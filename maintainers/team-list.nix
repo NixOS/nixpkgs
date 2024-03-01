@@ -342,7 +342,6 @@ with lib.maintainers; {
       imincik
       nh2
       nialov
-      r-burns
       sikmir
       willcohen
     ];
@@ -775,7 +774,6 @@ with lib.maintainers; {
     members = [
       aanderse
       drupol
-      etu
       ma27
       talyz
     ];

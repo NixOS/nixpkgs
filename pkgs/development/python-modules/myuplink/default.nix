@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "myuplink";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,13 @@ buildPythonPackage rec {
     owner = "pajzo";
     repo = "myuplink";
     rev = "refs/tags/${version}";
-    hash = "sha256-XDsQmgP3VvWpuZWGBVW5pBsxTRZT2cl3kp1i2sb+LnM=";
+    hash = "sha256-UJGRQqgtbYBwfjys2sYiC3dx8Doesu34EBys5Y++qBY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "%%VERSION_NO%%" "${version}"
+  '';
 
   nativeBuildInputs = [
     setuptools

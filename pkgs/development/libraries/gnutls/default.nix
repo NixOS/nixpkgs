@@ -1,14 +1,36 @@
-{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
-, perl, gmp, autoconf, automake, libidn2, libiconv
+{ config
+, lib
+, stdenv
+, fetchurl
+, zlib
+, lzo
+, libtasn1
+, nettle
+, pkg-config
+, lzip
+, perl
+, gmp
+, autoconf
+, automake
+, libidn2
+, libiconv
 , texinfo
-, unbound, dns-root-data, gettext, util-linux
+, unbound
+, dns-root-data
+, gettext
+, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
-, tpmSupport ? false, trousers, which, nettools, libunistring
-, withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
+, tpmSupport ? false
+, trousers
+, which
+, nettools
+, libunistring
+, withP11-kit ? !stdenv.hostPlatform.isStatic
+, p11-kit
 , Security  # darwin Security.framework
-# certificate compression - only zlib now, more possible: zstd, brotli
+  # certificate compression - only zlib now, more possible: zstd, brotli
 
-# for passthru.tests
+  # for passthru.tests
 , curlWithGnuTls
 , emacs
 , ffmpeg
@@ -28,7 +50,7 @@ let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin
-      && stdenv.buildPlatform == stdenv.hostPlatform;
+    && stdenv.buildPlatform == stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
 in
@@ -42,10 +64,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-90/FlUsn1Oxt+7Ed6ph4iLWxJCiaNwOvytoO5SD0Fz4=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputs = [ "bin" "dev" "out" ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ "man" "devdoc" ];
+
   # Not normally useful docs.
   outputInfo = "devdoc";
-  outputDoc  = "devdoc";
+  outputDoc = "devdoc";
 
   patches = [
     ./nix-ssl-cert-file.patch
@@ -68,15 +92,17 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs .";
   configureFlags =
     lib.optionals withP11-kit [
-    "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
-    "--with-default-trust-store-pkcs11=pkcs11:"
-  ] ++ [
-    "--disable-dependency-tracking"
-    "--enable-fast-install"
-    "--with-unbound-root-key-file=${dns-root-data}/root.key"
-    (lib.withFeature withP11-kit "p11-kit")
-    (lib.enableFeature cxxBindings "cxx")
-  ];
+      "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+      "--with-default-trust-store-pkcs11=pkcs11:"
+    ] ++ [
+      "--disable-dependency-tracking"
+      "--enable-fast-install"
+      "--with-unbound-root-key-file=${dns-root-data}/root.key"
+      (lib.withFeature withP11-kit "p11-kit")
+      (lib.enableFeature cxxBindings "cxx")
+    ] ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+      "--disable-doc"
+    ];
 
   enableParallelBuilding = true;
 
@@ -121,17 +147,17 @@ stdenv.mkDerivation rec {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''
-       GnuTLS is a project that aims to develop a library which
-       provides a secure layer, over a reliable transport
-       layer. Currently the GnuTLS library implements the proposed standards by
-       the IETF's TLS working group.
+      GnuTLS is a project that aims to develop a library which
+      provides a secure layer, over a reliable transport
+      layer. Currently the GnuTLS library implements the proposed standards by
+      the IETF's TLS working group.
 
-       Quoting from the TLS protocol specification:
+      Quoting from the TLS protocol specification:
 
-       "The TLS protocol provides communications privacy over the
-       Internet. The protocol allows client/server applications to
-       communicate in a way that is designed to prevent eavesdropping,
-       tampering, or message forgery."
+      "The TLS protocol provides communications privacy over the
+      Internet. The protocol allows client/server applications to
+      communicate in a way that is designed to prevent eavesdropping,
+      tampering, or message forgery."
     '';
 
     homepage = "https://gnutls.org/";

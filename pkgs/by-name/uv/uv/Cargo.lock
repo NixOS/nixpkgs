@@ -75,9 +75,9 @@ checksum = "4b46cbb362ab8752921c97e041f5e366ee6297bd428a31275b9fcf1e380f7299"
 
 [[package]]
 name = "anstream"
-version = "0.6.11"
+version = "0.6.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e2e1ebcb11de5c03c67de28a7df593d32191b44939c482e97702baaaa6ab6a5"
+checksum = "96b09b5178381e0874812a9b157f7fe84982617e48f71f4e3235482775e5b540"
 dependencies = [
  "anstyle",
  "anstyle-parse",
@@ -123,9 +123,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.79"
+version = "1.0.80"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "080e9890a082662b09c1ad45f567faeeb47f22b5fb23895fbe1e651e718e25ca"
+checksum = "5ad32ce52e4161730f7098c077cd2ed6229b5804ccf99e5366be1ab72a98b4e1"
 
 [[package]]
 name = "arc-swap"
@@ -147,9 +147,9 @@ checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
 
 [[package]]
 name = "assert_cmd"
-version = "2.0.13"
+version = "2.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00ad3f3a942eee60335ab4342358c161ee296829e0d16ff42fc1d6cb07815467"
+checksum = "ed72493ac66d5804837f480ab3766c72bdfab91a65e565fc54fa9e42db0073a8"
 dependencies = [
  "anstyle",
  "bstr",
@@ -203,9 +203,9 @@ dependencies = [
 
 [[package]]
 name = "async_http_range_reader"
-version = "0.6.1"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5143aaae4ec035a5d7cfda666eab896fe5428a2a8ab09ca651a2dce3a8f06912"
+checksum = "cf8eeab30c68da4dc2c51f3afc4327ab06fe0f3f028ca423f7ca398c7ed8c5e7"
 dependencies = [
  "bisection",
  "futures",
@@ -876,7 +876,7 @@ name = "distribution-filename"
 version = "0.0.1"
 dependencies = [
  "insta",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "platform-tags",
  "rkyv",
  "serde",
@@ -896,7 +896,7 @@ dependencies = [
  "fs-err",
  "itertools 0.12.1",
  "once_cell",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "platform-tags",
  "pypi-types",
@@ -906,8 +906,10 @@ dependencies = [
  "serde_json",
  "sha2",
  "thiserror",
+ "tracing",
  "url",
  "urlencoding",
+ "uv-auth",
  "uv-fs",
  "uv-git",
  "uv-normalize",
@@ -1292,6 +1294,7 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "uv-cache",
+ "uv-fs",
  "uv-interpreter",
  "which",
 ]
@@ -1561,14 +1564,15 @@ checksum = "1e186cfbae8084e513daff4240b4797e342f988cecda4fb6c939150f96315fd8"
 
 [[package]]
 name = "insta"
-version = "1.34.0"
+version = "1.35.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d64600be34b2fcfc267740a243fa7744441bb4947a619ac4e5bb6507f35fbfc"
+checksum = "7c985c1bef99cf13c58fade470483d81a2bfe846ebde60ed28cc2dddec2df9e2"
 dependencies = [
  "console",
  "lazy_static",
  "linked-hash-map",
  "regex",
+ "serde",
  "similar",
  "yaml-rust",
 ]
@@ -1583,25 +1587,21 @@ dependencies = [
  "data-encoding",
  "distribution-filename",
  "fs-err",
- "fs2",
- "goblin",
  "indoc",
  "mailparse",
  "once_cell",
- "pep440_rs 0.4.0",
+ "pathdiff",
+ "pep440_rs",
  "platform-host",
  "platform-info",
  "plist",
- "pyo3",
  "pypi-types",
- "rayon",
  "reflink-copy",
  "regex",
  "rustc-hash",
  "serde",
  "serde_json",
  "sha2",
- "target-lexicon",
  "tempfile",
  "thiserror",
  "tracing",
@@ -2157,16 +2157,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "parking_lot"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3742b2c103b9f06bc9fff0a37ff4912935851bee6d36f3c02bcc755bcfec228f"
-dependencies = [
- "lock_api",
- "parking_lot_core 0.9.9",
-]
-
-[[package]]
 name = "parking_lot_core"
 version = "0.8.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2200,20 +2190,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
 
 [[package]]
-name = "pep440_rs"
-version = "0.3.12"
+name = "pathdiff"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "887f66cc62717ea72caac4f1eb4e6f392224da3ffff3f40ec13ab427802746d6"
-dependencies = [
- "lazy_static",
- "regex",
- "serde",
- "unicode-width",
-]
+checksum = "8835116a5c179084a830efb3adc117ab007512b535bc1a21c991d3b32a6b44dd"
 
 [[package]]
 name = "pep440_rs"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "indoc",
  "once_cell",
@@ -2228,13 +2212,13 @@ dependencies = [
 
 [[package]]
 name = "pep508_rs"
-version = "0.2.3"
+version = "0.4.2"
 dependencies = [
  "derivative",
  "indoc",
  "log",
  "once_cell",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pyo3",
  "pyo3-log",
  "regex",
@@ -2477,7 +2461,7 @@ dependencies = [
 [[package]]
 name = "pubgrub"
 version = "0.2.1"
-source = "git+https://github.com/zanieb/pubgrub?rev=9b6d89cb8a0c7902815c8b2ae99106ba322ffb14#9b6d89cb8a0c7902815c8b2ae99106ba322ffb14"
+source = "git+https://github.com/zanieb/pubgrub?rev=aab132a3d4d444dd8dd41d8c4e605abd69dacfe1#aab132a3d4d444dd8dd41d8c4e605abd69dacfe1"
 dependencies = [
  "indexmap 2.2.3",
  "log",
@@ -2488,15 +2472,16 @@ dependencies = [
 
 [[package]]
 name = "pyo3"
-version = "0.20.2"
+version = "0.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9a89dc7a5850d0e983be1ec2a463a171d20990487c3cfcd68b5363f1ee3d6fe0"
+checksum = "53bdbb96d49157e65d45cc287af5f32ffadd5f4761438b527b055fb0d4bb8233"
 dependencies = [
  "cfg-if",
  "indoc",
  "libc",
  "memoffset",
- "parking_lot 0.12.1",
+ "parking_lot",
+ "portable-atomic",
  "pyo3-build-config",
  "pyo3-ffi",
  "pyo3-macros",
@@ -2505,9 +2490,9 @@ dependencies = [
 
 [[package]]
 name = "pyo3-build-config"
-version = "0.20.2"
+version = "0.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "07426f0d8fe5a601f26293f300afd1a7b1ed5e78b2a705870c5f30893c5163be"
+checksum = "deaa5745de3f5231ce10517a1f5dd97d53e5a2fd77aa6b5842292085831d48d7"
 dependencies = [
  "once_cell",
  "target-lexicon",
@@ -2515,9 +2500,9 @@ dependencies = [
 
 [[package]]
 name = "pyo3-ffi"
-version = "0.20.2"
+version = "0.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dbb7dec17e17766b46bca4f1a4215a85006b4c2ecde122076c562dd058da6cf1"
+checksum = "62b42531d03e08d4ef1f6e85a2ed422eb678b8cd62b762e53891c05faf0d4afa"
 dependencies = [
  "libc",
  "pyo3-build-config",
@@ -2536,9 +2521,9 @@ dependencies = [
 
 [[package]]
 name = "pyo3-macros"
-version = "0.20.2"
+version = "0.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "05f738b4e40d50b5711957f142878cfa0f28e054aa0ebdfc3fd137a843f74ed3"
+checksum = "7305c720fa01b8055ec95e484a6eca7a83c841267f0dd5280f0c8b8551d2c158"
 dependencies = [
  "proc-macro2",
  "pyo3-macros-backend",
@@ -2548,12 +2533,13 @@ dependencies = [
 
 [[package]]
 name = "pyo3-macros-backend"
-version = "0.20.2"
+version = "0.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fc910d4851847827daf9d6cdd4a823fbdaab5b8818325c5e97a86da79e8881f"
+checksum = "7c7e9b68bb9c3149c5b0cade5d07f953d6d125eb4337723c4ccdb665f1f96185"
 dependencies = [
  "heck",
  "proc-macro2",
+ "pyo3-build-config",
  "quote",
  "syn 2.0.48",
 ]
@@ -2567,7 +2553,7 @@ dependencies = [
  "insta",
  "mailparse",
  "once_cell",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "regex",
  "rkyv",
@@ -2583,12 +2569,12 @@ dependencies = [
 
 [[package]]
 name = "pyproject-toml"
-version = "0.8.1"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46d4a5e69187f23a29f8aa0ea57491d104ba541bc55f76552c2a74962aa20e04"
+checksum = "3b80f889b6d413c3f8963a2c7db03f95dd6e1d85e1074137cb2013ea2faa8898"
 dependencies = [
  "indexmap 2.2.3",
- "pep440_rs 0.3.12",
+ "pep440_rs",
  "pep508_rs",
  "serde",
  "toml",
@@ -2791,9 +2777,9 @@ dependencies = [
  "fs-err",
  "indoc",
  "insta",
- "itertools 0.10.5",
+ "itertools 0.12.1",
  "once_cell",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "regex",
  "serde",
@@ -2882,7 +2868,7 @@ dependencies = [
  "getrandom",
  "http",
  "hyper",
- "parking_lot 0.11.2",
+ "parking_lot",
  "reqwest",
  "reqwest-middleware",
  "retry-policies",
@@ -3205,18 +3191,18 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.196"
+version = "1.0.197"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "870026e60fa08c69f064aa766c10f10b1d62db9ccd4d0abb206472bee0ce3b32"
+checksum = "3fb1c873e1b9b056a4dc4c0c198b24c3ffa059243875552b2bd0933b1aee4ce2"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.196"
+version = "1.0.197"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33c85360c95e7d137454dc81d9a4ed2b8efd8fbe19cee57357b32b9771fccb67"
+checksum = "7eb0b34b42edc17f6b7cac84a52a1c5f0e1bb2227e997ca9011ea3dd34e8610b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3225,9 +3211,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.113"
+version = "1.0.114"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69801b70b1c3dac963ecb03a364ba0ceda9cf60c71cfe475e99864759c8b8a79"
+checksum = "c5f09b1bd632ef549eaa9f60a1f8de742bdbc698e6cee2095fc84dde5f549ae0"
 dependencies = [
  "itoa",
  "ryu",
@@ -3511,21 +3497,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
 
 [[package]]
-name = "tar"
-version = "0.4.40"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b16afcea1f22891c49a00c751c7b63b2233284064f11a200fc624137c51e2ddb"
-dependencies = [
- "filetime",
- "libc",
- "xattr",
-]
-
-[[package]]
 name = "target-lexicon"
-version = "0.12.13"
+version = "0.12.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69758bda2e78f098e4ccb393021a0963bb3442eac05f135c30f61b7370bbafae"
+checksum = "e1fc403891a21bcfb7c37834ba66a547a8f402146eba7265b5a6d88059c9ff2f"
 
 [[package]]
 name = "task-local-extensions"
@@ -3608,9 +3583,9 @@ dependencies = [
 
 [[package]]
 name = "textwrap"
-version = "0.16.0"
+version = "0.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "222a222a5bfe1bba4a77b45ec488a741b3cb8872e5e499451fd7d0129c9c7c3d"
+checksum = "23d434d3f8967a09480fb04132ebe0a3e088c173e6d0ee7897abbdf4eab0f8b9"
 dependencies = [
  "smawk",
  "unicode-linebreak",
@@ -4158,12 +4133,13 @@ checksum = "f00cc9702ca12d3c81455259621e676d0f7251cec66a21e98fe2e9a37db93b2a"
 
 [[package]]
 name = "uv"
-version = "0.1.6"
+version = "0.1.13"
 dependencies = [
  "anstream",
  "anyhow",
  "assert_cmd",
  "assert_fs",
+ "base64 0.21.7",
  "chrono",
  "clap",
  "clap_complete_command",
@@ -4177,6 +4153,7 @@ dependencies = [
  "fs-err",
  "futures",
  "gourgeist",
+ "indexmap 2.2.3",
  "indicatif",
  "indoc",
  "insta",
@@ -4185,7 +4162,7 @@ dependencies = [
  "miette",
  "mimalloc",
  "owo-colors 4.0.0",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "platform-host",
  "platform-tags",
@@ -4197,6 +4174,8 @@ dependencies = [
  "requirements-txt",
  "reqwest",
  "rustc-hash",
+ "serde",
+ "serde_json",
  "tempfile",
  "textwrap",
  "thiserror",
@@ -4207,6 +4186,7 @@ dependencies = [
  "tracing-durations-export",
  "tracing-subscriber",
  "tracing-tree",
+ "unicode-width",
  "url",
  "uv-build",
  "uv-cache",
@@ -4221,6 +4201,14 @@ dependencies = [
  "uv-traits",
  "uv-warnings",
  "which",
+]
+
+[[package]]
+name = "uv-auth"
+version = "0.0.1"
+dependencies = [
+ "tracing",
+ "url",
 ]
 
 [[package]]
@@ -4240,6 +4228,7 @@ dependencies = [
  "pypi-types",
  "pyproject-toml",
  "regex",
+ "rustc-hash",
  "serde",
  "serde_json",
  "tempfile",
@@ -4292,7 +4281,7 @@ dependencies = [
  "http",
  "insta",
  "install-wheel-rs",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "platform-tags",
  "pypi-types",
@@ -4314,6 +4303,7 @@ dependencies = [
  "tracing",
  "url",
  "urlencoding",
+ "uv-auth",
  "uv-cache",
  "uv-fs",
  "uv-normalize",
@@ -4338,7 +4328,7 @@ dependencies = [
  "itertools 0.12.1",
  "mimalloc",
  "owo-colors 4.0.0",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "petgraph",
  "platform-host",
@@ -4385,6 +4375,7 @@ dependencies = [
  "platform-host",
  "platform-tags",
  "pypi-types",
+ "rustc-hash",
  "tempfile",
  "tokio",
  "tracing",
@@ -4410,7 +4401,7 @@ dependencies = [
  "futures",
  "install-wheel-rs",
  "nanoid",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "platform-tags",
  "pypi-types",
@@ -4445,11 +4436,11 @@ dependencies = [
  "futures",
  "rayon",
  "rustc-hash",
- "tar",
  "thiserror",
  "tokio",
  "tokio-tar",
  "tokio-util",
+ "tracing",
  "zip",
 ]
 
@@ -4475,6 +4466,7 @@ dependencies = [
  "base64 0.21.7",
  "cache-key",
  "cargo-util",
+ "fs-err",
  "git2",
  "glob",
  "hex",
@@ -4502,16 +4494,19 @@ dependencies = [
  "futures",
  "install-wheel-rs",
  "once-map",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "platform-tags",
  "pypi-types",
+ "pyproject-toml",
  "rayon",
  "requirements-txt",
  "rustc-hash",
+ "serde",
  "tempfile",
  "thiserror",
  "tokio",
+ "toml",
  "tracing",
  "url",
  "uv-cache",
@@ -4531,12 +4526,14 @@ version = "0.0.1"
 dependencies = [
  "anyhow",
  "cache-key",
+ "configparser",
  "fs-err",
  "indoc",
  "insta",
+ "install-wheel-rs",
  "itertools 0.12.1",
  "once_cell",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "platform-host",
  "platform-tags",
@@ -4586,7 +4583,7 @@ dependencies = [
  "once-map",
  "once_cell",
  "owo-colors 4.0.0",
- "pep440_rs 0.4.0",
+ "pep440_rs",
  "pep508_rs",
  "petgraph",
  "platform-host",
@@ -4621,9 +4618,12 @@ name = "uv-traits"
 version = "0.0.1"
 dependencies = [
  "anyhow",
+ "clap",
  "distribution-types",
  "once-map",
  "pep508_rs",
+ "serde",
+ "serde_json",
  "tokio",
  "uv-cache",
  "uv-interpreter",
@@ -4812,7 +4812,7 @@ checksum = "be0ecb0db480561e9a7642b5d3e4187c128914e58aa84330b9493e3eb68c5e7f"
 dependencies = [
  "futures",
  "js-sys",
- "parking_lot 0.11.2",
+ "parking_lot",
  "pin-utils",
  "wasm-bindgen",
  "wasm-bindgen-futures",

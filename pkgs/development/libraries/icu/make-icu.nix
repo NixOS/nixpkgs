@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchurl, fixDarwinDylibNames, testers }:
+{ stdenv, lib, buildPackages, fetchurl, fixDarwinDylibNames, testers }:
 
-{ version, hash, patches ? [], patchFlags ? []
-# Cross-compiled icu4c requires a build-root of a native compile
-, buildRootOnly ? false, nativeBuildRoot
-}:
+{ version, hash, patches ? [], patchFlags ? [] }:
 
 let
+  # Cross-compiled icu4c requires a build-root of a native compile
+  nativeBuildRoot = buildPackages."icu${lib.versions.major version}".buildRootOnly;
+
   pname = "icu4c";
 
   baseAttrs = {
@@ -99,10 +99,9 @@ let
     '';
   };
 
-  attrs = if buildRootOnly
-            then buildRootOnlyAttrs
-          else realAttrs;
+  mkWithAttrs = attrs: stdenv.mkDerivation (finalAttrs: attrs // {
+    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    passthru.buildRootOnly = mkWithAttrs buildRootOnlyAttrs;
+  });
 in
-stdenv.mkDerivation (finalAttrs: attrs // {
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-})
+  mkWithAttrs realAttrs

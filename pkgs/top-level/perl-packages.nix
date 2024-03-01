@@ -13563,10 +13563,10 @@ with self; {
 
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.7";
+    version = "0.8.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      hash = "sha256-JdqdlEB3newNrdTMLUIn6Oq4dDfAcZh3J03PuQakzHk=";
+      hash = "sha256-fSu+LOJSuvhro/OIzQ3sOqSDj0nWErnsfMT/iBBbrcw=";
     };
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
@@ -13595,7 +13595,7 @@ with self; {
       homepage = "https://dlmf.nist.gov/LaTeXML/";
       license = with lib.licenses; [ publicDomain ];
       maintainers = with maintainers; [ xworld21 ];
-      mainProgram = "latexml";
+      mainProgram = "latexmlc";
     };
   };
 

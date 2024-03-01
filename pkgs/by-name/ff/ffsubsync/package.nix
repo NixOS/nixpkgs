@@ -1,21 +1,25 @@
 { lib
-, python3Packages
 , fetchFromGitHub
+, python3
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ffsubsync";
   version = "0.4.25";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-ZdKZeKfAUe/FXLOur9Btb5RgXewmy3EHunQphqlxpIc=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     auditok
     charset-normalizer
     faust-cchardet
@@ -32,9 +36,13 @@ python3Packages.buildPythonApplication rec {
     webrtcvad
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "ffsubsync" ];
+  pythonImportsCheck = [
+    "ffsubsync"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/smacke/ffsubsync";

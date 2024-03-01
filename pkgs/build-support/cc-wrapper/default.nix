@@ -377,7 +377,7 @@ stdenv.mkDerivation {
 
       # this symlink points to the unwrapped gnat's output "out". It is used by
       # our custom gprconfig compiler description to find GNAT's ada runtime. See
-      # ../../development/tools/build-managers/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+      # ../../development/ada-modules/gprbuild/{boot.nix, nixpkgs-gnat.xml}
       ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
     ''
 

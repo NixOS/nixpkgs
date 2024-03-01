@@ -19,14 +19,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.2.0";
+  version = "2024.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-k8caA5Q4QcP7H1Nn5yvFsfExVwipAlFSb/DphkzYNtU=";
+    hash = "sha256-MAyK8Wx/d7lJKEueeL7GhxxKu8EygwjylPGXB2Y3bWM=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -59,8 +59,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
-    kconfiglib
     icmplib
+    kconfiglib
+    packaging
     paho-mqtt
     pillow
     platformio

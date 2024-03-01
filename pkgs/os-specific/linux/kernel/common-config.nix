@@ -290,6 +290,7 @@ let
       IPW2200_MONITOR             = option yes; # support promiscuous mode
       HOSTAP_FIRMWARE             = option yes; # Support downloading firmware images with Host AP driver
       HOSTAP_FIRMWARE_NVRAM       = option yes;
+      MAC80211_MESH               = option yes; # Enable 802.11s (mesh networking) support
       ATH9K_PCI                   = option yes; # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB                   = option yes; # Ditto, AHB bus
       # The description of this option makes it sound dangerous or even illegal
@@ -845,6 +846,7 @@ let
       AIC94XX_DEBUG = no;
 
       BLK_DEV_INTEGRITY       = yes;
+      BLK_DEV_ZONED           = yes;
 
       BLK_SED_OPAL = yes;
 

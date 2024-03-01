@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "2024.1.2";
+  version = "2024.1.2b";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-XpFGLZpX5BeP6cEZfGlNnh94aS6As0eCnllVyHLrOWo=";
+    hash = "sha256-p5UsI8T2cV5uQnQmOi5WBo2UirLLS83NHoaljxcRkqo=";
   };
 
 in buildNpmPackage rec {

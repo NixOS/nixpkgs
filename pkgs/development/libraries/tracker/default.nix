@@ -28,16 +28,17 @@
 , systemd
 , dbus
 , writeText
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tracker";
   version = "3.6.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "Ulks/hm6/9FtvkdHW+fadQ29C2Mz/XrLYPqp2lvEDfI=";
   };
 
@@ -162,7 +163,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
@@ -172,5 +176,6 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    pkgConfigModules = [ "tracker-sparql-3.0" "tracker-testutils-3.0" ];
   };
-}
+})

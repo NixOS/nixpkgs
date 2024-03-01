@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "nibe";
     rev = "refs/tags/${version}";
-    hash = "sha256-baw2uJn2M0tcP897+h88aMkVul6l170Vyz6qwFHZ8+s=";
+    hash = "sha256-j8P/lhBjlsmnOc4Cv/a2Hdf2EPO8CEpT4IOQHtiBgQA=";
   };
 
   nativeBuildInputs = [

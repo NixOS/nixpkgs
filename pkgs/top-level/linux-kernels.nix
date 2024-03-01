@@ -169,14 +169,6 @@ in {
       ];
     };
 
-    linux_6_5 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "6.5";
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
-
     linux_6_6 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "6.6";
       kernelPatches = [
@@ -266,7 +258,6 @@ in {
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
-    linux_6_5_hardened = hardenedKernelFor kernels.linux_6_5 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
     linux_6_7_hardened = hardenedKernelFor kernels.linux_6_7 { };
 
@@ -279,6 +270,7 @@ in {
     linux_6_2 = throw "linux 6.2 was removed because it has reached its end of life upstream";
     linux_6_3 = throw "linux 6.3 was removed because it has reached its end of life upstream";
     linux_6_4 = throw "linux 6.4 was removed because it has reached its end of life upstream";
+    linux_6_5 = throw "linux 6.5 was removed because it has reached its end of life upstream";
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -600,7 +592,6 @@ in {
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
-    linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_7 = recurseIntoAttrs (packagesFor kernels.linux_6_7);
     __attrsFailEvaluation = true;
@@ -613,6 +604,7 @@ in {
     linux_6_2 = throw "linux 6.2 was removed because it reached its end of life upstream"; # Added 2023-05-26
     linux_6_3 = throw "linux 6.3 was removed because it reached its end of life upstream"; # Added 2023-07-22
     linux_6_4 = throw "linux 6.4 was removed because it reached its end of life upstream"; # Added 2023-10-02
+    linux_6_5 = throw "linux 6.5 was removed because it reached its end of life upstream"; # Added 2024-02-28
   };
 
   rtPackages = {
@@ -645,7 +637,6 @@ in {
     linux_5_10_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_10_hardened);
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
-    linux_6_5_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_5_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
     linux_6_7_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_7_hardened);
 
@@ -667,7 +658,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_6_1;
+    linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_7;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

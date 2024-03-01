@@ -95,9 +95,6 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-assert lib.assertMsg (bluezSupport -> stdenv.isLinux)
-  "Bluez support is only available on Linux.";
-
 assert lib.assertMsg (enableFramework -> stdenv.isDarwin)
   "Framework builds are only supported on Darwin.";
 

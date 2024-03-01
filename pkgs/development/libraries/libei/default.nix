@@ -23,14 +23,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libei";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libei";
     rev = version;
-    hash = "sha256-MHPWEBMtxoEJ8j3LyDPD+m3DsO9u8nE+/pPtRHHXEXA=";
+    hash = "sha256-8n/C0rBlyhY8SaxkwU+tDskwSQObLRrR+utk4Ktgb7U=";
   };
 
   buildInputs = [

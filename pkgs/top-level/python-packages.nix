@@ -445,6 +445,8 @@ self: super: with self; {
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
+  airium = callPackage ../development/python-modules/airium { };
+
   airly = callPackage ../development/python-modules/airly { };
 
   airthings-ble = callPackage ../development/python-modules/airthings-ble { };
@@ -2005,6 +2007,8 @@ self: super: with self; {
 
   chainmap = callPackage ../development/python-modules/chainmap { };
 
+  chainstream = callPackage ../development/python-modules/chainstream { };
+
   chalice = callPackage ../development/python-modules/chalice { };
 
   chameleon = callPackage ../development/python-modules/chameleon { };
@@ -2056,6 +2060,10 @@ self: super: with self; {
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
   chispa = callPackage ../development/python-modules/chispa { };
+
+  chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
+
+  chromadb = callPackage ../development/python-modules/chromadb { };
 
   chromaprint = callPackage ../development/python-modules/chromaprint { };
 
@@ -2667,7 +2675,7 @@ self: super: with self; {
   datadog = callPackage ../development/python-modules/datadog { };
 
   datafusion = callPackage ../development/python-modules/datafusion {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
@@ -2917,6 +2925,8 @@ self: super: with self; {
   directv = callPackage ../development/python-modules/directv { };
 
   dirty-equals = callPackage ../development/python-modules/dirty-equals { };
+
+  dirtyjson = callPackage ../development/python-modules/dirtyjson { };
 
   discid = callPackage ../development/python-modules/discid { };
 
@@ -3549,6 +3559,8 @@ self: super: with self; {
   dynd = callPackage ../development/python-modules/dynd { };
 
   e3-core = callPackage ../development/python-modules/e3-core { };
+
+  e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
 
@@ -4279,11 +4291,11 @@ self: super: with self; {
 
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 
-  flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
+  flufl-bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
 
-  flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
+  flufl-i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
 
-  flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
+  flufl-lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
   flux-led = callPackage ../development/python-modules/flux-led { };
 
@@ -4788,6 +4800,8 @@ self: super: with self; {
 
   google-cloud-monitoring = callPackage ../development/python-modules/google-cloud-monitoring { };
 
+  google-cloud-netapp = callPackage ../development/python-modules/google-cloud-netapp { };
+
   google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
 
   google-cloud-os-config = callPackage ../development/python-modules/google-cloud-os-config { };
@@ -4803,6 +4817,8 @@ self: super: with self; {
   google-cloud-secret-manager = callPackage ../development/python-modules/google-cloud-secret-manager { };
 
   google-cloud-securitycenter = callPackage ../development/python-modules/google-cloud-securitycenter { };
+
+  google-cloud-shell = callPackage ../development/python-modules/google-cloud-shell { };
 
   google-cloud-spanner = callPackage ../development/python-modules/google-cloud-spanner { };
 
@@ -4824,7 +4840,15 @@ self: super: with self; {
 
   google-cloud-vision = callPackage ../development/python-modules/google-cloud-vision { };
 
+  google-cloud-vpc-access = callPackage ../development/python-modules/google-cloud-vpc-access { };
+
+  google-cloud-webrisk = callPackage ../development/python-modules/google-cloud-webrisk { };
+
   google-cloud-websecurityscanner = callPackage ../development/python-modules/google-cloud-websecurityscanner { };
+
+  google-cloud-workflows = callPackage ../development/python-modules/google-cloud-workflows { };
+
+  google-cloud-workstations = callPackage ../development/python-modules/google-cloud-workstations { };
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
@@ -4947,9 +4971,7 @@ self: super: with self; {
 
   graphtage = callPackage ../development/python-modules/graphtage { };
 
-  graphviz = callPackage ../development/python-modules/graphviz {
-    inherit (pkgs) graphviz;
-  };
+  graphviz = callPackage ../development/python-modules/graphviz { };
 
   grappelli-safe = callPackage ../development/python-modules/grappelli-safe { };
 
@@ -5556,6 +5578,8 @@ self: super: with self; {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  import-expression = callPackage ../development/python-modules/import-expression { };
+
   importlab = callPackage ../development/python-modules/importlab { };
 
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
@@ -5888,6 +5912,8 @@ self: super: with self; {
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
   jira = callPackage ../development/python-modules/jira { };
+
+  jishaku = callPackage ../development/python-modules/jishaku { };
 
   jiwer = callPackage ../development/python-modules/jiwer { };
 
@@ -6253,6 +6279,8 @@ self: super: with self; {
   labgrid = callPackage ../development/python-modules/labgrid { };
 
   labmath = callPackage ../development/python-modules/labmath { };
+
+  laces = callPackage ../development/python-modules/laces { };
 
   lakeside = callPackage ../development/python-modules/lakeside { };
 
@@ -6647,6 +6675,46 @@ self: super: with self; {
   livereload = callPackage ../development/python-modules/livereload { };
 
   lizard = callPackage ../development/python-modules/lizard { };
+
+  llama-index = callPackage ../development/python-modules/llama-index { };
+
+  llama-index-agent-openai = callPackage ../development/python-modules/llama-index-agent-openai { };
+
+  llama-index-cli = callPackage ../development/python-modules/llama-index-cli { };
+
+  llama-index-core = callPackage ../development/python-modules/llama-index-core { };
+
+  llama-index-embeddings-gemini = callPackage ../development/python-modules/llama-index-embeddings-gemini { };
+
+  llama-index-embeddings-google = callPackage ../development/python-modules/llama-index-embeddings-google { };
+
+  llama-index-embeddings-openai = callPackage ../development/python-modules/llama-index-embeddings-openai { };
+
+  llama-index-indices-managed-llama-cloud = callPackage ../development/python-modules/llama-index-indices-managed-llama-cloud { };
+
+  llama-index-legacy = callPackage ../development/python-modules/llama-index-legacy { };
+
+  llama-index-llms-openai = callPackage ../development/python-modules/llama-index-llms-openai { };
+
+  llama-index-multi-modal-llms-openai = callPackage ../development/python-modules/llama-index-multi-modal-llms-openai { };
+
+  llama-index-program-openai = callPackage ../development/python-modules/llama-index-program-openai { };
+
+  llama-index-question-gen-openai = callPackage ../development/python-modules/llama-index-question-gen-openai { };
+
+  llama-index-readers-file = callPackage ../development/python-modules/llama-index-readers-file { };
+
+  llama-index-readers-json = callPackage ../development/python-modules/llama-index-readers-json { };
+
+  llama-index-readers-llama-parse = callPackage ../development/python-modules/llama-index-readers-llama-parse { };
+
+  llama-index-readers-weather = callPackage ../development/python-modules/llama-index-readers-weather { };
+
+  llama-index-vector-stores-chroma = callPackage ../development/python-modules/llama-index-vector-stores-chroma { };
+
+  llama-parse = callPackage ../development/python-modules/llama-parse { };
+
+  llamaindex-py-client = callPackage ../development/python-modules/llamaindex-py-client { };
 
   llfuse = callPackage ../development/python-modules/llfuse {
     inherit (pkgs) fuse;
@@ -8865,6 +8933,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
 
+  opentelemetry-instrumentation-fastapi = callPackage ../development/python-modules/opentelemetry-instrumentation-fastapi { };
+
   opentelemetry-instrumentation-flask = callPackage ../development/python-modules/opentelemetry-instrumentation-flask { };
 
   opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
@@ -8932,6 +9002,8 @@ self: super: with self; {
 
   oras = callPackage ../development/python-modules/oras { };
 
+  orbax-checkpoint = callPackage ../development/python-modules/orbax-checkpoint { };
+
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
@@ -8954,9 +9026,13 @@ self: super: with self; {
 
   osc-lib = callPackage ../development/python-modules/osc-lib { };
 
-  oscrypto = callPackage ../development/python-modules/oscrypto { };
+  osc-sdk-python = callPackage ../development/python-modules/osc-sdk-python { };
 
   oscpy = callPackage ../development/python-modules/oscpy { };
+
+  oscrypto = callPackage ../development/python-modules/oscrypto { };
+
+  oscscreen = callPackage ../development/python-modules/oscscreen { };
 
   oset = callPackage ../development/python-modules/oset { };
 
@@ -9720,6 +9796,8 @@ self: super: with self; {
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 
+  python-idzip = callPackage ../development/python-modules/python-idzip { };
+
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
@@ -10060,6 +10138,8 @@ self: super: with self; {
   pudb = callPackage ../development/python-modules/pudb { };
 
   pulp = callPackage ../development/python-modules/pulp { };
+
+  pulsar-client = callPackage ../development/python-modules/pulsar-client { };
 
   pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
 
@@ -10536,6 +10616,8 @@ self: super: with self; {
   pyexcel-ods = callPackage ../development/python-modules/pyexcel-ods { };
 
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
+
+  pyexiftool = callPackage ../development/python-modules/pyexiftool { };
 
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
@@ -11589,6 +11671,16 @@ self: super: with self; {
   pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
+
+  pytest-asyncio_0_21 = pytest-asyncio.overridePythonAttrs (old: rec {
+    version = "0.21.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "pytest-dev";
+      repo = "pytest-asyncio";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-Wpo8MpCPGiXrckT2x5/yBYtGlzso/L2urG7yGc7SPkA=";
+    };
+  });
 
   pytest-bdd = callPackage ../development/python-modules/pytest-bdd { };
 
@@ -14188,6 +14280,10 @@ self: super: with self; {
 
   systembridge = callPackage ../development/python-modules/systembridge { };
 
+  systembridgeconnector = callPackage ../development/python-modules/systembridgeconnector { };
+
+  systembridgemodels = callPackage ../development/python-modules/systembridgemodels { };
+
   systemd = callPackage ../development/python-modules/systemd {
     inherit (pkgs) systemd;
   };
@@ -14296,6 +14392,8 @@ self: super: with self; {
   tempora = callPackage ../development/python-modules/tempora { };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
+
+  tencentcloud-sdk-python = callPackage ../development/python-modules/tencentcloud-sdk-python { };
 
   tensorboard-data-server = callPackage ../development/python-modules/tensorboard-data-server { };
 
@@ -15701,6 +15799,8 @@ self: super: with self; {
   types-html5lib = callPackage ../development/python-modules/types-html5lib { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
+
+  types-lxml = callPackage ../development/python-modules/types-lxml { };
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
 

@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     libxslt
+    python3
   ];
 
   buildInputs = [

@@ -2,7 +2,6 @@
 , kernel ? null
 , stdenv
 , linuxKernel
-, removeLinuxDRM ? false
 , nixosTests
 , ...
 } @ args:
@@ -15,14 +14,9 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfsUnstable";
   # check the release notes for compatible kernels
-  kernelCompatible =
-    if stdenv'.isx86_64 || removeLinuxDRM
-    then kernel.kernelOlder "6.9"
-    else kernel.kernelOlder "6.2";
+  kernelCompatible = kernel.kernelOlder "6.9";
 
-  latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM
-    then linuxKernel.packages.linux_6_7
-    else linuxKernel.packages.linux_6_1;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_7;
 
   # this package should point to a version / git revision compatible with the latest kernel release
   # IMPORTANT: Always use a tagged release candidate or commits from the

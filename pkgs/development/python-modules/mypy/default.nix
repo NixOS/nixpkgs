@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
@@ -99,6 +100,11 @@ buildPythonPackage rec {
     six
     tomli
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # requires distutils
+    "test_c_unit_test"
+  ];
 
   disabledTestPaths = [
     # fails to find tyoing_extensions

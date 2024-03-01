@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.8";
-  format = "pyproject";
+  version = "1.8.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "wagtail-localize";
     owner = "wagtail";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K4TOW4q8vD9vaNJzSEtmQBgO/dOxcWKKUp2FE3JLIbE=";
+    hash = "sha256-WOkixwcGvsH4vgL7KAQeeGtoh3+Usr9drXb3Uho1AS0=";
   };
 
   nativeBuildInputs = [

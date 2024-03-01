@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kube-linter";
-  version = "0.6.7";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-D9QJsYaYvGjDucr0Xedg2LEqfwTxzIQBBNNFZ1m5D/U=";
+    sha256 = "sha256-abfNzf+84BWHpvLQZKyzl7WBt7UHj2zqzKq3VCqAwwY=";
   };
 
-  vendorHash = "sha256-ARrMHjR/fOGS8EDMCKiEr3ubWjqDySb/AdX9jNYWOVA=";
+  vendorHash = "sha256-FUkGiJ/6G9vSYtAj0v9GT4OINbO3d/OKlJ0YwhONftY=";
 
   ldflags = [
     "-s" "-w" "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"

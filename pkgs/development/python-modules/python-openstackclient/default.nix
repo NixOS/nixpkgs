@@ -11,6 +11,7 @@
 , python-novaclient
 , requests-mock
 , sphinx
+, sphinxcontrib-apidoc
 , stestr
 }:
 
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     installShellFiles
     openstackdocstheme
     sphinx
+    sphinxcontrib-apidoc
   ];
 
   propagatedBuildInputs = [

@@ -15,6 +15,7 @@ let
   defaultPinentryFlavor =
     if xserverCfg.desktopManager.lxqt.enable
     || xserverCfg.desktopManager.plasma5.enable
+    || xserverCfg.desktopManager.plasma6.enable
     || xserverCfg.desktopManager.deepin.enable then
       "qt"
     else if xserverCfg.desktopManager.xfce.enable then

@@ -378,7 +378,7 @@ in rec {
     '';
 
   targetToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text =
         ''
           [Unit]
@@ -387,7 +387,7 @@ in rec {
     };
 
   serviceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def (''
         [Service]
       '' + (let env = cfg.globalEnvironment // def.environment;
@@ -408,7 +408,7 @@ in rec {
     };
 
   socketToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Socket]
         ${attrsToSection def.socketConfig}
@@ -418,7 +418,7 @@ in rec {
     };
 
   timerToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Timer]
         ${attrsToSection def.timerConfig}
@@ -426,7 +426,7 @@ in rec {
     };
 
   pathToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Path]
         ${attrsToSection def.pathConfig}
@@ -434,7 +434,7 @@ in rec {
     };
 
   mountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Mount]
         ${attrsToSection def.mountConfig}
@@ -442,7 +442,7 @@ in rec {
     };
 
   automountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Automount]
         ${attrsToSection def.automountConfig}
@@ -450,7 +450,7 @@ in rec {
     };
 
   sliceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
+    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Slice]
         ${attrsToSection def.sliceConfig}

@@ -36,7 +36,18 @@ rustPlatform.buildRustPackage rec {
     glib
   ];
 
+  postPatch = ''
+    substituteInPlace style.css \
+      --replace-fail "/usr/share/wleave" "$out/share/${pname}"
+
+    substituteInPlace src/main.rs \
+      --replace-fail "/etc/wleave" "$out/etc/${pname}"
+  '';
+
   postInstall = ''
+    install -Dm644 -t "$out/etc/wleave" {"style.css","layout"}
+    install -Dm644 -t "$out/share/wleave/icons" icons/*
+
     for f in man/*.scd; do
       local page="man/$(basename "$f" .scd)"
       scdoc < "$f" > "$page"

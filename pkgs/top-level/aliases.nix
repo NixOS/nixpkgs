@@ -76,6 +76,7 @@ mapAliases ({
   apacheAnt_1_9 = throw "Ant 1.9 has been removed since it's not used in nixpkgs anymore"; # Added 2023-11-12
   antimicroX = antimicrox; # Added 2021-10-31
   arcanPackages = throw "arcanPackages was removed and its sub-attributes were promoted to top-level"; # Added 2023-11-26
+  archiveopteryx = throw "archiveopteryx depended on an unsupported version of OpenSSL and was unmaintained"; # Added 2024-01-03
   ardour_6 = throw "ardour_6 has been removed in favor of newer versions"; # Added 2023-10-13
   aseprite-unfree = aseprite; # Added 2023-08-26
   asls = throw "asls has been removed: abandoned by upstream"; # Added 2023-03-16
@@ -97,9 +98,12 @@ mapAliases ({
   bash_5 = bash; # Added 2021-08-20
   bazel_3 = throw "bazel 3 is past end of life as it is not an lts version"; # Added 2023-02-02
   bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
+  bee-unstable = throw "bee-unstable has been removed, use 'bee' instead"; # Added 2024-02-12
+  bee-clef = throw "bee-clef has been removed as the upstream project was archived"; # Added 2024-02-12
   beignet = throw "beignet was removed as it was never ported from old llvmPackages_6 upstream"; # added 2024-01-08
   binance = throw "binance has been removed, because it depends on a very outdated and insecure version of electron"; # Added 2023-11-09
   bird2 = bird; # Added 2022-02-21
+  bitwarden = bitwarden-desktop; # Added 2024-02-25
   bitwig-studio1 = throw "bitwig-studio1 has been removed, you can upgrade to 'bitwig-studio'"; # Added 2023-01-03
   bitwig-studio2 = throw "bitwig-studio2 has been removed, you can upgrade to 'bitwig-studio'"; # Added 2023-01-03
   blender-with-packages = args:
@@ -232,6 +236,7 @@ mapAliases ({
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1; # Added 2020-01-19
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0; # Added 2020-09-11
   drgeo = throw "'drgeo' has been removed as it is outdated and unmaintained"; # Added 2023-10-15
+  drush = throw "drush as a standalone package has been removed because it's no longer supported as a standalone tool";
   dtv-scan-tables_linuxtv = dtv-scan-tables; # Added 2023-03-03
   dtv-scan-tables_tvheadend = dtv-scan-tables; # Added 2023-03-03
   du-dust = dust; # Added 2024-01-19
@@ -278,6 +283,7 @@ mapAliases ({
   eterm = throw "eterm was removed because it is still insecure: https://github.com/mej/Eterm/issues/7"; # Added 2023-09-10
   exa = throw "'exa' has been removed because it is unmaintained upstream. Consider using 'eza', a maintained fork"; # Added 2023-09-07
   exhibitor = throw "'exhibitor' has been removed because it is unmaintained upstream"; # Added 2023-06-20
+  eww-wayland = lib.warn "eww now can build for X11 and wayland simultaneously, so `eww-wayland` is deprecated, use the normal `eww` package instead." eww;
 
   ### F ###
 
@@ -347,6 +353,21 @@ mapAliases ({
   gnatboot11 = gnat-bootstrap11;
   gnatboot12 = gnat-bootstrap12;
   gnatboot = gnat-bootstrap;
+  gnatcoll-core     = gnatPackages.gnatcoll-core; # Added 2024-02-25
+  gnatcoll-gmp      = gnatPackages.gnatcoll-gmp; # Added 2024-02-25
+  gnatcoll-iconv    = gnatPackages.gnatcoll-iconv; # Added 2024-02-25
+  gnatcoll-lzma     = gnatPackages.gnatcoll-lzma; # Added 2024-02-25
+  gnatcoll-omp      = gnatPackages.gnatcoll-omp; # Added 2024-02-25
+  gnatcoll-python3  = gnatPackages.gnatcoll-python3; # Added 2024-02-25
+  gnatcoll-readline = gnatPackages.gnatcoll-readline; # Added 2024-02-25
+  gnatcoll-syslog   = gnatPackages.gnatcoll-syslog; # Added 2024-02-25
+  gnatcoll-zlib     = gnatPackages.gnatcoll-zlib; # Added 2024-02-25
+  gnatcoll-postgres = gnatPackages.gnatcoll-postgres; # Added 2024-02-25
+  gnatcoll-sql      = gnatPackages.gnatcoll-sql; # Added 2024-02-25
+  gnatcoll-sqlite   = gnatPackages.gnatcoll-sqlite; # Added 2024-02-25
+  gnatcoll-xref     = gnatPackages.gnatcoll-xref; # Added 2024-02-25
+  gnatcoll-db2ada   = gnatPackages.gnatcoll-db2ada; # Added 2024-02-25
+  gnatinspect = gnatPackages.gnatinspect; # Added 2024-02-25
   gnome-firmware-updater = gnome-firmware; # added 2022-04-14
   gnome-passwordsafe = gnome-secrets; # added 2022-01-30
   gnome-mpv = throw "'gnome-mpv' has been renamed to/replaced by 'celluloid'"; # Converted to throw 2023-09-10
@@ -391,6 +412,9 @@ mapAliases ({
   gocode = throw "'gocode' has been removed as the upstream project was archived. 'gopls' is suggested as replacement"; # Added 2023-12-26
   govendor = throw "'govendor' has been removed as it is no longer maintained upstream, please use Go modules instead"; # Added 2023-12-26
   gometer = throw "gometer has been removed from nixpkgs because goLance stopped offering Linux support"; # Added 2023-02-10
+  gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25;
+
+  gpt4all-chat = throw "gpt4all-chat has been renamed to gpt4all"; # Added 2024-02-27
 
   graalvm11-ce = throw "graalvm11-ce has been removed because upstream dropped support to different JDK versions for each GraalVM release. Please use graalvm-ce instead"; # Added 2023-09-26
   graalvm17-ce = throw "graalvm17-ce has been removed because upstream dropped support to different JDK versions for each GraalVM release. Please use graalvm-ce instead"; # Added 2023-09-26
@@ -691,6 +715,7 @@ mapAliases ({
   mod_pkcs12 = apacheHttpdPackages.mod_pkcs12; # Added 2019-12-24
   mod_timestamp = apacheHttpdPackages.mod_timestamp; # Added 2019-12-24
   monero = monero-cli; # Added 2021-11-28
+  moneyplex = throw "'moneyplex' has been removed, as it was broken and unmaintained"; # Added 2024-02-28
   mongodb-4_0 = throw "mongodb-4_0 has been removed, it's end of life since April 2022"; # Added 2023-01-05
   mongodb-4_2 = throw "mongodb-4_2 has been removed, it's end of life since April 2023"; # Added 2023-06-06
   moonlander = throw "'moonlander' has been removed due to it being broken and unmaintained"; # Added 2023-11-26
@@ -920,6 +945,7 @@ mapAliases ({
   rarian = throw "rarian has been removed as unused"; # Added 2023-07-05
   rccl = throw "'rccl' has been replaced with 'rocmPackages.rccl'"; # Added 2023-10-08
   rdc = throw "'rdc' has been replaced with 'rocmPackages.rdc'"; # Added 2023-10-08
+  readline63 = throw "'readline63' has been replaced with 'readline'"; # Added 2024-02-10
   redpanda = redpanda-client; # Added 2023-10-14
   restya-board = throw "'restya-board' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-01-22
   retdec-full = throw "'retdec-full' is no longer needed, please use 'retdec'"; # Added 2024-02-05
@@ -1013,6 +1039,7 @@ mapAliases ({
   spark2 = throw "'spark2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_2_4 = throw "'spark_2_4' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_3_1 = throw "'spark_3_1' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
+  spark2014 = gnatprove; # Added 2024-02-25
 
   # Added 2020-02-10
   sourceHanSansPackages = {
@@ -1170,6 +1197,7 @@ mapAliases ({
   xdg_utils = xdg-utils; # Added 2021-02-01
   xineLib = xine-lib; # Added 2021-04-27
   xineUI = xine-ui; # Added 2021-04-27
+  xmlada = gnatPackages.xmlada; # Added 2024-02-25
   xonsh-unwrapped = throw "'xonsh-unwrapped' was incorporated into xonsh code; call xonsh directly instead."; # Added 2024-01-20
   xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
@@ -1188,6 +1216,7 @@ mapAliases ({
 
   ### Z ###
 
+  zabbix40 = throw "'zabbix40' has been removed as it has reached end of life"; # Added 2024-01-07
   zinc = zincsearch; # Added 2023-05-28
   zkg = throw "'zkg' has been replaced by 'zeek'";
   zq = zed.overrideAttrs (old: { meta = old.meta // { mainProgram = "zq"; }; }); # Added 2023-02-06

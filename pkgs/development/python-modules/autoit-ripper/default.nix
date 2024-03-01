@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-+BHWDkeVewoRUgaHln5TyoajpCvJiowCiC2dFYyp1MA=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "pefile==2019.4.18" "pefile>=2019.4.18"
-  '';
-
   nativeBuildInputs = [
     setuptools
   ];

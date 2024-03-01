@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , enableStatic ? stdenv.hostPlatform.isStatic
 , writeScript
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -8,12 +9,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
   version = "5.4.6";
 
   src = fetchurl {
-    url = "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.bz2";
+    url = with finalAttrs; "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.bz2";
     sha256 = "sha256-kThRsnTo4dMXgeyUnxwj6NvPDs9uc6JDbcIXad0+b0k=";
   };
 
@@ -47,8 +48,11 @@ stdenv.mkDerivation rec {
       new_version="$(curl -s https://tukaani.org/xz/ |
           pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]bz2</a>' |
           head -n1)"
-      update-source-version ${pname} "$new_version"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -72,5 +76,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
+    pkgConfigModules = [ "liblzma" ];
   };
-}
+})

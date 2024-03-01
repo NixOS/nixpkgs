@@ -175,7 +175,7 @@ following are specific to `buildPythonPackage`:
   from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`
   even if the package only has a `setup.py`. When set to `false`, you can
-  use the existing [hooks](#setup-hooks0 or provide your own logic to build the
+  use the existing [hooks](#setup-hooks) or provide your own logic to build the
   package. This can be useful for packages that don't support the pyproject
   format. When unset, the legacy `setuptools` hooks are used for backwards
   compatibility.
@@ -475,7 +475,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   be added as `build-system`.
 - `pipInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
-- `pythonCatchConflictsHook` to check whether a Python package is not already existing.
+- `pythonCatchConflictsHook` to fail if the package depends on two different versions of the same dependency.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).

@@ -116,7 +116,7 @@ stdenv.mkDerivation {
       --replace "#include <stdlib.h>" ""
     substituteInPlace lib/builtins/clear_cache.c \
       --replace "#include <assert.h>" ""
-    substituteInPlace lib/builtins/cpu_model.c \
+    substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
       --replace "#include <assert.h>" ""
   '';
 

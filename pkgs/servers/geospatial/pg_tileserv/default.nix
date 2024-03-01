@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "pg_tileserv";
@@ -13,7 +13,27 @@ buildGoModule rec {
 
   vendorHash = "sha256-8CvYvoIKOYvR7npCV65ZqZGR8KCTH4GabTt/JGQG3uc=";
 
+  postPatch = ''
+    # fix default configuration file location
+    substituteInPlace \
+      main.go \
+      --replace-fail "viper.AddConfigPath(\"/etc\")" "viper.AddConfigPath(\"$out/share/config\")"
+
+    # fix assets location in configuration file
+    substituteInPlace \
+      config/pg_tileserv.toml.example \
+      --replace-fail "# AssetsPath = \"/usr/share/pg_tileserv/assets\"" "AssetsPath = \"$out/share/assets\""
+  '';
+
   ldflags = [ "-s" "-w" "-X main.programVersion=${version}" ];
+
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r assets $out/share
+
+    mkdir -p $out/share/config
+    cp config/pg_tileserv.toml.example $out/share/config/pg_tileserv.toml
+  '';
 
   doCheck = false;
 

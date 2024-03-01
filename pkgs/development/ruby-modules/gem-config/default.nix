@@ -620,14 +620,6 @@ in
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
     dontBuild = false;
-    patches = [
-      # fix ruby 3.1 https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3
-      (fetchpatch {
-        url = "https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3/commits/b596b919bc7857fdc0fc1c61a8cb7eab32cfc2db.patch";
-        hash = "sha256-AzGTQaD/e6X4LOMuXhy/WhbayhWKYCGHXPFlzLRWyPM=";
-        stripLen = 1;
-      })
-    ];
   };
 
   pango = attrs: {

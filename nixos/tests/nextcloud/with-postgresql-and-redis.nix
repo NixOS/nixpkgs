@@ -84,7 +84,7 @@ in {
         "${withRcloneEnv} ${copySharedFile}"
     )
     client.wait_for_unit("multi-user.target")
-    client.execute("${pkgs.nextcloud-notify_push.passthru.test_client}/bin/test_client http://nextcloud ${adminuser} ${adminpass} >&2 &")
+    client.execute("${pkgs.lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${adminuser} ${adminpass} >&2 &")
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )

@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, httpx
+, pyjwt
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
 , pythonOlder
 , setuptools
 , setuptools-scm
-, wheel
-, httpx
-, pyjwt
-, pytest-httpx
-, pytestCheckHook
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "httpx-auth";
-  version = "0.19.0";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,13 +23,12 @@ buildPythonPackage rec {
     owner = "Colin-b";
     repo = "httpx_auth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ptxM0gabr+NmfkXqYlWd+G0c0yClJawRNKjbtPKSGFY=";
+    hash = "sha256-tKEYFoIHxiBG18JWyCHzQEwUvrWk/zuCWqj1uYsmh84=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -37,11 +37,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pyjwt
+    pytest-asyncio
     pytest-httpx
     pytestCheckHook
+    time-machine
   ];
 
-  pythonImportsCheck = [ "httpx_auth" ];
+  pythonImportsCheck = [
+    "httpx_auth"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

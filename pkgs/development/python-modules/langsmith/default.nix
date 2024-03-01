@@ -3,17 +3,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , freezegun
+, orjson
 , poetry-core
 , pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.3";
+  version = "0.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,16 +24,22 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-apczSNhj39Av5gsIM0QPF9eus3Z4eCv/ztxjHDgG8E0=";
+    hash = "sha256-9My/0DPN6AwAFoAiTdl6jd2GtX4fpFIgpnZe/WzAi9c=";
   };
 
   sourceRoot = "${src.name}/python";
 
+  pythonRelaxDeps = [
+    "orjson"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    orjson
     pydantic
     requests
   ];

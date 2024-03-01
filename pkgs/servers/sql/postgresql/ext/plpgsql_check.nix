@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plpgsql-check";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "plpgsql_check";
     rev = "v${version}";
-    hash = "sha256-7CHKcUpqEXJ+z0OcxrEpYHaO/zUtRbCXa8LgL+/roSg=";
+    hash = "sha256-VFM8SplBGlJd2RfUgS0FLH+xkyLOCVY2jaK6mn878CQ=";
   };
 
   buildInputs = [ postgresql ];

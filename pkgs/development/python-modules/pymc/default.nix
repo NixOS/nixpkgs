@@ -23,8 +23,13 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bOrWgZaSOXXalw251cm5JUDkAARGaxmUk+z3SY6Git8=";
+    hash = "sha256-tiOXbryY2TmeBVrG5cIMeDJ4alolBQ5LosdfH3tpVOA=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail ', "pytest-cov"' ""
+  '';
 
   propagatedBuildInputs = [
     arviz
@@ -36,11 +41,6 @@ buildPythonPackage rec {
     scipy
     typing-extensions
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ', "pytest-cov"' ""
-  '';
 
   # The test suite is computationally intensive and test failures are not
   # indicative for package usability hence tests are disabled by default.

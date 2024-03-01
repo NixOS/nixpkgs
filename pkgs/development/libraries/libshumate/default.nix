@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     sha256 = "+h0dKLECtvfsxwD5aRTIgiNI9jG/tortUJYFiYMe60g=";
   };
 
+  depsBuildBuild = [
+    # required to find native gi-docgen when cross compiling
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     gi-docgen
     meson

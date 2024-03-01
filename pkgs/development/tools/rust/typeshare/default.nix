@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typeshare";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
     rev = "v${version}";
-    hash = "sha256-Ftr0YMrY6tPpfg25swYntBXLWGKT00PEz79aOiSgLsU=";
+    hash = "sha256-ykrtvXPXxNYrUQNScit+REb7/6mE0FOzBQxPdbWodgk=";
   };
 
-  cargoHash = "sha256-VIPIFdbyPcflqHHLkzpDugmw9+9CJRIv+Oy7PoaUZ5g=";
+  cargoHash = "sha256-/oIezLqd3hkWrfO2pml31de+pgpEXhXHxIxt10rPJZo=";
 
   nativeBuildInputs = [ installShellFiles ];
 

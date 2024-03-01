@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Y6agmrqozKiV+GbiY60eOYORRrYLuB1zLNilxzM6oV0=";
+    hash = "sha256-kjSyIgLTObTOKMG5dk49XmWPXZpCWbLdpkmAsJcFliA=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [

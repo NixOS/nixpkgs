@@ -87,7 +87,7 @@ in stdenv.mkDerivation (rec {
     # of the flags used for the normal LLVM build. To avoid the need for building
     # a native libLLVM.so (which would fail) we force llvm-config to be linked
     # statically against the necessary LLVM components always.
-    ../../llvm-config-link-static.patch
+    ../../common/llvm/llvm-config-link-static.patch
     # Fix llvm being miscompiled by some gccs. See llvm/llvm-project#49955
     # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
     ./fix-llvm-issue-49955.patch
@@ -138,7 +138,7 @@ in stdenv.mkDerivation (rec {
     # TODO: Fix failing tests:
     rm test/DebugInfo/X86/vla-multi.ll
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp

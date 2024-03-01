@@ -2,20 +2,20 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-autocomplete";
-  version = "23.05.24";
+  version = "23.07.13";
 
   src = fetchFromGitHub {
     owner = "marlonrichert";
     repo = "zsh-autocomplete";
     rev = version;
-    sha256 = "sha256-/6V6IHwB5p0GT1u5SAiUa20LjFDSrMo731jFBq/bnpw=";
+    sha256 = "sha256-0NW0TI//qFpUA2Hdx6NaYdQIIUpRSd0Y4NhwBbdssCs=";
   };
 
   strictDeps = true;
   installPhase = ''
     install -D zsh-autocomplete.plugin.zsh $out/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-    cp -R scripts $out/share/zsh-autocomplete/scripts
-    cp -R functions $out/share/zsh-autocomplete/functions
+    cp -R Completions $out/share/zsh-autocomplete/Completions
+    cp -R Functions $out/share/zsh-autocomplete/Functions
   '';
 
   meta = with lib; {

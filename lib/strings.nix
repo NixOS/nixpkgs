@@ -95,8 +95,7 @@ rec {
         concatStringsSep "/" ["usr" "local" "bin"]
         => "usr/local/bin"
   */
-  concatStringsSep = builtins.concatStringsSep or (separator: list:
-    lib.foldl' (x: y: x + y) "" (intersperse separator list));
+  concatStringsSep = builtins.concatStringsSep;
 
   /* Maps a function over a list of strings and then concatenates the
      result with the specified separator interspersed between
