@@ -124,7 +124,6 @@ let
         export PERL5LIB=${with perlPackages; makePerlPath [ FileMimeInfo ]}
         export PATH=$PATH:${lib.makeBinPath [ coreutils perlPackages.FileMimeInfo ]}
       ''}";
-
     }
 
     {
