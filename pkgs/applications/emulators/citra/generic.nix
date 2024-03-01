@@ -34,7 +34,7 @@
 , enableQtTranslation ? enableQt, qttools
 , enableWebService ? true
 , enableCubeb ? true, cubeb
-, useDiscordRichPresence ? true, rapidjson
+, useDiscordRichPresence ? false, rapidjson
 }:
 stdenv.mkDerivation {
   inherit pname version src;
