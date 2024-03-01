@@ -49,7 +49,7 @@ in
 
   config =
     let
-      inherit (lib) mkIf;
+      inherit (lib) mkIf getExe;
     in
     mkIf cfg.enable {
 
@@ -84,7 +84,7 @@ in
 
           Type = "simple";
           Restart = "on-failure";
-          ExecStart = "${pkgs.komga}/bin/komga";
+          ExecStart = getExe pkgs.komga;
 
           StateDirectory = mkIf (cfg.stateDir == "/var/lib/komga") "komga";
 
