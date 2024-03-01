@@ -89,14 +89,14 @@ rec {
   # we have to keep all the numbers in the version to handle major/minor/patch level.
   # for <1.0.
 
-  garage_0_8_5 = generic {
-    version = "0.8.5";
-    sha256 = "sha256-YRxkjETSmI1dcHP9qTPLcOMqXx9B2uplVR3bBjJWn3I=";
-    cargoSha256 = "sha256-VOcymlvqqQRdT1MFzRcMuD+Xo3fc3XTuRA12tW7ZjdI=";
+  garage_0_8_6 = generic {
+    version = "0.8.6";
+    sha256 = "sha256-N0AOcwpuBHwTZtHcz6a2d9GOimHevhohEOzVkIt0RDE=";
+    cargoSha256 = "sha256-e72FQKL77CZOi/pa+hE7PCyc1+HSJgEsKGgWlfVw51k=";
     broken = stdenv.isDarwin;
   };
 
-  garage_0_8 = garage_0_8_5;
+  garage_0_8 = garage_0_8_6;
 
   garage_0_9_1 = generic {
     version = "0.9.1";
