@@ -1,7 +1,8 @@
-{ lib, fetchgit, fetchzip }:
+{ lib, repoRevToNameMaybe, fetchgit, fetchzip }:
 
 lib.makeOverridable (
-{ owner, repo, rev, name ? "source"
+{ owner, repo, rev
+, name ? repoRevToNameMaybe repo rev "github"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
 , sparseCheckout ? []
