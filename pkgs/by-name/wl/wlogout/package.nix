@@ -1,15 +1,16 @@
 { lib
-, stdenv
 , fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, scdoc
+, gitUpdater
+, gtk-layer-shell
 , gtk3
 , libxkbcommon
+, meson
+, ninja
+, pkg-config
+, scdoc
+, stdenv
 , wayland
 , wayland-protocols
-, gtk-layer-shell
 # gtk-layer-shell fails to cross-compile due to a hard dependency
 # on gobject-introspection.
 # Disable it when cross-compiling since it's an optional dependency.
@@ -17,20 +18,30 @@
 , withGtkLayerShell ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlogout";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "ArtsyMacaw";
     repo = "wlogout";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xeTO8MBUrvcVA7WTRY7OhaVGInijuvXsVYEax8JmMZ0=";
   };
 
-  strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ pkg-config meson ninja scdoc ];
+  outputs = [ "out" "man" ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+  ];
+
   buildInputs = [
     gtk3
     libxkbcommon
@@ -40,26 +51,32 @@ stdenv.mkDerivation rec {
     gtk-layer-shell
   ];
 
-  postPatch = ''
-    substituteInPlace style.css \
-      --replace "/usr/share/wlogout" "$out/share/${pname}"
-
-    substituteInPlace main.c \
-      --replace "/etc/wlogout" "$out/etc/${pname}"
-  '';
+  strictDeps = true;
 
   mesonFlags = [
     "--datadir=${placeholder "out"}/share"
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace style.css \
+      --replace "/usr/share/wlogout" "$out/share/wlogout"
+
+    substituteInPlace main.c \
+      --replace "/etc/wlogout" "$out/etc/wlogout"
+  '';
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
+
+  meta = {
     homepage = "https://github.com/ArtsyMacaw/wlogout";
     description = "A wayland based logout menu";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [ mit ];
     mainProgram = "wlogout";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (wayland.meta) platforms;
   };
-}
-# TODO: shell completions
+})
