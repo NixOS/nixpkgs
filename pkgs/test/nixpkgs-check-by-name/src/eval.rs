@@ -8,6 +8,7 @@ use crate::utils;
 use crate::validation::ResultIteratorExt as _;
 use crate::validation::{self, Validation::Success};
 use crate::NixFileStore;
+use relative_path::RelativePathBuf;
 use std::path::Path;
 
 use anyhow::Context;
@@ -56,18 +57,15 @@ struct Location {
 
 impl Location {
     // Returns the [file] field, but relative to Nixpkgs
-    fn relative_file(&self, nixpkgs_path: &Path) -> anyhow::Result<PathBuf> {
-        Ok(self
-            .file
-            .strip_prefix(nixpkgs_path)
-            .with_context(|| {
-                format!(
-                    "The file ({}) is outside Nixpkgs ({})",
-                    self.file.display(),
-                    nixpkgs_path.display()
-                )
-            })?
-            .to_path_buf())
+    fn relative_file(&self, nixpkgs_path: &Path) -> anyhow::Result<RelativePathBuf> {
+        let path = self.file.strip_prefix(nixpkgs_path).with_context(|| {
+            format!(
+                "The file ({}) is outside Nixpkgs ({})",
+                self.file.display(),
+                nixpkgs_path.display()
+            )
+        })?;
+        Ok(RelativePathBuf::from_path(path).expect("relative path"))
     }
 }
 
@@ -352,12 +350,12 @@ fn by_name(
 /// all-packages.nix
 fn by_name_override(
     attribute_name: &str,
-    expected_package_file: PathBuf,
+    expected_package_file: RelativePathBuf,
     is_semantic_call_package: bool,
     optional_syntactic_call_package: Option<CallPackageArgumentInfo>,
     definition: String,
     location: Location,
-    relative_location_file: PathBuf,
+    relative_location_file: RelativePathBuf,
 ) -> validation::Validation<ratchet::RatchetState<ratchet::ManualDefinition>> {
     // At this point, we completed two different checks for whether it's a
     // `callPackage`

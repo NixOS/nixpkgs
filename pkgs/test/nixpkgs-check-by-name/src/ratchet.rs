@@ -5,8 +5,8 @@
 use crate::nix_file::CallPackageArgumentInfo;
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::validation::{self, Validation, Validation::Success};
+use relative_path::RelativePathBuf;
 use std::collections::HashMap;
-use std::path::PathBuf;
 
 /// The ratchet value for the entirety of Nixpkgs.
 #[derive(Default)]
@@ -146,7 +146,7 @@ impl ToNixpkgsProblem for ManualDefinition {
 pub enum UsesByName {}
 
 impl ToNixpkgsProblem for UsesByName {
-    type ToContext = (CallPackageArgumentInfo, PathBuf);
+    type ToContext = (CallPackageArgumentInfo, RelativePathBuf);
 
     fn to_nixpkgs_problem(
         name: &str,

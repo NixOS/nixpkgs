@@ -3,6 +3,7 @@
 use crate::utils::LineIndex;
 use anyhow::Context;
 use itertools::Either::{self, Left, Right};
+use relative_path::RelativePathBuf;
 use rnix::ast;
 use rnix::ast::Expr;
 use rnix::ast::HasEntry;
@@ -79,7 +80,7 @@ impl NixFile {
 #[derive(Debug, PartialEq)]
 pub struct CallPackageArgumentInfo {
     /// The relative path of the first argument, or `None` if it's not a path.
-    pub relative_path: Option<PathBuf>,
+    pub relative_path: Option<RelativePathBuf>,
     /// Whether the second argument is an empty attribute set
     pub empty_arg: bool,
 }
@@ -369,8 +370,8 @@ pub enum ResolvedPath {
     /// The path is outside the given absolute path
     Outside,
     /// The path is within the given absolute path.
-    /// The `PathBuf` is the relative path under the given absolute path.
-    Within(PathBuf),
+    /// The `RelativePathBuf` is the relative path under the given absolute path.
+    Within(RelativePathBuf),
 }
 
 impl NixFile {
@@ -402,7 +403,9 @@ impl NixFile {
                 // Check if it's within relative_to
                 match resolved.strip_prefix(relative_to) {
                     Err(_prefix_error) => ResolvedPath::Outside,
-                    Ok(suffix) => ResolvedPath::Within(suffix.to_path_buf()),
+                    Ok(suffix) => ResolvedPath::Within(
+                        RelativePathBuf::from_path(suffix).expect("a relative path"),
+                    ),
                 }
             }
         }
@@ -506,14 +509,14 @@ mod tests {
             (
                 6,
                 Some(CallPackageArgumentInfo {
-                    relative_path: Some(PathBuf::from("file.nix")),
+                    relative_path: Some(RelativePathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
             (
                 7,
                 Some(CallPackageArgumentInfo {
-                    relative_path: Some(PathBuf::from("file.nix")),
+                    relative_path: Some(RelativePathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
@@ -527,7 +530,7 @@ mod tests {
             (
                 9,
                 Some(CallPackageArgumentInfo {
-                    relative_path: Some(PathBuf::from("file.nix")),
+                    relative_path: Some(RelativePathBuf::from("file.nix")),
                     empty_arg: false,
                 }),
             ),
