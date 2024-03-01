@@ -141,6 +141,11 @@ self = stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+
+    # Backport crash fix for Radeon (legacy) kernel driver
+    # see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10613
+    # FIXME: remove when merged upstream
+    ./backport-radeon-crash-fix.patch
   ];
 
   postPatch = ''
