@@ -37,14 +37,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       targetPodcastDuration = toString
         ((targetPodcastSize + lameMp3FileAdjust) / (lameMp3Bitrate / 8));
       mp3file = with pkgs;
-        runCommand "gen-castopod.mp3" { nativeBuildInputs = [ sox lame ]; } ''
-          sox -n -r 48000 -t wav - synth ${targetPodcastDuration} sine 440 `
-          `| lame --noreplaygain -cbr -q 9 -b 320 - $out
-          FILESIZE="$(stat -c%s $out)"
-          [ "$FILESIZE" -gt 0 ]
-          [ "$FILESIZE" -le "${toString targetPodcastSize}" ]
-        '';
-
+        runCommand ;
       bannerWidth = 3000;
       banner = pkgs.runCommand "gen-castopod-cover.jpg" { } ''
         ${pkgs.imagemagick}/bin/magick `
@@ -185,7 +178,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             # upload podcast ###################################################
 
             driver.find_element(By.CSS_SELECTOR, '#audio_file').send_keys(
-                '${mp3file}'
+                '/tmp/podcast.mp3'
             )
             driver.find_element(By.CSS_SELECTOR, '#cover').send_keys(
                 '${cover}'
@@ -206,7 +199,23 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             driver.quit()
           '';
         in
-        [ pkgs.firefox-unwrapped pkgs.geckodriver browser-test ];
+        [
+          pkgs.firefox-unwrapped
+          pkgs.geckodriver
+          browser-test
+          (pkgs.writeShellApplication {
+            name = "build-mp3";
+            runtimeInputs = with pkgs; [ sox lame ];
+            text = ''
+              out=/tmp/podcast.mp3
+              sox -n -r 48000 -t wav - synth ${targetPodcastDuration} sine 440 `
+              `| lame --noreplaygain -cbr -q 9 -b 320 - $out
+              FILESIZE="$(stat -c%s $out)"
+              [ "$FILESIZE" -gt 0 ]
+              [ "$FILESIZE" -le "${toString targetPodcastSize}" ]
+            '';
+          })
+        ];
     };
 
   testScript = ''
@@ -216,6 +225,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     castopod.wait_for_unit("nginx.service")
     castopod.wait_for_open_port(80)
     castopod.wait_until_succeeds("curl -sS -f http://castopod.example.com")
+
+    client.succeed("build-mp3")
 
     with subtest("Create superadmin, log in, create and upload a podcast"):
         client.succeed(\
