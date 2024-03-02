@@ -41,6 +41,10 @@ stdenv.mkDerivation {
     (lib.enableFeature enableShared "shared")
   ];
 
+  # Workaround upstream testsuite failure in multithreaded setup:
+  #   https://github.com/ianlancetaylor/libbacktrace/issues/118#issuecomment-1974850483
+  env.XZ_OPT = "--threads=1";
+
   doCheck = stdenv.isLinux && !stdenv.hostPlatform.isMusl;
 
   passthru = {

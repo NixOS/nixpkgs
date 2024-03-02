@@ -5666,6 +5666,8 @@ self: super: with self; {
 
   intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
 
+  interegular = callPackage ../development/python-modules/interegular { };
+
   interface-meta = callPackage ../development/python-modules/interface-meta { };
 
   internetarchive = callPackage ../development/python-modules/internetarchive { };
@@ -9410,6 +9412,8 @@ self: super: with self; {
   openusd = callPackage ../development/python-modules/openusd {
     alembic = pkgs.alembic;
   };
+
+  outlines = callPackage ../development/python-modules/outlines { };
 
   overly = callPackage ../development/python-modules/overly { };
 
