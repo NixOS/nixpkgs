@@ -15,7 +15,7 @@ let
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, hash, psqlSchema
+      , version, hash
 
       # for tests
       , testers, nixosTests, thisAttr
@@ -262,7 +262,8 @@ let
       };
     in
     {
-      inherit psqlSchema jitSupport;
+      inherit jitSupport;
+      psqlSchema = lib.versions.major version;
 
       withJIT = if jitSupport then this else jitToggle;
       withoutJIT = if jitSupport then jitToggle else this;
