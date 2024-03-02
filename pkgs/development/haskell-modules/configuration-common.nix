@@ -2492,7 +2492,7 @@ self: super: {
   # 2023-07-18: https://github.com/srid/ema/issues/156
   ema = doJailbreak super.ema;
 
-  # 2024-03-02: base <=4.18.0.0 - https://github.com/srid/url-slug/issues/1
+  # 2024-03-02: base <=4.18.0.0  https://github.com/srid/url-slug/pull/2
   url-slug = doJailbreak super.url-slug;
 
   glirc = doJailbreak (super.glirc.override {
@@ -2729,9 +2729,35 @@ self: super: {
   # multiple bounds too strict
   snaplet-sqlite-simple = doJailbreak super.snaplet-sqlite-simple;
 
-  emanote = super.emanote.overrideScope (lself: lsuper: {
-    commonmark-extensions = lself.commonmark-extensions_0_2_3_2;
-  });
+  # Test failure https://gitlab.com/lysxia/ap-normalize/-/issues/2
+  ap-normalize = dontCheck super.ap-normalize;
+
+  heist-extra = doJailbreak super.heist-extra;  # base <4.18.0.0.0
+  unionmount = doJailbreak super.unionmount;  # base <4.18
+  path-tree = doJailbreak super.path-tree;  # base <4.18  https://github.com/srid/pathtree/pull/1
+  tailwind = doJailbreak super.tailwind;  # base <=4.17.0.0
+  tagtree = doJailbreak super.tagtree;  # base <=4.17  https://github.com/srid/tagtree/issues/1
+  commonmark-wikilink = doJailbreak super.commonmark-wikilink; # base <4.18.0.0.0
+
+  # 2024-03-02: Apply unreleased changes necessary for compatibility
+  # with commonmark-extensions-0.2.5.3.
+  commonmark-simple = assert super.commonmark-simple.version == "0.1.0.0";
+    appendPatches (map ({ rev, hash }: fetchpatch {
+      name = "commonmark-simple-${lib.substring 0 7 rev}.patch";
+      url = "https://github.com/srid/commonmark-simple/commit/${rev}.patch";
+      includes = [ "src/Commonmark/Simple.hs" ];
+      inherit hash;
+    }) [
+      {
+        rev = "71f5807ed4cbd8da915bf5ba04cd115b49980bcb";
+        hash = "sha256-ibDQbyTd2BoA0V+ldMOr4XYurnqk1nWzbJ15tKizHrM=";
+      }
+      {
+        rev = "fc106c94f781f6a35ef66900880edc08cbe3b034";
+        hash = "sha256-9cpgRNFWhpSuSttAvnwPiLmi1sIoDSYbp0sMwcKWgDQ=";
+      }
+    ])
+      (doJailbreak super.commonmark-simple);
 
   # Test files missing from sdist
   # https://github.com/tweag/webauthn/issues/166
