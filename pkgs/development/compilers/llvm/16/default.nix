@@ -119,6 +119,11 @@ in let
       python3 = pkgs.python3;  # don't use python-boot
     });
 
+    # broken, added to avoid evaluation error on Darwin
+    bolt = callPackage ../common/bolt {
+      inherit llvm_meta;
+    };
+
     # pick clang appropriate for package set we are targeting
     clang =
       /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM

@@ -1,0 +1,154 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cc3a70fa3..2e45aa79a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,15 @@
+-include(ExternalProject)
++cmake_minimum_required(VERSION 3.20.0)
++
++if(NOT DEFINED LLVM_COMMON_CMAKE_UTILS)
++  set(LLVM_COMMON_CMAKE_UTILS ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
++endif()
++include(${LLVM_COMMON_CMAKE_UTILS}/Modules/CMakePolicy.cmake
++  NO_POLICY_SCOPE)
++
++if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
++  project(bolt)
++  set(BOLT_BUILT_STANDALONE TRUE)
++endif()
+ 
+ set(BOLT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+ set(BOLT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+@@ -7,6 +18,39 @@ set(CMAKE_CXX_STANDARD 17)
+ # Add path for custom modules.
+ list(INSERT CMAKE_MODULE_PATH 0 "${BOLT_SOURCE_DIR}/cmake/modules")
+ 
++# standalone build, copied from clang
++if(BOLT_BUILT_STANDALONE)
++  set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard to conform to")
++  set(CMAKE_CXX_STANDARD_REQUIRED YES)
++  set(CMAKE_CXX_EXTENSIONS NO)
++
++  if(NOT MSVC_IDE)
++    set(LLVM_ENABLE_ASSERTIONS ${ENABLE_ASSERTIONS}
++      CACHE BOOL "Enable assertions")
++    # Assertions should follow llvm-config's.
++    mark_as_advanced(LLVM_ENABLE_ASSERTIONS)
++  endif()
++
++  find_package(LLVM REQUIRED HINTS "${LLVM_CMAKE_DIR}")
++  list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
++
++  set(LLVM_MAIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../llvm" CACHE PATH "Path to LLVM source tree")
++  find_program(LLVM_TABLEGEN_EXE "llvm-tblgen" ${LLVM_TOOLS_BINARY_DIR}
++    NO_DEFAULT_PATH)
++
++  # They are used as destination of target generators.
++  set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/bin)
++  set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib${LLVM_LIBDIR_SUFFIX})
++
++  include(AddLLVM)
++  include(TableGen)
++  include_directories(${LLVM_INCLUDE_DIRS})
++
++  set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
++  set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX} )
++  set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX} )
++endif() # standalone
++
+ # Determine default set of targets to build -- the intersection of
+ # those BOLT supports and those LLVM is targeting.
+ set(BOLT_TARGETS_TO_BUILD_all "AArch64;X86;RISCV")
+@@ -92,6 +136,8 @@ if (BOLT_ENABLE_RUNTIME)
+   if(CMAKE_SYSROOT)
+     list(APPEND extra_args -DCMAKE_SYSROOT=${CMAKE_SYSROOT})
+   endif()
++
++  include(ExternalProject)
+   ExternalProject_Add(bolt_rt
+     SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/runtime"
+     STAMP_DIR ${CMAKE_CURRENT_BINARY_DIR}/bolt_rt-stamps
+diff --git a/lib/Utils/CMakeLists.txt b/lib/Utils/CMakeLists.txt
+index d14033142..79623b33f 100644
+--- a/lib/Utils/CMakeLists.txt
++++ b/lib/Utils/CMakeLists.txt
+@@ -1,15 +1,43 @@
++find_first_existing_vc_file("${LLVM_MAIN_SRC_DIR}" llvm_vc)
++find_first_existing_vc_file("${BOLT_SOURCE_DIR}" bolt_vc)
++
++# The VC revision include that we want to generate.
++set(version_inc "${CMAKE_CURRENT_BINARY_DIR}/VCSVersion.inc")
++
++set(generate_vcs_version_script "${LLVM_CMAKE_DIR}/GenerateVersionFromVCS.cmake")
++
++if(llvm_vc AND LLVM_APPEND_VC_REV)
++  set(llvm_source_dir ${LLVM_MAIN_SRC_DIR})
++endif()
++
++# Create custom target to generate the VC revision include.
++add_custom_command(OUTPUT "${version_inc}"
++  DEPENDS "${llvm_vc}" "${bolt_vc}" "${generate_vcs_version_script}"
++  COMMAND ${CMAKE_COMMAND} "-DNAMES=BOLT"
++                           "-DHEADER_FILE=${version_inc}"
++                           "-DBOLT_SOURCE_DIR=${BOLT_SOURCE_DIR}"
++                           "-DLLVM_VC_REPOSITORY=${llvm_vc_repository}"
++                           "-DLLVM_VC_REVISION=${llvm_vc_revision}"
++                           "-DLLVM_FORCE_VC_REVISION=${LLVM_FORCE_VC_REVISION}"
++                           "-DLLVM_FORCE_VC_REPOSITORY=${LLVM_FORCE_VC_REPOSITORY}"
++                           -P "${generate_vcs_version_script}")
++
++# Mark the generated header as being generated.
++set_source_files_properties("${version_inc}"
++  PROPERTIES GENERATED TRUE
++             HEADER_FILE_ONLY TRUE)
++
++include_directories(${CMAKE_CURRENT_BINARY_DIR})
++
+ add_llvm_library(LLVMBOLTUtils
+   CommandLineOpts.cpp
+   Utils.cpp
+-
++  ${version_inc}
+   DISABLE_LLVM_LINK_LLVM_DYLIB
+ 
+   LINK_LIBS
+   ${LLVM_PTHREAD_LIB}
+ 
+-  DEPENDS
+-  llvm_vcsrevision_h
+-
+   LINK_COMPONENTS
+   Support
+   )
+diff --git a/lib/Utils/CommandLineOpts.cpp b/lib/Utils/CommandLineOpts.cpp
+index ba296c10c..fe819821a 100644
+--- a/lib/Utils/CommandLineOpts.cpp
++++ b/lib/Utils/CommandLineOpts.cpp
+@@ -11,7 +11,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "bolt/Utils/CommandLineOpts.h"
+-#include "llvm/Support/VCSRevision.h"
++#include "VCSVersion.inc"
+ 
+ using namespace llvm;
+ 
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 89862fd59..09c482224 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -29,6 +29,14 @@ if (BOLT_LLD_EXE AND NOT "lld" IN_LIST LLVM_ENABLE_PROJECTS)
+   set_property(TARGET lld PROPERTY IMPORTED_LOCATION "${BOLT_LLD_EXE}")
+ endif()
+ 
++if (BOLT_BINUTILS_DIR)
++  add_executable(llvm-readelf IMPORTED GLOBAL)
++  set_property(TARGET llvm-readelf PROPERTY IMPORTED_LOCATION "${BOLT_BINUTILS_DIR}/llvm-readelf")
++
++  add_executable(llvm-strip IMPORTED GLOBAL)
++  set_property(TARGET llvm-strip PROPERTY IMPORTED_LOCATION "${BOLT_BINUTILS_DIR}/llvm-strip")
++endif()
++
+ list(APPEND BOLT_TEST_DEPS
+   clang
+   count
