@@ -10,49 +10,31 @@ let
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  mkValue = v:
-    if v == true then "yes"
-    else if v == false then "no"
-    else if lib.isInt v then toString v
-    else v;
-
-  mkSection = name: attrs: ''
-    [${name}]
-    ${
-      lib.concatStringsSep "\n"
-        (lib.mapAttrsToList
-          (k: v: "${k}=${mkValue v}")
-          (lib.filterAttrs
-            (k: v: v != null)
-            attrs))
-    }
-  '';
-
-  configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
-    (mkSection "main" {
+  configAttrs = lib.recursiveUpdate {
+    main = {
       plugins = "keyfile";
       inherit (cfg) dhcp dns;
       # If resolvconf is disabled that means that resolv.conf is managed by some other module.
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
-    })
-    (mkSection "keyfile" {
+    };
+    keyfile = {
       unmanaged-devices =
-        if cfg.unmanaged == [ ] then null
-        else lib.concatStringsSep ";" cfg.unmanaged;
-    })
-    (mkSection "logging" {
+      if cfg.unmanaged == [ ] then null
+      else lib.concatStringsSep ";" cfg.unmanaged;
+    };
+    logging = {
       audit = config.security.audit.enable;
       level = cfg.logLevel;
-    })
-    (mkSection "connection" cfg.connectionConfig)
-    (mkSection "device" {
-      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
-      "wifi.backend" = cfg.wifi.backend;
-    })
-    cfg.extraConfig
-  ]);
+    };
+    connection = cfg.connectionConfig;
+    device = {
+        "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
+        "wifi.backend" = cfg.wifi.backend;
+    };
+  } cfg.extraConfig;
+  configFile = ini.generate "NetworkManager.conf" configAttrs;
 
   /*
     [network-manager]
@@ -129,7 +111,7 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = teams.freedesktop.members ++ [ lib.maintainers.janik ];
   };
 
   ###### interface
@@ -170,7 +152,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.lines;
+        type = ini.type;
         default = "";
         description = lib.mdDoc ''
           Configuration appended to the generated NetworkManager.conf.
