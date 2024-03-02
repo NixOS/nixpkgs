@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, ncurses, xmlto }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 with lib;
 stdenv.mkDerivation rec {
 
   pname = "galaxis";
-  version = "1.10";
+  version = "1.11";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "http://www.catb.org/~esr/galaxis/${pname}-${version}.tar.gz";
-    sha256 = "1181x3z4r0794v2bkpigb5fablw1nayj42wvhy2am79p7j1iqq5r";
+    sha256 = "1d3qaiqd8qik622g9c27n73iw28mvj02ag30bn3z4qzpkz5grycc";
   };
 
-  buildInputs = [ ncurses xmlto ];
+  buildInputs = [ ncurses ];
 
   patchPhase = ''
     sed -i\
