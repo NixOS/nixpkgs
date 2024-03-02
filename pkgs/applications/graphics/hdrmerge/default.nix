@@ -3,7 +3,6 @@
 , fetchpatch
 , fetchFromGitHub
 , cmake
-, extra-cmake-modules
 , qtbase
 , wrapQtAppsHook
 , libraw
@@ -17,12 +16,12 @@
 
 mkDerivation rec {
   pname = "hdrmerge";
-  version = "unstable-2020-11-12";
+  version = "unstable-2023-01-04";
   src = fetchFromGitHub {
     owner = "jcelaya";
     repo = "hdrmerge";
-    rev = "f5a2538cffe3e27bd9bea5d6a199fa211d05e6da";
-    sha256 = "1bzf9wawbdvdbv57hnrmh0gpjfi5hamgf2nwh2yzd4sh1ssfa8jz";
+    rev = "ca38b54f980564942a7f2b014a5f57a64c1d9019";
+    hash = "sha256-DleYgpDXP0NvbmEURXnBfe3OYnT1CaQq+Mw93JQQprE=";
   };
 
   nativeBuildInputs = [
@@ -38,18 +37,17 @@ mkDerivation rec {
     "-DALGLIB_DIR:PATH=${alglib}"
   ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' does not name a type
+    "-include cstdint"
+  ];
+
   patches = [
+    # https://github.com/jcelaya/hdrmerge/pull/222
     (fetchpatch {
-      # patch FindAlglib.cmake to respect ALGLIB_DIR
-      # see https://github.com/jcelaya/hdrmerge/pull/213
-      name = "patch-hdrmerge-CMake.patch";
-      url = "https://github.com/mkroehnert/hdrmerge/commit/472b2dfe7d54856158aea3d5412a02d0bab1da4c.patch";
-      sha256 = "0jc713ajr4w08pfbi6bva442prj878nxp1fpl9112i3xj34x9sdi";
-    })
-    (fetchpatch {
-      name = "support-libraw-0.21.patch";
-      url = "https://github.com/jcelaya/hdrmerge/commit/779e566b3e2807280b78c79affda2cdfa64bde87.diff";
-      sha256 = "48sivCfJWEtGiBXTrO+SWTVlT9xyx92w2kkB8Wt/clk=";
+      name = "exiv2-0.28.patch";
+      url = "https://github.com/jcelaya/hdrmerge/commit/377d8e6f3c7cdd1a45b63bce2493ad177dde03fb.patch";
+      hash = "sha256-lXHML6zGkVeWKvmY5ECoJL2xjmtZz77XJd5prpgJiZo=";
     })
   ];
 

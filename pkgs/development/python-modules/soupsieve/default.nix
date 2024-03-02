@@ -3,17 +3,16 @@
 , fetchPypi
 , hatchling
 , isPy3k
-, backports_functools_lru_cache
 }:
 
 buildPythonPackage rec {
   pname = "soupsieve";
-  version = "2.4";
+  version = "2.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4o26nKbHwAFz405LpXRI8GiLtoG3xei/SXHar8CT1po=";
+    hash = "sha256-VmPVp7O/ru4LxDcuf8SPnP9JQLPuxUpkUcxSmfEJdpA=";
   };
 
   nativeBuildInputs = [

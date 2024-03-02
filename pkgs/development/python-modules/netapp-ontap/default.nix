@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "netapp-ontap";
-  version = "9.12.1.0";
+  version = "9.14.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;
-    sha256 = "sha256-eqFj2xYl4X1TB4Rxajpor5zgJdoISJk89KpARAHI/W0=";
+    sha256 = "sha256-nh7SHcyujTVXSgxQajRA4EueN6Hf8cKueQbsbnr6+qw=";
   };
 
   propagatedBuildInputs = [

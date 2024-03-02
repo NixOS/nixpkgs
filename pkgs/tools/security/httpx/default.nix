@@ -5,20 +5,25 @@
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.3.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VYFXxCKlVqueUk/uoD15ay+IWiFKDsBHp5WXZlajw70=";
+    hash = "sha256-UYMaviHuRP47WSm8tsxjpsVrPgeQRUGTe7TxDAfhoGM=";
   };
 
-  vendorHash = "sha256-1WamyEnDsuyv0ijHPJthS/ZZVXKrGu8LG8w5wMVoUS0=";
+  vendorHash = "sha256-tCwh+uEqXw4PZp11xRSFovXxNstulCMPfcEiVhTFuI4=";
 
-  subPackages = [ "cmd/httpx" ];
+  subPackages = [
+    "cmd/httpx"
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Tests require network access
   doCheck = false;

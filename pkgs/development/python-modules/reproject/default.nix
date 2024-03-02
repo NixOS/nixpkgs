@@ -3,40 +3,56 @@
 , astropy-extension-helpers
 , astropy-healpix
 , buildPythonPackage
-, cython
+, cloudpickle
+, cython_3
+, dask
 , fetchPypi
+, fsspec
 , numpy
+, oldest-supported-numpy
 , pytest-astropy
 , pytestCheckHook
 , pythonOlder
 , scipy
 , setuptools-scm
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "0.13.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OKxPPKcVVrEVUGR8Zaphn7ur9HOuqQKa9gnMo2RQQME=";
+    hash = "sha256-lL6MkKVSWmV6KPkG/9fjc2c2dFQ14i9fiJAr3VFfcuI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "cython==" "cython>="
+  '';
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    cython
+    cython_3
+    numpy
+    oldest-supported-numpy
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
     astropy
     astropy-healpix
+    cloudpickle
+    dask
+    fsspec
     numpy
     scipy
-  ];
+    zarr
+  ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     pytest-astropy
@@ -57,7 +73,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Reproject astronomical images";
+    downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
+    changelog = "https://github.com/astropy/reproject/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ smaret ];
   };

@@ -3,7 +3,7 @@
 
 let
 
-  inherit (stdenv.targetPlatform) system;
+  inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
   target = {
@@ -12,13 +12,13 @@ let
   }.${system} or throwSystem;
 in stdenv.mkDerivation rec {
   pname = "shim";
-  version = "15.7";
+  version = "15.8";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = pname;
     rev = version;
-    hash = "sha256-CfUuq0anbXlCVo9r9NIb76oJzDqaPMIhL9cmXK1iqXo=";
+    hash = "sha256-xnr9HBfYP035C7p2YTRZasx5SF4a2ZkOl9IpsVduNm4=";
     fetchSubmodules = true;
   };
 
@@ -35,6 +35,13 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/shim
     install -m 644 ${target} $out/share/shim/
   '';
+
+  passthru = {
+    # Expose the target file name so that consumers
+    # (e.g. infrastructure for signing this shim) don't need to
+    # duplicate the logic from here
+    inherit target;
+  };
 
   meta = with lib; {
     description = "UEFI shim loader";

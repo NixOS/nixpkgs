@@ -86,7 +86,7 @@ in {
       };
 
       ifpAllowedUids = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = ["root"];
         description = lib.mdDoc "A list of users allowed to access the ifp dbus interface.";
       };
@@ -117,8 +117,8 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = !config.krb5.enable;
-        message = "krb5 must be disabled through `krb5.enable` for FreeIPA integration to work.";
+        assertion = !config.security.krb5.enable;
+        message = "krb5 must be disabled through `security.krb5.enable` for FreeIPA integration to work.";
       }
       {
         assertion = !config.users.ldap.enable;
@@ -181,25 +181,33 @@ in {
       '';
     };
 
-    system.activationScripts.ipa = stringAfter ["etc"] ''
-      # libcurl requires a hard copy of the certificate
-      if ! ${pkgs.diffutils}/bin/diff ${cfg.certificate} /etc/ipa/ca.crt > /dev/null 2>&1; then
-        rm -f /etc/ipa/ca.crt
-        cp ${cfg.certificate} /etc/ipa/ca.crt
-      fi
+    systemd.services."ipa-activation" = {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
+      script = ''
+        # libcurl requires a hard copy of the certificate
+        if ! ${pkgs.diffutils}/bin/diff ${cfg.certificate} /etc/ipa/ca.crt > /dev/null 2>&1; then
+          rm -f /etc/ipa/ca.crt
+          cp ${cfg.certificate} /etc/ipa/ca.crt
+        fi
 
-      if [ ! -f /etc/krb5.keytab ]; then
-        cat <<EOF
+        if [ ! -f /etc/krb5.keytab ]; then
+          cat <<EOF
 
-          In order to complete FreeIPA integration, please join the domain by completing the following steps:
-          1. Authenticate as an IPA user authorized to join new hosts, e.g. kinit admin@${cfg.realm}
-          2. Join the domain and obtain the keytab file: ipa-join
-          3. Install the keytab file: sudo install -m 600 krb5.keytab /etc/
-          4. Restart sssd systemd service: sudo systemctl restart sssd
+            In order to complete FreeIPA integration, please join the domain by completing the following steps:
+            1. Authenticate as an IPA user authorized to join new hosts, e.g. kinit admin@${cfg.realm}
+            2. Join the domain and obtain the keytab file: ipa-join
+            3. Install the keytab file: sudo install -m 600 krb5.keytab /etc/
+            4. Restart sssd systemd service: sudo systemctl restart sssd
 
-      EOF
-      fi
-    '';
+        EOF
+        fi
+      '';
+    };
 
     services.sssd.config = ''
       [domain/${cfg.domain}]

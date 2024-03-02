@@ -11,23 +11,16 @@
 
 buildGoModule rec {
   pname = "dive";
-  version = "0.10.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
-    repo = pname;
+    repo = "dive";
     rev = "v${version}";
-    sha256 = "sha256-1pmw8pUlek5FlI1oAuvLSqDow7hw5rw86DRDZ7pFAmA=";
+    hash = "sha256-CuVRFybsn7PVPgz3fz5ghpjOEOsTYTv6uUAgRgFewFw=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/wagoodman/dive/commit/fe9411c414418d839a8638bb9a12ccfc892b5845.patch";
-      sha256 = "sha256-c0TcUQ87CeOiXHoTQ3z/04i72aDr403DL7fIbXTJ9cY=";
-    })
-  ];
-
-  vendorSha256 = "sha256-YPkEei7d7mXP+5FhooNoMDARQLosH2fdSaLXGZ5C27o=";
+  vendorHash = "sha256-uzzawa/Doo6j/Fh9dJMzGKbpp24UTLAo9VGmuQ80IZE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,7 +31,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "A tool for exploring each layer in a docker image";
     homepage = "https://github.com/wagoodman/dive";
+    changelog = "https://github.com/wagoodman/dive/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam spacekookie SuperSandro2000 ];
+    maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

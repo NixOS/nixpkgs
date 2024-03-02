@@ -1,7 +1,7 @@
 { config
 , lib
 , stdenv
-, fetchzip
+, fetchgit
 , autoreconfHook
 , autoconf-archive
 , pkg-config
@@ -39,8 +39,13 @@ stdenv.mkDerivation rec {
   pname = "sox";
   version = "unstable-2021-05-09";
 
-  src = fetchzip {
-    url = "https://sourceforge.net/code-snapshots/git/s/so/sox/code.git/sox-code-42b3557e13e0fe01a83465b672d89faddbe65f49.zip";
+  src = fetchgit {
+    # not really needed, but when this src was updated from `fetchurl ->
+    # fetchgit`, we spared the mass rebuild by changing this `name` and
+    # therefor merge this to `master` and not to `staging`.
+    name = "source";
+    url = "https://git.code.sf.net/p/sox/code";
+    rev = "42b3557e13e0fe01a83465b672d89faddbe65f49";
     hash = "sha256-9cpOwio69GvzVeDq79BSmJgds9WU5kA/KUlAkHcpN5c=";
   };
 
@@ -54,8 +59,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
-  ] ++ lib.optionals enableOpusfile [
-    # configure.ac uses pkg-config only to locate libopusfile
     pkg-config
   ];
 
@@ -75,6 +78,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableAMR [ amrnb amrwb ]
     ++ lib.optional enableLibpulseaudio libpulseaudio
     ++ lib.optional stdenv.isDarwin CoreAudio;
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Sample Rate Converter for audio";

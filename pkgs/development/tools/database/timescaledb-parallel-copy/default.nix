@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-HxaGKJnLZjPPJXoccAx0XUsCrZiG09c40zeSbHYXm04=";
   };
 
-  vendorSha256 = "sha256-muxtr80EjnRoHG/TCEQwrBwlnARsfqWoYlR0HavMe6U=";
+  vendorHash = "sha256-muxtr80EjnRoHG/TCEQwrBwlnARsfqWoYlR0HavMe6U=";
 
   meta = with lib; {
     description = "Bulk, parallel insert of CSV records into PostgreSQL";

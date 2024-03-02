@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cargo
-, fetchFromGitHub
+, fetchPypi
 , libiconv
 , Foundation
 , rustPlatform
@@ -13,19 +13,18 @@
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.4.0.post0";
+  version = "1.6.3";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    hash = "sha256-aw57B15sDbMcdNPD8MW+O7AdqSSqjlOcuXNSm10GdPM=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-z9Vu9mj82hwuPva56tmav4jN9RCoNIZxL+C3GYtYsOo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-SvHrMr5k4afVdU5nvg+bcoHVmzHYyoOYqv7nOSVxRCE=";
+    hash = "sha256-2or419evNxi99HIvL2TlSWFFh4BCky8qI/dVQbq/X38=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
@@ -34,7 +33,7 @@ buildPythonPackage rec {
 
   GETTEXT_SYSTEM = true;
 
-  doCheck = false; # there are no tests
+  doCheck = false; # tests for this package are in skytemple-files package
   pythonImportsCheck = [ "skytemple_rust" ];
 
   meta = with lib; {

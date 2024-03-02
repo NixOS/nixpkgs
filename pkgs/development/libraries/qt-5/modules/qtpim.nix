@@ -12,7 +12,7 @@ qtModule {
     "dev"
   ];
 
-  qtInputs = [
+  propagatedBuildInputs = [
     qtbase
     qtdeclarative
   ];

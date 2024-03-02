@@ -2,19 +2,22 @@
 
 buildGoModule rec {
   pname = "wakapi";
-  version = "2.7.0";
+  version = "2.10.5";
 
   src = fetchFromGitHub {
     owner = "muety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1EMSrHx6Tx58voz5veyNZg1gnubuGyg2K4dg2QdzmMw=";
+    sha256 = "sha256-u+br+C5tWSCc8LPGS3/CMkxpqaO30BsWPRFGOkloMlA=";
   };
 
-  vendorHash = "sha256-0wHXULDKyXYBTGxfSQXT/5NidPtSnx7ujb8vyczmE38=";
+  vendorHash = "sha256-TeKVhG1V9inyDWfILwtpU9QknJ9bt3Dja5GVHrK9PkA=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
+
+  # Fix up reported version
+  postPatch = ''echo ${version} > version.txt'';
 
   ldflags = [
     "-s"
@@ -27,5 +30,6 @@ buildGoModule rec {
     description = "A minimalist self-hosted WakaTime-compatible backend for coding statistics";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ t4ccer ];
+    mainProgram = "wakapi";
   };
 }

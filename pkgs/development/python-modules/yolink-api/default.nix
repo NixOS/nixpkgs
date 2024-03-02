@@ -1,8 +1,8 @@
 { lib
 , aiohttp
+, aiomqtt
 , buildPythonPackage
 , fetchFromGitHub
-, asyncio-mqtt
 , pydantic
 , pythonOlder
 , setuptools
@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "yolink-api";
-  version = "0.2.9";
-  format = "pyproject";
+  version = "0.3.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
-    repo = pname;
+    repo = "yolink-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DbdoGNwz7HtscnDv+rOI2zcs4i4Dl1DpRZNH/DOcJHc=";
+    hash = "sha256-RXO++8Dh0hLkjXev/WDhPixLHKXlqRabbrPW6Hs/xoM=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    asyncio-mqtt
+    aiomqtt
     pydantic
     tenacity
   ];

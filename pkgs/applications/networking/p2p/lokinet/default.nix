@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , libevent
 , libsodium
@@ -8,13 +9,20 @@
 , nlohmann_json
 , pkg-config
 , spdlog
+, fmt_9
 , sqlite
 , systemd
 , unbound
 , zeromq
 }:
+let
+  # Upstream has received reports of incompatibilities with fmt, and other
+  # dependencies, see: https://github.com/oxen-io/lokinet/issues/2200.
+  spdlog' = spdlog.override {
+    fmt = fmt_9;
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "lokinet";
   version = "0.9.11";
 
@@ -26,6 +34,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
   };
 
+  patches = [
+    # Fix gcc-13 compatibility:
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/oxen-io/lokinet/commit/89c5c73be48788ba14a55cb6d82d57208b487eaf.patch";
+      hash = "sha256-yCy4WXs6p67TMe4uPNAuQyJvtP3IbpJS81AeomNu9lU=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -36,7 +53,7 @@ stdenv.mkDerivation rec {
     libuv
     libsodium
     nlohmann_json
-    spdlog
+    spdlog'
     sqlite
     systemd
     unbound

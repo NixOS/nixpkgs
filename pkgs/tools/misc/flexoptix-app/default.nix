@@ -1,11 +1,11 @@
-{ lib, appimageTools, fetchurl, nodePackages }: let
+{ lib, appimageTools, fetchurl, asar }: let
   pname = "flexoptix-app";
-  version = "5.13.4";
+  version = "5.20.0-latest";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-W+9KmKZ1bPfQfv1DXCJrIswriw4ivBVZPW81tfvRBc0=";
+    hash = "sha256-/4vZaVLpSiufjNwwofPi+YBtTJ4aq7eYgFnYFv89LFY=";
   };
 
   udevRules = fetchurl {
@@ -18,9 +18,9 @@
       ${oA.buildCommand}
 
       # Get rid of the autoupdater
-      ${nodePackages.asar}/bin/asar extract $out/resources/app.asar app
-      sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
-      ${nodePackages.asar}/bin/asar pack app $out/resources/app.asar
+      ${asar}/bin/asar extract $out/resources/app.asar app
+      patch -p0 < ${./disable-autoupdate.patch}
+      ${asar}/bin/asar pack app $out/resources/app.asar
     '';
   });
 
@@ -28,7 +28,7 @@ in appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
-  multiPkgs = null; # no 32bit needed
+  multiArch = false; # no 32bit needed
   extraPkgs = { pkgs, ... }@args: [
     pkgs.hidapi
   ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;

@@ -3,18 +3,16 @@
 , fetchFromGitHub
 , python
 , pythonOlder
-, pytestCheckHook
 , setuptools
+, wheel
 , torch
-, einops
-, lion-pytorch
 , scipy
 , symlinkJoin
 }:
 
 let
   pname = "bitsandbytes";
-  version = "0.38.0";
+  version = "0.42.0";
 
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
   inherit (cudaPackages) backendStdenv cudaVersion;
@@ -45,22 +43,22 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TimDettmers";
-    repo = pname;
+    repo = "bitsandbytes";
     rev = "refs/tags/${version}";
-    hash = "sha256-gGlbzTDvZNo4MhcYzLvWuB2ec7q+Qt5/LtTbJ0Rc+Kk=";
+    hash = "sha256-PZxsFJ6WpfeQqRQrRRBZfZfNY6/TfJFLBeknX24OXcU=";
   };
 
   postPatch = ''
     substituteInPlace Makefile --replace "/usr/bin/g++" "g++" --replace "lib64" "lib"
     substituteInPlace bitsandbytes/cuda_setup/main.py  \
-      --replace "binary_path = package_dir / binary_name"  \
-                "binary_path = Path('$out/${python.sitePackages}/${pname}')/binary_name"
+      --replace "binary_path = package_dir / self.binary_name"  \
+                "binary_path = Path('$out/${python.sitePackages}/${pname}')/self.binary_name"
   '' + lib.optionalString torch.cudaSupport ''
     substituteInPlace bitsandbytes/cuda_setup/main.py  \
       --replace "/usr/local/cuda/lib64" "${cuda-native-redist}/lib"
@@ -75,23 +73,32 @@ buildPythonPackage {
   else
     ''make CUDA_VERSION=CPU cpuonly'';
 
-  nativeBuildInputs = [ setuptools ] ++ lib.optionals torch.cudaSupport [ cuda-native-redist ];
-  buildInputs = lib.optionals torch.cudaSupport [ cuda-redist ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ] ++ lib.optionals torch.cudaSupport [
+    cuda-native-redist
+  ];
+
+  buildInputs = lib.optionals torch.cudaSupport [
+    cuda-redist
+  ];
 
   propagatedBuildInputs = [
+    scipy
     torch
   ];
 
   doCheck = false;  # tests require CUDA and also GPU access
-  nativeCheckInputs = [ pytestCheckHook einops lion-pytorch scipy ];
 
   pythonImportsCheck = [
     "bitsandbytes"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/TimDettmers/bitsandbytes";
     description = "8-bit CUDA functions for PyTorch";
+    homepage = "https://github.com/TimDettmers/bitsandbytes";
+    changelog = "https://github.com/TimDettmers/bitsandbytes/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

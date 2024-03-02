@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable; #TODO freedist, libs under BSD-3
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ kylesferrazza ];
+    mainProgram = "jdiskreport";
   };
 }

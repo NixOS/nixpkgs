@@ -4,15 +4,16 @@
 , fixtures
 , mock
 , pbr
-, pytest-cov
 , pytestCheckHook
 , pythonOlder
 , requests
+, testtools
 }:
 
 buildPythonPackage rec {
   pname = "pyopnsense";
   version = "0.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -29,8 +30,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fixtures
     mock
-    pytest-cov
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [

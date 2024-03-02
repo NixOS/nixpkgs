@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree; # No license specified upstream
     platforms = [ "x86_64-linux" ]; # Should work on Darwin as well, but this is untested. aarch64-linux fails.
     maintainers = [ maintainers.ivar ];
+    mainProgram = "nx2elf";
   };
 }

@@ -1,5 +1,24 @@
-{ lib, stdenv, fetchurl, substituteAll, pkg-config, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
-, libtool, makeWrapper, autoreconfHook, fetchpatch
+{ lib
+, stdenv
+, autoreconfHook
+, avahi
+, coreutils
+, fetchurl
+, freeipmi
+, gd
+, i2c-tools
+, libmodbus
+, libtool
+, libusb1
+, makeWrapper
+, neon
+, net-snmp
+, openssl
+, pkg-config
+, substituteAll
+, systemd
+, udev
+, gnused
 }:
 
 stdenv.mkDerivation rec {
@@ -8,42 +27,68 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "19r5dm07sfz495ckcgbfy0pasx0zy3faa0q7bih69lsjij8q43lq";
+    sha256 = "sha256-w+WnCNp5e3xwtlPTexIGoAD8tQO4VRn+TN9jU/eSv+U=";
   };
 
   patches = [
-    (fetchpatch {
-      # Fix build with openssl >= 1.1.0
-      url = "https://github.com/networkupstools/nut/commit/612c05efb3c3b243da603a3a050993281888b6e3.patch";
-      sha256 = "0jdbii1z5sqyv24286j5px65j7b3gp8zk3ahbph83pig6g46m3hs";
-    })
+    # This patch injects a default value for NUT_CONFPATH into the nutshutdown script
+    # since the way we build the package results in the binaries being hardcoded to check
+    # $out/etc/ups.conf instead of /etc/nut/ups.conf (where the module places the file).
+    # We also cannot use `--sysconfdir=/etc/nut` since that results in the install phase
+    # trying to install directly into /etc/nut which predictably fails
+    ./nutshutdown-conf-default.patch
+
     (substituteAll {
       src = ./hardcode-paths.patch;
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
-      libusb = "${libusb-compat-0_1}/lib";
+      libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
+      libmodbus = "${libmodbus}/lib";
+      netsnmp = "${net-snmp.lib}/lib";
     })
   ];
 
-  buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi ];
+  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libmodbus i2c-tools net-snmp gd ];
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config makeWrapper ];
 
   configureFlags =
     [ "--with-all"
       "--with-ssl"
-      "--without-snmp" # Until we have it ...
       "--without-powerman" # Until we have it ...
-      "--without-cgi"
-      "--without-hal"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
+      "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
+      "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
       "--with-udev-dir=$(out)/etc/udev"
     ];
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
+  # Add `cgi-bin` to the default list to avoid pulling in whole
+  # of `gcc` into build closure.
+  stripDebugList = [ "cgi-bin" "lib" "lib32" "lib64" "libexec" "bin" "sbin" ];
+
+  postInstall = ''
+    substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
+      --replace /bin/sed "${gnused}/bin/sed" \
+      --replace /bin/sleep "${coreutils}/bin/sleep" \
+      --replace /bin/systemctl "${systemd}/bin/systemctl"
+
+    for file in system/{nut-monitor.service,nut-driver-enumerator.service,nut-server.service,nut-driver@.service} system-shutdown/nutshutdown; do
+      substituteInPlace $out/lib/systemd/$file \
+        --replace "$out/etc/nut.conf" "/etc/nut/nut.conf"
+    done
+
+    substituteInPlace $out/lib/systemd/system/nut-driver-enumerator.path \
+      --replace "$out/etc/ups.conf" "/etc/nut/ups.conf"
+
+    # we don't need init.d scripts
+    rm -r $out/share/solaris-init
+
+    # Suspicious/overly broad rule, remove it until we know better
+    rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules
+  '';
 
   meta = with lib; {
     description = "Network UPS Tools";

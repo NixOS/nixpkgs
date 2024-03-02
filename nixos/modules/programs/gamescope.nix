@@ -23,14 +23,7 @@ in
   options.programs.gamescope = {
     enable = mkEnableOption (mdDoc "gamescope");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gamescope;
-      defaultText = literalExpression "pkgs.gamescope";
-      description = mdDoc ''
-        The GameScope package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "gamescope" { };
 
     capSysNice = mkOption {
       type = types.bool;
@@ -42,7 +35,7 @@ in
     };
 
     args = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [ ];
       example = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
       description = mdDoc ''
@@ -51,7 +44,7 @@ in
     };
 
     env = mkOption {
-      type = types.attrsOf types.string;
+      type = types.attrsOf types.str;
       default = { };
       example = literalExpression ''
         # for Prime render offload on Nvidia laptops.

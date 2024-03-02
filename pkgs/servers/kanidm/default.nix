@@ -4,13 +4,14 @@
 , nixosTests
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , pkg-config
 , udev
 , openssl
 , sqlite
 , pam
+, bashInteractive
+, rust-jemalloc-sys
 }:
 
 let
@@ -18,45 +19,40 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-alpha.12";
+  version = "1.1.0-rc.16";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZlUn7m5xgMWWIr9y/dkM/yZ2KF2LdkaxqtHsMcxAT/M=";
+    rev = version;
+    hash = "sha256-UavMiHe91UrCZfmG6b+yhdduOY2eKMev9HSjtXq1Tlw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tracing-forest-0.1.5" = "sha256-L6auSKB4DCnZBZpx7spiikhSOD6i1W3erc3zjn+26Ao=";
+      "base64urlsafedata-0.1.3" = "sha256-lYVWuKqF4c34LpFmTIg98TEXIlP4dHen0XkGnLOiq8Q=";
+      "sshkeys-0.3.2" = "sha256-CNG9HW8kSwezAdIYW+CR5rqFfmuso4R0+m4OpIyXbSM=";
     };
   };
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
-  patches = [
-    (fetchpatch {
-      # Bring back x86_64-v1 microarchitecture level
-      name = "cpu-opt-level.patch";
-      url = "https://github.com/kanidm/kanidm/commit/59c6723f7dfb2266eae45c3b2ddd377872a7a113.patch";
-      hash = "sha256-8rVEYitxvdVduQ/+AD/UG3v+mgT/VxkLoxNIXczUfCQ=";
-    })
-  ];
-
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       profile = {
-        web_ui_pkg_path = "@web_ui_pkg_path@";
+        admin_bind_path = "/run/kanidmd/sock";
         cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
+        default_config_path = "/etc/kanidm/server.toml";
+        default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        web_ui_pkg_path = "@web_ui_pkg_path@";
       };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
-        --replace '@web_ui_pkg_path@' "$out/ui"
+        --replace '@web_ui_pkg_path@' "${placeholder "out"}/ui"
     '';
 
   nativeBuildInputs = [
@@ -69,6 +65,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     pam
+    rust-jemalloc-sys
   ];
 
   # The UI needs to be in place before the tests are run.
@@ -92,6 +89,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests) kanidm; };
 
   meta = with lib; {
+    changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
     description = "A simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;

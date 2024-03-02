@@ -1,4 +1,4 @@
-{ async_generator
+{ async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
@@ -19,7 +19,7 @@
 
 let nbclient = buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.7.2";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ let nbclient = buildPythonPackage rec {
     owner = "jupyter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2H6Oi1tK/GrtfMTR1j12tZdRzQkFUxXzMSpfCtGPyWE=";
+    hash = "sha256-m0Tke/JlTeKE3PJZ1rBejra/HPEXCSS0ur/cPiSBJZw=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ let nbclient = buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    async_generator
+    async-generator
     traitlets
     nbformat
     nest-asyncio

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "netdisco";
   version = "3.0.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

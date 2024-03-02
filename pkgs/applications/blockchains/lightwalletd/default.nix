@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "lightwalletd";
-  version = "0.4.13";
+  version = "0.4.16";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "lightwalletd";
     rev = "v${version}";
-    hash = "sha256-oFP1VHDhbx95QLGcIraHjeKSnLfvagJg4bcd3Lem+s4=";
+    hash = "sha256-M9xfV2T8L+nssrJj29QmPiErNMpfpT8BY/30Vj8wPjY=";
   };
 
-  vendorHash = "sha256-RojAxNU5ggjTMPDF2BuB4NyuSRG6HMe3amYTjG2PRFc=";
+  vendorHash = "sha256-z5Hs+CkPswWhz+Ya5MyHKA3MZzQkvS7WOxNckElkg6U=";
 
   ldflags = [
     "-s" "-w"
@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/zcash/lightwalletd";
     maintainers = with maintainers; [ centromere ];
     license = licenses.mit;
+    mainProgram = "lightwalletd";
   };
 }

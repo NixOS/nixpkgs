@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "openstep-plist";
   version = "0.3.0.post1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "openstep_plist";

@@ -1,53 +1,37 @@
 { lib
 , fetchFromGitHub
-, python3
+, python3Packages
 , nixosTests
 , testers
 , sqlite3-to-mysql
-, fetchPypi
+, mysql80
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # sqlite3-to-mysql is incompatible with versions > 1.4.44 of sqlalchemy
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.44";
-        format = "setuptools";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-LdpflnGa6Js+wPG3lpjYbrmuyx1U6ZCrs/3ZLAS0apA=";
-        };
-      });
-    };
-    self = py;
-  };
-
-in
-with py.pkgs; buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "1.4.19";
+  version = "2.1.7";
   format = "pyproject";
+
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "techouse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gtXwDLHl5f1sXLm+b8l08bY/XJkN+zVtd7m45K0CAYY=";
+    hash = "sha256-TglHny0HgVth3o73GQYddh9sdyQ0L+4J4dJBAeJToiM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = with python3Packages; [
+    hatchling
+    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     click
     mysql-connector
-    pytimeparse
+    pytimeparse2
     pymysql
     pymysqlsa
-    six
     simplejson
     sqlalchemy
     sqlalchemy-utils
@@ -55,6 +39,11 @@ with py.pkgs; buildPythonApplication rec {
     tabulate
     unidecode
     packaging
+    mysql80
+  ];
+
+  pythonRelaxDeps = [
+    "mysql-connector-python"
   ];
 
   # tests require a mysql server instance
@@ -74,5 +63,6 @@ with py.pkgs; buildPythonApplication rec {
     homepage = "https://github.com/techouse/sqlite3-to-mysql";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
+    mainProgram = "sqlite3mysql";
   };
 }

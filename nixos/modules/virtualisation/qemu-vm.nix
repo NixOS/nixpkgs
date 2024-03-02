@@ -166,6 +166,16 @@ let
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
 
+      ${lib.optionalString cfg.useHostCerts
+      ''
+        mkdir -p "$TMPDIR/certs"
+        if [ -e "$NIX_SSL_CERT_FILE" ]; then
+          cp -L "$NIX_SSL_CERT_FILE" "$TMPDIR"/certs/ca-certificates.crt
+        else
+          echo \$NIX_SSL_CERT_FILE should point to a valid file if virtualisation.useHostCerts is enabled.
+        fi
+      ''}
+
       ${lib.optionalString cfg.useEFIBoot
       ''
         # Expose EFI variables, it's useful even when we are not using a bootloader (!).
@@ -186,6 +196,39 @@ let
           }
           chmod 0644 "$NIX_EFI_VARS"
         fi
+      ''}
+
+      ${lib.optionalString cfg.tpm.enable ''
+        NIX_SWTPM_DIR=$(readlink -f "''${NIX_SWTPM_DIR:-${config.system.name}-swtpm}")
+        mkdir -p "$NIX_SWTPM_DIR"
+        ${lib.getExe cfg.tpm.package} \
+          socket \
+          --tpmstate dir="$NIX_SWTPM_DIR" \
+          --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket,terminate \
+          --pid file="$NIX_SWTPM_DIR"/pid --daemon \
+          --tpm2 \
+          --log file="$NIX_SWTPM_DIR"/stdout,level=6
+
+        # Enable `fdflags` builtin in Bash
+        # We will need it to perform surgical modification of the file descriptor
+        # passed in the coprocess to remove `FD_CLOEXEC`, i.e. close the file descriptor
+        # on exec.
+        # If let alone, it will trigger the coprocess to read EOF when QEMU is `exec`
+        # at the end of this script. To work around that, we will just clear
+        # the `FD_CLOEXEC` bits as a first step.
+        enable -f ${hostPkgs.bash}/lib/bash/fdflags fdflags
+        # leave a dangling subprocess because the swtpm ctrl socket has
+        # "terminate" when the last connection disconnects, it stops swtpm.
+        # When qemu stops, or if the main shell process ends, the coproc will
+        # get signaled by virtue of the pipe between main and coproc ending.
+        # Which in turns triggers a socat connect-disconnect to swtpm which
+        # will stop it.
+        coproc waitingswtpm {
+          read || :
+          echo "" | ${lib.getExe hostPkgs.socat} STDIO UNIX-CONNECT:"$NIX_SWTPM_DIR"/socket
+        }
+        # Clear `FD_CLOEXEC` on the coprocess' file descriptor stdin.
+        fdflags -s-cloexec ''${waitingswtpm[1]}
       ''}
 
       cd "$TMPDIR"
@@ -257,6 +300,7 @@ let
   };
 
   storeImage = import ../../lib/make-disk-image.nix {
+    name = "nix-store-image";
     inherit pkgs config lib;
     additionalPaths = [ regInfo ];
     format = "qcow2";
@@ -637,7 +681,7 @@ in
         import pkgs.path { system = "x86_64-darwin"; }
       '';
       description = lib.mdDoc ''
-        pkgs set to use for the host-specific packages of the vm runner.
+        Package set to use for the host-specific packages of the VM runner.
         Changing this to e.g. a Darwin package set allows running NixOS VMs on Darwin.
       '';
     };
@@ -646,8 +690,8 @@ in
       package =
         mkOption {
           type = types.package;
-          default = hostPkgs.qemu_kvm;
-          defaultText = literalExpression "config.virtualisation.host.pkgs.qemu_kvm";
+          default = if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then hostPkgs.qemu_kvm else hostPkgs.qemu;
+          defaultText = literalExpression "if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then config.virtualisation.host.pkgs.qemu_kvm else config.virtualisation.host.pkgs.qemu";
           example = literalExpression "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
@@ -657,7 +701,10 @@ in
           type = types.listOf types.str;
           default = [];
           example = [ "-vga std" ];
-          description = lib.mdDoc "Options passed to QEMU.";
+          description = lib.mdDoc ''
+            Options passed to QEMU.
+            See [QEMU User Documentation](https://www.qemu.org/docs/master/system/qemu-manpage) for a complete list.
+          '';
         };
 
       consoles = mkOption {
@@ -688,9 +735,10 @@ in
           description = lib.mdDoc ''
             Networking-related command-line options that should be passed to qemu.
             The default is to use userspace networking (SLiRP).
+            See the [QEMU Wiki on Networking](https://wiki.qemu.org/Documentation/Networking) for details.
 
             If you override this option, be advised to keep
-            ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the example)
+            `''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}` (as seen in the example)
             to keep the default runtime behaviour.
           '';
         };
@@ -765,14 +813,19 @@ in
           defaultText = "!cfg.useBootLoader";
           description =
             lib.mdDoc ''
-              If enabled, the virtual machine will boot directly into the kernel instead of through a bootloader. Other relevant parameters such as the initrd are also passed to QEMU.
+              If enabled, the virtual machine will boot directly into the kernel instead of through a bootloader.
+              Read more about this feature in the [QEMU documentation on Direct Linux Boot](https://qemu-project.gitlab.io/qemu/system/linuxboot.html)
 
+              This is enabled by default.
               If you want to test netboot, consider disabling this option.
+              Enable a bootloader with {option}`virtualisation.useBootLoader` if you need.
 
-              This will not boot / reboot correctly into a system that has switched to a different configuration on disk.
+              Relevant parameters such as those set in `boot.initrd` and `boot.kernelParams` are also passed to QEMU.
+              Additional parameters can be supplied on invocation through the environment variable `$QEMU_KERNEL_PARAMS`.
+              They are added to the `-append` option, see [QEMU User Documentation](https://www.qemu.org/docs/master/system/qemu-manpage) for details
+              For example, to let QEMU use the parent terminal as the serial console, set `QEMU_KERNEL_PARAMS="console=ttyS0"`.
 
-              This is enabled by default if you don't enable bootloaders, but you can still enable a bootloader if you need.
-              Read more about this feature: <https://qemu-project.gitlab.io/qemu/system/linuxboot.html>.
+              This will not (re-)boot correctly into a system that has switched to a different configuration on disk.
             '';
         };
       initrd =
@@ -802,6 +855,8 @@ in
 
             If disabled, the kernel and initrd are directly booted,
             forgoing any bootloader.
+
+            Check the documentation on {option}`virtualisation.directBoot.enable` for details.
           '';
       };
 
@@ -852,6 +907,32 @@ in
       };
     };
 
+    virtualisation.tpm = {
+      enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm.";
+
+      package = mkPackageOption cfg.host.pkgs "swtpm" { };
+
+      deviceModel = mkOption {
+        type = types.str;
+        default = ({
+          "i686-linux" = "tpm-tis";
+          "x86_64-linux" = "tpm-tis";
+          "ppc64-linux" = "tpm-spapr";
+          "armv7-linux" = "tpm-tis-device";
+          "aarch64-linux" = "tpm-tis-device";
+        }.${pkgs.hostPlatform.system} or (throw "Unsupported system for TPM2 emulation in QEMU"));
+        defaultText = ''
+          Based on the guest platform Linux system:
+
+          - `tpm-tis` for (i686, x86_64)
+          - `tpm-spapr` for ppc64
+          - `tpm-tis-device` for (armv7, aarch64)
+        '';
+        example = "tpm-tis-device";
+        description = lib.mdDoc "QEMU device model for the TPM, uses the appropriate default based on th guest platform system and the package passed.";
+      };
+    };
+
     virtualisation.useDefaultFilesystems =
       mkOption {
         type = types.bool;
@@ -877,7 +958,6 @@ in
           '';
       };
 
-
     virtualisation.bios =
       mkOption {
         type = types.nullOr types.package;
@@ -887,6 +967,17 @@ in
             An alternate BIOS (such as `qboot`) with which to start the VM.
             Should contain a file named `bios.bin`.
             If `null`, QEMU's builtin SeaBIOS will be used.
+          '';
+      };
+
+    virtualisation.useHostCerts =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            If enabled, when `NIX_SSL_CERT_FILE` is set on the host,
+            pass the CA certificates from the host to the VM.
           '';
       };
 
@@ -917,7 +1008,7 @@ in
               virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
             '';
           }
-          { assertion = cfg.directBoot.initrd != options.virtualisation.directBoot.initrd.default -> cfg.directBoot.enable;
+          { assertion = cfg.directBoot.enable || cfg.directBoot.initrd == options.virtualisation.directBoot.initrd.default;
             message =
               ''
                 You changed the default of `virtualisation.directBoot.initrd` but you are not
@@ -986,10 +1077,18 @@ in
         ''}
       '';
 
-    systemd.tmpfiles.rules = lib.mkIf config.boot.initrd.systemd.enable [
-      "f /etc/NIXOS 0644 root root -"
-      "d /boot 0644 root root -"
-    ];
+    systemd.tmpfiles.settings."10-qemu-vm" = lib.mkIf config.boot.initrd.systemd.enable {
+      "/etc/NIXOS".f = {
+        mode = "0644";
+        user = "root";
+        group = "root";
+      };
+      "${config.boot.loader.efi.efiSysMountPoint}".d = {
+        mode = "0644";
+        user = "root";
+        group = "root";
+      };
+    };
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
@@ -1007,7 +1106,8 @@ in
 
     boot.initrd.availableKernelModules =
       optional cfg.writableStore "overlay"
-      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
+      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
+      ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1024,7 +1124,13 @@ in
         source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
         target = "/tmp/shared";
       };
+      certs = mkIf cfg.useHostCerts {
+        source = ''"$TMPDIR"/certs'';
+        target = "/etc/ssl/certs";
+      };
     };
+
+    security.pki.installCACerts = mkIf cfg.useHostCerts false;
 
     virtualisation.qemu.networkingOptions =
       let
@@ -1072,6 +1178,15 @@ in
       (mkIf (!cfg.graphics) [
         "-nographic"
       ])
+      (mkIf (cfg.tpm.enable) [
+        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
+        "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
+        "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
+      ])
+      (mkIf (pkgs.stdenv.hostPlatform.isx86 && cfg.efi.OVMF.systemManagementModeRequired) [
+        "-machine" "q35,smm=on"
+        "-global" "driver=cfi.pflash01,property=secure,value=on"
+      ])
     ];
 
     virtualisation.qemu.drives = mkMerge [
@@ -1095,11 +1210,12 @@ in
       }) cfg.emptyDiskImages)
     ];
 
-    # Use mkVMOverride to enable building test VMs (e.g. via `nixos-rebuild
-    # build-vm`) of a system configuration, where the regular value for the
-    # `fileSystems' attribute should be disregarded (since those filesystems
-    # don't necessarily exist in the VM).
-    fileSystems = mkVMOverride cfg.fileSystems;
+    # By default, use mkVMOverride to enable building test VMs (e.g. via
+    # `nixos-rebuild build-vm`) of a system configuration, where the regular
+    # value for the `fileSystems' attribute should be disregarded (since those
+    # filesystems don't necessarily exist in the VM). You can disable this
+    # override by setting `virtualisation.fileSystems = lib.mkForce { };`.
+    fileSystems = lib.mkIf (cfg.fileSystems != { }) (mkVMOverride cfg.fileSystems);
 
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:
@@ -1163,6 +1279,8 @@ in
         unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
       }];
       services.rw-store = {
+        before = [ "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         unitConfig = {
           DefaultDependencies = false;
           RequiresMountsFor = "/sysroot/nix/.rw-store";

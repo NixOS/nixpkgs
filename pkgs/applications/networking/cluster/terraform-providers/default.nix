@@ -45,6 +45,8 @@ let
           name = "source-${rev}";
           inherit owner repo rev hash;
         };
+        # nixpkgs-update: no auto update
+        # easier to update all providers together
 
         meta = {
           inherit homepage;
@@ -93,7 +95,7 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      ksyun = removed "ksyun" "2023/04";
+      fly = archived "fly" "2023/10";
     };
 
   # excluding aliases, used by terraform-full

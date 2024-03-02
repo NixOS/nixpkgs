@@ -1,6 +1,4 @@
-{ lib
-, python3
-, fetchFromGitHub
+{ python3
 
 , addr ? "127.0.0.1"
 , port ? 8082
@@ -24,9 +22,10 @@ python3.pkgs.buildPythonApplication {
   installPhase = ''
     mkdir -p $out/bin
     echo "#!${python3.interpreter}" >> $out/bin/timetagger
-    cat run.py >> $out/bin/timetagger
-    sed -Ei 's,0\.0\.0\.0:80,${addr}:${toString port},' $out/bin/timetagger
+    cat timetagger/__main__.py >> $out/bin/timetagger
     chmod +x $out/bin/timetagger
+    wrapProgram $out/bin/timetagger \
+      --set TIMETAGGER_BIND "${addr}:${toString port}"
   '';
 }
 

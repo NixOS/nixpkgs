@@ -354,7 +354,12 @@ rec {
   /* Add a dummy command to trigger a build despite an equivalent
      earlier build that is present in the store or cache.
    */
-  triggerRebuild = i: overrideCabal (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+  triggerRebuild = i: overrideCabal (drv: {
+    postUnpack = drv.postUnpack or "" + ''
+
+      # trigger rebuild ${toString i}
+    '';
+  });
 
   /* Override the sources for the package and optionally the version.
      This also takes of removing editedCabalFile.
@@ -407,7 +412,9 @@ rec {
 
     self: super:
       let
-        haskellPaths = builtins.attrNames (builtins.readDir directory);
+        haskellPaths =
+          lib.filter (lib.hasSuffix ".nix")
+            (builtins.attrNames (builtins.readDir directory));
 
         toKeyVal = file: {
           name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;

@@ -7,6 +7,9 @@
 , installShellFiles
 , libxml2
 , libxslt
+, testers
+, offlineimap
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,6 +22,14 @@ python3.pkgs.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "0y3giaz9i8vvczlxkbwymfkn3vi9fv599dy4pc2pn2afxsl4mg2w";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "sqlite-version-aware-threadsafety-check.patch";
+      url = "https://github.com/OfflineIMAP/offlineimap3/pull/139/commits/7cd32cf834b34a3d4675b29bebcd32dc1e5ef128.patch";
+      hash = "sha256-xNq4jFHMf9XZaa9BFF1lOzZrEGa5BEU8Dr+gMOBkJE4=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc
@@ -58,10 +69,13 @@ python3.pkgs.buildPythonApplication rec {
     "offlineimap"
   ];
 
+  passthru.tests.version = testers.testVersion { package = offlineimap; };
+
   meta = with lib; {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ endocrimes ];
+    mainProgram = "offlineimap";
   };
 }

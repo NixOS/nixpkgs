@@ -56,7 +56,7 @@ let
 
     src = djvSrc;
 
-    sourceRoot = "source/etc/SuperBuild";
+    sourceRoot = "${src.name}/etc/SuperBuild";
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [
@@ -111,6 +111,11 @@ stdenv.mkDerivation rec {
   patches = [
     # Pull fix ending upstream inclusion for gcc-12+ support:
     #   https://github.com/darbyjohnston/DJV/pull/477
+    (fetchpatch {
+      name = "gcc-13-cstdint-include.patch";
+      url = "https://github.com/darbyjohnston/DJV/commit/be0dd90c256f30c0305ff7b180fd932a311e66e5.patch";
+      hash = "sha256-x8GAfakhgjBiCKHbfgCukT5iFNad+zqURDJkQr092uk=";
+    })
     (fetchpatch {
       name = "gcc-11-limits.patch";
       url = "https://github.com/darbyjohnston/DJV/commit/0544ffa1a263a6b8e8518b47277de7601b21b4f4.patch";

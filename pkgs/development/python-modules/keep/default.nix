@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "keep";
   version = "2.10.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

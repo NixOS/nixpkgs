@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "0.1.1";
+  format = "setuptools";
   pname = "azure-loganalytics";
 
   src = fetchPypi {

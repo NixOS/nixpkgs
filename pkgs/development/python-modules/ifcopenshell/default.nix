@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gcc10
 , cmake
-, boost17x
+, boost179
 , icu
 , swig
 , pcre
@@ -14,21 +14,21 @@
 
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "210410";
+  version = "231201";
   format = "other";
 
   src = fetchFromGitHub {
     owner  = "IfcOpenShell";
     repo   = "IfcOpenShell";
-    rev    = "blenderbim-${version}";
+    rev = "refs/tags/blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "1g52asxrqcfj01iqvf03k3bb6rg3v04hh1wc3nmn329a2lwjbxpw";
+    sha256 = "sha256-T7XT5gvfzhagecB3jrTyWOawOm4iye7SCsmYhnjtOTE=";
   };
 
   nativeBuildInputs = [ gcc10 cmake ];
 
   buildInputs = [
-    boost17x
+    boost179
     icu
     pcre
     libxml2

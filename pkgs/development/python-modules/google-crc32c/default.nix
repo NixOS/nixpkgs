@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "google-crc32c";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googleapis";
@@ -26,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-crc32c";
     description = "Wrapper the google/crc32c hardware-based implementation of the CRC32C hashing algorithm";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ freezeboy SuperSandro2000 ];
+    maintainers = with maintainers; [ freezeboy ];
   };
 }

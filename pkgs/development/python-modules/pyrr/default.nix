@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pyrr";
   version = "unstable-2022-07-22";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adamlwgriffiths";

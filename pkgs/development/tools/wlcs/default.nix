@@ -2,38 +2,32 @@
 , lib
 , gitUpdater
 , fetchFromGitHub
-, fetchpatch
+, testers
 , cmake
 , pkg-config
 , boost
 , gtest
 , wayland
+, wayland-scanner
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlcs";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
-    rev = "v${version}";
-    hash = "sha256-QxmWxu+w77/WE5pGXMWXm+NP95QmYo2O8ltZYrgCIWw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BQPRymkbGu4YvTYXTaTMuyP5fHpqMWI4xPwjDRHZNEQ=";
   };
 
-  patches = [
-    # Improves pkg-config paths even more
-    # Remove when https://github.com/MirServer/wlcs/pull/260 merged & in a release
-    (fetchpatch {
-      name = "0001-wlcs-pkgsconfig-Use-better-path-concatenations.patch";
-      url = "https://github.com/MirServer/wlcs/pull/260/commits/20f28d82fa4dfa6a6e27212dbd6b0f2e8a833c69.patch";
-      hash = "sha256-m8zPD27JbX/vN2YQgNhcRsh/O+qLfvoeky5E5ZEeD1I=";
-    })
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -42,13 +36,11 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
-  ];
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
@@ -73,5 +65,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;
+    pkgConfigModules = [
+      "wlcs"
+    ];
   };
-}
+})

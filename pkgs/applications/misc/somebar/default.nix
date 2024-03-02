@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~raphi";
     repo = "somebar";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ magnouvean ];
     platforms = platforms.linux;
+    mainProgram = "somebar";
   };
 }

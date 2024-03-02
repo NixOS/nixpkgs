@@ -5,22 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gitless";
-  version = "0.8.8";
+  version = "0.9.17";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "gitless-vcs";
+    owner = "goldstar611";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xo5EWtP2aN8YzP8ro3bnxZwUGUp0PHD0g8hk+Y+gExE=";
+    rev = version;
+    hash = "sha256-XDB1i2b1reMCM6i1uK3IzTnsoLXO7jldYtNlYUo1AoQ=";
   };
 
   nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    sh
     pygit2
-    clint
+    argcomplete
   ];
 
   pythonRelaxDeps = [ "pygit2" ];
@@ -37,5 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ cransom ];
     platforms = platforms.all;
+    mainProgram = "gl";
   };
 }

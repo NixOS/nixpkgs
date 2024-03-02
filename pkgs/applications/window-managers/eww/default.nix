@@ -2,34 +2,29 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, wrapGAppsHook
 , gtk3
-, gdk-pixbuf
-, withWayland ? false
+, librsvg
 , gtk-layer-shell
 , stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "unstable-2023-06-10";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    rev = "25e50eda46379bccd8a7887c18ee35833e0460e8";
-    hash = "sha256-8e6gHSg6FDp6nU5v89D44Tqb1lR5aQpS0lXOVqzoUS4=";
+    rev = "v${version}";
+    hash = "sha256-HBBz1NDtj2TnDK5ghDLRrAOwHXDZlzclvVscYnmKGck=";
   };
 
-  cargoHash = "sha256-dC7yVJdR7mO0n+sxWwigM1Q4tbDv5ZuOINHHlUIPdA0=";
+  cargoHash = "sha256-IirFE714NZmppLjwbWk6fxcmRXCUFzB4oxOxBvmYu5U=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gdk-pixbuf ] ++ lib.optional withWayland gtk-layer-shell;
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    (if withWayland then "wayland" else "x11")
-  ];
+  buildInputs = [ gtk3 librsvg gtk-layer-shell ];
 
   cargoBuildFlags = [ "--bin" "eww" ];
 
@@ -42,7 +37,8 @@ rustPlatform.buildRustPackage rec {
     description = "ElKowars wacky widgets";
     homepage = "https://github.com/elkowar/eww";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lom ];
+    maintainers = with maintainers; [ figsoda lom coffeeispower ];
+    mainProgram = "eww";
     broken = stdenv.isDarwin;
   };
 }

@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.14";
+  version = "1.8.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rABJfdrV+D2v6yHpAbzj/0MSGc9bo49pwXEC45Mmmlk=";
+    sha256 = "sha256-dPWp8SH4//HJlCrF6YRaMb32idox1E0/Gd8qc/GmP4c=";
   };
 
-  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
@@ -34,10 +34,15 @@ python3Packages.buildPythonApplication rec {
     borgbackup
     colorama
     jsonschema
+    packaging
     ruamel-yaml
     requests
     setuptools
   ];
+
+  passthru.optional-dependencies = {
+    apprise = with python3Packages; [ apprise ];
+  };
 
   postInstall = ''
     installShellCompletion --cmd borgmatic \
@@ -56,11 +61,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = borgmatic; };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ imlonghao ];
   };
 }

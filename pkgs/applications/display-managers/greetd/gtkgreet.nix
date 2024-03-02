@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromSourcehut
+, wrapGAppsHook
 , pkg-config
 , cmake
 , meson
@@ -8,18 +9,19 @@
 , gtk3
 , gtk-layer-shell
 , json_c
+, librsvg
 , scdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkgreet";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = pname;
     rev = version;
-    sha256 = "ms+2FdtzzNlmlzNxFhu4cpX5H+5H+9ZOtZ0p8uVA3lo=";
+    sha256 = "sha256-GKBYql0hzqB6uY87SsAqHwf3qLAr7xznMnAjRtP4HS8=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     cmake
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -34,6 +37,7 @@ stdenv.mkDerivation rec {
     gtk-layer-shell
     json_c
     scdoc
+    librsvg
   ];
 
   mesonFlags = [
@@ -49,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.linux;
+    mainProgram = "gtkgreet";
   };
 }

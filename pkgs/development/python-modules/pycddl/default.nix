@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pycddl";
-  version = "0.4.0";
+  version = "0.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w0CGbPeiXyS74HqZXyiXhvaAMUaIj5onwjl9gWKAjqY=";
+    hash = "sha256-LdecJPSov2Y/QI4MWb20DcF0EtMuDO0VwiQDUeD55GI=";
   };
 
   nativeBuildInputs = with rustPlatform; [ maturinBuildHook cargoSetupHook ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-g96eeaqN9taPED4u+UKUcoitf5aTGFrW2/TOHoHEVHs=";
+    hash = "sha256-FJET2Xb1cq4aePFhPXpp2oEPIOtpugYWNFAa2Dj0F6Y=";
   };
 
   nativeCheckInputs = [ pytestCheckHook psutil cbor2 ];

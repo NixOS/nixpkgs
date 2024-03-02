@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.30.0";
+  version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-h0fipw3lJKy+VkGkh1XbZ6wUOg4001uURoJpjNq7QOs=";
+    hash = "sha256-0mH6s9BSTkXutwYVG3EpqEcildO3g37Us4pdTmLPcAQ=";
   };
 
   outputs = [ "out" "man" ];
@@ -62,6 +62,10 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = buildah;
+    command = ''
+      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
+      buildah --version
+    '';
   };
 
   meta = with lib; {
@@ -69,6 +73,7 @@ buildGoModule rec {
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }
+

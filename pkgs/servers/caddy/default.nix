@@ -7,12 +7,12 @@
 , installShellFiles
 }:
 let
-  version = "2.6.4";
+  version = "2.7.6";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     rev = "v${version}";
-    hash = "sha256-SJO1q4g9uyyky9ZYSiqXJgNIvyxT5RjrpYd20YDx8ec=";
+    hash = "sha256-aZ7hdAZJH1PvrX9GQLzLquzzZG3LZSKOvt7sWQhTiR8=";
   };
 in
 buildGoModule {
@@ -23,10 +23,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    hash = "sha256-3a3+nFHmGONvL/TyQRqgJtrSDIn0zdGy9YwhZP17mU0=";
+    hash = "sha256-th0R3Q1nGT0q5PGOygtD1/CpJmrT5TYagrwQR4t/Fvg=";
   };
 
-  vendorHash = "sha256-toi6efYZobjDV3YPT9seE/WZAzNaxgb1ioVG4txcuXM=";
+  vendorHash = "sha256-ebnSehuhbCY58ctM8IRVMfNxxbJBp6ht9cbuLdGFNek=";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -64,6 +64,7 @@ buildGoModule {
     homepage = "https://caddyserver.com";
     description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
     license = licenses.asl20;
+    mainProgram = "caddy";
     maintainers = with maintainers; [ Br1ght0ne emilylange techknowlogick ];
   };
 }

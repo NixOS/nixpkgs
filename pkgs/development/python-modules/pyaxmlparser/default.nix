@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.3.27";
+  format = "setuptools";
   pname = "pyaxmlparser";
 
   src = fetchFromGitHub {
@@ -20,6 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/appknox/pyaxmlparser";
     # Files from Androguard are licensed ASL 2.0
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

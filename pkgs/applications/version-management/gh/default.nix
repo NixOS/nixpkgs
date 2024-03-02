@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gh";
-  version = "2.31.0";
+  version = "2.44.1";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-HZ64Dz2vluRkrwOe1oXwBm/hATsqxlFq4VC9L758cwE=";
+    hash = "sha256-ZcJY9XNkp1Glo0sQ0O9iadsvW4eterkogjlJmQeP+M4=";
   };
 
-  vendorHash = "sha256-eq/2w16KL2Mrt7jZJStRFosLVpw6qfnGLAhes0iZAdg=";
+  vendorHash = "sha256-r1zcwBz/mJOv1RU4Ilgg73yH37xu7a/BmqgAkiODq0I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -47,6 +47,7 @@ buildGoModule rec {
     homepage = "https://cli.github.com/";
     changelog = "https://github.com/cli/cli/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "gh";
     maintainers = with maintainers; [ zowoq ];
   };
 }

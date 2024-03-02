@@ -38,6 +38,12 @@ buildPythonPackage rec {
     "tests"
   ];
 
+  disabledTestPaths = [
+    # tests enum.IntFlag behaviour which has been disallowed in python 3.11.6
+    # https://gitlab.com/dangass/plum/-/issues/150
+    "tests/flag/test_flag_invalid.py"
+  ];
+
   meta = with lib; {
     description = "Classes and utilities for packing/unpacking bytes";
     homepage = "https://plum-py.readthedocs.io/";

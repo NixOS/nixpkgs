@@ -14,7 +14,7 @@ from .utils import Freezeable
 FragmentType = Literal['preface', 'part', 'chapter', 'section', 'appendix']
 
 # in the TOC all fragments are allowed, plus the all-encompassing book.
-TocEntryType = Literal['book', 'preface', 'part', 'chapter', 'section', 'appendix', 'example']
+TocEntryType = Literal['book', 'preface', 'part', 'chapter', 'section', 'appendix', 'example', 'figure']
 
 def is_include(token: Token) -> bool:
     return token.type == "fence" and token.info.startswith("{=include=} ")
@@ -110,9 +110,12 @@ class XrefTarget:
     path: str
     """whether to drop the `#anchor` from links when expanding xrefs"""
     drop_fragment: bool = False
+    """whether to drop the `path.html` from links when expanding xrefs.
+       mostly useful for docbook compatibility"""
+    drop_target: bool = False
 
     def href(self) -> str:
-        path = html.escape(self.path, True)
+        path = "" if self.drop_target else html.escape(self.path, True)
         return path if self.drop_fragment else f"{path}#{html.escape(self.id, True)}"
 
 @dc.dataclass
@@ -125,6 +128,7 @@ class TocEntry(Freezeable):
     children: list[TocEntry] = dc.field(default_factory=list)
     starts_new_chunk: bool = False
     examples: list[TocEntry] = dc.field(default_factory=list)
+    figures: list[TocEntry] = dc.field(default_factory=list)
 
     @property
     def root(self) -> TocEntry:
@@ -139,7 +143,7 @@ class TocEntry(Freezeable):
 
     @classmethod
     def collect_and_link(cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token]) -> TocEntry:
-        entries, examples = cls._collect_entries(xrefs, tokens, 'book')
+        entries, examples, figures = cls._collect_entries(xrefs, tokens, 'book')
 
         def flatten_with_parent(this: TocEntry, parent: TocEntry | None) -> Iterable[TocEntry]:
             this.parent = parent
@@ -157,6 +161,7 @@ class TocEntry(Freezeable):
             paths_seen.add(c.target.path)
 
         flat[0].examples = examples
+        flat[0].figures = figures
 
         for c in flat:
             c.freeze()
@@ -165,21 +170,23 @@ class TocEntry(Freezeable):
 
     @classmethod
     def _collect_entries(cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token],
-                         kind: TocEntryType) -> tuple[TocEntry, list[TocEntry]]:
+                         kind: TocEntryType) -> tuple[TocEntry, list[TocEntry], list[TocEntry]]:
         # we assume that check_structure has been run recursively over the entire input.
         # list contains (tag, entry) pairs that will collapse to a single entry for
         # the full sequence.
         entries: list[tuple[str, TocEntry]] = []
         examples: list[TocEntry] = []
+        figures: list[TocEntry] = []
         for token in tokens:
             if token.type.startswith('included_') and (included := token.meta.get('included')):
                 fragment_type_str = token.type[9:].removesuffix('s')
                 assert fragment_type_str in get_args(TocEntryType)
                 fragment_type = cast(TocEntryType, fragment_type_str)
                 for fragment, _path in included:
-                    subentries, subexamples = cls._collect_entries(xrefs, fragment, fragment_type)
+                    subentries, subexamples, subfigures = cls._collect_entries(xrefs, fragment, fragment_type)
                     entries[-1][1].children.append(subentries)
                     examples += subexamples
+                    figures += subfigures
             elif token.type == 'heading_open' and (id := cast(str, token.attrs.get('id', ''))):
                 while len(entries) > 1 and entries[-1][0] >= token.tag:
                     entries[-2][1].children.append(entries.pop()[1])
@@ -188,7 +195,9 @@ class TocEntry(Freezeable):
                 token.meta['TocEntry'] = entries[-1][1]
             elif token.type == 'example_open' and (id := cast(str, token.attrs.get('id', ''))):
                 examples.append(TocEntry('example', xrefs[id]))
+            elif token.type == 'figure_open' and (id := cast(str, token.attrs.get('id', ''))):
+                figures.append(TocEntry('figure', xrefs[id]))
 
         while len(entries) > 1:
             entries[-2][1].children.append(entries.pop()[1])
-        return (entries[0][1], examples)
+        return (entries[0][1], examples, figures)

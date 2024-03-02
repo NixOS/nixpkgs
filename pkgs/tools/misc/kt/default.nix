@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-1UGsiMMmAyIQZ62hNIi0uzyX2uNL03EWupIazjznqDc=";
   };
 
-  vendorSha256 = "sha256-PeNpDro6G78KLN6B2CDhsTKamRTWQyxPJYWuuv6sUyw=";
+  vendorHash = "sha256-PeNpDro6G78KLN6B2CDhsTKamRTWQyxPJYWuuv6sUyw=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -23,5 +23,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ utdemir ];
     platforms = with platforms; unix;
     license = licenses.mit;
+    mainProgram = "kt";
   };
 }

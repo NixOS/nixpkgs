@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "huisbaasje-client";
   version = "0.1.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

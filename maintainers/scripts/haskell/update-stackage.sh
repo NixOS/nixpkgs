@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p nix curl jq nix-prefetch-github git gnused gnugrep -I nixpkgs=.
+#! nix-shell -i bash -p nix curl jq git gnused gnugrep -I nixpkgs=.
 # shellcheck shell=bash
 
 set -eu -o pipefail
@@ -7,8 +7,11 @@ set -eu -o pipefail
 # Stackage solver to use, LTS or Nightly
 # (should be capitalized like the display name)
 SOLVER=LTS
+# Stackage solver verson, if any. Use latest if empty
+VERSION=21
 TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER
+readonly VERSION
 readonly TMP_TEMPLATE
 
 toLower() {
@@ -23,7 +26,7 @@ stackage_config="pkgs/development/haskell-modules/configuration-hackage2nix/stac
 trap 'rm "${tmpfile}" "${tmpfile_new}"' 0
 touch "$tmpfile" "$tmpfile_new" # Creating files here so that trap creates no errors.
 
-curl -L -s "https://stackage.org/$(toLower "$SOLVER")/cabal.config" >"$tmpfile"
+curl -L -s "https://stackage.org/$(toLower "$SOLVER")${VERSION:+-$VERSION}/cabal.config" >"$tmpfile"
 old_version=$(grep '^# Stackage' $stackage_config | sed -e 's/.\+ \([A-Za-z]\+ [0-9.-]\+\)$/\1/g')
 version="$SOLVER $(sed -rn "s/^--.*http:..(www.)?stackage.org.snapshot.$(toLower "$SOLVER")-//p" "$tmpfile")"
 
@@ -66,6 +69,7 @@ sed -r \
     -e '/ hie-bios /d' \
     -e '/ ShellCheck /d' \
     -e '/ Agda /d' \
+    -e '/ stack /d' \
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.

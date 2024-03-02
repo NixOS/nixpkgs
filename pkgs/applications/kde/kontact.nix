@@ -4,7 +4,8 @@
   qtwebengine,
   kcmutils, kcrash, kdbusaddons, kparts, kwindowsystem,
   akonadi, grantleetheme, kontactinterface, kpimtextedit,
-  mailcommon, libkdepim, pimcommon
+  mailcommon, libkdepim, pimcommon,
+  akregator, kaddressbook, kmail, knotes, korganizer, zanshin
 }:
 
 mkDerivation {
@@ -21,5 +22,6 @@ mkDerivation {
     kcmutils kcrash kdbusaddons kparts kwindowsystem
     akonadi grantleetheme kontactinterface kpimtextedit
     mailcommon libkdepim pimcommon
+    akregator kaddressbook kmail knotes korganizer zanshin
   ];
 }

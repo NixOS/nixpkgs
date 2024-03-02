@@ -2,28 +2,30 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, pkg-config
-, openssl
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "artem";
-  version = "1.2.1";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "finefindus";
-    repo = pname;
+    repo = "artem";
     rev = "v${version}";
-    sha256 = "sha256-T652cdKVZqoZ+EwXmTSs9x+ftjvWOELjy37trCP7V+0=";
+    hash = "sha256-iio0MJG0qVndhQvF2zgZ6Jw0za6bBQYFmtk1Mbxpq1E=";
   };
 
-  cargoSha256 = "sha256-2LXpvAbkpk2sJHZJvytwLYksZK4coVYyKvuNRiDK0Gg=";
+  cargoHash = "sha256-47HNoAA1qr39qQqfq+qZoCFyjKHu5pnRKC2QzA60K3k=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  buildInputs = [ openssl ];
-
-  OPENSSL_NO_VENDOR = 1;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   checkFlags = [
     # require internet access
@@ -46,5 +48,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/finefindus/artem/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "artem";
   };
 }

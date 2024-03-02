@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, testers, earthly }:
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.7.9";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    sha256 = "sha256-KShHkqhPlC5MXHVd81ipacyDxWXyl3xFvWpe+7DHqsM=";
+    hash = "sha256-8grH07Vt6mrsKJ8FsG1yZcfLv5R8UIEBu19f1kal7Us=";
   };
 
-  vendorHash = "sha256-0KAnj/PizBC1obz09EAVWUPO0aFw5QUSTENMd7aIo1Y=";
+  vendorHash = "sha256-zYueMiU3eL2vb2fn1dMkbfge+jZzM3Ry/AeLJerlMFg=";
   subPackages = [ "cmd/earthly" "cmd/debugger" ];
 
   CGO_ENABLED = 0;
@@ -38,6 +38,13 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/debugger $out/bin/earthly-debugger
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = earthly;
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "Build automation for the container era";

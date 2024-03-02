@@ -17,9 +17,10 @@
     (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
+, testers
 }:
 
 let
@@ -32,9 +33,9 @@ in
   assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
 
 let
-libxml = stdenv.mkDerivation rec {
+libxml = stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxml2";
-  version = "2.10.4";
+  version = "2.12.5";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -43,23 +44,8 @@ libxml = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    sha256 = "7QyRxYRQCPGTZznk7uIDVTHByUdCxlQfRO5m2IWUjUU=";
+    hash = "sha256-qXJ5Zpav04Bz4PWcKDw6L1pWC1JotLq8ORsoYWZSayE=";
   };
-
-  patches = [
-    # Upstream bugs:
-    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
-    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
-    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
-    # but only the UTF-8 part.
-    # Can also be mitigated by fixing malformed XML inputs, such as in
-    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
-    # Other discussion:
-    #   https://github.com/itstool/itstool/issues/22
-    #   https://github.com/NixOS/nixpkgs/pull/63174
-    #   https://github.com/NixOS/nixpkgs/pull/72342
-    ./utf8-xmlErrorFuncHandler.patch
-  ];
 
   strictDeps = true;
 
@@ -98,7 +84,7 @@ libxml = stdenv.mkDerivation rec {
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ];
 
   installFlags = lib.optionals pythonSupport [
@@ -138,6 +124,11 @@ libxml = stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "none";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -146,8 +137,9 @@ libxml = stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
+    pkgConfigModules = [ "libxml-2.0" ];
   };
-};
+});
 in
 if oldVer then
   libxml.overrideAttrs (attrs: rec {

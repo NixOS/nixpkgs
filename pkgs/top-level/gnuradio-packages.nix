@@ -20,8 +20,11 @@ let
       boost
       volk
       logLib
+      python
     ;
     inherit mkDerivationWith mkDerivation;
+    inherit gnuradio;
+    inherit (gnuradio) gnuradioOlder gnuradioAtLeast;
   } // lib.optionalAttrs (gnuradio.hasFeature "gr-uhd") {
     inherit (gnuradio) uhd;
   });
@@ -30,9 +33,6 @@ in {
   inherit callPackage mkDerivation mkDerivationWith;
 
   ### Packages
-
-  inherit gnuradio;
-  inherit (gnuradio) python;
 
   osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
 

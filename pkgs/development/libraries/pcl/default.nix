@@ -18,7 +18,8 @@
 , Cocoa
 , AGL
 , OpenGL
-, withCuda ? false, cudatoolkit
+, config
+, cudaSupport ? config.cudaSupport, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +39,13 @@ stdenv.mkDerivation rec {
     sed -i '/-ffloat-store/d' cmake/pcl_find_sse.cmake
   '';
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+
   buildInputs = [
     eigen
     libusb1
@@ -46,8 +53,7 @@ stdenv.mkDerivation rec {
     qtbase
     libXt
   ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ]
-  ++ lib.optionals withCuda [ cudatoolkit ];
+  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
 
   propagatedBuildInputs = [
     boost
@@ -60,7 +66,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-  ] ++ lib.optionals withCuda [ "-DWITH_CUDA=true" ];
+  ] ++ lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
 
   meta = {
     homepage = "https://pointclouds.org/";

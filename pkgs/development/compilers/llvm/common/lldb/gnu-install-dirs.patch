@@ -1,0 +1,49 @@
+diff --git a/bindings/lua/CMakeLists.txt b/bindings/lua/CMakeLists.txt
+index 1a739a980..59f8fc3a0 100644
+--- a/bindings/lua/CMakeLists.txt
++++ b/bindings/lua/CMakeLists.txt
+@@ -56,7 +56,7 @@ function(finish_swig_lua swig_target lldb_lua_bindings_dir lldb_lua_target_dir)
+   if(LLDB_BUILD_FRAMEWORK)
+     set(LLDB_LUA_INSTALL_PATH ${LLDB_FRAMEWORK_INSTALL_DIR}/LLDB.framework/Resources/Python)
+   else()
+-    set(LLDB_LUA_INSTALL_PATH ${LLDB_LUA_RELATIVE_PATH})
++    set(LLDB_LUA_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR}/../${LLDB_LUA_RELATIVE_PATH})
+   endif()
+   install(DIRECTORY ${lldb_lua_target_dir}/
+           DESTINATION ${LLDB_LUA_INSTALL_PATH}
+diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+index c631faf52ac3..1d92d069960b 100644
+--- a/bindings/python/CMakeLists.txt
++++ b/bindings/python/CMakeLists.txt
+@@ -160,7 +160,7 @@ function(finish_swig_python swig_target lldb_python_bindings_dir lldb_python_tar
+   if(LLDB_BUILD_FRAMEWORK)
+     set(LLDB_PYTHON_INSTALL_PATH ${LLDB_FRAMEWORK_INSTALL_DIR}/LLDB.framework/Versions/${LLDB_FRAMEWORK_VERSION}/Resources/Python)
+   else()
+-    set(LLDB_PYTHON_INSTALL_PATH ${LLDB_PYTHON_RELATIVE_PATH})
++    set(LLDB_PYTHON_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR}/../${LLDB_PYTHON_RELATIVE_PATH})
+   endif()
+   if (NOT CMAKE_CFG_INTDIR STREQUAL  ".")
+     string(REPLACE ${CMAKE_CFG_INTDIR} "\$\{CMAKE_INSTALL_CONFIG_NAME\}" LLDB_PYTHON_INSTALL_PATH ${LLDB_PYTHON_INSTALL_PATH})
+diff --git a/cmake/modules/AddLLDB.cmake b/cmake/modules/AddLLDB.cmake
+index 3291a7c808e1..b27d27ce6a87 100644
+--- a/cmake/modules/AddLLDB.cmake
++++ b/cmake/modules/AddLLDB.cmake
+@@ -109,7 +109,7 @@ function(add_lldb_library name)
+   endif()
+ 
+   if(PARAM_SHARED)
+-    set(install_dest lib${LLVM_LIBDIR_SUFFIX})
++    set(install_dest ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+     if(PARAM_INSTALL_PREFIX)
+       set(install_dest ${PARAM_INSTALL_PREFIX})
+     endif()
+diff --git a/tools/intel-features/CMakeLists.txt b/tools/intel-features/CMakeLists.txt
+index 7d48491ec89a..c04543585588 100644
+--- a/tools/intel-features/CMakeLists.txt
++++ b/tools/intel-features/CMakeLists.txt
+@@ -30,4 +30,4 @@ add_lldb_library(lldbIntelFeatures SHARED
+   )
+ 
+ install(TARGETS lldbIntelFeatures
+-  LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX})
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})

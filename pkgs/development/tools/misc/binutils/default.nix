@@ -1,5 +1,5 @@
 let
-  withGold = platform: platform.parsed.kernel.execFormat.name == "elf" && !platform.isRiscV && !platform.isLoongArch64;
+  withGold = platform: platform.isElf && !platform.isRiscV && !platform.isLoongArch64;
 in
 
 { stdenv
@@ -18,6 +18,7 @@ in
 , zlib
 
 , enableGold ? withGold stdenv.targetPlatform
+, enableGoldDefault ? false
 , enableShared ? !stdenv.hostPlatform.isStatic
   # WARN: Enabling all targets increases output size to a multiple.
 , withAllTargets ? false
@@ -26,6 +27,7 @@ in
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
 # make sure that intent matches result ourselves.
 assert enableGold -> withGold stdenv.targetPlatform;
+assert enableGoldDefault -> enableGold;
 
 
 let
@@ -103,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
      # this patch is from debian:
      # https://sources.debian.org/data/main/b/binutils/2.38-3/debian/patches/mips64-default-n64.diff
      (if stdenv.targetPlatform.isMusl
-      then substitute { src = ./mips64-default-n64.patch; replacements = [ "--replace" "gnuabi64" "muslabi64" ]; }
+      then substitute { src = ./mips64-default-n64.patch; substitutions = [ "--replace" "gnuabi64" "muslabi64" ]; }
       else ./mips64-default-n64.patch)
   # This patch fixes a bug in 2.40 on MinGW, which breaks DXVK when cross-building from Darwin.
   # See https://sourceware.org/bugzilla/show_bug.cgi?id=30079
@@ -217,8 +219,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lib-path=:"
   ]
   ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
-  ++ lib.optionals enableGold [ "--enable-gold" "--enable-plugins" ]
-  ++ (if enableShared
+  ++ lib.optionals enableGold [
+    "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
+    "--enable-plugins"
+  ] ++ (if enableShared
       then [ "--enable-shared" "--disable-static" ]
       else [ "--disable-shared" "--enable-static" ])
   ;

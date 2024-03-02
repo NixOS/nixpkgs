@@ -7,7 +7,7 @@
 , vala
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmanette";
-  version = "0.2.6";
+  version = "0.2.7";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1b3bcdkk5xd5asq797cch9id8692grsjxrc1ss87vv11m1ck4rb3";
+    hash = "sha256-zd1cAqExBywZxs3m8sss1X6ufay1DRTDN+/ZgLqlGlE=";
   };
 
   nativeBuildInputs = [

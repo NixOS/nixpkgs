@@ -2,13 +2,13 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
 , setuptools
 , types-psutil
 , types-setuptools
-, types-typed-ast
 
 # propagates
 , mypy-extensions
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.3.0";
+  version = "1.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfKuIyzgZo5hAZHighpXH78dHJ1PMbyCakyxF34CnMQ=";
+    hash = "sha256-qs+axm2+UWNuWzLW8CI4qBV7k7Ra8gBajid8mYKDsso=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,6 @@ buildPythonPackage rec {
     setuptools
     types-psutil
     types-setuptools
-    types-typed-ast
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
@@ -102,18 +101,29 @@ buildPythonPackage rec {
     tomli
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # requires distutils
+    "test_c_unit_test"
+  ];
+
   disabledTestPaths = [
     # fails to find tyoing_extensions
     "mypy/test/testcmdline.py"
     "mypy/test/testdaemon.py"
     # fails to find setuptools
     "mypyc/test/test_commandline.py"
+    # fails to find hatchling
+    "mypy/test/testpep561.py"
+  ] ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # https://github.com/python/mypy/issues/15221
+    "mypyc/test/test_run.py"
   ];
 
   meta = with lib; {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
+    mainProgram = "mypy";
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

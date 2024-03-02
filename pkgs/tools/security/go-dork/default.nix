@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "go-dork";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tFmXutX3UnKAFFS4mO4PCv7Bhw1wJ7qjdA1ROryqYZU=";
+    hash = "sha256-Q7ECwXH9q6qWba2URh3LjMx8g6vPF1DWfKnmXej7ht4=";
   };
 
   vendorHash = "sha256-6V58RRRPamBMDAf0gg4sQMQkoD5dWauCFtPrwf5EasI=";
@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/dwisiswant0/go-dork/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "go-dork";
   };
 }

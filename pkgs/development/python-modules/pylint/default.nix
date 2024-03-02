@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.16.2";
-  format = "pyproject";
+  version = "3.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xNCGf4CsxEKScIn6dl2Ka31P6bhMo5fTs9TIQz+vPiM=";
+    owner = "pylint-dev";
+    repo = "pylint";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JwSzit4oDxAqrQFlvTNF7lrirhaHbJ15MRKbl7c7bEg=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ buildPythonPackage rec {
     # implementation relies on the '__implements__'  attribute proposed
     # in PEP 245, which was rejected in 2006.
     "-W" "ignore::DeprecationWarning"
+    "-v"
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -103,8 +104,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://pylint.pycqa.org/";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
     description = "A bug and style checker for Python";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple
@@ -115,6 +117,6 @@ buildPythonPackage rec {
       - epylint: Emacs and Flymake compatible Pylint
     '';
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

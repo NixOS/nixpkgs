@@ -53,5 +53,6 @@ in bundlerApp {
     license     = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms   = platforms.unix;
+    mainProgram = "jekyll";
   };
 }

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.36.1";
+  version = "1.40.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "influxdata";
     repo = "influxdb-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O10q/ResES3mE26LZQLgGPSLjhUCEOwZpm6vZj6H5mQ=";
+    hash = "sha256-+I5DxcxNxIRDwtfYXLvXPl8Z3FKcSWyaYtv1KHT9QO4=";
   };
 
   propagatedBuildInputs = [

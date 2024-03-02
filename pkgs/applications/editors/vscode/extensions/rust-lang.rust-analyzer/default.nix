@@ -20,13 +20,13 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2023-03-06";
+  releaseTag = "2024-02-19";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
-    sha256 = "sha256-Njlus+vY3N++qWE0JXrGjwcXY2QDFuOV/7NruBBMETY=";
+    sha256 = "sha256-Oj/RPMridKpYt3eRqUIPg9YNrj6npG8THIGuWjsamnE=";
   };
 
   build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps";
@@ -39,9 +39,12 @@ let
     inherit releaseTag;
 
     nativeBuildInputs = [
-      jq moreutils esbuild
+      jq
+      moreutils
+      esbuild
       # Required by `keytar`, which is a dependency of `vsce`.
-      pkg-config libsecret
+      pkg-config
+      libsecret
     ] ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
@@ -88,3 +91,4 @@ vscode-utils.buildVscodeExtension {
     platforms = lib.platforms.all;
   };
 }
+

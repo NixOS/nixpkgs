@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
       Wingdows [TM], a virus cleverly designed to resemble a popular
       operating system.
     '';
+    mainProgram = "xbill";
   };
 }

@@ -22,8 +22,7 @@
 , luajit
 , lz4
 , nspr
-, nss
-, pcre
+, pcre2
 , python
 , zlib
 , redisSupport ? true, redis, hiredis
@@ -34,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "6.0.13";
+  version = "7.0.3";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-4J8vgA0ODNL5fyHFBZUMzD27nOXP6AjflWe22EmjEFU=";
+    hash = "sha256-6gdC16mHg/GvSldmGvYGi8LYUKw+ygSzIE0ozhZeNf8=";
   };
 
   nativeBuildInputs = [
@@ -67,8 +66,7 @@ stdenv.mkDerivation rec {
     luajit
     lz4
     nspr
-    nss
-    pcre
+    pcre2
     python
     zlib
   ]
@@ -101,7 +99,6 @@ stdenv.mkDerivation rec {
     "--enable-nflog"
     "--enable-nfqueue"
     "--enable-pie"
-    "--disable-prelude"
     "--enable-python"
     "--enable-unix-socket"
     "--localstatedir=/var"

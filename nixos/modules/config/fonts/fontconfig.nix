@@ -42,7 +42,7 @@ let
   # looking things up.
   makeCacheConf = { }:
     let
-      makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
+      makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.packages; };
       cache     = makeCache pkgs.fontconfig;
       cache32   = makeCache pkgs.pkgsi686Linux.fontconfig;
     in
@@ -51,7 +51,7 @@ let
       <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
-        ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+        ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.packages)}
         ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         <!-- Pre-generated font caches -->
         <cachedir>${cache}</cachedir>

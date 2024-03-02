@@ -74,7 +74,7 @@ let
     fi
   '';
   provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
-    mkdir -p $out/{datasources,dashboards,notifiers,alerting}
+    mkdir -p $out/{alerting,datasources,dashboards,notifiers,plugins}
     ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
     ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashboard"; }}
     ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
@@ -88,27 +88,7 @@ let
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
-  # FIXME(@Ma27) remove before 23.05. This is just a helper-type
-  # because `mkRenamedOptionModule` doesn't work if `foo.bar` is renamed
-  # to `foo.bar.baz`.
-  submodule' = module: types.coercedTo
-    (mkOptionType {
-      name = "grafana-provision-submodule";
-      description = "Wrapper-type for backwards compat of Grafana's declarative provisioning";
-      check = x:
-        if builtins.isList x then
-          throw ''
-            Provisioning dashboards and datasources declaratively by
-            setting `dashboards` or `datasources` to a list is not supported
-            anymore. Use `services.grafana.provision.datasources.settings.datasources`
-            (or `services.grafana.provision.dashboards.settings.providers`) instead.
-          ''
-        else isAttrs x || isFunction x;
-    })
-    id
-    (types.submodule module);
-
-  # http://docs.grafana.org/administration/provisioning/#datasources
+  # https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
@@ -160,7 +140,7 @@ let
     };
   };
 
-  # http://docs.grafana.org/administration/provisioning/#dashboards
+  # https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards
   grafanaTypes.dashboardConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
@@ -330,12 +310,7 @@ in
       apply = x: if isList x then lib.unique x else x;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use.";
-      default = pkgs.grafana;
-      defaultText = literalExpression "pkgs.grafana";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "grafana" { };
 
     dataDir = mkOption {
       description = lib.mdDoc "Data directory.";
@@ -1160,7 +1135,7 @@ in
           Declaratively provision Grafana's datasources.
         '';
         default = { };
-        type = submodule' {
+        type = types.submodule {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana datasource configuration in Nix. Can't be used with
@@ -1235,7 +1210,7 @@ in
           Declaratively provision Grafana's dashboards.
         '';
         default = { };
-        type = submodule' {
+        type = types.submodule {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana dashboard configuration in Nix. Can't be used with
@@ -1856,11 +1831,12 @@ in
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
-        exec ${cfg.package}/bin/grafana-server -homepath ${cfg.dataDir} -config ${configFile}
+        exec ${cfg.package}/bin/grafana server -homepath ${cfg.dataDir} -config ${configFile}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
+        Restart = "on-failure";
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening

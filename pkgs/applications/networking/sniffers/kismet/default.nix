@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, autoreconfHook
 , binutils
 , elfutils
 , fetchurl
@@ -20,23 +21,25 @@
 , python3
 , sqlite
 , withNetworkManager ? false
-, withPython ? true
+, withPython ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , withSensors ? false
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "kismet";
-  version = "2022-08-R1";
+  version = "2023-07-R1";
 
   src = fetchurl {
     url = "https://www.kismetwireless.net/code/${pname}-${version}.tar.xz";
-    hash = "sha256-IUnM6sVSZQhlP00C3PemlOPaPcAAojcqHuS/mYgnl4E=";
+    hash = "sha256-8IVI4mymX6HlZ7Heu+ocpNDnIGvduWpPY5yQFxhz6Pc=";
   };
 
   postPatch = ''
     substituteInPlace Makefile.in \
       --replace "-m 4550" ""
+    substituteInPlace configure.ac \
+      --replace "pkg-config" "$PKG_CONFIG"
   '';
 
   postConfigure = ''
@@ -47,10 +50,21 @@ stdenv.mkDerivation rec {
         -i Makefile
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
+    protobuf
+    protobufc
   ] ++ lib.optionals withPython [
-    python3
+    (python3.withPackages (ps: [
+      ps.numpy
+      ps.protobuf
+      ps.pyserial
+      ps.setuptools
+      ps.websockets
+    ]))
   ];
 
   buildInputs = [
@@ -75,18 +89,8 @@ stdenv.mkDerivation rec {
     lm_sensors
   ];
 
-  propagatedBuildInputs = [
-  ] ++ lib.optionals withPython [
-    (python3.withPackages (ps: [
-      ps.numpy
-      ps.protobuf
-      ps.pyserial
-      ps.setuptools
-      ps.websockets
-    ]))
-  ];
-
   configureFlags = [
+    "--disable-wifi-coconut"  # Until https://github.com/kismetwireless/kismet/issues/478
   ] ++ lib.optionals (!withNetworkManager) [
     "--disable-libnm"
   ] ++ lib.optionals (!withPython) [

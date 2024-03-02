@@ -2,18 +2,18 @@
 , ascii-magic
 , buildPythonPackage
 , fetchFromGitHub
+, oauthlib
 , pillow
-, pytest-httpserver
 , pytestCheckHook
 , pythonOlder
 , requests
-, oauthlib
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.55.0";
-  format = "setuptools";
+  version = "0.60.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,8 +21,23 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+ISWPrpY/urpZZZrn6+Ii8gbrwkQMLL6gXhydXd8HqI=";
+    hash = "sha256-VM4qCe+VMnfKXioUHTjOeBSniwpq44fvbN1k1jG6puk=";
   };
+
+  postPatch = ''
+    substituteInPlace weconnect/__version.py \
+      --replace-fail "0.0.0dev" "${version}"
+    substituteInPlace setup.py \
+      --replace-fail "setup_requires=SETUP_REQUIRED" "setup_requires=[]" \
+      --replace-fail "tests_require=TEST_REQUIRED" "tests_require=[]"
+    substituteInPlace pytest.ini \
+      --replace-fail "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
+      --replace-fail "required_plugins = pytest-cov" ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     oauthlib
@@ -37,25 +52,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest-httpserver
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace weconnect/__version.py \
-      --replace "develop" "${version}"
-    substituteInPlace setup.py \
-      --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
-      --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
-    substituteInPlace requirements.txt \
-      --replace "requests~=2.29.0" "requests"
-    substituteInPlace image_extra_requirements.txt \
-      --replace "pillow~=" "pillow>=" \
-      --replace "ascii_magic~=" "ascii_magic>="
-    substituteInPlace pytest.ini \
-      --replace "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
-      --replace "pytest-cov" ""
-  '';
 
   pythonImportsCheck = [
     "weconnect"

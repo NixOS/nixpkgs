@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
-, ffmpeg
+, ffmpeg-headless
 , makeWrapper
 , nixosTests
 , nodejs
@@ -116,7 +115,7 @@ stdenv.mkDerivation rec {
 
     # Convenience binary and wrap with ffmpeg dependency
     makeWrapper $out/share/botamusique/mumbleBot.py $out/bin/botamusique \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
 
     runHook postInstall
   '';
@@ -153,5 +152,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ infinisil ];
+    mainProgram = "botamusique";
   };
 }

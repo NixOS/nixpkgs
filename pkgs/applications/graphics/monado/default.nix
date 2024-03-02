@@ -3,13 +3,16 @@
 , fetchFromGitLab
 , writeText
 , cmake
+, cjson
 , doxygen
 , glslang
 , pkg-config
 , python3
 , SDL2
+, bluez
 , dbus
 , eigen
+, elfutils
 , ffmpeg
 , gst-plugins-base
 , gstreamer
@@ -18,18 +21,25 @@
 , libXau
 , libXdmcp
 , libXrandr
+, libXext
 , libbsd
 , libffi
 , libjpeg
-# , librealsense
+, librealsense
 , libsurvive
+, libunwind
 , libusb1
 , libuv
 , libuvc
 , libv4l
 , libxcb
+, onnxruntime
 , opencv4
 , openhmd
+, openvr
+, orc
+, pcre2
+, shaderc
 , udev
 , vulkan-headers
 , vulkan-loader
@@ -38,6 +48,8 @@
 , wayland-scanner
 , libdrm
 , zlib
+, zstd
+, nixosTests
 # Set as 'false' to build monado without service support, i.e. allow VR
 # applications linking against libopenxr_monado.so to use OpenXR standalone
 # instead of via the monado-service program. For more information see:
@@ -45,16 +57,16 @@
 , serviceSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "monado";
-  version = "unstable-2023-01-14";
+  version = "unstable-2024-01-02";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    rev = "1ef49b92f2d6cb519039edd7ba7f70e8073fbe88";
-    sha256 = "sha256-zieJmI6BKHpYyCPOOUora9qoWn+NXehbHKvoi4h81UA=";
+    rev = "bfa1c16ff9fc759327ca251a5d086b958b1a3b8a";
+    hash = "sha256-wXRwOs9MkDre/VeW686DzmvKjX0qCSS13MILbYQD6OY=";
   };
 
   nativeBuildInputs = [
@@ -72,8 +84,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
+    bluez
+    cjson
     dbus
     eigen
+    elfutils
     ffmpeg
     gst-plugins-base
     gstreamer
@@ -85,15 +100,21 @@ stdenv.mkDerivation rec {
     libbsd
     libjpeg
     libffi
-    # librealsense.dev - see below
+    librealsense
     libsurvive
+    libunwind
     libusb1
     libuv
     libuvc
     libv4l
     libxcb
+    onnxruntime
     opencv4
     openhmd
+    openvr
+    orc
+    pcre2
+    shaderc
     udev
     vulkan-headers
     vulkan-loader
@@ -102,28 +123,34 @@ stdenv.mkDerivation rec {
     wayland-protocols
     libdrm
     zlib
+    zstd
   ];
 
-  # realsense is disabled, the build ends with the following error:
-  #
-  # CMake Error in src/xrt/drivers/CMakeLists.txt:
-  # Imported target "realsense2::realsense2" includes non-existent path
-  # "/nix/store/2v95aps14hj3jy4ryp86vl7yymv10mh0-librealsense-2.41.0/include"
-  # in its INTERFACE_INCLUDE_DIRECTORIES.
-  #
-  # for some reason cmake is trying to use ${librealsense}/include
-  # instead of ${librealsense.dev}/include as an include directory
+  # known disabled drivers/features:
+  #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core (See https://github.com/NixOS/nixpkgs/issues/292618)
+  #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR (See https://github.com/NixOS/nixpkgs/issues/292661)
+  #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
+  #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
   # Help openxr-loader find this runtime
   setupHook = writeText "setup-hook" ''
     export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
+  patches = [
+    # We don't have $HOME/.steam when building
+    ./force-enable-steamvr_lh.patch
+  ];
+
+  passthru.tests = {
+    basic-service = nixosTests.monado;
+  };
+
   meta = with lib; {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ expipiplus1 prusnak ];
+    maintainers = with maintainers; [ Scrumplex expipiplus1 prusnak ];
     platforms = platforms.linux;
     mainProgram = "monado-cli";
   };

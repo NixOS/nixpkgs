@@ -1,14 +1,19 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, pgweb
+}:
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.14.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NPuL7ffDLpnu0khJBIz+tItYyeHYPeOuTHXr4DjBgM0=";
+    hash = "sha256-We7MyKOdauf93tBihvjouEiZ4FnkvsUtfJpswK6ef7Q=";
   };
 
   postPatch = ''
@@ -16,11 +21,27 @@ buildGoModule rec {
     rm -f pkg/client/{client,dump}_test.go
   '';
 
-  vendorSha256 = "sha256-W+Vybea4oppD4BHRqcyouQL79cF+y+sONY9MRggti20=";
+  vendorHash = "sha256-Jpvf6cST3kBvYzCQLoJ1fijUC/hP1ouptd2bQZ1J/Lo=";
 
   ldflags = [ "-s" "-w" ];
 
+  checkFlags =
+    let
+      skippedTests = [
+        # There is a `/tmp/foo` file on the test machine causing the test case to fail on macOS
+        "TestParseOptions"
+      ];
+    in
+    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
+
+    passthru.tests.version = testers.testVersion {
+      version = "v${version}";
+      package = pgweb;
+      command = "pgweb --version";
+    };
+
   meta = with lib; {
+    changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
     description = "A web-based database browser for PostgreSQL";
     longDescription = ''
       A simple postgres browser that runs as a web server. You can view data,
@@ -28,6 +49,7 @@ buildGoModule rec {
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
     license = licenses.mit;
+    mainProgram = "pgweb";
     maintainers = with maintainers; [ zupo luisnquin ];
   };
 }

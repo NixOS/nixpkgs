@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -41,11 +42,13 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = passthru.optional-dependencies.all;
+  # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.
+  # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
+  env.MPLBACKEND = lib.optionalString stdenv.isDarwin "Agg";
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.all;
 
   disabledTestPaths = [
     "tests/test_spy.py" # Requires meshzoo (non-free) and pytest-codeblocks (not packaged)

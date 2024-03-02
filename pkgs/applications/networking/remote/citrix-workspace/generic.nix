@@ -3,7 +3,9 @@
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
-, libpulseaudio, pcsclite, glib-networking, llvmPackages_12
+, libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
+, libfaketime
+, libinput, libcap, libjson, libsecret, libcanberra-gtk3
 
 , homepage, version, prefix, hash
 
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
       ${homepage}
 
       (if you do not find version ${version} there, try at
-      https://www.citrix.com/downloads/workspace-app/
+      https://www.citrix.com/downloads/workspace-app/)
 
       Once you have downloaded the file, please use the following command and re-run the
       installation:
@@ -59,6 +61,7 @@ stdenv.mkDerivation rec {
     more
     which
     wrapGAppsHook
+    libfaketime
   ];
 
   buildInputs = [
@@ -78,16 +81,24 @@ stdenv.mkDerivation rec {
     gtk_engines
     heimdal
     krb5
+    libcap
+    libcanberra-gtk3
     libcxx
     libcxxabi
+    libinput
     libjpeg
+    libjson
     libpng12
+    libpulseaudio
+    libsecret
     libsoup
     libvorbis
     libxml2
+    llvmPackages_12.libunwind
     mesa
     nspr
     nss
+    opencv4
     openssl'
     pango
     speex
@@ -98,9 +109,7 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libXtst
     zlib
-  ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs
-    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio
-    ++ lib.optional (lib.versionAtLeast version "21.12") llvmPackages_12.libunwind;
+  ];
 
   runtimeDependencies = [
     glib
@@ -116,12 +125,14 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
+    xorg.xprop
+    xorg.xdpyinfo
   ];
 
   installPhase = let
     icaFlag = program:
       if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
-      else if (lib.versionAtLeast version "21.12" && builtins.match "wfica(.*)" program != null) then null
+      else if (builtins.match "wfica(.*)" program != null) then null
       else "-icaroot";
     wrap = program: ''
       wrapProgram $out/opt/citrix-icaclient/${program} \
@@ -142,8 +153,7 @@ stdenv.mkDerivation rec {
 
     mkWrappers = lib.concatMapStringsSep "\n";
 
-    toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ]
-      ++ lib.optional (lib.versionOlder version "20.06") "selfservice_old";
+    toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ];
   in ''
     runHook preInstall
 
@@ -153,7 +163,8 @@ stdenv.mkDerivation rec {
 
     # Run upstream installer in the store-path.
     sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
-    ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
+    source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
+    faketime -f "$source_date" ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
 
     if [ -f "$ICAInstDir/util/setlog" ]; then
       chmod +x "$ICAInstDir/util/setlog"
@@ -198,6 +209,14 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
+  preFixup = ''
+    find $out/opt/citrix-icaclient/lib -name "libopencv_imgcodecs.so.*" | while read -r fname; do
+      # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+      patchelf --replace-needed libtiff.so.5 libtiff.so $fname
+      # lib needs libjpeg.so.8, but nixpkgs provides libjpeg.so.9
+      patchelf --replace-needed libjpeg.so.8 libjpeg.so $fname
+    done
+  '';
   postFixup = ''
     autoPatchelf -- "$out"
     $out/opt/citrix-icaclient/util/ctx_rehash
@@ -208,7 +227,7 @@ stdenv.mkDerivation rec {
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pmenke michaeladler ];
+    maintainers = with maintainers; [ michaeladler ];
     inherit homepage;
   };
 }

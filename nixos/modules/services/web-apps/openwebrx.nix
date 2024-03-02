@@ -6,12 +6,7 @@ in
   options.services.openwebrx = with lib; {
     enable = mkEnableOption (lib.mdDoc "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.openwebrx;
-      defaultText = literalExpression "pkgs.openwebrx";
-      description = lib.mdDoc "OpenWebRX package to use for the service";
-    };
+    package = mkPackageOption pkgs "openwebrx" { };
   };
 
   config = lib.mkIf cfg.enable {

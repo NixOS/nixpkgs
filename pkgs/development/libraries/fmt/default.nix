@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitHub, fetchpatch
 , cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
 
@@ -67,7 +67,7 @@ in
   };
 
   fmt_10 = generic {
-    version = "10.0.0";
-    sha256 = "sha256-sVY2TVPS/Zx32p5XIYR6ghqN4kOZexzH7Cr+y8sZXK8=";
+    version = "10.1.1";
+    sha256 = "sha256-H9+1lEaHM12nzXSmo9m8S6527t+97e6necayyjCPm1A=";
   };
 }

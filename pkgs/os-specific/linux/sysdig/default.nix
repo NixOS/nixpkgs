@@ -1,61 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, kernel, installShellFiles, pkg-config
-, luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
-, yaml-cpp, nlohmann_json, re2, zstd
+{ lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles, pkg-config
+, luajit, ncurses, perl, jsoncpp, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
+, yaml-cpp, nlohmann_json, re2, zstd, uthash, fetchpatch, fetchurl
 }:
 
 let
-  # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "0.11.0";
-  libsSha256 = "sha256-QvRTz3yMS6i+qdiSG51wvho9D7w/dMQhY72OYd3qOgU=";
+  # Compare with https://github.com/draios/sysdig/blob/0.35.1/cmake/modules/falcosecurity-libs.cmake
+  libsRev = "0.14.2";
+  libsHash = "sha256-sWrniRB/vQd1BZnsiz+wLHugrF3LhuAr9e9gDMavLoo=";
 
-  # Compare with https://github.com/falcosecurity/libs/blob/master/cmake/modules/valijson.cmake#L17
+  # Compare with https://github.com/falcosecurity/libs/blob/0.14.2/cmake/modules/valijson.cmake
   valijson = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
     rev = "v0.6";
-    sha256 = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
+    hash = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
   };
 
-  # https://github.com/draios/sysdig/blob/0.31.5/cmake/modules/driver.cmake
+  # https://github.com/draios/sysdig/blob/0.35.1/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
-    rev = "5.0.1+driver";
-    sha256 = "sha256-CQ6QTcyTnThpJHDXgOM1Zdp5SG7rngp9XtEM+2mS8ro=";
+    rev = "7.0.0+driver";
+    hash = "sha256-kXqvfM7HbGh2wEGaO4KBkFDW+m5gpOShJZKJLu9McKk=";
   };
-
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.31.5";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-RuoPqVulATtn7jSga/8fECs7weNfjt/YFh7iHmfCKjw=";
+    hash = "sha256-nSCkKwhdEduepyvcyWEKMQtQ6TfhF3GnTSreRVoarsw=";
   };
-
-  # to fix the build against the latest kernel
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/draios/sysdig/compare/35ded9aab87801281e22898242e24e0bc63873b2...954e6fc6238f21d4870a491395d68a7dd3062aa9.patch";
-      sha256 = "sha256-gnLURnv8FW5LvqjbreCf9DPGdBcn7rfizGeznFqJ+Fk=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
   buildInputs = [
     luajit
     ncurses
-    libb64
     openssl
     curl
     jq
     gcc
     elfutils
     tbb
-    libb64
     re2
     protobuf
     grpc
@@ -63,6 +52,7 @@ stdenv.mkDerivation rec {
     jsoncpp
     nlohmann_json
     zstd
+    uthash
   ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -72,14 +62,18 @@ stdenv.mkDerivation rec {
       owner = "falcosecurity";
       repo = "libs";
       rev = libsRev;
-      sha256 = libsSha256;
+      hash = libsHash;
     }} libs
     chmod -R +w libs
+
+    substituteInPlace libs/userspace/libscap/libscap.pc.in libs/userspace/libsinsp/libsinsp.pc.in \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@" \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+
     cp -r ${driver} driver-src
     chmod -R +w driver-src
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
-      "-DVALIJSON_INCLUDE=${valijson}/include"
       "-DDRIVER_SOURCE_DIR=$(pwd)/driver-src/driver"
     )
   '';
@@ -90,7 +84,10 @@ stdenv.mkDerivation rec {
     "-DUSE_BUNDLED_B64=OFF"
     "-DUSE_BUNDLED_TBB=OFF"
     "-DUSE_BUNDLED_RE2=OFF"
+    "-DUSE_BUNDLED_JSONCPP=OFF"
     "-DCREATE_TEST_TARGETS=OFF"
+    "-DVALIJSON_INCLUDE=${valijson}/include"
+    "-DUTHASH_INCLUDE=${uthash}/include"
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   env.NIX_CFLAGS_COMPILE =

@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , substituteAll
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , gettext
 , makeWrapper
@@ -14,10 +14,10 @@
 , glib
 , gdk-pixbuf
 , gobject-introspection
-, gtk2
 , gtk3
 , gtk4
 , gtk-doc
+, libdbusmenu-gtk3
 , runCommand
 , isocodes
 , cldr-annotations
@@ -27,7 +27,7 @@
 , json-glib
 , libnotify ? null
 , enableUI ? true
-, withWayland ? false
+, withWayland ? true
 , libxkbcommon
 , wayland
 , buildPackages
@@ -47,23 +47,24 @@ let
   };
   # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
   # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch = runCommand "sandbox-dbus-launch" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
-      makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-        --add-flags --config-file=${dbus}/share/dbus-1/session.conf
+  dbus-launch = runCommand "sandbox-dbus-launch"
+    {
+      nativeBuildInputs = [ makeWrapper ];
+    } ''
+    makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+      --add-flags --config-file=${dbus}/share/dbus-1/session.conf
   '';
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.28";
+  version = "1.5.29";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-zjV+QkhVkrHFs9Vt1FpbvmS4nRHxwKaKU3mQkSgyLaQ=";
+    sha256 = "sha256-d4EUIg0v8rfHdvzG5USc6GLY6QHtQpIJp1PrPaaBxxE=";
   };
 
   patches = [
@@ -73,17 +74,17 @@ stdenv.mkDerivation rec {
       pythonSitePackages = python3.sitePackages;
     })
     ./build-without-dbus-launch.patch
-    # unicode and emoji input are broken before 1.5.29
-    # https://github.com/NixOS/nixpkgs/issues/226526
-    (fetchpatch {
-      url = "https://github.com/ibus/ibus/commit/7c8abbe89403c2fcb08e3fda42049a97187e53ab.patch";
-      hash = "sha256-59HzAdLq8ahrF7K+tFGLjTodwIiTkJGEkFe8quqIkhU=";
-    })
   ];
 
   outputs = [ "out" "dev" "installedTests" ];
 
   postPatch = ''
+    # Maintainer does not want to create separate tarballs for final release candidate and release versions,
+    # so we need to set `ibus_released` to `1` in `configure.ac`. Otherwise, anyone running `ibus version` gets
+    # a version with an inaccurate `-rcX` suffix.
+    # https://github.com/ibus/ibus/issues/2584
+    substituteInPlace configure.ac --replace "m4_define([ibus_released], [0])" "m4_define([ibus_released], [1])"
+
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
     substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
@@ -93,23 +94,23 @@ stdenv.mkDerivation rec {
   preAutoreconf = "touch ChangeLog";
 
   configureFlags = [
+    # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
+    # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
+    # https://github.com/NixOS/nixpkgs/issues/21751
+    "CC_FOR_BUILD=${stdenv.cc}/bin/cc"
+    "CXX_FOR_BUILD=${stdenv.cc}/bin/c++"
     "--disable-memconf"
     (lib.enableFeature (dconf != null) "dconf")
     (lib.enableFeature (libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
     (lib.enableFeature enableUI "ui")
+    "--disable-gtk2"
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
-
-  # missing make dependency
-  # https://github.com/NixOS/nixpkgs/pull/218120#issuecomment-1514027173
-  preBuild = ''
-    make -C src ibusenumtypes.h
-  '';
 
   makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
@@ -126,6 +127,7 @@ stdenv.mkDerivation rec {
     vala
     wrapGAppsHook
     dbus-launch
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -137,14 +139,13 @@ stdenv.mkDerivation rec {
     systemd
     dconf
     gdk-pixbuf
-    gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
-    gtk2
     gtk3
     gtk4
     isocodes
     json-glib
     libnotify
+    libdbusmenu-gtk3
   ] ++ lib.optionals withWayland [
     libxkbcommon
     wayland

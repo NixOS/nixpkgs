@@ -217,6 +217,13 @@ in {
 
     systemd.services = {
       thinkfan.environment.THINKFAN_ARGS = escapeShellArgs ([ "-c" configFile ] ++ cfg.extraArgs);
+      thinkfan.serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = "30s";
+
+        # Hardening
+        PrivateNetwork = true;
+      };
 
       # must be added manually, see issue #81138
       thinkfan.wantedBy = [ "multi-user.target" ];

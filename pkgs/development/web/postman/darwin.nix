@@ -11,12 +11,12 @@ let
   dist = {
     aarch64-darwin = {
       arch = "arm64";
-      sha256 = "sha256-zBjA+IekQONwZJ+2hQhJIBA+qu/rRYOtm6y1aBaxQrA=";
+      sha256 = "sha256-P7x06KKH0e1Yro93SCEJyiWS/Uv25tWU8A85vxv85hI=";
     };
 
     x86_64-darwin = {
       arch = "64";
-      sha256 = "sha256-YBI8F/wABFBqfwIGSBr7UqD/zDGaESL9/v/DpCSy1m0=";
+      sha256 = "sha256-/jlLU5NKF8sNZ49n90219b/oiVFT8EkFx2oYhIk8Tgw=";
     };
   }.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 

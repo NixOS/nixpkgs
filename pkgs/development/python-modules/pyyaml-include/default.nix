@@ -1,25 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pytestCheckHook
 , pyyaml
+, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
-, toml
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyyaml-include";
-  version = "1.3";
+  version = "1.3.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9/vrjnG1C+Dm4HRy98edv7GhW63pyToHg2n/SeV+Z3E=";
+  src = fetchFromGitHub {
+    owner = "tanbro";
+    repo = "pyyaml-include";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xsNMIEBYqMVQp+H8R7XpFCwROXA8I6bFvAuHrRvC+DI=";
   };
 
   nativeBuildInputs = [
-    pyyaml
+    setuptools
     setuptools-scm
-    setuptools-scm-git-archive
-    toml
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    pyyaml
   ];
 
   nativeCheckInputs = [

@@ -1,19 +1,20 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, git
 , installShellFiles
 , openssl
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.63.0";
+  version = "0.74.7";
 
   src = fetchFromGitHub {
     owner = "anchore";
-    repo = pname;
+    repo = "grype";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MccjZ7EDpyiu/Bv7KItwG5JtGKOSSwMevd21hXBi3+o=";
+    hash = "sha256-mP9Yjg5AVMIMvlOI+5AaCYzlw7h2K9WCFLY9ZwXmZk0=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,35 +29,38 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-RbQvWIy8yebohKNaT3ixJqvz+8vewpxMoBALO5kJpWw=";
+  vendorHash = "sha256-X+E2g/FoDgjKq8XcPeEA/XbRJV8JkhY5AHPnw26hRnM=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   nativeCheckInputs = [
+    git
     openssl
   ];
 
-  subPackages = [ "." ];
+  subPackages = [
+    "cmd/grype"
+  ];
 
   excludedPackages = "test/integration";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/anchore/grype/internal/version.version=${version}"
-    "-X github.com/anchore/grype/internal/version.gitDescription=v${version}"
-    "-X github.com/anchore/grype/internal/version.gitTreeState=clean"
+    "-X=main.version=${version}"
+    "-X=main.gitDescription=v${version}"
+    "-X=main.gitTreeState=clean"
   ];
 
   preBuild = ''
     # grype version also displays the version of the syft library used
     # we need to grab it from the go.sum and add an ldflag for it
     SYFT_VERSION="$(grep "github.com/anchore/syft" go.sum -m 1 | awk '{print $2}')"
-    ldflags+=" -X github.com/anchore/grype/internal/version.syftVersion=$SYFT_VERSION"
-    ldflags+=" -X github.com/anchore/grype/internal/version.gitCommit=$(cat COMMIT)"
-    ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X main.syftVersion=$SYFT_VERSION"
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
   preCheck = ''
@@ -70,20 +74,25 @@ buildGoModule rec {
 
     # remove tests that depend on docker
     substituteInPlace test/cli/cmd_test.go \
-      --replace "TestCmd" "SkipCmd"
+      --replace-fail "TestCmd" "SkipCmd"
     substituteInPlace grype/pkg/provider_test.go \
-      --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
+      --replace-fail "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
+    substituteInPlace test/cli/cmd_test.go \
+      --replace-fail "Test_descriptorNameAndVersionSet" "Skip_descriptorNameAndVersionSet"
     # remove tests that depend on git
     substituteInPlace test/cli/db_validations_test.go \
-      --replace "TestDBValidations" "SkipDBValidations"
+      --replace-fail "TestDBValidations" "SkipDBValidations"
     substituteInPlace test/cli/registry_auth_test.go \
-      --replace "TestRegistryAuth" "SkipRegistryAuth"
+      --replace-fail "TestRegistryAuth" "SkipRegistryAuth"
     substituteInPlace test/cli/sbom_input_test.go \
-      --replace "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
-      --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument" \
-      --replace "TestAttestationInput_AsArgument" "SkipAttestationInput_AsArgument"
+      --replace-fail "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
+      --replace-fail "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument"
     substituteInPlace test/cli/subprocess_test.go \
-      --replace "TestSubprocessStdin" "SkipSubprocessStdin"
+      --replace-fail "TestSubprocessStdin" "SkipSubprocessStdin"
+    substituteInPlace grype/internal/packagemetadata/names_test.go \
+      --replace-fail "TestAllNames" "SkipAllNames"
+    substituteInPlace test/cli/version_cmd_test.go \
+      --replace-fail "TestVersionCmdPrintsToStdout" "SkipVersionCmdPrintsToStdout"
 
     # segfault
     rm grype/db/v5/namespace/cpe/namespace_test.go
@@ -105,6 +114,6 @@ buildGoModule rec {
       container image or filesystem to find known vulnerabilities.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [ fab jk kashw2 ];
   };
 }

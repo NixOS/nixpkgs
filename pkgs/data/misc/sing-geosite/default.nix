@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo120Module
 , fetchFromGitHub
 , substituteAll
 , v2ray-domain-list-community
@@ -11,7 +11,7 @@ let
     geosite_data = "${v2ray-domain-list-community}/share/v2ray/geosite.dat";
   };
 in
-buildGoModule rec {
+buildGo120Module {
   pname = "sing-geosite";
   inherit (v2ray-domain-list-community) version;
 

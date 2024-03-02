@@ -1,20 +1,21 @@
 { cmake, cudatoolkit, fetchFromGitHub, gfortran, lib, llvmPackages, python3Packages, stdenv
+, config
 , enableCfp ? true
-, enableCuda ? false
-, enableFortran ? builtins.elem stdenv.targetPlatform.system gfortran.meta.platforms
+, enableCuda ? config.cudaSupport
+, enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms
 , enableOpenMP ? true
 , enablePython ? true
 , enableUtilities ? true }:
 
 stdenv.mkDerivation rec {
   pname = "zfp";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "zfp";
     rev = version;
-    sha256 = "sha256-E2LI1rWo1HO5O/sxPHAmLDs3Z5xouzlgMj11rQFPNYQ=";
+    sha256 = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -51,5 +52,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.spease ];
     # 64-bit only
     platforms = platforms.aarch64 ++ platforms.x86_64;
+    mainProgram = "zfp";
   };
 }

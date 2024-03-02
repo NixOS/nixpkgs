@@ -12,22 +12,29 @@
 , pytest-trio
 , pytestCheckHook
 , requests
+, setuptools
 , six
 , trio
-, typing-extensions }:
+, typing-extensions
+}:
 
 buildPythonPackage rec {
-  version = "1.26.3";
+  version = "1.30.0";
   pname = "azure-core";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-rL0NqpZ1zohiPaNcgNgZza+pFzHe5rJpXGTXyp2oLbQ=";
+    hash = "sha256-bzp4g+8YRyL2vZlyYu3a+Az+fls+DKqvjbFpVpWJPTU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
@@ -35,9 +42,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  passthru.optional-dependencies = {
+    aio = [
+      aiohttp
+    ];
+  };
+
   nativeCheckInputs = [
     aiodns
-    aiohttp
     flask
     mock
     pytest
@@ -45,14 +57,17 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # test server needs to be available
   preCheck = ''
     export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  pytestFlagsArray = [
+    "tests/"
+  ];
+
   # disable tests which touch network
   disabledTests = [
     "aiohttp"
@@ -68,6 +83,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "location_polling_fail"
   ];
+
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
@@ -87,7 +103,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

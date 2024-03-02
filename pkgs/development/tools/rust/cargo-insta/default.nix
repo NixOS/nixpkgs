@@ -5,24 +5,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.30.0";
+  version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
     rev = "refs/tags/${version}";
-    hash = "sha256-Gh0RdWCYIYhur+nuHx68B2LllInx5Lx+5GeooWkB4dc=";
+    hash = "sha256-w/dxIQ7KRrn86PwiE/g5L9Gn8KszPF9u/zlwE/FYDu4=";
   };
 
-  sourceRoot = "source/cargo-insta";
+  sourceRoot = "${src.name}/cargo-insta";
 
-  cargoHash = "sha256-bV8LzYIQuSDg8ZETzF28PTuonvI+2QsPn7uTF8kn4fA=";
+  cargoHash = "sha256-mEtmZ+wFo1WI1IMNYsVqSVScFDLdiXBbghH7c0l/3NQ=";
 
   meta = with lib; {
     description = "A Cargo subcommand for snapshot testing";
     homepage = "https://github.com/mitsuhiko/insta";
     changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda oxalica ];
+    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
   };
 }

@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = with python3Packages; [
-    click babel opsdroid_get_image_size slackclient webexteamssdk bleach
+    click babel opsdroid-get-image-size slackclient webexteamssdk bleach
     parse emoji puremagic yamale nbformat websockets pycron nbconvert
     aiohttp matrix-api-async aioredis aiosqlite arrow pyyaml motor regex
     mattermostdriver setuptools voluptuous ibm-watson tailer multidict
@@ -32,5 +32,6 @@ python3Packages.buildPythonPackage rec {
     maintainers = with maintainers; [ globin willibutz ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "opsdroid";
   };
 }

@@ -2,16 +2,17 @@
 
 buildGoModule {
   pname = "protoc-gen-twirp_typescript";
-  version = "unstable-2021-03-29";
+  version = "unstable-2022-08-14";
 
   src = fetchFromGitHub {
     owner = "larrymyers";
     repo = "protoc-gen-twirp_typescript";
-    rev = "97fd63e543beb2d9f6a90ff894981affe0f2faf1";
+    rev = "535986b31881a214db3c04f122bcc96a2823a155";
     sha256 = "sha256-LfF/n96LwRX8aoPHzCRI/QbDmZR9yMhE5yGhFAqa8nA=";
   };
 
-  vendorSha256 = "sha256-WISWuq1neVX4xQkoamc6FznZahOQHwgkYmERJF40OFQ=";
+  proxyVendor = true;
+  vendorHash = "sha256-UyxHa28SY60U8VeL7TbSTyscqN5T7tKGfuN2GIL6QIg";
 
   subPackages = [ "." ];
 
@@ -19,6 +20,6 @@ buildGoModule {
     description = "Protobuf Plugin for Generating a Twirp Typescript Client";
     homepage = "https://github.com/larrymyers/protoc-gen-twirp_typescript";
     license = licenses.mit;
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [ jojosch dgollings ];
   };
 }

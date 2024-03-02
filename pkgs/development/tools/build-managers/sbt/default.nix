@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.9.1";
+  version = "1.9.9";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
-    hash = "sha256-KcylFTzJYxXW5CN3flgAuDHkVyO0dzLCB6Zu+lyk/Cs=";
+    hash = "sha256-xXyuYMISLKG7p3GE37TQ0l/GwYgFOUqzarYgiwwPJi8=";
   };
 
   postPatch = ''
@@ -32,7 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
     ln -sT ../share/sbt/bin/sbt $out/bin/sbt
-    ln -sT ../share/sbt/bin/sbtn-x86_64-${
+    ln -sT ../share/sbt/bin/sbtn-${
+      if (stdenv.hostPlatform.isAarch64) then "aarch64" else "x86_64"
+    }-${
       if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"
     } $out/bin/sbtn
 
@@ -47,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       binaryNativeCode
     ];
     description = "A build tool for Scala, Java and more";
-    maintainers = with maintainers; [ nequissimus ];
+    maintainers = with maintainers; [ nequissimus kashw2 ];
     platforms = platforms.unix;
   };
 })

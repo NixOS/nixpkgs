@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , aiohttp
+, ciso8601
 , async-timeout
 , kasa-crypt
 , orjson
@@ -13,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.12.0";
-  format = "setuptools";
+  version = "0.12.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,19 +24,24 @@ buildPythonPackage rec {
     owner = "scottbonline";
     repo = "sense";
     rev = "refs/tags/${version}";
-    hash = "sha256-LVpTB7Q78N/cRbneJJ1aT+lFE790ssdMHo8VRirtDHY=";
+    hash = "sha256-aAPDYg5ttOAkKF5c1ft2apIQoReh4t22+78PtmLZNlI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "{{VERSION_PLACEHOLDER}}" "${version}"
+      --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
     kasa-crypt
     orjson
+    ciso8601
     requests
     websocket-client
     websockets

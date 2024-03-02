@@ -4,25 +4,18 @@
 , autoPatchelfHook
 , expat
 , zlib
-
-# Pick one of
-# - ipu6 (Tiger Lake)
-# - ipu6ep (Alder Lake)
-, ipuVersion ? "ipu6"
 }:
 
-stdenv.mkDerivation {
-  pname = "${ipuVersion}-camera-bin";
-  version = "unstable-2023-02-08";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ipu6-camera-bins";
+  version = "unstable-2023-10-26";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-bins";
-    rev = "276859fc6de83918a32727d676985ec40f31af2b";
-    hash = "sha256-QnedM2UBbGyd2wIF762Mi+VkDZYtC6MifK4XGGxlUzw=";
+    rev = "af5ba0cb4a763569ac7514635013e9d870040bcf";
+    hash = "sha256-y0pT5M7AKACbquQWLZPYpTPXRC5hipLNL61nhs+cst4=";
   };
-
-  sourceRoot = "source/${ipuVersion}";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -40,32 +33,20 @@ stdenv.mkDerivation {
       include \
       $out/
 
-    install -m 0644 -D ../LICENSE $out/share/doc/LICENSE
+    install -m 0644 -D LICENSE $out/share/doc/LICENSE
 
     runHook postInstall
   '';
 
   postFixup = ''
-    for pcfile in $out/lib/pkgconfig/*.pc; do
+    for pcfile in $out/lib/*/pkgconfig/*.pc; do
       substituteInPlace $pcfile \
-        --replace 'exec_prefix=/usr' 'exec_prefix=''${prefix}' \
-        --replace 'prefix=/usr' "prefix=$out" \
-        --replace 'libdir=/usr/lib' 'libdir=''${prefix}/lib' \
-        --replace 'includedir=/usr/include' 'includedir=''${prefix}/include'
+        --replace 'prefix=/usr' "prefix=$out"
     done
   '';
 
-  passthru = {
-    inherit ipuVersion;
-  };
-
-  meta = let
-    generation = {
-      ipu6 = "Tiger Lake";
-      ipu6ep = "Alder Lake";
-    }.${ipuVersion};
-  in with lib; {
-    description = "${generation} IPU firmware and proprietary image processing libraries";
+  meta = with lib; {
+    description = "IPU firmware and proprietary image processing libraries";
     homepage = "https://github.com/intel/ipu6-camera-bins";
     license = licenses.issl;
     sourceProvenance = with sourceTypes; [
@@ -76,4 +57,4 @@ stdenv.mkDerivation {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

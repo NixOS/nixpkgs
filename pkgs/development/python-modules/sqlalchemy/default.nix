@@ -1,7 +1,6 @@
 { lib
 , isPyPy
 , pythonOlder
-, fetchPypi
 , fetchFromGitHub
 , buildPythonPackage
 
@@ -18,7 +17,7 @@
 , aiosqlite
 , asyncmy
 , asyncpg
-, cx_oracle
+, cx-oracle
 , mariadb
 , mypy
 , mysql-connector
@@ -41,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "2.0.15";
+  version = "2.0.27";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -50,8 +49,12 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-05GhFearTA9At8MgmEfeXfbS3MAZ0Rmx8jER18q7fmI=";
+    hash = "sha256-6R+A7rVq1olRXj1wMolHhEq418bpr5rsmH8RjxajmmQ=";
   };
+
+  postPatch = ''
+    sed -i '/tag_build = dev/d' setup.cfg
+  '';
 
   nativeBuildInputs =[
     setuptools
@@ -90,7 +93,7 @@ buildPythonPackage rec {
       mariadb
     ];
     oracle = [
-      cx_oracle
+      cx-oracle
     ];
     oracle_oracledb = [
       oracledb
@@ -111,6 +114,9 @@ buildPythonPackage rec {
       psycopg2cffi
     ];
     postgresql_psycopg = [
+      psycopg
+    ];
+    postgresql_psycopgbinary = [
       psycopg
     ];
     pymysql = [
@@ -140,6 +146,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # typing correctness, not interesting
     "test/ext/mypy"
+    "test/typing"
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];

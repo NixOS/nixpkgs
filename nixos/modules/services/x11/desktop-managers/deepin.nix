@@ -15,7 +15,7 @@ in
   options = {
 
     services.xserver.desktopManager.deepin = {
-      enable = mkEnableOption (lib.mdDoc "Enable Deepin desktop manager");
+      enable = mkEnableOption (lib.mdDoc "Deepin desktop manager");
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
@@ -38,8 +38,8 @@ in
 
   config = mkIf cfg.enable
     {
-      services.xserver.displayManager.sessionPackages = [ pkgs.deepin.startdde ];
-      services.xserver.displayManager.defaultSession = mkDefault "deepin";
+      services.xserver.displayManager.sessionPackages = [ pkgs.deepin.dde-session ];
+      services.xserver.displayManager.defaultSession = mkDefault "dde-x11";
 
       # Update the DBus activation environment after launching the desktop manager.
       services.xserver.displayManager.sessionCommands = ''
@@ -67,7 +67,7 @@ in
       networking.networkmanager.enable = mkDefault true;
       programs.dconf.enable = mkDefault true;
 
-      fonts.fonts = with pkgs; [ noto-fonts ];
+      fonts.packages = with pkgs; [ noto-fonts ];
       xdg.mime.enable = true;
       xdg.menus.enable = true;
       xdg.icons.enable = true;
@@ -77,6 +77,9 @@ in
           buildPortalsInGnome = false;
         })
       ];
+
+      # https://github.com/NixOS/nixpkgs/pull/247766#issuecomment-1722839259
+      xdg.portal.config.deepin.default = mkDefault [ "gtk" ];
 
       environment.sessionVariables = {
         NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -90,18 +93,13 @@ in
         "/lib/dde-file-manager"
         "/share/backgrounds"
         "/share/wallpapers"
+        "/share/dde-daemon"
+        "/share/dsg"
+        "/share/deepin-themes"
+        "/share/deepin"
       ];
 
       environment.etc = {
-        "distribution.info".text = ''
-          [Distribution]
-          Name=NixOS
-          WebsiteName=www.nixos.org
-          Website=https://www.nixos.org
-          Logo=${pkgs.nixos-icons}/share/icons/hicolor/96x96/apps/nix-snowflake.png
-          LogoLight=${pkgs.nixos-icons}/share/icons/hicolor/32x32/apps/nix-snowflake.png
-          LogoTransparent=${pkgs.deepin.deepin-desktop-base}/share/pixmaps/distribution_logo_transparent.svg
-        '';
         "deepin-installer.conf".text = ''
           system_info_vendor_name="Copyright (c) 2003-2023 NixOS contributors"
         '';
@@ -135,19 +133,26 @@ in
             libsForQt5.kde-gtk-config # deepin-api/gtk-thumbnailer need
             libsForQt5.kglobalaccel
             xsettingsd # lightdm-deepin-greeter
+            dtkcommon
+            dtkcore
+            dtkgui
+            dtkwidget
+            dtkdeclarative
             qt5platform-plugins
             deepin-pw-check
             deepin-turbo
 
             dde-account-faces
             deepin-icon-theme
+            deepin-desktop-theme
             deepin-sound-theme
             deepin-gtk-theme
             deepin-wallpapers
+            deepin-desktop-base
 
             startdde
             dde-dock
-            dde-launcher
+            dde-launchpad
             dde-session-ui
             dde-session-shell
             dde-file-manager
@@ -159,24 +164,29 @@ in
             dpa-ext-gnomekeyring
             deepin-desktop-schemas
             deepin-terminal
-            dde-kwin
             deepin-kwin
+            dde-session
+            dde-widgets
+            dde-appearance
+            dde-application-manager
+            deepin-service-manager
           ];
           optionalPackages = [
             onboard # dde-dock plugin
-            deepin-camera
             deepin-calculator
             deepin-compressor
             deepin-editor
             deepin-picker
             deepin-draw
-            deepin-album
-            deepin-image-viewer
             deepin-music
             deepin-movie-reborn
             deepin-system-monitor
-            deepin-screen-recorder
             deepin-shortcut-viewer
+            # freeimage has knownVulnerabilties, don't install packages using freeiamge by default
+            # deepin-album
+            # deepin-camera
+            # deepin-image-viewer
+            # deepin-screen-recorder
           ];
         in
         requiredPackages
@@ -184,24 +194,33 @@ in
 
       services.dbus.packages = with pkgs.deepin; [
         dde-dock
-        dde-launcher
+        dde-launchpad
         dde-session-ui
         dde-session-shell
         dde-file-manager
         dde-control-center
         dde-calendar
         dde-clipboard
-        dde-kwin
         deepin-kwin
         deepin-pw-check
+        dde-widgets
+        dde-session
+        dde-appearance
+        dde-application-manager
+        deepin-service-manager
       ];
 
       systemd.packages = with pkgs.deepin; [
-        dde-launcher
+        dde-launchpad
         dde-file-manager
         dde-calendar
         dde-clipboard
         deepin-kwin
+        dde-appearance
+        dde-widgets
+        dde-session
+        dde-application-manager
+        deepin-service-manager
       ];
     };
 }

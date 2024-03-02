@@ -1,38 +1,47 @@
 { lib
 , stdenv
-, pythonOlder
-, rustPlatform
-, fetchFromGitHub
 , buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# build-system
+, rustPlatform
 , cffi
+
+# native dependencies
 , libiconv
+
+# tests
 , numpy
 , psutil
 , pytestCheckHook
 , python-dateutil
 , pytz
 , xxhash
+, python
 }:
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.8.11";
-  format = "pyproject";
+  version = "3.9.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
-    repo = pname;
+    repo = "orjson";
     rev = "refs/tags/${version}";
-    hash = "sha256-TFoagWUtd/nJceNaptgPp4aTR/tBCmxpiZIVJwOlia4=";
+    hash = "sha256-p6nkzEHFTKCBr7Wte2wvzh1TlzwweADZON8gm2pT224=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/x+0/I3WFxPwVu2LliTgr42SuJX7VjOLe/SGai5OgAw=";
+    hash = "sha256-2c8XgQILhAvR8HUqoEIOfYeiV1lR9UyIJXWDuNeVZsE=";
   };
+
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     cffi

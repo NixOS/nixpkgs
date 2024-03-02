@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "mercadopago";
-  version = "2.2.0";
+  version = "2.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mercadopago";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-HtPyIwip/cjvnBDZ0qGpLKJOkwETGSqXvTkH2pcd6cc=";
+    hash = "sha256-ABxYGYUBOzeOSE0yK8jym+ldinDUCTpqO165OWhszgs=";
   };
 
   propagatedBuildInputs = [

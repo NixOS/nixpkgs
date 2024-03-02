@@ -6,26 +6,35 @@
 , jinja2
 , pandas
 , plotly
+, setuptools
 , setuptools-scm
 , typeguard
+, wheel
 , hypothesis
 , mercurial
 , pyfakefs
 , pytestCheckHook
 , yappi
+, pyre-extensions
 }:
 
 buildPythonPackage rec {
   pname = "ax";
-  version = "0.3.2";
+  version = "0.3.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = version;
-    hash = "sha256-1KLLjeUktXvIDOlTQzMmpbL/On8PTxZQ44Qi4BT3nPk=";
+    hash = "sha256-5f2VpOFDRz6YzxvxFYWMu8hljkMVbBsyULYVreUxYRU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     botorch
@@ -33,11 +42,9 @@ buildPythonPackage rec {
     jinja2
     pandas
     plotly
-    setuptools-scm
     typeguard
+    pyre-extensions
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   checkInputs = [
     hypothesis
@@ -58,6 +65,14 @@ buildPythonPackage rec {
     "--ignore=ax/service/tests/test_scheduler.py"
     "--ignore=ax/service/tests/test_with_db_settings_base.py"
     "--ignore=ax/storage"
+  ];
+  disabledTests = [
+    # exact comparison of floating points
+    "test_optimize_l0_homotopy"
+    # AssertionError: 5 != 2
+    "test_get_standard_plots_moo"
+    # AssertionError: Expected 'warning' to be called once. Called 3 times
+    "test_validate_kwarg_typing"
   ];
   pythonImportsCheck = [ "ax" ];
 

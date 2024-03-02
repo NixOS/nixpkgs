@@ -1,42 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, curl, gnutls, libgcrypt, libuuid, fuse, boost }:
+{ lib, buildGoModule, fetchFromGitHub, fuse3, testers, blobfuse }:
 
 let
-  version = "1.3.7";
+  version = "2.1.2";
   src = fetchFromGitHub {
-    owner  = "Azure";
-    repo   = "azure-storage-fuse";
-    rev    = "blobfuse-${version}-Linux";
-    sha256 = "sha256-yihIuS4AG489U7eBi/p7H6S7Cg54kkQeNVCexxQZ60A=";
+    owner = "Azure";
+    repo = "azure-storage-fuse";
+    rev = "blobfuse2-${version}";
+    sha256 = "sha256-KzpD+6g1WwviydYE0v5pSH35zC41MrPlk5MitwAIgnE=";
   };
-  cpplite = stdenv.mkDerivation rec {
-    pname = "cpplite";
-    inherit version src;
-
-    sourceRoot = "source/cpplite";
-    patches = [ ./install-adls.patch ];
-
-    cmakeFlags = [ "-DBUILD_ADLS=ON" "-DUSE_OPENSSL=OFF" ];
-
-    buildInputs = [ curl libuuid gnutls ];
-    nativeBuildInputs = [ cmake pkg-config ];
-  };
-in stdenv.mkDerivation rec {
+in buildGoModule {
   pname = "blobfuse";
   inherit version src;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=deprecated-declarations"
-    "-Wno-error=catch-value"
-  ];
+  vendorHash = "sha256-+Z+mkTs/8qCtYcWZIMzsW9MQsC08KDJUHNbxyc6Ro5Y=";
 
-  buildInputs = [ curl gnutls libgcrypt libuuid fuse boost cpplite ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fuse3 ];
+
+  # Many tests depend on network or needs to be configured to pass. See the link below for a starting point
+  # https://github.com/NixOS/nixpkgs/pull/201196/files#diff-e669dbe391f8856f4564f26023fe147a7b720aeefe6869ab7a218f02a8247302R20
+  doCheck = false;
+
+  passthru.tests.version = testers.testVersion { package = blobfuse; };
 
   meta = with lib; {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
     license = licenses.mit;
     maintainers = with maintainers; [ jbgi ];
     platforms = platforms.linux;
+    mainProgram = "azure-storage-fuse";
   };
 }

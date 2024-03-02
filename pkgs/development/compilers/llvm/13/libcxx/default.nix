@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/libcxx";
+  sourceRoot = "${src.name}/libcxx";
 
   outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
 
   patches = [
     ./gnu-install-dirs.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
+    ../../common/libcxx/libcxx-0001-musl-hacks.patch
   ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''

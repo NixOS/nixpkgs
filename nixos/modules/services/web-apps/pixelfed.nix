@@ -39,8 +39,8 @@ in {
   options.services = {
     pixelfed = {
       enable = mkEnableOption (lib.mdDoc "a Pixelfed instance");
-      package = mkPackageOptionMD pkgs "pixelfed" { };
-      phpPackage = mkPackageOptionMD pkgs "php81" { };
+      package = mkPackageOption pkgs "pixelfed" { };
+      phpPackage = mkPackageOption pkgs "php81" { };
 
       user = mkOption {
         type = types.str;
@@ -271,7 +271,6 @@ in {
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
           name = user;
-          ensurePermissions = { };
         }];
       };
 

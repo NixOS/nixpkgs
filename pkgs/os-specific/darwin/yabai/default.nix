@@ -3,7 +3,6 @@
 , stdenvNoCC
 , fetchFromGitHub
 , fetchzip
-, writeShellScript
 , installShellFiles
 , testers
 , yabai
@@ -18,7 +17,7 @@
 
 let
   pname = "yabai";
-  version = "5.0.4";
+  version = "6.0.15";
 
   test-version = testers.testVersion {
     package = yabai;
@@ -37,10 +36,12 @@ let
     changelog = "https://github.com/koekeishiya/yabai/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.darwin;
+    mainProgram = "yabai";
     maintainers = with maintainers; [
       cmacrae
       shardy
       ivar
+      khaneliman
     ];
   };
 in
@@ -52,7 +53,7 @@ in
 
     src = fetchzip {
       url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
-      sha256 = "sha256-2PH3Hi9x0323MjKHPybNmFddvNNlsaDb1LdiVcZTNJc=";
+      hash = "sha256-L82N0IaC2OAZVhmu9NALencK78FeCZI2cWJyNkGH2vQ=";
     };
 
     nativeBuildInputs = [
@@ -88,7 +89,7 @@ in
       owner = "koekeishiya";
       repo = "yabai";
       rev = "v${version}";
-      sha256 = "sha256-TCY0EvP0+2+U1k9kYIi8jMt4mj3ZRaQPsb1wtU3Z2U4=";
+      hash = "sha256-buX6FRIXdM5VmYpA80eESDMPf+xeMfJJj0ulyx2g94M=";
     };
 
     nativeBuildInputs = [
@@ -106,6 +107,11 @@ in
 
     dontConfigure = true;
     enableParallelBuilding = true;
+
+    env = {
+      # silence service.h error
+      NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+    };
 
     postPatch = ''
       # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.

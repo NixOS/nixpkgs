@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-qt";
-  version = "4.2.0";
+  version = "4.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AKF7WG3VMLbXqTmZI6QEicpKmjCXGQERdfVdxrXcj0E=";
+    hash = "sha256-AlYEGveAgt/AjiLM+GCqqHjYApVX8D9L/CAH/CkbHmE=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "pytest support for PyQt and PySide applications";
     homepage = "https://github.com/pytest-dev/pytest-qt";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

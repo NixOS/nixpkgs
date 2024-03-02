@@ -8,6 +8,7 @@ let
   sortedcontainers = buildPythonPackage rec {
     pname = "sortedcontainers";
     version = "2.4.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "grantjenks";
@@ -32,7 +33,7 @@ let
       description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
       homepage = "https://grantjenks.com/docs/sortedcontainers/";
       license = licenses.asl20;
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ ];
     };
   };
 in

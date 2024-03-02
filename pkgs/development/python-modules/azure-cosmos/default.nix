@@ -6,12 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
+  version = "4.5.1";
+  format = "setuptools";
   pname = "azure-cosmos";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f77cc558fecffac04377ba758ac4e23f076dc1c54e2cf2515f85bc15cbde5c6";
+    sha256 = "sha256-xK2oOBMG7sQTwBvFCneOJk3D9Pr6nWlvnfhDYUjSrqg=";
   };
 
   propagatedBuildInputs = [ six requests ];

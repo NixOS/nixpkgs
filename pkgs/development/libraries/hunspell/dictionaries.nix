@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
+{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, python3, hunspell }:
 
 
 let
@@ -828,14 +828,14 @@ rec {
   th_TH = th-th;
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
-    version = "experimental-2023-03-01";
+    version = "experimental-2024-02-27";
     dictFileName = "th_TH";
     readmeFile = "README.md";
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
-      rev = "9c09f1b7c0eb4d04b9f6f427901686c5c3d9fa54";
-      sha256 = "1wszpnbgj31k72x1vvcfkzcpmxsncdpqsi3zagah7swilpi7cqm4";
+      rev = "62d35f9211ca1eb4c367eac2ae57193efe6e88d2";
+      sha256 = "sha256-t4m4u+qIgJPrKz58Cu2Q+knYm/+cvrNLzQsiiSRTB1A=";
     };
     meta = with lib; {
       description = "Hunspell dictionary for Central Thai (Thailand)";
@@ -915,13 +915,56 @@ rec {
     license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
   };
 
-  # Portugese
+  /* PORTUGUESE */
+
   pt_BR = pt-br;
   pt-br = mkDictFromLibreOffice {
     shortName = "pt-br";
     dictFileName = "pt_BR";
-    shortDescription = "Brazillian Portugese (Brazil)";
+    shortDescription = "Portuguese (Brazil)";
     readmeFile = "README_pt_BR.txt";
     license = with lib.licenses; [ lgpl3 ];
+  };
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromLibreOffice {
+    shortName = "pt-pt";
+    dictFileName = "pt_PT";
+    shortDescription = "Portuguese (Portugal)";
+    readmeFile = "README_pt_PT.txt";
+    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+  };
+
+  /* PERSIAN */
+
+  fa_IR = fa-ir;
+  fa-ir = mkDict {
+    pname = "hunspell-dict-fa-ir";
+    version = "experimental-2022-09-04";
+    dictFileName = "fa-IR";
+    readmeFile = "README.md";
+    src = fetchFromGitHub {
+      owner = "b00f";
+      repo = "lilak";
+      rev = "1a80a8e5c9377ac424d29ef20be894e250bc9765";
+      hash = "sha256-xonnrclzgFEHdQ9g8ijm0bo9r5a5Y0va52NoJR5d8mo=";
+    };
+    nativeBuildInputs = [ python3 ];
+    buildPhase = ''
+      runHook preBuild
+      mkdir build
+      (cd src && python3 lilak.py)
+      mv build/* ./
+      # remove timestamp from file
+      sed -i 's/^\(## *File Version[^,]*\),.*/\1/' fa-IR.aff
+      runHook postBuild
+    '';
+    meta = with lib; {
+      description = "Hunspell dictionary for Persian (Iran)";
+      homepage = "https://github.com/b00f/lilak";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ nix-julia ];
+      platforms = platforms.all;
+    };
   };
 }

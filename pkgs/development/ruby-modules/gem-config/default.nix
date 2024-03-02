@@ -21,12 +21,13 @@
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
+, cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
+, bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
+, cargo, rustc, rustPlatform
 , autoSignDarwinBinariesHook, fetchpatch
 }@args:
 
@@ -76,7 +77,7 @@ in
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ cairo pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
+    buildInputs = [ cairo expat pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   charlock_holmes = attrs: {
@@ -232,6 +233,12 @@ in
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
   };
 
+  gdk3 = attrs: {
+    nativeBuildInputs = [ pkg-config bundler rake ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf cairo ];
+  };
+
   gpgme = attrs: {
     buildInputs = [ gpgme ];
     nativeBuildInputs = [ pkg-config ];
@@ -239,9 +246,9 @@ in
   };
 
   gio2 = attrs: {
-    nativeBuildInputs = [ pkg-config ]
+    nativeBuildInputs = [ pkg-config gobject-introspection ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre pcre2 gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
+    buildInputs = [ gtk2 pcre pcre2 ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -290,6 +297,41 @@ in
     in ''
       substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
     '';
+  } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
+    cargoRoot = "ext/fast_mmaped_file_rs";
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = stdenv.mkDerivation {
+        inherit (buildRubyGem { inherit (attrs) gemName version source; })
+          name
+          src
+          unpackPhase
+          nativeBuildInputs
+        ;
+        dontBuilt = true;
+        installPhase = ''
+          cp -R ext/fast_mmaped_file_rs $out
+        '';
+      };
+      hash = if lib.versionAtLeast attrs.version "1.1.0"
+        then "sha256-tSyoCEBtMMkFfPynaMx8oc9bO7I+Pf6Y/f3Ld8uwlEE="
+        else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+    };
+    nativeBuildInputs = [
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+      rustPlatform.bindgenHook
+    ];
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
+    preBuild = ''
+      cat ../.cargo/config > ext/fast_mmaped_file_rs/.cargo/config.toml
+      sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+    '';
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
+    '';
   };
 
   glib2 = attrs: {
@@ -320,6 +362,36 @@ in
     dontStrip = stdenv.isDarwin;
   };
 
+  gtk3 = attrs: {
+    nativeBuildInputs = [
+      binutils
+      pkg-config
+    ] ++ lib.optionals stdenv.isLinux [
+      util-linux
+      libselinux
+      libsepol
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [
+      atk
+      gdk-pixbuf
+      fribidi
+      gobject-introspection
+      gtk3
+      cairo
+      harfbuzz
+      libdatrie
+      libthai
+      pcre
+      pcre2
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+      xorg.libXtst
+      libxkbcommon
+      libepoxy
+    ];
+    dontStrip = stdenv.isDarwin;
+  };
+
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkg-config pcre2 ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
@@ -332,6 +404,13 @@ in
       substituteInPlace bin/gollum \
         --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
     '';
+  };
+
+  google-protobuf = attrs:
+    lib.optionalAttrs (lib.versionAtLeast attrs.version "3.25.0") {
+    # Fails on 3.25.0 with:
+    #   convert.c:312:32: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+    hardeningDisable = [ "format" ];
   };
 
   grpc = attrs: {
@@ -369,7 +448,12 @@ in
   };
 
   iconv = attrs: {
+    dontBuild = false;
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./iconv-fix-incompatible-function-pointer-conversions.patch
+    ];
   };
 
   idn-ruby = attrs: {
@@ -486,10 +570,6 @@ in
     '';
   };
 
-  msgpack = attrs: {
-    buildInputs = [ msgpack ];
-  };
-
   mysql = attrs: {
     buildInputs = [ libmysqlclient zlib openssl ];
   };
@@ -540,14 +620,6 @@ in
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
     dontBuild = false;
-    patches = [
-      # fix ruby 3.1 https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3
-      (fetchpatch {
-        url = "https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3/commits/b596b919bc7857fdc0fc1c61a8cb7eab32cfc2db.patch";
-        hash = "sha256-AzGTQaD/e6X4LOMuXhy/WhbayhWKYCGHXPFlzLRWyPM=";
-        stripLen = 1;
-      })
-    ];
   };
 
   pango = attrs: {
@@ -630,6 +702,9 @@ in
 
   re2 = attrs: {
     buildInputs = [ re2 ];
+    buildFlags = [
+      "--enable-system-libraries"
+    ];
   };
 
   rest-client = attrs: {
@@ -710,6 +785,16 @@ in
     # https://github.com/NixOS/nixpkgs/issues/19098
     buildFlags = [ "--disable-lto" ];
   });
+
+  sass-embedded = attrs: {
+    # Patch the Rakefile to use our dart-sass and not try to fetch anything.
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace ext/sass/Rakefile \
+        --replace \'dart-sass/sass\' \'${dart-sass}/bin/sass\' \
+        --replace ' => %w[dart-sass]' ""
+    '';
+  };
 
   scrypt = attrs: lib.optionalAttrs stdenv.isDarwin {
     dontBuild = false;

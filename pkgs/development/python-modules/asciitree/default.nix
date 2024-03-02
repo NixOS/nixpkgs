@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "asciitree";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mbr";
@@ -27,6 +28,6 @@ buildPythonPackage rec {
     description = "Draws ASCII trees";
     homepage = "https://github.com/mbr/asciitree";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

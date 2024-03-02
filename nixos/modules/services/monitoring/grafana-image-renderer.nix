@@ -108,7 +108,7 @@ in {
 
     services.grafana.settings.rendering = mkIf cfg.provisionGrafana {
       server_url = "http://localhost:${toString cfg.settings.service.port}/render";
-      callback_url = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
+      callback_url = "http://${config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
     };
 
     services.grafana-image-renderer.chromium = mkDefault pkgs.chromium;

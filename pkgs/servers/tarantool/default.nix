@@ -38,8 +38,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DENABLE_DIST=ON"
     "-DTARANTOOL_VERSION=${version}.builtByNix" # expects the commit hash as well
   ];

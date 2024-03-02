@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DFLATCC_INSTALL=on"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

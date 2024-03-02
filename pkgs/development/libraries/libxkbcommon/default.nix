@@ -17,14 +17,15 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
+    url = with finalAttrs; "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
     sha256 = "sha256-Vg8RxLu8oQ9JXz7306aqTKYrT4+wtS59RZ0Yom5G4Bc=";
   };
 
@@ -49,6 +50,12 @@ stdenv.mkDerivation rec {
     patchShebangs ../test/
   '';
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     description = "A library to handle keyboard descriptions";
     longDescription = ''
@@ -58,10 +65,15 @@ stdenv.mkDerivation rec {
       and dead keys.
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
-    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
+    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ttuegel ];
     mainProgram = "xkbcli";
     platforms = with platforms; unix;
+    pkgConfigModules = [
+      "xkbcommon"
+      "xkbcommon-x11"
+      "xkbregistry"
+    ];
   };
-}
+})

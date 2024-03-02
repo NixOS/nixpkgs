@@ -3,16 +3,18 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, attrs
 , pillow
 , toml
 , numpy
+, pyyaml
 , python
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clickgen";
-  version = "2.1.3";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,12 +23,20 @@ buildPythonPackage rec {
     owner = "ful1e5";
     repo = "clickgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qDaSfIeKCbyl3C2iKz9DYQc1oNwTe5xDlGg/yYhakSw=";
+    hash = "sha256-mae/bO6aAMyYw42FYNlLMWm/ZC92LDgWVSSRKGR0tFM=";
   };
 
-  propagatedBuildInputs = [ pillow toml numpy ];
+  propagatedBuildInputs = [
+    attrs
+    numpy
+    pillow
+    pyyaml
+    toml
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   postInstall = ''
     # Copying scripts directory needed by clickgen script at $out/bin/

@@ -11,23 +11,23 @@
 , python-dateutil
 , pythonOlder
 , semver
+, shtab
 , rich
 , tomlkit
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.6.1";
-  format = "pyproject";
+  version = "24.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "pontos";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HBDijU5R1furmlP1ykmjbbBWXh/LSVE2zuuJ80D9Yng=";
+    hash = "sha256-xg5/UDAnT6kvDfYnQn/LCHlAgpRrt19pDC8NB5RzCnc=";
   };
 
   nativeBuildInputs = [
@@ -41,11 +41,9 @@ buildPythonPackage rec {
     packaging
     python-dateutil
     semver
+    shtab
     rich
-    typing-extensions
     tomlkit
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ] ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
@@ -67,6 +65,12 @@ buildPythonPackage rec {
     "test_successfully_sign"
     # calls git log, but our fetcher removes .git
     "test_git_error"
+    # Tests require git executable
+    "test_github_action_output"
+    "test_initial_release"
+    # Tests are out-dated
+    "test_getting_version_without_version_config"
+    "test_verify_version_does_not_match"
   ];
 
   pythonImportsCheck = [

@@ -8,7 +8,8 @@ in
 
 self: super: {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+  # Should be llvmPackages_6 which has been removed from nixpkgs
+  llvmPackages = null;
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -38,17 +39,23 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
+
+  # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
+  Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+  # These core package only exist for GHC >= 9.4. The best we can do is feign
+  # their existence to callPackages, but their is no shim for lower GHC versions.
+  system-cxx-std-lib = null;
 
   # Needs Cabal 3.0.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_1_0; };
+  jailbreak-cabal = super.jailbreak-cabal.overrideScope (cself: _: { Cabal = cself.Cabal_3_2_1_0; });
 
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
@@ -66,19 +73,12 @@ self: super: {
   unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
   RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
-  monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
   github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
   binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
   rebase = doJailbreak super.rebase; # time ==1.9.* is too low
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
-
-  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
-  stack = doJailbreak super.stack;
-
-  # Newer versions don't compile.
-  resolv = self.resolv_0_1_1_2;
 
   # cabal2nix needs the latest version of Cabal, and the one
   # hackage-db uses must match, so take the latest
@@ -95,7 +95,7 @@ self: super: {
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
-  exceptions = super.exceptions_0_10_4;
+  exceptions = self.exceptions_0_10_7;
 
   # Older compilers need the latest ghc-lib to build this package.
   hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;

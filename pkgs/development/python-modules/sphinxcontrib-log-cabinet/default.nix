@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     homepage = "https://github.com/davidism/sphinxcontrib-log-cabinet";
     description = "Sphinx extension to organize changelogs";

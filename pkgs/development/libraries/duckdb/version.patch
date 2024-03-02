@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 349af6acf7..7ffec0b4cb 100644
+index 2b49e11288..0a4a69b9a0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -196,52 +196,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
+@@ -244,52 +244,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
    set(SUN TRUE)
  endif()
  
@@ -52,7 +52,7 @@ index 349af6acf7..7ffec0b4cb 100644
 -  set(DUCKDB_DEV_ITERATION 0)
 -  set(DUCKDB_VERSION "v${DUCKDB_MAJOR_VERSION}.${DUCKDB_MINOR_VERSION}.${DUCKDB_PATCH_VERSION}-dev${DUCKDB_DEV_ITERATION}")
 -endif()
-+set(DUCKDB_VERSION "@DUCKDB_VERSION@")
++set(DUCKDB_VERSION "@version@")
  
  message(STATUS "git hash ${GIT_COMMIT_HASH}, version ${DUCKDB_VERSION}")
  

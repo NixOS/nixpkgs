@@ -7,12 +7,13 @@
 , pytest
 , setuptools-scm
 , toml
-, zc_lockfile
+, zc-lockfile
 }:
 
 buildPythonPackage rec {
   pname = "pytest-services";
   version = "2.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     psutil
-    zc_lockfile
+    zc-lockfile
   ];
 
   # no tests in PyPI tarball

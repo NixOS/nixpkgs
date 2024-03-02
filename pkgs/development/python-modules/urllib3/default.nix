@@ -1,46 +1,58 @@
 { lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+
+# build-system
+, hatchling
+
+# optional-dependencies
 , brotli
 , brotlicffi
-, buildPythonPackage
-, certifi
-, cryptography
-, fetchPypi
-, idna
-, isPyPy
-, mock
-, pyopenssl
 , pysocks
-, pytest-freezegun
-, pytest-timeout
+
+# tests
+, backports-zoneinfo
 , pytestCheckHook
-, python-dateutil
+, pytest-timeout
+, pythonOlder
 , tornado
 , trustme
 }:
 
-buildPythonPackage rec {
+let self = buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.14";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B2kHv4/TVc3ndyhHExZiWk0vfnE8El9RlTu1s+7PT3I=";
+    hash = "sha256-33qor7AUj6eEiOeJmyxZtfT/z6gubFTMud03wde1LVQ=";
   };
 
-  # FIXME: remove backwards compatbility hack
-  propagatedBuildInputs = passthru.optional-dependencies.brotli
-    ++ passthru.optional-dependencies.socks;
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  passthru.optional-dependencies = {
+    brotli = if isPyPy then [
+      brotlicffi
+    ] else [
+      brotli
+    ];
+    socks = [
+      pysocks
+    ];
+  };
 
   nativeCheckInputs = [
-    python-dateutil
-    mock
-    pytest-freezegun
     pytest-timeout
     pytestCheckHook
     tornado
     trustme
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Tests in urllib3 are mostly timeout-based instead of event-based and
   # are therefore inherently flaky. On your own machine, the tests will
@@ -55,6 +67,8 @@ buildPythonPackage rec {
   # Still, failures can occur and for that reason tests are disabled.
   doCheck = false;
 
+  passthru.tests.pytest = self.overridePythonAttrs (_: { doCheck = true; });
+
   preCheck = ''
     export CI # Increases LONG_TIMEOUT
   '';
@@ -63,29 +77,12 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  passthru.optional-dependencies = {
-    brotli = if isPyPy then [
-      brotlicffi
-    ] else [
-      brotli
-    ];
-    # Use carefully since pyopenssl is not supported aarch64-darwin
-    secure = [
-      certifi
-      cryptography
-      idna
-      pyopenssl
-    ];
-    socks = [
-      pysocks
-    ];
-  };
-
   meta = with lib; {
-    description = "Powerful, sanity-friendly HTTP client for Python";
-    homepage = "https://github.com/shazow/urllib3";
+    description = "Powerful, user-friendly HTTP client for Python";
+    homepage = "https://github.com/urllib3/urllib3";
     changelog = "https://github.com/urllib3/urllib3/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
-}
+};
+in self

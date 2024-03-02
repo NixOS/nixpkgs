@@ -1,24 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, libX11, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  libX11,
+  libXt
+}:
 
-stdenv.mkDerivation {
-  pname = "xsel-unstable";
-  version = "2020-05-27";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "xsel";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "kfish";
     repo = "xsel";
-    rev = "062e6d373537c60829fa9b5dcddbcd942986b3c3";
-    sha256 = "0fbf80zsc22vcqp59r9fdx4icxhrkv7l3lphw83326jrmkzy6kri";
+    rev = finalAttrs.version;
+    hash = "sha256-F2w/Ad8IWxJNH90/0a9+1M8bLfn1M3m4TH3PNpQmEFI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libX11 ];
+  nativeBuildInputs = [pkg-config autoreconfHook];
+  buildInputs = [libX11 libXt];
 
   meta = with lib; {
     description = "Command-line program for getting and setting the contents of the X selection";
     homepage = "http://www.kfish.org/software/xsel";
+    changelog = "https://github.com/kfish/xsel/releases/tag/${finalAttrs.version}";
     license = licenses.mit;
-    maintainers = [ maintainers.cstrahan ];
+    maintainers = with maintainers; [cafkafk];
     platforms = lib.platforms.unix;
+    mainProgram = "xsel";
   };
-}
+})

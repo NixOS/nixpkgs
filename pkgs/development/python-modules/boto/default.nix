@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -51,6 +52,6 @@ buildPythonPackage rec {
       future infrastructural services offered by Amazon Web
       Services.  This includes S3, SQS, EC2, among others.
     '';
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

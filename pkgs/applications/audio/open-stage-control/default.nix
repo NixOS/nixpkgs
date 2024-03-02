@@ -1,14 +1,24 @@
-{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3, nix-update-script }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nodejs_18
+, electron
+, python3
+, nix-update-script
+}:
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.25.1";
+  version = "1.25.7";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-mbd+fknSzokFt5dPlZrZIpDox/NzMbvyFp2fNPelv3c=";
+    hash = "sha256-BvWr+AhNGh2t4DleKFqgCqijma4CcXOSMoDtSeEUiEc=";
   };
 
   # Remove some Electron stuff from package.json
@@ -16,12 +26,13 @@ buildNpmPackage rec {
     sed -i -e '/"electron"\|"electron-installer-debian"/d' package.json
   '';
 
-  npmDepsHash = "sha256-M+6+zrxy8VpJQS0dG/xORMbflKEq8wO2DEOjGrA6OUw=";
+  npmDepsHash = "sha256-UqjYNXdNoQmirIgU9DRgkp14SIrawfrfi9mD2h6ACyU=";
+
+  nodejs = nodejs_18;
 
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
-    python3
   ];
 
   buildInputs = [
@@ -79,5 +90,6 @@ buildNpmPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lilyinstarlight ];
     platforms = platforms.linux;
+    mainProgram = "open-stage-control";
   };
 }

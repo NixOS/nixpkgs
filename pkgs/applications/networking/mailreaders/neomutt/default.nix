@@ -6,20 +6,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20230517";
+  version = "20231221";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "sha256-1i0STaJulJP0LWdNfLLIEKVapfkcguYRnbc+psWlVE4=";
+    sha256 = "sha256-IXly2N/DD2+XBXVIXJw1sE/0eJwbUaONDNRMi7n1T44=";
   };
-
-  patches = [
-    # https://github.com/neomutt/neomutt/issues/3773#issuecomment-1493295144
-    ./fix-open-very-large-mailbox.patch
-  ];
 
   buildInputs = [
     cyrus_sasl gss gpgme libkrb5 libidn2 ncurses
@@ -112,7 +107,7 @@ stdenv.mkDerivation rec {
     description = "A small but very powerful text-based mail client";
     homepage    = "http://www.neomutt.org";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 raitobezarius ];
+    maintainers = with maintainers; [ erikryb vrthra ma27 raitobezarius ];
     platforms   = platforms.unix;
   };
 }

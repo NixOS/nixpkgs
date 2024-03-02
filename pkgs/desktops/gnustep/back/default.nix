@@ -11,11 +11,11 @@
 
 gsmakeDerivation rec {
   pname = "gnustep-back";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
-    sha256 = "sha256-4n2SC68G0dpSz9nqCL5Kz76nyoRxWcRTWDwZsnMoHSM=";
+    sha256 = "sha256-HD4PLdkE573nPWqFwffUmcHw8VYIl5rLiPKWrbnwpCI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

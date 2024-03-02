@@ -39,6 +39,10 @@ let
     '';
     destination = "/share/gnome-background-properties/nixos.xml";
   };
+
+  budgie-control-center = pkgs.budgie.budgie-control-center.override {
+    enableSshSocket = config.services.openssh.startWhenNeeded;
+  };
 in {
   options = {
     services.xserver.desktopManager.budgie = {
@@ -114,13 +118,11 @@ in {
       [
         # Budgie Desktop.
         budgie.budgie-backgrounds
-        budgie.budgie-control-center
+        budgie-control-center
         (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view
         budgie.budgie-screensaver
-
-        # Required by the Budgie Desktop session.
-        (gnome.gnome-session.override { gnomeShellSupport = false; })
+        budgie.budgie-session
 
         # Required by Budgie Menu.
         gnome-menus
@@ -134,6 +136,7 @@ in {
         # Update user directories.
         xdg-user-dirs
       ]
+      ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
           cinnamon.nemo
           mate.eom
@@ -156,7 +159,7 @@ in {
       ++ cfg.sessionPath;
 
     # Fonts.
-    fonts.fonts = mkDefault [
+    fonts.packages = mkDefault [
       pkgs.noto-fonts
       pkgs.hack-font
     ];
@@ -192,7 +195,7 @@ in {
     # Required by Budgie Panel plugins and/or Budgie Control Center panels.
     networking.networkmanager.enable = mkDefault true; # for BCC's Network panel.
     programs.nm-applet.enable = config.networking.networkmanager.enable; # Budgie has no Network applet.
-    programs.nm-applet.indicator = false; # Budgie doesn't support AppIndicators.
+    programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
 
     hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
     hardware.pulseaudio.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Sound panel.
@@ -201,6 +204,7 @@ in {
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # provides a XDG Portals implementation.
     ];
+    xdg.portal.configPackages = mkDefault [ pkgs.budgie.budgie-desktop ];
 
     services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.
@@ -233,8 +237,13 @@ in {
     services.gvfs.enable = mkDefault true;
 
     # Register packages for DBus.
-    services.dbus.packages = with pkgs; [
-      budgie.budgie-control-center
+    services.dbus.packages = [
+      budgie-control-center
+    ];
+
+    # Register packages for udev.
+    services.udev.packages = with pkgs; [
+      budgie.magpie
     ];
 
     # Shell integration for MATE Terminal.

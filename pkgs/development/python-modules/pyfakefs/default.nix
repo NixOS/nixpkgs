@@ -2,18 +2,25 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , pythonOlder
+
+# build-system
+, setuptools
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "5.1.0";
   pname = "pyfakefs";
+  version = "5.3.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MWxgJmQNFKa0+95x/ZZ0V20bVxDe2o+r3oqtUdeF28M=";
+    hash = "sha256-qDd2o8EEbU0QPy9TACmqbN/18Dht/9WcFe4WkmE1STw=";
   };
 
   postPatch = ''
@@ -29,15 +36,26 @@ buildPythonPackage rec {
       --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
   '');
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  pythonImportsCheck = [
+    "pyfakefs"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   # https://github.com/jmcgeheeiv/pyfakefs/issues/581 (OSError: [Errno 9] Bad file descriptor)
-  disabledTests = [ "test_open_existing_pipe" ];
-  pythonImportsCheck = [ "pyfakefs" ];
+  #disabledTests = [ "test_open_existing_pipe" ];
+
 
   meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
     homepage = "http://pyfakefs.org/";
-    changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/master/CHANGES.md";
+    changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${version}/CHANGES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ gebner ];
   };

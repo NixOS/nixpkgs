@@ -4,6 +4,7 @@
   "date": "2021-03-03T16:54:30-08:00",
   "path": "/nix/store/ragrvqj7hm98r74v5b3fljvc47gd3nhj-tree-sitter-ruby",
   "sha256": "0m3h4928rbs300wcb6776h9r88hi32rybbhcaf6rdympl5nzi83v",
+  "hash": "sha256-e6D4baG3+paNUwyu5bMYESKUEzTnmMU4AEOvjEQicFQ=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

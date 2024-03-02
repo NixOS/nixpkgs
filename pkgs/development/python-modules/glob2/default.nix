@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "glob2";
   version = "0.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +22,6 @@ buildPythonPackage rec {
     description = "Version of the glob module that can capture patterns and supports recursive wildcards";
     homepage = "https://github.com/miracle2k/python-glob2/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

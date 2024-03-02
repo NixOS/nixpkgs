@@ -3,7 +3,6 @@
 , boost
 , cmake
 , giflib
-, ilmbase
 , libjpeg
 , libpng
 , libtiff
@@ -16,14 +15,20 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.4.12.0";
+  version = "2.5.5.0";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "v${version}";
-    hash = "sha256-0Jilfe4jNNnpsbodJBFIyxjWqOA99MwmzAriwJgvqVs=";
+    hash = "sha256-FtUZqk1m9ahdnwhrBeMFkUbV0dangMY/w9ShevCASfo=";
   };
+
+  # Workaround broken zlib version detecion in CMake < 3.37.
+  postPatch = ''
+    substituteInPlace ./src/cmake/Config.cmake.in \
+      --replace " @ZLIB_VERSION@" ""
+  '';
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
@@ -35,7 +40,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     giflib
-    ilmbase
     libjpeg
     libpng
     libtiff

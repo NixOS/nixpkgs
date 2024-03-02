@@ -5,20 +5,16 @@
 
 maven.buildMavenPackage {
   pname = "scim-keycloak-user-storage-spi";
-  version = "unstable-2023-04-12";
+  version = "unstable-2024-02-14";
 
   src = fetchFromGitHub {
     owner = "justin-stephenson";
     repo = "scim-keycloak-user-storage-spi";
-    rev = "e2a78d9dddbb21a42a9aaeb5c72b5ed1ef76d2a0";
-    hash = "sha256-xFEXMZw575hONMG9ZNQ+5xKEVeKvGyzurqbAW48Mrg8=";
+    rev = "6c59915836d9a559983326bbb87f895324bb75e4";
+    hash = "sha256-BSso9lU542Aroxu0RIX6NARc10lGZ04A/WIWOVtdxHw=";
   };
 
-  mvnHash = "sha256-kV3hjwEQ0jAhFm9EB9O0l87gCZGsRQ/9cazlSjHrY74=";
-
-  nativeBuildInputs = [
-    maven
-  ];
+  mvnHash = "sha256-xbGlVZl3YtbF372kCDh+UdK5pLe6C6WnGgbEXahlyLw=";
 
   installPhase = ''
     install -D "target/scim-user-spi-0.0.1-SNAPSHOT.jar" "$out/scim-user-spi-0.0.1-SNAPSHOT.jar"

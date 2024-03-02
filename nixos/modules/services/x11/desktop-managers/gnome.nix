@@ -19,7 +19,7 @@ let
 
   defaultFavoriteAppsOverride = ''
     [org.gnome.shell]
-    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
   nixos-background-light = pkgs.nixos-artwork.wallpapers.simple-blue;
@@ -229,7 +229,7 @@ in
         panelModulePackages = mkOption {
           default = [ pkgs.gnome.gnome-applets ];
           defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
-          type = types.listOf types.path;
+          type = types.listOf types.package;
           description = lib.mdDoc ''
             Packages containing modules that should be made available to `gnome-panel` (usually for applets).
 
@@ -282,9 +282,6 @@ in
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
-
-       # If gnome is installed, build vim for gtk3 too.
-      nixpkgs.config.vim.gui = "gtk3";
     })
 
     (mkIf flashbackEnabled {
@@ -297,8 +294,7 @@ in
           map
             (wm:
               pkgs.gnome.gnome-flashback.mkSessionForWm {
-                inherit (wm) wmName wmLabel wmCommand enableGnomePanel;
-                inherit (cfg.flashback) panelModulePackages;
+                inherit (wm) wmName wmLabel wmCommand;
               }
             ) flashbackWms;
 
@@ -310,10 +306,16 @@ in
         gnome-flashback
       ] ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      # gnome-panel needs these for menu applet
-      environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gnome.gnome-flashback}/share" ];
-      # TODO: switch to sessionVariables (resolve conflict)
-      environment.variables.XDG_CONFIG_DIRS = [ "${pkgs.gnome.gnome-flashback}/etc/xdg" ];
+      environment.systemPackages = with pkgs.gnome; [
+        gnome-flashback
+        (gnome-panel-with-modules.override {
+          panelModulePackages = cfg.flashback.panelModulePackages;
+        })
+      ]
+      # For /share/applications/${wmName}.desktop
+      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
+      # For /share/gnome-session/sessions/gnome-flashback-${wmName}.session
+      ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
     (mkIf serviceCfg.core-os-services.enable {
@@ -351,13 +353,7 @@ in
           buildPortalsInGnome = false;
         })
       ];
-
-      # Harmonize Qt application style and also make them use the portal for file chooser dialog.
-      qt = {
-        enable = mkDefault true;
-        platformTheme = mkDefault "gnome";
-        style = mkDefault "adwaita";
-      };
+      xdg.portal.configPackages = mkDefault [ pkgs.gnome.gnome-session ];
 
       networking.networkmanager.enable = mkDefault true;
 
@@ -432,7 +428,7 @@ in
         isSystem = true;
       };
 
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         cantarell-fonts
         dejavu_fonts
         source-code-pro # Default monospace font in 3.32
@@ -453,29 +449,26 @@ in
             gnome-color-manager
             gnome-control-center
             gnome-shell-extensions
-            gnome-themes-extra
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs
             pkgs.orca
             pkgs.glib # for gsettings program
             pkgs.gnome-menus
             pkgs.gtk3.out # for gtk-launch program
-            pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+            pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ];
         in
         mandatoryPackages
         ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
         with pkgs.gnome;
         utils.removePackagesByName
           ([
             baobab
-            cheese
-            eog
             epiphany
             pkgs.gnome-text-editor
             gnome-calculator
@@ -488,12 +481,13 @@ in
             gnome-logs
             gnome-maps
             gnome-music
-            pkgs.gnome-photos
             gnome-system-monitor
             gnome-weather
+            pkgs.loupe
             nautilus
             pkgs.gnome-connections
             simple-scan
+            pkgs.snapshot
             totem
             yelp
           ] ++ lib.optionals config.services.flatpak.enable [

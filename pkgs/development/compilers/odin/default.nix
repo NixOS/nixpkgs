@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , llvmPackages_13
-, makeWrapper
+, makeBinaryWrapper
 , libiconv
 , MacOSX-SDK
 , which
@@ -12,17 +12,17 @@ let
   inherit (llvmPackages) stdenv;
 in stdenv.mkDerivation rec {
   pname = "odin";
-  version = "dev-2023-05";
+  version = "dev-2024-02";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     rev = version;
-    sha256 = "sha256-qEewo2h4dpivJ7D4RxxBZbtrsiMJ7AgqJcucmanbgxY=";
+    hash = "sha256-v9A0+kgREXALhnvFYWtE0+H4L7CYnyje+d2W5+/ZvHA=";
   };
 
   nativeBuildInputs = [
-    makeWrapper which
+    makeBinaryWrapper which
   ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
@@ -47,10 +47,13 @@ in stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp odin $out/bin/odin
 
     mkdir -p $out/share
+    cp -r base $out/share/base
     cp -r core $out/share/core
     cp -r vendor $out/share/vendor
 
@@ -62,13 +65,15 @@ in stdenv.mkDerivation rec {
         lld
       ])} \
       --set-default ODIN_ROOT $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A fast, concise, readable, pragmatic and open sourced programming language";
     homepage = "https://odin-lang.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ luc65r astavie ];
+    maintainers = with maintainers; [ luc65r astavie znaniye ];
     platforms = platforms.x86_64 ++ [ "aarch64-darwin" ];
   };
 }

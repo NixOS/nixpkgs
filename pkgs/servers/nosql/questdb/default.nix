@@ -1,18 +1,23 @@
-{ fetchurl, jdk17_headless, lib, makeWrapper, stdenv }:
+{
+  fetchurl,
+  jdk17_headless,
+  lib,
+  makeBinaryWrapper,
+  stdenv
+}:
 
-let
-  jre = jdk17_headless;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "questdb";
-  version = "7.2";
+  version = "7.3.10";
 
   src = fetchurl {
-    url = "https://github.com/questdb/questdb/releases/download/${version}/questdb-${version}-no-jre-bin.tar.gz";
-    sha256 = "sha256-37pmNeN02sHt2Cpyjk3FpBFscBw2Zqm4nNmOlyiX6H0=";
+    url = "https://github.com/questdb/questdb/releases/download/${finalAttrs.version}/questdb-${finalAttrs.version}-no-jre-bin.tar.gz";
+    hash = "sha256-diltorfAnyrXZwohrsZHA91AXuSZolxDUajfmOaD5lM=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -22,16 +27,16 @@ stdenv.mkDerivation rec {
     cp questdb.jar $out/share/java
 
     ln -s $out/share/java/questdb.jar $out/bin
-    wrapProgram $out/bin/questdb.sh --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/questdb.sh --set JAVA_HOME "${jdk17_headless}"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "high-performance, open-source SQL database for applications in financial services, IoT, machine learning, DevOps and observability";
     homepage = "https://questdb.io/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.jacfal ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.jacfal ];
+    platforms = lib.platforms.linux;
   };
-}
+})

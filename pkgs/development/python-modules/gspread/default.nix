@@ -1,32 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
+, fetchFromGitHub
+, flit-core
 , google-auth
 , google-auth-oauthlib
+, pytest-vcr
+, pytestCheckHook
 , pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "gspread";
-  version = "5.9.0";
-  format = "setuptools";
+  version = "5.12.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NLl4NLvvrM9ySXcCuuJtEvltBoXkmkGK/mqSqbvLnJw=";
+  src = fetchFromGitHub {
+    owner = "burnash";
+    repo = "gspread";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    google-auth
-    google-auth-oauthlib
+  nativeBuildInputs = [
+    flit-core
   ];
 
-  # No tests included
-  doCheck = false;
+  propagatedBuildInputs = [
+    google-auth
+    google-auth-oauthlib
+    requests
+  ];
+
+  nativeCheckInputs = [
+    pytest-vcr
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "gspread"

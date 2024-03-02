@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "0.30.1";
+  version = "0.32.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     rev = "v${version}";
-    hash = "sha256-uFcmuyz0JsUTvKqCb+3t8JdB4Dn4hJq00jeEhvMNW18=";
+    hash = "sha256-2a6LIW5ohSi7fbMwk/wmNJ0AOz5JIXiXJI7EoVKv1Sk=";
   };
 
-  cargoHash = "sha256-PWqwTGodQ7LBTgHFB2AWX5wIOVJja2GzPoocX59Dr/0=";
+  cargoHash = "sha256-beA0viJVDjfANsPegkc/x2syVp8uGKTMnrPcM7jcvG4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     nettle
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [

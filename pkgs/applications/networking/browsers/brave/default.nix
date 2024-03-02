@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
-, dpkg
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -7,6 +6,7 @@
 , cairo
 , cups
 , dbus
+, dpkg
 , expat
 , fontconfig
 , freetype
@@ -15,32 +15,35 @@
 , gnome
 , gsettings-desktop-schemas
 , gtk3
-, libuuid
-, libdrm
+, gtk4
 , libX11
+, libXScrnSaver
 , libXcomposite
 , libXcursor
 , libXdamage
 , libXext
 , libXfixes
 , libXi
-, libxkbcommon
 , libXrandr
 , libXrender
-, libXScrnSaver
-, libxshmfence
 , libXtst
+, libdrm
+, libkrb5
+, libuuid
+, libxkbcommon
+, libxshmfence
 , mesa
 , nspr
 , nss
 , pango
 , pipewire
+, snappy
 , udev
 , wayland
+, xdg-utils
+, coreutils
 , xorg
 , zlib
-, xdg-utils
-, snappy
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -69,11 +72,11 @@ let
 
   deps = [
     alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
-    fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11 libGL
+    fontconfig freetype gdk-pixbuf glib gtk3 gtk4 libdrm libX11 libGL
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
-    xorg.libxcb zlib snappy
+    xorg.libxcb zlib snappy libkrb5
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
@@ -90,11 +93,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.52.129";
+  version = "1.63.162";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-v5C8YbYv2gr2Tf+koM3+4s2xtHTabLcJcIlsQx3UxfM=";
+    hash = "sha256-kRIYdSBAjBVX3EZQv0OWifD+XIpGAqAVTcrdxGAifEI=";
   };
 
   dontConfigure = true;
@@ -109,7 +112,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    glib gsettings-desktop-schemas gtk3
+    glib gsettings-desktop-schemas gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
@@ -170,7 +173,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
       --prefix PATH : ${binpath}
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils coreutils ]}
       ${optionalString (enableFeatures != []) ''
       --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
       ''}
@@ -203,7 +206,8 @@ stdenv.mkDerivation rec {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "brave";
   };
 }

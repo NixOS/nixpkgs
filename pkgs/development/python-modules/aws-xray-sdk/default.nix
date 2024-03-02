@@ -1,35 +1,82 @@
 { lib
+, aiohttp
+, botocore
+, bottle
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
+, django
+, fetchFromGitHub
+, httpx
 , importlib-metadata
 , jsonpickle
-, wrapt
+, pymysql
+, pytest-asyncio
+, pynamodb
+, pytestCheckHook
+, pythonOlder
 , requests
-, future
-, botocore
+, setuptools
+, sqlalchemy
+, webtest
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "aws-xray-sdk";
-  version = "2.11.0";
+  version = "2.12.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eINfyEHwPlUIWPGKmXPquGGPR/ItL1nt8TBXj6VFqGc=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "aws-xray-sdk-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NLFNst4Yqsz2u5IXwe8OdJPW77irLRO5tWWn1uV3tMg=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    jsonpickle wrapt requests future botocore
+    botocore
+    jsonpickle
+    requests
+    wrapt
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  meta = {
-    description = "AWS X-Ray SDK for the Python programming language";
-    license = lib.licenses.asl20;
-    homepage = "https://github.com/aws/aws-xray-sdk-python";
-  };
+  nativeCheckInputs = [
+    aiohttp
+    bottle
+    django
+    httpx
+    pymysql
+    pynamodb
+    pytest-asyncio
+    pytestCheckHook
+    sqlalchemy
+    webtest
+  ];
 
-  doCheck = false;
+  disabledTestPaths = [
+    # This reduces the amount of dependencies
+    "tests/ext/"
+    # We don't care about benchmarks
+    "tests/test_local_sampling_benchmark.py"
+    "tests/test_patcher.py"
+  ];
+
+  pythonImportsCheck = [
+    "aws_xray_sdk"
+  ];
+
+  meta = with lib; {
+    description = "AWS X-Ray SDK for the Python programming language";
+    homepage = "https://github.com/aws/aws-xray-sdk-python";
+    changelog = "https://github.com/aws/aws-xray-sdk-python/blob/${version}/CHANGELOG.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
+  };
 }

@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -19,8 +20,11 @@ mkYarnPackage rec {
   };
 
   packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-  yarnNix = ./yarn.nix;
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-GTiNv7u1QK/wjQgpka7REuoLn2wjZG59kYJQaZZPycI=";
+  };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -34,7 +38,7 @@ mkYarnPackage rec {
 
     yarn --offline run electron-builder \
       --dir \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     popd

@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2_1_5
+, libgit2
 , openssl
 , zlib
 , stdenv
@@ -11,23 +11,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "projectable";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "dzfrias";
     repo = "projectable";
     rev = version;
-    hash = "sha256-mN8kqh17qGJWOwrdH9fCPApFQBbgCs6FaVg38SNJGP0=";
+    hash = "sha256-yN4OA3glRCzjk87tTadwlhytMoh6FM/ke37BsX4rStQ=";
   };
 
-  cargoHash = "sha256-SQ117gFkqex3GFl7RnorSfPo7e0Eefg1l3L0Vyi/tpU=";
+  cargoHash = "sha256-GGoL681Lv3sXnao2WfhLy4VMgtJFFttzn68lArQO1Uc=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
+    LIBGIT2_NO_VENDOR = 1;
     OPENSSL_NO_VENDOR = true;
   };
 

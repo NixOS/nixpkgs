@@ -24,5 +24,6 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ turion ];
+    broken = true;
   };
 }

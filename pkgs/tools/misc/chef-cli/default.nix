@@ -14,5 +14,6 @@ bundlerApp {
     homepage = "https://chef.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dylanmtaylor ];
+    mainProgram = "chef-cli";
   };
 }

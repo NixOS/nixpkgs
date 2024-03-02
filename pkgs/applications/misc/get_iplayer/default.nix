@@ -1,20 +1,29 @@
-{ lib, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
+{ lib
+, perlPackages
+, fetchFromGitHub
+, makeWrapper
+, stdenv
+, shortenPerlShebang
+, perl
+, atomicparsley
+, ffmpeg
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
-  version = "3.31";
+  version = "3.35";
 
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
     rev = "v${version}";
-    sha256 = "+ChCF27nmPKbqaZVxsZ6TlbzSdEz6RfMs87NE8xaSRw=";
+    hash = "sha256-fqzrgmtqy7dlmGEaTXAqpdt9HqZCVooJ0Vf6/JUKihw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
-    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple Mojolicious
+    LWP LWPProtocolHttps XMLLibXML Mojolicious
   ];
 
   preConfigure = "touch Makefile.PL";
@@ -22,18 +31,25 @@ perlPackages.buildPerlPackage rec {
   outputs = [ "out" "man" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
-    cp get_iplayer $out/bin
-    wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg flvstreamer rtmpdump ]} --prefix PERL5LIB : $PERL5LIB
-    cp get_iplayer.1 $out/share/man/man1
+    runHook preInstall
+
+    install -D get_iplayer -t $out/bin
+    wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg ]} --prefix PERL5LIB : $PERL5LIB
+    install -Dm444 get_iplayer.1 -t $out/share/man/man1
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/.get_iplayer-wrapped
   '';
 
   meta = with lib; {
-    description = "Downloads TV and radio from BBC iPlayer";
+    description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
     license = licenses.gpl3Plus;
-    homepage = "https://squarepenguin.co.uk/";
+    homepage = "https://github.com/get-iplayer/get_iplayer";
     platforms = platforms.all;
-    maintainers = with maintainers; [ rika ];
+    maintainers = with maintainers; [ rika chewblacka ];
   };
 
 }

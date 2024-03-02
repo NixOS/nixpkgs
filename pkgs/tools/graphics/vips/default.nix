@@ -18,15 +18,13 @@
 , libexif
 , librsvg
 , poppler
-, libgsf
 , libtiff
 , fftw
 , lcms2
-, libpng
+, libspng
 , libimagequant
 , imagemagick
 , pango
-, orc
 , matio
 , cfitsio
 , libwebp
@@ -35,19 +33,24 @@
 , libjxl
 , openslide
 , libheif
+, cgif
+, libarchive
+, libhwy
+, testers
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.14.2";
+  version = "8.15.1";
 
   outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
-    rev = "v${version}";
-    hash = "sha256-QUWZ11t2JEJBdpNuIY2uRiSL/hffRbV0SV5HowxWaME=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-0zfYpOawH7XnTH9k8BdNDtZEKpYUlCXp7GY+fdXalsE=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -75,15 +78,13 @@ stdenv.mkDerivation rec {
     libexif
     librsvg
     poppler
-    libgsf
     libtiff
     fftw
     lcms2
-    libpng
+    libspng
     libimagequant
     imagemagick
     pango
-    orc
     matio
     cfitsio
     libwebp
@@ -92,6 +93,9 @@ stdenv.mkDerivation rec {
     libjxl
     openslide
     libheif
+    cgif
+    libarchive
+    libhwy
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
@@ -100,20 +104,36 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dcgif=disabled"
-    "-Dspng=disabled"
     "-Dpdfium=disabled"
     "-Dnifti=disabled"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-Dgtk_doc=true"
-  ];
+  ]
+  ++ lib.optional (!stdenv.isDarwin) "-Dgtk_doc=true"
+  ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
+  ;
+
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "vips --version";
+      };
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "v([0-9.]+)" ];
+    };
+  };
 
   meta = with lib; {
-    changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";
-    homepage = "https://libvips.github.io/libvips/";
+    changelog = "https://github.com/libvips/libvips/blob/${finalAttrs.src.rev}/ChangeLog";
+    homepage = "https://www.libvips.org/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ kovirobi ];
+    maintainers = with maintainers; [ kovirobi anthonyroussel ];
+    pkgConfigModules = [ "vips" "vips-cpp" ];
     platforms = platforms.unix;
+    mainProgram = "vips";
   };
-}
+})

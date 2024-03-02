@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, electron_10, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
+{ lib, stdenv, fetchurl, electron_10, makeDesktopItem, makeWrapper, asar, autoPatchelfHook}:
 
 let
   electron = electron_10;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.asar ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper asar ];
   installPhase = ''
     mkdir -p $out/bin $out/opt/teleprompter $out/share/applications
     asar e resources/app.asar $out/opt/teleprompter/resources/app.asar.unpacked

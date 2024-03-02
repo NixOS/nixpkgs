@@ -7,18 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fuc";
-  version = "1.1.6";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "fuc";
     rev = version;
-    hash = "sha256-kbEIZljIWs/GYOQ/XCBgWsBcEwm05bf7bZmAwq+eWXo=";
+    hash = "sha256-Y43+LB6JXxpU94BrrjSBs2ge2g3NB7O3wYeU6rbF28U=";
   };
 
-  patches = [ ./add_missing_feature.patch ];
-
-  cargoHash = "sha256-AD3LdBMmyf6xM7sWUDxYZs3NltnAkEfAdxYLAbnRM4M=";
+  cargoHash = "sha256-uNG+7a9EvGLkPIu/p8tnucZ3R6/LhZ2Lfv7V0e5YIxs=";
 
   RUSTC_BOOTSTRAP = 1;
 

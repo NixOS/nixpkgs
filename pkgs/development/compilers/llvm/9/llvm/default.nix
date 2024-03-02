@@ -86,12 +86,12 @@ in stdenv.mkDerivation (rec {
     # of the flags used for the normal LLVM build. To avoid the need for building
     # a native libLLVM.so (which would fail) we force llvm-config to be linked
     # statically against the necessary LLVM components always.
-    ../../llvm-config-link-static.patch
+    ../../common/llvm/llvm-config-link-static.patch
 
     ./gnu-install-dirs.patch
     # Force a test to evaluate the saved benchmark for a CPU for which LLVM has
     # an execution model. See NixOS/nixpkgs#119673.
-    ../../exegesis-force-bdver2.patch
+    ./exegesis-force-bdver2.patch
 
     # Fix missing includes for GCC 11
     (fetchpatch {
@@ -115,7 +115,17 @@ in stdenv.mkDerivation (rec {
       relative = "llvm";
       hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
     })
-  ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
+  ] ++ lib.optionals enablePolly [
+    ./gnu-install-dirs-polly.patch
+    # Add missing isl header includess required to build LLVM 9 + Polly with clang 16.
+    (fetchpatch {
+      name = "polly-ppcg-isl-headers.patch";
+      url = "https://repo.or.cz/ppcg.git/patch/098ba285306114dc71497f7b51c357f69c9b4472";
+      hash = "sha256-c9L30rDROYAMbUSuaK9U/ixyFMlH/Sa1n+VgLODzSCQ=";
+      extraPrefix = "tools/polly/lib/External/ppcg/";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -127,7 +137,7 @@ in stdenv.mkDerivation (rec {
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -193,6 +203,8 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
+  cmakeBuildType = if debugVersion then "Debug" else "Release";
+
   cmakeFlags = with stdenv; let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
@@ -208,7 +220,6 @@ in stdenv.mkDerivation (rec {
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
   in flagsForLlvmConfig ++ [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
@@ -226,7 +237,7 @@ in stdenv.mkDerivation (rec {
   ] ++ optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

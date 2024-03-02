@@ -87,9 +87,7 @@ let
           ensureUsers = [
             {
               name = "powerdnsadmin";
-              ensurePermissions = {
-                "DATABASE powerdnsadmin" = "ALL PRIVILEGES";
-              };
+              ensureDBOwnership = true;
             }
           ];
         };

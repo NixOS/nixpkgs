@@ -15,7 +15,7 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "0zbrvvb957z2lwbfd39ixqdsnd2w4wfjirwkqdrqm27bjz308731";
   };
 
-  sourceRoot = "source/programmer";
+  sourceRoot = "${src.name}/programmer";
 
   propagatedBuildInputs = [
     pyserial
@@ -29,10 +29,6 @@ with python3Packages; buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [ setuptools-scm ];
-
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqb";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Tfw5nGy3A3zLtVuyHn+8jzXPySRNwBx0opwkE+0k+RA=";
+    sha256 = "sha256-ZjxC7W4U8T68mZy/OvWj/e4W9pJIj2lVDoEjxXYr/G8=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "prison";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "betodealmeida";
@@ -28,6 +29,6 @@ buildPythonPackage rec {
     description = "Rison encoder/decoder";
     homepage = "https://github.com/betodealmeida/python-rison";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

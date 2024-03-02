@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruplacer";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "TankerHQ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7qVjJLw90SUtXkfp40u/X84trnJzgCV6mp7b/yNmcPk=";
+    sha256 = "sha256-xuq+Scy5MyyGvI51Vs26pk9+NnlghzGEJDHYC3kSXNw=";
   };
 
-  cargoSha256 = "sha256-AV6wxD2KZN53rlJofsDISL6p2dfgw+5F+GiP5u9/2/w=";
+  cargoHash = "sha256-Kevwpkvgq40LhWxhW9ra2Nd1zEiAF372DM1sY9hnQb0=";
 
   buildInputs = (lib.optional stdenv.isDarwin Security);
 

@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "sha256-y/mCfNWe5ShdxEz8IUQ8zUzgVkUy/+5lX6rcJ3r6KoI=";
   };
 
-  vendorSha256 = "sha256-DCDAuKvov4tkf77nJNo9mQU/bAeQasp4VBQRtLX+U6c=";
+  vendorHash = "sha256-DCDAuKvov4tkf77nJNo9mQU/bAeQasp4VBQRtLX+U6c=";
 
   buildInputs = [
     libpcap
@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/redcode-labs/GodSpeed";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    mainProgram = "godspeed";
   };
 }

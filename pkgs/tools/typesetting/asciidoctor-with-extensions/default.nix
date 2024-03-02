@@ -17,6 +17,7 @@ bundlerApp rec {
     "asciidoctor-epub3"
     "asciidoctor-multipage"
     "asciidoctor-pdf"
+    "asciidoctor-reducer"
     "asciidoctor-revealjs"
   ];
 

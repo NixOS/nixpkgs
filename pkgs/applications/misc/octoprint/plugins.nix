@@ -60,16 +60,14 @@ in
 
   bedlevelvisualizer = buildPlugin rec {
     pname = "bedlevelvisualizer";
-    version = "1.1.0";
+    version = "1.1.1";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-BedLevelVisualizer";
       rev = version;
-      sha256 = "sha256-SKrhtTGyDuvbDmUCXSx83Y+C83ZzVHA78TwMYwE6tcc=";
+      sha256 = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
     };
-
-    propagatedBuildInputs = with super; [ numpy ];
 
     meta = with lib; {
       description = "Displays 3D mesh of bed topography report";
@@ -235,13 +233,13 @@ in
 
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
-    version = "2.2.8";
+    version = "2.3.1";
 
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
       rev = version;
-      sha256 = "sha256-Bbpm7y4flzEbUb6Sgkp6hIIHs455A0IsbmzvZwlkbh0=";
+      sha256 = "sha256-2lxaTcmPBSdfMmViIfLEbeYWfXZpNVAO4i5Z678gWy0=";
     };
 
     propagatedBuildInputs = with super; [
@@ -480,5 +478,5 @@ in
     };
   };
 } // lib.optionalAttrs config.allowAliases {
-  octoprint-dashboard = self.dashboard;
+  octoprint-dashboard = super.dashboard;
 }

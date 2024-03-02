@@ -15,7 +15,6 @@
 , boost # Not using boost leads to crashes with gtk3
 , gettext
 , libpng
-, autoreconfHook
 , pkg-config
 , makeWrapper
 , libX11

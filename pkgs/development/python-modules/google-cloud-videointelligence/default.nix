@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "2.11.2";
-  format = "setuptools";
+  version = "2.13.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WlBpQ234J1rCA1jpPPCxUa+k6+DAKivZV6kLknnUArw=";
+    hash = "sha256-wHfiVZmhB/GMfgV8pmHzdgCxtxxl2Q1s9cQgQ9rcjbE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -52,9 +57,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Video Intelligence API client library";
-    homepage = "https://github.com/googleapis/python-videointelligence";
-    changelog = "https://github.com/googleapis/python-videointelligence/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-videointelligence";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-videointelligence-v${version}/packages/google-cloud-videointelligence/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

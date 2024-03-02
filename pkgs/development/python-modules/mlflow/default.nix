@@ -26,7 +26,7 @@
 , pyarrow
 , pytz
 , pyyaml
-, querystring_parser
+, querystring-parser
 , requests
 , scikit-learn
 , scipy
@@ -38,15 +38,20 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.4.1";
+  version = "2.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZZj3j37OWalIBXOvV7CXCKMoPs6I8Zbl0XLCBAzsMj8=";
+    hash = "sha256-Pd8yuiwB2seeTQd9S7ntRtgqCC3JkiMgfVYsfua+5nE=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/core-requirements.txt \
+      --replace "gunicorn<21" "gunicorn"
+  '';
 
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
@@ -78,7 +83,7 @@ buildPythonPackage rec {
     pyarrow
     pytz
     pyyaml
-    querystring_parser
+    querystring-parser
     requests
     scikit-learn
     scipy

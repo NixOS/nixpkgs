@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ ivar ];
     platforms = platforms.linux;
+    mainProgram = "xwallpaper";
   };
 }

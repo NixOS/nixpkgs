@@ -24,12 +24,7 @@ let
         '';
       };
 
-      package = mkOption {
-        default = pkgs.authelia;
-        type = types.package;
-        defaultText = literalExpression "pkgs.authelia";
-        description = mdDoc "Authelia derivation to use.";
-      };
+      package = mkPackageOption pkgs "authelia" { };
 
       user = mkOption {
         default = "authelia-${name}";

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "endlessh-go";
-  version = "20230613";
+  version = "20230625-3";
 
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
     rev = version;
-    sha256 = "sha256-XJcl8w36ZfcYp+0JlSvDW0BoW5MNC8pmTLZgkYLobBU=";
+    sha256 = "sha256-ug01nwlUCKe7DkhSJJ9XUU4QHZeH0A2f/oH6wl2VzIc=";
   };
 
-  vendorHash = "sha256-UsbuB4GsL9pteebAF2ybAt7GgEpY0z4O9zjSYEIamdQ=";
+  vendorHash = "sha256-n7lzSLtR3bUslT6Q1khsFeofSvwuSaBv3n33+HIdssU=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -27,5 +27,6 @@ buildGoModule rec {
     changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
+    mainProgram = "endlessh-go";
   };
 }

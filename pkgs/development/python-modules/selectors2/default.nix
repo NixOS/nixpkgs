@@ -3,6 +3,7 @@
 
 buildPythonPackage rec {
   version = "2.0.2";
+  format = "setuptools";
   pname = "selectors2";
 
   src = fetchPypi {
@@ -30,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/SethMichaelLarson/selectors2";
     description = "Back-ported, durable, and portable selectors";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

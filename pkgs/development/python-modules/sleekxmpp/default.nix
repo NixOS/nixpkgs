@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "sleekxmpp";
   version = "1.3.3";
+  format = "setuptools";
 
   disabled = pythonAtLeast "3.10"; # Deprecated in favor of Slixmpp
 

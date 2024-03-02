@@ -5,7 +5,6 @@
 , cinnamon
 , gnome
 , gobject-introspection
-, intltool
 , libnotify
 , pavucontrol
 , python3Packages

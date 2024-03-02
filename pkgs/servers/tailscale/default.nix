@@ -1,7 +1,18 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, getent
+, iproute2
+, iptables
+, shadow
+, procps
+, nixosTests
+}:
 
 let
-  version = "1.44.0";
+  version = "1.60.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -11,9 +22,9 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-/SiQFkhVseLkjK7ePNzNyBs0r3XE3kHJ6CDTFjdCXec=";
+    hash = "sha256-1BzzXRqbs8dS9263cXCujYYSStQlvyQr3dm3tyr+64k=";
   };
-  vendorHash = "sha256-fgCrmtJs1svFz0Xn7iwLNrbBNlcO6V0yqGPMY0+V1VQ=";
+  vendorHash = "sha256-eci4f6golU1eIQOezplA+I+gmOfof40ktIdpr0v/uMc=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
@@ -38,10 +49,15 @@ buildGoModule {
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) headscale;
+  };
+
   meta = with lib; {
     homepage = "https://tailscale.com";
     description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk ];
+    mainProgram = "tailscale";
+    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk mfrw ];
   };
 }

@@ -71,7 +71,6 @@ in
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "moinmoin" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
-    (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
@@ -112,8 +111,23 @@ in
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
+    (mkRemovedOptionModule [ "services" "prayer" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "restya-board" ] "The corresponding package was removed from nixpkgs.")
 
     (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Please use fcitx5 instead")
+    (mkRemovedOptionModule [ "services" "dhcpd4" ] ''
+      The dhcpd4 module has been removed because ISC DHCP reached its end of life.
+      See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
+      Please switch to a different implementation like kea or dnsmasq.
+    '')
+    (mkRemovedOptionModule [ "services" "dhcpd6" ] ''
+      The dhcpd6 module has been removed because ISC DHCP reached its end of life.
+      See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
+      Please switch to a different implementation like kea or dnsmasq.
+    '')
+    (mkRemovedOptionModule [ "services" "tedicross" ] ''
+      The corresponding package was broken and removed from nixpkgs.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

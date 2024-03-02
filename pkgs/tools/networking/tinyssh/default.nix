@@ -5,19 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyssh";
-  version = "20230101";
+  version = "20240101";
 
   src = fetchFromGitHub {
     owner = "janmojzis";
     repo = "tinyssh";
     rev = "refs/tags/${version}";
-    hash = "sha256-yEqPrLp14AF0L1QLoIcBhTphmd6qVzOB9EVW0Miy8yM=";
+    hash = "sha256-wO0fGr+pU+Y5YCZMRGNOZ6pJeCUIc64TzmRAaQCnBxk=";
   };
 
   preConfigure = ''
     echo /bin       > conf-bin
     echo /share/man > conf-man
   '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
   DESTDIR = placeholder "out";
 

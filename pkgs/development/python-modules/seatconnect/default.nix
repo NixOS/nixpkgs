@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "seatconnect";
-  version = "1.1.6";
+  version = "1.1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,11 +21,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "farfar";
     repo = pname;
-    rev = version;
-    hash = "sha256-8ZqqNDLygHgtUzTgdb34+4BHuStXJXnl9fBfo0WSNZw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HITVrI0o94a61gy/TYSGFtLBYX4Rw/dK1o2/KsvHLTQ=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -40,13 +38,6 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest>=5,<6'," ""
-    substituteInPlace requirements.txt \
-      --replace "pytest-asyncio" ""
-  '';
-
   # Project only has a dummy test
   doCheck = false;
 
@@ -57,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Seat Connect";
     homepage = "https://github.com/farfar/seatconnect";
+    changelog = "https://github.com/Farfar/seatconnect/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

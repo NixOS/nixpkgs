@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches = [
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ../../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
     ./gnu-install-dirs.patch
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
@@ -135,6 +135,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ mit ncsa ];
     # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
     # https://reviews.llvm.org/D43106#1019077
-    broken = stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.is32bit && !stdenv.cc.isClang;
+    broken = stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang;
   };
 }

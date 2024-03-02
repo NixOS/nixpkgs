@@ -7,43 +7,40 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , electron
 , libpulseaudio
 , pipewire
 , alsa-utils
 , which
+, testers
+, teams-for-linux
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.1.6";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UDCMQqDN7MZ5tHZJts00IryMpRr07TPSGwxFdcq0fdI=";
+    repo = "teams-for-linux";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LrFF61D2b9+FWnVkb9MYxBJQxMtejuOmGTEtfSj1No4=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-Zk3TAoGAPeki/ogfNl/XqeBBn6N/kbNcktRHEyqPOAA=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-Z2vnLr14F/Etuq9yWH7ygQwa54an7v99LbU3gPcEuII=";
   };
 
-  patches = [
-    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
-    ./screensharing-wayland-hack-fix.patch
-  ];
-
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -55,7 +52,7 @@ stdenv.mkDerivation rec {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -87,22 +84,26 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItems = [(makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
+    name = finalAttrs.pname;
+    exec = finalAttrs.pname;
+    icon = finalAttrs.pname;
     desktopName = "Microsoft Teams for Linux";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
   })];
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion rec {
+    package = teams-for-linux;
+    command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ muscaln lilyinstarlight ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})

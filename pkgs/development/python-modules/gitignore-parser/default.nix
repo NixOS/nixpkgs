@@ -2,13 +2,14 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gitignore-parser";
-  version = "0.1.3";
-  format = "setuptools";
+  version = "0.1.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,8 +17,12 @@ buildPythonPackage rec {
     owner = "mherrmann";
     repo = "gitignore_parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AWLiwF+8CfiD4uT6uV5drCLtnQT+r5VTPo53T7w0SiM=";
+    hash = "sha256-y8A8OLgJccYWvKTJs7um8RwFFM0CswbwRojknBmk3TY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     unittestCheckHook

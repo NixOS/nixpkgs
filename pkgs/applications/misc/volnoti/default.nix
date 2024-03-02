@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     # Fix dbus interface headers. See
     # https://github.com/davidbrazdil/volnoti/pull/10
     (fetchpatch {
-      url = "https://github.com/davidbrazdil/volnoti/pull/10.patch";
+      url = "https://github.com/davidbrazdil/volnoti/commit/623ad8ea5c3ac8720d00a2ced4b6163aae38c119.patch";
       sha256 = "046zfdjmvhb7jrsgh04vfgi35sgy1zkrhd3bzdby3nvds1wslfam";
     })
   ];

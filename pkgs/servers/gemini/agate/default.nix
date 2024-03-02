@@ -2,15 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.0";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
-    hash = "sha256-B0hbXar/RulfBJUR1Jtczf3p1H6Zj5OVCXVCaj5zf/U=";
+    hash = "sha256-7z3iAA+Q3k5jEO9ZhA06h7/17gE0FWPqDOGK/XENRWg=";
   };
-  cargoHash = "sha256-6Z+mcQAJwW7tm4SBbrHwHIwiqlFV+PIa5I2onU2rPts=";
+
+  cargoHash = "sha256-iTopJnuH2extGnaJXL+RPUwcvj2e+k5A4BT33v+sFiA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage rec {
     $out/bin/agate --version 2>&1 | grep "agate ${version}"
     runHook postInstallCheck
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = { inherit (nixosTests) agate; };
 

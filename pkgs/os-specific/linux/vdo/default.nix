@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     # platforms are defined in https://github.com/dm-vdo/vdo/blob/master/utils/uds/atomicDefs.h
     platforms = [ "x86_64-linux" "aarch64-linux" "s390-linux" "powerpc64-linux" "powerpc64le-linux" ];
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = teams.helsinki-systems.members;
   };
 }

@@ -31,7 +31,7 @@ package.
 
 ## Using libraries not available in repositories
 
-There are useful and working libraries out there, that are nontheless
+There are useful and working libraries out there, that are nonetheless
 unavailable to users of package managers such as Quicklisp or
 Ultralisp. Two real-world examples are [jzon] and [cl-tar].
 

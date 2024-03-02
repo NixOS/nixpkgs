@@ -1,17 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , cryptography
 , pytestCheckHook
 , pythonOlder
 , sphinxHook
 , sphinx-rtd-theme
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.7.0";
+  version = "2.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyJWT";
     inherit version;
-    hash = "sha256-vWyko8QoXBotQ0nloDX9+PuU4EzND8vmuiidrpzD4HQ=";
+    hash = "sha256-V+KNFW49XBAIjgxoq7kL+sPfgrQKcb0NqiDGXM1cI94=";
   };
 
   postPatch = ''
@@ -32,9 +33,10 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     sphinxHook
     sphinx-rtd-theme
-    zope_interface
+    zope-interface
   ];
 
   passthru.optional-dependencies.crypto = [
@@ -44,6 +46,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ (lib.flatten (lib.attrValues passthru.optional-dependencies));
+
+  disabledTests = [
+    # requires internet connection
+    "test_get_jwt_set_sslcontext_default"
+  ];
 
   pythonImportsCheck = [ "jwt" ];
 

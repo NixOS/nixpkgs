@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "0.4.10";
+  format = "setuptools";
   pname = "mmpython";
 
   src = fetchurl {

@@ -10,27 +10,19 @@
 , poppler
 , pkg-config
 , setuptools
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "python-poppler-qt5";
-  version = "21.1.0";
+  version = "21.3.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b82gm4i75q5v19kfbq0h4y0b2vcwr2213zkhxh6l0h45kdndmxd";
+    sha256 = "sha256-tHfohB8OoOCf2rby8wXPON+XfZ4ULlaTo3RgXXXdb+A=";
   };
 
-  patches = [
-    # Fix for https://github.com/frescobaldi/python-poppler-qt5/issues/43 (from PR #45)
-    (fetchpatch {
-      url = "https://github.com/frescobaldi/python-poppler-qt5/commit/40e71ad88173d02648bceb2438bc0567e60dacd5.patch";
-      sha256 = "0c93d0k7b1n2s2njl8g92x6vw3z96da1fczah9qx07x08iw8dzi5";
-    })
-  ];
 
   buildInputs = [ qtbase.dev poppler pyqt-builder ];
   nativeBuildInputs = [ pkg-config qmake sip setuptools ];

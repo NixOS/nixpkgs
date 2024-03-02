@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "snakebite";
   version = "2.11.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,6 +34,6 @@ buildPythonPackage rec {
     description = "Pure Python HDFS client";
     homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

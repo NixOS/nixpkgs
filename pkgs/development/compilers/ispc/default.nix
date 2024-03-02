@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode
-
+, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
 , testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.18.1";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-WBAVgjQjW4x9JGx6xotPoTVOePsPjBJEyBYA7TCTBvc=";
+    sha256 = "sha256-zixPt7YICCG0N8t1pcXEu/sPKCVLQVPCiJsQEqEXl+A=";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+
   buildInputs = with llvmPackages; [
     libllvm libclang openmp ncurses
   ];
@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DFILE_CHECK_EXECUTABLE=${llvmPackages.llvm}/bin/FileCheck"
+    "-DLLVM_AS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-as"
     "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
@@ -68,6 +70,6 @@ stdenv.mkDerivation rec {
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
-    maintainers = with maintainers; [ aristid thoughtpolice athas ];
+    maintainers = with maintainers; [ aristid thoughtpolice athas alexfmpe ];
   };
 }

@@ -1,8 +1,9 @@
-{ stdenv, lib, isPy3k, buildPythonPackage, fetchFromGitHub, zope_interface, twisted }:
+{ stdenv, lib, isPy3k, buildPythonPackage, fetchFromGitHub, zope-interface, twisted }:
 
 buildPythonPackage rec {
   pname = "python3-application";
-  version = "3.0.4";
+  version = "3.0.6";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -10,15 +11,15 @@ buildPythonPackage rec {
     owner = "AGProjects";
     repo = pname;
     rev = "release-${version}";
-    hash = "sha256-XXAKp/RlBVs3KmcnuiexdYfxf0zt2A/DrsJzdC9I4vA=";
+    hash = "sha256-L7KN6rKkbjNmkSoy8vdMYpXSBkWN7afNpreJO0twjq8=";
   };
 
-  propagatedBuildInputs = [ zope_interface twisted ];
+  propagatedBuildInputs = [ zope-interface twisted ];
 
   pythonImportsCheck = [ "application" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "A collection of modules that are useful when building python applications";
     homepage = "https://github.com/AGProjects/python3-application";
     license = licenses.lgpl21Plus;

@@ -1,28 +1,30 @@
-{ lib, fetchFromGitHub, ocamlPackages, rsync }:
+{ lib, fetchFromGitHub, ocamlPackages }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "beluga";
-  version = "1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
-    owner  = "Beluga-lang";
-    repo   = "Beluga";
-    rev    = "v${version}";
-    sha256 = "1ziqjfv8jwidl8lj2mid2shhgqhv31dfh5wad2zxjpvf6038ahsw";
+    owner = "Beluga-lang";
+    repo = "Beluga";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-l/C77czLtlLnpadVx4d9ve9jv/e11jsOgzrbXt+Zo5s=";
   };
 
   duneVersion = "3";
 
   buildInputs = with ocamlPackages; [
-    gen sedlex extlib dune-build-info linenoise
+    gen
+    sedlex
+    extlib
+    dune-build-info
+    linenoise
+    omd
+    uri
+    ounit2
+    yojson
   ];
 
-  postPatch = ''
-    patchShebangs ./TEST ./run_harpoon_test.sh
-  '';
-
-  checkPhase = "./TEST";
-  nativeCheckInputs = [ rsync ];
   doCheck = true;
 
   postInstall = ''
@@ -32,9 +34,10 @@ ocamlPackages.buildDunePackage rec {
 
   meta = with lib; {
     description = "A functional language for reasoning about formal systems";
-    homepage    = "http://complogic.cs.mcgill.ca/beluga/";
-    license     = licenses.gpl3Plus;
+    homepage = "https://complogic.cs.mcgill.ca/beluga";
+    changelog = "https://github.com/Beluga-lang/Beluga/releases/tag/v${version}";
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.bcdarwin ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

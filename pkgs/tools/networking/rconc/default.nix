@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkgs }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.1.4";
@@ -17,5 +17,6 @@ rustPlatform.buildRustPackage rec {
     description = "Simple cross-platform RCON client written in rust";
     homepage = "https://github.com/klemens/rconc";
     license = licenses.gpl3Only;
+    mainProgram = "rconc";
   };
 }

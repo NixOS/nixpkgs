@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   version = "0.3.0";
+  format = "setuptools";
   pname = "secure";
   disabled = isPy27;
 

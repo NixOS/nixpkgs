@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, jdk11, maven, javaPackages }:
+{ lib, fetchFromGitHub, jdk11, maven, jogl }:
 
 let
   mavenJdk11 = maven.override {
@@ -18,7 +18,7 @@ mavenJdk11.buildMavenPackage rec {
 
   mvnHash = "sha256-/2/Yb26Ry0NHQQ3j0LXnjwC0wQqJiztvTgWixyMJqvg=";
 
-  nativeBuildInputs = [ jdk11 mavenJdk11 ];
+  nativeBuildInputs = [ jdk11 ];
 
   installPhase = ''
     cp -r modules/application/target/gephi $out
@@ -29,8 +29,8 @@ mavenJdk11.buildMavenPackage rec {
 
     # use self-compiled JOGL to avoid patchelf'ing .so inside jars
     rm $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-{jogl,gluegen}/*.jar
-    cp ${javaPackages.jogl_2_4_0}/share/java/jogl*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-jogl/
-    cp ${javaPackages.jogl_2_4_0}/share/java/glue*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-gluegen/
+    cp ${jogl}/share/java/jogl*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-jogl/
+    cp ${jogl}/share/java/glue*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-gluegen/
 
     printf "\n\njdkhome=${jdk11}\n" >> $out/etc/gephi.conf
   '';
@@ -44,6 +44,5 @@ mavenJdk11.buildMavenPackage rec {
     ];
     license = licenses.gpl3;
     maintainers = [ maintainers.taeer ];
-    platforms = [ "x86_64-linux" ];
   };
 }

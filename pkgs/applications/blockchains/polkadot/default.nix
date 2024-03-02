@@ -2,20 +2,22 @@
 , lib
 , protobuf
 , rocksdb
+, rust-jemalloc-sys-unprefixed
 , rustPlatform
+, rustc
 , stdenv
 , Security
 , SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.43";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
-    repo = "polkadot";
-    rev = "v${version}";
-    hash = "sha256-h+9b+KQgdYowHYGr0nPsqibcwOPmBVo9tKi/uEbLhqo=";
+    repo = "polkadot-sdk";
+    rev = "polkadot-v${version}";
+    hash = "sha256-YjA69i1cnnMlH/3U40s/qUi+u1IKFvlGUjsDVJuBgBE=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -31,40 +33,56 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "binary-merkle-tree-4.0.0-dev" = "sha256-/8bGqnM/yqtCgVWkIaVEySZSV3XGYuiA3JuyHYTp2lw=";
-      "sub-tokens-0.1.0" = "sha256-GvhgZhOIX39zF+TbQWtTCgahDec4lQjH+NqamLFLUxM=";
-    };
-  };
-
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
-
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
-
   preBuild = ''
-    export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
+    export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(< .git_commit)
     rm .git_commit
   '';
 
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ark-secret-scalar-0.0.2" = "sha256-91sODxaj0psMw0WqigMCGO5a7+NenAsRj5ZmW6C7lvc=";
+      "common-0.1.0" = "sha256-LHz2dK1p8GwyMimlR7AxHLz1tjTYolPwdjP7pxork1o=";
+      "fflonk-0.1.0" = "sha256-+BvZ03AhYNP0D8Wq9EMsP+lSgPA6BBlnWkoxTffVLwo=";
+      "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
+      "sp-ark-bls12-381-0.4.2" = "sha256-nNr0amKhSvvI9BlsoP+8v6Xppx/s7zkf0l9Lm3DW8w8=";
+      "sp-crypto-ec-utils-0.4.1" = "sha256-/Sw1ZM/JcJBokFE4y2mv/P43ciTL5DEm0PDG0jZvMkI=";
+    };
+  };
+
+  buildType = "production";
+
+  cargoBuildFlags = [ "-p" "polkadot" ];
+
+  # NOTE: tests currently fail to compile due to an issue with cargo-auditable
+  # and resolution of features flags, potentially related to this:
+  # https://github.com/rust-secure-code/cargo-auditable/issues/66
+  doCheck = false;
+
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    rustc
+    rustc.llvmPackages.lld
+  ];
+
+  # NOTE: jemalloc is used by default on Linux with unprefixed enabled
+  buildInputs = lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ] ++
+    lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+
+  # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
+  # available for `rustc-wasm32`
+  WASM_BUILD_STD = 0;
+
+  # NOTE: we need to force lld otherwise rust-lld is not found for wasm32 target
+  CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
   PROTOC = "${protobuf}/bin/protoc";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-
-  # NOTE: We don't build the WASM runtimes since this would require a more
-  # complicated rust environment setup and this is only needed for developer
-  # environments. The resulting binary is useful for end-users of live networks
-  # since those just use the WASM blob from the network chainspec.
-  SKIP_WASM_BUILD = 1;
-
-  # We can't run the test suite since we didn't compile the WASM runtimes.
-  doCheck = false;
 
   meta = with lib; {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
+    maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
     platforms = platforms.unix;
   };
 }

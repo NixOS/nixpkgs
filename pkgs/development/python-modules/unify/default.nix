@@ -1,25 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, setuptools
+, pytestCheckHook
 , untokenize
-, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "unify";
   version = "0.5";
+  pyproject = true;
 
-  # PyPi release is missing tests (see https://github.com/myint/unify/pull/18)
+  disabled = pythonOlder "3.9";
+
   src = fetchFromGitHub {
     owner = "myint";
     repo = "unify";
-    rev = "v${version}";
-    sha256 = "1l6xxygaigacsxf0g5f7w5gpqha1ava6mcns81kqqy6vw91pyrbi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cWV/Q+LbeIxnQNqyatRWQUF8X+HHlQdc10y9qJ7v3dA=";
   };
 
-  propagatedBuildInputs = [ untokenize ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  propagatedBuildInputs = [
+    untokenize
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "unify"
+  ];
+
+  disabledTests = [
+    # https://github.com/myint/unify/issues/21
+    "test_format_code"
+    "test_format_code_with_backslash_in_comment"
+  ];
 
   meta = with lib; {
     description = "Modifies strings to all use the same quote where possible";

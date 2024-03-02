@@ -1,17 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools, paramiko, scp, tenacity
-, textfsm, ntc-templates, pyserial, pytestCheckHook, pyyaml }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+
+# build-system
+, poetry-core
+
+# dependencies
+, ntc-templates
+, paramiko
+, pyserial
+, pyyaml
+, scp
+, textfsm
+}:
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.1.2";
+  version = "4.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9e3iooZw09/TRwBhRoZl+A+bSQbtIOaw+02eHJvmevw=";
+    hash = "sha256-2pD2798ztBQOts1/InJ3PCzhRPp0rDTV7KwbTUYH8fs=";
   };
 
-  buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ paramiko scp tenacity pyyaml textfsm ntc-templates pyserial ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "poetry==1.3.2" "poetry-core" \
+      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    ntc-templates
+    paramiko
+    pyserial
+    pyyaml
+    scp
+    textfsm
+  ];
 
   # tests require closed-source pyats and genie packages
   doCheck = false;

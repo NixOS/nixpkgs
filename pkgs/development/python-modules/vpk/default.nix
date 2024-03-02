@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "vpk";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ValvePython";

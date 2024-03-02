@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, patchelf
 , cmake
 , pkg-config
 , intel-gmmlib
@@ -12,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "23.17.26241.15";
+  version = "24.05.28454.6";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-A0gtSM6e+VcfcGG/6zReV2LIXq6tGbWIwDQFlQ2TW28=";
+    hash = "sha256-gX6zvZcwZXcSj3ch/eIWqIefccKuab0voh2vHHJTTso=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -35,6 +34,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "drivers" ];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
@@ -49,8 +51,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/intel/compute-runtime";
     description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
+    homepage = "https://github.com/intel/compute-runtime";
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ SuperSandro2000 ];

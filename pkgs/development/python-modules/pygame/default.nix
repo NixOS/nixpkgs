@@ -1,25 +1,47 @@
-{ stdenv, lib, substituteAll, fetchFromGitHub, buildPythonPackage, python, pkg-config, libX11
-, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype, fontconfig
-, AppKit
+{ stdenv
+, lib
+, substituteAll
+, fetchFromGitHub
+, buildPythonPackage
 , pythonOlder
+
+# build-system
+, cython_3
+, setuptools
+, pkg-config
+
+# native dependencies
+, AppKit
+, fontconfig
+, freetype
+, libjpeg
+, libpng
+, libX11
+, portmidi
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+
+# tests
+, python
 }:
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.2.0";
+  version = "2.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
-
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-SMkY3uN3kAlb/pbm047W0G8MJ7G8mCsfGVSPhzd5aEo=";
+    hash = "sha256-+gRv3Rim+2aL2uhPPGfVD0QDgB013lTf6wPx8rOwgXg=";
     postFetch = "rm -rf $out/docs/reST";
   };
 
@@ -46,19 +68,33 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config SDL2
+    cython_3
+    pkg-config
+    SDL2
+    setuptools
   ];
 
   buildInputs = [
-    SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng libjpeg
-    portmidi libX11 freetype
+    freetype
+    libjpeg
+    libpng
+    libX11
+    portmidi
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
   ];
 
   preConfigure = ''
-    ${python.pythonForBuild.interpreter} buildconfig/config.py
+    ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
 
   checkPhase = ''
     runHook preCheck

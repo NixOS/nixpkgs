@@ -1,17 +1,39 @@
 { lib
 , fetchFromGitHub
+, fetchPypi
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # autosuspend is incompatible with tzlocal v5
+      # See https://github.com/regebro/tzlocal#api-change
+      tzlocal = super.tzlocal.overridePythonAttrs (prev: rec {
+        version = "4.3.1";
+        src = fetchPypi {
+          inherit (prev) pname;
+          inherit version;
+          hash = "sha256-7jLvjCCAPBmpbtNmrd09SnKe9jCctcc1mgzC7ut/pGo=";
+        };
+        propagatedBuildInputs = with self; [
+          pytz-deprecation-shim
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "4.3.0";
+  version = "6.0.0";
+
+  disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gS8NNks4GaIGl7cEqWSP53I4/tIV4LypkmZ5vNOjspY=";
+    hash = "sha256-gS8NNks4GaIGl7cEqWSP53I4/tIV4LypkmZ5vNOjspY=";
   };
 
   postPatch = ''
@@ -19,27 +41,28 @@ python3.pkgs.buildPythonApplication rec {
       --replace '--cov-config=setup.cfg' ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
+    dbus-python
+    icalendar
+    jsonpath-ng
+    lxml
+    mpd2
     portalocker
     psutil
-    dbus-python
-  ];
-
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-    python-dbusmock
-    pytest-httpserver
-    dateutils
-    freezegun
-    pytest-mock
+    python-dateutil
+    pytz
     requests
     requests-file
-    icalendar
     tzlocal
-    jsonpath-ng
-    mpd2
-    lxml
+  ];
+
+  nativeCheckInputs = with python.pkgs; [
+    freezegun
     pytest-datadir
+    pytest-httpserver
+    pytest-mock
+    pytestCheckHook
+    python-dbusmock
   ];
 
   # Disable tests that need root
@@ -50,11 +73,13 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "A daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
+    changelog = "https://github.com/languitar/autosuspend/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = with maintainers; [ bzizou anthonyroussel ];
+    mainProgram = "autosuspend";
     platforms = platforms.linux;
   };
 }

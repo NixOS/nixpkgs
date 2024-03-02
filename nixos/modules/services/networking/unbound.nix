@@ -24,12 +24,24 @@ let
   confNoServer = concatStringsSep "\n" ((mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [""]);
   confServer = concatStringsSep "\n" (mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ]));
 
-  confFile = pkgs.writeText "unbound.conf" ''
+  confFileUnchecked = pkgs.writeText "unbound.conf" ''
     server:
     ${optionalString (cfg.settings.server.define-tag != "") (toOption "  " "define-tag" cfg.settings.server.define-tag)}
     ${confServer}
     ${confNoServer}
   '';
+  confFile = if cfg.checkconf then pkgs.runCommandLocal "unbound-checkconf" { } ''
+    cp ${confFileUnchecked} unbound.conf
+
+    # fake stateDir which is not accesible in the sandbox
+    mkdir -p $PWD/state
+    sed -i unbound.conf \
+      -e '/auto-trust-anchor-file/d' \
+      -e "s|${cfg.stateDir}|$PWD/state|"
+    ${cfg.package}/bin/unbound-checkconf unbound.conf
+
+    cp ${confFileUnchecked} $out
+  '' else confFileUnchecked;
 
   rootTrustAnchorFile = "${cfg.stateDir}/root.key";
 
@@ -42,12 +54,7 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "Unbound domain name server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.unbound-with-systemd;
-        defaultText = literalExpression "pkgs.unbound-with-systemd";
-        description = lib.mdDoc "The unbound package to use";
-      };
+      package = mkPackageOption pkgs "unbound-with-systemd" { };
 
       user = mkOption {
         type = types.str;
@@ -65,6 +72,17 @@ in {
         type = types.path;
         default = "/var/lib/unbound";
         description = lib.mdDoc "Directory holding all state for unbound to run.";
+      };
+
+      checkconf = mkOption {
+        type = types.bool;
+        default = !cfg.settings ? include;
+        defaultText = "!config.services.unbound.settings ? include";
+        description = lib.mdDoc ''
+          Wether to check the resulting config file with unbound checkconf for syntax errors.
+
+          If settings.include is used, then this options is disabled, as the import can likely not be resolved at build time.
+        '';
       };
 
       resolveLocalQueries = mkOption {
@@ -166,7 +184,7 @@ in {
     services.unbound.settings = {
       server = {
         directory = mkDefault cfg.stateDir;
-        username = cfg.user;
+        username = ''""'';
         chroot = ''""'';
         pidfile = ''""'';
         # when running under systemd there is no need to daemonize
@@ -245,14 +263,13 @@ in {
         NotifyAccess = "main";
         Type = "notify";
 
-        # FIXME: Which of these do we actually need, can we drop the chroot flag?
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
+          "CAP_NET_RAW" # needed if ip-transparent is set to true
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE"
           "CAP_NET_RAW"
-          "CAP_SETGID"
-          "CAP_SETUID"
-          "CAP_SYS_CHROOT"
-          "CAP_SYS_RESOURCE"
         ];
 
         User = cfg.user;
@@ -266,22 +283,19 @@ in {
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectSystem = "strict";
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectKernelLogs = true;
+        ProtectKernelTunables = true;
         RuntimeDirectory = "unbound";
         ConfigurationDirectory = "unbound";
         StateDirectory = "unbound";
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" "AF_UNIX" ];
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "~@clock"
-          "@cpu-emulation"
-          "@debug"
-          "@keyring"
-          "@module"
-          "mount"
-          "@obsolete"
-          "@resources"
-        ];
+        SystemCallFilter = [ "@system-service" ];
         RestrictNamespaces = true;
         LockPersonality = true;
         RestrictSUIDSGID = true;

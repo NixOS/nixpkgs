@@ -11,7 +11,6 @@
 , protobuf
 , protobufc
 , python3
-, python3Packages
 , systemd
 }:
 let
@@ -24,14 +23,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libei";
-  version = "0.99.2";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libei";
     rev = version;
-    hash = "sha256-hxWWOvqenHHnzrvRwSwNT1GFVx9NR+Mm1XK9nisF8fA=";
+    hash = "sha256-8n/C0rBlyhY8SaxkwU+tDskwSQObLRrR+utk4Ktgb7U=";
   };
 
   buildInputs = [
@@ -42,19 +41,18 @@ stdenv.mkDerivation rec {
     systemd
   ];
   nativeBuildInputs = [
-    attr
     meson
     ninja
     pkg-config
-    python3
-  ] ++
-  (with python3Packages; [
-    jinja2
-    pytest
-    python-dbusmock
-    strenum
-    structlog
-  ]);
+    (python3.withPackages(ps: with ps; [
+      attrs
+      jinja2
+      pytest
+      python-dbusmock
+      strenum
+      structlog
+    ]))
+  ];
 
   postPatch = ''
     ln -s "${munit}" ./subprojects/munit

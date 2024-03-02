@@ -8,8 +8,8 @@ let
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.1.0";
-  vc_version = "23051307";
+  base_version = "8.1.3";
+  vc_version = "23091805";
 in stdenv.mkDerivation rec {
   pname = "renpy";
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    sha256 = "sha256-5EU4jaBTU+a9UNHRs7xrKQ7ZivhDEqisO3l4W2E6F+c=";
+    sha256 = "sha256-bYqnKSWY8EEGr1+12cWeT9/ZSv5OrKLsRqCnnIruDQw=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib
   ] ++ (with python3.pkgs; [
-    python pygame_sdl2 tkinter future six pefile requests ecdsa
+    python pygame-sdl2 tkinter future six pefile requests ecdsa
   ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
@@ -49,22 +49,24 @@ in stdenv.mkDerivation rec {
     cp tutorial/game/tutorial_director.rpy{m,}
 
     cat > renpy/vc_version.py << EOF
-    vc_version = ${vc_version}
+    version = '${version}'
     official = False
     nightly = False
+    # Look at https://renpy.org/latest.html for what to put.
+    version_name = 'Where No One Has Gone Before'
     EOF
   '';
 
   buildPhase = with python3.pkgs; ''
     runHook preBuild
-    ${python.pythonForBuild.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
+    ${python.pythonOnBuildForHost.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = with python3.pkgs; ''
     runHook preInstall
 
-    ${python.pythonForBuild.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
+    ${python.pythonOnBuildForHost.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 
@@ -75,7 +77,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame-sdl2}/include/${python.libPrefix}";
 
   meta = with lib; {
     description = "Visual Novel Engine";

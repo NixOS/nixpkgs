@@ -21,12 +21,7 @@ in {
         server. You need to create "''${dataDir}/dump/*.gpg" for the initial
         import'');
 
-      package = mkOption {
-        default = pkgs.sks;
-        defaultText = literalExpression "pkgs.sks";
-        type = types.package;
-        description = lib.mdDoc "Which SKS derivation to use.";
-      };
+      package = mkPackageOption pkgs "sks" { };
 
       dataDir = mkOption {
         type = types.path;

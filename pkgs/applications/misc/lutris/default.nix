@@ -1,6 +1,7 @@
 { buildPythonApplication
 , lib
 , fetchFromGitHub
+, fetchpatch
 
   # build inputs
 , atk
@@ -75,13 +76,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.13";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    hash = "sha256-ectrfbIkPhIqfhkavDpBCNdLPnGQhCnfFYwTf2IxB50=";
+    hash = "sha256-Ed1bhugBe97XmY050A5jCPcnLj0Fd7qPX2p/Ab+YbOE=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
@@ -147,5 +148,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
+    mainProgram = "lutris";
   };
 }

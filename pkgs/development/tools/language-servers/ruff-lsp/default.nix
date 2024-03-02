@@ -2,12 +2,13 @@
 , stdenv
 , pythonOlder
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ruff
 , pygls
 , lsprotocol
 , hatchling
 , typing-extensions
+, packaging
 , pytestCheckHook
 , python-lsp-jsonrpc
 , pytest-asyncio
@@ -15,14 +16,15 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.35";
-  format = "pyproject";
+  version = "0.0.53";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "ruff_lsp";
-    hash = "sha256-qRNpswpQitvVczFBKsUFlew+W1uEjtkbWnmwBRUHq0w=";
+  src = fetchFromGitHub {
+    owner = "astral-sh";
+    repo = "ruff-lsp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gtMqIsgGCzSBo5D4+Ne8tUloDV9+MufYkN96yr7XVd4=";
   };
 
   postPatch = ''
@@ -35,6 +37,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     pygls
     lsprotocol
     typing-extensions
@@ -61,10 +64,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     description = "A Language Server Protocol implementation for Ruff";
     homepage = "https://github.com/astral-sh/ruff-lsp";
-    changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "ruff-lsp";
     maintainers = with maintainers; [ figsoda kalekseev ];
   };
 }

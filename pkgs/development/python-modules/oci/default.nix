@@ -9,11 +9,12 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , pytz
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.105.0";
+  version = "2.122.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "oracle";
     repo = "oci-python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EiyvAVFEC/hVPTagV4CsyrMRyc89cEzG2NIS2nJg+NU=";
+    hash = "sha256-DDUnstgyRgt7sNcGV6gqJoTzmbBCMDTjmvf2zIXpBO8=";
   };
 
   pythonRelaxDeps = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   propagatedBuildInputs = [

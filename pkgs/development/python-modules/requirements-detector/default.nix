@@ -4,35 +4,41 @@
 , fetchFromGitHub
 , packaging
 , poetry-core
-, poetry-semver
+, semver
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "requirements-detector";
-  version = "1.1.0";
-  format = "pyproject";
+  version = "1.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "landscapeio";
-    repo = pname;
-    rev = version;
-    hash = "sha256-H+h/PN1TrlpDRgI7tMWUhXlxj4CChwcxIR/BvyO261c=";
+    repo = "requirements-detector";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
+
+  pythonRelaxDeps = [
+    "astroid"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     astroid
     packaging
-    poetry-semver
     toml
+    semver
   ];
 
   nativeCheckInputs = [
@@ -46,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool to find and list requirements of a Python project";
     homepage = "https://github.com/landscapeio/requirements-detector";
+    changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };

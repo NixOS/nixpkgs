@@ -8,24 +8,28 @@
 
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.0.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     rev = "v${version}";
-    sha256 = "sha256-7mVFDORbu9KsJ4IH8PrrpXE7xFrWVTyBmRaL8Kt/ghY=";
+    hash = "sha256-rnPZms60vRtefEV+3IeVXoZJU9WMjVxPVioRaEcyw/o=";
   };
 
   postPatch = ''
-    cp ${writeScript "fake-gradlew-for-dafny" ''
-      mkdir -p build/libs/
-      javac $(find -name "*.java" | grep "^./src/main") -d classes
-      jar cf build/libs/DafnyRuntime.jar -C classes dafny
-    ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
+    cp ${
+      writeScript "fake-gradlew-for-dafny" ''
+        mkdir -p build/libs/
+        javac $(find -name "*.java" | grep "^./src/main") -d classes
+        jar cf build/libs/DafnyRuntime-${version}.jar -C classes dafny
+      ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
 
     # Needed to fix
-    # "error NETSDK1129: The 'Publish' target is not supported without specifying a target framework. The current project targets multiple frameworks, you must specify the framework for the published application."
+    # "error NETSDK1129: The 'Publish' target is not supported without
+    # specifying a target framework. The current project targets multiple
+    # frameworks, you must specify the framework for the published
+    # application."
     substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
       --replace TargetFrameworks TargetFramework \
       --replace "netstandard2.0;net452" net6.0

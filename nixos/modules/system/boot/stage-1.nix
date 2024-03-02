@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, lib, utils, pkgs, ... }:
+{ config, options, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -91,7 +91,7 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommand "extra-utils"
-    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
+    { nativeBuildInputs = with pkgs.buildPackages; [ nukeReferences bintools ];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -122,8 +122,8 @@ let
         # code, using default options and effectively ignore security relevant
         # ZFS properties such as `setuid=off` and `exec=off` (unless manually
         # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
-        copy_bin_and_libs ${pkgs.util-linux}/bin/mount
-        copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
+        copy_bin_and_libs ${lib.getOutput "mount" pkgs.util-linux}/bin/mount
+        copy_bin_and_libs ${config.boot.zfs.package}/bin/mount.zfs
       ''}
 
       # Copy some util-linux stuff.
@@ -132,10 +132,6 @@ let
       # Copy dmsetup and lvm.
       copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
       copy_bin_and_libs ${getBin pkgs.lvm2}/bin/lvm
-
-      # Add RAID mdadm tool.
-      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
-      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
 
       # Copy udev.
       copy_bin_and_libs ${udev}/bin/udevadm
@@ -225,7 +221,6 @@ let
       $out/bin/udevadm --version
       $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
-      $out/bin/mdadm --version
       ${optionalString config.services.multipath.enable ''
         ($out/bin/multipath || true) 2>&1 | grep -q 'need to be root'
         ($out/bin/multipathd || true) 2>&1 | grep -q 'need to be root'
@@ -289,7 +284,7 @@ let
       # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
       # corresponding udev rules for now.  This was the behaviour in
       # udev <= 154.  See also
-      #   http://www.spinics.net/lists/hotplug/msg03935.html
+      #   https://www.spinics.net/lists/hotplug/msg03935.html
       substituteInPlace $out/60-persistent-storage.rules \
         --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
     ''; # */
@@ -312,7 +307,7 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit linkUnits udevRules extraUtils modulesClosure;
+    inherit linkUnits udevRules extraUtils;
 
     inherit (config.boot) resumeDevice;
 
@@ -321,7 +316,7 @@ let
     inherit (config.system.build) earlyMountScript;
 
     inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
+      preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
                     (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
@@ -354,8 +349,8 @@ let
       [ { object = bootStage1;
           symlink = "/init";
         }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.services.swraid.mdadmConf;
-          symlink = "/etc/mdadm.conf";
+        { object = "${modulesClosure}/lib";
+          symlink = "/lib";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
@@ -440,7 +435,7 @@ let
          }
 
         # mindepth 1 so that we don't change the mode of /
-        (cd "$tmp" && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
+        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
@@ -532,6 +527,14 @@ in
       '';
     };
 
+    boot.initrd.postResumeCommands = mkOption {
+      default = "";
+      type = types.lines;
+      description = lib.mdDoc ''
+        Shell commands to be executed immediately after attempting to resume.
+      '';
+    };
+
     boot.initrd.postMountCommands = mkOption {
       default = "";
       type = types.lines;
@@ -618,6 +621,11 @@ in
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
             path inside and out).
+
+            Note that `nixos-rebuild switch` will generate the initrd
+            also for past generations, so if secrets are moved or deleted
+            you will also have to garbage collect the generations that
+            use those secrets.
           '';
         example = literalExpression
           ''
@@ -628,10 +636,8 @@ in
       };
 
     boot.initrd.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc "Names of supported filesystem types in the initial ramdisk.";
+      default = { };
+      inherit (options.boot.supportedFilesystems) example type description;
     };
 
     boot.initrd.verbose = mkOption {
@@ -727,6 +733,6 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "initrd" "services" "swraid" "mdadmConf" ])
+    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
   ];
 }

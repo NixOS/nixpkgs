@@ -2,25 +2,25 @@
 
 buildGoModule rec {
   pname = "istioctl";
-  version = "1.18.0";
+  version = "1.20.3";
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
     rev = version;
-    sha256 = "sha256-vC8EE9v3U6FNbjxWb3At+gL4DUgBIb7MY2xBu7WNMKw=";
+    hash = "sha256-NimwuQj/EvWtXt87LgHWwcZ2hAd548o/agXY4TVK63o=";
   };
-  vendorHash = "sha256-YgRW/sVRQLqrtEFxC+bGHZEQoEro5bzNzqKv7c7iO4Y=";
+  vendorHash = "sha256-4HzUsTLt4R35TS4jKOmrKW0At9q8W61TU+NTQ/K7Axk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   # Bundle release metadata
   ldflags = let
     attrs = [
-      "istio.io/pkg/version.buildVersion=${version}"
-      "istio.io/pkg/version.buildStatus=Nix"
-      "istio.io/pkg/version.buildTag=${version}"
-      "istio.io/pkg/version.buildHub=docker.io/istio"
+      "istio.io/istio/pkg/version.buildVersion=${version}"
+      "istio.io/istio/pkg/version.buildStatus=Nix"
+      "istio.io/istio/pkg/version.buildTag=${version}"
+      "istio.io/istio/pkg/version.buildHub=docker.io/istio"
     ];
   in ["-s" "-w" "${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"];
 

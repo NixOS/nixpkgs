@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.8.0";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "benleb";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/fgNznsucjHPO44lK4tk5tDJHKjCJEbPtOO7YHmDcRQ=";
+    hash = "sha256-ETgpXSUUsV1xoZjdnL2bzn4HwDjKC2t13yXwf28OBqI=";
   };
 
   postPatch = ''

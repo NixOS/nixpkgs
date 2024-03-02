@@ -3,19 +3,27 @@
 , fetchFromGitHub
 , pytestCheckHook
 , requests
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pytado";
-  version = "0.16.0";
+  version = "0.17.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    # Upstream hasn't tagged 0.13.0 yet
     rev = "refs/tags/${version}";
-    sha256 = "sha256-tpWr+VlkJ9svN9XtBIDEAos4uxYCl6njvUBPIJG++Yg=";
+    hash = "sha256-Wdd9HdsQjaYlL8knhMuO87+dom+aTsmrLRK0UdrpsbQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
@@ -32,7 +40,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python binding for Tado web API";
     homepage = "https://github.com/wmalgadey/PyTado";
-    license = licenses.gpl3;
+    changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
   };
 }

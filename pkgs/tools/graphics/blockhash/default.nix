@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "blockhash";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "commonsmachinery";
     repo = "blockhash";
     rev = "v${version}";
-    sha256 = "0x3lvhnkb4c3pyq6p81qnnqimz35wpippiac506dgjx3b1848v35";
+    sha256 = "sha256-QoqFTCfWtXIrFF3Yx4NfOa9cSjHtCSKz3k3i0u9Qx9M=";
   };
 
   nativeBuildInputs = [ python3 pkg-config wafHook ];
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.infinisil ];
     platforms = platforms.unix;
+    mainProgram = "blockhash";
   };
 }

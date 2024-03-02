@@ -3,6 +3,7 @@
 buildPythonPackage rec {
     pname = "dbfread";
     version = "2.0.7";
+    format = "setuptools";
 
     src = fetchPypi {
       inherit pname version;

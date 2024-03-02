@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-zsh-completions";
-  version = "unstable-2023-01-30";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-zsh-completions";
-    rev = "6a1bfc024481bdba568f2ced65e02f3a359a7692";
-    hash = "sha256-aXetjkl5nPuYHHyuX59ywXF+4Xg+PUCV6Y2u+g18gEk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DKvCpjAeCiUwD5l6PUW7WlEvM0cNZEOk41IiVXoh9D8=";
   };
 
   strictDeps = true;

@@ -33,5 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://gitlab.com/ports1/tailor";
     license = licenses.gpl1Plus;
     platforms = platforms.unix;
+    mainProgram = "tailor";
   };
 }

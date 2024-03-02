@@ -93,7 +93,11 @@ The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given
 To package Dotnet applications, you can use `buildDotnetModule`. This has similar arguments to `stdenv.mkDerivation`, with the following additions:
 
 * `projectFile` is used for specifying the dotnet project file, relative to the source root. These have `.sln` (entire solution) or `.csproj` (single project) file extensions. This can be a list of multiple projects as well. When omitted, will attempt to find and build the solution (`.sln`). If running into problems, make sure to set it to a file (or a list of files) with the `.csproj` extension - building applications as entire solutions is not fully supported by the .NET CLI.
-* `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. This file can also be generated manually using `nuget-to-nix` tool, which is available in nixpkgs. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`.
+* `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`.
+::: {.note}
+For more detail about managing the `deps.nix` file, see [Generating and updating NuGet dependencies](#generating-and-updating-nuget-dependencies)
+:::
+
 * `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
 * `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
  For example, your project has a local dependency:
@@ -138,11 +142,13 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # To run fetch-deps when this file does not yet exist, set nugetDeps to null
+  nugetDeps = ./deps.nix;
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
-  dotnet-sdk = dotnetCorePackages.sdk_6.0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
@@ -154,6 +160,8 @@ in buildDotnetModule rec {
 }
 ```
 
+Keep in mind that you can tag the [`@NixOS/dotnet`](https://github.com/orgs/nixos/teams/dotnet) team for help and code review.
+
 ## Dotnet global tools {#dotnet-global-tools}
 
 [.NET Global tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools) are a mechanism provided by the dotnet CLI to install .NET binaries from Nuget packages.
@@ -161,7 +169,7 @@ in buildDotnetModule rec {
 They can be installed either as a global tool for the entire system, or as a local tool specific to project.
 
 The local installation is the easiest and works on NixOS in the same way as on other Linux distributions.
-[See dotnet documention](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) to learn more.
+[See dotnet documentation](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) to learn more.
 
 [The global installation method](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-global-tool)
 should also work most of the time. You have to remember to update the `PATH`
@@ -210,3 +218,43 @@ buildDotnetGlobalTool {
   };
 }
 ```
+## Generating and updating NuGet dependencies {#generating-and-updating-nuget-dependencies}
+
+First, restore the packages to the `out` directory, ensure you have cloned
+the upstream repository and you are inside it.
+
+```bash
+$ dotnet restore --packages out
+  Determining projects to restore...
+  Restored /home/lychee/Celeste64/Celeste64.csproj (in 1.21 sec).
+```
+
+Next, use `nuget-to-nix` tool provided in nixpkgs to generate a lockfile to `deps.nix` from
+the packages inside the `out` directory.
+
+```bash
+$ nuget-to-nix out > deps.nix
+```
+Which `nuget-to-nix` will generate an output similar to below
+```
+{ fetchNuGet }: [
+  (fetchNuGet { pname = "FosterFramework"; version = "0.1.15-alpha"; sha256 = "0pzsdfbsfx28xfqljcwy100xhbs6wyx0z1d5qxgmv3l60di9xkll"; })
+  (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "8.0.1"; sha256 = "1gjz379y61ag9whi78qxx09bwkwcznkx2mzypgycibxk61g11da1"; })
+  (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "8.0.1"; sha256 = "1drbgqdcvbpisjn8mqfgba1pwb6yri80qc4mfvyczqwrcsj5k2ja"; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Runtime.linux-x64"; version = "8.0.1"; sha256 = "1g5b30f4l8a1zjjr3b8pk9mcqxkxqwa86362f84646xaj4iw3a4d"; })
+  (fetchNuGet { pname = "SharpGLTF.Core"; version = "1.0.0-alpha0031"; sha256 = "0ln78mkhbcxqvwnf944hbgg24vbsva2jpih6q3x82d3h7rl1pkh6"; })
+  (fetchNuGet { pname = "SharpGLTF.Runtime"; version = "1.0.0-alpha0031"; sha256 = "0lvb3asi3v0n718qf9y367km7qpkb9wci38y880nqvifpzllw0jg"; })
+  (fetchNuGet { pname = "Sledge.Formats"; version = "1.2.2"; sha256 = "1y0l66m9rym0p1y4ifjlmg3j9lsmhkvbh38frh40rpvf1axn2dyh"; })
+  (fetchNuGet { pname = "Sledge.Formats.Map"; version = "1.1.5"; sha256 = "1bww60hv9xcyxpvkzz5q3ybafdxxkw6knhv97phvpkw84pd0jil6"; })
+  (fetchNuGet { pname = "System.Numerics.Vectors"; version = "4.5.0"; sha256 = "1kzrj37yzawf1b19jq0253rcs8hsq1l2q8g69d7ipnhzb0h97m59"; })
+]
+```
+
+Finally, you move the `deps.nix` file to the appropriate location to be used by `nugetDeps`, then you're all set!
+
+If you ever need to update the dependencies of a package, you instead do
+
+* `nix-build -A package.fetch-deps` to generate the update script for `package`
+* Run `./result deps.nix` to regenerate the lockfile to `deps.nix`, keep in mind if a location isn't provided, it will write to a temporary path instead
+* Finally, move the file where needed and look at its contents to confirm it has updated the dependencies.
+

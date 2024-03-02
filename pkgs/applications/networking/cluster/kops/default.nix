@@ -48,21 +48,21 @@ in
 rec {
   mkKops = generic;
 
-  kops_1_24 = mkKops rec {
-    version = "1.24.5";
-    sha256 = "sha256-U5OSiU0t2gyvyNd07y68Fb+HaXp5wQN4t0CBPOOMd/M=";
-    rev = "v${version}";
-  };
-
-  kops_1_25 = mkKops rec {
-    version = "1.25.4";
-    sha256 = "sha256-Q40d62D+H7CpLmrjweCy75U3LgnHEV2pFZs2Ze+koqo=";
-    rev = "v${version}";
-  };
-
   kops_1_26 = mkKops rec {
-    version = "1.26.4";
-    sha256 = "sha256-dHwakorYSQCv5Pi6l32y5cajLd9teXwEds1LFgiH0ck=";
+    version = "1.26.6";
+    sha256 = "sha256-qaehvPgB3phZl/K577hig4G4RxAUi6Im94vXP5ctnWM=";
+    rev = "v${version}";
+  };
+
+  kops_1_27 = mkKops rec {
+    version = "1.27.1";
+    sha256 = "sha256-WV+0380yj8GHckY4PDM3WspbZ/YuYZOAQEMd2ygEOjo=";
+    rev = "v${version}";
+  };
+
+  kops_1_28 = mkKops rec {
+    version = "1.28.4";
+    sha256 = "sha256-nknsrLdV7tQKLOir5RM3LRhTS+dyiAc1GjbByJzjwCo=";
     rev = "v${version}";
   };
 }

@@ -86,6 +86,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook-1.8.sh;
 
+  passthru = {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/site-ccache";
+    siteDir = "share/guile/site";
+  };
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";

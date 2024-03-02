@@ -7,11 +7,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-g1zn/CBpLv0oNhp32njeNhhli8aTCECgh92+zn5v+4U=";
   };
 
-  vendorSha256 = "sha256-0OsxCGCJT5k5bHXNSIL6QiJXj72bzYCZiI03gvHQuR8=";
+  vendorHash = "sha256-0OsxCGCJT5k5bHXNSIL6QiJXj72bzYCZiI03gvHQuR8=";
 
   meta = with lib; {
     description = "Syncthing CLI Tool";
@@ -19,5 +19,6 @@ buildGoModule rec {
     changelog = "https://github.com/tenox7/stc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.ivankovnatsky ];
+    mainProgram = "stc";
   };
 }

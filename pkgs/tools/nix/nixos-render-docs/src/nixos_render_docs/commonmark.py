@@ -184,3 +184,7 @@ class CommonMarkRenderer(Renderer):
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._list_stack.pop()
         return ""
+    def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        if title := cast(str, token.attrs.get('title', '')):
+            title = ' "' + title.replace('"', '\\"') + '"'
+        return f'![{token.content}]({token.attrs["src"]}{title})'

@@ -6,6 +6,7 @@
 , gtk3
 , glib
 , libxml2
+, libarchive
 , libsecret
 , poppler
 , itstool
@@ -14,7 +15,7 @@
 , mate
 , wrapGAppsHook
 , enableEpub ? true
-, webkitgtk
+, webkitgtk_4_1
 , enableDjvu ? true
 , djvulibre
 , enablePostScript ? true
@@ -27,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atril";
-  version = "1.26.1";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "pTphOsuXAaGK1nG/WQJU0c6Da6CuG+LAvYlI/fa0kaQ=";
+    sha256 = "wwW51fVxP0Jiau4DggkTA0IrPXGlbd1lkyzNsjx86SY=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     itstool
+    libarchive
     libsecret
     libxml2
     poppler
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
     texlive.bin.core # for synctex, used by the pdf back-end
   ]
   ++ lib.optionals enableDjvu [ djvulibre ]
-  ++ lib.optionals enableEpub [ webkitgtk ]
+  ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
   ++ lib.optionals enablePostScript [ libspectre ]
   ++ lib.optionals enableXps [ libgxps ]
   ;

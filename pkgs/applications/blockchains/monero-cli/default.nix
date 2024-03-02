@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.2.2";
+  version = "0.18.3.1";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "6VI5D3vP6NKdrEE5qOpKnv1wr6AWriixdOxkAa8HaCQ=";
+    hash = "sha256-PYcSbwbuQm6/r9RH+vjDy7NW1AiKhK/DG1pYYt4/drg=";
   };
 
   patches = [
@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_DEVICE_TREZOR=ON"
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
@@ -73,5 +72,6 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
+    mainProgram = "monero-wallet-cli";
   };
 }

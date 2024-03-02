@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-Br+BJRAo9qSJQjg2awQTnsYz76WReVWsTUw6XoUb1YY=";
   };
 
-  vendorSha256 = "sha256-dUPDwKdkBXBfyfbFxrpgHwZ0Q5jB7aamClNmv+tLCGA=";
+  vendorHash = "sha256-dUPDwKdkBXBfyfbFxrpgHwZ0Q5jB7aamClNmv+tLCGA=";
 
   # skip running go tests as they require network access
   doCheck = false;

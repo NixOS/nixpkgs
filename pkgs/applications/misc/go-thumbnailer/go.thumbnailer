@@ -1,3 +1,0 @@
-[Thumbnailer Entry]
-Exec=@out@/bin/go-thumbnailer %s %i %o
-MimeType=inode/directory

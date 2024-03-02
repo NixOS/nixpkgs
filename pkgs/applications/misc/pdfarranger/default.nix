@@ -1,27 +1,34 @@
-{ fetchFromGitHub, lib
-, wrapGAppsHook, intltool
-, python3Packages, gtk3, poppler_gi
+{ fetchFromGitHub
+, lib
+, wrapGAppsHook
+, python3Packages
+, gtk3
+, poppler_gi
+, libhandy
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.9.2";
+  version = "1.10.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pdfarranger";
+    repo = "pdfarranger";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-nZSP9JBbUPG9xk/ATXUYkjyP344m+e7RQS3BiFVzQf4=";
+    hash = "sha256-l//DeaIqUl6FdGFxM8yTKcTjVNvYMllorcoXoK33Iy4=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook
   ] ++ (with python3Packages; [
-    setuptools distutils_extra
+    setuptools
   ]);
 
   buildInputs = [
-    gtk3 poppler_gi
+    gtk3
+    poppler_gi
+    libhandy
   ];
 
   propagatedBuildInputs = with python3Packages; [

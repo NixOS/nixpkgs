@@ -58,5 +58,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/KittyKatt/screenFetch";
     maintainers = with maintainers; [ relrod ];
     platforms = platforms.all;
+    mainProgram = "screenfetch";
   };
 }

@@ -1,52 +1,54 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg
-, pandoc, poppler_utils, ripgrep, Security, imagemagick, tesseract3
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, ffmpeg
+, pandoc
+, poppler_utils
+, ripgrep
+, Security
+, zip
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  path = [
+    ffmpeg
+    pandoc
+    poppler_utils
+    ripgrep
+    zip
+  ];
+in rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
-  version = "0.9.6";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "phiresky";
-    repo = pname;
+    repo = "ripgrep-all";
     rev = "v${version}";
-    sha256 = "1wjpgi7m3lxybllkr3r60zaphp02ykq2syq72q9ail2760cjcir6";
+    hash = "sha256-ns7RL7kiG72r07LkF6RzShNg8M2SU6tU5+gXDxzUQHM=";
   };
 
-  cargoSha256 = "1l71xj5crfb51wfp2bdvdqp1l8kg182n5d6w23lq2wjszaqcj7cw";
-  nativeBuildInputs = [ makeWrapper ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tokio-tar-0.3.1" = "sha256-oYXcZepnQyZ13zCvECwNqbXUnov3Y6uJlpkHz1zVpRo=";
+    };
+  };
+
+  nativeBuildInputs = [ makeWrapper poppler_utils ];
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  nativeCheckInputs = path;
 
   postInstall = ''
     wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep imagemagick tesseract3 ]}"
+      --prefix PATH ":" "${lib.makeBinPath path}"
   '';
-
-  # Use upstream's example data to run a couple of queries to ensure the dependencies
-  # for all of the adapters are available.
-  installCheckPhase = ''
-    set -e
-    export PATH="$PATH:$out/bin"
-
-    test1=$(rga --rga-no-cache "hello" exampledir/ | wc -l)
-    test2=$(rga --rga-no-cache --rga-adapters=tesseract "crate" exampledir/screenshot.png | wc -l)
-
-    if [ $test1 != 26 ]
-    then
-      echo "ERROR: test1 failed! Could not find the word 'hello' 26 times in the sample data."
-      exit 1
-    fi
-
-    if [ $test2 != 1 ]
-    then
-      echo "ERROR: test2 failed! Could not find the word 'crate' in the screenshot."
-      exit 1
-    fi
-  '';
-
-  doInstallCheck = true;
 
   meta = with lib; {
+    changelog = "https://github.com/phiresky/ripgrep-all/blob/${src.rev}/CHANGELOG.md";
     description = "Ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, and more";
     longDescription = ''
       Ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, etc.

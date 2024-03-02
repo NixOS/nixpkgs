@@ -1,5 +1,5 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, stdenvNoCC, cmake, ninja
-, gccForLibs, preLibcCrossHeaders
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+, preLibcCrossHeaders
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -54,51 +54,16 @@ in
 let
   monorepoSrc' = monorepoSrc;
 in let
-  releaseInfo = if gitRelease != null then rec {
-    original = gitRelease;
-    release_version = original.version;
-    version = gitRelease.rev-version;
-  } else rec {
-    original = officialRelease;
-    release_version = original.version;
-    version = if original ? candidate then
-      "${release_version}-${original.candidate}"
-    else
-      release_version;
-  };
-
-  monorepoSrc = if monorepoSrc' != null then
-    monorepoSrc'
-  else let
-    sha256 = releaseInfo.original.sha256;
-    rev = if gitRelease != null then
-      gitRelease.rev
-    else
-      "llvmorg-${releaseInfo.version}";
-  in fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    inherit rev sha256;
-  };
-
+  # Import releaseInfo separately to avoid infinite recursion
+  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
   inherit (releaseInfo) release_version version;
+  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
-  llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = lib.teams.llvm.members;
-
-    # See llvm/cmake/config-ix.cmake.
-    platforms   =
-      lib.platforms.aarch64 ++
-      lib.platforms.arm ++
-      lib.platforms.m68k ++
-      lib.platforms.mips ++
-      lib.platforms.power ++
-      lib.platforms.riscv ++
-      lib.platforms.s390x ++
-      lib.platforms.wasi ++
-      lib.platforms.x86;
-  };
+  lldbPlugins = lib.makeExtensible (lldbPlugins: let
+    callPackage = newScope (lldbPlugins // { inherit stdenv; inherit (tools) lldb; });
+  in {
+    llef = callPackage ../common/lldb-plugins/llef.nix {};
+  });
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
@@ -192,17 +157,18 @@ in let
       '') { };
       patches =
         let
-          resourceDirPatch = callPackage ({ runCommand, libclang }: (runCommand "resource-dir.patch"
-            {
-              clangLibDir = "${libclang.lib}/lib";
-            } ''
-            substitute '${./lldb/resource-dir.patch}' "$out" --subst-var clangLibDir
-          '')) { };
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
         in
         [
           # FIXME: do we need this? ./procfs.patch
           resourceDirPatch
-          ./lldb/gnu-install-dirs.patch
+          ../common/lldb/gnu-install-dirs.patch
         ]
         # This is a stopgap solution if/until the macOS SDK used for x86_64 is
         # updated.
@@ -218,7 +184,7 @@ in let
             && !stdenv.targetPlatform.isAarch64
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
-      inherit llvm_meta release_version;
+      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -228,7 +194,7 @@ in let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;
@@ -260,6 +226,7 @@ in let
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -270,11 +237,13 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-        "-nostdlib++"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+          "-nostdlib++"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -285,10 +254,12 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoCompilerRt = wrapCCWith rec {
@@ -297,17 +268,29 @@ in let
       bintools = bintoolsNoLibc';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-      nixSupport.cc-cflags = [ "-nostartfiles" ];
+      nixSupport.cc-cflags =
+        [
+          "-nostartfiles"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
-    clangNoCompilerRtWithLibc = wrapCCWith rec {
+    clangNoCompilerRtWithLibc = wrapCCWith (rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = bintools';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-    };
+    } // lib.optionalAttrs stdenv.targetPlatform.isWasm {
+      nixSupport.cc-cflags = [ "-fno-exceptions" ];
+    });
 
+    # Has to be in tools despite mostly being a library,
+    # because we use a native helper executable from a
+    # non-cross build in cross builds.
+    libclc = callPackage ../common/libclc.nix {
+      inherit buildLlvmTools;
+    };
   });
 
   libraries = lib.makeExtensible (libraries: let
@@ -316,7 +299,7 @@ in let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
@@ -329,7 +312,7 @@ in let
     };
 
     # N.B. condition is safe because without useLLVM both are the same.
-    compiler-rt = if stdenv.hostPlatform.isAndroid
+    compiler-rt = if stdenv.hostPlatform.isAndroid || stdenv.hostPlatform.isDarwin
       then libraries.compiler-rt-libc
       else libraries.compiler-rt-no-libc;
 
@@ -392,5 +375,6 @@ in let
       inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // libraries // tools
+in { inherit tools libraries release_version lldbPlugins; } // (noExtend libraries) // (noExtend tools)

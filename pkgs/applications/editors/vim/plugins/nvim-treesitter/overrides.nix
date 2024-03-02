@@ -35,10 +35,10 @@ let
   # or for all grammars:
   # pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   withPlugins =
-    f: self.nvim-treesitter.overrideAttrs (_: {
+    f: self.nvim-treesitter.overrideAttrs {
       passthru.dependencies = map grammarToPlugin
         (f (tree-sitter.builtGrammars // builtGrammars));
-    });
+    };
 
   withAllGrammars = withPlugins (_: allGrammars);
 in
@@ -48,7 +48,7 @@ in
     rm -r parser
   '';
 
-  passthru = {
+  passthru = (super.nvim-treesitter.passthru or { }) // {
     inherit builtGrammars allGrammars grammarToPlugin withPlugins withAllGrammars;
 
     grammarPlugins = lib.mapAttrs (_: grammarToPlugin) generatedDerivations;

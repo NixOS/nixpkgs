@@ -1,20 +1,12 @@
-{
+{ hostPlatform
 }:
 
 rec {
-  name = "stage0-posix-${version}-${rev}-source";
-  # Pinned from https://github.com/oriansj/stage0-posix/commit/3189b5f325b7ef8b88e3edec7c1cde4fce73c76c
-  version = "unstable-2023-05-02";
-  rev = "3189b5f325b7ef8b88e3edec7c1cde4fce73c76c";
+  name = "stage0-posix-${version}-source";
+  version = "1.6.0";
+  rev = "Release_${version}";
   outputHashAlgo = "sha256";
-
-  # This 256 byte seed is the only pre-compiled binary in the bootstrap chain.
-  hex0-seed = import <nix/fetchurl.nix> {
-    name = "hex0-seed-${version}";
-    url = "https://github.com/oriansj/bootstrap-seeds/raw/b1263ff14a17835f4d12539226208c426ced4fba/POSIX/x86/hex0-seed";
-    hash = "sha256-QU3RPGy51W7M2xnfFY1IqruKzusrSLU+L190ztN6JW8=";
-    executable = true;
-  };
+  outputHash = "sha256-epUaShjKiAd749ICvc6rS6WhUkS8R4heKuPdwUjEtsQ=";
 
   /*
   Since `make-minimal-bootstrap-sources` requires nixpkgs and nix it
@@ -29,7 +21,7 @@ rec {
 
   Run the following command:
   ```
-  nix hash file $(nix build --print-out-paths -f '<nixpkgs>' make-minimal-bootstrap-sources)
+  nix hash path $(nix build --print-out-paths -f '<nixpkgs>' make-minimal-bootstrap-sources)
   ```
 
   # Why do we need this `.nar` archive?
@@ -71,11 +63,10 @@ rec {
   requirements above apply to `minimal-bootstrap-sources`.
   */
   minimal-bootstrap-sources = derivation {
-    name = "${name}.nar.xz";
-    system = builtins.currentSystem;
-    outputHashMode = "flat";
-    inherit outputHashAlgo;
-    outputHash = "sha256-ig988BiRTz92hhZZgKQW1tVPoV4aQ2D69Cq3wHvVgHg=";
+    inherit name;
+    system = hostPlatform.system;
+    outputHashMode = "recursive";
+    inherit outputHashAlgo outputHash;
 
     # This builder always fails, but fortunately Nix will print the
     # "builder", which is really the error message that we want the
@@ -85,22 +76,21 @@ rec {
       #
       # Neither your store nor your substituters seems to have:
       #
-      #  ${name}.nar.xz
+      #  ${builtins.placeholder "out"}
       #
-      # Please obtain or create this file, give it exactly the name
-      # shown above, and then run the following command:
-      #
-      #   nix-store --add-fixed ${outputHashAlgo} ${name}.nar.xz
-      #
-      # You can create this file from an already-bootstrapped nixpkgs
+      # You can create this path from an already-bootstrapped nixpkgs
       # using the following command:
       #
       #   nix-build '<nixpkgs>' -A make-minimal-bootstrap-sources
       #
       # Or, if you prefer, you can create this file using only `git`,
       # `nix`, and `xz`.  For the commands needed in order to do this,
-      # see `make-bootstrap-sources.nix`.
+      # see `make-bootstrap-sources.nix`.  Once you have the manual
+      # result, do:
       #
+      #   nix-store --add-fixed --recursive ${outputHashAlgo} ./${name}
+      #
+      # to add it to your store.
     '';
   };
 }

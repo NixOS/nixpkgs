@@ -6,21 +6,25 @@
 
 stdenv.mkDerivation rec {
   pname = "optipng";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/optipng/optipng-${version}.tar.gz";
-    sha256 = "0lj4clb851fzpaq446wgj0sfy922zs5l5misbpwv6w7qrqrz4cjg";
+    hash = "sha256-JaO9aEgfIVAsyqD0wT+E3PayAzjkxOjFHyzvvYUTOYw=";
   };
 
   buildInputs = [ libpng ];
 
-  LDFLAGS = lib.optional static "-static";
   # Workaround for crash in cexcept.h. See
   # https://github.com/NixOS/nixpkgs/issues/28106
   preConfigure = ''
     export LD=$CC
   '';
+
+  # OptiPNG does not like --static, --build or --host
+  dontDisableStatic = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [ ];
 
   configureFlags = [
     "--with-system-zlib"
@@ -38,5 +42,6 @@ stdenv.mkDerivation rec {
     description = "A PNG optimizer";
     license = licenses.zlib;
     platforms = platforms.unix;
+    mainProgram = "optipng";
   };
 }

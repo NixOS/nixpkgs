@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "devtools";
-  version = "0.10.0";
+  version = "0.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-${pname}";
-    rev = "v${version}";
-    hash = "sha256-x9dL/FE94OixMAmjnmfzZUcYJBqE5P2AAIFsNJF0Fxo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
   };
 
   nativeBuildInputs = [
@@ -47,10 +47,15 @@ buildPythonPackage rec {
   disabledTests = [
     # Test for Windows32
     "test_print_subprocess"
-    # sensitive to timing
+    # Sensitive to timing
     "test_multiple_not_verbose"
-    # sensitive to interpreter output
-    "test_simple_vars"
+    # Sensitive to interpreter output
+    "test_simple"
+  ];
+
+  disabledTestPaths = [
+    # pytester_pretty is not available in Nixpkgs
+    "tests/test_insert_assert.py"
   ];
 
   pythonImportsCheck = [

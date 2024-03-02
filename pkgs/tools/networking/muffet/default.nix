@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "muffet";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "muffet";
     rev = "v${version}";
-    hash = "sha256-68M/c1qA1JcW2usGMmlKSZRYtFSxn6zHanFepljlw9Q=";
+    hash = "sha256-kwEHabQYAaxC8nKewc5XHZnSvUSEQRw7qg0jtJoOw9g=";
   };
 
-  vendorHash = "sha256-NTQlhLlSPh9+Il08T9I2qc+BqIo9RniOFG9Dgeez1QA=";
+  vendorHash = "sha256-GNwyQHqyfuzKnNAv5gpZFmhSq+jIHdfeceLSD9UphdA=";
 
   meta = with lib; {
     description = "A website link checker which scrapes and inspects all pages in a website recursively";
@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/raviqqe/muffet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "muffet";
   };
 }

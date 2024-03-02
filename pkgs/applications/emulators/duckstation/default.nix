@@ -8,76 +8,78 @@
 , curl
 , extra-cmake-modules
 , libXrandr
-, makeDesktopItem
-, mesa # for libgbm
+, libbacktrace
+, makeWrapper
 , ninja
 , pkg-config
 , qtbase
 , qtsvg
 , qttools
 , qtwayland
+, substituteAll
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
-, enableWayland ? true
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
-  version = "unstable-2023-04-14";
+  version = "0.1-6292";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = "duckstation";
-    rev = "5fee6f5abee7f3aad65da5523e57896e10e2a53a";
-    sha256 = "sha256-sRs/b4GVXhF3zrOef8DSBKJJGYECUER/nNWZAqv7suA=";
+    rev = "0bc42c38aab49030118f507c9783de047769148b";
+    hash = "sha256-8OavixSwEWihFY2fEdsepR1lqWlTH+//xZRKwb7lFCQ=";
   };
+
+  patches = [
+    # Tests are not built by default
+    ./001-fix-test-inclusion.diff
+    # Patching yet another script that fills data based on git commands...
+    (substituteAll {
+      src = ./002-hardcode-vars.diff;
+      gitHash = finalAttrs.src.rev;
+      gitBranch = "master";
+      gitTag = "${finalAttrs.version}-g0bc42c38";
+      gitDate = "2024-02-06T22:47:47+09:00";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     copyDesktopItems
+    extra-cmake-modules
     ninja
     pkg-config
     qttools
     wrapQtAppsHook
-  ]
-  ++ lib.optionals enableWayland [
-    extra-cmake-modules
   ];
 
   buildInputs = [
     SDL2
     curl
     libXrandr
-    mesa
+    libbacktrace
     qtbase
     qtsvg
-    vulkan-loader
-  ]
-  ++ lib.optionals enableWayland [
     qtwayland
     wayland
   ]
   ++ cubeb.passthru.backendLibs;
 
-  cmakeFlags = [
-    "-DUSE_DRMKMS=ON"
-  ]
-  ++ lib.optionals enableWayland [ "-DUSE_WAYLAND=ON" ];
+  strictDeps = true;
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "duckstation-qt";
-      desktopName = "DuckStation";
-      genericName = "PlayStation 1 Emulator";
-      icon = "duckstation";
-      tryExec = "duckstation-qt";
-      exec = "duckstation-qt %f";
-      comment = "Fast PlayStation 1 emulator";
-      categories = [ "Game" "Emulator" "Qt" ];
-      type = "Application";
-    })
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTS" true)
   ];
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    bin/common-tests
+    runHook postCheck
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -87,27 +89,35 @@ stdenv.mkDerivation {
     cp -r bin $out/share/duckstation
     ln -s $out/share/duckstation/duckstation-qt $out/bin/
 
-    install -Dm644 bin/resources/images/duck.png $out/share/pixmaps/duckstation.png
+    install -Dm644 $src/scripts/org.duckstation.DuckStation.desktop $out/share/applications/org.duckstation.DuckStation.desktop
+    install -Dm644 $src/scripts/org.duckstation.DuckStation.png $out/share/pixmaps/org.duckstation.DuckStation.png
 
     runHook postInstall
   '';
 
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    bin/common-tests
-    runHook postCheck
+  qtWrapperArgs =
+    let
+      libPath = lib.makeLibraryPath ([
+        vulkan-loader
+      ] ++ cubeb.passthru.backendLibs);
+    in [
+      "--prefix LD_LIBRARY_PATH : ${libPath}"
+    ];
+
+  # https://github.com/stenzek/duckstation/blob/master/scripts/appimage/apprun-hooks/default-to-x11.sh
+  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
+  postFixup = ''
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/duckstation-qt \
+      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ vulkan-loader ] ++ cubeb.passthru.backendLibs)}"
-  ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stenzek/duckstation";
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ guibou AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "duckstation-qt";
+    maintainers = with lib.maintainers; [ guibou AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

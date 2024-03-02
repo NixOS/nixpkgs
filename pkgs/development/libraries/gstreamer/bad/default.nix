@@ -109,13 +109,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.22.4";
+  version = "1.22.9";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-6q9TIkVl6qvVBco5xtV2lxm0V5XPUyzhzrYOGy6+maw=";
+    hash = "sha256-G8ZdD9X1OjY2Vk79P88xjD7c3sOcQQmlA8H8ggOECh0=";
   };
 
   patches = [
@@ -142,7 +142,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     gst-plugins-base
     orc
     json-glib
@@ -192,6 +191,7 @@ stdenv.mkDerivation rec {
     libfreeaptx
     zxing-cpp
     usrsctp
+    wildmidi
   ] ++ lib.optionals opencvSupport [
     opencv4
   ] ++ lib.optionals enableZbar [
@@ -212,9 +212,6 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    # wildmidi requires apple's OpenAL
-    # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    wildmidi
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     mjpegtools
 
@@ -318,7 +315,6 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-    "-Dwildmidi=disabled" # see dependencies above
   ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [

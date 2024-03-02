@@ -26,7 +26,6 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
   ];
@@ -34,6 +33,9 @@ stdenv.mkDerivation {
   hardeningDisable = [ "fortify" ];
 
   meta = with lib; {
+    # Does not build against gcc-13. No development activity upstream
+    # for past few years.
+    broken = true;
     description = "Private, secure, untraceable currency";
     homepage = "http://www.aeon.cash/";
     license = licenses.bsd3;

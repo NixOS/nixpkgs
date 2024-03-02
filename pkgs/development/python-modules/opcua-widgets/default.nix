@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "opcua-widgets";
   version = "0.6.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     asyncua
   ];
 
-  pythonImportChecks = [ "opcua-widgets" ];
+  pythonImportsCheck = [ "uawidgets" ];
 
   #This test is broken, when updating this package check if the test was fixed.
   doCheck = false;

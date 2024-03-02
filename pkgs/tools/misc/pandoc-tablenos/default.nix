@@ -31,5 +31,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/tomduck/pandoc-tablenos";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ppenguin ];
+    mainProgram = "pandoc-tablenos";
   };
 }

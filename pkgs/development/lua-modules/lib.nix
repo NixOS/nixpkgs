@@ -74,22 +74,36 @@ rec {
       };
     });
 
-  /* generate luarocks config
 
-  generateLuarocksConfig {
-    externalDeps = [ { name = "CRYPTO"; dep = pkgs.openssl; } ];
-    rocksSubdir = "subdir";
-  };
+  /* generate a luarocks config conforming to:
+    https://github.com/luarocks/luarocks/wiki/Config-file-format
+
+    The config lists folders where to find lua dependencies
+
+    Example:
+      generateLuarocksConfig {
+        externalDeps = [ { name = "CRYPTO"; dep = pkgs.openssl; } ];
+        rocksSubdir = "subdir";
+      };
+
+    Type:
+       generateLuarocksConfig :: AttrSet -> String
   */
   generateLuarocksConfig = {
-      externalDeps
+      externalDeps ? []
     # a list of lua derivations
-    , requiredLuaRocks
-    , extraVariables ? {}
-    , rocksSubdir
-    }: let
+    , requiredLuaRocks ? []
+    , rocksSubdir ? "rocks-subdir"
+    , ...
+    }@args: let
       rocksTrees = lib.imap0
-        (i: dep: { name = "dep-${toString i}"; root = "${dep}"; rocks_dir = "${dep}/${dep.rocksSubdir}"; })
+        (i: dep: {
+          name = "dep-${toString i}";
+          root = "${dep}";
+          # packages built by buildLuaPackage or luarocks doesn't contain rocksSubdir
+          # hence a default here
+          rocks_dir = if dep ? rocksSubdir then "${dep}/${dep.rocksSubdir}" else "${dep.pname}-${dep.version}-rocks";
+        })
         requiredLuaRocks;
 
       # Explicitly point luarocks to the relevant locations for multiple-output
@@ -108,31 +122,37 @@ rec {
       externalDepsDirs = map
         (x: builtins.toString x)
         (lib.filter (lib.isDerivation) externalDeps);
-  in toLua { asBindings = true; } ({
-    local_cache = "";
-    # To prevent collisions when creating environments, we install the rock
-    # files into per-package subdirectories
-    rocks_subdir = rocksSubdir;
-    # first tree is the default target where new rocks are installed,
-    # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
-    rocks_trees = (
-      [{name = "current"; root = "${placeholder "out"}"; rocks_dir = "current"; }] ++
-      rocksTrees
-    );
-  } // lib.optionalAttrs lua.pkgs.isLuaJIT {
-    # Luajit provides some additional functionality built-in; this exposes
-    # that to luarock's dependency system
-    rocks_provided = {
-      jit = "${lua.luaversion}-1";
-      ffi = "${lua.luaversion}-1";
-      luaffi = "${lua.luaversion}-1";
-      bit = "${lua.luaversion}-1";
-    };
-  } // {
-    # For single-output external dependencies
-    external_deps_dirs = externalDepsDirs;
-    # Some needed machinery to handle multiple-output external dependencies,
-    # as per https://github.com/luarocks/luarocks/issues/766
-    variables = (depVariables // extraVariables);
-  });
+
+      generatedConfig = ({
+        local_cache = "";
+
+        # To prevent collisions when creating environments, we install the rock
+        # files into per-package subdirectories
+        rocks_subdir = rocksSubdir;
+
+        # first tree is the default target where new rocks are installed,
+        # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
+        rocks_trees = (
+          [{name = "current"; root = "${placeholder "out"}"; rocks_dir = "current"; }] ++
+          rocksTrees
+        );
+      } // lib.optionalAttrs lua.pkgs.isLuaJIT {
+        # Luajit provides some additional functionality built-in; this exposes
+        # that to luarock's dependency system
+        rocks_provided = {
+          jit = "${lua.luaversion}-1";
+          ffi = "${lua.luaversion}-1";
+          luaffi = "${lua.luaversion}-1";
+          bit = "${lua.luaversion}-1";
+        };
+      } // {
+        # For single-output external dependencies
+        external_deps_dirs = externalDepsDirs;
+        # Some needed machinery to handle multiple-output external dependencies,
+        # as per https://github.com/luarocks/luarocks/issues/766
+        variables = depVariables;
+      }
+      // removeAttrs args [ "requiredLuaRocks" "externalDeps" ]
+      );
+  in generatedConfig;
 }

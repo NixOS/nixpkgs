@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonImportsCheckHook
+
+# build-system
+, setuptools
+
 # documentation build dependencies
 , sphinxHook
 # runtime dependencies
@@ -15,22 +18,20 @@
 
 buildPythonPackage rec {
   pname = "sphinx-tabs";
-  version = "3.4.1";
+  version = "3.4.5";
+  format = "pyproject";
+
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-tabs";
-    rev = "v${version}";
-    hash = "sha256-5lpo7NRCksXJOdbLSFjDxQV/BsxRBb93lA6tavz6YEs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uFSnIhvnmg3ZURJGbSOUpLVx0EDUs/9SewspM7gtNRk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'docutils~=0.18.0' 'docutils'
-  '';
-
   nativeBuildInputs = [
-    pythonImportsCheckHook
+    setuptools
     sphinxHook
   ];
 

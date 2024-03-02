@@ -7,7 +7,7 @@
 }:
 
 let
-  self = stdenv.mkDerivation (rec {
+  self = stdenv.mkDerivation (finalAttrs: rec {
     pname = "clang";
     inherit version;
 
@@ -51,11 +51,10 @@ let
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
       ../../common/clang/add-nostdlibinc-flag.patch
-      # FIMXE: do we need this patch?
-      # (substituteAll {
-      #   src = ../../clang-11-12-LLVMgold-path.patch;
-      #  libllvmLibdir = "${libllvm.lib}/lib";
-      # })
+      (substituteAll {
+        src = ../../common/clang/clang-at-least-16-LLVMgold-path.patch;
+       libllvmLibdir = "${libllvm.lib}/lib";
+      })
     ];
 
     postPatch = ''
@@ -92,7 +91,12 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [ "fortify3" ];
+      hardeningUnsupportedFlags = [
+        "fortify3"
+      ];
+      hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
+        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
     };
 
     meta = llvm_meta // {

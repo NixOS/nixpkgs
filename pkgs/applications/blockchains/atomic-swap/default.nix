@@ -1,8 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
 
 let
   pname = "atomic-swap";
-  version = "0.4.0";
+  version = "0.4.3";
 in
 buildGoModule {
   inherit pname version;
@@ -11,16 +11,22 @@ buildGoModule {
     owner = "AthanorLabs";
     repo = "atomic-swap";
     rev = "v${version}";
-    hash = "sha256-wVLufTC7WcRELhzebzLgIUvIWklEY+8/C41FluPkya0=";
+    hash = "sha256-MOylUZ6BrvlxUrsZ5gg3JzW9ROG5UXeGhq3YoPZKdHs=";
   };
 
-  vendorSha256 = "sha256-igHuklt76r7MDxz8TAaFgFdQS7L3DJkMYarAMNVYTC4=";
+  vendorHash = "sha256-fGQ6MI+3z7wRL0y7AUERVtN0V2rcRa+vqeB8+3FMzzc=";
 
   subPackages = [
     "cmd/swapcli"
     "cmd/swapd"
     "cmd/bootnode"
   ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/swapd --prefix PATH : ${lib.makeBinPath [ monero-cli ]}
+  '';
 
   # integration tests require network access
   doCheck = false;
@@ -30,7 +36,7 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/AthanorLabs/atomic-swap";
     description = "ETH-XMR atomic swap implementation";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ happysalada ];
+    license = with licenses; [ lgpl3Only ];
+    maintainers = with maintainers; [ happysalada lord-valen ];
   };
 }

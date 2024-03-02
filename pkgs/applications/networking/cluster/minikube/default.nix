@@ -7,14 +7,17 @@
 , which
 , libvirt
 , vmnet
+, withQemu ? false
+, qemu
 , makeWrapper
+, OVMF
 }:
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.30.1";
+  version = "1.32.0";
 
-  vendorHash = "sha256-616T47H+8FdXU37MDvAHRyM59JXurU45uz8c/TNxkkc=";
+  vendorHash = "sha256-MzB+my1NwvZx9qfojuOlTHmuY6CyLFlrgr4UEuC5FBk=";
 
   doCheck = false;
 
@@ -22,8 +25,24 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-dw+aFckp5Q9i6bNKPetw2WlslrpKAgEzXI+aGAwDurU=";
+    sha256 = "sha256-2EWaMpcr4F1wRzIP1rPg1a/Sjd1x+oo2ee90k4Ie8cU=";
   };
+  postPatch =
+    (
+      lib.optionalString (withQemu && stdenv.isDarwin) ''
+        substituteInPlace \
+          pkg/minikube/registry/drvs/qemu2/qemu2.go \
+          --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
+          --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
+      ''
+    ) + (
+      lib.optionalString (withQemu && stdenv.isLinux) ''
+        substituteInPlace \
+          pkg/minikube/registry/drvs/qemu2/qemu2.go \
+          --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
+          --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
+      ''
+    );
 
   nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
 

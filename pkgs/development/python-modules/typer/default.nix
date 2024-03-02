@@ -28,6 +28,15 @@ buildPythonPackage rec {
     hash = "sha256-UJIv15rqL0dRqOBAj/ENJmK9DIu/qEdVppnzutopeLI=";
   };
 
+  patches = [
+    # https://github.com/tiangolo/typer/pull/651
+    (fetchpatch {
+      name = "unpin-flit-core-dependency.patch";
+      url = "https://github.com/tiangolo/typer/commit/78a0ee2eec9f54ad496420e177fdaad84984def1.patch";
+      hash = "sha256-VVUzFvF2KCXXkCfCU5xu9acT6OLr+PlQQPeVGONtU4A=";
+    })
+  ];
+
   nativeBuildInputs = [
     flit-core
   ];
@@ -58,8 +67,8 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_scripts"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # likely related to https://github.com/sarugaku/shellingham/issues/35
+    # Likely related to https://github.com/sarugaku/shellingham/issues/35
+    # fails also on Linux
     "test_show_completion"
     "test_install_completion"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [

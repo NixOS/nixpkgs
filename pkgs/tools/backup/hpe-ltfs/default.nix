@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "193593hsc8nf5dn1fkxhzs1z4fpjh64hdkc8q6n9fgplrpxdlr4s";
   };
 
-  sourceRoot = "source/ltfs";
+  sourceRoot = "${src.name}/ltfs";
 
   # include sys/sysctl.h is deprecated in glibc. The sysctl calls are only used
   # for Apple to determine the kernel version. Because this build only targets

@@ -8,7 +8,6 @@
 , openssl
 , bash
 , nixosTests
-, writeTextDir
 }:
 
 stdenv.mkDerivation rec {

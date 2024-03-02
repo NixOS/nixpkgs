@@ -15,17 +15,22 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.9";
-  format = "pyproject";
+  version = "0.3.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
+    repo = "aiomysensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hLUITEPUoUKGqN3AnacahnKwoKdfGN3mp34df74gsbE=";
+    hash = "sha256-2i2QodEWOZ/nih6ap5ovWuKxILB5arusnqOiOlb4xWM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=src --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -44,12 +49,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=src --cov-report=term-missing:skip-covered" "" \
-      --replace 'marshmallow = "^3.17"' 'marshmallow = "*"'
-  '';
 
   pythonImportsCheck = [
     "aiomysensors"

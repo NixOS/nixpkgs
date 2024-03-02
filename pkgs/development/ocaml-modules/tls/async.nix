@@ -3,10 +3,9 @@
 buildDunePackage rec {
   pname = "tls-async";
 
-  inherit (tls) src meta version;
+  inherit (tls) src version;
 
-  minimalOCamlVersion = "4.11";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.14";
 
   doCheck = true;
 
@@ -18,4 +17,8 @@ buildDunePackage rec {
     mirage-crypto-rng-async
     tls
   ];
+
+  meta = tls.meta // {
+    description = "Transport Layer Security purely in OCaml, Async layer";
+  };
 }

@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "9.1";
+  version = "9.2";
   pname = "tab";
 
   src = fetchFromGitHub {
     owner = "ivan-tkatchev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AhgWeV/ojB8jM16A5ggrOD1YjWfRVcoQbkd3S2bgdyE=";
+    hash = "sha256-UOXfnpzYMKDdp8EeBo2HsVPGn61hkCqHe8olX9KAgOU=";
   };
 
   # gcc12; see https://github.com/ivan-tkatchev/tab/commit/673bdac998

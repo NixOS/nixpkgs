@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "amaranth-boards";
   version = "unstable-2021-12-17";
+  format = "setuptools";
   # python setup.py --version
   realVersion = "0.1.dev202+g${lib.substring 0 7 src.rev}";
 

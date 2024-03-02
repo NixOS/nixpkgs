@@ -1,22 +1,48 @@
-{ stdenv, pkgsHostTarget, cmake, makeWrapper, mkDerivation, fetchFromGitHub
-, alex, array, base, bytestring, cond, containers, directory, extra
-, filepath, hpack, hspec, hspec-core, isocline, json, lib, mtl
-, parsec, process, regex-compat, text, time }:
+{ stdenv
+, pkgsHostTarget
+, cmake
+, makeWrapper
+, mkDerivation
+, fetchFromGitHub
+, alex
+, lib
+, hpack
+, aeson
+, array
+, async
+, base
+, bytestring
+, co-log-core
+, cond
+, containers
+, directory
+, FloatingHex
+, isocline
+, lens
+, lsp
+, mtl
+, network
+, network-simple
+, parsec
+, process
+, text
+, text-rope
+, time
+}:
 
 let
-  version = "2.4.0";
+  version = "3.1.0";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-+evs5g0qrplUMr8zC51GvUx2JXQBYJb39IaI4rC6CSA=";
+    sha256 = "sha256-Twm2Hr8BQ0xTdA30e2Az/57525jTUkmv2Zs/+SNiQns=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
     pname = "kklib";
     inherit version;
     src = "${src}/kklib";
-    patches = [ ./kklib-mimalloc-macos-fix.diff ];
     nativeBuildInputs = [ cmake ];
     outputs = [ "out" "dev" ];
     postInstall = ''
@@ -39,8 +65,28 @@ mkDerivation rec {
   isExecutable = true;
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
-    array base bytestring cond containers directory isocline mtl
-    parsec process text time kklib
+    aeson
+    array
+    async
+    base
+    bytestring
+    co-log-core
+    cond
+    containers
+    directory
+    FloatingHex
+    isocline
+    lens
+    lsp
+    mtl
+    network
+    network-simple
+    parsec
+    process
+    text
+    text-rope
+    time
+    kklib
   ];
   executableToolDepends = [ alex makeWrapper ];
   postInstall = ''

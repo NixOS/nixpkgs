@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, pythonAtLeast
 , fetchFromGitHub
 , substituteAll
 , gdb
@@ -19,18 +18,16 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.7";
+  version = "1.8.0";
   format = "setuptools";
 
-  # Currently doesn't support 3.11:
-  # https://github.com/microsoft/debugpy/issues/1107
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-porQTFvcLaIkvhWPM4vWR0ohlcFRkRwSLpQJNg25Tj4=";
+    hash = "sha256-FW1RDmj4sDBS0q08C82ErUd16ofxJxgVaxfykn/wVBA=";
   };
 
   patches = [
@@ -91,11 +88,8 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    # Scale default timeouts by a factor of 4 to avoid flaky builds
-    # https://github.com/microsoft/debugpy/pull/1286 if merged would
-    # allow us to disable the timeouts altogether
-    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=60
-    export DEBUGPY_PROCESS_EXIT_TIMEOUT=20
+    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
+    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
@@ -114,8 +108,8 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # https://github.com/microsoft/debugpy/issues/1241
-    "test_flask_breakpoint_multiproc"
+    # testsuite gets stuck at this one
+    "test_attach_pid_client"
   ];
 
   pythonImportsCheck = [

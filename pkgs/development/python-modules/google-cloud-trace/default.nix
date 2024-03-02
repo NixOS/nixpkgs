@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.11.1";
-  format = "setuptools";
+  version = "1.13.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-twaJlx/2W1BQCWZMTQbZOp74oFecL2vwZkAxK/XwE8E=";
+    hash = "sha256-3Iy7ke+2sH+S/xkjjfD4snLRt9B0Zew52qcwSryyDNU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -50,9 +55,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Trace API client library";
-    homepage = "https://github.com/googleapis/python-trace";
-    changelog = "https://github.com/googleapis/python-trace/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

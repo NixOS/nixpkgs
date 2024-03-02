@@ -9,15 +9,15 @@
 , stdenv
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libremidi";
-  version = "unstable-2023-05-05";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "jcelerier";
     repo = "libremidi";
-    rev = "cd2e52d59c8ecc97d751619072c4f4271fa82455";
-    hash = "sha256-CydoCprxqDl5FXjtgT+AckaRTqQAlCDwwrnPDK17A6o=";
+    rev = "v${version}";
+    hash = "sha256-AWONCZa4tVZ7HMze9WSVzHQUXIrn1i6ZZ4Hgufkrep8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A modern C++ MIDI real-time & file I/O library";
     homepage = "https://github.com/jcelerier/libremidi";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
   };

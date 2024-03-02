@@ -17,6 +17,7 @@
 , UserNotifications
 , WebKit
 , ui ? false
+, netbird-ui
 }:
 let
   modules =
@@ -30,16 +31,16 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.21.7";
+  version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-y/1RWywWgDpklG6I58J//6IngdEgAQtsGEAS1z2X/M4=";
+    hash = "sha256-fnKrv8bMONZbZGZtCQUAeGo3OIvOIqLX3nvVfGhYoK8=";
   };
 
-  vendorHash = "sha256-R5LhqW6uh7R8/vr60Sy0kVpAaTL3rwh5c4Ix08Rx6Zk=";
+  vendorHash = "sha256-Zp8LAaADpSa/wfnLAQVJ8cG3bMkC7ZU1BT+Dz214c34=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
@@ -72,9 +73,9 @@ buildGoModule rec {
   postPatch = ''
     # make it compatible with systemd's RuntimeDirectory
     substituteInPlace client/cmd/root.go \
-      --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
+      --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
     substituteInPlace client/ui/client_ui.go \
-      --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
+      --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
   '';
 
   postInstall = lib.concatStringsSep "\n"
@@ -89,17 +90,18 @@ buildGoModule rec {
       '')
       modules) + lib.optionalString (stdenv.isLinux && ui) ''
     mkdir -p $out/share/pixmaps
-    cp $src/client/ui/disconnected.png $out/share/pixmaps/netbird.png
+    cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
 
     mkdir -p $out/share/applications
     cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
 
     substituteInPlace $out/share/applications/netbird.desktop \
-      --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
+      --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
   '';
 
   passthru = {
     tests.netbird = nixosTests.netbird;
+    tests.netbird-ui = netbird-ui;
     updateScript = nix-update-script { };
   };
 
@@ -109,5 +111,6 @@ buildGoModule rec {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [ misuzu ];
+    mainProgram = "netbird";
   };
 }

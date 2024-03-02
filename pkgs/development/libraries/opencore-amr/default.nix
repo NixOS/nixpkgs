@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "opencore-amr";
-  version = "0.1.5";
+  version = "0.1.6";
   src = fetchurl {
-    url = "https://vorboss.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-${version}.tar.gz";
-    sha256 = "0hfk9khz3by0119h3jdwgdfd7jgkdbzxnmh1wssvylgnsnwnq01c";
+    url = "mirror://sourceforge/opencore-amr/opencore-amr/opencore-amr-${version}.tar.gz";
+    hash = "sha256-SD60BhCI4rNLNY5HVAtdSVqWzUaONhBQ+uYVsYCdxKE=";
   };
 
   meta = {

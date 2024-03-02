@@ -58,5 +58,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/Kentzo/git-archive-all";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "git-archive-all";
   };
 }

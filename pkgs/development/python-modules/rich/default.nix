@@ -2,10 +2,20 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, markdown-it-py
+
+# build-system
 , poetry-core
+
+# dependencies
+, markdown-it-py
 , pygments
 , typing-extensions
+
+# optional-dependencies
+, ipywidgets
+
+# tests
+, attrs
 , pytestCheckHook
 , setuptools
 
@@ -18,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.3.5";
+  version = "13.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +37,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PnyO5u0gxfYKT6xr0k3H0lbLl9wKPl6oxR1mM9A0Hys=";
+    hash = "sha256-L72an7vHC+aBj8NlLOjofDrQGvmFxJpdbfiEubfg0GM=";
   };
 
   nativeBuildInputs = [
@@ -37,13 +47,34 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     markdown-it-py
     pygments
-    setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
+  passthru.optional-dependencies = {
+    jupyter = [
+      ipywidgets
+    ];
+  };
+
   nativeCheckInputs = [
+    attrs
     pytestCheckHook
+    setuptools
+  ];
+
+  disabledTests = [
+    # pygments 2.16 compat
+    # https://github.com/Textualize/rich/issues/3088
+    "test_card_render"
+    "test_markdown_render"
+    "test_markdown_render"
+    "test_python_render"
+    "test_python_render_simple"
+    "test_python_render_simple_passing_lexer_instance"
+    "test_python_render_indent_guides"
+    "test_option_no_wrap"
+    "test_syntax_highlight_ranges"
   ];
 
   pythonImportsCheck = [

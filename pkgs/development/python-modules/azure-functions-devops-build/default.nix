@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "0.0.22";
+  format = "setuptools";
   pname = "azure-functions-devops-build";
 
   src = fetchFromGitHub {

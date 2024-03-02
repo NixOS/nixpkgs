@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-6SNXVe6EfVwcXH9O6BxNw+v4/uhKhCtVS3XE2GTc2Sc=";
   };
 
-  vendorSha256 = "sha256-xEPmNnaDwFU4l2G4cMvtNeQ9KneF5g9ViQSFrDkrafY=";
+  vendorHash = "sha256-xEPmNnaDwFU4l2G4cMvtNeQ9KneF5g9ViQSFrDkrafY=";
 
   nativeBuildInputs = [ scdoc ];
 
@@ -44,5 +44,6 @@ buildGoModule rec {
     license = licenses.isc;
     maintainers = [ maintainers.ajgrf ];
     platforms = platforms.linux;
+    mainProgram = "darkman";
   };
 }

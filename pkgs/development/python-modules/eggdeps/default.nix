@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_interface
-, zope_testing
+, zope-interface
+, zope-testing
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "a094ed7961a3dd38fcaaa69cf7a58670038acdff186360166d9e3d964b7a7323";
   };
 
-  propagatedBuildInputs = [ zope_interface zope_testing ];
+  propagatedBuildInputs = [ zope-interface zope-testing ];
 
   # tests fail, see https://hydra.nixos.org/build/4316603/log/raw
   doCheck = false;

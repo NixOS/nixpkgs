@@ -11,6 +11,8 @@ let
   data = lib.importJSON ./pin.json;
 in
 mkYarnPackage rec {
+  inherit nodejs;
+
   pname = "matrix-appservice-slack";
   version = data.version;
 
@@ -19,7 +21,7 @@ mkYarnPackage rec {
     owner = "matrix-org";
     repo = "matrix-appservice-slack";
     rev = data.version;
-    sha256 = data.srcHash;
+    hash = data.srcHash;
   };
 
   offlineCache = fetchYarnDeps {

@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "surrealdb";
-  version = "1.0.0-beta.9";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
     rev = "v${version}";
-    sha256 = "sha256-GgRsRGYnaE2TssoXdubEuMEbLjM4woE3vxTxSlufquU=";
+    hash = "sha256-ICQvAyBV+7cyHiwwiPEaoGT/W/pM4yiSpqByzkByRK4=";
   };
 
-  cargoSha256 = "sha256-eLJ+sxsK45pkgNUYrNuUOAqutwIjvEhGGjsvwGzfVKI=";
+  cargoHash = "sha256-a9ZRr6U7mKCk2uaXJmCJMaCQxJ9adbRLMRUpJrsookk=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -42,6 +42,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+
+  checkFlags = [
+    # flaky
+    "--skip=ws_integration::none::merge"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = surrealdb;

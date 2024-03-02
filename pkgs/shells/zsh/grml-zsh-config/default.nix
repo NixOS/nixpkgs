@@ -5,13 +5,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "grml-zsh-config";
-  version = "0.19.5";
+  version = "0.19.7";
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
-    sha256 = "sha256-/phoIi8amqdO+OK26+CE2OXwHTE71PaV9NIXEnGl6Co=";
+    sha256 = "sha256-XHuoafb1Wc8dUPrk/7jwYhlRQm76qcbQy2vHECm0Iuo=";
   };
 
   strictDeps = true;

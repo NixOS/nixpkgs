@@ -35,6 +35,7 @@
 , libXau
 , libinput
 , libdrm
+, libei
 , gsettings-desktop-schemas
 , glib
 , atk
@@ -66,13 +67,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "44.2";
+  version = "45.4";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "N1ZtflXJPciJTpx/I6e6WHmoswuvZVWCIwCdK0Z0AqE=";
+    sha256 = "kRQIN74VWC8sdTvmYauOQtrVXUobDwZQvQssk/Ar16s=";
   };
 
   mesonFlags = [
@@ -108,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     gi-docgen
     xorgserver
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -116,13 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     gsettings-desktop-schemas
     atk
     fribidi
     harfbuzz
     libcanberra
     libdrm
+    libei
     libgudev
     libinput
     libstartup_notification
@@ -170,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-12/doc" "$devdoc"
+    moveToOutput "share/mutter-13/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -179,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-12";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-13";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

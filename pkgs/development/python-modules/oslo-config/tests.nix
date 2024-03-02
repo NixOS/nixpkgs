@@ -9,11 +9,10 @@
 , testscenarios
 }:
 
-buildPythonPackage rec {
-  pname = "oslo-config-tests";
-  inherit (oslo-config) version;
-
-  src = oslo-config.src;
+buildPythonPackage {
+pname = "oslo-config-tests";
+  inherit (oslo-config) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

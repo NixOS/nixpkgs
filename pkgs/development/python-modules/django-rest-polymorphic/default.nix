@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "django-rest-polymorphic";
   version = "0.1.10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "apirobot";
@@ -41,6 +42,6 @@ buildPythonPackage rec {
     description = "Polymorphic serializers for Django REST Framework";
     homepage = "https://github.com/apirobot/django-rest-polymorphic";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "jsbeautifier";
-  version = "1.14.8";
+  version = "1.14.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1MTiY6Qt1hlK+52+VHEL48VgRJLL7D6JyS3ZhRP5i58=";
+    hash = "sha256-a2Mlgepg3RwTPNJaSK0Ye0uR9SZiPEsPtUQ++AUlBQU=";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, protobufc
 , libunwind, lzo, openssl, protobuf, zlib
 }:

@@ -1,19 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, Carbon }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, Carbon
+, Cocoa
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "skhd";
-  version = "0.3.5";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0x099979kgpim18r0vi9vd821qnv0rl3rkj0nd1nx3wljxgf7mrg";
+    repo = "skhd";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fnkWws/g4BdHKDRhqoCpdPFUavOHdk8R7h7H1dAdAYI=";
   };
 
-  buildInputs = [ Carbon ];
+  buildInputs = [
+    Carbon
+    Cocoa
+  ];
 
-  makeFlags = [ "BUILD_PATH=$(out)/bin" ];
+  makeFlags = [
+    "BUILD_PATH=$(out)/bin"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   postInstall = ''
     mkdir -p $out/Library/LaunchDaemons
@@ -21,11 +34,17 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.skhd.plist --subst-var out
   '';
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "skhd-v${finalAttrs.version}";
+  };
+
+  meta = {
     description = "Simple hotkey daemon for macOS";
     homepage = "https://github.com/koekeishiya/skhd";
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ cmacrae lnl7 periklis ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    mainProgram = "skhd";
+    maintainers = with lib.maintainers; [ cmacrae lnl7 periklis khaneliman ];
+    platforms = lib.platforms.darwin;
   };
-}
+})

@@ -6,9 +6,10 @@
 
 buildPythonPackage rec {
   pname = "cirq-pasqal";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \

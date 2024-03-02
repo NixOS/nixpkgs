@@ -7,13 +7,20 @@
 
 stdenv.mkDerivation rec {
   pname = "lzip";
-  version = "1.23";
+  version = "1.24";
   outputs = [ "out" "man" "info" ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-R5LAR93xXvKdVbqOaKGiHgy3aS2H7N9yBEGYZFgvKA0=";
+    sha256 = "sha256-1CZZIpsQ4GbutugetnPN2JO2cuUS0mcZwtlZdVVspWw=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+    ./mingw-install-exe-file.patch
+    # https://lists.nongnu.org/archive/html/lzip-bug/2024-02/msg00015.html
+    # patch provided by upstream, to be removed in the next release
+    ./mingw-mkdir-one-argument.patch
+  ];
 
   configureFlags = [
     "CPPFLAGS=-DNDEBUG"
@@ -33,5 +40,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ vlaci ];
     platforms = lib.platforms.all;
+    mainProgram = "lzip";
   };
 }

@@ -24,18 +24,23 @@
 , scdoc
 , vala
 , xvfb-run
+, sassc
+, pantheon
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mwwSTs4d9jUXUy33nSYJCRFlpH6naCmbRUSpfVacMBE=";
+    hash = "sha256-7O+DX4uuncUqx5zEKQprZE6tctteT6NU01V2EBHiFqA=";
   };
+
+  # build pkg-config is required to locate the native `scdoc` input
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     bash-completion
@@ -47,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ninja
     pkg-config
     python3
+    sassc
     scdoc
     vala
     wrapGAppsHook
@@ -64,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     libhandy
     libpulseaudio
     librsvg
+    pantheon.granite
     # systemd # ends with broken permission
   ];
 

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k6";
-  version = "0.45.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nZXNUAS5HZTEMQ/sjetE30s/etpX/Hwp7QqgtOl3Rqs=";
+    hash = "sha256-zlsHEAGsey+qe0s7sle9Kt/V0hTp6uzelJmRlATznUY=";
   };
 
   subPackages = [ "./" ];
@@ -34,6 +34,6 @@ buildGoModule rec {
     homepage = "https://k6.io/";
     changelog = "https://github.com/grafana/k6/releases/tag/v${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ offline bryanasdev000 ];
+    maintainers = with maintainers; [ offline bryanasdev000 kashw2 ];
   };
 }

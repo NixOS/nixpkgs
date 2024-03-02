@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , python3
 , cacert
@@ -7,25 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.1.4";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-McHzHK404kDB992T2f84dZHDxujpPIz4qglYMmv3kTw=";
+    hash = "sha256-JeEJ4xTIOFeMADnuPMLNGxB/qEPKMnaIhQ6FCUaNa7E=";
   };
-
-  pythonRelaxDeps = [
-    "aiofiles"
-    "argcomplete"
-    "msgspec"
-  ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -34,6 +26,9 @@ python3.pkgs.buildPythonApplication rec {
     aiosqlite
     argcomplete
     can
+    exitcode
+    platformdirs
+    psutil
     construct
     msgspec
     pydantic

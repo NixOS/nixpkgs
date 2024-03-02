@@ -17,19 +17,17 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.6";
-  format = "pyproject";
+  version = "3.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
     rev = "refs/tags/${version}";
-    hash = "sha256-oH+uxu61+d6qEQmT7joxwlyfpv7mF8ug6OzHmyUa95Y=";
+    hash = "sha256-anRNCnLDKHAEfOWi6m1n4R9lvFTlZgw5xxh39exvzH0=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

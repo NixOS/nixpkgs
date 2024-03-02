@@ -3,24 +3,18 @@
 , makeWrapper
 , fetchurl
 , makeDesktopItem
-, curl
-, dotnetCorePackages
 , lttng-ust_2_12
 , fontconfig
-, krb5
 , openssl
 , xorg
 , zlib
 }:
 
 let
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
   # These libraries are dynamically loaded by the application,
   # and need to be present in LD_LIBRARY_PATH
   runtimeLibs = [
-    curl
     fontconfig.lib
-    krb5
     openssl
     stdenv.cc.cc.lib
     xorg.libX11
@@ -31,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchurl {
     url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
-    sha256 = "sha256-RlWaeOK6XqxyCIQQp1/X6iG9t7f3ER5K+S3ZvPg6wBg=";
+    sha256 = "sha256-1AgX+Klw/IsRRBV2M1OkLGE4DPqq6hX2h72RNzad2DM=";
   };
 
   dontBuild = true;
@@ -58,8 +52,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications
     cp -Rv . $out/opt/${pname}
 
-    makeWrapper "${dotnet-runtime}/bin/dotnet" "$out/bin/${pname}" \
-      --add-flags "$out/opt/${pname}/WalletWasabi.Fluent.Desktop.dll" \
+    makeWrapper "$out/opt/${pname}/wassabee" "$out/bin/${pname}" \
+      --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
+
+    makeWrapper "$out/opt/${pname}/wassabeed" "$out/bin/${pname}d" \
       --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
 
     cp -v $desktopItem/share/applications/* $out/share/applications

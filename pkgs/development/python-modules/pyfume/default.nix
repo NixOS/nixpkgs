@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyfume";
-  version = "0.2.25";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyFUME";
     inherit version;
-    hash = "sha256-uD1IHFyNd9yv3eyHPZ4pg6X2+rLTY5sYsQysuIXbvfA=";
+    hash = "sha256-dZKp+BGwOSRlPcaDmY8LRJZEdJA3WaIGcBBOek5ZMf4=";
   };
 
   propagatedBuildInputs = [

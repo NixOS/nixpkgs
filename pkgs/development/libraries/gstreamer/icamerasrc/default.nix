@@ -8,15 +8,15 @@
 , libdrm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
-  version = "unstable-2023-03-09";
+  version = "unstable-2023-10-23";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "icamerasrc";
-    rev = "17841ab6249aaa69bd9b3959262bf182dee74111";
-    hash = "sha256-j8ZYe4nyy5yfo10CGeXDwbAaAPvdr0ptMWB8hQDyESQ=";
+    rev = "528a6f177732def4d5ebc17927220d8823bc8fdc";
+    hash = "sha256-Ezcm5OpF/NKvJf5sFeJyvNc2Uq0166GukC9MuNUV2Fs=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = [
+    "-Wno-error"
     # gstcameradeinterlace.cpp:55:10: fatal error: gst/video/video.h: No such file or directory
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
   ];

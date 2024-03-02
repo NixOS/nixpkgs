@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "bravia-tv";
   version = "1.0.11";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   version = "0.14.2";
+  format = "setuptools";
   pname = "hdmedians";
 
   src = fetchPypi {
@@ -30,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daleroberts/hdmedians";
     description = "High-dimensional medians";
     license = licenses.gpl3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

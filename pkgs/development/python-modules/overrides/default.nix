@@ -1,26 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "overrides";
-  version = "7.3.1";
-  format = "setuptools";
+  version = "7.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mkorpela";
-    repo = pname;
+    repo = "overrides";
     rev = "refs/tags/${version}";
-    hash = "sha256-mxMh1ifOnii2SqxYjupDKvslHVGwClGtRgyoJSCGfZo=";
+    hash = "sha256-UdahbhmRfuxKTxb6Afjny/hMgXX1UuDUrIcLjZ0Jtak=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # KeyError: 'assertRaises'
+    "test_enforcing_when_incompatible"
   ];
 
   pythonImportsCheck = [

@@ -1,19 +1,34 @@
-{ config, stdenv, lib, fetchurl, fetchpatch
-, perl, pkg-config
-, libcap, libtool, libxml2, openssl, libuv, nghttp2, jemalloc
-, enablePython ? false, python3
-, enableGSSAPI ? true, libkrb5
-, buildPackages, nixosTests
-, cmocka, tzdata
+{ stdenv
+, lib
+, fetchurl
+, perl
+, pkg-config
+, libcap
+, libidn2
+, libtool
+, libxml2
+, openssl
+, libuv
+, nghttp2
+, jemalloc
+, enablePython ? false
+, python3
+, enableGSSAPI ? true
+, libkrb5
+, buildPackages
+, nixosTests
+, cmocka
+, tzdata
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.16";
+  version = "9.18.24";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-yII0/gfudcPIqeWRUv7mS3FGQ96OIs+Y2j200LV+B3U=";
+    hash = "sha256-cJ1zAjyRFd2tO6tltsjHmlkBltDRFPXQyiUz29Ut32Y=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -23,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ perl pkg-config ];
-  buildInputs = [ libtool libxml2 openssl libuv nghttp2 jemalloc ]
+  buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
@@ -33,8 +48,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--without-lmdb"
+    "--with-libidn2"
   ] ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -63,7 +79,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   # TODO: investigate the aarch64-linux failures; see this and linked discussions:
   # https://github.com/NixOS/nixpkgs/pull/192962
-  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux);
+  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
+    # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
+    && !is32bit;
   checkTarget = "unit";
   checkInputs = [
     cmocka
@@ -73,13 +91,26 @@ stdenv.mkDerivation rec {
   preCheck = lib.optionalString stdenv.hostPlatform.isMusl ''
     # musl doesn't respect TZDIR, skip timezone-related tests
     sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Test timeouts on Darwin
+    sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) bind;
-    prometheus-exporter = nixosTests.prometheus-exporters.bind;
-    kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-    kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+  passthru = {
+    tests = {
+      inherit (nixosTests) bind;
+      prometheus-exporter = nixosTests.prometheus-exporters.bind;
+      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+    };
+
+    updateScript = gitUpdater {
+      # No nicer place to find latest stable release.
+      url = "https://gitlab.isc.org/isc-projects/bind9.git";
+      rev-prefix = "v";
+      # Avoid unstable 9.19 releases.
+      odd-unstable = true;
+    };
   };
 
   meta = with lib; {

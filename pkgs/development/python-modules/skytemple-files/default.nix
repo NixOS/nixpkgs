@@ -12,6 +12,8 @@
 , tilequant
 , pyyaml
 , pmdsky-debug-py
+, range-typed-integers
+, importlib-resources
 , typing-extensions
 , pythonOlder
 , # optional dependancies for SpriteCollab
@@ -28,19 +30,19 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.4.7";
+  version = "1.6.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-SLRZ9ThrH2UWqfr5BbjJKDM/SRkCfMNK70XZT4+Ks7w=";
-    fetchSubmodules = true;
+    hash = "sha256-OkokbVD8j+Sgypj25demzSZdiAEf8TJrnl0QRIM2HsI=";
   };
 
   postPatch = ''
-    substituteInPlace skytemple_files/patch/arm_patcher.py \
-      --replace "exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')" "exec_name = \"${armips}/bin/armips\""
+    substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
+      --replace "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" "exec_name = \"${armips}/bin/armips\""
   '';
 
   buildInputs = [ armips ];
@@ -56,7 +58,9 @@ buildPythonPackage rec {
     tilequant
     pyyaml
     pmdsky-debug-py
+    range-typed-integers
   ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
     typing-extensions
   ];
 

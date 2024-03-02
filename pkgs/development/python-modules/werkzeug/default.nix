@@ -3,42 +3,65 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+
+# build-system
+, flit-core
+
+# dependencies
+, markupsafe
+
+# optional-dependencies
 , watchdog
+
+# tests
+, cryptography
 , ephemeral-port-reserve
+, greenlet
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
-, markupsafe
-# for passthru.tests
-, moto, sentry-sdk
+
+# reverse dependencies
+, moto
+, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.2.3";
-  format = "setuptools";
+  version = "3.0.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Werkzeug";
-    inherit version;
-    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+    inherit pname version;
+    hash = "sha256-UH6BHs6nKxikBJR63tSzOQ4duPgmtJTXZVDvRbs7Hcw=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     markupsafe
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # watchdog requires macos-sdk 10.13+
-    watchdog
   ];
 
+  passthru.optional-dependencies = {
+    watchdog = lib.optionals (!stdenv.isDarwin) [
+      # watchdog requires macos-sdk 10.13
+      watchdog
+    ];
+  };
+
   nativeCheckInputs = [
+    cryptography
     ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess
     pytestCheckHook
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    greenlet
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_get_machine_id"
@@ -60,6 +83,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://werkzeug.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "The comprehensive WSGI web application library";
     longDescription = ''
@@ -69,6 +93,6 @@ buildPythonPackage rec {
       utility libraries.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

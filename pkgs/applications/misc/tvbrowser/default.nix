@@ -75,7 +75,8 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau yarny ];
+    mainProgram = "tvbrowser";
+    maintainers = with maintainers; [ yarny ];
     longDescription = ''
       TV-Browser shows TV program data arranged like in printed
       TV programs after downloading it from the internet.

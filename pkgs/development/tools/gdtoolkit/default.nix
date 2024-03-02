@@ -1,23 +1,28 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
-, godot-server
+, godot3-server
 }:
 
-let lark080 = python3Packages.lark.overrideAttrs (old: rec {
-  # gdtoolkit needs exactly this lark version
-  version = "0.8.0";
-  src = fetchFromGitHub {
-    owner = "lark-parser";
-    repo = "lark";
-    rev = version;
-    hash = "sha256-KN9buVlH8hJ8t0ZP5yefeYM5vH5Gg7a7TEDGKJYpozs=";
-    fetchSubmodules = true;
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      lark = super.lark.overridePythonAttrs (old: rec {
+        # gdtoolkit needs exactly this lark version
+        version = "0.8.0";
+        src = fetchFromGitHub {
+          owner = "lark-parser";
+          repo = "lark";
+          rev = version;
+          hash = "sha256-KN9buVlH8hJ8t0ZP5yefeYM5vH5Gg7a7TEDGKJYpozs=";
+          fetchSubmodules = true;
+        };
+        patches = [ ];
+      });
+    };
   };
-});
-
 in
-python3Packages.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
   version = "3.3.1";
 
@@ -29,26 +34,26 @@ python3Packages.buildPythonApplication rec {
     sha256 = "13nnpwy550jf5qnm9ixpxl1bwfnhhbiys8vqfd25g3aim4bm3gnn";
   };
 
-  disabled = python3Packages.pythonOlder "3.7";
+  disabled = python.pythonOlder "3.7";
 
-  propagatedBuildInputs = [ lark080
-  ] ++ (with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     docopt
+    lark
     pyyaml
     setuptools
-  ]);
+  ];
 
   doCheck = true;
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     hypothesis
-    godot-server
+    godot3-server
   ];
 
   preCheck =
     let
-      godotServerMajorVersion = lib.versions.major godot-server.version;
+      godotServerMajorVersion = lib.versions.major godot3-server.version;
       gdtoolkitMajorVersion = lib.versions.major version;
       msg = ''
         gdtoolkit major version ${gdtoolkitMajorVersion} does not match godot-server major version ${godotServerMajorVersion}!

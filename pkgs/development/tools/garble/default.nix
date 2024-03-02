@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-f7coWG1CS4UL8GGqwADx5CvIk2sPONPlWW+JgRhFsb8=";
   };
 
-  vendorSha256 = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
+  vendorHash = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
 
   # Used for some of the tests.
   nativeCheckInputs = [git];

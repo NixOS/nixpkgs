@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, gitUpdater
+, nix-update-script
 , makeWrapper
 , openssh
 , libxcrypt
@@ -11,26 +11,23 @@
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.12.3";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    hash = "sha256-WKMy2JttXFRcW1yb5aQ6xe8BoSoN65K8Hlmac62+QPc=";
+    hash = "sha256-XnkU/I41x6JqrH5D6JGw1fgdiNfiMOBy9DUUXzKwkGg=";
   };
 
   modRoot = "./agent";
 
-  vendorHash = "sha256-BqzpQcL3U6SIrDW5NfBG0D2zyvv1zNu7uoOBYmKbF4Y=";
+  vendorHash = "sha256-nuFgJc1xQU4X86ojdFzs+9Gp3HDLsw3tkMcprlXCrko=";
 
   ldflags = [ "-s" "-w" "-X main.AgentVersion=v${version}" ];
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
-    };
+    updateScript = nix-update-script { };
 
     tests.version = testers.testVersion {
       package = shellhub-agent;
@@ -59,5 +56,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ otavio ];
     platforms = platforms.linux;
+    mainProgram = "agent";
   };
 }

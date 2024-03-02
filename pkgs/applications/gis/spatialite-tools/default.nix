@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spatialite-tools";
-  version = "5.0.1";
+  version = "5.1.0a";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/spatialite-tools-${version}.tar.gz";
-    hash = "sha256-lgTCBeh/A3eJvFIwLGbM0TccPpjHTo7E4psHUt41Fxw=";
+    url = "https://www.gaia-gis.it/gaia-sins/spatialite-tools-sources/spatialite-tools-${version}.tar.gz";
+    hash = "sha256-EZ40dY6AiM27Q+2BtKbq6ojHZLC32hkAGlUUslRVAc4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -8,9 +8,10 @@
 buildPythonPackage rec {
   pname = "capstone";
   version = lib.getVersion capstone;
+  format = "setuptools";
 
   src = capstone.src;
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   postPatch = ''
     ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/

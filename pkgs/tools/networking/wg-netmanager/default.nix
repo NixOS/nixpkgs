@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, wireguard-go, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit asl20 bsd3 mpl20 ];
     maintainers = with maintainers; [ gin66 ];
     platforms = platforms.linux;
+    mainProgram = "wg_netmanager";
   };
 }

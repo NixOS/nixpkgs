@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
     platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
+    mainProgram = "hardinfo";
   };
 }

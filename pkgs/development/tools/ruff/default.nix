@@ -4,45 +4,36 @@
 , installShellFiles
 , stdenv
 , darwin
-  # tests
+, rust-jemalloc-sys
 , ruff-lsp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.275";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-HsoycugHzgudY3Aixv5INlOLTjLMzP+gKMMKIreiODs=";
+    repo = "ruff";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wCjPlKlw0IAh5oH4W7DUw3KBxR4bt9Ho7ncRL5TbD/0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libcst-0.1.0" = "sha256-jG9jYJP4reACkFLrQBWOYH6nbKniNyFVItD0cTZ+nW0=";
-      "ruff_text_size-0.0.0" = "sha256-oIMZ+7oCID0Ud9Ss6hZjJDvAv7wepyODU31Pb3EOxiM=";
-      "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
-    };
-  };
+  cargoHash = "sha256-EHAlsEh3YnAhjIGC9rSgyK3gbKPCJqI6F3uAqZxv2nU=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  cargoBuildFlags = [ "--package=ruff_cli" ];
-  cargoTestFlags = cargoBuildFlags;
-
-  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    # See https://github.com/jemalloc/jemalloc/issues/1997
-    # Using a value of 48 should work on both emulated and native x86_64-darwin.
-    export JEMALLOC_SYS_WITH_LG_VADDR=48
+  # tests expect no colors
+  preCheck = ''
+    export NO_COLOR=1
   '';
 
   postInstall = ''
@@ -61,6 +52,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/astral-sh/ruff";
     changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "ruff";
     maintainers = with maintainers; [ figsoda ];
   };
 }

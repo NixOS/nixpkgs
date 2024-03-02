@@ -24,8 +24,8 @@ let
     };
 
     "2.13" = {
-      version = "2.13.11";
-      sha256 = "YYLdgdICPM5SczPteFsaojqY6H3IVauji6SJLcaq8eM=";
+      version = "2.13.12";
+      sha256 = "r+fm+1njyIRX6Z9wGHMOUvuifI0V49cVT3KWggbKhxk=";
       pname = "scala_2_13";
     };
   };
@@ -114,6 +114,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     branch = versions.majorMinor version;
-    maintainers = [ maintainers.nequissimus ];
+    maintainers = with maintainers; [ nequissimus kashw2 ];
   };
 }

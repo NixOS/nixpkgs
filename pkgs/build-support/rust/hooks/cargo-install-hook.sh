@@ -1,7 +1,7 @@
 cargoInstallPostBuildHook() {
     echo "Executing cargoInstallPostBuildHook"
 
-    releaseDir=target/@shortTarget@/$cargoBuildType
+    releaseDir=target/@targetSubdirectory@/$cargoBuildType
     tmpDir="${releaseDir}-tmp";
 
     mkdir -p $tmpDir
@@ -21,7 +21,7 @@ cargoInstallHook() {
 
     # rename the output dir to a architecture independent one
 
-    releaseDir=target/@shortTarget@/$cargoBuildType
+    releaseDir=target/@targetSubdirectory@/$cargoBuildType
     tmpDir="${releaseDir}-tmp";
 
     mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep "${tmpDir}$")

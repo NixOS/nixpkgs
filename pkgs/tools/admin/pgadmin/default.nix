@@ -7,21 +7,21 @@
 , postgresqlTestHook
 , postgresql
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , server-mode ? true
 }:
 
 let
   pname = "pgadmin";
-  version = "7.3";
-  yarnSha256 = "sha256-gbFAeTB24EU0SWSAMnPus1rcgQmHcPySb6wXX3xKnvg=";
+  version = "8.2";
+  yarnHash = "sha256-uMSgpkYoLD32VYDAkjywC9bZjm7UKA0hhwVNc/toEbA=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-7qdM/CkrSy9g85WhaG57O9uqHIwQIpOThHKxGs+U0dQ=";
+    hash = "sha256-RfpZXy265kwpMsWUBDVfbL/0eX0By79I4VNkG8zwVOs=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -30,7 +30,7 @@ let
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    hash = yarnSha256;
+    hash = yarnHash;
   };
 
 in
@@ -59,13 +59,8 @@ pythonPackages.buildPythonApplication rec {
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
       --replace "code_snippets" ""
-    patchShebangs .
-
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    #TODO: Can be removed once cryptography>=40 has been merged to master
-    substituteInPlace requirements.txt \
-      --replace "cryptography>=40.0.*" "cryptography>=39.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
@@ -106,7 +101,7 @@ pythonPackages.buildPythonApplication rec {
     rm yarn.lock
     cp ${./yarn.lock} yarn.lock
     chmod +w yarn.lock
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     yarn webpacker
@@ -130,7 +125,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn fixup_yarn_lock nodejs ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn prefetch-yarn-deps nodejs ];
   buildInputs = [
     zlib
     pythonPackages.wheel
@@ -140,8 +135,8 @@ pythonPackages.buildPythonApplication rec {
     flask
     flask-gravatar
     flask-login
-    flask_mail
-    flask_migrate
+    flask-mail
+    flask-migrate
     flask-sqlalchemy
     flask-wtf
     flask-compress
@@ -161,7 +156,6 @@ pythonPackages.buildPythonApplication rec {
     cryptography
     sshtunnel
     ldap3
-    flask-babelex
     flask-babel
     gssapi
     flask-socketio
@@ -186,6 +180,8 @@ pythonPackages.buildPythonApplication rec {
     google-auth-oauthlib
     google-api-python-client
     keyring
+    typer
+    rich
   ];
 
   passthru.tests = {

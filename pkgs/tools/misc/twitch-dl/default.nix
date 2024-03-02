@@ -1,14 +1,13 @@
 { lib
 , fetchFromGitHub
 , python3Packages
-, ffmpeg
 , installShellFiles
 , scdoc
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.1.3";
+  version = "2.1.4";
 
   format = "setuptools";
 
@@ -16,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-uxIBt/mGmld8bxUWQvAspaX39EVfguX5qDgJ/ecz3hM=";
+    hash = "sha256-0mITsNQQWG6lVQSxnDdU4ta548AR9q+zs/E96uwtG/U=";
   };
 
   nativeCheckInputs = [
@@ -50,5 +49,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "twitch-dl";
   };
 }

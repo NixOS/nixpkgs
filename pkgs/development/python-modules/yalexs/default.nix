@@ -13,21 +13,32 @@
 , pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "1.11.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8aOLDjWZOqAsnldxUtUBcuT7pBbZHPnPSmQCF/oqNYw=";
+    hash = "sha256-LzjkR60zelxV8N4i68M31yJJLEThUgz6+hYd6d+EHx4=";
   };
+
+  postPatch = ''
+    # Not used requirement
+    substituteInPlace setup.py \
+      --replace-fail '"vol",' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -45,12 +56,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ];
-
-  postPatch = ''
-    # Not used requirement
-    substituteInPlace setup.py \
-      --replace '"vol",' ""
-  '';
 
   pythonImportsCheck = [
     "yalexs"

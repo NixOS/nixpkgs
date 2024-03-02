@@ -10,10 +10,10 @@
 , imagemagick
 , makeWrapper
 , pkg-config
-, ploticus
 , enableEmacs ? false, emacs
-, enableLout ? true, lout
-, enableTex ? true, tex
+, enableLout ? stdenv.isLinux, lout
+, enablePloticus ? stdenv.isLinux, ploticus
+, enableTex ? true, texliveSmall
 }:
 
 let
@@ -40,21 +40,17 @@ in stdenv.mkDerivation (finalAttrs: {
     guile-lib
     guile-reader
     imagemagick
-    ploticus
   ]
   ++ optional enableEmacs emacs
   ++ optional enableLout lout
-  ++ optional enableTex tex;
+  ++ optional enablePloticus ploticus
+  ++ optional enableTex texliveSmall;
 
-  postInstall =
-    let
-      guileVersion = lib.versions.majorMinor guile.version;
-    in
-    ''
-      wrapProgram $out/bin/skribilo \
-        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/skribilo \
+      --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
+      --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+  '';
 
   meta = {
     homepage = "https://www.nongnu.org/skribilo/";

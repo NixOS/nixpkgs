@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "astropy-helpers";
   version = "4.0.1";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

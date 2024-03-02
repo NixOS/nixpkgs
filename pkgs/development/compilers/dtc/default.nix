@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchzip
 , fetchpatch
 , meson
 , ninja
@@ -18,9 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dtc";
   version = "1.7.0";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-    rev = "refs/tags/v${finalAttrs.version}";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-FMh3VvlY3fUK8fbd0M+aCmlUrmG9YegiOOQ7MOByffc=";
   };
 

@@ -2,7 +2,8 @@
 , buildPythonPackage
 , cherrypy
 , fetchFromGitHub
-, lockfile
+, flit-core
+, filelock
 , mock
 , msgpack
 , pytestCheckHook
@@ -13,51 +14,54 @@
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.12.11";
-  format = "setuptools";
+  version = "0.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "ionrock";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-uUPIQz/n347Q9G7NDOGuB760B/KxOglUxiS/rYjt5Po=";
+    repo = "cachecontrol";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-myyqiUGna+5S2GJGnwZTOfLh49NhjfHAvpUB49dQbgY=";
   };
 
-  postPatch = ''
-    # https://github.com/ionrock/cachecontrol/issues/297
-    substituteInPlace tests/test_etag.py --replace \
-      "requests.adapters.HTTPResponse.from_httplib" \
-      "urllib3.response.HTTPResponse.from_httplib"
-  '';
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     msgpack
     requests
   ];
 
+  passthru.optional-dependencies = {
+    filecache = [
+      filelock
+    ];
+    redis = [
+      redis
+    ];
+  };
+
   nativeCheckInputs = [
     cherrypy
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.filecache;
+    requests
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "cachecontrol"
   ];
 
-  passthru.optional-dependencies = {
-    filecache = [ lockfile ];
-    redis = [ redis ];
-  };
-
   meta = with lib; {
     description = "Httplib2 caching for requests";
     homepage = "https://github.com/ionrock/cachecontrol";
+    changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

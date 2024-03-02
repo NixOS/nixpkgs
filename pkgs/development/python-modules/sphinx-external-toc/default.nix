@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "sphinx-external-toc";
-  version = "0.3.1";
+  version = "1.0.1";
 
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "sphinx_external_toc";
-    sha256 = "9c8ea9980ea0e57bf3ce98f6a400f9b69eb1df808f7dd796c9c8cc1873d8b355";
+    sha256 = "sha256-p9LGPMR+xohUZEOyi8TvRmEhgn7z3Hu1Cd41S61OouA=";
   };
 
   nativeBuildInputs = [ flit-core ];

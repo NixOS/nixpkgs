@@ -1,15 +1,17 @@
 { lib
 , buildPythonPackage
 , aiohttp
-, bitarray
+, async-timeout
 , chacha20poly1305-reuseable
 , cryptography
 , deepdiff
 , fetchFromGitHub
+, ifaddr
 , mediafile
 , miniaudio
-, netifaces
 , protobuf
+, pydantic
+, pyfakefs
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-httpserver
@@ -18,22 +20,25 @@
 , pythonRelaxDepsHook
 , pythonOlder
 , requests
+, setuptools
 , srptools
+, stdenv
+, tabulate
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.13.2";
-  format = "setuptools";
+  version = "0.14.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "postlund";
-    repo = pname;
+    repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7jXxnZLruwNzYVOn3c+YlF2olwezwjpwXInDem44/vE=";
+    hash = "sha256-Uykj9MIUFcZyTWOBjUhL9+qItbnpwtuTd2Cx5jI7Wtw=";
   };
 
   postPatch = ''
@@ -58,24 +63,28 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   propagatedBuildInputs = [
     aiohttp
-    bitarray
+    async-timeout
     chacha20poly1305-reuseable
     cryptography
+    ifaddr
     mediafile
     miniaudio
-    netifaces
     protobuf
+    pydantic
     requests
     srptools
+    tabulate
     zeroconf
   ];
 
   nativeCheckInputs = [
     deepdiff
+    pyfakefs
     pytest-aiohttp
     pytest-asyncio
     pytest-httpserver
@@ -83,8 +92,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+  disabledTests = [
+    # https://github.com/postlund/pyatv/issues/2307
+    "test_zeroconf_service_published"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
+    "test_stream_retransmission"
   ];
 
   disabledTestPaths = [

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "unflac";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = pname;
     rev = version;
-    sha256 = "1vlwlm895mcvmxaxcid3vfji1zi9wjchz7divm096na4whj35cc4";
+    sha256 = "sha256-BgXuPAXrw28axfTEh10Yh8dQc27M1/lSmCo2eAeNnjE=";
   };
 
-  vendorSha256 = "sha256-QqLjz1X4uVpxhYXb/xIBwuLUhRaqwz2GDUPjBTS4ut0=";
+  vendorHash = "sha256-IQHxEYv6l8ORoX+a3Szox9tS2fyBk0tpK+Q1AsWohX0=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''
@@ -30,5 +30,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ felipeqq2 ];
+    mainProgram = "unflac";
   };
 }

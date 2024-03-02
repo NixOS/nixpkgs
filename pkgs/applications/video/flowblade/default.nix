@@ -5,17 +5,17 @@
 
 stdenv.mkDerivation rec {
   pname = "flowblade";
-  version = "2.10.0.2";
+  version = "2.12.0.2";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lXMVtWsTyMaGIpEglHvnUgDSaFlnWtB3lSyg6ljNIdQ=";
+    sha256 = "sha256-SZ/J03PYeAbqQlNQXdqLSduo/5VjQ7VH4eErJqO3Ua0=";
   };
 
   buildInputs = [
-    ffmpeg frei0r sox gtk3 gobject-introspection ladspaPlugins
+    ffmpeg frei0r sox gtk3 ladspaPlugins
     (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow ]))
   ];
 
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ polygon ];
+    mainProgram = "flowblade";
   };
 }

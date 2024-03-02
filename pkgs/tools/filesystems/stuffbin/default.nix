@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "stuffbin";
-  version = "1.1.0";
+  version = "1.3.0";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "stuffbin";
     rev = "v${version}";
-    sha256 = "sha256-M72xNh7bKUMLzA+M8bJB++kJ5KCrkboQm1v8BasP3Yo=";
+    sha256 = "sha256-dOlc/G2IiuMAN0LqiZtbpXLSYaOpe5cl1+cs3YhaAbg=";
   };
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];

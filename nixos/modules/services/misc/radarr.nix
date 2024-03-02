@@ -11,13 +11,7 @@ in
     services.radarr = {
       enable = mkEnableOption (lib.mdDoc "Radarr");
 
-      package = mkOption {
-        description = lib.mdDoc "Radarr package to use";
-        default = pkgs.radarr;
-        defaultText = literalExpression "pkgs.radarr";
-        example = literalExpression "pkgs.radarr";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "radarr" { };
 
       dataDir = mkOption {
         type = types.str;
@@ -46,9 +40,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-radarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.radarr = {
       description = "Radarr";

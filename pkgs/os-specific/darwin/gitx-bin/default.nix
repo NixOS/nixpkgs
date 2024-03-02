@@ -15,11 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         aarch64-darwin = fetchurl {
           url = "${base}/${finalAttrs.version}/GitX-arm64.dmg";
-          hash = "sha256-azUK3104gm2DSiXgzayz87w4Zwy9kopZvXmCsdUo6g8=";
+          hash = "sha256-HAr1rxvv9BGnyvwrLJOu1D7NyeEHSyqH2MQXlCnGQxM=";
         };
         x86_64-darwin = fetchurl {
           url = "${base}/${finalAttrs.version}/GitX-x86_64.dmg";
-          hash = "sha256-ul7cgsJg+99LbnTC46RVsnDr3m1clKkUDyEr7ByrlQc=";
+          hash = "sha256-5U8wOQmn6tzxoHGOd763i7Q8qNXLdiPAFoC2xxjzurU=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications/GitX.app"
     cp -R . "$out/Applications/GitX.app"
     mkdir "$out/bin"
-    ln -s "$out/Applications/GitX.app/Contents/MacOS/GitX" "$out/bin/$pname"
+    ln -s "$out/Applications/GitX.app/Contents/MacOS/GitX" "$out/bin/${finalAttrs.pname}"
 
     runHook postInstall
   '';
@@ -44,5 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     maintainers = with maintainers; [ yamashitax ];
     platforms = platforms.darwin;
+    hydraPlatforms = [];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

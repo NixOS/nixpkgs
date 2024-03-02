@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     installManPage gen6dns.1
   '';
 
+  configureFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+  ];
+
   makeFlags = [ "INSTALL_DIR=$(out)/bin" ];
 
   meta = with lib; {

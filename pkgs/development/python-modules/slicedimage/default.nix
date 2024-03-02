@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "slicedimage";
   version = "4.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spacetx";
@@ -50,6 +51,6 @@ buildPythonPackage rec {
     description = "Library to access sliced imaging data";
     homepage = "https://github.com/spacetx/slicedimage";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

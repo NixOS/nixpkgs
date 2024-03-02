@@ -5,19 +5,20 @@
 , hypothesis
 , lupa
 , poetry-core
+, pybloom-live
+, pyprobables
 , pytest-asyncio
-, pytestCheckHook
 , pytest-mock
+, pytestCheckHook
 , pythonOlder
 , redis
-, six
 , sortedcontainers
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.15.0";
-  format = "pyproject";
+  version = "2.21.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cAa95KvmeU/rIqlUEXi+lKJPXKAdDEQGmMTo4RbWPPM=";
+    hash = "sha256-2+ZZTWhUb6rj7oWPnDP0PJUHj0CJpOD8iZxmtO4xSbo=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +35,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     redis
-    six
     sortedcontainers
   ];
 
@@ -52,6 +52,15 @@ buildPythonPackage rec {
     aioredis = [
       aioredis
     ];
+    bf = [
+      pyprobables
+    ];
+    cf = [
+      pyprobables
+    ];
+    probabilistic = [
+      pyprobables
+    ];
   };
 
   pythonImportsCheck = [
@@ -62,7 +71,7 @@ buildPythonPackage rec {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
     changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
 }

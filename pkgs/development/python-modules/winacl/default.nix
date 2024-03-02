@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "winacl";
-  version = "0.1.7";
+  version = "0.1.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ymYsCRRxpsYp12xe7GPYob8a98BUNI8JwSQvM4hQsr0=";
+    hash = "sha256-RCcaMCVi3lFin2jvFUDUDzom57wBc2RrAaZ3nO2tZEw=";
   };
 
   propagatedBuildInputs = [

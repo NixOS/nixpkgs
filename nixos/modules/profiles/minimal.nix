@@ -18,6 +18,17 @@ with lib;
 
   documentation.nixos.enable = mkDefault false;
 
+  # Perl is a default package.
+  environment.defaultPackages = mkDefault [ ];
+
+  environment.stub-ld.enable = false;
+
+  # The lessopen package pulls in Perl.
+  programs.less.lessopen = mkDefault null;
+
+  # This pulls in nixos-containers which depends on Perl.
+  boot.enableContainers = mkDefault false;
+
   programs.command-not-found.enable = mkDefault false;
 
   services.logrotate.enable = mkDefault false;

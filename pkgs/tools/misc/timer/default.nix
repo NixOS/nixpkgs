@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "timer";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "timer";
     rev = "v${version}";
-    hash = "sha256-9p/L3Hj3VqlNiyY3lfUAhCjwTl1iSTegWxaVEGB4qHM=";
+    hash = "sha256-8BVzijAXsJ8Q8BhDmhzFbEQ23fUEBdmbUsCPxfpXyBA=";
   };
 
-  vendorHash = "sha256-j7Xik0te6GdjfhXHT7DRf+MwM+aKjfgTGvroxnlD3MM=";
+  vendorHash = "sha256-1n5vZKlOWoB2SFdDdv+pPWLybzCIJG/wdBYqLMatjNA=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/caarlos0/timer";
     license = licenses.mit;
     maintainers = with maintainers; [ zowoq caarlos0 ];
+    mainProgram = "timer";
   };
 }

@@ -2,24 +2,36 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.100";
-  format = "setuptools";
+  version = "0.0.112";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-EWGsnUnr83YuhEdGJ3YtlYm9VT+aTuUjfganhOeqt7o=";
+    hash = "sha256-wI7mpX6oFV/RrxH/UP1X9Odago0CxJ5dhjKAsDS+Sq4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -27,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 

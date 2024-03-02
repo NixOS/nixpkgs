@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "1.3.1";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "JoshData";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JW6Yrotm3HjUOUtNFxRorkrJKjzuwIXwjpUuMWEyLV0=";
+    hash = "sha256-58DuQslADM7glrnlSSP6TtIDTlwuS0/GK8+izatqDxI=";
   };
 
   propagatedBuildInputs = [
@@ -30,18 +30,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # fails with dns.resolver.NoResolverConfiguration due to network sandboxing
-    "test_deliverability_no_records"
-    "test_deliverability_found"
-    "test_deliverability_fails"
-    "test_deliverability_dns_timeout"
-    "test_email_example_reserved_domain"
-    "test_main_single_good_input"
-    "test_main_multi_input"
-    "test_main_input_shim"
-    "test_validate_email__with_caching_resolver"
-    "test_validate_email__with_configured_resolver"
+  disabledTestPaths = [
+    # dns.resolver.NoResolverConfiguration: cannot open /etc/resolv.conf
+    "tests/test_deliverability.py"
+    "tests/test_main.py"
   ];
 
   pythonImportsCheck = [

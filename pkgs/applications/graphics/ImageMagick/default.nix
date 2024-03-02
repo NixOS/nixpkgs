@@ -30,6 +30,8 @@
 , Foundation
 , testers
 , imagemagick
+, nixos-icons
+, perlPackages
 , python3
 }:
 
@@ -47,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-12";
+  version = "7.1.1-29";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-URwSufiTcLGWRFNOJidJyEcIPxWUSdN7yHaCiFh7GEI=";
+    hash = "sha256-W9WbHzmTa0dA9+mOxXu88qmN1mO9ORaH0Nj6r2s1Q+E=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -124,13 +126,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    version = testers.testVersion { package = imagemagick; };
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+    inherit nixos-icons;
+    inherit (perlPackages) ImageMagick;
     inherit (python3.pkgs) img2pdf;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
+    changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -14,17 +14,22 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.3.1";
-  format = "setuptools";
+  version = "5.10.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
-    repo = pname;
+    repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TtRIYgsPlire4li4/9Ls7Rh1SIkDGi5uCSN7huSrelA=";
+    hash = "sha256-tiOXbryY2TmeBVrG5cIMeDJ4alolBQ5LosdfH3tpVOA=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail ', "pytest-cov"' ""
+  '';
 
   propagatedBuildInputs = [
     arviz
@@ -37,11 +42,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ', "pytest-cov"' ""
-  '';
-
   # The test suite is computationally intensive and test failures are not
   # indicative for package usability hence tests are disabled by default.
   doCheck = false;
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
-    homepage = "https://github.com/pymc-devs/pymc3";
+    homepage = "https://github.com/pymc-devs/pymc";
     changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ nidabdella ];

@@ -16,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-kLkH/nNidd1QNPKvo7fxZwMhTgd4AVB8Ofw0Wo0z6c0=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   passthru.tests.version = testers.testVersion {
     package = gitls;
@@ -30,5 +30,6 @@ buildGoModule rec {
     changelog = "https://github.com/hahwul/gitls/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "gitls";
   };
 }

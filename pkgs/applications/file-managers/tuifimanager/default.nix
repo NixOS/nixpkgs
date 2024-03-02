@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifi-manager";
-  version = "3.0.0";
+  version = "3.3.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
-    rev = "v.${version}";
-    hash = "sha256-ahZUm+FkAaM4I6FfSa/Oej+lMux8avw8LxzzGqTpuH8=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-O4cAHFurgF6QzpeAMoipX2/JywU1drZOTw/Ob9Pa8WQ=";
   };
 
   postPatch = ''

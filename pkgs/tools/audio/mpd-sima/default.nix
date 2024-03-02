@@ -34,5 +34,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
+    mainProgram = "mpd-sima";
   };
 }

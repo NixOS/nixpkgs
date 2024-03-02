@@ -1,15 +1,14 @@
 { buildGoModule, lib, installShellFiles, fetchFromGitHub }:
-let
-  short_hash = "7447a09";
-in buildGoModule rec {
+
+buildGoModule rec {
   pname = "deck";
-  version = "1.22.0";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
     rev = "v${version}";
-    hash = "sha256-BCx4bw+FrnH291sp52Dz+dc6cYtoLAt8fmdF6YbmgOE=";
+    hash = "sha256-7lE/Wnrlv3L6V1ex+357q6XXpdx0810m1rKkqITowXY=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -18,10 +17,11 @@ in buildGoModule rec {
 
   ldflags = [
     "-s -w -X github.com/kong/deck/cmd.VERSION=${version}"
-    "-X github.com/kong/deck/cmd.COMMIT=${short_hash}"
+    "-X github.com/kong/deck/cmd.COMMIT=${src.rev}"
   ];
 
-  vendorSha256 = "sha256-rir8z1IwQenTvihHWaA7dx6Nn45M82ulCNRJuQlUhEM=";
+  proxyVendor = true; # darwin/linux hash mismatch
+  vendorHash = "sha256-D260T3E0aufOAqlN918SChv3aNDCFHfe2e0It1pcPiU=";
 
   postInstall = ''
     installShellCompletion --cmd deck \

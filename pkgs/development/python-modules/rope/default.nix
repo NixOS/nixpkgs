@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "1.6.0";
-  format = "pyproject";
+  version = "1.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-rope";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-avNCti288dY9pl5AVTmUzZU/vb6WDkXEtELNlEi6L/o=";
+    hash = "sha256-j/9q2S2B3DzmEqMOBLG9iHwnLqZipcPxLaKppysJffA=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pytoolconfig
   ] ++ pytoolconfig.optional-dependencies.global;
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytest-timeout

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-clusters";
-  version = "2023.6.0";
+  version = "2024.2.1";
   format = "wheel";
 
   src = fetchPypi {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     pname = "home_assistant_chip_clusters";
     dist = "py3";
     python = "py3";
-    hash = "sha256-8LYB3BEDHOj6ItfFRK7ewbhjN604xXKY0YlymNjEO+g=";
+    hash = "sha256-QMsfs9gUWeaz1LfMZF5J2OFVCPnuckZvvF9x5bQ5uZY=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "chip.clusters"
+    "chip.clusters.ClusterObjects"
+    "chip.tlv"
   ];
 
   doCheck = false; # no tests

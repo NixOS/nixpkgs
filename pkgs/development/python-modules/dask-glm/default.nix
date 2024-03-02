@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dask-glm";
-  version = "0.2.0";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WLhs6/BP5bnlgJLhxGfjLmDQHhG3H9xii6qp/G0a3uU=";
+    hash = "sha256-yUelZoZmmKAdeZeK5zIzy16DitXq1ghRQ1gsXpMLmko=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Generalized Linear Models with Dask";
     homepage = "https://github.com/dask/dask-glm/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -2,7 +2,6 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-, pythonAtLeast
 , pythonRelaxDepsHook
 , numpy
 , wheel
@@ -24,15 +23,15 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.11.0";
+  version = "2.16.0";
   format = "wheel";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-oOWS7oeWLhevPw3Of6rj+70jkDAVnp5iXM6BC341xT0=";
+    hash = "sha256-JjuQmiAJyzp52qar5kwXhcwxfCWlTk2y/stkKf/FTFg=";
   };
 
   nativeBuildInputs = [
@@ -77,9 +76,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
     license = licenses.asl20;
+    mainProgram = "tensorboard";
     maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -1,23 +1,39 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, six
+, fetchFromGitHub
+
+# build-system
 , pbr
+, setuptools
+
+# tests
+, pytestCheckHook
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "munch";
-  version = "2.5.0";
+  version = "4.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2d735f6f24d4dba3417fa448cae40c6e896ec1fdab6cdb5e6510999758a4dbd2";
+  src = fetchFromGitHub {
+    owner = "Infinidat";
+    repo = "munch";
+    rev = "refs/tags/${version}";
+    hash = "sha256-p7DvOGRhkCmtJ32EfttyKXGGmO5kfb2bQGqok/RJtU8=";
   };
 
-  propagatedBuildInputs = [ six pbr ];
+  env.PBR_VERSION = version;
 
-  # No tests in archive
-  doCheck = false;
+  nativeBuildInputs = [
+    pbr
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
 
   meta = with lib; {
     description = "A dot-accessible dictionary (a la JavaScript objects)";

@@ -1,51 +1,40 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
+, setuptools
 , ipython
-, ipython_genutils
-, pandas
+, ipython-genutils
 , prettytable
-, pytest
 , sqlalchemy
 , sqlparse
 }:
 buildPythonPackage rec {
   pname = "ipython-sql";
-  version = "0.4.0";
+  version = "0.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "catherinedevlin";
-    repo = "ipython-sql";
-    rev = "117764caf099d80100ed4b09fc004b55eed6f121";
-    hash = "sha256-ScQihsvRSnC7VIgy8Tzi1z4x6KIZo0SAeLPvHAVdrfA=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-PbPOf5qV369Dh2+oCxa9u5oE3guhIELKsT6fWW/P/b4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'prettytable<1' prettytable
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ipython
-    ipython_genutils
+    ipython-genutils
     prettytable
     sqlalchemy
     sqlparse
   ];
 
-  nativeCheckInputs = [ ipython pandas pytest ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    # running with ipython is required because the tests use objects available
-    # only inside of ipython, for example the global `get_ipython()` function
-    ipython -c 'import pytest; pytest.main()'
-
-    runHook postCheck
-  '';
+  # pypi tarball has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "sql" ];
 

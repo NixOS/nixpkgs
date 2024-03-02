@@ -21,11 +21,12 @@
 , redis
 , prometheus-client
 , polib
+, python
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.3.11";
+  version = "1.5.2";
 
   format = "setuptools";
 
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S2J7kcoZFHOjVm2mb3TblWf9/FzkxZEB3h27BCaPYgY=";
+    hash = "sha256-8bbVpC53wH9GvwwHHlPEYQd/zqMXIqrwixwn4HY6FMg=";
   };
 
   propagatedBuildInputs = [
@@ -69,7 +70,7 @@ buildPythonPackage rec {
   postInstall = ''
     # expose static files to be able to serve them via web-server
     mkdir -p $out/share/libretranslate
-    ln -s $out/lib/python*/site-packages/libretranslate/static $out/share/libretranslate/static
+    ln -s $out/${python.sitePackages}/libretranslate/static $out/share/libretranslate/static
   '';
 
   doCheck = false; # needs network access

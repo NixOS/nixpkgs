@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "2.0.9";
+  version = "2.1.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tarpas";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-klKn110zmurLx3aITYiGV1tLztTiY/Z2tf/L6qW2cGI=";
+    hash = "sha256-zbMX9r9lftdm9hzXMZRZZ/GEDViGk9QiYYUhO9ZcEAc=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";
     homepage = "https://github.com/tarpas/pytest-testmon/";
     changelog = "https://github.com/tarpas/pytest-testmon/releases/tag/v${version}";
-    license = licenses.agpl3Only;
+    license = licenses.mit;
     maintainers = with maintainers; [ dmvianna ];
   };
 }

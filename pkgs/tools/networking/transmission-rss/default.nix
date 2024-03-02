@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.3.1";
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/herlon214/transmission-rss";
     maintainers = with maintainers; [ icewind1991 ];
     license = licenses.mit;
+    mainProgram = "transmission-rss";
   };
 }

@@ -29,8 +29,6 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov=measurement" ""

@@ -2,6 +2,7 @@
 
 with utils.systemdUtils.unitOptions;
 with utils.systemdUtils.lib;
+with utils.systemdUtils.network.units;
 with lib;
 
 let
@@ -82,7 +83,7 @@ let
         (assertByteFormat "BitsPerSecond")
         (assertValueOneOf "Duplex" ["half" "full"])
         (assertValueOneOf "AutoNegotiation" boolValues)
-        (assertValueOneOf "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off"])
+        (assertValuesSomeOfOr "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon"] "off")
         (assertValueOneOf "Port" ["tp" "aui" "bnc" "mii" "fibre"])
         (assertValueOneOf "ReceiveChecksumOffload" boolValues)
         (assertValueOneOf "TransmitChecksumOffload" boolValues)
@@ -121,6 +122,16 @@ let
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
       ];
+
+      # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
+      ipVlanVtapChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "Flags"
+        ])
+        (assertValueOneOf "Mode" ["L2" "L3" "L3S" ])
+        (assertValueOneOf "Flags" ["private" "vepa" "bridge" ])
+      ];
     in {
 
       sectionNetdev = checkUnitConfig "Netdev" [
@@ -145,6 +156,7 @@ let
           "ip6gretap"
           "ipip"
           "ipvlan"
+          "ipvtap"
           "macvlan"
           "macvtap"
           "sit"
@@ -158,6 +170,7 @@ let
           "geneve"
           "l2tp"
           "macsec"
+          "wlan"
           "vrf"
           "vcan"
           "vxcan"
@@ -170,7 +183,7 @@ let
           "batadv"
         ])
         (assertByteFormat "MTUBytes")
-        (assertMacAddress "MACAddress")
+        (assertNetdevMacAddress "MACAddress")
       ];
 
       sectionVLAN = checkUnitConfig "VLAN" [
@@ -188,6 +201,10 @@ let
         (assertValueOneOf "LooseBinding" boolValues)
         (assertValueOneOf "ReorderHeader" boolValues)
       ];
+
+      sectionIPVLAN = checkUnitConfig "IPVLAN" ipVlanVtapChecks;
+
+      sectionIPVTAP = checkUnitConfig "IPVTAP" ipVlanVtapChecks;
 
       sectionMACVLAN = checkUnitConfig "MACVLAN" [
         (assertOnlyFields [
@@ -222,6 +239,7 @@ let
           "PortRange"
           "FlowLabel"
           "IPDoNotFragment"
+          "Independent"
         ])
         (assertInt "VNI")
         (assertRange "VNI" 1 16777215)
@@ -241,6 +259,7 @@ let
         (assertInt "FlowLabel")
         (assertRange "FlowLabel" 0 1048575)
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+        (assertValueOneOf "Independent" boolValues)
       ];
 
       sectionTunnel = checkUnitConfig "Tunnel" [
@@ -465,6 +484,30 @@ let
         (assertMinimum "Table" 0)
       ];
 
+      sectionWLAN = checkUnitConfig "WLAN" [
+        (assertOnlyFields [
+          "PhysicalDevice"  # systemd supports both strings ("phy0") and indexes (0) here.
+          "Type"
+          "WDS"
+        ])
+        # See https://github.com/systemd/systemd/blob/main/src/basic/linux/nl80211.h#L3382
+        (assertValueOneOf "Type" [
+          "ad-hoc"
+          "station"
+          "ap"
+          "ap-vlan"
+          "wds"
+          "monitor"
+          "mesh-point"
+          "p2p-client"
+          "p2p-go"
+          "p2p-device"
+          "ocb"
+          "nan"
+        ])
+        (assertValueOneOf "WDS" boolValues)
+      ];
+
       sectionBatmanAdvanced = checkUnitConfig "BatmanAdvanced" [
         (assertOnlyFields [
           "GatewayMode"
@@ -514,17 +557,24 @@ let
         (assertValueOneOf "Unmanaged" boolValues)
         (assertInt "Group")
         (assertRange "Group" 0 2147483647)
-        (assertValueOneOf "RequiredForOnline" (boolValues ++ [
-          "missing"
-          "off"
-          "no-carrier"
-          "dormant"
-          "degraded-carrier"
-          "carrier"
-          "degraded"
-          "enslaved"
-          "routable"
-        ]))
+        (assertValueOneOf "RequiredForOnline" (boolValues ++ (
+          let
+            # https://freedesktop.org/software/systemd/man/networkctl.html#missing
+            operationalStates = [
+              "missing"
+              "off"
+              "no-carrier"
+              "dormant"
+              "degraded-carrier"
+              "carrier"
+              "degraded"
+              "enslaved"
+              "routable"
+            ];
+            operationalStateRanges = concatLists (imap0 (i: min: map (max: "${min}:${max}") (drop i operationalStates)) operationalStates);
+          in
+          operationalStates ++ operationalStateRanges
+        )))
         (assertValueOneOf "RequiredFamilyForOnline" [
           "ipv4"
           "ipv6"
@@ -547,6 +597,8 @@ let
           "DHCP"
           "DHCPServer"
           "LinkLocalAddressing"
+          "IPv6LinkLocalAddressGenerationMode"
+          "IPv6StableSecretAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -580,7 +632,9 @@ let
           "VRF"
           "VLAN"
           "IPVLAN"
+          "IPVTAP"
           "MACVLAN"
+          "MACVTAP"
           "VXLAN"
           "Tunnel"
           "MACsec"
@@ -593,9 +647,10 @@ let
           "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
-        (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
+        (assertValueOneOf "DHCP" (boolValues ++ ["ipv4" "ipv6"]))
         (assertValueOneOf "DHCPServer" boolValues)
-        (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "fallback" "ipv4-fallback"])
+        (assertValueOneOf "LinkLocalAddressing" (boolValues ++ ["ipv4" "ipv6" "fallback" "ipv4-fallback"]))
+        (assertValueOneOf "IPv6LinkLocalAddressGenerationMode" ["eui64" "none" "stable-privacy" "random"])
         (assertValueOneOf "IPv4LLRoute" boolValues)
         (assertValueOneOf "DefaultRouteOnDevice" boolValues)
         (assertValueOneOf "LLMNR" (boolValues ++ ["resolve"]))
@@ -795,6 +850,8 @@ let
           "UseAddress"
           "UseDNS"
           "UseNTP"
+          "UseHostname"
+          "UseDomains"
           "RouteMetric"
           "RapidCommit"
           "MUDURL"
@@ -809,16 +866,20 @@ let
           "DUIDRawData"
           "IAID"
           "UseDelegatedPrefix"
+          "SendRelease"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "UseHostname" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "WithoutRA" ["no" "solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
         (assertInt "IAID")
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
+        (assertValueOneOf "SendRelease" boolValues)
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -898,6 +959,9 @@ let
           "RelayTarget"
           "RelayAgentCircuitId"
           "RelayAgentRemoteId"
+          "BootServerAddress"
+          "BootServerName"
+          "BootFilename"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -941,10 +1005,12 @@ let
           "Prefix"
           "PreferredLifetimeSec"
           "ValidLifetimeSec"
+          "Assign"
           "Token"
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
+        (assertValueOneOf "Assign" boolValues)
       ];
 
       sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [
@@ -973,7 +1039,7 @@ let
           "MulticastToUnicast"
           "NeighborSuppression"
           "Learning"
-          "Hairpin"
+          "HairPin"
           "Isolated"
           "UseBPDU"
           "FastLeave"
@@ -989,7 +1055,7 @@ let
         (assertValueOneOf "MulticastToUnicast" boolValues)
         (assertValueOneOf "NeighborSuppression" boolValues)
         (assertValueOneOf "Learning" boolValues)
-        (assertValueOneOf "Hairpin" boolValues)
+        (assertValueOneOf "HairPin" boolValues)
         (assertValueOneOf "Isolated" boolValues)
         (assertValueOneOf "UseBPDU" boolValues)
         (assertValueOneOf "FastLeave" boolValues)
@@ -1230,6 +1296,7 @@ let
           "FirewallMark"
           "Wash"
           "SplitGSO"
+          "AckFilter"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
@@ -1262,6 +1329,7 @@ let
         (assertRange "FirewallMark" 1 4294967295)
         (assertValueOneOf "Wash" boolValues)
         (assertValueOneOf "SplitGSO" boolValues)
+        (assertValueOneOf "AckFilter" (boolValues ++ ["aggressive"]))
       ];
 
       sectionControlledDelay = checkUnitConfig "ControlledDelay" [
@@ -1547,7 +1615,7 @@ let
         description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
           `[WireGuardPeer]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
+          {manpage}`systemd.netdev(5)` for details.
         '';
       };
     };
@@ -1573,6 +1641,26 @@ let
         Each attribute in this set specifies an option in the
         `[VLAN]` section of the unit.  See
         {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "L2"; Flags = "private"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipvtapConfig = mkOption {
+      default = {};
+      example = { Mode = "L3"; Flags = "vepa"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVTAP;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVTAP]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -1757,6 +1845,16 @@ let
       '';
     };
 
+    wlanConfig = mkOption {
+      default = {};
+      example = { PhysicalDevice = 0; Type = "station"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[WLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
     batmanAdvancedConfig = mkOption {
       default = {};
       example = {
@@ -1897,7 +1995,7 @@ let
 
   bridgeVLANOptions = {
     options = {
-      bridgeMDBConfig = mkOption {
+      bridgeVLANConfig = mkOption {
         default = {};
         example = { VLAN = 20; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
@@ -2388,17 +2486,6 @@ let
       '';
     };
 
-    bridgeVLANConfig = mkOption {
-      default = {};
-      example = { VLAN = "10-20"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
-      description = lib.mdDoc ''
-        Each attribute in this set specifies an option in the
-        `[BridgeVLAN]` section of the unit.  See
-        {manpage}`systemd.network(5)` for details.
-      '';
-    };
-
     bridgeVLANs = mkOption {
       default = [];
       example = [ { bridgeVLANConfig = { VLAN = "10-20"; }; } ];
@@ -2514,6 +2601,15 @@ let
       '';
     };
 
+    macvtap = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = lib.mdDoc ''
+        A list of macvtap interfaces to be added to the network section of the
+        unit.  See {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
     vxlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -2615,95 +2711,6 @@ let
     };
   };
 
-  commonMatchText = def: optionalString (def.matchConfig != { }) ''
-    [Match]
-    ${attrsToSection def.matchConfig}
-  '';
-
-  linkToUnit = name: def:
-    { inherit (def) enable;
-      text = commonMatchText def
-        + ''
-          [Link]
-          ${attrsToSection def.linkConfig}
-        ''
-        + def.extraConfig;
-    };
-
-  netdevToUnit = name: def:
-    { inherit (def) enable;
-      text = commonMatchText def
-        + ''
-          [NetDev]
-          ${attrsToSection def.netdevConfig}
-        ''
-        + optionalString (def.vlanConfig != { }) ''
-          [VLAN]
-          ${attrsToSection def.vlanConfig}
-        ''
-        + optionalString (def.macvlanConfig != { }) ''
-          [MACVLAN]
-          ${attrsToSection def.macvlanConfig}
-        ''
-        + optionalString (def.vxlanConfig != { }) ''
-          [VXLAN]
-          ${attrsToSection def.vxlanConfig}
-        ''
-        + optionalString (def.tunnelConfig != { }) ''
-          [Tunnel]
-          ${attrsToSection def.tunnelConfig}
-        ''
-        + optionalString (def.fooOverUDPConfig != { }) ''
-          [FooOverUDP]
-          ${attrsToSection def.fooOverUDPConfig}
-        ''
-        + optionalString (def.peerConfig != { }) ''
-          [Peer]
-          ${attrsToSection def.peerConfig}
-        ''
-        + optionalString (def.tunConfig != { }) ''
-          [Tun]
-          ${attrsToSection def.tunConfig}
-        ''
-        + optionalString (def.tapConfig != { }) ''
-          [Tap]
-          ${attrsToSection def.tapConfig}
-        ''
-        + optionalString (def.l2tpConfig != { }) ''
-          [L2TP]
-          ${attrsToSection def.l2tpConfig}
-        ''
-        + flip concatMapStrings def.l2tpSessions (x: ''
-          [L2TPSession]
-          ${attrsToSection x.l2tpSessionConfig}
-        '')
-        + optionalString (def.wireguardConfig != { }) ''
-          [WireGuard]
-          ${attrsToSection def.wireguardConfig}
-        ''
-        + flip concatMapStrings def.wireguardPeers (x: ''
-          [WireGuardPeer]
-          ${attrsToSection x.wireguardPeerConfig}
-        '')
-        + optionalString (def.bondConfig != { }) ''
-          [Bond]
-          ${attrsToSection def.bondConfig}
-        ''
-        + optionalString (def.xfrmConfig != { }) ''
-          [Xfrm]
-          ${attrsToSection def.xfrmConfig}
-        ''
-        + optionalString (def.vrfConfig != { }) ''
-          [VRF]
-          ${attrsToSection def.vrfConfig}
-        ''
-        + optionalString (def.batmanAdvancedConfig != { }) ''
-          [BatmanAdvanced]
-          ${attrsToSection def.batmanAdvancedConfig}
-        ''
-        + def.extraConfig;
-    };
-
   renderConfig = def:
     { text = ''
         [Network]
@@ -2717,235 +2724,6 @@ let
         [DHCPv6]
         ${attrsToSection def.dhcpV6Config}
       ''; };
-
-  networkToUnit = name: def:
-    { inherit (def) enable;
-      text = commonMatchText def
-        + optionalString (def.linkConfig != { }) ''
-          [Link]
-          ${attrsToSection def.linkConfig}
-        ''
-        + ''
-          [Network]
-        ''
-        + attrsToSection def.networkConfig
-        + optionalString (def.address != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
-        ''
-        + optionalString (def.gateway != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
-        ''
-        + optionalString (def.dns != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
-        ''
-        + optionalString (def.ntp != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
-        ''
-        + optionalString (def.bridge != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
-        ''
-        + optionalString (def.bond != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
-        ''
-        + optionalString (def.vrf != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
-        ''
-        + optionalString (def.vlan != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
-        ''
-        + optionalString (def.macvlan != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
-        ''
-        + optionalString (def.vxlan != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
-        ''
-        + optionalString (def.tunnel != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
-        ''
-        + optionalString (def.xfrm != [ ]) ''
-          ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
-        ''
-        + ''
-
-        ''
-        + flip concatMapStrings def.addresses (x: ''
-          [Address]
-          ${attrsToSection x.addressConfig}
-        '')
-        + flip concatMapStrings def.routingPolicyRules (x: ''
-          [RoutingPolicyRule]
-          ${attrsToSection x.routingPolicyRuleConfig}
-        '')
-        + flip concatMapStrings def.routes (x: ''
-          [Route]
-          ${attrsToSection x.routeConfig}
-        '')
-        + optionalString (def.dhcpV4Config != { }) ''
-          [DHCPv4]
-          ${attrsToSection def.dhcpV4Config}
-        ''
-        + optionalString (def.dhcpV6Config != { }) ''
-          [DHCPv6]
-          ${attrsToSection def.dhcpV6Config}
-        ''
-        + optionalString (def.dhcpPrefixDelegationConfig != { }) ''
-          [DHCPPrefixDelegation]
-          ${attrsToSection def.dhcpPrefixDelegationConfig}
-        ''
-        + optionalString (def.ipv6AcceptRAConfig != { }) ''
-          [IPv6AcceptRA]
-          ${attrsToSection def.ipv6AcceptRAConfig}
-        ''
-        + optionalString (def.dhcpServerConfig != { }) ''
-          [DHCPServer]
-          ${attrsToSection def.dhcpServerConfig}
-        ''
-        + optionalString (def.ipv6SendRAConfig != { }) ''
-          [IPv6SendRA]
-          ${attrsToSection def.ipv6SendRAConfig}
-        ''
-        + flip concatMapStrings def.ipv6Prefixes (x: ''
-          [IPv6Prefix]
-          ${attrsToSection x.ipv6PrefixConfig}
-        '')
-        + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
-          [IPv6RoutePrefix]
-          ${attrsToSection x.ipv6RoutePrefixConfig}
-        '')
-        + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
-          [DHCPServerStaticLease]
-          ${attrsToSection x.dhcpServerStaticLeaseConfig}
-        '')
-        + optionalString (def.bridgeConfig != { }) ''
-          [Bridge]
-          ${attrsToSection def.bridgeConfig}
-        ''
-        + flip concatMapStrings def.bridgeFDBs (x: ''
-          [BridgeFDB]
-          ${attrsToSection x.bridgeFDBConfig}
-        '')
-        + flip concatMapStrings def.bridgeMDBs (x: ''
-          [BridgeMDB]
-          ${attrsToSection x.bridgeMDBConfig}
-        '')
-        + optionalString (def.lldpConfig != { }) ''
-          [LLDP]
-          ${attrsToSection def.lldpConfig}
-        ''
-        + optionalString (def.canConfig != { }) ''
-          [CAN]
-          ${attrsToSection def.canConfig}
-        ''
-        + optionalString (def.ipoIBConfig != { }) ''
-          [IPoIB]
-          ${attrsToSection def.ipoIBConfig}
-        ''
-        + optionalString (def.qdiscConfig != { }) ''
-          [QDisc]
-          ${attrsToSection def.qdiscConfig}
-        ''
-        + optionalString (def.networkEmulatorConfig != { }) ''
-          [NetworkEmulator]
-          ${attrsToSection def.networkEmulatorConfig}
-        ''
-        + optionalString (def.tokenBucketFilterConfig != { }) ''
-          [TokenBucketFilter]
-          ${attrsToSection def.tokenBucketFilterConfig}
-        ''
-        + optionalString (def.pieConfig != { }) ''
-          [PIE]
-          ${attrsToSection def.pieConfig}
-        ''
-        + optionalString (def.flowQueuePIEConfig != { }) ''
-          [FlowQueuePIE]
-          ${attrsToSection def.flowQueuePIEConfig}
-        ''
-        + optionalString (def.stochasticFairBlueConfig != { }) ''
-          [StochasticFairBlue]
-          ${attrsToSection def.stochasticFairBlueConfig}
-        ''
-        + optionalString (def.stochasticFairnessQueueingConfig != { }) ''
-          [StochasticFairnessQueueing]
-          ${attrsToSection def.stochasticFairnessQueueingConfig}
-        ''
-        + optionalString (def.bfifoConfig != { }) ''
-          [BFIFO]
-          ${attrsToSection def.bfifoConfig}
-        ''
-        + optionalString (def.pfifoConfig != { }) ''
-          [PFIFO]
-          ${attrsToSection def.pfifoConfig}
-        ''
-        + optionalString (def.pfifoHeadDropConfig != { }) ''
-          [PFIFOHeadDrop]
-          ${attrsToSection def.pfifoHeadDropConfig}
-        ''
-        + optionalString (def.pfifoFastConfig != { }) ''
-          [PFIFOFast]
-          ${attrsToSection def.pfifoFastConfig}
-        ''
-        + optionalString (def.cakeConfig != { }) ''
-          [CAKE]
-          ${attrsToSection def.cakeConfig}
-        ''
-        + optionalString (def.controlledDelayConfig != { }) ''
-          [ControlledDelay]
-          ${attrsToSection def.controlledDelayConfig}
-        ''
-        + optionalString (def.deficitRoundRobinSchedulerConfig != { }) ''
-          [DeficitRoundRobinScheduler]
-          ${attrsToSection def.deficitRoundRobinSchedulerConfig}
-        ''
-        + optionalString (def.deficitRoundRobinSchedulerClassConfig != { }) ''
-          [DeficitRoundRobinSchedulerClass]
-          ${attrsToSection def.deficitRoundRobinSchedulerClassConfig}
-        ''
-        + optionalString (def.enhancedTransmissionSelectionConfig != { }) ''
-          [EnhancedTransmissionSelection]
-          ${attrsToSection def.enhancedTransmissionSelectionConfig}
-        ''
-        + optionalString (def.genericRandomEarlyDetectionConfig != { }) ''
-          [GenericRandomEarlyDetection]
-          ${attrsToSection def.genericRandomEarlyDetectionConfig}
-        ''
-        + optionalString (def.fairQueueingControlledDelayConfig != { }) ''
-          [FairQueueingControlledDelay]
-          ${attrsToSection def.fairQueueingControlledDelayConfig}
-        ''
-        + optionalString (def.fairQueueingConfig != { }) ''
-          [FairQueueing]
-          ${attrsToSection def.fairQueueingConfig}
-        ''
-        + optionalString (def.trivialLinkEqualizerConfig != { }) ''
-          [TrivialLinkEqualizer]
-          ${attrsToSection def.trivialLinkEqualizerConfig}
-        ''
-        + optionalString (def.hierarchyTokenBucketConfig != { }) ''
-          [HierarchyTokenBucket]
-          ${attrsToSection def.hierarchyTokenBucketConfig}
-        ''
-        + optionalString (def.hierarchyTokenBucketClassConfig != { }) ''
-          [HierarchyTokenBucketClass]
-          ${attrsToSection def.hierarchyTokenBucketClassConfig}
-        ''
-        + optionalString (def.heavyHitterFilterConfig != { }) ''
-          [HeavyHitterFilter]
-          ${attrsToSection def.heavyHitterFilterConfig}
-        ''
-        + optionalString (def.quickFairQueueingConfig != { }) ''
-          [QuickFairQueueing]
-          ${attrsToSection def.quickFairQueueingConfig}
-        ''
-        + optionalString (def.quickFairQueueingConfigClass != { }) ''
-          [QuickFairQueueingClass]
-          ${attrsToSection def.quickFairQueueingConfigClass}
-        ''
-        + flip concatMapStrings def.bridgeVLANs (x: ''
-          [BridgeVLAN]
-          ${attrsToSection x.bridgeVLANConfig}
-        '')
-        + def.extraConfig;
-    };
 
   mkUnitFiles = prefix: cfg: listToAttrs (map (name: {
     name = "${prefix}systemd/network/${name}";
@@ -3022,9 +2800,12 @@ let
         description = lib.mdDoc ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
           This is useful on portable machines with a wired and a wireless interface, for example.
+
+          This is on by default if {option}`networking.useDHCP` is enabled.
         '';
         type = types.bool;
-        default = false;
+        defaultText = "config.networking.useDHCP";
+        default = config.networking.useDHCP;
       };
 
       ignoredInterfaces = mkOption {
@@ -3059,11 +2840,14 @@ let
 
   };
 
-  commonConfig = config: let cfg = config.systemd.network; in mkMerge [
+  commonConfig = config: let
+    cfg = config.systemd.network;
+    mkUnit = f: def: { inherit (def) enable; text = f def; };
+  in mkMerge [
 
     # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
     {
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
+      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (mkUnit linkToUnit v)) cfg.links;
 
       systemd.network.wait-online.extraArgs =
         [ "--timeout=${toString cfg.wait-online.timeout}" ]
@@ -3073,8 +2857,8 @@ let
 
     (mkIf config.systemd.network.enable {
 
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
-        // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
+      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (mkUnit netdevToUnit v)) cfg.netdevs
+        // mapAttrs' (n: v: nameValuePair "${n}.network" (mkUnit networkToUnit v)) cfg.networks;
 
       # systemd-networkd is socket-activated by kernel netlink route change
       # messages. It is important to have systemd buffer those on behalf of
@@ -3125,9 +2909,15 @@ let
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 
-      systemd.services.systemd-networkd = {
+      systemd.services.systemd-networkd = let
+        isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
+        reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
+        nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
+        unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
+      in {
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+        reloadTriggers = unitFileSources reloadableUnitFiles;
+        restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
           config.environment.etc."systemd/networkd.conf".source
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
@@ -3147,6 +2937,17 @@ let
     })
   ];
 
+  stage1Options = {
+    options.boot.initrd.systemd.network.networks = mkOption {
+      type = with types; attrsOf (submodule {
+        # Default in initrd is dhcp-on-stop, which is correct if flushBeforeStage2 = false
+        config = mkIf config.boot.initrd.network.flushBeforeStage2 {
+          networkConfig.KeepConfiguration = mkDefault false;
+        };
+      });
+    };
+  };
+
   stage1Config = let
     cfg = config.boot.initrd.systemd.network;
   in mkMerge [
@@ -3164,8 +2965,6 @@ let
     }
 
     (mkIf cfg.enable {
-
-      systemd.package = mkDefault pkgs.systemdStage1Network;
 
       # For networkctl
       systemd.dbus.enable = mkDefault true;
@@ -3190,15 +2989,9 @@ let
 
       systemd.services.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        # These before and conflicts lines can be removed when this PR makes it into a release:
-        # https://github.com/systemd/systemd/pull/27791
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
       systemd.sockets.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
 
       systemd.services.systemd-network-generator.wantedBy = [ "sysinit.target" ];
@@ -3210,45 +3003,14 @@ let
       ];
       kernelModules = [ "af_packet" ];
 
-      systemd.services.nixos-flush-networkd = mkIf config.boot.initrd.network.flushBeforeStage2 {
-        description = "Flush Network Configuration";
-        wantedBy = ["initrd.target"];
-        after = ["systemd-networkd.service" "dbus.socket" "dbus.service"];
-        before = ["shutdown.target" "initrd-switch-root.target"];
-        conflicts = ["shutdown.target" "initrd-switch-root.target"];
-        unitConfig.DefaultDependencies = false;
-        serviceConfig = {
-          # This service does nothing when starting, but brings down
-          # interfaces when switching root. This is the easiest way to
-          # ensure proper ordering while stopping. See systemd.unit(5)
-          # section on Before= and After=. The important part is that
-          # we are stopped before units we need, like dbus.service,
-          # and that we are stopped before starting units like
-          # initrd-switch-root.target
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "/bin/true";
-        };
-        # systemd-networkd doesn't bring down interfaces on its own
-        # when it exits (see: systemd-networkd(8)), so we have to do
-        # it ourselves. The networkctl command doesn't have a way to
-        # bring all interfaces down, so we have to iterate over the
-        # list and filter out unmanaged interfaces to bring them down
-        # individually.
-        preStop = ''
-          networkctl list --full --no-legend | while read _idx link _type _operational setup _; do
-            [ "$setup" = unmanaged ] && continue
-            networkctl down "$link"
-          done
-        '';
-      };
-
     })
   ];
 
 in
 
 {
+  imports = [ stage1Options ];
+
   options = {
     systemd.network = commonOptions true;
     boot.initrd.systemd.network = commonOptions "shallow";
@@ -3258,10 +3020,10 @@ in
     stage2Config
     (mkIf config.boot.initrd.systemd.enable {
       assertions = [{
-        assertion = config.boot.initrd.network.udhcpc.extraArgs == [];
+        assertion = !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [];
         message = ''
-          boot.initrd.network.udhcpc.extraArgs is not supported when
-          boot.initrd.systemd.enable is enabled
+          systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
+          DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
         '';
       }];
 

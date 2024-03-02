@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, transmission, ... }: {
   name = "transmission";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ coconnor ];
@@ -12,6 +12,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     security.apparmor.enable = true;
 
     services.transmission.enable = true;
+    services.transmission.package = transmission;
   };
 
   testScript =

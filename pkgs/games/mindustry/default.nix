@@ -37,8 +37,10 @@
 
 let
   pname = "mindustry";
-  version = "145.1";
+  version = "146";
   buildVersion = makeBuildVersion version;
+
+  gradleWithJdk = gradle.override { java = jdk; };
 
   selectedGlew = if enableWayland then glew-egl else glew;
 
@@ -46,13 +48,13 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-xHF+3QIzP6Xekm1arXio4dAveOQpY9MXuiUC7OZFSUA=";
+    hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-HkJoYdnC4rwTMEmSO0r82cuhY3ZT7Baj3pyqSbzJrQ4=";
+    hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -114,7 +116,7 @@ let
     inherit version unpackPhase patches;
     postPatch = cleanupMindustrySrc;
 
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [ gradleWithJdk perl ];
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
@@ -131,7 +133,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-tSQV9A4uxKUVEJuFRxCQVZNb+0wEQrZofQOluQe0cfA=";
+    outputHash = "sha256-hbWLsWorEo+1BBURvrFMXpxvZjJBZ1p7HVlJN5e5JZc=";
   };
 
 in
@@ -149,7 +151,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     pkg-config
-    gradle
+    gradleWithJdk
     makeWrapper
     jdk
   ] ++ lib.optionals enableClient [
@@ -243,7 +245,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno fgaz thekostins ];
-    platforms = platforms.x86_64;
+    platforms = if enableClient then platforms.x86_64 else platforms.linux;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
     broken = stdenv.isDarwin;

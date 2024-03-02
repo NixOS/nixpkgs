@@ -46,5 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mkg20001 ];
+    mainProgram = "lxd-image-server";
   };
 }

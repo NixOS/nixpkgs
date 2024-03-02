@@ -2,32 +2,33 @@
 , fetchFromGitHub
 , buildPythonApplication
 , setuptools
+, setuptools-scm
+, wheel
 , nss
 , nix-update-script
 }:
 
 buildPythonApplication rec {
   pname = "firefox_decrypt";
-  version = "unstable-2023-05-14";
-
+  version = "1.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "unode";
     repo = pname;
-    rev = "ac857efde75d86dd6bd5dfca25d4a0f73b75009f";
-    sha256 = "sha256-34QS98nmrL98nzoZgeFSng8TJJc9BU1+Tzh2b+dsuCc=";
+    rev = "0931c0484d7429f7d4de3a2f5b62b01b7924b49f";
+    hash = "sha256-9HbH8DvHzmlem0XnDbcrIsMQRBuf82cHObqpLzQxNZM=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   makeWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ nss ]) ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/unode/firefox_decrypt";

@@ -6,7 +6,7 @@
 , lz4
 , openssh
 , openssl
-, python3
+, python3Packages
 , xxHash
 , zstd
 , installShellFiles
@@ -14,14 +14,29 @@
 , fetchPypi
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3Packages.python.override {
+    packageOverrides = self: super: {
+      msgpack = super.msgpack.overrideAttrs (oldAttrs: rec {
+        version ="1.0.4";
+
+        src = fetchPypi {
+          pname = "msgpack";
+          inherit version;
+          hash = "sha256-9dhpwY8DAgLrQS8Iso0q/upVPWYTruieIA16yn7wH18=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.4";
+  version = "1.2.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pL1U6UaegbejCmcRQjEVq8gY2c2ETsscoOYQS8U3Tag=";
+    hash = "sha256-9j8oozg8BBlxzsh7BhyjmoFbX9RF2ySqgXLKxBfZQRo=";
   };
 
   postPatch = ''
@@ -30,14 +45,14 @@ python3.pkgs.buildPythonApplication rec {
       --replace "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     cython
     setuptools-scm
     pkgconfig
 
     # docs
     sphinxHook
-    guzzle_sphinx_theme
+    guzzle-sphinx-theme
 
     # shell completions
     installShellFiles
@@ -55,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -72,7 +87,7 @@ python3.pkgs.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     e2fsprogs
     py
     python-dateutil

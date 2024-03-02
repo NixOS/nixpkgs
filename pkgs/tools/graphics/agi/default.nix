@@ -14,11 +14,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "agi";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchzip {
-    url = "https://github.com/google/agi/releases/download/v${version}/agi-${version}-linux.zip";
-    sha256 = "sha256-vKq1pe4Z0blSvNgez+/MP2rA0+QfCyr3RsCGX4GMR08=";
+    url = "https://github.com/google/agi/releases/download/${version}/agi-${version}-linux.zip";
+    sha256 = "sha256-Yawl6InBYSWNw3clHyGAeC2PVfXEzWmbd6vcYrqAPO0=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/google/agi/releases/tag/v${version}";
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.ivar ];
+    maintainers = with maintainers; [ ivar kashw2 ];
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode

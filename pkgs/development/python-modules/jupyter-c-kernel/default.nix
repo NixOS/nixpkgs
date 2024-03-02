@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "jupyter-c-kernel";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "jupyter_c_kernel";
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     description = "Minimalistic C kernel for Jupyter";
     homepage = "https://github.com/brendanrius/jupyter-c-kernel/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

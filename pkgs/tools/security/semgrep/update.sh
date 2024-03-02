@@ -15,7 +15,6 @@ fi
 
 ROOT="$(dirname "$(readlink -f "$0")")"
 NIXPKGS_ROOT="$ROOT/../../../.."
-NIX_DRV="$ROOT/default.nix"
 
 COMMON_FILE="$ROOT/common.nix"
 
@@ -25,10 +24,10 @@ instantiateClean() {
 
 # get latest version
 NEW_VERSION=$(
-  curl -s -H \
+  curl -s -L -H \
     "Accept: application/vnd.github.v3+json" \
     ${GITHUB_TOKEN:+ -H "Authorization: bearer $GITHUB_TOKEN"} \
-    https://api.github.com/repos/returntocorp/semgrep/releases/latest \
+    https://api.github.com/repos/semgrep/semgrep/releases/latest \
   | jq -r '.tag_name'
 )
 # trim v prefix
@@ -59,7 +58,7 @@ fetchPypi rec {
   version = \"$VERSION\";
   format = \"wheel\";
   dist = python;
-  python = \"cp37.cp38.cp39.py37.py38.py39\";
+  python = \"cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311\";
   platform = \"$PLATFORM\";
 }
 "
@@ -102,7 +101,7 @@ update_core_platform "aarch64-darwin"
 OLD_PWD=$PWD
 TMPDIR="$(mktemp -d)"
 # shallow clone to check submodule commits, don't actually need the submodules
-git clone https://github.com/returntocorp/semgrep "$TMPDIR/semgrep" --depth 1 --branch "v$NEW_VERSION"
+git clone https://github.com/semgrep/semgrep "$TMPDIR/semgrep" --depth 1 --branch "v$NEW_VERSION"
 
 get_submodule_commit() {
     OLD_PWD=$PWD
@@ -130,8 +129,6 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.pas
       echo "$SUBMODULE already up to date"
       continue
     fi
-
-    NEW_URL=$(instantiateClean semgrep.passthru.submodulesSubset."$SUBMODULE".url | sed "s@$OLD_REV@$NEW_REV@g")
 
     TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     replace "$OLD_REV" "$NEW_REV" "$COMMON_FILE"

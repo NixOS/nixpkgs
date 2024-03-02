@@ -1,10 +1,3 @@
-##
-## Caveat: a copy of configuration-ghc-8.6.x.nix with minor changes:
-##
-##  1. "8.7" strings
-##  2. llvm 6
-##  3. disabled library update: parallel
-##
 { pkgs, haskellLib }:
 
 with haskellLib;
@@ -46,43 +39,81 @@ self: super: {
   process = null;
   rts = null;
   stm = null;
+  system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   xhtml = null;
 
-  # https://github.com/tibbe/unordered-containers/issues/214
-  unordered-containers = dontCheck super.unordered-containers;
+  # HLS
+  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html
+  haskell-language-server = super.haskell-language-server.override {
+    hls-class-plugin = null;
+    hls-floskell-plugin = null;
+    hls-fourmolu-plugin = null;
+    hls-gadt-plugin = null;
+    hls-hlint-plugin = null;
+    hls-ormolu-plugin = null;
+    hls-refactor-plugin = null;
+    hls-rename-plugin = null;
+    hls-retrie-plugin = null;
+    hls-splice-plugin = null;
+    hls-stylish-haskell-plugin = null;
+  };
 
-  # Test suite does not compile.
-  data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
-  dates = doJailbreak super.dates; # base >=4.9 && <4.12
-  Diff = dontCheck super.Diff;
-  HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
-  hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
-  http-api-data = doJailbreak super.http-api-data;
-  persistent-sqlite = dontCheck super.persistent-sqlite;
-  system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
-  unicode-transforms = dontCheck super.unicode-transforms;
-  wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
-  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
-  monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
-  github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
-  binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
+  # Version upgrades
+  alex = doDistribute self.alex_3_4_0_1;
+  some = doDistribute self.some_1_0_6;
+  tagged = doDistribute self.tagged_0_8_8;
+  th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
+  hspec-core = doDistribute self.hspec-core_2_11_7;
+  hspec-meta = doDistribute self.hspec-meta_2_11_7;
+  hspec-discover = doDistribute self.hspec-discover_2_11_7;
+  hspec = doDistribute self.hspec_2_11_7;
+  hspec-expectations = doDistribute self.hspec-expectations_0_8_4;
+  bifunctors = doDistribute self.bifunctors_5_6_1;
+  free = doDistribute self.free_5_2;
+  semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
+  doctest = doDistribute self.doctest_0_22_2;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_1_20231121;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_0;
+  ghc-lib = doDistribute self.ghc-lib_9_8_1_20231121;
+  megaparsec = doDistribute self.megaparsec_9_6_1;
+  tasty-hspec = doDistribute self.tasty-hspec_1_2_0_4;
+  hedgehog = doDistribute self.hedgehog_1_4;
+  rebase = doDistribute self.rebase_1_20_2;
+  rerebase = doDistribute self.rerebase_1_20_2;
+  aeson = doDistribute self.aeson_2_2_1_0;
+  aeson-pretty = doDistribute self.aeson-pretty_0_8_10;
+  attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
+  ormolu = doDistribute self.ormolu_0_7_3_0;
+  fourmolu = doDistribute (dontCheck self.fourmolu_0_14_1_0);
 
-  # https://github.com/jgm/skylighting/issues/55
-  skylighting-core = dontCheck super.skylighting-core;
+  # Jailbreaks
+  commutative-semigroups = doJailbreak super.commutative-semigroups; # base < 4.19
+  ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
+  primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
+  newtype-generics = doJailbreak super.newtype-generics; # base < 4.19
+  hw-prim = doJailbreak super.hw-prim; # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
+  hw-fingertree = doJailbreak super.hw-fingertree; # deepseq <1.5, doctest < 0.22, hedgehog < 1.4
+  # Too strict bound on base, believe it or not.
+  # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
+  terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
 
-  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
-  stack = doJailbreak super.stack;
+  # Test suite issues
+  unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
+  lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
+  # https://github.com/wz1000/HieDb/issues/64
+  hiedb = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "--match" "!/hiedb/Command line/point-info/correctly prints type signatures/"
+    ];
+  }) super.hiedb;
 
-  # https://github.com/fpco/inline-c/pull/131
-  # and/or https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7739
-  inline-c-cpp =
-    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
-    super.inline-c-cpp;
+  # Unbroken due to hspec* upgrades
+  hspec-api = doDistribute (unmarkBroken super.hspec-api);
 }

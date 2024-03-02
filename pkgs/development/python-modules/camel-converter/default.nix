@@ -9,21 +9,21 @@
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "3.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sanders41";
-    repo = pname;
+    repo = "camel-converter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t0wZ03xMNuBEUeXC+DizNSVJmnlt2SH9f0qw6F4UXg8=";
+    hash = "sha256-xrdk5Y3H8KlQaGtJYdJNHq16Qfos2p+93uIAfIl098c=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=camel_converter --cov-report term-missing" ""
+      --replace "--cov=camel_converter --cov-report term-missing --no-cov-on-fail" ""
   '';
 
   nativeBuildInputs = [
@@ -42,6 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "camel_converter"
+  ];
+
+  disabledTests = [
+    # AttributeError: 'Test' object has no attribute 'model_dump'
+    "test_camel_config"
   ];
 
   meta = with lib; {

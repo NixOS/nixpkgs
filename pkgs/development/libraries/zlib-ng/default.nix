@@ -1,29 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, gtest
 , withZlibCompat ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "zlib-ng";
-  version = "2.1.2";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = version;
-    sha256 = "sha256-6IEH9IQsBiNwfAZAemmP0/p6CTOzxEKyekciuH6pLhw=";
+    hash = "sha256-Auu7DS4qNm9/8t/nCjEJBaXfPPxA18oZr2qqybVY4Es=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/zlib-ng/zlib-ng/pull/1519.patch";
-      hash = "sha256-itobS8kJ2Hj3RfjslVkvEVdQ4t5eeIrsA9muRZt03pE=";
-    })
-  ];
 
   outputs = [ "out" "dev" "bin" ];
 
-  nativeBuildInputs = [ cmake pkg-config gtest ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  buildInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=/"

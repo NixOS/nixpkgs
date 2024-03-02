@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = [ maintainers.skeidel ];
+    maintainers = [ ];
   };
 }

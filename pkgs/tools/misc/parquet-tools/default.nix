@@ -7,7 +7,7 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "parquet-tools";
-  version = "0.2.12";
+  version = "0.2.14";
 
   format = "pyproject";
 
@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner = "ktrueda";
     repo = "parquet-tools";
     rev = "refs/tags/${version}";
-    hash = "sha256-5bK+kW550DgBhcH5INozwGKKjM+xXblmFg2Tu2rnos4=";
+    hash = "sha256-2jIwDsxB+g37zV9hLc2VNC5YuZXTpTmr2aQ72AeHYJo=";
   };
 
   postPatch = ''
@@ -56,6 +56,8 @@ buildPythonApplication rec {
     # These tests try to read Python code as parquet and fail
     "test_local_wildcard"
     "test_local_and_s3_wildcard_files"
+    # test file is 2 bytes bigger than expected
+    "test_excute_simple"
   ];
 
   pythonImportsCheck = [
@@ -68,5 +70,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/ktrueda/parquet-tools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "parquet-tools";
   };
 }

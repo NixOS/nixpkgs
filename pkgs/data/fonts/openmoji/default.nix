@@ -4,6 +4,7 @@
 , fetchpatch
 , scfbuild
 , fontforge
+, node-glob
 , libuninameslist
 , nodejs
 , nodePackages
@@ -59,7 +60,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     scfbuild-with-fontforge-20201107
     nodejs
-    nodePackages.glob
+    node-glob
     nodePackages.lodash
   ];
 

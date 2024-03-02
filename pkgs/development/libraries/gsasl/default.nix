@@ -1,12 +1,14 @@
-{ fetchurl, lib, stdenv, libidn, libkrb5 }:
+{ fetchurl, lib, stdenv, libidn, libkrb5
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsasl";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gsasl/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ebho47mXbcSE1ZspygroiXvpbOTTbTKu1dk1p6Mwd1k=";
+    url = "mirror://gnu/gsasl/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-1FtWLhO9E7n8ILNy9LUyaXQM9iefg28JzhG50yvO4HU=";
   };
 
   # This is actually bug in musl. It is already fixed in trunc and
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
   '';
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "GNU SASL, Simple Authentication and Security Layer library";
 
@@ -38,6 +42,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = with lib.maintainers; [ shlevy ];
+    pkgConfigModules = [ "libgsasl" ];
     platforms = lib.platforms.all;
   };
-}
+})

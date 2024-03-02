@@ -51,6 +51,8 @@
 
 # the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
 , gccForLibs ? if useCcForLibs then cc else null
+, fortify-headers ? null
+, includeFortifyHeaders ? null
 }:
 
 with lib;
@@ -65,6 +67,10 @@ let
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
+  includeFortifyHeaders' = if includeFortifyHeaders != null
+    then includeFortifyHeaders
+    else (targetPlatform.libc == "musl" && isGNU);
+
   # Prefix for binaries. Customarily ends with a dash separator.
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
@@ -75,14 +81,14 @@ let
   ccVersion = lib.getVersion cc;
   ccName = lib.removePrefix targetPrefix (lib.getName cc);
 
-  libc_bin = if libc == null then "" else getBin libc;
-  libc_dev = if libc == null then "" else getDev libc;
-  libc_lib = if libc == null then "" else getLib libc;
+  libc_bin = optionalString (libc != null) (getBin libc);
+  libc_dev = optionalString (libc != null) (getDev libc);
+  libc_lib = optionalString (libc != null) (getLib libc);
   cc_solib = getLib cc
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
-  coreutils_bin = if nativeTools then "" else getBin coreutils;
+  coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
 
   # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
@@ -101,12 +107,35 @@ let
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)
     && gccForLibs != null;
+  gccForLibs_solib = getLib gccForLibs
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
-  # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
+  # Analogously to cc_solib and gccForLibs_solib
+  libcxx_solib = "${lib.getLib libcxx}/lib";
+
+  # The following two functions, `isGccArchSupported` and
+  # `isGccTuneSupported`, only handle those situations where a flag
+  # (`-march` or `-mtune`) is accepted by one compiler but rejected
+  # by another, and both compilers are relevant to nixpkgs.  We are
+  # not trying to maintain a complete list of all flags accepted by
+  # all versions of all compilers ever in nixpkgs.
+  #
+  # The two main cases of interest are:
+  #
+  # - One compiler is gcc and the other is clang
+  # - One compiler is pkgs.gcc and the other is bootstrap-files.gcc
+  #   -- older compilers (for example bootstrap's GCC 5) fail with
+  #   -march=too-modern-cpu
+
   isGccArchSupported = arch:
     if targetPlatform.isPower then false else # powerpc does not allow -march=
     if isGNU then
-      { # Intel
+      { # Generic
+        x86-64-v2 = versionAtLeast ccVersion "11.0";
+        x86-64-v3 = versionAtLeast ccVersion "11.0";
+        x86-64-v4 = versionAtLeast ccVersion "11.0";
+
+        # Intel
         skylake        = versionAtLeast ccVersion "6.0";
         skylake-avx512 = versionAtLeast ccVersion "6.0";
         cannonlake     = versionAtLeast ccVersion "8.0";
@@ -117,6 +146,7 @@ let
         tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
         alderlake      = versionAtLeast ccVersion "12.0";
+
         # AMD
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
@@ -124,12 +154,18 @@ let
         znver4         = versionAtLeast ccVersion "13.0";
       }.${arch} or true
     else if isClang then
-      { # Intel
+      { #Generic
+        x86-64-v2 = versionAtLeast ccVersion "12.0";
+        x86-64-v3 = versionAtLeast ccVersion "12.0";
+        x86-64-v4 = versionAtLeast ccVersion "12.0";
+
+        # Intel
         cannonlake     = versionAtLeast ccVersion "5.0";
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
         alderlake      = versionAtLeast ccVersion "16.0";
+
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
         znver2         = versionAtLeast ccVersion "9.0";
@@ -139,6 +175,62 @@ let
     else
       false;
 
+  isGccTuneSupported = tune:
+    # for x86 -mtune= takes the same values as -march, plus two more:
+    if targetPlatform.isx86 then
+      {
+        generic = true;
+        intel = true;
+      }.${tune} or (isGccArchSupported tune)
+    # on arm64, the -mtune= values are specific processors
+    else if targetPlatform.isAarch64 then
+      (if isGNU then
+        {
+          cortex-a53              = versionAtLeast ccVersion "4.8";  # gcc 8c075f
+          cortex-a72              = versionAtLeast ccVersion "5.1";  # gcc d8f70d
+          "cortex-a72.cortex-a53" = versionAtLeast ccVersion "5.1";  # gcc d8f70d
+        }.${tune} or false
+       else if isClang then
+         {
+           cortex-a53             = versionAtLeast ccVersion "3.9"; # llvm dfc5d1
+         }.${tune} or false
+       else false)
+    else if targetPlatform.isPower then
+      # powerpc does not support -march
+      true
+    else if targetPlatform.isMips then
+      # for mips -mtune= takes the same values as -march
+      isGccArchSupported tune
+    else
+      false;
+
+  # Clang does not support as many `-mtune=` values as gcc does;
+  # this function will return the best possible approximation of the
+  # provided `-mtune=` value, or `null` if none exists.
+  #
+  # Note: this function can make use of ccVersion; for example, `if
+  # versionOlder ccVersion "12" then ...`
+  findBestTuneApproximation = tune:
+    let guess = if isClang
+                then {
+                  # clang does not tune for big.LITTLE chips
+                  "cortex-a72.cortex-a53" = "cortex-a72";
+                }.${tune} or tune
+                else tune;
+    in if isGccTuneSupported guess
+       then guess
+       else null;
+
+  defaultHardeningFlags = bintools.defaultHardeningFlags or [];
+
+  # if cc.hardeningUnsupportedFlagsByTargetPlatform exists, this is
+  # called with the targetPlatform as an argument and
+  # cc.hardeningUnsupportedFlags is completely ignored - the function
+  # is responsible for including the constant hardeningUnsupportedFlags
+  # list however it sees fit.
+  ccHardeningUnsupportedFlags = if cc ? hardeningUnsupportedFlagsByTargetPlatform
+    then cc.hardeningUnsupportedFlagsByTargetPlatform targetPlatform
+    else (cc.hardeningUnsupportedFlags or []);
 
   darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
@@ -153,6 +245,8 @@ let
     stdenv.targetPlatform.darwinMinVersionVariable;
 in
 
+assert includeFortifyHeaders' -> fortify-headers != null;
+
 # Ensure bintools matches
 assert libc_bin == bintools.libc_bin;
 assert libc_dev == bintools.libc_dev;
@@ -164,7 +258,7 @@ assert nativePrefix == bintools.nativePrefix;
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${ccName}-wrapper");
-  version = if cc == null then "" else ccVersion;
+  version = optionalString (cc != null) ccVersion;
 
   preferLocalBuild = true;
 
@@ -177,7 +271,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit cc libc nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -191,6 +285,8 @@ stdenv.mkDerivation {
     inherit expand-response-params;
 
     inherit nixSupport;
+
+    inherit defaultHardeningFlags;
   };
 
   dontBuild = true;
@@ -281,7 +377,7 @@ stdenv.mkDerivation {
 
       # this symlink points to the unwrapped gnat's output "out". It is used by
       # our custom gprconfig compiler description to find GNAT's ada runtime. See
-      # ../../development/tools/build-managers/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+      # ../../development/ada-modules/gprbuild/{boot.nix, nixpkgs-gnat.xml}
       ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
     ''
 
@@ -312,7 +408,16 @@ stdenv.mkDerivation {
   setupHooks = [
     ../setup-hooks/role.bash
   ] ++ lib.optional (cc.langC or true) ./setup-hook.sh
-    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh;
+    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh
+    ++ lib.optional (targetPlatform.isWindows) (stdenv.mkDerivation {
+      name = "win-dll-hook.sh";
+      dontUnpack = true;
+      installPhase = ''
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
+      '';
+    });
 
   postFixup =
     # Ensure flags files exists, as some other programs cat them. (That these
@@ -345,7 +450,7 @@ stdenv.mkDerivation {
     ''
     + optionalString useGccForLibs ''
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
-      echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
+      echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
@@ -402,6 +507,16 @@ stdenv.mkDerivation {
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+    ''
+    # fortify-headers is a set of wrapper headers that augment libc
+    # and use #include_next to pass through to libc's true
+    # implementations, so must appear before them in search order.
+    # in theory a correctly placed -idirafter could be used, but in
+    # practice the compiler may have been built with a --with-headers
+    # like option that forces the libc headers before all -idirafter,
+    # hence -isystem here.
+    + optionalString includeFortifyHeaders' ''
+      echo "-isystem ${fortify-headers}/include" >> $out/nix-support/libc-cflags
     '')
 
     ##
@@ -419,15 +534,16 @@ stdenv.mkDerivation {
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
-      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
+      for dir in ${gccForLibs}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
-      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*/${targetPlatform.config}; do
+      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
     + optionalString (libcxx.isLLVM or false) ''
       echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
       echo "-l${libcxx.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
     ''
@@ -460,7 +576,7 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
-      echo " -L${lib.getLib libcxx}/lib" >> $out/nix-support/cc-ldflags
+      echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
     ##
@@ -477,7 +593,7 @@ stdenv.mkDerivation {
     ## Hardening support
     ##
     + ''
-      export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
+      export hardening_unsupported_flags="${builtins.concatStringsSep " " ccHardeningUnsupportedFlags}"
     ''
 
     # Machine flags. These are necessary to support
@@ -517,10 +633,12 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.thumb) ''
       echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
     ''
-    + optionalString (targetPlatform ? gcc.tune &&
-                      isGccArchSupported targetPlatform.gcc.tune) ''
-      echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
-    ''
+    + (let tune = if targetPlatform ? gcc.tune
+                  then findBestTuneApproximation targetPlatform.gcc.tune
+                  else null;
+      in optionalString (tune != null) ''
+      echo "-mtune=${tune}" >> $out/nix-support/cc-cflags-before
+    '')
 
     # TODO: categorize these and figure out a better place for them
     + optionalString targetPlatform.isWindows ''
@@ -545,12 +663,6 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     '' + optionalString targetPlatform.isMicroBlaze ''
       hardening_unsupported_flags+=" stackprotector"
-    ''
-
-    + optionalString (libc != null && targetPlatform.isAvr) ''
-      for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
-        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
-      done
     ''
 
     + optionalString stdenv.targetPlatform.isDarwin ''
@@ -597,17 +709,20 @@ stdenv.mkDerivation {
 
 
   env = {
+    inherit isClang;
+
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
-    gnugrep_bin = if nativeTools then "" else gnugrep;
+    gnugrep_bin = optionalString (!nativeTools) gnugrep;
     # stdenv.cc.cc should not be null and we have nothing better for now.
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
-    cc = if nativeTools then "" else cc;
+    cc = optionalString (!nativeTools) cc;
     wrapperName = "CC_WRAPPER";
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
+    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
   };
 
   meta =

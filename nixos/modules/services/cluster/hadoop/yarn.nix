@@ -160,7 +160,7 @@ in
           umount /run/wrappers/yarn-nodemanager/cgroup/cpu || true
           rm -rf /run/wrappers/yarn-nodemanager/ || true
           mkdir -p /run/wrappers/yarn-nodemanager/{bin,etc/hadoop,cgroup/cpu}
-          cp ${cfg.package}/lib/${cfg.package.untarDir}/bin/container-executor /run/wrappers/yarn-nodemanager/bin/
+          cp ${cfg.package}/bin/container-executor /run/wrappers/yarn-nodemanager/bin/
           chgrp hadoop /run/wrappers/yarn-nodemanager/bin/container-executor
           chmod 6050 /run/wrappers/yarn-nodemanager/bin/container-executor
           cp ${hadoopConf}/container-executor.cfg /run/wrappers/yarn-nodemanager/etc/hadoop/

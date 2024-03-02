@@ -1,0 +1,25 @@
+From 9c76dbff982b0fd8beaffae42a6e98bc1e67f089 Mon Sep 17 00:00:00 2001
+From: Gabriel Simmer <g@gmem.ca>
+Date: Fri, 21 Jul 2023 08:16:52 +0100
+Subject: [PATCH] Disable auto update
+
+---
+ internal/config/config.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/internal/config/config.go b/internal/config/config.go
+index 1914f8e0..958baf27 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -141,7 +141,7 @@ func (cfg *Config) ApplyFile(path string) (err error) {
+ 		AutoUpdate   bool   `yaml:"auto_update"`
+ 	}
+ 	w.SendMetrics = true
+-	w.AutoUpdate = true
++	w.AutoUpdate = false
+ 
+ 	if err = unmarshal(path, &w); err == nil {
+ 		cfg.AccessToken = w.AccessToken
+-- 
+2.41.0
+

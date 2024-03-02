@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "amass";
-  version = "3.23.3";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
-    rev = "v${version}";
-    hash = "sha256-aOir4ezLBNWoTaDeQDWoDdV/A+Qzbq09601297o6uDE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lhvU2fUnjQ+D+EZDRircNg/np4Ynk+HzOBgxT1L8BaQ=";
   };
 
-  vendorHash = "sha256-zUl1q6rRjX958VXKnVB2YmLUpKMUtFvdh+hkIrTomes=";
+  vendorHash = "sha256-PdFIWK4yBh8Bb9mzYdU2h7pDPK8FZMhu8meTd9snP48=";
 
   outputs = [
     "out"
@@ -47,5 +47,6 @@ buildGoModule rec {
     changelog = "https://github.com/OWASP/Amass/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit fab ];
+    mainProgram = "amass";
   };
 }

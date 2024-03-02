@@ -7,18 +7,18 @@ buildNpmPackage {
   pname = "frigate-web";
   inherit version src;
 
-  sourceRoot = "source/web";
+  sourceRoot = "${src.name}/web";
 
   postPatch = ''
     substituteInPlace package.json \
-      --replace "--base=/BASE_PATH/" ""
+      --replace-fail "--base=/BASE_PATH/" ""
 
     substituteInPlace src/routes/Storage.jsx \
-      --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate"
+      --replace-fail "/media/frigate" "/var/lib/frigate" \
+      --replace-fail "/tmp/cache" "/var/cache/frigate"
   '';
 
-  npmDepsHash = "sha256-fvRxpQjSEzd2CnoEOVgQcB6MJJ4dcjN8bOaacHjCdwU=";
+  npmDepsHash = "sha256-+36quezGArqIM9dM+UihwcIgmE3EVmJQThuicLgDW4A=";
 
   installPhase = ''
     cp -rv dist/ $out

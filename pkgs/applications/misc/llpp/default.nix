@@ -1,26 +1,39 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchFromGitHub, fetchpatch, ocaml, pkg-config, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
-libGLU, libGL, gumbo, freetype, zlib, xclip, inotify-tools, procps }:
+{ stdenv
+, lib
+, makeWrapper
+, fetchFromGitHub
+, ocaml
+, pkg-config
+, mupdf
+, libX11
+, jbig2dec
+, openjpeg
+, libjpeg
+, lcms2
+, harfbuzz
+, libGLU
+, libGL
+, gumbo
+, freetype
+, zlib
+, xclip
+, inotify-tools
+, procps
+, darwin
+}:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
   pname = "llpp";
-  version = "41";
+  version = "42";
 
   src = fetchFromGitHub {
     owner = "criticic";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Doj0zLYI1pi7eK01+29xFLYPtc8+fWzj10292+PmToE=";
+    hash = "sha256-B/jKvBtBwMOErUVmGFGXXIT8FzMl1DFidfDCHIH41TU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "system-makedeps.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-makedeps.patch?h=llpp&id=0d2913056aaf3dbf7431e57b7b08b55568ba076c";
-      hash = "sha256-t9PLXsM8+exCeYqJBe0LSDK0D2rpktmozS8qNcEAcHo=";
-    })
-  ];
 
   postPatch = ''
     sed -i "2d;s/ver=.*/ver=${version}/" build.bash
@@ -29,14 +42,11 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ makeWrapper ocaml pkg-config ];
-  buildInputs = [ mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
+  buildInputs = [ mupdf libX11 freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ]
+    ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.OpenGL darwin.apple_sdk.frameworks.Cocoa ];
 
   dontStrip = true;
-
-  configurePhase = ''
-    mkdir -p build/mupdf/thirdparty
-    ln -s ${freetype.dev} build/mupdf/thirdparty/freetype
-  '';
 
   buildPhase = ''
     bash ./build.bash build
@@ -46,7 +56,8 @@ stdenv.mkDerivation rec {
     install -d $out/bin
     install build/llpp $out/bin
     install misc/llpp.inotify $out/bin/llpp.inotify
-
+    install -Dm444 misc/llpp.desktop -t $out/share/applications
+  '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/llpp \
         --prefix PATH ":" "${xclip}/bin"
 
@@ -57,10 +68,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://repo.or.cz/w/llpp.git";
+    homepage = "https://github.com/criticic/llpp";
     description = "A MuPDF based PDF pager written in OCaml";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
-    license = licenses.gpl3;
+    license = [ licenses.publicDomain licenses.bsd3 ];
   };
 }

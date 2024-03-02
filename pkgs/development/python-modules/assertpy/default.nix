@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "assertpy";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

@@ -7,6 +7,7 @@ buildPythonPackage {
   # tags have dashes, while the library version does not
   # see https://github.com/nexB/python-publicsuffix2/issues/12
   version = lib.replaceStrings ["-"] [""] tagVersion;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nexB";
@@ -27,6 +28,6 @@ buildPythonPackage {
     description = "Get a public suffix for a domain name using the Public Suffix List";
     homepage = "https://github.com/nexB/python-publicsuffix2";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

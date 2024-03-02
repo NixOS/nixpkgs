@@ -10,11 +10,10 @@
 , virtualenv
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pbr";
-  inherit (pbr) version;
-
-  src = pbr.src;
+  inherit (pbr) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

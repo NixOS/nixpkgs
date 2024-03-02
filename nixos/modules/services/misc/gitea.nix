@@ -15,6 +15,7 @@ let
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
+    WORK_PATH = ${cfg.stateDir}
 
     ${generators.toINI {} cfg.settings}
 
@@ -50,12 +51,7 @@ in
         description = lib.mdDoc "Enable Gitea Service.";
       };
 
-      package = mkOption {
-        default = pkgs.gitea;
-        type = types.package;
-        defaultText = literalExpression "pkgs.gitea";
-        description = lib.mdDoc "gitea derivation to use";
-      };
+      package = mkPackageOption pkgs "gitea" { };
 
       useWizard = mkOption {
         default = false;
@@ -238,11 +234,25 @@ in
         description = lib.mdDoc "Path to the git repositories.";
       };
 
+      camoHmacKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/camoHmacKey";
+        description = lib.mdDoc "Path to a file containing the camo HMAC key.";
+      };
+
       mailerPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/secrets/gitea/mailpw";
         description = lib.mdDoc "Path to a file containing the SMTP password.";
+      };
+
+      metricsTokenFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/metrics_token";
+        description = lib.mdDoc "Path to a file containing the metrics authentication token.";
       };
 
       settings = mkOption {
@@ -386,6 +396,14 @@ in
       { assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
+      { assertion = cfg.database.createDatabase && usePostgresql -> cfg.database.user == cfg.database.name;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.gitea.createDatabase` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.gitea.settings = {
@@ -418,6 +436,10 @@ in
         LFS_JWT_SECRET = "#lfsjwtsecret#";
       };
 
+      camo = mkIf (cfg.camoHmacKeyFile != null) {
+        HMAC_KEY = "#hmackey#";
+      };
+
       session = {
         COOKIE_NAME = lib.mkDefault "session";
       };
@@ -432,6 +454,10 @@ in
         PASSWD = "#mailerpass#";
       };
 
+      metrics = mkIf (cfg.metricsTokenFile != null) {
+        TOKEN = "#metricstoken#";
+      };
+
       oauth2 = {
         JWT_SECRET = "#oauth2jwtsecret#";
       };
@@ -439,6 +465,8 @@ in
       lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
+
+      packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
     };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
@@ -447,7 +475,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -467,10 +495,8 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.dump.backupDir}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.repositoryRoot}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -484,7 +510,6 @@ in
       "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
 
       # If we have a folder or symlink with gitea locales, remove it
       # And symlink the current gitea locales in place
@@ -493,13 +518,12 @@ in
     ] ++ lib.optionals cfg.lfs.enable [
       "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.lfs.contentDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.gitea = {
       description = "gitea";
       after = [ "network.target" ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
-      requires = optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
+      requires = optional (cfg.database.createDatabase && usePostgresql) "postgresql.service" ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.git pkgs.gnupg ];
 
@@ -557,8 +581,16 @@ in
               ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
             ''}
 
+            ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
+              ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
+            ''}
+
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
+            ''}
+
+            ${lib.optionalString (cfg.metricsTokenFile != null) ''
+              ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
             ''}
             chmod u-w '${runConfig}'
           }
@@ -588,6 +620,9 @@ in
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
+        # Proc filesystem
+        ProcSubset = "pid";
+        ProtectProc = "invisible";
         # Access write directories
         ReadWritePaths = [ cfg.customDir cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
         UMask = "0027";
@@ -607,15 +642,17 @@ in
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @reboot @setuid @swap";
+        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" "setrlimit" ];
       };
 
       environment = {
@@ -644,6 +681,11 @@ in
       optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
       optional (cfg.extraConfig != null) ''
         services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
+      '' ++
+      optional (lib.getName cfg.package == "forgejo") ''
+        Running forgejo via services.gitea.package is no longer supported.
+        Please use services.forgejo instead.
+        See https://nixos.org/manual/nixos/unstable/#module-forgejo for migration instructions.
       '';
 
     # Create database passwordFile default when password is configured.
@@ -662,6 +704,7 @@ in
          USER = cfg.user;
          HOME = cfg.stateDir;
          GITEA_WORK_DIR = cfg.stateDir;
+         GITEA_CUSTOM = cfg.customDir;
        };
 
        serviceConfig = {

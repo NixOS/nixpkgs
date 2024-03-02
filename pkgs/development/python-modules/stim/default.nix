@@ -1,67 +1,76 @@
 { lib
-, pkgs
 , buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, pytest-xdist
-, fetchFromGitHub
-, numpy
-, pybind11
 , cirq-core
+, fetchFromGitHub
 , matplotlib
 , networkx
-, scipy
+, numpy
 , pandas
+, pybind11
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, scipy
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "stim";
-  version = "1.9.0";
-  format = "pyproject";
+  version = "1.12.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "Stim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zXWdJjFkf74FCWxyVMF8dx0P8GmUkuHFxUo5wYNU2o0=";
+    hash = "sha256-vDpW8cn1JPARDIXpLyK9uenhHmva0FwnWIDV7dSHbIY=";
   };
+
+  postPatch = ''
+    # asked to relax this in https://github.com/quantumlib/Stim/issues/623
+    substituteInPlace pyproject.toml \
+      --replace "pybind11==" "pybind11>="
+  '';
+
+  nativeBuildInputs = [
+    pybind11
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     numpy
-    pybind11
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-
     cirq-core
     matplotlib
     networkx
-    scipy
     pandas
+    pytest-xdist
+    pytestCheckHook
+    scipy
   ];
 
-  meta = {
-    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits.";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ chrispattison ];
-    homepage = "https://github.com/quantumlib/stim";
-  };
-
-  pythonImportsCheck = [ "stim" ];
+  pythonImportsCheck = [
+    "stim"
+  ];
 
   enableParallelBuilding = true;
 
   disabledTestPaths = [
-    # No pymatching
-    "glue/sample/src/sinter/main_test.py"
-    "glue/sample/src/sinter/decoding_test.py"
-    "glue/sample/src/sinter/predict_test.py"
-    "glue/sample/src/sinter/collection_test.py"
-    "glue/sample/src/sinter/collection_work_manager.py"
-    "glue/sample/src/sinter/worker_test.py"
+    # Don't test sample
+    "glue/sample/"
   ];
+
+  meta = with lib; {
+    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
+    homepage = "https://github.com/quantumlib/stim";
+    changelog = "https://github.com/quantumlib/Stim/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ chrispattison ];
+  };
 }

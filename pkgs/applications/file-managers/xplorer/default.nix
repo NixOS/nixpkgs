@@ -51,7 +51,7 @@ in
 rustPlatform.buildRustPackage {
   inherit version src pname;
 
-  sourceRoot = "source/src-tauri";
+  sourceRoot = "${src.name}/src-tauri";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -90,5 +90,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://xplorer.space";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "xplorer";
   };
 }

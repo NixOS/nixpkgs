@@ -1,30 +1,24 @@
-{ lib, stdenv, buildNpmPackage, fetchFromGitHub, vscode }:
+{ lib, stdenv, buildNpmPackage, fetchFromGitHub, vscodium, vscode-extensions }:
 
 buildNpmPackage rec {
   pname = "vscode-langservers-extracted";
-  version = "4.7.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "hrsh7th";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RLRDEHfEJ2ckn0HTMu0WbMK/o9W20Xwm+XI6kCq57u8=";
+    hash = "sha256-sGnxmEQ0J74zNbhRpsgF/cYoXwn4jh9yBVjk6UiUdK0=";
   };
 
-  npmDepsHash = "sha256-QhiSj/DigsI4Bfwmk3wG4lDQOWuDDduc/sfJlXiEoGE=";
-
-  postPatch = ''
-    # TODO: Add vscode-eslint as a dependency
-    # Eliminate the vscode-eslint bin
-    sed -i '/^\s*"vscode-eslint-language-server":.*bin\//d' package.json package-lock.json
-  '';
+  npmDepsHash = "sha256-LFWC87Ahvjf2moijayFze1Jk0TmTc7rOUd/s489PHro=";
 
   buildPhase =
     let
       extensions =
         if stdenv.isDarwin
-        then "${vscode}/Applications/Visual\\ Studio\\ Code.app/Contents/Resources/app/extensions"
-        else "${vscode}/lib/vscode/resources/app/extensions";
+        then "${vscodium}/Applications/VSCodium.app/Contents/Resources/app/extensions"
+        else "${vscodium}/lib/vscode/resources/app/extensions";
     in
     ''
       npx babel ${extensions}/css-language-features/server/dist/node \
@@ -35,11 +29,13 @@ buildNpmPackage rec {
         --out-dir lib/json-language-server/node/
       npx babel ${extensions}/markdown-language-features/server/dist/node \
         --out-dir lib/markdown-language-server/node/
+      cp -r ${vscode-extensions.dbaeumer.vscode-eslint}/share/vscode/extensions/dbaeumer.vscode-eslint/server/out \
+        lib/eslint-language-server
       mv lib/markdown-language-server/node/workerMain.js lib/markdown-language-server/node/main.js
     '';
 
   meta = with lib; {
-    description = "HTML/CSS/JSON/ESLint language servers extracted from vscode.";
+    description = "HTML/CSS/JSON/ESLint language servers extracted from vscode";
     homepage = "https://github.com/hrsh7th/vscode-langservers-extracted";
     license = licenses.mit;
     maintainers = with maintainers; [ lord-valen ];

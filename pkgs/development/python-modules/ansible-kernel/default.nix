@@ -25,6 +25,7 @@ in
 buildPythonPackage rec {
   pname = "ansible-kernel";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -55,6 +56,6 @@ buildPythonPackage rec {
     description = "An Ansible kernel for Jupyter";
     homepage = "https://github.com/ansible/ansible-jupyter-kernel";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

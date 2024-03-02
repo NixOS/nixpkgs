@@ -9,17 +9,18 @@
 , xorg
 , darwin
 , nix-update-script
+, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.8.0";
+  version = "0.9.0.1";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-1HWWrBI96znHctoMhQyO46Jmbg1jXPcvkDdwiWwp4KE=";
+    hash = "sha256-iILtyURYCshicgAV3MWkgMQsXHe7Unj1A08W7tUMU2o=";
   };
 
   postPatch = ''
@@ -36,12 +37,14 @@ stdenv.mkDerivation rec {
     wayland-protocols
     wayland
     xorg.libX11
+    alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 
+  cmakeBuildType = "MinSizeRel";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='MinSizeRel'"
     "-Wno-dev"
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];

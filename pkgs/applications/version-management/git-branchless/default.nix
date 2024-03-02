@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    sha256 = "sha256-9kyC9Uwmc2WNHgfKpnS3v8vNF2o+168ULWqE+2eX1cE=";
+    hash = "sha256-ev56NzrEF7xm3WmR2a0pHPs69Lvmb4He7+kIBYiJjKY=";
   };
 
-  cargoHash = "sha256-k+Jx5PcA8TaFQQDYqZ6dTy8bwNtYeALF75ucoFjVGUc=";
+  cargoHash = "sha256-Ppw5TN/6zMNxFAx90Q9hQ7RdGxV+TT8UlOm68ldK8oc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -36,6 +36,10 @@ rustPlatform.buildRustPackage rec {
     SystemConfiguration
     libiconv
   ];
+
+  postInstall = ''
+    $out/bin/git-branchless install-man-pages $out/share/man
+  '';
 
   preCheck = ''
     export TEST_GIT=${git}/bin/git
@@ -52,6 +56,7 @@ rustPlatform.buildRustPackage rec {
     description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
     license = licenses.gpl2Only;
+    mainProgram = "git-branchless";
     maintainers = with maintainers; [ msfjarvis nh2 hmenke ];
   };
 }

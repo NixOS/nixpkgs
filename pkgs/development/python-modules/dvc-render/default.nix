@@ -15,19 +15,17 @@
 
 buildPythonPackage rec {
   pname = "dvc-render";
-  version = "0.5.3";
-  format = "pyproject";
+  version = "1.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc-render";
     rev = "refs/tags/${version}";
-    hash = "sha256-4nqImAYk4pYXSuE2/znzwjtf0349bydqi4iN69wG080=";
+    hash = "sha256-7rmmhf6Y6teoHR8u1+Ce1Xq0rdtC1/MWLXb282OOEnc=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

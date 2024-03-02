@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.6.6";
+  version = "7.7.1";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yt5sMvYau43WwVerQlaOrvzJ4HnBOEVQqbql9UH8jnM=";
+    hash = "sha256-rRYM8wdvwfetoIpS/lzAV/uV5XVpXyXsHSrClPWcsCo=";
   };
 
   postUnpack = ''
@@ -70,11 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     python3Packages.wrapPython
+    gobject-introspection
   ];
 
   buildInputs = [
     flac
-    gobject-introspection
     gtk3
     libappindicator
     libnotify

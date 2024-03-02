@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.12.1";
-  format = "setuptools";
+  version = "3.15.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KBqnGp56U2lGLo/2MWu5kfHr7pfIJJDT857+xnrK+iU=";
+    hash = "sha256-Ttza6UuVCUJUmoH9hFVWVzTfX4kTMS9EQ+ixoYm9xOg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -39,6 +44,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires credentials
     "test_inspect_content"
+    "test_list_dlp_jobs"
   ];
 
   pythonImportsCheck = [
@@ -51,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-dlp";
     changelog = "https://github.com/googleapis/python-dlp/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

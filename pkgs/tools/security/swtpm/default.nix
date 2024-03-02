@@ -14,15 +14,15 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swtpm";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
-    rev = "v${version}";
-    sha256 = "sha256-O+sHkmQ47FbqsgWpaqAc/j2AJ5xzsvpBj/p0Zea1nSI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-QKR5S7FlMFDw4+VpyRdqixMWyzLpQkf3QCUceQvsliU=";
   };
 
   nativeBuildInputs = [
@@ -100,5 +100,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stefanberger/swtpm";
     license = licenses.bsd3;
     maintainers = [ maintainers.baloo ];
+    mainProgram = "swtpm";
   };
-}
+})

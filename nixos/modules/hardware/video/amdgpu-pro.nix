@@ -20,9 +20,6 @@ in
 {
 
   config = mkIf enabled {
-
-    nixpkgs.config.xorg.abiCompat = "1.20";
-
     services.xserver.drivers = singleton
       { name = "amdgpu"; modules = [ package ]; display = true; };
 
@@ -42,9 +39,10 @@ in
 
     hardware.firmware = [ package.fw ];
 
-    system.activationScripts.setup-amdgpu-pro = ''
-      ln -sfn ${package}/opt/amdgpu{,-pro} /run
-    '';
+    systemd.tmpfiles.settings.amdgpu-pro = {
+      "/run/amdgpu"."L+".argument = "${package}/opt/amdgpu";
+      "/run/amdgpu-pro"."L+".argument = "${package}/opt/amdgpu-pro";
+    };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "DEVICE_PRIVATE")

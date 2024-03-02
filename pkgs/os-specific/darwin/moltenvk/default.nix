@@ -1,8 +1,8 @@
 { lib
 , overrideCC
 , stdenv
-, fetchurl
 , fetchFromGitHub
+, gitUpdater
 , cctools
 , sigtool
 , cereal
@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.3";
+  version = "1.2.7";
 
   buildInputs = [
     AppKit
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GPOF2lyo1eDf1GrPjcj0y1OuUHI/c80L9gSQM+4wEp0=";
+    hash = "sha256-0+S/kueV+AEVt+oFnh4cgcDRVtEbUH1QiHFPhGhimCA=";
   };
 
   patches = [
@@ -58,17 +58,18 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Move `mvkGitRevDerived.h` to a stable location
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
-      --replace '$'''{BUILT_PRODUCTS_DIR}' "$NIX_BUILD_TOP/$sourceRoot/build/include" \
-      --replace '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
+      --replace-fail '$'''{BUILT_PRODUCTS_DIR}' "$NIX_BUILD_TOP/$sourceRoot/build/include" \
+      --replace-fail '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
     # Use the SPIRV-Cross packaged in nixpkgs instead of one built specifically for MoltenVK.
     substituteInPlace MoltenVK/MoltenVK.xcodeproj/project.pbxproj \
-      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
+      --replace-fail SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
     substituteInPlace MoltenVKShaderConverter/MoltenVKShaderConverter.xcodeproj/project.pbxproj \
-      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
+      --replace-fail SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
     # Adding all of `usr/include` from the SDK results in header conflicts with `libcxx.dev`.
     # Work around it by symlinking just the SIMD stuff needed by MoltenVK.
     mkdir -p build/include
     ln -s "${MacOSX-SDK}/usr/include/simd" "build/include"
+    ln -s "${glslang.src}" "build/include/glslang"
   '';
 
   dontConfigure = true;
@@ -92,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS+=" \
       -lMachineIndependent \
       -lGenericCodeGen \
-      -lOGLCompiler \
       -lglslang \
       -lOSDependent \
       -lSPIRV \
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       -configuration Release \
       -project MoltenVKShaderConverter.xcodeproj \
       -scheme MoltenVKShaderConverter \
-      -arch ${stdenv.targetPlatform.darwinArch}
+      -arch ${stdenv.hostPlatform.darwinArch}
     declare -A products=( [MoltenVKShaderConverter]=bin [libMoltenVKShaderConverter.a]=lib )
     for product in "''${!products[@]}"; do
       cp MoltenVKShaderConverter-*/Build/Products/Release/$product "$build/''${products[$product]}/$product"
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       -configuration Release \
       -project MoltenVK.xcodeproj \
       -scheme MoltenVK-macOS \
-      -arch ${stdenv.targetPlatform.darwinArch}
+      -arch ${stdenv.hostPlatform.darwinArch}
     cp MoltenVK-*/Build/Products/Release/dynamic/libMoltenVK.dylib "$build/lib/libMoltenVK.dylib"
     popd
   '';
@@ -138,13 +138,18 @@ stdenv.mkDerivation (finalAttrs: {
     cp MoltenVK/MoltenVK/API/* "$dev/include/MoltenVK"
     install -m644 MoltenVK/icd/MoltenVK_icd.json "$out/share/vulkan/icd.d/MoltenVK_icd.json"
     substituteInPlace $out/share/vulkan/icd.d/MoltenVK_icd.json \
-      --replace ./libMoltenVK.dylib "$out/lib/libMoltenVK.dylib"
+      --replace-fail ./libMoltenVK.dylib "$out/lib/libMoltenVK.dylib"
   '';
 
   postFixup = ''
     install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     codesign -s - -f "$out/lib/libMoltenVK.dylib"
+    codesign -s - -f "$bin/bin/MoltenVKShaderConverter"
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "A Vulkan Portability implementation built on top of Apple’s Metal API";

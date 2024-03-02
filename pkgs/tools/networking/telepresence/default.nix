@@ -1,4 +1,4 @@
-{ lib, pythonPackages, fetchFromGitHub, makeWrapper, git
+{ lib, pythonPackages, fetchFromGitHub, makeWrapper
 , sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
 , iptables, bash }:
 

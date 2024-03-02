@@ -9,14 +9,14 @@
   "icon-hider@kalnitsky.org" = callPackage ./icon-hider { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
-  "paperwm@hedning:matrix.org" = callPackage ./paperwm { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
   "pop-shell@system76.com" = callPackage ./pop-shell { };
   "sound-output-device-chooser@kgshank.net" = callPackage ./sound-output-device-chooser { };
-  "system-monitor@paradoxxx.zero.gmail.com" = callPackage ./system-monitor { };
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };
   "tilingnome@rliang.github.com" = callPackage ./tilingnome { };
   "TopIcons@phocean.net" = callPackage ./topicons-plus { };
+  # Can be removed when https://github.com/hardpixel/unite-shell/issues/353 resolved
+  "unite@hardpixel.eu" = callPackage ./unite { };
   "valent@andyholmes.ca" = callPackage ./valent { };
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
 }

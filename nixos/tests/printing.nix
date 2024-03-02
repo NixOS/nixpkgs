@@ -19,6 +19,7 @@ import ./make-test-python.nix (
       startWhenNeeded = socket;
       listenAddresses = [ "*:631" ];
       defaultShared = true;
+      openFirewall = true;
       extraConf = ''
         <Location />
           Order allow,deny
@@ -26,7 +27,6 @@ import ./make-test-python.nix (
         </Location>
       '';
     };
-    networking.firewall.allowedTCPPorts = [ 631 ];
     # Add a HP Deskjet printer connected via USB to the server.
     hardware.printers.ensurePrinters = [{
       name = "DeskjetLocal";

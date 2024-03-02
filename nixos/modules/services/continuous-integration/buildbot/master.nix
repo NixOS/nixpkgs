@@ -15,6 +15,7 @@ let
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
+    ${cfg.extraImports}
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
@@ -28,6 +29,7 @@ let
      schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
      builders      = [ ${concatStringsSep "," cfg.builders} ],
      services      = [ ${concatStringsSep "," cfg.reporters} ],
+     configurators = [ ${concatStringsSep "," cfg.configurators} ],
     )
     for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
@@ -79,6 +81,15 @@ in {
         ];
       };
 
+      configurators = mkOption {
+        type = types.listOf types.str;
+        description = lib.mdDoc "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
+        default = [];
+        example = [
+          "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
+        ];
+      };
+
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -89,6 +100,13 @@ in {
         type = types.str;
         description = lib.mdDoc "Extra configuration to append to master.cfg";
         default = "c['buildbotNetUsageData'] = None";
+      };
+
+      extraImports = mkOption {
+        type = types.str;
+        description = lib.mdDoc "Extra python imports to prepend to master.cfg";
+        default = "";
+        example = "from buildbot.process.project import Project";
       };
 
       masterCfg = mkOption {
@@ -211,12 +229,8 @@ in {
         description = lib.mdDoc "Specifies port number on which the buildbot HTTP interface listens.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.buildbot-full;
-        defaultText = literalExpression "pkgs.buildbot-full";
-        description = lib.mdDoc "Package to use for buildbot.";
-        example = literalExpression "pkgs.buildbot";
+      package = mkPackageOption pkgs "buildbot-full" {
+        example = "buildbot";
       };
 
       packages = mkOption {
@@ -253,7 +267,7 @@ in {
 
     systemd.services.buildbot-master = {
       description = "Buildbot Continuous Integration Server.";
-      after = [ "network-online.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
       environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
@@ -272,7 +286,13 @@ in {
         Group = cfg.group;
         WorkingDirectory = cfg.home;
         # NOTE: call twistd directly with stdout logging for systemd
-        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${tacFile}";
+        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${cfg.buildbotDir}/buildbot.tac";
+        # To reload on upgrade, set the following in your configuration:
+        # systemd.services.buildbot-master.reloadIfChanged = true;
+        ExecReload = [
+          "${pkgs.coreutils}/bin/ln -sf ${tacFile} ${cfg.buildbotDir}/buildbot.tac"
+          "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
+        ];
       };
     };
   };
@@ -285,5 +305,5 @@ in {
     '')
   ];
 
-  meta.maintainers = with lib.maintainers; [ mic92 lopsided98 ];
+  meta.maintainers = lib.teams.buildbot.members;
 }

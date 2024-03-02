@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, fetchurl
-, zlib
 , fetchFromGitHub
 , gnumake
 , gcc
@@ -15,7 +13,7 @@
 , libevdev
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "midimonster";
   version = "0.6.0";
 
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "cbdevnet";
     rev = "f16f7db86662fcdbf45b6373257c90c824b0b4b0";
     sha256 = "131zs4j9asq9xl72cbyi463xpkj064ca1s7i77q5jrwqysgy52sp";
-};
+  };
 
   doCheck = true;
   enableParallelBuilding = true;
@@ -54,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [keldu];
+    mainProgram = "midimonster";
   };
 }

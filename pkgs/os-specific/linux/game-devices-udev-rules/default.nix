@@ -1,24 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
+{ lib
+, stdenv
+, fetchFromGitea
+, bash
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "game-devices-udev-rules";
-  version = "0.21";
+  version = "0.22";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "fabiscafe";
     repo = "game-devices-udev";
-    rev = version;
-    hash = "sha256-Yy91yDF5BSDTTlr/Pj8e0UklPooEdzvRW8mkhdHtHVo=";
+    rev = finalAttrs.version;
+    hash = "sha256-1aOb8pJxB+/PM7spcvZcy/cwdEolHQ4+lwBLij+6iDk=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  postInstall = ''
     install -Dm444 -t "$out/lib/udev/rules.d" *.rules
-    runHook postInstall
+    substituteInPlace $out/lib/udev/rules.d/71-powera-controllers.rules \
+    --replace "/bin/sh" "${bash}/bin/bash"
   '';
 
   meta = with lib; {
@@ -32,6 +33,6 @@ stdenv.mkDerivation rec {
       Additionally, you may need to enable 'hardware.uinput'.
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [keenanweaver];
+    maintainers = with maintainers; [ keenanweaver ];
   };
-}
+})

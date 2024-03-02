@@ -4,7 +4,7 @@
 , makeWrapper
 , gnum4
 , texinfo
-, texLive
+, texliveSmall
 , automake
 , autoconf
 , libtool
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       $out/lib/mit-scheme${arch}-${version}
   '';
 
-  nativeBuildInputs = [ makeWrapper gnum4 texinfo texLive automake ghostscript autoconf libtool ];
+  nativeBuildInputs = [ makeWrapper gnum4 texinfo (texliveSmall.withPackages (ps: with ps; [ epsf ps.texinfo ])) automake ghostscript autoconf libtool ];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;

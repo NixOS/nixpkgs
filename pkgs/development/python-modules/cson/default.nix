@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "cson";
   version = "0.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ speg ];
 
-  pythonImportChecks = [ "cson" ];
+  pythonImportsCheck = [ "cson" ];
 
   meta = with lib; {
     description = "A python parser for the Coffeescript Object Notation (CSON)";

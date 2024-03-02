@@ -29,10 +29,10 @@ let
   mkKeyboardTest = layout: { extraConfig ? {}, tests }: with pkgs.lib; makeTest {
     name = "keymap-${layout}";
 
-    machine.console.keyMap = mkOverride 900 layout;
-    machine.services.xserver.desktopManager.xterm.enable = false;
-    machine.services.xserver.layout = mkOverride 900 layout;
-    machine.imports = [ ./common/x11.nix extraConfig ];
+    nodes.machine.console.keyMap = mkOverride 900 layout;
+    nodes.machine.services.xserver.desktopManager.xterm.enable = false;
+    nodes.machine.services.xserver.xkb.layout = mkOverride 900 layout;
+    nodes.machine.imports = [ ./common/x11.nix extraConfig ];
 
     testScript = ''
       import json
@@ -116,7 +116,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     };
 
     extraConfig.console.keyMap = "fr";
-    extraConfig.services.xserver.layout = "fr";
+    extraConfig.services.xserver.xkb.layout = "fr";
   };
 
   bone = {
@@ -130,8 +130,8 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     };
 
     extraConfig.console.keyMap = "bone";
-    extraConfig.services.xserver.layout = "de";
-    extraConfig.services.xserver.xkbVariant = "bone";
+    extraConfig.services.xserver.xkb.layout = "de";
+    extraConfig.services.xserver.xkb.variant = "bone";
   };
 
   colemak = {
@@ -141,8 +141,8 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     };
 
     extraConfig.console.keyMap = "colemak";
-    extraConfig.services.xserver.layout = "us";
-    extraConfig.services.xserver.xkbVariant = "colemak";
+    extraConfig.services.xserver.xkb.layout = "us";
+    extraConfig.services.xserver.xkb.variant = "colemak";
   };
 
   dvorak = {
@@ -154,8 +154,8 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     };
 
     extraConfig.console.keyMap = "dvorak";
-    extraConfig.services.xserver.layout = "us";
-    extraConfig.services.xserver.xkbVariant = "dvorak";
+    extraConfig.services.xserver.xkb.layout = "us";
+    extraConfig.services.xserver.xkb.variant = "dvorak";
   };
 
   dvorak-programmer = {
@@ -170,8 +170,8 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     };
 
     extraConfig.console.keyMap = "dvorak-programmer";
-    extraConfig.services.xserver.layout = "us";
-    extraConfig.services.xserver.xkbVariant = "dvp";
+    extraConfig.services.xserver.xkb.layout = "us";
+    extraConfig.services.xserver.xkb.variant = "dvp";
   };
 
   neo = {
@@ -185,8 +185,8 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     };
 
     extraConfig.console.keyMap = "neo";
-    extraConfig.services.xserver.layout = "de";
-    extraConfig.services.xserver.xkbVariant = "neo";
+    extraConfig.services.xserver.xkb.layout = "de";
+    extraConfig.services.xserver.xkb.variant = "neo";
   };
 
   qwertz = {
@@ -199,6 +199,35 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     };
 
     extraConfig.console.keyMap = "de";
-    extraConfig.services.xserver.layout = "de";
+    extraConfig.services.xserver.xkb.layout = "de";
+  };
+
+  custom = {
+    tests = {
+      us.qwerty = [ "a" "b" "g" "d" "z" "shift-2" "shift-3" ];
+      us.expect = [ "a" "b" "g" "d" "z" "@" "#" ];
+      greek.qwerty = map (x: "alt_r-${x}")
+                     [ "a" "b" "g" "d" "z" ];
+      greek.expect = [ "α" "β" "γ" "δ" "ζ" ];
+    };
+
+    extraConfig.console.useXkbConfig = true;
+    extraConfig.services.xserver.xkb.layout = "us-greek";
+    extraConfig.services.xserver.xkb.extraLayouts.us-greek =
+      { description = "US layout with alt-gr greek";
+        languages   = [ "eng" ];
+        symbolsFile = pkgs.writeText "us-greek" ''
+          xkb_symbols "us-greek"
+          {
+            include "us(basic)"
+            include "level3(ralt_switch)"
+            key <LatA> { [ a, A, Greek_alpha ] };
+            key <LatB> { [ b, B, Greek_beta  ] };
+            key <LatG> { [ g, G, Greek_gamma ] };
+            key <LatD> { [ d, D, Greek_delta ] };
+            key <LatZ> { [ z, Z, Greek_zeta  ] };
+          };
+        '';
+      };
   };
 }

@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raboof/nethogs#readme";
     platforms = platforms.linux;
     maintainers = [ maintainers.rycee ];
+    mainProgram = "nethogs";
   };
 }

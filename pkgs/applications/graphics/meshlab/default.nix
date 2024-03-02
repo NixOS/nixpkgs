@@ -14,8 +14,8 @@
 , levmar
 , qhull
 , cmake
-, cgal_5
-, boost17x
+, cgal
+, boost179
 , mpfr
 , xercesc
 }:
@@ -27,8 +27,8 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
-    rev = "Meshlab-${version}";
-    sha256 = "sha256-MP+jkiV6yS1T1eWClxM56kZWLXwu0g4w/zBHy6CSL6Y=";
+    rev = "MeshLab-${version}";
+    sha256 = "sha256-jcc3PfsiIeYyipteZgzd0NwZgFFgR/mMBiaInzhOcDY=";
     fetchSubmodules = true; # for vcglib
   };
 
@@ -45,8 +45,8 @@ mkDerivation rec {
     gmp
     levmar
     qhull
-    cgal_5
-    boost17x
+    cgal
+    boost179
     mpfr
     xercesc
   ];
@@ -73,6 +73,11 @@ mkDerivation rec {
     # some plugins are disabled unless these are on
     "-DALLOW_BUNDLED_NEWUOA=ON"
     "-DALLOW_BUNDLED_LEVMAR=ON"
+  ];
+
+  CXXFLAGS = [
+    # GCC 13: error: 'int16_t' has not been declared in 'std'
+    "-include cstdint"
   ];
 
   postFixup = ''

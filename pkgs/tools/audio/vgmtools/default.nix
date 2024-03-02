@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vgmtools";
-  version = "unstable-2023-05-04";
+  version = "unstable-2023-08-27";
 
   src = fetchFromGitHub {
     owner = "vgmrips";
     repo = "vgmtools";
-    rev = "0a7814304b9664ff1cf167e209ff354d222773a4";
-    hash = "sha256-YEOuT5RN0zFT7rU4KfxYS0Ec+rUL3Flsgx9IrELnhGg=";
+    rev = "7b7f2041e346f0d4fff8c834a763edc4f4d88896";
+    hash = "sha256-L52h94uohLMnj29lZj+i9hM8n9hIYo20nRS8RCW8npY=";
   };
 
   nativeBuildInputs = [

@@ -11,10 +11,10 @@ in {
 
     # the upstream package runs as root, but doesn't seem to be strictly
     # necessary for basic functionality
-    runAsRoot = mkEnableOption (lib.mdDoc "Whether to run as root");
+    runAsRoot = mkEnableOption (lib.mdDoc "running as root");
 
     autoRetirement = mkEnableOption (lib.mdDoc ''
-      Whether to automatically retire the host upon OS shutdown.
+      retiring the host upon OS shutdown
     '');
 
     apiKeyFile = mkOption {
@@ -59,7 +59,7 @@ in {
         };
 
         options.diagnostic =
-          mkEnableOption (lib.mdDoc "Collect memory usage for the agent itself");
+          mkEnableOption (lib.mdDoc "collecting memory usage for the agent itself");
       };
     };
   };
@@ -84,6 +84,7 @@ in {
     # upstream service file in https://git.io/JUt4Q
     systemd.services.mackerel-agent = {
       description = "mackerel.io agent";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {

@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "lenovo-legion-module";
   inherit (lenovo-legion) version src;
 
-  sourceRoot = "source/kernel_module";
+  sourceRoot = "${lenovo-legion.src.name}/kernel_module";
 
   hardeningDisable = [ "pic" ];
 

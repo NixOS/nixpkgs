@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.strikerlulu ];
     platforms = lib.platforms.linux;
+    mainProgram = "nanotts";
   };
 }

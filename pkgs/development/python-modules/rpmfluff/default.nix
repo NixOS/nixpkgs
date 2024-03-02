@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "rpmfluff";
   version = "0.5.7.1";
+  format = "setuptools";
 
   src = fetchurl {
   url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";

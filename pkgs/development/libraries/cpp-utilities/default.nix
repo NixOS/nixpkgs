@@ -6,15 +6,15 @@
 , iconv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-utilities";
-  version = "5.23.0";
+  version = "5.24.6";
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-gZF+dsj+KYrFklnJHT04XSGLdlEdslFmxeStz6jVl24=";
+    repo = "cpp-utilities";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Lzt/lINfYvzabBbEUdNbF4Ta767WgMre2dxBkMbQnp0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     iconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
+
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
+
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
   preCheck = ''
     checkFlagsArray+=(
@@ -38,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

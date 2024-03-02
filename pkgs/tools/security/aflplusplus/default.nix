@@ -1,6 +1,6 @@
 { lib, stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, gcc, which, libcgroup, python3, perl, gmp
-, file, wine ? null, fetchpatch
+, file, wine ? null
 , cmocka
 , llvmPackages
 }:
@@ -11,7 +11,7 @@
 assert (wine != null) -> (stdenv.targetPlatform.system == "i686-linux");
 
 let
-  aflplusplus-qemu = callPackage ./qemu.nix { inherit aflplusplus; };
+  aflplusplus-qemu = callPackage ./qemu.nix { };
   qemu-exe-name = if stdenv.targetPlatform.system == "x86_64-linux" then "qemu-x86_64"
     else if stdenv.targetPlatform.system == "i686-linux" then "qemu-i386"
     else throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
@@ -19,13 +19,13 @@ let
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "4.06c";
+    version = "4.10c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
-      rev = version;
-      sha256 = "sha256-Gb1nYDBnwLS+m8e1UD0WLIrnp8KRgliGQVvQD22JXrQ=";
+      rev = "v${version}";
+      sha256 = "sha256-elghcBw2tIttQo7bkMFRCx8iNqxwY0NCz0343wc8hWA=";
     };
     enableParallelBuilding = true;
 

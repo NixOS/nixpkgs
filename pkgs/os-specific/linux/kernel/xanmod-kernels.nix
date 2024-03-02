@@ -2,15 +2,18 @@
 
 let
   # These names are how they are designated in https://xanmod.org.
+
+  # NOTE: When updating these, please also take a look at the changes done to
+  # kernel config in the xanmod version commit
   ltsVariant = {
-    version = "6.1.35";
-    hash = "sha256-CfrM2CNaGUTfkVteudL8xnAuCdZJxD5pUEC1YW9LiuU=";
+    version = "6.6.18";
+    hash = "sha256-WGfbCmM0fpWXQt1ThfaHn4bqZz22bNkhc9I2qeXMsws=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.3.9";
-    hash = "sha256-t1fKPZ+giANPmhM4zGoGtYWJF6rDnbpJaoHILl3nyRI=";
+    version = "6.7.6";
+    hash = "sha256-gg8B/i6kidgvRBOm3JiMBwP18UtVRH1ELNGQUBkDOMs=";
     variant = "main";
   };
 
@@ -26,33 +29,22 @@ let
     };
 
     structuredExtraConfig = with lib.kernel; {
-      # AMD P-state driver
-      X86_AMD_PSTATE = lib.mkOverride 60 yes;
-
-      # Google's BBRv2 TCP congestion Control
-      TCP_CONG_BBR2 = yes;
-      DEFAULT_BBR2 = yes;
-
-      # FQ-PIE Packet Scheduling
-      NET_SCH_DEFAULT = yes;
-      DEFAULT_FQ_PIE = yes;
-
-      # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
-      FUTEX = yes;
-      FUTEX_PI = yes;
+      # Google's BBRv3 TCP congestion Control
+      TCP_CONG_BBR = yes;
+      DEFAULT_BBR = yes;
 
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
 
-      # Preemptive Full Tickless Kernel at 500Hz
-      HZ = freeform "500";
-      HZ_500 = yes;
+      # Preemptive Full Tickless Kernel at 250Hz
+      HZ = freeform "250";
+      HZ_250 = yes;
       HZ_1000 = no;
     };
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu shawn8901 ];
+      maintainers = with lib.maintainers; [ moni lovesegfault atemu shawn8901 zzzsy ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };

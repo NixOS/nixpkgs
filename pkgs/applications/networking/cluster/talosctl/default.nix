@@ -1,17 +1,17 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "talosctl";
-  version = "1.4.5";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     rev = "v${version}";
-    hash = "sha256-pgWNmjIyRWsshuP+GGc/Kxd32DIoHphwYvBIx2hBWZg=";
+    hash = "sha256-TEQnbQux+rN2WdlIbxh836Lx/ipqTDkoUsjQP8Ubl6s=";
   };
 
-  vendorHash = "sha256-Fr4yfwRdhwH1UHAb4rQ74rzAGjIyEX4+0lFujUs8Tos=";
+  vendorHash = "sha256-xdcHd/LvIm4rawwXtsGMF8Es9pMGMaJJaZ6UQwc24ZU=";
 
   ldflags = [ "-s" "-w" ];
 

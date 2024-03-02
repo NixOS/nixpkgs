@@ -23,9 +23,9 @@ in
     meta = with lib; {
       description = "M+ Outline Fonts (legacy OSDN release)";
       homepage = "https://mplus-fonts.osdn.jp";
-      maintainers = with maintainers; [ henrytill uakci ];
+      maintainers = with maintainers; [ uakci ];
       platforms = platforms.all;
-      license = licenses.mit;
+      license = licenses.mplus;
     };
   };
 
@@ -53,7 +53,7 @@ in
     meta = with lib; {
       description = "M+ Outline Fonts (GitHub release)";
       homepage = "https://mplusfonts.github.io";
-      maintainers = with maintainers; [ henrytill uakci ];
+      maintainers = with maintainers; [ uakci ];
       platforms = platforms.all;
       license = licenses.ofl;
     };

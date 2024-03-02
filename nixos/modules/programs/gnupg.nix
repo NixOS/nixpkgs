@@ -6,11 +6,16 @@ let
 
   cfg = config.programs.gnupg;
 
+  agentSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+  };
+
   xserverCfg = config.services.xserver;
 
   defaultPinentryFlavor =
     if xserverCfg.desktopManager.lxqt.enable
     || xserverCfg.desktopManager.plasma5.enable
+    || xserverCfg.desktopManager.plasma6.enable
     || xserverCfg.desktopManager.deepin.enable then
       "qt"
     else if xserverCfg.desktopManager.xfce.enable then
@@ -25,14 +30,7 @@ in
 {
 
   options.programs.gnupg = {
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gnupg;
-      defaultText = literalExpression "pkgs.gnupg";
-      description = lib.mdDoc ''
-        The gpg package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "gnupg" { };
 
     agent.enable = mkOption {
       type = types.bool;
@@ -75,12 +73,22 @@ in
       defaultText = literalMD ''matching the configured desktop environment'';
       description = lib.mdDoc ''
         Which pinentry interface to use. If not null, the path to the
-        pinentry binary will be passed to gpg-agent via commandline and
-        thus overrides the pinentry option in gpg-agent.conf in the user's
-        home directory.
+        pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
         If not set at all, it'll pick an appropriate flavor depending on the
         system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
         4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
+      '';
+    };
+
+    agent.settings = mkOption {
+      type = agentSettingsFormat.type;
+      default = { };
+      example = {
+        default-cache-ttl = 600;
+      };
+      description = lib.mdDoc ''
+        Configuration for /etc/gnupg/gpg-agent.conf.
+        See {manpage}`gpg-agent(1)` for supported options.
       '';
     };
 
@@ -94,16 +102,20 @@ in
   };
 
   config = mkIf cfg.agent.enable {
-    environment.etc."gnupg/gpg-agent.conf".text = ''
-      pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
-    '';
+    programs.gnupg.agent.settings = {
+      pinentry-program = lib.mkIf (cfg.agent.pinentryFlavor != null)
+        "${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry";
+    };
+
+    environment.etc."gnupg/gpg-agent.conf".source =
+      agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
 
     # This overrides the systemd user unit shipped with the gnupg package
-    systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
+    systemd.user.services.gpg-agent = {
       unitConfig = {
         Description = "GnuPG cryptographic agent and passphrase cache";
         Documentation = "man:gpg-agent(1)";
-        Requires = [ "gpg-agent.socket" ];
+        Requires = [ "sockets.target" ];
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/gpg-agent --supervised";

@@ -65,7 +65,7 @@ do
 done
 
 # If unset, assume the default hardening flags.
-: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
+: ${NIX_HARDENING_ENABLE="@default_hardening_flags_str@"}
 export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file

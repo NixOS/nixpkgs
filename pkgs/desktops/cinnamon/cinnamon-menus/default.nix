@@ -11,18 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-menus";
-  version = "5.8.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-AgA/DA7I9/0AJhlmgk0yAOJaZzpiQV1vM949Y6EOWVg=";
+    hash = "sha256-zP1jA5Fwxh6QrM5YwJo7SFPWaxkJsv1D84dhIDP5xuI=";
   };
 
   buildInputs = [
     glib
-    gobject-introspection
   ];
 
   nativeBuildInputs = [
@@ -30,6 +29,7 @@ stdenv.mkDerivation rec {
     ninja
     wrapGAppsHook
     pkg-config
+    gobject-introspection
   ];
 
   meta = with lib; {

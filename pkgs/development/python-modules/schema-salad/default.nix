@@ -1,29 +1,31 @@
 { lib
 , black
 , buildPythonPackage
-, fetchPypi
-, setuptools-scm
 , cachecontrol
-, lockfile
+, fetchFromGitHub
+, importlib-resources
 , mistune
-, mypy
-, rdflib
-, ruamel-yaml
-, setuptools
+, mypy-extensions
 , pytestCheckHook
 , pythonOlder
+, rdflib
+, requests
+, ruamel-yaml
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.4.20230606143604";
+  version = "8.5.20240102191336.dev7+g8e95468";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8Zo9ZhS0r+zsk7nHEh0x7gHYwaoWmyctQYRMph09mvY=";
+  src = fetchFromGitHub {
+    owner = "common-workflow-language";
+    repo = "schema_salad";
+    rev = "8e954684b08d222d54b7eff680eaa4d4e65920a9";
+    hash = "sha256-VoFFKe6XHDytj5UlmsN14RevKcgpl+DSDMGDVS2Ols4=";
   };
 
   nativeBuildInputs = [
@@ -32,12 +34,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cachecontrol
-    lockfile
     mistune
-    mypy
+    mypy-extensions
     rdflib
+    requests
     ruamel-yaml
-    setuptools # needs pkg_resources at runtime
+  ] ++ cachecontrol.optional-dependencies.filecache
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   nativeCheckInputs = [
@@ -49,6 +53,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_load_by_yaml_metaschema"
     # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"

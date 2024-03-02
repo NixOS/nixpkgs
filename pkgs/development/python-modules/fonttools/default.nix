@@ -24,7 +24,8 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.38.0";
+  version = "4.46.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner  = pname;
     repo   = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-cdZI2kwR3zzS6eiiXGpeHIp+kgPCPEsTOSTV60pODTM=";
+    hash = "sha256-QpC1OWpqhJpzS59OG8A/nndWDoeYyAFUTIcsppLzM8Y=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -59,7 +60,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.concatLists (lib.attrVals ([
     "woff"
-    "interpolatable"
+    # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
+    "ufo"
   ] ++ lib.optionals (!skia-pathops.meta.broken) [
     "pathops" # broken
   ] ++ [

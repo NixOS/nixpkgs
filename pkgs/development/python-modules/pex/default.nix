@@ -1,24 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, flit-core
+, hatchling
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.137";
-  format = "flit";
+  version = "2.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ywzmz2R1fdW6TzTEYHq0hfeQnmwkzUecoozlIgXw7es=";
+    hash = "sha256-I63eX9BDn9RGitEFZiulsjEYVAsmYyvSNi3+2tIrGv8=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    hatchling
   ];
 
   # A few more dependencies I don't want to handle right now...
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pantsbuild/pex";
     changelog = "https://github.com/pantsbuild/pex/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin phaer ];
   };
 }

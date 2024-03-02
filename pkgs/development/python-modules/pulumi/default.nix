@@ -1,12 +1,12 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , protobuf
 , dill
 , grpcio
 , pulumi
 , isPy27
 , semver
+, pip
 , pytestCheckHook
 , pyyaml
 , six
@@ -15,6 +15,7 @@ buildPythonPackage rec {
   inherit (pulumi) version src;
 
   pname = "pulumi";
+  format = "setuptools";
 
   disabled = isPy27;
 
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pip
     pulumi.pkgs.pulumi-language-python
     pytestCheckHook
   ];
@@ -44,7 +46,7 @@ buildPythonPackage rec {
     cp ../../README.md .
     substituteInPlace setup.py \
       --replace "3.0.0" "${version}" \
-      --replace "grpcio==1.51.3" "grpcio" \
+      --replace "grpcio==1.56.2" "grpcio" \
       --replace "semver~=2.13" "semver"
   '';
 

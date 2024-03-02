@@ -1,41 +1,60 @@
 { lib
+, stdenv
+, buildPackages
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
+, testers
+, trivy
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.42.1";
+  version = "0.49.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-QEjhnZmrmVzNG1/Zj8z/76v0Fb1N0rMYlvGb2pid2VM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+wgnj7mDIJ5UPGfD7vogdcbUeBdvTenL/a0Ew4CfuvE=";
   };
-  # hash missmatch on across linux and darwin
-  proxyVendor = true;
-  vendorHash = "sha256-bEmp3Fq9Zop3YCbZH4lOG71osY0P71xuhpIPOUSnHSY=";
 
-  excludedPackages = [ "magefiles" "misc" ];
+  # Hash mismatch on across Linux and Darwin
+  proxyVendor = true;
+
+  vendorHash = "sha256-IL3FHgOYQYJIqJKr2eEeM/NzO+SeYucGSNUUY62kHNA=";
+
+  subPackages = [ "cmd/trivy" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X=github.com/aquasecurity/trivy/pkg/version.ver=v${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Tests require network access
   doCheck = false;
 
+  postInstall =
+    let
+      trivy = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then placeholder "out" else buildPackages.trivy;
+    in
+    ''
+      installShellCompletion --cmd trivy \
+        --bash <(${trivy}/bin/trivy completion bash) \
+        --fish <(${trivy}/bin/trivy completion fish) \
+        --zsh <(${trivy}/bin/trivy completion zsh)
+    '';
+
   doInstallCheck = true;
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/trivy --help
-    $out/bin/trivy --version | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = trivy;
+    command = "trivy --version";
+    version = "Version: v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/aquasecurity/trivy";
@@ -48,7 +67,8 @@ buildGoModule rec {
       vulnerabilities of OS packages (Alpine, RHEL, CentOS, etc.) and
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
+    mainProgram = "trivy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ fab jk ];
   };
 }

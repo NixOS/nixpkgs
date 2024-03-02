@@ -16,8 +16,12 @@ let
   cfgTrim = config.services.zfs.trim;
   cfgZED = config.services.zfs.zed;
 
-  inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
-  inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
+  selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
+  clevisDatasets = map (e: e.device) (filter (e: e.device != null && (hasAttr e.device config.boot.initrd.clevis.devices) && e.fsType == "zfs" && (fsNeededForBoot e)) config.system.build.fileSystems);
+
+
+  inInitrd = config.boot.initrd.supportedFilesystems.zfs or false;
+  inSystem = config.boot.supportedFilesystems.zfs or false;
 
   autosnapPkg = pkgs.zfstools.override {
     zfs = cfgZfs.package;
@@ -67,7 +71,7 @@ let
     done
     poolReady() {
       pool="$1"
-      state="$("${zpoolCmd}" import 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
+      state="$("${zpoolCmd}" import -d "${cfgZfs.devNodes}" 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
       if [[ "$state" = "ONLINE" ]]; then
         return 0
       else
@@ -90,37 +94,44 @@ let
 
   getPoolMounts = prefix: pool:
     let
+      poolFSes = getPoolFilesystems pool;
+
       # Remove the "/" suffix because even though most mountpoints
       # won't have it, the "/" mountpoint will, and we can't have the
       # trailing slash in "/sysroot/" in stage 1.
       mountPoint = fs: escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint));
+
+      hasUsr = lib.any (fs: fs.mountPoint == "/usr") poolFSes;
     in
-      map (x: "${mountPoint x}.mount") (getPoolFilesystems pool);
+      map (x: "${mountPoint x}.mount") poolFSes
+      ++ lib.optional hasUsr "sysusr-usr.mount";
 
   getKeyLocations = pool: if isBool cfgZfs.requestEncryptionCredentials then {
     hasKeys = cfgZfs.requestEncryptionCredentials;
-    command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}";
+    command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus -t volume,filesystem ${pool}";
   } else let
     keys = filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials;
   in {
     hasKeys = keys != [];
-    command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString keys}";
+    command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus -t volume,filesystem ${toString keys}";
   };
 
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
-      # we need systemd-udev-settle to ensure devices are available
+      # We wait for systemd-udev-settle to ensure devices are available,
+      # but don't *require* it, because mounts shouldn't be killed if it's stopped.
       # In the future, hopefully someone will complete this:
       # https://github.com/zfsonlinux/zfs/pull/4943
-      requires = [ "systemd-udev-settle.service" ];
+      wants = [ "systemd-udev-settle.service" ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
-      ];
-      wantedBy = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
-      before = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
+      ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
+      requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+      before = getPoolMounts prefix pool ++ [ "shutdown.target" "zfs-import.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig = {
         DefaultDependencies = "no";
       };
@@ -147,6 +158,9 @@ let
           poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
         fi
         if poolImported "${pool}"; then
+        ${optionalString config.boot.initrd.clevis.enable (concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem} || true ") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets))}
+
+
           ${optionalString keyLocations.hasKeys ''
             ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
               {
@@ -197,6 +211,7 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "boot" "zfs" "enableUnstable" ] "Instead set `boot.zfs.package = pkgs.zfs_unstable;`")
   ];
 
   ###### interface
@@ -204,11 +219,17 @@ in
   options = {
     boot.zfs = {
       package = mkOption {
-        readOnly = true;
         type = types.package;
-        default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
-        defaultText = literalExpression "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
-        description = lib.mdDoc "Configured ZFS userland tools package.";
+        default = pkgs.zfs;
+        defaultText = literalExpression "pkgs.zfs";
+        description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfs_unstable` if you want to track the latest staging ZFS branch.";
+      };
+
+      modulePackage = mkOption {
+        internal = true; # It is supposed to be selected automatically, but can be overridden by expert users.
+        default = selectModulePackage cfgZfs.package;
+        type = types.package;
+        description = lib.mdDoc "Configured ZFS kernel module package.";
       };
 
       enabled = mkOption {
@@ -217,19 +238,6 @@ in
         default = inInitrd || inSystem;
         defaultText = literalMD "`true` if ZFS filesystem support is enabled";
         description = lib.mdDoc "True if ZFS filesystem support is enabled";
-      };
-
-      enableUnstable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Use the unstable zfs package. This might be an option, if the latest
-          kernel is not yet supported by a published release of ZFS. Enabling
-          this option will install a development version of ZFS on Linux. The
-          version will have already passed an extensive test suite, but it is
-          more likely to hit an undiscovered bug compared to running a released
-          version of ZFS on Linux.
-          '';
       };
 
       allowHibernation = mkOption {
@@ -321,6 +329,18 @@ in
           Timeout in seconds to wait for password entry for decrypt at boot.
 
           Defaults to 0, which waits forever.
+        '';
+      };
+
+      removeLinuxDRM = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Patch the kernel to change symbols needed by ZFS from
+          EXPORT_SYMBOL_GPL to EXPORT_SYMBOL.
+
+          Currently has no effect, but may again in future if a kernel
+          update breaks ZFS due to symbols being newly changed to GPL.
         '';
       };
     };
@@ -465,9 +485,15 @@ in
     };
 
     services.zfs.zed = {
-      enableMail = mkEnableOption (lib.mdDoc "ZED's ability to send emails") // {
-        default = cfgZfs.package.enableMail;
-        defaultText = literalExpression "config.${optZfs.package}.enableMail";
+      enableMail = mkOption {
+        type = types.bool;
+        default = config.services.mail.sendmailSetuidWrapper != null;
+        defaultText = literalExpression ''
+          config.services.mail.sendmailSetuidWrapper != null
+        '';
+        description = mdDoc ''
+          Whether to enable ZED's ability to send emails.
+        '';
       };
 
       settings = mkOption {
@@ -504,12 +530,8 @@ in
     (mkIf cfgZfs.enabled {
       assertions = [
         {
-          assertion = cfgZED.enableMail -> cfgZfs.package.enableMail;
-          message = ''
-            To allow ZED to send emails, ZFS needs to be configured to enable
-            this. To do so, one must override the `zfs` package and set
-            `enableMail` to true.
-          '';
+          assertion = cfgZfs.modulePackage.version == cfgZfs.package.version;
+          message = "The kernel module and the userspace tooling versions are not matching, this is an unsupported usecase.";
         }
         {
           assertion = config.networking.hostId != null;
@@ -542,27 +564,25 @@ in
         kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
         extraModulePackages = [
-          (if config.boot.zfs.enableUnstable then
-            config.boot.kernelPackages.zfsUnstable
-           else
-            config.boot.kernelPackages.zfs)
+          cfgZfs.modulePackage
         ];
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
+        # spl has been removed in ≥ 2.2.0.
+        kernelModules = [ "zfs" ] ++ lib.optional (lib.versionOlder "2.2.0" version) "spl";
         extraUtilsCommands =
-          ''
+          mkIf (!config.boot.initrd.systemd.enable) ''
             copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
             copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
             copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
           '';
-        extraUtilsCommandsTest = mkIf inInitrd
-          ''
+        extraUtilsCommandsTest =
+          mkIf (!config.boot.initrd.systemd.enable) ''
             $out/bin/zfs --help >/dev/null 2>&1
             $out/bin/zpool --help >/dev/null 2>&1
           '';
-        postDeviceCommands = concatStringsSep "\n" ([''
+        postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (concatStringsSep "\n" ([''
             ZFS_FORCE="${optionalString cfgZfs.forceImportRoot "-f"}"
           ''] ++ [(importLib {
             # See comments at importLib definition.
@@ -584,6 +604,9 @@ in
               fi
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
             fi
+
+            ${optionalString config.boot.initrd.clevis.enable (concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets))}
+
             ${if isBool cfgZfs.requestEncryptionCredentials
               then optionalString cfgZfs.requestEncryptionCredentials ''
                 zfs load-key -a
@@ -591,10 +614,10 @@ in
               else concatMapStrings (fs: ''
                 zfs load-key -- ${escapeShellArg fs}
               '') (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}
-        '') rootPools));
+        '') rootPools)));
 
         # Systemd in stage 1
-        systemd = {
+        systemd = mkIf config.boot.initrd.systemd.enable {
           packages = [cfgZfs.package];
           services = listToAttrs (map (pool: createImportService {
             inherit pool;
@@ -602,8 +625,11 @@ in
             force = cfgZfs.forceImportRoot;
             prefix = "/sysroot";
           }) rootPools);
+          targets.zfs-import.wantedBy = [ "zfs.target" ];
+          targets.zfs.wantedBy = [ "initrd.target" ];
           extraBin = {
-            # zpool and zfs are already in thanks to fsPackages
+            zpool = "${cfgZfs.package}/sbin/zpool";
+            zfs = "${cfgZfs.package}/sbin/zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
         };
@@ -617,10 +643,17 @@ in
       # TODO FIXME See https://github.com/NixOS/nixpkgs/pull/99386#issuecomment-798813567. To not break people's bootloader and as probably not everybody would read release notes that thoroughly add inSystem.
       boot.loader.grub = mkIf (inInitrd || inSystem) {
         zfsSupport = true;
+        zfsPackage = cfgZfs.package;
       };
 
       services.zfs.zed.settings = {
-        ZED_EMAIL_PROG = mkIf cfgZED.enableMail (mkDefault "${pkgs.mailutils}/bin/mail");
+        ZED_EMAIL_PROG = mkIf cfgZED.enableMail (mkDefault (
+          config.security.wrapperDir + "/" +
+          config.services.mail.sendmailSetuidWrapper.program
+        ));
+        # subject in header for sendmail
+        ZED_EMAIL_OPTS = mkIf cfgZED.enableMail (mkDefault "@ADDRESS@");
+
         PATH = lib.makeBinPath [
           cfgZfs.package
           pkgs.coreutils
@@ -632,6 +665,11 @@ in
           pkgs.util-linux
         ];
       };
+
+      # ZFS already has its own scheduler. Without this my(@Artturin) computer froze for a second when I nix build something.
+      services.udev.extraRules = ''
+        ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
+      '';
 
       environment.etc = genAttrs
         (map
@@ -698,15 +736,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets.zfs-import =
-        let
-          services = map (pool: "zfs-import-${pool}.service") dataPools;
-        in
-          {
-            requires = services;
-            after = services;
-            wantedBy = [ "zfs.target" ];
-          };
+      systemd.targets.zfs-import.wantedBy = [ "zfs.target" ];
 
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })

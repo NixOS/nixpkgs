@@ -5,16 +5,17 @@
 , gtk3
 , gtksourceview4
 , gspell
+, enablePolkit ? true
 , polkit
 }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
-  version = "0.6.1";
+  version = "0.6.2";
   odd-unstable = false;
 
-  sha256 = "sha256-MLdexhIsQa4XuVaLgtQ2aVJ00+pwkhAP3qMj0XXPqh0=";
+  sha256 = "sha256-A4siNxbTf9ObJJg8inPuH7Lo4dckLbFljV6aPFQxRto=";
 
   nativeBuildInputs = [ gobject-introspection ];
 
@@ -23,7 +24,8 @@ mkXfceDerivation {
     gtk3
     gtksourceview4
     gspell
-    polkit # optional polkit support
+  ] ++ lib.optionals enablePolkit [
+    polkit
   ];
 
   # Use the GSettings keyfile backend rather than DConf

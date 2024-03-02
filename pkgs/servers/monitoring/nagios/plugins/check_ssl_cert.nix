@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "check_ssl_cert";
-  version = "2.70.0";
+  version = "2.80.0";
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mr6tCZfnAM0e8cEtyen3oiV0Vt3cR/Z80RJ4NeMUaMs=";
+    hash = "sha256-1KYolUA5AZ9fQLfNb4UE1WlMTj6GiAnNszPTLlERBvc=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/check_ssl_cert \
-      --prefix PATH : "${lib.makeBinPath [ openssl file which curl bc coreutils bind nmap iproute2 netcat-gnu python3 ]}"
+      --prefix PATH : "${lib.makeBinPath ([ openssl file which curl bc coreutils bind nmap netcat-gnu python3 ] ++ lib.optional stdenv.isLinux iproute2) }"
   '';
 
   meta = with lib; {

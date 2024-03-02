@@ -9,8 +9,14 @@ let
     options = {
       devices = mkOption {
         type = types.listOf types.str;
+        default = [ ];
         example = [ "/dev/input/by-id/usb-0000_0000-event-kbd" ];
-        description = mdDoc "Paths to keyboard devices.";
+        description = mdDoc ''
+          Paths to keyboard devices.
+
+          An empty list, the default value, lets kanata detect which
+          input devices are keyboards and intercept them all.
+        '';
       };
       config = mkOption {
         type = types.lines;
@@ -72,7 +78,13 @@ let
   mkName = name: "kanata-${name}";
 
   mkDevices = devices:
-    optionalString ((length devices) > 0) "linux-dev ${concatStringsSep ":" devices}";
+    let
+      devicesString = pipe devices [
+        (map (device: "\"" + device + "\""))
+        (concatStringsSep " ")
+      ];
+    in
+    optionalString ((length devices) > 0) "linux-dev (${devicesString})";
 
   mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
     (defcfg
@@ -140,16 +152,11 @@ in
 {
   options.services.kanata = {
     enable = mkEnableOption (mdDoc "kanata");
-    package = mkOption {
-      type = types.package;
-      default = pkgs.kanata;
-      defaultText = literalExpression "pkgs.kanata";
-      example = literalExpression "pkgs.kanata-with-cmd";
-      description = mdDoc ''
-        The kanata package to use.
-
+    package = mkPackageOption pkgs "kanata" {
+      example = "kanata-with-cmd";
+      extraDescription = ''
         ::: {.note}
-        If `danger-enable-cmd` is enabled in any of the keyboards, the
+        If {option}`danger-enable-cmd` is enabled in any of the keyboards, the
         `kanata-with-cmd` package should be used.
         :::
       '';
@@ -162,6 +169,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings =
+      let
+        keyboardsWithEmptyDevices = filterAttrs (name: keyboard: keyboard.devices == [ ]) cfg.keyboards;
+        existEmptyDevices = length (attrNames keyboardsWithEmptyDevices) > 0;
+        moreThanOneKeyboard = length (attrNames cfg.keyboards) > 1;
+      in
+      optional (existEmptyDevices && moreThanOneKeyboard) "One device can only be intercepted by one kanata instance.  Setting services.kanata.keyboards.${head (attrNames keyboardsWithEmptyDevices)}.devices = [ ] and using more than one services.kanata.keyboards may cause a race condition.";
+
     hardware.uinput.enable = true;
 
     systemd.services = mapAttrs' mkService cfg.keyboards;

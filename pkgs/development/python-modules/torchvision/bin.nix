@@ -16,7 +16,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.15.2";
+  version = "0.17.1";
 in buildPythonPackage {
   inherit version;
 
@@ -28,13 +28,14 @@ in buildPythonPackage {
 
   disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
 
-  buildInputs = with cudaPackages; [
+  # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
+  buildInputs = with cudaPackages; lib.optionals stdenv.isLinux [
     # $out/${sitePackages}/torchvision/_C.so wants libcudart.so.11.0 but torchvision.libs only ships
     # libcudart.$hash.so.11.0
     cuda_cudart
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
     addOpenGLRunpath
   ];
@@ -49,7 +50,7 @@ in buildPythonPackage {
 
   pythonImportsCheck = [ "torchvision" ];
 
-  preInstall = ''
+  preInstall = lib.optionalString stdenv.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 
@@ -62,7 +63,7 @@ in buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

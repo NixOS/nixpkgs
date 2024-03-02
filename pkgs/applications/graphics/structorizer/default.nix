@@ -5,11 +5,12 @@
 , makeDesktopItem
 , makeWrapper
 , copyDesktopItems
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-11";
+  version = "3.32-15";
 
   desktopItems = [
     (makeDesktopItem {
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-rGyeOcGm6uBplgTjMIOy/xRekfHacwDy9kkMigmRSdk=";
+    hash = "sha256-ZCVvMvbXMQIcZRk1F7QiRtNeuLicHe/aEvwp4FvhwoM=";
   };
 
   patches = [ ./makeStructorizer.patch ./makeBigJar.patch ];
@@ -94,11 +95,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Create Nassi-Shneiderman diagrams (NSD)";
     homepage = "https://structorizer.fisch.lu";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ annaaurora ];
+    mainProgram = "structorizer";
   };
 }

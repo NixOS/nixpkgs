@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
-  version = "1.10.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-zLCL64yX7i/mtUf8CkgrSwb6zZ7vhR1Dw8eUH/vgFT4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ooNZSsVtIeueqgj9hR9OZp08qm8gGokiq8IU3U/ZV5w=";
   };
 
   format = "other";
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    beautifulsoup4 distutils_extra mpd2 notify-py pygobject3 requests
+    beautifulsoup4 distutils-extra mpd2 notify-py pygobject3 requests
   ];
 
   postInstall = ''
@@ -51,5 +51,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ apfelkuchen6 ];
+    mainProgram = "mpdevil";
   };
 }

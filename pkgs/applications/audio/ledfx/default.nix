@@ -1,59 +1,70 @@
 { lib
-, python3
 , fetchPypi
+, python3
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.67";
-  format = "setuptools";
+  version = "2.0.94";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lFxAMjglQZXCySr83PtvStU6hw2ucQu+rSjIHo1yZBk=";
+    hash = "sha256-l498NXt3Ib9QLTWoJcpngAwkbY6JqLbVLKhTWQye7Fs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"openrgb-python~=0.2.10",' "" \
-      --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
-      --replace '"sentry-sdk==1.14.0",' "" \
-      --replace "~=" ">="
-  '';
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    # not packaged
+    "rpi-ws281x"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    cython
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-cors
     aubio
     certifi
-    cython
     flux-led
+    python-dotenv
     icmplib
+    mss
     multidict
     numpy
-    # openrgb-python # not packaged
+    openrgb-python
     paho-mqtt
     pillow
     psutil
+    pybase64
     pyserial
     pystray
+    python-mbedtls
+    python-osc
     python-rtmidi
     # rpi-ws281x # not packaged
     requests
     sacn
     samplerate
     sentry-sdk
+    setuptools
     sounddevice
+    stupidartnet
     uvloop
     voluptuous
     zeroconf
   ];
 
-  # has no tests
+  # Project has no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "LedFx is a network based LED effect controller with support for advanced real-time audio effects";
+    description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
     license = licenses.gpl3Only;

@@ -1,4 +1,4 @@
-{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, }:
+{ pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
 # Documentation is in doc/builders/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
@@ -61,7 +61,7 @@
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
       if output=$(${command} 2>&1); then
-        if grep -Fw "${version}" - <<< "$output"; then
+        if grep -Fw -- "${version}" - <<< "$output"; then
           touch $out
         else
           echo "Version string '${version}' not found!" >&2
@@ -107,7 +107,7 @@
             (lib.setDefaultModuleLocation "the argument that was passed to pkgs.runNixOSTest" testModule)
           ];
           hostPkgs = pkgs;
-          node.pkgs = pkgs;
+          node.pkgs = pkgsLinux;
         };
 
   # See doc/builders/testers.chapter.md or
@@ -123,7 +123,7 @@
           inherit pkgs;
           extraConfigurations = [(
             { lib, ... }: {
-              config.nixpkgs.pkgs = lib.mkDefault pkgs;
+              config.nixpkgs.pkgs = lib.mkDefault pkgsLinux;
             }
           )];
         });
@@ -137,7 +137,14 @@
         in
           nixosTesting.simpleTest calledTest;
 
-  hasPkgConfigModule = callPackage ./hasPkgConfigModule/tester.nix { };
+  hasPkgConfigModule =
+    { moduleName, ... }@args:
+    lib.warn "testers.hasPkgConfigModule has been deprecated in favor of testers.hasPkgConfigModules. It accepts a list of strings via the moduleNames argument instead of a single moduleName." (
+      testers.hasPkgConfigModules (builtins.removeAttrs args [ "moduleName" ] // {
+        moduleNames = [ moduleName ];
+      })
+    );
+  hasPkgConfigModules = callPackage ./hasPkgConfigModules/tester.nix { };
 
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 }

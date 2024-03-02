@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.unix;
+    mainProgram = "nixos-shell";
   };
 }

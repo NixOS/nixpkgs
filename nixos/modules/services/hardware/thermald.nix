@@ -19,18 +19,19 @@ in
         '';
       };
 
+     ignoreCpuidCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to ignore the cpuid check to allow running on unsupported platforms";
+      };
+
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         description = lib.mdDoc "the thermald manual configuration file.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.thermald;
-        defaultText = literalExpression "pkgs.thermald";
-        description = lib.mdDoc "Which thermald package to use.";
-      };
+      package = mkPackageOption pkgs "thermald" { };
     };
   };
 
@@ -47,6 +48,7 @@ in
           ${cfg.package}/sbin/thermald \
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
+            ${optionalString cfg.ignoreCpuidCheck "--ignore-cpuid-check"} \
             ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
             --dbus-enable \
             --adaptive

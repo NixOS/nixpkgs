@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uwc";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitLab {
     owner = "dead10ck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ywqq9hrrm3frvd2sswknxygjlxi195kcy7g7phwq63j7hkyrn50";
+    hash = "sha256-x2mijB1GkxdraFroG1+PiBzWKPjsaAeoDt0HFL2v93I=";
   };
 
-  cargoSha256 = "04pslga3ff766cpb73n6ivzmqfa0hm19gcla8iyv6p59ddsajh3q";
+  cargoHash = "sha256-0IvOaQaXfdEz5tlXh5gTbnZG9QZSWDVHGOqYq8aWOIc=";
 
   doCheck = true;
 

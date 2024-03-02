@@ -1,4 +1,4 @@
-{ lib, google-cloud-sdk, callPackage, runCommand, components }:
+{ lib, google-cloud-sdk, runCommand, components }:
 
 comps_:
 
@@ -32,6 +32,7 @@ runCommand "google-cloud-sdk-${google-cloud-sdk.version}"
   passAsFile = [ "comps" ];
 
   doInstallCheck = true;
+  disallowedRequisites = [ google-cloud-sdk ];
   installCheckPhase =
     let
       compNames = builtins.map (drv: drv.name) comps_;
@@ -57,5 +58,5 @@ runCommand "google-cloud-sdk-${google-cloud-sdk.version}"
     done
 
     # Replace references to the original google-cloud-sdk with this one
-    find $out/google-cloud-sdk/bin/ -type f -exec sed -i -e "s#${google-cloud-sdk}#$out#" {} \;
+    find $out/google-cloud-sdk -type f -exec sed -i -e "s#${google-cloud-sdk}#$out#" {} \;
   ''

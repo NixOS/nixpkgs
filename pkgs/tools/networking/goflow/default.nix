@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "goflow";
-  version = "3.4.4";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nMWAvvJj1S5W4ItOT212bn9CPG5Lpdd+k8ciwGmeu0w=";
+    sha256 = "sha256-2tQADlAajuiNtygdu2SCu2EF3NAuloQL0ROBMUZudZU=";
   };
 
-  vendorSha256 = "sha256-fOlfVI8v7KqNSRhAPlZBSHKfZRlCbCgjnMV/6bsqDhg=";
+  vendorHash = "sha256-fOlfVI8v7KqNSRhAPlZBSHKfZRlCbCgjnMV/6bsqDhg=";
 
   meta = with lib; {
     description = "A NetFlow/IPFIX/sFlow collector in Go";

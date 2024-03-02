@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/buhman/capture";
     maintainers = [ maintainers.ar1a ];
     license = licenses.gpl3Plus;
+    mainProgram = "capture";
   };
 }

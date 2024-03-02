@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.7.6";
+  version = "0.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rLcYC8IO2eCWAL4QIiUg/kyigybq6VNTUjNDXx4KPHc=";
+    hash = "sha256-L2nyVADDjPrHwhZRm+RAvfBdpP9sIvc9cakDiLVA7xw=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,8 @@ buildPythonPackage rec {
       trio
     ];
   };
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     flask

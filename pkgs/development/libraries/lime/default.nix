@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lime";
-  version = "5.2.6";
+  version = "5.2.98";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WQ6AcJpQSvWR5m2edVNji5u6ZiS4QOH45vQN2q+39NU=";
+    hash = "sha256-LdwXBJpwSA/PoCXL+c1pcX1V2Fq/eR6nNmwBKDM1Vr8=";
   };
 
   buildInputs = [

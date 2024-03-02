@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wgc6wv7i6cs95rgzzx3zqm14xxbjyajvcqylz8w97d8kk4x4wjr";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   installPhase = ''
     runHook preInstall

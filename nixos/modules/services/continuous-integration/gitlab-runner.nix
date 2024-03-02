@@ -195,12 +195,8 @@ in {
         Time to wait until a graceful shutdown is turned into a forceful one.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gitlab-runner;
-      defaultText = literalExpression "pkgs.gitlab-runner";
-      example = literalExpression "pkgs.gitlab-runner_1_11";
-      description = lib.mdDoc "Gitlab Runner package to use.";
+    package = mkPackageOption pkgs "gitlab-runner" {
+      example = "gitlab-runner_1_11";
     };
     extraPackages = mkOption {
       type = types.listOf types.package;
@@ -611,4 +607,6 @@ in {
     (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "advertiseAddress" ] [ "services" "gitlab-runner" "settings" "session_server" "advertise_address" ] )
     (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "sessionTimeout" ] [ "services" "gitlab-runner" "settings" "session_server" "session_timeout" ] )
   ];
+
+  meta.maintainers = teams.gitlab.members;
 }

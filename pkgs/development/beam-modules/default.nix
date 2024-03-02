@@ -43,7 +43,12 @@ let
       elvis-erlang = callPackage ./elvis-erlang { };
 
       # BEAM-based languages.
-      elixir = elixir_1_14;
+      elixir = elixir_1_15;
+
+      elixir_1_16 = lib'.callElixir ../interpreters/elixir/1.16.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
 
       elixir_1_15 = lib'.callElixir ../interpreters/elixir/1.15.nix {
         inherit erlang;

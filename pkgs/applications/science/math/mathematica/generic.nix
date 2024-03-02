@@ -56,7 +56,9 @@ let cudaEnv = symlinkJoin {
         cuda_cudart cuda_nvcc libcublas libcufft libcurand libcusparse
       ];
       postBuild = ''
-        ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
+        if [ ! -e $out/lib/libcuda.so ]; then
+            ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
+        fi
         ln -s lib $out/lib64
       '';
     };
@@ -119,14 +121,19 @@ in stdenv.mkDerivation {
   ]) ++ lib.optional cudaSupport cudaEnv;
 
   wrapProgramFlags = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib zlib ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+      dbus
+      gcc-unwrapped.lib
+      zlib
+    ]}"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
     # Fix libQt errors - #96490
     "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"
     # Fix xkeyboard config path for Qt
     "--set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
-    # wayland isn't supported
-    "--set QT_QPA_PLATFORM xcb"
+    # if wayland isn't supported we fail over to xcb
+    # see https://github.com/qt/qtbase/blob/35d0f012ee9b95e8cf3563a41d710ff3c023d841/src/gui/kernel/qguiapplication.cpp#L1218
+    "--set QT_QPA_PLATFORM wayland;xcb"
   ] ++ lib.optionals cudaSupport [
     "--set CUDA_PATH ${cudaEnv}"
     "--set NVIDIA_DRIVER_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libnvidia-tls.so"
@@ -157,9 +164,10 @@ in stdenv.mkDerivation {
 
     # Remove PATH restriction, root and avahi daemon checks, and hostname call
     sed -i '
-      s/^PATH=/# &/
+      s/^\s*PATH=/# &/
       s/isRoot="false"/# &/
-      s/^checkAvahiDaemon$/# &/
+      s/^\s*checkAvahiDaemon$/:/
+      s/^\s*installBundledInstall$/:/
       s/`hostname`/""/
     ' MathInstaller
 

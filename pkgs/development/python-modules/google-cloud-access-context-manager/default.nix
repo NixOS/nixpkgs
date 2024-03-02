@@ -4,19 +4,24 @@
 , google-api-core
 , pythonOlder
 , protobuf
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.1.16";
-  format = "setuptools";
+  version = "0.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+L5Rre6LHpSlc+yzdQpMLSvURLHd412apDes5zwzdgc=";
+    hash = "sha256-pbQkMSwISwK2+Ywev7avKBMvwB5dcZgX+kmeeMh+BLc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -35,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-access-context-manager";
     changelog = "https://github.com/googleapis/python-access-context-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+    maintainers = with maintainers; [ austinbutler ];
   };
 }

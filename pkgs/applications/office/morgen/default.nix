@@ -1,20 +1,20 @@
 { lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, nodePackages, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+, asar, alsa-lib, gtk3, libxshmfence, mesa, nss }:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "2.7.3";
+  version = "3.2.2";
 
   src = fetchurl {
-    url = "https://download.todesktop.com/210203cqcj00tw1/morgen-${version}.deb";
-    sha256 = "sha256-8cGL2xQI4NYDPGqnvlnVVvha3wXFT8IcjRWTTGO7OJQ=";
+    url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
+    hash = "sha256-+VvQM851uWoMXV3hwuVSlK9IqiNjh57uq8Wlwl/VvPg=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
     makeWrapper
-    nodePackages.asar
+    asar
   ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
@@ -46,12 +46,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "All-in-one Calendars, Tasks and Scheduler";
     homepage = "https://morgen.so/download";
+    mainProgram = "morgen";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [ justanotherariel wolfangaukang ];
     platforms = [ "x86_64-linux" ];
   };
 }

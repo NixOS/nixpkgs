@@ -4,12 +4,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dynalite-devices";
   version = "0.1.48";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,6 +25,10 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' setup.cfg
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
@@ -36,6 +41,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "dynalite_devices_lib"
   ];
+
+  # it would use the erroneous tag v0.47
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "An unofficial Dynalite DyNET interface creating devices";

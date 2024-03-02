@@ -14,23 +14,30 @@ assert !blas.isILP64 && !lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "dftd4";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "dftd4";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZCoFbjTNQD7slq5sKwPRPkrHSHofsxU9C9h/bF5jmZI=";
+    hash = "sha256-VIV9953hx0MZupOARdH+P1h7JtZeJmTlqtO8si+lwdU=";
   };
 
   nativeBuildInputs = [ cmake gfortran ];
 
   buildInputs = [ blas lapack mctc-lib mstore multicharge ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}/" ""
+  outputs = [ "out" "dev" ];
+
+  # Fix the Pkg-Config files for doubled store paths
+  postPatch = ''
+    substituteInPlace config/template.pc \
+      --replace "\''${prefix}/" ""
   '';
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
 
   doCheck = true;
   preCheck = ''

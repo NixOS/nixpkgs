@@ -1,27 +1,34 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
-  version = "1.3";
+  version = "1.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
-    rev = "v${version}";
-    sha256 = "12sl7d381l1gjaam419xc8gxmsprxf0hgksz1f974qmmijvr02bh";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-z3OGCjLsOi6K1udChlSih8X6e2qvT8kNhh2PWBGB9zU=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    notmuch
-    oauth2client
+    notmuch2
     google-api-python-client
+    google-auth-oauthlib
     tqdm
     setuptools
   ];
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "lieer" ];
+
+  pythonImportsCheck = [
+    "lieer"
+  ];
 
   meta = with lib; {
     description = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
@@ -34,6 +41,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://lieer.gaute.vetsj.com/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ archer-65 flokli ];
+    mainProgram = "gmi";
   };
 }

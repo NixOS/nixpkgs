@@ -8,19 +8,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.4.3";
-  format = "setuptools";
+  version = "3.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RSe/saqfidAn20INQN6fquSCS2QGyANzpt2CfnmJwJ4=";
+    hash = "sha256-hovm31u1SRxvMb7fYAryNmHAJ3bKVkwVHELGPgs0Zds=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -44,11 +49,16 @@ buildPythonPackage rec {
     "google.cloud.vision_v1p4beta1"
   ];
 
+  disabledTests = [
+    # Tests require PROJECT_ID
+    "test_list_products"
+  ];
+
   meta = with lib; {
     description = "Cloud Vision API API client library";
     homepage = "https://github.com/googleapis/python-vision";
     changelog = "https://github.com/googleapis/python-vision/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

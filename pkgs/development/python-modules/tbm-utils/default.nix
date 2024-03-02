@@ -1,37 +1,76 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , attrs
 , pendulum
+, poetry-core
 , pprintpp
+, pytestCheckHook
+, pythonRelaxDepsHook
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "tbm-utils";
   version = "2.6.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1v7pb3yirkhzbv1z5i1qp74vl880f56zvzfj68p08b5jxv64hmr3";
+  src = fetchFromGitHub {
+    owner = "thebigmunch";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-AEKawsAxDSDNkIaXEFFgdEBOY2PpASDrhlDrsnM5eyA=";
   };
 
-  propagatedBuildInputs = [ attrs pendulum pprintpp wrapt ];
-
-  # this versioning was done to prevent normal pip users from encountering
-  # issues with package failing to build from source, but nixpkgs is better
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'attrs>=18.2,<19.4'" "'attrs'"
+    substituteInPlace pyproject.toml \
+      --replace 'poetry>=1.0.0' 'poetry-core' \
+      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';
 
-  # No tests in archive.
-  doCheck = false;
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    pendulum
+    pprintpp
+    wrapt
+  ];
+
+  pythonRelaxDeps = [
+    "attrs"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Skip on macOS because /etc/localtime is accessed through the pendulum
+    # library, which is not allowed in a sandboxed build.
+    "test_create_parser_filter_dates"
+    "test_parse_args"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # Skip on macOS because /etc/localtime is accessed through the pendulum
+    # library, which is not allowed in a sandboxed build.
+    "tests/test_datetime.py"
+    "tests/test_misc.py"
+  ];
+
+  pythonImportsCheck = [
+    "tbm_utils"
+  ];
 
   meta = {
     description = "A commonly-used set of utilities";
     homepage = "https://github.com/thebigmunch/tbm-utils";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
+    license = [ lib.licenses.mit ];
   };
-
 }

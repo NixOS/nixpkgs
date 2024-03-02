@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchurl
 , meson
 , ninja
@@ -17,23 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.6.3";
+  version = "1.6.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-T09Biwe4EWTfH3q2EuKOTAFsLQhbik85+XlF+LFe4kg=";
+    hash = "sha256-ydxQ6MeLN5LRsObFxfUsk+k0XT2uKJHjEamTpXT1oE8=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://gitlab.gnome.org/GNOME/gupnp/-/merge_requests/32
-      name = "gi-docgen-as-native-dep.patch";
-      url = "https://gitlab.gnome.org/GNOME/gupnp/-/commit/11d4a33cff1f5d8b8ad4b80c4506246a9e0dff8f.diff";
-      hash = "sha256-+p4vzUG2v+7mxtQ5AUcEI7SW0cDX6XlzqlyegF+I1Go=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config

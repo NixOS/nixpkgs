@@ -18,8 +18,8 @@
     name = "april-asr";
     owner = "abb128";
     repo = "april-asr";
-    rev = "c2f138c674cad58e2708ecaddc95cc72e7f85549";
-    hash = "sha256-hZe2iss3BGdzeTM5FCp9wp6LaDOjtGJrZS5vB5F6uLg=";
+    rev = "3308e68442664552de593957cad0fa443ea183dd";
+    hash = "sha256-/cOZ2EcZu/Br9v0ComxnOegcEtlC9e8FYt3XHfah7mE=";
   };
 
   aprilModel = fetchurl {
@@ -28,15 +28,15 @@
     hash = "sha256-d+uV0PpPdwijfoaMImUwHubELcsl5jymPuo9nLrbwfM=";
   };
 in
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (finalAttrs: {
     pname = "livecaptions";
-    version = "0.4.0";
+    version = "0.4.1";
 
     src = fetchFromGitHub {
       owner = "abb128";
       repo = "LiveCaptions";
-      rev = "v${version}";
-      hash = "sha256-RepuvqNPHRGENupPG5ezadn6f7FxEUYFDi4+DpNanuA=";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-x8NetSooIBlOKzKUMvDkPFtpD6EVGYECnaqWurySUDU=";
     };
 
     nativeBuildInputs = [
@@ -72,5 +72,6 @@ in
       license = licenses.gpl3Plus;
       platforms = platforms.linux;
       maintainers = with maintainers; [Scrumplex];
+      mainProgram = "livecaptions";
     };
-  }
+  })

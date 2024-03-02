@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "0a5024vimpfrpj6w60j1ad8qvjkrmxiy8w1yijxfwk917ag9rkpq";
   };
 
+  patches = [
+    ./fix-config_h-includes-should-be-first.patch
+  ];
+
   postPatch = ''
     substituteInPlace configure.ac \
       --replace "AC_PREREQ([2.62])" "AC_PREREQ([2.64])"
@@ -59,9 +63,10 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "A command-line tool to print idle time from libXss";
-    homepage = "http://taktoa.me/xprintidle-ng/";
-    license = lib.licenses.gpl2;
+    homepage = "https://github.com/taktoa/xprintidle-ng";
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
+    mainProgram = "xprintidle-ng";
   };
 }

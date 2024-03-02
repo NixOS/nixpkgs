@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "isounidecode";
   version = "0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +19,6 @@ buildPythonPackage rec {
     description = "Python package for conversion and transliteration of unicode into ascii or iso-8859-1";
     homepage = "https://github.com/redvasily/isounidecode";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

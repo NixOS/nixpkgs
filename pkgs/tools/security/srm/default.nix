@@ -1,13 +1,17 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchsvn, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "srm";
-  version = "1.2.15";
+  version = "1.2.15-unstable-2017-12-18";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/srm/${version}/srm-${version}.tar.gz";
-    sha256 = "10sjarhprs6s4zandndg720528rcnd4xk8dl48pjj7li1q9c30vm";
+  src = fetchsvn {
+    url = "svn://svn.code.sf.net/p/srm/srm/trunk/";
+    rev = "268";
+    sha256 = "sha256-bY8p6IS5zeByoe/uTmvBAaBN4Wu7J19dVSpbtqx4OeQ=";
   };
+
+  patches = [ ./fix-output-in-verbose-mode.patch ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     description = "Delete files securely";
@@ -22,5 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
   };
-
 }

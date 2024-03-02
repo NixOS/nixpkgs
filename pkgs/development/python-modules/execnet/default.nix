@@ -2,52 +2,53 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
-, fetchpatch
+, hatchling
+, hatch-vcs
+, gevent
 , pytestCheckHook
-, setuptools-scm
-, apipkg
-, py
 }:
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.9.0";
-  format = "setuptools";
+  version = "2.0.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f694f3ba9cc92cab508b152dcfe322153975c29bda272e2fd7f3f00f36e47c5";
+    hash = "sha256-zFm8RCN0L9ca0icSLrDdRNtR77PcQJW0WsmgjHcAlq8=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Fix test compat with pytest 7.2.0
-      url = "https://github.com/pytest-dev/execnet/commit/c0459b92bc4a42b08281e69b8802d24c5d3415d4.patch";
-      hash = "sha256-AT2qr7AUpFXcPps525U63A7ARcEVmf0HM6ya73Z2vi0=";
-    })
-  ];
-
-  # remove vbox tests
   postPatch = ''
-    rm -v testing/test_termination.py
-    rm -v testing/test_channel.py
-    rm -v testing/test_xspec.py
-    rm -v testing/test_gateway.py
-    ${lib.optionalString isPyPy "rm -v testing/test_multi.py"}
+    # remove vbox tests
+    rm testing/test_termination.py
+    rm testing/test_channel.py
+    rm testing/test_xspec.py
+    rm testing/test_gateway.py
+  '' + lib.optionalString isPyPy ''
+    rm testing/test_multi.py
   '';
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    apipkg
-  ];
+  # sometimes crashes with: OSError: [Errno 9] Bad file descriptor
+  doCheck = !isPyPy;
 
   nativeCheckInputs = [
-    py
+    gevent
     pytestCheckHook
   ];
+
+  disabledTests = [
+    # gets stuck
+    "test_popen_io"
+    # OSError: [Errno 9] Bad file descriptor
+    "test_stdouterrin_setnull"
+  ];
+
+  pytestFlagsArray = [ "-vvv" ];
 
   pythonImportsCheck = [
     "execnet"
@@ -62,5 +63,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-
 }

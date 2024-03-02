@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "qiling";
-  version = "1.4.5";
+  version = "1.4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MEafxry/ewqlzOMu9TJMQodXLChGMYjS2jX3yv7FZJk=";
+    hash = "sha256-l3WQBlJic4lXCe5Z1FmoxaqOblE7uAaW2gG/nTn84Kc=";
   };
 
   propagatedBuildInputs = [

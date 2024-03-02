@@ -1,66 +1,54 @@
 { boto3
 , buildPythonPackage
 , crc32c
-, which
 , fetchFromGitHub
 , lib
 , matplotlib
 , moto
 , numpy
-, pillow
 , protobuf
 , pytestCheckHook
 , torch
-, six
+, setuptools-scm
 , soundfile
+, stdenv
 , tensorboard
 , torchvision
 }:
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.5.1";
+  version = "2.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Np0Ibn51qL0ORwq1IY8lUle05MQDdb5XkI1uzGOKJno=";
+    hash = "sha256-m7RLDOMuRNLacnIudptBGjhcTlMk8+v/onz6Amqxb90=";
   };
 
-  # apparently torch API changed a bit at 1.6
-  postPatch = ''
-    substituteInPlace tensorboardX/pytorch_graph.py --replace \
-      "torch.onnx.set_training(model, False)" \
-      "torch.onnx.select_model_mode_for_export(model, torch.onnx.TrainingMode.EVAL)"
-
-    # Version detection seems broken here, the version reported by python is
-    # newer than the protobuf package itself.
-    sed -i -e "s/'protobuf[^']*'/'protobuf'/" setup.py
-  '';
-
   nativeBuildInputs = [
-    which
     protobuf
+    setuptools-scm
   ];
 
   # required to make tests deterministic
-  PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   propagatedBuildInputs = [
     crc32c
     numpy
-    six
-    soundfile
   ];
+
+  pythonImportsCheck = [ "tensorboardX" ];
 
   nativeCheckInputs = [
     boto3
     matplotlib
     moto
-    pillow
     pytestCheckHook
+    soundfile
     torch
     tensorboard
     torchvision
@@ -71,6 +59,10 @@ buildPythonPackage rec {
     "test_TorchVis"
     # Requires network access (FileNotFoundError: [Errno 2] No such file or directory: 'wget')
     "test_onnx_graph"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Fails with a mysterious error in pytorch:
+    # RuntimeError: required keyword attribute 'name' has the wrong type
+    "test_pytorch_graph"
   ];
 
   disabledTestPaths = [
@@ -80,7 +72,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for writing tensorboard-compatible logs";
-    homepage = "https://github.com/lanpa/tensorboardX";
+    homepage = "https://tensorboardx.readthedocs.io";
+    downloadPage = "https://github.com/lanpa/tensorboardX";
+    changelog = "https://github.com/lanpa/tensorboardX/blob/${src.rev}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ lebastr akamaus ];
     platforms = platforms.all;

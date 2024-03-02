@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "throttler";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uburuntu";

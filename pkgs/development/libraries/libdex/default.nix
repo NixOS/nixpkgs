@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libdex";
-  version = "0.2.0";
+  version = "0.4.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libdex";
     rev = version;
-    sha256 = "54TwMdO29jordVqlBsMZOVtHc7s7ivf/4OkpCSNu7VE=";
+    sha256 = "0GNlgJgAOE3JGwu/6Zsh4sjFapA7nUcGD3lgZZJ0BfQ=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gnome.updateScript {
     packageName = "libdex";
+    versionPolicy = "odd-unstable";
   };
 
   meta = with lib; {

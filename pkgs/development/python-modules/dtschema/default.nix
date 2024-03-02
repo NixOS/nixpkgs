@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , jsonschema
@@ -28,8 +29,6 @@ buildPythonPackage rec {
     ./fix_libfdt_name.patch
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -54,6 +53,14 @@ buildPythonPackage rec {
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
     license = with licenses; [ bsd2 /* or */ gpl2Only ];
     maintainers = with maintainers; [ sorki ];
+
+    broken = (
+      # Library not loaded: @rpath/libfdt.1.dylib
+      stdenv.isDarwin ||
+
+      # see https://github.com/devicetree-org/dt-schema/issues/108
+      versionAtLeast jsonschema.version "4.18"
+    );
   };
 }
 

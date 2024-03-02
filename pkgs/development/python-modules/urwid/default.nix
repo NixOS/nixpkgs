@@ -1,36 +1,90 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPy3k
+, exceptiongroup
+, fetchFromGitHub
 , glibcLocales
+, pygobject3
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, pyzmq
+, setuptools
+, setuptools-scm
+, tornado
+, trio
+, twisted
+, typing-extensions
+, wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.1.2";
-  format = "setuptools";
+  version = "2.6.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "urwid";
+    repo = "urwid";
+    rev = "refs/tags/${version}";
+    hash = "sha256-d9tgKjZMVdaMrxQT6sJsVb812NuFYkA1hLlo/6XgwAo=";
   };
 
-  patches = [
-    # https://github.com/urwid/urwid/pull/517
-    (fetchpatch {
-      name = "python311-compat.patch";
-      url = "https://github.com/urwid/urwid/commit/42c1ed1eeb663179b265bae9b384d7ec11c8a9b5.patch";
-      hash = "sha256-Oz8O/M6AdqbB6C/BB5rtxp8FgdGhZUxkSxKIyq5Dmho=";
-    })
+  postPatch = ''
+    sed -i '/addopts =/d' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
-  # tests need to be able to set locale
-  LC_ALL = "en_US.UTF-8";
-  nativeCheckInputs = [ glibcLocales ];
+  propagatedBuildInputs = [
+    typing-extensions
+    wcwidth
+  ];
 
-  # tests which assert on strings don't decode results correctly
-  doCheck = isPy3k;
+  passthru.optional-dependencies = {
+    glib = [
+      pygobject3
+    ];
+    tornado = [
+      tornado
+    ];
+    trio = [
+      exceptiongroup
+      trio
+    ];
+    twisted = [
+      twisted
+    ];
+    zmq = [
+      pyzmq
+    ];
+    serial = [
+      pyserial
+    ];
+    lcd = [
+      pyserial
+    ];
+  };
+
+  nativeCheckInputs = [
+    glibcLocales
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  env.LC_ALL = "en_US.UTF8";
+
+  pytestFlagsArray = [
+    "tests"
+  ];
+
+  disabledTestPaths = [
+    # expect call hangs
+    "tests/test_vterm.py"
+  ];
 
   pythonImportsCheck = [
     "urwid"
@@ -38,8 +92,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A full-featured console (xterm et al.) user interface library";
+    changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
+    downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

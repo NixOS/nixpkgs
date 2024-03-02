@@ -1,6 +1,5 @@
-{ stdenv
+{ lib
 , fetchFromGitLab
-, lib
 , nettle
 , nix-update-script
 , rustPlatform

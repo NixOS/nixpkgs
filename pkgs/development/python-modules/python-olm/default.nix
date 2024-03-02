@@ -8,11 +8,12 @@
 
 buildPythonPackage {
   pname = "python-olm";
+  format = "setuptools";
   inherit (olm) src version;
 
   disabled = !isPy3k;
 
-  sourceRoot = "source/python";
+  sourceRoot = "${olm.src.name}/python";
   buildInputs = [ olm ];
 
   preBuild = ''

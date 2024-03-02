@@ -1,31 +1,62 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
-, brotli, fixup_yarn_lock, jq, nodejs, which, yarn
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, fetchFromGitHub
+, fetchYarnDeps
+, nixosTests
+, brotli
+, prefetch-yarn-deps
+, jq
+, nodejs
+, which
+, yarn
 }:
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
-    else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
-
-  bcrypt_version = "5.1.0";
-  bcrypt_lib = fetchurl {
-    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
-    hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+  bcryptHostPlatformAttrs = {
+    x86_64-linux = {
+      arch = "linux-x64";
+      libc = "glibc";
+      hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+    };
+    aarch64-linux = {
+      arch = "linux-arm64";
+      libc = "glibc";
+      hash = "sha256-q8BR7kILYV8i8ozDkpcuKarf4s1TgRqOrUeLqjdWEQ0=";
+    };
+    x86_64-darwin = {
+      arch = "darwin-x64";
+      libc = "unknown";
+      hash = "sha256-ONnXtRxcYFuFz+rmVTg+yEKe6J/vfKahX2i6k8dQStg=";
+    };
+    aarch64-darwin = {
+      arch = "darwin-arm64";
+      libc = "unknown";
+      hash = "sha256-VesAcT/IF2cvJVncJoqZcAvFxw32SN70C60GLU2kmVI=";
+    };
   };
-
-in stdenv.mkDerivation rec {
+  bcryptAttrs = bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}" or
+    (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
+  bcryptVersion = "5.1.0";
+  bcryptLib = fetchurl {
+    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcryptVersion}/bcrypt_lib-v${bcryptVersion}-napi-v3-${bcryptAttrs.arch}-${bcryptAttrs.libc}.tar.gz";
+    inherit (bcryptAttrs) hash;
+  };
+in
+stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-C9mBF+QymGXyBB3IFX6MNgsZpHk739qv1/DLuvzrTaU=";
+    hash = "sha256-8JzU0JVb+JQCNiro8hPHBwkofNTUy90YkSCzTOoB+/A=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-W+pX2XO27j6qAVxvo+Xf1h7g3V0LUMtwNf+meZmkgwE=";
+    hash = "sha256-pzXH6hdDf8O6Kr12Xw0jRcnPRD2TrDGdiEfxVr3KmwY=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
@@ -35,17 +66,17 @@ in stdenv.mkDerivation rec {
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-TAv8QAAfT3q28jUo26h0uCGsoqBzAn8lybIaqNAApU8=";
+    hash = "sha256-Ejzk/VEx7YtJpsrkHcXAZnJ+yRx1VhBJGpqquHYULNU=";
   };
 
-  nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
+  nativeBuildInputs = [ brotli prefetch-yarn-deps jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
     export HOME=$PWD
-    fixup_yarn_lock ~/yarn.lock
-    fixup_yarn_lock ~/server/tools/yarn.lock
-    fixup_yarn_lock ~/client/yarn.lock
+    fixup-yarn-lock ~/yarn.lock
+    fixup-yarn-lock ~/server/tools/yarn.lock
+    fixup-yarn-lock ~/client/yarn.lock
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/server/tools
@@ -62,11 +93,11 @@ in stdenv.mkDerivation rec {
 
     # Fix bcrypt node module
     cd ~/node_modules/bcrypt
-    if [ "${bcrypt_version}" != "$(cat package.json | jq -r .version)" ]; then
+    if [ "${bcryptVersion}" != "$(cat package.json | jq -r .version)" ]; then
       echo "Mismatching version please update bcrypt in derivation"
       exit
     fi
-    mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcrypt_lib}
+    mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcryptLib}
 
     # Return to home directory
     cd ~
@@ -122,7 +153,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
   };
 }

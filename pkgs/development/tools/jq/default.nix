@@ -1,24 +1,22 @@
 { lib
 , stdenv
 , fetchurl
+, removeReferencesTo
 , autoreconfHook
+, bison
 , onigurumaSupport ? true
 , oniguruma
 }:
 
 stdenv.mkDerivation rec {
   pname = "jq";
-  version = "1.6";
+  version = "1.7.1";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
-    url = "https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    sha256 = "sha256-XejI4pqqP7nMa0e7JymfJxNU67clFOOsytx9OLW7qnI=";
+    url = "https://github.com/jqlang/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
+    hash = "sha256-R4ycoSn9LjRD/icxS0VeIR4NjGC8j/ffcDhz3u7lgMI=";
   };
-
-  patches = [
-    ./fix-tests-when-building-without-regex-supports.patch
-  ];
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
 
@@ -38,7 +36,16 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals onigurumaSupport [ oniguruma ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ removeReferencesTo autoreconfHook bison ];
+
+  # Darwin requires _REENTRANT be defined to use functions like `lgamma_r`.
+  # Otherwise, configure will detect that they’re in libm, but the build will fail
+  # with clang 16+ due to calls to undeclared functions.
+  # This is fixed upstream and can be removed once jq is updated (to 1.7 or an unstable release).
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+    "-D_REENTRANT=1"
+    "-D_DARWIN_C_SOURCE=1"
+  ]);
 
   configureFlags = [
     "--bindir=\${bin}/bin"
@@ -48,6 +55,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
   # jq is linked to libjq:
   ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+
+  # Break the dependency cycle: $dev refers to $bin via propagated-build-outputs, and
+  # $bin refers to $dev because of https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
+  postFixup = ''
+    remove-references-to -t "$dev" "$bin/bin/jq"
+  '';
 
   doInstallCheck = true;
   installCheckTarget = "check";
@@ -61,10 +74,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A lightweight and flexible command-line JSON processor";
-    homepage = "https://stedolan.github.io/jq/";
+    homepage = "https://jqlang.github.io/jq/";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin globin artturin ];
+    maintainers = with maintainers; [ raskin artturin ncfavier ];
     platforms = platforms.unix;
-    downloadPage = "https://stedolan.github.io/jq/download/";
+    downloadPage = "https://jqlang.github.io/jq/download/";
+    mainProgram = "jq";
   };
 }

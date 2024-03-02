@@ -1,7 +1,6 @@
 { lib
 , aiofiles
 , buildPythonPackage
-, cached-property
 , colorama
 , fetchFromGitHub
 , git
@@ -13,22 +12,17 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.29.1";
-  format = "pyproject";
+  version = "0.41.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "griffe";
     rev = "refs/tags/${version}";
-    hash = "sha256-df6uFIaTdTy5VMKxBZew5zK0/iO7KbttbjGBJp1Vhjw=";
+    hash = "sha256-or0kXc8YJl7+95gM54MaviDdErN0vqBnCtAavZM938k=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'license = "ISC"' 'license = {file = "LICENSE"}' \
-  '';
 
   nativeBuildInputs = [
     pdm-backend
@@ -36,8 +30,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorama
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
   ];
 
   nativeCheckInputs = [

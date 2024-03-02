@@ -4,17 +4,16 @@
 , pytest
 , pytestCheckHook
 , pexpect
-, pytest-cov
 }:
 
 buildPythonPackage rec {
   pname = "pytest-timeout";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wHygdATGEvirviIpSyPDaOLlEEtSHBeQGVVh834aw9k=";
+    hash = "sha256-OwuV2r88tQusnvXKkS+gz8KGUmrxevyAaCTfIML3LJA=";
   };
 
   buildInputs = [
@@ -24,7 +23,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pexpect
-    pytest-cov
   ];
 
   disabledTests = [
@@ -46,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-timeout/";
     changelog = "https://github.com/pytest-dev/pytest-timeout/#changelog";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu costrouc ];
+    maintainers = with maintainers; [ makefu ];
   };
 }

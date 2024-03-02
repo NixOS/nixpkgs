@@ -5,20 +5,24 @@
 
 buildGoModule rec {
   pname = "nuclei";
-  version = "2.9.7";
+  version = "3.1.10";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-w9XiXZzkDM1ZETzs/c3uMEoaRXUXKzpzn3k3RbgTXbE=";
+    repo = "nuclei";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-11ORN9h2VsXJKZw5HUljq6Tk0XC81tC7sCPbFgcTd+k=";
   };
 
-  vendorHash = "sha256-T09uSUBRZGsI732723UTd2jOT9/pYjUp+nshWthGA1k=";
+  vendorHash = "sha256-0ERUvPUAxj0H62YcRvsfYX8h0Hp/mA6NdE8E/BjPGzw=";
 
-  modRoot = "./v2";
   subPackages = [
     "cmd/nuclei/"
+  ];
+
+  ldflags = [
+    "-w"
+    "-s"
   ];
 
   # Test files are not part of the release tarball
@@ -37,5 +41,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/nuclei/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab Misaka13514 ];
+    mainProgram = "nuclei";
   };
 }

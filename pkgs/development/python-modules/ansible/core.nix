@@ -1,15 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, pythonRelaxDepsHook
 , installShellFiles
+, docutils
 , ansible
 , cryptography
+, importlib-resources
 , jinja2
 , junit-xml
 , lxml
 , ncclient
 , packaging
 , paramiko
+, ansible-pylibssh
 , passlib
 , pexpect
 , psutil
@@ -24,11 +29,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.15.1";
+  version = "2.16.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7SjrSUPkgABO3Juh6b7peaBlDLL5Nyzkor1XKDjGDSs=";
+    hash = "sha256-dqh2WoWGBk7wc6KZVi4wj6LBgKdbX3Vpu9D2HUFxzbM=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -37,10 +42,15 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
+
+    patchShebangs --build packaging/cli-doc/build.py
   '';
 
   nativeBuildInputs = [
     installShellFiles
+    docutils
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -58,16 +68,27 @@ buildPythonPackage rec {
     lxml
     ncclient
     paramiko
+    ansible-pylibssh
     pexpect
     psutil
     pycrypto
     requests
     scp
     xmltodict
-  ] ++ lib.optional windowsSupport pywinrm;
+  ] ++ lib.optionals windowsSupport [
+    pywinrm
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-resources
+  ];
+
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
+    "importlib-resources"
+  ];
 
   postInstall = ''
-    installManPage docs/man/man1/*.1
+    export HOME="$(mktemp -d)"
+    packaging/cli-doc/build.py man --output-dir=man
+    installManPage man/*
   '';
 
   # internal import errors, missing dependencies

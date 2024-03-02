@@ -15,14 +15,21 @@ qtModule {
     llvmPackages.libclang
     llvmPackages.llvm
   ];
-  qtInputs = [ qtbase qtdeclarative ];
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ cups ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
   patches = [
     ../patches/qttools-paths.patch
   ];
   env.NIX_CFLAGS_COMPILE = toString [
     "-DNIX_OUTPUT_OUT=\"${placeholder "out"}\""
   ];
+  postPatch = ''
+    substituteInPlace \
+      src/qdoc/catch/CMakeLists.txt \
+      src/qdoc/catch_generators/CMakeLists.txt \
+      src/qdoc/catch_conversions/CMakeLists.txt \
+      --replace ''\'''${CMAKE_INSTALL_INCLUDEDIR}' "$out/include"
+  '';
   postInstall = ''
     mkdir -p "$dev"
     ln -s "$out/bin" "$dev/bin"

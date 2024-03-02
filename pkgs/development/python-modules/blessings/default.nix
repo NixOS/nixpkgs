@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "blessings";
   version = "1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     "LIBDIR=${placeholder "out"}/lib"
   ];
 
+  postInstall = ''
+    mv $out/include/qm-dsp/* $out/include
+    rmdir $out/include/qm-dsp
+  '';
+
   env.NIX_CFLAGS_COMPILE = "-I${kissfft}/include/kissfft";
 
   meta = with lib; {

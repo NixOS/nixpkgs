@@ -1,66 +1,39 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
+
+# build-system
 , setuptools
-
-# build
-, hassil
-, jinja2
-, pyyaml
-, regex
-, voluptuous
-, python
-
-# tests
-, pytest-xdist
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2023.6.5";
+  version = "2024.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "home-assistant";
-    repo = "intents";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZfPOxTFPQNdZ3Tq8p410RHlLGej+FOqhafD+91MRbRo=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Tb9ZZvs5Wyzm2TS5INUSua4Y3/2H+kHEhjpfYWJi+d0=";
   };
 
-  sourceRoot = "source/package";
-
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "2023.4.26" "${version}"
+    substituteInPlace pyproject.toml --replace-fail \
+      'requires = ["setuptools~=62.3", "wheel~=0.37.1"]' \
+      'requires = ["setuptools"]'
   '';
 
   nativeBuildInputs = [
-    hassil
-    jinja2
-    pyyaml
-    regex
     setuptools
-    voluptuous
   ];
 
-  postInstall = ''
-    pushd ..
-    # https://github.com/home-assistant/intents/blob/main/script/package#L18
-    ${python.pythonForBuild.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
-    popd
-  '';
-
-  checkInputs = [
-    pytest-xdist
-    pytestCheckHook
-  ];
+  # sdist does not ship tests
+  doCheck = false;
 
   pytestFlagsArray = [
-    "../tests"
+    "intents/tests"
   ];
 
   meta = with lib; {

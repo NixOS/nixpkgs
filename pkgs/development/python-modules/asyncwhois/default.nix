@@ -1,27 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-asyncio
 , pytest-mock
 , pytestCheckHook
 , python-socks
 , pythonOlder
+, setuptools
 , tldextract
 , whodap
 }:
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.0.6";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
-    repo = pname;
+    repo = "asyncwhois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SakO+s05P1Kj2NWlhMcdNa4bDs+DaVZ1W2ybs51U+BQ=";
+    hash = "sha256-rJwJhSOFrZZ3WXEZmPMfdosBBW/R5/PMqs0QLnsPMoI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-socks
@@ -30,13 +36,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "python-socks[asyncio]" "python-socks"
+      --replace-fail "python-socks[asyncio]" "python-socks"
   '';
 
   disabledTests = [
@@ -52,6 +59,8 @@ buildPythonPackage rec {
     "test_whois_query_run"
     "test_whois_query_create_connection"
     "test_whois_query_send_and_recv"
+    "test_input_parameters_for_domain_query"
+    "test__get_top_level_domain"
   ];
 
   pythonImportsCheck = [

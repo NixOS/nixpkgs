@@ -1,6 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, fetchpatch
 , frozendict
 , termcolor
 , matplotlib
@@ -28,13 +29,21 @@
 let bsuite = buildPythonPackage rec {
   pname = "bsuite";
   version = "0.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ak9McvXl7Nz5toUaPaRaJek9lurxiQiIW209GnZEjX0=";
   };
 
-  buildInputs = [
+  patches = [
+    (fetchpatch {  # Convert np.int -> np.int32 since np.int is deprecated (https://github.com/google-deepmind/bsuite/pull/48)
+      url = "https://github.com/google-deepmind/bsuite/pull/48/commits/f8d81b2f1c27ef2c8c71ae286001ed879ea306ab.patch";
+      hash = "sha256-FXtvVS+U8brulq8Z27+yWIimB+kigGiUOIv1SHb1TA8=";
+    })
+  ];
+
+  propagatedBuildInputs = [
     absl-py
     dm-env
     dm-tree

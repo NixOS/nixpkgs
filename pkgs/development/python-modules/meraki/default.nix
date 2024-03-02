@@ -1,24 +1,30 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchPypi
-, aiohttp
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "1.34.0";
+  version = "1.43.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rAFoIKHrhHRqcXmvbzlFKFIaHxVLp6CJUhNASwHhpPk=";
+    hash = "sha256-llKC5bBVDlSfVDML0a9HEijM+3H5pQVuLxdukJ6sPR0=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     requests
   ];
+
+  # All tests require an API key
+  doCheck = false;
 
   pythonImportsCheck = [
     "meraki"

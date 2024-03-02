@@ -96,6 +96,13 @@ def main() -> None:
                 workspace_manifest, crate_manifest["target"][key]
             )
 
+    if (
+        "lints" in crate_manifest
+        and "workspace" in crate_manifest["lints"]
+        and crate_manifest["lints"]["workspace"] is True
+    ):
+        crate_manifest["lints"] = workspace_manifest["lints"]
+
     if not changed:
         return
 

@@ -6,12 +6,14 @@
 , pythonOlder
 , pyzipper
 , setuptools
+, striprtf
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xknxproject";
-  version = "3.2.0";
-  format = "pyproject";
+  version = "3.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -19,16 +21,18 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknxproject";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZLBvhuLXEOgqS7tRwP/e1Dv1/EMqxqXgpAZtLQGIt/o=";
+    hash = "sha256-tw/hHiiW4ZGlrbQmuIihJmhyIL++Rjpg6q8AdKNsn14=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
     cryptography
     pyzipper
+    striprtf
   ];
 
   nativeCheckInputs = [

@@ -9,11 +9,12 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "5.13.1";
+  version = "5.18.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kO6aH+4N2jDigw4SmFUIHqF70bBqVTpiti3hXK/xohk=";
+    hash = "sha256-Ngox5vu0nRKwBwNutpKVITQ9a+4iNvhFmRWCG676LLs=";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
+    downloadPage = "https://github.com/plotly/plotly.py";
     homepage = "https://plot.ly/python/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];

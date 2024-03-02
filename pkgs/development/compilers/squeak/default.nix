@@ -1,15 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, fetchzip
-, autoconf, automake, autoreconfHook, clang, dos2unix, file, perl
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, fetchzip
+, autoconf
+, automake
+, autoreconfHook
+, dos2unix
+, file
+, perl
 , pkg-config
-, alsa-lib, coreutils, freetype, glib, glibc, gnugrep, libpulseaudio, libtool
-, libuuid, openssl, pango, xorg
-, squeakImageHash ? null, squeakSourcesHash ? null, squeakSourcesVersion ? null
-, squeakVersion ? null, squeakVmCommitHash ? null, squeakVmCommitHashHash ? null
+, alsa-lib
+, coreutils
+, freetype
+, glib
+, glibc
+, gnugrep
+, libGL
+, libpulseaudio
+, libtool
+, libuuid
+, openssl
+, pango
+, xorg
+, squeakImageHash ? null
+, squeakSourcesHash ? null
+, squeakSourcesVersion ? null
+, squeakVersion ? null
+, squeakVmCommitHash ? null
+, squeakVmCommitHashHash ? null
 , squeakVmVersion ? null
 } @ args:
 
 let
-  inherit (builtins) elemAt;
+  inherit (builtins) elemAt toString;
+
   nullableOr = o: default: if o == null then default else o;
 
   bits = stdenv.hostPlatform.parsed.cpu.bits;
@@ -75,7 +100,6 @@ in stdenv.mkDerivation {
     autoconf
     automake
     autoreconfHook
-    clang
     dos2unix
     file
     perl
@@ -88,6 +112,7 @@ in stdenv.mkDerivation {
     glib
     glibc
     gnugrep
+    libGL
     libpulseaudio
     libtool
     libuuid
@@ -139,7 +164,16 @@ in stdenv.mkDerivation {
   # Workaround build failure on -fno-common toolchains:
   #   ld: vm/vm.a(cogit.o):spur64src/vm/cogitX64SysV.c:2552: multiple definition of
   #       `traceStores'; vm/vm.a(gcc3x-cointerp.o):spur64src/vm/cogit.h:140: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [ "-fcommon" ]
+    ++ (lib.optionals stdenv.cc.isClang [
+      # LLVM 16 turned these into errors (rightly, perhaps.)
+      # Allow this package to continue to build despite this change.
+      "-Wno-error=int-conversion"
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-function-pointer-types"
+    ])
+  );
 
   preAutoreconf = ''
     pushd ./platforms/unix/config > /dev/null

@@ -31,7 +31,10 @@ in
     preferLocalBuild = true;
 
     nativeBuildInputs = [ makeWrapper ];
-    passthru = { unwrapped = helm; };
+    passthru = {
+      inherit pluginsDir;
+      unwrapped = helm;
+    };
 
     meta = helm.meta // {
       # To prevent builds on hydra

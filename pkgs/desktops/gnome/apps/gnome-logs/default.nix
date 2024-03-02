@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -23,24 +22,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "43.0";
+  version = "45.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "M6k7l17CfISHglBIqnuK99XCNWWrz3t0yQKrez7CCGE=";
+    sha256 = "nbxJ/7J90jQuji/UmK8ltUENsjkQ/I7/XmiTrHa7jK4=";
   };
-
-  patches = [
-    # Remove GTK 3 depndency
-    # https://gitlab.gnome.org/GNOME/gnome-logs/-/merge_requests/46
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/32193a1385b95012bc8e7007ada89566bd63697d.patch";
-      sha256 = "5WsTnfVpWZquU65pSLnk2M6VnY+qQPUi7A0cqMmzfrU=";
-      postFetch = ''
-        substituteInPlace "$out" --replace "43.1" "43.0"
-      '';
-    })
-  ];
 
   nativeBuildInputs = [
     meson

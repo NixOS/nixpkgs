@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "AMQP implementation using asyncio";
     homepage = "https://github.com/polyconseil/aioamqp";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

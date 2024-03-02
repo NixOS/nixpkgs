@@ -1,8 +1,6 @@
 { lib
 , astropy
-, astropy-helpers
 , buildPythonPackage
-, cython
 , fetchpatch
 , fetchPypi
 , matplotlib
@@ -15,7 +13,10 @@
 , pythonOlder
 , reproject
 , scikit-image
+, setuptools
+, setuptools-scm
 , shapely
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -32,12 +33,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    astropy-helpers
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
     astropy
-    cython
     matplotlib
     numpy
     pillow

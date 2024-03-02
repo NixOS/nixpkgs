@@ -1,13 +1,16 @@
 { lib
-, absl-py
 , blas
 , buildPythonPackage
-, etils
+, callPackage
+, setuptools
+, importlib-metadata
 , fetchFromGitHub
 , jaxlib
 , jaxlib-bin
+, hypothesis
 , lapack
 , matplotlib
+, ml-dtypes
 , numpy
 , opt-einsum
 , pytestCheckHook
@@ -15,7 +18,6 @@
 , pythonOlder
 , scipy
 , stdenv
-, typing-extensions
 }:
 
 let
@@ -27,32 +29,39 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.5";
-  format = "setuptools";
+  version = "0.4.24";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-UJzX8zP3qaEUIV5hPJhiGiLJO7k8p962MHWxIHDY1ZA=";
+    hash = "sha256-hmx7eo3pephc6BQfoJ3U0QwWBWmhkAc+7S4QmW32qQs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  # The version is automatically set to ".dev" if this variable is not set.
+  # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
+  JAX_RELEASE = "1";
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The
   # JAX project ships separate wheels for CPU, GPU, and TPU.
   propagatedBuildInputs = [
-    absl-py
-    etils
+    ml-dtypes
     numpy
     opt-einsum
     scipy
-    typing-extensions
-  ] ++ etils.optional-dependencies.epath;
+  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   nativeCheckInputs = [
+    hypothesis
     jaxlib'
     matplotlib
     pytestCheckHook
@@ -81,6 +90,9 @@ buildPythonPackage rec {
     "testKde3"
     "testKde5"
     "testKde6"
+    # Invokes python manually in a subprocess, which does not have the correct dependencies
+    # ImportError: This version of jax requires jaxlib version >= 0.4.19.
+    "test_no_log_spam"
   ] ++ lib.optionals usingMKL [
     # See
     #  * https://github.com/google/jax/issues/9705
@@ -94,26 +106,43 @@ buildPythonPackage rec {
     "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
     "testQdwhWithRandomMatrix3"
     "testScanGrad_jit_scan"
+
+    # See https://github.com/google/jax/issues/17867.
+    "test_array"
+    "test_async"
+    "test_copy0"
+    "test_device_put"
+    "test_make_array_from_callback"
+    "test_make_array_from_single_device_arrays"
+
+    # Fails on some hardware due to some numerical error
+    # See https://github.com/google/jax/issues/18535
+    "testQdwhWithOnRankDeficientInput5"
   ];
 
-  # See https://github.com/google/jax/issues/11722. This is a temporary fix in
-  # order to unblock etils, and upgrading jax/jaxlib to the latest version. See
-  # https://github.com/NixOS/nixpkgs/issues/183173#issuecomment-1204074993.
-  disabledTestPaths = [
-    "tests/api_test.py"
-    "tests/core_test.py"
-    "tests/lax_numpy_indexing_test.py"
-    "tests/lax_numpy_test.py"
-    "tests/nn_test.py"
-    "tests/random_test.py"
-    "tests/sparse_test.py"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # RuntimeWarning: invalid value encountered in cast
     "tests/lax_test.py"
   ];
 
-  # As of 0.3.22, `import jax` does not work without jaxlib being installed.
-  pythonImportsCheck = [ ];
+  pythonImportsCheck = [ "jax" ];
+
+  # Test CUDA-enabled jax and jaxlib. Running CUDA-enabled tests is not
+  # currently feasible within the nix build environment so we have to maintain
+  # this script separately. See https://github.com/NixOS/nixpkgs/pull/256230
+  # for a possible remedy to this situation.
+  #
+  # Run these tests with eg
+  #
+  #   NIXPKGS_ALLOW_UNFREE=1 nixglhost -- nix run --impure .#python3Packages.jax.passthru.tests.test_cuda_jaxlibBin
+  passthru.tests = {
+    test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib.override { cudaSupport = true; };
+    };
+    test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib-bin.override { cudaSupport = true; };
+    };
+  };
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

@@ -4,13 +4,13 @@
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.62.3";
+  version = "2.65.11";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
     rev = "v${version}";
-    hash = "sha256-/zIAF3LqOeIN91o33vntkBtQnESJhEDBljGPbMZvelc=";
+    hash = "sha256-eb7Ku1hgvYdmRgemXcEZMl53oNXYcomh4wYHpRzLTUc=";
   };
 
   vendorHash = null;
@@ -41,7 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Config-free text editor and IDE limited to VT100";
-    homepage = "https://github.com/xyproto/orbiton";
+    homepage = "https://orbiton.zip";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sikmir ];
     mainProgram = "o";

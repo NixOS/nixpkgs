@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "csdr";
-  version = "0.18.1";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Cmms+kQzTP+CMDRXCbtWuizosFe9FywLobjBOUA79O0=";
+    sha256 = "sha256-LdVzeTTIvDQIXRdcz/vpQu/fUgtE8nx1kIEfoiwxrUg=";
   };
 
   nativeBuildInputs = [

@@ -8,44 +8,45 @@
 #
 # To build:
 #
-#   nix-build '<nixpkgs>' -o sources.nar.xz -A make-minimal-bootstrap-sources
+#   nix-build '<nixpkgs>' -A make-minimal-bootstrap-sources
 #
 
 { lib
+, hostPlatform
 , fetchFromGitHub
-, runCommand
-, nix
-, xz
+, fetchpatch
 }:
+
 let
-  inherit (import ./bootstrap-sources.nix { }) name rev;
-
-  src = fetchFromGitHub {
-    owner = "oriansj";
-    repo = "stage0-posix";
-    inherit rev;
-    sha256 = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
-    fetchSubmodules = true;
-    postFetch = ''
-      # Seed binaries will be fetched separately
-      echo "Removing seed binaries"
-      rm -rf $out/bootstrap-seeds/*
-
-      # Remove vendored/duplicate M2libc's
-      echo "Removing duplicate M2libc"
-      rm -rf \
-        $out/M2-Mesoplanet/M2libc \
-        $out/M2-Planet/M2libc \
-        $out/mescc-tools/M2libc \
-        $out/mescc-tools-extra/M2libc
-    '';
-  };
-
+  expected = import ./bootstrap-sources.nix { inherit hostPlatform; };
 in
-runCommand "${name}.nar.xz" {
-  nativeBuildInputs = [ nix xz ];
 
-  passthru = { inherit src; };
+fetchFromGitHub {
+  inherit (expected) name rev;
+  owner = "oriansj";
+  repo = "stage0-posix";
+  sha256 = expected.outputHash;
+  fetchSubmodules = true;
+  postFetch = ''
+    # Seed binaries will be fetched separately
+    echo "Removing seed binaries"
+    rm -rf $out/bootstrap-seeds/*
+
+    # Remove vendored/duplicate M2libc's
+    echo "Removing duplicate M2libc"
+    rm -rf \
+      $out/M2-Mesoplanet/M2libc \
+      $out/M2-Planet/M2libc \
+      $out/mescc-tools/M2libc \
+      $out/mescc-tools-extra/M2libc
+
+    # aarch64: syscall: mkdir -> mkdirat
+    # https://github.com/oriansj/M2libc/pull/17
+    patch -Np1 -d $out/M2libc -i ${(fetchpatch {
+      url = "https://github.com/oriansj/M2libc/commit/ff7c3023b3ab6cfcffc5364620b25f8d0279e96b.patch";
+      hash = "sha256-QAKddv4TixIQHpFa9SVu9fAkeKbzhQaxjaWzW2yJy7A=";
+    })}
+  '';
 
   meta = with lib; {
     description = "Packaged sources for the first bootstrapping stage";
@@ -54,6 +55,4 @@ runCommand "${name}.nar.xz" {
     maintainers = teams.minimal-bootstrap.members;
     platforms = platforms.all;
   };
-} ''
-  nix-store --dump ${src} | xz -c > $out
-''
+}

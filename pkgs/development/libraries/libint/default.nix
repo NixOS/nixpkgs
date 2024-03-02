@@ -109,7 +109,7 @@ assert (builtins.elem shellSet [ "standard" "orca" ]);
 
 let
   pname = "libint";
-  version = "2.7.2";
+  version = "2.8.1";
 
   meta = with lib; {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
@@ -126,7 +126,7 @@ let
       owner = "evaleev";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-lX+DVnhdOb8d7MX9umf33y88CNiGb3TYYlMZtQXfx+8=";
+      hash = "sha256-0QWOJUjK7Jq4KCk77vNIrBNKOzPcc/1+Ji13IN5xUKM=";
     };
 
     # Replace hardcoded "/bin/rm" with normal "rm"

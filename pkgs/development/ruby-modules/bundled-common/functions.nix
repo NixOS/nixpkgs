@@ -80,6 +80,8 @@ in rec {
           outputs = [ "out" ];
           out = res;
           outputName = "out";
+          suffix = version;
+          gemType = "path";
         };
     in res;
 

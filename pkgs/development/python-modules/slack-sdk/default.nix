@@ -5,7 +5,6 @@
 , boto3
 , buildPythonPackage
 , codecov
-, databases
 , fetchFromGitHub
 , flake8
 , flask-sockets
@@ -14,6 +13,7 @@
 , psutil
 , pytest-asyncio
 , pytestCheckHook
+, setuptools
 , sqlalchemy
 , websocket-client
 , websockets
@@ -21,8 +21,8 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.20.2";
-  format = "setuptools";
+  version = "3.27.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -30,8 +30,17 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2MPXV+rVXZYMTZe11T8x8GKQmHZwUlkwarCkheVkERo=";
+    hash = "sha256-fBHu4e6pSt8yzXbLWr5cwjRFDfvdH2jzpSNzdMBg4N0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "pytest-runner"' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiodns
@@ -44,7 +53,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     codecov
-    databases
     flake8
     flask-sockets
     moto
@@ -67,6 +75,7 @@ buildPythonPackage rec {
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
     "test_org_installation"
     "test_interactions"
+    "test_issue_690_oauth_access"
   ];
 
   pythonImportsCheck = [

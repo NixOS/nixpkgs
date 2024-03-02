@@ -8,7 +8,7 @@ in
 
   options.services.rustus = {
 
-    enable = mkEnableOption (lib.mdDoc "TUS protocol implementation in Rust.");
+    enable = mkEnableOption (lib.mdDoc "TUS protocol implementation in Rust");
 
     host = mkOption {
       type = types.str;
@@ -226,6 +226,10 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.rustus}/bin/rustus";
         StateDirectory = "rustus";
+        # User name is defined here to enable restoring a backup for example
+        # You will run the backup restore command as sudo -u rustus in order
+        # to have write permissions to /var/lib
+        User = "rustus";
         DynamicUser = true;
         LoadCredential = lib.optionals isHybridS3 [
           "S3_ACCESS_KEY_PATH:${cfg.storage.s3_access_key_file}"

@@ -22,7 +22,7 @@ let
   desktopItem = makeDesktopItem {
     name = "ssb-patchwork";
     exec = "${binary}/bin/ssb-patchwork";
-    icon = "ssb-patchwork.png";
+    icon = "ssb-patchwork";
     comment = "Client for the decentralized social network Secure Scuttlebutt";
     desktopName = "Patchwork";
     genericName = "Patchwork";
@@ -47,7 +47,8 @@ in
       '';
       homepage = "https://www.scuttlebutt.nz/";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ asymmetric ninjatrappeur cyplo ];
+      maintainers = with maintainers; [ asymmetric picnoir cyplo ];
+      mainProgram = "ssb-patchwork";
       platforms = [ "x86_64-linux" ];
     };
   }

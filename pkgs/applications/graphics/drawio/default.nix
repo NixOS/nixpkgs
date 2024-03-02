@@ -4,8 +4,7 @@
 , fetchYarnDeps
 , makeDesktopItem
 , copyDesktopItems
-, desktopToDarwinBundle
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , makeWrapper
 , nodejs
 , yarn
@@ -14,28 +13,29 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "21.5.0";
+  version = "23.1.5";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Eh3QRVeWd/RDEBnuYpFeNF96bt7bGpNkNFwWaTdYeCE=";
+    hash = "sha256-ThmTahuU0o/vr6h/T/zCyEB5/APJlVA6t1TNfZgqTJ0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-PcE3PhK4jIRx089A8nnZBvYwWpjeTtGFwAMGwbfVS5E=";
+    hash = "sha256-hL89WVYy/EQe6Zppmr17Q9T2o/UjBvydDIgGpr7AA5M=";
   };
 
   nativeBuildInputs = [
-    copyDesktopItems
-    fixup_yarn_lock
+    prefetch-yarn-deps
     makeWrapper
     nodejs
     yarn
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    copyDesktopItems
+  ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -54,9 +54,15 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
+  '' + lib.optionalString stdenv.isDarwin ''
+    cp -R ${electron}/Applications/Electron.app Electron.app
+    chmod -R u+w Electron.app
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    sed -i "/afterSign/d" electron-builder-linux-mac.json
+  '' + ''
     yarn --offline run electron-builder --dir \
-      --config electron-builder-linux-mac.json \
-      -c.electronDist=${electron}/lib/electron \
+      ${if stdenv.isDarwin then "--config electron-builder-linux-mac.json" else ""} \
+      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -65,6 +71,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv dist/mac*/draw.io.app $out/Applications
+
+    # Symlinking `draw.io` doesn't work; seems to look for files in the wrong place.
+    makeWrapper $out/Applications/draw.io.app/Contents/MacOS/draw.io $out/bin/drawio
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     mkdir -p "$out/share/lib/drawio"
     cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/drawio"
 
@@ -74,6 +87,7 @@ stdenv.mkDerivation rec {
       --add-flags "$out/share/lib/drawio/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --inherit-argv0
+  '' + ''
 
     runHook postInstall
   '';
@@ -87,7 +101,7 @@ stdenv.mkDerivation rec {
       comment = "draw.io desktop";
       mimeTypes = [ "application/vnd.jgraph.mxfile" "application/vnd.visio" ];
       categories = [ "Graphics" ];
-      startupWMClass = "drawio";
+      startupWMClass = "draw.io";
     })
   ];
 
@@ -98,6 +112,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ qyliss darkonion0 ];
     platforms = platforms.darwin ++ platforms.linux;
-    broken = stdenv.isDarwin;
+    mainProgram = "drawio";
   };
 }

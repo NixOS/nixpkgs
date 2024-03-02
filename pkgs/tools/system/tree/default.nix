@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://mama.indstate.edu/users/ice/tree/";
+    homepage = "https://oldmanprogrammer.net/source.php?dir=projects/tree";
     description = "Command to produce a depth indented directory listing";
     license = licenses.gpl2;
     longDescription = ''
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       the LS_COLORS environment variable is set and output is to tty.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
+    mainProgram = "tree";
   };
 }

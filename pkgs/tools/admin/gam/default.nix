@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-/VmBFMjCkd1xhudlcjYGGv+6tgEsyY/xqQoGdupJvOg=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   patches = [
     # Also disables update check
@@ -52,8 +52,8 @@ python3.pkgs.buildPythonApplication rec {
     runHook preInstall
     mkdir -p $out/bin
     cp gam.py $out/bin/gam
-    mkdir -p $out/lib/${python3.libPrefix}/site-packages
-    cp -r gam $out/lib/${python3.libPrefix}/site-packages
+    mkdir -p $out/${python3.sitePackages}
+    cp -r gam $out/${python3.sitePackages}
     runHook postInstall
   '';
 

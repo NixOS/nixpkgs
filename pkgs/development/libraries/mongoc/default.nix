@@ -14,19 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-IVy2PxFM//AKffYfeLyCNjattnFZmqeg6WNTqXI/yMY=";
+    hash = "sha256-uXHCd7KDnx3n6KO0opoITpf8LtUS67bc94tPHioeb4o=";
   };
-
-  postPatch = ''
-    substituteInPlace src/libbson/CMakeLists.txt src/libmongoc/CMakeLists.txt \
-      --replace "\\\''${prefix}/" ""
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -48,6 +43,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_VERSION=${version}"
     "-DENABLE_UNINSTALL=OFF"
     "-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   # remove forbidden reference to $TMPDIR

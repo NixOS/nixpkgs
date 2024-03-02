@@ -9,15 +9,17 @@
 , libva
 , libvdpau
 , xorg
+, libGL
+, libGLU
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-softhddevice";
-  version = "1.9.7";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "ua0lnj";
     repo = "vdr-plugin-softhddevice";
-    sha256 = "sha256-SviAuV+71pxnuEcmoLQkA1yti2jAAuG7yZZDlf3cODc=";
+    sha256 = "sha256-d/Cl0sE4laDdjMhd3xTHcY4OT5tWWCFCvLsNF157+zw=";
     rev = "v${version}";
   };
 
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     libvdpau
     xorg.libxcb
     xorg.libX11
+    libGL
+    libGLU
   ];
 
   makeFlags = [ "DESTDIR=$(out)" ];

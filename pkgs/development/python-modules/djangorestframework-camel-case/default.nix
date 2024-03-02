@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "djangorestframework-camel-case";
   version = "1.4.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "Camel case JSON support for Django REST framework";
     homepage = "https://github.com/vbabiy/djangorestframework-camel-case";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

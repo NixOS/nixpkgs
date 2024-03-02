@@ -1,28 +1,35 @@
-{ lib, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
 , fuse3
 , maven, jdk, makeShellWrapper, glib, wrapGAppsHook
+, libayatana-appindicator
 }:
 
-maven.buildMavenPackage rec {
+
+let
+  mavenJdk = maven.override {
+    jdk = jdk;
+  };
+in
+assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
+mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.8.0";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    hash = "sha256-4MjF2PDH0JB1biY4HO2wOC0i6EIGSlzkK6tDm8nzvIo=";
+    hash = "sha256-pVQ3xlNgJIDz8dnNoiLJaG6y4kNHNLL7zYq1sl6rleY=";
   };
 
-  mvnParameters = "-Dmaven.test.skip=true";
-  mvnHash = "sha256-rHLLYkZq3GGE0uhTgZT0tnsh+ChzQdpQ2e+SG1TwBvw=";
+  mvnParameters = "-Dmaven.test.skip=true -Plinux";
+  mvnHash = "sha256-Zx2HhgmebF8UOp+2JKl2+FGA98aPRSUTIduHPTtgAjI=";
 
   preBuild = ''
     VERSION=${version}
     SEMVER_STR=${version}
   '';
-
 
   # This is based on the instructins in https://github.com/cryptomator/cryptomator/blob/develop/dist/linux/appimage/build.sh
   installPhase = ''
@@ -31,26 +38,29 @@ maven.buildMavenPackage rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
+    makeShellWrapper ${jdk}/bin/java $out/bin/${pname} \
       --add-flags "--enable-preview" \
+      --add-flags "--enable-native-access=org.cryptomator.jfuse.linux.amd64,org.purejava.appindicator" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
-      --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
-      --add-flags "-Dcryptomator.pluginDir='~/.local/share/Cryptomator/plugins'" \
-      --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
-      --add-flags "-Dcryptomator.ipcSocketPath='~/.config/Cryptomator/ipc.socket'" \
-      --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
-      --add-flags "-Dcryptomator.showTrayIcon=false" \
-      --add-flags "-Dcryptomator.buildNumber='nix'" \
+      --add-flags "-Dfile.encoding='utf-8'" \
+      --add-flags "-Dcryptomator.logDir='@{userhome}/.local/share/Cryptomator/logs'" \
+      --add-flags "-Dcryptomator.pluginDir='@{userhome}/.local/share/Cryptomator/plugins'" \
+      --add-flags "-Dcryptomator.settingsPath='@{userhome}/.config/Cryptomator/settings.json'" \
+      --add-flags "-Dcryptomator.p12Path='@{userhome}/.config/Cryptomator/key.p12'" \
+      --add-flags "-Dcryptomator.ipcSocketPath='@{userhome}/.config/Cryptomator/ipc.socket'" \
+      --add-flags "-Dcryptomator.mountPointsDir='@{userhome}/.local/share/Cryptomator/mnt'" \
+      --add-flags "-Dcryptomator.showTrayIcon=true" \
+      --add-flags "-Dcryptomator.buildNumber='nix-${src.rev}'" \
       --add-flags "-Dcryptomator.appVersion='${version}'" \
-      --add-flags "-Djdk.gtk.version=3" \
+      --add-flags "-Djava.net.useSystemProxies=true" \
       --add-flags "-Xss20m" \
       --add-flags "-Xmx512m" \
-      --add-flags "-Djavafx.embed.singleThread=true " \
-      --add-flags "-Dawt.useSystemAAFontSettings=on" \
+      --add-flags "-Dcryptomator.disableUpdateCheck=true" \
+      --add-flags "-Dcryptomator.integrationsLinux.trayIconsDir='$out/share/icons/hicolor/symbolic/apps'" \
       --add-flags "--module org.cryptomator.desktop/org.cryptomator.launcher.Cryptomator" \
       --prefix PATH : "$out/share/cryptomator/libs/:${lib.makeBinPath [ jdk glib ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse3 ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse3 libayatana-appindicator ]}" \
       --set JAVA_HOME "${jdk.home}"
 
     # install desktop entry and icons
@@ -67,12 +77,11 @@ maven.buildMavenPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    maven
     makeShellWrapper
     wrapGAppsHook
     jdk
   ];
-  buildInputs = [ fuse3 jdk glib ];
+  buildInputs = [ fuse3 jdk glib libayatana-appindicator ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";

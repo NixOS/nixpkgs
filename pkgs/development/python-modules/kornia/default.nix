@@ -2,23 +2,22 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
 , packaging
 , torch
 }:
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.6.12";
+  version = "0.7.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qLJos1ivEws/jFK4j0Kp1ij9J9ZwCoHFRYXnlYxwPFY=";
+    hash = "sha256-gHMrA4Uzazpw4TdswrXdoZG4+ek5g+wtLXNmhH3SlOM=";
   };
 
   propagatedBuildInputs = [

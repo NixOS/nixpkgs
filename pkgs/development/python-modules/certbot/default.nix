@@ -10,13 +10,14 @@
 , distro
 , josepy
 , parsedatetime
-, pyRFC3339
+, pyrfc3339
 , pyopenssl
 , pytz
 , requests
 , six
-, zope_component
-, zope_interface
+, zope-component
+, zope-interface
+, setuptools
 , dialog
 , gnureadline
 , pytest-xdist
@@ -26,16 +27,21 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.4.0";
+  version = "2.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "certbot";
+    repo = "certbot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BQsdhlYABZtz5+SORiCVnWMZdMmiWGM9W1YLqObyFo8=";
+    hash = "sha256-yYB9Y0wniRgzNk5XatkjKayIPj7ienXsqOboKPwzIfk=";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     configargparse
@@ -45,13 +51,9 @@ buildPythonPackage rec {
     distro
     josepy
     parsedatetime
-    pyRFC3339
-    pyopenssl
+    pyrfc3339
     pytz
-    requests
-    six
-    zope_component
-    zope_interface
+    setuptools # for pkg_resources
   ];
 
   buildInputs = [ dialog gnureadline ];
@@ -64,12 +66,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-o cache_dir=$(mktemp -d)"
-    # See https://github.com/certbot/certbot/issues/8746
-    "-W ignore::ResourceWarning"
-    "-W ignore::DeprecationWarning"
   ];
-
-  doCheck = true;
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
 
@@ -89,9 +86,11 @@ buildPythonPackage rec {
     '';
 
   meta = with lib; {
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/certbot/certbot";
+    changelog = "https://github.com/certbot/certbot/blob/${src.rev}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
+    mainProgram = "certbot";
     maintainers = with maintainers; [ domenkozar ];
     license = with licenses; [ asl20 ];
   };

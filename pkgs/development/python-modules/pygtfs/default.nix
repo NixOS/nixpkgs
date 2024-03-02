@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pygtfs";
-  version = "0.1.7";
+  version = "0.1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sGJwtf8DVIrE4hcU3IksnyAAt8yf67UBJIiVILDSsv8=";
+    hash = "sha256-J5vu51OOMabWd8h60PpvvBiCnwQlhEnBywNXxy9hOuA=";
   };
 
   postPatch = ''

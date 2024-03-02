@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-eonKHhaH7mAdW7ouprQivMxKPGFv0s1m/S8jGwid8kM=";
   };
 
-  vendorSha256 = "sha256-s0uN6PzIaAHLvRb9T07Xvb6mMAuvKHQ4oFJtl5hsvY4=";
+  vendorHash = "sha256-s0uN6PzIaAHLvRb9T07Xvb6mMAuvKHQ4oFJtl5hsvY4=";
 
   meta = with lib; {
     description = "A set of rewrite proxies and gateways for UnifiedPush";

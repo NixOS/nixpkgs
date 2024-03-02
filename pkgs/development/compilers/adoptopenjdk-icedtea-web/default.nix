@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, xulrunner, zip, pkg-config, npapi_sdk, bash, bc }:
+{ lib, stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, firefox-unwrapped, zip, pkg-config, npapi_sdk, bash, bc }:
 
 stdenv.mkDerivation rec {
   pname = "adoptopenjdk-icedtea-web";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config bc ];
-  buildInputs = [ cargo rustc glib xulrunner zip npapi_sdk ];
+  buildInputs = [ cargo rustc glib firefox-unwrapped zip npapi_sdk ];
 
   preConfigure = ''
     configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-remotedata";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-viHFWONNfBGw9q61CVbAlSC//NArf86cb46FMaQBocg=";
+    hash = "sha256-BcCL9jjN0e1m6wFzihZHw8cUc3w+w6vgCdLB95O0u1k=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     six
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -50,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/astropy/pytest-remotedata";
     changelog = "https://github.com/astropy/pytest-remotedata/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

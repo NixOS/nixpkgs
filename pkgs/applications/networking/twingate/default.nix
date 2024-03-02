@@ -8,21 +8,30 @@
 , udev
 , cryptsetup
 , stdenv
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "twingate";
-  version = "1.0.60";
+  version = "2024.018.111147";
 
   src = fetchurl {
-    url = "https://binaries.twingate.com/client/linux/DEB/${version}/twingate-amd64.deb";
-    sha256 = "b308c422af8a33ecd58e21a10a72c353351a189df67006e38d1ec029a93d5678";
+    url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
+    hash = "sha256-lOW4Y2zRP1UGMgBSC3K92mF5172kp0B1nwfRpE1QX/M=";
   };
 
-  buildInputs = [ dbus curl libnl udev cryptsetup ];
-  nativeBuildInputs = [ dpkg autoPatchelfHook ];
+  buildInputs = [
+    dbus
+    curl
+    libnl
+    udev
+    cryptsetup
+  ];
 
-  unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+  ];
 
   postPatch = ''
     while read file; do
@@ -41,11 +50,13 @@ stdenv.mkDerivation rec {
     mv usr/share $out/share
   '';
 
+  passthru.tests = { inherit (nixosTests) twingate; };
+
   meta = with lib; {
     description = "Twingate Client";
     homepage = "https://twingate.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ tonyshkurenko ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

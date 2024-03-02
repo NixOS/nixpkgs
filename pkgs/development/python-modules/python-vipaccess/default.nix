@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "python-vipaccess";
   version = "0.14.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

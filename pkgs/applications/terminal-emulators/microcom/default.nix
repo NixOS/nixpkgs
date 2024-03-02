@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microcom";
-  version = "2019.01.0";
+  version = "2023.09.0";
 
   src = fetchFromGitHub {
     owner = "pengutronix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "056v28hvagnzns6p8i3bq8609k82d3w1ab2lab5dr4cdfwhs4pqj";
+    hash = "sha256-CT/myxOK4U3DzliGsa45WMIFcYLjcoxx6w5S1NL5c7Y=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
+    mainProgram = "microcom";
   };
 }

@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "c-ares";
-  version = "1.19.1";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-MhcAOZty7Q4DfQB0xinndB9rLsLdqSlWq+PpZx0+Jo4=";
+    url = "https://c-ares.org/download/${pname}-${version}.tar.gz";
+    hash = "sha256-vtWMTwKwCQgOvabCRnukaXIqxq679El9xEqD2MYZTlA=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit curl grpc;
+    inherit grpc;
+    curl = (curl.override { c-aresSupport = true; }).tests.withCheck;
   };
 
   meta = with lib; {

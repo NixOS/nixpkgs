@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       --replace 'openssl/evp.h' 'openssl/crypto.h'
   '';
 
+  configureFlags = lib.optional (fts != null) "LDFLAGS=-lfts";
+
   meta = {
     homepage    = "https://mackyle.github.io/xar/";
     description = "Extensible Archiver";
@@ -42,5 +44,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ copumpkin ];
     platforms   = lib.platforms.all;
+    mainProgram = "xar";
   };
 }

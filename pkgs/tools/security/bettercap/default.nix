@@ -19,7 +19,7 @@ buildGoModule rec {
     sha256 = "sha256-OND8WPqU/95rKykqMAPWmDsJ+AjsjGjrncZ2/m3mpt0=";
   };
 
-  vendorSha256 = "sha256-QKv8F9QLRi+1Bqj9KywJsTErjs7o6gFM4tJLA8y52MY=";
+  vendorHash = "sha256-QKv8F9QLRi+1Bqj9KywJsTErjs7o6gFM4tJLA8y52MY=";
 
   doCheck = false;
 
@@ -37,5 +37,6 @@ buildGoModule rec {
     homepage = "https://www.bettercap.org/";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ y0no ];
+    mainProgram = "bettercap";
   };
 }

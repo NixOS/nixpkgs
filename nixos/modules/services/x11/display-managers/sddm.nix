@@ -7,7 +7,10 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = pkgs.libsForQt5.sddm;
+  sddm = cfg.package.override(old: {
+    withWayland = cfg.wayland.enable;
+    extraPackages = old.extraPackages or [] ++ cfg.extraPackages;
+  });
 
   iniFmt = pkgs.formats.ini { };
 
@@ -33,6 +36,8 @@ let
 
       # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
       DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
+
+      DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     };
 
     Theme = {
@@ -62,6 +67,7 @@ let
     Wayland = {
       EnableHiDPI = cfg.enableHidpi;
       SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
     };
   } // lib.optionalAttrs dmcfg.autoLogin.enable {
     Autologin = {
@@ -105,6 +111,8 @@ in
         '';
       };
 
+      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] {};
+
       enableHidpi = mkOption {
         type = types.bool;
         default = true;
@@ -132,6 +140,15 @@ in
         default = "";
         description = lib.mdDoc ''
           Greeter theme to use.
+        '';
+      };
+
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        defaultText = "[]";
+        description = lib.mdDoc ''
+          Extra Qt plugins / QML libraries to add to the environment.
         '';
       };
 
@@ -184,6 +201,32 @@ in
           '';
         };
       };
+
+      # Experimental Wayland support
+      wayland = {
+        enable = mkEnableOption "experimental Wayland support";
+
+        compositorCommand = mkOption {
+          type = types.str;
+          internal = true;
+
+          # This is basically the upstream default, but with Weston referenced by full path
+          # and the configuration generated from NixOS options.
+          default = let westonIni = (pkgs.formats.ini {}).generate "weston.ini" {
+              libinput = {
+                enable-tap = xcfg.libinput.mouse.tapping;
+                left-handed = xcfg.libinput.mouse.leftHanded;
+              };
+              keyboard = {
+                keymap_model = xcfg.xkb.model;
+                keymap_layout = xcfg.xkb.layout;
+                keymap_variant = xcfg.xkb.variant;
+                keymap_options = xcfg.xkb.options;
+              };
+            }; in "${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
+          description = lib.mdDoc "Command used to start the selected compositor";
+        };
+      };
     };
   };
 
@@ -204,15 +247,7 @@ in
       }
     ];
 
-    services.xserver.displayManager.job = {
-      environment = {
-        # Load themes from system environment
-        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
-        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
-      };
-
-      execCmd = "exec /run/current-system/sw/bin/sddm";
-    };
+    services.xserver.displayManager.job.execCmd = "exec /run/current-system/sw/bin/sddm";
 
     security.pam.services = {
       sddm.text = ''
@@ -267,6 +302,18 @@ in
 
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];
+    systemd.tmpfiles.packages = [ sddm ];
+
+    # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
+    systemd.services.display-manager.after = [
+      "systemd-user-sessions.service"
+      "getty@tty7.service"
+      "plymouth-quit.service"
+      "systemd-logind.service"
+    ];
+    systemd.services.display-manager.conflicts = [
+      "getty@tty7.service"
+    ];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

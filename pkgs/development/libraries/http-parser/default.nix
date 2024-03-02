@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "http-parser";
@@ -12,8 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
   patches = [
-    ./build-shared.patch
+    ./enable-static-shared.patch
   ] ++ lib.optionals stdenv.isAarch32 [
     # https://github.com/nodejs/http-parser/pull/510
     (fetchpatch {
@@ -21,18 +25,43 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-rZZMJeow3V1fTnjadRaRa+xTq3pdhZn/eJ4xjxEDoU4=";
     })
   ];
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
-  buildFlags = [ "library" ];
+
+  makeFlags = [
+    "DESTDIR="
+    "PREFIX=$(out)"
+    "BINEXT=${stdenv.hostPlatform.extensions.executable}"
+    "Platform=${lib.toLower stdenv.hostPlatform.uname.system}"
+    "AEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.staticLibrary}"
+    "ENABLE_SHARED=${if enableShared then "1" else "0"}"
+    "ENABLE_STATIC=${if enableStatic then "1" else "0"}"
+  ] ++ lib.optionals enableShared [
+    "SOEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.sharedLibrary}"
+  ] ++ lib.optionals enableStatic [
+    "AEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.staticLibrary}"
+  ] ++ lib.optionals (enableShared && stdenv.hostPlatform.isWindows) [
+    "SONAME=$(SOLIBNAME).$(SOMAJOR).$(SOMINOR).$(SOEXT)"
+    "LIBNAME=$(SOLIBNAME).$(SOMAJOR).$(SOMINOR).$(SOREV).$(SOEXT)"
+    "LDFLAGS=-Wl,--out-implib=$(LIBNAME).a"
+  ];
+
+  buildFlags = lib.optional enableShared "library"
+    ++ lib.optional enableStatic "package";
+
   doCheck = true;
   checkTarget = "test";
 
   enableParallelBuilding = true;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isWindows ''
+    install -D *.dll.a $out/lib
+    ln -sf libhttp_parser.${version}.dll.a $out/lib/libhttp_parser.dll.a
+  '';
 
   meta = with lib; {
     description = "An HTTP message parser written in C";
     homepage = "https://github.com/nodejs/http-parser";
     maintainers = with maintainers; [ matthewbauer ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

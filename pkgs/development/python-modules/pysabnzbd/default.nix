@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pysabnzbd";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jeradM";

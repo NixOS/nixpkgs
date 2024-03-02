@@ -13,6 +13,7 @@
 , libsamplerate
 , libvorbis
 , libxml2
+, makeWrapper
 , movit
 , opencv4
 , rtaudio
@@ -20,16 +21,16 @@
 , sox
 , vid-stab
 , darwin
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , enableJackrack ? stdenv.isLinux
+, glib
 , ladspa-sdk
 , ladspaPlugins
 , enablePython ? false
 , python3
 , swig
-, enableQt ? false
-, libsForQt5
+, qt ? null
 , enableSDL1 ? stdenv.isLinux
 , SDL
 , enableSDL2 ? true
@@ -39,26 +40,27 @@
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "7.16.0";
+  version = "7.22.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    hash = "sha256-Ed9CHaeJ8Rkrvfq/dZVOn/5lhHLH7B6A1Qf2xOQfWik=";
+    hash = "sha256-vJKpeEdQIWBQRRdDui5ibSZtD8qUlDZBD+UQE+0cQqk=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     which
+    makeWrapper
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ] ++ lib.optionals enablePython [
     python3
     swig
-  ] ++ lib.optionals enableQt [
-    libsForQt5.wrapQtAppsHook
+  ] ++ lib.optionals (qt != null) [
+    qt.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -81,11 +83,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ] ++ lib.optionals enableJackrack [
+    glib
     ladspa-sdk
     ladspaPlugins
-  ] ++ lib.optionals enableQt [
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+  ] ++ lib.optionals (qt != null) [
+    qt.qtbase
+    qt.qtsvg
+    (qt.qt5compat or null)
   ] ++ lib.optionals enableSDL1 [
     SDL
   ] ++ lib.optionals enableSDL2 [
@@ -100,13 +104,17 @@ stdenv.mkDerivation rec {
     "-DMOD_OPENCV=ON"
   ] ++ lib.optionals enablePython [
     "-DSWIG_PYTHON=ON"
+  ] ++ lib.optionals (qt != null) [
+    "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
   ];
 
-  qtWrapperArgs = [
-    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-  ] ++ lib.optionals enableJackrack [
-    "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
-  ];
+  preFixup = ''
+    wrapProgram $out/bin/melt \
+      --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
+      ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
+      ${lib.optionalString (qt != null) "\${qtWrapperArgs[@]}"}
+
+  '';
 
   postFixup = ''
     substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \

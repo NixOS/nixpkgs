@@ -22,7 +22,7 @@ tcl.mkTclDerivation {
       substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
     done
   ''
-  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11") ''
+  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
     substituteInPlace unix/configure* \
       --replace " -framework UniformTypeIdentifiers" ""
   '';

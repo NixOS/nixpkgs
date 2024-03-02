@@ -21,9 +21,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.wait_for_x()
       machine.execute("shattered-pixel-dungeon >&2 &")
       machine.wait_for_window(r"Shattered Pixel Dungeon")
-      machine.sleep(5)
-      if "Enter" not in machine.get_screen_text():
-          raise Exception("Program did not start successfully")
+      machine.wait_for_text("Enter")
       machine.screenshot("screen")
     '';
 })

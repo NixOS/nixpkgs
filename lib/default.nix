@@ -41,6 +41,7 @@ let
 
     # serialization
     cli = callLibs ./cli.nix;
+    gvariant = callLibs ./gvariant.nix;
     generators = callLibs ./generators.nix;
 
     # misc
@@ -54,6 +55,7 @@ let
     # Eval-time filesystem handling
     path = callLibs ./path;
     filesystem = callLibs ./filesystem.nix;
+    fileset = callLibs ./fileset;
     sources = callLibs ./sources.nix;
 
     # back-compat aliases
@@ -72,25 +74,25 @@ let
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare
-      functionArgs setFunctionArgs isFunction toFunction
+      functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
       toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
-      mapAttrs' mapAttrsToList concatMapAttrs mapAttrsRecursive mapAttrsRecursiveCond
-      genAttrs isDerivation toDerivation optionalAttrs
+      mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
+      mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
-      recursiveUpdate matchAttrs overrideExisting showAttrPath getOutput getBin
-      getLib getDev getMan chooseDevOutputs zipWithNames zip
+      recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
+      getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets
       updateManyAttrsByPath;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
-      reverseList listDfs toposort sort naturalSort compareLists take
-      drop sublist last init crossLists unique intersectLists
+      reverseList listDfs toposort sort sortOn naturalSort compareLists take
+      drop sublist last init crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy';
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
@@ -104,6 +106,7 @@ let
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
+      cmakeOptionType cmakeBool cmakeFeature
       mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber
@@ -112,12 +115,13 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
-      makeScope makeScopeWithSplicing;
-    inherit (self.derivations) lazyDerivation;
+      makeScope makeScopeWithSplicing makeScopeWithSplicing';
+    inherit (self.derivations) lazyDerivation optionalDrvAttr;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
-      hiPrioSet getLicenseFromSpdxId getExe;
-    inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile;
+      hiPrioSet getLicenseFromSpdxId getExe getExe';
+    inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile
+      packagesFromDirectoryRecursive;
     inherit (self.sources) cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext

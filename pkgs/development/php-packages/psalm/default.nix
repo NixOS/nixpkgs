@@ -1,35 +1,30 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ lib
+, fetchFromGitHub
+, php
+}:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "psalm";
-  version = "5.9.0";
-in
-mkDerivation {
-  inherit pname version;
+  version = "5.22.2";
 
-  src = fetchurl {
-    url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-    sha256 = "sha256-56vLT/t+3f5ZyH1pFmgy4vtSMQcDYLQZIF/iIkwd2vM=";
+  src = fetchFromGitHub {
+    owner = "vimeo";
+    repo = "psalm";
+    rev = finalAttrs.version;
+    hash = "sha256-M8Ds3PQGphK8lQciWNdxWkMN35q8vdaNTWTrP1WXTeg=";
   };
 
-  dontUnpack = true;
+  # Missing `composer.lock` from the repository.
+  # Issue open at https://github.com/vimeo/psalm/issues/10446
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-AgvAaHcCYosS3yRrp9EFdqTjg6NzQRCr8ELSza9DvZ8=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/psalm/psalm.phar
-    makeWrapper ${php}/bin/php $out/bin/psalm \
-      --add-flags "$out/libexec/psalm/psalm.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    changelog = "https://github.com/vimeo/psalm/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
     description = "A static analysis tool for finding errors in PHP applications";
-    license = licenses.mit;
     homepage = "https://github.com/vimeo/psalm";
-    maintainers = teams.php.members;
+    license = lib.licenses.mit;
+    mainProgram = "psalm";
+    maintainers = lib.teams.php.members;
   };
-}
+})

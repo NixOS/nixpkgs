@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bacnet-stack";
-  version = "1.0.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "bacnet-stack";
     repo = "bacnet-stack";
     rev = "bacnet-stack-${version}";
-    sha256 = "078p7qsy9v6fl7pzwgcr72pgjqxfxmfxyqajih2zqlb5g5sf88vh";
+    sha256 = "sha256-fFQIyZYHHNyszUO8jySIB9Y/Amzj/TTdxaex76ovBmw=";
   };
 
   hardeningDisable = [ "all" ];

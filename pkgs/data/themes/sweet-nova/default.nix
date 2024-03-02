@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "sweet-nova";
-  version = "unstable-2023-04-02";
+  version = "unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "EliverLara";
     repo = "Sweet";
-    rev = "8a5d5a7d975567b5ae101b9f9d436fb1db2d9b24";
-    hash = "sha256-FVcXBxcS5oFsvAUDcwit7EIfgIQznl8AYYxqQ797ddU=";
+    rev = "6e82150d7c3bb1e30ed9bd64de4d2ddd8e113205";
+    hash = "sha256-vy4SO1j4y/cUmbQJNqW1/EPJljEtaRrigYIg4yMKXr4=";
   };
 
   buildPhase = ''

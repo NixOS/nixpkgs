@@ -10,6 +10,7 @@
 
 mkDerivation {
   pname = "spectacle";
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications

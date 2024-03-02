@@ -30,5 +30,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/zhzyker/logmap";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "logmap";
   };
 }

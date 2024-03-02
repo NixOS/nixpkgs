@@ -29,6 +29,8 @@ buildDunePackage rec {
     sha256 = "0g11324j1s2631zzf7zxc8s0nqd4fwvcni0kbvfpfxg96gy2wwfm";
   };
 
+  patches = [ ./janestreet-0.16.patch ];
+
   propagatedBuildInputs = [
     base64
     bos

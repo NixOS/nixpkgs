@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
   version = "1.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

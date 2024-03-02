@@ -57,7 +57,7 @@ let
       meta = with lib; {
         description = "Web Debugging Proxy";
         homepage = "https://www.charlesproxy.com/";
-        maintainers = with maintainers; [ kalbasit ];
+        maintainers = with maintainers; [ kalbasit kashw2 ];
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
         license = licenses.unfree;
         platforms = platforms.unix;
@@ -66,8 +66,8 @@ let
 
 in {
   charles4 = (generic {
-    version = "4.6.2";
-    sha256 = "0r5rann7cq665ih0pa66k52081gylk85ashrwq1khbv2jf80yy52";
+    version = "4.6.4";
+    sha256 = "KEQYb90kt41dS3TJLZqdaV9P3mQA9UPsEyiFb/knm3w=";
     platform = "_amd64";
     jdk = jdk11;
   });
@@ -75,5 +75,6 @@ in {
     version = "3.12.3";
     sha256 = "13zk82ny1w5zd9qcs9qkq0kdb22ni5byzajyshpxdfm4zv6p32ss";
     jdk = jdk8.jre;
+    mainProgram = "charles";
   });
 }

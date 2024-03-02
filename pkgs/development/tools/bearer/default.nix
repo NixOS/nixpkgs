@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "bearer";
-  version = "1.14.0";
+  version = "1.40.1";
 
   src = fetchFromGitHub {
     owner = "bearer";
     repo = "bearer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7h+7lP4K4Dbf5V2HDrb2lJKWqINtOpqybBAyae0S6EE=";
+    hash = "sha256-yfgbkF7ANJyyy3qYNLOg85+MJ8SdHCZkXsOhH0vzy8o=";
   };
 
-  vendorHash = "sha256-D8LdufbOx3ogLbeSwBTsDnQ4NpZF+Ro2QiUg4hPGGYI=";
+  vendorHash = "sha256-TKdZVNt98jrIzXekfxRXfxEfEhb2doWTTGojOLOcKzU=";
 
   subPackages = [
     "cmd/bearer"
@@ -39,7 +39,7 @@ buildGoModule rec {
     description = "Code security scanning tool (SAST) to discover, filter and prioritize security and privacy risks";
     homepage = "https://github.com/bearer/bearer";
     changelog = "https://github.com/Bearer/bearer/releases/tag/v${version}";
-    license = with licenses; [ elastic ];
+    license = with licenses; [ elastic20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

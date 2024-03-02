@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "chezmoi";
-  version = "2.34.2";
+  version = "2.46.1";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     rev = "v${version}";
-    hash = "sha256-rq+TN9j/PX2h3lzK+WhcB3KBgvcTyXyU9VApelqfIJE=";
+    hash = "sha256-RMhYgmNN2SPBU33ZzR6ZK7ElVlT9ZM/8QOS7k/NOBSY=";
   };
 
-  vendorHash = "sha256-UyWrvReFUCQ091Mbk1iJE55rJkkmTyMX4yvb9ppszt8=";
+  vendorHash = "sha256-C3aRKluMIZ6X7VHwC1xitG/gLJE8qcbbskxsgsXvzuA=";
 
   doCheck = false;
 
@@ -39,5 +39,6 @@ buildGoModule rec {
     changelog = "https://github.com/twpayne/chezmoi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jhillyerd ];
+    mainProgram = "chezmoi";
   };
 }

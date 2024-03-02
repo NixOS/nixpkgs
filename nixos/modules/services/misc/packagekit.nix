@@ -13,7 +13,7 @@ let
     (iniFmt.generate "PackageKit.conf" (recursiveUpdate
       {
         Daemon = {
-          DefaultBackend = "nix";
+          DefaultBackend = "test_nop";
           KeepCache = false;
         };
       }
@@ -35,14 +35,14 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to Nix.")
+    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to test_nop, Nix backend is broken see #177946.")
   ];
 
   options.services.packagekit = {
     enable = mkEnableOption (lib.mdDoc ''
-      PackageKit provides a cross-platform D-Bus abstraction layer for
+      PackageKit, a cross-platform D-Bus abstraction layer for
       installing software. Software utilizing PackageKit can install
-      software regardless of the package manager.
+      software regardless of the package manager
     '');
 
     settings = mkOption {

@@ -4,6 +4,7 @@
 , fetchPypi
 , lxml
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , requests
 , webob
@@ -33,6 +34,8 @@ buildPythonPackage rec {
     lxml
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "pyquery" ];
 
   checkInputs = [
@@ -48,6 +51,11 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # requires network
     "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/gawel/pyquery/issues/249
+    "pyquery.pyquery.PyQuery.serialize_dict"
   ];
 
   meta = with lib; {

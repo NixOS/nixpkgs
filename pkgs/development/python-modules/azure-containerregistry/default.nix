@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-containerregistry";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6IU+fzMIL8HJv4rCrWlcJSuYre6cdBa7BjS9KrIbIRU=";
+    hash = "sha256-Ss0ygh0IZVPqvV3f7Lsh+5FbXRPvg3XRWvyyyAvclqM=";
     extension = "zip";
   };
 

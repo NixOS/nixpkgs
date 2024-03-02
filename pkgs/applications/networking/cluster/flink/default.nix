@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "flink";
-  version = "1.17.0";
+  version = "1.18.1";
 
   src = fetchurl {
     url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.12.tgz";
-    sha256 = "sha256-x60Lk/xXf+Isg1J6z5qAIZ2/dbDiztPIKWrdPITp3Tg=";
+    sha256 = "sha256-EHyCdOimHIGlggjDnXmgk0+hBDfOjEvIafMMNSCeRak=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${jre}/bin
 
     cat <<EOF >> $out/opt/flink/conf/flink-conf.yaml
-    env.java.home: ${jre}"
+    env.java.home: ${jre}
     env.log.dir: /tmp/flink-logs
     EOF
   '';

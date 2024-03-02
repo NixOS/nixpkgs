@@ -1,5 +1,16 @@
-{ lib, stdenv, rustPlatform, fetchFromGitea, openssl, pkg-config, protobuf
-, cacert, testers, Security, garage, nixosTests }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitea
+, fetchpatch
+, openssl
+, pkg-config
+, protobuf
+, cacert
+, Security
+, garage
+, nixosTests
+}:
 let
   generic = { version, sha256, cargoSha256, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";
@@ -12,6 +23,12 @@ let
       rev = "v${version}";
       inherit sha256;
     };
+
+    postPatch = ''
+      # Starting in 0.9.x series, Garage is using mold in local development
+      # and this leaks in this packaging, we remove it to use the default linker.
+      rm .cargo/config.toml || true
+    '';
 
     inherit cargoSha256;
 
@@ -31,8 +48,6 @@ let
     # on version changes for checking if changes are required here
     buildFeatures = [
       "kubernetes-discovery"
-    ] ++
-    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "metrics"
@@ -41,7 +56,7 @@ let
       "lmdb"
       "sqlite"
       "consul-discovery"
-    ]);
+    ];
 
     # To make integration tests pass, we include the optional k2v feature here,
     # but in buildFeatures only for version 0.8+, where it's enabled by default.
@@ -49,47 +64,53 @@ let
     checkFeatures = [
       "k2v"
       "kubernetes-discovery"
-    ] ++
-    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "lmdb"
       "sqlite"
-    ]);
+    ];
 
-    passthru = nixosTests.garage;
+    disabledTests = [
+      # Upstream told us this test is flakey.
+      "k2v::poll::test_poll_item"
+    ];
+
+    passthru.tests = nixosTests.garage;
 
     meta = {
       description = "S3-compatible object store for small self-hosted geo-distributed deployments";
+      changelog = "https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/v${version}";
       homepage = "https://garagehq.deuxfleurs.fr";
       license = lib.licenses.agpl3Only;
       maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
       knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
       inherit broken;
+      mainProgram = "garage";
     };
   };
 in
-  rec {
-    # Until Garage hits 1.0, 0.7.3 is equivalent to 7.3.0 for now, therefore
-    # we have to keep all the numbers in the version to handle major/minor/patch level.
-    # for <1.0.
+rec {
+  # Until Garage hits 1.0, 0.7.3 is equivalent to 7.3.0 for now, therefore
+  # we have to keep all the numbers in the version to handle major/minor/patch level.
+  # for <1.0.
 
-    garage_0_7_3 = generic {
-      version = "0.7.3";
-      sha256 = "sha256-WDhe2L+NalMoIy2rhfmv8KCNDMkcqBC9ezEKKocihJg=";
-      cargoSha256 = "sha256-5m4c8/upBYN8nuysDhGKEnNVJjEGC+yLrraicrAQOfI=";
-      eol = true; # Confirmed with upstream maintainers over Matrix.
-    };
+  garage_0_8_6 = generic {
+    version = "0.8.6";
+    sha256 = "sha256-N0AOcwpuBHwTZtHcz6a2d9GOimHevhohEOzVkIt0RDE=";
+    cargoSha256 = "sha256-e72FQKL77CZOi/pa+hE7PCyc1+HSJgEsKGgWlfVw51k=";
+    broken = stdenv.isDarwin;
+  };
 
-    garage_0_7 = garage_0_7_3;
+  garage_0_8 = garage_0_8_6;
 
-    garage_0_8_2 = generic {
-      version = "0.8.2";
-      sha256 = "sha256-IlDWbNWI1yXvPPF3HIqQvo79M2FQCtoX1wRLJrDbd9k=";
-      cargoSha256 = "sha256-6l4tDBMcOvckTkEO05rman4hHlmVbBt1nCeX5/dETKk=";
-    };
+  garage_0_9_2 = generic {
+    version = "0.9.2";
+    sha256 = "sha256-6a400/wOZunVH+LAByd6BEA0gs56Rxyh+gvM4hUO4Y8=";
+    cargoSha256 = "sha256-1p6bB2gMOCHDdILEwgoJ1EqvgGhLPcThNkwaz6NMZhQ=";
+    broken = stdenv.isDarwin;
+  };
 
-    garage_0_8 = garage_0_8_2;
+  garage_0_9 = garage_0_9_2;
 
-    garage = garage_0_8;
-  }
+  garage = garage_0_9;
+}

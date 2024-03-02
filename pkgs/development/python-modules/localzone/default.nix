@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "localzone";
   version = "0.9.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ags-slc";

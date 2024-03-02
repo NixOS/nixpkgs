@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , libGLU, libGL
 , xorg
 , numpy
@@ -8,12 +9,17 @@
 
 buildPythonPackage rec {
   pname = "pybullet";
-  version = "3.2.5";
+  version = "3.2.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G8ua+4eghr4bLeGPCE0f2rgZTaG/cfJkdDyia6o5w1E=";
+    hash = "sha256-2idSVDPIhpjcn9i8IPpK5NB3OLRlZjNlnr2CwtKITgg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     libGLU libGL
@@ -29,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open-source software for robot simulation, integrated with OpenAI Gym";
+    downloadPage = "https://github.com/bulletphysics/bullet3";
     homepage = "https://pybullet.org/";
     license = licenses.zlib;
     maintainers = with maintainers; [ timokau ];

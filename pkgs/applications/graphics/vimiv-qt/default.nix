@@ -2,23 +2,26 @@
 , fetchFromGitHub
 , python3
 , qt5
+, stdenv
 , installShellFiles
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vimiv-qt";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "karlch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pj3gak7nxkw9r9m71zsfvcaq8dk9crbk5rz4n7pravxkl5hs2bg";
+    sha256 = "sha256-28sk5qDVmrgXYX2wm5G8zv564vG6GwxNp+gjrFHCRfU=";
   };
 
   nativeBuildInputs = [ installShellFiles qt5.wrapQtAppsHook python3.pkgs.setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [ pyqt5 py3exiv2 qt5.qtsvg ];
+  propagatedBuildInputs = with python3.pkgs; [ pyqt5 py3exiv2 ];
+
+  buildInputs = [ qt5.qtsvg ] ++ lib.optionals stdenv.isLinux [ qt5.qtwayland ];
 
   postInstall = ''
     install -Dm644 misc/vimiv.desktop $out/share/applications/vimiv.desktop
@@ -35,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
   # Vimiv has to be wrapped manually because it is a non-ELF executable.
   dontWrapQtApps = true;
   preFixup = ''
-      wrapQtApp $out/bin/vimiv
+    wrapQtApp $out/bin/vimiv
   '';
 
   meta = with lib; {
@@ -43,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     homepage = "https://github.com/karlch/vimiv-qt";
     maintainers = with maintainers; [ dschrempf ];
+    mainProgram = "vimiv";
     platforms = platforms.all;
   };
 }

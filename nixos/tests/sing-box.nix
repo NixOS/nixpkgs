@@ -8,7 +8,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
   nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.curl ];
-    services.nginx.enable = true;
+    services.nginx = {
+      enable = true;
+      statusPage = true;
+    };
     services.sing-box = {
       enable = true;
       settings = {

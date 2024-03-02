@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitea, fetchYarnDeps
-, fixup_yarn_lock, yarn, nodejs
+, prefetch-yarn-deps, yarn, nodejs
 , python3, pkg-config, libsass
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    prefetch-yarn-deps
     yarn
     nodejs
     pkg-config
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     export HOME="$(mktemp -d)"
 
     yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/cross-env

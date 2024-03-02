@@ -2,8 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, jaraco_functools
-, jaraco_text
+, jaraco-functools
+, jaraco-text
 , more-itertools
 , portend
 , pypytools
@@ -14,34 +14,44 @@
 , requests-toolbelt
 , requests-unixsocket
 , setuptools-scm
-, setuptools-scm-git-archive
 , six
 }:
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "9.0.0";
+  version = "10.0.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PUetnuGey+wUS0dYOZA2aS/b9npAuW7vH7FFQ2ez0zg=";
+    hash = "sha256-WcShh3/vmWmzw8CAyqrzd+J4CRlDeFP8DTKp30CzEfA=";
   };
+
+  # remove setuptools-scm-git-archive dependency
+  # https://github.com/cherrypy/cheroot/commit/f0c51af263e20f332c6f675aa90ec6705ae4f5d1
+  # there is a difference between the github source and the pypi tarball source,
+  # and it is not easy to apply patches.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools_scm_git_archive>=1.1",' ""
+    substituteInPlace setup.cfg \
+      --replace "setuptools_scm_git_archive>=1.0" ""
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
-    setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = [
-    jaraco_functools
+    jaraco-functools
     more-itertools
     six
   ];
 
   nativeCheckInputs = [
-    jaraco_text
+    jaraco-text
     portend
     pypytools
     pytest-mock

@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-ZkGhEOckIOYGb6Yjr4I4e9cjAHDfksRwHW+zgOMZ/FE=";
   };
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   subPackages = [ "." ];
 
@@ -34,6 +34,6 @@ buildGoModule rec {
     license =  licenses.asl20;
     maintainers = with maintainers; [ guibert ];
     platforms = platforms.linux;
-    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

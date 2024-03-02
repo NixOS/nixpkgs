@@ -4,16 +4,17 @@ IFS=:
 
 newLoadPath=()
 newNativeLoadPath=()
-added=
+addedNewLoadPath=
+addedNewNativeLoadPath=
 
 if [[ -n $EMACSLOADPATH ]]
 then
     while read -rd: entry
     do
-        if [[ -z $entry && -z $added ]]
+        if [[ -z $entry && -z $addedNewLoadPath ]]
         then
             newLoadPath+=(@wrapperSiteLisp@)
-            added=1
+            addedNewLoadPath=1
         fi
         newLoadPath+=("$entry")
     done <<< "$EMACSLOADPATH:"
@@ -22,14 +23,19 @@ else
     newLoadPath+=("")
 fi
 
+# NOTE: Even though we treat EMACSNATIVELOADPATH like EMACSLOADPATH in
+# this wrapper, empty elements in EMACSNATIVELOADPATH have no special
+# meaning for Emacs.  Only non-empty elements in EMACSNATIVELOADPATH
+# will be prepended to native-comp-eln-load-path.
+# https://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/startup.el?id=3685387e609753293c4518be75e77c659c3b2d8d#n599
 if [[ -n $EMACSNATIVELOADPATH ]]
 then
     while read -rd: entry
     do
-        if [[ -z $entry && -z $added ]]
+        if [[ -z $entry && -z $addedNewNativeLoadPath ]]
         then
             newNativeLoadPath+=(@wrapperSiteLispNative@)
-            added=1
+            addedNewNativeLoadPath=1
         fi
         newNativeLoadPath+=("$entry")
     done <<< "$EMACSNATIVELOADPATH:"

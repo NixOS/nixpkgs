@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeDesktopItem
-, jre
+, openjdk19
 , gtk3
 , glib
 , gnome
@@ -10,14 +10,16 @@
 , libXtst
 , which
 }:
-
+let
+  jre = openjdk19;
+in
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "22.1.5";
+  version = "23.1.1";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "sha256-s31sYEC1g7eLMhT9UkmjbBnHePY9wnQPmgGQXgVX4j4=";
+    sha256 = "sha256-LXB+OymApJjL4bgOZ8Vfd193jZHVbQ6G2zmrHNE/OJk=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];

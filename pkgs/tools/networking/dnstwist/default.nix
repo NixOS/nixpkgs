@@ -5,15 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnstwist";
-  version = "20230509";
-  format = "setuptools";
+  version = "20240116";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elceef";
-    repo = pname;
+    repo = "dnstwist";
     rev = "refs/tags/${version}";
-    hash = "sha256-dJ/LI5mQJAYsqlOk2vP6h8Iz6ZdqTi9i4fgtjVaBkuE=";
+    hash = "sha256-areFRDi728SedArhUy/rbPzhoFabNoT/WdyyN+6OQK0=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     dnspython

@@ -45,7 +45,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/spectrum-protect/8.1.15?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/storage-protect/8.1.21?topic=solaris-set-api-environment-variables
 
 
 # The newest version of TSM client should be discoverable by
@@ -53,20 +53,20 @@
 # Find the "Backup-archive client" table on that page.
 # Look for "Download Documents" of the latest release.
 # Follow the "Download Information" link.
-# Look for the "Linux x86_64 client ..." rows in the table at
+# Look for the "Linux x86_64 ..." rows in the table at
 # the bottom of the page and follow their "HTTPS" links (one
 # link per row -- each link might point to the latest release).
 # In the directory listings to show up,
 # check the big `.tar` file.
 #
-# (as of 2022-12-10)
+# (as of 2023-07-01)
 
 
 let
 
   meta = {
-    homepage = "https://www.ibm.com/products/data-protection-and-recovery";
-    downloadPage = "https://www.ibm.com/support/pages/ibm-spectrum-protect-downloads-latest-fix-packs-and-interim-fixes";
+    homepage = "https://www.ibm.com/products/storage-protect";
+    downloadPage = "https://www.ibm.com/support/pages/ibm-storage-protect-downloads-latest-fix-packs-and-interim-fixes";
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsmc";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -104,10 +104,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.19.0";
+    version = "8.1.21.0";
     src = fetchurl {
       url = mkSrcUrl version;
-      hash = "sha512-HF4w8R6R+7gfIFsYlO3R6mkDxMo4TvL/KeK7IuuspGLiajGnBU2B7yg9/oUiT11YUBHjklaINyceQWWJoFSQJw==";
+      hash = "sha512-iXkVYQsqbNhQJmrYl5a5433iSl6kg6YzlTlgCzpFGslMn+3ynSmYn8Rtxwitp931SwmV4a53tGctSuisz8pOCg==";
     };
     inherit meta passthru;
 

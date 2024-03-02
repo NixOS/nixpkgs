@@ -1,25 +1,58 @@
-{ config, lib, pkgs, fetchFromGitHub, rustPlatform, pkg-config, lz4, libxkbcommon }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, lz4
+, libxkbcommon
+, installShellFiles
+, scdoc
+}:
+
 rustPlatform.buildRustPackage rec {
   pname = "swww";
-  version = "0.7.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
-    owner = "Horus645";
+    owner = "LGFae";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-58zUi6tftTvNoc/R/HO4RDC7n+NODKOrBCHH8QntKSY=";
+    hash = "sha256-n7YdUmIZGu7W7cX6OvVW+wbkKjFvont4hEAhZXYDQd8=";
   };
 
-  cargoSha256 = "sha256-hL5rOf0G+UBO8kyRXA1TqMCta00jGSZtF7n8ibjGi9k=";
-  buildInputs = [ lz4 libxkbcommon ];
+  cargoSha256 = "sha256-lZC71M3lbsI+itMydAp5VCz0cpSHo/FpkQFC1NlN4DU=";
+
+  buildInputs = [
+    lz4
+    libxkbcommon
+  ];
+
   doCheck = false; # Integration tests do not work in sandbox environment
-  nativeBuildInputs = [ pkg-config ];
+
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    scdoc
+  ];
+
+  postInstall = ''
+    for f in doc/*.scd; do
+      local page="doc/$(basename "$f" .scd)"
+      scdoc < "$f" > "$page"
+      installManPage "$page"
+    done
+
+    installShellCompletion --cmd swww \
+      --bash <(cat completions/swww.bash) \
+      --fish <(cat completions/swww.fish) \
+      --zsh <(cat completions/_swww)
+  '';
 
   meta = with lib; {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
-    homepage = "https://github.com/Horus645/swww";
+    homepage = "https://github.com/LGFae/swww";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mateodd25 ];
+    maintainers = with maintainers; [ mateodd25 donovanglover ];
     platforms = platforms.linux;
+    mainProgram = "swww";
   };
 }

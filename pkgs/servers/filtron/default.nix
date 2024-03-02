@@ -34,5 +34,6 @@ buildGoModule rec {
     license = licenses.agpl3;
     maintainers = [ maintainers.dasj19 ];
     platforms = platforms.linux;
+    mainProgram = "filtron";
   };
 }

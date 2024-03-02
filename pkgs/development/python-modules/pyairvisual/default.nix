@@ -2,9 +2,11 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , numpy
 , poetry-core
+, pygments
 , pysmb
 , pytest-aiohttp
 , pytest-asyncio
@@ -14,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2022.12.1";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyairvisual";
     rev = "refs/tags/${version}";
-    hash = "sha256-xzTho4HsIU2YLURz9DfFfaRL3tsrtVi8n5IA2bRkyzw=";
+    hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +34,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     numpy
+    pygments
     pysmb
   ];
+
+  # this lets tests bind to localhost in sandbox mode on macOS
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , bison
 , boost182
 , flex
+, fmt
 , gtest
 , libbacktrace
 , lit
@@ -19,24 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nixd";
-  version = "1.1.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
     rev = version;
-    hash = "sha256-zeBVh9gPMR+1ETx0ujl+TUSoeHHR4fkQfxyOpCDKP9M=";
+    hash = "sha256-i/z5VnsWPWloQfdk48i+a4XaGnTMPJ6QougChkT9IWw=";
   };
-
-  patches = [
-    # Fix build on Darwin. Remove with next release.
-    # https://github.com/nix-community/nixd/pull/172
-    (fetchpatch {
-      url = "https://github.com/nix-community/nixd/commit/3dbe1eb6bde1949b510e19a2d1863a2f4d2329a6.patch";
-      hash = "sha256-130L+85bZIBmNfHqH3PdmQCBuxLnCs3IyAAoW15RQSk=";
-      includes = [ "lib/lspserver/src/Logger.cpp" "lib/nixd/src/ServerController.cpp" ];
-    })
-  ];
 
   mesonBuildType = "release";
 
@@ -56,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libbacktrace
     nix
+    fmt
     gtest
     boost182
     llvmPackages.llvm
@@ -63,7 +54,8 @@ stdenv.mkDerivation rec {
 
   env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
-  doCheck = true;
+  # https://github.com/nix-community/nixd/issues/215
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -91,8 +83,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Nix language server";
     homepage = "https://github.com/nix-community/nixd";
+    changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
+    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
+    mainProgram = "nixd";
     platforms = lib.platforms.unix;
   };
 }

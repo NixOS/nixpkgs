@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pymetar";
   version = "1.4";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

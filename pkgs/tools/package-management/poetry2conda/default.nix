@@ -43,5 +43,6 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = "https://github.com/dojeda/poetry2conda";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "poetry2conda";
   };
 }

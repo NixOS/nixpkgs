@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "A package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

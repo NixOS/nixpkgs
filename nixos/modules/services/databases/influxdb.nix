@@ -116,12 +116,7 @@ in
         type = types.bool;
       };
 
-      package = mkOption {
-        default = pkgs.influxdb;
-        defaultText = literalExpression "pkgs.influxdb";
-        description = lib.mdDoc "Which influxdb derivation to use";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "influxdb" { };
 
       user = mkOption {
         default = "influxdb";
@@ -166,6 +161,7 @@ in
         ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
         User = cfg.user;
         Group = cfg.group;
+        Restart = "on-failure";
       };
       postStart =
         let

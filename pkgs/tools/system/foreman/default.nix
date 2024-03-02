@@ -11,5 +11,6 @@ bundlerEnv {
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
     platforms = ruby.meta.platforms;
+    mainProgram = "foreman";
   };
 }

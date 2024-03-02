@@ -8,16 +8,17 @@
 , readline
 , openssl
 , python3Packages
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.5";
+  version = "2.14";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-QGrZid1MVAofFcsnZ20f8RJdyNrVsRkUg2yPGC/iGVU=";
+    hash = "sha256-35hKb8IVL8jQG80y48a5CcozUEWxLCdTqAHhZlPFCYE=";
   };
 
   outputs = [ "out" "man" "doc" ]
@@ -87,11 +88,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
+  };
+
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
+    maintainers = with maintainers; [ dtzWill fpletz amaxine ];
   };
 }

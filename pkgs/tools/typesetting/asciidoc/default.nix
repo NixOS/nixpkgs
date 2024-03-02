@@ -6,7 +6,7 @@
 , highlight
 , pygments
 , graphviz
-, texlive
+, texliveMinimal
 , dblatexFull
 , libxslt
 , w3m
@@ -33,7 +33,7 @@
 , enableDiagFilter ? false, blockdiag, seqdiag, actdiag, nwdiag
 , enableQrcodeFilter ? false, qrencode
 , enableMatplotlibFilter ? false, matplotlib, numpy
-, enableAafigureFilter ? false, aafigure, recursivePthLoader
+, enableAafigureFilter ? false, aafigure, recursive-pth-loader
 # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
@@ -54,6 +54,11 @@ let
   _enableAafigureFilter = enableExtraPlugins || enableAafigureFilter;
   _enableDeckjsBackend = enableExtraPlugins || enableDeckjsBackend;
   _enableOdfBackend = enableExtraPlugins || enableOdfBackend;
+
+  #
+  # texlive environment
+  #
+  texlive = texliveMinimal.withPackages (ps: [ ps.dvipng ]);
 
   #
   # filters
@@ -175,7 +180,7 @@ in python3.pkgs.buildPythonApplication rec {
     echo "Extracting aafigure filter"
     unzip -d "$out/etc/asciidoc/filters/aafigure" "${aafigureFilterSrc}"
     # Add aafigure to sys.path (and it needs recursive-pth-loader)
-    pth_loader_path="$(toPythonPath ${recursivePthLoader})"
+    pth_loader_path="$(toPythonPath ${recursive-pth-loader})"
     aafigure_path="$(toPythonPath ${aafigure})"
     sed -i "/^import.*sys/asys.path.append(\"$pth_loader_path\"); sys.path.append(\"$aafigure_path\"); import sitecustomize" \
         "$out/etc/asciidoc/filters/aafigure/aafig2img.py"

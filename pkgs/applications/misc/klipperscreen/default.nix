@@ -50,5 +50,6 @@
     homepage = "https://github.com/jordanruthe/KlipperScreen";
     license = licenses.agpl3;
     maintainers = with maintainers; [ cab404 ];
+    mainProgram = "KlipperScreen";
   };
 }

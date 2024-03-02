@@ -1,5 +1,4 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
-, fetchpatch
 , threadingSupport ? true # multi-threading
 , openglSupport ? false, freeglut, libGL, libGLU # OpenGL (required for vwebp)
 , pngSupport ? true, libpng # PNG image format
@@ -28,23 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-nhXkq+qKpaa75YQB/W/cRozslTIFPdXeqj1y6emQeHk=";
+    hash   = "sha256-UYO2Fmm8nzQR8VBC26wEwWd3qZTD+6MHKcmKBoNcpEE=";
   };
-
-  patches = [
-    # https://www.mozilla.org/en-US/security/advisories/mfsa2023-13/#MFSA-TMP-2023-0001
-    (fetchpatch {
-      url = "https://github.com/webmproject/libwebp/commit/a486d800b60d0af4cc0836bf7ed8f21e12974129.patch";
-      name = "fix-msfa-tmp-2023-0001.patch";
-      hash = "sha256-TRKXpNkYVzftBw09mX+WeQRhRoOzBgXFTNZBzSdCKvc=";
-    })
-  ];
 
   configureFlags = [
     (lib.enableFeature threadingSupport "threading")

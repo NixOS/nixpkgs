@@ -33,5 +33,7 @@ mkDerivation {
   ];
   homepage = "https://github.com/hasura/platform";
   license = lib.licenses.asl20;
+  hydraPlatforms = lib.platforms.none;
   maintainers = with lib.maintainers; [ lassulus ];
+  broken = true;
 }

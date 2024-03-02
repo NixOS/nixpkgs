@@ -111,7 +111,7 @@ in {
 
     fonts = mkIf (cfg.fonts != null) {
       fontconfig.enable = true;
-      fonts = map (f: f.package) cfg.fonts;
+      packages = map (f: f.package) cfg.fonts;
     };
   };
 }

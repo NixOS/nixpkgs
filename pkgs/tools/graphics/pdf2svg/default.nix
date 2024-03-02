@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.ianwookim ];
     platforms = platforms.unix;
+    mainProgram = "pdf2svg";
   };
 }

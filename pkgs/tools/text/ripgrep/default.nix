@@ -1,7 +1,7 @@
 { lib, stdenv
+, buildPackages
 , fetchFromGitHub
 , rustPlatform
-, asciidoctor
 , installShellFiles
 , pkg-config
 , Security
@@ -9,48 +9,55 @@
 , pcre2
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  canRunRg = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg";
+in rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "13.0.0";
+  version = "14.1.0";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "0pdcjzfi0fclbzmmf701fdizb95iw427vy3m1svy6gdn2zwj3ldr";
+    hash = "sha256-CBU1GzgWMPTVsgaPMy39VRcENw5iWRUrRpjyuGiZpPI=";
   };
 
-  cargoSha256 = "1kfdgh8dra4jxgcdb0lln5wwrimz0dpp33bq3h7jgs8ngaq2a9wp";
+  cargoHash = "sha256-8FxN5MhYduMkzym7Xx4dnVbWaBKv9pgbXMIRGiRRQew=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ]
+  nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2
     ++ lib.optional stdenv.isDarwin Security;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
-  preFixup = ''
-    installManPage $releaseDir/build/ripgrep-*/out/rg.1
+  preFixup = lib.optionalString canRunRg ''
+    ${rg} --generate man > rg.1
+    installManPage rg.1
 
-    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
-    installShellCompletion --zsh complete/_rg
+    installShellCompletion --cmd rg \
+      --bash <(${rg} --generate complete-bash) \
+      --fish <(${rg} --generate complete-fish) \
+      --zsh <(${rg} --generate complete-zsh)
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     file="$(mktemp)"
     echo "abc\nbcd\ncde" > "$file"
-    $out/bin/rg -N 'bcd' "$file"
-    $out/bin/rg -N 'cd' "$file"
+    ${rg} -N 'bcd' "$file"
+    ${rg} -N 'cd' "$file"
   '' + lib.optionalString withPCRE2 ''
-    echo '(a(aa)aa)' | $out/bin/rg -P '\((a*|(?R))*\)'
+    echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
   '';
 
   meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
+    changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${version}";
     license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
+    maintainers = with maintainers; [ globin ma27 zowoq ];
     mainProgram = "rg";
   };
 }

@@ -86,7 +86,7 @@ let
   # Erlang/Elixir uses a somewhat special format for IP addresses
   erlAddr = addr: fileContents
     (pkgs.runCommand addr {
-      nativeBuildInputs = with pkgs; [ elixir ];
+      nativeBuildInputs = [ cfg.package.elixirPackage ];
       code = ''
         case :inet.parse_address('${addr}') do
           {:ok, addr} -> IO.inspect addr
@@ -96,7 +96,7 @@ let
       passAsFile = [ "code" ];
     } ''elixir "$codePath" >"$out"'');
 
-  format = pkgs.formats.elixirConf { };
+  format = pkgs.formats.elixirConf { elixir = cfg.package.elixirPackage; };
   configFile = format.generate "config.exs"
     (replaceSec
       (attrsets.updateManyAttrsByPath [{
@@ -146,7 +146,7 @@ let
 
   initSecretsScript = writeShell {
     name = "akkoma-init-secrets";
-    runtimeInputs = with pkgs; [ coreutils elixir ];
+    runtimeInputs = with pkgs; [ coreutils cfg.package.elixirPackage ];
     text = let
       key-base = web.secret_key_base;
       jwt-signer = ex.":joken".":default_signer";
@@ -282,11 +282,11 @@ let
         AKKOMA_CONFIG_PATH="$RUNTIME_DIRECTORY/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
-        ERL_FLAGS="${concatStringsSep " " [
-          "-kernel inet_dist_use_interface '${erlAddr cfg.dist.address}'"
-          "-kernel inet_dist_listen_min ${toString cfg.dist.portMin}"
-          "-kernel inet_dist_listen_max ${toString cfg.dist.portMax}"
-        ]}" \
+        ERL_FLAGS=${lib.escapeShellArg (lib.escapeShellArgs ([
+          "-kernel" "inet_dist_use_interface" (erlAddr cfg.dist.address)
+          "-kernel" "inet_dist_listen_min" (toString cfg.dist.portMin)
+          "-kernel" "inet_dist_listen_max" (toString cfg.dist.portMax)
+        ] ++ cfg.dist.extraFlags))} \
         RELEASE_COOKIE="$(<"$RUNTIME_DIRECTORY/cookie")" \
         RELEASE_NAME="akkoma" \
           exec "${cfg.package}/bin/$(basename "$0")" "$@"
@@ -352,12 +352,7 @@ in {
     services.akkoma = {
       enable = mkEnableOption (mdDoc "Akkoma");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.akkoma;
-        defaultText = literalExpression "pkgs.akkoma";
-        description = mdDoc "Akkoma package to use.";
-      };
+      package = mkPackageOption pkgs "akkoma" { };
 
       user = mkOption {
         type = types.nonEmptyStr;
@@ -551,6 +546,13 @@ in {
           type = types.port;
           default = 4369;
           description = mdDoc "TCP port to bind Erlang Port Mapper Daemon to.";
+        };
+
+        extraFlags = mkOption {
+          type = with types; listOf str;
+          default = [ ];
+          description = mdDoc "Extra flags to pass to Erlang";
+          example = [ "+sbwt" "none" "+sbwtdcpu" "none" "+sbwtdio" "none" ];
         };
 
         portMin = mkOption {
@@ -902,7 +904,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = optionals (!config.security.sudo.enable) [''
+    warnings = optionals (with config.security; (!sudo.enable) && (!sudo-rs.enable)) [''
       The pleroma_ctl wrapper enabled by the installWrapper option relies on
       sudo, which appears to have been disabled through security.sudo.enable.
     ''];
@@ -972,7 +974,7 @@ in {
       # This service depends on network-online.target and is sequenced after
       # it because it requires access to the Internet to function properly.
       bindsTo = [ "akkoma-config.service" ];
-      wants = [ "network-online.service" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       after = [
         "akkoma-config.target"

@@ -1,9 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, glibcLocales
 , meson
 , ninja
 , pkg-config
+, python3
+, cld2
 , coreutils
 , emacs
 , glib
@@ -14,46 +17,60 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.10.4";
+  version = "1.12.0";
+
+  outputs = [ "out" "mu4e" ];
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-vwStqrw/fPYUpBhBsLX0MPXtBtP5LwU0AYmUbP+Ywgo=";
+    hash = "sha256-z0sHDZlhsSeIf+ZRCni3j/DbfYrmn6bvYmKpt4PA2i8=";
   };
 
   postPatch = ''
-    # Fix mu4e-builddir (set it to $out)
-    substituteInPlace mu4e/mu4e-config.el.in \
-      --replace "@abs_top_builddir@" "$out"
-    substituteInPlace lib/utils/mu-test-utils.cc \
-      --replace "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/utils/mu-utils-file.cc \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/tests/bench-indexer.cc \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/mu-maildir.cc \
+      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
+    patchShebangs build-aux/date.py
   '';
 
-  # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
-  postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
-    mkdir -p $out/share/emacs/native-lisp
-    export EMACSLOADPATH=$out/share/emacs/site-lisp/mu4e:
-    export EMACSNATIVELOADPATH=$out/share/emacs/native-lisp:
-
-    find $out/share/emacs -type f -name '*.el' -print0 \
-      | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
-          "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
-  '' + ''
-    emacs --batch -l package --eval "(package-generate-autoloads \"mu4e\" \"$out/share/emacs/site-lisp/mu4e\")"
+  postInstall = ''
+    rm --verbose $mu4e/share/emacs/site-lisp/mu4e/*.elc
   '';
 
-  buildInputs = [ emacs glib gmime3 texinfo xapian ];
+  # move only the mu4e info manual
+  # this has to be after preFixup otherwise the info manual may be moved back by _multioutDocs()
+  # we manually move the mu4e info manual instead of setting
+  # outputInfo to mu4e because we do not want to move the mu-guile
+  # info manual (if it exists)
+  postFixup = ''
+    moveToOutput share/info/mu4e.info.gz $mu4e
+    install-info $mu4e/share/info/mu4e.info.gz $mu4e/share/info/dir
+    if [[ -a ''${!outputInfo}/share/info/mu-guile.info.gz ]]; then
+      install-info --delete $mu4e/share/info/mu4e.info.gz ''${!outputInfo}/share/info/dir
+    else
+      rm --verbose --recursive ''${!outputInfo}/share/info
+    fi
+  '';
+
+  buildInputs = [ cld2 emacs glib gmime3 texinfo xapian ];
 
   mesonFlags = [
     "-Dguile=disabled"
     "-Dreadline=disabled"
+    "-Dlispdir=${placeholder "mu4e"}/share/emacs/site-lisp"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja python3 glibcLocales ];
 
   doCheck = true;
+
+  # Tests need a UTF-8 aware locale configured
+  env.LANG = "C.UTF-8";
 
   meta = with lib; {
     description = "A collection of utilities for indexing and searching Maildirs";
@@ -61,6 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
     maintainers = with maintainers; [ antono chvp peterhoeg ];
+    mainProgram = "mu";
     platforms = platforms.unix;
   };
 }

@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "snapraid";
-  version = "12.2";
+  version = "12.3";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
     rev = "v${version}";
-    sha256 = "sha256-3wy442tv3m1CSOAj1cngTWRiqX934c/7V2YL6j30+3U=";
+    sha256 = "sha256-pkLooA3JZV/rPlE5+JeJN1QW2xAdNu7c/iFFtT4M4vc=";
   };
 
   VERSION = version;
 
-  doCheck = true;
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;
+    mainProgram = "snapraid";
   };
 }

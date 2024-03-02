@@ -37,12 +37,7 @@ in
           :::
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vmware-workstation;
-        defaultText = literalExpression "pkgs.vmware-workstation";
-        description = lib.mdDoc "VMware host virtualisation package to use";
-      };
+      package = mkPackageOption pkgs "vmware-workstation" { };
       extraPackages = mkOption {
         type = with types; listOf package;
         default = with pkgs; [ ];
@@ -90,34 +85,43 @@ in
       };
     };
 
-    ###### wrappers activation script
-
-    system.activationScripts.vmwareWrappers =
-      lib.stringAfter [ "specialfs" "users" ]
-        ''
-          mkdir -p "${parentWrapperDir}"
-          chmod 755 "${parentWrapperDir}"
-          # We want to place the tmpdirs for the wrappers to the parent dir.
-          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-          chmod a+rx "$wrapperDir"
-          ${lib.concatStringsSep "\n" (vmwareWrappers)}
-          if [ -L ${wrapperDir} ]; then
-            # Atomically replace the symlink
-            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-            old=$(readlink -f ${wrapperDir})
-            if [ -e "${wrapperDir}-tmp" ]; then
-              rm --force --recursive "${wrapperDir}-tmp"
-            fi
-            ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
-            mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
-            rm --force --recursive "$old"
-          else
-            # For initial setup
-            ln --symbolic "$wrapperDir" "${wrapperDir}"
-          fi
-        '';
-
     # Services
+
+    systemd.services."vmware-wrappers" = {
+      description = "Create VMVare Wrappers";
+      wantedBy = [ "multi-user.target" ];
+      before = [
+        "vmware-authdlauncher.service"
+        "vmware-networks-configuration.service"
+        "vmware-networks.service"
+        "vmware-usbarbitrator.service"
+      ];
+      after = [ "systemd-sysusers.service" ];
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
+      script = ''
+        mkdir -p "${parentWrapperDir}"
+        chmod 755 "${parentWrapperDir}"
+        # We want to place the tmpdirs for the wrappers to the parent dir.
+        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+        chmod a+rx "$wrapperDir"
+        ${lib.concatStringsSep "\n" (vmwareWrappers)}
+        if [ -L ${wrapperDir} ]; then
+          # Atomically replace the symlink
+          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+          old=$(readlink -f ${wrapperDir})
+          if [ -e "${wrapperDir}-tmp" ]; then
+            rm --force --recursive "${wrapperDir}-tmp"
+          fi
+          ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+          mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+          rm --force --recursive "$old"
+        else
+          # For initial setup
+          ln --symbolic "$wrapperDir" "${wrapperDir}"
+        fi
+      '';
+    };
 
     systemd.services."vmware-authdlauncher" = {
       description = "VMware Authentication Daemon";

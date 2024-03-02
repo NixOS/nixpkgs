@@ -2,13 +2,13 @@
 
 ## Using Ruby {#using-ruby}
 
-Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 2.6. It's also possible to refer to specific versions, e.g. `ruby_2_y`, `jruby`, or `mruby`.
+Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 3.1. It's also possible to refer to specific versions, e.g. `ruby_3_y`, `jruby`, or `mruby`.
 
 In the Nixpkgs tree, Ruby packages can be found throughout, depending on what they do, and are called from the main package set. Ruby gems, however are separate sets, and there's one default set for each interpreter (currently MRI only).
 
 There are two main approaches for using Ruby with gems. One is to use a specifically locked `Gemfile` for an application that has very strict dependencies. The other is to depend on the common gems, which we'll explain further down, and rely on them being updated regularly.
 
-The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_2_7.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
+The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_3_2.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
 
 Since not all gems have executables like `nokogiri`, it's usually more convenient to use the `withPackages` function like this: `ruby.withPackages (p: with p; [ nokogiri ])`. This will also make sure that the Ruby in your environment will be able to find the gem and it can be used in your Ruby code (for example via `ruby` or `irb` executables) via `require "nokogiri"` as usual.
 
@@ -32,7 +32,8 @@ Again, it's possible to launch the interpreter from the shell. The Ruby interpre
 
 #### Load Ruby environment from `.nix` expression {#load-ruby-environment-from-.nix-expression}
 
-As explained in the Nix manual, `nix-shell` can also load an expression from a `.nix` file. Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
+As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
+Say we want to have Ruby, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
 ```nix
 with import <nixpkgs> {};
@@ -93,7 +94,7 @@ $ bundle lock
 $ bundix
 ```
 
-If you already have a `Gemfile.lock`, you can simply run `bundix` and it will work the same.
+If you already have a `Gemfile.lock`, you can run `bundix` and it will work the same.
 
 To update the gems in your `Gemfile.lock`, you may use the `bundix -l` flag, which will create a new `Gemfile.lock` in case the `Gemfile` has a more recent time of modification.
 
@@ -113,11 +114,21 @@ With this file in your directory, you can run `nix-shell` to build and use the g
 
 The `bundlerEnv` is a wrapper over all the gems in your gemset. This means that all the `/lib` and `/bin` directories will be available, and the executables of all gems (even of indirect dependencies) will end up in your `$PATH`. The `wrappedRuby` provides you with all executables that come with Ruby itself, but wrapped so they can easily find the gems in your gemset.
 
-One common issue that you might have is that you have Ruby 2.6, but also `bundler` in your gemset. That leads to a conflict for `/bin/bundle` and `/bin/bundler`. You can resolve this by wrapping either your Ruby or your gems in a `lowPrio` call. So in order to give the `bundler` from your gemset priority, it would be used like this:
+One common issue that you might have is that you have Ruby, but also `bundler` in your gemset. That leads to a conflict for `/bin/bundle` and `/bin/bundler`. You can resolve this by wrapping either your Ruby or your gems in a `lowPrio` call. So in order to give the `bundler` from your gemset priority, it would be used like this:
 
 ```nix
 # ...
 mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
+```
+
+Sometimes a Gemfile references other files. Such as `.ruby-version` or vendored gems. When copying the Gemfile to the nix store we need to copy those files alongside. This can be done using `extraConfigPaths`. For example:
+
+```nix
+  gems = bundlerEnv {
+    name = "gems-for-some-project";
+    gemdir = ./.;
+    extraConfigPaths = [ "${./.}/.ruby-version" ];
+  };
 ```
 
 ### Gem-specific configurations and workarounds {#gem-specific-configurations-and-workarounds}
@@ -240,7 +251,7 @@ source 'https://rubygems.org' do
 end
 ```
 
-If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by simply running the `bundle lock` and `bundix` steps again.
+If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by running the `bundle lock` and `bundix` steps again.
 
 Now you can also make a `default.nix` that looks like this:
 

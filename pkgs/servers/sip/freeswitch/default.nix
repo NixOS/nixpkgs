@@ -1,12 +1,28 @@
-{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
-, ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
-, ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
-
+{ fetchFromGitHub
+, fetchpatch
+, stdenv
+, lib
+, pkg-config
+, autoreconfHook
+, ncurses
+, gnutls
+, readline
+, openssl
+, perl
+, sqlite
+, libjpeg
+, speex
+, pcre
+, libuuid
+, ldns
+, libedit
+, yasm
+, which
+, libsndfile
+, libtiff
+, libxcrypt
 , callPackage
-
 , SystemConfiguration
-
 , modules ? null
 , nixosTests
 }:
@@ -88,12 +104,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.9";
+  version = "1.10.11";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-65DH2HxiF8wqzmzbIqaQZjSa/JPERHIS2FW6F18c6Pw=";
+    hash = "sha256-LzGqrXzPED3PoCDnrwUmmSQsvlAucYo2gTkwFausM7A=";
   };
 
   postPatch = ''
@@ -151,7 +167,7 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = with lib.platforms; unix;
     broken = stdenv.isDarwin;
   };

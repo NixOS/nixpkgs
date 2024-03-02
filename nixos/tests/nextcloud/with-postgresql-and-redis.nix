@@ -32,7 +32,6 @@ in {
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
           '');
-          trustedProxies = [ "::1" ];
         };
         notify_push = {
           enable = true;
@@ -40,8 +39,9 @@ in {
         };
         extraAppsEnable = true;
         extraApps = {
-          inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push;
+          inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push notes;
         };
+        settings.trusted_proxies = [ "::1" ];
       };
 
       services.redis.servers."nextcloud".enable = true;
@@ -60,7 +60,7 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -84,7 +84,7 @@ in {
         "${withRcloneEnv} ${copySharedFile}"
     )
     client.wait_for_unit("multi-user.target")
-    client.execute("${pkgs.nextcloud-notify_push.passthru.test_client}/bin/test_client http://nextcloud ${adminuser} ${adminpass} >&2 &")
+    client.execute("${pkgs.lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${adminuser} ${adminpass} >&2 &")
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
@@ -92,5 +92,7 @@ in {
 
     # redis cache should not be empty
     nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
+
+    nextcloud.fail("curl -f http://nextcloud/nix-apps/notes/lib/AppInfo/Application.php")
   '';
 })) args

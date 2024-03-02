@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "metar";
-  version = "1.10.0";
+  version = "1.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "python-metar";
     repo = "python-metar";
     rev = "refs/tags/v${version}";
-    hash = "sha256-53vgnViEYuMVKEnIZ2BNyIUrURR2rwopx7RWyFmF5PA=";
+    hash = "sha256-ZDjlXcSTUcSP7oRdhzLpXf/fLUA7Nkc6nj2I6vovbHg=";
   };
 
   nativeCheckInputs = [

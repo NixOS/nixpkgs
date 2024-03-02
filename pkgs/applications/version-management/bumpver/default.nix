@@ -30,5 +30,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://pypi.org/project/bumpver/";
     license = licenses.mit;
     maintainers = with maintainers; [ kfollesdal ];
+    mainProgram = "bumpver";
   };
 }

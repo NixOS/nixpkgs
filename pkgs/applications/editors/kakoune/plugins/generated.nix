@@ -17,14 +17,26 @@ packages = ( self:
 
   auto-pairs-kak = buildKakounePluginFrom2Nix {
     pname = "auto-pairs-kak";
-    version = "2022-03-13";
+    version = "2023-07-30";
     src = fetchFromGitHub {
       owner = "alexherbo2";
       repo = "auto-pairs.kak";
-      rev = "bfdcb8566076f653ec707f86207f83ea75173ce9";
-      sha256 = "0vx9msk8wlj8p9qf6yiv9gzrbanb5w245cidnx5cppgld2w842ij";
+      rev = "d4b33b783ea42a536c848296b5b6d434b4d1470f";
+      sha256 = "017x9g89q0w60y561xhigc0f14ryp4phh1hdna847ca5lvmbxksp";
     };
     meta.homepage = "https://github.com/alexherbo2/auto-pairs.kak/";
+  };
+
+  byline-kak = buildKakounePluginFrom2Nix {
+    pname = "byline-kak";
+    version = "2023-02-27";
+    src = fetchFromGitHub {
+      owner = "evanrelf";
+      repo = "byline.kak";
+      rev = "a27d109b776c60e11752eeb3207c989a5e157fc0";
+      sha256 = "121dxd65ml65ablkvdxj0rib3kvfwss0pv943bgl3nq35ag19b81";
+    };
+    meta.homepage = "https://github.com/evanrelf/byline.kak/";
   };
 
   connect-kak = buildKakounePluginFrom2Nix {
@@ -137,12 +149,12 @@ packages = ( self:
 
   kakoune-vertical-selection = buildKakounePluginFrom2Nix {
     pname = "kakoune-vertical-selection";
-    version = "2022-11-29";
+    version = "2023-04-20";
     src = fetchFromGitHub {
       owner = "occivink";
       repo = "kakoune-vertical-selection";
-      rev = "227b3fd9643e6e3b9d36fab324081a988c038e21";
-      sha256 = "0ygqhlk31ilczpwws28iqya8i1qhnwkb5rw6bn2zqgxj428a1kqj";
+      rev = "dbb39712e3824ca6142b510f26f35a769934a1e1";
+      sha256 = "1wncx16a8mi2b81cvkiji3ccv8is5g3sa4hwf1669va5a432vdwn";
     };
     meta.homepage = "https://github.com/occivink/kakoune-vertical-selection/";
   };
@@ -209,12 +221,12 @@ packages = ( self:
 
   tabs-kak = buildKakounePluginFrom2Nix {
     pname = "tabs-kak";
-    version = "2021-07-05";
+    version = "2023-05-15";
     src = fetchFromGitHub {
       owner = "enricozb";
       repo = "tabs.kak";
-      rev = "1cb19e410a3ef299f7a701fa5bec98c2d9284dac";
-      sha256 = "0hxa4mvw1k74vscxkm520c6g7iwcaqh8kj9g4mwy6n5kkvr1drf0";
+      rev = "f0b3a399db1dfa12b89fbff3eed09aec74725bab";
+      sha256 = "1sg26bv4vr08pqyxp68wsmzj8vhi2qg1bmkqb2jnngi5sjp4r7xy";
     };
     meta.homepage = "https://github.com/enricozb/tabs.kak/";
   };

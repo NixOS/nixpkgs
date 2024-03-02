@@ -1,16 +1,16 @@
 Shrink closure size by avoiding paths embedded from configure call.
 
 https://github.com/NixOS/nixpkgs/issues/175693
+diff --git a/daemon/buildinfo.c b/daemon/buildinfo.c
+index 56cde84fc..011e7579d 100644
 --- a/daemon/buildinfo.c
 +++ b/daemon/buildinfo.c
-@@ -247,7 +247,9 @@ void print_build_info(void) {
-     char *prebuilt_distro = NULL;
-     get_install_type(&install_type, &prebuilt_arch, &prebuilt_distro);
+@@ -1040,7 +1040,7 @@ static void build_info_set_status(BUILD_INFO_SLOT slot, bool status) {
  
--    printf("Configure options: %s\n", CONFIGURE_COMMAND);
-+    // To minimize closure size do not persist configure options
-+    // with build-time inputs.
-+    printf("Configure options: REMOVED\n");
+ __attribute__((constructor)) void initialize_build_info(void) {
+     build_info_set_value(BIB_PACKAGING_NETDATA_VERSION, program_version);
+-    build_info_set_value(BIB_PACKAGING_CONFIGURE_OPTIONS, CONFIGURE_COMMAND);
++    build_info_set_value(BIB_PACKAGING_CONFIGURE_OPTIONS, "REMOVED FOR CLOSURE SIZE REASONS");
  
-     if (install_type == NULL) {
-         printf("Install type: unknown\n");
+ #ifdef COMPILED_FOR_LINUX
+     build_info_set_status(BIB_FEATURE_BUILT_FOR, true);

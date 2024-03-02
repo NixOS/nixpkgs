@@ -1,0 +1,25 @@
+From 9013d36cfe7b2958eb18ce373f49193b66a0bbf6 Mon Sep 17 00:00:00 2001
+From: Dan Callaghan <djc@djc.id.au>
+Date: Sun, 23 Apr 2023 16:14:55 +1000
+Subject: [PATCH] use packaged unicode data
+
+
+diff --git a/lib/youseedee/__init__.py b/lib/youseedee/__init__.py
+index 4424ef1..9a72f52 100644
+--- a/lib/youseedee/__init__.py
++++ b/lib/youseedee/__init__.py
+@@ -11,10 +11,7 @@
+ UCD_URL = "https://unicode.org/Public/UCD/latest/ucd/UCD.zip"
+ 
+ def ucd_dir():
+-  ucddir = os.path.expanduser("~/.youseedee")
+-  if not os.path.isdir(ucddir):
+-    os.mkdir(ucddir)
+-  return ucddir
++  return "@ucd_dir@"
+ 
+ def ensure_files():
+   if os.path.isfile(os.path.join(ucd_dir(), "UnicodeData.txt")):
+-- 
+2.38.4
+

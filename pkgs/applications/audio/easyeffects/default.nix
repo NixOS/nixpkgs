@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, appstream-glib
 , desktop-file-utils
+, deepfilternet
 , fetchFromGitHub
 , calf
 , fftw
@@ -10,9 +12,11 @@
 , gsl
 , gtk4
 , itstool
+, ladspaH
 , libadwaita
 , libbs2b
 , libebur128
+, libportal-gtk4
 , libsamplerate
 , libsigcxx30
 , libsndfile
@@ -28,6 +32,7 @@
 , rnnoise
 , rubberband
 , speexdsp
+, soundtouch
 , tbb
 , wrapGAppsHook4
 , zam-plugins
@@ -36,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.0.4";
+  version = "7.1.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    hash = "sha256-JaqwzCWVnvFzzGHnmzYwe3occ9iw7s9xCH54eVKEuOs=";
+    hash = "sha256-OJy8HhojfpUwWo3zg+FgdFI4pMzWA61VMsdPE03MfeE=";
   };
 
   nativeBuildInputs = [
@@ -55,15 +60,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    appstream-glib
+    deepfilternet
     fftw
     fftwFloat
     fmt_9
     glib
     gsl
     gtk4
+    ladspaH
     libadwaita
     libbs2b
     libebur128
+    libportal-gtk4
     libsamplerate
     libsigcxx30
     libsndfile
@@ -73,6 +82,7 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
+    soundtouch
     speexdsp
     tbb
     zita-convolver
@@ -87,6 +97,7 @@ stdenv.mkDerivation rec {
         zam-plugins # maximizer
       ];
       ladspaPlugins = [
+        deepfilternet # deep noise remover
         rubberband # pitch shifting
       ];
     in
@@ -100,10 +111,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   meta = with lib; {
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
     description = "Audio effects for PipeWire applications.";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "easyeffects";
   };
 }

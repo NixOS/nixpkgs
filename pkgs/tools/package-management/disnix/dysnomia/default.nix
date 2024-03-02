@@ -40,10 +40,10 @@ assert enableXinetdService -> xinetd != null;
 
 stdenv.mkDerivation rec {
   pname = "dysnomia";
-  version = "0.10.1";
+  version = "0.10.2";
   src = fetchurl {
     url = "https://github.com/svanderburg/dysnomia/releases/download/dysnomia-${version}/dysnomia-${version}.tar.gz";
-    sha256 = "0w9601g8zpaxrmynx6mh8zz85ldpb8psp7cc6ls8v3srjpj1l5n3";
+    sha256 = "08ijqbijs2h584dvsb3z858ha385fqd5jfxc51lks9lxxv0sfkr4";
   };
 
   configureFlags = [

@@ -11,7 +11,7 @@ in
     services.alice-lg = {
       enable = mkEnableOption (lib.mdDoc "Alice Looking Glass");
 
-      package = mkPackageOptionMD pkgs "alice-lg" { };
+      package = mkPackageOption pkgs "alice-lg" { };
 
       settings = mkOption {
         type = settingsFormat.type;

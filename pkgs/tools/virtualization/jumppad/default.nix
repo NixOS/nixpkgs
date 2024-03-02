@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "jumppad";
-  version = "0.5.28";
+  version = "0.5.59";
 
   src = fetchFromGitHub {
     owner = "jumppad-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-j1m95RiT4cymSK9PuJuNc+ixia4DNj+8lZ0KloB+kWo=";
+    hash = "sha256-ObDbZ3g+BtH8JCqLIa+gR69GowZA8T9HMPuKNDgW3uA=";
   };
-  vendorHash = "sha256-OtixGeQY1wPqs3WU6gKvrzEgxnMORxr4BWCpn/VYxRc=";
+  vendorHash = "sha256-9DLDc6zI0BYd2AK9xwqFNJTFdKXagkdPwczLhCvud94=";
 
   ldflags = [
     "-s" "-w" "-X main.version=${version}"
@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://jumppad.dev";
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "jumppad";
   };
 }

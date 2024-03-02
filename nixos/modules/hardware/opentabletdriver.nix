@@ -26,14 +26,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opentabletdriver;
-        defaultText = literalExpression "pkgs.opentabletdriver";
-        description = lib.mdDoc ''
-          OpenTabletDriver derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "opentabletdriver" { };
 
       daemon = {
         enable = mkOption {

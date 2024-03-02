@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.unix;
+    mainProgram = "sng";
   };
 }

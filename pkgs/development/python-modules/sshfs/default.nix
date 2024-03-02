@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , asyncssh
 , bcrypt
 , buildPythonPackage
@@ -7,23 +8,24 @@
 , mock-ssh-server
 , pytest-asyncio
 , pytestCheckHook
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2023.4.1";
+  version = "2023.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qoOqKXtmavKgfbg6bBEeZb+n1RVyZSxqhKIQsToxDUU=";
+    hash = "sha256-6MueDHR+jZFDZg4zufEVhBtSwcgDd7KnW9gJp2hDu0A=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -33,10 +35,17 @@ buildPythonPackage rec {
     fsspec
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     mock-ssh-server
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # test fails with sandbox enabled
+    "test_checksum"
   ];
 
   pythonImportsCheck = [

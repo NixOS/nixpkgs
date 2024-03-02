@@ -1,6 +1,18 @@
 { lib }:
 
-rec {
+let
+  inherit (lib.trivial)
+    isFunction
+    isInt
+    functionArgs
+    pathExists
+    release
+    setFunctionArgs
+    toBaseDigits
+    version
+    versionSuffix
+    warn;
+in {
 
   ## Simple (higher order) functions
 
@@ -58,9 +70,7 @@ rec {
      of the next function, and the last function returns the
      final value.
   */
-  pipe = val: functions:
-    let reverseApply = x: f: f x;
-    in builtins.foldl' reverseApply val functions;
+  pipe = builtins.foldl' (x: f: f x);
 
   # note please don’t add a function like `compose = flip pipe`.
   # This would confuse users, because the order of the functions
@@ -84,21 +94,6 @@ rec {
 
   /* boolean “and” */
   and = x: y: x && y;
-
-  /* bitwise “and” */
-  bitAnd = builtins.bitAnd
-    or (import ./zip-int-bits.nix
-        (a: b: if a==1 && b==1 then 1 else 0));
-
-  /* bitwise “or” */
-  bitOr = builtins.bitOr
-    or (import ./zip-int-bits.nix
-        (a: b: if a==1 || b==1 then 1 else 0));
-
-  /* bitwise “xor” */
-  bitXor = builtins.bitXor
-    or (import ./zip-int-bits.nix
-        (a: b: if a!=b then 1 else 0));
 
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
@@ -155,8 +150,8 @@ rec {
   inherit (builtins)
     pathExists readFile isBool
     isInt isFloat add sub lessThan
-    seq deepSeq genericClosure;
-
+    seq deepSeq genericClosure
+    bitAnd bitOr bitXor;
 
   ## nixpkgs version strings
 
@@ -179,7 +174,7 @@ rec {
      they take effect as soon as the oldest release reaches end of life. */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2211;
+    2311;
 
   /* Whether a feature is supported in all supported releases (at the time of
      release branch-off, if applicable). See `oldestSupportedRelease`. */
@@ -195,7 +190,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Tapir";
+  codeName = "Uakari";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -220,7 +215,7 @@ rec {
        else if lib.pathExists revisionFile then lib.fileContents revisionFile
        else default;
 
-  nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
+  nixpkgsVersion = warn "lib.nixpkgsVersion is a deprecated alias of lib.version." version;
 
   /* Determine whether the function is being called from inside a Nix
      shell.
@@ -307,14 +302,14 @@ rec {
 
   /* Reads a JSON file.
 
-     Type :: path -> any
+     Type: importJSON :: path -> any
   */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
   /* Reads a TOML file.
 
-     Type :: path -> any
+     Type: importTOML :: path -> any
   */
   importTOML = path:
     builtins.fromTOML (builtins.readFile path);
@@ -439,7 +434,7 @@ rec {
   */
   functionArgs = f:
     if f ? __functor
-    then f.__functionArgs or (lib.functionArgs (f.__functor f))
+    then f.__functionArgs or (functionArgs (f.__functor f))
     else builtins.functionArgs f;
 
   /* Check whether something is a function or something
@@ -447,6 +442,40 @@ rec {
   */
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
+
+  /*
+    `mirrorFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)
+    but its function arguments mirroring `f` (`lib.functionArgs g' == lib.functionArgs f`).
+
+    Type:
+      mirrorFunctionArgs :: (a -> b) -> (a -> c) -> (a -> c)
+
+    Example:
+      addab = {a, b}: a + b
+      addab { a = 2; b = 4; }
+      => 6
+      lib.functionArgs addab
+      => { a = false; b = false; }
+      addab1 = attrs: addab attrs + 1
+      addab1 { a = 2; b = 4; }
+      => 7
+      lib.functionArgs addab1
+      => { }
+      addab1' = lib.mirrorFunctionArgs addab addab1
+      addab1' { a = 2; b = 4; }
+      => 7
+      lib.functionArgs addab1'
+      => { a = false; b = false; }
+  */
+  mirrorFunctionArgs =
+    # Function to provide the argument metadata
+    f:
+    let
+      fArgs = functionArgs f;
+    in
+    # Function to set the argument metadata to
+    g:
+    setFunctionArgs g fArgs;
 
   /*
     Turns any non-callable values into constant functions.
@@ -476,22 +505,20 @@ rec {
 
      toHexString 250 => "FA"
   */
-  toHexString = i:
-    let
-      toHexDigit = d:
-        if d < 10
-        then toString d
-        else
-          {
-            "10" = "A";
-            "11" = "B";
-            "12" = "C";
-            "13" = "D";
-            "14" = "E";
-            "15" = "F";
-          }.${toString d};
-    in
-      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+  toHexString = let
+    hexDigits = {
+      "10" = "A";
+      "11" = "B";
+      "12" = "C";
+      "13" = "D";
+      "14" = "E";
+      "15" = "F";
+    };
+    toHexDigit = d:
+      if d < 10
+      then toString d
+      else hexDigits.${toString d};
+  in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:

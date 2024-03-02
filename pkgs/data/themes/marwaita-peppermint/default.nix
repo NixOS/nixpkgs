@@ -5,17 +5,18 @@
 , gtk-engine-murrine
 , gtk_engines
 , librsvg
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "marwaita-peppermint";
-  version = "10.3";
+  version = "17.0";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
-    rev = version;
-    sha256 = "09lqp82aymj3silpwmjkkf4mgv3b1xw7181ck89lz2nxb98sr9im";
+    rev = "247f9c539d6eef8ae3a5f59beed42a40b1f10434";
+    hash = "sha256-uT7KnpIdxypUqKhXOao3Bz3vJecJKK+GjcAp9biNyHc=";
   };
 
   buildInputs = [
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
     cp -a Marwaita* $out/share/themes
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Marwaita GTK theme with Peppermint Os Linux style";

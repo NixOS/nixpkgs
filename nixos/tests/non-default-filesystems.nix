@@ -94,6 +94,8 @@ with pkgs.lib;
     makeTest {
       name = "non-default-filesystems-erofs";
 
+      meta.maintainers = with maintainers; [ nikstur ];
+
       nodes.machine = _: {
         virtualisation.qemu.drives = [{
           name = "non-default-filesystem";
@@ -126,6 +128,45 @@ with pkgs.lib;
 
         file_contents = machine.succeed("cat /non-default/filesystem")
         assert "erofs" in file_contents
+      '';
+    };
+
+  squashfs =
+    let
+      fsImage = "/tmp/non-default-filesystem.img";
+    in
+    makeTest {
+      name = "non-default-filesystems-squashfs";
+
+      meta.maintainers = with maintainers; [ nikstur ];
+
+      nodes.machine = {
+        virtualisation.qemu.drives = [{
+          name = "non-default-filesystem";
+          file = fsImage;
+          deviceExtraOpts.serial = "non-default";
+        }];
+
+        virtualisation.fileSystems."/non-default" = {
+          device = "/dev/disk/by-id/virtio-non-default";
+          fsType = "squashfs";
+          neededForBoot = true;
+        };
+      };
+
+      testScript = ''
+        import subprocess
+
+        with open("filesystem", "w") as f:
+          f.write("squashfs")
+
+        subprocess.run([
+          "${pkgs.squashfsTools}/bin/mksquashfs",
+          "filesystem",
+          "${fsImage}",
+        ])
+
+        assert "squashfs" in machine.succeed("cat /non-default/filesystem")
       '';
     };
 }

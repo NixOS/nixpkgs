@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   };
   src = [ ftesrc ftecommon ];
 
+  env.NIX_CFLAGS_COMPILE = "-DHAVE_STRLCAT -DHAVE_STRLCPY";
+
   buildFlags = [ "PREFIX=$(out)" ];
 
   installFlags = [ "PREFIX=$(out)" "INSTALL_NONROOT=1" ];

@@ -24,7 +24,7 @@ let
       '';
     };
     sharp = {
-      nativeBuildInputs = [ pkg-config nodePackages.semver ];
+      nativeBuildInputs = [ pkg-config nodePackages.node-gyp nodePackages.semver ];
       buildInputs = [ vips ];
       postInstall = ''
         yarn --offline run install
@@ -33,14 +33,14 @@ let
   };
 
   name = "lemmy-ui";
-  version = pinData.version;
+  version = pinData.uiVersion;
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = name;
     rev = version;
     fetchSubmodules = true;
-    sha256 = pinData.uiSha256;
+    hash = pinData.uiHash;
   };
 in
 mkYarnPackage {
@@ -52,8 +52,15 @@ mkYarnPackage {
   packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    sha256 = pinData.uiYarnDepsSha256;
+    hash = pinData.uiYarnDepsHash;
   };
+
+  patchPhase = ''
+    substituteInPlace ./package.json \
+      --replace '$(git rev-parse --short HEAD)' "${src.rev}" \
+      --replace 'yarn clean' 'yarn --offline clean' \
+      --replace 'yarn run rimraf dist' 'yarn --offline run rimraf dist'
+  '';
 
   yarnPreBuild = ''
     export npm_config_nodedir=${nodejs}
@@ -77,8 +84,9 @@ mkYarnPackage {
 
   distPhase = "true";
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
   passthru.tests.lemmy-ui = nixosTests.lemmy;
+  passthru.commit_sha = src.rev;
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";

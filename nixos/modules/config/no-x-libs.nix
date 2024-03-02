@@ -30,11 +30,15 @@ with lib;
       beam = super.beam_nox;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
+      fastfetch = super.fastfetch.override { vulkanSupport = false; waylandSupport = false; x11Support = false; };
       ffmpeg_4 = super.ffmpeg_4.override { ffmpegVariant = "headless"; };
       ffmpeg_5 = super.ffmpeg_5.override { ffmpegVariant = "headless"; };
       # dep of graphviz, libXpm is optional for Xpm support
       gd = super.gd.override { withXorg = false; };
+      ghostscript = super.ghostscript.override { cupsSupport = false; x11Support = false; };
+      gjs = super.gjs.overrideAttrs { doCheck = false; installTests = false; }; # avoid test dependency on gtk3
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      gpg-tui = super.gpg-tui.override { x11Support = false; };
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
@@ -44,6 +48,7 @@ with lib;
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
+      intel-vaapi-driver = super.intel-vaapi-driver.override { enableGui = false; };
       libdevil = super.libdevil-nox;
       libextractor = super.libextractor.override { gtkSupport = false; };
       libva = super.libva-minimal;
@@ -51,6 +56,7 @@ with lib;
       mc = super.mc.override { x11Support = false; };
       mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; waylandSupport = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
+      mupdf = super.mupdf.override { enableGL = false; enableX11 = false; };
       neofetch = super.neofetch.override { x11Support = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
@@ -61,16 +67,23 @@ with lib;
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       pango = super.pango.override { x11Support = false; };
       pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
-      pipewire = super.pipewire.override { x11Support = false; };
+      pipewire = super.pipewire.override { vulkanSupport = false; x11Support = false; };
+      pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
+        (python-final: python-prev: {
+          # tk feature requires wayland which fails to compile
+          matplotlib = python-prev.matplotlib.override { enableTk = false; };
+        })
+      ];
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
       qt5 = super.qt5.overrideScope (const (super': {
-        qtbase = super'.qtbase.override { withGtk3 = false; };
+        qtbase = super'.qtbase.override { withGtk3 = false; withQttranslation = false; };
       }));
       stoken = super.stoken.override { withGTK3 = false; };
       # translateManpages -> perlPackages.po4a -> texlive-combined-basic -> texlive-core-big -> libX11
       util-linux = super.util-linux.override { translateManpages = false; };
       vim-full = super.vim-full.override { guiSupport = false; };
+      vte = super.vte.override { gtkVersion = null; };
       zbar = super.zbar.override { enableVideo = false; withXorg = false; };
     }));
   };

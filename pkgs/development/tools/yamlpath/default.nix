@@ -46,5 +46,9 @@ python3.pkgs.buildPythonApplication rec {
      '';
     license = licenses.isc;
     maintainers = with maintainers; [ Flakebi ];
+
+   # No support for ruamel.yaml > 0.17.21
+   # https://github.com/wwkimball/yamlpath/issues/217
+    broken = true;
   };
 }

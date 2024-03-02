@@ -87,7 +87,7 @@ in stdenv.mkDerivation (rec {
     # of the flags used for the normal LLVM build. To avoid the need for building
     # a native libLLVM.so (which would fail) we force llvm-config to be linked
     # statically against the necessary LLVM components always.
-    ../../llvm-config-link-static.patch
+    ../../common/llvm/llvm-config-link-static.patch
     # Fix llvm being miscompiled by some gccs. See llvm/llvm-project#49955
     # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
     ./fix-llvm-issue-49955.patch
@@ -138,7 +138,7 @@ in stdenv.mkDerivation (rec {
     # TODO: Fix failing tests:
     rm test/DebugInfo/X86/vla-multi.ll
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -202,6 +202,8 @@ in stdenv.mkDerivation (rec {
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
+  cmakeBuildType = if debugVersion then "Debug" else "Release";
+
   cmakeFlags = with stdenv; let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
@@ -217,7 +219,6 @@ in stdenv.mkDerivation (rec {
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
   in flagsForLlvmConfig ++ [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
@@ -243,7 +244,7 @@ in stdenv.mkDerivation (rec {
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

@@ -36,16 +36,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        description = lib.mdDoc ''
-          Matomo package for the service to use.
-          This can be used to point to newer releases from nixos-unstable,
-          as they don't get backported if they are not security-relevant.
-        '';
-        default = pkgs.matomo;
-        defaultText = literalExpression "pkgs.matomo";
-      };
+      package = mkPackageOption pkgs "matomo" { };
 
       webServerUser = mkOption {
         type = types.nullOr types.str;
