@@ -50,8 +50,8 @@ in
     { });
   julia_110 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.10.1";
-      hash = "sha256-a6WLVfxW59fLhU1fPHuM+2ogmFDYLvdM33aHjYQWEqQ=";
+      version = "1.10.2";
+      hash = "sha256-YkaHIK+8QQ608mLtJDOpITJieHLJ9pC3BNwEXMsVVAE=";
       patches = [
         ./patches/1.10/0001-skip-building-docs-as-it-requires-network-access.patch
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
