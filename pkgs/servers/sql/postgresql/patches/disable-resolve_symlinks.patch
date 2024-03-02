@@ -1,5 +1,5 @@
---- a/src/common/exec.c	2014-09-04 20:19:12.236057588 +0200
-+++ b/src/common/exec.c	2014-09-04 20:19:50.550251633 +0200
+--- a/src/common/exec.c
++++ b/src/common/exec.c
 @@ -218,6 +218,9 @@
  static int
  resolve_symlinks(char *path)
