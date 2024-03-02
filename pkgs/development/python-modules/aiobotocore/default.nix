@@ -13,6 +13,7 @@
 , setuptools
 , pytest-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , wrapt
 }:
@@ -96,6 +97,10 @@ buildPythonPackage rec {
     "test_required_config_not_set"
     "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
     "test_sso_credential_fetcher_can_fetch_credentials"
+  ] ++ lib.optionals (pythonAtLeast "3.12.") [
+    # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
+    "test_max_rate_updated_on_success_response"
+    "test_max_rate_cant_exceed_20_percent_max"
   ];
 
   __darwinAllowLocalNetworking = true;
