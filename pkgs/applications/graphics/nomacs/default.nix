@@ -1,68 +1,87 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , cmake
-, pkg-config
-, wrapQtAppsHook
-
-, qtbase
-, qttools
-, qtsvg
-, qtimageformats
-
 , exiv2
-, opencv4
+, fetchFromGitHub
 , libraw
+, libsForQt5
 , libtiff
-, quazip
+, opencv4
+, pkg-config
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
   version = "3.17.2287";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
-    rev = version;
+    rev = finalAttrs.version;
+    fetchSubmodules = false; # We'll use our own
     hash = "sha256-OwiMB6O4+WuAt87sRbD1Qby3U7igqgCgddiWs3a4j3k=";
   };
 
-  setSourceRoot = ''
-    sourceRoot=$(echo */ImageLounge)
-  '';
+  outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [cmake
-                       pkg-config
-                       wrapQtAppsHook];
+  sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
-  buildInputs = [qtbase
-                 qttools
-                 qtsvg
-                 qtimageformats
-                 exiv2
-                 opencv4
-                 libraw
-                 libtiff
-                 quazip];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+    pkg-config
+  ];
 
-  cmakeFlags = ["-DENABLE_OPENCV=ON"
-                "-DENABLE_RAW=ON"
-                "-DENABLE_TIFF=ON"
-                "-DENABLE_QUAZIP=ON"
-                "-DENABLE_TRANSLATIONS=ON"
-                "-DUSE_SYSTEM_QUAZIP=ON"];
+  buildInputs = [
+    exiv2
+    libraw
+    libtiff
+    opencv4
+  ] ++ (with libsForQt5; [
+    qtbase
+    qtimageformats
+    qtsvg
+    qttools
+    quazip
+  ]);
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_OPENCV" true)
+    (lib.cmakeBool "ENABLE_QUAZIP" true)
+    (lib.cmakeBool "ENABLE_RAW" true)
+    (lib.cmakeBool "ENABLE_TIFF" true)
+    (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
+    (lib.cmakeBool "USE_SYSTEM_QUAZIP" true)
+  ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/lib
     mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
-    maintainers = with lib.maintainers; [ mindavi ];
-    license = licenses.gpl3Plus;
-    inherit (qtbase.meta) platforms;
+    longDescription = ''
+      nomacs is a free, open source image viewer, which supports multiple
+      platforms. You can use it for viewing all common image formats including
+      RAW and psd images.
+
+      nomacs features semi-transparent widgets that display additional
+      information such as thumbnails, metadata or histogram. It is able to
+      browse images in zip or MS Office files which can be extracted to a
+      directory. Metadata stored with the image can be displayed and you can add
+      notes to images. A thumbnail preview of the current folder is included as
+      well as a file explorer panel which allows switching between
+      folders. Within a directory you can apply a file filter, so that only
+      images are displayed whose filenames have a certain string or match a
+      regular expression. Activating the cache allows for instantly switching
+      between images.
+    '';
+    changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [ gpl3Plus ];
+    mainProgram = "nomacs";
+    maintainers = with lib.maintainers; [ AndersonTorres mindavi ];
+    inherit (libsForQt5.qtbase.meta) platforms;
   };
-}
+})
