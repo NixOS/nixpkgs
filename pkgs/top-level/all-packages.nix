@@ -10735,8 +10735,6 @@ with pkgs;
 
   mbuffer = callPackage ../tools/misc/mbuffer { };
 
-  mdsh = callPackage ../development/tools/documentation/mdsh { };
-
   mecab =
     let
       mecab-nodic = callPackage ../tools/text/mecab/nodic.nix { };
