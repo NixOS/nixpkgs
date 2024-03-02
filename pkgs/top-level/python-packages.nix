@@ -16144,6 +16144,8 @@ self: super: with self; {
 
   verboselogs = callPackage ../development/python-modules/verboselogs { };
 
+  verlib2 = callPackage ../development/python-modules/verlib2 { };
+
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   versionfinder = callPackage ../development/python-modules/versionfinder { };
