@@ -103,7 +103,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
             driver.get('http://${domain}/cp-install')
 
-            wait = WebDriverWait(driver, 10)
+            wait = WebDriverWait(driver, 20)
 
             wait.until(EC.title_contains("installer"))
 
