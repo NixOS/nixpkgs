@@ -10538,6 +10538,12 @@
     githubId = 449813;
     name = "Roman Kuznetsov";
   };
+  kuznetsss = {
+    email = "kuzzz99@gmail.com";
+    github = "kuznetsss";
+    githubId = 15742918;
+    name = "Sergey Kuznetsov";
+  };
   kwohlfahrt = {
     email = "kai.wohlfahrt@gmail.com";
     github = "kwohlfahrt";
