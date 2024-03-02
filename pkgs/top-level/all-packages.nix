@@ -33967,8 +33967,6 @@ with pkgs;
 
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
-  nomacs = callPackage ../applications/graphics/nomacs { };
-
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
