@@ -928,6 +928,18 @@ with lib.maintainers; {
     shortName = "Serokell employees";
   };
 
+  steam = {
+    members = [
+      atemu
+      eclairevoyant
+      jonringer
+      k900
+      mkg20001
+    ];
+    scope = "Maintain steam module and packages";
+    shortName = "Steam";
+  };
+
   systemd = {
     members = [ ];
     githubTeams = [
