@@ -9758,6 +9758,8 @@ self: super: with self; {
 
   python-heatclient = callPackage ../development/python-modules/python-heatclient { };
 
+  python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
+
   python-hl7 = callPackage ../development/python-modules/python-hl7 { };
 
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
