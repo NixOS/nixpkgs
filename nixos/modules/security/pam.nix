@@ -1465,9 +1465,9 @@ in
         '';
       }
       {
-        assertion = config.security.pam.zfs.enable -> (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
+        assertion = config.security.pam.zfs.enable -> config.boot.zfs.enabled;
         message = ''
-          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
+          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled`).
         '';
       }
       {

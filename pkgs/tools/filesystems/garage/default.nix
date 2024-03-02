@@ -70,6 +70,11 @@ let
       "sqlite"
     ];
 
+    disabledTests = [
+      # Upstream told us this test is flakey.
+      "k2v::poll::test_poll_item"
+    ];
+
     passthru.tests = nixosTests.garage;
 
     meta = {
@@ -89,22 +94,23 @@ rec {
   # we have to keep all the numbers in the version to handle major/minor/patch level.
   # for <1.0.
 
-  garage_0_8_5 = generic {
-    version = "0.8.5";
-    sha256 = "sha256-YRxkjETSmI1dcHP9qTPLcOMqXx9B2uplVR3bBjJWn3I=";
-    cargoSha256 = "sha256-VOcymlvqqQRdT1MFzRcMuD+Xo3fc3XTuRA12tW7ZjdI=";
+  garage_0_8_6 = generic {
+    version = "0.8.6";
+    sha256 = "sha256-N0AOcwpuBHwTZtHcz6a2d9GOimHevhohEOzVkIt0RDE=";
+    cargoSha256 = "sha256-e72FQKL77CZOi/pa+hE7PCyc1+HSJgEsKGgWlfVw51k=";
     broken = stdenv.isDarwin;
   };
 
-  garage_0_8 = garage_0_8_5;
+  garage_0_8 = garage_0_8_6;
 
-  garage_0_9_1 = generic {
-    version = "0.9.1";
-    sha256 = "sha256-AXLaifVmZU4j5D/wKn/0TzhjHZBzZW1+tMyhsAo2eBU=";
-    cargoSha256 = "sha256-4/+OsM73TroBB1TGqare2xASO5KhqVyNkkss0Y0JZXg=";
+  garage_0_9_2 = generic {
+    version = "0.9.2";
+    sha256 = "sha256-6a400/wOZunVH+LAByd6BEA0gs56Rxyh+gvM4hUO4Y8=";
+    cargoSha256 = "sha256-1p6bB2gMOCHDdILEwgoJ1EqvgGhLPcThNkwaz6NMZhQ=";
+    broken = stdenv.isDarwin;
   };
 
-  garage_0_9 = garage_0_9_1;
+  garage_0_9 = garage_0_9_2;
 
   garage = garage_0_9;
 }
