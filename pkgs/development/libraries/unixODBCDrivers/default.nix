@@ -64,12 +64,13 @@
     buildInputs = [ unixODBC openssl libiconv zlib ]
       ++ lib.optionals stdenv.isDarwin [ libkrb5 ];
 
-    preConfigure = ''
+    # TODO: remove preConfigure on staging
+    preConfigure = if !stdenv.isDarwin then ''
       # we don't want to build a .pkg
       substituteInPlace CMakeLists.txt \
         --replace "IF(APPLE)" "IF(0)" \
         --replace "CMAKE_SYSTEM_NAME MATCHES AIX" "APPLE"
-    '';
+    '' else null;
 
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
@@ -79,6 +80,10 @@
       # on darwin this defaults to ON but we want to build against unixODBC
       "-DWITH_IODBC=OFF"
     ];
+
+    buildFlags = if stdenv.isDarwin then [ "maodbc" ] else null;
+
+    installTargets = if stdenv.isDarwin then [ "install/fast" ] else null;
 
     # see the top of the file for an explanation
     passthru = {
