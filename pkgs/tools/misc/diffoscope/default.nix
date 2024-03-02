@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , abootimg
+, acl
 , apksigcopier
 , apksigner
 , apktool
@@ -78,11 +79,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "252";
+  version = "257";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-NmYv5htZT2v04vVksIWGuaPI1rXfNmrVSmErT/faBbQ=";
+    hash = "sha256-Fejp4i0uzsK9+9JBVPsE1AdDwshtRlxpxPfJdqRQQH4=";
   };
 
   outputs = [
@@ -112,16 +113,20 @@ python3.pkgs.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
+  # Android-specific tools:
   # aapt2
   # dexdump
-  # docx2txt
-  # getfacl
+  # Darwin-specific tools:
   # lipo
   # otool
-  # r2pipe
+  # Other tools:
+  # docx2txt <- makes tests broken:
+  # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
+    acl
     binutils-unwrapped-all-targets
     bzip2
     cdrkit
@@ -209,11 +214,12 @@ python3.pkgs.buildPythonApplication rec {
       guestfs
       h5py
       pdfminer-six
+      # docx2txt, breaks the tests.
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
-    ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
+    ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
   ));
 
   nativeCheckInputs = with python3.pkgs; [
@@ -242,6 +248,15 @@ python3.pkgs.buildPythonApplication rec {
     "test_non_unicode_filename"
     "test_listing"
     "test_symlink_root"
+
+    # Appears to be a sandbox related issue
+    "test_trim_stderr_in_command"
+    # Seems to be a bug caused by having different versions of rdata than
+    # expected. Will file upstream.
+    "test_item_rdb"
+    # Caused by getting an otool command instead of llvm-objdump. Could be Nix
+    # setup, could be upstream bug. Will file upstream.
+    "test_libmix_differences"
   ];
 
   disabledTestPaths = [
