@@ -104,14 +104,14 @@ let
                 enable = true;
                 initialScript = pkgs.writeText "mysql-init.sql" ''
                   CREATE DATABASE bitwarden;
-                  CREATE USER 'bitwardenuser'@'localhost' IDENTIFIED BY '${dbPassword}';
-                  GRANT ALL ON `bitwarden`.* TO 'bitwardenuser'@'localhost';
+                  CREATE USER 'bitwarden'@'localhost' IDENTIFIED BY '${dbPassword}';
+                  GRANT ALL ON `bitwarden`.* TO 'bitwarden'@'localhost';
                   FLUSH PRIVILEGES;
                 '';
                 package = pkgs.mariadb;
               };
 
-              services.vaultwarden.config.databaseUrl = "mysql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+              services.vaultwarden.config.databaseUrl = "mysql://bitwarden:${dbPassword}@localhost/bitwarden";
 
               systemd.services.vaultwarden.after = [ "mysql.service" ];
             };
@@ -119,14 +119,14 @@ let
             postgresql = {
               services.postgresql = {
                 enable = true;
-                initialScript = pkgs.writeText "postgresql-init.sql" ''
-                  CREATE DATABASE bitwarden;
-                  CREATE USER bitwardenuser WITH PASSWORD '${dbPassword}';
-                  GRANT ALL PRIVILEGES ON DATABASE bitwarden TO bitwardenuser;
-                '';
+                ensureDatabases = [ "vaultwarden" ];
+                ensureUsers = [ {
+                  name = "vaultwarden";
+                  ensureDBOwnership = true;
+                } ];
               };
 
-              services.vaultwarden.config.databaseUrl = "postgresql://bitwardenuser:${dbPassword}@localhost/bitwarden";
+              services.vaultwarden.config.DATABASE_URL = "postgresql:///vaultwarden?host=/run/postgresql";
 
               systemd.services.vaultwarden.after = [ "postgresql.service" ];
             };
