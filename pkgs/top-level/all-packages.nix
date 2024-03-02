@@ -37065,8 +37065,6 @@ with pkgs;
 
   zdoom = callPackage ../games/doom-ports/zdoom { };
 
-  ### GAMES/LGAMES
-
   maelstrom = callPackage ../games/maelstrom { };
 
   mar1d = callPackage ../games/mar1d { } ;
