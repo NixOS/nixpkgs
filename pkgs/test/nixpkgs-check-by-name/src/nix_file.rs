@@ -2,10 +2,11 @@
 
 use crate::utils::LineIndex;
 use anyhow::Context;
+use itertools::Either::{self, Left, Right};
+use relative_path::RelativePathBuf;
 use rnix::ast;
 use rnix::ast::Expr;
 use rnix::ast::HasEntry;
-use rnix::SyntaxKind;
 use rowan::ast::AstNode;
 use rowan::TextSize;
 use rowan::TokenAtOffset;
@@ -79,7 +80,7 @@ impl NixFile {
 #[derive(Debug, PartialEq)]
 pub struct CallPackageArgumentInfo {
     /// The relative path of the first argument, or `None` if it's not a path.
-    pub relative_path: Option<PathBuf>,
+    pub relative_path: Option<RelativePathBuf>,
     /// Whether the second argument is an empty attribute set
     pub empty_arg: bool,
 }
@@ -87,8 +88,9 @@ pub struct CallPackageArgumentInfo {
 impl NixFile {
     /// Returns information about callPackage arguments for an attribute at a specific line/column
     /// index.
-    /// If the location is not of the form `<attr> = callPackage <arg1> <arg2>;`, `None` is
-    /// returned.
+    /// If the definition at the given location is not of the form `<attr> = callPackage <arg1> <arg2>;`,
+    /// `Ok((None, String))` is returned, with `String` being the definition itself.
+    ///
     /// This function only returns `Err` for problems that can't be caused by the Nix contents,
     /// but rather problems in this programs code itself.
     ///
@@ -109,7 +111,10 @@ impl NixFile {
     ///
     /// You'll get back
     /// ```rust
-    /// Some(CallPackageArgumentInfo { path = Some("default.nix"), empty_arg: true })
+    /// Ok((
+    ///   Some(CallPackageArgumentInfo { path = Some("default.nix"), empty_arg: true }),
+    ///   "foo = self.callPackage ./default.nix { };",
+    /// ))
     /// ```
     ///
     /// Note that this also returns the same for `pythonPackages.callPackage`. It doesn't make an
@@ -119,11 +124,16 @@ impl NixFile {
         line: usize,
         column: usize,
         relative_to: &Path,
-    ) -> anyhow::Result<Option<CallPackageArgumentInfo>> {
-        let Some(attrpath_value) = self.attrpath_value_at(line, column)? else {
-            return Ok(None);
-        };
-        self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)
+    ) -> anyhow::Result<(Option<CallPackageArgumentInfo>, String)> {
+        Ok(match self.attrpath_value_at(line, column)? {
+            Left(definition) => (None, definition),
+            Right(attrpath_value) => {
+                let definition = attrpath_value.to_string();
+                let attrpath_value =
+                    self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)?;
+                (attrpath_value, definition)
+            }
+        })
     }
 
     // Internal function mainly to make it independently testable
@@ -131,7 +141,7 @@ impl NixFile {
         &self,
         line: usize,
         column: usize,
-    ) -> anyhow::Result<Option<ast::AttrpathValue>> {
+    ) -> anyhow::Result<Either<String, ast::AttrpathValue>> {
         let index = self.line_index.fromlinecolumn(line, column);
 
         let token_at_offset = self
@@ -158,6 +168,22 @@ impl NixFile {
             )
         };
 
+        if ast::Attr::can_cast(node.kind()) {
+            // Something like `foo`, `"foo"` or `${"foo"}`
+        } else if ast::Inherit::can_cast(node.kind()) {
+            // Something like `inherit <attr>` or `inherit (<source>) <attr>`
+            // This is the only other way how `builtins.unsafeGetAttrPos` can return
+            // attribute positions, but we only look for ones like `<attr-path> = <value>`, so
+            // ignore this
+            return Ok(Left(node.to_string()));
+        } else {
+            // However, anything else is not expected and smells like a bug
+            anyhow::bail!(
+                "Node in {} is neither an attribute node nor an inherit node: {node:?}",
+                self.path.display()
+            )
+        }
+
         // node looks like "foo"
         let Some(attrpath_node) = node.parent() else {
             anyhow::bail!(
@@ -166,10 +192,14 @@ impl NixFile {
             )
         };
 
-        if attrpath_node.kind() != SyntaxKind::NODE_ATTRPATH {
-            // This can happen for e.g. `inherit foo`, so definitely not a syntactic `callPackage`
-            return Ok(None);
+        if !ast::Attrpath::can_cast(attrpath_node.kind()) {
+            // We know that `node` is an attribute, its parent should be an attribute path
+            anyhow::bail!(
+                "In {}, attribute parent node is not an attribute path node: {attrpath_node:?}",
+                self.path.display()
+            )
         }
+
         // attrpath_node looks like "foo.bar"
         let Some(attrpath_value_node) = attrpath_node.parent() else {
             anyhow::bail!(
@@ -189,7 +219,9 @@ impl NixFile {
         // unwrap is fine because we confirmed that we can cast with the above check.
         // We could avoid this `unwrap` for a `clone`, since `cast` consumes the argument,
         // but we still need it for the error message when the cast fails.
-        Ok(Some(ast::AttrpathValue::cast(attrpath_value_node).unwrap()))
+        Ok(Right(
+            ast::AttrpathValue::cast(attrpath_value_node).unwrap(),
+        ))
     }
 
     // Internal function mainly to make attrpath_value_at independently testable
@@ -338,8 +370,8 @@ pub enum ResolvedPath {
     /// The path is outside the given absolute path
     Outside,
     /// The path is within the given absolute path.
-    /// The `PathBuf` is the relative path under the given absolute path.
-    Within(PathBuf),
+    /// The `RelativePathBuf` is the relative path under the given absolute path.
+    Within(RelativePathBuf),
 }
 
 impl NixFile {
@@ -371,7 +403,9 @@ impl NixFile {
                 // Check if it's within relative_to
                 match resolved.strip_prefix(relative_to) {
                     Err(_prefix_error) => ResolvedPath::Outside,
-                    Ok(suffix) => ResolvedPath::Within(suffix.to_path_buf()),
+                    Ok(suffix) => ResolvedPath::Within(
+                        RelativePathBuf::from_path(suffix).expect("a relative path"),
+                    ),
                 }
             }
         }
@@ -408,6 +442,7 @@ mod tests {
               /**/quuux/**/=/**/5/**/;/*E*/
 
               inherit toInherit;
+              inherit (toInherit) toInherit;
             }
         "#};
 
@@ -417,20 +452,28 @@ mod tests {
 
         // These are builtins.unsafeGetAttrPos locations for the attributes
         let cases = [
-            (2, 3, Some("foo = 1;")),
-            (3, 3, Some(r#""bar" = 2;"#)),
-            (4, 3, Some(r#"${"baz"} = 3;"#)),
-            (5, 3, Some(r#""${"qux"}" = 4;"#)),
-            (8, 3, Some("quux\n  # B\n  =\n  # C\n  5\n  # D\n  ;")),
-            (17, 7, Some("quuux/**/=/**/5/**/;")),
-            (19, 10, None),
+            (2, 3, Right("foo = 1;")),
+            (3, 3, Right(r#""bar" = 2;"#)),
+            (4, 3, Right(r#"${"baz"} = 3;"#)),
+            (5, 3, Right(r#""${"qux"}" = 4;"#)),
+            (8, 3, Right("quux\n  # B\n  =\n  # C\n  5\n  # D\n  ;")),
+            (17, 7, Right("quuux/**/=/**/5/**/;")),
+            (19, 10, Left("inherit toInherit;")),
+            (20, 22, Left("inherit (toInherit) toInherit;")),
         ];
 
         for (line, column, expected_result) in cases {
             let actual_result = nix_file
-                .attrpath_value_at(line, column)?
-                .map(|node| node.to_string());
-            assert_eq!(actual_result.as_deref(), expected_result);
+                .attrpath_value_at(line, column)
+                .context(format!("line {line}, column {column}"))?
+                .map_right(|node| node.to_string());
+            let owned_expected_result = expected_result
+                .map(|x| x.to_string())
+                .map_left(|x| x.to_string());
+            assert_eq!(
+                actual_result, owned_expected_result,
+                "line {line}, column {column}"
+            );
         }
 
         Ok(())
@@ -466,14 +509,14 @@ mod tests {
             (
                 6,
                 Some(CallPackageArgumentInfo {
-                    relative_path: Some(PathBuf::from("file.nix")),
+                    relative_path: Some(RelativePathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
             (
                 7,
                 Some(CallPackageArgumentInfo {
-                    relative_path: Some(PathBuf::from("file.nix")),
+                    relative_path: Some(RelativePathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
@@ -487,7 +530,7 @@ mod tests {
             (
                 9,
                 Some(CallPackageArgumentInfo {
-                    relative_path: Some(PathBuf::from("file.nix")),
+                    relative_path: Some(RelativePathBuf::from("file.nix")),
                     empty_arg: false,
                 }),
             ),
@@ -501,8 +544,10 @@ mod tests {
         ];
 
         for (line, expected_result) in cases {
-            let actual_result = nix_file.call_package_argument_info_at(line, 3, temp_dir.path())?;
-            assert_eq!(actual_result, expected_result);
+            let (actual_result, _definition) = nix_file
+                .call_package_argument_info_at(line, 3, temp_dir.path())
+                .context(format!("line {line}"))?;
+            assert_eq!(actual_result, expected_result, "line {line}");
         }
 
         Ok(())

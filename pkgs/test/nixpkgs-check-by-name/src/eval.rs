@@ -1,10 +1,14 @@
+use crate::nix_file::CallPackageArgumentInfo;
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::ratchet;
+use crate::ratchet::RatchetState::Loose;
+use crate::ratchet::RatchetState::Tight;
 use crate::structure;
 use crate::utils;
 use crate::validation::ResultIteratorExt as _;
 use crate::validation::{self, Validation::Success};
 use crate::NixFileStore;
+use relative_path::RelativePathBuf;
 use std::path::Path;
 
 use anyhow::Context;
@@ -49,6 +53,20 @@ struct Location {
     pub file: PathBuf,
     pub line: usize,
     pub column: usize,
+}
+
+impl Location {
+    // Returns the [file] field, but relative to Nixpkgs
+    fn relative_file(&self, nixpkgs_path: &Path) -> anyhow::Result<RelativePathBuf> {
+        let path = self.file.strip_prefix(nixpkgs_path).with_context(|| {
+            format!(
+                "The file ({}) is outside Nixpkgs ({})",
+                self.file.display(),
+                nixpkgs_path.display()
+            )
+        })?;
+        Ok(RelativePathBuf::from_path(path).expect("relative path"))
+    }
 }
 
 #[derive(Deserialize)]
@@ -163,6 +181,7 @@ pub fn check_values(
                     Attribute::NonByName(non_by_name_attribute) => handle_non_by_name_attribute(
                         nixpkgs_path,
                         nix_file_store,
+                        &attribute_name,
                         non_by_name_attribute,
                     )?,
                     Attribute::ByName(by_name_attribute) => by_name(
@@ -195,7 +214,6 @@ fn by_name(
     use ByNameAttribute::*;
 
     let relative_package_file = structure::relative_file_for_package(attribute_name);
-    let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
     // At this point we know that `pkgs/by-name/fo/foo/package.nix` has to exists.
     // This match decides whether the attribute `foo` is defined accordingly
@@ -276,53 +294,31 @@ fn by_name(
                     // We should expect manual definitions to have a location, otherwise we can't
                     // enforce the expected format
                     if let Some(location) = location {
-                        // Parse the Nix file in the location and figure out whether it's an
-                        // attribute definition of the form `= callPackage <arg1> <arg2>`,
-                        // returning the arguments if so.
-                        let optional_syntactic_call_package = nix_file_store
-                            .get(&location.file)?
-                            .call_package_argument_info_at(
-                            location.line,
-                            location.column,
-                            // We're passing `pkgs/by-name/fo/foo/package.nix` here, which causes
-                            // the function to verify that `<arg1>` is the same path,
-                            // making `syntactic_call_package.relative_path` end up as `""`
-                            // TODO: This is confusing and should be improved
-                            &absolute_package_file,
-                        )?;
+                        // Parse the Nix file in the location
+                        let nix_file = nix_file_store.get(&location.file)?;
 
-                        // At this point, we completed two different checks for whether it's a
-                        // `callPackage`
-                        match (is_semantic_call_package, optional_syntactic_call_package) {
-                            // Something like `<attr> = { ... }`
-                            // or a `pkgs.callPackage` but with the wrong file
-                            (false, None)
-                            // Something like `<attr> = pythonPackages.callPackage ./pkgs/by-name/...`
-                            | (false, Some(_))
-                            // Something like `<attr> = bar` where `bar = pkgs.callPackage ...`
-                            // or a `callPackage` but with the wrong file
-                            | (true, None) => {
-                                // All of these are not of the expected form, so error out
-                                // TODO: Make error more specific, don't lump everything together
-                                NixpkgsProblem::WrongCallPackage {
-                                      relative_package_file: relative_package_file.to_owned(),
-                                      package_name: attribute_name.to_owned(),
-                                }.into()
-                            }
-                            // Something like `<attr> = pkgs.callPackage ./pkgs/by-name/...`,
-                            // with the correct file
-                            (true, Some(syntactic_call_package)) => {
-                                Success(
-                                    // Manual definitions with empty arguments are not allowed
-                                    // anymore
-                                    if syntactic_call_package.empty_arg {
-                                        Loose(())
-                                    } else {
-                                        Tight
-                                    }
-                                )
-                            }
-                        }
+                        // The relative path of the Nix file, for error messages
+                        let relative_location_file = location.relative_file(nixpkgs_path).with_context(|| {
+                            format!("Failed to resolve the file where attribute {attribute_name} is defined")
+                        })?;
+
+                        // Figure out whether it's an attribute definition of the form `= callPackage <arg1> <arg2>`,
+                        // returning the arguments if so.
+                        let (optional_syntactic_call_package, definition) = nix_file
+                            .call_package_argument_info_at(location.line, location.column, nixpkgs_path)
+                            .with_context(|| {
+                                format!("Failed to get the definition info for attribute {attribute_name}")
+                            })?;
+
+                        by_name_override(
+                            attribute_name,
+                            relative_package_file,
+                            is_semantic_call_package,
+                            optional_syntactic_call_package,
+                            definition,
+                            location,
+                            relative_location_file,
+                        )
                     } else {
                         // If manual definitions don't have a location, it's likely `mapAttrs`'d
                         // over, e.g. if it's defined in aliases.nix.
@@ -350,11 +346,91 @@ fn by_name(
     )
 }
 
+/// Handles the case for packages in `pkgs/by-name` that are manually overridden, e.g. in
+/// all-packages.nix
+fn by_name_override(
+    attribute_name: &str,
+    expected_package_file: RelativePathBuf,
+    is_semantic_call_package: bool,
+    optional_syntactic_call_package: Option<CallPackageArgumentInfo>,
+    definition: String,
+    location: Location,
+    relative_location_file: RelativePathBuf,
+) -> validation::Validation<ratchet::RatchetState<ratchet::ManualDefinition>> {
+    // At this point, we completed two different checks for whether it's a
+    // `callPackage`
+    match (is_semantic_call_package, optional_syntactic_call_package) {
+        // Something like `<attr> = foo`
+        (_, None) => NixpkgsProblem::NonSyntacticCallPackage {
+            package_name: attribute_name.to_owned(),
+            file: relative_location_file,
+            line: location.line,
+            column: location.column,
+            definition,
+        }
+        .into(),
+        // Something like `<attr> = pythonPackages.callPackage ...`
+        (false, Some(_)) => NixpkgsProblem::NonToplevelCallPackage {
+            package_name: attribute_name.to_owned(),
+            file: relative_location_file,
+            line: location.line,
+            column: location.column,
+            definition,
+        }
+        .into(),
+        // Something like `<attr> = pkgs.callPackage ...`
+        (true, Some(syntactic_call_package)) => {
+            if let Some(actual_package_file) = syntactic_call_package.relative_path {
+                if actual_package_file != expected_package_file {
+                    // Wrong path
+                    NixpkgsProblem::WrongCallPackagePath {
+                        package_name: attribute_name.to_owned(),
+                        file: relative_location_file,
+                        line: location.line,
+                        actual_path: actual_package_file,
+                        expected_path: expected_package_file,
+                    }
+                    .into()
+                } else {
+                    // Manual definitions with empty arguments are not allowed
+                    // anymore, but existing ones should continue to be allowed
+                    let manual_definition_ratchet = if syntactic_call_package.empty_arg {
+                        // This is the state to migrate away from
+                        Loose(NixpkgsProblem::EmptyArgument {
+                            package_name: attribute_name.to_owned(),
+                            file: relative_location_file,
+                            line: location.line,
+                            column: location.column,
+                            definition,
+                        })
+                    } else {
+                        // This is the state to migrate to
+                        Tight
+                    };
+
+                    Success(manual_definition_ratchet)
+                }
+            } else {
+                // No path
+                NixpkgsProblem::NonPath {
+                    package_name: attribute_name.to_owned(),
+                    file: relative_location_file,
+                    line: location.line,
+                    column: location.column,
+                    definition,
+                }
+                .into()
+            }
+        }
+    }
+}
+
 /// Handles the evaluation result for an attribute _not_ in `pkgs/by-name`,
 /// turning it into a validation result.
 fn handle_non_by_name_attribute(
     nixpkgs_path: &Path,
     nix_file_store: &mut NixFileStore,
+    attribute_name: &str,
     non_by_name_attribute: NonByNameAttribute,
 ) -> validation::Result<ratchet::Package> {
     use ratchet::RatchetState::*;
@@ -405,11 +481,17 @@ fn handle_non_by_name_attribute(
             location: Some(location),
         }) = non_by_name_attribute {
 
-        // Parse the Nix file in the location and figure out whether it's an
-        // attribute definition of the form `= callPackage <arg1> <arg2>`,
+        // Parse the Nix file in the location
+        let nix_file = nix_file_store.get(&location.file)?;
+
+        // The relative path of the Nix file, for error messages
+        let relative_location_file = location.relative_file(nixpkgs_path).with_context(|| {
+            format!("Failed to resolve the file where attribute {attribute_name} is defined")
+        })?;
+
+        // Figure out whether it's an attribute definition of the form `= callPackage <arg1> <arg2>`,
         // returning the arguments if so.
-        let optional_syntactic_call_package = nix_file_store
-            .get(&location.file)?
+        let (optional_syntactic_call_package, _definition) = nix_file
             .call_package_argument_info_at(
                 location.line,
                 location.column,
@@ -417,7 +499,10 @@ fn handle_non_by_name_attribute(
                 // strips the absolute Nixpkgs path from it, such that
                 // syntactic_call_package.relative_path is relative to Nixpkgs
                 nixpkgs_path
-            )?;
+                )
+            .with_context(|| {
+                format!("Failed to get the definition info for attribute {attribute_name}")
+            })?;
 
         // At this point, we completed two different checks for whether it's a
         // `callPackage`
@@ -453,7 +538,7 @@ fn handle_non_by_name_attribute(
                     _ => {
                         // Otherwise, the path is outside `pkgs/by-name`, which means it can be
                         // migrated
-                        Loose(syntactic_call_package)
+                        Loose((syntactic_call_package, relative_location_file))
                     }
                 }
             }
