@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
       attrPath = "networkmanager";
       versionPolicy = "odd-unstable";
     };
-    tests ={
+    tests = {
       inherit (nixosTests.networking) networkmanager;
     };
   };
