@@ -49,6 +49,8 @@ in stdenvNoCC.mkDerivation rec {
       --setenv HOME /tmp/home \
       -- /bin/fakeroot /installer --mode unattended
 
+    rm -r chroot/opt/microchip/mplabx/v6.20/sys
+
     runHook postBuild
   '';
   installPhase = ''
