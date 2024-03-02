@@ -1787,6 +1787,11 @@ self: super: {
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = doJailbreak (dontCheck super.reflex);
 
+  # 2024-03-02: hspec <2.11, primitive <0.8 - https://github.com/reflex-frp/reflex-vty/pull/80
+  reflex-vty = assert super.reflex-vty.version == "0.5.2.0"; doJailbreak super.reflex-vty;
+  # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
+  reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
+
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
   # Tests disabled because of: https://github.com/kowainik/stan/issues/409
