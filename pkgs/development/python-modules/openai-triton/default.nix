@@ -19,6 +19,7 @@
 , filelock
 , torchWithRocm
 , python
+, writeScriptBin
 
 , runCommand
 
@@ -27,32 +28,22 @@
 }:
 
 let
-  ptxas = "${cudaPackages.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+  mkBinaryStub = name: "${writeScriptBin name ''
+    echo binary ${name} is not available: openai-triton was built without CUDA support
+  ''}/bin/${name}";
 in
 buildPythonPackage rec {
   pname = "triton";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-8UTUwLH+SriiJnpejdrzz9qIquP2zBp1/uwLdHmv0XQ=";
+    # Release v2.2.0 is not tagged, but published on pypi: https://github.com/openai/triton/issues/3160
+    rev = "0e7b97bd47fc4beb21ae960a516cd9a7ae9bc060";
+    hash = "sha256-UdxoHkFnFFBfvGa/NvgvGebbtwGYbrAICQR9JZ4nvYo=";
   };
-
-  patches = [
-    # fix overflow error
-    (fetchpatch {
-      url = "https://github.com/openai/triton/commit/52c146f66b79b6079bcd28c55312fc6ea1852519.patch";
-      hash = "sha256-098/TCQrzvrBAbQiaVGCMaF3o5Yc3yWDxzwSkzIuAtY=";
-    })
-  ] ++ lib.optionals (!cudaSupport) [
-    ./0000-dont-download-ptxas.patch
-    # openai-triton wants to get ptxas version even if ptxas is not
-    # used, resulting in ptxas not found error.
-    ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -111,6 +102,11 @@ buildPythonPackage rec {
     # Use our linker flags
     substituteInPlace python/triton/common/build.py \
       --replace '${oldStr}' '${newStr}'
+    # triton/common/build.py will be called both on build, and sometimes in runtime.
+    substituteInPlace python/triton/common/build.py \
+      --replace 'os.getenv("TRITON_LIBCUDA_PATH")' '"${cudaPackages.cuda_cudart}/lib"'
+    substituteInPlace python/triton/common/build.py \
+      --replace 'os.environ.get("CC")' '"${cudaPackages.backendStdenv.cc}/bin/cc"'
   '';
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
@@ -125,23 +121,27 @@ buildPythonPackage rec {
 
     # The rest (including buildPhase) is relative to ./python/
     cd python
+
+    mkdir -p $out/${python.sitePackages}/triton/third_party/cuda/bin
+    function install_binary {
+      export TRITON_''${1^^}_PATH=$2
+      ln -s $2 $out/${python.sitePackages}/triton/third_party/cuda/bin/
+    }
   '' + lib.optionalString cudaSupport ''
     export CC=${cudaPackages.backendStdenv.cc}/bin/cc;
     export CXX=${cudaPackages.backendStdenv.cc}/bin/c++;
 
-    # Work around download_and_copy_ptxas()
-    mkdir -p $PWD/triton/third_party/cuda/bin
-    ln -s ${ptxas} $PWD/triton/third_party/cuda/bin
+    install_binary ptxas ${cudaPackages.cuda_nvcc}/bin/ptxas
+    install_binary cuobjdump ${cudaPackages.cuda_cuobjdump}/bin/cuobjdump
+    install_binary nvdisasm ${cudaPackages.cuda_nvdisasm}/bin/nvdisasm
+  '' + lib.optionalString (!cudaSupport) ''
+    install_binary ptxas ${mkBinaryStub "ptxas"}
+    install_binary cuobjdump ${mkBinaryStub "cuobjdump"}
+    install_binary nvdisasm ${mkBinaryStub "nvdisasm"}
   '';
 
   # CMake is run by setup.py instead
   dontUseCmakeConfigure = true;
-
-  # Setuptools (?) strips runpath and +x flags. Let's just restore the symlink
-  postFixup = lib.optionalString cudaSupport ''
-    rm -f $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
-    ln -s ${ptxas} $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
-  '';
 
   checkInputs = [ cmake ]; # ctest
   dontUseSetuptoolsCheck = true;
