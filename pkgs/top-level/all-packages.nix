@@ -37067,8 +37067,6 @@ with pkgs;
 
   ### GAMES/LGAMES
 
-  lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
-
   maelstrom = callPackage ../games/maelstrom { };
 
   mar1d = callPackage ../games/mar1d { } ;
