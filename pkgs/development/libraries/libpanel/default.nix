@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libpanel";
-  version = "1.4.1";
+  version = "1.5.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "mEENAOc0hX7N8zuaIN17D7ONi20x1Dabr8HGc5Krud4=";
+    sha256 = "sha256-gFLFJzQuFkkuHhiJSe3dbyS5Xo4mxAolGJRuCeSAXDs=";
   };
 
   nativeBuildInputs = [
