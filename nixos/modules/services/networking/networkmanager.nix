@@ -10,49 +10,31 @@ let
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  mkValue = v:
-    if v == true then "yes"
-    else if v == false then "no"
-    else if lib.isInt v then toString v
-    else v;
-
-  mkSection = name: attrs: ''
-    [${name}]
-    ${
-      lib.concatStringsSep "\n"
-        (lib.mapAttrsToList
-          (k: v: "${k}=${mkValue v}")
-          (lib.filterAttrs
-            (k: v: v != null)
-            attrs))
-    }
-  '';
-
-  configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
-    (mkSection "main" {
+  configAttrs = lib.recursiveUpdate {
+    main = {
       plugins = "keyfile";
       inherit (cfg) dhcp dns;
       # If resolvconf is disabled that means that resolv.conf is managed by some other module.
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
-    })
-    (mkSection "keyfile" {
+    };
+    keyfile = {
       unmanaged-devices =
-        if cfg.unmanaged == [ ] then null
-        else lib.concatStringsSep ";" cfg.unmanaged;
-    })
-    (mkSection "logging" {
+      if cfg.unmanaged == [ ] then null
+      else lib.concatStringsSep ";" cfg.unmanaged;
+    };
+    logging = {
       audit = config.security.audit.enable;
       level = cfg.logLevel;
-    })
-    (mkSection "connection" cfg.connectionConfig)
-    (mkSection "device" {
-      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
-      "wifi.backend" = cfg.wifi.backend;
-    })
-    cfg.extraConfig
-  ]);
+    };
+    connection = cfg.connectionConfig;
+    device = {
+        "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
+        "wifi.backend" = cfg.wifi.backend;
+    };
+  } cfg.settings;
+  configFile = ini.generate "NetworkManager.conf" configAttrs;
 
   /*
     [network-manager]
@@ -145,7 +127,7 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = teams.freedesktop.members ++ [ lib.maintainers.janik ];
   };
 
   ###### interface
@@ -185,11 +167,11 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+      settings = mkOption {
+        type = ini.type;
+        default = {};
         description = ''
-          Configuration appended to the generated NetworkManager.conf.
+          Configuration added to the generated NetworkManager.conf, note that you can overwrite settings with this.
           Refer to
           [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
@@ -471,8 +453,28 @@ in
   imports = [
     (mkRenamedOptionModule
       [ "networking" "networkmanager" "packages" ]
-      [ "networking" "networkmanager" "plugins" ])
-    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+      [ "networking" "networkmanager" "plugins" ]
+    )
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "useDnsmasq" ]
+      [ "networking" "networkmanager" "dns" ]
+    )
+    (mkRemovedOptionModule [ "networking" "networkmanager" "extraConfig" ] ''
+      This option was removed in favour of `networking.networkmanager.settings`,
+      which accepts structured nix-code equivalent to the ini
+      and allows for overriding settings.
+      Example patch:
+      ```patch
+         networking.networkmanager = {
+      -    extraConfig = '''
+      -      [main]
+      -      no-auto-default=*
+      -    '''
+      +    extraConfig.main.no-auto-default = "*";
+         };
+      ```
+    ''
+    )
     (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
       This option was removed, because using bundled FCC unlock scripts is risky,
       might conflict with vendor-provided unlock scripts, and should
