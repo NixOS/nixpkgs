@@ -4600,7 +4600,6 @@ broken-packages:
   - reflex-sdl2 # failure in job https://hydra.nixos.org/build/233233947 at 2023-09-02
   - reflex-test-host # failure in job https://hydra.nixos.org/build/233220665 at 2023-09-02
   - reflex-transformers # failure in job https://hydra.nixos.org/build/233243647 at 2023-09-02
-  - reflex-vty # failure in job https://hydra.nixos.org/build/233225875 at 2023-09-02
   - ref-mtl # failure in job https://hydra.nixos.org/build/233260152 at 2023-09-02
   - reformat # failure in job https://hydra.nixos.org/build/233212381 at 2023-09-02
   - reform-hamlet # failure in job https://hydra.nixos.org/build/233230013 at 2023-09-02
