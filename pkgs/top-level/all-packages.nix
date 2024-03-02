@@ -28650,6 +28650,8 @@ with pkgs;
 
   teensy-udev-rules = callPackage ../os-specific/linux/teensy-udev-rules { };
 
+  sensible-side-buttons = callPackage ../os-specific/darwin/sensible-side-buttons { };
+
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_ro_ssids = wpa_supplicant.override {
