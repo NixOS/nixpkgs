@@ -7,6 +7,7 @@
 , packaging
 , setuptools
 , torch
+, outlines
 , wheel
 , psutil
 , ray
@@ -36,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.3.2";
+  version = "0.3.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZFwlR8Xnen7FFblwzPJm0k+3iEo2p27QhfRaDfzwbOM=";
+    hash = "sha256-LU5pCPVv+Ws9dL8oWL1sJGzwQKI1IFk2A1I6TP9gXL4=";
   };
 
   # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
@@ -114,6 +115,7 @@ buildPythonPackage rec {
     numpy
     torch
     transformers
+    outlines
     xformers
     fastapi
     uvicorn
