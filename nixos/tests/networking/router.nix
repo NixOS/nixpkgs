@@ -33,7 +33,10 @@
             id = n;
             subnet = "192.168.${toString n}.0/24";
             pools = [{ pool = "192.168.${toString n}.3 - 192.168.${toString n}.254"; }];
-            option-data = [{ name = "routers"; data = "192.168.${toString n}.1"; }];
+            option-data = [
+              { data = "192.168.${toString n}.1"; name = "routers"; }
+              { data = "192.168.${toString n}.1"; name = "domain-name-servers"; }
+            ];
 
             reservations = [{
               hw-address = qemu-common.qemuNicMac n 1;
