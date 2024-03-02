@@ -214,7 +214,7 @@ in rec {
   };
 
   rocmlir = callPackage ./rocmlir {
-    inherit rocmUpdateScript rocm-cmake clr;
+    inherit rocmUpdateScript rocm-cmake rocminfo clr;
     stdenv = llvm.rocmClangStdenv;
   };
 
