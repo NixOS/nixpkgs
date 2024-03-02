@@ -1,1 +1,5 @@
+XSym
+0058
+1d774683fd9f959af1137ec75c4fb7a2
 ../../pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
