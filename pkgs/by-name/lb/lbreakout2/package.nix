@@ -1,28 +1,29 @@
 { lib
-, stdenv
-, fetchurl
-, fetchpatch
 , SDL
 , SDL_mixer
+, fetchpatch
+, fetchurl
 , libintl
 , libpng
+, stdenv
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakout2";
   version = "2.6.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
-    sha256 = "0vwdlyvh7c4y80q5vp7fyfpzbqk9lq3w8pvavi139njkalbxc14i";
+    url = "mirror://sourceforge/lgames/lbreakout2-${finalAttrs.version}.tar.gz";
+    hash = "sha256-kQTWF1VT2jRC3GpfxAemaeL1r/Pu3F0wQJ6wA7enjW8=";
   };
 
-  # Can't exit from pause without this patch
-  patches = [(fetchpatch {
-    url = "https://sources.debian.org/data/main/l/lbreakout2/2.6.5-2/debian/patches/sdl_fix_pauses.patch";
-    hash = "sha256-ycsuxfokpOblLky42MwtJowdEp7v5dZRMFIR4id4ZBI=";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/l/lbreakout2/2.6.5-2/debian/patches/sdl_fix_pauses.patch";
+      hash = "sha256-ycsuxfokpOblLky42MwtJowdEp7v5dZRMFIR4id4ZBI=";
+    })
+  ];
 
   buildInputs = [
     SDL
@@ -37,12 +38,12 @@ stdenv.mkDerivation rec {
   #   Aborted (core dumped)
   hardeningDisable = [ "fortify" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://lgames.sourceforge.net/LBreakout2/";
     description = "Breakout clone from the LGames series";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ciil ];
-    platforms = platforms.unix;
-    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "lbreakout2";
+    maintainers = with lib.maintainers; [ AndersonTorres ciil ];
+    platforms = lib.platforms.unix;
   };
-}
+})
