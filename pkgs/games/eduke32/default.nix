@@ -5,6 +5,7 @@
 , pkg-config
 , nasm
 , makeDesktopItem
+, copyDesktopItems
 , alsa-lib
 , flac
 , gtk2
@@ -17,19 +18,12 @@
 , Cocoa
 , GLUT
 , OpenGL
+, graphicsmagick
 }:
 
 let
-  desktopItem = makeDesktopItem {
-    name = "eduke32";
-    exec = "@out@/bin/${wrapper}";
-    comment = "Duke Nukem 3D port";
-    desktopName = "Enhanced Duke Nukem 3D";
-    genericName = "Duke Nukem 3D port";
-    categories = [ "Game" ];
-  };
-
   wrapper = "eduke32-wrapper";
+  swWrapper = "voidsw-wrapper";
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
@@ -88,29 +82,63 @@ in stdenv.mkDerivation (finalAttrs: {
     "LTO=0"
   ];
 
+  buildFlags = [
+    "duke3d"
+    "sw"
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "eduke32";
+      icon = "eduke32";
+      exec = "${wrapper}";
+      comment = "Duke Nukem 3D port";
+      desktopName = "Enhanced Duke Nukem 3D";
+      genericName = "Duke Nukem 3D port";
+      categories = [ "Game" ];
+    })
+    (makeDesktopItem {
+      name = "voidsw";
+      icon = "voidsw";
+      exec = "${swWrapper}";
+      comment = "Shadow Warrior eduke32 source port";
+      desktopName = "VoidSW";
+      genericName = "Shadow Warrior source port";
+      categories = [ "Game" ];
+    })
+  ];
+
   enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin eduke32 mapster32
+    install -Dm755 -t $out/bin eduke32 mapster32 voidsw wangulator
   '' + lib.optionalString stdenv.isLinux ''
     makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
       --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
       --add-flags '-g "$EDUKE32_DATA_DIR/DUKE3D.GRP"'
-
-    cp -rv ${desktopItem}/share $out
-    substituteInPlace $out/share/applications/eduke32.desktop \
-      --subst-var out
+    makeWrapper $out/bin/voidsw $out/bin/${swWrapper} \
+      --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
+      --add-flags '-g"$EDUKE32_DATA_DIR/SW.GRP"'
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    gm convert "./source/duke3d/rsrc/game_icon.ico[10]" $out/share/icons/hicolor/scalable/apps/eduke32.png
+    install -Dm644 ./source/sw/rsrc/game_icon.svg $out/share/icons/hicolor/scalable/apps/voidsw.svg
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications/EDuke32.app/Contents/MacOS
     mkdir -p $out/Applications/Mapster32.app/Contents/MacOS
+    mkdir -p $out/Applications/VoidSW.app/Contents/MacOS
+    mkdir -p $out/Applications/Wangulator.app/Contents/MacOS
 
     cp -r platform/Apple/bundles/EDuke32.app/* $out/Applications/EDuke32.app/
     cp -r platform/Apple/bundles/Mapster32.app/* $out/Applications/Mapster32.app/
+    cp -r platform/Apple/bundles/VoidSW.app/* $out/Applications/VoidSW.app/
+    cp -r platform/Apple/bundles/Wangulator.app/* $out/Applications/Wangulator.app/
 
     ln -sf $out/bin/eduke32 $out/Applications/EDuke32.app/Contents/MacOS/eduke32
     ln -sf $out/bin/mapster32 $out/Applications/Mapster32.app/Contents/MacOS/mapster32
+    ln -sf $out/bin/voidsw $out/Applications/VoidSW.app/Contents/MacOS/voidsw
+    ln -sf $out/bin/wangulator $out/Applications/Wangulator.app/Contents/MacOS/wangulator
   '' + ''
     runHook postInstall
   '';
