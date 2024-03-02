@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     FILE *testfp;
     int testfd;
     struct stat testsb;
-#ifndef __APPLE__
+#ifdef __GLIBC__
     struct stat64 testsb64;
 #endif
 #if defined(__linux__) && defined(STATX_TYPE)
@@ -93,11 +93,11 @@ int main(int argc, char *argv[])
     assert(access(TESTPATH, X_OK) == 0);
 
     assert(stat(TESTPATH, &testsb) != -1);
-#ifndef __APPLE__
+#ifdef __GLIBC__
     assert(stat64(TESTPATH, &testsb64) != -1);
 #endif
     assert(fstatat(123, TESTPATH, &testsb, 0) != -1);
-#ifndef __APPLE__
+#ifdef __GLIBC__
     assert(fstatat64(123, TESTPATH, &testsb64, 0) != -1);
 #endif
 #if defined(__linux__) && defined(STATX_TYPE)
