@@ -633,6 +633,16 @@ let
       mlir = callPackage ./mlir { };
       libclc = callPackage ./libclc.nix { };
     }
+    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
+      bolt = callPackage ./bolt {
+        patches = lib.optionals (lib.versions.major metadata.release_version == "19") [
+          (fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/abc2eae68290c453e1899a94eccc4ed5ea3b69c1.patch";
+            hash = "sha256-oxCxOjhi5BhNBEraWalEwa1rS3Mx9CuQgRVZ2hrbd7M=";
+          })
+        ];
+      };
+    }
   );
 
   libraries = lib.makeExtensible (
