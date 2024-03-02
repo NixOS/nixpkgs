@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "1.60.0";
+  version = "1.60.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -22,7 +22,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-qx6ukgaEsdsq76E+GQkYH/Ydv3VKO9jLTh1zm0pGeWw=";
+    hash = "sha256-1BzzXRqbs8dS9263cXCujYYSStQlvyQr3dm3tyr+64k=";
   };
   vendorHash = "sha256-eci4f6golU1eIQOezplA+I+gmOfof40ktIdpr0v/uMc=";
 

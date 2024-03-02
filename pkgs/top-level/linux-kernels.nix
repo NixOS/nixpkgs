@@ -557,15 +557,15 @@ in {
       configFile = "kernel";
       inherit pkgs kernel;
     };
-    zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
+    zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
       configFile = "kernel";
       inherit pkgs kernel;
     };
-    zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
+    zfs_unstable = callPackage ../os-specific/linux/zfs/unstable.nix {
       configFile = "kernel";
       inherit pkgs kernel;
     };
-    zfs = zfsStable;
+    zfs = zfs_2_2;
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };
 

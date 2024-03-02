@@ -1,40 +1,39 @@
-{ mkDerivation
+{ stdenv
 , lib
-, stdenv
 , fetchFromGitHub
 , nix-update-script
+, libsForQt5
 , libvorbis
 , pkg-config
-, qmake
-, qtbase
-, qttools
-, qtmultimedia
 , rtmidi
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ptcollab";
-  version = "0.6.4.7";
+  version = "0.6.4.8";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
-    rev = "v${version}";
-    hash = "sha256-KYNov/HbKM2d8VVO8iyWA3XWFDE9iWeKkRCNC1xlPNw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9u2K79QJRfYKL66e1lsRrQMEqmKTWbK+ucal3/u4rP4=";
   };
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ (with libsForQt5; [
     qmake
     qttools
-  ];
+    wrapQtAppsHook
+  ]);
 
   buildInputs = [
     libvorbis
+    rtmidi
+  ] ++ (with libsForQt5; [
     qtbase
     qtmultimedia
-    rtmidi
-  ];
+  ]);
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Move appbundles to Applications before wrapping happens
@@ -54,8 +53,9 @@ mkDerivation rec {
   meta = with lib; {
     description = "Experimental pxtone editor where you can collaborate with friends";
     homepage = "https://yuxshao.github.io/ptcollab/";
+    changelog = "https://github.com/yuxshao/ptcollab/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
   };
-}
+})

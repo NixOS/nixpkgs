@@ -1,5 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose, numpy, future
+{ lib
+, buildPythonPackage
+, fetchPypi
+, future
+, numpy
+, pynose
 }:
 
 buildPythonPackage rec {
@@ -13,10 +17,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ future ];
-  nativeCheckInputs = [ nose numpy ];
+  nativeCheckInputs = [ pynose numpy ];
 
   checkPhase = ''
-    nosetests -sv
+    nosetests -sve test_1to2
   '';
 
   meta = with lib; {

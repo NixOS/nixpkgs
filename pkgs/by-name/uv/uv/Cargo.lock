@@ -4133,7 +4133,7 @@ checksum = "f00cc9702ca12d3c81455259621e676d0f7251cec66a21e98fe2e9a37db93b2a"
 
 [[package]]
 name = "uv"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4228,6 +4228,7 @@ dependencies = [
  "pypi-types",
  "pyproject-toml",
  "regex",
+ "rustc-hash",
  "serde",
  "serde_json",
  "tempfile",
@@ -4374,6 +4375,7 @@ dependencies = [
  "platform-host",
  "platform-tags",
  "pypi-types",
+ "rustc-hash",
  "tempfile",
  "tokio",
  "tracing",
