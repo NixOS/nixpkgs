@@ -7,7 +7,8 @@ let
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
   settingsFormat = pkgs.formats.json {};
-  settingsFile =
+  settingsFile = "${dataDir}/config.json";
+  settingsFileUnsubstituted =
     settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
 
 in {
@@ -134,6 +135,16 @@ in {
   };
 
   config = mkIf cfg.enable {
+
+    users.users.mautrix-telegram = {
+      isSystemUser = true;
+      group = "mautrix-telegram";
+      home = "${dataDir}";
+      description = "Mautrix-Telegram bridge user";
+    };
+
+    users.groups.mautrix-telegram = {};
+
     systemd.services.mautrix-telegram = {
       description = "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
 
@@ -155,6 +166,17 @@ in {
       environment.HOME = dataDir;
 
       preStart = ''
+        # substitute the settings file by environment variables
+        # in this case read from EnvironmentFile
+        test -f '${settingsFile}' && rm -f '${settingsFile}'
+        old_umask=$(umask)
+        umask 0177
+
+        ${pkgs.envsubst}/bin/envsubst \
+          -o '${settingsFile}' \
+          -i '${settingsFileUnsubstituted}'
+        umask $old_umask
+
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
@@ -162,33 +184,55 @@ in {
             --config='${settingsFile}' \
             --registration='${registrationFile}'
         fi
-      '' + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
-        # run automatic database init and migration scripts
-        ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
+        chmod 640 ${registrationFile}
+
+        umask 0177
+        ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
+          | .[0].appservice.hs_token = .[1].hs_token
+          | .[0]' '${settingsFile}' '${registrationFile}' \
+          > '${settingsFile}.tmp'
+        mv '${settingsFile}.tmp' '${settingsFile}'
+
+        umask $old_umask
       '';
 
       serviceConfig = {
-        Type = "simple";
-        Restart = "always";
-
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-
-        DynamicUser = true;
-        PrivateTmp = true;
-        WorkingDirectory = pkgs.mautrix-telegram; # necessary for the database migration scripts to be found
-        StateDirectory = baseNameOf dataDir;
-        UMask = "0027";
+        User = "mautrix-telegram";
+        Group = "mautrix-telegram";
         EnvironmentFile = cfg.environmentFile;
-
+        StateDirectory = baseNameOf dataDir;
+        WorkingDirectory = dataDir;
+        ReadWritePaths = dataDir;
         ExecStart = ''
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
-            --config='${settingsFile}'
+          --config='${settingsFile}' \
+          --registration='${registrationFile}'
         '';
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        Restart = "on-failure";
+        RestartSec = "30s";
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = ["@system-service"];
+        Type = "simple";
+        UMask = 0027;
       };
+      restartTriggers = [settingsFileUnsubstituted];
     };
   };
 
