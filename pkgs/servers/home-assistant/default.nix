@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , fetchPypi
 , fetchpatch
-, python311
+, python312
 , substituteAll
 , ffmpeg-headless
 , inetutils
@@ -375,6 +375,9 @@ let
           inherit version;
           hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
         };
+        pytestFlagsArray = [
+          "-W" "ignore::DeprecationWarning"
+        ];
       });
 
       voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
@@ -444,7 +447,7 @@ let
     })
   ];
 
-  python = python311.override {
+  python = python312.override {
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -496,6 +499,7 @@ in python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "attrs"
+    "bcrypt"
     "ciso8601"
     "orjson"
     "pyopenssl"
