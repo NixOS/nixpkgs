@@ -24286,9 +24286,9 @@ with pkgs;
 
   primesieve = callPackage ../applications/science/math/primesieve { };
 
-  proj = disable-warnings-if-gcc13 (callPackage ../development/libraries/proj {
+  proj = callPackage ../development/libraries/proj {
     stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
-  });
+  };
 
   proj_7 = callPackage ../development/libraries/proj/7.nix { };
 
