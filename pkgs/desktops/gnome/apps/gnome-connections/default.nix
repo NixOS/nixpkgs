@@ -7,7 +7,6 @@
 , vala
 , gettext
 , itstool
-, appstream-glib
 , desktop-file-utils
 , wrapGAppsHook
 , glib
@@ -22,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "45.0";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ufq1JbkKPifRE8FvuGjCucR7+BSTENFNuGLqGRLAb7g=";
+    hash = "sha256-hlqVud4a6Q8NH7Xbx3a0SD8KkGZNVu93uzRFzpouRFw=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    appstream-glib
     desktop-file-utils
     glib # glib-compile-resources
     wrapGAppsHook
