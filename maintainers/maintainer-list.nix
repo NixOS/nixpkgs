@@ -6413,12 +6413,6 @@
     githubId = 1952914;
     name = "Maxence Maireaux";
   };
-  flexagoon = {
-    email = "flexagoon@pm.me";
-    github = "flexagoon";
-    githubId = 66178592;
-    name = "Pavel Zolotarevskiy";
-  };
   flexiondotorg = {
     name = "Martin Wimpress";
     email = "martin@wimpress.org";
