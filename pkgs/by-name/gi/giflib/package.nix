@@ -3,6 +3,17 @@
   lib,
   fetchurl,
   fixDarwinDylibNames,
+
+  # for passthru.tests
+  SDL2_image,
+  SDL_image,
+  gdal,
+  imlib2,
+  leptonica,
+  libjxl,
+  libwebp,
+  openimageio,
+  openjdk,
   pkgsStatic,
 }:
 
@@ -52,6 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     static = pkgsStatic.giflib;
+    inherit
+      SDL2_image
+      SDL_image
+      gdal
+      imlib2
+      leptonica
+      libjxl
+      openimageio
+      openjdk
+      ;
   };
 
   meta = {
