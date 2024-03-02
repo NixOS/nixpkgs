@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openpgl";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "OpenPathGuidingLibrary";
-    repo = finalAttrs.pname;
+    repo = "openpgl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dbHmGGiHQkU0KPpQYpY/o0uCWdb3L5namETdOcOREgs=";
+    hash = "sha256-WZ3CveJnGpwlfTp4XBTv6HiCbuLLHllS9uTiZ6fTnSU=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Intel Open Path Guiding Library";
     homepage = "https://github.com/OpenPathGuidingLibrary/openpgl";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.amarshall ];
     license = lib.licenses.asl20;
   };
