@@ -115,15 +115,17 @@ in
       virtualisation.useSecureBoot = true;
     };
 
-    testScript = ''
+    testScript = let
+      efiArch = pkgs.stdenv.hostPlatform.efiArch;
+    in { nodes, ... }: ''
       machine.start(allow_reboot=True)
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed("sbctl create-keys")
       machine.succeed("sbctl enroll-keys --yes-this-might-brick-my-machine")
-      machine.succeed('sbctl sign /boot/EFI/systemd/systemd-bootx64.efi')
-      machine.succeed('sbctl sign /boot/EFI/BOOT/BOOTX64.EFI')
-      machine.succeed('sbctl sign /boot/EFI/nixos/*bzImage.efi')
+      machine.succeed('sbctl sign /boot/EFI/systemd/systemd-boot${efiArch}.efi')
+      machine.succeed('sbctl sign /boot/EFI/BOOT/BOOT${toUpper efiArch}.EFI')
+      machine.succeed('sbctl sign /boot/EFI/nixos/*${nodes.machine.system.boot.loader.kernelFile}.efi')
 
       machine.reboot()
 
