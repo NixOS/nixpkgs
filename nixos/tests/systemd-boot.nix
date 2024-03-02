@@ -14,6 +14,72 @@ let
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
   };
+
+  commonXbootldr = { config, lib, pkgs, ... }:
+    let
+      diskImage = import ../lib/make-disk-image.nix {
+        inherit config lib pkgs;
+        label = "nixos";
+        format = "qcow2";
+        partitionTableType = "efixbootldr";
+        touchEFIVars = true;
+        installBootLoader = true;
+      };
+    in
+    {
+      imports = [ common ];
+      virtualisation.useBootLoader = lib.mkForce false; # Only way to tell qemu-vm not to create the default system image
+      virtualisation.directBoot.enable = false; # But don't direct boot either because we're testing systemd-boot
+
+      system.build.diskImage = diskImage; # Use custom disk image with an XBOOTLDR partition
+      virtualisation.efi.variables = "${diskImage}/efi-vars.fd";
+
+      virtualisation.useDefaultFilesystems = false; # Needs custom setup for `diskImage`
+      virtualisation.bootPartition = null;
+      virtualisation.fileSystems = {
+        "/" = {
+          device = "/dev/vda3";
+          fsType = "ext4";
+        };
+        "/boot" = {
+          device = "/dev/vda2";
+          fsType = "vfat";
+          noCheck = true;
+        };
+        "/efi" = {
+          device = "/dev/vda1";
+          fsType = "vfat";
+          noCheck = true;
+        };
+      };
+
+      boot.loader.systemd-boot.enable = true;
+      boot.loader.efi.efiSysMountPoint = "/efi";
+      boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
+    };
+
+  customDiskImage = nodes: ''
+    import os
+    import subprocess
+    import tempfile
+
+    tmp_disk_image = tempfile.NamedTemporaryFile()
+
+    subprocess.run([
+      "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
+      "create",
+      "-f",
+      "qcow2",
+      "-b",
+      "${nodes.machine.system.build.diskImage}/nixos.qcow2",
+      "-F",
+      "qcow2",
+      tmp_disk_image.name,
+    ])
+
+    # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
+    os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+  '';
 in
 {
   basic = makeTest {
@@ -26,6 +92,58 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+
+      # Ensure we actually booted using systemd-boot
+      # Magic number is the vendor UUID used by systemd-boot.
+      machine.succeed(
+          "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+      )
+
+      # "bootctl install" should have created an EFI entry
+      machine.succeed('efibootmgr | grep "Linux Boot Manager"')
+    '';
+  };
+
+  # Test that systemd-boot works with secure boot
+  secureBoot = makeTest {
+    name = "systemd-boot-secure-boot";
+
+    nodes.machine = {
+      imports = [ common ];
+      environment.systemPackages = [ pkgs.sbctl ];
+      virtualisation.useSecureBoot = true;
+    };
+
+    testScript = ''
+      machine.start(allow_reboot=True)
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("sbctl create-keys")
+      machine.succeed("sbctl enroll-keys --yes-this-might-brick-my-machine")
+      machine.succeed('sbctl sign /boot/EFI/systemd/systemd-bootx64.efi')
+      machine.succeed('sbctl sign /boot/EFI/BOOT/BOOTX64.EFI')
+      machine.succeed('sbctl sign /boot/EFI/nixos/*bzImage.efi')
+
+      machine.reboot()
+
+      assert "Secure Boot: enabled (user)" in machine.succeed("bootctl status")
+    '';
+  };
+
+  basicXbootldr = makeTest {
+    name = "systemd-boot-xbootldr";
+    meta.maintainers = with pkgs.lib.maintainers; [ sdht0 ];
+
+    nodes.machine = commonXbootldr;
+
+    testScript = { nodes, ... }: ''
+      ${customDiskImage nodes}
+
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("test -e /efi/EFI/systemd/systemd-bootx64.efi")
       machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
 
       # Ensure we actually booted using systemd-boot
@@ -155,6 +273,29 @@ in
       machine.fail("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/loader/entries/apple.conf")
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
+    '';
+  };
+
+  entryFilenameXbootldr = makeTest {
+    name = "systemd-boot-entry-filename-xbootldr";
+    meta.maintainers = with pkgs.lib.maintainers; [ sdht0 ];
+
+    nodes.machine = { pkgs, lib, ... }: {
+      imports = [ commonXbootldr ];
+      boot.loader.systemd-boot.memtest86.enable = true;
+      boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
+    };
+
+    testScript = { nodes, ... }: ''
+      ${customDiskImage nodes}
+
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("test -e /efi/EFI/systemd/systemd-bootx64.efi")
+      machine.fail("test -e /boot/loader/entries/memtest86.conf")
+      machine.succeed("test -e /boot/loader/entries/apple.conf")
+      machine.succeed("test -e /boot/EFI/memtest86/memtest.efi")
     '';
   };
 

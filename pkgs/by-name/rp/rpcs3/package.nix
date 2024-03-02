@@ -36,7 +36,7 @@ let
   rpcs3Revision = "ebf48800e6bf2569fa0a59974ab2daaeb3a92f23";
   rpcs3Hash = "sha256-HJQ+DCZy8lwMCfq0N9StKD8bP1hCBxGMAucbQ9esy/I=";
 
-  inherit (qt6Packages) qtbase qtmultimedia wrapQtAppsHook;
+  inherit (qt6Packages) qtbase qtmultimedia wrapQtAppsHook qtwayland;
 in
 stdenv.mkDerivation {
   pname = "rpcs3";
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
   ] ++ cubeb.passthru.backendLibs
     ++ lib.optionals faudioSupport [ faudio SDL2 ]
-    ++ lib.optional waylandSupport wayland;
+    ++ lib.optionals waylandSupport [ wayland qtwayland ];
 
   postInstall = ''
     # Taken from https://wiki.rpcs3.net/index.php?title=Help:Controller_Configuration

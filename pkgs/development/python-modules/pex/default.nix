@@ -1,24 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
+, hatchling
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.159";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hBlwfyQ1PbD6AyCsra2yZwt0x8+iGtDisU9coTSJRZI=";
+    hash = "sha256-I63eX9BDn9RGitEFZiulsjEYVAsmYyvSNi3+2tIrGv8=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   # A few more dependencies I don't want to handle right now...

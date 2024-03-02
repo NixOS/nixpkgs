@@ -23,11 +23,12 @@
 , ptex
 , embree
 , alembic
-, openexr
+, imath
 , flex
 , bison
 , qt6
 , python
+, darwin
 }:
 let
   # Matches the pyside6-uic implementation
@@ -45,6 +46,11 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-5zQrfB14kXs75WbL3s4eyhxELglhLNxU2L2aVXiyVjg=";
   };
+
+  stdenv = if python.stdenv.isDarwin then
+    darwin.apple_sdk_11_0.stdenv
+  else
+    python.stdenv;
 
   outputs = ["out" "doc"];
 
@@ -72,9 +78,9 @@ buildPythonPackage rec {
     "-DPXR_BUILD_PYTHON_DOCUMENTATION=ON"
     "-DPXR_BUILD_EMBREE_PLUGIN=ON"
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
-    "-DPXR_ENABLE_OSL_SUPPORT=ON"
     "-DPXR_BUILD_DRACO_PLUGIN=ON"
     "-DPXR_BUILD_MONOLITHIC=ON" # Seems to be commonly linked to monolithically
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.isDarwin))
   ];
 
   nativeBuildInputs = [
@@ -94,14 +100,18 @@ buildPythonPackage rec {
     ptex
     embree
     alembic.dev
-    openexr
+    imath
     flex
     bison
     boost
     draco
     qt6.qtbase
-    qt6.qtwayland
-  ];
+  ]
+    ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+      Cocoa
+    ])
+  ;
 
   pythonImportsCheck = [ "pxr" "pxr.Usd" ];
 

@@ -3,15 +3,16 @@
 , buildPythonPackage
 , fetchFromGitHub
 , orjson
-, unittestCheckHook
 , pythonOlder
 , redis
+, setuptools
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "5.3.2";
-  format = "setuptools";
+  version = "5.3.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,8 +20,12 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = "karton";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/MPD83sBo9n/dI1uXbHbjvz6upJSJrssMGmGwfQ+KE8=";
+    hash = "sha256-RVHhMKoQAqsddziK/vWGynSL9mxMuccNEGzoJTx8KAA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     boto3

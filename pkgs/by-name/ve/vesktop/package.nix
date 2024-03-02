@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , stdenvNoCC
-, gcc13Stdenv
 , fetchFromGitHub
 , substituteAll
 , makeWrapper
@@ -19,6 +18,9 @@
 , nodePackages
 , speechd
 , withTTS ? true
+  # Enables the use of vencord from nixpkgs instead of
+  # letting vesktop manage it's own version
+, withSystemVencord ? true
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
@@ -86,9 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll { inherit vencord; src = ./use_system_vencord.patch; })
     ./disable_update_checking.patch
-  ];
+  ] ++ lib.optional withSystemVencord (substituteAll { inherit vencord; src = ./use_system_vencord.patch; });
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -121,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
         libpulseaudio
         libnotify
         pipewire
-        gcc13Stdenv.cc.cc.lib
+        stdenv.cc.cc.lib
       ] ++ lib.optional withTTS speechd);
     in
     ''

@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "6.22.2";
+  version = "24.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L0Cf6Y762mHan4q3zfNKW2feQ+EzjO4GGfXVH0+LFd0=";
+    hash = "sha256-a8XWJz8zcR7G03Df5f2+l6ZLTDbCp6GaJJQBMm6wNhY=";
   };
 
   postPatch = ''

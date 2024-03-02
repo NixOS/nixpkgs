@@ -135,7 +135,6 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        PrivateNetwork = true;
         ExecStart = escapeShellArgs
           ([ "${pkgs.acpid}/bin/acpid"
              "--foreground"

@@ -20,5 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line OTP authenticator application";
     license = licenses.mit;
     maintainers = with maintainers; [ mvs ];
+    mainProgram = "cloak";
   };
 }

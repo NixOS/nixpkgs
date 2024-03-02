@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "pure-maps";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "pure-maps";
     rev = version;
-    hash = "sha256-07Jk5ufYbBAa/UY1B0IoyuOAVt15rGCxCRXu3OeYyWU=";
+    hash = "sha256-AZt0JcNegHkUkWy+NW5CNLZfxjjFyKWBrhLJgSTv3to=";
     fetchSubmodules = true;
   };
 

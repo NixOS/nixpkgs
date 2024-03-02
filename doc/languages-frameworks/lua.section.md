@@ -215,6 +215,11 @@ install the package
   environment variable and add dependent libraries to script's `LUA_PATH` and
   `LUA_CPATH`.
 
+It accepts as arguments:
+
+* 'luarocksConfig': a nix value that directly maps to the luarocks config used during
+  the installation
+
 By default `meta.platforms` is set to the same value as the interpreter unless overridden otherwise.
 
 #### `buildLuaApplication` function {#buildluaapplication-function}

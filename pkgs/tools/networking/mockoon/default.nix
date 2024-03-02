@@ -36,5 +36,6 @@ appimageTools.wrapType2 {
     homepage = "https://mockoon.com";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "mockoon";
   };
 }

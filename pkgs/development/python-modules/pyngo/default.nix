@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "yezz123";
     repo = "pyngo";
     rev = "refs/tags/${version}";
-    hash = "sha256-jHPZjS/J1VLpsLN2wg5UJCgavoSEs4Uogo4GI6bZMuY=";
+    hash = "sha256-wvy1L21AnQ4JP5seAh6DWksQU2OcbYTXKcixpFryH4w=";
   };
 
   nativeBuildInputs = [

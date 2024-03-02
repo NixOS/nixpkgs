@@ -1,11 +1,13 @@
-import ../make-test-python.nix ({ pkgs, lib, ... } :
+import ../make-test-python.nix ({ pkgs, lib, extra ? {}, ... } :
 
 let
   releases = import ../../release.nix {
     configuration = {
       # Building documentation makes the test unnecessarily take a longer time:
       documentation.enable = lib.mkForce false;
-    };
+
+      boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+    } // extra;
   };
 
   container-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
@@ -31,7 +33,7 @@ in
 
   testScript = ''
     def instance_is_up(_) -> bool:
-        status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+        status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
         return status == 0
 
     def set_container(config):
@@ -39,6 +41,12 @@ in
         machine.succeed("incus restart container")
         with machine.nested("Waiting for instance to start and be usable"):
           retry(instance_is_up)
+
+    def check_sysctl(instance):
+        with subtest("systemd sysctl settings are applied"):
+            machine.succeed(f"incus exec {instance} -- systemctl status systemd-sysctl")
+            sysctl = machine.succeed(f"incus exec {instance} -- sysctl net.ipv4.ip_forward").strip().split(" ")[-1]
+            assert "1" == sysctl, f"systemd-sysctl configuration not correctly applied, {sysctl} != 1"
 
     machine.wait_for_unit("incus.service")
 
@@ -81,12 +89,9 @@ in
         assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '125000 kB', got: '{meminfo_bytes}'"
 
     with subtest("lxc-container generator configures plain container"):
-        machine.execute("incus delete --force container")
-        machine.succeed("incus launch nixos container")
-        with machine.nested("Waiting for instance to start and be usable"):
-          retry(instance_is_up)
-
+        # reuse the existing container to save some time
         machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+        check_sysctl("container")
 
     with subtest("lxc-container generator configures nested container"):
         machine.execute("incus delete --force container")
@@ -98,14 +103,16 @@ in
         target = machine.succeed("incus exec container readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
         assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
 
+        check_sysctl("container")
+
     with subtest("lxc-container generator configures privileged container"):
         machine.execute("incus delete --force container")
         machine.succeed("incus launch nixos container --config security.privileged=true")
         with machine.nested("Waiting for instance to start and be usable"):
           retry(instance_is_up)
-        # give generator an extra second to run
-        machine.sleep(1)
 
         machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+
+        check_sysctl("container")
   '';
 })

@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ivar ];
     platforms = platforms.linux;
+    mainProgram = "SimpleNES";
   };
 }

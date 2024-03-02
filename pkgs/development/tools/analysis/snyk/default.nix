@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "snyk";
-  version = "1.1269.0";
+  version = "1.1281.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-jFaWkit96mIBCIYVOYoa5qNOP+fzmzwoi5bFgpi8JHM=";
+    hash = "sha256-QxmYArH9HRq2vkGzfhWlCPLS++UiwdzAStUQxhGF85Q=";
   };
 
-  npmDepsHash = "sha256-GCWpNFDfvpZrMLy8S7q1V0bzngL0fe0gZeMx+MbHOKU=";
+  npmDepsHash = "sha256-JxX4r1I/F3PEzg9rLfFNEIa4Q8jwuUWC6krH1oSoc8s=";
 
   postPatch = ''
     substituteInPlace package.json --replace '"version": "1.0.0-monorepo"' '"version": "${version}"'

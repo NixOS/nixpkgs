@@ -62,6 +62,9 @@ buildPythonPackage rec {
     "test_zero_inflated_logits_probs_agree"
     # NameError: unbound axis name: _provenance
     "test_model_transformation"
+    # Using deprecated (removed in jax==0.4.24) jax.core.safe_map
+    # https://github.com/pyro-ppl/numpyro/issues/1733
+    "test_beta_bernoulli"
   ];
 
   # TODO: remove when tensorflow-probability gets fixed.

@@ -5,6 +5,7 @@
 , fetchpatch
 , gdbm
 , glib
+, gst_all_1
 , gsettings-desktop-schemas
 , gtk-vnc
 , gtk3
@@ -64,6 +65,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     bash-completion
     glib
     gsettings-desktop-schemas

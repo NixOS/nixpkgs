@@ -99,7 +99,11 @@ in
       ${cfg.extraConfig}
     '';
 
-    systemd.tmpfiles.rules = [ "d /var/cache/postfixadmin/templates_c 700 ${user} ${user}" ];
+    systemd.tmpfiles.settings."10-postfixadmin"."/var/cache/postfixadmin/templates_c".d = {
+      inherit user;
+      group = user;
+      mode = "700";
+    };
 
     services.nginx = {
       enable = true;

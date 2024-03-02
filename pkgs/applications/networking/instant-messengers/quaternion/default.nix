@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.96-beta4";
+  version = "0.0.96.1";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "Quaternion";
     rev = "refs/tags/${version}";
-    hash = "sha256-yItl31Ze48lRIIey+FlRLMVAkg4mHu8G1sFOceHvTJw=";
+    hash = "sha256-lRCSEb/ldVnEv6z0moU4P5rf0ssKb9Bw+4QEssLjuwI=";
   };
 
   buildInputs = [

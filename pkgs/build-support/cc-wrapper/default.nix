@@ -223,6 +223,15 @@ let
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [];
 
+  # if cc.hardeningUnsupportedFlagsByTargetPlatform exists, this is
+  # called with the targetPlatform as an argument and
+  # cc.hardeningUnsupportedFlags is completely ignored - the function
+  # is responsible for including the constant hardeningUnsupportedFlags
+  # list however it sees fit.
+  ccHardeningUnsupportedFlags = if cc ? hardeningUnsupportedFlagsByTargetPlatform
+    then cc.hardeningUnsupportedFlagsByTargetPlatform targetPlatform
+    else (cc.hardeningUnsupportedFlags or []);
+
   darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
@@ -368,7 +377,7 @@ stdenv.mkDerivation {
 
       # this symlink points to the unwrapped gnat's output "out". It is used by
       # our custom gprconfig compiler description to find GNAT's ada runtime. See
-      # ../../development/tools/build-managers/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+      # ../../development/ada-modules/gprbuild/{boot.nix, nixpkgs-gnat.xml}
       ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
     ''
 
@@ -525,10 +534,10 @@ stdenv.mkDerivation {
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
-      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
+      for dir in ${gccForLibs}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
-      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*/${targetPlatform.config}; do
+      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
@@ -584,7 +593,7 @@ stdenv.mkDerivation {
     ## Hardening support
     ##
     + ''
-      export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
+      export hardening_unsupported_flags="${builtins.concatStringsSep " " ccHardeningUnsupportedFlags}"
     ''
 
     # Machine flags. These are necessary to support

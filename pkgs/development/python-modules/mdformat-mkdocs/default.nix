@@ -27,7 +27,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
     mdformat-gfm
     mdit-py-plugins
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "mdformat plugin for MkDocs";
+    description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
     changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/v${version}";
     license = licenses.mit;

@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   version = "2.50.0";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

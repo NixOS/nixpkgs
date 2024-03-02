@@ -7,7 +7,7 @@ let
 
   efi = config.boot.loader.efi;
 
-  systemdBootBuilder = pkgs.substituteAll {
+  systemdBootBuilder = pkgs.substituteAll rec {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
@@ -22,13 +22,17 @@ let
 
     timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
-    editor = if cfg.editor then "True" else "False";
-
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful;
+    inherit (cfg) consoleMode graceful editor;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
+
+    bootMountPoint = if cfg.xbootldrMountPoint != null
+      then cfg.xbootldrMountPoint
+      else efi.efiSysMountPoint;
+
+    nixosDir = "/EFI/nixos";
 
     inherit (config.system.nixos) distroName;
 
@@ -36,35 +40,45 @@ let
 
     netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
+    checkMountpoints = pkgs.writeShellScript "check-mountpoints" ''
+      fail() {
+        echo "$1 = '$2' is not a mounted partition. Is the path configured correctly?" >&2
+        exit 1
+      }
+      ${pkgs.util-linuxMinimal}/bin/findmnt ${efiSysMountPoint} > /dev/null || fail efiSysMountPoint ${efiSysMountPoint}
+      ${lib.optionalString
+        (cfg.xbootldrMountPoint != null)
+        "${pkgs.util-linuxMinimal}/bin/findmnt ${cfg.xbootldrMountPoint} > /dev/null || fail xbootldrMountPoint ${cfg.xbootldrMountPoint}"}
+    '';
+
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
       empty_file=$(${pkgs.coreutils}/bin/mktemp)
 
       ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -Dp "${v}" "${bootMountPoint}/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/"${escapeShellArg n}
       '') cfg.extraFiles)}
 
       ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${efi.efiSysMountPoint}/loader/entries/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/loader/entries/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${bootMountPoint}/loader/entries/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${bootMountPoint}/${nixosDir}/.extra-files/loader/entries/"${escapeShellArg n}
       '') cfg.extraEntries)}
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
-  } ''
-    install -m755 ${systemdBootBuilder} $out
-    mypy \
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" { } ''
+    mkdir -p $out/bin
+    install -m755 ${systemdBootBuilder} $out/bin/systemd-boot-builder
+    ${lib.getExe pkgs.buildPackages.mypy} \
       --no-implicit-optional \
       --disallow-untyped-calls \
       --disallow-untyped-defs \
-      $out
+      $out/bin/systemd-boot-builder
   '';
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder} "$@"
+    ${checkedSystemdBootBuilder}/bin/systemd-boot-builder "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
@@ -102,6 +116,18 @@ in {
       '';
     };
 
+    xbootldrMountPoint = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = lib.mdDoc ''
+        Where the XBOOTLDR partition is mounted.
+
+        If set, this partition will be used as $BOOT to store boot loader entries and extra files
+        instead of the EFI partition. As per the bootloader specification, it is recommended that
+        the EFI and XBOOTLDR partitions be mounted at `/efi` and `/boot`, respectively.
+      '';
+    };
+
     configurationLimit = mkOption {
       default = null;
       example = 120;
@@ -111,7 +137,7 @@ in {
         Useful to prevent boot partition running out of disk space.
 
         `null` means no limit i.e. all generations
-        that were not garbage collected yet.
+        that have not been garbage collected yet.
       '';
     };
 
@@ -203,7 +229,7 @@ in {
       '';
       description = lib.mdDoc ''
         Any additional entries you want added to the `systemd-boot` menu.
-        These entries will be copied to {file}`/boot/loader/entries`.
+        These entries will be copied to {file}`$BOOT/loader/entries`.
         Each attribute name denotes the destination file name,
         and the corresponding attribute value is the contents of the entry.
 
@@ -220,9 +246,9 @@ in {
         { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
       '';
       description = lib.mdDoc ''
-        A set of files to be copied to {file}`/boot`.
+        A set of files to be copied to {file}`$BOOT`.
         Each attribute name denotes the destination file name in
-        {file}`/boot`, while the corresponding
+        {file}`$BOOT`, while the corresponding
         attribute value specifies the source file.
       '';
     };
@@ -246,6 +272,18 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
+      {
+        assertion = (hasPrefix "/" efi.efiSysMountPoint);
+        message = "The ESP mount point '${efi.efiSysMountPoint}' must be an absolute path";
+      }
+      {
+        assertion = cfg.xbootldrMountPoint == null || (hasPrefix "/" cfg.xbootldrMountPoint);
+        message = "The XBOOTLDR mount point '${cfg.xbootldrMountPoint}' must be an absolute path";
+      }
+      {
+        assertion = cfg.xbootldrMountPoint != efi.efiSysMountPoint;
+        message = "The XBOOTLDR mount point '${cfg.xbootldrMountPoint}' cannot be the same as the ESP mount point '${efi.efiSysMountPoint}'";
+      }
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
         message = "This kernel does not support the EFI boot stub";

@@ -132,5 +132,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         deployer.succeed("passh -c 3 -C -p ${nodes.target.users.users.bob.password} -P \"\[sudo\] password\" nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --use-remote-sudo &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-3-deployed", f"{target_hostname=}"
+
+      with subtest("Deploy works with very long TMPDIR"):
+        tmp_dir = "/var/folder/veryveryveryveryverylongpathnamethatdoesnotworkwithcontrolpath"
+        deployer.succeed(f"mkdir -p {tmp_dir}")
+        deployer.succeed(f"TMPDIR={tmp_dir} nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
     '';
 })

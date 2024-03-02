@@ -1,18 +1,21 @@
 { lib
+, attr
 , buildPythonPackage
 , fetchFromGitHub
 , freezegun
+, orjson
 , poetry-core
 , pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.80";
+  version = "0.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,21 +24,28 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFXwM/YiQJzJ1Nf76kuq3WtFhU6dUIHzK4K33+VO/lQ=";
+    hash = "sha256-9My/0DPN6AwAFoAiTdl6jd2GtX4fpFIgpnZe/WzAi9c=";
   };
 
   sourceRoot = "${src.name}/python";
 
+  pythonRelaxDeps = [
+    "orjson"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    orjson
     pydantic
     requests
   ];
 
   nativeCheckInputs = [
+    attr
     freezegun
     pytest-asyncio
     pytestCheckHook
@@ -51,11 +61,17 @@ buildPythonPackage rec {
     "test_as_runnable_async_batch"
     # requires git repo
     "test_git_info"
+    # Tests require OpenAI API key
+    "test_chat_async_api"
+    "test_chat_sync_api"
+    "test_completions_async_api"
+    "test_completions_sync_api"
   ];
 
   disabledTestPaths = [
     # due to circular import
     "tests/integration_tests/test_client.py"
+    "tests/unit_tests/test_client.py"
   ];
 
   pythonImportsCheck = [

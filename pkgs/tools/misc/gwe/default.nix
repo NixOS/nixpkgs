@@ -32,13 +32,13 @@ let
  ]);
 in stdenv.mkDerivation rec {
   pname = "gwe";
-  version = "0.15.6";
+  version = "0.15.7";
 
   src = fetchFromGitLab {
     owner = "leinardi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xlAz67sThXZ5o2kABb+aQI/7N7jmRpWU/5m24u8TkII=";
+    sha256 = "sha256-0/VQD3WuSMShsPjydOxVEufBZqVOCTFO3UbJpsy+oLE=";
   };
 
   prePatch = ''

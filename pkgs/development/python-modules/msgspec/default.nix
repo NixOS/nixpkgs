@@ -4,21 +4,26 @@
 , msgpack
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.18.5";
-  format = "setuptools";
+  version = "0.18.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jcrist";
-    repo = pname;
+    repo = "msgspec";
     rev = "refs/tags/${version}";
-    hash = "sha256-BcENL1vPCspzYdAHicC5AHs/7xZPWf+Yys37vKgbris=";
+    hash = "sha256-xqtV60saQNINPMpOnZRSDnicedPSPBUQwPSE5zJGrTo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Requires libasan to be accessible
   doCheck = false;

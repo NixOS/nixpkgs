@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-backgrounds";
-  version = "2.0";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-backgrounds";
     rev = "v${version}";
-    hash = "sha256-L6y9YVS0NFsycS90AmUJJd9HFMJ/Ge99pI426tC05jA=";
+    hash = "sha256-2E6+WDLIAwqiiPMJw+tLDCT3CnpboH4X0cB87zw/hBQ=";
   };
 
   nativeBuildInputs = [

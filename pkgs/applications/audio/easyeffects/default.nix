@@ -2,6 +2,7 @@
 , stdenv
 , appstream-glib
 , desktop-file-utils
+, deepfilternet
 , fetchFromGitHub
 , calf
 , fftw
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream-glib
+    deepfilternet
     fftw
     fftwFloat
     fmt_9
@@ -95,6 +97,7 @@ stdenv.mkDerivation rec {
         zam-plugins # maximizer
       ];
       ladspaPlugins = [
+        deepfilternet # deep noise remover
         rubberband # pitch shifting
       ];
     in

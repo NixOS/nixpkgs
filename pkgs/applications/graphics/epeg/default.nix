@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mattes/epeg#license";
     };
     maintainers = with maintainers; [ nh2 ];
+    mainProgram = "epeg";
   };
 }

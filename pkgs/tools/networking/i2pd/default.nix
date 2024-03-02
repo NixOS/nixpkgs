@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
+    mainProgram = "i2pd";
   };
 }

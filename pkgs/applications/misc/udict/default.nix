@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lsmb/udict";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "udict";
   };
 }

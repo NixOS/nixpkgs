@@ -17,9 +17,8 @@
 , dvc-studio-client
 , dvc-task
 , fetchFromGitHub
-, fetchpatch
 , flatten-dict
-, flufl_lock
+, flufl-lock
 , funcy
 , grandalf
 , gto
@@ -58,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.40.1";
+  version = "3.43.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -67,7 +66,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     rev = "refs/tags/${version}";
-    hash = "sha256-ik2WVq7cXhOc9kwBep38HELgvj0CGLtpx5EzzdJzAsc=";
+    hash = "sha256-9JS8N4BWikmXoo5TtpUD5El2vHST80NEOBdxkHfK4ME=";
   };
 
   pythonRelaxDeps = [
@@ -99,7 +98,7 @@ buildPythonPackage rec {
     dvc-studio-client
     dvc-task
     flatten-dict
-    flufl_lock
+    flufl-lock
     funcy
     grandalf
     gto

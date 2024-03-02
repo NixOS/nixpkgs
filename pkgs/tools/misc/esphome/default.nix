@@ -6,6 +6,8 @@
 , platformio
 , esptool
 , git
+, inetutils
+, stdenv
 }:
 
 let
@@ -17,26 +19,26 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.12.5";
+  version = "2024.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ajpYwquVyznIngZKcWxI9Pyiqf4VYcWtGFRZSpi6+3I=";
+    hash = "sha256-MAyK8Wx/d7lJKEueeL7GhxxKu8EygwjylPGXB2Y3bWM=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
     argcomplete
     installShellFiles
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    # remove all version pinning (E.g tornado==5.1.1 -> tornado)
-    sed -i -e "s/==[0-9.]*//" requirements.txt
+  pythonRelaxDeps = true;
 
+  postPatch = ''
     # drop coverage testing
     sed -i '/--cov/d' pytest.ini
   '';
@@ -57,7 +59,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
+    icmplib
     kconfiglib
+    packaging
     paho-mqtt
     pillow
     platformio
@@ -74,13 +78,18 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    # platformio is used in esphomeyaml/platformio_api.py
-    # esptool is used in esphomeyaml/__main__.py
-    # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
-    "--prefix PYTHONPATH : $PYTHONPATH" # will show better error messages
+    # platformio is used in esphome/platformio_api.py
+    # esptool is used in esphome/__main__.py
+    # git is used in esphome/writer.py
+    # inetutils is used in esphome/dashboard/status/ping.py
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
+    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath propagatedBuildInputs}" # will show better error messages
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
+
+  # Needed for tests
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3Packages; [
     hypothesis

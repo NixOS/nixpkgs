@@ -97,7 +97,6 @@
 , errcheck
 , go-motion
 , go-tools
-, gocode
 , gocode-gomod
 , godef
 , gogetdoc
@@ -110,6 +109,7 @@
 , iferr
 , impl
 , reftools
+, revive
 , # hurl dependencies
   hurl
 , # must be lua51Packages
@@ -549,6 +549,12 @@
       '';
   });
 
+  elixir-tools-nvim = super.elixir-tools-nvim.overrideAttrs {
+    fixupPhase = ''
+      patchShebangs $(find $out/bin/ -type f -not -name credo-language-server)
+    '';
+  };
+
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim ];
   };
@@ -668,6 +674,14 @@
 
   harpoon2 = super.harpoon2.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
+  };
+
+  haskell-snippets-nvim = super.haskell-snippets-nvim.overrideAttrs {
+    dependencies = [ self.luasnip ];
+  };
+
+  haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter ];
   };
 
   hex-nvim = super.hex-nvim.overrideAttrs {
@@ -941,6 +955,10 @@
     dependencies = with self; [ nui-nvim ];
   };
 
+  none-ls-nvim = super.none-ls-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
@@ -980,7 +998,7 @@
         inherit (old) version src;
         sourceRoot = "source/spectre_oxi";
 
-        cargoHash = "sha256-y2ZIgOApIShkIesXmItPKDO6XjFrG4GS5HCPncJUmN8=";
+        cargoHash = "sha256-gCGuD5kipgfR0Le8npNmyBxNsUq0PavXvKkxkiPx13E=";
 
 
         preCheck = ''
@@ -1116,7 +1134,7 @@
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-BDNFZ/7nnfvtBA7T6a7MDNJsq/cOI9tgW0kxUoIcbV8=";
+        cargoHash = "sha256-nlPSsp/HbS1DxhOHh5+7x1re46oiQa9FQMLClc7TQLg=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1530,13 +1548,11 @@
   vim-go =
     let
       binPath = lib.makeBinPath [
-        # TODO: package commented packages
         asmfmt
         delve
         errcheck
         go-motion
-        go-tools # contains staticcheck
-        gocode
+        go-tools # contains staticcheck, keyify
         gocode-gomod
         godef
         gogetdoc
@@ -1544,15 +1560,12 @@
         golangci-lint
         gomodifytags
         gopls
-        # gorename
         gotags
-        gotools
-        # guru
+        gotools # contains guru, gorename
         iferr
         impl
-        # keyify
         reftools
-        # revive
+        revive
       ];
     in
     super.vim-go.overrideAttrs {
@@ -1656,6 +1669,14 @@
 
   vim-surround = super.vim-surround.overrideAttrs {
     dependencies = with self; [ vim-repeat ];
+  };
+
+  vim-tabby = super.vim-tabby.overrideAttrs {
+    postPatch = ''
+      substituteInPlace autoload/tabby/globals.vim --replace-fail \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', 'node')" \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', '${nodejs}/bin/node')"
+    '';
   };
 
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {

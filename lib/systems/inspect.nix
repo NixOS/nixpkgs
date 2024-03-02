@@ -48,6 +48,7 @@ rec {
     isRiscV64      = { cpu = { family = "riscv"; bits = 64; }; };
     isRx           = { cpu = { family = "rx"; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
+    isSparc64      = { cpu = { family = "sparc"; bits = 64; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isMsp430       = { cpu = { family = "msp430"; }; };
     isVc4          = { cpu = { family = "vc4"; }; };

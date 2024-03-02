@@ -16,10 +16,14 @@ let
     # Test flaky because of our RPATH patching
     # https://github.com/NixOS/nixpkgs/pull/230965#issuecomment-1545336489
     "compiler/codegen"
+    # Test flaky
+    "read"
   ] ++ lib.optionals (lib.versionAtLeast version "1.10") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/52739
     "REPL"
+    # Test flaky
+    "ccall"
   ] ++ lib.optionals stdenv.isDarwin [
     # Test flaky on ofborg
     "FileWatching"

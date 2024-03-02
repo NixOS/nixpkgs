@@ -290,6 +290,7 @@ let
       IPW2200_MONITOR             = option yes; # support promiscuous mode
       HOSTAP_FIRMWARE             = option yes; # Support downloading firmware images with Host AP driver
       HOSTAP_FIRMWARE_NVRAM       = option yes;
+      MAC80211_MESH               = option yes; # Enable 802.11s (mesh networking) support
       ATH9K_PCI                   = option yes; # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB                   = option yes; # Ditto, AHB bus
       # The description of this option makes it sound dangerous or even illegal
@@ -345,7 +346,7 @@ let
     };
 
     video = {
-      DRM_LEGACY = no;
+      DRM_LEGACY = whenOlder "6.8" no;
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
@@ -379,6 +380,16 @@ let
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
+    };
+
+    # Enables Rust support in the Linux kernel. This is currently not enabled by default, because it occasionally requires
+    # patching the Linux kernel for the specific Rust toolchain in nixpkgs. These patches usually take a bit
+    # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
+    #
+    # Once Rust in the kernel has more users, we can reconsider enabling it by default.
+    rust = optionalAttrs ((features.rust or false) && versionAtLeast version "6.7") {
+      RUST = yes;
+      GCC_PLUGINS = no;
     };
 
     sound = {
@@ -835,6 +846,7 @@ let
       AIC94XX_DEBUG = no;
 
       BLK_DEV_INTEGRITY       = yes;
+      BLK_DEV_ZONED           = yes;
 
       BLK_SED_OPAL = yes;
 
@@ -1013,6 +1025,9 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+
+      # Enable LEDS to display link-state status of PHY devices (i.e. eth lan/wan interfaces)
+      LED_TRIGGER_PHY = whenAtLeast "4.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = yes;

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2023.12.0";
+  version = "2024.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pvizeli";
     repo = "securetar";
     rev = "refs/tags/${version}";
-    hash = "sha256-P8aq1RRlEmXhJ4n0TSLVjYx4dvkckuz2aDGkAvp7bfo=";
+    hash = "sha256-rYRbrpXo2oVW8SpddNsKb0FBdscovNUaGXLHy7WBiVU=";
   };
 
   nativeBuildInputs = [

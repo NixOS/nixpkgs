@@ -29,13 +29,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.18.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  version = "8.20.0";
+  pyproject = true;
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ym8Hm7M0V8ZuIz5FgOv8QSiFW0z2Nw3d1zhCqVY+iic=";
+    hash = "sha256-LyG9P8HVFVDInuOUSuBLvHvHnhKeoJN9pubGi/2/EXo=";
   };
 
   nativeBuildInputs = [

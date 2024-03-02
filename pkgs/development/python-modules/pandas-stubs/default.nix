@@ -1,8 +1,11 @@
 { lib
 , stdenv
+, beautifulsoup4
 , buildPythonPackage
 , fetchFromGitHub
+, html5lib
 , jinja2
+, lxml
 , matplotlib
 , odfpy
 , openpyxl
@@ -24,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.0.3.230814";
-  format = "pyproject";
+  version = "2.1.4.231227";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
-    repo = pname;
+    repo = "pandas-stubs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V/igL+vPJADOL7LwBJljqs2a1BB3vDVYTWXIkK/ImYY=";
+    hash = "sha256-AkgMesDesKkVkwxNnGYG71IuIgF3G+BecpfWNWVucC8=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +49,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    beautifulsoup4
+    html5lib
     jinja2
+    lxml
     matplotlib
     odfpy
     openpyxl

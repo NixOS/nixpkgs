@@ -2,7 +2,7 @@
 
 In addition to exposing the Idris2 compiler itself, Nixpkgs exposes an `idris2Packages.buildIdris` helper to make it a bit more ergonomic to build Idris2 executables or libraries.
 
-The `buildIdris` function takes a package set that defines at a minimum the `src` and `projectName` of the package to be built and any `idrisLibraries` required to build it. The `src` is the same source you're familiar with but the `projectName` must be the name of the `ipkg` file for the project (omitting the `.ipkg` extension). The `idrisLibraries` is a list of other library derivations created with `buildIdris`. You can optionally specify other derivation properties as needed but sensible defaults for `configurePhase`, `buildPhase`, and `installPhase` are provided.
+The `buildIdris` function takes an attribute set that defines at a minimum the `src` and `ipkgName` of the package to be built and any `idrisLibraries` required to build it. The `src` is the same source you're familiar with and the `ipkgName` must be the name of the `ipkg` file for the project (omitting the `.ipkg` extension). The `idrisLibraries` is a list of other library derivations created with `buildIdris`. You can optionally specify other derivation properties as needed but sensible defaults for `configurePhase`, `buildPhase`, and `installPhase` are provided.
 
 Importantly, `buildIdris` does not create a single derivation but rather an attribute set with two properties: `executable` and `library`. The `executable` property is a derivation and the `library` property is a function that will return a derivation for the library with or without source code included. Source code need not be included unless you are aiming to use IDE or LSP features that are able to jump to definitions within an editor.
 
@@ -10,7 +10,7 @@ A simple example of a fully packaged library would be the [`LSP-lib`](https://gi
 ```nix
 { fetchFromGitHub, idris2Packages }:
 let lspLibPkg = idris2Packages.buildIdris {
-  projectName = "lsp-lib";
+  ipkgName = "lsp-lib";
   src = fetchFromGitHub {
    owner = "idris-community";
    repo = "LSP-lib";
@@ -31,7 +31,7 @@ A slightly more involved example of a fully packaged executable would be the [`i
 # Assuming the previous example lives in `lsp-lib.nix`:
 let lspLib = callPackage ./lsp-lib.nix { };
     lspPkg = idris2Packages.buildIdris {
-      projectName = "idris2-lsp";
+      ipkgName = "idris2-lsp";
       src = fetchFromGitHub {
          owner = "idris-community";
          repo = "idris2-lsp";

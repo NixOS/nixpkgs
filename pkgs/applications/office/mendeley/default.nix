@@ -39,6 +39,7 @@ in appimageTools.wrapType2 {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers  = with maintainers; [ dtzWill atila ];
+    mainProgram = "mendeley-reference-manager";
   };
 
 }

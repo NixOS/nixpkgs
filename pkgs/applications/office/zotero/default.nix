@@ -153,5 +153,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ i077 ];
+    mainProgram = "zotero";
   };
 }

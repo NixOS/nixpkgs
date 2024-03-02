@@ -32,6 +32,7 @@
 , split
 , seed
 , definitionsDirectory
+, sectorSize
 }:
 
 let
@@ -94,6 +95,7 @@ runCommand imageFileBasename
     --definitions="$amendedRepartDefinitions" \
     --split="${lib.boolToString split}" \
     --json=pretty \
+    ${lib.optionalString (sectorSize != null) "--sector-size=${toString sectorSize}"} \
     ${imageFileBasename}.raw \
     | tee repart-output.json
 

@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.32.4";
+  version = "1.34.0";
 
   outputs = [ "out" "dev" ]
     ++ lib.optional withIntrospection "devdoc";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "mobile-broadband";
     repo = "libqmi";
     rev = version;
-    hash = "sha256-cczGvoD+2+G6uiAt0Iv1BO4/FqzO9bkqhFsEwOfp7qw=";
+    hash = "sha256-l9ev9ZOWicVNZ/Wj//KNd3NHcefIrLVriqJhEpwWvtQ=";
   };
 
   nativeBuildInputs = [

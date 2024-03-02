@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/ntnj/tunwg";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "tunwg";
   };
 }

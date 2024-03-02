@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with maintainers; [ h7x4 ];
+    mainProgram = "sxiv";
   };
 }

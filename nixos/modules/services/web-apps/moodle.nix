@@ -255,9 +255,10 @@ in
       } ];
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0750 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-moodle".${stateDir}.d = {
+      inherit user group;
+      mode = "0750";
+    };
 
     systemd.services.moodle-init = {
       wantedBy = [ "multi-user.target" ];

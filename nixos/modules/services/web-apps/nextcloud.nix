@@ -183,8 +183,8 @@ let
     ];
 
     $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
-      "${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}",
-      "impossible: this should never happen (decoding generated extraOptions file %s failed)"
+      "${jsonFormat.generate "nextcloud-settings.json" cfg.settings}",
+      "impossible: this should never happen (decoding generated settings file %s failed)"
     ));
 
     ${optionalString (cfg.secretFile != null) ''
@@ -205,21 +205,22 @@ in {
       Add port to services.nextcloud.config.dbhost instead.
     '')
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "logLevel" ] [ "services" "nextcloud" "extraOptions" "loglevel" ])
+      [ "services" "nextcloud" "logLevel" ] [ "services" "nextcloud" "settings" "loglevel" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "logType" ] [ "services" "nextcloud" "extraOptions" "log_type" ])
+      [ "services" "nextcloud" "logType" ] [ "services" "nextcloud" "settings" "log_type" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "defaultPhoneRegion" ] [ "services" "nextcloud" "extraOptions" "default_phone_region" ])
+      [ "services" "nextcloud" "config" "defaultPhoneRegion" ] [ "services" "nextcloud" "settings" "default_phone_region" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "overwriteProtocol" ] [ "services" "nextcloud" "extraOptions" "overwriteprotocol" ])
+      [ "services" "nextcloud" "config" "overwriteProtocol" ] [ "services" "nextcloud" "settings" "overwriteprotocol" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "skeletonDirectory" ] [ "services" "nextcloud" "extraOptions" "skeletondirectory" ])
+      [ "services" "nextcloud" "skeletonDirectory" ] [ "services" "nextcloud" "settings" "skeletondirectory" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "globalProfiles" ] [ "services" "nextcloud" "extraOptions" "profile.enabled" ])
+      [ "services" "nextcloud" "globalProfiles" ] [ "services" "nextcloud" "settings" "profile.enabled" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "extraOptions" "trusted_domains" ])
+      [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "settings" "trusted_domains" ])
     (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "trustedProxies" ] [ "services" "nextcloud" "extraOptions" "trusted_proxies" ])
+      [ "services" "nextcloud" "config" "trustedProxies" ] [ "services" "nextcloud" "settings" "trusted_proxies" ])
+    (mkRenamedOptionModule ["services" "nextcloud" "extraOptions" ] [ "services" "nextcloud" "settings" ])
   ];
 
   options.services.nextcloud = {
@@ -648,7 +649,7 @@ in {
       '';
     };
 
-    extraOptions = mkOption {
+    settings = mkOption {
       type = types.submodule {
         freeformType = jsonFormat.type;
         options = {
@@ -770,7 +771,7 @@ in {
       default = null;
       description = lib.mdDoc ''
         Secret options which will be appended to Nextcloud's config.php file (written as JSON, in the same
-        form as the [](#opt-services.nextcloud.extraOptions) option), for example
+        form as the [](#opt-services.nextcloud.settings) option), for example
         `{"redis":{"password":"secret"}}`.
       '';
     };
@@ -872,9 +873,11 @@ in {
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         after = [ "nextcloud-setup.service" ];
-        timerConfig.OnBootSec = "5m";
-        timerConfig.OnUnitActiveSec = "5m";
-        timerConfig.Unit = "nextcloud-cron.service";
+        timerConfig = {
+          OnBootSec = "5m";
+          OnUnitActiveSec = "5m";
+          Unit = "nextcloud-cron.service";
+        };
       };
 
       systemd.tmpfiles.rules = map (dir: "d ${dir} 0750 nextcloud nextcloud - -") [
@@ -930,7 +933,7 @@ in {
             (i: v: ''
               ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
                 ${toString i} --value="${toString v}"
-            '') ([ cfg.hostName ] ++ cfg.extraOptions.trusted_domains));
+            '') ([ cfg.hostName ] ++ cfg.settings.trusted_domains));
 
         in {
           wantedBy = [ "multi-user.target" ];
@@ -991,15 +994,21 @@ in {
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-          serviceConfig.Type = "oneshot";
-          serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${webroot}/cron.php";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "nextcloud";
+            ExecCondition = "${lib.getExe phpPackage} -f ${webroot}/occ status -e";
+            ExecStart = "${lib.getExe phpPackage} -f ${webroot}/cron.php";
+            KillMode = "process";
+          };
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           after = [ "nextcloud-setup.service" ];
-          serviceConfig.Type = "oneshot";
-          serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
-          serviceConfig.User = "nextcloud";
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+            User = "nextcloud";
+          };
           startAt = cfg.autoUpdateApps.startAt;
         };
       };
@@ -1056,7 +1065,7 @@ in {
 
       services.nextcloud = {
         caching.redis = lib.mkIf cfg.configureRedis true;
-        extraOptions = mkMerge [({
+        settings = mkMerge [({
           datadirectory = lib.mkDefault "${datadir}/data";
           trusted_domains = [ cfg.hostName ];
         }) (lib.mkIf cfg.configureRedis {

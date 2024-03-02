@@ -47,6 +47,8 @@ let
   # The redistArch is the name of the architecture for which the redistributable is built.
   # It is `"unsupported"` if the redistributable is not supported on the target platform.
   redistArch = flags.getRedistArch hostPlatform.system;
+
+  sourceMatchesHost = flags.getNixSystem redistArch == stdenv.hostPlatform.system;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
@@ -136,7 +138,9 @@ backendStdenv.mkDerivation (
     # badPlatformsConditions :: AttrSet Bool
     # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
     # Example: Broken on a specific architecture when some condition is met (like targeting Jetson).
-    badPlatformsConditions = { };
+    badPlatformsConditions = {
+      "No source" = !sourceMatchesHost;
+    };
 
     # src :: Optional Derivation
     src = trivial.pipe redistArch [

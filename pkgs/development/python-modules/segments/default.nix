@@ -2,30 +2,35 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
+, setuptools
 , regex
 , csvw
 , clldutils
-, mock
 , pytestCheckHook
 , pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "segments";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.2.1";
+  pyproject = true;
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "cldf";
-    repo = pname;
+    repo = "segments";
     rev = "v${version}";
-    sha256 = "04yc8q79zk09xj0wnal0vdg5azi9jlarfmf2iyljqyr80p79gwvv";
+    sha256 = "sha256-Z9AQnsK/0HUCZDzdpQKNfSBWxfAOjWNBytcfI6yBY84=";
   };
 
   patchPhase = ''
-    substituteInPlace setup.cfg --replace "--cov" ""
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     regex
@@ -34,12 +39,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
     pytest-mock
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/cldf/segments/blob/${src.rev}/CHANGES.md";
     description = "Unicode Standard tokenization routines and orthography profile segmentation";
     homepage = "https://github.com/cldf/segments";
     license = licenses.asl20;

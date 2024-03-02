@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.tcbravo ];
     platforms = platforms.unix;
     license = licenses.mit;
+    mainProgram = "ashuffle";
   };
 }

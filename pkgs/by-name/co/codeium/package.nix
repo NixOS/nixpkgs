@@ -13,10 +13,10 @@ let
   }.${system} or throwSystem;
 
   hash = {
-    x86_64-linux = "sha256-vr/c7kYXoKlZh7+f1ZPHcmIGw0nB8x1wJt/iR2F9bQI=";
-    aarch64-linux = "sha256-mKLbxj5LSztjHtLWdZFlW4T6S+kN56SZnJNxKZDQIQ4=";
-    x86_64-darwin = "sha256-AllKEadf+1s3XGCXD0PRycvDUyYNL6HLaViBwwaYswU=";
-    aarch64-darwin = "sha256-6Pik3uYLfbeAW4Q4ZxJFt90IH+jhXWKY6kpDA6NAmaA=";
+    x86_64-linux = "sha256-+SdAippxuJ0LvT+w6xSvTpzCv5EPjxXJKH4mcmnxu9Y=";
+    aarch64-linux = "sha256-cX+P0WcT+0oYDAcUJJ0+SRWPQCdv4rhrBf5BdPrF1Hg=";
+    x86_64-darwin = "sha256-eQjwViY5OsFzFtKkjLbrQgGNVBBpNNJjlfu8t/F37hI=";
+    aarch64-darwin = "sha256-xfB81SLuVa1wKcIGJZFxjdCSPmPXg0vYXtkCftiXBtU=";
   }.${system} or throwSystem;
 
   bin = "$out/bin/codeium_language_server";
@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "codeium";
-  version = "1.6.23";
+  version = "1.8.0";
   src = fetchurl {
     name = "${finalAttrs.pname}-${finalAttrs.version}.gz";
     url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${finalAttrs.version}/language_server_${plat}.gz";

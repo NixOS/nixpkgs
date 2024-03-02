@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gitUpdater }:
+{ stdenv, fetchurl, unzip, gitUpdater }:
 stdenv.mkDerivation rec {
   pname = "nx_tzdb";
   version = "221202";
@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-mRzW+iIwrU1zsxHmf+0RArU8BShAoEMvCz+McXFFK3c=";
   };
 
-  dontUnpack = true;
+  nativeBuildInputs = [ unzip ];
 
   buildCommand = ''
-    cp $src $out
+    unzip $src -d $out
   '';
 
   passthru.updateScript = gitUpdater {

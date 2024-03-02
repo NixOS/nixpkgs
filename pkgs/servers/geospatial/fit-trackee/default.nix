@@ -25,21 +25,19 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fit-trackee";
-  version = "0.7.22";
+  version = "0.7.29";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     rev = "v${version}";
-    hash = "sha256-aPQ8jLssN9nx0Bpd/44E3sQi2w0cR8ecG76DJjreeHA=";
+    hash = "sha256-NWWQ+lPUMaeF3UPglllaLGJnNgF54SXo4DcF3VAQbO4=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace psycopg2-binary psycopg2 \
-      --replace 'poetry>=0.12' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
+    substituteInPlace pyproject.toml --replace psycopg2-binary psycopg2 \
+      --replace 'flask = "^3.0.0"' 'flask = "*"'
   '';
 
   nativeBuildInputs = [
@@ -55,6 +53,7 @@ python.pkgs.buildPythonApplication rec {
     flask-dramatiq
     flask-limiter
     flask-migrate
+    flask-sqlalchemy
     gpxpy
     gunicorn
     humanize

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libusb";
-  version = "1.0.26";
+  version = "1.0.27";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
     rev = "v${version}";
-    sha256 = "sha256-LEy45YiFbueCCi8d2hguujMsxBezaTUERHUpFsTKGZQ=";
+    sha256 = "sha256-OtzYxWwiba0jRK9X+4deWWDDTeZWlysEt0qMyGUarDo=";
   };
 
   outputs = [ "out" "dev" ];

@@ -17,12 +17,7 @@
     else pkgs.bintools
 , darwin
 # LLVM release information; specify one of these but not both:
-, gitRelease ? {
-  version = "18.0.0";
-  rev = "6f44f87011cd52367626cac111ddbb2d25784b90";
-  rev-version = "18.0.0-unstable-2023-10-04";
-  sha256 = "sha256-CqsCDlzg8I2c9BybKP7B5nfHiQWktqgVavrfiYkjkx4=";
-}
+, gitRelease ? null
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -30,7 +25,7 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? null
+, officialRelease ? { version = "18.1.0-rc3"; sha256 = "sha256-qRzY2kTLeRxXQCSuVP592Awafm5wjVeFY60d6082mSc="; }
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -149,6 +144,10 @@ in let
       inherit llvm_meta;
     };
 
+    mlir = callPackage ../common/mlir {
+      inherit llvm_meta;
+    };
+
     lldb = callPackage ../common/lldb.nix {
       src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
         mkdir -p "$out"
@@ -216,6 +215,7 @@ in let
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
     };
 
     clangNoLibcxx = wrapCCWith rec {

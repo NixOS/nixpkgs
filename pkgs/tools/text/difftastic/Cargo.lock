@@ -253,7 +253,7 @@ checksum = "6184e33543162437515c2e2b48714794e37845ec9851711914eec9d308f6ebe8"
 
 [[package]]
 name = "difftastic"
-version = "0.54.0"
+version = "0.55.0"
 dependencies = [
  "aho-corasick",
  "assert_cmd",
@@ -1053,9 +1053,9 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter"
-version = "0.20.9"
+version = "0.20.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4423c784fe11398ca91e505cdc71356b07b1a924fc8735cfab5333afe3e18bc"
+checksum = "e747b1f9b7b931ed39a548c1fae149101497de3c1fc8d9e18c62c1a66c683d3d"
 dependencies = [
  "cc",
  "regex",

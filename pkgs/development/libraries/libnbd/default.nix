@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , bash-completion
 , pkg-config
 , perl
@@ -13,20 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
-  version = "1.18.1";
+  version = "1.18.2";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    hash = "sha256-UNHRphDw1ycRnp0KClzHlSuLIxs5Mc4gcjB+EF/smbY=";
+    hash = "sha256-OYtNHAIGgwJuapoJNEMVkurUK9bQ7KO+V223bGC0TFI=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-5871.patch";
-      url = "https://gitlab.com/nbdkit/libnbd/-/commit/4451e5b61ca07771ceef3e012223779e7a0c7701.patch";
-      hash = "sha256-zmg/kxSJtjp2w9917Sp33ezt7Ccj/inngzCUVesF1Tc=";
-    })
-  ];
 
   nativeBuildInputs = [
     bash-completion

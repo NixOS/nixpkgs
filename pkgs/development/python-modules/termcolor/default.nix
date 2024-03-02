@@ -30,9 +30,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Termcolor";
-    homepage = "https://pypi.python.org/pypi/termcolor";
+    description = "ANSI color formatting for output in terminal";
+    homepage = "https://github.com/termcolor/termcolor";
     license = licenses.mit;
   };
-
 }

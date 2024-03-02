@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/RaphGL/Tuckr/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mimame ];
+    mainProgram = "tuckr";
   };
 }

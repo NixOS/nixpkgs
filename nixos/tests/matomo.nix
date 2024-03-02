@@ -47,4 +47,8 @@ in {
     name = "matomo-beta";
     meta.maintainers = with maintainers; [ florianjacob kiwi mmilata twey boozedog ];
   };
+  matomo_5 = matomoTest pkgs.matomo_5 // {
+    name = "matomo-5";
+    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata twey boozedog ] ++ lib.teams.flyingcircus.members;
+  };
 }

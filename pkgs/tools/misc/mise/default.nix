@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.1.20";
+  version = "2024.2.19";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-4KyvqxM7QpszTGIzSrd0nrnO1yk/hkjmbRqVzzlMuYI=";
+    hash = "sha256-SDGXSjCDdtjKn474s2SQm9YDHofMOmHuodLS2iu10Co=";
   };
 
-  cargoHash = "sha256-Mq9uN0pztH5DwVCPNtl58zDPZtyWBsoTTMriUK6w8iI=";
+  cargoHash = "sha256-4MEBIZOXjcLEyW0TB+AXWsEc24VZz8bGCkduHqbazuo=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];

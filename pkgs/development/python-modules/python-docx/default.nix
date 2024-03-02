@@ -47,6 +47,16 @@ buildPythonPackage rec {
     "docx"
   ];
 
+  disabledTests = [
+    # https://github.com/python-openxml/python-docx/issues/1302
+    "it_accepts_unicode_providing_there_is_no_encoding_declaration"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = with lib; {
     description = "Create and update Microsoft Word .docx files";
     homepage = "https://python-docx.readthedocs.io/";

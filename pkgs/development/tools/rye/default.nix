@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.17.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-4vf+jmEu78LYFAcRrGdC02y+NsLM7zoBpHKCeaS60bY=";
+    hash = "sha256-tqwjhA81UYCtZjz6X5tIZ91pDVPe4UU+sTKUIzmOHlM=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
-      "monotrail-utils-0.0.1" = "sha256-4x5jnXczXnToU0QXpFalpG5A+7jeyaEBt8vBwxbFCKQ=";
+      "monotrail-utils-0.0.1" = "sha256-ydNdg6VI+Z5wXe2bEzRtavw0rsrcJkdsJ5DvXhbaDE4=";
     };
   };
 
@@ -53,6 +53,23 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=utils::test_is_inside_git_work_tree"
+
+    # The following require internet access to fetch a python binary
+    "--skip=test_add_and_sync_no_auto_sync"
+    "--skip=test_add_autosync"
+    "--skip=test_add_flask"
+    "--skip=test_add_from_find_links"
+    "--skip=test_basic_tool_behavior"
+    "--skip=test_config_empty"
+    "--skip=test_config_get_set_multiple"
+    "--skip=test_config_incompatible_format_and_show_path"
+    "--skip=test_config_show_path"
+    "--skip=test_empty_sync"
+    "--skip=test_fetch"
+    "--skip=test_init_default"
+    "--skip=test_init_lib"
+    "--skip=test_init_script"
+    "--skip=test_lint_and_format"
   ];
 
   meta = with lib; {

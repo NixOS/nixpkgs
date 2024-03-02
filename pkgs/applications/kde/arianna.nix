@@ -16,6 +16,7 @@
 , kfilemetadata
 , ki18n
 , kirigami-addons
+, kitemmodels
 , kquickcharts
 , kwindowsystem
 , qqc2-desktop-style
@@ -44,6 +45,7 @@ mkDerivation {
     kfilemetadata
     ki18n
     kirigami-addons
+    kitemmodels
     kquickcharts
     kwindowsystem
     qqc2-desktop-style
