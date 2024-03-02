@@ -6560,6 +6560,11 @@
     githubId = 726447;
     name = "Francisco Demartino";
   };
+  frankp = {
+    github = "MDM23";
+    githubId = 10290864;
+    name = "Peter Frank";
+  };
   franzmondlichtmann = {
     name = "Franz Schroepf";
     email = "franz-schroepf@t-online.de";
