@@ -8,22 +8,27 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "databases";
   version = "0.9.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "databases";
     rev = "refs/tags/${version}";
     hash = "sha256-Zf9QqBgDhWAnHdNvzjXtri5rdT00BOjc4YTNzJALldM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     sqlalchemy
@@ -78,7 +83,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
-    # https://github.com/encode/databases/issues/530
-    broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
   };
 }
