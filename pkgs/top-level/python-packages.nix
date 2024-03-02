@@ -9413,6 +9413,8 @@ self: super: with self; {
     alembic = pkgs.alembic;
   };
 
+  outlines = callPackage ../development/python-modules/outlines { };
+
   overly = callPackage ../development/python-modules/overly { };
 
   overpy = callPackage ../development/python-modules/overpy { };
