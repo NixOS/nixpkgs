@@ -14,7 +14,7 @@ for arg; do
 done
 
 extraBefore=(@defaultArgs@ "${defaultSysroot[@]}")
-extraAfter=($NIX_RUSTFLAGS)
+extraAfter=($@extraFlagsVar@)
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
