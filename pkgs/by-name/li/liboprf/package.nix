@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "liboprf - library providing OPRF and Threshold OPRF based on libsodium";
     homepage = "https://github.com/stef/liboprf";
     license = licenses.lgpl3;
-    maintainer = [ gepardgame ];
+    maintainer = [ maintainers.gepardgame ];
   };
 }
