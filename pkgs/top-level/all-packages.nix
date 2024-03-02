@@ -34977,8 +34977,6 @@ with pkgs;
 
   spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
 
-  spotify-tray = callPackage ../applications/misc/spotify-tray { };
-
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
