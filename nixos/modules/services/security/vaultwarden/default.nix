@@ -237,6 +237,9 @@ in {
     };
   };
 
-  # uses attributes of the linked package
-  meta.buildDocsInSandbox = false;
+  meta = {
+    # uses attributes of the linked package
+    buildDocsInSandbox = false;
+    maintainers = with lib.maintainers; [ dotlambda SuperSandro2000 ];
+  };
 }
