@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , lib
 , darwin
 , nettle
@@ -22,6 +23,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-voFektWZnkmIQzI7s5nKzVVWQtEhzk2GKtxX926RtxU=";
   };
+  patches = [
+    # Fixes test failing on Darwin, see:
+    # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/211
+    (fetchpatch {
+      url = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/commit/21221a935e0d058ed269ae6c8f45c5fa7ea0d598.patch";
+      hash = "sha256-ZjTl3EumeFwMJUl+qMpX+P2maYz4Ow/Tn9KwYbHDbes=";
+    })
+  ];
 
   cargoHash = "sha256-3ncBpRi0v6g6wwPkSASDwt0d8cOOAUv9BwZaYvnif1U=";
 
