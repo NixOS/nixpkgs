@@ -1623,11 +1623,12 @@ self: super: {
     sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
   }) super.splot;
 
-  # Fix build with newer monad-logger: https://github.com/obsidiansystems/monad-logger-extras/pull/5
+  # 2023-07-27: Fix build with newer monad-logger: https://github.com/obsidiansystems/monad-logger-extras/pull/5
+  # 2024-03-02: jailbreak for ansi-terminal <0.12, mtl <2.3
   monad-logger-extras = appendPatch (fetchpatch {
     url = "https://github.com/obsidiansystems/monad-logger-extras/commit/55d414352e740a5ecacf313732074d9b4cf2a6b3.patch";
     sha256 = "sha256-xsQbr/QIrgWR0uwDPtV0NRTbVvP0tR9bY9NMe1JzqOw=";
-  }) super.monad-logger-extras;
+  }) (doJailbreak super.monad-logger-extras);
 
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
@@ -2490,6 +2491,9 @@ self: super: {
 
   # 2023-07-18: https://github.com/srid/ema/issues/156
   ema = doJailbreak super.ema;
+
+  # 2024-03-02: base <=4.18.0.0 - https://github.com/srid/url-slug/issues/1
+  url-slug = doJailbreak super.url-slug;
 
   glirc = doJailbreak (super.glirc.override {
     vty = self.vty_5_35_1;
