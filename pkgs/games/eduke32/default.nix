@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , makeWrapper
 , pkg-config
 , nasm
@@ -34,13 +34,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "eduke32";
-  version = "20230926";
-  rev = "10459";
-  revExtra = "8feaf6c25";
+  version = "0-unstable-2024-02-17";
 
-  src = fetchurl {
-    url = "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
-    hash = "sha256-GQOpDQm2FeaOMyYu9L5zhrM6XFvZAHMAwn1tSK7RCB8=";
+  src = fetchFromGitLab {
+    domain = "voidpoint.io";
+    owner = "terminx";
+    repo = "eduke32";
+    rev = "8afa42e388e0434b38979fdddc763363717a2727";
+    hash = "sha256-dyZ4JtDBxsTDe9uQDWxJe7M74X7m+5wpEHm+i+s9hwo=";
   };
 
   buildInputs = [
