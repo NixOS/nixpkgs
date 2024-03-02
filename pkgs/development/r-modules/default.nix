@@ -586,6 +586,7 @@ let
     DiffBind = with pkgs; [ zlib.dev ];
     CNEr = with pkgs; [ zlib ];
     GMMAT = with pkgs; [ zlib.dev bzip2.dev ];
+    rmumps = with pkgs; [ zlib.dev ];
     HiCDCPlus = [ pkgs.zlib.dev ];
     PopGenome = [ pkgs.zlib.dev ];
     QuasR = [ pkgs.zlib.dev ];
