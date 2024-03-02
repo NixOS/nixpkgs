@@ -6,15 +6,15 @@
 , gettext
 , itstool
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , cairo
 , gdk-pixbuf
 , colord
 , glib
-, gtk3
+, libadwaita
+, gtk4
 , gusb
 , packagekit
-, libhandy
 , libwebp
 , libxml2
 , sane-backends
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "44.0";
+  version = "46.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Obhw/Ub0R/dH6uzC3yYEnvdzGFCZ8OE8Z1ZWJk3ZjpU=";
+    sha256 = "sha256-XGRxdmIzn98fB6FAmXuHfklnVJ/SdVd4cph4pqQTFnY=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
     libxml2
     gobject-introspection # For setup hook
     vala
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     colord
     glib
     gusb
-    gtk3
-    libhandy
+    libadwaita
+    gtk4
     libwebp
     packagekit
     sane-backends
