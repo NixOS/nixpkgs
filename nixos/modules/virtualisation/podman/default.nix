@@ -208,9 +208,11 @@ in
         requires = [ "podman.service" ];
       };
 
+      systemd.services.podman.environment = config.networking.proxy.envVars;
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
 
+      systemd.user.services.podman.environment = config.networking.proxy.envVars;
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
       systemd.timers.podman-prune.timerConfig = lib.mkIf cfg.autoPrune.enable {
