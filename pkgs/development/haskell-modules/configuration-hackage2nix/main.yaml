@@ -113,7 +113,6 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
-  - commonmark-extensions < 0.2.3.3     # 2022-12-17: required by emanote 1.0.0.0 (to avoid a bug in 0.2.3.3)
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.6.*                   # 2023-02-18: preserve for ghc-lib == 9.4.*

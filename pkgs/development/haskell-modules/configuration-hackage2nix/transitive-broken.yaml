@@ -1216,7 +1216,6 @@ dont-distribute-packages:
  - emacs-keys
  - email
  - emailparse
- - emanote
  - embroidery
  - emd
  - engine-io-growler
