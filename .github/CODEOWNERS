@@ -112,6 +112,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # Systemd-boot
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
+/nixos/tests/systemd-boot.nix                       @JulienMalka
 
 # Images and installer media
 /nixos/modules/installer/cd-dvd/            @samueldr
