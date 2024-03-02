@@ -208,18 +208,18 @@ let
         moveToOutput "lib/llvmjit*" "$out"
 
         # In the case of JIT support, prevent a retained dependency on clang-wrapper
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${self.llvmPackages.stdenv.cc}/bin/clang clang
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/clang clang
         nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
 
         # Stop out depending on the default output of llvm
         substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${self.llvmPackages.llvm.out}/bin "" \
+          --replace ${llvmPackages.llvm.out}/bin "" \
           --replace '$(LLVM_BINPATH)/' ""
 
         # Stop out depending on the -dev output of llvm
         substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${self.llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
-          --replace -I${self.llvmPackages.llvm.dev}/include ""
+          --replace ${llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
+          --replace -I${llvmPackages.llvm.dev}/include ""
 
         ${lib.optionalString (!stdenv'.isDarwin) ''
           # Stop lib depending on the -dev output of llvm
