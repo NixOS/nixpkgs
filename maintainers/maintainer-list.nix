@@ -5594,6 +5594,12 @@
     githubId = 5737945;
     name = "Elia Argentieri";
   };
+  elisesouche = {
+    email = "elise@souche.one";
+    github = "elisesouche";
+    githubId = 161958668;
+    name = "Élise Souche";
+  };
   elitak = {
     email = "elitak@gmail.com";
     github = "elitak";
