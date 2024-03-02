@@ -40670,6 +40670,8 @@ with pkgs;
 
   shellz = callPackage ../tools/security/shellz { };
 
+  tableplus = callPackage ../applications/misc/tableplus { };
+
   timeloop = pkgs.darwin.apple_sdk_11_0.callPackage ../applications/science/computer-architecture/timeloop { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
