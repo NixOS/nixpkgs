@@ -175,8 +175,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     python ./x.py --keep-stage=0 --stage=1 install library/std
     mkdir -v $out/bin $doc $man
-    ln -s ${rustc.unwrapped}/bin/rustc $out/bin
-    makeWrapper ${rustc.unwrapped}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
+    ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
     ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
     echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
