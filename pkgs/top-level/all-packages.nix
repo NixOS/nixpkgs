@@ -8042,13 +8042,9 @@ with pkgs;
 
   chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
 
-  fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 { };
-
-  fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
+  fcitx5 = callPackage ../tools/inputmethods/fcitx5 { };
 
   fcitx5-bamboo = callPackage ../tools/inputmethods/fcitx5/fcitx5-bamboo.nix { };
-
-  fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
   fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
     abseil-cpp = abseil-cpp.override {
@@ -8056,15 +8052,7 @@ with pkgs;
     };
   };
 
-  fcitx5-skk = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
-
-  fcitx5-skk-qt = fcitx5-skk.override {
-    enableQt = true;
-  };
-
-  fcitx5-unikey = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
-
-  fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
+  fcitx5-skk = qt6Packages.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
 
   fcitx5-anthy = callPackage ../tools/inputmethods/fcitx5/fcitx5-anthy.nix { };
 
@@ -8417,7 +8405,7 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_5 garage_0_9_1;
+      garage_0_8_6 garage_0_9_2;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -10746,8 +10734,6 @@ with pkgs;
   mb2md = callPackage ../tools/text/mb2md { };
 
   mbuffer = callPackage ../tools/misc/mbuffer { };
-
-  mdsh = callPackage ../development/tools/documentation/mdsh { };
 
   mecab =
     let
@@ -24414,7 +24400,7 @@ with pkgs;
   qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
-    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
+    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget kdePackages;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   });
 
@@ -25792,17 +25778,17 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbcl_2_4_0 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.0"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_1 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.1"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_1;
+  sbcl_2_4_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.2"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_2;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -28695,16 +28681,22 @@ with pkgs;
 
   zenmonitor = callPackage ../os-specific/linux/zenmonitor { };
 
-  zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
-    configFile = "user";
-  };
-  zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
-    configFile = "user";
-  };
-  zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
-    configFile = "user";
-  };
-  zfs = zfsStable;
+  inherit
+    ({
+      zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
+        configFile = "user";
+      };
+      zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
+        configFile = "user";
+      };
+      zfs_unstable = callPackage ../os-specific/linux/zfs/unstable.nix {
+        configFile = "user";
+      };
+    })
+    zfs_2_1
+    zfs_2_2
+    zfs_unstable;
+  zfs = zfs_2_2;
 
   ### DATA
 
@@ -30255,7 +30247,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio Foundation;
   };
 
-  ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
+  ptcollab = callPackage ../by-name/pt/ptcollab/package.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   schismtracker = callPackage ../applications/audio/schismtracker {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -35175,8 +35169,6 @@ with pkgs;
 
   spotify-player = callPackage ../applications/audio/spotify-player { };
 
-  spotifywm = callPackage ../applications/audio/spotifywm { };
-
   psst = callPackage ../applications/audio/psst { };
 
   squeezelite = darwin.apple_sdk_11_0.callPackage ../applications/audio/squeezelite {
@@ -37089,8 +37081,6 @@ with pkgs;
   lbreakouthd = callPackage ../games/lgames/lbreakouthd { };
 
   lpairs2 = callPackage ../games/lgames/lpairs2 { };
-
-  ltris = callPackage ../games/lgames/ltris { };
 
   maelstrom = callPackage ../games/maelstrom { };
 

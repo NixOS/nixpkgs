@@ -211,6 +211,7 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "boot" "zfs" "enableUnstable" ] "Instead set `boot.zfs.package = pkgs.zfs_unstable;`")
   ];
 
   ###### interface
@@ -219,9 +220,9 @@ in
     boot.zfs = {
       package = mkOption {
         type = types.package;
-        default = if cfgZfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
-        defaultText = literalExpression "if zfsUnstable is enabled then pkgs.zfsUnstable else pkgs.zfs";
-        description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfsUnstable` if you want to track the latest staging ZFS branch.";
+        default = pkgs.zfs;
+        defaultText = literalExpression "pkgs.zfs";
+        description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfs_unstable` if you want to track the latest staging ZFS branch.";
       };
 
       modulePackage = mkOption {
@@ -237,19 +238,6 @@ in
         default = inInitrd || inSystem;
         defaultText = literalMD "`true` if ZFS filesystem support is enabled";
         description = lib.mdDoc "True if ZFS filesystem support is enabled";
-      };
-
-      enableUnstable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Use the unstable zfs package. This might be an option, if the latest
-          kernel is not yet supported by a published release of ZFS. Enabling
-          this option will install a development version of ZFS on Linux. The
-          version will have already passed an extensive test suite, but it is
-          more likely to hit an undiscovered bug compared to running a released
-          version of ZFS on Linux.
-          '';
       };
 
       allowHibernation = mkOption {
