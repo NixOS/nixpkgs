@@ -25,6 +25,7 @@
 , libsoup
 , libsoup_3
 , json-glib
+, avahi
 , systemd
 , dbus
 , writeText
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tracker";
-  version = "3.6.0";
+  version = "3.7.rc";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Ulks/hm6/9FtvkdHW+fadQ29C2Mz/XrLYPqp2lvEDfI=";
+    sha256 = "sha256-4nXVTG50cA8dNXR/AslWrW2nSSHfPXhsy7c3ppI081w=";
   };
 
   strictDeps = true;
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libuuid
     json-glib
+    avahi
     libstemmer
     dbus
   ] ++ lib.optionals stdenv.isLinux [
