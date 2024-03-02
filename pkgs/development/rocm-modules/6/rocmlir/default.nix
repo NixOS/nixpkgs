@@ -4,6 +4,7 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
+, rocminfo
 , ninja
 , clr
 , git
@@ -89,8 +90,12 @@ in stdenv.mkDerivation (finalAttrs: {
     patchShebangs mlir
     patchShebangs external/llvm-project/mlir/lib/Dialect/GPU/AmdDeviceLibsIncGen.py
 
+    # remove when no longer required
+    substituteInPlace mlir/test/{e2e/generateE2ETest.py,fusion/e2e/generate-fusion-tests.py} \
+      --replace-fail "\"/opt/rocm/bin" "\"${rocminfo}/bin"
+
     substituteInPlace mlir/utils/performance/common/CMakeLists.txt \
-      --replace "/opt/rocm" "${clr}"
+      --replace-fail "/opt/rocm" "${clr}"
   '';
 
   dontBuild = true;
