@@ -87,6 +87,16 @@ in {
 
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
+      (lib.mkChangedOptionModule
+        [ "boot" "loader" "systemd-boot" "memtest86" "entryFilename" ]
+        [ "boot" "loader" "systemd-boot" "memtest86" "sortKey" ]
+        (config: lib.strings.removeSuffix ".conf" config.boot.loader.systemd-boot.memtest86.entryFilename)
+      )
+      (lib.mkChangedOptionModule
+        [ "boot" "loader" "systemd-boot" "netbootxyz" "entryFilename" ]
+        [ "boot" "loader" "systemd-boot" "netbootxyz" "sortKey" ]
+        (config: lib.strings.removeSuffix ".conf" config.boot.loader.systemd-boot.netbootxyz.entryFilename)
+      )
     ];
 
   options.boot.loader.systemd-boot = {
@@ -99,6 +109,35 @@ in {
         Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
         For more information about systemd-boot:
         https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
+      '';
+    };
+
+    sortKey = mkOption {
+      default = "nixos";
+      type = lib.types.str;
+      description = ''
+        The sort key used for the NixOS bootloader entries.
+        This key determines sorting relative to non-NixOS entries.
+        See also https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+
+        This option can also be used to control the sorting of NixOS specialisations.
+
+        By default, specialisations inherit the sort key of their parent generation
+        and will have the same value for both the sort-key and the version (i.e. the generation number),
+        systemd-boot will therefore sort them based on their file name, meaning that
+        in your boot menu you will have each main generation directly followed by
+        its specialisations sorted alphabetically by their names.
+
+        If you want a different ordering for a specialisation, you can override
+        its sort-key which will cause the specialisation to be uncoupled from its
+        parent generation. It will then be sorted by its new sort-key just like
+        any other boot entry.
+
+        The sort-key is stored in the generation's bootspec, which means that
+        generations keep their sort-keys even if the original definition of the
+        generation was removed from the NixOS configuration.
+        It also means that updating the sort-key will only affect new generations,
+        while old ones will keep the sort-key that they were originally built with.
       '';
     };
 
@@ -184,13 +223,15 @@ in {
         '';
       };
 
-      entryFilename = mkOption {
-        default = "memtest86.conf";
+      sortKey = mkOption {
+        default = "o_memtest86";
         type = types.str;
         description = lib.mdDoc ''
-          `systemd-boot` orders the menu entries by the config file names,
+          `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
           it should start with {file}`o` or onwards.
+
+          See also {option}`boot.loader.systemd-boot.sortKey`.
         '';
       };
     };
@@ -207,13 +248,15 @@ in {
         '';
       };
 
-      entryFilename = mkOption {
-        default = "o_netbootxyz.conf";
+      sortKey = mkOption {
+        default = "o_netbootxyz";
         type = types.str;
         description = lib.mdDoc ''
-          `systemd-boot` orders the menu entries by the config file names,
+          `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
           it should start with {file}`o` or onwards.
+
+          See also {option}`boot.loader.systemd-boot.sortKey`.
         '';
       };
     };
@@ -225,6 +268,7 @@ in {
         { "memtest86.conf" = '''
           title Memtest86+
           efi /efi/memtest86/memtest.efi
+          sort-key z_memtest
         '''; }
       '';
       description = lib.mdDoc ''
@@ -233,9 +277,10 @@ in {
         Each attribute name denotes the destination file name,
         and the corresponding attribute value is the contents of the entry.
 
-        `systemd-boot` orders the menu entries by the config file names,
-        so if you want something to appear after all the NixOS entries,
-        it should start with {file}`o` or onwards.
+        To control the ordering of the entry in the boot menu, use the sort-key
+        field, see
+        https://uapi-group.org/specifications/specs/boot_loader_specification/#sorting
+        and {option}`boot.loader.systemd-boot.sortKey`.
       '';
     };
 
@@ -328,18 +373,24 @@ in {
 
     boot.loader.systemd-boot.extraEntries = mkMerge [
       (mkIf cfg.memtest86.enable {
-        "${cfg.memtest86.entryFilename}" = ''
+        "memtest86.conf" = ''
           title  Memtest86+
           efi    /efi/memtest86/memtest.efi
+          sort-key ${cfg.memtest86.sortKey}
         '';
       })
       (mkIf cfg.netbootxyz.enable {
-        "${cfg.netbootxyz.entryFilename}" = ''
+        "netbootxyz.conf" = ''
           title  netboot.xyz
           efi    /efi/netbootxyz/netboot.xyz.efi
+          sort-key ${cfg.netbootxyz.sortKey}
         '';
       })
     ];
+
+    boot.bootspec.extensions."org.nixos.systemd-boot" = {
+      inherit (config.boot.loader.systemd-boot) sortKey;
+    };
 
     system = {
       build.installBootLoader = finalSystemdBootBuilder;
