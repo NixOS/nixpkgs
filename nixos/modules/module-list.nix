@@ -377,6 +377,7 @@
   ./services/backup/restic-rest-server.nix
   ./services/backup/restic.nix
   ./services/backup/rsnapshot.nix
+  ./services/backup/rustic-rs.nix
   ./services/backup/sanoid.nix
   ./services/backup/syncoid.nix
   ./services/backup/tarsnap.nix
