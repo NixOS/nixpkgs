@@ -9,7 +9,7 @@ index aaabb35..69676d3 100644
 @@ -72,16 +72,8 @@ def startAria():
  
      # in macintosh
-     elif os_type == 'Darwin':
+     elif os_type == OS.OSX:
 -        if aria2_path == "" or aria2_path == None or os.path.isfile(str(aria2_path)) == False:
 -
 -            cwd = sys.argv[0]

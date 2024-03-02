@@ -18,33 +18,26 @@
 
 buildPythonApplication rec {
   pname = "persepolis";
-  version = "3.2.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
-    rev = version;
-    sha256 = "1rh7q432ynbysapsd075nif975ync71icpb71x2mb4j8jx1vzs45";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-2S6s/tWhI9RBFA26jkwxYTGeaok8S8zv/bY+Zr8TOak=";
   };
 
   # see: https://github.com/persepolisdm/persepolis/blob/3.2.0/setup.py#L130
   doCheck = false;
 
-  preBuild=
   # Make setup automatic
-  ''
+  preBuild= ''
     substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
-  '' +
-  # Replace abandoned youtube-dl with maintained fork yt-dlp. Fixes https://github.com/persepolisdm/persepolis/issues/930,
-  # can be removed if that issue is fixed and/or https://github.com/persepolisdm/persepolis/pull/936 is merged
-  ''
-    substituteInPlace setup.py ./persepolis/scripts/video_finder_addlink.py --replace \
-        "import youtube_dl" "import yt_dlp as youtube_dl"
   '';
 
   patches = lib.optionals stdenv.isDarwin [
-    # Upstream is abandonware, the last commit to master was on 2021-08-26.
-    # If it is forked or picked up again, consider upstreaming these patches.
+    # Upstream does currently not allow building from source on macOS. These patches can likely
+    # be removed if https://github.com/persepolisdm/persepolis/issues/943 is fixed upstream
     ./0001-Allow-building-on-darwin.patch
     ./0002-Fix-startup-crash-on-darwin.patch
     ./0003-Search-PATH-for-aria2c-on-darwin.patch
