@@ -37073,8 +37073,6 @@ with pkgs;
 
   lbreakouthd = callPackage ../games/lgames/lbreakouthd { };
 
-  lpairs2 = callPackage ../games/lgames/lpairs2 { };
-
   maelstrom = callPackage ../games/maelstrom { };
 
   mar1d = callPackage ../games/mar1d { } ;
