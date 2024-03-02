@@ -1073,6 +1073,15 @@ let
       '';
     });
 
+    rmsb = let
+        R-with-rstantools = pkgs.rWrapper.override{packages = with pkgs.rPackages; [ rstantools ];};
+      in old.rmsb.overrideAttrs (attrs: {
+        postPatch = ''
+          substituteInPlace "./configure" \
+            --replace-fail \$\{R_HOME\} "${R-with-rstantools}"
+        '';
+      });
+
     s2 = old.s2.overrideAttrs (attrs: {
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
