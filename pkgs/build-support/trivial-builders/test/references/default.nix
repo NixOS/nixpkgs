@@ -90,21 +90,27 @@ let
     };
   });
 in
-testers.nixosTest {
-  name = "nixpkgs-trivial-builders";
-  nodes.machine = { ... }: {
+testers.runNixOSTest ({ config, lib, ... }:
+let
+  # Use the testScriptBin from guest pkgs.
+  # The attribute path to access the guest version of testScriptBin is
+  # tests.trivial-builders.references.config.node.pkgs.tests.trivial-builders.references.testScriptBin
+  # which is why passthru.guestTestScriptBin is provided.
+  guestTestScriptBin = config.node.pkgs.tests.trivial-builders.references.testScriptBin;
+in
+{
+  name = "nixpkgs-trivial-builders-references";
+  nodes.machine = { config, lib, pkgs, ... }: {
     virtualisation.writableStore = true;
 
     # Test runs without network, so we don't substitute and prepare our deps
     nix.settings.substituters = lib.mkForce [ ];
-    environment.etc."pre-built-paths".source = writeText "pre-built-paths" (
-      builtins.toJSON [ testScriptBin ]
-    );
+    system.extraDependencies = [ guestTestScriptBin ];
   };
   testScript =
     ''
       machine.succeed("""
-        ${lib.getExe testScriptBin} 2>/dev/console
+        ${lib.getExe guestTestScriptBin} 2>/dev/console
       """)
     '';
   passthru = {
@@ -114,6 +120,7 @@ testers.nixosTest {
       samples
       testScriptBin
       ;
+    inherit guestTestScriptBin;
   };
   meta = {
     maintainers = with lib.maintainers; [
@@ -121,4 +128,4 @@ testers.nixosTest {
       ShamrockLee
     ];
   };
-}
+})
