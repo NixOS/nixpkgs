@@ -14641,6 +14641,8 @@ self: super: with self; {
 
   throttler = callPackage ../development/python-modules/throttler { };
 
+  thttp = callPackage ../development/python-modules/thttp { };
+
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
   };
