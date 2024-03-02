@@ -78,8 +78,9 @@ let
     #       it with `allowAliases = false`?
     # warnIf pkgs.config.allowAliases "nixosTests: pkgs includes aliases."
     {
+      _file = "${__curPos.file} readOnlyPkgs";
       _class = "nixosTest";
-      node.pkgs = pkgs;
+      node.pkgs = pkgs.pkgsLinux;
     };
 
 in {

@@ -8722,7 +8722,7 @@ with pkgs;
 
   google-guest-oslogin = callPackage ../tools/virtualization/google-guest-oslogin { };
 
-  google-cloud-cpp = disable-warnings-if-gcc13 (callPackage ../development/libraries/google-cloud-cpp { });
+  google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp { };
 
   google-java-format = callPackage ../development/tools/google-java-format { };
 
@@ -16912,7 +16912,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-binutils = callPackage ../development/tools/rust/cargo-binutils { };
-  cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-bolero = callPackage ../development/tools/rust/cargo-bolero { };
   cargo-bundle = callPackage ../development/tools/rust/cargo-bundle { };
   cargo-bundle-licenses = callPackage ../development/tools/rust/cargo-bundle-licenses { };
@@ -21328,7 +21327,7 @@ with pkgs;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
-  graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
+  graphia = qt6Packages.callPackage ../applications/science/misc/graphia { };
 
   graphinder = callPackage ../tools/security/graphinder { };
 
@@ -24290,9 +24289,9 @@ with pkgs;
 
   primesieve = callPackage ../applications/science/math/primesieve { };
 
-  proj = disable-warnings-if-gcc13 (callPackage ../development/libraries/proj {
+  proj = callPackage ../development/libraries/proj {
     stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
-  });
+  };
 
   proj_7 = callPackage ../development/libraries/proj/7.nix { };
 
@@ -27623,7 +27622,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  btop = disable-warnings-if-gcc13 (darwin.apple_sdk_11_0.callPackage ../tools/system/btop { });
+  btop = darwin.apple_sdk_11_0.callPackage ../tools/system/btop { };
 
   nmon = callPackage ../os-specific/linux/nmon { };
 
@@ -33902,7 +33901,7 @@ with pkgs;
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
 
-  reproc = disable-warnings-if-gcc13 (callPackage ../development/libraries/reproc { });
+  reproc = callPackage ../development/libraries/reproc { };
 
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
@@ -36848,9 +36847,9 @@ with pkgs;
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
     withGui = true;
   };
-  vertcoind = disable-warnings-if-gcc13 (callPackage ../applications/blockchains/vertcoin {
+  vertcoind = callPackage ../applications/blockchains/vertcoin {
     withGui = false;
-  });
+  };
 
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 

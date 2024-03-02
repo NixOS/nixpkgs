@@ -11718,6 +11718,12 @@
     githubId = 1780588;
     name = "Malte Poll";
   };
+  maltejanz = {
+    email = "service.malte.j@protonmail.com";
+    github = "MalteJanz";
+    githubId = 18661391;
+    name = "Malte Janz";
+  };
   malte-v = {
     email = "nixpkgs@mal.tc";
     github = "malte-v";
