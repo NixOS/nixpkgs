@@ -33,9 +33,6 @@ let
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
 
-      # WineSync driver for fast kernel-backed Wine
-      WINESYNC = module;
-
       # Preemptive Full Tickless Kernel at 250Hz
       HZ = freeform "250";
       HZ_250 = yes;
