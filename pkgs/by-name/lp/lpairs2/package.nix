@@ -1,19 +1,19 @@
 { lib
-, stdenv
-, fetchurl
 , SDL2
 , SDL2_image
 , SDL2_mixer
 , SDL2_ttf
 , directoryListingUpdater
+, fetchurl
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lpairs2";
   version = "2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/lgames/lpairs2-${finalAttrs.version}.tar.gz";
     hash = "sha256-gw1BNkcztyTuoXRdx5+TBZNJEJNrLCfEUCQ1JzROogA=";
   };
 
@@ -25,17 +25,18 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = directoryListingUpdater {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     url = "https://lgames.sourceforge.io/LPairs/";
     extraRegex = "(?!.*-win(32|64)).*";
   };
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
     homepage = "http://lgames.sourceforge.net/LPairs/";
     description = "Matching the pairs - a typical Memory Game";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "lpairs2";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
+})
