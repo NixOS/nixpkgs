@@ -153,7 +153,7 @@ in
 
       extraConfig = mkOption {
         type = ini.type;
-        default = "";
+        default = {};
         description = lib.mdDoc ''
           Configuration added to the generated NetworkManager.conf, note that you can overwrite settings existing settings with this.
           Refer to
