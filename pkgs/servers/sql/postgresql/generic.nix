@@ -19,7 +19,7 @@ let
       , version, hash, muslPatches
 
       # for tests
-      , testers, nixosTests, thisAttr
+      , testers, nixosTests
 
       # JIT
       , jitSupport
@@ -254,10 +254,18 @@ let
                      this.pkgs;
 
       tests = {
-        postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
+        postgresql-wal-receiver = import ../../../../nixos/tests/postgresql-wal-receiver.nix {
+          inherit (stdenv) system;
+          pkgs = self;
+          package = this;
+        };
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
-        postgresql-jit = nixosTests.postgresql-jit.${thisAttr};
+        postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
+          inherit (stdenv) system;
+          pkgs = self;
+          package = this;
+        };
       };
     };
 
