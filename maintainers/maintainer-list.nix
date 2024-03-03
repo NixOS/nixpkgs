@@ -2587,6 +2587,12 @@
     githubId = 133602;
     name = "Bjørn Forsman";
   };
+  bkaylor = {
+    email = "blkaylor@mines.edu";
+    github = "kaylorben"
+    githubId = 41012641
+    name = "Benjamin Kaylor";
+  };
   bkchr = {
     email = "nixos@kchr.de";
     github = "bkchr";
