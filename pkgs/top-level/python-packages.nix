@@ -14715,6 +14715,8 @@ self: super: with self; {
 
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
 
+  tinytuya = callPackage ../development/python-modules/tinytuya { };
+
   tissue = callPackage ../development/python-modules/tissue { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
