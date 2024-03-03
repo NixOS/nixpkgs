@@ -1,28 +1,53 @@
-{ lib, stdenv, fetchurl, ncurses, xmlto }:
+{ lib
+, docbook_xsl
+, fetchFromGitLab
+, ncurses
+, stdenv
+, xmlto
+}:
 
-with lib;
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "galaxis";
   version = "1.10";
 
-  src = fetchurl{
-    url = "http://www.catb.org/~esr/galaxis/${pname}-${version}.tar.gz";
-    sha256 = "1181x3z4r0794v2bkpigb5fablw1nayj42wvhy2am79p7j1iqq5r";
+  src = fetchFromGitLab {
+    owner = "esr";
+    repo = "galaxis";
+    rev = finalAttrs.version;
+    hash = "sha256-l49JEFAyiNvQJ1qimXzd5WL5jFHaFsu7RJe8Xfp3uWw=";
   };
 
-  buildInputs = [ ncurses xmlto ];
+  outputs = [ "out" "man" ];
 
-  patchPhase = ''
-    sed -i\
-     -e 's|^install: galaxis\.6 uninstall|install: galaxis.6|'\
-     -e 's|usr/||g' -e 's|ROOT|DESTDIR|g'\
-     -e 's|install -m 755 -o 0 -g 0|install -m 755|' Makefile
+  nativeBuildInputs = [
+    docbook_xsl
+    xmlto
+  ];
+
+  buildInputs = [
+    ncurses
+  ];
+
+  strictDeps = true;
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "galaxis"
+    "galaxis.6"
+  ];
+
+  postPatch = ''
+    sed -i -E '/[[:space:]]*xmlto/ s|xmlto|xmlto --skip-validation|' Makefile
   '';
 
-  dontConfigure = true;
-
-  makeFlags = [ "DESTDIR=$(out)" ];
+  # This is better than sed-patch the Makefile
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin $man/share/man/man6
+    install -Dm755 galaxis -t $out/bin/
+    install -Dm644 galaxis.6 -t $man/share/man/man6
+    runHook postInstall
+  '';
 
   meta = {
     description = "Rescue lifeboats lost in interstellar space";
@@ -40,8 +65,9 @@ stdenv.mkDerivation rec {
       game's simpler deductions.
     '';
     homepage = "http://catb.org/~esr/galaxis/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "galaxis";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})
