@@ -331,6 +331,8 @@ self: super: with self; {
 
   aiooss2 = callPackage ../development/python-modules/aiooss2 { };
 
+  aiooui = callPackage ../development/python-modules/aiooui { };
+
   aiopegelonline = callPackage ../development/python-modules/aiopegelonline { };
 
   aiopg = callPackage ../development/python-modules/aiopg { };
