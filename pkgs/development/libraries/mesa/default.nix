@@ -106,7 +106,7 @@ let
       hash = "sha256-VWRCZJO0/DJbNu0/V9TLaqlwMot65YjInWT9VWg57DY=";
     }
     {
-    pname = "syn";
+      pname = "syn";
       version = "2.0.39";
       hash = "sha256-Mjen2L/omhVbhU/+Ao65mogs3BP3fY+Bodab3uU63EI=";
     }
