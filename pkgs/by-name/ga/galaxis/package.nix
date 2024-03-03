@@ -1,27 +1,25 @@
 { lib
-, docbook_xsl
+, asciidoctor
 , fetchFromGitLab
 , ncurses
 , stdenv
-, xmlto
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "galaxis";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "galaxis";
     rev = finalAttrs.version;
-    hash = "sha256-l49JEFAyiNvQJ1qimXzd5WL5jFHaFsu7RJe8Xfp3uWw=";
+    hash = "sha256-fSzifGoSdWyFGt99slzAsqCMDoeLbBqQGXujX8QAfGc=";
   };
 
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
-    docbook_xsl
-    xmlto
+    asciidoctor
   ];
 
   buildInputs = [
