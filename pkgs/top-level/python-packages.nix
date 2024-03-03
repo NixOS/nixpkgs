@@ -14447,6 +14447,8 @@ self: super: with self; {
 
   tencentcloud-sdk-python = callPackage ../development/python-modules/tencentcloud-sdk-python { };
 
+  tendo = callPackage ../development/python-modules/tendo { };
+
   tensorboard-data-server = callPackage ../development/python-modules/tensorboard-data-server { };
 
   tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
