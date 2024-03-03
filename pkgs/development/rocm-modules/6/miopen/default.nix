@@ -31,7 +31,6 @@
 , python3Packages
 , buildDocs ? false # Needs internet because of rocm-docs-core
 , buildTests ? false
-, useOpenCL ? false
 }:
 
 let
@@ -167,12 +166,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (!useOpenCL) [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
     "-DMIOPEN_BACKEND=HIP"
-  ] ++ lib.optionals useOpenCL [
-    "-DMIOPEN_BACKEND=OpenCL"
   ] ++ lib.optionals buildTests [
     "-DBUILD_TESTS=ON"
     "-DMIOPEN_TEST_ALL=ON"
@@ -211,7 +207,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ln -sf ${gfx90a} $out/share/miopen/db/gfx90a.kdb
     ln -sf ${gfx1030} $out/share/miopen/db/gfx1030.kdb
   '' + lib.optionalString buildDocs ''
-    mv ../doc/html $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
+    mv ../doc/html $out/share/doc/miopen-hip
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
