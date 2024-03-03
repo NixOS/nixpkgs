@@ -30,6 +30,12 @@ let
       yaml-cpp
     ];
 
+    postPatch = ''
+      substituteInPlace src/3rdParty/OndselSolver/OndselSolver.pc.in \
+        --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@" \
+        --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+    '';
+
     meta = with lib; {
       # mainProgram = "freecad";
       homepage = "https://ondsel.com/";
