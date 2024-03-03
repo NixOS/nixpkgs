@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "tell-me-your-secrets";
   version = "2.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "valayDave";
@@ -17,6 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "gitignore-parser"
+    "pandas"
   ];
 
   nativeBuildInputs = with python3.pkgs; [

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,13 +24,8 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiodiscover";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FbOqTUSqxSPSCn5zA4s47+M6OsVsqvUBZxTFvJ5PoHs=";
+    hash = "sha256-M3tus0r58YVJyi/S7UWq+OvaKke3hqkHGuYkUxEpVxg=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner>=5.2",' ""
-  '';
 
   nativeBuildInputs = [
     setuptools

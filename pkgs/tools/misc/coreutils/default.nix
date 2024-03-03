@@ -129,10 +129,8 @@ stdenv.mkDerivation rec {
   # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
-  # On aarch64+musl, test-init.sh fails due to a segfault in diff.
   doCheck = (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
-    && !(stdenv.hostPlatform.libc == "musl" && stdenv.hostPlatform.isAarch64)
     && !stdenv.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.

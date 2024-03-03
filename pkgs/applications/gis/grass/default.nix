@@ -107,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
     "--with-readline"
-    "--with-wxwidgets"
     "--with-zstd"
     "--without-opengl"
   ] ++ lib.optionals stdenv.isLinux [

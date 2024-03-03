@@ -28,5 +28,6 @@ buildGoModule rec {
     description = "A CLI for managing and sending data to Humio";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
+    mainProgram = "humioctl";
   };
 }

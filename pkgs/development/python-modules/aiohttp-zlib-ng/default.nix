@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-zlib-ng";
-  version = "0.1.3";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,12 +19,12 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohttp-zlib-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t7T3KIGId5CoBciSkwu/sejW45i2EYtq1fHvNKNXlhA=";
+    hash = "sha256-XA2XSX9KA/oBzOLJrhj78uoy6ufLbVTENYZL3y/+fwU=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiohttp_zlib_ng --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aiohttp_zlib_ng --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [

@@ -30,6 +30,7 @@ lib:
 # It is likely we will have to split out additional builders for additional
 # versions in the future, or customize this one further.
 { lib
+, fetchpatch
 , makeWrapper
 , socat
 , iptables
@@ -183,6 +184,16 @@ let
 
     src = k3sRepo;
     vendorHash = k3sVendorHash;
+
+    patches =
+      # Disable: Add runtime checking of golang version
+      lib.optional (lib.versionAtLeast k3sVersion "1.28")
+        (fetchpatch {
+          # https://github.com/k3s-io/k3s/pull/9054
+          url = "https://github.com/k3s-io/k3s/commit/b297996b9252b02e56e9425f55f6becbf6bb7832.patch";
+          hash = "sha256-xBOY2jnLhT9dtVKtq26V9QUnuX1q6E/9UcO9IaU719U=";
+          revert = true;
+        });
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp sqlite.dev ];
@@ -344,6 +355,7 @@ buildGoModule rec {
   passthru.mkTests = version:
     let k3s_version = "k3s_" + lib.replaceStrings ["."] ["_"] (lib.versions.majorMinor version);
     in {
+      etcd = nixosTests.k3s.etcd.${k3s_version};
       single-node = nixosTests.k3s.single-node.${k3s_version};
       multi-node = nixosTests.k3s.multi-node.${k3s_version};
     };

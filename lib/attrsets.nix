@@ -2,10 +2,10 @@
 { lib }:
 
 let
-  inherit (builtins) head tail length;
-  inherit (lib.trivial) id mergeAttrs;
+  inherit (builtins) head length;
+  inherit (lib.trivial) mergeAttrs warn;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
+  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
 
 rec {
@@ -369,7 +369,7 @@ rec {
      Type:
        attrValues :: AttrSet -> [Any]
   */
-  attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
+  attrValues = builtins.attrValues;
 
 
   /* Given a set of attribute names, return the set of the corresponding
@@ -398,8 +398,7 @@ rec {
      Type:
        catAttrs :: String -> [AttrSet] -> [Any]
   */
-  catAttrs = builtins.catAttrs or
-    (attr: l: concatLists (map (s: if s ? ${attr} then [s.${attr}] else []) l));
+  catAttrs = builtins.catAttrs;
 
 
   /* Filter an attribute set by removing all attributes for which the
@@ -608,9 +607,7 @@ rec {
      Type:
        mapAttrs :: (String -> Any -> Any) -> AttrSet -> AttrSet
   */
-  mapAttrs = builtins.mapAttrs or
-    (f: set:
-      listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set)));
+  mapAttrs = builtins.mapAttrs;
 
 
   /* Like `mapAttrs`, but allows the name of each attribute to be
@@ -1197,9 +1194,10 @@ rec {
       (x // y) // mask;
 
   # DEPRECATED
-  zipWithNames = zipAttrsWithNames;
+  zipWithNames = warn
+    "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
 
   # DEPRECATED
-  zip = builtins.trace
-    "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
+  zip = warn
+    "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 }

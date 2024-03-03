@@ -28,5 +28,6 @@ buildGoModule rec {
     changelog = "https://github.com/jonaslu/ain/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "ain";
   };
 }

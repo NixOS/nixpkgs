@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "withings-sync";
-  version = "4.2.2";
+  version = "4.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p1coGTbMQ+zptFKVLW5qgSdoudo2AggGT8Xu+cSCCs4=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-nFYEtQob3x6APWDKCVP5p+qkKmgvXIcmegp/6ZRbDQA=";
   };
 
   nativeBuildInputs = [

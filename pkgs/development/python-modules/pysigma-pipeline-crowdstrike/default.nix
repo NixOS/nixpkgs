@@ -9,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-crowdstrike";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "1.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-crowdstrike";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kopZ4bbWX0HNrqos9XO/DfbdExlgZcDLEsUpOBumvBA=";
+    hash = "sha256-0uSoZC2cUgdOGE5saLlx5n0gbVPX61kkASCBFD4F5QM=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to support CrowdStrike pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike";
+    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike/releases/tag/v${version}";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ fab ];
   };

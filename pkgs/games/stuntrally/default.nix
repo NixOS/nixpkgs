@@ -48,6 +48,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-fglm1FetFGHM/qGTtpxDb8+k2iAREn5DQR5GPujuLms=";
   };
 
+  postPatch = ''
+    substituteInPlace config/*-default.cfg \
+      --replace "screenshot_png = off" "screenshot_png = on"
+    substituteInPlace source/*/BaseApp_Create.cpp \
+      --replace "Codec_FreeImage" "Codec_STBI"
+  '';
+
   preConfigure = ''
     rmdir data/tracks
     ln -s ${tracks}/ data/tracks

@@ -53,7 +53,7 @@ final: _: {
   autoAddCudaCompatRunpathHook =
     final.callPackage
       (
-        {makeSetupHook, cuda_compat ? throw "autoAddCudaCompatRunpathHook: No cuda_compat for CUDA ${final.cudaMajorMinorVersion}" }:
+        {makeSetupHook, cuda_compat ? null }:
         makeSetupHook
           {
             name = "auto-add-cuda-compat-runpath-hook";
@@ -61,7 +61,12 @@ final: _: {
               # Hotfix Ofborg evaluation
               libcudaPath = if final.flags.isJetsonBuild then "${cuda_compat}/compat" else null;
             };
+
             meta.broken = !final.flags.isJetsonBuild;
+
+            # Pre-cuda_compat CUDA release:
+            meta.badPlatforms = final.lib.optionals (cuda_compat == null) final.lib.platforms.all;
+            meta.platforms = cuda_compat.meta.platforms or [ ];
           }
           ./auto-add-cuda-compat-runpath.sh
       )

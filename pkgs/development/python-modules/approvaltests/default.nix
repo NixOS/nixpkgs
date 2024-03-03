@@ -5,6 +5,7 @@
 , buildPythonPackage
 , empty-files
 , fetchFromGitHub
+, mock
 , mrjob
 , numpy
 , pyperclip
@@ -18,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.2.0";
+  version = "11.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2NaqqgrHXJovoVExvbr0s86eRbcxy+DUrsdRH/vak3E=";
+    hash = "sha256-Ep95niYin3urtiMFSVY792zpFAcu6MwQN9DA/IJLSQQ=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest
@@ -52,7 +54,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_docstrings"
     # Tests expects paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"

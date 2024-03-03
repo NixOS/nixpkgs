@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     # The BSD license comes from host-common/VpxFrameParser.cpp, which
     # incorporates some code from libvpx, which uses the 3-clause BSD license.
     license = with licenses; [ asl20 mit bsd3 ];
-    platforms = platforms.darwin ++ platforms.linux;
+    # See base/include/aemu/base/synchronization/Lock.h
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

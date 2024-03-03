@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , antlr4
 , capnproto
@@ -28,6 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash  = "sha256-jdA3PBodecqriGWU/BzWtQ5gyu62pZHv+1NvFrwsTTk=";
     fetchSubmodules = false;  # we use all dependencies from nix
   };
+
+  patches = [
+    (fetchpatch {
+      # Fixes https://github.com/chipsalliance/synlig/issues/2299
+      name = "make-compile-for-yosys-0.37.patch";
+      url = "https://github.com/chipsalliance/synlig/commit/3dd46d4769c20b6dd1163310f8e56560b351a211.patch";
+      hash = "sha256-OP/2HA/Ukt6o5aKgoBk19P6T/33btU/x6VnoIVXct1g=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

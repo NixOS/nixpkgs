@@ -51,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://www.nicotine-plus.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ehmry klntsky ];
+    maintainers = with maintainers; [ klntsky ];
   };
 }

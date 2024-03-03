@@ -324,7 +324,6 @@ dont-distribute-packages:
  - Pup-Events
  - Pup-Events-Demo
  - Quelea
- - QuickPlot
  - RESTng
  - RJson
  - RMP
@@ -480,11 +479,9 @@ dont-distribute-packages:
  - alsa-pcm-tests
  - alsa-seq-tests
  - alto
- - amazon-emailer-client-snap
  - amby
  - ampersand
  - amqp-streamly
- - analyze-client
  - anatomy
  - animate-example
  - animate-frames
@@ -500,8 +497,6 @@ dont-distribute-packages:
  - antiope-s3
  - antiope-shell
  - antlrc
- - apecs-gloss
- - apecs-physics-gloss
  - apelsin
  - api-rpc-accumulate
  - api-rpc-pegnet
@@ -560,7 +555,6 @@ dont-distribute-packages:
  - audiovisual
  - aura
  - authoring
- - autodocodec-openapi3
  - automata
  - autonix-deps-kf5
  - avers
@@ -724,10 +718,12 @@ dont-distribute-packages:
  - bytelog
  - bytestring-builder-varword
  - bytestring-read
+ - bytetrie
  - ca
  - cabal-bounds
  - cabal-cache
  - cabal-cargs
+ - cabal-fix
  - cabal-query
  - cabal-test
  - cabal2arch
@@ -969,6 +965,7 @@ dont-distribute-packages:
  - copilot-libraries
  - copilot-sbv
  - copilot-theorem
+ - copilot-verifier
  - corenlp-parser
  - coroutine-enumerator
  - coroutine-iteratee
@@ -984,6 +981,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
+ - crackNum_3_6
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -993,9 +991,12 @@ dont-distribute-packages:
  - crf-chain1-constrained
  - crf-chain2-generic
  - crf-chain2-tiers
- - criu-rpc
- - criu-rpc-types
  - cron-compat
+ - crucible
+ - crucible-llvm
+ - crucible-symio
+ - crux
+ - crux-llvm
  - crypto-classical
  - crypto-conduit
  - crypto-pubkey
@@ -1013,6 +1014,7 @@ dont-distribute-packages:
  - curryer-rpc
  - cv-combinators
  - cypher
+ - dahdit-midi
  - dahdit-network
  - dahdit-test
  - daino
@@ -1094,7 +1096,6 @@ dont-distribute-packages:
  - deptrack-dot
  - dequeue
  - derive-IG
- - deriving-openapi3
  - descript-lang
  - detour-via-uom
  - devtools
@@ -1109,7 +1110,6 @@ dont-distribute-packages:
  - difference-monoid
  - differential
  - digestive-foundation-lucid
- - digestive-functors-heist
  - digestive-functors-hsp
  - dimensional-tf
  - dimensions
@@ -1216,7 +1216,6 @@ dont-distribute-packages:
  - emacs-keys
  - email
  - emailparse
- - emanote
  - embroidery
  - emd
  - engine-io-growler
@@ -1273,11 +1272,6 @@ dont-distribute-packages:
  - eventsource-geteventstore-store
  - eventsource-store-specs
  - eventsource-stub-store
- - eventuo11y
- - eventuo11y-batteries
- - eventuo11y-json
- - eventuo11y-otel
- - eventuo11y-prometheus
  - every-bit-counts
  - exference
  - exist
@@ -1301,7 +1295,6 @@ dont-distribute-packages:
  - family-tree
  - fast-arithmetic
  - fast-bech32
- - fastcdc
  - fastirc
  - fastparser
  - fault-tree
@@ -1358,10 +1351,8 @@ dont-distribute-packages:
  - fixed-point-vector-space
  - fixhs
  - flashblast
- - flatbuffers
  - flexiwrap
  - flexiwrap-smallcheck
- - flink-statefulfun
  - flite
  - flower
  - flowsim
@@ -1373,7 +1364,6 @@ dont-distribute-packages:
  - fluent-logger
  - fluent-logger-conduit
  - fmt-for-rio
- - fn-extra
  - foldable1
  - foldl-transduce-attoparsec
  - follower
@@ -1449,7 +1439,6 @@ dont-distribute-packages:
  - gbu
  - gdax
  - gdiff-ig
- - gearhash
  - gedcom
  - geek
  - geek-server
@@ -1478,11 +1467,9 @@ dont-distribute-packages:
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
- - ghc-lib_9_8_1_20231121
  - ghc-mod
  - ghc-plugs-out
  - ghc-session
- - ghc_9_8_1
  - ghci-pretty
  - ghcide-bench
  - ghcjs-dom-hello
@@ -1494,7 +1481,6 @@ dont-distribute-packages:
  - gi-ges
  - gi-gstpbutils
  - gi-gtk-declarative-app-simple
- - gi-gtk_4_0_8
  - git-config
  - git-fmt
  - git-gpush
@@ -1808,7 +1794,6 @@ dont-distribute-packages:
  - hack2-handler-happstack-server
  - hack2-handler-mongrel2-http
  - hack2-handler-snap-server
- - hackage-cli
  - hackage2twitter
  - hackmanager
  - haddock
@@ -1845,7 +1830,6 @@ dont-distribute-packages:
  - happstack-fay
  - happstack-fay-ajax
  - happstack-foundation
- - happstack-heist
  - happstack-helpers
  - happstack-ixset
  - happstack-plugins
@@ -1999,9 +1983,6 @@ dont-distribute-packages:
  - hedis-pile
  - heftia
  - heftia-effects
- - heist-aeson
- - heist-async
- - heist-extra
  - helic
  - helics
  - helics-wai
@@ -2152,7 +2133,6 @@ dont-distribute-packages:
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
- - hspec-snap
  - hspecVariant
  - hsprocess
  - hsql-mysql
@@ -2181,7 +2161,6 @@ dont-distribute-packages:
  - http-enumerator
  - http-exchange
  - http-exchange-instantiations
- - http-io-streams
  - http-response-decoder
  - http2-client-exe
  - http2-client-grpc
@@ -2248,7 +2227,6 @@ dont-distribute-packages:
  - ihaskell-rlangqq
  - ihttp
  - imap
- - imbib
  - imgurder
  - imj-animation
  - imj-base
@@ -2665,12 +2643,6 @@ dont-distribute-packages:
  - micro-gateway
  - microformats2-types
  - midimory
- - mig
- - mig-client
- - mig-extra
- - mig-server
- - mig-swagger-ui
- - mig-wai
  - mighttpd
  - minecraft-data
  - minesweeper
@@ -2794,8 +2766,6 @@ dont-distribute-packages:
  - mxnet-examples
  - mxnet-nn
  - myTestlll
- - mysnapsession
- - mysnapsession-example
  - mysql-haskell-nem
  - mysql-haskell-openssl
  - mysql-simple-typed
@@ -2870,7 +2840,6 @@ dont-distribute-packages:
  - nri-prelude
  - nri-redis
  - nri-test-encoding
- - numerals-base
  - numeric-kinds
  - numeric-ode
  - numerical
@@ -3137,11 +3106,7 @@ dont-distribute-packages:
  - prolude
  - proplang
  - prosidyc
- - proto-lens-combinators
  - proto-lens-descriptors
- - proto-lens-protobuf-types
- - proto-lens-protoc
- - proto-lens-setup
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor
@@ -3176,6 +3141,7 @@ dont-distribute-packages:
  - qtah-generator
  - qtah-qt5
  - quantfin
+ - quantification-aeson
  - quantum-random
  - queryparser
  - queryparser-demo
@@ -3270,14 +3236,12 @@ dont-distribute-packages:
  - reflex-dom-colonnade
  - reflex-dynamic-containers
  - reflex-gadt-api
- - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
  - reflex-localize-dom
  - reflex-monad-auth
  - reflex-potatoes
- - reflex-process
  - refractor
  - refurb
  - reg-alloc-graph-color
@@ -3436,7 +3400,6 @@ dont-distribute-packages:
  - sbv-program
  - sbvPlugin
  - sc2-lowlevel
- - sc2-proto
  - sc2-support
  - sc2hs
  - sc3-rdu
@@ -3514,29 +3477,21 @@ dont-distribute-packages:
  - servant-matrix-param
  - servant-oauth2
  - servant-oauth2-examples
- - servant-openapi3
  - servant-postgresql
- - servant-proto-lens
  - servant-pushbullet-client
- - servant-queryparam-openapi3
  - servant-rate-limit
  - servant-reason
  - servant-serialization
  - servant-server-namedargs
- - servant-snap
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
  - servant-swagger-tags
  - servant-to-elm
- - servant-util
- - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
  - servant-zeppelin-swagger
- - serversession-frontend-snap
- - ses-html-snaplet
  - sessiontypes-distributed
  - sgf
  - sgrep
@@ -3561,7 +3516,6 @@ dont-distribute-packages:
  - sibe
  - sigma-ij
  - signable
- - signable-haskell-protoc
  - signals
  - signature
  - silvi
@@ -3602,56 +3556,24 @@ dont-distribute-packages:
  - smtlib2-quickcheck
  - smtlib2-timing
  - smtp2mta
- - snap
- - snap-auth-cli
  - snap-elm
- - snap-error-collector
  - snap-extras
- - snap-routes
- - snap-testing
- - snap-utils
- - snap-web-routes
- - snaplet-acid-state
  - snaplet-actionlog
- - snaplet-amqp
- - snaplet-auth-acid
- - snaplet-coffee
- - snaplet-css-min
  - snaplet-customauth
- - snaplet-environments
  - snaplet-fay
- - snaplet-ghcjs
  - snaplet-hasql
  - snaplet-haxl
  - snaplet-hdbc
- - snaplet-hslogger
- - snaplet-i18n
- - snaplet-influxdb
  - snaplet-lss
- - snaplet-mandrill
  - snaplet-mongoDB
- - snaplet-mongodb-minimalistic
- - snaplet-mysql-simple
  - snaplet-oauth
- - snaplet-persistent
- - snaplet-postgresql-simple
  - snaplet-postmark
- - snaplet-purescript
- - snaplet-recaptcha
- - snaplet-redis
  - snaplet-redson
  - snaplet-rest
  - snaplet-riak
- - snaplet-sass
- - snaplet-scoped-session
  - snaplet-sedna
- - snaplet-ses-html
- - snaplet-sqlite-simple
- - snaplet-sqlite-simple-jwt-auth
  - snaplet-stripe
  - snaplet-tasks
- - snaplet-typed-sessions
- - snaplet-wordpress
  - snappy-iteratee
  - sndfile-enumerators
  - sneakyterm
@@ -3837,8 +3759,6 @@ dont-distribute-packages:
  - telegram-raw-api
  - ten-lens
  - ten-unordered-containers
- - tensorflow-opgen
- - tensorflow-proto
  - terminal-text
  - terrahs
  - test-sandbox-compose
@@ -4080,7 +4000,6 @@ dont-distribute-packages:
  - wahsp
  - wai-devel
  - wai-dispatch
- - wai-handler-hal
  - wai-handler-snap
  - wai-hastache
  - wai-middleware-brotli
@@ -4090,7 +4009,6 @@ dont-distribute-packages:
  - wai-middleware-content-type
  - wai-middleware-rollbar
  - wai-middleware-route
- - wai-middleware-validation
  - wai-middleware-verbs
  - wai-route
  - wai-routing
@@ -4107,7 +4025,6 @@ dont-distribute-packages:
  - wavesurfer
  - wavy
  - weatherhs
- - web-fpco
  - web-mongrel2
  - web-routes-regular
  - web-routing
@@ -4120,7 +4037,6 @@ dont-distribute-packages:
  - web3-solidity
  - webcrank-wai
  - webdriver-w3c
- - webgear-openapi
  - webify
  - webserver
  - websockets-rpc

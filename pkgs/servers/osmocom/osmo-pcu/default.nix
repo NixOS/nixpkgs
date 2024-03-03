@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-pcu";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-pcu";
     rev = version;
-    hash = "sha256-p5gBOHw/3NJ482EX5LcmaWkwz/ikcK7EEeio/puNTFo=";
+    hash = "sha256-rE5/wtzABEd6OVSRVrBvIJuo/CSfK19nf7tm+QQzljY=";
   };
 
   postPatch = ''

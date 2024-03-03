@@ -78,6 +78,8 @@ self: super: {
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
   ormolu = doDistribute self.ormolu_0_7_3_0;
   fourmolu = doDistribute (dontCheck self.fourmolu_0_14_1_0);
+  xmonad = doDistribute self.xmonad_0_18_0;
+  hlint = doDistribute self.hlint_3_8;
 
   #
   # Jailbreaks
@@ -104,6 +106,7 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
   hourglass = dontCheck super.hourglass; # umaintained, test suite doesn't compile anymore
+  bsb-http-chunked = dontCheck super.bsb-http-chunked; # umaintained, test suite doesn't compile anymore
 
   #
   # Other build fixes
@@ -112,4 +115,18 @@ self: super: {
   # 2023-12-23: It needs this to build under ghc-9.6.3.
   #   A factor of 100 is insufficent, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
+
+  # Fix build with text-2.x.
+  libmpd = appendPatch (pkgs.fetchpatch
+      { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
+        sha256 = "Q4fA2J/Tq+WernBo+UIMdj604ILOMlIYkG4Pr046DfM=";
+      })
+    super.libmpd;
+
+  # Symbol syntax seems to have changed in 9.8, removing a seemingly redundant colon; appears to be an overspecified assertion.
+  # https://github.com/wz1000/HieDb/issues/74
+  hiedb =
+    assert super.hiedb.version == "0.5.0.1";
+    dontCheck super.hiedb;
+
 }

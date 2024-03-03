@@ -6,6 +6,9 @@
 , fetchPypi
 , nix-update-script
 , runtimeShell
+, installShellFiles
+, testers
+, pdm
 }:
 let
   python = python3.override {
@@ -32,23 +35,26 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.10.4";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "2.12.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bf2dTLWQQ+3sstC0fSCOVdidMzunGX3rBcyi37x6S/s=";
+    hash = "sha256-U82rcnwUaf3Blu/Y1/+EBKPKke5DwKVxRzbyAg0KXd8=";
   };
 
   nativeBuildInputs = [
     pdm-backend
+    installShellFiles
   ];
 
   propagatedBuildInputs = [
     blinker
     certifi
     cachecontrol
+    dep-logic
     findpython
     installer
     packaging
@@ -69,7 +75,27 @@ buildPythonApplication rec {
   ]
   ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
+  ]
+  ++ lib.optionals (pythonAtLeast "3.10") [
+    truststore
   ];
+
+  makeWrapperArgs = [
+    "--set PDM_CHECK_UPDATE 0"
+  ];
+
+  preInstall = ''
+    # Silence network warning during pypaInstallPhase
+    # by disabling latest version check
+    export PDM_CHECK_UPDATE=0
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd pdm \
+      --bash <($out/bin/pdm completion bash) \
+      --fish <($out/bin/pdm completion fish) \
+      --zsh <($out/bin/pdm completion zsh)
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -86,7 +112,7 @@ buildPythonApplication rec {
   preCheck = ''
     export HOME=$TMPDIR
     substituteInPlace tests/cli/test_run.py \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-warn "/bin/bash" "${runtimeShell}"
   '';
 
   disabledTests = [
@@ -98,6 +124,10 @@ buildPythonApplication rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = pdm;
+  };
 
   passthru.updateScript = nix-update-script { };
 

@@ -2,28 +2,19 @@
 , fetchFromGitHub
 , python3Packages
 , qt6
-, fetchpatch
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "zapzap";
-  version = "4.5.5.2";
+  version = "5.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zapzap-linux";
     repo = "zapzap";
-    rev = version;
-    hash = "sha256-8IeFGTI+5kbeFGqH5DpHCY8pqzGhE48hPCEIKIe7jAM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Jswt/SWsrrXdJtaT3FAOuOCkrwlpy+lSJa6/gquMiwY=";
   };
-
-  patches = [
-    # fixes that the tray icon was not installed
-    (fetchpatch {
-      url = "https://github.com/zapzap-linux/zapzap/pull/25/commits/4107b019555492e2c2692dd4c40553503047e6a8.patch";
-      hash = "sha256-NQPGPXYFhVwsPXopEELG1n/f8yUj/74OFE1hTyt93Ng=";
-    })
-  ];
 
   nativeBuildInputs = with python3Packages; [
     setuptools

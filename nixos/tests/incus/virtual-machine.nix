@@ -36,7 +36,7 @@ in
 
   testScript = ''
     def instance_is_up(_) -> bool:
-      status, _ = machine.execute("incus exec ${instance-name} --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+      status, _ = machine.execute("incus exec ${instance-name} --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
       return status == 0
 
     machine.wait_for_unit("incus.service")

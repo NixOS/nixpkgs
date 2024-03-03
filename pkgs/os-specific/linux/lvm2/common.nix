@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
     }))
     # Musl fix from Alpine
     ./fix-stdio-usage.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    ./no-shared.patch
+    # https://gitlab.com/lvmteam/lvm2/-/merge_requests/8
+    ./fix-static.patch
   ];
 
   doCheck = false; # requires root

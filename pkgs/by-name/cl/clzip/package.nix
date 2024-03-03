@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clzip";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchurl {
     url = "mirror://savannah/lzip/clzip/clzip-${finalAttrs.version}.tar.gz";
-    hash = "sha256-esn79QNr9Q+wtqIOhNIpPLDSTUBE6vM8vpdgu55/6no=";
+    hash = "sha256-9j/hJFuDL+B/9nnpubhofpN5q2E6Jr+wrKN1TIsWLXM=";
   };
 
   meta = with lib; {

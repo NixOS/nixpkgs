@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   # it would use the erroneous tag v0.47
-  passthru.skipBulkUpdate = false;
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "An unofficial Dynalite DyNET interface creating devices";

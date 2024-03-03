@@ -1,15 +1,43 @@
-{ stdenv, pkgsHostTarget, cmake, makeWrapper, mkDerivation, fetchFromGitHub
-, alex, array, base, bytestring, cond, containers, directory, extra
-, filepath, hpack, hspec, hspec-core, isocline, json, lib, mtl
-, parsec, process, regex-compat, text, time }:
+{ stdenv
+, pkgsHostTarget
+, cmake
+, makeWrapper
+, fetchpatch
+, mkDerivation
+, fetchFromGitHub
+, alex
+, lib
+, hpack
+, aeson
+, array
+, async
+, base
+, bytestring
+, co-log-core
+, cond
+, containers
+, directory
+, FloatingHex
+, isocline
+, lens
+, lsp
+, mtl
+, network
+, network-simple
+, parsec
+, process
+, text
+, text-rope
+, time
+}:
 
 let
-  version = "2.4.2";
+  version = "3.1.0";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-sVjaIzOxNuBtDswpDl5gLB10Sw945TQAf2ywrKumqqk=";
+    sha256 = "sha256-Twm2Hr8BQ0xTdA30e2Az/57525jTUkmv2Zs/+SNiQns=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
@@ -37,9 +65,37 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   libraryToolDepends = [ hpack ];
+  patches = [
+    (fetchpatch {
+      name = "koka-stackage-22.patch";
+      url = "https://github.com/koka-lang/koka/commit/95f9b360544996e06d4bb33321a83a6b9605d092.patch";
+      sha256 = "1a1sv1r393wkhsnj56awsi8mqxakqdy86p7dg9i9xfv13q2g4h6x";
+      includes = [ "src/**" ];
+    })
+  ];
   executableHaskellDepends = [
-    array base bytestring cond containers directory isocline mtl
-    parsec process text time kklib
+    aeson
+    array
+    async
+    base
+    bytestring
+    co-log-core
+    cond
+    containers
+    directory
+    FloatingHex
+    isocline
+    lens
+    lsp
+    mtl
+    network
+    network-simple
+    parsec
+    process
+    text
+    text-rope
+    time
+    kklib
   ];
   executableToolDepends = [ alex makeWrapper ];
   postInstall = ''

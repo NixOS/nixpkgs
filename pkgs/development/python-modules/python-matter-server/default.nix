@@ -2,9 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, stdenvNoCC
+, substituteAll
 
 # build
 , setuptools
+, pythonRelaxDepsHook
 
 # propagates
 , aiohttp
@@ -18,6 +21,7 @@
 # optionals
 , cryptography
 , home-assistant-chip-core
+, zeroconf
 
 # tests
 , python
@@ -26,9 +30,32 @@
 , pytestCheckHook
 }:
 
+let
+  paaCerts = stdenvNoCC.mkDerivation rec {
+    pname = "matter-server-paa-certificates";
+    version = "1.2.0.1";
+
+    src = fetchFromGitHub {
+      owner = "project-chip";
+      repo = "connectedhomeip";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-p3P0n5oKRasYz386K2bhN3QVfN6oFndFIUWLEUWB0ss=";
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp $src/credentials/development/paa-root-certs/* $out/
+
+      runHook postInstall
+    '';
+  };
+in
+
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.1.1";
+  version = "5.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -37,16 +64,29 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-y4gapml7rIwOu1TVDEHPch7JS5Rl/cIfMLeVMIFzXOY=";
+    hash = "sha256-bpXRay4JUujqdnscGldW732e8FTkcmfShbtwp2YJC60=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./link-paa-root-certs.patch;
+      paacerts = paaCerts;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace '--cov' ""
   '';
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "home-assistant-chip-clusters"
   ];
 
   propagatedBuildInputs = [
@@ -63,6 +103,7 @@ buildPythonPackage rec {
     server = [
       cryptography
       home-assistant-chip-core
+      zeroconf
     ];
   };
 
@@ -70,7 +111,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = let
     pythonEnv = python.withPackages (_: propagatedBuildInputs ++ nativeCheckInputs ++ [ pytest ]);

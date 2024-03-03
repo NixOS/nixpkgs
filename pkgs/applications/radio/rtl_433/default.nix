@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ earldouglas markuskowa ];
     platforms = platforms.all;
+    mainProgram = "rtl_433";
   };
 }

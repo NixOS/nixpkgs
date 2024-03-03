@@ -154,7 +154,7 @@ in
     in {
       description = "BigClown Gateway";
       wantedBy = [ "multi-user.target" ];
-      wants = mkIf config.services.mosquitto.enable [ "mosquitto.service" ];
+      wants = [ "network-online.target" ] ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
       after = [ "network-online.target" ];
       preStart = ''
         umask 077

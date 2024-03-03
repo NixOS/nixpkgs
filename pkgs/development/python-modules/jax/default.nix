@@ -1,6 +1,7 @@
 { lib
 , blas
 , buildPythonPackage
+, callPackage
 , setuptools
 , importlib-metadata
 , fetchFromGitHub
@@ -28,7 +29,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.23";
+  version = "0.4.24";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-PDa3yVH/sszGbWkVkJ+19FdOr3oqdYk+OdbeUTMTDuU=";
+    hash = "sha256-hmx7eo3pephc6BQfoJ3U0QwWBWmhkAc+7S4QmW32qQs=";
   };
 
   nativeBuildInputs = [
@@ -89,6 +90,9 @@ buildPythonPackage rec {
     "testKde3"
     "testKde5"
     "testKde6"
+    # Invokes python manually in a subprocess, which does not have the correct dependencies
+    # ImportError: This version of jax requires jaxlib version >= 0.4.19.
+    "test_no_log_spam"
   ] ++ lib.optionals usingMKL [
     # See
     #  * https://github.com/google/jax/issues/9705
@@ -122,6 +126,23 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "jax" ];
+
+  # Test CUDA-enabled jax and jaxlib. Running CUDA-enabled tests is not
+  # currently feasible within the nix build environment so we have to maintain
+  # this script separately. See https://github.com/NixOS/nixpkgs/pull/256230
+  # for a possible remedy to this situation.
+  #
+  # Run these tests with eg
+  #
+  #   NIXPKGS_ALLOW_UNFREE=1 nixglhost -- nix run --impure .#python3Packages.jax.passthru.tests.test_cuda_jaxlibBin
+  passthru.tests = {
+    test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib.override { cudaSupport = true; };
+    };
+    test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib-bin.override { cudaSupport = true; };
+    };
+  };
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

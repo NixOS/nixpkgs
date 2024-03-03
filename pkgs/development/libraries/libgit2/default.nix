@@ -15,18 +15,21 @@
 # for passthru.tests
 , libgit2-glib
 , python3Packages
+, gitstatus
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "1.7.1";
+  version = "1.7.2";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
+
+  outputs = ["lib" "dev" "out"];
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    hash = "sha256-3W0/i6Pu7I7D1zMQhmEqJVsa7PZpKOqU1+udNENSBvM=";
+    hash = "sha256-fVPY/byE2/rxmv/bUykcAbmUFMlF3UZogVuTzjOXJUU=";
   };
 
   cmakeFlags = [
@@ -46,11 +49,27 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
 
-  doCheck = false; # hangs. or very expensive?
+  doCheck = true;
+  checkPhase = ''
+    testArgs=(-v -xonline)
+
+    # slow
+    testArgs+=(-xclone::nonetwork::bad_urls)
+
+    # failed to set permissions on ...: Operation not permitted
+    testArgs+=(-xrepo::init::extended_1)
+    testArgs+=(-xrepo::template::extended_with_template_and_shared_mode)
+
+    (
+      set -x
+      ./libgit2_tests ''${testArgs[@]}
+    )
+  '';
 
   passthru.tests = {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
+    inherit gitstatus;
   };
 
   meta = with lib; {

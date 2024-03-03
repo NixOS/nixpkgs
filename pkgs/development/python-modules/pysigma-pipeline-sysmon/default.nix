@@ -9,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-sysmon";
-  version = "1.0.3";
-  format = "pyproject";
+  version = "1.0.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-sysmon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5CDwevzD6R1nIcID6C5PV+i6pwY2CLakRC6NUXtmPs8=";
+    hash = "sha256-/WBHu1pFEiVPJQ97xEwjJJ92h9kHzTBPgmfQrR+RZjA=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to support Sysmon pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon";
+    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon/releases/tag/v${version}";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ fab ];
   };

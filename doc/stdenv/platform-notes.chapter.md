@@ -54,7 +54,7 @@ Some common issues when packaging software for Darwin:
     # ...
     prePatch = ''
       substituteInPlace Makefile \
-          --replace '/usr/bin/xcrun clang' clang
+          --replace-fail '/usr/bin/xcrun clang' clang
     '';
   }
   ```

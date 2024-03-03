@@ -75,6 +75,8 @@ self: super: {
 
   # Forbids transformers >= 0.6
   quickcheck-classes-base = doJailbreak super.quickcheck-classes-base;
+  # https://github.com/Gabriella439/Haskell-Break-Library/pull/3
+  break = doJailbreak super.break;
   # Forbids mtl >= 2.3
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   # Forbids base >= 4.18
@@ -103,24 +105,6 @@ self: super: {
       })
     ] (super.hourglass);
 
-  # Patch 0.17.1 for support of mtl-2.3
-  xmonad-contrib = appendPatch
-    (pkgs.fetchpatch {
-      name = "xmonad-contrib-mtl-2.3.patch";
-      url = "https://github.com/xmonad/xmonad-contrib/commit/8cb789af39e93edb07f1eee39c87908e0d7c5ee5.patch";
-      sha256 = "sha256-ehCvVy0N2Udii/0K79dsRSBP7/i84yMoeyupvO8WQz4=";
-    })
-    (doJailbreak super.xmonad-contrib);
-
-  # Patch 0.12.0.1 for support of unix-2.8.0.0
-  arbtt = appendPatch
-    (pkgs.fetchpatch {
-      name = "arbtt-unix-2.8.0.0.patch";
-      url = "https://github.com/nomeata/arbtt/pull/168/commits/ddaac94395ac50e3d3cd34c133dda4a8e5a3fd6c.patch";
-      sha256 = "sha256-5Gmz23f4M+NfgduA5O+9RaPmnneAB/lAlge8MrFpJYs=";
-    })
-    super.arbtt;
-
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
@@ -136,27 +120,9 @@ self: super: {
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin
-    algebraic-graphs
-    co-log-core
-    lens
-    cryptohash-sha1
-    cryptohash-md5
     ghc-trace-events
-    tasty-hspec
-    constraints-extras
-    tree-diff
-    implicit-hie-cradle
-    focus
-    hie-compat
-    dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
     gi-cairo-connector          # mtl <2.3
-    haskintex                   # text <2
-    lens-family-th              # template-haskell <2.19
     ghc-prof                    # base <4.18
-    profiteur                   # vector <0.13
-    mfsolve                     # mtl <2.3
-    cubicbezier                 # mtl <2.3
-    dhall                       # template-haskell <2.20
     env-guard                   # doctest <0.21
     package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;
@@ -173,6 +139,28 @@ self: super: {
 
   # Doctest comments have bogus imports.
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
+
+  # This can be removed once https://github.com/typeclasses/ascii-predicates/pull/1
+  # is merged and in a release that's being tracked.
+  ascii-predicates = appendPatch
+    (pkgs.fetchpatch
+      { url = "https://github.com/typeclasses/ascii-predicates/commit/2e6d9ed45987a8566f3a77eedf7836055c076d1a.patch";
+        name = "ascii-predicates-pull-1.patch";
+        relative = "ascii-predicates";
+        sha256 = "sha256-4JguQFZNRQpjZThLrAo13jNeypvLfqFp6o7c1bnkmZo=";
+      })
+    super.ascii-predicates;
+
+  # This can be removed once https://github.com/typeclasses/ascii-numbers/pull/1
+  # is merged and in a release that's being tracked.
+  ascii-numbers = appendPatch
+    (pkgs.fetchpatch
+      { url = "https://github.com/typeclasses/ascii-numbers/commit/e9474ad91bc997891f1a46afd5d0bdf9b9f7d768.patch";
+        name = "ascii-numbers-pull-1.patch";
+        relative = "ascii-numbers";
+        sha256 = "sha256-buw1UeW57CFefEfqdDUraSyQ+H/NvCZOv6WF2ORiYQg=";
+      })
+    super.ascii-numbers;
 
   # Fix ghc-9.6.x build errors.
   libmpd = appendPatch
@@ -194,10 +182,15 @@ self: super: {
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;
-
+}
+# super.ghc is required to break infinite recursion as Nix is strict in the attrNames
+// lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {
   # The NCG backend for aarch64 generates invalid jumps in some situations,
   # the workaround on 9.6 is to revert to the LLVM backend (which is used
   # for these sorts of situations even on 9.2 and 9.4).
   # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
-  tls = if pkgs.stdenv.hostPlatform.isAarch64 then self.forceLlvmCodegenBackend super.tls else super.tls;
+  inherit (lib.mapAttrs (_: self.forceLlvmCodegenBackend) super)
+    tls
+    mmark
+    ;
 }

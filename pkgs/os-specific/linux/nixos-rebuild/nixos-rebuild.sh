@@ -34,8 +34,7 @@ targetHost=
 remoteSudo=
 verboseScript=
 noFlake=
-# comma separated list of vars to preserve when using sudo
-preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
+installBootloader=
 json=
 
 # log the given argument to stderr
@@ -57,10 +56,10 @@ while [ "$#" -gt 0 ]; do
         ;;
       --install-grub)
         log "$0: --install-grub deprecated, use --install-bootloader instead"
-        export NIXOS_INSTALL_BOOTLOADER=1
+        installBootloader=1
         ;;
       --install-bootloader)
-        export NIXOS_INSTALL_BOOTLOADER=1
+        installBootloader=1
         ;;
       --no-build-nix)
         buildNix=
@@ -157,8 +156,6 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-sudoCommand=(sudo --preserve-env="$preservedSudoVars" --)
-
 if [[ -n "$SUDO_USER" ]]; then
     useSudo=1
 fi
@@ -179,7 +176,7 @@ runCmd() {
 buildHostCmd() {
     local c
     if [[ "${useSudo:-x}" = 1 ]]; then
-        c=("${sudoCommand[@]}")
+        c=("sudo")
     else
         c=()
     fi
@@ -196,7 +193,7 @@ buildHostCmd() {
 targetHostCmd() {
     local c
     if [[ "${useSudo:-x}" = 1 ]]; then
-        c=("${sudoCommand[@]}")
+        c=("sudo")
     else
         c=()
     fi
@@ -407,6 +404,13 @@ fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
+if [[ ${#tmpDir} -ge 60 ]]; then
+    # Very long tmp dirs lead to "too long for Unix domain socket"
+    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
+    rmdir "$tmpDir"
+    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
+fi
+
 cleanup() {
     for ctrl in "$tmpDir"/ssh-*; do
         ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
@@ -572,6 +576,7 @@ if [ "$action" = repl ]; then
                     - ${blue}config${reset}   All option values
                     - ${blue}options${reset}  Option data and metadata
                     - ${blue}pkgs${reset}     Nixpkgs package set
+                    - ${blue}lib${reset}      Nixpkgs library functions
                     - other module arguments
 
                     - ${blue}flake${reset}    Flake outputs, inputs and source info of $flake
@@ -592,6 +597,7 @@ if [ "$action" = repl ]; then
                 configuration._module.specialArgs //
                 {
                   inherit (configuration) config options;
+                  lib = configuration.lib or configuration.pkgs.lib;
                   inherit flake;
                 };
           in builtins.seq scope builtins.trace motd scope
@@ -747,7 +753,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     cmd=(
         "systemd-run"
         "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value
-        "-E" "NIXOS_INSTALL_BOOTLOADER"
+        "-E" "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
         "--collect"
         "--no-ask-password"
         "--pty"
@@ -765,14 +771,14 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     # may be dangerous in remote access (e.g. SSH).
     if [[ -n "$NIXOS_SWITCH_USE_DIRTY_ENV" ]]; then
         log "warning: skipping systemd-run since NIXOS_SWITCH_USE_DIRTY_ENV is set. This environment variable will be ignored in the future"
-        cmd=()
+        cmd=("env" "NIXOS_INSTALL_BOOTLOADER=$installBootloader")
     elif ! targetHostSudoCmd "${cmd[@]}" true; then
         logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
         cmd=(
             "env"
             "-i"
             "LOCALE_ARCHIVE=$LOCALE_ARCHIVE"
-            "NIXOS_INSTALL_BOOTLOADER=$NIXOS_INSTALL_BOOTLOADER"
+            "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
         )
     else
         logVerbose "Using systemd-run to switch configuration."

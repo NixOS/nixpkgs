@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "vimpc";
   };
 }

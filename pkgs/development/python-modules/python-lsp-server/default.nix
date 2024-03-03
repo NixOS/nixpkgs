@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.9.0";
+  version = "1.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9za0et/W+AwrjqUVoHwk8oqLXk4eqgRON8Z4F5GSKXM=";
+    hash = "sha256-dh33m7wgOwUETjdNqqDKZnpTgbrYCg9/XXC296tHm4w=";
   };
 
   postPatch = ''
@@ -144,6 +144,7 @@ buildPythonPackage rec {
     # https://github.com/python-lsp/python-lsp-server/issues/243
     "test_numpy_completions"
     "test_workspace_loads_pycodestyle_config"
+    "test_autoimport_code_actions_and_completions_for_notebook_document"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # pyqt5 is broken on aarch64-darwin
     "test_pyqt_completion"

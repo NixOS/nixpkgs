@@ -59,7 +59,6 @@ in {
 
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
-  lens-family-th = doJailbreak super.lens-family-th;  # template-haskell <2.19
 
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
@@ -93,6 +92,9 @@ in {
 
   ghc-tags = self.ghc-tags_1_6;
 
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = super.ghc-exactprint_1_6_1_3;
+
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
   th-extras = doJailbreak super.th-extras;
@@ -102,6 +104,9 @@ in {
 
   # Broken because of unix >= 2.8 for GHC >= 9.6
   darcs = unmarkBroken (doDistribute super.darcs);
+
+  # Test suite has too strict dependencies
+  hw-fingertree = dontCheck super.hw-fingertree;
 
   inherit
     (

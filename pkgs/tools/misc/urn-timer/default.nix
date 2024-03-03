@@ -7,6 +7,7 @@
 , wrapGAppsHook
 , gtk3
 , jansson
+, nixosTests
 }:
 
 stdenv.mkDerivation {
@@ -37,6 +38,8 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/paoloose/urn.git";
   };
+
+  passthru.tests.nixosTest = nixosTests.urn-timer;
 
   meta = with lib; {
     homepage = "https://github.com/paoloose/urn";

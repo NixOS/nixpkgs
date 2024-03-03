@@ -114,7 +114,6 @@ self: super: builtins.intersectAttrs super {
       }))
       super)
     hls-brittany-plugin
-    hls-stan-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-overloaded-record-dot-plugin
@@ -123,6 +122,9 @@ self: super: builtins.intersectAttrs super {
   # PLUGINS WITH DISABLED TESTS
   # 2023-04-01: TODO: We should reenable all these tests to figure if they are still broken.
   inherit (pkgs.lib.mapAttrs (_: dontCheck) super)
+    # Tests require ghcide-test-utils which is broken
+    hls-semantic-tokens-plugin
+
     # Tests have file permissions expections that don’t work with the nix store.
     hls-gadt-plugin
 
@@ -173,6 +175,9 @@ self: super: builtins.intersectAttrs super {
 
     # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3549
     hls-retrie-plugin
+
+    # 2024-01-25: Golden files are missing
+    hls-stan-plugin
   ;
 
   ###########################################
@@ -465,6 +470,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
   shellify = enableSeparateBinOutput super.shellify;
+  specup = enableSeparateBinOutput super.specup;
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
@@ -490,9 +496,6 @@ self: super: builtins.intersectAttrs super {
 
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
-
-  # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
   # llvm-ffi needs a specific version of LLVM which we hard code here. Since we
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
@@ -795,6 +798,7 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace Test.hs \
         --replace ', testCase "crypto" test_crypto' ""
     '' + (drv.postPatch or "");
+
     # Ensure git-annex uses the exact same coreutils it saw at build-time.
     # This is especially important on Darwin but also in Linux environments
     # where non-GNU coreutils are used by default.
@@ -805,6 +809,19 @@ self: super: builtins.intersectAttrs super {
     buildTools = [
       pkgs.buildPackages.makeWrapper
     ] ++ (drv.buildTools or []);
+
+    # Git annex provides a restricted login shell. Setting
+    # passthru.shellPath here allows a user's login shell to be set to
+    # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
+    # https://git-annex.branchable.com/git-annex-shell/
+    passthru.shellPath = "/bin/git-annex-shell";
+
+    # Install man pages which is no longer done by Setup.hs
+    # TODO(@sternenseemann): figure out why install-desktops wants to create /usr
+    # and run that, too.
+    postInstall = drv.postInstall or "" + ''
+      make install-mans "DESTDIR=$out" PREFIX=
+    '';
   }) (super.git-annex.override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
@@ -1086,7 +1103,7 @@ self: super: builtins.intersectAttrs super {
   rel8 = pkgs.lib.pipe super.rel8 [
     (addTestToolDepend pkgs.postgresql)
     # https://github.com/NixOS/nixpkgs/issues/198495
-    (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
+    (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
@@ -1118,10 +1135,16 @@ self: super: builtins.intersectAttrs super {
     preCheck = "export CI=true";
   }) super.aeson-typescript;
 
-  # Enable extra optimisations which increase build time, but also
-  # later compiler performance, so we should do this for user's benefit.
-  # Flag added in Agda 2.6.2
-  Agda = appendConfigureFlag "-foptimise-heavily" super.Agda;
+  Agda = lib.pipe super.Agda [
+    # Enable extra optimisations which increase build time, but also
+    # later compiler performance, so we should do this for user's benefit.
+    # Flag added in Agda 2.6.2
+    (enableCabalFlag "optimise-heavily")
+    # Enable debug printing, which worsens performance slightly but is
+    # very useful.
+    # Flag added in Agda 2.6.4.1, was always enabled before
+    (enableCabalFlag "debug")
+  ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
   # to arbitrary files in $HOME. This doesn't either not achieve anything
@@ -1155,10 +1178,7 @@ self: super: builtins.intersectAttrs super {
 
   # Some hash implementations are x86 only, but part of the test suite.
   # So executing and building it on non-x86 platforms will always fail.
-  hashes = overrideCabal {
-    doCheck = with pkgs.stdenv; hostPlatform == buildPlatform
-      && buildPlatform.isx86;
-  } super.hashes;
+  hashes = dontCheckIf (!pkgs.stdenv.hostPlatform.isx86) super.hashes;
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
@@ -1335,6 +1355,10 @@ self: super: builtins.intersectAttrs super {
       webkit2gtk3-javascriptcore
       gi-webkit2
       gi-webkit2webextension
+      gi-gtk_4_0_8
+      gi-gdk_4_0_7
+      gi-gsk
+      gi-adwaita
       ;
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
@@ -1356,4 +1380,12 @@ self: super: builtins.intersectAttrs super {
     mpi-hs-cereal
     mpi-hs-binary
     ;
+
+  postgresql-libpq = overrideCabal (drv: {
+    # Using use-pkg-config flag, because pg_config won't work when cross-compiling.
+    configureFlags = drv.configureFlags or [] ++ [ "-fuse-pkg-config" ];
+    # Move postgresql from SystemDepends to PkgconfigDepends
+    libraryPkgconfigDepends = drv.librarySystemDepends;
+    librarySystemDepends = [];
+  }) super.postgresql-libpq;
 }

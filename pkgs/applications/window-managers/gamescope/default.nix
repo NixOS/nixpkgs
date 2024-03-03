@@ -13,6 +13,7 @@
 , glm
 , gbenchmark
 , libcap
+, libavif
 , SDL2
 , pipewire
 , pixman
@@ -26,6 +27,7 @@
 , libdisplay-info
 , lib
 , makeBinaryWrapper
+, nix-update-script
 , enableExecutable ? true
 , enableWsi ? true
 }:
@@ -39,14 +41,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.13.19";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-WKQgVbuHvTbZnvTU5imV35AKZ4AF0EDsdESBZwVH7+M=";
+    hash = "sha256-Ym1kl9naAm1MGlxCk32ssvfiOlstHiZPy7Ga8EZegus=";
   };
 
   patches = [
@@ -108,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXres
     xorg.libXtst
     xorg.libXxf86vm
+    libavif
     libdrm
     libliftoff
     SDL2
@@ -130,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/gamescope/reshade
     cp -r ${joshShaders}/* $out/share/gamescope/reshade/
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "SteamOS session compositing window manager";

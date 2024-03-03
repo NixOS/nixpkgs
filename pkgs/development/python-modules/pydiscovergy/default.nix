@@ -9,6 +9,7 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pytz
 , respx
 }:
@@ -29,6 +30,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pytz"
   ];
 
   propagatedBuildInputs = [

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.7.11";
+  version = "0.7.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "svinota";
     repo = "pyroute2";
     rev = "refs/tags/${version}";
-    hash = "sha256-rX/aUmL9H4dSoRngxVVX1olfGtxK93g76E6Z0CYNr2M=";
+    hash = "sha256-zB792ZwDWd74YBYvQ5au0t2RWTIAqrWvNtQ/e+ZEk50=";
   };
 
   nativeBuildInputs = [

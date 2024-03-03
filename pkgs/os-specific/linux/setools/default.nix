@@ -8,18 +8,18 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "4.4.1";
+  version = "4.4.4";
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-4T5FIdnKi35JSm+IoYA2gIBBRV0nN0YLEw9xvDqNcgo=";
+    hash = "sha256-QCJfFdY4THBurx7G8q/WAzb7b9CwtNNGi5fn9D++BMU=";
   };
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];
-  propagatedBuildInputs = [ enum34 libselinux networkx ]
+  propagatedBuildInputs = [ enum34 libselinux networkx setuptools ]
     ++ optionals withGraphics [ pyqt5 ];
 
   nativeCheckInputs = [ tox checkpolicy ];

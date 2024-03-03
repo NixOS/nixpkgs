@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.6.1";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-Zqp/NSF3uoxktycg+Q3BLFUMzbHFKUkYCg+DvEcRydU=";
+    hash = "sha256-lMlBCAmmenEwxzt4ft5jwwvqedzu2omeoNx5g6lA+PE=";
   };
 
   buildInputs = [ gtk3 gtksourceview4 ];

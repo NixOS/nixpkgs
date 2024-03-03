@@ -1,36 +1,36 @@
 { lib
 , callPackage
 , pkg-config
-, gcc13Stdenv
+, stdenv
 , hyprland
 }:
 let
-  mkHyprlandPlugin =
+  mkHyprlandPlugin = hyprland:
     args@{ pluginName, ... }:
-    gcc13Stdenv.mkDerivation (args // {
+    stdenv.mkDerivation (args // {
       pname = "${pluginName}";
       nativeBuildInputs = [ pkg-config ] ++ args.nativeBuildInputs or [ ];
       buildInputs = [ hyprland ]
         ++ hyprland.buildInputs
         ++ (args.buildInputs or [ ]);
       meta = args.meta // {
-        description = (args.meta.description or "");
-        longDescription = (args.meta.lonqDescription or "") +
+        description = args.meta.description or "";
+        longDescription = (args.meta.longDescription or "") +
           "\n\nPlugins can be installed via a plugin entry in the Hyprland NixOS or Home Manager options.";
       };
     });
 
   plugins = {
     hy3 = { fetchFromGitHub, cmake, hyprland }:
-      mkHyprlandPlugin rec {
+      mkHyprlandPlugin hyprland rec {
         pluginName = "hy3";
-        version = "0.34.0";
+        version = "unstable-2024-02-23";
 
         src = fetchFromGitHub {
           owner = "outfoxxed";
           repo = "hy3";
-          rev = "hl${version}";
-          hash = "sha256-Jd1bSwelh7WA8aeYrV+CxxtpsmSITUDruKdNNLHdV7c=";
+          rev = "029a2001361d2a4cbbe7447968dee5d1b1880298";
+          hash = "sha256-8LKCXwNU6wA8o6O7s9T2sLWbYNHaI1tYU4YMjHkNLZQ=";
         };
 
         nativeBuildInputs = [ cmake ];
@@ -47,5 +47,4 @@ let
       };
   };
 in
-lib.mapAttrs (name: plugin: callPackage plugin { }) plugins
-
+(lib.mapAttrs (name: plugin: callPackage plugin { }) plugins) // { inherit mkHyprlandPlugin; }

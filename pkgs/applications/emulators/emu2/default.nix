@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ AndersonTorres ];
     license = licenses.gpl2Plus;
+    mainProgram = "emu2";
   };
 }

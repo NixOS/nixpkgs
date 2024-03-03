@@ -41,6 +41,13 @@ buildPythonPackage rec {
       url = "https://github.com/bodono/scs-python/commit/dd17e2e5282ebe85f2df8a7c6b25cfdeb894970d.patch";
       hash = "sha256-vSeSJeeu5Wx3RXPyB39YTo0RU8HtAojrUw85Q76/QzA=";
     })
+    # fix test_solve_random_cone_prob on linux after scipy 1.12 update
+    # https://github.com/bodono/scs-python/pull/82
+    (fetchpatch {
+      name = "scipy-1.12-fix.patch";
+      url = "https://github.com/bodono/scs-python/commit/4baf4effdc2ce7ac2dd1beaf864f1a5292eb06c6.patch";
+      hash = "sha256-U/F5MakwYZN5hCaeAkcCG38WQxX9mXy9OvhyEQqN038=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -62,12 +69,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
-  disabledTests = lib.lists.optional (stdenv.system == "x86_64-linux") [
-    # `test/test_scs_rand.py` hang on "x86_64-linux" (https://github.com/NixOS/nixpkgs/pull/244532#pullrequestreview-1598095858)
-    "test_feasible"
-    "test_infeasibl"
-    "test_unbounded"
-  ];
 
   meta = with lib; {
     description = "Python interface for SCS: Splitting Conic Solver";

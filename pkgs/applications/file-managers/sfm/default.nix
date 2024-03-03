@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
+    mainProgram = "sfm";
   };
 }

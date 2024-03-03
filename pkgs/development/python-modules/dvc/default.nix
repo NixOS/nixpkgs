@@ -1,26 +1,24 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools-scm
 , appdirs
+, buildPythonPackage
 , colorama
 , configobj
 , distro
 , dpath
 , dvc-azure
 , dvc-data
+, dvc-gdrive
 , dvc-gs
+, dvc-hdfs
 , dvc-http
 , dvc-render
 , dvc-s3
 , dvc-ssh
 , dvc-studio-client
 , dvc-task
+, fetchFromGitHub
 , flatten-dict
-, flufl_lock
+, flufl-lock
 , funcy
 , grandalf
 , gto
@@ -36,10 +34,13 @@
 , pydot
 , pygtrie
 , pyparsing
+, pythonOlder
+, pythonRelaxDepsHook
 , requests
 , rich
 , ruamel-yaml
 , scmrepo
+, setuptools-scm
 , shortuuid
 , shtab
 , tabulate
@@ -56,14 +57,16 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.39.0";
+  version = "3.43.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc";
     rev = "refs/tags/${version}";
-    hash = "sha256-sFrbG9CKt8PaW9qdXBxEa516lnRWzFdTEbdCW6VFUuQ=";
+    hash = "sha256-9JS8N4BWikmXoo5TtpUD5El2vHST80NEOBdxkHfK4ME=";
   };
 
   pythonRelaxDeps = [
@@ -72,7 +75,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace dvc/analytics.py --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
+    substituteInPlace dvc/analytics.py \
+      --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
@@ -94,7 +98,7 @@ buildPythonPackage rec {
     dvc-studio-client
     dvc-task
     flatten-dict
-    flufl_lock
+    flufl-lock
     funcy
     grandalf
     gto
@@ -135,8 +139,14 @@ buildPythonPackage rec {
     azure = [
       dvc-azure
     ];
+    gdrive = [
+      dvc-gdrive
+    ];
     gs = [
       dvc-gs
+    ];
+    hdfs = [
+      dvc-hdfs
     ];
     s3 = [
       dvc-s3

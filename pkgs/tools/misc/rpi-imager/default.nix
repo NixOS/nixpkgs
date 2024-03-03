@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-ZuS/fhPpVlLSdaD+t+qIw6fdEbi7c82X+BxcgWlPntg=";
+    sha256 = "sha256-JrotKMyAgQO3Y5RsFAar9N5/wDpWiBcy8RfvBWDiJMs=";
   };
 
   nativeBuildInputs = [

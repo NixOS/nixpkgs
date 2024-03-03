@@ -114,11 +114,14 @@ in {
       services.knot.extraArgs = [ "-v" ];
       services.knot.settings = {
         server = {
-          listen = [
-            "0.0.0.0@53"
-            "::@53"
-          ];
           automatic-acl = true;
+        };
+
+        xdp = {
+          listen = [
+            "eth1"
+          ];
+          tcp = true;
         };
 
         remote.primary = {
@@ -140,7 +143,7 @@ in {
           "sub.example.com".file = "sub.example.com.zone";
         };
 
-        log.syslog.any = "info";
+        log.syslog.any = "debug";
       };
     };
     client = { lib, nodes, ... }: {

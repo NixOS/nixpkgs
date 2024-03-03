@@ -1,20 +1,23 @@
-{ lib, stdenv, fetchurl, perl, libunwind, buildPackages, gitUpdater }:
+{ lib, stdenv, fetchurl, perl, libunwind, buildPackages, gitUpdater, elfutils }:
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.6";
+  version = "6.7";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-QhtBhsBrcFFj5k3IXycevc9nZgr4ZnKDFH1ehZ/IqWw=";
+    sha256 = "sha256-IJAgHho/8yhG9P5CHBFjsV9EC7OOMTVdCfgtOUmSKvc=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
+  # libunwind for -k.
   # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
   # The build will silently fall back and -k will not work on RISC-V.
-  buildInputs = [ libunwind ]; # support -k
+  buildInputs = [ libunwind ]
+    # -kk
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   configureFlags = [ "--enable-mpers=check" ];
 

@@ -9,28 +9,35 @@
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
+, setuptools
+, setuptools-scm
 , torch
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2023.11.3";
-  format = "setuptools";
+  version = "2024.2.26";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
-    repo = pname;
+    repo = "monty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SENrAHCCWYEMWqPQSy61E8bMYkCBJepK5otb7B7UGXA=";
+    hash = "sha256-+NxgZ8JCoAih4nHq+KP4jym0xnKCjUXJqs+xPpKZPbs=";
   };
 
   postPatch = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     msgpack

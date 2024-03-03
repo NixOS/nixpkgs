@@ -23,7 +23,7 @@ mkDerivation {
   '';
   patches = lib.optionals (!enableHyperlinkedSource) [
     ./disable-hyperlinked-source.patch
-  ] ++ lib.optionals (ghcVersion == "9.8.1") [
+  ] ++ lib.optionals (lib.elem ghcVersion [ "9.8.1" "9.8.2" ]) [
     # Incorrect bounds on Cabal
     # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
     ./hadrian-9.8.1-allow-Cabal-3.10.patch

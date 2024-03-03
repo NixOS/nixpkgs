@@ -23,6 +23,12 @@ buildPythonPackage rec {
 
   sourceRoot = "source/openllm-client";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.18.0" "hatchling" \
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs"
+  '';
+
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs

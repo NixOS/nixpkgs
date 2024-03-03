@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cctools-port
 , perl
 , CoreServices
 , ApplicationServices
@@ -9,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2023.10";
+  version = "2024.01";
 
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";
     rev = version;
-    hash = "sha256-1w6oMoxDro/AHE+QvjKUx9cxNpYuVSXYrRMh31ksgoQ=";
+    hash = "sha256-vU1fhR6pKz2qnznrJ/mknt9DVx+I1kLaPStXKQvp59g=";
     fetchSubmodules = true;
   };
 
@@ -27,12 +26,8 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/arch' "$(type -P true)" \
       --replace '/usr/' '/nope/'
     substituteInPlace 3rdparty/dyncall/configure \
-      --replace '`sw_vers -productVersion`' '"$MACOSX_DEPLOYMENT_TARGET"'
+      --replace '`sw_vers -productVersion`' '"11.0"'
   '';
-
-  nativeBuildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    cctools-port
-  ];
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
   doCheck = false; # MoarVM does not come with its own test suite

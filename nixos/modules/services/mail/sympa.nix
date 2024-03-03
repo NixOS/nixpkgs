@@ -435,7 +435,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
-      wants = sympaSubServices;
+      wants = sympaSubServices ++ [ "network-online.target" ];
       before = sympaSubServices;
       serviceConfig = sympaServiceConfig "sympa_msg";
 
