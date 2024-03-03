@@ -1,26 +1,17 @@
 { lib, writeText, runCommand, python3Full }:
 rec {
-  pythonJsonToDot = writeText "jstodot" ''
-    import sys
-    import json
-    def dot_notate(obj, target=None, prefix=""):
-        if target is None:
-            target = {}
-        for key, value in obj.items():
-            if isinstance(value, dict):
-                dot_notate(value, target, prefix + key + ".")
-            else:
-                target[prefix + key] = value
-        return '\n'.join([f"{key}={value}" for key, value in target.items()])
-    try:
-        print(dot_notate(json.loads(sys.stdin.read())))
-    except json.JSONDecodeError as e:
-        print(f'Error parsing JSON: {e}', file=sys.stderr)
-  '';
-
-  attrToDot = x: builtins.readFile (runCommand "jsonToDot.dot" { } ''
-    echo '${builtins.toJSON x}' | ${python3Full}/bin/python ${pythonJsonToDot} > $out
-  '');
+  attrToDot =
+    let
+      attrToDotHelper = prefix: x:
+        lib.concatStrings
+          (lib.mapAttrsToList
+            (k: v:
+              if builtins.elem (builtins.typeOf v) [ "string" "int" "float" ]
+              then "${prefix}${k}=${toString v}\n"
+              else attrToDotHelper "${prefix}${k}." v)
+            x);
+    in
+    attrToDotHelper "";
 
   compilerEntry = (compilerPkg: compilerName: compilerBinary:
     rec {
@@ -37,11 +28,14 @@ rec {
 
   ce_configuredCompilersListFromEntries = (entries: builtins.concatStringsSep ":" (map (entry: "${entry.entry}") entries));
 
-  ce_configuredCompilerNameAndBinaryListFromEntries = (prefix: entries: builtins.concatStringsSep "\n" (map
-    (entry:
-      "${prefix}.${entry.entry}.exe=${entry.compilerPath}"
-      + "\n" +
-      "${prefix}.${entry.entry}.name=${entry.visibleName}")
-    entries));
+  ce_configuredCompilerNameAndBinaryListFromEntries =
+    prefix: lib.concatMapStrings
+      (entry:
+        attrToDot {
+          ${prefix}.${entry.entry} = {
+            exe = entry.compilerPath;
+            name = entry.visibleName;
+          };
+        });
 
 }
