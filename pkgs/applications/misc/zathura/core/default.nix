@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, wrapGAppsHook, pkg-config
+{ lib, stdenv, fetchFromGitLab, meson, ninja, wrapGAppsHook, pkg-config, gitUpdater
 , appstream-glib, json-glib, desktop-file-utils, python3
 , gtk, girara, gettext, libxml2, check
 , sqlite, glib, texlive, libintl, libseccomp
@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/zathura";
