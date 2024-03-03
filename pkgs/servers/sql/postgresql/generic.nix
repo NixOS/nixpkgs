@@ -46,7 +46,8 @@ let
 
     stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
   in stdenv'.mkDerivation (finalAttrs: {
-    inherit pname version;
+    inherit version;
+    pname = pname + lib.optionalString jitSupport "-jit";
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
