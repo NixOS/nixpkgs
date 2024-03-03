@@ -34,7 +34,7 @@ buildGoModule rec {
   pname = "grafana";
   version = "10.3.4";
 
-  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" "modowners" ];
+  subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
   src = fetchFromGitHub {
     owner = "grafana";
