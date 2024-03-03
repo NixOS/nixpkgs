@@ -192,14 +192,20 @@ self = stdenv.mkDerivation {
     ${copyRustDeps}
   '';
 
-  outputs = [ "out" "dev" "drivers" ]
-    ++ lib.optional enableOSMesa "osmesa"
-    ++ lib.optional stdenv.isLinux "driversdev"
-    ++ lib.optional enableOpenCL "opencl"
+  outputs = [
+    "out" "dev" "drivers"
+  ] ++ lib.optionals enableOSMesa [
+    "osmesa"
+  ] ++ lib.optionals stdenv.isLinux [
+    "driversdev"
+  ] ++ lib.optionals enableOpenCL [
+    "opencl"
+  ] ++ lib.optionals haveDozen [
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
-    # libspirv2dxil itself is pretty chonky, so relocate it to its own output
-    # in case anything wants to use it at some point
-    ++ lib.optional haveDozen "spirv2dxil";
+    # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
+    # case anything wants to use it at some point
+    "spirv2dxil"
+  ];
 
   # Keep build-ids so drivers can use them for caching, etc.
   # Also some drivers segfault without this.
@@ -267,8 +273,11 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (!withLibunwind) [
     (lib.mesonEnable "libunwind" false)
   ]
-  ++ lib.optional enablePatentEncumberedCodecs (lib.mesonOption "video-codecs" "all")
-  ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
+  ++ lib.optionals enablePatentEncumberedCodecs [
+    (lib.mesonOption "video-codecs" "all")
+  ] ++ lib.optionals (vulkanLayers != []) [
+    "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}"
+  ];
 
   strictDeps = true;
 
@@ -285,17 +294,20 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ elfutils libomxil-bellagio libva-minimal udev lm_sensors ]
     ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
-    ++ lib.optional withValgrind valgrind-light
-    ++ lib.optional haveZink vulkan-loader
-    ++ lib.optional haveDozen directx-headers;
+    ++ lib.optionals withValgrind [ valgrind-light ]
+    ++ lib.optionals haveZink [ vulkan-loader ]
+    ++ lib.optionals haveDozen [ directx-headers ];
 
-  depsBuildBuild = [ pkg-config ]
-    # Adding this unconditionally makes x86_64-darwin pick up an older toolchain, as
-    # we explicitly call Mesa with 11.0 stdenv, but buildPackages is still 10.something,
-    # and Mesa can't build with that.
+  depsBuildBuild = [
+    pkg-config
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # Adding this unconditionally makes x86_64-darwin pick up an older
+    # toolchain, as we explicitly call Mesa with 11.0 stdenv, but buildPackages
+    # is still 10.something, and Mesa can't build with that.
     # FIXME: figure this out, or figure out how to get rid of Mesa on Darwin,
     # whichever is easier.
-    ++ lib.optional (!stdenv.isDarwin) buildPackages.stdenv.cc;
+    buildPackages.stdenv.cc
+  ];
 
   nativeBuildInputs = [
     meson pkg-config ninja
@@ -303,11 +315,11 @@ self = stdenv.mkDerivation {
     python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
     rustc rust-bindgen rustPlatform.bindgenHook
-  ] ++ lib.optional haveWayland wayland-scanner;
+  ] ++ lib.optionals haveWayland [ wayland-scanner ];
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
-  ] ++ lib.optional withLibdrm libdrm
+  ] ++ lib.optionals withLibdrm [ libdrm ]
     ++ lib.optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
   doCheck = false;
