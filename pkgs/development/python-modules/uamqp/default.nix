@@ -36,6 +36,24 @@ buildPythonPackage rec {
       extraPrefix = "src/vendor/azure-uamqp-c/";
       hash = "sha256-9o3TNKFeJvZRZeS6qo2Zl+JVFrrqAGYWDQbusz4Ou+g=";
     })
+    ./1.6.5-CVE-2024-25110.prerequisite.patch
+    (fetchpatch {
+      name = "CVE-2024-25110-part-1.patch";
+      url = "https://github.com/Azure/azure-uamqp-c/commit/30865c9ccedaa32ddb036e87a8ebb52c3f18f695.patch";
+      stripLen = 1;
+      extraPrefix = "src/vendor/azure-uamqp-c/";
+      hash = "sha256-igzZqTLUUyuNcpCUbYHI4RXmWxg+7EC/yyD4DBurR2M=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-27099.patch";
+      url = "https://github.com/Azure/azure-uamqp-c/commit/2ca42b6e4e098af2d17e487814a91d05f6ae4987.patch";
+      stripLen = 1;
+      extraPrefix = "src/vendor/azure-uamqp-c/";
+      # other files are just tests which aren't run from the python
+      # builder anyway
+      includes = [ "src/vendor/azure-uamqp-c/src/link.c" ];
+      hash = "sha256-EqDfG1xAz5CG8MssSSrz8Yrje5qwF8ri1Kdw+UUu5ms=";
+    })
     # Fix incompatible function pointer conversion error with clang 16.
     ./clang-fix-incompatible-function-pointer-conversion.patch
   ];
