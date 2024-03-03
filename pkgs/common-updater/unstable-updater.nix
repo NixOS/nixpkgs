@@ -84,9 +84,7 @@ let
       # Get info about HEAD from a shallow git clone
       tmpdir="$(mktemp -d)"
 
-      cloneArgs=(
-        --bare
-      )
+      cloneArgs=()
 
       if [[ "$shallow_clone" == "1" ]]; then
           cloneArgs+=(--depth=1)
@@ -120,7 +118,7 @@ let
                   last_tag="$(git describe --tags --abbrev=0 --match "''${tag_format}" 2> /dev/null || true)"
               fi
           else
-              last_tag="$(git describe --tags --abbrev=0 2> --match "''${tag_format}" /dev/null || true)"
+              last_tag="$(git describe --tags --abbrev=0 --match "''${tag_format}" 2> /dev/null || true)"
           fi
           if [[ -z "$last_tag" ]]; then
               last_tag="0"
