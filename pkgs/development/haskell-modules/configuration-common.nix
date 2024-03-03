@@ -1802,6 +1802,17 @@ self: super: {
   # https://github.com/obsidiansystems/dependent-sum/issues/55
   dependent-sum = doJailbreak super.dependent-sum;
 
+  # 2024-02-03: Jailbreak because pretty much every dependency has
+  # tight bounds, and disable building the example executable because
+  # it's not compatible with Reflex 0.9 (the library itself is
+  # compatible however).
+  # https://gitlab.com/Kritzefitz/reflex-gi-gtk/-/merge_requests/16
+  reflex-gi-gtk = assert super.reflex-gi-gtk.version == "0.2.0.0";
+    overrideCabal (drv: {
+      jailbreak = true;
+      buildTarget = drv.pname;  # just the library
+    }) super.reflex-gi-gtk;
+
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = doJailbreak (dontCheck super.reflex);
 
