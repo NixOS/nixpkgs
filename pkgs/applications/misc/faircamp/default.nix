@@ -16,20 +16,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faircamp";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "simonrepp";
     repo = "faircamp";
     rev = version;
-    hash = "sha256-AYvykiPdVeWMEoDgPHlTHDcPrk3VgNQJFXulbO/3Ars=";
+    hash = "sha256-Q0jsqOWeXEfekegxYvq3oIIuVMGyeKL1no2Jh4JByD0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "enolib-0.4.0" = "sha256-lfvQHdQSHAzeOULrvIj7MIYtNaIwc0bXC5q1KK9UGvU=";
+      "enolib-0.4.1" = "sha256-Uz9AXksD3YO6PjSr29RZCQjdoPiFBTXecbE0fluA0LU=";
     };
   };
 
