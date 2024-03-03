@@ -282,21 +282,49 @@ self = stdenv.mkDerivation {
   strictDeps = true;
 
   buildInputs = with xorg; [
-    expat glslang llvmPackages.libllvm libglvnd xorgproto
-    libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
-    libffi libvdpau libXvMC
-    libpthreadstubs openssl
+    expat
+    glslang
+    llvmPackages.libllvm
+    libglvnd
+    xorgproto
+    libX11
+    libXext
+    libxcb
+    libXt
+    libXfixes
+    libxshmfence
+    libXrandr
+    libffi
+    libvdpau
+    libXvMC
+    libpthreadstubs
+    openssl
     zstd
   ] ++ lib.optionals withLibunwind [
     libunwind
   ] ++ [
     python3Packages.python # for shebang
-  ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ elfutils libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
-    ++ lib.optionals withValgrind [ valgrind-light ]
-    ++ lib.optionals haveZink [ vulkan-loader ]
-    ++ lib.optionals haveDozen [ directx-headers ];
+  ] ++ lib.optionals haveWayland [
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals stdenv.isLinux [
+    elfutils
+    libomxil-bellagio
+    libva-minimal
+    udev
+    lm_sensors
+  ] ++ lib.optionals enableOpenCL [
+    llvmPackages.libclc
+    llvmPackages.clang
+    llvmPackages.clang-unwrapped
+    spirv-llvm-translator
+  ] ++ lib.optionals withValgrind [
+    valgrind-light
+  ] ++ lib.optionals haveZink [
+    vulkan-loader
+  ] ++ lib.optionals haveDozen [
+    directx-headers
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -310,17 +338,34 @@ self = stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    meson pkg-config ninja
-    intltool bison flex file
-    python3Packages.python python3Packages.mako python3Packages.ply
-    jdupes glslang
-    rustc rust-bindgen rustPlatform.bindgenHook
-  ] ++ lib.optionals haveWayland [ wayland-scanner ];
+    meson
+    pkg-config
+    ninja
+    intltool
+    bison
+    flex
+    file
+    python3Packages.python
+    python3Packages.mako
+    python3Packages.ply
+    jdupes
+    glslang
+    rustc
+    rust-bindgen
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals haveWayland [
+    wayland-scanner
+  ];
 
   propagatedBuildInputs = with xorg; [
-    libXdamage libXxf86vm
-  ] ++ lib.optionals withLibdrm [ libdrm ]
-    ++ lib.optionals stdenv.isDarwin [ OpenGL Xplugin ];
+    libXdamage
+    libXxf86vm
+  ] ++ lib.optionals withLibdrm [
+    libdrm
+  ] ++ lib.optionals stdenv.isDarwin [
+    OpenGL
+    Xplugin
+  ];
 
   doCheck = false;
 
