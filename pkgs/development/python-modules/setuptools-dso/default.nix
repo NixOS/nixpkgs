@@ -6,12 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "setuptools_dso";
+  pname = "setuptools-dso";
   version = "2.10";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "setuptools_dso";
+    inherit version;
     hash = "sha256-sjAZ9enOw3vF3zqXNbhu45SM5/sv2kIwfKC6SWJdG0Q=";
   };
 
