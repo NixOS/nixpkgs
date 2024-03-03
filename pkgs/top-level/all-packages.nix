@@ -6484,7 +6484,7 @@ with pkgs;
   routersploit = callPackage ../tools/security/routersploit { };
 
   routinator = callPackage ../servers/routinator {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   rsbep = callPackage ../tools/backup/rsbep { };
@@ -8485,7 +8485,7 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_4 garage_0_9_0;
+      garage_0_8_6 garage_0_9_2;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
