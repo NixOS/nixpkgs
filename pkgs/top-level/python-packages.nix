@@ -3502,6 +3502,8 @@ self: super: with self; {
 
   duct-py = callPackage ../development/python-modules/duct-py { };
 
+  duden = callPackage ../development/python-modules/duden { };
+
   duecredit = callPackage ../development/python-modules/duecredit { };
 
   duet = callPackage ../development/python-modules/duet { };
