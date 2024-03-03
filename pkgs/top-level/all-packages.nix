@@ -8092,8 +8092,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  fflogs = callPackage ../games/fflogs { };
-
   ffsend = callPackage ../tools/misc/ffsend {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
@@ -36954,6 +36952,8 @@ with pkgs;
   everspace = callPackage ../games/everspace { };
 
   ezquake = callPackage ../games/ezquake { };
+
+  fflogs = callPackage ../games/fflogs { };
 
   freedroid = callPackage ../games/freedroid { };
 
