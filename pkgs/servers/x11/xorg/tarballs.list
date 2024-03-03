@@ -1,7 +1,6 @@
 https://invisible-mirror.net/archives/luit/luit-20230201.tgz
 mirror://xorg/individual/xcb/libpthread-stubs-0.5.tar.xz
 mirror://xorg/individual/xcb/xcb-util-0.4.1.tar.xz
-mirror://xorg/individual/xcb/xcb-util-cursor-0.1.4.tar.xz
 mirror://xorg/individual/xcb/xcb-util-errors-1.0.1.tar.xz
 mirror://xorg/individual/xcb/xcb-util-image-0.4.1.tar.xz
 mirror://xorg/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz
@@ -208,6 +207,7 @@ mirror://xorg/individual/lib/libXvMC-1.0.14.tar.xz
 mirror://xorg/individual/lib/libXxf86dga-1.1.6.tar.xz
 mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2
 mirror://xorg/individual/lib/libXxf86vm-1.1.5.tar.xz
+mirror://xorg/individual/lib/xcb-util-cursor-0.1.5.tar.xz
 mirror://xorg/individual/lib/xtrans-1.5.0.tar.xz
 mirror://xorg/individual/proto/xcb-proto-1.16.0.tar.xz
 mirror://xorg/individual/proto/xorgproto-2023.2.tar.xz

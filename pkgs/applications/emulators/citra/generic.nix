@@ -34,7 +34,7 @@
 , enableQtTranslation ? enableQt, qttools
 , enableWebService ? true
 , enableCubeb ? true, cubeb
-, useDiscordRichPresence ? true, rapidjson
+, useDiscordRichPresence ? false, rapidjson
 }:
 stdenv.mkDerivation {
   inherit pname version src;
@@ -72,23 +72,25 @@ stdenv.mkDerivation {
     ++ lib.optional useDiscordRichPresence rapidjson;
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_LIBS=ON"
+    (lib.cmakeBool "USE_SYSTEM_LIBS" true)
 
-    "-DDISABLE_SYSTEM_DYNARMIC=ON"
-    "-DDISABLE_SYSTEM_GLSLANG=ON" # The following imported targets are referenced, but are missing: SPIRV-Tools-opt
-    "-DDISABLE_SYSTEM_LODEPNG=ON" # Not packaged in nixpkgs
-    "-DDISABLE_SYSTEM_VMA=ON"
-    "-DDISABLE_SYSTEM_XBYAK=ON"
+    (lib.cmakeBool "DISABLE_SYSTEM_DYNARMIC" true)
+    (lib.cmakeBool "DISABLE_SYSTEM_GLSLANG" true) # The following imported targets are referenced, but are missing: SPIRV-Tools-opt
+    (lib.cmakeBool "DISABLE_SYSTEM_LODEPNG" true) # Not packaged in nixpkgs
+    (lib.cmakeBool "DISABLE_SYSTEM_VMA" true)
+    (lib.cmakeBool "DISABLE_SYSTEM_XBYAK" true)
 
     # We don't want to bother upstream with potentially outdated compat reports
-    "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"
-    "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # We provide this deterministically
-  ] ++ lib.optional (!enableSdl2Frontend) "-DENABLE_SDL2_FRONTEND=OFF"
-    ++ lib.optional (!enableQt) "-DENABLE_QT=OFF"
-    ++ lib.optional enableQtTranslation "-DENABLE_QT_TRANSLATION=ON"
-    ++ lib.optional (!enableWebService) "-DENABLE_WEB_SERVICE=OFF"
-    ++ lib.optional (!enableCubeb) "-DENABLE_CUBEB=OFF"
-    ++ lib.optional useDiscordRichPresence "-DUSE_DISCORD_PRESENCE=ON";
+    (lib.cmakeBool "CITRA_ENABLE_COMPATIBILITY_REPORTING" true)
+    (lib.cmakeBool "ENABLE_COMPATIBILITY_LIST_DOWNLOAD" false) # We provide this deterministically
+
+    (lib.cmakeBool "ENABLE_SDL2_FRONTEND" enableSdl2Frontend)
+    (lib.cmakeBool "ENABLE_QT" enableQt)
+    (lib.cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslation)
+    (lib.cmakeBool "ENABLE_WEB_SERVICE" enableWebService)
+    (lib.cmakeBool "ENABLE_CUBEB" enableCubeb)
+    (lib.cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
+  ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
