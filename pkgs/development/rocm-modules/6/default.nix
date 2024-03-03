@@ -235,7 +235,10 @@ in rec {
   # hipBlasLt - Very broken with Tensile at the moment, only supports GFX9
   # hipTensor - Only supports GFX9
 
-  miopengemm = throw "'miopengemm' has been deprecated"; # Added 2024-2-10;
+  miopengemm= throw ''
+    'miopen-opencl' has been deprecated.
+    It is still available for some time as part of rocmPackages_5.
+  ''; # Added 2024-3-3;
 
   composable_kernel = callPackage ./composable_kernel {
     inherit rocmUpdateScript rocm-cmake clr;
