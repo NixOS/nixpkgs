@@ -7,6 +7,7 @@
 , fuse
 , installShellFiles
 , wrapGAppsHook
+, wrapperDir ? "/run/wrappers/bin"
 }:
 let
   pname = "onedriver";
@@ -51,7 +52,7 @@ buildGoModule {
 
     substituteInPlace $out/lib/systemd/user/onedriver@.service \
       --replace "/usr/bin/onedriver" "$out/bin/onedriver" \
-      --replace "/usr/bin/fusermount" "${fuse}/bin/fusermount"
+      --replace "/usr/bin/fusermount" "${wrapperDir}/fusermount"
   '';
 
   meta = with lib; {
