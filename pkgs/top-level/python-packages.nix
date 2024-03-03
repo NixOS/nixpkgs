@@ -1935,7 +1935,7 @@ self: super: with self; {
 
   command_runner = callPackage ../development/python-modules/command_runner { };
 
-  connect-box = callPackage ../development/python-modules/connect_box { };
+  connect-box = callPackage ../development/python-modules/connect-box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
