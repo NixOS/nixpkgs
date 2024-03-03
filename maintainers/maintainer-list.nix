@@ -2589,7 +2589,7 @@
   };
   bkaylor = {
     email = "blkaylor@mines.edu";
-    github = "kaylorben"
+    github = "kaylorben";
     githubId = 41012641;
     name = "Benjamin Kaylor";
   };
