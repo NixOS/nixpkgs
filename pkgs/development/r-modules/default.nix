@@ -426,6 +426,7 @@ let
     httpuv = [ pkgs.zlib.dev ];
     clustermq = [ pkgs.zeromq ];
     SAVE = with pkgs; [ zlib bzip2 icu xz pcre ];
+    salso = [ pkgs.cargo ];
     sdcTable = with pkgs; [ gmp glpk ];
     seewave = with pkgs; [ fftw.dev libsndfile.dev ];
     seqinr = [ pkgs.zlib.dev ];
@@ -865,6 +866,7 @@ let
     "R_filesets"
     "RKorAPClient"
     "R_rsp"
+    "salso"
     "scholar"
     "stepR"
     "styler"
