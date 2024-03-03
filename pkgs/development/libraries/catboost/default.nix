@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace cmake/common.cmake \
-      --replace  "\''${RAGEL_BIN}" "${ragel}/bin/ragel" \
-      --replace "\''${YASM_BIN}" "${yasm}/bin/yasm"
+      --replace-fail  "\''${RAGEL_BIN}" "${ragel}/bin/ragel" \
+      --replace-fail "\''${YASM_BIN}" "${yasm}/bin/yasm"
 
     shopt -s globstar
     for cmakelists in **/CMakeLists.*; do
@@ -86,11 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DCMAKE_BINARY_DIR=$out"
-    "-DCMAKE_POSITION_INDEPENDENT_CODE=on"
-    "-DCATBOOST_COMPONENTS=app;libs${lib.optionalString pythonSupport ";python-package"}"
-  ] ++ lib.optionals cudaSupport [
-    "-DHAVE_CUDA=on"
+    (lib.cmakeFeature "CMAKE_BINARY_DIR" "$out")
+    (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
+    (lib.cmakeFeature "CATBOOST_COMPONENTS" "app;libs${lib.optionalString pythonSupport ";python-package"}")
+    (lib.cmakeBool "HAVE_CUDA" cudaSupport)
   ];
 
   installPhase = ''
