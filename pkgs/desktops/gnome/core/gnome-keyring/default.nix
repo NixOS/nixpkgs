@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "42.1";
+  version = "46.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x/TQQMx2prf+Z+CO+RBpEcPIDUD8iMv8jiaEpMlG4+Y=";
+    sha256 = "sha256-sdOukTL/L4s/JaGQeQiSlo49Cs+VKkh+QPZEqFUM4/Y=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
+    # gnome-keyring doesn't build with ssh-agent by default anymore, we need to
+    # switch to using gcr https://github.com/NixOS/nixpkgs/issues/140824
+    "--enable-ssh-agent"
   ];
 
   # Tends to fail non-deterministically.
