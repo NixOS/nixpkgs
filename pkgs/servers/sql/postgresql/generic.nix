@@ -23,7 +23,7 @@ let
 
       # JIT
       , jitSupport
-      , nukeReferences, patchelf, llvmPackages
+      , nukeReferences, patchelf, llvmPackages, overrideCC
 
       # PL/Python
       , pythonSupport ? false
@@ -43,7 +43,16 @@ let
 
     pname = "postgresql";
 
-    stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
+    stdenv' =
+      # TODO: Change back to default stdenv for non-jit / isDarwin case
+      # once LTO works after #307880.
+      if jitSupport || stdenv.isDarwin then
+        overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
+          # LLVM bintools are not used by default, but are needed to make -flto work below.
+          bintools = llvmPackages.bintools;
+        })
+      else
+        stdenv;
   in stdenv'.mkDerivation (finalAttrs: {
     inherit version;
     pname = pname + lib.optionalString jitSupport "-jit";
@@ -53,10 +62,15 @@ let
       inherit hash;
     };
 
+    __structuredAttrs = true;
+
     hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
+    outputChecks.lib = {
+      disallowedReferences = [ "out" "doc" "man" ];
+    };
 
     buildInputs = [
       zlib
@@ -87,9 +101,21 @@ let
 
     buildFlags = [ "world" ];
 
-    # Makes cross-compiling work when xml2-config can't be executed on the host.
-    # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
-    env.NIX_CFLAGS_COMPILE = lib.optionalString (olderThan "13") "-I${libxml2.dev}/include/libxml2";
+    # libpgcommon.a and libpgport.a contain all paths returned by pg_config and are linked
+    # into all binaries. However, almost no binaries actually use those paths. The following
+    # flags will remove unused sections from all shared libraries and binaries - including
+    # those paths. This avoids a lot of circular dependency problems with different outputs,
+    # and allows splitting them cleanly.
+    env.CFLAGS = "-fdata-sections -ffunction-sections"
+      + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections")
+      + lib.optionalString stdenv'.isDarwin " -fuse-ld=lld"
+      # Makes cross-compiling work when xml2-config can't be executed on the host.
+      # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
+      + lib.optionalString (olderThan "13") " -I${libxml2.dev}/include/libxml2";
+
+    # This could be removed once the upstream issue is resolved:
+    # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
+    configureFlagsArray = lib.optionalString (stdenv'.isDarwin && atLeast "16") "LDFLAGS_EX_BE=-Wl,-export_dynamic";
 
     configureFlags = [
       "--with-openssl"
@@ -124,6 +150,8 @@ let
       map fetchurl (lib.attrValues muslPatches)
     ) ++ lib.optionals stdenv'.isLinux  [
       (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
+    ] ++ lib.optionals (stdenv'.isDarwin && olderThan "16") [
+      ./patches/export-dynamic-darwin-15-.patch
     ];
 
     installTargets = [ "install-world" ];
@@ -138,7 +166,6 @@ let
       ''
         moveToOutput "lib/libpgcommon*.a" "$out"
         moveToOutput "lib/libpgport*.a" "$out"
-        moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
@@ -255,9 +282,7 @@ let
       # resulting LLVM IR isn't platform-independent this doesn't give you much.
       # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
       # a query, postgres would coredump with `Illegal instruction`.
-      broken = (jitSupport && stdenv.hostPlatform != stdenv.buildPlatform)
-        # Allmost all tests fail FATAL errors for v12 and v13
-        || (jitSupport && stdenv.hostPlatform.isMusl && olderThan "14");
+      broken = jitSupport && stdenv.hostPlatform != stdenv.buildPlatform;
     };
   });
 
