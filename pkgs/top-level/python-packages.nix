@@ -6532,6 +6532,10 @@ self: super: with self; {
     inherit (self) python libxml2;
   })).py;
 
+  libzfs_core = toPythonModule (pkgs.zfs.override {
+    pythonSupport = true;
+  });
+
   liccheck = callPackage ../development/python-modules/liccheck { };
 
   license-expression = callPackage ../development/python-modules/license-expression { };
