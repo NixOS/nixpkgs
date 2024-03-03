@@ -43,6 +43,7 @@ class BootSpec:
     system: str
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
+    sortKey: str
     initrdSecrets: str | None = None
 
 
@@ -73,6 +74,7 @@ def system_dir(profile: str | None, generation: int, specialisation: str | None)
         return d
 
 BOOT_ENTRY = """title {title}
+sort-key {sort_key}
 version Generation {generation} {description}
 linux {kernel}
 initrd {initrd}
@@ -123,7 +125,13 @@ def get_bootspec(profile: str | None, generation: int) -> BootSpec:
 def bootspec_from_json(bootspec_json: Dict) -> BootSpec:
     specialisations = bootspec_json['org.nixos.specialisation.v1']
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
-    return BootSpec(**bootspec_json['org.nixos.bootspec.v1'], specialisations=specialisations)
+    systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
+    sortKey = systemdBootExtension.get('sortKey', 'nixos')
+    return BootSpec(
+        **bootspec_json['org.nixos.bootspec.v1'],
+        specialisations=specialisations,
+        sortKey=sortKey
+    )
 
 
 def copy_from_file(file: str, dry_run: bool = False) -> str:
@@ -170,6 +178,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
 
     with open(tmp_path, 'w') as f:
         f.write(BOOT_ENTRY.format(title=title,
+                    sort_key=bootspec.sortKey,
                     generation=generation,
                     kernel=kernel,
                     initrd=initrd,

@@ -104,6 +104,7 @@ in
         StateDirectory = "photoprism";
         WorkingDirectory = "/var/lib/photoprism";
         RuntimeDirectory = "photoprism";
+        ReadWritePaths = [ cfg.originalsPath cfg.importPath cfg.storagePath ];
 
         LoadCredential = lib.optionalString (cfg.passwordFile != null)
           "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
