@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.50.2";
+  version = "2.52.0";
 
   outputs = [ "out" "dev" ];
   separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-W4GxRhpi3Y++0aJ2+p71txEvmuX/huHjKtlkS2VP94w=";
+    hash = "sha256-CsP8gyDI0B+hR8Jyun+gOAY4nGsD08QG0II+MONf9as=";
   };
 
   nativeBuildInputs = [
