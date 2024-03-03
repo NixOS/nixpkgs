@@ -13928,6 +13928,11 @@
     githubId = 3159451;
     name = "Nicolas Schneider";
   };
+  NIS = {
+    name = "NSC IT Solutions";
+    github = "dev-nis";
+    githubId = 132921300;
+  };
   nitsky = {
     name = "nitsky";
     github = "nitsky";
