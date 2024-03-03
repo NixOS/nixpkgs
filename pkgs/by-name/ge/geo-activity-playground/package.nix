@@ -4,13 +4,13 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "geo-activity-playground";
-  version = "0.19.1";
+  version = "0.20.0";
   format = "pyproject";
   src = fetchFromGitHub {
     repo = "geo-activity-playground";
     owner = "martin-ueding";
     rev = version;
-    hash = "sha256-XD7OgnrtdRXtgIIQPo8pJe43BV/9mANE/0gD9VSrhOk=";
+    hash = "sha256-kqweaIS5vEoncpAT/IngCpSF2WYi8VPZAmYw97tICsA=";
   };
   nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
   pythonRelaxDeps = [
@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     vl-convert-python
     xmltodict
     appdirs
+    imagehash
   ];
 
   meta = {
