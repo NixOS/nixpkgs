@@ -731,6 +731,7 @@ rec {
       { modules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
+      , name ? "submodule"
       , description ? null
       , class ? null
       }@attrs:
@@ -766,9 +767,6 @@ rec {
         };
 
         freeformType = base._module.freeformType;
-
-        name = "submodule";
-
       in
       mkOptionType {
         inherit name;
