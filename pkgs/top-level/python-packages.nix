@@ -10041,6 +10041,8 @@ self: super: with self; {
 
   prometheus-flask-exporter = callPackage ../development/python-modules/prometheus-flask-exporter { };
 
+  prometrix = callPackage ../development/python-modules/prometrix { };
+
   promise = callPackage ../development/python-modules/promise { };
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit { };
