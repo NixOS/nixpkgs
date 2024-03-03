@@ -50,6 +50,42 @@ getAllOutputNames() {
 ######################################################################
 # Hook handling.
 
+# Log a hook, to be run before the hook is actually called.
+# This only logs explicit hooks; "implicit" hooks, those specified directly
+# in a derivation's arguments, are logged in `_callImplicitHook` instead.
+_logHook() {
+    local hookKind="$1"
+    local hookExpr="$2"
+    shift 2
+
+    if declare -F "$hookExpr" > /dev/null 2>&1; then
+        echo "calling '$hookKind' function hook '$hookExpr'" "$@"
+    elif type -p "$hookExpr" > /dev/null; then
+        echo "sourcing '$hookKind' script hook '$hookExpr'"
+    elif [[ "$hookExpr" != "_callImplicitHook"* ]]; then
+        # Here we have a string hook to eval.
+        # Join lines onto one with literal \n characters unless NIX_DEBUG >= 2.
+        local exprToOutput
+        if (( "${NIX_DEBUG:-0}" >= 2 )); then
+            exprToOutput="$hookExpr"
+        else
+            while IFS= read -r hookExprLine; do
+                # These lines often have indentation,
+                # so let's remove leading whitespace.
+                hookExprLine="${hookExprLine#"${hookExprLine%%[![:space:]]*}"}"
+                # If this line wasn't entirely whitespace,
+                # then add it to our output.
+                if [[ -n "$hookExprLine" ]]; then
+                    exprToOutput+="$hookExprLine\\n "
+                fi
+            done <<< "$hookExpr"
+
+            # And then remove the final, unnecessary, \n
+            exprToOutput="${exprToOutput%%\\n }"
+        fi
+        echo "evaling '$hookKind' string hook '$exprToOutput'"
+    fi
+}
 
 # Run all hooks with the specified name in the order in which they
 # were added, stopping if any fails (returns a non-zero exit
@@ -64,6 +100,7 @@ runHook() {
     # Hack around old bash being bad and thinking empty arrays are
     # undefined.
     for hook in "_callImplicitHook 0 $hookName" ${!hooksSlice+"${!hooksSlice}"}; do
+        _logHook "$hookName" "$hook" "$@"
         _eval "$hook" "$@"
     done
 
@@ -81,6 +118,7 @@ runOneHook() {
     local hook ret=1
     # Hack around old bash like above
     for hook in "_callImplicitHook 1 $hookName" ${!hooksSlice+"${!hooksSlice}"}; do
+        _logHook "$hookName" "$hook" "$@"
         if _eval "$hook" "$@"; then
             ret=0
             break
@@ -100,10 +138,13 @@ _callImplicitHook() {
     local def="$1"
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
+        echo "calling implicit '$hookName' function hook"
         "$hookName"
     elif type -p "$hookName" > /dev/null; then
+        echo "sourcing implicit '$hookName' script hook"
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
+        echo "evaling implicit '$hookName' string hook"
         eval "${!hookName}"
     else
         return "$def"
@@ -644,6 +685,7 @@ activatePackage() {
     (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
+        echo "sourcing setup hook '$pkg'"
         source "$pkg"
     fi
 
@@ -667,6 +709,7 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
+        echo "sourcing setup hook '$pkg/nix-support/setuphook'"
         source "$pkg/nix-support/setup-hook"
     fi
 }
