@@ -546,4 +546,8 @@ in {
       assert (base >= 2);
       assert (i >= 0);
       lib.reverseList (go i);
+
+  /* For use with pkgs.formats.jsonWithRuntimeSubstitution and potentially future other related formats. */
+  stringFromRuntimeFile = path: {_runtimeSource.file = path;};
+  stringFromSystemdCredential = name: {_runtimeSource.systemdCredential = name;};
 }
