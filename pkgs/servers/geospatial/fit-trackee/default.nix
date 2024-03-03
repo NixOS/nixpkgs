@@ -25,19 +25,20 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fit-trackee";
-  version = "0.7.29";
+  version = "0.7.31";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     rev = "v${version}";
-    hash = "sha256-NWWQ+lPUMaeF3UPglllaLGJnNgF54SXo4DcF3VAQbO4=";
+    hash = "sha256-qKUdpuxslhS6k9EiWvbU/0hSXH1y9mjhXs02pugTF3g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace psycopg2-binary psycopg2 \
-      --replace 'flask = "^3.0.0"' 'flask = "*"'
+      --replace 'flask = "^3.0.2"' 'flask = "*"' \
+      --replace 'pyopenssl = "^24.0.0"' 'pyopenssl = "*"'
   '';
 
   nativeBuildInputs = [

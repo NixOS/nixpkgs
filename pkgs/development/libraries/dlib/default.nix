@@ -54,7 +54,7 @@
     lapack
   ]
   ++ lib.optionals guiSupport [ libX11 ]
-  ++ lib.optionals config.cudaSupport (with cudaPackages; [
+  ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cudart.dev
     cuda_cudart.lib
     cuda_cudart.static
