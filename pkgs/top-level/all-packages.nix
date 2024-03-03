@@ -37410,8 +37410,6 @@ with pkgs;
 
   fsg = callPackage ../games/fsg { };
 
-  galaxis = callPackage ../games/galaxis { };
-
   gambit-chess = callPackage ../games/gambit { };
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
