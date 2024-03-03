@@ -2590,7 +2590,7 @@
   bkaylor = {
     email = "blkaylor@mines.edu";
     github = "kaylorben"
-    githubId = 41012641
+    githubId = 41012641;
     name = "Benjamin Kaylor";
   };
   bkchr = {
