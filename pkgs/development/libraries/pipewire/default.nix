@@ -130,7 +130,7 @@ stdenv.mkDerivation(finalAttrs: {
   ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
   ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
   ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
-  ++ lib.optionals libcameraSupport [ libcamera libdrm ]
+  ++ lib.optionals libcameraSupport [ libcamera ]
   ++ lib.optional ffmpegSupport ffmpeg
   ++ lib.optionals bluezSupport [ bluez libfreeaptx liblc3 sbc fdk_aac libopus ]
   ++ lib.optional ldacbtSupport ldacbt
@@ -139,7 +139,7 @@ stdenv.mkDerivation(finalAttrs: {
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
   ++ lib.optional rocSupport roc-toolkit
-  ++ lib.optionals vulkanSupport [ vulkan-headers vulkan-loader ]
+  ++ lib.optionals vulkanSupport [ libdrm vulkan-headers vulkan-loader ]
   ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
   ++ lib.optional mysofaSupport libmysofa
   ++ lib.optional ffadoSupport ffado;
