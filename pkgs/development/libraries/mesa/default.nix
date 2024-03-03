@@ -216,59 +216,58 @@ self = stdenv.mkDerivation {
 
     # Don't build in debug mode
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
-    "-Db_ndebug=true"
+    (lib.mesonBool "b_ndebug" true)
 
-    "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
+    (lib.mesonOption "dri-search-path" "${libglvnd.driverLink}/lib/dri")
 
-    "-Dplatforms=${lib.concatStringsSep "," eglPlatforms}"
-    "-Dgallium-drivers=${lib.concatStringsSep "," galliumDrivers}"
-    "-Dvulkan-drivers=${lib.concatStringsSep "," vulkanDrivers}"
+    (lib.mesonOption "platforms" (lib.concatStringsSep "," eglPlatforms))
+    (lib.mesonOption "gallium-drivers" (lib.concatStringsSep "," galliumDrivers))
+    (lib.mesonOption "vulkan-drivers" (lib.concatStringsSep "," vulkanDrivers))
 
-    "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
-    "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
-    "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
-    "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
-    "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
+    (lib.mesonOption "dri-drivers-path" "${placeholder "drivers"}/lib/dri")
+    (lib.mesonOption "vdpau-libs-path" "${placeholder "drivers"}/lib/vdpau")
+    (lib.mesonOption "omx-libs-path" "${placeholder "drivers"}/lib/bellagio")
+    (lib.mesonOption "va-libs-path" "${placeholder "drivers"}/lib/dri")
+    (lib.mesonOption "d3d-drivers-path" "${placeholder "drivers"}/lib/d3d")
 
-    "-Dgallium-nine=${lib.boolToString enableGalliumNine}" # Direct3D in Wine
-    "-Dosmesa=${lib.boolToString enableOSMesa}" # used by wine
-    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonBool "gallium-nine" enableGalliumNine) # Direct3D in Wine
+    (lib.mesonBool "osmesa" enableOSMesa) # used by wine
+    (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
 
     # To enable non-mesa gbm backends to be found (e.g. Nvidia)
-    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
+    (lib.mesonOption "gbm-backends-path" "${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm")
 
     # meson auto_features enables these features, but we do not want them
-    "-Dandroid-libbacktrace=disabled"
-
+    (lib.mesonEnable "android-libbacktrace" false)
   ] ++ lib.optionals stdenv.isLinux [
-    "-Dglvnd=true"
+    (lib.mesonBool "glvnd" true)
 
     # Enable RT for Intel hardware
     # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
     (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable features that are explicitly unsupported on the platform
-    "-Dgbm=disabled"
-    "-Dxlib-lease=disabled"
-    "-Degl=disabled"
-    "-Dgallium-vdpau=disabled"
-    "-Dgallium-va=disabled"
-    "-Dgallium-xa=disabled"
-    "-Dlmsensors=disabled"
+    (lib.mesonEnable "gbm" false)
+    (lib.mesonEnable "xlib-lease" false)
+    (lib.mesonEnable "egl" false)
+    (lib.mesonEnable "gallium-vdpau" false)
+    (lib.mesonEnable "gallium-va" false)
+    (lib.mesonEnable "gallium-xa" false)
+    (lib.mesonEnable "lmsensors" false)
   ] ++ lib.optionals enableOpenCL [
     # Clover, old OpenCL frontend
-    "-Dgallium-opencl=icd"
-    "-Dopencl-spirv=true"
+    (lib.mesonOption "gallium-opencl" "icd")
+    (lib.mesonBool "opencl-spirv" true)
 
     # Rusticl, new OpenCL frontend
-    "-Dgallium-rusticl=true"
-    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ]  ++ lib.optionals (!withValgrind) [
-    "-Dvalgrind=disabled"
-  ]  ++ lib.optionals (!withLibunwind) [
-    "-Dlibunwind=disabled"
-  ] ++ lib.optional enablePatentEncumberedCodecs
-    "-Dvideo-codecs=all"
+    (lib.mesonBool "gallium-rusticl" true)
+    (lib.mesonOption "clang-libdir" "${llvmPackages.clang-unwrapped.lib}/lib")
+  ] ++ lib.optionals (!withValgrind) [
+    (lib.mesonEnable "valgrind" false)
+  ] ++ lib.optionals (!withLibunwind) [
+    (lib.mesonEnable "libunwind" false)
+  ]
+  ++ lib.optional enablePatentEncumberedCodecs (lib.mesonOption "video-codecs" "all")
   ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   strictDeps = true;
