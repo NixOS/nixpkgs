@@ -4842,7 +4842,6 @@ broken-packages:
   - selenium # failure in job https://hydra.nixos.org/build/233214276 at 2023-09-02
   - selinux # failure in job https://hydra.nixos.org/build/233192853 at 2023-09-02
   - Semantique # failure in job https://hydra.nixos.org/build/233199841 at 2023-09-02
-  - semaphore-compat # failure in job https://hydra.nixos.org/build/233225619 at 2023-09-02
   - semdoc # failure in job https://hydra.nixos.org/build/233258790 at 2023-09-02
   - semialign-indexed # failure in job https://hydra.nixos.org/build/233210150 at 2023-09-02
   - semialign-optics # failure in job https://hydra.nixos.org/build/233229100 at 2023-09-02
