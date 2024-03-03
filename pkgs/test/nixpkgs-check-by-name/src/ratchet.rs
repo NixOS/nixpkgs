@@ -4,8 +4,8 @@
 
 use crate::nix_file::CallPackageArgumentInfo;
 use crate::nixpkgs_problem::NixpkgsProblem;
-use crate::structure;
 use crate::validation::{self, Validation, Validation::Success};
+use relative_path::RelativePathBuf;
 use std::collections::HashMap;
 
 /// The ratchet value for the entirety of Nixpkgs.
@@ -127,17 +127,14 @@ impl<Context: ToNixpkgsProblem> RatchetState<Context> {
 pub enum ManualDefinition {}
 
 impl ToNixpkgsProblem for ManualDefinition {
-    type ToContext = ();
+    type ToContext = NixpkgsProblem;
 
     fn to_nixpkgs_problem(
-        name: &str,
+        _name: &str,
         _optional_from: Option<()>,
-        _to: &Self::ToContext,
+        to: &Self::ToContext,
     ) -> NixpkgsProblem {
-        NixpkgsProblem::WrongCallPackage {
-            relative_package_file: structure::relative_file_for_package(name),
-            package_name: name.to_owned(),
-        }
+        (*to).clone()
     }
 }
 
@@ -149,24 +146,38 @@ impl ToNixpkgsProblem for ManualDefinition {
 pub enum UsesByName {}
 
 impl ToNixpkgsProblem for UsesByName {
-    type ToContext = CallPackageArgumentInfo;
+    type ToContext = (CallPackageArgumentInfo, RelativePathBuf);
 
     fn to_nixpkgs_problem(
         name: &str,
         optional_from: Option<()>,
-        to: &Self::ToContext,
+        (to, file): &Self::ToContext,
     ) -> NixpkgsProblem {
         if let Some(()) = optional_from {
-            NixpkgsProblem::MovedOutOfByName {
+            if to.empty_arg {
+                NixpkgsProblem::MovedOutOfByNameEmptyArg {
+                    package_name: name.to_owned(),
+                    call_package_path: to.relative_path.clone(),
+                    file: file.to_owned(),
+                }
+            } else {
+                NixpkgsProblem::MovedOutOfByNameNonEmptyArg {
+                    package_name: name.to_owned(),
+                    call_package_path: to.relative_path.clone(),
+                    file: file.to_owned(),
+                }
+            }
+        } else if to.empty_arg {
+            NixpkgsProblem::NewPackageNotUsingByNameEmptyArg {
                 package_name: name.to_owned(),
                 call_package_path: to.relative_path.clone(),
-                empty_arg: to.empty_arg,
+                file: file.to_owned(),
             }
         } else {
-            NixpkgsProblem::NewPackageNotUsingByName {
+            NixpkgsProblem::NewPackageNotUsingByNameNonEmptyArg {
                 package_name: name.to_owned(),
                 call_package_path: to.relative_path.clone(),
-                empty_arg: to.empty_arg,
+                file: file.to_owned(),
             }
         }
     }

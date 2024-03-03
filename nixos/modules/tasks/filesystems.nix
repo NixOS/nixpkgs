@@ -105,7 +105,7 @@ let
         type = types.bool;
         description = lib.mdDoc ''
           If the device does not currently contain a filesystem (as
-          determined by {command}`blkid`, then automatically
+          determined by {command}`blkid`), then automatically
           format it with the filesystem type specified in
           {option}`fsType`.  Use with caution.
         '';

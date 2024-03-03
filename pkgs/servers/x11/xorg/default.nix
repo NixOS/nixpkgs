@@ -2278,11 +2278,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilcursor = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbutilimage, xcbutilrenderutil, xorgproto, m4, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xcb-util-cursor";
-    version = "0.1.4";
+    version = "0.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xcb/xcb-util-cursor-0.1.4.tar.xz";
-      sha256 = "1yria9h0vqpblkgzqhpygk3rraijd3mmipg0mdhkayxbpj8gxp18";
+      url = "mirror://xorg/individual/lib/xcb-util-cursor-0.1.5.tar.xz";
+      sha256 = "0mrwcrm6djbd5zdvqb5v4wr87bzawnaacyqwwhfghw09ssq9kbqc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
