@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     requests
   ];
 
+  # TODO: remove this when #286814 hits master
+  mesonFlags = [ "-Dtiff_compression=jpeg" ];
+
   buildInputs = [
     libadwaita
     (python3Packages.python.withPackages (_: finalAttrs.pythonPath))
