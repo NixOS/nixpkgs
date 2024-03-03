@@ -1,80 +1,110 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchCrate, buildPackages
-, meson, pkg-config, ninja
-, intltool, bison, flex, file, python3Packages, wayland-scanner
-, expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, elfutils, libvdpau
-, libglvnd, libunwind, lm_sensors
-, vulkan-loader, glslang
-, galliumDrivers ?
-  if stdenv.isLinux then
-    [
-      "d3d12" # WSL emulated GPU (aka Dozen)
-      "kmsro" # special "render only" driver for GPUs without a display controller
-      "nouveau" # Nvidia
-      "radeonsi" # new AMD (GCN+)
-      "r300" # very old AMD
-      "r600" # less old AMD
-      "swrast" # software renderer (aka LLVMPipe)
-      "svga" # VMWare virtualized GPU
-      "virgl" # QEMU virtualized GPU (aka VirGL)
-      "zink" # generic OpenGL over Vulkan, experimental
-    ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
-      "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
-      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-      "lima" # ARM Mali 4xx
-      "panfrost" # ARM Mali Midgard and up (T/G series)
-      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-    ] ++ lib.optionals stdenv.isAarch64 [
-      "tegra" # Nvidia Tegra SoCs
-      "v3d" # Broadcom VC5 (Raspberry Pi 4)
-    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
-      "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
-      "crocus" # Intel legacy, x86 only
-      "i915" # Intel extra legacy, x86 only
-    ]
-  else [ "auto" ]
-, vulkanDrivers ?
-  if stdenv.isLinux then
-    [
-      "amd" # AMD (aka RADV)
-      "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
-      "nouveau-experimental" # Nouveau (aka NVK)
-      "swrast" # software renderer (aka Lavapipe)
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
-      # QEMU virtualized GPU (aka VirGL)
-      # Requires ATOMIC_INT_LOCK_FREE == 2.
-      "virtio"
-    ]
-    ++ lib.optionals stdenv.isAarch64 [
-      "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
-      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-      "imagination-experimental" # PowerVR Rogue (currently N/A)
-      "panfrost" # ARM Mali Midgard and up (T/G series)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86 [
-      "intel" # Intel (aka ANV), could work on non-x86 with PCIe cards, but doesn't build
-      "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
-    ]
-  else [ "auto" ]
-, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
-, vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" "intel-nullhw" ] # No Vulkan support on Darwin
-, OpenGL, Xplugin
-, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
+{ lib
+, OpenGL
+, Xplugin
+, bison
+, buildPackages
+, directx-headers
+, elfutils
+, expat
+, fetchCrate
+, fetchpatch
+, fetchurl
+, file
+, flex
+, glslang
+, intltool
+, jdupes
+, libdrm
+, libffi
+, libglvnd
+, libomxil-bellagio
+, libunwind
+, libva-minimal
+, libvdpau
+, llvmPackages
+, lm_sensors
+, meson
+, ninja
+, openssl
+, pkg-config
+, python3Packages
+, rust-bindgen
+, rustPlatform
+, rustc
+, spirv-llvm-translator
+, stdenv
+, udev
+, valgrind-light
+, vulkan-loader
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xorg
+, zstd
+, withValgrind ?
+  lib.meta.availableOn stdenv.hostPlatform valgrind-light
+  && !valgrind-light.meta.broken
 , withLibunwind ? lib.meta.availableOn stdenv.hostPlatform libunwind
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , enablePatentEncumberedCodecs ? true
-, jdupes
-, rustPlatform
-, rust-bindgen
-, rustc
-, spirv-llvm-translator
-, zstd
-, directx-headers
-, udev
+
+, galliumDrivers ?
+  if stdenv.isLinux
+  then [
+    "d3d12" # WSL emulated GPU (aka Dozen)
+    "kmsro" # special "render only" driver for GPUs without a display controller
+    "nouveau" # Nvidia
+    "radeonsi" # new AMD (GCN+)
+    "r300" # very old AMD
+    "r600" # less old AMD
+    "swrast" # software renderer (aka LLVMPipe)
+    "svga" # VMWare virtualized GPU
+    "virgl" # QEMU virtualized GPU (aka VirGL)
+    "zink" # generic OpenGL over Vulkan, experimental
+  ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
+    "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
+    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+    "lima" # ARM Mali 4xx
+    "panfrost" # ARM Mali Midgard and up (T/G series)
+    "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "tegra" # Nvidia Tegra SoCs
+    "v3d" # Broadcom VC5 (Raspberry Pi 4)
+  ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
+    "crocus" # Intel legacy, x86 only
+    "i915" # Intel extra legacy, x86 only
+  ]
+  else [ "auto" ]
+, vulkanDrivers ?
+  if stdenv.isLinux
+  then [
+    "amd" # AMD (aka RADV)
+    "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
+    "nouveau-experimental" # Nouveau (aka NVK)
+    "swrast" # software renderer (aka Lavapipe)
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
+    # QEMU virtualized GPU (aka VirGL)
+    # Requires ATOMIC_INT_LOCK_FREE == 2.
+    "virtio"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
+    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+    "imagination-experimental" # PowerVR Rogue (currently N/A)
+    "panfrost" # ARM Mali Midgard and up (T/G series)
+  ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    "intel" # Intel (aka ANV), could work on non-x86 with PCIe cards, but doesn't build
+    "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
+  ]
+  else [ "auto" ]
+, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
+, vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ # No Vulkan support on Darwin
+  "device-select"
+  "overlay"
+  "intel-nullhw"
+]
 }:
 
 # When updating this package, please verify at least these build (assuming x86_64-linux):
