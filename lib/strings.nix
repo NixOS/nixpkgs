@@ -541,9 +541,13 @@ rec {
        escapeNixIdentifier "0abc"
        => "\"0abc\""
   */
-  escapeNixIdentifier = s:
+  escapeNixIdentifier =
+    let
+      matchIdentifier = match "[a-zA-Z_][a-zA-Z0-9_'-]*";
+    in
+    s:
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
-    if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
+    if matchIdentifier s != null
     then s else escapeNixString s;
 
   /* Escapes a string such that it is safe to include verbatim in an XML
