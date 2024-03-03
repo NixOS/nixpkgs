@@ -483,6 +483,12 @@ let
       for chromiumBinary in "$libExecPath/$packageName" "$libExecPath/libGLESv2.so"; do
         patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$(patchelf --print-rpath "$chromiumBinary")" "$chromiumBinary"
       done
+
+      # replace bundled vulkan-loader
+      if [ -e $libExecPath/libvulkan.so.1 ]; then
+        rm $libExecPath/libvulkan.so.1
+        ln -s -t "$libExecPath" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+      fi
     '';
 
     passthru = {
