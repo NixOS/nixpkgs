@@ -117,7 +117,6 @@ let
       ${preBuildAndTest}
       ${maybeEnterBuildAndTestSubdir}
 
-      NIX_PGLIBDIR="${postgresql}/lib" \
       PGRX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
       cargo pgrx package \
         --pg-config ${postgresql}/bin/pg_config \

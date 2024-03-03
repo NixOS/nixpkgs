@@ -9,3 +9,14 @@
  	strlcat(path, "/pgxs/src/makefiles/pgxs.mk", sizeof(path));
  	cleanup_path(path);
  	configdata[i].setting = pstrdup(path);
+--- a/src/Makefile.global.in
++++ b/src/Makefile.global.in
+@@ -116,7 +116,7 @@ endif
+ 
+ libdir := @libdir@
+ 
+-pkglibdir = $(libdir)
++pkglibdir = @out@/lib
+ ifeq "$(findstring pgsql, $(pkglibdir))" ""
+ ifeq "$(findstring postgres, $(pkglibdir))" ""
+ override pkglibdir := $(pkglibdir)/postgresql
