@@ -1,8 +1,8 @@
 { lib
 , config
-, stdenv
 , fetchFromGitHub
 , cmake
+, darwin
 , libiconv
 , llvmPackages
 , ninja
@@ -13,18 +13,22 @@
 , zlib
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
+, llvmPackages_12
 , pythonSupport ? false
 }:
+let
+  inherit (llvmPackages) stdenv;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-A1zCIqPOW21dHKBQHRtS+/sstZ2o6F8k71lmJFGn0+g=";
+    hash = "sha256-wn9STnpqX3zmdxPmMYAz9JPdg13Goux76CMaCiqohk8=";
   };
 
   patches = [
@@ -55,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     (python3Packages.python.withPackages (ps: with ps; [ six ]))
     ragel
     yasm
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.cctools
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
   ]);
@@ -71,7 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   env = {
-    CUDAHOSTCXX = lib.optionalString cudaSupport "${stdenv.cc}/bin/cc";
+    # catboost requires clang 14+ for build, but does clang 12 for cuda build.
+    # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
+    # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
+    CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackages_12.stdenv.cc}/bin/cc";
     NIX_CFLAGS_LINK = lib.optionalString stdenv.isLinux "-fuse-ld=lld";
     NIX_LDFLAGS = "-lc -lm";
   };
