@@ -1,12 +1,13 @@
 { lib, buildPythonPackage, fetchPypi, psutil }:
 
 buildPythonPackage rec {
-  pname = "command_runner";
+  pname = "command-runner";
   version = "1.6.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "command_runner";
+    inherit version;
     sha256 = "sha256-lzt1UhhrPqQrBKsRmPhqhtOIfFlCteQqo6sZ6rOut0A=";
   };
 

@@ -1933,7 +1933,7 @@ self: super: with self; {
 
   comicon = callPackage ../development/python-modules/comicon { };
 
-  command_runner = callPackage ../development/python-modules/command_runner { };
+  command-runner = callPackage ../development/python-modules/command-runner { };
 
   connect-box = callPackage ../development/python-modules/connect_box { };
 
