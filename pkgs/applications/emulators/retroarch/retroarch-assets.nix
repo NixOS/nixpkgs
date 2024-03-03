@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "retroarch-assets";
-  version = "unstable-2024-04-24";
+  version = "1.17.0-unstable-2024-04-24";
 
   src = fetchFromGitHub {
     owner = "libretro";
@@ -24,7 +24,9 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "Assets needed for RetroArch";
