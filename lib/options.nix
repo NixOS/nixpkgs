@@ -426,20 +426,21 @@ rec {
        (showOption ["foo" "*" "bar"]) == "foo.*.bar"
        (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
   */
-  showOption = parts: let
+  showOption = let
+    # We assume that these are "special values" and not real configuration data.
+    # If it is real configuration data, it is rendered incorrectly.
+    specialIdentifiers = [
+      "<name>"          # attrsOf (submodule {})
+      "*"               # listOf (submodule {})
+      "<function body>" # functionTo
+    ];
+  in parts: let
     escapeOptionPart = part:
-      let
-        # We assume that these are "special values" and not real configuration data.
-        # If it is real configuration data, it is rendered incorrectly.
-        specialIdentifiers = [
-          "<name>"          # attrsOf (submodule {})
-          "*"               # listOf (submodule {})
-          "<function body>" # functionTo
-        ];
-      in if builtins.elem part specialIdentifiers
+       if builtins.elem part specialIdentifiers
          then part
          else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
+
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
   showDefs = defs: concatMapStrings (def:
