@@ -90,7 +90,9 @@ in
 
     users.groups.nixseparatedebuginfod = { };
 
-    nix.settings.extra-allowed-users = [ "nixseparatedebuginfod" ];
+    nix.settings = lib.optionalAttrs (lib.versionAtLeast config.nix.package.version "2.4") {
+      extra-allowed-users = [ "nixseparatedebuginfod" ];
+    };
 
     environment.variables.DEBUGINFOD_URLS = "http://${url}";
 

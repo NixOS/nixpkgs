@@ -70,7 +70,8 @@ buildPythonPackage {
     cd share/extensions
 
     substituteInPlace pyproject.toml \
-      --replace 'scour = "^0.37"' 'scour = ">=0.37"'
+      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"' \
+      --replace-fail 'lxml = "^4.5.0"' 'lxml = "^4.5.0 || ^5.0.0"'
   '';
 
   meta = {
