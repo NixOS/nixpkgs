@@ -8092,6 +8092,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  fflogs = callPackage ../games/fflogs { };
+
   ffsend = callPackage ../tools/misc/ffsend {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
