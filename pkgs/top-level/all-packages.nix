@@ -36953,8 +36953,6 @@ with pkgs;
 
   ezquake = callPackage ../games/ezquake { };
 
-  fflogs = callPackage ../games/fflogs { };
-
   freedroid = callPackage ../games/freedroid { };
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
