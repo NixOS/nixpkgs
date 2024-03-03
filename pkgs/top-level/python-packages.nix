@@ -8949,6 +8949,18 @@ self: super: with self; {
       }
     )).py;
 
+  libzfs_core_2_3 = toPythonModule (
+    pkgs.zfs_2_3.override {
+      enablePython = true;
+    }
+  );
+
+  libzfs_core_2_4 = toPythonModule (
+    pkgs.zfs_2_4.override {
+      enablePython = true;
+    }
+  );
+
   liccheck = callPackage ../development/python-modules/liccheck { };
 
   license-expression = callPackage ../development/python-modules/license-expression { };
