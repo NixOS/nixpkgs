@@ -20586,10 +20586,6 @@ with pkgs;
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
   catboost = callPackage ../development/libraries/catboost {
-    # catboost requires clang 12+ for build
-    # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
-    inherit (llvmPackages_12) stdenv;
-
     # https://github.com/catboost/catboost/issues/2540
     cudaPackages = cudaPackages_11;
   };
