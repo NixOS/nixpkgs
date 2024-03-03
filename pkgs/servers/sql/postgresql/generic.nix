@@ -112,7 +112,6 @@ let
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
       ./patches/less-is-more.patch
       ./patches/paths-for-split-outputs.patch
-      ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/paths-with-postgresql-suffix.patch
 
       (substituteAll {
@@ -129,18 +128,13 @@ let
     installTargets = [ "install-world" ];
 
     postPatch = ''
+      substituteInPlace "src/Makefile.global.in" --subst-var out
       # Hardcode the path to pgxs so pg_config returns the path in $out
       substituteInPlace "src/common/config_info.c" --subst-var out
-    '' + lib.optionalString jitSupport ''
-        # Force lookup of jit stuff in $out instead of $lib
-        substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
     '';
 
     postInstall =
       ''
-        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
         moveToOutput "lib/libpgcommon*.a" "$out"
         moveToOutput "lib/libpgport*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
@@ -159,11 +153,6 @@ let
           done
         fi
       '' + lib.optionalString jitSupport ''
-        # Move the bitcode and libllvmjit.so library out of $lib; otherwise, every client that
-        # depends on libpq.so will also have libLLVM.so in its closure too, bloating it
-        moveToOutput "lib/bitcode" "$out"
-        moveToOutput "lib/llvmjit*" "$out"
-
         # In the case of JIT support, prevent a retained dependency on clang-wrapper
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/clang clang
         nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
@@ -225,7 +214,7 @@ let
       in import ./ext newSelf newSuper;
 
       withPackages = postgresqlWithPackages {
-                       inherit makeWrapper buildEnv;
+                       inherit buildEnv;
                        postgresql = this;
                      }
                      this.pkgs;
@@ -271,30 +260,14 @@ let
     };
   });
 
-  postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
+  postgresqlWithPackages = { postgresql, buildEnv }: pkgs: f: buildEnv {
     name = "postgresql-and-plugins-${postgresql.version}";
     paths = f pkgs ++ [
         postgresql
-        postgresql.lib
         postgresql.man   # in case user installs this into environment
     ];
-    nativeBuildInputs = [ makeWrapper ];
 
-
-    # We include /bin to ensure the $out/bin directory is created, which is
-    # needed because we'll be removing the files from that directory in postBuild
-    # below. See #22653
-    pathsToLink = ["/" "/bin"];
-
-    # Note: the duplication of executables is about 4MB size.
-    # So a nicer solution was patching postgresql to allow setting the
-    # libdir explicitly.
-    postBuild = ''
-      mkdir -p $out/bin
-      rm $out/bin/{pg_config,postgres,pg_ctl}
-      cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
-      wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
-    '';
+    pathsToLink = ["/"];
 
     passthru.version = postgresql.version;
     passthru.psqlSchema = postgresql.psqlSchema;
