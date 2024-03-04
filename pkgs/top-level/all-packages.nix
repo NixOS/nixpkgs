@@ -27161,8 +27161,6 @@ with pkgs;
 
   vouch-proxy = callPackage ../servers/vouch-proxy { };
 
-  victoriametrics = callPackage ../servers/nosql/victoriametrics { };
-
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
 
   virtualenv = with python3Packages; toPythonApplication virtualenv;
