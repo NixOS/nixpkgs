@@ -41365,7 +41365,9 @@ with pkgs;
 
   valent = callPackage ../applications/misc/valent { };
 
-  vault = callPackage ../tools/security/vault { };
+  vault = callPackage ../tools/security/vault {
+    buildGoModule = buildGo120Module;
+  };
 
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 
