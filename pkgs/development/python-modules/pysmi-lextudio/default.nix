@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, jinja2
 , ply
 , poetry-core
 , pythonOlder
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysmi-lextudio";
-  version = "1.1.13";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "lextudio";
     repo = "pysmi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P1uu1+EcqA7K+oJWFyHTyQqUvqZjZTU0owLKoxjaQhc=";
+    hash = "sha256-3ai7Fb97B2HpG6IllEx/PNbJ3KQjwoN9Mn+jprMz+XY=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    jinja2
     ply
     requests
   ];
