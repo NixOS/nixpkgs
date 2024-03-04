@@ -6,6 +6,7 @@ let
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
+      , removeReferencesTo
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
@@ -66,10 +67,24 @@ let
 
     hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
-    outputs = [ "out" "lib" "doc" "man" ];
-    setOutputFlags = false; # $out retains configureFlags :-/
+    outputs = [ "out" "dev" "doc" "lib" "man" ];
+    outputChecks.out = {
+      disallowedReferences = [ "dev" "doc" "man" ];
+      disallowedRequisites = [
+        stdenv'.cc
+      ] ++ lib.optionals jitSupport [
+        llvmPackages.llvm.out
+        llvmPackages.llvm.dev
+      ];
+    };
     outputChecks.lib = {
-      disallowedReferences = [ "out" "doc" "man" ];
+      disallowedReferences = [ "out" "dev" "doc" "man" ];
+      disallowedRequisites = [
+        stdenv'.cc
+      ] ++ lib.optionals jitSupport [
+        llvmPackages.llvm.out
+        llvmPackages.llvm.dev
+      ];
     };
 
     buildInputs = [
@@ -92,6 +107,7 @@ let
     nativeBuildInputs = [
       makeWrapper
       pkg-config
+      removeReferencesTo
     ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
 
@@ -122,7 +138,6 @@ let
       "--with-libxml"
       "--with-icu"
       "--sysconfdir=/etc"
-      "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString systemdSupport' "--with-systemd")
@@ -158,21 +173,31 @@ let
 
     postPatch = ''
       substituteInPlace "src/Makefile.global.in" --subst-var out
-      # Hardcode the path to pgxs so pg_config returns the path in $out
-      substituteInPlace "src/common/config_info.c" --subst-var out
+      # Hardcode the path to pgxs so pg_config returns the path in $dev
+      substituteInPlace "src/common/config_info.c" --subst-var dev
     '';
 
     postInstall =
       ''
-        moveToOutput "lib/libpgcommon*.a" "$out"
-        moveToOutput "lib/libpgport*.a" "$out"
+        moveToOutput "bin/ecpg" "$dev"
+        moveToOutput "lib/pgxs" "$dev"
 
-        # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
+        # Pretend pg_config is located in $out/bin to return correct paths, but
+        # actually have it in -dev to avoid pulling in all other outputs.
+        moveToOutput "bin/pg_config" "$dev"
+        touch "$out/bin/pg_config" && chmod +x "$out/bin/pg_config"
+        wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
+
+        # postgres shows all the configured paths in the pg_config view.
+        # To prevent reference cycles between outputs, the paths to the
+        # dev, doc and man outputs will be removed from that view.
+        # References to the lib output are kept, because that output is linked
+        # to from allmost all other binaries anyway - many of them use libpq.
+        remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
-          for i in $out/lib/*.a $lib/lib/*.a; do
+          for i in $lib/lib/*.a; do
             name="$(basename "$i")"
             ext="${stdenv'.hostPlatform.extensions.sharedLibrary}"
             if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
@@ -180,20 +205,12 @@ let
             fi
           done
         fi
+        # The remaining static libraries are libpgcommon.a, libpgport.a and related.
+        # Those are only used when building e.g. extensions, so go to $dev.
+        moveToOutput "lib/*.a" "$dev"
       '' + lib.optionalString jitSupport ''
         # In the case of JIT support, prevent a retained dependency on clang-wrapper
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/clang clang
         nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
-
-        # Stop out depending on the default output of llvm
-        substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.out}/bin "" \
-          --replace '$(LLVM_BINPATH)/' ""
-
-        # Stop out depending on the -dev output of llvm
-        substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
-          --replace -I${llvmPackages.llvm.dev}/include ""
 
         ${lib.optionalString (!stdenv'.isDarwin) ''
           # Stop lib depending on the -dev output of llvm
@@ -213,8 +230,6 @@ let
     doCheck = !stdenv'.isDarwin;
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
-
-    disallowedReferences = [ stdenv'.cc ];
 
     passthru = let
       this = self.callPackage generic args;
