@@ -4,19 +4,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "srgn";
-  version = "0.10.2";
+  # the latest versioned release has broken unit tests, so we use the latest commit instead
+  version = "0.10.2-unstable-2024-02-04";
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
-    rev = "srgn-v${version}";
-    hash = "sha256-szOknySy7P/ZYVCJceg4eQtOf3wshQR2zHWqhqcvpNA=";
+    rev = "9df9fe772df140c2cd0f3c8311c1e12c210838de";
+    hash = "sha256-qUkuE0Tws7pl0Hd9Dsi6+V74ErCv+BwdvTdCbvAjgIc=";
   };
 
-  cargoHash = "sha256-vGBe0yZP+FwGDY9JTV4rP6ESmPerzYg27g7+9SNDOAw=";
-
-  # currently, the tests try to run `git restore`, which fails.
-  doCheck = false;
+  cargoHash = "sha256-B0epxhyPoImoclQRQHVgKPxnEdb8ER2mjJgse7FtgqU=";
 
   meta = with lib; {
     description = "A code surgeon for precise text and code transplantation.";
