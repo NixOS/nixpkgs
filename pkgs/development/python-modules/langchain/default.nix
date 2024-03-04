@@ -11,6 +11,7 @@
 , langsmith
 , langchain-core
 , langchain-community
+, langchain-text-splitters
 , numpy
 , pydantic
 , pyyaml
@@ -51,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.1.9";
+  version = "0.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -60,7 +61,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AgEze4JUo3i6HCg541tz/gV6g+zrueyOljy/TXUYBV4=";
+    hash = "sha256-wSm+n66CWvvR1ljrmmmE1wOX/CaCNgf8AKBZl5+I07A=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -79,6 +80,7 @@ buildPythonPackage rec {
     jsonpatch
     langchain-community
     langchain-core
+    langchain-text-splitters
     langsmith
     numpy
     pydantic
