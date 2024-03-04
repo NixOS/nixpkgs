@@ -14096,6 +14096,8 @@ self: super: with self; {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+  std-uritemplate = callPackage ../development/python-modules/std-uritemplate { };
+
   std2 = callPackage ../development/python-modules/std2 { };
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
