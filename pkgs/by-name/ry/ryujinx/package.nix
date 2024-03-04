@@ -134,7 +134,7 @@ buildDotnetModule rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ ivar jk artemist ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "Ryujinx";
   };
 }
