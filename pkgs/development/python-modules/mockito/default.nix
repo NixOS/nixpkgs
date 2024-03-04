@@ -1,23 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, funcsigs, pytest, numpy }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, numpy
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "1.5.0";
-  format = "setuptools";
   pname = "mockito";
+  version = "1.5.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-A2Eo2n2vLaiaC2N71zMh6ZL/ZbqKOYdsojPuwX63fo8=";
   };
 
-  propagatedBuildInputs = lib.optionals (!isPy3k) [ funcsigs ];
-  nativeCheckInputs = [ pytest numpy ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  # tests are no longer packaged in pypi tarball
-  doCheck = false;
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    numpy
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "mockito" ];
 
   meta = with lib; {
     description = "Spying framework";
