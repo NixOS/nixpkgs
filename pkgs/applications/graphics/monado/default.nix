@@ -2,10 +2,16 @@
 , stdenv
 , fetchFromGitLab
 , writeText
+, clang
 , cmake
+, cmake-format
 , cjson
 , doxygen
+, git
 , glslang
+, gradle
+, gradle-completion
+, ninja
 , pkg-config
 , python3
 , SDL2
@@ -70,9 +76,15 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
+    clang
     cmake
+    cmake-format
     doxygen
+    git
     glslang
+    gradle
+    gradle-completion
+    ninja
     pkg-config
     python3
   ];
