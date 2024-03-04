@@ -15,19 +15,15 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "0.6.0";
+  version = "0.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchgit {
     url = "https://github.com/mxmlnkn/ratarmount";
-    # The revision is hardcoded for now to fix problems with the tests, which are not worthy of a new release
-    # tag because releases do not officially contain tests. On the next release, use the commented revision,
-    # which points to a release tag, instead.
-    #rev = "core-v${version}";
-    rev = "ea43572dfbac4770a27ef2169f72ff73ee4a4ae9";
-    hash = "sha256-sPApM5OW+UbujFXHSL4ptMaegajz7FNtXz/KftTlw+U=";
+    rev = "core-v${version}";
+    hash = "sha256-2jG066BUkhyHRqRyFAucQRJrjXQNw2ccCxERKkltO3Y=";
     fetchSubmodules = true;
   };
 
