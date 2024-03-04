@@ -5,7 +5,7 @@
 
 let
   pname = "arduino-ide";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
