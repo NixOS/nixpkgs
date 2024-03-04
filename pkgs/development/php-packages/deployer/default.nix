@@ -2,16 +2,19 @@
 
 mkDerivation rec {
   pname = "deployer";
-  version = "6.8.0";
+  version = "7.3.3";
 
   src = fetchurl {
-    url = "https://deployer.org/releases/v${version}/${pname}.phar";
-    sha256 = "09mxwfa7yszsiljbkxpsd4sghqngl08cn18v4g1fbsxp3ib3kxi5";
+    url = "https://github.com/deployphp/deployer/releases/download/v${version}/${pname}.phar";
+    hash = "sha256-6F9o7u+BjXsJv1CUawBsCgltIwaeJodVluJjEKbQanY=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -21,15 +24,16 @@ mkDerivation rec {
 
     # fish support currently broken: https://github.com/deployphp/deployer/issues/2527
     installShellCompletion --cmd dep \
-      --bash <($out/bin/dep autocomplete --install) \
-      --zsh <($out/bin/dep autocomplete --install)
+      --bash <($out/bin/dep completion) \
+      --zsh <($out/bin/dep completion)
     runHook postInstall
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/deployphp/deployer/releases/tag/v${version}";
     description = "A deployment tool for PHP";
-    license = licenses.mit;
     homepage = "https://deployer.org/";
+    license = licenses.mit;
     mainProgram = "dep";
     maintainers = with maintainers; teams.php.members;
   };
