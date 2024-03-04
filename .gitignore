@@ -11,6 +11,7 @@ outputs/
 result-*
 result
 repl-result-*
+tags
 !pkgs/development/python-modules/result
 /doc/NEWS.html
 /doc/NEWS.txt
