@@ -113,6 +113,24 @@ let
     (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
       # fallback safe-ish set of flags
       (remove "pie" knownHardeningFlags);
+
+  # Clean up arguments
+  cleanAttrs = let
+    attrs' = [
+      "meta" "passthru" "pos"
+       "checkInputs" "installCheckInputs"
+       "nativeCheckInputs" "nativeInstallCheckInputs"
+       "__contentAddressed"
+       "__darwinAllowLocalNetworking"
+       "__impureHostDeps" "__propagatedImpureHostDeps"
+       "sandboxProfile" "propagatedSandboxProfile"
+    ];
+    attrsWithEnv' = attrs' ++ [ "env" ];
+  in {
+    withEnv = attrs: removeAttrs attrs attrsWithEnv';
+    default = attrs: removeAttrs attrs attrs';
+  };
+
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible = rattrs:
     let
@@ -390,15 +408,7 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg =
-    (removeAttrs attrs
-      (["meta" "passthru" "pos"
-       "checkInputs" "installCheckInputs"
-       "nativeCheckInputs" "nativeInstallCheckInputs"
-       "__contentAddressed"
-       "__darwinAllowLocalNetworking"
-       "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
-       ++ optional (__structuredAttrs || envIsExportable) "env"))
+    ((if (__structuredAttrs || envIsExportable) then cleanAttrs.withEnv else cleanAttrs.default) attrs)
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
