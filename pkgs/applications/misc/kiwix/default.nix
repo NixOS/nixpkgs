@@ -42,6 +42,6 @@ mkDerivation {
     homepage = "https://kiwix.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = with maintainers; [ ];
   };
 }
