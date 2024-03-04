@@ -14,12 +14,12 @@
 , ffmpeg-headless
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopus";
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/opus/opus-${version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/opus/opus-${finalAttrs.version}.tar.gz";
     hash = "sha256-uEYQlZuNQXthGqEqIlZeCjcyCXxjidGQmNhEVD40D4U=";
   };
 
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
     homepage = "https://opus-codec.org/";
-    changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${version}";
+    changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${finalAttrs.version}";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ ];
   };
-}
+})
