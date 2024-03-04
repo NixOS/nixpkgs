@@ -9835,7 +9835,7 @@ with self; {
     meta = {
       description = "File locking with fcntl(2)";
       license = with lib.licenses; [ artistic1 ];
-      maintainers = with maintainers; [ ajs124 das_j ];
+      maintainers = with maintainers; [ das_j ];
     };
   };
 

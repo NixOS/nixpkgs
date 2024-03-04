@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "std-uritemplate";
-  version = "0.0.53";
+  version = "0.0.54";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "std_uritemplate";
     inherit version;
-    hash = "sha256-AQjfDMU7XVsu2rInwmDOwy6qeVtbXNIq+wiKff4j4BY=";
+    hash = "sha256-FVKnB3v/T7eV6IQkaKQ8CFumIMc3PPlAgNOFNohQf9Q=";
   };
 
   nativeBuildInputs = [
