@@ -494,13 +494,13 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-hC87cIbDqK9rTK/SOuLy4qBVpMUCPxrFb+ReDkGhU1o=",
+    "hash": "sha256-FcoWovmdPUcX4LcSF9MLpxvwK1ObFejump4ha0Fmdbw=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v2.10.0",
+    "rev": "v2.12.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-/cS4skB/p4QMeRqxpgp7JjnkTnTHVtb5M9YEVA1X+k0="
+    "vendorHash": "sha256-lbtWI96iAjHNRbhJw2e8yWSGJD7hsMqy4ZGCScSH8ME="
   },
   "gridscale": {
     "hash": "sha256-nOuckOEiHTMUOSjRwTHaitLOosraEl2mbU4gafi3gi4=",
