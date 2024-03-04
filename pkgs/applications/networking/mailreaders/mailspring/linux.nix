@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -ar ./usr/share $out
 
     substituteInPlace $out/share/mailspring/resources/app.asar.unpacked/mailsync \
-      --replace dirname ${coreutils}/bin/dirname
+      --replace-fail dirname ${coreutils}/bin/dirname
 
     ln -s $out/share/mailspring/mailspring $out/bin/mailspring
     ln -s ${lib.getLib openssl}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = /* sh */ ''
     substituteInPlace $out/share/applications/Mailspring.desktop \
-      --replace Exec=mailspring Exec=$out/bin/mailspring
+      --replace-fail Exec=mailspring Exec=$out/bin/mailspring
   '';
 })
