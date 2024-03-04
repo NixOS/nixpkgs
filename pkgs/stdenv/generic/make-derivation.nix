@@ -95,6 +95,24 @@ let
       '';
 
     in optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
+
+  knownHardeningFlags = [
+    "bindnow"
+    "format"
+    "fortify"
+    "fortify3"
+    "pic"
+    "pie"
+    "relro"
+    "stackprotector"
+    "strictoverflow"
+    "zerocallusedregs"
+  ];
+
+  defaultHardeningFlags =
+    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
+      # fallback safe-ish set of flags
+      (remove "pie" knownHardeningFlags);
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible = rattrs:
     let
@@ -287,22 +305,6 @@ let
     # disabling fortify implies fortify3 should also be disabled
     then unique (hardeningDisable ++ [ "fortify3" ])
     else hardeningDisable;
-  knownHardeningFlags = [
-    "bindnow"
-    "format"
-    "fortify"
-    "fortify3"
-    "pic"
-    "pie"
-    "relro"
-    "stackprotector"
-    "strictoverflow"
-    "zerocallusedregs"
-  ];
-  defaultHardeningFlags =
-    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
-      # fallback safe-ish set of flags
-      (remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
