@@ -1170,6 +1170,7 @@
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
   ./services/security/certmgr.nix
+  ./services/security/certmonger.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
   ./services/security/endlessh-go.nix
