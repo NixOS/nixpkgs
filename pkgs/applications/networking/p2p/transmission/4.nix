@@ -22,10 +22,13 @@
 , libnatpmp
 , libiconv
 , Foundation
+, libicns
+, writeDarwinBundle
   # Build options
 , enableGTK3 ? false
 , gtkmm3
 , xorg
+, gnome
 , wrapGAppsHook
 , enableQt ? false
 , qt5
@@ -65,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optionals stdenv.isDarwin [
       # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
       "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+      # qt translation generation segfaults
+      "-DENABLE_NLS=OFF"
     ];
 
   postPatch = ''
@@ -91,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
   ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
+  ++ lib.optionals stdenv.isDarwin [ libicns writeDarwinBundle ]
   ;
 
   buildInputs = [
@@ -111,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
+  ++ lib.optionals (stdenv.isDarwin && enableGTK3) [ gnome.adwaita-icon-theme ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
   ++ lib.optionals stdenv.isDarwin [ libiconv Foundation ];
@@ -140,6 +147,19 @@ stdenv.mkDerivation (finalAttrs: {
     }
     EOF
     install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
+  '' + lib.optionalString (stdenv.isDarwin && (enableQt || enableGTK3)) ''
+    mkdir -p $out/Applications/Transmission.app/Contents/{MacOS,Resources}
+    icnsutil \
+      -c icns \
+      -o $out/Applications/Transmission.app/Contents/Resources/AppIcon.icns \
+      ../macosx/Images/Images.xcassets/AppIcon.appiconset
+    write-darwin-bundle "$out" "Transmission" "${finalAttrs.meta.mainProgram}" "AppIcon"
+  '';
+
+  preFixup = lib.optionalString (stdenv.isDarwin && enableGTK3) ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
   '';
 
   passthru.tests = {
