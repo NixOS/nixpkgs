@@ -1,29 +1,30 @@
-{ fetchFromGitHub, skawarePackages }:
+{ lib, fetchFromGitHub, skawarePackages, skalibs }:
 
-with skawarePackages;
 let
   version = "2.9.4.0";
+
+in skawarePackages.buildPackage {
+  inherit version;
+
+  pname = "execline";
+  # ATTN: also check whether there is a new manpages version
+  sha256 = "mrVdVhU536dv9Kl5BvqZX8SiiOPeUiXLGp2PqenrxJs=";
 
   # Maintainer of manpages uses following versioning scheme: for every
   # upstream $version he tags manpages release as ${version}.1, and,
   # in case of extra fixes to manpages, new tags in form ${version}.2,
   # ${version}.3 and so on are created.
-  manpages = fetchFromGitHub {
-    owner = "flexibeast";
-    repo = "execline-man-pages";
-    rev = "v2.9.1.0.1";
-    sha256 = "nZzzQFMUPmIgPS3aAIgcORr/TSpaLf8UtzBUFD7blt8=";
+  manpages = skawarePackages.buildManPages {
+    pname = "execline-man-pages";
+    version = "2.9.3.0.5";
+    sha256 = "0fcjrj4xp7y7n1c55k45rxr5m7zpv6cbhrkxlxymd4j603i9jh6d";
+    description = "Port of the documentation for the execline suite to mdoc";
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
-
-in buildPackage {
-  inherit version;
-
-  pname = "execline";
-  sha256 = "mrVdVhU536dv9Kl5BvqZX8SiiOPeUiXLGp2PqenrxJs=";
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
-  outputs = [ "bin" "man" "lib" "dev" "doc" "out" ];
+  outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
   # TODO: nsss support
   configureFlags = [
@@ -62,7 +63,5 @@ in buildPackage {
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
       -lskarnet
-    mkdir -p $man/share/
-    cp -vr ${manpages}/man* $man/share
   '';
 }
