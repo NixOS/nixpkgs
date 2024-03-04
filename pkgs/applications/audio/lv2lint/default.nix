@@ -5,7 +5,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.16.2";
 
   src = fetchFromSourcehut {
-    domain = "git.open-music-kontrollers.ch";
+    domain = "open-music-kontrollers.ch";
     owner = "~hp";
     repo = "lv2lint";
     rev = finalAttrs.version;
