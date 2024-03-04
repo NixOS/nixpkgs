@@ -21646,6 +21646,17 @@
     githubId = 332534;
     name = "Zach Shipko";
   };
+  ztmzzz = {
+    email = "ztmzzz@163.com";
+    github = "ztmzzz";
+    githubId = 41851415;
+    name = "Tianming Zhang";
+    keys = [
+      {
+        fingerprint = "6050 2DA5 AB4A 21D0 16D6  2F9E 1767 7378 51AB 1893";
+      }
+    ];
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
