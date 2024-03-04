@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.13.2";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-Um8LFVGAlMeOaN9uMwycHJzqEnTaxp8FYXIk+m2VTug=";
+    hash = "sha256-PkPqqchDRz166TnBg+ENsU4ju0KwrR3pCuFaRRF23kg=";
   };
 
   propagatedBuildInputs = [
@@ -62,9 +62,6 @@ buildPythonPackage rec {
     "test_zero_inflated_logits_probs_agree"
     # NameError: unbound axis name: _provenance
     "test_model_transformation"
-    # Using deprecated (removed in jax==0.4.24) jax.core.safe_map
-    # https://github.com/pyro-ppl/numpyro/issues/1733
-    "test_beta_bernoulli"
   ];
 
   # TODO: remove when tensorflow-probability gets fixed.
