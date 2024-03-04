@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6ND0Y+TzdN2rRI10cusgSK1sYMC55Wn5qFCHP4hsdes=";
+    sha256 = "sha256-8UAAX/kixqiY9zEYs5eva0G2K2vlfnYd1yyVHMSfSeY=";
   };
 
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
