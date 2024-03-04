@@ -157,15 +157,6 @@ self: super: {
       })
     ] super.aeson);
 
-  # Lifts bounds on hoauth2, skylighting, and json adds compat with mtl >= 2.3
-  gitit = appendPatches [
-    (pkgs.fetchpatch {
-      name = "gitit-stackage-lts-22.patch";
-      url = "https://github.com/jgm/gitit/commit/c3ce1ab513d07e9b29e9f4ec8244903441a03fca.patch";
-      sha256 = "1573ysf1qdhgsn0lh46cvwlcvyx4r2aay7g8c5cfgnadxd9b1j41";
-    })
-  ] super.gitit;
-
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 
