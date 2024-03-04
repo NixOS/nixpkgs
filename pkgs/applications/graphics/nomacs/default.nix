@@ -22,7 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OwiMB6O4+WuAt87sRbD1Qby3U7igqgCgddiWs3a4j3k=";
   };
 
-  outputs = [ "out" "man" ];
+  # Because some unknown reason split outputs is breaking on Darwin
+  outputs = if stdenv.isDarwin
+            then [ "out" ]
+            else [ "out" "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
