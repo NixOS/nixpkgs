@@ -6,16 +6,18 @@
 , catalogue
 , cymem
 , fetchPypi
+, hypothesis
 , jinja2
 , jsonschema
 , langcodes
+, mock
 , murmurhash
 , numpy
 , packaging
 , pathy
 , preshed
 , pydantic
-, pytest
+, pytestCheckHook
 , python
 , pythonOlder
 , pythonRelaxDepsHook
@@ -38,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.3";
+  version = "3.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mSZQKPvcbhIknFMwXkYfeaEDY3sOaGbCivDkY2X3UeE=";
+    hash = "sha256-Ul8s7S5AdhViyMrOk+9qHm6MSD8nvVZLwbFfYI776Fs=";
   };
 
   pythonRelaxDeps = [
@@ -83,20 +85,29 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "thinc>=8.1.8,<8.2.0" "thinc>=8.1.8"
-  '';
-
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
+    hypothesis
+    mock
   ];
 
-  doCheck = false;
+  doCheck = true;
 
-  checkPhase = ''
-    ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
+  # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
+  preCheck = ''
+    cd $out
   '';
+
+  pytestFlagsArray = [
+    "-m 'slow'"
+  ];
+
+  disabledTests = [
+    # touches network
+    "test_download_compatibility"
+    "test_validate_compatibility_table"
+    "test_project_assets"
+  ];
 
   pythonImportsCheck = [
     "spacy"
@@ -104,14 +115,14 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = writeScript "update-spacy" ''
-    #!${stdenv.shell}
-    set -eou pipefail
-    PATH=${lib.makeBinPath [ nix git nix-update ]}
+      #!${stdenv.shell}
+      set -eou pipefail
+      PATH=${lib.makeBinPath [ nix git nix-update ]}
 
-    nix-update python3Packages.spacy
+      nix-update python3Packages.spacy
 
-    # update spacy models as well
-    echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+      # update spacy models as well
+      echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
     '';
     tests.annotation = callPackage ./annotation-test { };
   };

@@ -163,6 +163,7 @@
   ./programs/clash-verge.nix
   ./programs/cnping.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/coolercontrol.nix
   ./programs/criu.nix
   ./programs/darling.nix
   ./programs/dconf.nix

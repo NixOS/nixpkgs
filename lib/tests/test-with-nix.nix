@@ -53,6 +53,12 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
   echo "Running lib/tests/modules.sh"
   bash lib/tests/modules.sh
 
+  echo "Checking lib.version"
+  nix-instantiate lib -A version --eval || {
+    echo "lib.version does not evaluate when lib is isolated from the rest of the nixpkgs tree"
+    exit 1
+  }
+
   echo "Running lib/tests/filesystem.sh"
   TEST_LIB=$PWD/lib bash lib/tests/filesystem.sh
 

@@ -55,6 +55,24 @@ runTests {
     expected = { a = false; b = false; c = true; };
   };
 
+  testCallPackageWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: {};
+      f' = callPackageWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.override;
+      expected = functionArgs f;
+    };
+
+  testCallPackagesWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: { nested = {}; };
+      f' = callPackagesWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.nested.override;
+      expected = functionArgs f;
+    };
+
 # TRIVIAL
 
   testId = {

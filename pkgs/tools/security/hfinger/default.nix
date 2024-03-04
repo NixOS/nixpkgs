@@ -7,14 +7,18 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "hfinger";
   version = "0.2.2";
-  disabled = python3.pythonOlder "3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "hfinger";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gxwirAqtY4R3KDHyNmDIknABO+SFuoDua9nm1UyXbxA=";
+    hash = "sha256-gxwirAqtY4R3KDHyNmDIknABO+SFuoDua9nm1UyXbxA=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     fnvhash
@@ -25,11 +29,15 @@ python3.pkgs.buildPythonApplication rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "hfinger" ];
+
+  pythonImportsCheck = [
+    "hfinger"
+  ];
 
   meta = with lib; {
     description = "Fingerprinting tool for HTTP requests";
     homepage = "https://github.com/CERT-Polska/hfinger";
+    changelog = "https://github.com/CERT-Polska/hfinger/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

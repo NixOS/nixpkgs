@@ -331,6 +331,8 @@ self: super: with self; {
 
   aiooss2 = callPackage ../development/python-modules/aiooss2 { };
 
+  aiooui = callPackage ../development/python-modules/aiooui { };
+
   aiopegelonline = callPackage ../development/python-modules/aiopegelonline { };
 
   aiopg = callPackage ../development/python-modules/aiopg { };
@@ -1309,6 +1311,8 @@ self: super: with self; {
   paddleocr = callPackage ../development/python-modules/paddleocr { };
 
   paddlepaddle = callPackage ../development/python-modules/paddlepaddle { };
+
+  pueblo = callPackage ../development/python-modules/pueblo { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
@@ -3499,6 +3503,8 @@ self: super: with self; {
   duckduckgo-search = callPackage ../development/python-modules/duckduckgo-search { };
 
   duct-py = callPackage ../development/python-modules/duct-py { };
+
+  duden = callPackage ../development/python-modules/duden { };
 
   duecredit = callPackage ../development/python-modules/duecredit { };
 
@@ -14645,6 +14651,8 @@ self: super: with self; {
 
   throttler = callPackage ../development/python-modules/throttler { };
 
+  thttp = callPackage ../development/python-modules/thttp { };
+
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
   };
@@ -16143,6 +16151,8 @@ self: super: with self; {
   velbus-aio = callPackage ../development/python-modules/velbus-aio { };
 
   verboselogs = callPackage ../development/python-modules/verboselogs { };
+
+  verlib2 = callPackage ../development/python-modules/verlib2 { };
 
   versioneer = callPackage ../development/python-modules/versioneer { };
 
