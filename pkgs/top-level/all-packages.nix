@@ -7579,8 +7579,6 @@ with pkgs;
 
   dt-schema = callPackage ../development/tools/dt-schema { };
 
-  dub = callPackage ../development/tools/build-managers/dub { };
-
   duc = callPackage ../tools/misc/duc { };
 
   duff = callPackage ../tools/filesystems/duff {
