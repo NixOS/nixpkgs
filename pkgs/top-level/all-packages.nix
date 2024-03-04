@@ -559,6 +559,8 @@ with pkgs;
 
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
+  coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
+
   coost = callPackage ../development/libraries/coost { };
 
   confetty = callPackage ../applications/misc/confetty { };
@@ -40985,9 +40987,6 @@ with pkgs;
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
-
-  vikunja-api = callPackage ../servers/web-apps/vikunja/api.nix { };
-  vikunja-frontend = callPackage ../servers/web-apps/vikunja/frontend.nix { };
 
   vips = callPackage ../tools/graphics/vips {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;

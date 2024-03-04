@@ -1159,6 +1159,8 @@ mapAliases ({
   ventoy-bin = ventoy; # Added 2023-04-12
   ventoy-bin-full = ventoy-full; # Added 2023-04-12
   ViennaRNA = viennarna; # Added 2023-08-23
+  vikunja-api = throw "'vikunja-api' has been replaced by 'vikunja'"; # Added 2024-02-19
+  vikunja-frontend = throw "'vikunja-frontend' has been replaced by 'vikunja'"; # Added 2024-02-19
   vimHugeX = vim-full; # Added 2022-12-04
   vim_configurable = vim-full; # Added 2022-12-04
   virtmanager = throw "'virtmanager' has been renamed to/replaced by 'virt-manager'"; # Converted to throw 2023-09-10

@@ -331,6 +331,8 @@ self: super: with self; {
 
   aiooss2 = callPackage ../development/python-modules/aiooss2 { };
 
+  aiooui = callPackage ../development/python-modules/aiooui { };
+
   aiopegelonline = callPackage ../development/python-modules/aiopegelonline { };
 
   aiopg = callPackage ../development/python-modules/aiopg { };
@@ -14648,6 +14650,8 @@ self: super: with self; {
   thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
 
   throttler = callPackage ../development/python-modules/throttler { };
+
+  thttp = callPackage ../development/python-modules/thttp { };
 
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
