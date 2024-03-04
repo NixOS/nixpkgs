@@ -48,6 +48,6 @@ buildGoModule {
     homepage = "https://scion-architecture.net/";
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    maintainers = with maintainers; [ sarcasticadmin matthewcroughan ];
   };
 }
