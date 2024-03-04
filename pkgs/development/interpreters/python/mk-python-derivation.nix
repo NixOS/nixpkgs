@@ -35,6 +35,18 @@ let
     optional optionals optionalAttrs hasSuffix escapeShellArgs
     extendDerivation head splitString isBool;
 
+  leftPadName = name: against: let
+      len = max (stringLength name) (stringLength against);
+    in fixedWidthString len " " name;
+
+  isPythonModule = drv:
+    # all pythonModules have the pythonModule attribute
+    (drv ? "pythonModule")
+    # Some pythonModules are turned in to a pythonApplication by setting the field to false
+    && (!isBool drv.pythonModule);
+
+  isMismatchedPython = drv: drv.pythonModule != python;
+
 in
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -139,27 +151,13 @@ let
 
   withDistOutput = elem format' ["pyproject" "setuptools" "wheel"];
 
-  name_ = name;
-
-  validatePythonMatches = attrName: let
-    isPythonModule = drv:
-      # all pythonModules have the pythonModule attribute
-      (drv ? "pythonModule")
-      # Some pythonModules are turned in to a pythonApplication by setting the field to false
-      && (!isBool drv.pythonModule);
-    isMismatchedPython = drv: drv.pythonModule != python;
-
-    optionalLocation = let
-        pos = unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
-      in optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
-
-    leftPadName = name: against: let
-        len = max (stringLength name) (stringLength against);
-      in fixedWidthString len " " name;
-
-    throwMismatch = drv: let
+  validatePythonMatches = let
+    throwMismatch = attrName: drv: let
       myName = "'${namePrefix}${name}'";
       theirName = "'${drv.name}'";
+      optionalLocation = let
+          pos = unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+        in optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
     in throw ''
       Python version mismatch in ${myName}:
 
@@ -187,12 +185,11 @@ let
       ${optionalLocation}
     '';
 
-    checkDrv = drv:
-      if (isPythonModule drv) && (isMismatchedPython drv)
-      then throwMismatch drv
+    checkDrv = attrName: drv:
+      if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv
       else drv;
 
-    in inputs: builtins.map (checkDrv) inputs;
+    in attrName: inputs: map (checkDrv attrName) inputs;
 
   isBootstrapInstallPackage = builtins.elem (attrs.pname or null) [
     "flit-core" "installer"
@@ -232,7 +229,7 @@ let
     "dependencies" "optional-dependencies" "build-system"
   ]) // {
 
-    name = namePrefix + name_;
+    name = namePrefix + name;
 
     nativeBuildInputs = [
       python
