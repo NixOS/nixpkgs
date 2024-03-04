@@ -12,6 +12,7 @@
 
 # tests
 , ffmpeg-headless
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,6 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit ffmpeg-headless;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "opus" ];
+    };
   };
 
   meta = with lib; {
