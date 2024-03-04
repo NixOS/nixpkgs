@@ -8,14 +8,11 @@
 , setuptools
 
 # Runtime dependencies
-, appnope
-, backcall
 , decorator
 , exceptiongroup
 , jedi
 , matplotlib-inline
 , pexpect
-, pickleshare
 , prompt-toolkit
 , pygments
 , stack-data
@@ -23,19 +20,21 @@
 , typing-extensions
 
 # Test dependencies
+, pickleshare
+, pytest-asyncio
 , pytestCheckHook
 , testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.20.0";
+  version = "8.22.1";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LyG9P8HVFVDInuOUSuBLvHvHnhKeoJN9pubGi/2/EXo=";
+    hash = "sha256-Ocb578B5+xm/sPF+7pA5eP6aKQsbgtaBlsZBzst26iI=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +42,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    backcall
     decorator
     jedi
     matplotlib-inline
     pexpect
-    pickleshare
     prompt-toolkit
     pygments
     stack-data
@@ -57,8 +54,6 @@ buildPythonPackage rec {
     exceptiongroup
   ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
   ];
 
   pythonImportsCheck = [
@@ -74,6 +69,8 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pickleshare
+    pytest-asyncio
     pytestCheckHook
     testpath
   ];
