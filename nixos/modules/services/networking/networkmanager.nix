@@ -33,7 +33,7 @@ let
         "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
         "wifi.backend" = cfg.wifi.backend;
     };
-  } cfg.extraConfig;
+  } cfg.settings;
   configFile = ini.generate "NetworkManager.conf" configAttrs;
 
   /*
@@ -151,7 +151,7 @@ in
         '';
       };
 
-      extraConfig = mkOption {
+      settings = mkOption {
         type = ini.type;
         default = {};
         description = lib.mdDoc ''
@@ -436,8 +436,16 @@ in
   imports = [
     (mkRenamedOptionModule
       [ "networking" "networkmanager" "packages" ]
-      [ "networking" "networkmanager" "plugins" ])
-    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+      [ "networking" "networkmanager" "plugins" ]
+    )
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "useDnsmasq" ]
+      [ "networking" "networkmanager" "dns" ]
+    )
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "extraConfig" ]
+      [ "networking" "networkmanager" "settings" ]
+    )
     (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
       This option was removed, because using bundled FCC unlock scripts is risky,
       might conflict with vendor-provided unlock scripts, and should
