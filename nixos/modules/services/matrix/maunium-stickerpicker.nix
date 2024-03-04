@@ -6,7 +6,7 @@ let
       ${pkgs.maunium-stickerpicker}/bin/sticker-import $@ \
       --config ${cfg.dataDir}/config.json \
       --output-dir ${cfg.dataDir}/packs \
-      --session ${cfg.dataDir}/tgsession
+      --session ${cfg.dataDir}/tgsession.session
   '';
 
   sticker-pack = pkgs.writeShellScriptBin "sticker-pack" ''
@@ -156,6 +156,7 @@ in
           Group = cfg.user;
           WorkingDirectory = cfg.dataDir;
           StateDirectory = baseNameOf cfg.dataDir;
+          StateDirectoryMode = "770";
           UMask = "007";
         };
 
