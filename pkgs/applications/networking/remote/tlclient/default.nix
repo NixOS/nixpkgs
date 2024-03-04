@@ -17,12 +17,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tlclient";
-  version = "4.13.0-2172";
+  version = "4.16.0-3389";
 
   src = fetchurl {
     # x86_64 arch tarball
     url = "https://www.cendio.com/downloads/clients/tl-${version}-client-linux-dynamic-x86_64.tar.gz";
-    sha256 = "1mpigdd3abcypwjiwql2lrvpw3r6074czsxyanndnvfzy7xhc8ac";
+    sha256 = "ea3a92186cbaf71cc4ab692b3baeadd94b3836242e58705a38fe3683f4f18691";
   };
 
   nativeBuildInputs = [ autoPatchelfHook copyDesktopItems ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       icon = "tlclient";
       comment = meta.description;
       type = "Application";
-      categories = "Network;RemoteAccess;";
+      categories = [ "Network" "RemoteAccess" ];
     })
   ];
 
