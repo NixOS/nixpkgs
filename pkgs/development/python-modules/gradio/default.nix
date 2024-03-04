@@ -170,5 +170,9 @@ buildPythonPackage rec {
     description = "Python library for easily interacting with trained machine learning models";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
+    knownVulnerabilities = [
+      "CVE-2023-51449"
+      "CVE-2024-0964"
+    ];
   };
 }
