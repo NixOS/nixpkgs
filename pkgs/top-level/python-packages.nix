@@ -2802,6 +2802,8 @@ self: super: with self; {
 
   deepdish = callPackage ../development/python-modules/deepdish { };
 
+  deepgram-sdk = callPackage ../development/python-modules/deepgram-sdk { };
+
   deepl = callPackage ../development/python-modules/deepl { };
 
   deepmerge = callPackage ../development/python-modules/deepmerge { };
