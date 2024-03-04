@@ -21,7 +21,7 @@ let
     networking.networkmanager = {
       enable = true;
       # this is needed so NM doesn't generate 'Wired Connection' profiles and instead uses the default one
-      extraConfig.main.no-auto-default = "*";
+      settings.main.no-auto-default = "*";
       ensureProfiles.profiles.default = {
         connection = {
           id = "default";
@@ -122,8 +122,6 @@ let
         static.wait_until_fails("cat /etc/resolv.conf | grep -q '192.168.1.1'")
       '';
     };
-    # wireguard = {
-    # };
     dispatcherScripts = {
       name = "dispatcherScripts";
       nodes.client = clientConfig {
@@ -164,4 +162,8 @@ let
   };
 in lib.mapAttrs (lib.const (attrs: makeTest (attrs // {
   name = "${attrs.name}-Networking-NetworkManager";
+  meta = {
+    maintainers = with lib.maintainers; [ janik ];
+  };
+
 }))) testCases
