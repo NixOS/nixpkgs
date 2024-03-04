@@ -2,7 +2,6 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, wrapGAppsHook
 , libX11
 , libgdiplus
 , ffmpeg
@@ -10,8 +9,6 @@
 , libsoundio
 , sndio
 , pulseaudio
-, gtk3
-, gdk-pixbuf
 , vulkan-loader
 , libICE
 , libSM
@@ -42,17 +39,7 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-  ];
-
-  buildInputs = [
-    gtk3
-    gdk-pixbuf
-  ];
-
   runtimeDeps = [
-    gtk3
     libX11
     libgdiplus
     SDL2_mixer
@@ -93,7 +80,6 @@ buildDotnetModule rec {
 
   makeWrapperArgs = [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
-    "--set GDK_BACKEND x11"
     "--set SDL_VIDEODRIVER x11"
   ];
 
