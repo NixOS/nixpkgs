@@ -382,7 +382,18 @@ let
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
-  checkValidity = attrs:
+  checkValidity =
+    let
+      # Return singleton for the common (valid) case
+      validityValid = {
+        valid = "yes";
+        # Prepopulate handled field so we don't have to calculate it again in assertValidity.
+        handled = true;
+      };
+
+      validityNoMaintainer = { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; };
+    in
+    attrs:
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
     let res = checkMeta (attrs.meta or {}); in if res != [] then
@@ -427,10 +438,9 @@ let
 
     # --- warnings ---
     # Please also update the type in /pkgs/top-level/config.nix alongside this.
-    else if hasNoMaintainers attrs then
-      { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
+    else if hasNoMaintainers attrs then validityNoMaintainer
     # -----
-    else { valid = "yes"; });
+    else validityValid);
 
 
   # The meta attribute is passed in the resulting attribute set,
@@ -482,9 +492,12 @@ let
     };
 
   assertValidity = { meta, attrs }: let
-      validity = checkValidity attrs;
-      inherit (validity) valid;
-  in validity // {
+    validity = checkValidity attrs;
+    inherit (validity) valid;
+  in
+    # The valid == "yes" case returns an attrset with handled already set.
+    if valid == "yes" then validity
+    else validity // {
       # Throw an error if trying to evaluate a non-valid derivation
       # or, alternatively, just output a warning message.
       handled =
