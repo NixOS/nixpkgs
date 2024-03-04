@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "aiocomelit";
   version = "0.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiocomelit --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aiocomelit --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
