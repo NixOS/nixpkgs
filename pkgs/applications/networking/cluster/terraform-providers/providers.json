@@ -1244,11 +1244,11 @@
     "vendorHash": null
   },
   "ucloud": {
-    "hash": "sha256-D6nrIjw4m2loeZRKNvrmgNQ4oaHKEc2xjxrWcgE8LNw=",
+    "hash": "sha256-OFnNEmODAluhEzVvQ22jblUhpzIlIvjsYZZmtepAcX8=",
     "homepage": "https://registry.terraform.io/providers/ucloud/ucloud",
     "owner": "ucloud",
     "repo": "terraform-provider-ucloud",
-    "rev": "v1.38.3",
+    "rev": "v1.38.6",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
