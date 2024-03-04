@@ -59,6 +59,12 @@ let
 
   isSetuptoolsDependency' = lib.flip elem [ "setuptools" "wheel" ];
 
+  cleanAttrs = lib.flip removeAttrs [
+    "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
+    "disabledTestPaths" "outputs" "stdenv"
+    "dependencies" "optional-dependencies" "build-system"
+  ];
+
 in
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -227,11 +233,7 @@ let
     };
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
-    "disabledTestPaths" "outputs" "stdenv"
-    "dependencies" "optional-dependencies" "build-system"
-  ]) // {
+  self = toPythonModule (stdenv.mkDerivation ((cleanAttrs attrs) // {
 
     name = namePrefix + name;
 
