@@ -22,6 +22,18 @@ let
       ln -sf $out/lib/libssl.so $out/lib/libssl.so.1.0.0
     '';
   };
+
+  opencv4' = symlinkJoin {
+    name = "opencv4-compat";
+    nativeBuildInputs = [ makeWrapper ];
+    paths = [ opencv4 ];
+    postBuild = ''
+      for so in ${opencv4}/lib/*.so; do
+        ln -s "$so" $out/lib/$(basename "$so").407
+      done
+    '';
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -98,7 +110,7 @@ stdenv.mkDerivation rec {
     mesa
     nspr
     nss
-    opencv4
+    opencv4'
     openssl'
     pango
     speex
