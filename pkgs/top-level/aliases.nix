@@ -1220,10 +1220,11 @@ mapAliases ({
   yafaray-core = libyafaray; # Added 2022-09-23
   yarn2nix-moretea-openssl_1_1 = throw "'yarn2nix-moretea-openssl_1_1' has been removed."; # Added 2023-02-04
   yubikey-manager4 = throw "yubikey-manager4 has been removed, since it is no longer required by yubikey-manager-qt. Please update to yubikey-manager."; # Added 2024-01-14
-  yuzu-ea = yuzuPackages.early-access; # Added 2022-08-18
-  yuzu-early-access = yuzuPackages.early-access; # Added 2023-12-29
-  yuzu = yuzuPackages.mainline; # Added 2021-01-25
-  yuzu-mainline = yuzuPackages.mainline; # Added 2023-12-29
+  yuzu-ea = throw "yuzu-ea has been removed from nixpkgs, as it has been deleted upstream"; # Added 2024-03-04
+  yuzu-early-access = throw "yuzu-early-access has been removed from nixpkgs, as it has been deleted upstream"; # Added 2024-03-04
+  yuzu = throw "yuzu has been removed from nixpkgs, as it has been deleted upstream"; # Added 2024-03-04
+  yuzu-mainline = throw "yuzu-mainline has been removed from nixpkgs, as it has been deleted upstream"; # Added 2024-03-04
+  yuzuPackages = throw "yuzuPackages has been removed from nixpkgs, as it has been deleted upstream"; # Added 2024-03-04
 
   ### Z ###
 
