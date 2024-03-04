@@ -240,8 +240,6 @@ rec {
           --replace-needed libssl.so.10 libssl.so \
           --replace-needed libcrypto.so.10 libcrypto.so
 
-        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
         chmod +x $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
       )
     '';
