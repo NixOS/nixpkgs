@@ -441,9 +441,6 @@ let
   #   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
   #   validity = checkMeta.assertValidity { inherit meta attrs; };
   commonMeta = { validity, attrs, pos ? null, references ? [ ] }:
-    let
-      outputs = attrs.outputs or [ "out" ];
-    in
     {
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
@@ -462,6 +459,7 @@ let
       #   unless they are comfortable with this default.
       outputsToInstall =
         let
+          outputs = attrs.outputs or [ "out" ];
           hasOutput = out: builtins.elem out outputs;
         in
         [ (findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
