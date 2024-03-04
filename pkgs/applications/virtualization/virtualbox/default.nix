@@ -21,6 +21,9 @@
 , extraConfigureFlags ? ""
 }:
 
+# See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
+assert enableKvm -> !enableHardening;
+
 with lib;
 
 let
