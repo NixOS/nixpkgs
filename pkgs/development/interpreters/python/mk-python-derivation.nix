@@ -47,6 +47,18 @@ let
 
   isMismatchedPython = drv: drv.pythonModule != python;
 
+  withDistOutput' = lib.flip elem ["pyproject" "setuptools" "wheel"];
+
+  isBootstrapInstallPackage' = lib.flip elem [ "flit-core" "installer" ];
+
+  isBootstrapPackage' = lib.flip elem ([
+    "build" "packaging" "pyproject-hooks" "wheel"
+  ] ++ optionals (python.pythonOlder "3.11") [
+    "tomli"
+  ]);
+
+  isSetuptoolsDependency' = lib.flip elem [ "setuptools" "wheel" ];
+
 in
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -149,7 +161,7 @@ let
     else
       "setuptools";
 
-  withDistOutput = elem format' ["pyproject" "setuptools" "wheel"];
+  withDistOutput = withDistOutput' format';
 
   validatePythonMatches = let
     throwMismatch = attrName: drv: let
@@ -191,19 +203,11 @@ let
 
     in attrName: inputs: map (checkDrv attrName) inputs;
 
-  isBootstrapInstallPackage = builtins.elem (attrs.pname or null) [
-    "flit-core" "installer"
-  ];
+  isBootstrapInstallPackage = isBootstrapInstallPackage' (attrs.pname or null);
 
-  isBootstrapPackage = isBootstrapInstallPackage || builtins.elem (attrs.pname or null) ([
-    "build" "packaging" "pyproject-hooks" "wheel"
-  ] ++ optionals (python.pythonOlder "3.11") [
-    "tomli"
-  ]);
+  isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (attrs.pname or null);
 
-  isSetuptoolsDependency = builtins.elem (attrs.pname or null) [
-    "setuptools" "wheel"
-  ];
+  isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
   passthru =
     attrs.passthru or { }
