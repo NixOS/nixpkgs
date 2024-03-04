@@ -232,10 +232,12 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
+nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
+/nixos/tests/networking/* @Janik-Haag
 
 # Web servers
 /doc/packages/nginx.section.md @raitobezarius
