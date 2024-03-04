@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     domain = "open-music-kontrollers.ch";
     owner = "~hp";
-    repo = "mephisto";
+    repo = "mephisto.lv2";
     rev = finalAttrs.version;
     hash = "sha256-ab6OGt1XVgynKNdszzdXwJ/jVKJSzgSmAv6j1U3/va0=";
   };
