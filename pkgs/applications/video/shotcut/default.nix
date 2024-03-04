@@ -16,17 +16,18 @@
 , qtmultimedia
 , qtcharts
 , cmake
+, Cocoa
 , gitUpdater
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "24.02.19";
+  version = "24.02.29";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
-    rev = "v${version}";
-    hash = "sha256-fjm2gqbuLKj6YyAZGgbfWUd+JOM9/Fhvpfz0E+TaqY0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PHpVquqC0MT7WNoWcdB9WTz4ZiSK4/f4oD5PH1gWBnw=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
@@ -41,11 +42,13 @@ stdenv.mkDerivation rec {
     qttools
     qtmultimedia
     qtcharts
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
   cmakeFlags = [
-    "-DSHOTCUT_VERSION=${version}"
+    "-DSHOTCUT_VERSION=${finalAttrs.version}"
   ];
 
   patches = [
@@ -55,8 +58,14 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [jack1 SDL2]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([SDL2] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [jack1])}"
   ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications $out/bin
+    mv $out/Shotcut.app $out/Applications/Shotcut.app
+    ln -s $out/Applications/Shotcut.app/Contents/MacOS/Shotcut $out/bin/shotcut
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -76,7 +85,7 @@ stdenv.mkDerivation rec {
     homepage = "https://shotcut.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "shotcut";
   };
-}
+})
