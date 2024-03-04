@@ -33963,8 +33963,6 @@ with pkgs;
 
   nanorc = callPackage ../applications/editors/nano/nanorc { };
 
-  nc4nix = callPackage ../development/tools/nc4nix { };
-
   netbeans = callPackage ../applications/editors/netbeans {
     jdk = jdk17;
   };
