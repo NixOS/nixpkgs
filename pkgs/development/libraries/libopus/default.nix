@@ -2,6 +2,7 @@
 , stdenv
 , fetchpatch
 , fetchurl
+, gitUpdater
 , meson
 , python3
 , ninja
@@ -53,12 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
-  passthru.tests = {
-    inherit ffmpeg-headless;
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.xiph.org/xiph/opus.git";
+      rev-prefix = "v";
+    };
 
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-      moduleNames = [ "opus" ];
+    tests = {
+      inherit ffmpeg-headless;
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        moduleNames = [ "opus" ];
+      };
     };
   };
 
