@@ -2,18 +2,18 @@
 , libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
 , Carbon, Cocoa, Kernel, OpenGL, fixDarwinDylibNames
 , waylandSupport ? false, extra-cmake-modules, wayland
-, wayland-protocols, libxkbcommon
+, wayland-scanner, wayland-protocols, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.10";
+  version = "3.4";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "sha256-kTRXsfQ+9PFurG3ffz0lwnITAYAXtNl3h/3O6FSny5o=";
+    sha256 = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
-    ++ lib.optional waylandSupport extra-cmake-modules;
+    ++ lib.optionals waylandSupport [ extra-cmake-modules wayland-scanner ];
 
   buildInputs =
     lib.optionals stdenv.isDarwin [ Carbon Cocoa Kernel ]
@@ -37,8 +37,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.isDarwin && !stdenv.hostPlatform.isWindows) [
     "-DCMAKE_C_FLAGS=-D_GLFW_GLX_LIBRARY='\"${lib.getLib libGL}/lib/libGL.so.1\"'"
   ] ++ lib.optionals waylandSupport [
-    "-DGLFW_USE_WAYLAND=ON"
+    "-DGLFW_BUILD_X11=OFF"
     "-DCMAKE_C_FLAGS=-D_GLFW_EGL_LIBRARY='\"${lib.getLib libGL}/lib/libEGL.so.1\"'"
+  ] ++ lib.optionals (!waylandSupport) [
+    "-DGLFW_BUILD_WAYLAND=OFF"
   ];
 
   postPatch = lib.optionalString waylandSupport ''
