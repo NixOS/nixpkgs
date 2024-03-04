@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "catamaran";
-  version = "2024-03-02";
+  version = "0-unstable-2024-03-02";
 
   src = fetchzip {
     url = "https://www.1001fonts.com/download/catamaran.zip";
