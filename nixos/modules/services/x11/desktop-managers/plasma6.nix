@@ -101,6 +101,7 @@ in {
         libplasma # provides Kirigami platform theme
         plasma-integration # provides Qt platform theme
         kde-gtk-config
+        pkgs.xsettingsd
 
         # Artwork + themes
         breeze
