@@ -93,6 +93,7 @@ in
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+      machine.succeed("grep 'sort-key nixos' /boot/loader/entries/nixos-generation-1.conf")
 
       # Ensure we actually booted using systemd-boot
       # Magic number is the vendor UUID used by systemd-boot.
@@ -115,15 +116,17 @@ in
       virtualisation.useSecureBoot = true;
     };
 
-    testScript = ''
+    testScript = let
+      efiArch = pkgs.stdenv.hostPlatform.efiArch;
+    in { nodes, ... }: ''
       machine.start(allow_reboot=True)
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed("sbctl create-keys")
       machine.succeed("sbctl enroll-keys --yes-this-might-brick-my-machine")
-      machine.succeed('sbctl sign /boot/EFI/systemd/systemd-bootx64.efi')
-      machine.succeed('sbctl sign /boot/EFI/BOOT/BOOTX64.EFI')
-      machine.succeed('sbctl sign /boot/EFI/nixos/*bzImage.efi')
+      machine.succeed('sbctl sign /boot/EFI/systemd/systemd-boot${efiArch}.efi')
+      machine.succeed('sbctl sign /boot/EFI/BOOT/BOOT${toUpper efiArch}.EFI')
+      machine.succeed('sbctl sign /boot/EFI/nixos/*${nodes.machine.system.boot.loader.kernelFile}.efi')
 
       machine.reboot()
 
@@ -164,7 +167,9 @@ in
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
-      specialisation.something.configuration = {};
+      specialisation.something.configuration = {
+        boot.loader.systemd-boot.sortKey = "something";
+      };
     };
 
     testScript = ''
@@ -176,6 +181,9 @@ in
       )
       machine.succeed(
           "grep -q 'title NixOS (something)' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+      )
+      machine.succeed(
+          "grep 'sort-key something' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
       )
     '';
   };
@@ -254,25 +262,25 @@ in
     };
 
     testScript = ''
-      machine.succeed("test -e /boot/loader/entries/o_netbootxyz.conf")
+      machine.succeed("test -e /boot/loader/entries/netbootxyz.conf")
       machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
     '';
   };
 
-  entryFilename = makeTest {
-    name = "systemd-boot-entry-filename";
+  memtestSortKey = makeTest {
+    name = "systemd-boot-memtest-sortkey";
     meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
-      boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
+      boot.loader.systemd-boot.memtest86.sortKey = "apple";
     };
 
     testScript = ''
-      machine.fail("test -e /boot/loader/entries/memtest86.conf")
-      machine.succeed("test -e /boot/loader/entries/apple.conf")
+      machine.succeed("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
+      machine.succeed("grep 'sort-key apple' /boot/loader/entries/memtest86.conf")
     '';
   };
 
@@ -283,7 +291,6 @@ in
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ commonXbootldr ];
       boot.loader.systemd-boot.memtest86.enable = true;
-      boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
     };
 
     testScript = { nodes, ... }: ''
@@ -293,8 +300,7 @@ in
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed("test -e /efi/EFI/systemd/systemd-bootx64.efi")
-      machine.fail("test -e /boot/loader/entries/memtest86.conf")
-      machine.succeed("test -e /boot/loader/entries/apple.conf")
+      machine.succeed("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/EFI/memtest86/memtest.efi")
     '';
   };
@@ -386,9 +392,9 @@ in
           machine.succeed("${finalSystem}/bin/switch-to-configuration boot")
           machine.fail("test -e /boot/efi/fruits/tomato.efi")
           machine.fail("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
-          machine.succeed("test -e /boot/loader/entries/o_netbootxyz.conf")
+          machine.succeed("test -e /boot/loader/entries/netbootxyz.conf")
           machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
-          machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/o_netbootxyz.conf")
+          machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/netbootxyz.conf")
           machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
     '';
   };

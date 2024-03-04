@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , stdenv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-X+pAvudfbxng6kMv0NO00v6mMBXUMaXvZb/L1OgWd38=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "socks" ];

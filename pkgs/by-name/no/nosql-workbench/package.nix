@@ -39,20 +39,12 @@ if stdenv.isDarwin then stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ _7zz ];
-
-  buildInputs = [ jdk21 ];
-
   # DMG file is using APFS which is unsupported by "undmg".
   # Instead, use "7zz" to extract the contents.
   # "undmg" issue: https://github.com/matthewbauer/undmg/issues/4
-  unpackCmd = ''
-    runHook preUnpack
+  nativeBuildInputs = [ _7zz ];
 
-    7zz x $curSrc
-
-    runHook postUnpack
-  '';
+  buildInputs = [ jdk21 ];
 
   installPhase = ''
     runHook preInstall
