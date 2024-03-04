@@ -5,13 +5,14 @@
 , fetchFromGitHub
 , orjson
 , pythonOlder
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "reolink-aio";
   version = "0.8.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-MUhB8A51dj+FA3+lvBrFyAWizKq5CpYwo38E1euJsHs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
