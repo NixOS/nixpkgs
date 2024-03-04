@@ -401,7 +401,7 @@ let
         (mkIf config.isNormalUser {
           group = mkDefault "users";
           createHome = mkDefault true;
-          home = mkDefault "/home/${config.name}";
+          home = mkDefault "${cfg.defaultHome}/${config.name}";
           homeMode = mkDefault "700";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
@@ -618,6 +618,14 @@ in {
         a password or an SSH key.
 
         WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
+      '';
+    };
+
+    users.defaultHome = mkOption {
+      type = types.str;
+      default = "/home";
+      description = ''
+        The default home directory for normal users.
       '';
     };
 
