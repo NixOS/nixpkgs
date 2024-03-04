@@ -1,10 +1,11 @@
 { lib
 , aiohttp
-, asgiref
+, aioitertools
 , buildPythonPackage
 , django
 , djangorestframework
 , falcon
+, fastapi
 , fetchFromGitHub
 , flask
 , httpx
@@ -12,6 +13,7 @@
 , jsonschema
 , jsonschema-spec
 , more-itertools
+, multidict
 , openapi-schema-validator
 , openapi-spec-validator
 , parse
@@ -28,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.18.2";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-5sNI6ujqDQ5L4afVHYZkm2pKa8yATtHFo7MF3eFF8Ig=";
+    hash = "sha256-+YYcSNX717JjVHMk4Seb145iq9/rQZEVQn27Ulk1A3E=";
   };
 
   postPatch = ''
@@ -56,19 +58,22 @@ buildPythonPackage rec {
     openapi-spec-validator
     werkzeug
     jsonschema-spec
-    asgiref
     jsonschema
   ];
 
   passthru.optional-dependencies = {
     aiohttp = [
       aiohttp
+      multidict
     ];
     django = [
       django
     ];
     falcon = [
       falcon
+    ];
+    fastapi = [
+      fastapi
     ];
     flask = [
       flask
@@ -77,7 +82,7 @@ buildPythonPackage rec {
       requests
     ];
     starlette = [
-      httpx
+      aioitertools
       starlette
     ];
   };
@@ -85,6 +90,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    httpx
     pytest-aiohttp
     pytestCheckHook
     responses
@@ -103,6 +109,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/python-openapi/openapi-core";
     license = licenses.bsd3;
