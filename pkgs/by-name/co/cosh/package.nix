@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     repo = "cosh";
     owner = "tomhrr";
     rev = "e13702dc77c63dc91df305d2abf5bbdd87809781";
-    hash = "sha256-4zsTK2kAELM/A3WEob9MDt++wowFhrDJwPEtR9QZ4oU=";
+    hash = "sha256-4zsTK2kAELM/A3WEob9MDt++wowFhrDJwPEtR9QZ4oU=";#sha256-4zsTK2kAELM/A3WEob9MDt++wowFhrDJwPEtR9QZ4oU=";
   };
 
   # the tests try to read /etc/localtime which is unavailable under the sandbox
