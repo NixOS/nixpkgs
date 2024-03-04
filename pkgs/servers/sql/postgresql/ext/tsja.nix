@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/local/pgsql ${postgresql} \
+      --replace /usr/local/pgsql ${lib.getDev postgresql} \
       --replace -L/usr/local/lib "" \
       --replace -I/usr/local/include ""
     substituteInPlace tsja.c --replace /usr/local/lib/mecab ${mecab}/lib/mecab
