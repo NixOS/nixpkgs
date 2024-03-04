@@ -2918,9 +2918,6 @@ with pkgs;
   kodi-retroarch-advanced-launchers =
     callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
 
-  ### APPLICATIONS/EMULATORS/YUZU
-  yuzuPackages = callPackage ../applications/emulators/yuzu {};
-
   # Aliases kept here because they are easier to use
   x16-emulator = x16.emulator;
   x16-rom = x16.rom;
