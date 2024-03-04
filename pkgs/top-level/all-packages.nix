@@ -2913,18 +2913,6 @@ with pkgs;
   kodi-retroarch-advanced-launchers =
     callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
 
-  ### APPLICATIONS/EMULATORS/YUZU
-
-  yuzu-mainline = import ../applications/emulators/yuzu {
-    inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
-    branch = "mainline";
-  };
-
-  yuzu-early-access = import ../applications/emulators/yuzu {
-    inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
-    branch = "early-access";
-  };
-
   ### APPLICATIONS/EMULATORS/COMMANDERX16
 
   x16-emulator = callPackage ../applications/emulators/commanderx16/emulator.nix { };
