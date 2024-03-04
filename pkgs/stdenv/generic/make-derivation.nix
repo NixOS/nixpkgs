@@ -131,6 +131,22 @@ let
     default = attrs: removeAttrs attrs attrs';
   };
 
+  # Indicate the host platform of the derivation if cross compiling.
+  # Fixed-output derivations like source tarballs shouldn't get a host
+  # suffix. But we have some weird ones with run-time deps that are
+  # just used for their side-affects. Those might as well since the
+  # hash can't be the same. See #32986.
+  hostSuffix = optionalString
+    (stdenv.hostPlatform != stdenv.buildPlatform)
+    "-${stdenv.hostPlatform.config}";
+
+  # Disambiguate statically built packages. This was originally
+  # introduce as a means to prevent nix-env to get confused between
+  # nix and nixStatic. This should be also achieved by moving the
+  # hostSuffix before the version, so we could contemplate removing
+  # it again.
+  staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
+
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible = rattrs:
     let
@@ -411,30 +427,13 @@ else let
     ((if (__structuredAttrs || envIsExportable) then cleanAttrs.withEnv else cleanAttrs.default) attrs)
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
-        let
-          # Indicate the host platform of the derivation if cross compiling.
-          # Fixed-output derivations like source tarballs shouldn't get a host
-          # suffix. But we have some weird ones with run-time deps that are
-          # just used for their side-affects. Those might as well since the
-          # hash can't be the same. See #32986.
-          hostSuffix = optionalString
-            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
-            "-${stdenv.hostPlatform.config}";
-
-          # Disambiguate statically built packages. This was originally
-          # introduce as a means to prevent nix-env to get confused between
-          # nix and nixStatic. This should be also achieved by moving the
-          # hostSuffix before the version, so we could contemplate removing
-          # it again.
-          staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
-        in
         lib.strings.sanitizeDerivationName (
           if attrs ? name
-          then attrs.name + hostSuffix
+          then attrs.name + optionalString (!dontAddHostSuffix) hostSuffix
           else
             # we cannot coerce null to a string below
             assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
-            "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
+            "${attrs.pname}${staticMarker}${optionalString (!dontAddHostSuffix) hostSuffix}-${attrs.version}"
         );
     }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
