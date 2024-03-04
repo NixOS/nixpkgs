@@ -2744,24 +2744,24 @@ final: prev:
 
   ddc-filter-sorter_rank = buildVimPlugin {
     pname = "ddc-filter-sorter_rank";
-    version = "2023-09-11";
+    version = "2024-03-01";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-filter-sorter_rank";
-      rev = "fccbd5892dc57f44f07cddcbef9d465838b36cee";
-      sha256 = "1cs4c7q8r60q7pxacl0f091ap9kjsqmc19mlb2rwrwi76v6x1avs";
+      rev = "8b51a0690d030bc22777549c3944012d42fa02a3";
+      sha256 = "0ng4zjhvc1ill9bzd152kzl75rvisiayw8ihrnfjn9db27csvjmy";
     };
     meta.homepage = "https://github.com/Shougo/ddc-filter-sorter_rank/";
   };
 
   ddc-source-lsp = buildVimPlugin {
     pname = "ddc-source-lsp";
-    version = "2024-01-15";
+    version = "2024-02-25";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-source-lsp";
-      rev = "ad43a10726ebdacea80fafee5034247816fb099d";
-      sha256 = "1agrpcq75j4m5ac7qs292kyq8aqwmm0filvpkw3775hcgv1gkxz3";
+      rev = "682d8551fc2b3c30412ff6f26fa57a7c8c712057";
+      sha256 = "0si2y3f4clhsxfxazhpq02cg20c0vg78fid3n2fb6qg6vgs1lhvy";
     };
     meta.homepage = "https://github.com/Shougo/ddc-source-lsp/";
   };
@@ -2792,12 +2792,12 @@ final: prev:
 
   ddc-vim = buildVimPlugin {
     pname = "ddc.vim";
-    version = "2024-02-09";
+    version = "2024-03-04";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc.vim";
-      rev = "e5daae126a42e6c736af9743fbb69263d117f328";
-      sha256 = "0iq3bbf07g12mn8m2jz7w2phr3sb2gzy6ajc00316dvy4l65x5jh";
+      rev = "b35e779277126c124339a68a34d1a3e9277b057f";
+      sha256 = "0a6a425kqrrmhl8w4vizjchy4a69wy1b8ljgkkxh40bbiy5896dc";
     };
     meta.homepage = "https://github.com/Shougo/ddc.vim/";
   };
