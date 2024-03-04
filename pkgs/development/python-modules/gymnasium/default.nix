@@ -55,7 +55,10 @@ buildPythonPackage rec {
     moviepy
     opencv4
     pybox2d
-    pygame
+    # Currently broken
+    # TODO: uncomment when pygame is fixed
+    # See https://github.com/NixOS/nixpkgs/issues/293186
+    # pygame
     pytestCheckHook
     scipy
   ];
@@ -69,6 +72,32 @@ buildPythonPackage rec {
     "tests/utils/test_save_video.py"
     "tests/wrappers/test_record_video.py"
     "tests/wrappers/test_video_recorder.py"
+
+    # Currently broken
+    # TODO: remove when pygame is fixed
+    # See https://github.com/NixOS/nixpkgs/issues/293186
+    "tests/envs/test_env_implementation.py"
+    "tests/utils/test_play.py"
+  ];
+
+  # Currently broken
+  # TODO: remove when pygame is fixed
+  # See https://github.com/NixOS/nixpkgs/issues/293186
+  disabledTests = [
+    "test_call_async_vector_env"
+    "test_call_sync_vector_env"
+    "test_frame_stack"
+    "test_gray_scale_observation"
+    "test_human_rendering"
+    "test_invalid_input"
+    "test_make_human_rendering"
+    "test_make_render_collection"
+    "test_no_error_warnings"
+    "test_order_enforcing"
+    "test_render_modes"
+    "test_resize_observation"
+    "test_resize_shapes"
+    "test_vector_wrapper_equivalence"
   ];
 
   meta = with lib; {
