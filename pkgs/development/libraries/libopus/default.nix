@@ -16,23 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libopus";
-  version = "1.4";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/opus/opus-${version}.tar.gz";
-    sha256 = "sha256-ybMrQlO+WuY9H/Fu6ga5S18PKVG3oCrO71jjo85JxR8=";
+    hash = "sha256-uEYQlZuNQXthGqEqIlZeCjcyCXxjidGQmNhEVD40D4U=";
   };
 
   patches = [
     ./fix-pkg-config-paths.patch
     # Some tests time out easily on slower machines
     ./test-timeout.patch
-    # Fix meson build for arm64. Remove with next release
-    # https://gitlab.xiph.org/xiph/opus/-/merge_requests/59
-    (fetchpatch {
-      url = "https://gitlab.xiph.org/xiph/opus/-/commit/20c032d27c59d65b19b8ffbb2608e5282fe817eb.patch";
-      hash = "sha256-2pX+0ay5PTyHL2plameBX2L1Q4aTx7V7RGiTdhNIuE4=";
-    })
   ];
 
   postPatch = ''
