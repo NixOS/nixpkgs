@@ -155,7 +155,7 @@ in
         type = ini.type;
         default = {};
         description = lib.mdDoc ''
-          Configuration added to the generated NetworkManager.conf, note that you can overwrite settings existing settings with this.
+          Configuration added to the generated NetworkManager.conf, note that you can overwrite existing settings with this.
           Refer to
           [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
