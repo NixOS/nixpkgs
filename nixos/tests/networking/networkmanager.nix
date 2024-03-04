@@ -124,8 +124,22 @@ let
     };
     # wireguard = {
     # };
-    # dispatcherScripts = {
-    # };
+    dispatcherScripts = {
+      name = "dispatcherScripts";
+      nodes.client = clientConfig {
+        networking.networkmanager.dispatcherScripts = [{
+          type = "pre-up";
+          source = pkgs.writeText "testHook" ''
+            touch /tmp/dispatcher-scripts-are-working
+          '';
+        }];
+      };
+      testScript = ''
+        start_all()
+        client.wait_for_unit("NetworkManager.service")
+        client.wait_until_succeeds("stat /tmp/dispatcher-scripts-are-working")
+      '';
+    };
     envsubst = {
       name = "envsubst";
       nodes.client = let
