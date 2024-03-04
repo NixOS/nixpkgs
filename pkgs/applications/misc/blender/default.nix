@@ -85,8 +85,6 @@ let
   pythonPackages = python310Packages;
   inherit (pythonPackages) python;
 
-  buildEnv = callPackage ./wrapper.nix { };
-
   libdecor' = libdecor.overrideAttrs (old: {
     # Blender uses private APIs, need to patch to expose them
     patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
@@ -323,12 +321,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     withPackages =
       f:
-      let
-        packages = f pythonPackages;
-      in
-      buildEnv.override {
+      (callPackage ./wrapper.nix { }).override {
         blender = finalAttrs.finalPackage;
-        extraModules = packages;
+        extraModules = (f pythonPackages);
       };
 
     tests = {
