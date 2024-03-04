@@ -201,6 +201,9 @@ self: super: {
   # currently, cabal-plan seems to get not much maintenance
   cabal-plan = doJailbreak super.cabal-plan;
 
+  # Too strict bounds on optparse-applicative
+  weeder = lib.warnIf (lib.versionAtLeast super.weeder.version "2.8.0") "jailbreak on weeder may be obsolete" doJailbreak super.weeder;
+
   # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
   leveldb-haskell = appendPatch (fetchpatch {
     url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
