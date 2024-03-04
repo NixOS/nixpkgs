@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, installShellFiles
 , php
 }:
 
@@ -15,6 +16,13 @@ php.buildComposerProject (finalAttrs: {
   };
 
   vendorHash = "sha256-0jvWbQubPXDhsXqEp8q5R0Y7rQX3UiccGDF3HDBeh7o=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd phpactor \
+      --bash <($out/bin/phpactor completion bash)
+  '';
 
   meta = {
     changelog = "https://github.com/phpactor/phpactor/releases/tag/${finalAttrs.version}";
