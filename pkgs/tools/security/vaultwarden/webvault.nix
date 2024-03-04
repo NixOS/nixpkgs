@@ -4,6 +4,7 @@
 , git
 , nixosTests
 , python3
+, vaultwarden
 }:
 
 let
