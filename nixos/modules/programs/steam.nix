@@ -117,14 +117,10 @@ in {
       };
     };
 
-    extest.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Load the extest library into Steam, to translate X11 input events to
-        uinput events (e.g. for using Steam Input on Wayland)
-      '';
-    };
+    extest.enable = mkEnableOption (lib.mdDoc ''
+      Load the extest library into Steam, to translate X11 input events to
+      uinput events (e.g. for using Steam Input on Wayland)
+    '');
   };
 
   config = mkIf cfg.enable {
