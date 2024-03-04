@@ -4,7 +4,7 @@
  	i++;
 
  	configdata[i].name = pstrdup("PGXS");
-+	strlcpy(path, "@out@/lib", sizeof(path));
++	strlcpy(path, "@dev@/lib", sizeof(path));
 -	get_pkglib_path(my_exec_path, path);
  	strlcat(path, "/pgxs/src/makefiles/pgxs.mk", sizeof(path));
  	cleanup_path(path);
