@@ -12,7 +12,7 @@
   cmake,
   colladaSupport ? true,
   config,
-  cudaPackages ? { },
+  cudaPackages,
   cudaSupport ? config.cudaSupport,
   dbus,
   embree,
