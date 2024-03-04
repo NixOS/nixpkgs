@@ -2812,8 +2812,6 @@ with pkgs;
 
   ruffle = callPackage ../applications/emulators/ruffle { };
 
-  ryujinx = callPackage ../applications/emulators/ryujinx { };
-
   sameboy = callPackage ../applications/emulators/sameboy { };
 
   simh = callPackage ../applications/emulators/simh { };
