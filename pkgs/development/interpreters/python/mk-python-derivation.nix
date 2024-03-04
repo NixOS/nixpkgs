@@ -28,6 +28,15 @@
 , eggInstallHook
 }:
 
+let
+  inherit (builtins) unsafeGetAttrPos;
+  inherit (lib)
+    elem optionalString max stringLength fixedWidthString getName
+    optional optionals optionalAttrs hasSuffix escapeShellArgs
+    extendDerivation head splitString isBool;
+
+in
+
 { name ? "${attrs.pname}-${attrs.version}"
 
 # Build-time dependencies for the package
@@ -128,7 +137,7 @@ let
     else
       "setuptools";
 
-  withDistOutput = lib.elem format' ["pyproject" "setuptools" "wheel"];
+  withDistOutput = elem format' ["pyproject" "setuptools" "wheel"];
 
   name_ = name;
 
@@ -137,16 +146,16 @@ let
       # all pythonModules have the pythonModule attribute
       (drv ? "pythonModule")
       # Some pythonModules are turned in to a pythonApplication by setting the field to false
-      && (!builtins.isBool drv.pythonModule);
+      && (!isBool drv.pythonModule);
     isMismatchedPython = drv: drv.pythonModule != python;
 
     optionalLocation = let
-        pos = builtins.unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
-      in lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+        pos = unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+      in optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
     leftPadName = name: against: let
-        len = lib.max (lib.stringLength name) (lib.stringLength against);
-      in lib.strings.fixedWidthString len " " name;
+        len = max (stringLength name) (stringLength against);
+      in fixedWidthString len " " name;
 
     throwMismatch = drv: let
       myName = "'${namePrefix}${name}'";
@@ -173,7 +182,7 @@ let
         * If ${theirName} provides executables that are called at run time, pass its
           bin path to makeWrapperArgs:
 
-              makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${lib.getName drv } ] }" ];
+              makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${getName drv } ] }" ];
 
       ${optionalLocation}
     '';
@@ -191,7 +200,7 @@ let
 
   isBootstrapPackage = isBootstrapInstallPackage || builtins.elem (attrs.pname or null) ([
     "build" "packaging" "pyproject-hooks" "wheel"
-  ] ++ lib.optionals (python.pythonOlder "3.11") [
+  ] ++ optionals (python.pythonOlder "3.11") [
     "tomli"
   ]);
 
@@ -203,16 +212,16 @@ let
     attrs.passthru or { }
     // {
       updateScript = let
-        filename = builtins.head (lib.splitString ":" self.meta.position);
+        filename = head (splitString ":" self.meta.position);
       in attrs.passthru.updateScript or [ update-python-libraries filename ];
     }
-    // lib.optionalAttrs (dependencies != []) {
+    // optionalAttrs (dependencies != []) {
       inherit dependencies;
     }
-    // lib.optionalAttrs (optional-dependencies != {}) {
+    // optionalAttrs (optional-dependencies != {}) {
       inherit optional-dependencies;
     }
-    // lib.optionalAttrs (build-system != []) {
+    // optionalAttrs (build-system != []) {
       inherit build-system;
     };
 
@@ -230,7 +239,7 @@ let
       wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
-    ] ++ lib.optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
+    ] ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
       #
       # 1. When building a package that is also part of the bootstrap chain, we
       #    must ignore conflicts after installation, because there will be one with
@@ -240,13 +249,13 @@ let
       #    because the hook that checks for conflicts uses setuptools.
       #
       pythonCatchConflictsHook
-    ] ++ lib.optionals removeBinBytecode [
+    ] ++ optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
-    ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+    ] ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [
       unzip
-    ] ++ lib.optionals (format' == "setuptools") [
+    ] ++ optionals (format' == "setuptools") [
       setuptoolsBuildHook
-    ] ++ lib.optionals (format' == "pyproject") [(
+    ] ++ optionals (format' == "pyproject") [(
       if isBootstrapPackage then
         pypaBuildHook.override {
           inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
@@ -261,24 +270,24 @@ let
         }
       else
         pythonRuntimeDepsCheckHook
-    )] ++ lib.optionals (format' == "wheel") [
+    )] ++ optionals (format' == "wheel") [
       wheelUnpackHook
-    ] ++ lib.optionals (format' == "egg") [
+    ] ++ optionals (format' == "egg") [
       eggUnpackHook eggBuildHook eggInstallHook
-    ] ++ lib.optionals (format' != "other") [(
+    ] ++ optionals (format' != "other") [(
       if isBootstrapInstallPackage then
         pypaInstallHook.override {
           inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
         }
       else
         pypaInstallHook
-    )] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    )] ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs
       pythonImportsCheckHook
-    ] ++ lib.optionals (python.pythonAtLeast "3.3") [
+    ] ++ optionals (python.pythonAtLeast "3.3") [
       # Optionally enforce PEP420 for python3
       pythonNamespacesHook
-    ] ++ lib.optionals withDistOutput [
+    ] ++ optionals withDistOutput [
       pythonOutputDistHook
     ] ++ nativeBuildInputs ++ build-system;
 
@@ -299,7 +308,7 @@ let
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
     nativeInstallCheckInputs = [
-    ] ++ lib.optionals (format' == "setuptools") [
+    ] ++ optionals (format' == "setuptools") [
       # Longer-term we should get rid of this and require
       # users of this function to set the `installCheckPhase` or
       # pass in a hook that sets it.
@@ -307,14 +316,14 @@ let
     ] ++ nativeCheckInputs;
     installCheckInputs = checkInputs;
 
-    postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
+    postFixup = optionalString (!dontWrapPythonPrograms) ''
       wrapPythonPrograms
     '' + attrs.postFixup or "";
 
     # Python packages built through cross-compilation are always for the host platform.
-    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonOnBuildForHost ];
+    disallowedReferences = optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonOnBuildForHost ];
 
-    outputs = outputs ++ lib.optional withDistOutput "dist";
+    outputs = outputs ++ optional withDistOutput "dist";
 
     inherit passthru;
 
@@ -323,15 +332,15 @@ let
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
     } // meta;
-  } // lib.optionalAttrs (attrs?checkPhase) {
+  } // optionalAttrs (attrs?checkPhase) {
     # If given use the specified checkPhase, otherwise use the setup hook.
     # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
     installCheckPhase = attrs.checkPhase;
-  } //  lib.optionalAttrs (disabledTestPaths != []) {
-      disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
+  } //  optionalAttrs (disabledTestPaths != []) {
+      disabledTestPaths = escapeShellArgs disabledTestPaths;
   }));
 
-in lib.extendDerivation
+in extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")
   passthru
   self
