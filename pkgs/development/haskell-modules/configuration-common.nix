@@ -204,6 +204,16 @@ self: super: {
   # Too strict bounds on optparse-applicative
   weeder = lib.warnIf (lib.versionAtLeast super.weeder.version "2.8.0") "jailbreak on weeder may be obsolete" doJailbreak super.weeder;
 
+  # Allow scotty < 0.21
+  # For < 0.22 add https://github.com/taffybar/taffybar/commit/71fe820d892a85e49ad2f2843eac0a59e01f3fd4
+  taffybar = appendPatches [
+    (pkgs.fetchpatch {
+      name = "taffybar-scotty-0.20.patch";
+      url = "https://github.com/taffybar/taffybar/commit/dcc4184fa63295d51b6c6efb2f97f23b13170e66.patch";
+      sha256 = "0hsn0zxpc8icabdq48jlkfn2v07xfjy4l344fnq2pbdc5apcm0fy";
+    })
+  ] super.taffybar;
+
   # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
   leveldb-haskell = appendPatch (fetchpatch {
     url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
