@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "sectools";
-  version = "1.3.9";
+  version = "1.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "p0dalirius";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-F9mmPSlfSSS7UDNuX9OPrqDsEpqq0bD3eROG8D9CC78=";
+    hash = "sha256-k3k1/DFmv0resnsNht/C+2Xh6qbSQmk83eN/3vtDU00=";
   };
 
   propagatedBuildInputs = [
