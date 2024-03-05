@@ -45,6 +45,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/agateau/nanonote";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ morgenkaff ];
-    platforms = lib.platforms.all;
   };
 })
