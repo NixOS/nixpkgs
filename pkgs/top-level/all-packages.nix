@@ -40776,7 +40776,9 @@ with pkgs;
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
-  vcluster = callPackage ../applications/networking/cluster/vcluster { };
+  vcluster = callPackage ../applications/networking/cluster/vcluster {
+    buildGoModule = buildGo122Module;
+  };
 
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
