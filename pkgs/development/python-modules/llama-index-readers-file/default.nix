@@ -6,13 +6,15 @@
 , poetry-core
 , pymupdf
 , pypdf
+, pytestCheckHook
 , pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-file";
+  version = "0.1.7";
 
-  inherit (llama-index-core) version src meta;
+  inherit (llama-index-core) src meta;
 
   pyproject = true;
 
@@ -38,6 +40,10 @@ buildPythonPackage rec {
     llama-index-core
     pymupdf
     pypdf
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
