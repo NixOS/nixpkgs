@@ -242,6 +242,9 @@ in lib.makeExtensible (self: ({
   nix_2_19 = common {
     version = "2.19.3";
     hash = "sha256-EtL6M0H5+0mFbFh+teVjm+0B+xmHoKwtBvigS5NMWoo=";
+    patches = [
+      ./patches/2_19/CVE-2024-27297.patch
+    ];
   };
 
   # The minimum Nix version supported by Nixpkgs
