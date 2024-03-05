@@ -86,10 +86,10 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "Persepolis Download Manager is a GUI for aria2";
+    description = "A GUI for aria2";
     mainProgram = "persepolis";
     homepage = "https://persepolisdm.github.io/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ iFreilicht ];
   };
 }
