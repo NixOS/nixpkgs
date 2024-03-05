@@ -4,6 +4,7 @@
 , git
 , nixosTests
 , python3
+, vaultwarden
 }:
 
 let
@@ -69,6 +70,6 @@ in buildNpmPackage rec {
     changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda msteen mic92 ];
+    inherit (vaultwarden.meta) maintainers;
   };
 }
