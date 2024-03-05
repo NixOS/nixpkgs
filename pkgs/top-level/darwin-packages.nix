@@ -89,6 +89,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     extraBuildInputs = [];
   };
 
+  bartender = callPackage ../os-specific/darwin/bartender { };
+
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs) cctools;
     inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
