@@ -3,17 +3,17 @@
 , stdenvNoCC
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rizin-sigdb";
-  version = "unstable-2023-02-13";
+  version = "unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     # sigdb-source: source files (.pat and etc), around 2.5gb total
     # sigdb: built and deflated .sig files, around 50mb total
     repo = "sigdb";
-    rev = "829baf835e3515923266898fd597f7f75046ebd2";
-    hash = "sha256-zvGna2CEsDctc9P7hWTaz7kdtxAtPsXHNWOrRQ9ocdc=";
+    rev = "4addbed50cd3b50eeef5a41d72533d079ebbfbf8";
+    hash = "sha256-Fy92MTuLswEgQ/XEUExqdU1Z4a5MP2Ahzi/gGxd5BtA=";
   };
 
   buildPhase = ''
@@ -29,8 +29,8 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "Rizin FLIRT Signature Database";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = licenses.lgpl3;
     maintainers = with lib.maintainers; [ chayleaf ];
   };
-}
+})
