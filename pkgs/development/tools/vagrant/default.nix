@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
 , libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux
+, openssl
 }:
 
 let
@@ -49,6 +50,11 @@ in buildRubyGem rec {
   doInstallCheck = true;
   dontBuild = false;
   src = fetchurl { inherit url hash; };
+
+  # Some reports indicate that some connection types, particularly
+  # WinRM, suffer from "Digest initialization failed" errors. Adding
+  # openssl as a build input resolves this runtime error.
+  buildInputs = [ openssl ];
 
   patches = [
     ./unofficial-installation-nowarn.patch
