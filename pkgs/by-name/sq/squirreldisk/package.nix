@@ -57,7 +57,7 @@ in
       mkdir -p frontend-build
       cp -r ${frontend-build}/* frontend-build
 
-      substituteInPlace tauri.conf.json --replace-fail '"distDir": "../dist"' '"distDir": "./frontend-build"'
+      substituteInPlace tauri.conf.json --replace '"distDir": "../dist"' '"distDir": "./frontend-build"'
 
       # Copy pdu binary from nixpkgs, since the default packaged binary has issues.
       cp ${parallel-disk-usage}/bin/pdu bin/pdu-${stdenv.hostPlatform.config}
