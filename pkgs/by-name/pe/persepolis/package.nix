@@ -1,22 +1,16 @@
 { lib
 , stdenv
-, buildPythonApplication
+, qt5
+, python3
 , fetchFromGitHub
 , aria2
 , ffmpeg
 , libnotify
 , pulseaudio
-, psutil
-, pyqt5
-, requests
-, setproctitle
-, setuptools
 , sound-theme-freedesktop
-, wrapQtAppsHook
-, yt-dlp
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";
   version = "4.0.0";
 
@@ -56,7 +50,7 @@ buildPythonApplication rec {
 
   # prevent double wrapping
   dontWrapQtApps = true;
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   # feed args to wrapPythonApp
   makeWrapperArgs = [
@@ -76,14 +70,15 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     pulseaudio
+    sound-theme-freedesktop
+  ] ++ (with python3.pkgs; [
     psutil
     pyqt5
     requests
     setproctitle
     setuptools
-    sound-theme-freedesktop
     yt-dlp
-  ];
+  ]);
 
   meta = with lib; {
     description = "A GUI for aria2";
