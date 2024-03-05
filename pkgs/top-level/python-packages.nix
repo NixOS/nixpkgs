@@ -3601,7 +3601,7 @@ self: super: with self; {
 
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
-  ecos = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/ecos { });
+  ecos = callPackage ../development/python-modules/ecos { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
 
