@@ -35866,6 +35866,10 @@ with pkgs;
     inherit (gnome2) libIDL;
   };
 
+  virtualboxKvm = lowPrio (virtualbox.override {
+    enableKvm = true;
+  });
+
   virtualboxHardened = lowPrio (virtualbox.override {
     enableHardening = true;
   });
