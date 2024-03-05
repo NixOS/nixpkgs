@@ -33110,8 +33110,6 @@ with pkgs;
 
   loxodo = callPackage ../applications/misc/loxodo { };
 
-  lsd2dsl = libsForQt5.callPackage ../applications/misc/lsd2dsl { };
-
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
   lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php81; };

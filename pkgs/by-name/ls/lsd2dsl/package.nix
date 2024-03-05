@@ -1,23 +1,40 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeDesktopItem, copyDesktopItems, cmake
-, boost, libvorbis, libsndfile, minizip, gtest, qtwebkit }:
+, boost, cups, fmt, libvorbis, libsndfile, minizip, gtest, qt6 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lsd2dsl";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "nongeneric";
-    repo = pname;
+    repo = "lsd2dsl";
     rev = "v${version}";
-    sha256 = "sha256-PLgfsVVrNBTxI4J0ukEOFRoBkbmB55/sLNn5KyiHeAc=";
+    hash = "sha256-0UsxDNpuWpBrfjh4q3JhZnOyXhHatSa3t/cApiG2JzM=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isLinux copyDesktopItems;
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+  '';
 
-  buildInputs = [ boost libvorbis libsndfile minizip gtest qtwebkit ];
+  nativeBuildInputs = [
+    cmake
+    qt6.wrapQtAppsHook
+  ] ++ lib.optional stdenv.isLinux copyDesktopItems;
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=missing-braces";
+  buildInputs = [
+    boost
+    cups
+    fmt
+    libvorbis
+    libsndfile
+    minizip
+    gtest
+    qt6.qt5compat
+    qt6.qtwebengine
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
   desktopItems = lib.singleton (makeDesktopItem {
     name = "lsd2dsl";
