@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
 
   preCheck = ''
     # requires network
