@@ -27,7 +27,7 @@ buildPythonApplication rec {
     hash = "sha256-2S6s/tWhI9RBFA26jkwxYTGeaok8S8zv/bY+Zr8TOak=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = [
     # Upstream does currently not allow building from source on macOS. These patches can likely
     # be removed if https://github.com/persepolisdm/persepolis/issues/943 is fixed upstream
     ./0001-Allow-building-on-darwin.patch
