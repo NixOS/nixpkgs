@@ -182,6 +182,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     inherit (pkgs.darwin) cctools sigtool;
   };
 
+  monitorcontrol = callPackage ../os-specific/darwin/monitorcontrol { };
+
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
