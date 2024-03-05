@@ -32279,6 +32279,8 @@ with pkgs;
 
   spot = callPackage ../applications/audio/spot { };
 
+  spotify-backup = callPackage ../tools/backup/spotify-backup { };
+
   spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
 
   spotifyd = callPackage ../applications/audio/spotifyd {
