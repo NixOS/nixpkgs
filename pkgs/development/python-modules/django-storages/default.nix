@@ -1,32 +1,27 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# build-system
-, setuptools
-
-# dependencies
-, django
-
-# optional-dependencies
 , azure-storage-blob
 , boto3
+, buildPythonPackage
+, cryptography
+, django
 , dropbox
+, fetchFromGitHub
 , google-cloud-storage
 , libcloud
-, paramiko
-
-# tests
-, cryptography
 , moto
+, paramiko
 , pytestCheckHook
+, pythonOlder
 , rsa
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "django-storages";
   version = "1.14";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jschneier";
@@ -81,8 +76,8 @@ buildPythonPackage rec {
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   meta = with lib; {
-    changelog = "https://github.com/jschneier/django-storages/blob/${version}/CHANGELOG.rst";
     description = "Collection of custom storage backends for Django";
+    changelog = "https://github.com/jschneier/django-storages/blob/${version}/CHANGELOG.rst";
     downloadPage = "https://github.com/jschneier/django-storages/";
     homepage = "https://django-storages.readthedocs.io";
     license = licenses.bsd3;
