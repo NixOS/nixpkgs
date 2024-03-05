@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonPackage {
   pname = "spotify-backup";
-  version = "0.0.0-unstable-2023-02-24";
+  version = "0-unstable-2023-02-24";
 
   src = fetchFromGitHub {
     owner = "caseychu";
@@ -17,23 +17,18 @@ python3.pkgs.buildPythonPackage {
   preBuild = ''
     cat > setup.py << EOF
 from setuptools import setup
-
-setup(
-  scripts=[
-    'spotify-backup.py',
-  ],
-)
+setup(scripts=['spotify-backup.py'])
 EOF'';
 
   postInstall = ''
     mv -v $out/bin/spotify-backup.py $out/bin/spotify-backup
   '';
 
-  # meta.mainProgram = "spotify-backup";
   meta = with lib; {
     description = "A Python script that exports all of your Spotify playlists";
     homepage = "https://github.com/caseychu/spotify-backup";
     license = licenses.mit;
+    mainProgram = "spotify-backup";
   };
 }
 
