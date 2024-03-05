@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar, _1password, testers }:
+{ lib, stdenvNoCC, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, _1password, testers, darwin }:
 
 let
-  inherit (stdenv.hostPlatform) system;
+  inherit (stdenvNoCC.hostPlatform) system;
   fetch = srcPlatform: hash: extension:
     let
       args = {
@@ -21,49 +21,36 @@ let
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
-  mainProgram = "op";
-in
 
-stdenv.mkDerivation {
-  inherit pname version;
   src =
     if (builtins.elem system platforms) then
       sources.${system}
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
-
-  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
-
-  unpackPhase = lib.optionalString stdenv.isDarwin ''
-    xar -xf $src
-    zcat op.pkg/Payload | cpio -i
-  '';
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall
-    install -D ${mainProgram} $out/bin/${mainProgram}
+    install -D ${meta.mainProgram} $out/bin/${meta.mainProgram}
     runHook postInstall
   '';
 
   postInstall = ''
     HOME=$TMPDIR
-    installShellCompletion --cmd ${mainProgram} \
-      --bash <($out/bin/${mainProgram} completion bash) \
-      --fish <($out/bin/${mainProgram} completion fish) \
-      --zsh <($out/bin/${mainProgram} completion zsh)
+    installShellCompletion --cmd ${meta.mainProgram} \
+      --bash <($out/bin/${meta.mainProgram} completion bash) \
+      --fish <($out/bin/${meta.mainProgram} completion fish) \
+      --zsh <($out/bin/${meta.mainProgram} completion zsh)
   '';
-
-  dontStrip = stdenv.isDarwin;
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/${mainProgram} --version
+    $out/bin/${meta.mainProgram} --version
   '';
 
-  passthru.tests.version = testers.testVersion {
+  testers' = testers.testVersion {
     package = _1password;
   };
 
@@ -74,6 +61,21 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ joelburget marsam ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    inherit mainProgram platforms;
+    mainProgram = "op";
+    inherit platforms;
   };
-}
+
+  linux = stdenvNoCC.mkDerivation {
+    inherit pname version src installPhase postInstall doInstallCheck installCheckPhase meta;
+    nativeBuildInputs = nativeBuildInputs ++ [ autoPatchelfHook ];
+    passthru.tests.version = testers';
+  };
+
+  darwin' = darwin.installBinaryPackage {
+    inherit pname version src nativeBuildInputs installPhase postInstall doInstallCheck installCheckPhase meta;
+    passthru.tests.version = testers';
+  };
+in
+if stdenvNoCC.isDarwin
+then darwin'
+else linux
