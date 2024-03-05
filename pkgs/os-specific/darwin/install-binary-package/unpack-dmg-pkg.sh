@@ -2,9 +2,9 @@
 unpackCmdHooks+=(unpackDmgPkg)
 unpackDmgPkg() {
     case "$curSrc" in
-        *.dmg) unpackDmg "$curSrc";;
-        *.pkg) unpackPkg "$curSrc";;
-        *) return 1
+    *.dmg) unpackDmg "$curSrc" ;;
+    *.pkg) unpackPkg "$curSrc" ;;
+    *) return 1 ;;
     esac
 }
 
@@ -17,8 +17,9 @@ unpackPkg() {
     # Depending on how apps are packaged maxdepth might need to be adjusted
     # or made adjustable
     _unpack "$1" "${2:-$pname}"
-    ( cd "${2:-$pname}"; \
-      find . -name 'Payload*' -maxdepth 2 -print0 | xargs -0 -t -I % bsdtar -xf % \
+    (
+        cd "${2:-$pname}"
+        find . -name 'Payload*' -maxdepth 2 -print0 | xargs -0 -t -I % bsdtar -xf %
     )
 }
 
