@@ -80,6 +80,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     extraBuildInputs = [];
   };
 
+  apparency = callPackage ../os-specific/darwin/apparency { };
+
   bartender = callPackage ../os-specific/darwin/bartender { };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {

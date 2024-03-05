@@ -27288,8 +27288,6 @@ with pkgs;
     fftw = fftwFloat;
   };
 
-  apparency = callPackage ../os-specific/darwin/apparency { };
-
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
     buildArmTrustedFirmware
