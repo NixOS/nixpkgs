@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qtbase
     qttools
-
   ];
 
   buildPhase = ''
