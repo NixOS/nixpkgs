@@ -9101,7 +9101,10 @@ with pkgs;
 
   hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
 
-  hdf5-mpi = hdf5.override { mpiSupport = true; };
+  hdf5-mpi = hdf5.override {
+    mpiSupport = true;
+    cppSupport = false;
+  };
 
   hdf5-cpp = hdf5.override { cppSupport = true; };
 
