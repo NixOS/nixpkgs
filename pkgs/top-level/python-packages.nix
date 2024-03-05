@@ -10049,9 +10049,13 @@ self: super: with self; {
 
   progress = callPackage ../development/python-modules/progress { };
 
+  prometheus-api-client = callPackage ../development/python-modules/prometheus-api-client { };
+
   prometheus-client = callPackage ../development/python-modules/prometheus-client { };
 
   prometheus-flask-exporter = callPackage ../development/python-modules/prometheus-flask-exporter { };
+
+  prometrix = callPackage ../development/python-modules/prometrix { };
 
   promise = callPackage ../development/python-modules/promise { };
 
