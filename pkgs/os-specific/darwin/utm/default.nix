@@ -1,11 +1,11 @@
 { lib
-, undmg
 , makeWrapper
 , fetchurl
 , stdenvNoCC
+, darwin
 }:
 
-stdenvNoCC.mkDerivation rec {
+darwin.installBinaryPackage rec {
   pname = "utm";
   version = "4.4.5";
 
@@ -14,23 +14,18 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-FlIPSWqY2V1akd/InS6BPEBfc8pomJ8jgDns7wvaOm8=";
   };
 
-  nativeBuildInputs = [ undmg makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  sourceRoot = ".";
-  installPhase = ''
-    runHook preInstall
+  appName = "UTM.app";
+  sourceRoot = "UTM";
 
-    mkdir -p $out/Applications
-    cp -r *.app $out/Applications
-
+  postaInstall = ''
     mkdir -p $out/bin
     for bin in $out/Applications/UTM.app/Contents/MacOS/*; do
       # Symlinking `UTM` doesn't work; seems to look for files in the wrong
       # place
       makeWrapper $bin "$out/bin/$(basename $bin)"
     done
-
-    runHook postInstall
   '';
 
   meta = with lib; {
@@ -57,11 +52,10 @@ stdenvNoCC.mkDerivation rec {
       See https://docs.getutm.app/ for more information.
     '';
     homepage = "https://mac.getutm.app/";
-    changelog = "https://github.com/utmapp/${pname}/releases/tag/v${version}";
+    changelog = "https://github.com/utmapp/utm/releases/tag/v${version}";
     mainProgram = "UTM";
     license = licenses.asl20;
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ rrbutani wegank ];
   };
 }

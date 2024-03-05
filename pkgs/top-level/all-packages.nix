@@ -35702,8 +35702,6 @@ with pkgs;
 
   uwimap = callPackage ../tools/networking/uwimap { };
 
-  utm = callPackage ../os-specific/darwin/utm { };
-
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
