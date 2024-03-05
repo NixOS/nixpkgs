@@ -16,6 +16,7 @@
 , alsa-lib
 , libjack2
 , libusb1
+, linuxHeaders
 , udev
 , libsndfile
 , vulkanSupport ? true
@@ -122,6 +123,7 @@ stdenv.mkDerivation(finalAttrs: {
     libusb1
     libselinux
     libsndfile
+    linuxHeaders
     lilv
     ncurses
     readline
