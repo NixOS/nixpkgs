@@ -6,6 +6,7 @@
 , buildPgrxExtension
 , postgresql
 , rustPlatform
+, substituteAll
 , clang_16
 , openssl
 }:
@@ -23,6 +24,18 @@ buildPgrxExtension rec {
     hash = "sha256-kwaGHerEVh6Oxb9jQupSapm7CsKl5CoH6jCv+zbi4FE=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./read-clang-flags-from-environment.patch;
+      clang = lib.getExe clang_16;
+    })
+  ];
+
+  # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL
+  postPatch = ''
+    substituteInPlace vectors.control --subst-var-by CARGO_VERSION ${version}
+  '';
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -31,12 +44,19 @@ buildPgrxExtension rec {
     };
   };
 
-  # Bypass rust nightly features not being available on rust stable
-  RUSTC_BOOTSTRAP = 1;
-  patches = [ ./0001-pgvecto.rs-zeroed-uninit.patch ];
+  env = {
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
 
-  # Needed to get openssl-sys to use pkg-config.
-  env.OPENSSL_NO_VENDOR = 1;
+    # Bypass rust nightly features not being available on rust stable
+    RUSTC_BOOTSTRAP = 1;
+  };
+
+  # Include upgrade scripts in the final package
+  # https://github.com/tensorchord/pgvecto.rs/blob/v0.2.1/scripts/build_2.sh#L19
+  postInstall = ''
+    cp sql/upgrade/* $out/share/postgresql/extension/
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -45,15 +65,8 @@ buildPgrxExtension rec {
     };
   };
 
-  # pgvecto.rs requires clang 16 to be built.
-  postPatch = ''
-    substituteInPlace crates/c/build.rs \
-      --replace '"clang-16"' '"${lib.getExe clang_16}"'
-  '';
-
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-    rustPlatform.cargoSetupHook
     pkg-config
   ];
   buildInputs = [
