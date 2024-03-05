@@ -111,12 +111,11 @@ let
       ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
 
     patches = [
-      (if atLeast "16" then ./patches/disable-normalize_exec_path.patch
-       else ./patches/disable-resolve_symlinks.patch)
+      (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
       ./patches/less-is-more.patch
-      ./patches/hardcode-pgxs-path.patch
+      ./patches/paths-for-split-outputs.patch
       ./patches/specify_pkglibdir_at_runtime.patch
-      ./patches/findstring.patch
+      ./patches/paths-with-postgresql-suffix.patch
 
       (substituteAll {
         src = ./patches/locale-binary-path.patch;
@@ -127,7 +126,7 @@ let
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
     ) ++ lib.optionals stdenv'.isLinux  [
-      (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
+      (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
     ];
 
     installTargets = [ "install-world" ];
@@ -136,7 +135,7 @@ let
 
     postPatch = ''
       # Hardcode the path to pgxs so pg_config returns the path in $out
-      substituteInPlace "src/common/config_info.c" --replace HARDCODED_PGXS_PATH "$out/lib"
+      substituteInPlace "src/common/config_info.c" --subst-var out
     '' + lib.optionalString jitSupport ''
         # Force lookup of jit stuff in $out instead of $lib
         substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
