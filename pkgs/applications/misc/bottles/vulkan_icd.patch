@@ -1,0 +1,15 @@
+diff --git a/bottles/backend/utils/vulkan.py b/bottles/backend/utils/vulkan.py
+index 6673493..9191004 100644
+--- a/bottles/backend/utils/vulkan.py
++++ b/bottles/backend/utils/vulkan.py
+@@ -28,7 +28,9 @@ class VulkanUtils:
+         "/usr/share/vulkan",
+         "/etc/vulkan",
+         "/usr/local/share/vulkan",
+-        "/usr/local/etc/vulkan"
++        "/usr/local/etc/vulkan",
++        "/run/opengl-driver/share/vulkan",
++        "/run/opengl-driver-32/share/vulkan",
+     ]
+     if "FLATPAK_ID" in os.environ:
+         __vk_icd_dirs += [

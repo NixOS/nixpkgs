@@ -1,0 +1,4 @@
+#! /usr/bin/env nix-shell
+#! nix-shell --show-trace ./emacs2nix.nix -i bash
+
+exec elpa-devel-packages.sh --names $EMACS2NIX/names.nix -o elpa-devel-generated.nix

@@ -1,0 +1,52 @@
+From 2e1e9b3ffce9d1069fca0b27b8011f85c7547c3b Mon Sep 17 00:00:00 2001
+From: Francesco Gazzetta <fgaz@fgaz.me>
+Date: Wed, 19 Aug 2020 15:06:19 +0200
+Subject: [PATCH 1/2] Remove coherency checks >:)
+
+As far as I can see, they are just to make sure that the types can fit
+in the word length, but this check was written when 64 bits weren't a
+possibility and didn't take that into account,
+so although the types do fit, the checks fail.
+Indeed, the program seems to work well on 64 bits.
+More info here:
+https://github.com/Mdashdotdashn/LittleGPTracker/issues/4
+---
+ sources/Externals/Soundfont/DATATYPE.H | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/sources/Externals/Soundfont/DATATYPE.H b/sources/Externals/Soundfont/DATATYPE.H
+index 762a724..f6b031f 100644
+--- a/sources/Externals/Soundfont/DATATYPE.H
++++ b/sources/Externals/Soundfont/DATATYPE.H
+@@ -123,28 +123,6 @@ typedef short               SHORT;     /* 16 bit signed value was: INT */
+ ********************************************************************/
+ typedef unsigned short        EMUSTAT;
+ 
+-/********************************************************************
+-* Compare <limits.h> values with SoundFont Enabler limits.  Fail compile
+-* if discrepency. If compile fails due to one of these errors, then
+-* the SoundFont enabler will not work with your system or the state of your
+-* development environment.
+-********************************************************************/
+-#if (SCHAR_MAX != CHAR_MAXVAL) || (UCHAR_MAX != BYTE_MAXVAL)
+-  #error <datatype.h>: char is out of range!
+-#endif
+-
+-#if (SHRT_MAX != SHRT_MAXVAL)
+-  #error <datatype.h>: short is out of range!
+-#endif
+-
+-#if (LONG_MAX != LONG_MAXVAL)
+-  #error <datatype.h>: long is out of range!
+-#endif
+-
+-#if (ULONG_MAX != DWORD_MAXVAL)
+-  #error <datatype.h>: unsigned long is out of range!
+-#endif
+-
+ #ifdef __BYTE_COHERENT
+ 
+ /********************************************************************
+-- 
+2.25.4
+

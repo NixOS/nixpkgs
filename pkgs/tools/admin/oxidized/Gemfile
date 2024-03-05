@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+
+gem 'oxidized', '0.29.1'
+gem 'oxidized-web', '0.13.1'
+
+# The version on rubygems is not up2date
+gem 'oxidized-script', git: 'https://github.com/ytti/oxidized-script.git', ref: '988cded5d89f52e274afb545bd3e011e19d5d22d'
+
+# Fix for https://github.com/ytti/oxidized/issues/2769
+gem 'psych', '~> 3.3.2'
+

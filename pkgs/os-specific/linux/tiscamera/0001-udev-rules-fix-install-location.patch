@@ -1,0 +1,25 @@
+From fdbc0b74812b9afd663226715375b5688e5408b5 Mon Sep 17 00:00:00 2001
+From: Raymond Gauthier <jraygauthier@gmail.com>
+Date: Thu, 9 Jun 2022 20:23:02 -0400
+Subject: [PATCH] udev/rules: fix install location
+
+---
+ CMakeInstall.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeInstall.cmake b/CMakeInstall.cmake
+index 4773091f..962c9b09 100644
+--- a/CMakeInstall.cmake
++++ b/CMakeInstall.cmake
+@@ -92,7 +92,7 @@ else()
+ 
+   else()
+ 
+-    set(TCAM_INSTALL_UDEV "${CMAKE_INSTALL_PREFIX}/udev/rules.d" CACHE PATH "udev rules installation path" FORCE)
++    set(TCAM_INSTALL_UDEV "${CMAKE_INSTALL_PREFIX}/lib/udev/rules.d" CACHE PATH "udev rules installation path" FORCE)
+     set(TCAM_INSTALL_SYSTEMD "${CMAKE_INSTALL_PREFIX}/lib/systemd/system/" CACHE PATH "systemd unit installation path" FORCE)
+ 
+     set(TCAM_INSTALL_PKGCONFIG "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" CACHE PATH "pkgconfig installation path" FORCE)
+-- 
+2.31.1
+

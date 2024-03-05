@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/leo60228/tree-sitter-pioasm",
+  "rev": "924aadaf5dea2a6074d72027b064f939acf32e20",
+  "date": "2021-08-27T17:22:56-04:00",
+  "path": "/nix/store/nhxzw33vljxh5i90d0fb5nzdfjp5h9bl-tree-sitter-pioasm",
+  "sha256": "1lxvgc0zkd2sv8dxp2fy6b1k3gqrbkxgqy25lw9sbd4kij7463m2",
+  "hash": "sha256-og5DjoyTtKUTp0V4/PpcGb8xwzLeidsb2lq0+QF7u9M=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

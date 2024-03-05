@@ -1,0 +1,28 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "npeg"
+      ],
+      "path": "/nix/store/ffkxmjmigfs7zhhiiqm0iw2c34smyciy-source",
+      "ref": "1.2.1",
+      "rev": "26d62fdc40feb84c6533956dc11d5ee9ea9b6c09",
+      "sha256": "0xpzifjkfp49w76qmaylan8q181bs45anmp46l4bwr3lkrr7bpwh",
+      "srcDir": "src",
+      "url": "https://github.com/zevv/npeg/archive/26d62fdc40feb84c6533956dc11d5ee9ea9b6c09.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "preserves"
+      ],
+      "path": "/nix/store/nrcpzf9hx70kry3gwhrdzcs3qicjncjh-source",
+      "ref": "20231021",
+      "rev": "edece399be70818208bf2263c30cb2bcf435bbff",
+      "sha256": "0xmw35wmw3a4lja9q4qvlvpxv3xk0hnkjg4fwfw6f3inh6zfiqki",
+      "srcDir": "src",
+      "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/edece399be70818208bf2263c30cb2bcf435bbff.tar.gz"
+    }
+  ]
+}
