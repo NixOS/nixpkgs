@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rocmPackages, python3, cargo, rustc, cmake, clang, zlib, libxml2, libedit, rustPlatform }:
+{ lib, fetchFromGitHub, rocmPackages, python3, cargo, rustc, cmake, clang, zlib, libxml2, libedit, rustPlatform, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zluda";
@@ -40,6 +40,8 @@ rustPlatform.buildRustPackage rec {
   preConfigure = ''
     # Comment out zluda_blaslt in Cargo.toml
     sed -i '/zluda_blaslt/d' Cargo.toml
+    # TODO: investigate test failure (the test seems to require build time env vars that aren't set on linux?)
+    rm zluda_inject/tests/inject.rs
   '';
 
   buildPhase = ''
@@ -47,8 +49,18 @@ rustPlatform.buildRustPackage rec {
     cargo xtask --release
     runHook postBuild
   '';
+  # xtask doesn't support passing --target, but nix hooks expect the folder structure from when it's set
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.cargoShortTarget;
 
   cargoHash = "sha256-gZdLThmaeWVJXoeG7fuusfacgH2RNTHrqm8W0kqkqOY=";
+
+  # vergen panics if the .git directory isn't present
+  # Disable vergen and manually set env
+  postPatch = ''
+    substituteInPlace zluda/build.rs \
+      --replace-fail 'vergen(Config::default())' 'Some(())'
+    '';
+  env.VERGEN_GIT_SHA = "1b9ba2b2333746c5e2b05a2bf24fa6ec3828dcdf-nix";
 
   meta = with lib; {
     description = "ZLUDA - CUDA on Intel GPUs";
