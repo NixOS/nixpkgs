@@ -2,16 +2,10 @@
 , stdenv
 , fetchFromGitLab
 , writeText
-, clang
 , cmake
-, cmake-format
 , cjson
 , doxygen
-, git
 , glslang
-, gradle
-, gradle-completion
-, ninja
 , pkg-config
 , python3
 , SDL2
@@ -55,6 +49,12 @@
 , libdrm
 , zlib
 , zstd
+, clang
+, cmake-format
+, git
+, gradle
+, gradle-completion
+, ninja
 , nixosTests
 # Set as 'false' to build monado without service support, i.e. allow VR
 # applications linking against libopenxr_monado.so to use OpenXR standalone
@@ -76,15 +76,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    clang
     cmake
-    cmake-format
     doxygen
-    git
     glslang
-    gradle
-    gradle-completion
-    ninja
     pkg-config
     python3
   ];
@@ -152,6 +146,15 @@ stdenv.mkDerivation {
   patches = [
     # We don't have $HOME/.steam when building
     ./force-enable-steamvr_lh.patch
+  ];
+
+  passthru.devTools = [
+    clang
+    cmake-format
+    git
+    gradle
+    gradle-completion
+    ninja
   ];
 
   passthru.tests = {
