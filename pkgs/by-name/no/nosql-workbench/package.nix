@@ -1,10 +1,9 @@
-{
-  appimageTools,
-  lib,
-  fetchurl,
-  jdk21,
-  stdenv,
-  _7zz
+{ lib
+, appimageTools
+, fetchurl
+, jdk21
+, stdenvNoCC
+, darwin
 }:
 let
   pname = "nosql-workbench";
@@ -23,7 +22,7 @@ let
       url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-linux-${version}.AppImage";
       hash = "sha256-cDOSbhAEFBHvAluxTxqVpva1GJSlFhiozzRfuM4MK5c=";
     };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  }.${stdenvNoCC.system} or (throw "Unsupported system: ${stdenvNoCC.system}");
 
   meta = {
     description = "Visual tool that provides data modeling, data visualization, and query development features to help you design, create, query, and manage DynamoDB tables";
@@ -34,27 +33,10 @@ let
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
   };
 in
-if stdenv.isDarwin then stdenv.mkDerivation {
+if stdenvNoCC.isDarwin then darwin.installBinaryPackage {
   inherit pname version src meta;
-
-  sourceRoot = ".";
-
-  # DMG file is using APFS which is unsupported by "undmg".
-  # Instead, use "7zz" to extract the contents.
-  # "undmg" issue: https://github.com/matthewbauer/undmg/issues/4
-  nativeBuildInputs = [ _7zz ];
-
+  appName = "NoSQL Workbench.app";
   buildInputs = [ jdk21 ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/Applications"
-    mv NoSQL\ Workbench.app $out/Applications/
-
-    runHook postInstall
-  '';
-
 } else appimageTools.wrapType2 {
   inherit pname version src meta;
 
