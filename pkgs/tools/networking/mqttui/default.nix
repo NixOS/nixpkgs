@@ -7,16 +7,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mqttui";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
-    repo = pname;
+    repo = "mqttui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cezG9hdHOeTExX4OJwJ22e/PvfdySPzQGwxumavV++Q=";
+    hash = "sha256-NfRPuZFZMZl1ulEGD5oQkS25oJdBVyLiN3QCQWrDej8=";
   };
 
-  cargoHash = "sha256-vSlziZtjyzsd346qUBEPEl8I3UlPhWHRu4+FiD1XqOo=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ratatui-binary-data-widget-0.1.0" = "sha256-4/8ZZag7vpEXnh6wJvZkgGLrOQNJXsnek3gFG/F0+zY=";
+    };
+  };
+
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -25,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/EdJoPaTo/mqttui";
     changelog = "https://github.com/EdJoPaTo/mqttui/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab sikmir ];
     mainProgram = "mqttui";
   };
 }
