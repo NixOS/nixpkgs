@@ -7373,6 +7373,8 @@ with pkgs;
 
   debugedit = callPackage ../development/tools/misc/debugedit { };
 
+  decode-spam-headers = callPackage ../tools/networking/decode-spam-headers { };
+
   deer = callPackage ../shells/zsh/zsh-deer { };
 
   deno = callPackage ../development/web/deno { };
@@ -13695,7 +13697,9 @@ with pkgs;
 
   teip = callPackage ../tools/text/teip { };
 
-  telegraf = callPackage ../servers/monitoring/telegraf { };
+  telegraf = callPackage ../servers/monitoring/telegraf {
+    buildGoModule = buildGo122Module;
+  };
 
   teleport_12 = callPackage ../servers/teleport/12 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
@@ -17188,8 +17192,7 @@ with pkgs;
   tinycc = darwin.apple_sdk_11_0.callPackage ../development/compilers/tinycc { };
 
   tinygo = callPackage ../development/compilers/tinygo {
-    llvmPackages = llvmPackages_16;
-    wasi-libc = pkgsCross.wasi32.wasilibc;
+    llvmPackages = llvmPackages_17;
   };
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
@@ -26509,7 +26512,7 @@ with pkgs;
 
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
     yarn = yarn.override { inherit (super) nodejs; };
-    nodejs = nodejs_18;
+    nodejs = nodejs_20;
   }));
 
   openbgpd = callPackage ../servers/openbgpd { };
