@@ -24,13 +24,8 @@ buildPythonApplication rec {
     owner = "persepolisdm";
     repo = "persepolis";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-2S6s/tWhI9RBFA26jkwxYTGeaok8S8zv/bY+Zr8TOak=";
+    hash = "sha256-2S6s/tWhI9RBFA26jkwxYTGeaok8S8zv/bY+Zr8TOak=";
   };
-
-  # Make setup automatic
-  preBuild = ''
-    substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
-  '';
 
   patches = lib.optionals stdenv.isDarwin [
     # Upstream does currently not allow building from source on macOS. These patches can likely
@@ -44,6 +39,9 @@ buildPythonApplication rec {
   postPatch = ''
     sed -i "s|'persepolis = persepolis.__main__'|'persepolis = persepolis.scripts.persepolis:main'|" setup.py
 
+    # Automatically answer yes to all interactive questions during setup
+    substituteInPlace setup.py --replace-fail "answer = input(" "answer = 'y'#"
+
     # Ensure dependencies with hard-coded FHS paths are properly detected
     substituteInPlace setup.py --replace-fail "isdir(notifications_path)" "isdir('${sound-theme-freedesktop}/share/sounds/freedesktop')"
 
@@ -52,8 +50,8 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-     mkdir -p $out/share/applications
-     cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
+    mkdir -p $out/share/applications
+    cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
   '';
 
   # prevent double wrapping
