@@ -11,7 +11,7 @@
 
 buildNpmPackage rec {
   pname = "polonium";
-  version = "0.6.0";
+  version = "1.0b1";
 
   src = fetchFromGitHub {
     owner = "zeroxoneafour";
@@ -43,7 +43,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "Auto-tiler that uses KWin 5.27+ tiling functionality";
+    description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (plasma-framework.meta) platforms;
