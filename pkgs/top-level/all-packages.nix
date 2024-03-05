@@ -8405,7 +8405,7 @@ with pkgs;
   })
     garage
       garage_0_8 garage_0_9
-      garage_0_8_6 garage_0_9_2;
+      garage_0_8_7 garage_0_9_3;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -27178,8 +27178,6 @@ with pkgs;
   uxplay = callPackage ../servers/uxplay { };
 
   vouch-proxy = callPackage ../servers/vouch-proxy { };
-
-  victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
 
