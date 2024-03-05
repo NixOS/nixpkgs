@@ -1,49 +1,21 @@
-# I just copied this from Hugo's package becuase I don't know what I'm doing
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, buildPackages
-, testers
-, hugo
+{ lib
+, stdenv
+, fetchzip
 }:
 
-buildGoModule rec {
+stdenv.mkDerivation rec {
   pname = "dotcopy";
-  version = "0.1.0";
+  version = "0.2.9";
 
-  src = fetchFromGitHub {
-    owner = "firesquid6";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+  src = fetchzip {
+    url = "https://github.com/firesquid6/dotcopy/releases/download/v${version}/dotcopy-v${version}-linux-amd64.tar.gz";
+    hash = "sha256-QBEGtE7r5B39cILAg+Ev1cwfu4nXiMk2jn1NZVFHnyk=";
   };
 
-  tags = [ "extended" ];
-
-  subPackages = [ "." ];
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  # idk what this does
-  # ldflags = [ "-s" "-w" "-X github.com/gohugoio/hugo/common/hugo.vendorInfo=nixpkgs" ];
-
-  # yeah I should figure out manuals and stuff
-  # postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
-  #   ${emulator} $out/bin/hugo gen man
-  #   installManPage man/*
-  #   installShellCompletion --cmd hugo \
-  #     --bash <(${emulator} $out/bin/hugo completion bash) \
-  #     --fish <(${emulator} $out/bin/hugo completion fish) \
-  #     --zsh  <(${emulator} $out/bin/hugo completion zsh)
-  # '';
-
-  # don't thing I need this either
-  # passthru.tests.version = testers.testVersion {
-  #   package = ;
-  #   command = "hugo version";
-  #   version = "v${version}";
-  # };
+  installPhase = ''
+    mkdir -p $out/bin
+    mv dotcopy $out/bin
+  '';
 
   meta = with lib; {
     description = "A linux dotfile manager";
