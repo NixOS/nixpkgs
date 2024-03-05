@@ -492,6 +492,8 @@ in {
 
     rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
 
+    scst = callPackage ../os-specific/linux/scst {};
+
     shufflecake = callPackage ../os-specific/linux/shufflecake {};
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
