@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -24,6 +25,8 @@ buildGoModule rec {
     # Test tries to find files using git
     "-skip=^TestGoldens"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/google/keep-sorted/releases/tag/v${version}";
