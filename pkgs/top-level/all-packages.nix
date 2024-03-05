@@ -2628,14 +2628,6 @@ with pkgs;
 
   webfontkitgenerator = callPackage ../applications/misc/webfontkitgenerator { };
 
-  citra-canary = callPackage ../applications/emulators/citra {
-    branch = "canary";
-  };
-
-  citra-nightly = callPackage ../applications/emulators/citra {
-    branch = "nightly";
-  };
-
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
   coltrane = callPackage ../applications/misc/coltrane { };
