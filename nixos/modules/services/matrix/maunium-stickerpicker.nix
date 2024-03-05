@@ -24,7 +24,7 @@ let
 in
 {
   options.services.maunium-stickerpicker = with lib; {
-    enable = mkEnableOption (mdDoc "Mautrix-Stickerpicker, a Matrix stickerpicker widget");
+    enable = mkEnableOption (mdDoc "Maunium sticker picker, a Matrix stickerpicker widget");
 
     homeserver_url = mkOption {
       type = types.str;
