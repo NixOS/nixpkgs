@@ -9,7 +9,7 @@ in
     services.scrutiny = {
       enable = lib.mkEnableOption "Enables the scrutiny web application.";
 
-      package = lib.mkPackageOptionMD pkgs "scrutiny" { };
+      package = lib.mkPackageOption pkgs "scrutiny" { };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;
@@ -20,7 +20,7 @@ in
       influxdb.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enables InfluxDB on the host system using the `services.influxdb2` NixOS module
           with default options.
 
@@ -30,7 +30,7 @@ in
       };
 
       settings = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Scrutiny settings to be rendered into the configuration file.
 
           See https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml.
@@ -42,20 +42,20 @@ in
           options.web.listen.port = lib.mkOption {
             type = lib.types.port;
             default = 8080;
-            description = lib.mdDoc "Port for web application to listen on.";
+            description = "Port for web application to listen on.";
           };
 
           options.web.listen.host = lib.mkOption {
             type = lib.types.str;
             default = "0.0.0.0";
-            description = lib.mdDoc "Interface address for web application to bind to.";
+            description = "Interface address for web application to bind to.";
           };
 
           options.web.listen.basepath = lib.mkOption {
             type = lib.types.str;
             default = "";
             example = "/scrutiny";
-            description = lib.mdDoc ''
+            description = ''
               If Scrutiny will be behind a path prefixed reverse proxy, you can override this
               value to serve Scrutiny on a subpath.
             '';
@@ -64,49 +64,49 @@ in
           options.log.level = lib.mkOption {
             type = lib.types.enum [ "INFO" "DEBUG" ];
             default = "INFO";
-            description = lib.mdDoc "Log level for Scrutiny.";
+            description = "Log level for Scrutiny.";
           };
 
           options.web.influxdb.scheme = lib.mkOption {
             type = lib.types.str;
             default = "http";
-            description = lib.mdDoc "URL scheme to use when connecting to InfluxDB.";
+            description = "URL scheme to use when connecting to InfluxDB.";
           };
 
           options.web.influxdb.host = lib.mkOption {
             type = lib.types.str;
             default = "0.0.0.0";
-            description = lib.mdDoc "IP or hostname of the InfluxDB instance.";
+            description = "IP or hostname of the InfluxDB instance.";
           };
 
           options.web.influxdb.port = lib.mkOption {
             type = lib.types.port;
             default = 8086;
-            description = lib.mdDoc "The port of the InfluxDB instance.";
+            description = "The port of the InfluxDB instance.";
           };
 
           options.web.influxdb.tls.insecure_skip_verify = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = lib.mdDoc "Skip TLS verification when connecting to InfluxDB.";
+            description = "Skip TLS verification when connecting to InfluxDB.";
           };
 
           options.web.influxdb.token = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
-            description = lib.mdDoc "Authentication token for connecting to InfluxDB.";
+            description = "Authentication token for connecting to InfluxDB.";
           };
 
           options.web.influxdb.org = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
-            description = lib.mdDoc "InfluxDB organisation under which to store data.";
+            description = "InfluxDB organisation under which to store data.";
           };
 
           options.web.influxdb.bucket = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
-            description = lib.mdDoc "InfluxDB bucket in which to store data.";
+            description = "InfluxDB bucket in which to store data.";
           };
         };
       };
@@ -114,18 +114,18 @@ in
       collector = {
         enable = lib.mkEnableOption "Enables the scrutiny metrics collector.";
 
-        package = lib.mkPackageOptionMD pkgs "scrutiny-collector" { };
+        package = lib.mkPackageOption pkgs "scrutiny-collector" { };
 
         schedule = lib.mkOption {
           type = lib.types.str;
           default = "*:0/15";
-          description = lib.mdDoc ''
+          description = ''
             How often to run the collector in systemd calendar format.
           '';
         };
 
         settings = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Collector settings to be rendered into the collector configuration file.
 
             See https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml.
@@ -137,19 +137,19 @@ in
             options.host.id = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
               default = null;
-              description = lib.mdDoc "Host ID for identifying/labelling groups of disks";
+              description = "Host ID for identifying/labelling groups of disks";
             };
 
             options.api.endpoint = lib.mkOption {
               type = lib.types.str;
               default = "http://localhost:8080";
-              description = lib.mdDoc "Scrutiny app API endpoint for sending metrics to.";
+              description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
             options.log.level = lib.mkOption {
               type = lib.types.enum [ "INFO" "DEBUG" ];
               default = "INFO";
-              description = lib.mdDoc "Log level for Scrutiny collector.";
+              description = "Log level for Scrutiny collector.";
             };
           };
         };
