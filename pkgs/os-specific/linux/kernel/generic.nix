@@ -65,7 +65,10 @@
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
-, kernelTests ? []
+
+# The recommended way to add tests is to override `passthru.tests` with `overrideAttrs`.
+# Attribute kernelTests is preserved for convenience and compatibility.
+, kernelTests ? { }
 , nixosTests
 , ...
 }@args:
@@ -222,21 +225,39 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
 
     # Adds dependencies needed to edit the config:
     # nix-shell '<nixpkgs>' -A linux.configEnv --command 'make nconfig'
-    configEnv = kernel.overrideAttrs (old: {
-      nativeBuildInputs = old.nativeBuildInputs or [] ++ (with buildPackages; [
+    configEnv = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+      nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ] ++ (with buildPackages; [
         pkg-config ncurses
       ]);
     });
 
-    tests = let
-      overridableKernel = finalAttrs.finalPackage // {
-        override = args:
-          lib.warn (
-            "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
-            + toString (lib.attrNames (lib.toFunction args { }))
-          ) overridableKernel;
-      };
-    in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
+    tests = {
+      nixos-test-kernel-generic =
+        let
+          overridableKernel = finalAttrs.finalPackage // {
+            override = args:
+              lib.warn (
+                "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
+                + toString (lib.attrNames (lib.toFunction args { }))
+              ) overridableKernel;
+          };
+        in
+        nixosTests.kernel-generic.passthru.testsForKernel overridableKernel;
+    } // (
+      # Compatibility layer for legacy usage of kernelTests as a list.
+      # TODO: Convert to throw after 24.05 is released.
+      if builtins.isList kernelTests then
+        let
+          kernelTests' = lib.flatten kernelTests;
+        in
+        lib.warn
+          "buildLinux: kernelTests: expect an attribute set instead of a list."
+          (lib.listToAttrs (lib.genList (i: {
+            name = "extra-kernel-test-${toString i}";
+            value = lib.elemAt kernelTests' i;
+          }) (lib.length kernelTests')))
+      else kernelTests
+    );
   };
 
 })
