@@ -42,7 +42,7 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
+  unsupportedSystemMsg = "Unsupported system: ${system}";
 
   # Zoom versions are released at different times for each platform
   # and often with different versions.  We write them on three lines
@@ -115,9 +115,9 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoom";
-  version = versions.${system} or throwSystem;
+  version = versions.${system} or unsupportedSystemMsg;
 
-  src = srcs.${system} or throwSystem;
+  src = srcs.${system} or unsupportedSystemMsg;
 
   dontUnpack = stdenv.isLinux;
   unpackPhase = lib.optionalString stdenv.isDarwin ''
@@ -147,7 +147,9 @@ stdenv.mkDerivation rec {
         tar -C $out -xf $src
         mv $out/usr/* $out/
       '';
-    }.${system} or throwSystem}
+    }.${system} or ''
+      echo ERROR: installPhase not defined for ${system}
+    ''}
     runHook postInstall
   '';
 
