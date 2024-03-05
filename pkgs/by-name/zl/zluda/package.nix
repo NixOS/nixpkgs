@@ -59,8 +59,22 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace zluda/build.rs \
       --replace-fail 'vergen(Config::default())' 'Some(())'
-    '';
+  '';
   env.VERGEN_GIT_SHA = "1b9ba2b2333746c5e2b05a2bf24fa6ec3828dcdf-nix";
+
+  postInstall = ''
+    ln -s libnvml.so     $out/lib/libnvidia-ml.so.1
+    ln -s libnvml.so     $out/lib/libnvidia-ml.so
+    ln -s libnccl.so     $out/lib/libnccl.so.2
+    ln -s libcusparse.so $out/lib/libcusparse.so.11
+    ln -s libcufft.so    $out/lib/libcufft.so.10
+    ln -s libcudnn.so    $out/lib/libcudnn.so.8
+    ln -s libcudnn.so    $out/lib/libcudnn.so.7
+    ln -s libnvcuda.so   $out/lib/libcuda.so.1
+    ln -s libnvcuda.so   $out/lib/libcuda.so
+    ln -s libcublas.so   $out/lib/libcublas.so.11
+    ln -s libcublas.so   $out/lib/libcublas.so.10
+  '';
 
   meta = with lib; {
     description = "ZLUDA - CUDA on Intel GPUs";
