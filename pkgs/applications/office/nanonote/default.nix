@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A minimalist note taking application";
-    downloadPage = "https://github.com/agateau/nanonote";
+    downloadPage = "https://github.com/agateau/nanonote/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/agateau/nanonote";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ morgenkaff ];
