@@ -235,6 +235,7 @@ in lib.makeExtensible (self: ({
     hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
     patches = [
       patch-rapidcheck-shared
+      ./patches/2_18/CVE-2024-27297.patch
     ];
   };
 
