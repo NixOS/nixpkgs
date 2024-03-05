@@ -1,8 +1,8 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchurl
 , appimageTools
-, undmg
+, darwin
 , nix-update-script
 }:
 
@@ -23,7 +23,7 @@ let
       url = "https://github.com/hoppscotch/releases/releases/download/v${version}-1/Hoppscotch_linux_x64.AppImage";
       hash = "sha256-MYQ7SRm+CUPIXROZxejbbZ0/wH+U5DQO4YGbE/HQAj8=";
     };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  }.${stdenvNoCC.system} or (throw "Unsupported system: ${stdenvNoCC.system}");
 
   meta = {
     description = "Open source API development ecosystem";
@@ -34,22 +34,12 @@ let
     maintainers = with lib.maintainers; [ DataHearth ];
   };
 in
-if stdenv.isDarwin then stdenv.mkDerivation
+if stdenvNoCC.isDarwin then darwin.installBinaryPackage
 {
   inherit pname version src meta;
 
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ undmg ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/Applications"
-    mv Hoppscotch.app $out/Applications/
-
-    runHook postInstall
-  '';
+  sourceRoot = "Hoppscotch";
+  appName = "Hoppscotch.app";
 }
 else appimageTools.wrapType2 {
   inherit pname version src meta;
