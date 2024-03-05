@@ -11,8 +11,8 @@
 , which
 , xcbuild
 , zip
-, coreutils
 , darwin
+, cups
 }:
 
 # Each Corretto version is based on a corresponding OpenJDK version. So
@@ -28,33 +28,17 @@ let
   # See https://github.com/corretto/corretto-17/blob/release-17.0.8.8.1/build.gradle#L40
   # "major.minor.security.build.revision"
   #
-  appleFrameworks = darwin.apple_sdk_11_0.frameworks;
-  metalFrameworks = [
-    appleFrameworks.Accelerate
-    appleFrameworks.Metal
-    appleFrameworks.MetalKit
-    appleFrameworks.MetalPerformanceShaders
-  ];
-
 in
 jdk.overrideAttrs (finalAttrs: oldAttrs: {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin
-    (
-    [ coreutils zip autoconf which xcbuild darwin.xattr darwin.stubs.setfile ]
-      ++
-      metalFrameworks
-    );
+      # Fix "error: 'ptrauth.h' file not found"
+  env.NIX_CFLAGS_COMPILE="-I${darwin.xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers";
 
-  configurePhase = ''
-    runHook preConfigure
 
-    bash configure --with-xcode-path=$(xcode-select -p)
-
-    runHook postConfigure
-  '';
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin [ zip autoconf which xcbuild darwin.xattr darwin.stubs.setfile cups darwin.xnu ];
+   
 
   postPatch = ''
     # The rpm/deb task definitions require a Gradle plugin which we don't
@@ -85,10 +69,12 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
       # OS X ..." because $HOME/.gradle is not accessible.
       export GRADLE_USER_HOME=$(mktemp -d)
 
-      # Corretto's actual built is triggered via `gradle`.
-      gradle --console=plain --no-daemon ${task}
+      # Fix "configure: error: Invalid SDK or SYSROOT path, dependent framework headers not found"
+      # Fix error: 'new' file not found
+      # Fix missing cups
+      export EXTRA_CORRETTO_CONFIG_OPTIONS="--with-xcode-path=$(xcode-select -p) --disable-precompiled-headers --with-cups=${cups.dev}"
 
-      set -xv
+      gradle -Pcorretto.extra_config="$EXTRA_CORRETTO_CONFIG_OPTIONS" --console=plain --no-daemon ${task}
 
       # Prepare for the installPhase so that it looks like if a normal
       # OpenJDK had been built.
