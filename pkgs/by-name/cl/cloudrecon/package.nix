@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "cloudrecon";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "CloudRecon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I/pdipBC+DndAGS6L4i3YoMVBTlaXNzXopD+ZxyyRmY=";
+    hash = "sha256-SslHkwoMelvszrQZvNX28EokBgwnPDBbTUBA9jdJPro=";
   };
 
   vendorHash = "sha256-hLEmRq7Iw0hHEAla0Ehwk1EfmpBv6ddBuYtq12XdhVc=";
