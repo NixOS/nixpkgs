@@ -27039,7 +27039,7 @@ with pkgs;
 
   smcroute = callPackage ../servers/smcroute { };
 
-  snipe-it = callPackage ../servers/web-apps/snipe-it {
+  snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {
     php = php81;
   };
 
