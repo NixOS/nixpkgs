@@ -3,7 +3,7 @@ let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf;
-  inherit (lib.options) mkEnableOption mkOption mkPackageOption;
+  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.types) bool enum nullOr port str submodule;
 
   cfg = config.services.scrutiny;
@@ -140,7 +140,8 @@ in
 
             options.api.endpoint = mkOption {
               type = str;
-              default = "http://localhost:8080";
+              default = "http://localhost:${toString cfg.settings.web.listen.port}";
+              defaultText = literalExpression ''"http://localhost:''${config.services.scrutiny.settings.web.listen.port}"'';
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
