@@ -13,15 +13,11 @@ in
 {
   options = {
     services.scrutiny = {
-      enable = mkEnableOption "Enables the scrutiny web application.";
+      enable = mkEnableOption "Scrutiny, a web application for drive monitoring";
 
       package = mkPackageOption pkgs "scrutiny" { };
 
-      openFirewall = mkOption {
-        type = bool;
-        default = false;
-        description = "Open the default ports in the firewall for Scrutiny.";
-      };
+      openFirewall = mkEnableOption "opening the default ports in the firewall for Scrutiny";
 
       influxdb.enable = mkOption {
         type = bool;
@@ -91,11 +87,7 @@ in
             description = "The port of the InfluxDB instance.";
           };
 
-          options.web.influxdb.tls.insecure_skip_verify = mkOption {
-            type = bool;
-            default = false;
-            description = "Skip TLS verification when connecting to InfluxDB.";
-          };
+          options.web.influxdb.tls.insecure_skip_verify = mkEnableOption "skipping TLS verification when connecting to InfluxDB";
 
           options.web.influxdb.token = mkOption {
             type = nullOr str;
@@ -118,7 +110,7 @@ in
       };
 
       collector = {
-        enable = mkEnableOption "Enables the scrutiny metrics collector.";
+        enable = mkEnableOption "the Scrutiny metrics collector";
 
         package = mkPackageOption pkgs "scrutiny-collector" { };
 
