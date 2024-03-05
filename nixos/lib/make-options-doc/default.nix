@@ -28,6 +28,8 @@
 , variablelistId ? "configuration-variable-list"
   # String to prefix to the option XML/HTML id attributes.
 , optionIdPrefix ? "opt-"
+/** Dont include internal options prefixed with `_` e.g. `_module.args` into the generated documentation. */
+, discardInternalOptions ? false
 , revision ? "" # Specify revision for the options
 # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
@@ -53,7 +55,11 @@ assert markdownByDefault && ! allowDocBook;
 let
   rawOpts = lib.optionAttrSetToDocList options;
   transformedOpts = map transformOptions rawOpts;
-  filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
+  filteredOpts = lib.filter (
+    opt: opt.visible
+    && !opt.internal
+    && (!discardInternalOptions || !lib.hasPrefix "_" opt.name)
+  ) transformedOpts;
   optionsList = lib.flip map filteredOpts
    (opt: opt
     // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
