@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
     description = "Terminal client for MQTT";
