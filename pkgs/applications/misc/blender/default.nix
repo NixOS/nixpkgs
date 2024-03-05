@@ -82,8 +82,8 @@
 }:
 
 let
-  pythonPackages = python310Packages;
-  inherit (pythonPackages) python;
+  python3Packages = python310Packages;
+  python3 = python3Packages.python;
 
   libdecor' = libdecor.overrideAttrs (old: {
     # Blender uses private APIs, need to patch to expose them
@@ -121,14 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
           : > build_files/cmake/platform/platform_apple_xcode.cmake
           substituteInPlace source/creator/CMakeLists.txt \
             --replace '${"$"}{LIBDIR}/python' \
-                      '${python}'
+                      '${python3}'
           substituteInPlace build_files/cmake/platform/platform_apple.cmake \
             --replace '${"$"}{LIBDIR}/python' \
-                      '${python}' \
+                      '${python3}' \
             --replace '${"$"}{LIBDIR}/opencollada' \
                       '${opencollada}' \
             --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                      '${pythonPackages.numpy}/${python.sitePackages}/numpy'
+                      '${python3Packages.numpy}/${python3.sitePackages}/numpy'
         ''
       else
         ''
@@ -140,16 +140,16 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
     '');
 
-  env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
 
   cmakeFlags =
     [
-      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
-      "-DPYTHON_LIBPATH=${python}/lib"
-      "-DPYTHON_LIBRARY=${python.libPrefix}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${pythonPackages.numpy}/${python.sitePackages}/numpy/core/include"
-      "-DPYTHON_NUMPY_PATH=${pythonPackages.numpy}/${python.sitePackages}"
-      "-DPYTHON_VERSION=${python.pythonVersion}"
+      "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+      "-DPYTHON_LIBPATH=${python3}/lib"
+      "-DPYTHON_LIBRARY=${python3.libPrefix}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python3.sitePackages}/numpy/core/include"
+      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python3.sitePackages}"
+      "-DPYTHON_VERSION=${python3.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       llvmPackages.llvm.dev
       makeWrapper
-      pythonPackages.wrapPython
+      python3Packages.wrapPython
     ]
     ++ lib.optionals cudaSupport [
       addOpenGLRunpath
@@ -232,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
       (opensubdiv.override { inherit cudaSupport; })
       potrace
       pugixml
-      python
+      python3
       tbb
       zlib
       zstd
@@ -281,7 +281,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonPath =
     let
-      ps = pythonPackages;
+      ps = python3Packages;
     in
     [
       ps.numpy
@@ -317,13 +317,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit python pythonPackages;
+    python = python3;
+    pythonPackages = python3Packages;
 
     withPackages =
       f:
       (callPackage ./wrapper.nix { }).override {
         blender = finalAttrs.finalPackage;
-        extraModules = (f pythonPackages);
+        extraModules = (f python3Packages);
       };
 
     tests = {
