@@ -156,6 +156,7 @@ in lib.makeExtensible (self: ({
     hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
       patch-monitorfdhup
+      ./patches/2_3/CVE-2024-27297.patch
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; };
