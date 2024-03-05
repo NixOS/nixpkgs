@@ -17,10 +17,10 @@ buildNpmPackage rec {
     owner = "zeroxoneafour";
     repo = pname;
     rev = "v" + version;
-    hash = "sha256-fZgNOcOq+owmqtplwnxeOIQpWmrga/WitCNCj89O5XA=";
+    hash = "sha256-2uthjNhQm+hkRCPXGQm2LZunTj+J0SUuUfZL0PeRd4s=";
   };
 
-  npmDepsHash = "sha256-25AtM1FweWIbFot+HUMSPYTu47/0eKNpRWSlBEL0yKk=";
+  npmDepsHash = "sha256-kaT3Uyq+/JkmebakG9xQuR4Kjo7vk6BzI1/LffOj/eo=";
 
   dontConfigure = true;
 
