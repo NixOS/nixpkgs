@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "admin-fe";
-  version = "unstable-2023-02-11";
+  version = "unstable-2024-02-25";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "admin-fe";
-    rev = "130c17808bc50269f8444612f4ab378a08cd5e43";
-    hash = "sha256-+ZU8J4rOyRMSZP+CUyLeOhRI2fKiw2s31coTYAoReWM=";
+    rev = "2a1e175f7c2b02e66d728f808cb7e9449231a288";
+    hash = "sha256-PLSJ+doZUZ2n4hWUahY299VoCvNq76Tm8qpdvOIHD9c=";
   };
 
   patches = [ ./deps.patch ];

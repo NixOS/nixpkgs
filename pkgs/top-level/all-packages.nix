@@ -1563,8 +1563,8 @@ with pkgs;
   adminer = callPackage ../servers/adminer { };
 
   akkoma = callPackage ../servers/akkoma {
-    elixir = elixir_1_14;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_14; });
+    elixir = elixir_1_16;
+    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_16; });
   };
   akkoma-frontends = recurseIntoAttrs {
     akkoma-fe = callPackage ../servers/akkoma/akkoma-fe { };
@@ -35880,6 +35880,10 @@ with pkgs;
     inherit (gnome2) libIDL;
   };
 
+  virtualboxKvm = lowPrio (virtualbox.override {
+    enableKvm = true;
+  });
+
   virtualboxHardened = lowPrio (virtualbox.override {
     enableHardening = true;
   });
@@ -41339,11 +41343,9 @@ with pkgs;
 
   xrq = callPackage ../applications/misc/xrq { };
 
-  pynitrokey = with python3Packages; toPythonApplication pynitrokey;
-
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
 
-  nitrokey-app2 = python3Packages.callPackage ../tools/security/nitrokey-app2 { };
+  nitrokey-app2 = callPackage ../tools/security/nitrokey-app2 { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 
