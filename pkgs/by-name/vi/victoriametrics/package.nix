@@ -2,16 +2,34 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.97.1";
+  version = "1.99.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zaRXvktHqsM/pZd7DsCAXCSI2jaPZ3iKHLQqDILZ9pc=";
+    hash = "sha256-IHUmxdCOzvA2JL06k/ei6/OTVWHTL1TiKKYZB1hgqyA=";
   };
 
   vendorHash = null;
+
+  subPackages = [
+    "app/victoria-logs"
+    "app/victoria-metrics"
+    "app/vlinsert"
+    "app/vlselect"
+    "app/vlstorage"
+    "app/vmagent"
+    "app/vmalert-tool"
+    "app/vmauth"
+    "app/vmctl"
+    "app/vminsert"
+    "app/vmselect"
+    "app/vmstorage"
+    "app/vmbackup"
+    "app/vmrestore"
+    "app/vmui"
+  ];
 
   postPatch = ''
     # main module (github.com/VictoriaMetrics/VictoriaMetrics) does not contain package

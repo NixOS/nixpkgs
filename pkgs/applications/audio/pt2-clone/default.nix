@@ -6,14 +6,14 @@
 , SDL2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pt2-clone";
   version = "1.66.1";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "pt2-clone";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-j7VPC1sj1Q+wL2TBgv06uYLPqym8F57HG1SRvj0Ggeo=";
   };
 
@@ -41,5 +41,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.littleEndian;
     mainProgram = "pt2-clone";
   };
-}
-
+})

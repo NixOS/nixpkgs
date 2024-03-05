@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, scons, pkg-config, wrapGAppsHook
 , glfw3, gtk3, libpng12 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goxel";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ueA0YW2n/DXd9AytDzfPtvtXbvuUm4VDwcdvHWObKxc=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ tilpner fgaz ];
   };
-}
+})
