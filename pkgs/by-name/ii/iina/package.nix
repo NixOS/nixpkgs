@@ -1,11 +1,11 @@
 { lib
 , fetchurl
-, stdenv
-, undmg
+, stdenvNoCC
+, darwin
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+darwin.installBinaryPackage rec {
   pname = "iina";
   version = "1.3.4";
 
@@ -14,14 +14,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-feUPWtSi/Vsnv1mjGyBgB0wFMxx6r6UzrUratlAo14w=";
   };
 
-  nativeBuildInputs = [ undmg ];
+  appName = "IINA.app";
+  sourceRoot = "IINA";
 
-  sourceRoot = "IINA.app";
-
-  installPhase = ''
-    mkdir -p $out/{bin,Applications/IINA.app}
-    cp -R . "$out/Applications/IINA.app"
-    ln -s "$out/Applications/IINA.app/Contents/MacOS/iina-cli" "$out/bin/iina"
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s $out/Applications/IINA.app/Contents/MacOS/${meta.mainProgram} $out/bin/${meta.mainProgram}
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -29,10 +27,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://iina.io/";
     description = "The modern media player for macOS";
-    platforms = platforms.darwin;
     license = licenses.gpl3;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "iina";
+    mainProgram = "iina-cli";
     maintainers = with maintainers; [ arkivm stepbrobd ];
   };
 }
