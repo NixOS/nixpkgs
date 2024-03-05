@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+    substituteInPlace src/functions.vala --replace "/usr/local/etc/xdg/swaync" "$out/etc/xdg/swaync"
   '';
 
   passthru.tests.version = testers.testVersion {

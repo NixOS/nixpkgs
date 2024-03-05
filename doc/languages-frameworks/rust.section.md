@@ -903,8 +903,8 @@ with import <nixpkgs>
 };
 let
   rustPlatform = makeRustPlatform {
-    cargo = rust-bin.stable.latest.minimal;
-    rustc = rust-bin.stable.latest.minimal;
+    cargo = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
+    rustc = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
   };
 in
 
