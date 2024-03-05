@@ -4213,7 +4213,7 @@ self: super: with self; {
 
   flask-principal = callPackage ../development/python-modules/flask-principal { };
 
-  flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
+  flask-pymongo = callPackage ../development/python-modules/flask-pymongo { };
 
   flask-restful = callPackage ../development/python-modules/flask-restful { };
 
