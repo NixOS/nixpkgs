@@ -1,5 +1,11 @@
 { config, lib, pkgs, ... }:
 let
+  inherit (lib) maintainers;
+  inherit (lib.meta) getExe;
+  inherit (lib.modules) mkIf;
+  inherit (lib.options) mkEnableOption mkOption mkPackageOption;
+  inherit (lib.types) bool enum nullOr port str submodule;
+
   cfg = config.services.scrutiny;
   # Define the settings format used for this program
   settingsFormat = pkgs.formats.yaml { };
@@ -7,18 +13,18 @@ in
 {
   options = {
     services.scrutiny = {
-      enable = lib.mkEnableOption "Enables the scrutiny web application.";
+      enable = mkEnableOption "Enables the scrutiny web application.";
 
-      package = lib.mkPackageOption pkgs "scrutiny" { };
+      package = mkPackageOption pkgs "scrutiny" { };
 
-      openFirewall = lib.mkOption {
-        type = lib.types.bool;
+      openFirewall = mkOption {
+        type = bool;
         default = false;
         description = "Open the default ports in the firewall for Scrutiny.";
       };
 
-      influxdb.enable = lib.mkOption {
-        type = lib.types.bool;
+      influxdb.enable = mkOption {
+        type = bool;
         default = true;
         description = ''
           Enables InfluxDB on the host system using the `services.influxdb2` NixOS module
@@ -29,30 +35,30 @@ in
         '';
       };
 
-      settings = lib.mkOption {
+      settings = mkOption {
         description = ''
           Scrutiny settings to be rendered into the configuration file.
 
           See https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml.
         '';
         default = { };
-        type = lib.types.submodule {
+        type = submodule {
           freeformType = settingsFormat.type;
 
-          options.web.listen.port = lib.mkOption {
-            type = lib.types.port;
+          options.web.listen.port = mkOption {
+            type = port;
             default = 8080;
             description = "Port for web application to listen on.";
           };
 
-          options.web.listen.host = lib.mkOption {
-            type = lib.types.str;
+          options.web.listen.host = mkOption {
+            type = str;
             default = "0.0.0.0";
             description = "Interface address for web application to bind to.";
           };
 
-          options.web.listen.basepath = lib.mkOption {
-            type = lib.types.str;
+          options.web.listen.basepath = mkOption {
+            type = str;
             default = "";
             example = "/scrutiny";
             description = ''
@@ -61,50 +67,50 @@ in
             '';
           };
 
-          options.log.level = lib.mkOption {
-            type = lib.types.enum [ "INFO" "DEBUG" ];
+          options.log.level = mkOption {
+            type = enum [ "INFO" "DEBUG" ];
             default = "INFO";
             description = "Log level for Scrutiny.";
           };
 
-          options.web.influxdb.scheme = lib.mkOption {
-            type = lib.types.str;
+          options.web.influxdb.scheme = mkOption {
+            type = str;
             default = "http";
             description = "URL scheme to use when connecting to InfluxDB.";
           };
 
-          options.web.influxdb.host = lib.mkOption {
-            type = lib.types.str;
+          options.web.influxdb.host = mkOption {
+            type = str;
             default = "0.0.0.0";
             description = "IP or hostname of the InfluxDB instance.";
           };
 
-          options.web.influxdb.port = lib.mkOption {
-            type = lib.types.port;
+          options.web.influxdb.port = mkOption {
+            type = port;
             default = 8086;
             description = "The port of the InfluxDB instance.";
           };
 
-          options.web.influxdb.tls.insecure_skip_verify = lib.mkOption {
-            type = lib.types.bool;
+          options.web.influxdb.tls.insecure_skip_verify = mkOption {
+            type = bool;
             default = false;
             description = "Skip TLS verification when connecting to InfluxDB.";
           };
 
-          options.web.influxdb.token = lib.mkOption {
-            type = lib.types.nullOr lib.types.str;
+          options.web.influxdb.token = mkOption {
+            type = nullOr str;
             default = null;
             description = "Authentication token for connecting to InfluxDB.";
           };
 
-          options.web.influxdb.org = lib.mkOption {
-            type = lib.types.nullOr lib.types.str;
+          options.web.influxdb.org = mkOption {
+            type = nullOr str;
             default = null;
             description = "InfluxDB organisation under which to store data.";
           };
 
-          options.web.influxdb.bucket = lib.mkOption {
-            type = lib.types.nullOr lib.types.str;
+          options.web.influxdb.bucket = mkOption {
+            type = nullOr str;
             default = null;
             description = "InfluxDB bucket in which to store data.";
           };
@@ -112,42 +118,42 @@ in
       };
 
       collector = {
-        enable = lib.mkEnableOption "Enables the scrutiny metrics collector.";
+        enable = mkEnableOption "Enables the scrutiny metrics collector.";
 
-        package = lib.mkPackageOption pkgs "scrutiny-collector" { };
+        package = mkPackageOption pkgs "scrutiny-collector" { };
 
-        schedule = lib.mkOption {
-          type = lib.types.str;
+        schedule = mkOption {
+          type = str;
           default = "*:0/15";
           description = ''
             How often to run the collector in systemd calendar format.
           '';
         };
 
-        settings = lib.mkOption {
+        settings = mkOption {
           description = ''
             Collector settings to be rendered into the collector configuration file.
 
             See https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml.
           '';
           default = { };
-          type = lib.types.submodule {
+          type = submodule {
             freeformType = settingsFormat.type;
 
-            options.host.id = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
+            options.host.id = mkOption {
+              type = nullOr str;
               default = null;
               description = "Host ID for identifying/labelling groups of disks";
             };
 
-            options.api.endpoint = lib.mkOption {
-              type = lib.types.str;
+            options.api.endpoint = mkOption {
+              type = str;
               default = "http://localhost:8080";
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
-            options.log.level = lib.mkOption {
-              type = lib.types.enum [ "INFO" "DEBUG" ];
+            options.log.level = mkOption {
+              type = enum [ "INFO" "DEBUG" ];
               default = "INFO";
               description = "Log level for Scrutiny collector.";
             };
@@ -157,14 +163,14 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable || cfg.collector.enable) {
+  config = mkIf (cfg.enable || cfg.collector.enable) {
     services.influxdb2.enable = cfg.influxdb.enable;
 
-    networking.firewall = lib.mkIf cfg.openFirewall {
+    networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.settings.web.listen.port ];
     };
 
-    services.smartd = lib.mkIf cfg.collector.enable {
+    services.smartd = mkIf cfg.collector.enable {
       enable = true;
       extraOptions = [
         "-A /var/log/smartd/"
@@ -174,7 +180,7 @@ in
 
     systemd = {
       services = {
-        scrutiny = lib.mkIf cfg.enable {
+        scrutiny = mkIf cfg.enable {
           description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
@@ -185,14 +191,14 @@ in
           };
           serviceConfig = {
             DynamicUser = true;
-            ExecStart = "${lib.getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
+            ExecStart = "${getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
             Restart = "always";
             StateDirectory = "scrutiny";
             StateDirectoryMode = "0750";
           };
         };
 
-        scrutiny-collector = lib.mkIf cfg.collector.enable {
+        scrutiny-collector = mkIf cfg.collector.enable {
           description = "Scrutiny Collector Service";
           environment = {
             COLLECTOR_VERSION = "1";
@@ -200,12 +206,12 @@ in
           };
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${lib.getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
+            ExecStart = "${getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
           };
         };
       };
 
-      timers = lib.mkIf cfg.collector.enable {
+      timers = mkIf cfg.collector.enable {
         scrutiny-collector = {
           timerConfig = {
             OnCalendar = cfg.collector.schedule;
@@ -217,5 +223,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.jnsgruk ];
+  meta.maintainers = [ maintainers.jnsgruk ];
 }
