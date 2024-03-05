@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-abstractions-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ubDbpQhrqoyiBNne15nlO44lXg2wG+wrL8EJasMUocc=";
+    hash = "sha256-PAomuAOwpX5/ijVOi0hjTlUnSWgF+qsb3kpuydIV6nc=";
   };
 
   nativeBuildInputs = [
