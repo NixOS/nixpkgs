@@ -23,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SE3zB+8zZuuT+W6QYTuQhM+dBgYuFzYK4a7QaquGB60=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  # Splitting outputs going bad on Darwin
+  outputs = if stdenv.isDarwin
+            then [ "out" ]
+            else [ "out" "dev" "doc" "lib" "man" ];
 
   nativeBuildInputs = [
     cmake
