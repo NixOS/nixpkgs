@@ -261,12 +261,6 @@ let
     else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
-
-  checkDependencyList = checkDependencyList' [];
-  checkDependencyList' = positions: name: deps: flip imap1 deps (index: dep:
-    if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
-    else if isList dep then checkDependencyList' ([index] ++ positions) name dep
-    else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
@@ -290,30 +284,30 @@ else let
 
   dependencies = map (map chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
+      (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
+      (map (drv: drv.__spliced.buildHost or drv) nativeBuildInputs')
+      (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+      (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
+      (map (drv: drv.__spliced.hostTarget or drv) buildInputs')
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
+      (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
     ]
   ];
   propagatedDependencies = map (map chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
+      (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuildPropagated)
+      (map (drv: drv.__spliced.buildHost or drv) propagatedNativeBuildInputs)
+      (map (drv: drv.__spliced.buildTarget or drv) depsBuildTargetPropagated)
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+      (map (drv: drv.__spliced.hostHost or drv) depsHostHostPropagated)
+      (map (drv: drv.__spliced.hostTarget or drv) propagatedBuildInputs)
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
+      (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
     ]
   ];
 
