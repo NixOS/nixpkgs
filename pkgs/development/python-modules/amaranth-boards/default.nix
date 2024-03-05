@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
     rev = "170675812b71ee722bcf8ccdb88409a9ad97ffe2";
-    hash = "sha256-9ZyzD4hOGW2sG24ISNwYBY6NiDe5q0rwDeMdYtzjwDA=";
+    hash = "sha256-dwZCKMJnEY9RjzkcJ9r3TEC7W+Wfi/P7Hjl4/d60/qo=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
