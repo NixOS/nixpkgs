@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.14";
+  version = "1.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jschneier";
     repo = "django-storages";
     rev = "refs/tags/${version}";
-    hash = "sha256-q+vQm1T5/ueGPfwzuUOmSI/nESchqJc4XizJieBsLWc=";
+    hash = "sha256-V0uFZvnBi0B31b/j/u3Co6dd9XcdVefiSkl3XmCTJG4=";
   };
 
   nativeBuildInputs = [
