@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "yaegi";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "yaegi";
     rev = "v${version}";
-    hash = "sha256-ZV1HidHJvwum18QIIwQiCcRcitZdHk5+FxkPs6YgDac=";
+    hash = "sha256-AplNd9+Z+bVC4/2aFKwhabMvumF9IPcSX8X8H0z/ADA=";
   };
 
   vendorHash = null;
