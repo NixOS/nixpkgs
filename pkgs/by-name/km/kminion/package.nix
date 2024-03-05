@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "kafka-minion";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "redpanda-data";

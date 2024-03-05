@@ -1,4 +1,4 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-update common-updater-scripts
+#!nix-shell -i bash -p nix-update
 
 nix-update kminion
