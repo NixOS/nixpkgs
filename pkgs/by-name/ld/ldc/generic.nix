@@ -1,7 +1,23 @@
-{ version, sha256 }:
-{ lib, stdenv, fetchurl, cmake, ninja, llvm_17, curl, tzdata
-, libconfig, lit, gdb, unzip, darwin, bash
-, callPackage, makeWrapper, runCommand, targetPackages
+{ version, hash }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, llvm_17
+, curl
+, tzdata
+, libconfig
+, lit
+, gdb
+, unzip
+, darwin
+, bash
+, callPackage
+, makeWrapper
+, runCommand
+, targetPackages
+
 , ldcBootstrap ? callPackage ./bootstrap.nix { }
 }:
 
@@ -14,13 +30,16 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
   inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/ldc-developers/ldc/releases/download/v${version}/ldc-${version}-src.tar.gz";
-    inherit sha256;
+  src = fetchFromGitHub {
+    owner = "ldc-developers";
+    repo = "ldc";
+    rev = "v${version}";
+    inherit hash;
+    fetchSubmodules = true;
   };
 
   # https://issues.dlang.org/show_bug.cgi?id=19553
@@ -28,38 +47,29 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     patchShebangs .
-  ''
-  + ''
-      rm ldc-${version}-src/tests/dmd/fail_compilation/mixin_gc.d
-      rm ldc-${version}-src/tests/dmd/runnable/xtest46_gc.d
-      rm ldc-${version}-src/tests/dmd/runnable/testptrref_gc.d
 
-      # test depends on current year
-      rm ldc-${version}-src/tests/dmd/compilable/ddocYear.d
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # https://github.com/NixOS/nixpkgs/issues/34817
-      rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
+    rm source/tests/dmd/fail_compilation/mixin_gc.d
+    rm source/tests/dmd/runnable/xtest46_gc.d
+    rm source/tests/dmd/runnable/testptrref_gc.d
+
+    # test depends on current year
+    rm source/tests/dmd/compilable/ddocYear.d
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # https://github.com/NixOS/nixpkgs/issues/34817
+    rm -r source/tests/plugins/addFuncEntryCall
   '';
 
-  postPatch = ''
-    # Setting SHELL=$SHELL when dmd testsuite is run doesn't work on Linux somehow
-    substituteInPlace tests/dmd/Makefile --replace "SHELL=/bin/bash" "SHELL=${bash}/bin/bash"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace runtime/phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace runtime/phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace runtime/phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace runtime/phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
   nativeBuildInputs = [
     cmake ldcBootstrap lit lit.python llvm_17.dev makeWrapper ninja unzip
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
     gdb
   ];
@@ -76,7 +86,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DMD=$DMD" ];
 
-  fixNames = lib.optionalString stdenv.hostPlatform.isDarwin  ''
+  fixNames = lib.optionalString stdenv.hostPlatform.isDarwin ''
     fixDarwinDylibNames() {
       local flags=()
 
@@ -103,7 +113,7 @@ stdenv.mkDerivation rec {
     # Build default lib test runners
     ninja -j$NIX_BUILD_CORES all-test-runners
 
-    ${fixNames}
+    ${finalAttrs.fixNames}
 
     # Run dmd testsuite
     export DMD_TESTSUITE_MAKE_ARGS="-j$NIX_BUILD_CORES DMD=$DMD"
@@ -116,14 +126,14 @@ stdenv.mkDerivation rec {
     ctest -V -R "lit-tests"
 
     # Run default lib unittests
-    ctest -j$NIX_BUILD_CORES --output-on-failure -E "ldc2-unittest|lit-tests|dmd-testsuite${additionalExceptions}"
+    ctest -j$NIX_BUILD_CORES --output-on-failure -E "ldc2-unittest|lit-tests|dmd-testsuite${finalAttrs.additionalExceptions}"
   '';
 
   postInstall = ''
     wrapProgram $out/bin/ldc2 \
-        --prefix PATH ":" "${targetPackages.stdenv.cc}/bin" \
-        --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
-   '';
+      --prefix PATH : ${targetPackages.stdenv.cc}/bin \
+      --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
+  '';
 
   meta = with lib; {
     description = "The LLVM-based D compiler";
@@ -133,4 +143,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ThomasMader lionello jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
-}
+})
