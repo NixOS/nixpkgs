@@ -160,6 +160,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "systemd-system-service" enableSystemd)
     (lib.mesonEnable "udev" (!enableSystemd))
     (lib.mesonEnable "ffmpeg" ffmpegSupport)
+    (lib.mesonEnable "pw-cat-ffmpeg" ffmpegSupport)
     (lib.mesonEnable "bluez5" bluezSupport)
     (lib.mesonEnable "bluez5-backend-hsp-native" nativeHspSupport)
     (lib.mesonEnable "bluez5-backend-hfp-native" nativeHfpSupport)
