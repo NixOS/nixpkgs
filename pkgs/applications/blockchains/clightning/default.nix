@@ -44,8 +44,7 @@ stdenv.mkDerivation rec {
       tools/generate-wire.py \
       tools/update-mocks.sh \
       tools/mockup.sh \
-      devtools/sql-rewrite.py \
-      plugins/clnrest/clnrest.py
+      devtools/sql-rewrite.py
   '' else ''
     substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
     substituteInPlace external/libwally-core/configure.ac --replace gsed sed
@@ -61,6 +60,11 @@ stdenv.mkDerivation rec {
   # ccan/ccan/fdpass/fdpass.c:16:8: error: variable length array folded to constant array as an extension [-Werror,-Wgnu-folding-constant]
   #                 char buf[CMSG_SPACE(sizeof(fd))];
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "-Wno-error=gnu-folding-constant";
+
+  # The `clnrest` plugin requires a Python environment to run
+  postInstall = ''
+    rm -r $out/libexec/c-lightning/plugins/clnrest
+  '';
 
   meta = with lib; {
     description = "A Bitcoin Lightning Network implementation in C";
