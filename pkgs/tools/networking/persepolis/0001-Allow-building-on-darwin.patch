@@ -23,14 +23,6 @@ index 985d28d..933f3df 100755
  
  # Checking dependencies!
  not_installed = ''
-@@ -100,6 +96,7 @@ else:
-     print('paplay is found!')
- 
- # sound-theme-freedesktop
-+notifications_path = ''
- if os_type == 'Linux':
-     notifications_path = '/usr/share/sounds/freedesktop/stereo/'
- elif os_type == 'FreeBSD' or os_type == 'OpenBSD':
 @@ -139,7 +136,7 @@ if sys.argv[1] == "test":
  
  DESCRIPTION = 'Persepolis Download Manager'

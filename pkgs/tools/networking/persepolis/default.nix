@@ -27,11 +27,8 @@ buildPythonApplication rec {
     sha256 = "sha256-2S6s/tWhI9RBFA26jkwxYTGeaok8S8zv/bY+Zr8TOak=";
   };
 
-  # see: https://github.com/persepolisdm/persepolis/blob/3.2.0/setup.py#L130
-  doCheck = false;
-
   # Make setup automatic
-  preBuild= ''
+  preBuild = ''
     substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
   '';
 
@@ -45,8 +42,13 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    sed -i 's|/usr/share/sounds/freedesktop/stereo/|${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/|' setup.py
     sed -i "s|'persepolis = persepolis.__main__'|'persepolis = persepolis.scripts.persepolis:main'|" setup.py
+
+    # Ensure dependencies with hard-coded FHS paths are properly detected
+    substituteInPlace setup.py --replace-fail "isdir(notifications_path)" "isdir('${sound-theme-freedesktop}/share/sounds/freedesktop')"
+
+    # Fix oversight in test script (can be removed once https://github.com/persepolisdm/persepolis/pull/942 is merged upstream)
+    substituteInPlace setup.py --replace-fail "sys.exit('0')" "sys.exit(0)"
   '';
 
   postInstall = ''
@@ -62,6 +64,16 @@ buildPythonApplication rec {
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ aria2 ffmpeg libnotify ]}"
     "\${qtWrapperArgs[@]}"
+  ];
+
+  # The presence of these dependencies is checked during setuptoolsCheckPhase,
+  # but apart from that, they're not required during build, only runtime
+  nativeCheckInputs = [
+    aria2
+    libnotify
+    pulseaudio
+    sound-theme-freedesktop
+    ffmpeg
   ];
 
   propagatedBuildInputs = [
