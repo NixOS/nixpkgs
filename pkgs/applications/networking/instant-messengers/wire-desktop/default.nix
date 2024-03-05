@@ -3,23 +3,22 @@
 , fetchurl
 , makeDesktopItem
 , makeWrapper
-, stdenv
+, stdenvNoCC
 , lib
 , udev
 , wrapGAppsHook
-, cpio
-, xar
 , libdbusmenu
 , alsa-lib
 , mesa
 , nss
 , nspr
 , systemd
+, darwin
 }:
 
 let
 
-  inherit (stdenv.hostPlatform) system;
+  inherit (stdenvNoCC.hostPlatform) system;
 
   throwSystem = throw "Unsupported system: ${system}";
 
@@ -69,7 +68,7 @@ let
     hydraPlatforms = [];
   };
 
-  linux = stdenv.mkDerivation rec {
+  linux = stdenvNoCC.mkDerivation rec {
     inherit pname version meta;
 
     src = fetchurl {
@@ -143,7 +142,7 @@ let
     '';
   };
 
-  darwin = stdenv.mkDerivation {
+  darwin' = darwin.installBinaryPackage {
     inherit pname version meta;
 
     src = fetchurl {
@@ -151,39 +150,10 @@ let
       inherit hash;
     };
 
-    buildInputs = [
-      cpio
-      xar
-    ];
-
-    unpackPhase = ''
-      runHook preUnpack
-
-      xar -xf $src
-      cd com.wearezeta.zclient.mac.pkg
-
-      runHook postUnpack
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      cat Payload | gunzip -dc | cpio -i
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/Applications
-      cp -r Wire.app $out/Applications
-
-      runHook postInstall
-    '';
+    appName = "Wire.app";
   };
 
 in
-if stdenv.isDarwin
-then darwin
+if stdenvNoCC.isDarwin
+then darwin'
 else linux
