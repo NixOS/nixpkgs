@@ -4367,7 +4367,9 @@ with pkgs;
     charles4
   ;
 
-  quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
+  quaternion-qt5 = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
+  quaternion-qt6 = qt6Packages.callPackage ../applications/networking/instant-messengers/quaternion { };
+  quaternion = quaternion-qt6;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
