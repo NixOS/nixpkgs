@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EnpwYtBpY+s5FVI2jhaFHTtAKHeaRlZVnWE/o2T1+FY=";
   };
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = {
     description = "High quality system independent, portable, open source libm implementation";
