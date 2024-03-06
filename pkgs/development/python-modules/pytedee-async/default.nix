@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pytedee-async";
-  version = "0.2.14";
+  version = "0.2.15";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "zweckj";
     repo = "pytedee_async";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BtBHiDOYe8BkrqJEGG4eGKFMnCspCQK4fvcj2vvGmFM=";
+    hash = "sha256-in5umB3ewrx5de1OaWI1XpDaNgy2ZtLYr4lCswhcayg=";
   };
 
   nativeBuildInputs = [
