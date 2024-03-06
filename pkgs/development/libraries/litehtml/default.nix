@@ -5,14 +5,14 @@
 , gumbo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "litehtml";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "litehtml";
     repo = "litehtml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9571d3k8RkzEpMWPuIejZ7njLmYstSwFUaSqT3sk6uQ=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ fgaz ];
   };
-}
+})

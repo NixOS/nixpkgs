@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "popeye";
@@ -18,6 +18,15 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-ThldEPzAwMfNnhUEgHL5/asc+SETKxTrPIJt307tqsg=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd popeye \
+      --bash <($out/bin/popeye completion bash) \
+      --fish <($out/bin/popeye completion fish) \
+      --zsh <($out/bin/popeye completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

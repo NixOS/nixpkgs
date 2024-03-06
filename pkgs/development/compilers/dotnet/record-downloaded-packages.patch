@@ -1,0 +1,42 @@
+From a5a4a77dd77ed5c997bec6519adf7b6be3108af2 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 31 Dec 2023 01:48:31 -0400
+Subject: [PATCH 2/2] record downloaded packages
+
+---
+ .../buildBootstrapPreviouslySB.csproj         |  6 +++++
+ repo-projects/Directory.Build.targets         | 27 +++++++++++++++++++
+ 2 files changed, 33 insertions(+)
+
+diff --git a/eng/bootstrap/buildBootstrapPreviouslySB.csproj b/eng/bootstrap/buildBootstrapPreviouslySB.csproj
+index d85e32ca76..280c9eaf89 100644
+--- a/eng/bootstrap/buildBootstrapPreviouslySB.csproj
++++ b/eng/bootstrap/buildBootstrapPreviouslySB.csproj
+@@ -102,6 +102,12 @@
+     </ItemGroup>
+   </Target>
+ 
++  <Target Name="NuGetToNix" AfterTargets="Restore">
++    <Exec
++        Command="nuget-to-nix $(RestorePackagesPath) >$(ArchiveDir)deps.nix 2>&amp;1"
++        WorkingDirectory="$(MSBuildProjectDirectory)"/>
++  </Target>
++
+   <Target Name="BuildBoostrapPreviouslySourceBuilt"
+           AfterTargets="Restore"
+           DependsOnTargets="GetPackagesToDownload">
+diff --git a/repo-projects/Directory.Build.targets b/repo-projects/Directory.Build.targets
+index 3fa15da862..afd7b87088 100644
+--- a/repo-projects/Directory.Build.targets
++++ b/repo-projects/Directory.Build.targets
+@@ -471,6 +497,7 @@
+     <ItemGroup>
+       <LogFilesToCopy Include="$(ProjectDirectory)artifacts/**/*.log" />
+       <LogFilesToCopy Include="$(ProjectDirectory)artifacts/**/*.binlog" />
++      <LogFilesToCopy Include="$(ProjectDirectory)artifacts/**/deps.nix" />
+       <ObjFilesToCopy Include="$(ProjectDirectory)artifacts/**/project.assets.json" />
+     </ItemGroup>
+     <MakeDir Directories="$(BuildLogsDir)" Condition="Exists('$(ProjectDirectory)artifacts')"/>
+-- 
+2.40.1
+

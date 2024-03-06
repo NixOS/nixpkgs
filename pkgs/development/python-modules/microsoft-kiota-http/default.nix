@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-http";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-http-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N3+oAH3yWgrl0v2fm4xdCxzj7u/0fbQI3xHFht39vzA=";
+    hash = "sha256-I16WARk6YBr8KgE9MtHcA5VdsnLXBKcZOaqRL/eqwKE=";
   };
 
   nativeBuildInputs = [

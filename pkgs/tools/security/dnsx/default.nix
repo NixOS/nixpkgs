@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dnsx";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "dnsx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gfznhNW9EmUuKrgxhQD4jKO4raQedTsg/ZcpscymQTs=";
+    hash = "sha256-scp0CDIO8F2TqpSCgXXfb8I83stvO/GZqSA5/BkN8pE=";
   };
 
-  vendorHash = "sha256-/fZaUJHP5HwwLBdeNq6iMhfdJ1DYt6YVeHP4ZGmYffg=";
+  vendorHash = "sha256-WbFkBTPy4N+mAVSkq1q9XcNs1jk6YuBcYxiEmQV/TsM=";
 
   # Tests require network access
   doCheck = false;

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wl-screenrec";
-  version = "unstable-2023-09-17";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "russelltg";
     repo = pname;
-    rev = "a36c5923009b44f2131196d8a3a234948f8e0102";
-    hash = "sha256-V29eB9vozVKIBq8dO7zgA4nirsh1eDBjJN+rwVkeDLE=";
+    rev = "v${version}";
+    hash = "sha256-ThPZPV1GyMFRu94O9WwUpXbR4gnIML26K7TyIfXZlcI=";
   };
 
-  cargoHash = "sha256-uUfEweLWn/NdqgY8O7Ld+YnGPKQV1tpJi/Gd4MZB4xI=";
+  cargoHash = "sha256-DtlVsUFKNKXcwqNvGvqkSKUE+kRHX8wajL4fR0c9ZuQ=";
 
   nativeBuildInputs = [
     pkg-config
