@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.27.0";
+  version = "1.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ALdAT+C5LBTrSAXk6ko9KidutN5Tub+ufDAxfZsSGtk=";
+    hash = "sha256-80syqWoK2J+CjsBFO6LJEuF+pimJGpufgRLObHSKcAw=";
   };
 
   nativeBuildInputs = [

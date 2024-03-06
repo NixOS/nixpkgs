@@ -29,13 +29,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer-local-repo-plugin";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "composer-local-repo-plugin";
     rev = finalAttrs.version;
-    hash = "sha256-fLJlxcAQ7X28GDK8PVYKxJgTzbspfWxvgRmRK4NZRIA=";
+    hash = "sha256-edbn07r/Uc1g0qOuVBZBs6N1bMN5kIfA1b4FCufdw5M=";
   };
 
   COMPOSER_CACHE_DIR = "/dev/null";
