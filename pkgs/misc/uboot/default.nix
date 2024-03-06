@@ -26,10 +26,10 @@
 }:
 
 let
-  defaultVersion = "2023.07.02";
+  defaultVersion = "2024.01";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
+    hash = "sha256-uZYR8e0je/NUG9yENLaMlqbgWWcGH5kkQ8swqr6+9bM=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
