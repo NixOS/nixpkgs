@@ -494,6 +494,7 @@ with lib.maintainers; {
     members = [
       aanderse
       cpages
+      dschrempf
       edwtjo
       minijackson
       peterhoeg
