@@ -11,6 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HUC+8Vd0koAmumRZ8gS5u6LVa7fUfkIYRaxVv6/7Hgg=";
   };
 
+  postPatch = ''
+    substituteInPlace \
+      configure \
+        --replace \
+          'COMPILER=`./.1 2> /dev/null`' \
+          "COMPILER=gcc"
+  '';
+
+  configureFlags = ["--platform=${stdenv.hostPlatform.parsed.cpu.name}}"];
+
   dontDisableStatic = true;
 
   meta = with lib; {
