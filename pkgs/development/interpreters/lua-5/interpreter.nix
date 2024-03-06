@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs:
 
   # we can't pass flags to the lua makefile because for portability, everything is hardcoded
   postPatch = ''
-    sed -e '/#define LUA_ROOT/c #define LUA_ROOT "${placeholder "out"}/"' -i src/luaconf.h  
+    sed -e '/#define LUA_ROOT/c #define LUA_ROOT "${placeholder "out"}/"' -i src/luaconf.h
   '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
