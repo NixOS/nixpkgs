@@ -193,10 +193,10 @@ luaposix = buildLuarocksPackage {
   disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ bit32 lua std_normalize ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
-    maintainers = with maintainers; [ vyp lblasc ];
+    maintainers = with lib.maintainers; [ vyp lblasc ];
     license.fullName = "MIT/X11";
   };
 };

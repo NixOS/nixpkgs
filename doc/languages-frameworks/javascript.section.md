@@ -184,11 +184,11 @@ buildNpmPackage rec {
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
-  meta = with lib; {
+  meta = {
     description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ winter ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ winter ];
   };
 }
 ```
