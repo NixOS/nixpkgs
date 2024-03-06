@@ -885,10 +885,7 @@ rec {
      Type:
        zipAttrs :: [ AttrSet ] -> AttrSet
   */
-  zipAttrs =
-    # List of attribute sets to zip together.
-    sets:
-    zipAttrsWith (name: values: values) sets;
+  zipAttrs = zipAttrsWith (name: values: values);
 
   /*
     Merge a list of attribute sets together using the `//` operator.
