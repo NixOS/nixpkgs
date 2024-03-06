@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "wslutilities";
-    repo = pname;
+    repo = "wslu";
     rev = "v${version}";
     hash = "sha256-yhugh836BoSISbTu19ubLOrz5X31Opu5QtCR0DXrbWc=";
   };
