@@ -513,6 +513,7 @@ let
     textshaping = [ pkgs.pkg-config ];
     ragg = [ pkgs.pkg-config ];
     qqconf = [ pkgs.pkg-config ];
+    vapour = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -656,6 +657,7 @@ let
     ijtiff = [ pkgs.libtiff ];
     ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ];
     qqconf = [ pkgs.fftw.dev ];
+    vapour = with pkgs; [ proj.dev gdal ];
   };
 
   packagesRequiringX = [
