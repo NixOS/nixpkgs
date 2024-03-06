@@ -22,11 +22,17 @@ mkDerivation rec {
   };
 
   patches = [
+    # Fixes build with SIP 6.8
     (fetchpatch {
-      name = "krita-opencolorio-2.3-compat.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/520c633c2c868f2236d8e56eefecdcb6e3ebd840.patch";
-      hash = "sha256-eXsgBN8OnKjZOQsOxViPypts6CVh3L+IYKMB/mDUcfQ=";
-      includes = [ "plugins/dockers/lut/ocio_display_filter_vfx2021.cpp" ];
+      name = "bump-SIP-ABI-version-to-12.8.patch";
+      url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
+      hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
+    })
+    # Fixes build with libjxl 0.9.0
+    (fetchpatch {
+      name = "fix-build-with-libjxl-0.9.0.patch";
+      url = "https://invent.kde.org/graphics/krita/-/commit/ace7edcca6ad322581ab39620f21ccf3ffbd3b5a.diff";
+      hash = "sha256-dXk4+HNS0+Ie/8V4+Oj4rBJrJbNHG57gIzPymXLEc9M=";
     })
   ];
 

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+, regex
 , requests
 , pythonOlder
 }:
@@ -20,11 +21,17 @@ buildPythonPackage rec {
     hash = "sha256-Xgd0E/oFO2yyytBjuwr1vDJfKWC0Iw8P6GStCuCni/g=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace ", 'datetime'" ""
+  '';
+
   nativeBuildInputs = [
     setuptools
   ];
 
   propagatedBuildInputs = [
+    regex
     requests
   ];
 

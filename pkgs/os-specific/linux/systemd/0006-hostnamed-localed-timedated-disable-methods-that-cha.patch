@@ -11,7 +11,7 @@ Subject: [PATCH] hostnamed, localed, timedated: disable methods that change
  3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index 9ef45f8e75..99b1ec2e36 100644
+index e1d53f2395..a224e6dadc 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
 @@ -1053,6 +1053,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
@@ -35,7 +35,7 @@ index 9ef45f8e75..99b1ec2e36 100644
  
          context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index f544a73580..ce00c262cc 100644
+index 5d96237fae..9af35cd29c 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
 @@ -229,6 +229,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
@@ -69,10 +69,10 @@ index f544a73580..ce00c262cc 100644
  
          r = x11_context_verify_and_warn(&in, LOG_ERR, error);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index ad1d492d6b..331af34505 100644
+index c7be30f563..50f8aa8675 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
-@@ -665,6 +665,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
+@@ -659,6 +659,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
          if (r < 0)
                  return r;
  
@@ -83,7 +83,7 @@ index ad1d492d6b..331af34505 100644
          if (!timezone_is_valid(z, LOG_DEBUG))
                  return sd_bus_error_setf(error, SD_BUS_ERROR_INVALID_ARGS, "Invalid or not installed time zone '%s'", z);
  
-@@ -743,6 +747,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
+@@ -737,6 +741,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
          if (r < 0)
                  return r;
  
@@ -93,7 +93,7 @@ index ad1d492d6b..331af34505 100644
          if (lrtc == c->local_rtc && !fix_system)
                  return sd_bus_reply_method_return(m, NULL);
  
-@@ -923,6 +930,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+@@ -917,6 +924,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
          if (r < 0)
                  return r;
  

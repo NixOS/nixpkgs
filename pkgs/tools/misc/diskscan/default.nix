@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diskscan";
-  version = "0.20";
+  version = "0.21";
 
   src = fetchFromGitHub {
     owner  = "baruch";
     repo   = "diskscan";
     rev    = version;
-    sha256 = "1s2df082yrnr3gqnapdsqz0yd0ld75bin37g0rms83ymzkh4ysgv";
+    sha256 = "sha256-2y1ncPg9OKxqImBN5O5kXrTsuwZ/Cg/8exS7lWyZY1c=";
   };
 
   buildInputs = [ ncurses zlib ];

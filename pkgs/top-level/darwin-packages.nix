@@ -196,6 +196,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     xcode_12 xcode_12_0_1 xcode_12_1 xcode_12_2 xcode_12_3 xcode_12_4 xcode_12_5 xcode_12_5_1
     xcode_13 xcode_13_1 xcode_13_2 xcode_13_3 xcode_13_3_1 xcode_13_4 xcode_13_4_1
     xcode_14 xcode_14_1
+    xcode_15 xcode_15_1
     xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
@@ -233,7 +234,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
-  # See doc/builders/special/darwin-builder.section.md
+  # See doc/packages/darwin-builder.section.md
   linux-builder = lib.makeOverridable ({ modules }:
     let
       toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];

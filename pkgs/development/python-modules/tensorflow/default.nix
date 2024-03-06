@@ -29,7 +29,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security, cctools, llvmPackages_11
+, Foundation, Security, cctools, llvmPackages
 }:
 
 let
@@ -51,7 +51,7 @@ let
   # translation units, so the build fails at link time
   stdenv =
     if cudaSupport then cudaPackagesGoogle.backendStdenv
-    else if originalStdenv.isDarwin then llvmPackages_11.stdenv
+    else if originalStdenv.isDarwin then llvmPackages.stdenv
     else originalStdenv;
   inherit (cudaPackagesGoogle) cudatoolkit nccl;
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
@@ -480,6 +480,7 @@ let
     };
 
     meta = with lib; {
+      badPlatforms = lib.optionals cudaSupport lib.platforms.darwin;
       changelog = "https://github.com/tensorflow/tensorflow/releases/tag/v${version}";
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";

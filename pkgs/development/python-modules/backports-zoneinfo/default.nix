@@ -46,7 +46,7 @@ buildPythonPackage rec {
     (substituteAll {
       name = "zoneinfo-path";
       src = ./zoneinfo.patch;
-      zoneinfo = "${tzdata}/lib/${python.libPrefix}/site-packages/tzdata/zoneinfo";
+      zoneinfo = "${tzdata}/${python.sitePackages}/tzdata/zoneinfo";
     })
   ];
 

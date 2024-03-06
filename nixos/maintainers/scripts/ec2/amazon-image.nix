@@ -157,4 +157,6 @@ in {
       '';
     };
   in if config.ec2.zfs.enable then zfsBuilder else extBuilder;
+
+  meta.maintainers = with maintainers; [ arianvp ];
 }

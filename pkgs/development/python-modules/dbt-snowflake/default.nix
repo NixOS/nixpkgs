@@ -1,22 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , dbt-core
+, fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
+, setuptools
 , snowflake-connector-python
 }:
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.6.2";
-  format = "setuptools";
+  version = "1.7.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-snowflake";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AOO3VbU1R3/snH7U7K9XXokBGXtf9Udpv7eR5HCBxss=";
+    hash = "sha256-OyUBqSNHMedCDsY280O8VAmxeyeF5J0snk5o6XhE2V4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     dbt-core

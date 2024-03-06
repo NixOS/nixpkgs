@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.73";
+  version = "1.4.74";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gYgW0LMUsKqHKKcHZRNDX21esifzthMjRo4fENvoTKg=";
+    sha256 = "sha256-XAhzboMIj34Bl5cVnzBuiOxymr6XbcmPs77XG50+U7U=";
   };
 
   postPatch = ''
@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor brecht ];
+    mainProgram = "lighttpd";
   };
 }

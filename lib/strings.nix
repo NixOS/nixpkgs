@@ -95,8 +95,7 @@ rec {
         concatStringsSep "/" ["usr" "local" "bin"]
         => "usr/local/bin"
   */
-  concatStringsSep = builtins.concatStringsSep or (separator: list:
-    lib.foldl' (x: y: x + y) "" (intersperse separator list));
+  concatStringsSep = builtins.concatStringsSep;
 
   /* Maps a function over a list of strings and then concatenates the
      result with the specified separator interspersed between
@@ -561,7 +560,7 @@ rec {
     ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
 
   # warning added 12-12-2022
-  replaceChars = lib.warn "replaceChars is a deprecated alias of replaceStrings, replace usages of it with replaceStrings." builtins.replaceStrings;
+  replaceChars = lib.warn "lib.replaceChars is a deprecated alias of lib.replaceStrings." builtins.replaceStrings;
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -1039,22 +1038,24 @@ rec {
        toInt "3.14"
        => error: floating point JSON numbers are not supported
   */
-  toInt = str:
+  toInt =
+    let
+      matchStripInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*";
+      matchLeadingZero = match "0[[:digit:]]+";
+    in
+    str:
     let
       # RegEx: Match any leading whitespace, possibly a '-', one or more digits,
       # and finally match any trailing whitespace.
-      strippedInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*" str;
+      strippedInput = matchStripInput str;
 
       # RegEx: Match a leading '0' then one or more digits.
-      isLeadingZero = match "0[[:digit:]]+" (head strippedInput) == [];
+      isLeadingZero = matchLeadingZero (head strippedInput) == [];
 
       # Attempt to parse input
       parsedInput = fromJSON (head strippedInput);
 
       generalError = "toInt: Could not convert ${escapeNixString str} to int.";
-
-      octalAmbigError = "toInt: Ambiguity in interpretation of ${escapeNixString str}"
-      + " between octal and zero padded integer.";
 
     in
       # Error on presence of non digit characters.
@@ -1062,7 +1063,7 @@ rec {
       then throw generalError
       # Error on presence of leading zero/octal ambiguity.
       else if isLeadingZero
-      then throw octalAmbigError
+      then throw "toInt: Ambiguity in interpretation of ${escapeNixString str} between octal and zero padded integer."
       # Error if parse function fails.
       else if !isInt parsedInput
       then throw generalError
@@ -1090,15 +1091,20 @@ rec {
        toIntBase10 "3.14"
        => error: floating point JSON numbers are not supported
   */
-  toIntBase10 = str:
+  toIntBase10 =
+    let
+      matchStripInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*";
+      matchZero = match "0+";
+    in
+    str:
     let
       # RegEx: Match any leading whitespace, then match any zero padding,
       # capture possibly a '-' followed by one or more digits,
       # and finally match any trailing whitespace.
-      strippedInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*" str;
+      strippedInput = matchStripInput str;
 
       # RegEx: Match at least one '0'.
-      isZero = match "0+" (head strippedInput) == [];
+      isZero = matchZero (head strippedInput) == [];
 
       # Attempt to parse input
       parsedInput = fromJSON (head strippedInput);
@@ -1133,7 +1139,7 @@ rec {
             "/prefix/nix-profiles-library-paths.patch"
             "/prefix/compose-search-path.patch" ]
   */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
+  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead."
     (rootPath: file:
       let
         lines = lib.splitString "\n" (readFile file);

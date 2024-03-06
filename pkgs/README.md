@@ -346,13 +346,17 @@ There are a few naming guidelines:
 
 - The `pname` attribute _should_ be identical to the upstream package name.
 
-- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
+- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer"` instead of `"MPlayer"`.
 
-- The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
+- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"`.
 
 - If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
 
 Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+
+- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning / tagging schema - then the latest upstream version in the above schema should be `0`.
+
+Example: Given a project that has no tags / released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
 
 - Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
@@ -380,7 +384,13 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 * `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
-* `meta.mainProgram` must be set when appropriate.
+* `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
+  * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`. For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.
+  * Packages like `polkit_gnome` that have no executables in the applicable directory should not set `meta.mainProgram`.
+  * Packages like `e2fsprogs` that have multiple executables, none of which can be considered the main program, should not set `meta.mainProgram`.
+  * Packages which are not primarily used for a single executable do not need to set `meta.mainProgram`.
+  * Always prefer using a hardcoded string (don't use `pname`, for example).
+  * When in doubt, ask for reviewer input.
 * `meta.maintainers` must be set for new packages.
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
@@ -406,7 +416,6 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 
   ```nix
   src = fetchgit {
-    url = "git@github.com:NixOS/nix.git"
     url = "git://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
     hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";

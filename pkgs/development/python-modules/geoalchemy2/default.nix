@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.14.2";
+  version = "0.14.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     rev = "refs/tags/${version}";
-    hash = "sha256-C/F1hpL2DnzC4UPAGGFntlQlULCx5Ufzkw7EIrzRV7I=";
+    hash = "sha256-s3+w6LtewjR725O8ENl7jRer979fRZDqsnbAYJOWcIY=";
   };
 
   nativeBuildInputs = [
@@ -39,10 +39,6 @@ buildPythonPackage rec {
     alembic
     pytestCheckHook
   ] ++ passthru.optional-dependencies.shapely;
-
-  env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  };
 
   disabledTestPaths = [
     # tests require live databases

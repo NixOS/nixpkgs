@@ -8,19 +8,8 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.49";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-Bv8ly64ww5bEt3N0ZPKn/Deme32kCZk7GCsCTOyArtk=";
-        };
-        # Remove "test/typing" that does not exist
-        disabledTestPaths = [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      });
+      sqlalchemy = super.sqlalchemy_1_4;
+
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.5";
 
@@ -36,21 +25,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fit-trackee";
-  version = "0.7.22";
+  version = "0.7.31";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     rev = "v${version}";
-    hash = "sha256-aPQ8jLssN9nx0Bpd/44E3sQi2w0cR8ecG76DJjreeHA=";
+    hash = "sha256-qKUdpuxslhS6k9EiWvbU/0hSXH1y9mjhXs02pugTF3g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace psycopg2-binary psycopg2 \
-      --replace 'poetry>=0.12' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
+      --replace-fail psycopg2-binary psycopg2 \
+      --replace-fail 'flask = "^3.0.2"' 'flask = "*"' \
+      --replace-fail 'pyopenssl = "^24.0.0"' 'pyopenssl = "*"' \
+      --replace-fail 'sqlalchemy = "=1.4.51"' 'sqlalchemy = "*"'
   '';
 
   nativeBuildInputs = [
@@ -66,6 +56,7 @@ python.pkgs.buildPythonApplication rec {
     flask-dramatiq
     flask-limiter
     flask-migrate
+    flask-sqlalchemy
     gpxpy
     gunicorn
     humanize

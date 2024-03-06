@@ -7,31 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "acl";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "mirror://savannah/acl/acl-${version}.tar.gz";
-    sha256 = "sha256-dgxhxokBs3/dXu/ur0wMeia9/disdHoe3/HODiQ8Ea8=";
+    hash = "sha256-XyvbrWKXB6p9hcYj+ZSqih0t7FWnPeUgW6wL9gWKL3w=";
   };
-
-  patches = [
-    ./LFS64.patch
-  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];
 
-  # causes failures in coreutils test suite
-  hardeningDisable = [ "fortify3" ];
-
-  # Upstream use C++-style comments in C code. Remove them.
-  # This comment breaks compilation if too strict gcc flags are used.
   postPatch = ''
-    echo "Removing C++-style comments from include/acl.h"
-    sed -e '/^\/\//d' -i include/acl.h
-
     patchShebangs .
   '';
 

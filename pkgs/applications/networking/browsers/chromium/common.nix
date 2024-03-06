@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, fetchzip, zstd
+, recompressTarball
 , buildPackages
 , pkgsBuildBuild
 , pkgsBuildTarget
@@ -25,7 +25,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libcap
-, xdg-utils, minizip, libwebp
+, minizip, libwebp
 , libusb1, re2
 , ffmpeg, libxslt, libxml2
 , nasm
@@ -148,33 +148,6 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
-  recompressTarball = { version, hash ? "" }: fetchzip {
-    name = "chromium-${version}.tar.zstd";
-    url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-    inherit hash;
-
-    nativeBuildInputs = [ zstd ];
-
-    postFetch = ''
-      echo removing unused code from tarball to stay under hydra limit
-      rm -r $out/third_party/{rust-src,llvm}
-
-      echo moving remains out of \$out
-      mv $out source
-
-      echo recompressing final contents into new tarball
-      # try to make a deterministic tarball
-      tar \
-        --use-compress-program "zstd -T$NIX_BUILD_CORES" \
-        --sort name \
-        --mtime 1970-01-01 \
-        --owner=root --group=root \
-        --numeric-owner --mode=go=rX,u+rw,a-s \
-        -cf $out source
-    '';
-  };
-
-
   base = rec {
     pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
     inherit (upstream-info) version;
@@ -211,9 +184,6 @@ let
       bzip2 flac speex opusWithCustomModes
       libevent expat libjpeg snappy
       libcap
-    ] ++ lib.optionals (!xdg-utils.meta.broken) [
-      xdg-utils
-    ] ++ [
       minizip libwebp
       libusb1 re2
       ffmpeg libxslt libxml2
@@ -246,17 +216,9 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
-    ] ++ lib.optionals (!chromiumVersionAtLeast "120") [
-      # We need to revert this patch to build M114+ with LLVM 16:
-      (githubPatch {
-        # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
-        commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
-        hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
-        revert = true;
-      })
     ] ++ lib.optionals (chromiumVersionAtLeast "120") [
-      # We need to revert this patch to build M120+ with LLVM 16:
-      ./patches/chromium-120-llvm-16.patch
+      # We need to revert this patch to build M120+ with LLVM 17:
+      ./patches/chromium-120-llvm-17.patch
     ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
       # Fix build with at-spi2-core ≥ 2.49
       # This version is still needed for electron.
@@ -271,6 +233,11 @@ let
         commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
         hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
       })
+    ] ++ lib.optionals (chromiumVersionAtLeast "121") [
+      # M121 is the first version to require the new rust toolchain.
+      # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
+      # allowing us to use our rustc and our clang.
+      ./patches/chromium-121-rust.patch
     ];
 
     postPatch = ''
@@ -324,10 +291,6 @@ let
         --replace \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
-
-    '' + lib.optionalString (!xdg-utils.meta.broken) ''
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
-        chrome/browser/shell_integration_linux.cc
 
     '' + lib.optionalString systemdSupport ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -435,11 +398,15 @@ let
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
-      # We do intentionally not set rustc_version as nixpkgs will never do incremental
-      # rebuilds, thus leaving this empty is fine.
       rust_sysroot_absolute = "${buildPackages.rustc}";
-      # Building with rust is disabled for now - this matches the flags in other major distributions.
+      # Rust is enabled for M121+, see next section:
       enable_rust = false;
+    } // lib.optionalAttrs (chromiumVersionAtLeast "121") {
+      # M121 the first version to actually require a functioning rust toolchain
+      enable_rust = true;
+      # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
+      # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
+      rustc_version = buildPackages.rustc.version;
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
       # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
       arm_control_flow_integrity = "none";
@@ -453,6 +420,13 @@ let
       link_pulseaudio = true;
     } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
     // (extraAttrs.gnFlags or {}));
+
+    # We cannot use chromiumVersionAtLeast in mkDerivation's env attrset due
+    # to infinite recursion when chromium.override is used (e.g. electron).
+    # To work aroud this, we use export in the preConfigure phase.
+    preConfigure = lib.optionalString (chromiumVersionAtLeast "121") ''
+      export RUSTC_BOOTSTRAP=1
+    '';
 
     configurePhase = ''
       runHook preConfigure

@@ -3,8 +3,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 , furl
+, hatchling
 , jsonschema
-, nose
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -13,16 +14,21 @@
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.1.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "1.3.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";
-    repo = pname;
+    repo = "pook";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nLeJAAsJUKFAetZSAQmOtXP+3ZRHvCTFAzycSkK+kiI=";
+    hash = "sha256-0sS2QJcshMuxxCGlrcVHeIQnVMZbBoJfLsRIxpvl7pM=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -33,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -41,8 +47,15 @@ buildPythonPackage rec {
     "pook"
   ];
 
+  disabledTestPaths = [
+    # Don't test integrations
+    "tests/integration/"
+    # Tests require network access
+    "tests/unit/interceptors/"
+  ];
+
   meta = with lib; {
-    description = "HTTP traffic mocking and testing made simple in Python";
+    description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
     changelog = "https://github.com/h2non/pook/blob/v${version}/History.rst";
     license = with licenses; [ mit ];

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-text";
-  version = "3.11.1";
+  version = "3.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jaraco.text";
     inherit version;
-    hash = "sha256-Mzpd8hSPcTlxhgfN81L+HZUWKXGnKZw4Dcwk2rAWiYA=";
+    hash = "sha256-OJ4lyNSzLpcVv1MFlvqw9c06pHKW5DlpOS4YpUGvWSw=";
   };
 
   pythonNamespaces = [

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudhunter";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "belane";
     repo = "CloudHunter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yRl3x1dboOcoPeKxpUEhDk8OJx1hynEJRHL9/Su8OyA=";
+    hash = "sha256-7iT4vr0kcNXEyJJdBbJsllIcbZRGY3T5t/FjEONkuq0=";
   };
 
   postPatch = ''

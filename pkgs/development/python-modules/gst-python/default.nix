@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.7";
+  version = "1.22.9";
 
   format = "other";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-HvjfdggBL6RpMpeZyVDsCHc3ptq60wA8IwZYtYxxAXI=";
+    url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
+    hash = "sha256-P51cb/79omhwN0S1kqazmDqmcjJzsSIOy8tiwqWAAAk=";
   };
 
   # Python 2.x is not supported.

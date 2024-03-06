@@ -4,7 +4,7 @@
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
-, openssl, openssl_1_1
+, openssl
 , linuxPackages, libsystemtap
 } @ args:
 
@@ -20,17 +20,16 @@ let
 
   generic = { version, hash, cargoHash ? null }: let
     ver = version;
-    atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     atLeast31 = lib.versionAtLeast ver.majMin "3.1";
     atLeast32 = lib.versionAtLeast ver.majMin "3.2";
     # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
     yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
-    self = lib.makeOverridable (
+    rubyDrv = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
-      , openssl, openssl_1_1, opensslSupport ? true
+      , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
       , ncurses, readline, cursesSupport ? true
       , groff, docSupport ? true
@@ -59,7 +58,7 @@ let
         }
       , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
       }:
-      stdenv.mkDerivation rec {
+      stdenv.mkDerivation ( finalAttrs: {
         pname = "ruby";
         inherit version;
 
@@ -84,8 +83,7 @@ let
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op (atLeast30 && opensslSupport) openssl)
-          ++ (op (!atLeast30 && opensslSupport) openssl_1_1)
+          ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses
@@ -103,7 +101,7 @@ let
         enableParallelInstalling = false;
 
         patches = op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useBaseRuby) (
+          ++ op useBaseRuby (
             if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch
             else ./do-not-update-gems-baseruby.patch
           )
@@ -114,21 +112,6 @@ let
               hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
             })
          ]
-          ++ ops (!atLeast30 && rubygemsSupport) [
-            # We upgrade rubygems to a version that isn't compatible with the
-            # ruby 2.7 installer. Backport the upstream fix.
-            ./rbinstall-new-rubygems-compat.patch
-
-            # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
-            # the resulting error was swallowed. Newer rubygems no longer swallows
-            # this error. We upgrade rubygems when rubygemsSupport is enabled, so
-            # we have to fix this bug to prevent the install step from failing.
-            # See https://github.com/ruby/ruby/pull/2930
-            (fetchpatch {
-              url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
-              hash = "sha256-HqfaevMYuIVOsdEr+CnjnUqr2IrH5fkW2uKzzoqIMXM=";
-            })
-          ]
           ++ ops atLeast31 [
             # When using a baseruby, ruby always sets "libdir" to the build
             # directory, which nix rejects due to a reference in to /build/ in
@@ -140,25 +123,20 @@ let
         cargoRoot = opString yjitSupport "yjit";
 
         cargoDeps = if yjitSupport then rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = "${pname}-${version}/${cargoRoot}";
+          inherit (finalAttrs) src;
+          sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
           hash = cargoHash;
         } else null;
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
           cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
-          cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
         postPatch = ''
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
-        '' + opString (!atLeast30) ''
-          # Make the build reproducible for ruby <= 2.7
-          # See https://github.com/ruby/io-console/commit/679a941d05d869f5e575730f6581c027203b7b26#diff-d8422f096931c58d4463e2489f62a228b0f24f0492950ba88c8c89a0d741cfe6
-          sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
         configureFlags = [
@@ -197,8 +175,8 @@ let
 
         preInstall = ''
           # Ruby installs gems here itself now.
-          mkdir -pv "$out/${passthru.gemPath}"
-          export GEM_HOME="$out/${passthru.gemPath}"
+          mkdir -pv "$out/${finalAttrs.passthru.gemPath}"
+          export GEM_HOME="$out/${finalAttrs.passthru.gemPath}"
         '';
 
         installFlags = lib.optional docSupport "install-doc";
@@ -224,19 +202,21 @@ let
 
           # Allow to override compiler. This is important for cross compiling as
           # we need to set a compiler that is different from the build one.
-          sed -i 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/'  "$rbConfig"
+          sed -i "$rbConfig" \
+            -e 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/' \
+            -e 's/CONFIG\["CXX"\] = "\(.*\)"/CONFIG["CXX"] = if ENV["CXX"].nil? || ENV["CXX"].empty? then "\1" else ENV["CXX"] end/'
 
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
+          extMakefiles=$(find $out/${finalAttrs.passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
-          find "$out/${passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
+          find "$out/${finalAttrs.passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
           addGemPath() {
-            addToSearchPath GEM_PATH \$1/${passthru.gemPath}
+            addToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
           }
           addRubyLibPath() {
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
@@ -296,30 +276,24 @@ let
           gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
           devEnv = import ./dev.nix {
             inherit buildEnv bundler bundix;
-            ruby = self;
+            ruby = finalAttrs.finalPackage;
           };
 
           inherit rubygems;
           inherit (import ../../ruby-modules/with-packages {
             inherit lib stdenv makeBinaryWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
-            ruby = self;
+            ruby = finalAttrs.finalPackage;
           }) withPackages buildGems gems;
-
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
         };
-      }
-    ) args; in self;
+      } )
+    ) args; in rubyDrv;
 
 in {
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
-
-  ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "8" "";
-    hash = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
-  };
 
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "4" "";
@@ -327,14 +301,14 @@ in {
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "2" "";
-    hash = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
+    version = rubyVersion "3" "2" "3" "";
+    hash = "sha256-r38XV9ndtjA0WYgTkhHx/VcP9bqDDe8cx8Rorptlybo=";
     cargoHash = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "0" "rc1";
-    hash = "sha256-xP+COVqQ73bH+Qa3aHAm4KuWsJTc86Uy2auXeEoHMiI=";
+    version = rubyVersion "3" "3" "0" "";
+    hash = "sha256-llGIFNmDK+zpKoVBWoGdSJOzB9tZIa4fD3Uamomla30=";
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 

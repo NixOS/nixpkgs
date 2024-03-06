@@ -12,22 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gFba2wOU4GwpOZTo5A2QpBgnC6OgDJEeyaPGHbA+7tA=";
+    sha256 = "sha256-9ccp5Pxhs7jOQuWHCmU9yvzLKeOAN8lEaieCIvnXJRA=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-36192.patch";
-      url = "https://github.com/irontec/sngrep/commit/ad1daf15c8387bfbb48097c25197bf330d2d98fc.patch";
-      hash = "sha256-g8fxvxi3d7jmZEKTbxqw29hJbm/ShsKKxstsOUGxTug=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf

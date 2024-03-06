@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.28.0";
+  version = "0.29.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-clLNw6yy9S/qo2ZCgNO814pGvWwQv9aBrP/++hEg4ng=";
+    hash = "sha256-0cSeH0T/+v2aVeGpsQFZCFnYgdY56ikiUW9dnFEtNU4=";
   };
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495

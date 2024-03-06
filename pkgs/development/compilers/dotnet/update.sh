@@ -8,7 +8,7 @@ release () {
   local content="$1"
   local version="$2"
 
-  jq -r '.releases[] | select(."release-version" == "'"$version"'")' <<< "$content"
+  jq -r '.releases[] | select(.sdks[] | ."version" == "'"$version"'")' <<< "$content"
 }
 
 release_files () {
@@ -17,6 +17,14 @@ release_files () {
 
   jq -r '[."'"$type"'".files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
 }
+
+sdk_files () {
+  local release="$1"
+  local version="$2"
+
+  jq -r '[.sdks[] | select(.version == "'"$version"'") | .files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
+}
+
 
 release_platform_attr () {
   local release_files="$1"
@@ -281,6 +289,13 @@ sdk_packages () {
         )
     fi
 
+    # These packges were added on .NET 8
+    if ! version_older "$version" "8"; then
+        pkgs+=(
+            "Microsoft.NET.ILLink.Tasks"
+        )
+    fi
+
     generate_package_list "$version" "${pkgs[@]}"
 }
 
@@ -314,13 +329,13 @@ Examples:
     # Then get the json file and parse it to find the latest patch release.
     major_minor=$(sed 's/^\([0-9]*\.[0-9]*\).*$/\1/' <<< "$sem_version")
     content=$(curl -sL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
-    major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-release"' <<< "$content")
+    major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-sdk"' <<< "$content")
     major_minor_underscore=${major_minor/./_}
 
-    release_content=$(release "$content" "$major_minor_patch")
+    sdk_version=$major_minor_patch
+    release_content=$(release "$content" "$sdk_version")
     aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
     runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
-    sdk_version=$(jq -r '.sdk.version' <<< "$release_content")
 
     # If patch was not specified, check if the package is already the latest version
     # If it is, exit early
@@ -339,7 +354,7 @@ Examples:
 
     aspnetcore_files="$(release_files "$release_content" "aspnetcore-runtime")"
     runtime_files="$(release_files "$release_content" "runtime")"
-    sdk_files="$(release_files "$release_content" "sdk")"
+    sdk_files="$(sdk_files "$release_content" "$sdk_version")"
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")

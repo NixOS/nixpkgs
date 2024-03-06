@@ -3,6 +3,7 @@
 , bazelTest
 , stdenv
 , darwin
+, extraBazelArgs ? ""
 , lib
 , runLocal
 , runtimeShell
@@ -77,6 +78,7 @@ let
       ${bazel}/bin/bazel \
         run \
         --distdir=${distDir} \
+        ${extraBazelArgs} \
         //python:bin
     '';
   };

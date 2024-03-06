@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "typioca";
-  version = "2.8.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "typioca";
     rev = version;
-    hash = "sha256-cm6z7MVAbFxfkSTaCfh8wZhtgXdfVQopqEk+w+hPZpI=";
+    hash = "sha256-D6I1r+8cvUerqXR2VyBL33lapWAs5Cl5yvYOsmUBnHo=";
   };
 
-  vendorHash = "sha256-XiKn18WCbhVvsrIvTN/Yquj4mhq4n1X1jqdGUaMacV4=";
+  vendorHash = "sha256-j/nyAHNwUoNkcdNJqcaUuhQk5a2VHQw/XgYIoTR9ctQ=";
 
   ldflags = [
     "-s"
@@ -36,5 +36,6 @@ buildGoModule rec {
     changelog = "https://github.com/bloznelis/typioca/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "typioca";
   };
 }

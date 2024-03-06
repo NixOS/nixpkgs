@@ -4,13 +4,13 @@
 
 buildDunePackage rec {
   pname = "ppx_deriving_yaml";
-  version = "0.2.1";
+  version = "0.2.2";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${version}/ppx_deriving_yaml-${version}.tbz";
-    hash = "sha256-3vmay8UY7d3j96VOQ+D3oYEotzVls91F51ebXWQ/9SQ=";
+    hash = "sha256-9xy43jaCpKo/On5sTTt8f0Mytyjj1JN2QuFMcoWYTBY=";
   };
 
   propagatedBuildInputs = [ ppxlib ppx_deriving yaml ];

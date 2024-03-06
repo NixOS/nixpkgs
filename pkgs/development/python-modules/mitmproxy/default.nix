@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, pythonRelaxDepsHook
   # Mitmproxy requirements
 , aioquic
 , asgiref
@@ -29,7 +30,7 @@
 , setuptools
 , sortedcontainers
 , tornado
-, urwid
+, urwid-mitmproxy
 , wsproto
 , zstandard
   # Additional check requirements
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.1.6";
+  version = "10.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,8 +54,17 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-W+gxK5bNCit1jK9ojwE/HVjUz6OJcNw6Ac1lN5FxGgw=";
+    hash = "sha256-oxhpaFW++on3eRXm0anXZDRo6g/X5IflTcZkFF8Kcps=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "aioquic"
+    "cryptography"
+  ];
 
   propagatedBuildInputs = [
     aioquic
@@ -81,7 +91,7 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     tornado
-    urwid
+    urwid-mitmproxy
     wsproto
     zstandard
   ] ++ lib.optionals stdenv.isDarwin [
@@ -109,22 +119,14 @@ buildPythonPackage rec {
     "test_get_version"
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
-    "test_integration"
+    "test_commands_exist"
     "test_contentview_flowview"
     "test_flowview"
-    # ValueError: Exceeds the limit (4300) for integer string conversion
-    "test_roundtrip_big_integer"
-    "test_wireguard"
-    "test_commands_exist"
+    "test_integration"
     "test_statusbar"
-    # AssertionError: Playbook mismatch!
-    "test_untrusted_cert"
-    "test_mitmproxy_ca_is_untrusted"
-  ];
-
-  disabledTestPaths = [
-    # teardown of half the tests broken
-    "test/mitmproxy/addons/test_onboarding.py"
+    # FileNotFoundError: [Errno 2] No such file or directory
+    # likely wireguard is also not working in the sandbox
+    "test_wireguard"
   ];
 
   dontUsePytestXdist = true;
@@ -136,6 +138,6 @@ buildPythonPackage rec {
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

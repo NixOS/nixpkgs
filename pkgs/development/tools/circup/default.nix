@@ -15,8 +15,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-kax4gnvRkHSqj0Y6Rk8eyPpT7Wia2QngCQtxpqWSl9s=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
     "semver"
   ];
@@ -33,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     semver
     setuptools
-    update_checker
+    update-checker
   ];
 
   nativeCheckInputs = with python3.pkgs; [

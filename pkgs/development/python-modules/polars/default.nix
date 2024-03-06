@@ -13,12 +13,12 @@
 }:
 let
   pname = "polars";
-  version = "0.20.0";
+  version = "0.20.7";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-6tn3Q6oZfMjgQ5l5xCFnGimLSDLOjTWCW5uEbi6yFZY=";
+    hash = "sha256-R3by/e28HE+1xq+HQd9wYy/iK+fDM6/IfKuc563atX4=";
   };
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
     jemalloc = jemalloc.override {
@@ -38,7 +38,6 @@ buildPythonPackage {
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
   preBuild = ''
-    cd py-polars
     #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
   '';
 
@@ -49,7 +48,7 @@ buildPythonPackage {
     };
   };
 
-  cargoRoot = "py-polars";
+  buildAndTestSubdir = "py-polars";
 
   # Revisit this whenever package or Rust is upgraded
   RUSTC_BOOTSTRAP = 1;
@@ -57,6 +56,10 @@ buildPythonPackage {
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ];
+
+  # trick taken from the polars repo since there seems to be a problem
+  # with simd enabled with our stable rust (instead of nightly).
+  maturinBuildFlags = [ "--no-default-features" "--features=all" ];
 
   dontUseCmakeConfigure = true;
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "8.0.1";
+  version = "8.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,10 +25,8 @@ buildPythonPackage rec {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ASjAmkM/BFWzZYnLeXATbZzSG6KBDcmy66/R1MgzAwQ=";
+    hash = "sha256-FnDXj+bY/TMdengnxgludXUTiZw9wpeFiNbWTIxrlzw=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace setup.cfg \

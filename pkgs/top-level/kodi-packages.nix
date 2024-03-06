@@ -80,6 +80,10 @@ let self = rec {
 
   keymap = callPackage ../applications/video/kodi/addons/keymap { };
 
+  mediacccde = callPackage ../applications/video/kodi/addons/mediacccde { };
+
+  mediathekview = callPackage ../applications/video/kodi/addons/mediathekview { };
+
   netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
   orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
@@ -103,6 +107,8 @@ let self = rec {
   pvr-hdhomerun = callPackage ../applications/video/kodi/addons/pvr-hdhomerun { };
 
   pvr-iptvsimple = callPackage ../applications/video/kodi/addons/pvr-iptvsimple { };
+
+  pvr-vdr-vnsi = callPackage ../applications/video/kodi/addons/pvr-vdr-vnsi { };
 
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
@@ -175,6 +181,8 @@ let self = rec {
   simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
 
   six = callPackage ../applications/video/kodi/addons/six { };
+
+  sponsorblock = callPackage ../applications/video/kodi/addons/sponsorblock { };
 
   urllib3 = callPackage ../applications/video/kodi/addons/urllib3 { };
 

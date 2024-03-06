@@ -1,8 +1,11 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , installShellFiles
-, makeWrapper
+, makeBinaryWrapper
+, darwin
 , fetchFromGitHub
+, nix-update-script
 , nvd
 , use-nom ? true
 , nix-output-monitor ? null
@@ -11,7 +14,7 @@
 assert use-nom -> nix-output-monitor != null;
 
 let
-  version = "3.4.12";
+  version = "3.5.3";
   runtimeDeps = [ nvd ] ++ lib.optionals use-nom [ nix-output-monitor ];
 in
 rustPlatform.buildRustPackage {
@@ -19,18 +22,20 @@ rustPlatform.buildRustPackage {
   pname = "nh";
 
   src = fetchFromGitHub {
-    owner = "ViperML";
+    owner = "viperML";
     repo = "nh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V5TQ/1loQnegDjfLh61DxBWEQZivYEBq2kQpT0fn2cQ=";
+    hash = "sha256-37BcFt67NZj4YQ9kqm69O+OJkgt+TXWTu53bvJvOtn8=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preFixup = ''
     mkdir completions
@@ -47,11 +52,13 @@ rustPlatform.buildRustPackage {
       ${lib.optionalString use-nom "--set-default NH_NOM 1"}
   '';
 
-  cargoHash = "sha256-Ul4DM8WmKvKG32zBXzpdzHZknpTQAVvrxFcEd/C1buA=";
+  cargoHash = "sha256-uRibycYznqzdf8QVX6bHfq3J3Imu8KnWCL0ZS1w4KFk=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Yet another nix cli helper";
-    homepage = "https://github.com/ViperML/nh";
+    homepage = "https://github.com/viperML/nh";
     license = lib.licenses.eupl12;
     mainProgram = "nh";
     maintainers = with lib.maintainers; [ drupol viperML ];

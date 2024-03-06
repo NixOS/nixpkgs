@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, pythonRelaxDepsHook
 
 # build-system
 , hatchling
@@ -18,18 +20,25 @@
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "1.7.0";
+  version = "2.0.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
     rev = "refs/tags/${version}";
-    hash = "sha256-cMWYmCbkhJmz+RMCh3NIhOkC5bX46nwz09WhTV+Mz6w=";
+    hash = "sha256-wvy1L21AnQ4JP5seAh6DWksQU2OcbYTXKcixpFryH4w=";
   };
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
   ];
 
   propagatedBuildInputs = [

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiojobs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/+PTHLrZyf2UuYkLWkNgzf9amFywDJnP2OKVWvARcAA=";
+    hash = "sha256-LwFXb/SHP6bbqPg1tqYwE03FKHf4Mv1PPOxnPdESH0I=";
   };
 
   postPatch = ''

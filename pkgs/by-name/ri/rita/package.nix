@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "rita";
-  version = "4.8.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "activecm";
     repo = "rita";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w86fGRH9pIqONgvdYpsHDNkE0BAuhzArET+NLIpRg/w=";
+    hash = "sha256-By0JvQ4LTm+NEnRMadE1x2PiiYqnJQCsF3Fy+gHulXs=";
   };
 
   vendorHash = "sha256-KyC7VPgWlgKD6KWWRo3hFQHl2HjTub+VSMtJCpYE6Zk=";

@@ -1,49 +1,58 @@
 # pkgs.mkBinaryCache {#sec-pkgs-binary-cache}
 
-`pkgs.mkBinaryCache` is a function for creating Nix flat-file binary caches. Such a cache exists as a directory on disk, and can be used as a Nix substituter by passing `--substituter file:///path/to/cache` to Nix commands.
+`pkgs.mkBinaryCache` is a function for creating Nix flat-file binary caches.
+Such a cache exists as a directory on disk, and can be used as a Nix substituter by passing `--substituter file:///path/to/cache` to Nix commands.
 
-Nix packages are most commonly shared between machines using [HTTP, SSH, or S3](https://nixos.org/manual/nix/stable/package-management/sharing-packages.html), but a flat-file binary cache can still be useful in some situations. For example, you can copy it directly to another machine, or make it available on a network file system. It can also be a convenient way to make some Nix packages available inside a container via bind-mounting.
+Nix packages are most commonly shared between machines using [HTTP, SSH, or S3](https://nixos.org/manual/nix/stable/package-management/sharing-packages.html), but a flat-file binary cache can still be useful in some situations.
+For example, you can copy it directly to another machine, or make it available on a network file system.
+It can also be a convenient way to make some Nix packages available inside a container via bind-mounting.
 
-Note that this function is meant for advanced use-cases. The more idiomatic way to work with flat-file binary caches is via the [nix-copy-closure](https://nixos.org/manual/nix/stable/command-ref/nix-copy-closure.html) command. You may also want to consider [dockerTools](#sec-pkgs-dockerTools) for your containerization needs.
+`mkBinaryCache` expects an argument with the `rootPaths` attribute.
+`rootPaths` must be a list of derivations.
+The transitive closure of these derivations' outputs will be copied into the cache.
 
-## Example {#sec-pkgs-binary-cache-example}
+::: {.note}
+This function is meant for advanced use cases.
+The more idiomatic way to work with flat-file binary caches is via the [nix-copy-closure](https://nixos.org/manual/nix/stable/command-ref/nix-copy-closure.html) command.
+You may also want to consider [dockerTools](#sec-pkgs-dockerTools) for your containerization needs.
+:::
+
+[]{#sec-pkgs-binary-cache-example}
+:::{.example #ex-mkbinarycache-copying-package-closure}
+
+# Copying a package and its closure to another machine with `mkBinaryCache`
 
 The following derivation will construct a flat-file binary cache containing the closure of `hello`.
 
 ```nix
+{ mkBinaryCache, hello }:
 mkBinaryCache {
   rootPaths = [hello];
 }
 ```
 
-- `rootPaths` specifies a list of root derivations. The transitive closure of these derivations' outputs will be copied into the cache.
-
-Here's an example of building and using the cache.
-
-Build the cache on one machine, `host1`:
+Build the cache on a machine.
+Note that the command still builds the exact nix package above, but adds some boilerplate to build it directly from an expression.
 
 ```shellSession
-nix-build -E 'with import <nixpkgs> {}; mkBinaryCache { rootPaths = [hello]; }'
+$ nix-build -E 'let pkgs = import <nixpkgs> {}; in pkgs.callPackage ({ mkBinaryCache, hello }: mkBinaryCache { rootPaths = [hello]; }) {}'
+/nix/store/azf7xay5xxdnia4h9fyjiv59wsjdxl0g-binary-cache
 ```
 
+Copy the resulting directory to another machine, which we'll call `host2`:
+
 ```shellSession
-/nix/store/cc0562q828rnjqjyfj23d5q162gb424g-binary-cache
+$ scp result host2:/tmp/hello-cache
 ```
 
-Copy the resulting directory to the other machine, `host2`:
+At this point, the cache can be used as a substituter when building derivations on `host2`:
 
 ```shellSession
-scp result host2:/tmp/hello-cache
-```
-
-Substitute the derivation using the flat-file binary cache on the other machine, `host2`:
-```shellSession
-nix-build -A hello '<nixpkgs>' \
+$ nix-build -A hello '<nixpkgs>' \
   --option require-sigs false \
   --option trusted-substituters file:///tmp/hello-cache \
   --option substituters file:///tmp/hello-cache
+/nix/store/zhl06z4lrfrkw5rp0hnjjfrgsclzvxpm-hello-2.12.1
 ```
 
-```shellSession
-/nix/store/gl5a41azbpsadfkfmbilh9yk40dh5dl0-hello-2.12.1
-```
+:::

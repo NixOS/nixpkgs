@@ -4,6 +4,7 @@
 , backoff
 , beautifulsoup4
 , buildPythonPackage
+, certifi
 , docutils
 , fetchFromGitHub
 , poetry-core
@@ -19,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2023.10.0";
-  format = "pyproject";
+  version = "2024.01.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "simplisafe-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-U3SbaR8PTTvoAMu65+LAHSwTmR7iwqiidbefW8bNSCo=";
+    hash = "sha256-ewbR2FI0t2F8HF0ZL5omsclB9OPAjHygGLPtSkVlvgM=";
   };
 
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     aiohttp
     backoff
     beautifulsoup4
+    certifi
     docutils
     pytz
     voluptuous

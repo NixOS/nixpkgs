@@ -9,8 +9,8 @@ wlroots.overrideAttrs
       domain = "gitlab.freedesktop.org";
       owner = "wlroots";
       repo = "wlroots";
-      rev = "5d639394f3e83b01596dcd166a44a9a1a2583350";
-      hash = "sha256-7kvyoA91etzVEl9mkA/EJfB6z/PltxX7Xc4gcr7/xlo=";
+      rev = "0cb091f1a2d345f37d2ee445f4ffd04f7f4ec9e5";
+      hash = "sha256-Mz6hCtommq7RQfcPnxLINigO4RYSNt23HeJHC6mVmWI=";
     };
 
     patches = [ ]; # don't inherit old.patches

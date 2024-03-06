@@ -42,7 +42,7 @@ buildGoModule rec {
     mkdocs
     python3
     python3Packages.mkdocs-material
-    python3Packages.mkdocs-minify
+    python3Packages.mkdocs-minify-plugin
     python3Packages.mkdocs-simple-hooks
   ];
 

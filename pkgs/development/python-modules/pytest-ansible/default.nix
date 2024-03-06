@@ -1,29 +1,30 @@
 { lib
 , stdenv
+, ansible-compat
 , ansible-core
 , buildPythonPackage
 , coreutils
 , fetchFromGitHub
+, packaging
 , pytest
 , pytestCheckHook
 , pythonOlder
 , setuptools
 , setuptools-scm
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "4.1.1";
-  format = "pyproject";
+  version = "24.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
     rev = "refs/tags/v${version}";
-    hash = "sha256-51DQ+NwD454XaYLuRxriuWRZ8uTSX3ZpadXdxs7FspQ=";
+    hash = "sha256-NtGk+azpSZZm9PUf6Q1Qipo/zaUH+bed7k3oFnQyKjw=";
   };
 
   postPatch = ''
@@ -31,12 +32,9 @@ buildPythonPackage rec {
       --replace '/usr/bin/env' '${coreutils}/bin/env'
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   buildInputs = [
@@ -45,6 +43,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ansible-core
+    ansible-compat
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -79,6 +79,9 @@ buildPythonPackage rec {
     # These tests fail in the Darwin sandbox
     "tests/test_adhoc.py"
     "tests/test_adhoc_result.py"
+  ] ++ lib.optionals (lib.versionAtLeast ansible-core.version "2.16") [
+    # Test fail in the NixOS environment
+    "tests/test_adhoc.py"
   ];
 
   pythonImportsCheck = [

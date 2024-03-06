@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "enyo-launcher";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitLab {
     owner = "sdcofer70";
     repo = "enyo-launcher";
     rev = version;
-    sha256 = "sha256-qdVP5QN2t0GK4VBWuFGrnRfgamQDZGRjwaAe6TIK604=";
+    sha256 = "sha256-k6Stc1tQOcdS//j+bFUNfnOUlwuhIPKxf9DHU+ng164=";
   };
 
   nativeBuildInputs = [ cmake ];

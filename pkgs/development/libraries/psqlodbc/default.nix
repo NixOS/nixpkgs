@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "psqlodbc";
-  version = "13.02.0000";
+  version = "16.00.0000";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-${version}.tar.gz";
-    hash = "sha256-s5t+XEH9ZHXFUREvpyS/V8SkRhdexBiKkOKETMFhJYU=";
+    hash = "sha256-r9iS+J0uzujT87IxTxvVvy0CIBhyxuNDHlwxCW7KTIs=";
   };
 
   buildInputs = [ libiodbc postgresql openssl ];

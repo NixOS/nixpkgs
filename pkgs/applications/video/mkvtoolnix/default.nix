@@ -25,6 +25,7 @@
 , pugixml
 , qtbase
 , qtmultimedia
+, qtwayland
 , utf8cpp
 , xdg-utils
 , zlib
@@ -48,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "81.0";
+  version = "82.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    hash = "sha256-Dh1XbC3uATTkc23m9rcehXs2/2zekwI6IzE04L/cXS0=";
+    hash = "sha256-3WULzEkjMH4PUETJeKmDKn9PdanWf581O2mI/IqN8YM=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +91,7 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ optionals withGUI [ cmark ]
+  ++ optionals stdenv.isLinux [ qtwayland ]
   ++ optionals stdenv.isDarwin [ libiconv ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings

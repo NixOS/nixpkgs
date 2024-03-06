@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , makeWrapper
 , pkg-config
@@ -163,6 +164,14 @@ rec {
       (substituteAll {
         src = ./override-version.patch;
         version = sources.rev;
+      })
+
+      # Can be removed with release 0.12.3
+      (fetchpatch {
+        name = "remove-unused-unstable-features.patch";
+        url = "https://github.com/ActivityWatch/aw-server-rust/commit/e1cd761d2f0a9309eb851b59732c2567a7ae2d3a.patch";
+        hash = "sha256-wP+3XZDkr148XY5b8RV3obuLczAFBE3FhaYPqnmmGcU=";
+        includes = [ "aw-server/src/lib.rs" ];
       })
     ];
 

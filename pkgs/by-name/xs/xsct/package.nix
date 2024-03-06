@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsct";
-  version = "2.0";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "faf0";
     repo = "sct";
     rev = finalAttrs.version;
-    hash = "sha256-XhrkaK85I/U2ChO5mZYah/TaXz03yahfMEbfgzXqytU=";
+    hash = "sha256-PDkbZTtl14wYdfALv43SIU9MKhbfiYlRqkI1mFn1qa4=";
   };
 
   buildInputs = [

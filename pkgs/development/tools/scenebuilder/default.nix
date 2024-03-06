@@ -25,8 +25,8 @@ maven'.buildMavenPackage rec {
   buildDate = "2022-10-07T00:00:00+01:00"; # v20.0.0 release date
   mvnParameters = "-Dmaven.test.skip -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
   mvnHash = selectSystem {
-    x86_64-linux = "sha256-3SFCQ+hyQPtAEx1jSbe/Qtq4dYkfVvU/Kmekzv53o3U=";
-    aarch64-linux = "sha256-AZ1NXzSRyT77W+EjLIb7eWxf7Ztu6XuKjSImRg1lNcw=";
+    x86_64-linux = "sha256-QwxA3lKVkRG5CV2GIwfVFPOj112pHr7bDlZJD6KwrHc=";
+    aarch64-linux = "sha256-cO5nHSvv2saBuAjq47A+GW9vFWEM+ysXyZgI0Oe/F70=";
   };
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper glib wrapGAppsHook ];

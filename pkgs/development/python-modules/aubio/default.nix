@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "a library for audio and music analysis";
     homepage = "https://aubio.org";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

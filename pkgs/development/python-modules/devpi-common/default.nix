@@ -3,6 +3,7 @@
 , setuptools
 , setuptools-changelog-shortener
 , requests
+, tomli
 , pytestCheckHook
 , lazy
 }:
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     lazy
+    tomli
   ];
 
   nativeCheckInputs = [

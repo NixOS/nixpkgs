@@ -25,13 +25,13 @@ in
 backendStdenv.mkDerivation (
   finalAttrs: {
     pname = "nccl";
-    version = "2.19.3-1";
+    version = "2.20.3-1";
 
     src = fetchFromGitHub {
       owner = "NVIDIA";
       repo = finalAttrs.pname;
       rev = "v${finalAttrs.version}";
-      hash = "sha256-59FlOKM5EB5Vkm4dZBRCkn+IgIcdQehE+FyZAdTCT/A=";
+      hash = "sha256-7gI1q6uN3saz/twwLjWl7XmMucYjvClDPDdbVpVM0vU=";
     };
 
     strictDeps = true;
@@ -100,6 +100,9 @@ backendStdenv.mkDerivation (
       homepage = "https://developer.nvidia.com/nccl";
       license = licenses.bsd3;
       platforms = platforms.linux;
+      # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
+      # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
+      badPlatforms = lib.optionals cudaFlags.isJetsonBuild [ "aarch64-linux" ];
       maintainers =
         with maintainers;
         [

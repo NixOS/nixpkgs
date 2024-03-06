@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "keyfinder-cli";
   };
 }

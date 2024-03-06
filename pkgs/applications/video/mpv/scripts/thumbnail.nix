@@ -1,4 +1,4 @@
-{ lib, buildLua, fetchFromGitHub, python3 }:
+{ lib, buildLua, fetchFromGitHub, gitUpdater, python3 }:
 
 buildLua rec {
   pname = "mpv-thumbnail-script";
@@ -10,6 +10,7 @@ buildLua rec {
     rev = version;
     sha256 = "sha256-J24Rou7BTE7zoiPlBkWuO9dtYJiuzkuwB4FROuzXzag=";
   };
+  passthru.updateScript = gitUpdater {};
 
   nativeBuildInputs = [ python3 ];
   postPatch = "patchShebangs concat_files.py";

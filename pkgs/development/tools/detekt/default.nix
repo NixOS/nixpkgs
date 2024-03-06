@@ -1,13 +1,13 @@
 { detekt, lib, stdenv, fetchurl, makeWrapper, jre_headless, testers }:
 stdenv.mkDerivation rec {
   pname = "detekt";
-  version = "1.23.3";
+  version = "1.23.5";
 
   jarfilename = "${pname}-${version}-executable.jar";
 
   src = fetchurl {
     url = "https://github.com/detekt/detekt/releases/download/v${version}/detekt-cli-${version}-all.jar";
-    sha256 = "sha256-Lm9z8XB7BdB7ikiyJyuVtV8eqlPucxmMNNC90E99qpA=";
+    sha256 = "sha256-Pz+MaZimJMCjtGPy7coi6SSE7IdAQhtp2u8YV4s7KLY=";
   };
 
   dontUnpack = true;

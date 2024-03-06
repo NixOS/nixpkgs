@@ -39,6 +39,7 @@ buildHomeAssistantComponent {
     # changelog, description, homepage, license, maintainers
   }
 }
+```
 
 ## Package attribute
 

@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-4i7Q+TtXTQNSJ1EIcS8KHrVPdCJAgZh86Y6lB8772XU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [ cython mecab setuptools-scm ];
 
   nativeCheckInputs = [ ipadic pytestCheckHook ]

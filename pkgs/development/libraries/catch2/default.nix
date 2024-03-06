@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "http://catch-lib.net";
     license = licenses.boost;
     maintainers = with maintainers; [ edwtjo knedlsepp ];
-    platforms = platforms.unix ++ [ "x86_64-windows" ];
+    platforms = with platforms; unix ++ windows;
   };
 }

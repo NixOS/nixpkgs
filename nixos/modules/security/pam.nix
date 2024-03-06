@@ -96,6 +96,10 @@ let
 
   pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
 
+    imports = [
+      (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+    ];
+
     options = {
 
       name = mkOption {
@@ -203,17 +207,6 @@ let
             to provide Google Authenticator token to log in.
           '';
         };
-      };
-
-      usbAuth = mkOption {
-        default = config.security.pam.usb.enable;
-        defaultText = literalExpression "config.security.pam.usb.enable";
-        type = types.bool;
-        description = lib.mdDoc ''
-          If set, users listed in
-          {file}`/etc/pamusb.conf` are able to log in
-          with the associated USB key.
-        '';
       };
 
       otpwAuth = mkOption {
@@ -473,16 +466,23 @@ let
         '';
       };
 
-      enableKwallet = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          If enabled, pam_wallet will attempt to automatically unlock the
-          user's default KDE wallet upon login. If the user has no wallet named
-          "kdewallet", or the login password does not match their wallet
-          password, KDE will prompt separately after login.
-        '';
+      kwallet = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = lib.mdDoc ''
+            If enabled, pam_wallet will attempt to automatically unlock the
+            user's default KDE wallet upon login. If the user has no wallet named
+            "kdewallet", or the login password does not match their wallet
+            password, KDE will prompt separately after login.
+          '';
+        };
+
+        package = mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
+          pkgsText = "pkgs.plasma5Packages";
+        };
       };
+
       sssdStrictAccess = mkOption {
         default = false;
         type = types.bool;
@@ -654,8 +654,8 @@ let
           { name = "mysql"; enable = cfg.mysqlAuth; control = "sufficient"; modulePath = "${pkgs.pam_mysql}/lib/security/pam_mysql.so"; settings = {
             config_file = "/etc/security/pam_mysql.conf";
           }; }
-          { name = "ssh_agent_auth"; enable = config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth; control = "sufficient"; modulePath = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so"; settings = {
-            file = lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles;
+          { name = "ssh_agent_auth"; enable = config.security.pam.sshAgentAuth.enable && cfg.sshAgentAuth; control = "sufficient"; modulePath = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so"; settings = {
+            file = lib.concatStringsSep ":" config.security.pam.sshAgentAuth.authorizedKeysFiles;
           }; }
           (let p11 = config.security.pam.p11; in { name = "p11"; enable = cfg.p11Auth; control = p11.control; modulePath = "${pkgs.pam_p11}/lib/security/pam_p11.so"; args = [
             "${pkgs.opensc}/lib/opensc-pkcs11.so"
@@ -665,7 +665,6 @@ let
             authfile = u2f.authFile;
             appid = u2f.appId;
           }; })
-          { name = "usb"; enable = cfg.usbAuth; control = "sufficient"; modulePath = "${pkgs.pam_usb}/lib/security/pam_usb.so"; }
           (let ussh = config.security.pam.ussh; in { name = "ussh"; enable = config.security.pam.ussh.enable && cfg.usshAuth; control = ussh.control; modulePath = "${pkgs.pam_ussh}/lib/security/pam_ussh.so"; settings = {
             ca_file = ussh.caFile;
             authorized_principals = ussh.authorizedPrincipals;
@@ -698,8 +697,9 @@ let
             (config.security.pam.enableEcryptfs
               || config.security.pam.enableFscrypt
               || cfg.pamMount
-              || cfg.enableKwallet
+              || cfg.kwallet.enable
               || cfg.enableGnomeKeyring
+              || config.services.intune.enable
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
@@ -722,10 +722,9 @@ let
               { name = "mount"; enable = cfg.pamMount; control = "optional"; modulePath = "${pkgs.pam_mount}/lib/security/pam_mount.so"; settings = {
                 disable_interactive = true;
               }; }
-              { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
-                kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
-              }; }
+              { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
               { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
+              { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
               }; }
@@ -858,18 +857,14 @@ let
             order = "user,group,default";
             debug = true;
           }; }
-          { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
-            kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
-          }; }
+          { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
           { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
             auto_start = true;
           }; }
           { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
             no-autostart = cfg.gnupg.noAutostart;
           }; }
-          { name = "cgfs"; enable = config.virtualisation.lxc.lxcfs.enable; control = "optional"; modulePath = "${pkgs.lxc}/lib/security/pam_cgfs.so"; args = [
-            "-c" "all"
-          ]; }
+          { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
         ];
       };
     };
@@ -943,7 +938,7 @@ let
       value.source = pkgs.writeText "${name}.pam" service.text;
     };
 
-  optionalSudoConfigForSSHAgentAuth = optionalString config.security.pam.enableSSHAgentAuth ''
+  optionalSudoConfigForSSHAgentAuth = optionalString config.security.pam.sshAgentAuth.enable ''
     # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
     Defaults env_keep+=SSH_AUTH_SOCK
   '';
@@ -956,6 +951,7 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
+    (mkRenamedOptionModule [ "security" "pam" "enableSSHAgentAuth" ] [ "security" "pam" "sshAgentAuth" "enable" ])
   ];
 
   ###### interface
@@ -1025,16 +1021,34 @@ in
       '';
     };
 
-    security.pam.enableSSHAgentAuth = mkOption {
-      type = types.bool;
-      default = false;
-      description =
-        lib.mdDoc ''
-          Enable sudo logins if the user's SSH agent provides a key
-          present in {file}`~/.ssh/authorized_keys`.
-          This allows machines to exclusively use SSH keys instead of
-          passwords.
+    security.pam.sshAgentAuth = {
+      enable = mkEnableOption ''
+        authenticating using a signature performed by the ssh-agent.
+        This allows using SSH keys exclusively, instead of passwords, for instance on remote machines
+      '';
+
+      authorizedKeysFiles = mkOption {
+        type = with types; listOf str;
+        description = ''
+          A list of paths to files in OpenSSH's `authorized_keys` format, containing
+          the keys that will be trusted by the `pam_ssh_agent_auth` module.
+
+          The following patterns are expanded when interpreting the path:
+          - `%f` and `%H` respectively expand to the fully-qualified and short hostname ;
+          - `%u` expands to the username ;
+          - `~` or `%h` expands to the user's home directory.
+
+          ::: {.note}
+          Specifying user-writeable files here result in an insecure configuration:  a malicious process
+          can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
+
+          See [issue #31611](https://github.com/NixOS/nixpkgs/issues/31611)
+          :::
         '';
+        example = [ "/etc/ssh/authorized_keys.d/%u" ];
+        default = config.services.openssh.authorizedKeysFiles;
+        defaultText = literalExpression "config.services.openssh.authorizedKeysFiles";
+      };
     };
 
     security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
@@ -1067,8 +1081,8 @@ in
 
     security.pam.krb5 = {
       enable = mkOption {
-        default = config.krb5.enable;
-        defaultText = literalExpression "config.krb5.enable";
+        default = config.security.krb5.enable;
+        defaultText = literalExpression "config.security.krb5.enable";
         type = types.bool;
         description = lib.mdDoc ''
           Enables Kerberos PAM modules (`pam-krb5`,
@@ -1076,7 +1090,7 @@ in
 
           If set, users can authenticate with their Kerberos password.
           This requires a valid Kerberos configuration
-          (`config.krb5.enable` should be set to
+          (`config.security.krb5.enable` should be set to
           `true`).
 
           Note that the Kerberos PAM modules are not necessary when using SSS
@@ -1451,12 +1465,29 @@ in
         '';
       }
       {
-        assertion = config.security.pam.zfs.enable -> (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
+        assertion = config.security.pam.zfs.enable -> config.boot.zfs.enabled;
         message = ''
-          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
+          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled`).
+        '';
+      }
+      {
+        assertion = with config.security.pam.sshAgentAuth; enable -> authorizedKeysFiles != [];
+        message = ''
+          `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
+          Did you forget to set `services.openssh.enable` ?
         '';
       }
     ];
+
+    warnings = optional
+      (with lib; with config.security.pam.sshAgentAuth;
+        enable && any (s: hasPrefix "%h" s || hasPrefix "~" s) authorizedKeysFiles)
+      ''config.security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
+
+        Specifying user-writeable files there result in an insecure configuration:
+        a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
+        See https://github.com/NixOS/nixpkgs/issues/31611
+      '';
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.

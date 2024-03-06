@@ -1,6 +1,6 @@
 { lib
 , buildPythonApplication
-, fetchgit
+, fetchzip
 , pygobject3
 , pytestCheckHook
 , gdk-pixbuf
@@ -16,13 +16,12 @@ buildPythonApplication rec {
   pname = "tuna";
   version = "0.15";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/utils/${pname}/${pname}.git";
-    rev = "v${version}";
-    sha256 = "sha256-lRHlbdCQ0NcjcWgLvCze67kN8NsK0f5RmKfPbkHhk78=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git/snapshot/tuna-v${version}.tar.gz";
+    sha256 = "MwyLBwKz5ur1sBXHiCLq/Nq2u5aaiC+KzXqvGBmQii8=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     mv tuna-cmd.py tuna/cmd.py
 
     substituteInPlace setup.py \

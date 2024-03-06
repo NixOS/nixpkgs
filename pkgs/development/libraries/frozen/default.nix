@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
   # Since it has only two source files, the best course of action to support
   # cross compilation is to create a small meson.build file.
   # Relevant upstream issue: https://github.com/cesanta/frozen/pull/71
+  # We also remove the GN BUILD file to prevent conflicts on case-insesitive
+  # file systems.
   preConfigure = ''
+    rm BUILD
     cp ${./meson.build} meson.build
   '';
 

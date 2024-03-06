@@ -33,21 +33,11 @@ in {
         '';
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.lxd;
-        defaultText = lib.literalExpression "pkgs.lxd";
-        description = lib.mdDoc ''
-          The LXD package to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "lxd" { };
 
-      lxcPackage = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.lxc;
-        defaultText = lib.literalExpression "pkgs.lxc";
-        description = lib.mdDoc ''
-          The LXC package to use with LXD (required for AppArmor profiles).
+      lxcPackage = lib.mkPackageOption pkgs "lxc" {
+        extraDescription = ''
+          Required for AppArmor profiles.
         '';
       };
 
@@ -149,7 +139,7 @@ in {
       ui = {
         enable = lib.mkEnableOption (lib.mdDoc "(experimental) LXD UI");
 
-        package = lib.mkPackageOption pkgs.lxd-unwrapped "ui" { };
+        package = lib.mkPackageOption pkgs [ "lxd-unwrapped" "ui" ] { };
       };
     };
   };
@@ -224,16 +214,14 @@ in {
         LimitNPROC = "infinity";
         TasksMax = "infinity";
 
-        Restart = "on-failure";
-        TimeoutStartSec = "${cfg.startTimeout}s";
-        TimeoutStopSec = "30s";
-
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
         # explicitly tell it where the actual configuration files are
         Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
           "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
+
+      unitConfig.ConditionPathExists = "!/var/lib/incus/.migrated-from-lxd";
     };
 
     systemd.services.lxd-preseed = lib.mkIf (cfg.preseed != null) {

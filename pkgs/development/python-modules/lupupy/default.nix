@@ -5,19 +5,24 @@
 , fetchPypi
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lupupy";
-  version = "0.3.1";
-  format = "setuptools";
+  version = "0.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mij5WGIl60D7ya1SdIvZ8TEgIZhJ9Xd2kcUnnbO1dD4=";
+    hash = "sha256-A92Jk6WlRKep3dkbqLiYYHklEh0pyncipRW6swq0mvo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     colorlog

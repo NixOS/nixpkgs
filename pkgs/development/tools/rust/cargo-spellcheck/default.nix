@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pJsRY9fDHDQTd0J/gbSzl/JM3kzm8v+w13JRbTYnMFM=";
+    hash = "sha256-PgV+sjCf4O24v0i9P7RJIcn28OWMUcPSwy+P5n8RwS4=";
   };
 
-  cargoHash = "sha256-XDGOhPO09d5nq355LiDBKc5v8dx8RuzGKC2fnFF/M+E=";
+  cargoHash = "sha256-6dhM+FzuLtKtRp2mpE9nlpT+0PBcgGqvBa9vqs6Rs7s=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 

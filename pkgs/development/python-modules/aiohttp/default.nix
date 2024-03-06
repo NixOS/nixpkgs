@@ -1,15 +1,15 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
 , pythonOlder
+, fetchFromGitHub
+, substituteAll
+, llhttp
 # build_requires
+, cython
 , setuptools
-, wheel
 # install_requires
 , attrs
-, charset-normalizer
 , multidict
 , async-timeout
 , yarl
@@ -17,69 +17,73 @@
 , aiosignal
 , aiodns
 , brotli
-, faust-cchardet
-, typing-extensions
 # tests_require
-, async-generator
 , freezegun
 , gunicorn
 , pytest-mock
 , pytestCheckHook
+, python-on-whales
 , re-assert
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.6";
-  format = "pyproject";
+  version = "3.9.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sM8qRQG/+TMKilJItM6VGFHkFb3M6dwVjnbP1V4VCFw=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "aiohttp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dEeMHruFJ1o0J6VUJcpUk7LhEC8sV8hUKXoKcd618lE=";
   };
 
   patches = [
-    (fetchpatch {
-      # https://github.com/aio-libs/aiohttp/pull/7260
-      # Merged upstream, should be dropped once updated to 3.9.0
-      url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
-      hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
+    (substituteAll {
+      src = ./unvendor-llhttp.patch;
+      llhttpDev = lib.getDev llhttp;
+      llhttpLib = lib.getLib llhttp;
     })
   ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
+
+    rm -r vendor
+    patchShebangs tools
+    touch .git  # tools/gen.py uses .git to find the project root
   '';
 
   nativeBuildInputs = [
+    cython
     setuptools
-    wheel
   ];
+
+  preBuild = ''
+    make cythonize
+  '';
 
   propagatedBuildInputs = [
     attrs
-    charset-normalizer
     multidict
     async-timeout
     yarl
-    typing-extensions
     frozenlist
     aiosignal
     aiodns
     brotli
-    faust-cchardet
   ];
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
-    async-generator
     freezegun
     gunicorn
     pytest-mock
     pytestCheckHook
+    python-on-whales
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
     # Optional test dependency. Depends indirectly on pyopenssl, which is
@@ -100,6 +104,8 @@ buildPythonPackage rec {
     "test_static_file_if_none_match"
     "test_static_file_if_match"
     "test_static_file_if_modified_since_past_date"
+    # don't run benchmarks
+    "test_import_time"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -108,15 +114,15 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "test_proxy_functional.py" # FIXME package proxy.py
+    "tests/test_proxy_functional.py" # FIXME package proxy.py
   ];
 
   __darwinAllowLocalNetworking = true;
 
   # aiohttp in current folder shadows installed version
-  # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
-    cd tests
+    rm -r aiohttp
+    touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"

@@ -8,35 +8,35 @@ callPackage ./common.nix ({
   # Note that the latest build may differ by platform
   dists = {
     x86_64-linux = {
-      zuluVersion = "21.28.85";
-      jdkVersion = "21.0.0";
+      zuluVersion = "21.32.17";
+      jdkVersion = "21.0.2";
       hash =
-        if enableJavaFX then "sha256-ew/tgSdkrPdk1CTguk9nyl30w7se+YZYqyqOTaeketk="
-        else "sha256-DA6t+9xHp8pkrqtRucBh9xtuTSXS2HZ0US6bY4fp46Y=";
+        if enableJavaFX then "sha256-CEM2lMjyZLWS1tBcS1tBTUxBwAyzW3vrpRWFVVSFVGY="
+        else "sha256-Wtcw++5rtJv/8QvznoQ5LnKNiRA9NHSn5d7w/RNLMAo=";
     };
 
     aarch64-linux = {
-      zuluVersion = "21.28.85";
-      jdkVersion = "21.0.0";
+      zuluVersion = "21.32.17";
+      jdkVersion = "21.0.2";
       hash =
         if enableJavaFX then throw "JavaFX is not available for aarch64-linux"
-        else "sha256-H7ZLgDbF1GPYq1mvBr9bawBoEeYBLjsOtrzPV/HFWDU=";
+        else "sha256-zn3xr11EqfRVYXxLiJFEP74+Syacd32Lgu1m93Fnz+A=";
     };
 
     x86_64-darwin = {
-      zuluVersion = "21.28.85";
-      jdkVersion = "21.0.0";
+      zuluVersion = "21.32.17";
+      jdkVersion = "21.0.2";
       hash =
-        if enableJavaFX then "sha256-QrgEpLaNGc2aNFF38z2ckUTCpweKnuALYLOWATZFJPA="
-        else "sha256-ljm4fbWG0MifepiSrkf0IeRCxkuXuuvf8xeI++IyZb0=";
+        if enableJavaFX then "sha256-CbEKa9Z/ItFqVM4BqsWXyRf5ejQZXPK8OqkULr9Cpqk="
+        else "sha256-Otj+KI61fZdcJ4auRToDaqRuR6sqw9gVOOuuKlTTwCU=";
     };
 
     aarch64-darwin = {
-      zuluVersion = "21.28.85";
-      jdkVersion = "21.0.0";
+      zuluVersion = "21.32.17";
+      jdkVersion = "21.0.2";
       hash =
-        if enableJavaFX then "sha256-PUVB/R1K1dLTi1FsOYIvcI76M6EYYeMG1Bm+oMno//Y="
-        else "sha256-KnqZo+omPb2NMqZ9Hm42O6iyXGRcgm9eFnoCu6+v8fo=";
+        if enableJavaFX then "sha256-PK+cafgQsnK6acuQxun4IUiyYHQJsBfUawwfGV8OCfQ="
+        else "sha256-6CYFFt6LYGYUIqcl8d8sNu+Ij2+zU5NWawDnMl2z0E4=";
     };
   };
 } // builtins.removeAttrs args [ "callPackage" ])

@@ -1,30 +1,39 @@
 { lib
 , buildPythonPackage
 , certifi
+, cryptography
 , fetchPypi
 , openssl
 , pylsqpack
 , pyopenssl
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, service-identity
 }:
 
 buildPythonPackage rec {
   pname = "aioquic";
-  version = "0.9.21";
-  format = "setuptools";
+  version = "0.9.25";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ecfsBjGOeFYnZlyk6HI63zR7ciW30AbjMtJXWh9RbvU=";
+    hash = "sha256-cHlceJBTJthVwq5SQHIjSq5YbHibgSkuJy0CHpsEMKM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     certifi
+    cryptography
     pylsqpack
     pyopenssl
+    service-identity
   ];
 
   buildInputs = [

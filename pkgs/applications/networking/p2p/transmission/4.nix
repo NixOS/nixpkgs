@@ -35,7 +35,6 @@
 , enableCli ? true
 , installLib ? false
 , apparmorRulesFromClosure
-, extraAppArmorPaths ? []
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -136,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
       rwk /tmp/tr_session_id_*,
 
       r $out/share/transmission/public_html/**,
-      ${lib.strings.concatMapStrings (x: "r ${x},\n") extraAppArmorPaths}
 
       include <local/bin.transmission-daemon>
     }

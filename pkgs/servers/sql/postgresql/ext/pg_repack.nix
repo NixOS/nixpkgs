@@ -1,23 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, postgresql
+, postgresqlTestHook
+, readline
+, testers
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pg_repack";
-  version = "1.4.8";
+  version = "1.5.0";
 
   buildInputs = [ postgresql openssl zlib readline ];
 
   src = fetchFromGitHub {
-    owner  = "reorg";
-    repo   = "pg_repack";
-    rev    = "ver_${version}";
-    sha256 = "sha256-Et8aMRzG7ez0uy9wG6qsg57/kPPZdUhb+/gFxW86D08=";
+    owner = "reorg";
+    repo = "pg_repack";
+    rev = "ver_${finalAttrs.version}";
+    sha256 = "sha256-do80phyMxwcRIkYyUt9z02z7byNQhK+pbSaCUmzG+4c=";
   };
 
   installPhase = ''
     install -D bin/pg_repack -t $out/bin/
     install -D lib/pg_repack${postgresql.dlSuffix} -t $out/lib/
-    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
+    install -D lib/{pg_repack--${finalAttrs.version}.sql,pg_repack.control} -t $out/share/postgresql/extension
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    extension = stdenv.mkDerivation {
+      name = "plpgsql-check-test";
+      dontUnpack = true;
+      doCheck = true;
+      buildInputs = [ postgresqlTestHook ];
+      nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.pg_repack ])) ];
+      postgresqlTestUserOptions = "LOGIN SUPERUSER";
+      failureHook = "postgresqlStop";
+      checkPhase = ''
+        runHook preCheck
+        psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION pg_repack;"
+        runHook postCheck
+      '';
+      installPhase = "touch $out";
+    };
+  };
 
   meta = with lib; {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
@@ -31,5 +61,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
+    mainProgram = "pg_repack";
   };
-}
+})

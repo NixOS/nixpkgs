@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-MSYIZ/bzngRu6mG3EGblUotSCA+6bi+l3EymFA8NRZA=";
   };
 
+  postPatch = ''
+    substituteInPlace magic_filter/__init__.py \
+      --replace '"1"' '"${version}"'
+  '';
+
   nativeBuildInputs = [
     hatchling
   ];

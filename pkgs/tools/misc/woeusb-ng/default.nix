@@ -35,7 +35,7 @@ buildPythonApplication rec {
     parted
     grub2
     termcolor
-    wxPython_4_2
+    wxpython
     six
   ];
 

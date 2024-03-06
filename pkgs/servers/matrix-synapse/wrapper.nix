@@ -41,4 +41,7 @@ stdenv.mkDerivation {
     # for backward compatibility
     inherit (matrix-synapse-unwrapped) plugins tools;
   };
+
+  # Carry the maintainer, licenses, and various useful information.
+  inherit (matrix-synapse-unwrapped) meta;
 }

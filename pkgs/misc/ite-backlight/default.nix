@@ -1,6 +1,7 @@
 { lib
 , pkgs
 , stdenv
+, fetchpatch
 , ninja
 , libusb1
 , meson
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     libusb1
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-gcc13-build-failure.patch";
+      url = "https://github.com/hexagonal-sun/ite-backlight/commit/dc8c19d4785d80cbe7a82869daee1f723d3f3fb2.patch";
+      hash = "sha256-iTRTVy7qB2z1ip135b8k3RufTBzeJaP1wdrRWN9tPsU=";
+    })
   ];
 
   meta = with lib; {

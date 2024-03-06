@@ -3,22 +3,23 @@
 , fetchFromGitHub
 , pythonOlder
 , awkward
+, cramjam
+, hatch-vcs
 , hatchling
 , numpy
 , fsspec
 , packaging
+, pandas
 , pytestCheckHook
-, lz4
 , pytest-timeout
 , rangehttpserver
 , scikit-hep-testdata
 , xxhash
-, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.2.0";
+  version = "5.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,28 +28,29 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oig66OvnmuqT56UkAecSG9qg+qxEQINX/DWS30yq46s=";
+    hash = "sha256-cZVdsemaA3ni6xFfrkyLJA+12B7vyURj9OYVuOhqTXU=";
   };
 
   nativeBuildInputs = [
+    hatch-vcs
     hatchling
   ];
 
   propagatedBuildInputs = [
     awkward
+    cramjam
     numpy
     fsspec
     packaging
   ];
 
   nativeCheckInputs = [
+    pandas
     pytestCheckHook
-    lz4
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
     xxhash
-    zstandard
   ];
 
   preCheck = ''
@@ -59,6 +61,8 @@ buildPythonPackage rec {
     # Tests that try to download files
     "test_fallback"
     "test_file"
+    "test_fsspec_cache_http"
+    "test_fsspec_cache_http_directory"
     "test_fsspec_chunks"
     "test_fsspec_globbing_http"
     "test_fsspec_writing_memory"
@@ -73,6 +77,8 @@ buildPythonPackage rec {
     "test_open_fsspec_http"
     "test_open_fsspec_github"
     "test_pickle_roundtrip_http"
+    # Cyclic dependency with dask-awkward
+    "test_decompression_executor_for_dask"
   ];
 
   disabledTestPaths = [

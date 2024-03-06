@@ -21,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.39";
+  version = "0.43";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "dr-prodigy";
+    owner = "vacanza";
     repo = "python-holidays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PsrdR4voEAiEhgoeR03Xp/tacqtcEt1FhO4kfMYkSos=";
+    hash = "sha256-8Qm8hzGVkaYLwqUcqUxcY4iDR1jrhnSoBS8E2Wewb+U=";
   };
 
   nativeBuildInputs = [
@@ -75,8 +75,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate and work with holidays in Python";
-    homepage = "https://github.com/dr-prodigy/python-holidays";
-    changelog = "https://github.com/dr-prodigy/python-holidays/releases/tag/v${version}";
+    homepage = "https://github.com/vacanza/python-holidays";
+    changelog = "https://github.com/vacanza/python-holidays/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab jluttine ];
   };

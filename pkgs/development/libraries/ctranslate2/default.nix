@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ctranslate2";
-  version = "3.23.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     rev = "v${version}";
-    hash = "sha256-jqeLNKOGdGtAVx7ExGGDxxgi5zDmQgmJ6bxIuguaM3k=";
+    hash = "sha256-pySnkDnV41rqr4OcNonPtSgv4AJYcF5vtkBg6Ad/IvU=";
     fetchSubmodules = true;
   };
 

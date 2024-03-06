@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "jsonpath-ng";
-  version = "1.6.0";
+  version = "1.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "h2non";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-q4kIH/2+VKdlSa+IhJ3ymHpc5gmml9lW4aJS477/YSo=";
+    hash = "sha256-0ErTGxGlMn/k2KMwRV26WJpx85yJUfn6Hgp5pU4RZA4=";
   };
 
   propagatedBuildInputs = [

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, autoreconfHook
 , binutils
 , elfutils
 , fetchurl
@@ -20,7 +21,7 @@
 , python3
 , sqlite
 , withNetworkManager ? false
-, withPython ? true
+, withPython ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , withSensors ? false
 , zlib
 }:
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile.in \
       --replace "-m 4550" ""
+    substituteInPlace configure.ac \
+      --replace "pkg-config" "$PKG_CONFIG"
   '';
 
   postConfigure = ''
@@ -47,10 +50,21 @@ stdenv.mkDerivation rec {
         -i Makefile
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
+    protobuf
+    protobufc
   ] ++ lib.optionals withPython [
-    python3
+    (python3.withPackages (ps: [
+      ps.numpy
+      ps.protobuf
+      ps.pyserial
+      ps.setuptools
+      ps.websockets
+    ]))
   ];
 
   buildInputs = [
@@ -73,17 +87,6 @@ stdenv.mkDerivation rec {
     glib
   ] ++ lib.optionals withSensors [
     lm_sensors
-  ];
-
-  propagatedBuildInputs = [
-  ] ++ lib.optionals withPython [
-    (python3.withPackages (ps: [
-      ps.numpy
-      ps.protobuf
-      ps.pyserial
-      ps.setuptools
-      ps.websockets
-    ]))
   ];
 
   configureFlags = [

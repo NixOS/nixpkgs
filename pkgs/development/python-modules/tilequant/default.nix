@@ -4,6 +4,7 @@
 , click
 , ordered-set
 , pythonOlder
+, pythonRelaxDepsHook
 , pillow
 , sortedcollections
 , setuptools_dso
@@ -20,6 +21,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-uW1g3nlT6Y+1beifo/MOlGxsGL7on/jcAROxSddySHk=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pillow"
+  ];
 
   propagatedBuildInputs = [
     click

@@ -26,7 +26,8 @@ in lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
-  context.scriptsFolder = "context/stubs/unix";
+  context.scriptsFolder = "context/stubs-mkiv/unix";
+  context-legacy.scriptsFolder = "context/stubs/unix";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -66,7 +67,8 @@ in lib.recursiveUpdate orig rec {
   bibexport.extraBuildInputs = [ gnugrep ];
   checklistings.extraBuildInputs = [ coreutils ];
   cjk-gs-integrate.extraBuildInputs = [ ghostscript_headless ];
-  context.extraBuildInputs = [ coreutils ruby ];
+  context.extraBuildInputs = [ coreutils ];
+  context-legacy.extraBuildInputs = [ ruby ];
   cyrillic-bin.extraBuildInputs = [ coreutils gnused ];
   dtxgen.extraBuildInputs = [ coreutils getopt gnumake zip ];
   dviljk.extraBuildInputs = [ coreutils ];
@@ -89,7 +91,6 @@ in lib.recursiveUpdate orig rec {
   ps2eps.extraBuildInputs = [ ghostscript_headless ];
   pst2pdf.extraBuildInputs = [ ghostscript_headless ];
   tex4ebook.extraBuildInputs = [ html-tidy ];
-  tex4ht.extraBuildInputs = [ ruby ];
   texlive-scripts.extraBuildInputs = [ gnused ];
   texlive-scripts-extra.extraBuildInputs = [ coreutils findutils ghostscript_headless gnused ];
   thumbpdf.extraBuildInputs = [ ghostscript_headless ];
@@ -118,8 +119,23 @@ in lib.recursiveUpdate orig rec {
     clxelatex = "cluttex";
   };
 
+  context.binlinks = {
+    context = "luametatex";
+    "context.lua" = tl.context.tex + "/scripts/context/lua/context.lua";
+    mtxrun = "luametatex";
+    "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
+  };
+
   epstopdf.binlinks.repstopdf = "epstopdf";
   pdfcrop.binlinks.rpdfcrop = "pdfcrop";
+
+  # TODO: handle symlinks in bin.core
+  ptex.binlinks = {
+    pbibtex = tl.uptex + "/bin/upbibtex";
+    pdvitype = tl.uptex + "/bin/updvitype";
+    ppltotf = tl.uptex + "/bin/uppltotf";
+    ptftopl = tl.uptex + "/bin/uptftopl";
+  };
 
   texdef.binlinks = {
     latexdef = "texdef";
@@ -155,8 +171,11 @@ in lib.recursiveUpdate orig rec {
   '';
 
   context.postFixup = ''
-    sed -i '2iPATH="${lib.makeBinPath [ coreutils ]}''${PATH:+:$PATH}"' "$out"/bin/{contextjit,mtxrunjit}
-    sed -i '2iPATH="${lib.makeBinPath [ ruby ]}''${PATH:+:$PATH}"' "$out"/bin/texexec
+    sed -i '2iPATH="${lib.makeBinPath context.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/{contextjit,mtxrunjit}
+  '';
+
+  context-legacy.postFixup = ''
+    sed -i '2iPATH="${lib.makeBinPath context-legacy.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/texexec
   '';
 
   cyrillic-bin.postFixup = ''
@@ -246,10 +265,6 @@ in lib.recursiveUpdate orig rec {
     sed -i '2ios.setenv("PATH","${lib.makeBinPath tex4ebook.extraBuildInputs}" .. (os.getenv("PATH") and ":" .. os.getenv("PATH") or ""))' "$out"/bin/tex4ebook
   '';
 
-  tex4ht.postFixup = ''
-    sed -i -e '2iPATH="${lib.makeBinPath tex4ht.extraBuildInputs}''${PATH:+:$PATH}"' -e 's/\\rubyCall//g;' "$out"/bin/htcontext
-  '';
-
   texlive-scripts.postFixup = ''
     sed -i '2iPATH="${lib.makeBinPath texlive-scripts.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/{fmtutil-user,mktexmf,mktexpk,mktextfm,updmap-user}
   '';
@@ -276,6 +291,11 @@ in lib.recursiveUpdate orig rec {
   '';
 
   #### other script fixes
+  # wrong $0 expectations
+  bibcop.postFixup = ''
+    substituteInPlace "$out"/bin/bibcop --replace "basename(\$0) eq 'bibcop.pl'" "basename(\$0) eq 'bibcop'"
+  '';
+
   # misc tab and python3 fixes
   ebong.postFixup = ''
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
@@ -292,6 +312,9 @@ in lib.recursiveUpdate orig rec {
   latexindent.postFixup = ''
     substituteInPlace "$out"/bin/latexindent --replace 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
   '';
+
+  # flag lua dependency
+  texblend.scriptExts = [ "lua" ];
 
   # Patch texlinks.sh back to 2015 version;
   # otherwise some bin/ links break, e.g. xe(la)tex.
@@ -316,8 +339,8 @@ in lib.recursiveUpdate orig rec {
       --replace '[dict get $::pkgs texlive.infra localrev]' '${toString orig."texlive.infra".revision}' \
       --replace '[dict get $::pkgs tlshell localrev]' '${toString orig.tlshell.revision}'
   '';
-  #### dependency changes
 
+  #### dependency changes
   # it seems to need it to transform fonts
   xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
 
@@ -337,10 +360,6 @@ in lib.recursiveUpdate orig rec {
 
   # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
   arabi-add.license = [  "lppl13c" ];
-
-  # TODO: remove this when updating to texlive-2023, npp-for-context is no longer in texlive
-  # tlpdb lists license as "noinfo", but it's gpl3: https://github.com/luigiScarso/context-npp
-  npp-for-context.license = [  "gpl3Only" ];
 
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";

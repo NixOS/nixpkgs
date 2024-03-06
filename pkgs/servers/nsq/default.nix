@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "nsq";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "nsqio";
     repo = "nsq";
     rev = "v${version}";
-    hash = "sha256-yOfhDf0jidAYvkgIIJy6Piu6GKGzph/Er/obYB2XWCo=";
+    hash = "sha256-qoAp8yAc4lJmlnHHcZskRzkleZ3Q5Gu3Lhk9u1jMR4g=";
   };
 
-  vendorHash = "sha256-SkNxb90uet/DAApGjj+jpFnjdPiw4oxqxpEpqL9JXYc=";
+  vendorHash = "sha256-/5nH7zHg8zxWFgtVzSnfp7RZGvPWiuGSEyhx9fE2Pvo=";
 
   excludedPackages = [ "bench" ];
 

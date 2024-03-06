@@ -1,5 +1,7 @@
 { lib, buildLua
-, fetchFromGitHub }:
+, fetchFromGitHub
+, gitUpdater
+}:
 buildLua rec {
   pname = "simple-mpv-ui";
   version = "3.0.0";
@@ -11,9 +13,12 @@ buildLua rec {
     hash = "sha256-I8lwpo3Hfpy3UnPMmHEJCdArVQnNL245NkxsYVmnMF0=";
     sparseCheckout = [ "main.lua" "webui-page" ];
   };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   scriptPath = ".";
-  passthru.scriptName = "webui.lua";
+  passthru.scriptName = "webui";
 
   meta = with lib; {
     description = "A web based user interface with controls for the mpv mediaplayer";

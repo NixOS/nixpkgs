@@ -1,4 +1,4 @@
 args:
 builtins.removeAttrs
-  (import ../mock-nixpkgs.nix { root = ./.; } args)
+  (import <test-nixpkgs> { root = ./.; } args)
   [ "foo" ]

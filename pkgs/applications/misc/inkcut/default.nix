@@ -56,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     pycups
     qtconsole
     pyqt5
+    setuptools
   ];
 
   # QtApplication.instance() does not work during tests?

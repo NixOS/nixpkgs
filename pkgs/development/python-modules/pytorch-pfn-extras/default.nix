@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
+, setuptools
 , numpy
 , onnx
 , packaging
@@ -13,15 +14,19 @@
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.7.2";
-  format = "setuptools";
+  version = "0.7.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
-    repo = pname;
+    repo = "pytorch-pfn-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-juoLw/qfq4YF7opyR7cTYCVzUa9pXVvQnvGntcQhBr4=";
+    hash = "sha256-X7N2RQS8he9FJPfEjPJH6GdxkAPV6uxOIfRVOnJId0U=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ numpy packaging torch typing-extensions ];
 

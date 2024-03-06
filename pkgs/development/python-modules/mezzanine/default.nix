@@ -6,7 +6,7 @@
 , django
 , django-contrib-comments
 , fetchPypi
-, filebrowser_safe
+, filebrowser-safe
 , future
 , grappelli-safe
 , isPyPy
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     chardet
     django
     django-contrib-comments
-    filebrowser_safe
+    filebrowser-safe
     future
     grappelli-safe
     pillow
@@ -88,4 +88,3 @@ buildPythonPackage rec {
     platforms = platforms.unix;
   };
 }
-

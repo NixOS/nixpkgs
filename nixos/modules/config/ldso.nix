@@ -6,9 +6,9 @@ let
   libDir = pkgs.stdenv.hostPlatform.libDir;
   ldsoBasename = builtins.unsafeDiscardStringContext (last (splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker));
 
-  pkgs32 = pkgs.pkgsi686Linux;
-  libDir32 = pkgs32.stdenv.hostPlatform.libDir;
-  ldsoBasename32 = builtins.unsafeDiscardStringContext (last (splitString "/" pkgs32.stdenv.cc.bintools.dynamicLinker));
+  # Hard-code to avoid creating another instance of nixpkgs. Also avoids eval errors in some cases.
+  libDir32 = "lib"; # pkgs.pkgsi686Linux.stdenv.hostPlatform.libDir
+  ldsoBasename32 = "ld-linux.so.2"; # last (splitString "/" pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker)
 in {
   options = {
     environment.ldso = mkOption {

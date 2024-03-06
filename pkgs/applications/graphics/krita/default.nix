@@ -1,7 +1,7 @@
 { callPackage, ... }:
 
 callPackage ./generic.nix {
-  version = "5.2.0";
+  version = "5.2.2";
   kde-channel = "stable";
-  hash = "sha256-02oZc4pZw2dQucx1IuPJslWQGjOqwGmgeDgnUIqKkpc=";
+  hash = "sha256-wdLko219iqKW0CHlK+STzGedP+Xoqk/BPENNM+gVTOI=";
 }

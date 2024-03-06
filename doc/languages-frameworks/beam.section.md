@@ -216,7 +216,7 @@ in packages.mixRelease {
 Setup will require the following steps:
 
 - Move your secrets to runtime environment variables. For more information refer to the [runtime.exs docs](https://hexdocs.pm/mix/Mix.Tasks.Release.html#module-runtime-configuration). On a fresh Phoenix build that would mean that both `DATABASE_URL` and `SECRET_KEY` need to be moved to `runtime.exs`.
-- `cd assets` and `nix-shell -p node2nix --run node2nix --development` will generate a Nix expression containing your frontend dependencies
+- `cd assets` and `nix-shell -p node2nix --run "node2nix --development"` will generate a Nix expression containing your frontend dependencies
 - commit and push those changes
 - you can now `nix-build .`
 - To run the release, set the `RELEASE_TMP` environment variable to a directory that your program has write access to. It will be used to store the BEAM settings.

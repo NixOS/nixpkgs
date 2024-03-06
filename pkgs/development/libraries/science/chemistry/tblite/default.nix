@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Fix the Pkg-Config files for doubled store paths
+  postPatch = ''
+    substituteInPlace config/template.pc \
+      --replace "\''${prefix}/" ""
+  '';
+
   nativeBuildInputs = [ cmake gfortran ];
 
   buildInputs = [
@@ -48,14 +54,15 @@ stdenv.mkDerivation rec {
     simple-dftd3
   ];
 
+  outputs = [ "out" "dev" ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
+
   doCheck = true;
   preCheck = ''
     export OMP_NUM_THREADS=2
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}" ""
   '';
 
   meta = with lib; {

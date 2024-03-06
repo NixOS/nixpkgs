@@ -1,20 +1,26 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "beancount-language-server";
-  version = "1.3.1";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "polarmutex";
     repo = "beancount-language-server";
     rev = "v${version}";
-    hash = "sha256-9IkbEOG6xcmpowsLj/RHnMFGQxh02JMQsTVli4hvs/M=";
+    hash = "sha256-C44Z8JaEZvwgocaGjWT3rUAgIBtCRo0xZappMsydR7g=";
   };
 
-  cargoHash = "sha256-qhN2//hhCaKpm0HAiUL/CfdrtvAXgR34vXBECB8UDxE=";
+  cargoHash = "sha256-NMSNCURSO1iIWHH27FI5Y0q7+Ghds8VSxRGBOp+fH6A=";
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
+  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   doInstallCheck = true;
   postInstallCheck = ''

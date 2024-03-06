@@ -2,38 +2,43 @@
 , callPackage
 , python3Packages
 , fetchFromGitHub
+, installShellFiles
 , platformio
 , esptool
 , git
+, inetutils
+, stdenv
 }:
 
 let
   python = python3Packages.python.override {
     packageOverrides = self: super: {
-      esphome-dashboard = self.callPackage ./dashboard.nix {};
+      esphome-dashboard = self.callPackage ./dashboard.nix { };
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.11.6";
+  version = "2024.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9LqZlhCt+7p6tnSHFhbnUzkEOJQDsg/Pd/hgd/Il0ZQ=";
+    hash = "sha256-MAyK8Wx/d7lJKEueeL7GhxxKu8EygwjylPGXB2Y3bWM=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
+    argcomplete
+    installShellFiles
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    # remove all version pinning (E.g tornado==5.1.1 -> tornado)
-    sed -i -e "s/==[0-9.]*//" requirements.txt
+  pythonRelaxDeps = true;
 
+  postPatch = ''
     # drop coverage testing
     sed -i '/--cov/d' pytest.ini
   '';
@@ -54,7 +59,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
+    icmplib
     kconfiglib
+    packaging
     paho-mqtt
     pillow
     platformio
@@ -71,12 +78,18 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    # platformio is used in esphomeyaml/platformio_api.py
-    # esptool is used in esphomeyaml/__main__.py
-    # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    # platformio is used in esphome/platformio_api.py
+    # esptool is used in esphome/__main__.py
+    # git is used in esphome/writer.py
+    # inetutils is used in esphome/dashboard/status/ping.py
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
+    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath propagatedBuildInputs}" # will show better error messages
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
+
+  # Needed for tests
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3Packages; [
     hypothesis
@@ -97,9 +110,20 @@ python.pkgs.buildPythonApplication rec {
     $out/bin/esphome --help > /dev/null
   '';
 
+  postInstall =
+    let
+      argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
+    in
+    ''
+      installShellCompletion --cmd esphome \
+        --bash <(${argcomplete} --shell bash esphome) \
+        --zsh <(${argcomplete} --shell zsh esphome) \
+        --fish <(${argcomplete} --shell fish esphome)
+    '';
+
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
-    updateScript = callPackage ./update.nix {};
+    updateScript = callPackage ./update.nix { };
   };
 
   meta = with lib; {

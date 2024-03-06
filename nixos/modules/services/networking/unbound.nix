@@ -24,12 +24,24 @@ let
   confNoServer = concatStringsSep "\n" ((mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [""]);
   confServer = concatStringsSep "\n" (mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ]));
 
-  confFile = pkgs.writeText "unbound.conf" ''
+  confFileUnchecked = pkgs.writeText "unbound.conf" ''
     server:
     ${optionalString (cfg.settings.server.define-tag != "") (toOption "  " "define-tag" cfg.settings.server.define-tag)}
     ${confServer}
     ${confNoServer}
   '';
+  confFile = if cfg.checkconf then pkgs.runCommandLocal "unbound-checkconf" { } ''
+    cp ${confFileUnchecked} unbound.conf
+
+    # fake stateDir which is not accesible in the sandbox
+    mkdir -p $PWD/state
+    sed -i unbound.conf \
+      -e '/auto-trust-anchor-file/d' \
+      -e "s|${cfg.stateDir}|$PWD/state|"
+    ${cfg.package}/bin/unbound-checkconf unbound.conf
+
+    cp ${confFileUnchecked} $out
+  '' else confFileUnchecked;
 
   rootTrustAnchorFile = "${cfg.stateDir}/root.key";
 
@@ -60,6 +72,17 @@ in {
         type = types.path;
         default = "/var/lib/unbound";
         description = lib.mdDoc "Directory holding all state for unbound to run.";
+      };
+
+      checkconf = mkOption {
+        type = types.bool;
+        default = !cfg.settings ? include;
+        defaultText = "!config.services.unbound.settings ? include";
+        description = lib.mdDoc ''
+          Wether to check the resulting config file with unbound checkconf for syntax errors.
+
+          If settings.include is used, then this options is disabled, as the import can likely not be resolved at build time.
+        '';
       };
 
       resolveLocalQueries = mkOption {

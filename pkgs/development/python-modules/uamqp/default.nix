@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cython
 , certifi
 , CFNetwork
@@ -16,19 +17,36 @@
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.6.5";
+  version = "1.6.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-uamqp-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q8FxM4PBXLD5q68nrUJ+TGkui1yQJ3HHNF7jn+e+HkA=";
+    hash = "sha256-L4E7nnsVZ/VrOM0t4KtztU9ALmtGfi1vDzUi0ogtZOc=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     ./darwin-azure-c-shared-utility-corefoundation.patch
   ] ++ [
+    (fetchpatch {
+      name = "CVE-2024-25110.patch";
+      url = "https://github.com/Azure/azure-uamqp-c/commit/30865c9ccedaa32ddb036e87a8ebb52c3f18f695.patch";
+      stripLen = 1;
+      extraPrefix = "src/vendor/azure-uamqp-c/";
+      hash = "sha256-igzZqTLUUyuNcpCUbYHI4RXmWxg+7EC/yyD4DBurR2M=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-27099.patch";
+      url = "https://github.com/Azure/azure-uamqp-c/commit/2ca42b6e4e098af2d17e487814a91d05f6ae4987.patch";
+      stripLen = 1;
+      extraPrefix = "src/vendor/azure-uamqp-c/";
+      # other files are just tests which aren't run from the python
+      # builder anyway
+      includes = [ "src/vendor/azure-uamqp-c/src/link.c" ];
+      hash = "sha256-EqDfG1xAz5CG8MssSSrz8Yrje5qwF8ri1Kdw+UUu5ms=";
+    })
     # Fix incompatible function pointer conversion error with clang 16.
     ./clang-fix-incompatible-function-pointer-conversion.patch
   ];

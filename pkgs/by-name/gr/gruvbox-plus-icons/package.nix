@@ -3,7 +3,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , gtk3
-, breeze-icons
+, plasma5Packages
 , gnome-icon-theme
 , hicolor-icon-theme
 }:
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ breeze-icons gnome-icon-theme hicolor-icon-theme ];
+  propagatedBuildInputs = [ plasma5Packages.breeze-icons gnome-icon-theme hicolor-icon-theme ];
 
   installPhase = ''
     runHook preInstall

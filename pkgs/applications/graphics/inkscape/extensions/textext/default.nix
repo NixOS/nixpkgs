@@ -20,13 +20,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "textext";
-  version = "1.8.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    rev = version;
-    sha256 = "sha256-Qzd39X0X3DdwZ3pIIGvEbNjl6dxjDf3idzjwCkp3WRg=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-JbI/ScCFCvHbK9JZzHuT67uSAL3546et+gtTkwRnCSE=";
   };
 
   patches = [

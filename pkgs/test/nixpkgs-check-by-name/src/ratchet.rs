@@ -2,84 +2,183 @@
 //!
 //! Each type has a `compare` method that validates the ratchet checks for that item.
 
+use crate::nix_file::CallPackageArgumentInfo;
 use crate::nixpkgs_problem::NixpkgsProblem;
-use crate::structure;
 use crate::validation::{self, Validation, Validation::Success};
+use relative_path::RelativePathBuf;
 use std::collections::HashMap;
 
 /// The ratchet value for the entirety of Nixpkgs.
 #[derive(Default)]
 pub struct Nixpkgs {
-    /// The ratchet values for each package in `pkgs/by-name`
-    pub packages: HashMap<String, Package>,
+    /// Sorted list of packages in package_map
+    pub package_names: Vec<String>,
+    /// The ratchet values for all packages
+    pub package_map: HashMap<String, Package>,
 }
 
 impl Nixpkgs {
     /// Validates the ratchet checks for Nixpkgs
-    pub fn compare(optional_from: Option<Self>, to: Self) -> Validation<()> {
+    pub fn compare(from: Self, to: Self) -> Validation<()> {
         validation::sequence_(
             // We only loop over the current attributes,
             // we don't need to check ones that were removed
-            to.packages.into_iter().map(|(name, attr_to)| {
-                let attr_from = if let Some(from) = &optional_from {
-                    from.packages.get(&name)
-                } else {
-                    // This pretends that if there's no base version to compare against, all
-                    // attributes existed without conforming to the new strictness check for
-                    // backwards compatibility.
-                    // TODO: Remove this case. This is only needed because the `--base`
-                    // argument is still optional, which doesn't need to be once CI is updated
-                    // to pass it.
-                    Some(&Package {
-                        empty_non_auto_called: EmptyNonAutoCalled::Invalid,
-                    })
-                };
-                Package::compare(&name, attr_from, &attr_to)
+            to.package_names.into_iter().map(|name| {
+                Package::compare(&name, from.package_map.get(&name), &to.package_map[&name])
             }),
         )
     }
 }
 
-/// The ratchet value for a single package in `pkgs/by-name`
+/// The ratchet value for a top-level package
 pub struct Package {
     /// The ratchet value for the check for non-auto-called empty arguments
-    pub empty_non_auto_called: EmptyNonAutoCalled,
+    pub manual_definition: RatchetState<ManualDefinition>,
+
+    /// The ratchet value for the check for new packages using pkgs/by-name
+    pub uses_by_name: RatchetState<UsesByName>,
 }
 
 impl Package {
-    /// Validates the ratchet checks for a single package defined in `pkgs/by-name`
+    /// Validates the ratchet checks for a top-level package
     pub fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
-        EmptyNonAutoCalled::compare(
-            name,
-            optional_from.map(|x| &x.empty_non_auto_called),
-            &to.empty_non_auto_called,
-        )
+        validation::sequence_([
+            RatchetState::<ManualDefinition>::compare(
+                name,
+                optional_from.map(|x| &x.manual_definition),
+                &to.manual_definition,
+            ),
+            RatchetState::<UsesByName>::compare(
+                name,
+                optional_from.map(|x| &x.uses_by_name),
+                &to.uses_by_name,
+            ),
+        ])
     }
 }
 
-/// The ratchet value of a single package in `pkgs/by-name`
-/// for the non-auto-called empty argument check of a single.
-///
-/// This checks that packages defined in `pkgs/by-name` cannot be overridden
-/// with an empty second argument like `callPackage ... { }`.
-#[derive(PartialEq, PartialOrd)]
-pub enum EmptyNonAutoCalled {
-    Invalid,
-    Valid,
+/// The ratchet state of a generic ratchet check.
+pub enum RatchetState<Ratchet: ToNixpkgsProblem> {
+    /// The ratchet is loose, it can be tightened more.
+    /// In other words, this is the legacy state we're trying to move away from.
+    /// Introducing new instances is not allowed but previous instances will continue to be allowed.
+    /// The `Context` is context for error messages in case a new instance of this state is
+    /// introduced
+    Loose(Ratchet::ToContext),
+    /// The ratchet is tight, it can't be tightened any further.
+    /// This is either because we already use the latest state, or because the ratchet isn't
+    /// relevant.
+    Tight,
+    /// This ratchet can't be applied.
+    /// State transitions from/to NonApplicable are always allowed
+    NonApplicable,
 }
 
-impl EmptyNonAutoCalled {
-    /// Validates the non-auto-called empty argument ratchet check for a single package defined in `pkgs/by-name`
+/// A trait that can convert an attribute-specific error context into a NixpkgsProblem
+pub trait ToNixpkgsProblem {
+    /// Context relating to the Nixpkgs that is being transitioned _to_
+    type ToContext;
+
+    /// How to convert an attribute-specific error context into a NixpkgsProblem
+    fn to_nixpkgs_problem(
+        name: &str,
+        optional_from: Option<()>,
+        to: &Self::ToContext,
+    ) -> NixpkgsProblem;
+}
+
+impl<Context: ToNixpkgsProblem> RatchetState<Context> {
+    /// Compare the previous ratchet state of an attribute to the new state.
+    /// The previous state may be `None` in case the attribute is new.
     fn compare(name: &str, optional_from: Option<&Self>, to: &Self) -> Validation<()> {
-        let from = optional_from.unwrap_or(&Self::Valid);
-        if to >= from {
-            Success(())
-        } else {
-            NixpkgsProblem::WrongCallPackage {
-                relative_package_file: structure::relative_file_for_package(name),
-                package_name: name.to_owned(),
+        match (optional_from, to) {
+            // Loosening a ratchet is now allowed
+            (Some(RatchetState::Tight), RatchetState::Loose(loose_context)) => {
+                Context::to_nixpkgs_problem(name, Some(()), loose_context).into()
             }
-            .into()
+
+            // Introducing a loose ratchet is also not allowed
+            (None, RatchetState::Loose(loose_context)) => {
+                Context::to_nixpkgs_problem(name, None, loose_context).into()
+            }
+
+            // Everything else is allowed, including:
+            // - Loose -> Loose (grandfathering policy for a loose ratchet)
+            // - -> Tight (always okay to keep or make the ratchet tight)
+            // - Anything involving NotApplicable, where we can't really make any good calls
+            _ => Success(()),
+        }
+    }
+}
+
+/// The ratchet to check whether a top-level attribute has/needs
+/// a manual definition, e.g. in all-packages.nix.
+///
+/// This ratchet is only tight for attributes that:
+/// - Are not defined in `pkgs/by-name`, and rely on a manual definition
+/// - Are defined in `pkgs/by-name` without any manual definition,
+///   (no custom argument overrides)
+/// - Are defined with `pkgs/by-name` with a manual definition that can't be removed
+///   because it provides custom argument overrides
+///
+/// In comparison, this ratchet is loose for attributes that:
+/// - Are defined in `pkgs/by-name` with a manual definition
+///   that doesn't have any custom argument overrides
+pub enum ManualDefinition {}
+
+impl ToNixpkgsProblem for ManualDefinition {
+    type ToContext = NixpkgsProblem;
+
+    fn to_nixpkgs_problem(
+        _name: &str,
+        _optional_from: Option<()>,
+        to: &Self::ToContext,
+    ) -> NixpkgsProblem {
+        (*to).clone()
+    }
+}
+
+/// The ratchet value of an attribute
+/// for the check that new packages use pkgs/by-name
+///
+/// This checks that all new package defined using callPackage must be defined via pkgs/by-name
+/// It also checks that once a package uses pkgs/by-name, it can't switch back to all-packages.nix
+pub enum UsesByName {}
+
+impl ToNixpkgsProblem for UsesByName {
+    type ToContext = (CallPackageArgumentInfo, RelativePathBuf);
+
+    fn to_nixpkgs_problem(
+        name: &str,
+        optional_from: Option<()>,
+        (to, file): &Self::ToContext,
+    ) -> NixpkgsProblem {
+        if let Some(()) = optional_from {
+            if to.empty_arg {
+                NixpkgsProblem::MovedOutOfByNameEmptyArg {
+                    package_name: name.to_owned(),
+                    call_package_path: to.relative_path.clone(),
+                    file: file.to_owned(),
+                }
+            } else {
+                NixpkgsProblem::MovedOutOfByNameNonEmptyArg {
+                    package_name: name.to_owned(),
+                    call_package_path: to.relative_path.clone(),
+                    file: file.to_owned(),
+                }
+            }
+        } else if to.empty_arg {
+            NixpkgsProblem::NewPackageNotUsingByNameEmptyArg {
+                package_name: name.to_owned(),
+                call_package_path: to.relative_path.clone(),
+                file: file.to_owned(),
+            }
+        } else {
+            NixpkgsProblem::NewPackageNotUsingByNameNonEmptyArg {
+                package_name: name.to_owned(),
+                call_package_path: to.relative_path.clone(),
+                file: file.to_owned(),
+            }
         }
     }
 }

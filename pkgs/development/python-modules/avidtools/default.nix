@@ -6,7 +6,6 @@
 , pydantic
 , pythonOlder
 , setuptools
-, typing
 , typing-extensions
 }:
 
@@ -22,6 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-t+ohPjOBwY8i+g7VC30ehEu6SFIsn1SwGR/ICkV9blg=";
   };
 
+  postPatch = ''
+    sed -i "/'typing'/d" setup.py
+  '';
+
   nativeBuildInputs = [
     setuptools
   ];
@@ -30,7 +33,6 @@ buildPythonPackage rec {
     datetime
     nvdlib
     pydantic
-    typing
     typing-extensions
   ];
 

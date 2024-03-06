@@ -26,7 +26,7 @@ let
   # Sometimes we access `llvmPackages` via `pkgs`, and other times
   # via `pkgsFooBar`, so a string (attrname) is the only way to have
   # a single point of control over the LLVM version used.
-  llvmPackages_attrName = "llvmPackages_16";
+  llvmPackages_attrName = "llvmPackages_17";
   stdenv = pkgs.${llvmPackages_attrName}.stdenv;
 
   # Helper functions for changes that depend on specific versions:
@@ -59,6 +59,7 @@ let
           inherit (upstream-info.deps.gn) url rev hash;
         };
       });
+      recompressTarball = callPackage ./recompress-tarball.nix { };
     });
 
     browser = callPackage ./browser.nix {

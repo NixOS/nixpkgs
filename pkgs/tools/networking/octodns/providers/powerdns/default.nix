@@ -7,7 +7,6 @@
 , requests
 , requests-mock
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [

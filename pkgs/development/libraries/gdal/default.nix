@@ -14,7 +14,9 @@
 , useHDF ? (!useMinimalFeatures)
 , useNetCDF ? (!useMinimalFeatures)
 , useArmadillo ? (!useMinimalFeatures)
+, useJava ? (!useMinimalFeatures)
 
+, ant
 , bison
 , cmake
 , gtest
@@ -36,6 +38,7 @@
 , libgeotiff
 , geos
 , giflib
+, jdk
 , libheif
 , dav1d
 , libaom
@@ -76,13 +79,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.8.2";
+  version = "3.8.4";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R21zRjEvJO+97yXJDvzDJryQ7ps9uEN62DZ0GCxdoFk=";
+    hash = "sha256-R9VLof13OXPbWGHOG1Q4WZWSPoF739C6WuNWxoIwKTw=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.setuptools
     python3.pkgs.wrapPython
     swig
-  ];
+  ] ++ lib.optionals useJava [ ant jdk ];
 
   cmakeFlags = [
     "-DGDAL_USE_INTERNAL_LIBS=OFF"
@@ -110,6 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ] ++ lib.optionals (!useTiledb) [
     "-DGDAL_USE_TILEDB=OFF"
+  ] ++ lib.optionals (!useJava) [
+    # This is not strictly needed as the Java bindings wouldn't build anyway if
+    # ant/jdk were not available.
+    "-DBUILD_JAVA_BINDINGS=OFF"
   ];
 
   buildInputs =
@@ -144,7 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
         openexr
         xercesc
       ] ++ arrowDeps);
-    in [
+    in
+    [
       c-blosc
       brunsli
       cfitsio
@@ -178,20 +186,25 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       python3.pkgs.numpy
     ] ++ tileDbDeps
-      ++ libHeifDeps
-      ++ libJxlDeps
-      ++ mysqlDeps
-      ++ postgresDeps
-      ++ popplerDeps
-      ++ arrowDeps
-      ++ hdfDeps
-      ++ netCdfDeps
-      ++ armadilloDeps
-      ++ darwinDeps
-      ++ nonDarwinDeps;
+    ++ libHeifDeps
+    ++ libJxlDeps
+    ++ mysqlDeps
+    ++ postgresDeps
+    ++ popplerDeps
+    ++ arrowDeps
+    ++ hdfDeps
+    ++ netCdfDeps
+    ++ armadilloDeps
+    ++ darwinDeps
+    ++ nonDarwinDeps;
 
+  pythonPath = [ python3.pkgs.numpy ];
   postInstall = ''
-    wrapPythonPrograms
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+  '' + lib.optionalString useJava ''
+    cd $out/lib
+    ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
+    cd -
   '';
 
   enableParallelBuilding = true;
@@ -257,9 +270,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd # autotest
   '';
 
-  passthru.tests = {
-    gdal = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
-  };
+  passthru.tests = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
 
   __darwinAllowLocalNetworking = true;
 

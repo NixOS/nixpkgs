@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 
 # build-system
 , poetry-core
@@ -12,7 +13,7 @@
 , oauthlib
 , packaging
 , qrcode
-, rich
+, cookiecutter
 , watchdog
 , websocket-client
 , websockets
@@ -21,16 +22,21 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.15.0";
-  format = "pyproject";
+  version = "0.20.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NnozZX8i5QsnVRW5cyIvKxYuHf9EoR6owWSQw6Y4dwQ=";
+    hash = "sha256-3LhQI/hjenTxG/1DZP/zn2zs00rT5BviDAQYb2vucBM=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "websockets"
   ];
 
   propagatedBuildInputs = [
@@ -43,7 +49,7 @@ buildPythonPackage rec {
     httpx
     packaging
     qrcode
-    rich
+    cookiecutter
   ];
 
   doCheck = false;

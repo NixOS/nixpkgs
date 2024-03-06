@@ -18,19 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "swayosd";
-  version = "unstable-2023-07-18";
+  version = "unstable-2023-09-26";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
-    rev = "b14c83889c7860c174276d05dec6554169a681d9";
-    hash = "sha256-MJuTwEI599Y7q+0u0DMxRYaXsZfpksc2csgnK9Ghp/E=";
+    rev = "1c7d2f5b3ee262f25bdd3c899eadf17efb656d26";
+    hash = "sha256-Y22O6Ktya/WIhidnoyxnZu5YvXWNmSS6vecDU8zDD34=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-pExpzQwuHREhgkj+eZ8drBVsh/B3WiQBBh906O6ymFw=";
+    hash = "sha256-tqbMlygX+n14oR1t+0ngjiSG2mHUk/NbiWHk4yEAb2o=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "A GTK based on screen display for keyboard shortcuts";
     homepage = "https://github.com/ErikReider/SwayOSD";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = with maintainers; [ aleksana barab-i ];
     platforms = platforms.linux;
   };
 }

@@ -36,7 +36,7 @@ in
 
   testScript = ''
     def instance_is_up(_) -> bool:
-      status, _ = machine.execute("incus exec ${instance-name} --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+      status, _ = machine.execute("incus exec ${instance-name} --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
       return status == 0
 
     machine.wait_for_unit("incus.service")
@@ -53,5 +53,8 @@ in
 
     with subtest("lxd-agent is started"):
         machine.succeed("incus exec ${instance-name} systemctl is-active lxd-agent")
+
+    with subtest("lxd-agent has a valid path"):
+        machine.succeed("incus exec ${instance-name} -- bash -c 'true'")
   '';
 })

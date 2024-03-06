@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, autoreconfHook, ... } @ args:
 
 import ./generic.nix (args // {
-  version = "6.2.23";
-  sha256 = "1isxx4jfmnh913jzhp8hhfngbk6dsg46f4kjpvvc56maj64jqqa7";
+  version = "6.2.32";
+  sha256 = "1yx8wzhch5wwh016nh0kfxvknjkafv6ybkqh6nh7lxx50jqf5id9";
   license = lib.licenses.agpl3;
   extraPatches = [
     ./clang-6.0.patch

@@ -7,7 +7,8 @@
   magma,
   magma-hip,
   magma-cuda-static,
-  useSystemNccl ? true,
+  # Use the system NCCL as long as we're targeting CUDA on a supported platform.
+  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
   MPISupport ? false, mpi,
   buildDocs ? false,
 
@@ -20,6 +21,7 @@
   Accelerate, CoreServices, libobjc,
 
   # Propagated build inputs
+  astunparse,
   fsspec,
   filelock,
   jinja2,
@@ -125,8 +127,8 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.1.2";
-  format = "setuptools";
+  version = "2.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8.0";
 
@@ -143,7 +145,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-E/GQCRWBf3hYsDCCk0twaL9gkVOCEQeCvO3Va+jgIdE=";
+    hash = "sha256-6z8G5nMbGHbpA+xfmOR726h9E4N9NoEtaFgcYE0DuUE=";
   };
 
   patches = lib.optionals cudaSupport [
@@ -246,6 +248,9 @@ in buildPythonPackage rec {
   # Also avoids pytorch exporting the headers of pybind11
   USE_SYSTEM_PYBIND11 = true;
 
+  # NB technical debt: building without NNPACK as workaround for missing `six`
+  USE_NNPACK = 0;
+
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
     ${python.pythonOnBuildForHost.interpreter} setup.py build --cmake-only
@@ -273,9 +278,11 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_NCCL = setBool (cudaSupport && cudaPackages ? nccl);
-  USE_SYSTEM_NCCL = setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
-  USE_STATIC_NCCL = setBool useSystemNccl;
+  # In-tree builds of NCCL are not supported.
+  # Use NCCL when cudaSupport is enabled and nccl is available.
+  USE_NCCL = setBool useSystemNccl;
+  USE_SYSTEM_NCCL = USE_NCCL;
+  USE_STATIC_NCCL = USE_NCCL;
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -363,7 +370,7 @@ in buildPythonPackage rec {
     ] ++ lists.optionals (cudaPackages ? cudnn) [
       cudnn.dev
       cudnn.lib
-    ] ++ lists.optionals (useSystemNccl && cudaPackages ? nccl) [
+    ] ++ lists.optionals useSystemNccl [
       # Some platforms do not support NCCL (i.e., Jetson)
       nccl.dev # Provides nccl.h AND a static copy of NCCL!
     ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
@@ -380,6 +387,7 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   propagatedBuildInputs = [
+    astunparse
     cffi
     click
     numpy

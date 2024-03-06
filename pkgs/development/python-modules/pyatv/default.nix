@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.14.4";
+  version = "0.14.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w3WOlZFfuCmekUsr8msi2LXTm6j8/Bk49L3MiYF7lOM=";
+    hash = "sha256-Uykj9MIUFcZyTWOBjUhL9+qItbnpwtuTd2Cx5jI7Wtw=";
   };
 
   postPatch = ''

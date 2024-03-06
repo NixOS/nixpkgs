@@ -4,7 +4,12 @@
 , fetchpatch
 , openssl
 }:
-
+let
+  makefile =
+    if stdenv.isDarwin
+    then "makefile.mac"
+    else "makefile";
+in
 stdenv.mkDerivation rec {
   pname = "ibm-sw-tpm2";
   version = "1682";
@@ -30,12 +35,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "src";
 
+  inherit makefile;
+
   prePatch = ''
     # Fix hardcoded path to GCC.
-    substituteInPlace makefile --replace /usr/bin/gcc "${stdenv.cc}/bin/cc"
+    substituteInPlace ${makefile} --replace /usr/bin/gcc "${stdenv.cc}/bin/cc"
 
     # Remove problematic default CFLAGS.
-    substituteInPlace makefile \
+    substituteInPlace ${makefile} \
       --replace -Werror "" \
       --replace -O0 "" \
       --replace -ggdb ""
@@ -49,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "IBM's Software TPM 2.0, an implementation of the TCG TPM 2.0 specification";
     homepage = "https://sourceforge.net/projects/ibmswtpm2/";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ delroth ];
     license = licenses.bsd3;
   };

@@ -5,15 +5,15 @@
 , dnspython
 , fetchFromGitHub
 , publicsuffix2
-, pythonOlder
 , pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "authheaders";
-  version = "0.15.3";
-  format = "setuptools";
+  version = "0.16.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,8 +21,12 @@ buildPythonPackage rec {
     owner = "ValiMail";
     repo = "authentication-headers";
     rev = "refs/tags/${version}";
-    hash = "sha256-96fCx5uN7yegTrCN+LSjtu4u3RL+dcxV/Puyo0eziI8=";
+    hash = "sha256-/vxUUSWwysYQzcy2AmkF4f8R59FHRnBfFlPRpfM9e5o=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     authres
@@ -38,6 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "authheaders"
+  ];
+
+  disabledTests = [
+    # Test fails with timeout even if the resolv.conf hack is present
+    "test_authenticate_dmarc_psdsub"
   ];
 
   meta = with lib; {

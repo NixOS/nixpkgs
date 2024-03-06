@@ -55,6 +55,24 @@ runTests {
     expected = { a = false; b = false; c = true; };
   };
 
+  testCallPackageWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: {};
+      f' = callPackageWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.override;
+      expected = functionArgs f;
+    };
+
+  testCallPackagesWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: { nested = {}; };
+      f' = callPackagesWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.nested.override;
+      expected = functionArgs f;
+    };
+
 # TRIVIAL
 
   testId = {
@@ -1902,7 +1920,7 @@ runTests {
     expected = true;
   };
 
-  # lazyDerivation
+  # DERIVATIONS
 
   testLazyDerivationIsLazyInDerivationForAttrNames = {
     expr = attrNames (lazyDerivation {
@@ -1955,9 +1973,57 @@ runTests {
     expected = derivation;
   };
 
+  testOptionalDrvAttr = let
+    mkDerivation = args: derivation (args // {
+      builder = "builder";
+      system = "system";
+      __ignoreNulls = true;
+    });
+  in {
+    expr = (mkDerivation {
+      name = "foo";
+      x = optionalDrvAttr true 1;
+      y = optionalDrvAttr false 1;
+    }).drvPath;
+    expected = (mkDerivation {
+      name = "foo";
+      x = 1;
+    }).drvPath;
+  };
+
+  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out" "dev"];
+      dev = "test dev";
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta.position = "/hi:23";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
+    expected = derivation;
+  };
+
   testTypeDescriptionInt = {
     expr = (with types; int).description;
     expected = "signed integer";
+  };
+  testTypeDescriptionIntsPositive = {
+    expr = (with types; ints.positive).description;
+    expected = "positive integer, meaning >0";
+  };
+  testTypeDescriptionIntsPositiveOrEnumAuto = {
+    expr = (with types; either ints.positive (enum ["auto"])).description;
+    expected = ''positive integer, meaning >0, or value "auto" (singular enum)'';
+  };
+  testTypeDescriptionListOfPositive = {
+    expr = (with types; listOf ints.positive).description;
+    expected = "list of (positive integer, meaning >0)";
   };
   testTypeDescriptionListOfInt = {
     expr = (with types; listOf int).description;

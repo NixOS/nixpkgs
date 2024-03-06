@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , hatchling
 , jax
 , jaxlib
@@ -9,28 +9,23 @@
 , typing-extensions
 , beartype
 , optax
+, pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qFTKiY/t2LCCWJBOSfaX0hYQInrpXgfhTc+J4iuyVbM=";
+    hash = "sha256-la3gPfwQ2pxfZoEikn9uG+Pc3PKafgEgxZ8oVQEm9YM=";
   };
-
-  patches = [
-    (fetchpatch {  # https://github.com/patrick-kidger/equinox/pull/601
-      name = "fix-wrong-PRNGKey-annotation";
-      url = "https://github.com/patrick-kidger/equinox/pull/601/commits/dce2fa1b7dcfd25d9573ce3186c5f6e8f79392bb.patch";
-      hash = "sha256-tlGV5xuNGLZTd1GlPwllybPz8tWHGHaCBdlsEuISm/0=";
-    })
-  ];
 
   nativeBuildInputs = [
     hatchling
@@ -46,6 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beartype
     optax
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -53,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
+    changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
     homepage = "https://github.com/patrick-kidger/equinox";
     license = licenses.asl20;
     maintainers = with maintainers; [ GaetanLepage ];

@@ -10,20 +10,29 @@
 
 buildPythonPackage rec {
   pname = "dvc-ssh";
-  version = "2.22.2";
-  format = "setuptools";
+  version = "4.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eJwNCZvdBqYKEbX4On3pGm2bzCvH9G7rdsgeN7XPJB0=";
+    hash = "sha256-lvC6oAXQR4u7s+11n6NgQExPc9yrq3JAmmXtuOw22tI=";
   };
 
-  # Prevent circular dependency
-  pythonRemoveDeps = [ "dvc" ];
+  pythonRemoveDeps = [
+    # Prevent circular dependency
+    "dvc"
+  ];
 
-  nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    setuptools-scm
+    pythonRelaxDepsHook
+  ];
 
-  propagatedBuildInputs = [ bcrypt dvc-objects sshfs ];
+  propagatedBuildInputs = [
+    bcrypt
+    dvc-objects
+    sshfs
+  ];
 
   # bcrypt is enabled for sshfs in nixpkgs
   postPatch = ''
@@ -33,7 +42,10 @@ buildPythonPackage rec {
   # Network access is needed for tests
   doCheck = false;
 
-  pythonImportsCheck = [ "dvc_ssh" ];
+  # Circular dependency
+  # pythonImportsCheck = [
+  #  "dvc_ssh"
+  # ];
 
   meta = with lib; {
     description = "ssh plugin for dvc";

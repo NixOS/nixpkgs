@@ -768,11 +768,6 @@
         "python3"
       ]
     },
-    "ruby-2.7": {
-      "attrPath": [
-        "ruby_2_7"
-      ]
-    },
     "ruby-3.1": {
       "attrPath": [
         "ruby_3_1"

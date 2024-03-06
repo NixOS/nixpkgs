@@ -43,8 +43,6 @@ buildPythonPackage rec {
     "flask_compress"
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   meta = with lib; {
     description = "Compress responses in your Flask app with gzip, deflate or brotli";
     homepage = "https://github.com/colour-science/flask-compress";

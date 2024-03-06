@@ -22,7 +22,7 @@
 , libuuid
 , libxml2
 , lmdb
-, luajit
+, luajit_openresty
 , msgpuck
 , openssl
 , opentracing-cpp
@@ -231,14 +231,16 @@ let self = {
     };
   };
 
-  echo = {
+  echo = rec {
     name = "echo";
+    version = "0.63";
+
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
       repo = "echo-nginx-module";
-      rev = "v0.62";
-      sha256 = "0kr1y094yw1a9fyrf4w73ikq18w5ys463wza9n7yfl77xdwirnvl";
+      rev = "v${version}";
+      hash = "sha256-K7oOE0yxPYLf+3YMVbBsncpHRpGHXjs/8B5QPO3MQC4=";
     };
 
     meta = with lib; {
@@ -371,15 +373,17 @@ let self = {
 
   lua = rec {
     name = "lua";
+    version = "0.10.26";
+
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.22";
-      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
+      rev = "v${version}";
+      hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
 
     preConfigure = let
       # fix compilation against nginx 1.23.0
@@ -388,8 +392,8 @@ let self = {
         sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
       };
     in ''
-      export LUAJIT_LIB="${luajit}/lib"
-      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+      export LUAJIT_LIB="${luajit_openresty}/lib"
+      export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
 
       # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
       lua_src=$TMPDIR/lua-src
@@ -420,7 +424,7 @@ let self = {
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
     allowMemoryWriteExecute = true;
 
     meta = with lib; {
@@ -458,15 +462,15 @@ let self = {
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.34";
-      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
+      rev = "v0.36";
+      sha256 = "sha256-X+ygIesQ9PGm5yM+u1BOLYVpm1172P8jWwXNr3ixFY4=";
     };
 
     meta = with lib; {
       description = "Set, add, and clear arbitrary output headers";
       homepage = "https://github.com/openresty/headers-more-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
@@ -1029,8 +1033,8 @@ let self = {
       name = "zstd";
       owner = "tokers";
       repo = "zstd-nginx-module";
-      rev = "0.1.0";
-      hash = "sha256-8SBU9hJnKtNrwbpioy+Z/mfiVuqAx+U1t64m5tfEy6o=";
+      rev = "0.1.1";
+      hash = "sha256-1gCV7uUsuYnZfb9e8VfjWkUloVINOUH5qzeJ03kIHgs=";
     };
 
     inputs = [ zstd ];

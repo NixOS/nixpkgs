@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.3.3";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "printfn";
-    repo = pname;
+    repo = "fend";
     rev = "v${version}";
-    sha256 = "sha256-4N2MSs4Uhd0NcS57b6qIJd8ovnUVjLiLniMsHTdZHCo=";
+    hash = "sha256-X96r5wN5eq1PZD/JGqnG/0kg6PYEdnj5h9zc+GXQjQM=";
   };
 
-  cargoHash = "sha256-Y8LfkFPM4MKxwW6xk93+vCASkVfsMp3GugjH/kIAvQ8=";
+  cargoHash = "sha256-UIZs45OQ1j57VEb6g4P0AwjmEsjMt0am5FUXXDODaWI=";
 
   nativeBuildInputs = [ pandoc installShellFiles copyDesktopItems ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -D -m 444 $src/icon/fend-icon-256.png $out/share/icons/hicolor/256x256/apps/fend.png
+    install -D -m 444 $src/icon/icon.svg $out/share/icons/hicolor/scalable/apps/fend.svg
   '';
 
   desktopItems = [
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
     changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
-    license = licenses.mit;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ djanatyn liff ];
     mainProgram = "fend";
   };

@@ -6,6 +6,13 @@
 , bubblewrap
 , systemd
 , pandoc
+, kmod
+, gnutar
+, util-linux
+, cpio
+, bash
+, coreutils
+, btrfs-progs
 
   # Python packages
 , setuptools
@@ -23,20 +30,7 @@
 let
   # For systemd features used by mkosi, see
   # https://github.com/systemd/mkosi/blob/19bb5e274d9a9c23891905c4bcbb8f68955a701d/action.yaml#L64-L72
-  systemdForMkosi = (systemd.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches ++ [
-      # Enable setting a deterministic verity seed for systemd-repart. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/81e04781106e3db24e9cf63c1d5fdd8215dc3f42.patch";
-        hash = "sha256-KO3poIsvdeepPmXWQXNaJJCPpmBb4sVmO+ur4om9f5k=";
-      })
-      # repart: make sure rewinddir() is called before readdir() when performing rm -rf. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/6bbb893b90e2dcb05fb310ba4608f9c9dc587845.patch";
-        hash = "sha256-A6cF2QAeYHGc0u0V1JMxIcV5shzf5x3Q6K+blZOWSn4=";
-      })
-    ];
-  })).override {
+  systemdForMkosi = systemd.override {
     withRepart = true;
     withBootloader = true;
     withSysusers = true;
@@ -51,7 +45,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "19";
+  version = "20.2";
   format = "pyproject";
 
   outputs = [ "out" "man" ];
@@ -60,8 +54,17 @@ buildPythonApplication rec {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-KjJM+KZCgUnsaEN2ZorhH0AR5nmiV2h3i7Vb3KdGFtI=";
+    hash = "sha256-+mvepzoswDVIHzj+rEnlr0ouphGv5unpaNX3U8x517Y=";
   };
+
+  patches = [
+    # sandbox: Deal correctly with unmerged-usr.
+    # Remove on next release after v20.2.
+    (fetchpatch {
+      url = "https://github.com/systemd/mkosi/commit/5a708efdb432dee9c6e5a9a4754752359cac8944.patch";
+      hash = "sha256-dXkY8Hha6y9CoZC1WdtZuI/YJsOQ1fOt4o4RsPkGWYQ=";
+    })
+  ];
 
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
@@ -84,8 +87,15 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    systemdForMkosi
+    bash
+    btrfs-progs
     bubblewrap
+    coreutils
+    cpio
+    gnutar
+    kmod
+    systemdForMkosi
+    util-linux
   ] ++ lib.optional withQemu [
     qemu
   ];

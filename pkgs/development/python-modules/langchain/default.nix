@@ -3,14 +3,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pythonRelaxDepsHook
 , poetry-core
 , aiohttp
-, anyio
 , async-timeout
 , dataclasses-json
 , jsonpatch
 , langsmith
+, langchain-core
+, langchain-community
+, langchain-text-splitters
 , numpy
 , pydantic
 , pyyaml
@@ -18,60 +19,27 @@
 , sqlalchemy
 , tenacity
   # optional dependencies
-, atlassian-python-api
 , azure-core
 , azure-cosmos
 , azure-identity
-, beautifulsoup4
 , chardet
 , clarifai
 , cohere
-, duckduckgo-search
-, elasticsearch
 , esprima
-, faiss
-, google-api-python-client
-, google-auth
-, google-search-results
-, gptcache
-, html2text
 , huggingface-hub
-, jinja2
-, jq
 , lark
-, librosa
-, lxml
 , manifest-ml
-, neo4j
-, networkx
 , nlpcloud
-, nltk
 , openai
-, opensearch-py
-, pdfminer-six
-, pgvector
-, pinecone-client
-, psycopg2
-, pymongo
-, pyowm
-, pypdf
-, pytesseract
-, python-arango
 , qdrant-client
-, rdflib
-, redis
-, requests-toolbelt
 , sentence-transformers
 , tiktoken
 , torch
 , transformers
 , typer
-, weaviate-client
-, wikipedia
   # test dependencies
 , freezegun
 , pandas
-, pexpect
 , pytest-asyncio
 , pytest-mock
 , pytest-socket
@@ -84,23 +52,22 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.334";
+  version = "0.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "hwchase17";
+    owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mXPqc8wF9DhEtITm8h5R9kHBcMJ7AEK4kL5Z7V2p8NE=";
+    hash = "sha256-wSm+n66CWvvR1ljrmmmE1wOX/CaCNgf8AKBZl5+I07A=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [
@@ -108,17 +75,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
-    sqlalchemy
-    requests
-    pyyaml
-    numpy
-    dataclasses-json
-    tenacity
     aiohttp
-    langsmith
-    anyio
+    dataclasses-json
     jsonpatch
+    langchain-community
+    langchain-core
+    langchain-text-splitters
+    langsmith
+    numpy
+    pydantic
+    pyyaml
+    requests
+    sqlalchemy
+    tenacity
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
   ];
@@ -169,81 +138,9 @@ buildPythonPackage rec {
       # azure-ai-vision
       # azure-cognitiveservices-speech
       # azure-search-documents
+      # azure-ai-textanalytics
     ];
     all = [
-      clarifai
-      cohere
-      openai
-      nlpcloud
-      huggingface-hub
-      manifest-ml
-      elasticsearch
-      opensearch-py
-      google-search-results
-      faiss
-      sentence-transformers
-      transformers
-      nltk
-      wikipedia
-      beautifulsoup4
-      tiktoken
-      torch
-      jinja2
-      pinecone-client
-      # pinecone-text
-      # marqo
-      pymongo
-      weaviate-client
-      redis
-      google-api-python-client
-      google-auth
-      # wolframalpha
-      qdrant-client
-      # tensorflow-text
-      pypdf
-      networkx
-      # nomic
-      # aleph-alpha-client
-      # deeplake
-      # libdeeplake
-      pgvector
-      psycopg2
-      pyowm
-      pytesseract
-      html2text
-      atlassian-python-api
-      gptcache
-      duckduckgo-search
-      # arxiv
-      azure-identity
-      # clickhouse-connect
-      azure-cosmos
-      # lancedb
-      # langkit
-      lark
-      pexpect
-      # pyvespa
-      # O365
-      jq
-      # docarray
-      pdfminer-six
-      lxml
-      requests-toolbelt
-      neo4j
-      # openlm
-      # azure-ai-formrecognizer
-      # azure-ai-vision
-      # azure-cognitiveservices-speech
-      # momento
-      # singlestoredb
-      # tigrisdb
-      # nebula3-python
-      # awadb
-      esprima
-      rdflib
-      # amadeus
-      librosa
-      python-arango
     ];
     cli = [
       typer
@@ -277,6 +174,9 @@ buildPythonPackage rec {
 
     # these tests have network access
     "test_socket_disabled"
+
+    # this test may require a specific version of langchain-community
+    "test_compatible_vectorstore_documentation"
   ];
 
   pythonImportsCheck = [
@@ -285,8 +185,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Building applications with LLMs through composability";
-    homepage = "https://github.com/hwchase17/langchain";
-    changelog = "https://github.com/hwchase17/langchain/releases/tag/v${version}";
+    homepage = "https://github.com/langchain-ai/langchain";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

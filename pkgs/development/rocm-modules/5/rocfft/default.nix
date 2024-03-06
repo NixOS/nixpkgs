@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-GZSi03geTT+NUztBWhGYyghLqJGsFjUQzVAKQ7d03uA=";
@@ -160,10 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "FFT implementation for ROCm";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
+    homepage = "https://github.com/ROCm/rocFFT";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ kira-bruneau ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

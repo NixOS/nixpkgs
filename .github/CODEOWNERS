@@ -20,7 +20,7 @@
 
 # Libraries
 /lib                        @infinisil
-/lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
+/lib/systems                @alyssais @ericson2314
 /lib/generators.nix         @infinisil @Profpatsch
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
@@ -41,17 +41,18 @@
 /pkgs/top-level/stage.nix                        @Ericson2314
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
-/pkgs/stdenv/generic                             @Ericson2314 @amjoseph-nixpkgs
+/pkgs/stdenv/generic                             @Ericson2314
 /pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @piegamesde
-/pkgs/stdenv/cross                               @Ericson2314 @amjoseph-nixpkgs
-/pkgs/build-support/cc-wrapper                   @Ericson2314 @amjoseph-nixpkgs
+/pkgs/stdenv/cross                               @Ericson2314
+/pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
-/pkgs/pkgs-lib/formats/libconfig                 @ckiee
+/pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
+/pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
@@ -65,6 +66,10 @@
 # Nixpkgs make-disk-image
 /doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
+
+# Nix, the package manager
+pkgs/tools/package-management/nix/                    @raitobezarius @ma27
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -80,7 +85,6 @@
 /nixos/README.md @infinisil
 /pkgs/README.md @infinisil
 /maintainers/README.md @infinisil
-/maintainers/* @piegamesde @Janik-Haag
 
 # User-facing development documentation
 /doc/development.md @infinisil
@@ -154,7 +158,7 @@
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # C compilers
-/pkgs/development/compilers/gcc @amjoseph-nixpkgs
+/pkgs/development/compilers/gcc
 /pkgs/development/compilers/llvm @RaitoBezarius
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
@@ -167,6 +171,8 @@
 
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
+/pkgs/applications/networking/browsers/chromium @emilylange
+/nixos/tests/chromium.nix @emilylange
 
 # Certificate Authorities
 pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
@@ -179,17 +185,28 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Licenses
 /lib/licenses.nix @alyssais
 
-# Qt / KDE
-/pkgs/applications/kde @ttuegel
-/pkgs/desktops/plasma-5 @ttuegel
-/pkgs/development/libraries/kde-frameworks @ttuegel
-/pkgs/development/libraries/qt-5 @ttuegel
+# Qt
+/pkgs/development/libraries/qt-5 @NixOS/qt-kde
+/pkgs/development/libraries/qt-6 @NixOS/qt-kde
+
+# KDE / Plasma 5
+/pkgs/applications/kde @NixOS/qt-kde
+/pkgs/desktops/plasma-5 @NixOS/qt-kde
+/pkgs/development/libraries/kde-frameworks @NixOS/qt-kde
+
+# KDE / Plasma 6
+/pkgs/kde @NixOS/qt-kde
+/maintainers/scripts/kde @NixOS/qt-kde
 
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @thoughtpolice @marsam
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
+
+# Linux kernel
+/pkgs/os-specific/linux/kernel    @raitobezarius
+/pkgs/top-level/linux-kernels.nix @raitobezarius
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix @joachifm
@@ -214,6 +231,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Network
+/pkgs/tools/networking/octodns @Janik-Haag
 /pkgs/tools/networking/kea/default.nix @mweinelt
 /pkgs/tools/networking/babeld/default.nix @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
@@ -260,20 +278,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions   @jonringer
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php                                     @drupol @etu
-/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
-
-# Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @adisbladis
-/nixos/modules/virtualisation/cri-o.nix      @adisbladis
-/nixos/modules/virtualisation/podman         @adisbladis
-/nixos/tests/cri-o.nix                       @adisbladis
-/nixos/tests/podman                          @adisbladis
+/doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php                                     @drupol
+/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @drupol @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @globin @ma27 @talyz
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth
@@ -326,6 +337,9 @@ pkgs/applications/version-management/forgejo @bendlas @emilylange
 /pkgs/build-support/node/fetch-npm-deps         @lilyinstarlight @winterqt
 /doc/languages-frameworks/javascript.section.md @lilyinstarlight @winterqt
 
+# environment.noXlibs option aka NoX
+/nixos/modules/config/no-x-libs.nix  @SuperSandro2000
+
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid
 /pkgs/development/compilers/ocaml   @ulrikstrid
@@ -341,5 +355,7 @@ nixos/tests/zfs.nix                       @raitobezarius
 /pkgs/development/compilers/zig @figsoda
 /doc/hooks/zig.section.md       @figsoda
 
-# Linux Kernel
-pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
+# Buildbot
+nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
+nixos/tests/buildbot.nix                               @Mic92 @zowoq
+pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq

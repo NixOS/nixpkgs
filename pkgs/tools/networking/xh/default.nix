@@ -5,29 +5,29 @@
 , pkg-config
 , withNativeTls ? true
 , stdenv
-, Security
+, darwin
 , openssl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-e3AGegW0V7JK6iLy0PaMwSeA9+2wSouzX5QIYUg8HCk=";
+    sha256 = "sha256-nsxXNlDycn7W7X+AthYCFQu8i2bEPQv7r2LCbc3gFrE=";
   };
 
-  cargoSha256 = "sha256-JE8SKxc7fKlK637NCZnTKkbF4GNrrvJQ/2kGxK4WXpg=";
+  cargoHash = "sha256-THj8tE12P/K+t/R1xUxo042FIX6JP3riCvm2a8zVEzw=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = lib.optionals withNativeTls
-    (if stdenv.isDarwin then [ Security ] else [ openssl ]);
+    (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;

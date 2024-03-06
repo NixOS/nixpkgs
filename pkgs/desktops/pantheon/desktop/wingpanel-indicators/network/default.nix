@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "7.0.2";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PqTnopacT1/Ctx8VH6b35tiVI+3ZlrdFcRsDpAWm4a0=";
+    sha256 = "sha256-eCWse/rEuAG5YSW+/EOB/aAvikyof0KwbVtLthCGqRQ=";
   };
 
   nativeBuildInputs = [

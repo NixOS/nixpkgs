@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nv-codec-headers";
-  version = "12.0.16.0";
+  version = "12.1.14.0";
 
   src = fetchgit {
     url = "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git";
     rev = "n${version}";
-    sha256 = "sha256-8YZU9pb0kzat0JBVEotaZUkNicQvLNIrIyPU9KTTjwg=";
+    sha256 = "sha256-WJYuFmMGSW+B32LwE7oXv/IeTln6TNEeXSkquHh85Go=";
   };
 
   makeFlags = [

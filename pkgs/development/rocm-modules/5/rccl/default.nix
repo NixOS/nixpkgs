@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rccl";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-nFkou/kjGBmImorlPOZNTlCrxbfAYpDhgRveyoAufu8=";
@@ -82,10 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm communication collectives library";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rccl";
+    homepage = "https://github.com/ROCm/rccl";
     license = with licenses; [ bsd2 bsd3 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

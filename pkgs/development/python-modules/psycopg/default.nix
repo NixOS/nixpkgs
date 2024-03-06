@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -35,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.14";
+  version = "3.1.17";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zocRBnrQoJDWI4qhxDnxxIeiLdaWolvsujqfHBYQc/A=";
+    hash = "sha256-Paq4Wkvv6d6+fNcvRO/yfj7OWCMygqccKIdfsohHUMM=";
   };
 
   patches = [
@@ -49,12 +48,6 @@ let
       src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
-    })
-
-    (fetchpatch {
-      # add fixture to mark flaky ref count tests
-      url = "https://github.com/psycopg/psycopg/commit/70ef364324ba3448ef9ac0e29329c9d802380e4b.patch";
-      hash = "sha256-8PlrBcIumlxFjNXCAfm4NpSIxAnvLR8TopHzneJyzf0=";
     })
   ];
 
@@ -135,8 +128,8 @@ buildPythonPackage rec {
 
   # Introduce this file necessary for the docs build via environment var
   LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/REL_14_STABLE/doc/src/sgml/libpq.sgml";
-    hash = "sha256-yn09fR9+7zQni8SvTG7BUmYRD7MK7u2arVAznWz2oAw=";
+    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
   };
 
   inherit patches;

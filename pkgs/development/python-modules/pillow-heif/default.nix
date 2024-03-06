@@ -6,6 +6,7 @@
 # build-system
 , cmake
 , nasm
+, pkg-config
 
 # native dependencies
 , libheif
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GbOW29rGpLMS7AfShuO6UCzcspdHtFS7hyNKori0otI=";
+    hash = "sha256-HFcywrH687CBGTbZQ2rQrr/AdJ2+pFoI+NvYhUCanic=";
   };
 
   postPatch = ''
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     nasm
+    pkg-config
   ];
 
   dontUseCmakeConfigure = true;
@@ -52,6 +54,9 @@ buildPythonPackage rec {
     libheif
     x265
   ];
+
+  # clang-16: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   propagatedBuildInputs = [
     pillow

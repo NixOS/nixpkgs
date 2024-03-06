@@ -18,12 +18,13 @@ with python3.pkgs; buildPythonApplication rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'sqlalchemy = "^1.4"' 'sqlalchemy = "*"'
-  '';
+  pythonRelaxDeps = [
+    "docutils"
+    "sqlalchemy"
+  ];
 
   propagatedBuildInputs = [
     click

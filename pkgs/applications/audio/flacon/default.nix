@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkg-config, shntool, flac
-, opusTools, vorbis-tools, mp3gain, lame, taglib, wavpack, vorbisgain, gtk3, qtbase
-, qttools, wrapQtAppsHook }:
+, opusTools, vorbis-tools, mp3gain, lame, taglib, wavpack, vorbisgain
+, monkeysAudio, sox, gtk3, qtbase, qttools, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "flacon";
@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
     mp3gain
     lame
     wavpack
+    monkeysAudio
     vorbisgain
+    sox
   ];
 
   postInstall = ''

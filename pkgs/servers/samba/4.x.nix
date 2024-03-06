@@ -61,11 +61,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.19.3";
+  version = "4.19.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-KAVTuQ8TGxlAWA3yk2U8npvYkGIB9d725ejBYPC/rJY=";
+    hash = "sha256-QCbZO4ZtsZjIyhaFsPXVJ5P2XG5jyzZBY69mH9/wlow=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -165,8 +165,14 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optionals stdenv.isAarch32 [
-    # https://bugs.gentoo.org/683148
+  ] ++ optionals stdenv.buildPlatform.is32bit [
+    # By default `waf configure` spawns as many as available CPUs. On
+    # 32-bit systems with many CPUs (like `i686` chroot on `x86_64`
+    # kernel) it can easily exhaust 32-bit address space and hang up:
+    #   https://github.com/NixOS/nixpkgs/issues/287339#issuecomment-1949462057
+    #   https://bugs.gentoo.org/683148
+    # Limit the job count down to the minimal on system with limited address
+    # space.
     "--jobs 1"
   ];
 

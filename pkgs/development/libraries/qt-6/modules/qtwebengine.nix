@@ -60,6 +60,7 @@
 , mesa
 , enableProprietaryCodecs ? true
   # darwin
+, autoSignDarwinBinariesHook
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -104,7 +105,9 @@ qtModule {
     which
     gn
     nodejs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     bootstrap_cmds
     cctools
     xcbuild
@@ -155,14 +158,14 @@ qtModule {
       --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
       --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
   ''
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
@@ -181,20 +184,23 @@ qtModule {
     "-DQT_FEATURE_pdf_xfa_gif=ON"
     "-DQT_FEATURE_pdf_xfa_png=ON"
     "-DQT_FEATURE_pdf_xfa_tiff=ON"
-    "-DQT_FEATURE_webengine_system_icu=ON"
     "-DQT_FEATURE_webengine_system_libevent=ON"
-    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+
+    # Appears not to work on some platforms
+    # https://github.com/Homebrew/homebrew-core/issues/104008
+    "-DQT_FEATURE_webengine_system_icu=ON"
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
   ];
 
   propagatedBuildInputs = [
@@ -218,17 +224,15 @@ qtModule {
 
     # Text rendering
     harfbuzz
-    icu
 
     openssl
     glib
-    libxml2
     libxslt
     lcms2
 
     libevent
     ffmpeg_4
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     zlib
     minizip
@@ -236,6 +240,9 @@ qtModule {
     nss
     protobuf
     jsoncpp
+
+    icu
+    libxml2
 
     # Audio formats
     alsa-lib
@@ -268,7 +275,7 @@ qtModule {
 
     libkrb5
     mesa
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AGL
     AVFoundation
     Accelerate
@@ -295,7 +302,7 @@ qtModule {
 
   buildInputs = [
     cups
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpm
     sandbox
   ];

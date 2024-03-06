@@ -7,6 +7,7 @@
 , setuptools
 , setuptools-scm
 , wheel
+, packaging
 , pybind11
 , pydantic
 , rich
@@ -18,21 +19,19 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bQKcS8vktvD62zvSeaBtoJw36TSpo0gEpKm0HI3AuXg=";
+    hash = "sha256-H8QCdU6piBdqJEJOGVbsz+6eyMhFVuwTpIHKUoKaf4A=";
   };
 
   nativeBuildInputs = [
     cmake
-    numpy
     scikit-build
     setuptools
     setuptools-scm
-    wheel
     pybind11
   ];
 
@@ -41,13 +40,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    numpy
+    packaging
     pydantic
     rich
   ];
 
   dontUseCmakeConfigure = true;
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeCheckInputs = [
     awkward

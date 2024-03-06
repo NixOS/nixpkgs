@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "rabtap";
-  version = "1.39.0";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "jandelgado";
     repo = "rabtap";
     rev = "v${version}";
-    sha256 = "sha256-/inclOpKYlEGSEH390+GtRiHXotaH+VxqWVAWSf61Xs=";
+    sha256 = "sha256-R0OZNmOgklhiljsYTVoqpbMMMaPHICC/qVJNUgkUsfU=";
   };
 
   vendorHash = "sha256-BrpDafEFDrH243zDHY9EtkVjPvwrmbJVu5TQMHHOWfA=";

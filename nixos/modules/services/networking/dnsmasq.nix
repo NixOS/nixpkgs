@@ -181,4 +181,6 @@ in
         restartTriggers = [ config.environment.etc.hosts.source ];
     };
   };
+
+  meta.doc = ./dnsmasq.md;
 }

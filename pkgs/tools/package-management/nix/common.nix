@@ -5,8 +5,8 @@
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
-, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
-}:
+, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ma27 ]
+}@args:
 assert (hash == null) -> (src != null);
 let
   atLeast24 = lib.versionAtLeast version "2.4pre";
@@ -56,13 +56,7 @@ in
 , util-linuxMinimal
 , xz
 
-, enableDocumentation ? !atLeast24 || (
-    (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    # mdbook errors out on risc-v due to a rustc bug
-    # https://github.com/NixOS/nixpkgs/pull/242019
-    # https://github.com/rust-lang/rust/issues/114473
-    !stdenv.buildPlatform.isRiscV
-  )
+, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
@@ -213,6 +207,11 @@ self = stdenv.mkDerivation {
   preInstallCheck = lib.optionalString stdenv.isDarwin ''
     export TMPDIR=$NIX_BUILD_TOP
   ''
+  # Prevent crashes in libcurl due to invoking Objective-C `+initialize` methods after `fork`.
+  # See http://sealiesoftware.com/blog/archive/2017/6/5/Objective-C_and_fork_in_macOS_1013.html.
+  + lib.optionalString stdenv.isDarwin ''
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+  ''
   # See https://github.com/NixOS/nix/issues/5687
   + lib.optionalString (atLeast25 && stdenv.isDarwin) ''
     echo "exit 99" > tests/gc-non-blocking.sh
@@ -232,6 +231,9 @@ self = stdenv.mkDerivation {
     };
   };
 
+  # point 'nix edit' and ofborg at the file that defines the attribute,
+  # not this common file.
+  pos = builtins.unsafeGetAttrPos "version" args;
   meta = with lib; {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''

@@ -51,8 +51,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   meta = with lib; {
     description = "Module that implements the Virtual Instrument Software Architecture";
     homepage = "https://github.com/pyvisa/pyvisa-py";

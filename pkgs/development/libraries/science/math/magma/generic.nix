@@ -142,6 +142,8 @@ stdenv.mkDerivation {
   ] ++ lists.optionals rocmSupport [
     "-DCMAKE_C_COMPILER=${rocmPackages.clr}/bin/hipcc"
     "-DCMAKE_CXX_COMPILER=${rocmPackages.clr}/bin/hipcc"
+  ] ++ lists.optionals (cudaPackages.cudaAtLeast "12.0.0") [
+    (lib.cmakeBool "USE_FORTRAN" false)
   ];
 
   buildFlags = [
@@ -159,7 +161,7 @@ stdenv.mkDerivation {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
     homepage = "http://icl.cs.utk.edu/magma/index.html";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ connorbaker ];
 
     # Cf. https://bitbucket.org/icl/magma/src/fcfe5aa61c1a4c664b36a73ebabbdbab82765e9f/CMakeLists.txt#lines-20

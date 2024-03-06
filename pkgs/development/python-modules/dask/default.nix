@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.12.0";
+  version = "2024.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-LMd55s8LT4m6Ym+LmXb4TKPnZ0jMkNBfcPJxmgruMDM=";
+    hash = "sha256-L8bRh2bx36CYrAFXYJF67rCeCRfm5ufhTkMFRJo0yYo=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +98,9 @@ buildPythonPackage rec {
     # from panda[test]
     hypothesis
     pytest-asyncio
-  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+  ]
+  ++ passthru.optional-dependencies.dataframe
+  ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
     pyarrow
   ];
 

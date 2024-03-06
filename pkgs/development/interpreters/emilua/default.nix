@@ -23,14 +23,6 @@
 }:
 
 let
-  emilua-http-wrap = fetchFromGitHub {
-      owner = "BoostGSoC14";
-      repo = "boost.http";
-      rev = "93ae527c89ffc517862e1f5f54c8a257278f1195";
-      name = "emilua-http";
-      hash = "sha256-MN29YwkTi0TJ2V+vRI9nUIxvJKsG+j3nT3o0yQB3p0o=";
-  };
-
   trial-protocol-wrap = fetchFromGitHub {
       owner = "breese";
       repo = "trial.protocol";
@@ -41,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "emilua";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
       owner = "emilua";
       repo = "emilua";
       rev = "v${version}";
-      hash = "sha256-5NzxZHdQGw3qLEzW/mv1sLCuqehn5pjUYkCna4PUzDQ=";
+      hash = "sha256-cW2b+jUQT60hCCirBzxZltzA7KvBihnzWNPkKDID6kU=";
   };
 
   buildInputs = [
@@ -84,20 +76,17 @@ stdenv.mkDerivation rec {
   };
 
   mesonFlags = [
-    (lib.mesonOption "version_suffix" "-nixpkgs1")
-    (lib.mesonBool "enable_http" true)
     (lib.mesonBool "enable_file_io" true)
     (lib.mesonBool "enable_io_uring" true)
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
+    (lib.mesonOption "version_suffix" "-nixpkgs1")
   ];
 
   postPatch = ''
     pushd subprojects
-    cp -r ${emilua-http-wrap} emilua-http
     cp -r ${trial-protocol-wrap} trial-protocol
-    chmod +w emilua-http trial-protocol
-    cp "packagefiles/emilua-http/meson.build" "emilua-http/"
+    chmod +w trial-protocol
     cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
     popd
 

@@ -5,6 +5,7 @@
 , runCommand
 , lndir
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , python3
@@ -31,6 +32,16 @@ let
       rev = "v${version}";
       sha256 = "0haryi3yrszdfpqnkfnppxj1yiy6ipah6m80snvayc7v0ss0wnir";
     };
+
+    patches = [
+      # autoconf-2.72 upstream fix:
+      #   https://github.com/ClusterLabs/resource-agents/pull/1908
+      (fetchpatch {
+        name = "autoconf-2.72.patch";
+        url = "https://github.com/ClusterLabs/resource-agents/commit/bac658711a61fd704e792e2a0a45a2137213c442.patch";
+        hash = "sha256-Xq7W8pMRmFZmkqb2430bY5zdmVTrUrob6GwGiN6/bKY=";
+      })
+    ];
 
     nativeBuildInputs = [
       autoreconfHook

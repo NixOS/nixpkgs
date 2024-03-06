@@ -5,6 +5,10 @@ with lib;
 let
   cfg = config.services.journald;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "journald" "enableHttpGateway" ] [ "services" "journald" "gateway" "enable" ])
+  ];
+
   options = {
     services.journald.console = mkOption {
       default = "";
@@ -52,7 +56,9 @@ in {
         journald.conf(5)](https://www.freedesktop.org/software/systemd/man/journald.conf.html).
 
         Note that the total amount of logs stored is limited by journald settings
-        such as `SystemMaxUse`, which defaults to a 4 GB cap.
+        such as `SystemMaxUse`, which defaults to 10% the file system size
+        (capped at max 4GB), and `SystemKeepFree`, which defaults to 15% of the
+        file system size.
 
         It is thus recommended to compute what period of time that you will be
         able to store logs for when an application logs at full burst rate.
@@ -68,14 +74,6 @@ in {
       description = lib.mdDoc ''
         Extra config options for systemd-journald. See man journald.conf
         for available options.
-      '';
-    };
-
-    services.journald.enableHttpGateway = mkOption {
-      default = false;
-      type = types.bool;
-      description = lib.mdDoc ''
-        Whether to enable the HTTP gateway to the journal.
       '';
     };
 
@@ -101,9 +99,6 @@ in {
       ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
-      ] ++ optionals cfg.enableHttpGateway [
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
       ];
 
     environment.etc = {
@@ -124,12 +119,6 @@ in {
     };
 
     users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
-    users.users.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
-    users.users.systemd-journal-gateway.group = "systemd-journal-gateway";
-    users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
-
-    systemd.sockets.systemd-journal-gatewayd.wantedBy =
-      optional cfg.enableHttpGateway "sockets.target";
 
     systemd.services.systemd-journal-flush.restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];

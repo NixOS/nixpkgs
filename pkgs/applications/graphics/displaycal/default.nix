@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     build
     certifi
-    wxPython_4_2
+    wxpython
     dbus-python
     distro
     numpy

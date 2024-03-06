@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, bash
 , fetchFromGitHub
 , SDL2
 , alsa-lib
@@ -39,7 +40,6 @@
 , upower
 , wayland
 , wireplumber
-, wlroots
 , wrapGAppsHook
 
 , cavaSupport ? true
@@ -115,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     spdlog
     wayland
-    wlroots
   ]
   ++ lib.optionals cavaSupport [
     SDL2
@@ -165,6 +164,11 @@ stdenv.mkDerivation (finalAttrs: {
     "wireplumber" = wireplumberSupport;
   }) ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
 
+  postPatch = ''
+    substituteInPlace include/util/command.hpp \
+      --replace-fail /bin/sh ${lib.getExe' bash "sh"}
+  '';
+
   preFixup = lib.optionalString withMediaPlayer ''
     cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
 
@@ -180,13 +184,12 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "waybar";
     maintainers = with lib.maintainers; [
       FlorianFranzen
-      jtbx
       lovesegfault
       minijackson
       rodrgz
       synthetica
       khaneliman
     ];
-    inherit (wlroots.meta) platforms;
+    platforms = lib.platforms.linux;
   };
 })

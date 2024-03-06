@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 
 , build
 , coloredlogs
@@ -25,6 +26,16 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-sHCPT6nTenE6mbTifNPtg0OMNIJCs7LRcF8Xuk+MwLs=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
+    "twine"
+    "wheel"
+  ];
 
   propagatedBuildInputs = [
     build

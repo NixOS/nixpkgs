@@ -1,54 +1,57 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, logbook
+
+# build-system
+, poetry-core
+
+# dependencies
 , aiofiles
 , aiohttp
 , aiohttp-socks
-, aioresponses
-, atomicwrites
-, attrs
-, cachetools
-, faker
-, future
-, git
 , h11
 , h2
-, hypothesis
 , jsonschema
-, peewee
-, poetry-core
-, py
 , pycryptodome
+, unpaddedbase64
+
+# optional-dependencies
+, atomicwrites
+, cachetools
+, peewee
+, python-olm
+
+# tests
+, aioresponses
+, faker
+, hpack
+, hyperframe
+, hypothesis
 , pytest-aiohttp
 , pytest-benchmark
 , pytestCheckHook
-, python-olm
-, unpaddedbase64
+
+# passthru tests
+, nixosTests
+, opsdroid
+, pantalaimon
+, weechatScripts
+, zulip
 }:
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.22.1";
+  version = "0.24.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    hash = "sha256-hFSS2Nys95YJgBNED8SBan24iRo2q/UOr6pqUPAF5Ms=";
+    hash = "sha256-XlswVHLvKOi1qr+I7Mbm4IBjn1DG7glgDsNY48NA5Ew=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"' \
-      --replace 'h11 = "^0.12.0"' 'h11 = "*"' \
-      --replace 'cachetools = { version = "^4.2.1", optional = true }' 'cachetools = { version = "*", optional = true }' \
-      --replace 'aiohttp-socks = "^0.7.0"' 'aiohttp-socks = "*"'
-  '';
-
   nativeBuildInputs = [
-    git
     poetry-core
   ];
 
@@ -56,12 +59,9 @@ buildPythonPackage rec {
     aiofiles
     aiohttp
     aiohttp-socks
-    attrs
-    future
     h11
     h2
     jsonschema
-    logbook
     pycryptodome
     unpaddedbase64
   ];
@@ -78,8 +78,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     faker
+    hpack
+    hyperframe
     hypothesis
-    py
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
@@ -95,6 +96,23 @@ buildPythonPackage rec {
     # time dependent and flaky
     "test_transfer_monitor_callbacks"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests)
+      dendrite
+      matrix-appservice-irc
+      matrix-conduit
+      mjolnir
+    ;
+    inherit (weechatScripts)
+      weechat-matrix
+    ;
+    inherit
+      opsdroid
+      pantalaimon
+      zulip
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/poljar/matrix-nio";

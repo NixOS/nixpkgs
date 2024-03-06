@@ -119,10 +119,10 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        swaylock swayidle foot dmenu
+        swaylock swayidle foot dmenu wmenu
       ];
       defaultText = literalExpression ''
-        with pkgs; [ swaylock swayidle foot dmenu ];
+        with pkgs; [ swaylock swayidle foot dmenu wmenu ];
       '';
       example = literalExpression ''
         with pkgs; [

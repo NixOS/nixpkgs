@@ -49,7 +49,7 @@ index 360ca6f..6db93ab 100644
              wallpaper = bg.getId();
          } else {
 -            wallpaper = "file:///usr/share/wallpapers/deepin/desktop.jpg";
-+            wallpaper = "file:///run/current-system/sw/wallpapers/deepin/desktop.jpg";
++            wallpaper = "file:///run/current-system/sw/share/wallpapers/deepin/desktop.jpg";
          }
  
          PhaseWallPaper::setWallpaperUri(index, monitorName, wallpaper);
@@ -62,7 +62,7 @@ index bf739a5..1076d59 100644
  #include <QDBusReply>
  
 -QStringList Backgrounds::systemWallpapersDir = { "/usr/share/wallpapers/deepin" };
-+QStringList Backgrounds::systemWallpapersDir = { "/run/current-system/sw/wallpapers/deepin" };
++QStringList Backgrounds::systemWallpapersDir = { "/run/current-system/sw/share/wallpapers/deepin" };
  QStringList Backgrounds::uiSupportedFormats = { "jpeg", "png", "bmp", "tiff", "gif" };
  
  Backgrounds::Backgrounds(QObject *parent)

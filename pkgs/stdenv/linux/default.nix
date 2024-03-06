@@ -89,9 +89,9 @@
     else null) null (lib.attrNames archLookupTable);
 
   archLookupTable = table.${localSystem.libc}
-    or (abort "unsupported libc for the pure Linux stdenv");
+    or (throw "unsupported libc for the pure Linux stdenv");
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
-    else (abort "unsupported platform for the pure Linux stdenv"));
+    else (throw "unsupported platform for the pure Linux stdenv"));
   in files
 }:
 

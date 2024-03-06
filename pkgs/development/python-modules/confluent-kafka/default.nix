@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6CdalNFKkgF7JUqCGtt4nB1/H3u4SVqt9xCAg5DR3T0=";
+    hash = "sha256-sPlLlp0niR45lQPCvVd6NPtGI1cFbmPeQpIF1RnnY0I=";
   };
 
   buildInputs = [

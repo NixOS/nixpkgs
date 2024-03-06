@@ -1,9 +1,8 @@
-{ mkDerivation
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
 , qtbase
+, qtsvg
 , qtwebengine
 , qtdeclarative
 , extra-cmake-modules
@@ -34,18 +33,19 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.4.9";
+  version = "1.5.0";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I9+q9GQ1QMbo7BdVG159iRYbDvRyfXmwBIW5AeJ3sC4=";
+    hash = "sha256-O8FLjse2gY8KNWGXpUeZ83cNk0ZuRAZJJ3Am33/ABVw=";
   };
 
   buildInputs = [
     qtbase
+    qtsvg
     cpp-utilities
     qtutilities
     boost
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.isDarwin;
   preCheck = ''
     export QT_QPA_PLATFORM=offscreen
-    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qtbase}/${qtbase.qtPluginPrefix}"
   '';
   # don't test --help  on Darwin because output is .app
   doInstallCheck = !stdenv.isDarwin;
@@ -83,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
+    "-DKF_PACKAGE_PREFIX=KF${lib.versions.major qtbase.version}"
     "-DBUILD_TESTING=ON"
     # See https://github.com/Martchus/syncthingtray/issues/208
     "-DEXCLUDE_TESTS_FROM_ALL=OFF"

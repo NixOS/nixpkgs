@@ -46,14 +46,14 @@
 stdenv.mkDerivation (finalAttrs: {
   # LAMMPS has weird versioning convention. Updates should go smoothly with:
   # nix-update --commit lammps --version-regex 'stable_(.*)'
-  version = "2Aug2023_update2";
+  version = "2Aug2023_update3";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${finalAttrs.version}";
-    hash = "sha256-E918Jv6RAfXmHxyHZos2F7S8HFWzU6KjxDwXYNAYFMY=";
+    hash = "sha256-jx0hkiYxQlnE2sa4WTvluEgphF//sNbK91VGAQJMwjw=";
   };
   preConfigure = ''
     cd cmake
@@ -108,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
       '';
-    homepage = "https://lammps.sandia.gov";
-    license = licenses.gpl2Plus;
+    homepage = "https://www.lammps.org";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     # compiling lammps with 64 bit support blas and lapack might cause runtime
     # segfaults. In anycase both blas and lapack should have the same #bits

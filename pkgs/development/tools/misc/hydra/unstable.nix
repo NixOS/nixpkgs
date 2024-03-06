@@ -43,7 +43,6 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
-, fetchpatch2
 , nixosTests
 }:
 
@@ -124,25 +123,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-12-04";
+  version = "2023-12-24";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "4dc8fe0b08edc421c251270ccd4be3e5bf9d66b4";
-    hash = "sha256-FjyMb5ZbPa2GLrRuFMUP/foKb0KvXFKThvgc9faFIw8=";
+    rev = "02e453fc8c39751843220eaecdeaf7d539b7e765";
+    hash = "sha256-hIXRgu2MGqFYCALDKAiP+8lE859zftRe4OVIgGOTkvc=";
   };
-
-  patches = [
-    # hydra-eval-jobs: don't use restrict-eval for Flakes
-    # https://github.com/NixOS/hydra/pull/1257
-    # should be removed when https://github.com/NixOS/nix/pull/9547
-    # lands in the nix version used by hydra
-    (fetchpatch2 {
-      url = "https://github.com/NixOS/hydra/commit/9370b0ef977bff7e84ac07a81a0e31e75989276b.patch";
-      hash = "sha256-BRenC0lpWPgzfx42MPJBQ9VBamh5hZXuuVe6TXYKkdE=";
-    })
-  ];
 
   buildInputs = [
     unzip

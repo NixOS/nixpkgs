@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.beautifulsoup4 ps.lxml ])"
+#!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.beautifulsoup4 ps.lxml ps.packaging ])"
 import json
 import os
 import pathlib
@@ -10,6 +10,8 @@ from dataclasses import dataclass
 from enum import Enum
 
 from bs4 import BeautifulSoup, NavigableString, Tag
+from packaging.version import parse as parse_version, Version
+from typing import List
 
 HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent.parent.parent.parent
@@ -80,6 +82,18 @@ def get_hash(kernel: KernelRelease):
     return f"sha256:{hash}"
 
 
+def get_oldest_branch() -> Version:
+    with open(VERSIONS_FILE) as f:
+        return parse_version(sorted(json.load(f).keys())[0])
+
+
+def predates_oldest_branch(oldest: Version, to_compare: str) -> bool:
+    if to_compare == "testing":
+        return False
+
+    return parse_version(to_compare) < oldest
+
+
 def commit(message):
     return subprocess.check_call(["git", "commit", "-m", message, VERSIONS_FILE])
 
@@ -97,6 +111,8 @@ def main():
     parsed_releases = filter(None, [parse_release(release) for release in releases])
     all_kernels = json.load(VERSIONS_FILE.open())
 
+    oldest_branch = get_oldest_branch()
+
     for kernel in parsed_releases:
         branch = get_branch(kernel.version)
         nixpkgs_branch = branch.replace(".", "_")
@@ -104,6 +120,13 @@ def main():
         old_version = all_kernels.get(branch, {}).get("version")
         if old_version == kernel.version:
             print(f"linux_{nixpkgs_branch}: {kernel.version} is latest, skipping...")
+            continue
+
+        if predates_oldest_branch(oldest_branch, kernel.branch):
+            print(
+                f"{kernel.branch} is too old and not supported anymore, skipping...",
+                file=sys.stderr
+            )
             continue
 
         if old_version is None:
