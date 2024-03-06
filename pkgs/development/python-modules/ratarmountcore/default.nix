@@ -7,6 +7,7 @@
 , indexed-gzip
 , indexed-zstd
 , python-xz
+, setuptools
 , rapidgzip
 , rarfile
 , zstandard     # Python bindings
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "ratarmountcore";
   version = "0.6.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/core";
 
+  nativeBuildInputs = [ setuptools ];
   propagatedBuildInputs = [ indexed-gzip indexed-bzip2 indexed-zstd python-xz rapidgzip rarfile ];
 
   pythonImportsCheck = [ "ratarmountcore" ];
