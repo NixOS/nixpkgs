@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreGraphics
+    darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.Foundation
     darwin.apple_sdk.frameworks.Metal
     darwin.apple_sdk.frameworks.QuartzCore
