@@ -540,6 +540,7 @@ let
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
+    cartogramR = with pkgs; [ fftw.dev geos ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
