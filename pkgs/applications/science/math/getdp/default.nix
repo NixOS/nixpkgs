@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "getdp";
-  version = "3.5.0";
+  version = "3.6.0";
   src = fetchurl {
     url = "http://getdp.info/src/getdp-${version}-source.tgz";
-    sha256 = "sha256-C/dsSe+puIQBpFfBL3qr2XWXrUnvYy0/uTCKqOpDe9w=";
+    sha256 = "sha256-N1cb72W77Dr+TzeHpLgv5FuFb+SJqyGcfn+kOfEvZgA=";
   };
 
   inherit (petsc) mpiSupport;
