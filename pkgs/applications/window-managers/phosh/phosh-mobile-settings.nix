@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A settings app for mobile specific things";
-    homepage = "https://gitlab.gnome.org/guidog/phosh-mobile-settings";
-    changelog = "https://gitlab.gnome.org/guidog/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ rvl ];
     platforms = platforms.linux;
