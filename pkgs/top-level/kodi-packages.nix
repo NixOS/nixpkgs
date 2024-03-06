@@ -1,12 +1,17 @@
 { config, lib, newScope, kodi, libretro }:
 
-with lib;
-
 let
-  inherit (libretro) fuse genesis-plus-gx mgba nestopia snes9x twenty-fortyeight;
-in
+  inherit (lib)
+    catAttrs
+    concatLists
+    filter
+    optionalAttrs
+    unique
+    ;
 
-let self = rec {
+  inherit (libretro) fuse genesis-plus-gx mgba nestopia snes9x twenty-fortyeight;
+
+  self = rec {
 
   addonDir = "/share/kodi/addons";
   rel = "Nexus";
@@ -197,7 +202,7 @@ let self = rec {
   trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
 
   trakt = callPackage ../applications/video/kodi/addons/trakt { };
-}; in self // lib.optionalAttrs config.allowAliases {
+}; in self // optionalAttrs config.allowAliases {
   # deprecated or renamed packages
 
   controllers = throw "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles." { };
