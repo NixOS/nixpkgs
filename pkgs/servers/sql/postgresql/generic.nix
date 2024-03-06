@@ -131,8 +131,6 @@ let
 
     installTargets = [ "install-world" ];
 
-    LC_ALL = "C";
-
     postPatch = ''
       # Hardcode the path to pgxs so pg_config returns the path in $out
       substituteInPlace "src/common/config_info.c" --subst-var out
