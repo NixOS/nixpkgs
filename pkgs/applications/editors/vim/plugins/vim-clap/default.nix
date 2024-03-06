@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.50";
+  version = "0.52";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     rev = "v${version}";
-    hash = "sha256-EYAylATdtwDzM92tN4OlzbQ1XqErRwT9mCNpzj63oxk=";
+    hash = "sha256-byG4DHa0rTzvlLW+d3eF8xCX8uft4b7HYJDqbVmTdNI=";
   };
 
   meta = with lib; {
@@ -36,6 +36,7 @@ let
       lockFile = ./Cargo.lock;
       outputHashes = {
         "subprocess-0.2.10" = "sha256-WcGrJ103ofGlQwi32kRGM3Z+uvKSCFBmFZbZXAtuWwM=";
+        "tree-sitter-dockerfile-0.1.0" = "sha256-K+duK3HcxlVgbLXBos3MUxyfnTywcHX6JM4Do0qAJO0=";
         "tree-sitter-vim-0.3.1-dev.0" = "sha256-CWxZ28LdptiMNO2VIk+Ny/DhQXdN604EuqRIb9oaCmI=";
       };
     };
