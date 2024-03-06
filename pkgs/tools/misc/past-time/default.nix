@@ -5,15 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "past-time";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabaff";
-    repo = pname;
+    repo = "past-time";
     rev = "refs/tags/${version}";
-    hash = "sha256-9LmFOWNUkvKfWHLo4HB1W1UBQL90Gp9UJJ3VDIYBDHo=";
+    hash = "sha256-3tSEbqGwFw16JcaEERhs6I+BsfxjE1hQWpOT1C+fQDk=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
