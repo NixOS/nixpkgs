@@ -16,7 +16,7 @@ appleDerivation' stdenvNoCC {
     export DSTROOT=$out
     export PUBLIC_HEADERS_FOLDER_PATH=include
     export PRIVATE_HEADERS_FOLDER_PATH=include
-    bash xcodescripts/headers.sh
+    FEATURE_LEGACY_RUNE_APIS=1 FEATURE_LEGACY_UTMP_APIS=1 bash xcodescripts/headers.sh
 
     cp ${./CrashReporterClient.h} $out/include/CrashReporterClient.h
 
