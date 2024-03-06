@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "past-time";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabaff";
     repo = "past-time";
     rev = "refs/tags/${version}";
-    hash = "sha256-3tSEbqGwFw16JcaEERhs6I+BsfxjE1hQWpOT1C+fQDk=";
+    hash = "sha256-NSuU33vuHbgJ+cG0FrGYLizIrG7jSz+veptt3D4UegY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
