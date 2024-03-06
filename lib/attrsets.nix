@@ -680,52 +680,67 @@ rec {
   attrsToList = mapAttrsToList nameValuePair;
 
 
-  /* Like `mapAttrs`, except that it recursively applies itself to
-     the *leaf* attributes of a potentially-nested attribute set:
-     the second argument of the function will never be an attrset.
-     Also, the first argument of the argument function is a *list*
-     of the attribute names that form the path to the leaf attribute.
+  /**
+    Like `mapAttrs`, except that it recursively applies itself to the *leaf* attributes of a potentially-nested attribute set:
+    the second argument of the function will never be an attrset.
+    Also, the first argument of the mapping function is a *list* of the attribute names that form the path to the leaf attribute.
 
-     For a function that gives you control over what counts as a leaf,
-     see `mapAttrsRecursiveCond`.
+    For a function that gives you control over what counts as a leaf, see `mapAttrsRecursiveCond`.
 
-     Example:
-       mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
-         { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
-       => { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
+    :::{#map-attrs-recursive-example .example}
+    # Map over leaf attributes
 
-     Type:
-       mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```nix
+    mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
+      { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
+    ```
+    evaluates to
+    ```nix
+    { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
+    ```
+    :::
+
+    # Type
+    ```
+    mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```
   */
   mapAttrsRecursive =
-    # A function, given a list of attribute names and a value, returns a new value.
+    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
     f:
-    # Set to recursively map over.
+    # Attribute set to recursively map over.
     set:
     mapAttrsRecursiveCond (as: true) f set;
 
 
-  /* Like `mapAttrsRecursive`, but it takes an additional predicate
-     function that tells it whether to recurse into an attribute
-     set.  If it returns false, `mapAttrsRecursiveCond` does not
-     recurse, but does apply the map function.  If it returns true, it
-     does recurse, and does not apply the map function.
+  /**
+    Like `mapAttrsRecursive`, but it takes an additional predicate that tells it whether to recurse into an attribute set.
+    If the predicate returns false, `mapAttrsRecursiveCond` does not recurse, but instead applies the mapping function.
+    If the predicate returns true, it does recurse, and does not apply the mapping function.
 
-     Example:
-       # To prevent recursing into derivations (which are attribute
-       # sets with the attribute "type" equal to "derivation"):
-       mapAttrsRecursiveCond
-         (as: !(as ? "type" && as.type == "derivation"))
-         (x: ... do something ...)
-         attrs
+    :::{#map-attrs-recursive-cond-example .example}
+    # Map over an leaf attributes defined by a condition
 
-     Type:
-       mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+    Map derivations to their `name` attribute.
+    Derivatons are identified as attribute sets that contain `{ type = "derivation"; }`.
+    ```nix
+    mapAttrsRecursiveCond
+      (as: !(as ? "type" && as.type == "derivation"))
+      (x: x.name)
+      attrs
+    ```
+    :::
+
+    # Type
+    ```
+    mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```
   */
   mapAttrsRecursiveCond =
-    # A function, given the attribute set the recursion is currently at, determine if to recurse deeper into that attribute set.
+    # A function that, given the attribute set the recursion is currently at, determines if to recurse deeper into that attribute set.
     cond:
-    # A function, given a list of attribute names and a value, returns a new value.
+    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
+    # The attribute value is either an attribute set for which `cond` returns false, or something other than an attribute set.
     f:
     # Attribute set to recursively map over.
     set:
