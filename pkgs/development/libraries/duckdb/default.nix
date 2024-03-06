@@ -15,23 +15,29 @@
 
 let
   enableFeature = yes: if yes then "ON" else "OFF";
+  versions = lib.importJSON ./versions.json;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
-  version = "0.10.0";
+  inherit (versions) version;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qGUq0iYTaLNHKqbXNLRmvqHMqunvIlP991IKb4qdSt4=";
+    # to update run:
+    # nix-shell maintainers/scripts/update.nix --argstr path duckdb
+    inherit (versions) hash;
+    owner = "duckdb";
+    repo = "duckdb";
+    rev = "refs/tags/v${finalAttrs.version}";
   };
+
+  outputs = [ "out" "lib" "dev" ];
 
   patches = [
     # remove calls to git and set DUCKDB_VERSION to version
     (substituteAll {
       src = ./version.patch;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
+      rev = versions.rev;
     })
     # add missing file needed for httpfs compile
     # remove on next update
@@ -48,21 +54,20 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    "-DDUCKDB_EXTENSION_CONFIGS=${src}/.github/config/in_tree_extensions.cmake"
+    "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
-  ] ++ lib.optionals doInstallCheck [
+  ] ++ lib.optionals finalAttrs.doInstallCheck [
     # development settings
     "-DBUILD_UNITTESTS=ON"
   ];
 
-  doInstallCheck = true;
-
-  preInstallCheck = ''
-    export HOME="$(mktemp -d)"
-  '' + lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:}''${DYLD_LIBRARY_PATH}"
+  postInstall = ''
+    mkdir -p $lib
+    mv $out/lib $lib
   '';
+
+  doInstallCheck = true;
 
   installCheckPhase =
     let
@@ -114,17 +119,20 @@ stdenv.mkDerivation rec {
         "test/sql/aggregate/aggregates/test_skewness.test"
         "test/sql/function/list/aggregates/skewness.test"
       ]);
+      LD_LIBRARY_PATH = lib.optionalString stdenv.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstallCheck
 
-      ./test/unittest ${toString excludes}
+      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
 
       runHook postInstallCheck
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
-    changelog = "https://github.com/duckdb/duckdb/releases/tag/v${version}";
+    changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
     description = "Embeddable SQL OLAP Database Management System";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
@@ -132,4 +140,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ costrouc cpcloud ];
     platforms = platforms.all;
   };
-}
+})
