@@ -6,6 +6,8 @@
 
   auth-header = callPackage ./auth-header {};
 
+  better_thermostat = callPackage ./better_thermostat {};
+
   emporia_vue = callPackage ./emporia_vue {};
 
   govee-lan = callPackage ./govee-lan {};
