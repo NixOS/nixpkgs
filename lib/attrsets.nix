@@ -1153,10 +1153,7 @@ rec {
    Type: chooseDevOutputs :: [Derivation] -> [String]
 
   */
-  chooseDevOutputs =
-    # List of packages to pick `dev` outputs from
-    drvs:
-    builtins.map getDev drvs;
+  chooseDevOutputs = builtins.map getDev;
 
   /* Make various Nix tools consider the contents of the resulting
      attribute set when looking for what to build, find, etc.
