@@ -36,7 +36,7 @@ in {
     '';
 
     passthru = {
-      inherit (vmr) icu targetRid updateScript;
+      inherit (vmr) icu targetRid;
     };
 
     meta = vmr.meta // {
