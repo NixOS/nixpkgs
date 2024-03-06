@@ -399,7 +399,7 @@ self = stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "An open source 3D graphics library";
     longDescription = ''
       The Mesa project began as an open-source implementation of the OpenGL
@@ -412,9 +412,9 @@ self = stdenv.mkDerivation {
     '';
     homepage = "https://www.mesa3d.org/";
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
-    license = licenses.mit; # X11 variant, in most files
-    platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
+    license = with lib.licenses; [ mit ]; # X11 variant, in most files
+    platforms = lib.platforms.mesaPlatforms;
+    maintainers = with lib.maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 };
 
