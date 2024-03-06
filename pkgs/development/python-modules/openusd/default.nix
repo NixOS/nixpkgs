@@ -33,8 +33,8 @@
   tbb,
   withDocs ? false,
   withOsl ? true,
-  withTools ? true,
-  withUsdView ? true,
+  withTools ? false,
+  withUsdView ? false,
   writeShellScriptBin,
 }:
 
