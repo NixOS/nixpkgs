@@ -4,8 +4,9 @@ let
   inherit (lib) attrValues concatMapStringsSep concatStrings concatStringsSep
     flatten imap1 isBool isDerivation isInt isList isPath isString
     literalExpression mapAttrsToList mkEnableOption mkIf mkOption
-    mkRemovedOptionModule optional optionalAttrs optionalString singleton
-    types mkRenamedOptionModule nameValuePair mapAttrs' listToAttrs filter;
+    mkChangedOptionModule mkRemovedOptionModule optional optionalAttrs
+    optionalString singleton types mkRenamedOptionModule nameValuePair
+    mapAttrs' listToAttrs filter;
   inherit (lib.generators) toPretty;
   inherit (lib.lists) findFirstIndex length sublist reverseList;
   inherit (lib.strings) escape match splitString;
@@ -296,6 +297,11 @@ in
   imports = [
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
     (mkRenamedOptionModule [ "services" "dovecot2" "sieveScripts" ] [ "services" "dovecot2" "sieve" "scripts" ])
+    (mkRenamedOptionModule [ "services" "dovecot2" "sieve" "plugins" ] [ "services" "dovecot2" "pluginSettings" "sieve_plugins" ])
+    (mkChangedOptionModule [ "services" "dovecot2" "sieve" "extensions" ] [ "services" "dovecot2" "pluginSettings" "sieve_extensions" ]
+      (config: map (el: "+${el}") config.services.dovecot2.sieve.extensions))
+    (mkChangedOptionModule [ "services" "dovecot2" "sieve" "globalExtensions" ] [ "services" "dovecot2" "pluginSettings" "sieve_global_extensions" ]
+      (config: map (el: "+${el}") config.services.dovecot2.sieve.globalExtensions))
   ];
 
   options.services.dovecot2 = {
@@ -470,11 +476,49 @@ in
 
     pluginSettings = mkOption {
       # types.str does not coerce from packages, like `sievePipeBinScriptDirectory`.
-      type =
-        let
-          singleValueType = types.oneOf [ types.bool types.int types.str types.package ];
-        in
-        types.attrsOf (types.oneOf [ singleValueType (types.listOf singleValueType) ]);
+      type = types.submodule {
+        freeformType =
+          let
+            singleValueType = types.oneOf [ types.bool types.int types.str types.package ];
+          in
+          types.attrsOf (types.oneOf [ singleValueType (types.listOf singleValueType) ]);
+        options = {
+          sieve_plugins = mkOption {
+            default = [];
+            example = [ "sieve_extprograms" ];
+            description = "Sieve plugins to load";
+            type = types.listOf types.str;
+          };
+
+          sieve_extensions = mkOption {
+            default = [];
+            description = "Sieve extensions to enable in user scripts";
+            example = [ "+notify" "+imapflags" "+vnd.dovecot.filter" ];
+            type = types.listOf types.str;
+          };
+
+          sieve_global_extensions = mkOption {
+            default = [];
+            example = [ "+vnd.dovecot.environment" ];
+            description = "Sieve extensions to enable in global scripts";
+            type = types.listOf types.str;
+          };
+
+          sieve_pipe_bin_dir = mkOption {
+            default = sievePipeBinScriptDirectory;
+            defaultText = "Directory containing the scripts defined in {option}`services.dovecot2.sieve.pipeBins`.";
+            example = "/etc/dovecot/sieve-pipe";
+            description = ''
+              Directory containing programs available for use by the vnd.dovecot.pipe extension
+
+              Unless you want to manage your own pipe-bins directory, it is
+              recommended to add items to the
+              {option}`services.dovecot2.sieve.pipeBins` list instead.
+            '';
+            type = types.either types.path types.package;
+          };
+        };
+      };
       default = {};
       example = literalExpression ''
         {
@@ -488,6 +532,8 @@ in
         can still override any plugin settings.
 
         If you override a plugin setting, its value is cleared and you have to copy over the defaults.
+
+        See https://doc.dovecot.org/settings/plugin/ for an incomplete list of all allowed settings.
       '';
     };
 
@@ -556,27 +602,6 @@ in
     };
 
     sieve = {
-      plugins = mkOption {
-        default = [];
-        example = [ "sieve_extprograms" ];
-        description = "Sieve plugins to load";
-        type = types.listOf types.str;
-      };
-
-      extensions = mkOption {
-        default = [];
-        description = "Sieve extensions for use in user scripts";
-        example = [ "notify" "imapflags" "vnd.dovecot.filter" ];
-        type = types.listOf types.str;
-      };
-
-      globalExtensions = mkOption {
-        default = [];
-        example = [ "vnd.dovecot.environment" ];
-        description = "Sieve extensions for use in global scripts";
-        type = types.listOf types.str;
-      };
-
       scripts = mkOption {
         type = types.attrsOf types.path;
         default = {};
@@ -616,18 +641,17 @@ in
         perProtocol.imap.enable = [ "imap_quota" ];
       };
 
-      sieve.plugins =
-        optional (cfg.imapsieve.mailbox != []) "sieve_imapsieve"
-        ++ optional (cfg.sieve.pipeBins != []) "sieve_extprograms";
-
-      sieve.globalExtensions = optional (cfg.sieve.pipeBins != []) "vnd.dovecot.pipe";
-
-      pluginSettings = lib.mapAttrs (n: lib.mkDefault) ({
-        sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
-        sieve_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions);
-        sieve_global_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions);
-        sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
-      } // sieveScriptSettings // imapSieveMailboxSettings);
+      pluginSettings = (lib.mapAttrs (n: lib.mkDefault) (
+        sieveScriptSettings // imapSieveMailboxSettings
+      )) // {
+        sieve_global_extensions = lib.mkBefore (
+          optional (cfg.sieve.pipeBins != []) "+vnd.dovecot.pipe"
+        );
+        sieve_plugins = lib.mkBefore (
+          optional (cfg.imapsieve.mailbox != []) "sieve_imapsieve"
+          ++ optional (cfg.sieve.pipeBins != []) "sieve_extprograms"
+        );
+      };
     };
 
     users.users = {
