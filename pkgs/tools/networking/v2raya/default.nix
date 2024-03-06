@@ -94,6 +94,6 @@ buildGoModule {
     mainProgram = "v2rayA";
     license = licenses.agpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elliot ];
+    maintainers = with maintainers; [ ChaosAttractor ];
   };
 }
