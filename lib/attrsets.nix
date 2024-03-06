@@ -706,7 +706,7 @@ rec {
     ```
   */
   mapAttrsRecursive =
-    # A function, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
+    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
     f:
     # Attribute set to recursively map over.
     set:
