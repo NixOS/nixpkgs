@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ansilove";
-    repo = pname;
+    repo = "ansilove";
     rev = version;
     hash = "sha256-cIJBerIbVY/V2LVupBLapmeHDWlBd49M5IjKPFM5OcE=";
   };
