@@ -5,7 +5,7 @@
 , sharutils
 , file
 , getconf
-, flint
+, flint3
 , ntl
 , cddlib
 , gfan
@@ -18,13 +18,13 @@
 # want it to match the upstream format because sage depends on it.
 , texinfo4
 , texliveSmall
-, enableDocs ? !stdenv.isDarwin
+, enableDocs ? true
 , enableGfanlib ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.3.2p2";
+  version = "4.3.2p16";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
     rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-dtZmN8xUCZ9eSgmtBxqfJeWsM4W5Baq7xWXuNAxNLjA=";
+    sha256 = "sha256-5JZgI5lnfX4JlBSEAL7Wv6uao/57GBaMqwgslJt9Bjk=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     ntl
-    flint
+    flint3
     lrcalc
     gfan
   ] ++ lib.optionals enableGfanlib [
