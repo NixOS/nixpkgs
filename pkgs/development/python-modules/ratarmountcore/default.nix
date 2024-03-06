@@ -38,6 +38,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook zstandard zstd ];
 
+  disabledTestPaths = [
+    # Disable this test because for arcane reasons running pytest with nix-build uses 10-100x
+    # more virtual memory than running the test directly or inside a local development nix-shell.
+    # This virtual memory usage caused os.fork called by Python multiprocessing to fail with
+    # "OSError: [Errno 12] Cannot allocate memory" on a test system with 16 GB RAM. It worked fine
+    # on a system with 96 GB RAM. In order to avoid build errors on "low"-memory systems, this
+    # test is disabled for now.
+    "tests/test_BlockParallelReaders.py"
+  ];
+
   meta = with lib; {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
