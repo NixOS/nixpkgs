@@ -17130,6 +17130,12 @@
     githubId = 8534888;
     name = "Savanni D'Gerinel";
   };
+  savedra1 = {
+    email = "michaelsavedra@gmail.com";
+    github = "savedra1";
+    githubId = 99875823;
+    name = "Michael Savedra";
+  };
   savyajha = {
     email = "savya.jha@hawkradius.com";
     github = "savyajha";
