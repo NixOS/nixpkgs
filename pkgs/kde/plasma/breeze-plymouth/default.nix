@@ -41,9 +41,6 @@ in
       postPatch =
         ''
           substituteInPlace cmake/FindPlymouth.cmake --subst-var out
-
-          # FIXME: hack to fix build, remove for 6.0.2
-          substituteInPlace CMakeLists.txt --replace-fail "ECM 6.0.1" "ECM 6.0.0"
         ''
         + lib.optionalString (logoFile != null) ''
           cp ${logoFile} breeze/images/${resolvedLogoName}.logo.png
