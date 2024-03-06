@@ -851,8 +851,8 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled
-      withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withBootloader withCryptsetup withHostnamed withImportd withKmod
+      withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests)
