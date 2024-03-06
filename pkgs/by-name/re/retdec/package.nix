@@ -6,6 +6,7 @@
 , lib
 , openssl
 , cmake
+, ninja
 , autoconf
 , automake
 , libtool
@@ -22,9 +23,10 @@
 , libffi
 , libxml2
 , zlib
+, buildEnv
 , enableTests ? true
 , buildDevTools ? true
-, compileYaraPatterns ? true
+, compileYaraPatterns ? false
 }:
 
 let
@@ -34,25 +36,36 @@ let
     owner = "capstone-engine";
     repo = "capstone";
     rev = "5.0-rc2";
-    sha256 = "sha256-nB7FcgisBa8rRDS3k31BbkYB+tdqA6Qyj9hqCnFW+ME=";
+    hash = "sha256-nB7FcgisBa8rRDS3k31BbkYB+tdqA6Qyj9hqCnFW+ME=";
   };
   llvm = fetchFromGitHub {
     owner = "avast-tl";
     repo = "llvm";
     rev = "2a1f3d8a97241c6e91710be8f84cf3cf80c03390";
-    sha256 = "sha256-+v1T0VI9R92ed9ViqsfYZMJtPCjPHCr4FenoYdLuFOU=";
+    hash = "sha256-+v1T0VI9R92ed9ViqsfYZMJtPCjPHCr4FenoYdLuFOU=";
   };
   yaracpp = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v4.2.0-rc1";
-    sha256 = "sha256-WcN6ClYO2d+/MdG06RHx3kN0o0WVAY876dJiG7CwJ8w=";
+    hash = "sha256-WcN6ClYO2d+/MdG06RHx3kN0o0WVAY876dJiG7CwJ8w=";
   };
   yaramod = fetchFromGitHub {
     owner = "avast";
     repo = "yaramod";
     rev = "aa06dd408c492a8f4488774caf2ee105ccc23ab5";
-    sha256 = "sha256-NVDRf2U5H92EN/Ks//uxNEaeKU+sT4VL4QyyYMO+zKk=";
+    hash = "sha256-wiD4A+6Jsd7bzGo8mmWnkb7l2XcjEgLCK/A4iW9Zt/A=";
+
+    # yaramod builds yet more dependencies. these need to be installed to "lib"
+    postFetch = ''
+      (
+      cd $out
+      shopt -s globstar
+      substituteInPlace src/CMakeLists.txt deps/**/CMakeLists.txt \
+        --replace-quiet CMAKE_ARGS 'CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib' \
+        --replace-quiet '$'{CMAKE_INSTALL_LIBDIR} lib
+      )
+    '';
   };
   keystone = fetchFromGitHub {
     # only for tests
@@ -71,14 +84,19 @@ let
       stripRoot = false;
     };
 
+  # checks the nix dependency "dep" matches that specified in the deps.cmake.
+  # if dep.rev is null, the check is disabled.
+  # see: https://github.com/avast/retdec/blob/master/cmake/deps.cmake
   check-dep = name: dep:
     ''
       context="$(grep ${name}_URL --after-context 1 cmake/deps.cmake)"
       expected="$(echo "$context" | grep --only-matching '".*"')"
-      have="${dep.rev}"
+      have="${builtins.toString dep.rev}"
 
       echo "checking ${name} dependency matches deps.cmake...";
-      if ! echo "$expected" | grep -q "$have"; then
+      if [[ -z "$have" ]]; then
+        echo "${name} version check disabled"
+      elif ! echo "$expected" | grep -q "$have"; then
         printf '%s\n' "${name} version does not match!"  "  nix: $have, expected: $expected"
         false
       fi
@@ -92,8 +110,7 @@ let
     SUPPORT_PKG = retdec-support;
   } // lib.optionalAttrs enableTests {
     KEYSTONE = keystone;
-    # nixpkgs googletest is used
-    # GOOGLETEST = googletest;
+    GOOGLETEST = gtest.src // { rev = null; };  # null rev disables dep version checking
   };
 
   # overwrite install-share.py to copy instead of download.
@@ -139,10 +156,13 @@ stdenv.mkDerivation (self: {
       url = "https://github.com/avast/retdec/commit/dbaab2c3d17b1eae22c581e8ab6bfefadf4ef6ae.patch";
       hash = "sha256-YqHYPGAGWT4x6C+CpsOSsOIZ+NPM2FBQtGQFs74OUIQ=";
     })
+    # aarch64 compatibility: https://github.com/avast/retdec/pull/1195 (not yet merged)
+    ./fix-long-double.patch
   ];
 
   nativeBuildInputs = [
     cmake
+    ninja
     autoconf
     automake
     libtool
@@ -167,9 +187,11 @@ stdenv.mkDerivation (self: {
     (lib.cmakeBool "RETDEC_DEV_TOOLS" buildDevTools) # build tools e.g. capstone2llvmir, retdectool
     (lib.cmakeBool "RETDEC_COMPILE_YARA" compileYaraPatterns) # build and install compiled patterns
   ] ++ lib.mapAttrsToList (k: v: lib.cmakeFeature "${k}_URL" "${v}") deps;
+  # note: *_URL variables are simply passed to ExternalProject_Add and can be file paths
+  # see: https://github.com/avast/retdec/blob/master/deps/capstone/CMakeLists.txt#L65
 
   preConfigure =
-    lib.concatStringsSep "\n" (lib.mapAttrsToList check-dep deps)
+    lib.concatLines (lib.mapAttrsToList check-dep deps)
     +
     ''
       cp -v ${install-share} ./support/install-share.py
@@ -177,60 +199,101 @@ stdenv.mkDerivation (self: {
       # the CMakeLists assume CMAKE_INSTALL_BINDIR, etc are path components but in Nix, they are absolute.
       # therefore, we need to remove the unnecessary CMAKE_INSTALL_PREFIX prepend.
       substituteInPlace ./CMakeLists.txt \
-        --replace-warn "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_BIN_DIR} "''$"{CMAKE_INSTALL_FULL_BINDIR} \
-        --replace-warn "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_LIB_DIR} "''$"{CMAKE_INSTALL_FULL_LIBDIR} \
+        --replace-fail "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_BIN_DIR} "''$"{CMAKE_INSTALL_FULL_BINDIR} \
+        --replace-fail "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_LIB_DIR} "''$"{CMAKE_INSTALL_FULL_LIBDIR} \
 
       # --replace "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_SUPPORT_DIR} "''$"{RETDEC_INSTALL_SUPPORT_DIR}
       # note! Nix does not set CMAKE_INSTALL_DATADIR to an absolute path, so this replacement would be incorrect
 
-      # similarly for yaramod. here, we fix the LIBDIR to lib64. for whatever reason, only "lib64" works.
+      # similarly for yaramod.
       substituteInPlace deps/yaramod/CMakeLists.txt \
-        --replace-fail "''$"{YARAMOD_INSTALL_DIR}/"''$"{CMAKE_INSTALL_LIBDIR} "''$"{YARAMOD_INSTALL_DIR}/lib64 \
-        --replace-fail CMAKE_ARGS 'CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib64'
+        --replace-fail "''$"{YARAMOD_INSTALL_DIR}/"''$"{CMAKE_INSTALL_LIBDIR} "''$"{YARAMOD_INSTALL_DIR}/lib
 
       # yara needs write permissions in the generated source directory.
-      echo ${lib.escapeShellArg ''
+      echo '
         ExternalProject_Add_Step(
           yara chmod WORKING_DIRECTORY ''${YARA_DIR}
           DEPENDEES download COMMAND chmod -R u+w .
         )
-      ''} >> deps/yara/CMakeLists.txt
+      ' >> deps/yara/CMakeLists.txt
 
-      # patch gtest to use the system package
-      gtest=deps/googletest/CMakeLists.txt
-      old="$(cat $gtest)"
-      (echo 'find_package(GTest REQUIRED)'; echo "$old") > $gtest
-      sed -i 's/ExternalProject_[^(]\+[(]/ set(IGNORED /g' $gtest
+      # yara: to support building retdec with ninja.
+      # although retdec is built with ninja, the subproject yara is built with make.
+      substituteInPlace deps/yara/CMakeLists.txt \
+        --replace-fail '$'{YARA_MAKE_PROGRAM} $(command -v make)
 
-      substituteInPlace $gtest \
-        --replace-fail '$'{GTEST_LIB} "GTest::gtest"\
-        --replace-fail '$'{GMOCK_LIB} "GTest::gmock"\
-        --replace-fail '$'{GTEST_MAIN_LIB} "GTest::gtest_main"\
-        --replace-fail '$'{GMOCK_MAIN_LIB} "GTest::gmock_main"
+      # all vendored dependencies must build their libs into the "lib" subdirectory.
+      # retdec's install phase will copy these into the correct Nix output.
+      substituteInPlace deps/*/CMakeLists.txt \
+        --replace-quiet CMAKE_ARGS 'CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib'
 
-      # without git history, there is no chance these tests will pass.
+      substituteInPlace src/utils/CMakeLists.txt \
+        --replace-warn '$'{RETDEC_GIT_VERSION_TAG} ${self.version} \
+        --replace-warn '$'{RETDEC_GIT_COMMIT_HASH} ${self.src.rev}
+
+
+      # tests: without git history, there is no chance these tests will pass.
       substituteInPlace tests/utils/version_tests.cpp \
-        --replace-quiet VersionTests DISABLED_VersionTests
+        --replace-warn VersionTests DISABLED_VersionTests
 
+
+      # scripts: patch paths
       substituteInPlace scripts/retdec-utils.py \
-        --replace-warn /usr/bin/time ${time} \
-        --replace-warn /usr/local/bin/gtime ${time}
+        --replace-fail /usr/bin/time ${time} \
+        --replace-fail /usr/local/bin/gtime ${time}
       substituteInPlace scripts/retdec-unpacker.py \
-        --replace-warn "'upx'" "'${upx}'"
+        --replace-fail "'upx'" "'${upx}'"
     '';
 
   doInstallCheck = enableTests;
   installCheckPhase = ''
-    ${python3.interpreter} "$out/bin/retdec-tests-runner.py"
+    runHook preInstallCheck
 
+    ${python3.interpreter} "''${!outputBin}/bin/retdec-tests-runner.py"
     rm -rf $out/bin/__pycache__
+
+    runHook postInstallCheck
   '';
+
+
+  # static-code patterns are split out since they are rarely needed by end users.
+  # from retdec's wiki:
+  #   However, these are mainly for older compilers used for testing purposes.
+  #   If you want to remove code from newer compilers or some custom libraries,
+  #   you have to create your own signature files.
+  # see: https://github.com/avast/retdec/wiki/Removing-Statically-Linked-Code
+  postFixup = ''
+    mkdir -p $dev/lib/retdec
+    mv -v $out/share/retdec/cmake $dev/lib/retdec
+
+    yara_dir=share/retdec/support/generic/yara_patterns
+    mkdir -p $patterns/$yara_dir
+    mv -v $out/$yara_dir/static-code $patterns/$yara_dir
+  '';
+
+  outputs = [ "out" "lib" "dev" "patterns" ];
+
+  passthru.full = buildEnv {
+    name = "${self.pname}-full-${self.version}";
+    inherit (self.finalPackage) meta;
+    paths = [ self.finalPackage.out self.finalPackage.patterns ];
+    postBuild = ''
+      config=$out/share/retdec/decompiler-config.json
+      cp -v --remove-destination $(readlink -f $config) $config
+
+      static_code=support/generic/yara_patterns/static-code/
+      substituteInPlace $config \
+        --replace-fail ./$static_code $out/share/retdec/$static_code
+    '';
+  };
+
+  passthru.deps = deps;
 
   meta = with lib; {
     description = "Retargetable machine-code decompiler based on LLVM";
     homepage = "https://retdec.com";
     license = licenses.mit;
     maintainers = with maintainers; [ katrinafyi ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
   };
 })

@@ -1,0 +1,64 @@
+From 93233e79a0b14e6aeeee6b117a1c93feba88577b Mon Sep 17 00:00:00 2001
+From: rina <k@rina.fyi>
+Date: Fri, 8 Mar 2024 17:00:07 +1000
+Subject: [PATCH] fix get10Byte on platforms where long double is >80 bits.
+
+for platforms with a non 80-bit "long double" type, we
+change get10ByteImpl to reduce to double then use the
+language's conversion to long double.
+
+this handles both where long double is smaller and greater
+than 80 bits, though only 64 bits of precision are preserved.
+
+this fixes the tests on aarch64 platforms.
+---
+ src/utils/byte_value_storage.cpp | 7 ++++++-
+ src/utils/system.cpp             | 8 +++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/src/utils/byte_value_storage.cpp b/src/utils/byte_value_storage.cpp
+index c16e7425e..bc8f6afc3 100644
+--- a/src/utils/byte_value_storage.cpp
++++ b/src/utils/byte_value_storage.cpp
+@@ -1019,7 +1019,12 @@ bool ByteValueStorage::get10ByteImpl(
+ 	{
+ 		std::vector<std::uint8_t> d8;
+ 		double10ToDouble8(d8, data);
+-		memcpy(&res, d8.data(), d8.size());
++
++		double d8res = 0;
++		static_assert(sizeof(double) == 8);
++
++		memcpy(&d8res, d8.data(), d8.size());
++		res = d8res;
+ 	}
+ 
+ 	return true;
+diff --git a/src/utils/system.cpp b/src/utils/system.cpp
+index 669d2d8f0..6721a6821 100644
+--- a/src/utils/system.cpp
++++ b/src/utils/system.cpp
+@@ -7,6 +7,8 @@
+ #include "retdec/utils/os.h"
+ #include "retdec/utils/system.h"
+ 
++#include <cfloat>
++
+ namespace retdec {
+ namespace utils {
+ 
+@@ -22,11 +24,11 @@ bool isLittleEndian() {
+ }
+ 
+ /**
+-* @brief Finds out if the runtime system supports <tt>long double</tt> (at least
+-*        10 bytes long).
++* @brief Finds out if the runtime system supports 80-bit <tt>long double</tt>
++*        (exactly 10 bytes long).
+ */
+ bool systemHasLongDouble() {
+-	return sizeof(long double) >= 10;
++	return sizeof(long double) >= 10 && (LDBL_MANT_DIG == 64);
+ }
+ 
+ } // namespace utils
