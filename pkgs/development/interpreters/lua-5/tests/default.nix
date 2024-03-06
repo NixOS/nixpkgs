@@ -1,12 +1,10 @@
 { lua
 , hello
 , wrapLua
-, lib, fetchFromGitHub
-, fetchFromGitLab
+, lib
 , pkgs
 }:
 let
-
   runTest = lua: { name, command }:
     pkgs.runCommandLocal "test-${lua.name}-${name}" ({
       nativeBuildInputs = [lua];
@@ -18,29 +16,47 @@ let
     + "touch $out"
     );
 
-    wrappedHello = hello.overrideAttrs(oa: {
-      propagatedBuildInputs = [
-        wrapLua
-        lua.pkgs.cjson
-      ];
-      postFixup = ''
-        wrapLuaPrograms
-      '';
-    });
+  wrappedHello = hello.overrideAttrs(oa: {
+    propagatedBuildInputs = [
+      wrapLua
+      lua.pkgs.cjson
+    ];
+    postFixup = ''
+      wrapLuaPrograms
+    '';
+  });
 
-    luaWithModule = lua.withPackages(ps: [
-      ps.lua-cjson
-    ]);
+  luaWithModule = lua.withPackages(ps: [
+    ps.lua-cjson
+  ]);
+
+  golden_LUA_PATHS = {
+
+    # Looking at lua interpreter 'setpath' code
+    # for instance https://github.com/lua/lua/blob/69ea087dff1daba25a2000dfb8f1883c17545b7a/loadlib.c#L599
+    # replace ";;" by ";LUA_PATH_DEFAULT;"
+    "5.1" = ";./?.lua;${lua}/share/lua/5.1/?.lua;${lua}/share/lua/5.1/?/init.lua;${lua}/lib/lua/5.1/?.lua;${lua}/lib/lua/5.1/?/init.lua;";
+    "5.2" = ";${lua}/share/lua/5.2/?.lua;${lua}/share/lua/5.2/?/init.lua;${lua}/lib/lua/5.2/?.lua;${lua}/lib/lua/5.2/?/init.lua;./?.lua;";
+    "5.3" = ";${lua}/share/lua/5.3/?.lua;${lua}/share/lua/5.3/?/init.lua;${lua}/lib/lua/5.3/?.lua;${lua}/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;";
+    # lua5.4 seems to be smarter about it and dont add the lua separators when nothing left or right
+    "5.4" = "${lua}/share/lua/5.4/?.lua;${lua}/share/lua/5.4/?/init.lua;${lua}/lib/lua/5.4/?.lua;${lua}/lib/lua/5.4/?/init.lua;./?.lua;./?/init.lua";
+
+    # luajit versions
+    "2.0" = ";./?.lua;${lua}/share/luajit-2.0/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;${lua}/share/lua/5.1/?.lua;${lua}/share/lua/5.1/?/init.lua;";
+    "2.1" = ";./?.lua;${lua}/share/luajit-2.1/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;${lua}/share/lua/5.1/?.lua;${lua}/share/lua/5.1/?/init.lua;";
+  };
 in
   pkgs.recurseIntoAttrs ({
 
-  checkAliases = runTest lua {
-    name = "check-aliases";
+  checkInterpreterPatch = let
+    golden_LUA_PATH = golden_LUA_PATHS.${lib.versions.majorMinor lua.version};
+  in
+    runTest lua {
+    name = "check-default-lua-path";
     command = ''
+      export LUA_PATH=";;"
       generated=$(lua -e 'print(package.path)')
-      golden_LUA_PATH='./share/lua/${lua.luaversion}/?.lua;./?.lua;./?/init.lua'
-
-      assertStringContains "$generated" "$golden_LUA_PATH"
+      assertStringEqual "$generated" "${golden_LUA_PATH}"
       '';
   };
 
