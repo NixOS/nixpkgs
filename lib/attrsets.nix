@@ -739,7 +739,7 @@ rec {
   mapAttrsRecursiveCond =
     # A function that, given the attribute set the recursion is currently at, determines if to recurse deeper into that attribute set.
     cond:
-    # A function, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
+    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
     # The attribute value is either an attribute set for which `cond` returns false, or something other than an attribute set.
     f:
     # Attribute set to recursively map over.
