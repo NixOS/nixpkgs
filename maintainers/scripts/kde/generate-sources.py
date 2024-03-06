@@ -101,7 +101,7 @@ def main(set: str, version: str, nixpkgs: pathlib.Path):
 
     set_dir.mkdir(parents=True, exist_ok=True)
     with (set_dir / "default.nix").open("w") as fd:
-        fd.write(ROOT_TEMPLATE.render(packages=results.keys()) + "\n")
+        fd.write(ROOT_TEMPLATE.render(packages=sorted(results.keys())) + "\n")
 
     sources_dir = generated_dir / "sources"
     sources_dir.mkdir(parents=True, exist_ok=True)
