@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-O8FLjse2gY8KNWGXpUeZ83cNk0ZuRAZJJ3Am33/ABVw=";
+    hash = "sha256-O8FLjse2gY8KNWGXpUeZ83cNk0ZuRAZJJ3Am33/ABVw=";
   };
 
   buildInputs = [
