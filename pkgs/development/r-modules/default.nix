@@ -359,7 +359,6 @@ let
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
     iBMQ = [ pkgs.gsl ];
-    igraph = with pkgs; [ gmp libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
@@ -565,6 +564,7 @@ let
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
+    igraph = with pkgs; [ gmp libxml2.dev glpk ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
     magick = [ pkgs.pkg-config ];
     mwaved = [ pkgs.pkg-config ];
