@@ -1,20 +1,23 @@
 # Fetchers {#chap-pkgs-fetchers}
 
 Building software with Nix often requires downloading source code and other files from the internet.
-To this end, Nixpkgs provides *fetchers*: functions to obtain remote sources via various protocols and services.
+To do this, we use functions that we call _fetchers_ to obtain remote sources via various protocols and services.
 
-Nixpkgs fetchers differ from built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball):
+Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball) to accomplish this, but they behave in ways that complicate the task of evaluating code in Nixpkgs.
+Nixpkgs provides its own fetchers, which work differently and reduce the time needed to evaluate code in Nixpkgs, as well as allow [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
+
+Since the Nixpkgs fetchers work better with Nixpkgs, the Nix built-in fetchers are not allowed in Nixpkgs code.
+
+The differences are explained in this list:
+
 - A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path).
-  A Nixpkgs fetcher will create a ([fixed-output](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation)) [derivation](https://nixos.org/manual/nix/stable/language/derivations), and files are downloaded at build time.
+  A Nixpkgs fetcher will create a ([fixed-output](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation)) [derivation](https://nixos.org/manual/nix/stable/glossary#gloss-derivation), and files are downloaded at build time.
 - Built-in fetchers will invalidate their cache after [`tarball-ttl`](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-tarball-ttl) expires, and will require network activity to check if the cache entry is up to date.
-  Nixpkgs fetchers only re-download if the specified hash changes or the store object is not otherwise available.
+  Nixpkgs fetchers only re-download if the specified hash changes or the store object is not available.
 - Built-in fetchers do not use [substituters](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters).
   Derivations produced by Nixpkgs fetchers will use any configured binary cache transparently.
 
-This significantly reduces the time needed to evaluate the entirety of Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
-For these reasons, built-in fetchers are not allowed in Nixpkgs source code.
-
-The following table shows an overview of the differences:
+The following table summarizes the differences:
 
 | Fetchers | Download | Output | Cache | Re-download when |
 |-|-|-|-|-|
@@ -23,66 +26,444 @@ The following table shows an overview of the differences:
 
 ## Caveats {#chap-pkgs-fetchers-caveats}
 
-The fact that the hash belongs to the Nix derivation output and not the file itself can lead to confusion.
-For example, consider the following fetcher:
+Because Nixpkgs fetchers are [fixed-output derivations](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation), they need you to specify a hash (this is what turns them into a fixed-output derivation).
+This is usually done through a `hash` attribute.
+However, **this hash is not a hash of the contents that are downloaded**, it is a hash that corresponds to the derivation output itself, and is calculated by Nix.
+
+This has the following implications that you should be aware of:
+
+- If you want to figure out the hash beforehand, you need Nix (or Nix-aware) tooling to give you the hash.
+  You can't just hash the contents and use it.
+- If you update the URL of the content to be fetched (or a version parameter, or some other parameter), you **must not** leave the hash unchanged, because it will reuse the old contents that were already fetched.
+  As [explained in the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash), if the contents with the given hash already exist, it won't do any other work and will reuse the existing contents.
+
+For example, consider the following recipe that only uses a fetcher:
 
 ```nix
+{ fetchurl }:
 fetchurl {
-  url = "http://www.example.org/hello-1.0.tar.gz";
-  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
-};
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.05/.version";
+  hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
+}
 ```
 
 A common mistake is to update a fetcher’s URL, or a version parameter, without updating the hash.
 
 ```nix
+{ fetchurl }:
 fetchurl {
-  url = "http://www.example.org/hello-1.1.tar.gz";
-  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
-};
-```
-
-**This will reuse the old contents**.
-Remember to invalidate the hash argument, in this case by setting the `hash` attribute to an empty string.
-
-```nix
-fetchurl {
-  url = "http://www.example.org/hello-1.1.tar.gz";
-  hash = "";
-};
-```
-
-Use the resulting error message to determine the correct hash.
-
-```
-error: hash mismatch in fixed-output derivation '/path/to/my.drv':
-         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-            got:    sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=
-```
-
-A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
-
-## `fetchurl` and `fetchzip` {#fetchurl}
-
-Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `hash`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `hash`. This hash will be used by Nix to identify your source. A typical usage of `fetchurl` is provided below.
-
-```nix
-{ stdenv, fetchurl }:
-
-stdenv.mkDerivation {
-  name = "hello";
-  src = fetchurl {
-    url = "http://www.example.org/hello.tar.gz";
-    hash = "sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=";
-  };
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
+  hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
 }
 ```
 
-The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand, will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
+**This will reuse the old contents**.
+Remember to invalidate the hash argument.
+You can do this by setting the `hash` attribute to an empty string.
 
-Additional parameters to `fetchurl`:
-- `downloadToTemp`: Defaults to `false`. If `true`, saves the source to `$downloadedFile`, to be used in conjunction with `postFetch`
-- `postFetch`: Shell code executed after the file has been fetched successfully. Use it for postprocessing, to check or transform the file.
+```nix
+{ fetchurl }:
+fetchurl {
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
+  hash = "";
+}
+```
+
+When building the recipe, you'll get an error message that you can use to determine the correct hash:
+
+```shell
+$ nix-build
+(some output removed for clarity)
+error: hash mismatch in fixed-output derivation '/nix/store/7yynn53jpc93l76z9zdjj4xdxgynawcw-version.drv':
+         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+            got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
+error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
+```
+
+A similar problem arises while testing changes to a fetcher's implementation.
+If the output of the derivation already exists in the Nix store, test failures can go undetected.
+The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
+
+[]{#fetchurl}
+## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
+
+Downloads content from a given URL and stores the unaltered contents within the Nix store.
+
+`fetchurl` uses {manpage}`curl(1)` internally, and allows its behaviour to be modified by specifying a few attributes in the argument to `fetchurl` (see the documentation for attributes `curlOpts`, `curlOptsList`, and `netrcPhase`).
+
+### File naming {#sec-pkgs-fetchers-fetchurl-file-naming}
+
+The name of the file within the Nix store is controlled by the hash given to `fetchurl`, and also the `name` (or `pname` and `version`) values.
+
+If neither `name` nor `pname` and `version` are specified when calling `fetchurl`, it will default to using the [basename](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-baseNameOf) of `url` or the first element of `urls`.
+
+If `pname` and `version` are specified, `fetchurl` will use those values and will ignore `name`, even if it is also specified.
+
+### Inputs {#sec-pkgs-fetchers-fetchurl-inputs}
+
+`fetchurl` expects a single argument with the following attributes:
+
+`url` (String; _optional_)
+: The URL to download from.
+
+  :::{.note}
+  Either `url` or `urls` must be specified, but not both.
+  :::
+
+  _Default value:_ `""`.
+
+`urls` (List of String; _optional_)
+: A list of URLs, specifying download locations for the same content.
+  Each URL will be tried in order until one of them succeeds with some content or all of them fail.
+  See [](#ex-fetchers-fetchurl-nixpkgs-version-multiple-urls) to understand how this attribute affects the behaviour of `fetchurl`.
+
+  :::{.note}
+  Either `url` or `urls` must be specified, but not both.
+  :::
+
+  _Default value:_ `[]`.
+
+`hash` (String; _optional_)
+: Hash of the derivation output of `fetchurl` in the format expected by Nix.
+  For more information, see [](#chap-pkgs-fetchers-caveats).
+
+  :::{.note}
+  It is recommended that you use the `hash` attribute instead of the other hash-specific attributes that exist for backwards compatibility.
+
+  If `hash` is not specified, you must specify `outputHash` and `outputHashAlgo`, or one of `sha512`, `sha256`, or `sha1`.
+  :::
+
+  _Default value:_ `""`.
+
+`outputHash` (String; _optional_)
+: Hash of the derivation output of `fetchurl` in the format expected by Nix.
+  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+
+  :::{.note}
+  It is recommended that you use the `hash` attribute instead.
+
+  If `outputHash` is specified, you must also specify `outputHashAlgo`.
+  :::
+
+  _Default value:_ `""`.
+
+`outputHashAlgo` (String; _optional_)
+: Algorithm used to generate the value specified in `outputHash`.
+  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHashAlgo) for more information about the values it supports.
+
+  :::{.note}
+  It is recommended that you use the `hash` attribute instead.
+
+  The value specified in `outputHashAlgo` will be ignored if `outputHash` isn't also specified.
+  :::
+
+  _Default value:_ `""`.
+
+`sha1` (String; _optional_)
+: SHA-1 hash of the derivation output of `fetchurl` in the format expected by Nix.
+  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+
+  :::{.note}
+  It is recommended that you use the `hash` attribute instead.
+  :::
+
+  _Default value:_ `""`.
+
+`sha256` (String; _optional_)
+: SHA-256 hash of the derivation output of `fetchurl` in the format expected by Nix.
+  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+
+  :::{.note}
+  It is recommended that you use the `hash` attribute instead.
+  :::
+
+  _Default value:_ `""`.
+
+`sha512` (String; _optional_)
+: SHA-512 hash of the derivation output of `fetchurl` in the format expected by Nix.
+  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+
+  :::{.note}
+  It is recommended that you use the `hash` attribute instead.
+  :::
+
+  _Default value:_ `""`.
+
+`name` (String; _optional_)
+: Name of the downloaded file when saved in the Nix store.
+  See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
+
+  _Default value:_ `""`.
+
+`pname` (String; _optional_)
+: The base name of the downloaded file, which will be combined with `version` to form the name of the downloaded file when saved in the Nix store.
+  See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
+
+  :::{.note}
+  If `pname` is specified, you must also specify `version`, otherwise `fetchurl` will ignore the value of `pname`.
+  :::
+
+  _Default value:_ `""`.
+
+`version` (String; _optional_)
+: The version of the downloaded file, which will be combined with `pname` to form the name of the downloaded file when saved in the Nix store.
+  See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
+
+  _Default value:_ `""`.
+
+`recursiveHash` (Boolean; _optional_)
+: If set to `true`, will signal to Nix that the hash given to `fetchurl` was calculated using the `"recursive"` mode.
+  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHashMode) for more information about the existing modes.
+
+  By default, `fetchurl` uses `"recursive"` mode when the `executable` attribute is set to `true`, so you don't need to specify `recursiveHash` in this case.
+
+  _Default value:_ `false`.
+
+`executable` (Boolean; _optional_)
+: If `true`, sets the executable bit on the downloaded file.
+
+  _Default value_: `false`.
+
+`downloadToTemp` (Boolean; _optional_)
+: If `true`, saves the downloaded file to a temporary location instead of the expected Nix store location.
+  This is useful when used in conjunction with `postFetch` attribute, otherwise `fetchurl` will not produce any meaningful output.
+
+  The location of the downloaded file will be set in the `$downloadedFile` variable, which should be used by the script in the `postFetch` attribute.
+  See [](#ex-fetchers-fetchurl-nixpkgs-version-postfetch) to understand how to work with this attribute.
+
+  _Default value:_ `false`.
+
+`postFetch` (String; _optional_)
+: Script executed after the file has been downloaded successfully, and before `fetchurl` finishes running.
+  Useful for post-processing, to check or transform the file in some way.
+  See [](#ex-fetchers-fetchurl-nixpkgs-version-postfetch) to understand how to work with this attribute.
+
+  _Default value:_ `""`.
+
+`netrcPhase` (String or Null; _optional_)
+: Script executed to create a {manpage}`netrc(5)` file to be used with {manpage}`curl(1)`.
+  The script should create the `netrc` file (note that it does not begin with a ".") in the directory it's currently running in (`$PWD`).
+
+  The script is executed during the setup done by `fetchurl` before it runs any of its code to download the specified content.
+
+  :::{.note}
+  If specified, `fetchurl` will automatically alter its invocation of {manpage}`curl(1)` to use the `netrc` file, so you don't need to add anything to `curlOpts` or `curlOptsList`.
+  :::
+
+  :::{.caution}
+  Since `netrcPhase` needs to be specified in your source Nix code, any secrets that you put directly in it will be world-readable by design (both in your source code, and when the derivation gets created in the Nix store).
+
+  If you want to avoid this behaviour, see the documentation of `netrcImpureEnvVars` for an alternative way of dealing with these secrets.
+  :::
+
+  _Default value_: `null`.
+
+`netrcImpureEnvVars` (List of String; _optional_)
+: If specified, `fetchurl` will add these environment variable names to the list of [impure environment variables](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-impureEnvVars), which will be passed from the environment of the calling user to the builder running the `fetchurl` code.
+
+  This is useful when used with `netrcPhase` to hide any secrets that are used in it, because the script in `netrcPhase` only needs to reference the environment variables with the secrets in them instead.
+  However, note that these are called _impure_ variables for a reason:
+  the environment that starts the build needs to have these variables declared for everything to work properly, which means that additional setup is required outside what Nix controls.
+
+  _Default value:_ `[]`.
+
+`curlOpts` (String; _optional_)
+: If specified, this value will be appended to the invocation of {manpage}`curl(1)` when downloading the URL(s) given to `fetchurl`.
+  Multiple arguments can be separated by spaces normally, but values with whitespaces will be interpreted as multiple arguments (instead of a single value), even if the value is escaped.
+  See `curlOptsList` for a way to pass values with whitespaces in them.
+
+  _Default value:_ `""`.
+
+`curlOptsList` (List of String; _optional_)
+: If specified, each element of this list will be passed as an argument to the invocation of {manpage}`curl(1)` when downloading the URL(s) given to `fetchurl`.
+  This allows passing values that contain spaces, with no escaping needed.
+
+  _Default value:_ `[]`.
+
+`showURLs` (Boolean; _optional_)
+: If set to `true`, this will stop `fetchurl` from downloading anything at all.
+  Instead, it will output a list of all the URLs it would've used to download the content (after resolving `mirror://` URLs, for example).
+  This is useful for debugging.
+
+  _Default value:_ `false`.
+
+`meta` (Attribute Set; _optional_)
+: Specifies any [meta-attributes](#chap-meta) for the derivation returned by `fetchurl`.
+
+  _Default value:_ `{}`.
+
+`passthru` (Attribute Set; _optional_)
+: Specifies any extra [passthru](#var-stdenv-passthru) attributes for the derivation returned by `fetchurl`.
+  Note that `fetchurl` defines [passthru attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
+  Attributes specified in `passthru` can override the default attributes returned by `fetchurl`.
+
+  _Default value:_ `{}`.
+
+`preferLocalBuild` (Boolean; _optional_)
+: This is the same attribute as [defined in the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-preferLocalBuild).
+  It is `true` by default because making a remote machine download the content just duplicates network traffic (since the local machine might download the results from the derivation anyway), but this could be useful in cases where network access is restricted on local machines.
+
+  _Default value:_ `true`.
+
+`nativeBuildInputs` (List of Attribute Set; _optional_)
+: Additional packages needed to download the content.
+  This is useful if you need extra packages for `postFetch` or `netrcPhase`, for example.
+  Has the same semantics as in [](#var-stdenv-nativeBuildInputs).
+  See [](#ex-fetchers-fetchurl-nixpkgs-version-postfetch) to understand how this can be used with `postFetch`.
+
+  _Default value:_ `[]`.
+
+### Passthru outputs {#ssec-pkgs-fetchers-fetchurl-passthru-outputs}
+
+`fetchurl` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+
+`url` (String)
+
+: The same `url` attribute passed in the argument to `fetchurl`.
+
+### Examples {#ssec-pkgs-fetchers-fetchurl-examples}
+
+:::{.example #ex-fetchers-fetchurl-nixpkgs-version}
+# Using `fetchurl` to download a file
+
+The following package downloads a small file from a URL and shows the most common way to use `fetchurl`:
+
+```nix
+{ fetchurl }:
+fetchurl {
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
+  hash = "sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=";
+}
+```
+
+After building the package, the file will be downloaded and place into the Nix store:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/4g9y3x851wqrvim4zcz5x2v3zivmsq8n-version
+
+$ cat /nix/store/4g9y3x851wqrvim4zcz5x2v3zivmsq8n-version
+23.11
+```
+:::
+
+:::{.example #ex-fetchers-fetchurl-nixpkgs-version-multiple-urls}
+# Using `fetchurl` to download a file with multiple possible URLs
+
+The following package adapts [](#ex-fetchers-fetchurl-nixpkgs-version) to use multiple URLs.
+The first URL was crafted to intentionally return an error to illustrate how `fetchurl` will try multiple URLs until it finds one that works (or all URLs fail).
+
+```nix
+{ fetchurl }:
+fetchurl {
+  urls = [
+    "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/does-not-exist"
+    "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version"
+  ];
+  hash = "sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=";
+}
+```
+
+After building the package, both URLs will be used to download the file:
+
+```shell
+$ nix-build
+(some output removed for clarity)
+trying https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/does-not-exist
+(some output removed for clarity)
+curl: (22) The requested URL returned error: 404
+
+trying https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version
+(some output removed for clarity)
+/nix/store/n9asny31z32q7sdw6a8r1gllrsfy53kl-does-not-exist
+
+$ cat /nix/store/n9asny31z32q7sdw6a8r1gllrsfy53kl-does-not-exist
+23.11
+```
+
+However, note that the name of the file was derived from the first URL (this is further explained in [](#sec-pkgs-fetchers-fetchurl-file-naming)).
+To ensure the result will have the same name regardless of which URLs are used, we can modify the package:
+
+```nix
+{ fetchurl }:
+fetchurl {
+  name = "nixpkgs-version";
+  urls = [
+    "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/does-not-exist"
+    "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version"
+  ];
+  hash = "sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=";
+}
+```
+
+After building the package, the result will have the name we specified:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/zczb6wl3al6jm9sm5h3pr6nqn0i5ji9z-nixpkgs-version
+```
+:::
+
+:::{.example #ex-fetchers-fetchurl-nixpkgs-version-postfetch}
+# Manipulating the content downloaded by `fetchurl`
+
+It might be useful to manipulate the content downloaded by `fetchurl` directly in its derivation.
+In this example, we'll adapt [](#ex-fetchers-fetchurl-nixpkgs-version) to append the result of running the `hello` package to the contents we download, purely to illustrate how to manipulate the content.
+
+```nix
+{ fetchurl, hello, lib }:
+fetchurl {
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
+
+  nativeBuildInputs = [ hello ];
+
+  downloadToTemp = true;
+  postFetch = ''
+    ${lib.getExe hello} >> $downloadedFile
+    mv $downloadedFile $out
+  '';
+
+  hash = "sha256-ceooQQYmDx5+0nfg40uU3NNI2yKrixP7HZ/xLZUNv+w=";
+}
+```
+
+After building the package, the resulting file will have "Hello, world!" appended to it:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/ifi6pp7q0ag5h7c5v9h1c1c7bhd10c7f-version
+
+$ cat /nix/store/ifi6pp7q0ag5h7c5v9h1c1c7bhd10c7f-version
+23.11
+Hello, world!
+```
+
+Note that the `hash` specified in the package is different than the hash specified in [](#ex-fetchers-fetchurl-nixpkgs-version), because the contents of the output have changed (even though the actual file that was downloaded is the same).
+See [](#chap-pkgs-fetchers-caveats) for more details on how to work with the `hash` attribute when the output changes.
+:::
+
+## `fetchzip` {#sec-pkgs-fetchers-fetchzip}
+
+Downloads content from a given URL (which is assumed to be an archive), and decompresses the archive for you, making files and directories directly accessible.
+`fetchzip` can only be used with archives.
+Despite its name, `fetchzip` is not limited to `.zip` files and can also be used with any tarball.
+
+It has two required arguments, a URL and a hash.
+The hash is typically `hash`, although many more hash algorithms are supported.
+Nixpkgs contributors are currently recommended to use `hash`.
+This hash will be used by Nix to identify your source.
+A typical usage of `fetchzip` is provided below.
+
+```nix
+{ fetchzip }:
+fetchzip {
+  url = "https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.gz";
+  hash = "sha256-3ABYlME9R8klcpJ7MQpyFEFwHmxDDEzIYBqu/CpDYmg=";
+}
+```
 
 ## `fetchpatch` {#fetchpatch}
 
