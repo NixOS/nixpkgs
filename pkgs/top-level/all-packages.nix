@@ -26293,8 +26293,6 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
-  listmonk = callPackage ../servers/mail/listmonk { };
-
   linx-server = callPackage ../servers/web-apps/linx-server { };
 
   livepeer = callPackage ../servers/livepeer { };
