@@ -19,7 +19,30 @@ let
   libStr = lib.strings;
   libAttr = lib.attrsets;
 
-  inherit (lib) isFunction;
+  inherit (builtins)
+    addErrorContext
+    attrNames
+    concatStringsSep
+    elem
+    filter
+    head
+    isAttrs
+    isFloat
+    isInt
+    isList
+    isPath
+    isString
+    length
+    mapAttrs
+    match
+    replaceStrings
+    split
+    tail
+    ;
+
+  inherit (lib)
+    isFunction
+    ;
 in
 
 rec {
@@ -30,7 +53,7 @@ rec {
    * The builtin `toString` function has some strange defaults,
    * suitable for bash scripts but not much else.
    */
-  mkValueStringDefault = {}: v: with builtins;
+  mkValueStringDefault = {}: v:
     let err = t: v: abort
           ("generators.mkValueStringDefault: " +
            "${t} not supported: ${toPretty {} v}");
@@ -86,7 +109,7 @@ rec {
   }:
   let mkLine = k: v: indent + mkKeyValue k v + "\n";
       mkLines = if listsAsDuplicateKeys
-        then k: v: map (mkLine k) (if lib.isList v then v else [v])
+        then k: v: map (mkLine k) (if isList v then v else [v])
         else k: v: [ (mkLine k v) ];
   in attrs: libStr.concatStrings (lib.concatLists (libAttr.mapAttrsToList mkLines attrs));
 
@@ -195,7 +218,6 @@ rec {
    *>   name = "edolstra"
    */
   toGitINI = attrs:
-    with builtins;
     let
       mkSectionName = name:
         let
@@ -266,7 +288,7 @@ rec {
       /* If this option is true, an error will be thrown, if a certain given depth is exceeded */
     , throwOnDepthLimit ? true
     }:
-      assert builtins.isInt depthLimit;
+      assert isInt depthLimit;
       let
         specialAttrs = [
           "__functor"
@@ -275,7 +297,7 @@ rec {
           "__pretty"
         ];
         stepIntoAttr = evalNext: name:
-          if builtins.elem name specialAttrs
+          if elem name specialAttrs
             then id
             else evalNext;
         transform = depth:
@@ -284,7 +306,7 @@ rec {
               then throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to evaluate with `generators.withRecursion'!"
               else const "<unevaluated>"
           else id;
-        mapAny = with builtins; depth: v:
+        mapAny = depth: v:
           let
             evalNext = x: mapAny (depth + 1) (transform (depth + 1) x);
           in
@@ -311,9 +333,8 @@ rec {
     indent ? ""
   }:
     let
-    go = indent: v: with builtins;
-    let     isPath   = v: typeOf v == "path";
-            introSpace = if multiline then "\n${indent}  " else " ";
+    go = indent: v:
+    let     introSpace = if multiline then "\n${indent}  " else " ";
             outroSpace = if multiline then "\n${indent}" else " ";
     in if   isInt      v then toString v
     # toString loses precision on floats, so we use toJSON instead. This isn't perfect
@@ -322,7 +343,7 @@ rec {
     else if isFloat    v then builtins.toJSON v
     else if isString   v then
       let
-        lines = filter (v: ! isList v) (builtins.split "\n" v);
+        lines = filter (v: ! isList v) (split "\n" v);
         escapeSingleline = libStr.escape [ "\\" "\"" "\${" ];
         escapeMultiline = libStr.replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
         singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
@@ -359,10 +380,10 @@ rec {
       else if v ? type && v.type == "derivation" then
         "<derivation ${v.name or "???"}>"
       else "{" + introSpace
-          + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
+          + concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
                 "${libStr.escapeNixIdentifier name} = ${
-                  builtins.addErrorContext "while evaluating an attribute `${name}`"
+                  addErrorContext "while evaluating an attribute `${name}`"
                     (go (indent + "  ") value)
                 };") v)
         + outroSpace + "}"
@@ -371,9 +392,7 @@ rec {
 
   # PLIST handling
   toPlist = {}: v: let
-    isFloat = builtins.isFloat or (x: false);
-    isPath = x: builtins.typeOf x == "path";
-    expr = ind: x:  with builtins;
+    expr = ind: x:
       if x == null  then "" else
       if isBool x   then bool ind x else
       if isInt x    then int ind x else
@@ -396,20 +415,20 @@ rec {
 
     item = ind: libStr.concatMapStringsSep "\n" (indent ind);
 
-    list = ind: x: libStr.concatStringsSep "\n" [
+    list = ind: x: concatStringsSep "\n" [
       (literal ind "<array>")
       (item ind x)
       (literal ind "</array>")
     ];
 
-    attrs = ind: x: libStr.concatStringsSep "\n" [
+    attrs = ind: x: concatStringsSep "\n" [
       (literal ind "<dict>")
       (attr ind x)
       (literal ind "</dict>")
     ];
 
     attr = let attrFilter = name: value: name != "_module" && value != null;
-    in ind: x: libStr.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
+    in ind: x: concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
       (name: value: lib.optionals (attrFilter name value) [
       (key "\t${ind}" name)
       (expr "\t${ind}" value)
@@ -426,8 +445,7 @@ ${expr "" v}
    * the Natural type.
   */
   toDhall = { }@args: v:
-    with builtins;
-    let concatItems = lib.strings.concatStringsSep ", ";
+    let concatItems = concatStringsSep ", ";
     in if isAttrs v then
       "{ ${
         concatItems (lib.attrsets.mapAttrsToList
@@ -488,7 +506,6 @@ ${expr "" v}
     /* Interpret as variable bindings */
     asBindings ? false,
   }@args: v:
-    with builtins;
     let
       innerIndent = "${indent}  ";
       introSpace = if multiline then "\n${innerIndent}" else " ";
