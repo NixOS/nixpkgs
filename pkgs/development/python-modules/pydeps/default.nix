@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "1.12.18";
+  version = "1.12.19";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "thebjorn";
     repo = "pydeps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-89RrAf09n42mRiWOUdHFNP4JoCP9bXMofkISyVqd+4I=";
+    hash = "sha256-3z/7pkeP6R8GsWvSaCChcf0DZPrC3KdwLeGdNm4m6Jc=";
   };
 
   nativeBuildInputs = [
