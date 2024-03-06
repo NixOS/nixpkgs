@@ -11,7 +11,7 @@ let
   version = "8.1.7";
   src = fetchurl {
     url = "https://s3.nosqlbooster.com/download/releasesv8/nosqlbooster4mongo-${version}.AppImage";
-    hash = "sha256-W1kODb52jOmjwW4sam1Uf284Z/OBClRMybVL/B8LEkw=";
+    hash = "sha256-+LJS3lqRPAIcCbGniLcxoL1yfRhlmn7S1OrWuedHufU=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
