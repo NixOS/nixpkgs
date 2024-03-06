@@ -9,19 +9,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waylyrics";
-  version = "0.2.4";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "poly000";
     repo = "waylyrics";
     rev = "v${version}";
-    hash = "sha256-Tpsk1KL+QSiv8aWl8N5hextKnhMulI3YWtQvB6IIdmQ=";
+    hash = "sha256-sUhFT3Vq/IjbMir7/AVCU8FyfmoNiZsn2zkqdJkOMFo=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ncmapi-0.1.13" = "sha256-wh9RsyuS1L7rnz1jh2A27s6wUvyH8cNgUywPORIimmg=";
+      "ncmapi-0.1.13" = "sha256-NxgF1TV+3hK5oE/DfJnWyc+XmPX3U1UeD+xTkcvDzIA=";
       "qqmusic-rs-0.1.0" = "sha256-woLsO0n+m3EBUI+PRLio7iLp0UPQSliWK0djCSZEaZc=";
     };
   };
@@ -33,7 +33,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ openssl dbus ];
 
-  doCheck = false; # Requires network access
+  checkFlags = [
+    "--skip=tests::netease_lyric::get_netease_lyric" # Requires network access
+  ];
 
   WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
 

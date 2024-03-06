@@ -7798,7 +7798,7 @@ with pkgs;
     (callPackage ../development/libraries/volk { })
   ;
 
-  vorta = libsForQt5.callPackage ../applications/backup/vorta { };
+  vorta = qt6Packages.callPackage ../applications/backup/vorta { };
 
   vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit { };
 
@@ -23774,10 +23774,6 @@ with pkgs;
 
   mqttmultimeter = callPackage ../tools/networking/mqttmultimeter { };
 
-  mqttui = callPackage ../tools/networking/mqttui {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   msgpack = callPackage ../development/libraries/msgpack { };
 
   msgpack-c = callPackage ../development/libraries/msgpack-c { };
@@ -26313,8 +26309,6 @@ with pkgs;
   lightgbm = callPackage ../development/libraries/lightgbm { };
 
   lighttpd = callPackage ../servers/http/lighttpd { };
-
-  listmonk = callPackage ../servers/mail/listmonk { };
 
   linx-server = callPackage ../servers/web-apps/linx-server { };
 
@@ -32655,7 +32649,7 @@ with pkgs;
   }) k3s_1_26 k3s_1_27 k3s_1_28;
   inherit (callPackage ../applications/networking/cluster/k3s { }) k3s_1_29;
 
-  k3s = k3s_1_28;
+  k3s = k3s_1_29;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 

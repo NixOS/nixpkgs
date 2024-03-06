@@ -188,6 +188,7 @@ with lib.maintainers; {
       ivar
       mdarocha
       corngood
+      ggg
       raphaelr
       jamiemagee
       anpin
