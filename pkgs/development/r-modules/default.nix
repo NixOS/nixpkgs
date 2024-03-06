@@ -523,6 +523,7 @@ let
     nat_templatebrains = [ pkgs.which ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     bigmemory = lib.optionals stdenv.isLinux [ pkgs.libuuid.dev ];
+    bayesWatch = [ pkgs.boost.dev ];
     clustermq = [  pkgs.pkg-config ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
