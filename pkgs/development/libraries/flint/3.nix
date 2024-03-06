@@ -24,16 +24,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ezEaAFA6hjiB64F32+uEMi8pOZ89fXLzsaTJuh1XlLQ=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     autoconf
     automake
     gettext
     libtool
   ];
 
+  propagatedBuildInputs = [
+    mpfr
+  ];
+
   buildInputs = [
     gmp
-    mpfr
   ] ++ lib.optionals withBlas [
     openblas
   ] ++ lib.optionals withNtl [
