@@ -1,20 +1,23 @@
 # Fetchers {#chap-pkgs-fetchers}
 
 Building software with Nix often requires downloading source code and other files from the internet.
-To this end, Nixpkgs provides *fetchers*: functions to obtain remote sources via various protocols and services.
+To do this, we use functions that we call _fetchers_ to obtain remote sources via various protocols and services.
 
-Nixpkgs fetchers differ from built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball):
+Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball) to accomplish this, but they behave in ways that complicate the task of evaluating code in Nixpkgs.
+Nixpkgs provides its own fetchers, which work differently and reduce the time needed to evaluate code in Nixpkgs, as well as allow [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
+
+Since the Nixpkgs fetchers work better with Nixpkgs, the Nix built-in fetchers are not allowed in Nixpkgs code.
+
+The differences are explained in this list:
+
 - A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path).
-  A Nixpkgs fetcher will create a ([fixed-output](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation)) [derivation](https://nixos.org/manual/nix/stable/language/derivations), and files are downloaded at build time.
+  A Nixpkgs fetcher will create a ([fixed-output](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation)) [derivation](https://nixos.org/manual/nix/stable/glossary#gloss-derivation), and files are downloaded at build time.
 - Built-in fetchers will invalidate their cache after [`tarball-ttl`](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-tarball-ttl) expires, and will require network activity to check if the cache entry is up to date.
-  Nixpkgs fetchers only re-download if the specified hash changes or the store object is not otherwise available.
+  Nixpkgs fetchers only re-download if the specified hash changes or the store object is not available.
 - Built-in fetchers do not use [substituters](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters).
   Derivations produced by Nixpkgs fetchers will use any configured binary cache transparently.
 
-This significantly reduces the time needed to evaluate the entirety of Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
-For these reasons, built-in fetchers are not allowed in Nixpkgs source code.
-
-The following table shows an overview of the differences:
+The following table summarizes the differences:
 
 | Fetchers | Download | Output | Cache | Re-download when |
 |-|-|-|-|-|
@@ -23,44 +26,63 @@ The following table shows an overview of the differences:
 
 ## Caveats {#chap-pkgs-fetchers-caveats}
 
-The fact that the hash belongs to the Nix derivation output and not the file itself can lead to confusion.
-For example, consider the following fetcher:
+Because Nixpkgs fetchers are [fixed-output derivations](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation), they need you to specify a hash (this is what turns them into a fixed-output derivation).
+This is usually done through a `hash` attribute.
+However, **this hash is not a hash of the contents that are downloaded**, it is a hash that corresponds to the derivation output itself, and is calculated by Nix.
+
+This has the following implications that you should be aware of:
+
+- If you want to figure out the hash beforehand, you need Nix (or Nix-aware) tooling to give you the hash.
+  You can't just hash the contents and use it.
+- If you update the URL of the content to be fetched (or a version parameter, or some other parameter), you **must not** leave the hash unchanged, because it will reuse the old contents that were already fetched.
+  As [explained in the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash), if the contents with the given hash already exist, it won't do any other work and will reuse the existing contents.
+
+For example, consider the following recipe that only uses a fetcher:
 
 ```nix
+{ fetchurl }:
 fetchurl {
-  url = "http://www.example.org/hello-1.0.tar.gz";
-  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.05/.version";
+  hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
 }
 ```
 
 A common mistake is to update a fetcher’s URL, or a version parameter, without updating the hash.
 
 ```nix
+{ fetchurl }:
 fetchurl {
-  url = "http://www.example.org/hello-1.1.tar.gz";
-  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
+  hash = "sha256-ZHl1emidXVojm83LCVrwULpwIzKE/mYwfztVkvpruOM=";
 }
 ```
 
 **This will reuse the old contents**.
-Remember to invalidate the hash argument, in this case by setting the `hash` attribute to an empty string.
+Remember to invalidate the hash argument.
+You can do this by setting the `hash` attribute to an empty string.
 
 ```nix
+{ fetchurl }:
 fetchurl {
-  url = "http://www.example.org/hello-1.1.tar.gz";
+  url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
   hash = "";
 }
 ```
 
-Use the resulting error message to determine the correct hash.
+When building the recipe, you'll get an error message that you can use to determine the correct hash:
 
-```
-error: hash mismatch in fixed-output derivation '/path/to/my.drv':
+```shell
+$ nix-build
+(some output removed for clarity)
+error: hash mismatch in fixed-output derivation '/nix/store/7yynn53jpc93l76z9zdjj4xdxgynawcw-version.drv':
          specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-            got:    sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=
+            got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
+error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
 ```
 
-A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
+A similar problem arises while testing changes to a fetcher's implementation.
+If the output of the derivation already exists in the Nix store, test failures can go undetected.
+The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
