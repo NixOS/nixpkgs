@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchgit
+, fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
 , indexed-bzip2
@@ -20,8 +20,9 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchgit {
-    url = "https://github.com/mxmlnkn/ratarmount";
+  src = fetchFromGitHub {
+    owner = "mxmlnkn";
+    repo = "ratarmount";
     rev = "core-v${version}";
     hash = "sha256-2jG066BUkhyHRqRyFAucQRJrjXQNw2ccCxERKkltO3Y=";
     fetchSubmodules = true;
