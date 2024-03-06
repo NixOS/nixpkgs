@@ -15,14 +15,14 @@
     "hash": "sha256-iI1vzXZ+j97dqgq/Uze81TSpeu+RqKXkf6oZcmdNguM="
   },
   "breeze-gtk": {
-    "version": "6.0.1",
-    "url": "mirror://kde/stable/plasma/6.0.1/breeze-gtk-6.0.1.tar.xz",
-    "hash": "sha256-MmInFnKHzR4PHzIfm7UFQsQAa/x53lehSNSaHL8gYqU="
+    "version": "6.0.1.1",
+    "url": "mirror://kde/stable/plasma/6.0.1/breeze-gtk-6.0.1.1.tar.xz",
+    "hash": "sha256-I8qWYBzJv/AENPf7/jkB+8uSNi0XUaMcCFIPtMESRhA="
   },
   "breeze-plymouth": {
-    "version": "6.0.1",
-    "url": "mirror://kde/stable/plasma/6.0.1/breeze-plymouth-6.0.1.tar.xz",
-    "hash": "sha256-TlPrMhAYMWCf8dGyzxP1PjS8JMQHb1ec0JysuXtx8ZM="
+    "version": "6.0.1.1",
+    "url": "mirror://kde/stable/plasma/6.0.1/breeze-plymouth-6.0.1.1.tar.xz",
+    "hash": "sha256-Xk/enHtV4kwK4inPSrct34g1nvewvSrnFbuH4eDx94I="
   },
   "discover": {
     "version": "6.0.1",
@@ -85,9 +85,9 @@
     "hash": "sha256-9wZA2Q88JbE5NFM5UDwAGax0Oy8ldd+d+Ywn0URcdiQ="
   },
   "kpipewire": {
-    "version": "6.0.1",
-    "url": "mirror://kde/stable/plasma/6.0.1/kpipewire-6.0.1.tar.xz",
-    "hash": "sha256-CfahfSldlHT0ecVrzYuL5pCl1RCHAdDcICJ+84Udvjk="
+    "version": "6.0.1.1",
+    "url": "mirror://kde/stable/plasma/6.0.1/kpipewire-6.0.1.1.tar.xz",
+    "hash": "sha256-GQLzlJBS/xq12nnGMJWG8+EaKcfASgRPc7P2rJglHEo="
   },
   "kscreen": {
     "version": "6.0.1",
