@@ -687,13 +687,23 @@ rec {
 
     For a function that gives you control over what counts as a leaf, see `mapAttrsRecursiveCond`.
 
-    Example:
-      mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
-        { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
-      => { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
+    :::{#map-attrs-recursive-example .example}
+    # Map over leaf attributes
 
-    Type:
-      mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```nix
+    mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
+      { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
+    ```
+    evaluates to
+    ```nix
+    { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
+    ```
+    :::
+
+    # Type
+    ```
+    mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```
   */
   mapAttrsRecursive =
     # A function, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
@@ -708,16 +718,23 @@ rec {
     If the predicate returns false, `mapAttrsRecursiveCond` does not recurse, but instead applies the mapping function.
     If the predicate returns true, it does recurse, and does not apply the mapping function.
 
-    Example:
-      # Map derivations to their `name` attribute.
-      # Derivatons are identified as attribute sets that contain `{ type = "derivation"; }`.
-      mapAttrsRecursiveCond
-        (as: !(as ? "type" && as.type == "derivation"))
-        (x: x.name)
-        attrs
+    :::{#map-attrs-recursive-cond-example .example}
+    # Map over an leaf attributes defined by a condition
 
-    Type:
-      mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+    Map derivations to their `name` attribute.
+    Derivatons are identified as attribute sets that contain `{ type = "derivation"; }`.
+    ```nix
+    mapAttrsRecursiveCond
+      (as: !(as ? "type" && as.type == "derivation"))
+      (x: x.name)
+      attrs
+    ```
+    :::
+
+    # Type
+    ```
+    mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```
   */
   mapAttrsRecursiveCond =
     # A function that, given the attribute set the recursion is currently at, determines if to recurse deeper into that attribute set.
