@@ -75,16 +75,7 @@ stdenv.mkDerivation rec {
       # passed by nixpkgs CC wrapper is insufficient on its own
       substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
     fi
-
-    {
-      echo -e '
-        #undef  LUA_PATH_DEFAULT
-        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
-        #undef  LUA_CPATH_DEFAULT
-        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
-      '
-    } >> src/luaconf.h
-  '';
+'';
 
   dontConfigure = true;
 
