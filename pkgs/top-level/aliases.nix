@@ -947,7 +947,6 @@ mapAliases ({
   readline63 = throw "'readline63' has been replaced with 'readline'"; # Added 2024-02-10
   redpanda = redpanda-client; # Added 2023-10-14
   restya-board = throw "'restya-board' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-01-22
-  retdec-full = throw "'retdec-full' is no longer needed, please use 'retdec'"; # Added 2024-02-05
   retroshare06 = retroshare;
   rigsofrods = rigsofrods-bin; # Added 2023-03-22
   ring-daemon = jami-daemon; # Added 2021-10-26
