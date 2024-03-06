@@ -746,14 +746,13 @@ rec {
     set:
     let
       recurse = path:
-        let
-          g =
-            name: value:
+        mapAttrs
+          (name: value:
             if isAttrs value && cond value
-              then recurse (path ++ [name]) value
-              else f (path ++ [name]) value;
-        in mapAttrs g;
-    in recurse [] set;
+            then recurse (path ++ [ name ]) value
+            else f (path ++ [ name ]) value);
+    in
+    recurse [ ] set;
 
 
   /* Generate an attribute set by mapping a function over a list of
