@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "curly";
   version = "0.3.0";
 
-  minimalOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.03";
 
   duneVersion = "3";
 
