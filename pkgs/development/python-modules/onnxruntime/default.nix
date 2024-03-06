@@ -53,7 +53,13 @@ buildPythonPackage {
     oneDNN
     re2
     onnxruntime.protobuf
-  ];
+  ] ++ lib.optionals onnxruntime.passthru.cudaSupport (with onnxruntime.passthru.cudaPackages; [
+    libcublas # libcublasLt.so.XX libcublas.so.XX
+    libcurand # libcurand.so.XX
+    libcufft # libcufft.so.XX
+    cudnn # libcudnn.soXX
+    cuda_cudart # libcudart.so.XX
+  ]);
 
   propagatedBuildInputs = [
     coloredlogs
