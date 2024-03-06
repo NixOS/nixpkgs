@@ -15,7 +15,7 @@ let
     pkgs = pkgs.python3.pkgs.overrideScope (self: super: {
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
-        inherit flint arb;
+        inherit flint3;
         inherit sage-src env-locations singular;
         inherit (maxima) lisp-compiler;
         linbox = pkgs.linbox.override { withSage = true; };
@@ -73,7 +73,7 @@ let
     sagelib = python3.pkgs.sagelib;
     sage-docbuild = python3.pkgs.sage-docbuild;
     inherit env-locations;
-    inherit python3 singular palp flint pythonEnv maxima;
+    inherit python3 singular palp flint3 pythonEnv maxima;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
 
@@ -125,9 +125,7 @@ let
     ignoreCollisions = true;
   } // { extraLibs = pythonRuntimeDeps; }; # make the libs accessible
 
-  arb = pkgs.arb.override { inherit flint; };
-
-  singular = pkgs.singular.override { inherit flint; };
+  singular = pkgs.singular.override { inherit flint3; };
 
   maxima = pkgs.maxima-ecl.override {
     lisp-compiler = pkgs.ecl.override {
@@ -149,7 +147,7 @@ let
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
   # blas when it is available. Alternative would be to override flint to use
   # openblasCompat.
-  flint = pkgs.flint.override { withBlas = false; };
+  flint3 = pkgs.flint3.override { withBlas = false; };
 
   # Multiple palp dimensions need to be available and sage expects them all to be
   # in the same folder.
