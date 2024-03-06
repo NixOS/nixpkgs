@@ -43,6 +43,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
-    platforms = platforms.all;
   };
 }
