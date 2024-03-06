@@ -23,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SE3zB+8zZuuT+W6QYTuQhM+dBgYuFzYK4a7QaquGB60=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  # Splitting outputs going bad on Darwin
+  outputs = if stdenv.isDarwin
+            then [ "out" ]
+            else [ "out" "dev" "doc" "lib" "man" ];
 
   nativeBuildInputs = [
     cmake
@@ -75,12 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
       was chosen primarily due to the availability of C development environments
       for most computing platforms when JasPer was first developed, circa 1999.
     '';
-    license = lib.licenses.mit;
+    license = with lib.licenses; [ mit ];
     mainProgram = "jasper";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-
-    # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling.
+    # The value of __STDC_VERSION__ cannot be automatically determined when
+    # cross-compiling.
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
+# TODO: investigate opengl support
