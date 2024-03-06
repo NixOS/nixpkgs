@@ -307,11 +307,11 @@
         "src": {
             "owner": "flyinghead",
             "repo": "flycast",
-            "rev": "bc51aefa9c52981621abf1d3545bff7befa4d01b",
-            "hash": "sha256-NSCJxex5Rl7sWe2DkJ2aIyPzfdTcwSRb2iI3xpvYiow=",
+            "rev": "391da7023f63c2afd32af72ac9f2cfb02bbc7eb6",
+            "hash": "sha256-fcNpFl6VwaoL2mWZOgyVoJWX9CV2KbWctukdxxo797I=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-02-23"
+        "version": "unstable-2024-03-04"
     },
     "fmsx": {
         "fetcher": "fetchFromGitHub",
