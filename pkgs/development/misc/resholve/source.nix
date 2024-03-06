@@ -3,11 +3,11 @@
 }:
 
 rec {
-  version = "0.9.1";
+  version = "0.10.1";
   rSrc = fetchFromGitHub {
     owner = "abathur";
     repo = "resholve";
     rev = "v${version}";
-    hash = "sha256-hkLKQKhEMD1UQ9EunPmx5Tsh44q4+tYj820OXF2ueUo=";
+    hash = "sha256-mXOC59I+04oaUlBK46YgaWbyudDwlqWHhAoCr1I6vhY=";
   };
 }
