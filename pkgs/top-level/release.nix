@@ -52,15 +52,30 @@
 , attrNamesOnly ? false
 }:
 
-let release-lib = import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; }; in
-with release-lib;
-
 let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems scrubJobs nixpkgsArgs;
+  };
 
-  supportDarwin = lib.genAttrs [
+  inherit (release-lib) mapTestOn pkgs;
+
+  inherit (release-lib.lib)
+    collect
+    elem
+    genAttrs
+    hasInfix
+    hasSuffix
+    id
+    isDerivation
+    optionals
+    ;
+
+  inherit (release-lib.lib.attrsets) unionOfDisjoint;
+
+  supportDarwin = genAttrs [
     "x86_64"
     "aarch64"
-  ] (arch: builtins.elem "${arch}-darwin" supportedSystems);
+  ] (arch: elem "${arch}-darwin" supportedSystems);
 
   nonPackageJobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
@@ -162,8 +177,8 @@ let
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
               */
             ]
-            ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
-            ++ lib.optionals supportDarwin.x86_64 [
+            ++ collect isDerivation jobs.stdenvBootstrapTools
+            ++ optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
               jobs.cachix.x86_64-darwin
@@ -190,7 +205,7 @@ let
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
             ]
-            ++ lib.optionals supportDarwin.aarch64 [
+            ++ optionals supportDarwin.aarch64 [
               jobs.stdenv.aarch64-darwin
               jobs.cargo.aarch64-darwin
               jobs.cachix.aarch64-darwin
@@ -210,8 +225,7 @@ let
             ];
         };
 
-      stdenvBootstrapTools = with lib;
-        genAttrs bootstrapConfigs (config:
+      stdenvBootstrapTools = genAttrs bootstrapConfigs (config:
           if hasInfix "-linux-" config then
             let
               bootstrap = import ../stdenv/linux/make-bootstrap-tools.nix {
@@ -244,13 +258,13 @@ let
   # Conflicts usually cause silent job drops like in
   #   https://github.com/NixOS/nixpkgs/pull/182058
   jobs = let
-    packagePlatforms = if attrNamesOnly then lib.id else release-lib.packagePlatforms;
+    packagePlatforms = if attrNamesOnly then id else release-lib.packagePlatforms;
     packageJobs = {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       # Build selected packages (HLS) for multiple Haskell compilers to rebuild
       # the cache after a staging merge
-      haskell.packages = lib.genAttrs [
+      haskell.packages = genAttrs [
         # TODO: share this list between release.nix and release-haskell.nix
         "ghc90"
         "ghc92"
@@ -285,8 +299,6 @@ let
       then pkgs // packageJobs
       else mapTestOn ((packagePlatforms pkgs) // packageJobs);
   in
-    lib.attrsets.unionOfDisjoint
-      nonPackageJobs
-      mapTestOn-packages;
+    unionOfDisjoint nonPackageJobs mapTestOn-packages;
 
 in jobs
