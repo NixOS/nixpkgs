@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.6.1";
+  version = "3.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,12 +27,12 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QJVRT+d/IIGxkWfSNoXFSmbW017+8CTKuWD4W+TzvBs=";
+    hash = "sha256-rezyw0v1VijMe78ip3U+Jd+NQExW+gQXjs8qkcPNcUk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "Cython==3.0.3" "Cython"
+      --replace-fail "Cython >=3.0.9, <3.1.0" "Cython"
   '';
 
   nativeBuildInputs = [
