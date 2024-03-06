@@ -82,7 +82,7 @@ let
     ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
 
-    enableParallelBuilding = !stdenv'.isDarwin;
+    enableParallelBuilding = true;
 
     separateDebugInfo = true;
 
