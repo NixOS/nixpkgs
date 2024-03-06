@@ -13,7 +13,7 @@ buildGoModule rec {
   };
 
   doCheck = false;
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "." ];
 
