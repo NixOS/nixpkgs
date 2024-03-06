@@ -1,9 +1,10 @@
 { lib
 , fetchFromGitHub
+, stdenv
 , python3
 }:
 
-python3.pkgs.buildPythonPackage {
+stdenv.mkDerivation {
   pname = "spotify-backup";
   version = "0-unstable-2023-02-24";
 
@@ -14,14 +15,12 @@ python3.pkgs.buildPythonPackage {
     hash = "sha256-+z9IWgtc71GPPLDqNU4PXFDyD5Dczp3Bbrwzy/DaIts=";
   };
 
-  preBuild = ''
-    cat > setup.py << EOF
-from setuptools import setup
-setup(scripts=['spotify-backup.py'])
-EOF'';
+  propagatedBuildInputs = [
+    python3
+  ];
 
-  postInstall = ''
-    mv -v $out/bin/spotify-backup.py $out/bin/spotify-backup
+  installPhase = ''
+    install -Dm755 spotify-backup.py $out/bin/spotify-backup
   '';
 
   meta = with lib; {
