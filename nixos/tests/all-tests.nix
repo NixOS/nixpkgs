@@ -993,6 +993,7 @@ in {
   xterm = handleTest ./xterm.nix {};
   xxh = handleTest ./xxh.nix {};
   yabar = handleTest ./yabar.nix {};
+  your_spotify = handleTest ./your_spotify.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
   zammad = handleTest ./zammad.nix {};
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
