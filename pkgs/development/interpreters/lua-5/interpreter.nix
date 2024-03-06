@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs:
   let
     luaPackages = self.pkgs;
 
-    luaversion = lib.versions.majorMinor version;
+    luaversion = lib.versions.majorMinor finalAttrs.version;
 
     plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
           else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs:
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
-    url = "https://www.lua.org/ftp/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://www.lua.org/ftp/lua-${finalAttrs.version}.tar.gz";
     sha256 = hash;
   };
 
@@ -60,16 +60,11 @@ stdenv.mkDerivation (finalAttrs:
 
   inherit patches;
 
-  # we can't pass flags to the lua makefile because for portability, everything is hardcoded
   postPatch = ''
-    {
-      echo -e '
-        #undef  LUA_PATH_DEFAULT
-        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
-        #undef  LUA_CPATH_DEFAULT
-        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
-      '
-    } >> src/luaconf.h
+      sed -i "s@#define LUA_ROOT[[:space:]]*\"/usr/local/\"@#define LUA_ROOT  \"$out/\"@g" src/luaconf.h
+
+      # abort if patching didn't work
+      grep $out src/luaconf.h
   '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
@@ -102,8 +97,8 @@ stdenv.mkDerivation (finalAttrs:
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib"
-                else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${version}" )}" )
+      TO_LIB="${if stdenv.isDarwin then "liblua.${finalAttrs.version}.dylib"
+                else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${finalAttrs.version}" )}" )
 
     runHook postConfigure
   '';
@@ -128,7 +123,7 @@ stdenv.mkDerivation (finalAttrs:
 
     Name: Lua
     Description: An Extensible Extension Language
-    Version: ${version}
+    Version: ${finalAttrs.version}
     Requires:
     Libs: -L$out/lib -llua
     Cflags: -I$out/include
@@ -138,7 +133,7 @@ stdenv.mkDerivation (finalAttrs:
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
 
     # Make documentation outputs of different versions co-installable.
-    mv $out/share/doc/lua $out/share/doc/lua-${version}
+    mv $out/share/doc/lua $out/share/doc/lua-${finalAttrs.version}
   '';
 
   # copied from python
