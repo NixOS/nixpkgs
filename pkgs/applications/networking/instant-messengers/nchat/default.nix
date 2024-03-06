@@ -5,18 +5,20 @@
 
 stdenv.mkDerivation rec {
   pname = "nchat";
-  version = "3.67";
+  version = "4.13";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     rev = "v${version}";
-    hash = "sha256-PhvZejtSoDptzoMP5uIe6T0Ws/bQQXVuYH9uoZo3JsI=";
+    hash = "sha256-dWoKHT1S68DlmXvcFQxBrVkGnIl9GW7zUov7untne8w=";
   };
 
   postPatch = ''
     substituteInPlace lib/tgchat/ext/td/CMakeLists.txt \
-      --replace "get_git_head_revision" "#get_git_head_revision"
+      --replace-warn "get_git_head_revision" "#get_git_head_revision"
+    substituteInPlace lib/tgchat/ext/td/td/telegram/Client.h \
+      --replace-warn '#include "td/telegram/td_api.h"' ""
   '';
 
   nativeBuildInputs = [ cmake gperf ];
@@ -29,10 +31,6 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Foundation ];
-
-  cmakeFlags = [
-    "-DHAS_WHATSAPP=OFF" # go module build required
-  ];
 
   meta = with lib; {
     description = "Terminal-based chat client with support for Telegram and WhatsApp";
