@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , dnspython
-, fetchFromGitHub
+, fetchurl
 , idna
 , pytestCheckHook
 , pythonOlder
@@ -9,16 +9,17 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "2.1.0";
+  version = "2.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "JoshData";
-    repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-58DuQslADM7glrnlSSP6TtIDTlwuS0/GK8+izatqDxI=";
+  # Upstream has a bad habit of re-issuing release tarballs and
+  # force-pushing over public release tags.
+  # Archive new release tarballs at: https://web.archive.org/save
+  src = fetchurl {
+    url = "http://web.archive.org/web/20240306093519/https://github.com/JoshData/python-email-validator/archive/refs/tags/v${version}.tar.gz";
+    hash = "sha256-BR/a+YJjvpr6UtzVC2vFkXCGVLa1mLR+SkCAIFpxf8E=";
   };
 
   propagatedBuildInputs = [
