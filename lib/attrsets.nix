@@ -216,8 +216,7 @@ rec {
     attrPath:
     # The nested attribute set to find the value in.
     set:
-    let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
-    in attrByPath attrPath (abort errorMsg) set;
+    attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
 
   /* Map each attribute in the given set and merge them into a new attribute set.
 
