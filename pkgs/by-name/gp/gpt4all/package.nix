@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-PXOnhSU8YaV0fcLAptSVjsUP2Za23GFUxyOkL0T6z0o=";
+    hash = "sha256-casGjHiVZXec+9HGIH5fcpfWgLfsGCM5pEBINXJgMY8=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
