@@ -362,6 +362,13 @@
     githubId = 2526296;
     name = "Adrien Bustany";
   };
+  abysssol = {
+    name = "abysssol";
+    email = "abysssol@pm.me";
+    matrix = "@abysssol:tchncs.de";
+    github = "abysssol";
+    githubId = 76763323;
+  };
   acairncross = {
     email = "acairncross@gmail.com";
     github = "acairncross";
