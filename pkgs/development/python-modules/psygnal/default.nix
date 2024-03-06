@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.9.5";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-eDfGWmTKJrkkzRy1I3wl3WYPCxtPHSRzqAoOiO7QQ9Y=";
+    hash = "sha256-RckzvOclV2UUZLYq3buLeLLBN/Q/CmCAqmGmjzYPqbM=";
   };
 
   buildInputs = [
