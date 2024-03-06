@@ -36,7 +36,7 @@ let
 
   srcIcon = fetchurl {
     url = "https://www.ej-technologies.com/assets/content/header-product-jprofiler@2x-24bc4d84bd2a4eb641a5c8531758ff7c.png";
-    hash = "sha256-XUmuqhnNv7mZ3Gb4A0HLSlfiJd5xbCExVsw3hmXHeVE=";
+    hash = "sha256-4T0j2ctHmgWOSCmFG2PZCLJS57nIa5MxmJBpMYzy9FI=";
   };
 
   desktopItems = makeDesktopItem {
