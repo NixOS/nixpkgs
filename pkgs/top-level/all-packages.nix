@@ -14845,8 +14845,6 @@ with pkgs;
 
   woeusb-ng = callPackage ../tools/misc/woeusb-ng { };
 
-  wslu = callPackage ../tools/system/wslu { };
-
   chase = callPackage ../tools/system/chase { };
 
   wimlib = callPackage ../tools/archivers/wimlib { };
