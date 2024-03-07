@@ -571,7 +571,7 @@ rec {
 
   mypy-boto3-proton = buildMypyBoto3Package "proton" "1.34.0" "sha256-wRBMw/7PWi0s9sJTfnDq3MXcbA5pKwogMDC3UZtLJoY=";
 
-  mypy-boto3-qldb = buildMypyBoto3Package "qldb" "1.34.0" "sha256-WQeLaZFGqmU1OYIWsjzttkZDIT1vqrnVLfdo2DBMwGg=";
+  mypy-boto3-qldb = buildMypyBoto3Package "qldb" "1.34.49" "sha256-yiqWryr4vKt/6k+dVoDMDdtL6yP4ClVY0rFwZDDcvWY=";
 
   mypy-boto3-qldb-session = buildMypyBoto3Package "qldb-session" "1.34.0" "sha256-JHePiaFCfIJPxZzvC1U38xrBGkDvB9+yKwPecaZl7BY=";
 
