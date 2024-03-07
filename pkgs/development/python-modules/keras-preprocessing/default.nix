@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, numpy, six, scipy, pillow, pytest, keras }:
 
 buildPythonPackage rec {
-  pname = "Keras_Preprocessing";
+  pname = "keras-preprocessing";
   version = "1.1.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Keras_Preprocessing";
+    inherit version;
     sha256 = "add82567c50c8bc648c14195bf544a5ce7c1f76761536956c3d2978970179ef3";
   };
 

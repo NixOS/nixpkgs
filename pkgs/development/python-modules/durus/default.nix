@@ -1,11 +1,12 @@
 { stdenv, lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  pname = "Durus";
+  pname = "durus";
   version = "4.2";
 
   src = fetchPypi {
-    inherit version pname;
+    pname = "Durus";
+    inherit version;
     sha256 = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
   };
 

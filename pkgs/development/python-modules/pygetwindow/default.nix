@@ -4,11 +4,12 @@
 , pyrect
 }:
 buildPythonPackage rec {
-  pname = "PyGetWindow";
+  pname = "pygetwindow";
   version = "0.0.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyGetWindow";
+    inherit version;
     hash = "sha256-F4lDVefSswXNgy1xdwg4QBfBaYqQziT29/vwJC3Qpog=";
   };
 

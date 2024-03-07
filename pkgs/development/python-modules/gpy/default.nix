@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "GPy";
+  pname = "gpy";
   version = "1.13.0";
   pyproject = true;
 

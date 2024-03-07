@@ -6,14 +6,15 @@
 , versioneer
 }:
 buildPythonPackage rec {
-  pname = "pcbnewTransition";
+  pname = "pcbnew-transition";
   version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pcbnewTransition";
+    inherit version;
     hash = "sha256-M4r6IeARVZq+KO7Q0tbHFD/BMeLN6vmuxfnstmMPgdg=";
   };
 

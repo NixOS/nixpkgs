@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
-  pname = "PyMeeus";
+  pname = "pymeeus";
   version = "0.5.12";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyMeeus";
+    inherit version;
     hash = "sha256-VI9xhr2LlsvAac9kmo6ON33OSax0SGcJhJ/mOpnK1oQ=";
   };
 

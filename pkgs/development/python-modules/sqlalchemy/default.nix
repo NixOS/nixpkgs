@@ -39,7 +39,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "SQLAlchemy";
+  pname = "sqlalchemy";
   version = "2.0.28";
   format = "pyproject";
 

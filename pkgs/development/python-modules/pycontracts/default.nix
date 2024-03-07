@@ -2,11 +2,12 @@
 , nose, pyparsing, decorator, six, future }:
 
 buildPythonPackage rec {
-  pname = "PyContracts";
+  pname = "pycontracts";
   version = "1.8.14";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyContracts";
+    inherit version;
     sha256 = "03q5m595ysjrc9h57m7prrca6b9l4yrzvdijnzxnhd61p7jzbh49";
   };
 

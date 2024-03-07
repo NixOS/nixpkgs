@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, fetchpatch, buildPythonPackage, isPy3k, flask, mock, unittestCheckHook }:
 
 buildPythonPackage rec {
-  pname = "Flask-SeaSurf";
+  pname = "flask-seasurf";
   version = "1.1.1";
   disabled = !isPy3k;
 

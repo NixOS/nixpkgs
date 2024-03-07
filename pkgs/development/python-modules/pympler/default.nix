@@ -8,11 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Pympler";
+  pname = "pympler";
   version = "1.0.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Pympler";
+    inherit version;
     sha256 = "993f1a3599ca3f4fcd7160c7545ad06310c9e12f70174ae7ae8d4e25f6c5d3fa";
   };
 

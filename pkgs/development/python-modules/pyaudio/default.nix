@@ -6,12 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyAudio";
+  pname = "pyaudio";
   version = "0.2.14";
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyAudio";
+    inherit version;
     hash = "sha256-eN//OHm0mU0fT8ZIVkald1XG7jwZZHpJH3kKCJW9L4c=";
   };
 

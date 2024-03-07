@@ -1,10 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
-  pname = "Whoosh";
+  pname = "whoosh";
   version = "2.7.4";
   src = fetchPypi {
-    inherit pname version;
+    pname = "Whoosh";
+    inherit version;
     sha256 = "10qsqdjpbc85fykc1vgcs8xwbgn4l2l52c8d83xf1q59pwyn79bw";
   };
 
