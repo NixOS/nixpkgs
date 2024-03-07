@@ -285,7 +285,7 @@ rec {
 
   mypy-boto3-entityresolution = buildMypyBoto3Package "entityresolution" "1.34.0" "sha256-qfRZtRaxysW+Ev16gnj48CePZzLBWrXmrq3tEGtfNbM=";
 
-  mypy-boto3-es = buildMypyBoto3Package "es" "1.34.0" "sha256-h1ALh7JaoeLbfrkrvFuNsqMbNFN9ERcr/m4hKTVrqlU=";
+  mypy-boto3-es = buildMypyBoto3Package "es" "1.34.36" "sha256-uVLB1fjZRhlqJ/isKl5TDORmIN4ffKKqzyGZcEffa5g=";
 
   mypy-boto3-events = buildMypyBoto3Package "events" "1.34.0" "sha256-1nQVOsAXZ92z1ImWhZcm9HpucFYB5jkMC6wnfS6woxY=";
 
