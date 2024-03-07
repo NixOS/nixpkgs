@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/mypy-boto3/default.nix
 
-#nix-update python311Packages.botocore-stubs --commit --build
+nix-update python311Packages.botocore-stubs --commit --build
 
 packages=(
   mypy-boto3-accessanalyzer
