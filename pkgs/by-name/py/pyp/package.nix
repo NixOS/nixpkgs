@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "1.2.0";
 in python3.pkgs.buildPythonApplication {
   pname = "pyp";
   inherit version;
@@ -15,8 +15,8 @@ in python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "hauntsaninja";
     repo = "pyp";
-    rev = "v${version}";
-    hash = "sha256-A1Ip41kxH17BakHEWEuymfa24eBEl5FIHAWL+iZFM4I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hnEgqWOIVj2ugOhd2aS9IulfkVnrlkhwOtrgH4qQqO8=";
   };
 
   nativeBuildInputs = [
