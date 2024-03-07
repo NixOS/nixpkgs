@@ -657,7 +657,7 @@ rec {
 
   mypy-boto3-service-quotas = buildMypyBoto3Package "service-quotas" "1.34.0" "sha256-wWbm/udCn5Je1gJZ+uDJ4LE8NbQlq1yHVQc6eQ2umIw=";
 
-  mypy-boto3-servicecatalog = buildMypyBoto3Package "servicecatalog" "1.34.0" "sha256-K/h4NTDQFrsSs+S42MXvj3RrY4v/ThHCwql2Z2rUYNo=";
+  mypy-boto3-servicecatalog = buildMypyBoto3Package "servicecatalog" "1.34.13" "sha256-60XUP/uZDAkB0RaJgUD4wk+DknbsuygMnTmc3bKlr3U=";
 
   mypy-boto3-servicecatalog-appregistry = buildMypyBoto3Package "servicecatalog-appregistry" "1.34.0" "sha256-XYqa3aiC9pasmkMDXFmHKuK/PWwi6fZs/pt7rXuRFDw=";
 
