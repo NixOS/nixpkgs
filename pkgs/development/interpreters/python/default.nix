@@ -42,19 +42,6 @@ in {
     inherit passthruFun;
   };
 
-  python38 = callPackage ./cpython {
-    self = __splicedPackages.python38;
-    sourceVersion = {
-      major = "3";
-      minor = "8";
-      patch = "18";
-      suffix = "";
-    };
-    hash = "sha256-P/txzTSaMmunsvrcfn34a6V33ZxJF+UqhAGtvadAXj8=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
   python39 = callPackage ./cpython {
     self = __splicedPackages.python39;
     sourceVersion = {

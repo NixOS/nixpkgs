@@ -15,12 +15,16 @@
 , openclSupport ? false
 , clblast
 
-, blasSupport ? !rocmSupport && !cudaSupport
-, openblas
+, blasSupport ? builtins.all (x: !x) [ cudaSupport metalSupport openclSupport rocmSupport vulkanSupport ]
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
-, patchelf
-, static ? true # if false will build the shared objects as well
+, vulkanSupport ? false
+, mpiSupport ? false # Increases the runtime closure by ~700M
+, vulkan-headers
+, vulkan-loader
+, ninja
+, git
+, mpi
 }:
 
 let
@@ -28,42 +32,18 @@ let
   # otherwise we get libstdc++ errors downstream.
   # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
-in
-effectiveStdenv.mkDerivation (finalAttrs: {
-  pname = "llama-cpp";
-  version = "2249";
+  inherit (lib) cmakeBool cmakeFeature optionals;
 
-  src = fetchFromGitHub {
-    owner = "ggerganov";
-    repo = "llama.cpp";
-    rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-ikJUToUbA60u/8azR6dPmPyodq/nQe5L2aotlYBclaE=";
-  };
-
-  postPatch = ''
-    substituteInPlace ./ggml-metal.m \
-      --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-  '';
-
-  nativeBuildInputs = [ cmake ] ++ lib.optionals blasSupport [ pkg-config ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
-  ];
-
-  buildInputs = lib.optionals effectiveStdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [
+  darwinBuildInputs =
+    with darwin.apple_sdk.frameworks;
+    [
       Accelerate
-      CoreGraphics
       CoreVideo
-      Foundation
-    ])
-  ++ lib.optionals metalSupport (with darwin.apple_sdk.frameworks; [
-    MetalKit
-  ])
-  ++ lib.optionals cudaSupport (with cudaPackages; [
+      CoreGraphics
+    ]
+    ++ optionals metalSupport [ MetalKit ];
+
+   cudaBuildInputs = with cudaPackages; [
     cuda_cccl.dev # <nv/target>
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
@@ -74,65 +54,93 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     libcublas.dev
     libcublas.lib
     libcublas.static
-  ]) ++ lib.optionals rocmSupport [
-    rocmPackages.clr
-    rocmPackages.hipblas
-    rocmPackages.rocblas
-  ] ++ lib.optionals openclSupport [
-    clblast
-  ] ++ lib.optionals blasSupport [
-    openblas
   ];
+
+  rocmBuildInputs = with rocmPackages; [
+    clr
+    hipblas
+    rocblas
+  ];
+
+  vulkanBuildInputs = [
+    vulkan-headers
+    vulkan-loader
+  ];
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
+  pname = "llama-cpp";
+  version = "2346";
+
+  src = fetchFromGitHub {
+    owner = "ggerganov";
+    repo = "llama.cpp";
+    rev = "refs/tags/b${finalAttrs.version}";
+    hash = "sha256-s937fAOUjid2H+6OQEMicdkFQVqPJ37GR+DMrCV1ky4=";
+  };
+
+  postPatch = ''
+    substituteInPlace ./ggml-metal.m \
+      --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+  '';
+
+  nativeBuildInputs = [ cmake ninja pkg-config git ]
+    ++ optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+
+    # TODO: Replace with autoAddDriverRunpath
+    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
+
+  buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
+    ++ optionals cudaSupport cudaBuildInputs
+    ++ optionals mpiSupport mpi
+    ++ optionals openclSupport [ clblast ]
+    ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals vulkanSupport vulkanBuildInputs;
 
   cmakeFlags = [
-    "-DLLAMA_NATIVE=OFF"
-    "-DLLAMA_BUILD_SERVER=ON"
+    # -march=native is non-deterministic; override with platform-specific flags if needed
+    (cmakeBool "LLAMA_NATIVE" false)
+    (cmakeBool "BUILD_SHARED_SERVER" true)
+    (cmakeBool "BUILD_SHARED_LIBS" true)
+    (cmakeBool "BUILD_SHARED_LIBS" true)
+    (cmakeBool "LLAMA_BLAS" blasSupport)
+    (cmakeBool "LLAMA_CLBLAST" openclSupport)
+    (cmakeBool "LLAMA_CUBLAS" cudaSupport)
+    (cmakeBool "LLAMA_HIPBLAS" rocmSupport)
+    (cmakeBool "LLAMA_METAL" metalSupport)
+    (cmakeBool "LLAMA_MPI" mpiSupport)
+    (cmakeBool "LLAMA_VULKAN" vulkanSupport)
   ]
-  ++ lib.optionals metalSupport [
-    "-DCMAKE_C_FLAGS=-D__ARM_FEATURE_DOTPROD=1"
-    "-DLLAMA_METAL=ON"
-  ]
-  ++ lib.optionals cudaSupport [
-    "-DLLAMA_CUBLAS=ON"
-  ]
-  ++ lib.optionals rocmSupport [
-    "-DLLAMA_HIPBLAS=1"
-    "-DCMAKE_C_COMPILER=hipcc"
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
-  ]
-  ++ lib.optionals openclSupport [
-    "-DLLAMA_CLBLAST=ON"
-  ]
-  ++ lib.optionals blasSupport [
-    "-DLLAMA_BLAS=ON"
-    "-DLLAMA_BLAS_VENDOR=OpenBLAS"
-  ]
-  ++ lib.optionals (!static) [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-  ];
+      ++ optionals cudaSupport [
+        (
+          with cudaPackages.flags;
+          cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
+            builtins.concatStringsSep ";" (map dropDot cudaCapabilities)
+          )
+        )
+      ]
+      ++ optionals rocmSupport [
+        (cmakeFeature "CMAKE_C_COMPILER" "hipcc")
+        (cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
 
-  installPhase = ''
-    runHook preInstall
+        # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
+        # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
+        # and select the line that matches the current nixpkgs version of rocBLAS.
+        # Should likely use `rocmPackages.clr.gpuTargets`.
+        "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
+      ]
+      ++ optionals metalSupport [ (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1") ]
+      ++ optionals blasSupport [ (cmakeFeature "LLAMA_BLAS_VENDOR" "OpenBLAS") ];
 
-    mkdir -p $out/bin
-    ${lib.optionalString (!static) ''
-      mkdir $out/lib
-      cp libggml_shared.so $out/lib
-      cp libllama.so $out/lib
-    ''}
-
-    for f in bin/*; do
-      test -x "$f" || continue
-      ${lib.optionalString (!static) ''
-        ${patchelf}/bin/patchelf "$f" --set-rpath "$out/lib"
-      ''}
-      cp "$f" $out/bin/llama-cpp-"$(basename "$f")"
-    done
-
-    ${lib.optionalString metalSupport "cp ./bin/ggml-metal.metal $out/bin/ggml-metal.metal"}
-
-    runHook postInstall
+  # upstream plans on adding targets at the cmakelevel, remove those
+  # additional steps after that
+  postInstall = ''
+    mv $out/bin/main $out/bin/llama
+    mv $out/bin/server $out/bin/llama-server
+    mkdir -p $out/include
+    cp $src/llama.h $out/include/
   '';
 
   passthru.updateScript = nix-update-script {
@@ -144,9 +152,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     description = "Port of Facebook's LLaMA model in C/C++";
     homepage = "https://github.com/ggerganov/llama.cpp/";
     license = licenses.mit;
-    mainProgram = "llama-cpp-main";
-    maintainers = with maintainers; [ dit7ya elohmeier ];
-    broken = (effectiveStdenv.isDarwin && effectiveStdenv.isx86_64) || lib.count lib.id [openclSupport blasSupport rocmSupport cudaSupport] == 0;
+    mainProgram = "llama";
+    maintainers = with maintainers; [ dit7ya elohmeier philiptaron ];
     platforms = platforms.unix;
+    badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
+    broken = (metalSupport && !effectiveStdenv.isDarwin);
   };
 })

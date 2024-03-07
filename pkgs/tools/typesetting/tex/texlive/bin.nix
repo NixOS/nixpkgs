@@ -3,7 +3,7 @@
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config, cmake, ninja
-, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr, mupdf
+, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr, mupdf-headless
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 , biber-ms
@@ -361,7 +361,7 @@ dvisvgm = stdenv.mkDerivation {
     ++ [ "--with-system-kpathsea" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash mupdf ];
+  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash mupdf-headless ];
 
   enableParallelBuilding = true;
 };

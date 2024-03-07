@@ -26,13 +26,14 @@ rustPlatform.buildRustPackage rec {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
-    fetchSubmodules = true;
     sha256 = "sha256-xZHYiaQ8ASUwu0ieHIXcjRaH06SQoB6OR1y7Ok+FjAs=";
   };
 
   cargoHash = "sha256-niMgb4zsTWHw5yaa4kJOZzpOzO5gMG4k3cTHwSV+wmY=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildFeatures = [ "external-harfbuzz" ];
 
   buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);

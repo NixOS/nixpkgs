@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jwcrypto";
-  version = "1.5.4";
+  version = "1.5.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CBX7q2E9uZuthWkdpfE2+IYEIzlmZ3KKJkvPpuHbNrA=";
+    hash = "sha256-WefV5FidGwcXDzaOIMMusyoCORGAapcjsfQ6DYswKNY=";
   };
 
   nativeBuildInputs = [

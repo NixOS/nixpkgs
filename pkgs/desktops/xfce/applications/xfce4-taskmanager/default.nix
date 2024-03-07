@@ -13,10 +13,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-taskmanager";
-  version = "1.5.6";
+  version = "1.5.7";
   odd-unstable = false;
 
-  sha256 = "sha256-2NkjaK6xXsrMimriO2/gTOZowt9KTX4MrWJpPXM0w68=";
+  sha256 = "sha256-znadP7rrP/IxH22U1D9p6IHZ1J1JfXoCVk8iKUgrkJw=";
 
   nativeBuildInputs = [
     exo

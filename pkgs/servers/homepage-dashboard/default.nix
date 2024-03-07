@@ -39,6 +39,20 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-u15lDdXnV3xlXAC9WQQKLIeV/AgtRM1sFNsacw3j6kU=";
 
+  # This project is primarily designed to be consumed through Docker.
+  # By default it logs to stdout, and also to a directory. This makes
+  # little sense here where all the logs will be collated in the
+  # systemd journal anyway, so the patch removes the file logging.
+  # This patch has been suggested upstream, but the contribution won't
+  # be accepted until it gets at least 10 upvotes, per their policy:
+  # https://github.com/gethomepage/homepage/discussions/3067
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gethomepage/homepage/commit/3be28a2c8b68f2404e4083e7f32eebbccdc4d293.patch";
+      hash = "sha256-5fUOXiHBZ4gdPeOHe1NIaBLaHJTDImsRjSwtueQOEXY=";
+    })
+  ];
+
   preBuild = ''
     mkdir -p config
   '';

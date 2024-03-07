@@ -4,21 +4,26 @@
 , pythonAtLeast
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "overrides";
-  version = "7.4.0";
-  format = "setuptools";
+  version = "7.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mkorpela";
-    repo = pname;
+    repo = "overrides";
     rev = "refs/tags/${version}";
-    hash = "sha256-7fbuBcb47BTVxAoKokZmGdIwHSyfyfSiCAZ4XZjWz60=";
+    hash = "sha256-UdahbhmRfuxKTxb6Afjny/hMgXX1UuDUrIcLjZ0Jtak=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

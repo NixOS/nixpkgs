@@ -81,20 +81,11 @@ let
 
   ovmf-2mb = OVMF.override {
     secureBoot = true;
-    csmSupport = false;
     fdSize2MB = true;
   };
 
   ovmf-4mb = OVMF.override {
     secureBoot = true;
-    csmSupport = false;
-    fdSize4MB = true;
-  };
-
-  ovmf-4mb-csm = OVMF.override {
-    secureBoot = true;
-    csmSupport = false;
-    fdSize2MB = false;
     fdSize4MB = true;
   };
 
@@ -106,10 +97,6 @@ let
     {
       name = "OVMF_CODE.2MB.fd";
       path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_CODE.fd";
-    }
-    {
-      name = "OVMF_CODE.4MB.CSM.fd";
-      path = "${ovmf-4mb-csm.fd}/FV/${ovmf-prefix}_CODE.fd";
     }
     {
       name = "OVMF_CODE.4MB.fd";
@@ -127,10 +114,6 @@ let
     {
       name = "OVMF_VARS.2MB.ms.fd";
       path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-    {
-      name = "OVMF_VARS.4MB.CSM.fd";
-      path = "${ovmf-4mb-csm.fd}/FV/${ovmf-prefix}_VARS.fd";
     }
     {
       name = "OVMF_VARS.4MB.fd";

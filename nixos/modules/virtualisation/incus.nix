@@ -107,6 +107,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !(config.networking.firewall.enable && !config.networking.nftables.enable && config.virtualisation.incus.enable);
+        message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
+      }
+    ];
+
     # https://github.com/lxc/incus/blob/f145309929f849b9951658ad2ba3b8f10cbe69d1/doc/reference/server_settings.md
     boot.kernel.sysctl = {
       "fs.aio-max-nr" = lib.mkDefault 524288;

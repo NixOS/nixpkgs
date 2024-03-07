@@ -3,13 +3,13 @@
 buildKodiAddon rec {
   pname = "youtube";
   namespace = "plugin.video.youtube";
-  version = "7.0.3";
+  version = "7.0.3.2";
 
   src = fetchFromGitHub {
     owner = "anxdpanic";
     repo = "plugin.video.youtube";
     rev = "v${version}";
-    hash = "sha256-dD9jl/W8RDfYHv13TBniOeRyc4cocj8160BHWz3MKlE=";
+    hash = "sha256-gJ7RGB0pSG/iLdpmXHpQOoQTisXnMl1Mgd0KYFgg2qI=";
   };
 
   propagatedBuildInputs = [

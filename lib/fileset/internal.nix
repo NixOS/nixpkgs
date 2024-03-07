@@ -18,6 +18,7 @@ let
     attrNames
     attrValues
     mapAttrs
+    mapAttrsToList
     optionalAttrs
     zipAttrsWith
     ;
@@ -29,6 +30,7 @@ let
   inherit (lib.lists)
     all
     commonPrefix
+    concatLists
     elemAt
     filter
     findFirst
@@ -538,6 +540,27 @@ rec {
         {
           ${baseNameOf root} = rootPathType;
         };
+
+  # Turns a file set into the list of file paths it includes.
+  # Type: fileset -> [ Path ]
+  _toList = fileset:
+    let
+      recurse = path: tree:
+        if isAttrs tree then
+          concatLists (mapAttrsToList (name: value:
+            recurse (path + "/${name}") value
+          ) tree)
+        else if tree == "directory" then
+          recurse path (readDir path)
+        else if tree == null then
+          [ ]
+        else
+          [ path ];
+    in
+    if fileset._internalIsEmptyWithoutBase then
+      [ ]
+    else
+      recurse fileset._internalBase fileset._internalTree;
 
   # Transforms the filesetTree of a file set to a shorter base path, e.g.
   # _shortenTreeBase [ "foo" ] (_create /foo/bar null)

@@ -7,20 +7,25 @@
 , platformdirs
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , uritools
 }:
 
 buildPythonPackage rec {
   pname = "urlextract";
-  version = "1.8.0";
-  format = "setuptools";
+  version = "1.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NXP2uBKBTv4GykbpHoLZhO2qPNB9qqqilqRnrZiBoDc=";
+    hash = "sha256-cFCOArqd83LiXPBkLbNnzs4nPocSzQzngXj8XdfqANs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     filelock

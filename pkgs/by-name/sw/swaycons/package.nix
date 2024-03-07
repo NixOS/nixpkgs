@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "Window Icons in Sway with Nerd Fonts!";
     homepage = "https://github.com/ActuallyAllie/swaycons";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ aacebedo ];
   };
 }

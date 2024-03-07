@@ -188,6 +188,7 @@ with lib.maintainers; {
       ivar
       mdarocha
       corngood
+      ggg
       raphaelr
       jamiemagee
       anpin
@@ -429,7 +430,6 @@ with lib.maintainers; {
   helsinki-systems = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
-      ajs124
       das_j
     ];
     scope = "Group registration for packages maintained by Helsinki Systems";
@@ -494,6 +494,7 @@ with lib.maintainers; {
     members = [
       aanderse
       cpages
+      dschrempf
       edwtjo
       minijackson
       peterhoeg

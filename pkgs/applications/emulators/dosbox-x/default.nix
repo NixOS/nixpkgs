@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , alsa-lib
 , AudioUnit
 , autoreconfHook
@@ -28,29 +27,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2023.10.06";
+  version = "2024.03.01";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-YNYtYqcpTOx4xS/LXI53h3S+na8JVpn4w8Dhf4fWNBQ=";
+    hash = "sha256-EcAp7KyqXdBACEbPgkM1INoKeGVo7hMDUx97y2RcX+k=";
   };
-
-  patches = [
-    # 2 patches which fix stack smashing when launching Windows 3.0
-    # Remove when version > 2023.10.06
-    (fetchpatch {
-      name = "0001-dosbox-x-Attempt-to-fix-graphical-palette-issues-added-by-TTF-fix.patch";
-      url = "https://github.com/joncampbell123/dosbox-x/commit/40bf135f70376b5c3944fe2e972bdb7143439bcc.patch";
-      hash = "sha256-9whtqBkivYVYaPObyTODtwcfjaoK+rLqhCNZ7zVoiGI=";
-    })
-    (fetchpatch {
-      name = "0002-dosbox-x-Fix-Sid-Meiers-Civ-crash.patch";
-      url = "https://github.com/joncampbell123/dosbox-x/compare/cdcfb554999572e758b81edf85a007d398626b78..ac91760d9353c301e1da382f93e596238cf6d336.patch";
-      hash = "sha256-G7HbUhYEi6JJklN1z3JiOTnWLuWb27bMDyB/iGwywuY=";
-    })
-  ];
 
   strictDeps = true;
 

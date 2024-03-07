@@ -59,12 +59,14 @@ buildPythonPackage rec {
         "${lib.getLib dep}/lib"
       ]) buildInputs);
     })
+    # Skip tests that should be disabled without video driver
+    ./skip-surface-tests.patch
   ];
 
   postPatch = ''
     substituteInPlace src_py/sysfont.py \
-      --replace 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
-      --replace /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
+      --replace-fail 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
+      --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
   '';
 
   nativeBuildInputs = [
@@ -102,7 +104,6 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
-    export SDL_DISKAUDIOFILE=/dev/null
 
     ${python.interpreter} -m pygame.tests -v --exclude opengl,timing --time_out 300
 

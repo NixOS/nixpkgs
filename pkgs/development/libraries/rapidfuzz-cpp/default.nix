@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidfuzz-cpp";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
-    owner = "maxbachmann";
+    owner = "rapidfuzz";
     repo = "rapidfuzz-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-N9yGOxlk1+wgRXWLbDIXWQz+/pwbnYVs3ub4/16Nzws=";
+    hash = "sha256-v/apbqRyv93PZsO397lvyIMtA1JtYrOpbWAVAbMCmP4=";
   };
 
   nativeBuildInputs = [
@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Rapid fuzzy string matching in C++ using the Levenshtein Distance";
-    homepage = "https://github.com/maxbachmann/rapidfuzz-cpp";
-    changelog = "https://github.com/maxbachmann/rapidfuzz-cpp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/rapidfuzz/rapidfuzz-cpp";
+    changelog = "https://github.com/rapidfuzz/rapidfuzz-cpp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.unix;

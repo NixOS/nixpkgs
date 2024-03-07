@@ -83,5 +83,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ emilytrau ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "fragments";
   };
 }

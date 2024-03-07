@@ -8,12 +8,12 @@
 , libpng
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powermanga";
   version = "0.93.1";
 
   src = fetchurl {
-    url = "https://linux.tlk.fr/games/Powermanga/download/powermanga-${version}.tgz";
+    url = "https://linux.tlk.fr/games/Powermanga/download/powermanga-${finalAttrs.version}.tgz";
     sha256 = "sha256-2nU/zoOQWm2z/Y6mXHDFfWYjYshsQp1saVRBcUT5Q+g=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.isDarwin;
   };
-}
+})

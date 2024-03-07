@@ -3,6 +3,7 @@
 
   lib,
   buildGoModule,
+  fetchpatch,
   fetchFromGitHub,
   writeShellScript,
   acl,
@@ -19,14 +20,19 @@
 
 let
   releaseFile = if lts then ./lts.nix else ./latest.nix;
-  inherit (import releaseFile) version hash vendorHash;
+  inherit (import releaseFile { inherit fetchpatch; })
+    version
+    hash
+    patches
+    vendorHash
+    ;
   name = "incus${lib.optionalString lts "-lts"}";
 in
 
-buildGoModule rec {
+buildGoModule {
   pname = "${name}-unwrapped";
 
-  inherit vendorHash version;
+  inherit patches vendorHash version;
 
   src = fetchFromGitHub {
     owner = "lxc";

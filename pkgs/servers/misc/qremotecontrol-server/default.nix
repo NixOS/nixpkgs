@@ -7,7 +7,7 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qremotecontrol-server";
   version = "unstable-2014-11-05"; # basically 2.4.2 + qt5
 

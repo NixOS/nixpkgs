@@ -3,6 +3,9 @@
 , fetchFromGitHub
 , stdenv
 , pkg-config
+, AppKit
+, Cocoa
+, Security
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -16,22 +19,23 @@ rustPlatform.buildRustPackage rec {
   inherit buildNoDefaultFeatures buildFeatures;
 
   pname = "himalaya";
-  version = "1.0.0-beta.2";
+  version = "1.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dLj/bEPz3SD1v54yXbtVdUJKQsyw0OJxmQh10ql+3iI=";
+    hash = "sha256-B7eswDq4tKyg881i3pLd6h+HsObK0c2dQnYuvPAGJHk=";
   };
 
-  cargoSha256 = "0IYpuKq5amAcYtsDMzJGghbxkuldAulsgUmChTl2DIg=";
+  cargoSha256 = "jOzuCXsrtXp8dmJTBqrEq4nog6smEPbdsFAy+ruPtY8=";
 
   nativeBuildInputs = [ ]
     ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) pkg-config
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = [ ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Security ]
     ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch
     ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) gpgme;
 

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-core";
-  version = "2.14.0";
+  version = "2.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yAaBWkj/24lMxbzhW4JZuaMBLMDNoBvi89+7hE8/TyE=";
+    hash = "sha256-7cRVVIjYqfHGG9QZx74nsjl0sqBSlxtGFPzSKerus4I=";
   };
 
   nativeBuildInputs = [

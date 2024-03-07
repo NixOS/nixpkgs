@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.4.0";
+  version = "9.5.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pT5kcKUWYntZ0iUFIioMhXlL4afyd06HeWEFvUfulpU=";
+    hash = "sha256-G51xev+TytQgBF+2xS9jdqty8IX4GTEwiSAg7EbJNVU=";
   };
 
   propagatedBuildInputs = [

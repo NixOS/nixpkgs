@@ -1,17 +1,20 @@
-{ lib, fetchFromGitHub, php }:
+{ lib
+, fetchFromGitHub
+, php
+}:
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpunit";
-  version = "11.0.3";
+  version = "11.0.4";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-ASeALfqcDUoK2PSl88AJ3UgrLdesuH1o5UNq+ceGbxI=";
+    hash = "sha256-ucUDeiqz8QkCsKM/SfHVjJSnfs0TRaV04CTKepSzyo0=";
   };
 
-  vendorHash = "sha256-2rG0ERgI5oVW3MuU8yFwgssoWX6zwUwXpro2IVkX7ac=";
+  vendorHash = "sha256-0jbSUIT4Eh1lWu11REgE4ilGlw1zuawXeKCPBHnoxdk=";
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";

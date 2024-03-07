@@ -8,26 +8,25 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "castor";
-  version = "0.11.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FqFCKvhOEtDERNRLB3613geEiNDOlQuLeCa5uVvoMdM=";
+    hash = "sha256-Sm6I306iKVr66sBp+ADeTZAKGToVMc+Y/BCymUdszNc=";
   };
 
-  vendorHash = "sha256-+ORwa3+tkVJ9KU+9URg+1lyHoL1swxg6DG5ex8HjigE=";
+  vendorHash = "sha256-KbmovAnejShyVclF4IcZ9ckUOWysfEz3DFqE8OxlzI0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   # install shell completions
   postInstall = ''
-    echo "yes" | ${php}/bin/php $out/share/php/castor/bin/castor
     installShellCompletion --cmd castor \
-      --bash <(${php}/bin/php $out/share/php/castor/bin/castor completion bash) \
-      --fish <(${php}/bin/php $out/share/php/castor/bin/castor completion fish) \
-      --zsh <(${php}/bin/php $out/share/php/castor/bin/castor completion zsh)
+      --bash <($out/bin/castor completion bash) \
+      --fish <($out/bin/castor completion fish) \
+      --zsh <($out/bin/castor completion zsh)
   '';
 
   passthru = {

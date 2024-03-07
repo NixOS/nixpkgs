@@ -405,7 +405,7 @@ let
     rjags = [ pkgs.jags ];
     rJava = with pkgs; [ zlib bzip2.dev icu xz.dev pcre.dev jdk libzip ];
     Rlibeemd = [ pkgs.gsl ];
-    rmatio = [ pkgs.zlib.dev ];
+    rmatio = [ pkgs.zlib.dev pkgs.pkg-config ];
     Rmpfr = with pkgs; [ gmp mpfr.dev ];
     Rmpi = [ pkgs.mpi ];
     RMySQL = with pkgs; [ zlib libmysqlclient openssl.dev ];
@@ -452,6 +452,7 @@ let
     topicmodels = [ pkgs.gsl ];
     udunits2 = with pkgs; [ udunits expat ];
     units = [ pkgs.udunits ];
+    vdiffr = [ pkgs.libpng.dev ];
     V8 = [ pkgs.v8 ];
     XBRL = with pkgs; [ zlib libxml2.dev ];
     XLConnect = [ pkgs.jdk ];
@@ -500,9 +501,10 @@ let
     RDieHarder = [ pkgs.gsl ];
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
-    RcppCWB = [ pkgs.pkg-config ];
+    RcppCWB = [ pkgs.pkg-config pkgs.pcre2 ];
     redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
+    Rbwa = [ pkgs.zlib.dev ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     NanoMethViz = [ pkgs.zlib.dev ];
@@ -515,6 +517,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
@@ -593,6 +596,7 @@ let
     Signac = [ pkgs.zlib.dev ];
     TransView = [ pkgs.zlib.dev ];
     bigsnpr = [ pkgs.zlib.dev ];
+    zlib = [ pkgs.zlib.dev ];
     divest = [ pkgs.zlib.dev ];
     hipread = [ pkgs.zlib.dev ];
     jackalope = with pkgs; [ zlib.dev xz.dev ];
@@ -943,7 +947,7 @@ let
       cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-vBrTQ+5JZA8554Aasbqw7mbaOfJNQjrOpG00IXAcamI=";
+        hash = "sha256-e6nuiQU22GiO2I+bu0muyICGrdkCLSZUDHDz2mM2hz0=";
       };
 
       cargoRoot = "src/myrustlib";
@@ -1000,6 +1004,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+   gmailr = old.gmailr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     purrr = old.purrr.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -1043,6 +1051,15 @@ let
       preConfigure = ''
         patchShebangs configure
         '';
+    });
+
+    pathfindR = old.pathfindR.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/zzz.R" \
+          --replace-fail "    check_java_version()" "    Sys.setenv(JAVA_HOME = \"${lib.getBin pkgs.jre_minimal}\"); check_java_version()"
+        substituteInPlace "R/active_snw_search.R" \
+          --replace-fail "system(paste0(\"java" "system(paste0(\"${lib.getBin pkgs.jre_minimal}/bin/java"
+      '';
     });
 
     pbdZMQ = old.pbdZMQ.overrideAttrs (attrs: {

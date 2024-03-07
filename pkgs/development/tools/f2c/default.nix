@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "f2c";
-  version = "20230428";
+  version = "20240130";
 
   src = fetchurl {
     url = "https://www.netlib.org/f2c/src.tgz";
-    sha256 = "sha256-dLpnwyGjtikhbH7VpIoGHD5cNyKshc6wHczmkTdRcFo=";
+    sha256 = "sha256-YciR1CbtsFvGR9b3/DRcLn9NzlXQksVKj8Xhr0g6MjU=";
   };
 
   makeFlags = [ "-f" "makefile.u" ];

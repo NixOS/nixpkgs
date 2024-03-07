@@ -25,7 +25,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libcap
-, xdg-utils, minizip, libwebp
+, minizip, libwebp
 , libusb1, re2
 , ffmpeg, libxslt, libxml2
 , nasm
@@ -184,9 +184,6 @@ let
       bzip2 flac speex opusWithCustomModes
       libevent expat libjpeg snappy
       libcap
-    ] ++ lib.optionals (!xdg-utils.meta.broken) [
-      xdg-utils
-    ] ++ [
       minizip libwebp
       libusb1 re2
       ffmpeg libxslt libxml2
@@ -294,10 +291,6 @@ let
         --replace \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
-
-    '' + lib.optionalString (!xdg-utils.meta.broken) ''
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
-        chrome/browser/shell_integration_linux.cc
 
     '' + lib.optionalString systemdSupport ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \

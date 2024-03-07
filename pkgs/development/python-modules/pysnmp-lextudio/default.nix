@@ -7,7 +7,6 @@
 
 # dependencies
 , pyasn1
-, pyasyncore
 , pysmi-lextudio
 , pysnmpcrypto
 
@@ -18,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp-lextudio";
-  version = "5.0.33";
+  version = "6.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
     rev = "v${version}";
-    hash = "sha256-IXYpR7JnuHmcjtdCs1C+rPHS9IZ93MN/Zuw4Pu1l/4A=";
+    hash = "sha256-Mbzpe2wVoW4m7hnfsdcSO/8uOgWl5f1sLLqvdpQP2gU=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyasn1
-    pyasyncore
     pysmi-lextudio
     pysnmpcrypto
   ];
@@ -50,11 +48,15 @@ buildPythonPackage rec {
     "test_send_notification"
     "test_send_trap"
     "test_send_v3_inform_notification"
+    "test_send_v3_inform_sync"
     "test_usm_sha_aes128"
     "test_v1_get"
     "test_v1_next"
     "test_v1_set"
     "test_v2c_bulk"
+    # pysnmp.smi.error.MibNotFoundError
+    "test_send_v3_trap_notification"
+    "test_addAsn1MibSource"
   ];
 
   pythonImportsCheck = [

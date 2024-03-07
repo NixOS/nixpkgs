@@ -1,13 +1,13 @@
 { buildPackages, cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
 
 let
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
     rev = version;
-    hash = "sha256-7apzP37GK5ZbCxcWfjK1ID6sYa24uoS1GUH3CBDmcRA=";
+    hash = "sha256-bgyjpFYGU+uZLVBJ3gpl8UOrRzvz+7qibQD2RllSY38=";
   };
 
   quick-lint-js-build-tools = buildPackages.stdenv.mkDerivation {

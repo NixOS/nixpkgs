@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-connector";
     rev = "refs/tags/${version}";
-    hash = "sha256-dMOhw7e2sCmGItsgGcGxYVCIJM2FBm6IyxIQXPtY+Pg=";
+    hash = "sha256-CbLm2CHofgtaTHuGDexVEKmy8+ovvvGJOO3iiAimLTg=";
   };
 
   nativeBuildInputs = [

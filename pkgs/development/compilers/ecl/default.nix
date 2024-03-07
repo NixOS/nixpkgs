@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
     license = licenses.mit;
+    mainProgram = "ecl";
     maintainers = lib.teams.lisp.members;
     platforms = platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";

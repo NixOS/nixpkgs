@@ -11,3 +11,4 @@ pkgs/by-name/ba/foo: File package.nix at line 3 contains the path expression "..
 pkgs/by-name/ba/foo: File package.nix at line 4 contains the nix search path expression "<nixpkgs>" which may point outside the directory of that package.
 pkgs/by-name/ba/foo: File package.nix at line 5 contains the path expression "./${"test"}", which is not yet supported and may point outside the directory of that package.
 pkgs/by-name/fo/foo: Missing required "package.nix" file.
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

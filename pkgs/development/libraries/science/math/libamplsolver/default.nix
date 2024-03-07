@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substitute {
       src = ./libamplsolver-sharedlib.patch;
-      replacements = [ "--replace" "@sharedlibext@" "${stdenv.hostPlatform.extensions.sharedLibrary}" ];
+      substitutions = [ "--replace" "@sharedlibext@" "${stdenv.hostPlatform.extensions.sharedLibrary}" ];
     })
   ];
 

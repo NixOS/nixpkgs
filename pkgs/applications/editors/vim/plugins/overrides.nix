@@ -998,7 +998,7 @@
         inherit (old) version src;
         sourceRoot = "source/spectre_oxi";
 
-        cargoHash = "sha256-822+3s6FJVqBRYJAL/89bJfGv8fNhSN3nQelB29mXvQ=";
+        cargoHash = "sha256-gCGuD5kipgfR0Le8npNmyBxNsUq0PavXvKkxkiPx13E=";
 
 
         preCheck = ''
@@ -1671,6 +1671,14 @@
     dependencies = with self; [ vim-repeat ];
   };
 
+  vim-tabby = super.vim-tabby.overrideAttrs {
+    postPatch = ''
+      substituteInPlace autoload/tabby/globals.vim --replace-fail \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', 'node')" \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', '${nodejs}/bin/node')"
+    '';
+  };
+
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {
     dependencies = with self; [ vim-textobj-user ];
     meta.maintainers = with lib.maintainers; [ farlion ];
@@ -1772,6 +1780,10 @@
 
   vim-zettel = super.vim-zettel.overrideAttrs {
     dependencies = with self; [ vimwiki fzf-vim ];
+  };
+
+  windows-nvim = super.windows-nvim.overrideAttrs {
+    dependencies = with self; [ luaPackages.middleclass animation-nvim ];
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {

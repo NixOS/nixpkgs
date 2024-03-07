@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.7.2";
+  version = "4.7.3";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-Q4/aoLIxFssti3Dto1JwRRAQ+D3DHlH9JgDrHBVKg4M=";
+    hash = "sha256-hAuNjlFr23l5ztfoa2RTHKZtH2aXF1EuWTd/ZyKuyHg=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       spell checking and support of any compilation chain.
     '';
     homepage = "https://texstudio.org";
-    changelog = "https://github.com/texstudio-org/texstudio/blob/${version}/utilities/manual/CHANGELOG.txt";
+    changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/CHANGELOG.txt";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ajs124 cfouche ];

@@ -8,7 +8,7 @@
   magma-hip,
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
-  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported),
+  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
   MPISupport ? false, mpi,
   buildDocs ? false,
 

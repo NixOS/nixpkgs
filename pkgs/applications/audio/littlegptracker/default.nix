@@ -6,7 +6,7 @@
 , Foundation
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "littlegptracker";
   version = "unstable-2020-11-26";
 

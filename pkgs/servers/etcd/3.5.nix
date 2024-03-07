@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests, k3s }:
 
 let
   version = "3.5.12";
@@ -67,7 +67,10 @@ symlinkJoin {
 
   passthru = {
     inherit etcdserver etcdutl etcdctl;
-    tests = { inherit (nixosTests) etcd etcd-cluster; };
+    tests = {
+      inherit (nixosTests) etcd etcd-cluster;
+      k3s = k3s.passthru.tests.etcd;
+    };
   };
 
   paths = [

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i nu -p nushell common-updater-scripts prefetch-npm-deps
+#!nix-shell -i nu -p nushell common-updater-scripts prefetch-npm-deps nix-prefetch-github
 
 def main [] {
   let sourceFile = $"(pwd)/pkgs/by-name/au/audiobookshelf/source.json"

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.35-27";
+  version = "8.0.36-28";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-YxrZBj8SNe55OjW2AucSR2Yot7DMcTXdVIVtu1i0HUU";
+    hash = "sha256-iktEvZz3mjjmJ16PX51OjSwwiFS3H9W/XRco//Q6aEQ=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]

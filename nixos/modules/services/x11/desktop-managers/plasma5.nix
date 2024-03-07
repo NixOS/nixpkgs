@@ -362,7 +362,7 @@ in
 
       security.pam.services.kde = { allowNullPassword = true; };
 
-      security.pam.services.login.enableKwallet = true;
+      security.pam.services.login.kwallet.enable = true;
 
       systemd.user.services = {
         plasma-early-setup = mkIf cfg.runUsingSystemd {

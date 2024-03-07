@@ -97,6 +97,7 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      "systemd-boot-random-seed.service"
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -667,7 +668,6 @@ in
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
-    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226

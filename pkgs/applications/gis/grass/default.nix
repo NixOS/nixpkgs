@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-blas"
-    "--with-fftw"
     "--with-geos"
     # It complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
@@ -107,10 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
     "--with-readline"
-    "--with-zstd"
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--with-pdal"
   ] ++ lib.optionals stdenv.isDarwin [
     "--without-cairo"
     "--without-freetype"

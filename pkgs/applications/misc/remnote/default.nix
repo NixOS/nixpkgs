@@ -6,19 +6,22 @@ stdenv.mkDerivation (finalAttrs: let
 in
 {
   pname = "remnote";
-  version = "1.13.52";
+  version = "1.14.13";
 
   src = fetchurl {
     url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
-    hash = "sha256-4wN4lqeA9olo6igr1M1JhecPG/ruVivdOyWiRlDAzQQ=";
+    hash = "sha256-WpNgdQGNz1Vv3MQe6tgnkzf+rvxMeoDQns5SqKNP7F8=";
   };
+
   appexec = appimageTools.wrapType2 {
     inherit pname version src;
   };
+
   icon = fetchurl {
     url = "https://www.remnote.io/icon.png";
     hash = "sha256-r5D7fNefKPdjtmV7f/88Gn3tqeEG8LGuD4nHI/sCk94=";
   };
+
   desktopItem = makeDesktopItem {
     type = "Application";
     name = "remnote";
@@ -29,18 +32,21 @@ in
     categories = [ "Office" ];
     mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
   };
+
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
+
   installPhase = ''
     runHook preInstall
 
-    install -D ${appexec}/bin/remnote-${version} $out/bin/remnote
-    install -m 444 -D "${desktopItem}/share/applications/"* -t $out/share/applications/
-    install -m 444 -D ${icon} $out/share/pixmaps/remnote.png
+    install -Dm755 ${appexec}/bin/remnote-${version} $out/bin/remnote
+    install -Dm444 "${desktopItem}/share/applications/"* -t $out/share/applications/
+    install -Dm444 ${icon} $out/share/pixmaps/remnote.png
 
     runHook postInstall
   '';
+
   meta = with lib; {
     description = "A note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";

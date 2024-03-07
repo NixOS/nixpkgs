@@ -33,6 +33,7 @@
 , tbb_2021_8
 , wayland
 , wayland-protocols
+, wrapGAppsHook
 }:
 let
   # get cccl from source to avoid license issues
@@ -95,6 +96,7 @@ clangStdenv.mkDerivation rec {
     python3
     libsForQt5.qt5.wrapQtAppsHook
     llvmPackages.bintools
+    wrapGAppsHook
   ];
   buildInputs = with libsForQt5; with qt5; [
     # manifold dependencies

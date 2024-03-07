@@ -5,7 +5,10 @@ with lib;
 let
   im = config.i18n.inputMethod;
   cfg = im.fcitx5;
-  fcitx5Package = pkgs.fcitx5-with-addons.override { inherit (cfg) addons; };
+  fcitx5Package =
+    if cfg.plasma6Support
+    then pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
+    else pkgs.libsForQt5.fcitx5-with-addons.override { inherit (cfg) addons; };
   settingsFormat = pkgs.formats.ini { };
 in
 {
@@ -25,6 +28,15 @@ in
         description = lib.mdDoc ''
           Use the Wayland input method frontend.
           See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland).
+        '';
+      };
+      plasma6Support = mkOption {
+        type = types.bool;
+        default = config.services.xserver.desktopManager.plasma6.enable;
+        defaultText = literalExpression "config.services.xserver.desktopManager.plasma6.enable";
+        description = lib.mdDoc ''
+          Use qt6 versions of fcitx5 packages.
+          Required for configuring fcitx5 in KDE System Settings.
         '';
       };
       quickPhrase = mkOption {

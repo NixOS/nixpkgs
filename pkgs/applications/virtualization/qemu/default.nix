@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils";
-  version = "8.2.1";
+  version = "8.2.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hWJ1EVgXX50YfF8itXVVq+PIcPAyXIztEsNMbZh3Kb4=";
+    hash = "sha256-hHNGwbgsGlSyw49u29hVSe3rF0MLfU09oSYg4pYrxPM=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]

@@ -23,7 +23,7 @@ let finalPackage = buildDotnetModule rec {
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = sdk_8_0;
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
   dotnet-runtime = sdk_8_0;
 
   dotnetInstallFlags = [ "--framework net6.0" ];

@@ -12,7 +12,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.0.28";
+  version = "1.0.29";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
@@ -51,19 +51,19 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-kw39m8zD1f4uGjs2r/J2j8YbjbKDjZmFWxzf/x81poM=";
+        hash = "sha256-tcrFHzGJkpVDkrEUff6OR4i76E2+dmYIXuwJ3BiNvQc=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-eJr3mWusSNrDqPHV5PwVsfGK4o57XDsBHozpPJE7HsU=";
+        hash = "sha256-ujiVw1Pemlo+OHPj8JtazNzYVziq8a65mYdXcS5ViL4=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-qkVy1w+MrlBplX0CLuW0yufnZ/+ETkJPSm/91KpAR+c=";
+        hash = "sha256-rY9VixMXgn8E2NzZpJg873eADM9ZnJnAkdAVnj91S2o=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-a9upDXwlgmvF99ulUplrscWrsGp/7AsLTfx1FPYY41s=";
+        hash = "sha256-mhDFX6Z1UFGXLqDbUAt8TP/8Ejavzu+WdFGayrtS2Ns=";
       };
     };
     updateScript = writeShellScript "update-bun" ''

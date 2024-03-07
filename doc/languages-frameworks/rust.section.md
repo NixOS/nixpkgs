@@ -35,10 +35,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
 
-  meta = with lib; {
+  meta = {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     maintainers = [];
   };
 }
@@ -903,8 +903,8 @@ with import <nixpkgs>
 };
 let
   rustPlatform = makeRustPlatform {
-    cargo = rust-bin.stable.latest.minimal;
-    rustc = rust-bin.stable.latest.minimal;
+    cargo = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
+    rustc = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
   };
 in
 
@@ -923,11 +923,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    license = with licenses; [ mit unlicense ];
-    maintainers = with maintainers; [];
+    license = with lib.licenses; [ mit unlicense ];
+    maintainers = with lib.maintainers; [];
   };
 }
 ```

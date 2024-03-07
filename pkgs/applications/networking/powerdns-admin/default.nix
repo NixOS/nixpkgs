@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, fetchYarnDeps, mkYarnPackage, nixosTests, writeText, python3 }:
 
 let
-  version = "0.4.1";
+  version = "0.4.2";
   src = fetchFromGitHub {
     owner = "PowerDNS-Admin";
     repo = "PowerDNS-Admin";
     rev = "v${version}";
-    hash = "sha256-AwqEcAPD1SF1Ma3wtH03mXlTywM0Q19hciCmTtlr3gk=";
+    hash = "sha256-q9mt8wjSNFb452Xsg+qhNOWa03KJkYVGAeCWVSzZCyk=";
   };
 
   python = python3;
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-3ebT19LrbYuypdJaoB3tClVVP0Fi8tHx3Xi6ge/DpA4=";
+      hash = "sha256-rXIts+dgOuZQGyiSke1NIG7b4lFlR/Gfu3J6T3wP3aY=";
     };
 
     # Copied from package.json, see also

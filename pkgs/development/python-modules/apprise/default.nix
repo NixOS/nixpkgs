@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "1.7.2";
+  version = "1.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CeFZspAI5sjpPX/8PBXUGcC7rkFiBAX48tNDK3Ki6b8=";
+    hash = "sha256-MeKmOUB7uNJmJJ/Adf8xfp00/1lRxuFr/u/dwq9f6Ew=";
   };
 
   nativeBuildInputs = [

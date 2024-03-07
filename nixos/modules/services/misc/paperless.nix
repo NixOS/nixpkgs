@@ -307,6 +307,9 @@ in
         Restart = "on-failure";
       };
       environment = env;
+      # Allow the consumer to access the private /tmp directory of the server.
+      # This is required to support consuming files via a local folder.
+      unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
     };
 
     systemd.services.paperless-web = {
@@ -339,6 +342,7 @@ in
         User = cfg.user;
         Restart = "on-failure";
 
+        LimitNOFILE = 65536;
         # gunicorn needs setuid, liblapack needs mbind
         SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid mbind" ];
         # Needs to serve web page

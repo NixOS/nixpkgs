@@ -15,7 +15,9 @@ lazy_static = "1.4.0"
 colored = "2.0.4"
 itertools = "0.11.0"
 rowan = "0.15.11"
+indoc = "2.0.4"
+relative-path = "1.9.2"
+textwrap = "0.16.1"
 
 [dev-dependencies]
 temp-env = "0.3.5"
-indoc = "2.0.4"

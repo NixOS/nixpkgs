@@ -243,6 +243,16 @@ let
       };
     } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
+    # If already linux: the same package set unaltered
+    # Otherwise, return a natively built linux package set for the current cpu architecture string.
+    # (ABI and other details will be set to the default for the cpu/os pair)
+    pkgsLinux =
+      if stdenv.hostPlatform.isLinux
+      then self
+      else nixpkgsFun {
+        localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
+      };
+
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays
     # in one go when calling Nixpkgs, for performance and simplicity.

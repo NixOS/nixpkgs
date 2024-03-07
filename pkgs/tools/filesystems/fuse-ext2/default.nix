@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-ext2";
-  version = "unstable-2020-07-12";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "alperakcan";
     repo = "fuse-ext2";
-    rev = "899f17c982dadcea13aa447c3a83c53b9431435a";
-    sha256 = "AE7Z+HePAy/h2TCNI9tsz6GVLdnE2AIOM3GnQzerKn8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VQMftlnd6q1PdwhSIQwjffjnkhupY8MUc8E+p1tgvUM=";
   };
 
   patches = [

@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2_1_6
+, libgit2
 , rust-jemalloc-sys
 , zlib
 , stdenv
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2_1_6
+    libgit2
     rust-jemalloc-sys
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     BIOME_VERSION = version;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   preCheck = ''

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.2.2";
+  version = "2024.2.28";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Tb9ZZvs5Wyzm2TS5INUSua4Y3/2H+kHEhjpfYWJi+d0=";
+    hash = "sha256-EmnaYc+L1PHOv6M7odYDl+UBZkLJRtP86xPoqdbuOqU=";
   };
 
   postPatch = ''

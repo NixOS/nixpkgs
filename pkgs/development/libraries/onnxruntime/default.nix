@@ -187,8 +187,8 @@ effectiveStdenv.mkDerivation rec {
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" cutlass)
-    (lib.cmakeFeature "onnxruntime_CUDNN_HOME" cudaPackages.cudnn)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
+    (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
   ];
 

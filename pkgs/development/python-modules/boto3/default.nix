@@ -1,27 +1,27 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , botocore
+, buildPythonPackage
+, fetchFromGitHub
 , jmespath
-, s3transfer
-, pythonRelaxDepsHook
-, setuptools
 , pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
+, s3transfer
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.34.21"; # N.B: if you change this, change botocore and awscli to a matching version
-  format = "pyproject";
+  version = "1.34.49"; # N.B: if you change this, change botocore and awscli to a matching version
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "boto";
-    repo = pname;
+    repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-oOrUVBh1sbaOibU8A+bGZ4z7IEiE4gjHwZ+8889Hv60=";
+    hash = "sha256-/pgbLSL5RJ5RrKUAfQ1QNJykBdICrpqnuziHOVHt1JI=";
   };
 
   nativeBuildInputs = [
@@ -54,14 +54,16 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    crt = [ botocore.optional-dependencies.crt ];
+    crt = [
+      botocore.optional-dependencies.crt
+    ];
   };
 
   meta = with lib; {
+    description = "AWS SDK for Python";
     homepage = "https://github.com/boto/boto3";
     changelog = "https://github.com/boto/boto3/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    description = "AWS SDK for Python";
     longDescription = ''
       Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for
       Python, which allows Python developers to write software that makes use of
