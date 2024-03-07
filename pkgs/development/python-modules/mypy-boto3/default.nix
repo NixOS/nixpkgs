@@ -59,7 +59,7 @@ rec {
 
   mypy-boto3-amp = buildMypyBoto3Package "amp" "1.34.39" "sha256-XOousDfEQsZ9z48iH2wVHuUaIwoECwbkHvIAlV3+zu4=";
 
-  mypy-boto3-amplify = buildMypyBoto3Package "amplify" "1.34.0" "sha256-dWI0x6Ro0FOIeraID9XVLOKMWdKxQy5ywVathCQz2Pc=";
+  mypy-boto3-amplify = buildMypyBoto3Package "amplify" "1.34.45" "sha256-hV0fg6Y39NkZ6Qa6GyIYicMERjCBAjZYcSsJ+1jXAfA=";
 
   mypy-boto3-amplifybackend = buildMypyBoto3Package "amplifybackend" "1.34.0" "sha256-wP6fOHAUg4dvrlQ2rUNk/lgIr6JnpWu/0Tr2prTckOk=";
 
