@@ -31,6 +31,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/mxmlnkn/indexed_bzip2";
     license = licenses.mit; # dual MIT and asl20, https://internals.rust-lang.org/t/rationale-of-apache-dual-licensing/8952
     maintainers = with lib.maintainers; [ mxmlnkn ];
-    platforms = platforms.all;
   };
 }
