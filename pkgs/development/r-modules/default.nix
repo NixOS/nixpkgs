@@ -519,6 +519,7 @@ let
     # sort -t '=' -k 2
     asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev ];
     svKomodo = [ pkgs.which ];
+    ulid = [ pkgs.zlib.dev ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
