@@ -36,6 +36,10 @@ buildPythonPackage rec {
     hash = "sha256-B2piRWx9TfKlGTPOAAGsq2GxyfHIRBVFpk6dxES0WF0=";
   };
 
+  patches = [
+    ./2022.3.29-CVE-2024-23346.patch
+  ];
+
   nativeBuildInputs = [
     cython
     glibcLocales
