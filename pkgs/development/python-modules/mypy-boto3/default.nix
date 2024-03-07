@@ -189,7 +189,7 @@ rec {
 
   mypy-boto3-cognito-sync = buildMypyBoto3Package "cognito-sync" "1.34.0" "sha256-JTkmpEHwKN5IyoGVs4beVAEOr1fZPxBoYjzNBgjTEY0=";
 
-  mypy-boto3-comprehend = buildMypyBoto3Package "comprehend" "1.34.0" "sha256-C3KrC4tHmNHLe0Hl5TIE0vWZsB9z8wDNRr1SXSsH4e0=";
+  mypy-boto3-comprehend = buildMypyBoto3Package "comprehend" "1.34.30" "sha256-G7mSJWcr0ntPX6WoaeTWPw/uB32yn6xXPyyQvDVfa8s=";
 
   mypy-boto3-comprehendmedical = buildMypyBoto3Package "comprehendmedical" "1.34.0" "sha256-4KzL56xU474te8tW5xVZo6D5Pwe3GLRQbQfX8CXTz9g=";
 
