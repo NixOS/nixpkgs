@@ -619,7 +619,7 @@ rec {
 
   mypy-boto3-rum = buildMypyBoto3Package "rum" "1.34.49" "sha256-Mq2H+13cjxYRwFfxJpWTAb+W5bx+Vew+jl+zbreRIkQ=";
 
-  mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.34.0" "sha256-dkSgDgluuxwyklUQWfZP+DKWJdrNQIJ87ZSBsU1kxzM=";
+  mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.34.14" "sha256-ccOasGI820QtIltxwXg/alE8/0xKE1BaLvuy46/y6WU=";
 
   mypy-boto3-s3control = buildMypyBoto3Package "s3control" "1.34.0" "sha256-PEGAPyCB/LovPfAsItH3nGnK/I63wEcsfb6MkPAitbY=";
 
