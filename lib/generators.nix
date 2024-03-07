@@ -22,6 +22,7 @@ let
   inherit (builtins)
     addErrorContext
     attrNames
+    concatLists
     concatStringsSep
     elem
     filter
@@ -40,8 +41,30 @@ let
     tail
     ;
 
+  inherit (lib.attrsets)
+    isDerivation
+    mapAttrsToList
+    recursiveUpdate
+    ;
+
+  inherit (lib.lists)
+    init
+    flatten
+    foldl
+    last
+    optionals
+    reverseList
+    toList
+    ;
+
+  inherit (lib.trivial)
+    isFunction    # Note: not the builtin, considers `__functor` in attrsets.
+    functionArgs  # Note: not the builtin; considers `__functor` in attrsets.
+    ;
+
   inherit (lib)
-    isFunction
+    assertMsg
+    gvariant
     ;
 in
 
@@ -59,7 +82,7 @@ rec {
            "${t} not supported: ${toPretty {} v}");
     in   if isInt      v then toString v
     # convert derivations to store paths
-    else if lib.isDerivation v then toString v
+    else if isDerivation v then toString v
     # we default to not quoting strings
     else if isString   v then v
     # isString returns "1", which is not a good default
@@ -111,7 +134,7 @@ rec {
       mkLines = if listsAsDuplicateKeys
         then k: v: map (mkLine k) (if isList v then v else [v])
         else k: v: [ (mkLine k v) ];
-  in attrs: libStr.concatStrings (lib.concatLists (libAttr.mapAttrsToList mkLines attrs));
+  in attrs: libStr.concatStrings (concatLists (libAttr.mapAttrsToList mkLines attrs));
 
 
   /* Generate an INI-style config file from an
@@ -242,19 +265,19 @@ rec {
       # generation for multiple ini values
       mkKeyValue = k: v:
         let mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
-        in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (lib.toList v));
+        in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (toList v));
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs = let
         recurse = path: value:
-          if isAttrs value && !lib.isDerivation value then
-            lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
+          if isAttrs value && !isDerivation value then
+            mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
           else if length path > 1 then {
-            ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;
+            ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
           } else {
             ${head path} = value;
           };
-      in attrs: lib.foldl lib.recursiveUpdate { } (lib.flatten (recurse [ ] attrs));
+      in attrs: foldl recursiveUpdate { } (flatten (recurse [ ] attrs));
 
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
@@ -262,7 +285,7 @@ rec {
 
   # mkKeyValueDefault wrapper that handles dconf INI quirks.
   # The main differences of the format is that it requires strings to be quoted.
-  mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (lib.gvariant.mkValue v); } "=";
+  mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (gvariant.mkValue v); } "=";
 
   # Generates INI in dconf keyfile style. See https://help.gnome.org/admin/system-admin-guide/stable/dconf-keyfiles.html.en
   # for details.
@@ -351,8 +374,8 @@ rec {
           escapedLines = map escapeMultiline lines;
           # The last line gets a special treatment: if it's empty, '' is on its own line at the "outer"
           # indentation level. Otherwise, '' is appended to the last line.
-          lastLine = lib.last escapedLines;
-        in "''" + introSpace + concatStringsSep introSpace (lib.init escapedLines)
+          lastLine = last escapedLines;
+        in "''" + introSpace + concatStringsSep introSpace (init escapedLines)
                 + (if lastLine == "" then outroSpace else introSpace + lastLine) + "''";
       in
         if multiline && length lines > 1 then multilineResult else singlelineResult
@@ -366,7 +389,7 @@ rec {
         + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
         + outroSpace + "]"
     else if isFunction v then
-      let fna = lib.functionArgs v;
+      let fna = functionArgs v;
           showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
                        (name: hasDefVal: if hasDefVal then name + "?" else name)
                        fna);
@@ -428,8 +451,8 @@ rec {
     ];
 
     attr = let attrFilter = name: value: name != "_module" && value != null;
-    in ind: x: concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
-      (name: value: lib.optionals (attrFilter name value) [
+    in ind: x: concatStringsSep "\n" (flatten (mapAttrsToList
+      (name: value: optionals (attrFilter name value) [
       (key "\t${ind}" name)
       (expr "\t${ind}" value)
     ]) x));
@@ -448,7 +471,7 @@ ${expr "" v}
     let concatItems = concatStringsSep ", ";
     in if isAttrs v then
       "{ ${
-        concatItems (lib.attrsets.mapAttrsToList
+        concatItems (mapAttrsToList
           (key: value: "${key} = ${toDhall args value}") v)
       } }"
     else if isList v then
@@ -518,9 +541,9 @@ ${expr "" v}
       isLuaInline = { _type ? null, ... }: _type == "lua-inline";
 
       generatedBindings =
-          assert lib.assertMsg (badVarNames == []) "Bad Lua var names: ${toPretty {} badVarNames}";
+          assert assertMsg (badVarNames == []) "Bad Lua var names: ${toPretty {} badVarNames}";
           libStr.concatStrings (
-            lib.attrsets.mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v
+            mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v
             );
 
       # https://en.wikibooks.org/wiki/Lua_Programming/variable#Variable_names
@@ -546,7 +569,7 @@ ${expr "" v}
           ''"${toString v}"''
         else
           "{${introSpace}${concatItems (
-            lib.attrsets.mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v
+            mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v
             )}${outroSpace}}"
       )
     else
