@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, rns
 , pythonOlder
+, rns
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lxmf";
-  version = "0.3.8";
-  format = "setuptools";
+  version = "0.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,8 +17,12 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "lxmf";
     rev = "refs/tags/${version}";
-    hash = "sha256-tse2Hgu50KfxWLBkzyV4VpDj2YHgxIc5izgvwJAJ/7k=";
+    hash = "sha256-sEim7bCLLkHo6A1onbDQruyNigVKtim5DDAQI8CYUVo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     rns

@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, makeDesktopItem, bambu-studio }:
 let
   orca-slicer = bambu-studio.overrideAttrs (finalAttrs: previousAttrs: {
-    version = "1.9.0";
+    version = "1.9.1";
     pname = "orca-slicer";
 
     src = fetchFromGitHub {
       owner = "SoftFever";
       repo = "OrcaSlicer";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-v6REKDlFhyW6kEEfpcm8Sjezkh6uLaBusMuVk8n3Ts0=";
+      hash = "sha256-+JYUpyEr3xraJEb1wDkyle+jAQiNE+AMUTT1fhh4Clw=";
     };
 
     meta = with lib; {

@@ -16,12 +16,12 @@ debianPatch = patchname: hash: fetchpatch {
   sha256 = hash;
 };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "torus-trooper";
   version = "0.22";
 
   src = fetchurl {
-    url = "http://abagames.sakura.ne.jp/windows/tt${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "http://abagames.sakura.ne.jp/windows/tt${lib.replaceStrings ["."] ["_"] finalAttrs.version}.zip";
     sha256 = "1yhki1fdp3fi4y2iq12vca69f6k38dqjaw9z4lwcxky5kbgb7jvg";
   };
 
@@ -101,4 +101,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

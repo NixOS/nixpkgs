@@ -1,20 +1,23 @@
-{ buildPythonPackage
+{ absl-py
+, buildPythonPackage
 , cmake
+, etils
 , fetchPypi
 , glfw
 , lib
 , mujoco
 , numpy
 , perl
-, pkgs
 , pybind11
+, pyopengl
 , python
 , setuptools
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "mujoco";
-  version = "3.1.0";
+  version = "3.1.2";
 
   pyproject = true;
 
@@ -24,13 +27,19 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rZNVihIuvNJnQWqA5tV9DG5r3/LttWNW6fN2js+fDb8=";
+    hash = "sha256-U1MLwakZA/P9Sx6ZgYzDj72ZEXANspssn8g58jv6y7g=";
   };
 
   nativeBuildInputs = [ cmake setuptools ];
   dontUseCmakeConfigure = true;
   buildInputs = [ mujoco pybind11 ];
-  propagatedBuildInputs = [ glfw numpy ];
+  propagatedBuildInputs = [
+    absl-py
+    etils
+    glfw
+    numpy
+    pyopengl
+  ];
 
   pythonImportsCheck = [ "${pname}" ];
 
@@ -48,11 +57,15 @@ buildPythonPackage rec {
       # E.g. 3.11.2 -> "311"
       pythonVersionMajorMinor = with lib.versions;
         "${major python.pythonVersion}${minor python.pythonVersion}";
+
+      # E.g. "linux-aarch64"
+      platform = with stdenv.hostPlatform.parsed;
+        "${kernel.name}-${cpu.name}";
     in ''
       ${perl}/bin/perl -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
       ${perl}/bin/perl -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
 
-      build="/build/${pname}-${version}/build/temp.linux-x86_64-cpython-${pythonVersionMajorMinor}/"
+      build="/build/${pname}-${version}/build/temp.${platform}-cpython-${pythonVersionMajorMinor}/"
       mkdir -p $build/_deps
       ln -s ${mujoco.pin.lodepng} $build/_deps/lodepng-src
       ln -s ${mujoco.pin.eigen3} $build/_deps/eigen-src
@@ -63,6 +76,7 @@ buildPythonPackage rec {
     description =
       "Python bindings for MuJoCo: a general purpose physics simulator.";
     homepage = "https://mujoco.org/";
+    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ tmplt ];
   };

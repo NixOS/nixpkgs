@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./py_pybind11_no_external_download.patch
     ./install-presets.patch
+    # https://github.com/IntelRealSense/librealsense/pull/11917
+    (fetchpatch {
+      name = "fix-gcc13-missing-cstdint.patch";
+      url = "https://github.com/IntelRealSense/librealsense/commit/b59b13671658910fc453a4a6bbd61f13ba6e83cc.patch";
+      hash = "sha256-zaW8HG8rfsApI5S/3x+x9Fx8xhyTIPNn/fJVFtkmlEA=";
+    })
   ];
 
   nativeBuildInputs = [

@@ -15,20 +15,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2023.5";
+  version = "2024.2";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-XGNFLfZDDGTT55UAsapUf1B0uSzrNjwSRK+yQSU3wG0=";
+    hash = "sha256-SzjMoXISd4fMHoenF1CK3Yn8bfLq9INuOmt86QTcgk8=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "iced-0.9.0" = "sha256-z/tkUdFXNjxR5Si8dnNrkrvFos0VAqGjnFNSs88D/5w=";
-      "winit-0.28.6" = "sha256-szB1LCOPmPqhZNIWbeO8JMfRMcMRr0+Ze0f4uqyR8AE=";
+      "iced-0.12.0" = "sha256-LtmAJDUMp42S4E+CjOM6Q7doAKOZkmJCN/49gsq3v/A=";
+      "winit-0.29.10" = "sha256-YoXJEvEhMvk3pK5EbXceVFeJEJLL6KTjiw0kBJxgHIE=";
     };
   };
 
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreGraphics
+    darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.Foundation
     darwin.apple_sdk.frameworks.Metal
     darwin.apple_sdk.frameworks.QuartzCore
@@ -72,6 +73,15 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  postFixup = lib.optional stdenv.isLinux (
+    let
+      rpathWayland = lib.makeLibraryPath [ wayland vulkan-loader libxkbcommon ];
+    in
+    ''
+      rpath=$(patchelf --print-rpath $out/bin/halloy)
+      patchelf --set-rpath "$rpath:${rpathWayland}" $out/bin/halloy
+    '');
+
   postInstall = ''
     install -Dm644 assets/linux/org.squidowl.halloy.png $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
   '';
@@ -82,5 +92,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "halloy";
   };
 }

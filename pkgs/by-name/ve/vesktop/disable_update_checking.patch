@@ -1,0 +1,12 @@
+diff --git a/src/updater/main.ts b/src/updater/main.ts
+index 059afb9..274802e 100644
+--- a/src/updater/main.ts
++++ b/src/updater/main.ts
+@@ -77,6 +77,7 @@ function isOutdated(oldVersion: string, newVersion: string) {
+ }
+ 
+ export async function checkUpdates() {
++    return;
+     if (Settings.store.checkUpdates === false) return;
+ 
+     try {

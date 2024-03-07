@@ -5,32 +5,34 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.1.9";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = "trueseeing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g5OqdnPtGGV4wBwPRAjH3lweguwlfVcgpNLlq54OHKA=";
+    hash = "sha256-bgvnzCcxRiJnjcHVbcIA6YfpCOIDTLD5tQae/0Tqk4E=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "attrs~=21.4" "attrs>=21.4"
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     flit-core
+    pythonRelaxDepsHook
   ];
 
+  pythonRelaxDeps = true;
+
   propagatedBuildInputs = with python3.pkgs; [
+    asn1crypto
     attrs
-    ipython
+    importlib-metadata
     jinja2
     lxml
+    progressbar2
     pypubsub
     pyyaml
+    termcolor
+    zstandard
   ];
 
   # Project has no tests

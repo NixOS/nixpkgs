@@ -2,21 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , twisted
 , unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-mpd2";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "3.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8zws2w1rqnSjZyTzjBxKCZp84sjsSiu3GSFQpYVd9HY=";
+    hash = "sha256-S67DWEzEPtmUjVVZB5+vwmebBrKt4nPpCbNYJlSys/U=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   passthru.optional-dependencies = {
     twisted = [

@@ -7,6 +7,48 @@
 let
   python = python3.override {
     packageOverrides = pySelf: pySuper: {
+      connexion = pySuper.connexion.overridePythonAttrs (o: rec {
+        version = "2.14.2";
+        src = fetchFromGitHub {
+          owner = "spec-first";
+          repo = "connexion";
+          rev = "refs/tags/${version}";
+          hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
+        };
+        nativeBuildInputs = with pySelf; [
+          setuptools
+          pythonRelaxDepsHook
+        ];
+        pythonRelaxDeps = [
+          "werkzeug"
+        ];
+        propagatedBuildInputs = with pySelf; [
+          aiohttp
+          aiohttp-jinja2
+          aiohttp-swagger
+          clickclick
+          flask
+          inflection
+          jsonschema
+          openapi-spec-validator
+          packaging
+          pyyaml
+          requests
+          swagger-ui-bundle
+        ];
+        nativeCheckInputs = with pySelf; [
+          aiohttp-remotes
+          decorator
+          pytest-aiohttp
+          pytestCheckHook
+          testfixtures
+        ];
+        disabledTests = [
+          "test_app"
+          "test_openapi_yaml_behind_proxy"
+          "test_swagger_ui"
+        ];
+      });
       flask = pySuper.flask.overridePythonAttrs (o: rec {
         version = "2.2.5";
         src = fetchPypi {

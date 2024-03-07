@@ -7,6 +7,7 @@
 , bzip3
 , lz4
 , pcre2
+, testers
 , xz
 , zlib
 , zstd
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ugrep";
-  version = "4.5.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "ugrep";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-unryRXGuxQXCwzpQW6AJAYQEL3Xvs2u4DH2E3LATQaU=";
+    hash = "sha256-VAfnj/2EdkDpcS30DveUUYLSNj07sy+gvKxyGkg2mvA=";
   };
 
   buildInputs = [
@@ -35,6 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     description = "Ultra fast grep with interactive query UI";
     homepage = "https://github.com/Genivia/ugrep";
@@ -42,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ numkem mikaelfangel ];
     license = licenses.bsd3;
     platforms = platforms.all;
+    mainProgram = "ug";
   };
 })

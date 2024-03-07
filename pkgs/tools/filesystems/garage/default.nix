@@ -24,6 +24,12 @@ let
       inherit sha256;
     };
 
+    postPatch = ''
+      # Starting in 0.9.x series, Garage is using mold in local development
+      # and this leaks in this packaging, we remove it to use the default linker.
+      rm .cargo/config.toml || true
+    '';
+
     inherit cargoSha256;
 
     nativeBuildInputs = [ protobuf pkg-config ];
@@ -64,10 +70,16 @@ let
       "sqlite"
     ];
 
+    disabledTests = [
+      # Upstream told us this test is flakey.
+      "k2v::poll::test_poll_item"
+    ];
+
     passthru.tests = nixosTests.garage;
 
     meta = {
       description = "S3-compatible object store for small self-hosted geo-distributed deployments";
+      changelog = "https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/v${version}";
       homepage = "https://garagehq.deuxfleurs.fr";
       license = lib.licenses.agpl3Only;
       maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
@@ -82,28 +94,23 @@ rec {
   # we have to keep all the numbers in the version to handle major/minor/patch level.
   # for <1.0.
 
-  garage_0_8_4 = generic {
-    version = "0.8.4";
-    sha256 = "sha256-YgMw41ofM59h7OnHK1H8+Se5mZEdYypPIdkqbyX9qfs=";
-    cargoSha256 = "sha256-dEtksOVqy5wAPoqCuXJj3c4TB6UbR8PTaB70fbL6iR8=";
+  garage_0_8_7 = generic {
+    version = "0.8.7";
+    sha256 = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
+    cargoSha256 = "sha256-Q0QyBNPEDrlhgIHD4q7Qb1Pu3xBvzlLOSW7LSWWdoIo=";
+    broken = stdenv.isDarwin;
   };
 
-  garage_0_8 = garage_0_8_4;
+  garage_0_8 = garage_0_8_7;
 
-  garage_0_9_0 = (generic {
-    version = "0.9.0";
-    sha256 = "sha256-Bw7ohMAfnbkhl43k8KxYu2OJd5689PqDS0vAcgU09W8=";
-    cargoSha256 = "sha256-JqCt/8p24suQMRzEyTE2OkbzZCGUDLuGq32kCq3eZ7o=";
-  }).overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches or [ ] ++ [
-      (fetchpatch {
-        url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/commit/c7f5dcd953ff1fdfa002a8bccfb43eafcc6fddd4.patch";
-        sha256 = "sha256-q7E6gtPjnj5O/K837LMP6LPEFcgdkifxRFrYzBuqkk0=";
-      })
-    ];
-  });
+  garage_0_9_3 = generic {
+    version = "0.9.3";
+    sha256 = "sha256-NN2HoheSW2+SAFX71K12KTe0wpaBEwkwxvZDi0Bdx+8=";
+    cargoSha256 = "sha256-OabgWVMkccFFAtBHEf3z+MRVcWaO+NCk/pumEqdNNRs=";
+    broken = stdenv.isDarwin;
+  };
 
-  garage_0_9 = garage_0_9_0;
+  garage_0_9 = garage_0_9_3;
 
   garage = garage_0_9;
 }

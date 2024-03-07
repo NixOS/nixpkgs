@@ -9,7 +9,8 @@
 , cmake-extras
 , dbus
 , dbus-test-runner
-, withDocumentation ? true
+# Needs qdoc, https://github.com/NixOS/nixpkgs/pull/245379
+, withDocumentation ? false
 , doxygen
 , glog
 , graphviz
@@ -19,19 +20,20 @@
 , python3
 , qtbase
 , qtdeclarative
+, validatePkgConfig
 , wrapQtAppsHook
 , xvfb-run
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-download-manager";
     rev = finalAttrs.version;
-    hash = "sha256-a9C+hactBMHMr31E+ImKDPgpzxajy1klkjDcSEkPHqI=";
+    hash = "sha256-LhhO/zZ4wNiRd235NB2b08SQcCZt1awN/flcsLs2m8U=";
   };
 
   outputs = [
@@ -42,42 +44,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when version > 0.1.2
+    # This change seems incomplete, potentially breaks things on systems that don't use AppArmor mediation
+    # https://gitlab.com/ubports/development/core/lomiri-download-manager/-/merge_requests/24#note_1746801673
     (fetchpatch {
-      name = "0001-lomiri-download-manager-Make-documentation-build-optional.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/32d7369714c01bd425af9c6de5bdc04399a12e0a.patch";
-      hash = "sha256-UztcBAAFXDX2j0X5D3kMp9q0vFm3/PblUAKPJ5nZyiY=";
-    })
-
-    # Remove when version > 0.1.2
-    (fetchpatch {
-      name = "0002-lomiri-download-manager-Upgrade-C++-standard-to-C++17.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/a6bc7ae80f2ff4c4743978c6c694149707d9d2e2.patch";
-      hash = "sha256-iA1sZhHI8Osgo1ofL5RTqgVzUG32zx0dU/28qcEqmQc=";
-    })
-
-    # Remove when version > 0.1.2
-    (fetchpatch {
-      name = "0003-lomiri-download-manager-Bump-version-make-Werror-and-tests-optional.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/73ec04c429e5285f05dd72d5bb9720ba6ff31be2.patch";
-      hash = "sha256-0BrJSKCvUhITwfln05OrHgHEpldbgBoh4rivAvw+qrc=";
-    })
-
-    # Remove when version > 0.1.2
-    (fetchpatch {
-      name = "0004-lomiri-download-manager-Use-GNUInstallDirs-variables-for-more-install-destinations.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/5d40daf053de62150aa5ee618285e415d7d3f1c8.patch";
-      hash = "sha256-r5fpiJkZkDsYX9fcX5JuPsE/qli9z5/DatmGJ9/QauU=";
+      name = "0001-lomiri-download-manager-Revert-Drop-GetConnectionAppArmorSecurityContext.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/2367f3dff852b69457b1a65a487cb032c210569f.patch";
+      revert = true;
+      hash = "sha256-xS0Wz6d+bZWj/kDGK2WhOduzyP4Rgz3n9n2XY1Zu5hE=";
     })
   ];
 
   postPatch = ''
-    # fetchpatch strips renames
-    # Remove when version > 0.1.2
-    for service in src/{uploads,downloads}/daemon/{lomiri-*-manager,lomiri-*-manager-systemd,com.lomiri.*}.service; do
-      mv "$service" "$service".in
-    done
-
     # pkg_get_variable doesn't let us substitute prefix pkg-config variable from systemd
     substituteInPlace CMakeLists.txt \
       --replace 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR "${placeholder "out"}/lib/systemd/user")' \
@@ -89,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    validatePkgConfig
     wrapQtAppsHook
   ] ++ lib.optionals withDocumentation [
     doxygen
@@ -116,10 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_DOC=${lib.boolToString withDocumentation}"
+    (lib.cmakeBool "ENABLE_DOC" withDocumentation)
     # Deprecation warnings on Qt 5.15
     # https://gitlab.com/ubports/development/core/lomiri-download-manager/-/issues/1
-    "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_WERROR" false)
   ];
 
   makeTargets = [
@@ -146,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Performs uploads and downloads from a centralized location";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-download-manager";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.lgpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

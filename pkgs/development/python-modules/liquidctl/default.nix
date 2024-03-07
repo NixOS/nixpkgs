@@ -15,6 +15,7 @@
 , colorlog
 , crcmod
 , pillow
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-LU8rQmXrEIoOBTTFotGvMeHqksYGrtNo2YSl2l2e/UI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "tests-pillow-10.2.0-compat.patch";
+      url = "https://github.com/liquidctl/liquidctl/commit/c50afa4e610bd2e268e85c347e2644794c817a78.diff";
+      hash = "sha256-1cKk3drl3RybHmnPXdlJoeYK6UDz25jHSS2YS/XLHIY=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles

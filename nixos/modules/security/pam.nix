@@ -96,6 +96,10 @@ let
 
   pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
 
+    imports = [
+      (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+    ];
+
     options = {
 
       name = mkOption {
@@ -203,17 +207,6 @@ let
             to provide Google Authenticator token to log in.
           '';
         };
-      };
-
-      usbAuth = mkOption {
-        default = config.security.pam.usb.enable;
-        defaultText = literalExpression "config.security.pam.usb.enable";
-        type = types.bool;
-        description = lib.mdDoc ''
-          If set, users listed in
-          {file}`/etc/pamusb.conf` are able to log in
-          with the associated USB key.
-        '';
       };
 
       otpwAuth = mkOption {
@@ -473,16 +466,23 @@ let
         '';
       };
 
-      enableKwallet = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          If enabled, pam_wallet will attempt to automatically unlock the
-          user's default KDE wallet upon login. If the user has no wallet named
-          "kdewallet", or the login password does not match their wallet
-          password, KDE will prompt separately after login.
-        '';
+      kwallet = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = lib.mdDoc ''
+            If enabled, pam_wallet will attempt to automatically unlock the
+            user's default KDE wallet upon login. If the user has no wallet named
+            "kdewallet", or the login password does not match their wallet
+            password, KDE will prompt separately after login.
+          '';
+        };
+
+        package = mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
+          pkgsText = "pkgs.plasma5Packages";
+        };
       };
+
       sssdStrictAccess = mkOption {
         default = false;
         type = types.bool;
@@ -665,7 +665,6 @@ let
             authfile = u2f.authFile;
             appid = u2f.appId;
           }; })
-          { name = "usb"; enable = cfg.usbAuth; control = "sufficient"; modulePath = "${pkgs.pam_usb}/lib/security/pam_usb.so"; }
           (let ussh = config.security.pam.ussh; in { name = "ussh"; enable = config.security.pam.ussh.enable && cfg.usshAuth; control = ussh.control; modulePath = "${pkgs.pam_ussh}/lib/security/pam_ussh.so"; settings = {
             ca_file = ussh.caFile;
             authorized_principals = ussh.authorizedPrincipals;
@@ -698,8 +697,9 @@ let
             (config.security.pam.enableEcryptfs
               || config.security.pam.enableFscrypt
               || cfg.pamMount
-              || cfg.enableKwallet
+              || cfg.kwallet.enable
               || cfg.enableGnomeKeyring
+              || config.services.intune.enable
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
@@ -722,10 +722,9 @@ let
               { name = "mount"; enable = cfg.pamMount; control = "optional"; modulePath = "${pkgs.pam_mount}/lib/security/pam_mount.so"; settings = {
                 disable_interactive = true;
               }; }
-              { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
-                kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
-              }; }
+              { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
               { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
+              { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
               }; }
@@ -858,18 +857,14 @@ let
             order = "user,group,default";
             debug = true;
           }; }
-          { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
-            kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
-          }; }
+          { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
           { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
             auto_start = true;
           }; }
           { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
             no-autostart = cfg.gnupg.noAutostart;
           }; }
-          { name = "cgfs"; enable = config.virtualisation.lxc.lxcfs.enable; control = "optional"; modulePath = "${pkgs.lxc}/lib/security/pam_cgfs.so"; args = [
-            "-c" "all"
-          ]; }
+          { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
         ];
       };
     };
@@ -1470,9 +1465,9 @@ in
         '';
       }
       {
-        assertion = config.security.pam.zfs.enable -> (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
+        assertion = config.security.pam.zfs.enable -> config.boot.zfs.enabled;
         message = ''
-          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
+          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled`).
         '';
       }
       {

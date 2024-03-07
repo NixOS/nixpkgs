@@ -42,7 +42,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2023.09.3";
+  version = "2023.09.5";
   pyproject = false;
 
   src =
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-bewOdmpnm6cArD5iaMKNqT8z4GUIpih+JzJ+wdo/lrI=";
+      hash = "sha256-ZYNAHNBHQPx8rBJSvEWFEpdSpYyXcoqJ+nBA7tpHwQs=";
     };
 
   unpackPhase = ''
@@ -141,7 +141,7 @@ buildPythonPackage rec {
   checkPhase = ''
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
   '';
 

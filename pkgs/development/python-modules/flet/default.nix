@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 
 # build-system
 , poetry-core
@@ -21,16 +22,21 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "0.20.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ix9O4wBq7/gwkV+23B+dnxTYv/VL6w8RmnvbYWcWqmc=";
+    hash = "sha256-3LhQI/hjenTxG/1DZP/zn2zs00rT5BviDAQYb2vucBM=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "websockets"
   ];
 
   propagatedBuildInputs = [

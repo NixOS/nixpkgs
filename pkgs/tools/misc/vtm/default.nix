@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtm";
-  version = "0.9.44";
+  version = "0.9.74";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FWWQzlJ8Uic2ry16UvwDn40JwtXs+4DTFogq++taSY4=";
+    hash = "sha256-O8fnh8I3KbiOD40bU0eO7tbvpMoSCVonKPVFx5pynR4=";
   };
 
   nativeBuildInputs = [

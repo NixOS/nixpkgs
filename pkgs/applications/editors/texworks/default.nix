@@ -14,16 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "texworks";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "TeXworks";
     repo = "texworks";
     rev = "release-${version}";
-    sha256 = "sha256-X0VuXNghHoNsNNDfZJXXJ++nfUa5ofjW8rv3CHOUzxQ=";
+    sha256 = "sha256-G8TVTVQPELyE6H9a6gWSyWHi653TWzUoaRdlfPnngM0=";
   };
-
-  patches = [ ./0001-fix-build-with-qt-6.5.patch ];
 
   nativeBuildInputs = [
     cmake

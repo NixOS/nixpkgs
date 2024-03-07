@@ -2,6 +2,7 @@
 , stdenv
 , appstream-glib
 , desktop-file-utils
+, deepfilternet
 , fetchFromGitHub
 , calf
 , fftw
@@ -40,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.1.3";
+  version = "7.1.4";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    hash = "sha256-OJy8HhojfpUwWo3zg+FgdFI4pMzWA61VMsdPE03MfeE=";
+    hash = "sha256-UNS7kHyxHB4VneELXGn2G8T8EeKUpjb1ib2q0G+gf/s=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream-glib
+    deepfilternet
     fftw
     fftwFloat
     fmt_9
@@ -95,6 +97,7 @@ stdenv.mkDerivation rec {
         zam-plugins # maximizer
       ];
       ladspaPlugins = [
+        deepfilternet # deep noise remover
         rubberband # pitch shifting
       ];
     in

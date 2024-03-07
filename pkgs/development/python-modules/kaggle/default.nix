@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.6.1";
+  version = "1.6.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AsdRYWbeG++zACCSVfnCPuy1hIdixLqNbxP0npmmabQ=";
+    sha256 = "sha256-24hxXMBhivJTtq/eIYga6ejm9ksxCs+yc/0T9KV1Igc=";
   };
 
   propagatedBuildInputs = [

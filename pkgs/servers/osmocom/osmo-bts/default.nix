@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmo-bts";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bts";
     rev = version;
-    hash = "sha256-Y972aa98bNU3IhuGMV80nh4ZjQKUdK6of1Q8H75Ips8=";
+    hash = "sha256-dje+B1jobsVdQZYyIkLTZzez4HQirCcjyosTQCo/v64=";
   };
 
   postPatch = ''

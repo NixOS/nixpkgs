@@ -77,5 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ linsui ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "dialect";
   };
 }

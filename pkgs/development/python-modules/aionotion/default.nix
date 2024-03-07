@@ -3,19 +3,23 @@
 , aresponses
 , buildPythonPackage
 , certifi
+, ciso8601
 , fetchFromGitHub
+, frozenlist
+, mashumaro
 , poetry-core
-, pydantic
+, pyjwt
 , pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, pytest-cov
 , pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2023.12.0";
+  version = "2024.02.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-F9Mv8c+QEd+Vi5pdNDAFzRnYoNKZSAN5qbeX7yG6kIk=";
+    hash = "sha256-xehHOB4iUMT1kKEK4jQzaj7hH9fmiY7mZxGC3CLnpAs=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +38,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     certifi
-    pydantic
+    ciso8601
+    frozenlist
+    mashumaro
+    pyjwt
+    yarl
   ];
 
   __darwinAllowLocalNetworking = true;

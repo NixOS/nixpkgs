@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ elohmeier ];
     license = licenses.bsd2;
+    mainProgram = "gpu_burn";
   };
 }

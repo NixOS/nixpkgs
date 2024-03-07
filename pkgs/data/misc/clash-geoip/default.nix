@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "clash-geoip";
-  version = "20231212";
+  version = "20240212";
 
   src = fetchurl {
     url = "https://github.com/Dreamacro/maxmind-geoip/releases/download/${version}/Country.mmdb";
-    sha256 = "sha256-h6EojfOWfDwD5Akvb8NrSvg3xyQZhOUrKhUxlWwio8A=";
+    sha256 = "sha256-cNVEWdIRo2Z2FluZIR0O5o3Aso4tDcVyHAG3DkNmpSQ=";
   };
 
   dontUnpack = true;

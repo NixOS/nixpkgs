@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     description = "GraphViz graph viewer/navigator";
     platforms = with lib.platforms; unix;
+    mainProgram = "zgrviewer";
   };
 }

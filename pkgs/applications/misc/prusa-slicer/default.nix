@@ -1,8 +1,5 @@
 { stdenv
 , lib
-, openexr
-, jemalloc
-, c-blosc
 , binutils
 , fetchFromGitHub
 , cmake
@@ -12,6 +9,7 @@
 , cereal
 , cgal
 , curl
+, darwin
 , dbus
 , eigen
 , expat
@@ -63,19 +61,17 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost tbb_2021_8 jemalloc c-blosc ilmbase ];
-  });
+  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_8; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-hSHeh3qJroCFnzeoVz6LKtCK8r0ealWSFz9cW4xvSb8=";
+    hash = "sha256-IZRw6qEe4hM/Sfhx0je11vaMHeuW/e4ZP5zMTuptb2k=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -116,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     catch2
   ] ++ lib.optionals withSystemd [
     systemd
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreWLAN
   ];
 
   separateDebugInfo = true;
@@ -195,6 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3;
     maintainers = with maintainers; [ moredread tweber tmarkus ];
+    platforms = platforms.unix;
   } // lib.optionalAttrs (stdenv.isDarwin) {
     mainProgram = "PrusaSlicer";
   };

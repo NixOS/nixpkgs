@@ -1,37 +1,34 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
 , aiobotocore
+, aiofiles
+, boto3
+, buildPythonPackage
 , chalice
 , cryptography
-, boto3
-, pytestCheckHook
-, pytest-asyncio
-, requests
-, aiofiles
-, moto
 , dill
+, fetchFromGitHub
+, moto
+, poetry-core
+, poetry-dynamic-versioning
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "11.3.0";
+  version = "12.3.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "terrycain";
     repo = "aioboto3";
-    rev = "v${version}";
-    hash = "sha256-jU9sKhbUdVeOvOXQnXR/S/4sBwTNcQCc9ZduO+HDXho=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GDuxy/V+j0LRJ2lbcRHMEAga+pdCbYIWhEt3ItrHMB4=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-    --replace poetry.masonry.api poetry.core.masonry.api \
-    --replace "poetry>=0.12" "poetry-core>=0.12"
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -40,8 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiobotocore
-    boto3
-  ];
+  ] ++ aiobotocore.optional-dependencies.boto3;
 
   passthru.optional-dependencies = {
     chalice = [
@@ -53,15 +49,27 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    requests
     aiofiles
-    moto
     dill
+    moto
+    pytest-asyncio
+    pytestCheckHook
+    requests
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [ "aioboto3" ];
+  pythonImportsCheck = [
+    "aioboto3"
+  ];
+
+  disabledTests = [
+    # Our moto package is not ready to support more tests
+    "encrypt_decrypt_aes_cbc"
+    "test_chalice_async"
+    "test_dynamo"
+    "test_flush_doesnt_reset_item_buffer"
+    "test_kms"
+    "test_s3"
+  ];
 
   meta = with lib; {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";

@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       aarch64-linux = "sha256-6nXemaGiQjp2stjjKItPJ62VcH5Q5pRf63qKtl2haXI=";
       x86_64-darwin = "sha256-jSMAw+AMD63vqPckZjblw4EDngA4E8h0WlsZu3hUShY=";
       aarch64-darwin = "sha256-zujXURpIcw7IOw63AW167h6cywYXydhHZMzA2apGZAs=";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
   nativeBuildInputs =

@@ -144,6 +144,8 @@ in {
     start_all()
 
     with subtest("Wait for network"):
+        web.systemctl("start network-online.target")
+        curl.systemctl("start network-online.target")
         web.wait_for_unit("network-online.target")
         curl.wait_for_unit("network-online.target")
 

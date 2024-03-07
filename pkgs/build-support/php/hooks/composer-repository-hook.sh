@@ -10,6 +10,8 @@ preBuildHooks+=(composerRepositoryBuildHook)
 preCheckHooks+=(composerRepositoryCheckHook)
 preInstallHooks+=(composerRepositoryInstallHook)
 
+source @phpScriptUtils@
+
 composerRepositoryConfigureHook() {
     echo "Executing composerRepositoryConfigureHook"
 
@@ -18,7 +20,8 @@ composerRepositoryConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
-        COMPOSER_ROOT_VERSION="${version}" \
+        setComposeRootVersion
+
         composer \
             --no-ansi \
             --no-install \
@@ -55,10 +58,12 @@ composerRepositoryBuildHook() {
 
     mkdir -p repository
 
+    setComposeRootVersion
+
     # Build the local composer repository
     # The command 'build-local-repo' is provided by the Composer plugin
     # nix-community/composer-local-repo-plugin.
-    composer-local-repo-plugin --no-ansi build-local-repo ${composerNoDev:+--no-dev} -r repository
+    composer-local-repo-plugin --no-ansi build-local-repo-lock ${composerNoDev:+--no-dev} -r repository
 
     echo "Finished composerRepositoryBuildHook"
 }
@@ -66,26 +71,7 @@ composerRepositoryBuildHook() {
 composerRepositoryCheckHook() {
     echo "Executing composerRepositoryCheckHook"
 
-    if ! composer validate --strict --no-ansi --no-interaction --quiet; then
-        if [ ! -z "${composerStrictValidation-}" ]; then
-            echo
-            echo -e "\e[31mERROR: composer files validation failed\e[0m"
-            echo
-            echo -e '\e[31mThe validation of the composer.json and composer.lock failed.\e[0m'
-            echo -e '\e[31mMake sure that the file composer.lock is consistent with composer.json.\e[0m'
-            echo
-            exit 1
-        else
-            echo
-            echo -e "\e[33mWARNING: composer files validation failed\e[0m"
-            echo
-            echo -e '\e[33mThe validation of the composer.json and composer.lock failed.\e[0m'
-            echo -e '\e[33mMake sure that the file composer.lock is consistent with composer.json.\e[0m'
-            echo
-            echo -e '\e[33mThis check is not blocking, but it is recommended to fix the issue.\e[0m'
-            echo
-        fi
-    fi
+    checkComposerValidate
 
     echo "Finished composerRepositoryCheckHook"
 }

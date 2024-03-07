@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jruby";
-  version = "9.4.5.0";
+  version = "9.4.6.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${finalAttrs.version}/jruby-bin-${finalAttrs.version}.tar.gz";
-    hash = "sha256-pA94xGQczIZ1Lhay2iR/1ryfvPmkhkzxvjb3/3s1aEw=";
+    hash = "sha256-LaFN5BUrcf2/o1ukaHpG7xLNRldAM3tUnMH+bHwTmBM=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

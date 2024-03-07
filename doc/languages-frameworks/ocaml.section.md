@@ -110,11 +110,11 @@ buildDunePackage rec {
     hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flowtype/ocaml-wtf8";
     description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates.";
-    license = licenses.mit;
-    maintainers = [ maintainers.eqyiel ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.eqyiel ];
   };
 }
 ```

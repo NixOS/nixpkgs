@@ -19,6 +19,7 @@
 , enableBigBoards ? false
 , enableContrib ? false
 , enableTcmalloc ? true
+, enableTrtPlanCache ? false
 }:
 
 assert lib.assertOneOf "backend" backend [ "opencl" "cuda" "tensorrt" "eigen" ];
@@ -67,25 +68,15 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DNO_GIT_REVISION=ON"
-  ] ++ lib.optionals enableAVX2 [
-    "-DUSE_AVX2=ON"
-  ] ++ lib.optionals (backend == "eigen") [
-    "-DUSE_BACKEND=EIGEN"
-  ] ++ lib.optionals (backend == "cuda") [
-    "-DUSE_BACKEND=CUDA"
-  ] ++ lib.optionals (backend == "tensorrt") [
-    "-DUSE_BACKEND=TENSORRT"
-  ] ++ lib.optionals (backend == "opencl") [
-    "-DUSE_BACKEND=OPENCL"
+    (lib.cmakeFeature "USE_BACKEND" (lib.toUpper backend))
+    (lib.cmakeBool "USE_AVX2" enableAVX2)
+    (lib.cmakeBool "USE_TCMALLOC" enableTcmalloc)
+    (lib.cmakeBool "USE_BIGGER_BOARDS_EXPENSIVE" enableBigBoards)
+    (lib.cmakeBool "USE_CACHE_TENSORRT_PLAN" enableTrtPlanCache)
+    (lib.cmakeBool "NO_GIT_REVISION" (!enableContrib))
   ] ++ lib.optionals enableContrib [
-    "-DBUILD_DISTRIBUTED=1"
-    "-DNO_GIT_REVISION=OFF"
-    "-DGIT_EXECUTABLE=${fakegit}/bin/git"
-  ] ++ lib.optionals enableTcmalloc [
-    "-DUSE_TCMALLOC=ON"
-  ] ++ lib.optionals enableBigBoards [
-    "-DUSE_BIGGER_BOARDS_EXPENSIVE=ON"
+    (lib.cmakeBool "BUILD_DISTRIBUTED" true)
+    (lib.cmakeFeature "GIT_EXECUTABLE" "${fakegit}/bin/git")
   ];
 
   preConfigure = ''

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.29.0";
+  version = "1.29.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h/pXLGpQ2+ENxWqIb9yteroaudsS8Hz+sraON+65TMw=";
+    hash = "sha256-Talw1P0JnPdU+dDgC8J2TJSOV/LshgQyBbPYEqzKpfA=";
   };
 
   nativeBuildInputs = [

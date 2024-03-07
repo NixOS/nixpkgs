@@ -8,13 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.11.2";
+  version = "0.11.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
+    repo = "khal";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +83,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "CLI calendar application";
     homepage = "http://lostpackets.de/khal/";
+    changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };

@@ -32,6 +32,7 @@
 , libuv
 , libxcrypt
 , libyaml
+, luajitPackages
 , mariadb
 , magic-enum
 , mpfr
@@ -155,8 +156,15 @@ with prev;
     */
   });
 
+  image-nvim = prev.image-nvim.overrideAttrs (oa: {
+    propagatedBuildInputs = [
+      lua
+      luajitPackages.magick
+    ];
+  });
+
   ldbus = prev.ldbus.overrideAttrs (oa: {
-    extraVariables = {
+    luarocksConfig.variables = {
       DBUS_DIR = "${dbus.lib}";
       DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
       DBUS_INCDIR = "${dbus.dev}/include/dbus-1.0";
@@ -301,7 +309,7 @@ with prev;
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
-    extraVariables = {
+    luarocksConfig.variables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
       MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
       MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
@@ -512,7 +520,7 @@ with prev;
     buildInputs = [ libuv ];
 
     # Use system libuv instead of building local and statically linking
-    extraVariables = {
+    luarocksConfig.variables = {
       WITH_SHARED_LIBUV = "ON";
     };
 
@@ -565,6 +573,7 @@ with prev;
     '';
   });
 
+  # upstream broken, can't be generated, so moved out from the generated set
   readline = final.callPackage({ buildLuarocksPackage, fetchurl, luaAtLeast, luaOlder, lua, luaposix }:
   buildLuarocksPackage ({
     pname = "readline";
@@ -580,7 +589,7 @@ with prev;
       sha256 = "1mk9algpsvyqwhnq7jlw4cgmfzj30l7n2r6ak4qxgdxgc39f48k4";
     };
 
-    extraVariables = rec {
+    luarocksConfig.variables = rec {
       READLINE_INCDIR = "${readline.dev}/include";
       HISTORY_INCDIR = READLINE_INCDIR;
     };
@@ -589,7 +598,6 @@ with prev;
       tar xf *.tar.gz
     '';
 
-    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
     propagatedBuildInputs = [ lua luaposix
       readline.out
     ];
@@ -598,6 +606,7 @@ with prev;
       homepage = "http://pjb.com.au/comp/lua/readline.html";
       description = "Interface to the readline library";
       license.fullName = "MIT/X11";
+      broken = (luaOlder "5.1") || (luaAtLeast "5.5");
     };
   })) {};
 

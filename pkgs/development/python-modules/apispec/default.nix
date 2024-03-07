@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , marshmallow
 , mock
 , openapi-spec-validator
@@ -9,19 +10,24 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.3.1";
-  format = "setuptools";
+  version = "6.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s45EeZFtQ/Kx6IzhX8L66TrfLo1Vy1nsdKxmqCeUFIM=";
+    hash = "sha256-wDpNhIrnDpuyJp3U5NMNjsfsBp0k756bQi48vRqf55Q=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     packaging

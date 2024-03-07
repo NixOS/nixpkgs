@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , docutils
-, readme_renderer
+, readme-renderer
 , packaging
 , pygments
 , pytestCheckHook
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     docutils
-    readme_renderer
+    readme-renderer
     packaging
     pygments
   ];

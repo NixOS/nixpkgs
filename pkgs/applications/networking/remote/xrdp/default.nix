@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, applyPatches, pkg-config, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
+{ lib
+, stdenv
+, applyPatches
+, fetchFromGitHub
+, pkg-config
+, which
+, perl
+, autoconf
+, automake
+, libtool
+, openssl
+, systemd
+, pam
+, fuse
+, libjpeg
+, libopus
+, nasm
+, xorg
+, lame
+, pixman
+, libjpeg_turbo
+}:
 
 let
-  version = "0.9.23.1";
+  version = "0.9.24";
   patchedXrdpSrc = applyPatches {
     patches = [ ./dynamic_config.patch ];
     name = "xrdp-patched-${version}";
@@ -10,7 +31,7 @@ let
       repo = "xrdp";
       rev = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-fJKSEHB5X5QydKgRPjIMJzNaAy1EVJifHETSGmlJttQ=";
+      hash = "sha256-Kvj72l+jmoad6VgmCYW2KtQAbJMJ8AZjNIYJ5lUNzRM=";
     };
   };
 
@@ -45,7 +66,8 @@ let
 
     enableParallelBuilding = true;
   };
-  xrdp = stdenv.mkDerivation rec {
+
+  xrdp = stdenv.mkDerivation {
     inherit version;
     pname = "xrdp";
 
@@ -53,10 +75,25 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm perl ];
 
-    buildInputs = [ openssl systemd pam fuse libjpeg libopus xorg.libX11 xorg.libXfixes xorg.libXrandr ];
+    buildInputs = [
+      fuse
+      lame
+      libjpeg
+      libjpeg_turbo
+      libopus
+      openssl
+      pam
+      pixman
+      systemd
+      xorg.libX11
+      xorg.libXfixes
+      xorg.libXrandr
+    ];
 
     postPatch = ''
       substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+
+      substituteInPlace configure.ac --replace /usr/include/ ""
     '';
 
     preConfigure = ''
@@ -64,7 +101,20 @@ let
       ./bootstrap
     '';
     dontDisableStatic = true;
-    configureFlags = [ "--with-systemdsystemunitdir=/var/empty" "--enable-ipv6" "--enable-jpeg" "--enable-fuse" "--enable-rfxcodec" "--enable-opus" "--enable-pam-config=unix" ];
+    configureFlags = [
+      "--with-systemdsystemunitdir=/var/empty"
+      "--enable-fuse"
+      "--enable-ipv6"
+      "--enable-jpeg"
+      "--enable-mp3lame"
+      "--enable-opus"
+      "--enable-pam-config=unix"
+      "--enable-pixman"
+      "--enable-rdpsndaudin"
+      "--enable-rfxcodec"
+      "--enable-tjpeg"
+      "--enable-vsock"
+    ];
 
     installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
@@ -104,7 +154,7 @@ let
       description = "An open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;
-      maintainers = with maintainers; [ chvp ];
+      maintainers = with maintainers; [ chvp lucasew ];
       platforms = platforms.linux;
     };
   };

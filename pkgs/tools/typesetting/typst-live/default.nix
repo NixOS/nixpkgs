@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-live";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-8YndEqhIESC3Cbe4klQfkVqesNFeZ2g1oRd1VoVrMnE=";
+    hash = "sha256-9GhrWhT0mYU2OOeoHGd5XY7BKO/S7cKTnURXi9dF+IU=";
   };
 
-  cargoHash = "sha256-62tBefXek6W01RfdPczXBuYhrLK+wG1YQ7va7FQmAhA=";
+  cargoHash = "sha256-KGwmTXkY2nv5oWwjs5ZLz6u3bJ7YWJQPqOqJJNxKDkM=";
 
   nativeBuildInputs = [
     makeWrapper

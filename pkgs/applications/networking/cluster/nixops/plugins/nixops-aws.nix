@@ -12,14 +12,14 @@
 
 buildPythonPackage {
   pname = "nixops-aws";
-  version = "unstable-2023-08-09";
+  version = "unstable-2024-02-29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "nixops-aws";
-    rev = "8802d1cda9004ec1362815292c2a8ab95e6d64e8";
-    hash = "sha256-i0KjFrwpDHRch9jorccdVwnjAQiORClDUqm2R2xvwuU=";
+    rev = "d173b2f14ec767d782ceab45fb22b32fe3b5a1f7";
+    hash = "sha256-ocTtc7POt1bugb9Bki2ew2Eh5uc933GftNw1twoOJsc=";
   };
 
   postPatch = ''

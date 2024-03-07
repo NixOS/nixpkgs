@@ -8,12 +8,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "7.0.0";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AI/GNubb7+nwz/vM6v/JoUtWup6rBJieKXtFQzrdPkE=";
+    hash = "sha256-oOX5Z8WXgNJYsgXqHE2CsXdDnA3XmDF6axD1D318bPQ=";
   };
 
   postPatch = ''

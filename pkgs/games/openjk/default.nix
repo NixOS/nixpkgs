@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2
+, unstableGitUpdater
+}:
 
 let
   jamp = makeDesktopItem rec {
@@ -30,13 +32,13 @@ let
   };
 in stdenv.mkDerivation {
   pname = "OpenJK";
-  version = "unstable-2022-01-30";
+  version = "0-unstable-2024-02-20";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "235fb9e1a9c4537a603b2e54e444327d20d198a3";
-    sha256 = "sha256-DqP6wnu5sE7lQJGEdsEPOc6FIaJjqxt5ANKZ5eiabC4=";
+    rev = "1e8a7998ca2fe434daebb41d586ac3cd5296433a";
+    sha256 = "sha256-TKJNaz+oWNYyReFZVefg1frPXyd3Yl96JDklp1qY1to=";
   };
 
   dontAddPrefix = true;
@@ -78,6 +80,8 @@ in stdenv.mkDerivation {
     ln -s $openjo/bin/* $out/bin
     rm -rf $out/opt
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "An open-source engine for Star Wars Jedi Academy game";

@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , testers
 
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
@@ -18,6 +19,7 @@
 , openscenegraph
 , pkg-config
 , postgresql
+, proj
 , tiledb
 , xercesc
 , zlib
@@ -26,14 +28,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.5.6";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-JKwa89c05EfZ/FxOkj8lYmw0o2EgSqafRDIV2mTpZ5E=";
+    sha256 = "sha256-wrgEbCYOGW1yrVxyX+UDa5jcUqab3letEGuvWnYvtac=";
   };
+
+  patches = [
+    # Fix running tests
+    # https://github.com/PDAL/PDAL/issues/4280
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/PDAL/PDAL/pull/4291.patch";
+      sha256 = "sha256-jFS+trwMRBfm+MpT0CcuD/hdYmfyuQj2zyoe06B6G9U=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     openscenegraph
     postgresql
+    proj
     tiledb
     xercesc
     zlib
@@ -63,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_PLUGIN_HDF=ON"
     "-DBUILD_PLUGIN_PGPOINTCLOUD=ON"
     "-DBUILD_PLUGIN_TILEDB=ON"
+    "-DWITH_COMPLETION=ON"
     "-DWITH_TESTS=ON"
     "-DBUILD_PGPOINTCLOUD_TESTS=OFF"
 
@@ -92,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     "pdal_io_tiledb_time_writer_test"
     "pdal_io_tiledb_time_reader_test"
     "pdal_io_tiledb_bit_fields_test"
+    "pdal_io_tiledb_utils_test"
     "pdal_io_e57_read_test"
     "pdal_io_e57_write_test"
     "pdal_io_stac_reader_test"

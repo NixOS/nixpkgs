@@ -6,20 +6,27 @@
 , tigerbeetle
 , nix-update-script
 }:
+let
+  # Read [these comments](pkgs/development/compilers/zig/hook.nix#L12-L30) on the default Zig flags, and the associated links. tigerbeetle stopped exposing the `-Doptimize` build flag, so we can't use the default Nixpkgs zig hook as-is. tigerbeetle only exposes a boolean `-Drelease` flag which we'll add in the tigerbeetle derivation in this file.
+  custom_zig_hook = zig_0_11.hook.overrideAttrs (previousAttrs: {
+    zig_default_flags = builtins.filter (flag: builtins.match "-Doptimize.*" flag == null) previousAttrs.zig_default_flags;
+  });
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tigerbeetle";
-  version = "0.14.171";
+  version = "0.14.181";
 
   src = fetchFromGitHub {
     owner = "tigerbeetle";
     repo = "tigerbeetle";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-MjsNQarRXsrWKJZ2aBi/Wc2HAYm3isLBNw81a75+nhc=";
+    hash = "sha256-BtaPSMQn6Rq6wiYQZb1f+vM9sjrV9HVrvQ9DAQFE+zk=";
   };
 
-  nativeBuildInputs = [ zig_0_11.hook ];
+  nativeBuildInputs = [ custom_zig_hook ];
 
   zigBuildFlags = [
+    "-Drelease"
     "-Dgit-commit=0000000000000000000000000000000000000000"
     "-Dversion=${finalAttrs.version}"
   ];
@@ -37,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A financial accounting database designed to be distributed and fast";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danielsidhion ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     mainProgram = "tigerbeetle";
   };
 })

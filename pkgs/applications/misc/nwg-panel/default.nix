@@ -7,7 +7,7 @@
 , systemd          # systemctl
 , wlr-randr        # wlr-randr
 , nwg-menu         # nwg-menu
-, light            # light
+, brightnessctl    # brightnessctl
 , pamixer          # pamixer
 , pulseaudio       # pactl
 , libdbusmenu-gtk3 # tray
@@ -16,13 +16,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.9.20";
+  version = "0.9.25";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
-    rev = "v${version}";
-    hash = "sha256-Cq/kj61OmnHLd8EQK6QF67ALv3lMXKPGYUvTIeh90zQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dTBV2OckPJNA707PNz/jmfUPpufhItt4EEDHAI79kxQ=";
   };
 
   # No tests
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       --prefix XDG_DATA_DIRS : "$out/share"
-      --prefix PATH : "${lib.makeBinPath [ hyprland light nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
+      --prefix PATH : "${lib.makeBinPath [ brightnessctl hyprland nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
     )
   '';
 

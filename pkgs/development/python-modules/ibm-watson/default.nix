@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "7.0.1";
+  version = "8.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f/nf9WFiUNDQBkFNMV16EznCw0TN9L4fDIPQ/j4B1Sc=";
+    hash = "sha256-p2LyR7Fxd0Ny6QCypAWIusnINuhWAhWOnRfZ14FKvro=";
   };
 
   propagatedBuildInputs = [

@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.28";
+  version = "1.1.29";
   pname = "libpaper";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/libp/libpaper/libpaper_${version}.tar.gz";
-    sha256 = "sha256-yLuUbsk9PCxyu7HXJX6QFyoipEoHoH+2uAKluyyV/dw=";
+    hash = "sha256-JjMOIemjEkZY1RX9hQsM3lRv9C2JsllqUmTF8Wd/BUc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

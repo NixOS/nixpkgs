@@ -10,9 +10,9 @@ in
 rec {
 
   /*
-    Run the shell command `buildCommand' to produce a store path named `name'.
+    Run the shell command `buildCommand` to produce a store path named `name`.
 
-    The attributes in `env' are added to the environment prior to running the command.
+    The attributes in `env` are added to the environment prior to running the command.
     Environment variables set by `stdenv.mkDerivation` take precedence.
 
     By default `runCommand` runs in a stdenv with no compiler environment.
@@ -152,19 +152,21 @@ rec {
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
+    , derivationArgs ? { } # Extra arguments to pass to `stdenv.mkDerivation`
     }:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
-      {
+      ({
         inherit text executable checkPhase allowSubstitutes preferLocalBuild;
-        passAsFile = [ "text" ];
+        passAsFile = [ "text" ]
+          ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
           {
             mainProgram = lib.head matches;
-          } // meta;
-      }
+          } // meta // derivationArgs.meta or {};
+      } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
@@ -182,101 +184,32 @@ rec {
         eval "$checkPhase"
       '';
 
-  /*
-     Writes a text file to nix store with no optional parameters available.
-
-     Example:
-
-
-     # Writes contents of file to /nix/store/<store path>
-     writeText "my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeText = name: text: writeTextFile { inherit name text; };
 
-  /*
-    Writes a text file to nix store in a specific directory with no
-    optional parameters available.
-
-    Example:
-
-
-    # Writes contents of file to /nix/store/<store path>/share/my-file
-    writeTextDir "share/my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeTextDir = path: text: writeTextFile {
     inherit text;
     name = builtins.baseNameOf path;
     destination = "/${path}";
   };
 
-  /*
-    Writes a text file to /nix/store/<store path> and marks the file as
-    executable.
-
-    If passed as a build input, will be used as a setup hook. This makes setup
-    hooks more efficient to create: you don't need a derivation that copies
-    them to $out/nix-support/setup-hook, instead you can use the file as is.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable
-    writeScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScript = name: text: writeTextFile { inherit name text; executable = true; };
 
-  /*
-    Writes a text file to /nix/store/<store path>/bin/<name> and
-    marks the file as executable.
-
-    Example:
-
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScriptBin = name: text: writeTextFile {
     inherit name text;
     executable = true;
     destination = "/bin/${name}";
   };
 
-  /*
-    Similar to writeScript. Writes a Shell script and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable.
-    writeShellScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScript = name: text:
     writeTextFile {
       inherit name;
@@ -290,22 +223,8 @@ rec {
       '';
     };
 
-  /*
-    Similar to writeShellScript and writeScriptBin.
-    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeShellScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScriptBin = name: text:
     writeTextFile {
       inherit name;
@@ -321,53 +240,94 @@ rec {
       meta.mainProgram = name;
     };
 
-  /*
-    Similar to writeShellScriptBin and writeScriptBin.
-    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
-    checks its syntax with shellcheck and the shell's -n option.
-    Individual checks can be foregone by putting them in the excludeShellChecks
-    list, e.g. [ "SC2016" ].
-    Automatically includes sane set of shellopts (errexit, nounset, pipefail)
-    and handles creation of PATH based on runtimeInputs
-
-    Note that the checkPhase uses stdenv.shell for the test run of the script,
-    while the generated shebang uses runtimeShell. If, for whatever reason,
-    those were to mismatch you might lose fidelity in the default checks.
-
-    Example:
-
-    Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-
-
-    writeShellApplication {
-      name = "my-file";
-      runtimeInputs = [ curl w3m ];
-      text = ''
-        curl -s 'https://nixos.org' | w3m -dump -T text/html
-       '';
-    }
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellApplication =
-    { name
-    , text
-    , runtimeInputs ? [ ]
-    , meta ? { }
-    , checkPhase ? null
-    , excludeShellChecks ? [ ]
+    {
+      /*
+         The name of the script to write.
+
+         Type: String
+       */
+      name,
+      /*
+         The shell script's text, not including a shebang.
+
+         Type: String
+       */
+      text,
+      /*
+         Inputs to add to the shell script's `$PATH` at runtime.
+
+         Type: [String|Derivation]
+       */
+      runtimeInputs ? [ ],
+      /*
+         Extra environment variables to set at runtime.
+
+         Type: AttrSet
+       */
+      runtimeEnv ? null,
+      /*
+         `stdenv.mkDerivation`'s `meta` argument.
+
+         Type: AttrSet
+       */
+      meta ? { },
+      /*
+         The `checkPhase` to run. Defaults to `shellcheck` on supported
+         platforms and `bash -n`.
+
+         The script path will be given as `$target` in the `checkPhase`.
+
+         Type: String
+       */
+      checkPhase ? null,
+      /*
+         Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
+
+         See <https://www.shellcheck.net/wiki/> for a list of checks.
+
+         Type: [String]
+       */
+      excludeShellChecks ? [ ],
+      /*
+         Bash options to activate with `set -o` at the start of the script.
+
+         Defaults to `[ "errexit" "nounset" "pipefail" ]`.
+
+         Type: [String]
+       */
+      bashOptions ? [ "errexit" "nounset" "pipefail" ],
+      /* Extra arguments to pass to `stdenv.mkDerivation`.
+
+         :::{.caution}
+         Certain derivation attributes are used internally,
+         overriding those could cause problems.
+         :::
+
+         Type: AttrSet
+       */
+      derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta;
+      inherit name meta derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
-        set -o errexit
-        set -o nounset
-        set -o pipefail
-      '' + lib.optionalString (runtimeInputs != [ ]) ''
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+      '' + lib.optionalString (runtimeEnv != null)
+        (lib.concatStrings
+          (lib.mapAttrsToList
+            (name: value: ''
+              ${lib.toShellVar name value}
+              export ${name}
+            '')
+            runtimeEnv))
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
       '' + ''
@@ -492,7 +452,7 @@ rec {
 
 
   /*
-    Create a forest of symlinks to the files in `paths'.
+    Create a forest of symlinks to the files in `paths`.
 
     This creates a single derivation that replicates the directory structure
     of all the input paths.
@@ -705,7 +665,7 @@ rec {
       '');
 
 
-  # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
+  # Write the references (i.e. the runtime dependencies in the Nix store) of `path` to a file.
 
   writeReferencesToFile = path: runCommand "runtime-deps"
     {
@@ -763,13 +723,13 @@ rec {
   writeStringReferencesToFile = string:
     /*
        The basic operation this performs is to copy the string context
-       from `string' to a second string and wrap that string in a
+       from `string` to a second string and wrap that string in a
        derivation. However, that alone is not enough, since nothing in the
        string refers to the output paths of the derivations/paths in its
        context, meaning they'll be considered build-time dependencies and
        removed from the wrapper derivation's closure. Putting the
        necessary output paths in the new string is however not very
-       straightforward - the attrset returned by `getContext' contains
+       straightforward - the attrset returned by `getContext` contains
        only references to derivations' .drv-paths, not their output
        paths. In order to "convert" them, we try to extract the
        corresponding paths from the original string using regex.
@@ -944,22 +904,23 @@ rec {
         else throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
       ) + "-patched"
     , patches ? [ ]
+    , prePatch ? ""
     , postPatch ? ""
     , ...
     }@args:
-    if patches == [ ] && postPatch == ""
+    if patches == [ ] && prePatch == "" && postPatch == ""
     then src # nothing to do, so use original src to avoid additional drv
     else stdenvNoCC.mkDerivation
-      {
-        inherit name src patches postPatch;
+      ({
+        inherit name src patches prePatch postPatch;
         preferLocalBuild = true;
         allowSubstitutes = false;
         phases = "unpackPhase patchPhase installPhase";
         installPhase = "cp -R ./ $out";
       }
-    # Carry `meta` information from the underlying `src` if present.
-    // (optionalAttrs (src?meta) { inherit (src) meta; })
-    // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
+      # Carry `meta` information from the underlying `src` if present.
+      // (optionalAttrs (src?meta) { inherit (src) meta; })
+      // (removeAttrs args [ "src" "name" "patches" "prePatch" "postPatch" ]));
 
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file"

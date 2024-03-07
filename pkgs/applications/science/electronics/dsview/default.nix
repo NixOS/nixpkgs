@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, cmake, wrapQtAppsHook
 , libzip, boost, fftw, qtbase, qtwayland, qtsvg, libusb1
-, python3, fetchpatch
+, python3, fetchpatch, desktopToDarwinBundle
 }:
 
 stdenv.mkDerivation rec {
@@ -20,18 +20,19 @@ stdenv.mkDerivation rec {
     ./install.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ]
+    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    boost fftw qtbase qtwayland qtsvg libusb1 libzip
+    boost fftw qtbase qtsvg libusb1 libzip
     python3
-  ];
+  ] ++ lib.optional stdenv.isLinux qtwayland;
 
   meta = with lib; {
     description = "A GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
     homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bachp ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bachp carlossless ];
   };
 }

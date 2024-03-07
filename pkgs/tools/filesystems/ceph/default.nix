@@ -50,6 +50,9 @@
 , zlib
 , zstd
 
+# Dependencies of overridden Python dependencies, hopefully we can remove these soon.
+, rustPlatform
+
 # Optional Dependencies
 , curl ? null
 , expat ? null
@@ -166,7 +169,70 @@ let
 
   # Watch out for python <> boost compatibility
   python = python310.override {
-    packageOverrides = self: super: {
+    packageOverrides = self: super: let cryptographyOverrideVersion = "40.0.1"; in {
+      # Ceph does not support `cryptography` > 40 yet:
+      # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
+      # * Upstream issue: https://tracker.ceph.com/issues/63529
+      #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
+      #
+      # We pin the older `cryptography` 40 here;
+      # this also forces us to pin an older `pyopenssl` because the current one
+      # is not compatible with older `cryptography`, see:
+      #     https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
+      cryptography = super.cryptography.overridePythonAttrs (old: rec {
+        version = cryptographyOverrideVersion;
+
+        src = fetchPypi {
+          inherit (old) pname;
+          version = cryptographyOverrideVersion;
+          hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
+        };
+
+        cargoDeps = rustPlatform.fetchCargoTarball {
+          inherit src;
+          sourceRoot = let cargoRoot = "src/rust"; in "${old.pname}-${cryptographyOverrideVersion}/${cargoRoot}";
+          name = "${old.pname}-${cryptographyOverrideVersion}";
+          hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+        };
+
+        # Not using the normal `(old.patches or []) ++` pattern here to use
+        # the overridden package's patches, because current nixpkgs's `cryptography`
+        # has patches that do not apply on this old version.
+        patches = [
+          # Fix https://nvd.nist.gov/vuln/detail/CVE-2023-49083 which has no upstream backport.
+          # See https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a#diff-f5134bf8f3cf0a5cc8601df55e50697acc866c603a38caff98802bd8e17976c5R1893
+          ./python-cryptography-Cherry-pick-fix-for-CVE-2023-49083-on-cryptography-40.patch
+        ];
+
+        # Tests would require overriding `cryptography-vectors`, which is not currently
+        # possible/desired, see: https://github.com/NixOS/nixpkgs/pull/281858#pullrequestreview-1841421866
+        doCheck = false;
+      });
+
+      # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
+      # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
+      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
+        version = "23.1.1";
+        src = fetchPypi {
+          pname = "pyOpenSSL";
+          inherit version;
+          hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
+        };
+      });
+
+      # Ceph does not support `kubernetes` >= 19, see:
+      #     https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1900324090
+      kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
+        version = "18.20.0";
+        src = fetchFromGitHub {
+          owner = "kubernetes-client";
+          repo = "python";
+          rev = "v${version}";
+          sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
+          fetchSubmodules = true;
+        };
+      });
+
     };
   };
 
@@ -215,10 +281,10 @@ let
   ]);
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "18.2.0";
+  version = "18.2.1";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256:0k9nl6xi5brva51rr14m7ig27mmmd7vrpchcmqc40q3c2khn6ns9";
+    hash = "sha256-gHWwNHf0KtI7Hv0MwaCqP6A3YR/AWakfUZTktRyddko=";
   };
 in rec {
   ceph = stdenv.mkDerivation {

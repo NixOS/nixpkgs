@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, pythonRelaxDepsHook
   # Mitmproxy requirements
-, aioquic-mitmproxy
+, aioquic
 , asgiref
 , blinker
 , brotli
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.2.1";
+  version = "10.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,11 +54,20 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-BO7oQ4TVuZ4dCtROq2M24V6HVo0jzyBdQfb67dYA07U=";
+    hash = "sha256-oxhpaFW++on3eRXm0anXZDRo6g/X5IflTcZkFF8Kcps=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "aioquic"
+    "cryptography"
+  ];
+
   propagatedBuildInputs = [
-    aioquic-mitmproxy
+    aioquic
     asgiref
     blinker
     brotli
@@ -109,22 +119,14 @@ buildPythonPackage rec {
     "test_get_version"
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
-    "test_integration"
+    "test_commands_exist"
     "test_contentview_flowview"
     "test_flowview"
-    # ValueError: Exceeds the limit (4300) for integer string conversion
-    "test_roundtrip_big_integer"
-    "test_wireguard"
-    "test_commands_exist"
+    "test_integration"
     "test_statusbar"
-    # AssertionError: Playbook mismatch!
-    "test_untrusted_cert"
-    "test_mitmproxy_ca_is_untrusted"
-  ];
-
-  disabledTestPaths = [
-    # teardown of half the tests broken
-    "test/mitmproxy/addons/test_onboarding.py"
+    # FileNotFoundError: [Errno 2] No such file or directory
+    # likely wireguard is also not working in the sandbox
+    "test_wireguard"
   ];
 
   dontUsePytestXdist = true;
@@ -136,6 +138,6 @@ buildPythonPackage rec {
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

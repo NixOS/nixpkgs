@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "2.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "wagtail";
     repo = "Willow";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+ubylc/Zuw3DSSgtTg2dO3Zj0gpTJcLbb1J++caxS7w=";
+    hash = "sha256-g9/v56mdo0sJe5Pl/to/R/kXayaKK3qaYbnnPXpFjXE=";
   };
 
   nativeBuildInputs = [

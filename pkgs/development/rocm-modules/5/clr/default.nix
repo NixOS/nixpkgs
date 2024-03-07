@@ -88,6 +88,11 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  patches = [
+    ./add-missing-operators.patch
+    ./static-functions.patch
+  ];
+
   postPatch = ''
     patchShebangs hipamd/src
 

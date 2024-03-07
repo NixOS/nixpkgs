@@ -57,8 +57,8 @@ mixRelease rec {
           src = fetchFromGitHub {
             owner = "danhper";
             repo = "elixir-web-push-encryption";
-            rev = "70f00d06cbd88c9ac382e0ad2539e54448e9d8da";
-            sha256 = "sha256-b4ZMrt/8n2sPUFtCDRTwXS1qWm5VlYdbx8qC0R0boOA=";
+            rev = "6e143dcde0a2854c4f0d72816b7ecab696432779";
+            sha256 = "sha256-Da+/28SPZuUQBi8fQj31zmMvhMrYUaQIW4U4E+mRtMg=";
           };
           beamDeps = with final; [ httpoison jose ];
         };

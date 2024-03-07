@@ -1,26 +1,25 @@
 { ffmpeg_6-full
-, chromaprint
 , fetchFromGitHub
 , lib
 }:
 
 ffmpeg_6-full.overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
-  version = "6.0.1-1";
+  version = "6.0.1-3";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-LMwGxx++z6TpZLnpeRGraid4653Mp8T4pY5EP4Z7GXY=";
+    hash = "sha256-UINiXO61nB/AL0HJJy7G7emujakk/mQv81aUioyJz0Y=";
   };
 
-  buildInputs = old.buildInputs ++ [ chromaprint ];
+  # Clobber upstream patches as they don't apply to the Jellyfin fork
+  patches = [];
 
   configureFlags = old.configureFlags ++ [
     "--extra-version=Jellyfin"
     "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
-    "--enable-chromaprint"
   ];
 
   postPatch = ''

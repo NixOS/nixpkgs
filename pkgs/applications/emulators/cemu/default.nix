@@ -31,15 +31,28 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+let
+  # cemu doesn't build with imgui 1.90.2 or newer:
+  # error: 'struct ImGuiIO' has no member named 'ImeWindowHandle'
+  imgui' = imgui.overrideAttrs rec {
+    version = "1.90.1";
+    src = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      rev = "v${version}";
+      sha256 = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+    };
+  };
+
+in stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-61";
+  version = "2.0-66";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-oKVVBie3Q3VtsHbh0wJfdlx1YnF424hib8mFRYnbgXY=";
+    hash = "sha256-1s1H2rJuN9lRNanKXxKWMLBOFg5z3IwpJCZCmymAH9Y=";
   };
 
   patches = [
@@ -67,7 +80,7 @@ stdenv.mkDerivation rec {
     glm
     gtk3
     hidapi
-    imgui
+    imgui'
     libpng
     libusb1
     libzip
@@ -95,7 +108,7 @@ stdenv.mkDerivation rec {
     tag = last (splitString "-" version);
   in ''
     rm -rf dependencies/imgui
-    ln -s ${imgui}/include/imgui dependencies/imgui
+    ln -s ${imgui'}/include/imgui dependencies/imgui
     substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
     substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
   '';

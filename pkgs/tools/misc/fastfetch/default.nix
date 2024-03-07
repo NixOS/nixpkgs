@@ -9,72 +9,98 @@
 , ddcutil
 , glib
 , imagemagick_light
+, libXrandr
 , libglvnd
 , libpulseaudio
+, libselinux
+, libsepol
 , libxcb
-, libXrandr
 , makeBinaryWrapper
 , networkmanager
 , nix-update-script
 , ocl-icd
 , opencl-headers
 , pciutils
+, pcre
+, pcre2
 , pkg-config
+, python3
 , rpm
 , sqlite
 , testers
+, util-linux
 , vulkan-loader
 , wayland
 , xfce
+, xorg
 , yyjson
 , zlib
+, rpmSupport ? false
+, vulkanSupport ? true
+, waylandSupport ? true
+, x11Support ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.5.0";
+  version = "2.8.7";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-W/6Ye7IJi46SKPY9gnvHNRYwTwxGCJ6oY3KVPzcFvNM=";
+    hash = "sha256-lJRTw8Z//x6tMpwfwSodTz7aVbnJPt3rac7AudqF+DA=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     cmake
     makeBinaryWrapper
     pkg-config
+    python3
   ];
 
   buildInputs = [
     chafa
     imagemagick_light
+    pcre
+    pcre2
     sqlite
     yyjson
-  ]
-  ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     dbus
     dconf
     ddcutil
     glib
-    libglvnd
     libpulseaudio
-    libxcb
-    libXrandr
+    libselinux
+    libsepol
     networkmanager
     ocl-icd
     opencl-headers
     pciutils
-    rpm
-    vulkan-loader
-    wayland
-    xfce.xfconf
+    util-linux
     zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+  ] ++ lib.optionals rpmSupport [
+    rpm
+  ] ++ lib.optionals vulkanSupport [
+    vulkan-loader
+  ] ++ lib.optionals waylandSupport [
+    wayland
+  ] ++ lib.optionals x11Support [
+    libXrandr
+    libglvnd
+    libxcb
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.libXext
+  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin)) [
+    xfce.xfconf
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Apple80211
     AppKit
+    AVFoundation
     Cocoa
     CoreDisplay
     CoreVideo
@@ -88,13 +114,21 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
-    "-DENABLE_SYSTEM_YYJSON=YES"
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=uninitialized"
+    (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
+    (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
+    (lib.cmakeBool "ENABLE_DRM" false)
+    (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
+    (lib.cmakeBool "ENABLE_OSMESA" false)
+    (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
+    (lib.cmakeBool "ENABLE_GLX" x11Support)
+    (lib.cmakeBool "ENABLE_RPM" rpmSupport)
+    (lib.cmakeBool "ENABLE_VULKAN" x11Support)
+    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_X11" x11Support)
+    (lib.cmakeBool "ENABLE_XCB" x11Support)
+    (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
+    (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.isDarwin)))
+    (lib.cmakeBool "ENABLE_XRANDR" x11Support)
   ];
 
   postInstall = ''

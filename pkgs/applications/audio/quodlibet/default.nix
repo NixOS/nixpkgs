@@ -171,6 +171,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ coroa paveloom pbogdan ];
+    maintainers = with maintainers; [ coroa pbogdan ];
   };
 }

@@ -9835,7 +9835,7 @@ with self; {
     meta = {
       description = "File locking with fcntl(2)";
       license = with lib.licenses; [ artistic1 ];
-      maintainers = with maintainers; [ ajs124 das_j ];
+      maintainers = with maintainers; [ das_j ];
     };
   };
 
@@ -13563,10 +13563,10 @@ with self; {
 
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.7";
+    version = "0.8.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      hash = "sha256-JdqdlEB3newNrdTMLUIn6Oq4dDfAcZh3J03PuQakzHk=";
+      hash = "sha256-fSu+LOJSuvhro/OIzQ3sOqSDj0nWErnsfMT/iBBbrcw=";
     };
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
@@ -13595,7 +13595,7 @@ with self; {
       homepage = "https://dlmf.nist.gov/LaTeXML/";
       license = with lib.licenses; [ publicDomain ];
       maintainers = with maintainers; [ xworld21 ];
-      mainProgram = "latexml";
+      mainProgram = "latexmlc";
     };
   };
 
@@ -19983,6 +19983,19 @@ with self; {
     };
   };
 
+  ParseWin32Registry = buildPerlPackage {
+    pname = "ParseWin32Registry";
+    version = "1.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMACFARLA/Parse-Win32Registry-1.1.tar.gz";
+      hash = "sha256-wWOyAr5q17WPSEZJT/crjJqXloPKmU5DgOmsZWTcBbo=";
+    };
+    meta = with lib; {
+      description = "Module for parsing Windows Registry files";
+      license = with licenses; [ artistic1 gpl1Only ];
+    };
+  };
+
   ParseEDID = buildPerlPackage {
     pname = "Parse-Edid";
     version = "1.0.7";
@@ -22426,6 +22439,13 @@ with self; {
       url = "mirror://cpan/authors/id/F/FR/FRACTAL/Session-Token-1.503.tar.gz";
       hash = "sha256-MsPflu9FXHGHA2Os2VDdxPvISMWU9LxVshtEz5efeaE=";
     };
+    patches = [
+      # Add final null-byte to tokens. https://github.com/hoytech/Session-Token/pull/3
+      (fetchpatch {
+        url = "https://github.com/hoytech/Session-Token/commit/cd64e7b69986054bb715755290811308159b7959.patch";
+        hash = "sha256-nMQmdvVQW8cQYO0+bLJcdVfSOLVIsongk+71fQ7fQdU=";
+      })
+    ];
     meta = {
       description = "Secure, efficient, simple random session token generation";
       homepage = "https://github.com/hoytech/Session-Token";
@@ -23907,12 +23927,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "9.8.0";
+    version = "10.0.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-xLrqD1fFbDYS4HH85vYCeaKZeNwXQpjPXfGpJCFumg8=";
+      hash = "sha256-FK2SaerA/GB0ZAg/QXG9Ig1Cvpg6v9lh1sKPjYU52M8=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

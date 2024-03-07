@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mdformat-toc";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
   ];
 

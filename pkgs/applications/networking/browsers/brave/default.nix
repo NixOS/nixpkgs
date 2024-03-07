@@ -15,6 +15,7 @@
 , gnome
 , gsettings-desktop-schemas
 , gtk3
+, gtk4
 , libX11
 , libXScrnSaver
 , libXcomposite
@@ -71,7 +72,7 @@ let
 
   deps = [
     alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
-    fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11 libGL
+    fontconfig freetype gdk-pixbuf glib gtk3 gtk4 libdrm libX11 libGL
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
@@ -86,17 +87,18 @@ let
   enableFeatures = optionals enableVideoAcceleration [ "VaapiVideoDecoder" "VaapiVideoEncoder" ]
     ++ optional enableVulkan "Vulkan";
 
+  disableFeatures = [ "OutdatedBuildDetector" ] # disable automatic updates
     # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
-  disableFeatures = optional enableVideoAcceleration "UseChromeOSDirectVideoDecoder";
+    ++ optionals enableVideoAcceleration  [ "UseChromeOSDirectVideoDecoder" ];
 in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.61.114";
+  version = "1.63.165";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    hash = "sha256-AVL08Npg1nuvFJrd3rC2rCZeoLnPuQsgpvf2R623c6Y=";
+    hash = "sha256-UyzOV6sUv7WdwN31TIg35HGchrUSXnvzk3Aba/d8dJc=";
   };
 
   dontConfigure = true;
@@ -111,7 +113,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    glib gsettings-desktop-schemas gtk3
+    glib gsettings-desktop-schemas gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme

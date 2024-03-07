@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , desktop-file-utils
 , SDL
@@ -8,14 +9,22 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfxr";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://www.drpetter.se/files/sfxr-sdl-${version}.tar.gz";
+    url = "http://www.drpetter.se/files/sfxr-sdl-${finalAttrs.version}.tar.gz";
     sha256 = "0dfqgid6wzzyyhc0ha94prxax59wx79hqr25r6if6by9cj4vx4ya";
   };
+
+  patches = [
+    # Fix segfault
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/sfxr/raw/223e58e68857c2018ced635e8209bb44f3616bf8/f/sfxr-sdl-gcc8x.patch";
+      hash = "sha256-etn4AutkNrhEDH9Ep8MhH9JSJEd7V/JXwjQua5uhAmg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile --replace "usr/" ""
@@ -53,5 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
   };
-}
-
+})

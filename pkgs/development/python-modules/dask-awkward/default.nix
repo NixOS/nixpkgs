@@ -1,19 +1,26 @@
 { lib
 , awkward
 , buildPythonPackage
+, cachetools
 , dask
+, dask-histogram
+, distributed
 , fetchFromGitHub
 , hatch-vcs
 , hatchling
+, hist
+, pandas
 , pyarrow
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, typing-extensions
+, uproot
 }:
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.1.0";
+  version = "2024.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +29,7 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-LxkiEQDHuVCRUoYgRwvMgBff22mzOvPmDoqczRweWB8=";
+    hash = "sha256-Lkbp/XrDHOekMpT71pbxtuozgzU9iiGF2GJZ+tuV/yM=";
   };
 
   pythonRelaxDeps = [
@@ -37,13 +44,25 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     awkward
+    cachetools
     dask
+    typing-extensions
   ];
 
+  passthru.optional-dependencies = {
+    io = [
+      pyarrow
+    ];
+  };
+
   checkInputs = [
+    dask-histogram
+    distributed
+    hist
+    pandas
     pytestCheckHook
-    pyarrow
-  ];
+    uproot
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "dask_awkward"
@@ -54,6 +73,8 @@ buildPythonPackage rec {
     "test_remote_double"
     "test_remote_single"
     "test_from_text"
+    # ValueError: not a ROOT file: first four bytes...
+    "test_basic_root_works"
   ];
 
   meta = with lib; {

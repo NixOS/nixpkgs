@@ -54,11 +54,18 @@ in python.pkgs.buildPythonApplication rec {
     owner  = "ManimCommunity";
     repo = "manim";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TI7O0b1JvUZAxTj6XfpAJKhbGqrGnhcrE9eRJUVx4GM=";
+    hash = "sha256-TI7O0b1JvUZAxTj6XfpAJKhbGqrGnhcrE9eRJUVx4GM=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "cloup"
+    "pillow"
+    "skia-pathops"
   ];
 
   patches = [
@@ -67,8 +74,7 @@ in python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" "" \
-      --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
+      --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" ""
   '';
 
   buildInputs = [ cairo ];

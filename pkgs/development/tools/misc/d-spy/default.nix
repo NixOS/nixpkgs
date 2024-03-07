@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "d-spy";
+      versionPolicy = "odd-unstable";
     };
   };
 

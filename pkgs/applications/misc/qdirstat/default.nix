@@ -4,13 +4,13 @@
 
 let
   pname = "qdirstat";
-  version = "1.8.1";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yWv41iWtdTdlFuvLHKCbwmnSXq7Z5pIJq28GMDltdxM=";
+    sha256 = "sha256-pwdmltHDNwUMx1FNOoiXl5Pna0zlKqahmicBCN6UVSU=";
   };
 in
 

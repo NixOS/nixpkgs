@@ -362,7 +362,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.11.0";
+    version = "3.11.4";
 
     lispLibs = (with super; [
       alexandria
@@ -456,12 +456,14 @@ let
       nclasses
       nfiles
       cl-containers
+      # remove this override after quicklisp one is updated.
+      # Because of building failure with new sbcl, the slime version is different from the nyxt pinned one
       (swank.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
           owner = "slime";
           repo = "slime";
-          rev = "735258a26bb97e85d25f39e4bef83c1f80c12f5d";
-          hash = "sha256-vMMer6qLJDKTwNE3unsOQezujISqFtn2AYl8cxsJvrc=";
+          rev = "v2.29.1";
+          hash = "sha256-5hNB5XxbTER4HX3dn4umUGnw6UeiTQkczmggFz4uWoE=";
         };
         systems = [ "swank" "swank/exts" ];
       }))
@@ -470,8 +472,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.11.0";
-      hash = "sha256-Nw2r3FdqwxHlq8CrZo7Z423xe0rR5zu+U4dDPdG880M=";
+      rev = "3.11.4";
+      hash = "sha256-5LhpcuQTioOXZtzwN9B1vWo/xsYXxn9fSKRCdhSPM7A=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -507,7 +509,7 @@ let
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
-      rm -v $out/nyxt
+      rm -fv $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \

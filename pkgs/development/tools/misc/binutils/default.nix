@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
      # this patch is from debian:
      # https://sources.debian.org/data/main/b/binutils/2.38-3/debian/patches/mips64-default-n64.diff
      (if stdenv.targetPlatform.isMusl
-      then substitute { src = ./mips64-default-n64.patch; replacements = [ "--replace" "gnuabi64" "muslabi64" ]; }
+      then substitute { src = ./mips64-default-n64.patch; substitutions = [ "--replace" "gnuabi64" "muslabi64" ]; }
       else ./mips64-default-n64.patch)
   # This patch fixes a bug in 2.40 on MinGW, which breaks DXVK when cross-building from Darwin.
   # See https://sourceware.org/bugzilla/show_bug.cgi?id=30079
