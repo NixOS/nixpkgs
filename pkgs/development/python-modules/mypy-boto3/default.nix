@@ -397,7 +397,7 @@ rec {
 
   mypy-boto3-kendra-ranking = buildMypyBoto3Package "kendra-ranking" "1.34.0" "sha256-hbemz5ECtfP3oi645lZT7CCx31yg8MNqbAD32Am6l1U=";
 
-  mypy-boto3-keyspaces = buildMypyBoto3Package "keyspaces" "1.34.0" "sha256-Hii5uKPqWNwm/dRYFtdQni1F+WsAB49yeY+cjaJsMH4=";
+  mypy-boto3-keyspaces = buildMypyBoto3Package "keyspaces" "1.34.45" "sha256-Ucmttfi8oQIPpdfr3KPvrX1Tj3zbYxHGoYH0JNYX5UM=";
 
   mypy-boto3-kinesis = buildMypyBoto3Package "kinesis" "1.34.0" "sha256-9ATnW63Vl36fCXQbdpuIiIVL3UEcYxNEaGq4ie/ph0E=";
 
