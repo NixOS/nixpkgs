@@ -1,13 +1,15 @@
 { lib
 , buildPythonPackage
+, cython
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "indexed_bzip2";
   version = "1.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -15,6 +17,8 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-3HUiigZR91/nbOAMOuSHGcPtqkkEaj3VepyMhmKOHpI=";
   };
+
+  nativeBuildInputs = [ cython setuptools ];
 
   # has no tests
   doCheck = false;
