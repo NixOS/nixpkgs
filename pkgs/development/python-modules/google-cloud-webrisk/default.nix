@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-webrisk";
-  version = "1.14.2";
+  version = "1.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5bRZRPVN6PtAI3yX5ogtxkDeHmz8mSE8ofz8k+VRLkY=";
+    hash = "sha256-VrfIVy3qGEMfFUiJ27zZPjBaWIPZX/qraga/+FfJol4=";
   };
 
   nativeBuildInputs = [

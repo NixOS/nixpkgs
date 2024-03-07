@@ -210,11 +210,11 @@ buildDotnetGlobalTool {
 
   nugetSha256 = "sha256-ZG2HFyKYhVNVYd2kRlkbAjZJq88OADe3yjxmLuxXDUo=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cmd.petabridge.com/index.html";
     changelog = "https://cmd.petabridge.com/articles/RELEASE_NOTES.html";
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
   };
 }
 ```

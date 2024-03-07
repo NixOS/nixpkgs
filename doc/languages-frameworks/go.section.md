@@ -51,11 +51,11 @@ pet = buildGoModule rec {
 
   vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple command-line snippet manager, written in Go";
     homepage = "https://github.com/knqyf263/pet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }
 ```

@@ -12,7 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UgtJnZF/YtD54OBy9HzGRAEHx5tC9Wo2YcUidGwrv+s=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   doCheck = true;
 

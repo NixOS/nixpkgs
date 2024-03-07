@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "natemaia";
     repo = "dk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AzvpvcH0S8WJNzYXMwvF6CIRDXnh/c6B8g2iWDQI6Qw=";
+    hash = "sha256-wuEsfzy4L40tL/Lb5R1jMFa8UAvAqkI3iEd//D7lxGY=";
   };
 
   buildInputs = [

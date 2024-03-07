@@ -80,6 +80,14 @@ final: prev: {
     '';
   };
 
+  grammarly-languageserver = prev.grammarly-languageserver.override (old: {
+    meta = old.meta // {
+      # requires EOL Node.js 16
+      # https://github.com/znck/grammarly/issues/334
+      broken = true;
+    };
+  });
+
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''

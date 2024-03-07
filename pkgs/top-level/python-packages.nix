@@ -3601,7 +3601,7 @@ self: super: with self; {
 
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
-  ecos = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/ecos { });
+  ecos = callPackage ../development/python-modules/ecos { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
 
@@ -4716,9 +4716,9 @@ self: super: with self; {
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
-  gmsh = pkgs.disable-warnings-if-gcc13 (toPythonModule (callPackage ../applications/science/math/gmsh {
+  gmsh = toPythonModule (callPackage ../applications/science/math/gmsh {
     enablePython = true;
-  }));
+  });
 
   gntp = callPackage ../development/python-modules/gntp { };
 
@@ -16477,6 +16477,8 @@ self: super: with self; {
   wifi = callPackage ../development/python-modules/wifi { };
 
   wikipedia = callPackage ../development/python-modules/wikipedia { };
+
+  wikipedia2vec = callPackage ../development/python-modules/wikipedia2vec { };
 
   wikipedia-api = callPackage ../development/python-modules/wikipedia-api { };
 

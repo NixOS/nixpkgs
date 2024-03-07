@@ -188,6 +188,7 @@ with lib.maintainers; {
       ivar
       mdarocha
       corngood
+      ggg
       raphaelr
       jamiemagee
       anpin
@@ -493,6 +494,7 @@ with lib.maintainers; {
     members = [
       aanderse
       cpages
+      dschrempf
       edwtjo
       minijackson
       peterhoeg

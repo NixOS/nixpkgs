@@ -1991,6 +1991,24 @@ runTests {
     }).drvPath;
   };
 
+  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out" "dev"];
+      dev = "test dev";
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta.position = "/hi:23";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
+    expected = derivation;
+  };
+
   testTypeDescriptionInt = {
     expr = (with types; int).description;
     expected = "signed integer";

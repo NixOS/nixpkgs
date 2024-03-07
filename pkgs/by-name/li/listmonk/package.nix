@@ -1,25 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests }:
 
 buildGoModule rec {
   pname = "listmonk";
-  version = "2.5.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${version}";
-    sha256 = "sha256-gCnIblc83CmG1auvYYxqW/xBl6Oy1KHGkqSY/3yIm3I=";
+    sha256 = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
   };
 
-  patches = [
-    # Ensure that listmonk supports Go 1.20
-    (fetchpatch {
-      url = "https://github.com/knadh/listmonk/commit/25513b81044803b104ada63c0be57a913960484e.patch";
-      hash = "sha256-SYACM8r+NgeSWn9VJV4+wkm+6s/MhNGwn5zyc2tw7FU=";
-    })
-  ];
-
-  vendorHash = "sha256-0sgC1+ueZTUCP+7JwI/OKLktfMHQq959GEk1mC0TQgE=";
+  vendorHash = "sha256-XAm2VfX1nHWTuAV2COEn8qrqPNv0xbaWgTYCpjrEfMw=";
 
   nativeBuildInputs = [
     stuffbin
@@ -50,7 +42,7 @@ buildGoModule rec {
       '';
 
   passthru = {
-    frontend = callPackage ./frontend.nix { inherit meta; };
+    frontend = callPackage ./frontend.nix { inherit meta version src; };
     tests = { inherit (nixosTests) listmonk; };
   };
 
