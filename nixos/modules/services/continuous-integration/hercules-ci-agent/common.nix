@@ -50,7 +50,11 @@ in
         Package containing the bin/hercules-ci-agent executable.
       '';
       type = types.package;
-      default = pkgs.hercules-ci-agent;
+      default =
+        # hercules-ci-agent performs its builds through the nix-daemon, so as
+        # long as nix-daemon used and up to date, we can safely use 2.16 for evaluation.
+        # (nix-daemon comes from nix.package; default value is safe)
+        pkgs.hercules-ci-agent_only_safe_with_daemon;
       defaultText = literalExpression "pkgs.hercules-ci-agent";
     };
     settings = mkOption {
