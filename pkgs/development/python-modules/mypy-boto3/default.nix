@@ -97,7 +97,7 @@ rec {
 
   mypy-boto3-arc-zonal-shift = buildMypyBoto3Package "arc-zonal-shift" "1.34.0" "sha256-FhQaiu0Sc4HkkaRuhtgvUBMOgj80DbIBzZLEbZB41Cs=";
 
-  mypy-boto3-athena = buildMypyBoto3Package "athena" "1.34.0" "sha256-tBvQLE3zxj/4y1Yj05DoZ7pJgQxOJom+S5WnOo/afrE=";
+  mypy-boto3-athena = buildMypyBoto3Package "athena" "1.34.23" "sha256-PDvz2+2XcNi/nYkGjOeb8t1JbIN+SxSSifU6sDXoNyc=";
 
   mypy-boto3-auditmanager = buildMypyBoto3Package "auditmanager" "1.34.0" "sha256-22Xkl1A5wzKDpRQcr/lp7gQsDPtQjvjK3nBm5O2ZS+k=";
 
