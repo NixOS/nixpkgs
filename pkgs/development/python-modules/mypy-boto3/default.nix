@@ -135,7 +135,7 @@ rec {
 
   mypy-boto3-cleanrooms = buildMypyBoto3Package "cleanrooms" "1.34.0" "sha256-gucAudT1eWqm/y/gynY7pgBXbs5n7fnzfeSlVQad7HI=";
 
-  mypy-boto3-cloud9 = buildMypyBoto3Package "cloud9" "1.34.0" "sha256-uX7dER+xkJj38UtmtLpg17CAdaUQi6/CVoRzU/J87v0=";
+  mypy-boto3-cloud9 = buildMypyBoto3Package "cloud9" "1.34.24" "sha256-fryD7UfO5cdFS7vMxmZaT9LW4nNSGTQCd3NyD60f9wA=";
 
   mypy-boto3-cloudcontrol = buildMypyBoto3Package "cloudcontrol" "1.34.0" "sha256-81M2llb46sviZ874/vHVaqOU1PvQs+Zdil8bxr1pEWM=";
 
