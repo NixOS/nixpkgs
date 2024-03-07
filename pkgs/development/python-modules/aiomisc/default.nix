@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "aiomisc";
   version = "17.3.48";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -49,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     raven
     setproctitle
-  ] ++ passthru.optional-dependencies.aiohttp
-  ++ passthru.optional-dependencies.cron
-  ++ passthru.optional-dependencies.uvloop;
+  ]  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   passthru.optional-dependencies = {
     aiohttp = [
