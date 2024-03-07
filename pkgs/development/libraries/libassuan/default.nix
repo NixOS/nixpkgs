@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
       GnuPG components.  Both, server and client side functions are
       provided.
     '';
-    homepage = "http://gnupg.org";
+    homepage = "https://gnupg.org/software/libassuan/";
+    changelog = "https://dev.gnupg.org/source/libassuan/browse/master/NEWS;libassuan-${version}";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = [ ];
