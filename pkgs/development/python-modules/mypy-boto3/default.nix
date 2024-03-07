@@ -425,7 +425,7 @@ rec {
 
   mypy-boto3-lex-runtime = buildMypyBoto3Package "lex-runtime" "1.34.0" "sha256-oFUSsfT7RXHRAVUUk014lqPylPa+TZuyNuvHRixIxt8=";
 
-  mypy-boto3-lexv2-models = buildMypyBoto3Package "lexv2-models" "1.34.0" "sha256-tNe2tLSSupXGHp6u65zeYNSciCC2Wbj/R4ZkDKT5cS8=";
+  mypy-boto3-lexv2-models = buildMypyBoto3Package "lexv2-models" "1.34.53" "sha256-xeuLY+rMoqtJc75pf2A/DYcsG86qqsIDO225QIwjlDw=";
 
   mypy-boto3-lexv2-runtime = buildMypyBoto3Package "lexv2-runtime" "1.34.0" "sha256-V1OkUcwFYp8TVS2ASFjARJUrIKAx/9zcfQbQMngU5Uc=";
 
