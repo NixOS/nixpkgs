@@ -73,7 +73,7 @@ rec {
 
   mypy-boto3-appconfig = buildMypyBoto3Package "appconfig" "1.34.0" "sha256-mhA3LnS9upyI89XPjdTOaTKWbHMRF/xIhnYl432s6x4=";
 
-  mypy-boto3-appconfigdata = buildMypyBoto3Package "appconfigdata" "1.34.0" "sha256-W0hEQ5i8Ef+cuAZZ5nBRaJhAzUC/iDqwbB16RXC1dq0=";
+  mypy-boto3-appconfigdata = buildMypyBoto3Package "appconfigdata" "1.34.24" "sha256-pSo1Qw6ZKN0XzERlCRmCtvJEOjgyd+a82t6Q3pPaU8Q=";
 
   mypy-boto3-appfabric = buildMypyBoto3Package "appfabric" "1.34.0" "sha256-wjvOtCvFrj+YPvyqvR8cKIvwvC6x15WeSX6PkNp4OWg=";
 
