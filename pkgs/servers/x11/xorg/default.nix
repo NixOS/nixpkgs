@@ -1278,11 +1278,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXdmcp = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXdmcp";
-    version = "1.1.4";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXdmcp-1.1.4.tar.xz";
-      sha256 = "005dsry6nfqrv32i7gbqn7mxnb2m3pc8fz9lxj2b9w7q2z1mrkid";
+      url = "mirror://xorg/individual/lib/libXdmcp-1.1.5.tar.xz";
+      sha256 = "1312l8x3asib77wgf123w3nbabnky61mb6pnmmqapbf350l259fq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

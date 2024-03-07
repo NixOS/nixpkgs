@@ -181,7 +181,7 @@ mirror://xorg/individual/lib/libXcomposite-0.4.6.tar.xz
 mirror://xorg/individual/lib/libXcursor-1.2.1.tar.xz
 mirror://xorg/individual/lib/libxcvt-0.1.2.tar.xz
 mirror://xorg/individual/lib/libXdamage-1.1.6.tar.xz
-mirror://xorg/individual/lib/libXdmcp-1.1.4.tar.xz
+mirror://xorg/individual/lib/libXdmcp-1.1.5.tar.xz
 mirror://xorg/individual/lib/libXext-1.3.6.tar.xz
 mirror://xorg/individual/lib/libXfixes-6.0.1.tar.xz
 mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2
