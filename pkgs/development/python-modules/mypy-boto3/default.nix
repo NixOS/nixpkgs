@@ -91,7 +91,7 @@ rec {
 
   mypy-boto3-apprunner = buildMypyBoto3Package "apprunner" "1.34.11" "sha256-p4txQ08e6jpYiJmjG/JIXyObXhTnlXB8S5QDtUPUFt0=";
 
-  mypy-boto3-appstream = buildMypyBoto3Package "appstream" "1.34.0" "sha256-wSUalYAu+1FHxM67tZdodL3PqBV4du07p+6yHYRmFNE=";
+  mypy-boto3-appstream = buildMypyBoto3Package "appstream" "1.34.5" "sha256-1m9YDw1fzoe4Y37yW6a1545SR2QGSrr5qbqYfXEax7o=";
 
   mypy-boto3-appsync = buildMypyBoto3Package "appsync" "1.34.0" "sha256-5PjtOGmd/65OE57chi0Uk2rUtd9Dr2i4ZaeSv92AxBo=";
 
