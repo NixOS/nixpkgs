@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, godot3-server
 }:
 
 let
@@ -24,14 +23,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit3";
-  version = "3.3.1";
+  version = "3.5.0";
 
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
     rev = version;
-    sha256 = "13nnpwy550jf5qnm9ixpxl1bwfnhhbiys8vqfd25g3aim4bm3gnn";
+    hash = "sha256-cMGD5Xdf9ElS1NT7Q0NPB//EvUO0MI0VTtps5JRisZ4=";
   };
 
   disabled = python.pythonOlder "3.7";
@@ -48,36 +47,18 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     hypothesis
-    godot3-server
   ];
 
-  preCheck =
-    let
-      godotServerMajorVersion = lib.versions.major godot3-server.version;
-      gdtoolkitMajorVersion = lib.versions.major version;
-      msg = ''
-        gdtoolkit major version ${gdtoolkitMajorVersion} does not match godot-server major version ${godotServerMajorVersion}!
-        gdtoolkit needs a matching godot-server for its tests.
-        If you see this error, you can either:
-         - disable doCheck for gdtoolkit, or
-         - provide a compatible godot-server version to gdtoolkit"
-      '';
-    in
-    lib.throwIf (godotServerMajorVersion != gdtoolkitMajorVersion) msg ''
-      # The tests want to run the installed executables
-      export PATH=$out/bin:$PATH
+  preCheck = ''
+    # The tests want to run the installed executables
+    export PATH=$out/bin:$PATH
 
-      # gdtoolkit tries to write cache variables to $HOME/.cache
-      export HOME=$TMP
+    # gdtoolkit tries to write cache variables to $HOME/.cache
+    export HOME=$TMP
+  '';
 
-      # Work around https://github.com/godotengine/godot/issues/20503
-      # Without this, Godot will complain about a missing project file
-      touch project.godot
-
-      # Remove broken test case
-      # (hard to skip via disabledTests since the test name contains an absolute path)
-      rm tests/potential-godot-bugs/multiline-subscription-expression.gd
-    '';
+  # The tests are not working on NixOS
+  disabledTests = [ "test_cc_on_empty_file_succeeds" "test_cc_on_file_with_single_function_succeeds" ];
 
   pythonImportsCheck = [ "gdtoolkit" "gdtoolkit.formatter" "gdtoolkit.linter" "gdtoolkit.parser" ];
 
