@@ -1,30 +1,35 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, python-crontab
+, case
 , celery
 , cron-descriptor
 , django-timezone-field
-, tzdata
 , ephem
-, pytest-timeout
+, fetchPypi
 , pytest-django
-, case
+, pytest-timeout
 , pytestCheckHook
+, python-crontab
 , pythonOlder
+, setuptools
+, tzdata
 }:
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
   version = "2.6.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-91stEpcx8SFL6Dg+GPrmv+rNtV3/shFs6EkiLAEG+a0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cron-descriptor
