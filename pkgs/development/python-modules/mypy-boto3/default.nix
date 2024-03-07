@@ -549,7 +549,7 @@ rec {
 
   mypy-boto3-personalize-events = buildMypyBoto3Package "personalize-events" "1.34.0" "sha256-dklttvls5In+d9uWONxmhfSOP1TQf+4VMW56JjKICr4=";
 
-  mypy-boto3-personalize-runtime = buildMypyBoto3Package "personalize-runtime" "1.34.0" "sha256-ncMVAU7pwfB1zZ+xAPFNtiIlGimFbsowHugEUrlbybs=";
+  mypy-boto3-personalize-runtime = buildMypyBoto3Package "personalize-runtime" "1.34.20" "sha256-sKEXkOlMb7t4jBQrLLx90wFhCN1R4ZOk8w9kMpKI0os=";
 
   mypy-boto3-pi = buildMypyBoto3Package "pi" "1.34.0" "sha256-97giGYtpINPHxtcUU6cE/mPF0/r6YfLixAdcC/LGKC0=";
 
