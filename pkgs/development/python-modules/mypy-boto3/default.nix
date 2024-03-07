@@ -419,7 +419,7 @@ rec {
 
   mypy-boto3-lakeformation = buildMypyBoto3Package "lakeformation" "1.34.7" "sha256-/IPOF44ohg59XX+lmMbx8WsaHFpBaMH440Wm5jgrKD4=";
 
-  mypy-boto3-lambda = buildMypyBoto3Package "lambda" "1.34.0" "sha256-50wM5UjadHqMbmQ8OdrYqlTWfgV/V3QOx4Cn5WVZBic=";
+  mypy-boto3-lambda = buildMypyBoto3Package "lambda" "1.34.46" "sha256-J1KXlExeNqFws3znAinyHbbdNWFgZ5nxjZbjasXfaHY=";
 
   mypy-boto3-lex-models = buildMypyBoto3Package "lex-models" "1.34.0" "sha256-LkD3CCjJYGwlSYRP0meJUCEdVSGGdSRrL9uBtimX4GU=";
 
