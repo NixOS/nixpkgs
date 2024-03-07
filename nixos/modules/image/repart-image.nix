@@ -3,6 +3,7 @@
 
 { lib
 , runCommand
+, runCommandLocal
 , python3
 , black
 , ruff
@@ -50,6 +51,11 @@ let
     mypy --strict $out
   '';
 
+  amendedRepartDefinitions = runCommandLocal "amended-repart.d" {} ''
+    definitions=$(${amendRepartDefinitions} ${partitions} ${definitionsDirectory})
+    cp -r $definitions $out
+  '';
+
   fileSystemToolMapping = {
     "vfat" = [ dosfstools mtools ];
     "ext4" = [ e2fsprogs.bin ];
@@ -74,28 +80,37 @@ in
 
 runCommand imageFileBasename
 {
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     systemd
     fakeroot
     util-linux
     compressionPkg
   ] ++ fileSystemTools;
-} ''
-  amendedRepartDefinitions=$(${amendRepartDefinitions} ${partitions} ${definitionsDirectory})
 
+  systemdRepartFlags = [
+    "--dry-run=no"
+    "--empty=create"
+    "--size=auto"
+    "--seed=${seed}"
+    "--definitions=${amendedRepartDefinitions}"
+    "--split=${lib.boolToString split}"
+    "--json=pretty"
+  ] ++ lib.optionals (sectorSize != null) [
+    "--sector-size=${toString sectorSize}"
+  ];
+
+  passthru = {
+    inherit amendRepartDefinitions amendedRepartDefinitions;
+  };
+} ''
   mkdir -p $out
   cd $out
 
   echo "Building image with systemd-repart..."
   unshare --map-root-user fakeroot systemd-repart \
-    --dry-run=no \
-    --empty=create \
-    --size=auto \
-    --seed="${seed}" \
-    --definitions="$amendedRepartDefinitions" \
-    --split="${lib.boolToString split}" \
-    --json=pretty \
-    ${lib.optionalString (sectorSize != null) "--sector-size=${toString sectorSize}"} \
+    ''${systemdRepartFlags[@]} \
     ${imageFileBasename}.raw \
     | tee repart-output.json
 
