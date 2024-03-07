@@ -33,6 +33,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/mxmlnkn/rapidgzip/blob/rapidgzip-v${version}/python/rapidgzip/CHANGELOG.md";
     license = licenses.mit; # dual MIT and asl20, https://internals.rust-lang.org/t/rationale-of-apache-dual-licensing/8952
     maintainers = with lib.maintainers; [ mxmlnkn ];
-    platforms = platforms.all;
   };
 }
