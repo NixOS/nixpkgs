@@ -453,7 +453,7 @@ rec {
 
   mypy-boto3-macie = buildMypyBoto3Package "macie" "1.28.36" "sha256-T7zd6G5Z4fz1/ZiCOwf+kWbXWCy35JaE3f2OUpWGNpE=";
 
-  mypy-boto3-macie2 = buildMypyBoto3Package "macie2" "1.34.0" "sha256-5PO/Zcpo7e1crJTprlKVGYTlzRxZ+0ShNRLLVVjQ5GA=";
+  mypy-boto3-macie2 = buildMypyBoto3Package "macie2" "1.34.20" "sha256-erqa/ptOBMd8x+N1A6ibSULfBH75gEWsKDd/jhc/9tg=";
 
   mypy-boto3-managedblockchain = buildMypyBoto3Package "managedblockchain" "1.34.0" "sha256-gUPuS8/ygIdsfCx6S1zpxP936Ah0o5BT4TaDiEW4wPQ=";
 
