@@ -575,7 +575,7 @@ rec {
 
   mypy-boto3-qldb-session = buildMypyBoto3Package "qldb-session" "1.34.0" "sha256-JHePiaFCfIJPxZzvC1U38xrBGkDvB9+yKwPecaZl7BY=";
 
-  mypy-boto3-quicksight = buildMypyBoto3Package "quicksight" "1.34.0" "sha256-mhGxgfq/DDcmfuEcKTKm/9aq8jxICSqubJhiW36/YgU=";
+  mypy-boto3-quicksight = buildMypyBoto3Package "quicksight" "1.34.53" "sha256-aN1W1Hu/gyV181x68VNkbBp2Ua4jpJB3H/vmQ0HO1Nw=";
 
   mypy-boto3-ram = buildMypyBoto3Package "ram" "1.34.0" "sha256-9sOspEfirpVQ8cT9ILUSWypxBswpAD75A0hHRV7glNg=";
 
