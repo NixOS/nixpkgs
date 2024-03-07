@@ -20,7 +20,9 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 spotify-backup.py $out/bin/spotify-backup
+    runHook postInstall
   '';
 
   meta = with lib; {
