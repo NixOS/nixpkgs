@@ -11,12 +11,13 @@
 , pynacl
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "bip-utils";
   version = "2.9.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-qK1jSVfkebB9JM0sZjOu7ABc7xMrcybu1r7oQOw3bJo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ecdsa
