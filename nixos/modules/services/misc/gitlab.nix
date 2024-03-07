@@ -1581,7 +1581,7 @@ in {
         gnutar
         gzip
         openssh
-        gitlab-workhorse
+        cfg.packages.gitlab-workhorse
       ];
       serviceConfig = {
         Type = "simple";
