@@ -239,7 +239,7 @@ rec {
 
   mypy-boto3-docdb = buildMypyBoto3Package "docdb" "1.34.13" "sha256-oh6mrgHSr64TK/iYypOYZtqEEFtNfaIWpqj6sFatP18=";
 
-  mypy-boto3-docdb-elastic = buildMypyBoto3Package "docdb-elastic" "1.34.0" "sha256-7LeK49HTNBf4AZ6Lba0N42/6oTEh6RopgMHm+TfdY5k=";
+  mypy-boto3-docdb-elastic = buildMypyBoto3Package "docdb-elastic" "1.34.53" "sha256-sNoS7ujT0rMi4WAFXwIfwkoGP3c88+l6cW7eliHheJ4=";
 
   mypy-boto3-drs = buildMypyBoto3Package "drs" "1.34.0" "sha256-AFAsrg/ZByd39VCotrmgvVsbtccl6+o0kxRB7vPjQDM=";
 
