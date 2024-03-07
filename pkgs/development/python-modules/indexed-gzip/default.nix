@@ -33,6 +33,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/pauldmccarthy/indexed_gzip";
     license = licenses.zlib;
     maintainers = with lib.maintainers; [ mxmlnkn ];
-    platforms = platforms.all;
   };
 }
