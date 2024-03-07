@@ -615,7 +615,7 @@ rec {
 
   mypy-boto3-route53domains = buildMypyBoto3Package "route53domains" "1.34.40" "sha256-N81sytOFacuG3pHSk35QbxVxUVEZUx8DK4Y7uUonyh4=";
 
-  mypy-boto3-route53resolver = buildMypyBoto3Package "route53resolver" "1.34.0" "sha256-RnMZIG4PDcZZX34oZMs+I3uCWaJ2XcxVqB7GNvmrqFA=";
+  mypy-boto3-route53resolver = buildMypyBoto3Package "route53resolver" "1.34.15" "sha256-ER9jhGIeEeHc0llpy4aqRnI9iFfubJFIik04gB81vr0=";
 
   mypy-boto3-rum = buildMypyBoto3Package "rum" "1.34.0" "sha256-T2OTu4dpOqZq+sxoU/nyXQXNxW6KbIFjIE3+VtfSEwg=";
 
