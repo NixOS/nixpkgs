@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Secure ACME/Let's Encrypt client";
-    homepage = "https://sr.ht/~graywolf/acme-client-portable/";
+    homepage = "https://git.wolfsden.cz/acme-client-portable";
     platforms = platforms.unix;
     license = licenses.isc;
     maintainers = with maintainers; [ pmahoney ];
