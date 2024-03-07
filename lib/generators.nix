@@ -16,8 +16,6 @@
 { lib }:
 with (lib).trivial;
 let
-  libAttr = lib.attrsets;
-
   inherit (builtins)
     addErrorContext
     attrNames
@@ -143,7 +141,7 @@ rec {
       mkLines = if listsAsDuplicateKeys
         then k: v: map (mkLine k) (if isList v then v else [v])
         else k: v: [ (mkLine k v) ];
-  in attrs: concatStrings (concatLists (libAttr.mapAttrsToList mkLines attrs));
+  in attrs: concatStrings (concatLists (mapAttrsToList mkLines attrs));
 
 
   /* Generate an INI-style config file from an
@@ -178,7 +176,7 @@ rec {
         # map function to string for each key val
         mapAttrsToStringsSep = sep: mapFn: attrs:
           concatStringsSep sep
-            (libAttr.mapAttrsToList mapFn attrs);
+            (mapAttrsToList mapFn attrs);
         mkSection = sectName: sectValues: ''
           [${mkSectionName sectName}]
         '' + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
@@ -399,7 +397,7 @@ rec {
         + outroSpace + "]"
     else if isFunction v then
       let fna = functionArgs v;
-          showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
+          showFnas = concatStringsSep ", " (mapAttrsToList
                        (name: hasDefVal: if hasDefVal then name + "?" else name)
                        fna);
       in if fna == {}    then "<function>"
@@ -412,7 +410,7 @@ rec {
       else if v ? type && v.type == "derivation" then
         "<derivation ${v.name or "???"}>"
       else "{" + introSpace
-          + concatStringsSep introSpace (libAttr.mapAttrsToList
+          + concatStringsSep introSpace (mapAttrsToList
               (name: value:
                 "${escapeNixIdentifier name} = ${
                   addErrorContext "while evaluating an attribute `${name}`"
@@ -574,7 +572,7 @@ ${expr "" v}
           "(${v.expr})"
         else if v == { } then
           "{}"
-        else if libAttr.isDerivation v then
+        else if isDerivation v then
           ''"${toString v}"''
         else
           "{${introSpace}${concatItems (
