@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   buildInputs = [ zstd.dev ];
 
+  postPatch = "cython -3 --cplus indexed_zstd/indexed_zstd.pyx";
+
   # has no tests
   doCheck = false;
 
