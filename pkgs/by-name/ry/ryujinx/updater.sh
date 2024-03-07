@@ -54,7 +54,7 @@ if [ -z ${NEW_VERSION+x} ] && [ -z ${COMMIT+x} ]; then
     NEW_VERSION="${BASE_VERSION}.${PATCH_VERSION}"
 fi
 
-OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
+OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
 
 echo "comparing versions $OLD_VERSION -> $NEW_VERSION"
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then

@@ -2,7 +2,6 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, wrapGAppsHook
 , libX11
 , libgdiplus
 , ffmpeg
@@ -10,8 +9,6 @@
 , libsoundio
 , sndio
 , pulseaudio
-, gtk3
-, gdk-pixbuf
 , vulkan-loader
 , libICE
 , libSM
@@ -28,13 +25,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1155"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1217"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "d704bcd93b90c288e6e200378373403525b59220";
-    sha256 = "0vf964rgr5jry8aszzbjm3jh7qd0d8b6rpzibb7b564awzy6kzda";
+    rev = "bc4d99a0786dbcbfde62d3bdeb98ed3d12c94852";
+    sha256 = "00qvwhl18f09lgs94b66kzxyf0pbhwdkcyrsc7vjyv5dl88f5120";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -42,17 +39,7 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-  ];
-
-  buildInputs = [
-    gtk3
-    gdk-pixbuf
-  ];
-
   runtimeDeps = [
-    gtk3
     libX11
     libgdiplus
     SDL2_mixer
@@ -88,13 +75,11 @@ buildDotnetModule rec {
 
   executables = [
     "Ryujinx.Headless.SDL2"
-    "Ryujinx.Ava"
     "Ryujinx"
   ];
 
   makeWrapperArgs = [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
-    "--set GDK_BACKEND x11"
     "--set SDL_VIDEODRIVER x11"
   ];
 
@@ -134,8 +119,8 @@ buildDotnetModule rec {
       2017.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ivar jk ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ivar jk artemist ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "Ryujinx";
   };
 }

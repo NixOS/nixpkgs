@@ -1871,6 +1871,8 @@ let
 
     vorbis = callPackage ../development/ocaml-modules/vorbis { };
 
+    vpl-core = callPackage ../development/ocaml-modules/vpl-core { };
+
     ### W ###
 
     wasm = callPackage ../development/ocaml-modules/wasm { };

@@ -52,6 +52,12 @@ stdenv.mkDerivation rec {
   # Fix installation path for gdk-pixbuf module
   PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
 
+  # Wrong include path in .cmake.  It's a bit difficult to patch because of special characters.
+  postFixup = ''
+    sed '/^  INTERFACE_INCLUDE_DIRECTORIES/s|"[^"]*/include"|"${placeholder "dev"}/include"|' \
+      -i "$dev"/lib/cmake/libheif/libheif-config.cmake
+  '';
+
   passthru.tests = {
     inherit gimp imagemagick imlib2Full imv vips;
   };
