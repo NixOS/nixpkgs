@@ -1,14 +1,16 @@
 { lib
 , buildPythonPackage
+, cython
 , fetchPypi
 , pythonOlder
+, setuptools
 , nasm
 }:
 
 buildPythonPackage rec {
   pname = "rapidgzip";
   version = "0.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-MwT4+wzlNXfDLT/o/oT1iy9cVlFIIXc18r7dg+x5SXY=";
   };
 
-  nativeBuildInputs = [ nasm ];
+  nativeBuildInputs = [ cython nasm setuptools ];
 
   # has no tests
   doCheck = false;
