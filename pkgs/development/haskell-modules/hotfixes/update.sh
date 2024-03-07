@@ -7,4 +7,3 @@ cabal2nix cabal://hercules-ci-api-core >hercules-ci-api-core.nix
 cabal2nix cabal://hercules-ci-cli >hercules-ci-cli.nix
 cabal2nix cabal://hercules-ci-cnix-expr >hercules-ci-cnix-expr.nix
 cabal2nix cabal://hercules-ci-cnix-store >hercules-ci-cnix-store.nix
-cabal2nix cabal://openapi3 >openapi3.nix

@@ -49,5 +49,4 @@ self: super: {
   hercules-ci-cli = self.callPackage ./hotfixes/hercules-ci-cli.nix {};
   hercules-ci-cnix-expr = self.callPackage ./hotfixes/hercules-ci-cnix-expr.nix {};
   hercules-ci-cnix-store = self.callPackage ./hotfixes/hercules-ci-cnix-store.nix {};
-  openapi3 = self.callPackage ./hotfixes/openapi3.nix {};
 }
