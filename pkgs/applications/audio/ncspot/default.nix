@@ -12,6 +12,9 @@
 , withPulseAudio ? false, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMPRIS ? true, withNotify ? true, dbus
+, nix-update-script
+, testers
+, ncspot
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -53,12 +56,22 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withMPRIS "mpris"
     ++ lib.optional withNotify "notify";
 
+  postInstall = ''
+    install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/${pname}.desktop
+    install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/${pname}.png
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = ncspot; };
+  };
+
   meta = with lib; {
     description = "Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes";
     homepage = "https://github.com/hrkfdn/ncspot";
     changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam liff ];
     mainProgram = "ncspot";
   };
 }
