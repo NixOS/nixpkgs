@@ -339,7 +339,7 @@ rec {
 
   mypy-boto3-identitystore = buildMypyBoto3Package "identitystore" "1.34.0" "sha256-OdJsMjraTe4qhpblBOuwr++4QfiMXtaaMHDAEOTBII4=";
 
-  mypy-boto3-imagebuilder = buildMypyBoto3Package "imagebuilder" "1.34.0" "sha256-eDAlL/p9iBVDQyKuDggxdyE3Jz6ch/l5ECn3cNiL9Uo=";
+  mypy-boto3-imagebuilder = buildMypyBoto3Package "imagebuilder" "1.34.57" "sha256-r11JVMvO/IL1d2+fGZoc4nt1JnyUXir38a8i7IsZmLQ=";
 
   mypy-boto3-importexport = buildMypyBoto3Package "importexport" "1.34.0" "sha256-GnIzCaCuRLPdvaAmmID62uY/te1Lx5DFGin2zJuDdAM=";
 
