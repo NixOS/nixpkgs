@@ -651,7 +651,7 @@ rec {
 
   mypy-boto3-securityhub = buildMypyBoto3Package "securityhub" "1.34.20" "sha256-EcLY5SXSN2kJEuo8s2sYJJfq/X78BM1msyI9TfYD7Xw=";
 
-  mypy-boto3-securitylake = buildMypyBoto3Package "securitylake" "1.34.0" "sha256-h5xo9+FzzQvsyvwwFlmVUesHIEkcJQC8/veieACKvS8=";
+  mypy-boto3-securitylake = buildMypyBoto3Package "securitylake" "1.34.53" "sha256-O/RHRoeUYT5DerEXIQ1NL288bcgA6bGdI29sN7WoQac=";
 
   mypy-boto3-serverlessrepo = buildMypyBoto3Package "serverlessrepo" "1.34.0" "sha256-abWCJqFbD/AyPV+7hmY4OlsedFs+p8WpNSXG7hjrj3s=";
 
