@@ -518,6 +518,7 @@ let
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
     asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev ];
+    island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
