@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
   version = "3.5.0";
-  disabled = python3Packages.pythonOlder "3.6";
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dalibo";

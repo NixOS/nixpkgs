@@ -32,16 +32,16 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "3.41.1";
+  version = "3.42.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PbgazRK3+CoJISh1ZXGjxDfbKHY/XqSvVrkpycvPi7c=";
+    hash = "sha256-7MesRCfXr/f2MBokZhraFQqIuOyWCjIDRYZcvzM5Ezc=";
   };
 
   nativeBuildInputs = [

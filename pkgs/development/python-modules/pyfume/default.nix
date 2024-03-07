@@ -8,11 +8,12 @@
 , scipy
 , setuptools
 , simpful
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pyfume";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyFUME";
     inherit version;
-    hash = "sha256-dZKp+BGwOSRlPcaDmY8LRJZEdJA3WaIGcBBOek5ZMf4=";
+    hash = "sha256-8J9qhSaTlb/KiCjegmc8iaGaZOXJ0Pk1EquOTEUUtW0=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     pandas
     scipy
     simpful
+    typing-extensions
   ];
 
   # Module has not test

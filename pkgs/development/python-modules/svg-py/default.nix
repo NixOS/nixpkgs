@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "svg-py";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "orsinium-labs";
     repo = "svg.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-GbXPDYDq6zlsPJ/PAjR6OvarVrp7x3LGhseyTMwY8Dg=";
+    hash = "sha256-rnxznJM3ihuEJrD3ba6uMdGMozIrLw/QyGzA3JPygH4=";
   };
 
   nativeBuildInputs = [

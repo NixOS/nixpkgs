@@ -83,6 +83,9 @@ buildPythonPackage rec {
     "test_sync_download__directory"
     "test_sync_download__system_directory"
     "test_transformer_group__download_grids"
+
+    # proj-data grid required
+    "test_azimuthal_equidistant"
   ];
 
   pythonImportsCheck = [

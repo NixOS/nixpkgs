@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-artifact-registry";
-  version = "1.11.2";
+  version = "1.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5ASS7Lt6F7dWBhc82bW+0FBSDCePax2YF5hr+BAGabs=";
+    hash = "sha256-wsSeFbtZHWXeoiyC2lUUjFE09xkZuu+OtNNb4dHLIM0=";
   };
 
   nativeBuildInputs = [

@@ -193,6 +193,8 @@ self: super: with self; {
 
   aiocurrencylayer = callPackage ../development/python-modules/aiocurrencylayer { };
 
+  aiodhcpwatcher = callPackage ../development/python-modules/aiodhcpwatcher { };
+
   aiodiscover = callPackage ../development/python-modules/aiodiscover { };
 
   aiodns = callPackage ../development/python-modules/aiodns { };
@@ -1935,7 +1937,7 @@ self: super: with self; {
 
   comicon = callPackage ../development/python-modules/comicon { };
 
-  command_runner = callPackage ../development/python-modules/command_runner { };
+  command-runner = callPackage ../development/python-modules/command-runner { };
 
   connect-box = callPackage ../development/python-modules/connect-box { };
 
@@ -4027,7 +4029,7 @@ self: super: with self; {
 
   fastrlock = callPackage ../development/python-modules/fastrlock { };
 
-  fasttext = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/fasttext { });
+  fasttext = callPackage ../development/python-modules/fasttext { };
 
   fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
 

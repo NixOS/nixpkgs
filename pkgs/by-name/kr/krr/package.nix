@@ -18,7 +18,11 @@ python3.pkgs.buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace robusta_krr/__init__.py \
+      --replace-warn '1.7.0-dev' '${version}'
+
     substituteInPlace pyproject.toml \
+      --replace-warn '1.7.0-dev' '${version}' \
       --replace-fail 'aiostream = "^0.4.5"' 'aiostream = "*"' \
       --replace-fail 'kubernetes = "^26.1.0"' 'kubernetes = "*"' \
       --replace-fail 'pydantic = "1.10.7"' 'pydantic = "*"' \
