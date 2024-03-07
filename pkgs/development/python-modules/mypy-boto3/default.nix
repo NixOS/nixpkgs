@@ -165,7 +165,7 @@ rec {
 
   mypy-boto3-codecatalyst = buildMypyBoto3Package "codecatalyst" "1.34.0" "sha256-TsXVy8bx6kaj84PJiNNU+075Tx3WW0mrtZFOyLx9yT4=";
 
-  mypy-boto3-codecommit = buildMypyBoto3Package "codecommit" "1.34.0" "sha256-uxOfWHCeWBYWnNgWaopcJkS0GH/CaW4J4FoXhPvh3VM=";
+  mypy-boto3-codecommit = buildMypyBoto3Package "codecommit" "1.34.6" "sha256-wCw6e7yvMjM+A6jXfB2D4Z+i9s3e/F9Ih/VxD6iiwws=";
 
   mypy-boto3-codedeploy = buildMypyBoto3Package "codedeploy" "1.34.0" "sha256-Sxtcl/fO+A2/s/6O3VC1BPIJ3dDamshEEmKXqyg4fN8=";
 
