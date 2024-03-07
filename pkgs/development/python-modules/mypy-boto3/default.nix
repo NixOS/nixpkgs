@@ -545,7 +545,7 @@ rec {
 
   mypy-boto3-pca-connector-ad = buildMypyBoto3Package "pca-connector-ad" "1.34.0" "sha256-pSGVZPLuj8xcSfLqa+xvf4UL/l2Xb5t43KuXlTCfskc=";
 
-  mypy-boto3-personalize = buildMypyBoto3Package "personalize" "1.34.0" "sha256-pg36s61onSuPDyQeC4otrSEpVxVFwrFwU6NgbOt1fKY=";
+  mypy-boto3-personalize = buildMypyBoto3Package "personalize" "1.34.20" "sha256-1Q+rXczO15oM/KXRLVP8D96HW4nILpxig4stjT1KwuY=";
 
   mypy-boto3-personalize-events = buildMypyBoto3Package "personalize-events" "1.34.0" "sha256-dklttvls5In+d9uWONxmhfSOP1TQf+4VMW56JjKICr4=";
 
