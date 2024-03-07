@@ -185,7 +185,7 @@ rec {
 
   mypy-boto3-cognito-identity = buildMypyBoto3Package "cognito-identity" "1.34.0" "sha256-6UlyNX0a1wG5FR/WHMZOwysikGffNCX6Fo1MYvFuFwM=";
 
-  mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.34.0" "sha256-WVg6clR26IqKS/GhAjK++6wrlzdDpM8Y1hovoTjNoQw=";
+  mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.34.33" "sha256-1YDEVgaXP3atrIezWiR/nhjeXYF/tLQNoPQjyWjvn2E=";
 
   mypy-boto3-cognito-sync = buildMypyBoto3Package "cognito-sync" "1.34.0" "sha256-JTkmpEHwKN5IyoGVs4beVAEOr1fZPxBoYjzNBgjTEY0=";
 
