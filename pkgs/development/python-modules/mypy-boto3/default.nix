@@ -195,7 +195,7 @@ rec {
 
   mypy-boto3-compute-optimizer = buildMypyBoto3Package "compute-optimizer" "1.34.0" "sha256-k/4Ixaf9n4J8Y5ELjuMZ2dn7DgKftmwQZfdHhYDMc6w=";
 
-  mypy-boto3-config = buildMypyBoto3Package "config" "1.34.0" "sha256-Yr0Cp6vDk/+lGc6ehCIncSbNGxexR3t8ZaH7abEc8DI=";
+  mypy-boto3-config = buildMypyBoto3Package "config" "1.34.45" "sha256-LN1CcIOj9cgzSNCvnUVwLRNPXlitHAlt+5jj6wu6i8E=";
 
   mypy-boto3-connect = buildMypyBoto3Package "connect" "1.34.0" "sha256-bAJDjrOQMLJx/iVT8r6nl4x6DGb8vqHeOOVcw4LukOI=";
 
