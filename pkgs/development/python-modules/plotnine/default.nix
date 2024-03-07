@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qhmo1Ckc4OUzWCnjCNQvwsExB98/BCKydMZdB/yfOY0=";
+    hash = "sha256-VgR7T8pDrVMBYqtvTfRmFwW61IREYiRCMXbpCOj/a4Q=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +87,7 @@ buildPythonPackage rec {
     "tests/test_geom_smooth.py"
     "tests/test_geom_text_label.py"
     "tests/test_geom_violin.py"
+    "tests/test_layout.py"
     "tests/test_position.py"
     "tests/test_qplot.py"
     "tests/test_scale_internals.py"
