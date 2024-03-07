@@ -335,7 +335,7 @@ rec {
 
   mypy-boto3-honeycode = buildMypyBoto3Package "honeycode" "1.34.0" "sha256-HNp/STFuMLoO4qyL0iaYeiPpnMV3uzNBNFUDgzrHt9s=";
 
-  mypy-boto3-iam = buildMypyBoto3Package "iam" "1.34.0" "sha256-JIXnU8/hOOzpS6scSYPQ203HbiUxTT/9ub3lxyrRqSw=";
+  mypy-boto3-iam = buildMypyBoto3Package "iam" "1.34.8" "sha256-b69oz4ABgpJGh7ZxGz+a+o2UCtmT8lmjuR5V6CiS1kE=";
 
   mypy-boto3-identitystore = buildMypyBoto3Package "identitystore" "1.34.0" "sha256-OdJsMjraTe4qhpblBOuwr++4QfiMXtaaMHDAEOTBII4=";
 
