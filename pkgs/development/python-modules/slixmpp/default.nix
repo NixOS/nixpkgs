@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
-    changelog = "https://lab.louiz.org/poezio/slixmpp/-/tags/slix-${version}";
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
