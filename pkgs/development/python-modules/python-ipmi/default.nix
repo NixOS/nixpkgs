@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-ipmi";
-  version = "0.5.4";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "kontron";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IXEq3d1nXGEndciQw2MJ1Abc0vmEYez+k6aWGSWEzWA=";
+    hash = "sha256-G5FcFHtyN8bXMjj/yfJgzcfmV1mxQ9lu3GM3XMeTWVU=";
   };
 
   postPatch = ''
