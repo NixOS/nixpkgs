@@ -401,7 +401,7 @@ rec {
 
   mypy-boto3-kinesis = buildMypyBoto3Package "kinesis" "1.34.0" "sha256-9ATnW63Vl36fCXQbdpuIiIVL3UEcYxNEaGq4ie/ph0E=";
 
-  mypy-boto3-kinesis-video-archived-media = buildMypyBoto3Package "kinesis-video-archived-media" "1.34.0" "sha256-QXuYhv4wLd+3X+IG3ynOVVDIVbesn0OiiSojtBC3Hc8=";
+  mypy-boto3-kinesis-video-archived-media = buildMypyBoto3Package "kinesis-video-archived-media" "1.34.10" "sha256-B66x9erx5SlnDmTBpf4izGckF4GysChy+VRXy9tWSf4=";
 
   mypy-boto3-kinesis-video-media = buildMypyBoto3Package "kinesis-video-media" "1.34.0" "sha256-YgkG14UzymthRLg4cga80ZDK9cxZzFBTISmnfTPt8nM=";
 
