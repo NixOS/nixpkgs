@@ -11,10 +11,6 @@
     "clean": "rm -rf node_modules",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts*' --write"
   },
-  "resolutions": {
-    "@types/react": "^17.0.1",
-    "@types/react-dom": "^17.0.1"
-  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -47,6 +43,7 @@
     "@tiptap/react": "^2.0.4",
     "@tiptap/starter-kit": "^2.0.4",
     "@types/lodash": "^4.14.195",
+    "fuse.js": "^7.0.0",
     "jotai": "^2.2.2",
     "lodash": "^4.17.21",
     "lowlight": "^2.9.0",
@@ -54,13 +51,14 @@
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dom": "^18.2.0",
+    "react-idle-timer": "^5.7.2",
     "wouter": "^2.11.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.4.0",
     "@types/node": "^20.4.4",
     "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
+    "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.0.3",
     "prettier": "^3.0.0",
     "typescript": "^5.1.6",
