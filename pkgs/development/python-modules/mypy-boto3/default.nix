@@ -1,9 +1,10 @@
 { lib
 , boto3
 , buildPythonPackage
-, pythonOlder
-, typing-extensions
 , fetchPypi
+, pythonOlder
+, setuptools
+, typing-extensions
 }:
 let
   toUnderscore = str: builtins.replaceStrings [ "-" ] [ "_" ] str;
@@ -12,13 +13,17 @@ let
     buildPythonPackage rec {
       pname = "mypy-boto3-${serviceName}";
       inherit version;
-      format = "setuptools";
+      pyproject = true;
 
       disabled = pythonOlder "3.7";
 
       src = fetchPypi {
         inherit pname version hash;
       };
+
+      nativeBuildInputs = [
+        setuptools
+      ];
 
       propagatedBuildInputs = [
         boto3
