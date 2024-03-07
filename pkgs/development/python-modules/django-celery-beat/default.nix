@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Celery Periodic Tasks backed by the Django ORM";
     homepage = "https://github.com/celery/django-celery-beat";
+    changelog = "https://github.com/celery/django-celery-beat/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };
