@@ -37,6 +37,7 @@ let
     replaceStrings
     split
     tail
+    toJSON
     typeOf
     ;
 
@@ -77,9 +78,6 @@ let
     assertMsg
     gvariant
     ;
-in
-
-rec {
 
   ## -- HELPER FUNCTIONS & DEFAULTS --
 
@@ -302,19 +300,6 @@ rec {
   # for details.
   toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
 
-  /* Generates JSON from an arbitrary (non-function) value.
-    * For more information see the documentation of the builtin.
-    */
-  toJSON = {}: builtins.toJSON;
-
-
-  /* YAML has been a strict superset of JSON since 1.2, so we
-    * use toJSON. Before it only had a few differences referring
-    * to implicit typing rules, so it should work with older
-    * parsers as well.
-    */
-  toYAML = toJSON;
-
   withRecursion =
     {
       /* If this option is not null, the given value will stop evaluating at a certain depth */
@@ -496,7 +481,7 @@ ${expr "" v}
     else if v == null then
       abort "generators.toDhall: cannot convert a null to Dhall"
     else
-      builtins.toJSON v;
+      toJSON v;
 
   /*
    Translate a simple Nix expression to Lua representation with occasional
@@ -566,7 +551,7 @@ ${expr "" v}
     else if v == null then
       "nil"
     else if isInt v || isFloat v || isString v || isBool v then
-      builtins.toJSON v
+      toJSON v
     else if isList v then
       (if v == [ ] then "{}" else
       "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
@@ -580,7 +565,7 @@ ${expr "" v}
           ''"${toString v}"''
         else
           "{${introSpace}${concatItems (
-            mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v
+            mapAttrsToList (key: value: "[${toJSON key}] = ${toLua innerArgs value}") v
             )}${outroSpace}}"
       )
     else
@@ -593,4 +578,37 @@ ${expr "" v}
      mkLuaInline :: String -> AttrSet
   */
   mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
+
+in
+
+# Everything in this attrset is the public interface of the file.
+{
+  inherit
+    mkDconfKeyValue
+    mkKeyValueDefault
+    mkLuaInline
+    mkValueStringDefault
+    toDconfINI
+    toDhall
+    toGitINI
+    toINI
+    toINIWithGlobalSection
+    toKeyValue
+    toLua
+    toPlist
+    toPretty
+    withRecursion
+    ;
+
+  /* Generates JSON from an arbitrary (non-function) value.
+    * For more information see the documentation of the builtin.
+    */
+  toJSON = {}: toJSON;
+
+  /* YAML has been a strict superset of JSON since 1.2, so we
+    * use toJSON. Before it only had a few differences referring
+    * to implicit typing rules, so it should work with older
+    * parsers as well.
+    */
+  toYAML = {}: toJSON;
 }
