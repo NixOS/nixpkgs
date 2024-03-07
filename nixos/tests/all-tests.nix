@@ -730,6 +730,7 @@ in {
   privoxy = handleTest ./privoxy.nix {};
   prometheus = handleTest ./prometheus.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
+  prometheus-kafka-adapter = handleTestOn ["x86_64-linux"] ./prometheus-kafka-adapter.nix {};
   prosody = handleTest ./xmpp/prosody.nix {};
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};

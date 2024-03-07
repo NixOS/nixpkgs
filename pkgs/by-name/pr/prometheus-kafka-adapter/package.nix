@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  passthru.tests.default = nixosTests.prometheus-kafka-adapter;
+
   meta = with lib; {
     description = "Prometheus remote write adapter for Apache Kafka";
     homepage = "https://github.com/Telefonica/prometheus-kafka-adapter";
