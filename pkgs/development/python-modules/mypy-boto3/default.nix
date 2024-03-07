@@ -237,7 +237,7 @@ rec {
 
   mypy-boto3-dms = buildMypyBoto3Package "dms" "1.34.0" "sha256-xGGMtqja+ipLpWRMXO1VzxHqjlaZDZ31p634u5kmyNs=";
 
-  mypy-boto3-docdb = buildMypyBoto3Package "docdb" "1.34.0" "sha256-BuGkdlbgE40NOaa2Uy5ZTa0vdNv7d4OwPI6pTsNsBy4=";
+  mypy-boto3-docdb = buildMypyBoto3Package "docdb" "1.34.13" "sha256-oh6mrgHSr64TK/iYypOYZtqEEFtNfaIWpqj6sFatP18=";
 
   mypy-boto3-docdb-elastic = buildMypyBoto3Package "docdb-elastic" "1.34.0" "sha256-7LeK49HTNBf4AZ6Lba0N42/6oTEh6RopgMHm+TfdY5k=";
 
