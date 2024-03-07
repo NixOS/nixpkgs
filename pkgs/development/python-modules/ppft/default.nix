@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Distributed and parallel Python";
     homepage = "https://ppft.readthedocs.io/";
-    changelog = "https://github.com/uqfoundation/ppft/releases/tag/ppft-${version}";
+    changelog = "https://github.com/uqfoundation/ppft/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
