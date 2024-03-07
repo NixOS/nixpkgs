@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.62";
+  version = "3.3.5";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/calamares/calamares/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-oPvOwqQ4aTdT/BdCIDVhGa1624orGcMXUYqhywJdbdA=";
+    sha256 = "sha256-ZbEda7K6dvx0/tCPqktv5D0aW/SiUisw/EO0QVFobEc=";
   };
 
   patches = lib.optionals nixos-extensions [
