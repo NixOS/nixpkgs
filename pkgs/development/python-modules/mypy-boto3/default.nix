@@ -605,7 +605,7 @@ rec {
 
   mypy-boto3-rolesanywhere = buildMypyBoto3Package "rolesanywhere" "1.34.0" "sha256-U/j/u6pqoHpfNP3GbQ8SZb+qIL842ZcwwdBr1QQhlj0=";
 
-  mypy-boto3-route53 = buildMypyBoto3Package "route53" "1.34.0" "sha256-pXDmqrT5sN7pfkuVStBEC59b9+lLhMuXILiTeWlVFFs=";
+  mypy-boto3-route53 = buildMypyBoto3Package "route53" "1.34.31" "sha256-MtmEtt57vhFRG1O+VnFXFUhSWAQ7JrnV3hBZx4TpOh8=";
 
   mypy-boto3-route53-recovery-cluster = buildMypyBoto3Package "route53-recovery-cluster" "1.34.0" "sha256-1IUmycikAtBBNykch2aj7tI6XLRjN7D56YwJn6QRmIQ=";
 
