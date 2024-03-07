@@ -101,7 +101,7 @@ rec {
 
   mypy-boto3-auditmanager = buildMypyBoto3Package "auditmanager" "1.34.0" "sha256-22Xkl1A5wzKDpRQcr/lp7gQsDPtQjvjK3nBm5O2ZS+k=";
 
-  mypy-boto3-autoscaling = buildMypyBoto3Package "autoscaling" "1.34.0" "sha256-zXvepguIpLfim5EOBOG7Rr86AmW8twHqF+mRj5mkLjs=";
+  mypy-boto3-autoscaling = buildMypyBoto3Package "autoscaling" "1.34.54" "sha256-MGACE7CeturY9BN6Gq3VAvz4TqeoQ/ASlSdbX9LLTbQ=";
 
   mypy-boto3-autoscaling-plans = buildMypyBoto3Package "autoscaling-plans" "1.34.0" "sha256-16siojcxNe5MuSZSRJXPAz2UudJozEEyCYUrsGNDAM8=";
 
