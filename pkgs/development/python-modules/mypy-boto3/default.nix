@@ -481,7 +481,7 @@ rec {
 
   mypy-boto3-mediastore-data = buildMypyBoto3Package "mediastore-data" "1.34.0" "sha256-bYlKkBh7Kq4PsToHQ4+K5B3h8+IwyS+7ngEJ5AALBus=";
 
-  mypy-boto3-mediatailor = buildMypyBoto3Package "mediatailor" "1.34.0" "sha256-PD40mNQDdTmdlbaljPfflhojclRRWgFlE6l66SWpwSM=";
+  mypy-boto3-mediatailor = buildMypyBoto3Package "mediatailor" "1.34.45" "sha256-r1rzW4TQ2pZ/Bw+ina6sSLUTEk9+fakZEWYA5gOxXhY=";
 
   mypy-boto3-medical-imaging = buildMypyBoto3Package "medical-imaging" "1.34.0" "sha256-3lAWDWzf1MjTDh0+HDnewq0Yo3bUuhSGSSKJvJf6k8g=";
 
