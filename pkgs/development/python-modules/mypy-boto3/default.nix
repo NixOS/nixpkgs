@@ -223,7 +223,7 @@ rec {
 
   mypy-boto3-dax = buildMypyBoto3Package "dax" "1.34.0" "sha256-DH5kqV+C4vbZ8fbvAtR93jd5YB22hkYe/xgOF4oru1Y=";
 
-  mypy-boto3-detective = buildMypyBoto3Package "detective" "1.34.0" "sha256-tKVKacFOFqRPbqIXBfbuqD2yC+Mh2cfTxqKFV4tvT1A=";
+  mypy-boto3-detective = buildMypyBoto3Package "detective" "1.34.43" "sha256-VevmUTgN0UKhWAtGfSbQoqAhgv19XiOBBoNNsHfHezg=";
 
   mypy-boto3-devicefarm = buildMypyBoto3Package "devicefarm" "1.34.0" "sha256-X0D4Am4GUDFl703FmdrPcHXihFdzuch/eQBofDTameQ=";
 
