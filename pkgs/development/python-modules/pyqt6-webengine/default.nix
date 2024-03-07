@@ -12,14 +12,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt6_WebEngine";
+  pname = "pyqt6-webengine";
   version = "6.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyQt6_WebEngine";
+    inherit version;
     hash = "sha256-1QuYTD+F5AnmkrFWEychUi1OjPm2wl4M+Sfuot+zlIc=";
   };
 
