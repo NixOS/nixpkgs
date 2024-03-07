@@ -309,7 +309,7 @@ rec {
 
   mypy-boto3-fsx = buildMypyBoto3Package "fsx" "1.34.55" "sha256-XsIX4C8sF1m8jGbwrDWGoV7onHA9tRlI5Dki43bf9FM=";
 
-  mypy-boto3-gamelift = buildMypyBoto3Package "gamelift" "1.34.0" "sha256-O9k5Ve7aZte3gwk2FS9i8k/sRsMKj+HIfI/rk9MlI70=";
+  mypy-boto3-gamelift = buildMypyBoto3Package "gamelift" "1.34.1" "sha256-EUdVrcriXRUqjcyKzyuoIdDTxMSAdyKcnbJ96s/Y8Uc=";
 
   mypy-boto3-gamesparks = buildMypyBoto3Package "gamesparks" "1.28.36" "sha256-6lQXNJ55FYvkFA14rgJGhRMjBHA3YrOybnsKNecX7So=";
 
