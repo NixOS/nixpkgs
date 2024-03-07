@@ -175,7 +175,7 @@ rec {
 
   mypy-boto3-codeguruprofiler = buildMypyBoto3Package "codeguruprofiler" "1.34.0" "sha256-pAZL9m0SHRYiIrXzBf+IeEkQOXS4/6OJqoDI6og3N5s=";
 
-  mypy-boto3-codepipeline = buildMypyBoto3Package "codepipeline" "1.34.0" "sha256-3GNLNY7OYm3bonTrMenNrGiUJiFWEKbv2mBZWMUlTmc=";
+  mypy-boto3-codepipeline = buildMypyBoto3Package "codepipeline" "1.34.43" "sha256-omGtS0+5qBDBxCcKoOM+dsraE22m129zYUJB2yRxBtQ=";
 
   mypy-boto3-codestar = buildMypyBoto3Package "codestar" "1.34.0" "sha256-BAueRLlYZGDiF6DtjxL24twLYYZqD3ErdJ73fsFoG1k=";
 
