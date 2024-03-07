@@ -7,6 +7,11 @@
 let
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   arch = stdenv.hostPlatform.uname.processor;
+  qbePlatform = {
+    x86_64 = "amd64_sysv";
+    aarch64 = "arm64";
+    riscv64 = "rv64";
+  }.${arch};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
@@ -31,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${builtins.placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
+    "QBEFLAGS=-t${qbePlatform}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AS=${stdenv.cc.targetPrefix}as"
+    "LD=${stdenv.cc.targetPrefix}ld"
   ];
 
   strictDeps = true;

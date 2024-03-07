@@ -19962,8 +19962,6 @@ with pkgs;
 
   swiftformat = callPackage ../development/tools/swiftformat { };
 
-  symfony-cli = callPackage ../development/tools/symfony-cli { };
-
   swiftshader = callPackage ../development/libraries/swiftshader { };
 
   systemfd = callPackage ../development/tools/systemfd { };
@@ -40219,7 +40217,14 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
-  nixops_unstable = callPackage ../applications/networking/cluster/nixops { };
+  inherit (callPackages ../applications/networking/cluster/nixops { })
+    nixops_unstable_minimal
+
+    # Not recommended; too fragile
+    nixops_unstable_full;
+
+  # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-aws: ...` to trigger automatically.
+  nixops_unstablePlugins = recurseIntoAttrs nixops_unstable_minimal.availablePlugins;
 
   /*
     Evaluate a NixOS configuration using this evaluation of Nixpkgs.

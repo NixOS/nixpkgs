@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Secure replacement for inetd";
     platforms = lib.platforms.linux;
     homepage = "https://github.com/openSUSE/xinetd";
-    license = lib.licenses.free;
+    license = lib.licenses.xinetd;
     maintainers = with lib.maintainers; [ fgaz ];
   };
 })

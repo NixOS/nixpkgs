@@ -1004,6 +1004,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+   gmailr = old.gmailr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     purrr = old.purrr.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });

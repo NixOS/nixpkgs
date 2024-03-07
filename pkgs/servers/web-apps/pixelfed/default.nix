@@ -10,18 +10,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.11.12";
+  version = "0.11.13";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tHwNchnB5z21Q1I8qwKn2s5rfHFvMxRLAyPkUEhC6qQ=";
+    hash = "sha256-bEwKaC9fSOGLQbjsuPuIdMMbO3kzvzQxWQR8C2A4mQc=";
   };
 
-  vendorHash = "sha256-nRCrmF1p+fZI+iyrM5I3bVCSwjQdn8BSW8Jj62lpn8E=";
-  # Needed because buzz/laravel-h-captcha is pinned to 1.0.4 in composer.json
-  composerStrictValidation = false;
+  vendorHash = "sha256-ahQsOq3qOMGt3b0Ebac4xex+MP9knTmjyCy0PSNE4W8=";
 
   postInstall = ''
     mv "$out/share/php/${finalAttrs.pname}"/* $out
