@@ -28,7 +28,7 @@ let
   ];
 
   extensions = lib.composeManyExtensions ([
-    nonHackagePackages
+    (nonHackagePackages { inherit pkgs haskellLib; })
     (configurationNix { inherit pkgs haskellLib; })
     (configurationCommon { inherit pkgs haskellLib; })
   ] ++ platformConfigurations ++ [
