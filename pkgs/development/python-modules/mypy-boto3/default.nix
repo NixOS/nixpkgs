@@ -563,7 +563,7 @@ rec {
 
   mypy-boto3-pipes = buildMypyBoto3Package "pipes" "1.34.0" "sha256-c/N5SaT4BS0Ldv/P6yi43gB4LzDeqB9y1Xx1UAHf6dU=";
 
-  mypy-boto3-polly = buildMypyBoto3Package "polly" "1.34.0" "sha256-kAbx8YHata0ehTTqI/z3YPB6Px3d0ON1ek3a9aY8amU=";
+  mypy-boto3-polly = buildMypyBoto3Package "polly" "1.34.43" "sha256-rx5sW32N6H47fpy5yGvwlKKVKS/uIKOtLfsjoGoNPJg=";
 
   mypy-boto3-pricing = buildMypyBoto3Package "pricing" "1.34.0" "sha256-qS9ghI37MKtDIdUuzSVJ02CrB6z2PiIsT8ekEDb6oVM=";
 
