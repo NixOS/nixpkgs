@@ -79,7 +79,7 @@ rec {
 
   mypy-boto3-appflow = buildMypyBoto3Package "appflow" "1.34.0" "sha256-XruMwzBrjV7QTHOcHKqszt75cHX+578wbTwFMwyXHzE=";
 
-  mypy-boto3-appintegrations = buildMypyBoto3Package "appintegrations" "1.34.0" "sha256-dh804kGi00kWB2mCj7SPpdDh675A77KkxU9A0TjenmU=";
+  mypy-boto3-appintegrations = buildMypyBoto3Package "appintegrations" "1.34.6" "sha256-iVaOlWOiCeocOJpcsxF0hlzKhGE3iq6Z7OifLWA3kkM=";
 
   mypy-boto3-application-autoscaling = buildMypyBoto3Package "application-autoscaling" "1.34.0" "sha256-xW+Rc6yjDBviNDBDB63ssg0aPZFytaVfrVlA32wY/D4=";
 
