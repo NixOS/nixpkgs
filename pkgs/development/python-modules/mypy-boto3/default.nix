@@ -89,7 +89,7 @@ rec {
 
   mypy-boto3-appmesh = buildMypyBoto3Package "appmesh" "1.34.0" "sha256-AXJ4z/54qPQeHKbZF6Is4OXt9/gZNacmYnLwfxPcn+E=";
 
-  mypy-boto3-apprunner = buildMypyBoto3Package "apprunner" "1.34.0" "sha256-w6gwD3m+nbsVvNaWbBnTjktLfkL08XsawNJWYzEgMLI=";
+  mypy-boto3-apprunner = buildMypyBoto3Package "apprunner" "1.34.11" "sha256-p4txQ08e6jpYiJmjG/JIXyObXhTnlXB8S5QDtUPUFt0=";
 
   mypy-boto3-appstream = buildMypyBoto3Package "appstream" "1.34.0" "sha256-wSUalYAu+1FHxM67tZdodL3PqBV4du07p+6yHYRmFNE=";
 
