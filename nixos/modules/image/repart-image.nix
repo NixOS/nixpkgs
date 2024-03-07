@@ -34,6 +34,7 @@
 , seed
 , definitionsDirectory
 , sectorSize
+, mkfsEnv ? {}
 }:
 
 let
@@ -88,6 +89,8 @@ runCommand imageFileBasename
     util-linux
     compressionPkg
   ] ++ fileSystemTools;
+
+  env = mkfsEnv;
 
   systemdRepartFlags = [
     "--dry-run=no"
