@@ -1115,10 +1115,11 @@ self: super: builtins.intersectAttrs super {
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
+  hercules-ci-cnix-store-nix = pkgs.nixVersions.nix_2_16;
   hercules-ci-cnix-store = overrideCabal
     (old: {
       passthru = old.passthru or { } // {
-        nixPackage = pkgs.nixVersions.nix_2_16;
+        nixPackage = self.hercules-ci-cnix-store-nix;
       };
     })
     (super.hercules-ci-cnix-store.override {
