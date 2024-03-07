@@ -415,7 +415,7 @@ rec {
 
   mypy-boto3-kinesisvideo = buildMypyBoto3Package "kinesisvideo" "1.34.48" "sha256-uYSkwOuYKF3B+sj5IWbDL789Xue2yNY9g14j/2b6k6w=";
 
-  mypy-boto3-kms = buildMypyBoto3Package "kms" "1.34.0" "sha256-0/rxLiZeadSPkzmVqx/TGMaFMAdIAXS82FcXf8BSUpg=";
+  mypy-boto3-kms = buildMypyBoto3Package "kms" "1.34.14" "sha256-fGuTdVCmgdqaYdJcEJY7vhvNw+Qi1NXYFST16mXp0UA=";
 
   mypy-boto3-lakeformation = buildMypyBoto3Package "lakeformation" "1.34.0" "sha256-xIQAyiytQRYcLFWGoEfZJY+4Ga9NeRBuN8MQOZmOypc=";
 
