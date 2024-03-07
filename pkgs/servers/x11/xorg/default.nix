@@ -1238,11 +1238,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcursor = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes, libXrender, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXcursor";
-    version = "1.2.1";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXcursor-1.2.1.tar.xz";
-      sha256 = "011195an3w4xld3x0dr534kar1xjf52q96hmf0hgvfhh2rrl7ha6";
+      url = "mirror://xorg/individual/lib/libXcursor-1.2.2.tar.xz";
+      sha256 = "1vl87819mnhlbnccchysv9nmax4abil5x3cr61x52vn55jyp3l2k";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
