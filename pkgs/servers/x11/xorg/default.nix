@@ -1798,11 +1798,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxcb = callPackage ({ stdenv, pkg-config, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python3, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libxcb";
-    version = "1.16";
+    version = "1.16.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxcb-1.16.tar.xz";
-      sha256 = "0w8xf6ff6axvla734lfb2291hrjrqqhn6mqabvdrdwgvl1m5cj23";
+      url = "mirror://xorg/individual/lib/libxcb-1.16.1.tar.xz";
+      sha256 = "04g3cspag5kkwy7nc77ij9m3xqrmircbcz7wb2rjgq68aiqihkgj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
