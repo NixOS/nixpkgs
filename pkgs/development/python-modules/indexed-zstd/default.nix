@@ -33,6 +33,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/martinellimarco/indexed_zstd";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
-    platforms = platforms.all;
   };
 }
