@@ -43,7 +43,10 @@
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
-stdenv.mkDerivation rec {
+let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+stdenv'.mkDerivation rec {
   pname = "sunshine";
   version = "0.21.0";
 
