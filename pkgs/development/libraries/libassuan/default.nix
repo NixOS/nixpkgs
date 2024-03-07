@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, gettext, npth, libgpg-error, buildPackages }:
+{ fetchurl, lib, stdenv, gettext, npth, libgpg-error, buildPackages, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' $dev/include/assuan.h
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://dev.gnupg.org/source/libassuan.git";
+    rev-prefix = "libassuan-";
+    ignoredVersions = ".*-base";
+  };
 
   meta = with lib; {
     description = "IPC library used by GnuPG and related software";
