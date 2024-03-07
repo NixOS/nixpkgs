@@ -103,9 +103,11 @@ rustPlatform.buildRustPackage {
         libXcursor
       ];
     in
+    # Does not open on wayland without WINIT_UNIX_BACKEND x11 https://gitlab.com/veloren/airshipper/-/issues/35
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/airshipper"
       wrapProgram "$out/bin/airshipper" --set VELOREN_PATCHER "${patch}"
+      wrapProgram "$out/bin/airshipper" --set WINIT_UNIX_BACKEND x11
     '';
 
   doCheck = false;
