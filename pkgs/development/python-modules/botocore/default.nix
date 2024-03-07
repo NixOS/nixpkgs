@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.34.49"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.34.57"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2JQQvGBnPq/xaZ8/H9yw46Xh96agSMDYjDzlw1SUM+w=";
+    hash = "sha256-mlqiA03p8MNntLYakq8PqCf1whr/oZ4KKEg4oULnEIM=";
   };
 
   pythonRelaxDeps = [
