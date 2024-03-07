@@ -216,8 +216,7 @@ rec {
     attrPath:
     # The nested attribute set to find the value in.
     set:
-    let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
-    in attrByPath attrPath (abort errorMsg) set;
+    attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
 
   /* Map each attribute in the given set and merge them into a new attribute set.
 
@@ -746,14 +745,13 @@ rec {
     set:
     let
       recurse = path:
-        let
-          g =
-            name: value:
+        mapAttrs
+          (name: value:
             if isAttrs value && cond value
-              then recurse (path ++ [name]) value
-              else f (path ++ [name]) value;
-        in mapAttrs g;
-    in recurse [] set;
+            then recurse (path ++ [ name ]) value
+            else f (path ++ [ name ]) value);
+    in
+    recurse [ ] set;
 
 
   /* Generate an attribute set by mapping a function over a list of
@@ -885,10 +883,7 @@ rec {
      Type:
        zipAttrs :: [ AttrSet ] -> AttrSet
   */
-  zipAttrs =
-    # List of attribute sets to zip together.
-    sets:
-    zipAttrsWith (name: values: values) sets;
+  zipAttrs = zipAttrsWith (name: values: values);
 
   /*
     Merge a list of attribute sets together using the `//` operator.
@@ -1153,10 +1148,7 @@ rec {
    Type: chooseDevOutputs :: [Derivation] -> [String]
 
   */
-  chooseDevOutputs =
-    # List of packages to pick `dev` outputs from
-    drvs:
-    builtins.map getDev drvs;
+  chooseDevOutputs = builtins.map getDev;
 
   /* Make various Nix tools consider the contents of the resulting
      attribute set when looking for what to build, find, etc.

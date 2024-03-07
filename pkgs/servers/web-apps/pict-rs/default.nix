@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks ];
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   postInstall = ''
     wrapProgram "$out/bin/pict-rs" \
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests) pict-rs; };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A simple image hosting service";
     homepage = "https://git.asonix.dog/asonix/pict-rs";
     license = with licenses; [ agpl3Plus ];
