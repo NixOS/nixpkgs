@@ -16,7 +16,6 @@
 { lib }:
 with (lib).trivial;
 let
-  libStr = lib.strings;
   libAttr = lib.attrsets;
 
   inherit (builtins)
@@ -55,6 +54,16 @@ let
     optionals
     reverseList
     toList
+    ;
+
+  inherit (lib.strings)
+    concatMapStringsSep
+    concatStrings
+    escape
+    escapeNixIdentifier
+    floatToString
+    hasInfix
+    splitString
     ;
 
   inherit (lib.trivial)
@@ -99,7 +108,7 @@ rec {
     # Floats currently can't be converted to precise strings,
     # condition warning on nix version once this isn't a problem anymore
     # See https://github.com/NixOS/nix/pull/3480
-    else if isFloat    v then libStr.floatToString v
+    else if isFloat    v then floatToString v
     else err "this value is" (toString v);
 
 
@@ -115,7 +124,7 @@ rec {
   mkKeyValueDefault = {
     mkValueString ? mkValueStringDefault {}
   }: sep: k: v:
-    "${libStr.escape [sep] k}${sep}${mkValueString v}";
+    "${escape [sep] k}${sep}${mkValueString v}";
 
 
   ## -- FILE FORMAT GENERATORS --
@@ -134,7 +143,7 @@ rec {
       mkLines = if listsAsDuplicateKeys
         then k: v: map (mkLine k) (if isList v then v else [v])
         else k: v: [ (mkLine k v) ];
-  in attrs: libStr.concatStrings (concatLists (libAttr.mapAttrsToList mkLines attrs));
+  in attrs: concatStrings (concatLists (libAttr.mapAttrsToList mkLines attrs));
 
 
   /* Generate an INI-style config file from an
@@ -159,7 +168,7 @@ rec {
    */
   toINI = {
     # apply transformations (e.g. escapes) to section names
-    mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
+    mkSectionName ? (name: escape [ "[" "]" ] name),
     # format a setting line from key and value
     mkKeyValue    ? mkKeyValueDefault {} "=",
     # allow lists as values for duplicate keys
@@ -168,7 +177,7 @@ rec {
     let
         # map function to string for each key val
         mapAttrsToStringsSep = sep: mapFn: attrs:
-          libStr.concatStringsSep sep
+          concatStringsSep sep
             (libAttr.mapAttrsToList mapFn attrs);
         mkSection = sectName: sectValues: ''
           [${mkSectionName sectName}]
@@ -210,7 +219,7 @@ rec {
    */
   toINIWithGlobalSection = {
     # apply transformations (e.g. escapes) to section names
-    mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
+    mkSectionName ? (name: escape [ "[" "]" ] name),
     # format a setting line from key and value
     mkKeyValue    ? mkKeyValueDefault {} "=",
     # allow lists as values for duplicate keys
@@ -244,8 +253,8 @@ rec {
     let
       mkSectionName = name:
         let
-          containsQuote = libStr.hasInfix ''"'' name;
-          sections = libStr.splitString "." name;
+          containsQuote = hasInfix ''"'' name;
+          sections = splitString "." name;
           section = head sections;
           subsections = tail sections;
           subsection = concatStringsSep "." subsections;
@@ -367,8 +376,8 @@ rec {
     else if isString   v then
       let
         lines = filter (v: ! isList v) (split "\n" v);
-        escapeSingleline = libStr.escape [ "\\" "\"" "\${" ];
-        escapeMultiline = libStr.replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
+        escapeSingleline = escape [ "\\" "\"" "\${" ];
+        escapeMultiline = replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
         singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
         multilineResult = let
           escapedLines = map escapeMultiline lines;
@@ -386,7 +395,7 @@ rec {
     else if isList     v then
       if v == [] then "[ ]"
       else "[" + introSpace
-        + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
+        + concatMapStringsSep introSpace (go (indent + "  ")) v
         + outroSpace + "]"
     else if isFunction v then
       let fna = functionArgs v;
@@ -405,7 +414,7 @@ rec {
       else "{" + introSpace
           + concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${
+                "${escapeNixIdentifier name} = ${
                   addErrorContext "while evaluating an attribute `${name}`"
                     (go (indent + "  ") value)
                 };") v)
@@ -436,7 +445,7 @@ rec {
 
     indent = ind: expr "\t${ind}";
 
-    item = ind: libStr.concatMapStringsSep "\n" (indent ind);
+    item = ind: concatMapStringsSep "\n" (indent ind);
 
     list = ind: x: concatStringsSep "\n" [
       (literal ind "<array>")
@@ -542,7 +551,7 @@ ${expr "" v}
 
       generatedBindings =
           assert assertMsg (badVarNames == []) "Bad Lua var names: ${toPretty {} badVarNames}";
-          libStr.concatStrings (
+          concatStrings (
             mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v
             );
 
