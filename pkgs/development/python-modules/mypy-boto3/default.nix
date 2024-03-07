@@ -595,7 +595,7 @@ rec {
 
   mypy-boto3-resiliencehub = buildMypyBoto3Package "resiliencehub" "1.34.0" "sha256-F/ZRCp/M/6kBI4Apb3mISzqe1Zi4Y7gq/vu0dvyyTvM=";
 
-  mypy-boto3-resource-explorer-2 = buildMypyBoto3Package "resource-explorer-2" "1.34.0" "sha256-5CKBpBoU3pZBXD0/Kz69TAM+51zmnd+314Ou1DOdaso=";
+  mypy-boto3-resource-explorer-2 = buildMypyBoto3Package "resource-explorer-2" "1.34.41" "sha256-Q4MCAvEZkYRnDLEF9d8x+FOMUJ9O2eCb2mZr/e8Ut24=";
 
   mypy-boto3-resource-groups = buildMypyBoto3Package "resource-groups" "1.34.0" "sha256-Wz1Oo/Ze6ROHkg5EAas7ZKLOWE6RS+uKpNea79WUrLY=";
 
