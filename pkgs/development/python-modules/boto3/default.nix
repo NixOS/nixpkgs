@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.34.49"; # N.B: if you change this, change botocore and awscli to a matching version
+  version = "1.34.57"; # N.B: if you change this, change botocore and awscli to a matching version
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-/pgbLSL5RJ5RrKUAfQ1QNJykBdICrpqnuziHOVHt1JI=";
+    hash = "sha256-ExKj7NfRp3f+uECOpedlnkSpeF+4XiJwm4GWOpCBJ+M=";
   };
 
   nativeBuildInputs = [
