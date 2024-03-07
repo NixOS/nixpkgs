@@ -23,7 +23,7 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
-  pname = "gdtoolkit";
+  pname = "gdtoolkit_3";
   version = "3.3.1";
 
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
