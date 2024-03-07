@@ -3446,6 +3446,12 @@
     githubId = 1118859;
     name = "Scott Worley";
   };
+  ChlorideCull = {
+    email = "nixrelated@chcl.se";
+    github = "ChlorideCull";
+    githubId = 4977063;
+    name = "Sebastian Johansson";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
