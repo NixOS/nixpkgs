@@ -193,6 +193,8 @@ self: super: with self; {
 
   aiocurrencylayer = callPackage ../development/python-modules/aiocurrencylayer { };
 
+  aiodhcpwatcher = callPackage ../development/python-modules/aiodhcpwatcher { };
+
   aiodiscover = callPackage ../development/python-modules/aiodiscover { };
 
   aiodns = callPackage ../development/python-modules/aiodns { };
