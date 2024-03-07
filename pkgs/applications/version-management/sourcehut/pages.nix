@@ -6,13 +6,13 @@
 
 buildGoModule (rec {
   pname = "pagessrht";
-  version = "0.15.4";
+  version = "0.13.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    hash = "sha256-3kdQVIL7xaIPu2elxj1k+4/y75bd+OKP5+VPSniF7w8=";
+    sha256 = "sha256-vUN6c6cyhcLI8bKrFYKoxlBQ29VS/bowpSfBRmi47wg=";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ buildGoModule (rec {
       --replace "all: server" ""
   '';
 
-  vendorHash = "sha256-DP+6rxjiXzs0RbSuMD20XwO/+v7QXCNgXj2LxZ96lWE=";
+  vendorHash = "sha256-GKuHkUqSVBLN3k8YsFtxdmdHFkqKo9YZqDk2GBmbfWo=";
 
   postInstall = ''
     mkdir -p $out/share/sql/
@@ -31,7 +31,7 @@ buildGoModule (rec {
     homepage = "https://git.sr.ht/~sircmpwn/pages.sr.ht";
     description = "Web hosting service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [ eadwu ];
   };
   # There is no ./loaders but this does not cause troubles
   # to go generate

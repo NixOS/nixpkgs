@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "gitlike-commands";
-  version = "0.3.0";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "unixorn";
     repo = "gitlike-commands";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z0l8nCKov1iMJvI3YTHvg0ey+oPju3rgaKtmk6OX44g=";
+    hash = "sha256-VjweN4gigzCNvg6TccZx2Xw1p7SusKplxUTZjItTQc0=";
   };
 
   nativeBuildInputs = [

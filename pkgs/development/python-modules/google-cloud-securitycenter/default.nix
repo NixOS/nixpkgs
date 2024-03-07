@@ -8,24 +8,19 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.28.0";
-  pyproject = true;
+  version = "1.25.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-80syqWoK2J+CjsBFO6LJEuF+pimJGpufgRLObHSKcAw=";
+    hash = "sha256-SofrNcO5Rir8iQfwjADlUJnGmf1y1xkBG8r6gBVxva4=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     grpc-google-iam-v1

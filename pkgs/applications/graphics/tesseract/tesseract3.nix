@@ -44,6 +44,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ viric erikarvstedt ];
     platforms = with lib.platforms; linux ++ darwin;
-    mainProgram = "tesseract";
   };
 }

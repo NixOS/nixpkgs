@@ -34,11 +34,11 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Simple command line wrapper around JD Core Java Decompiler project";
     homepage = "https://github.com/intoolswetrust/jd-cli";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ majiir ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ majiir ];
   };
 }:
 ```

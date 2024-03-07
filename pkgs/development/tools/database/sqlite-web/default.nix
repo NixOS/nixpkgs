@@ -5,11 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite-web";
-  version = "0.6.3";
+  version = "0.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cDSlSh0vnwvbJZFDPqvJ5oXz68gN9yzodcQYkXUAytE=";
+    sha256 = "17pymadm063358nji70xzma64zkfv26c3pai5i1whsfp9ahqzasg";
   };
 
   propagatedBuildInputs = with python3Packages; [ flask peewee pygments ];

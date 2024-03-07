@@ -21,6 +21,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/shweshi/terminal-stocks";
     maintainers = with maintainers; [ mislavzanic ];
     license = licenses.mit;
-    mainProgram = "terminal-stocks";
   };
 }

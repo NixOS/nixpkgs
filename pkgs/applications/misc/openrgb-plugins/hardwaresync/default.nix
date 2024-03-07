@@ -11,14 +11,14 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "openrgb-plugin-hardwaresync";
   version = "0.9";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBHardwareSyncPlugin";
-    rev = "release_${finalAttrs.version}";
+    rev = "release_${version}";
     hash = "sha256-3sQFiqmXhuavce/6v3XBpp6PAduY7t440nXfbfCX9a0=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.linux;
   };
-})
+}

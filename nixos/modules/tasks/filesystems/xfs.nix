@@ -4,12 +4,12 @@ with lib;
 
 let
 
-  inInitrd = config.boot.initrd.supportedFilesystems.xfs or false;
+  inInitrd = any (fs: fs == "xfs") config.boot.initrd.supportedFilesystems;
 
 in
 
 {
-  config = mkIf (config.boot.supportedFilesystems.xfs or false) {
+  config = mkIf (any (fs: fs == "xfs") config.boot.supportedFilesystems) {
 
     system.fsPackages = [ pkgs.xfsprogs.bin ];
 

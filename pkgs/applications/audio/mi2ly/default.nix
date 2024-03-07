@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     homepage = "https://www.nongnu.org/mi2ly/";
-    mainProgram = "mi2ly";
   };
 }

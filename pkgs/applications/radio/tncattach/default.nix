@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ sarcasticadmin ];
     platforms = platforms.linux;
-    mainProgram = "tncattach";
   };
 }

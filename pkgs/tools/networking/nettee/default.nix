@@ -19,7 +19,6 @@ in stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ Profpatsch ];
     platforms = lib.platforms.linux;
-    mainProgram = "nettee";
   };
 
   outputs = [ "bin" "man" "doc" "out" ];

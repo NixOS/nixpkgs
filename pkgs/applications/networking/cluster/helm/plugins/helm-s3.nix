@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helm-s3";
-  version = "0.16.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "hypnoglow";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0wx8q93y8goXNh2x/XI3FQEXImVTpONURiDW2dCAi6o=";
+    hash = "sha256-D79nUIueOV2FC3I2LreHMzl/xOpzNa+OsfL5wcnyY78=";
   };
 
-  vendorHash = "sha256-i+rWg0/EUes5soFVRu9M5/iktbtudII7Ly5pcnOU2hU=";
+  vendorHash = "sha256-dKKggD/VlBiopt2ygh07+6bTBbRgQfWbiY/1qJSSx/0=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''

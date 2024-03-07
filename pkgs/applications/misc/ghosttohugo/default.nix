@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/jbarone/ghostToHugo";
     license = licenses.mit;
     maintainers = with maintainers; [ clerie ];
-    mainProgram = "ghostToHugo";
   };
 }

@@ -131,6 +131,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lapce/lapce";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ elliot ];
-    mainProgram = "lapce";
   };
 }

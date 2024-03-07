@@ -31,6 +31,5 @@ stdenv.mkDerivation {
     license = licenses.isc;
     maintainers = with maintainers; [ sophrosyne ];
     platforms = platforms.linux;
-    mainProgram = "dwmblocks";
   };
 }

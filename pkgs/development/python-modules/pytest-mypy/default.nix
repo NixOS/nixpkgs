@@ -1,38 +1,27 @@
 { lib
-, attrs
 , buildPythonPackage
 , fetchPypi
 , filelock
 , pytest
 , mypy
-, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mypy";
   version = "0.10.3";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-+EWPZCMj8Toso+LmFQn3dnlmtSe02K3M1QMsPntP09s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    attrs
-    mypy
-    filelock
-  ];
+  propagatedBuildInputs = [ mypy filelock ];
 
   # does not contain tests
   doCheck = false;

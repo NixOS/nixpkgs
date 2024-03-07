@@ -86,7 +86,7 @@ import ./make-test-python.nix (
       "ddterm"
       "emoji-selector"
       "gsconnect"
-      "system-monitor-next"
+      "system-monitor"
       "desktop-icons-ng-ding"
       "workspace-indicator"
       "vitals"

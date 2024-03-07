@@ -24,6 +24,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.iand675 ];
     platforms = platforms.linux;
-    mainProgram = "noip2";
   };
 }

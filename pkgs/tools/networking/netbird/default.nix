@@ -31,16 +31,16 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.26.2";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fnKrv8bMONZbZGZtCQUAeGo3OIvOIqLX3nvVfGhYoK8=";
+    hash = "sha256-308t/yaFFabFC9nr1eN/SMF+uBBnpGaaWiWD0wm/dtI=";
   };
 
-  vendorHash = "sha256-Zp8LAaADpSa/wfnLAQVJ8cG3bMkC7ZU1BT+Dz214c34=";
+  vendorHash = "sha256-3jjCAsqbD5HUM8972jGBxCiewSLh2aIRE68rpV03KqQ=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
@@ -73,9 +73,9 @@ buildGoModule rec {
   postPatch = ''
     # make it compatible with systemd's RuntimeDirectory
     substituteInPlace client/cmd/root.go \
-      --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
+      --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
     substituteInPlace client/ui/client_ui.go \
-      --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
+      --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
   '';
 
   postInstall = lib.concatStringsSep "\n"
@@ -90,13 +90,13 @@ buildGoModule rec {
       '')
       modules) + lib.optionalString (stdenv.isLinux && ui) ''
     mkdir -p $out/share/pixmaps
-    cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
+    cp $src/client/ui/netbird-systemtray-default.png $out/share/pixmaps/netbird.png
 
     mkdir -p $out/share/applications
     cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
 
     substituteInPlace $out/share/applications/netbird.desktop \
-      --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
+      --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
   '';
 
   passthru = {
@@ -111,6 +111,5 @@ buildGoModule rec {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [ misuzu ];
-    mainProgram = "netbird";
   };
 }

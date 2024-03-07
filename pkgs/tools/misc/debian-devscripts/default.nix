@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
-    tgtpy="$out/${python.sitePackages}"
+    tgtpy="$out/lib/${python.libPrefix}/site-packages"
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     find lib po4a scripts -type f -exec sed -r \

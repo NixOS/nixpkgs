@@ -9,7 +9,7 @@
 , zodbpickle
 , zconfig
 , persistent
-, zc-lockfile
+, zc_lockfile
 , btrees
 , manuel
 }:
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     zodbpickle
     zconfig
     persistent
-    zc-lockfile
+    zc_lockfile
     btrees
   ];
 

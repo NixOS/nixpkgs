@@ -11,8 +11,7 @@ let
     extraCertificateFiles = cfg.certificateFiles;
     extraCertificateStrings = cfg.certificates;
   };
-  caBundleName = if cfg.useCompatibleBundle then "ca-no-trust-rules-bundle.crt" else "ca-bundle.crt";
-  caBundle = "${cacertPackage}/etc/ssl/certs/${caBundleName}";
+  caBundle = "${cacertPackage}/etc/ssl/certs/ca-bundle.crt";
 
 in
 
@@ -23,17 +22,6 @@ in
       default = true;
       internal = true;
     };
-
-    security.pki.useCompatibleBundle = mkEnableOption ''usage of a compatibility bundle.
-
-      Such a bundle consist exclusively of `BEGIN CERTIFICATE` and no `BEGIN TRUSTED CERTIFICATE`,
-      which is a OpenSSL specific PEM format.
-
-      It is known to be incompatible with certain software stacks.
-
-      Nevertheless, enabling this will strip all additional trust rules provided by the
-      certificates themselves, this can have security consequences depending on your usecases.
-    '';
 
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;

@@ -11,34 +11,30 @@
 , setuptools
 }:
 
-let
-  version = "0.16.3";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.36"; };
+buildPythonPackage rec {
+  pname = "mansrht";
+  version = "0.16.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "man.sr.ht";
     rev = version;
-    hash = "sha256-o1A3LmwH6WgpFqjKyL3UTru9q7TgKdOdbKZfJHR6fCA=";
+    sha256 = "sha256-94G9/Kzt1gaQ2CaXtsJYCB6W5OTdn27XhVdpNJ9a5cE=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile --replace "all: api" ""
+  '';
 
   mansrht-api = buildGoModule ({
     inherit src version;
     pname = "mansrht-api";
     modRoot = "api";
-    vendorHash = "sha256-6AzKWytdyuofCFaDEdeO24mv1mtpnQEJydrjVWGY2eU=";
-  } // gqlgen);
-in
-buildPythonPackage rec {
-  inherit src version;
-  pname = "mansrht";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
-
-  postPatch = ''
-    substituteInPlace Makefile --replace "all: api" ""
-  '';
+    vendorHash = "sha256-K5EmZ4U+xItTR85+SCwhwg5KUGLkKHo9Nr2pkvmJpfo=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   nativeBuildInputs = [
     pip
@@ -65,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     description = "Wiki service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [ eadwu ];
   };
 }

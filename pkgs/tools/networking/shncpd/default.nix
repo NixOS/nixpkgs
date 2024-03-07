@@ -23,6 +23,5 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.fpletz ];
-    mainProgram = "shncpd";
   };
 }

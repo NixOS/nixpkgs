@@ -1,7 +1,8 @@
 { lib, openbabel, python, buildPythonPackage }:
 
 buildPythonPackage rec {
-  inherit (openbabel) pname version;
+  pname = "openbabel";
+  version = "3.1.1";
 
   src = "${openbabel}/lib/python${python.sourceVersion.major}.${python.sourceVersion.minor}/site-packages";
 

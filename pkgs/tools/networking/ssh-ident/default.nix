@@ -27,6 +27,5 @@ stdenvNoCC.mkDerivation {
     license = licenses.bsd2;
     maintainers = with maintainers; [ telotortium ];
     platforms = with platforms; unix;
-    mainProgram = "ssh-ident";
   };
 }

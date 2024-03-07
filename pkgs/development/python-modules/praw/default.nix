@@ -9,7 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests-toolbelt
-, update-checker
+, update_checker
 , websocket-client
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     mock
     prawcore
-    update-checker
+    update_checker
     websocket-client
   ];
 

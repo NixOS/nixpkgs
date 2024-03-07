@@ -1,9 +1,8 @@
 { lib
+, bigstringaf
 , buildDunePackage
-, cstruct
 , fetchurl
-, mdx
-, poll
+, iomux
 , ptime
 , telemetry
 , uri
@@ -11,29 +10,24 @@
 
 buildDunePackage rec {
   pname = "riot";
-  version = "0.0.7";
+  version = "0.0.5";
 
   minimalOCamlVersion = "5.1";
 
   src = fetchurl {
     url = "https://github.com/leostera/riot/releases/download/${version}/riot-${version}.tbz";
-    hash = "sha256-t+PMBh4rZXi82dUljv3nLzZX5o1iagBbQ9FfGnr/dp4=";
+    hash = "sha256-Abe4LMxlaxK3MVlg2d8X60aCuPGvaOn+4zFx/uH5z4g=";
   };
 
   propagatedBuildInputs = [
-    cstruct
-    poll
+    bigstringaf
+    iomux
     ptime
     telemetry
     uri
   ];
 
-  checkInputs = [
-    mdx
-    mdx.bin
-  ];
-
-  doCheck = false; # fails on sandbox
+  doCheck = true;
 
   meta = {
     description = "An actor-model multi-core scheduler for OCaml 5";

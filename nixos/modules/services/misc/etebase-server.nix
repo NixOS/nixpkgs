@@ -5,6 +5,9 @@ with lib;
 let
   cfg = config.services.etebase-server;
 
+  pythonEnv = pkgs.python3.withPackages (ps: with ps;
+    [ etebase-server daphne ]);
+
   iniFmt = pkgs.formats.ini {};
 
   configIni = iniFmt.generate "etebase-server.ini" cfg.settings;
@@ -41,13 +44,6 @@ in
           the user specified by the `user` option or a superuser.
           Then you can login and create accounts on your-etebase-server.com/admin
         '';
-      };
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.python3.pkgs.etebase-server;
-        defaultText = literalExpression "pkgs.python3.pkgs.etebase-server";
-        description = lib.mdDoc "etebase-server package to use.";
       };
 
       dataDir = mkOption {
@@ -168,7 +164,7 @@ in
       (runCommand "etebase-server" {
         nativeBuildInputs = [ makeWrapper ];
       } ''
-        makeWrapper ${cfg.package}/bin/etebase-server \
+        makeWrapper ${pythonEnv}/bin/etebase-server \
           $out/bin/etebase-server \
           --chdir ${escapeShellArg cfg.dataDir} \
           --prefix ETEBASE_EASY_CONFIG_PATH : "${configIni}"
@@ -182,8 +178,8 @@ in
     systemd.services.etebase-server = {
       description = "An Etebase (EteSync 2.0) server";
       after = [ "network.target" "systemd-tmpfiles-setup.service" ];
-      path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pythonEnv ];
       serviceConfig = {
         User = cfg.user;
         Restart = "always";
@@ -191,26 +187,24 @@ in
       };
       environment = {
         ETEBASE_EASY_CONFIG_PATH = configIni;
-        PYTHONPATH = cfg.package.pythonPath;
       };
       preStart = ''
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${cfg.package} ]]; then
+        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkgs.etebase-server} ]]; then
           etebase-server migrate --no-input
           etebase-server collectstatic --no-input --clear
-          echo ${cfg.package} > "$versionFile"
+          echo ${pkgs.etebase-server} > "$versionFile"
         fi
       '';
       script =
         let
-          python = cfg.package.python;
           networking = if cfg.unixSocket != null
-          then "--uds ${cfg.unixSocket}"
-          else "--host 0.0.0.0 --port ${toString cfg.port}";
+          then "-u ${cfg.unixSocket}"
+          else "-b 0.0.0.0 -p ${toString cfg.port}";
         in ''
-          ${python.pkgs.uvicorn}/bin/uvicorn ${networking} \
-            --app-dir ${cfg.package}/${cfg.package.python.sitePackages} \
+          cd "${pythonEnv}/lib/etebase-server";
+          daphne ${networking} \
             etebase_server.asgi:application
         '';
     };

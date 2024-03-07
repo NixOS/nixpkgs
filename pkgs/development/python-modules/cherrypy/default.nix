@@ -19,7 +19,7 @@
 , routes
 , setuptools-scm
 , simplejson
-, zc-lockfile
+, zc_lockfile
 }:
 
 buildPythonPackage rec {
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     cheroot
     portend
     more-itertools
-    zc-lockfile
+    zc_lockfile
     jaraco-collections
   ];
 

@@ -103,9 +103,8 @@ let
         homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
       } // (args.meta or {});
 
-    } // lib.optionalAttrs (lib.elem language [ "is" "nb" ]) {
-      # These have Windows-1251 encoded non-ASCII characters,
-      # so need some special handling.
+    } // lib.optionalAttrs (stdenv.isDarwin && lib.elem language [ "is" "nb" ]) {
+      # tar: Cannot open: Illegal byte sequence
       unpackPhase = ''
         runHook preUnpack
 

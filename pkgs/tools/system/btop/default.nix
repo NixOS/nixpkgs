@@ -1,35 +1,30 @@
 { lib
-, config
 , stdenv
 , fetchFromGitHub
-, cmake
 , darwin
 , removeReferencesTo
 , btop
 , testers
-, cudaSupport ? config.cudaSupport
-, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.3.2";
+  version = "1.2.13";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kjSyIgLTObTOKMG5dk49XmWPXZpCWbLdpkmAsJcFliA=";
+    hash = "sha256-F/muCjhcnM+VqAn6FlD4lv23OLITrmtnHkFc5zv97yk=";
   };
-
-  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
-  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreFoundation
     darwin.apple_sdk_11_0.frameworks.IOKit
   ];
+
+  env.ADDFLAGS = lib.optionalString stdenv.isDarwin
+    "-F${darwin.apple_sdk_11_0.frameworks.IOKit}/Library/Frameworks/";
 
   installFlags = [ "PREFIX=$(out)" ];
 

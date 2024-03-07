@@ -114,7 +114,6 @@ in {
     systemd.services.ergo = {
       description = "ergo server";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         User = cfg.user;

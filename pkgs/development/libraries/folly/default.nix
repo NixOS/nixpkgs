@@ -4,6 +4,7 @@
 , boost
 , cmake
 , double-conversion
+, fetchpatch
 , fmt_8
 , gflags
 , glog
@@ -18,21 +19,17 @@
 , zstd
 , jemalloc
 , follyMobile ? false
-
-# for passthru.tests
-, python3
-, watchman
 }:
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2024.01.22.00";
+  version = "2023.02.27.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-+z1wuEOgr7CMHFnOn5gLm9mtVH7mVURLstOoDqzxKbk=";
+    sha256 = "sha256-DfZiVxncpKSPn9BN25d8o0/tC27+HhSG/t53WgzAT/s=";
   };
 
   nativeBuildInputs = [
@@ -67,33 +64,19 @@ stdenv.mkDerivation rec {
     # temporary hack until folly builds work on aarch64,
     # see https://github.com/facebook/folly/issues/1880
     "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
-
-    # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
-    # see https://github.com/NixOS/nixpkgs/issues/144170
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  # split outputs to reduce downstream closure sizes
-  outputs = [ "out" "dev" ];
-
-  # patch prefix issues again
-  # see https://github.com/NixOS/nixpkgs/issues/144170
   postFixup = ''
-    substituteInPlace $dev/lib/cmake/${pname}/${pname}-targets-release.cmake  \
-      --replace '$'{_IMPORT_PREFIX}/lib/ $out/lib/
+    substituteInPlace "$out"/lib/pkgconfig/libfolly.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace '=''${exec_prefix}//' '=/'
   '';
 
+  # folly-config.cmake, will `find_package` these, thus there should be
+  # a way to ensure abi compatibility.
   passthru = {
-    # folly-config.cmake, will `find_package` these, thus there should be
-    # a way to ensure abi compatibility.
     inherit boost;
     fmt = fmt_8;
-
-    tests = {
-      inherit watchman;
-      inherit (python3.pkgs) django pywatchman;
-    };
   };
 
   meta = with lib; {

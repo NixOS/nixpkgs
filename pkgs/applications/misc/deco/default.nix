@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
-    mainProgram = "deco";
   };
 
   dontBuild = true;

@@ -6,6 +6,7 @@
 , unzip
 , SDL2
 , boost
+, freeimage
 , freetype
 , libpng
 , ois
@@ -54,6 +55,7 @@ let
     buildInputs = [
       SDL2
       boost
+      freeimage
       freetype
       libpng
       ois

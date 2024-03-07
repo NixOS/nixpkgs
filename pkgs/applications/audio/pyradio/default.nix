@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
-  version = "0.9.2.25";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "coderholic";
-    repo = "pyradio";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GkOp0iK84HDvVH8RmtmIKJ5EtQIECgZS5g8pmaIhUcc=";
+    hash = "sha256-tu/qlrbTcUCIRF15x9ATKHH+LDy1OsGJpo5x+CerTKg=";
   };
 
   nativeBuildInputs = [
@@ -20,12 +20,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    dnspython
-    netifaces
-    psutil
-    python-dateutil
     requests
-    rich
+    psutil
+    dnspython
   ];
 
   checkPhase = ''

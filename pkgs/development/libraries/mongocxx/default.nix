@@ -2,8 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , mongoc
-, openssl
-, cyrus_sasl
 , cmake
 , validatePkgConfig
 , testers
@@ -33,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     mongoc
-    openssl
-    cyrus_sasl
   ];
 
   cmakeFlags = [

@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.3.0";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     rev = "v${version}";
-    hash = "sha256-aR4IDPfcbWWyM+1MhSWIsNUNLi43MvbWBykoEkVbe+4=";
+    hash = "sha256-ikt0gl/pNjEaENj1WRLdn/Zvx349FAGpzSV62Y2GwXI=";
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
@@ -25,7 +25,7 @@ buildDotnetModule rec {
 
   executables = [ "naps2" ];
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   selfContainedBuild = true;
   runtimeDeps = [

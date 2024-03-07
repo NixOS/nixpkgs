@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nerdypepper/taizen";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "taizen";
   };
 }

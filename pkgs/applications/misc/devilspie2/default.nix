@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.linux;
-    mainProgram = "devilspie2";
   };
 }

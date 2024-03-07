@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with lib.maintainers; [ dermetfan ];
     license = with lib.licenses; [ zlib libpng ];
-    mainProgram = "mcrcon";
   };
 }

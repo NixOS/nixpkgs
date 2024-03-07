@@ -34,6 +34,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/zineland/zine/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya figsoda ];
-    mainProgram = "zine";
   };
 }

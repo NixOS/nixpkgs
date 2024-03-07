@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jose";
-  version = "12";
+  version = "11";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MuYRgYskIT2rmd32gziCdiRwIWMKQ6iTx0Qm/jJI+Iw=";
+    hash = "sha256-TKcXswF50B8MS+XHSEvqHaFSAct7VdsnZ0RtZCF04Lc=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja asciidoc ];

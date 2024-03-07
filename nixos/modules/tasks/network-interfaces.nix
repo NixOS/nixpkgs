@@ -1449,6 +1449,16 @@ in
       listToAttrs
     ];
 
+    # The network-interfaces target is kept for backwards compatibility.
+    # New modules must NOT use it.
+    systemd.targets.network-interfaces =
+      { description = "All Network Interfaces (deprecated)";
+        wantedBy = [ "network.target" ];
+        before = [ "network.target" ];
+        after = [ "network-pre.target" ];
+        unitConfig.X-StopOnReconfiguration = true;
+      };
+
     systemd.services = {
       network-local-commands = {
         description = "Extra networking commands.";

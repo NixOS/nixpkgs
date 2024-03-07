@@ -62,12 +62,19 @@ with lib;
       };
 
     fileSystems."/nix/store" = mkImageMediaOverride
-      { overlay = {
-          lowerdir = [ "/nix/.ro-store" ];
-          upperdir = "/nix/.rw-store/store";
-          workdir = "/nix/.rw-store/work";
-        };
-        neededForBoot = true;
+      { fsType = "overlay";
+        device = "overlay";
+        options = [
+          "lowerdir=/nix/.ro-store"
+          "upperdir=/nix/.rw-store/store"
+          "workdir=/nix/.rw-store/work"
+        ];
+
+        depends = [
+          "/nix/.ro-store"
+          "/nix/.rw-store/store"
+          "/nix/.rw-store/work"
+        ];
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];

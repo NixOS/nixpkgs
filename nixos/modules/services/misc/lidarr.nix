@@ -45,10 +45,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.settings."10-lidarr".${cfg.dataDir}.d = {
-      inherit (cfg) user group;
-      mode = "0700";
-    };
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.lidarr = {
       description = "Lidarr";

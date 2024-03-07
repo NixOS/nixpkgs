@@ -17,7 +17,7 @@ let
   src = tuxedo-rs.src;
   sourceRoot = "source/tailor_gui";
   pname = "tailor_gui";
-  version = "0.2.3";
+  version = tuxedo-rs.version;
 in
 stdenv.mkDerivation {
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mrcjkb xaverdh ];
+    maintainers = with maintainers; [ mrcjkb ];
     platforms = platforms.linux;
   };
 }

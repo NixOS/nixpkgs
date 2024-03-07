@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "raft-cowsql";
-  version = "0.22.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "raft";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kd0PD45+CenlfRMp5O48uELyZ2gEtasCe7xNEzsKU+M=";
+    hash = "sha256-GF+dfkdBNamaix+teJQfhiVMGFwHoAj6GeQj9EpuhYE=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

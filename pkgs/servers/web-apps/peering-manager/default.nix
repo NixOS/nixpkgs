@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.8.3";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-UV1zSX9C9y5faOBUQ7bfj2DT6ffhMW28MIT7SaYjMgw=";
+    rev = "v${version}";
+    sha256 = "sha256-He1AXfNsjVHYt2cBDjObz6sRcPbtsMotAsw+hvMrWyA=";
   };
 
   format = "other";

@@ -57,7 +57,7 @@ let
   isJdk8 = lib.versions.major dist.jdkVersion == "8";
 
   jdk = stdenv.mkDerivation rec {
-    pname = "zulu-${javaPackage}";
+    pname = "zulu${dist.zuluVersion}-${javaPackage}";
     version = dist.jdkVersion;
 
     src = fetchurl {

@@ -545,14 +545,12 @@ let
       };
 
       server = mkOption {
-        type = types.str;
-        inherit (defaultAndText "server" "https://acme-v02.api.letsencrypt.org/directory") default defaultText;
-        example = "https://acme-staging-v02.api.letsencrypt.org/directory";
+        type = types.nullOr types.str;
+        inherit (defaultAndText "server" null) default defaultText;
         description = lib.mdDoc ''
-          ACME Directory Resource URI.
-          Defaults to Let's Encrypt's production endpoint.
-          For testing Let's Encrypt's [staging endpoint](https://letsencrypt.org/docs/staging-environment/)
-          should be used to avoid the rather tight rate limit on the production endpoint.
+          ACME Directory Resource URI. Defaults to Let's Encrypt's
+          production endpoint,
+          <https://acme-v02.api.letsencrypt.org/directory>, if unset.
         '';
       };
 
@@ -899,10 +897,10 @@ in {
         certs = attrValues cfg.certs;
       in [
         {
-          assertion = cfg.defaults.email != null || all (certOpts: certOpts.email != null) certs;
+          assertion = cfg.email != null || all (certOpts: certOpts.email != null) certs;
           message = ''
             You must define `security.acme.certs.<name>.email` or
-            `security.acme.defaults.email` to register with the CA. Note that using
+            `security.acme.email` to register with the CA. Note that using
             many different addresses for certs may trigger account rate limits.
           '';
         }

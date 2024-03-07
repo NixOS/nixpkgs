@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;
-    mainProgram = "srelay";
   };
 }

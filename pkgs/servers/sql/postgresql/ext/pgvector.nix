@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgvector";
-  version = "0.6.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector";
     rev = "v${version}";
-    hash = "sha256-NS9iNgrVnoqmAIXd4sJFnPISQvYYl8YQ84bnLjpChx4=";
+    hash = "sha256-ZNzq+dATZn9LUgeOczsaadr5hwdbt9y/+sAOPIdr77U=";
   };
 
   buildInputs = [ postgresql ];

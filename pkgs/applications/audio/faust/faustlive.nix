@@ -1,28 +1,6 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, which
-, alsa-lib
-, curl
-, faust
-, flac
-, gnutls
-, libjack2
-, libmicrohttpd
-, libmpg123
-, libogg
-, libopus
-, libsndfile
-, libtasn1
-, libvorbis
-, libxcb
-, llvm
-, p11-kit
-, qrencode
-, qt5
+{ lib, stdenv, fetchFromGitHub
+, llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
+, bc, coreutils, which, libsndfile, flac, libogg, libvorbis, libopus, pkg-config, libxcb, cmake, gnutls, libtasn1, p11-kit
 }:
 
 stdenv.mkDerivation rec {
@@ -32,55 +10,22 @@ stdenv.mkDerivation rec {
     owner = "grame-cncm";
     repo = "faustlive";
     rev = version;
-    hash = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
+    sha256 = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # move mutex initialization outside assert call
-    # https://github.com/grame-cncm/faustlive/pull/59
-    (fetchpatch {
-      name = "initalize-mutexes.patch";
-      url = "https://github.com/grame-cncm/faustlive/commit/fdd46b12202def9731b9ed2f6363287af16be892.patch";
-      hash = "sha256-yH95Y4Jbqgs8siE9rtutmu5C2sNZwQMJzCgDYqNBDj4=";
-    })
-  ];
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    cmake
-    faust
-    llvm
-    pkg-config
-    qt5.wrapQtAppsHook
-    which
-  ];
+  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook cmake ];
 
   buildInputs = [
-    alsa-lib
-    curl
-    faust
-    flac
-    gnutls
-    libjack2
-    libmicrohttpd
-    libmpg123
-    libogg
-    libopus
-    libsndfile
-    libtasn1
-    libvorbis
-    libxcb
-    llvm
-    p11-kit
-    qrencode
-    qt5.qtbase
+    llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
+    bc coreutils which libsndfile flac libogg libvorbis libopus libxcb gnutls libtasn1 p11-kit
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/FaustLive --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmicrohttpd libsndfile faust llvm_10 ]}"
+  '';
 
   postPatch = "cd Build";
 

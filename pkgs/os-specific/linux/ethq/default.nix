@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ethq";
-  version = "0.6.3";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "isc-projects";
     repo = "ethq";
     rev = "refs/tags/v${builtins.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-dr37KiSnP0S0OjQof242EcbH+y4pCCzu6R9D6fXR9qc=";
+    hash = "sha256-luvvNdH4kERAMy242kLCqlnGmfPjSjvoHa6J2J7BFi4=";
   };
 
   buildInputs = [ ncurses ];

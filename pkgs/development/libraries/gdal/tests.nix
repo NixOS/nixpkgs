@@ -1,40 +1,34 @@
-{ runCommand, gdal, jdk, lib, testers }:
+{ runCommand, gdal }:
 
 let
   inherit (gdal) pname version;
 
 in
-{
-  ogrinfo-version = testers.testVersion {
-    package = gdal;
-    command = "ogrinfo --version";
-  };
+runCommand "${pname}-tests" { meta.timeout = 60; }
+  ''
+    # test version
+    ${gdal}/bin/ogrinfo --version \
+      | grep 'GDAL ${version}'
 
-  gdalinfo-version = testers.testVersion {
-    package = gdal;
-    command = "gdalinfo --version";
-  };
+    ${gdal}/bin/gdalinfo --version \
+      | grep 'GDAL ${version}'
 
-  ogrinfo-format-geopackage = runCommand "${pname}-ogrinfo-format-geopackage" { } ''
-    ${lib.getExe' gdal "ogrinfo"} --formats \
+
+    # test formats
+    ${gdal}/bin/ogrinfo --formats \
       | grep 'GPKG.*GeoPackage'
-    touch $out
-  '';
 
-  gdalinfo-format-geotiff = runCommand "${pname}-gdalinfo-format-geotiff" { } ''
-    ${lib.getExe' gdal "gdalinfo"} --formats \
+    ${gdal}/bin/gdalinfo --formats \
       | grep 'GTiff.*GeoTIFF'
-    touch $out
-  '';
 
-  vector-file = runCommand "${pname}-vector-file" { } ''
+
+    # test vector file
     echo -e "Latitude,Longitude,Name\n48.1,0.25,'Test point'" > test.csv
-    ${lib.getExe' gdal "ogrinfo"} ./test.csv
-    touch $out
-  '';
+    ${gdal}/bin/ogrinfo ./test.csv
 
-  raster-file = runCommand "${pname}-raster-file" { } ''
-    ${lib.getExe' gdal "gdal_create"} \
+
+    # test raster file
+    ${gdal}/bin/gdal_create \
       -a_srs "EPSG:4326" \
       -of GTiff \
       -ot UInt16 \
@@ -44,20 +38,7 @@ in
       -co COMPRESS=LZW \
       test.tif
 
-    ${lib.getExe' gdal "gdalinfo"} ./test.tif
-    touch $out
-  '';
+    ${gdal}/bin/gdalinfo ./test.tif
 
-  java-bindings = runCommand "${pname}-java-bindings" { } ''
-    cat <<EOF > main.java
-    import org.gdal.gdal.gdal;
-    class Main {
-      public static void main(String[] args) {
-      gdal.AllRegister();
-      }
-    }
-    EOF
-    ${lib.getExe jdk} -Djava.library.path=${gdal}/lib/ -cp ${gdal}/share/java/gdal-${version}.jar main.java
     touch $out
-  '';
-}
+  ''

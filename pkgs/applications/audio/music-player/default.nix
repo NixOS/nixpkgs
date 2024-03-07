@@ -40,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/tsirysndr/music-player/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "music-player";
   };
 }

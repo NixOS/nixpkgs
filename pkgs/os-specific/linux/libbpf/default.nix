@@ -4,12 +4,7 @@
 , stdenv
 , zlib
 , lib
-
-# for passthru.tests
-, knot-dns
 , nixosTests
-, systemd
-, tracee
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +25,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "-C src" ];
 
   passthru.tests = {
-    inherit knot-dns tracee;
     bpf = nixosTests.bpf;
-    systemd = systemd.override { withLibBPF = true; };
   };
 
   postInstall = ''

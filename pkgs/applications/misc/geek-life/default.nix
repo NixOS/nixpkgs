@@ -22,6 +22,5 @@ buildGoModule rec {
     description = "The Todo List / Task Manager for Geeks in command line";
     maintainers = with maintainers; [ noisersup ];
     license = licenses.mit;
-    mainProgram = "geek-life";
   };
 }

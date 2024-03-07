@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , cairocffi
-, cython_3
+, cython
 , fetchPypi
 , igraph
 , leidenalg
@@ -9,7 +9,6 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , scipy
 , setuptools
 , spacy
@@ -22,24 +21,21 @@
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.9.4";
+  version = "0.9.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4154ytzo1QpwhKA1BkVMss9fNIkysnClW/yfSVlX33M=";
+    hash = "sha256-fx2S43IqpSMsfJow26jB/D27dyUFQ1PlXP1rbUIZPPQ=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
-    cython_3
+    cython
     poetry-core
     setuptools
   ];
-
-  pythonRelaxDeps = [ "igraph" "leidenalg" ];
 
   propagatedBuildInputs = [
     cairocffi
@@ -63,14 +59,10 @@ buildPythonPackage rec {
     "textnets"
   ];
 
-  # Enables the package to find the cythonized .so files during testing. See #255262
-  preCheck = ''
-    rm -r textnets
-  '';
-
   disabledTests = [
-    # Test fails: Throws a UserWarning asking the user to install `textnets[fca]`.
-    "test_context"
+    # Test fails: A warning is triggered because of a deprecation notice by pandas.
+    # TODO: Try to re-enable it when pandas is updated to 2.1.1
+    "test_corpus_czech"
   ];
 
   meta = with lib; {

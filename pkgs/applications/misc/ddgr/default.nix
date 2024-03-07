@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ceedubs markus1189 ];
     platforms = python3.meta.platforms;
-    mainProgram = "ddgr";
   };
 }

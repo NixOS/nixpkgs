@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     itstool
     perl
     pkg-config
-    python3.pkgs.wrapPython
     wrapGAppsHook
   ];
 
@@ -47,16 +46,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  pythonPath = with python3.pkgs; [
-    pycairo
-    six
-  ];
-
-  postFixup = ''
-    buildPythonPath "$pythonPath"
-    patchPythonScript $out/lib/pluma/plugins/snippets/Snippet.py
-  '';
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 

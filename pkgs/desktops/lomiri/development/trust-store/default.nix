@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, gitUpdater
 , testers
 , boost
 , cmake
@@ -20,18 +19,17 @@
 , properties-cpp
 , qtbase
 , qtdeclarative
-, validatePkgConfig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trust-store";
-  version = "2.0.2";
+  version = "unstable-2023-10-17";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/trust-store";
-    rev = finalAttrs.version;
-    hash = "sha256-tVwqBu4py8kdydyKECZfLvcLijpZSQszeo8ytTDagy0=";
+    rev = "7aa7ab5b7f3843e24c13ae6d9b8607455296d60e";
+    hash = "sha256-j+4FZzbG3qh1pGRapFuuMiwT4Lv9P6Ji9/3Z0uGvXmw=";
   };
 
   outputs = [
@@ -60,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     graphviz
     pkg-config
-    validatePkgConfig
   ];
 
   buildInputs = [
@@ -89,10 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Requires mirclient API, unavailable in Mir 2.x
     # https://gitlab.com/ubports/development/core/trust-store/-/issues/2
-    (lib.cmakeBool "TRUST_STORE_MIR_AGENT_ENABLED" false)
-    (lib.cmakeBool "TRUST_STORE_ENABLE_DOC_GENERATION" true)
-    # error: moving a temporary object prevents copy elision
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    "-DTRUST_STORE_MIR_AGENT_ENABLED=OFF"
+    "-DTRUST_STORE_ENABLE_DOC_GENERATION=ON"
   ];
 
   # Not working
@@ -109,10 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Starts & talks to DBus
   enableParallelChecking = false;
 
-  passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = gitUpdater { };
-  };
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     description = "Common implementation of a trust store to be used by trusted helpers";

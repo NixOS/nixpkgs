@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pinpox ];
-    mainProgram = "river-luatile";
   };
 }

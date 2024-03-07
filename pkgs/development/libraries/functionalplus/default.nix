@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "functionalplus";
-  version = "0.2.23";
+  version = "0.2.20-p0";
 
   src = fetchFromGitHub {
     owner = "Dobiasd";
     repo = "FunctionalPlus";
     rev = "v${version}";
-    sha256 = "sha256-WDufVO0vQyu7O3w9tq+19JioRUFgYlnTbO/AQzg0FnM=";
+    sha256 = "sha256-PKd3gx63VTxyq1q0v7WaKXVA0oICpZQfVsKsgUml9wk=";
   };
 
   nativeBuildInputs = [ cmake ];

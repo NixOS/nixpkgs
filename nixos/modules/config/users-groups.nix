@@ -649,6 +649,7 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
+        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -684,7 +685,7 @@ in {
       shadow.gid = ids.gids.shadow;
     };
 
-    system.activationScripts.users = if !config.systemd.sysusers.enable then {
+    system.activationScripts.users = {
       supportsDryActivation = true;
       text = ''
         install -m 0700 -d /root
@@ -693,7 +694,7 @@ in {
         ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
         -w ${./update-users-groups.pl} ${spec}
       '';
-    } else ""; # keep around for backwards compatibility
+    };
 
     system.activationScripts.update-lingering = let
       lingerDir = "/var/lib/systemd/linger";
@@ -710,9 +711,7 @@ in {
     '';
 
     # Warn about user accounts with deprecated password hashing schemes
-    # This does not work when the users and groups are created by
-    # systemd-sysusers because the users are created too late then.
-    system.activationScripts.hashes = if !config.systemd.sysusers.enable then {
+    system.activationScripts.hashes = {
       deps = [ "users" ];
       text = ''
         users=()
@@ -730,7 +729,7 @@ in {
           printf ' - %s\n' "''${users[@]}"
         fi
       '';
-    } else ""; # keep around for backwards compatibility
+    };
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
@@ -896,26 +895,7 @@ in {
     ));
 
     warnings =
-      flip concatMap (attrValues cfg.users) (user: let
-        unambiguousPasswordConfiguration = 1 >= length (filter (x: x != null) ([
-          user.hashedPassword
-          user.hashedPasswordFile
-          user.password
-        ] ++ optionals cfg.mutableUsers [
-          # For immutable users, initialHashedPassword is set to hashedPassword,
-          # so using these options would always trigger the assertion.
-          user.initialHashedPassword
-          user.initialPassword
-        ]));
-      in optional (!unambiguousPasswordConfiguration) ''
-        The user '${user.name}' has multiple of the options
-        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
-        & `initialHashedPassword` set to a non-null value.
-        The options silently discard others by the order of precedence
-        given above which can lead to surprising results. To resolve this warning,
-        set at most one of the options above to a non-`null` value.
-      '')
-      ++ builtins.filter (x: x != null) (
+      builtins.filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the

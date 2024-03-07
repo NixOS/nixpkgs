@@ -1,22 +1,22 @@
 { lib
 , stdenv
 , fetchurl
-, cmake
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
-  version = "3.9.5";
+  version = "3.9.2";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-xsmu36iGT7RLp4kRQIRCOCv9BpDPLUCRrjgFyGN4kDY=";
+    sha256 = "sha256-RKWpviHX1HNDa/Yhwt3MPPWou+PHhuEyKWGKO52GEpc=";
   };
 
-  nativeBuildInputs = [ cmake ];
-
   enableParallelBuilding = true;
+
+  # https://trac.osgeo.org/geos/ticket/993
+  configureFlags = lib.optional stdenv.isAarch32 "--disable-inline";
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

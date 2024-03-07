@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Read mdx/mdd files (repacking of readmdict from mdict-analysis)";
     homepage = "https://github.com/ffreemt/readmdict";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }

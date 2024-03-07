@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, flutter313
+, flutter
 , makeDesktopItem
 , pkg-config
 , libayatana-appindicator
@@ -11,16 +11,16 @@
 
 let
   pname = "localsend";
-  version = "1.13.1";
+  version = "1.12.0";
 
-  linux = flutter313.buildFlutterApplication {
+  linux = flutter.buildFlutterApplication {
     inherit pname version;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-GJHCKNtKvwQAG3AUkhk0G4k/qsmLOUQAyyi9Id7NJh8=";
+      hash = "sha256-mk0CLZP0x/mEixeAig7X41aFgQzs+kZkBJx6T//3ZKY=";
     };
 
     sourceRoot = "source/app";
@@ -52,7 +52,7 @@ let
       exec = "@out@/bin/localsend_app";
       icon = "localsend";
       desktopName = "LocalSend";
-      startupWMClass = "localsend_app";
+      startupWMClass = "localsend";
       genericName = "An open source cross-platform alternative to AirDrop";
       categories = [ "Network" ];
     };
@@ -67,7 +67,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-YCy6NlmEPsOFtIZ27mOYDnMPd1tj3YO2bwNDdM3K/uY=";
+      hash = "sha256-XKYc3lA7x0Tf1Mf3o7D2RYwYDRDVHoSb/lj9PhKzV5U=";
     };
 
     nativeBuildInputs = [ undmg ];
@@ -90,7 +90,7 @@ let
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";
-    maintainers = with maintainers; [ sikmir linsui ];
+    maintainers = with maintainers; [ sikmir ];
   };
 in
 if stdenv.isDarwin

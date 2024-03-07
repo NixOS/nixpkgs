@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , pythonRelaxDepsHook
 
@@ -15,16 +15,20 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "miauth";
-  version = "0.9.7";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2/4nFInpdY8fb/b+sXhgT6ZPtEgBV+KHMyLnxIp6y/U=";
+  src = fetchFromGitHub {
+    owner = "dnandha";
+    repo = "miauth";
+    # Release is not tagged properly, https://github.com/dnandha/miauth/issues/15
+    # rev = "refs/tags/${version}";
+    rev = "refs/tags/release";
+    hash = "sha256-+aoY0Eyd9y7xQTA3uSC6YIZisViilsHlFaOXmhPMcBY=";
   };
 
   nativeBuildInputs = [
@@ -41,13 +45,11 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
   pythonImportsCheck = [
     "miauth"
   ];
+
+  doCheck = false; # no tests
 
   meta = with lib; {
     description = "Authenticate and interact with Xiaomi devices over BLE";

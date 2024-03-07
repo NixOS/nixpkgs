@@ -23,6 +23,5 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ farcaller ];
-    mainProgram = "ali";
   };
 }

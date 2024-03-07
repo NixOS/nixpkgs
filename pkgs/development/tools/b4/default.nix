@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "b4";
-  version = "0.13.0";
+  version = "0.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gsok5aDi5oYJPMXVv3MFAehyKZ5hHBtvwf7z6Ut4dBQ=";
+    hash = "sha256-tk4VBvSnHE6VnUAa3QYCqFLQbsHTJ6Bfqwa1wKEC6mI=";
   };
 
   # tests make dns requests and fails

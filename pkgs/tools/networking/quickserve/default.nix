@@ -31,6 +31,5 @@ in stdenv.mkDerivation {
     homepage = "https://xyne.archlinux.ca/projects/quickserve/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus ];
-    mainProgram = "quickserve";
   };
 }

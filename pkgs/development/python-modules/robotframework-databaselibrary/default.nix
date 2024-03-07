@@ -1,10 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , setuptools
 , robotframework
-, robotframework-excellib
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -12,11 +10,9 @@ buildPythonPackage rec {
   version = "1.4.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "MarketSquare";
-    repo = "Robotframework-Database-Library";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BCVXmlrYOaG+Dh67OytUfQnJ9Ak3MtHR3swOXdAN/HU=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-/n4+xA/eLrcVEwlWyLQLrkX5waYaJKRkphwT22b7hTU=";
   };
 
   nativeBuildInputs = [
@@ -26,18 +22,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     robotframework
-    robotframework-excellib
   ];
 
-  pythonImportsCheck = [ "DatabaseLibrary" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # unit tests are impure
+  doCheck = false;
 
   meta = with lib; {
     description = "Database Library contains utilities meant for Robot Framework";
-    homepage = "https://github.com/MarketSquare/Robotframework-Database-Library";
+    homepage = "https://github.com/franz-see/Robotframework-Database-Library";
     license = licenses.asl20;
     maintainers = with maintainers; [ talkara ];
   };

@@ -2,7 +2,8 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2
+  # libgit2-sys doesn't support libgit2 1.6 yet
+, libgit2_1_5
 , oniguruma
 , zlib
 , stdenv
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2
+    libgit2_1_5
     oniguruma
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
@@ -53,10 +54,7 @@ rustPlatform.buildRustPackage rec {
     git config --global user.email nixbld@example.com
   '';
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-    RUSTONIG_SYSTEM_LIBONIG = true;
-  };
+  RUSTONIG_SYSTEM_LIBONIG = true;
 
   meta = with lib; {
     description = "Dive into a file's history to find root cause";

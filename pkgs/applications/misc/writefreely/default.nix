@@ -24,6 +24,5 @@ buildGoModule rec {
     homepage = "https://github.com/writefreely/writefreely";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ soopyc ];
-    mainProgram = "writefreely";
   };
 }

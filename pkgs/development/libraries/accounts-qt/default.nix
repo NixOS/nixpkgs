@@ -1,15 +1,14 @@
 { stdenv, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "accounts-qt";
-  version = "1.16-unstable-2023-11-24";
+  version = "1.16";
 
-  # pinned to fork with Qt6 support
   src = fetchFromGitLab {
-    owner = "nicolasfella";
+    sha256 = "1vmpjvysm0ld8dqnx8msa15hlhrkny02cqycsh4k2azrnijg0xjz";
+    rev = "VERSION_${version}";
     repo = "libaccounts-qt";
-    rev = "18557f7def9af8f4a9e0e93e9f575ae11e5066aa";
-    hash = "sha256-8FGZmg2ljSh1DYZfklMTrWN7Sdlk/Atw0qfpbb+GaBc=";
+    owner = "accounts-sso";
   };
 
   propagatedBuildInputs = [ glib libaccounts-glib ];

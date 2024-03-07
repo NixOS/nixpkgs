@@ -35,6 +35,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     maintainers = [ maintainers.PowerUser64 ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "jack-passthru";
   };
 })

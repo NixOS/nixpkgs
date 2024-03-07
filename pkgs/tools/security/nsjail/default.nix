@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
-
   preBuild = ''
     makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=${shadow}/bin/newuidmap -DNEWGIDMAP_PATH=${shadow}/bin/newgidmap')
   '';

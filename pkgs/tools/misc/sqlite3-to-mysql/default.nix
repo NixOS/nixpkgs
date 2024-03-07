@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.1.7";
+  version = "2.1.6";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -18,12 +18,11 @@ python3Packages.buildPythonApplication rec {
     owner = "techouse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TglHny0HgVth3o73GQYddh9sdyQ0L+4J4dJBAeJToiM=";
+    hash = "sha256-RIe4If7R8snbNN2yIPxAh39EQplVyhMF2c0G06Zipds=";
   };
 
   nativeBuildInputs = with python3Packages; [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -40,10 +39,6 @@ python3Packages.buildPythonApplication rec {
     unidecode
     packaging
     mysql80
-  ];
-
-  pythonRelaxDeps = [
-    "mysql-connector-python"
   ];
 
   # tests require a mysql server instance

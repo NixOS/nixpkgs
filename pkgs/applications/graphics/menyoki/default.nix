@@ -50,6 +50,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "menyoki";
   };
 }

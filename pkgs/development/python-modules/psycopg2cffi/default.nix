@@ -1,12 +1,4 @@
-{ buildPythonPackage
-, cffi
-, fetchFromGitHub
-, lib
-, postgresql
-, postgresqlTestHook
-, pytestCheckHook
-, six
-}:
+{ buildPythonPackage, cffi, fetchFromGitHub, lib, postgresql, pytestCheckHook, six }:
 
 buildPythonPackage rec {
   pname = "psycopg2cffi";
@@ -30,19 +22,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ postgresql ];
-
   propagatedBuildInputs = [ six cffi ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [ postgresqlTestHook pytestCheckHook ];
-
-  disabledTests = [
-    # AssertionError: '{}' != []
-    "testEmptyArray"
-  ];
-
-  env = {
-    PGDATABASE = "psycopg2_test";
-  };
+  # NB: The tests need a postgres instance running to test against, and so we
+  # disable them.
+  doCheck = false;
 
   pythonImportsCheck = [ "psycopg2cffi" ];
 

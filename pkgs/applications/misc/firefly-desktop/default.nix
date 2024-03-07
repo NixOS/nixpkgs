@@ -30,6 +30,5 @@ in appimageTools.wrapType2 {
     license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "firefly-desktop";
   };
 }

@@ -3,7 +3,7 @@
 let
   cfg = config.systemd.sysupdate;
 
-  format = pkgs.formats.ini { listToValue = toString; };
+  format = pkgs.formats.ini { };
 
   definitionsDirectory = utils.systemdUtils.lib.definitions
     "sysupdate.d"
@@ -71,7 +71,7 @@ in
       type = with lib.types; attrsOf format.type;
       default = { };
       example = {
-        "10-uki" = {
+        "10-uki.conf" = {
           Transfer = {
             ProtectVersion = "%A";
           };
@@ -79,7 +79,7 @@ in
           Source = {
             Type = "url-file";
             Path = "https://download.example.com/";
-            MatchPattern = [ "nixos_@v+@l-@d.efi" "nixos_@v+@l.efi" "nixos_@v.efi" ];
+            MatchPattern = "nixos_@v.efi.xz";
           };
 
           Target = {

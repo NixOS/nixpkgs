@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 ];
     maintainers = [ maintainers.michalrus ];
     platforms = platforms.unix;
-    mainProgram = "arpoison";
   };
 }

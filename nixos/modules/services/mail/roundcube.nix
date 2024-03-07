@@ -102,12 +102,6 @@ in
       apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
 
-    configureNginx = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = lib.mdDoc "Configure nginx as a reverse proxy for roundcube.";
-    };
-
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -148,39 +142,26 @@ in
       ${cfg.extraConfig}
     '';
 
-    services.nginx = lib.mkIf cfg.configureNginx {
+    services.nginx = {
       enable = true;
       virtualHosts = {
         ${cfg.hostName} = {
           forceSSL = mkDefault true;
           enableACME = mkDefault true;
-          root = cfg.package;
           locations."/" = {
+            root = cfg.package;
             index = "index.php";
-            priority = 1100;
             extraConfig = ''
-              add_header Cache-Control 'public, max-age=604800, must-revalidate';
-            '';
-          };
-          locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {
-            priority = 3110;
-            extraConfig = ''
-              return 404;
-            '';
-          };
-          locations."~ ^/(CHANGELOG.md|INSTALL|LICENSE|README.md|SECURITY.md|UPGRADING|composer.json|composer.lock)" = {
-            priority = 3120;
-            extraConfig = ''
-              return 404;
-            '';
-          };
-          locations."~* \\.php(/|$)" = {
-            priority = 3130;
-            extraConfig = ''
-              fastcgi_pass unix:${fpm.socket};
-              fastcgi_param PATH_INFO $fastcgi_path_info;
-              fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              include ${config.services.nginx.package}/conf/fastcgi.conf;
+              location ~* \.php(/|$) {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass unix:${fpm.socket};
+
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param PATH_INFO       $fastcgi_path_info;
+
+                include ${config.services.nginx.package}/conf/fastcgi_params;
+                include ${pkgs.nginx}/conf/fastcgi.conf;
+              }
             '';
           };
         };
@@ -250,7 +231,6 @@ in
         path = [ config.services.postgresql.package ];
       })
       {
-        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         script = let

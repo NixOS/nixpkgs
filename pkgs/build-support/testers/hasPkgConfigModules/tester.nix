@@ -30,11 +30,10 @@ runCommand testName {
         }
         package.meta;
   } ''
-    touch "$out"
     for moduleName in $moduleNames; do
       echo "checking pkg-config module $moduleName in $buildInputs"
       set +e
-      version="$($PKG_CONFIG --modversion $moduleName)"
+      version="$(pkg-config --modversion $moduleName)"
       r=$?
       set -e
       if [[ $r = 0 ]]; then
@@ -42,7 +41,7 @@ runCommand testName {
         printf '%s\t%s\n' "$moduleName" "$version" >> "$out"
       else
         echo "These modules were available in the input propagation closure:"
-        $PKG_CONFIG --list-all
+        pkg-config --list-all
         echo "❌ pkg-config module $moduleName was not found"
         false
       fi

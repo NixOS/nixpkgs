@@ -220,7 +220,7 @@ stdenv.mkDerivation (rec {
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
+    patch -p1 -i ${../../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -330,7 +330,7 @@ stdenv.mkDerivation (rec {
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

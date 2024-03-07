@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "mdformat-beautysh";
   version = "0.1.1";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -28,11 +28,14 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    beautysh
+  buildInputs = [
     mdformat
     mdformat-gfm
     mdit-py-plugins
+  ];
+
+  propagatedBuildInputs = [
+    beautysh
   ];
 
   nativeCheckInputs = [

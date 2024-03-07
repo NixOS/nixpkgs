@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , alsa-lib
-, appstream
 , appstream-glib
 , cargo
 , cmake
@@ -27,20 +26,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.10.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-PMg83eWcC21yNiRYdTS6/j9gerTctnDPHXIM4PWktrU=";
+    hash = "sha256-twysPSuCu++dVqoRKTNSvxwrO1ljUu4k2vPZEBkaj10=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "ink-stroke-modeler-rs-0.1.0" = "sha256-WfZwezohm8+ZXiKZlssTX+b/Izk1M4jFwxQejeTfc6M=";
-      "piet-0.6.2" = "sha256-3juXzuKwoLuxia6MoVwbcBJ3jXBQ9QRNVoxo3yFp2Iw=";
+      "piet-0.6.2" = "sha256-WrQok0T7uVQEp8SvNWlgqwQHfS7q0510bnP1ecr+s1Q=";
     };
   };
 
@@ -68,7 +67,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    appstream
     glib
     gstreamer
     gtk4

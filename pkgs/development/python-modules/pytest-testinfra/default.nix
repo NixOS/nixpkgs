@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-testinfra";
-  version = "10.1.0";
+  version = "10.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-93Qzm5R3Ws3zqMSjeTqOrS6N/HD/NLd4vhWquhQPoZ4=";
+    hash = "sha256-L7fQGFRYqbpmn/FNDdvsizkAxr3j+2+tmwlzdM5Kt30=";
   };
 
   nativeBuildInputs = [

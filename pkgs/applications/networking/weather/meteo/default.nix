@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "meteo";
-  version = "0.9.9.3";
+  version = "0.9.9.2";
 
   src = fetchFromGitLab {
     owner = "bitseater";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
+    sha256 = "sha256-9+FNpLjiX0zdsUnbBnNSLt/Ma/cqtclP25tl+faPlpU=";
   };
 
   nativeBuildInputs = [

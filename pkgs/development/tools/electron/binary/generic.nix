@@ -12,7 +12,7 @@
 , mesa
 , libxkbcommon
 , libxshmfence
-, libGL
+, libglvnd
 , alsa-lib
 , cairo
 , cups
@@ -102,7 +102,7 @@ let
     ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
     ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libGL ]
+    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libglvnd ]
   );
 
   linux = {
@@ -130,11 +130,6 @@ let
         --set-rpath "${electronLibPath}:$out/libexec/electron" \
         $out/libexec/electron/.electron-wrapped \
         ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
-
-      # patch libANGLE
-      patchelf \
-        --set-rpath "${lib.makeLibraryPath [ libGL pciutils ]}" \
-        $out/libexec/electron/lib*GL*
     '';
   };
 

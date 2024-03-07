@@ -6,16 +6,8 @@ let
   cfg = config.services.matrix-synapse;
   format = pkgs.formats.yaml { };
 
-  filterRecursiveNull = o:
-    if isAttrs o then
-      mapAttrs (_: v: filterRecursiveNull v) (filterAttrs (_: v: v != null) o)
-    else if isList o then
-      map filterRecursiveNull (filter (v: v != null) o)
-    else
-      o;
-
   # remove null values from the final configuration
-  finalSettings = filterRecursiveNull cfg.settings;
+  finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
   configFile = format.generate "homeserver.yaml" finalSettings;
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
@@ -113,19 +105,6 @@ let
         SYSLOG_IDENTIFIER = logName;
       };
     });
-
-  toIntBase8 = str:
-    lib.pipe str [
-      lib.stringToCharacters
-      (map lib.toInt)
-      (lib.foldl (acc: digit: acc * 8 + digit) 0)
-    ];
-
-  toDecimalFilePermission = value:
-    if value == null then
-      null
-    else
-      toIntBase8 value;
 in {
 
   imports = [
@@ -213,11 +192,10 @@ in {
   ];
 
   options = let
-    listenerType = workerContext: types.submodule ({ config, ... }: {
+    listenerType = workerContext: types.submodule {
       options = {
         port = mkOption {
-          type = types.nullOr types.port;
-          default = null;
+          type = types.port;
           example = 8448;
           description = lib.mdDoc ''
             The port to listen for HTTP(S) requests on.
@@ -225,20 +203,11 @@ in {
         };
 
         bind_addresses = mkOption {
-          type = types.nullOr (types.listOf types.str);
-          default = if config.path != null then null else [
+          type = types.listOf types.str;
+          default = [
             "::1"
             "127.0.0.1"
           ];
-          defaultText = literalExpression ''
-            if path != null then
-              null
-            else
-              [
-                "::1"
-                "127.0.0.1"
-              ]
-          '';
           example = literalExpression ''
             [
               "::"
@@ -248,35 +217,6 @@ in {
           description = lib.mdDoc ''
             IP addresses to bind the listener to.
           '';
-        };
-
-        path = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = ''
-            Unix domain socket path to bind this listener to.
-
-            ::: {.note}
-              This option is incompatible with {option}`bind_addresses`, {option}`port`, {option}`tls`
-              and also does not support the `metrics` and `manhole` listener {option}`type`.
-            :::
-          '';
-        };
-
-        mode = mkOption {
-          type = types.nullOr (types.strMatching "^[0,2-7]{3,4}$");
-          default = if config.path != null then "660" else null;
-          defaultText = literalExpression ''
-            if path != null then
-              "660"
-            else
-              null
-          '';
-          example = "660";
-          description = ''
-            File permissions on the UNIX domain socket.
-          '';
-          apply = toDecimalFilePermission;
         };
 
         type = mkOption {
@@ -294,30 +234,17 @@ in {
         };
 
         tls = mkOption {
-          type = types.nullOr types.bool;
-          default = if config.path != null then
-            null
-          else
-            !workerContext;
-          defaultText = ''
-            Enabled for the main instance listener, unless it is configured with a UNIX domain socket path.
-          '';
+          type = types.bool;
+          default = !workerContext;
           example = false;
           description = lib.mdDoc ''
             Whether to enable TLS on the listener socket.
-
-            ::: {.note}
-              This option will be ignored for UNIX domain sockets.
-            :::
           '';
         };
 
         x_forwarded = mkOption {
           type = types.bool;
-          default = config.path != null;
-          defaultText = ''
-            Enabled if the listener is configured with a UNIX domain socket path
-          '';
+          default = false;
           example = true;
           description = lib.mdDoc ''
             Use the X-Forwarded-For (XFF) header as the client IP and not the
@@ -364,27 +291,10 @@ in {
           '';
         };
       };
-    });
+    };
   in {
     services.matrix-synapse = {
       enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
-
-      enableRegistrationScript = mkOption {
-        type = types.bool;
-        default = clientListener.bind_addresses != [];
-        example = false;
-        defaultText = ''
-          Enabled if the client listener uses TCP sockets
-        '';
-        description = ''
-          Whether to install the `register_new_matrix_user` script, that
-          allows account creation on the terminal.
-
-          ::: {.note}
-            This script does not work when the client listener uses UNIX domain sockets
-          :::
-        '';
-      };
 
       serviceUnit = lib.mkOption {
         type = lib.types.str;
@@ -706,8 +616,11 @@ in {
                   compress = false;
                 }];
               }] ++ lib.optional hasWorkers {
-                path = "/run/matrix-synapse/main_replication.sock";
+                port = 9093;
+                bind_addresses = [ "127.0.0.1" ];
                 type = "http";
+                tls = false;
+                x_forwarded = false;
                 resources = [{
                   names = [ "replication" ];
                   compress = false;
@@ -717,7 +630,7 @@ in {
                 List of ports that Synapse should listen on, their purpose and their configuration.
 
                 By default, synapse will be configured for client and federation traffic on port 8008, and
-                use a UNIX domain socket for worker replication. See [`services.matrix-synapse.workers`](#opt-services.matrix-synapse.workers)
+                for worker replication traffic on port 9093. See [`services.matrix-synapse.workers`](#opt-services.matrix-synapse.workers)
                 for more details.
               '';
             };
@@ -1093,15 +1006,9 @@ in {
             listener = lib.findFirst
               (
                 listener:
-                  (
-                    lib.hasAttr "port" main && listener.port or null == main.port
-                    || lib.hasAttr "path" main && listener.path or null == main.path
-                  )
+                  listener.port == main.port
                   && listenerSupportsResource "replication" listener
-                  && (
-                    lib.hasAttr "host" main &&  lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses
-                    || lib.hasAttr "path" main
-                  )
+                  && (lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses)
               )
               null
               cfg.settings.listeners;
@@ -1115,44 +1022,15 @@ in {
           This is done by default unless you manually configure either of those settings.
         '';
       }
-      {
-        assertion = cfg.enableRegistrationScript -> clientListener.path == null;
-        message = ''
-          The client listener on matrix-synapse is configured to use UNIX domain sockets.
-          This configuration is incompatible with the `register_new_matrix_user` script.
-
-          Disable  `services.mastrix-synapse.enableRegistrationScript` to continue.
-        '';
-      }
-    ]
-    ++ (map (listener: {
-      assertion = (listener.path == null) != (listener.bind_addresses == null);
-      message = ''
-        Listeners require either a UNIX domain socket `path` or `bind_addresses` for a TCP socket.
-      '';
-    }) cfg.settings.listeners)
-    ++ (map (listener: {
-      assertion = listener.path != null -> (listener.bind_addresses == null && listener.port == null && listener.tls == null);
-      message = let
-        formatKeyValue = key: value: lib.optionalString (value != null) "  - ${key}=${toString value}\n";
-      in ''
-        Listener configured with UNIX domain socket (${toString listener.path}) ignores the following options:
-        ${formatKeyValue "bind_addresses" listener.bind_addresses}${formatKeyValue "port" listener.port}${formatKeyValue "tls" listener.tls}
-      '';
-    }) cfg.settings.listeners)
-    ++ (map (listener: {
-      assertion = listener.path == null || listener.type == "http";
-      message = ''
-        Listener configured with UNIX domain socket (${toString listener.path}) only supports the "http" listener type.
-      '';
-    }) cfg.settings.listeners);
+    ];
 
     services.matrix-synapse.settings.redis = lib.mkIf cfg.configureRedisLocally {
       enabled = true;
       path = config.services.redis.servers.matrix-synapse.unixSocket;
     };
     services.matrix-synapse.settings.instance_map.main = lib.mkIf hasWorkers (lib.mkDefault {
-      path = "/run/matrix-synapse/main_replication.sock";
+      host = "127.0.0.1";
+      port = 9093;
     });
 
     services.matrix-synapse.serviceUnit = if hasWorkers then "matrix-synapse.target" else "matrix-synapse.service";
@@ -1178,7 +1056,6 @@ in {
 
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
     };
@@ -1194,7 +1071,6 @@ in {
             requires = optional hasLocalPostgresDB "postgresql.service";
           }
           else {
-            wants = [ "network-online.target" ];
             after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
             requires = optional hasLocalPostgresDB "postgresql.service";
             wantedBy = [ "multi-user.target" ];
@@ -1208,8 +1084,6 @@ in {
             User = "matrix-synapse";
             Group = "matrix-synapse";
             WorkingDirectory = cfg.dataDir;
-            RuntimeDirectory = "matrix-synapse";
-            RuntimeDirectoryPreserve = true;
             ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
             Restart = "on-failure";
             UMask = "0077";
@@ -1302,9 +1176,7 @@ in {
       user = "matrix-synapse";
     };
 
-    environment.systemPackages = lib.optionals cfg.enableRegistrationScript [
-      registerNewMatrixUser
-    ];
+    environment.systemPackages = [ registerNewMatrixUser ];
   };
 
   meta = {

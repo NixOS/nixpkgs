@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     homepage = "https://id3v2.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    mainProgram = "id3v2";
   };
 }

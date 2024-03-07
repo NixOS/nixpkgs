@@ -5,23 +5,22 @@
 , nodejs
 , prefetch-yarn-deps
 , yarn
-, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxd-ui";
-  version = "0.6";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
     rev = "refs/tags/${version}";
-    hash = "sha256-3Ts6lKyzpMDVATCKD1fFIGTskWzWpQUT9S8cPFnlEOs=";
+    hash = "sha256-52MRf7bk8Un9wqz00+JjDmuJgPKYhgAhIbMbcAuf8W8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-0pyxwMGGqogEe1w3sail8NUDHtxLQZU9Wg8E6rQNy4o=";
+    hash = "sha256-WWnNjwzhN57PzTPmLWWzPoj66VFUnuzW1hTjKlVV8II=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +56,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.tests.default = nixosTests.lxd.ui;
 
   meta = {
     description = "Web user interface for LXD";

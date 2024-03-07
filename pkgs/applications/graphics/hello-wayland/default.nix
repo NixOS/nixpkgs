@@ -35,6 +35,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.linux;
-    mainProgram = "hello-wayland";
   };
 }

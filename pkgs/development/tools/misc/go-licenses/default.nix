@@ -1,9 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, go
 , installShellFiles
-, makeWrapper
 }:
 
 buildGoModule rec {
@@ -28,23 +26,13 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
   ];
-
-  subPackages = [ "." ];
-
-  allowGoReference = true;
 
   postInstall = ''
     installShellCompletion --cmd go-licenses \
       --bash <("$out/bin/go-licenses" completion bash) \
       --fish <("$out/bin/go-licenses" completion fish) \
       --zsh  <("$out/bin/go-licenses" completion zsh)
-
-    # workaround empty output when GOROOT differs from built environment
-    # see https://github.com/google/go-licenses/issues/149
-    wrapProgram "$out/bin/go-licenses" \
-      --set GOROOT '${go}/share/go'
   '';
 
   # Tests require internet connection

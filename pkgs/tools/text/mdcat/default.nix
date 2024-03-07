@@ -13,20 +13,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.1.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    hash = "sha256-2ThjIv77kdjHyOpGcQplYZXPdu+cN4oBnyHRGptN7f4=";
+    hash = "sha256-b/iLjqNcCUGaGllSXA5eq04mz/I8cbz0pXJ/Dn+yDDo=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoHash = "sha256-y828L8HHkFeem/76yizQWX7DpCGQP+HzJP+pQnxAn70=";
+  cargoHash = "sha256-RGpqTVafG7YzeUwTj8uU0PsqX2bq3BVg/ci9MVyeH80=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "cat for markdown";
     homepage = "https://github.com/swsnr/mdcat";
-    changelog = "https://github.com/swsnr/mdcat/releases/tag/mdcat-${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

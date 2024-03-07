@@ -3,7 +3,6 @@
 , bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 , cmake
 , gn
@@ -25,25 +24,19 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.27.3";
-    rev = "0fd81ee7ffcd7cfc864094b24dc9b5c3ade89ff2";
-    hash = "sha256-WNyyUw3517oKqMd1sJMk9CiLa/V7UrhwlRS+AWNNOOo=";
+    version = "1.27.1";
+    rev = "6b9db09c69965d5bfb37bdd29693f8b7f9e9e9ec";
   };
-
-  # these need to be updated for any changes to fetchAttrs
-  depsHash = {
-    x86_64-linux = "sha256-wTGHfeFkCuijPdX//lT5GPspaxZsxzBHJffH1tpVM2w=";
-    aarch64-linux = "sha256-9/Wem+Gk/7bFeMNFC4J3mdTm3mrNmyMxiu5oadQcovU=";
-  }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
-buildBazelPackage {
+buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
   bazel = bazel_6;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) hash rev;
+    inherit (srcVer) rev;
+    hash = "sha256-eZ3UCVqQbtK2GbawUVef5+BMSQbqe+owtwH+b887mQE=";
 
     postFetch = ''
       chmod -R +w $out
@@ -69,12 +62,6 @@ buildBazelPackage {
 
     # use system C/C++ tools
     ./0003-nixpkgs-use-system-C-C-toolchains.patch
-
-    # bump proxy-wasm-cpp-host until > 1.27.3/1.28.0
-    (fetchpatch {
-      url = "https://github.com/envoyproxy/envoy/pull/31451.patch";
-      hash = "sha256-n8k7bho3B8Gm0dJbgf43kU7ymvo15aGJ2Twi2xR450g=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -95,7 +82,10 @@ buildBazelPackage {
   hardeningDisable = [ "format" ];
 
   fetchAttrs = {
-    sha256 = depsHash;
+    sha256 = {
+      x86_64-linux = "sha256-OQ4vg4S3DpM+Zo+igncx3AXJnL8FkJbwh7KnBhbnCUM=";
+      aarch64-linux = "sha256-/X8i1vzQ4QvFxi1+5rc1/CGHmRhhu5F3X5A3PgbW+Mc=";
+    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -121,9 +111,6 @@ buildBazelPackage {
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
-
-      # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
-      sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
     '';
   };
   buildAttrs = {
@@ -191,7 +178,6 @@ buildBazelPackage {
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
-    changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];

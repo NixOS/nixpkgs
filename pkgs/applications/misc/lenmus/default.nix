@@ -94,6 +94,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers;  [ ramkromberg ];
     platforms = with platforms; unix;
-    mainProgram = "lenmus";
   };
 }

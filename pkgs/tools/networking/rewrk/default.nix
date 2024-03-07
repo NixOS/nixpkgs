@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lnx-search/rewrk/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "rewrk";
   };
 }

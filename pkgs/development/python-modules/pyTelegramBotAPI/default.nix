@@ -5,7 +5,6 @@
 , coloredlogs
 , fastapi
 , fetchFromGitHub
-, hatchling
 , pillow
 , psutil
 , pytestCheckHook
@@ -19,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.16.0";
-  pyproject = true;
+  version = "4.14.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -28,12 +27,8 @@ buildPythonPackage rec {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     rev = "refs/tags/${version}";
-    hash = "sha256-w039aPK+PdOiiOj5ZZAUfyHQ6QDrKySVIijcOw+GIOk=";
+    hash = "sha256-p31JRojOwoWQZE1w6UXEja0UvloMDbtKw75HHMUzgFU=";
   };
-
-  nativeBuildInputs = [
-    hatchling
-  ];
 
   passthru.optional-dependencies = {
     json = [

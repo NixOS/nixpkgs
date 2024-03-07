@@ -164,10 +164,7 @@ in
     systemd.services.cloud-init-local = {
       description = "Initial cloud-init job (pre-networking)";
       wantedBy = [ "multi-user.target" ];
-      # In certain environments (AWS for example), cloud-init-local will
-      # first configure an IP through DHCP, and later delete it.
-      # This can cause race conditions with anything else trying to set IP through DHCP.
-      before = [ "systemd-networkd.service" "dhcpcd.service" ];
+      before = [ "systemd-networkd.service" ];
       path = path;
       serviceConfig = {
         Type = "oneshot";

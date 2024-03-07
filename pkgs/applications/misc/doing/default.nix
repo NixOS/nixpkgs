@@ -21,6 +21,5 @@ bundlerEnv {
     license     = licenses.mit;
     maintainers = with maintainers; [ ktf nicknovitski ];
     platforms   = platforms.unix;
-    mainProgram = "doing";
   };
 }

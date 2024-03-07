@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , static ? stdenv.hostPlatform.isStatic
 , cxxStandard ? null
@@ -8,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abseil-cpp";
-  version = "20220623.2";
+  version = "20220623.1";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = "refs/tags/${version}";
-    hash = "sha256-ma8QJfSySsk2XVLA0rhwYJMQx+6HxMFgub6gi5mDrLI=";
+    hash = "sha256-Od1FZOOWEXVQsnZBwGjDIExi6LdYtomyL0STR44SsG8=";
   };
 
   patches = lib.optionals stdenv.isDarwin [

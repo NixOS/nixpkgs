@@ -1,10 +1,13 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , pkg-config
 , vala
-, gi-docgen
 , gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
 , glib
 , babl
 , libpng
@@ -35,15 +38,24 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.48";
+  version = "0.4.46";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/gegl-${version}.tar.xz";
-    hash = "sha256-QYwm2UvogF19mPbeDGglyia9dPystsGI2kdTPZ7igkc=";
+    hash = "sha256-0LOySBvId0xfPQpIdhGRAWbRju+COoWfuR54Grex6JI=";
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/136
+    # Fix missing libm dependency.
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gegl/-/commit/ee970f10f4fe442cbf8a4f5cb94049deab33e786.patch";
+      hash = "sha256-0LLKH+Gg+1H83kN7hJGK2u+oLrw7Hxed7R4tTwT3C5s=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +64,9 @@ stdenv.mkDerivation rec {
     ninja
     vala
     gobject-introspection
-    gi-docgen
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
   ];
 
   buildInputs = [
@@ -88,6 +102,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Dgtk-doc=true"
     "-Dmrg=disabled" # not sure what that is
     "-Dsdl2=disabled"
     "-Dpygobject=disabled"
@@ -102,11 +117,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x tests/opencl/opencl_test.sh
     patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tools/xml_insert.sh
-  '';
-
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode

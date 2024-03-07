@@ -5,7 +5,7 @@
 , postgresql
 , geos
 , proj
-, gdalMinimal
+, gdal
 , json_c
 , pkg-config
 , file
@@ -14,19 +14,15 @@
 , pcre2
 , nixosTests
 }:
-
-let
-  gdal = gdalMinimal;
-in
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.4.2";
+  version = "3.4.1";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
+    sha256 = "sha256-/vahQSE9D/J79FszuEnMOWwi3bH/xv7UNUacnokfyB0=";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]

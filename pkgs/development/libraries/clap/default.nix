@@ -2,18 +2,17 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, testers
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "clap";
-  version = "1.2.0";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap";
-    rev = finalAttrs.version;
-    hash = "sha256-BNT2yWIlWk8kzhZteh7TaamliwJI+lzWVs/8XCFsuUc=";
+    rev = version;
+    hash = "sha256-AH3kSCp4Q8Nw3To2vuPuMH/cWm3cmzj2OEH/Azcbdmo=";
   };
 
   postPatch = ''
@@ -23,14 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-
   meta = with lib; {
     description = "Clever Audio Plugin API interface headers";
     homepage = "https://cleveraudio.org/";
-    pkgConfigModules = [ "clap" ];
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ ris ];
   };
-})
+}

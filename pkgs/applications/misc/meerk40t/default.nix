@@ -1,60 +1,40 @@
 { lib
 , fetchFromGitHub
 , meerk40t-camera
-, python3Packages
+, python3
 , gtk3
 , wrapGAppsHook
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "MeerK40t";
-  version = "0.9.4000";
-  pyproject = true;
+  version = "0.8.1000";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ceDnnHdmJ6VOrM9pSxjeKQ748E8fsIqSQ36qFpXc9Ac=";
+    hash = "sha256-YCcnqaH4Npmct5IBHsnufswRz8bS7mUb1YFwTta/Dxc=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook
-  ] ++ (with python3Packages; [
-    setuptools
-  ]);
+  ];
 
   # prevent double wrapping
   dontWrapGApps = true;
 
-  # https://github.com/meerk40t/meerk40t/blob/main/setup.py
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
+    ezdxf
     meerk40t-camera
-    numpy
+    opencv4
+    pillow
     pyserial
     pyusb
     setuptools
     wxpython
-  ]
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
-
-  passthru.optional-dependencies = with python3Packages; {
-    cam = [
-      opencv4
-    ];
-    camhead = [
-      opencv4
-    ];
-    dxf = [
-      ezdxf
-    ];
-    gui = [
-      wxpython
-      pillow
-      opencv4
-      ezdxf
-    ];
-  };
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -63,7 +43,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python3.pkgs; [
     unittestCheckHook
   ];
 

@@ -1,26 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
 , cmake
 }:
 
+let
+  tests = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-test";
+    rev = "e407c1592df0f8e91664835324dea85146f20189";
+    hash = "sha256-9WSEkMJOewPqJjB6f7J6Ir0L+U712hkaN+GszjnGw7c=";
+  };
+in
 buildPythonPackage rec {
   pname = "editorconfig";
-  version = "0.12.4";
-  pyproject = true;
+  version = "0.12.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
     rev = "v${version}";
-    hash = "sha256-+m674bLj6xs7MWU+8BMixEwy7/TjyES0lvCLLogTDHQ=";
-    fetchSubmodules = true;
+    hash = "sha256-ZwoTMgk18+BpPNtXKQUMXGcl2Lp+1RQVyPHgk6gHWh8=";
+    # workaround until https://github.com/editorconfig/editorconfig-core-py/pull/40 is merged
+    # fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postUnpack = ''
+    cp -r ${tests}/* source/tests
+    chmod +w -R source/tests
+  '';
 
   nativeCheckInputs = [
     cmake
@@ -29,12 +38,9 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   checkPhase = ''
-    runHook preCheck
-
     cmake .
-    ctest .
-
-    runHook postCheck
+    # utf_8_char fails with Python 3
+    ctest -E "utf_8_char" .
   '';
 
   pythonImportsCheck = [ "editorconfig" ];

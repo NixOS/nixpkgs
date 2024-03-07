@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.4.3";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "printfn";
-    repo = "fend";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-X96r5wN5eq1PZD/JGqnG/0kg6PYEdnj5h9zc+GXQjQM=";
+    sha256 = "sha256-s6b15FhVfEwsHtVt4bhd6LDxl/WW1PXlUrH2XFOTT5E=";
   };
 
-  cargoHash = "sha256-UIZs45OQ1j57VEb6g4P0AwjmEsjMt0am5FUXXDODaWI=";
+  cargoHash = "sha256-Ilsv0mo7/4eEdRH3jWZXdF4LSYYdWr6gCvnMMAZn5j0=";
 
   nativeBuildInputs = [ pandoc installShellFiles copyDesktopItems ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -D -m 444 $src/icon/icon.svg $out/share/icons/hicolor/scalable/apps/fend.svg
+    install -D -m 444 $src/icon/fend-icon-256.png $out/share/icons/hicolor/256x256/apps/fend.png
   '';
 
   desktopItems = [

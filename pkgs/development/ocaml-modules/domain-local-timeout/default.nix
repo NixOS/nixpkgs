@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "domain-local-timeout";
-  version = "1.0.1";
+  version = "0.1.0";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/domain-local-timeout/releases/download/${version}/domain-local-timeout-${version}.tbz";
-    hash = "sha256-6sCqUkOjN8E+7OLUwVQntkv0vrQDkGDV8KNqDhVm0d8=";
+    hash = "sha256-UTqcHdGAN/LrvumPhW4Cy6RY8RJ/iVO5zTJKrhPRTjk=";
   };
 
   propagatedBuildInputs = [ mtime psq thread-table ];

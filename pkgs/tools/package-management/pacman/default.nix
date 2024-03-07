@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchpatch
+, fetchurl
 , asciidoc
 , binutils
 , coreutils
@@ -38,23 +39,19 @@
 , sysHookDir ? "/usr/share/libalpm/hooks/"
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation rec {
   pname = "pacman";
-  version = "6.1.0";
+  version = "6.0.2";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.archlinux.org";
-    owner = "pacman";
-    repo = "pacman";
-    rev = "v${final.version}";
-    hash = "sha256-uHBq1A//YSqFATlyqjC5ZgmvPkNKqp7sVew+nbmLH78=";
+  src = fetchurl {
+    url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-fY4+jFEhrsCWXfcfWb7fRgUsbPFPljZcRBHsPeCkwaU=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     asciidoc
-    gettext
     installShellFiles
     libarchive
     makeWrapper
@@ -74,6 +71,11 @@ stdenv.mkDerivation (final: {
 
   patches = [
     ./dont-create-empty-dirs.patch
+    # Add keyringdir meson option to configure the keyring directory
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/pacman/pacman/-/commit/79bd512181af12ec80fd8f79486fc9508fa4a1b3.patch";
+      hash = "sha256-ivTPwWe06Q5shn++R6EY0x3GC0P4X0SuC+F5sndfAtM=";
+    })
   ];
 
   postPatch = let compressionTools = [
@@ -91,16 +93,16 @@ stdenv.mkDerivation (final: {
     substituteInPlace meson.build \
       --replace "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
       --replace "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
-      --replace "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'" \
-      --replace "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
+      --replace "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'"
     substituteInPlace doc/meson.build \
       --replace "/bin/true" "${coreutils}/bin/true"
     substituteInPlace scripts/repo-add.sh.in \
       --replace bsdtar "${libarchive}/bin/bsdtar"
     substituteInPlace scripts/pacman-key.sh.in \
       --replace "local KEYRING_IMPORT_DIR='@keyringdir@'" "" \
-      --subst-var-by keyringdir '\$KEYRING_IMPORT_DIR'
-  '';
+      --subst-var-by keyringdir '\$KEYRING_IMPORT_DIR' \
+      --replace "--batch --check-trustdb" "--batch --check-trustdb --allow-weak-key-signatures"
+  ''; # the line above should be removed once Arch migrates to gnupg 2.3.x
 
   mesonFlags = [
     "--sysconfdir=/etc"
@@ -130,7 +132,6 @@ stdenv.mkDerivation (final: {
     changelog = "https://gitlab.archlinux.org/pacman/pacman/-/raw/v${version}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    mainProgram = "pacman";
     maintainers = with maintainers; [ samlukeyes123 ];
   };
-})
+}

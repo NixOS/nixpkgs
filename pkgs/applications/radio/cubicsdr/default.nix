@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lasandell ];
     platforms = platforms.unix;
-    mainProgram = "CubicSDR";
   };
 }

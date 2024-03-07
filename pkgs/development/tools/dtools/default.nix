@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dtools";
-  version = "2.106.1";
+  version = "2.106.0";
 
   src = fetchFromGitHub {
     owner = "dlang";

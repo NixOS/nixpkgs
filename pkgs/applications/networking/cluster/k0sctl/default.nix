@@ -1,18 +1,18 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , installShellFiles
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "k0sctl";
-  version = "0.17.4";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E9EIyBDYsLqfKsb25o1SEh0lUAT/xEtcHHlkunS5Meg=";
+    hash = "sha256-KdD4Wy6PQJQWHnFntYAm/gstWv82AgKK4XvQVM1fnL4=";
   };
 
   vendorHash = "sha256-0P1v7mZ+k7Th8/cwxRNlhDodzyagv0V9ZBXy1BUGk+k=";

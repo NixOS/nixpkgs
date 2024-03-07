@@ -77,13 +77,13 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.38";
+  version = "0.36";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
-    hash  = "sha256-mzMBhnIEgToez6mGFOvO7zBA+rNivZ9OnLQsjBBDamA=";
+    hash  = "sha256-jcaXn77OuKeC3AQTicILP3ABkJ3qBccM+uGbj1wn2Vw=";
   };
 
   enableParallelBuilding = true;
@@ -107,11 +107,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace-fail 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
-
-    # https://github.com/YosysHQ/yosys/pull/4199
-    substituteInPlace ./tests/various/clk2fflogic_effects.sh \
-      --replace-fail 'tail +3' 'tail -n +3'
+      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
 
     chmod +x ./misc/yosys-config.in
     patchShebangs tests ./misc/yosys-config.in
@@ -137,13 +133,6 @@ in stdenv.mkDerivation (finalAttrs: {
     echo "ENABLE_PYOSYS := 1" >> Makefile.conf
     echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
     echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
-  '';
-
-  preCheck = ''
-    # autotest.sh automatically compiles a utility during startup if it's out of date.
-    # having N check jobs race to do that creates spurious codesigning failures on macOS.
-    # run it once without asking it to do anything so that compilation is done before the jobs start.
-    tests/tools/autotest.sh
   '';
 
   checkTarget = "test";

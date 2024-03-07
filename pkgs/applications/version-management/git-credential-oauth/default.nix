@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-credential-oauth";
-  version = "0.11.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "hickford";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-bqyoAAqli0L6Kf+W1sTh2vmmfaIj2OdpQyvQZnYOWWA=";
+    hash = "sha256-Zxdd4JhSoaAFx8neZqdOZSZEOTtupZHnX+5ziYxbw6s=";
   };
 
   ldflags = [

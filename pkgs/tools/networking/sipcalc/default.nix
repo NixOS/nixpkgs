@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.globin ];
-    mainProgram = "sipcalc";
   };
 }

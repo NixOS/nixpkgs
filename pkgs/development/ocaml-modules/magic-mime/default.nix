@@ -2,14 +2,15 @@
 
 buildDunePackage rec {
   pname = "magic-mime";
-  version = "1.3.1";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-magic-mime/releases/download/v${version}/magic-mime-${version}.tbz";
-    hash = "sha256-4CNNA2Jduh76xY5X44dnLXWl6aYh/0ms/g9gnADxOwg=";
+    url = "https://github.com/mirage/ocaml-magic-mime/releases/download/v${version}/magic-mime-v${version}.tbz";
+    sha256 = "sha256-8SG2dQD43Zfi/J/V0BxzJeTIS8XAI3RCd5+9b6IGlPU=";
   };
 
   minimalOCamlVersion = "4.03";
+  useDune2 = true;
 
   meta = with lib; {
     description = "Convert file extensions to MIME types";

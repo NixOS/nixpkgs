@@ -5,21 +5,19 @@
 
 buildGoModule rec {
   pname = "doc2go";
-  version = "0.8.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "doc2go";
     rev = "v${version}";
-    hash = "sha256-b4L20/9jm+bFGdNsHmcwSnzcmr3Il9XoV20284Ba8PU=";
+    hash = "sha256-CFqr1laPxKNhaluGmwW7apxLQqkAFKVznDKezH8gjx0=";
   };
-  vendorHash = "sha256-d5ZRMFi7GIfDHsYRNvMnDdfnGhTM1sA0WDYD2aDoEd0=";
+  vendorHash = "sha256-2WvlH69iYqIA3d9aFVec8TZL+pMJItoNKSoDBL/NNyg=";
 
   ldflags = [ "-s" "-w" "-X main._version=${version}" ];
 
   subPackages = [ "." ];
-  # integration is it's own module
-  excludedPackages = [ "integration" ];
 
   checkFlags = [
     # needs to fetch additional go modules

@@ -15,7 +15,6 @@
 , openssl
 , swig
 , which
-, python3
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
@@ -45,7 +44,6 @@ let
     version ? null
   , src ? null
   , filesToInstall
-  , pythonScriptsToInstall ? { }
   , installDir ? "$out"
   , defconfig
   , extraConfig ? ""
@@ -65,10 +63,6 @@ let
     ] ++ extraPatches;
 
     postPatch = ''
-      ${lib.concatMapStrings (script: ''
-        substituteInPlace ${script} \
-        --replace "#!/usr/bin/env python3" "#!${pythonScriptsToInstall.${script}}/bin/python3"
-      '') (builtins.attrNames pythonScriptsToInstall)}
       patchShebangs tools
       patchShebangs scripts
     '';
@@ -116,12 +110,12 @@ let
       runHook preInstall
 
       mkdir -p ${installDir}
-      cp ${lib.concatStringsSep " " (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)} ${installDir}
+      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
       mkdir -p "$out/nix-support"
       ${lib.concatMapStrings (file: ''
         echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
-      '') (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)}
+      '') filesToInstall}
 
       runHook postInstall
     '';
@@ -134,7 +128,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
+  } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
 
@@ -160,10 +154,6 @@ in {
       "tools/mkenvimage"
       "tools/mkimage"
     ];
-
-    pythonScriptsToInstall = {
-      "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
-    };
   };
 
   ubootA20OlinuxinoLime = buildUBoot {
@@ -359,15 +349,6 @@ in {
     defconfig = "a64-olinuxino-emmc_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
-    SCP = "/dev/null";
-    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
-  };
-
-  ubootOlimexA64Teres1 = buildUBoot {
-    defconfig = "teres_i_defconfig";
-    extraMeta.platforms = ["aarch64-linux"];
-    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
-    # Using /dev/null here is upstream-specified way that disables the inclusion of crust-firmware as it's not yet packaged and without which the build will fail -- https://docs.u-boot.org/en/latest/board/allwinner/sunxi.html#building-the-crust-management-processor-firmware
     SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };

@@ -1,5 +1,5 @@
 { lib, fetchurl, stdenv, runtimeShell, SDL2, freealut, SDL2_image, openal, physfs
-, zlib, libGLU, libGL, glew, tinyxml-2, copyDesktopItems, makeDesktopItem }:
+, zlib, libGLU, libGL, glew, tinyxml-2 }:
 
 stdenv.mkDerivation rec {
   pname = "trigger-rally";
@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/trigger-rally/${pname}-${version}.tar.gz";
     sha256 = "016bc2hczqscfmngacim870hjcsmwl8r3aq8x03vpf22s49nw23z";
   };
-
-  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     SDL2
@@ -44,21 +42,7 @@ stdenv.mkDerivation rec {
     exec $out/games/trigger-rally "$@"
     EOF
     chmod +x $out/bin/trigger-rally
-
-    mkdir -p $out/share/pixmaps/
-    ln -s $out/share/games/trigger-rally/icon/trigger-rally-icons.svg $out/share/pixmaps/trigger.svg
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Trigger";
-      exec = "trigger-rally";
-      icon = "trigger";
-      desktopName = "Trigger";
-      comment = "Fast-paced 3D single-player rally racing game";
-      categories = [ "Game" "ActionGame" ];
-    })
-  ];
 
   meta = {
     description = "A fast-paced single-player racing game";

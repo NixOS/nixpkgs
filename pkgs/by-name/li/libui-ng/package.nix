@@ -7,18 +7,17 @@
 , meson
 , ninja
 , pkg-config
-, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "libui-ng";
-  version = "unstable-2024-02-05";
+  version = "unstable-2023-12-19";
 
   src = fetchFromGitHub {
     owner = "libui-ng";
     repo = "libui-ng";
-    rev = "4d46de31eafad84c88b939356bcd64e6c5ee3821";
-    hash = "sha256-Yb8VdJe75uBzRnsfTOVxUXstZmu6dJ9nBuOrf86KO5s=";
+    rev = "8de4a5c8336f82310df1c6dad51cb732113ea114";
+    hash = "sha256-ZMt2pEHwxXxLWtK8Rm7hky9Kxq5ZIB0olBLf1d9wVfc=";
   };
 
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
@@ -46,8 +45,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonBool "examples" (!stdenv.isDarwin))
   ];
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "A portable GUI library for C";

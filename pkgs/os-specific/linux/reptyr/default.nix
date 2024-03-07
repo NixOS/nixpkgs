@@ -17,9 +17,7 @@ in stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ python ];
 
-  # reptyr needs to do ptrace of a non-child process
-  # It can be neither used nor tested if the kernel is not told to allow this
-  doCheck = false;
+  doCheck = true;
 
   checkFlags = [
     "PYTHON_CMD=${python.interpreter}"

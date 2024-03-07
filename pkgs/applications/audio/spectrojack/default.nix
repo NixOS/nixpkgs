@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ sleexyz ];
     platforms = with lib.platforms; linux;
-    mainProgram = "spectrojack";
   };
 }

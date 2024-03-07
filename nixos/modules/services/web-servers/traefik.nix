@@ -144,7 +144,6 @@ in {
 
     systemd.services.traefik = {
       description = "Traefik web server";
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 86400;

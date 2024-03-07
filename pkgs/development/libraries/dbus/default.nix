@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
-  separateDebugInfo = true;
 
   strictDeps = true;
   nativeBuildInputs = [

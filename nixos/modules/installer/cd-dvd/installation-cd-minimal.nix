@@ -18,7 +18,7 @@
   # not including it may cause annoying cache misses in the case of the NixOS manual.
   documentation.doc.enable = lib.mkOverride 500 true;
 
-  fonts.fontconfig.enable = lib.mkOverride 500 false;
+  fonts.fontconfig.enable = lib.mkForce false;
 
-  isoImage.edition = lib.mkOverride 500 "minimal";
+  isoImage.edition = lib.mkForce "minimal";
 }

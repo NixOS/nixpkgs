@@ -64,6 +64,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
-    mainProgram = "8086tiny";
   };
 }

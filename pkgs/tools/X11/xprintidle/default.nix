@@ -7,14 +7,14 @@
 , xorg
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xprintidle";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "g0hl1n";
     repo = "xprintidle";
-    rev = finalAttrs.version;
+    rev = version;
     sha256 = "sha256-bafDUZoSFsJ3g6mtLCRechGizfrWg2qW2vnlfIzj7mQ=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     mainProgram = "xprintidle";
   };
-})
+}

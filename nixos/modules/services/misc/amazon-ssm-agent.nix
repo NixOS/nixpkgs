@@ -41,7 +41,6 @@ in {
     # See https://github.com/aws/amazon-ssm-agent/blob/mainline/packaging/linux/amazon-ssm-agent.service
     systemd.services.amazon-ssm-agent = {
       inherit (cfg.package.meta) description;
-      wants    = [ "network-online.target" ];
       after    = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 

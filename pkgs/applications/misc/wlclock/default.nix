@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ nomisiv ];
     platforms = with platforms; linux;
-    mainProgram = "wlclock";
   };
 }

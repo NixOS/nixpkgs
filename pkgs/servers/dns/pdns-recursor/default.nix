@@ -1,46 +1,26 @@
 { lib, stdenv, fetchurl, pkg-config, boost, nixosTests
 , openssl, systemd, lua, luajit, protobuf
-, libsodium
-, curl
-, rustPlatform, cargo, rustc
 , enableProtoBuf ? false
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pdns-recursor";
-  version = "5.0.2";
+  version = "4.9.2";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-qQ6LYf3BgbWWFEw1kgEYynHDuV9GZYzOfoIidQ3kXKk=";
+    url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
+    sha256 = "sha256-TLgYBFjs+1KKPZo0uihEts0u1pyhxGHd4koOvWaCkUQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-XHzuYkO91TJNU2DYqMlafqrc2zR1WvIrNLjFHL2FcwA=";
-  };
-
-  cargoRoot = "settings/rust";
-
-  nativeBuildInputs = [
-    cargo
-    rustc
-
-    rustPlatform.cargoSetupHook
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost openssl systemd
     lua luajit
-    libsodium
-    curl
   ] ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [
     "--enable-reproducible"
     "--enable-systemd"
-    "--enable-dns-over-tls"
     "sysconfdir=/etc/pdns-recursor"
   ];
 
@@ -62,4 +42,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ rnhmjoj ];
   };
-})
+}

@@ -6,16 +6,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "robo";
-  version = "4.0.6";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "consolidation";
     repo = "robo";
     rev = finalAttrs.version;
-    hash = "sha256-rpCs24Q15XM4BdW1+IfysFR/8/ZU4o5b4MyJL48uDaU=";
+    hash = "sha256-4sQc3ec34F5eBy9hquTqmzUgvFCTlml3LJdP39gPim4=";
   };
 
-  vendorHash = "sha256-Ul8XjH0Nav37UVpNQslOkF2bkiyqUAEZiIbcSW2tGkQ=";
+  vendorHash = "sha256-QX7AFtW6Vm9P0ABOuTs1U++nvWBzpvtxhTbK40zDYqc=";
 
   meta = {
     changelog = "https://github.com/consolidation/robo/blob/${finalAttrs.version}/CHANGELOG.md";

@@ -5,14 +5,14 @@
 , fetchpatch
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "heatshrink";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "atomicobject";
     repo = "heatshrink";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-Nm9/+JFMDXY1N90hmNFGh755V2sXSRQ4VBN9f8TcsGk=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     mainProgram = "heatshrink";
   };
-})
+}

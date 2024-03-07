@@ -12,7 +12,5 @@ qtModule {
   patches = [
     # prevent headaches from stale qmlcache data
     ../patches/qtdeclarative-default-disable-qmlcache.patch
-    # add version specific QML import path
-    ../patches/qtdeclarative-qml-paths.patch
   ];
 }

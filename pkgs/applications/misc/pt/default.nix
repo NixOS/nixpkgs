@@ -13,6 +13,5 @@ bundlerApp {
     license     = licenses.mit;
     maintainers = with maintainers; [ ebzzry manveru nicknovitski ];
     platforms   = platforms.unix;
-    mainProgram = "pt";
   };
 }

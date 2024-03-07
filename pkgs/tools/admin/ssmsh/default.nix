@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ssmsh";
-  version = "1.4.9";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "bwhaley";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UmfwDukRVyfX+DmUfRi+KepqFrPtDNImKd22/dI7ytk=";
+    sha256 = "sha256-GpN+yicgFIHOaMeJJcRn55f6fQbFX12vSV089/cMsqc=";
   };
 
-  vendorHash = "sha256-+7duWRe/haBOZbe18sr2qwg419ieEZwYDb0L3IPLA4A=";
+  vendorHash = "sha256-17fmdsfOrOaySPsXofLzz0+vmiemg9MbnWhRoZ67EuQ=";
 
   doCheck = true;
 
@@ -28,6 +28,5 @@ buildGoModule rec {
     description = "An interactive shell for AWS Parameter Store";
     license = licenses.mit;
     maintainers = with maintainers; [ dbirks ];
-    mainProgram = "ssmsh";
   };
 }

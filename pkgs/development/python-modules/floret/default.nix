@@ -23,8 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-7vkw6H0ZQoHEwNusY6QWh/vPbSCdP1ZaaqABHsZH6hQ=";
   };
 
-  patches = [./cstdint.patch ];
-
   nativeBuildInputs = [
     pybind11
     setuptools

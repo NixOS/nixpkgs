@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-G5UZ8lBrUo5G3jMae70p/zi9kOVqHWMNCedOy45L1PA=";
   };
 
-  patches = [ ./0001-build-tests-with-cpp-14.patch ];
-
   # don't use vendored htmltopdf
   postPatch = ''
     substituteInPlace deepin_reader.pro \

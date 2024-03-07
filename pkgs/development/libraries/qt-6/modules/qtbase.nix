@@ -4,7 +4,6 @@
 , patches ? [ ]
 , version
 , coreutils
-, buildPackages
 , bison
 , flex
 , gdb
@@ -22,7 +21,7 @@
 , double-conversion
 , util-linux
 , systemd
-, systemdSupport ? stdenv.hostPlatform.isLinux
+, systemdSupport ? stdenv.isLinux
 , libb2
 , md4c
 , mtdev
@@ -80,8 +79,6 @@
 , EventKit
 , GSS
 , MetalKit
-  # mingw
-, pkgsBuildBuild
   # optional dependencies
 , cups
 , libmysqlclient
@@ -90,7 +87,7 @@
 , dconf
 , gtk3
   # options
-, libGLSupported ? stdenv.hostPlatform.isLinux
+, libGLSupported ? stdenv.isLinux
 , libGL
 , debug ? false
 , developerBuild ? false
@@ -99,7 +96,6 @@
 
 let
   debugSymbols = debug || developerBuild;
-  isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "qtbase";
@@ -114,6 +110,7 @@ stdenv.mkDerivation rec {
     openssl
     sqlite
     zlib
+    unixODBC
     # Text rendering
     harfbuzz
     icu
@@ -122,22 +119,20 @@ stdenv.mkDerivation rec {
     libpng
     pcre2
     pcre
+    libproxy
     zstd
+    double-conversion
     libb2
     md4c
-    double-conversion
-  ] ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
-    libproxy
     dbus
     glib
     # unixODBC drivers
-    unixODBC
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
   ] ++ lib.optionals systemdSupport [
     systemd
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     util-linux
     mtdev
     lksctp-tools
@@ -170,7 +165,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     AGL
     AVFoundation
     AppKit
@@ -179,29 +174,24 @@ stdenv.mkDerivation rec {
     EventKit
     GSS
     MetalKit
-  ] ++ lib.optionals libGLSupported [
-    libGL
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    vulkan-headers
-    vulkan-loader
-  ];
+  ] ++ lib.optional libGLSupported libGL;
 
-  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
+  buildInputs = [
     at-spi2-core
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libinput
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     AppKit
     CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional developerBuild gdb
-  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
-  ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
-  ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
+  ++ lib.optional (cups != null) cups
+  ++ lib.optional (libmysqlclient != null) libmysqlclient
+  ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
+    ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -213,9 +203,9 @@ stdenv.mkDerivation rec {
 
   # https://bugreports.qt.io/browse/QTBUG-97568
   postPatch = ''
-    substituteInPlace src/corelib/CMakeLists.txt --replace-fail "/bin/ls" "${buildPackages.coreutils}/bin/ls"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+    substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cmake/QtAutoDetect.cmake --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
   '';
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
@@ -235,20 +225,16 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_libproxy=ON"
     "-DQT_FEATURE_system_sqlite=ON"
     "-DQT_FEATURE_openssl_linked=ON"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DQT_FEATURE_sctp=ON"
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
-  ] ++ lib.optionals isCrossBuild [
-    "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
-    "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
-  ]
-  ++ lib.optional (qttranslations != null && !isCrossBuild) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
+  ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
-  env.NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
+  env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
     "-framework GSS"
   ]);
@@ -267,8 +253,6 @@ stdenv.mkDerivation rec {
 
   dontStrip = debugSymbols;
 
-  dontWrapQtApps = true;
-
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
   meta = with lib; {
@@ -276,6 +260,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao LunNova ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = platforms.unix;
   };
 }

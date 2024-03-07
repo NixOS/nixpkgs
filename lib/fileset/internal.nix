@@ -5,7 +5,6 @@ let
     isAttrs
     isPath
     isString
-    nixVersion
     pathExists
     readDir
     split
@@ -18,8 +17,6 @@ let
     attrNames
     attrValues
     mapAttrs
-    mapAttrsToList
-    optionalAttrs
     zipAttrsWith
     ;
 
@@ -30,7 +27,6 @@ let
   inherit (lib.lists)
     all
     commonPrefix
-    concatLists
     elemAt
     filter
     findFirst
@@ -60,7 +56,6 @@ let
     substring
     stringLength
     hasSuffix
-    versionAtLeast
     ;
 
   inherit (lib.trivial)
@@ -541,27 +536,6 @@ rec {
           ${baseNameOf root} = rootPathType;
         };
 
-  # Turns a file set into the list of file paths it includes.
-  # Type: fileset -> [ Path ]
-  _toList = fileset:
-    let
-      recurse = path: tree:
-        if isAttrs tree then
-          concatLists (mapAttrsToList (name: value:
-            recurse (path + "/${name}") value
-          ) tree)
-        else if tree == "directory" then
-          recurse path (readDir path)
-        else if tree == null then
-          [ ]
-        else
-          [ path ];
-    in
-    if fileset._internalIsEmptyWithoutBase then
-      [ ]
-    else
-      recurse fileset._internalBase fileset._internalTree;
-
   # Transforms the filesetTree of a file set to a shorter base path, e.g.
   # _shortenTreeBase [ "foo" ] (_create /foo/bar null)
   # => { bar = null; }
@@ -866,10 +840,6 @@ rec {
   # https://github.com/NixOS/nix/commit/55cefd41d63368d4286568e2956afd535cb44018
   _fetchGitSubmodulesMinver = "2.4";
 
-  # Support for `builtins.fetchGit` with `shallow = true` was introduced in 2.4
-  # https://github.com/NixOS/nix/commit/d1165d8791f559352ff6aa7348e1293b2873db1c
-  _fetchGitShallowMinver = "2.4";
-
   # Mirrors the contents of a Nix store path relative to a local path as a file set.
   # Some notes:
   # - The store path is read at evaluation time.
@@ -924,17 +894,7 @@ rec {
           # However a simpler alternative still would be [a builtins.gitLsFiles](https://github.com/NixOS/nix/issues/2944).
           fetchResult = fetchGit ({
             url = path;
-          }
-          # In older Nix versions, repositories were always assumed to be deep clones, which made `fetchGit` fail for shallow clones
-          # For newer versions this was fixed, but the `shallow` flag is required.
-          # The only behavioral difference is that for shallow clones, `fetchGit` doesn't return a `revCount`,
-          # which we don't need here, so it's fine to always pass it.
-
-          # Unfortunately this means older Nix versions get a poor error message for shallow repositories, and there's no good way to improve that.
-          # Checking for `.git/shallow` doesn't seem worth it, especially since that's more of an implementation detail,
-          # and would also require more code to handle worktrees where `.git` is a file.
-          // optionalAttrs (versionAtLeast nixVersion _fetchGitShallowMinver) { shallow = true; }
-          // extraFetchGitAttrs);
+          } // extraFetchGitAttrs);
         in
         # We can identify local working directories by checking for .git,
         # see https://git-scm.com/docs/gitrepository-layout#_description.

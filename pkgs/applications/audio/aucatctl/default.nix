@@ -32,6 +32,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.isc;
     maintainers = with maintainers; [ sna ];
     platforms = platforms.unix;
-    mainProgram = "aucatctl";
   };
 })

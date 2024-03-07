@@ -1,34 +1,37 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, which
-, gmp
-, avx2Support ? stdenv.hostPlatform.avx2Support
+, bc
+, libedit
+, readline
+, avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "9.5.1";
+  version = "904-beta-c";
 
   src = fetchFromGitHub {
+    name = "${pname}-source";
     owner = "jsoftware";
     repo = "jsource";
-    rev = "${version}";
-    hash = "sha256-QRQhE8138+zaGQOdq9xUOrifkVIprzbJWbmMK+WhEOU=";
+    rev = "j${version}";
+    hash = "sha256-MzEO/saHEBl1JwVlFC6P2UKm9RZnV7KVrNd9h4cPV/w=";
   };
 
-  nativeBuildInputs = [ which ];
-  buildInputs = [ gmp ];
+  buildInputs = [
+    readline
+    libedit
+    bc
+  ];
 
   patches = [
     ./fix-install-path.patch
   ];
 
-  enableParallelBuilding = true;
-
   dontConfigure = true;
 
-  # Emulate jplatform64.sh configuration variables
+  # emulating build_all.sh configuration variables
   jplatform =
     if stdenv.isDarwin then "darwin"
     else if stdenv.hostPlatform.isAarch then "raspberry"
@@ -38,39 +41,62 @@ stdenv.mkDerivation rec {
   j64x =
     if stdenv.is32bit then "j32"
     else if stdenv.isx86_64 then
-      if stdenv.isLinux && avx2Support then "j64avx2" else "j64"
+      if (stdenv.isLinux && avxSupport) then "j64avx" else "j64"
     else if stdenv.isAarch64 then
       if stdenv.isDarwin then "j64arm" else "j64"
     else "unsupported";
 
-  env.NIX_LDFLAGS = "-lgmp";
-
   buildPhase = ''
     runHook preBuild
-    MAKEFLAGS+=" ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}" \
-      jplatform=${jplatform} j64x=${j64x} make2/build_all.sh
-    cp -v bin/${jplatform}/${j64x}/* jlibrary/bin/
+
+    export SRCDIR=$(pwd)
+    export HOME=$TMPDIR
+    export JLIB=$SRCDIR/jlibrary
+    export CC=cc
+
+    cd make2
+
+    patchShebangs .
+
+    j64x="${j64x}" jplatform="${jplatform}" ./build_all.sh
+
+    cp -v $SRCDIR/bin/${jplatform}/${j64x}/* "$JLIB/bin"
+
     runHook postBuild
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    echo "Smoke test"
+    echo 'i. 10' | $JLIB/bin/jconsole | fgrep "0 1 2 3 4 5 6 7 8 9"
+
+    # Now run the real tests
+    pushd $SRCDIR/test
+    for f in *.ijs
+    do
+      echo -n "test $f: "
+      $JLIB/bin/jconsole < $f > /dev/null || echo FAIL && echo PASS
+    done
+    popd
+
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/j
-    cp -r jlibrary/{addons,system} $out/share/j/
-    cp -r jlibrary/bin $out/
+
+    mkdir -p "$out/share/j/"
+    cp -r $JLIB/{addons,system} "$out/share/j"
+    cp -r $JLIB/bin "$out"
+
     runHook postInstall
   '';
 
-  doInstallCheck = false; # The "gregex" test fails due to not finding PCRE2
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-    HOME="$TMPDIR" $out/bin/jconsole -lib $out/bin/libj* script/testga.ijs
-    runHook postInstallCheck
-  '';
-
   meta = with lib; {
-    homepage = "https://jsoftware.com/";
+    homepage = "http://jsoftware.com/";
     description = "J programming language, an ASCII-based APL successor";
     longDescription = ''
       J is a high-level, general-purpose programming language that is
@@ -78,10 +104,8 @@ stdenv.mkDerivation rec {
       of data. It is a powerful tool for developing algorithms and exploring
       problems that are not already well understood.
     '';
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
-    broken = stdenv.isDarwin;
-    platforms = platforms.all;
-    mainProgram = "jconsole";
+    platforms = with platforms; unix;
   };
 }

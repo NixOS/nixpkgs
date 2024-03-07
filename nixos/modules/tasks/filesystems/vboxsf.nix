@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inInitrd = config.boot.initrd.supportedFilesystems.vboxsf or false;
+  inInitrd = any (fs: fs == "vboxsf") config.boot.initrd.supportedFilesystems;
 
   package = pkgs.runCommand "mount.vboxsf" { preferLocalBuild = true; } ''
     mkdir -p $out/bin
@@ -13,7 +13,7 @@ let
 in
 
 {
-  config = mkIf (config.boot.supportedFilesystems.vboxsf or false) {
+  config = mkIf (any (fs: fs == "vboxsf") config.boot.supportedFilesystems) {
 
     system.fsPackages = [ package ];
 

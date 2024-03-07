@@ -8,7 +8,7 @@
   magma-hip,
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
-  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
+  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported),
   MPISupport ? false, mpi,
   buildDocs ? false,
 
@@ -21,7 +21,6 @@
   Accelerate, CoreServices, libobjc,
 
   # Propagated build inputs
-  astunparse,
   fsspec,
   filelock,
   jinja2,
@@ -127,8 +126,8 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.2.1";
-  pyproject = true;
+  version = "2.1.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8.0";
 
@@ -145,7 +144,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-6z8G5nMbGHbpA+xfmOR726h9E4N9NoEtaFgcYE0DuUE=";
+    hash = "sha256-E/GQCRWBf3hYsDCCk0twaL9gkVOCEQeCvO3Va+jgIdE=";
   };
 
   patches = lib.optionals cudaSupport [
@@ -247,9 +246,6 @@ in buildPythonPackage rec {
   # Avoid using pybind11 from git submodule
   # Also avoids pytorch exporting the headers of pybind11
   USE_SYSTEM_PYBIND11 = true;
-
-  # NB technical debt: building without NNPACK as workaround for missing `six`
-  USE_NNPACK = 0;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -387,7 +383,6 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   propagatedBuildInputs = [
-    astunparse
     cffi
     click
     numpy

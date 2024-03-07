@@ -28,6 +28,5 @@ buildGoModule rec {
     homepage = "https://github.com/mattn/tailscale-systray";
     license = licenses.mit;
     maintainers = with maintainers; [ qbit ];
-    mainProgram = "tailscale-systray";
   };
 }

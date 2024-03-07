@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "qcs-api-client";
   version = "0.23.1";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -46,8 +46,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "attrs"
     "httpx"
-    "iso8601"
-    "pydantic"
   ];
 
   nativeBuildInputs = [

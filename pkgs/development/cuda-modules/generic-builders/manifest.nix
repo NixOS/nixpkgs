@@ -47,8 +47,6 @@ let
   # The redistArch is the name of the architecture for which the redistributable is built.
   # It is `"unsupported"` if the redistributable is not supported on the target platform.
   redistArch = flags.getRedistArch hostPlatform.system;
-
-  sourceMatchesHost = flags.getNixSystem redistArch == stdenv.hostPlatform.system;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
@@ -138,9 +136,7 @@ backendStdenv.mkDerivation (
     # badPlatformsConditions :: AttrSet Bool
     # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
     # Example: Broken on a specific architecture when some condition is met (like targeting Jetson).
-    badPlatformsConditions = {
-      "No source" = !sourceMatchesHost;
-    };
+    badPlatformsConditions = { };
 
     # src :: Optional Derivation
     src = trivial.pipe redistArch [
@@ -280,10 +276,11 @@ backendStdenv.mkDerivation (
     '';
 
     # libcuda needs to be resolved during runtime
-    autoPatchelfIgnoreMissingDeps = [
-      "libcuda.so"
-      "libcuda.so.*"
-    ];
+    # NOTE: Due to the use of __structuredAttrs, we can't use a list for autoPatchelfIgnoreMissingDeps, since it
+    # will take only the first value. Instead, we produce a string with the values separated by spaces.
+    # Using the `env` attribute ensures that the value is representable as one of the primitives allowed by
+    # bash's environment variables.
+    env.autoPatchelfIgnoreMissingDeps = "libcuda.so libcuda.so.*";
 
     # The out output leverages the same functionality which backs the `symlinkJoin` function in
     # Nixpkgs:

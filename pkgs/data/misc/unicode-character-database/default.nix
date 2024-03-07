@@ -1,9 +1,9 @@
-{ lib, stdenvNoCC
+{ lib, stdenv
 , fetchurl
 , unzip
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "unicode-character-database";
   version = "15.1.0";
 
@@ -23,7 +23,6 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $out/share/unicode
     cp -r * $out/share/unicode
-    rm $out/share/unicode/env-vars
 
     runHook postInstall
   '';

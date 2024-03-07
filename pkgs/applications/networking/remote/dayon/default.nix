@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dayon";
-  version = "13.0.2";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sKA50D+VYjfKzdZAppIGfU5uJqrCrZPEsk9EEMBxu3I=";
+    hash = "sha256-2Fo+LQvsrDvqEudZxzQBtJHGxrRYUyNyhrPV1xS49pQ=";
   };
 
   nativeBuildInputs = [

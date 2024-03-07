@@ -16,7 +16,6 @@ let
     libcublas
     setupCudaHook
     ;
-  inherit (lib) getDev getLib getOutput;
 in
 backendStdenv.mkDerivation {
   pname = "saxpy";
@@ -37,9 +36,9 @@ backendStdenv.mkDerivation {
   buildInputs =
     lib.optionals (lib.versionOlder cudaVersion "11.4") [cudatoolkit]
     ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [
-      (getDev libcublas)
-      (getLib libcublas)
-      (getOutput "static" libcublas)
+      libcublas.dev
+      libcublas.lib
+      libcublas.static
       cuda_cudart
     ]
     ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0") [cuda_cccl];
@@ -51,11 +50,10 @@ backendStdenv.mkDerivation {
     ))
   ];
 
-  meta = rec {
+  meta = {
     description = "A simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
     license = lib.licenses.mit;
     maintainers = lib.teams.cuda.members;
     platforms = lib.platforms.unix;
-    badPlatforms = lib.optionals flags.isJetsonBuild platforms;
   };
 }

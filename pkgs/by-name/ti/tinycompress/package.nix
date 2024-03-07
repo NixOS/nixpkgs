@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tinycompress";
-  version = "1.2.11";
+  version = "1.2.8";
 
   src = fetchurl {
     url = "mirror://alsa/tinycompress/${pname}-${version}.tar.bz2";
-    hash = "sha256-6754jCgyjnzKJFqvkZSlrQ3JHp4NyIPCz5/rbULJ8/w=";
+    hash = "sha256-L4l+URLNO8pnkLXOz9puBmLIvF7g+6uXKyR6DMYg1mw=";
   };
 
   meta = with lib; {

@@ -30,6 +30,5 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "nwg-dock";
   };
 }

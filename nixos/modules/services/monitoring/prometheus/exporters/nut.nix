@@ -36,17 +36,6 @@ in
         provisioned outside of Nix store.
       '';
     };
-    nutVariables = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = ''
-        List of NUT variable names to monitor.
-
-        If no variables are set, all numeric variables will be exported automatically.
-        See the [upstream docs](https://github.com/DRuggeri/nut_exporter?tab=readme-ov-file#variables-and-information)
-        for more information.
-      '';
-    };
   };
   serviceOpts = {
     script = ''
@@ -55,9 +44,7 @@ in
       ${pkgs.prometheus-nut-exporter}/bin/nut_exporter \
         --nut.server=${cfg.nutServer} \
         --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" \
-        ${optionalString (cfg.nutUser != "") "--nut.username=${cfg.nutUser}"} \
-        ${optionalString (cfg.nutVariables != []) "--nut.vars_enable=${concatStringsSep "," cfg.nutVariables}"} \
-        ${concatStringsSep " " cfg.extraFlags}
+        ${optionalString (cfg.nutUser != "") "--nut.username=${cfg.nutUser}"}
     '';
   };
 }

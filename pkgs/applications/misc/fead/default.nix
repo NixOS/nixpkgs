@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     changelog = "https://git.sr.ht/~cnx/fead/refs/${version}";
     maintainers = with maintainers; [ McSinyx ];
-    mainProgram = "fead";
   };
 }

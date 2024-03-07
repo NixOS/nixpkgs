@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
-    mainProgram = "pinpoint";
   };
 }

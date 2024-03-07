@@ -3,13 +3,11 @@ use crate::references;
 use crate::utils;
 use crate::utils::{BASE_SUBPATH, PACKAGE_NIX_FILENAME};
 use crate::validation::{self, ResultIteratorExt, Validation::Success};
-use crate::NixFileStore;
 use itertools::concat;
 use lazy_static::lazy_static;
 use regex::Regex;
-use relative_path::RelativePathBuf;
 use std::fs::DirEntry;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 lazy_static! {
     static ref SHARD_NAME_REGEX: Regex = Regex::new(r"^[a-z0-9_-]{1,2}$").unwrap();
@@ -22,24 +20,21 @@ pub fn shard_for_package(package_name: &str) -> String {
     package_name.to_lowercase().chars().take(2).collect()
 }
 
-pub fn relative_dir_for_shard(shard_name: &str) -> RelativePathBuf {
-    RelativePathBuf::from(format!("{BASE_SUBPATH}/{shard_name}"))
+pub fn relative_dir_for_shard(shard_name: &str) -> PathBuf {
+    PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}"))
 }
 
-pub fn relative_dir_for_package(package_name: &str) -> RelativePathBuf {
+pub fn relative_dir_for_package(package_name: &str) -> PathBuf {
     relative_dir_for_shard(&shard_for_package(package_name)).join(package_name)
 }
 
-pub fn relative_file_for_package(package_name: &str) -> RelativePathBuf {
+pub fn relative_file_for_package(package_name: &str) -> PathBuf {
     relative_dir_for_package(package_name).join(PACKAGE_NIX_FILENAME)
 }
 
 /// Check the structure of Nixpkgs, returning the attribute names that are defined in
 /// `pkgs/by-name`
-pub fn check_structure(
-    path: &Path,
-    nix_file_store: &mut NixFileStore,
-) -> validation::Result<Vec<String>> {
+pub fn check_structure(path: &Path) -> validation::Result<Vec<String>> {
     let base_dir = path.join(BASE_SUBPATH);
 
     let shard_results = utils::read_dir_sorted(&base_dir)?
@@ -93,13 +88,7 @@ pub fn check_structure(
                 let package_results = entries
                     .into_iter()
                     .map(|package_entry| {
-                        check_package(
-                            nix_file_store,
-                            path,
-                            &shard_name,
-                            shard_name_valid,
-                            package_entry,
-                        )
+                        check_package(path, &shard_name, shard_name_valid, package_entry)
                     })
                     .collect_vec()?;
 
@@ -113,7 +102,6 @@ pub fn check_structure(
 }
 
 fn check_package(
-    nix_file_store: &mut NixFileStore,
     path: &Path,
     shard_name: &str,
     shard_name_valid: bool,
@@ -121,8 +109,7 @@ fn check_package(
 ) -> validation::Result<String> {
     let package_path = package_entry.path();
     let package_name = package_entry.file_name().to_string_lossy().into_owned();
-    let relative_package_dir =
-        RelativePathBuf::from(format!("{BASE_SUBPATH}/{shard_name}/{package_name}"));
+    let relative_package_dir = PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}/{package_name}"));
 
     Ok(if !package_path.is_dir() {
         NixpkgsProblem::PackageNonDir {
@@ -174,9 +161,8 @@ fn check_package(
         });
 
         let result = result.and(references::check_references(
-            nix_file_store,
             &relative_package_dir,
-            &relative_package_dir.to_path(path),
+            &path.join(&relative_package_dir),
         )?);
 
         result.map(|_| package_name.clone())

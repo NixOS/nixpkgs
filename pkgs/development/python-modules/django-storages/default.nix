@@ -1,33 +1,38 @@
 { lib
+, buildPythonPackage
+, fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
+, django
+
+# optional-dependencies
 , azure-storage-blob
 , boto3
-, buildPythonPackage
-, cryptography
-, django
 , dropbox
-, fetchFromGitHub
 , google-cloud-storage
 , libcloud
-, moto
 , paramiko
+
+# tests
+, cryptography
+, moto
 , pytestCheckHook
-, pythonOlder
 , rsa
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.14.2";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  version = "1.14";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jschneier";
     repo = "django-storages";
     rev = "refs/tags/${version}";
-    hash = "sha256-V0uFZvnBi0B31b/j/u3Co6dd9XcdVefiSkl3XmCTJG4=";
+    hash = "sha256-q+vQm1T5/ueGPfwzuUOmSI/nESchqJc4XizJieBsLWc=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +67,12 @@ buildPythonPackage rec {
     ];
   };
 
+  pythonImportsCheck = [
+    "storages"
+  ];
+
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
+
   nativeCheckInputs = [
     cryptography
     moto
@@ -69,20 +80,9 @@ buildPythonPackage rec {
     rsa
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "storages"
-  ];
-
-  env.DJANGO_SETTINGS_MODULE = "tests.settings";
-
-  disabledTests = [
-    # AttributeError: 'str' object has no attribute 'universe_domain'
-    "test_storage_save_gzip"
-  ];
-
   meta = with lib; {
-    description = "Collection of custom storage backends for Django";
     changelog = "https://github.com/jschneier/django-storages/blob/${version}/CHANGELOG.rst";
+    description = "Collection of custom storage backends for Django";
     downloadPage = "https://github.com/jschneier/django-storages/";
     homepage = "https://django-storages.readthedocs.io";
     license = licenses.bsd3;

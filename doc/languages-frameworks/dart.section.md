@@ -80,8 +80,6 @@ Do _not_ use `dart run <package_name>`, as this will attempt to download depende
 
 ### Usage with nix-shell {#ssec-dart-applications-nix-shell}
 
-#### Using dependencies from the Nix store {#ssec-dart-applications-nix-shell-deps}
-
 As `buildDartApplication` provides dependencies instead of `pub get`, Dart needs to be explicitly told where to find them.
 
 Run the following commands in the source directory to configure Dart appropriately.
@@ -103,10 +101,7 @@ See the [Dart documentation](#ssec-dart-applications) for more details on requir
 
 flutter.buildFlutterApplication {
   pname = "firmware-updater";
-  version = "0-unstable-2023-04-30";
-
-  # To build for the Web, use the targetFlutterPlatform argument.
-  # targetFlutterPlatform = "web";
+  version = "unstable-2023-04-30";
 
   src = fetchFromGitHub {
     owner = "canonical";
@@ -122,15 +117,4 @@ flutter.buildFlutterApplication {
 
 ### Usage with nix-shell {#ssec-dart-flutter-nix-shell}
 
-Flutter-specific `nix-shell` usage notes are included here. See the [Dart documentation](#ssec-dart-applications-nix-shell) for general `nix-shell` instructions.
-
-#### Entering the shell {#ssec-dart-flutter-nix-shell-enter}
-
-By default, dependencies for only the `targetFlutterPlatform` are available in the
-build environment. This is useful for keeping closures small, but be problematic
-during development. It's common, for example, to build Web apps for Linux during
-development to take advantage of native features such as stateful hot reload.
-
-To enter a shell with all the usual target platforms available, use the `multiShell` attribute.
-
-e.g. `nix-shell '<nixpkgs>' -A fluffychat-web.multiShell`.
+See the [Dart documentation](#ssec-dart-applications-nix-shell) for nix-shell instructions.

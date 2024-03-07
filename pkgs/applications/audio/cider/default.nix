@@ -26,6 +26,5 @@ appimageTools.wrapType2 rec {
     license = licenses.agpl3;
     maintainers = [ maintainers.cigrainger ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "cider";
   };
 }

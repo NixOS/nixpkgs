@@ -12,6 +12,7 @@
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
 , lwt_ppx
+, ocamlnet
 , ocsipersist
 }:
 
@@ -32,6 +33,7 @@ buildDunePackage rec {
   buildInputs = [
     js_of_ocaml-ocamlbuild
     js_of_ocaml-ppx_deriving_json
+    ocamlnet
     ppx_optcomp
   ];
 

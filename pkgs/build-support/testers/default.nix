@@ -1,4 +1,4 @@
-{ pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
+{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
 # Documentation is in doc/builders/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
@@ -107,7 +107,7 @@
             (lib.setDefaultModuleLocation "the argument that was passed to pkgs.runNixOSTest" testModule)
           ];
           hostPkgs = pkgs;
-          node.pkgs = pkgsLinux;
+          node.pkgs = pkgs;
         };
 
   # See doc/builders/testers.chapter.md or
@@ -123,7 +123,7 @@
           inherit pkgs;
           extraConfigurations = [(
             { lib, ... }: {
-              config.nixpkgs.pkgs = lib.mkDefault pkgsLinux;
+              config.nixpkgs.pkgs = lib.mkDefault pkgs;
             }
           )];
         });

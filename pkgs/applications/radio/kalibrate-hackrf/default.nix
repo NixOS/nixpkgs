@@ -34,6 +34,5 @@ stdenv.mkDerivation {
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = [ maintainers.mog ];
-    mainProgram = "kal-hackrf";
   };
 }

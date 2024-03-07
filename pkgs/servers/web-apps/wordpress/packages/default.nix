@@ -9,17 +9,12 @@ let packages = self:
     generatedJson = {
       inherit plugins themes languages;
     };
-    sourceJson = {
-      plugins = builtins.fromJSON (builtins.readFile ./wordpress-plugins.json);
-      themes = builtins.fromJSON (builtins.readFile ./wordpress-themes.json);
-      languages = builtins.fromJSON (builtins.readFile ./wordpress-languages.json);
-    };
 
   in {
     # Create a generic WordPress package. Most arguments are just passed
     # to `mkDerivation`. The version is automatically filtered for weird characters.
     mkWordpressDerivation = self.callPackage ({ stdenvNoCC, lib, filterWPString, gettext, wp-cli }:
-      { type, pname, version, license, ... }@args:
+      { type, pname, version, ... }@args:
         assert lib.any (x: x == type) [ "plugin" "theme" "language" ];
         stdenvNoCC.mkDerivation ({
           pname = "wordpress-${type}-${pname}";
@@ -36,10 +31,6 @@ let packages = self:
 
           passthru = {
             wpName = pname;
-          };
-
-          meta = {
-            license = lib.licenses.${license};
           } // (args.passthru or {});
         } // lib.optionalAttrs (type == "language") {
           nativeBuildInputs = [ gettext wp-cli ];
@@ -60,9 +51,9 @@ let packages = self:
     # Create a derivation from the official wordpress.org packages.
     # This takes the type, the pname and the data generated from the go tool.
     mkOfficialWordpressDerivation = self.callPackage ({ mkWordpressDerivation, fetchWordpress }:
-      { type, pname, data, license }:
+      { type, pname, data }:
       mkWordpressDerivation {
-        inherit type pname license;
+        inherit type pname;
         version = data.version;
 
         src = fetchWordpress type data;
@@ -88,8 +79,7 @@ let packages = self:
         throw "fetchWordpress: invalid package type ${type}";
     }) {};
 
-  } // lib.mapAttrs (
-    type: pkgs: lib.makeExtensible (_: lib.mapAttrs (pname: data: self.mkOfficialWordpressDerivation {type = lib.removeSuffix "s" type; inherit pname data; license = sourceJson.${type}.${pname}; }) pkgs)) generatedJson;
+  } // lib.mapAttrs (type: pkgs: lib.makeExtensible (_: lib.mapAttrs (pname: data: self.mkOfficialWordpressDerivation { type = lib.removeSuffix "s" type; inherit pname data; }) pkgs)) generatedJson;
 
 # This creates an extensible scope.
 in lib.recursiveUpdate ((lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (selfWP: superWP: {})) (callPackage ./thirdparty.nix {})

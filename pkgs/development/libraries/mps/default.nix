@@ -16,16 +16,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-3ql3jWLccgnQHKf23B1en+nJ9rxqmHcWd7aBr93YER0=";
   };
 
-  postPatch = ''
-    # Disable -Werror to avoid biuld failure on fresh toolchains like
-    # gcc-13.
-    substituteInPlace code/gc.gmk --replace-fail '-Werror ' ' '
-    substituteInPlace code/gp.gmk --replace-fail '-Werror ' ' '
-    substituteInPlace code/ll.gmk --replace-fail '-Werror ' ' '
-  '';
-
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ sqlite ];
+
+  # needed for 1.116.0 to build with gcc7
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-implicit-fallthrough"
+    "-Wno-error=clobbered"
+    "-Wno-error=cast-function-type"
+  ];
+
 
   meta = {
     description = "A flexible memory management and garbage collection library";

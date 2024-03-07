@@ -24,20 +24,20 @@ buildPythonPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/${python.sitePackages}"
+    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
 
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
+    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
 
     ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/${python.sitePackages} \
+      --install-lib=$out/lib/${python.libPrefix}/site-packages \
       --prefix="$out"
 
-    eapth="$out/${python.sitePackages}/easy-install.pth"
+    eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
     if [ -e "$eapth" ]; then
     mv "$eapth" $(dirname "$eapth")/${pname}-${version}.pth
     fi
 
-    rm -f "$out/${python.sitePackages}"/site.py*
+    rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
 
     runHook postInstall
   '';

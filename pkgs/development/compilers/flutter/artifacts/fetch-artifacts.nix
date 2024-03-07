@@ -1,22 +1,16 @@
-# Schema:
-# ${flutterVersion}.${targetPlatform}.${hostPlatform}
-#
-# aarch64-darwin as a host is not yet supported.
-# https://github.com/flutter/flutter/issues/60118
 { lib
 , runCommand
 , xorg
 , cacert
 , unzip
 
-, flutterPlatform
-, systemPlatform
+, platform
 , flutter
 , hash
 }:
 
 let
-  flutterPlatforms = [
+  platforms = [
     "android"
     "ios"
     "web"
@@ -30,34 +24,21 @@ let
   flutter' = flutter.override {
     # Use a version of Flutter with just enough capabilities to download
     # artifacts.
-    supportedTargetFlutterPlatforms = [ ];
-
-    # Modify flutter-tool's system platform in order to get the desired platform's hashes.
-    flutter = flutter.unwrapped.override {
-      flutterTools = flutter.unwrapped.tools.override {
-        inherit systemPlatform;
-      };
-    };
+    supportedTargetPlatforms = [ ];
   };
 in
-runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
+runCommand "flutter-artifacts-${platform}"
 {
   nativeBuildInputs = [ xorg.lndir flutter' unzip ];
 
   NIX_FLUTTER_TOOLS_VM_OPTIONS = "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt";
-  NIX_FLUTTER_OPERATING_SYSTEM = {
-    "x86_64-linux" = "linux";
-    "aarch64-linux" = "linux";
-    "x86_64-darwin" = "macos";
-    "aarch64-darwin" = "macos";
-  }.${systemPlatform};
 
   outputHash = hash;
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
 
   passthru = {
-    inherit flutterPlatform;
+    inherit platform;
   };
 } ''
   export FLUTTER_ROOT="$NIX_BUILD_TOP"
@@ -65,7 +46,7 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
   rm -rf "$FLUTTER_ROOT/bin/cache"
   mkdir "$FLUTTER_ROOT/bin/cache"
 
-  HOME="$(mktemp -d)" flutter precache -v '--${flutterPlatform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove flutterPlatform flutterPlatforms))}
+  HOME="$(mktemp -d)" flutter precache -v '--${platform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove platform platforms))}
   rm -rf "$FLUTTER_ROOT/bin/cache/lockfile"
   find "$FLUTTER_ROOT" -type l -lname '${flutter'}/*' -delete
 

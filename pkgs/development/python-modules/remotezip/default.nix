@@ -1,35 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
 , requests
 , tabulate
 , pytestCheckHook
 , requests-mock
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "remotezip";
-  version = "0.12.3";
-  pyproject = true;
+  version = "0.12.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gtsystem";
     repo = "python-remotezip";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TNEM7Dm4iH4Z/P/PAqjJppbn1CKmyi9Xpq/sU9O8uxg=";
+    # upstream does not tag releases, determined with git blame
+    # pypi archive lacks files for tests
+    rev = "3723724d6d877d3166d52f4528ffa7bd5bf6627f";
+    hash = "sha256-iYxHW8RdLFrpjkcEvpfF/NWBnw7Dd5cx2ghpof2XFn4=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     requests
+    tabulate
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
     requests-mock
   ];
 

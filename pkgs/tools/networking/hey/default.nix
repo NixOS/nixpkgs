@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/rakyll/hey";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne ];
-    mainProgram = "hey";
   };
 }

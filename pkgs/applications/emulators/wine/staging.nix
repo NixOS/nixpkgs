@@ -7,9 +7,11 @@ let patch = (callPackage ./sources.nix {}).staging;
       (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
 in assert lib.versions.majorMinor wineUnstable.version == lib.versions.majorMinor patch.version;
 
-(lib.overrideDerivation (wineUnstable.override { wineRelease = "staging"; }) (self: {
+(lib.overrideDerivation wineUnstable (self: {
   buildInputs = build-inputs [ "perl" "util-linux" "autoconf" "gitMinimal" ] self.buildInputs;
   nativeBuildInputs = [ autoconf hexdump perl python3 ] ++ self.nativeBuildInputs;
+
+  name = "${self.name}-staging";
 
   prePatch = self.prePatch or "" + ''
     patchShebangs tools

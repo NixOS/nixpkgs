@@ -1,6 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "keepalived";
-  meta.maintainers = [ lib.maintainers.raitobezarius ];
 
   nodes = {
     node1 = { pkgs, ... }: {

@@ -4,17 +4,15 @@
 , python3Packages
 , gtk3
 , poppler_gi
-, libhandy
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
   version = "1.10.1";
-  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pdfarranger";
-    repo = "pdfarranger";
+    owner = pname;
+    repo = pname;
     rev = "refs/tags/${version}";
     hash = "sha256-l//DeaIqUl6FdGFxM8yTKcTjVNvYMllorcoXoK33Iy4=";
   };
@@ -28,7 +26,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     poppler_gi
-    libhandy
   ];
 
   propagatedBuildInputs = with python3Packages; [

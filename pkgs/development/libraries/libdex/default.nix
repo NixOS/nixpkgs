@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gnome.updateScript {
     packageName = "libdex";
-    versionPolicy = "odd-unstable";
   };
 
   meta = with lib; {

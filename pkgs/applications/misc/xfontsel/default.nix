@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.x.org/";
     description = "Allows testing the fonts available in an X server";
-    license = with licenses; [ x11 smlnj mit ];
+    license = licenses.free;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
   };

@@ -2,12 +2,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, attrs
 , docopt
 , pillow
 , scikit-image
-, scipy
-, numpy
 , aggdraw
 , pytestCheckHook
 , ipython
@@ -34,13 +31,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aggdraw
-    attrs
     docopt
     ipython
-    numpy
     pillow
     scikit-image
-    scipy
   ];
 
   nativeCheckInputs = [

@@ -32,6 +32,5 @@ buildGoModule rec {
     license = lib.licenses.lgpl3Only;
     description = "Open-source tool for capturing and replaying live HTTP traffic";
     maintainers = with lib.maintainers; [ lovek323 ];
-    mainProgram = "goreplay";
   };
 }

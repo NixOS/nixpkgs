@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ magnouvean ];
     platforms = platforms.linux;
-    mainProgram = "somebar";
   };
 }

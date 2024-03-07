@@ -1,14 +1,14 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  version = "1.7.18";
+  version = "1.7.17";
   pname = "ossutil";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "ossutil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M7Jh3rmWdUlsvj+P0UKazjQoe0zLDro882f/l8wFZGQ=";
+    hash = "sha256-5Z0mMgDYexUQAcngeEd0m5J5kRwWTGIS2Q+idBcTV98=";
   };
 
   vendorHash = "sha256-4a/bNH47sxxwgYYQhHTqyXddJit3VbeM49/4IEfjWsY=";
@@ -22,6 +22,5 @@ buildGoModule rec {
     changelog = "https://github.com/aliyun/ossutil/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
-    mainProgram = "ossutil";
   };
 }

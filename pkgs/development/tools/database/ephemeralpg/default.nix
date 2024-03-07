@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, postgresql, getopt, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "ephemeralpg";
-  version = "3.3";
+  version = "3.1";
   src = fetchurl {
-    url = "https://eradman.com/ephemeralpg/code/${pname}-${version}.tar.gz";
-    hash = "sha256-pVQrfSpwJnxCRXAUpZQZsb0Z/wlLbjdaYmhVevgHrgo=";
+    url = "http://ephemeralpg.org/code/${pname}-${version}.tar.gz";
+    sha256 = "1ap22ki8yz6agd0qybcjgs4b9izw1rwwcgpxn3jah2ccfyax34s6";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Run tests on an isolated, temporary PostgreSQL database";
     license = licenses.isc;
-    homepage = "https://eradman.com/ephemeralpg/";
+    homepage = "http://ephemeralpg.org/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ hrdinka medv ];
+    maintainers = with maintainers; [ hrdinka ];
   };
 }

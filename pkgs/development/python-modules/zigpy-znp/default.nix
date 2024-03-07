@@ -8,7 +8,6 @@
 , pytest-mock
 , pytest-rerunfailures
 , pytest-timeout
-, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -54,23 +53,11 @@ buildPythonPackage rec {
     pytest-mock
     pytest-rerunfailures
     pytest-timeout
-    pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
     "--reruns=3"
-  ];
-
-  disabledTests = [
-    # failing since zigpy 0.60.0
-    "test_join_device"
-    "test_nonstandard_profile"
-    "test_permit_join"
-    "test_request_recovery_route_rediscovery_zdo"
-    "test_watchdog"
-    "test_zigpy_request"
-    "test_zigpy_request_failure"
   ];
 
   pythonImportsCheck = [

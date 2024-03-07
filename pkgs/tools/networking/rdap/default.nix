@@ -21,6 +21,5 @@ buildGoModule rec {
     description = "Command line client for the Registration Data Access Protocol (RDAP)";
     license = licenses.mit;
     maintainers = with maintainers; [ sebastianblunt ];
-    mainProgram = "rdap";
   };
 }

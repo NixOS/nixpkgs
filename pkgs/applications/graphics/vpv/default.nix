@@ -59,6 +59,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.kidanger ];
     license = lib.licenses.gpl3;
     broken = stdenv.isDarwin; # the CMake expects the SDL2::SDL2main target for darwin
-    mainProgram = "vpv";
   };
 })

@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://sr.ht/~sircmpwn/openring";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sumnerevans ];
-    mainProgram = "openring";
   };
 }

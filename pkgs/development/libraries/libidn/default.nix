@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libidn";
-  version = "1.42";
+  version = "1.41";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-1sGZ3NgG5P4nk2DLSwg0mg05Vg7VSP/RzK3ajN7LRyM=";
+    sha256 = "sha256-iE1wY2S4Gr3Re+6Whtj/KudDHFoUZRBHxorfizH9iUU=";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
       included.
     '';
 
-    mainProgram = "idn";
     license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [ "libidn" ];
     platforms = lib.platforms.all;

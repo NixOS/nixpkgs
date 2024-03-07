@@ -20,7 +20,7 @@
 }:
 let
   pname = "snorkel";
-  version = "0.10.0";
+  version = "0.9.9";
 in
 buildPythonPackage {
   inherit pname version;
@@ -31,8 +31,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "snorkel-team";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1DgkMHYToiI3266yCND1bXiui80x8AaBttxM83kJImw=";
+    rev = "v${version}";
+    hash = "sha256-IDWYvblS0Q8ubuHzgIc7fU/gwpJ43Dd7VMWycMfAJxc=";
   };
 
   propagatedBuildInputs = [

@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "snowflake";
-  version = "2.9.1";
+  version = "2.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -10,16 +10,16 @@ buildGoModule rec {
     owner = "anti-censorship/pluggable-transports";
     repo = "snowflake";
     rev = "v${version}";
-    sha256 = "sha256-LDr/Fzg1fC2lf7W+yTD1y5q4C2pPXZz+ZJf9sI1BxcQ=";
+    sha256 = "sha256-DSXzw/7aBfh4uqLV2JrbrLitNgXcgEdcwxyIMolGEsE=";
   };
 
-  vendorHash = "sha256-IT2+5HmgkV6BKPEARkCZbULyVr7VDLtwGUCF22YuodA=";
+  vendorHash = "sha256-+f7gxswHCzBT5wqJNYdR1/uDZJNpEyHMWchA4X0aK+M=";
 
   meta = with lib; {
     description = "System to defeat internet censorship";
     homepage = "https://snowflake.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/-/raw/v${version}/ChangeLog";
-    maintainers = with maintainers; [ bbjubjub yayayayaka ];
+    maintainers = with maintainers; [ lourkeur yayayayaka ];
     license = licenses.bsd3;
   };
 }

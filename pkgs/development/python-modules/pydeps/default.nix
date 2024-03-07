@@ -6,27 +6,22 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
-, setuptools
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "1.12.19";
-  pyproject = true;
+  version = "1.12.17";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thebjorn";
-    repo = "pydeps";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3z/7pkeP6R8GsWvSaCChcf0DZPrC3KdwLeGdNm4m6Jc=";
+    hash = "sha256-DVSZeNuDz/y0jh/HimV+jFgNFevMhUKOu6EhZytMMqQ=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   buildInputs = [
     graphviz

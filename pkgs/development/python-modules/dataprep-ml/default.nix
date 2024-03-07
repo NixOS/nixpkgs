@@ -1,28 +1,24 @@
 { lib
 , buildPythonPackage
-, colorlog
-, dataclasses-json
 , fetchPypi
-, nltk-data
+, pythonOlder
+, poetry-core
 , numpy
 , pandas
-, poetry-core
-, pydantic
 , pydateinfer
 , python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
 , scipy
-, symlinkJoin
 , type-infer
+, dataclasses-json
+, colorlog
+, pydantic
+, nltk-data
+, symlinkJoin
 }:
 let
   testNltkData = symlinkJoin {
     name = "nltk-test-data";
-    paths = [
-      nltk-data.punkt
-      nltk-data.stopwords
-    ];
+    paths = [ nltk-data.punkt nltk-data.stopwords ];
   };
 in
 buildPythonPackage rec {
@@ -39,25 +35,20 @@ buildPythonPackage rec {
     hash = "sha256-BtnRmj5JtgNdCFowgNdpIZn5vUdw8QYCWneHfDgC4/c=";
   };
 
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
-
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
-    colorlog
-    dataclasses-json
     numpy
     pandas
-    pydantic
     pydateinfer
     python-dateutil
     scipy
     type-infer
+    dataclasses-json
+    colorlog
+    pydantic
   ];
 
   # PyPI tarball has no tests

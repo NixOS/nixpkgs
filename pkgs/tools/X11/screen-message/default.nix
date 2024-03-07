@@ -1,14 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk3 }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "screen-message";
-  version = "0.28";
+  version = "0.26";
 
-  src = fetchFromGitHub {
-    owner = "nomeata";
-    repo = "screen-message";
-    rev = version;
-    hash = "sha256-KHJL1N72Hc1B1m0olxoZxBHIpq/d/T3m2VdS5XC9+tk=";
+  src = fetchurl {
+    url = "mirror://debian/pool/main/s/screen-message/screen-message_${version}.orig.tar.gz";
+    sha256 = "sha256-vBKnuXOEQZDACmlNP9wjJ3NbIdixIx7I72a6Nj6pjzc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

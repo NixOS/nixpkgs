@@ -49,7 +49,8 @@ let
   # ```
   # {
   #   ghc810 = "ghc810";
-  #   ghc8107Binary = "ghc8107Binary";
+  #   ghc8102Binary = "ghc8102Binary";
+  #   ghc8102BinaryMinimal = "ghc8102BinaryMinimal";
   #   ghc8107 = "ghc8107";
   #   ghc924 = "ghc924";
   #   ...
@@ -70,7 +71,6 @@ let
     ghc947
     ghc948
     ghc963
-    ghc964
     ghc981
   ];
 
@@ -384,6 +384,7 @@ let
         {
           # remove musl ghc865Binary since it is known to be broken and
           # causes an evaluation error on darwin.
+          # TODO: remove ghc865Binary altogether and use ghc8102Binary
           ghc865Binary = {};
 
           ghcjs = {};
@@ -645,6 +646,7 @@ let
           ];
         };
         constituents = accumulateDerivations [
+          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902

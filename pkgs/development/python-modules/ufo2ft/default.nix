@@ -1,25 +1,28 @@
 { lib
-, booleanoperations
 , buildPythonPackage
+, fetchPypi
+
+# build
+, setuptools-scm
+
+# runtime
+, booleanoperations
 , cffsubr
 , compreffor
 , cu2qu
 , defcon
-, fetchPypi
 , fonttools
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
 , skia-pathops
 , ufolib2
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ufo2ft";
   version = "2.33.4";
-  pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,27 +50,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
+  pytestFlagsArray = [
     # Do not depend on skia.
-    "test_removeOverlaps_CFF_pathops"
-    "test_removeOverlaps_pathops"
-    "test_custom_filters_as_argument"
-    "test_custom_filters_as_argument"
-    # Some integration tests fail
-    "test_compileVariableCFF2"
-    "test_compileVariableTTF"
-    "test_drop_glyph_names_variable"
-    "test_drop_glyph_names_variable"
+    "--deselect=tests/integration_test.py::IntegrationTest::test_removeOverlaps_CFF_pathops"
+    "--deselect=tests/integration_test.py::IntegrationTest::test_removeOverlaps_pathops"
+    "--deselect=tests/preProcessor_test.py::TTFPreProcessorTest::test_custom_filters_as_argument"
+    "--deselect=tests/preProcessor_test.py::TTFInterpolatablePreProcessorTest::test_custom_filters_as_argument"
   ];
 
-  pythonImportsCheck = [
-    "ufo2ft"
-  ];
+  pythonImportsCheck = [ "ufo2ft" ];
 
   meta = with lib; {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
-    changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

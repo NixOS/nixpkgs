@@ -1,35 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , freezegun
 , graphql-core
-, hatchling
-, httpx
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-, python-multipart
+, snapshottest
 , starlette
-, syrupy
 , typing-extensions
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.22.0";
-  pyproject = true;
+  version = "0.21.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mirumee";
-    repo = "ariadne";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GMBtW2gZbF1m0BrKhYEkSaZYt5tIGmP/ipy6WC1H1pg=";
+    hash = "sha256-T5J0xAF33PDkC8sDOzHADpQJxwdXwKary0y/jaUJ9Fk=";
   };
-
   patches = [
     ./remove-opentracing.patch
   ];
@@ -46,21 +43,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    httpx
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-    python-multipart
-    syrupy
+    snapshottest
     werkzeug
   ];
 
   pythonImportsCheck = [
     "ariadne"
-  ];
-
-  pytestFlagsArray = [
-    "--snapshot-update"
   ];
 
   disabledTests = [

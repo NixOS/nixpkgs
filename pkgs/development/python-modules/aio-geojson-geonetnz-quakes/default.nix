@@ -1,33 +1,28 @@
 { lib
 , aio-geojson-client
 , aiohttp
-, aioresponses
+, aresponses
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
 , pytz
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-quakes";
-  version = "0.16";
-  pyproject = true;
+  version = "0.15";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8OpmA3yHjUY+N5Obri4RWeuJiW916xGSWUYUgdpmjkw=";
+    hash = "sha256-/EPPEGLtiZBorZMnVg0NqwnHCbCXyZzz4449MzAYQx8=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aio-geojson-client
@@ -38,7 +33,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    aioresponses
+    aresponses
     pytest-asyncio
     pytestCheckHook
   ];

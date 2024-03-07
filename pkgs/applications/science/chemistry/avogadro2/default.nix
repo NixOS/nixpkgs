@@ -12,13 +12,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "avogadro2";
-  version = "1.99.0";
+  version = "1.98.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = version;
-    hash = "sha256-m8kX4WzOmPE/BZQRePOoUAdMPdWb6pmcqtPvDdEIIao=";
+    hash = "sha256-N35WGYZbgfjKnorzGKCnbBvlrlt9Vr04YIG2R3k+b8A=";
   };
 
   postUnpack = ''
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ openbabel ];
 
-  qtWrapperArgs = [ "--prefix PATH : ${lib.getBin openbabel}/bin" ];
+  qtWrapperArgs = [ "--prefix PATH : ${openbabel}/bin" ];
 
   meta = with lib; {
     description = "Molecule editor and visualizer";

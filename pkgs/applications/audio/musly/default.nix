@@ -29,6 +29,5 @@ stdenv.mkDerivation {
     license = licenses.mpl20;
     maintainers = with maintainers; [ ggpeti ];
     platforms = with platforms; darwin ++ linux;
-    mainProgram = "musly";
   };
 }

@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre2, pkg-config, libsepol
-, enablePython ? !stdenv.hostPlatform.isStatic
-, swig ? null, python3 ? null, python3Packages
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre, pkg-config, libsepol
+, enablePython ? !stdenv.hostPlatform.isStatic, swig ? null, python3 ? null
 , fts
 }:
 
@@ -10,14 +9,14 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libselinux";
-  version = "3.6";
+  version = "3.3";
   inherit (libsepol) se_url;
 
   outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${version}/libselinux-${version}.tar.gz";
-    hash = "sha256-uk4O80snDnZypeXxtSP+K+qzpAuzPZOJ9K06hyjyG1I=";
+    sha256 = "0mvh793g7fg6wb6zqhkdyrv80x6k84ypqwi8ii89c91xcckyxzdc";
   };
 
   patches = [
@@ -41,13 +40,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [
-    python3Packages.pip
-    python3Packages.setuptools
-    python3Packages.wheel
-    swig
-  ];
-  buildInputs = [ libsepol pcre2 fts ] ++ optionals enablePython [ python3 ];
+  nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [ swig ];
+  buildInputs = [ libsepol pcre fts ] ++ optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
@@ -74,7 +68,6 @@ stdenv.mkDerivation rec {
   ] ++ optionals enablePython [
     "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
-    "PYTHON_SETUP_ARGS=--no-build-isolation"
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''

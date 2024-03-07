@@ -42,12 +42,6 @@ buildPythonPackage rec {
       url = "https://src.fedoraproject.org/rpms/python-eventlet/raw/rawhide/f/python3.12.patch";
       hash = "sha256-MxzprFaVcV1uamjjTeIz+2gPvfPy+Y1QaA20znMdwoA=";
     })
-    # fix tests running on kernel 6.6 or newer
-    # https://github.com/eventlet/eventlet/pull/905
-    (fetchpatch {
-      url = "https://github.com/eventlet/eventlet/commit/413327b229c80a97e9c89c52f7714224942701b4.patch";
-      hash = "sha256-rbYPd5cg3ElSYWYaZJrS7bb4nMJkTMO0ScvNnXRXzE0=";
-    })
   ];
 
   nativeBuildInputs = [

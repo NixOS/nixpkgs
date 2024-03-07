@@ -41,7 +41,7 @@ in
     fi
 
     languageConstraint="$(yq -r .environment.sdk "''${packageSources["$package"]}/''${packageRoots["$package"]}/pubspec.yaml")"
-    if [[ "$languageConstraint" =~ ^[[:space:]]*(\^|>=|>)?[[:space:]]*([[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+.*$ ]]; then
+    if [[ "$languageConstraint" =~ ^[[:space:]]*(\^|>=|>|)[[:space:]]*([[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+.*$ ]]; then
       languageVersionJson="\"''${BASH_REMATCH[2]}\""
     elif [ "$languageConstraint" = 'any' ]; then
       languageVersionJson='null'

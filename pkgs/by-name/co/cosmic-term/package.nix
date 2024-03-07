@@ -1,30 +1,33 @@
-{ lib
-, cosmic-icons
-, fetchFromGitHub
-, fontconfig
-, freetype
-, just
-, libglvnd
-, libinput
-, libxkbcommon
-, makeBinaryWrapper
-, mesa
-, pkg-config
-, rustPlatform
-, stdenv
-, vulkan-loader
-, wayland
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rust,
+  rustPlatform,
+  cmake,
+  makeBinaryWrapper,
+  cosmic-icons,
+  just,
+  pkg-config,
+  libxkbcommon,
+  glib,
+  gtk3,
+  libinput,
+  fontconfig,
+  freetype,
+  wayland,
+  xorg
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-  version = "0-unstable-2024-01-19";
+  version = "unstable-2023-12-26";
+
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "6d519018a070e25db0cd099a2752a7add4d6b138";
-    hash = "sha256-gfvBLrhq6Bz6cQdgiLH5o8vyptOT+q3xwUYoDG6eGTY=";
+    rev = "bf3f507fdd73a06ab1f9b199a98dca6988aafec2";
+    hash = "sha256-c5RNrC0AZvz+O3nj7VvMQuA/U0sgxZCVHn+cc+4pIN8=";
   };
 
   cargoLock = {
@@ -32,13 +35,12 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-uo4So9I/jD3LPfigyKwESUdZiK1wqm7rg9wYwyv4uKc=";
-      "cosmic-text-0.10.0" = "sha256-S0GkKUiUsSkL1CZHXhtpQy7Mf5+6fqNuu33RRtxG3mE=";
-      "glyphon-0.4.1" = "sha256-mwJXi63LTBIVFrFcywr/NeOJKfMjQaQkNl3CSdEgrZc=";
-      "libc-0.2.151" = "sha256-VcNTcLOnVXMlX86yeY0VDfIfKOZyyx/DO1Hbe30BsaI=";
+      "cosmic-config-0.1.0" = "sha256-V371fmSmLIwUxtx6w+C55cBJ8oyYgN86r3FZ8rGBLEs=";
+      "cosmic-text-0.10.0" = "sha256-/4Hg+7R0LRF4paXIREkMOTtbQ1xgONym5nKb/TuyeD4=";
+      "glyphon-0.3.0" = "sha256-T7hvqtR3zi9wNemFrPPGakq2vEraLpnPkN7umtumwVg=";
       "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
-      "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
       "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
+      "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.28.6" = "sha256-FhW6d2XnXCGJUMoT9EMQew9/OPXiehy/JraeCiVd76M=";
     };
@@ -49,20 +51,20 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [
+    cmake
     just
     pkg-config
     makeBinaryWrapper
   ];
-
   buildInputs = [
+    libxkbcommon
+    xorg.libX11
+    libinput
     fontconfig
     freetype
-    libglvnd
-    libinput
-    libxkbcommon
-    vulkan-loader
     wayland
-    xorg.libX11
+    glib
+    gtk3
   ];
 
   dontUseJustBuild = true;
@@ -73,40 +75,23 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
-  ];
-
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
+    "target/${
+      rust.lib.toRustTargetSpecShort stdenv.hostPlatform
+    }/release/cosmic-term"
   ];
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        libxkbcommon
-        mesa.drivers
-        vulkan-loader
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
-      ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 wayland libxkbcommon ]}
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [ ahoneybun ];
     platforms = platforms.linux;
-    mainProgram = "cosmic-term";
   };
 }

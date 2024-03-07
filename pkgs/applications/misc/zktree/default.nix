@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/alirezameskin/zktree";
     license = licenses.unlicense;
     maintainers = with lib.maintainers; [ alirezameskin ];
-    mainProgram = "zktree";
   };
 }

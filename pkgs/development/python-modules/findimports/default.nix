@@ -3,26 +3,21 @@
 , fetchFromGitHub
 , python
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "findimports";
-  version = "2.4.0";
-  pyproject = true;
+  version = "2.3.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mgedmin";
-    repo = "findimports";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ar05DYSc/raYC1RJyLCxDYnd7Zjx20aczywlb6wc67Y=";
+    hash = "sha256-yA1foeGhgOXZArc/nZfS1tbGyONXJZ9lW+Zcx7hCedM=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   pythonImportsCheck = [
     "findimports"

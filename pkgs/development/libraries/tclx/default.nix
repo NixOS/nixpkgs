@@ -5,13 +5,13 @@
 
 tcl.mkTclDerivation rec {
   pname = "tclx";
-  version = "8.6.3";
+  version = "8.6.2";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclx";
     rev = "v${version}";
-    hash = "sha256-bzLF6qOF9o24joWnGR7B4S+Doj7zv9iTh/mo50iFbUs=";
+    hash = "sha256-ZYJcaVBM5DQWBFYAcW6fx+ENMWJwHzTOUKYPkLsd6o8=";
   };
 
   # required in order for tclx to properly detect tclx.tcl at runtime

@@ -16,14 +16,14 @@
 , SDLSupport ? true
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "jimtcl";
   version = "0.82";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
-    rev = finalAttrs.version;
+    rev = version;
     sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ dbohdan fgaz vrthra ];
   };
-})
+}

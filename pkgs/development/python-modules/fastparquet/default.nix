@@ -20,26 +20,17 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2024.2.0";
-  pyproject = true;
+  version = "2023.7.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = "fastparquet";
-    rev = "refs/tags/${version}";
-    hash = "sha256-e0gnC/HMYdrYdEwy6qNOD1J52xgN2x81oCG03YNsYjg=";
+    repo = pname;
+    rev = version;
+    hash = "sha256-pJ0zK0upEV7TyuNMIcozugkwBlYpK/Dg6BdB0kBpn9k=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-runner"' ""
-
-    sed -i \
-      -e "/pytest-runner/d" \
-      -e '/"git", "status"/d' setup.py
-  '';
 
   nativeBuildInputs = [
     cython
@@ -48,6 +39,15 @@ buildPythonPackage rec {
     setuptools-scm
     wheel
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"pytest-runner"' ""
+
+    sed -i \
+      -e "/pytest-runner/d" \
+      -e '/"git", "status"/d' setup.py
+  '';
 
   propagatedBuildInputs = [
     cramjam
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Implementation of the parquet format";
+    description = "A python implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];

@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, perl, gettext, pkg-config, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.21";
+  version = "5.5.20";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    hash = "sha256-iVt/4rxOgF1wZBy+Lnh7jR7HDk2Y7hwljt9FrFuXdHg=";
+    hash = "sha256-0vQ6GBBtNA6Phlqhl3NZvEJqoyZ1um7VdkpsIRKhsm4=";
   };
 
   patches = [
@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
-    mainProgram = "whois";
   };
 }

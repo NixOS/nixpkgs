@@ -26,6 +26,5 @@ buildGoModule rec {
     homepage = "https://github.com/jonpulsifer/dnsmon-go";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "dnsmon-go";
   };
 }

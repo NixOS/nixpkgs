@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mpdecimal";
-  version = "4.0.0";
+  version = "2.5.1";
   outputs = [ "out" "cxx" "doc" "dev" ];
 
   src = fetchurl {
     url = "https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-${version}.tar.gz";
-    hash = "sha256-lCRFwyRbInMP1Bpnp8XCMdEcsbmTa5wPdjNPt9C0Row=";
+    hash = "sha256-n5zUwEH5m1xJ/7e1nZ8S2VtoPYhYVgiqVqYwdmeysh8=";
   };
 
   configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];

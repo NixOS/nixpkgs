@@ -11,13 +11,13 @@
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "5.5.3.4";
+  version = "5.5.0.11";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-9ISEIKrAK6UTDM3TPizBRMU+wfiinhnaWmS5CkXpkYo=";
+    hash = "sha256-VlJiTCdoH6hlVtQgECIlbsQvg3S58B5IIy1zRxh1eOg=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -57,7 +57,7 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
-        -p:UseAppHost=false
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false
      }
 
      buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
@@ -76,6 +76,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }

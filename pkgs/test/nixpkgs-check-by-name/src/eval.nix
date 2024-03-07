@@ -1,5 +1,5 @@
-# Takes a path to nixpkgs and a path to the json-encoded list of `pkgs/by-name` attributes.
-# Returns a value containing information on all Nixpkgs attributes
+# Takes a path to nixpkgs and a path to the json-encoded list of attributes to check.
+# Returns an value containing information on each requested attribute,
 # which is decoded on the Rust side.
 # See ./eval.rs for the meaning of the returned values
 {
@@ -9,28 +9,33 @@
 let
   attrs = builtins.fromJSON (builtins.readFile attrsPath);
 
-  # We need to check whether attributes are defined manually e.g. in
-  # `all-packages.nix`, automatically by the `pkgs/by-name` overlay, or
-  # neither. The only way to do so is to override `callPackage` and
-  # `_internalCallByNamePackageFile` with our own version that adds this
-  # information to the result, and then try to access it.
+  nixpkgsPathLength = builtins.stringLength (toString nixpkgsPath) + 1;
+  removeNixpkgsPrefix = builtins.substring nixpkgsPathLength (-1);
+
+  # We need access to the `callPackage` arguments of each attribute.
+  # The only way to do so is to override `callPackage` with our own version that adds this information to the result,
+  # and then try to access this information.
   overlay = final: prev: {
 
-    # Adds information to each attribute about whether it's manually defined using `callPackage`
+    # Information for attributes defined using `callPackage`
     callPackage = fn: args:
       addVariantInfo (prev.callPackage fn args) {
-        # This is a manual definition of the attribute, and it's a callPackage, specifically a semantic callPackage
-        ManualDefinition.is_semantic_call_package = true;
+        Manual = {
+          path =
+            if builtins.isPath fn then
+              removeNixpkgsPrefix (toString fn)
+            else
+              null;
+          empty_arg =
+            args == { };
+        };
       };
 
-    # Adds information to each attribute about whether it's automatically
-    # defined by the `pkgs/by-name` overlay. This internal attribute is only
-    # used by that overlay.
-    # This overrides the above `callPackage` information (we don't need that
-    # one, since `pkgs/by-name` always uses `callPackage` underneath.
+    # Information for attributes that are auto-called from pkgs/by-name.
+    # This internal attribute is only used by pkgs/by-name
     _internalCallByNamePackageFile = file:
       addVariantInfo (prev._internalCallByNamePackageFile file) {
-        AutoDefinition = null;
+        Auto = null;
       };
 
   };
@@ -45,7 +50,7 @@ let
     else
       # It's very rare that callPackage doesn't return an attribute set, but it can occur.
       # In such a case we can't really return anything sensible that would include the info,
-      # so just don't return the value directly and treat it as if it wasn't a callPackage.
+      # so just don't return the info and let the consumer handle it.
       value;
 
   pkgs = import nixpkgsPath {
@@ -57,60 +62,32 @@ let
     system = "x86_64-linux";
   };
 
-  # See AttributeInfo in ./eval.rs for the meaning of this
-  attrInfo = name: value: {
-    location = builtins.unsafeGetAttrPos name pkgs;
-    attribute_variant =
-      if ! builtins.isAttrs value then
-        { NonAttributeSet = null; }
-      else
-        {
-          AttributeSet = {
-            is_derivation = pkgs.lib.isDerivation value;
-            definition_variant =
-              if ! value ? _callPackageVariant then
-                { ManualDefinition.is_semantic_call_package = false; }
-              else
-                value._callPackageVariant;
-          };
+  attrInfo = name: value:
+    if ! builtins.isAttrs value then
+      {
+        NonAttributeSet = null;
+      }
+    else if ! value ? _callPackageVariant then
+      {
+        NonCallPackage = null;
+      }
+    else
+      {
+        CallPackage = {
+          call_package_variant = value._callPackageVariant;
+          is_derivation = pkgs.lib.isDerivation value;
         };
-  };
+      };
 
-  # Information on all attributes that are in pkgs/by-name.
-  byNameAttrs = builtins.listToAttrs (map (name: {
-    inherit name;
-    value.ByName =
+  attrInfos = map (name: [
+    name
+    (
       if ! pkgs ? ${name} then
         { Missing = null; }
       else
-        # Evaluation failures are not allowed, so don't try to catch them
-        { Existing = attrInfo name pkgs.${name}; };
-  }) attrs);
+        { Existing = attrInfo name pkgs.${name}; }
+    )
+  ]) attrs;
 
-  # Information on all attributes that exist but are not in pkgs/by-name.
-  # We need this to enforce pkgs/by-name for new packages
-  nonByNameAttrs = builtins.mapAttrs (name: value:
-    let
-      # Packages outside `pkgs/by-name` often fail evaluation,
-      # so we need to handle that
-      output = attrInfo name value;
-      result = builtins.tryEval (builtins.deepSeq output null);
-    in
-    {
-      NonByName =
-        if result.success then
-          { EvalSuccess = output; }
-        else
-          { EvalFailure = null; };
-    }
-  ) (builtins.removeAttrs pkgs attrs);
-
-  # All attributes
-  attributes = byNameAttrs // nonByNameAttrs;
 in
-# We output them in the form [ [ <name> <value> ] ]` such that the Rust side
-# doesn't need to sort them again to get deterministic behavior (good for testing)
-map (name: [
-  name
-  attributes.${name}
-]) (builtins.attrNames attributes)
+attrInfos

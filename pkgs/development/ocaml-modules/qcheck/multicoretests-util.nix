@@ -4,13 +4,13 @@
 
 buildDunePackage rec {
   pname = "qcheck-multicoretests-util";
-  version = "0.3";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "ocaml-multicore";
     repo = "multicoretests";
     rev = version;
-    hash = "sha256-0fbMDksC23jojJV+aegBoSwKf1hNzDUvDEbo31HUDoM=";
+    hash = "sha256-U1ZqfWMwpAvbPq5yp2U9YTFklT4MypzTSfNvcKJfaYE=";
   };
 
   propagatedBuildInputs = [ qcheck-core ];

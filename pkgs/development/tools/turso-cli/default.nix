@@ -1,20 +1,20 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo121Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGo121Module rec {
   pname = "turso-cli";
-  version = "0.88.8";
+  version = "0.87.8";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
     rev = "v${version}";
-    hash = "sha256-F+/xCs35ugdr2KlHbZ01wE9AX3qhsxvfaly/yDCcGJI=";
+    hash = "sha256-7JdWAMMNOBRWx2sU8mQ2kLZBVDsXaVszlOQos2Ybiy4=";
   };
 
   vendorHash = "sha256-rTeW2RQhcdwJTAMQELm4cdObJbm8gk/I2Qz3Wk3+zpI=";

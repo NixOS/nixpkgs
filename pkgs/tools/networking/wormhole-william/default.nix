@@ -26,6 +26,5 @@ buildGoModule rec {
     changelog = "https://github.com/psanford/wormhole-william/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psanford ];
-    mainProgram = "wormhole-william";
   };
 }

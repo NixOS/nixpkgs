@@ -4,15 +4,14 @@
 , numba
 , numpy
 , pillow
-, pytestCheckHook
 , scipy
-, setuptools
+, pytestCheckHook
+,
 }:
-
 buildPythonPackage rec {
   pname = "pymatting";
   version = "1.1.10";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pymatting";
@@ -21,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-wHCTqcBvVN/pTXH3iW57DPpMEsnehutRQB5NaugS6Zs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  patches = [ ./01-kdtree-signature.patch ];
 
   propagatedBuildInputs = [
     numba
@@ -32,12 +29,10 @@ buildPythonPackage rec {
     scipy
   ];
 
+  pythonImportsCheck = [ "pymatting" ];
+
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "pymatting"
   ];
 
   disabledTests = [

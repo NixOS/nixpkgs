@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.28.2";
+  version = "0.28.1";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -28,8 +28,15 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo = "exiv2";
     rev = "v${version}";
-    hash = "sha256-0TgvIiuHMeohStIwmHOq4yvTj2H07wyx4w3iIdkrLTc=";
+    hash = "sha256-Jim8vYWyCa16LAJ1GuP8cCzhXIc2ouo6hVsHg3UQbdg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Exiv2/exiv2/commit/c351c7cce317571934abf693055779a59df30d6e.patch";
+      hash = "sha256-fWJT4IUBrAELl6ku0M1iTzGFX74le8Z0UzTJLU/gYls=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -87,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2
+    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2 $static/lib/*.a
   '';
 
   disallowedReferences = [ stdenv.cc.cc ];

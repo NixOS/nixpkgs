@@ -55,7 +55,4 @@ spago.overrideAttrs (oldAttrs: {
           touch $out
         '';
   };
-  meta = (oldAttrs.meta or {}) // {
-    mainProgram = "spago";
-  };
 })

@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ zzzsy ];
     platforms = platforms.linux;
     license = licenses.wtfpl;
-    mainProgram = "flaca";
   };
 }

@@ -10,7 +10,7 @@
   tiffSupport ? true, libtiff,
   gdalSupport ? false, gdal,
   curlSupport ? true, curl,
-  colladaSupport ? false, opencollada,
+  colladaSupport ? false, collada-dom,
   opencascadeSupport ? false, opencascade-occt,
   ffmpegSupport ? false, ffmpeg,
   nvttSupport ? false, nvidia-texture-tools,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional tiffSupport libtiff
     ++ lib.optional gdalSupport gdal
     ++ lib.optional curlSupport curl
-    ++ lib.optional colladaSupport opencollada
+    ++ lib.optional colladaSupport collada-dom
     ++ lib.optional opencascadeSupport opencascade-occt
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional nvttSupport nvidia-texture-tools

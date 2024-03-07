@@ -40,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rapiz1/rathole/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "rathole";
   };
 }

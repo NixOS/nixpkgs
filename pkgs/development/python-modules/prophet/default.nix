@@ -66,5 +66,6 @@ buildPythonPackage rec {
     homepage = "https://facebook.github.io/prophet/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.linux; # cmdstanpy doesn't currently build on darwin
   };
 }

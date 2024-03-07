@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ CharlesHD mudri ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "cmusfm";
   };
 }

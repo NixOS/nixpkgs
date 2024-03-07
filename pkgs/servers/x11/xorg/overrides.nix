@@ -5,7 +5,7 @@
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
   ApplicationServices, Carbon, Cocoa, Xplugin,
   xorg, windows
 }:
@@ -408,15 +408,14 @@ self: super:
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
-
-    buildInputs = attrs.buildInputs ++ [ zlib ]
-      ++ lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
-
-    mesonFlags = [
-      (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
-      (lib.mesonEnable "zlib" true)
+    patches = attrs.patches or [] ++ [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/commit/833c86ce15cee2a84a37ae71015f236fd32615d9.patch";
+        hash = "sha256-6koQV+Vse7/OWwuWYrWmBUebHBT+5F32Kkn9V9j+m+Q=";
+      })
     ];
+
+    buildInputs = lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
 
     meta = attrs.meta // {
       # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114

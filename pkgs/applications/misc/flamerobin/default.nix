@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.unix;
-    mainProgram = "flamerobin";
   };
 }

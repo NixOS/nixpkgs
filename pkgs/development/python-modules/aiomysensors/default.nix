@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.14";
+  version = "0.3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiomysensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7Y7JE/GAX5gQrIGcErZTGQXyaf3QwsTFgviiHLWgGeI=";
+    hash = "sha256-uBmFJFmUClTkaAg8jTThygzmZv7UZDPSt0bXo8BLu00=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail " --cov=src --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=src --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [

@@ -27,7 +27,6 @@
 , pytest-watch
 , pytestCheckHook
 , pythonOlder
-, quart
 , rq
 , sanic
 , setuptools
@@ -38,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.40.6";
+  version = "1.39.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -47,7 +46,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-cGAPSF+kjGsY9IeRxRZUiAEiDR2uNBheet5Z+fok/eY=";
+    hash = "sha256-tYfnQ6L91KrRCR32dgzcDtA7eO+LHRAHBklxU8cXkK8=";
   };
 
   nativeBuildInputs = [
@@ -97,7 +96,7 @@ buildPythonPackage rec {
       pure-eval
     ];
     quart = [
-      quart
+      # quart missing
       blinker
     ];
     rq = [
@@ -134,12 +133,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Issue with the asseration
     "test_auto_enabling_integrations_catches_import_error"
-    "test_default_release"
   ];
 
   disabledTestPaths = [
     # Varius integration tests fail every once in a while when we
-    # upgrade dependencies, so don't bother testing them.
+    # upgrade depencies, so don't bother testing them.
     "tests/integrations/"
   ] ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
     # test crashes on aarch64

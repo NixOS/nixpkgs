@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildGoModule
+, buildGo120Module
 , testers
 , pinact
 }:
@@ -15,7 +15,7 @@ let
     hash = "sha256-OQo21RHk0c+eARKrA2qB4NAWWanb94DOZm4b9lqDz8o=";
   };
 in
-buildGoModule {
+buildGo120Module {
   inherit pname version src;
 
   vendorHash = "sha256-g7rdIE+w/pn70i8fOmAo/QGjpla3AUWm7a9MOhNmrgE=";

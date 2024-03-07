@@ -3,37 +3,28 @@
 , bluetooth-data-tools
 , buildPythonPackage
 , fetchFromGitHub
-, habluetooth
 , orjson
 , pythonOlder
-, setuptools
-, yarl
 }:
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "8.1.1";
-  pyproject = true;
+  version = "7.0.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-i2dlcparDQlwM7Wk/HwlBz0mmI38ZRwxVM6jLY0rI+0=";
+    hash = "sha256-+sE/nppRu6XTvXzWlXc+4clLOI/KvVdfRDl9FUhy8fg=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aiohttp
     bluetooth-data-tools
-    habluetooth
     orjson
-    yarl
   ];
 
   # Project has no test

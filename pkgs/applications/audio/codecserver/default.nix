@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = teams.c3d2.members;
-    mainProgram = "codecserver";
   };
 }

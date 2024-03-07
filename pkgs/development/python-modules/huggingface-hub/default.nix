@@ -1,8 +1,7 @@
 { lib
+, fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
-, fetchFromGitHub
-, setuptools
 , filelock
 , fsspec
 , packaging
@@ -14,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.21.3";
-  pyproject = true;
+  version = "0.19.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -23,12 +22,8 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DtKb/mR01vifclDalZiZV4/A4XpTKBcT9bCiLZkRCZY=";
+    hash = "sha256-bK/Cg+ZFhf9TrTVlDU35cLMDuTmdH4bN/QuPVeUVDsI=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     filelock
@@ -52,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

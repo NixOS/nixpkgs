@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc
-, systemd, pango, cairo, gdk-pixbuf, jq, bash
+, systemd, pango, cairo, gdk-pixbuf, jq
 , wayland, wayland-protocols
 , wrapGAppsHook }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ systemd /* for busctl */ jq bash ]}"
+      --prefix PATH : "${lib.makeBinPath [ systemd /* for busctl */ jq ]}"
     )
   '';
 

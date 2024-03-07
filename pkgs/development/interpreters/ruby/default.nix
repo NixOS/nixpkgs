@@ -24,7 +24,7 @@ let
     atLeast32 = lib.versionAtLeast ver.majMin "3.2";
     # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
     yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
-    rubyDrv = lib.makeOverridable (
+    self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , rubygemsSupport ? true
@@ -58,7 +58,7 @@ let
         }
       , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
       }:
-      stdenv.mkDerivation ( finalAttrs: {
+      stdenv.mkDerivation rec {
         pname = "ruby";
         inherit version;
 
@@ -123,8 +123,8 @@ let
         cargoRoot = opString yjitSupport "yjit";
 
         cargoDeps = if yjitSupport then rustPlatform.fetchCargoTarball {
-          inherit (finalAttrs) src;
-          sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
+          inherit src;
+          sourceRoot = "${pname}-${version}/${cargoRoot}";
           hash = cargoHash;
         } else null;
 
@@ -175,8 +175,8 @@ let
 
         preInstall = ''
           # Ruby installs gems here itself now.
-          mkdir -pv "$out/${finalAttrs.passthru.gemPath}"
-          export GEM_HOME="$out/${finalAttrs.passthru.gemPath}"
+          mkdir -pv "$out/${passthru.gemPath}"
+          export GEM_HOME="$out/${passthru.gemPath}"
         '';
 
         installFlags = lib.optional docSupport "install-doc";
@@ -202,21 +202,19 @@ let
 
           # Allow to override compiler. This is important for cross compiling as
           # we need to set a compiler that is different from the build one.
-          sed -i "$rbConfig" \
-            -e 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/' \
-            -e 's/CONFIG\["CXX"\] = "\(.*\)"/CONFIG["CXX"] = if ENV["CXX"].nil? || ENV["CXX"].empty? then "\1" else ENV["CXX"] end/'
+          sed -i 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/'  "$rbConfig"
 
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/${finalAttrs.passthru.gemPath} -name Makefile)
+          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
-          find "$out/${finalAttrs.passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
+          find "$out/${passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
           addGemPath() {
-            addToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
+            addToSearchPath GEM_PATH \$1/${passthru.gemPath}
           }
           addRubyLibPath() {
             addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
@@ -276,20 +274,21 @@ let
           gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
           devEnv = import ./dev.nix {
             inherit buildEnv bundler bundix;
-            ruby = finalAttrs.finalPackage;
+            ruby = self;
           };
 
           inherit rubygems;
           inherit (import ../../ruby-modules/with-packages {
             inherit lib stdenv makeBinaryWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
-            ruby = finalAttrs.finalPackage;
+            ruby = self;
           }) withPackages buildGems gems;
+
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
         };
-      } )
-    ) args; in rubyDrv;
+      }
+    ) args; in self;
 
 in {
   mkRubyVersion = rubyVersion;
@@ -301,8 +300,8 @@ in {
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "3" "";
-    hash = "sha256-r38XV9ndtjA0WYgTkhHx/VcP9bqDDe8cx8Rorptlybo=";
+    version = rubyVersion "3" "2" "2" "";
+    hash = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
     cargoHash = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 

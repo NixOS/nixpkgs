@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "golines";
-  version = "0.12.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-D0gI9BA0vgM1DBqwolNTfPsTCWuOGrcu5gAVFEdyVGg=";
+    sha256 = "sha256-2K9KAg8iSubiTbujyFGN3yggrL+EDyeUCs9OOta/19A=";
   };
 
-  vendorHash = "sha256-jI3/m1UdZMKrS3H9jPhcVAUCjc1G/ejzHi9SCTy24ak=";
+  vendorHash = "sha256-rxYuzn4ezAxaeDhxd8qdOzt+CKYIh03A9zKNdzILq18=";
 
   meta = with lib; {
     description = "A golang formatter that fixes long lines";

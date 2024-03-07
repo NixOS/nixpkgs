@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, python
 }:
 
 buildPythonPackage rec {
@@ -14,12 +15,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-5CkUax7dGYssqTSiBGplZWxdMbDsiUu9YFUSf03q/xc=";
   };
-
-  # AttributeError: 'Keccak_224Tests' object has no attribute 'failIf'.
-  postPatch = ''
-    substituteInPlace tests.py \
-      --replace "failIf" "assertFalse"
-  '';
 
   pythonImportsCheck = [
     "sha3"

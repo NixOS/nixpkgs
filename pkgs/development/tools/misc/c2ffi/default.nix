@@ -1,24 +1,24 @@
 { lib
 , fetchFromGitHub
 , cmake
-, llvmPackages_16
+, llvmPackages_11
 , unstableGitUpdater
 }:
 
 let
-  c2ffiBranch = "llvm-16.0.0";
-  llvmPackages = llvmPackages_16;
+  c2ffiBranch = "llvm-11.0.0";
+  llvmPackages = llvmPackages_11;
 in
 
 llvmPackages.stdenv.mkDerivation {
   pname = "c2ffi-${c2ffiBranch}";
-  version = "0-unstable-2023-11-18";
+  version = "unstable-2021-06-15";
 
   src = fetchFromGitHub {
     owner = "rpav";
     repo = "c2ffi";
-    rev = "097cbe61ca02dc79ea60859aa056975131a9d985";
-    hash = "sha256-pflolW5OoEkVDozy4cjCdUIVxgE/SfVKIhQyNBDhENc=";
+    rev = "f50243926a0afb589de1078a073ac08910599582";
+    sha256 = "UstGicFzFY0/Jge5HGYTPwYSnh9OUBY5346ObZYfR54=";
   };
 
   passthru.updateScript = unstableGitUpdater {
@@ -45,12 +45,12 @@ llvmPackages.stdenv.mkDerivation {
   # LLVM may be compiled with -fno-rtti, so let's just turn it off.
   # A mismatch between lib{clang,LLVM}* and us can lead to the link time error:
   # undefined reference to `typeinfo for clang::ASTConsumer'
-  env.CXXFLAGS="-fno-rtti";
+  CXXFLAGS="-fno-rtti";
 
   meta = with lib; {
     homepage = "https://github.com/rpav/c2ffi";
     description = "An LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ attila-lendvai ];
  };
 }

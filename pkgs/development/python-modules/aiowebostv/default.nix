@@ -2,27 +2,22 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "aiowebostv";
-  version = "0.4.0";
-  pyproject = true;
+  version = "0.3.3";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = "aiowebostv";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-VUznW+rMCZF1LbrQmEaOgdcX3YCm6Tf7yWlB8KNrjxU=";
+    hash = "sha256-djcfYpHkhXhjQwJzHP3mNflKrcP6Yj3/z62qeXg67ss=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     websockets

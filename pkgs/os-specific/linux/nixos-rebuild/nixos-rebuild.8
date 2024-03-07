@@ -363,9 +363,11 @@ is also set. This is useful when the target-host connection to cache.nixos.org
 is faster than the connection between hosts.
 .
 .It Fl -use-remote-sudo
-When set, nixos-rebuild prefixes activation commands that run on the
+When set, nixos-rebuild prefixes remote commands that run on the
+.Fl -build-host
+and
 .Fl -target-host
-system with
+systems with
 .Ic sudo Ns
 \&. Setting this option allows deploying as a non-root user.
 .

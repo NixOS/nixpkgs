@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vdot0x23 ];
     platforms = platforms.unix;
-    mainProgram = "netdiscover";
   };
 }

@@ -35,10 +35,7 @@ buildPythonPackage rec {
     "pegen"
   ];
 
-  disabledTests = [
-    # ValueError: Expected locations of (1, 3) and...
-    "test_invalid_call_arguments"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
     # https://github.com/we-like-parsers/pegen/issues/89
     "test_invalid_def_stmt"
   ];

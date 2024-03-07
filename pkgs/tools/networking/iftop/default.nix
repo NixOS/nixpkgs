@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     homepage = "http://ex-parrot.com/pdw/iftop/";
     platforms = platforms.unix;
     maintainers = [ ];
-    mainProgram = "iftop";
   };
 }

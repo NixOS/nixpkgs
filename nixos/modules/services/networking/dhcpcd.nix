@@ -13,8 +13,6 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
-  enableNTPService = (config.services.ntp.enable || config.services.ntpd-rs.enable || config.services.openntpd.enable || config.services.chrony.enable);
-
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
@@ -91,22 +89,20 @@ let
       ${cfg.extraConfig}
     '';
 
-  exitHook = pkgs.writeText "dhcpcd.exit-hook" ''
-    ${optionalString enableNTPService ''
+  exitHook = pkgs.writeText "dhcpcd.exit-hook"
+    ''
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-        # Restart ntpd. We need to restart it to make sure that it will actually do something:
-        # if ntpd cannot resolve the server hostnames in its config file, then it will never do
-        # anything ever again ("couldn't resolve ..., giving up on it"), so we silently lose
-        # time synchronisation. This also applies to openntpd.
-        ${optionalString config.services.ntp.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service || true"}
-        ${optionalString config.services.ntpd-rs.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd-rs.service || true"}
-        ${optionalString config.services.openntpd.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart openntpd.service || true"}
-        ${optionalString config.services.chrony.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart chronyd.service || true"}
+          # Restart ntpd.  We need to restart it to make sure that it
+          # will actually do something: if ntpd cannot resolve the
+          # server hostnames in its config file, then it will never do
+          # anything ever again ("couldn't resolve ..., giving up on
+          # it"), so we silently lose time synchronisation. This also
+          # applies to openntpd.
+          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
       fi
-    ''}
 
-    ${cfg.runHook}
-  '';
+      ${cfg.runHook}
+    '';
 
 in
 
@@ -223,8 +219,6 @@ in
       '';
     } ];
 
-    environment.etc."dhcpcd.conf".source = dhcpcdConf;
-
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
@@ -236,7 +230,7 @@ in
         wants = [ "network.target" ];
         before = [ "network-online.target" ];
 
-        restartTriggers = optional (enableNTPService || cfg.runHook != "") [ exitHook ];
+        restartTriggers = [ exitHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -265,9 +259,7 @@ in
 
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc."dhcpcd.exit-hook" = mkIf (enableNTPService || cfg.runHook != "") {
-      source = exitHook;
-    };
+    environment.etc."dhcpcd.exit-hook".source = exitHook;
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''

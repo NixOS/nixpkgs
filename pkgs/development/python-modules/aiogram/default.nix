@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.4.1";
+  version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2of4KHdpAATOt0dCqI3AmTJtdeN5SdiWydeGjtagABI=";
+    hash = "sha256-8SYrg+gfNSTR0CTPf4cYDa4bfA0LPBmZtPcATF22fqw=";
   };
 
   nativeBuildInputs = [
@@ -66,9 +66,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiogram" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Modern and fully asynchronous framework for Telegram Bot API";

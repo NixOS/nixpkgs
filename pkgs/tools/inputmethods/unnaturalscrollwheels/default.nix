@@ -15,6 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # APFS format is unsupported by undmg
   nativeBuildInputs = [ _7zz ];
+  unpackCmd = "7zz x $curSrc";
 
   installPhase = ''
     runHook preInstall

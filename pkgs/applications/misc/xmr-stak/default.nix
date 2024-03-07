@@ -38,9 +38,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # Does not build against gcc-13. No development activity upstream
-    # for past few years.
-    broken = true;
     description = "Unified All-in-one Monero miner";
     homepage = "https://github.com/fireice-uk/xmr-stak";
     license = licenses.gpl3Plus;

@@ -19,7 +19,7 @@ buildGoModule rec {
   # https://github.com/Mic92/nix-update/pull/95
   vendorHash = "sha256-ZBvHu4BEmQi6PQwRHuVwx/6X4gBqlRR44OktKRBGcs4=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-buildid=" ];
 
   subPackages = [ "main" ];
 

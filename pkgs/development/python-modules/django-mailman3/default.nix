@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 
 # propagates
 , django-gravatar2
@@ -12,7 +13,6 @@
 , django
 , pytest-django
 , pytestCheckHook
-, nixosTests
 }:
 
 buildPythonPackage rec {
@@ -24,6 +24,17 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-uIjJaZHWL2evj+oISLprvKWT5Sm5f2EKgUD1twL1VbQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/django-mailman3/-/commit/840d0d531a0813de9a30e72427e202aea21b40fe.patch";
+      hash = "sha256-vltvsIP/SWpQZeXDUB+GWlTu+ghFMUqIT8i6CrYcmGo=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/django-mailman3/-/commit/25c55e31d28f2fa8eb23f0e83c12f9b0a05bfbf0.patch";
+      hash = "sha256-ug5tBmnVfJTn5ufDDVg/cEtsZM59jQYJpQZV51T3qIc=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -46,8 +57,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "django_mailman3"
   ];
-
-  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = with lib; {
     description = "Django library for Mailman UIs";

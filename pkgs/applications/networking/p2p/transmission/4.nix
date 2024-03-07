@@ -27,10 +27,8 @@
 , gtkmm3
 , xorg
 , wrapGAppsHook
-, enableQt5 ? false
-, enableQt6 ? false
+, enableQt ? false
 , qt5
-, qt6Packages
 , nixosTests
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , enableDaemon ? true
@@ -39,24 +37,6 @@
 , apparmorRulesFromClosure
 }:
 
-let
-  inherit (lib) cmakeBool optionals;
-
-  apparmorRules = apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-    curl
-    libdeflate
-    libevent
-    libnatpmp
-    libpsl
-    miniupnpc
-    openssl
-    pcre
-    zlib
-  ]
-  ++ optionals enableSystemd [ systemd ]
-  ++ optionals stdenv.isLinux [ inotify-tools ]);
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
   version = "4.0.5";
@@ -71,17 +51,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "apparmor" ];
 
-  cmakeFlags = [
-    (cmakeBool "ENABLE_CLI" enableCli)
-    (cmakeBool "ENABLE_DAEMON" enableDaemon)
-    (cmakeBool "ENABLE_GTK" enableGTK3)
-    (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
-    (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
-    (cmakeBool "INSTALL_LIB" installLib)
-  ] ++ optionals stdenv.isDarwin [
-    # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
-  ];
+  cmakeFlags =
+    let
+      mkFlag = opt: if opt then "ON" else "OFF";
+    in
+    [
+      "-DENABLE_MAC=OFF" # requires xcodebuild
+      "-DENABLE_GTK=${mkFlag enableGTK3}"
+      "-DENABLE_QT=${mkFlag enableQt}"
+      "-DENABLE_DAEMON=${mkFlag enableDaemon}"
+      "-DENABLE_CLI=${mkFlag enableCli}"
+      "-DINSTALL_LIB=${mkFlag installLib}"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+    ];
 
   postPatch = ''
     # Clean third-party libraries to ensure system ones are used.
@@ -105,9 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
   ]
-  ++ optionals enableGTK3 [ wrapGAppsHook ]
-  ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
-  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
+  ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
+  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
   ;
 
   buildInputs = [
@@ -126,12 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
     utf8cpp
     zlib
   ]
-  ++ optionals enableQt5 (with qt5; [ qttools qtbase ])
-  ++ optionals enableQt6 (with qt6Packages; [ qttools qtbase qtsvg ])
-  ++ optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
-  ++ optionals enableSystemd [ systemd ]
-  ++ optionals stdenv.isLinux [ inotify-tools ]
-  ++ optionals stdenv.isDarwin [ libiconv Foundation ];
+  ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
+  ++ lib.optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
+  ++ lib.optionals enableSystemd [ systemd ]
+  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+  ++ lib.optionals stdenv.isDarwin [ libiconv Foundation ];
 
   postInstall = ''
     mkdir $apparmor
@@ -141,7 +123,11 @@ stdenv.mkDerivation (finalAttrs: {
       include <abstractions/base>
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
-      include "${apparmorRules}"
+      include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
+        curl libevent openssl pcre zlib libdeflate libpsl libnatpmp miniupnpc
+      ] ++ lib.optionals enableSystemd [ systemd ]
+        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+      )}"
       r @{PROC}/sys/kernel/random/uuid,
       r @{PROC}/sys/vm/overcommit_memory,
       r @{PROC}/@{pid}/environ,
@@ -161,9 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
     smoke-test = nixosTests.bittorrent;
   };
 
-  meta = with lib; {
+  meta = {
     description = "A fast, easy and free BitTorrent client";
-    mainProgram = if (enableQt5 || enableQt6) then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
+    mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
       on top of a cross-platform back-end.
@@ -175,9 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
         * Bluetack (PeerGuardian) blocklists with automatic updates
         * Full encryption, DHT, and PEX support
     '';
-    homepage = "https://www.transmissionbt.com/";
-    license = with licenses; [ gpl2Plus mit ];
-    maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.unix;
+    homepage = "http://www.transmissionbt.com/";
+    license = with lib.licenses; [ gpl2Plus mit ];
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.unix;
   };
 })

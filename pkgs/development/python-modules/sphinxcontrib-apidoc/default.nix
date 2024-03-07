@@ -2,17 +2,16 @@
 , buildPythonPackage
 , fetchPypi
 , pbr
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
-  version = "0.5.0";
-  pyproject = true;
+  version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ze/NkiEqX4I3FfuV7gmLRYprsJpe5hfZ7T3q2XF3zVU=";
+    hash = "sha256-/lnRWIJHKqk8Jzevvepr7bNM41y9NKpJR5CfXfFQCq0=";
   };
 
   postPatch = ''
@@ -20,9 +19,8 @@ buildPythonPackage rec {
     rm test-requirements.txt requirements.txt
   '';
 
-  nativeBuildInputs = [
+  propagatedBuildInputs = [
     pbr
-    setuptools
   ];
 
   # Check is disabled due to circular dependency of sphinx

@@ -16,14 +16,14 @@
 , libhandy
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnonograms";
   version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "jeremypw";
     repo = "gnonograms";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-TkEVjrwlr4Q5FsfcdY+9fxwaMq+DFs0RwGI2E+GT5Mk=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jeremypw/gnonograms";
     platforms = platforms.all;
   };
-})
+}

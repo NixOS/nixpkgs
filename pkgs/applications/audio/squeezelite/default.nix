@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , flac
-, libgpiod
 , libmad
 , libpulseaudio
 , libvorbis
@@ -45,13 +44,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1468";
+  version = "1.9.9.1463";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "fd89d67b1b9a17a6dd212be0c91d0417b440f60a";
-    hash = "sha256-wYVRlv+Y1jvdAGlj2zXKUhQBwWX9pGgNX6U71PsfySg=";
+    rev = "c2534dc4139f3635ff7aed49b90ff03c43723dd9";
+    hash = "sha256-MTGeF62jb7auOtUDougWZz7VJUNCBD/QL9jfDB7UmQE=";
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]
@@ -63,8 +62,7 @@ stdenv.mkDerivation {
     ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile
     ++ optional resampleSupport soxr
-    ++ optional sslSupport openssl
-    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) libgpiod;
+    ++ optional sslSupport openssl;
 
   enableParallelBuilding = true;
 
@@ -83,8 +81,7 @@ stdenv.mkDerivation {
     ++ optional portaudioSupport "-DPORTAUDIO"
     ++ optional pulseSupport "-DPULSEAUDIO"
     ++ optional resampleSupport "-DRESAMPLE"
-    ++ optional sslSupport "-DUSE_SSL"
-    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) "-DRPI";
+    ++ optional sslSupport "-DUSE_SSL";
 
   env = lib.optionalAttrs stdenv.isDarwin {
     LDADD = "-lportaudio -lpthread";

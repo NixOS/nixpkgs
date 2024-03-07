@@ -1,30 +1,35 @@
-{ lib
-, fetchFromGitHub
-, php
-}:
+{ mkDerivation, fetchurl, makeWrapper, lib, php }:
 
-php.buildComposerProject (finalAttrs: {
+let
   pname = "phpmd";
   version = "2.15.0";
+in
+mkDerivation {
+  inherit pname version;
 
-  src = fetchFromGitHub {
-    owner = "phpmd";
-    repo = "phpmd";
-    rev = finalAttrs.version;
-    hash = "sha256-nTuJGzOZnkqrfE9R9Vujz/zGJRLlj8+yRZmmnxWrieQ=";
+  src = fetchurl {
+    url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
+    sha256 = "sha256-aijvVd4MdTsHDR0VgLsIoNFGAW+J8O3c72CsT8EINUQ=";
   };
 
-  # Missing `composer.lock` from the repository.
-  # Issue open at https://github.com/phpmd/phpmd/issues/1056
-  composerLock = ./composer.lock;
-  vendorHash = "sha256-vr0wQkfhXHLEz8Q5nEq5Bocu1U1nDhXUlaHBsysvuRQ=";
+  dontUnpack = true;
 
-  meta = {
-    changelog = "https://github.com/phpmd/phpmd/releases/tag/${finalAttrs.version}";
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install -D $src $out/libexec/phpmd/phpmd.phar
+    makeWrapper ${php}/bin/php $out/bin/phpmd \
+      --add-flags "$out/libexec/phpmd/phpmd.phar"
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    changelog = "https://github.com/phpmd/phpmd/releases/tag/${version}";
     description = "PHP code quality analyzer";
+    license = licenses.bsd3;
     homepage = "https://phpmd.org/";
-    license = lib.licenses.bsd3;
-    mainProgram = "phpmd";
-    maintainers = lib.teams.php.members;
+    maintainers = teams.php.members;
   };
-})
+}

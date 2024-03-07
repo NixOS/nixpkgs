@@ -59,6 +59,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    mainProgram = "xournal";
   };
 }

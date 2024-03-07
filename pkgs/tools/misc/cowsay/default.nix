@@ -1,6 +1,6 @@
-{ lib, stdenv, perl, fetchFromGitHub, fetchpatch, makeWrapper, nix-update-script, testers }:
+{ lib, stdenv, perl, fetchFromGitHub, fetchpatch, makeWrapper, nix-update-script, testers, cowsay }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "cowsay";
   version = "3.7.0";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cowsay-org";
     repo = "cowsay";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-t1grmCPQhRgwS64RjEwkK61F2qxxMBKuv0/DzBTnL3s=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+      package = cowsay;
       command = "cowsay --version";
     };
   };
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A program which generates ASCII pictures of a cow with a message";
     homepage = "https://cowsay.diamonds";
-    changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ rob anthonyroussel ];
   };
-})
+}

@@ -20,7 +20,6 @@
 , docbook_xsl
 , docbook_xml_dtd_45
 , docbook_xml_dtd_42
-, testers
 }:
 
 # Documentation is only built when building libraries.
@@ -32,12 +31,12 @@ assert withTests -> withLibraries;
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wayland";
   version = "1.22.0";
 
   src = fetchurl {
-    url = with finalAttrs; "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
     hash = "sha256-FUCvHqaYpHHC2OnSiDMsfg/TYMjx0Sk267fny8JCWEI=";
   };
 
@@ -103,16 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     Name: Wayland Scanner
     Description: Wayland scanner
-    Version: ${finalAttrs.version}
+    Version: ${version}
     EOF
   '';
 
-  passthru = {
-    inherit withLibraries;
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  passthru = { inherit withLibraries; };
 
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
@@ -128,14 +122,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
-    pkgConfigModules = [
-      "wayland-scanner"
-    ] ++ lib.optionals withLibraries [
-      "wayland-client"
-      "wayland-cursor"
-      "wayland-egl"
-      "wayland-egl-backend"
-      "wayland-server"
-    ];
   };
-})
+}

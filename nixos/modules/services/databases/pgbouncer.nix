@@ -66,6 +66,9 @@ let
       ${optionalString (cfg.adminUsers != null) "admin_users = ${cfg.adminUsers}"}
       ${optionalString (cfg.statsUsers != null) "stats_users = ${cfg.statsUsers}"}
 
+      # linux
+      pidfile = /run/pgbouncer/pgbouncer.pid
+
       # extra
       ${cfg.extraConfig}
     '';
@@ -93,9 +96,10 @@ in {
 
     logFile = mkOption {
       type = types.nullOr types.str;
-      default = null;
+      default = "pgbouncer.log";
       description = lib.mdDoc ''
-        Specifies a log file in addition to journald.
+        Specifies the log file.
+        Either this or syslog has to be specified.
       '';
     };
 
@@ -597,21 +601,22 @@ in {
 
     systemd.services.pgbouncer = {
       description = "PgBouncer - PostgreSQL connection pooler";
-      wants    = [ "network-online.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
-      after    = [ "network-online.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service";
+      wants    = [ "postgresql.service" ];
+      after    = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        Type = "notify";
+        Type = "forking";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${lib.getExe pkgs.pgbouncer} ${confFile}";
+        ExecStart = "${pkgs.pgbouncer}/bin/pgbouncer -d ${confFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         RuntimeDirectory = "pgbouncer";
+        PIDFile = "/run/pgbouncer/pgbouncer.pid";
         LimitNOFILE = cfg.openFilesLimit;
       };
     };
 
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.listenPort;
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
 
   };
 

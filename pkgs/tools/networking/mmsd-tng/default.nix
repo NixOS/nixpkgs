@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ julm ];
     platforms = platforms.linux;
-    mainProgram = "mmsdtng";
   };
 }

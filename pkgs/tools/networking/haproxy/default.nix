@@ -1,44 +1,39 @@
 { useLua ? true
 , usePcre ? true
+# QUIC "is currently supported as an experimental feature" so shouldn't be enabled by default
+, useQuicTls ? false
 , withPrometheusExporter ? true
-, sslLibrary ? "quictls"
 , stdenv
 , lib
 , fetchurl
 , nixosTests
 , zlib
 , libxcrypt
-, wolfssl
-, libressl
-, quictls
-, openssl
-, lua5_4
-, pcre2
-, systemd
+, openssl ? null
+, quictls ? null
+, lua5_3 ? null
+, pcre ? null
+, systemd ? null
 }:
 
-assert lib.assertOneOf "sslLibrary" sslLibrary [ "quictls" "openssl" "libressl" "wolfssl" ];
-let
-  sslPkgs = {
-    inherit quictls openssl libressl;
-    wolfssl = wolfssl.override {
-      variant = "haproxy";
-      extraConfigureFlags = [ "--enable-quic" ];
-    };
-  };
-  sslPkg = sslPkgs.${sslLibrary};
+assert useLua -> lua5_3 != null;
+assert usePcre -> pcre != null;
+assert useQuicTls -> quictls != null;
+assert !useQuicTls -> openssl != null;
+
+let sslPkg = if useQuicTls then quictls else openssl;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "2.9.6";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-IIrfR8j6g8VJeANLpcARC3RjxHB48Rm9BSNCFxo7mgs=";
+    hash = "sha256-1YAcdyqrnEP0CWS3sztDiNFLW0V1C+TSZxeFhjzbnxw=";
   };
 
   buildInputs = [ sslPkg zlib libxcrypt ]
-    ++ lib.optional useLua lua5_4
-    ++ lib.optional usePcre pcre2
+    ++ lib.optional useLua lua5_3
+    ++ lib.optional usePcre pcre
     ++ lib.optional stdenv.isLinux systemd;
 
   # TODO: make it work on bsd as well
@@ -51,23 +46,20 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildFlags = [
-    "USE_ZLIB=yes"
     "USE_OPENSSL=yes"
-    "SSL_INC=${lib.getDev sslPkg}/include"
-    "SSL_LIB=${lib.getDev sslPkg}/lib"
-    "USE_QUIC=yes"
-  ] ++ lib.optionals (sslLibrary == "openssl") [
-    "USE_QUIC_OPENSSL_COMPAT=yes"
-  ] ++ lib.optionals (sslLibrary == "wolfssl") [
-    "USE_OPENSSL_WOLFSSL=yes"
+    "SSL_LIB=${sslPkg}/lib"
+    "SSL_INC=${sslPkg}/include"
+    "USE_ZLIB=yes"
+  ] ++ lib.optionals useQuicTls [
+    "USE_QUIC=1"
   ] ++ lib.optionals usePcre [
-    "USE_PCRE2=yes"
-    "USE_PCRE2_JIT=yes"
+    "USE_PCRE=yes"
+    "USE_PCRE_JIT=yes"
   ] ++ lib.optionals useLua [
     "USE_LUA=yes"
     "LUA_LIB_NAME=lua"
-    "LUA_LIB=${lua5_4}/lib"
-    "LUA_INC=${lua5_4}/include"
+    "LUA_LIB=${lua5_3}/lib"
+    "LUA_INC=${lua5_3}/include"
   ] ++ lib.optionals stdenv.isLinux [
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"
@@ -92,7 +84,7 @@ in stdenv.mkDerivation (finalAttrs: {
       tens of thousands of connections is clearly realistic with todays
       hardware.
     '';
-    maintainers = with lib.maintainers; [ vifino ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "haproxy";
   };

@@ -39,7 +39,7 @@ let
 
   hydra-package =
   let
-    makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set-default \"${key}\" \"${value}\"") hydraEnv);
+    makeWrapperArgs = concatStringsSep " " (mapAttrsToList (key: value: "--set \"${key}\" \"${value}\"") hydraEnv);
   in pkgs.buildEnv rec {
     name = "hydra-env";
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -393,7 +393,6 @@ in
     systemd.services.hydra-evaluator =
       { wantedBy = [ "multi-user.target" ];
         requires = [ "hydra-init.service" ];
-        wants = [ "network-online.target" ];
         after = [ "hydra-init.service" "network.target" "network-online.target" ];
         path = with pkgs; [ hydra-package nettools jq ];
         restartTriggers = [ hydraConf ];

@@ -182,7 +182,6 @@ in
     systemd.services.certmgr = {
       description = "certmgr";
       path = mkIf (cfg.svcManager == "command") [ pkgs.bash ];
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit preStart;

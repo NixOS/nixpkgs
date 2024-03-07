@@ -231,16 +231,14 @@ let self = {
     };
   };
 
-  echo = rec {
+  echo = {
     name = "echo";
-    version = "0.63";
-
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
       repo = "echo-nginx-module";
-      rev = "v${version}";
-      hash = "sha256-K7oOE0yxPYLf+3YMVbBsncpHRpGHXjs/8B5QPO3MQC4=";
+      rev = "v0.62";
+      sha256 = "0kr1y094yw1a9fyrf4w73ikq18w5ys463wza9n7yfl77xdwirnvl";
     };
 
     meta = with lib; {
@@ -373,14 +371,12 @@ let self = {
 
   lua = rec {
     name = "lua";
-    version = "0.10.26";
-
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v${version}";
-      hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
+      rev = "v0.10.22";
+      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
     };
 
     inputs = [ luajit_openresty ];

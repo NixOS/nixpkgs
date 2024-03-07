@@ -39,9 +39,9 @@ in {
         };
         extraAppsEnable = true;
         extraApps = {
-          inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push notes;
+          inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push;
         };
-        settings.trusted_proxies = [ "::1" ];
+        extraOptions.trusted_proxies = [ "::1" ];
       };
 
       services.redis.servers."nextcloud".enable = true;
@@ -84,7 +84,7 @@ in {
         "${withRcloneEnv} ${copySharedFile}"
     )
     client.wait_for_unit("multi-user.target")
-    client.execute("${pkgs.lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${adminuser} ${adminpass} >&2 &")
+    client.execute("${pkgs.nextcloud-notify_push.passthru.test_client}/bin/test_client http://nextcloud ${adminuser} ${adminpass} >&2 &")
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
@@ -92,7 +92,5 @@ in {
 
     # redis cache should not be empty
     nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
-
-    nextcloud.fail("curl -f http://nextcloud/nix-apps/notes/lib/AppInfo/Application.php")
   '';
 })) args

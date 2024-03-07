@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    libdir="$out/${python3.sitePackages}"
+    libdir="$out/lib/${python3.libPrefix}/site-packages"
     mkdir -p "$libdir"
     cp -r postiats "$libdir"
 

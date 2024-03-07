@@ -19,6 +19,5 @@ bundlerApp rec {
     '';
     license = licenses.mit;
     maintainers = [ maintainers.panaeon ];
-    mainProgram = "coltrane";
   };
 }

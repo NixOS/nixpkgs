@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pulp";
-  version = "2.8.0";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "coin-or";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-lpbk1GeC8F/iLGV8G5RPHghnaM9eL82YekUYEt9+mvc=";
+    hash = "sha256-j0f6OiscJyTqPNyLp0qWRjCGLWuT3HdU1S/sxpnsiMo=";
   };
 
   postPatch = ''

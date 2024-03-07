@@ -6,13 +6,12 @@
 , paho-mqtt
 , python-dateutil
 , weconnect
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.48.4";
-  pyproject = true;
+  version = "0.48.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -20,22 +19,18 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Yv6CAGTDi4P9pImLxVk2QkZ014iqQ8UMBUeiyZWnYiQ=";
+    hash = "sha256-Pja9BP0gbWXTgOokEngNS364tJp1oWJYNKcTxyYJHGw=";
   };
 
   postPatch = ''
-    substituteInPlace weconnect_mqtt/__version.py \
-      --replace-fail "0.0.0dev" "${version}"
     substituteInPlace requirements.txt \
-      --replace-fail "weconnect[Images]~=" "weconnect>="
+      --replace "weconnect[Images]~=" "weconnect>="
+    substituteInPlace weconnect_mqtt/__version.py \
+      --replace "develop" "${version}"
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=weconnect_mqtt --cov-config=.coveragerc --cov-report html" "" \
-      --replace-fail "pytest-cov" ""
+      --replace "--cov=weconnect_mqtt --cov-config=.coveragerc --cov-report html" "" \
+      --replace "pytest-cov" ""
   '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     paho-mqtt

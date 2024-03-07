@@ -43,6 +43,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/tobealive/wthrr-the-weathercrab/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "wthrr";
   };
 }

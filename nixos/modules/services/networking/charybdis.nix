@@ -81,9 +81,9 @@ in
         gid = config.ids.gids.ircd;
       };
 
-      systemd.tmpfiles.settings."10-charybdis".${cfg.statedir}.d = {
-        inherit (cfg) user group;
-      };
+      systemd.tmpfiles.rules = [
+        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
+      ];
 
       environment.etc."charybdis/ircd.conf".source = configFile;
 

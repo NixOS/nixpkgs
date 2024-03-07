@@ -3,7 +3,6 @@
 , bottle
 , buildPythonPackage
 , fetchFromGitHub
-, flit-core
 , flask
 , mock
 , pytestCheckHook
@@ -13,21 +12,17 @@
 
 buildPythonPackage rec {
   pname = "apispec-webframeworks";
-  version = "1.0.0";
-  pyproject = true;
+  version = "0.5.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "apispec-webframeworks";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zrsqIZ5ZogZsK1ZOL2uy8igS4T8a+19IwL5dMhKw7OA=";
+    rev = version;
+    hash = "sha256-ByNmmBLO99njw9JrT+cCW/K4NJBH92smAiIgg47Cvkk=";
   };
-
-  nativeBuildInputs = [
-    flit-core
-  ];
 
   propagatedBuildInputs = [
     apispec

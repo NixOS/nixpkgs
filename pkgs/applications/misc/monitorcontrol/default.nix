@@ -1,20 +1,19 @@
-{ lib, fetchurl, stdenv, _7zz }:
+{ lib, fetchurl, stdenv, undmg }:
 
 # This cannot be built from source due to the problematic nature of XCode - so
 # this is what it's like when doves cry?
 
 stdenv.mkDerivation rec {
   pname = "MonitorControl";
-  version = "4.2.0";
+  version = "4.1.0";
 
   src = fetchurl {
     url =
       "https://github.com/MonitorControl/${pname}/releases/download/v${version}/MonitorControl.${version}.dmg";
-    sha256 = "Q96uK6wVe1D2uLvWL+pFR6LcmrU7cgmr2Y5tPvvTDgI=";
+    sha256 = "iaxM9j78Sq1EH5TCY240N+D5bG6quk2dZj8T7nt9ATo=";
   };
 
-  # MonitorControl.${version}.dmg is APFS formatted, unpack with 7zz
-  nativeBuildInputs = [ _7zz ];
+  nativeBuildInputs = [ undmg ];
 
   sourceRoot = "MonitorControl.app";
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     longDescription = "Controls your external display brightness and volume and shows native OSD. Use menulet sliders or the keyboard, including native Apple keys!";
     homepage = "https://github.com/MonitorControl/MonitorControl#readme";
     license = licenses.mit;
-    maintainers = with maintainers; [ cbleslie cottand ];
+    maintainers = with maintainers; [ cbleslie ];
     platforms = platforms.darwin;
   };
 }

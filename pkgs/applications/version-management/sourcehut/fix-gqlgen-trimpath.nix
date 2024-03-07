@@ -1,5 +1,5 @@
 { unzip
-, gqlgenVersion ? "0.17.42"
+, gqlgenVersion ? "0.17.20"
 }:
 {
   overrideModAttrs = (_: {

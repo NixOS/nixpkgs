@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
-    mainProgram = "sstpc";
   };
 }

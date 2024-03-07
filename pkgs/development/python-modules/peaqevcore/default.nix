@@ -2,28 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "peaqevcore";
-  version = "19.7.7";
-  pyproject = true;
+  version = "19.6.6";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HJ+8EpxcMhUPJILapNk9esA0iUm8PiHPDm3MmBQDny4=";
+    hash = "sha256-4T30jiMRAbPDgGW8Zcolj1k3UpKN1/juXtYSHrjO804=";
   };
 
   postPatch = ''
     sed -i "/extras_require/d" setup.py
   '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   # Tests are not shipped and source is not tagged
   # https://github.com/elden1337/peaqev-core/issues/4

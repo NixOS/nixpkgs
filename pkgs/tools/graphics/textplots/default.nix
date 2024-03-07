@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "textplots";
-  version = "0.8.5";
+  version = "0.8.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-83EAe6O8ETsuGJ5MK6kt68OnJL+r+BAYkFzvzlxHyp4=";
+    hash = "sha256-DtDxD3b8idYOBcHKkLbOy6NUU0bjWzDySGoW8uOT4xc=";
   };
 
-  cargoHash = "sha256-O47b00PGRXTWWxywitS2V15gXahzgjNvFKUvE+VMXaM=";
+  cargoHash = "sha256-tXqonC4qawS6eu9dPt/6/TVYCjTroG+9XikmYQHCLdA=";
 
   buildFeatures = [ "tool" ];
 

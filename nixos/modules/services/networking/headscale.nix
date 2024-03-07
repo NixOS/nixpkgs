@@ -444,14 +444,10 @@ in {
       tls_letsencrypt_cache_dir = "${dataDir}/.cache";
     };
 
-    environment = {
-      # Setup the headscale configuration in a known path in /etc to
-      # allow both the Server and the Client use it to find the socket
-      # for communication.
-      etc."headscale/config.yaml".source = configFile;
-
-      systemPackages = [ cfg.package ];
-    };
+    # Setup the headscale configuration in a known path in /etc to
+    # allow both the Server and the Client use it to find the socket
+    # for communication.
+    environment.etc."headscale/config.yaml".source = configFile;
 
     users.groups.headscale = mkIf (cfg.group == "headscale") {};
 
@@ -464,7 +460,6 @@ in {
 
     systemd.services.headscale = {
       description = "headscale coordination server for Tailscale";
-      wants = [ "network-online.target" ];
       after = ["network-online.target"];
       wantedBy = ["multi-user.target"];
       restartTriggers = [configFile];

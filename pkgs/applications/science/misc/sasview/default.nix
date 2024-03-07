@@ -1,20 +1,29 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 , wrapQtAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sasview";
-  version = "5.0.6";
-  pyproject = true;
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasview";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cwP9VuvO4GPlbAxCqw31xISTi9NoF5RoBQmjWusrnzc=";
+    rev = "v${version}";
+    hash = "sha256-TjcchqA6GCvkr59ZgDuGglan2RxLp+aMjJk28XhvoiY=";
   };
+
+  patches = [
+    # Fix `asscalar` numpy API removal.
+    # See https://github.com/SasView/sasview/pull/2178
+    (fetchpatch {
+      url = "https://github.com/SasView/sasview/commit/b1ab08c2a4e8fdade7f3e4cfecf3dfec38b8f3c5.patch";
+      hash = "sha256-IH8g4XPziVAnkmBdzLH1ii8vN6kyCmOgrQlH2HEbm5o=";
+    })
+  ];
 
   # AttributeError: module 'numpy' has no attribute 'float'.
   postPatch = ''
@@ -24,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3.pkgs.pyqt5
-    python3.pkgs.setuptools
     wrapQtAppsHook
   ];
 
@@ -58,21 +66,12 @@ python3.pkgs.buildPythonApplication rec {
     unittest-xml-reporting
   ];
 
-  pytestFlagsArray = [
-    "test"
-  ];
-
-  disabledTests = [
-    # NoKnownLoaderException
-    "test_invalid_cansas"
-    "test_data_reader_exception"
-  ];
+  pytestFlagsArray = [ "test" ];
 
   meta = with lib; {
-    description = "Fitting and data analysis for small angle scattering data";
     homepage = "https://www.sasview.org";
-    changelog = "https://github.com/SasView/sasview/releases/tag/v${version}";
-    license = licenses.bsd3;
+    description = "Fitting and data analysis for small angle scattering data";
     maintainers = with maintainers; [ rprospero ];
+    license = licenses.bsd3;
   };
 }

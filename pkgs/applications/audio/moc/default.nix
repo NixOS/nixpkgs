@@ -96,6 +96,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ aethelz pSub jagajaga ];
     platforms = platforms.unix;
-    mainProgram = "mocp";
   };
 }

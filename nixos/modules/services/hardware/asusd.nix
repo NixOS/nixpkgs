@@ -8,8 +8,6 @@ in
     services.asusd = {
       enable = lib.mkEnableOption (lib.mdDoc "the asusd service for ASUS ROG laptops");
 
-      package = lib.mkPackageOption pkgs "asusctl" { };
-
       enableUserService = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -75,7 +73,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ pkgs.asusctl ];
 
     environment.etc =
       let
@@ -94,9 +92,9 @@ in
       };
 
     services.dbus.enable = true;
-    systemd.packages = [ cfg.package ];
-    services.dbus.packages = [ cfg.package ];
-    services.udev.packages = [ cfg.package ];
+    systemd.packages = [ pkgs.asusctl ];
+    services.dbus.packages = [ pkgs.asusctl ];
+    services.udev.packages = [ pkgs.asusctl ];
     services.supergfxd.enable = lib.mkDefault true;
 
     systemd.user.services.asusd-user.enable = cfg.enableUserService;

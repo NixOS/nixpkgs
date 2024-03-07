@@ -14,7 +14,6 @@
 , gmp
 , icu
 , limesuite
-, gnuradioAtLeast
 }:
 
 let
@@ -34,7 +33,7 @@ let
 in mkDerivation {
   pname = "gr-limesdr";
   inherit version src;
-  disabled = gnuradioAtLeast "3.9";
+  disabledForGRafter = "3.9";
 
   nativeBuildInputs = [
     cmake

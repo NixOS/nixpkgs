@@ -7,7 +7,6 @@
 , wheel
 
 # dependencies
-, beartype
 , einops
 , torch
 }:
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    beartype
     einops
     torch
   ];
@@ -44,7 +42,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of Rotary Embeddings, from the Roformer paper, in Pytorch";
     homepage = "https://github.com/lucidrains/rotary-embedding-torch";
-    changelog = "https://github.com/lucidrains/rotary-embedding-torch/releases/tag/${version}";
     license = licenses.mit;
     maintainers = teams.tts.members;
   };

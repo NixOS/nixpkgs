@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, pythonOlder
+, isPy27
 , fetchFromGitHub
 , setuptools
 , urllib3
@@ -15,9 +15,9 @@
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.21.0";
+  version = "0.20.1";
 
-  disabled = pythonOlder "3.8";
+  disabled = isPy27;
 
   pyproject = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "cobrateam";
     repo = "splinter";
     rev = "refs/tags/${version}";
-    hash = "sha256-PGGql8yI1YosoUBAyDoI/8k7s4sVYnXEV7eow3GHH88=";
+    hash = "sha256-6oHcHIkqOr0aFNfCNjZpm4zIYuz2ov9drfCxSdjAg7o=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "splinter" ];
 
   meta = with lib; {
-    changelog = "https://splinter.readthedocs.io/en/latest/news.html";
     description = "Browser abstraction for web acceptance testing";
     homepage = "https://github.com/cobrateam/splinter";
     license = licenses.bsd3;

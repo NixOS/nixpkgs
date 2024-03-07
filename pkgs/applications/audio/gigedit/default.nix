@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
-    mainProgram = "gigedit";
   };
 }

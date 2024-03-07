@@ -12,21 +12,20 @@
 , pythonOlder
 , typing-extensions
 , wagtail
-, wagtail-modeladmin
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.8.2";
-  pyproject = true;
+  version = "1.7";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    repo = "wagtail-localize";
+    repo = pname;
     owner = "wagtail";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBqGFD6piMn9d7Ls/GBeBfeQty/MDvlQY0GP66BA2QE=";
+    hash = "sha256-Q29Nh/4Z3tYuwoodWKDl5FS+lfl9yDXN7RHn/RReCds=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     wagtail
     polib
     typing-extensions
-    wagtail-modeladmin
   ];
 
   nativeCheckInputs = [

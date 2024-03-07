@@ -1,7 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, _7zz
+, undmg
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,8 +16,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  # AlDente.dmg is APFS formatted, unpack with 7zz
-  nativeBuildInputs = [ _7zz ];
+  nativeBuildInputs = [ undmg ];
+
+  # AlDente.dmg is not HFS formatted, default unpackPhase fails
+  # https://discourse.nixos.org/t/help-with-error-only-hfs-file-systems-are-supported-on-ventura
+  unpackCmd = ''
+    if ! [[ "$curSrc" =~ \.dmg$ ]]; then return 1; fi
+    mnt=$(mktemp -d -t ci-XXXXXXXXXX)
+
+    function finish {
+      /usr/bin/hdiutil detach $mnt -force
+    }
+    trap finish EXIT
+
+    /usr/bin/hdiutil attach -nobrowse -readonly $src -mountpoint $mnt
+
+    shopt -s extglob
+    DEST="$PWD"
+    (cd "$mnt"; cp -a !(Applications) "$DEST/")
+  '';
 
   sourceRoot = "AlDente.app";
 

@@ -34,7 +34,6 @@ in {
     users.users.brltty = {
       description = "BRLTTY daemon user";
       group = "brltty";
-      isSystemUser = true;
     };
     users.groups = {
       brltty = { };

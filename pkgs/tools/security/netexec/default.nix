@@ -1,50 +1,116 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , python3
+, buildPythonPackage
+, fetchPypi
 }:
 let
   python = python3.override {
     packageOverrides = self: super: {
       impacket = super.impacket.overridePythonAttrs {
-        version = "0.12.0.dev1-unstable-2023-11-30";
+        version = "0.12.0.dev1";
         src = fetchFromGitHub {
           owner = "Pennyw0rth";
           repo = "impacket";
           rev = "d370e6359a410063b2c9c68f6572c3b5fb178a38";
           hash = "sha256-Jozn4lKAnLQ2I53+bx0mFY++OH5P4KyqVmrS5XJUY3E=";
         };
-        # Fix version to be compliant with Python packaging rules
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace 'version="{}.{}.{}.{}{}"' 'version="{}.{}.{}"'
-        '';
       };
+      bloodhound-py = super.bloodhound-py.overridePythonAttrs (old: {
+        propagatedBuildInputs =
+          lib.lists.remove super.impacket old.propagatedBuildInputs
+          ++ [ self.impacket ];
+      });
     };
+  };
+
+  python-easyconfig = buildPythonPackage rec {
+    pname = "python-easyconfig";
+    version = "0.1.7";
+    src = fetchPypi {
+      inherit version;
+      pname = "Python-EasyConfig";
+      hash = "sha256-tUjxmrhQtVFU9hFi8xTj27J24R47JpUbio+gaDwGuyk=";
+    };
+    propagatedBuildInputs = with python.pkgs; [
+      six
+      pyyaml
+    ];
+  };
+
+  jsonform = buildPythonPackage rec {
+    pname = "jsonform";
+    version = "0.0.2";
+    doCheck = false;
+    src = fetchPypi {
+      inherit version;
+      pname = "JsonForm";
+      hash = "sha256-cfi3ohU44wyphLad3gTwKYDNbNwhg6GKp8oC2VCZiOY=";
+    };
+    propagatedBuildInputs = with python.pkgs; [
+      jsonschema
+    ];
+  };
+
+  jsonsir = buildPythonPackage rec {
+    pname = "jsonsir";
+    version = "0.0.2";
+    doCheck = false;
+    src = fetchPypi {
+      inherit version;
+      pname = "JsonSir";
+      hash = "sha256-QBRHxekx94h4Uc6b8kB/401aqwsUZ7sku787dg5b0/s=";
+    };
+  };
+
+  dploot = buildPythonPackage rec {
+    pname = "dploot";
+    version = "2.2.4";
+    pyproject = true;
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-40/5KOlEFvPL9ohCfR3kqoikpKFfJO22MToq3GhamKM=";
+    };
+    nativeBuildInputs = with python.pkgs; [
+      poetry-core
+    ];
+    propagatedBuildInputs = with python.pkgs; [
+      impacket
+      cryptography
+      pyasn1
+      lxml
+    ];
+  };
+
+  resource = buildPythonPackage rec {
+    pname = "resource";
+    version = "0.2.1";
+    doCheck = false;
+    src = fetchPypi {
+      inherit version;
+      pname = "Resource";
+      hash = "sha256-mDVKvY7+c9WhDyEJnYC774Xs7ffKIqQW/yAlClGs2RY=";
+    };
+    propagatedBuildInputs = with python.pkgs; [
+      python-easyconfig
+      jsonform
+      jsonsir
+    ];
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "netexec";
-  version = "1.1.0-unstable-2024-01-15";
+  version = "1.1.0";
   pyproject = true;
+  doCheck = true;
   pythonRelaxDeps = true;
-  pythonRemoveDeps = [
-    # Fail to detect dev version requirement
-    "neo4j"
-  ];
 
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
     repo = "NetExec";
-    rev = "9df72e2f68b914dfdbd75b095dd8f577e992615f";
-    hash = "sha256-oQHtTE5hdlxHX4uc412VfNUrN0UHVbwI0Mm9kmJpNW4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cNkZoIdfrKs5ZvHGKGBybCWGwA6C4rqjCOEM+pX70S8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"' \
-      --replace '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
-  '';
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
@@ -52,55 +118,55 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python.pkgs; [
-    aardwolf
-    aioconsole
-    aiosqlite
-    argcomplete
-    asyauth
+    requests
     beautifulsoup4
-    bloodhound-py
-    dploot
-    dsinternals
-    impacket
     lsassy
-    masky
-    minikerberos
+    termcolor
     msgpack
     neo4j
-    oscrypto
-    paramiko
-    pyasn1-modules
     pylnk3
     pypsrp
-    pypykatz
-    python-libnmap
-    pywerview
-    requests
-    rich
-    sqlalchemy
-    termcolor
-    terminaltables
+    paramiko
+    impacket
+    dsinternals
     xmltodict
+    terminaltables
+    aioconsole
+    pywerview
+    minikerberos
+    pypykatz
+    aardwolf
+    dploot
+    bloodhound-py
+    asyauth
+    masky
+    sqlalchemy
+    aiosqlite
+    pyasn1-modules
+    rich
+    python-libnmap
+    resource
+    oscrypto
   ];
 
   nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
+    pytest
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"'
+
+    substituteInPlace pyproject.toml \
+      --replace '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
   '';
 
   meta = with lib; {
-    description = "Network service exploitation tool (maintained fork of CrackMapExec)";
+    description = "Network service exploitation tool (Maintaned fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
     changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
     license = with licenses; [ bsd2 ];
     mainProgram = "nxc";
     maintainers = with maintainers; [ vncsb ];
-    # FIXME: failing fixupPhase:
-    # $ Rewriting #!/nix/store/<hash>-python3-3.11.7/bin/python3.11 to #!/nix/store/<hash>-python3-3.11.7
-    # $ /nix/store/<hash>-wrap-python-hook/nix-support/setup-hook: line 65: 47758 Killed: 9               sed -i "$f" -e "1 s^#!/nix/store/<hash>-python3-3.11.7^#!/nix/store/<hash>-python3-3.11.7^"
-    broken = stdenv.isDarwin;
   };
 }

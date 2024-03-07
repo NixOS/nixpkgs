@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.71.5";
+  version = "0.69.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "core.sr.ht";
     rev = version;
-    hash = "sha256-YIoKOiTi/9X4bSiG+GvnwzvKYhbfywrv/dTjxaJOOTQ=";
+    sha256 = "sha256-T9yewweqnWL3IW5PHGyAcsIWCGn1ayK2rwrHVukYpgE=";
     fetchSubmodules = true;
   };
 
@@ -89,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [ eadwu ];
   };
 }

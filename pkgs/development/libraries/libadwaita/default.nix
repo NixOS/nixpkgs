@@ -17,12 +17,11 @@
 , xvfb-run
 , AppKit
 , Foundation
-, testers
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.4.3";
+  version = "1.4.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = finalAttrs.version;
-    hash = "sha256-ctHAN0SY6k68jaBpmIpMm8DngC9DPiL1vAmGhECpNic=";
+    rev = version;
+    hash = "sha256-SsQbCnNtgiRWMZerEjSSw+CU5m6bGRv8ILY/TITGtL4=";
   };
 
   depsBuildBuild = [
@@ -51,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-  ] ++ lib.optionals (!finalAttrs.doCheck) [
+  ] ++ lib.optionals (!doCheck) [
     "-Dtests=false"
   ];
 
@@ -107,20 +106,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
-    };
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
+      packageName = pname;
     };
   };
 
   meta = with lib; {
-    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.rev}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${src.rev}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
     platforms = platforms.unix;
-    pkgConfigModules = [ "libadwaita-1" ];
   };
-})
+}

@@ -130,6 +130,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
-    mainProgram = "nautilus";
   };
 })

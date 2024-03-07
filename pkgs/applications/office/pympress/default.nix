@@ -13,12 +13,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.8.5";
+  version = "1.8.4";
 
   src = fetchPypi {
     inherit version;
     pname = "pympress";
-    hash = "sha256-Kb05EV0F8lTamTq7pC1UoOkYf04s58NjMksVE2xTC/Y=";
+    hash = "sha256-3cnCHGoKUX0gTzIx1khM+br6x9+g9WXh28SLhm99eN4=";
   };
 
   nativeBuildInputs = [

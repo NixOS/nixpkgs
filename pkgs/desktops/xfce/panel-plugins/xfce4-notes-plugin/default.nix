@@ -3,11 +3,8 @@
 , fetchurl
 , pkg-config
 , intltool
-, glib
-, gtk3
-, libxfce4ui
-, libxfce4util
 , xfce4-panel
+, libxfce4ui
 , xfconf
 , gitUpdater
 }:
@@ -16,11 +13,11 @@ let
   category = "panel-plugins";
 in stdenv.mkDerivation rec {
   pname  = "xfce4-notes-plugin";
-  version = "1.11.0";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-6zgkbesPyJU1+p/5uVPHYs7OIytVhdghD6uau/KCquM=";
+    sha256 = "sha256-LuRAYELt01KpHhZsg7YNEyIO8E3OP6a54OsTY21jaSk=";
   };
 
   nativeBuildInputs = [
@@ -29,10 +26,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib
-    gtk3
     libxfce4ui
-    libxfce4util
     xfce4-panel
     xfconf
   ];

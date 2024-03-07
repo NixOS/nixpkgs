@@ -1,4 +1,4 @@
-{ version, src, stdenv, lib, fetchYarnDeps, prefetch-yarn-deps, yarn, nodejs }:
+{ version, src, stdenv, lib, fetchFromGitHub, fetchYarnDeps, prefetch-yarn-deps, yarn, nodejs }:
 
 stdenv.mkDerivation rec {
   inherit version src;
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/ui/yarn.lock";
-    sha256 = "sha256-4boZCEly4HovK9BXlSoFd3wZoPaGnzbJg5AygSC/Lrg=";
+    sha256 = "sha256-37P+acjaeG7TCyLoIHIHsB+DCUOsQOJ1H9T5SgajtLc=";
   };
 
   nativeBuildInputs = [ prefetch-yarn-deps yarn nodejs ];

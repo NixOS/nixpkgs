@@ -1,3 +1,5 @@
+diff --git a/Makefile b/Makefile
+index fa95b7b70..4d15ed721 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -215,7 +215,7 @@ ABC_ARCHFLAGS += "-DABC_NO_RLIMIT"
@@ -9,17 +11,8 @@
  LD = clang++
  CXXFLAGS += -std=$(CXXSTD) -Os
  ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H -Wno-c++11-narrowing $(ABC_ARCHFLAGS)"
---- a/tests/cxxrtl/run-test.sh
-+++ b/tests/cxxrtl/run-test.sh
-@@ -5,7 +5,7 @@ set -ex
- run_subtest () {
-     local subtest=$1; shift
- 
--    ${CC:-gcc} -std=c++11 -O2 -o cxxrtl-test-${subtest} -I../../backends/cxxrtl/runtime test_${subtest}.cc -lstdc++
-+    ${CXX:-gcc} -std=c++11 -O2 -o cxxrtl-test-${subtest} -I../../backends/cxxrtl/runtime test_${subtest}.cc -lstdc++
-     ./cxxrtl-test-${subtest}
- }
- 
+diff --git a/tests/fmt/run-test.sh b/tests/fmt/run-test.sh
+index 914a72347..bc0b129d2 100644
 --- a/tests/fmt/run-test.sh
 +++ b/tests/fmt/run-test.sh
 @@ -51,7 +51,7 @@ test_cxxrtl () {

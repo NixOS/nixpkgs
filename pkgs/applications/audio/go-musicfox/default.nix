@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , pkg-config
 , alsa-lib
@@ -7,20 +7,20 @@
 , nix-update-script
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "go-musicfox";
-  version = "4.3.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "go-musicfox";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QZHuQAOnthSm7Kb82i3NUWTnKk+9OMHV5vzOU72inX0=";
+    hash = "sha256-JDR3D3tILT0q9jqcZmbfQC3yn7cmaSL/GEpCguqCFXI=";
   };
 
   deleteVendor = true;
 
-  vendorHash = "sha256-6DeoxpjVfykBI3fJAJpMZwJ4VTooIbxGpk5+SW198hU=";
+  vendorHash = "sha256-ILO4v4ii1l9JokXG7R3vuN7i5hDi/hLHTFiClA2vdf0=";
 
   subPackages = [ "cmd/musicfox.go" ];
 

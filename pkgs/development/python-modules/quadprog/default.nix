@@ -3,7 +3,6 @@
 , pythonOlder
 , fetchFromGitHub
 , cython
-, setuptools
 , numpy
 , pytestCheckHook
 , scipy
@@ -11,30 +10,38 @@
 
 buildPythonPackage rec {
   pname = "quadprog";
-  version = "0.1.12";
-  pyproject = true;
+  version = "0.1.11";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "quadprog";
-    repo = "quadprog";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-3S846PaNfZ4j3r6Vi2o6+Jk+2kC/P7tMSQQiB/Kx8nI=";
+    hash = "sha256-/suv1KbG3HbiYqEiuCtB/ia3xbxAO5AMuWx1Svy0rMw=";
   };
 
   nativeBuildInputs = [
     cython
-    setuptools
   ];
 
   propagatedBuildInputs = [
     numpy
   ];
 
+  preBuild = ''
+    cython quadprog/quadprog.pyx
+  '';
+
   nativeCheckInputs = [
     pytestCheckHook
     scipy
+  ];
+
+  pytestFlagsArray = [
+    # test fails on aarch64-darwin
+    "--deselect=tests/test_1.py::test_5"
   ];
 
   meta = with lib; {

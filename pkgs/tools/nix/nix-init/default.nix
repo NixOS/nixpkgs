@@ -6,7 +6,7 @@
 , installShellFiles
 , pkg-config
 , bzip2
-, libgit2
+, libgit2_1_6
 , openssl
 , zlib
 , zstd
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     bzip2
     curl
-    libgit2
+    libgit2_1_6
     openssl
     zlib
     zstd
@@ -80,7 +80,6 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    LIBGIT2_NO_VENDOR = 1;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;

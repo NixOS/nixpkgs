@@ -7,7 +7,6 @@
 , setuptools
 , setuptools-scm
 , wheel
-, packaging
 , pybind11
 , pydantic
 , rich
@@ -19,19 +18,21 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.5.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H8QCdU6piBdqJEJOGVbsz+6eyMhFVuwTpIHKUoKaf4A=";
+    hash = "sha256-bQKcS8vktvD62zvSeaBtoJw36TSpo0gEpKm0HI3AuXg=";
   };
 
   nativeBuildInputs = [
     cmake
+    numpy
     scikit-build
     setuptools
     setuptools-scm
+    wheel
     pybind11
   ];
 
@@ -40,8 +41,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    numpy
-    packaging
     pydantic
     rich
   ];
@@ -63,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

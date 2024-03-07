@@ -1,0 +1,14 @@
+diff --git a/src/plugins/meson.build b/src/plugins/meson.build
+index cdd3b5b..a5a2174 100644
+--- a/src/plugins/meson.build
++++ b/src/plugins/meson.build
+@@ -63,9 +63,3 @@ if all_nvidia_linux_libs
+ 		install : true,
+ 		link_with : libtuxclocker)
+ endif
+-
+-shared_library('cpu', 'CPU.cpp', 'Utils.cpp',
+-        include_directories : [incdir, fplus_inc],
+-        install_dir : get_option('libdir') / 'tuxclocker' / 'plugins',
+-        install : true,
+-        link_with : libtuxclocker)

@@ -5,6 +5,7 @@
   "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
+  "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
@@ -13,6 +14,7 @@
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
   "@prisma/language-server" = "prisma-language-server";
+  "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";
   "@vue/cli" = "vue";
   "@webassemblyjs/repl-1.11.1" = "wasm";
@@ -45,12 +47,8 @@
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
   prettier = "prettier";
-  pulp = "pulp";
-  purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
-  purty = "purty";
-  pscid = "pscid";
   remod-cli = "remod";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
@@ -60,6 +58,5 @@
   vscode-css-languageserver-bin = "css-languageserver";
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";
-  vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }

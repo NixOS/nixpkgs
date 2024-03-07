@@ -17,11 +17,14 @@ let
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
 
-  manage = pkgs.writeShellScript "manage" ''
-    set -o allexport # Export the following env vars
-    ${lib.toShellVars env}
-    exec ${pkg}/bin/tandoor-recipes "$@"
-  '';
+  manage =
+    let
+      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
+    in
+    pkgs.writeShellScript "manage" ''
+      ${setupEnv}
+      exec ${pkg}/bin/tandoor-recipes "$@"
+    '';
 in
 {
   meta.maintainers = with maintainers; [ ambroisie ];

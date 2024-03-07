@@ -57,7 +57,7 @@ let
     # Defined in gdk-pixbuf setup hook
     findGdkPixbufLoaders "${librsvg}"
 
-    ${if (builtins.isString to) then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
+    ${if to then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --argv0 factor \
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs} \
@@ -72,7 +72,7 @@ let
         passthru.runtimeLibs = runtimeLibs ++ interpreter.runtimeLibs;
       }
       (wrapFactorScript {
-        from = "${interpreter}/lib/factor/.factor-wrapped";
+        from = "${interpreter}/lib/factor/.factor.wrapped";
         to = "$out/bin/factor";
         runtimeLibs = (runtimeLibs ++ interpreter.runtimeLibs);
       });

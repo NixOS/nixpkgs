@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
-  version = "1.4.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Rn9kJWutWKPj9cLu2ZJKITmC+I8/ikhCAoIp00Yg6ZA=";
+    sha256 = "sha256-iPDIbfbRNhgmTQHw9gNczXTcUaJ0dQpBDHg5ZOQQJ4M=";
   };
 
-  cargoHash = "sha256-kmXtwS5pCLEq5dbNHtWYGzDKjOUlVlr5xippVd2wl8k=";
+  cargoHash = "sha256-Hg8Xlcx0j70Z8IwlJPCwm+qhurXjtKGLI3ZUCeHL1KY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,6 +31,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/svenstaro/genact/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "genact";
   };
 }

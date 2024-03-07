@@ -6,22 +6,19 @@
 , packaging
 , quantities
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.13.0";
-  pyproject = true;
+  version = "0.12.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VnXR+jgaU8LH7ri16SnsA5neILsLUkU+G5nsbWbckfM=";
+    hash = "sha256-O2yk/AXf206VPiU+cJlL+7yP4ukJWPvaf6WGDK8/pjo=";
   };
-
-  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy

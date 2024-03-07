@@ -12,14 +12,14 @@
 , impy
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "evilpixie";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "bcampbell";
     repo = "evilpixie";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-+DdAN+xDOYxLgLHUlr75piTEPrWpuOyXvxckhBEl7yU=";
   };
 
@@ -51,4 +51,5 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/bcampbell/evilpixie/issues/28
       stdenv.isAarch64;
   };
-})
+}
+

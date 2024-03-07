@@ -1,12 +1,12 @@
 { lib
 , stdenv
-, fetchurl
-, directoryListingUpdater
+, fetchFromGitLab
+, gitUpdater
 , meson
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook4
+, wrapGAppsHook
 , libadwaita
 , libhandy
 , libxkbcommon
@@ -34,14 +34,18 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.36.0";
+  version = "0.33.0";
 
-  src = fetchurl {
-    # Release tarball which includes subprojects gvc and libcall-ui
-    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-rhhvVCOqw/jqNSpo9Hlrcgh4Bxnoud/Z3yAq4n/ixIQ=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
+    sha256 = "sha256-t+1MYfsz7KqsMvN8TyLIUrTLTQPWQQpOSk/ysxgE7kg=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -90,10 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd=true"
     "-Dcompositor=${phoc}/bin/phoc"
     # https://github.com/NixOS/nixpkgs/issues/36468
-    # https://gitlab.gnome.org/World/Phosh/phosh/-/merge_requests/1363
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
-    # Save some time building if tests are disabled
-    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   checkPhase = ''
@@ -113,19 +114,30 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  postFixup = ''
+    mkdir -p $out/share/wayland-sessions
+    ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
+  '';
+
   passthru = {
-    providedSessions = [ "phosh" ];
+    providedSessions = [
+      "sm.puri.Phosh"
+    ];
+
     tests.phosh = nixosTests.phosh;
-    updateScript = directoryListingUpdater { };
+
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
-    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
     mainProgram = "phosh-session";
   };
-})
+}

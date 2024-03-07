@@ -6,10 +6,11 @@
 , libgudev
 , pkg-config
 , glib
-, python3Packages
+, python3
+, gobject-introspection
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "switcheroo-control";
   version = "2.6";
 
@@ -18,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
-    repo = "switcheroo-control";
+    repo = pname;
     rev = version;
     hash = "sha256-F+5HhMxM8pcnAGmVBARKWNCL0rIEzHW/jsGHHqYZJug=";
   };
@@ -27,16 +28,18 @@ python3Packages.buildPythonApplication rec {
     ninja
     meson
     pkg-config
+
+    # needed for glib-compile-resources
+    glib
   ];
 
   buildInputs = [
     systemd
     libgudev
-    glib
   ];
 
   propagatedBuildInputs = [
-    python3Packages.pygobject3
+    python3.pkgs.pygobject3
   ];
 
   mesonFlags = [

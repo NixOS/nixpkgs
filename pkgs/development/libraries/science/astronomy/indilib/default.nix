@@ -15,18 +15,17 @@
 , gsl
 , fftw
 , gtest
-, indi-full
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "indilib";
-  version = "2.0.6";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-3MeF2G/rr//c7cgGzqDzmqoNKvR+7Kkbid1g8znKPkg=";
+    rev = "v${version}";
+    hash = "sha256-n1zj1U26l30JYr5Tio5zwv8v/e2cjEeIRGsyncMtt9I=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-  ] ++ lib.optional finalAttrs.finalPackage.doCheck [
+  ] ++ lib.optional doCheck [
     "-DINDI_BUILD_UNITTESTS=ON"
     "-DINDI_BUILD_INTEGTESTS=ON"
   ];
@@ -69,19 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.tests = {
-    # make sure 3rd party drivers compile with this indilib
-    indi-full = indi-full.override {
-      indilib = finalAttrs.finalPackage;
-    };
-  };
 
   meta = with lib; {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
-    changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 sheepforce ];
     platforms = platforms.unix;
   };
-})
+}

@@ -11,7 +11,6 @@ SDK_PACKAGES=(
     "vulkan-tools-lunarg"
     "vulkan-extension-layer"
     "vulkan-utility-libraries"
-    "vulkan-volk"
     "spirv-headers"
     "spirv-cross"
     "spirv-tools"

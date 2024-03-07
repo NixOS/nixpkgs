@@ -1,29 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qttools, qtbase, qtsvg, kcolorpicker }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, kcolorpicker, qttools }:
 
-let
-  isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kimageannotator";
-  version = "0.7.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kImageAnnotator";
     rev = "v${version}";
-    hash = "sha256-Dq9CM/D3nA7MaY9rfwqF/UAw/+1ptKLf3P8jhFdngKk=";
+    sha256 = "sha256-lNoYAJ5yTC5H0gWPVkBGhLroRhFCPyC1DsVBy0IrqL4=";
   };
 
   nativeBuildInputs = [ cmake qttools ];
-  buildInputs = [ qtbase qtsvg ];
-  propagatedBuildInputs = [ kcolorpicker ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_WITH_QT6" isQt6)
-    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-  ];
-
-  # Library only
-  dontWrapQtApps = true;
+  buildInputs = [ qtbase kcolorpicker ];
 
   meta = with lib; {
     description = "Tool for annotating images";

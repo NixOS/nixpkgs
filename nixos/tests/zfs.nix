@@ -7,14 +7,17 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
 
-  makeZfsTest =
-    { kernelPackages
+  makeZfsTest = name:
+    { kernelPackage ? if enableUnstable
+                      then pkgs.zfsUnstable.latestCompatibleLinuxPackages
+                      else pkgs.linuxPackages
+    , enableUnstable ? false
     , enableSystemdStage1 ? false
-    , zfsPackage
+    , zfsPackage ? if enableUnstable then pkgs.zfs else pkgs.zfsUnstable
     , extraTest ? ""
     }:
     makeTest {
-      name = zfsPackage.kernelModuleAttribute;
+      name = "zfs-" + name;
       meta = with pkgs.lib.maintainers; {
         maintainers = [ elvishjerricco ];
       };
@@ -32,7 +35,7 @@ let
         boot.loader.timeout = 0;
         boot.loader.efi.canTouchEfiVariables = true;
         networking.hostId = "deadbeef";
-        boot.kernelPackages = kernelPackages;
+        boot.kernelPackages = kernelPackage;
         boot.zfs.package = zfsPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.initrd.systemd.enable = enableSystemdStage1;
@@ -192,24 +195,18 @@ let
 in {
 
   # maintainer: @raitobezarius
-  series_2_1 = makeZfsTest {
+  series_2_1 = makeZfsTest "2.1-series" {
     zfsPackage = pkgs.zfs_2_1;
-    kernelPackages = pkgs.linuxPackages;
   };
 
-  series_2_2 = makeZfsTest {
-    zfsPackage = pkgs.zfs_2_2;
-    kernelPackages = pkgs.linuxPackages;
+  stable = makeZfsTest "stable" { };
+
+  unstable = makeZfsTest "unstable" {
+    enableUnstable = true;
   };
 
-  unstable = makeZfsTest rec {
-    zfsPackage = pkgs.zfs_unstable;
-    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
-  };
-
-  unstableWithSystemdStage1 = makeZfsTest rec {
-    zfsPackage = pkgs.zfs_unstable;
-    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
+  unstableWithSystemdStage1 = makeZfsTest "unstable" {
+    enableUnstable = true;
     enableSystemdStage1 = true;
   };
 

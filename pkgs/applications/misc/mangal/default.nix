@@ -35,6 +35,5 @@ buildGoModule rec {
     homepage = "https://github.com/metafates/mangal";
     license = licenses.mit;
     maintainers = [ maintainers.bertof ];
-    mainProgram = "mangal";
   };
 }

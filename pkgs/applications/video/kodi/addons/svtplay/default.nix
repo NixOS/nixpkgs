@@ -2,13 +2,13 @@
 buildKodiAddon rec {
   pname = "svtplay";
   namespace = "plugin.video.svtplay";
-  version = "5.1.21";
+  version = "5.1.12";
 
   src = fetchFromGitHub {
     owner = "nilzen";
     repo = "xbmc-" + pname;
     rev = "v${version}";
-    sha256 = "sha256-CZtBUqFaKtMmKcpfBQp0Mb8sVvpCTkqcpfdYe41YSJs=";
+    sha256 = "04j1nhm7mh9chs995lz6bv1vsq5xzk7a7c0lmk4bnfv8jrfpj0w6";
   };
 
   meta = with lib; {

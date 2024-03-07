@@ -6,6 +6,7 @@
 , makeWrapper
 }:
 
+
 let
   sounds = fetchFromGitHub {
     owner = "nivs1978";
@@ -38,15 +39,15 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/jc_reborn/data
-    cp -t $out/share/jc_reborn/data/ \
+    mkdir -p $out
+    cp -t $out/ \
       ../scrantic-source/RESOURCE.* \
       JCOS/Resources/sound*.wav
 
     makeWrapper \
-      ${johnny-reborn-engine}/bin/jc_reborn \
-      $out/bin/jc_reborn \
-      --chdir $out/share/jc_reborn
+      ${johnny-reborn-engine}/jc_reborn \
+      $out/jc_reborn \
+      --chdir $out
 
     runHook postInstall
   '';
@@ -55,6 +56,6 @@ stdenvNoCC.mkDerivation {
     description = "An open-source engine for the classic \"Johnny Castaway\" screensaver (ready to use, with resources)";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ pedrohlc ];
-    inherit (johnny-reborn-engine.meta) homepage platforms mainProgram;
+    inherit (johnny-reborn-engine.meta) homepage platforms;
   };
 }

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.16.1";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aMe2hoXocOgOYP2oKG+9Ymnpx03B30MW32/kbqvJTJk=";
+    hash = "sha256-lMfmd3XpDheSw5q3/KTgRZv3w1ZWEj6Nwunhs+lTuvg=";
   };
 
   nativeBuildInputs = [

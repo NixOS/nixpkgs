@@ -4,18 +4,17 @@
 , sudachidict
 , runCommand
 , sudachi-rs
-, writeScript
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sudachi-rs";
-  version = "0.6.8";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "WorksApplications";
     repo = "sudachi.rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9GXU+YDPuQ+roqQfUE5q17Hl6AopsvGhRPjZ+Ui+n24=";
+    hash = "sha256-VzNOI6PP9sKBsNfB5yIxAI8jI8TEdM4tD49Jl/2tkSE=";
   };
 
   postPatch = ''
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
-  cargoHash = "sha256-Ufo3dB2KGDDNiebp7hLhQrUMLsefO8wRpJQDz57Yb8Y=";
+  cargoHash = "sha256-b2NtgHcMkimzFFuqohAo9KdSaIq6oi3qo/k8/VugyFs=";
 
   # prepare the resources before the build so that the binary can find sudachidict
   preBuild = ''
@@ -31,22 +30,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 resources/* -t $out/share/resources
   '';
 
-  passthru = {
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
-
-      set -eu -o pipefail
-      nix-update sudachi-rs
-      nix-update --version=skip python3Packages.sudachipy
+  passthru.tests = {
+    # detects an error that sudachidict is not found
+    cli = runCommand "${pname}-cli-test" { } ''
+      mkdir $out
+      echo "高輪ゲートウェイ駅" | ${lib.getExe sudachi-rs} > $out/result
     '';
-    tests = {
-      # detects an error that sudachidict is not found
-      cli = runCommand "${pname}-cli-test" { } ''
-        mkdir $out
-        echo "高輪ゲートウェイ駅" | ${lib.getExe sudachi-rs} > $out/result
-      '';
-    };
   };
 
   meta = with lib; {

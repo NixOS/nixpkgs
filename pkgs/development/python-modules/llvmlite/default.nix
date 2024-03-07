@@ -15,16 +15,17 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.42.0";
+  version = "0.41.1";
   pyproject = true;
 
-  disabled = isPyPy || pythonAtLeast "3.13";
+  # uses distutils in setup.py
+  disabled = isPyPy || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "llvmlite";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vN2npyAyN6C340l69YSRtRJrAe4EHSqh4SCgWfeSQaQ=";
+    hash = "sha256-RBgs8L5kOJ8BhEDLB8r8/iVhwuVIPT/rUSmwmBWm4D0=";
   };
 
   nativeBuildInputs = [

@@ -2,8 +2,8 @@
 
 let
 
-  inInitrd = config.boot.initrd.supportedFilesystems.erofs or false;
-  inSystem = config.boot.supportedFilesystems.erofs or false;
+  inInitrd = lib.any (fs: fs == "erofs") config.boot.initrd.supportedFilesystems;
+  inSystem = lib.any (fs: fs == "erofs") config.boot.supportedFilesystems;
 
 in
 

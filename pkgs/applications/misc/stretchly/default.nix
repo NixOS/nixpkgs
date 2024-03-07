@@ -8,18 +8,19 @@
 , makeDesktopItem
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
+
   pname = "stretchly";
-  version = "1.15.1";
+  version = "1.8.1";
 
   src = fetchurl {
-    url = "https://github.com/hovancik/stretchly/releases/download/v${finalAttrs.version}/stretchly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-suTH6o7vtUr2DidPXAwqrya5/WukQOFmS/34LaiWDBs=";
+    url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
+    sha256 = "sha256-/v74vDGxD5iiOPeBXPAaV42JpyBjeJSO/Lk88pCkDng=";
   };
 
   icon = fetchurl {
-    url = "https://raw.githubusercontent.com/hovancik/stretchly/v${finalAttrs.version}/stretchly_128x128.png";
-    hash = "sha256-tO0cNKopG/recQus7KDUTyGpApvR5/tpmF5C4V14DnI=";
+    url = "https://raw.githubusercontent.com/hovancik/stretchly/v${version}/stretchly_128x128.png";
+    sha256 = "0whfg1fy2hjyk1lzpryikc1aj8agsjhfrb0bf7ggl6r9m8s1rvdl";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,14 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${finalAttrs.pname}/
-    mv resources/app.asar* $out/share/${finalAttrs.pname}/
+    mkdir -p $out/bin $out/share/${pname}/
+    mv resources/app.asar* $out/share/${pname}/
 
     mkdir -p $out/share/applications
-    ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
+    ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
-    makeWrapper ${electron}/bin/electron $out/bin/${finalAttrs.pname} \
-      --add-flags $out/share/${finalAttrs.pname}/app.asar
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/app.asar
 
     runHook postInstall
   '';
@@ -53,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   desktopItem = makeDesktopItem {
-    name = finalAttrs.pname;
-    exec = finalAttrs.pname;
-    icon = finalAttrs.icon;
+    name = pname;
+    exec = pname;
+    icon = icon;
     desktopName = "Stretchly";
     genericName = "Stretchly";
     categories = [ "Utility" ];
@@ -75,6 +76,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ _1000101 ];
     platforms = platforms.linux;
-    mainProgram = "stretchly";
   };
-})
+}

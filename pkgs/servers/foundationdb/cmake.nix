@@ -2,7 +2,7 @@
 
 { lib, fetchFromGitHub
 , cmake, ninja, python3, openjdk8, mono, pkg-config
-, msgpack-cxx, toml11
+, msgpack, toml11
 
 , gccStdenv, llvmPackages
 , useClang ? false
@@ -37,7 +37,7 @@ let
           inherit rev hash;
         };
 
-        buildInputs = [ ssl boost msgpack-cxx toml11 ];
+        buildInputs = [ ssl boost msgpack toml11 ];
 
         nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk8 mono ]
           ++ lib.optionals useClang [ llvmPackages.lld ];

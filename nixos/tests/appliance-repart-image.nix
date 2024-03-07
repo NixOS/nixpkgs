@@ -8,8 +8,9 @@
 let
   rootPartitionLabel = "root";
 
-  imageId = "nixos-appliance";
-  imageVersion = "1-rc1";
+  bootLoaderConfigPath = "/loader/entries/nixos.conf";
+  kernelPath = "/EFI/nixos/kernel.efi";
+  initrdPath = "/EFI/nixos/initrd.efi";
 in
 {
   name = "appliance-gpt-image";
@@ -28,9 +29,6 @@ in
     # TODO(raitobezarius): revisit this when #244907 lands
     boot.loader.grub.enable = false;
 
-    system.image.id = imageId;
-    system.image.version = imageVersion;
-
     virtualisation.fileSystems = lib.mkForce {
       "/" = {
         device = "/dev/disk/by-partlabel/${rootPartitionLabel}";
@@ -40,8 +38,6 @@ in
 
     image.repart = {
       name = "appliance-gpt-image";
-      # OVMF does not work with the default repart sector size of 4096
-      sectorSize = 512;
       partitions = {
         "esp" = {
           contents =
@@ -52,8 +48,19 @@ in
               "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
                 "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
 
-              "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
-                "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+              # TODO: create an abstraction for Boot Loader Specification (BLS) entries.
+              "${bootLoaderConfigPath}".source = pkgs.writeText "nixos.conf" ''
+                title NixOS
+                linux ${kernelPath}
+                initrd ${initrdPath}
+                options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+              '';
+
+              "${kernelPath}".source =
+                "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
+
+              "${initrdPath}".source =
+                "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
             };
           repartConfig = {
             Type = "esp";
@@ -92,7 +99,7 @@ in
       "-f",
       "qcow2",
       "-b",
-      "${nodes.machine.system.build.image}/${nodes.machine.image.repart.imageFile}",
+      "${nodes.machine.system.build.image}/image.raw",
       "-F",
       "raw",
       tmp_disk_image.name,
@@ -101,11 +108,9 @@ in
     # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
     os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
 
-    os_release = machine.succeed("cat /etc/os-release")
-    assert 'IMAGE_ID="${imageId}"' in os_release
-    assert 'IMAGE_VERSION="${imageVersion}"' in os_release
-
     bootctl_status = machine.succeed("bootctl status")
-    assert "Boot Loader Specification Type #2 (.efi)" in bootctl_status
+    assert "${bootLoaderConfigPath}" in bootctl_status
+    assert "${kernelPath}" in bootctl_status
+    assert "${initrdPath}" in bootctl_status
   '';
 }

@@ -4,31 +4,21 @@
 , marshmallow
 , pythonOlder
 , pytestCheckHook
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-polyfield";
-  version = "5.11";
-  pyproject = true;
+  version = "5.10";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Bachmann1234";
-    repo = "marshmallow-polyfield";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jbpeyih2Ccw1Rk+QcXRO9AfN5B/DhZmxa/M6FzXHqqs=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-oF5LBuDK4kqsAcKwidju+wFjigjy4CNbJ6bfWpGO1yQ=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=marshmallow_polyfield" ""
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     marshmallow
@@ -37,6 +27,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=marshmallow_polyfield" ""
+  '';
 
   pythonImportsCheck = [
     "marshmallow"

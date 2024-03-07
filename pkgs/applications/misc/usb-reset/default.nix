@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.evils ];
     platforms = platforms.all;
-    mainProgram = "usb-reset";
   };
 }

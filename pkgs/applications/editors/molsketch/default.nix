@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, mkDerivation
 , fetchurl
 , cmake
 , pkg-config
@@ -10,18 +10,14 @@
 , desktop-file-utils
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "molsketch";
-  version = "0.8.1";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/molsketch/Molsketch-${version}-src.tar.gz";
-    hash = "sha256-6wFvl3Aktv8RgEdI2ENsKallKlYy/f8Tsm5C0FB/igI=";
+    hash = "sha256-Mpx4fHktxqBAkmdwqg2pXvEgvvGUQPbgqxKwXKjhJuQ=";
   };
-
-  patches = [
-    ./openbabel.patch
-  ];
 
   # uses C++17 APIs like std::transform_reduce
   postPatch = ''
@@ -38,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    ln -s $out/lib/molsketch/* $out/lib/.
+    mv $out/lib/molsketch/* $out/lib
   '';
 
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
@@ -54,6 +50,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.moni ];
     mainProgram = "molsketch";
-    platforms = platforms.unix;
   };
 }

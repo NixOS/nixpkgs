@@ -23,6 +23,5 @@ buildGoModule {
     homepage = "https://github.com/maaslalani/confetty";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "confetty";
   };
 }

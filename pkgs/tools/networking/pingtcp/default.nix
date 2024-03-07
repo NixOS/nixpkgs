@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LanetNetwork/pingtcp";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    mainProgram = "pingtcp";
   };
 }

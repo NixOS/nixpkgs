@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.8.10";
+  version = "0.8.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiortm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WkVuuvWWdj2McdXl+XwYukUcloehelFIi6QL5LSkfLk=";
+    hash = "sha256-rWULiyQGBA01hWfRDulDuHX0c1LPo6CTZ9HFOn3MD+E=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-warn " --cov=aiortm --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=aiortm --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [

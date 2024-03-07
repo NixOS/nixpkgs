@@ -1,33 +1,23 @@
 { lib
 , fetchFromGitHub
-, buildGoModule
-, installShellFiles
+, buildGo121Module
 }:
-buildGoModule rec {
+buildGo121Module rec {
   pname = "uplosi";
-  version = "0.1.3";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "edgelesssys";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RqjaI/1Sx36JfpvnLblt8hPfgSral3Gvp8M6BshKVwo=";
+    hash = "sha256-9hOeKnjH6r3CPQSe6fQ6PXlVPEJ9NiyXvp5N1krG2XA=";
   };
 
-  vendorHash = "sha256-eZ0/piSxMUC1ZM7qBhFW40l9p8ZPMIj1HyrS2Dy4wJQ=";
+  vendorHash = "sha256-RsjUPLe8omoN+XGyNhHDxzNfZR7VVTkh/f/On1oCRqM=";
 
   CGO_ENABLED = "0";
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-buildid=" "-X main.version=${version}" ];
   flags = [ "-trimpath" ];
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = ''
-    installShellCompletion --cmd uplosi \
-      --bash <($out/bin/uplosi completion bash) \
-      --fish <($out/bin/uplosi completion fish) \
-      --zsh <($out/bin/uplosi completion zsh)
-  '';
 
   meta = with lib; {
     description = "Upload OS images to cloud provider";

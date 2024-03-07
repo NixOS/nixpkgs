@@ -87,15 +87,6 @@ let
       platforms   = platforms.all;
       maintainers = with maintainers; [ thoughtpolice fpletz ];
       inherit knownVulnerabilities;
-
-      # OpenBSD believes that PowerPC should be always-big-endian;
-      # this assumption seems to have propagated into recent
-      # releases of libressl.  Since libressl is aliased to many
-      # other packages (e.g. netcat) it's important to fail early
-      # here, otherwise it's very difficult to figure out why
-      # libressl is getting dragged into a failing build.
-      badPlatforms = with lib.systems.inspect.patterns;
-        [ (lib.recursiveUpdate isPower64 isLittleEndian) ];
     };
   };
 

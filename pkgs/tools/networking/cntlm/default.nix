@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
         maintainers.carlosdagos
       ];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "cntlm";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchzip, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
+{ lib, stdenv, fetchzip, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
   version = "3.2";
@@ -7,14 +7,6 @@ stdenv.mkDerivation rec {
     url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
     hash   = "sha256-rTcaaEQ3Y4cneNnZSGiMZNp+Z7dyAa3oNTNMAEXr28g=";
   };
-
-  patches = [
-    # Upstream patches to be released in the next version
-    (fetchpatch {
-      sha256 = "sha256-eGuHODm29M7rbGYsyXUPoNe1xsIG3eJYhwXQDakRJHA=";
-      url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/patch/?id=6b07a7df871342068604b204711ab741d421d051";
-    })
-  ];
 
   # Don't build and install html documentation
   postPatch = ''

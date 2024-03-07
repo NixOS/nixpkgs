@@ -6,6 +6,7 @@
 , pythonOlder
 
 # build-system
+, cython
 , cython_3
 , meson-python
 , meson
@@ -64,7 +65,7 @@
 
 let pandas = buildPythonPackage rec {
   pname = "pandas";
-  version = "2.2.0";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -73,18 +74,19 @@ let pandas = buildPythonPackage rec {
     owner = "pandas-dev";
     repo = "pandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PMrqniyyFYRnAeFBruPrTrGKzX2dRxMRct8AHeghstA=";
+    hash = "sha256-okGYzPJC3mpG+Sq4atjWwLlocUDnpjgGRPmQ+4ehQX0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "Cython==3.0.5" "Cython>=3.0.5" \
-      --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
-      --replace-fail "meson==1.2.1" "meson>=1.2.1"
+      --replace "Cython>=0.29.33,<3" "Cython" \
+      --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
+      --replace "meson==1.2.1" "meson>=1.2.1"
   '';
 
   nativeBuildInputs = [
-    cython_3
+    # TODO: hack to support pandas on python3.12, remove with pandas 2.2.0
+    (if pythonAtLeast "3.12" then cython_3 else cython)
     meson-python
     meson
     numpy

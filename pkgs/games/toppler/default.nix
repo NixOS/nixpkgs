@@ -15,14 +15,14 @@
 , zlib
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "toppler";
   version = "1.3";
 
   src = fetchFromGitLab {
     owner = "roever";
     repo = "toppler";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-ecEaELu52Nmov/BD9VzcUw6wyWeHJcsKQkEzTnaW330=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-})
+}

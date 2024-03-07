@@ -51,15 +51,6 @@ stdenv.mkDerivation rec {
     sha256 = "d+g9dU9RrDjFQj847rVd5bPiYSjmC1EbAtLe/PNubBg=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "gcc13-fixes.patch";
-      url = "https://github.com/brummer10/guitarix/commit/b52736180b6966f24398f8a5ad179a58173473ec.patch";
-      hash = "sha256-+jilgLujy/B6ijUb8NHzt3+4IKCt17X8LmuMLdmsvGw=";
-      relative = "trunk";
-    })
-  ];
-
   # doesnt apply cleanly, so doing with substituteInPlace
   # https://github.com/brummer10/guitarix/commit/39d7c21c4173eb0f121b1bbff439d9cf43331a00.patch
   postPatch = ''

@@ -97,7 +97,6 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
-      "systemd-boot-random-seed.service"
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -429,13 +428,7 @@ in
 
   config = {
 
-    warnings = let
-      mkOneNetOnlineWarn = typeStr: name: def: lib.optional
-        (lib.elem "network-online.target" def.after && !(lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo)))
-        "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
-      mkNetOnlineWarns = typeStr: defs: lib.concatLists (lib.mapAttrsToList (mkOneNetOnlineWarn typeStr) defs);
-      mkMountNetOnlineWarns = typeStr: defs: lib.concatLists (map (m: mkOneNetOnlineWarn typeStr m.what m) defs);
-    in concatLists (
+    warnings = concatLists (
       mapAttrsToList
         (name: service:
           let
@@ -454,29 +447,6 @@ in
                 "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
               )
             ]
-        )
-        cfg.services
-    )
-    ++ (mkNetOnlineWarns "target" cfg.targets)
-    ++ (mkNetOnlineWarns "service" cfg.services)
-    ++ (mkNetOnlineWarns "socket" cfg.sockets)
-    ++ (mkNetOnlineWarns "timer" cfg.timers)
-    ++ (mkNetOnlineWarns "path" cfg.paths)
-    ++ (mkMountNetOnlineWarns "mount" cfg.mounts)
-    ++ (mkMountNetOnlineWarns "automount" cfg.automounts)
-    ++ (mkNetOnlineWarns "slice" cfg.slices);
-
-    assertions = concatLists (
-      mapAttrsToList
-        (name: service:
-          map (message: {
-            assertion = false;
-            inherit message;
-          }) (concatLists [
-            (optional ((builtins.elem "network-interfaces.target" service.after) || (builtins.elem "network-interfaces.target" service.wants))
-              "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
-            )
-          ])
         )
         cfg.services
     );
@@ -584,13 +554,6 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
-    # This target only exists so that services ordered before sysinit.target
-    # are restarted in the correct order, notably BEFORE the other services,
-    # when switching configurations.
-    systemd.targets.sysinit-reactivation = {
-      description = "Reactivate sysinit units";
-    };
-
     systemd.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
@@ -668,6 +631,7 @@ in
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
+    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226

@@ -1,31 +1,29 @@
 { lib
+, buildPythonPackage
+, fetchFromGitHub
 , agate
 , boto3
-, buildPythonPackage
 , dbt-core
 , dbt-postgres
-, fetchFromGitHub
 , pytestCheckHook
 , pythonRelaxDepsHook
 , redshift-connector
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dbt-redshift";
-  version = "1.7.4";
-  pyproject = true;
+  version = "1.7.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = "dbt-redshift";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ny6Nnb5OhtqSQZ0BMOQrb0ic6i29GVywy3hn3UuVtxE=";
+    hash = "sha256-ONXrA8ABTYxkBm56TdFPhzjF/nngUQyecdgr2WO/5mE=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
-    setuptools
   ];
 
   pythonRelaxDeps = [

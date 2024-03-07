@@ -1,23 +1,22 @@
 { lib
+, stdenv
+, fetchFromGitHub
 , SDL2
 , cmake
-, fetchFromGitHub
 , ffmpeg
-, discord-rpc
 , libedit
 , libelf
 , libepoxy
-, libsForQt5
 , libzip
-, lua
+, lua5_4
 , minizip
 , pkg-config
-, stdenv
+, libsForQt5
 , wrapGAppsHook
-, enableDiscordRpc ? false
 }:
 
 let
+    lua = lua5_4;
     inherit (libsForQt5)
       qtbase
       qtmultimedia
@@ -26,24 +25,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.10.3";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = finalAttrs.version;
-    hash = "sha256-wSt3kyjRxKBnDOVY10jq4cpv7uIaBUIcsZr6aU7XnMA=";
+    hash = "sha256-+AwIYhnqp984Banwb7zmB5yzenExfLLU1oGJSxeTl/M=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
-
   nativeBuildInputs = [
-    SDL2
     cmake
     pkg-config
     wrapGAppsHook
     wrapQtAppsHook
   ];
+
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   buildInputs = [
     SDL2
@@ -57,22 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     qttools
-  ]
-  ++ lib.optionals enableDiscordRpc [ discord-rpc ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
   ];
 
-  strictDeps = true;
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  meta = {
+  meta = with lib; {
     homepage = "https://mgba.io";
     description = "A modern GBA emulator with a focus on accuracy";
     longDescription = ''
@@ -89,11 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
       runners, and a modern feature set for emulators that older emulators may
       not support.
     '';
-    changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
-    license = with lib.licenses; [ mpl20 ];
+    changelog = "https://github.com/mgba-emu/mgba/blob/${finalAttrs.version}/CHANGES";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ MP2E AndersonTorres ];
+    platforms = platforms.linux;
     mainProgram = "mgba";
-    maintainers = with lib.maintainers; [ MP2E AndersonTorres ];
-    platforms = lib.platforms.linux;
-    broken = enableDiscordRpc; # Some obscure `ld` error
   };
 })

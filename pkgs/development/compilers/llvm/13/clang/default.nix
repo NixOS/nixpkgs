@@ -43,7 +43,7 @@ let
       ./revert-malloc-alignment-assumption.patch
       ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
-        src = ../../common/clang/clang-11-15-LLVMgold-path.patch;
+        src = ../../clang-11-15-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
@@ -83,7 +83,7 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" ];
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {

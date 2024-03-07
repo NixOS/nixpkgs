@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "bdffont";
-  version = "0.0.16";
+  version = "0.0.15";
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2qR9uKQk9zrKpyekpZJht8uZOp8PK01sv2CYyP+BqcA=";
+    hash = "sha256-aXK6zqLFfqLXa/JLmSSW3gtC2+wtutz3/lLdYPZZ/ys=";
   };
 
   format = "pyproject";

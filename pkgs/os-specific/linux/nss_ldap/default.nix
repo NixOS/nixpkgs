@@ -29,13 +29,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc
   '';
 
-  nativeBuildInputs = [
-    perl # shebang of vers_string
-  ];
-
-  buildInputs = [
-    openldap
-  ];
+  buildInputs = [ openldap perl ];
 
   meta = with lib; {
     description = "LDAP module for the Solaris Nameservice Switch (NSS)";

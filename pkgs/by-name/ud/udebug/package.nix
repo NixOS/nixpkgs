@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation {
   pname = "udebug";
-  version = "unstable-2023-12-06";
+  version = "unstable-2023-11-28";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/udebug.git";
-    rev = "6d3f51f9fda706f0cf4732c762e4dbe8c21e12cf";
-    hash = "sha256-5dowoFZn9I2IXMQ3Pz+2Eo3rKfihLzjca84MytQIXcU=";
+    rev = "d49aadabb7a147b99a3e6299a77d7fda4e266091";
+    hash = "sha256-5I50q+oUQ5f82ngKl7bX50J+3pBviNk3iVEChNjt5wY=";
   };
 
   buildInputs = [

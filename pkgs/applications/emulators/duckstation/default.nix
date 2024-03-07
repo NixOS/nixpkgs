@@ -9,7 +9,7 @@
 , extra-cmake-modules
 , libXrandr
 , libbacktrace
-, makeWrapper
+, makeDesktopItem
 , ninja
 , pkg-config
 , qtbase
@@ -20,17 +20,18 @@
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
+, enableWayland ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
-  version = "0.1-6292";
+  version = "unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = "duckstation";
-    rev = "0bc42c38aab49030118f507c9783de047769148b";
-    hash = "sha256-8OavixSwEWihFY2fEdsepR1lqWlTH+//xZRKwb7lFCQ=";
+    rev = "d5608bf12df7a7e03750cb94a08a3d7999034ae2";
+    hash = "sha256-ktfZgacjkN6GQb1vLmyTZMr8QmmH12qAvFSIBTjgRSs=";
   };
 
   patches = [
@@ -41,19 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./002-hardcode-vars.diff;
       gitHash = finalAttrs.src.rev;
       gitBranch = "master";
-      gitTag = "${finalAttrs.version}-g0bc42c38";
-      gitDate = "2024-02-06T22:47:47+09:00";
+      gitTag = "0.1-5889-gd5608bf1";
+      gitDate = "2023-09-30T23:20:09+10:00";
     })
   ];
 
   nativeBuildInputs = [
     cmake
     copyDesktopItems
-    extra-cmake-modules
     ninja
     pkg-config
     qttools
     wrapQtAppsHook
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
   ];
 
   buildInputs = [
@@ -63,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     libbacktrace
     qtbase
     qtsvg
+    vulkan-loader
+  ]
+  ++ lib.optionals enableWayland [
     qtwayland
     wayland
   ]
@@ -72,6 +78,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)
+    (lib.cmakeBool "ENABLE_WAYLAND" enableWayland)
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "duckstation-qt";
+      desktopName = "DuckStation";
+      genericName = "PlayStation 1 Emulator";
+      icon = "duckstation";
+      tryExec = "duckstation-qt";
+      exec = "duckstation-qt %f";
+      comment = "Fast PlayStation 1 emulator";
+      categories = [ "Game" "Emulator" "Qt" ];
+      type = "Application";
+    })
   ];
 
   doCheck = true;
@@ -89,28 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r bin $out/share/duckstation
     ln -s $out/share/duckstation/duckstation-qt $out/bin/
 
-    install -Dm644 $src/scripts/org.duckstation.DuckStation.desktop $out/share/applications/org.duckstation.DuckStation.desktop
-    install -Dm644 $src/scripts/org.duckstation.DuckStation.png $out/share/pixmaps/org.duckstation.DuckStation.png
+    install -Dm644 bin/resources/images/duck.png $out/share/pixmaps/duckstation.png
 
     runHook postInstall
   '';
 
-  qtWrapperArgs =
-    let
-      libPath = lib.makeLibraryPath ([
-        vulkan-loader
-      ] ++ cubeb.passthru.backendLibs);
-    in [
-      "--prefix LD_LIBRARY_PATH : ${libPath}"
-    ];
-
-  # https://github.com/stenzek/duckstation/blob/master/scripts/appimage/apprun-hooks/default-to-x11.sh
-  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
-  postFixup = ''
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/duckstation-qt \
-      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
-  '';
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ vulkan-loader ] ++ cubeb.passthru.backendLibs)}"
+  ];
 
   meta = {
     homepage = "https://github.com/stenzek/duckstation";

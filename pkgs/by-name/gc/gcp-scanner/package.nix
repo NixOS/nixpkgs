@@ -5,22 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gcp-scanner";
-  version = "1.4.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gcp_scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6bIrSaTqpXQjB64YWAI64DlgQBD2XD+zMvKymMtwpDk=";
+    hash = "sha256-mMvAoqwptCA73JiUl8HIhFBO198NnUmvCbf8Rk9dWxA=";
   };
-
-  pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     setuptools-git-versioning
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

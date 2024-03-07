@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "tunwg";
-  version = "24.01.15+9f04d73";
+  version = "23.07.15+3213668";
 
   src = fetchFromGitHub {
     owner = "ntnj";
     repo = "tunwg";
     rev = "v${version}";
-    hash = "sha256-M7iMl80uxw0hKg4sK8Tv6U5+nMOK8eTfb9SGn+U2+8E=";
+    hash = "sha256-FghsfL3GW8jWBICJWXsqiFZPbDhIKl2nY8RsMH6ILTw=";
   };
 
-  vendorHash = "sha256-VlH41hOWC5QBCYZxiKCUZRmw2vHRbbPyzToRMU6kDO8=";
+  vendorHash = "sha256-pzUWhKcht9vodBiZGe9RU+tm0c1/slBGeIrKfZlIDdk=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/ntnj/tunwg";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "tunwg";
   };
 }

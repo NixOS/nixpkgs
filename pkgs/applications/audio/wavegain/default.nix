@@ -34,6 +34,5 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.robbinch ];
-    mainProgram = "wavegain";
   };
 }

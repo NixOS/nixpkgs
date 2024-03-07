@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "acme-client";
-  version = "1.3.3";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.gz";
-    hash = "sha256-HJOk2vlDD7ADrLdf/eLEp+teu9XN0KrghEe6y4FIDoI=";
+    hash = "sha256-nVB0VIT6mwKwSTY+wDcuxMtpEjtZ9Z0ke0lJ7SzdsJ0=";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Secure ACME/Let's Encrypt client";
-    homepage = "https://git.wolfsden.cz/acme-client-portable";
+    homepage = "https://sr.ht/~graywolf/acme-client-portable/";
     platforms = platforms.unix;
     license = licenses.isc;
     maintainers = with maintainers; [ pmahoney ];
-    mainProgram = "acme-client";
   };
 }
 

@@ -16,22 +16,22 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.4.2";
-  pyproject = true;
+  version = "0.3.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = "safetensors";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hdPUI8k7CCQwt2C/AsjUHRmAL6ob+yCN97KkWtqOQL8=";
+    hash = "sha256-U+indMoLFN6vMZkJTWFG08lsdXuK5gOfgaHmUVl6DPk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-7n9aYlha6IaPsZ2zMfD5EIkrk8ENwMBwj41s6QU7ml0=";
+    hash = "sha256-MhRs9tFCmVZI5O0EVRUbo4ZnUVRQ0EfQTU+E1K+qKZI=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -41,7 +41,6 @@ buildPythonPackage rec {
     cargo
     rustc
     rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -55,9 +54,6 @@ buildPythonPackage rec {
     "tests/test_flax_comparison.py"
     "tests/test_paddle_comparison.py"
     "tests/test_tf_comparison.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # don't require mlx (not in Nixpkgs) to run tests
-    "tests/test_mlx_comparison.py"
   ];
 
   pythonImportsCheck = [

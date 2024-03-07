@@ -1,12 +1,9 @@
 { lib
-, stdenv
 , mkDerivation
-, argp-standalone
 , dbus
 , dbus_cplusplus
 , desktop-file-utils
 , fetchurl
-, fetchpatch
 , glibmm
 , kernel
 , libavc1394
@@ -27,14 +24,12 @@ let
 in
 mkDerivation rec {
   pname = "ffado";
-  version = "2.4.8";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    hash = "sha256-f0x561ehKw6uMSri0RZip+v1JHZuhixtywl0PVU/N44=";
+    sha256 = "0vsn3y52g6f77lqh9qfkd7dslmb7bbgy46cv5idynx4frqscc23s";
   };
-
-  sourceRoot = "libffado-${version}/libffado";
 
   prePatch = ''
     substituteInPlace ./support/tools/ffado-diag.in \
@@ -44,13 +39,6 @@ mkDerivation rec {
   patches = [
     # fix installing metainfo file
     ./fix-build.patch
-
-    (fetchpatch {
-      name = "musl.patch";
-      url = "http://subversion.ffado.org/changeset?format=diff&new=2846&old=2845";
-      stripLen = 2;
-      hash = "sha256-iWeYnb5J69Uvo1lftc7MWg7WrLa+CGZyOwJPOe8/PKg=";
-    })
   ];
 
   outputs = [ "out" "bin" "dev" ];
@@ -89,11 +77,7 @@ mkDerivation rec {
     libraw1394
     libxmlxx3
     python
-  ] ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
-    argp-standalone
   ];
-
-  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isGnu) "-largp";
 
   enableParallelBuilding = true;
   dontWrapQtApps = true;

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-pipewire-audio-capture";
-  version = "1.1.3";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dL/+Y1uaD+7EY0UNWbxvh1TTLYfgk07qCqLLGvfzWZk=";
+    sha256 = "sha256-9HPQ17swMlsCnKkYQXIUzEbx2vKuBUfGf58Up2hHVGI=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];

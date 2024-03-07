@@ -25,6 +25,5 @@ stdenvNoCC.mkDerivation (finalAttrs: rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Freed-Wu ];
     platforms = platforms.unix;
-    mainProgram = "has";
   };
 })

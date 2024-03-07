@@ -17,6 +17,7 @@ mkDerivation {
 
   meta = with lib; {
     license = [ licenses.lgpl2 ];
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.linux;
   };
 

@@ -1,21 +1,24 @@
 { pkgs }:
 let
   inherit (pkgs) lib formats;
+in
+with lib;
+let
 
-  # merging allows us to add metadata to the input
-  # this makes error messages more readable during development
-  mergeInput = name: format: input:
-    format.type.merge [] [
-      {
-        # explicitly throw here to trigger the code path that prints the error message for users
-        value = lib.throwIfNot (format.type.check input) (builtins.trace input "definition does not pass the type's check function") input;
-        # inject the name
-        file = "format-test-${name}";
-      }
-    ];
+  evalFormat = format: args: def:
+    let
+      formatSet = format args;
+      config = formatSet.type.merge [] (imap1 (n: def: {
+        # We check the input values, so that
+        #  - we don't write nonsensical tests that will impede progress
+        #  - the test author has a slightly more realistic view of the
+        #    final format during development.
+        value = lib.throwIfNot (formatSet.type.check def) (builtins.trace def "definition does not pass the type's check function") def;
+        file = "def${toString n}";
+      }) [ def ]);
+    in formatSet.generate "test-format-file" config;
 
-  # run a diff between expected and real output
-  runDiff = name: drv: expected: pkgs.runCommand name {
+  runBuildTest = name: { drv, expected }: pkgs.runCommand name {
     passAsFile = ["expected"];
     inherit expected drv;
   } ''
@@ -28,66 +31,12 @@ let
     fi
   '';
 
-  # use this to check for proper serialization
-  # in practice you do not have to supply the name parameter as this one will be added by runBuildTests
-  shouldPass = { format, input, expected }: name: {
-    name = "pass-${name}";
-    path = runDiff "test-format-${name}" (format.generate "test-format-${name}" (mergeInput name format input)) expected;
-  };
-
-  # use this function to assert that a type check must fail
-  # in practice you do not have to supply the name parameter as this one will be added by runBuildTests
-  # note that as per 352e7d330a26 and 352e7d330a26 the type checking of attrsets and lists are not strict
-  # this means that the code below needs to properly merge the module type definition and also evaluate the (lazy) return value
-  shouldFail = { format, input }: name:
-    let
-      # trigger a deep type check using the module system
-      typeCheck = lib.modules.mergeDefinitions
-        [ "tests" name ]
-        format.type
-        [
-          {
-            file = "format-test-${name}";
-            value = input;
-          }
-        ];
-      # actually use the return value to trigger the evaluation
-      eval = builtins.tryEval (typeCheck.mergedValue == input);
-      # the check failing is what we want, so don't do anything here
-      typeFails = pkgs.runCommand "test-format-${name}" {} "touch $out";
-      # bail with some verbose information in case the type check passes
-      typeSucceeds = pkgs.runCommand "test-format-${name}" {
-          passAsFile = [ "inputText" ];
-          testName = name;
-          # this will fail if the input contains functions as values
-          # however that should get caught by the type check already
-          inputText = builtins.toJSON input;
-        }
-        ''
-          echo "Type check $testName passed when it shouldn't."
-          echo "The following data was used as input:"
-          echo
-          cat "$inputTextPath"
-          exit 1
-        '';
-    in {
-      name = "fail-${name}";
-      path = if eval.success then typeSucceeds else typeFails;
-    };
-
-  # this function creates a linkFarm for all the tests below such that the results are easily visible in the filesystem after a build
-  # the parameters are an attrset of name: test pairs where the name is automatically passed to the test
-  # the test therefore is an invocation of ShouldPass or shouldFail with the attrset parameters but *not* the name (which this adds for convenience)
-  runBuildTests = (lib.flip lib.pipe) [
-    (lib.mapAttrsToList (name: value: value name))
-    (pkgs.linkFarm "nixpkgs-pkgs-lib-format-tests")
-  ];
+  runBuildTests = tests: pkgs.linkFarm "nixpkgs-pkgs-lib-format-tests" (mapAttrsToList (name: value: { inherit name; path = runBuildTest name value; }) (filterAttrs (name: value: value != null) tests));
 
 in runBuildTests {
 
-  jsonAtoms = shouldPass {
-    format = formats.json {};
-    input = {
+  testJsonAtoms = {
+    drv = evalFormat formats.json {} {
       null = null;
       false = false;
       true = true;
@@ -118,9 +67,8 @@ in runBuildTests {
     '';
   };
 
-  yamlAtoms = shouldPass {
-    format = formats.yaml {};
-    input = {
+  testYamlAtoms = {
+    drv = evalFormat formats.yaml {} {
       null = null;
       false = false;
       true = true;
@@ -145,9 +93,8 @@ in runBuildTests {
     '';
   };
 
-  iniAtoms = shouldPass {
-    format = formats.ini {};
-    input = {
+  testIniAtoms = {
+    drv = evalFormat formats.ini {} {
       foo = {
         bool = true;
         int = 10;
@@ -164,29 +111,8 @@ in runBuildTests {
     '';
   };
 
-  iniInvalidAtom = shouldFail {
-    format = formats.ini {};
-    input = {
-      foo = {
-        function = _: 1;
-      };
-    };
-  };
-
-  iniDuplicateKeysWithoutList = shouldFail {
-    format = formats.ini {};
-    input = {
-      foo = {
-        bar = [ null true "test" 1.2 10 ];
-        baz = false;
-        qux = "qux";
-      };
-    };
-  };
-
-  iniDuplicateKeys = shouldPass {
-    format = formats.ini { listsAsDuplicateKeys = true; };
-    input = {
+  testIniDuplicateKeys = {
+    drv = evalFormat formats.ini { listsAsDuplicateKeys = true; } {
       foo = {
         bar = [ null true "test" 1.2 10 ];
         baz = false;
@@ -205,9 +131,8 @@ in runBuildTests {
     '';
   };
 
-  iniListToValue = shouldPass {
-    format = formats.ini { listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault {}); };
-    input = {
+  testIniListToValue = {
+    drv = evalFormat formats.ini { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
       foo = {
         bar = [ null true "test" 1.2 10 ];
         baz = false;
@@ -222,104 +147,8 @@ in runBuildTests {
     '';
   };
 
-  iniWithGlobalNoSections = shouldPass {
-    format = formats.iniWithGlobalSection {};
-    input = {};
-    expected = "";
-  };
-
-  iniWithGlobalOnlySections = shouldPass {
-    format = formats.iniWithGlobalSection {};
-    input = {
-      sections = {
-        foo = {
-          bar = "baz";
-        };
-      };
-    };
-    expected = ''
-      [foo]
-      bar=baz
-    '';
-  };
-
-  iniWithGlobalOnlyGlobal = shouldPass {
-    format = formats.iniWithGlobalSection {};
-    input = {
-      globalSection = {
-        bar = "baz";
-      };
-    };
-    expected = ''
-      bar=baz
-
-    '';
-  };
-
-  iniWithGlobalWrongSections = shouldFail {
-    format = formats.iniWithGlobalSection {};
-    input = {
-      foo = {};
-    };
-  };
-
-  iniWithGlobalEverything = shouldPass {
-    format = formats.iniWithGlobalSection {};
-    input = {
-      globalSection = {
-        bar = true;
-      };
-      sections = {
-        foo = {
-          bool = true;
-          int = 10;
-          float = 3.141;
-          str = "string";
-        };
-      };
-    };
-    expected = ''
-      bar=true
-
-      [foo]
-      bool=true
-      float=3.141000
-      int=10
-      str=string
-    '';
-  };
-
-  iniWithGlobalListToValue = shouldPass {
-    format = formats.iniWithGlobalSection { listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault {}); };
-    input = {
-      globalSection = {
-        bar = [ null true "test" 1.2 10 ];
-        baz = false;
-        qux = "qux";
-      };
-      sections = {
-        foo = {
-          bar = [ null true "test" 1.2 10 ];
-          baz = false;
-          qux = "qux";
-        };
-      };
-    };
-    expected = ''
-      bar=null, true, test, 1.200000, 10
-      baz=false
-      qux=qux
-
-      [foo]
-      bar=null, true, test, 1.200000, 10
-      baz=false
-      qux=qux
-    '';
-  };
-
-  keyValueAtoms = shouldPass {
-    format = formats.keyValue {};
-    input = {
+  testKeyValueAtoms = {
+    drv = evalFormat formats.keyValue {} {
       bool = true;
       int = 10;
       float = 3.141;
@@ -333,9 +162,8 @@ in runBuildTests {
     '';
   };
 
-  keyValueDuplicateKeys = shouldPass {
-    format = formats.keyValue { listsAsDuplicateKeys = true; };
-    input = {
+  testKeyValueDuplicateKeys = {
+    drv = evalFormat formats.keyValue { listsAsDuplicateKeys = true; } {
       bar = [ null true "test" 1.2 10 ];
       baz = false;
       qux = "qux";
@@ -351,9 +179,8 @@ in runBuildTests {
     '';
   };
 
-  keyValueListToValue = shouldPass {
-    format = formats.keyValue { listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault {}); };
-    input = {
+  testKeyValueListToValue = {
+    drv = evalFormat formats.keyValue { listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {}); } {
       bar = [ null true "test" 1.2 10 ];
       baz = false;
       qux = "qux";
@@ -365,9 +192,8 @@ in runBuildTests {
     '';
   };
 
-  tomlAtoms = shouldPass {
-    format = formats.toml {};
-    input = {
+  testTomlAtoms = {
+    drv = evalFormat formats.toml {} {
       false = false;
       true = true;
       int = 10;
@@ -396,9 +222,8 @@ in runBuildTests {
   #   1. testing type coercions
   #   2. providing a more readable example test
   # Whereas java-properties/default.nix tests the low level escaping, etc.
-  javaProperties = shouldPass {
-    format = formats.javaProperties {};
-    input = {
+  testJavaProperties = {
+    drv = evalFormat formats.javaProperties {} {
       floaty = 3.1415;
       tautologies = true;
       contradictions = false;

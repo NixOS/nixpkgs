@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ michalrus ];
     platforms = platforms.unix;
-    mainProgram = "arping";
   };
 }

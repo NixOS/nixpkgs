@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
       license     = licenses.wtfpl;
       platforms   = platforms.all;
       maintainers = with maintainers; [ thesola10 ];
-      mainProgram = "crumbs";
     };
 }

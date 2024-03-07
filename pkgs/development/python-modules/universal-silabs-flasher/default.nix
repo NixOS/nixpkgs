@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pythonRelaxDepsHook
 
 # build-system
 , setuptools
@@ -27,25 +26,19 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.19";
+  version = "0.0.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VoO9B27CNY2Cnt/Q2HsU6DVYkukQMgbIHc6xqfN0P7w=";
+    rev = "v${version}";
+    hash = "sha256-5hA1i2XzKzQDRrZfOaA6I3X7hU+nSd7HpcHHNIzZO7g=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-git-versioning
-  ];
-
-  pythonRelaxDeps = [
-    # https://github.com/NabuCasa/universal-silabs-flasher/pull/50
-    "gpiod"
   ];
 
   propagatedBuildInputs = [

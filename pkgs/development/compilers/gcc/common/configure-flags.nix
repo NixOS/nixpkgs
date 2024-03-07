@@ -135,8 +135,6 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       "--with-build-sysroot=/"
-      # Same with the stdlibc++ headers embedded in the gcc output
-      "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
     ]
 
     # Basic configuration
@@ -250,11 +248,6 @@ let
     # glibc's definitions and fail the build. It was fixed in gcc-13+.
     ++ lib.optionals (targetPlatform.isMips && targetPlatform.parsed.abi.name == "gnu" && lib.versions.major version == "12") [
       "--disable-libsanitizer"
-    ]
-    ++ lib.optionals targetPlatform.isAlpha [
-      # Workaround build failures like:
-      #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
-      "--disable-werror"
     ]
   ;
 

@@ -20,8 +20,7 @@ let
       });
     };
   };
-in
-python.pkgs.buildPythonApplication rec {
+in python.pkgs.buildPythonApplication rec {
   pname = "lektor";
   version = "3.4.0b8";
   format = "pyproject";
@@ -71,11 +70,6 @@ python.pkgs.buildPythonApplication rec {
     pytest-click
     pytest-mock
     pytestCheckHook
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "werkzeug"
   ];
 
   postInstall = ''

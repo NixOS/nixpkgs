@@ -5,19 +5,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.4.3";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NCBCwQ8im6ttFuQBaG+bzmtinf+rqNnbogcK8r60dCM=";
+    hash = "sha256-fNjix3pJDRCTWM3Xtn+AtZe4RJfgQ60kiJB9J9tC5t4=";
   };
 
-  vendorHash = "sha256-/TJ/CahmOWcRBlAsJDzWcfhlDd+ypRapruFT0Dvlb1w=";
-
-  # Needed because of the unbound version constraint on phpdocumentor/json-path
-  composerStrictValidation = false;
+  vendorHash = "sha256-rsBg2EHbvYLVr6haN1brHZFVjLDaxqdkNWf0HL3Eoy0=";
 
   installPhase = ''
     runHook preInstall

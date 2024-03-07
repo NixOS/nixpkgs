@@ -1,13 +1,13 @@
 { lib, stdenv, buildEnv, fetchurl, mono }:
 
 let
-  version = "1.16.0";
+  version = "1.14.0";
   drv = stdenv.mkDerivation {
     pname = "keepassrpc";
     inherit version;
     src = fetchurl {
       url    = "https://github.com/kee-org/keepassrpc/releases/download/v${version}/KeePassRPC.plgx";
-      hash   = "sha256-p5dYluCrXAKhBhlm6sQ3QQE3gLMJzEZsHXwGnVeXFos=";
+      sha256 = "1c410cc93c0252e7cfdb02507b8172c13e18d12c97f08630b721d897dc9b8b24";
     };
 
     meta = with lib; {

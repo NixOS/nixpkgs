@@ -5,34 +5,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ldeep";
-  version = "1.0.53";
-  pyproject = true;
+  version = "1.0.51";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "franc-pentest";
     repo = "ldeep";
     rev = "refs/tags/${version}";
-    hash = "sha256-67jVpzvdjEcjFmTRE2YjPr4AO1iN+PakwoKcjvimt8g=";
+    hash = "sha256-UbZotbq97ehVj8dF0vXM2Z61IG1H+21xk14DXKmWirA=";
   };
-
-  pythonRelaxDeps = [
-    "cryptography"
-  ];
 
   nativeBuildInputs = with python3.pkgs; [
     cython
-    pythonRelaxDepsHook
-    setuptools
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     commandparse
     cryptography
     dnspython
-    gssapi
     ldap3
-    oscrypto
-    pycryptodome
     pycryptodomex
     six
     termcolor

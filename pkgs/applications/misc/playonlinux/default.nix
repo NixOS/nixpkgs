@@ -146,6 +146,5 @@ in stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = [ maintainers.pasqui23 ];
     platforms = [ "x86_64-linux" "i686-linux" ];
-    mainProgram = "playonlinux";
   };
 }

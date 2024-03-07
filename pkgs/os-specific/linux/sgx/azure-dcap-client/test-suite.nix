@@ -9,7 +9,7 @@ sgx-azure-dcap-client.overrideAttrs (old: {
     gtest
   ];
 
-  patches = (old.patches or []) ++ [
+  patches = [
     ./tests-missing-includes.patch
   ];
 

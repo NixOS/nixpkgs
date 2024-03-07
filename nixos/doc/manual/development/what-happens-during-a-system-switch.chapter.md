@@ -37,7 +37,7 @@ of actions is always the same:
 - Forget about the failed state of units (`systemctl reset-failed`)
 - Reload systemd (`systemctl daemon-reload`)
 - Reload systemd user instances (`systemctl --user daemon-reload`)
-- Reactivate sysinit (`systemctl restart sysinit-reactivation.target`)
+- Set up tmpfiles (`systemd-tmpfiles --create`)
 - Reload units (`systemctl reload`)
 - Restart units (`systemctl restart`)
 - Start units (`systemctl start`)
@@ -56,5 +56,4 @@ explained in the next sections.
 unit-handling.section.md
 activation-script.section.md
 non-switchable-systems.section.md
-etc-overlay.section.md
 ```

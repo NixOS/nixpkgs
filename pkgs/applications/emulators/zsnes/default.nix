@@ -70,6 +70,5 @@ in stdenv.mkDerivation {
     maintainers = [ lib.maintainers.sander ];
     homepage = "https://www.zsnes.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
-    mainProgram = "zsnes";
   };
 }

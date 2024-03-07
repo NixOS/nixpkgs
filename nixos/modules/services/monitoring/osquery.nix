@@ -90,10 +90,8 @@ in
       };
       wantedBy = [ "multi-user.target" ];
     };
-    systemd.tmpfiles.settings."10-osquery".${dirname (cfg.flags.pidfile)}.d = {
-      user = "root";
-      group = "root";
-      mode = "0755";
-    };
+    systemd.tmpfiles.rules = [
+      "d ${dirname (cfg.flags.pidfile)} 0755 root root -"
+    ];
   };
 }

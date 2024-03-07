@@ -23,11 +23,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.6.2";
+    version = "6.6.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-y0lNe+fdwvydMXHIiDCvnAKyHHU+PlET3vrJwDc7S2A=";
+      sha256 = "sha256-opRlo/5Ao+jUm6g0MTSsKrooa2g//rg42gz25FIflpU=";
     };
 
     format = "other";
@@ -37,7 +37,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-yOysqMrTWDx/ENcJng8Rm338NI9vpuBGH6Yq8B7+MFg=";
+      sha256 = "sha256-wLV0qdCfMgGpZRxnZik/lRwZHm/66p0sJn/mYVRvRkQ=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -62,7 +62,7 @@ let
       cp contrib/hgk $out/bin
       cat >> $out/etc/mercurial/hgrc << EOF
       [extensions]
-      hgk=$out/${python.sitePackages}/hgext/hgk.py
+      hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
       EOF
       # setting HG so that hgk can be run itself as well (not only hg view)
       WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}

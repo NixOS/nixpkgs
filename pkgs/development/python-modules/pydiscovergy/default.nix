@@ -1,22 +1,21 @@
 { lib
 , authlib
 , buildPythonPackage
+, dataclasses-json
 , fetchFromGitHub
 , httpx
-, mashumaro
-, orjson
+, marshmallow
 , pytest-httpx
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , pytz
 , respx
 }:
 
 buildPythonPackage rec {
   pname = "pydiscovergy";
-  version = "3.0.0";
+  version = "2.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -24,24 +23,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "pydiscovergy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ArcH/4ZyOtIGmoXArU+oEd357trJnS9umlN9B+U0dBI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-u2G+o/vhPri7CPSnekC8rUo/AvuvePpG51MR+FdH2XA=";
   };
-
-  postPatch = ''
-    sed -i '/addopts =/d' pyproject.toml
-  '';
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     authlib
+    dataclasses-json
     httpx
-    mashumaro
-    orjson
+    marshmallow
     pytz
   ];
 
@@ -58,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async Python 3 library for interacting with the Discovergy API";
     homepage = "https://github.com/jpbede/pydiscovergy";
-    changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${version}";
+    changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

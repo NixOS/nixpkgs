@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     homepage = "https://tools.suckless.org/wmname";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    mainProgram = "wmname";
   };
 }

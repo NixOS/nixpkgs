@@ -3,23 +3,22 @@
 , fetchFromGitHub
 , stdenv
 , Security
-, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.13.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DCejOfL+c04MABweyuvDLImlYKj/SONxBfXD/4OVzH0=";
+    hash = "sha256-gInJS7JpvEbmOuZecB4xjff2d7TnjcVV+8mPOmy5Oyo=";
   };
 
-  cargoHash = "sha256-X+pAvudfbxng6kMv0NO00v6mMBXUMaXvZb/L1OgWd38=";
+  cargoHash = "sha256-c5SQysjO821pfGhnyB4aGOZuwrHaN502PfkA1gBPtY4=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "socks" ];

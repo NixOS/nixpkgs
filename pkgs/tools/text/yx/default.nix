@@ -1,19 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, libyaml
-, testers
-, yx
-}:
+{ lib, stdenv, fetchFromGitLab, libyaml }:
 stdenv.mkDerivation rec {
   pname = "yx";
-  version = "1.0.2";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     owner = "tomalok";
-    repo = "yx";
+    repo = pname;
     rev = version;
-    hash = "sha256-uuso+hsmdsB7VpIRKob8rfMaWvRMCBHvCFnYrHPC6iw=";
+    sha256 = "sha256-oY61V9xP0DwRooabzi0XtaFsQa2GwYbuvxfERXQtYcA=";
   };
 
   makeFlags = [
@@ -25,12 +19,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libyaml ];
 
   doCheck = true;
-
-  passthru.tests.version = testers.testVersion {
-    package = yx;
-    command = "${meta.mainProgram} -v";
-    version = "v${yx.version}";
-  };
 
   meta = with lib; {
     description = "YAML Data Extraction Tool";

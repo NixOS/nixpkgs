@@ -6,28 +6,23 @@
 , pytestCheckHook
 , python-socks
 , pythonOlder
-, setuptools
 , tldextract
 , whodap
 }:
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.1.0";
-  pyproject = true;
+  version = "1.0.9";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "asyncwhois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rJwJhSOFrZZ3WXEZmPMfdosBBW/R5/PMqs0QLnsPMoI=";
+    hash = "sha256-5T/h4YzODH7zFyQpG8qVZetTK7V+Ii9jc+MQFgMUA8w=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     python-socks
@@ -43,7 +38,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "python-socks[asyncio]" "python-socks"
+      --replace "python-socks[asyncio]" "python-socks"
   '';
 
   disabledTests = [

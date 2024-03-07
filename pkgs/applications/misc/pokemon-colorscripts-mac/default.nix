@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.wesleyjrz ];
     platforms = platforms.unix;
-    mainProgram = "pokemon-colorscripts";
   };
 }

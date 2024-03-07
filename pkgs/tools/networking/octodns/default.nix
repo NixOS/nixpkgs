@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , setuptools
+, wheel
 , pytestCheckHook
 , dnspython
 , fqdn
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

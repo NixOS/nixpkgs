@@ -1,7 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, _7zz
+, undmg
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -19,8 +19,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  # AirBuddy.dmg is APFS formatted, unpack with 7zz
-  nativeBuildInputs = [ _7zz ];
+  nativeBuildInputs = [ undmg ];
+
+  # AirBuddy.dmg is not HFS formatted, default unpackPhase fails
+  # https://discourse.nixos.org/t/help-with-error-only-hfs-file-systems-are-supported-on-ventura
+  unpackCmd = ''
+    mnt=$(mktemp -d)
+
+    /usr/bin/hdiutil attach -nobrowse -readonly $src -mountpoint $mnt
+
+    shopt -s extglob
+    DEST="$PWD"
+    (cd "$mnt"; cp -a !(Applications) "$DEST/")
+  '';
 
   sourceRoot = "AirBuddy.app";
 

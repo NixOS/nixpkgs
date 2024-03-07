@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit0;
     platforms = platforms.all;
     maintainers = with maintainers; [ hzeller ];
-    mainProgram = "otf2bdf";
   };
 }

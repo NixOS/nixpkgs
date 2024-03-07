@@ -60,8 +60,6 @@ stdenv.mkDerivation rec {
     "--without-crypto"
   ];
 
-  enableParallelBuilding = true;
-
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"

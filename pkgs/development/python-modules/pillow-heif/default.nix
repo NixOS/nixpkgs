@@ -55,9 +55,6 @@ buildPythonPackage rec {
     x265
   ];
 
-  # clang-16: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
-
   propagatedBuildInputs = [
     pillow
   ];

@@ -7,31 +7,36 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , shortuuid
+, typing-extensions
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.4.0";
+  version = "9.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
     rev = "refs/tags/${version}";
-    hash = "sha256-EntV/CBvT4II4nxsVe3KjNA4EPV7Oc6h2G0fX0fHKTU=";
+    hash = "sha256-RbDiJvbFNuXIqFvevLpk5sy5WDinwaWwSqa+XI6Dljo=";
   };
 
   nativeBuildInputs = [
+    setuptools
     poetry-core
   ];
 
   propagatedBuildInputs = [
     aiormq
     yarl
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   nativeCheckInputs = [

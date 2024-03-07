@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;
-    mainProgram = "hr";
   };
 }

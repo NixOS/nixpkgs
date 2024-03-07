@@ -39,9 +39,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_43
     gettext
-  ] ++ lib.optionals
-    (!stdenv.buildPlatform.canExecute stdenv.hostPlatform
-      && !stdenv.hostPlatform.isMinGW) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -71,13 +69,6 @@ stdenv.mkDerivation rec {
     # Install sample config files to $out/etc even though they will be loaded from /etc.
     substituteInPlace p11-kit/meson.build \
       --replace 'install_dir: prefix / p11_system_config' "install_dir: '$out/etc/pkcs11'"
-  '';
-
-  preCheck = ''
-    # Tests run in fakeroot for non-root users (with Nix single-user install)
-    if [ "$(id -u)" != "0" ]; then
-      export FAKED_MODE=1
-    fi
   '';
 
   meta = with lib; {

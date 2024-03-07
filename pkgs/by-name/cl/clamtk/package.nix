@@ -9,13 +9,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "clamtk";
-  version = "6.18";
+  version = "6.17";
 
   src = fetchFromGitHub {
     owner = "dave-theunsub";
     repo = "clamtk";
     rev = "v${version}";
-    hash = "sha256-ClBsBXbGj67zgrkA9EjgK7s3OmXOJA+xV5xLGOcMsbI=";
+    hash = "sha256-2tWVfRijf78OiKBpLUrZWFberIL8mjqtxvW/IjPn1IE=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
@@ -46,12 +46,11 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 clamtk -t $out/bin
-    install -Dm444 lib/*.pm -t $out/lib/perl5/site_perl/ClamTk
-    install -Dm444 clamtk.desktop -t $out/share/applications
-    install -Dm444 images/* -t $out/share/pixmaps
-    install -Dm444 clamtk.1.gz -t $out/share/man/man1
-    install -Dm444 {CHANGES,LICENSE,*.md} -t $out/share/doc/clamtk
+    install -D lib/*.pm -t $out/lib/perl5/site_perl/ClamTk
+    install -D clamtk.desktop -t $out/share/applications
+    install -D images/* -t $out/share/pixmaps
+    install -D clamtk.1.gz -t $out/share/man/man1
+    install -D -m755 clamtk -t $out/bin
 
     runHook postInstall
   '';

@@ -27,6 +27,5 @@ in stdenv.mkDerivation {
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.unix;
-    mainProgram = "SoapySDRServer";
   };
 }

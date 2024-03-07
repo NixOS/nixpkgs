@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
-let version = "2.00";
+let version = "1.98";
 in stdenv.mkDerivation {
   pname = "cloc";
   inherit version;
@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = "sha256-GZvrsVuPLg09yOlDmdHNZ0QLXoftgSYMFkn6PLf1/Pw=";
+    sha256 = "sha256-OTzIzLgE9sdbHZUSARSbVrxD95dW8gPiM8tvMvqm1Bg=";
   };
 
   setSourceRoot = ''

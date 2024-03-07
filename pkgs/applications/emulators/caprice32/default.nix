@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ ];
     platforms = platforms.linux;
-    mainProgram = "cap32";
   };
 }

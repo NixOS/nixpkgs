@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   patches = [
     ./gnu-install-dirs.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../common/libcxx/libcxx-0001-musl-hacks.patch
+    ../../libcxx-0001-musl-hacks.patch
   ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''

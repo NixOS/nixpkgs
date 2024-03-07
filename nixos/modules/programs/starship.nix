@@ -1,21 +1,13 @@
 { config, lib, pkgs, ... }:
 
+with lib;
+
 let
   cfg = config.programs.starship;
 
   settingsFormat = pkgs.formats.toml { };
 
-  userSettingsFile = settingsFormat.generate "starship.toml" cfg.settings;
-
-  settingsFile = if cfg.presets == [] then userSettingsFile else pkgs.runCommand "starship.toml"
-    {
-      nativeBuildInputs = [ pkgs.yq ];
-    } ''
-    tomlq -s -t 'reduce .[] as $item ({}; . * $item)' \
-      ${lib.concatStringsSep " " (map (f: "${pkgs.starship}/share/starship/presets/${f}.toml") cfg.presets)} \
-      ${userSettingsFile} \
-      > $out
-  '';
+  settingsFile = settingsFormat.generate "starship.toml" cfg.settings;
 
   initOption =
     if cfg.interactiveOnly then
@@ -26,28 +18,19 @@ let
 in
 {
   options.programs.starship = {
-    enable = lib.mkEnableOption (lib.mdDoc "the Starship shell prompt");
+    enable = mkEnableOption (lib.mdDoc "the Starship shell prompt");
 
-    interactiveOnly = lib.mkOption {
+    interactiveOnly = mkOption {
       default = true;
       example = false;
-      type = lib.types.bool;
+      type = types.bool;
       description = lib.mdDoc ''
         Whether to enable starship only when the shell is interactive.
         Some plugins require this to be set to false to function correctly.
       '';
     };
 
-    presets = lib.mkOption {
-      default = [ ];
-      example = [ "nerd-font-symbols" ];
-      type = with lib.types; listOf str;
-      description = lib.mdDoc ''
-        Presets files to be merged with settings in order.
-      '';
-    };
-
-    settings = lib.mkOption {
+    settings = mkOption {
       inherit (settingsFormat) type;
       default = { };
       description = lib.mdDoc ''
@@ -58,7 +41,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     programs.bash.${initOption} = ''
       if [[ $TERM != "dumb" ]]; then
         # don't set STARSHIP_CONFIG automatically if there's a user-specified

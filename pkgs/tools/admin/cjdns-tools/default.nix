@@ -40,8 +40,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Tools for cjdns managment";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.linux;
-    mainProgram = "cjdns-tools";
   };
 }

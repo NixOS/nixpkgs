@@ -1,33 +1,28 @@
 { lib
 , aio-geojson-client
 , aiohttp
-, aioresponses
+, aresponses
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
 , pytz
-, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-nsw-rfs-incidents";
-  version = "0.7";
-  pyproject = true;
+  version = "0.6";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-nsw-rfs-incidents";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HksiKfXhLASAgU81x7YiOXFmBLIkqJ9ldWLLY1ZbZlk=";
+    hash = "sha256-pn0r5iLpNnK3xmAhq/oX90hdiHgFDuwDQqfAzkp5jmw=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aio-geojson-client
@@ -38,7 +33,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    aioresponses
+    aresponses
     pytest-asyncio
     pytestCheckHook
   ];

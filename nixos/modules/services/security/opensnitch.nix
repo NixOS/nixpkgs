@@ -36,8 +36,7 @@ in {
 
         description = mdDoc ''
           Declarative configuration of firewall rules.
-          All rules will be stored in `/var/lib/opensnitch/rules` by default.
-          Rules path can be configured with `settings.Rules.Path`.
+          All rules will be stored in `/var/lib/opensnitch/rules`.
           See [upstream documentation](https://github.com/evilsocket/opensnitch/wiki/Rules)
           for available options.
         '';
@@ -77,6 +76,15 @@ in {
               description = mdDoc ''
                 Default action whether to block or allow application internet
                 access.
+              '';
+            };
+
+            DefaultDuration = mkOption {
+              type = types.enum [
+                "once" "always" "until restart" "30s" "5m" "15m" "30m" "1h"
+              ];
+              description = mdDoc ''
+                Default duration of firewall rule.
               '';
             };
 
@@ -126,30 +134,6 @@ in {
               };
 
             };
-
-            Ebpf.ModulesPath = mkOption {
-              type = types.path;
-              default = if cfg.settings.ProcMonitorMethod == "ebpf" then "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd" else null;
-              defaultText = literalExpression ''
-                if cfg.settings.ProcMonitorMethod == "ebpf" then
-                  "\\$\\{config.boot.kernelPackages.opensnitch-ebpf\\}/etc/opensnitchd"
-                else null;
-              '';
-              description = mdDoc ''
-                Configure eBPF modules path. Used when
-                `settings.ProcMonitorMethod` is set to `ebpf`.
-              '';
-            };
-
-            Rules.Path = mkOption {
-              type = types.path;
-              default = "/var/lib/opensnitch/rules";
-              description = mdDoc ''
-                Path to the directory where firewall rules can be found and will
-                get stored by the NixOS module.
-              '';
-            };
-
           };
         };
         description = mdDoc ''
@@ -167,42 +151,40 @@ in {
 
     systemd = {
       packages = [ pkgs.opensnitch ];
-      services.opensnitchd = {
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = [
-            ""
-            "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" cfg.settings}"
-          ];
-        };
-        preStart = mkIf (cfg.rules != {}) (let
-          rules = flip mapAttrsToList predefinedRules (file: content: {
-          inherit (content) file;
-          local = "${cfg.settings.Rules.Path}/${file}.json";
-        });
-        in ''
-          # Remove all firewall rules from rules path (configured with
-          # cfg.settings.Rules.Path) that are symlinks to a store-path, but aren't
-          # declared in `cfg.rules` (i.e. all networks that were "removed" from
-          # `cfg.rules`).
-          find ${cfg.settings.Rules.Path} -type l -lname '${builtins.storeDir}/*' ${optionalString (rules != {}) ''
-            -not \( ${concatMapStringsSep " -o " ({ local, ... }:
-              "-name '${baseNameOf local}*'")
-            rules} \) \
-          ''} -delete
-          ${concatMapStrings ({ file, local }: ''
-            ln -sf '${file}' "${local}"
-          '') rules}
-        '');
-      };
-      tmpfiles.rules = [
-        "d ${cfg.settings.Rules.Path} 0750 root root - -"
-        "L+ /etc/opensnitchd/system-fw.json - - - - ${pkgs.opensnitch}/etc/opensnitchd/system-fw.json"
-      ];
+      services.opensnitchd.wantedBy = [ "multi-user.target" ];
     };
 
-  };
+    systemd.services.opensnitchd.preStart = mkIf (cfg.rules != {}) (let
+      rules = flip mapAttrsToList predefinedRules (file: content: {
+        inherit (content) file;
+        local = "/var/lib/opensnitch/rules/${file}.json";
+      });
+    in ''
+      # Remove all firewall rules from `/var/lib/opensnitch/rules` that are symlinks to a store-path,
+      # but aren't declared in `cfg.rules` (i.e. all networks that were "removed" from
+      # `cfg.rules`).
+      find /var/lib/opensnitch/rules -type l -lname '${builtins.storeDir}/*' ${optionalString (rules != {}) ''
+        -not \( ${concatMapStringsSep " -o " ({ local, ... }:
+          "-name '${baseNameOf local}*'")
+        rules} \) \
+      ''} -delete
+      ${concatMapStrings ({ file, local }: ''
+        ln -sf '${file}' "${local}"
+      '') rules}
 
-  meta.maintainers = with lib.maintainers; [ onny ];
+      if [ ! -f /etc/opensnitchd/system-fw.json ]; then
+        cp "${pkgs.opensnitch}/etc/opensnitchd/system-fw.json" "/etc/opensnitchd/system-fw.json"
+      fi
+    '');
+
+    environment.etc = mkMerge [ ({
+      "opensnitchd/default-config.json".source = format.generate "default-config.json" cfg.settings;
+    }) (mkIf (cfg.settings.ProcMonitorMethod == "ebpf") {
+      "opensnitchd/opensnitch.o".source = "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd/opensnitch.o";
+      "opensnitchd/opensnitch-dns.o".source = "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd/opensnitch-dns.o";
+      "opensnitchd/opensnitch-procs.o".source = "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd/opensnitch-procs.o";
+    })];
+
+  };
 }
 

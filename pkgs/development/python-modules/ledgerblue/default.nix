@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , bleak
 , buildPythonPackage
 , ecpy
@@ -30,6 +29,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    bleak
     ecpy
     future
     hidapi
@@ -41,9 +41,6 @@ buildPythonPackage rec {
     pyelftools
     python-u2flib-host
     websocket-client
-  ]
-  ++ lib.optionals stdenv.isLinux [
-    bleak
   ];
 
   # No tests

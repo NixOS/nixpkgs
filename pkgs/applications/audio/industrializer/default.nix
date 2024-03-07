@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
-    mainProgram = "psindustrializer";
   };
 }

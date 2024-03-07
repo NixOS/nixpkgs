@@ -17,7 +17,7 @@ php.buildComposerProject (finalAttrs: {
   vendorHash = "sha256-83GX/dxHa6w1E34wnJshg7yxlVyRkDT5jmAPCCqPdtA=";
 
   doInstallCheck = true;
-  postInstallCheck = ''
+  postCheckInstall = ''
     $out/bin/phel --version
   '';
 

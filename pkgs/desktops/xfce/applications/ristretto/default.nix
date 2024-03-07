@@ -11,10 +11,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.13.2";
+  version = "0.13.1";
   odd-unstable = false;
 
-  sha256 = "sha256-FKgNKQ2l4FGvEvmppf+RTxMXU6TfsZVFBVii4zr4ASc=";
+  sha256 = "sha256-Tor4mA0uSpVCdK6mla1L0JswgURnGPOfkYBR2N1AbL0=";
 
   buildInputs = [
     glib

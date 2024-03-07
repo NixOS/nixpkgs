@@ -22,8 +22,6 @@ lib.makeExtensible (self: {
 
   beets-stable = callPackage ./common.nix rec {
     inherit python3Packages;
-    # NOTE: ./builtin-plugins.nix and ./common.nix can have some conditionals
-    # be removed when stable version updates
     version = "1.6.0";
     src = fetchFromGitHub {
       owner = "beetbox";

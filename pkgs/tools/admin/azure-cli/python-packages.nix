@@ -64,8 +64,6 @@ let
             azure/cli/core/tests \
             --ignore=azure/cli/core/tests/test_profile.py \
             --ignore=azure/cli/core/tests/test_generic_update.py \
-            --ignore=azure/cli/core/tests/test_cloud.py \
-            --ignore=azure/cli/core/tests/test_extension.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
@@ -101,10 +99,11 @@ let
       azure-mgmt-advisor = overrideAzureMgmtPackage super.azure-mgmt-advisor "9.0.0" "zip" "sha256-/ECLNzFf6EeBtRkST4yxuKwQsvQkHkOdDT4l/WyhjXs=";
       azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "4.0.0" "zip" "sha256-AiTjLJ28g80xnrRFLfPUevJgeaxLpuGmvkd3+FskNiw=";
       azure-mgmt-authorization = overrideAzureMgmtPackage super.azure-mgmt-authorization "4.0.0" "zip" "sha256-abhavAmuZPxyl1vUNDEXDYx+tdFmdUuYqsXzhF3lfcQ=";
+      azure-mgmt-batch = overrideAzureMgmtPackage super.azure-mgmt-batch "17.0.0" "zip" "sha256-hkM4WVLuwxj4qgXsY8Ya7zu7/v37gKdP0Xbf2EqrsWo=";
       azure-mgmt-billing = overrideAzureMgmtPackage super.azure-mgmt-billing "6.0.0" "zip" "sha256-1PXFpBiKRW/h6zK2xF9VyiBpx0vkHrdpIYQLOfL1wH8=";
       azure-mgmt-botservice = overrideAzureMgmtPackage super.azure-mgmt-botservice "2.0.0b3" "zip" "sha256-XZGQOeMw8usyQ1tl8j57fZ3uqLshomHY9jO/rbpQOvM=";
       azure-mgmt-cognitiveservices = overrideAzureMgmtPackage super.azure-mgmt-cognitiveservices "13.5.0" "zip" "sha256-RK8LGbH4J+nN6gnGBUweZgkqUcMrwe9aVtvZtAvFeBU=";
-      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "30.4.0" "tar.gz" "sha256-C3Qo/YvRXHy9fGa5uwEOClyzeoBs7x9JSNkHGRV2kzQ=";
+      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "30.3.0" "tar.gz" "sha256-5Sl4Y0D4YqpqIYp61qW+trn7VYM8XKoIUcwzFNBJO2M=";
       azure-mgmt-containerinstance = overrideAzureMgmtPackage super.azure-mgmt-containerinstance "10.1.0" "zip" "sha256-eNQ3rbKFdPRIyDjtXwH5ztN4GWCYBh3rWdn3AxcEwX4=";
       azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "10.1.0" "zip" "sha256-VrX9YfYNvlA8+eNqHCp35BAeQZzQKakZs7ZZKwT8oYc=";
       azure-mgmt-core = overrideAzureMgmtPackage super.azure-mgmt-core "1.3.2" "zip" "sha256-B/Sv6COlXXBLBI1h7f3BMYwFHtWfJEAyEmNQvpXp1QE=";
@@ -140,11 +139,6 @@ let
       azure-mgmt-appcontainers = overrideAzureMgmtPackage super.azure-mgmt-appcontainers "2.0.0" "zip"
         "sha256-ccdIdvdgTYPWEZCWqkLc8lEuMuAEERvl5B1huJyBkvU=";
 
-      azure-mgmt-batch = (overrideAzureMgmtPackage super.azure-mgmt-batch "17.0.0" "zip"
-        "sha256-hkM4WVLuwxj4qgXsY8Ya7zu7/v37gKdP0Xbf2EqrsWo=").overridePythonAttrs (attrs: {
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
-      });
-
       azure-mgmt-batchai = overrideAzureMgmtPackage super.azure-mgmt-batchai "7.0.0b1" "zip"
         "sha256-mT6vvjWbq0RWQidugR229E8JeVEiobPD3XA/nDM3I6Y=";
 
@@ -175,7 +169,7 @@ let
       });
 
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
-        "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=";
+        "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=r";
 
       azure-mgmt-loganalytics = overrideAzureMgmtPackage super.azure-mgmt-loganalytics "13.0.0b4" "zip"
         "sha256-Jm1t7v5vyFjNNM/evVaEI9sXJKNwJk6XAXuJSRSnKHk=";
@@ -183,11 +177,11 @@ let
       azure-mgmt-media = overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
         "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
 
-      azure-mgmt-web = overrideAzureMgmtPackage super.azure-mgmt-web "7.2.0" "tar.gz"
-        "sha256-78/m9/Ug7Qq8/oZRfhyM8CpxL3N6PbDbfLRsbWR5ge0=";
+      azure-mgmt-web = overrideAzureMgmtPackage super.azure-mgmt-web "7.0.0" "zip"
+        "sha256-WvyNgfiliEt6qawqy8Le8eifhxusMkoZbf6YcyY1SBA=";
 
       azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "10.1.0" "zip"
-        "sha256-eJiWTOCk2C79Jotku9bKlu3vU6H8004hWrX+h76MjQM=";
+      "sha256-eJiWTOCk2C79Jotku9bKlu3vU6H8004hWrX+h76MjQM=";
 
       azure-mgmt-signalr = overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b2" "tar.gz"
         "sha256-05PUV8ouAKq/xhGxVEWIzDop0a7WDTV5mGVSC4sv9P4=";
@@ -210,10 +204,8 @@ let
       azure-mgmt-applicationinsights = overrideAzureMgmtPackage super.azure-mgmt-applicationinsights "1.0.0" "zip"
         "sha256-woeix9703hn5LAwxugKGf6xvW433G129qxkoi7RV/Fs=";
 
-      azure-mgmt-servicefabric = (overrideAzureMgmtPackage super.azure-mgmt-servicefabric "1.0.0" "zip"
-        "sha256-3jXhF5EoMsGp6TEJqNJMq5T1VwOpCHsuscWwZVs7GRM=").overridePythonAttrs (attrs: {
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
-      });
+      azure-mgmt-servicefabric = overrideAzureMgmtPackage super.azure-mgmt-servicefabric "1.0.0" "zip"
+        "sha256-3jXhF5EoMsGp6TEJqNJMq5T1VwOpCHsuscWwZVs7GRM=";
 
       azure-mgmt-servicelinker = overrideAzureMgmtPackage super.azure-mgmt-servicelinker "1.2.0b1" "zip"
         "sha256-RK1Q51Q0wAG55oKrFmv65/2AUKl+gRdp27t/EcuMONk=";

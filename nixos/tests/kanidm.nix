@@ -67,7 +67,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       ''
         start_all()
         server.wait_for_unit("kanidm.service")
-        client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
 
         with subtest("Test HTTP interface"):

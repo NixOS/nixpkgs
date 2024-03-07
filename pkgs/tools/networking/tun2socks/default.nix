@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-zeiOcn33PnyoseYb0wynkn7MfGp3rHEYBStY98C6aR8=";
 
   ldflags = [
-    "-w" "-s"
+    "-w" "-s" "-buildid="
     "-X github.com/xjasonlyu/tun2socks/v2/internal/version.Version=v${version}"
     "-X github.com/xjasonlyu/tun2socks/v2/internal/version.GitCommit=v${version}"
   ];
@@ -27,6 +27,5 @@ buildGoModule rec {
     description = "tun2socks - powered by gVisor TCP/IP stack";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nickcao ];
-    mainProgram = "tun2socks";
   };
 }

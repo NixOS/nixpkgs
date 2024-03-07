@@ -104,8 +104,6 @@ in {
       featuresInfo
       python
     ;
-    gnuradioOlder = lib.versionOlder versionAttr.major;
-    gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit qt;
   } // lib.optionalAttrs (hasFeature "gnuradio-companion") {

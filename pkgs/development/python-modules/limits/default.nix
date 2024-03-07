@@ -1,13 +1,10 @@
 { lib
-, aetcd
 , buildPythonPackage
-, coredis
 , deprecated
-, etcd3
 , fetchFromGitHub
+, etcd3
 , hiro
 , importlib-resources
-, motor
 , packaging
 , pymemcache
 , pymongo
@@ -23,13 +20,13 @@
 buildPythonPackage rec {
   pname = "limits";
   version = "3.7.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
-    repo = "limits";
+    repo = pname;
     rev = "refs/tags/${version}";
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
@@ -40,65 +37,36 @@ buildPythonPackage rec {
     hash = "sha256-0h3ofungHkjycUvNJ3jf+VB/GSrshgUDECN2YoPGzzg=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov=limits" "" \
-      --replace-fail "-K" ""
-
-    substituteInPlace setup.py \
-      --replace-fail "versioneer.get_version()" "'${version}'"
-
-    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [
     deprecated
     importlib-resources
     packaging
+    setuptools
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    redis = [
-      redis
-    ];
-    rediscluster = [
-      redis
-    ];
-    memcached = [
-      pymemcache
-    ];
-    mongodb = [
-      pymongo
-    ];
-    etcd = [
-      etcd3
-    ];
-    async-redis = [
-      coredis
-    ];
-    # async-memcached = [
-    #   emcache  # Missing module
-    # ];
-    async-mongodb = [
-      motor
-    ];
-    async-etcd = [
-      aetcd
-    ];
-  };
-
   nativeCheckInputs = [
+    etcd3
     hiro
+    pymemcache
+    pymongo
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    redis
+  ];
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--cov=limits" "" \
+      --replace "-K" ""
+
+    substituteInPlace setup.py \
+      --replace "versioneer.get_version()" "'${version}'"
+
+    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
+    echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
+  '';
 
   pythonImportsCheck = [
     "limits"
@@ -114,7 +82,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
-    changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

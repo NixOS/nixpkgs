@@ -2,22 +2,16 @@
 
 buildGoModule rec {
   pname = "q";
-  version = "0.19.2";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "natesales";
     repo = "q";
     rev = "v${version}";
-    sha256 = "sha256-kfuf0iwRYNxd9TfIIHvAqLxXjesQh7jC0evT9DQrrzQ=";
+    sha256 = "sha256-yItgytsPR/FkiERHhLTq1vNJbZ204DckEc3xK3PaPKM=";
   };
 
-  vendorHash = "sha256-6kdf+LwMrIjwC3uZHlMdpEHvonxKfr86PQaMOgzgYOc=";
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${version}"
-  ];
+  vendorHash = "sha256-xLv2F/rOSjMTnTrLck/1E8Y0fTbpUutQIJGmqetqYjg=";
 
   doCheck = false; # tries to resolve DNS
 
@@ -26,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/natesales/q";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.das_j ];
-    mainProgram = "q";
   };
 }

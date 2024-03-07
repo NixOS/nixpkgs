@@ -1,31 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, msrestazure
+, msrest
 , azure-common
+, msrestazure
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "azure-batch";
-  version = "14.1.0";
-  pyproject = true;
+  version = "14.0.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lhayyqYpx0ABItaF1VfrzQF5famImQgxj5pUdIQ5es0=";
+    extension = "zip";
+    hash = "sha256-FlsembhvghAkxProX7NIadQHqg67DKS5b7JthZwmyTQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [
-    azure-common
+    msrest
     msrestazure
+    azure-common
   ];
 
   # Module has no tests
@@ -37,8 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Batch Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/batch/azure-batch";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-batch_${version}/sdk/batch/azure-batch/CHANGELOG.md";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit bsd3 ]; # dual licensed, MIT-x11 & BSD-3-Clause
     maintainers = with maintainers; [ ckie ];
     platforms = platforms.linux;
-    mainProgram = "cnping";
   };
 }

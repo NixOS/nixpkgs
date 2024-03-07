@@ -14,16 +14,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.13.0";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "veeso";
-    repo = "termscp";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/Mnoljgp87ML6+3vV1vZTFO0TSY5hr8E8U1fXJq31pE=";
+    hash = "sha256-+5s5PskSHZKv1deti5r986qXg8J9APuVXY+Lvq3ki0w=";
   };
 
-  cargoHash = "sha256-xq21cncEYNSwDiKvVSM1J2Jz3TqOkYMK3gckKpM5+6E=";
+  cargoPatches = [
+    ./Cargo.lock.patch
+  ];
+
+  cargoHash = "sha256-2RmYxtjJm70qbiGl8YHXgebtvNsQvBdgkNDm8td9oNk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,6 +60,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "termscp";
   };
 }

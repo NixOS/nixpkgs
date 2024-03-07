@@ -1,50 +1,37 @@
-{ lib
-, astroid
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
-, pylint
+, isPy3k
+, lib
+
+# pythonPackages
 , pylint-plugin-utils
-, pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pylint-flask";
   version = "0.6";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  format = "setuptools";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9Nl94iFr97/OB8nAixZul4/p8nJd4qUKmEWpfefjFRc=";
+    sha256 = "05qmwgkpvaa5k05abqjxfbrfk3wpdqb8ph690z7bzxvb47i7vngl";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  buildInputs = [
-    pylint
-  ];
-
   propagatedBuildInputs = [
-    astroid
     pylint-plugin-utils
   ];
 
   # Tests require a very old version of pylint
-  # also tests are only available at GitHub, with an old release tag
+  #   also tests are only available at GitHub, with an old release tag
   doCheck = false;
-
-  pythonImportsCheck = [
-    "pylint_flask"
-  ];
 
   meta = with lib; {
     description = "A Pylint plugin to analyze Flask applications";
     homepage = "https://github.com/jschaf/pylint-flask";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      kamadorueda
+    ];
   };
 }

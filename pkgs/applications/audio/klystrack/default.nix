@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ suhr ];
     platforms = platforms.linux;
-    mainProgram = "klystrack";
   };
 }

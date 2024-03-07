@@ -1,26 +1,23 @@
 { lib, stdenv, fetchurl, makeWrapper
-, pkg-config
+, pkg-config, openssl, fuse, libxml2
 , cabextract ? null
 , cdrkit ? null
 , mtools ? null
-, fuse3 ? null
 , ntfs3g ? null
 , syslinux ? null
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.14.4";
+  version = "1.13.6";
   pname = "wimlib";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ fuse3 ];
+  buildInputs = [ openssl fuse libxml2 ntfs3g ];
 
   src = fetchurl {
     url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
-    hash = "sha256-NjPbK2yLJV64bTvz3zBZeWvR8I5QuMlyjH62ZmLlEwA=";
+    sha256 = "sha256-Cg+cHA06KnZkVTWusPYuA/xVkUymXzpNVZm7iwJg29k=";
   };
-
-  enableParallelBuilding = true;
 
   preBuild = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace programs/mkwinpeimg.in \
@@ -28,10 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = let
-    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ cdrkit syslinux fuse3 ]);
+    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ cdrkit syslinux ]);
   in ''
     for prog in $out/bin/*; do
-      wrapProgram $prog --prefix PATH : $out/bin:${path}
+      wrapProgram $prog --prefix PATH : ${path}
     done
   '';
 
@@ -46,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "A library and program to extract, create, and modify WIM files";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];
-    license = with licenses; [ gpl3 lgpl3 mit ];
+    license = with licenses; [ gpl3 lgpl3 cc0 ];
   };
 }

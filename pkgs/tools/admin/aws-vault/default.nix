@@ -3,7 +3,6 @@
 , installShellFiles
 , lib
 , makeWrapper
-, stdenv
 , xdg-utils
 }:
 buildGoModule rec {
@@ -23,8 +22,7 @@ buildGoModule rec {
 
   postInstall = ''
     # make xdg-open overrideable at runtime
-    # aws-vault uses https://github.com/skratchdot/open-golang/blob/master/open/open.go to open links
-    ${lib.optionalString (!stdenv.isDarwin) "wrapProgram $out/bin/aws-vault --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"}
+    wrapProgram $out/bin/aws-vault --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     installShellCompletion --cmd aws-vault \
       --bash $src/contrib/completions/bash/aws-vault.bash \
       --fish $src/contrib/completions/fish/aws-vault.fish \

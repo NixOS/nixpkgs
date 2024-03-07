@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "indexed_bzip2";
-  version = "1.6.0";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3HUiigZR91/nbOAMOuSHGcPtqkkEaj3VepyMhmKOHpI=";
+    hash = "sha256-tKf9odadfQZQYJz//vWYpeB99Z8VLg+hEPvfEHXgdnM=";
   };
 
   # has no tests

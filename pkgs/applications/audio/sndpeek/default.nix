@@ -52,6 +52,5 @@ stdenv.mkDerivation rec {
     homepage = "https://soundlab.cs.princeton.edu/software/sndpeek/";
     license = licenses.gpl2;
     maintainers = [ maintainers.laikq ];
-    mainProgram = "sndpeek";
   };
 }

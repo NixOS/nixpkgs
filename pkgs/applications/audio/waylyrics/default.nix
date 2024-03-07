@@ -1,63 +1,59 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, openssl
-, dbus
-}:
+{ lib, fetchFromGitHub, rustPlatform, gtk4, pkg-config, openssl, dbus, wrapGAppsHook4, glib, makeDesktopItem, copyDesktopItems }:
 
 rustPlatform.buildRustPackage rec {
   pname = "waylyrics";
-  version = "0.2.12";
+  version = "unstable-2023-05-14";
 
   src = fetchFromGitHub {
     owner = "poly000";
-    repo = "waylyrics";
-    rev = "v${version}";
-    hash = "sha256-sUhFT3Vq/IjbMir7/AVCU8FyfmoNiZsn2zkqdJkOMFo=";
+    repo = pname;
+    rev = "7e8bd99e1748a5448c1a5c49f0664bd96fbf965e";
+    hash = "sha256-vSYtLsLvRHCCHxomPSHifXFZKjkFrlskNp7IlFflrUU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ncmapi-0.1.13" = "sha256-NxgF1TV+3hK5oE/DfJnWyc+XmPX3U1UeD+xTkcvDzIA=";
-      "qqmusic-rs-0.1.0" = "sha256-woLsO0n+m3EBUI+PRLio7iLp0UPQSliWK0djCSZEaZc=";
-    };
-  };
+  cargoHash = "sha256-dpJa0T6xapCBPM5fWbSDEhBlZ55c3Sr5oTnu58B/voM=";
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  nativeBuildInputs = [ pkg-config wrapGAppsHook4 copyDesktopItems ];
+  buildInputs = [ gtk4 openssl dbus glib ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
-  buildInputs = [ openssl dbus ];
+  RUSTC_BOOTSTRAP = 1;
 
-  checkFlags = [
-    "--skip=tests::netease_lyric::get_netease_lyric" # Requires network access
-  ];
+  doCheck = false; # No tests defined in the project.
 
+  WAYLYRICS_DEFAULT_CONFIG = "${placeholder "out"}/share/waylyrics/config.toml";
   WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "io.poly000.waylyrics";
+      exec = "waylyrics";
+      comment = "Simple on screen lyrics for MPRIS-friendly players";
+      type = "Application";
+      icon = "io.poly000.waylyrics";
+      desktopName = "Waylyrics";
+      terminal = false;
+      categories = [ "Audio" "AudioVideo" ];
+    })
+  ];
+
   postInstall = ''
-    # Install themes
-    install -d $WAYLYRICS_THEME_PRESETS_DIR
-    cp -vr themes/* $WAYLYRICS_THEME_PRESETS_DIR
-    # Install desktop entry
-    install -Dm644 io.poly000.waylyrics.desktop -t $out/share/applications
+    $out/bin/gen_config_example
+    mkdir -p $out/share/waylyrics
+    install -Dm644 config.toml $WAYLYRICS_DEFAULT_CONFIG
+    cp -vr themes $out/share/waylyrics/
+    rm $out/bin/gen_config_example # Unnecessary for end users
     # Install schema
     install -Dm644 io.poly000.waylyrics.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas
     glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas/
     # Install icons
-    install -d $out/share/icons
-    cp -vr res/icons/hicolor $out/share/icons/hicolor
+    cp -vr res/icons $out/share/
   '';
 
   meta = with lib; {
-    description = "Desktop lyrics with QQ and NetEase Music source";
+    description = "On screen lyrics for Wayland with NetEase Music source";
     homepage = "https://github.com/poly000/waylyrics";
-    license = with licenses; [ mit cc-by-40 ];
-    maintainers = with maintainers; [ shadowrz aleksana ];
+    license = licenses.mit;
+    maintainers = [ maintainers.shadowrz ];
     platforms = platforms.linux;
   };
 }

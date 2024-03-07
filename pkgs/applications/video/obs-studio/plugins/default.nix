@@ -20,8 +20,6 @@
 
   obs-command-source = callPackage ./obs-command-source.nix { };
 
-  obs-composite-blur = callPackage ./obs-composite-blur.nix { };
-
   obs-freeze-filter = qt6Packages.callPackage ./obs-freeze-filter.nix { };
 
   obs-gradient-source = callPackage ./obs-gradient-source.nix { };
@@ -77,8 +75,6 @@
   };
 
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
-
-  obs-webkitgtk = callPackage ./obs-webkitgtk.nix { };
 
   wlrobs = callPackage ./wlrobs.nix { };
 

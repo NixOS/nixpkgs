@@ -13,11 +13,11 @@ assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.4";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-Z+vgFsqQ+naIzmejh+vYLGJh6ViX23sj3yT/M1voW8Y=";
+    hash = "sha256-drceWutEO/2RDOnLyCgbYXyDQWh6+2e65FWHeXK1neg=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
     ./24-allow-import-of-previously-known-keys-even-without-UI.patch
-    ./24-revert-rfc4880bis-defaults.patch
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
   ];

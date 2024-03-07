@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , setuptools
+, wheel
 , aiohttp
 , python-dateutil
 , typing-extensions
@@ -10,21 +11,22 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "4.2.0";
+  version = "4.1.0";
 
   disabled = pythonOlder "3.7";
 
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QAxLYujnsudaiz9UepwrBA835Pct5h4VcE9ZrbkwMmg=";
+    hash = "sha256-aYYuHyILd3nT0jG59wJcRgSeri26YsC3NpwuQ9dsI1I=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

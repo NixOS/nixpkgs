@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdevctl";
-  version = "1.3.0";
+  version = "1.2.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-4K4NW3DOTtzZJ7Gg0mnRPr88YeqEjTtKX+C4P8i923E=";
+    hash = "sha256-0X/3DWNDPOgSNNTqcj44sd7DNGFt+uGBjkc876dSgU8=";
   };
 
-  cargoHash = "sha256-hCqNy32uPLsKfUJqiG2DRcXfqdvlp4bCutQmt+FieXc=";
+  cargoHash = "sha256-TmumQBWuH5fJOe2qzcDtEGbmCs2G9Gfl8mH7xifzRGc=";
 
   nativeBuildInputs = [
     docutils

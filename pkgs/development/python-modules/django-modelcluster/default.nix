@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "6.3";
+  version = "6.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "wagtail";
     repo = "django-modelcluster";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AUVl2aidjW7Uu//3HlAod7pxzj6Gs1Xd0uTt3NrrqAU=";
+    hash = "sha256-y2jGSZvTeSnpWDFJ+aNGofTEtMMlY9TrXZjQeET5OhY=";
   };
 
   propagatedBuildInputs = [

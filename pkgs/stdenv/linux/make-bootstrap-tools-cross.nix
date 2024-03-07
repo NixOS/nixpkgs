@@ -12,10 +12,7 @@ let
     pkgs = releaseLib.pkgsForCross crossSystem system;
   };
 in lib.mapAttrs (n: make) (with lib.systems.examples; {
-  # NOTE: Only add platforms for which there are files in `./bootstrap-files`
-  # or for which you plan to request the tarball upload soon. See the
-  #   maintainers/scripts/bootstrap-files/README.md
-  # on how to request an upload.
+  # NOTE: Only add platforms for which there are files in `./bootstrap-files`.
   # Sort following the sorting in `./default.nix` `bootstrapFiles` argument.
 
   armv5tel-unknown-linux-gnueabi = sheevaplug;

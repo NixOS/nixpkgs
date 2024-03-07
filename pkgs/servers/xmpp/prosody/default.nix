@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "b109773ce6fe";
-    hash = "sha256-N1vmShDWtWsHD4b1x7UjX6Sj28iPaDeCLSYeDOLLhzo=";
+    rev = "7c105277a9ca";
+    sha256 = "eiObn5Kw7dS+oxdQiJ8NhSC4P7EvILIOEnMoxCWIFro=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -84,6 +84,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ toastal ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, pkg-config, libiconv, openssl, pcre }:
 
-import ./versions.nix ({ version, hash, ... }:
+import ./versions.nix ({ version, sha256, ... }:
   stdenv.mkDerivation {
     pname = "zabbix-agent";
     inherit version;
 
     src = fetchurl {
       url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-      inherit hash;
+      inherit sha256;
     };
 
     nativeBuildInputs = [ pkg-config ];

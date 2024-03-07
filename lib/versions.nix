@@ -9,7 +9,7 @@ rec {
        splitVersion "1.2.3"
        => ["1" "2" "3"]
   */
-  splitVersion = builtins.splitVersion;
+  splitVersion = builtins.splitVersion or (lib.splitString ".");
 
   /* Get the major version string from a string.
 

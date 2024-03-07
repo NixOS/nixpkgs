@@ -1,8 +1,7 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, autoreconfHook
-# doc: https://github.com/ivmai/bdwgc/blob/v8.2.4/doc/README.macros (LARGE_CONFIG)
+, fetchurl
+# doc: https://github.com/ivmai/bdwgc/blob/v8.2.2/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
 , enableStatic ? false
@@ -11,21 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.2.4";
+  version = "8.2.2";
 
-  src = fetchFromGitHub {
-    owner = "ivmai";
-    repo = "bdwgc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-KHijT4BBKfDvTpHpwognN+3ZXoC6JabBTFSYFyOUT9o=";
+  src = fetchurl {
+    urls = [
+      # "https://www.hboehm.info/gc/gc_source/gc-${finalAttrs.version}.tar.gz"
+      "https://github.com/ivmai/bdwgc/releases/download/v${finalAttrs.version}/gc-${finalAttrs.version}.tar.gz"
+    ];
+    sha256 = "sha256-8wEHvLBi4JIKeQ//+lbZUSNIVGhZNkwjoUviZLOINqA=";
   };
 
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
-
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
 
   configureFlags = [
     "--enable-cplusplus"
@@ -42,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   # not fix the problem the test failure will be a reminder to
   # extend the set of versions requiring the workaround).
   makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
-                  finalAttrs.version == "8.2.4")
+                  finalAttrs.version == "8.2.2")
     [
       # do not use /proc primitives to track dirty bits; see:
       # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537

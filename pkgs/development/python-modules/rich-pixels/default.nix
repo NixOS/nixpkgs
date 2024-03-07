@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytestCheckHook
 , syrupy
@@ -21,14 +20,6 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-fbpnHEfBPWLSYhgETqKbdmmzt7Lu/4oKgetjgNvv04c=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-version.patch";
-      url = "https://github.com/darrenburns/rich-pixels/commit/ff1cc3fef789321831f29e9bf282ae6b337eddb2.patch";
-      hash = "sha256-58ZHBNg1RCuOfuE034qF1SbAgoiWMNlSG3c5pCSLUyI=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core

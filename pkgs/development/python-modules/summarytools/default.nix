@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools
 , ipython
 , matplotlib
 , numpy
@@ -13,7 +12,7 @@
 buildPythonPackage rec {
   pname = "summarytools";
   version = "0.2.3";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-wsDf9IXCMQe0cVfQQuRVwMhxkhhUxbPu06yWZPLvgw4=";
   };
-
-  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     ipython

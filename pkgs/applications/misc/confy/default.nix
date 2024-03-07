@@ -1,9 +1,9 @@
-{ lib
-, blueprint-compiler
+{ blueprint-compiler
 , desktop-file-utils
 , fetchFromSourcehut
 , gobject-introspection
 , gtk4
+, lib
 , libadwaita
 , libnotify
 , meson
@@ -14,25 +14,25 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "confy";
-  version = "0.7.1";
+  version = "0.7.0";
 
   src = fetchFromSourcehut {
     owner = "~fabrixxm";
     repo = "confy";
-    rev = finalAttrs.version;
-    hash = "sha256-BXQDnRRt2Kuqc1Gwx6Ba6BoEWhICTCsWWkGlBsStyT8=";
+    rev = version;
+    hash = "sha256-q8WASTNbiBuKb2tPQBmUL9ji60PRAPnYOTYxnUn0MAw=";
   };
 
   nativeBuildInputs = [
     blueprint-compiler
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkg-config
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -50,11 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";
     description = "Conferences schedule viewer";
     homepage = "https://confy.kirgroup.net/";
-    license = licenses.gpl3Plus;
-    mainProgram = "confy";
+    changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${version}";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ michaelgrahamevans ];
   };
-})
+}

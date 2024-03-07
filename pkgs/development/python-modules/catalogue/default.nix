@@ -4,26 +4,21 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
-, setuptools
 , typing-extensions
 , zipp
 }:
 
 buildPythonPackage rec {
   pname = "catalogue";
-  version = "2.0.10";
-  pyproject = true;
+  version = "2.0.8";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T1baqUCRPT8J1YnBkcdOWm1Rdis6njfdU7dDev1s2hU=";
+    hash = "sha256-syXHdlkgi/tq8bDZOxoapBEuG7KaTFztgWdYpyLw44g=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions

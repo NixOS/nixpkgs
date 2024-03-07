@@ -3,28 +3,24 @@
 , pythonOlder
 , fetchFromGitHub
 , pkg-config
-, setuptools
 , igraph
 , texttable
-, cairocffi
-, matplotlib
-, plotly
-, pytestCheckHook
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.4";
+  version = "0.11.3";
 
   disabled = pythonOlder "3.8";
 
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-sR9OqsBxP2DvcYz1dhIP29rrQ56CRKW02oNAXUNttio=";
+    hash = "sha256-Pki0ygcQeuC5E4SwhzGX7oIe9LUSgoBKiXbtcpjL3ng=";
   };
 
   postPatch = ''
@@ -33,7 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    setuptools
   ];
 
   buildInputs = [
@@ -44,25 +39,13 @@ buildPythonPackage rec {
     texttable
   ];
 
-  passthru.optional-dependencies = {
-    cairo = [ cairocffi ];
-    matplotlib = [ matplotlib ];
-    plotly = [ plotly ];
-    plotting = [ cairocffi ];
-  };
-
   # NB: We want to use our igraph, not vendored igraph, but even with
   # pkg-config on the PATH, their custom setup.py still needs to be explicitly
   # told to do it. ~ C.
-  env.IGRAPH_USE_PKG_CONFIG = true;
+  setupPyGlobalFlags = [ "--use-pkg-config" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
-
-  disabledTests = [
-    "testAuthorityScore"
-    "test_labels"
+    unittestCheckHook
   ];
 
   pythonImportsCheck = [ "igraph" ];

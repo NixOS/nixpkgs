@@ -48,12 +48,12 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.2.1";
+  version = "11.2.0";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-g122VD1csugBZ1lYllvpaHf2bWkHu1IZVLWYt4Xerl4=";
+    hash = "sha256-Rq1/qzxctL0L3XfdbT4igxhIGSNby8AbLRF9gbNVlqY=";
   };
 
   # Fix broken paths in a .pc

@@ -42,7 +42,6 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/mschneider82/keylight-control";
     maintainers = with maintainers; [ ];
-    mainProgram = "keylight-control";
   };
 }
 

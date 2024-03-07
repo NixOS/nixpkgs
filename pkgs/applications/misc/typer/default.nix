@@ -23,6 +23,5 @@ buildGoModule {
     homepage = "https://github.com/maaslalani/typer";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "typer";
   };
 }

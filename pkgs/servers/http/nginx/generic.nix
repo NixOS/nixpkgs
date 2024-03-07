@@ -192,7 +192,7 @@ stdenv.mkDerivation {
   passthru = {
     inherit modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-etag-compression nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;

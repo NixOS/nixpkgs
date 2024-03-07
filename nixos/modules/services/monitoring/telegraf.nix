@@ -59,7 +59,6 @@ in {
     in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps;
       serviceConfig = {

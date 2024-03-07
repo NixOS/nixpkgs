@@ -39,10 +39,6 @@ let
     '';
     destination = "/share/gnome-background-properties/nixos.xml";
   };
-
-  budgie-control-center = pkgs.budgie.budgie-control-center.override {
-    enableSshSocket = config.services.openssh.startWhenNeeded;
-  };
 in {
   options = {
     services.xserver.desktopManager.budgie = {
@@ -118,11 +114,13 @@ in {
       [
         # Budgie Desktop.
         budgie.budgie-backgrounds
-        budgie-control-center
+        budgie.budgie-control-center
         (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view
         budgie.budgie-screensaver
-        budgie.budgie-session
+
+        # Required by the Budgie Desktop session.
+        (gnome.gnome-session.override { gnomeShellSupport = false; })
 
         # Required by Budgie Menu.
         gnome-menus
@@ -237,8 +235,8 @@ in {
     services.gvfs.enable = mkDefault true;
 
     # Register packages for DBus.
-    services.dbus.packages = [
-      budgie-control-center
+    services.dbus.packages = with pkgs; [
+      budgie.budgie-control-center
     ];
 
     # Register packages for udev.

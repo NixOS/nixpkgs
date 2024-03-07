@@ -1,23 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, boost
-, cmake
-, fmt_8
-, folly
-, glog
-, gtest
-}:
+{ stdenv, lib, cmake, fetchFromGitHub, glog, folly, fmt_8, boost, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "edencommon";
-  version = "2024.01.22.00";
+  version = "2023.03.06.00";
 
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
     rev = "v${version}";
-    sha256 = "sha256-KY0vXptzOEJLDjHvGd3T5oiCCvggND2bPBzvll+YBo4=";
+    sha256 = "sha256-m54TaxThWe6bUa6Q1t+e99CLFOvut9vq9RSmimTNuaU=";
   };
 
   nativeBuildInputs = [ cmake ];

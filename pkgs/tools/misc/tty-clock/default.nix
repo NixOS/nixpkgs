@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/xorg62/tty-clock";
-    license = licenses.bsd3;
+    license = licenses.free;
     description = "Digital clock in ncurses";
     platforms = platforms.all;
     maintainers = [ maintainers.koral ];

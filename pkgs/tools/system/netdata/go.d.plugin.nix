@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
+{ lib, fetchFromGitHub, buildGo121Module, nixosTests }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "netdata-go-plugins";
-  version = "0.58.1";
+  version = "0.57.2";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "go.d.plugin";
     rev = "v${version}";
-    hash = "sha256-zzHm98jec7MXnzVsrLlYIk+ILA3Ei43853dM1LdFz5c=";
+    hash = "sha256-Qtk1/sQxWAGPHid6tPlwylyHvhxwWTJMT8TwCd/gazk=";
   };
 
-  vendorHash = "sha256-eb+GRFhfWxDkfH4x2VF3ogyT5z4OcIoqHtEVJ1tGsdA=";
+  vendorHash = "sha256-SFXf99cSA8sncAzZqj2eiiJFhyD4TXQipGAeM2Hivak=";
 
   doCheck = false;
 

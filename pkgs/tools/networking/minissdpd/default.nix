@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     downloadPage = "http://miniupnp.free.fr/files/";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    mainProgram = "minissdpd";
   };
 }

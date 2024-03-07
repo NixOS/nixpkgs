@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage rec {
       comment = meta.description;
       genericName = "Remote Desktop";
       categories = [ "Network" ];
-      mimeTypes = [ "x-scheme-handler/rustdesk" ];
     })
   ];
 

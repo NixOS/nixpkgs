@@ -5,7 +5,6 @@
 , ed25519
 , fetchFromGitHub
 , nats-server
-, nkeys
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -14,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.7.2";
-  pyproject = true;
+  version = "2.6.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -23,28 +22,22 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5lvdt1JbOmdts0CYU00bSmv0LsMQsOe//yUgyevBULE=";
+    hash = "sha256-gpQXCihKvuXzCt1WNOd5W7RxxfVAvpaVP6OuHUiAQkw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"--cov=nats", "--cov-report=html"' ""
+  '';
 
   nativeBuildInputs = [
     setuptools
   ];
 
   propagatedBuildInputs = [
+    aiohttp
     ed25519
   ];
-
-  passthru.optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
-    nkeys = [
-      nkeys
-    ];
-    # fast_parse = [
-    #   fast-mail-parser
-    # ];
-  };
 
   nativeCheckInputs = [
     nats-server

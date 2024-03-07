@@ -18,6 +18,5 @@ stdenv.mkDerivation {
     description = "A straightforward command line program to play midi files through the ALSA sequencer";
     maintainers = with maintainers; [ lheckemann ];
     license = licenses.gpl2;
-    mainProgram = "pmidi";
   };
 }

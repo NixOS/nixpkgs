@@ -1,21 +1,21 @@
 { lib
-, buildGo122Module
+, buildGo121Module
 , fetchFromGitHub
 , installShellFiles
 }:
 
-buildGo122Module rec {
+buildGo121Module rec {
   pname = "timoni";
-  version = "0.20.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
     rev = "v${version}";
-    hash = "sha256-zQawfzwQNQvtta7lIOtePGI67Y4iXzEBGqd5YiOKAVY=";
+    hash = "sha256-KhDig31BGMmKVrLVFcTXNKjsyAUTb6KEX5PJV2rkMgM=";
   };
 
-  vendorHash = "sha256-xQgSABaWY5FWHh2kcBB36fm3povFNpU18PjD4J6M4QM=";
+  vendorHash = "sha256-3RbWHLQLLh/omGttY2wWv2nsuuTE8ALAqgQaiJY/EjI=";
 
   subPackages = [ "cmd/timoni" ];
   nativeBuildInputs = [ installShellFiles ];

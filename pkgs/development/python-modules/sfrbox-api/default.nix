@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "sfrbox-api";
-  version = "0.0.9";
-  pyproject = true;
+  version = "0.0.8";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
-    repo = "sfrbox-api";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rMfX9vA8IuWxXvVs4WYNHO6neeoie/3gABwhXyJoAF8=";
+    hash = "sha256-yvVoWBupHRbMoXmun/pj0bPpujWKfH1SknEhvgIsPzk=";
   };
 
   postPatch = ''
@@ -36,22 +36,17 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    click
     defusedxml
     httpx
     pydantic
   ];
 
-  passthru.optional-dependencies = {
-    cli = [
-      click
-    ];
-  };
-
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     respx
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ];
 
   pythonImportsCheck = [
     "sfrbox_api"

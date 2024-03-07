@@ -23,7 +23,7 @@
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
-, rutabagaSupport ? openGLSupport && !toolsOnly && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx, rutabaga_gfx
+, rutabagaSupport ? openGLSupport && !toolsOnly, rutabaga_gfx
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? !toolsOnly, libiscsi
 , smbdSupport ? false, samba
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils";
-  version = "8.2.2";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hHNGwbgsGlSyw49u29hVSe3rF0MLfU09oSYg4pYrxPM=";
+    hash = "sha256-vwDS+hIBDfiwrekzcd71jmMssypr/cX1oP+Oah+xvzI=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -134,6 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
+    })
+    # Fix display issues when using virtio-gpu on 8.2.0 https://gitlab.com/qemu-project/qemu/-/issues/2051
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/9d5b42beb6978dc6219d5dc029c9d453c6b8d503.diff";
+      sha256 = "sha256-NknkH/gFTsMcdq8/ArwM4+qrpU+ZHd+xVMFUuMJTtf0=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;

@@ -1,8 +1,6 @@
 { buildPythonApplication
 , lib
-, stdenv
 , fetchFromGitHub
-, pkg-config
 , setuptools
 , setuptools-rust
 , rustPlatform
@@ -11,37 +9,30 @@
 , breezy
 , dulwich
 , jinja2
-, libiconv
-, openssl
 , pyyaml
 , ruamel-yaml
 }:
 
 buildPythonApplication rec {
   pname = "silver-platter";
-  version = "0.5.20";
+  version = "0.5.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "silver-platter";
     rev = version;
-    hash = "sha256-k+C4jrC4FO/yy9Eb6x4lv1zyyp/eGkpMcDqZ0KoxfBs=";
+    hash = "sha256-QkTT9UcJuGDAwpp/CtXobPvfTYQzFakBR72MhF//Bpo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-+EUj6iBnHF4zlOAAfaHy5V/z6CCD/LFksBClE4FaHHc=";
+    hash = "sha256-QLnKu9D23FVp1jCSuxN3odPZ1ToAZ6i/FNS8BkmNuQw=";
   };
 
   propagatedBuildInputs = [ setuptools breezy dulwich jinja2 pyyaml ruamel-yaml ];
-  nativeBuildInputs = [ setuptools-rust rustPlatform.cargoSetupHook cargo rustc ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
-
-  pythonImportsCheck = [ "silver_platter" ];
+  nativeBuildInputs = [ setuptools-rust rustPlatform.cargoSetupHook cargo rustc ];
 
   meta = with lib; {
     description = "Automate the creation of merge proposals for scriptable changes";

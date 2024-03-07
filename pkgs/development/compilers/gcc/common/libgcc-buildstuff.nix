@@ -48,6 +48,6 @@ in
   # https://www.openwall.com/lists/musl/2022/11/09/3
   #
   # 'parsed.cpu.family' won't be correct for every platform.
-+ lib.optionalString (stdenv.targetPlatform.isLoongArch64 || stdenv.targetPlatform.isS390 || stdenv.targetPlatform.isAlpha) ''
++ lib.optionalString (stdenv.targetPlatform.isLoongArch64 || stdenv.targetPlatform.isS390) ''
   touch libgcc/config/${stdenv.targetPlatform.parsed.cpu.family}/crt{i,n}.S
 ''

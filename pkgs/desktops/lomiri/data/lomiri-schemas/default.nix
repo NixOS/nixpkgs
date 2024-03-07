@@ -8,18 +8,17 @@
 , glib
 , intltool
 , pkg-config
-, validatePkgConfig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-schemas";
-  version = "0.1.4";
+  version = "0.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-schemas";
     rev = finalAttrs.version;
-    hash = "sha256-Pnn/Qh5EYEqmP8QFsZcSCpDL36++aeUUok3t9a1/1n0=";
+    hash = "sha256-FrDUFqdD0KW2VG2pTA6LMb6/9PdNtQUlYTEo1vnW6QQ=";
   };
 
   strictDeps = true;
@@ -29,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib # glib-compile-schemas
     pkg-config
     intltool
-    validatePkgConfig
   ];
 
   buildInputs = [
@@ -38,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-    (lib.cmakeBool "GSETTINGS_COMPILE" true)
+    "-DGSETTINGS_LOCALINSTALL=ON"
+    "-DGSETTINGS_COMPILE=ON"
   ];
 
   passthru = {
@@ -50,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "GSettings / AccountsService schema files for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-schemas";
-    changelog = "https://gitlab.com/ubports/development/core/lomiri-schemas/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.lgpl21Plus;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

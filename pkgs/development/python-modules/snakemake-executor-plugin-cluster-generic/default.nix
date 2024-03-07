@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-executor-plugin-cluster-generic";
-  version = "1.0.8";
+  version = "1.0.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+aGd+E+VQb7MflsiUgFR98AyeetZxbc4gdvU1JWJNcM=";
+    hash = "sha256-1W/8jf+R1798cu3sWI0LTSyVawtmFfwlAqRHwfmIAzU=";
   };
 
   nativeBuildInputs = [

@@ -69,7 +69,6 @@ let
     cutter = callPackage ./cutter.nix { };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
-    mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { };

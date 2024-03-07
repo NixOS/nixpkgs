@@ -29,7 +29,6 @@ profiles/graphical.section.md
 profiles/hardened.section.md
 profiles/headless.section.md
 profiles/installation-device.section.md
-profiles/perlless.section.md
 profiles/minimal.section.md
 profiles/qemu-guest.section.md
 ```

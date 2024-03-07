@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.devhell ];
-    mainProgram = "mp3val";
   };
 }

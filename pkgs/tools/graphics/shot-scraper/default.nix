@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shot-scraper";
-  version = "1.4";
+  version = "1.3";
   format = "setuptools";
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hPzOwvTQAFs9IQRkq/uw+pHv5ZP5XU3Zn605SL8udPA=";
+    hash = "sha256-IC6S6LnavwxTcGEDX7lSHF1GZKBH1QcHQy17LGx4Ago=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

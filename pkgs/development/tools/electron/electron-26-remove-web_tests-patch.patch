@@ -1,0 +1,73 @@
+diff --git a/electron/patches/chromium/cherry-pick-80106e31c7ea.patch b/electron/patches/chromium/cherry-pick-80106e31c7ea.patch
+index 3f8ae7d1b2..af8859a1a5 100644
+--- a/electron/patches/chromium/cherry-pick-80106e31c7ea.patch
++++ b/electron/patches/chromium/cherry-pick-80106e31c7ea.patch
+@@ -361,68 +361,3 @@ index 3d562fa22bd84dc438abfe9fa883eff6f5846b1b..c64c7fb1b15f7f523b37671abca2ab50
+    auto* resolver = MakeGarbageCollected<ScriptPromiseResolver>(
+        script_state, exception_state.GetContext());
+    ScriptPromise promise = resolver->Promise();
+-diff --git a/third_party/blink/web_tests/external/wpt/webusb/usbDevice.https.any.js b/third_party/blink/web_tests/external/wpt/webusb/usbDevice.https.any.js
+-index b1b0c133ce160a314ea392514ac5b38e4cac136d..804af2afb9db3a0d5fafbeb26aed64f89badb1b3 100644
+---- a/third_party/blink/web_tests/external/wpt/webusb/usbDevice.https.any.js
+-+++ b/third_party/blink/web_tests/external/wpt/webusb/usbDevice.https.any.js
+-@@ -1247,3 +1247,60 @@ usb_test((t) => {
+-         .then(() => promise_rejects_dom(t, 'NotFoundError', device.reset()));
+-   });
+- }, 'resetDevice rejects when called on a disconnected device');
+-+
+-+usb_test(async (t) => {
+-+  const PACKET_COUNT = 4;
+-+  const PACKET_LENGTH = 8;
+-+  const {device, fakeDevice} = await getFakeDevice();
+-+  await device.open();
+-+  await device.selectConfiguration(2);
+-+  await device.claimInterface(0);
+-+  await device.selectAlternateInterface(0, 1);
+-+  const buffer = new Uint8Array(PACKET_COUNT * PACKET_LENGTH);
+-+  const packetLengths = new Array(PACKET_COUNT).fill(PACKET_LENGTH);
+-+  packetLengths[0] = PACKET_LENGTH - 1;
+-+  await promise_rejects_dom(
+-+      t, 'DataError', device.isochronousTransferOut(1, buffer, packetLengths));
+-+}, 'isochronousTransferOut rejects when buffer size exceeds packet lengths');
+-+
+-+usb_test(async (t) => {
+-+  const PACKET_COUNT = 4;
+-+  const PACKET_LENGTH = 8;
+-+  const {device, fakeDevice} = await getFakeDevice();
+-+  await device.open();
+-+  await device.selectConfiguration(2);
+-+  await device.claimInterface(0);
+-+  await device.selectAlternateInterface(0, 1);
+-+  const buffer = new Uint8Array(PACKET_COUNT * PACKET_LENGTH);
+-+  const packetLengths = new Array(PACKET_COUNT).fill(PACKET_LENGTH);
+-+  packetLengths[0] = PACKET_LENGTH + 1;
+-+  await promise_rejects_dom(
+-+      t, 'DataError', device.isochronousTransferOut(1, buffer, packetLengths));
+-+}, 'isochronousTransferOut rejects when packet lengths exceed buffer size');
+-+
+-+usb_test(async (t) => {
+-+  const PACKET_COUNT = 2;
+-+  const PACKET_LENGTH = 8;
+-+  const {device, fakeDevice} = await getFakeDevice();
+-+  await device.open();
+-+  await device.selectConfiguration(2);
+-+  await device.claimInterface(0);
+-+  await device.selectAlternateInterface(0, 1);
+-+  const packetLengths = [0xffffffff, 1];
+-+  await promise_rejects_dom(
+-+      t, 'DataError', device.isochronousTransferIn(1, packetLengths));
+-+}, 'isochronousTransferIn rejects when packet lengths exceed maximum size');
+-+
+-+usb_test(async (t) => {
+-+  const PACKET_COUNT = 2;
+-+  const PACKET_LENGTH = 8;
+-+  const {device, fakeDevice} = await getFakeDevice();
+-+  await device.open();
+-+  await device.selectConfiguration(2);
+-+  await device.claimInterface(0);
+-+  await device.selectAlternateInterface(0, 1);
+-+  const buffer = new Uint8Array(PACKET_LENGTH * PACKET_COUNT);
+-+  const packetLengths = [0xffffffff, 1];
+-+  await promise_rejects_dom(
+-+      t, 'DataError', device.isochronousTransferOut(1, buffer, packetLengths));
+-+}, 'isochronousTransferOut rejects when packet lengths exceed maximum size');

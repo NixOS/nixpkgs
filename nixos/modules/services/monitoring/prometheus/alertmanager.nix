@@ -174,7 +174,6 @@ in {
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
-        wants    = [ "network-online.target" ];
         after    = [ "network-online.target" ];
         preStart = ''
            ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \

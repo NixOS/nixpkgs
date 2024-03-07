@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     homepage = "https://maxwell.ydns.eu/git/rnhmjoj/fakeroute";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    mainProgram = "fakeroute";
   };
 }

@@ -2,12 +2,6 @@
 
 let
   versionJSON = lib.importJSON ./version.json;
-  ndiPlatform =
-    if stdenv.isAarch64 then "aarch64-rpi4-linux-gnueabi"
-    else if stdenv.isAarch32 then "arm-rpi2-linux-gnueabihf"
-    else if stdenv.isx86_64 then "x86_64-linux-gnu"
-    else if stdenv.isi686 then "i686-linux-gnu"
-    else throw "unsupported platform for NDI SDK";
 in
 stdenv.mkDerivation rec {
   pname = "ndi";
@@ -41,13 +35,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    mv bin/${ndiPlatform} $out/bin
+    mv bin/x86_64-linux-gnu $out/bin
     for i in $out/bin/*; do
-      if [ -L "$i" ]; then continue; fi
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"
     done
     patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" $out/bin/ndi-record
-    mv lib/${ndiPlatform} $out/lib
+    mv lib/x86_64-linux-gnu $out/lib
     for i in $out/lib/*; do
       if [ -L "$i" ]; then continue; fi
       patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" "$i"
@@ -55,6 +48,7 @@ stdenv.mkDerivation rec {
     mv include examples $out/
     mkdir -p $out/share/doc/${pname}-${version}
     mv licenses $out/share/doc/${pname}-${version}/licenses
+    mv logos $out/share/doc/${pname}-${version}/logos
     mv documentation/* $out/share/doc/${pname}-${version}/
   '';
 
@@ -67,9 +61,9 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.py;
 
   meta = with lib; {
-    homepage = "https://ndi.video/ndi-sdk/";
+    homepage = "https://ndi.tv/sdk/";
     description = "NDI Software Developer Kit";
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "armv7l-linux"];
+    platforms = ["x86_64-linux"];
     hydraPlatforms = [];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

@@ -12,16 +12,15 @@
 , pytest-trio
 , pytestCheckHook
 , requests
-, setuptools
 , six
 , trio
 , typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "1.30.0";
+  version = "1.28.0";
   pname = "azure-core";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -29,12 +28,9 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bzp4g+8YRyL2vZlyYu3a+Az+fls+DKqvjbFpVpWJPTU=";
+    extension = "zip";
+    hash = "sha256-6e78Zvwf3lbatvBNTl0SxgdU1an6Sb3P2FNPyW7ZNr0=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     requests
@@ -103,8 +99,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/core/azure-core/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

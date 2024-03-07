@@ -145,12 +145,6 @@ rec {
     in fix g
     ```
 
-    :::{.note}
-    The argument to the given fixed-point function after applying an overlay will *not* refer to its own return value, but rather to the value after evaluating the overlay function.
-
-    The given fixed-point function is called with a separate argument than if it was evaluated with `lib.fix`.
-    :::
-
     :::{.example}
 
     # Extend a fixed-point function with an overlay
@@ -236,6 +230,13 @@ rec {
 
       fix (extends (final: prev: { c = final.a + final.b; }) f)
       => { a = 1; b = 3; c = 4; }
+
+    :::{.note}
+    The argument to the given fixed-point function after applying an overlay will *not* refer to its own return value, but rather to the value after evaluating the overlay function.
+
+    The given fixed-point function is called with a separate argument than if it was evaluated with `lib.fix`.
+    The new argument
+    :::
   */
   extends =
     # The overlay to apply to the fixed-point function

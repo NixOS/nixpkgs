@@ -9,24 +9,19 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.16.3";
-  pyproject = true;
+  version = "2.15.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2JH+cAbbTWEig4qm3krKbgB3urIk7crmhGZq4+MDxF8=";
+    hash = "sha256-SpmTjbARHVU3hkG1I1uY5r12S8jip+JN9wb4uGO98nw=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     google-api-core

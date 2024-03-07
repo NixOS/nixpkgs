@@ -3,14 +3,14 @@
 , darwin
 , callPackage
 , flutter
-, supportedTargetFlutterPlatforms ? [
+, supportedTargetPlatforms ? [
     "universal"
     "web"
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux "linux"
   ++ lib.optional (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin) "android"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "macos" "ios" ]
-, artifactHashes ? flutter.artifactHashes
+, artifactHashes ? (import ./artifacts/hashes.nix).${flutter.version}
 , extraPkgConfigPackages ? [ ]
 , extraLibraries ? [ ]
 , extraIncludes ? [ ]
@@ -44,26 +44,25 @@
 }:
 
 let
-  supportsLinuxDesktopTarget = builtins.elem "linux" supportedTargetFlutterPlatforms;
+  supportsLinuxDesktopTarget = builtins.elem "linux" supportedTargetPlatforms;
 
-  flutterPlatformArtifacts = lib.genAttrs supportedTargetFlutterPlatforms (flutterPlatform:
+  platformArtifacts = lib.genAttrs supportedTargetPlatforms (platform:
     (callPackage ./artifacts/prepare-artifacts.nix {
       src = callPackage ./artifacts/fetch-artifacts.nix {
-        inherit flutterPlatform;
-        systemPlatform = stdenv.hostPlatform.system;
+        inherit platform;
         flutter = callPackage ./wrapper.nix { inherit flutter; };
-        hash = artifactHashes.${flutterPlatform}.${stdenv.hostPlatform.system} or "";
+        hash = artifactHashes.${platform}.${stdenv.hostPlatform.system} or "";
       };
     }));
 
   cacheDir = symlinkJoin rec {
     name = "flutter-cache-dir";
-    paths = builtins.attrValues flutterPlatformArtifacts;
+    paths = builtins.attrValues platformArtifacts;
     postBuild = ''
       mkdir -p "$out/bin/cache"
       ln -s '${flutter}/bin/cache/dart-sdk' "$out/bin/cache"
     '';
-    passthru.flutterPlatform = flutterPlatformArtifacts;
+    passthru.platform = platformArtifacts;
   };
 
   # By default, Flutter stores downloaded files (such as the Pub cache) in the SDK directory.
@@ -128,7 +127,6 @@ in
   passthru = flutter.passthru // {
     inherit (flutter) version;
     unwrapped = flutter;
-    updateScript = ./update/update.py;
     inherit cacheDir;
   };
 

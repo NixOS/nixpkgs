@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.48.0";
-  pyproject = true;
+  version = "0.47.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1NZhNYw+f4Afv+FRGPXM8Iub2bH0W4uRBgWWUoPtrWQ=";
+    hash = "sha256-R747LD1wmn9bcJ6xJu1P5sx5d9YY/lwVjdicKp99mRY=";
   };
 
   nativeBuildInputs = [

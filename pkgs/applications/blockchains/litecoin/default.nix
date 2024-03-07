@@ -26,14 +26,6 @@ mkDerivation rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/boost1770.patch?h=litecoin-qt&id=dc75ad854af123f375b5b683be64aa14573170d7";
       hash = "sha256-PTkYQRA8n5a9yR2AvpzH5natsXT2W6Xjo0ONCPJx78k=";
     })
-
-    # Fix gcc-13 build by adding missing headers:
-    #   https://github.com/litecoin-project/litecoin/pull/929
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/litecoin-project/litecoin/commit/6d1adb19aa79a8e8e140582759515bbd76816aa0.patch";
-      hash = "sha256-1y4Iz2plMw5HMAjl9x50QQpYrYaUd2WKrrAcUnQmlBY=";
-    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

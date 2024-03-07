@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-ruff";
-  version = "2.2.0";
+  version = "2.0.1";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "python-lsp-ruff";
-    hash = "sha256-Z8FAZ/drw9Fr1Uc6V04NezvUItcjti0rKoM1borwUds=";
+    sha256 = "sha256-sgS0wwFuAaaen9b/vpJrpAsUvE2lehfHVaOB/hSol9k=";
   };
 
   postPatch = ''

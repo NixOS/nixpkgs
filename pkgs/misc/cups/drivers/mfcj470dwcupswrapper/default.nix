@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mfcj470dwlpr, makeWrapper, bash }:
+{ lib, stdenv, fetchurl, mfcj470dwlpr, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj470dw-cupswrapper";
@@ -10,27 +10,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [
-    bash # shebang
-  ];
+  buildInputs = [ mfcj470dwlpr ];
 
-  makeFlags = [ "-C" "brcupsconfpt1" "all" ];
-
-  postPatch = ''
+  patchPhase = ''
     WRAPPER=cupswrapper/cupswrappermfcj470dw
 
     substituteInPlace $WRAPPER \
-      --replace-fail /opt "${mfcj470dwlpr}/opt" \
-      --replace-fail /usr "${mfcj470dwlpr}/usr" \
-      --replace-fail /etc "$out/etc"
+    --replace /opt "${mfcj470dwlpr}/opt" \
+    --replace /usr "${mfcj470dwlpr}/usr" \
+    --replace /etc "$out/etc"
 
     substituteInPlace $WRAPPER \
-      --replace-fail "cp " "cp -p "
-  '';
+    --replace "cp " "cp -p "
+    '';
+
+  buildPhase = ''
+    cd brcupsconfpt1
+    make all
+    cd ..
+    '';
 
   installPhase = ''
-    runHook preInstall
-
     TARGETFOLDER=$out/opt/brother/Printers/mfcj470dw/cupswrapper/
     PPDFOLDER=$out/share/cups/model/
     FILTERFOLDER=$out/lib/cups/filter/
@@ -44,9 +44,12 @@ stdenv.mkDerivation rec {
     cp PPD/brother_mfcj470dw_printer_en.ppd $PPDFOLDER
 
     ln -s ${mfcj470dwlpr}/lib/cups/filter/brother_lpdwrapper_mfcj470dw $FILTERFOLDER/
+    '';
 
-    runHook postInstall
-  '';
+  cleanPhase = ''
+    cd brcupsconfpt1
+    make clean
+    '';
 
   meta = {
     homepage = "http://www.brother.com/";

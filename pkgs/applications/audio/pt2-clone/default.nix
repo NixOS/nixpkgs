@@ -6,15 +6,15 @@
 , SDL2
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pt2-clone";
-  version = "1.66.1";
+  version = "1.65.1";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "pt2-clone";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-j7VPC1sj1Q+wL2TBgv06uYLPqym8F57HG1SRvj0Ggeo=";
+    rev = "v${version}";
+    sha256 = "sha256-0bZGiulLeAZ8bR0lj0Bm7te3T3YhxSOBFgMgWADRkIY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -39,6 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
     platforms = platforms.littleEndian;
-    mainProgram = "pt2-clone";
   };
-})
+}
+

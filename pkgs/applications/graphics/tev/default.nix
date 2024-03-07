@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${gnome.zenity}/bin"
   '';
 
-  env.CXXFLAGS = "-include cstdint";
-
   meta = with lib; {
     description = "A high dynamic range (HDR) image comparison tool";
     longDescription = ''

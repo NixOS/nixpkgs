@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A markup language for GTK user interface files";
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ benediktbroich ranfdev ];
+    maintainers = with maintainers; [ benediktbroich paveloom ranfdev ];
     platforms = platforms.unix;
   };
 })

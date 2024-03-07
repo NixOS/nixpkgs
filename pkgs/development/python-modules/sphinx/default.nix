@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -18,6 +19,7 @@
 , pygments
 , requests
 , snowballstemmer
+, sphinxcontrib-apidoc
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
 , sphinxcontrib-htmlhelp
@@ -75,6 +77,9 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
+
+    # extra plugins which are otherwise not found by sphinx-build
+    sphinxcontrib-apidoc
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];

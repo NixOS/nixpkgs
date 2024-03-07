@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "obconf-qt";
-  version = "0.16.4";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-uF90v56BthEts/Jy+a6kH2b1QFHCtft4ZLxyi/K/Vnc=";
+    hash = "sha256-ExBcP+j1uf9Y8f6YfZsqyD6YTx1PriS3w8I6qdqQGeE=";
   };
 
   nativeBuildInputs = [

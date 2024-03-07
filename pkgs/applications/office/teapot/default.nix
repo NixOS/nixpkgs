@@ -73,7 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    mainProgram = "teapot";
   };
 }
 # TODO: patch/fix FLTK building

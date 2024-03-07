@@ -5,7 +5,6 @@
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
-, ftfy
 , httpx
 , netifaces
 , pytest-asyncio
@@ -18,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.11.6";
-  pyproject = true;
+  version = "0.11.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ol-iver";
-    repo = "denonavr";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-VxoRK1qeGrIunsiCzeZJUHxW/sxk+PFpntInL+G/yI8=";
+    hash = "sha256-0+BjakGGnCbmiSHSipRifPkasfP1vvAWGvzyRufpsOk=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     asyncstdlib
     attrs
     defusedxml
-    ftfy
     httpx
     netifaces
   ] ++ lib.optionals (pythonOlder "3.11") [

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.19.2";
+  version = "0.19.1";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "sha256-GhlU02CmglHUzVTqoajXFS1E6WXxXjxRTdiDEDqsH8s=";
+    sha256 = "add96ad3509d4d5c6d8658b005dfd046963cd6bb0a4e1f3e88f726a86c05810f";
   };
 
   passthru.tests = nixosTests.freetube;
@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags $out/share/${pname}/resources/app.asar
   '';
 
   meta = with lib; {

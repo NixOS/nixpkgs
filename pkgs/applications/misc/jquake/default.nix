@@ -64,6 +64,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = platforms.linux;
-    mainProgram = "JQuake";
   };
 }

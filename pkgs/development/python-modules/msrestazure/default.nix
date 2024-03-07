@@ -1,52 +1,41 @@
-{ lib
-, adal
+{ pkgs
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, httpretty
-, mock
+, isPy3k
+, adal
 , msrest
+, mock
+, httpretty
+, pytest
 , pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
-  pname = "msrestazure";
   version = "0.6.4";
-  pyproject = true;
+  format = "setuptools";
+  pname = "msrestazure";
 
-  disabled = pythonOlder "3.7";
-
+  # Pypi tarball doesnt include tests
+  # see https://github.com/Azure/msrestazure-for-python/pull/133
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "msrestazure-for-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZZVZi0v1ucD2g5FpLaNhfNBf6Ab10fUEcEdkY4ELaEY=";
+    rev = "v${version}";
+    sha256 = "0ik81f0n6r27f02gblgm0vl5zl3wc6ijsscihgvc1fgm9f5mk5b5";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ adal msrest ];
 
-  propagatedBuildInputs = [
-    adal
-    msrest
-  ];
+  nativeCheckInputs = [ httpretty mock pytest ]
+                ++ lib.optionals isPy3k [ pytest-asyncio ];
 
-  nativeCheckInputs = [
-    httpretty
-    mock
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  checkPhase = ''
+    pytest tests/
+  '';
 
-  pythonImportsCheck = [
-    "msrest"
-  ];
-
-  meta = with lib; {
-    description = "The runtime library 'msrestazure' for AutoRest generated Python clients";
+  meta = with pkgs.lib; {
+    description = "The runtime library 'msrestazure' for AutoRest generated Python clients.";
     homepage = "https://azure.microsoft.com/en-us/develop/python/";
     license = licenses.mit;
     maintainers = with maintainers; [ bendlas jonringer ];

@@ -150,41 +150,6 @@ in
       "systemd-tmpfiles-setup.service"
     ];
 
-    # Allow systemd-tmpfiles to be restarted by switch-to-configuration. This
-    # service is not pulled into the normal boot process. It only exists for
-    # switch-to-configuration.
-    #
-    # This needs to be a separate unit because it does not execute
-    # systemd-tmpfiles with `--boot` as that is supposed to only be executed
-    # once at boot time.
-    #
-    # Keep this aligned with the upstream `systemd-tmpfiles-setup.service` unit.
-    systemd.services."systemd-tmpfiles-resetup" = {
-      description = "Re-setup tmpfiles on a system that is already running.";
-
-      requiredBy = [ "sysinit-reactivation.target" ];
-      after = [ "local-fs.target" "systemd-sysusers.service" "systemd-journald.service" ];
-      before = [ "sysinit-reactivation.target" "shutdown.target" ];
-      conflicts = [ "shutdown.target" ];
-      restartTriggers = [ config.environment.etc."tmpfiles.d".source ];
-
-      unitConfig.DefaultDependencies = false;
-
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = "systemd-tmpfiles --create --remove --exclude-prefix=/dev";
-        SuccessExitStatus = "DATAERR CANTCREAT";
-        ImportCredential = [
-          "tmpfiles.*"
-          "loging.motd"
-          "login.issue"
-          "network.hosts"
-          "ssh.authorized_keys.root"
-        ];
-      };
-    };
-
     environment.etc = {
       "tmpfiles.d".source = (pkgs.symlinkJoin {
         name = "tmpfiles.d";

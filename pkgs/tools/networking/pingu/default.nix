@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/sheepla/pingu/";
     license = licenses.mit;
     maintainers = with maintainers; [ CactiChameleon9 ];
-    mainProgram = "pingu";
   };
 }

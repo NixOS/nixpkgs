@@ -8,28 +8,22 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
-, setuptools
-, structlog
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "dlms-cosem";
-  version = "24.1.0";
-  pyproject = true;
+  version = "21.3.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pwitab";
-    repo = "dlms-cosem";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-NeTaU8i18Zb39Y2JnYzr87Ozt7Rj074xusL4xaNe0q0=";
+    hash = "sha256-BrLanP+SIRRof15yzqwcDOxw92phbW7m9CfORz0xo7I=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -37,7 +31,6 @@ buildPythonPackage rec {
     cryptography
     pyserial
     python-dateutil
-    structlog
     typing-extensions
   ];
 
@@ -52,7 +45,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to parse DLMS/COSEM";
     homepage = "https://github.com/pwitab/dlms-cosem";
-    changelog = "https://github.com/pwitab/dlms-cosem/blob/${version}/HISTORY.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

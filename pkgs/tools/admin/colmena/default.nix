@@ -43,6 +43,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "colmena";
   };
 }

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "3.2.1";
-  pyproject = true;
+  version = "2.6.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-OO9Rxm7jMfQAyyO5plLDWXbfYmPR2egewOMlrhHQTEw=";
+    hash = "sha256-+lsejepg/iBHo6CRAGNHjiUC7ZgboHbKu7EDmlN3lVk=";
   };
 
   postPatch = ''
@@ -20,12 +20,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace '"pytest-runner",' ""
   '';
 
-  pythonRelaxDeps = [
-    "python-socketio"
-  ];
-
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -39,7 +34,6 @@ python3.pkgs.buildPythonApplication rec {
     pytenable
     python-gvm
     python-owasp-zap-v2-4
-    python-socketio
     pyyaml
     requests
     syslog-rfc5424-formatter

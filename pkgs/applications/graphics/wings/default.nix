@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.tcltk;
     maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
-    mainProgram = "wings";
   };
 }

@@ -74,6 +74,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mkaito ] ++ teams.serokell.members;
     inherit (coreutils.meta) platforms;
-    mainProgram = "acme.sh";
   };
 }

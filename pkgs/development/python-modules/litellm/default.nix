@@ -1,48 +1,32 @@
 { lib
-, aiohttp
-, apscheduler
-, azure-identity
-, azure-keyvault-secrets
-, backoff
 , buildPythonPackage
-, click
-, fastapi
-, fastapi-sso
 , fetchFromGitHub
-, google-cloud-kms
-, gunicorn
-, importlib-metadata
-, jinja2
-, openai
-, orjson
 , poetry-core
-, prisma
-, pyjwt
+, importlib-metadata
+, openai
 , python-dotenv
-, python-multipart
-, pythonOlder
-, pyyaml
-, requests
-, resend
-, rq
-, streamlit
 , tiktoken
 , tokenizers
-, uvicorn
+, click
+, jinja2
+, certifi
+, appdirs
+, aiohttp
+, httpx
 }:
-
+let
+  version = "1.17.0";
+in
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.28.11";
-  pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  format = "pyproject";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6RhJjrPS62f+qoNFQ8qRelZmA8Er9Myz8CF1c/fhBTc=";
+    hash = "sha256-lH0J5QFjSHOkHZWZQaH5ig6d9vWm7Mj02ssVc6lE4Uo=";
   };
 
   postPatch = ''
@@ -54,40 +38,17 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    aiohttp
-    click
-    importlib-metadata
-    jinja2
     openai
-    requests
     python-dotenv
     tiktoken
+    importlib-metadata
     tokenizers
+    click
+    jinja2
+    certifi
+    appdirs
+    aiohttp
   ];
-
-  passthru.optional-dependencies = {
-    proxy = [
-      apscheduler
-      backoff
-      fastapi
-      fastapi-sso
-      gunicorn
-      orjson
-      pyjwt
-      python-multipart
-      pyyaml
-      rq
-      uvicorn
-    ];
-    extra_proxy = [
-      azure-identity
-      azure-keyvault-secrets
-      google-cloud-kms
-      prisma
-      resend
-      streamlit
-    ];
-  };
 
   # the import check phase fails trying to do a network request to openai
   # pythonImportsCheck = [ "litellm" ];
@@ -98,8 +59,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/v${version}";
     license = licenses.mit;
+    changelog = "https://github.com/BerriAI/litellm/releases/tag/v${version}";
     maintainers = with maintainers; [ happysalada ];
   };
 }

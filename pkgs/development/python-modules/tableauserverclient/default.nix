@@ -1,43 +1,25 @@
 { lib
 , buildPythonPackage
-, defusedxml
 , fetchPypi
+, defusedxml
+, requests
 , packaging
+, requests-mock
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
-, setuptools
-, versioneer
 }:
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.30";
-  pyproject = true;
+  version = "0.28";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MIE6V84xLEbgmTwvP6jQC0H//gBnMTO1sowL1HIMbpQ=";
+    hash = "sha256-jSblDVkuuBBZ7GmPKUYji8wtRoPS7g8r6Ye9EpnjvKA=";
   };
-
-  postPatch = ''
-    # Remove vendorized versioneer
-    rm versioneer.py
-  '';
-
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
-
-  nativeBuildInputs = [
-    setuptools
-    pythonRelaxDepsHook
-    versioneer
-  ];
 
   propagatedBuildInputs = [
     defusedxml

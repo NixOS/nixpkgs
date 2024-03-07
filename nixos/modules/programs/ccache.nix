@@ -1,43 +1,35 @@
 { config, pkgs, lib, ... }:
 
+with lib;
 let
   cfg = config.programs.ccache;
 in {
   options.programs.ccache = {
     # host configuration
-    enable = lib.mkEnableOption (lib.mdDoc "CCache");
-    cacheDir = lib.mkOption {
-      type = lib.types.path;
+    enable = mkEnableOption (lib.mdDoc "CCache");
+    cacheDir = mkOption {
+      type = types.path;
       description = lib.mdDoc "CCache directory";
       default = "/var/cache/ccache";
     };
     # target configuration
-    packageNames = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+    packageNames = mkOption {
+      type = types.listOf types.str;
       description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
       default = [];
       example = [ "wxGTK32" "ffmpeg" "libav_all" ];
     };
-    owner = lib.mkOption {
-      type = lib.types.str;
-      default = "root";
-      description = lib.mdDoc "Owner of CCache directory";
-    };
-    group = lib.mkOption {
-      type = lib.types.str;
-      default = "nixbld";
-      description = lib.mdDoc "Group owner of CCache directory";
-    };
   };
 
-  config = lib.mkMerge [
+  config = mkMerge [
     # host configuration
-    (lib.mkIf cfg.enable {
-      systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 ${cfg.owner} ${cfg.group} -" ];
+    (mkIf cfg.enable {
+      systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 root nixbld -" ];
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {
-        inherit (cfg) owner group;
+        owner = "root";
+        group = "nixbld";
         setuid = false;
         setgid = true;
         source = pkgs.writeScript "nix-ccache.pl" ''
@@ -58,9 +50,9 @@ in {
     })
 
     # target configuration
-    (lib.mkIf (cfg.packageNames != []) {
+    (mkIf (cfg.packageNames != []) {
       nixpkgs.overlays = [
-        (self: super: lib.genAttrs cfg.packageNames (pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }))
+        (self: super: genAttrs cfg.packageNames (pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }))
 
         (self: super: {
           ccacheWrapper = super.ccacheWrapper.override {
@@ -73,7 +65,7 @@ in {
                 echo "Directory '$CCACHE_DIR' does not exist"
                 echo "Please create it with:"
                 echo "  sudo mkdir -m0770 '$CCACHE_DIR'"
-                echo "  sudo chown ${cfg.owner}:${cfg.group} '$CCACHE_DIR'"
+                echo "  sudo chown root:nixbld '$CCACHE_DIR'"
                 echo "====="
                 exit 1
               fi

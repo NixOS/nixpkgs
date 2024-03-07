@@ -35,6 +35,5 @@ EOF
     license = licenses.epl10;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
-    mainProgram = "emem";
   };
 }

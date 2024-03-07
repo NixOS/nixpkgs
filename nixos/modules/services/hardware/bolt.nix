@@ -1,13 +1,14 @@
+# Thunderbolt 3 device manager
+
 { config, lib, pkgs, ...}:
 
 with lib;
 
-let
-  cfg = config.services.hardware.bolt;
-in
 {
   options = {
+
     services.hardware.bolt = {
+
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -19,13 +20,15 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "bolt" { };
     };
+
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    services.udev.packages = [ cfg.package ];
-    systemd.packages = [ cfg.package ];
+  config = mkIf config.services.hardware.bolt.enable {
+
+    environment.systemPackages = [ pkgs.bolt ];
+    services.udev.packages = [ pkgs.bolt ];
+    systemd.packages = [ pkgs.bolt ];
+
   };
 }

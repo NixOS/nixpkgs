@@ -2,26 +2,22 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, jax
 , jaxlib
-, keras
+, jax
 , numpy
 , parameterized
 , pillow
-, pytestCheckHook
-, pythonOlder
 , scipy
-, setuptools
 , tensorboard
+, keras
+, pytestCheckHook
 , tensorflow
 }:
 
 buildPythonPackage rec {
   pname = "objax";
   version = "1.8.0";
-  pyproject = true;
-
-  disabled = pythonOlder "3.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -29,10 +25,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   # Avoid propagating the dependency on `jaxlib`, see
   # https://github.com/NixOS/nixpkgs/issues/156767
@@ -70,14 +62,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires internet access for prefetching some weights
     "test_pretrained_keras_weight_0_ResNet50V2"
-    # ModuleNotFoundError: No module named 'tree'
-    "TestResNetV2Pretrained"
   ];
 
   meta = with lib; {
-    description = "Machine learning framework that provides an Object Oriented layer for JAX";
+    description = "Objax is a machine learning framework that provides an Object Oriented layer for JAX.";
     homepage = "https://github.com/google/objax";
-    changelog = "https://github.com/google/objax/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };

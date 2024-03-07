@@ -3,10 +3,11 @@
 with lib;
 
 let
-  inInitrd = config.boot.initrd.supportedFilesystems.f2fs or false;
+  inInitrd = any (fs: fs == "f2fs") config.boot.initrd.supportedFilesystems;
+  fileSystems = filter (x: x.fsType == "f2fs") config.system.build.fileSystems;
 in
 {
-  config = mkIf (config.boot.supportedFilesystems.f2fs or false) {
+  config = mkIf (any (fs: fs == "f2fs") config.boot.supportedFilesystems) {
 
     system.fsPackages = [ pkgs.f2fs-tools ];
 

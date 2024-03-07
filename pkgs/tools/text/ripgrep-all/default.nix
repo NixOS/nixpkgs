@@ -11,44 +11,33 @@
 , zip
 }:
 
-let
-  path = [
-    ffmpeg
-    pandoc
-    poppler_utils
-    ripgrep
-    zip
-  ];
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
-  version = "0.10.6";
+  version = "1.0.0-alpha.5";
 
   src = fetchFromGitHub {
     owner = "phiresky";
-    repo = "ripgrep-all";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-ns7RL7kiG72r07LkF6RzShNg8M2SU6tU5+gXDxzUQHM=";
+    sha256 = "sha256-fpDYzn4oAz6GJQef520+Vi2xI09xFjpWdAlFIAVzcoA=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tokio-tar-0.3.1" = "sha256-oYXcZepnQyZ13zCvECwNqbXUnov3Y6uJlpkHz1zVpRo=";
+      "tokio-tar-0.3.1" = "sha256-gp4UM6YV7P9k1FZxt3eVjyC4cK1zvpMjM5CPt2oVBEA=";
     };
   };
 
   nativeBuildInputs = [ makeWrapper poppler_utils ];
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  nativeCheckInputs = path;
-
   postInstall = ''
     wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath path}"
+    --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep zip ]}"
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/phiresky/ripgrep-all/blob/${src.rev}/CHANGELOG.md";
     description = "Ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, and more";
     longDescription = ''
       Ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, etc.

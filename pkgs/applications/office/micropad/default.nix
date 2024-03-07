@@ -96,6 +96,5 @@ in
       license = licenses.mpl20;
       maintainers = with maintainers; [rhysmdnz];
       inherit (electron.meta) platforms;
-      mainProgram = "micropad";
     };
   }

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "croc";
-  version = "9.6.13";
+  version = "9.6.6";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uuE3Ci0JeWhYMHj5xO5UNZR4BOuaD15nMqFQFZIQCkY=";
+    sha256 = "sha256-y2uS6GlqxfBpLE+6cOl+vLI+KSZ1ThFMjnUNEGplnxM=";
   };
 
-  vendorHash = "sha256-pUWUYV1Ts/dFXUzufIWt5ETRQVpxIGzxRFq9jviG0Fs=";
+  vendorHash = "sha256-JLNbRmiO38M+JQiSJfxFcdFYrEyNBA1KOHnxbjaCusE=";
 
   subPackages = [ "." ];
 
@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/schollz/croc";
     license = licenses.mit;
     maintainers = with maintainers; [ hugoreeves equirosa SuperSandro2000 ];
-    mainProgram = "croc";
   };
 }

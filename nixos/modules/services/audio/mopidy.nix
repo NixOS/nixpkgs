@@ -70,10 +70,9 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.settings."10-mopidy".${cfg.dataDir}.d = {
-      user = "mopidy";
-      group = "mopidy";
-    };
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - mopidy mopidy - -"
+    ];
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];

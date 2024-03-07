@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mct/tcptraceroute";
     license = lib.licenses.gpl2;
     maintainers = [ ];
-    mainProgram = "tcptraceroute";
   };
 }

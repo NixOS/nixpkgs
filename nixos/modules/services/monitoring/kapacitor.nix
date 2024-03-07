@@ -160,9 +160,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kapacitor ];
 
-    systemd.tmpfiles.settings."10-kapacitor".${cfg.dataDir}.d = {
-      inherit (cfg) user group;
-    };
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.kapacitor = {
       description = "Kapacitor Real-Time Stream Processing Engine";

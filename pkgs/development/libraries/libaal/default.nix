@@ -1,13 +1,15 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.7";
+  version = "1.0.6";
   pname = "libaal";
 
   src = fetchurl {
     url = "mirror://sourceforge/reiser4/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fIVohp2PVCaNaQRVJ4zfW8mukiiqM3BgF8Vwu9qrmJE=";
+    sha256 = "176f2sns6iyxv3h9zyirdinjwi05gdak48zqarhib2s38rvm98di";
   };
+
+  patches = [ ./libaal-1.0.6-glibc-2.26.patch ];
 
   preInstall = ''
     substituteInPlace Makefile --replace ./run-ldconfig true
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.namesys.com/";
     description = "Support library for Reiser4";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ mglolenstine ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;
   };
 }

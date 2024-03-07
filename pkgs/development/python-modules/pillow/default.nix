@@ -12,15 +12,15 @@
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "10.2.0";
+  version = "10.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "pillow";
+    pname = "Pillow";
     inherit version;
-    hash = "sha256-6H8LLHgVfhLXaGsn1jwHD9ZdmU6N2ubzKODc9KDNAH4=";
+    hash = "sha256-5r+N5sNu2WyG6jtuHVJzxT9G71GKBiRkzX713Sz5Ljg=";
   };
 
   passthru.tests = {

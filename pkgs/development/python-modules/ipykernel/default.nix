@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.29.2";
+  version = "6.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O63igATj/2JO1Xl0lIEWZwYErF9nbRIzlpPzFCF20/A=";
+    hash = "sha256-acEUA9Jt5p3wIiWRb5FrN+pLmvQX2gqMgn+EMo2I5fM=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767

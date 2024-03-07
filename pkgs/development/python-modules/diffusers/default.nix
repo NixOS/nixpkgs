@@ -21,7 +21,6 @@
 , jax
 , jaxlib
 , jinja2
-, peft
 , protobuf
 , tensorboard
 , torch
@@ -39,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.26.3";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -48,7 +47,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1pIe1OU+vIrHM6KIZtHRMXklBZrugDV+I/OBNQYqvXI=";
+    hash = "sha256-ccWF8hQzPhFY/kqRum2tbanI+cQiT25MmvPZN+hGadc=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +80,6 @@ buildPythonPackage rec {
       accelerate
       datasets
       jinja2
-      peft
       protobuf
       tensorboard
     ];

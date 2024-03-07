@@ -20,21 +20,17 @@
 , librsvg
 , libcanberra-gtk3
 , gtk-mac-integration
-, exiv2
 }:
 
 stdenv.mkDerivation rec {
   pname = "rawtherapee";
-  version = "5.10";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
     rev = version;
-    hash = "sha256-rIwwKNm7l7oPEt95sHyRj4aF3mtnvM4KAu8oVaIMwyE=";
-    # The developpers ask not to use the tarball from Github releases, see
-    # https://www.rawtherapee.com/downloads/5.10/#news-relevant-to-package-maintainers
-    forceFetchGit = true;
+    hash = "sha256-kdctfjss/DHEcaSDPXcmT20wXTwkI8moRX/i/5wT5Hg=";
   };
 
   postPatch = ''
@@ -65,7 +61,6 @@ stdenv.mkDerivation rec {
     libsigcxx
     lensfun
     librsvg
-    exiv2
   ] ++ lib.optionals stdenv.isLinux [
     libcanberra-gtk3
   ] ++ lib.optionals stdenv.isDarwin [
@@ -84,7 +79,6 @@ stdenv.mkDerivation rec {
     "-Wno-deprecated-declarations"
     "-Wno-unused-result"
   ];
-  env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications/RawTherapee.app $out/bin

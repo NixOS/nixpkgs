@@ -5,22 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ghunt";
-  version = "2.1.0";
-  pyproject = true;
+  version = "2.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mxrch";
     repo = "ghunt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UeHVATTyAH3Xdm/NVSUhiicM+tZ4UnLeJsy1jSLK3v8=";
+    hash = "sha256-7awLKX+1fVbufg3++lUUCZg4p07c2yGeefiPFcE1Ij4=";
   };
-
-  pythonRelaxDeps = true;
-
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     alive-progress

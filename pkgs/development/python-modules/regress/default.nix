@@ -1,9 +1,7 @@
 { lib
-, stdenv
 , fetchPypi
 , buildPythonPackage
 , rustPlatform
-, libiconv
 }:
 
 buildPythonPackage rec {
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;

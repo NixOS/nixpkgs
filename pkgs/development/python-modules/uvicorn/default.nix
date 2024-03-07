@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.27.1";
+  version = "0.24.0.post1";
   disabled = pythonOlder "3.8";
 
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-p0iPQE66RJfd811x6cnv7m3yvD/L9v7evBXlaIQSE0M=";
+    hash = "sha256-WMXOmQOTj/yPazPEAuteho4UH9enXcIa1mMDDl2eaIk=";
   };
 
   outputs = [

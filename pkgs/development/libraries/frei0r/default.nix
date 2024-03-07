@@ -1,7 +1,7 @@
 { lib
 , config
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , cairo
 , cmake
 , opencv
@@ -13,13 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
-  version = "2.3.2";
+  version = "1.8.0";
 
-  src = fetchFromGitHub {
-    owner = "dyne";
-    repo = "frei0r";
-    rev = "v${version}";
-    hash = "sha256-shPCCKcmacSB/mqwLU6BPR1p+/9Myg759MMehj9yijI=";
+  src = fetchurl {
+    url = "https://files.dyne.org/frei0r/releases/${pname}-${version}.tar.gz";
+    hash = "sha256-RaKGVcrwVyJ7RCuADKOJnpNJBRXIHiEtIZ/fSnYT9cQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

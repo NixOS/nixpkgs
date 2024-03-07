@@ -47,6 +47,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;
-    mainProgram = "xtuner";
   };
 }

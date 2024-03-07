@@ -3,36 +3,18 @@
 , python3
 }:
 
-
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pydantic = self.pydantic_1;
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.6";
-  pyproject = true;
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
-    repo = "cfripper";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-h/NNTE5u1coyD4owiGjsK6SIuvDq1SQOPW4RM4yJtno=";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-SmD3Dq5LicPRe3lWFsq4zqM/yDZ1LsgRwSUA5/RbN9I=";
   };
 
-  pythonRelaxDeps = [
-    "pluggy"
-  ];
-
-  nativeBuildInputs = with python.pkgs; [
-    pythonRelaxDepsHook
-    setuptools
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     boto3
     cfn-flip
     click
@@ -43,10 +25,17 @@ in python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     moto
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "click~=7.1.1" "click" \
+      --replace "pluggy~=0.13.1" "pluggy" \
+      --replace "pydash~=4.7.6" "pydash"
+  '';
 
   disabledTestPaths = [
     # Tests are failing
@@ -66,7 +55,6 @@ in python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for analysing CloudFormation templates";
     homepage = "https://github.com/Skyscanner/cfripper";
-    changelog = "https://github.com/Skyscanner/cfripper/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

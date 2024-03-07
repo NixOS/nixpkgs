@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools
 , mccabe
 , pycodestyle
 , pyflakes
@@ -11,22 +10,18 @@
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "7.0.0";
+  version = "6.1.0";
 
   disabled = pythonOlder "3.8";
 
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8";
     rev = version;
-    hash = "sha256-2oVvchDhH3cX90RTIquYLyr+rzHxzQgYA4k4ReTxpH8=";
+    hash = "sha256-N8bufkn1CUREHusVc2mQ1YlNr7lrESEZGmlN68bhgbE=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     mccabe
@@ -39,8 +34,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "The modular source code checker: pep8, pyflakes and co";
-    homepage = "https://github.com/PyCQA/flake8";
+    description = "Flake8 is a wrapper around pyflakes, pycodestyle and mccabe.";
+    homepage = "https://github.com/pycqa/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
     mainProgram = "flake8";

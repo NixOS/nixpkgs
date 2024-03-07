@@ -9,7 +9,7 @@ let
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
-      ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
+      ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
   });
 
   # Provides a fake "docker" binary mapping to podman
@@ -82,8 +82,6 @@ in
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        **Deprecated**, please use virtualisation.containers.cdi.dynamic.nvidia.enable instead.
-
         Enable use of NVidia GPUs from within podman containers.
       '';
     };
@@ -152,38 +150,25 @@ in
 
   };
 
-  config =
-    let
-      networkConfig = ({
-        dns_enabled = false;
-        driver = "bridge";
-        id = "0000000000000000000000000000000000000000000000000000000000000000";
-        internal = false;
-        ipam_options = { driver = "host-local"; };
-        ipv6_enabled = false;
-        name = "podman";
-        network_interface = "podman0";
-        subnets = [{ gateway = "10.88.0.1"; subnet = "10.88.0.0/16"; }];
-      } // cfg.defaultNetwork.settings);
-      inherit (networkConfig) dns_enabled network_interface;
-    in
-    lib.mkIf cfg.enable {
-      warnings = lib.optionals cfg.enableNvidia [
-        ''
-          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
-        ''
-      ];
-
+  config = lib.mkIf cfg.enable
+    {
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
       # https://github.com/containers/podman/blob/097cc6eb6dd8e598c0e8676d21267b4edb11e144/docs/tutorials/basic_networking.md#default-network
       environment.etc."containers/networks/podman.json" = lib.mkIf (cfg.defaultNetwork.settings != { }) {
-        source = json.generate "podman.json" networkConfig;
+        source = json.generate "podman.json" ({
+          dns_enabled = false;
+          driver = "bridge";
+          id = "0000000000000000000000000000000000000000000000000000000000000000";
+          internal = false;
+          ipam_options = { driver = "host-local"; };
+          ipv6_enabled = false;
+          name = "podman";
+          network_interface = "podman0";
+          subnets = [{ gateway = "10.88.0.1"; subnet = "10.88.0.0/16"; }];
+        } // cfg.defaultNetwork.settings);
       };
-
-      # containers cannot reach aardvark-dns otherwise
-      networking.firewall.interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
@@ -216,11 +201,9 @@ in
         requires = [ "podman.service" ];
       };
 
-      systemd.services.podman.environment = config.networking.proxy.envVars;
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
 
-      systemd.user.services.podman.environment = config.networking.proxy.envVars;
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
       systemd.timers.podman-prune.timerConfig = lib.mkIf cfg.autoPrune.enable {

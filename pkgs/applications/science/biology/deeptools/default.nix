@@ -1,25 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
-}:
-
-python3.pkgs.buildPythonApplication rec {
-  pname = "deeptools";
+{ lib, python, fetchFromGitHub }:
+with python.pkgs;
+buildPythonApplication rec {
+  pname = "deepTools";
   version = "3.5.4";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
     rev = version;
-    hash = "sha256-A8YdlMptmJyxWW0EYLjXFIWjIO/mttEC7VYdlCe9MaI=";
+    sha256 = "sha256-A8YdlMptmJyxWW0EYLjXFIWjIO/mttEC7VYdlCe9MaI=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  format = "pyproject";
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     numpy
     numpydoc
     scipy
@@ -32,21 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     importlib-metadata
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
-  disabledTestPaths = [
-    # tests trip on `len(sys.argv) == 1`
-    "deeptools/test/test_bigwigAverage.py"
-    "deeptools/test/test_bigwigCompare_and_multiBigwigSummary.py"
-    "deeptools/test/test_heatmapper.py"
-    "deeptools/test/test_multiBamSummary.py"
-  ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     homepage = "https://deeptools.readthedocs.io/en/develop";

@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/jckuester/awsweeper";
     license = licenses.mpl20;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "awsweeper";
   };
 }

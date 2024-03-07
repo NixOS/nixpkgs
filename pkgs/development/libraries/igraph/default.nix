@@ -26,17 +26,21 @@ assert (blas.isILP64 == lapack.isILP64 &&
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.10";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-xFX48qAr0x0iNRns/aGH9UKL0wGJyfccQLdEXUFI/TU=";
+    hash = "sha256-suma1iS9NdJwU/4EQl6qoFyD4bErLSkY+0yxgh3dHkw=";
   };
 
   postPatch = ''
     echo "${finalAttrs.version}" > IGRAPH_VERSION
+  ''
+  # https://github.com/igraph/igraph/issues/2340
+  + lib.optionalString stdenv.isDarwin ''
+    sed -i "/safelocale/d" tests/CMakeLists.txt
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -88,10 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doc "$out/share"
   '';
 
-  postFixup = ''
-    substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
-      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
-  '' + lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 

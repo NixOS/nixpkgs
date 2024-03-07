@@ -39,6 +39,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.DamienCassou ];
     platforms = lib.platforms.all; # GHC can cross-compile
-    mainProgram = "hledger-check-fancyassertions";
   };
 }

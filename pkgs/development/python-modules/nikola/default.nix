@@ -1,12 +1,11 @@
 { lib
-, stdenv
 , aiohttp
 , babel
 , blinker
 , buildPythonPackage
+, python-dateutil
 , docutils
 , doit
-, feedparser
 , fetchPypi
 , freezegun
 , ghp-import
@@ -29,11 +28,10 @@
 , pyphen
 , pyrss2gen
 , pytestCheckHook
-, python-dateutil
 , pythonOlder
 , requests
 , ruamel-yaml
-, setuptools
+, stdenv
 , toml
 , typogrify
 , unidecode
@@ -43,33 +41,24 @@
 
 buildPythonPackage rec {
   pname = "nikola";
-  version = "8.3.0";
-  pyproject = true;
+  version = "8.2.4";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Nikola";
     inherit version;
-    hash = "sha256-VYuhiGLMTHcOZM8/bGZT7Xx5BOHo9gsMPjufYglrBL0=";
+    hash = "sha256-LNVk2zfNwY4CC4qulqfNXwi3mWyFxzWIeMykh6gFOL8=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov nikola --cov-report term-missing" ""
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aiohttp
     babel
     blinker
+    python-dateutil
     docutils
     doit
-    feedparser
     ghp-import
     hsluv
     html5lib
@@ -88,7 +77,6 @@ buildPythonPackage rec {
     pygments
     pyphen
     pyrss2gen
-    python-dateutil
     requests
     ruamel-yaml
     toml
@@ -104,6 +92,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov nikola --cov-report term-missing" ""
+  '';
+
   disabledTests = [
     # AssertionError
     "test_compiling_markdown"
@@ -114,9 +107,7 @@ buildPythonPackage rec {
     "test_format_date_locale_variants"
   ];
 
-  pythonImportsCheck = [
-    "nikola"
-  ];
+  pythonImportsCheck = [ "nikola" ];
 
   meta = with lib; {
     description = "Static website and blog generator";

@@ -17,7 +17,7 @@ in
       { name = "icewm";
         start =
           ''
-            ${pkgs.icewm}/bin/icewm-session &
+            ${pkgs.icewm}/bin/icewm &
             waitPID=$!
           '';
       };

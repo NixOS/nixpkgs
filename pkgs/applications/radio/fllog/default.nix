@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.8";
+  version = "1.2.7";
   pname = "fllog";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-kJLb1ifd8sUOwGgNsIEmlhH29fQLdTfDMjKLrzK7r1I=";
+    sha256 = "sha256-HxToZ+f1IJgDKGPHBeVuS7rRkh3+KfpyoYPBwfyqsC8=";
   };
 
   buildInputs = [
@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dysinger ];
     platforms = lib.platforms.linux;
-    mainProgram = "fllog";
   };
 }

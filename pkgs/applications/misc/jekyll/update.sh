@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bundix zlib libyaml
+#!nix-shell -i bash -p bundix zlib
 
 set -o errexit
 set -o nounset

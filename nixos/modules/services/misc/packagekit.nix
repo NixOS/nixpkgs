@@ -13,7 +13,7 @@ let
     (iniFmt.generate "PackageKit.conf" (recursiveUpdate
       {
         Daemon = {
-          DefaultBackend = "test_nop";
+          DefaultBackend = "nix";
           KeepCache = false;
         };
       }
@@ -35,7 +35,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to test_nop, Nix backend is broken see #177946.")
+    (mkRemovedOptionModule [ "services" "packagekit" "backend" ] "Always set to Nix.")
   ];
 
   options.services.packagekit = {

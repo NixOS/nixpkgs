@@ -31,6 +31,5 @@ buildGoModule rec {
     homepage = "https://github.com/norouter/norouter";
     license = licenses.asl20;
     maintainers = with maintainers; [ blaggacao ];
-    mainProgram = "norouter";
   };
 }

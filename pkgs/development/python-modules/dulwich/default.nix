@@ -11,7 +11,6 @@
 , gnupg
 , gpgme
 , paramiko
-, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , urllib3
@@ -54,7 +53,6 @@ buildPythonPackage rec {
     geventhttpclient
     git
     glibcLocales
-    pytest-xdist
     pytestCheckHook
   ] ++ passthru.optional-dependencies.fastimport
   ++ passthru.optional-dependencies.pgp
@@ -74,8 +72,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # missing test inputs
     "dulwich/contrib/test_swift_smoke.py"
-    # flaky on high core count >4
-    "dulwich/tests/compat/test_client.py"
   ];
 
   pythonImportsCheck = [
@@ -89,7 +85,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
+    changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
     license = with licenses; [ asl20 gpl2Plus ];
     maintainers = with maintainers; [ koral ];
   };

@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "AnyDesk";
-      exec = "anydesk %u";
+      exec = "${placeholder "out"}/bin/anydesk %u";
       icon = "anydesk";
       desktopName = "AnyDesk";
       genericName = description;

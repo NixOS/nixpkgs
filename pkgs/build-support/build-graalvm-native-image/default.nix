@@ -16,13 +16,14 @@
     "-H:Name=${executable}"
     "-march=compatibility"
     "--verbose"
+    "-J-Dsun.stdout.encoding=UTF-8"
+    "-J-Dsun.stderr.encoding=UTF-8"
   ]
   # Extra arguments to be passed to the native-image
 , extraNativeImageBuildArgs ? [ ]
   # XMX size of GraalVM during build
 , graalvmXmx ? "-J-Xmx6g"
 , meta ? { }
-, LC_ALL ? "en_US.UTF-8"
 , ...
 } @ args:
 
@@ -44,16 +45,21 @@ in
 stdenv.mkDerivation ({
   inherit dontUnpack jar;
 
-  env = { inherit LC_ALL; };
-
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales removeReferencesTo ];
 
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
+  # Workaround GraalVM issue where the builder does not have access to the
+  # environment variables since 21.0.0
+  # https://github.com/oracle/graal/pull/6095
+  # https://github.com/oracle/graal/pull/6095
+  # https://github.com/oracle/graal/issues/7502
+  env.NATIVE_IMAGE_DEPRECATED_BUILDER_SANITATION = "true";
+
   buildPhase = args.buildPhase or ''
     runHook preBuild
 
-    native-image -jar "$jar" $(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n) ''${nativeImageBuildArgs[@]}
+    native-image -jar "$jar" ''${nativeImageBuildArgs[@]}
 
     runHook postBuild
   '';

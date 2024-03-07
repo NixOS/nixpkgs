@@ -74,6 +74,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    mainProgram = "tamatool";
   };
 })

@@ -12,14 +12,11 @@ assert enablePrinting -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "xpdf";
-  version = "4.05";
+  version = "4.04";
 
   src = fetchzip {
-    urls = [
-      "https://dl.xpdfreader.com/xpdf-${version}.tar.gz"
-      "https://dl.xpdfreader.com/old/xpdf-${version}.tar.gz"
-    ];
-    hash = "sha256-LBxKSrXTdoulZDjPiyYMaJr63jFHHI+VCgVJx310i/w=";
+    url = "https://dl.xpdfreader.com/xpdf-${version}.tar.gz";
+    hash = "sha256-ujH9KDwFRjPIKwdMg79Mab9BfA2HooY5+2PESUgnGDY=";
   };
 
   # Fix "No known features for CXX compiler", see
@@ -76,6 +73,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
     knownVulnerabilities = [
+      "CVE-2018-7453: loop in PDF objects"
+      "CVE-2018-16369: loop in PDF objects"
       "CVE-2019-9587: loop in PDF objects"
       "CVE-2019-9588: loop in PDF objects"
       "CVE-2019-16088: loop in PDF objects"
@@ -83,10 +82,14 @@ stdenv.mkDerivation rec {
       "CVE-2022-38928"
       "CVE-2022-41842"
       "CVE-2022-41843"
+      "CVE-2022-41844"
       "CVE-2022-43071"
       "CVE-2022-43295"
       "CVE-2022-45586"
       "CVE-2022-45587"
+      "CVE-2023-2662"
+      "CVE-2023-2663"
+      "CVE-2023-2664"
       "CVE-2023-26930"
       "CVE-2023-26931"
       "CVE-2023-26934"

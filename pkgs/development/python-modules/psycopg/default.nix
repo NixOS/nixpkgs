@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -34,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.17";
+  version = "3.1.15";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Paq4Wkvv6d6+fNcvRO/yfj7OWCMygqccKIdfsohHUMM=";
+    hash = "sha256-8M2Rm9AtOvZwZhKGuR96XiOOmllqcWAZJuEmUXxzsRw=";
   };
 
   patches = [
@@ -128,8 +129,8 @@ buildPythonPackage rec {
 
   # Introduce this file necessary for the docs build via environment var
   LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
-    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
+    url = "https://raw.githubusercontent.com/postgres/postgres/REL_14_STABLE/doc/src/sgml/libpq.sgml";
+    hash = "sha256-yn09fR9+7zQni8SvTG7BUmYRD7MK7u2arVAznWz2oAw=";
   };
 
   inherit patches;

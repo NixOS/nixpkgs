@@ -3,7 +3,6 @@
 , fetchurl
 , qmake
 , qtbase
-, qttools
 , qtsvg
 , pkg-config
 , poppler
@@ -25,7 +24,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
-    qttools
     pkg-config
   ];
 
@@ -41,7 +39,6 @@ mkDerivation rec {
   ];
 
   preConfigure = ''
-    lrelease qpdfview.pro
     qmakeFlags+=(*.pro)
   '';
 

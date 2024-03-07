@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "Send ICMP echo probes to network hosts";
     license = licenses.bsd0;
     platforms = platforms.all;
-    mainProgram = "fping";
   };
 }

@@ -13,12 +13,12 @@ let
   mkScript = name: args:
     let self = rec {
       pname = camelToKebab name;
-      version = "unstable-2024-01-11";
+      version = "unstable-2023-12-18";
       src = fetchFromGitHub {
         owner = "occivink";
         repo = "mpv-scripts";
-        rev = "d0390c8e802c2e888ff4a2e1d5e4fb040f855b89";
-        hash = "sha256-pc2aaO7lZaoYMEXv5M0WI7PtmqgkNbdtNiLZZwVzppM=";
+        rev = "f0426bd6b107b1f4b124552dae923b62f58ce3b6";
+        hash = "sha256-oag5lcDoezyNXs5EBr0r0UE3ikeftvbfxSzfbxV1Oy0=";
       };
       passthru.updateScript = unstableGitUpdater {};
 

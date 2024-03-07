@@ -1,5 +1,5 @@
 { stdenv
-, buildGoModule
+, buildGo121Module
 , callPackage
 , fetchFromGitHub
 , lib
@@ -15,17 +15,17 @@
 }:
 
 let
-  version = "2.42.10";
+  version = "2.40.3";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-Uv0iEIFkTdBAi0WDBQHf0ATs4L2FOU4NmiE9p1MHSa0=";
+    hash = "sha256-WqsK6DAYkLs5wBNvkVGarLMm/unBLtipFkl07pR90HI=";
   };
-  goModulesHash = "sha256-PQch046YjYhAmVlNNdgDLWIqFvEpXRgXAYFMwSZmk4w=";
+  goModulesHash = "sha256-IVf1YVnhyEYgZqM31Cv3aBFnPG7v5WW6fCEvlN+sTIE=";
 
   buildZitadelProtocGen = name:
-    buildGoModule {
+    buildGo121Module {
       pname = "protoc-gen-${name}";
       inherit version;
 
@@ -62,7 +62,6 @@ let
       name = "${pname}-buf-generated";
 
       src = zitadelRepo;
-      patches = [ ./console-use-local-protobuf-plugins.patch ];
 
       nativeBuildInputs = nativeBuildInputs ++ [ buf ];
 
@@ -92,10 +91,10 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-3qDVY2CvtY8lZDr+p5i0vV6zZ5KyTtxBLyV7Os9KuIw=";
+    hash = "sha256-xrEF1B4pMoCZs1WO9F6IoqHnSyt5BhPVTIABMWK/q2E=";
   };
 in
-buildGoModule rec {
+buildGo121Module rec {
   name = "zitadel";
   inherit version;
 
@@ -105,11 +104,10 @@ buildGoModule rec {
 
   proxyVendor = true;
   vendorHash = goModulesHash;
-  ldflags = [ "-X 'github.com/zitadel/zitadel/cmd/build.version=${version}'" ];
 
   # Adapted from Makefile in repo, with dependency fetching and protobuf codegen
   # bits removed
-  preBuild = ''
+  buildPhase = ''
     mkdir -p pkg/grpc
     cp -r ${protobufGenerated}/grpc/github.com/zitadel/zitadel/pkg/grpc/* pkg/grpc
     mkdir -p openapi/v2/zitadel
@@ -124,13 +122,12 @@ buildGoModule rec {
     go run internal/api/assets/generator/asset_generator.go -directory=internal/api/assets/generator/ -assets=docs/apis/assets/assets.md
 
     cp -r ${passthru.console}/* internal/api/ui/console/static
+    CGO_ENABLED=0 go build -o zitadel -v -ldflags="-s -w -X 'github.com/zitadel/zitadel/cmd/build.version=${version}'"
   '';
-
-  doCheck = false;
 
   installPhase = ''
     mkdir -p $out/bin
-    install -Dm755 $GOPATH/bin/zitadel $out/bin/
+    install -Dm755 zitadel $out/bin/
   '';
 
   passthru = {

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , cmake
 , pkg-config
@@ -27,15 +26,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix gcc-13 build failure
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/OpenBoardView/OpenBoardView/commit/b03d0f69ec1611f5eb93f81291b4ba8c58cd29eb.patch";
-      hash = "sha256-Hp7KgzulPC2bPtRsd6HJrTLu0oVoQEoBHl0p2DcOLQw=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook ];
   buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.isDarwin [

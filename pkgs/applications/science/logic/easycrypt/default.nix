@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easycrypt";
-  version = "2024.01";
+  version = "2023.09";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "r${version}";
-    hash = "sha256-UYDoVMi5TtYxgPq5nkp/oRtcMcHl2p7KAG8ptvuOL5U=";
+    hash = "sha256-9xavU9jRisZekPqC87EyiLXtZCGu/9QeGzq6BJGt1+Y=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -22,12 +22,11 @@ stdenv.mkDerivation rec {
     batteries
     dune-build-info
     inifiles
-    why3
     yojson
     zarith
   ];
 
-  propagatedBuildInputs = [ why3.out ];
+  propagatedBuildInputs = [ why3 ];
 
   strictDeps = true;
 

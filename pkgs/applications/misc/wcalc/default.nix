@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     homepage = "https://w-calc.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.all;
-    mainProgram = "wcalc";
   };
 }

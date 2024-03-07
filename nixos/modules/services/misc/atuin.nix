@@ -8,8 +8,6 @@ in
     services.atuin = {
       enable = lib.mkEnableOption (mdDoc "Atuin server for shell history sync");
 
-      package = lib.mkPackageOption pkgs "atuin" { };
-
       openRegistration = mkOption {
         type = types.bool;
         default = false;
@@ -54,13 +52,10 @@ in
         };
 
         uri = mkOption {
-          type = types.nullOr types.str;
+          type = types.str;
           default = "postgresql:///atuin?host=/run/postgresql";
           example = "postgresql://atuin@localhost:5432/atuin";
-          description = mdDoc ''
-            URI to the database.
-            Can be set to null in which case ATUIN_DB_URI should be set through an EnvironmentFile
-          '';
+          description = mdDoc "URI to the database";
         };
       };
     };
@@ -90,7 +85,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} server start";
+        ExecStart = "${pkgs.atuin}/bin/atuin server start";
         RuntimeDirectory = "atuin";
         RuntimeDirectoryMode = "0700";
         DynamicUser = true;
@@ -137,10 +132,9 @@ in
         ATUIN_PORT = toString cfg.port;
         ATUIN_MAX_HISTORY_LENGTH = toString cfg.maxHistoryLength;
         ATUIN_OPEN_REGISTRATION = lib.boolToString cfg.openRegistration;
+        ATUIN_DB_URI = cfg.database.uri;
         ATUIN_PATH = cfg.path;
         ATUIN_CONFIG_DIR = "/run/atuin"; # required to start, but not used as configuration is via environment variables
-      } // lib.optionalAttrs (cfg.database.uri != null) {
-        ATUIN_DB_URI = cfg.database.uri;
       };
     };
 

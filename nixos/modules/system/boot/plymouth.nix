@@ -186,8 +186,6 @@ in
           # module might come from a theme
           cp ${themesEnv}/lib/plymouth/*.so $out
           cp ${plymouth}/lib/plymouth/renderers/*.so $out/renderers
-          # useless in the initrd, and adds several megabytes to the closure
-          rm $out/renderers/x11.so
         '';
         "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
           # Check if the actual requested theme is here
@@ -273,8 +271,6 @@ in
       # module might come from a theme
       cp ${themesEnv}/lib/plymouth/*.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
-      # useless in the initrd, and adds several megabytes to the closure
-      rm $out/lib/plymouth/renderers/x11.so
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth

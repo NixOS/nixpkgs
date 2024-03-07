@@ -20,6 +20,5 @@ buildGoModule rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ skykanin ];
     homepage = "https://github.com/GeertJohan/gomatrix";
-    mainProgram = "gomatrix";
   };
 }

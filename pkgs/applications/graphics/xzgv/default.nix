@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.linux;
-    mainProgram = "xzgv";
   };
 }

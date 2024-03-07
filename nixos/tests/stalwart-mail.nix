@@ -42,22 +42,20 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
         session.auth.mechanisms = [ "PLAIN" ];
         session.auth.directory = "in-memory";
-        storage.directory = "in-memory";  # shared with imap
+        jmap.directory = "in-memory";  # shared with imap
 
         session.rcpt.directory = "in-memory";
         queue.outbound.next-hop = [ "local" ];
 
         directory."in-memory" = {
           type = "memory";
-          principals = [
+          users = [
             {
-              type = "individual";
               name = "alice";
               secret = "foobar";
               email = [ "alice@${domain}" ];
             }
             {
-              type = "individual";
               name = "bob";
               secret = "foobar";
               email = [ "bob@${domain}" ];
@@ -92,9 +90,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
         with IMAP4('localhost') as imap:
             imap.starttls()
-            status, [caps] = imap.login('bob', 'foobar')
-            assert status == 'OK'
-            imap.select()
+            imap.login('bob', 'foobar')
+            imap.select('"All Mail"')
             status, [ref] = imap.search(None, 'ALL')
             assert status == 'OK'
             [msgId] = ref.split()

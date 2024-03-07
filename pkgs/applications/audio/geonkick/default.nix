@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];
-    mainProgram = "geonkick";
   };
 }

@@ -52,10 +52,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  configurePhase = generated.configure + ''
-    swiftpmMakeMutable swift-tools-support-core
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${./patches/force-unwrap-file-handles.patch}
-  '';
+  configurePhase = generated.configure;
 
   # TODO: Tests depend on indexstore-db being provided by an existing Swift
   # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.

@@ -6,23 +6,21 @@
 , SDL_image
 , SDL_ttf
 , gtk3
-, wrapGAppsHook
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "hivelytracker";
   version = "1.9";
 
   src = fetchFromGitHub {
     owner = "pete-gordon";
     repo = "hivelytracker";
-    rev = "V${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
+    rev = "V${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "148p320sd8phcpmj4m85ns5zly2dawbp8kgx9ryjfdk24pa88xg6";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -64,8 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.bsd3;
     platforms = platforms.all;
-    mainProgram = "hivelytracker";
     maintainers = with maintainers; [ fgaz ];
     broken = stdenv.isDarwin; # TODO: try to use xcbuild
   };
-})
+}

@@ -80,6 +80,5 @@ resholve.mkDerivation {
     changelog = "https://github.com/sakai135/wsl-vpnkit/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ terlar ];
-    mainProgram = "wsl-vpnkit";
   };
 }

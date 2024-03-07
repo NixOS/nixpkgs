@@ -1,34 +1,23 @@
-{ lib
-, stdenv
+{ lib, stdenv
 , fetchzip
 , callPackage
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+stdenv.mkDerivation rec {
   pname = "qbe";
-  version = "1.2";
+  version = "1.1";
 
   src = fetchzip {
-    url = "https://c9x.me/compile/release/qbe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UgtJnZF/YtD54OBy9HzGRAEHx5tC9Wo2YcUidGwrv+s=";
+    url = "https://c9x.me/compile/release/qbe-${version}.tar.xz";
+    sha256 = "sha256-yFZ3cpp7eLjf7ythKFTY1YEJYyfeg2en4/D8+9oM1B4=";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
-  patches = [
-    # Use "${TMPDIR:-/tmp}" instead of the latter directly
-    # see <https://lists.sr.ht/~mpu/qbe/patches/49613>
-    ./001-dont-hardcode-tmp.patch
-  ];
-
   passthru = {
-    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
+    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
   };
 
   meta = with lib; {
@@ -37,6 +26,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     license = licenses.mit;
     platforms = platforms.all;
-    mainProgram = "qbe";
   };
-})
+}

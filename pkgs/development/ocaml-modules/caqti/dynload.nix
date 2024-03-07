@@ -4,6 +4,8 @@ buildDunePackage {
   pname = "caqti-dynload";
   inherit (caqti) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ caqti findlib ];
 
   meta = caqti.meta // {

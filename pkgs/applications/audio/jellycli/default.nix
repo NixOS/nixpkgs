@@ -30,6 +30,5 @@ buildGoModule rec {
     homepage = "https://github.com/tryffel/jellycli";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ oxzi ];
-    mainProgram = "jellycli";
   };
 }

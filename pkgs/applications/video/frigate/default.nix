@@ -3,20 +3,20 @@
 , python3
 , fetchFromGitHub
 , fetchurl
-, fetchpatch2
+, fetchpatch
 , frigate
 , nixosTests
 }:
 
 let
-  version = "0.13.2";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     #name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NVT7yaJkVA7b7GL0S0fHjNneBzhjCru56qY1Q4sTVcE=";
+    hash = "sha256-kNvYsHoObi6b9KT/LYhTGK4uJ/uAHnYhyoQkiXIA/s8=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -35,7 +35,7 @@ let
   };
 
   # Tensorflow Lite models
-  # https://github.com/blakeblackshear/frigate/blob/v0.13.0/docker/main/Dockerfile#L96-L97
+  # https://github.com/blakeblackshear/frigate/blob/v0.12.0/Dockerfile#L88-L91
   tflite_cpu_model = fetchurl {
     url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess.tflite";
     hash = "sha256-kLszpjTgQZFMwYGapd+ZgY5sOWxNLblSwP16nP/Eck8=";
@@ -46,7 +46,7 @@ let
   };
 
   # OpenVino models
-  # https://github.com/blakeblackshear/frigate/blob/v0.13.0/docker/main/Dockerfile#L101
+  # https://github.com/blakeblackshear/frigate/blob/v0.12.0/Dockerfile#L92-L95
   openvino_model = fetchurl {
     url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
@@ -60,10 +60,10 @@ python.pkgs.buildPythonApplication rec {
   inherit src;
 
   patches = [
-    (fetchpatch2 {
-      name = "frigate-flask3.0-compat.patch";
-      url = "https://github.com/blakeblackshear/frigate/commit/56bdacc1c661eff8a323e033520e75e2ba0a3842.patch";
-      hash = "sha256-s/goUJxIbjq/woCEOEZECdcZoJDoWc1eM63sd60cxeY=";
+    (fetchpatch {
+      # numpy 1.24 compat
+      url = "https://github.com/blakeblackshear/frigate/commit/cb73d0cd392990448811c7212bc5f09be411fc69.patch";
+      hash = "sha256-Spt7eRosmTN8zyJ2uVme5HPVy2TKgBtvbQ6tp6PaNac=";
     })
   ];
 
@@ -75,60 +75,58 @@ python.pkgs.buildPythonApplication rec {
 
     substituteInPlace frigate/const.py \
       --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate" \
-      --replace "/config" "/var/lib/frigate" \
-      --replace "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
+      --replace "/tmp/cache" "/var/cache/frigate/"
 
     substituteInPlace frigate/http.py \
-      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
+      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
+      --replace "/tmp/cache/" "/var/cache/frigate/"
 
     substituteInPlace frigate/output.py \
       --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
 
+    substituteInPlace frigate/record.py \
+      --replace "/tmp/cache" "/var/cache/frigate"
+
     substituteInPlace frigate/detectors/detector_config.py \
       --replace "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
-    substituteInPlace frigate/config.py \
-      --replace "/cpu_model.tflite" "${tflite_cpu_model}" \
+    substituteInPlace frigate/detectors/plugins/edgetpu_tfl.py \
       --replace "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
-    substituteInPlace frigate/test/test_config.py \
-      --replace "(MODEL_CACHE_DIR" "('/build/model_cache'" \
-      --replace "/config/model_cache" "/build/model_cache"
+    substituteInPlace frigate/detectors/plugins/cpu_tfl.py \
+      --replace "/cpu_model.tflite" "${tflite_cpu_model}"
+
+    substituteInPlace frigate/ffmpeg_presets.py --replace \
+       '"-timeout" if os.path.exists(BTBN_PATH) else "-stimeout"' \
+       '"-timeout"'
   '';
 
   dontBuild = true;
 
   propagatedBuildInputs = with python.pkgs; [
-    # docker/main/requirements.txt
+    # requirements.txt
     scikit-build
-    # docker/main/requirements-wheel.txt
+    # requirements-wheel.txt
     click
     flask
     imutils
-    markupsafe
     matplotlib
-    norfair
     numpy
-    onvif-zeep
     opencv4
     openvino
     paho-mqtt
     peewee
     peewee-migrate
     psutil
-    py3nvml
     pydantic
-    pytz
     pyyaml
     requests
-    ruamel-yaml
     scipy
     setproctitle
     tensorflow
     tzlocal
-    unidecode
     ws4py
+    zeroconf
   ];
 
   installPhase = ''
@@ -146,13 +144,8 @@ python.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  nativeCheckInputs = with python.pkgs; [
+  checkInputs = with python.pkgs; [
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Test needs network access
-    "test_plus_labelmap"
   ];
 
   passthru = {

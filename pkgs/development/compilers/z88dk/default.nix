@@ -1,14 +1,14 @@
-{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, gmp, m4, uthash, which, pkg-config }:
+{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
 
 stdenv.mkDerivation rec {
   pname = "z88dk";
-  version = "2.3";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo = "z88dk";
     rev = "v${version}";
-    sha256 = "sha256-CHTORgK6FYIO6n+cvTUX4huY2Ek5FuHrs40QN5NZX44=";
+    sha256 = "sha256-vf/hEmcl6R3nsc66G6eETNeW0SV/odk14XIpEPPAbKo=";
     fetchSubmodules = true;
   };
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     "git_count=0"
   ];
 
-  nativeBuildInputs = [ which makeWrapper unzip pkg-config ];
-  buildInputs = [ libxml2 m4 uthash gmp ];
+  nativeBuildInputs = [ which makeWrapper unzip ];
+  buildInputs = [ libxml2 m4 uthash ];
 
   preInstall = ''
     mkdir -p $out/{bin,share}

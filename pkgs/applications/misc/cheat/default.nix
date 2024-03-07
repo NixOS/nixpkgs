@@ -30,6 +30,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ mic92 ];
     license = with licenses; [ gpl3 mit ];
     inherit (src.meta) homepage;
-    mainProgram = "cheat";
   };
 }

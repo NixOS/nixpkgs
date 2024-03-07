@@ -8,6 +8,7 @@
 , glib
 , gnome
 , gnome-desktop
+, gnome-menus
 , graphene
 , gst_all_1
 , gtk-doc
@@ -31,20 +32,19 @@
 , sassc
 , upower
 , vala
-, xfce
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.1";
+  version = "10.8.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-H+J/zFUjiXbr5ynDkkjrRsEbyO4LPOhqe8DdG60ikRw=";
+    hash = "sha256-K5XUYcFjDJCHhjb/UTO206+UT6lI2P7X1v3SqlYbwPM=";
   };
 
   patches = [
@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     budgie-screensaver
     glib
     gnome-desktop
+    gnome-menus
+    gnome.gnome-bluetooth_1_0
     gnome.gnome-settings-daemon
     gnome.mutter
     gnome.zenity
@@ -87,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     sassc
     upower
-    xfce.libxfce4windowing
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base

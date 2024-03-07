@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytraccar";
-  version = "2.1.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = "pytraccar";
     rev = "refs/tags/${version}";
-    hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
+    hash = "sha256-7QGgI+DDYbordBx4LbtCvPWyEh6ur2RrSKMuDlwRlTo=";
   };
 
   nativeBuildInputs = [

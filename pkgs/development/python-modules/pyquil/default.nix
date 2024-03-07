@@ -5,24 +5,22 @@
 , importlib-metadata
 , ipython
 , lark
-, matplotlib-inline
-, nest-asyncio
 , networkx
 , numpy
-, packaging
 , poetry-core
-, pydantic
 , pytest-asyncio
+, pytest-freezegun
+, pytest-httpx
 , pytest-mock
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
 , pythonRelaxDepsHook
-, qcs-sdk-python
+, qcs-api-client
 , respx
+, retry
 , rpcq
 , scipy
-, syrupy
 , tenacity
 , types-deprecated
 , types-python-dateutil
@@ -31,21 +29,17 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.6.1";
-  pyproject = true;
+  version = "4.2.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rigetti";
-    repo = "pyquil";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-93dHujgGEh9/r9epAiUcUCiFCG7SFTAFoQbjQwwKhN0=";
+    hash = "sha256-LLhTK/wE42mBTrqjBbnkPvqSG8gP7Vx/3ip66hKHxXc=";
   };
-
-  patches = [
-    ./pydantic.patch
-  ];
 
   pythonRelaxDeps = [
     "lark"
@@ -60,12 +54,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     deprecated
     lark
-    matplotlib-inline
     networkx
     numpy
-    packaging
-    pydantic
-    qcs-sdk-python
+    qcs-api-client
+    retry
     rpcq
     scipy
     tenacity
@@ -77,17 +69,44 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nest-asyncio
-    pytest-asyncio
-    pytest-mock
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+    pytest-freezegun
+    pytest-httpx
+    pytest-mock
     respx
-    syrupy
     ipython
   ];
 
-  # tests hang
-  doCheck = false;
+  disabledTestPaths = [
+    # Tests require network access
+    "test/e2e/"
+    "test/unit/test_api.py"
+    "test/unit/test_engagement_manager.py"
+    "test/unit/test_operator_estimation.py"
+    "test/unit/test_wavefunction_simulator.py"
+    "test/unit/test_compatibility_v2_operator_estimation.py"
+    "test/unit/test_compatibility_v2_quantum_computer.py"
+    "test/unit/test_compatibility_v2_qvm.py"
+    "test/unit/test_quantum_computer.py"
+    "test/unit/test_qvm.py"
+    "test/unit/test_reference_wavefunction.py"
+    # Out-dated
+    "test/unit/test_qpu_client.py"
+    "test/unit/test_qvm_client.py"
+    "test/unit/test_reference_density.py"
+  ];
+
+  disabledTests = [
+    "test_compile_with_quilt_calibrations"
+    "test_sets_timeout_on_requests"
+    # sensitive to lark parser output
+    "test_memory_commands"
+    "test_classical"
+  ];
 
   pythonImportsCheck = [
     "pyquil"

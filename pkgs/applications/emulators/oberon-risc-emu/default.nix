@@ -23,6 +23,5 @@ stdenv.mkDerivation {
     description = "Emulator for the Oberon RISC machine";
     license     = licenses.isc;
     maintainers = with maintainers; [ siraben ];
-    mainProgram = "risc";
   };
 }

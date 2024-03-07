@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jc ];
     platforms = with platforms; linux;
-    mainProgram = "pinentry-bemenu";
   };
 }

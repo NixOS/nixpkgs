@@ -40,9 +40,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ cmake pkg-config ];
 
-  # Fix missing include
-  patches = [./gcc13.patch];
-
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
 

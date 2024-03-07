@@ -19,19 +19,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-rc.16";
+  version = "1.1.0-rc.15";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    hash = "sha256-UavMiHe91UrCZfmG6b+yhdduOY2eKMev9HSjtXq1Tlw=";
+    # Latest 1.1.0-rc.15 tip
+    rev = "a5ca8018e3a636dbb0a79b3fd869db059d92979d";
+    hash = "sha256-PFGoeGn7a/lVR6rOmOKA3ydAoo3/+9RlkwBAKS22Psg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "base64urlsafedata-0.1.3" = "sha256-lYVWuKqF4c34LpFmTIg98TEXIlP4dHen0XkGnLOiq8Q=";
+      "base64urlsafedata-0.1.3" = "sha256-D+u4CIhx8BNyx+EH1efS4mrinjeSJopWCteSaMY1kh8=";
       "sshkeys-0.3.2" = "sha256-CNG9HW8kSwezAdIYW+CR5rqFfmuso4R0+m4OpIyXbSM=";
     };
   };

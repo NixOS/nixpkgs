@@ -1,33 +1,32 @@
 { lib
 , stdenv
-, aocd-example-parser
-, beautifulsoup4
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
-, pebble
-, pook
-, pytest-freezegun
+, requests
+, pytestCheckHook
+, tzlocal
 , pytest-mock
+, pytest-freezegun
 , pytest-raisin
 , pytest-socket
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
 , requests-mock
+, pook
+, numpy
 , rich
-, setuptools
+, pebble
+, python-dateutil
 , termcolor
-, tzlocal
+, beautifulsoup4
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aocd";
   version = "2.0.1";
-  pyproject = true;
+  format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
@@ -36,30 +35,15 @@ buildPythonPackage rec {
     hash = "sha256-YZvcR97uHceloqwoP+azaBmj3GLusYNbItLIaeJ3QD0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [
-    aocd-example-parser
-    beautifulsoup4
-    pebble
     python-dateutil
     requests
-    rich # for example parser aoce. must either be here or checkInputs
     termcolor
+    beautifulsoup4
+    pebble
     tzlocal
-  ];
-
-  nativeCheckInputs = [
-    numpy
-    pook
-    pytest-freezegun
-    pytest-mock
-    pytest-raisin
-    pytest-socket
-    pytestCheckHook
-    requests-mock
+    setuptools
+    rich # for example parser aoce. must either be here or checkInputs
   ];
 
   # Too many failing tests
@@ -99,6 +83,20 @@ buildPythonPackage rec {
     "test_submit_puts_level1_by_default"
     "test_cannot_submit_same_bad_answer_twice"
     "test_submit_float_warns"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+    pytest-freezegun
+    pytest-raisin
+    pytest-socket
+  ];
+
+  checkInputs = [
+    pook
+    numpy
+    requests-mock
   ];
 
   pythonImportsCheck = [

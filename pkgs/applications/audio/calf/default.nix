@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
-    mainProgram = "calfjackhost";
   };
 }

@@ -1,21 +1,20 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "keep-sorted";
-  version = "0.4.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
     rev = "v${version}";
-    hash = "sha256-yeps+StUA7h12Jlra24Po2zNzjIPNIQCOyWLazC8F8M=";
+    hash = "sha256-bCV0XcwgyFTORl/RF1BS7vsM8DmU0Wox3OIEuZBrwSs=";
   };
 
-  vendorHash = "sha256-tPTWWvr+/8wWUnQcI4Ycco2OEgA2mDQt15OGCk/ZjrQ=";
+  vendorHash = "sha256-yaeqfMAJbQdrqZ0uco6Y5T8vnfjlBJY4IQuGzZg3Ubw=";
 
   CGO_ENABLED = "0";
 
@@ -25,8 +24,6 @@ buildGoModule rec {
     # Test tries to find files using git
     "-skip=^TestGoldens"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/google/keep-sorted/releases/tag/v${version}";

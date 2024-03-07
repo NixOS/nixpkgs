@@ -61,7 +61,6 @@ let
       libqtxdg
       libsysstat
       liblxqt
-      qtxdg-tools
 
       ### CORE 1
       libfm-qt

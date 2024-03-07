@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       eadwu
     ];
-    mainProgram = "clight";
   };
 }

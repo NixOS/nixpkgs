@@ -2,20 +2,20 @@
 , buildDunePackage
 , fetchurl
 , alcotest
-, domain_shims
 , mdx
 , thread-table
 }:
 
 buildDunePackage rec {
   pname = "domain-local-await";
-  version = "1.0.1";
+  version = "1.0.0";
 
   minimalOCamlVersion = "5.0";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    hash = "sha256-KVIRPFPLB+KwVLLchs5yk5Ex2rggfI8xOa2yPmTN+m8=";
+    sha256 = "KijWg0iTSdqbwkXd5Kr3/94urDm8QFSY2lMmGjUuxGo=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,6 @@ buildDunePackage rec {
 
   checkInputs = [
     alcotest
-    domain_shims
     mdx
   ];
 

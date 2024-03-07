@@ -10,7 +10,7 @@ let
     sparkCluster = testSparkCluster args;
     passthru.override = args': testsForPackage (args // args');
   };
-  testSparkCluster = { sparkPackage, ... }: pkgs.testers.nixosTest ({
+  testSparkCluster = { sparkPackage, ... }: pkgs.nixosTest ({
     name = "spark";
 
     nodes = {

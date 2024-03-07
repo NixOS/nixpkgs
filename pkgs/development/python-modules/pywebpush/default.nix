@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "1.14.1";
+  version = "1.14.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+I1+K/XofGFt+wS4yVwRkjjFEWWbAvc17nfMFoQoVe4=";
+    hash = "sha256-bDbhZ5JoIZ5pO6lA2yvyVMJAygJmTeECtyaa/DxUVzE=";
   };
 
   propagatedBuildInputs = [

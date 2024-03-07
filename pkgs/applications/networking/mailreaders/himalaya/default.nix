@@ -3,41 +3,52 @@
 , fetchFromGitHub
 , stdenv
 , pkg-config
-, AppKit
-, Cocoa
-, Security
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
 , notmuch
 , gpgme
-, buildNoDefaultFeatures ? false
-, buildFeatures ? []
+, withMaildir ? true
+, withImap ? true
+, withNotmuch ? false
+, withSendmail ? true
+, withSmtp ? true
+, withPgpCommands ? false
+, withPgpGpg ? false
+, withPgpNative ? false
 }:
 
 rustPlatform.buildRustPackage rec {
-  inherit buildNoDefaultFeatures buildFeatures;
-
   pname = "himalaya";
-  version = "1.0.0-beta.3";
+  version = "1.0.0-beta";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B7eswDq4tKyg881i3pLd6h+HsObK0c2dQnYuvPAGJHk=";
+    hash = "sha256-39XYtxmo/12hkCS7zVIQi3UbLzaIKH1OwfdDB/ghU98=";
   };
 
-  cargoSha256 = "jOzuCXsrtXp8dmJTBqrEq4nog6smEPbdsFAy+ruPtY8=";
+  cargoSha256 = "HIDmBPrcOcK2coTaD4v8ntIZrv2SwTa8vUTG8Ky4RhM=";
 
   nativeBuildInputs = [ ]
-    ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) pkg-config
+    ++ lib.optional withPgpGpg pkg-config
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Security ]
-    ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch
-    ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) gpgme;
+    ++ lib.optional withNotmuch notmuch
+    ++ lib.optional withPgpGpg gpgme;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ ]
+    ++ lib.optional withMaildir "maildir"
+    ++ lib.optional withImap "imap"
+    ++ lib.optional withNotmuch "notmuch"
+    ++ lib.optional withSmtp "smtp"
+    ++ lib.optional withSendmail "sendmail"
+    ++ lib.optional withPgpCommands "pgp-commands"
+    ++ lib.optional withPgpGpg "pgp-gpg"
+    ++ lib.optional withPgpNative "pgp-native";
 
   postInstall = lib.optionalString installManPages ''
     mkdir -p $out/man

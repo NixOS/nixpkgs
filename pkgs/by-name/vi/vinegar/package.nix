@@ -8,42 +8,37 @@
 , xorg
 , wayland
 , vulkan-headers
-, wine64Packages
+, wineWowPackages
 , fetchpatch
 }:
 let
   # wine-staging doesn't support overrideAttrs for now
-  wine = wine64Packages.staging.overrideDerivation (oldAttrs: {
+  wine = wineWowPackages.stagingFull.overrideDerivation (oldAttrs: {
     patches =
-      (oldAttrs.patches or [])
+      (oldAttrs.patches or [ ])
       ++ [
         # upstream issue: https://bugs.winehq.org/show_bug.cgi?id=55604
         # Here are the currently applied patches for Roblox to run under WINE:
         (fetchpatch {
-          name = "vinegar-wine-segregrevert.patch";
-          url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/e24cb9dfa996bcfeaa46504c0375660fe271148d/patches/wine/segregrevert.patch";
-          hash = "sha256-+3Nld81nG3GufI4jAF6yrWfkJmsSCOku39rx0Hov29c=";
-        })
-        (fetchpatch {
-          name = "vinegar-wine-mouselock.patch";
-          url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/e24cb9dfa996bcfeaa46504c0375660fe271148d/patches/wine/mouselock.patch";
-          hash = "sha256-0AGA4AQbxTL5BGVbm072moav7xVA3zpotYqM8pcEDa4=";
+          name = "vinegar-wine-segrevert.patch";
+          url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/8fc153c492542a522d6cc2dff7d1af0e030a529a/patches/wine/temp.patch";
+          hash = "sha256-AnEBBhB8leKP0xCSr6UsQK7CN0NDbwqhe326tJ9dDjc=";
         })
       ];
   });
 in
 buildGoModule rec {
   pname = "vinegar";
-  version = "1.7.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     rev = "v${version}";
-    hash = "sha256-aKL+4jw/uMbbvLRCBHstCTrcQ1PTYSCwMNgXTvSvMeY=";
+    hash = "sha256-TebRAqMPrXSSKg05iX3Y/S0uACePOR/QNnNcOOMw+Xk=";
   };
 
-  vendorHash = "sha256-OaMfWecOPQh6quXjYkZLyBDHZ9TINSA7Ue/Y0sz5ZYY=";
+  vendorHash = "sha256-Ex6PRd3rD2jbLXlY36koNvZF3P+gAZTE9hExIfOw9CE=";
 
   nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
   buildInputs = [ libGL libxkbcommon xorg.libX11 xorg.libXcursor xorg.libXfixes wayland vulkan-headers wine ];

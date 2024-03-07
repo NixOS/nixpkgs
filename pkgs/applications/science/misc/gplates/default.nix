@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, mkDerivation
+, fetchurl
 , cmake
 , doxygen
 , graphviz
@@ -11,13 +12,11 @@
 , gmp
 , libGL
 , libGLU
-, libSM
 , mpfr
 , proj
 , python3
 , qtxmlpatterns
 , qwt
-, wrapQtAppsHook
 }:
 
 let
@@ -31,22 +30,24 @@ let
   cgal = cgal_5.override {
     boost = boost';
   };
-in stdenv.mkDerivation (finalAttrs: {
+in mkDerivation rec {
   pname = "gplates";
-  version = "2.4";
+  version = "2.3.0";
 
-  src = fetchFromGitHub {
-    owner = "GPlates";
-    repo = "GPlates";
-    rev = "GPlates-${finalAttrs.version}";
-    hash = "sha256-BRvrqczGguE2z44ZboxeJxgWEA+t02XkzvU+yF4ki6s=";
+  src = fetchurl {
+    name = "gplates_${version}_src.tar.bz2";
+    url = "https://www.earthbyte.org/download/8421/?uid=b89bb31428";
+    sha256 = "0lrcmcxc924ixddii8cyglqlwwxvk7f00g4yzbss5i3fgcbh8n96";
   };
+
+  patches = [
+    ./boost-placeholders.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
-    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -57,7 +58,6 @@ in stdenv.mkDerivation (finalAttrs: {
     gmp
     libGL
     libGLU
-    libSM
     mpfr
     proj
     python
@@ -70,6 +70,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gplates.org";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # FIX: this check: https://github.com/GPlates/GPlates/blob/gplates/cmake/modules/Config_h.cmake#L72
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gplates.x86_64-darwin
   };
-})
+}

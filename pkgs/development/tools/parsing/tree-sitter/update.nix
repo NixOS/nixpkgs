@@ -108,10 +108,6 @@ let
       orga = "wilfred";
       repo = "tree-sitter-elisp";
     };
-    "tree-sitter-just" = {
-      orga = "IndianBoy42";
-      repo = "tree-sitter-just";
-    };
     "tree-sitter-nix" = {
       orga = "cstrahan";
       repo = "tree-sitter-nix";
@@ -404,10 +400,6 @@ let
     "tree-sitter-wgsl" = {
       orga = "szebniok";
       repo = "tree-sitter-wgsl";
-    };
-    "tree-sitter-templ" = {
-      orga = "vrischmann";
-      repo = "tree-sitter-templ";
     };
   };
 

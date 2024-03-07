@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.ecl20;
-    mainProgram = "vue";
+    license = lib.licenses.free; # Apache License fork, actually
   };
 }

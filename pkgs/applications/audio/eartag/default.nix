@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.0";
+  version = "0.5.1";
   format = "other";
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-MfffIqxfelwP+9wsFvQfEIMkav7j5LJEHjLPOsuYdtQ=";
+    hash = "sha256-tHBEz4sZsWOxDkdUd/3zMta8vOhuzv4G01dtjKBX/D0=";
   };
 
   postPatch = ''
@@ -77,7 +77,6 @@ python3Packages.buildPythonApplication rec {
     # since ICU license is a modified version of MIT and to prevent it from
     # being incorrectly identified as unfree software.
     license = licenses.mit;
-    mainProgram = "eartag";
     maintainers = with maintainers; [ foo-dogsquared ];
   };
 }

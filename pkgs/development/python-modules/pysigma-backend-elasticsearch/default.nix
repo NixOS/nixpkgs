@@ -10,8 +10,8 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-elasticsearch";
-  version = "1.0.12";
-  pyproject = true;
+  version = "1.0.9";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -19,12 +19,12 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ibCwTZymgd+VuE4UXbYxUyIbzlpfIdc2zE8Nz/vhBGQ=";
+    hash = "sha256-OZaUKEEvgEIukEcAHB9ci/XWCU+h1CvQTU3gwWBOBkY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
+      --replace " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
   '';
 
   nativeBuildInputs = [

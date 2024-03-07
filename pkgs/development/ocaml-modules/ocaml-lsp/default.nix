@@ -8,9 +8,8 @@
 , dot-merlin-reader
 , spawn
 , ocamlc-loc
+, odoc-parser
 , merlin-lib
-, astring
-, camlp-streams
 }:
 
 buildDunePackage rec {
@@ -22,7 +21,7 @@ buildDunePackage rec {
   ++ lib.optional (lib.versionAtLeast version "1.9") spawn
   ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ]
   ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
-  ++ lib.optionals (lib.versionAtLeast version "1.17.0") [ astring camlp-streams merlin-lib ];
+  ++ lib.optional (lib.versionAtLeast version "1.16.2") [ odoc-parser merlin-lib ];
 
   nativeBuildInputs = [ makeWrapper ];
 

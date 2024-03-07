@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , bison
 , libevent
@@ -11,7 +10,6 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
 , withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
-, withSixel ? true
 }:
 
 let
@@ -27,7 +25,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.4";
+  version = "3.3a";
 
   outputs = [ "out" "man" ];
 
@@ -35,13 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tmux";
     repo = "tmux";
     rev = finalAttrs.version;
-    hash = "sha256-RX3RZ0Mcyda7C7im1r4QgUxTnp95nfpGgQ2HRxr0s64=";
+    sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
   };
 
-  patches = [(fetchpatch {
-    url = "https://github.com/tmux/tmux/commit/2d1afa0e62a24aa7c53ce4fb6f1e35e29d01a904.diff";
-    hash = "sha256-mDt5wy570qrUc0clGa3GhZFTKgL0sfnQcWJEJBKAbKs=";
-  })];
+  patches = [
+    ./CVE-2022-47016.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -60,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
-  ++ lib.optionals withSixel [ "--enable-sixel" ]
   ++ lib.optionals withUtempter [ "--enable-utempter" ]
   ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
 

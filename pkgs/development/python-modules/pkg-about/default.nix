@@ -7,26 +7,26 @@
 , setuptools
 , packaging
 , tomli
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "1.1.5";
+  version = "1.0.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pkg_about";
+    inherit version;
     extension = "zip";
-    hash = "sha256-B5u+iJuqHtv4BlGhdWqYxBfS89/S01OXmLyDOQraHfo=";
+    hash = "sha256-mb43XbKypgilagXLW33kP8wXxioNsfLtl6AEnOI1WlA=";
   };
 
   # tox is listed in build requirements but not actually used to build
   # keeping it as a requirement breaks the build unnecessarily
   postPatch = ''
-    sed -i "/requires/s/, 'tox>=[^']*'//" pyproject.toml
+    sed  -i "/requires/s/, 'tox>=3.25.1'//"  pyproject.toml
   '';
 
   nativeBuildInputs = [
@@ -42,9 +42,8 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "pkg_about"

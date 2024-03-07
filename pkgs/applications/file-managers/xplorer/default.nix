@@ -90,6 +90,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://xplorer.space";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "xplorer";
   };
 }

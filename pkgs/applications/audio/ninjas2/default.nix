@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 ];
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
-    mainProgram = "ninjas2";
   };
 }

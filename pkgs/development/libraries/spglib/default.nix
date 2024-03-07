@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spglib";
-  version = "2.3.1"; # N.B: if you change this, please update: pythonPackages.spglib
+  version = "2.2.0"; # N.B: if you change this, please update: pythonPackages.spglib
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "spglib";
     rev = "v${version}";
-    hash = "sha256-MOre1LGf7Li+tAqtzpuEvAX6q/P0ueDlMXhhmtiE+jw=";
+    hash = "sha256-VaTW7n7DTeYBr/PrxPhfzfx/gLxzJikw5aL1tEbMtbs=";
   };
 
   nativeBuildInputs = [ cmake gfortran gtest ];

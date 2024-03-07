@@ -17,6 +17,6 @@ stdenv.mkDerivation {
   meta = {
     description = "udev rules for TECK keyboards";
     inherit (teck-programmer.meta) license;
-    maintainers = [ lib.maintainers.bbjubjub ];
+    maintainers = [ lib.maintainers.lourkeur ];
   };
 }

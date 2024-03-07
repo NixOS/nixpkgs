@@ -2,16 +2,16 @@
 
 maven.buildMavenPackage rec {
   pname = "keycloak-metrics-spi";
-  version = "5.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "aerogear";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iagXbsKsU4vNP9eg05bwXEo67iij3N2FF0BW50MjRGE=";
+    hash = "sha256-pacmx5w1VVWz3HmHO6sc2friNUpzo4zyJI1/TQgCXlc=";
   };
 
-  mvnHash = "sha256-+ySBrQ9yQ5ZxuVUh/mnHNEmugru3n8x5VR/RYEDCLAo=";
+  mvnHash = "sha256-RjERY434UL9z/gNZFV+wMTITCmTPGanwu61L8sEGaKY=";
 
   installPhase = ''
     runHook preInstall

@@ -1,15 +1,11 @@
-# PipeWire service.
+# pipewire service.
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
   json = pkgs.formats.json {};
-  mapToFiles = location: config: concatMapAttrs (name: value: { "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value; }) config;
-  extraConfigPkgFromFiles = locations: filesSet: pkgs.runCommand "pipewire-extra-config" { } ''
-    mkdir -p ${lib.concatMapStringsSep " " (l: "$out/share/pipewire/${l}.conf.d") locations}
-    ${lib.concatMapStringsSep ";" ({name, value}: "ln -s ${value} $out/${name}") (lib.attrsToList filesSet)}
-  '';
+  mapToFiles = location: config: concatMapAttrs (name: value: { "pipewire/${location}.conf.d/${name}.conf".source = json.generate "${name}" value;}) config;
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
                            && pkgs.stdenv.isx86_64
@@ -23,48 +19,13 @@ let
     mkdir -p "$out/lib"
     ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
-
-  configPackages = cfg.configPackages;
-
-  extraConfigPkg = extraConfigPkgFromFiles
-    [ "pipewire" "client" "client-rt" "jack" "pipewire-pulse" ]
-    (
-      mapToFiles "pipewire" cfg.extraConfig.pipewire
-      // mapToFiles "client" cfg.extraConfig.client
-      // mapToFiles "client-rt" cfg.extraConfig.client-rt
-      // mapToFiles "jack" cfg.extraConfig.jack
-      // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse
-    );
-
-  configs = pkgs.buildEnv {
-    name = "pipewire-configs";
-    paths = configPackages
-      ++ [ extraConfigPkg ]
-      ++ lib.optionals cfg.wireplumber.enable cfg.wireplumber.configPackages;
-    pathsToLink = [ "/share/pipewire" ];
-  };
-
-  requiredLv2Packages = lib.flatten
-    (
-      lib.concatMap
-      (p:
-        lib.attrByPath ["passthru" "requiredLv2Packages"] [] p
-      )
-      configPackages
-    );
-
-  lv2Plugins = pkgs.buildEnv {
-    name = "pipewire-lv2-plugins";
-    paths = cfg.extraLv2Packages ++ requiredLv2Packages;
-    pathsToLink = [ "/lib/lv2" ];
-  };
 in {
   meta.maintainers = teams.freedesktop.members ++ [ lib.maintainers.k900 ];
 
   ###### interface
   options = {
     services.pipewire = {
-      enable = mkEnableOption (lib.mdDoc "PipeWire service");
+      enable = mkEnableOption (lib.mdDoc "pipewire service");
 
       package = mkPackageOption pkgs "pipewire" { };
 
@@ -72,7 +33,7 @@ in {
         default = true;
         type = types.bool;
         description = lib.mdDoc ''
-          Automatically run PipeWire when connections are made to the PipeWire socket.
+          Automatically run pipewire when connections are made to the pipewire socket.
         '';
       };
 
@@ -239,34 +200,6 @@ in {
           '';
         };
       };
-
-      configPackages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = [];
-        description = lib.mdDoc ''
-          List of packages that provide PipeWire configuration, in the form of
-          `share/pipewire/*/*.conf` files.
-
-          LV2 dependencies will be picked up from config packages automatically
-          via `passthru.requiredLv2Packages`.
-        '';
-      };
-
-      extraLv2Packages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
-        default = [];
-        example = lib.literalExpression "[ pkgs.lsp-plugins ]";
-        description = lib.mdDoc ''
-          List of packages that provide LV2 plugins in `lib/lv2` that should
-          be made available to PipeWire for [filter chains][wiki-filter-chain].
-
-          Config packages have their required LV2 plugins added automatically,
-          so they don't need to be specified here. Config packages need to set
-          `passthru.requiredLv2Packages` for this to work.
-
-          [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
-        '';
-      };
     };
   };
 
@@ -297,18 +230,6 @@ in {
         assertion = (cfg.alsa.enable || cfg.pulse.enable) -> cfg.audio.enable;
         message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Set `services.pipewire.audio.enable` to true.";
       }
-      {
-        assertion = builtins.length
-          (builtins.attrNames
-            (
-              lib.filterAttrs
-                (name: value:
-                  lib.hasPrefix "pipewire/" name || name == "pipewire"
-                )
-                config.environment.etc
-            )) == 1;
-        message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported in 24.05. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";
-      }
     ];
 
     environment.systemPackages = [ cfg.package ]
@@ -327,9 +248,6 @@ in {
     systemd.services.pipewire.enable = cfg.systemWide;
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
     systemd.user.services.pipewire.enable = !cfg.systemWide;
-
-    systemd.services.pipewire.environment.LV2_PATH = lib.mkIf cfg.systemWide "${lv2Plugins}/lib/lv2";
-    systemd.user.services.pipewire.environment.LV2_PATH = lib.mkIf (!cfg.systemWide) "${lv2Plugins}/lib/lv2";
 
     # Mask pw-pulse if it's not wanted
     systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable;
@@ -365,8 +283,12 @@ in {
       "alsa/conf.d/99-pipewire-default.conf" = mkIf cfg.alsa.enable {
         source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
       };
-      pipewire.source = "${configs}/share/pipewire";
-    };
+    }
+    // mapToFiles "pipewire" cfg.extraConfig.pipewire
+    // mapToFiles "client" cfg.extraConfig.client
+    // mapToFiles "client-rt" cfg.extraConfig.client-rt
+    // mapToFiles "jack" cfg.extraConfig.jack
+    // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse;
 
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.mkIf cfg.jack.enable [ "${cfg.package.jack}/lib" ];
@@ -379,7 +301,7 @@ in {
           "audio"
           "video"
         ] ++ lib.optional config.security.rtkit.enable "rtkit";
-        description = "PipeWire system service user";
+        description = "Pipewire system service user";
         isSystemUser = true;
         home = "/var/lib/pipewire";
         createHome = true;

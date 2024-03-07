@@ -4,24 +4,19 @@
 , google-api-core
 , pythonOlder
 , protobuf
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.2.0";
-  pyproject = true;
+  version = "0.1.16";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pbQkMSwISwK2+Ywev7avKBMvwB5dcZgX+kmeeMh+BLc=";
+    hash = "sha256-+L5Rre6LHpSlc+yzdQpMLSvURLHd412apDes5zwzdgc=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     google-api-core

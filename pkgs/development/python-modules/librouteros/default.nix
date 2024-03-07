@@ -1,29 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest-xdist
+, isPy3k
 , pytestCheckHook
-, pythonOlder
-, setuptools
+, pytest-xdist
 }:
 
 buildPythonPackage rec {
   pname = "librouteros";
   version = "3.2.1";
-  pyproject = true;
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "luqasz";
-    repo = "librouteros";
-    rev = "refs/tags/${version}";
+    repo = pname;
+    rev = version;
     hash = "sha256-VwpZ1RY6Sul7xvWY7ZoOxZ7KgbRmKRwcVdF9e2b3f6Q=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   nativeCheckInputs = [
     pytest-xdist
@@ -38,8 +33,6 @@ buildPythonPackage rec {
     "test_add_then_remove"
     "test_add_then_update"
     "test_generator_ditch"
-    # AttributeError: 'called_once_with' is not a valid assertion
-    "test_rawCmd_calls_writeSentence"
   ];
 
   pythonImportsCheck = [
@@ -49,7 +42,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of the MikroTik RouterOS API";
     homepage = "https://librouteros.readthedocs.io/";
-    changelog = "https://github.com/luqasz/librouteros/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
   };

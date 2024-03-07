@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeloop";
-  version = "3.0.3";
+  version = "unstable-2022-11-29";
 
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "timeloop";
-    rev = "v${version}";
-    hash = "sha256-CGPhrBNzFdERAA/Eym2v0+FvFUe+VkBLnwYEqEMHE9k=";
+    rev = "905ba953432c812772de935d57fd0a674a89d3c1";
+    hash = "sha256-EXiWXf8hdX4vFRNk9wbFSOsix/zVkwrafGUtFrsoAN0=";
   };
 
   nativeBuildInputs = [ scons ];
@@ -46,14 +46,10 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
 
   postPatch = ''
-    # Fix gcc-13 build failure due to missing includes:
-    sed -e '1i #include <cstdint>' -i \
-      include/compound-config/compound-config.hpp
-
     # use nix ar/ranlib
     substituteInPlace ./SConstruct \
-      --replace-fail "env.Replace(AR = \"gcc-ar\")" "pass" \
-      --replace-fail "env.Replace(RANLIB = \"gcc-ranlib\")" "pass"
+      --replace "env.Replace(AR = \"gcc-ar\")" "" \
+      --replace "env.Replace(RANLIB = \"gcc-ranlib\")" ""
     '' + lib.optionalString stdenv.isDarwin ''
     # prevent clang from dying on errors that gcc is fine with
     substituteInPlace ./src/SConscript --replace "-Werror" "-Wno-inconsistent-missing-override"

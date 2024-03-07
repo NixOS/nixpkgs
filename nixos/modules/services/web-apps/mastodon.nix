@@ -4,8 +4,7 @@ let
   cfg = config.services.mastodon;
   opt = options.services.mastodon;
 
-  # We only want to create a Redis and PostgreSQL databases if we're actually going to connect to it local.
-  redisActuallyCreateLocally = cfg.redis.createLocally && (cfg.redis.host == "127.0.0.1" || cfg.redis.enableUnixSocket);
+  # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == "/run/postgresql";
 
   env = {
@@ -34,7 +33,6 @@ let
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
-  // lib.optionalAttrs (cfg.redis.createLocally && cfg.redis.enableUnixSocket) { REDIS_URL = "unix://${config.services.redis.servers.mastodon.unixSocket}"; }
   // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) { DB_PORT = toString cfg.database.port; }
   // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN  = cfg.smtp.user; }
   // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_HOST = cfg.elasticsearch.host; }
@@ -118,11 +116,9 @@ let
       threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
     in {
       after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       description = "Mastodon sidekiq${jobClassLabel}";
@@ -137,7 +133,6 @@ let
         RestartSec = 20;
         EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
-        LimitNOFILE = "1024000";
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
@@ -150,11 +145,9 @@ let
         name = "mastodon-streaming-${toString i}";
         value = {
           after = [ "network.target" "mastodon-init-dirs.service" ]
-            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
             ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
             ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
           requires = [ "mastodon-init-dirs.service" ]
-            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
             ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
             ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
           wantedBy = [ "mastodon.target" "mastodon-streaming.target" ];
@@ -410,19 +403,6 @@ in {
           type = lib.types.port;
           default = 31637;
         };
-
-        passwordFile = lib.mkOption {
-          description = lib.mdDoc "A file containing the password for Redis database.";
-          type = lib.types.nullOr lib.types.path;
-          default = null;
-          example = "/run/keys/mastodon-redis-password";
-        };
-
-        enableUnixSocket = lib.mkOption {
-          description = lib.mdDoc "Use Unix socket";
-          type = lib.types.bool;
-          default = true;
-        };
       };
 
       database = {
@@ -632,13 +612,6 @@ in {
   config = lib.mkIf cfg.enable (lib.mkMerge [{
     assertions = [
       {
-        assertion = redisActuallyCreateLocally -> (!cfg.redis.enableUnixSocket || cfg.redis.passwordFile == null);
-        message = ''
-          <option>services.mastodon.redis.enableUnixSocket</option> needs to be disabled if
-            <option>services.mastodon.redis.passwordFile</option> is used.
-        '';
-      }
-      {
         assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.database.user && cfg.database.user == cfg.database.name);
         message = ''
           For local automatic database provisioning (services.mastodon.database.createLocally == true) with peer
@@ -715,8 +688,6 @@ in {
         OTP_SECRET="$(cat ${cfg.otpSecretFile})"
         VAPID_PRIVATE_KEY="$(cat ${cfg.vapidPrivateKeyFile})"
         VAPID_PUBLIC_KEY="$(cat ${cfg.vapidPublicKeyFile})"
-      '' + lib.optionalString (cfg.redis.passwordFile != null)''
-        REDIS_PASSWORD="$(cat ${cfg.redis.passwordFile})"
       '' + lib.optionalString (cfg.database.passwordFile != null) ''
         DB_PASS="$(cat ${cfg.database.passwordFile})"
       '' + lib.optionalString cfg.smtp.authenticate ''
@@ -779,11 +750,9 @@ in {
 
     systemd.services.mastodon-web = {
       after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "mastodon.target" ];
@@ -864,14 +833,11 @@ in {
       enable = true;
       hostname = lib.mkDefault "${cfg.localDomain}";
     };
-    services.redis.servers.mastodon = lib.mkIf redisActuallyCreateLocally (lib.mkMerge [
-      {
-        enable = true;
-      }
-      (lib.mkIf (!cfg.redis.enableUnixSocket) {
-        port = cfg.redis.port;
-      })
-    ]);
+    services.redis.servers.mastodon = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
+      enable = true;
+      port = cfg.redis.port;
+      bind = "127.0.0.1";
+    };
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = [
@@ -892,7 +858,6 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package pkgs.imagemagick ])
-      (lib.mkIf (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {${config.services.mastodon.user}.extraGroups = [ "redis-mastodon" ];})
     ];
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;

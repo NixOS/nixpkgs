@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.24";
+  version = "9.18.21";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-cJ1zAjyRFd2tO6tltsjHmlkBltDRFPXQyiUz29Ut32Y=";
+    hash = "sha256-pVa+IlBdnqT5xnF67pxUlznGhJiv88ppA1eH7MZI/sU=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -91,9 +91,6 @@ stdenv.mkDerivation rec {
   preCheck = lib.optionalString stdenv.hostPlatform.isMusl ''
     # musl doesn't respect TZDIR, skip timezone-related tests
     sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Test timeouts on Darwin
-    sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
   '';
 
   passthru = {

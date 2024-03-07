@@ -98,10 +98,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
-    ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
     ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
     ++ lib.optionals (enablePython) [ which swig ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle fixDarwinDylibNames xcbuild ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
@@ -127,7 +126,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  desktopItems = lib.optionals (enableGL || enableX11) [
+  desktopItems = [
     (makeDesktopItem {
       name = pname;
       desktopName = pname;
@@ -155,14 +154,14 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/mupdf.pc" <<EOF
     prefix=$out
-    libdir=\''${prefix}/lib
-    includedir=\''${prefix}/include
+    libdir=$out/lib
+    includedir=$out/include
 
     Name: mupdf
     Description: Library for rendering PDF documents
     Version: ${version}
-    Libs: -L\''${libdir} -lmupdf
-    Cflags: -I\''${includedir}
+    Libs: -L$out/lib -lmupdf
+    Cflags: -I$dev/include
     EOF
 
     moveToOutput "bin" "$bin"

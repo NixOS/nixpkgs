@@ -466,7 +466,6 @@ in
         Type = "notify";
         KillMode = "process"; # when stopping, leave the VMs alone
         Restart = "no";
-        OOMScoreAdjust = "-999";
       };
       restartIfChanged = false;
     };

@@ -2,6 +2,7 @@
 , anyascii
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , flaky
 , google-cloud-storage
 , mock
@@ -10,14 +11,13 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, setuptools
 , sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "filedepot";
-  version = "0.11.0";
-  pyproject = true;
+  version = "0.10.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -25,11 +25,16 @@ buildPythonPackage rec {
     owner = "amol-";
     repo = "depot";
     rev = "refs/tags/${version}";
-    hash = "sha256-693H/u+Wg2G9sdoUkC6DQo9WkmIlKnh8NKv3ufK/eyQ=";
+    hash = "sha256-vPceky5cvmy3MooWz7dRdy68VoAHN7i3a7egBs4dPE8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    # Add support for Pillow 10, https://github.com/amol-/depot/pull/84
+    (fetchpatch {
+      name = "support-pillow-10.patch";
+      url = "https://github.com/amol-/depot/commit/bdb73d1b3898279068b421bc061ecc18c5108fa4.patch";
+      hash = "sha256-7+VGrdJstkiy0bYAqA9FjF1NftZiurgyPd8Wlz6GUy8=";
+    })
   ];
 
   propagatedBuildInputs = [

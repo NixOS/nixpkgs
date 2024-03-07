@@ -34,7 +34,8 @@ targetHost=
 remoteSudo=
 verboseScript=
 noFlake=
-installBootloader=
+# comma separated list of vars to preserve when using sudo
+preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
 json=
 
 # log the given argument to stderr
@@ -56,10 +57,10 @@ while [ "$#" -gt 0 ]; do
         ;;
       --install-grub)
         log "$0: --install-grub deprecated, use --install-bootloader instead"
-        installBootloader=1
+        export NIXOS_INSTALL_BOOTLOADER=1
         ;;
       --install-bootloader)
-        installBootloader=1
+        export NIXOS_INSTALL_BOOTLOADER=1
         ;;
       --no-build-nix)
         buildNix=
@@ -156,8 +157,8 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [[ -n "$SUDO_USER" ]]; then
-    useSudo=1
+if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
+    maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
 # log the given argument to stderr if verbose mode is on
@@ -174,44 +175,20 @@ runCmd() {
 }
 
 buildHostCmd() {
-    local c
-    if [[ "${useSudo:-x}" = 1 ]]; then
-        c=("sudo")
-    else
-        c=()
-    fi
-
     if [ -z "$buildHost" ]; then
         runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" env PATH="$remoteNix":'$PATH' "$@"
     else
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
     fi
 }
 
 targetHostCmd() {
-    local c
-    if [[ "${useSudo:-x}" = 1 ]]; then
-        c=("sudo")
-    else
-        c=()
-    fi
-
     if [ -z "$targetHost" ]; then
-        runCmd "${c[@]}" "$@"
+        runCmd "${maybeSudo[@]}" "$@"
     else
-        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
-    fi
-}
-
-targetHostSudoCmd() {
-    if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
-    else
-        # While a tty might not be necessary, we apply it to be consistent with
-        # sudo usage, and an experience that is more consistent with local deployment.
-        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        runCmd ssh $SSHOPTS "$targetHost" "${maybeSudo[@]}" "$@"
     fi
 }
 
@@ -404,13 +381,6 @@ fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
-if [[ ${#tmpDir} -ge 60 ]]; then
-    # Very long tmp dirs lead to "too long for Unix domain socket"
-    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-    rmdir "$tmpDir"
-    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
-fi
-
 cleanup() {
     for ctrl in "$tmpDir"/ssh-*; do
         ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
@@ -576,7 +546,6 @@ if [ "$action" = repl ]; then
                     - ${blue}config${reset}   All option values
                     - ${blue}options${reset}  Option data and metadata
                     - ${blue}pkgs${reset}     Nixpkgs package set
-                    - ${blue}lib${reset}      Nixpkgs library functions
                     - other module arguments
 
                     - ${blue}flake${reset}    Flake outputs, inputs and source info of $flake
@@ -597,7 +566,6 @@ if [ "$action" = repl ]; then
                 configuration._module.specialArgs //
                 {
                   inherit (configuration) config options;
-                  lib = configuration.lib or configuration.pkgs.lib;
                   inherit flake;
                 };
           in builtins.seq scope builtins.trace motd scope
@@ -699,7 +667,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostSudoCmd nix-env -p "$profile" --set "$pathToConfig"
+        targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
@@ -727,7 +695,7 @@ if [ -z "$rollback" ]; then
     fi
 else # [ -n "$rollback" ]
     if [[ "$action" = switch || "$action" = boot ]]; then
-        targetHostSudoCmd nix-env --rollback -p "$profile"
+        targetHostCmd nix-env --rollback -p "$profile"
         pathToConfig="$profile"
     elif [[ "$action" = test || "$action" = build ]]; then
         systemNumber=$(
@@ -753,7 +721,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     cmd=(
         "systemd-run"
         "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value
-        "-E" "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
+        "-E" "NIXOS_INSTALL_BOOTLOADER"
         "--collect"
         "--no-ask-password"
         "--pty"
@@ -771,14 +739,14 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     # may be dangerous in remote access (e.g. SSH).
     if [[ -n "$NIXOS_SWITCH_USE_DIRTY_ENV" ]]; then
         log "warning: skipping systemd-run since NIXOS_SWITCH_USE_DIRTY_ENV is set. This environment variable will be ignored in the future"
-        cmd=("env" "NIXOS_INSTALL_BOOTLOADER=$installBootloader")
-    elif ! targetHostSudoCmd "${cmd[@]}" true; then
+        cmd=()
+    elif ! targetHostCmd "${cmd[@]}" true &>/dev/null; then
         logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
         cmd=(
             "env"
             "-i"
             "LOCALE_ARCHIVE=$LOCALE_ARCHIVE"
-            "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
+            "NIXOS_INSTALL_BOOTLOADER=$NIXOS_INSTALL_BOOTLOADER"
         )
     else
         logVerbose "Using systemd-run to switch configuration."
@@ -794,7 +762,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         fi
     fi
 
-    if ! targetHostSudoCmd "${cmd[@]}" "$action"; then
+    if ! targetHostCmd "${cmd[@]}" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi

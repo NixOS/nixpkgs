@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , jinja2
 , lxml
 , mock
 , ncclient
 , netaddr
-, nose2
+, nose
 , ntc-templates
 , paramiko
 , pyparsing
@@ -14,8 +15,6 @@
 , pythonOlder
 , pyyaml
 , scp
-, setuptools
-, pytestCheckHook
 , six
 , transitions
 , yamlordereddictloader
@@ -23,21 +22,23 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.7.0";
-  pyproject = true;
+  version = "2.6.8";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
     rev = "refs/tags/${version}";
-    hash = "sha256-06OV6UrF2i4SxL5dCvVxsEX2e8ef8UBFx/oMbvCZDaM=";
+    hash = "sha256-5xZjuU2U3BodAMQiWZIJ27AZiAwoMm4yJ4qr3DjMd9o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    # https://github.com/Juniper/py-junos-eznc/issues/1236
+    substituteInPlace lib/jnpr/junos/utils/scp.py \
+      --replace "inspect.getargspec" "inspect.getfullargspec"
+  '';
 
   propagatedBuildInputs = [
     jinja2
@@ -57,33 +58,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    nose2
-    pytestCheckHook
+    nose
   ];
 
-  pytestFlagsArray = [
-   "tests/unit"
-  ];
-
-  disabledTests = [
-    # jnpr.junos.exception.FactLoopError: A loop was detected while gathering the...
-    "TestPersonality"
-    "TestGetSoftwareInformation"
-    "TestIfdStyle"
-    # KeyError: 'mac'
-    "test_textfsm_table_mutli_key"
-    # AssertionError: None != 'juniper.net'
-    "test_domain_fact_from_config"
-  ];
+  checkPhase = ''
+    nosetests -v -a unit --exclude=test_sw_put_ftp
+  '';
 
   pythonImportsCheck = [
     "jnpr.junos"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
     description = "Junos 'EZ' automation for non-programmers";
     homepage = "https://github.com/Juniper/py-junos-eznc";
-    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };

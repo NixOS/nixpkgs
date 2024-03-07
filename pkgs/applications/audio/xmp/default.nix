@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     homepage    = "https://xmp.sourceforge.net/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
-    mainProgram = "xmp";
   };
 }

@@ -52,7 +52,7 @@ let
 
   multiaddrsToListenStreams = addrIn:
     let
-      addrs = if builtins.isList addrIn
+      addrs = if builtins.typeOf addrIn == "list"
       then addrIn else [ addrIn ];
       unfilteredResult = map multiaddrToListenStream addrs;
     in
@@ -60,7 +60,7 @@ let
 
   multiaddrsToListenDatagrams = addrIn:
     let
-      addrs = if builtins.isList addrIn
+      addrs = if builtins.typeOf addrIn == "list"
       then addrIn else [ addrIn ];
       unfilteredResult = map multiaddrToListenDatagram addrs;
     in
@@ -99,12 +99,7 @@ in
 
     services.kubo = {
 
-      enable = mkEnableOption (lib.mdDoc ''
-        the Interplanetary File System (WARNING: may cause severe network degradation).
-        NOTE: after enabling this option and rebuilding your system, you need to log out
-        and back in for the `IPFS_PATH` environment variable to be present in your shell.
-        Until you do that, the CLI tools won't be able to talk to the daemon by default
-      '');
+      enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degradation)");
 
       package = mkPackageOption pkgs "kubo" { };
 
@@ -279,8 +274,8 @@ in
       {
         assertion = !((lib.versionAtLeast cfg.package.version "0.21") && (builtins.hasAttr "Experimental" cfg.settings) && (builtins.hasAttr "AcceleratedDHTClient" cfg.settings.Experimental));
         message = ''
-          The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
-        '';
+    The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
+  '';
       }
     ];
 
@@ -312,13 +307,12 @@ in
       ipfs.gid = config.ids.gids.ipfs;
     };
 
-    systemd.tmpfiles.settings."10-kubo" = let
-      defaultConfig = { inherit (cfg) user group; };
-    in {
-      ${cfg.dataDir}.d = defaultConfig;
-      ${cfg.settings.Mounts.IPFS}.d = mkIf (cfg.autoMount) defaultConfig;
-      ${cfg.settings.Mounts.IPNS}.d = mkIf (cfg.autoMount) defaultConfig;
-    };
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+    ] ++ optionals cfg.autoMount [
+      "d '${cfg.settings.Mounts.IPFS}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.settings.Mounts.IPNS}' - ${cfg.user} ${cfg.group} - -"
+    ];
 
     # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
     systemd.packages = if cfg.autoMount

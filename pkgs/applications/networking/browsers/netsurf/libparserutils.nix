@@ -3,22 +3,20 @@
 , fetchurl
 , perl
 , buildsystem
-, iconv
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libparserutils";
-  version = "0.2.5";
+  version = "0.2.4";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/libparserutils-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-MX7VxxjxeSe1chl0uuXeMsP9bQVdsTGtMbQxKgMu0Tk=";
+    hash = "sha256-MiuuYbMMzt4+MFv26uJBSSBkl3W8X/HRtogBKjxJR9g=";
   };
 
   buildInputs = [
     perl
     buildsystem
-    iconv
   ];
 
   makeFlags = [

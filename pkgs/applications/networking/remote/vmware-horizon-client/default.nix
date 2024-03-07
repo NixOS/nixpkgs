@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , buildFHSEnvChroot
-, copyDesktopItems
 , fetchurl
 , gsettings-desktop-schemas
 , makeDesktopItem
@@ -11,7 +10,7 @@
 , configText ? ""
 }:
 let
-  version = "2312";
+  version = "2306";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -20,13 +19,17 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
+  bins = [
+    "vmware-view"
+    "vmware-usbarbitrator"
+  ];
 
   mainProgram = "vmware-view";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
-  wrapBinCommands = path: name: ''
-    makeWrapper "$out/${path}/${name}" "$out/bin/${name}_wrapper" \
+  wrapBinCommands = name: ''
+    makeWrapper "$out/bin/${name}" "$out/bin/${name}_wrapper" \
     --set GTK_THEME Adwaita \
     --suffix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
     --suffix LD_LIBRARY_PATH : "$out/lib/vmware/view/crtbora:$out/lib/vmware"
@@ -36,8 +39,8 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART24FQ4_LIN_2312_TARBALL/VMware-Horizon-Client-Linux-2312-8.12.0-23149323.tar.gz";
-      sha256 = "15ca1d6028b9ca88e23fa363a2942fd76456c19e95ced4734595c3dc44db38d8";
+      url = "https://download3.vmware.com/software/CART24FQ2_LIN_2306_TARBALL/VMware-Horizon-Client-Linux-2306-8.10.0-21964631.tar.gz";
+      sha256 = "6051f6f1617385b3c211b73ff42dad27e2d22362df6ffd2f3d9f559d0b5743ea";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -46,7 +49,7 @@ let
 
       chmod -R u+w ext/usr/lib
       mv ext/usr $out
-      cp -r ext/lib $out/
+      cp -r ext/bin ext/lib $out/
 
       # Horizon includes a copy of libstdc++ which is loaded via $LD_LIBRARY_PATH
       # when it cannot detect a new enough version already present on the system.
@@ -59,8 +62,7 @@ let
       mkdir $out/lib/vmware/view/pkcs11
       ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/vmware/view/pkcs11/libopenscpkcs11.so
 
-      ${wrapBinCommands "bin" "vmware-view"}
-      ${wrapBinCommands "lib/vmware/view/usb" "vmware-usbarbitrator"}
+      ${lib.concatMapStrings wrapBinCommands bins}
     '';
   };
 
@@ -119,6 +121,11 @@ let
     mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
+  binLinkCommands = lib.concatMapStringsSep
+    "\n"
+    (bin: "ln -s ${vmwareFHSUserEnv bin}/bin/${bin} $out/bin/")
+    bins;
+
 in
 stdenv.mkDerivation {
   pname = "vmware-horizon-client";
@@ -126,16 +133,10 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems ];
-
-  desktopItems = [ desktopItem ];
-
   installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    ln -s ${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view $out/bin/
-    ln -s ${vmwareFHSUserEnv "vmware-usbarbitrator"}/bin/vmware-usbarbitrator $out/bin/
-    runHook postInstall
+    mkdir -p $out/bin $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+    ${binLinkCommands}
   '';
 
   unwrapped = vmwareHorizonClientFiles;

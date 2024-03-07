@@ -89,6 +89,5 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ natto1784 ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "premid";
   };
 }

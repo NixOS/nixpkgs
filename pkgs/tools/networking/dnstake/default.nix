@@ -31,6 +31,5 @@ buildGoModule rec {
     homepage = "https://github.com/pwnesia/dnstake";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "dnstake";
   };
 }

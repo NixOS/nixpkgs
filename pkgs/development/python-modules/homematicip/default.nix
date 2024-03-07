@@ -11,30 +11,23 @@
 , pytest-aiohttp
 , pytest-asyncio
 , requests
-, setuptools
-, setuptools-scm
 , websocket-client
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.1.0";
-  pyproject = true;
+  version = "1.0.16";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-tx7/amXG3rLdUFgRPQcuf57qkBLAPxPWjLGSO7MrcWU=";
+    hash = "sha256-rvjdhsvGYllVeenVkU/ikwil4OVHPRIaXs+85q0pM/w=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
 
   propagatedBuildInputs = [
     aenum

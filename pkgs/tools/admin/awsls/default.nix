@@ -24,6 +24,5 @@ buildGoModule rec {
     homepage = "https://github.com/jckuester/awsls";
     license = licenses.mit;
     maintainers = [ maintainers.markus1189 ];
-    mainProgram = "awsls";
   };
 }

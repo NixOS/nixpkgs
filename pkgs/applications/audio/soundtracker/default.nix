@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchzip
+, fetchurl
 , pkg-config
 , autoreconfHook
 , gtk2
@@ -8,21 +8,19 @@
 , jack2
 , audiofile
 , goocanvas # graphical envelope editing
-, libxml2
-, libsndfile
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "soundtracker";
-  version = "1.0.4";
+  version = "1.0.3";
 
-  src = fetchzip {
+  src = fetchurl {
     # Past releases get moved to the "old releases" directory.
     # Only the latest release is at the top level.
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
-    url = "mirror://sourceforge/soundtracker/soundtracker-${finalAttrs.version}.tar.xz";
-    hash = "sha256-kNt0BSRaEQY+oa1xbuZ1l6nCqXhcktVugxzcC3ZDaX0=";
+    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.xz";
+    sha256 = "sha256-k+TB1DIauOIeQSCVV5uYu69wwRx7vCRAlSCTAtDguKo=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -57,8 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     jack2
     audiofile
     goocanvas
-    libxml2
-    libsndfile
   ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   meta = with lib; {
@@ -76,4 +72,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-})
+}

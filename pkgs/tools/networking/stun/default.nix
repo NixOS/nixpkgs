@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     license     = licenses.vsl10;
     maintainers = with maintainers; [ marcweber obadz ];
     platforms   = platforms.linux;
-    mainProgram = "stun";
   };
 }

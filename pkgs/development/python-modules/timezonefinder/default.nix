@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "6.4.1";
-  pyproject = true;
+  version = "6.2.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jannikmi";
-    repo = "timezonefinder";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-e9Zx236X76GYFuADCw9+5HWs2craeq44gVNclkc4th0=";
+    hash = "sha256-n6TcTezu5seKy34KDlzGikAVaqAud00gxywwJA3MaWM=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,11 @@ buildPythonPackage rec {
     numba
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'numpy = "^1.22"' 'numpy = "*"'
+  '';
 
   pythonImportsCheck = [
     "timezonefinder"

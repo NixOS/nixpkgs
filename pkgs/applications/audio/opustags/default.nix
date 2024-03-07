@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ kmein ];
     license = licenses.bsd3;
-    mainProgram = "opustags";
   };
 }

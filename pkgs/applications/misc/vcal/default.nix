@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     homepage = "https://waynemorrison.com/software/";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
-    mainProgram = "vcal";
   };
 }

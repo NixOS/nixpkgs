@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ianwookim ];
     license = licenses.gpl2Plus;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
-    mainProgram = "cadaver";
   };
 }

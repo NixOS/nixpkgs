@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           enable = true;
           settings.DefaultAction = "deny";
           rules = {
-            curl = {
+            opensnitch = {
               name = "curl";
               enabled = true;
               action = "allow";

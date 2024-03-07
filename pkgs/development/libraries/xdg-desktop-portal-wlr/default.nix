@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.7.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GIIDeZMIGUiZV0IUhcclRVThE5LKaqVc5VwnNT8beNU=";
+    sha256 = "sha256-EwBHkXFEPAEgVUGC/0e2Bae/rV5lec1ttfbJ5ce9cKw=";
   };
 
   strictDeps = true;

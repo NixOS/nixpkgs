@@ -18,7 +18,6 @@
 , pytest-click
 , pytest-subtests
 , pytest-timeout
-, pytest-xdist
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -64,7 +63,6 @@ buildPythonPackage rec {
     pytest-click
     pytest-subtests
     pytest-timeout
-    pytest-xdist
     pytestCheckHook
   ];
 
@@ -79,13 +77,6 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
-    # seems to only fail on higher core counts
-    # AssertionError: assert 3 == 0
-    "test_setup_security_disabled_serializers"
-    # fails with pytest-xdist
-    "test_itercapture_limit"
-    "test_stamping_headers_in_options"
-    "test_stamping_with_replace"
   ] ++ lib.optionals stdenv.isDarwin [
     # too many open files on hydra
     "test_cleanup"

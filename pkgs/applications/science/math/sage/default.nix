@@ -32,7 +32,6 @@ let
     });
   };
 
-  # matches src/sage/repl/ipython_kernel/install.py:kernel_spec
   jupyter-kernel-definition = {
     displayName = "SageMath ${sage-src.version}";
     argv = [
@@ -43,7 +42,7 @@ let
       "-f"
       "{connection_file}"
     ];
-    language = "sage";
+    language = "sagemath";
     # just one 16x16 logo is available
     logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
     logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";

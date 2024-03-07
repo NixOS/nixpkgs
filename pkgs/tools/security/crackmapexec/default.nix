@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     pypsrp
     pywerview
     requests
-    requests-ntlm
+    requests_ntlm
     termcolor
     terminaltables
     xmltodict

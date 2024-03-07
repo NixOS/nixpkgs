@@ -81,6 +81,5 @@ stdenv.mkDerivation (finalAttrs: {
     # ibtool -> real Xcode -> I can't get that, and Ofborg can't test that
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ OPNA2608 ];
-    mainProgram = "milkytracker";
   };
 })

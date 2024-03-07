@@ -10,18 +10,19 @@
 , libskk
 , qtbase
 , skk-dicts
+, wrapQtAppsHook
 , enableQt ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-skk";
-  version = "5.1.2";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vg79zJ/ZoUjCKU11krDUjO0rAyZxDMsBnHqJ/I6NTTA=";
+    sha256 = "sha256-a+ZsuFEan61U0oOuhrTFoK5J4Vd0jj463jQ8Mk7TdbA=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     gettext
     pkg-config
-  ];
+  ] ++ lib.optional enableQt wrapQtAppsHook;
 
   buildInputs = [
     fcitx5
@@ -40,12 +41,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT" enableQt)
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
+    "-DENABLE_QT=${toString enableQt}"
     "-DSKK_DEFAULT_PATH=${skk-dicts}/share/SKK-JISYO.L"
   ];
-
-  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Input method engine for Fcitx5, which uses libskk as its backend";

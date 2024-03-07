@@ -1,14 +1,14 @@
 { lib
 , fetchFromGitHub
 }: rec {
-  version = "3.7.0";
+  version = "3.6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openrazer";
     repo = "openrazer";
     rev = "v${version}";
-    hash = "sha256-tjVWvJxcZ2maR99VRwMGCa+IK+1CjCc7jxAj4XkDUEw=";
+    hash = "sha256-bboTRZqJq5tKeBQuiEQAXxTHYvoldDQlwbfehjDA8EE=";
   };
 
   meta = with lib; {

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "natural-docs";
-  version = "2.3";
+  version = "2.2";
 
   src = fetchzip {
     url = "https://naturaldocs.org/download/natural_docs/${version}/Natural_Docs_${version}.zip";
-    sha256 = "sha256-yk9PxrZ6+ocqGLB+xCBGiQKnHLMdp2r+NuoMhWsr0GM=";
+    sha256 = "sha256-W0E9wamzABnPleVhHHXTIdWJk8kWnrUHojM+pcsowy8=";
   };
 
   dontPatch = true;
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     homepage = "https://naturaldocs.org";
     license = licenses.agpl3Only;
     maintainers = [ maintainers.nkpvk ];
-    mainProgram = "NaturalDocs";
   };
 }

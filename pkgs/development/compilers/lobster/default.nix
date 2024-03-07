@@ -16,14 +16,14 @@
 , ForceFeedback
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lobster";
   version = "2023.13";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-7lMIIJ3iduyxZKwK65tle3c+az2G2Mpi4JwAeCCsTxw=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-})
+}

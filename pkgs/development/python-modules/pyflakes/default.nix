@@ -1,29 +1,22 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchFromGitHub
-, setuptools
+, fetchPypi
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "3.2.0";
+  version = "3.1.0";
 
   disabled = pythonOlder "3.8";
 
-  pyproject = true;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = "pyflakes";
-    rev = version;
-    hash = "sha256-ouCkkm9OrYob00uLTilqgWsTWfHhzaiZp7sa2C5liqk=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-oKrgNMRE2wBxqgd5crpHaNQMgw2VOf1Fv0zT+PaZLvw=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -33,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/PyCQA/pyflakes";
-    changelog = "https://github.com/PyCQA/pyflakes/blob/${src.rev}/NEWS.rst";
+    changelog = "https://github.com/PyCQA/pyflakes/blob/${version}/NEWS.rst";
     description = "A simple program which checks Python source files for errors";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

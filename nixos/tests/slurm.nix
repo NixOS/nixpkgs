@@ -45,7 +45,7 @@ let
       '';
     in pkgs.runCommand "mpitest" {} ''
       mkdir -p $out/bin
-      ${lib.getDev pkgs.mpi}/bin/mpicc ${mpitestC} -o $out/bin/mpitest
+      ${pkgs.openmpi}/bin/mpicc ${mpitestC} -o $out/bin/mpitest
     '';
 in {
   name = "slurm";

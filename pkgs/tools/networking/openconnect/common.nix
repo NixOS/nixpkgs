@@ -44,6 +44,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ pradeepchhetri tricktron alyaeanyx ];
     platforms = lib.platforms.unix;
-    mainProgram = "openconnect";
   };
 }

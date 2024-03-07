@@ -14,13 +14,22 @@
 , publicsuffix-list
 }:
 
-stdenv.mkDerivation rec {
+let
+  enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    # Apparently valgrind doesn't support some new ARM features on (some) Hydra machines:
+    #  VEX: Mismatch detected between RDMA and atomics features.
+    && !stdenv.isAarch64
+    # Valgrind on musl does not hook malloc calls properly, resulting in errors `Invalid free() / delete / delete[] / realloc()`
+    # https://bugs.kde.org/show_bug.cgi?id=435441
+    && !stdenv.hostPlatform.isMusl
+  ;
+in stdenv.mkDerivation rec {
   pname = "libpsl";
-  version = "0.21.5";
+  version = "0.21.2";
 
   src = fetchurl {
     url = "https://github.com/rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.lz";
-    hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
+    sha256 = "sha256-qj1wbEUnhtE0XglNriAc022B8Dz4HWNtXPwQ02WQfxc=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +41,8 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     libxslt
+  ] ++ lib.optionals enableValgrindTests [
+    valgrind
   ];
 
   buildInputs = [
@@ -58,6 +69,8 @@ stdenv.mkDerivation rec {
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+  ] ++ lib.optionals enableValgrindTests [
+    "--enable-valgrind-tests"
   ];
 
   enableParallelBuilding = true;
@@ -78,7 +91,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.c0bw3b ];
     mainProgram = "psl";
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = platforms.unix;
     pkgConfigModules = [ "libpsl" ];
   };
 }

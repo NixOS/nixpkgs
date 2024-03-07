@@ -33,7 +33,7 @@ buildType = if stdenv.isDarwin then
 
 edk2 = stdenv.mkDerivation rec {
   pname = "edk2";
-  version = "202402";
+  version = "202311";
 
   patches = [
     # pass targetPrefix as an env var
@@ -48,7 +48,7 @@ edk2 = stdenv.mkDerivation rec {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-Nurm6QNKCyV6wvbj0ELdYAL7mbZ0yg/tTwnEJ+N18ng=";
+    hash = "sha256-gC/If8U9qo70rGvNl3ld/mmZszwY0w/5Ge/K21mhzYw=";
   };
 
   # We don't want EDK2 to keep track of OpenSSL,
@@ -59,11 +59,6 @@ edk2 = stdenv.mkDerivation rec {
     mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
     tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
     chmod -R +w $out/
-
-    # Fix missing INT64_MAX include that edk2 explicitly does not provide
-    # via it's own <stdint.h>. Let's pull in openssl's definition instead:
-    sed -i $out/CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
-        -e '1i #include "internal/numbers.h"'
   '';
 
   nativeBuildInputs = [ pythonEnv ];

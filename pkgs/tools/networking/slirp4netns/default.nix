@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slirp4netns";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "sha256-6kfL0ZjXzcyZl3remLi25RMLWCpg+a8EHC1M5LJE4a4=";
+    sha256 = "sha256-TQi2Ok58VbKl3iaMygBL16NZukvVkSSmyVpGT2A1IJQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ orivej ] ++ teams.podman.members;
     platforms = platforms.linux;
-    mainProgram = "slirp4netns";
   };
 }

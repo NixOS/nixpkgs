@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/st3w/neo";
     platforms = ncurses.meta.platforms;
     maintainers = [ maintainers.abbe ];
-    mainProgram = "neo";
   };
 }

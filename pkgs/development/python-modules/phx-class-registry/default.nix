@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "class-registry";
-  version = "4.1.0";
+  version = "4.0.6";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "todofixthis";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kJbyUzyklVSvW6bBxTTTrY+WhfcV0GUf/+Pzyv+7sEA=";
+    hash = "sha256-kSEHgzBgnAq5rMv2HbmGl+9CUzsmzUzPQWr+5q8mcsA=";
   };
 
   nativeCheckInputs = [
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Factory and registry pattern for Python classes";
     homepage = "https://class-registry.readthedocs.io/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka tomhoule ];
+    maintainers = with maintainers; [ kevincox ];
   };
 }

@@ -1,12 +1,8 @@
 # Nixpkgs pkgs/by-name checker
 
 This directory implements a program to check the [validity](#validity-checks) of the `pkgs/by-name` Nixpkgs directory.
+It is being used by [this GitHub Actions workflow](../../../.github/workflows/check-by-name.yml).
 This is part of the implementation of [RFC 140](https://github.com/NixOS/rfcs/pull/140).
-
-A [pinned version](./scripts/pinned-tool.json) of this tool is used by [this GitHub Actions workflow](../../../.github/workflows/check-by-name.yml).
-See [./scripts](./scripts/README.md#update-pinned-toolsh) for how to update the pinned version.
-
-The source of the tool being right inside Nixpkgs allows any Nixpkgs committer to make updates to it.
 
 ## Interface
 
@@ -49,8 +45,6 @@ The current ratchets are:
 
 - New manual definitions of `pkgs.${name}` (e.g. in `pkgs/top-level/all-packages.nix`) with `args = { }`
   (see [nix evaluation checks](#nix-evaluation-checks)) must not be introduced.
-- New top-level packages defined using `pkgs.callPackage` must be defined with a package directory.
-  - Once a top-level package uses `pkgs/by-name`, it also can't be moved back out of it.
 
 ## Development
 
@@ -73,7 +67,7 @@ Tests are declared in [`./tests`](./tests) as subdirectories imitating Nixpkgs w
 - `default.nix`:
   Always contains
   ```nix
-  import <test-nixpkgs> { root = ./.; }
+  import ../mock-nixpkgs.nix { root = ./.; }
   ```
   which makes
   ```
@@ -100,3 +94,18 @@ Tests are declared in [`./tests`](./tests) as subdirectories imitating Nixpkgs w
 - `expected` (optional):
   A file containing the expected standard output.
   The default is expecting an empty standard output.
+
+## Hydra builds
+
+This program will always be available pre-built for `x86_64-linux` on the `nixos-unstable` channel and `nixos-XX.YY` channels.
+This is ensured by including it in the `tested` jobset description in [`nixos/release-combined.nix`](../../../nixos/release-combined.nix).
+
+This allows CI for PRs to development branches `master` and `release-XX.YY` to fetch the pre-built program from the corresponding channel and use that to check the PR. This has the following benefits:
+- It allows CI to check all PRs, even if they would break the CI tooling.
+- It makes the CI check very fast, since no Nix builds need to be done, even for mass rebuilds.
+- It improves security, since we don't have to build potentially untrusted code from PRs.
+  The tool only needs a very minimal Nix evaluation at runtime, which can work with [readonly-mode](https://nixos.org/manual/nix/stable/command-ref/opt-common.html#opt-readonly-mode) and [restrict-eval](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-restrict-eval).
+- It allows anybody to make updates to the tooling and for those updates to be automatically used by CI without needing a separate release mechanism.
+
+The tradeoff is that there's a delay between updates to the tool and those updates being used by CI.
+This needs to be considered when updating the [API](#api).

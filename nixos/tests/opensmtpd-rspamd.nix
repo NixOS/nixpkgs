@@ -119,7 +119,6 @@ import ./make-test-python.nix {
   testScript = ''
     start_all()
 
-    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
     smtp1.wait_for_unit("opensmtpd")
     smtp2.wait_for_unit("opensmtpd")

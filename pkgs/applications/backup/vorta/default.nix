@@ -3,43 +3,44 @@
 , fetchFromGitHub
 , wrapQtAppsHook
 , borgbackup
-, qtbase
-, qtwayland
+, qt5
 , stdenv
-, makeFontsConf
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.9.1";
-  pyproject = true;
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    hash = "sha256-wGlnldS2p92NAYAyRPqKjSneIlbdsOiJ0N42n/mMGFI=";
+    hash = "sha256-nLdLTh1qSKvOR2cE9HWQrIWQ9L+ynX4qF+lTtKn/Ubs=";
   };
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   buildInputs = lib.optionals stdenv.isLinux [
-    qtwayland
+    qt5.qtwayland
   ];
 
   propagatedBuildInputs = with python3Packages; [
     peewee
-    pyqt6
+    pyqt5
+    python-dateutil
     psutil
+    qdarkstyle
     secretstorage
+    appdirs
     setuptools
     platformdirs
   ];
 
   postPatch = ''
+    substituteInPlace setup.cfg \
+    --replace setuptools_git "" \
+    --replace pytest-runner ""
+
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
     --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
@@ -62,28 +63,33 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  preCheck = let
-    fontsConf = makeFontsConf {
-      fontDirectories = [ ];
-    };
-  in ''
+  preCheck = ''
     export HOME=$(mktemp -d)
-    export FONTCONFIG_FILE=${fontsConf};
     # For tests/test_misc.py::test_autostart
     mkdir -p $HOME/.config/autostart
-    export QT_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
   '';
 
   disabledTestPaths = [
-    # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)
-    "tests/test_excludes.py"
-    "tests/integration"
-    "tests/unit"
+    "tests/test_archives.py"
+    "tests/test_borg.py"
+    "tests/test_lock.py"
+    "tests/test_notifications.py"
+  ];
+
+  disabledTests = [
+    "diff_archives_dict_issue-Users"
+    "diff_archives-test"
+    "test_repo_unlink"
+    "test_repo_add_success"
+    "test_ssh_dialog"
+    "test_create"
+    "test_scheduler_create_backup"
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/borgbase/vorta/releases/tag/${src.rev}";
+    changelog = "https://github.com/borgbase/vorta/releases/tag/v0.8.10";
     description = "Desktop Backup Client for Borg";
     homepage = "https://vorta.borgbase.com/";
     license = licenses.gpl3Only;

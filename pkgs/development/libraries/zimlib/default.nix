@@ -11,19 +11,19 @@
 
 stdenv.mkDerivation rec {
   pname = "zimlib";
-  version = "9.1.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
     rev = version;
-    hash = "sha256-yWnW/+CaQwbemrNLzvQpXw5yvW2Q6LtwDgvA58+fVUs=";
+    sha256 = "sha256-ab7UUF+I0/xaGChvdjylEQRHLOjmtg/wk+/JEGehGLE=";
   };
 
   testData = fetchzip rec {
-    passthru.version = "0.5";
+    passthru.version = "0.4";
     url = "https://github.com/openzim/zim-testing-suite/releases/download/v${passthru.version}/zim-testing-suite-${passthru.version}.tar.gz";
-    hash = "sha256-hCIFT1WPDjhoZMlsR2cFbt4NhmIJ4DX1H/tDCIv4NjQ=";
+    sha256 = "sha256-2eJqmvs/GrvOD/pq8dTubaiO9ZpW2WqTNQByv354Z0w=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,6 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [  "-Dtest_data_dir=${testData}" ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isGNU) [
-      "-Wno-error=mismatched-new-delete"
-    ]
-  );
 
   nativeCheckInputs = [
     gtest

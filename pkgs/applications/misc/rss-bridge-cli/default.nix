@@ -23,6 +23,5 @@ in (writeShellScriptBin "rss-bridge-cli" ''
     homepage = "https://github.com/RSS-Bridge/rss-bridge";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ymeister ];
-    mainProgram = "rss-bridge-cli";
   };
 })

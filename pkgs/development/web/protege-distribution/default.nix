@@ -78,6 +78,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nessdoor ];
     license = with licenses; [ asl20 bsd2 epl10 lgpl3 ];
     platforms = platforms.linux;
-    mainProgram = "run-protege";
   };
 }

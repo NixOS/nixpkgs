@@ -1,7 +1,6 @@
 # Trivial build helpers {#chap-trivial-builders}
 
-Nixpkgs provides a variety of wrapper functions that help build commonly useful derivations.
-Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers creates a derivation, but the arguments passed are different (usually simpler) from those required by `stdenv.mkDerivation`.
+Nixpkgs provides a couple of functions that help with building derivations. The most important one, `stdenv.mkDerivation`, has already been documented above. The following functions wrap `stdenv.mkDerivation`, making it easier to use in certain cases.
 
 ## `runCommand` {#trivial-builder-runCommand}
 
@@ -59,416 +58,63 @@ Variant of `runCommand` that forces the derivation to be built locally, it is no
 This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr-allowSubstitutes), so only use `runCommandLocal` if you are certain the user will always have a builder for the `system` of the derivation. This should be true for most trivial use cases (e.g., just copying some files to a different location or adding symlinks) because there the `system` is usually the same as `builtins.currentSystem`.
 :::
 
-## Writing text files {#trivial-builder-text-writing}
+## `writeTextFile`, `writeText`, `writeTextDir`, `writeScript`, `writeScriptBin` {#trivial-builder-writeText}
 
-Nixpkgs provides the following functions for producing derivations which write text files or executable scripts into the Nix store.
-They are useful for creating files from Nix expression, and are all implemented as convenience wrappers around `writeTextFile`.
+These functions write `text` to the Nix store. This is useful for creating scripts from Nix expressions. `writeTextFile` takes an attribute set and expects two arguments, `name` and `text`. `name` corresponds to the name used in the Nix store path. `text` will be the contents of the file. You can also set `executable` to true to make this file have the executable bit set.
 
-Each of these functions will cause a derivation to be produced.
-When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`builtins.toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
+Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`. These are convenience functions over `writeTextFile`.
 
-:::: {.note}
-Some of these functions will put the resulting files within a directory inside the [derivation output](https://nixos.org/manual/nix/stable/language/derivations#attr-outputs).
-If you need to refer to the resulting files somewhere else in a Nix expression, append their path to the derivation's store path.
-
-For example, if the file destination is a directory:
-
+Here are a few examples:
 ```nix
-my-file = writeTextFile {
-  name = "my-file";
-  text = ''
-    Contents of File
-  '';
-  destination = "/share/my-file";
-}
-```
-
-Remember to append "/share/my-file" to the resulting store path when using it elsewhere:
-
-```nix
-writeShellScript "evaluate-my-file.sh" ''
-  cat ${my-file}/share/my-file
-'';
-```
-::::
-
-### `writeTextFile` {#trivial-builder-writeTextFile}
-
-Write a text file to the Nix store.
-
-`writeTextFile` takes an attribute set with the following possible attributes:
-
-`name` (String)
-
-: Corresponds to the name used in the Nix store path identifier.
-
-`text` (String)
-
-: The contents of the file.
-
-`executable` (Bool, _optional_)
-
-: Make this file have the executable bit set.
-
-  Default: `false`
-
-`destination` (String, _optional_)
-
-: A subpath under the derivation's output path into which to put the file.
-  Subdirectories are created automatically when the derivation is realised.
-
-  By default, the store path itself will be a file containing the text contents.
-
-  Default: `""`
-
-`checkPhase` (String, _optional_)
-
-: Commands to run after generating the file.
-
-  Default: `""`
-
-`meta` (Attribute set, _optional_)
-
-: Additional metadata for the derivation.
-
-  Default: `{}`
-
-`allowSubstitutes` (Bool, _optional_)
-
-: Whether to allow substituting from a binary cache.
-  Passed through to [`allowSubsitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
-
-  It defaults to `false`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
-  Set it to true if the `checkPhase` step is expensive.
-
-  Default: `false`
-
-`preferLocalBuild` (Bool, _optional_)
-
-: Whether to prefer building locally, even if faster [remote build machines](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters) are available.
-
-  Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `builtins.derivation`.
-
-  It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
-
-  Default: `true`
-
-The resulting store path will include some variation of the name, and it will be a file unless `destination` is used, in which case it will be a directory.
-
-::: {.example #ex-writeTextFile}
-# Usage 1 of `writeTextFile`
-
-Write `my-file` to `/nix/store/<store path>/some/subpath/my-cool-script`, making it executable.
-Also run a check on the resulting file in a `checkPhase`, and supply values for the less-used options.
-
-```nix
-writeTextFile {
-  name = "my-cool-script";
-  text = ''
-    #!/bin/sh
-    echo "This is my cool script!"
-  '';
-  executable = true;
-  destination = "/some/subpath/my-cool-script";
-  checkPhase = ''
-    ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
-  '';
-  meta = {
-    license = pkgs.lib.licenses.cc0;
-  };
-  allowSubstitutes = true;
-  preferLocalBuild = false;
-};
-```
-:::
-
-::: {.example #ex2-writeTextFile}
-# Usage 2 of `writeTextFile`
-
-Write the string `Contents of File` to `/nix/store/<store path>`.
-See also the [](#trivial-builder-writeText) helper function.
-
-```nix
+# Writes my-file to /nix/store/<store path>
 writeTextFile {
   name = "my-file";
   text = ''
     Contents of File
   '';
 }
-```
-:::
+# See also the `writeText` helper function below.
 
-::: {.example #ex3-writeTextFile}
-# Usage 3 of `writeTextFile`
-
-Write an executable script `my-script` to `/nix/store/<store path>/bin/my-script`.
-See also the [](#trivial-builder-writeScriptBin) helper function.
-
-```nix
+# Writes executable my-file to /nix/store/<store path>/bin/my-file
 writeTextFile {
-  name = "my-script";
+  name = "my-file";
   text = ''
-    echo "hi"
+    Contents of File
   '';
   executable = true;
-  destination = "/bin/my-script";
+  destination = "/bin/my-file";
 }
-```
-:::
-
-### `writeText` {#trivial-builder-writeText}
-
-Write a text file to the Nix store
-
-`writeText` takes the following arguments:
-a string.
-
-`name` (String)
-
-: The name used in the Nix store path.
-
-`text` (String)
-
-: The contents of the file.
-
-The store path will include the name, and it will be a file.
-
-::: {.example #ex-writeText}
-# Usage of `writeText`
-
-Write the string `Contents of File` to `/nix/store/<store path>`:
-
-```nix
+# Writes contents of file to /nix/store/<store path>
 writeText "my-file"
   ''
   Contents of File
   '';
-```
-:::
-
-This is equivalent to:
-
-```nix
-writeTextFile {
-  name = "my-file";
-  text = ''
-    Contents of File
-  '';
-}
-```
-
-### `writeTextDir` {#trivial-builder-writeTextDir}
-
-Write a text file within a subdirectory of the Nix store.
-
-`writeTextDir` takes the following arguments:
-
-`path` (String)
-
-: The destination within the Nix store path under which to create the file.
-
-`text` (String)
-
-: The contents of the file.
-
-The store path will be a directory.
-
-::: {.example #ex-writeTextDir}
-# Usage of `writeTextDir`
-
-Write the string `Contents of File` to `/nix/store/<store path>/share/my-file`:
-
-```nix
+# Writes contents of file to /nix/store/<store path>/share/my-file
 writeTextDir "share/my-file"
   ''
   Contents of File
   '';
-```
-:::
-
-This is equivalent to:
-
-```nix
-writeTextFile {
-  name = "my-file";
-  text = ''
-    Contents of File
-  '';
-  destination = "share/my-file";
-}
-```
-
-### `writeScript` {#trivial-builder-writeScript}
-
-Write an executable script file to the Nix store.
-
-`writeScript` takes the following arguments:
-
-`name` (String)
-
-: The name used in the Nix store path.
-
-`text` (String)
-
-: The contents of the file.
-
-The created file is marked as executable.
-The store path will include the name, and it will be a file.
-
-::: {.example #ex-writeScript}
-# Usage of `writeScript`
-
-Write the string `Contents of File` to `/nix/store/<store path>` and make the file executable.
-
-```nix
+# Writes my-file to /nix/store/<store path> and makes executable
 writeScript "my-file"
   ''
   Contents of File
   '';
-```
-:::
-
-This is equivalent to:
-
-```nix
-writeTextFile {
-  name = "my-file";
-  text = ''
-    Contents of File
-  '';
-  executable = true;
-}
-```
-
-### `writeScriptBin` {#trivial-builder-writeScriptBin}
-
-Write a script within a `bin` subirectory of a directory in the Nix store.
-This is for consistency with the convention of software packages placing executables under `bin`.
-
-`writeScriptBin` takes the following arguments:
-
-`name` (String)
-
-: The name used in the Nix store path and within the file created under the store path.
-
-`text` (String)
-
-: The contents of the file.
-
-The created file is marked as executable.
-The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
-
-::: {.example #ex-writeScriptBin}
-# Usage of `writeScriptBin`
-
-```nix
-writeScriptBin "my-script"
+# Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+writeScriptBin "my-file"
   ''
-  echo "hi"
+  Contents of File
   '';
-```
-:::
-
-This is equivalent to:
-
-```nix
-writeTextFile {
-  name = "my-script";
-  text = ''
-    echo "hi"
-  '';
-  executable = true;
-  destination = "bin/my-script"
-}
-```
-
-### `writeShellScript` {#trivial-builder-writeShellScript}
-
-Write a Bash script to the store.
-
-`writeShellScript` takes the following arguments:
-
-`name` (String)
-
-: The name used in the Nix store path.
-
-`text` (String)
-
-: The contents of the file.
-
-The created file is marked as executable.
-The store path will include the name, and it will be a file.
-
-This function is almost exactly like [](#trivial-builder-writeScript), except that it prepends to the file a [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29) line that points to the version of Bash used in Nixpkgs.
-<!-- this cannot be changed in practice, so there is no point pretending it's somehow generic -->
-
-::: {.example #ex-writeShellScript}
-# Usage of `writeShellScript`
-
-```nix
-writeShellScript "my-script"
+# Writes my-file to /nix/store/<store path> and makes executable.
+writeShellScript "my-file"
   ''
-  echo "hi"
+  Contents of File
   '';
-```
-:::
-
-This is equivalent to:
-
-```nix
-writeTextFile {
-  name = "my-script";
-  text = ''
-    #! ${pkgs.runtimeShell}
-    echo "hi"
-  '';
-  executable = true;
-}
-```
-
-### `writeShellScriptBin` {#trivial-builder-writeShellScriptBin}
-
-Write a Bash script to a "bin" subdirectory of a directory in the Nix store.
-
-`writeShellScriptBin` takes the following arguments:
-
-`name` (String)
-
-: The name used in the Nix store path and within the file generated under the store path.
-
-`text` (String)
-
-: The contents of the file.
-
-The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
-
-This function is a combination of [](#trivial-builder-writeShellScript) and [](#trivial-builder-writeScriptBin).
-
-::: {.example #ex-writeShellScriptBin}
-# Usage of `writeShellScriptBin`
-
-```nix
-writeShellScriptBin "my-script"
+# Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+writeShellScriptBin "my-file"
   ''
-  echo "hi"
+  Contents of File
   '';
-```
-:::
 
-This is equivalent to:
-
-```nix
-writeTextFile {
-  name = "my-script";
-  text = ''
-    #! ${pkgs.runtimeShell}
-    echo "hi"
-  '';
-  executable = true;
-  destination = "bin/my-script"
-}
 ```
 
 ## `concatTextFile`, `concatText`, `concatScript` {#trivial-builder-concatText}
@@ -502,14 +148,9 @@ concatScript "my-file" [ file1 file2 ]
 
 ## `writeShellApplication` {#trivial-builder-writeShellApplication}
 
-`writeShellApplication` is similar to `writeShellScriptBin` and `writeScriptBin` but supports runtime dependencies with `runtimeInputs`.
-Writes an executable shell script to `/nix/store/<store path>/bin/<name>` and checks its syntax with [`shellcheck`](https://github.com/koalaman/shellcheck) and the `bash`'s `-n` option.
-Some basic Bash options are set by default (`errexit`, `nounset`, and `pipefail`), but can be overridden with `bashOptions`.
+This can be used to easily produce a shell script that has some dependencies (`runtimeInputs`). It automatically sets the `PATH` of the script to contain all of the listed inputs, sets some sanity shellopts (`errexit`, `nounset`, `pipefail`), and checks the resulting script with [`shellcheck`](https://github.com/koalaman/shellcheck).
 
-Extra arguments may be passed to `stdenv.mkDerivation` by setting `derivationArgs`; note that variables set in this manner will be set when the shell script is _built,_ not when it's run.
-Runtime environment variables can be set with the `runtimeEnv` argument.
-
-For example, the following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`:
+For example, look at the following code:
 
 ```nix
 writeShellApplication {
@@ -522,6 +163,10 @@ writeShellApplication {
   '';
 }
 ```
+
+Unlike with normal `writeShellScriptBin`, there is no need to manually write out `${curl}/bin/curl`, setting the PATH
+was handled by `writeShellApplication`. Moreover, the script is being checked with `shellcheck` for more strict
+validation.
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 

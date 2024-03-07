@@ -70,8 +70,7 @@ let
         deviceDependency = dev:
           # Use systemd service if we manage device creation, else
           # trust udev when not in a container
-          if (dev == null || dev == "lo") then []
-          else if (hasAttr dev (filterAttrs (k: v: v.virtual) cfg.interfaces)) ||
+          if (hasAttr dev (filterAttrs (k: v: v.virtual) cfg.interfaces)) ||
              (hasAttr dev cfg.bridges) ||
              (hasAttr dev cfg.bonds) ||
              (hasAttr dev cfg.macvlans) ||
@@ -79,7 +78,7 @@ let
              (hasAttr dev cfg.vlans) ||
              (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
-          else optional (!config.boot.isContainer) (subsystemDevice dev);
+          else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");

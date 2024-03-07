@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, fetchpatch
+, pydantic
 
 # extras: babel
 , babel
@@ -58,16 +58,6 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-we2TquU28qP/ir4eE67J0Nlft/8IL8w7Ny3ypSE5cNk=";
   };
-
-  patches = [
-    # https://github.com/Flask-Middleware/flask-security/pull/901
-    (fetchpatch {
-      name = "fixes-for-py_webauthn-2.0.patch";
-      url = "https://github.com/Flask-Middleware/flask-security/commit/5725f7021343567ec0b25c890e859f4e84c93ba6.patch";
-      hash = "sha256-4EgwT4zRj0mh4ZaoZFz7H5KeiZ9zs+BY4siYm8DwMfU=";
-      excludes = [ "CHANGES.rst" ];
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -138,5 +128,7 @@ buildPythonPackage rec {
     description = "Simple security for Flask apps (fork)";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
+    # https://github.com/Flask-Middleware/flask-security/pull/851
+    broken = versionAtLeast pydantic.version "2";
   };
 }

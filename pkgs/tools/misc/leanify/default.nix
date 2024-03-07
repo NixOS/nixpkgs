@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "leanify";
-  version = "unstable-2023-10-19";
+  version = "unstable-2022-12-04";
 
   src = fetchFromGitHub {
     owner = "JayXon";
     repo = "Leanify";
-    rev = "5511415b02a7669f5fe9b454e5705e8328ab0359";
-    hash = "sha256-eOp/SOynh0HUz62Ki5ADRk7FjQY0Gh55ydVnO0MCXAA=";
+    rev = "7847668ac5bf0df1d940b674bc8b907bd1b37044";
+    hash = "sha256-KxVV7AW9sEfH4YTPDfeJk7fMMGh0eSkECXM/Mv9XqBA=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''

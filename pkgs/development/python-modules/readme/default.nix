@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, readme-renderer
+, readme_renderer
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    readme-renderer
+    readme_renderer
   ];
 
   checkPhase = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   # tests are not included with pypi release
-  # package is not readme-renderer
+  # package is not readme_renderer
   doCheck = false;
 
   meta = with lib; {

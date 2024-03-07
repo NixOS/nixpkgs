@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage rec {
     description = "XDG Desktop Portal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nyanbinary ];
-    mainProgram = "xdg-desktop-portal-cosmic";
     platforms = platforms.linux;
   };
 }

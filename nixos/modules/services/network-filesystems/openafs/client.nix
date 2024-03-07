@@ -215,7 +215,6 @@ in
     systemd.services.afsd = {
       description = "AFS client";
       wantedBy = [ "multi-user.target" ];
-      wants = lib.optional (!cfg.startDisconnected) "network-online.target";
       after = singleton (if cfg.startDisconnected then  "network.target" else "network-online.target");
       serviceConfig = { RemainAfterExit = true; };
       restartIfChanged = false;

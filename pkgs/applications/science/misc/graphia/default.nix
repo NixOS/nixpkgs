@@ -1,47 +1,47 @@
 { stdenv
 , lib
 , cmake
-, git
 , fetchFromGitHub
 , fetchpatch
 , wrapQtAppsHook
 , qtbase
-, qtdeclarative
-, qtsvg
-, qtwebengine
+, qtquickcontrols2
+, qtgraphicaleffects
 }:
 
 stdenv.mkDerivation rec {
   pname = "graphia";
-  version = "4.2";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "graphia-app";
     repo = "graphia";
     rev = version;
-    sha256 = "sha256-8+tlQbTr6BGx+/gjviuNrQQWcxC/j6dJ+PxwB4fYmqQ=";
+    sha256 = "sha256-9kohXLXF4F/qoHm8qmvPM1y9ak0Thb4xvgKJlVuOPTg=";
   };
 
   patches = [
-    # Fix gcc-13 build:
+    # Fix for a breakpad incompatibility with glibc>2.33
+    # https://github.com/pytorch/pytorch/issues/70297
+    # https://github.com/google/breakpad/commit/605c51ed96ad44b34c457bbca320e74e194c317e
+    ./breakpad-sigstksz.patch
+
+    # FIXME: backport patch fixing build with Qt 5.15, remove for next release
     (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/graphia-app/graphia/commit/78fb55a4d73f96e9a182de433c7da60330bd5b5e.patch";
-      hash = "sha256-waI2ur3gOKMQvqB2Qnyz7oMOMConl3jLMVKKmOmTpJs=";
+      url = "https://github.com/graphia-app/graphia/commit/4b51bb8d465afa7ed0b2b30cb1c5e1c6af95976f.patch";
+      hash = "sha256-GDJAFLxQlRWKvcOgqqPYV/aVTRM7+KDjW7Zp9l7SuyM=";
     })
   ];
 
   nativeBuildInputs = [
     cmake
-    git # needs to define some hash as a version
     wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
-    qtdeclarative
-    qtsvg
-    qtwebengine
+    qtquickcontrols2
+    qtgraphicaleffects
   ];
 
   meta = with lib; {
@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     description = "A visualisation tool for the creation and analysis of graphs.";
     homepage = "https://graphia.app";
     license = licenses.gpl3Only;
-    mainProgram = "Graphia";
     maintainers = [ maintainers.bgamari ];
     platforms = platforms.all;
   };

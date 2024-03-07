@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ganttproject-bin";
-  version = "3.3.3300";
+  version = "2.8.10";
 
-  src = fetchzip {
-    url = "https://dl.ganttproject.biz/ganttproject-${version}/ganttproject-${version}.zip";
-    stripRoot = false;
-    hash = "sha256-U9x64UIBuVtW44zbsdWuMRZyEJhZ8VUWbDVtapTGPMo=";
+  src = let build = "r2364"; in fetchzip {
+    sha256 = "0cclgyqv4f9pjsdlh93cqvgbzrp8ajvrpc2xszs03sknqz2kdh7r";
+    url = "https://dl.ganttproject.biz/ganttproject-${version}/"
+        + "ganttproject-${version}-${build}.zip";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.vidbina ];
-    mainProgram = "ganttproject";
   };
 }

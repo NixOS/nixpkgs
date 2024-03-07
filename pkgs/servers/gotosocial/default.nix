@@ -9,11 +9,11 @@ let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.13.3";
+  version = "0.13.0";
 
   web-assets = fetchurl {
     url = "https://github.com/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-xC1Acm/CJHXTblV8E63vZB+r/ktBH7EytL7x4eWGko8=";
+    hash = "sha256-aPxjfe+0f4hUBfwBH67LsR1/Kv/42sPhlHwmVmDfp30=";
   };
 in
 buildGoModule rec {
@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     inherit owner repo;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zjmIa25veVL0ruFow4c1oV+VtgJGgWrRL99GPdaNc4g";
+    hash = "sha256-+/x3CAGF/cjK1/7fHgC8EzlGR/Xmq3aFL5Ogc/QZCpA=";
   };
 
   vendorHash = null;
@@ -42,9 +42,6 @@ buildGoModule rec {
 
   # tests are working only on x86_64-linux
   doCheck = stdenv.isLinux && stdenv.isx86_64;
-
-  # flaky test
-  checkFlags = [ "-skip=^TestPage/minID,_maxID_and_limit_set$" ];
 
   passthru.tests.gotosocial = nixosTests.gotosocial;
 

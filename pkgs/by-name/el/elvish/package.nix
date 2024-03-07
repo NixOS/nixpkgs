@@ -6,7 +6,7 @@
 
 let
   pname = "elvish";
-  version = "0.20.1";
+  version = "0.19.2";
 in
 buildGoModule {
   inherit pname version;
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "elves";
     repo = "elvish";
     rev = "v${version}";
-    hash = "sha256-lKrX38gVUhYwwuNF25LcZ+TytP4vx/GO7ay6Au4BBZA=";
+    hash = "sha256-eCPJXCgmMvrJ2yVqYgXHXJWb6Ec0sutc91LNs4yRBYk=";
   };
 
-  vendorHash = "sha256-sgVGqpncV7Ylok5FRcV01a3MCX6UdZvTt3nfVh5L2so=";
+  vendorHash = "sha256-VMI20IP1jVkUK3rJm35szaFDfZGEEingUEL/xfVJ1cc=";
 
   subPackages = [ "cmd/elvish" ];
 

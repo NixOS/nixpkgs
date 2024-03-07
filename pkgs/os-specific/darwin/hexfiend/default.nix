@@ -1,19 +1,12 @@
 { stdenv, lib, fetchurl, undmg }:
 
-let
-  urlSuffix = version: if lib.versions.patch == 0 then
-    lib.versions.majorMinor version
-  else
-    version
-  ;
-in
 stdenv.mkDerivation rec {
   pname = "hexfiend";
-  version = "2.17.1";
+  version = "2.16.0";
 
   src = fetchurl {
-    url = "https://github.com/HexFiend/HexFiend/releases/download/v${version}/Hex_Fiend_${urlSuffix version}.dmg";
-    hash = "sha256-QpGmpxDpdS+sJtsNtp0VSAd9WJXaZiKTH4yDsDK8FSk=";
+    url = "https://github.com/HexFiend/HexFiend/releases/download/v${version}/Hex_Fiend_${lib.versions.majorMinor version}.dmg";
+    sha256 = "sha256-jO57bW5TyuQ0mjKKsSwDoGLp2TZ1d+m159flVGaVrLc=";
   };
 
   sourceRoot = "Hex Fiend.app";

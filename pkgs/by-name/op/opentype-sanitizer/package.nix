@@ -21,8 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gsNMPNPcfHyOgjJnIrJ5tLYHbCfIfTowEhcaGOUPb2Q=";
   };
 
-  mesonFlags = [ "-Dcpp_std=c++14" ];
-
   buildInputs = [
     freetype
     gtest

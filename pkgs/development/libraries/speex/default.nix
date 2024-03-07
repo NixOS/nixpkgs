@@ -1,12 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, fftw
-, speexdsp
-, withFft ? !stdenv.hostPlatform.isMinGW
-}:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fftw, speexdsp }:
 
 stdenv.mkDerivation rec {
   pname = "speex";
@@ -24,13 +16,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = lib.optionals withFft [ fftw ]
-    ++ [ speexdsp ];
+  buildInputs = [ fftw speexdsp ];
 
   # TODO: Remove this will help with immediate backward compatibility
   propagatedBuildInputs = [ speexdsp ];
 
-  configureFlags = lib.optionals withFft [
+  configureFlags = [
     "--with-fft=gpl-fftw3"
   ];
 
@@ -38,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.speex.org/";
     description = "An Open Source/Free Software patent-free audio compression format designed for speech";
     license = licenses.bsd3;
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = platforms.unix;
   };
 }

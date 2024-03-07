@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnupg.org/related_software/gpa/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    mainProgram = "gpa";
   };
 }

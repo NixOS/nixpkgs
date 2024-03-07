@@ -9,14 +9,10 @@ with pkgs;
       pkgSets = lib.pipe pkgNames [
         (filter (lib.hasPrefix "llvmPackages"))
         (filter (n: n != "rocmPackages.llvm"))
-        # Are throw aliases.
+        # Is a throw alias.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
         (filter (n: n != "llvmPackages_git"))
-        (filter (n: n != "llvmPackages_6"))
-        (filter (n: n != "llvmPackages_7"))
-        (filter (n: n != "llvmPackages_8"))
-        (filter (n: n != "llvmPackages_10"))
       ];
       tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
         clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
@@ -68,7 +64,9 @@ with pkgs;
             # libcxxStdenv broken
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+            (filterAttrs (n: _: n != "llvmPackages_8"))
             (filterAttrs (n: _: n != "llvmPackages_9"))
+            (filterAttrs (n: _: n != "llvmPackages_10"))
           ]);
         in
         toJSON sets;
@@ -111,7 +109,6 @@ with pkgs;
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
-  fetchPypiLegacy = callPackages ../build-support/fetchpypilegacy/tests.nix { };
 
   install-shell-files = callPackage ./install-shell-files {};
 
@@ -170,13 +167,7 @@ with pkgs;
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
 
-  buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
-
   nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
-
-  systemd = callPackage ./systemd { };
-
-  substitute = recurseIntoAttrs (callPackage ./substitute { });
 }

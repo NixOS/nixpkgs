@@ -29,7 +29,6 @@
 , spacenavSupport ? stdenv.isLinux, libspnav
 , wayland
 , wayland-protocols
-, wrapGAppsHook
 , qtwayland
 , cairo
 }:
@@ -58,7 +57,7 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ bison flex pkg-config gettext qmake wrapGAppsHook];
+  nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
 
   buildInputs = [
     eigen boost glew opencsg cgal_4 mpfr gmp glib

@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
     license = licenses.gpl2;
-    mainProgram = "cksfv";
   };
 }

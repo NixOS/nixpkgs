@@ -4,12 +4,12 @@ with lib;
 
 let
 
-  inInitrd = config.boot.initrd.supportedFilesystems.reiserfs or false;
+  inInitrd = any (fs: fs == "reiserfs") config.boot.initrd.supportedFilesystems;
 
 in
 
 {
-  config = mkIf (config.boot.supportedFilesystems.reiserfs or false) {
+  config = mkIf (any (fs: fs == "reiserfs") config.boot.supportedFilesystems) {
 
     system.fsPackages = [ pkgs.reiserfsprogs ];
 

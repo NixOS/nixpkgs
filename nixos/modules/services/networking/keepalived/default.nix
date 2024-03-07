@@ -59,11 +59,9 @@ let
         ${optionalString i.vmacXmitBase "vmac_xmit_base"}
 
         ${optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
-        ${optionalString (builtins.length i.unicastPeers > 0) ''
-          unicast_peer {
-            ${concatStringsSep "\n" i.unicastPeers}
-          }
-        ''}
+        unicast_peer {
+          ${concatStringsSep "\n" i.unicastPeers}
+        }
 
         virtual_ipaddress {
           ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
@@ -140,7 +138,6 @@ let
 
 in
 {
-  meta.maintainers = [ lib.maintainers.raitobezarius ];
 
   options = {
     services.keepalived = {

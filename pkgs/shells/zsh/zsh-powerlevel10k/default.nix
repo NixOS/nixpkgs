@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.20.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ES5vJXHjAKw/VHjWs8Au/3R+/aotSbY7PWnWAMzCR8E=";
+    hash = "sha256-+hzjSbbrXr0w1rGHm6m2oZ6pfmD6UUDBfPd7uMg5l5c=";
   };
 
   strictDeps = true;

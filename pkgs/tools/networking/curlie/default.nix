@@ -29,6 +29,5 @@ buildGoModule rec {
     homepage = "https://curlie.io/";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit;
-    mainProgram = "curlie";
   };
 }

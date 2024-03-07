@@ -51,6 +51,5 @@ buildGoModule rec {
     homepage = "https://github.com/pgrok/pgrok";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marie ];
-    mainProgram = "pgrok";
   };
 }

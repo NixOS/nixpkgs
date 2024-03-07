@@ -25,6 +25,5 @@ buildNpmPackage rec {
     homepage = "https://apitools.dev/swagger-cli/";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "swagger-cli";
   };
 }

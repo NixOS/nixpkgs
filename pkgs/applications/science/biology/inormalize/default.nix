@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper,
   perlPackages,
-  libminc, ebtks }:
+  libminc, EBTKS }:
 
 stdenv.mkDerivation rec {
   pname = "inormalize";
@@ -15,16 +15,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lgmask-interp.patch ./nu_correct_norm-interp.patch ];
 
-  postPatch = ''
-    substituteInPlace inormalize.cc \
-      --replace "clamp" "::clamp"
-  '';
-
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ libminc ebtks ];
+  buildInputs = [ libminc EBTKS ];
   propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${ebtks}/lib/" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${EBTKS}/lib/" ];
 
   postFixup = ''
     for p in $out/bin/*; do

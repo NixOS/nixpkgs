@@ -1,9 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, hypothesis
-, pyutil
 , setuptools
+, pyutil
 , twisted
 }:
 
@@ -21,26 +20,17 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    pyutil
-  ];
+  propagatedBuildInputs = [ pyutil ];
 
-  nativeCheckInputs = [
-    hypothesis
-    twisted
-  ];
+  nativeCheckInputs = [ twisted ];
 
-  checkPhase = ''
-    trial zfec
-  '';
+  checkPhase = "trial zfec";
 
-  pythonImportsCheck = [
-    "zfec"
-  ];
+  pythonImportsCheck = [ "zfec" ];
 
   meta = with lib; {
     homepage = "https://github.com/tahoe-lafs/zfec";
-    description = "Fast erasure codec which can be used with the command-line, C, Python, or Haskell";
+    description = "Zfec, a fast erasure codec which can be used with the command-line, C, Python, or Haskell";
     longDescription = ''
       Fast, portable, programmable erasure coding a.k.a. "forward
       error correction": the generation of redundant blocks of

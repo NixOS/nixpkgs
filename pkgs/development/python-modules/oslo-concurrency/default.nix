@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "6.0.0";
+  version = "5.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
-    hash = "sha256-tS8CtORvXydLkfuOG/xcv5pBjfzUqDvggDRUlePSboo=";
+    hash = "sha256-yqaSBw0hVZ73H/WQeAb3USoXgsRby1ChlP4+DNeNfe0=";
   };
 
   postPatch = ''

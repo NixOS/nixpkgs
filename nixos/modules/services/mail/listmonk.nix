@@ -187,11 +187,7 @@ in {
           # Indeed, it will try to create all the folders and realize one of them already exist.
           # Therefore, we have to create it ourselves.
           ''${pkgs.coreutils}/bin/mkdir -p "''${STATE_DIRECTORY}/listmonk/uploads"''
-          # setup database if not already done
-          "${cfg.package}/bin/listmonk --config ${cfgFile} --idempotent --install --yes"
-          # apply db migrations (setup and migrations can not be done in one step
-          # with "--install --upgrade" listmonk ignores the upgrade)
-          "${cfg.package}/bin/listmonk --config ${cfgFile} --upgrade --yes"
+          "${cfg.package}/bin/listmonk --config ${cfgFile} --idempotent --install --upgrade --yes"
           "${updateDatabaseConfigScript}/bin/update-database-config.sh"
         ];
         ExecStart = "${cfg.package}/bin/listmonk --config ${cfgFile}";
@@ -205,12 +201,13 @@ in {
         DynamicUser = true;
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
-        SystemCallArchitectures = "native";
+        SystemCallArchitecture = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" ];
-        PrivateDevices = true;
+        ProtectDevices = true;
         ProtectControlGroups = true;
         ProtectKernelTunables = true;
         ProtectHome = true;
+        DeviceAllow = false;
         RestrictNamespaces = true;
         RestrictRealtime = true;
         UMask = "0027";

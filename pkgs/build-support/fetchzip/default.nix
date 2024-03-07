@@ -5,7 +5,7 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ lib, fetchurl, withUnzip ? true, unzip, glibcLocalesUtf8 }:
+{ lib, fetchurl, unzip, glibcLocalesUtf8 }:
 
 { name ? "source"
 , url ? ""
@@ -42,7 +42,7 @@ fetchurl ({
   # Have to pull in glibcLocalesUtf8 for unzip in setup-hook.sh to handle
   # UTF-8 aware locale:
   #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
-  nativeBuildInputs = lib.optionals withUnzip [ unzip glibcLocalesUtf8 ] ++ nativeBuildInputs;
+  nativeBuildInputs = [ unzip glibcLocalesUtf8 ] ++ nativeBuildInputs;
 
   postFetch =
     ''

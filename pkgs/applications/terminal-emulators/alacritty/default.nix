@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString (!xdg-utils.meta.broken) ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';

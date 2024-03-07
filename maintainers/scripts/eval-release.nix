@@ -1,8 +1,9 @@
-# Evaluate `release.nix' like Hydra would. Too bad nix-instantiate can't to do this.
+# Evaluate `release.nix' like Hydra would.  Too bad nix-instantiate
+# can't to do this.
+
+with import ../../lib;
 
 let
-  inherit (import ../../lib) isDerivation mapAttrs;
-
   trace = if builtins.getEnv "VERBOSE" == "1" then builtins.trace else (x: y: y);
 
   rel = removeAttrs (import ../../pkgs/top-level/release.nix { }) [ "tarball" "unstable" "xbursttools" ];

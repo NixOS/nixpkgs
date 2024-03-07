@@ -28,6 +28,5 @@ buildDotnetModule rec {
     license = licenses.asl20;
     maintainers = [ maintainers.jvanbruegge ];
     platforms = platforms.linux;
-    mainProgram = "tone";
   };
 }

@@ -2,14 +2,14 @@
 , fetchFromGitHub
 , lmdb }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lmdbxx";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "lmdbxx";
-    rev = finalAttrs.version;
+    rev = version;
     sha256 = "sha256-7CxQZdgHVvmof6wVR9Mzic6tg89XJT3Z1ICGRs7PZYo=";
   };
 
@@ -22,4 +22,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-})
+}
+

@@ -22,6 +22,5 @@ buildGoModule rec {
     description = "Process manager for Procfile-based applications";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.sveitser ];
-    mainProgram = "hivemind";
   };
 }

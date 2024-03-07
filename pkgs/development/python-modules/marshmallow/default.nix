@@ -1,31 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flit-core
-, packaging
 , pytestCheckHook
 , pythonOlder
 , pytz
 , simplejson
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.21.1";
-  pyproject = true;
+  version = "3.20.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
-    repo = "marshmallow";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KhXasYKooZRokRoFlWKOaQzSUe6tXDtUlrf65eGGUi8=";
+    hash = "sha256-sPYiup7ontnubtBxv+rIT0up4IHPJNCUlH9J4FlHsss=";
   };
-
-  nativeBuildInputs = [
-    flit-core
-  ];
 
   propagatedBuildInputs = [
     packaging

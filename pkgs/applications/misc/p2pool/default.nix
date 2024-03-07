@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "3.10";
+  version = "3.9";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-IDOtwrIKzP/pbwqIespvZtNS1VdR3246uXxgxR3V6VI=";
+    sha256 = "sha256-3CzQVK/1kLL50UdlTsDvHVfx9ZY8B3M0qzcIlonII6k=";
     fetchSubmodules = true;
   };
 
@@ -52,6 +52,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/SChernykh/p2pool";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ratsclub ];
-    mainProgram = "p2pool";
   };
 }

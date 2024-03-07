@@ -18,18 +18,18 @@
 , pynacl
 }:
 
-# When changing this package, please test packages {keepkey,ledger,onlykey,trezor}-agent
+# XXX: when changing this package, please test the package onlykey-agent.
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.14.8";
+  version = "0.14.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
     rev = "v${version}";
-    hash = "sha256-tcVott/GlHsICQf640Gm5jx89fZWsCdcYnBxi/Kh2oc=";
+    hash = "sha256-RISAy0efdatr9u4CWNRGnlffkC8ksw1NyRpJWKwqz+s=";
   };
 
   # hardcode the path to gpgconf in the libagent library

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-client";
-  version = "0.20";
+  version = "0.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GASjsOCZ4lSK0+VtIuVxFNxjMCbHkUGy/KSBtGLSaXw=";
+    hash = "sha256-ia8nfU5/dcLq3ctJTvpDmvB24mCjO3JrkfQsuXPR+xs=";
   };
 
   __darwinAllowLocalNetworking = true;

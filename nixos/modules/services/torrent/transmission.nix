@@ -74,7 +74,7 @@ in
             description = lib.mdDoc "";
           };
           options.message-level = mkOption {
-            type = types.ints.between 0 6;
+            type = types.ints.between 0 3;
             default = 2;
             description = lib.mdDoc "Set verbosity of transmission messages.";
           };

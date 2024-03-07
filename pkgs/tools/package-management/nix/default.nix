@@ -156,7 +156,6 @@ in lib.makeExtensible (self: ({
     hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
       patch-monitorfdhup
-      ./patches/2_3/CVE-2024-27297.patch
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; };
@@ -235,16 +234,12 @@ in lib.makeExtensible (self: ({
     hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
     patches = [
       patch-rapidcheck-shared
-      ./patches/2_18/CVE-2024-27297.patch
     ];
   };
 
   nix_2_19 = common {
-    version = "2.19.3";
-    hash = "sha256-EtL6M0H5+0mFbFh+teVjm+0B+xmHoKwtBvigS5NMWoo=";
-    patches = [
-      ./patches/2_19/CVE-2024-27297.patch
-    ];
+    version = "2.19.2";
+    hash = "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=";
   };
 
   # The minimum Nix version supported by Nixpkgs

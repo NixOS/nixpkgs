@@ -1,35 +1,16 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, jdk_headless
-, jre_minimal
+, jre
 , makeBinaryWrapper
-, curl
-, jq
-, yq
-, dynamodb-local
-, testers
-, common-updater-scripts
-, writeShellScript
 }:
-let
-  jre = jre_minimal.override {
-    modules = [
-      "java.logging"
-      "java.xml"
-      "java.desktop"
-      "java.management"
-    ];
-    jdk = jdk_headless;
-  };
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
-  version = "2.2.1";
+  version = "2023-12-14";
 
   src = fetchurl {
-    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-01-04.tar.gz";
-    hash = "sha256-CbZ9Z9A70JoHu4G6It+7WycaEtzuwjVJ2YrOK+37zYA=";
+    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_${finalAttrs.version}.tar.gz";
+    hash = "sha256-F9xTcLNAVFVbH7l0FlMuVNoLBrJS/UcHKXTkJh1n40w=";
   };
 
   sourceRoot = ".";
@@ -47,29 +28,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru = {
-    tests.version = testers.testVersion {
-      package = dynamodb-local;
-    };
-    updateScript = writeShellScript "update-dynamodb-local" ''
-      set -o errexit
-      export PATH="${lib.makeBinPath [ curl jq yq common-updater-scripts ]}:$PATH"
-
-      NEW_VERSION=$(curl -s https://repo1.maven.org/maven2/com/amazonaws/DynamoDBLocal/maven-metadata.xml | xq -r '.metadata.versioning.latest')
-      NEW_VERSION_DATE=$(curl -s https://repo1.maven.org/maven2/com/amazonaws/DynamoDBLocal/maven-metadata.xml | xq -r '.metadata.versioning.lastUpdated | "\(.[:4])-\(.[4:6])-\(.[6:8])"')
-
-      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
-
-      DOWNLOAD_URL="https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_$NEW_VERSION_DATE.tar.gz"
-      NIX_HASH=$(nix hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
-
-      update-source-version "dynamodb-local" "$NEW_VERSION" "$NIX_HASH" "$DOWNLOAD_URL"
-    '';
-  };
 
   meta = with lib; {
     description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service.";

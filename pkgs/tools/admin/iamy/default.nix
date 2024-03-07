@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/99designs/iamy";
     license = licenses.mit;
     maintainers = with maintainers; [ suvash ];
-    mainProgram = "iamy";
   };
 }

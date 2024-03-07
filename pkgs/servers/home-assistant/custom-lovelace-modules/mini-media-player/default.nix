@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "mini-media-player";
-  version = "1.16.9";
+  version = "1.16.8";
 
   src = fetchFromGitHub {
     owner = "kalkih";
     repo = "mini-media-player";
     rev = "v${version}";
-    hash = "sha256-tEG8xmqsPDssXmsCobHJoNK3qdRvBRe6FcTfm16r6+g=";
+    hash = "sha256-mBxK/Y+gesaJwPYHB4P8FCkyfoV9lwC8jAzPZJV+B+M=";
   };
 
-  npmDepsHash = "sha256-pN6Hq0ECnmSZgKPoSfdAQsqNykUakLqRCTyLGVK57KQ=";
+  npmDepsHash = "sha256-kuEgX5PX7RKhaJPzx+GW37TiSISvz+51tKGacvAMlfg=";
 
   installPhase = ''
     runHook preInstall

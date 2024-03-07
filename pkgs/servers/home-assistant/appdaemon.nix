@@ -8,6 +8,8 @@ python3.pkgs.buildPythonApplication rec {
   version = "4.4.2";
   pyproject = true;
 
+  disabled = python3.pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "AppDaemon";
     repo = "appdaemon";
@@ -15,10 +17,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-T3InE4J4qYeFJTq6nrW8y5BOA7Z0n3t9eVpl641r/xk=";
   };
 
-  pythonRelaxDeps = true;
+  postPatch = ''
+    # relax dependencies
+    sed -i 's/~=/>=/' pyproject.toml
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 

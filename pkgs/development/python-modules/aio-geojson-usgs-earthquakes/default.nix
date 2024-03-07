@@ -1,33 +1,28 @@
 { lib
 , aio-geojson-client
 , aiohttp
-, aioresponses
+, aresponses
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
 , pytz
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-usgs-earthquakes";
-  version = "0.3";
-  pyproject = true;
+  version = "0.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-usgs-earthquakes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q9vBy5R5N5ihJdSMALo88qVYcFVs2/33lYRPdLej4S8=";
+    hash = "sha256-ET8wcOep4tSZJXyL+XvfW2j9eKp6LrBk/g18ZlgLIzc=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aio-geojson-client
@@ -42,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    aioresponses
+    aresponses
     pytest-asyncio
   ];
 

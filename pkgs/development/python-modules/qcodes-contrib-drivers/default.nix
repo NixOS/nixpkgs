@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "qcodes-contrib-drivers";
-  version = "0.21.0";
+  version = "0.18.0";
 
   disabled = pythonOlder "3.8";
   format = "pyproject";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-7WkG6Bq4J4PU4eWX52RaupQ8cNzE+sJ7s3PoXFRxG2w=";
+    rev = "v${version}";
+    sha256 = "sha256-hg3jSiuOkiuOInnUzzlKtBeoP5zkCDBQ3xP6KCwq+lU=";
   };
 
   nativeBuildInputs = [ setuptools versioningit ];

@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/trashhalo/imgcat";
     license = licenses.mit;
     maintainers = with maintainers; [ penguwin ];
-    mainProgram = "imgcat";
   };
 }

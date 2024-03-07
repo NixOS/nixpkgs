@@ -18,12 +18,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix";
-  version = "3.1.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/mcomix/mcomix-${version}.tar.gz";
-    hash = "sha256-+Shuun/7w86VKBNamTmCPEJfO76fdKY5+HBvzCi0xCc=";
+    hash = "sha256-InDEPXXih49k5MiG1bATElxCiUs2RZTV7JeRVMTeoAQ=";
   };
 
   buildInputs = [
@@ -56,10 +56,6 @@ python3.pkgs.buildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       "--prefix" "PATH" ":" "${lib.makeBinPath ([ p7zip ] ++ lib.optional unrarSupport unrar)}"
     )
-  '';
-
-  postInstall = ''
-    cp -a share $out/
   '';
 
   passthru.tests.version = testers.testVersion {

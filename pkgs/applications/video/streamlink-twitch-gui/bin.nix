@@ -121,7 +121,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/streamlink/streamlink-twitch-gui/releases";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    mainProgram = "streamlink-twitch-gui";
     maintainers = with maintainers; [ rileyinman ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

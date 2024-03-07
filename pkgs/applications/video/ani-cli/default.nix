@@ -21,13 +21,13 @@ assert withMpv || withVlc || withIina;
 
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
-  version = "4.8";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     rev = "v${version}";
-    hash = "sha256-vntCiWaONndjU622c1BoCoASQxQf/i7yO0x+70OxzPU=";
+    hash = "sha256-Ll4bHKrDZukoQX35iiMI6rMSgiTC6wp7fHUnOMPagOA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

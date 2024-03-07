@@ -18,14 +18,11 @@ let
     dir=${cfg.downloadDir}
     listen-port=${concatStringsSep "," (rangesToStringList cfg.listenPortRange)}
     rpc-listen-port=${toString cfg.rpcListenPort}
+    rpc-secret=${cfg.rpcSecret}
   '';
 
 in
 {
-  imports = [
-    (mkRemovedOptionModule [ "services" "aria2" "rpcSecret" ] "Use services.aria2.rpcSecretFile instead")
-  ];
-
   options = {
     services.aria2 = {
       enable = mkOption {
@@ -68,11 +65,11 @@ in
         default = 6800;
         description = lib.mdDoc "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
       };
-      rpcSecretFile = mkOption {
-        type = types.path;
-        example = "/run/secrets/aria2-rpc-token.txt";
+      rpcSecret = mkOption {
+        type = types.str;
+        default = "aria2rpc";
         description = lib.mdDoc ''
-          A file containing the RPC secret authorization token.
+          Set RPC secret authorization token.
           Read https://aria2.github.io/manual/en/html/aria2c.html#rpc-auth to know how this option value is used.
         '';
       };
@@ -120,7 +117,6 @@ in
           touch "${sessionFile}"
         fi
         cp -f "${settingsFile}" "${settingsDir}/aria2.conf"
-        echo "rpc-secret=$(cat "$CREDENTIALS_DIRECTORY/rpcSecretFile")" >> "${settingsDir}/aria2.conf"
       '';
 
       serviceConfig = {
@@ -129,7 +125,6 @@ in
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "aria2";
         Group = "aria2";
-        LoadCredential="rpcSecretFile:${cfg.rpcSecretFile}";
       };
     };
   };

@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.iblech ];
-    mainProgram = "nat-traverse";
   };
 }

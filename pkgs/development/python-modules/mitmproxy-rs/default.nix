@@ -45,5 +45,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.all;
   };
 }

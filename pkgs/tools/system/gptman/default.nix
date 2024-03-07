@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gptman";
-  version = "1.1.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "rust-disk-partition-management";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ebV61EilGggix6JSN/MW4Ka0itkSpvikLDSO005TTYY=";
+    hash = "sha256-Qi2nrvF566AK+JsP7V9tVQXwAU63TNpfTFZLuM/h1Ps=";
   };
 
-  cargoHash = "sha256-P+qez0oVsHBiaBYban2o8MRvF8ElLf5zb+p+tYunWWA=";
+  cargoHash = "sha256-YMlwlSq14S37SqewglvxZYUL67fT66hh22t0N8h+2vk=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

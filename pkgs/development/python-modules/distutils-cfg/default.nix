@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
-    dest="$out/${python.sitePackages}/distutils"
+    dest="$out/lib/${python.libPrefix}/site-packages/distutils"
     mkdir -p $dest
     ln -s ${python}/lib/${python.libPrefix}/distutils/* $dest
     ln -s ${distutilsCfg} $dest/distutils.cfg

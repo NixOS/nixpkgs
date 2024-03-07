@@ -48,6 +48,5 @@ in appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ tbenst ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "tusk";
   };
 }

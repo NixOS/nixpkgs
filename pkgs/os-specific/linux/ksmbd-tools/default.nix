@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-skip-installing-example-configuration.patch ];
   mesonFlags = [
     "-Drundir=/run"
-    "-Dsystemdsystemunitdir=lib/systemd/system"
     "--sysconfdir /etc"
   ];
 

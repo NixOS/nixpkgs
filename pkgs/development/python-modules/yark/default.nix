@@ -1,33 +1,29 @@
 { lib
 , buildPythonPackage
+, fetchPypi
+, poetry-core
+, pythonRelaxDepsHook
 , click
 , colorama
-, fetchPypi
 , flask
-, poetry-core
-, progress
-, pythonOlder
-, pythonRelaxDepsHook
 , requests
 , yt-dlp
+, progress
 }:
 
 buildPythonPackage rec {
   pname = "yark";
-  version = "1.2.10";
-  pyproject = true;
+  version = "1.2.9";
 
-  disabled = pythonOlder "3.9";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y1fWHpvrqGuBPyJ2dO2y0W2zhEgcTJABtkOAoZ7uyZU=";
+    hash = "sha256-g9JwFnB4tFuvRvQGEURbIB2gaXQgCQJkL1sNmYMFvck=";
   };
 
   pythonRelaxDeps = [
-    "flask"
     "requests"
-    "yt-dlp"
   ];
 
   nativeBuildInputs = [
@@ -44,7 +40,8 @@ buildPythonPackage rec {
     yt-dlp
   ];
 
-  # Module has no tests
+  # There aren't any unit tests. If test discovery runs, it will crash, halting the build.
+  # When upstream adds unit tests, please configure them here. Thanks! ~ C.
   doCheck = false;
 
   pythonImportsCheck = [
@@ -52,10 +49,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Module for YouTube archiving";
+    description = "YouTube archiving made simple";
     homepage = "https://github.com/Owez/yark";
-    changelog = "https://github.com/Owez/yark/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,9 +1,6 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
-, fetchpatch2
-, pdm-backend
 , pytz
 , oauthlib
 , requests
@@ -12,26 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pyfireservicerota";
-  version = "0.0.44";
-  pyproject = true;
-
-  disabled = pythonOlder "3.10";
+  version = "0.0.43";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OknGX4xP+AHXRuhizbeTVAfiOX0uRGzAly7FJ1vopDI=";
+    hash = "sha256-3+QK1BVuWYii0oYT4xXMOYJZmVKrB4EmqE0EkdFlZvE=";
   };
-
-  postPatch = ''
-    # https://github.com/cyberjunky/python-fireservicerota/pull/1
-    substituteInPlace pyproject.toml \
-      --replace-fail '"aiohttp",' '"requests",' \
-      --replace-fail '"aiohttp_retry",' ""
-  '';
-
-  nativeBuildInputs = [
-    pdm-backend
-  ];
 
   propagatedBuildInputs = [
     pytz

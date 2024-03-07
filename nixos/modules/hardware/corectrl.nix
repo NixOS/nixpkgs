@@ -12,10 +12,6 @@ in
       Add your user to the corectrl group to run corectrl without needing to enter your password
     '');
 
-    package = mkPackageOption pkgs "corectrl" {
-      extraDescription = "Useful for overriding the configuration options used for the package.";
-    };
-
     gpuOverclock = {
       enable = mkEnableOption (lib.mdDoc ''
         GPU overclocking
@@ -36,9 +32,9 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
-      environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ pkgs.corectrl ];
 
-      services.dbus.packages = [ cfg.package ];
+      services.dbus.packages = [ pkgs.corectrl ];
 
       users.groups.corectrl = { };
 

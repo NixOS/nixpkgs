@@ -6,7 +6,6 @@
 , fetchFromGitHub
 , json-stream
 , json-stream-rs-tokenizer
-, pythonOlder
 , rustc
 , rustPlatform
 , setuptools
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.25";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  version = "0.4.22";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zo/jRAWSwcOnO8eU4KhDNz44P6xDGcrZf9CflwsSvF0=";
+    hash = "sha256-EW726gUXTBX3gTxlFQ45RgkUa2Z4tIjUZxO4GBLXgEs=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

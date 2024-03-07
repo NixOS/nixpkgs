@@ -7,17 +7,15 @@
 , cmake
 , curl
 , dbus
-, elfutils
 , fetchFromGitHub
+, fetchpatch
 , flac
 , gtk3
-, glew
-, gtest
 , jasper
-, lame
 , libGLU
 , libarchive
 , libdatrie
+, libelf
 , libepoxy
 , libexif
 , libogg
@@ -32,13 +30,10 @@
 , libxkbcommon
 , lsb-release
 , lz4
-, libmpg123
 , makeWrapper
 , pcre
-, pcre2
 , pkg-config
 , portaudio
-, rapidjson
 , sqlite
 , tinyxml
 , udev
@@ -47,25 +42,31 @@
 , xorg
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "opencpn";
-  version = "5.8.4";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
-    rev = "Release_${finalAttrs.version}";
-    hash = "sha256-axRI3sssj2Q6IBfIeyvOa494b0EgKFP+lFL/QrGIybQ=";
+    rev = "Release_${version}";
+    hash = "sha256-sNZYf/2gtjRrrGPuazVnKTgcuIQpKPazhexqlK21T4g=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/OpenCPN/OpenCPN/commit/30fa16850ba97d3df0622273947e3e3975b8e6c0.patch";
+      sha256 = "sha256-Sb4FE9QJA5kMJi52/x1Az6rMTS3WSURPx4QAhcv2j9E=";
+    })
+  ];
+
   postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
+    sed -i '/fixup_bundle/d' CMakeLists.txt
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    gtest
   ] ++ lib.optionals stdenv.isLinux [
     lsb-release
   ] ++ lib.optionals stdenv.isDarwin [
@@ -79,14 +80,15 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     flac
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # gtk3 propagates AppKit from the 10.12 SDK
     AppKit
   ] ++ [
     gtk3
-    glew
     jasper
     libGLU
     libarchive
     libdatrie
+    libelf
     libepoxy
     libexif
     libogg
@@ -98,24 +100,19 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libxkbcommon
     lz4
-    libmpg123
     pcre
-    pcre2
     portaudio
-    rapidjson
     sqlite
     tinyxml
     wxGTK32
   ] ++ lib.optionals stdenv.isLinux [
     alsa-utils
-    elfutils
     libselinux
     libsepol
+    udev
     util-linux
     xorg.libXdmcp
     xorg.libXtst
-  ] ++ lib.optionals stdenv.isDarwin [
-    lame
   ];
 
   cmakeFlags = [ "-DOCPN_BUNDLE_DOCS=true" ];
@@ -139,4 +136,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     homepage = "https://opencpn.org/";
   };
-})
+}

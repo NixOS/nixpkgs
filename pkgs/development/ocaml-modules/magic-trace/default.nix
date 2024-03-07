@@ -1,49 +1,21 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, ocaml-crunch
-, angstrom
-, async
-, cohttp
-, cohttp_static_handler ? null
-, core
-, core_unix ? null
-, fzf
-, owee
-, ppx_jane
-, re
-, shell ? null
-}:
+{ lib, fetchFromGitHub, buildDunePackage, async, cohttp_static_handler ? null
+, core_unix ? null, owee, ppx_jane, shell ? null }:
 
 buildDunePackage rec {
   pname = "magic-trace";
-  version = "1.2.1";
+  version = "1.1.0";
 
   minimalOCamlVersion = "4.12";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = "magic-trace";
     rev = "v${version}";
-    hash = "sha256-/9TDjCG/06mhGyqbjAdUmk6fcaq9fNDqVSw51w5EEy4=";
+    sha256 = "sha256-615AOkrbQI6vRosA5Kz3Epipe9f9+Gs9+g3bVl5gzBY=";
   };
 
-  nativeBuildInputs = [
-    ocaml-crunch
-  ];
-  buildInputs = [
-    angstrom
-    async
-    cohttp
-    cohttp_static_handler
-    core
-    core_unix
-    fzf
-    owee
-    ppx_jane
-    re
-    shell
-  ];
+  buildInputs = [ async cohttp_static_handler core_unix owee ppx_jane shell ];
 
   meta = with lib; {
     description =

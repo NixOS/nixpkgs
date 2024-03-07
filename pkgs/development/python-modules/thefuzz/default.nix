@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "thefuzz";
-  version = "0.22.1";
+  version = "0.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cTgDmn7PVA2jI3kthZLvmQKx1563jBR9TyBmTeefNoA=";
+    hash = "sha256-ol5JeGscRgPH/G4taea8ZgmCopGWmLU2/4NU4GMcxA0=";
   };
 
   propagatedBuildInputs = [ levenshtein ];

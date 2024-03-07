@@ -13,20 +13,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         frontendScheme = "http";
         frontendHostname = "localhost";
       };
-      services.nginx = {
-        enable = true;
-        virtualHosts."http://localhost" = {
-          locations."/".proxyPass = "http://localhost:3456";
-        };
-      };
+      services.nginx.enable = true;
     };
     vikunjaPostgresql = { pkgs, ... }: {
       services.vikunja = {
         enable = true;
         database = {
           type = "postgres";
-          user = "vikunja";
-          database = "vikunja";
+          user = "vikunja-api";
+          database = "vikunja-api";
           host = "/run/postgresql";
         };
         frontendScheme = "http";
@@ -35,25 +30,20 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
       services.postgresql = {
         enable = true;
-        ensureDatabases = [ "vikunja" ];
+        ensureDatabases = [ "vikunja-api" ];
         ensureUsers = [
-          { name = "vikunja";
+          { name = "vikunja-api";
             ensureDBOwnership = true;
           }
         ];
       };
-      services.nginx = {
-        enable = true;
-        virtualHosts."http://localhost" = {
-          locations."/".proxyPass = "http://localhost:9090";
-        };
-      };
+      services.nginx.enable = true;
     };
   };
 
   testScript =
     ''
-      vikunjaSqlite.wait_for_unit("vikunja.service")
+      vikunjaSqlite.wait_for_unit("vikunja-api.service")
       vikunjaSqlite.wait_for_open_port(3456)
       vikunjaSqlite.succeed("curl --fail http://localhost:3456/api/v1/info")
 
@@ -62,7 +52,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       vikunjaSqlite.succeed("curl --fail http://localhost/api/v1/info")
       vikunjaSqlite.succeed("curl --fail http://localhost")
 
-      vikunjaPostgresql.wait_for_unit("vikunja.service")
+      vikunjaPostgresql.wait_for_unit("vikunja-api.service")
       vikunjaPostgresql.wait_for_open_port(9090)
       vikunjaPostgresql.succeed("curl --fail http://localhost:9090/api/v1/info")
 

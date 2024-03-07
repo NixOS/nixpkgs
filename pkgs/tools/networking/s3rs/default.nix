@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/yanganto/s3rs";
     license = licenses.mit;
     maintainers = with maintainers; [ yanganto ];
-    mainProgram = "s3rs";
   };
 }

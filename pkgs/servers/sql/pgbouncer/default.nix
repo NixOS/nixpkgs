@@ -1,19 +1,17 @@
-{ lib, stdenv, fetchurl, openssl, libevent, c-ares, pkg-config, systemd, nixosTests }:
+{ lib, stdenv, fetchurl, openssl, libevent, c-ares, pkg-config, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "pgbouncer";
-  version = "1.22.1";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "https://www.pgbouncer.org/downloads/files/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-KwGKps5/WSyYkrueD9kCYkhOtzk3/Sr5KXcKRTc7ohU=";
+    hash = "sha256-fh3WIMjYWoSQr/JQYdUFXXrvnPPov+LZ53GbjuWRFOI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl c-ares ]
-    ++ lib.optional stdenv.isLinux systemd;
+  buildInputs = [ libevent openssl c-ares ];
   enableParallelBuilding = true;
-  configureFlags = lib.optional stdenv.isLinux "--with-systemd";
 
   passthru.tests = {
     pgbouncer = nixosTests.pgbouncer;

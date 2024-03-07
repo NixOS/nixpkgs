@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pythonRelaxDepsHook
 , unasync
 , poetry-core
 , python
@@ -34,15 +33,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     unasync
     poetry-core
   ];
-
-  # it has not been maintained at all for a half year and some dependencies are outdated
-  # https://github.com/redis/redis-om-python/pull/554
-  # https://github.com/redis/redis-om-python/pull/577
-  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     click

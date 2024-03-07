@@ -28,9 +28,12 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     mdformat
     mdit-py-plugins
+  ];
+
+  propagatedBuildInputs = [
     ruamel-yaml
   ];
 
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Mdformat plugin to ensure frontmatter is respected";
+    description = "mdformat plugin to ensure frontmatter is respected";
     homepage = "https://github.com/butler54/mdformat-frontmatter";
     changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v{version}/CHANGELOG.md";
     license = licenses.mit;

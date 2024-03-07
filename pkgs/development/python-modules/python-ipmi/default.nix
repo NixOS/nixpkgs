@@ -3,33 +3,29 @@
 , fetchFromGitHub
 , future
 , mock
+, nose
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "python-ipmi";
-  version = "0.5.5";
-  pyproject = true;
+  version = "0.5.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kontron";
-    repo = "python-ipmi";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-G5FcFHtyN8bXMjj/yfJgzcfmV1mxQ9lu3GM3XMeTWVU=";
+    hash = "sha256-IXEq3d1nXGEndciQw2MJ1Abc0vmEYez+k6aWGSWEzWA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version=version," "version='${version}',"
+      --replace "version=version," "version='${version}',"
   '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     future
@@ -37,6 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    nose
     pytestCheckHook
   ];
 

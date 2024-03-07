@@ -1,40 +1,39 @@
 { lib
 , stdenv
 , buildPythonApplication
-, cepa
-, colorama
+, substituteAll
 , fetchFromGitHub
+, isPy3k
+, colorama
 , flask
-, flask-compress
 , flask-httpauth
 , flask-socketio
 , gevent-socketio
 , gevent-websocket
-, obfs4
+, cepa
 , psutil
+, pyqt5
 , pycrypto
 , pynacl
-, pyqt5
-, pyside6
+, pyside2
 , pysocks
 , pytestCheckHook
 , qrcode
 , qt5
 , requests
-, snowflake
-, substituteAll
-, tor
 , unidecode
-, waitress
+, tor
+, obfs4
+, snowflake
 }:
 
 let
-  version = "2.6.1";
+  version = "2.6";
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-LR3Ao4Q8kEDwrFV+gYdMSEeYF4hDtEa1rJgvRRrJMwc=";
+    sha256 = "sha256-LA7XlzoCXUiG/9subTddAd22336wO9sOHCIBlQK4Ga4=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -58,7 +57,8 @@ let
     homepage = "https://onionshare.org/";
 
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bbjubjub ];
+    maintainers = with maintainers; [ lourkeur ];
+    mainProgram = "onionshare-cli";
   };
 
   # TODO: package meek https://support.torproject.org/glossary/meek/
@@ -68,7 +68,7 @@ in
 rec {
   onionshare = buildPythonApplication {
     pname = "onionshare-cli";
-    inherit version;
+    inherit version meta;
     src = "${src}/cli";
     patches = [
       # hardcode store paths of dependencies
@@ -79,27 +79,23 @@ rec {
       })
     ];
     propagatedBuildInputs = [
-      cepa
       colorama
       flask
-      flask-compress
       flask-httpauth
       flask-socketio
       gevent-socketio
       gevent-websocket
+      cepa
       psutil
       pycrypto
       pynacl
-      pyside6
-      qrcode
       requests
       unidecode
-      waitress
     ];
 
     buildInputs = [
-      obfs4
       tor
+      obfs4
     ];
 
     nativeCheckInputs = [
@@ -111,25 +107,19 @@ rec {
       export HOME="$(mktemp -d)"
     '';
 
-    disabledTests = lib.optionals stdenv.isLinux [
+    disabledTests = [
       "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
     ] ++ lib.optionals stdenv.isDarwin [
-      # requires meek-client which is not packaged
-      "test_get_tor_paths_darwin"
       # on darwin (and only on darwin) onionshare attempts to discover
       # user's *real* homedir via /etc/passwd, making it more painful
       # to fake
       "test_receive_mode_webhook"
     ];
-
-    meta = meta // {
-      mainProgram = "onionshare-cli";
-    };
   };
 
   onionshare-gui = buildPythonApplication {
     pname = "onionshare";
-    inherit version;
+    inherit version meta;
     src = "${src}/desktop";
     patches = [
       # hardcode store paths of dependencies
@@ -138,15 +128,16 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+      ./fix-qrcode-gui.patch
     ];
 
     propagatedBuildInputs = [
       onionshare
-      psutil
       pyqt5
-      pyside6
-      pysocks
+      pyside2
+      psutil
       qrcode
+      pysocks
     ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
@@ -158,18 +149,12 @@ rec {
       cp $src/org.onionshare.OnionShare.appdata.xml $out/share/appdata
     '';
 
-    dontWrapQtApps = true;
-
     preFixup = ''
-      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+      wrapQtApp $out/bin/onionshare
     '';
 
     doCheck = false;
 
     pythonImportsCheck = [ "onionshare" ];
-
-    meta = meta // {
-      mainProgram = "onionshare";
-    };
   };
 }

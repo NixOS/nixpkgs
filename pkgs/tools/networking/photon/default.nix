@@ -31,6 +31,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/s0md3v/Photon";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
-    mainProgram = "photon";
   };
 }

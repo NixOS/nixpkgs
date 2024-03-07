@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     ./fix-pri-path.patch
   ];
 
+  postPatch = ''
+    substituteInPlace src/dsysinfo.cpp \
+      --replace "/usr/share/deepin/distribution.info" "/etc/distribution.info" \
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

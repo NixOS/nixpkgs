@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
 
     maintainers = with lib.maintainers; [ marcweber ];
     platforms = lib.platforms.linux;
-    mainProgram = "grip";
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , writeShellScript
 , pkg-config
@@ -27,14 +26,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-TM+cZ7N5PD6UG9cvy0XFa0sNYc3apbAJvEMh3husjRk=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-26157.patch";
-      url = "https://github.com/LibreDWG/libredwg/commit/c8cf03ce4c2315b146caf582ea061c0460193bcc.patch";
-      hash = "sha256-EEF3YYPW+6SvXRiAw3zz6tWU9w/qmGtc09Tf8wn7hVc=";
-    })
-  ];
 
   postPatch = let
     printVersion = writeShellScript "print-version" ''

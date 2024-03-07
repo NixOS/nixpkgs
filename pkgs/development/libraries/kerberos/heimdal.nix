@@ -1,138 +1,63 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, python3
-, perl
-, bison
-, flex
-, texinfo
-, perlPackages
-
-, openldap
-, libcap_ng
-, sqlite
-, openssl
-, db
-, libedit
-, pam
-, krb5
-, libmicrohttpd
-, cjson
-
-, CoreFoundation
-, Security
-, SystemConfiguration
-
-, curl
-, jdk
-, unzip
-, which
-
-, nixosTests
-
-, withCJSON ? true
-, withCapNG ? stdenv.isLinux
-# libmicrohttpd should theoretically work for darwin as well, but something is broken.
-# It affects tests check-bx509d and check-httpkadmind.
-, withMicroHTTPD ? stdenv.isLinux
-, withOpenLDAP ? true
-, withOpenLDAPAsHDBModule ? false
-, withOpenSSL ? true
-, withSQLite3 ? true
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3, perl, bison, flex
+, texinfo, perlPackages
+, openldap, libcap_ng, sqlite, openssl, db, libedit, pam
+, CoreFoundation, Security, SystemConfiguration
 }:
 
-assert lib.assertMsg (withOpenLDAPAsHDBModule -> withOpenLDAP) ''
-  OpenLDAP needs to be enabled in order to build the OpenLDAP HDB Module.
-'';
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "heimdal";
-  version = "7.8.0-unstable-2023-11-29";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
-    rev = "3253c49544eacb33d5ad2f6f919b0696e5aab794";
-    hash = "sha256-uljzQBzXrZCZjcIWfioqHN8YsbUUNy14Vo+A3vZIXzM=";
+    rev = "heimdal-${version}";
+    sha256 = "sha256-iXOaar1S3y0xHdL0S+vS0uxoFQjy43kABxqE+KEhxjU=";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    python3
-    perl
-    bison
-    flex
-    texinfo
-  ]
-  ++ (with perlPackages; [ JSON ]);
+  patches = [ ./heimdal-make-missing-headers.patch ];
 
-  buildInputs = [ db libedit pam ]
-    ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
-    ++ lib.optionals (withCJSON) [ cjson ]
-    ++ lib.optionals (withCapNG) [ libcap_ng ]
-    ++ lib.optionals (withMicroHTTPD) [ libmicrohttpd ]
-    ++ lib.optionals (withOpenLDAP) [ openldap ]
-    ++ lib.optionals (withOpenSSL) [ openssl ]
-    ++ lib.optionals (withSQLite3) [ sqlite ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 perl bison flex texinfo ]
+    ++ (with perlPackages; [ JSON ]);
+  buildInputs = lib.optionals (stdenv.isLinux) [ libcap_ng ]
+    ++ [ db sqlite openssl libedit openldap pam]
+    ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ];
 
-  doCheck = true;
-  nativeCheckInputs = [
-    curl
-    jdk
-    unzip
-    which
-  ];
-
+  ## ugly, X should be made an option
   configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--infodir=$info/share/info"
+    "--enable-hdb-openldap-module"
+    "--with-sqlite3=${sqlite.dev}"
+
+  # ugly, --with-libedit is not enought, it fall back to bundled libedit
     "--with-libedit-include=${libedit.dev}/include"
     "--with-libedit-lib=${libedit}/lib"
-    "--with-berkeley-db-include=${db.dev}/include"
-    "--with-berkeley-db"
-
+    "--with-openssl=${openssl.dev}"
     "--without-x"
-    "--disable-afs-string-to-key"
-  ] ++ lib.optionals (withCapNG) [
-    "--with-capng"
-  ] ++ lib.optionals (withCJSON) [
-    "--with-cjson=${cjson}"
-  ] ++ lib.optionals (withOpenLDAP) [
+    "--with-berkeley-db"
+    "--with-berkeley-db-include=${db.dev}/include"
     "--with-openldap=${openldap.dev}"
-  ] ++ lib.optionals (withOpenLDAPAsHDBModule) [
-    "--enable-hdb-openldap-module"
-  ] ++ lib.optionals (withSQLite3) [
-    "--with-sqlite3=${sqlite.dev}"
+  ] ++ lib.optionals (stdenv.isLinux) [
+    "--with-capng"
   ];
 
-  # (check-ldap) slapd resides within ${openldap}/libexec,
-  #              which is not part of $PATH by default.
-  # (check-ldap) prepending ${openldap}/bin to the path to avoid
-  #              using the default installation of openldap on unsandboxed darwin systems,
-  #              which does not support the new mdb backend at the moment (2024-01-13).
-  # (check-ldap) the bdb backend got deprecated in favour of mdb in openldap 2.5.0,
-  #              but the heimdal tests still seem to expect bdb as the openldap backend.
-  #              This might be fixed upstream in a future update.
-  patchPhase = ''
-    runHook prePatch
-
-    substituteInPlace tests/ldap/slapd-init.in \
-      --replace 'SCHEMA_PATHS="' 'SCHEMA_PATHS="${openldap}/etc/schema '
-    substituteInPlace tests/ldap/check-ldap.in \
-      --replace 'PATH=' 'PATH=${openldap}/libexec:${openldap}/bin:'
-    substituteInPlace tests/ldap/slapd.conf \
-      --replace 'database	bdb' 'database mdb'
-
-    runHook postPatch
+  postUnpack = ''
+    sed -i '/^DEFAULT_INCLUDES/ s,$, -I..,' source/cf/Makefile.am.common
+    sed -i -e 's/date/date --date="@$SOURCE_DATE_EPOCH"/' source/configure.ac
   '';
 
-  # (test_cc) heimdal uses librokens implementation of `secure_getenv` on darwin,
-  #           which expects either USER or LOGNAME to be set.
-  preCheck = lib.optionalString (stdenv.isDarwin) ''
-    export USER=nix-builder
+  preConfigure = ''
+    configureFlagsArray+=(
+      "--bindir=$out/bin"
+      "--sbindir=$out/sbin"
+      "--libexecdir=$out/libexec/heimdal"
+      "--mandir=$man/share/man"
+      "--infodir=$man/share/info"
+      "--includedir=$dev/include")
   '';
 
   # We need to build hcrypt for applications like samba
@@ -146,12 +71,15 @@ stdenv.mkDerivation {
     (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
     (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
 
+    # Do we need it?
+    rm $out/bin/su
+
     mkdir -p $dev/bin
     mv $out/bin/krb5-config $dev/bin/
 
     # asn1 compilers, move them to $dev
-    mv $out/libexec/heimdal/* $dev/bin
-    rmdir $out/libexec/heimdal
+    mv $out/libexec/heimdal/heimdal/* $dev/bin
+    rmdir $out/libexec/heimdal/heimdal
 
     # compile_et is needed for cross-compiling this package and samba
     mv lib/com_err/.libs/compile_et $dev/bin
@@ -162,17 +90,11 @@ stdenv.mkDerivation {
   #  hx_locl.h:67:25: fatal error: pkcs10_asn1.h: No such file or directory
   #enableParallelBuilding = true;
 
-  passthru = {
-    implementation = "heimdal";
-    tests.nixos = nixosTests.kerberos.heimdal;
-  };
-
   meta = with lib; {
-    homepage = "https://www.heimdal.software";
-    changelog = "https://github.com/heimdal/heimdal/releases";
     description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ h7x4 ];
   };
+
+  passthru.implementation = "heimdal";
 }

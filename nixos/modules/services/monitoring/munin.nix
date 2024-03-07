@@ -374,11 +374,7 @@ in
     };
 
     # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
-    systemd.tmpfiles.settings."10-munin"."/run/munin".d = {
-      mode = "0755";
-      user = "munin";
-      group = "munin";
-    };
+    systemd.tmpfiles.rules = [ "d /run/munin 0755 munin munin -" ];
 
   }) (mkIf cronCfg.enable {
 
@@ -403,17 +399,11 @@ in
       };
     };
 
-    systemd.tmpfiles.settings."20-munin" = let
-      defaultConfig = {
-        mode = "0755";
-        user = "munin";
-        group = "munin";
-      };
-    in {
-      "/run/munin".d = defaultConfig;
-      "/var/log/munin".d = defaultConfig;
-      "/var/www/munin".d = defaultConfig;
-      "/var/lib/munin".d = defaultConfig;
-    };
+    systemd.tmpfiles.rules = [
+      "d /run/munin 0755 munin munin -"
+      "d /var/log/munin 0755 munin munin -"
+      "d /var/www/munin 0755 munin munin -"
+      "d /var/lib/munin 0755 munin munin -"
+    ];
   })];
 }

@@ -86,14 +86,10 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ cmake ninja python ]
     ++ optionals enableManpages [
-    # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-    # splicing does *not* work with the latter. (TODO: fix)
-    python3Packages.sphinx
-  ] ++ optionals (lib.versionOlder version "18" && enableManpages) [
-    python3Packages.recommonmark
-  ] ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
-    python3Packages.myst-parser
-  ];
+      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+      # splicing does *not* work with the latter. (TODO: fix)
+      python3Packages.sphinx python3Packages.recommonmark
+    ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -224,7 +220,7 @@ stdenv.mkDerivation (rec {
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
+    patch -p1 -i ${../../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -333,7 +329,7 @@ stdenv.mkDerivation (rec {
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

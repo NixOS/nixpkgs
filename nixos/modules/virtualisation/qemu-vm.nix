@@ -701,10 +701,7 @@ in
           type = types.listOf types.str;
           default = [];
           example = [ "-vga std" ];
-          description = lib.mdDoc ''
-            Options passed to QEMU.
-            See [QEMU User Documentation](https://www.qemu.org/docs/master/system/qemu-manpage) for a complete list.
-          '';
+          description = lib.mdDoc "Options passed to QEMU.";
         };
 
       consoles = mkOption {
@@ -735,10 +732,9 @@ in
           description = lib.mdDoc ''
             Networking-related command-line options that should be passed to qemu.
             The default is to use userspace networking (SLiRP).
-            See the [QEMU Wiki on Networking](https://wiki.qemu.org/Documentation/Networking) for details.
 
             If you override this option, be advised to keep
-            `''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}` (as seen in the example)
+            ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the example)
             to keep the default runtime behaviour.
           '';
         };
@@ -813,19 +809,14 @@ in
           defaultText = "!cfg.useBootLoader";
           description =
             lib.mdDoc ''
-              If enabled, the virtual machine will boot directly into the kernel instead of through a bootloader.
-              Read more about this feature in the [QEMU documentation on Direct Linux Boot](https://qemu-project.gitlab.io/qemu/system/linuxboot.html)
+              If enabled, the virtual machine will boot directly into the kernel instead of through a bootloader. Other relevant parameters such as the initrd are also passed to QEMU.
 
-              This is enabled by default.
               If you want to test netboot, consider disabling this option.
-              Enable a bootloader with {option}`virtualisation.useBootLoader` if you need.
 
-              Relevant parameters such as those set in `boot.initrd` and `boot.kernelParams` are also passed to QEMU.
-              Additional parameters can be supplied on invocation through the environment variable `$QEMU_KERNEL_PARAMS`.
-              They are added to the `-append` option, see [QEMU User Documentation](https://www.qemu.org/docs/master/system/qemu-manpage) for details
-              For example, to let QEMU use the parent terminal as the serial console, set `QEMU_KERNEL_PARAMS="console=ttyS0"`.
+              This will not boot / reboot correctly into a system that has switched to a different configuration on disk.
 
-              This will not (re-)boot correctly into a system that has switched to a different configuration on disk.
+              This is enabled by default if you don't enable bootloaders, but you can still enable a bootloader if you need.
+              Read more about this feature: <https://qemu-project.gitlab.io/qemu/system/linuxboot.html>.
             '';
         };
       initrd =
@@ -855,8 +846,6 @@ in
 
             If disabled, the kernel and initrd are directly booted,
             forgoing any bootloader.
-
-            Check the documentation on {option}`virtualisation.directBoot.enable` for details.
           '';
       };
 
@@ -1077,18 +1066,10 @@ in
         ''}
       '';
 
-    systemd.tmpfiles.settings."10-qemu-vm" = lib.mkIf config.boot.initrd.systemd.enable {
-      "/etc/NIXOS".f = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
-      "${config.boot.loader.efi.efiSysMountPoint}".d = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
-    };
+    systemd.tmpfiles.rules = lib.mkIf config.boot.initrd.systemd.enable [
+      "f /etc/NIXOS 0644 root root -"
+      "d /boot 0644 root root -"
+    ];
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
@@ -1182,10 +1163,6 @@ in
         "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
         "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
-      ])
-      (mkIf (pkgs.stdenv.hostPlatform.isx86 && cfg.efi.OVMF.systemManagementModeRequired) [
-        "-machine" "q35,smm=on"
-        "-global" "driver=cfi.pflash01,property=secure,value=on"
       ])
     ];
 

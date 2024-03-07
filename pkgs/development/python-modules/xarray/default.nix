@@ -8,23 +8,25 @@
 , pythonOlder
 , setuptools
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2024.1.1";
-  pyproject = true;
+  version = "2023.11.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oboth6dIkuITycg/SkYtvN9oISMgpOMbNL14m6emTjU=";
+    hash = "sha256-mkXhB0GES1+UjY4edotGDffpBpbRji7/LB1H9dnVAlI=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

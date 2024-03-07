@@ -9,9 +9,6 @@
 , pahole
 , lib
 , stdenv
-, rustc
-, rustPlatform
-, rust-bindgen
 
 , # The kernel source tarball.
   src
@@ -40,7 +37,7 @@
   modDirVersion ? null
 
 , # An attribute set whose attributes express the availability of
-  # certain features in this kernel.  E.g. `{ia32Emulation = true;}'
+  # certain features in this kernel.  E.g. `{iwlwifi = true;}'
   # indicates a kernel that provides Intel wireless support.  Used in
   # NixOS to implement kernel-specific behaviour.
   features ? {}
@@ -92,7 +89,9 @@ let
 
   # Combine the `features' attribute sets of all the kernel patches.
   kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
+    iwlwifi = true;
     efiBootStub = true;
+    needsCifsUtils = true;
     netfilterRPFilter = true;
     ia32Emulation = true;
   } // features) kernelPatches;
@@ -118,8 +117,6 @@ let
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([baseConfigStr] ++ configFromPatches);
 
-  withRust = ((configfile.moduleStructuredConfig.settings.RUST or {}).tristate or null) == "y";
-
   configfile = stdenv.mkDerivation {
     inherit ignoreConfigErrors autoModules preferBuiltin kernelArch extraMakeFlags;
     pname = "linux-config";
@@ -133,11 +130,7 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ lib.optional (lib.versionAtLeast version "5.2") pahole
-      ++ lib.optionals withRust [ rust-bindgen rustc ]
-    ;
-
-    RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
+      ++ lib.optional (lib.versionAtLeast version "5.2") pahole;
 
     platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
@@ -209,13 +202,10 @@ let
     inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile;
     pos = builtins.unsafeGetAttrPos "version" args;
 
-    config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; } // lib.optionalAttrs withRust { CONFIG_RUST = "y"; };
+    config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   } // lib.optionalAttrs (modDirVersion != null) { inherit modDirVersion; });
 
-in
-kernel.overrideAttrs (finalAttrs: previousAttrs: {
-
-  passthru = previousAttrs.passthru or { } // basicArgs // {
+  passthru = basicArgs // {
     features = kernelFeatures;
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
@@ -228,15 +218,17 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
       ]);
     });
 
+    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let
-      overridableKernel = finalAttrs.finalPackage // {
+      overridableKernel = finalKernel // {
         override = args:
           lib.warn (
             "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
-            + toString (lib.attrNames (lib.toFunction args { }))
+            + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
           ) overridableKernel;
       };
     in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
-})
+  finalKernel = lib.extendDerivation true passthru kernel;
+in finalKernel

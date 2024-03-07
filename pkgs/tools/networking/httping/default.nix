@@ -58,6 +58,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Only;
     maintainers = [];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "httping";
   };
 }

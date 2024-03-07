@@ -1,7 +1,7 @@
 { stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
 , libXdmcp, libXau, lib, openssl
-, buildPackages, substituteAll, writeScript
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
@@ -16,14 +16,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ jam unzip ];
-
-  patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-    # Build process generates files by compiling and then invoking an executable.
-    substituteAll {
-      src = ./jam-cross.patch;
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    }
-  );
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Jambase \

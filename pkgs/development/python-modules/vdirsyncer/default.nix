@@ -22,7 +22,6 @@
 , aioresponses
 , vdirsyncer
 , testers
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -45,11 +44,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "aiostream"
   ];
 
   propagatedBuildInputs = [

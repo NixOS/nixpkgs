@@ -79,11 +79,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "259";
+  version = "253";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-WYgFWM6HKFt3xVcRNytQPWOf3ZpH1cG7Cghhu/AES80=";
+    hash = "sha256-xI+SIEUPKFxz7sk9qqE1ibSJX0WRPnJEpco0Mqv7Wp8=";
   };
 
   outputs = [
@@ -219,7 +219,7 @@ python3.pkgs.buildPythonApplication rec {
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
-    ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
+    ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
   ));
 
   nativeCheckInputs = with python3.pkgs; [
@@ -248,15 +248,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_non_unicode_filename"
     "test_listing"
     "test_symlink_root"
-
-    # Appears to be a sandbox related issue
-    "test_trim_stderr_in_command"
-    # Seems to be a bug caused by having different versions of rdata than
-    # expected. Will file upstream.
-    "test_item_rdb"
-    # Caused by getting an otool command instead of llvm-objdump. Could be Nix
-    # setup, could be upstream bug. Will file upstream.
-    "test_libmix_differences"
   ];
 
   disabledTestPaths = [

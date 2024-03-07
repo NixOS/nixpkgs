@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     description = "GUI for XNEUR keyboard layout switcher";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 gpl3 ];
-    mainProgram = "gxneur";
   };
 }

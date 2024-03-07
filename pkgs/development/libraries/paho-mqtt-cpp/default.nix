@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, paho-mqtt-c, enableStatic ? stdenv.hostPlatform.isStatic, enableShared ? !stdenv.hostPlatform.isStatic }:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl, paho-mqtt-c }:
 
 stdenv.mkDerivation rec {
   pname = "paho.mqtt.cpp";
@@ -14,12 +14,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ openssl paho-mqtt-c ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "PAHO_WITH_SSL" true)
-    (lib.cmakeBool "PAHO_BUILD_STATIC" enableStatic)
-    (lib.cmakeBool "PAHO_BUILD_SHARED" enableShared)
-  ];
 
   meta = with lib; {
     description = "Eclipse Paho MQTT C++ Client Library";

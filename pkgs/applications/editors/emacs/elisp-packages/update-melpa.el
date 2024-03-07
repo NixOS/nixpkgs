@@ -6,7 +6,7 @@
 (require 'semaphore-promise)
 (require 'url)
 (require 'json)
-(require 'cl-lib)
+(require 'cl)
 (require 'subr-x)
 (require 'seq)
 
@@ -77,7 +77,7 @@ return Promise to resolve in that process."
 
 (defun parse-previous-archive (filename)
   (let ((idx (make-hash-table :test 'equal)))
-    (cl-loop for desc in
+    (loop for desc in
           (let ((json-object-type 'hash-table)
                 (json-array-type 'list)
                 (json-key-type 'symbol))
@@ -166,7 +166,7 @@ return Promise to resolve in that process."
 
 (defun recipe-info (recipe-index ename)
   (if-let (desc (gethash ename recipe-index))
-      (cl-destructuring-bind (rcp-commit . rcp-sha256) desc
+      (destructuring-bind (rcp-commit . rcp-sha256) desc
         `((commit . ,rcp-commit)
           (sha256 . ,rcp-sha256)))
     `((error . "No recipe info"))))
@@ -204,7 +204,7 @@ return Promise to resolve in that process."
                   (seq-let [recipe-index unstable-sha stable-sha] res
                     (append `((ename   . ,ename))
                             (if-let (desc (gethash ename recipe-index))
-                                (cl-destructuring-bind (rcp-commit . rcp-sha256) desc
+                                (destructuring-bind (rcp-commit . rcp-sha256) desc
                                   (append `((commit . ,rcp-commit)
                                             (sha256 . ,rcp-sha256))
                                           (when (not unstable-aprops)
@@ -257,9 +257,10 @@ return Promise to resolve in that process."
       url (lambda (status)
             (funcall resolve (condition-case err
                                  (progn
-                                   (url-http-parse-headers)
-                                   (goto-char url-http-end-of-headers)
+                                   (goto-char (point-min))
+                                   (search-forward "\n\n")
                                    (message (buffer-substring (point-min) (point)))
+                                   (delete-region (point-min) (point))
                                    (funcall parser))
                                (funcall reject err))))))))
 

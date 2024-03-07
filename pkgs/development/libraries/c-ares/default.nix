@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "c-ares";
-  version = "1.26.0";
+  version = "1.19.1";
 
   src = fetchurl {
     url = "https://c-ares.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-vtWMTwKwCQgOvabCRnukaXIqxq679El9xEqD2MYZTlA=";
+    sha256 = "sha256-MhcAOZty7Q4DfQB0xinndB9rLsLdqSlWq+PpZx0+Jo4=";
   };
 
   outputs = [ "out" "dev" "man" ];

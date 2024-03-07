@@ -45,6 +45,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/bore";
     license = licenses.isc;
     maintainers = [ maintainers.delan ];
-    mainProgram = "bore";
   };
 }

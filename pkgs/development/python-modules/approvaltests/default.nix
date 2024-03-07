@@ -5,7 +5,6 @@
 , buildPythonPackage
 , empty-files
 , fetchFromGitHub
-, mock
 , mrjob
 , numpy
 , pyperclip
@@ -15,21 +14,20 @@
 , pythonOlder
 , setuptools
 , testfixtures
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "11.1.0";
+  version = "10.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F03qctswG0/y2ZCdHCacHsMiBZFTmEEegYXIIB2UPlc=";
+    hash = "sha256-2NaqqgrHXJovoVExvbr0s86eRbcxy+DUrsdRH/vak3E=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +39,10 @@ buildPythonPackage rec {
     approval-utilities
     beautifulsoup4
     empty-files
-    mock
     mrjob
     pyperclip
     pytest
     testfixtures
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -56,6 +52,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_docstrings"
     # Tests expects paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"

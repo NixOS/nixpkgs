@@ -88,7 +88,7 @@ self: let
         ];
 
         buildInputs = [
-          pkgs.gnatPackages.gnatcoll-xref
+          pkgs.gnatcoll-xref
         ];
 
         buildPhase = ''

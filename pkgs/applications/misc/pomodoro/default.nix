@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ annaaurora ];
     # error: redefinition of module 'ObjectiveC'
     broken = stdenv.isDarwin;
-    mainProgram = "pomodoro";
   };
 }

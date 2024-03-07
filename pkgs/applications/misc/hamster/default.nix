@@ -3,15 +3,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hamster";
-  version = "3.0.3";
+  version = "3.0.2";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "projecthamster";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-cUmUvJP9Y3de5OaNgIxvigDsX2ww7NNRY5son/gg+WI=";
+    rev = "v${version}";
+    sha256 = "09ikiwc2izjvwqbbyp8knn190x5y4anwslkmb9k2h3r3jwrg2vd2";
   };
 
   nativeBuildInputs = [

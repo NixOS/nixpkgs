@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
-  buildInputs = [ zlib freetype libpng libjpeg libwebp libtiff libavif ]
-    ++ lib.optionals withXorg [ fontconfig libXpm ];
+  buildInputs = [ zlib fontconfig freetype libpng libjpeg libwebp libtiff libavif ]
+    ++ lib.optional withXorg libXpm;
 
   outputs = [ "bin" "dev" "out" ];
 

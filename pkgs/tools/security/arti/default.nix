@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "arti";
-  version = "1.2.0";
+  version = "1.1.12";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage rec {
     owner = "core";
     repo = "arti";
     rev = "arti-v${version}";
-    hash = "sha256-ba07btx3eorFiocRk1YbkkGcblgsWaMI14r1SaPNr9g=";
+    hash = "sha256-cGqeuck/N1IoI400AkuUIkJpAJneJ7T47rfwC/GP62M=";
   };
 
-  cargoHash = "sha256-+TVmmyjAFLDlnXMED0+S0M3VbGBRHds4C1GNyTGD4wI=";
+  cargoHash = "sha256-aC5Us0wk2IORZDT+op2iAXYDqd9Qc2UI+GncbSZRMxI=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An implementation of Tor in Rust";
-    homepage = "https://arti.torproject.org/";
-    changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://gitlab.torproject.org/tpo/core/arti";
+    changelog = "https://gitlab.torproject.org/tpo/core/arti/-/raw/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ marsam ];
   };

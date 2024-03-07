@@ -2,20 +2,22 @@
 
 buildPythonPackage rec {
   pname = "iodata";
-  version = "1.0.0a2";
+  version = "0.1.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "theochem";
     repo = pname;
     rev = version;
-    hash = "sha256-GFTCYE19Re7WLhV8eU+0i8OMp/Tsms/Xj9DRTcgjcz4=";
+    hash = "sha256-Qn2xWFxdS12K92DhdHVzYrBjPRV+vYo7Cs27vkeCaxM=";
   };
+
+  leaveDotGit = true;
 
   nativeBuildInputs = [ cython nose ];
   propagatedBuildInputs = [ numpy scipy attrs ];
 
-  pythonImportsCheck = [ "iodata" ];
+  pythonImportsCheck = [ "iodata" "iodata.overlap_accel" ];
   doCheck = false; # Requires roberto or nose and a lenghtly setup to find the cython modules
 
   meta = with lib; {

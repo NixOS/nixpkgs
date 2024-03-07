@@ -1,50 +1,52 @@
 { lib
-, stdenv
+, mkDerivation
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
 , fcitx5
+, qtx11extras
+, libxcb
+, libXdmcp
 , qtbase
-, qtwayland
-, wrapQtAppsHook
+, qt6
 , wayland
 }:
-let
-  majorVersion = lib.versions.major qtbase.version;
-in
-stdenv.mkDerivation rec {
-  pname = "fcitx5-qt${majorVersion}";
+
+mkDerivation rec {
+  pname = "fcitx5-qt";
   version = "5.1.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = "fcitx5-qt";
+    repo = pname;
     rev = version;
     sha256 = "sha256-bVH2US/uEZGERslnAh/fyUbzR9fK1UfG4J+mOmrIE8Y=";
   };
 
-  postPatch = ''
-    substituteInPlace qt${majorVersion}/platforminputcontext/CMakeLists.txt \
-      --replace \$"{CMAKE_INSTALL_QT${majorVersion}PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+  preConfigure = ''
+    substituteInPlace qt5/platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QT5PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+    substituteInPlace qt6/platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QT6PLUGINDIR}" $out/${qt6.qtbase.qtPluginPrefix}
   '';
 
   cmakeFlags = [
-    "-DENABLE_QT4=OFF"
-    "-DENABLE_QT5=OFF"
-    "-DENABLE_QT6=OFF"
-    "-DENABLE_QT${majorVersion}=ON"
+    # adding qt6 to buildInputs would result in error: detected mismatched Qt dependencies
+    "-DCMAKE_PREFIX_PATH=${qt6.qtbase};${qt6.qtwayland}"
+    "-DENABLE_QT4=0"
+    "-DENABLE_QT6=1"
   ];
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtwayland
     fcitx5
+    qtx11extras
+    libxcb
+    libXdmcp
     wayland
   ];
 

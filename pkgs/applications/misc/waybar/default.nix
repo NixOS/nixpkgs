@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, bash
 , fetchFromGitHub
 , SDL2
 , alsa-lib
@@ -163,11 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
     "upower_glib" = upowerSupport;
     "wireplumber" = wireplumberSupport;
   }) ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
-
-  postPatch = ''
-    substituteInPlace include/util/command.hpp \
-      --replace-fail /bin/sh ${lib.getExe' bash "sh"}
-  '';
 
   preFixup = lib.optionalString withMediaPlayer ''
     cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py

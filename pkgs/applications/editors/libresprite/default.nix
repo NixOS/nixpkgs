@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 
 , cmake
 , pkg-config
@@ -27,26 +26,17 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libresprite";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "LibreSprite";
     repo = "LibreSprite";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "sha256-d8GmVHYomDb74iSeEhJEVTHvbiVXggXg7xSqIKCUSzY=";
   };
-
-  # Backport GCC 13 build fix
-  # FIXME: remove in next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/LibreSprite/LibreSprite/commit/6ffe8472194bf5d0a73b4b2cd7f6804d3c80aa0c.patch";
-      hash = "sha256-5chXt0H+koofIspYsCJ7/eUxMGcCBVXJcXe3U/7F9Vc=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -118,4 +108,4 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/LibreSprite/LibreSprite/issues/308
     broken = stdenv.isDarwin;
   };
-})
+}

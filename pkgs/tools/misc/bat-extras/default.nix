@@ -28,13 +28,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "2024.02.12";
+    version = "2023.06.15";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
-      repo   = "bat-extras";
+      repo   = pname;
       rev    = "v${version}";
-      hash   = "sha256-EPDGQkwwxYFTJPJtwSkVrpBf27+VlMd/nqEkJupHlyA=";
+      sha256 = "sha256-dBrnUIG3EuEgDZBbzrspP5UReiUKjrMSYIe5QtZ0/tU=";
       fetchSubmodules = true;
     };
 
@@ -94,7 +94,7 @@ let
     name: # the name of the script
     dependencies: # the tools we need to prefix onto PATH
     stdenv.mkDerivation {
-      pname = name;
+      pname = "${core.pname}-${name}";
       inherit (core) version;
 
       src = core;
@@ -133,9 +133,7 @@ let
       # We already patched
       dontPatchShebangs = true;
 
-      meta = core.meta // {
-        mainProgram = name;
-      };
+      inherit (core) meta;
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;

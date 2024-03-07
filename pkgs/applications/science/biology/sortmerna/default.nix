@@ -32,10 +32,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/sortmerna/CMakeLists.txt \
       --replace "target_link_libraries(sortmerna" \
         "target_link_libraries(sortmerna Threads::Threads"
-
-    # Fix gcc-13 build by adding missing <cstdint> includes:
-    #   https://github.com/sortmerna/sortmerna/issues/412
-    sed -e '1i #include <cstdint>' -i include/kseq_load.hpp
   '';
 
   meta = with lib; {

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.qyliss ];
     mainProgram = "slack";
     platforms = lib.platforms.unix;
   };

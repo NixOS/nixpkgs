@@ -198,7 +198,6 @@ in
         '';
       in {
         description = "Bitcoin daemon";
-        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {

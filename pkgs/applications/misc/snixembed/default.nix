@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "snixembed";
   };
 }

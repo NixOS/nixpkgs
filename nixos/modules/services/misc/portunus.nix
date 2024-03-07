@@ -37,15 +37,6 @@ in
       '';
     };
 
-    seedSettings = lib.mkOption {
-      type = with lib.types; nullOr (attrsOf (listOf (attrsOf anything)));
-      default = null;
-      description = lib.mdDoc ''
-        Seed settings for users and groups.
-        See upstream for format <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration>
-      '';
-    };
-
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/portunus";
@@ -181,53 +172,49 @@ in
       "127.0.0.1" = [ cfg.domain ];
     };
 
-    services = {
-      dex = mkIf cfg.dex.enable {
-        enable = true;
-        settings = {
-          issuer = "https://${cfg.domain}/dex";
-          web.http = "127.0.0.1:${toString cfg.dex.port}";
-          storage = {
-            type = "sqlite3";
-            config.file = "/var/lib/dex/dex.db";
-          };
-          enablePasswordDB = false;
-          connectors = [{
-            type = "ldap";
-            id = "ldap";
-            name = "LDAP";
-            config = {
-              host = "${cfg.domain}:636";
-              bindDN = "uid=${cfg.ldap.searchUserName},ou=users,${cfg.ldap.suffix}";
-              bindPW = "$DEX_SEARCH_USER_PASSWORD";
-              userSearch = {
-                baseDN = "ou=users,${cfg.ldap.suffix}";
-                filter = "(objectclass=person)";
-                username = "uid";
-                idAttr = "uid";
-                emailAttr = "mail";
-                nameAttr = "cn";
-                preferredUsernameAttr = "uid";
-              };
-              groupSearch = {
-                baseDN = "ou=groups,${cfg.ldap.suffix}";
-                filter = "(objectclass=groupOfNames)";
-                nameAttr = "cn";
-                userMatchers = [{ userAttr = "DN"; groupAttr = "member"; }];
-              };
-            };
-          }];
-
-          staticClients = forEach cfg.dex.oidcClients (client: {
-            inherit (client) id;
-            redirectURIs = [ client.callbackURL ];
-            name = "OIDC for ${client.id}";
-            secretEnv = "DEX_CLIENT_${client.id}";
-          });
+    services.dex = mkIf cfg.dex.enable {
+      enable = true;
+      settings = {
+        issuer = "https://${cfg.domain}/dex";
+        web.http = "127.0.0.1:${toString cfg.dex.port}";
+        storage = {
+          type = "sqlite3";
+          config.file = "/var/lib/dex/dex.db";
         };
-      };
+        enablePasswordDB = false;
+        connectors = [{
+          type = "ldap";
+          id = "ldap";
+          name = "LDAP";
+          config = {
+            host = "${cfg.domain}:636";
+            bindDN = "uid=${cfg.ldap.searchUserName},ou=users,${cfg.ldap.suffix}";
+            bindPW = "$DEX_SEARCH_USER_PASSWORD";
+            userSearch = {
+              baseDN = "ou=users,${cfg.ldap.suffix}";
+              filter = "(objectclass=person)";
+              username = "uid";
+              idAttr = "uid";
+              emailAttr = "mail";
+              nameAttr = "cn";
+              preferredUsernameAttr = "uid";
+            };
+            groupSearch = {
+              baseDN = "ou=groups,${cfg.ldap.suffix}";
+              filter = "(objectclass=groupOfNames)";
+              nameAttr = "cn";
+              userMatchers = [{ userAttr = "DN"; groupAttr = "member"; }];
+            };
+          };
+        }];
 
-      portunus.seedPath = lib.mkIf (cfg.seedSettings != null) (pkgs.writeText "seed.json" (builtins.toJSON cfg.seedSettings));
+        staticClients = forEach cfg.dex.oidcClients (client: {
+          inherit (client) id;
+          redirectURIs = [ client.callbackURL ];
+          name = "OIDC for ${client.id}";
+          secretEnv = "DEX_CLIENT_${client.id}";
+        });
+      };
     };
 
     systemd.services = {
@@ -243,10 +230,7 @@ in
         description = "Self-contained authentication service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/portunus-orchestrator";
-          Restart = "on-failure";
-        };
+        serviceConfig.ExecStart = "${cfg.package.out}/bin/portunus-orchestrator";
         environment = {
           PORTUNUS_LDAP_SUFFIX = cfg.ldap.suffix;
           PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";

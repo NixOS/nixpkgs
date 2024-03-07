@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.isDarwin; # error: no type or protocol named 'NSPasteboardType'
     license = licenses.gpl3Plus;
-    mainProgram = "master_me";
   };
 }

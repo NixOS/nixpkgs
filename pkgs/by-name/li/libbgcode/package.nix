@@ -36,6 +36,5 @@ stdenv.mkDerivation {
     description = "Prusa Block & Binary G-code reader / writer / converter";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ lach ];
-    platforms = platforms.unix;
   };
 }

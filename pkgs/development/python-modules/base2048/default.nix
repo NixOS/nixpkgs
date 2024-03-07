@@ -1,10 +1,8 @@
 { lib
-, stdenv
 , buildPythonPackage
 , cargo
 , fetchFromGitHub
 , frelatage
-, libiconv
 , maturin
 , pytestCheckHook
 , pythonOlder
@@ -39,10 +37,6 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
-  ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
   ];
 
   passthru.optional-dependencies = {

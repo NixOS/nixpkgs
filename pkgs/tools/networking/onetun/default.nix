@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/aramperes/onetun";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "onetun";
   };
 }

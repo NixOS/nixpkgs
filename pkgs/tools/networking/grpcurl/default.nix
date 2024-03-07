@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/fullstorydev/grpcurl";
     license = licenses.mit;
     maintainers = with maintainers; [ knl ];
-    mainProgram = "grpcurl";
   };
 }

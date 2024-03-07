@@ -9,24 +9,19 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.12.3";
-  pyproject = true;
+  version = "1.10.4";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gJhRgkEZg05PIxCyxPOGIcHRayuxTVufEy5px501Xn8=";
+    hash = "sha256-RWsl3do9TNJ0iKcnNrvDrwTXE64v42VcAbZqM50o1nk=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -53,8 +48,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Resource Manager API client library";
-    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-resource-manager";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-resource-manager-v${version}/packages/google-cloud-resource-manager/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/python-resource-manager";
+    changelog = "https://github.com/googleapis/python-resource-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

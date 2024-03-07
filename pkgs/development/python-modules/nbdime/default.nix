@@ -1,11 +1,20 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, jupyterlab
+, pythonOlder
+, hypothesis
+, setuptools-scm
+, six
+, attrs
+, py
+, setuptools
+, pytest-timeout
+, pytest-tornado
+, mock
+, tabulate
 , nbformat
+, jsonschema
+, pytestCheckHook
 , colorama
 , pygments
 , tornado
@@ -13,16 +22,14 @@
 , gitpython
 , jupyter-server
 , jupyter-server-mathjax
+, notebook
 , jinja2
-, git
-, pytest-tornado
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
   version = "4.0.1";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -32,41 +39,47 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    hatch-jupyter-builder
-    hatchling
-    jupyterlab
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    attrs
+    py
+    setuptools
+    six
+    jupyter-server-mathjax
     nbformat
     colorama
     pygments
     tornado
     requests
     gitpython
-    jupyter-server
-    jupyter-server-mathjax
+    notebook
     jinja2
   ];
 
   nativeCheckInputs = [
-    git
+    hypothesis
+    pytest-timeout
     pytest-tornado
+    jsonschema
+    mock
+    tabulate
     pytestCheckHook
   ];
 
   disabledTests = [
-    "test_git_diffdriver"
-    "test_git_difftool"
-    "test_git_mergedriver"
-    "test_git_mergetool"
+    "test_apply_filter_no_repo"
+    "test_diff_api_checkpoint"
+    "test_filter_cmd_invalid_filter"
+    "test_inline_merge_source_add"
+    "test_inline_merge_source_patches"
+    "test_inline_merge_source_replace"
+    "test_inline_merge_cells_insertion"
+    "test_inline_merge_cells_replacement"
+    "test_interrogate_filter_no_repo"
+    "test_merge_input_strategy_inline"
   ];
-
-  preCheck = ''
-    export HOME="$TEMP"
-    git config --global user.email "janedoe@example.com"
-    git config --global user.name "Jane Doe"
-  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -76,8 +89,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";
-    changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
-    description = "Tools for diffing and merging of Jupyter notebooks";
+    description = "Tools for diffing and merging of Jupyter notebooks.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tbenst ];
   };

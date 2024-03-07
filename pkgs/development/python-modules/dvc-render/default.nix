@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "dvc-render";
-  version = "1.0.1";
-  pyproject = true;
+  version = "1.0.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = "dvc-render";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7rmmhf6Y6teoHR8u1+Ce1Xq0rdtC1/MWLXb282OOEnc=";
+    hash = "sha256-OrfepQuLBNa5m3Sy4NzFOArtFFvaNtNNVJ8DNN3yT6s=";
   };
 
   nativeBuildInputs = [

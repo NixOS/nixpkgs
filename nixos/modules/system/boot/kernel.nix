@@ -81,13 +81,6 @@ in
             extraStructuredConfig.FOO = lib.kernel.yes;
             features.foo = true;
           }
-          {
-            name = "foo-ml-mbox";
-            patch = (fetchurl {
-              url = "https://lore.kernel.org/lkml/19700205182810.58382-1-email@domain/t.mbox.gz";
-              hash = "sha256-...";
-            });
-          }
         ]
       '';
       description = lib.mdDoc ''

@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, autoreconfHook
+, autoconf
+, automake
 , fetchFromGitHub
 , json_c
 , libpcap
@@ -9,19 +10,22 @@
 , which
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "ndpi";
-  version = "4.8";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-V3hRDQ141pbR5jJK2QlP7BF2CEbuzqIvo+iTx3EGhRY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-S0lVh5FZewPbYG/1ikI2RroCSC7OI8Xmfeq73hYCHnY=";
   };
 
+  configureScript = "./autogen.sh";
+
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
     libtool
     pkg-config
     which
@@ -38,10 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
       nDPI is a library for deep-packet inspection based on OpenDPI.
     '';
     homepage = "https://www.ntop.org/products/deep-packet-inspection/ndpi/";
-    changelog = "https://github.com/ntop/nDPI/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/ntop/nDPI/blob/${version}/CHANGELOG.md";
     license = with licenses; [ lgpl3Plus bsd3 ];
     maintainers = with maintainers; [ takikawa ];
     mainProgram = "ndpiReader";
     platforms = with platforms; unix;
   };
-})
+}

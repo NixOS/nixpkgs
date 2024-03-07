@@ -6,7 +6,6 @@
 , jinja2
 , lib
 , mock
-, openssh
 , packaging
 , pexpect
 , psutil
@@ -14,7 +13,6 @@
 , pytestCheckHook
 , pytest-dependency
 , pytest-mock
-, pythonRelaxDepsHook
 , pyudev
 , pyusb
 , pyyaml
@@ -27,17 +25,16 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "23.0.5";
+  version = "23.0.4";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jrapbSrybuLT3V11rvV342tOr7/sRwBMgAdNWDG5obA=";
+    sha256 = "sha256-EEPQSIHKAmLPudv7LLm9ol3Kukgz8edYKfDi+wvERpk=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
@@ -60,25 +57,8 @@ buildPythonPackage rec {
     xmodem
   ];
 
-  pythonRelaxDeps = [
-    "attrs"
-    "autobahn"
-    "jinja2"
-    "packaging"
-    "pexpect"
-    "pytest"
-    "pyudev"
-    "requests"
-    "xmodem"
-  ];
-
-  pythonRemoveDeps = [
-    "pyserial-labgrid"
-  ];
-
   nativeCheckInputs = [
     mock
-    openssh
     psutil
     pytestCheckHook
     pytest-mock

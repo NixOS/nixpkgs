@@ -5,14 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.10.5";
-  pyproject = true;
+  version = "0.10.2";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ep1cman";
-    repo = "unifi-protect-backup";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-la/YLodfAnVuM5On6u4dyDDUvaCotmDZtHdxgNnD31A=";
+    hash = "sha256-EQCI7TkkOhDASMo5yKfAca/gB4ayyPOaDVK6WEaAIgc=";
   };
 
   pythonRelaxDeps = [
@@ -29,7 +30,6 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     aiocron
-    aiolimiter
     aiorun
     aiosqlite
     apprise

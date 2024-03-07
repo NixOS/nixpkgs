@@ -161,7 +161,6 @@ in
         ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
         User = cfg.user;
         Group = cfg.group;
-        Restart = "on-failure";
       };
       postStart =
         let

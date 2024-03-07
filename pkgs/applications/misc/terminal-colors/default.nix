@@ -51,6 +51,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/eikenb/terminal-colors";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kaction ];
-    mainProgram = "terminal-colors";
   };
 }

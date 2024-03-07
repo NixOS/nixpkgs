@@ -15,16 +15,16 @@
 
 buildGoModule rec {
   pname = "nwg-look";
-  version = "0.2.6";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
     rev = "v${version}";
-    hash = "sha256-kOoYhJKt7/BsQ0/RuVhj0bWnX9GU8ET3MSq6NMCOw5E=";
+    hash = "sha256-Gw0C5PCVwXuwXWF39P7pc8KdnmCYRH24zizShmniynM=";
   };
 
-  vendorHash = "sha256-V0KXK6jxBYI+tixBLq24pJJcnu4gDF6nfyns2IBTss4=";
+  vendorHash = "sha256-vHqnIkzsoQHiP6mmrwNetq6Pp5UB1CmX7mYvgsbvb0s=";
 
   # Replace /usr/ directories with the packages output location
   # This means it references the correct path

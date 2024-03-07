@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, aiooui
 , buildPythonPackage
 , fetchFromGitHub
 , home-assistant-bluetooth
@@ -12,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "ibeacon-ble";
-  version = "1.2.0";
-  pyproject = true;
+  version = "1.0.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = "ibeacon-ble";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1liSWxduYpjIMu7226EH4bsc7gca5g/fyL79W4ZMdU4=";
+    hash = "sha256-iYgGflM0IpSIMNgPpJAFAl9FYoMfRinM3sP6VRcBSMc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail " --cov=ibeacon_ble --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=ibeacon_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    aiooui
     home-assistant-bluetooth
     mac-vendor-lookup
   ];

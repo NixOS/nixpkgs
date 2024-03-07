@@ -11,7 +11,7 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
-, retry-decorator
+, retry_decorator
 , rsa
 , six
 }:
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     httplib2
     oauth2client
     pyopenssl
-    retry-decorator
+    retry_decorator
     rsa
     six
   ];

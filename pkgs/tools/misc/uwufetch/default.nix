@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/TheDarkBug/uwufetch";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bbjubjub ];
+    maintainers = with maintainers; [ lourkeur ];
     mainProgram = "uwufetch";
   };
 }

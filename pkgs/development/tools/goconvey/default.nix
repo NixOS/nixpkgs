@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "goconvey";
-  version = "1.8.1";
+  version = "1.8.0";
 
   excludedPackages = "web/server/watch/integration_testing";
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "smartystreets";
     repo = "goconvey";
     rev = "v${version}";
-    hash = "sha256-6SrlPsOqRxNNwEYx2t1v+rEHnQ58GvJtjo87SZo/Omk=";
+    sha256 = "sha256-JgforTGu5aiQHltZrAfy16Bsu4UJ2pj6cCiof6sxz7s=";
   };
 
-  vendorHash = "sha256-020bxa0LErrvRKe3HirCWZDaBQFfKsWgl4mxfLtl1lg=";
+  vendorHash = "sha256-CCtWsljI14VOGjPid6ouzvieDbylh9ljoUcAoR9r4b4=";
 
   ldflags = [ "-s" "-w" ];
 

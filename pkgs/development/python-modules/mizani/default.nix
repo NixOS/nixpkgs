@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.11.0";
+  version = "0.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "mizani";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4xk8FCUiNOp5n512asYKcjAS7fsyExyMQiWg14XWwHY=";
+    hash = "sha256-gZwM8/9ipcA73m1sPCz9oxD7cndli+qX9+gLILdbq1A=";
   };
 
   nativeBuildInputs = [

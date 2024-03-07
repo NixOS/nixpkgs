@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl3;
     platforms = platforms.unix;
-    mainProgram = "xlog";
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 
 # build-system
 , poetry-core
@@ -10,7 +9,6 @@
 , aiofiles
 , blinker
 , click
-, flask
 , hypercorn
 , importlib-metadata
 , itsdangerous
@@ -31,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.4";
+  version = "0.18.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-EgCZ0AXK2vGxo55BWAcDVv6zNUrWNbAYNnEXEBJk+84=";
+    hash = "sha256-iT/pePUtH1hwNIOG8Y/YbqCVseNXVOKC0nrXfB2RTlQ=";
   };
 
   nativeBuildInputs = [
@@ -54,17 +52,15 @@ buildPythonPackage rec {
     aiofiles
     blinker
     click
-    flask
     hypercorn
+    importlib-metadata
     itsdangerous
     jinja2
     markupsafe
     pydata-sphinx-theme
     python-dotenv
-    werkzeug
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
     typing-extensions
+    werkzeug
   ];
 
   pythonImportsCheck = [
@@ -77,6 +73,11 @@ buildPythonPackage rec {
     py
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # remove after 0.18.4
+    "tests/test_signals.py"
   ];
 
   meta = with lib; {

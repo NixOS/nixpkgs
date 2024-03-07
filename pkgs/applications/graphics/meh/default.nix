@@ -22,6 +22,5 @@ stdenv.mkDerivation {
     homepage = "https://www.johnhawthorn.com/meh/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    mainProgram = "meh";
   };
 }

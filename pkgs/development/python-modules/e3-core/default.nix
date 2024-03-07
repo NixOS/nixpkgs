@@ -1,5 +1,4 @@
-{ autoPatchelfHook
-, buildPythonPackage
+{ buildPythonPackage
 , colorama
 , coverage
 , distro
@@ -7,14 +6,12 @@
 , httpretty
 , lib
 , mock
-, packaging
 , psutil
 , pytest
 , pytest-socket
 , python-dateutil
 , pyyaml
 , requests
-, requests-cache
 , requests-toolbelt
 , stdenv
 , setuptools
@@ -27,40 +24,26 @@
 
 buildPythonPackage rec {
   pname = "e3-core";
-  version = "22.4.0";
+  version = "22.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
     rev = "v${version}";
-    hash = "sha256-dgEk2/qRfAYwUz+e5TWKUy/aPLpmyWZ32OV1i7QM9Fs=";
+    hash = "sha256-4StHOJldfeqApdF6D14Euzg9HvZ2e7G4/OQ0UrEbEIw=";
   };
 
-  patches = [
-    ./0001-use-distro-over-ld.patch
-  ];
+  patches = [ ./0001-use-distro-over-ld.patch ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
-    colorama
-    packaging
-    pyyaml
-    python-dateutil
-    requests
-    requests-cache
-    requests-toolbelt
-    tqdm
-    stevedore
+    colorama pyyaml python-dateutil requests requests-toolbelt tqdm stevedore
   ] ++ lib.optional stdenv.isLinux [
     # See setup.py:24. These are required only on Linux. Darwin has its own set
     # of requirements.
-    psutil
-    distro
+    psutil distro
   ];
 
   pythonImportsCheck = [ "e3" ];

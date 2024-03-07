@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , sudachidict
 , setuptools
-, sudachipy
 }:
 
 buildPythonPackage rec {
@@ -32,10 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-  ];
-
-  propagatedBuildInputs = [
-    sudachipy
   ];
 
   # we need to prepare some files before the build

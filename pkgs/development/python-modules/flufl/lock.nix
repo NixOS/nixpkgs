@@ -1,18 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
 , atpublic, psutil, pytest-cov, sybil
 , pdm-pep517
 }:
 
 buildPythonPackage rec {
-  pname = "flufl-lock";
+  pname = "flufl.lock";
   version = "7.1.1";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   src = fetchPypi {
-    pname = "flufl.lock";
-    inherit version;
+    inherit pname version;
     hash = "sha256-rxQXKzW7xYaHvQa3DRaT/Y1Iy/D/3n5RphjBSK4kBC0=";
   };
 
@@ -25,19 +22,11 @@ buildPythonPackage rec {
   # relevant to the user.
   pytestFlagsArray = [ "--no-cov" ];
 
-  pythonImportsCheck = [
-    "flufl.lock"
-  ];
-
-  pythonNamespaces = [
-    "flufl"
-  ];
-
   meta = with lib; {
     homepage = "https://flufllock.readthedocs.io/";
     description = "NFS-safe file locking with timeouts for POSIX and Windows";
-    changelog = "https://gitlab.com/warsaw/flufl.lock/-/blob/${version}/docs/NEWS.rst";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

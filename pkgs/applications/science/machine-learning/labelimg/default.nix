@@ -15,7 +15,7 @@
     propagatedBuildInputs = with python3Packages; [
       pyqt5
       lxml
-      sip4
+      sip_4
     ];
     preBuild = ''
       make qt5py3

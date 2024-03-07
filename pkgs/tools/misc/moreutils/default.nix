@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "moreutils";
-  version = "0.69";
+  version = "0.68";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
     rev = "refs/tags/${version}";
-    hash = "sha256-hVvRAIXlG8+pAD2v/Ma9Z6EUL/1xIRz7Gx1fOxoQyi0=";
+    hash = "sha256-kOY12oejH0xKaaPrKem+l0PACqyPqD4P1jEjOYfNntM=";
   };
 
   preBuild = ''

@@ -7,21 +7,21 @@
 }:
 
 buildPythonApplication rec {
-  pname = "pysolfc";
-  version = "2.21.0";
+  pname = "PySolFC";
+  version = "2.20.1";
 
   src = fetchzip {
-    url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
-    hash = "sha256-Deye7KML5G6RZkth2veVgPOWZI8gnusEvszlrPTAhag=";
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC/PySolFC-${version}/PySolFC-${version}.tar.xz";
+    hash = "sha256-mEnsq8Su0ses+nqoSFC+Wr0MHY7aTDMbtDV8toYVNPY=";
   };
 
   cardsets = fetchzip {
-    url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-2.2.tar.bz2";
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC-Cardsets/PySolFC-Cardsets-2.2/PySolFC-Cardsets-2.2.tar.bz2";
     hash = "sha256-mWJ0l9rvn9KeZ9rCWy7VjngJzJtSQSmG8zGcYFE4yM0=";
   };
 
   music = fetchzip {
-    url = "mirror://sourceforge/pysolfc/pysol-music-4.50.tar.xz";
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySol-Music/PySol-Music-4.50/pysol-music-4.50.tar.xz";
     hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
   };
 

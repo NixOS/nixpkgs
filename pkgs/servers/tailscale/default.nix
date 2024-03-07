@@ -1,18 +1,7 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, getent
-, iproute2
-, iptables
-, shadow
-, procps
-, nixosTests
-}:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
 
 let
-  version = "1.60.1";
+  version = "1.56.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -22,9 +11,9 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-1BzzXRqbs8dS9263cXCujYYSStQlvyQr3dm3tyr+64k=";
+    hash = "sha256-kMk5Q/KvNcsohHNLDMmpBm+gUxQEOeO8o/odukcJi0A=";
   };
-  vendorHash = "sha256-eci4f6golU1eIQOezplA+I+gmOfof40ktIdpr0v/uMc=";
+  vendorHash = "sha256-bG/ydsJf2UncOcDo8/BXdvQJO3Mk0tl8JGje1b6kto4=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
@@ -48,10 +37,6 @@ buildGoModule {
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
-
-  passthru.tests = {
-    inherit (nixosTests) headscale;
-  };
 
   meta = with lib; {
     homepage = "https://tailscale.com";

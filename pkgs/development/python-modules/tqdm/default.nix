@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, pythonAtLeast
 , setuptools
 , setuptools-scm
 , wheel
@@ -20,6 +20,9 @@ buildPythonPackage rec {
   version = "4.66.1";
   format = "pyproject";
 
+  # https://github.com/tqdm/tqdm/issues/1537
+  disabled = pythonAtLeast "3.12";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-2I5lH5242FUaYlVtPP+eMDQnTKXWbpMZfPJJDi3Lacc=";
@@ -30,9 +33,6 @@ buildPythonPackage rec {
     setuptools-scm
     wheel
   ];
-
-  # https://github.com/tqdm/tqdm/issues/1537
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -48,7 +48,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W" "ignore::FutureWarning"
-    "-W" "ignore::DeprecationWarning"
   ];
 
   # Remove performance testing.

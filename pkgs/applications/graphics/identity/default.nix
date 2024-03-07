@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/YaLTeR/identity";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }

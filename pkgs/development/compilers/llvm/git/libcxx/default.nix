@@ -1,5 +1,5 @@
 { lib, stdenv, llvm_meta
-, monorepoSrc, runCommand, fetchpatch
+, monorepoSrc, runCommand
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
 , libcxxabi, libcxxrt, libunwind
@@ -45,11 +45,6 @@ stdenv.mkDerivation rec {
     chmod -R u+w .
   '';
 
-  patches = lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    # https://github.com/llvm/llvm-project/issues/64226
-    ./0001-darwin-10.12-mbstate_t-fix.patch
-  ];
-
   postPatch = ''
     cd ../runtimes
   '';
@@ -76,9 +71,7 @@ stdenv.mkDerivation rec {
     "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
   ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optionals (lib.versionAtLeast version "18" && !(stdenv.hostPlatform.useLLVM or false) && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
-    "-DLIBCXX_ADDITIONAL_LIBRARIES=gcc_s"
-  ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
       "-DLIBCXX_USE_COMPILER_RT=ON"
       # There's precedent for this in llvm-project/libcxx/cmake/caches.
       # In a monorepo build you might do the following in the libcxxabi build:

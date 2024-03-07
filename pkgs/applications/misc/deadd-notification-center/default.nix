@@ -60,5 +60,4 @@ in mkDerivation rec {
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ melkor333 sna ];
   platforms = lib.platforms.linux;
-  mainProgram = "deadd-notification-center";
 }

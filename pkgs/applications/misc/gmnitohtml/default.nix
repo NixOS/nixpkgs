@@ -42,6 +42,5 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ jk sikmir ];
-    mainProgram = "gmnitohtml";
   };
 }

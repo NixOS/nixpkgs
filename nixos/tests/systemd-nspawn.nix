@@ -38,7 +38,6 @@ in {
     start_all()
 
     server.wait_for_unit("nginx.service")
-    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
     client.succeed("machinectl pull-raw --verify=signature http://server/testimage.raw")
     client.succeed(

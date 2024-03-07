@@ -14,62 +14,56 @@ in
 
     package = mkPackageOption pkgs "livebook" { };
 
-    environment = mkOption {
-      type = with types; attrsOf (nullOr (oneOf [ bool int str ]));
-      default = { };
+    environmentFile = mkOption {
+      type = types.path;
       description = lib.mdDoc ''
-        Environment variables to set.
+        Environment file as defined in {manpage}`systemd.exec(5)` passed to the service.
 
-        Livebook is configured through the use of environment variables. The
-        available configuration options can be found in the [Livebook
-        documentation](https://hexdocs.pm/livebook/readme.html#environment-variables).
+        This must contain at least `LIVEBOOK_PASSWORD` or
+        `LIVEBOOK_TOKEN_ENABLED=false`.  See `livebook server --help`
+        for other options.'';
+    };
 
-        Note that all environment variables set through this configuration
-        parameter will be readable by anyone with access to the host
-        machine. Therefore, sensitive information like {env}`LIVEBOOK_PASSWORD`
-        or {env}`LIVEBOOK_COOKIE` should never be set using this configuration
-        option, but should instead use
-        [](#opt-services.livebook.environmentFile). See the documentation for
-        that option for more information.
+    erlang_node_short_name = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "livebook";
+      description = "A short name for the distributed node.";
+    };
 
-        Any environment variables specified in the
-        [](#opt-services.livebook.environmentFile) will supersede environment
-        variables specified in this option.
-      '';
+    erlang_node_name = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "livebook@127.0.0.1";
+      description = "The name for the app distributed node.";
+    };
 
-      example = literalExpression ''
-        {
-          LIVEBOOK_PORT = 8080;
-        }
+    port = mkOption {
+      type = types.port;
+      default = 8080;
+      description = "The port to start the web application on.";
+    };
+
+    address = mkOption {
+      type = types.str;
+      default = "127.0.0.1";
+      description = lib.mdDoc ''
+        The address to start the web application on.  Must be a valid IPv4 or
+        IPv6 address.
       '';
     };
 
-    environmentFile = mkOption {
-      type = with types; nullOr types.path;
-      default = null;
+    options = mkOption {
+      type = with types; attrsOf str;
+      default = { };
       description = lib.mdDoc ''
-        Additional dnvironment file as defined in {manpage}`systemd.exec(5)`.
-
-        Secrets like {env}`LIVEBOOK_PASSWORD` (which is used to specify the
-        password needed to access the livebook site) or {env}`LIVEBOOK_COOKIE`
-        (which is used to specify the
-        [cookie](https://www.erlang.org/doc/reference_manual/distributed.html#security)
-        used to connect to the running Elixir system) may be passed to the
-        service without making them readable to everyone with access to
-        systemctl by using this configuration parameter.
-
-        Note that this file needs to be available on the host on which
-        `livebook` is running.
-
-        For security purposes, this file should contain at least
-        {env}`LIVEBOOK_PASSWORD` or {env}`LIVEBOOK_TOKEN_ENABLED=false`.
-
-        See the [Livebook
-        documentation](https://hexdocs.pm/livebook/readme.html#environment-variables)
-        and the [](#opt-services.livebook.environment) configuration parameter
-        for further options.
+        Additional options to pass as command-line arguments to the server.
       '';
-      example = "/var/lib/livebook.env";
+      example = literalExpression ''
+        {
+          cookie = "a value shared by all nodes in this cluster";
+        }
+      '';
     };
 
     extraPackages = mkOption {
@@ -87,12 +81,17 @@ in
       serviceConfig = {
         Restart = "always";
         EnvironmentFile = cfg.environmentFile;
-        ExecStart = "${cfg.package}/bin/livebook start";
-        KillMode = "mixed";
+        ExecStart =
+          let
+            args = lib.cli.toGNUCommandLineShell { } ({
+              inherit (cfg) port;
+              ip = cfg.address;
+              name = cfg.erlang_node_name;
+              sname = cfg.erlang_node_short_name;
+            } // cfg.options);
+          in
+            "${cfg.package}/bin/livebook server ${args}";
       };
-      environment = mapAttrs (name: value:
-        if isBool value then boolToString value else toString value)
-        cfg.environment;
       path = [ pkgs.bash ] ++ cfg.extraPackages;
       wantedBy = [ "default.target" ];
     };

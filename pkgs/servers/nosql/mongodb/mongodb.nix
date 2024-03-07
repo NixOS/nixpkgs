@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, buildPackages
+, scons_3_1_2
 , boost
 , gperftools
 , pcre-cpp
@@ -9,8 +9,6 @@
 , zlib
 , yaml-cpp
 , sasl
-, net-snmp
-, openldap
 , openssl
 , libpcap
 , python3
@@ -32,19 +30,38 @@ with lib;
 }:
 
 let
-  scons = buildPackages.scons;
-  python = scons.python.withPackages (ps: with ps; [
-    pyyaml
-    cheetah3
-    psutil
-    setuptools
-  ] ++ lib.optionals (versionAtLeast version "6.0") [
-    packaging
-    pymongo
-  ]);
+  variants =
+    if versionAtLeast version "6.0"
+    then rec {
+      python = scons.python.withPackages (ps: with ps; [
+        pyyaml
+        cheetah3
+        psutil
+        setuptools
+        packaging
+        pymongo
+      ]);
 
-  mozjsVersion = "60";
-  mozjsReplace = "defined(HAVE___SINCOS)";
+      scons = scons_3_1_2;
+
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+
+    }
+    else rec {
+      python = scons.python.withPackages (ps: with ps; [
+        pyyaml
+        cheetah3
+        psutil
+        setuptools
+      ]);
+
+      scons = scons_3_1_2;
+
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+
+    };
 
   system-libraries = [
     "boost"
@@ -68,10 +85,8 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [
-    scons
-    python
-  ] ++ lib.optional stdenv.isLinux net-snmp;
+  nativeBuildInputs = [ variants.scons ]
+                      ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
 
   buildInputs = [
     boost
@@ -80,14 +95,12 @@ in stdenv.mkDerivation rec {
     libpcap
     yaml-cpp
     openssl
-    openldap
     pcre-cpp
+    variants.python
     sasl
     snappy
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ]
-  ++ lib.optional stdenv.isLinux net-snmp
-  ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -109,7 +122,7 @@ in stdenv.mkDerivation rec {
     # remove -march overriding, we know better.
     sed -i 's/env.Append.*-march=.*$/pass/' SConstruct
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
-    substituteInPlace src/third_party/mozjs-${mozjsVersion}/extract/js/src/jsmath.cpp --replace '${mozjsReplace}' 0
+    substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
@@ -144,7 +157,6 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
-    sconsFlags+=" AR=$AR"
   '' + optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';

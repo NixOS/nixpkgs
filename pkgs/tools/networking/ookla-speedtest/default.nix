@@ -1,8 +1,6 @@
-{ lib, stdenvNoCC, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
-  stdenv = stdenvNoCC;
-
   pname = "ookla-speedtest";
   version = "1.2.0";
 
@@ -53,6 +51,5 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ kranzes ];
     platforms = lib.attrNames srcs;
-    mainProgram = "speedtest";
   };
 }

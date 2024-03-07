@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ artemist ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "dsf2flac";
   };
 }

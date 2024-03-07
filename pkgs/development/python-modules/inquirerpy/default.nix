@@ -1,19 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, furo
+, myst-parser
 , pfzy
 , poetry-core
 , prompt-toolkit
 , pytestCheckHook
 , pythonOlder
+, sphinx
+, sphinx-autobuild
+, sphinx-copybutton
 }:
 
 buildPythonPackage rec {
   pname = "inquirerpy";
   version = "0.3.4";
-  pyproject = true;
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kazhala";
@@ -47,10 +51,11 @@ buildPythonPackage rec {
     "tests/base/test_list.py"
   ];
 
+
   meta = with lib; {
     description = "Python port of Inquirer.js";
     homepage = "https://github.com/kazhala/InquirerPy";
-    changelog = "https://github.com/kazhala/InquirerPy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/kazhala/InquirerPy/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -2,7 +2,7 @@
 , qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
-, bison, flex, gdb, gperf, perl, pkg-config, python3, ruby
+, bison, flex, gdb, gperf, perl, pkg-config, python38, ruby
 , ICU, OpenGL
 }:
 
@@ -26,7 +26,7 @@ qtModule {
     ++ lib.optional stdenv.isDarwin qtmultimedia;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base hyphen ]
     ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ];
-  nativeBuildInputs = [ bison flex gdb gperf perl pkg-config python3 ruby cmake ];
+  nativeBuildInputs = [ bison flex gdb gperf perl pkg-config python38 ruby cmake ];
 
   cmakeFlags = [ "-DPORT=Qt" ]
     ++ lib.optionals stdenv.isDarwin [

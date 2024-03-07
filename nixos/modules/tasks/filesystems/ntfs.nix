@@ -3,7 +3,7 @@
 with lib;
 
 {
-  config = mkIf (config.boot.supportedFilesystems.ntfs or config.boot.supportedFilesystems.ntfs-3g or false) {
+  config = mkIf (any (fs: fs == "ntfs" || fs == "ntfs-3g") config.boot.supportedFilesystems) {
 
     system.fsPackages = [ pkgs.ntfs3g ];
 

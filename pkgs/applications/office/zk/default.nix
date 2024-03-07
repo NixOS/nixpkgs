@@ -26,6 +26,5 @@ buildGoModule rec {
     license = licenses.gpl3;
     description = "A zettelkasten plain text note-taking assistant";
     homepage = "https://github.com/mickael-menu/zk";
-    mainProgram = "zk";
   };
 }

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mdk-sdk";
-  version = "0.25.0";
+  version = "0.23.1";
 
   src = fetchurl {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux-x64.tar.xz";
-    hash = "sha256-0m0Rg5Gv7o748iXqHafHvHYX5jHjjnmYE09TbG4PNNY=";
+    hash = "sha256-qC6FL76MJZ2XrrYePQFpWk5VPLTeoRd5ns93AK3iZjw=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

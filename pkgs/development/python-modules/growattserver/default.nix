@@ -3,13 +3,12 @@
 , fetchFromGitHub
 , pythonOlder
 , requests
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "growattserver";
-  version = "1.5.0";
-  pyproject = true;
+  version = "1.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -17,12 +16,8 @@ buildPythonPackage rec {
     owner = "indykoning";
     repo = "PyPi_GrowattServer";
     rev = "refs/tags/${version}";
-    hash = "sha256-ATxXjIF5QRsdLuXZCOWMwvbBzawrhlYZ+wodITz36sE=";
+    hash = "sha256-V0EW3I0FIDx9urbxX/zh3A51B/BiDqUfsrKbKU9FKiE=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     requests

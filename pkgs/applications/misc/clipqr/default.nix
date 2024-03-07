@@ -68,6 +68,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ MatthieuBarthel ];
     homepage = "https://gitlab.com/imatt-foss/clipqr";
     broken = stdenv.isDarwin;
-    mainProgram = "clipqr";
   };
 }

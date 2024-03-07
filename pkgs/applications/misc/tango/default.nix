@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/masakichi/tango";
     license = licenses.mit;
     maintainers = with maintainers; [ donovanglover ];
-    mainProgram = "tango";
   };
 }

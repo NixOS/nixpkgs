@@ -2,24 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "arp-scan";
-  version = "1.10.0";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "royhills";
     repo = "arp-scan";
     rev = version;
-    sha256 = "sha256-BS+ItZd6cSMX92M6XGYrIeAiCB2iBdvbMvKdLfwawLQ=";
+    sha256 = "sha256-zSihemqGaQ5z6XjA/dALoSJOuAkxF5/nnV6xE+GY7KI=";
   };
-
-  patches = [
-    ./remove-install-exec-hook.patch
-  ];
 
   perlModules = with perlPackages; [
     HTTPDate
     HTTPMessage
     LWP
-    TextCSV
     URI
   ];
 

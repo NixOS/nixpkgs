@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://git.sr.ht/~ghost08/ratt";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];
-    mainProgram = "ratt";
   };
 }

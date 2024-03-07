@@ -9,17 +9,17 @@
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "1.4.0";
+  version = "1.3.0";
 
   disabled = pythonOlder "3.8";
 
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pluggy";
     rev = "refs/tags/${version}";
-    hash = "sha256-1XHJwODmpYQkYZvnZck6RrtT4lOeCf8cr1QFx9DCbzw=";
+    hash = "sha256-jLasnqmATIOoheGu90Wo1+iTCwslYzNOKckqHIZDJec=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

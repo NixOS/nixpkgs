@@ -41,7 +41,6 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ataraxiasjel ];
-    mainProgram = "ivpn";
   };
 })) {
   ivpn = {

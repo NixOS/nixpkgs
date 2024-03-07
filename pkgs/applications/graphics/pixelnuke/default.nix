@@ -25,6 +25,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.unlicense;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mrVanDalo ];
-    mainProgram = "pixelnuke";
   };
 })

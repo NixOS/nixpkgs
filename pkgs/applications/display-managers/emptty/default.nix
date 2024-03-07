@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "emptty";
-  version = "0.12.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-64Ta0k4TzJcQC+RDybHzFUj96ZSRUOeYQ2U9KFjDXjk=";
+    hash = "sha256-nReExxLbqlbzx1F1vk8qftWafG8umH988egsalSUals=";
   };
 
   buildInputs = [ pam libX11 ];
@@ -28,6 +28,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ urandom ];
     # many undefined functions
     broken = stdenv.isDarwin;
-    mainProgram = "emptty";
   };
 }

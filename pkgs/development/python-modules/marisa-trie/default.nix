@@ -4,7 +4,7 @@
 , cython
 , pytestCheckHook
 , hypothesis
-, readme-renderer
+, readme_renderer
 , pythonOlder
 }:
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    readme-renderer
+    readme_renderer
     hypothesis
   ];
 

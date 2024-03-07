@@ -25,6 +25,13 @@
 , xapp
 , yelp-tools }:
 
+let
+  pythonenv = python3.withPackages (ps: [
+    ps.pygobject3
+    ps.dbus-python # For one plugin
+  ]);
+in
+
 stdenv.mkDerivation rec {
   pname = "xplayer";
   version = "2.4.4";
@@ -59,7 +66,6 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     pkg-config
-    python3.pkgs.wrapPython
     yelp-tools
     gobject-introspection
   ];
@@ -76,15 +82,15 @@ stdenv.mkDerivation rec {
     libpeas
     libxml2
     libxplayer-plparser
-    python3
+    pythonenv
     xapp
     # to satisfy configure script
-    python3.pkgs.pygobject3
+    pythonenv.pkgs.pygobject3
   ];
 
-  postFixup = ''
-    buildPythonPath ${python3.pkgs.dbus-python}
-    patchPythonScript $out/lib/xplayer/plugins/dbus/dbusservice.py
+  postInstall = ''
+    wrapProgram $out/bin/xplayer \
+                --prefix PATH : ${lib.makeBinPath [ pythonenv ]}
   '';
 
   meta = with lib; {

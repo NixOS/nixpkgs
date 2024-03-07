@@ -28,6 +28,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 mit ];
     maintainers = [ maintainers.vanilla ];
     platforms = platforms.linux;
-    mainProgram = "pbpctrl";
   };
 }

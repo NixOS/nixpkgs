@@ -1,24 +1,23 @@
 { lib
 , aiohttp
-, aresponses
 , awesomeversion
 , backoff
 , buildPythonPackage
+, pydantic
 , fetchFromGitHub
 , fetchpatch
 , poetry-core
-, pydantic
+, yarl
+, aresponses
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
-, yarl
 }:
 
 buildPythonPackage rec {
   pname = "demetriek";
   version = "0.4.0";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
@@ -46,13 +45,8 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
-
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -78,7 +72,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for LaMetric TIME devices";
     homepage = "https://github.com/frenck/python-demetriek";
-    changelog = "https://github.com/frenck/python-demetriek/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

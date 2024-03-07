@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mog rafael ];
     platforms = platforms.linux;
     license = licenses.asl20;
-    mainProgram = "zap";
   };
 }

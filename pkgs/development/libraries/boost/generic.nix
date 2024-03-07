@@ -168,7 +168,7 @@ stdenv.mkDerivation {
 
   preConfigure = lib.optionalString useMpi ''
     cat << EOF >> user-config.jam
-    using mpi : ${lib.getDev mpi}/bin/mpiCC ;
+    using mpi : ${mpi}/bin/mpiCC ;
     EOF
   ''
   # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,

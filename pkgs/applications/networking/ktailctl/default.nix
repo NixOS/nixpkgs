@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, buildGoModule
+, buildGo121Module
 , cmake
 , extra-cmake-modules
 , git
-, go
+, go_1_21
 , wrapQtAppsHook
 , qtbase
 , qtquickcontrols2
@@ -28,14 +28,13 @@ let
     hash = "sha256-nY6DEHkDVWIlvc64smXb9KshrhNgNLKiilYydbMKCqc=";
   };
 
-  goDeps = (buildGoModule {
+  goDeps = (buildGo121Module {
     pname = "tailwrap";
     inherit src version;
     modRoot = "tailwrap";
     vendorHash = "sha256-Y9xhoTf3vCtiNi5qOPg020EQmASo58BZI3rAoUEC8qE=";
   }).goModules;
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "ktailctl";
   inherit version src;
 
@@ -57,7 +56,7 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     git
-    go
+    go_1_21
     wrapQtAppsHook
   ];
 

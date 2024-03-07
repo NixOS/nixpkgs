@@ -5,13 +5,13 @@
 
 buildNpmPackage rec {
   pname = "polaris-web";
-  version = "69";
+  version = "68";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris-web";
     rev = "build-${version}";
-    hash = "sha256-/UmAOunc/79DpZByUrzqNA7q7JNugEceKRZvyTGhtVQ=";
+    hash = "sha256-YvVNTqv/DQzRyMuDgDdtCyoQbt4EqVztGa0NO92pO/Q=";
   };
 
   npmDepsHash = "sha256-c11CWJB76gX+Bxmqac3VxWjJxQVzYCaaf+pmQQpnOds=";

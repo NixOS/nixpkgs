@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, pythonAtLeast
 
 # build-system
 , setuptools
@@ -146,9 +145,6 @@ buildPythonPackage rec {
     "test_websocket_route_with_subprotocols"
     # Socket closes early
     "test_no_exceptions_when_cancel_pending_request"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # AttributeError: 'has_calls' is not a valid assertion. Use a spec for the mock if 'has_calls' is meant to be an attribute.
-    "test_ws_frame_put_message_into_queue"
   ];
 
   disabledTestPaths = [

@@ -5,32 +5,23 @@
 , which
 , pythonOlder
 , unittestCheckHook
-, sphinxHook
-, sphinx-argparse
-, parameterized
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "7.1.0";
-  pyproject = true;
+  version = "7.0.0";
+  format = "setuptools";
 
-  outputs = [ "out" "man" ];
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
     rev = "v${version}";
-    hash = "sha256-eQd/MNlnuzXzgFzvwUMchvHoIvkIrbpGKV7iknO14Cc=";
+    hash = "sha256-oIR2iEiOBQ1VKouJTLqEiWWNzrMSJcnxK+m/j9Ia/m8=";
   };
 
-  nativeBuildInputs = [ sphinxHook sphinx-argparse setuptools ];
-  nativeCheckInputs = [ unittestCheckHook git which parameterized ];
-
-  sphinxBuilders = [ "man" ];
-  sphinxRoot = "docs";
+  nativeCheckInputs = [ unittestCheckHook git which ];
 
   # ignore tests which are impure
   DISABLED_TESTS = "network requires_nix_build";

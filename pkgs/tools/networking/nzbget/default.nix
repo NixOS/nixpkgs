@@ -55,6 +55,5 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A command line tool for downloading files from news servers";
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;
-    mainProgram = "nzbget";
   };
 })

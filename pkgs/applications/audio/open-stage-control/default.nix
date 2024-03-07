@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.26.1";
+  version = "1.25.6";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-uw9vj12vs2N4nap6z1L6sGoCuPpRCmvfGoK/b+zHwHA=";
+    hash = "sha256-ZjNnchI8W0Xeuz1DHf3Q0cIL97BFXb3zY/HWQnrqqnk=";
   };
 
   # Remove some Electron stuff from package.json
@@ -90,6 +90,5 @@ buildNpmPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lilyinstarlight ];
     platforms = platforms.linux;
-    mainProgram = "open-stage-control";
   };
 }

@@ -2,9 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# build-system
-, setuptools
-
 # dependencies
 , av
 , ctranslate2
@@ -18,21 +15,17 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "1.0.1";
-  pyproject = true;
+  version = "0.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "SYSTRAN";
+    owner = "guillaumekln";
     repo = "faster-whisper";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b8P9fI32ubOrdayA0vnjLhpZ4qffB6W+8TEOA1YLKqo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qcpPQv5WoUkT92/TZ+MMq452FgPNcm3ZZ+ZNc0btOGE=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     av
     ctranslate2
     huggingface-hub

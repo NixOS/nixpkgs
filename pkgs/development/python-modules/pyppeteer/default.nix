@@ -18,23 +18,16 @@
 buildPythonPackage rec {
   pname = "pyppeteer";
   version = "1.0.2";
-  pyproject = true;
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "pyppeteer";
-    repo = "pyppeteer";
-    rev = "refs/tags/${version}";
+    owner = pname;
+    repo = pname;
+    rev = version;
     hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
-      --replace 'urllib3 = "^1.25.8"' 'urllib3 = "*"' \
-      --replace 'websockets = "^10.0"' 'websockets = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -55,6 +48,12 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
+      --replace 'websockets = "^9.1"' 'websockets = "*"'
+  '';
 
   disabledTestPaths = [
     # Requires network access
@@ -90,7 +89,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     homepage = "https://github.com/pyppeteer/pyppeteer";
-    changelog = "https://github.com/pyppeteer/pyppeteer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];
   };

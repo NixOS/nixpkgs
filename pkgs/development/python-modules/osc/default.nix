@@ -7,7 +7,6 @@
 , lib
 , rpm
 , urllib3
-, keyring
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
   nativeCheckInputs = [ rpm diffstat ];
-  propagatedBuildInputs = [ urllib3 cryptography keyring ];
+  propagatedBuildInputs = [ urllib3 cryptography ];
 
   postInstall = ''
     install -D -m444 contrib/osc.fish $out/etc/fish/completions/osc.fish

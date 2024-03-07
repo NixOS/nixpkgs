@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pythonRelaxDepsHook
 , beautifulsoup4
 , comicon
 , feedparser
@@ -19,7 +18,7 @@
 buildPythonPackage rec {
   pname = "mandown";
   version = "1.7.0";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
@@ -30,12 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "pillow"
-    "typer"
   ];
 
   propagatedBuildInputs = [
@@ -57,10 +50,13 @@ buildPythonPackage rec {
     ];
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace 'typer = "^0.7.0"' 'typer = "^0"'
+  '';
+
   pythonImportsCheck = [ "mandown" ];
 
   meta = with lib; {
-    changelog = "https://github.com/potatoeggy/mandown/releases/tag/v${version}";
     description = "Comic/manga/webtoon downloader and CBZ/EPUB/MOBI/PDF converter";
     homepage = "https://github.com/potatoeggy/mandown";
     license = licenses.agpl3Only;

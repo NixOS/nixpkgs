@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 let cfg = config.nix.sshServe;
@@ -46,7 +46,7 @@ in {
       description = "Nix SSH store user";
       isSystemUser = true;
       group = "nix-ssh";
-      shell = pkgs.bashInteractive;
+      useDefaultShell = true;
     };
     users.groups.nix-ssh = {};
 

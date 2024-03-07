@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ligolo-ng";
-  version = "0.5.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pFk/9AFtnMBNi5hdVWDzfxCTFe9wSkFydHciTpMRxQw=";
+    hash = "sha256-tx/iwb7eaaJODPMJhg4EdLMaua2Bm1frZh4rsl1bFxc=";
   };
 
   vendorHash = "sha256-QEGF12yJ+CQjIHx6kOwsykVhelp5npnglk7mIbOeIpI=";

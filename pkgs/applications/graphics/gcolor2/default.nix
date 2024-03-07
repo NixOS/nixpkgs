@@ -39,6 +39,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ notthemessiah ];
     platforms = with lib.platforms; unix;
-    mainProgram = "gcolor2";
   };
 }

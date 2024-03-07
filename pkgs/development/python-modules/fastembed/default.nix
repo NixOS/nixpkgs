@@ -1,11 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, huggingface-hub
 , pythonOlder
-, pythonRelaxDepsHook
 , poetry-core
-, onnx
 , onnxruntime
 , requests
 , tokenizers
@@ -16,7 +13,7 @@
 buildPythonPackage rec {
   pname = "fastembed";
   version = "0.1.2";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -29,25 +26,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
-    huggingface-hub
-    onnx
     onnxruntime
     requests
     tokenizers
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "fastembed"
-  ];
-
-  pythonRelaxDeps = [
-    "huggingface-hub"
-  ];
+  pythonImportsCheck = [ "fastembed" ];
 
   nativeCheckInputs = [
     pytestCheckHook

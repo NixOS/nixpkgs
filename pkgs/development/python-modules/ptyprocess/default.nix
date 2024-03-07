@@ -2,21 +2,16 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, flit-core
-, pythonOlder
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ptyprocess";
   version = "0.7.0";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XF0KO0jO7gtISF4MJgN8Cs19KXZco/u1yzgx00dCMiA=";
+    sha256 = "5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220";
   };
 
   patches = [
@@ -27,23 +22,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "ptyprocess"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Run a subprocess in a pseudo terminal";
     homepage = "https://github.com/pexpect/ptyprocess";
-    changelog = "https://github.com/pexpect/ptyprocess/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.isc;
   };
 }

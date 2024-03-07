@@ -37,9 +37,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8" \
-      --replace "draftjs_exporter>=2.1.5,<3.0" "draftjs_exporter>=2.1.5,<6.0" \
-      --replace "django-taggit>=2.0,<5.0" "django-taggit>=2.0,<6.0" \
-      --replace "Willow[heif]>=1.6.2,<1.7" "Willow[heif]>=1.6.2,<2"
+      --replace "draftjs_exporter>=2.1.5,<3.0" "draftjs_exporter>=2.1.5,<6.0"
   '';
 
   propagatedBuildInputs = [
@@ -66,9 +64,7 @@ buildPythonPackage rec {
   # on wagtail (wagtail-factories)
   doCheck = false;
 
-  passthru.tests.wagtail = callPackage ./tests.nix { };
-
-  pythonImportsCheck = [ "wagtail" ];
+  passthru.tests.wagtail = callPackage ./tests.nix {};
 
   meta = with lib; {
     description = "A Django content management system focused on flexibility and user experience";

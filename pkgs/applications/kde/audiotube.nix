@@ -11,7 +11,6 @@
 , ki18n
 , kirigami2
 , kirigami-addons
-, kpurpose
 , qcoro
 , qtimageformats
 , qtmultimedia
@@ -36,7 +35,6 @@ mkDerivation rec {
     ki18n
     kirigami2
     kirigami-addons
-    kpurpose
     qcoro
     qtimageformats
     qtmultimedia

@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     homepage = "https://spbooth.github.io/xmountains";
     license = licenses.hpndSellVariant;
     maintainers = with maintainers; [ djanatyn ];
-    mainProgram = "xmountains";
   };
 }

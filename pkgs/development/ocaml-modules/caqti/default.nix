@@ -1,34 +1,25 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, angstrom
-, bigstringaf
-, domain-name
-, dune-site
-, ipaddr
-, logs
-, lwt-dllist
-, mtime
-, ptime
-, uri
+{ lib, fetchurl, buildDunePackage, ocaml
+, cppo, logs, ptime, uri, bigstringaf
+, re, cmdliner, alcotest
 }:
 
 buildDunePackage rec {
   pname = "caqti";
-  version = "2.1.1";
+  version = "1.9.1";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.04";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/paurkedal/ocaml-caqti/releases/download/v${version}/caqti-v${version}.tbz";
-    hash = "sha256-SDpTX0HiZBkX/BgyzkrRX/w/ToKDsbMBiiYXNJWDCQo=";
+    sha256 = "sha256-PQBgJBNx3IcE6/vyNIf26a2xStU22LBhff8eM6UPaJ4=";
   };
 
-  buildInputs = [ dune-site ];
-  propagatedBuildInputs = [ angstrom bigstringaf domain-name ipaddr logs lwt-dllist mtime ptime uri ];
+  nativeBuildInputs = [ cppo ];
+  propagatedBuildInputs = [ logs ptime uri bigstringaf ];
+  checkInputs = [ re cmdliner alcotest ];
 
-  # Checks depend on caqti-driver-sqlite3 (circural dependency)
-  doCheck = false;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Unified interface to relational database libraries";

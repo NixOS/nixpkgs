@@ -2,8 +2,9 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min id warn;
+  inherit (lib.trivial) compare min id;
   inherit (lib.attrsets) mapAttrs;
+  inherit (lib.lists) sort;
 in
 rec {
 
@@ -171,7 +172,7 @@ rec {
        concatMap (x: [x] ++ ["z"]) ["a" "b"]
        => [ "a" "z" "b" "z" ]
   */
-  concatMap = builtins.concatMap;
+  concatMap = builtins.concatMap or (f: list: concatLists (map f list));
 
   /* Flatten the argument into a single list; that is, nested lists are
      spliced into the top-level lists.
@@ -315,7 +316,7 @@ rec {
        any isString [ 1 { } ]
        => false
   */
-  any = builtins.any;
+  any = builtins.any or (pred: foldr (x: y: if pred x then true else y) false);
 
   /* Return true if function `pred` returns true for all elements of
      `list`.
@@ -328,7 +329,7 @@ rec {
        all (x: x < 3) [ 1 2 3 ]
        => false
   */
-  all = builtins.all;
+  all = builtins.all or (pred: foldr (x: y: if pred x then y else false) true);
 
   /* Count how many elements of `list` match the supplied predicate
      function.
@@ -427,7 +428,12 @@ rec {
        partition (x: x > 2) [ 5 1 2 3 4 ]
        => { right = [ 5 3 4 ]; wrong = [ 1 2 ]; }
   */
-  partition = builtins.partition;
+  partition = builtins.partition or (pred:
+    foldr (h: t:
+      if pred h
+      then { right = [h] ++ t.right; wrong = t.wrong; }
+      else { right = t.right; wrong = [h] ++ t.wrong; }
+    ) { right = []; wrong = []; });
 
   /* Splits the elements of a list into many lists, using the return value of a predicate.
      Predicate should return a string which becomes keys of attrset `groupBy` returns.
@@ -596,7 +602,22 @@ rec {
      Type:
        sort :: (a -> a -> Bool) -> [a] -> [a]
   */
-  sort = builtins.sort;
+  sort = builtins.sort or (
+    strictLess: list:
+    let
+      len = length list;
+      first = head list;
+      pivot' = n: acc@{ left, right }: let el = elemAt list n; next = pivot' (n + 1); in
+        if n == len
+          then acc
+        else if strictLess first el
+          then next { inherit left; right = [ el ] ++ right; }
+        else
+          next { left = [ el ] ++ left; inherit right; };
+      pivot = pivot' 1 { left = []; right = []; };
+    in
+      if len < 2 then list
+      else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right));
 
   /*
     Sort a list based on the default comparison of a derived property `b`.
@@ -827,8 +848,8 @@ rec {
       crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
       => [ "13" "14" "23" "24" ]
   */
-  crossLists = warn
-    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead."
+  crossLists = builtins.trace
+    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
     (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
 

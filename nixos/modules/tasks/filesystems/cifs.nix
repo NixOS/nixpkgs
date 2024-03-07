@@ -4,14 +4,14 @@ with lib;
 
 let
 
-  inInitrd = config.boot.initrd.supportedFilesystems.cifs or false;
+  inInitrd = any (fs: fs == "cifs") config.boot.initrd.supportedFilesystems;
 
 in
 
 {
   config = {
 
-    system.fsPackages = mkIf (config.boot.supportedFilesystems.cifs or false) [ pkgs.cifs-utils ];
+    system.fsPackages = mkIf (any (fs: fs == "cifs") config.boot.supportedFilesystems) [ pkgs.cifs-utils ];
 
     boot.initrd.availableKernelModules = mkIf inInitrd
       [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" "sha256" ];

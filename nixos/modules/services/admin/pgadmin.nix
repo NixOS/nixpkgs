@@ -168,7 +168,7 @@ in
           echo "$PW"
           # Retype password:
           echo "$PW"
-        ) | ${cfg.package}/bin/pgadmin4-cli setup-db
+        ) | ${cfg.package}/bin/pgadmin4-setup
       '';
 
       restartTriggers = [

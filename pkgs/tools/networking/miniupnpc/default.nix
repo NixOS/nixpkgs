@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.2.6";
+  version = "2.2.5";
 
   src = fetchurl {
     url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-N/zZGVNQjD5i1pZLuP+8XUfz4TSB+lTmIU/MaHBMZvE=";
+    sha256 = "sha256-OKzV9GAvfPi83B7DCy1Y2y6ZEuXZ9TUN2ZsGv9/7UXw=";
   };
 
   nativeBuildInputs = [ cmake ];

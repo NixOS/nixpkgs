@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.linux;
-    mainProgram = "slstatus";
   };
 }

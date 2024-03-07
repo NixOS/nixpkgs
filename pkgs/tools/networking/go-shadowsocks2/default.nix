@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/shadowsocks/go-shadowsocks2/";
     license = licenses.asl20;
     maintainers = with maintainers; [ oxzi ];
-    mainProgram = "go-shadowsocks2";
   };
 }

@@ -80,7 +80,7 @@ let
     outputHash = {
       x86_64-linux = "sha256-9DHykkvazVBN2kfw1Pbejizk/R18v5w8lRBHZ4aXL5Q=";
       aarch64-linux = "sha256-RgAiRbUojBc+9RN/HpAzzpTjkjZ6q+jebDsqvah5XBw=";
-    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    }.${stdenv.system} or (throw "Unsupported platform");
   };
 
 in stdenv.mkDerivation {
@@ -137,7 +137,7 @@ in stdenv.mkDerivation {
       binaryBytecode  # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 ma27 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

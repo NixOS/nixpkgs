@@ -480,22 +480,6 @@ rec {
     layerC = layerOnTopOf layerB "c";
   in layerC;
 
-  bashUncompressed = pkgs.dockerTools.buildImage {
-    name = "bash-uncompressed";
-    tag = "latest";
-    compressor = "none";
-    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
-  };
-
-  bashZstdCompressed = pkgs.dockerTools.buildImage {
-    name = "bash-zstd";
-    tag = "latest";
-    compressor = "zstd";
-    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
-  };
-
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
@@ -630,12 +614,6 @@ rec {
     layeredImageWithFakeRootCommands
   ];
 
-  mergeVaryingCompressor = pkgs.dockerTools.mergeImages [
-    redis
-    bashUncompressed
-    bashZstdCompressed
-  ];
-
   helloOnRoot = pkgs.dockerTools.streamLayeredImage {
     name = "hello";
     tag = "latest";
@@ -659,20 +637,6 @@ rec {
     ];
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
-  };
-
-  helloOnRootNoStoreFakechroot = pkgs.dockerTools.streamLayeredImage {
-    name = "hello";
-    tag = "latest";
-    contents = [
-      (pkgs.buildEnv {
-        name = "hello-root";
-        paths = [ pkgs.hello ];
-      })
-    ];
-    config.Cmd = [ "hello" ];
-    includeStorePaths = false;
-    enableFakechroot = true;
   };
 
   etc =

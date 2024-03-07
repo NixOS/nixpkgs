@@ -24,13 +24,13 @@
 
 let
   pname = "windmill";
-  version = "1.246.15";
+  version = "1.219.1";
 
   src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-5KDSCag70ww1mYvfKf3rg2RTi80rEWZnMTXB+/6VsNM=";
+    hash = "sha256-HGZuIun9PWi3Fv/kX95k4xnXu1L604teWUKXzjVXKF0=";
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
@@ -42,7 +42,7 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-PdRNjUQdr1NgTO5UaWfH8rJeiFB/VJ6sJkwhpmPo/1A=";
+    npmDepsHash = "sha256-1uya/4FjMHTDW/KX1YinhTT/Mb7bJ9XVTWc6cU0oqJ8=";
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory

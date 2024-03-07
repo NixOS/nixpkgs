@@ -57,7 +57,6 @@ in
   mdh = addToBuildInputs pkgs.pcre;
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
-  mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
   opencl = addToBuildInputs ([ pkgs.opencl-headers pkgs.ocl-icd ]

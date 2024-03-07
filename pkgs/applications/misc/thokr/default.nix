@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/thatvegandev/thokr";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "thokr";
   };
 }

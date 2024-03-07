@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
-  version = "1.22.0";
+  version = "1.20.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "ModemManager";
     rev = version;
-    hash = "sha256-/D9b2rCCUhpDCUfSNAWR65+3EyUywzFdH1R17eSKRDo=";
+    hash = "sha256-/A4WTsUQVeZDi5ei6qBvqoWYLKdRcZaYZU8/qWOPrvM=";
   };
 
   patches = [
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     libxslt
-    python3
   ];
 
   buildInputs = [

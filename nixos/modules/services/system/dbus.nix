@@ -95,7 +95,6 @@ in
         uid = config.ids.uids.messagebus;
         description = "D-Bus system message bus daemon user";
         home = homeDir;
-        homeMode = "0755";
         group = "messagebus";
       };
 

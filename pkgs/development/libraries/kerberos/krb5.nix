@@ -14,7 +14,6 @@
 # This is called "staticOnly" because krb5 does not support
 # builting both static and shared, see below.
 , staticOnly ? false
-, withLdap ? false
 , withVerto ? false
 }:
 
@@ -26,9 +25,6 @@
 let
   libOnly = type == "lib";
 in
-
-assert withLdap -> !libOnly;
-
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
   version = "1.21.2";
@@ -44,7 +40,6 @@ stdenv.mkDerivation rec {
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
-    ++ lib.optional withLdap "--with-ldap"
     ++ lib.optional withVerto "--with-system-verto"
     ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
@@ -60,8 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
-    ++ lib.optionals (!libOnly) [ libedit ]
-    ++ lib.optionals withLdap [ openldap ]
+    ++ lib.optionals (!libOnly) [ openldap libedit ]
     ++ lib.optionals withVerto [ libverto ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [

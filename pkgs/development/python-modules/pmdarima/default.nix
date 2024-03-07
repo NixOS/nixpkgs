@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # Make sure we're running the tests for the actually installed
   # package, so that cython's compiled files are available.
   preCheck = ''
-    cd $out/${python.sitePackages}
+    cd $out/lib/${python.libPrefix}/site-packages
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

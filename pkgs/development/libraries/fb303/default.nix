@@ -2,26 +2,27 @@
 , lib
 , fetchFromGitHub
 , cmake
-, fbthrift
-, fizz
-, folly
 , glog
-, libsodium
-, mvfst
-, python3
-, wangle
+, folly
+, fmt_8
+, boost
+, fbthrift
 , zlib
+, fizz
+, libsodium
+, wangle
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "fb303";
-  version = "2024.01.22.00";
+  version = "2023.06.12.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fb303";
     rev = "v${version}";
-    sha256 = "sha256-EQpe0REGWUpYg+llsCo4x6vJ7UPdWXk3uPM3b8b9Uf0=";
+    sha256 = "sha256-nUOPYb5/tLyHjaZDvKuq0vdu4L7XOmO8R9nNLGAzeLI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,17 +33,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    fbthrift
-    fizz
-    folly
-    folly.boost
-    folly.fmt
     glog
-    libsodium
-    mvfst
-    python3
-    wangle
+    folly
+    fmt_8
+    boost
+    fbthrift
     zlib
+    fizz
+    libsodium
+    wangle
+    python3
   ];
 
   meta = with lib; {

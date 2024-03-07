@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, cython_3
+, cython
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-E4BcKuHAG3SJ+rXo6sk2FmK08sAkEuNlLuzkj/aVMWI=";
   };
 
-  propagatedBuildInputs = [ cython_3 ];
+  propagatedBuildInputs = [ cython ];
 
   pythonImportsCheck = [ "memory_allocator" ];
 

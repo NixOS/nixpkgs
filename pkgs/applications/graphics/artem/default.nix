@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "artem";
-  version = "2.0.6";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "finefindus";
     repo = "artem";
     rev = "v${version}";
-    hash = "sha256-iio0MJG0qVndhQvF2zgZ6Jw0za6bBQYFmtk1Mbxpq1E=";
+    hash = "sha256-t8L1lylaacEHGg3wxVgiB2XmBHDGzql774oHrg/vUC0=";
   };
 
-  cargoHash = "sha256-47HNoAA1qr39qQqfq+qZoCFyjKHu5pnRKC2QzA60K3k=";
+  cargoHash = "sha256-rsgl8g6AqNmdq2gJ3PHvKMb7eid8ewtheajGWSWbeBw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,6 +48,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/finefindus/artem/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "artem";
   };
 }

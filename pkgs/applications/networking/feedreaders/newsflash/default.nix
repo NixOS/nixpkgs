@@ -25,21 +25,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "3.1.5";
+  version = "3.0.2";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = "refs/tags/v.${finalAttrs.version}";
-    hash = "sha256-6RkZdRQ/pNq6VkL9E2BaAWbKKGbCpEC+skGHPe3TwH8=";
+    sha256 = "sha256-tJKr2bGkdpEb+25eN0ZfHhEDl5Zdf8fdaC/rNMbH8Ws=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "news-flash-2.3.0-alpha.0" = "sha256-Gr7EyAbIFABZx9GR/WvshF0vfJaul7wz4pro2EbwSM8=";
+      "news-flash-2.3.0-alpha.0" = "sha256-H0osT7IrPbQ3RQYJZE7J+n7u4UCT86LAybUF3vvIXkA=";
       "newsblur_api-0.2.0" = "sha256-eysCB19znQF8mRwQ64nSp6KuvJ1Trot4g4WCdQDedo8=";
-      "article_scraper-2.0.0" = "sha256-URiteEJ1kXoGfRopGoRI/4iPbzd+F9bQaMJKpkrh/sE=";
+      "article_scraper-2.0.0" = "sha256-FnOmrZyYewOuU8Au7fhmSJHN7UPCx/CxBV8UtSHattU=";
+      "commafeed_api-0.1.0" = "sha256-69UAmyUm0WG3qPoWZw4PekXh1RjIP5l3dx3gjWfxJDQ=";
     };
   };
 

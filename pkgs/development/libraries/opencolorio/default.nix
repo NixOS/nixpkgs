@@ -5,6 +5,7 @@
 , cmake
 , expat
 , yaml-cpp
+, ilmbase
 , pystring
 , imath
 , minizip-ng
@@ -45,8 +46,6 @@ stdenv.mkDerivation rec {
     # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
     # Needed for zlib >= 1.3 && cmake < 3.27.4.
     ./broken-cmake-zlib-version.patch
-    # Fix incorrect line number in test
-    ./line-numbers.patch
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -61,6 +60,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat
     yaml-cpp
+    ilmbase
     pystring
     imath
     minizip-ng

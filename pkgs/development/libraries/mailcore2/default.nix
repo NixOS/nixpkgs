@@ -1,6 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, libetpan, icu, cyrus_sasl, libctemplate
 , libuchardet, pkg-config, glib, html-tidy, libxml2, libuuid, openssl
-, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -17,14 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    libetpan cyrus_sasl libctemplate libuchardet
-    html-tidy libxml2 openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    glib
-    icu
-    libuuid
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
+    libetpan icu cyrus_sasl libctemplate libuchardet glib
+    html-tidy libxml2 libuuid openssl
   ];
 
   postPatch = ''
@@ -35,14 +28,9 @@ stdenv.mkDerivation rec {
        --replace "/usr/include/libxml2" "${libxml2.dev}/include/libxml2"
     substituteInPlace src/core/basetypes/MCHTMLCleaner.cpp \
       --replace buffio.h tidybuffio.h
-    substituteInPlace src/core/basetypes/MCString.cpp \
-      --replace "xmlErrorPtr" "const xmlError *"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    substituteInPlace src/core/basetypes/MCICUTypes.h \
-      --replace "__CHAR16_TYPE__ UChar" "char16_t UChar"
   '';
 
-  cmakeFlags = lib.optionals (!stdenv.isDarwin) [
+  cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
@@ -51,10 +39,10 @@ stdenv.mkDerivation rec {
     cp -r src/include $out
 
     mkdir $out/lib
-    cp src/libMailCore.* $out/lib
+    cp src/libMailCore.so $out/lib
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
   checkPhase = ''
     (
       cd unittest
@@ -67,6 +55,5 @@ stdenv.mkDerivation rec {
     homepage    = "http://libmailcore.com";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ ];
-    platforms   = platforms.unix;
   };
 }

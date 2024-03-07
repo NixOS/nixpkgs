@@ -54,6 +54,9 @@ buildPythonPackage rec {
   sourceRoot = "source/openllm-python";
 
   nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
     pythonRelaxDepsHook
   ];
 
@@ -62,13 +65,7 @@ buildPythonPackage rec {
     "cuda-python"
   ];
 
-  build-system = [
-    hatch-fancy-pypi-readme
-    hatch-vcs
-    hatchling
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     accelerate
     bentoml
     bitsandbytes
@@ -82,13 +79,14 @@ buildPythonPackage rec {
     safetensors
     scipy
     sentencepiece
+    tabulate
     transformers
   ] ++ bentoml.optional-dependencies.io
   ++ tabulate.optional-dependencies.widechars
   ++ transformers.optional-dependencies.tokenizers
   ++ transformers.optional-dependencies.torch;
 
-  optional-dependencies = {
+  passthru.optional-dependencies = {
     agents = [
       # diffusers
       soundfile
@@ -144,13 +142,10 @@ buildPythonPackage rec {
     vllm = [
       # vllm
     ];
-    full = with optional-dependencies; (
-      agents ++ awq ++ baichuan ++ chatglm ++ ctranslate ++ falcon ++ fine-tune ++ ggml ++ gptq ++ mpt
-      # disambiguate between derivation input and passthru field
-      ++ optional-dependencies.openai
-      ++ playground ++ starcoder ++ vllm
+    full = with passthru.optional-dependencies; (
+      agents ++ awq ++ baichuan ++ chatglm ++ ctranslate ++ falcon ++ fine-tune ++ ggml ++ gptq ++ mpt ++ openai ++ playground ++ starcoder ++ vllm
     );
-    all = optional-dependencies.full;
+    all = passthru.optional-dependencies.full;
   };
 
   nativeCheckInputs = [

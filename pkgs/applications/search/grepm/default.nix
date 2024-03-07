@@ -29,6 +29,5 @@ stdenv.mkDerivation {
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
-    mainProgram = "grepm";
   };
 }

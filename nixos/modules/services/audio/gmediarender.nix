@@ -64,7 +64,6 @@ in
   config = mkIf cfg.enable {
     systemd = {
       services.gmediarender = {
-        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         description = "gmediarender server daemon";

@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openpgp-card-tools";
-  version = "0.10.0";
+  version = "0.9.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "openpgp-card";
     repo = "openpgp-card-tools";
     rev = "v${version}";
-    hash = "sha256-dSGkPAeiQ54hYMJgghlPkbeJP3ZPUXGU7WmE63yIvz0=";
+    hash = "sha256-VD0eDq+lfeAu2gY9VZfz2ola3+CJCWerTEaGivpILyo=";
   };
 
-  cargoHash = "sha256-coFoFWI/Iq7tbkv9RKPCNfAVKWDsJd7KTzOTtQDHXJY=";
+  cargoHash = "sha256-tfawWfwsdWUOimd97b059HXt83ew6KBouI2MdGN8Knc=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ pcsclite nettle ] ++ lib.optionals stdenv.isDarwin [ PCSC ];
@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool for inspecting and configuring OpenPGP cards";
-    homepage = "https://codeberg.org/openpgp-card/openpgp-card-tools";
+    description = "CLI tools for OpenPGP cards";
+    homepage = "https://gitlab.com/openpgp-card/openpgp-card";
     license = with licenses ;[ asl20 /* OR */ mit ];
     maintainers = with maintainers; [ nickcao ];
-    mainProgram = "oct";
+    mainProgram = "opgpcard";
   };
 }

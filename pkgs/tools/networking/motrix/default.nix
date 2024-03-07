@@ -35,6 +35,5 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "motrix";
   };
 }

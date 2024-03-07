@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;
     license     = licenses.gpl2;
-    mainProgram = "ifstat-legacy";
   };
 }

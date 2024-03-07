@@ -1,5 +1,4 @@
 { lib
-, fsspec
 , stdenv
 , buildPythonPackage
 , pythonOlder
@@ -11,6 +10,7 @@
 , numpy
 , packaging
 , typing-extensions
+, fsspec
 , jax
 , jaxlib
 , numba
@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.2";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5wUTEB0iVffyCi671y4EsTum+7K1GDeAHlhdLpRgKnQ=";
+    hash = "sha256-lfeoWTmK/VNm3uFLHmIPO4r9aZPK3NhgDwio5WN4jqU=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     awkward-cpp
-    fsspec
     importlib-metadata
     numpy
     packaging

@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/piranha/gostatic";
     license = licenses.isc;
     maintainers = with maintainers; [ urandom ];
-    mainProgram = "gostatic";
   };
 }

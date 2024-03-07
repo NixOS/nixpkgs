@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/manojkarthick/reddsaver";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = [ maintainers.manojkarthick ];
-    mainProgram = "reddsaver";
   };
 
 }

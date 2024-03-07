@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "mod_auth_mellon";
-  version = "0.19.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "mod_auth_mellon";
     rev = "v${version}";
-    sha256 = "sha256-frSfhddLfEZ2xSI7/HPZkr5AiTJ9nnYmnJZY8aC3zwI=";
+    sha256 = "sha256-LIzJP+OAcrgNIo9KU2kMfZ8kjHC5qUg96kJw3qhqbvc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config autoconf automake ];

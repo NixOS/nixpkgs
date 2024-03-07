@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, setuptools
 
 # propagated
 , aiohttp
@@ -18,20 +16,14 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rfleming71";
-    repo = "pyoctoprintapi";
+    repo = pname;
     rev = "refs/tags/v${version}";
     hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aiohttp

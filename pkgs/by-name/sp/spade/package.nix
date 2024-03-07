@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.6.0";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-MNMKUhXVBhSn91uTVCuxozJ2BVFQAX/YdnCPOztGQyM=";
+    hash = "sha256-PvheMYpsDWAXPf8K3K8yloCH0UTjzzVPuMBlcGC1xKU=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
@@ -25,6 +25,11 @@ rustPlatform.buildRustPackage rec {
       "tracing-tree-0.2.0" = "sha256-/JNeAKjAXmKPh0et8958yS7joORDbid9dhFB0VUAhZc=";
     };
   };
+
+  # Cargo.lock is outdated
+  postConfigure = ''
+    cargo metadata --offline
+  '';
 
   meta = with lib; {
     description = "A better hardware description language";

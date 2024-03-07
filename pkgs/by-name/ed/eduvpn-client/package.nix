@@ -12,11 +12,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
-  version = "4.2.1";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://github.com/eduvpn/python-${pname}/releases/download/${version}/python-${pname}-${version}.tar.xz";
-    hash = "sha256-57EKWOzGfA4ihVYTyfLF2yoe7hN/7OnEkG+zLz7QtxI=";
+    hash = "sha256-W5z0ykrwWANZmW+lQt6m+BmYPI0cutsamx8V2JrpeHA=";
   };
 
   nativeBuildInputs = [

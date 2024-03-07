@@ -4,31 +4,34 @@
 
 stdenv.mkDerivation rec {
   pname = "boolector";
-  version = "3.2.3";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner  = "boolector";
     repo   = "boolector";
     rev    = version;
-    hash   = "sha256-CdfpXUbU1+yEmrNyl+hvHlJfpzzzx356naim6vRafDg=";
+    sha256 = "1smcy6yp8wvnw2brgnv5bf40v87k4v4fbdbrhi7987vja632k50z";
   };
 
   patches = [
-    # present in master - remove after 3.2.3
+    # present in master - remove after 3.2.2
     (fetchpatch {
-      name = "update-unit-tests-to-cpp-14.patch";
-      url = "https://github.com/Boolector/boolector/commit/cc13f371c0c5093d98638ddd213dc835ef3aadf3.patch";
-      hash = "sha256-h8DBhAvUu+wXBwmvwRhHnJv3XrbEpBpvX9D1FI/+avc=";
+      name = "fix-parser-getc-char-casts.patch";
+      url = "https://github.com/Boolector/boolector/commit/cc3a70918538c1e71ea5e7273fa1ac098da37c1b.patch";
+      sha256 = "0pjvagcy74vxa2q75zbshcz8j7rvhl98549xfcf5y8yyxf5h8hyq";
     })
   ];
 
-  nativeBuildInputs = [ cmake gtest ];
+  postPatch = ''
+    sed s@REPLACEME@file://${gtest.src}@ ${./cmake-gtest.patch} | patch -p1
+  '';
+
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ lingeling btor2tools gmp ];
 
   cmakeFlags =
     [ "-DBUILD_SHARED_LIBS=ON"
       "-DUSE_LINGELING=YES"
-      "-DBtor2Tools_INCLUDE_DIR=${btor2tools.dev}/include/btor2parser"
     ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
 
   nativeCheckInputs = [ python3 ];

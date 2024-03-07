@@ -1,24 +1,26 @@
 { lib
-, copyPkgconfigItems
+, stdenv
 , fetchFromRepoOrCz
+, copyPkgconfigItems
 , makePkgconfigItem
 , perl
-, stdenv
 , texinfo
 , which
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  # avoid "malformed 32-bit x.y.z" error on mac when using clang
+  isCleanVer = version: builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
+in
+stdenv.mkDerivation rec {
   pname = "tcc";
-  version = "0.9.27-unstable-2022-07-15";
+  version = "unstable-2022-07-15";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
     rev = "af1abf1f45d45b34f0b02437f559f4dfdba7d23c";
     hash = "sha256-jY0P2GErmo//YBaz6u4/jj/voOE3C2JaIDRmo0orXN8=";
   };
-
-  outputs = [ "out" "info" "man" ];
 
   nativeBuildInputs = [
     copyPkgconfigItems
@@ -27,27 +29,23 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  strictDeps = true;
-
-  pkgconfigItems = let
-    libtcc-pcitem = {
+  pkgconfigItems = [
+    (makePkgconfigItem rec {
       name = "libtcc";
-      inherit (finalAttrs) version;
-      cflags = [ "-I${libtcc-pcitem.variables.includedir}" ];
+      inherit version;
+      cflags = [ "-I${variables.includedir}" ];
       libs = [
-        "-L${libtcc-pcitem.variables.libdir}"
-        "-Wl,--rpath ${libtcc-pcitem.variables.libdir}"
+        "-L${variables.libdir}"
+        "-Wl,--rpath ${variables.libdir}"
         "-ltcc"
       ];
-      variables = {
+      variables = rec {
         prefix = "${placeholder "out"}";
-        includedir = "${placeholder "dev"}/include";
-        libdir = "${placeholder "lib"}/lib";
+        includedir = "${prefix}/include";
+        libdir = "${prefix}/lib";
       };
       description = "Tiny C compiler backend";
-    };
-  in [
-    (makePkgconfigItem libtcc-pcitem)
+    })
   ];
 
   postPatch = ''
@@ -66,18 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--config-musl"
   ];
 
-  preConfigure = let
-    # To avoid "malformed 32-bit x.y.z" error on mac when using clang
-    versionIsClean = version:
-      builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
-  in ''
+  preConfigure = ''
     ${
-      if stdenv.isDarwin && ! versionIsClean finalAttrs.version
+      if stdenv.isDarwin && ! isCleanVer version
       then "echo 'not overwriting VERSION since it would upset ld'"
-      else "echo ${finalAttrs.version} > VERSION"
+      else "echo ${version} > VERSION"
     }
     configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
   '';
+
+  outputs = [ "out" "info" "man" ];
 
   # Test segfault for static build
   doCheck = !stdenv.hostPlatform.isStatic;
@@ -88,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/tests2/{108,114}*
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://repo.or.cz/tinycc.git";
     description = "Small, fast, and embeddable C compiler and interpreter";
     longDescription = ''
@@ -112,13 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
 
       With libtcc, you can use TCC as a backend for dynamic code generation.
     '';
-    license = with lib.licenses; [ lgpl21Only ];
-    mainProgram = "tcc";
-    maintainers = with lib.maintainers; [ joachifm AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ joachifm AndersonTorres ];
+    platforms = platforms.unix;
     # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };
-})
+}
 # TODO: more multiple outputs
 # TODO: self-compilation
+# TODO: provide expression for stable release

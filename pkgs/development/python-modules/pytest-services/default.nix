@@ -7,7 +7,7 @@
 , pytest
 , setuptools-scm
 , toml
-, zc-lockfile
+, zc_lockfile
 }:
 
 buildPythonPackage rec {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     psutil
-    zc-lockfile
+    zc_lockfile
   ];
 
   # no tests in PyPI tarball

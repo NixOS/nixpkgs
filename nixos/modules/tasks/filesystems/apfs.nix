@@ -4,12 +4,12 @@ with lib;
 
 let
 
-  inInitrd = config.boot.initrd.supportedFilesystems.apfs or false;
+  inInitrd = any (fs: fs == "apfs") config.boot.initrd.supportedFilesystems;
 
 in
 
 {
-  config = mkIf (config.boot.supportedFilesystems.apfs or false) {
+  config = mkIf (any (fs: fs == "apfs") config.boot.supportedFilesystems) {
 
     system.fsPackages = [ pkgs.apfsprogs ];
 

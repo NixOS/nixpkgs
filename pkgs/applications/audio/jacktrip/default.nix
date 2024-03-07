@@ -1,17 +1,25 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, mkDerivation, fetchFromGitHub
 , pkg-config
 , help2man
+, qmake
+, alsa-lib
 , libjack2
 , dbus
-, qt6
+, qtbase
+, qttools
+, qtx11extras
 , meson
 , python3
 , rtaudio
 , ninja
+, qtquickcontrols2
+, qtnetworkauth
+, qtwebsockets
+, qtgraphicaleffects
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.2.2";
+mkDerivation rec {
+  version = "1.10.1";
   pname = "jacktrip";
 
   src = fetchFromGitHub {
@@ -19,7 +27,7 @@ stdenv.mkDerivation rec {
     repo = "jacktrip";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-idfetMiMqjl9Qrun4hlFhQaGWcvasgjojTts+0F3GGE=";
+    sha256 = "sha256-bdYhyLsdL4LDkCzJiWXdi+7CTtqhSiA7HNYhg190NWs=";
   };
 
   preConfigure = ''
@@ -28,8 +36,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     rtaudio
-    qt6.qtbase
-    qt6.qtwayland
+    qtbase
+    qtx11extras
     libjack2
     dbus
   ];
@@ -41,13 +49,12 @@ stdenv.mkDerivation rec {
     ninja
     help2man
     meson
-    qt6.qt5compat
-    qt6.qtnetworkauth
-    qt6.qtwebsockets
-    qt6.qtwebengine
-    qt6.qtdeclarative
-    qt6.qtsvg
-    qt6.wrapQtAppsHook
+    qmake
+    qttools
+    qtquickcontrols2
+    qtnetworkauth
+    qtwebsockets
+    qtgraphicaleffects
     pkg-config
   ];
 

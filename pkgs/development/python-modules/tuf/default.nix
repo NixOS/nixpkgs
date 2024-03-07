@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tuf";
-  version = "3.1.1";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
     owner = "theupdateframework";
     repo = "python-tuf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HiF/b6aOhDhhQqYx/bjMXHABxmAJY4vkLlTheiL8zEo=";
+    hash = "sha256-IGF/8RdX7Oxl6gdqPGN1w/6q4zaei+MnYXBZepB4KUA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==" "hatchling>="
+      --replace "hatchling==" "hatchling>="
   '';
 
   nativeBuildInputs = [

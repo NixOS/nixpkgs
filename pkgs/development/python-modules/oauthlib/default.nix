@@ -7,7 +7,6 @@
 , pyjwt
 , pytestCheckHook
 , pythonOlder
-, setuptools
 
 # for passthru.tests
 , django-allauth
@@ -19,31 +18,27 @@
 buildPythonPackage rec {
   pname = "oauthlib";
   version = "3.2.2";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "oauthlib";
-    repo = "oauthlib";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-KADS1pEaLYi86LEt2VVuz8FVTBANzxC8EeQLgGMxuBU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  propagatedBuildInputs = [
+    blinker
+    cryptography
+    pyjwt
   ];
-
-  passthru.optional-dependencies = {
-    rsa = [ cryptography ];
-    signedtoken = [ cryptography pyjwt ];
-    signals = [ blinker ];
-  };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ];
 
   pythonImportsCheck = [
     "oauthlib"
@@ -58,9 +53,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/oauthlib/oauthlib/blob/${src.rev}/CHANGELOG.rst";
     description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
-    homepage = "https://github.com/oauthlib/oauthlib";
+    homepage = "https://github.com/idan/oauthlib";
     license = licenses.bsd3;
     maintainers = with maintainers; [ prikhi ];
   };

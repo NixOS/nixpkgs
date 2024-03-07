@@ -177,6 +177,17 @@ let
            ''
            ++ hashedLines));
 
+  makeACLFile = idx: users: supplement:
+    pkgs.writeText "mosquitto-acl-${toString idx}.conf"
+      (concatStringsSep
+        "\n"
+        (flatten [
+          supplement
+          (mapAttrsToList
+            (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl)
+            users)
+        ]));
+
   authPluginOptions = with types; submodule {
     options = {
       plugin = mkOption {
@@ -331,7 +342,7 @@ let
   formatListener = idx: listener:
     [
       "listener ${toString listener.port} ${toString listener.address}"
-      "acl_file /etc/mosquitto/acl-${toString idx}.conf"
+      "acl_file ${makeACLFile idx listener.users listener.acl}"
     ]
     ++ optional (! listener.omitPasswordAuth) "password_file ${cfg.dataDir}/passwd-${toString idx}"
     ++ formatFreeform {} listener.settings
@@ -585,7 +596,6 @@ in
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         Type = "notify";
@@ -686,27 +696,6 @@ in
             (idx: listener: makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}")
             cfg.listeners);
     };
-
-    environment.etc = listToAttrs (
-      imap0
-        (idx: listener: {
-          name = "mosquitto/acl-${toString idx}.conf";
-          value = {
-            user = config.users.users.mosquitto.name;
-            group = config.users.users.mosquitto.group;
-            mode = "0400";
-            text = (concatStringsSep
-              "\n"
-              (flatten [
-                listener.acl
-                (mapAttrsToList
-                  (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl)
-                  listener.users)
-              ]));
-          };
-        })
-        cfg.listeners
-    );
 
     users.users.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon owner";

@@ -35,7 +35,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/derrod/legendary";
     license = licenses.gpl3;
     maintainers = with maintainers; [ equirosa ];
-    mainProgram = "legendary";
   };
 
   passthru.updateScript = gitUpdater { };

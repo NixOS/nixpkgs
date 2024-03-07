@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/sethhillbrand/stepreduce";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ evils ];
-    mainProgram = "stepreduce";
   };
 }

@@ -34,6 +34,5 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.robbinch ];
-    mainProgram = "aacgain";
   };
 }

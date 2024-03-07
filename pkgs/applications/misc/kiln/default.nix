@@ -25,6 +25,5 @@ buildGoModule rec {
     homepage = "https://kiln.adnano.co/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
-    mainProgram = "kiln";
   };
 }

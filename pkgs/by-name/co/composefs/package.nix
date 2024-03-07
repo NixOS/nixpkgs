@@ -16,7 +16,6 @@
 , fsverity-utils
 , nix-update-script
 , testers
-, nixosTests
 
 , fuseSupport ? lib.meta.availableOn stdenv.hostPlatform fuse3
 , enableValgrindCheck ? false
@@ -24,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.3";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YmredtZZKMjzJW/kxiTUmdgO/1iPIKzJsuJz8DeEdGM=";
+    hash = "sha256-ViZkmuLFV5DN1nqWKGl+yaqhYUEOztZ1zGpxjr1U/dw=";
   };
 
   strictDeps = true;
@@ -70,11 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      # Broken on aarch64 unrelated to this package: https://github.com/NixOS/nixpkgs/issues/291398
-      inherit (nixosTests) activation-etc-overlay-immutable activation-etc-overlay-mutable;
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {

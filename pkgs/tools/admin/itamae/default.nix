@@ -13,6 +13,5 @@ bundlerApp {
     license = with licenses; mit;
     maintainers = with maintainers; [ refi64 ];
     platforms = platforms.unix;
-    mainProgram = "itamae";
   };
 }

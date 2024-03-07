@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    hash = "sha256-66vXxE4pTUMkmPalLgJrCt2pl2BSWOJ3tiJ5K5wspYY=";
+    sha256 = "sha256-QSl/9hnAd9QxQm0xyZJ4ElIQDSOVStSzWa+fq3AJHjw=";
   };
 
   nativeBuildInputs = [ unzip ];

@@ -31,6 +31,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.unix;
-    mainProgram = "stag";
   };
 })

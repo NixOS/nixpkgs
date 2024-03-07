@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/pinpox/base16-universal-manager";
     license = licenses.mit;
     maintainers = with maintainers; [ jo1gi ];
-    mainProgram = "base16-universal-manager";
   };
 }

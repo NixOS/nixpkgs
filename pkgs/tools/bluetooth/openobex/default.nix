@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     description = "An open source implementation of the Object Exchange (OBEX) protocol";
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
-    mainProgram = "obex-check-device";
   };
 }

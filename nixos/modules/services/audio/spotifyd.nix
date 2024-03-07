@@ -50,7 +50,6 @@ in
 
     systemd.services.spotifyd = {
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";
       environment.SHELL = "/bin/sh";

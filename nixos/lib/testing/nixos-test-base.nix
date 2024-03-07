@@ -16,11 +16,7 @@ in
       # The human version (e.g. 21.05-pre) is left as is, because it is useful
       # for external modules that test with e.g. testers.nixosTest and rely on that
       # version number.
-      config.system.nixos = {
-        revision = mkForce "constant-nixos-revision";
-        versionSuffix = mkForce "test";
-        label = mkForce "test";
-      };
+      config.system.nixos.revision = mkForce "constant-nixos-revision";
     }
 
   ];

@@ -7,7 +7,6 @@
 , ipykernel
 , pandas
 , pytestCheckHook
-, setuptools
 , traitlets
 }:
 
@@ -28,10 +27,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     nbclient
     nbformat
-  ];
-
-  nativeBuildInputs = [
-    setuptools
   ];
 
   nativeCheckInputs = [

@@ -11,13 +11,12 @@
 , pynacl
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "bip-utils";
-  version = "2.9.2";
-  pyproject = true;
+  version = "2.9.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -25,12 +24,8 @@ buildPythonPackage rec {
     owner = "ebellocchia";
     repo = "bip_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qK1jSVfkebB9JM0sZjOu7ABc7xMrcybu1r7oQOw3bJo=";
+    hash = "sha256-PUWKpAn6Z1E7uMk8+XFm6FDtupzj6eMSkyXR9vN1w3I=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     ecdsa

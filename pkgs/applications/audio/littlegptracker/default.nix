@@ -6,7 +6,7 @@
 , Foundation
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "littlegptracker";
   version = "unstable-2020-11-26";
 
@@ -70,6 +70,5 @@ stdenv.mkDerivation {
     platforms = platforms.all;
     # https://github.com/NixOS/nixpkgs/pull/91766#issuecomment-688751821
     broken = stdenv.isDarwin;
-    mainProgram = "lgpt";
   };
 }

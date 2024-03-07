@@ -177,12 +177,6 @@ in rec {
     inherit system;
   });
 
-  iso_plasma6 = forMatchingSystems supportedSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix;
-    type = "plasma6";
-    inherit system;
-  });
-
   iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";

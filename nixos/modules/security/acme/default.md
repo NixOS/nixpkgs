@@ -72,7 +72,7 @@ services.nginx = {
       };
     };
   };
-};
+}
 ```
 
 ## Using ACME certificates in Apache/httpd {#module-security-acme-httpd}
@@ -111,7 +111,7 @@ services.nginx = {
       };
     };
   };
-};
+}
 # Alternative config for Apache
 users.users.wwwrun.extraGroups = [ "acme" ];
 services.httpd = {
@@ -131,7 +131,7 @@ services.httpd = {
       '';
     };
   };
-};
+}
 ```
 
 Now you need to configure ACME to generate a certificate.
@@ -181,7 +181,7 @@ services.bind = {
       extraConfig = "allow-update { key rfc2136key.example.com.; };";
     }
   ];
-};
+}
 
 # Now we can configure ACME
 security.acme.acceptTerms = true;
@@ -271,7 +271,7 @@ services.nginx = {
       acmeRoot = null;
     };
   };
-};
+}
 ```
 
 And that's it! Next time your configuration is rebuilt, or when

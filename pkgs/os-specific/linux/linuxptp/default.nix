@@ -15,10 +15,7 @@ stdenv.mkDerivation rec {
        '/usr/include/linux/' "${linuxHeaders}/include/linux/"
   '';
 
-  makeFlags = [
-    "prefix="
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags = [ "prefix=" ];
 
   preInstall = ''
     export DESTDIR=$out

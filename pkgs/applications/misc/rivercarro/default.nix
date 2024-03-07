@@ -45,6 +45,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
     inherit (zig_0_11.meta) platforms;
-    mainProgram = "rivercarro";
   };
 })

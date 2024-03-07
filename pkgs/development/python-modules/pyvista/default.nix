@@ -8,14 +8,13 @@
 , pooch
 , pythonOlder
 , scooby
-, setuptools
 , vtk
 }:
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.43.3";
-  pyproject = true;
+  version = "0.43.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -23,12 +22,8 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yJEggiWK73zzUPvOsPucpalmSMxywinE9t2e2dqBM9M=";
+    hash = "sha256-H7WkRK9lP92L47nFNDT1WusWfU0bLgXBA+KQqTyedL4=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     imageio

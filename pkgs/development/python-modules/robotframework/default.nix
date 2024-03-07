@@ -1,40 +1,24 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, jsonschema
-, python
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, jsonschema }:
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "7.0";
-  pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  version = "6.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "robotframework";
-    repo = "robotframework";
+    owner = pname;
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IyOm2MTHj2rOew/IkyGIfI4XZSFU88+Tx8KHKIRT2G4=";
+    hash = "sha256-vtP0TVkCMrm0CRXlpZvVTBf7yd8+3p+nRArMWyQUn4k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  nativeCheckInputs = [
-    jsonschema
-  ];
+  nativeCheckInputs = [ jsonschema ];
 
   checkPhase = ''
-    ${python.interpreter} utest/run.py
+    python3 utest/run.py
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/robotframework/robotframework/blob/master/doc/releasenotes/rf-${version}.rst";
     description = "Generic test automation framework";
     homepage = "https://robotframework.org/";
     license = licenses.asl20;

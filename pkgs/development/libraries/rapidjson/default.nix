@@ -43,14 +43,7 @@ stdenv.mkDerivation rec {
   # for tests, adding gtest to checkInputs does not work
   # https://github.com/NixOS/nixpkgs/pull/212200
   buildInputs = [ gtest ];
-  cmakeFlags = [
-    "-DGTEST_SOURCE_DIR=${gtest.dev}/include"
-
-    # Build rapidjson with std=c++17 so gtest 1.13.0+ works
-    # https://github.com/NixOS/nixpkgs/pull/282245#issuecomment-1951796902
-    "-DRAPIDJSON_BUILD_CXX11=OFF"
-    "-DRAPIDJSON_BUILD_CXX17=ON"
-  ];
+  cmakeFlags = [ "-DGTEST_SOURCE_DIR=${gtest.dev}/include" ];
 
   nativeCheckInputs = [ valgrind ];
   doCheck = !stdenv.hostPlatform.isStatic && !stdenv.isDarwin;

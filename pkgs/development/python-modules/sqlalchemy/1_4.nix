@@ -35,19 +35,15 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "1.4.52";
+  version = "1.4.51";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-3JiPDOI6KDQwtBtISvHi3d+Rdm0pz1d9cnZu3+f4jYE=";
+    hash = "sha256-KhLSKlQ4xfSh1nsAt+cRO+adh2aj/h/iqV6YmDbz39k=";
   };
-
-  postPatch = ''
-    sed -i '/tag_build = dev/d' setup.cfg
-  '';
 
   nativeBuildInputs = [
     setuptools

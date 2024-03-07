@@ -15,25 +15,25 @@
 , harfbuzz
 , openssl
 , pkg-config
+, makeBinaryWrapper
 , icu
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.15.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
-    sha256 = "sha256-xZHYiaQ8ASUwu0ieHIXcjRaH06SQoB6OR1y7Ok+FjAs=";
+    fetchSubmodules = true;
+    sha256 = "sha256-Cd8YzjU5mCA5DmgLBjg8eVRc87chVVIXinJuf8cNw3o=";
   };
 
-  cargoHash = "sha256-niMgb4zsTWHw5yaa4kJOZzpOzO5gMG4k3cTHwSV+wmY=";
+  cargoHash = "sha256-1WjZbmZFPB1+QYpjqq5Y+fDkMZNmWJYIxmMFWg7Tiac=";
 
   nativeBuildInputs = [ pkg-config ];
-
-  buildFeatures = [ "external-harfbuzz" ];
 
   buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);

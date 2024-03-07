@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.13.6";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-R/67y7ZiqH2Yg7JFsNYOuGocvR161srlWjRgjyZsqaE=";
+    hash = "sha256-tKywmFSSWc538i7raCrZnFpMDnFMT23hYVoYndnIKJ4=";
   };
 
-  vendorHash = "sha256-/+JSL54y7u7mGeDwAJV17Ibjb/LffitUOgonUd9EzDA=";
+  vendorHash = "sha256-eFoXUroJgrstNYjSYsP6o0vTEW2k/+6JjyVn6bb4um8=";
 
   subPackages = [
     # The server
@@ -52,7 +52,7 @@ buildGoModule rec {
   '';
 
   # PostgreSQL's request for a shared memory segment exceeded your kernel's SHMALL parameter
-  doCheck = !stdenv.isDarwin;
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
   passthru.tests = {
     inherit (nixosTests) dendrite;

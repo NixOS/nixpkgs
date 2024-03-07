@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.FlorianFranzen ];
     platforms = platforms.unix;
-    mainProgram = "jp2a";
   };
 }

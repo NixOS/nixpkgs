@@ -33,6 +33,5 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/jpoliv/wakeonlan";
     license = licenses.artistic1;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    mainProgram = "wakeonlan";
   };
 }

@@ -2,6 +2,8 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, pythonAtLeast
 , pythonOlder
 , pytestCheckHook
 , setuptools
@@ -11,8 +13,6 @@
 , pyyaml
 , safetensors
 , torch
-, config
-, cudatoolkit
 , evaluate
 , parameterized
 , transformers
@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.26.1";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-l0RSBVAa2u3bGDLbg/e/1UP5WO8z2+YBqzwdviAcMA0=";
+    hash = "sha256-WIMOSfo9fGbevMkUHvFsA51SOiGkBO1cK388FudRDY0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -52,8 +52,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH=$out/bin:$PATH
-  '' + lib.optionalString config.cudaSupport ''
-    export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
   '';
   pytestFlagsArray = [ "tests" ];
   disabledTests = [
@@ -76,9 +74,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"
-  ] ++ lib.optionals (!config.cudaSupport) [
-    # requires ptxas from cudatoolkit, which is unfree
-    "test_dynamo_extract_model"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
     "CheckpointTest"

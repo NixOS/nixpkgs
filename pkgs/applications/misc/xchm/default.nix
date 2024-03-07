@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
-    mainProgram = "xchm";
   };
 }

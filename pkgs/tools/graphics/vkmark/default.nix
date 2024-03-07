@@ -13,18 +13,17 @@
 , assimp
 , libxcb
 , xcbutilwm
-, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "vkmark";
-  version = "2017.08-unstable-2023-04-12";
+  version = "unstable-2022-09-09";
 
   src = fetchFromGitHub {
     owner = "vkmark";
     repo = "vkmark";
-    rev = "ab6e6f34077722d5ae33f6bd40b18ef9c0e99a15";
-    sha256 = "sha256-X1Y2U1aJymKrv3crJLN7tvXHG2W+w0W5gB2g00y4yvc=";
+    rev = "30d2cd37f0566589d90914501fc7c51a4e51f559";
+    sha256 = "sha256-/awEJbmSiNJT71bijI5mrJkKN4DhRNxXO/qYpQECFnA=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -39,8 +38,6 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ];
-
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "An extensible Vulkan benchmarking suite";

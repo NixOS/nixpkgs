@@ -2,7 +2,6 @@
 , lib
 , docbook-xsl-nons
 , fetchurl
-, fetchpatch
 , glib
 , gobject-introspection
 , gtk-doc
@@ -13,8 +12,7 @@
 , ninja
 , pkg-config
 , python3
-, substituteAll
-, systemdMinimal
+, systemd
 , usbutils
 , vala
 , which
@@ -35,20 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Hardcode absolute paths to libraries so that consumers
     # do not need to set LD_LIBRARY_PATH themselves.
     ./hardcode-paths.patch
-
-    # Replace references to udevadm with an absolute paths, so programs using
-    # umockdev will just work without having to provide it in their test environment
-    # $PATH.
-    (substituteAll {
-      src = ./substitute-udevadm.patch;
-      udevadm = "${systemdMinimal}/bin/udevadm";
-    })
-
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://github.com/martinpitt/umockdev/commit/d4efe24be59bd859b87473ea3d7efe8100bedc74.patch";
-      hash = "sha256-whf3p2e7FWN1xk5+HF9KsbMW74DPOQ0R0+FxBfCZTX0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -65,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemdMinimal
+    systemd
     libpcap
   ];
 
@@ -75,11 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     python3
-    usbutils
     which
+    usbutils
   ];
-
-  strictDeps = true;
 
   mesonFlags = [
     "-Dgtk_doc=true"

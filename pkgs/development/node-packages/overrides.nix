@@ -40,14 +40,6 @@ final: prev: {
     };
   };
 
-  bash-language-server = prev.bash-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/bash-language-server" \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.shellcheck ]}
-    '';
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -80,11 +72,20 @@ final: prev: {
     '';
   };
 
-  grammarly-languageserver = prev.grammarly-languageserver.override (old: {
+
+  graphite-cli = prev."@withgraphite/graphite-cli".override (old: {
+    name = "graphite-cli";
+    nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
+    buildInputs = with pkgs; [ cairo pango pixman ];
+    # 'gt completion' auto-detects zshell from environment variables:
+    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
+    postInstall = ''
+      installShellCompletion --cmd gt \
+        --bash <($out/bin/gt completion) \
+        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
+    '';
     meta = old.meta // {
-      # requires EOL Node.js 16
-      # https://github.com/znck/grammarly/issues/334
-      broken = true;
+      license = lib.licenses.unfree; # no license specified
     };
   });
 
@@ -399,10 +400,9 @@ final: prev: {
       };
   };
 
-  volar = final."@volar/vue-language-server".override ({ meta, ... }: {
+  volar = final."@volar/vue-language-server".override {
     name = "volar";
-    meta = meta // { mainProgram = "vue-language-server"; };
-  });
+  };
 
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
@@ -428,40 +428,40 @@ final: prev: {
         name = "_at_cloudflare_slash_workerd-linux-64";
         packageName = "@cloudflare/workerd-linux-64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = "1.20231030.0";
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20240129.0.tgz";
-          sha512 = "sFV1uobHgDI+6CKBS/ZshQvOvajgwl6BtiYaH4PSFSpvXTmRx+A9bcug+6BnD+V4WgwxTiEO2iR97E1XuwDAVw==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20231030.0.tgz";
+          sha512 = "2HUeRTvoCC17fxE0qdBeR7J9dO8j4A8ZbdcvY8pZxdk+zERU6+N03RTbk/dQMU488PwiDvcC3zZqS4gwLfVT8g==";
         };
       };
       linuxWorkerdArm = {
         name = "_at_cloudflare_slash_workerd-linux-arm64";
         packageName = "@cloudflare/workerd-linux-arm64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = "1.20231030.0";
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-1.20240129.0.tgz";
-          sha512 = "O7q7htHaFRp8PgTqNJx1/fYc3+LnvAo6kWWB9a14C5OWak6AAZk42PNpKPx+DXTmGvI+8S1+futBGUeJ8NPDXg==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-1.20231030.0.tgz";
+          sha512 = "4/GK5zHh+9JbUI6Z5xTCM0ZmpKKHk7vu9thmHjUxtz+o8Ne9DoD7DlDvXQWgMF6XGaTubDWyp3ttn+Qv8jDFuQ==";
         };
       };
       darwinWorkerd = {
         name = "_at_cloudflare_slash_workerd-darwin-64";
         packageName = "@cloudflare/workerd-darwin-64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = "1.20231030.0";
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-1.20240129.0.tgz";
-          sha512 = "DfVVB5IsQLVcWPJwV019vY3nEtU88c2Qu2ST5SQxqcGivZ52imagLRK0RHCIP8PK4piSiq90qUC6ybppUsw8eg==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-1.20231030.0.tgz";
+          sha512 = "0iy34j997llj3jl3l8dipnsyms89qv9nxkza9l2gxmcj6mqwv5m6c8cvgca78qfccl1f5zsrzj855q1fz631p91yydbri2gxgvd10r7";
         };
       };
       darwinWorkerdArm = {
         name = "_at_cloudflare_slash_workerd-darwin-arm64";
         packageName = "@cloudflare/workerd-darwin-arm64";
         # Should be same version as workerd
-        version = "1.20240129.0";
+        version = "1.20231030.0";
         src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-1.20240129.0.tgz";
-          sha512 = "t0q8ABkmumG1zRM/MZ/vIv/Ysx0vTAXnQAPy/JW5aeQi/tqrypXkO9/NhPc0jbF/g/hIPrWEqpDgEp3CB7Da7Q==";
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-1.20231030.0.tgz";
+          sha512 = "WSJJjm11Del4hSneiNB7wTXGtBXI4QMCH9l5qf4iT5PAW8cESGcCmdHtWDWDtGAAGcvmLT04KNvmum92vRKKQQ==";
         };
       };
 

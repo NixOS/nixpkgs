@@ -22,16 +22,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.8.13";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "woelper";
-    repo = "oculante";
+    repo = pname;
     rev = version;
-    hash = "sha256-RbRvV3OkRZXc0n7qGzqbBtbU81wFc+/Ohg9pbVqdsw4=";
+    hash = "sha256-uDSZ7qwDC/eR0aZN372ju21PBGuBiiYmlx/26Ta3luE=";
   };
 
-  cargoHash = "sha256-qt4bHCHpiP6yOce9hquVVlLFF906ADwhss4xAP9E0fA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [
     cmake
@@ -67,8 +69,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm444 $src/res/oculante.png -t $out/share/icons/hicolor/128x128/apps/
     install -Dm444 $src/res/oculante.desktop -t $out/share/applications
-    wrapProgram $out/bin/oculante \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL]}
+  '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libxkbcommon libX11 ]}
   '';
 
   meta = with lib; {

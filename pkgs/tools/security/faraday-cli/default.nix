@@ -5,19 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-cli";
-  version = "2.1.11";
-  pyproject = true;
+  version = "2.1.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
-    repo = "faraday-cli";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-bCiiX5dYodnWkKeNo2j3PGMz17F5y2X4ECZiStDdK5U=";
+    hash = "sha256-8D1oYYqf0R41DPYtorcvykZ99p6P6Diwe7PgEN378pU=";
   };
-
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     arrow

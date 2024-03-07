@@ -39,6 +39,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.unix;
-    mainProgram = "ssh-agents";
   };
 }

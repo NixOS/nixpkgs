@@ -41,6 +41,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ onny ];
-    mainProgram = "down_on_spot";
   };
 }

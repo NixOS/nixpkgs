@@ -9,7 +9,6 @@
 , libdrm
 , libgcrypt
 , libkrb5
-, libnotify
 , mesa # for libgbm
 , libGL
 , nss
@@ -88,9 +87,6 @@ stdenv.mkDerivation {
     # https://github.com/microcai/gentoo-zh/commit/06ad5e702327adfe5604c276635ae8a373f7d29e
     ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
       $out/opt/QQ/libappindicator3.so
-
-    ln -s ${libnotify}/lib/libnotify.so \
-      $out/opt/QQ/libnotify.so
 
     runHook postInstall
   '';

@@ -20,8 +20,8 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  build-system = [ poetry-core ];
-  dependencies = [ python-dateutil pytzdata ]
+  nativeBuildInputs = [ poetry-core ];
+  propagatedBuildInputs = [ python-dateutil pytzdata ]
   ++ lib.optional (pythonOlder "3.5") typing
   ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 

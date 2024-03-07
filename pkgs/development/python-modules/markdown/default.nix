@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.5.2";
+  version = "3.5.1";
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Python-Markdown";
     repo = "markdown";
     rev = "refs/tags/${version}";
-    hash = "sha256-YLOLDiS93zpjJWzkWXcutjZw9iB/FfbjxQXjau2B+JQ=";
+    hash = "sha256-OeCr72N3ygYYJnI+bIXCt63tSLDFLKznYekTk1sYHZI=";
   };
 
   nativeBuildInputs = [

@@ -19,29 +19,25 @@
 
 stdenv.mkDerivation rec {
   pname = "glide-media-player";
-  version = "0.6.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "philn";
     repo = "glide";
     rev = version;
-    hash = "sha256-SN/1Yf4fHlDbJ2X6DGktsn1GFW8bbkeznlO1S8sBZyg=";
+    hash = "sha256-dIXuWaoTeyVBhzr6VWxYBsn+CnUYG/KzhzNJtLLdRuI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2Ma7ZAKFiAQXFWFze4RLwGu33d/vC6FVW6fJdqwED20=";
+    hash = "sha256-azvxW40fuKuF/N0qwzofFk1bZiNxyTN6YBFU5qHQkCA=";
   };
 
   postPatch = ''
     substituteInPlace scripts/meson_post_install.py \
-      --replace-warn "gtk-update-icon-cache" "gtk4-update-icon-cache"
-    substituteInPlace data/net.baseart.Glide.desktop \
-      --replace-warn "Icon=net.baseart.Glide.svg" "Icon=net.baseart.Glide"
-    patchShebangs --build \
-      scripts/meson_post_install.py \
-      build-aux/cargo-build.py
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+    patchShebangs --build scripts/meson_post_install.py
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i "/wayland,x11egl,x11glx/d" meson.build
   '';

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pylxd";
-  version = "2.3.2";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "pylxd";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Q4GMz7HFpJNPYlYgLhE0a7mVCwNpdbw4XVcUGQ2gUJ0=";
+    rev = version;
+    hash = "sha256-eDRCJYjmBndMnSNuS6HD/2p/KhzqJq2qPAzMk7kC5UM=";
   };
 
   propagatedBuildInputs = [

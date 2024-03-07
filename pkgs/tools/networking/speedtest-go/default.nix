@@ -27,6 +27,5 @@ buildGoModule rec {
     changelog = "https://github.com/showwin/speedtest-go/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aleksana ];
-    mainProgram = "speedtest-go";
   };
 }

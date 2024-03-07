@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.5.2";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
-    hash = "sha256-xGPfXjk+oOnR7JqTrZd2pKJxalrlS8CMs7HWDClXaS8=";
+    hash = "sha256-DqGGfNjKPW9HFJrX9arFHyNYjB61uoL6NabZatTWrr0=";
   };
 
   nativeBuildInputs = [
@@ -29,11 +29,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
   ];
 
-  # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
-  env = lib.optionalAttrs stdenv.isx86_32 {
-    NIX_CFLAGS_COMPILE = "-msse2 -mfpmath=sse";
-  };
-
   doCheck = true;
 
   nativeCheckInputs = [
@@ -46,6 +41,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/catchorg/Catch2/blob/${src.rev}/docs/release-notes.md";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ dotlambda ];
-    platforms = with lib.platforms; unix ++ windows;
+    platforms = lib.platforms.unix;
   };
 }

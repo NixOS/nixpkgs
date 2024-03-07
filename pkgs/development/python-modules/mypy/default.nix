@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
 , pythonOlder
 
 # build-system
@@ -101,11 +100,6 @@ buildPythonPackage rec {
     tomli
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # requires distutils
-    "test_c_unit_test"
-  ];
-
   disabledTestPaths = [
     # fails to find tyoing_extensions
     "mypy/test/testcmdline.py"
@@ -124,6 +118,6 @@ buildPythonPackage rec {
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
     mainProgram = "mypy";
-    maintainers = with maintainers; [ lnl7 ];
+    maintainers = with maintainers; [ martingms lnl7 ];
   };
 }

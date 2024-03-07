@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://niklasfasching.github.io/go-org";
     license = licenses.mit;
     maintainers = with maintainers; [ payas ];
-    mainProgram = "go-org";
   };
 }

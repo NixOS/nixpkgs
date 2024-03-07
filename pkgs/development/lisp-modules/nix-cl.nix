@@ -145,7 +145,7 @@ let
       ...
     } @ args:
 
-    (stdenv.mkDerivation (rec {
+    stdenv.mkDerivation (rec {
       inherit
         version nativeLibs javaLibs lispLibs systems asds
         pkg program flags faslExt
@@ -226,14 +226,7 @@ let
       meta = (args.meta or {}) // {
         maintainers = args.meta.maintainers or lib.teams.lisp.members;
       };
-    })) // {
-      # Useful for overriding
-      # Overriding code would prefer to use pname from the attribute set
-      # However, pname is extended with the implementation name
-      # Moreover, it is used in the default list of systems to load
-      # So we pass the original pname
-      pname = args.pname;
-    }));
+    })));
 
   # Build the set of lisp packages using `lisp`
   # These packages are defined manually for one reason or another:

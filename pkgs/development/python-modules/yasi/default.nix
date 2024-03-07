@@ -1,15 +1,14 @@
 { lib
-, buildPythonPackage
+, buildPythonApplication
 , colorama
 , fetchFromGitHub
 , pytestCheckHook
-, setuptools
 }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname = "yasi";
   version = "2.1.2";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nkmathew";
@@ -18,15 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-xKhVTmh/vrtBkatxtk8R4yqbGroH0I+xTKNYUpuikt4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [
     colorama
   ];
 
-  nativeCheckInputs = [
+  nativeBuildInputs = [
     pytestCheckHook
   ];
 

@@ -1,26 +1,36 @@
-{ lib
-, fetchFromGitHub
-, php
-}:
+{ mkDerivation, fetchurl, makeWrapper, installShellFiles, lib, php }:
 
-php.buildComposerProject (finalAttrs: {
+mkDerivation rec {
   pname = "deployer";
-  version = "7.3.3";
+  version = "6.8.0";
 
-  src = fetchFromGitHub {
-    owner = "deployphp";
-    repo = "deployer";
-    rev = "v${finalAttrs.version}^";
-    hash = "sha256-zvK7NwIACAhWN/7D8lVY1Bv8x6xKAp/L826SovQhDYg=";
+  src = fetchurl {
+    url = "https://deployer.org/releases/v${version}/${pname}.phar";
+    sha256 = "09mxwfa7yszsiljbkxpsd4sghqngl08cn18v4g1fbsxp3ib3kxi5";
   };
 
-  vendorHash = "sha256-BDq2uryNWC31AEAEZJL9zGaAPbhXZ6hmfpsnr4wlixE=";
+  dontUnpack = true;
 
-  meta = {
-    description = "The PHP deployment tool with support for popular frameworks out of the box";
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install -D $src $out/libexec/deployer/deployer.phar
+    makeWrapper ${php}/bin/php $out/bin/dep --add-flags "$out/libexec/deployer/deployer.phar"
+
+    # fish support currently broken: https://github.com/deployphp/deployer/issues/2527
+    installShellCompletion --cmd dep \
+      --bash <($out/bin/dep autocomplete --install) \
+      --zsh <($out/bin/dep autocomplete --install)
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    description = "A deployment tool for PHP";
+    license = licenses.mit;
     homepage = "https://deployer.org/";
-    license = lib.licenses.mit;
     mainProgram = "dep";
-    maintainers = lib.teams.php.members;
+    maintainers = with maintainers; teams.php.members;
   };
-})
+}

@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wishfort36 moni ];
-    mainProgram = "tiramisu";
   };
 }

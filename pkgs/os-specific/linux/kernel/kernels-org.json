@@ -1,34 +1,38 @@
 {
     "testing": {
-        "version": "6.8-rc7",
-        "hash": "sha256:0q9isgv6lxzrmb4idl0spxv2l7fsk3nn4cdq0vdw9c8lyzrh5yy0"
+        "version": "6.7-rc8",
+        "hash": "sha256:02drhwl3f53y97gimgclz61zsa57v29vphkbrzr4cwmz4sh1vngk"
+    },
+    "6.5": {
+        "version": "6.5.13",
+        "hash": "sha256:1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq"
     },
     "6.1": {
-        "version": "6.1.81",
-        "hash": "sha256:0arl96yrqplbmp2gjyqcfma1lgc30kbn95m0sflv0yyldwf8dg8f"
+        "version": "6.1.72",
+        "hash": "sha256:09h9kzv2xfrn369ynl09dfnjl9025b9vpkcxg75gyp63fy8fdp4q"
     },
     "5.15": {
-        "version": "5.15.151",
-        "hash": "sha256:0jby224ncdardjwmf8c59s5j71inpvdlzah984ilf2b6y85pc7la"
+        "version": "5.15.146",
+        "hash": "sha256:14nijbspmzd4r38l8cpl4vn9dhawzcfnhyc0gnaxl2m8l9gpm02s"
     },
     "5.10": {
-        "version": "5.10.212",
-        "hash": "sha256:14vll2bghd52wngjxy78hgglydcxka59yziji0w56dcdpmky9wqc"
+        "version": "5.10.207",
+        "hash": "sha256:06sg6cd7a881yv9kzh4583g6hjv14zflx2blsls1bgwn4a4ykb46"
     },
     "5.4": {
-        "version": "5.4.271",
-        "hash": "sha256:0l2qv4xlhnry9crs90rkihsxyny6jz8kxw08bfad7nys9hrn3g6d"
+        "version": "5.4.266",
+        "hash": "sha256:1dmcn9i3nvf1gldm1a32gnl5ybwbk2lizb3wa4gc06g7dxz2y1ys"
     },
     "4.19": {
-        "version": "4.19.309",
-        "hash": "sha256:1yc45kfiwdqsqa11sxafs82b0day6qvgjcll8rx9vipidsmagbcm"
+        "version": "4.19.304",
+        "hash": "sha256:165mljr8v1cf4vf4a4b44hx089rprkssvi2azq5wbxxg3basbind"
     },
     "6.6": {
-        "version": "6.6.21",
-        "hash": "sha256:0mz420w99agr7jv1jgqfr4fjhzbv005xif086sqx556s900l62zf"
+        "version": "6.6.11",
+        "hash": "sha256:0lhyczcj1fhh52fjf06ikp5yh7kxc1qymsw44rv6v25vc6kfbqmg"
     },
     "6.7": {
-        "version": "6.7.9",
-        "hash": "sha256:0inkvyrvq60j9lxgivkivq3qh94lsfc1dpv6vwgxmy3q0zy37mqg"
+        "version": "6.7",
+        "hash": "sha256:0s8hbcsg7fdvspqam8kzcxygjsznr4zfi60nqgc81l3n4m518cgg"
     }
 }

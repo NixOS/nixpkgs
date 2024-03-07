@@ -14,8 +14,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "python_trovo";
-    inherit version;
+    inherit pname version;
     hash = "sha256-3EVSF4+nLvvM2RocNM2xz9Us5VrRRTCu/MWCcqwwikw=";
   };
 

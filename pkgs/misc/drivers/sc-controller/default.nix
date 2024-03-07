@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.13";
+  version = "0.4.8.11";
 
   src = fetchFromGitHub {
     owner  = "Ryochan7";
     repo   = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-vK/5S+GyqVfKTqn5PaPmOV/tXE9PIW57gqYxvhGaJSg=";
+    rev    = "v${version}";
+    sha256 = "xu9QqddJf0cXkhNPrOnE+L8CV5AfgcCyk9DSh+G94c0=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];

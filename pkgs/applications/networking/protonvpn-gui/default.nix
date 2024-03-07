@@ -27,14 +27,14 @@
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "4.1.10";
+  version = "4.1.0-unstable-2023-10-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-D06dMMjzFE7gIGFpIH/+0xmVCckqAWLkb3lc2ZmxNZs=";
+    rev = "713324e9e4ee9f030c8115072cae379eb3340c42";
+    hash = "sha256-DfuM4b2cSIA8j9Ux3TzInRCvzQGb9LvJDSwRhfadBPY=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton --cov-report=html --cov-report=term" ""
+      --replace "--cov=proton --cov-report=html --cov-report=term" ""
   '';
 
   postInstall = ''

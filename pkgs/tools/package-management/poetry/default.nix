@@ -1,8 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
+{ python3, fetchFromGitHub }:
 
 let
-  newPackageOverrides =
-    self: super: {
+  python = python3.override {
+    packageOverrides = self: super: rec {
       poetry = self.callPackage ./unwrapped.nix { };
 
       # The versions of Poetry and poetry-core need to match exactly,
@@ -12,19 +12,16 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.9.0";
+        version = "1.8.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
-          rev = "refs/tags/${version}";
-          hash = "sha256-vvwKbzGlvv2LTbXfJxQVM3nUXFGntgJxsku6cbRxCzw=";
+          rev = version;
+          hash = "sha256-RnCJ67jaL2knwv+Uo7p0zOejHAT73f40weaJnfqOYoM=";
         };
       });
     } // (plugins self);
-  python = python3.override (old: {
-    packageOverrides = lib.composeManyExtensions
-      ((if old ? packageOverrides then [ old.packageOverrides ] else [ ]) ++ [ newPackageOverrides ]);
-  });
+  };
 
   plugins = ps: with ps; {
     poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };

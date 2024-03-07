@@ -12,19 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.12.2";
-  pyproject = true;
+  version = "0.12.1";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "CryptoParser";
     inherit version;
-    hash = "sha256-SG7I/uOWZapjZ5zGW1HndGqaYc2k2aRWf3IWlartIJE=";
+    hash = "sha256-Q05koDfVaVgiQYhULkwzl9uzUIumO8ZIGJPfxRBUsj0=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt  \
-      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
-  '';
 
   nativeBuildInputs = [
     setuptools

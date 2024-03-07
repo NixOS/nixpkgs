@@ -1,21 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, mock
+, setuptools
 , pillow
 , pypng
-, pytestCheckHook
-, pythonAtLeast
-, qrcode
-, setuptools
-, testers
 , typing-extensions
+, mock
+, pytestCheckHook
+, testers
+, qrcode
 }:
 
 buildPythonPackage rec {
   pname = "qrcode";
   version = "7.4.2";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,15 +48,11 @@ buildPythonPackage rec {
     };
   };
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    "test_change"
-  ];
-
   meta = with lib; {
     description = "Python QR Code image generator";
     homepage = "https://github.com/lincolnloop/python-qrcode";
     changelog = "https://github.com/lincolnloop/python-qrcode/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
   };
+
 }

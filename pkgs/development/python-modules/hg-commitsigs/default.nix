@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/${python.sitePackages}/hgext3rd/
+    mkdir -p $out/lib/${python.libPrefix}/site-packages/hgext3rd/
     install -D $src/commitsigs.py \
-               $out/${python.sitePackages}/hgext3rd/
+               $out/lib/${python.libPrefix}/site-packages/hgext3rd/
   '';
 
   meta = with lib; {

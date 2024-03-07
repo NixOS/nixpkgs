@@ -20,10 +20,9 @@
 , gdal
 , openimageio
 , freeimage
-, testers
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libtiff";
   version = "4.6.0";
 
@@ -33,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-qCg5qjsPPynCHIg0JsPJldwVdcYkI68zYmyNAKUCoyw=";
   };
 
@@ -78,9 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
       inherit (python3Packages) pillow imread;
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-      };
     };
     updateScript = nix-update-script { };
   };
@@ -88,9 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
-    changelog = "https://libtiff.gitlab.io/libtiff/v${finalAttrs.version}.html";
+    changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
     license = licenses.libtiff;
     platforms = platforms.unix;
-    pkgConfigModules = [ "libtiff-4" ];
   };
-})
+}

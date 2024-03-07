@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jhhuh ];
-    mainProgram = "yasr";
   };
 }

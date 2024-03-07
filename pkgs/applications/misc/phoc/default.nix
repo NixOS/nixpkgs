@@ -1,7 +1,7 @@
 { lib
 , stdenv
-, stdenvNoCC
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -17,19 +17,30 @@
 , libxkbcommon
 , wlroots
 , xorg
-, directoryListingUpdater
+, gitUpdater
 , nixosTests
-, testers
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  phocWlroots = wlroots.overrideAttrs (old: {
+    patches = (old.patches or []) ++ [
+      # Revert "layer-shell: error on 0 dimension without anchors"
+      # https://source.puri.sm/Librem5/phosh/-/issues/422
+      (fetchpatch {
+        name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
+        url = "https://gitlab.gnome.org/World/Phosh/phoc/-/raw/acb17171267ae0934f122af294d628ad68b09f88/subprojects/packagefiles/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
+        hash = "sha256-uNJaYwkZImkzNUEqyLCggbXAoIRX5h2eJaGbSHj1B+o=";
+      })
+    ];
+  });
+in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.36.0";
+  version = "0.31.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
-    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-eAKHboICsuQ4lecxnnZ8+hZjt5l1DDQbfuwypDYtdKk=";
+    url = "https://storage.puri.sm/releases/phoc/phoc-${version}.tar.xz";
+    hash = "sha256-P7Bs9JMv6KNKo4d2ID0/Ba4+Nel6DMn8o4I7EDvY4vY=";
   };
 
   nativeBuildInputs = [
@@ -50,33 +61,23 @@ stdenv.mkDerivation (finalAttrs: {
     # For keybindings settings schemas
     gnome.mutter
     wayland
-    finalAttrs.wlroots
+    phocWlroots
     xorg.xcbutilwm
   ];
 
   mesonFlags = ["-Dembed-wlroots=disabled"];
 
-  # Patch wlroots to remove a check which crashes Phosh.
-  # This patch can be found within the phoc source tree.
-  wlroots = wlroots.overrideAttrs (old: {
-    patches = (old.patches or []) ++ [
-      (stdenvNoCC.mkDerivation {
-        name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        inherit (finalAttrs) src;
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-        phases = "unpackPhase installPhase";
-        installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
-      })
-    ];
-  });
+  postPatch = ''
+    chmod +x build-aux/post_install.py
+    patchShebangs build-aux/post_install.py
+  '';
 
   passthru = {
     tests.phosh = nixosTests.phosh;
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+    updateScript = gitUpdater {
+      url = "https://gitlab.gnome.org/World/Phosh/phoc";
+      rev-prefix = "v";
     };
-    updateScript = directoryListingUpdater { };
   };
 
   meta = with lib; {
@@ -86,4 +87,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
-})
+}

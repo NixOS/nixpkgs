@@ -29,7 +29,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security, cctools, llvmPackages
+, Foundation, Security, cctools, llvmPackages_11
 }:
 
 let
@@ -51,7 +51,7 @@ let
   # translation units, so the build fails at link time
   stdenv =
     if cudaSupport then cudaPackagesGoogle.backendStdenv
-    else if originalStdenv.isDarwin then llvmPackages.stdenv
+    else if originalStdenv.isDarwin then llvmPackages_11.stdenv
     else originalStdenv;
   inherit (cudaPackagesGoogle) cudatoolkit nccl;
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)

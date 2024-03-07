@@ -4,8 +4,6 @@
 , hare
 , scdoc
 , nix-update-script
-, makeWrapper
-, bash
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
@@ -22,15 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     hare
-    makeWrapper
     scdoc
   ];
-
-  enableParallelChecking = true;
-
-  doCheck = true;
-
-  dontConfigure = true;
 
   preBuild = ''
     HARECACHE="$(mktemp -d --tmpdir harecache.XXXXXXXX)"
@@ -49,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ./bin/haredo ''${enableParallelChecking:+-j$NIX_BUILD_CORES} test
+    ./bin/haredo test
 
     runHook postCheck
   '';
@@ -62,10 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/haredo \
-      --prefix PATH : "${lib.makeBinPath [bash]}"
-  '';
+  dontConfigure = true;
+  doCheck = true;
 
   setupHook = ./setup-hook.sh;
 

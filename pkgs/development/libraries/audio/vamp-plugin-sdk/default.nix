@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
   version = "2.10";
 
   src = fetchFromGitHub {
-    owner = "vamp-plugins";
+    owner = "c4dm";
     repo = "vamp-plugin-sdk";
     rev = "vamp-plugin-sdk-v${version}";
-    hash = "sha256-5jNA6WmeIOVjkEMZXB5ijxyfJT88alVndBif6dnUFdI=";
+    sha256 = "1lhmskcyk7qqfikmasiw7wjry74gc8g5q6a3j1iya84yd7ll0cz6";
   };
 
   nativeBuildInputs = [ pkg-config ];

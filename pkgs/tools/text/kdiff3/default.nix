@@ -1,9 +1,9 @@
-{ stdenv
+{ mkDerivation
 , lib
 , fetchurl
 , extra-cmake-modules
 , kdoctools
-, wrapQtAppsHook
+, wrapGAppsHook
 , boost
 , kcrash
 , kconfig
@@ -12,18 +12,20 @@
 , kiconthemes
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+mkDerivation rec {
   pname = "kdiff3";
   version = "1.10.7";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdiff3/kdiff3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uj9Ky/SsdIrr78hfWcr2U9Rf6FmkjDSviZGCJKdnxeM=";
+    url = "mirror://kde/stable/kdiff3/kdiff3-${version}.tar.xz";
+    hash = "sha256-/otpnRJM1NJjKzwnqgas7Fyqj8v4t2SM8MANektqzlA=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  buildInputs = [ boost ];
 
-  buildInputs = [ boost kconfig kcrash kinit kparts kiconthemes ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+
+  propagatedBuildInputs = [ kconfig kcrash kinit kparts kiconthemes ];
 
   cmakeFlags = [ "-Wno-dev" ];
 
@@ -34,4 +36,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux;
   };
-})
+}

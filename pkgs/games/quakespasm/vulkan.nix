@@ -36,10 +36,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
-    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
-  };
-
   postFixup = ''
     wrapProgram $out/bin/vkquake \
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib

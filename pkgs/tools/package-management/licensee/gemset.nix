@@ -5,20 +5,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0irbdwkkjwzajq1ip6ba46q49sxnrl2cw7ddkdhsfhb6aprnm3vr";
+      sha256 = "1ypdmpdn20hxp5vwxz3zc04r5xcwqc25qszdlg41h8ghdqbllwmw";
       type = "gem";
     };
-    version = "2.8.6";
-  };
-  base64 = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "01qml0yilb9basf7is2614skjp8384h2pycfx86cr8023arfj98g";
-      type = "gem";
-    };
-    version = "0.2.0";
+    version = "2.8.1";
   };
   dotenv = {
     groups = ["default"];
@@ -31,15 +21,15 @@
     version = "2.8.1";
   };
   faraday = {
-    dependencies = ["base64" "faraday-net_http" "ruby2_keywords"];
+    dependencies = ["faraday-net_http" "ruby2_keywords"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19p45ryrvxff6ggdj4fq76dk7wlkfgrh474c3kwzdsjx3xpdq8x8";
+      sha256 = "17lacy6n0hsayafvgxgzmngfq2x62b2arbn32bj2yyzmgxwyxhqn";
       type = "gem";
     };
-    version = "2.8.1";
+    version = "2.7.2";
   };
   faraday-net_http = {
     groups = ["default"];
@@ -57,20 +47,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "05g5w9c4jlfhwn0hfz117s1c7hfdm5yn7cywr4mah7xr41yvbh04";
+      sha256 = "0i4hs0vbgp0w3pdddr37zhydm16af122rmr0w39v3nqrj1ir65kv";
       type = "gem";
     };
-    version = "9.16.1";
+    version = "9.16.0";
   };
   mini_portile2 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1kl9c3kdchjabrihdqfmcplk3lq4cw1rr9f378y6q22qwy5dndvs";
+      sha256 = "1af4yarhbbx62f7qsmgg5fynrik0s36wjy3difkawy536xg343mp";
       type = "gem";
     };
-    version = "2.8.5";
+    version = "2.8.1";
   };
   nokogiri = {
     dependencies = ["mini_portile2" "racc"];
@@ -78,10 +68,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1l8b0i24h4irivyhwy9xmkjbggw86cxkzkiqdqg0jpcp9qc8h4rl";
+      sha256 = "0n79k78c5vdcyl0m3y3l5x9kxl6xf5lgriwi2vd665qmdkr01vnk";
       type = "gem";
     };
-    version = "1.16.0";
+    version = "1.13.10";
   };
   octokit = {
     dependencies = ["faraday" "sawyer"];
@@ -89,30 +79,30 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "11fhv1a43c51jkgmqf62aypf9yw74lc6ph4qmzsh2bydwwzbwqn3";
+      sha256 = "0a5iy1v1n8f5ggp6q601mn8dz1n08ffs4gv0zsh5ca68j8dfmpx5";
       type = "gem";
     };
-    version = "8.0.0";
+    version = "6.0.1";
   };
   public_suffix = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1bni4qjrsh2q49pnmmd6if4iv3ak36bd2cckrs6npl111n769k9m";
+      sha256 = "0hz0bx2qs2pwb0bwazzsah03ilpf3aai8b7lk7s35jsfzwbkjq35";
       type = "gem";
     };
-    version = "5.0.4";
+    version = "5.0.1";
   };
   racc = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01b9662zd2x9bp4rdjfid07h09zxj7kvn7f5fghbqhzc625ap1dp";
+      sha256 = "09jgz6r0f7v84a7jz9an85q8vvmp743dqcsdm3z9c8rqcqv6pljq";
       type = "gem";
     };
-    version = "1.7.3";
+    version = "1.6.2";
   };
   reverse_markdown = {
     dependencies = ["nokogiri"];
@@ -140,10 +130,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "02m9zksfy3dwzhbv56xq2wwmlghca5209hdg895pi2x2d2sbkahi";
+      sha256 = "02h1cv73znwfgy61mqmfylcfvwyyp3lddiz3njgivfx234mpz50x";
       type = "gem";
     };
-    version = "1.7.1";
+    version = "1.5.0.1";
   };
   sawyer = {
     dependencies = ["addressable" "faraday"];
@@ -161,9 +151,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1hx77jxkrwi66yvs10wfxqa8s25ds25ywgrrf66acm9nbfg7zp0s";
+      sha256 = "0inl77jh4ia03jw3iqm5ipr76ghal3hyjrd6r8zqsswwvi9j2xdi";
       type = "gem";
     };
-    version = "1.3.0";
+    version = "1.2.1";
   };
 }

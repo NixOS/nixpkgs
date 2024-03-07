@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.22.2";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/uG1xjhxnIkS3rq7Tv1q1v8X7p1baDB8OiSEV9OLyfo=";
+    hash = "sha256-9+7ol2QSIXLkkRt/YlAobZHb3Tm+SmnjW/JufwimMTE=";
   };
 
   cargoLock = {
@@ -23,24 +23,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::cases::ui::layout_under_50_width_under_50_height"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.isDarwin;
-
-  preConfigure = ''
-    export BANDWHICH_GEN_DIR=_shell-files
-    mkdir -p $BANDWHICH_GEN_DIR
-  '';
-
-  postInstall = ''
-    installManPage $BANDWHICH_GEN_DIR/bandwhich.1
-
-    installShellCompletion $BANDWHICH_GEN_DIR/bandwhich.{bash,fish} \
-      --zsh $BANDWHICH_GEN_DIR/_bandwhich
-  '';
 
   meta = with lib; {
     description = "A CLI utility for displaying current network utilization";
@@ -52,10 +38,8 @@ rustPlatform.buildRustPackage rec {
       the background using reverse DNS on a best effort basis.
     '';
     homepage = "https://github.com/imsnif/bandwhich";
-    changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne figsoda ];
     platforms = platforms.unix;
-    mainProgram = "bandwhich";
   };
 }

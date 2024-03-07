@@ -11,20 +11,19 @@
 , qtbase
 , qtcharts
 , tuxclocker-plugins
-, tuxclocker-without-unfree
 , wrapQtAppsHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxclocker";
-  version = "1.5.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "Lurkki14";
     repo = "tuxclocker";
     fetchSubmodules = true;
-    rev = finalAttrs.version;
-    hash = "sha256-QLKLqTCpVMWxlDINa8Bo1vgCDcjwovoaXUs/PdMnxv0=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-8dtuZXBWftXNQpqYgNQOayPGfvEIu9QfbqDShfkt1qA=";
   };
 
   # Meson doesn't find boost without these
@@ -56,10 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dplugins=false"
   ];
-
-  passthru.tests = {
-    inherit tuxclocker-without-unfree;
-  };
 
   meta = with lib; {
     description = "Qt overclocking tool for GNU/Linux";

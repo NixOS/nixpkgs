@@ -56,6 +56,5 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "ToneLib-NoiseReducer";
   };
 }

@@ -10,8 +10,8 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.110.0";
-  pyproject = true;
+  version = "1.103.0";
+  format = "pyproject";
 
   disabled = python3.pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "aws";
     repo = "aws-sam-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FJHHEsdi2uGP9/GxrANsVEuxZiS4M4BPBGoARQBQpkA=";
+    hash = "sha256-oy0+dAA6x8Jl1nZ1wjsR9xvpR9biemTtqL9B1awz4BM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -28,18 +28,15 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "aws-lambda-builders"
     "aws-sam-translator"
     "boto3-stubs"
-    "cfn-lint"
+    "tzlocal"
     "cookiecutter"
     "docker"
-    "jsonschema"
-    "pyopenssl"
-    "rich"
-    "ruamel-yaml"
+    "aws-lambda-builders"
     "tomlkit"
-    "tzlocal"
+    "rich"
+    "jsonschema"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -88,12 +85,13 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : $out/bin:${lib.makeBinPath [ git ]}
   '';
 
+  doCheck = true;
+
   nativeCheckInputs = with python3.pkgs; [
     filelock
     flaky
     parameterized
     psutil
-    pytest-timeout
     pytest-xdist
     pytestCheckHook
   ];
@@ -105,27 +103,22 @@ python3.pkgs.buildPythonApplication rec {
 
   pytestFlagsArray = [
     "tests"
-    # Disable warnings
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
 
-  disabledTestPaths = [
     # Disable tests that requires networking or complex setup
-    "tests/end_to_end"
-    "tests/integration"
-    "tests/regression"
-    "tests/smoke"
-    "tests/unit/lib/telemetry"
-    # Disable flaky tests
-    "tests/unit/lib/samconfig/test_samconfig.py"
-  ];
+    "--ignore=tests/end_to_end"
+    "--ignore=tests/integration"
+    "--ignore=tests/regression"
+    "--ignore=tests/smoke"
+    "--ignore=tests/unit/lib/telemetry"
 
-  disabledTests = [
     # Disable flaky tests
-    "test_update_stage"
-    "test_delete_deployment"
-    "test_request_with_no_data"
+    "--ignore=tests/unit/lib/samconfig/test_samconfig.py"
+    "--deselect=tests/unit/lib/sync/flows/test_rest_api_sync_flow.py::TestRestApiSyncFlow::test_update_stage"
+    "--deselect=tests/unit/lib/sync/flows/test_rest_api_sync_flow.py::TestRestApiSyncFlow::test_delete_deployment"
+    "--deselect=tests/unit/local/lambda_service/test_local_lambda_invoke_service.py::TestValidateRequestHandling::test_request_with_no_data"
+
+    # Disable warnings
+    "-W ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [

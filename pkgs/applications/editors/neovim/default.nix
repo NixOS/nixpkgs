@@ -12,10 +12,11 @@
 
 # now defaults to false because some tests can be flaky (clipboard etc), see
 # also: https://github.com/neovim/neovim/issues/16233
+, doCheck ? false
 , nodejs ? null, fish ? null, python3 ? null
 }:
-stdenv.mkDerivation (finalAttrs:
-  let
+
+let
   nvim-lpeg-dylib = luapkgs: if stdenv.isDarwin
     then (luapkgs.lpeg.overrideAttrs (oa: {
       preConfigure = ''
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs:
     (nvim-lpeg-dylib ps)
     luabitop
     mpack
-  ] ++ lib.optionals finalAttrs.doCheck [
+  ] ++ lib.optionals doCheck [
     luv
     coxpcall
     busted
@@ -63,17 +64,17 @@ stdenv.mkDerivation (finalAttrs:
         in deterministicLuajit.withPackages(ps: [ ps.mpack (nvim-lpeg-dylib ps) ])
       else lua.luaOnBuild;
 
+  pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 
-in {
+in
+  stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
     version = "0.9.5";
-
-    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "v${finalAttrs.version}";
+      rev = "v${version}";
       hash = "sha256-CcaBqA0yFCffNPmXOJTo8c9v1jrEBiqAl8CG5Dj5YxE=";
     };
 
@@ -86,7 +87,7 @@ in {
 
     dontFixCmake = true;
 
-    inherit lua treesitter-parsers;
+    inherit lua;
 
     buildInputs = [
       gperf
@@ -104,17 +105,15 @@ in {
       tree-sitter
       unibilium
     ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
-      ++ lib.optionals finalAttrs.doCheck [ glibcLocales procps ]
+      ++ lib.optionals doCheck [ glibcLocales procps ]
     ;
 
-    doCheck = false;
+    inherit doCheck;
 
     # to be exhaustive, one could run
     # make oldtests too
     checkPhase = ''
-      runHook preCheck
       make functionaltest
-      runHook postCheck
     '';
 
     nativeBuildInputs = [
@@ -124,9 +123,7 @@ in {
     ];
 
     # extra programs test via `make functionaltest`
-    nativeCheckInputs = let
-      pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
-    in [
+    nativeCheckInputs = [
       fish
       nodejs
       pyEnv      # for src/clint.py
@@ -169,11 +166,11 @@ in {
         ln -s \
           ${tree-sitter.buildGrammar {
             inherit language src;
-            version = "neovim-${finalAttrs.version}";
+            version = "neovim-${version}";
           }}/parser \
           $out/lib/nvim/parser/${language}.so
       '')
-      finalAttrs.treesitter-parsers);
+      treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
@@ -202,4 +199,4 @@ in {
       maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
-  })
+  }

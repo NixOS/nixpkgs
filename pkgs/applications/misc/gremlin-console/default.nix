@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.lewo ];
     platforms = platforms.all;
-    mainProgram = "gremlin-console";
   };
 }

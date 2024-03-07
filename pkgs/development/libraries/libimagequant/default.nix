@@ -1,27 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, rust
-, rustPlatform
-, cargo-c
-, python3
-
-# tests
-, testers
-, vips
-, libimagequant
-}:
+{ lib, stdenv, fetchFromGitHub, fetchurl, rust, rustPlatform, cargo-c, python3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "4.3.0";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
-    repo = "libimagequant";
+    repo = pname;
     rev = version;
-    hash = "sha256-/gHe3LQaBWOQImBesKvHK46T42TtRld988wgxbut4i0=";
+    hash = "sha256-cZgnJOmj+xJDcewsxH2Jp5AAnFZKVuYxKPtoGeN03g4=";
   };
 
   cargoLock = {
@@ -47,13 +34,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.tests = {
-    inherit vips;
     inherit (python3.pkgs) pillow;
-
-    pkg-config = testers.hasPkgConfigModules {
-      package = libimagequant;
-      moduleNames = [ "imagequant" ];
-    };
   };
 
   meta = with lib; {

@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "11.1.1";
-  pyproject = true;
+  version = "11.1.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-P8Su5P/ztyoXZBVvm5uCMDn4ezeg11oRSQ0QCyIJbVw=";
+    hash = "sha256-LYhd35FsredNaMgMfkj7LntNK3NRoVpniEUT6WHoXx8=";
   };
 
   postPatch = ''

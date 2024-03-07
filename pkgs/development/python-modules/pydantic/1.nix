@@ -6,7 +6,6 @@
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
-, pythonAtLeast
 , pythonOlder
 , setuptools
 , typing-extensions
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.14";
+  version = "1.10.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tcaHSPZggVwyzCgDmwOgcGqUmUrJOmkdSNudJTFQ3bc=";
+    hash = "sha256-ruDVcCLPVuwIkHOjYVuKOoP3hHHr7ItIY55Y6hUgR74=";
   };
 
   nativeBuildInputs = [
@@ -62,15 +61,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # depends on distuils
-    "test_cython_function_untouched"
-    # AssertionError on exact types and wording
-    "test_model_subclassing_abstract_base_classes_without_implementation_raises_exception"
-    "test_partial_specification_name"
-    "test_secretfield"
-  ];
 
   enableParallelBuilding = true;
 

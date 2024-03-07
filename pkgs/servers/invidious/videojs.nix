@@ -14,5 +14,5 @@ stdenvNoCC.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = versions.videojs.hash;
+  outputHash = versions.videojs.sha256;
 }

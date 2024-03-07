@@ -5,25 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commix";
-  version = "3.9";
-  pyproject = true;
+  version = "3.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "commixproject";
-    repo = "commix";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HX+gEL9nmq9R1GFw8xQaa7kBmW7R0IepitM08bIf3vY=";
+    hash = "sha256-S/2KzZb3YUF0VJharWV/+7IG+r1EnB2sOveMpd1ryEI=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-warn "-stable" ""
-  '';
-
-
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
 
   postInstall = ''
     # Helper files are not handled by setup.py

@@ -7,16 +7,13 @@
 , nbval
 , numpy
 , parameterized
-, protobuf_21
+, protobuf
 , pybind11
 , pytestCheckHook
 , pythonOlder
 , tabulate
 , typing-extensions
 , abseil-cpp
-, google-re2
-, pillow
-, protobuf
 }:
 
 let
@@ -42,13 +39,9 @@ in buildPythonPackage rec {
 
   buildInputs = [
     abseil-cpp
-    protobuf
-    google-re2
-    pillow
   ];
 
   propagatedBuildInputs = [
-    protobuf_21
     protobuf
     numpy
     typing-extensions
@@ -73,6 +66,10 @@ in buildPythonPackage rec {
       --replace 'include(googletest)' ""
     substituteInPlace cmake/unittest.cmake \
       --replace 'googletest)' ')'
+  '' + ''
+      # remove this override in 1.15 that will enable to set the CMAKE_CXX_STANDARD with cmakeFlags
+      substituteInPlace CMakeLists.txt \
+        --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
   '';
 
   preConfigure = ''

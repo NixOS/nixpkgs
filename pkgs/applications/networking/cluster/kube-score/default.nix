@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kube-score";
-  version = "1.18.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "zegl";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3OdcYqSUy0WH5CrrRMXDs1HGxvToXx/3iPytYBdDncg=";
+    hash = "sha256-/4xnUb60ARGO6hM5PQ3ZkuwjEQUT4Xnj/InIsfw2bzI=";
   };
 
-  vendorHash = "sha256-4yd/N57O3avD8KaGU9lZAEDasPx1pRx37rqQpuGeRiY=";
+  vendorHash = "sha256-UpuwkQHcNg3rohr+AdALakIdHroIySlTnXHgoUdY+EQ=";
 
   ldflags = [
     "-s"

@@ -25,8 +25,6 @@ rec {
     sdlSupport = true;
     mingwSupport = true;
     usbSupport = true;
-    waylandSupport = stdenv.isLinux;
-    x11Support = stdenv.isLinux;
   };
 
   full = base.override {
@@ -52,6 +50,6 @@ rec {
   staging = base.override { wineRelease = "staging"; };
   stagingFull = full.override { wineRelease = "staging"; };
 
-  wayland = base.override { wineRelease = "wayland"; waylandSupport = true; };
-  waylandFull = full.override { wineRelease = "wayland"; waylandSupport = true; };
+  wayland = base.override { wineRelease = "wayland"; };
+  waylandFull = full.override { wineRelease = "wayland"; };
 }

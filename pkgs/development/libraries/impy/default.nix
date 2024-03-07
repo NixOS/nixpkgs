@@ -9,14 +9,14 @@
 , libjpeg
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "impy";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "bcampbell";
     repo = "impy";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-0bHm3jawYgcIeF2COALWlypX7kvPw1hifB/W+TKcC4M=";
   };
 
@@ -40,4 +40,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-})
+}
+

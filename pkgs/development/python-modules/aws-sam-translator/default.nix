@@ -29,8 +29,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # don't try to use --cov or fail on new warnings
-    rm pytest.ini
+    substituteInPlace pytest.ini \
+      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
   '';
 
   propagatedBuildInputs = [
@@ -49,14 +49,13 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preCheck = ''
-    export AWS_DEFAULT_REGION=us-east-1
-  '';
-
-  pytestFlagsArray = [
-    "tests"
-    ''-m "not slow"''
+  pythonImportsCheck = [
+    "samtranslator"
   ];
+
+  preCheck = ''
+    sed -i '2ienv =\n\tAWS_DEFAULT_REGION=us-east-1' pytest.ini
+  '';
 
   disabledTests = [
     # urllib3 2.0 compat
@@ -79,10 +78,6 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  pythonImportsCheck = [
-    "samtranslator"
-  ];
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";

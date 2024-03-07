@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     homepage = "http://nuttcp.net/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    mainProgram = "nuttcp";
   };
 }

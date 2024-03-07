@@ -62,8 +62,6 @@ buildPythonPackage rec {
     # Pandas API changes cause it to no longer infer datetimes in the expected manner
     "test_multiquery_into_dataframe"
     "test_multiquery_into_dataframe_dropna"
-    # FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
-    "test_write_points_from_dataframe_with_tag_escaped"
   ];
 
   pythonImportsCheck = [ "influxdb" ];

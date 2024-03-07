@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.nothink.org/codes/snmpcheck/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ elohmeier ];
-    mainProgram = "snmp-check";
   };
 }

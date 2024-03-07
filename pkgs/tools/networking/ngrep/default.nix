@@ -52,6 +52,5 @@ stdenv.mkDerivation rec {
     };
     platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
-    mainProgram = "ngrep";
   };
 }

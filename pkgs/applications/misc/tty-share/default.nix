@@ -21,6 +21,5 @@ buildGoModule rec {
     description = "Share terminal via browser for remote work or shared sessions";
     license = licenses.mit;
     maintainers = with maintainers; [ andys8 ];
-    mainProgram = "tty-share";
   };
 }

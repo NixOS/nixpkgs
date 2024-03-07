@@ -6,7 +6,6 @@
 , libconfig
 , libsoup
 , libsecret
-, libayatana-appindicator
 , openssl
 , gettext
 , glib
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srain";
-  version = "1.6.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "SrainApp";
     repo = "srain";
     rev = version;
-    hash = "sha256-IGAb24aDeBXyxuyb/EWUetQZJg28GJLT0WK7ZmmHgyg=";
+    sha256 = "sha256-PiLjlsYmgxXpvcqDkwS/6WmTEimMH8+OndUG2Hehdm0=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     libconfig
     libsoup
     libsecret
-    libayatana-appindicator
     openssl
   ];
 

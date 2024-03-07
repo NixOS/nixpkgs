@@ -1,36 +1,34 @@
 { lib
-, azure-core
 , buildPythonPackage
 , fetchPypi
-, isodate
 , pythonOlder
-, setuptools
-, typing-extensions
+, azure-common
+, azure-core
+, msrest
+, six
 }:
 
 buildPythonPackage rec {
   pname = "azure-keyvault-administration";
-  version = "4.4.0";
-  pyproject = true;
+  version = "4.3.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ems2y59UTzV1D/L6lMg7l7PvIMH+G0JOpoAY7ucD8d8=";
+    extension = "zip";
+    hash = "sha256-PuKjui0OP0ODNErjbjJ90hOgee97JDrVT2sh+MufxWY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [
+    azure-common
     azure-core
-    typing-extensions
-    isodate
+    msrest
+    six
   ];
 
-  # Tests require checkout from mono-repo
+  # no tests in pypi tarball
   doCheck = false;
 
   pythonNamespaces = [
@@ -44,7 +42,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Microsoft Azure Key Vault Administration Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/keyvault/azure-keyvault-administration";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-keyvault-administration_${version}/sdk/keyvault/azure-keyvault-administration/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

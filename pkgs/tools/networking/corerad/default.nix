@@ -35,6 +35,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ mdlayher ];
     platforms = platforms.linux;
-    mainProgram = "corerad";
   };
 }

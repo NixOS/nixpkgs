@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       services.dockerRegistry.port = 8080;
       services.dockerRegistry.listenAddress = "0.0.0.0";
       services.dockerRegistry.enableGarbageCollect = true;
-      services.dockerRegistry.openFirewall = true;
+      networking.firewall.allowedTCPPorts = [ 8080 ];
     };
 
     client1 = { ... }: {

@@ -4,7 +4,7 @@
 , cmake
 , wrapQtAppsHook
 , qtbase
-, qtquickcontrols2 ? null # only a separate package on qt5
+, qtquickcontrols2
 , qtkeychain
 , qtmultimedia
 , qttools
@@ -13,19 +13,15 @@
 , olm
 }:
 
-let
-  inherit (lib) cmakeBool;
-
-in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.96.1";
+  version = "0.0.96-beta4";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "Quaternion";
-    rev = finalAttrs.version;
-    hash = "sha256-lRCSEb/ldVnEv6z0moU4P5rf0ssKb9Bw+4QEssLjuwI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yItl31Ze48lRIIey+FlRLMVAkg4mHu8G1sFOceHvTJw=";
   };
 
   buildInputs = [
@@ -40,12 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
 
-  # qt6 needs UTF
-  env.LANG = "C.UTF-8";
-
   cmakeFlags = [
-    # drop this from 0.0.97 onwards as it will be qt6 only
-    (cmakeBool "BUILD_WITH_QT6" ((lib.versions.major qtbase.version) == "6"))
+    "-DBUILD_WITH_QT6=OFF"
   ];
 
   postInstall =
@@ -63,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://matrix.org/ecosystem/clients/quaternion/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (qtbase.meta) platforms;
+    inherit (qtquickcontrols2.meta) platforms;
   };
-})
+}

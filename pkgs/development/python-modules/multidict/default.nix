@@ -1,43 +1,34 @@
 { lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.0.5";
+  version = "6.0.4";
 
   disabled = pythonOlder "3.7";
 
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9+MBB17a9QUA8LNBVDxBGU2N865cr0cC8glfPKc92No=";
+    hash = "sha256-NmaQZJLvt2RTwOe5fyz0WbBoLnQCwEialUhJZdvB2kk=";
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "-p pytest_cov" ""
-    sed -i '/--cov/d' pytest.ini
-    # `python3 -I -c "import multidict"` fails with ModuleNotFoundError
-    substituteInPlace tests/test_circular_imports.py \
-      --replace-fail '"-I",' ""
+    sed -i '/^addopts/d' setup.cfg
   '';
 
-  nativeBuildInputs = [
-    setuptools
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [
+    # error: incompatible pointer to integer conversion initializing 'int' with an expression of type 'void *'
+    "-Wno-error=int-conversion"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    # import from $out
-    rm -r multidict
-  '';
 
   pythonImportsCheck = [ "multidict" ];
 

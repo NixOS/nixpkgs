@@ -4,27 +4,29 @@
 , asn1crypto
 , cbor2
 , pythonOlder
+, pydantic
 , pyopenssl
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "webauthn";
-  version = "2.0.0";
+  version = "1.11.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "duo-labs";
     repo = "py_webauthn";
     rev = "refs/tags/v${version}";
-    hash = "sha256-StqoSrzErV13/OUpSWbI+6N5tSFPEpvnmQcDiZMaXPI=";
+    hash = "sha256-+pp21rtwavtjj6ahG091xsJpsYOH3zpqU3xH2/YFXqY=";
   };
 
   propagatedBuildInputs = [
     asn1crypto
     cbor2
+    pydantic
     pyopenssl
   ];
 

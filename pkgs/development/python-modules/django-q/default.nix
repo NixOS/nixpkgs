@@ -16,7 +16,6 @@
 , pytestCheckHook
 , pythonOlder
 , redis
-, setuptools
 }:
 
 buildPythonPackage rec {
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    setuptools
   ];
 
   propagatedBuildInputs = [

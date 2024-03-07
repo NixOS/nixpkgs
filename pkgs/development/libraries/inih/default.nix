@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inih";
-  version = "58";
+  version = "57";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = pname;
     rev = "r${version}";
-    hash = "sha256-b2f6hQvkmWgni/zdfv3I1b9ypd7zSyEBv/JVBA6K7/w=";
+    hash = "sha256-a4nvhJSmZGqu2sdZSPNPjdnkzZ9dSKocL/XG2aDyFw4=";
   };
 
   nativeBuildInputs = [ meson ninja ];

@@ -31,7 +31,6 @@ buildFHSEnv rec {
     ocl-icd  # needed for opencl
     numactl  # needed by hfs ocl backend
     ncurses5  # needed by hfs ocl backend
-    zstd  # needed from 20.0
   ] ++ (with xorg; [
     libICE
     libSM

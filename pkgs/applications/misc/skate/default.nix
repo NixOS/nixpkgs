@@ -22,6 +22,5 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/skate/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda penguwin ];
-    mainProgram = "skate";
   };
 }

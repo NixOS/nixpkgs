@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gifsicle";
-  version = "1.95";
+  version = "1.94";
 
   src = fetchurl {
     url = "https://www.lcdf.org/gifsicle/${pname}-${version}.tar.gz";
-    sha256 = "sha256-snEWRwCf0qExMPO+FgUy7UZTjnYr/A8CDepQYYp9yVA=";
+    sha256 = "sha256-S8lwBcB4liDedfiZl9PC9wdYxyxhqgou8E96Zxov+Js=";
   };
 
   buildInputs = lib.optionals gifview [ xorgproto libXt libX11 ];

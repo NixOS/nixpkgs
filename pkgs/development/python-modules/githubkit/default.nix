@@ -1,95 +1,37 @@
 { lib
-, anyio
 , buildPythonPackage
-, fetchFromGitHub
-, hishel
-, httpx
+, fetchPypi
 , poetry-core
+, httpx
 , pydantic
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.1";
+  version = "0.10.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchFromGitHub {
-    owner = "yanyongyu";
-    repo = "githubkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nPXs6thXAshDojgHSNyEeBN/jNJkfFECSuY5f51Zozo=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-sKikL+761mBP7j+qugHKDQ0hVXT51FV8FYbB3ZJtweA=";
   };
-
-  pythonRelaxDeps = [
-    "hishel"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=githubkit --cov-append --cov-report=term-missing" ""
-  '';
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
-    hishel
     httpx
     pydantic
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    all = [
-      anyio
-      pyjwt
-    ];
-    jwt = [
-      pyjwt
-    ];
-    auth-app = [
-      pyjwt
-    ];
-    auth-oauth-device = [
-      anyio
-    ];
-    auth = [
-      anyio
-      pyjwt
-    ];
-  };
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  pythonImportsCheck = [
-    "githubkit"
-  ];
-
-  disabledTests = [
-    # Tests require network access
-    "test_graphql"
-    "test_async_graphql"
-    "test_call"
-    "test_async_call"
-    "test_versioned_call"
-    "test_versioned_async_call"
-  ];
+  pythonImportsCheck = [ "githubkit" ];
 
   meta = {
     description = "GitHub SDK for Python";
     homepage = "https://github.com/yanyongyu/githubkit";
-    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };

@@ -30,21 +30,21 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "17fzqq44p7ix4ihkg8nq582njjy96a8zz8vz9hl62hdxxg3llgfg";
-    x86_64-darwin = "12vbkzv2l02wifcjd7amq583vlv0iqixpa2kf5swhl0arww1viqa";
-    aarch64-linux = "1myv8zy2cycsmnp8xhjbm2lpcad3hj9zh79ywcinc50yncwj6wdl";
-    aarch64-darwin = "0vvbwcbxf0fmcfyk2y231qd8lxaj869ap865zps6wcdjqr5wnbdq";
-    armv7l-linux = "04gy6ls3gnbdcg4998widy9b9h04rx1gzp6iml6pi73li1cmfawz";
+    x86_64-linux = "1z692zp413vgla0ln04rf2fnx0giy2rgglmi6q1jk9b7wmlrsrh1";
+    x86_64-darwin = "00d143mgrx5s7qdsxp93j04wz2xcgm8rkb5gj1a2czjcjvpsyjmv";
+    aarch64-linux = "1b5fjxfgjr7rak23kmnapqbbimd6f7q5fjiwbcclxwyl0cqa0d3j";
+    aarch64-darwin = "0zv81nj767741i9p2i5ac5ql9pm9snz6lg1zqvvw3rps3d5vwysz";
+    armv7l-linux = "11zms120dagscnxrr5xpivcxipbmahf2sy68a4bmcjk1nqnvcsgh";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.86.2";
+    version = "1.85.1";
     pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
     # This is used for VS Code - Remote SSH test
-    rev = "903b1e9d8990623e3d7da1df3d33db3e42d80eda";
+    rev = "0ee08df0cf4527e40edc9aa28f4b5bd38bbff2b2";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
@@ -68,7 +68,7 @@ in
       src = fetchurl {
         name = "vscode-server-${rev}.tar.gz";
         url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-        sha256 = "06jv2kzxy7p7y7294c4sq6fk6slwk4gfw6jqh79avnq0riy669gv";
+        sha256 = "06672ynsr7bxzkgdi1ghmrb6ki0y1ypmakk7w51r599vi1bjfnr0";
       };
     };
 
@@ -97,7 +97,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica bobby285271 Enzime ];
+      maintainers = with maintainers; [ eadwu synthetica amaxine bobby285271 Enzime ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

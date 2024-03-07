@@ -10,12 +10,12 @@
 , tinyxml
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "tecnoballz";
   version = "0.93.1";
 
   src = fetchurl {
-    url = "https://linux.tlk.fr/games/TecnoballZ/download/tecnoballz-${finalAttrs.version}.tgz";
+    url = "https://linux.tlk.fr/games/TecnoballZ/download/tecnoballz-${version}.tgz";
     sha256 = "sha256-WRW76e+/eXE/KwuyOjzTPFQnKwNznbIrUrz14fnvgug=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     broken = stdenv.isDarwin;
   };
-})
+}

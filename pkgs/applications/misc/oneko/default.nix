@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ publicDomain ];
     maintainers = with maintainers; [ xaverdh irenes ];
     platforms = platforms.unix;
-    mainProgram = "oneko";
   };
 }

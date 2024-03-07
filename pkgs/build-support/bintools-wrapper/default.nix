@@ -321,7 +321,7 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" pic"
     ''
 
-    + optionalString (targetPlatform.isAvr || targetPlatform.isWindows) ''
+    + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" relro bindnow"
     ''
 

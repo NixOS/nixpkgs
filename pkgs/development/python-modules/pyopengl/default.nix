@@ -23,26 +23,22 @@ buildPythonPackage rec {
     # Theses lines are patching the name of dynamic libraries
     # so pyopengl can find them at runtime.
     substituteInPlace OpenGL/platform/glx.py \
-      --replace '"OpenGL",' '"${pkgs.libGL}/lib/libOpenGL${ext}",' \
-      --replace '"GL",' '"${pkgs.libGL}/lib/libGL${ext}",' \
-      --replace '"GLU",' '"${pkgs.libGLU}/lib/libGLU${ext}",' \
-      --replace '"GLX",' '"${pkgs.libglvnd}/lib/libGLX${ext}",' \
-      --replace '"glut",' '"${pkgs.freeglut}/lib/libglut${ext}",' \
-      --replace '"GLESv1_CM",' '"${pkgs.libGL}/lib/libGLESv1_CM${ext}",' \
-      --replace '"GLESv2",' '"${pkgs.libGL}/lib/libGLESv2${ext}",' \
-      --replace '"gle",' '"${pkgs.gle}/lib/libgle${ext}",' \
-      --replace "'EGL'" "'${pkgs.libGL}/lib/libEGL${ext}'"
+      --replace "'GL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
+      --replace "'GLU'" "'${pkgs.libGLU}/lib/libGLU${ext}'" \
+      --replace "'glut'" "'${pkgs.freeglut}/lib/libglut${ext}'" \
+      --replace "'GLESv1_CM'," "'${pkgs.libGL}/lib/libGLESv1_CM${ext}'," \
+      --replace "'GLESv2'," "'${pkgs.libGL}/lib/libGLESv2${ext}',"
     substituteInPlace OpenGL/platform/egl.py \
       --replace "('OpenGL','GL')" "('${pkgs.libGL}/lib/libOpenGL${ext}', '${pkgs.libGL}/lib/libGL${ext}')" \
       --replace "'GLU'," "'${pkgs.libGLU}/lib/libGLU${ext}'," \
       --replace "'glut'," "'${pkgs.freeglut}/lib/libglut${ext}'," \
       --replace "'GLESv1_CM'," "'${pkgs.libGL}/lib/libGLESv1_CM${ext}'," \
       --replace "'GLESv2'," "'${pkgs.libGL}/lib/libGLESv2${ext}'," \
-      --replace "'gle'," '"${pkgs.gle}/lib/libgle${ext}",' \
       --replace "'EGL'," "'${pkgs.libGL}/lib/libEGL${ext}',"
     substituteInPlace OpenGL/platform/darwin.py \
       --replace "'OpenGL'," "'${pkgs.libGL}/lib/libGL${ext}'," \
       --replace "'GLUT'," "'${pkgs.freeglut}/lib/libglut${ext}',"
+    # TODO: patch 'gle' in OpenGL/platform/egl.py
   '' + ''
     # https://github.com/NixOS/nixpkgs/issues/76822
     # pyopengl introduced a new "robust" way of loading libraries in 3.1.4.
@@ -52,7 +48,7 @@ buildPythonPackage rec {
     # The following patch put back the "name" (i.e. the path) in the
     # list of possible files.
     substituteInPlace OpenGL/platform/ctypesloader.py \
-      --replace "filenames_to_try = [base_name]" "filenames_to_try = [name]"
+      --replace "filenames_to_try = []" "filenames_to_try = [name]"
   '';
 
   # Need to fix test runner
@@ -65,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = "OpenGL";
 
   meta = with lib; {
-    homepage = "https://mcfletch.github.io/pyopengl/";
+    homepage = "https://pyopengl.sourceforge.net/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''
       PyOpenGL is the cross platform Python binding to OpenGL and

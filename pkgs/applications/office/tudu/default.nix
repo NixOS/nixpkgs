@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     homepage = "https://code.meskio.net/tudu/";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    mainProgram = "tudu";
   };
 }

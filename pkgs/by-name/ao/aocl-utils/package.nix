@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aocl-utils";
-  version = "4.2";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "aocl-utils";
     rev = version;
-    hash = "sha256-tjmCgVSU4XjBhbKMUY3hsvj3bvuXvVdf5Bqva5nr1tc=";
+    hash = "sha256-7Vc3kE+YfqIt6VfvSamsVQRemolzs1sNJUVUZFKk/O8=";
   };
 
   nativeBuildInputs = [ cmake ];

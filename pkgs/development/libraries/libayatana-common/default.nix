@@ -4,11 +4,11 @@
 , gitUpdater
 , testers
 , cmake
+, cmake-extras
 , glib
 , gobject-introspection
 , gtest
 , intltool
-, lomiri
 , pkg-config
 , systemd
 , vala
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Queries via pkg_get_variable, can't override prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'set(SYSTEMD_USER_UNIT_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/user)'
+      --replace 'DESTINATION "''${SYSTEMD_USER_UNIT_DIR}"' 'DESTINATION "${placeholder "out"}/lib/systemd/user"'
   '';
 
   strictDeps = true;
@@ -42,9 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    lomiri.cmake-extras
+    cmake-extras
     glib
-    lomiri.lomiri-url-dispatcher
     systemd
   ];
 
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
-    "-DENABLE_LOMIRI_FEATURES=ON"
+    "-DENABLE_LOMIRI_FEATURES=OFF"
     "-DGSETTINGS_LOCALINSTALL=ON"
     "-DGSETTINGS_COMPILE=ON"
   ];

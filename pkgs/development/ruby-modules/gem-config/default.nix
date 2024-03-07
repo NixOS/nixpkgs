@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
+, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
@@ -312,9 +312,7 @@ in
           cp -R ext/fast_mmaped_file_rs $out
         '';
       };
-      hash = if lib.versionAtLeast attrs.version "1.1.0"
-        then "sha256-tSyoCEBtMMkFfPynaMx8oc9bO7I+Pf6Y/f3Ld8uwlEE="
-        else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+      hash = "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
     };
     nativeBuildInputs = [
       cargo
@@ -322,15 +320,9 @@ in
       rustPlatform.cargoSetupHook
       rustPlatform.bindgenHook
     ];
-    disallowedReferences = [
-      rustc.unwrapped
-    ];
     preBuild = ''
       cat ../.cargo/config > ext/fast_mmaped_file_rs/.cargo/config.toml
       sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
-    '';
-    postInstall = ''
-      find $out -type f -name .rustc_info.json -delete
     '';
   };
 
@@ -570,6 +562,10 @@ in
     '';
   };
 
+  msgpack = attrs: {
+    buildInputs = [ msgpack ];
+  };
+
   mysql = attrs: {
     buildInputs = [ libmysqlclient zlib openssl ];
   };
@@ -620,6 +616,14 @@ in
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
     dontBuild = false;
+    patches = [
+      # fix ruby 3.1 https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3
+      (fetchpatch {
+        url = "https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3/commits/b596b919bc7857fdc0fc1c61a8cb7eab32cfc2db.patch";
+        hash = "sha256-AzGTQaD/e6X4LOMuXhy/WhbayhWKYCGHXPFlzLRWyPM=";
+        stripLen = 1;
+      })
+    ];
   };
 
   pango = attrs: {

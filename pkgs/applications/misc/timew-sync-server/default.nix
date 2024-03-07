@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "timew-sync-server";
-  version = "1.2.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "timewarrior-synchronize";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3THRP+hydvq/dnxzUOFGeuu8//qL7pFN0RHJVxzgibI=";
+    hash = "sha256-GaDcnPJBcDJ3AQaHzifDgdl0QT4GSbAOIqp4RrAcO3M=";
   };
 
-  vendorHash = "sha256-w7I8PDQQeICDPln2Naf6whOg9qqOniTH/xs1/9luIVc=";
+  vendorHash = "sha256-iROqiRWkHG6N6kivUmgmu6sg14JDdG4f98BdR7CL1gs=";
 
   meta = with lib; {
     homepage = "https://github.com/timewarrior-synchronize/timew-sync-server";
@@ -19,6 +19,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = [ maintainers.joachimschmidt557 ];
     platforms = platforms.linux;
-    mainProgram = "timew-sync-server";
   };
 }

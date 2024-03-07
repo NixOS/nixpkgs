@@ -6,7 +6,6 @@
 , starlette
 , brotli
 # check inputs
-, httpx
 , requests
 , mypy
 , brotlipy
@@ -36,7 +35,6 @@ buildPythonPackage {
   pythonImportsCheck = [ "brotli_asgi" ];
 
   nativeCheckInputs = [
-    httpx
     requests
     mypy
     brotlipy

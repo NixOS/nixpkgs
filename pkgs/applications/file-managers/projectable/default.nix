@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2
+, libgit2_1_5
 , openssl
 , zlib
 , stdenv
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2
+    libgit2_1_5
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
@@ -35,7 +35,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
-    LIBGIT2_NO_VENDOR = 1;
     OPENSSL_NO_VENDOR = true;
   };
 

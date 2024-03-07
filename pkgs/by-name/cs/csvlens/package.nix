@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "csvlens";
-  version = "0.7.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "YS-L";
     repo = "csvlens";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b8SuXx1uN9lBrCoEDLeudZwylHu+f2i/PQkfHA56YlE=";
+    hash = "sha256-9zIi49iXFOARSZsz0iqzC7NfoiBngfNt6A7vZuwxItI=";
   };
 
-  cargoHash = "sha256-SPUEK+8rLXBR8cdxN3qUajvN6PxbAZX2i7vYcyMzqyw=";
+  cargoHash = "sha256-DDMsycYSzkBNvf4f9WVpnADpP72GQEkmJIJsfrlfMcI=";
 
   meta = with lib; {
     description = "Command line csv viewer";

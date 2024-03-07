@@ -55,6 +55,5 @@ stdenv.mkDerivation rec {
     description = "NFS and CIFS tracing/monitoring/capturing/analyzing tool";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    mainProgram = "nfstrace";
   };
 }

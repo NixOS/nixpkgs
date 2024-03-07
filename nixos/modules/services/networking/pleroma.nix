@@ -92,7 +92,6 @@ in {
 
     systemd.services.pleroma = {
       description = "Pleroma social network";
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];

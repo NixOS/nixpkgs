@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsdOriginal zlib ];
     maintainers = [ maintainers.chkno ];
     platforms = platforms.all;
-    mainProgram = "m4acut";
   };
 }

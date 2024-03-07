@@ -28,6 +28,5 @@ buildGoModule rec {
     changelog = "https://github.com/arp242/uni/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ chvp ];
-    mainProgram = "uni";
   };
 }

@@ -63,12 +63,6 @@ in
       '';
       type = types.listOf types.str;
     };
-
-    usePing = mkOption {
-      default = false;
-      type = types.bool;
-      description = lib.mdDoc "Use ping to check online status of devices instead of mDNS";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -80,10 +74,8 @@ in
       wantedBy = ["multi-user.target"];
       path = [cfg.package];
 
-      environment = {
-        # platformio fails to determine the home directory when using DynamicUser
-        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
-      } // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
+      # platformio fails to determine the home directory when using DynamicUser
+      environment.PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";

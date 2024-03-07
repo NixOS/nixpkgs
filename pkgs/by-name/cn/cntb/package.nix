@@ -3,18 +3,23 @@
 , fetchFromGitHub
 }: buildGoModule rec {
   pname = "cntb";
-  version = "1.4.8";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "contabo";
     repo = "cntb";
-    rev = version;
-    hash = "sha256-Cj1PO82JeztThFAHR4/8UyqKrodgxBqVDMDsun3iGDo=";
+    rev = "v${version}";
+    hash = "sha256-bvWNcEUSSHEk8fwwPdowATGEHIAj+TN8Z+A156sPVtA=";
+    # docs contains two files with the same name but different cases,
+    # this leads to a different hash on case insensitive filesystems (e.g. darwin)
+    postFetch = ''
+      rm -rf $out/openapi/docs
+    '';
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-4PhLUUtlnRh2dKkeVD7rZDDVP0eTDVAohvLLftQxQyE=";
+  vendorHash = "sha256-++y2C3jYuGZ0ovRFoxeqnx7S9EwoOZBJ5zxeLGWjkqc=";
 
   meta = with lib; {
     description = "CLI tool for managing your products from Contabo like VPS and VDS";

@@ -8,7 +8,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-5q4N76XHUhvc2lIqup0dYwrEdI5bR/96N7m2rhvPJh4=";
+      hash = "sha256-W0NRRS0z02/31eyqVRGJUZlUaI77I9WuAI3d3FlWHOQ=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -35,7 +35,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-kjow5WksdBzeo8nwXk5Djm/4tym8XvMo+VgiqSSAyKk=";
+      hash = "sha256-NfpgTZ0+sP2U8rkf+C4WTpXKVBvO8T+ijs8xIPe49tA=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -62,7 +62,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-IrXDwO0YSpiZfw6B/lorEQdbAIZ5qCja75L/PFRmJms=";
+      hash = "sha256-ykzzvsxP8e0TIHnZJPSnFJoZNNZDvbZ7vZ6hCZyd0iA=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -84,7 +84,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-ZkUsAN56OEI/SphQydv4HkVV6Eobd0pd+UbXa23mBfQ=";
+      hash = "sha256-U0j/ovoP3A83BzQWF4dtwisJxs00mZz0yyT12mlxfGo=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -106,7 +106,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-qL1+bpgxflcRTFPOvDHKdHilio28bbHClqy1Um4Se+o=";
+      hash = "sha256-cu0+66DHf8Hfvfx/IvVyexwl3I0MmLjJrNDBPLxo7Bg=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -128,7 +128,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-5D0N/5Sf8YNQBKt8GzAk1htdEY/xOmE5Abt5y7P9h34=";
+      hash = "sha256-vt7ea0IWIKn4i8sBUUMsoOMi1gPzzFssQ6wORDClJqs=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -150,7 +150,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-snyJbQZqSIqOk6dTJidSv1VmE/Gn+pblcZs8BpZ+fdA=";
+      hash = "sha256-Fd8r2+jV4YSuYu6zUl0fDjEdUGkzuHckR+PTSEyoXio=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -172,7 +172,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-0Ggm3NQn1ZZfMsMqf1qdCD1+HkJZmM1p+TqOPF0Q9CE=";
+      hash = "sha256-Q8gwqUfMy+D9dPBSw60BhNV12iu9mjhc7KXKYjtO23s=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -194,7 +194,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-rBUrYSeAWrxn5mlXaAAtE58jIZVLs/q69ARY2u6rTsI=";
+      hash = "sha256-LzsdHTABtHJzEfkyJ6LbmLE0QmKA3DVjY8VP90O3jT4=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -210,35 +210,13 @@
     };
   };
 
-  react-wsgi-dashboards = buildPythonPackage rec {
-    pname = "buildbot-react-wsgi-dashboards";
-    inherit (buildbot-pkg) version;
-
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-U0DHWFMmvTKFBW1C5bnoemjMOKpw1H3GXnBn/AU52vY=";
-    };
-
-    buildInputs = [ buildbot-pkg ];
-
-    # tests fail
-    doCheck = false;
-
-    meta = with lib; {
-      homepage = "https://buildbot.net/";
-      description = "Buildbot WSGI dashboards Plugin (React)";
-      maintainers = teams.buildbot.members;
-      license = licenses.gpl2;
-    };
-  };
-
   badges = buildPythonPackage rec {
     pname = "buildbot-badges";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-7t4E7twn4TeJJCE5Vn83UzIRE2Okvcox2us1d8j50Os=";
+      hash = "sha256-tVMXGYTZlkchfeEcHh3B/wGEZb8xUemtnbFzX65tvb8=";
     };
 
     buildInputs = [ buildbot-pkg ];

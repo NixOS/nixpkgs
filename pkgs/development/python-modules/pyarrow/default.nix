@@ -16,6 +16,7 @@
 , pytestCheckHook
 , pytest-lazy-fixture
 , pkg-config
+, scipy
 , setuptools
 , setuptools-scm
 , oldest-supported-numpy
@@ -52,12 +53,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cffi
-    numpy
-  ];
-
-  checkInputs = [
     cloudpickle
     fsspec
+    numpy
+    scipy
   ];
 
   nativeCheckInputs = [

@@ -8,28 +8,31 @@
 , which
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "pgtap";
-  version = "1.3.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pgtap";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jPfYp94mZenKctCW+3tyyvdgVKW6TDsG1/dbBlHK3vE=";
+    rev = "v${version}";
+    sha256 = "sha256-HOgCb1CCfsfbMbMMWuzFJ4B8CfVm9b0sI2zBY3/kqyI=";
   };
 
   nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];
 
   installPhase = ''
-    install -D {sql/pgtap--${finalAttrs.version}.sql,pgtap.control} -t $out/share/postgresql/extension
+    install -D src/pgtap.so -t $out/lib
+    install -D {sql/pgtap--${version}.sql,pgtap.control} -t $out/share/postgresql/extension
   '';
 
   passthru.tests.extension = stdenv.mkDerivation {
     name = "pgtap-test";
     dontUnpack = true;
     doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
+    buildInputs = [ postgresqlTestHook ];
+    nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.pgtap ])) ];
+    postgresqlTestUserOptions = "LOGIN SUPERUSER";
     passAsFile = [ "sql" ];
     sql = ''
       CREATE EXTENSION pgtap;
@@ -62,4 +65,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (postgresql.meta) platforms;
     license = licenses.mit;
   };
-})
+}

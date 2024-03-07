@@ -12,7 +12,6 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , questionary
 , requests
 , requests-mock
@@ -21,7 +20,7 @@
 buildPythonPackage rec {
   pname = "myjwt";
   version = "1.6.1";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -34,17 +33,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-warn "1.6.0" "${version}"
+      --replace "1.6.0" "${version}" \
+      --replace 'cryptography = "^39.0.2"' 'cryptography = "^39.0.0"'
   '';
-
-  pythonRelaxDeps = [
-    "cryptography"
-    "questionary"
-  ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

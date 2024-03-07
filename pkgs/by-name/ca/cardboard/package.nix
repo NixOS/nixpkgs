@@ -127,7 +127,6 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    broken = true; # Upstream is archived, fails to build on gcc-13.
     homepage = "https://gitlab.com/cardboardwm/cardboard";
     description = "A scrollable, tiling Wayland compositor inspired on PaperWM";
     license = lib.licenses.gpl3Only;

@@ -56,9 +56,7 @@ let cudaEnv = symlinkJoin {
         cuda_cudart cuda_nvcc libcublas libcufft libcurand libcusparse
       ];
       postBuild = ''
-        if [ ! -e $out/lib/libcuda.so ]; then
-            ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
-        fi
+        ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
         ln -s lib $out/lib64
       '';
     };
@@ -121,11 +119,7 @@ in stdenv.mkDerivation {
   ]) ++ lib.optional cudaSupport cudaEnv;
 
   wrapProgramFlags = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-      dbus
-      gcc-unwrapped.lib
-      zlib
-    ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib zlib ]}"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
     # Fix libQt errors - #96490
     "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"

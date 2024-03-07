@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "rethinkdb";
-  version = "2.4.10.post1";
+  version = "2.4.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NjTgPuE91jf9cZa4BHS/RMZNProd0GnqkrlJJnAqYL0=";
+    hash = "sha256-Vez3RH3BH+wOLOmqxLpMC1f9xcnFfXfuZz1Z0kXHRmY=";
   };
 
   nativeBuildInputs = [

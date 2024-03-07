@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dee, gtk3, intltool, libdbusmenu-gtk3, libunity, pkg-config, rsync, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, dee, gtk3, intltool, libdbusmenu-gtk3, libunity, pkg-config, rsync }:
 
 stdenv.mkDerivation rec {
   version = "1.3.1";
@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     intltool
     pkg-config
-    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -28,7 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.opbyte.it/grsync/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    mainProgram = "grsync";
     maintainers = [ maintainers.kuznero ];
   };
 }

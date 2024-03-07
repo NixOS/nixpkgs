@@ -31,6 +31,5 @@ buildGoModule rec {
     homepage = "https://github.com/lemonade-command/lemonade/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    mainProgram = "lemonade";
   };
 }

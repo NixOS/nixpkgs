@@ -130,7 +130,6 @@ let
           start_all()
 
           client.wait_for_unit("network.target")
-          router.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
 
           with subtest("Make sure DHCP server is not started"):
@@ -223,7 +222,6 @@ let
           start_all()
 
           client.wait_for_unit("network.target")
-          router.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
 
           with subtest("Wait until we have an ip address on each interface"):
@@ -851,7 +849,6 @@ let
 
           client.wait_for_unit("network.target")
           client_with_privacy.wait_for_unit("network.target")
-          router.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
 
           with subtest("Wait until we have an ip address"):

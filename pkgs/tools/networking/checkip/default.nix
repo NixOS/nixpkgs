@@ -30,6 +30,5 @@ buildGoModule rec {
     changelog = "https://github.com/jreisinger/checkip/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "checkip";
   };
 }

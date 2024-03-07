@@ -3,13 +3,13 @@
 buildKodiAddon rec {
   pname = "iagl";
   namespace = "plugin.program.iagl";
-  version = "3.0.9";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "zach-morris";
     repo = "plugin.program.iagl";
     rev = version;
-    sha256 = "sha256-b8nO3D/xTnj/5UDshGlIJdiHd75VhIlkrGUi0vkZqG4=";
+    sha256 = "sha256-fwPrNDsEGoysHbl9k9cRYKlr3MxDRiUmJhSsWVT2HHQ=";
   };
 
   propagatedBuildInputs = [

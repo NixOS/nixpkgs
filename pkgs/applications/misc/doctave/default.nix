@@ -26,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/doctave/doctave/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "doctave";
   };
 }

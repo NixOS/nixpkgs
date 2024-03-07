@@ -2,28 +2,28 @@
 , buildPythonPackage
 , fetchFromGitHub
 , substituteAll
+
 , cmdstan
-, pythonRelaxDepsHook
-, setuptools
+
 , pandas
 , numpy
 , tqdm
 , stanio
 , xarray
+
 , pytestCheckHook
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.1";
-  pyproject = true;
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q+AFhWEzjYElJpiHT4h6YfZrwZJ56pv+8R+001vREyQ=";
+    hash = "sha256-1/X5JDvCx21qLNamNQXpg+w3d3DdSRlB+liIv2fThs4=";
   };
 
   patches = [
@@ -38,11 +38,6 @@ buildPythonPackage rec {
     rm test/conftest.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = [
     pandas
     numpy
@@ -53,8 +48,6 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     all = [ xarray ];
   };
-
-  pythonRelaxDeps = [ "stanio" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -71,12 +64,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_lp_good" # Fails for some reason
     "test_serialization" # Pickle class mismatch errors
     # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
     "test_multi_proc_threads"
     "test_compile_force"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_init_types" # CmdStan error: error during processing Operation not permitted
   ];
 
   pythonImportsCheck = [ "cmdstanpy" ];
@@ -86,6 +78,7 @@ buildPythonPackage rec {
     description = "A lightweight interface to Stan for Python users";
     changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
 }

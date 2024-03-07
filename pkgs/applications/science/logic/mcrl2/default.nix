@@ -1,13 +1,13 @@
 {lib, stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
 
 stdenv.mkDerivation rec {
-  version = "202307";
+  version = "202206";
   build_nr = "1";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    hash = "sha256-zCHCO8tGyOxqUc0x3t/N3dUh4eG7slemlgK/QZsA4JA=";
+    sha256 = "KoLt8IU/vCdYqzJukNuaZfl8bWiOKB0UxWHEdQj3buU=";
   };
 
   nativeBuildInputs = [ cmake ];

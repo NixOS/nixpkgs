@@ -28,11 +28,11 @@ let
 in buildPythonPackage rec {
   # Using an untagged version, with numpy 1.25 support, when it's released
   # also drop the versioneer patch in postPatch
-  version = "0.59.0";
+  version = "0.58.1";
   pname = "numba";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "numba";
@@ -50,7 +50,7 @@ in buildPythonPackage rec {
     # use `forceFetchGit = true;`.` If in the future we'll observe the hash
     # changes too often, we can always use forceFetchGit, and inject the
     # relevant strings ourselves, using `sed` commands, in extraPostFetch.
-    hash = "sha256-wd4TujPhV2Jy/HUUXLHAlcbVFm4gfQNWxWFXD+jeZC4=";
+    hash = "sha256-1Tj2GFoUwRRCWBFxhreF+0Mr+Tjyb7+X4peO+T0qGNs=";
   };
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 

@@ -2,36 +2,27 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, doxygen
 , boost
 , eigen
 , numpy
-, scipy
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eigenpy";
-  version = "3.4.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-/k5eltoeUW05FTjvStAOw+tguWLUaUced8TArrk4UDI=";
+    hash = "sha256-ApWz0La+weqczVj3EyBqTAFlTt8cylA3Dl0ZDP4/i5o=";
   };
-
-  cmakeFlags = [
-    "-DINSTALL_DOCUMENTATION=ON"
-    "-DBUILD_TESTING_SCIPY=ON"
-  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    scipy
   ];
 
   buildInputs = [

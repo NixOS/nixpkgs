@@ -5,7 +5,6 @@
 , bison
 , boost182
 , flex
-, fmt
 , gtest
 , libbacktrace
 , lit
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nixd";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
     rev = version;
-    hash = "sha256-i/z5VnsWPWloQfdk48i+a4XaGnTMPJ6QougChkT9IWw=";
+    hash = "sha256-W44orkPZQ9gDUTogb8YVIaw4WHzUA+ExOXhTnZlJ6yY=";
   };
 
   mesonBuildType = "release";
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libbacktrace
     nix
-    fmt
     gtest
     boost182
     llvmPackages.llvm

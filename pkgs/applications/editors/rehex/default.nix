@@ -5,7 +5,6 @@
 , which
 , zip
 , libicns
-, botan2
 , capstone
 , jansson
 , libunistring
@@ -20,19 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.61.0";
+  version = "0.60.1";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    hash = "sha256-NBBBeTy15q6G30XR2PVd/xdIg41U2pWSPtqpdQX/+9o=";
+    hash = "sha256-oF8XtxKqyo6c2lNH6WDq6aEPeZw8RqBinDVhPpaDAWg=";
   };
 
   nativeBuildInputs = [ pkg-config which zip ]
     ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [ botan2 capstone jansson libunistring wxGTK32 ]
+  buildInputs = [ capstone jansson libunistring wxGTK32 ]
     ++ (with lua53Packages; [ lua busted ])
     ++ (with perlPackages; [ perl TemplateToolkit ])
     ++ lib.optionals stdenv.isLinux [ gtk3 ]

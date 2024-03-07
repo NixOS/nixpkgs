@@ -14,13 +14,13 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.1.11";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     rev = "refs/tags/${version}";
-    hash = "sha256-fVWfV7rEu/knysWUrPeokBBlSGnvNlpiptAd1M7ZVd8=";
+    hash = "sha256-cs1kj/spZtMUL9aUtBHINAH7uyjMSn9jRDF/hRPzIbo=";
   };
 
   outputs = [ "out" "udev" ];

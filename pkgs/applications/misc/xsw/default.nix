@@ -31,6 +31,5 @@ in stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license  = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
-    mainProgram = "xsw";
   };
 }

@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ earldouglas ];
-    mainProgram = "ebook2cw";
   };
 }

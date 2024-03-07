@@ -20,8 +20,6 @@
 , strictyaml
 , waitress
 , webtest
-, testers
-, devpi-server
 }:
 
 
@@ -66,7 +64,6 @@ buildPythonApplication rec {
     setuptools
     strictyaml
     waitress
-    py
   ] ++ passlib.optional-dependencies.argon2;
 
   nativeCheckInputs = [
@@ -105,10 +102,6 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "devpi_server"
   ];
-
-  passthru.tests.version = testers.testVersion {
-    package = devpi-server;
-  };
 
   meta = with lib;{
     homepage = "http://doc.devpi.net";

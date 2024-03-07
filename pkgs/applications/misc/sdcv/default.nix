@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
     platforms = platforms.unix;
-    mainProgram = "sdcv";
   };
 }

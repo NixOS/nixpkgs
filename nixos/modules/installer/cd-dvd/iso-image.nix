@@ -512,10 +512,9 @@ in
                 + lib.optionalString isAarch "-Xbcj arm"
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.str;
       description = lib.mdDoc ''
         Compression settings to use for the squashfs nix store.
-        `null` disables compression.
       '';
       example = "zstd -Xcompression-level 6";
     };

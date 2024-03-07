@@ -3,6 +3,7 @@
 , boost
 , cmake
 , gettext
+, git
 , libdrm
 , meson
 , ninja
@@ -19,6 +20,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     gettext
+    git
     meson
     ninja
     pkg-config

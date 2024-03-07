@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC
+{ lib, stdenv
 , fetchFromGitHub
 , coreutils
 , makeWrapper
@@ -15,12 +15,12 @@
 }:
 
 let
-  version = "0-unstable-2024-01-20";
+  version = "unstable-2023-06-30";
   src = fetchFromGitHub {
     owner = "OctopusET";
     repo = "sway-contrib";
-    rev = "b7825b218e677c65f6849be061b93bd5654991bf";
-    hash = "sha256-ZTfItJ77mrNSzXFVcj7OV/6zYBElBj+1LcLLHxBFypk=";
+    rev = "7e138bfc112872b79ac9fd766bc57c0f125b96d4";
+    hash = "sha256-u4sw1NeAhl4FJCG2YOeY45SHoN7tw6cSJwEL5iqr0uQ=";
   };
 
   meta = with lib; {
@@ -31,7 +31,7 @@ let
 in
 {
 
-grimshot = stdenvNoCC.mkDerivation {
+grimshot = stdenv.mkDerivation rec {
   inherit version src;
 
   pname = "grimshot";
@@ -70,7 +70,7 @@ grimshot = stdenvNoCC.mkDerivation {
     fi
   '';
 
-  meta = with lib; meta // {
+  meta = with lib; {
     description = "A helper for screenshots within sway";
     maintainers = with maintainers; [ evils ];
     mainProgram = "grimshot";
@@ -78,12 +78,11 @@ grimshot = stdenvNoCC.mkDerivation {
 };
 
 
-inactive-windows-transparency = let
-  # long name is long
-  lname = "inactive-windows-transparency";
-in python3Packages.buildPythonApplication {
+inactive-windows-transparency = python3Packages.buildPythonApplication rec {
   inherit version src;
 
+  # long name is long
+  lname = "inactive-windows-transparency";
   pname = "sway-${lname}";
 
   format = "other";
@@ -96,7 +95,7 @@ in python3Packages.buildPythonApplication {
     install -Dm 0755 $src/${lname}.py $out/bin/${lname}.py
   '';
 
-  meta = with lib; meta // {
+  meta = with lib; {
     description = "It makes inactive sway windows transparent";
     mainProgram = "${lname}.py";
     maintainers = with maintainers; [

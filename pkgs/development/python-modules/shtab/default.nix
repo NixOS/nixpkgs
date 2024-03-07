@@ -11,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.7.0";
-  pyproject = true;
+  version = "1.6.5";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = "shtab";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-b2XXDyO/2AnlxViC6sEEYUGviF6+FGXBnBcdQOuTViY=";
+    hash = "sha256-jplcKVXWogSrYRGch0qypWGNzO9HErR5B9S1iT4eFcM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
+      --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
   '';
 
   nativeBuildInputs = [

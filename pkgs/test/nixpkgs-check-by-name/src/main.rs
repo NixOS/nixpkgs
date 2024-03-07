@@ -1,7 +1,4 @@
-use crate::nix_file::NixFileStore;
-use std::panic;
 mod eval;
-mod nix_file;
 mod nixpkgs_problem;
 mod ratchet;
 mod references;
@@ -18,7 +15,6 @@ use colored::Colorize;
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
-use std::thread;
 
 /// Program to check the validity of pkgs/by-name
 ///
@@ -48,9 +44,15 @@ pub struct Args {
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match process(args.base, args.nixpkgs, false, &mut io::stderr()) {
-        Ok(true) => ExitCode::SUCCESS,
-        Ok(false) => ExitCode::from(1),
+    match process(&args.base, &args.nixpkgs, &[], &mut io::stderr()) {
+        Ok(true) => {
+            eprintln!("{}", "Validated successfully".green());
+            ExitCode::SUCCESS
+        }
+        Ok(false) => {
+            eprintln!("{}", "Validation failed, see above errors".yellow());
+            ExitCode::from(1)
+        }
         Err(e) => {
             eprintln!("{} {:#}", "I/O error: ".yellow(), e);
             ExitCode::from(2)
@@ -63,9 +65,9 @@ fn main() -> ExitCode {
 /// # Arguments
 /// - `base_nixpkgs`: Path to the base Nixpkgs to run ratchet checks against.
 /// - `main_nixpkgs`: Path to the main Nixpkgs to check.
-/// - `keep_nix_path`: Whether the value of the NIX_PATH environment variable should be kept for
-/// the evaluation stage, allowing its contents to be accessed.
-///   This is used to allow the tests to access e.g. the mock-nixpkgs.nix file
+/// - `eval_accessible_paths`:
+///   Extra paths that need to be accessible to evaluate Nixpkgs using `restrict-eval`.
+///   This is used to allow the tests to access the mock-nixpkgs.nix file
 /// - `error_writer`: An `io::Write` value to write validation errors to, if any.
 ///
 /// # Return value
@@ -73,66 +75,34 @@ fn main() -> ExitCode {
 /// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
 /// - `Ok(true)` if there are no problems
 pub fn process<W: io::Write>(
-    base_nixpkgs: PathBuf,
-    main_nixpkgs: PathBuf,
-    keep_nix_path: bool,
+    base_nixpkgs: &Path,
+    main_nixpkgs: &Path,
+    eval_accessible_paths: &[&Path],
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
-    // Very easy to parallelise this, since it's totally independent
-    let base_thread = thread::spawn(move || check_nixpkgs(&base_nixpkgs, keep_nix_path));
-    let main_result = check_nixpkgs(&main_nixpkgs, keep_nix_path)?;
+    // Check the main Nixpkgs first
+    let main_result = check_nixpkgs(main_nixpkgs, eval_accessible_paths, error_writer)?;
+    let check_result = main_result.result_map(|nixpkgs_version| {
+        // If the main Nixpkgs doesn't have any problems, run the ratchet checks against the base
+        // Nixpkgs
+        check_nixpkgs(base_nixpkgs, eval_accessible_paths, error_writer)?.result_map(
+            |base_nixpkgs_version| {
+                Ok(ratchet::Nixpkgs::compare(
+                    base_nixpkgs_version,
+                    nixpkgs_version,
+                ))
+            },
+        )
+    })?;
 
-    let base_result = match base_thread.join() {
-        Ok(res) => res?,
-        Err(e) => panic::resume_unwind(e),
-    };
-
-    match (base_result, main_result) {
-        (Failure(_), Failure(errors)) => {
-            // Base branch fails and the PR doesn't fix it and may also introduce additional problems
+    match check_result {
+        Failure(errors) => {
             for error in errors {
                 writeln!(error_writer, "{}", error.to_string().red())?
             }
-            writeln!(error_writer, "{}", "The base branch is broken and still has above problems with this PR, which need to be fixed first.\nConsider reverting the PR that introduced these problems in order to prevent more failures of unrelated PRs.".yellow())?;
             Ok(false)
         }
-        (Failure(_), Success(_)) => {
-            writeln!(
-                error_writer,
-                "{}",
-                "The base branch is broken, but this PR fixes it. Nice job!".green()
-            )?;
-            Ok(true)
-        }
-        (Success(_), Failure(errors)) => {
-            for error in errors {
-                writeln!(error_writer, "{}", error.to_string().red())?
-            }
-            writeln!(
-                error_writer,
-                "{}",
-                "This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break."
-                    .yellow()
-            )?;
-            Ok(false)
-        }
-        (Success(base), Success(main)) => {
-            // Both base and main branch succeed, check ratchet state
-            match ratchet::Nixpkgs::compare(base, main) {
-                Failure(errors) => {
-                    for error in errors {
-                        writeln!(error_writer, "{}", error.to_string().red())?
-                    }
-                    writeln!(error_writer, "{}", "This PR introduces additional instances of discouraged patterns as listed above. Merging is discouraged but would not break the base branch.".yellow())?;
-
-                    Ok(false)
-                }
-                Success(()) => {
-                    writeln!(error_writer, "{}", "Validated successfully".green())?;
-                    Ok(true)
-                }
-            }
-        }
+        Success(()) => Ok(true),
     }
 }
 
@@ -141,12 +111,11 @@ pub fn process<W: io::Write>(
 /// This does not include ratchet checks, see ../README.md#ratchet-checks
 /// Instead a `ratchet::Nixpkgs` value is returned, whose `compare` method allows performing the
 /// ratchet check against another result.
-pub fn check_nixpkgs(
+pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
-    keep_nix_path: bool,
+    eval_accessible_paths: &[&Path],
+    error_writer: &mut W,
 ) -> validation::Result<ratchet::Nixpkgs> {
-    let mut nix_file_store = NixFileStore::default();
-
     Ok({
         let nixpkgs_path = nixpkgs_path.canonicalize().with_context(|| {
             format!(
@@ -156,12 +125,16 @@ pub fn check_nixpkgs(
         })?;
 
         if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
-            // No pkgs/by-name directory, always valid
+            writeln!(
+                error_writer,
+                "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
+                utils::BASE_SUBPATH
+            )?;
             Success(ratchet::Nixpkgs::default())
         } else {
-            check_structure(&nixpkgs_path, &mut nix_file_store)?.result_map(|package_names|
+            check_structure(&nixpkgs_path)?.result_map(|package_names|
                 // Only if we could successfully parse the structure, we do the evaluation checks
-                eval::check_values(&nixpkgs_path, &mut nix_file_store, package_names, keep_nix_path))?
+                eval::check_values(&nixpkgs_path, package_names, eval_accessible_paths))?
         }
     })
 }
@@ -186,8 +159,8 @@ mod tests {
                 continue;
             }
 
-            let expected_errors = fs::read_to_string(path.join("expected"))
-                .expect("No expected file for test {name}");
+            let expected_errors =
+                fs::read_to_string(path.join("expected")).unwrap_or(String::new());
 
             test_nixpkgs(&name, &path, &expected_errors)?;
         }
@@ -196,7 +169,7 @@ mod tests {
 
     // tempfile::tempdir needs to be wrapped in temp_env lock
     // because it accesses TMPDIR environment variable.
-    pub fn tempdir() -> anyhow::Result<TempDir> {
+    fn tempdir() -> anyhow::Result<TempDir> {
         let empty_list: [(&str, Option<&str>); 0] = [];
         Ok(temp_env::with_vars(empty_list, tempfile::tempdir)?)
     }
@@ -224,7 +197,7 @@ mod tests {
         test_nixpkgs(
             "case_sensitive",
             &path,
-            "pkgs/by-name/fo: Duplicate case-sensitive package directories \"foO\" and \"foo\".\nThis PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.\n",
+            "pkgs/by-name/fo: Duplicate case-sensitive package directories \"foO\" and \"foo\".\n",
         )?;
 
         Ok(())
@@ -248,15 +221,13 @@ mod tests {
         let tmpdir = temp_root.path().join("symlinked");
 
         temp_env::with_var("TMPDIR", Some(&tmpdir), || {
-            test_nixpkgs(
-                "symlinked_tmpdir",
-                Path::new("tests/success"),
-                "Validated successfully\n",
-            )
+            test_nixpkgs("symlinked_tmpdir", Path::new("tests/success"), "")
         })
     }
 
     fn test_nixpkgs(name: &str, path: &Path, expected_errors: &str) -> anyhow::Result<()> {
+        let extra_nix_path = Path::new("tests/mock-nixpkgs.nix");
+
         let base_path = path.join("base");
         let base_nixpkgs = if base_path.exists() {
             base_path.as_path()
@@ -267,7 +238,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            process(base_nixpkgs.to_owned(), path.to_owned(), true, &mut writer)
+            process(base_nixpkgs, &path, &[&extra_nix_path], &mut writer)
                 .with_context(|| format!("Failed test case {name}"))?;
             Ok(writer)
         })?;
@@ -276,7 +247,7 @@ mod tests {
 
         if actual_errors != expected_errors {
             panic!(
-                "Failed test case {name}, expected these errors:\n=======\n{}\n=======\nbut got these:\n=======\n{}\n=======",
+                "Failed test case {name}, expected these errors:\n\n{}\n\nbut got these:\n\n{}",
                 expected_errors, actual_errors
             );
         }

@@ -1,23 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, glibcLocales
 , meson
 , ninja
 , pkg-config
-, python3
-, cld2
 , coreutils
 , emacs
 , glib
 , gmime3
 , texinfo
 , xapian
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.12.1";
+  version = "1.10.8";
 
   outputs = [ "out" "mu4e" ];
 
@@ -25,17 +23,23 @@ stdenv.mkDerivation rec {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-JnKvMbgkaZ1MO7cZMb2PGZsNMjV1M+dnaDpsBDsT0L4=";
+    hash = "sha256-cDfW0yXA+0fZY5lv4XCHWu+5B0svpMeVMf8ttX/z4Og=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "add-mu4e-pkg.el";
+      url = "https://github.com/djcb/mu/commit/00f7053d51105eea0c72151f1a8cf0b6d8478e4e.patch";
+      hash = "sha256-21c7djmYTcqyyygqByo9vu/GsH8WMYcq8NOAvJsS5AQ=";
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace lib/utils/mu-utils-file.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/tests/bench-indexer.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/mu-maildir.cc \
-      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
-    patchShebangs build-aux/date.py
+    # Fix mu4e-builddir (set it to $out)
+    substituteInPlace mu4e/mu4e-config.el.in \
+      --replace "@abs_top_builddir@" "$out"
+    substituteInPlace lib/utils/mu-test-utils.cc \
+      --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 
   postInstall = ''
@@ -57,7 +61,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  buildInputs = [ cld2 emacs glib gmime3 texinfo xapian ];
+  buildInputs = [ emacs glib gmime3 texinfo xapian ];
 
   mesonFlags = [
     "-Dguile=disabled"
@@ -65,12 +69,9 @@ stdenv.mkDerivation rec {
     "-Dlispdir=${placeholder "mu4e"}/share/emacs/site-lisp"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja python3 glibcLocales ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   doCheck = true;
-
-  # Tests need a UTF-8 aware locale configured
-  env.LANG = "C.UTF-8";
 
   meta = with lib; {
     description = "A collection of utilities for indexing and searching Maildirs";

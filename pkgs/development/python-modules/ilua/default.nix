@@ -4,7 +4,6 @@
 , jupyter-console
 , jupyter-core
 , pygments
-, setuptools
 , termcolor
 , txzmq
 }:
@@ -18,10 +17,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-YxV6xC7GS5NXyMPRZN9YIJxamgP2etwrZUAZjk5PjtU=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     jupyter-console

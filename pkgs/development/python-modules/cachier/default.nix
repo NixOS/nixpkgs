@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "3.0.0";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-cachier";
     repo = "cachier";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3rKsgcJQ9RQwosVruD7H99msB8iGtAai320okrCZCTI=";
+    rev = "v${version}";
+    hash = "sha256-zUZqT4SIwZRqhRS/wHIzIYVULnp5aYcytCQd17T0D/4=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];
@@ -41,10 +41,10 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    substituteInPlace pyproject.toml \
+    substituteInPlace pytest.ini \
       --replace  \
-        '"--cov' \
-        '#"--cov'
+        "--cov" \
+        "#--cov"
   '';
 
   nativeCheckInputs = [
@@ -77,6 +77,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "cachier"
+    "cachier.scripts"
   ];
 
   meta = {

@@ -10,7 +10,7 @@
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR ?     !stdenv.isDarwin, openexr_3
+, enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
@@ -194,7 +194,7 @@ stdenv.mkDerivation {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
-    ++ lib.optionals enableEXR [ openexr_3 ]
+    ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
@@ -218,6 +218,8 @@ stdenv.mkDerivation {
     ++ lib.optional enableCuda cudatoolkit;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;

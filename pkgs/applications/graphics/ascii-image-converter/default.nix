@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/TheZoraiz/ascii-image-converter#readme";
     license = licenses.asl20;
     maintainers = [ maintainers.danth ];
-    mainProgram = "ascii-image-converter";
   };
 }

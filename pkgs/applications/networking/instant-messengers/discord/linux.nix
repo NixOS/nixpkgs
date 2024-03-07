@@ -11,7 +11,7 @@
 , branch
 , withOpenASAR ? false, openasar
 , withVencord ? false, vencord
-, withTTS ? true }:
+, withTTS ? false }:
 
 let
   disableBreakingUpdates = runCommand "disable-breaking-updates.py"

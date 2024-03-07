@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
-    mainProgram = "jack_meter";
   };
 }

@@ -5,8 +5,6 @@ let
   inherit (self) callPackage;
 in
 {
-  inherit (pkgs) emacspeak;
-
   acm = callPackage ./manual-packages/acm { };
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };
@@ -33,13 +31,15 @@ in
 
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
+  emacspeak = callPackage ./manual-packages/emacspeak { };
+
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/ghc-mod { };
+  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
 
   git-undo = callPackage ./manual-packages/git-undo { };
 

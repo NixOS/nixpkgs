@@ -14,13 +14,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyrfc3339";
+  pname = "pyRFC3339";
   version = "1.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "pyRFC3339";
-    inherit version;
+    inherit pname version;
     sha256 = "06jv7ar7lpvvk0dixzwdr3wgm0g1lipxs429s2z7knwwa7hwpf41";
   };
 

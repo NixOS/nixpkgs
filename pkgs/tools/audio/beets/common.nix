@@ -36,21 +36,7 @@
 let
   inherit (lib) attrNames attrValues concatMap;
 
-  mkPlugin = { name
-  , enable ? !disableAllPlugins
-  , builtin ? false
-  , propagatedBuildInputs ? [ ]
-  , testPaths ? [
-    # NOTE: This conditional can be removed when beets-stable is updated and
-    # the default plugins test path is changed
-    (if (lib.versions.majorMinor version) == "1.6" then
-      "test/test_${name}.py"
-    else
-      "test/plugins/test_${name}.py"
-    )
-  ]
-  , wrapperBins ? [ ]
-  }: {
+  mkPlugin = { name, enable ? !disableAllPlugins, builtin ? false, propagatedBuildInputs ? [ ], testPaths ? [ "test/test_${name}.py" ], wrapperBins ? [ ] }: {
     inherit name enable builtin propagatedBuildInputs testPaths wrapperBins;
   };
 

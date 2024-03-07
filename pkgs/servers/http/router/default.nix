@@ -2,7 +2,6 @@
 , callPackage
 , fetchFromGitHub
 , rustPlatform
-, cmake
 , pkg-config
 , protobuf
 , elfutils
@@ -10,19 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.30.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mQtIjfXDcEy5HfZbWauL0NQLPneGq9EJt/yB8zMuhSU=";
+    sha256 = "sha256-IuS7NmlTNmHHnnSZ+YIbV6BnxJW2xprOQ5mkz5FuJEQ=";
   };
 
-  cargoHash = "sha256-XCDU6cXw+Wf5MR6m+HCI8/VFRRylMywktZbd5k7Lcwo=";
+  cargoHash = "sha256-yeb+4lgRDssjkEx6bYfGIbn4DJGpZZ/JDmuwFjQ+U+8=";
 
   nativeBuildInputs = [
-    cmake
     pkg-config
     protobuf
   ];

@@ -54,28 +54,29 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_BUNDLE=OFF"
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      library_path = lib.strings.makeLibraryPath [
+        "$out"
+        cairo
+        freetype
+        libgit2
+        SDL2
+      ];
+    in
+    ''
+      runHook preInstall
 
-    cmake --build . --target=install
-    mkdir -p "$out/lib"
-    mkdir "$out/bin"
-    cp build/vm/*.so* "$out/lib/"
-    cp build/vm/pharo "$out/bin/pharo"
+      cmake --build . --target=install
+      mkdir -p "$out/lib"
+      mkdir "$out/bin"
+      cp build/vm/*.so* "$out/lib/"
+      cp build/vm/pharo "$out/bin/pharo"
+      patchelf --allowed-rpath-prefixes "$NIX_STORE" --shrink-rpath "$out/bin/pharo"
+      wrapProgram "$out/bin/pharo" --set LD_LIBRARY_PATH "${library_path}"
 
-    runHook postInstall
-  '';
-
-  preFixup = let
-    libPath = lib.makeLibraryPath (finalAttrs.buildInputs ++ [
-      stdenv.cc.cc.lib
-      "$out"
-    ]);
-  in ''
-    patchelf --allowed-rpath-prefixes "$NIX_STORE" --shrink-rpath "$out/bin/pharo"
-    ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
-    wrapProgram "$out/bin/pharo" --argv0 $out/bin/pharo --prefix LD_LIBRARY_PATH ":" "${libPath}"
-  '';
+      runHook postInstall
+    '';
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "hyperledger-fabric";
-  version = "2.5.5";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
     rev = "v${version}";
-    hash = "sha256-Ev9a+d15kr6apKyGR5xTa/2I3cByyPSTW2Y+HAQk9GU=";
+    hash = "sha256-hZAGLSf/hez2pvfmaZJRD5b7GW3+exUXgLXUd2Awvpg=";
   };
 
   vendorHash = null;

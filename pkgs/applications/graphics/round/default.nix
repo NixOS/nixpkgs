@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage    = "https://github.com/mingrammer/round";
     license     = licenses.mit;
     maintainers =  with maintainers; [ addict3d ];
-    mainProgram = "round";
   };
 }

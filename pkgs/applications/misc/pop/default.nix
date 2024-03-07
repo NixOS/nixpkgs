@@ -36,6 +36,5 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/pop/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ caarlos0 maaslalani ];
-    mainProgram = "pop";
   };
 }

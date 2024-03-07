@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amd-blis";
-  version = "4.2";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "blis";
     rev = version;
-    hash = "sha256-mLigzaA2S7qFCQT8UWC6bHWAvBjgpqvtgabPyFWBYT0=";
+    hash = "sha256-1vd4uBg/+Vufqsr+MnAWSUW/THkribHNSMeq1/is8K4=";
   };
 
   inherit blas64;

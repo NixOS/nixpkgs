@@ -44,6 +44,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
-    mainProgram = "galculator";
   };
 }

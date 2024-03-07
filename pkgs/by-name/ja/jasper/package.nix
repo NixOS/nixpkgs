@@ -1,60 +1,31 @@
 { lib
-, cmake
-, fetchFromGitHub
-, freeglut
-, libGL
-, libheif
-, libjpeg
-, pkg-config
 , stdenv
-, enableHEIFCodec ? true
-, enableJPGCodec ? true
-, enableOpenGL ? true
+, fetchFromGitHub
+, cmake
+, pkg-config
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-SE3zB+8zZuuT+W6QYTuQhM+dBgYuFzYK4a7QaquGB60=";
+    hash = "sha256-u5380inzLmOT0v6emOtjU3pIEQqTmziAVz1R6QG77x0=";
   };
 
-  # Splitting outputs going bad on Darwin
-  outputs = if stdenv.isDarwin
-            then [ "out" ]
-            else [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
-  ] ++ lib.optionals enableHEIFCodec [
-    libheif
-  ] ++ lib.optionals enableJPGCodec [
-    libjpeg
-  ] ++ lib.optionals enableOpenGL [
-    freeglut
-    libGL
-  ];
-
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...
   cmakeBuildDir = "build-directory";
-  cmakeFlags = [
-    (lib.cmakeBool "ALLOW_IN_SOURCE_BUILD" true)
-    (lib.cmakeBool "JAS_ENABLE_HEIC_CODEC" enableHEIFCodec)
-    (lib.cmakeBool "JAS_INCLUDE_HEIC_CODEC" enableHEIFCodec)
-    (lib.cmakeBool "JAS_ENABLE_JPG_CODEC" enableJPGCodec)
-    (lib.cmakeBool "JAS_INCLUDE_JPG_CODEC" enableJPGCodec)
-    (lib.cmakeBool "JAS_ENABLE_MIF_CODEC" false) # Dangerous!
-    (lib.cmakeBool "JAS_ENABLE_OPENGL" enableOpenGL)
-  ];
 
   strictDeps = true;
 
@@ -78,13 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
       was chosen primarily due to the availability of C development environments
       for most computing platforms when JasPer was first developed, circa 1999.
     '';
-    license = with lib.licenses; [ mit ];
-    mainProgram = "jasper";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    # The value of __STDC_VERSION__ cannot be automatically determined when
-    # cross-compiling.
+
+    # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling.
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
-# TODO: investigate opengl support

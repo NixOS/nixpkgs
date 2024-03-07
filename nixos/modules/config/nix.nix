@@ -1,5 +1,5 @@
 /*
-  Manages /etc/nix/nix.conf.
+  Manages /etc/nix.conf.
 
   See also
    - ./nix-channel.nix

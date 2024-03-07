@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.siddharthist ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
-    mainProgram = "ympd";
   };
 }

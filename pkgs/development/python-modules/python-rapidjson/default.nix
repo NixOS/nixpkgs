@@ -6,8 +6,7 @@
 , rapidjson
 , pytestCheckHook
 , pytz
-, setuptools
-, substituteAll
+, glibcLocales
 }:
 
 let
@@ -26,30 +25,25 @@ let
         hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
       })
     ];
+    # valgrind_unittest failed
+    cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
-  version = "1.16";
+  version = "1.14";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.8";
 
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Z8cNu6tK5/yAu6b9Vb/EdXQj+fQgeT0QIszTEUurVM=";
+    hash = "sha256-fCC6jYUIB89HlEnbsmL0MeCBOO4NAZtePuPgZKYxoM8=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./rapidjson-include-dir.patch;
-      rapidjson = lib.getDev rapidjson';
-    })
-  ];
-
-  nativeBuildInputs = [
-    setuptools
+  setupPyBuildFlags = [
+    "--rj-include-dir=${lib.getDev rapidjson'}/include"
   ];
 
   nativeCheckInputs = [

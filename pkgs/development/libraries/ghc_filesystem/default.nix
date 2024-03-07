@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "header-only single-file C++ std::filesystem compatible helper library";
     homepage = "https://github.com/gulrak/filesystem";
     license = licenses.mit;
-    maintainers = with maintainers; [ bbjubjub ];
+    maintainers = with maintainers; [ lourkeur ];
   };
 }

@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.sgo ];
-    mainProgram = "cdpr";
   };
 }

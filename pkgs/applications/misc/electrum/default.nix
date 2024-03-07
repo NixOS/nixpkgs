@@ -8,11 +8,10 @@
 , secp256k1
 , enableQt ? true
 , callPackage
-, qtwayland
 }:
 
 let
-  version = "4.5.3";
+  version = "4.4.6";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.{v}"
@@ -29,11 +28,11 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-Lr6ynHAbyaiaxYAWU5j5Wh5acxO5HkP1/jpnFrL4j68=";
+    sha256 = "sha256-nd435CgF0a6JOni/OXcxkciVCR1aQqzfGfDSg1gPQ8Q=";
 
     postFetch = ''
       mv $out ./all
-      mv ./all/tests $out
+      mv ./all/electrum/tests $out
     '';
   };
 
@@ -45,16 +44,15 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-kej0msc7SB+51ad5xZrT8MMEY5rfYOGqum6RO1gBH5s=";
+    sha256 = "sha256-BxxC1xVKToUjgBo4mEeK9Tdhbd/+doHcTTJsXDtaELg=";
   };
 
   postUnpack = ''
     # can't symlink, tests get confused
-    cp -ar ${tests} $sourceRoot/tests
+    cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
-  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -72,8 +70,6 @@ python3.pkgs.buildPythonApplication {
     qrcode
     requests
     tlslite-ng
-    certifi
-    jsonpatch
     # plugins
     btchip-python
     ledger-bitcoin
@@ -83,10 +79,6 @@ python3.pkgs.buildPythonApplication {
   ] ++ lib.optionals enableQt [
     pyqt5
     qdarkstyle
-  ];
-
-  checkInputs = with python3.pkgs; lib.optionals enableQt [
-    pyqt6
   ];
 
   postPatch = ''
@@ -119,7 +111,7 @@ python3.pkgs.buildPythonApplication {
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
-  pytestFlagsArray = [ "tests" ];
+  pytestFlagsArray = [ "electrum/tests" ];
 
   postCheck = ''
     $out/bin/electrum help >/dev/null
@@ -141,6 +133,5 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ joachifm np prusnak ];
-    mainProgram = "electrum";
   };
 }

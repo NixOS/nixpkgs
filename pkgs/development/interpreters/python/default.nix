@@ -16,14 +16,24 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
+    python310 = {
+      sourceVersion = {
+        major = "3";
+        minor = "10";
+        patch = "13";
+        suffix = "";
+      };
+      hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
+    };
+
     python311 = {
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "8";
+        patch = "7";
         suffix = "";
       };
-      hash = "sha256-ngYAjIkBkkOVvB2jA+rFZ6cprgErqhgqs5Jp9lA4O7M=";
+      hash = "sha256-GOGqfmb/OlhCPVntIoFaaVTlM0ISLEXfIMlod8Biubc=";
     };
   };
 
@@ -42,6 +52,19 @@ in {
     inherit passthruFun;
   };
 
+  python38 = callPackage ./cpython {
+    self = __splicedPackages.python38;
+    sourceVersion = {
+      major = "3";
+      minor = "8";
+      patch = "18";
+      suffix = "";
+    };
+    hash = "sha256-P/txzTSaMmunsvrcfn34a6V33ZxJF+UqhAGtvadAXj8=";
+    inherit (darwin) configd;
+    inherit passthruFun;
+  };
+
   python39 = callPackage ./cpython {
     self = __splicedPackages.python39;
     sourceVersion = {
@@ -55,18 +78,11 @@ in {
     inherit passthruFun;
   };
 
-  python310 = callPackage ./cpython {
+  python310 = callPackage ./cpython ({
     self = __splicedPackages.python310;
-    sourceVersion = {
-      major = "3";
-      minor = "10";
-      patch = "13";
-      suffix = "";
-    };
-    hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
     inherit (darwin) configd;
     inherit passthruFun;
-  };
+  } // sources.python310);
 
   python311 = callPackage ./cpython ({
     self = __splicedPackages.python311;
@@ -79,10 +95,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "12";
-      patch = "2";
+      patch = "1";
       suffix = "";
     };
-    hash = "sha256-vigRLayBPSBTVFwUvxOhZAGiGHfxpp626l2ExKDz2HA=";
+    hash = "sha256-jfuPQm/NImZX+eK9Xx6W5TJkllF2+hfTJljoc1ka6yE=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -93,9 +109,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "a3";
+      suffix = "a2";
     };
-    hash = "sha256-IHhMgwTrHGnID5ZuvfB3W+LjfiPfO2JGHuwSqF3Pfq0=";
+    hash = "sha256-ttRrRBkMTAJCHraaBC0WsMVUgb3agYxsQW3CRBE6nC0=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -109,8 +125,8 @@ in {
     readline = null;
     ncurses = null;
     gdbm = null;
-    configd = null;
     sqlite = null;
+    configd = null;
     tzdata = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;

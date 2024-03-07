@@ -29,6 +29,5 @@ buildGoModule rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     broken = stdenv.isDarwin; # build fails with go > 1.17
-    mainProgram = "mole";
   };
 }

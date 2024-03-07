@@ -1,40 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, lxml
-, pytest-mypy-plugins
-, pytestCheckHook
 , setuptools
+, pytestCheckHook
+, pytest-mypy-plugins
+, lxml
 }:
 
 buildPythonPackage rec {
   pname = "lxml-stubs";
-  version = "0.5.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml-stubs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OwaPnCr0vylhdAvMMUfGV6DjZEh7Q71pgMOt66urg5I=";
+    rev = version;
+    hash = "sha256-RRH/taLtgaXOl0G/ve2Ad7Xy8WRDUG2/k26EFMv1PRM=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
-
   propagatedBuildInputs = [
     lxml
   ];
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mypy-plugins
-  ];
-
-  disabledTests = [
-    # Output difference, https://github.com/lxml/lxml-stubs/issues/101
-    "etree_element_iterchildren"
   ];
 
   meta = with lib; {

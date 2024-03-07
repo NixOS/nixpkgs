@@ -26,6 +26,5 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = with maintainers; [ abbradar ];
-    mainProgram = "pico2wave";
   };
 }

@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     description = "User mode programs to enable VLANs on Ethernet devices";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    mainProgram = "vconfig";
   };
 }

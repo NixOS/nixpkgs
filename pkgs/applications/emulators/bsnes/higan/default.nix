@@ -1,8 +1,8 @@
 { lib
+, stdenv
+, fetchFromGitHub
 , SDL2
 , alsa-lib
-, darwin
-, fetchFromGitHub
 , gtk3
 , gtksourceview3
 , libGL
@@ -10,25 +10,25 @@
 , libX11
 , libXv
 , libao
-, libicns
 , libpulseaudio
 , openal
 , pkg-config
 , runtimeShell
-, stdenv
 , udev
-, unstableGitUpdater
+# Darwin dependencies
+, libicns
+, darwin
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "higan";
-  version = "115-unstable-2024-02-17";
+  version = "115+unstable=2021-08-18";
 
   src = fetchFromGitHub {
     owner = "higan-emu";
     repo = "higan";
-    rev = "ba4b918c0bbcc302e0d5d2ed70f2c56214d62681";
-    hash = "sha256-M8WaPrOPSRKxhYcf6ffNkDzITkCltNF9c/zl0GmfJrI=";
+    rev = "9bf1b3314b2bcc73cbc11d344b369c31562aff10";
+    hash = "sha256-HZItJ97x20OjFKv2OVbMja7g+c1ZXcgcaC/XDe3vMZM=";
   };
 
   nativeBuildInputs = [
@@ -70,34 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildPhase = let
-    platform =
-      if stdenv.isLinux
-      then "linux"
-      else if stdenv.isDarwin
-      then "macos"
-      else if stdenv.isBSD
-      then "bsd"
-      else if stdenv.isWindows
-      then "windows"
-      else throw "Unknown platform for higan: ${stdenv.hostPlatform.system}";
-  in ''
+  buildPhase = ''
     runHook preBuild
 
-    make -C higan-ui -j$NIX_BUILD_CORES \
-      compiler=${stdenv.cc.targetPrefix}c++ \
-      platform=${platform} \
-      openmp=true \
-      hiro=gtk3 \
-      build=accuracy \
-      local=false \
-      cores="cv fc gb gba md ms msx ngp pce sfc sg ws"
-
-    make -C icarus -j$NIX_BUILD_CORES \
-      compiler=${stdenv.cc.targetPrefix}c++ \
-      platform=${platform} \
-      openmp=true \
-      hiro=gtk3
+    make -j $NIX_BUILD_CORES compiler=${stdenv.cc.targetPrefix}c++ \
+         platform=linux openmp=true hiro=gtk3 build=accuracy local=false \
+         cores="cv fc gb gba md ms msx ngp pce sfc sg ws" -C higan-ui
+    make -j $NIX_BUILD_CORES compiler=${stdenv.cc.targetPrefix}c++ \
+         platform=linux openmp=true hiro=gtk3 -C icarus
 
     runHook postBuild
   '';
@@ -152,8 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater {};
-
   meta = with lib; {
     homepage = "https://github.com/higan-emu/higan";
     description = "An open-source, cycle-accurate multi-system emulator";
@@ -173,5 +151,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };
-})
-# TODO: select between Qt and GTK3
+}
+# TODO: select between Qt, GTK2 and GTK3

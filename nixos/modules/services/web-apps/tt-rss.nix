@@ -4,8 +4,6 @@ with lib;
 let
   cfg = config.services.tt-rss;
 
-  inherit (cfg) phpPackage;
-
   configVersion = 26;
 
   dbPort = if cfg.database.port == null
@@ -28,7 +26,7 @@ let
       ;
   in pkgs.writeText "config.php" ''
     <?php
-      putenv('TTRSS_PHP_EXECUTABLE=${phpPackage}/bin/php');
+      putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
 
       putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
       putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
@@ -458,15 +456,6 @@ let
         '';
       };
 
-      phpPackage = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.php;
-        defaultText = "pkgs.php";
-        description = lib.mdDoc ''
-          php package to use for php fpm and update daemon.
-        '';
-      };
-
       plugins = mkOption {
         type = types.listOf types.str;
         default = ["auth_internal" "note"];
@@ -554,7 +543,7 @@ let
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         inherit (cfg) user;
-        inherit phpPackage;
+        phpPackage = pkgs.php81;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";
@@ -616,13 +605,13 @@ let
         description = "Tiny Tiny RSS feeds update daemon";
 
         preStart = ''
-          ${phpPackage}/bin/php ${cfg.root}/www/update.php --update-schema --force-yes
+          ${pkgs.php81}/bin/php ${cfg.root}/www/update.php --update-schema
         '';
 
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${phpPackage}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
+          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";

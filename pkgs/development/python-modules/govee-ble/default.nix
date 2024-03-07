@@ -12,22 +12,17 @@
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.31.0";
-  pyproject = true;
+  version = "0.27.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = "govee-ble";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g4tOu4nrJx1DVk2KLfF6HIEM7vTkfBg2fd7R1j+Xwrk=";
+    hash = "sha256-yMKZe2hEkBm9c/5QuFNQMVPsdHTx9lnEVysRlbntiVY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=govee_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -43,6 +38,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=govee_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   pythonImportsCheck = [
     "govee_ble"

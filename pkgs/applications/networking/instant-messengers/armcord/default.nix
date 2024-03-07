@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, makeBinaryWrapper
+, makeWrapper
 , wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.6";
+  version = "3.2.5";
 
   src =
     let
@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          hash = "sha256-9AcxqCxhLAjYclaw6lri06R0PgQQeRHTbLJLEdhDCWU=";
+          hash = "sha256-6zlYm4xuYpG+Bgsq5S+B/Zt9TRB2GZnueKAg2ywYLE4=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          hash = "sha256-/uk2slpNF1sSTW6z319Yg9yx/s45fJPvJQJpY11ULVw=";
+          hash = "sha256-HJu1lRa3zOTohsPMe23puHxg1VMWNR2aOjDQJqc4TqE=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeBinaryWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
 
   dontWrapGApps = true;
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     chmod -R g-w "$out"
 
     # Wrap the startup command
-    makeBinaryWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+    makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/ArmCord/ArmCord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling ];
+    maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "armcord";
   };

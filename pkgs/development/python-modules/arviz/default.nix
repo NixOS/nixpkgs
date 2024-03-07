@@ -100,7 +100,6 @@ buildPythonPackage rec {
     "test_plot_ppc_discrete_save_animation"
     # Assertion error
     "test_data_zarr"
-    "test_plot_forest"
   ];
 
   pythonImportsCheck = [

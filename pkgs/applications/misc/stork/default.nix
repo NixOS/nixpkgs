@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jameslittle230/stork";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ chuahou ];
-    mainProgram = "stork";
   };
 }

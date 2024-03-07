@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "0.10.1";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,9 +36,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
-    rev = "refs/tags/gradio_client@${version}";
+    #rev = "refs/tags/v${gradio.version}";
+    rev = "dc131b64f05062447643217819ca630e483a11df"; # v4.9.1 is not tagged...
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-cRsYqNMmzuybJI823lpUOmNcTdcTO8dJkp3cpjATZQU=";
+    hash = "sha256-Zp1Zl53Va0pyyZEHDUpnldi4dtH2uss7PZQD+Le8+cA=";
   };
   prePatch = ''
     cd client/python
@@ -92,8 +93,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "gradio_client" ];
-
-  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";

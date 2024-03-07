@@ -8,12 +8,12 @@
 }:
 buildPythonPackage rec {
   pname = "gekko";
-  version = "1.0.7";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MXoxrejg+QJgajFv8DgZw44NeJuTHNBBK/lsWgmymJY=";
+    hash = "sha256-WNyEdJXBXfhrD1LywBBJ3Ehk+CnUS8VYbJFK8mpKV20=";
   };
 
   nativeBuildInputs = [

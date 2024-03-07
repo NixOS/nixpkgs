@@ -5,6 +5,7 @@
 , cryptography
 , cssselect
 , fetchPypi
+, fetchpatch
 , glibcLocales
 , installShellFiles
 , itemadapter
@@ -21,7 +22,6 @@
 , pythonOlder
 , queuelib
 , service-identity
-, setuptools
 , sybil
 , testfixtures
 , tldextract
@@ -32,20 +32,31 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.11.1";
-  pyproject = true;
+  version = "2.11.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-czoDnHQj5StpvygQtTMgk9TkKoSEYDWcB7Auz/j3Pr4=";
+    hash = "sha256-PL3tzgw/DgSC1hvi10WGg758188UsO5q37rduA9bNqU=";
   };
+
+  patches = [
+    # Fix compatiblity with Twisted>=23.8. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/scrapy/scrapy/commit/aa95ada42cdf570f840f55c463375f8a81b303f8.patch";
+      hash = "sha256-LuhA5BqtjSUgkotplvUCtvGNYOTrl0MJRCXiSBMDFzY=";
+      excludes = [
+        "tests/CrawlerProcess/sleeping.py"
+        "tests/test_crawler.py"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools
   ];
 
   propagatedBuildInputs = [

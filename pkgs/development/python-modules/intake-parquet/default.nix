@@ -5,33 +5,19 @@
 , dask
 , fastparquet
 , pyarrow
-, setuptools
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "intake-parquet";
   version = "0.3.0";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "intake";
-    repo = "intake-parquet";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zSwylXBKOM/tG5mwYtc0FmxwcKJ6j+lw1bxJqf57NY8=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-zSwylXBKOM/tG5mwYtc0FmxwcKJ6j+lw1bxJqf57NY8=";
   };
-
-  postPatch = ''
-    # Break circular dependency
-    substituteInPlace requirements.txt \
-      --replace-fail "intake" ""
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     pandas
@@ -39,6 +25,12 @@ buildPythonPackage rec {
     fastparquet
     pyarrow
   ];
+
+  postPatch = ''
+    # Break circular dependency
+    substituteInPlace requirements.txt \
+      --replace "intake" ""
+  '';
 
   doCheck = false;
 

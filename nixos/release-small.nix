@@ -43,7 +43,7 @@ in rec {
         login
         misc
         nat
-        nfs4
+        nfs3
         openssh
         php
         predictable-interface-names
@@ -125,7 +125,7 @@ in rec {
         "nixos.tests.misc"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
-        "nixos.tests.nfs4.simple"
+        "nixos.tests.nfs3.simple"
         "nixos.tests.openssh"
         "nixos.tests.php.fpm"
         "nixos.tests.php.pcre"

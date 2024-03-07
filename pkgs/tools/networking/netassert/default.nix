@@ -36,6 +36,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
-    mainProgram = "netassert";
   };
 }

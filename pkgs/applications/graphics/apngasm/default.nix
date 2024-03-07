@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
-    mainProgram = "apngasm";
   };
 
 }

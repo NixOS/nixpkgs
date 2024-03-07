@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonAtLeast
 , fetchFromGitHub
 
 # propagates
@@ -26,9 +25,7 @@
 buildPythonPackage rec {
   pname = "mrjob";
   version = "0.7.4";
-
-  # https://github.com/Yelp/mrjob/issues/2222
-  disabled = pythonAtLeast "3.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Yelp";

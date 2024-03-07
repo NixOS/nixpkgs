@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     pony
     psutil
     pyasn1
-    pydantic_1
+    pydantic
     pyopenssl
     pyyaml
     sentry-sdk

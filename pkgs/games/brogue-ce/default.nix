@@ -7,14 +7,14 @@
 , SDL2_image
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "brogue-ce";
   version = "1.13";
 
   src = fetchFromGitHub {
     owner = "tmewett";
     repo = "BrogueCE";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-FUIdi1Ytn+INeD9550MW41qXtLb6in0QS3Snt8QaXUA=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ AndersonTorres fgaz ];
     platforms = platforms.all;
   };
-})
+}

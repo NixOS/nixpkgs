@@ -2,7 +2,7 @@
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols, libdrm
+, wlroots_0_16, wayland-protocols, libdrm
 , nixosTests
 # Used by the NixOS module:
 , isNixOS ? false
@@ -11,16 +11,19 @@
 , trayEnabled ? systemdSupport
 }:
 
+let
+  wlroots = wlroots_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
-  version = "1.9";
+  version = "1.8.1";
 
   inherit enableXWayland isNixOS systemdSupport trayEnabled;
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
-    hash = "sha256-/6+iDkQfdLcL/pTJaqNc6QdP4SRVOYLjfOItEu/bZtg=";
+    hash = "sha256-WxnT+le9vneQLFPz2KoBduOI+zfZPhn1fKlaqbPL6/g=";
   };
 
   patches = [
@@ -31,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
       inherit swaybg;
     })
 
+    (fetchpatch {
+      name = "LIBINPUT_CONFIG_ACCEL_PROFILE_CUSTOM.patch";
+      url = "https://github.com/swaywm/sway/commit/dee032d0a0ecd958c902b88302dc59703d703c7f.diff";
+      hash = "sha256-dx+7MpEiAkxTBnJcsT3/1BO8rYRfNLecXmpAvhqGMD0=";
+    })
   ] ++ lib.optionals (!finalAttrs.isNixOS) [
     # References to /nix/store/... will get GC'ed which causes problems when
     # copying the default configuration:

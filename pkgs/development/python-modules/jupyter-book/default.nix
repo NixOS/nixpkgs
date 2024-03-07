@@ -3,12 +3,13 @@
 , fetchPypi
 , pythonOlder
 , flit-core
+, pythonRelaxDepsHook
 , click
+, docutils
 , jinja2
 , jsonschema
 , linkify-it-py
 , myst-nb
-, myst-parser
 , pyyaml
 , sphinx
 , sphinx-comments
@@ -25,28 +26,29 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "1.0.0";
-  pyproject = true;
+  version = "0.15.1";
 
-  disabled = pythonOlder "3.9";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit version;
-    pname = "jupyter_book";
-    hash = "sha256-U5xdBJNUYgDZ3ie9S1936uoDEV+JN/gl1P+Cs4AamH4=";
+    inherit pname version;
+    hash = "sha256-ihY07Bb37t7g0Rbx5ft8SCAyia2S2kLglRnccdlWwBA=";
   };
 
   nativeBuildInputs = [
     flit-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     click
+    docutils
     jinja2
     jsonschema
     linkify-it-py
     myst-nb
-    myst-parser
     pyyaml
     sphinx
     sphinx-comments
@@ -61,9 +63,16 @@ buildPythonPackage rec {
     sphinx-multitoc-numbering
   ];
 
+  pythonRelaxDeps = [
+    "docutils"
+    "myst-nb"
+    "sphinx"
+    "sphinx-thebe"
+    "sphinxcontrib-bibtex"
+  ];
+
   pythonImportsCheck = [
     "jupyter_book"
-    "jupyter_book.cli.main"
   ];
 
   meta = with lib; {
@@ -72,6 +81,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/executablebooks/jupyter-book/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
-    mainProgram = "jupyter-book";
   };
 }

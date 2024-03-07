@@ -44,6 +44,5 @@ buildGoModule rec {
     changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
-    mainProgram = "lf";
   };
 }

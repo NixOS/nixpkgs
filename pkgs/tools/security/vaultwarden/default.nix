@@ -9,16 +9,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.30.3";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    hash = "sha256-vUAgW/kTFO9yzWFIWqM1f6xEZYH8ojIdt2eOhP9ID8g=";
+    hash = "sha256-9JCrEe0tla4v207XPgprLqP3g0BslpX8f7xa9aUhQcg=";
   };
 
-  cargoHash = "sha256-+FmVkemZTlFOf+fnTJED3u13pXeAuP/wIvEb96Vwa6I=";
+  cargoHash = "sha256-4KyBMOdTAHe5uD6X69gMd0aqIo4w2Rqrlg+25yY2B6o=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
@@ -37,9 +37,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
-    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ dotlambda SuperSandro2000 ];
+    maintainers = with maintainers; [ msteen ivan ];
     mainProgram = "vaultwarden";
   };
 }

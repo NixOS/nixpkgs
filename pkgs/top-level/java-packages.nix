@@ -10,8 +10,10 @@ let
   openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
   openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21.nix { };
 
+  mavenfod = pkgs.maven.buildMavenPackage;
+
 in {
-  inherit openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
+  inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
 
   compiler = let
 
@@ -62,7 +64,7 @@ in {
 
     mkOpenjdkLinuxOnly = path-linux: args: let
       openjdk = callPackage path-linux  (gnomeArgs // args);
-    in assert stdenv.isLinux; openjdk // {
+    in openjdk // {
       headless = openjdk.override { headless = true; };
     };
 
@@ -236,8 +238,7 @@ in {
       else ../development/compilers/semeru-bin/jdk-darwin.nix
     ) {});
   };
-}
-// lib.optionalAttrs config.allowAliases {
-  jogl_2_4_0 = throw "'jogl_2_4_0' is renamed to/replaced by 'jogl'";
-  mavenfod = throw "'mavenfod' is renamed to/replaced by 'maven.buildMavenPackage'";
+
+  inherit (pkgs.darwin.apple_sdk_11_0.callPackage ../development/java-modules/jogl { })
+    jogl_2_4_0;
 }

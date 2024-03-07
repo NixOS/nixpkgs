@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs";
-  version = "0.23.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5V7eLnukVAcOSX52myvaTlDbemGp6mDaWrQc3w4P5MI=";
+    hash = "sha256-7bWx6ZILqdSDY/q51UP/BuCgMH0F4ePMSnclHeF2DY4=";
   };
 
-  cargoHash = "sha256-sZl4FhaKIMJe7v5AAIM2w7M8Ev7vCht3owkvt0UhOu8=";
+  cargoHash = "sha256-ynmKmXQrUnTcmo0S7FO+l/9EPuzgLCdUOPLuwoG4pbU=";
 
   cargoBuildFlags = [ "--features=cli" ];
 

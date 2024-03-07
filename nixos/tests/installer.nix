@@ -83,34 +83,46 @@ let
                   , postInstallCommands, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig, testFlakeSwitch, clevisTest, clevisFallbackTest
                   }:
-    let
-      qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
-      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
-      qemu = qemu-common.qemuBinary pkgs.qemu_test;
+    let iface = "virtio";
+        isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+        bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
     in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then ''
       machine.succeed("true")
     '' else ''
-      import os
       import subprocess
-
       tpm_folder = os.environ['NIX_BUILD_TOP']
+      def assemble_qemu_flags():
+          flags = "-cpu max"
+          ${if (system == "x86_64-linux" || system == "i686-linux")
+            then ''flags += " -m 1024"''
+            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
+          }
+          ${optionalString clevisTest ''flags += f" -chardev socket,id=chrtpm,path={tpm_folder}/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"''}
+          ${optionalString clevisTest ''flags += " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:11:02 -netdev vde,id=vlan1,sock=\"$QEMU_VDE_SOCKET_1\""''}
+          return flags
 
-      startcommand = "${qemu} -m 2048"
 
-      ${optionalString clevisTest ''
-        startcommand += f" -chardev socket,id=chrtpm,path={tpm_folder}/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
-        startcommand += " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:11:02 -netdev vde,id=vlan1,sock=\"$QEMU_VDE_SOCKET_1\""
-      ''}
-      ${optionalString isEfi ''
-        startcommand +=" -drive if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware} -drive if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
-      ''}
+      qemu_flags = {"qemuFlags": assemble_qemu_flags()}
+
+      import os
 
       image_dir = machine.state_dir
       disk_image = os.path.join(image_dir, "machine.qcow2")
-      startcommand += f" -drive file={disk_image},if=virtio,werror=report"
+
+      hd_flags = {
+          "hdaInterface": "${iface}",
+          "hda": disk_image,
+      }
+      ${optionalString isEfi ''
+        hd_flags.update(
+            bios="${pkgs.OVMF.fd}/FV/${bios}"
+        )''
+      }
+      default_flags = {**hd_flags, **qemu_flags}
+
 
       def create_machine_named(name):
-          return create_machine(startcommand, name=name)
+          return create_machine({**default_flags, "name": name})
 
       class Tpm:
             def __init__(self):
@@ -146,9 +158,7 @@ let
       start_all()
       ${optionalString clevisTest ''
       tang.wait_for_unit("sockets.target")
-      tang.systemctl("start network-online.target")
       tang.wait_for_unit("network-online.target")
-      machine.systemctl("start network-online.target")
       machine.wait_for_unit("network-online.target")
       ''}
       machine.wait_for_unit("multi-user.target")
@@ -177,7 +187,6 @@ let
 
       ${optionalString clevisTest ''
         with subtest("Create the Clevis secret with Tang"):
-             machine.systemctl("start network-online.target")
              machine.wait_for_unit("network-online.target")
              machine.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
 
@@ -459,7 +468,7 @@ let
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
-          virtualisation.memorySize = 2048;
+          virtualisation.memorySize = 1536;
 
           boot.initrd.systemd.enable = systemdStage1;
 
@@ -514,7 +523,8 @@ let
             curl
           ]
           ++ optionals (bootLoader == "grub") (let
-            zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
+            zfsSupport = lib.any (x: x == "zfs")
+              (extraInstallerConfig.boot.supportedFilesystems or []);
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })

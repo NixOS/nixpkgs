@@ -5,7 +5,6 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -64,12 +63,6 @@ stdenv.mkDerivation rec {
     #
     #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
     ./fix-finding-test-typelibs.patch
-
-    (fetchpatch {
-      name = "redefinition-of-glib_autoptr_clear_GtkStackPage.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/7aaaecefc2ea8a37eaeae8b4d726d119d4eb8fa3.patch";
-      hash = "sha256-sYLqhwCd9GOkUMUZAO2trAGKC3013jgivHrNC4atdn0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -80,6 +73,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    python3.pkgs.wrapPython
     wrapGAppsHook4
   ];
 
@@ -143,8 +137,12 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
+  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
+
   preFixup = ''
+    buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
+      --prefix PYTHONPATH : "$program_PYTHONPATH"
       # For sysprof-agent
       --prefix PATH : "${sysprof}/bin"
     )

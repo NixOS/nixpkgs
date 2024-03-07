@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://www.archimatetool.com/downloads/archi_5.php?/${version}/Archi-Mac-Silicon-${version}.dmg";
       hash = "sha256-Jg+tl902OWSm4GHxF7QXbRU5nxX4/5q6LTGubHWQ08E=";
     };
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system");
 
   buildInputs = [
     libsecret
@@ -42,7 +42,9 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  sourceRoot = if stdenv.isDarwin then "." else null;
+  unpackPhase = if stdenv.hostPlatform.isDarwin then ''
+    7zz x $src
+  '' else null;
 
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then

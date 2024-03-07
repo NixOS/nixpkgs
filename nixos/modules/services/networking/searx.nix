@@ -213,7 +213,7 @@ in
       serviceConfig = {
         User  = "searx";
         Group = "searx";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = "${cfg.package}/bin/searx-run";
       } // optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
       environment = {

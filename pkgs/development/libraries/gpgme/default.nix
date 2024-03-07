@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , libgpg-error
 , gnupg
@@ -8,6 +9,7 @@
 , glib
 , pth
 , libassuan
+, file
 , which
 , ncurses
 , texinfo
@@ -20,34 +22,28 @@
 , qt6Packages
 , python3
 }:
-
+let
+  inherit (stdenv.hostPlatform) system;
+in
 stdenv.mkDerivation rec {
   pname = "gpgme";
   version = "1.23.2";
-  pyproject = true;
-
-  outputs = [ "out" "dev" "info" ];
-
-  outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
   src = fetchurl {
-    url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
+    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
     hash = "sha256-lJnosfM8zLaBVSehvBYEnTWmGYpsX64BhfK9VhvOUiQ=";
   };
 
   patches = [
-    # Support Python 3.10-3.12, remove distutils, https://dev.gnupg.org/D545
-    ./python-310-312-remove-distutils.patch
+    # Support Python 3.10 version detection without distutils, https://dev.gnupg.org/D545
+    ./python-310-detection-without-distutils.patch
     # Fix a test after disallowing compressed signatures in gpg (PR #180336)
     ./test_t-verify_double-plaintext.patch
   ];
 
-  postPatch = ''
-    # autoconf's beta detection requires a git repo to work
-    # and otherwise appends -unknown to the version number used in the python package which pip stumbles upon
-    substituteInPlace autogen.sh \
-      --replace-fail 'tmp="-unknown"' 'tmp=""'
-  '';
+  outputs = [ "out" "dev" "info" ];
+
+  outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
   nativeBuildInputs = [
     autoreconfHook
@@ -56,9 +52,6 @@ stdenv.mkDerivation rec {
     texinfo
   ] ++ lib.optionals pythonSupport [
     python3.pythonOnBuildForHost
-    python3.pkgs.pip
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
     ncurses
     swig2
     which

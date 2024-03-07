@@ -1,35 +1,28 @@
 { lib
 , buildPythonPackage
+, fetchPypi
 , distro
-, fetchFromGitHub
-, pyasyncore
 , pysnmp
-, pytestCheckHook
 , python-gnupg
-, pythonAtLeast
-, pythonOlder
 , qrcode
 , requests
-, setuptools
+, sseclient-py
+, zfec
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "2.4.6";
-  pyproject = true;
+  version = "0.4.6";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "Blockstream";
-    repo = "satellite";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1gz2lAS/AHeY54AaVXGeofLC68KjAP7POsIaBL3v2EY=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-uANAMNoAC4HUoUuR5ldxoiy+LLzZVpKosU5JttXLnqg=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     distro
@@ -37,12 +30,22 @@ buildPythonPackage rec {
     python-gnupg
     qrcode
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    pyasyncore
+    sseclient-py
+    zfec
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # disable tests which require being connected to the satellite
+    "blocksatcli/test_satip.py"
+    "blocksatcli/api/test_listen.py"
+    "blocksatcli/api/test_msg.py"
+    "blocksatcli/api/test_net.py"
+    # disable tests which require being online
+    "blocksatcli/api/test_order.py"
   ];
 
   disabledTests = [
@@ -58,7 +61,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
-    changelog = "https://github.com/Blockstream/satellite/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ prusnak ];
   };

@@ -1,14 +1,14 @@
-{ lib, buildNpmPackage, fetchFromGitHub, jq, quicktype, testers }:
+{ lib, buildNpmPackage, fetchFromGitHub, jq }:
 
 buildNpmPackage rec {
   pname = "quicktype";
-  version = "23.0.104"; # version from https://npm.im/quicktype
+  version = "23.0.80"; # version from https://npm.im/quicktype
 
   src = fetchFromGitHub {
     owner = "glideapps";
     repo = "quicktype";
-    rev = "916cd94a9d4fdeab870b6a12f42ad43ebaedf314"; # version not tagged
-    hash = "sha256-PI9YgFVy7Mlln9+7IAU9vzyvK606PuAJ32st3NDwXIw=";
+    rev = "2a60269d431b392b658e671df2c1fb5479aec855"; # version not tagged
+    hash = "sha256-3VW/CyvgetS9sqLflJgOmQERn4e/0nLQsezRHb6km3s=";
   };
 
   postPatch = ''
@@ -20,10 +20,6 @@ buildNpmPackage rec {
   postInstall = ''
     mv packages/ $out/lib/node_modules/quicktype/
   '';
-
-  passthru.tests = {
-    version = testers.testVersion { package = quicktype; };
-  };
 
   meta = with lib; {
     description = "Generate types and converters from JSON, Schema, and GraphQL";

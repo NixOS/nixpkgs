@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.8.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+oJBpERU2WbfmS7MyBbJKrh4kzY+rgSw4uKAU1y5kR4=";
+    hash = "sha256-COgoj5MrX7VBwjgfH+Ud7gp0gE7gpsYoyd0Jv4uXoec=";
   };
-  vendorHash = "sha256-Z46eDqUc8Mdq9lEMx1YOuSh5zPIMQrSkbto33AmgANU=";
+  vendorHash = "sha256-btvFro0K0+9potwForIj/7h41l+LbUE0Gym9aHaWtEE=";
 
   subPackages = [
     "."
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}" ];
+  ldflags = [ "-s" "-w" "-buildid=" "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}" ];
 
   preCheck = ''
     # test all paths

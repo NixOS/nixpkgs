@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ratarmount";
-  version = "0.14.1";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TrOYf9kbcRM8E9vq6sjswK2BQ0eA5zSGAIiNAfIZtnk=";
+    hash = "sha256-P+p0h+KuOsunPsXbRwxzAhr1XcEqMjQxHeHmA29+pDQ=";
   };
 
   propagatedBuildInputs = [ ratarmountcore fusepy ];

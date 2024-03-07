@@ -93,11 +93,11 @@ build-idris-package  {
     hash = "sha256-h28F9EEPuvab6zrfeE+0k1XGQJGwINnsJEG8yjWIl7w=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris YAML lib";
     homepage = "https://github.com/Heather/Idris.Yaml";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }
 ```

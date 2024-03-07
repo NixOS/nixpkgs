@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiosql";
-  version = "9.3";
+  version = "9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "nackjicholson";
     repo = "aiosql";
     rev = "refs/tags/${version}";
-    hash = "sha256-7bCJykE+7/eA1h4L5MyH/zVPZVMt7cNLXZSWq+8mPtY=";
+    hash = "sha256-xcrNnp3ZfWLbz+/77N3R5x7N2n7nPcw0khqaIeHn0+Y=";
   };
 
   sphinxRoot = "docs/source";
@@ -48,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiosql"
-  ];
+  pythonImportsCheck = [ "aiosql" ];
 
   meta = with lib; {
     description = "Simple SQL in Python";

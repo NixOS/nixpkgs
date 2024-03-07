@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
-    mainProgram = "kmetronome";
   };
 }

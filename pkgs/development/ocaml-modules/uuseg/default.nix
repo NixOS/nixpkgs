@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner
-, version ? if lib.versionAtLeast ocaml.version "4.14" then "15.1.0" else "15.0.0"
 , cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
 }:
 
@@ -11,14 +10,11 @@ in
 stdenv.mkDerivation rec {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  inherit version;
+  version = "15.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    hash = {
-      "15.1.0" = "sha256-IPI3Wd51HzX4n+uGcgc04us29jMjnKbGgVEAdp0CVMU=";
-      "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
-    }."${version}";
+    sha256 = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];

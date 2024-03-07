@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "autotiling";
-  version = "1.9.1";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PTMF9w4PMkKuhjLAP7856lOOiuyj5YZOoax0K9bgGgQ=";
+    sha256 = "sha256-4iiiiuXCHFXEeA99ikq/G3q2KXBZ7vwpfET7QtoDVds=";
   };
 
   propagatedBuildInputs = [ i3ipc importlib-metadata ];

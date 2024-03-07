@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , gitUpdater
 , makeFontsConf
 , testers
@@ -31,14 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   outputs = [ "out" "dev" "doc" ];
-
-  patches = [
-    (fetchpatch {
-      name = "0001-lomiri-api-Add-missing-headers-for-GCC13.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-api/-/commit/029b42a9b4d5467951595dff8bc536eb5a9e3ef7.patch";
-      hash = "sha256-eWrDQGrwf22X49rtUAVbrd+QN+OwyGacVLCWYFsS02o=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs $(find test -name '*.py')

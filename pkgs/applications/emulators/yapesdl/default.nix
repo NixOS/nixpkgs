@@ -40,6 +40,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
-    mainProgram = "yapesdl";
   };
 })

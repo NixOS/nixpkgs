@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moonlight-embedded";
-  version = "2.7.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-embedded";
     rev = "v${version}";
-    sha256 = "sha256-Jc706BjIT3rS9zwntNOdgszP4CHuX+qxvPvWeU68Amg=";
+    sha256 = "sha256-57gD8vyUk4+eJB+QkD+hZzyzM+Lhvue1mY7xSApYWn8=";
     fetchSubmodules = true;
   };
 
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/moonlight-stream/moonlight-embedded";
     license = licenses.gpl3Plus;
     maintainers = [];
-    mainProgram = "moonlight";
     platforms = platforms.linux;
   };
 }

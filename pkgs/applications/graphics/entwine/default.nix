@@ -34,6 +34,5 @@ stdenv.mkDerivation {
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ matthewcroughan ];
     platforms = platforms.linux;
-    mainProgram = "entwine";
   };
 }

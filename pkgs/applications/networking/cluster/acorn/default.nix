@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "acorn";
-  version = "0.10.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "acorn-io";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Zw/OqN4d5iukh9oUXjczMvNKYkcGSUoDEwfti7uzZXQ=";
+    hash = "sha256-l9V6URc5wY30z6W76n3xrGMHC43kDWfx0+1eznmcVi4=";
   };
 
-  vendorHash = "sha256-d/1Rqh00THUwcMBWloevfKbScaWhVG5r/32Q4zYUaJg=";
+  vendorHash = "sha256-EJ66rX0Pv6KG9wiEZq1POf6CODbENP/LbS6qZkn3XWs=";
 
   ldflags = [
     "-s"

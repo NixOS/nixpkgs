@@ -1,34 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fftwFloat
-, alsa-lib
-, zlib
-, wavpack
-, wxGTK32
-, udev
-, jackaudioSupport ? false
-, libjack2
-, imagemagick
-, libicns
-, yaml-cpp
-, makeWrapper
-, Cocoa
-, includeDemo ? true
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, fftwFloat, alsa-lib
+, zlib, wavpack, wxGTK32, udev, jackaudioSupport ? false, libjack2
+, imagemagick, libicns, makeWrapper, Cocoa
+, includeDemo ? true }:
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.14.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-kPz11V2yNmBe80egNLYxh/m2B1nDca3C5sGbEnrkqnw=";
+    sha256 = "sha256-l1KqER/vkNwgKLXIFUzHnYLw2ivGNP7hRiKhIOzn7pw=";
   };
 
   postPatch = ''
@@ -40,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
 
-  buildInputs = [ fftwFloat zlib wavpack wxGTK32 yaml-cpp ]
+  buildInputs = [ fftwFloat zlib wavpack wxGTK32 ]
     ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
@@ -69,6 +53,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.puzzlewolf ];
-    mainProgram = "GrandOrgue";
   };
 }

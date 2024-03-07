@@ -1,20 +1,19 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, git
 , installShellFiles
 , openssl
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.74.7";
+  version = "0.74.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
-    repo = "grype";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-mP9Yjg5AVMIMvlOI+5AaCYzlw7h2K9WCFLY9ZwXmZk0=";
+    hash = "sha256-M/PBsCZPMh2RSrTWqe5XjErVrSi39DbQpqSzbKXA/wI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,20 +28,17 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-X+E2g/FoDgjKq8XcPeEA/XbRJV8JkhY5AHPnw26hRnM=";
+  vendorHash = "sha256-h/rpDF1weo54DSHRM3eV//+WjSOI24zo1YmpTa3MRnE=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   nativeCheckInputs = [
-    git
     openssl
   ];
 
-  subPackages = [
-    "cmd/grype"
-  ];
+  subPackages = [ "cmd/grype" ];
 
   excludedPackages = "test/integration";
 
@@ -74,25 +70,23 @@ buildGoModule rec {
 
     # remove tests that depend on docker
     substituteInPlace test/cli/cmd_test.go \
-      --replace-fail "TestCmd" "SkipCmd"
+      --replace "TestCmd" "SkipCmd"
     substituteInPlace grype/pkg/provider_test.go \
-      --replace-fail "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
+      --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
     substituteInPlace test/cli/cmd_test.go \
-      --replace-fail "Test_descriptorNameAndVersionSet" "Skip_descriptorNameAndVersionSet"
+      --replace "Test_descriptorNameAndVersionSet" "Skip_descriptorNameAndVersionSet"
     # remove tests that depend on git
     substituteInPlace test/cli/db_validations_test.go \
-      --replace-fail "TestDBValidations" "SkipDBValidations"
+      --replace "TestDBValidations" "SkipDBValidations"
     substituteInPlace test/cli/registry_auth_test.go \
-      --replace-fail "TestRegistryAuth" "SkipRegistryAuth"
+      --replace "TestRegistryAuth" "SkipRegistryAuth"
     substituteInPlace test/cli/sbom_input_test.go \
-      --replace-fail "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
-      --replace-fail "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument"
+      --replace "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
+      --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument"
     substituteInPlace test/cli/subprocess_test.go \
-      --replace-fail "TestSubprocessStdin" "SkipSubprocessStdin"
+      --replace "TestSubprocessStdin" "SkipSubprocessStdin"
     substituteInPlace grype/internal/packagemetadata/names_test.go \
-      --replace-fail "TestAllNames" "SkipAllNames"
-    substituteInPlace test/cli/version_cmd_test.go \
-      --replace-fail "TestVersionCmdPrintsToStdout" "SkipVersionCmdPrintsToStdout"
+      --replace "TestAllNames" "SkipAllNames"
 
     # segfault
     rm grype/db/v5/namespace/cpe/namespace_test.go

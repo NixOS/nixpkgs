@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/PetteriAimonen/focus-stack";
     license = licenses.mit;
     maintainers = with maintainers; [ paperdigits ];
-    mainProgram = "focus-stack";
   };
 }

@@ -5,7 +5,6 @@
 , fetchpatch
 , cmdliner
 , ctypes
-, ctypes-foreign
 , dune-configurator
 , npy
 , ocaml-compiler-libs
@@ -43,7 +42,6 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     cmdliner
     ctypes
-    ctypes-foreign
     npy
     ocaml-compiler-libs
     ppx_custom_printf

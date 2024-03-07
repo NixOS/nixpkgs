@@ -19,25 +19,15 @@ dartInstallHook() {
         fi
     done < <(_getDartEntryPoints)
 
+    # Install the package_config.json file.
+    mkdir -p "$pubcache"
+    cp .dart_tool/package_config.json "$pubcache/package_config.json"
+
     runHook postInstall
 
     echo "Finished dartInstallHook"
 }
 
-dartInstallCacheHook() {
-    echo "Executing dartInstallCacheHook"
-
-    # Install the package_config.json file.
-    mkdir -p "$pubcache"
-    cp .dart_tool/package_config.json "$pubcache/package_config.json"
-
-    echo "Finished dartInstallCacheHook"
-}
-
 if [ -z "${dontDartInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=dartInstallHook
-fi
-
-if [ -z "${dontDartInstallCache-}" ]; then
-    postInstallHooks+=(dartInstallCacheHook)
 fi

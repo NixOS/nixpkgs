@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ivandokov/phockup";
     license = licenses.mit;
     maintainers = with maintainers; [ aanderse ];
-    mainProgram = "phockup";
   };
 }

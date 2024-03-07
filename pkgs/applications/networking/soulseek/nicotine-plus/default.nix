@@ -11,13 +11,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.3.2";
+  version = "3.2.9";
 
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-dl4fTa+CXsycC+hhSkIzQQxrSkBDPsdrmKdrHPakGig=";
+    sha256 = "sha256-PxtHsBbrzcIAcLyQKD9DV8yqf3ljzGS7gT/ZRfJ8qL4=";
   };
 
   nativeBuildInputs = [ gettext wrapGAppsHook gobject-introspection ];
@@ -51,6 +51,6 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://www.nicotine-plus.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ klntsky ];
+    maintainers = with maintainers; [ ehmry klntsky ];
   };
 }

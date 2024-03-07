@@ -2,16 +2,15 @@
 
 buildGoModule rec {
   pname = "conform";
-  version = "0.1.0-alpha.29";
+  version = "0.1.0-alpha.27";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "conform";
     rev = "v${version}";
-    hash = "sha256-5knN+lTedUdgWG8rb3zuJAxx9N0lt7LjJvmSJhdTSgw=";
+    sha256 = "sha256-lIXkflWQcUcmRDX9iSszFLKpI8nSgkCCB2+GQn07+DM=";
   };
-
-  vendorHash = "sha256-hDdNYXy5NIrlqT6yyOglFg2v7HOM9nE+oh7mx2kLdnQ=";
+  vendorHash = "sha256-Oigt7tAK4jhBQtfG1wdLHqi11NWu6uJn5fmuqTmR76E=";
 
   ldflags = [
     "-s"

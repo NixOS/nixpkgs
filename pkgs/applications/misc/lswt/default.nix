@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edrex ];
     platforms = platforms.linux;
-    mainProgram = "lswt";
   };
 }

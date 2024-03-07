@@ -17,20 +17,20 @@ let
   }.${system} or (throw "Unsupported system: ${system}");
 
   packageHash = {
-    x86_64-linux = "sha256-Y0Inew0PncpnEpdLWtl/85t93eGSRewKh5mvGnn+yck=";
-    aarch64-linux = "sha256-HEm3TaLeaws8G73CU9BmxeplQdeF9nQbBSnbctaVhqI=";
-    x86_64-darwin = "sha256-mlshpN/4Od4qrXiqIEYo7G84Dtb+tp2nK2VnrRG2rto=";
-    aarch64-darwin = "sha256-aJH/vOidj0vbkttGDgelaAC/dMYguQPLjxl+V3pOVzI=";
+    x86_64-linux = "sha256-Fp1h1X5UFOHLqgaAcXXl3oSioCMVLJLaOURHd3uu8sA=";
+    aarch64-linux = "sha256-F6/h98qZvzImuxPOMYr1cGWBjr1qWGvoYztvZzw2GRg=";
+    x86_64-darwin = "sha256-WegiHPHi9Qw4PPTEB2a9AdIgMlyOzzSpTRdJH43IEjM=";
+    aarch64-darwin = "sha256-BJER3Fp4AItqtLNYh6pH/tNB98H3iTARr3fKyTXGcP8=";
   }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "fermyon-spin";
-  version = "2.2.0";
+  version = "1.2.1";
 
   src = fetchzip {
     url = "https://github.com/fermyon/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";
     stripRoot = false;
-    hash = packageHash;
+    sha256 = packageHash;
   };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [

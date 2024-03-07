@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bloznelis/kbt";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "kbt";
   };
 }

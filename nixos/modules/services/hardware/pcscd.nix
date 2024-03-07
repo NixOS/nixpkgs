@@ -3,7 +3,6 @@
 with lib;
 
 let
-  cfg = config.services.pcscd;
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
 
   package = if config.security.polkit.enable
@@ -17,6 +16,9 @@ let
 
 in
 {
+
+  ###### interface
+
   options.services.pcscd = {
     enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
 
@@ -42,19 +44,16 @@ in
         See {manpage}`reader.conf(5)` for valid options.
       '';
     };
-
-    extraArgs = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = lib.mdDoc "Extra command line arguments to be passed to the PCSC daemon.";
-    };
   };
 
+  ###### implementation
+
   config = mkIf config.services.pcscd.enable {
+
     environment.etc."reader.conf".source = cfgFile;
 
     environment.systemPackages = [ package ];
-    systemd.packages = [ package ];
+    systemd.packages = [ (getBin package) ];
 
     services.pcscd.plugins = [ pkgs.ccid ];
 
@@ -62,6 +61,7 @@ in
 
     systemd.services.pcscd = {
       environment.PCSCLITE_HP_DROPDIR = pluginEnv;
+      restartTriggers = [ "/etc/reader.conf" ];
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the
@@ -71,7 +71,7 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}" ];
+      serviceConfig.ExecStart = [ "" "${getBin package}/bin/pcscd -f -x -c ${cfgFile}" ];
     };
   };
 }

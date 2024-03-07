@@ -102,6 +102,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;
-    mainProgram = "ChowKick";
   };
 }

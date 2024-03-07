@@ -5,12 +5,7 @@ let
   inherit (stdenv) hostPlatform;
   OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
   MODEL = toString hostPlatform.parsed.cpu.bits;
-in
-
-# On linux pargets like `pkgsLLVM.dmd` `cc` does not expose `libgcc`
-# and can't build `dmd`.
-assert hostPlatform.isLinux -> (stdenv.cc.cc ? libgcc);
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "dmd-bootstrap";
   inherit version;
 

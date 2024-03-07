@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , makeFontsConf
 , nix-update-script
 , testers
@@ -18,20 +19,40 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.6.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-6Gbujz20EHQ7s9GaPpEPju+WqePjpduJqb5hcrswTm8=";
+    hash = "sha256-1e1QDSJ8CjLU794saba2auCKko7p2ylrdI0JWhh8Kco=";
   };
 
   outputs = [
     "out"
   ] ++ lib.optionals docSupport [
     "doc"
+  ];
+
+  patches = [
+    # Pull autoconf-2.72 compatibility fix:
+    #   https://github.com/libsidplayfp/libsidplayfp/pull/103
+    # Remove when version > 2.5.1
+    (fetchpatch {
+      name = "0001-libsidplayfp-autoconf-2.72-compat.patch";
+      url = "https://github.com/libsidplayfp/libsidplayfp/commit/2b1b41beb5099d5697e3f8416d78f27634732a9e.patch";
+      hash = "sha256-5Hk202IuHUBow7HnnPr2/ieWFjKDuHLQjQ9mJUML9q8=";
+    })
+
+    # Fix --disable-tests logic
+    # https://github.com/libsidplayfp/libsidplayfp/pull/108
+    # Remove when version > 2.5.1
+    (fetchpatch {
+      name = "0002-libsidplayfp-Fix-autoconf-logic-for-tests-option.patch";
+      url = "https://github.com/libsidplayfp/libsidplayfp/commit/39dd2893b6186c4932d17b529bb62627b742b742.patch";
+      hash = "sha256-ErdfPvu8R81XxdHu2TaV87OpLFlRhJai51QcYUIkUZ4=";
+    })
   ];
 
   postPatch = ''

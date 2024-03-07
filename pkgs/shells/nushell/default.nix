@@ -13,9 +13,7 @@
 , Security
 , nghttp2
 , libgit2
-# string interpolation dependends on a date that is erroring out
-# this will be fixed in releases after 0.90.1
-, doCheck ? false
+, doCheck ? true
 , withDefaultFeatures ? true
 , additionalFeatures ? (p: p)
 , testers
@@ -24,7 +22,7 @@
 }:
 
 let
-  version = "0.91.0";
+  version = "0.89.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -35,10 +33,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-X3D+JRvnk6HMKWJMTNR16Fmhu+gYd8Ip+7PZQoLIoEU=";
+    hash = "sha256-sBS24FOdEhb+MPu33lpFxLd2/r2AvLUXka+7W3lUIvo=";
   };
 
-  cargoHash = "sha256-Xj4P/qd4GvmhWGwGaPvY23cQwdjdf6cSb1xyRZLN0tQ=";
+  cargoHash = "sha256-B1Sd4dLacIIVNQDnBFw74nX+LaQnzYwCKXv3oJIbu4M=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]

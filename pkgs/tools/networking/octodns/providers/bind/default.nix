@@ -6,11 +6,12 @@
 , pythonOlder
 , dnspython
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "octodns-bind";
-  version = "0.0.6";
+  version = "0.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,11 +20,12 @@ buildPythonPackage rec {
     owner = "octodns";
     repo = "octodns-bind";
     rev = "v${version}";
-    hash = "sha256-IxZr7Wds8wLfJg6rqCtJ59Sg/mCIJ1g9jDJ8CTM7O8w=";
+    hash = "sha256-0ia/xYarrOiLZa8KU0s5wtCGtXIyxSl6OcwNkSJb/rA=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

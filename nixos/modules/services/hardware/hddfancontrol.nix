@@ -60,10 +60,6 @@ in
       systemd.services.hddfancontrol = {
         wantedBy = [ "multi-user.target" ];
         environment.HDDFANCONTROL_ARGS = lib.escapeShellArgs args;
-        serviceConfig = {
-          # Hardening
-          PrivateNetwork = true;
-        };
       };
     }
   );

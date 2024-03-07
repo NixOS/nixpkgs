@@ -5,21 +5,16 @@
 
 buildGoModule rec {
   pname = "asnmap";
-  version = "1.1.0";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = "asnmap";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Of4IVra6kMHY9btWcF9grM/r3lTWFP/geeT309Seasw=";
+    hash = "sha256-uX7mf1y30JngRI4UJYzghk2F4DZh9OQAjgkkNRbAgwc=";
   };
 
-  vendorHash = "sha256-RDv8vkBI3miyeNAbhUsMpuZCYRUZ0ATfXYHxaTgTVfA=";
-
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  vendorHash = "sha256-co18Q8nfRjJyDfpmJ1YSJ275DJRJHn2AR3jF8WionNY=";
 
   # Tests require network access
   doCheck = false;

@@ -1,15 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, robotframework
-, python
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, robotframework }:
 
 buildPythonPackage rec {
-  pname = "robotstatuschecker";
   version = "3.0.1";
-  pyproject = true;
+  format = "setuptools";
+  pname = "robotstatuschecker";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
@@ -19,24 +13,10 @@ buildPythonPackage rec {
     hash = "sha256-yW6353gDwo/IzoWOB8oelaS6IUbvTtwwDT05yD7w6UA=";
   };
 
-  postPatch = ''
-    # https://github.com/robotframework/statuschecker/issues/46
-    substituteInPlace test/tests.robot \
-      --replace-fail BuiltIn.Log Log
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [ robotframework ];
 
   checkPhase = ''
-    runHook preCheck
-
     ${python.interpreter} test/run.py
-
-    runHook postCheck
   '';
 
   meta = with lib; {

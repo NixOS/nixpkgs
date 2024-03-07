@@ -42,6 +42,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/tarkah/tickrs/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ mredaelli ];
-    mainProgram = "tickrs";
   };
 }

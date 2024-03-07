@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, tkinter
 }:
 
 buildPythonPackage rec {
@@ -20,10 +19,6 @@ buildPythonPackage rec {
 
   # No tests available
   doCheck = false;
-
-  propagatedBuildInputs = [
-    tkinter
-  ];
 
   pythonImportsCheck = [
     "sv_ttk"

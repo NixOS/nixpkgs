@@ -53,6 +53,5 @@ resholve.mkDerivation rec {
     homepage = "https://github.com/jpfleury/pdfmm";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ];
-    mainProgram = "pdfmm";
   };
 }

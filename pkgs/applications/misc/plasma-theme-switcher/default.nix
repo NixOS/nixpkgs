@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     description = "A KDE Plasma theme switcher";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ kevink ];
-    mainProgram = "plasma-theme";
   };
 }

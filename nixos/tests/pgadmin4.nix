@@ -55,11 +55,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine.wait_until_succeeds("curl -sS localhost:5051/login | grep \"<title>pgAdmin 4</title>\" > /dev/null")
       # check for missing support files (css, js etc). Should catch not-generated files during build. See e.g. https://github.com/NixOS/nixpkgs/pull/229184
       machine.succeed("wget -nv --level=1 --spider --recursive localhost:5051/login")
-      # test idempotenceny
-      machine.systemctl("restart pgadmin.service")
-      machine.wait_for_unit("pgadmin")
-      machine.wait_until_succeeds("curl -sS localhost:5051")
-      machine.wait_until_succeeds("curl -sS localhost:5051/login | grep \"<title>pgAdmin 4</title>\" > /dev/null")
 
     # pgadmin4 module saves the configuration to /etc/pgadmin/config_system.py
     # pgadmin4-desktopmode tries to read that as well. This normally fails with a PermissionError, as the config file

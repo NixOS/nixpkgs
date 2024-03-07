@@ -25,11 +25,10 @@
 , curl
 , systemd
 , nixosTests
-, testers
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "appstream";
   version = "1.0.1";
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ximion";
     repo = "appstream";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-ULqRHepWVuAluXsXJUoqxqJfrN168MGlwdVkoLLwSN0=";
   };
 
@@ -98,10 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd=false"
   ];
 
-  passthru.tests = {
-    installed-tests = nixosTests.installed-tests.appstream;
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
+  passthru = {
+    tests = {
+      installed-tests = nixosTests.installed-tests.appstream;
     };
   };
 
@@ -117,6 +115,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     mainProgram = "appstreamcli";
     platforms = platforms.unix;
-    pkgConfigModules = [ "appstream" ];
   };
-})
+}

@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
+
 , loguru
 , poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
 , setuptools
 }:
 
@@ -18,18 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iscc";
     repo = "mobi";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     hash = "sha256-g1L72MkJdrKQRsEdew+Qsn8LfCn8+cmj2pmY6s4nv2U=";
   };
 
-  pythonRelaxDeps = [
-    "loguru"
-  ];
-
   nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
     setuptools
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -44,6 +39,6 @@ buildPythonPackage rec {
     description = "Library for unpacking unencrypted mobi files";
     homepage = "https://github.com/iscc/mobi";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }

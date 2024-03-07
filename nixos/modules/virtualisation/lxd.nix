@@ -214,14 +214,16 @@ in {
         LimitNPROC = "infinity";
         TasksMax = "infinity";
 
+        Restart = "on-failure";
+        TimeoutStartSec = "${cfg.startTimeout}s";
+        TimeoutStopSec = "30s";
+
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
         # explicitly tell it where the actual configuration files are
         Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
           "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
-
-      unitConfig.ConditionPathExists = "!/var/lib/incus/.migrated-from-lxd";
     };
 
     systemd.services.lxd-preseed = lib.mkIf (cfg.preseed != null) {

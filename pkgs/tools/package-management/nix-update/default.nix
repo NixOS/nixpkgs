@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-update";
-  version = "1.2.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    hash = "sha256-/Lv4wO4mCOwk8lNdfiQq2U+PhgeEeSnh89I2N7fxEpE=";
+    hash = "sha256-C7ke51QlBcTR98ovQi5NcxToEPP6s9gqnxWO1eBw/sI=";
   };
 
   nativeBuildInputs = [

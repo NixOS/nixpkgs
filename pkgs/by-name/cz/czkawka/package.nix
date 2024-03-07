@@ -19,15 +19,15 @@
 
 let
   pname = "czkawka";
-  version = "7.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    hash = "sha256-SOWtLmehh1F8SoDQ+9d7Fyosgzya5ZztCv8IcJZ4J94=";
+    hash = "sha256-uKmiBNwuu3Eduf0v3p2VYYNf6mgxJTBUsYs+tKZQZys=";
   };
-  cargoHash = "sha256-GOX7V6NLEMP06nMeRZINwcWCaHwK6T3nkRKl4e25DPg=";
+  cargoHash = "sha256-iBO99kpITVl7ySlXPkEg2YecS1lonVx9CbKt9WI180s=";
 in
 rustPlatform.buildRustPackage {
   inherit pname version src cargoHash;

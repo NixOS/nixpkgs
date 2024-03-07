@@ -37,6 +37,5 @@ buildGoModule rec {
     '';
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ oluceps ];
-    mainProgram = "phantomsocks";
   };
 }

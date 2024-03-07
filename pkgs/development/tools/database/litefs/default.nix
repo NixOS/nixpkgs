@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "litefs";
-  version = "0.5.11";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I12bKImZkvAMyfwb6r/NxE+BcUk+SalN+cIDXP0q4xA=";
+    sha256 = "sha256-e7RBiUHMndOz1n8gWlx+4ifnueWgPu482KIAXaSEhl0=";
   };
 
   vendorHash = "sha256-FcYPe4arb+jbxj4Tl6bRRAnkEvw0rkECIo8/zC79lOA=";
@@ -39,6 +39,5 @@ buildGoModule rec {
     homepage = "https://github.com/superfly/litefs";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "litefs";
   };
 }

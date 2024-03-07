@@ -184,11 +184,11 @@ buildNpmPackage rec {
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
-  meta = {
+  meta = with lib; {
     description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ winter ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ winter ];
   };
 }
 ```
@@ -354,7 +354,6 @@ mkYarnPackage rec {
 
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
-- `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
 
 ## Outside Nixpkgs {#javascript-outside-nixpkgs}
 

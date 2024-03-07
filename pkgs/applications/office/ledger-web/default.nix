@@ -19,6 +19,5 @@ bundlerApp {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg manveru nicknovitski ];
     platforms = platforms.linux;
-    mainProgram = "ledger_web";
   };
 }

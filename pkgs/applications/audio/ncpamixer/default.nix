@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = teams.c3d2.members;
-    mainProgram = "ncpamixer";
   };
 }

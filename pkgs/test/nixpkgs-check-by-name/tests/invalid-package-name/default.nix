@@ -1,1 +1,1 @@
-import <test-nixpkgs> { root = ./.; }
+import ../mock-nixpkgs.nix { root = ./.; }

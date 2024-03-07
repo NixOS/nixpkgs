@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.vklquevs ];
-    mainProgram = "mtpaint";
   };
 }
 

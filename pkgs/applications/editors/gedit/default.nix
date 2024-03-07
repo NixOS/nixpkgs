@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "46.2";
+  version = "46.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
-    sha256 = "wIZkErrRR+us4tKC/8u1oOmjBLIP1VZAvuIcgebVAe8=";
+    sha256 = "oabjfwQXZd/3InofVXi29J+q8Bax4X6GnK9b+5TGqk4=";
   };
 
   patches = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://gedit-technology.github.io/apps/gedit/";
+    homepage = "https://wiki.gnome.org/Apps/Gedit";
     description = "Former GNOME text editor";
     maintainers = with maintainers; [ bobby285271 ];
     license = licenses.gpl2Plus;

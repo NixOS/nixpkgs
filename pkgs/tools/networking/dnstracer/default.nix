@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
-    mainProgram = "dnstracer";
   };
 }

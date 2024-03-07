@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kapp";
-  version = "0.60.0";
+  version = "0.59.2";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kapp";
     rev = "v${version}";
-    sha256 = "sha256-o1MFbyjgOvhgcrlkbYGn0+nHENL2STFiD9CUkCdB56E=";
+    sha256 = "sha256-fDGQQo5REKtBlyBDZ4FTLGeayc14cppMmfLsXZtUJpA=";
   };
 
   vendorHash = null;
@@ -39,6 +39,5 @@ buildGoModule rec {
     homepage = "https://carvel.dev/kapp/";
     license = licenses.asl20;
     maintainers = with maintainers; [ brodes ];
-    mainProgram = "kapp";
   };
 }

@@ -5,15 +5,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starlark-rust";
-  version = "0.12.0";
+  version = "0.10.0";
 
   src = fetchCrate {
     pname = "starlark_bin";
     inherit version;
-    hash = "sha256-3+/kEuCb0TYFQ9bS6M13OYN23DWr2DkBRWvhAn8TW5w=";
+    hash = "sha256-7AoNRTLyTYsUass9bMJMBUN+GrfUzEGM9cED5VsRESs=";
   };
 
-  cargoHash = "sha256-60JXCBXsXei0INP0rozWqFU8dKZovJ9mn5ns87ziUac=";
+  cargoHash = "sha256-Q00JJRiubrxnI0nFQqUTbxTTB70XV93HJycjdlvV+74=";
 
   meta = with lib; {
     description = "A Rust implementation of the Starlark language";

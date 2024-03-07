@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ misuzu Luflosi ];
-    mainProgram = "swapspace";
   };
 }

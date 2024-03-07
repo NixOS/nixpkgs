@@ -12,7 +12,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.6.1";
+  version = "2.5.1";
   format = "other";
 
   sourceRoot = "source/source";
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-op6XUfP0EM9P5vT2nM4o+NOHxBcASIl1+6Mp/u9ub3U=";
+    hash = "sha256-kBFznJcH6UOlzgUnhPSOUBxqqsHzIEpirN63gRYC/u0=";
   };
 
   pythonPath = with python3Packages; [

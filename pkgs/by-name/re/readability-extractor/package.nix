@@ -4,20 +4,20 @@
 , fetchFromGitHub
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "readability-extractor";
-  version = "0.0.11";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "ArchiveBox";
     repo = "readability-extractor";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QzxwPonPrCDdVYHZ9rEfw8ok56lVZE82VykrfkdFh5I=";
+    rev = "be5c3222990d4f0459b21e74802565309bdd1d52";
+    hash = "sha256-KX9mtvwDUIV2XsH6Hgx5/W34AlM4QtZuzxp4QofPcyg=";
   };
 
   dontNpmBuild = true;
 
-  npmDepsHash = "sha256-F5lOGkhFlFVB8zTxrebWsPWRNfHgZ4Y2DqKED/z5riw=";
+  npmDepsHash = "sha256-bQHID9c2Ioyectx6t/GjTR/4cCyfwDfpT0aEQZoYCiU=";
 
   meta = with lib; {
     homepage = "https://github.com/ArchiveBox/readability-extractor";

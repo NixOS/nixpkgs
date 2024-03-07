@@ -105,7 +105,6 @@ in
       server.wait_for_unit("rpc-gssd.service")
       server.wait_for_unit("rpc-svcgssd.service")
 
-      client.systemctl("start network-online.target")
       client.wait_for_unit("network-online.target")
 
       # add principals to client keytab

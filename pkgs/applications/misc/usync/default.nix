@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
-    mainProgram = "usync";
   };
 
   dontBuild = true;

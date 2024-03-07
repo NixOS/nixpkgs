@@ -13,70 +13,70 @@
 , setuptools
 }:
 let
-  version = "0.85.7";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; };
+  version = "0.84.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    hash = "sha256-jkESrrVE+0O2g64zzPOpqhl8DpvmosQvuF0s6Xd+lbM=";
+    sha256 = "sha256-sAkTsQlWtNDQ5vAhA2EeOvuJcj9A6AG8pgDyIKtr65s=";
   };
 
   gitApi = buildGoModule ({
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
-  } // gqlgen);
+    vendorHash = "sha256-LAYp0zgosZnFEbtxzjuTH9++0lbxhACr705HqXJz3D0=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
-  gitDispatch = buildGoModule ({
+  gitDispatch = buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatch";
     modRoot = "gitsrht-dispatch";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-EDvSZ3/g0xDSohrsAIpNhk+F0yy8tbnTW/3tURTonMc=";
 
     postPatch = ''
       substituteInPlace gitsrht-dispatch/main.go \
         --replace /var/log/gitsrht-dispatch /var/log/sourcehut/gitsrht-dispatch
     '';
-  } // gqlgen);
+  };
 
-  gitKeys = buildGoModule ({
+  gitKeys = buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
     modRoot = "gitsrht-keys";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
 
     postPatch = ''
       substituteInPlace gitsrht-keys/main.go \
         --replace /var/log/gitsrht-keys /var/log/sourcehut/gitsrht-keys
     '';
-  } // gqlgen);
+  };
 
-  gitShell = buildGoModule ({
+  gitShell = buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
     modRoot = "gitsrht-shell";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
 
     postPatch = ''
       substituteInPlace gitsrht-shell/main.go \
         --replace /var/log/gitsrht-shell /var/log/sourcehut/gitsrht-shell
     '';
-  } // gqlgen);
+  };
 
-  gitUpdateHook = buildGoModule ({
+  gitUpdateHook = buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
     modRoot = "gitsrht-update-hook";
-    vendorHash = "sha256-yWVpldqwpEZmeI18tvdIgof8GgSFEP70c8T5XDkryn0=";
+    vendorHash = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
 
     postPatch = ''
       substituteInPlace gitsrht-update-hook/main.go \
         --replace /var/log/gitsrht-update-hook /var/log/sourcehut/gitsrht-update-hook
     '';
-  } // gqlgen);
+  };
+
 in
 buildPythonPackage rec {
   inherit src version;
@@ -122,6 +122,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [ eadwu ];
   };
 }

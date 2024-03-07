@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "speechbrain";
-  version = "1.0.0";
+  version = "0.5.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "speechbrain";
     repo = "speechbrain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s23RHxqr+ZCWPYNchFpyYa01mY+Bum3thgNbJP8rAmA=";
+    hash = "sha256-Mve6wr3klXMe7sCiJjPuzUPKGHRyI/LzTe6Ea39zNHw=";
   };
 
   propagatedBuildInputs = [

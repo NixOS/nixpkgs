@@ -7,25 +7,23 @@
 , pygments
 , pytestCheckHook
 , pythonRelaxDepsHook
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.1.5";
-  pyproject = true;
+  version = "0.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-dGbzZYEFEWE5bUz+647pPzP4Z/XmrJU82jNT4ZBRNHk=";
+    hash = "sha256-oa9q5k3OREGn6pQiyLy22MNJTiY6Pm+xrwA4DBUhxp0=";
   };
 
   nativeBuildInputs = [
     antlr4
     pythonRelaxDepsHook
-    setuptools
   ];
 
   pythonRelaxDeps = [

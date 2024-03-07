@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, mkDerivation
 , fetchurl
 , fetchFromGitHub
 , cmake
@@ -13,7 +13,6 @@
 , opencc
 , curl
 , fmt
-, qtbase
 , luaSupport ? true
 }:
 
@@ -30,15 +29,15 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.4";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OqVoXZ8SIO8KRs3ehxul9Ug4sV47cxVCbLCBh6/8EoE=";
+    sha256 = "sha256-z+udRjvAZbnu6EcvvdaFVCr0OKLxFBJbgoYpH9QjrDI=";
   };
 
   nativeBuildInputs = [
@@ -62,12 +61,6 @@ stdenv.mkDerivation rec {
     qtwebengine
     fmt
   ] ++ lib.optional luaSupport fcitx5-lua;
-
-  cmakeFlags = [
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
-  ];
-
-  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";

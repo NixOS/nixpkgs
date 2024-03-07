@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libdom";
-  version = "0.4.2";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/libdom-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-0F5FrxZUcBTCsKOuzzZw+hPUGfUFs/X8esihSR/DDzw=";
+    hash = "sha256-mO4HJHHlXiCMmHjlFcQQrUYso2+HtK/L7K0CPzos70o=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -64,6 +64,5 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ pmenke zaninime ];
     platforms = platforms.linux;
-    mainProgram = "sdrplay_apiService";
   };
 }

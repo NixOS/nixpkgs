@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , nixosTests
 , testers
@@ -10,16 +11,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sonic-server";
-  version = "1.4.8";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kNuLcImowjoptNQI12xHD6Tv+LLYdwlpauqYviKw6Xk=";
+    hash = "sha256-V97K4KS46DXje4qKA11O9NEm0s13aTUnM+XW8lGc6fo=";
   };
 
-  cargoHash = "sha256-9XSRb5RB82L72RzRWPJ45AJahkRnLwAL7lI2QFqbeko=";
+  cargoPatches = [
+    # Update rocksdb to 0.21 to fix compilation issues against clang 16, see:
+    # https://github.com/valeriansaliou/sonic/issues/315
+    # https://github.com/valeriansaliou/sonic/pull/316
+    (fetchpatch {
+      url = "https://github.com/valeriansaliou/sonic/commit/81d5f1efec21ef8b911ed3303fcbe9ca6335f562.patch";
+      hash = "sha256-nOvHThTc2L3UQRVusUsD/OzbSkhSleZc6n0WyZducHM=";
+    })
+  ];
+
+  cargoHash = "sha256-k+gPCkf8DCnuv/aLXcQwjmsDUu/eqSEqKXlUyj8bRq8=";
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
@@ -27,10 +38,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
-
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env.NIX_LDFLAGS = lib.optionalString stdenv.cc.isClang "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   postPatch = ''
     substituteInPlace src/main.rs --replace "./config.cfg" "$out/etc/sonic/config.cfg"

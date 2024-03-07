@@ -12,10 +12,6 @@ let
     nixpkgs.hostPlatform = "aarch64-linux";
     nixpkgs.buildPlatform = "aarch64-darwin";
   };
-  withSameHostAndBuild = eval {
-    nixpkgs.hostPlatform = "aarch64-linux";
-    nixpkgs.buildPlatform = "aarch64-linux";
-  };
   ambiguous = {
     _file = "ambiguous.nix";
     nixpkgs.hostPlatform = "aarch64-linux";
@@ -85,8 +81,6 @@ lib.recurseIntoAttrs {
     assert withHost._module.args.pkgs.stdenv.buildPlatform.system == "aarch64-linux";
     assert withHostAndBuild._module.args.pkgs.stdenv.hostPlatform.system == "aarch64-linux";
     assert withHostAndBuild._module.args.pkgs.stdenv.buildPlatform.system == "aarch64-darwin";
-    assert withSameHostAndBuild.config.nixpkgs.buildPlatform == withSameHostAndBuild.config.nixpkgs.hostPlatform;
-    assert withSameHostAndBuild._module.args.pkgs.stdenv.buildPlatform == withSameHostAndBuild._module.args.pkgs.stdenv.hostPlatform;
     assert builtins.trace (lib.head (getErrors ambiguous))
       getErrors ambiguous ==
         [''

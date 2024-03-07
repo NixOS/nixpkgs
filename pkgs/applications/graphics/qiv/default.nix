@@ -23,6 +23,5 @@ stdenv.mkDerivation (rec {
     homepage = "http://spiegl.de/qiv/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    mainProgram = "qiv";
   };
 })

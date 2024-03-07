@@ -17,6 +17,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/numtide/treefmt";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zimbatm ];
-    mainProgram = "treefmt";
   };
 }

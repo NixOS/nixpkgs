@@ -5,7 +5,7 @@
 , importlib-metadata
 , keyring
 , pkginfo
-, readme-renderer
+, readme_renderer
 , requests
 , requests-toolbelt
 , rich
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     importlib-metadata
     keyring
     pkginfo
-    readme-renderer
+    readme_renderer
     requests
     requests-toolbelt
     rfc3986

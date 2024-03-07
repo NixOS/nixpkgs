@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "redocly-cli";
-  version = "1.6.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-xoehTTpXT/9tlL0VoDQwKbyUnNGeMyH+VBIVLiz69ko=";
+    hash = "sha256-Wi3IxPeNqD1s1Q0Pi9cCus6jCQM0noBTHIAp9HUSpZk=";
   };
 
-  npmDepsHash = "sha256-9fI9P96iNmHrhjbgjePpRnknFe3yIjkirOoIMkVGkH4=";
+  npmDepsHash = "sha256-BcjQ9z2i1YBt6lBqgkRcv29P/WZeuGjVSeVmekaFugM=";
 
   npmBuildScript = "prepare";
 
@@ -31,10 +31,7 @@ buildNpmPackage rec {
     cp -R packages/core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/openapi-core
 
     mkdir $out/bin
-    makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
-      $out/bin/redocly-cli \
-      --set-default REDOCLY_TELEMETRY off \
-      --set-default CI true # Silence update messages
+    makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js $out/bin/redocly-cli --set REDOCLY_TELEMETRY off
   '';
 
   installCheckPhase = ''

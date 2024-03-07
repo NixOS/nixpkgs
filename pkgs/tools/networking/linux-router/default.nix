@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-router";
-  version = "0.7.3";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "garywill";
     repo = "linux-router";
     rev = "refs/tags/${version}";
-    hash = "sha256-iIHi434S7+Q9S1EU7Bpa7iYB7MJDTuyMdB/bbTrbl5Q=";
+    hash = "sha256-S7oxtd5DMFaChUhemcCOfoD1E0DbZ68r+1eVMq4vqZc=";
   };
 
   nativeBuildInputs = [
@@ -94,6 +94,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
-    mainProgram = "lnxrouter";
   };
 }

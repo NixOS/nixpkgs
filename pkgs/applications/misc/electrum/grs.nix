@@ -6,7 +6,6 @@
 , zbar
 , secp256k1
 , enableQt ? true
-, qtwayland
 }:
 
 let
@@ -36,7 +35,6 @@ python3.pkgs.buildPythonApplication {
   };
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
-  buildInputs = lib.optional stdenv.isLinux qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -55,7 +53,6 @@ python3.pkgs.buildPythonApplication {
     qrcode
     requests
     tlslite-ng
-    certifi
     # plugins
     btchip-python
     ledger-bitcoin

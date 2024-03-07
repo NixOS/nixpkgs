@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    mainProgram = "freqtweak";
   };
 }

@@ -11,12 +11,12 @@
 , freetype
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "zaz";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/zaz/zaz-${finalAttrs.version}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1r3bmwny05zzmdalxm5ah2rray0nnsg1w00r30p47q6x2lpwj8ml";
   };
 
@@ -56,4 +56,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     mainProgram = "zaz";
   };
-})
+}
+

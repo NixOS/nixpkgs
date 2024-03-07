@@ -710,9 +710,9 @@ in
           '';
         }
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
-      // (let cfgPath = "X11/xorg.conf.d/10-evdev.conf"; in
+      // (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
         {
-          ${cfgPath}.source = xorg.xf86inputevdev.out + "/share/" + cfgPath;
+          ${cfgPath}.source = xorg.xf86inputevdev.out + "/share" + cfgPath;
         });
 
     environment.systemPackages = utils.removePackagesByName
@@ -804,14 +804,14 @@ in
       ];
 
     system.checks = singleton (pkgs.runCommand "xkb-validated" {
-      inherit (cfg.xkb) dir model layout variant options;
+      inherit (cfg.xkb) model layout variant options;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
         "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
       }
-      XKB_CONFIG_ROOT="$dir" xkbvalidate "$model" "$layout" "$variant" "$options"
+      xkbvalidate "$model" "$layout" "$variant" "$options"
       touch "$out"
     '');
 

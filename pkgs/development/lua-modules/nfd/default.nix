@@ -20,9 +20,9 @@ buildLuarocksPackage {
       inherit zenity;
     })
   ];
-  knownRockspec = "lua/nfd-scm-1.rockspec";
+  rockspecDir = "lua";
 
-  luarocksConfig.LUA_LIBDIR = "${lua}/lib";
+  extraVariables.LUA_LIBDIR = "${lua}/lib";
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
@@ -31,12 +31,13 @@ buildLuarocksPackage {
     find $out -name nfd_zenity.so -execdir mv {} nfd.so \;
   '';
 
+  disabled = with lua; (luaversion != "5.1");
+
   meta = {
     description =
       "A tiny, neat lua library that portably invokes native file open and save dialogs.";
     homepage = "https://github.com/Alloyed/nativefiledialog/tree/master/lua";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.scoder12 ];
-    broken = lua.luaversion != "5.1";
   };
 }

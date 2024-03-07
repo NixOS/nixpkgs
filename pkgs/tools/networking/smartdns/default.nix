@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.lexuge ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    mainProgram = "smartdns";
   };
 }

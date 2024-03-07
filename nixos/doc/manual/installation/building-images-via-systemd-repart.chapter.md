@@ -75,10 +75,9 @@ image with a new one or by updating partitions via an A/B scheme. See the
 [Chrome OS update process][chrome-os-update] for an example of how to achieve
 this. The appliance image built in the following example does not contain a
 `configuration.nix` and thus you will not be able to call `nixos-rebuild` from
-this system. Furthermore, it uses a [Unified Kernel Image][unified-kernel-image].
+this system.
 
 [chrome-os-update]: https://chromium.googlesource.com/aosp/platform/system/update_engine/+/HEAD/README.md
-[unified-kernel-image]: https://uapi-group.org/specifications/specs/unified_kernel_image/
 
 ```nix
 let
@@ -102,8 +101,18 @@ in
             "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
               "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
 
-            "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
-              "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+            "/loader/entries/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+              title NixOS
+              linux /EFI/nixos/kernel.efi
+              initrd /EFI/nixos/initrd.efi
+              options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+            '';
+
+            "/EFI/nixos/kernel.efi".source =
+              "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
+
+            "/EFI/nixos/initrd.efi".source =
+              "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
           };
           repartConfig = {
             Type = "esp";

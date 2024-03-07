@@ -24,6 +24,7 @@
       sourceHanPackages
       steamPackages
       ut2004Packages
+      zabbix40
       zabbix50
       zabbix60
       zeroadPackages

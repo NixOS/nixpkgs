@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "dvc-ssh";
-  version = "4.1.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lvC6oAXQR4u7s+11n6NgQExPc9yrq3JAmmXtuOw22tI=";
+    hash = "sha256-Xlbav0mk+8/VTgS1MCide76QW8WhlflzNXQ7YM4N4iw=";
   };
 
   pythonRemoveDeps = [

@@ -26,8 +26,10 @@ let
         emptyValue.value = {};
       };
 
+  libsForQt5 = pkgs.plasma5Packages;
+  inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (lib)
-    getBin optionalAttrs literalExpression
+    getBin optionalAttrs optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
     mkDefault mkIf mkMerge mkOption mkPackageOption types;
 
@@ -63,7 +65,7 @@ let
     # recognize that software that has been removed.
     rm -fv $HOME/.cache/ksycoca*
 
-    ${pkgs.plasma5Packages.kservice}/bin/kbuildsycoca5
+    ${libsForQt5.kservice}/bin/kbuildsycoca5
   '';
 
   set_XDG_CONFIG_HOME = ''
@@ -174,21 +176,20 @@ in
           owner = "root";
           group = "root";
           capabilities = "cap_sys_nice+ep";
-          source = "${getBin pkgs.plasma5Packages.kwin}/bin/kwin_wayland";
+          source = "${getBin plasma5.kwin}/bin/kwin_wayland";
         };
       } // optionalAttrs (!cfg.runUsingSystemd) {
         start_kdeinit = {
           setuid = true;
           owner = "root";
           group = "root";
-          source = "${getBin pkgs.plasma5Packages.kinit}/libexec/kf5/start_kdeinit";
+          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
         };
       };
 
-      qt.enable = true;
-
       environment.systemPackages =
-        with pkgs.plasma5Packages;
+        with libsForQt5;
+        with plasma5; with kdeGear; with kdeFrameworks;
         let
           requiredPackages = [
             frameworkintegration
@@ -255,9 +256,6 @@ in
             plasma-integration
             polkit-kde-agent
 
-            qqc2-breeze-style
-            qqc2-desktop-style
-
             plasma-desktop
             plasma-workspace
             plasma-workspace-wallpapers
@@ -286,8 +284,8 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.plasma5.excludePackages
 
         # Phonon audio backend
-        ++ lib.optional (cfg.phononBackend == "gstreamer") pkgs.plasma5Packages.phonon-backend-gstreamer
-        ++ lib.optional (cfg.phononBackend == "vlc") pkgs.plasma5Packages.phonon-backend-vlc
+        ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
+        ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
 
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
@@ -303,7 +301,7 @@ in
 
       # Extra services for D-Bus activation
       services.dbus.packages = [
-        pkgs.plasma5Packages.kactivitymanagerd
+        plasma5.kactivitymanagerd
       ];
 
       environment.pathsToLink = [
@@ -336,7 +334,7 @@ in
         serif = [ "Noto Serif" ];
       };
 
-      programs.ssh.askPassword = mkDefault "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
+      programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
       services.accounts-daemon.enable = true;
@@ -362,7 +360,7 @@ in
 
       security.pam.services.kde = { allowNullPassword = true; };
 
-      security.pam.services.login.kwallet.enable = true;
+      security.pam.services.login.enableKwallet = true;
 
       systemd.user.services = {
         plasma-early-setup = mkIf cfg.runUsingSystemd {
@@ -374,8 +372,8 @@ in
       };
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
-      xdg.portal.configPackages = mkDefault [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
+      xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
+      xdg.portal.configPackages = mkDefault [ plasma5.xdg-desktop-portal-kde ];
       # xdg-desktop-portal-kde expects PipeWire to be running.
       # This does not, by default, replace PulseAudio.
       services.pipewire.enable = mkDefault true;
@@ -384,7 +382,6 @@ in
       system.userActivationScripts.plasmaSetup = activationScript;
 
       programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
-      programs.chromium.enablePlasmaBrowserIntegration = true;
     })
 
     (mkIf (cfg.kwinrc != {}) {
@@ -407,14 +404,15 @@ in
         ''
       ];
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-workspace ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
       # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
       # many tiny bugs.
       # See: https://github.com/NixOS/nixpkgs/issues/143272
       services.xserver.displayManager.defaultSession = mkDefault "plasma";
 
       environment.systemPackages =
-        with pkgs.plasma5Packages;
+        with libsForQt5;
+        with plasma5; with kdeGear; with kdeFrameworks;
         let
           requiredPackages = [
             ksystemstats
@@ -450,7 +448,7 @@ in
           script = ''
             ${set_XDG_CONFIG_HOME}
 
-            ${pkgs.plasma5Packages.kconfig}/bin/kwriteconfig5 \
+            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
               --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
           '';
         };
@@ -478,7 +476,8 @@ in
       ];
 
       environment.systemPackages =
-        with pkgs.plasma5Packages;
+        with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
         [
           # Basic packages without which Plasma Mobile fails to work properly.
           plasma-mobile
@@ -486,7 +485,7 @@ in
           pkgs.maliit-framework
           pkgs.maliit-keyboard
         ]
-        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with pkgs.plasma5Packages.plasmaMobileGear; [
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
           # Additional software made for Plasma Mobile.
           alligator
           angelfish
@@ -537,7 +536,7 @@ in
         };
       };
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-mobile ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-mobile ];
     })
 
     # Plasma Bigscreen

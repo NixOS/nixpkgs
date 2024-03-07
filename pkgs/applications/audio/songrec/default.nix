@@ -7,32 +7,24 @@
 , pkg-config
 , ffmpeg
 , dbus
-, libpulseaudio
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "songrec";
-  version = "0.4.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = pname;
     rev = version;
-    hash = "sha256-S44gtyz6L6uaLm3q75y8S4NJb77Vfy+Sd+J06IroHIM=";
+    hash = "sha256-K80uoMfwkyH/K8t6zdkq1ZYTpI0dAIvO2K2kzpzDoN0=";
   };
 
-  cargoHash = "sha256-f2xAWh+y0Jw7QVLZBkajMLN3ocCyRsR480ai7+07LM4=";
+  cargoHash = "sha256-Xmey+goHGTWMgKIJRzKMi9Y1bv677Yo2sfDaMauvZsM=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    alsa-lib
-    dbus
-    gtk3
-    openssl
-    ffmpeg
-    libpulseaudio
-  ];
+  buildInputs = [ alsa-lib dbus gtk3 openssl ffmpeg ];
 
   postInstall = ''
     mv packaging/rootfs/usr/share $out/share
@@ -44,6 +36,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tcbravo ];
-    mainProgram = "songrec";
   };
 }

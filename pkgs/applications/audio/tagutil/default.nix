@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;
-    mainProgram = "tagutil";
   };
 }

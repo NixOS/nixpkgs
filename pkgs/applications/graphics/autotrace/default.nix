@@ -55,6 +55,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ hodapp ];
     license = licenses.gpl2;
-    mainProgram = "autotrace";
   };
 }

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, gtest, boost, pkg-config, protobuf, icu, Foundation, buildPackages }:
 
 stdenv.mkDerivation rec {
-  pname = "libphonenumber";
+  pname = "phonenumber";
   version = "8.12.37";
 
   src = fetchFromGitHub {
@@ -12,8 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # An earlier version of this patch was submitted upstream but did not get
-    # any interest there - https://github.com/google/libphonenumber/pull/2921
+    # Submitted upstream: https://github.com/google/libphonenumber/pull/2921
     ./build-reproducibility.patch
   ];
 

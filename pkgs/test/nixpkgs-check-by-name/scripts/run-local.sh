@@ -1,5 +1,4 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq
+#!/usr/bin/env bash
 
 set -o pipefail -o errexit -o nounset
 
@@ -14,7 +13,6 @@ cleanup() {
 
     [[ -e "$tmp/base" ]] && git worktree remove --force "$tmp/base"
     [[ -e "$tmp/merged" ]] && git worktree remove --force "$tmp/merged"
-    [[ -e "$tmp/tool-nixpkgs" ]] && git worktree remove --force "$tmp/tool-nixpkgs"
 
     rm -rf "$tmp"
 
@@ -63,20 +61,7 @@ trace -n "Merging base branch into the HEAD commit in $tmp/merged.. "
 git -C "$tmp/merged" merge -q --no-edit "$baseSha"
 trace -e "\e[34m$(git -C "$tmp/merged" rev-parse HEAD)\e[0m"
 
-trace -n "Reading pinned nixpkgs-check-by-name revision from pinned-tool.json.. "
-toolSha=$(jq -r .rev "$tmp/merged/pkgs/test/nixpkgs-check-by-name/scripts/pinned-tool.json")
-trace -e "\e[34m$toolSha\e[0m"
-
-trace -n "Creating Git worktree for the nixpkgs-check-by-name revision in $tmp/tool-nixpkgs.. "
-git worktree add -q "$tmp/tool-nixpkgs" "$toolSha"
-trace "Done"
-
-trace "Building/fetching nixpkgs-check-by-name.."
-nix-build -o "$tmp/tool" "$tmp/tool-nixpkgs" \
-    -A tests.nixpkgs-check-by-name \
-    --arg config '{}' \
-    --arg overlays '[]' \
-    -j 0
+"$tmp/merged/pkgs/test/nixpkgs-check-by-name/scripts/fetch-tool.sh" "$baseBranch" "$tmp/tool"
 
 trace "Running nixpkgs-check-by-name.."
 "$tmp/tool/bin/nixpkgs-check-by-name" --base "$tmp/base" "$tmp/merged"

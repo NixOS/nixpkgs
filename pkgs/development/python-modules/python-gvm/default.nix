@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "24.1.0";
-  pyproject = true;
+  version = "23.12.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = "python-gvm";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1MJajawm/QdioZM+/efnXOAFcuDOk/xJ1acPrxKp700=";
+    hash = "sha256-rqaiygGdZMyZwHaNhmmbP3eRKpO8yT9hgFsz+azHzaM=";
   };
 
   nativeBuildInputs = [
@@ -33,17 +33,16 @@ buildPythonPackage rec {
     defusedxml
     lxml
     paramiko
+    pontos
   ];
 
   nativeCheckInputs = [
-    pontos
     pytestCheckHook
   ];
 
   disabledTests = [
     # No running SSH available
     "test_connect_error"
-    "test_feed_xml_error"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_feed_xml_error"
   ];

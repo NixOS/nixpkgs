@@ -25,6 +25,5 @@ buildGoModule rec {
     description = "DNS stub resolver, proxy and router";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jsimonetti ];
-    mainProgram = "routedns";
   };
 }

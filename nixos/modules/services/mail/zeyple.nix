@@ -93,11 +93,7 @@ in {
 
     environment.etc."zeyple.conf".source = ini.generate "zeyple.conf" cfg.settings;
 
-    systemd.tmpfiles.settings."10-zeyple".${cfg.settings.zeyple.log_file}.f = {
-      inherit (cfg) user group;
-      mode = "0600";
-    };
-
+    systemd.tmpfiles.rules = [ "f '${cfg.settings.zeyple.log_file}' 0600 ${cfg.user} ${cfg.group} - -" ];
     services.logrotate = mkIf cfg.rotateLogs {
       enable = true;
       settings.zeyple = {

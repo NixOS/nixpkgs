@@ -1,4 +1,5 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch
+{ lib, stdenv, buildPackages, fetchurl
+, fetchpatch
 , flex, cracklib, db4, gettext, audit, libxcrypt
 , nixosTests
 , autoreconfHook269, pkg-config-unwrapped
@@ -6,21 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.6.0";
+  version = "1.5.2";
 
   src = fetchurl {
-    url = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    hash = "sha256-//SjTlu+534ujxmS8nYx4jKby/igVj3etcM4m04xaa0=";
+    url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
+    sha256 = "sha256-5OxxMakdpEUSV0Jo9JPG2MoQXIcJFpG46bVspoXU+U0=";
   };
 
   patches = [
     ./suid-wrapper-path.patch
-
-    # Backport fix for missing include breaking musl builds.
+    # Pull support for localization on non-default --prefix:
+    #   https://github.com/NixOS/nixpkgs/issues/249010
+    #   https://github.com/linux-pam/linux-pam/pull/604
     (fetchpatch {
-      name = "pam_namespace-stdint.h.patch";
-      url = "https://github.com/linux-pam/linux-pam/commit/cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13.patch";
-      hash = "sha256-tCnH2yPO4dBbJOZA0fP2gm1EavHRMEJyfzB5Vy7YjAA=";
+      name = "bind-locales.patch";
+      url = "https://github.com/linux-pam/linux-pam/commit/77bd338125cde583ecdfb9fd69619bcd2baf15c2.patch";
+      hash = "sha256-tlc9RcLZpEH315NFD4sdN9yOco8qhC6+bszl4OHm+AI=";
     })
   ];
 
@@ -33,7 +35,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  # autoreconfHook269 is needed for `suid-wrapper-path.patch` above.
+  # autoreconfHook269 is needed for `suid-wrapper-path.patch` and
+  # `bind-locales.patch` above.
   # pkg-config-unwrapped is needed for `AC_CHECK_LIB` and `AC_SEARCH_LIBS`
   nativeBuildInputs = [ flex autoreconfHook269 pkg-config-unwrapped ]
     ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
@@ -54,9 +57,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--includedir=${placeholder "out"}/include/security"
     "--enable-sconfigdir=/etc/security"
-    # The module is deprecated. We re-enable it explicitly until NixOS
-    # module stops using it.
-    "--enable-lastlog"
   ];
 
   installFlags = [

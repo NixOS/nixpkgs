@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "dolibarr";
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.raitobezarius ];
 
   nodes.machine =
     { ... }:

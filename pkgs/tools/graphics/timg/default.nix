@@ -8,9 +8,6 @@
 , libjpeg
 , libsixel
 , openslide
-, poppler
-, librsvg
-, cairo
 , pkg-config
 , stb
 , qoi
@@ -19,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timg";
-  version = "1.6.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rTqToWgCPQeRYnMUmhPd/lJPX6L9PstFs1NczyecaB0=";
+    hash = "sha256-u52ipc3I57ldKXjmXqFuIXIYIrs5c9TSvgs1HfIu44U=";
   };
 
   buildInputs = [
@@ -36,9 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libsixel
     openslide
-    poppler
-    librsvg
-    cairo
     qoi.dev
     stb
   ];

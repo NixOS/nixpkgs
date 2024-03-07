@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/makeworld-the-better-one/gemget";
     license = licenses.mit;
     maintainers = with maintainers; [ amfl ];
-    mainProgram = "gemget";
   };
 }

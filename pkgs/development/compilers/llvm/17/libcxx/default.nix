@@ -1,5 +1,5 @@
 { lib, stdenv, llvm_meta
-, monorepoSrc, runCommand, fetchpatch
+, monorepoSrc, runCommand
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
 , libcxxabi, libcxxrt, libunwind
@@ -44,25 +44,6 @@ stdenv.mkDerivation rec {
     cd ../${basename}
     chmod -R u+w .
   '';
-
-  patches = [
-    # fix for https://github.com/NixOS/nixpkgs/issues/269548
-    # https://github.com/llvm/llvm-project/pull/77218
-    (fetchpatch {
-      name = "darwin-system-libcxxabi-link-flags.patch";
-      url = "https://github.com/llvm/llvm-project/commit/c5b89b29ee6e3c444a355fd1cf733ce7ab2e316a.patch";
-      hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
-      relative = "libcxx";
-    })
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    # https://github.com/llvm/llvm-project/issues/64226
-    (fetchpatch {
-      name = "0042-mbstate_t-not-defined.patch";
-      url = "https://github.com/macports/macports-ports/raw/acd8acb171f1658596ed1cf25da48d5b932e2d19/lang/llvm-17/files/0042-mbstate_t-not-defined.patch";
-      relative = "libcxx";
-      hash = "sha256-fVbX99W1gQrSaMFeBkzsJmNWNy0xVSw+oFvDe4AYXL0=";
-    })
-  ];
 
   postPatch = ''
     cd ../runtimes

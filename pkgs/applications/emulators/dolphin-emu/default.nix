@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -11,7 +12,7 @@
 , curl
 , enet
 , ffmpeg
-, fmt_10
+, fmt_8
 , gtest
 , hidapi
 , libevdev
@@ -23,7 +24,6 @@
 , libXdmcp
 , libXext
 , libXrandr
-, lz4
 , lzo
 , mbedtls_2
 , miniupnpc
@@ -32,7 +32,6 @@
 , pugixml
 , qtbase
 , qtsvg
-, SDL2
 , sfml
 , udev
 , vulkan-loader
@@ -58,17 +57,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-21088";
+  version = "5.0-19870";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "9240f579eab18a2f67eef23846a6b508393d0e6c";
-    hash = "sha256-lOiDbEQZoi9Bsiyta/w+B1VXNNW4qST2cBZekqo5dDA=";
+    rev = "032c77b462a220016f23c5079e71bb23e0ad2adf";
+    sha256 = "sha256-TgRattksYsMGcbfu4T5mCFO9BkkHRX0NswFxGwZWjEw=";
     fetchSubmodules = true;
   };
 
   patches = [
+    (fetchpatch {
+      url = "https://github.com/dolphin-emu/dolphin/commit/c43c9101c07376297abbbbc40ef9a1965a1681cd.diff";
+      sha256 = "sha256-yHlyG86ta76YKrJsyefvFh521dNbQOqiPOpRUVxKuZM=";
+    })
     # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
     ./find-minizip-ng.patch
   ];
@@ -96,7 +99,7 @@ stdenv.mkDerivation rec {
     curl
     enet
     ffmpeg
-    fmt_10
+    fmt_8
     gtest
     hidapi
     libiconv
@@ -104,7 +107,6 @@ stdenv.mkDerivation rec {
     libspng
     libusb1
     libXdmcp
-    lz4
     lzo
     mbedtls_2
     miniupnpc
@@ -113,7 +115,6 @@ stdenv.mkDerivation rec {
     pugixml
     qtbase
     qtsvg
-    SDL2
     sfml
     xxHash
     xz # LibLZMA

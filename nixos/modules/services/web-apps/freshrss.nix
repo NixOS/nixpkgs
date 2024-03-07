@@ -228,10 +228,9 @@ in
       };
       users.groups."${cfg.user}" = { };
 
-      systemd.tmpfiles.settings."10-freshrss".${cfg.dataDir}.d = {
-        inherit (cfg) user;
-        group = config.users.users.${cfg.user}.group;
-      };
+      systemd.tmpfiles.rules = [
+        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      ];
 
       systemd.services.freshrss-config =
         let

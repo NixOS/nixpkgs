@@ -74,6 +74,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ linsui ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    mainProgram = "amberol";
   };
 }

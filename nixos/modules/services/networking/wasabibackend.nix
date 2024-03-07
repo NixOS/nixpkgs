@@ -119,7 +119,6 @@ in {
     systemd.services.wasabibackend = {
       description = "wasabibackend server";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {
         DOTNET_PRINT_TELEMETRY_MESSAGE = "false";

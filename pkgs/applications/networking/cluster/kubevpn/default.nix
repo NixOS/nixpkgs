@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubevpn";
-  version = "2.2.3";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner  = "KubeNetworks";
     repo   = "kubevpn";
     rev    = "v${version}";
-    hash = "sha256-C1Fw7E7lXy9BRj8bTVUMzPK6wBiL6A3VGDYUqdD2Rjs=";
+    sha256 = "sha256-n65z7L82qQE4Xao5W99zIkXGEx2BFM4n/6C1cuTJXsk=";
   };
 
   vendorHash = null;

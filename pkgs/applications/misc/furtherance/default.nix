@@ -6,19 +6,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "furtherance";
-  version = "1.8.3";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "lakoliu";
     repo = "Furtherance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TxYARpCqqjjwinoRU2Wjihp+FYIvcI0YCGlOuumX6To=";
+    hash = "sha256-tr7TBqfqKzMnYBMHJmrAW/HViqT4rydBBZvBqgpnfSk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-VGBxBHs/kqW0mvOiz0UQRg0duDmW8ee9cSh6EOT9aaY=";
+    hash = "sha256-MFiMoTMW83QxV3BOyZaa1XmfRNieCT007N/4vfSD67Y=";
   };
 
   nativeBuildInputs = [

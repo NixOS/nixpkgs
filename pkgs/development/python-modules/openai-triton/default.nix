@@ -19,9 +19,6 @@
 , filelock
 , torchWithRocm
 , python
-
-, runCommand
-
 , cudaPackages
 , cudaSupport ? config.cudaSupport
 }:
@@ -49,9 +46,6 @@ buildPythonPackage rec {
     })
   ] ++ lib.optionals (!cudaSupport) [
     ./0000-dont-download-ptxas.patch
-    # openai-triton wants to get ptxas version even if ptxas is not
-    # used, resulting in ptxas not found error.
-    ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
   ];
 
   nativeBuildInputs = [
@@ -77,12 +71,7 @@ buildPythonPackage rec {
     zlib
   ];
 
-  propagatedBuildInputs = [
-    filelock
-    # openai-triton uses setuptools at runtime:
-    # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
-    setuptools
-  ];
+  propagatedBuildInputs = [ filelock ];
 
   postPatch = let
     # Bash was getting weird without linting,
@@ -161,18 +150,7 @@ buildPythonPackage rec {
   # ];
 
   # Ultimately, torch is our test suite:
-  passthru.tests = {
-    inherit torchWithRocm;
-    # Implemented as alternative to pythonImportsCheck, in case if circular dependency on torch occurs again,
-    # and pythonImportsCheck is commented back.
-    import-triton = runCommand "import-triton" { nativeBuildInputs = [(python.withPackages (ps: [ps.openai-triton]))]; } ''
-      python << \EOF
-      import triton
-      import triton.language
-      EOF
-      touch "$out"
-    '';
-  };
+  passthru.tests = { inherit torchWithRocm; };
 
   pythonRemoveDeps = [
     # Circular dependency, cf. https://github.com/openai/triton/issues/1374

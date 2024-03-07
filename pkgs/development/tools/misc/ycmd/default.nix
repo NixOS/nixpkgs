@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, ninja, python
+, withGocode ? true, gocode
 , withGodef ? true, godef
 , withGotools? true, gotools
 , withTypescript ? true, typescript
@@ -62,6 +63,10 @@ stdenv.mkDerivation {
     mkdir -p $out/lib/ycmd/third_party
     cp -r third_party/* $out/lib/ycmd/third_party/
 
+  '' + lib.optionalString withGocode ''
+    TARGET=$out/lib/ycmd/third_party/gocode
+    mkdir -p $TARGET
+    ln -sf ${gocode}/bin/gocode $TARGET
   '' + lib.optionalString withGodef ''
     TARGET=$out/lib/ycmd/third_party/godef
     mkdir -p $TARGET

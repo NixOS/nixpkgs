@@ -12,7 +12,7 @@
 
 # tests
 , pytestCheckHook
-, readme-renderer
+, readme_renderer
 , textile
 }:
 
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    readme-renderer
+    readme_renderer
     textile
   ];
 

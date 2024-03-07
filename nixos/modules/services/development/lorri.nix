@@ -44,7 +44,8 @@ in {
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/lorri daemon";
         PrivateTmp = true;
-        ProtectSystem = "full";
+        ProtectSystem = "strict";
+        ProtectHome = "read-only";
         Restart = "on-failure";
       };
     };

@@ -1,34 +1,26 @@
 { lib
 , buildPythonPackage
-, exceptiongroup
 , fetchFromGitHub
-, glibcLocales
-, pygobject3
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyzmq
+
+# build-system
 , setuptools
 , setuptools-scm
-, tornado
-, trio
-, twisted
-, typing-extensions
-, wcwidth
+
+# tests
+, glibcLocales
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.6.8";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  version = "2.2.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "urwid";
     repo = "urwid";
     rev = "refs/tags/${version}";
-    hash = "sha256-KtIcmAPOcxC9wTq6mKRZWcohH0skYMHlq4mehpn6raY=";
+    hash = "sha256-oPb2h/+gaqkZTXIiESjExMfBNnOzDvoMkXvkZ/+KVwo=";
   };
 
   postPatch = ''
@@ -40,40 +32,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-    wcwidth
-  ];
-
-  passthru.optional-dependencies = {
-    glib = [
-      pygobject3
-    ];
-    tornado = [
-      tornado
-    ];
-    trio = [
-      exceptiongroup
-      trio
-    ];
-    twisted = [
-      twisted
-    ];
-    zmq = [
-      pyzmq
-    ];
-    serial = [
-      pyserial
-    ];
-    lcd = [
-      pyserial
-    ];
-  };
-
   nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ];
 
   env.LC_ALL = "en_US.UTF8";
 
@@ -91,8 +53,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A full-featured console (xterm et al.) user interface library";
     changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
+    description = "A full-featured console (xterm et al.) user interface library";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;

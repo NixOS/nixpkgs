@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 , setuptools
 , pytest
 , portpicker
@@ -35,11 +34,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/bebleo/smtpdfix/issues/335
-    "test_missing_certs"
   ];
 
   meta = with lib; {

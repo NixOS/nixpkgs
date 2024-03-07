@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , curl
 , stdenv
@@ -8,7 +8,7 @@
 , substituteAll
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "static-server";
   version = "1.2.1";
 

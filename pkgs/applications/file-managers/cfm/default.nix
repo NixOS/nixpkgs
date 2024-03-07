@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ lom ];
     platforms = platforms.all;
-    mainProgram = "cfm";
   };
 }

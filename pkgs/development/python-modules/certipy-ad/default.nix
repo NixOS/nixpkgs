@@ -12,7 +12,7 @@
 , pyopenssl
 , pythonOlder
 , requests
-, requests-ntlm
+, requests_ntlm
 , unicrypto
 }:
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pycryptodome
     pyopenssl
     requests
-    requests-ntlm
+    requests_ntlm
     unicrypto
   ];
 

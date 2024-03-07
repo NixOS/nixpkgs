@@ -7,7 +7,7 @@
 }:
 
 let
-  self = stdenv.mkDerivation (finalAttrs: rec {
+  self = stdenv.mkDerivation (rec {
     pname = "clang";
     inherit version;
 
@@ -21,7 +21,6 @@ let
     sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake ninja python3 ]
-      ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -54,7 +53,7 @@ let
       ./gnu-install-dirs.patch
       ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
-        src = ../../common/clang/clang-at-least-16-LLVMgold-path.patch;
+        src = ../../clang-at-least-16-LLVMgold-path.patch;
        libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
@@ -71,7 +70,7 @@ let
       ln -sv $out/bin/clang $out/bin/cpp
 
       mkdir -p $lib/lib/clang
-      mv $lib/lib/${lib.versions.major version} $lib/lib/clang/${lib.versions.major version}
+      mv $lib/lib/18 $lib/lib/clang/18
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
@@ -96,12 +95,7 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [
-        "fortify3"
-      ];
-      hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
-        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
-        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {

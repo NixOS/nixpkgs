@@ -21,6 +21,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     broken = stdenv.isDarwin; # needs golang.org/x/sys bump
-    mainProgram = "senv";
   };
 }

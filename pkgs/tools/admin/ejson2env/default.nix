@@ -26,6 +26,5 @@ buildGoModule rec {
     homepage = "https://github.com/Shopify/ejson2env";
     maintainers = with maintainers; [ viraptor ];
     license = licenses.mit;
-    mainProgram = "ejson2env";
   };
 }

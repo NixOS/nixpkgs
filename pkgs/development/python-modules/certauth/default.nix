@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
 , pyopenssl
 , tldextract
 , pytestCheckHook
@@ -11,7 +10,7 @@
 buildPythonPackage rec {
   pname = "certauth";
   version = "1.3.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -25,12 +24,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "--cov certauth " ""
+      --replace "--cov certauth " ""
   '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     pyopenssl
@@ -46,9 +41,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # https://github.com/ikreymer/certauth/issues/23
-    "test_ca_cert_in_mem"
-    "test_custom_not_before_not_after"
     # Tests want to download Public Suffix List
     "test_file_wildcard"
     "test_file_wildcard_subdomains"

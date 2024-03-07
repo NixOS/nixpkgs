@@ -9,7 +9,6 @@
 , logLib
 , python
 , libsodium
-, gnuradioAtLeast
 }:
 
 mkDerivation {
@@ -21,7 +20,7 @@ mkDerivation {
     rev = "15276bb0fcabf5fe4de4e58df3d579b5be0e9765";
     sha256 = "018np0qlk61l7mlv3xxx5cj1rax8f1vqrsrch3higsl25yydbv7v";
   };
-  disabled = gnuradioAtLeast "3.8";
+  disabledForGRafter = "3.8";
 
   nativeBuildInputs = [
     cmake

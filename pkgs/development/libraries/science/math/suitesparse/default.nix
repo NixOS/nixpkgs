@@ -9,7 +9,6 @@
 , config
 , enableCuda ? config.cudaSupport
 , cudaPackages
-, openmp ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -39,12 +38,9 @@ stdenv.mkDerivation rec {
     gfortran.cc.lib
     gmp
     mpfr
-  ] ++ lib.optionals stdenv.cc.isClang [
-    openmp
   ] ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart.dev
     cudaPackages.cuda_cudart.lib
-    cudaPackages.cuda_cccl.dev
     cudaPackages.libcublas.dev
     cudaPackages.libcublas.lib
   ];

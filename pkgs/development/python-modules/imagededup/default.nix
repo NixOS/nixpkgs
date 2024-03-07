@@ -1,19 +1,17 @@
 { lib
 , buildPythonPackage
-, cython
 , fetchFromGitHub
 , fetchurl
-, matplotlib
-, pillow
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pywavelets
-, scikit-learn
-, setuptools
+, cython
 , torch
 , torchvision
+, pillow
 , tqdm
+, scikit-learn
+, pywavelets
+, matplotlib
+, pytestCheckHook
+, pytest-mock
 }:
 let
   MobileNetV3 = fetchurl {
@@ -25,57 +23,50 @@ let
     hash = "sha256-msG1N42ZJ71sg3TODNVX74Dhs/j7wYWd8zLE3J0P2CU=";
   };
   EfficientNet = fetchurl {
-    url = "https://download.pytorch.org/models/efficientnet_b4_rwightman-23ab8bcd.pth";
+    url = "https://download.pytorch.org/models/efficientnet_b4_rwightman-7eb33cd5.pth";
     hash = "sha256-I6uLzVvb72GnpDuRrcrYH2Iv1/NvtJNaVpgo13iIxE4=";
   };
 in
 buildPythonPackage rec {
   pname = "imagededup";
   version = "0.3.2";
-  pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "idealo";
-    repo = "imagededup";
-    rev = "refs/tags/v${version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-B2IuNMTZnzBi6IxrHBoMDsmIcqGQpznd/2f1XKo1Oa4=";
   };
 
   nativeBuildInputs = [
     cython
-    setuptools
   ];
 
   propagatedBuildInputs = [
-    matplotlib
-    pillow
-    pywavelets
-    scikit-learn
     torch
     torchvision
+    pillow
     tqdm
+    scikit-learn
+    pywavelets
+    matplotlib
   ];
 
-  nativeCheckInputs = [
-    pytest-mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mock ];
 
   preCheck = ''
+    # checks fail with: error: [Errno 13] Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
 
-    # Checks with CNN are preloaded to avoid downloads in the check phase
+    # checks with CNN are preloaded to avoid downloads in check-phase
     mkdir -p $HOME/.cache/torch/hub/checkpoints/
     ln -s ${MobileNetV3} $HOME/.cache/torch/hub/checkpoints/${MobileNetV3.name}
     ln -s ${ViT} $HOME/.cache/torch/hub/checkpoints/${ViT.name}
     ln -s ${EfficientNet} $HOME/.cache/torch/hub/checkpoints/${EfficientNet.name}
   '';
 
-  pythonImportsCheck = [
-    "imagededup"
-  ];
+  pythonImportsCheck = [ "imagededup" ];
 
   meta = with lib; {
     homepage = "https://idealo.github.io/imagededup/";

@@ -1,30 +1,42 @@
 { lib
-, fetchFromGitHub
 , php
+, mkDerivation
+, fetchurl
+, makeWrapper
 }:
-
-(php.withExtensions({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject (finalAttrs: {
+let
+  php' = php.withExtensions ({ enabled, all }: enabled ++ [ all.ast ]);
+in
+mkDerivation rec {
   pname = "phan";
   version = "5.4.3";
 
-  src = fetchFromGitHub {
-    owner = "phan";
-    repo = "phan";
-    rev = finalAttrs.version;
-    hash = "sha256-O0dtnDsz6X99B99VbRQf3Wr/xJfsJqd+2l5Z5iWxHyU=";
+  src = fetchurl {
+    url = "https://github.com/phan/phan/releases/download/${version}/phan.phar";
+    hash = "sha256-wZU6YIlH0q18iD044y6Z5gSscBn7cI0AwRwZgT/YhOo=";
   };
 
-  vendorHash = "sha256-yE85MBseJa0VGV5EbjT0te4QT3697YvtumGkMMfZtxI=";
+  dontUnpack = true;
 
-  meta = {
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install -D $src $out/libexec/phan/phan.phar
+    makeWrapper ${php'}/bin/php $out/bin/phan \
+      --add-flags "$out/libexec/phan/phan.phar"
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "Static analyzer for PHP";
-    homepage = "https://github.com/phan/phan";
-    license = lib.licenses.mit;
     longDescription = ''
       Phan is a static analyzer for PHP. Phan prefers to avoid false-positives
       and attempts to prove incorrectness rather than correctness.
     '';
-    mainProgram = "phan";
-    maintainers = with lib.maintainers; [ apeschar ] ++ lib.teams.php.members;
+    license = licenses.mit;
+    homepage = "https://github.com/phan/phan";
+    maintainers = [ maintainers.apeschar ];
   };
-})
+}

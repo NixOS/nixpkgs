@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ensemble-chorus";
-  version = "0-unstable-2019-02-15";
+  version = "unstable-15-02-2019";
 
   src = fetchFromGitHub {
     owner = "jpcima";

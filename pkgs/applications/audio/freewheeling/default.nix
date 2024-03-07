@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.sepi ];
     platforms = lib.platforms.linux;
-    mainProgram = "fweelin";
   };
 }

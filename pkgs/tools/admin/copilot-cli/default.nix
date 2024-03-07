@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "copilot-cli";
-  version = "1.33.1";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/xuS5tJBV67gXGHQ93FpMXMLXnhAgnicQnKx/pnwyAM=";
+    hash = "sha256-OdzycH+52F6lfCErKlsVFiPE2gxU22ySV5uPA6zBXUg=";
   };
 
-  vendorHash = "sha256-ekAuvvLxk9cwIuElosc6QbsW7+3f/mO8vsA74DA82D0=";
+  vendorHash = "sha256-5Nlo5Ol4YdO3XI5RhpFfBgprVUV5DUkySvCXeFZqulk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,6 +44,5 @@ buildGoModule rec {
     changelog = "https://github.com/aws/copilot-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jiegec ];
-    mainProgram = "copilot";
   };
 }

@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.wmertens ];
     platforms = platforms.all;
-    mainProgram = "makeself";
   };
 }

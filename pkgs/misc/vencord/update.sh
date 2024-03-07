@@ -1,8 +1,6 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq common-updater-scripts prefetch-npm-deps nodejs
+#! nix-shell -I nixpkgs=../../.. -i bash -p curl jq common-updater-scripts prefetch-npm-deps nodejs
 set -eou pipefail
-
-pkgDir="$(dirname "$(readlink -f "$0")")"
 
 tempDir=$(mktemp -d)
 
@@ -17,8 +15,10 @@ npm install --legacy-peer-deps -f
 npmDepsHash=$(prefetch-npm-deps ./package-lock.json)
 popd
 
+pushd ../../..
 update-source-version vencord "${latestTag#v}"
+popd
 
-sed -E 's#\bgitHash = ".*?"#gitHash = "'"${gitHash:0:7}"'"#' -i "$pkgDir/default.nix"
-sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'"$npmDepsHash"'"#' -i "$pkgDir/default.nix"
-cp "$tempDir/package-lock.json" "$pkgDir/package-lock.json"
+sed -E 's#\bgitHash = ".*?"#gitHash = "'"${gitHash:0:7}"'"#' -i default.nix
+sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'"$npmDepsHash"'"#' -i default.nix
+cp "$tempDir/package-lock.json" package-lock.json

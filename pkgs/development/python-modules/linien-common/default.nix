@@ -4,7 +4,7 @@
 , setuptools
 , importlib-metadata
 , numpy
-, rpyc4
+, rpyc
 , scipy
 , appdirs
 , callPackage
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     importlib-metadata
     numpy
-    rpyc4
+    rpyc
     scipy
     appdirs
   ];

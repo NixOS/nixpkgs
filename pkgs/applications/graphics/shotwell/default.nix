@@ -11,6 +11,7 @@
 , libxml2
 , vala
 , sqlite
+, webkitgtk_4_1
 , pkg-config
 , gnome
 , gst_all_1
@@ -39,11 +40,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.6";
+  version = "0.32.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-dZek/6yR4YzYFEsS8tCDE6P0Bbs2gkOnMmgm99kqcLY=";
+    sha256 = "sha256-3iqUUIRtHOwUxqEDA3X9SeGvJNySCtZIA0QST5zLhW8=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libxml2
     sqlite
+    webkitgtk_4_1
     gst_all_1.gstreamer
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base

@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
-    mainProgram = "xscope";
   };
 }
 

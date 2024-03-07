@@ -29,7 +29,6 @@ buildGoModule rec {
     homepage = "https://mtr.moe";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sharzy ];
-    mainProgram = "nexttrace";
   };
 }
 

@@ -1,42 +1,15 @@
-{ stdenv
-, pkgsHostTarget
-, cmake
-, makeWrapper
-, mkDerivation
-, fetchFromGitHub
-, alex
-, lib
-, hpack
-, aeson
-, array
-, async
-, base
-, bytestring
-, co-log-core
-, cond
-, containers
-, directory
-, FloatingHex
-, isocline
-, lens
-, lsp
-, mtl
-, network
-, network-simple
-, parsec
-, process
-, text
-, text-rope
-, time
-}:
+{ stdenv, pkgsHostTarget, cmake, makeWrapper, mkDerivation, fetchFromGitHub
+, alex, array, base, bytestring, cond, containers, directory, extra
+, filepath, hpack, hspec, hspec-core, isocline, json, lib, mtl
+, parsec, process, regex-compat, text, time }:
 
 let
-  version = "3.1.0";
+  version = "2.4.2";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-Twm2Hr8BQ0xTdA30e2Az/57525jTUkmv2Zs/+SNiQns=";
+    sha256 = "sha256-sVjaIzOxNuBtDswpDl5gLB10Sw945TQAf2ywrKumqqk=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
@@ -65,28 +38,8 @@ mkDerivation rec {
   isExecutable = true;
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
-    aeson
-    array
-    async
-    base
-    bytestring
-    co-log-core
-    cond
-    containers
-    directory
-    FloatingHex
-    isocline
-    lens
-    lsp
-    mtl
-    network
-    network-simple
-    parsec
-    process
-    text
-    text-rope
-    time
-    kklib
+    array base bytestring cond containers directory isocline mtl
+    parsec process text time kklib
   ];
   executableToolDepends = [ alex makeWrapper ];
   postInstall = ''

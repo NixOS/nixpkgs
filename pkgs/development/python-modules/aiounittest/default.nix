@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonAtLeast
 , setuptools
-, pynose
+, nose
 , coverage
 , wrapt
 }:
@@ -12,6 +12,9 @@ buildPythonPackage rec {
   pname = "aiounittest";
   version = "1.4.2";
   pyproject = true;
+
+  # requires the imp module
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "kwarunek";
@@ -29,12 +32,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pynose
+    nose
     coverage
   ];
 
   checkPhase = ''
-    nosetests -e test_specific_test
+    nosetests
   '';
 
   pythonImportsCheck = [ "aiounittest" ];

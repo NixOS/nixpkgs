@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     export PATH=$PATH:${mpi}/bin
     configureFlagsArray+=(
-      --with-mpi=${lib.getDev mpi}
+      --with-mpi=${mpi}
       CC=mpicc
       FC=mpif90
       MPICC=mpicc

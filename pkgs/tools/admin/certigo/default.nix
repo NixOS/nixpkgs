@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/square/certigo";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "certigo";
   };
 }

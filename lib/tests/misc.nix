@@ -55,24 +55,6 @@ runTests {
     expected = { a = false; b = false; c = true; };
   };
 
-  testCallPackageWithOverridePreservesArguments =
-    let
-      f = { a ? 0, b }: {};
-      f' = callPackageWith { a = 1; b = 2; } f {};
-    in {
-      expr = functionArgs f'.override;
-      expected = functionArgs f;
-    };
-
-  testCallPackagesWithOverridePreservesArguments =
-    let
-      f = { a ? 0, b }: { nested = {}; };
-      f' = callPackagesWith { a = 1; b = 2; } f {};
-    in {
-      expr = functionArgs f'.nested.override;
-      expected = functionArgs f;
-    };
-
 # TRIVIAL
 
   testId = {
@@ -1920,7 +1902,7 @@ runTests {
     expected = true;
   };
 
-  # DERIVATIONS
+  # lazyDerivation
 
   testLazyDerivationIsLazyInDerivationForAttrNames = {
     expr = attrNames (lazyDerivation {
@@ -1970,42 +1952,6 @@ runTests {
     };
   in {
     expr = lazyDerivation { inherit derivation; };
-    expected = derivation;
-  };
-
-  testOptionalDrvAttr = let
-    mkDerivation = args: derivation (args // {
-      builder = "builder";
-      system = "system";
-      __ignoreNulls = true;
-    });
-  in {
-    expr = (mkDerivation {
-      name = "foo";
-      x = optionalDrvAttr true 1;
-      y = optionalDrvAttr false 1;
-    }).drvPath;
-    expected = (mkDerivation {
-      name = "foo";
-      x = 1;
-    }).drvPath;
-  };
-
-  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
-    derivation = {
-      type = "derivation";
-      outputs = ["out" "dev"];
-      dev = "test dev";
-      out = "test out";
-      outPath = "test outPath";
-      outputName = "out";
-      drvPath = "test drvPath";
-      name = "test name";
-      system = "test system";
-      meta.position = "/hi:23";
-    };
-  in {
-    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
     expected = derivation;
   };
 

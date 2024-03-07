@@ -2,11 +2,9 @@
 , fetchFromGitea
 , rustPlatform
 , nix-update-script
-, imagemagick
-, makeWrapper
 }:
 let
-  version = "2.10.0";
+  version = "2.9.0";
 in
 rustPlatform.buildRustPackage {
   pname = "wallust";
@@ -17,17 +15,10 @@ rustPlatform.buildRustPackage {
     owner = "explosion-mental";
     repo = "wallust";
     rev = version;
-    hash = "sha256-0kPmr7/2uVncpCGVOeIkYlm2M0n9+ypVl7bQ9HnqLb4=";
+    hash = "sha256-AuZRt02bFr7GzI7qe4giGgjlXK/WX+gmF4+QwD0ChXk=";
   };
 
-  cargoHash = "sha256-p1NKEppBYLdCsTY7FHPzaGladLv5HqIVNJxSoFJOx50=";
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  postFixup = ''
-    wrapProgram $out/bin/wallust \
-      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
-  '';
+  cargoHash = "sha256-O9w18ae83mgF3zjk0WUMeu16Ap7CF2ubuPnOqeCt4Nw=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -78,7 +78,7 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
 
-        Restart = mkIf cfg.restart "on-success";
+        Restart = mkIf cfg.restart "always";
 
         # Defaults from greetd upstream configuration
         IgnoreSIGPIPE = false;

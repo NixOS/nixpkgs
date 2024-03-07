@@ -3,6 +3,7 @@
 , fetchPypi
 , substituteAll
 , pythonOlder
+, cudatoolkit
 , addOpenGLRunpath
 }:
 
@@ -23,6 +24,8 @@ buildPythonPackage rec {
       inherit (addOpenGLRunpath) driverLink;
     })
   ];
+
+  propagatedBuildInputs = [ cudatoolkit ];
 
   doCheck = false;  # no tests in PyPi dist
   pythonImportsCheck = [ "pynvml" "pynvml.smi" ];

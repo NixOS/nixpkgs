@@ -3,27 +3,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "aiotractive";
-  version = "0.5.7";
-  pyproject = true;
-
+  version = "0.5.6";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zhulik";
-    repo = "aiotractive";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fIdIFG1OpAN1R2L2RryTzYZyqGLo3tqAAkRC8UUFM4k=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-jJw1L1++Z/r+E12tA6zoyyy4MmTpaaVVzKwfI6xcDBQ=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -33,9 +27,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiotractive"
-  ];
+  pythonImportsCheck = [ "aiotractive" ];
 
   meta = with lib; {
     changelog = "https://github.com/zhulik/aiotractive/releases/tag/v${version}";

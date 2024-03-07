@@ -44,6 +44,5 @@ rustPackages.rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ anderslundstedt Br1ght0ne marsam ];
     platforms = platforms.unix;
-    mainProgram = "spotifyd";
   };
 }

@@ -56,6 +56,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    mainProgram = "ipcalc";
   };
 }

@@ -9,7 +9,6 @@
 # If false, and if `{ static = true; }`, the .a stays in the main output.
 , splitStaticOutput ? shared && static
 , testers
-, minizip
 }:
 
 # Without either the build will actually still succeed because the build
@@ -25,7 +24,7 @@ assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.3.1";
+  version = "1.3";
 
   src = let
     inherit (finalAttrs) version;
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Stable archive path, but captcha can be encountered, causing hash mismatch.
       "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
     ];
-    hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
+    hash = "sha256-/wukwpIBPbwnUws6geH5qBPNOd4Byl4Pi/NVcC76WT4=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -129,11 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     "SHARED_MODE=1"
   ];
 
-  passthru.tests = {
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    # uses `zlib` derivation:
-    inherit minizip;
-  };
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     homepage = "https://zlib.net";

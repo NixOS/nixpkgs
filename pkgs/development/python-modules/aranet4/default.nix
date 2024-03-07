@@ -5,13 +5,12 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aranet4";
-  version = "2.2.3";
-  pyproject = true;
+  version = "2.2.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -19,12 +18,8 @@ buildPythonPackage rec {
     owner = "Anrijs";
     repo = "Aranet4-Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jd7yuddxwRrO7XFQsVGy5vRQxwIUZdwFSjiZZHdkE3g=";
+    hash = "sha256-HiveHkGQUCvG4aqK2HSCbONObidT7yof4LzKSJPEOKU=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     bleak

@@ -40,7 +40,6 @@ stdenvNoCC.mkDerivation {
     cp -d \
       ${MacOSX-SDK}/usr/include/*.h \
       ${MacOSX-SDK}/usr/include/*.modulemap \
-      ${MacOSX-SDK}/usr/include/*.apinotes \
       $out/include
 
     rm $out/include/tk*.h $out/include/tcl*.h

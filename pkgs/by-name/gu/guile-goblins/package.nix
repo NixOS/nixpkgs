@@ -4,22 +4,21 @@
 , guile
 , guile-fibers
 , guile-gcrypt
-, guile-gnutls
 , texinfo
 , pkg-config
 }:
 stdenv.mkDerivation rec {
   pname = "guile-goblins";
-  version = "0.12.0";
+  version = "0.11.0";
 
   src = fetchurl {
     url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${version}.tar.gz";
-    hash = "sha256-P5WKKv5i5Lrs4en+IWL40AkYAD+bgTyFdsQqE4FxPfA=";
+    hash = "sha256-1FD35xvayqC04oPdgts08DJl6PVnhc9K/Dr+NYtxhMU=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [ guile pkg-config texinfo ];
-  buildInputs = [ guile guile-fibers guile-gcrypt guile-gnutls ];
+  buildInputs = [ guile guile-fibers guile-gcrypt ];
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # tests hang on darwin, and fail randomly on aarch64-linux on ofborg

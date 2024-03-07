@@ -1,33 +1,28 @@
 { lib
-, bitstruct
 , buildPythonPackage
-, diskcache
 , fetchFromGitHub
+, bitstruct
+, diskcache
 , prompt-toolkit
 , pyparsing
-, pytest-xdist
-, pytestCheckHook
+, python
 , pythonOlder
-, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "asn1tools";
   version = "0.166.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "asn1tools";
-    rev = "refs/tags/${version}";
+    rev = version;
     hash = "sha256-TWAOML6nsLX3TYqoQ9fcSjrUmC4byXOfczfkmSaSa0k=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     bitstruct
@@ -44,24 +39,17 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest-xdist
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-depdendencies);
+
 
   pythonImportsCheck = [
     "asn1tools"
   ];
 
-  disabledTests = [
-    # assert exact error message of pyparsing which changed and no longer matches
-    # https://github.com/eerimoq/asn1tools/issues/167
-    "test_parse_error"
-  ];
-
   meta = with lib; {
     description = "ASN.1 parsing, encoding and decoding";
     homepage = "https://github.com/eerimoq/asn1tools";
-    changelog = "https://github.com/eerimoq/asn1tools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , fetchFromGitHub
 , fetchpatch
 , makeWrapper
@@ -25,7 +24,7 @@
 , netcdf
 , ninja
 , openssl
-# , pdal
+, pdal
 , postgresql
 , proj
 , protobuf
@@ -47,6 +46,7 @@
 }:
 
 let
+
   py = python3.override {
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
@@ -76,14 +76,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.28.15";
+  version = "3.28.14";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-R6p1MVeCMbaD74Eqn+OLQkTYP+00y9mBucJR1JXPEJ4=";
+    hash = "sha256-BiBrnma6HlaRF2kC/AwbdhRaZOYrJ7lzDLdJfjkDmfk=";
   };
 
   passthru = {
@@ -127,7 +127,7 @@ in mkDerivation rec {
     qtserialport
     qtxmlpatterns
     qt3d
-    # pdal
+    pdal
     zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
@@ -146,11 +146,9 @@ in mkDerivation rec {
     })
   ];
 
-  # PDAL is disabled until https://github.com/qgis/QGIS/pull/54940
-  # is backported.
   cmakeFlags = [
     "-DWITH_3D=True"
-    "-DWITH_PDAL=False"  # TODO: re-enable PDAL
+    "-DWITH_PDAL=TRUE"
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let

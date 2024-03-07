@@ -70,9 +70,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # disable tests on linux aarch32
-  # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
-  doCheck = !(stdenv.isLinux && stdenv.isAarch32);
+  # disable tests on aarch64-darwin, the following tests fail there:
+  # oom/circbuf: [forking]
+  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
+  #   [circbuf FAILED]
+  # oom/streambuf: [forking]
+  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
+  #   [streambuf FAILED]
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   postInstall = ''
     mkdir -p $geoip/share/tor

@@ -33,6 +33,5 @@ buildGoModule rec {
     changelog = "https://github.com/jedisct1/piknik/blob/${src.rev}/ChangeLog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "piknik";
   };
 }

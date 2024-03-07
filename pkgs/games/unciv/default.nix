@@ -5,7 +5,6 @@
 , makeDesktopItem
 , makeWrapper
 , jre
-, libGL
 , libpulseaudio
 , libXxf86vm
 }:
@@ -18,20 +17,19 @@ let
     categories = [ "Game" ];
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
-    libGL
+  envLibPath = lib.makeLibraryPath [
     libpulseaudio
     libXxf86vm
-  ]);
+  ];
 
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.10.15";
+  version = "4.9.13";
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-SikrApaaGCAQc6ncqI4vRfXSgG/hgfO1wn5B5fj+W6Y=";
+    hash = "sha256-AQHhqxnNTNArXYlqpNcUMDRVb/IAR3dCYue+y0wPAw8=";
   };
 
   dontUnpack = true;
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     makeWrapper ${jre}/bin/java $out/bin/unciv \
-      --prefix LD_LIBRARY_PATH : "${envLibPath}" \
+      --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --add-flags "-jar ${src}"
 

@@ -1,28 +1,23 @@
 { lib
-, stdenv
+, mkDerivation
 , fetchurl
 , autoPatchelfHook
-, wrapQtAppsHook
 , hidapi
 , readline
 , qtsvg
 , qtxmlpatterns
 }:
 
-stdenv.mkDerivation {
+mkDerivation rec {
   pname = "flirc";
-  version = "3.27.10";
+  version = "3.24.3";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20240110170238/http://apt.flirc.tv/arch/x86_64/flirc.latest.x86_64.tar.gz";
-    hash = "sha256-iTr4vzFQ/+dsbsYD6sc8aTHctTkLKf5HnHBnO7cX5qc=";
+    url = "https://web.archive.org/web/20211021211803/http://apt.flirc.tv/arch/x86_64/flirc.latest.x86_64.tar.gz";
+    sha256 = "0p4pp7j70lbw6m25lmjg6ibc67r6jcy7qs3kki9f86ji1jvrxpga";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapQtAppsHook
-  ];
-
+  nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [
     hidapi
     readline

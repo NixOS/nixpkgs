@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/n64dev/cen64";
     maintainers = [ maintainers._414owen ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "cen64";
   };
 }

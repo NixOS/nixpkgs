@@ -1,31 +1,20 @@
-{ lib
-, buildPythonPackage
-, cacert
-, fetchFromGitHub
-, fetchpatch
-, git-annex
-, gitMinimal
-, pygit2
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, substituteAll
-, util-linux
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, substituteAll
+, python, util-linux, pygit2, gitMinimal, git-annex, cacert
 }:
 
 buildPythonPackage rec {
   pname = "git-annex-adapter";
   version = "0.2.2";
-  pyproject = true;
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = !isPy3k;
 
+  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "alpernebbi";
-    repo = "git-annex-adapter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vb0vxnwAs0/yOjpyyoGWvX6Tu+cuziGNdnXbdzXexhg=";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0666vqspgnvmfs6j3kifwyxr6zmxjs0wlwis7br4zcq0gk32zgdx";
   };
 
   patches = [
@@ -48,31 +37,17 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
-    pygit2
-    cacert
-  ];
-
   nativeCheckInputs = [
     gitMinimal
     util-linux # `rev` is needed in tests/test_process.py
-    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "git_annex_adapter"
-  ];
+  propagatedBuildInputs = [ pygit2 cacert ];
 
-  disabledTests = [
-    # KeyError and AssertionError
-    "test_jsonprocess_annex_metadata_batch"
-    "test_process_annex_metadata_batch"
-    "test_batchjson_metadata"
-  ];
+  checkPhase = ''
+    ${python.interpreter} -m unittest
+  '';
+  pythonImportsCheck = [ "git_annex_adapter" ];
 
   meta = with lib; {
     homepage = "https://github.com/alpernebbi/git-annex-adapter";

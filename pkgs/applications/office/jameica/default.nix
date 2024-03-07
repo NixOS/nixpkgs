@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, wrapGAppsHook, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.10.4";
-  _build = "487";
+  _version = "2.10.2";
+  _build = "484";
   version = "${_version}-${_build}";
 
   swtSystem =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
+    sha256 = "1x9sybknzsfxp9z0pvw9dx80732ynyap57y03p7xwwjbcrnjla57";
   };
 
   dontWrapGApps = true;
@@ -83,6 +83,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ flokli r3dl3g ];
-    mainProgram = "jameica";
   };
 }

@@ -4,19 +4,18 @@
 , fetchPypi
 , postfix
 , lynx
-, nixosTests
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.9";
+  version = "3.3.8";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
+    hash = "sha256-g6wH7lXqK0yJ8AxO1HFxMvBicBJ9NGWlPePFyxl9Qc4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -26,9 +25,9 @@ buildPythonPackage rec {
     click
     dnspython
     falcon
-    flufl-bounce
-    flufl-i18n
-    flufl-lock
+    flufl_bounce
+    flufl_i18n
+    flufl_lock
     gunicorn
     lazr-config
     passlib
@@ -52,10 +51,18 @@ buildPythonPackage rec {
       url = "https://gitlab.com/mailman/mailman/-/commit/9613154f3c04fa2383fbf017031ef263c291418d.patch";
       sha256 = "0vyw87s857vfxbf7kihwb6w094xyxmxbi1bpdqi3ybjamjycp55r";
     })
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/mailman/-/commit/5e4431af6bb7d672a7ed7e3329f8fac7812d47f8.patch";
+      excludes = [ ".gitlab-ci.yml" ];
+      hash = "sha256-y2AE9hU4Z1BpBlJywxMWiuRvltWkk+R9YgMkpemvlIo=";
+    })
     ./log-stderr.patch
   ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace "alembic>=1.6.2,<1.7" "alembic>=1.6.2"
+
     substituteInPlace src/mailman/config/postfix.cfg \
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
@@ -70,8 +77,6 @@ buildPythonPackage rec {
   # has all the necessary search paths to execute unwrapped 'master' and
   # 'runner' scripts.
   dontWrapPythonPrograms = true;
-
-  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";

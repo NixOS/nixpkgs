@@ -42,6 +42,5 @@ buildGoModule rec {
     homepage = "https://github.com/redhat-developer/app-services-cli";
     changelog = "https://github.com/redhat-developer/app-services-cli/releases/v${version}";
     maintainers = with maintainers; [stehessel];
-    mainProgram = "rhoas";
   };
 }

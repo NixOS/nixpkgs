@@ -15,6 +15,5 @@ appimageTools.wrapType2 rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ kashw2 ];
     platforms = platforms.linux;
-    mainProgram = "xlights-${version}";
   };
 }

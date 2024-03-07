@@ -225,20 +225,20 @@ in
     name = "stage-trial";
     mainProgram = "Pianoteq 8 STAGE";
     startupWMClass = "Pianoteq STAGE Trial";
-    version = "8.2.0";
+    version = "8.1.1";
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
-      hash = "sha256-66xbcqNrnVJ+C9FQ8Bg8A7nj/bFrjt6jKheusrXVWvI=";
+      hash = "sha256-jMGv95WiD7UHAuSzKgauLhlsNvO/RWVrHd2Yf3kiUTo=";
     };
   };
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
     mainProgram = "Pianoteq 8";
     startupWMClass = "Pianoteq Trial";
-    version = "8.2.0";
+    version = "8.1.1";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
-      hash = "sha256-IFFQMn8EFo5X8sUZV2/vtQOA83NHEFrUsU++CvYbN1c=";
+      hash = "sha256-pL4tJMV8OTVLT4fwABcImWO+iaVe9gCdDN3rbkL+noc=";
     };
   };
   stage-6 = mkPianoteq rec {
@@ -266,10 +266,10 @@ in
     name = "standard-8";
     mainProgram = "Pianoteq 8";
     startupWMClass = "Pianoteq";
-    version = "8.2.0";
+    version = "8.1.1";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_linux_v${versionForFile version}.7z";
-      hash = "sha256-ME0urUc1jwUKpg+5BdawYo9WhvMsrztYTVOrJTVxtkY=";
+      hash = "sha256-vWvo+ctJ0yN6XeJZZVhA3Ul9eWJWAh7Qo54w0TpOiVw=";
     };
   };
   # TODO other paid binaries, I don't own that so I don't know their hash.

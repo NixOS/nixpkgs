@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/skallwar/suckit";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "suckit";
   };
 }

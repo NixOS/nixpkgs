@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "mdformat-simple-breaks";
   version = "0.0.1";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     mdformat
   ];
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Mdformat plugin to render thematic breaks using three dashes";
+    description = "mdformat plugin to render thematic breaks using three dashes";
     homepage = "https://github.com/csala/mdformat-simple-breaks";
     license = licenses.mit;
     maintainers = with maintainers; [ aldoborrero ];

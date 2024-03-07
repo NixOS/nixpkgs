@@ -41,8 +41,6 @@ rec {
 
   libconfig = (import ./formats/libconfig/default.nix { inherit lib pkgs; }).format;
 
-  hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
-
   json = {}: {
 
     type = with lib.types; let
@@ -95,13 +93,29 @@ rec {
 
   };
 
-  # the ini formats share a lot of code
-  inherit (
-    let
-      singleIniAtom = with lib.types; nullOr (oneOf [ bool int float str ]) // {
+  ini = {
+    # Represents lists as duplicate keys
+    listsAsDuplicateKeys ? false,
+    # Alternative to listsAsDuplicateKeys, converts list to non-list
+    # listToValue :: [IniAtom] -> IniAtom
+    listToValue ? null,
+    ...
+    }@args:
+    assert !listsAsDuplicateKeys || listToValue == null;
+    {
+
+    type = with lib.types; let
+
+      singleIniAtom = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+      ]) // {
         description = "INI atom (null, bool, int, float or string)";
       };
-      iniAtom = with lib.types; { listsAsDuplicateKeys, listToValue }:
+
+      iniAtom =
         if listsAsDuplicateKeys then
           coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
@@ -112,79 +126,21 @@ rec {
           }
         else
           singleIniAtom;
-      iniSection = with lib.types; { listsAsDuplicateKeys, listToValue }@args:
-        attrsOf (iniAtom args) // {
-          description = "section of an INI file (attrs of " + (iniAtom args).description + ")";
-        };
 
-      maybeToList = listToValue: if listToValue != null then lib.mapAttrs (key: val: if lib.isList val then listToValue val else val) else lib.id;
-    in {
-      ini = {
-        # Represents lists as duplicate keys
-        listsAsDuplicateKeys ? false,
-        # Alternative to listsAsDuplicateKeys, converts list to non-list
-        # listToValue :: [IniAtom] -> IniAtom
-        listToValue ? null,
-        ...
-        }@args:
-        assert listsAsDuplicateKeys -> listToValue == null;
-        {
+    in attrsOf (attrsOf iniAtom);
 
-        type = lib.types.attrsOf (iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; });
+    generate = name: value:
+      let
+        transformedValue =
+          if listToValue != null
+          then
+            lib.mapAttrs (section: lib.mapAttrs (key: val:
+              if lib.isList val then listToValue val else val
+            )) value
+          else value;
+      in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
 
-        generate = name: value:
-          lib.pipe value
-          [
-            (lib.mapAttrs (_: maybeToList listToValue))
-            (lib.generators.toINI (removeAttrs args ["listToValue"]))
-            (pkgs.writeText name)
-          ];
-      };
-
-      iniWithGlobalSection = {
-        # Represents lists as duplicate keys
-        listsAsDuplicateKeys ? false,
-        # Alternative to listsAsDuplicateKeys, converts list to non-list
-        # listToValue :: [IniAtom] -> IniAtom
-        listToValue ? null,
-        ...
-        }@args:
-        assert listsAsDuplicateKeys -> listToValue == null;
-        {
-          type = lib.types.submodule {
-            options = {
-              sections = lib.mkOption rec {
-                type = lib.types.attrsOf (iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; });
-                default = {};
-                description = type.description;
-              };
-              globalSection = lib.mkOption rec {
-                type = iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; };
-                default = {};
-                description = "global " + type.description;
-              };
-            };
-          };
-          generate = name: { sections ? {}, globalSection ? {}, ... }:
-            pkgs.writeText name (lib.generators.toINIWithGlobalSection (removeAttrs args ["listToValue"])
-            {
-              globalSection = maybeToList listToValue globalSection;
-              sections = lib.mapAttrs (_: maybeToList listToValue) sections;
-            });
-        };
-
-      gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
-        type = let
-          atom = iniAtom {
-            listsAsDuplicateKeys = listsAsDuplicateKeys;
-            listToValue = null;
-          };
-        in with lib.types; attrsOf (attrsOf (either atom (attrsOf atom)));
-
-        generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
-      };
-
-    }) ini iniWithGlobalSection gitIni;
+  };
 
   # As defined by systemd.syntax(7)
   #
@@ -208,7 +164,7 @@ rec {
     listToValue ? null,
     ...
     }@args:
-    assert listsAsDuplicateKeys -> listToValue == null;
+    assert !listsAsDuplicateKeys || listToValue == null;
     {
 
     type = with lib.types; let
@@ -247,6 +203,17 @@ rec {
           else value;
       in pkgs.writeText name (lib.generators.toKeyValue (removeAttrs args ["listToValue"]) transformedValue);
 
+  };
+
+  gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
+
+    type = with lib.types; let
+
+      iniAtom = (ini args).type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped;
+
+    in attrsOf (attrsOf (either iniAtom (attrsOf iniAtom)));
+
+    generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
   };
 
   toml = {}: json {} // {

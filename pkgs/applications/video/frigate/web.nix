@@ -11,14 +11,14 @@ buildNpmPackage {
 
   postPatch = ''
     substituteInPlace package.json \
-      --replace-fail "--base=/BASE_PATH/" ""
+      --replace "--base=/BASE_PATH/" ""
 
     substituteInPlace src/routes/Storage.jsx \
-      --replace-fail "/media/frigate" "/var/lib/frigate" \
-      --replace-fail "/tmp/cache" "/var/cache/frigate"
+      --replace "/media/frigate" "/var/lib/frigate" \
+      --replace "/tmp/cache" "/var/cache/frigate"
   '';
 
-  npmDepsHash = "sha256-+36quezGArqIM9dM+UihwcIgmE3EVmJQThuicLgDW4A=";
+  npmDepsHash = "sha256-fvRxpQjSEzd2CnoEOVgQcB6MJJ4dcjN8bOaacHjCdwU=";
 
   installPhase = ''
     cp -rv dist/ $out

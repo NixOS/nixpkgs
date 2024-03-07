@@ -28,6 +28,5 @@ gccStdenv.mkDerivation rec {
     platforms = platforms.all;
     license.fullName = "alterMIME LICENSE";
     downloadPage = "https://pldaniels.com/altermime/";
-    mainProgram = "altermime";
   };
 }

@@ -19,6 +19,7 @@
 , glibc
 , gnome
 , gnome-desktop
+, gnome-online-accounts
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -53,19 +54,18 @@
 , upower
 , webp-pixbuf-loader
 , wrapGAppsHook
-, enableSshSocket ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "budgie-control-center";
-  version = "1.4.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
+    sha256 = "sha256-7E23cgX7TkBJT/yansBfvMx0ddfAwrF7mGfqzbyLY4Q=";
   };
 
   patches = [
@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gnome-desktop
+    gnome-online-accounts
     gnome.adwaita-icon-theme
     gnome.cheese
     gnome.gnome-bluetooth_1_0
@@ -131,10 +132,6 @@ stdenv.mkDerivation rec {
     samba
     udisks2
     upower
-  ];
-
-  mesonFlags = [
-    (lib.mesonBool "ssh" enableSshSocket)
   ];
 
   preConfigure = ''

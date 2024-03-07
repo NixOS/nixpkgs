@@ -5,12 +5,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
-  version = "1.2.8";
-  pyproject = true;
+  version = "1.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v0PJY0Ahxa4k011AwtWSIAWBXvt3Aybrd382j1SIT6M=";
+    hash = "sha256-LogI9sJHvLN5WHJGdW47D09XZInKln/I2hNmG62d1JU=";
   };
 
   postPatch = ''

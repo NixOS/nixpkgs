@@ -14,18 +14,6 @@ buildGoModule rec {
     hash = "sha256-C7+4v40T667KJHEQ3ebLDg2wJNrxD/nossfT6rMlER8=";
   };
 
-  ldflags =
-    let
-      t = "github.com/prometheus/common/version";
-    in
-    [ "-s" "-w"
-      "-X ${t}.Version=${version}"
-      "-X ${t}.Revision=unknown"
-      "-X ${t}.Branch=unknown"
-      "-X ${t}.BuildUser=nix@nixpkgs"
-      "-X ${t}.BuildDate=unknown"
-    ];
-
   vendorHash = "sha256-scBpRZeECgAtpu9lnkIk1I2c8UmAkEL8LYNPUeUNYto=";
 
   meta = with lib; {

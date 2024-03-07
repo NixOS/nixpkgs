@@ -19,22 +19,17 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.6.5";
+  version = "3.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
-    repo = "pymodbus";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BWoonOmKTvl5pKvdysmrCTHL6Bf3NGULXI6dpP5t/C0=";
+    hash = "sha256-IgGDYNIRS39t8vHkJSGnDGCTKxpeIYZyedLzyS5pOI0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov-report html " ""
-  '';
 
   nativeBuildInputs = [
     setuptools

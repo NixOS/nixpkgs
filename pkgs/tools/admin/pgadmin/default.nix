@@ -14,14 +14,14 @@
 
 let
   pname = "pgadmin";
-  version = "8.3";
-  yarnHash = "sha256-nhHss4YOFu2cGkIhA909lIdnf3H3pD9BQx4PvP9+9c0=";
+  version = "8.1";
+  yarnHash = "sha256-KAiY5TX2O8mxP7PjIJstYEzCBbqDgT+CpEhreuAGW/U=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-2L/JLkuyjx1oD9akQULmzW0FlSq8/MQlZ1HmlO81jj0=";
+    hash = "sha256-zzS/fydNOXpIWdyLtWQhY+hVpneca+3wD88DmZEkS8s=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -156,6 +156,7 @@ pythonPackages.buildPythonApplication rec {
     cryptography
     sshtunnel
     ldap3
+    flask-babelex
     flask-babel
     gssapi
     flask-socketio
@@ -180,8 +181,6 @@ pythonPackages.buildPythonApplication rec {
     google-auth-oauthlib
     google-api-python-client
     keyring
-    typer
-    rich
   ];
 
   passthru.tests = {

@@ -8,17 +8,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "fireflyalgorithm";
-  version = "0.4.4";
-  pyproject = true;
+  pname = "FireflyAlgorithm";
+  version = "0.3.4";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
-    repo = "FireflyAlgorithm";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xsTgSHBtN4gGw+9YvprcLubnCXSNRdn4abcz391cMEE=";
+    hash = "sha256-rJOcPQU/oz/qP787OpZsfbjSsT2dWvhJLTs4N5TriWc=";
   };
 
   nativeBuildInputs = [

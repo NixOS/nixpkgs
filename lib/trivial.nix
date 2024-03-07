@@ -95,6 +95,21 @@ in {
   /* boolean “and” */
   and = x: y: x && y;
 
+  /* bitwise “and” */
+  bitAnd = builtins.bitAnd
+    or (import ./zip-int-bits.nix
+        (a: b: if a==1 && b==1 then 1 else 0));
+
+  /* bitwise “or” */
+  bitOr = builtins.bitOr
+    or (import ./zip-int-bits.nix
+        (a: b: if a==1 || b==1 then 1 else 0));
+
+  /* bitwise “xor” */
+  bitXor = builtins.bitXor
+    or (import ./zip-int-bits.nix
+        (a: b: if a!=b then 1 else 0));
+
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
 
@@ -150,8 +165,8 @@ in {
   inherit (builtins)
     pathExists readFile isBool
     isInt isFloat add sub lessThan
-    seq deepSeq genericClosure
-    bitAnd bitOr bitXor;
+    seq deepSeq genericClosure;
+
 
   ## nixpkgs version strings
 
@@ -159,7 +174,7 @@ in {
   version = release + versionSuffix;
 
   /* Returns the current nixpkgs release number as string. */
-  release = lib.strings.fileContents ./.version;
+  release = lib.strings.fileContents ../.version;
 
   /* The latest release that is supported, at the time of release branch-off,
      if applicable.
@@ -174,7 +189,7 @@ in {
      they take effect as soon as the oldest release reaches end of life. */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2311;
+    2305;
 
   /* Whether a feature is supported in all supported releases (at the time of
      release branch-off, if applicable). See `oldestSupportedRelease`. */
@@ -215,7 +230,7 @@ in {
        else if lib.pathExists revisionFile then lib.fileContents revisionFile
        else default;
 
-  nixpkgsVersion = warn "lib.nixpkgsVersion is a deprecated alias of lib.version." version;
+  nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
   /* Determine whether the function is being called from inside a Nix
      shell.

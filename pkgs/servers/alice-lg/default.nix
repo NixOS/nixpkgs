@@ -6,21 +6,22 @@
 , yarn
 , nodejs
 , nixosTests
+, git
 , prefetch-yarn-deps
 }:
 
 buildGoModule rec {
   pname = "alice-lg";
-  version = "6.1.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "alice-lg";
     rev = version;
-    hash = "sha256-BbwTLHDtpa8HCECIiy+UxyQiLf9iAD2GzE0azXk7QGU=";
+    hash = "sha256-BdhbHAFqyQc8UbVm6eakbVmLS5QgXhr06oxoc6vYtsM=";
   };
 
-  vendorHash = "sha256-8N5E1CW5Z7HujwXRsZLv7y4uNOJkjj155kmX9PCjajQ=";
+  vendorHash = "sha256-SNF46uUTRCaa9qeGCfkHBjyo4BWOlpRaTDq+Uha08y8=";
 
   passthru.ui = stdenv.mkDerivation {
     pname = "alice-lg-ui";
@@ -29,10 +30,10 @@ buildGoModule rec {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/ui/yarn.lock";
-      hash = "sha256-PwByNIegKYTOT8Yg3nDMDFZiLRVkbX07z99YaDiBsIY=";
+      hash = "sha256-NeK9IM8E2IH09SVH9lMlV3taCmqwlroo4xzmv4Q01jI=";
     };
 
-    nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps ];
+    nativeBuildInputs = [ nodejs yarn git prefetch-yarn-deps ];
     configurePhase = ''
       runHook preConfigure
 

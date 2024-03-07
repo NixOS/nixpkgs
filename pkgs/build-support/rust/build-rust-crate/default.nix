@@ -314,16 +314,11 @@ crate_: lib.makeOverridable
       # Either set to a concrete sub path to the crate root
       # or use `null` for auto-detect.
       workspace_member = crate.workspace_member or ".";
-      crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [ ];
-      crateDescription = crate.description or "";
-      crateHomepage = crate.homepage or "";
-      crateLicense = crate.license or "";
-      crateLicenseFile = crate.license-file or "";
-      crateLinks = crate.links or "";
-      crateReadme = crate.readme or "";
-      crateRepository = crate.repository or "";
-      crateRustVersion = crate.rust-version or "";
       crateVersion = crate.version;
+      crateDescription = crate.description or "";
+      crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [ ];
+      crateHomepage = crate.homepage or "";
+      crateLinks = crate.links or "";
       crateType =
         if lib.attrByPath [ "procMacro" ] false crate then [ "proc-macro" ] else
         if lib.attrByPath [ "plugin" ] false crate then [ "dylib" ] else
@@ -346,7 +341,6 @@ crate_: lib.makeOverridable
         inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
           crateFeatures crateRenames libName build workspace_member release libPath crateVersion crateLinks
           extraLinkFlags extraRustcOptsForBuildRs
-          crateLicense crateLicenseFile crateReadme crateRepository crateRustVersion
           crateAuthors crateHomepage verbose colors codegenUnits;
       };
       buildPhase = buildCrate {

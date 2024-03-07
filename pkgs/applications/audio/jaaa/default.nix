@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
-    mainProgram = "jaaa";
   };
 }

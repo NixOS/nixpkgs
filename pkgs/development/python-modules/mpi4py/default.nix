@@ -25,11 +25,11 @@ buildPythonPackage rec {
   configurePhase = "";
 
   installPhase = ''
-    mkdir -p "$out/${python.sitePackages}"
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
+    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
 
     ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/${python.sitePackages} \
+      --install-lib=$out/lib/${python.libPrefix}/site-packages \
       --prefix="$out"
 
     # --install-lib:
@@ -37,6 +37,8 @@ buildPythonPackage rec {
     # python lib prefix, we override that back so all infrastructure (setup hooks)
     # work as expected
   '';
+
+  setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
 
   nativeBuildInputs = [ mpi ];
 

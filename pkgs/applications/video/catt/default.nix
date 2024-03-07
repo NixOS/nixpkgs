@@ -4,25 +4,7 @@
 , python3
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pychromecast = super.pychromecast.overridePythonAttrs (_: rec {
-        version = "13.1.0";
-
-        src = fetchPypi {
-          pname = "PyChromecast";
-          inherit version;
-          hash = "sha256-COYai1S9IRnTyasewBNtPYVjqpfgo7V4QViLm+YMJnY=";
-        };
-
-        postPatch = "";
-      });
-    };
-  };
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "catt";
   version = "0.12.11";
   format = "pyproject";
@@ -40,11 +22,11 @@ python.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     ifaddr
     pychromecast

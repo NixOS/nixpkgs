@@ -11,25 +11,23 @@
 , python-novaclient
 , requests-mock
 , sphinx
-, sphinxcontrib-apidoc
 , stestr
 }:
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "6.5.0";
+  version = "6.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EvwZNH9rGb/iw28Rx6GEH0FaLufxi5WUE8ISGZe4SVE=";
+    hash = "sha256-m6C9+NAwh+WFtAqNzEKc673V/ewkwdYKECv58zEyDfE=";
   };
 
   nativeBuildInputs = [
     installShellFiles
     openstackdocstheme
     sphinx
-    sphinxcontrib-apidoc
   ];
 
   propagatedBuildInputs = [

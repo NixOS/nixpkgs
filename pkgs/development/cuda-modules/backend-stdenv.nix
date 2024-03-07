@@ -13,14 +13,18 @@ let
   gccMajorVersion = nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
   cudaStdenv = stdenvAdapters.useLibsFrom stdenv pkgs."gcc${gccMajorVersion}Stdenv";
   passthruExtra = {
-    # cudaPackages.backendStdenv.nixpkgsCompatibleLibstdcxx has been removed,
-    # if you need it you're likely doing something wrong. There has been a
-    # warning here for a month or so. Now we can no longer return any
-    # meaningful value in its place and drop the attribute entirely.
+    nixpkgsCompatibleLibstdcxx = lib.warn "cudaPackages.backendStdenv.nixpkgsCompatibleLibstdcxx is misnamed, deprecated, and will be removed after 24.05" cudaStdenv.cc.cxxStdlib.package;
+    # cc already exposed
   };
   assertCondition = true;
 in
 
-  /* TODO: Consider testing whether we in fact use the newer libstdc++ */
+# We should use libstdc++ at least as new as nixpkgs' stdenv's one.
+assert let
+  cxxStdlibCuda = cudaStdenv.cc.cxxStdlib.package;
+  cxxStdlibNixpkgs = stdenv.cc.cxxStdlib.package;
+in
+((stdenv.cc.cxxStdlib.kind or null) == "libstdc++")
+-> lib.versionAtLeast cxxStdlibCuda.version cxxStdlibNixpkgs.version;
 
 lib.extendDerivation assertCondition passthruExtra cudaStdenv

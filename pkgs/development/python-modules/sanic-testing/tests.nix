@@ -1,8 +1,7 @@
 { buildPythonPackage
+, sanic-testing
 , pytest-asyncio
 , pytestCheckHook
-, sanic-testing
-, setuptools
 }:
 
 buildPythonPackage {
@@ -19,7 +18,6 @@ buildPythonPackage {
     pytest-asyncio
     pytestCheckHook
     sanic-testing
-    setuptools
   ];
 
   pythonImportsCheck = [

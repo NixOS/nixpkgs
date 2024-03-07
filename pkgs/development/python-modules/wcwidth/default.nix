@@ -1,21 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{ lib, fetchPypi, buildPythonPackage, pytestCheckHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "wcwidth";
-  version = "0.2.13";
+  version = "0.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cuoMBjmesobZeP3ttpI6nrR+HEhs5j6bTmT8GDA5crU=";
+    hash = "sha256-8BwQTv31eXG8t1bwVN1Y3exSBN0V+jHWUD6leUfZfAI=";
   };
 
   nativeBuildInputs = [
@@ -29,10 +23,6 @@ buildPythonPackage rec {
   # To prevent infinite recursion with pytest
   doCheck = false;
 
-  pythonImportsCheck = [
-    "wcwidth"
-  ];
-
   meta = with lib; {
     description = "Measures number of Terminal column cells of wide-character codes";
     longDescription = ''
@@ -42,8 +32,6 @@ buildPythonPackage rec {
       no 3rd-party dependencies.
     '';
     homepage = "https://github.com/jquast/wcwidth";
-    changelog = "https://github.com/jquast/wcwidth/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
   };
 }

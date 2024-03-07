@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.30.0";
+  version = "1.28.4";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals withDocs [ "man" ];
@@ -28,8 +29,26 @@ stdenv.mkDerivation rec {
     owner = "mobile-broadband";
     repo = "libmbim";
     rev = version;
-    hash = "sha256-sHTpu9WeMZroT+1I18ObEHWSzcyj/Relyz8UNe+WawI=";
+    hash = "sha256-aaYjvJ2OMTzkUyqWCyHdmsKJ3VGqBmKQzb1DWK/1cPU=";
   };
+
+  patches = [
+    # Intel Mutual Authentication - FCC lock. Part of 1.30, backported to
+    # openSUSE and Fedora and ChromeOS.
+    # https://src.fedoraproject.org/rpms/libmbim/blob/rawhide/f/libmbim.spec
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/libmbim/libmbim/patch/?id=910db9cb2b6fde303d3b4720890cf6dc6fc00880";
+      hash = "sha256-412sXdWb8WsSexe1scI/C57dwENgNWoREGO1GxSF4hs=";
+    })
+
+    # Intel Tools. Allows tracing various commands. Part of 1.30, backported to
+    # openSUSE, Fedora and ChromeOS.
+    # https://src.fedoraproject.org/rpms/libmbim/blob/rawhide/f/libmbim.spec
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/libmbim/libmbim/patch/?id=8a6dec6ed11931601e605c9537da9904b3be5bc0";
+      hash = "sha256-tU4zkUl5aZJE+g/qbnWprUHe/PmZvqVKB9qecSaUBhk=";
+    })
+  ];
 
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
