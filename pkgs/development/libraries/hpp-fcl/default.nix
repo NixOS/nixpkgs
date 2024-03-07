@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, doxygen
 , boost
 , eigen
 , assimp
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    doxygen
   ];
 
   propagatedBuildInputs = [
@@ -44,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DHPP_FCL_HAS_QHULL=ON"
+    "-DINSTALL_DOCUMENTATION=ON"
   ] ++ lib.optionals (!pythonSupport) [
     "-DBUILD_PYTHON_INTERFACE=OFF"
   ];
@@ -52,6 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = lib.optionals (!pythonSupport) [
     "hppfcl"
   ];
+
+  outputs = [ "dev" "out" "doc" ];
+  postFixup = ''
+    moveToOutput share/ament_index "$dev"
+    moveToOutput share/${finalAttrs.pname} "$dev"
+  '';
+
 
   meta = with lib; {
     description = "An extension of the Flexible Collision Library";
