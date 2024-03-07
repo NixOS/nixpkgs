@@ -23,7 +23,7 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
-  pname = "gdtoolkit";
+  pname = "gdtoolkit3";
   version = "3.3.1";
 
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
@@ -62,7 +62,8 @@ python.pkgs.buildPythonApplication rec {
          - disable doCheck for gdtoolkit, or
          - provide a compatible godot-server version to gdtoolkit"
       '';
-    in lib.throwIf (godotServerMajorVersion != gdtoolkitMajorVersion) msg ''
+    in
+    lib.throwIf (godotServerMajorVersion != gdtoolkitMajorVersion) msg ''
       # The tests want to run the installed executables
       export PATH=$out/bin:$PATH
 
