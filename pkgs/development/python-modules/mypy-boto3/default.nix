@@ -507,7 +507,7 @@ rec {
 
   mypy-boto3-mturk = buildMypyBoto3Package "mturk" "1.34.0" "sha256-qhyVd+9KIaL4hxjjDnw7qdyJdcT6ApCxhoTggOVDr80=";
 
-  mypy-boto3-mwaa = buildMypyBoto3Package "mwaa" "1.34.0" "sha256-a0p1hoTP8iNP6OPkrq0dlWptYNQNA9hit2tvgCI1+W8=";
+  mypy-boto3-mwaa = buildMypyBoto3Package "mwaa" "1.34.57" "sha256-D0W/03zhllRLYGyXQ/XvMBlcsKuEb2MPr0hmyUVy5xc=";
 
   mypy-boto3-neptune = buildMypyBoto3Package "neptune" "1.34.0" "sha256-oMS6e1cPfOZhh+obhOZTMjmwScEzwCBtvmjtpPIjltA=";
 
