@@ -535,7 +535,7 @@ rec {
 
   mypy-boto3-osis = buildMypyBoto3Package "osis" "1.34.0" "sha256-2mSI1VTmQWuwxsCgQtmr1w8xE3zIcwztvMuKMqXFF3k=";
 
-  mypy-boto3-outposts = buildMypyBoto3Package "outposts" "1.34.0" "sha256-IqGeCqd6Nc9MaMEldqVohTNcmf7WvIiEnFGORzpoB0A=";
+  mypy-boto3-outposts = buildMypyBoto3Package "outposts" "1.34.27" "sha256-nkXVo8Qr2k+pV3SChRezoiU0e2kT9kz1vr2J8MLfm+0=";
 
   mypy-boto3-panorama = buildMypyBoto3Package "panorama" "1.34.0" "sha256-Pw0yRgawY5TC0OIgcYmzK3KEQusyRf3coThpeHL4X30=";
 
