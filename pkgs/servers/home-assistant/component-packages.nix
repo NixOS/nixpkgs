@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.2.5";
+  version = "2024.3.0";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -18,6 +18,8 @@
     ];
     "acmeda" = ps: with ps; [
       aiopulse
+    ];
+    "acomax" = ps: with ps; [
     ];
     "actiontec" = ps: with ps; [
     ];
@@ -224,6 +226,8 @@
     "apprise" = ps: with ps; [
       apprise
     ];
+    "aprilaire" = ps: with ps; [
+    ]; # missing inputs: pyaprilaire
     "aprs" = ps: with ps; [
       aprslib
       geopy
@@ -568,8 +572,7 @@
     "brel_home" = ps: with ps; [
     ];
     "bring" = ps: with ps; [
-      python-bring-api
-    ];
+    ]; # missing inputs: bring-api
     "broadlink" = ps: with ps; [
       broadlink
     ];
@@ -831,6 +834,7 @@
     "decora_wifi" = ps: with ps; [
     ]; # missing inputs: decora-wifi
     "default_config" = ps: with ps; [
+      aiodhcpwatcher
       aiodiscover
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -862,7 +866,6 @@
       python-matter-server
       pyturbojpeg
       pyudev
-      scapy
       securetar
       sqlalchemy
       webrtc-noise-gain
@@ -929,9 +932,9 @@
       pydexcom
     ];
     "dhcp" = ps: with ps; [
+      aiodhcpwatcher
       aiodiscover
       cached-ipaddress
-      scapy
     ];
     "diagnostics" = ps: with ps; [
       aiohttp-cors
@@ -980,7 +983,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "dlna_dms" = ps: with ps; [
       aiohttp-cors
@@ -991,7 +993,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "dnsip" = ps: with ps; [
       aiodns
@@ -1079,6 +1080,8 @@
     ];
     "duotecno" = ps: with ps; [
       pyduotecno
+    ];
+    "duquesne_light" = ps: with ps; [
     ];
     "dwd_weather_warnings" = ps: with ps; [
       dwdwfsapi
@@ -2131,6 +2134,15 @@
     ];
     "hurrican_shutters_wholesale" = ps: with ps; [
     ];
+    "husqvarna_automower" = ps: with ps; [
+      aioautomower
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      psutil-home-assistant
+      sqlalchemy
+    ];
     "huum" = ps: with ps; [
       huum
     ];
@@ -2418,7 +2430,6 @@
     "joaoapps_join" = ps: with ps; [
     ]; # missing inputs: python-join-api
     "juicenet" = ps: with ps; [
-      python-juicenet
     ];
     "justnimbus" = ps: with ps; [
       justnimbus
@@ -2556,6 +2567,8 @@
     "kraken" = ps: with ps; [
       krakenex
       pykrakenapi
+    ];
+    "krispol" = ps: with ps; [
     ];
     "kulersky" = ps: with ps; [
       pykulersky
@@ -2854,6 +2867,8 @@
       psutil-home-assistant
       sqlalchemy
     ];
+    "madeco" = ps: with ps; [
+    ];
     "mailbox" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -3025,6 +3040,14 @@
     ];
     "mfi" = ps: with ps; [
     ]; # missing inputs: mficlient
+    "microbees" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      psutil-home-assistant
+      sqlalchemy
+    ]; # missing inputs: microBeesPy
     "microsoft" = ps: with ps; [
     ]; # missing inputs: pycsspeechtts
     "microsoft_face" = ps: with ps; [
@@ -3396,10 +3419,10 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      aiooui
       fnv-hash-fast
       getmac
       ifaddr
-      mac-vendor-lookup
       netmap
       psutil-home-assistant
       sqlalchemy
@@ -4263,6 +4286,8 @@
     "saj" = ps: with ps; [
       pysaj
     ];
+    "samsam" = ps: with ps; [
+    ];
     "samsungtv" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -4276,7 +4301,6 @@
       samsungtvws
       sqlalchemy
       wakeonlan
-      zeroconf
     ]
     ++ samsungctl.optional-dependencies.websocket
     ++ samsungtvws.optional-dependencies.async
@@ -4727,7 +4751,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "starline" = ps: with ps; [
       starline
@@ -4899,6 +4922,7 @@
     ];
     "systemmonitor" = ps: with ps; [
       psutil
+      psutil-home-assistant
     ];
     "tado" = ps: with ps; [
       python-tado
@@ -5330,7 +5354,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "uprise_smart_shades" = ps: with ps; [
     ];
@@ -5486,6 +5509,8 @@
     "weatherflow" = ps: with ps; [
       pyweatherflowudp
     ];
+    "weatherflow_cloud" = ps: with ps; [
+    ]; # missing inputs: weatherflow4py
     "weatherkit" = ps: with ps; [
       apple-weatherkit
     ];
@@ -5494,6 +5519,8 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
     ];
+    "webmin" = ps: with ps; [
+    ]; # missing inputs: webmin-xmlrpc
     "webostv" = ps: with ps; [
       aiowebostv
     ];
@@ -5555,7 +5582,7 @@
       wled
     ];
     "wolflink" = ps: with ps; [
-    ]; # missing inputs: wolf-smartset
+    ]; # missing inputs: wolf-comm
     "workday" = ps: with ps; [
       holidays
     ];
@@ -5693,7 +5720,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "yandex_transport" = ps: with ps; [
       aioymaps
@@ -5713,7 +5739,6 @@
       psutil-home-assistant
       sqlalchemy
       yeelight
-      zeroconf
     ];
     "yeelightsunflower" = ps: with ps; [
     ]; # missing inputs: yeelightsunflower
@@ -5797,6 +5822,8 @@
     ]; # missing inputs: ziggo-mediabox-xl
     "zodiac" = ps: with ps; [
     ];
+    "zondergas" = ps: with ps; [
+    ];
     "zone" = ps: with ps; [
     ];
     "zoneminder" = ps: with ps; [
@@ -5874,6 +5901,7 @@
     "arcam_fmj"
     "aseko_pool_live"
     "assist_pipeline"
+    "asterisk_mbox"
     "asuswrt"
     "atag"
     "august"
@@ -5905,7 +5933,6 @@
     "bond"
     "bosch_shc"
     "braviatv"
-    "bring"
     "broadlink"
     "brother"
     "brottsplatskartan"
@@ -6124,6 +6151,7 @@
     "huisbaasje"
     "humidifier"
     "hunterdouglas_powerview"
+    "husqvarna_automower"
     "huum"
     "hvv_departures"
     "hydrawise"
@@ -6570,6 +6598,7 @@
     "vallox"
     "valve"
     "velbus"
+    "velux"
     "venstar"
     "vera"
     "verisure"

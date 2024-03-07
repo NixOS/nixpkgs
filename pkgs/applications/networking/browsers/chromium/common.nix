@@ -216,6 +216,9 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+      # Chromium reads initial_preferences from its own executable directory
+      # This patch modifies it to read /etc/chromium/initial_preferences
+      ./patches/chromium-initial-prefs.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "120") [
       # We need to revert this patch to build M120+ with LLVM 17:
       ./patches/chromium-120-llvm-17.patch
