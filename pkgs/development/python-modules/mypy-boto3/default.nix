@@ -179,7 +179,7 @@ rec {
 
   mypy-boto3-codestar = buildMypyBoto3Package "codestar" "1.34.0" "sha256-BAueRLlYZGDiF6DtjxL24twLYYZqD3ErdJ73fsFoG1k=";
 
-  mypy-boto3-codestar-connections = buildMypyBoto3Package "codestar-connections" "1.34.0" "sha256-FTz1h4fD+P6L+tgTXs+4iyeowYIejH2o/TwMyby9CXE=";
+  mypy-boto3-codestar-connections = buildMypyBoto3Package "codestar-connections" "1.34.10" "sha256-xAYeABwDIbIELhjcRA4ErYaAsChZD1vCPWAw7/PNXL0=";
 
   mypy-boto3-codestar-notifications = buildMypyBoto3Package "codestar-notifications" "1.34.0" "sha256-JmXEpHbOhcO9F++G+ohXPuXoNILbcL9r5qyH4OooCtc=";
 
