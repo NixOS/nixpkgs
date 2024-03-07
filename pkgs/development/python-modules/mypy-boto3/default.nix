@@ -435,7 +435,7 @@ rec {
 
   mypy-boto3-license-manager-user-subscriptions = buildMypyBoto3Package "license-manager-user-subscriptions" "1.34.0" "sha256-PR+u+i5zSHFTN6+GuOcWBcON1E2SNABbPavByXz3unE=";
 
-  mypy-boto3-lightsail = buildMypyBoto3Package "lightsail" "1.34.0" "sha256-+VLq0hfyQS1IpzEMfB5mhp+gxL76CWh5q1wgJKffWQ8=";
+  mypy-boto3-lightsail = buildMypyBoto3Package "lightsail" "1.34.41" "sha256-Y7Zg/eorUegxh+Br+ULbedzGskkHKR2opnEEDpfBVk0=";
 
   mypy-boto3-location = buildMypyBoto3Package "location" "1.34.0" "sha256-SDz6L3ePAAA8V99pJrB55/4i+piQY0KpTbsKEJyVpS0=";
 
