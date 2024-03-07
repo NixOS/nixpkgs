@@ -201,7 +201,7 @@ rec {
 
   mypy-boto3-connect-contact-lens = buildMypyBoto3Package "connect-contact-lens" "1.34.0" "sha256-Wx9vcjlgXdWZ2qP3Y/hTY2LAeTd+hyyV5JSIuKQ5I5k=";
 
-  mypy-boto3-connectcampaigns = buildMypyBoto3Package "connectcampaigns" "1.34.0" "sha256-acfJ74LRwrfpwnBA2JjoqhiRrHjlaNUXLBvKP0RiAiA=";
+  mypy-boto3-connectcampaigns = buildMypyBoto3Package "connectcampaigns" "1.34.16" "sha256-CR1FuVJgYODKEhDmmwcWrjPyZm7HsFRlzq3HlnKe81E=";
 
   mypy-boto3-connectcases = buildMypyBoto3Package "connectcases" "1.34.0" "sha256-U9cPqrV5xnLZoJR0ilBQnOccShQOYRR3e2+tZruL7qY=";
 
