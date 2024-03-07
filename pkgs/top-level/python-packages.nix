@@ -9046,6 +9046,8 @@ self: super: with self; {
 
   osc = callPackage ../development/python-modules/osc { };
 
+  osc-diagram = callPackage ../development/python-modules/osc-diagram { };
+
   osc-lib = callPackage ../development/python-modules/osc-lib { };
 
   osc-sdk-python = callPackage ../development/python-modules/osc-sdk-python { };
