@@ -307,7 +307,7 @@ rec {
 
   mypy-boto3-frauddetector = buildMypyBoto3Package "frauddetector" "1.34.0" "sha256-EjiFEFpLKN0NmrNY43CFhQZHN+COTwRXx513X6X7vlE=";
 
-  mypy-boto3-fsx = buildMypyBoto3Package "fsx" "1.34.0" "sha256-ldLsj0dqNfvmcmqoikBI6qHPKIljkjfttrm3Rg8VKrE=";
+  mypy-boto3-fsx = buildMypyBoto3Package "fsx" "1.34.55" "sha256-XsIX4C8sF1m8jGbwrDWGoV7onHA9tRlI5Dki43bf9FM=";
 
   mypy-boto3-gamelift = buildMypyBoto3Package "gamelift" "1.34.0" "sha256-O9k5Ve7aZte3gwk2FS9i8k/sRsMKj+HIfI/rk9MlI70=";
 
