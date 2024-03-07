@@ -291,7 +291,7 @@ rec {
 
   mypy-boto3-evidently = buildMypyBoto3Package "evidently" "1.34.0" "sha256-MkBB5iTYJYg2cWFYHR3Qu7TcsDglLPEw0MnoHqij6+A=";
 
-  mypy-boto3-finspace = buildMypyBoto3Package "finspace" "1.34.0" "sha256-zYESrekQFm9mU7i4puR+T/dJ7zqen1HYhWLIfCSRfYI=";
+  mypy-boto3-finspace = buildMypyBoto3Package "finspace" "1.34.24" "sha256-GMHF1MWsAt0EfwcK/OSG14AP80L+9dLNsWygvpU5344=";
 
   mypy-boto3-finspace-data = buildMypyBoto3Package "finspace-data" "1.34.0" "sha256-8mND5BbdKY5srFwdpxSyfCUTIP4fa9hztP4daUJOB8k=";
 
