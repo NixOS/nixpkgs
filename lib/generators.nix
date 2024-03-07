@@ -14,7 +14,7 @@
  * Documentation in the manual, #sec-generators
  */
 { lib }:
-with (lib).trivial;
+
 let
   inherit (builtins)
     addErrorContext
@@ -25,6 +25,7 @@ let
     filter
     head
     isAttrs
+    isBool
     isFloat
     isInt
     isList
@@ -36,6 +37,7 @@ let
     replaceStrings
     split
     tail
+    typeOf
     ;
 
   inherit (lib.attrsets)
@@ -65,6 +67,8 @@ let
     ;
 
   inherit (lib.trivial)
+    const
+    id
     isFunction    # Note: not the builtin, considers `__functor` in attrsets.
     functionArgs  # Note: not the builtin; considers `__functor` in attrsets.
     ;
