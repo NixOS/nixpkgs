@@ -52,7 +52,7 @@ rec {
 
   mypy-boto3-alexaforbusiness = buildMypyBoto3Package "alexaforbusiness" "1.34.0" "sha256-wrMSoM3F0HgajmM9X6P+3i6mqD55TWGVv8eJ7XqNjrw=";
 
-  mypy-boto3-amp = buildMypyBoto3Package "amp" "1.34.0" "sha256-zdXxnk9+cNRSj4cZLIJiFVRaBZaXOf/C+UaTp6JkZ0U=";
+  mypy-boto3-amp = buildMypyBoto3Package "amp" "1.34.39" "sha256-XOousDfEQsZ9z48iH2wVHuUaIwoECwbkHvIAlV3+zu4=";
 
   mypy-boto3-amplify = buildMypyBoto3Package "amplify" "1.34.0" "sha256-dWI0x6Ro0FOIeraID9XVLOKMWdKxQy5ywVathCQz2Pc=";
 
