@@ -1832,7 +1832,6 @@ broken-packages:
   - ghc-gc-hook # failure in job https://hydra.nixos.org/build/233195053 at 2023-09-02
   - ghc-generic-instances # failure in job https://hydra.nixos.org/build/233259298 at 2023-09-02
   - ghc-hotswap # failure in job https://hydra.nixos.org/build/233220146 at 2023-09-02
-  - ghcide-test-utils # failure in job https://hydra.nixos.org/build/233209491 at 2023-09-02
   - ghci-diagrams # failure in job https://hydra.nixos.org/build/233194407 at 2023-09-02
   - ghci-haskeline # failure in job https://hydra.nixos.org/build/233216940 at 2023-09-02
   - ghci-history-parser # failure in job https://hydra.nixos.org/build/233204448 at 2023-09-02

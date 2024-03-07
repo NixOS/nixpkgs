@@ -1471,7 +1471,6 @@ dont-distribute-packages:
  - ghc-plugs-out
  - ghc-session
  - ghci-pretty
- - ghcide-bench
  - ghcjs-dom-hello
  - ghcjs-dom-webkit
  - ghcjs-hplay
