@@ -1,3 +1,5 @@
+{ pkgs, haskellLib }:
+
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
 #
 # This file should only contain packages that are not in ./hackage-packages.nix.
