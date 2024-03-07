@@ -157,7 +157,7 @@ rec {
 
   mypy-boto3-cloudtrail-data = buildMypyBoto3Package "cloudtrail-data" "1.34.0" "sha256-ACiJrI+VTHr06i8PKgDY/K8houFUZQNS1lluouadCTQ=";
 
-  mypy-boto3-cloudwatch = buildMypyBoto3Package "cloudwatch" "1.34.0" "sha256-zBiqKxqJ60iYpsIT21lKv2L+mvym6Ma9mqBLmZYZNjU=";
+  mypy-boto3-cloudwatch = buildMypyBoto3Package "cloudwatch" "1.34.40" "sha256-M/C3Rzie5dcv6TGVl7ilI5WiT1uYFrCGL+7Fga+xSLw=";
 
   mypy-boto3-codeartifact = buildMypyBoto3Package "codeartifact" "1.34.0" "sha256-iUgoanqMSyxRopVctyFLiu+otFSgRvdgQPw4mKX3QIk=";
 
