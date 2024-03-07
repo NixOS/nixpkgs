@@ -1949,6 +1949,8 @@ self: super: with self; {
 
   connio = callPackage ../development/python-modules/connio { };
 
+  conway-polynomials = callPackage ../development/python-modules/conway-polynomials {};
+
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
