@@ -3,7 +3,6 @@
 , pari
 , singular
 , maxima
-, conway_polynomials
 , graphs
 , elliptic_curves
 , polytopes_db
@@ -31,7 +30,6 @@ writeTextFile rec {
     export SINGULAR_EXECUTABLE='${singular}/bin/Singular'
     export MAXIMA_FAS='${maxima}/lib/maxima/${maxima.version}/binary-ecl/maxima.fas'
     export MAXIMA_PREFIX="${maxima}"
-    export CONWAY_POLYNOMIALS_DATA_DIR='${conway_polynomials}/share/conway_polynomials'
     export GRAPHS_DATA_DIR='${graphs}/share/graphs'
     export ELLCURVE_DATA_DIR='${elliptic_curves}/share/ellcurves'
     export POLYTOPE_DATA_DIR='${polytopes_db}/share/reflexive_polytopes'
