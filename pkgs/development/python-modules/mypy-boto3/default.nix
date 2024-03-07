@@ -153,7 +153,7 @@ rec {
 
   mypy-boto3-cloudsearchdomain = buildMypyBoto3Package "cloudsearchdomain" "1.34.0" "sha256-jhhwFXH80aZjVqVMZulwoCvu3EmXj4BbJ3DQ6eJPS4E=";
 
-  mypy-boto3-cloudtrail = buildMypyBoto3Package "cloudtrail" "1.34.0" "sha256-24CHnUhqXR0cBPFbdvLGBNO77kKNM5FUnQ+FjQ7QZlg=";
+  mypy-boto3-cloudtrail = buildMypyBoto3Package "cloudtrail" "1.34.22" "sha256-lymfB2xWjxHtHfB/A543RRX3haY0uEbTppfH0tYZAV4=";
 
   mypy-boto3-cloudtrail-data = buildMypyBoto3Package "cloudtrail-data" "1.34.0" "sha256-ACiJrI+VTHr06i8PKgDY/K8houFUZQNS1lluouadCTQ=";
 
