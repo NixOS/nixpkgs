@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   passthru.tests = {
-    version = testers.testVersion { package = smartdns; };
+    version = testers.testVersion {
+      package = smartdns;
+      command = "smartdns -v";
+    };
   };
 
   meta = with lib; {
