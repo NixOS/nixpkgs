@@ -539,7 +539,7 @@ rec {
 
   mypy-boto3-panorama = buildMypyBoto3Package "panorama" "1.34.0" "sha256-Pw0yRgawY5TC0OIgcYmzK3KEQusyRf3coThpeHL4X30=";
 
-  mypy-boto3-payment-cryptography = buildMypyBoto3Package "payment-cryptography" "1.34.0" "sha256-/VwWLFCNWMpppAEAjAGMa4d1SfWAxHxs+17lboZGcC0=";
+  mypy-boto3-payment-cryptography = buildMypyBoto3Package "payment-cryptography" "1.34.20" "sha256-WdyhWl00Khf3gA6OeWeKrlgFnTvWhk+AFoS2UhM5Haw=";
 
   mypy-boto3-payment-cryptography-data = buildMypyBoto3Package "payment-cryptography-data" "1.34.0" "sha256-+A49ZU8ITWkdUmGf57szMwIGzEHe6cx9egBEMDPsUKY=";
 
