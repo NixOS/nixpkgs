@@ -469,7 +469,7 @@ rec {
 
   mypy-boto3-mediaconvert = buildMypyBoto3Package "mediaconvert" "1.34.33" "sha256-7OwfjcWDE1AHvpyOu3fE5YBwjQscpa+VnE7eylk1unA=";
 
-  mypy-boto3-medialive = buildMypyBoto3Package "medialive" "1.34.0" "sha256-iOqhX6q/6NnCnqOEs2OfMFXfHcroZI5wQAaPv5uWwDc=";
+  mypy-boto3-medialive = buildMypyBoto3Package "medialive" "1.34.47" "sha256-kE93r3oDtz+uwUDeWBJA2yQBx4HFAL49FdpIexVMbrc=";
 
   mypy-boto3-mediapackage = buildMypyBoto3Package "mediapackage" "1.34.0" "sha256-4DJ2zVk0satmVn+TZdDExx/+ClJpc1bdmbvl72Joe5U=";
 
