@@ -320,7 +320,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     redis = callPackage ../development/php-packages/redis { };
 
-    relay = callPackage ../development/php-packages/relay { inherit php; };
+    relay = callPackage ../development/php-packages/relay { };
 
     rrd = callPackage ../development/php-packages/rrd { };
 
