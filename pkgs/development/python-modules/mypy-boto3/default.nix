@@ -531,7 +531,7 @@ rec {
 
   mypy-boto3-opsworkscm = buildMypyBoto3Package "opsworkscm" "1.34.0" "sha256-HsUXwbXRPmEaSJjs4EezSHugssLtP2g/NvaI0CnGStA=";
 
-  mypy-boto3-organizations = buildMypyBoto3Package "organizations" "1.34.0" "sha256-HQrlenaKsc49ugEcKSSRJkAyXwLOJ1Ymq1fTDoXSKXY=";
+  mypy-boto3-organizations = buildMypyBoto3Package "organizations" "1.34.56" "sha256-iVOUgkTI0sNixbfr/Z/H9Hsc2thCqDCqHrlthneZLVU=";
 
   mypy-boto3-osis = buildMypyBoto3Package "osis" "1.34.0" "sha256-2mSI1VTmQWuwxsCgQtmr1w8xE3zIcwztvMuKMqXFF3k=";
 
