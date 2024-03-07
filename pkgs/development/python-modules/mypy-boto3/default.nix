@@ -317,7 +317,7 @@ rec {
 
   mypy-boto3-globalaccelerator = buildMypyBoto3Package "globalaccelerator" "1.34.0" "sha256-hvQeuu1TuLO9aB1+lWTGPgpGqoZlC8d3Ru5S4OVLgys=";
 
-  mypy-boto3-glue = buildMypyBoto3Package "glue" "1.34.0" "sha256-ZUe+WMSvYT0v5aXEbYAX5ZitSV9kv9FKVtfeQGIEG6U=";
+  mypy-boto3-glue = buildMypyBoto3Package "glue" "1.34.35" "sha256-+Kvk8uB9KZp7mw3sMAM6mHdBTnkO5J8nSVClttndMDY=";
 
   mypy-boto3-grafana = buildMypyBoto3Package "grafana" "1.34.0" "sha256-J8ccxvUnjvC6aITCuLHnEXMlQ3Bdh6HxP+Spu326ZwA=";
 
