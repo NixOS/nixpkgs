@@ -868,6 +868,7 @@ let
     "scholar"
     "stepR"
     "styler"
+    "teal_code"
     "TreeTools"
     "ACNE"
     "APAlyzer"
