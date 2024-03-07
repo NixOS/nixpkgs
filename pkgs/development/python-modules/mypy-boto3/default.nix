@@ -451,7 +451,7 @@ rec {
 
   mypy-boto3-machinelearning = buildMypyBoto3Package "machinelearning" "1.34.0" "sha256-DeiBu3PQMageEUlVdjH/1uELsPwo4IVhYzDlJFBohKg=";
 
-  mypy-boto3-macie = buildMypyBoto3Package "macie" "1.28.36" "sha256-T7zd6G5Z4fz1/ZiCOwf+kWbXWCy35JaE3f2OUpWGNpE=";
+  mypy-boto3-macie = buildMypyBoto3Package "macie" "1.29.0" "sha256-lFOPbIBrGuv9W83fsyzyI5fyOleXf4j3sCh9IM0gaQ4=";
 
   mypy-boto3-macie2 = buildMypyBoto3Package "macie2" "1.34.20" "sha256-erqa/ptOBMd8x+N1A6ibSULfBH75gEWsKDd/jhc/9tg=";
 
