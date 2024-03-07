@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "48";
+  version = "50";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/Iz1F40Y00bgJUvNrkPGyA8Kkch92Kijeg8TQ8mostM=";
+    hash = "sha256-Zu8hT6t7ZxlgXQKb2o20FpB15n9y/+n1qMctzcRP8F8=";
   };
 
   propagatedBuildInputs = [
