@@ -76,8 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_QPA_PLATFORM=offscreen
     export QT_PLUGIN_PATH="${lib.getBin qtbase}/${qtbase.qtPluginPrefix}"
   '';
-  # don't test --help  on Darwin because output is .app
-  doInstallCheck = !stdenv.isDarwin;
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    # put the app bundle into the proper place /Applications instead of /bin
+    mkdir -p $out/Applications
+    mv $out/bin/syncthingtray.app $out/Applications
+    # Make binary available in PATH like on other platforms
+    ln -s $out/Applications/syncthingtray.app/Contents/MacOS/syncthingtray $out/bin/syncthingtray
+  '';
   installCheckPhase = ''
     $out/bin/syncthingtray --help | grep ${finalAttrs.version}
   '';
