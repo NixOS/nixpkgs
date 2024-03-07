@@ -701,7 +701,7 @@ rec {
 
   mypy-boto3-stepfunctions = buildMypyBoto3Package "stepfunctions" "1.34.0" "sha256-BtIpbO51DRfLYhcUIO6kYU8g8pvkXuNhhU+LWZpugRA=";
 
-  mypy-boto3-storagegateway = buildMypyBoto3Package "storagegateway" "1.34.0" "sha256-CIUoGQeMvaGErpr0FnYhBLQ5DS7JIxkqKo6sWLXdGrQ=";
+  mypy-boto3-storagegateway = buildMypyBoto3Package "storagegateway" "1.34.27" "sha256-iKn048AdvM6XSOqT/w6edWoe0VMi3V305oHMth/QkF0=";
 
   mypy-boto3-sts = buildMypyBoto3Package "sts" "1.34.0" "sha256-s0fgozbWAWLdlAdNnRD2FPKwmkVcm0JBWFDVTWduIGc=";
 
