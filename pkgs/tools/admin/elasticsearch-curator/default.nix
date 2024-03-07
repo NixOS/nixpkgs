@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "elasticsearch-curator";
-  version = "8.0.8";
+  version = "8.0.10";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G8wKeEr7TuUWlqz9hJmnJW7yxn+4WPoStVC0AX5jdHI=";
+    hash = "sha256-hGG7lyrVviZSKTUo+AOPIutn/mxtDo+ewFxCRdj/jts=";
   };
 
   postPatch = ''

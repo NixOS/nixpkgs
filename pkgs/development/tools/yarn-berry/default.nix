@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "yarn-berry";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "berry";
     rev = "@yarnpkg/cli/${version}";
-    hash = "sha256-SjWjvnq9sHdUhnZfzVC5BTQwksKcLqz8W+TTNXrIVjE=";
+    hash = "sha256-75bERA1uZeywMjYznFDyk4+AtVDLo7eIajVtWdAD/RA=";
   };
 
   buildInputs = [
