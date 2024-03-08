@@ -55,13 +55,10 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    description = "A new unix shell";
+    description = "A Unix shell with JSON-compatible structured data. It's our upgrade path from bash to a better language and runtime.";
     homepage = "https://www.oilshell.org/";
 
-    license = with lib.licenses; [
-      psfl # Includes a portion of the python interpreter and standard library
-      asl20 # Licence for Oil itself
-    ];
+    license = lib.licenses.asl20;
 
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ lheckemann alva mkg20001 ];
