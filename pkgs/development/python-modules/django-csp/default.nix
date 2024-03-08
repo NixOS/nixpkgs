@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "django-csp";
-  version = "3.7";
+  version = "3.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "django_csp";
-    sha256 = "01eda02ad3f10261c74131cdc0b5a6a62b7c7ad4fd017fbefb7a14776e0a9727";
+    sha256 = "sha256-7w8an32Nporm4WnALprGYcDs8E23Dg0dhWQFEqaEccA=";
   };
 
   # too complicated to setup - needs a running django instance
