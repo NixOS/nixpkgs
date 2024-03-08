@@ -17,7 +17,7 @@ let
   gguf-tools = fetchFromGitHub {
     owner = "antirez";
     repo = "gguf-tools";
-    rev = "refs/tags/v${version}";
+    rev = "af7d88d808a7608a33723fba067036202910acb3";
     hash = "sha256-LqNvnUbmq0iziD9VP5OTJCSIy+y/hp5lKCUV7RtKTvM=";
   };
   nlohmann_json = fetchFromGitHub {
