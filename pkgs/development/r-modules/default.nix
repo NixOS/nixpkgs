@@ -879,6 +879,7 @@ let
     "stepR"
     "styler"
     "TreeTools"
+    "TreeSearch"
     "ACNE"
     "APAlyzer"
     "EstMix"
