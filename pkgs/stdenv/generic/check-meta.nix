@@ -445,6 +445,9 @@ let
       outputs = attrs.outputs or [ "out" ];
     in
     {
+      # should always point to an http-browsable source tree, if available.
+      # fetchers like fetchFromGitHub set it automatically.
+      repository = attrs.src.meta.homepage or null;
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
       # Let's have a clean always accessible version here.

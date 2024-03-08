@@ -45,6 +45,10 @@ Release branch. Used to specify that a package is not going to receive updates t
 
 The package’s homepage. Example: `https://www.gnu.org/software/hello/manual/`
 
+### `repository` {#var-meta-repository}
+
+HTTP-browsable source tree of the package. Automatically set if the package uses a `fetchFrom*` fetcher for its `src`. Example: `https://github.com/forthy42/gforth`
+
 ### `downloadPage` {#var-meta-downloadPage}
 
 The page where a link to the current version can be found. Example: `https://ftp.gnu.org/gnu/hello/`
