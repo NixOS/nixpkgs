@@ -26,28 +26,28 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.5.3";
+  version = "2.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YTNV67uKGRag6ICkNjjY9YrOiKFB1hSZkKcUXjSrhwM=";
+    hash = "sha256-neTdG/IcXopCmevzFY5/XDlhPHmOb6dhyAnzaobmeG8=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
     libxcrypt
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     annotated-types
     pydantic-core
     typing-extensions
