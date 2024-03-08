@@ -45,7 +45,7 @@ in {
       apply = steam: steam.override (prev: {
         extraEnv = (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
             STEAM_EXTRA_COMPAT_TOOLS_PATHS = makeBinPath cfg.extraCompatPackages;
-          }) // prev.extraEnv;
+          }) // (prev.extraEnv or {});
         extraLibraries = pkgs: let
           prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
           additionalLibs = with config.hardware.opengl;
