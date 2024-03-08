@@ -34386,8 +34386,6 @@ with pkgs;
 
   potrace = callPackage ../applications/graphics/potrace { };
 
-  pqiv = callPackage ../applications/graphics/pqiv { };
-
   qiv = callPackage ../applications/graphics/qiv {
     imlib2 = imlib2Full;
   };
