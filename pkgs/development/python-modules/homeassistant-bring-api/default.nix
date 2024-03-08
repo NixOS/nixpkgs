@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "homeassistant-bring-api";
-  version = "0.1.0";
+  version = "0.5.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "miaucl";
     repo = "homeassistant-bring-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-EQ1Qv4B7axwERKvuMnLizpfA6jRNf/SyB6ktQ2BjFtM=";
+    hash = "sha256-vfc4xKLeGF2FuBFwqU99qbkUDBK5Uz66S4F2ODRDPa8=";
   };
 
   nativeBuildInputs = [
