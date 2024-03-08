@@ -64,6 +64,8 @@ in
   options.services.keyd = {
     enable = mkEnableOption (lib.mdDoc "keyd, a key remapping daemon");
 
+    package = mkPackageOption pkgs "keyd" { example = "keyd"; };
+
     keyboards = mkOption {
       type = types.attrsOf (types.submodule keyboardOptions);
       default = { };
@@ -91,11 +93,45 @@ in
         Configuration for one or more device IDs. Corresponding files in the /etc/keyd/ directory are created according to the name of the keys (like `default` or `externalKeyboard`).
       '';
     };
+
+    application-mapping = {
+      users = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = literalExpression ''
+          [ "alice" "bob" ]
+        '';
+        description = ''
+          List of users that will have keyd-application-mapper enabled. Note that because this also sets a group `keyd` for the user, it might require a re-login to start functioning.
+        '';
+      };
+      settings = mkOption {
+        inherit ((pkgs.formats.ini {})) type;
+        default = {};
+        example = literalExpression ''
+          {
+            kitty = {
+              "ctrl.j" = "down";
+              capslock = "esc";
+            };
+            "firefox|youtube.com" = {
+              "alt.]" = "C-S-t";
+            };
+            "steam-app-1282100|remnant2" = {
+              f13 = "x";
+            };
+          }
+        '';
+        description = mdDoc ''
+          Per-application hotkey configuration. You can match by window class, title, or both. See <https://github.com/rvaiya/keyd/blob/master/docs/keyd-application-mapper.scdoc> for more information.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable {
     # Creates separate files in the `/etc/keyd/` directory for each key in the dictionary
-    environment.etc = mapAttrs'
+    environment.etc = (mapAttrs'
       (name: options:
         nameValuePair "keyd/${name}.conf" {
           text = ''
@@ -106,9 +142,21 @@ in
             ${options.extraConfig}
           '';
         })
-      cfg.keyboards;
+      cfg.keyboards)
+      // {
+        "keyd/application-mapper/app.conf" = lib.mkIf (cfg.application-mapping.settings != {}) {
+          text = ''
+            ${generators.toINI {} cfg.application-mapping.settings}
+          '';
+        };
+      };
 
     hardware.uinput.enable = lib.mkDefault true;
+    users.groups."keyd".name = "keyd";
+    environment.systemPackages = [ cfg.package ];
+    users.users = lib.genAttrs cfg.application-mapping.users (user: {
+      extraGroups = [ "keyd" ];
+    });
 
     systemd.services.keyd = {
       description = "Keyd remapping daemon";
@@ -126,10 +174,10 @@ in
       # post-2.4.2 may need to set makeFlags in the derivation:
       #
       #     makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
-      environment.KEYD_SOCKET = "/run/keyd/keyd.sock";
+      environment.KEYD_SOCKET = "/run/keyd/keyd.socket";
 
       serviceConfig = {
-        ExecStart = "${pkgs.keyd}/bin/keyd";
+        ExecStart = "${cfg.package}/bin/keyd";
         Restart = "always";
 
         # TODO investigate why it doesn't work propeprly with DynamicUser
@@ -140,10 +188,8 @@ in
           config.users.groups.uinput.name
         ];
 
-        RuntimeDirectory = "keyd";
-
         # Hardening
-        CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
+        # CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
         DeviceAllow = [
           "char-input rw"
           "/dev/uinput rw"
@@ -178,5 +224,48 @@ in
         UMask = "0077";
       };
     };
+
+    systemd.user.services.keyd-application-mapper = mkIf (
+    cfg.application-mapping.settings != {} &&
+    cfg.application-mapping.users != []) {
+      description = "keyd-application-mapper";
+      partOf = ["graphical-session.target"];
+      after = ["graphical-session.target"];
+      wantedBy = ["graphical-session.target"];
+      serviceConfig = {
+        Environment = "PATH=${cfg.package}/bin/:$PATH";
+        ExecStart = "${cfg.package}/bin/keyd-application-mapper -v";
+        Restart = "always";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+      restartTriggers = [
+        config.environment.etc."keyd/application-mapper/app.conf".source
+      ];
+      unitConfig = {
+        ConditionGroup = "keyd";
+      };
+    };
+
+    systemd.services.setup-keyd-directory = {
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        mkdir -p /etc/keyd
+        chmod -R 775 /etc/keyd
+        chown -R root:keyd /etc/keyd
+      '';
+    };
+
+    assertions = [
+        {
+          assertion = !(cfg.application-mapping.settings != {} && cfg.application-mapping.users == []);
+          message = "ERROR: `keyd.application-mapping.users` should not be empty if you want keyd application mapping to have any effect";
+        }
+        {
+          assertion = !(cfg.application-mapping.settings == {} && cfg.application-mapping.users != []);
+          message = "ERROR: `keyd.application-mapping.settings` should not be empty if you want keyd application mapping to have any effect";
+        }
+      ];
+
   };
 }
