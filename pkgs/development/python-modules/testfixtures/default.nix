@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "7.2.2";
+  version = "8.1.0";
   pyproject = true;
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gHdK7LAklFgnWreD9TCT++dXlf8rMhjSLOP/8KEsTaY=";
+    hash = "sha256-gISJkDBIWcOito3+S8r3e25kJaOSUEe8JaUnVSd7+m0=";
   };
 
   patches = [
