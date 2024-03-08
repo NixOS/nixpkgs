@@ -10,7 +10,6 @@
 # tests
 , pytestCheckHook
 , undefined
-
 }:
 
 buildPythonPackage rec {
