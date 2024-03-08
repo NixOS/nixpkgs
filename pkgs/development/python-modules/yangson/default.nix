@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "yangson";
-  version = "1.4.19";
+  version = "1.5.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rYUxv3TEdyr2D3UEmmHcJJtlG6gXJnp1c2pez4H13SU=";
+    hash = "sha256-jpu0tOquqlOb29Ln5T1WNKMHz6reYbvvcDVLUmJPe6A=";
   };
 
   nativeBuildInputs = [
