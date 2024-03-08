@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "geoip2";
-  version = "4.7.0";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O93kmU9ryRfq+rW1Hnctc3sq4AA3pbhQAfsG3Gj3ed8=";
+    hash = "sha256-3ZzBgLfUFyQkDqSB1dU5FJ5lsjT2QoKyMbkXB5SprDU=";
   };
 
   propagatedBuildInputs = [
