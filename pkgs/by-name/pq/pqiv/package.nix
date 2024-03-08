@@ -22,7 +22,7 @@ stdenv.mkDerivation (rec {
     description = "Powerful image viewer with minimal UI";
     homepage = "https://www.pberndt.com/Programme/Linux/pqiv";
     license = licenses.gpl3Plus;
-    maintainers = [];
+    maintainers = with maintainers; [ donovanglover ];
     platforms = platforms.linux;
     mainProgram = "pqiv";
   };
