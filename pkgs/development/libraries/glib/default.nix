@@ -9,17 +9,20 @@
 , perl
 , python3
 , python3Packages
-, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt, docutils
+, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, libxslt
+, docutils, gi-docgen
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, libxml2, tzdata
+, coreutils, dbus, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
 , testers
+, gobject-introspection
+, withIntrospection ? stdenv.buildPlatform.canExecute stdenv.hostPlatform && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -46,7 +49,14 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  buildDocs = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic;
+  # Avoid introducing cairo, which enables gobjectSupport by default.
+  gobject-introspection' = buildPackages.gobject-introspection.override { x11Support = false; };
+
+  librarySuffix = if (stdenv.targetPlatform.extensions.library == ".so") then "2.0.so.0"
+                  else if (stdenv.targetPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
+                  else if (stdenv.targetPlatform.extensions.library == ".a") then "2.0.a"
+                  else if (stdenv.targetPlatform.extensions.library == ".dll") then "2.0-0.dll"
+                  else "2.0-0.lib";
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -95,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./split-dev-programs.patch
   ];
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
 
   setupHook = ./setup-hook.sh;
 
@@ -110,52 +120,40 @@ stdenv.mkDerivation (finalAttrs: {
     util-linuxMinimal # for libmount
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]) ++ lib.optionals buildDocs [
-    # Note: this needs to be both in buildInputs and nativeBuildInputs. The
-    # Meson gtkdoc module uses find_program to look it up (-> build dep), but
-    # glib's own Meson configuration uses the host pkg-config to find its
-    # version (-> host dep). We could technically go and fix this in glib, add
-    # pkg-config to depsBuildBuild, but this would be a futile exercise since
-    # Meson's gtkdoc integration does not support cross compilation[1] anyway
-    # and this derivation disables the docs build when cross compiling.
-    #
-    # [1] https://github.com/mesonbuild/meson/issues/2003
-    gtk-doc
-  ];
+  ]);
 
   strictDeps = true;
 
+  depsBuildBuild = [
+    pkg-config # required to find native gi-docgen
+  ];
+
   nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
     meson
     ninja
     pkg-config
     perl
     python3
-    python3Packages.packaging
+    python3Packages.packaging # mostly used to make meson happy
+    python3Packages.wrapPython # for patchPythonScript
     gettext
     libxslt
-    docbook_xsl
-  ] ++ lib.optionals buildDocs [
-    gtk-doc
-    docbook_xml_dtd_45
-    libxml2
-    docutils
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection'
   ];
 
-  propagatedBuildInputs = [ zlib libffi gettext libiconv
-    python3
-    python3Packages.packaging
-  ];
+  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   mesonFlags = [
-    # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
-    # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${lib.boolToString buildDocs}"
+    "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-    "-Dintrospection=disabled"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-Dman=true"                # broken on Darwin
+    (lib.mesonEnable "introspection" withIntrospection)
+    # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
+    # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
+    "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
   ] ++ lib.optionals stdenv.isFreeBSD [
     "-Db_lundef=false"
     "-Dxattr=false"
@@ -173,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs glib/tests/gen-casefold-txt.py
     patchShebangs glib/tests/gen-casemap-txt.py
     patchShebangs tools/gen-visibility-macros.py
+    patchShebangs tests
 
     # Needs machine-id, comment the test
     sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
@@ -208,8 +207,11 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '' + lib.optionalString (!buildDocs) ''
-    cp -r ${buildPackages.glib.devdoc} $devdoc
+  '';
+
+  preFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    buildPythonPath ${python3Packages.packaging}
+    patchPythonScript "$dev/share/glib-2.0/codegen/utils.py"
   '';
 
   # Move man pages to the same output as their binaries (needs to be
@@ -219,6 +221,9 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/man/man1/''${i##*/}.1.*" "$dev"
     done
+
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc/glib-2.0" "$devdoc"
   '';
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
@@ -231,8 +236,34 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME="$TMP"
     export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
     export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
-    export PATH="$PATH:$(pwd)/gobject"
+
+    # pkg_config_tests expects a PKG_CONFIG_PATH that points to meson-private, wrapped pkg-config
+    # tries to be clever and picks up the wrong glib at the end.
+    export PATH="${buildPackages.pkg-config-unwrapped}/bin:$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
+
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that we will delete before installation.
+    mkdir -p $out/lib
+    ln -s $PWD/gobject/libgobject-${librarySuffix} $out/lib/libgobject-${librarySuffix}
+    ln -s $PWD/gio/libgio-${librarySuffix} $out/lib/libgio-${librarySuffix}
+    ln -s $PWD/glib/libglib-${librarySuffix} $out/lib/libglib-${librarySuffix}
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    rm $out/lib/libgobject-${librarySuffix}
+    rm $out/lib/libgio-${librarySuffix}
+    rm $out/lib/libglib-${librarySuffix}
   '';
 
   separateDebugInfo = stdenv.isLinux;
