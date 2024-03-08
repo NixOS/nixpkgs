@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nat-418";
     repo ="knock";
-    rev = "a3749685381cae178bb5836c67645e0fce7aa1d0";
+    rev = "refs/tags/v${version}";
     hash = "sha256-VXrWphfBDGDNsz4iuUdwwd46oqnmhJ9i3TtzMqHoSJk=";
   };
 
