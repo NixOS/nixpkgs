@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "gdown";
-  version = "4.7.3";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N+3DoO3aGn/l68xjHDqtBhJYJ2ZGBjDuUvSBuh7Hrv4=";
+    hash = "sha256-VQpy3FyigZ/kvMFdgNBdfJjAuQ5XJWJUt30CVrnfRoM=";
   };
 
   propagatedBuildInputs = [
