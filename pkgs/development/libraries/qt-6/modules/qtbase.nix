@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
 
   # https://bugreports.qt.io/browse/QTBUG-97568
   postPatch = ''
-    substituteInPlace src/corelib/CMakeLists.txt --replace-fail "/bin/ls" "${buildPackages.coreutils}/bin/ls"
+    substituteInPlace src/corelib/CMakeLists.txt --replace-fail "/bin/sh" "${buildPackages.coreutils}/bin/sh"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
   '';
