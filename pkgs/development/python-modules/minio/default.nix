@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-hZn1T75JbnJ5lIyWnX3f8r6OET/d6ZltuRr6jjYOp2o=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/unit/crypto_test.py \
+      --replace-fail "assertEquals" "assertEqual"
+  '';
+
   nativeBuildInputs = [
     setuptools
   ];
