@@ -352,6 +352,7 @@ let
     haven = with pkgs; [ zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     highs = [ pkgs.which pkgs.cmake ];
+    rbedrock = [ pkgs.zlib.dev pkgs.which pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
     iBMQ = [ pkgs.gsl ];
