@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.14.1";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "alecthomas";
     repo = "voluptuous";
     rev = "refs/tags/${version}";
-    hash = "sha256-7KXuypcKoqZboHTzoNKK5sYUR57wWGJu6y9zkLecep0=";
+    hash = "sha256-2a4lid9NibbvhHfs/fcyHgPRZ2HirIKuPYxMsl5oA4o=";
   };
 
   nativeBuildInputs = [
