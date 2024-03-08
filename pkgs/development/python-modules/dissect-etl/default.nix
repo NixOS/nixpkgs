@@ -12,9 +12,9 @@
 buildPythonPackage rec {
   pname = "dissect-etl";
   version = "3.8";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
