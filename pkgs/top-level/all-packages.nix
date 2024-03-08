@@ -35899,6 +35899,8 @@ with pkgs;
 
   vkeybd = callPackage ../applications/audio/vkeybd { };
 
+  vlc-bin-universal = vlc-bin.override { variant = "universal"; };
+
   libvlc = vlc.override {
     withQt5 = false;
     onlyLibVLC = true;
