@@ -23,9 +23,9 @@ let
 
     pyproject = true;
 
-    disabled = pythonOlder "3.6";
+    disabled = pythonOlder "3.8";
 
-    nativeBuildInputs = [
+    build-system = [
       flit-core
     ];
 
@@ -35,7 +35,7 @@ let
       jq
     ];
 
-    propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
+    dependencies = lib.optionals (pythonOlder "3.9") [
       astunparse
     ];
 
