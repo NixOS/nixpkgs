@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-email";
-  version = "3.1.0";
+  version = "3.1.1";
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.email";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MR/SX5jmZvEMULgvQbh0JBZjIosNCPWl1wvEoJbdw4Y=";
+    hash = "sha256-2dU+tbrP86Oy8ej1Xa0+fNRB83tGBTUsOWbZyQsMKu8=";
   };
 
   patches = [
