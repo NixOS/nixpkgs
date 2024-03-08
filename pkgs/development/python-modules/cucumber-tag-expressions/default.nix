@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
-  version = "4.1.0";
+  version = "6.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e314d5fed6eebb2f90380271f562248fb15e18636764faf40f4dde4b28b1f960";
+    sha256 = "sha256-N1jTEjFe+sghWGXbF4N0jfXvZjJDUgaLMvhFt3B/7Vs=";
   };
 
   nativeCheckInputs = [
