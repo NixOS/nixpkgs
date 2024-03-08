@@ -321,6 +321,7 @@ let
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
     CellBarcode = [ pkgs.zlib ];
+    cld3 = [ pkgs.protobuf ];
     bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [ libtiff libjpeg cairo.dev xorg.libXt.dev fontconfig.lib ];
