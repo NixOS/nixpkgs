@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyrdfa3";
-  version = "3.5.3";
+  version = "3.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "pyRdfa3";
-    hash = "sha256-FXZjqSuH3zRbb2m94jXf9feXiRYI4S/h5PqNrWhxMa4=";
+    hash = "sha256-c2gdq5V/YJAWlnZziLlWpXaccwvEUdpv+y8ONvGDFMI=";
   };
 
   patches = [
