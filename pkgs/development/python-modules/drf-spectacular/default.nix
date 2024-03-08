@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.26.5";
+  version = "0.27.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
     rev = "refs/tags/${version}";
-    hash = "sha256-sK+upLh0mi8eHKh1Wt9FoLRjqlHitTSX0Zl54S4Ce6E=";
+    hash = "sha256-R6rxEo9SNNziXRWB+01UUInParpGcFDIkDZtN4k+dFE=";
   };
 
   patches = [
