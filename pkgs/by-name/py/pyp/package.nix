@@ -1,15 +1,12 @@
 { lib
-, astunparse
 , bc
-, buildPythonPackage
 , fetchFromGitHub
-, flit-core
 , jq
-, pytestCheckHook
-, pythonOlder
+, python3
 }:
 
 let
+  pythonPackages = python3.pkgs;
   finalAttrs = {
     pname = "pyp";
     version = "1.2.0";
@@ -23,20 +20,15 @@ let
 
     pyproject = true;
 
-    disabled = pythonOlder "3.8";
-
-    build-system = [
+    build-system = with pythonPackages; [
       flit-core
     ];
 
-    nativeCheckInputs = [
+    nativeCheckInputs = (with pythonPackages; [
       pytestCheckHook
+    ]) ++ [
       bc
       jq
-    ];
-
-    dependencies = lib.optionals (pythonOlder "3.9") [
-      astunparse
     ];
 
     pythonImportsCheck = [
@@ -65,4 +57,4 @@ let
     };
   };
 in
-buildPythonPackage finalAttrs
+pythonPackages.buildPythonPackage finalAttrs
