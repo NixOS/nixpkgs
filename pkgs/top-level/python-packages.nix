@@ -16693,6 +16693,8 @@ self: super: with self; {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  xdxf2html = callPackage ../development/python-modules/xdxf2html { };
+
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   y-py = callPackage ../development/python-modules/y-py { };
