@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "cffsubr";
-  version = "0.2.9.post1";
+  version = "0.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-azFBLc9JyPqEZkvahn4u3cVbb+b6aW/yU8TxOp/y/Fw=";
+    hash = "sha256-d0UVC9uBZ5+s3RHB87hwlsT029SVfo/Ou4jEVoeVLvs=";
   };
 
   patches = [
