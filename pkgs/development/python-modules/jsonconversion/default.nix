@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "jsonconversion";
-  version = "0.2.13";
+  version = "1.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4hMY0N/Px+g5zn3YzNfDWPyi8Pglvd/c2N9SeC4JoZ0=";
+    hash = "sha256-G/qnKkcdugqSVKu6naqNKzDpMnuOASmScyra4rwd884=";
   };
 
   postPatch = ''
