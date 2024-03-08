@@ -5418,6 +5418,8 @@ self: super: with self; {
 
   hupper = callPackage ../development/python-modules/hupper { };
 
+  hurry-filesize = callPackage ../development/python-modules/hurry-filesize { };
+
   huum = callPackage ../development/python-modules/huum { };
 
   hvac = callPackage ../development/python-modules/hvac { };
