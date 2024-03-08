@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.4.1";
+  version = "3.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/uPaRju2AJCjMCfA29IKQ4Hu71RBu/Yz8jHwk9EE1Eg=";
+    hash = "sha256-jm0X+X8gQyQYn03gT14bdr79+Wd5KL9ryvrU/0VUtEU=";
   };
 
   postPatch = ''
