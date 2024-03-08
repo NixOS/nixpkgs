@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AuER0dxqUKu47ta/McPkjtiwgw0eoqG3jGF2XCUT/dg=";
+    hash = "sha256-L6d8b9iUDxFu4da5Si+QsTteqNAZuYvIuv3KvN2b2+0=";
   };
 
   nativeBuildInputs = [
