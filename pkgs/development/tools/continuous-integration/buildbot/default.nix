@@ -1,9 +1,11 @@
-{ python3
+{ lib
+, newScope
+, python3
 , fetchPypi
 , recurseIntoAttrs
-, callPackage
 }:
-let
+# Take packages from self first, then python.pkgs (and secondarily pkgs)
+lib.makeScope (self: newScope (self.python.pkgs // self)) (self: {
   python = python3.override {
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
@@ -18,30 +20,24 @@ let
            "test/ext/mypy"
         ];
       });
-      moto = super.moto.overridePythonAttrs (oldAttrs: rec {
+      moto = super.moto.overridePythonAttrs (oldAttrs: {
         # a lot of tests -> very slow, we already build them when building python packages
         doCheck = false;
       });
     };
   };
 
-  buildbot-pkg = python.pkgs.callPackage ./pkg.nix {
-    inherit buildbot;
-  };
-  buildbot-worker = python3.pkgs.callPackage ./worker.nix {
-    inherit buildbot;
-  };
-  buildbot = python.pkgs.callPackage ./master.nix {
-    inherit buildbot-pkg buildbot-worker buildbot-plugins;
-  };
-  buildbot-plugins = recurseIntoAttrs (callPackage ./plugins.nix {
-    inherit buildbot-pkg;
-  });
-in
-{
-  inherit buildbot buildbot-plugins buildbot-worker;
-  buildbot-ui = buildbot.withPlugins (with buildbot-plugins; [ www ]);
-  buildbot-full = buildbot.withPlugins (with buildbot-plugins; [
+  buildbot-pkg = self.callPackage ./pkg.nix { };
+
+  buildbot-worker = self.callPackage ./worker.nix { };
+
+  buildbot = self.callPackage ./master.nix { };
+
+  buildbot-plugins = recurseIntoAttrs (self.callPackage ./plugins.nix { });
+
+  buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
+
+  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [
     www console-view waterfall-view grid-view wsgi-dashboards badges
   ]);
-}
+})
