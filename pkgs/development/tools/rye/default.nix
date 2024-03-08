@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-tqwjhA81UYCtZjz6X5tIZ91pDVPe4UU+sTKUIzmOHlM=";
+    hash = "sha256-i40VpPDK991mgBdGtufMFXuQuKuvqr0qIvl7q2KXQrg=";
   };
 
   cargoLock = {
@@ -57,12 +57,15 @@ rustPlatform.buildRustPackage rec {
     # The following require internet access to fetch a python binary
     "--skip=test_add_and_sync_no_auto_sync"
     "--skip=test_add_autosync"
+    "--skip=test_add_explicit_version_or_url"
     "--skip=test_add_flask"
     "--skip=test_add_from_find_links"
+    "--skip=test_autosync_remember"
     "--skip=test_basic_tool_behavior"
     "--skip=test_config_empty"
     "--skip=test_config_get_set_multiple"
     "--skip=test_config_incompatible_format_and_show_path"
+    "--skip=test_config_save_missing_folder"
     "--skip=test_config_show_path"
     "--skip=test_empty_sync"
     "--skip=test_fetch"
@@ -70,6 +73,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_init_lib"
     "--skip=test_init_script"
     "--skip=test_lint_and_format"
+    "--skip=test_version"
   ];
 
   meta = with lib; {
