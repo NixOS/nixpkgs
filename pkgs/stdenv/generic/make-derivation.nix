@@ -47,6 +47,106 @@ let
     inherit (stdenv) hostPlatform;
   };
 
+  # Precomputed partial cmake flags
+  cmakeFlags' =
+    optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+      "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
+    ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
+      "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+    ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
+      "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+    ] ++ optionals (stdenv.hostPlatform.isDarwin) [
+      "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+    ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
+      "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+    ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
+      "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+    ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
+      "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+    ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
+    ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
+    ]);
+
+  # Precomputed partial meson flags
+  mesonFlags' =
+    let
+      # See https://mesonbuild.com/Reference-tables.html#cpu-families
+      cpuFamily = platform: with platform;
+        /**/ if isAarch32 then "arm"
+        else if isx86_32  then "x86"
+        else platform.uname.processor;
+
+      crossFile = builtins.toFile "cross-file.conf" ''
+        [properties]
+        bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
+        needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
+
+        [host_machine]
+        system = '${stdenv.targetPlatform.parsed.kernel.name}'
+        cpu_family = '${cpuFamily stdenv.targetPlatform}'
+        cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
+        endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+
+        [binaries]
+        llvm-config = 'llvm-config-native'
+        rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
+      '';
+
+    in optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
+
+  knownHardeningFlags = [
+    "bindnow"
+    "format"
+    "fortify"
+    "fortify3"
+    "pic"
+    "pie"
+    "relro"
+    "stackprotector"
+    "strictoverflow"
+    "zerocallusedregs"
+  ];
+
+  defaultHardeningFlags =
+    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
+      # fallback safe-ish set of flags
+      (remove "pie" knownHardeningFlags);
+
+  # Clean up arguments
+  cleanAttrs = let
+    attrs' = [
+      "meta" "passthru" "pos"
+       "checkInputs" "installCheckInputs"
+       "nativeCheckInputs" "nativeInstallCheckInputs"
+       "__contentAddressed"
+       "__darwinAllowLocalNetworking"
+       "__impureHostDeps" "__propagatedImpureHostDeps"
+       "sandboxProfile" "propagatedSandboxProfile"
+    ];
+    attrsWithEnv' = attrs' ++ [ "env" ];
+  in {
+    withEnv = attrs: removeAttrs attrs attrsWithEnv';
+    default = attrs: removeAttrs attrs attrs';
+  };
+
+  # Indicate the host platform of the derivation if cross compiling.
+  # Fixed-output derivations like source tarballs shouldn't get a host
+  # suffix. But we have some weird ones with run-time deps that are
+  # just used for their side-affects. Those might as well since the
+  # hash can't be the same. See #32986.
+  hostSuffix = optionalString
+    (stdenv.hostPlatform != stdenv.buildPlatform)
+    "-${stdenv.hostPlatform.config}";
+
+  # Disambiguate statically built packages. This was originally
+  # introduce as a means to prevent nix-env to get confused between
+  # nix and nixStatic. This should be also achieved by moving the
+  # hostSuffix before the version, so we could contemplate removing
+  # it again.
+  staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
+
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible = rattrs:
     let
@@ -239,22 +339,6 @@ let
     # disabling fortify implies fortify3 should also be disabled
     then unique (hardeningDisable ++ [ "fortify3" ])
     else hardeningDisable;
-  knownHardeningFlags = [
-    "bindnow"
-    "format"
-    "fortify"
-    "fortify3"
-    "pic"
-    "pie"
-    "relro"
-    "stackprotector"
-    "strictoverflow"
-    "zerocallusedregs"
-  ];
-  defaultHardeningFlags =
-    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
-      # fallback safe-ish set of flags
-      (remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
@@ -340,41 +424,16 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg =
-    (removeAttrs attrs
-      (["meta" "passthru" "pos"
-       "checkInputs" "installCheckInputs"
-       "nativeCheckInputs" "nativeInstallCheckInputs"
-       "__contentAddressed"
-       "__darwinAllowLocalNetworking"
-       "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
-       ++ optional (__structuredAttrs || envIsExportable) "env"))
+    ((if (__structuredAttrs || envIsExportable) then cleanAttrs.withEnv else cleanAttrs.default) attrs)
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
-        let
-          # Indicate the host platform of the derivation if cross compiling.
-          # Fixed-output derivations like source tarballs shouldn't get a host
-          # suffix. But we have some weird ones with run-time deps that are
-          # just used for their side-affects. Those might as well since the
-          # hash can't be the same. See #32986.
-          hostSuffix = optionalString
-            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
-            "-${stdenv.hostPlatform.config}";
-
-          # Disambiguate statically built packages. This was originally
-          # introduce as a means to prevent nix-env to get confused between
-          # nix and nixStatic. This should be also achieved by moving the
-          # hostSuffix before the version, so we could contemplate removing
-          # it again.
-          staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
-        in
         lib.strings.sanitizeDerivationName (
           if attrs ? name
-          then attrs.name + hostSuffix
+          then attrs.name + optionalString (!dontAddHostSuffix) hostSuffix
           else
             # we cannot coerce null to a string below
             assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
-            "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
+            "${attrs.pname}${staticMarker}${optionalString (!dontAddHostSuffix) hostSuffix}-${attrs.version}"
         );
     }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
@@ -414,53 +473,9 @@ else let
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
-      cmakeFlags =
-        cmakeFlags
-        ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-          "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-        ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
-          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-        ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
-          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-        ] ++ optionals (stdenv.hostPlatform.isDarwin) [
-          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-        ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
-          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-        ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
-          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-        ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
-          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-        ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
-        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
-        ]);
+      cmakeFlags = cmakeFlags ++ cmakeFlags';
 
-      mesonFlags =
-        let
-          # See https://mesonbuild.com/Reference-tables.html#cpu-families
-          cpuFamily = platform: with platform;
-            /**/ if isAarch32 then "arm"
-            else if isx86_32  then "x86"
-            else platform.uname.processor;
-
-          crossFile = builtins.toFile "cross-file.conf" ''
-            [properties]
-            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
-            needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
-
-            [host_machine]
-            system = '${stdenv.targetPlatform.parsed.kernel.name}'
-            cpu_family = '${cpuFamily stdenv.targetPlatform}'
-            cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-            endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-
-            [binaries]
-            llvm-config = 'llvm-config-native'
-            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
-          '';
-          crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ mesonFlags;
+      mesonFlags = mesonFlags' ++ mesonFlags;
 
       inherit patches;
 
