@@ -342,7 +342,7 @@ rec {
 
     1. `newScope` (`AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a`)
 
-       A function that Takes an attribute set `attrs` and returns what ends up as `callPackage` in the output.
+       A function that takes an attribute set `attrs` and returns what ends up as `callPackage` in the output.
 
        Typical values are `callPackageWith` or `(makeScope callPackageWith f).newScope`.
 
