@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "3.6.1";
+  version = "4.1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "jeeftor";
     repo = "intellifire4py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ovJUL8Z98F6gyKG04CoOiQE5dJbp9yTVHcTgniJBvOw=";
+    hash = "sha256-dMhm2gntLV7ev6UIfHFMATytZo5blTlALuh9sBirkqI=";
   };
 
   nativeBuildInputs = [
