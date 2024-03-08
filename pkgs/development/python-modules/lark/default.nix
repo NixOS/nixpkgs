@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , regex
 , pytestCheckHook
+, pythonOlder
 , js2py
 , setuptools
 }:
@@ -32,6 +33,9 @@ buildPythonPackage rec {
     "lark.tools"
     "lark.grammars"
   ];
+
+  # Js2py is not supported on 3.12
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     js2py

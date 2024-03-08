@@ -28,6 +28,14 @@ mkDerivation rec {
       stripLen = 1;
       hash = "sha256-JfRME00YNNjl6SKs1HBa0wBa/lR/Rt3zbQtWhsC36JM=";
     })
+
+    # Bachport the build against binutils-2.41
+    (fetchpatch {
+      name = "binutils-2.41.patch";
+      url = "https://github.com/MythTV/mythtv/commit/f9f9bba62ee2743c816cb2b9634b6b4397e5e2e3.patch";
+      stripLen = 1;
+      hash = "sha256-IcXgBtfqPZ42inYFe7l8mWvKUV13S/YEQAHcOFaDivI=";
+    })
   ];
 
   setSourceRoot = "sourceRoot=$(echo */mythtv)";

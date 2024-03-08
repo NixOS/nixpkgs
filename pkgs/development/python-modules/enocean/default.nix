@@ -4,7 +4,7 @@
 , beautifulsoup4
 , enum-compat
 , pyserial
-, nose
+, pynose
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
   ];
 
   checkPhase = ''

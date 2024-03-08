@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
+, substituteAll
 , meson
 , nasm
 , ninja
@@ -24,9 +24,10 @@
 , gdk-pixbuf
 , aalib
 , libcaca
-, libsoup
+, libsoup_3
 , libpulseaudio
 , libintl
+, libxml2
 , Cocoa
 , lame
 , mpg123
@@ -62,6 +63,14 @@ stdenv.mkDerivation rec {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-JpWfz+v/9jfU6gjvQDFrrzG2G7dymCCwaE6ADDoUeLY=";
   };
+
+  patches = [
+    # dlopen libsoup_3 with an absolute path
+    (substituteAll {
+      src = ./souploader.diff;
+      nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
+    })
+  ];
 
   strictDeps = true;
 
@@ -102,8 +111,9 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     aalib
     libcaca
-    libsoup
+    libsoup_3
     libshout
+    libxml2
     lame
     mpg123
     twolame

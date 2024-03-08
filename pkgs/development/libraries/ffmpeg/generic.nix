@@ -40,7 +40,7 @@
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
 , withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
-, withFdkAac ? withFullDeps && withUnfree # Fraunhofer FDK AAC de/encoder
+, withFdkAac ? withFullDeps && (!withGPL || withUnfree) # Fraunhofer FDK AAC de/encoder
 , withFlite ? withFullDeps # Voice Synthesis
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
@@ -63,7 +63,8 @@
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
-, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder & AMR-WB decoder
+, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
+, withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
 , withOpengl ? false # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
@@ -93,7 +94,7 @@
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
-, withVulkan ? withFullDeps && !stdenv.isDarwin
+, withVulkan ? withSmallDeps && !stdenv.isDarwin
 , withWebp ? withFullDeps # WebP encoder
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
 , withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
@@ -362,6 +363,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = map (patch: fetchpatch patch) (extraPatches
+    ++ (lib.optional (lib.versionOlder version "6.1")
+      {
+        # Backport fix for binutils-2.41.
+        name = "binutils-2.41.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+        hash = "sha256-vlBUMJ1bORQHRNpuzc5iXsTWwS/CN5BmGIA8g7H7mJE=";
+      }
+    )
     ++ (lib.optional (lib.versionAtLeast finalAttrs.version "6" && lib.versionOlder finalAttrs.version "6.1")
       { # this can be removed post 6.1
         name = "fix_aacps_tablegen";
@@ -468,6 +477,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
+    (enableFeature withCaca "libcaca")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCuda "cuda")
@@ -478,6 +488,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withFdkAac "libfdk-aac")
     (enableFeature withFlite "libflite")
     (enableFeature withFontconfig "fontconfig")
+    (enableFeature withFontconfig "libfontconfig")
     (enableFeature withFreetype "libfreetype")
     (enableFeature withFrei0r "frei0r")
     (enableFeature withFribidi "libfribidi")
@@ -501,6 +512,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenal "openal")
     (enableFeature withOpencl "opencl")
     (enableFeature withOpencoreAmrnb "libopencore-amrnb")
+    (enableFeature withOpencoreAmrwb "libopencore-amrwb")
     (enableFeature withOpengl "opengl")
     (enableFeature withOpenh264 "libopenh264")
     (enableFeature withOpenjpeg "libopenjpeg")
@@ -580,7 +592,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
   ++ optionals withCudaLLVM [ clang ];
 
-  buildInputs = optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
+  buildInputs = []
   ++ optionals withAlsa [ alsa-lib ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAribcaption [ libaribcaption ]
@@ -612,10 +624,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
+  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
-  ++ optionals withOpencoreAmrnb [ opencore-amr ]
+  ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
   ++ optionals withOpengl [ libGL libGLU ]
   ++ optionals withOpenh264 [ openh264 ]
   ++ optionals withOpenjpeg [ openjpeg ]
@@ -707,6 +720,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = optionalString (stdenv.isLinux && withLib) ''
     addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
     addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
+  ''
+  # https://trac.ffmpeg.org/ticket/10809
+  + optionalString (versionAtLeast version "5.0" && withVulkan) ''
+    patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   enableParallelBuilding = true;

@@ -249,6 +249,7 @@ let
     "relro"
     "stackprotector"
     "strictoverflow"
+    "trivialautovarinit"
     "zerocallusedregs"
   ];
   defaultHardeningFlags =

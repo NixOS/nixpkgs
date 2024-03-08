@@ -7,6 +7,7 @@
 , cmake
 , nasm
 , pkg-config
+, setuptools
 
 # native dependencies
 , libheif
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.14.0";
-  format = "setuptools";
+  version = "0.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HFcywrH687CBGTbZQ2rQrr/AdJ2+pFoI+NvYhUCanic=";
+    hash = "sha256-zSPbOb7+U45Vmad6IwNtkunLXdT3ledKAE4QWlSeP0g=";
   };
 
   postPatch = ''
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     cmake
     nasm
     pkg-config
+    setuptools
   ];
 
   dontUseCmakeConfigure = true;

@@ -15,6 +15,11 @@ buildPythonPackage rec {
     hash = "sha256-DhqUZ0HbKIpANhrQT/OP4EvwgZg0uKu4TEtTX+2bpO8=";
   };
 
+  postPatch = ''
+    substituteInPlace src/lingua/extract.py \
+      --replace-fail SafeConfigParser ConfigParser
+  '';
+
   nativeBuildInputs = [
     flit-core
   ];

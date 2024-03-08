@@ -5,7 +5,7 @@
 , requests
 , setuptools
 , hypothesis
-, nose
+, pynose
 , responses
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    nose
+    pynose
     responses
   ];
 
