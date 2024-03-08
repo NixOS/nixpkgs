@@ -34712,10 +34712,6 @@ with pkgs;
 
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
 
-  ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet {
-    protobuf = protobuf_21;
-  };
-
   ries = callPackage ../applications/science/math/ries { };
 
   ripcord = if stdenv.isLinux then

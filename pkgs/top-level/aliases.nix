@@ -965,6 +965,7 @@ mapAliases ({
   restya-board = throw "'restya-board' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-01-22
   retdec-full = throw "'retdec-full' is no longer needed, please use 'retdec'"; # Added 2024-02-05
   retroshare06 = retroshare;
+  ricochet = throw "ricochet has been deprecated in favor of ricochet-refresh"; # Added 2024-02-26
   rigsofrods = rigsofrods-bin; # Added 2023-03-22
   ring-daemon = jami-daemon; # Added 2021-10-26
   rockbox_utility = rockbox-utility; # Added 2022-03-17
