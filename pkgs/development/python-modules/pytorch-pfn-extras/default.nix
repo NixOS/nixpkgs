@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.7.4";
+  version = "0.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X7N2RQS8he9FJPfEjPJH6GdxkAPV6uxOIfRVOnJId0U=";
+    hash = "sha256-vSon/0GxQfaRtSPsQbYAvE3s/F0HEN59VpzE3w1PnVE=";
   };
 
   nativeBuildInputs = [
