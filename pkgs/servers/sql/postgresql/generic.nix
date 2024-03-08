@@ -24,7 +24,7 @@ let
 
       # JIT
       , jitSupport
-      , nukeReferences, patchelf, llvmPackages, overrideCC
+      , nukeReferences, llvmPackages, overrideCC
 
       # PL/Python
       , pythonSupport ? false
@@ -39,6 +39,8 @@ let
     olderThan = lib.versionOlder version;
     lz4Enabled = atLeast "14";
     zstdEnabled = atLeast "15";
+
+    dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
     systemdSupport' = if enableSystemd == null then systemdSupport else (lib.warn "postgresql: argument enableSystemd is deprecated, please use systemdSupport instead." enableSystemd);
 
@@ -109,7 +111,7 @@ let
       pkg-config
       removeReferencesTo
     ]
-      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
+      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences ];
 
     enableParallelBuilding = true;
 
@@ -218,13 +220,8 @@ let
         # In the case of JIT support, prevent a retained dependency on clang-wrapper
         nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
 
-        ${lib.optionalString (!stdenv'.isDarwin) ''
-          # Stop lib depending on the -dev output of llvm
-          rpath=$(patchelf --print-rpath $out/lib/llvmjit.so)
-          nuke-refs -e $out $out/lib/llvmjit.so
-          # Restore the correct rpath
-          patchelf $out/lib/llvmjit.so --set-rpath "$rpath"
-        ''}
+        # Stop lib depending on the -dev output of llvm
+        remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
       '';
 
     postFixup = lib.optionalString (!stdenv'.isDarwin && stdenv'.hostPlatform.libc == "glibc")
@@ -244,12 +241,12 @@ let
       };
     in
     {
+      inherit dlSuffix;
+
       psqlSchema = lib.versions.major version;
 
       withJIT = if jitSupport then this else jitToggle;
       withoutJIT = if jitSupport then jitToggle else this;
-
-      dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
       pkgs = let
         scope = {
