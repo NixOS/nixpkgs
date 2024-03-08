@@ -844,6 +844,7 @@ let
     "svWidgets"
     "SYNCSA"
     "SyNet"
+    "switchboard"
     "tcltk2"
     "TestScorer"
     "TIMP"
