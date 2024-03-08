@@ -2,30 +2,43 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
+, hatchling
+, pysocks
 , pytestCheckHook
-, mock
-, six
 }:
 
 buildPythonPackage rec {
   pname = "paho-mqtt";
-  version = "1.6.1";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
-    rev = "v${version}";
-    hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dR/MCz3c9eHai76I17PGD71E5/nZVEo6uRwUULOzKQU=";
   };
+
+  build-system = [
+    hatchling
+  ];
+
+  optional-dependencies.proxy = [
+    pysocks
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    six
-  ] ++ lib.optionals (!isPy3k) [
-    mock
-  ];
+  ]
+  ++ optional-dependencies.proxy;
+
+  preCheck = ''
+    #  Traceback (most recent call last):
+    #  File "/build/source/tests/lib/clients/01-asyncio.py", line 6, in <module>
+    #     from tests.paho_test import get_test_server_port
+    #  ModuleNotFoundError: No module named 'tests'
+    export PYTHONPATH=$(pwd):$PYTHONPATH
+  '';
 
   doCheck = !stdenv.isDarwin;
 
