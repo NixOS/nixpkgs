@@ -11,7 +11,7 @@
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
-, alsa-lib
+, alsa-lib-with-plugins
 , pulseaudio
 , libcap
 , pciutils
@@ -202,7 +202,7 @@ qtModule ({
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
-    alsa-lib
+    alsa-lib-with-plugins
     pulseaudio
 
     # Text rendering
