@@ -3,12 +3,12 @@
 , fetchFromGitHub
 , pkg-config
 , wrapGAppsHook4
-, cairo
 , gdk-pixbuf
 , glib
 , gtk4
 , libadwaita
-, pango
+, libepoxy
+, libGL
 , copyDesktopItems
 , installShellFiles
 }:
@@ -16,16 +16,16 @@
 rustPlatform.buildRustPackage rec {
 
   pname = "satty";
-  version = "0.10.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "gabm";
     repo = "Satty";
     rev = "v${version}";
-    hash = "sha256-aE0hQla/FwUAUSVodfQz3s8hdYF6tQSIHl6p5gEtONU=";
+    hash = "sha256-bUDKRAp3/ByxWRzpoD0qGInxQuEfVIeYJ/pCcAEfH14=";
   };
 
-  cargoHash = "sha256-vARrc49+T813uCzIlB1tSS3eNyNeeCvC+G+LFYAsYx8=";
+  cargoHash = "sha256-aH08BJK4uOEUrpoMfVGwGnuzncHHW6w6jjxnk4Xz5zo=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    cairo
     gdk-pixbuf
     glib
     gtk4
     libadwaita
-    pango
+    libepoxy
+    libGL
   ];
 
   postInstall = ''
