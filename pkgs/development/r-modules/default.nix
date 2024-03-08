@@ -455,6 +455,7 @@ let
     sysfonts = with pkgs; [ zlib libpng freetype.dev ];
     systemfonts = with pkgs; [ fontconfig.dev freetype.dev ];
     TAQMNGR = [ pkgs.zlib.dev ];
+    TDA = [ pkgs.gmp ];
     tesseract = with pkgs; [ tesseract leptonica ];
     tiff = [ pkgs.libtiff.dev ];
     tkrplot = with pkgs; [ xorg.libX11 tk.dev ];
