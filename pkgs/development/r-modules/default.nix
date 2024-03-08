@@ -512,6 +512,7 @@ let
     RDieHarder = [ pkgs.gsl ];
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
+    RationalMatrix = [ pkgs.pkg-config pkgs.gmp.dev];
     RcppCWB = [ pkgs.pkg-config pkgs.pcre2 ];
     redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
