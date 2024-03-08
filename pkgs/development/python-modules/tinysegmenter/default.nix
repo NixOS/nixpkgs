@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "tinysegmenter";
-  version = "0.3";
+  version = "0.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7R9tLoBqR1inO+WJdUOEy62tx+GkFMgaFm/JrfLUDG0=";
+    hash = "sha256-ZEWL26VLp0gsAseF+WDPPWz2FZSk2rPWTDJUOQlPwbc=";
   };
 
   build-system = [
