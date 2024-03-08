@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, copyDesktopItems
 }:
 
 stdenv.mkDerivation rec {
@@ -9,13 +10,16 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "wslutilities";
-    repo = pname;
+    repo = "wslu";
     rev = "v${version}";
     hash = "sha256-yhugh836BoSISbTu19ubLOrz5X31Opu5QtCR0DXrbWc=";
   };
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   patches = [
     ./fallback-conf-nix-store.diff
+    ./fix-desktop-item.patch
   ];
 
   postPatch = ''
@@ -27,6 +31,8 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
     "PREFIX="
   ];
+
+  desktopItems = [ "src/etc/wslview.desktop" ];
 
   meta = with lib; {
     description = "A collection of utilities for Windows Subsystem for Linux";

@@ -14,6 +14,7 @@
 , requests
 , requests-ntlm
 , unicrypto
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     requests
     requests-ntlm
     unicrypto
+    setuptools
   ];
 
   # Project has no tests

@@ -80,14 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     # a newer libxml2 version has changed some interfaces
     ./fix-xml2.patch
+
+    # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
+    ./dont-search-for-antlr-jar.patch
   ];
 
-  # 1. have it look for 4.12.0 instead of 4.11.1
-  # 2. for some reason CMakeCache.txt is part of source code
-  preConfigure = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.11.1-complete.jar" "antlr-4.12.0-complete.jar"
+  postPatch = ''
+    # For some reason CMakeCache.txt is part of source code, remove it
     rm -f build/CMakeCache.txt
+
+    patchShebangs tools/get_wb_version.sh
   '';
 
   nativeBuildInputs = [
@@ -139,10 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
-  postPatch = ''
-    patchShebangs tools/get_wb_version.sh
-  '';
-
   # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
   # when updating the version make sure this is still needed
   env.CXXFLAGS = "-include cstdint";
@@ -164,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
-    "-DWITH_ANTLR_JAR=${antlr4_12.jarLocation}"
+    "-DANTLR_JAR_PATH=${antlr4_12.jarLocation}"
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 
