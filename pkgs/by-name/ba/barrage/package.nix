@@ -1,16 +1,16 @@
 { lib
-, stdenv
-, fetchurl
 , SDL
 , SDL_mixer
+, fetchurl
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "barrage";
   version = "1.0.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/lgames/barrage-${finalAttrs.version}.tar.gz";
     hash = "sha256-cGYrG7A4Ffh51KyR+UpeWu7A40eqxI8g4LefBIs18kg=";
   };
 
@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lgames.sourceforge.io/Barrage/";
     description = "A destructive action game";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "barrage";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
     broken = stdenv.isDarwin;
   };
-}
+})
