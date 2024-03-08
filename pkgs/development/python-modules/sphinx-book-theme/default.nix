@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "1.0.1";
+  version = "1.1.2";
 
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version format;
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    hash = "sha256-0V+CSLNxippr4LphejLRWR+fo5xhRGm/rOd3uganO3U=";
+    hash = "sha256-zudERm/eSPUDArhRKRsgiqZ+cmyjG3o7+5tuahRWY+A=";
   };
 
   propagatedBuildInputs = [

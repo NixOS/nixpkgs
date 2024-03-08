@@ -1,8 +1,18 @@
+From 6f0068359f32d1e7ebaa32650c3b608c008a1127 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Tue, 10 Oct 2023 11:46:28 -0400
+Subject: [PATCH 2/2] qtwebengine: fix path to locales
+
+---
+ src/core/api/CMakeLists.txt          | 3 ++-
+ src/core/web_engine_library_info.cpp | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
 diff --git a/src/core/api/CMakeLists.txt b/src/core/api/CMakeLists.txt
-index f860e0ba7..30e1a767a 100644
+index a3cb53e17..fcb6d70c5 100644
 --- a/src/core/api/CMakeLists.txt
 +++ b/src/core/api/CMakeLists.txt
-@@ -193,7 +193,8 @@ if(QT_FEATURE_framework)
+@@ -190,7 +190,8 @@ if(QT_FEATURE_framework)
  
  else()
      install(FILES ${localeFiles}
@@ -26,3 +36,6 @@ index c03c9a3b2..430fdfab2 100644
                              % QLatin1String("qtwebengine_locales");
              candidatePaths << fallbackDir();
          }
+-- 
+2.42.0
+

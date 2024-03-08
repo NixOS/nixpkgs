@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openasar";
-  version = "unstable-2023-07-07";
+  version = "unstable-2023-10-24";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "5ac246dc92e9a2a9b314d899df728f37096c482b";
-    hash = "sha256-ODeVru4LCSl3rIeJCdezAwqzKP6IRo5WDaaUymqEcBs=";
+    rev = "eee9bab822e3dbd97a735d0050ddd41ba27917f2";
+    hash = "sha256-SSWQSqGgTZjowgrzF6qHZDTw/Y9xFHNTZvetxqZubYI=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Open-source alternative of Discord desktop's \"app.asar\".";
     homepage = "https://openasar.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ pedrohlc ];
+    maintainers = with maintainers; [ ];
     platforms = nodejs.meta.platforms;
   };
 }

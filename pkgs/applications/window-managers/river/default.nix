@@ -14,14 +14,14 @@
 , wayland-protocols
 , wlroots_0_16
 , xwayland
-, zig_0_10
+, zig_0_11
 , withManpages ? true
 , xwaylandSupport ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.2.4";
+  version = "0.2.6";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-cIcO6owM6eYn+obYVaBOVQpnBx4++KOqQk5Hzo3GcNs=";
+    hash = "sha256-JPb8l5ANxYCqinWNoQK5PAyn4CaiSj0e9mAhZwd9HOw=";
   };
 
   nativeBuildInputs = [
     pkg-config
     wayland
     xwayland
-    zig_0_10.hook
+    zig_0_11.hook
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       adamcstephens
-      fortuneteller2k
+      moni
       rodrgz
     ];
     mainProgram = "river";

@@ -71,7 +71,7 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nokogiri (1.15.3)
+    nokogiri (1.16.0)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     psych (5.1.0)

@@ -2,19 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "measureme";
-  version = "10.1.1";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "measureme";
     rev = version;
-    hash = "sha256-RCh6fTa4d+/Fj5ID5Su3pCZj/O+FhITzfKixXu9G550=";
+    hash = "sha256-p8XSe/LyHrEHEuxe1uK0Iy1YoJFw/jWtFvTDMhJMmnM=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "analyzeme-9.2.0" = "sha256-YOZiux4ouWBToGFx0+fiqjcyrnSjwc+8Qfi2rLGT/18=";
+      "decodeme-10.1.2" = "sha256-20PJnBS6TCnltRuCiYkHKJcivKGDDQUrBc70hAX89bc=";
     };
   };
 

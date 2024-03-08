@@ -6,33 +6,35 @@ let
 
   defaultAddress = "localhost:8080";
 
-  dbUser = "miniflux";
-  dbName = "miniflux";
-
   pgbin = "${config.services.postgresql.package}/bin";
   preStart = pkgs.writeScript "miniflux-pre-start" ''
     #!${pkgs.runtimeShell}
-    ${pgbin}/psql "${dbName}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
+    ${pgbin}/psql "miniflux" -c "CREATE EXTENSION IF NOT EXISTS hstore"
   '';
 in
 
 {
   options = {
     services.miniflux = {
-      enable = mkEnableOption (lib.mdDoc "miniflux and creates a local postgres database for it");
+      enable = mkEnableOption (lib.mdDoc "miniflux");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.miniflux;
-        defaultText = literalExpression "pkgs.miniflux";
-        description = lib.mdDoc "Miniflux package to use.";
+      package = mkPackageOption pkgs "miniflux" { };
+
+      createDatabaseLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether a PostgreSQL database should be automatically created and
+          configured on the local host. If set to `false`, you need provision a
+          database yourself and make sure to create the hstore extension in it.
+        '';
       };
 
       config = mkOption {
-        type = types.attrsOf types.str;
+        type = with types; attrsOf (oneOf [ str int ]);
         example = literalExpression ''
           {
-            CLEANUP_FREQUENCY = "48";
+            CLEANUP_FREQUENCY = 48;
             LISTEN_ADDR = "localhost:8080";
           }
         '';
@@ -46,7 +48,7 @@ in
         '';
       };
 
-      adminCredentialsFile = mkOption  {
+      adminCredentialsFile = mkOption {
         type = types.path;
         description = lib.mdDoc ''
           File containing the ADMIN_USERNAME and
@@ -59,26 +61,23 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    services.miniflux.config =  {
+    services.miniflux.config = {
       LISTEN_ADDR = mkDefault defaultAddress;
-      DATABASE_URL = "user=${dbUser} host=/run/postgresql dbname=${dbName}";
-      RUN_MIGRATIONS = "1";
-      CREATE_ADMIN = "1";
+      DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
+      RUN_MIGRATIONS = 1;
+      CREATE_ADMIN = 1;
     };
 
-    services.postgresql = {
+    services.postgresql = lib.mkIf cfg.createDatabaseLocally {
       enable = true;
       ensureUsers = [ {
-        name = dbUser;
-        ensurePermissions = {
-          "DATABASE ${dbName}" = "ALL PRIVILEGES";
-        };
+        name = "miniflux";
+        ensureDBOwnership = true;
       } ];
-      ensureDatabases = [ dbName ];
+      ensureDatabases = [ "miniflux" ];
     };
 
-    systemd.services.miniflux-dbsetup = {
+    systemd.services.miniflux-dbsetup = lib.mkIf cfg.createDatabaseLocally {
       description = "Miniflux database setup";
       requires = [ "postgresql.service" ];
       after = [ "network.target" "postgresql.service" ];
@@ -92,15 +91,16 @@ in
     systemd.services.miniflux = {
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "miniflux-dbsetup.service" ];
-      after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
+      requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
+      after = [ "network.target" ]
+        ++ lib.optionals cfg.createDatabaseLocally [ "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/miniflux";
-        User = dbUser;
+        User = "miniflux";
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
-        RuntimeDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0750";
         EnvironmentFile = cfg.adminCredentialsFile;
         # Hardening
         CapabilityBoundingSet = [ "" ];
@@ -127,7 +127,7 @@ in
         UMask = "0077";
       };
 
-      environment = cfg.config;
+      environment = lib.mapAttrs (_: toString) cfg.config;
     };
     environment.systemPackages = [ cfg.package ];
 
@@ -140,6 +140,7 @@ in
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
         r ${cfg.package}/bin/miniflux,
         r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
+        rw /run/miniflux/**,
       }
     '';
   };

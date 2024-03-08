@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
     "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
     "-DUSE_QTPDF=OFF"
-    "-DLINK_MUPDF_THIRD=ON"
+    "-DLINK_MUPDF_THIRD=OFF"
     "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
     "-DLINK_MUJS=OFF"
     "-DLINK_GUMBO=ON"
@@ -90,5 +90,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ agpl3 gpl3Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien dotlambda ];
+    mainProgram = "beamerpresenter";
   };
 }

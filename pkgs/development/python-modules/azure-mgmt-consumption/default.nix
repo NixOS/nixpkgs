@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-consumption";
   version = "10.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

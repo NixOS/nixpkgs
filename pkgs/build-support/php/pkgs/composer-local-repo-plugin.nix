@@ -1,7 +1,9 @@
-{ callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
+{ php, callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
 
 let
-  composer = callPackage ./composer-phar.nix { };
+  composer = callPackage ./composer-phar.nix {
+    inherit (php.packages.composer) version pharHash;
+  };
 
   composerKeys = stdenvNoCC.mkDerivation (finalComposerKeysAttrs: {
     pname = "composer-keys";
@@ -27,13 +29,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer-local-repo-plugin";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "composer-local-repo-plugin";
     rev = finalAttrs.version;
-    hash = "sha256-L1DPAINlYiC/HdcgDpI72OI58v8LWfhZVuS1vtNDnEw=";
+    hash = "sha256-edbn07r/Uc1g0qOuVBZBs6N1bMN5kIfA1b4FCufdw5M=";
   };
 
   COMPOSER_CACHE_DIR = "/dev/null";
@@ -69,7 +71,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     composer global config --quiet minimum-stability dev
     composer global config --quiet prefer-stable true
-    composer global config --quiet autoloader-suffix "nixPredictableAutoloaderSuffix"
     composer global config --quiet apcu-autoloader false
     composer global config --quiet allow-plugins.nix-community/composer-local-repo-plugin true
     composer global config --quiet repo.packagist false

@@ -1,21 +1,22 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
-, expecttest
-, pytest-timeout
+, fetchFromGitHub
+, pdm-backend
 , huggingface-hub
 , pyyaml
 , safetensors
 , torch
 , torchvision
+, expecttest
+, pytestCheckHook
+, pytest-timeout
 }:
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.9.16";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,8 +24,12 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "pytorch-image-models";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gYrc8ds6urZvwDsTnzPjxjSTiAGzUD3RlCf0wogCrDI=";
+    hash = "sha256-IWEDKuI2565Z07q1MxTpzKS+CROPR6SyaD5fKcQ5eXk=";
   };
+
+  nativeBuildInputs = [
+    pdm-backend
+  ];
 
   propagatedBuildInputs = [
     huggingface-hub

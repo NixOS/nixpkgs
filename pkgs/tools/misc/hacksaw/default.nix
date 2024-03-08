@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ TethysSvensson ];
     platforms = platforms.linux;
+    mainProgram = "hacksaw";
   };
 }

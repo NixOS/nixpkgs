@@ -54,17 +54,17 @@ assert (privateBuildPlan != null) -> set != null;
 assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
-  pname = if set != null then "iosevka-${set}" else "iosevka";
-  version = "27.0.0";
+  pname = "Iosevka${toString set}";
+  version = "28.1.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-LXQ7F+hEsPfve9yKEYav1O+ZN7uZqK8YmMT0Pr5FQpc=";
+    hash = "sha256-cYnGJ7Z0PDRZtC/vz8hX/+mqk7iVkajFTfNGgRW+edQ=";
   };
 
-  npmDepsHash = "sha256-SAdKtX+BuU0/me4ECzrKLRJRW6LzGZO2ehAB9iWRVF8=";
+  npmDepsHash = "sha256-bzQ7dc7UiC++0DxnQHusu6Ym7rd7GgeA6bGSnnla1nk=";
 
   nativeBuildInputs = [
     remarshal
@@ -88,23 +88,23 @@ buildNpmPackage rec {
     ) [ "buildPlan" ];
 
   configurePhase = ''
-    runHook preConfigure
-    ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
-      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
-    ''}
-    ${lib.optionalString (builtins.isString privateBuildPlan
-      && (!lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
-        cp "$buildPlanPath" private-build-plans.toml
+      runHook preConfigure
+      ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
+        remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
       ''}
-    ${lib.optionalString (builtins.isString privateBuildPlan
-      && (lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
-        cp "$buildPlan" private-build-plans.toml
+      ${lib.optionalString (builtins.isString privateBuildPlan
+    && (!lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
+          cp "$buildPlanPath" private-build-plans.toml
+        ''}
+      ${lib.optionalString (builtins.isString privateBuildPlan
+    && (lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
+          cp "$buildPlan" private-build-plans.toml
+        ''}
+      ${lib.optionalString (extraParameters != null) ''
+        echo -e "\n" >> params/parameters.toml
+        cat "$extraParametersPath" >> params/parameters.toml
       ''}
-    ${lib.optionalString (extraParameters != null) ''
-      echo -e "\n" >> params/parameters.toml
-      cat "$extraParametersPath" >> params/parameters.toml
-    ''}
-    runHook postConfigure
+      runHook postConfigure
   '';
 
   buildPhase = ''
@@ -118,7 +118,7 @@ buildNpmPackage rec {
     runHook preInstall
     fontdir="$out/share/fonts/truetype"
     install -d "$fontdir"
-    install "dist/$pname/ttf"/* "$fontdir"
+    install "dist/$pname/TTF"/* "$fontdir"
     runHook postInstall
   '';
 
@@ -136,8 +136,6 @@ buildNpmPackage rec {
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [
-      cstrahan
-      jfrankenau
       ttuegel
       babariviere
       rileyinman

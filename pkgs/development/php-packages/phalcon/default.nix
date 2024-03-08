@@ -2,13 +2,13 @@
 
 buildPecl rec {
   pname = "phalcon";
-  version = "5.3.0";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "phalcon";
     repo = "cphalcon";
     rev = "v${version}";
-    hash = "sha256-82DJ+Qx0OYhw9Nv6FkAoyBec8WWfAiqNfBU9Ll/8RfA=";
+    hash = "sha256-1dCtj3pJGOY7sRe6xx8JgPPLSj/6qMemUnqrt9guPIk=";
   };
 
   internalDeps = [ php.extensions.session php.extensions.pdo ];

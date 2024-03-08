@@ -15,17 +15,18 @@
 , udev
 , hidapi
 , fftw
+, speexdsp
 }:
 
 mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.3.3";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DXer39+j8QaI1IAIcLhVzSVNyGvwoT93knRibpFsEeY=";
+    hash = "sha256-XNpD9JPbckiq0HgpV/QJR8hDmvGTptxBMoGihHz44lc=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +35,7 @@ mkDerivation rec {
     pkg-config
     protobuf
     python3
+    python3.pkgs.wrapPython
     python3.pkgs.protobuf
     python3.pkgs.setuptools
   ];
@@ -50,7 +52,20 @@ mkDerivation rec {
     fftw
     libevdev
     udev
+    speexdsp
   ];
+
+  pythonPath = [
+    python3.pkgs.requests
+  ];
+
+  postInstall = ''
+    install -Dm755 $src/scripts/psn-account-id.py $out/bin/psn-account-id
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
+  '';
 
   meta = with lib; {
     homepage = "https://streetpea.github.io/chiaki4deck/";

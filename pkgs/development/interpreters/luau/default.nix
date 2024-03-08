@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "luau";
-  version = "0.594";
+  version = "0.615";
 
   src = fetchFromGitHub {
-    owner = "Roblox";
+    owner = "luau-lang";
     repo = "luau";
     rev = version;
-    hash = "sha256-GRdJlVCT1jRAuQHsDjV2oqk7mtBUNDpWt8JGlP31CVs=";
+    hash = "sha256-IwiPUiw3bH+9CzIAJqLjGpIBLQ+T0xW7c4jVXoxVZPc=";
   };
+
+  patches = [
+    # Fix linker errors. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/luau-lang/luau/commit/9323be6110beda90ef9d9dcb43e49b9acdc224e5.patch";
+      hash = "sha256-/uWXbv3ZSpGJ4Q9MYixz50o5HIp5keSaqMSlOq0TbzE=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -38,9 +46,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A fast, small, safe, gradually typed embeddable scripting language derived from Lua";
     homepage = "https://luau-lang.org/";
-    changelog = "https://github.com/Roblox/luau/releases/tag/${version}";
+    changelog = "https://github.com/luau-lang/luau/releases/tag/${version}";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "luau";
   };
 }

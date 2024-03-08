@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://www.fractint.net/";
+    mainProgram = "xfractint";
   };
 }

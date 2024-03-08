@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "papeer";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "lapwat";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Kdy660FuPjXYF/uqndljmIvA6r+lo3D86W9pK6KqXl0=";
+    hash = "sha256-nEt2rxI9slrEkbpMpXQM6+jO0QWQsuLdOswXPCSozJs=";
   };
 
   vendorHash = "sha256-3QRSdkx9p0H+zPB//bpWCBKKjKjrx0lHMk5lFm+U7pA=";

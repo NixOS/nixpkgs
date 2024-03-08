@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost179
     eigen
-    opencv
+    opencv.cxxdev
   ];
 
   # Tests are broken on Darwin (linking issue)

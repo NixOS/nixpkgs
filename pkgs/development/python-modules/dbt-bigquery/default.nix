@@ -1,29 +1,35 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , agate
+, buildPythonPackage
 , dbt-core
+, fetchFromGitHub
 , google-cloud-bigquery
-, google-cloud-storage
 , google-cloud-dataproc
+, google-cloud-storage
 , pytestCheckHook
+, pythonOlder
 , pythonRelaxDepsHook
+, setuptools
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.5.3";
-  format = "setuptools";
+  version = "1.7.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-bigquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mzqUdT+dI7U0tHHcr0joIB1UCfKXrDdqhtVFShjIKus=";
+    hash = "sha256-bF2++Bs4pvqA3GW2xJkRNa1HkqnHBbMnKHHjo1TWboM=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [

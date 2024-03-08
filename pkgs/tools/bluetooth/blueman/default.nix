@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome.adwaita-icon-theme iproute2 networkmanager ]
+                  gnome.adwaita-icon-theme networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -36,6 +36,8 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    # Don't check for runtime dependency `ip` during the configure
+    "--disable-runtime-deps-check"
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 

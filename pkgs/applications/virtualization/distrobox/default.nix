@@ -2,19 +2,23 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.5.0.2";
+  version = "1.6.0.1";
 
   src = fetchFromGitHub {
     owner = "89luca89";
-    repo = finalAttrs.pname;
+    repo = "distrobox";
     rev = finalAttrs.version;
-    hash = "sha256-ss8049D6n1V/gDzEMjywDnoke5s2we9j3mO8yta72UA=";
+    hash = "sha256-UWrXpb20IHcwadPpwbhSjvOP1MBXic5ay+nP+OEVQE4=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  # https://github.com/89luca89/distrobox/pull/1080
+  patches = [ ./always-mount-nix.patch ];
+
   installPhase = ''
     runHook preInstall
 
@@ -30,6 +34,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapProgram "$out/bin/distrobox-generate-entry" \
       --prefix PATH ":" ${lib.makeBinPath [ wget ]}
+
+    mkdir -p $out/share/distrobox
+    echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
   '';
 
   meta = with lib; {
@@ -39,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       forward compatibility with software and freedom to use whatever distribution
       you’re more comfortable with
     '';
-    homepage = "https://distrobox.privatedns.org/";
+    homepage = "https://distrobox.it/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ atila ];

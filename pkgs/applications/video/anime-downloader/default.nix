@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     fuzzywuzzy
     jsbeautifier
     pycryptodome
-    pySmartDL
+    pysmartdl
     pyqt5
     requests
     requests-cache
@@ -50,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.unlicense;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "anime";
   };
 }

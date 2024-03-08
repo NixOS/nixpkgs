@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = "BSD-style";
     maintainers = with maintainers; [ aycanirican ];
     platforms = platforms.unix;
+    mainProgram = "ssldump";
   };
 }

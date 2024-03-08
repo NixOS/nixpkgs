@@ -11,6 +11,7 @@
 let
   cfg = config.boot.bootspec;
   children = lib.mapAttrs (childName: childConfig: childConfig.configuration.system.build.toplevel) config.specialisation;
+  hasAtLeastOneInitrdSecret = lib.length (lib.attrNames config.boot.initrd.secrets) > 0;
   schemas = {
     v1 = rec {
       filename = "boot.json";
@@ -27,6 +28,7 @@ let
               label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
             } // lib.optionalAttrs config.boot.initrd.enable {
               initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+            } // lib.optionalAttrs hasAtLeastOneInitrdSecret {
               initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
             };
           }));
@@ -79,7 +81,7 @@ in
       // { default = true; internal = true; };
     enableValidation = lib.mkEnableOption (lib.mdDoc ''the validation of bootspec documents for each build.
       This will introduce Go in the build-time closure as we are relying on [Cuelang](https://cuelang.org/) for schema validation.
-      Enable this option if you want to ascertain that your documents are correct.
+      Enable this option if you want to ascertain that your documents are correct
       ''
     );
 

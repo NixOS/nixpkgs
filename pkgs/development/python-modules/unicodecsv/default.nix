@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   version = "0.14.1";
+  format = "setuptools";
   pname = "unicodecsv";
 
   src = fetchPypi {

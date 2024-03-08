@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , freezegun
 , mock
-, nose2
+, pytestCheckHook
+, pythonOlder
 , pytz
 , setuptools
 , six
@@ -11,13 +12,16 @@
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "4.7.1";
+  version = "5.2.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
     rev = "refs/tags/${version}";
-    hash = "sha256-nnKujvhOtuNnlFrbmYtD7L++S7DK0Qqrc0LyAVYe7Xg=";
+    hash = "sha256-MnSAFxKgExq+e8TOwgsPAoO4GEfsc3sjPNGLxzch5f0=";
   };
 
   postPatch = ''
@@ -26,20 +30,34 @@ buildPythonPackage rec {
       --replace "flake8" ""
   '';
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     setuptools
+  ];
+
+  propagatedBuildInputs = [
     six
   ];
 
   nativeCheckInputs = [
     freezegun
     mock
-    nose2
+    pytestCheckHook
     pytz
   ];
 
   pythonImportsCheck = [
     "duo_client"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_server_hostname"
+    "test_server_hostname_with_port"
+    "test_get_billing_edition"
+    "test_get_telephony_credits"
+    "test_set_business_billing_edition"
+    "test_set_enterprise_billing_edition"
+    "test_set_telephony_credits"
   ];
 
   meta = with lib; {

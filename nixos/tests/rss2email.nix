@@ -55,6 +55,7 @@ import ./make-test-python.nix {
   testScript = ''
     start_all()
 
+    server.systemctl("start network-online.target")
     server.wait_for_unit("network-online.target")
     server.wait_for_unit("opensmtpd")
     server.wait_for_unit("dovecot2")

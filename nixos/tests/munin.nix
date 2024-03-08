@@ -37,8 +37,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     with subtest("ensure munin-node starts and listens on 4949"):
         one.wait_for_unit("munin-node.service")
         one.wait_for_open_port(4949)
+
     with subtest("ensure munin-cron output is correct"):
         one.wait_for_file("/var/lib/munin/one/one-uptime-uptime-g.rrd")
         one.wait_for_file("/var/www/munin/one/index.html")
+        one.wait_for_file("/var/www/munin/one/one/diskstat_iops_vda-day.png", timeout=60)
   '';
 })

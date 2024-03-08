@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "http://dns.measurement-factory.com/tools/dnstop";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    mainProgram = "dnstop";
   };
 }

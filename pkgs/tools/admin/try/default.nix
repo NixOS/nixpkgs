@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
   meta = with lib;{
-    homepage = "https://github/binpash/try";
+    homepage = "https://github.com/binpash/try";
     description = "Lets you run a command and inspect its effects before changing your live system";
     maintainers = with maintainers; [ pasqui23 ];
     license = with licenses; [ mit ];

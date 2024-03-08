@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pypinyin";
-  version = "0.49.0";
+  version = "0.50.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mozillazg";
     repo = "python-pinyin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4XiPkx7tYD5PQVyeJ/nvxrRzWmeLp9JfY1B853IEE7U=";
+    hash = "sha256-9RnuC9AvTlUtZqep6kn5y1xQcq/dzA9jTZXAsMpKZWc=";
   };
 
   postPatch = ''

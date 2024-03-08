@@ -5,25 +5,31 @@
 , buildPythonPackage
 , dill
 , fetchFromGitHub
+, flask
+, flask-cors
+, awscli
 , moto
+, boto3
+, setuptools
 , pytest-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.5.2";
-  format = "setuptools";
+  version = "2.11.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiobotocore";
     rev = "refs/tags/${version}";
-    hash = "sha256-twIo5qJht7oZye5lbiPwLFa/5dCwgCm+OkwuCuWU0cU=";
+    hash = "sha256-H9nsLPxjv3H5y6+5piBt6Pb+Wks4vwOitM+WQtyViPs=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -32,6 +38,10 @@ buildPythonPackage rec {
     sed -i "s/'botocore>=.*'/'botocore'/" setup.py
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     aioitertools
@@ -39,8 +49,19 @@ buildPythonPackage rec {
     wrapt
   ];
 
+  passthru.optional-dependencies = {
+    awscli = [
+      awscli
+    ];
+    boto3 = [
+      boto3
+    ];
+  };
+
   nativeCheckInputs = [
     dill
+    flask
+    flask-cors
     moto
     pytest-asyncio
     pytestCheckHook
@@ -76,7 +97,13 @@ buildPythonPackage rec {
     "test_required_config_not_set"
     "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
     "test_sso_credential_fetcher_can_fetch_credentials"
+  ] ++ lib.optionals (pythonAtLeast "3.12.") [
+    # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
+    "test_max_rate_updated_on_success_response"
+    "test_max_rate_cant_exceed_20_percent_max"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python client for amazon services";

@@ -3,22 +3,23 @@
 , fetchFromGitHub
 , stdenv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.12.2";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fblUr2gtlGMRAFbpWYDafskLmIls56e9b2GFD7ASZHM=";
+    hash = "sha256-DCejOfL+c04MABweyuvDLImlYKj/SONxBfXD/4OVzH0=";
   };
 
-  cargoHash = "sha256-pvb/tZW4jqNSLgp+Ktakd3J1KVfCRtPgE0bgNst6ImQ=";
+  cargoHash = "sha256-X+pAvudfbxng6kMv0NO00v6mMBXUMaXvZb/L1OgWd38=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "socks" ];
@@ -29,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "routinator";
   };
 }

@@ -3,9 +3,11 @@
 , cmake
 , pkg-config
 , cctools
+, makeWrapper
 , python3
 , vulkan-headers
 , vulkan-loader
+, vulkan-validation-layers
 }:
 let
   glslang = fetchFromGitHub {
@@ -32,27 +34,27 @@ let
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "b42ba6d92faf6b4938e6f22ddd186dbdacc98d78";
-    hash = "sha256-ks9JCj5rj+Xu++7z5RiHDkU3/sFXhcScw8dATfB/ot0=";
+    rev = "d13b52222c39a7e9a401b44646f0ca3a640fbd47";
+    hash = "sha256-bjiWGSmpEbydXtCLP8fRZfPBvdCzBoJxKXTx3BroQbg=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "a73e724359a274d7cf4f4248eba5be1e7764fbfd";
-    hash = "sha256-vooJHtgVRlBNkQG4hulYOxIgHH4GMhXw7N4OEbkKJvU=";
+    rev = "d87f61605b3647fbceae9aaa922fce0031afdc63";
+    hash = "sha256-lB2i6wjehIFDOQdIPUvCy3zzcnJSsR5vNawPhGmb0es=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "amber";
-  version = "unstable-2022-04-21";
+  version = "unstable-2023-09-02";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "8b145a6c89dcdb4ec28173339dd176fb7b6f43ed";
-    hash = "sha256-+xFYlUs13khT6r475eJJ+XS875h2sb+YbJ8ZN4MOSAA=";
+    rev = "8e90b2d2f532bcd4a80069e3f37a9698209a21bc";
+    hash = "sha256-LuNCND/NXoNbbTWv7RYQUkq2QXL1qXR27uHwFIz0DXg=";
   };
 
   buildInputs = [
@@ -62,6 +64,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkg-config
     python3
   ] ++ lib.optionals stdenv.isDarwin [
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Tests are disabled so we do not have to pull in googletest and more dependencies
-  cmakeFlags = [ "-DAMBER_SKIP_TESTS=ON" ];
+  cmakeFlags = [ "-DAMBER_SKIP_TESTS=ON" "-DAMBER_DISABLE_WERROR=ON" ];
 
   prePatch = ''
     cp -r ${glslang}/ third_party/glslang
@@ -79,14 +82,14 @@ stdenv.mkDerivation rec {
     cp -r ${spirv-headers}/ third_party/spirv-headers
     chmod u+w -R third_party
 
-    substituteInPlace CMakeLists.txt \
-      --replace "-Werror" ""
     substituteInPlace tools/update_build_version.py \
       --replace "not os.path.exists(directory)" "True"
   '';
 
   installPhase = ''
     install -Dm755 -t $out/bin amber image_diff
+    wrapProgram $out/bin/amber \
+      --suffix VK_LAYER_PATH : ${vulkan-validation-layers}/share/vulkan/explicit_layer.d
   '';
 
   meta = with lib; {

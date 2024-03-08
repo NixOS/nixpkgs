@@ -12,13 +12,14 @@
 , pyopenssl
 , pythonOlder
 , requests
-, requests_ntlm
+, requests-ntlm
 , unicrypto
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "certipy-ad";
-  version = "4.8.0";
+  version = "4.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "ly4k";
     repo = "Certipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-CyTwaCYhxUqvycZBKSzTWLKmKvebCNyE4vqTUnaX1V0=";
+    hash = "sha256-Era5iNLJkZIRvN/p3BiD/eDiDQme24G65VSG97tuEOQ=";
   };
 
   postPatch = ''
@@ -47,8 +48,9 @@ buildPythonPackage rec {
     pycryptodome
     pyopenssl
     requests
-    requests_ntlm
+    requests-ntlm
     unicrypto
+    setuptools
   ];
 
   # Project has no tests

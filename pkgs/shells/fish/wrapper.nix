@@ -18,7 +18,7 @@ let
     name = "wrapfish.aliases.fish";
     destination = "/share/fish/vendor_conf.d/aliases.fish";
     text = ''
-      status --is-interactive; and begin
+      status is-interactive; and begin
         # Aliases
         ${aliasesStr}
       end

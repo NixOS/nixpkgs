@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , openssl
@@ -25,6 +26,16 @@ stdenv.mkDerivation rec {
     rev = "860ffb707af3af94467d2ece4ad258dda957c6cd";
     hash = "sha256-mIsB+EaGJlGMOpz3OLrs0nAmhOY1BwMs83saFBaejwc=";
   };
+
+  patches = [
+    # Pull upstream fix for clang-16 and upcoming gcc-14 support:
+    #   https://github.com/libimobiledevice/libimobiledevice/pull/1444
+    (fetchpatch {
+      name = "usleep-decl.patch";
+      url = "https://github.com/libimobiledevice/libimobiledevice/commit/db623184c0aa09c27697f5a2e81025db223075d5.patch";
+      hash = "sha256-TgdgBkEDXzQDSgJxcZc+pZncfmBVXarhHOByGFs6p0Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

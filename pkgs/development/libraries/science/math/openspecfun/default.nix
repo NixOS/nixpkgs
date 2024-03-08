@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "openspecfun";
-  version = "0.5.5";
+  version = "0.5.6";
   src = fetchFromGitHub {
     owner = "JuliaLang";
     repo = "openspecfun";
     rev = "v${version}";
-    sha256 = "sha256-fX2wc8LHUcF5nN/hiA60ZZ7emRTs0SznOm/0q6lD+Ko=";
+    sha256 = "sha256-4MPoRMtDTkdvDfhNXKk/80pZjXRNEPcysLNTb5ohxWk=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

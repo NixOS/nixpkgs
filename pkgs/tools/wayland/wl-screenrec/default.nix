@@ -2,22 +2,23 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wayland
+, libdrm
 , ffmpeg
+, wayland
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wl-screenrec";
-  version = "unstable-2023-05-31";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "russelltg";
     repo = pname;
-    rev = "fc918f7898900c1882c6f64c96ed2de8cb9a6300";
-    hash = "sha256-P/JELiw0qGcwLFgNPccN/uetNy8CNCJdlCLhgq0h4sc=";
+    rev = "v${version}";
+    hash = "sha256-ThPZPV1GyMFRu94O9WwUpXbR4gnIML26K7TyIfXZlcI=";
   };
 
-  cargoHash = "sha256-r9zmAiLiAntHcb5W/WKmKbVP9c9+15ElIWtHkks0wig=";
+  cargoHash = "sha256-DtlVsUFKNKXcwqNvGvqkSKUE+kRHX8wajL4fR0c9ZuQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,8 +27,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     wayland
+    libdrm
     ffmpeg
   ];
+
+  doCheck = false; # tests use host compositor, etc
 
   meta = with lib; {
     description = "High performance wlroots screen recording, featuring hardware encoding";

@@ -111,15 +111,15 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "6.4"; in
+  linuxHeaders = let version = "6.7"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-j6BYjwws7KRMrHeg45ukjJ8AprncaXYcAqXT76yNp/M=";
+        hash = "sha256-7zEUSiV20IDYwxaY6D7J9mv5fGd/oqrw1bu58zRbEGk=";
       };
       patches = [
-         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+        ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
     };
 }

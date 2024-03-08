@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
     rev = "v${version}";
-    sha256 = "sha256-sK3KrtZzrV2jkQveZnSHDR5I4v7baL/sARje2mDpIMI=";
+    sha256 = "sha256-OPasi5zmvmcWnVCj/dU2KprzNmar51zDElD23750yk4=";
   };
 
   nativeBuildInputs = [
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+    mainProgram = "xsecurelock";
   };
 }

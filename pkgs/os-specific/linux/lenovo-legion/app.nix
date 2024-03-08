@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.5";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
     repo = "LenovoLegionLinux";
     rev = "v${version}-prerelease";
-    sha256 = "sha256-s4JFFmawokdC4qoqNvZDhuJSinhQ3YKSIfAYi79VTTA=";
+    hash = "sha256-PQdxfDfW3sn0wWjmsPoAt3HZ43PS3Tyez3/0KEVVZQg=";
   };
 
   sourceRoot = "${src.name}/python/legion_linux";
@@ -19,15 +19,20 @@ python3.pkgs.buildPythonApplication rec {
     pyqt5
     argcomplete
     pyyaml
+    darkdetect
     xorg.libxcb
     libsForQt5.qtbase
   ];
 
-  postInstall = ''
-    cp -r ./{legion.py,legion_cli.py,legion_gui.py} $out/${python3.sitePackages}
-    cp ./legion_logo.png $out/${python3.sitePackages}/legion_logo.png
-
-    rm -rf $out/data
+  postPatch = ''
+    substituteInPlace ./setup.cfg \
+      --replace "_VERSION" "${version}"
+    substituteInPlace ../../extra/service/fancurve-set \
+      --replace "FOLDER=/etc/legion_linux/" "FOLDER=$out/share/legion_linux"
+    substituteInPlace ./legion_linux/legion.py \
+      --replace "/etc/legion_linux" "$out/share/legion_linux"
+    substituteInPlace ./legion_linux/legion_gui{,_user}.desktop \
+      --replace "Icon=/usr/share/pixmaps/legion_logo.png" "Icon=legion_logo"
   '';
 
   dontWrapQtApps = true;

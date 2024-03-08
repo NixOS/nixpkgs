@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPyPy
 , fetchFromGitHub
+, setuptools
 , attrs
 , exceptiongroup
 , pexpect
@@ -21,9 +22,8 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.68.2";
-  outputs = [ "out" ];
-  format = "setuptools";
+  version = "6.91.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-SgX8esTyC3ulFIv9mZJUoBA5hiv7Izr2hyD+NOudkpE=";
+    hash = "sha256-2iBeB5pLVOunOJb6aGNQ/ZTj8HyeH+UkqvLPF3YVuLk=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -48,6 +48,10 @@ buildPythonPackage rec {
   '';
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs

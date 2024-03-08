@@ -5,12 +5,8 @@ with lib;
 let
   receiverSubmodule = {
     options = {
-      postgresqlPackage = mkOption {
-        type = types.package;
-        example = literalExpression "pkgs.postgresql_11";
-        description = lib.mdDoc ''
-          PostgreSQL package to use.
-        '';
+      postgresqlPackage = mkPackageOption pkgs "postgresql" {
+        example = "postgresql_15";
       };
 
       directory = mkOption {
@@ -124,7 +120,7 @@ in {
         example = literalExpression ''
           {
             main = {
-              postgresqlPackage = pkgs.postgresql_11;
+              postgresqlPackage = pkgs.postgresql_15;
               directory = /mnt/pg_wal/main/;
               slot = "main_wal_receiver";
               connection = "postgresql://user@somehost";

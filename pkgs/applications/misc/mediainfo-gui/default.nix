@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediainfo-gui";
-  version = "23.07";
+  version = "23.11";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    hash = "sha256-ttfanimZX9NKIhAIJbhD50wyx7xnrbARZrG+7epJ9dA=";
+    hash = "sha256-gByxsNG//MEibeymISoe41Mi6LsSYwozu7B6kqioycM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -5,7 +5,7 @@ assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.9.2";
+  version = "1.10.0";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -15,7 +15,7 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    hash = "sha256-6QmYRlSv8jY3OE3RcYuZt+c3z6GhFc8ESETVfCfF5RI=";
+    hash = "sha256-ExSS5HxDmJJtYypRYJNz7nY0D50gjoDBc4CnJMfgVw8=";
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
@@ -25,7 +25,7 @@ let
     pname = "${pname}-adapter";
     inherit version src;
 
-    cargoHash = "sha256-Qq2igtH1XIB+NAEES6hdNZcMbEmaFN69qIJ+gTYupvQ=";
+    cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -37,6 +37,19 @@ let
       "--lib"
       "--bin=codelldb"
     ];
+
+    postFixup = ''
+      mkdir -p $out/share
+      # codelldb expects libcodelldb.so to be in the same
+      # directory as the executable, and can't find it in $out/lib.
+      # To make codelldb executable as a standalone,
+      # we put all files in $out/share, and then wrap the binary in $out/bin.
+      mv $out/bin/* $out/share
+      cp $out/lib/* $out/share
+      ln -s ${lldb.lib} $out/lldb
+      makeWrapper $out/share/codelldb $out/bin/codelldb \
+        --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
+    '';
 
     patches = [ ./adapter-output-shared_object.patch ];
 
@@ -84,6 +97,12 @@ in stdenv.mkDerivation {
 
   patches = [ ./cmake-build-extension-only.patch ];
 
+  postPatch = ''
+    # temporary patch for forgotten version updates
+    substituteInPlace CMakeLists.txt \
+      --replace "1.9.2" ${version}
+  '';
+
   postConfigure = ''
     cp -r ${nodeDeps}/lib/node_modules .
   '';
@@ -106,7 +125,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
-    cp -t $ext/adapter ${adapter}/{bin,lib}/*
+    cp -t $ext/adapter ${adapter}/share/*
     cp -r ../adapter/scripts $ext/adapter
     wrapProgram $ext/adapter/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"

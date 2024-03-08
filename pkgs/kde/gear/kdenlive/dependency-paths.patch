@@ -1,0 +1,46 @@
+diff --git a/src/kdenlivesettings.kcfg b/src/kdenlivesettings.kcfg
+index 029849e5f..8befe4888 100644
+--- a/src/kdenlivesettings.kcfg
++++ b/src/kdenlivesettings.kcfg
+@@ -517,7 +517,7 @@
+   <group name="env">
+     <entry name="mltpath" type="Path">
+       <label>Mlt framework install path.</label>
+-      <default></default>
++      <default>@mlt@/share/mlt-7/profiles</default>
+     </entry>
+ 
+     <entry name="kdenliverendererpath" type="Path">
+@@ -527,27 +527,27 @@
+ 
+     <entry name="meltpath" type="Path">
+       <label>Mlt melt renderer install path.</label>
+-      <default></default>
++      <default>@mlt@/bin/melt</default>
+     </entry>
+ 
+     <entry name="ffmpegpath" type="Path">
+       <label>FFmpeg / Libav binary path.</label>
+-      <default></default>
++      <default>@ffmpeg@/bin/ffmpeg</default>
+     </entry>
+ 
+     <entry name="ffplaypath" type="Path">
+       <label>FFplay / avplay binary path.</label>
+-      <default></default>
++      <default>@ffmpeg@/bin/ffplay</default>
+     </entry>
+ 
+     <entry name="ffprobepath" type="Path">
+       <label>FFprobe / avprobe binary path.</label>
+-      <default></default>
++      <default>@ffmpeg@/bin/ffprobe</default>
+     </entry>
+ 
+     <entry name="mediainfopath" type="Path">
+       <label>mediaInfo binary path.</label>
+-      <default></default>
++      <default>@mediainfo@/bin/mediainfo</default>
+     </entry>
+ 
+     <entry name="processingthreads" type="Int">

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "thrift";
   version = "0.16.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

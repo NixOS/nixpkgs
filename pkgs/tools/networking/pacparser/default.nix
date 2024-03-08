@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pacparser";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "manugarg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p83aAcZ3fGOrokq4HDgF5/VxMl3Q11voSjdaBUUO4S0=";
+    sha256 = "sha256-qIfzAQ/dJgOZJajNU3XyFudSxu2w4JC0ffHosHXje1o=";
   };
 
   makeFlags = [ "NO_INTERNET=1" ];
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "pactester";
   };
 }

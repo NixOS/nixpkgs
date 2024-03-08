@@ -44,7 +44,7 @@ in {
       type = types.lines;
       description = lib.mdDoc ''
         Verbatim config file to use
-        (see http://www.mew.org/~kazu/proj/mighttpd/en/config.html)
+        (see https://kazu-yamamoto.github.io/mighttpd2/config.html)
       '';
     };
 
@@ -78,7 +78,7 @@ in {
       type = types.lines;
       description = lib.mdDoc ''
         Verbatim routing file to use
-        (see http://www.mew.org/~kazu/proj/mighttpd/en/config.html)
+        (see https://kazu-yamamoto.github.io/mighttpd2/config.html)
       '';
     };
 
@@ -101,6 +101,7 @@ in {
       ];
     systemd.services.mighttpd2 = {
       description = "Mighttpd2 web server";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

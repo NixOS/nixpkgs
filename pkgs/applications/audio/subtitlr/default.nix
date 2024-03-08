@@ -31,5 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/yoanbernabeu/Subtitlr/";
     license = licenses.mit;
     maintainers = with maintainers; [ qjoly ];
+    mainProgram = "Subtitlr";
   };
 }

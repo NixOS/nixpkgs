@@ -1,55 +1,56 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
-, pythonRelaxDepsHook
 , pyasn1
 , pyasn1-modules
 , cryptography
-, tinydb
 , joblib
-, tinyrecord
+, gitpython
+, sqlalchemy
+, pygount
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.17.0";
-  format = "pyproject";
+  version = "0.21.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
-    rev = "v${version}";
-    hash = "sha256-US9m7weW11+VxX6ZsKP5tYKp+bQoiI+TZ3YWE97D/f0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LzIK4GGVWAp4JXlKE7Mo0cPIH2srnJIlu36bzovNkwE=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "tinydb"
-    "joblib"
   ];
 
   propagatedBuildInputs = [
     pyasn1
     pyasn1-modules
     cryptography
-    tinydb
     joblib
-    tinyrecord
+    gitpython
+    sqlalchemy
+    pygount
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  disabledTests = [
+    # requires network access
+    "test_basic_parse"
+  ];
 
   pythonImportsCheck = [ "edk2toollib" ];
 
@@ -59,5 +60,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/v${version}";
     license = licenses.bsd2Patent;
     maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.linux;
   };
 }

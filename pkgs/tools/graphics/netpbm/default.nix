@@ -20,14 +20,14 @@ stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   pname = "netpbm";
-  version = "11.3.4";
+  version = "11.5.2";
 
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "4606";
-    sha256 = "raWpqPlORgL5vBkmHbvj7UCrGjpPLulWjeTuaPnuB98=";
+    rev = "4839";
+    sha256 = "tK9HGERr8UejswZTW3NdXa7OGpzqDTCegGQVaB4RK+I=";
   };
 
   nativeBuildInputs = [
@@ -94,6 +94,10 @@ stdenv.mkDerivation {
   '' + ''
     runHook postConfigure
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   installPhase = ''
     runHook preInstall

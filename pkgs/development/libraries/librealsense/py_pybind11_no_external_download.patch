@@ -1,39 +1,15 @@
-From 01e51b9c90ba51b2d0ca797dde676812cf3db415 Mon Sep 17 00:00:00 2001
-From: "Robert T. McGibbon" <rmcgibbo@gmail.com>
-Date: Mon, 10 May 2021 17:26:04 -0400
-Subject: [PATCH 1/1] V1
-
----
- wrappers/python/CMakeLists.txt | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
-
-diff --git a/wrappers/python/CMakeLists.txt b/wrappers/python/CMakeLists.txt
-index aa83e4c77..4ec92ccfa 100644
---- a/wrappers/python/CMakeLists.txt
-+++ b/wrappers/python/CMakeLists.txt
-@@ -8,21 +8,8 @@ if (NOT BUILD_PYTHON_BINDINGS)
- endif()
+diff --git a/CMake/global_config.cmake b/CMake/global_config.cmake
+index 350f7a268..2cf125c67 100644
+--- a/CMake/global_config.cmake
++++ b/CMake/global_config.cmake
+@@ -69,7 +69,8 @@ macro(global_set_flags)
  
- set(DEPENDENCIES realsense2)
--# In order for the external project clone to occur during cmake configure step(rather than during compilation, as would normally happen),
--# we copy the external project declaration to the build folder and then execute it
--configure_file(${CMAKE_SOURCE_DIR}/third-party/pybind11/CMakeLists.txt ${CMAKE_BINARY_DIR}/external-projects/pybind11/CMakeLists.txt)
--execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
--    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/external-projects/pybind11"
--)
--execute_process(COMMAND "${CMAKE_COMMAND}" --build .
--    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/external-projects/pybind11"
--)
+     if(BUILD_PYTHON_BINDINGS)
+         include(libusb_config)
+-        include(CMake/external_pybind11.cmake)
++        find_package(pybind11 REQUIRED)
++        set(PYTHON_INSTALL_DIR "${XXNIX_PYTHON_SITEPACKAGES}/pyrealsense2" CACHE PATH "Installation directory for Python bindings")
+     endif()
  
--# Add pybind11 makefile
--add_subdirectory("${CMAKE_BINARY_DIR}/third-party/pybind11"
--                 "${CMAKE_BINARY_DIR}/third-party/pybind11"
--                 EXCLUDE_FROM_ALL
--)
-+find_package(pybind11 REQUIRED)
- 
- set(PYBIND11_CPP_STANDARD -std=c++11)
- # Force Pybind11 not to share pyrealsense2 resources with other pybind modules.
--- 
-2.29.3
+     if(CHECK_FOR_UPDATES)
 

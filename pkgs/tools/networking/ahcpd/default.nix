@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "Autoconfiguration protocol for IPv6 and dual-stack IPv6/IPv4 networks";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    mainProgram = "ahcpd";
   };
 }

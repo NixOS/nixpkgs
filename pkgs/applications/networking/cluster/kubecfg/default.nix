@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubecfg";
-  version = "0.33.0";
+  version = "0.34.3";
 
   src = fetchFromGitHub {
     owner = "kubecfg";
     repo = "kubecfg";
     rev = "v${version}";
-    hash = "sha256-a/2qKiqn9en67uJD/jzU3G1k6gT73DTzjY32mi51xSQ=";
+    hash = "sha256-zy7SuJ5ChR09CvZ362z6ZDRd/eIyqg06fpv+JP7C4T0=";
   };
 
-  vendorHash = "sha256-mSYc12pjx34PhMx7jbKD/nPhPaK7jINmUSWxomikx7U=";
+  vendorHash = "sha256-TDXZy2I1sxMmtHiE5l9wgW1kJolFYsV5Otv3xfoErWM=";
 
   ldflags = [
     "-s"

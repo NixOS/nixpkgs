@@ -43,7 +43,7 @@ let
         "--enable-quartz=${if withQuartz then "yes" else "no"}"
         "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
       ] ++ lib.optionals (pname == "gammastep") [
-        "--with-systemduserunitdir=${placeholder "out"}/share/systemd/user/"
+        "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user/"
         "--enable-apparmor"
       ];
 
@@ -117,7 +117,8 @@ rec {
       license = licenses.gpl3Plus;
       homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ globin yana ];
+      mainProgram = "redshift";
+      maintainers = with maintainers; [ yana ];
     };
   };
 
@@ -137,7 +138,8 @@ rec {
       longDescription = "Gammastep"
         + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
-      maintainers = [ lib.maintainers.primeos ] ++ redshift.meta.maintainers;
+      mainProgram = "gammastep";
+      maintainers = (with lib.maintainers; [ eclairevoyant primeos ]) ++ redshift.meta.maintainers;
     };
   };
 }

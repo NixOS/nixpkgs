@@ -2,6 +2,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 
+# build-system
+, setuptools
+
 # tests
 , pytestCheckHook
 , pexpect
@@ -10,7 +13,7 @@
 buildPythonPackage rec {
   pname = "readchar";
   version = "4.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   # Don't use wheels on PyPI
   src = fetchFromGitHub {
@@ -22,12 +25,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=readchar" ""
+      --replace "--cov=readchar" "" \
+      --replace "attr: readchar.__version__" "${version}"
     # run Linux tests on Darwin as well
     # see https://github.com/magmax/python-readchar/pull/99 for why this is not upstreamed
     substituteInPlace tests/linux/conftest.py \
       --replace 'sys.platform.startswith("linux")' 'sys.platform.startswith(("darwin", "linux"))'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [ "readchar" ];
 

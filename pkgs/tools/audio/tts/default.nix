@@ -10,19 +10,20 @@ let
     packageOverrides = self: super: {
       torch = super.torch-bin;
       torchvision = super.torchvision-bin;
+      tensorflow = super.tensorflow-bin;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.16.0";
-  format = "pyproject";
+  version = "0.20.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2JZyINyzy4X1DTp4ZsMLY/rCsH4JdQ8bF/3hoqtvNTU=";
+    hash = "sha256-1nlSf15IEX1qKfDtR6+jQqskjxIuzaIWatkj9Z1fh8Y=";
   };
 
   postPatch = let
@@ -56,7 +57,9 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     cython
+    numpy
     packaging
+    setuptools
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -102,7 +105,7 @@ python.pkgs.buildPythonApplication rec {
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/utils/monotonic_align
-      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
+      ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out
     )
   '';
 
@@ -125,7 +128,7 @@ python.pkgs.buildPythonApplication rec {
 
     for file in $(grep -rl 'python TTS/bin' tests); do
       substituteInPlace "$file" \
-        --replace "python TTS/bin" "${python.interpreter} $out/lib/${python.libPrefix}/site-packages/TTS/bin"
+        --replace "python TTS/bin" "${python.interpreter} $out/${python.sitePackages}/TTS/bin"
     done
   '';
 

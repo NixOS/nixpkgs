@@ -1,27 +1,48 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, vpcs
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vpcs";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "GNS3";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-joEXRMtNZMQumkYDX1gdpGAV+XdNKiAMj3dh1GZxeqc=";
+    repo = "vpcs";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OKi4sC4fmKtkJkkpHZ6OfeIDaBafVrJXGXh1R6gLPFY=";
   };
 
-  buildPhase = ''(
-    cd src
-    ./mk.sh ${stdenv.buildPlatform.linuxArch}
-  )'';
+  sourceRoot = "${finalAttrs.src.name}/src";
+
+  buildPhase = ''
+    runHook preBuild
+
+    MKOPT="CC=${stdenv.cc.targetPrefix}cc" ./mk.sh ${stdenv.buildPlatform.linuxArch}
+
+    runHook postBuild
+  '';
 
   installPhase = ''
-    install -D -m555 src/vpcs $out/bin/vpcs;
-    install -D -m444 man/vpcs.1 $out/share/man/man1/vpcs.1;
+    runHook preInstall
+
+    install -D -m555 vpcs $out/bin/vpcs
+    install -D -m444 ../man/vpcs.1 $out/share/man/man1/vpcs.1
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = vpcs;
+      command = "vpcs -v";
+    };
+  };
 
   meta = with lib; {
     description = "A simple virtual PC simulator";
@@ -30,9 +51,10 @@ stdenv.mkDerivation rec {
       ping/traceroute them, or ping/traceroute the other hosts/routers from the
       VPCS when you study the Cisco routers in the dynamips.
     '';
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "vpcs";
+    maintainers = with maintainers; [ anthonyroussel ];
   };
-}
+})

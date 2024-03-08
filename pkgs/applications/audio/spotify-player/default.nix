@@ -33,16 +33,16 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "alsa" "pulseaud
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5+YBlXHpAzGgw6MqgnMSggCASS++A/WWomftX8Jxe7g=";
+    hash = "sha256-fGDIlkTaRg+J6YcP9iBcJFuYm9F0UOA+v/26hhdg9/o=";
   };
 
-  cargoHash = "sha256-PIYaJC3rVbPjc2CASzMGWAzUdrBwFnKqhrZO6nywdN8=";
+  cargoHash = "sha256-oZNydOnD2+6gLAsT3YTSlWSQ06EftS7Tl/AvlTbL84U=";
 
   nativeBuildInputs = [
     pkg-config

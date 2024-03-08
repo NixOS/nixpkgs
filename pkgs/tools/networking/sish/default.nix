@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "sish";
-  version = "2.9.2";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "antoniomika";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-6PCZtiXsDQfPZFw3r1n3rwgxigSnWgggHXzZdBT/fxA=";
+    hash = "sha256-dn64M/DGnyaoEtbdeytpRsKCXQPvR+dJDI7yFt2IqU0=";
   };
 
-  vendorHash = "sha256-RnvkEUvL/bQTTTlg0RF0xjjvVniltequNKRD3z0H3O8=";
+  vendorHash = "sha256-P5Y5DwF9Tb9j098XiEJZaEGZhT2Ce2emnV2SawElosI=";
 
   ldflags = [
     "-s"
@@ -38,5 +38,6 @@ buildGoModule rec {
     changelog = "https://github.com/antoniomika/sish/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sish";
   };
 }

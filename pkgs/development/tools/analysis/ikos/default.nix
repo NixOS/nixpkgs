@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-scaFkUhCkIi41iR6CGPbEndzXkgqTKMb3PDNvhgVbCE=";
   };
 
-  patches = fetchpatch {
+  patches = [ (fetchpatch {
     url = "https://github.com/NASA-SW-VnV/ikos/commit/2e647432427b3f0dbb639e0371d976ab6406f290.patch";
     hash = "sha256-ffzjlqEp4qp76Kwl5zpyQlg/xUMt8aLDSSP4XA4ndS8=";
-  };
+  })
+  # Fix build with GCC 13
+  # https://github.com/NASA-SW-VnV/ikos/pull/262
+  (fetchpatch {
+    name = "gcc-13.patch";
+    url = "https://github.com/NASA-SW-VnV/ikos/commit/73c816641fb9780f0d3b5e448510363a3cf21ce2.patch";
+    hash = "sha256-bkeSAtxrL+z+6QNiGOWSg7kN8XiZqMxlJiu5Dquhca0=";
+  })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost tbb gmp clang llvm sqlite python

@@ -23,6 +23,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/kiwi0fruit/open-fonts";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

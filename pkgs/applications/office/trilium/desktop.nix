@@ -1,18 +1,19 @@
 { stdenv, lib, unzip, autoPatchelfHook
-, fetchurl, atomEnv, makeWrapper
-, makeDesktopItem, copyDesktopItems, wrapGAppsHook, libxshmfence
+, fetchurl, makeWrapper
+, alsa-lib, mesa, nss, nspr, systemd
+, makeDesktopItem, copyDesktopItems, wrapGAppsHook
 , metaCommon
 }:
 
 let
   pname = "trilium-desktop";
-  version = "0.60.4";
+  version = "0.63.3";
 
   linuxSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  linuxSource.sha256 = "02vbghvi2sbh943rslgm712x9zccvpjab3jvr5b1bw4bq5fzppgq";
+  linuxSource.sha256 = "1dcq7s4lcp9bc0p4ylzxyfc020xvj7scrlsddzwcnp8mqz5ckik9";
 
   darwinSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "0z6dk16xdzkiyxrm1yh3iz5351c8sdzvk8v5l3jdqy7davxw9f86";
+  darwinSource.sha256 = "0m9m68f9jg10nfn719q6wahwvi13lpc2hmandw7ddxfslylwq29s";
 
   meta = metaCommon // {
     mainProgram = "trilium";
@@ -24,6 +25,7 @@ let
 
     src = fetchurl linuxSource;
 
+    # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
@@ -31,7 +33,14 @@ let
       copyDesktopItems
     ];
 
-    buildInputs = atomEnv.packages ++ [ libxshmfence ];
+    buildInputs = [
+      alsa-lib
+      mesa
+      nss
+      nspr
+      stdenv.cc.cc
+      systemd
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -64,8 +73,9 @@ let
     '';
 
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
+    # Error: libstdc++.so.6: cannot open shared object file: No such file or directory
     preFixup = ''
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${atomEnv.libPath})
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs})
     '';
 
     dontStrip = true;

@@ -77,12 +77,8 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.fail2ban;
-        defaultText = literalExpression "pkgs.fail2ban";
-        type = types.package;
-        example = literalExpression "pkgs.fail2ban_0_11";
-        description = lib.mdDoc "The fail2ban package to use for running the fail2ban service.";
+      package = mkPackageOption pkgs "fail2ban" {
+        example = "fail2ban_0_11";
       };
 
       packageFirewall = mkOption {
@@ -103,9 +99,9 @@ in
       };
 
       bantime = mkOption {
-        default = null;
-        type = types.nullOr types.str;
-        example = "10m";
+        default = "10m";
+        type = types.str;
+        example = "1h";
         description = lib.mdDoc "Number of seconds that a host is banned.";
       };
 
@@ -128,8 +124,8 @@ in
       };
 
       banaction-allports = mkOption {
-        default = if config.networking.nftables.enable then "nftables-allport" else "iptables-allport";
-        defaultText = literalExpression ''if config.networking.nftables.enable then "nftables-allport" else "iptables-allport"'';
+        default = if config.networking.nftables.enable then "nftables-allports" else "iptables-allports";
+        defaultText = literalExpression ''if config.networking.nftables.enable then "nftables-allports" else "iptables-allports"'';
         type = types.str;
         description = lib.mdDoc ''
           Default banning action (e.g. iptables, iptables-new, iptables-multiport,
@@ -393,7 +389,7 @@ in
           )
         ) // {
           # Miscellaneous options
-          inherit (cfg) banaction maxretry;
+          inherit (cfg) banaction maxretry bantime;
           ignoreip = ''127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}'';
           backend = "systemd";
           # Actions

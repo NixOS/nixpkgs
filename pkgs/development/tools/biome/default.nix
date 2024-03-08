@@ -2,7 +2,8 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2_1_6
+, libgit2
+, rust-jemalloc-sys
 , zlib
 , stdenv
 , darwin
@@ -11,23 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "biome";
-  version = "1.2.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "cli/v${version}";
-    hash = "sha256-/rIPIZX3w28xTn+UyAsB+lgfF0LDmxM92EofcPSCD+4=";
+    hash = "sha256-70LHsmS01ssD4yCbHfBouV+NyhMIlBbX0jcHFu8aLMw=";
   };
 
-  cargoHash = "sha256-5mX4RDACImjiU+nSuN9SzyibIMcUWYCAJfikX2gWIfg=";
+  cargoHash = "sha256-wf6X6aY1O9EABQ6sDNAb3XsVrC0lgUtpgoieiPZ7r3k=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    libgit2_1_6
+    libgit2
+    rust-jemalloc-sys
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -38,10 +40,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = cargoBuildFlags ++
+    # skip a broken test from v1.5.3 release
+    # this will be removed on the next version
+    [ "-- --skip=diagnostics::test::termination_diagnostic_size" ];
 
   env = {
     BIOME_VERSION = version;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   preCheck = ''

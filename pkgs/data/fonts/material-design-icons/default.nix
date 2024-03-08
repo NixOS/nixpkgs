@@ -1,14 +1,18 @@
-{ lib, fetchFromGitHub, stdenvNoCC }:
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, nix-update-script
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "material-design-icons";
-  version = "7.2.96";
+  version = "7.4.47";
 
   src = fetchFromGitHub {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
     rev = "v${version}";
-    sha256 = "sha256-4r/l7QkD04OR74FZBH0l81hDY5TexEIIJnECYFKsGxM=";
+    sha256 = "sha256-7t3i3nPJZ/tRslLBfY+9kXH8TR145GC2hPFYJeMHRL8=";
     sparseCheckout = [ "fonts" ];
   };
 
@@ -24,6 +28,8 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "7000+ Material Design Icons from the Community";
     longDescription = ''
@@ -34,6 +40,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://materialdesignicons.com";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vlaci PlayerNameHere ];
+    maintainers = with maintainers; [ vlaci dixslyf ];
   };
 }

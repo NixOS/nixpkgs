@@ -6,36 +6,37 @@
 , git
 , fetchFromGitHub
 , ninja
+, lit
 , gitUpdater
+, callPackage
 }:
 
 let
   pythonEnv = python3.withPackages (ps: [ ps.psutil ]);
+  circt-llvm = callPackage ./circt-llvm.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.54.0";
+  version = "1.67.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    sha256 = "sha256-jHDQl6UJTyNGZ4PUTEiZCIN/RSRbBxlaVutkwrWbK9M=";
+    hash = "sha256-ftKtqKIgGVqiETTsirhydjmFiozqHoMRdu+IBZc8iMI=";
     fetchSubmodules = true;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
   nativeBuildInputs = [ cmake ninja git pythonEnv ];
+  buildInputs = [ circt-llvm ];
 
-  cmakeDir = "../llvm/llvm";
   cmakeFlags = [
-    "-DLLVM_ENABLE_BINDINGS=OFF"
-    "-DLLVM_ENABLE_OCAMLDOC=OFF"
-    "-DLLVM_BUILD_EXAMPLES=OFF"
-    "-DLLVM_OPTIMIZED_TABLEGEN=ON"
-    "-DLLVM_ENABLE_PROJECTS=mlir"
-    "-DLLVM_EXTERNAL_PROJECTS=circt"
-    "-DLLVM_EXTERNAL_CIRCT_SOURCE_DIR=.."
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DMLIR_DIR=${circt-llvm.dev}/lib/cmake/mlir"
+
+    # LLVM_EXTERNAL_LIT is executed by python3, the wrapped bash script will not work
+    "-DLLVM_EXTERNAL_LIT=${lit}/bin/.lit-wrapped"
     "-DCIRCT_LLHD_SIM_ENABLED=OFF"
   ];
 
@@ -60,26 +61,27 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/modules/GenVersionFile.cmake --replace "unknown git version" "${src.rev}"
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    mv bin/{{fir,hls}tool,circt-{as,dis,lsp-server,opt,reduce,translate}} $out/bin
-    runHook postInstall
-  '';
-
   doCheck = true;
   checkTarget = "check-circt check-circt-integration";
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "firtool-";
+  outputs = [ "out" "lib" "dev" ];
+
+  postInstall = ''
+    moveToOutput lib "$lib"
+  '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "firtool-";
+    };
+    llvm = circt-llvm;
   };
 
   meta = {
     description = "Circuit IR compilers and tools";
     homepage = "https://circt.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sharzy ];
+    maintainers = with lib.maintainers; [ sharzy pineapplehunter ];
     platforms = lib.platforms.all;
   };
 }
-

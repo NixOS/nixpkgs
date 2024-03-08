@@ -14,8 +14,12 @@ flutter.buildFlutterApplication rec {
     "--dart-define=COMMIT_HASH=b4181b9cff18a07e958c81d8f41840d2d36a6705"
   ];
 
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-JFAX8Tq4vhX801WAxMrsc20tsSrwQhQduYCkeU67OTw=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = {
+    libtokyo = "sha256-T0+vyfSfijLv7MvM+zt3bkVpb3aVrlDnse2xyNMp9GU=";
+    libtokyo_flutter = "sha256-T0+vyfSfijLv7MvM+zt3bkVpb3aVrlDnse2xyNMp9GU=";
+  };
 
   postInstall = ''
     rm $out/bin/file_manager

@@ -2,7 +2,7 @@
 , coreutils
 , fetchFromGitHub
 , python3
-, par2cmdline
+, par2cmdline-turbo
 , unzip
 , unrar
 , p7zip
@@ -43,18 +43,18 @@ let
     sgmllib3k
     six
     tempora
-    zc_lockfile
+    zc-lockfile
   ]);
-  path = lib.makeBinPath [ coreutils par2cmdline unrar unzip p7zip util-linux ];
+  path = lib.makeBinPath [ coreutils par2cmdline-turbo unrar unzip p7zip util-linux ];
 in stdenv.mkDerivation rec {
-  version = "4.0.3";
+  version = "4.2.2";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-6d/UGFuySgKvpqhGjzl007GS9yMgfgI3YwTxkxsCzew=";
+    sha256 = "sha256-e5MjsBFUeQ1FMgMIuTDAmAUqf9BaM+ic2qpd1GVZEAw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -83,5 +83,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ fridh jojosch adamcstephens ];
+    mainProgram = "sabnzbd";
   };
 }

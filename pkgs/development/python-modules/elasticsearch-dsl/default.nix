@@ -8,11 +8,12 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "7.4.0";
+  version = "8.12.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c4a7b93882918a413b63bed54018a1685d7410ffd8facbc860ee7fd57f214a6d";
+    sha256 = "sha256-zjK4UpiIqXvpEVMedZCBbPOx9ggmPv9vt1qnEG4jPIg=";
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ];

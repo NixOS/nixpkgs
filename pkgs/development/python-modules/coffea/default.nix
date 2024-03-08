@@ -1,29 +1,30 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , hatchling
 , hatch-vcs
 , awkward
-, uproot
+, cachetools
+, cloudpickle
+, correctionlib
 , dask
 , dask-awkward
 , dask-histogram
-, correctionlib
-, pyarrow
-, fsspec
+, fsspec-xrootd
+, hist
+, lz4
 , matplotlib
+, mplhep
 , numba
 , numpy
-, scipy
-, tqdm
-, lz4
-, cloudpickle
-, toml
-, mplhep
 , packaging
 , pandas
-, hist
-, cachetools
+, pyarrow
+, scipy
+, toml
+, tqdm
+, uproot
 , distributed
 , pyinstrument
 , pytestCheckHook
@@ -31,20 +32,21 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2023.6.0.rc1";
-  format = "pyproject";
+  version = "2024.2.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
-    repo = pname;
+    repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TEtQ2KnwcylQbprlRtgHv7HIFg7roDWD4TihrQE4icU=";
+    hash = "sha256-GdoVb9YtlUlrSx7TWWrdHOqOJJ4M+kJspOllv6HgFXk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "numba>=0.57.0" "numba" \
-      --replace "numpy>=1.22.0,<1.25" "numpy"
+      --replace-fail "numba>=0.58.1" "numba"
   '';
 
   nativeBuildInputs = [
@@ -54,30 +56,27 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     awkward
-    uproot
+    cachetools
+    cloudpickle
+    correctionlib
     dask
-    dask.optional-dependencies.array
     dask-awkward
     dask-histogram
-    correctionlib
-    pyarrow
-    fsspec
+    fsspec-xrootd
+    hist
+    lz4
     matplotlib
+    mplhep
     numba
     numpy
-    scipy
-    tqdm
-    lz4
-    cloudpickle
-    toml
-    mplhep
     packaging
     pandas
-    hist
-    cachetools
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+    pyarrow
+    scipy
+    toml
+    tqdm
+    uproot
+  ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed
@@ -92,6 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];
   };

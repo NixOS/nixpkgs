@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "1.4.0";
+  format = "setuptools";
   pname = "traceback2";
 
   src = fetchPypi {

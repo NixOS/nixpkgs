@@ -1,24 +1,26 @@
-{ config
-, lib
+{ lib
+, config
 , stdenv
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
+, bash
 , docutils
 , meson
 , ninja
 , pkg-config
 , python3
-, ffmpeg_5
+, ffmpeg
 , freefont_ttf
 , freetype
 , libass
 , libpthreadstubs
-, nv-codec-headers
+, nv-codec-headers-11
 , lua
 , libuchardet
 , libiconv
 , xcbuild
+, rcodesign
 
 , waylandSupport ? stdenv.isLinux
   , wayland
@@ -80,7 +82,8 @@
 
 let
   inherit (darwin.apple_sdk_11_0.frameworks)
-    AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
+    AVFoundation Accelerate Cocoa CoreAudio CoreFoundation CoreMedia
+    MediaPlayer VideoToolbox;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 
   overrideSDK = platform: version:
@@ -97,36 +100,40 @@ let
     else stdenv;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.36.0";
+  version = "0.37.0";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-82moFbWvfc1awXih0d0D+dHqYbIoGNZ77RmafQ80IOY=";
+    hash = "sha256-izAz9Iiam7tJAWIQkmn2cKOfoaog8oPKq4sOUtp1nvU=";
   };
 
-  patches = [
-    # Revert "meson: use the new build_options method" to avoid a
-    # cycle between the out and dev outputs.
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/3c1686488b48bd2760e9b19f42e7d3be1363d00a.patch";
-      hash = "sha256-eYXfX8Y08q4Bl41VHBpwbxYRMZgm/iziXeK6AOp8O6I=";
-      revert = true;
-    })
+  patches = [ ./darwin-sigtool-no-deep.patch ];
+
+  postPatch = lib.concatStringsSep "\n" [
+    # Don't reference compile time dependencies or create a build outputs cycle
+    # between out and dev
+    ''
+    substituteInPlace meson.build \
+      --replace-fail "conf_data.set_quoted('CONFIGURATION', configuration)" \
+                     "conf_data.set_quoted('CONFIGURATION', '<ommited>')"
+    ''
+    # A trick to patchShebang everything except mpv_identify.sh
+    ''
+    pushd TOOLS
+    mv mpv_identify.sh mpv_identify
+    patchShebangs *.py *.sh
+    mv mpv_identify mpv_identify.sh
+    popd
+    ''
   ];
 
-  postPatch = ''
-    patchShebangs version.* ./TOOLS/
-  '';
-
-  NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
-
+  # Ensure we reference 'lib' (not 'out') of Swift.
   preConfigure = lib.optionalString swiftSupport ''
-    # Ensure we reference 'lib' (not 'out') of Swift.
-    export SWIFT_LIB_DYNAMIC=${lib.getLib swift.swift}/lib/swift/macosx
+    export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
   '';
 
   mesonFlags = [
@@ -142,6 +149,9 @@ in stdenv'.mkDerivation (finalAttrs: {
     # Disable whilst Swift isn't supported
     (lib.mesonEnable "swift-build" swiftSupport)
     (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Toggle explicitly because it fails on darwin
+    (lib.mesonEnable "videotoolbox-pl" vulkanSupport)
   ];
 
   mesonAutoFeatures = "auto";
@@ -152,19 +162,21 @@ in stdenv'.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    python3
   ]
-  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun rcodesign ]
   ++ lib.optionals swiftSupport [ swift ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
-    ffmpeg_5
+    bash
+    ffmpeg
     freetype
     libass
+    libplacebo
     libpthreadstubs
     libuchardet
     luaEnv
+    python3
   ] ++ lib.optionals alsaSupport        [ alsa-lib ]
     ++ lib.optionals archiveSupport     [ libarchive ]
     ++ lib.optionals bluraySupport      [ libbluray ]
@@ -189,15 +201,15 @@ in stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals vaapiSupport       [ libva ]
     ++ lib.optionals vapoursynthSupport [ vapoursynth ]
     ++ lib.optionals vdpauSupport       [ libvdpau ]
-    ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
+    ++ lib.optionals vulkanSupport      [ shaderc vulkan-headers vulkan-loader ]
     ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
     ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr libXpresent ]
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]
-    ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
+    ++ lib.optionals stdenv.isLinux     [ nv-codec-headers-11 ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer Accelerate ]
+    ++ lib.optionals stdenv.isDarwin    [ Accelerate CoreFoundation Cocoa CoreAudio MediaPlayer VideoToolbox ]
     ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
 
   postBuild = lib.optionalString stdenv.isDarwin ''
@@ -211,11 +223,18 @@ in stdenv'.mkDerivation (finalAttrs: {
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
-    cp ../TOOLS/mpv_identify.sh $out/bin
-    cp ../TOOLS/umpv $out/bin
-    cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
-    sed -i '/Icon=/ ! s/mpv/umpv/g; s/^Exec=.*/Exec=umpv %U/' $out/share/applications/umpv.desktop
-    printf "NoDisplay=true\n" >> $out/share/applications/umpv.desktop
+    pushd ../TOOLS
+    cp mpv_identify.sh umpv $out/bin/
+    popd
+    pushd $out/share/applications
+
+    # patch out smb protocol reference, since our ffmpeg can't handle it
+    substituteInPlace mpv.desktop --replace-fail "smb," ""
+
+    sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
+      mpv.desktop > umpv.desktop
+    printf "NoDisplay=true\n" >> umpv.desktop
+    popd
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r mpv.app $out/Applications
@@ -225,6 +244,7 @@ in stdenv'.mkDerivation (finalAttrs: {
   # See the explanation in addOpenGLRunpath.
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/bin/mpv
+    patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';
 
   passthru = {
@@ -241,7 +261,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mpv.io";
     description = "General-purpose media player, fork of MPlayer and mplayer2";
     longDescription = ''
@@ -249,8 +269,11 @@ in stdenv'.mkDerivation (finalAttrs: {
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "mpv";
+    maintainers = with lib.maintainers; [
+      AndersonTorres fpletz globin ma27 tadeokondrak
+    ];
+    platforms = lib.platforms.unix;
   };
 })

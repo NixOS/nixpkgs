@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ignore";
-  version = "1.2.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "sondr3";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kIRuoY0dM2t+aY4iYdik9gUpG+81sDiJLD11Bmx68FI=";
+    hash = "sha256-OVKRNj3tRi/PGY1m4rdpmH87laYzTkCiwoBc3txVJ3U=";
   };
 
-  cargoHash = "sha256-6sb+OW5VtA6vY6fDtsaZePZD53ehH7QawxJJlUNsrnM=";
+  cargoHash = "sha256-dAQKL+sMThpTqBoN5MZvm8tQUJhaSH7lT8DwbjzFq40=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sondr3/git-ignore/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "git-ignore";
   };
 }

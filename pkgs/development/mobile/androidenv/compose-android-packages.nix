@@ -4,10 +4,10 @@
 
 { cmdLineToolsVersion ? "11.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "34.0.4"
+, platformToolsVersion ? "34.0.5"
 , buildToolsVersions ? [ "34.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "32.1.14"
+, emulatorVersion ? "34.1.9"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -15,7 +15,7 @@
 , abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "25.2.9519653"
+, ndkVersion ? "26.1.10909125"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -151,7 +151,7 @@ rec {
     postInstall = ''
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
       ${linkPlugin { name = "patcher"; plugin = patcher; }}
-      ${linkPlugin { name = "emulator"; plugin = emulator; }}
+      ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
     '';
   };
 
@@ -171,14 +171,14 @@ rec {
     }
   ) buildToolsVersions;
 
-  emulator = callPackage ./emulator.nix {
+  emulator = lib.optionals includeEmulator (callPackage ./emulator.nix {
     inherit deployAndroidPackage os;
     package = check-version packages "emulator" emulatorVersion;
 
     postInstall = ''
       ${linkSystemImages { images = system-images; check = includeSystemImages; }}
     '';
-  };
+  });
 
   platforms = map (version:
     deployAndroidPackage {
@@ -373,9 +373,11 @@ rec {
           ln -s $i $out/bin
       done
 
-      for i in ${emulator}/bin/*; do
-          ln -s $i $out/bin
-      done
+      ${lib.optionalString includeEmulator ''
+        for i in ${emulator}/bin/*; do
+            ln -s $i $out/bin
+        done
+      ''}
 
       find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
           ln -s $i $out/bin

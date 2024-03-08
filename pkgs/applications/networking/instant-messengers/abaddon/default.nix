@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abaddon";
-  version = "0.1.11";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "uowuo";
     repo = "abaddon";
     rev = "v${version}";
-    hash = "sha256-KrBZESYab7QFwUfpTl40cgKn/if31oqA9oCe0PwoYbs=";
+    hash = "sha256-Amp6PkQWd4PnwUL29fzGETLuQXVEaARr+jIRlfrxTKc=";
     fetchSubmodules = true;
   };
 
@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/uowuo/abaddon";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ genericnerdyusername ];
-    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

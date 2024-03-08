@@ -1,4 +1,5 @@
 { lib
+, bleak
 , buildPythonPackage
 , dotmap
 , fetchFromGitHub
@@ -20,8 +21,8 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.2.5";
-  format = "setuptools";
+  version = "2.2.22";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,10 +30,15 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-qRSJN1tWMECQU/jbC2UzhEZAVQwvm7hTIr3cqvFO4TM=";
+    hash = "sha256-bAg7Rr17Q+a+S0ZuHcFmmTM0sRcX2w0zRClKdFwix30=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    bleak
     dotmap
     pexpect
     protobuf
@@ -41,8 +47,8 @@ buildPythonPackage rec {
     pyqrcode
     pyserial
     pyyaml
-    setuptools
     requests
+    setuptools
     tabulate
     timeago
   ];

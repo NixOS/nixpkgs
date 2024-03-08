@@ -115,6 +115,7 @@ rec {
   };
 
   gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32  = { config = "i686-unknown-linux-gnu"; };
 
   musl64 = { config = "x86_64-unknown-linux-musl"; };
@@ -206,6 +207,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
+    rustc.config = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {

@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.xfnw ];
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "xcd";
   };
 }

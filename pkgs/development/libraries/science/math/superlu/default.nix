@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     "-DUSE_XSDK_DEFAULTS=true"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+    ];
+  };
+
   patches = [
     ./add-superlu-lib-as-dependency-for-the-unit-tests.patch
   ];

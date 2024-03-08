@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "plexauth";
   version = "0.0.6";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

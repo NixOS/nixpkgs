@@ -13,7 +13,7 @@ If you find you are lacking inspiration for packing javascript applications, the
 ### Github {#javascript-finding-examples-github}
 
 - Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
-- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
+- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+path%3A**%2Fflake.nix&type=code>
 
 ### Gitlab {#javascript-finding-examples-gitlab}
 
@@ -161,6 +161,8 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 
 `buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
 
+Here's an example:
+
 ```nix
 { lib, buildNpmPackage, fetchFromGitHub }:
 
@@ -182,14 +184,16 @@ buildNpmPackage rec {
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
-  meta = with lib; {
+  meta = {
     description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ winter ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ winter ];
   };
 }
 ```
+
+In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`. Additionally, the `bin` and `man` keys in the source's `package.json` are used to decide what binaries and manpages are supposed to be installed. If these are not defined, `npm pack` may miss some files, and no binaries will be produced.
 
 #### Arguments {#javascript-buildNpmPackage-arguments}
 
@@ -204,10 +208,13 @@ buildNpmPackage rec {
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
 * `npmPackFlags`: Flags to pass to `npm pack`.
 * `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
+* `makeWrapperArgs`: Flags to pass to `makeWrapper`, added to executable calling the generated `.js` with `node` as an interpreter. These scripts are defined in `package.json`.
+* `nodejs`: The `nodejs` package to build against, using the corresponding `npm` shipped with that version of `node`. Defaults to `pkgs.nodejs`.
+* `npmDeps`: The dependencies used to build the npm package. Especially useful to not have to recompute workspace depedencies.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
-`prefetch-npm-deps` can calculate the hash of the dependencies of an npm project ahead of time.
+`prefetch-npm-deps` is a Nixpkgs package that calculates the hash of the dependencies of an npm project ahead of time.
 
 ```console
 $ ls
@@ -216,6 +223,50 @@ $ prefetch-npm-deps package-lock.json
 ...
 sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 ```
+
+#### fetchNpmDeps {#javascript-buildNpmPackage-fetchNpmDeps}
+
+`fetchNpmDeps` is a Nix function that requires the following mandatory arguments:
+
+- `src`: A directory / tarball with `package-lock.json` file
+- `hash`: The output hash of the node dependencies defined in `package-lock.json`.
+
+It returns a derivation with all `package-lock.json` dependencies downloaded into `$out/`, usable as an npm cache.
+
+#### importNpmLock {#javascript-buildNpmPackage-importNpmLock}
+
+`importNpmLock` is a Nix function that requires the following optional arguments:
+
+- `npmRoot`: Path to package directory containing the source tree
+- `package`: Parsed contents of `package.json`
+- `packageLock`: Parsed contents of `package-lock.json`
+- `pname`: Package name
+- `version`: Package version
+
+It returns a derivation with a patched `package.json` & `package-lock.json` with all dependencies resolved to Nix store paths.
+
+This function is analogous to using `fetchNpmDeps`, but instead of specifying `hash` it uses metadata from `package.json` & `package-lock.json`.
+
+Note that `npmHooks.npmConfigHook` cannot be used with `importNpmLock`. You will instead need to use `importNpmLock.npmConfigHook`:
+
+```nix
+{ buildNpmPackage, importNpmLock }:
+
+buildNpmPackage {
+  pname = "hello";
+  version = "0.1.0";
+
+  npmDeps = importNpmLock {
+    npmRoot = ./.;
+  };
+
+  npmConfigHook = importNpmLock.npmConfigHook;
+}
+```
+
+### corepack {#javascript-corepack}
+
+This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
 
 ### node2nix {#javascript-node2nix}
 
@@ -334,6 +385,7 @@ mkYarnPackage rec {
 
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
+- `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
 
 ## Outside Nixpkgs {#javascript-outside-nixpkgs}
 

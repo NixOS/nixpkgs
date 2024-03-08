@@ -15,16 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "47.0";
+  version = "50.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R+qgHDu9GRwT5ic1DCDlYe1Xb4hqi8pgitKq9iBBQNQ=";
+    hash = "sha256-PJlbY7QR9b2eVaALpuq/67kRTc91HEhs9Wl7WXtSLmA=";
   };
 
   strictDeps = true;
+
+  outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs = [
     cmake

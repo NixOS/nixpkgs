@@ -10,11 +10,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "1.6.0";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    sha256 = "1n052nwsccc3sr0jqnvhyl0six8wi46vysxjchwrdm8brnsdpf84";
+      url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart-arm64.tar.gz";
+      hash = "sha256-QtVqgmjYpLAhFibW1DIVWNYiOjHB1X/YY6zRVB+1soA=";
   };
   sourceRoot = ".";
 

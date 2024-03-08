@@ -38,8 +38,6 @@ The file system can be configured in NixOS via the usual [fileSystems](#opt-file
 Here's a typical setup:
 ```nix
 {
-  system.fsPackages = [ pkgs.sshfs ];
-
   fileSystems."/mnt/my-dir" = {
     device = "my-user@example.com:/my-dir/";
     fsType = "sshfs";

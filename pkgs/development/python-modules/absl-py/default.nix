@@ -2,18 +2,24 @@
 , lib
 , pythonOlder
 , fetchPypi
+, setuptools
 , six
 , enum34
 }:
 
 buildPythonPackage rec {
   pname = "absl-py";
-  version = "1.4.0";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0sJE0BBIukdufAgL0sbfXhQdIR3oAiNGDVs7iipYQz0=";
+    hash = "sha256-2WkCEcX8/vzdGkVHCsK1xazUUkHDr3Hu2WvFRBdGwNU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     six

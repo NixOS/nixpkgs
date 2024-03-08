@@ -8,12 +8,12 @@
 , blas-ilp64
 , hdf5-cpp
 , python3
-, texlive
+, texliveMinimal
 , armadillo
 , libxc
 , makeWrapper
 , gsl
-, boost175
+, boost180
 , autoPatchelfHook
   # Note that the CASPT2 module is broken with MPI
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
@@ -41,16 +41,15 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "23.06";
+  version = "24.02";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
-    # The tag keeps moving, fix a hash instead
-    rev = "1cda3772686cbf99a4af695929a12d563c795ca2"; # 2023-06-12
-    sha256 = "sha256-DLRQsRy2jt8V8q2sKmv2hLuKCuMihp/+zcMY/3sg1Fk=";
+    rev = "v${version}";
+    hash = "sha256-4Ek0cnaRfLEbj1Nj31rRp9b2sois4rIFTcpOUq9h2mw=";
   };
 
   patches = [
@@ -78,7 +77,7 @@ stdenv.mkDerivation {
     perl
     gfortran
     cmake
-    texlive.combined.scheme-minimal
+    texliveMinimal
     makeWrapper
     autoPatchelfHook
   ];
@@ -90,7 +89,7 @@ stdenv.mkDerivation {
     armadillo
     libxc
     gsl.dev
-    boost175
+    boost180
   ] ++ lib.optionals enableMpi [
     mpi
     globalarrays
@@ -104,7 +103,7 @@ stdenv.mkDerivation {
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
-    "-DEXTERNAL_LIBXC=${libxc}"
+    "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
     "-DDMRG=ON"
     "-DNEVPT2=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
@@ -152,7 +151,7 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
     license = with licenses; [ lgpl21Only bsd3 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     mainProgram = "pymolcas";
   };
 }

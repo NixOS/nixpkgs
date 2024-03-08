@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.x86_64;
     maintainers = with maintainers; [ nullishamy ];
+    mainProgram = "owofetch";
   };
 }

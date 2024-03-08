@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "bagit";
   version = "1.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "LibraryOfCongress";
@@ -19,8 +20,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ gettext setuptools-scm ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeCheckInputs = [
     mock

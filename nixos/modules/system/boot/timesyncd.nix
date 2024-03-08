@@ -46,6 +46,35 @@ with lib;
       wantedBy = [ "sysinit.target" ];
       aliases = [ "dbus-org.freedesktop.timesync1.service" ];
       restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
+      # systemd-timesyncd disables DNSSEC validation in the nss-resolve module by setting SYSTEMD_NSS_RESOLVE_VALIDATE to 0 in the unit file.
+      # This is required in order to solve the chicken-and-egg problem when DNSSEC validation needs the correct time to work, but to set the
+      # correct time, we need to connect to an NTP server, which usually requires resolving its hostname.
+      # In order for nss-resolve to be able to read this environment variable we patch systemd-timesyncd to disable NSCD and use NSS modules directly.
+      # This means that systemd-timesyncd needs to have NSS modules path in LD_LIBRARY_PATH. When systemd-resolved is disabled we still need to set
+      # NSS module path so that systemd-timesyncd keeps using other NSS modules that are configured in the system.
+      environment.LD_LIBRARY_PATH = config.system.nssModules.path;
+
+      preStart = (
+        # Ensure that we have some stored time to prevent
+        # systemd-timesyncd to resort back to the fallback time.  If
+        # the file doesn't exist we assume that our current system
+        # clock is good enough to provide an initial value.
+        ''
+          if ! [ -f /var/lib/systemd/timesync/clock ]; then
+            test -d /var/lib/systemd/timesync || mkdir -p /var/lib/systemd/timesync
+            touch /var/lib/systemd/timesync/clock
+          fi
+        '' +
+        # workaround an issue of systemd-timesyncd not starting due to upstream systemd reverting their dynamic users changes
+        #  - https://github.com/NixOS/nixpkgs/pull/61321#issuecomment-492423742
+        #  - https://github.com/systemd/systemd/issues/12131
+        (lib.optionalString (versionOlder config.system.stateVersion "19.09") ''
+          if [ -L /var/lib/systemd/timesync ]; then
+            rm /var/lib/systemd/timesync
+            mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
+          fi
+        '')
+      );
     };
 
     environment.etc."systemd/timesyncd.conf".text = ''
@@ -59,28 +88,5 @@ with lib;
       group = "systemd-timesync";
     };
     users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
-
-    system.activationScripts.systemd-timesyncd-migration =
-      # workaround an issue of systemd-timesyncd not starting due to upstream systemd reverting their dynamic users changes
-      #  - https://github.com/NixOS/nixpkgs/pull/61321#issuecomment-492423742
-      #  - https://github.com/systemd/systemd/issues/12131
-      mkIf (versionOlder config.system.stateVersion "19.09") ''
-        if [ -L /var/lib/systemd/timesync ]; then
-          rm /var/lib/systemd/timesync
-          mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
-        fi
-      '';
-    system.activationScripts.systemd-timesyncd-init-clock =
-      # Ensure that we have some stored time to prevent systemd-timesyncd to
-      # resort back to the fallback time.
-      # If the file doesn't exist we assume that our current system clock is
-      # good enough to provide an initial value.
-      ''
-      if ! [ -f /var/lib/systemd/timesync/clock ]; then
-        test -d /var/lib/systemd/timesync || mkdir -p /var/lib/systemd/timesync
-        touch /var/lib/systemd/timesync/clock
-      fi
-      '';
   };
-
 }

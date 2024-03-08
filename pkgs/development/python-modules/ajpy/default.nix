@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ajpy";
   version = "0.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -13,21 +13,32 @@
 , pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.9.0";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9rXAFMFpKF+oIKXSFLVCLDfdpMF837xRIEe3aH7ditc=";
+    hash = "sha256-ozohIzw80YfyB0sxXQ9MY6VpF+EDDvXZYfkpuloE4AU=";
   };
+
+  postPatch = ''
+    # Not used requirement
+    substituteInPlace setup.py \
+      --replace-fail '"vol",' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -39,18 +50,15 @@ buildPythonPackage rec {
     requests
   ];
 
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     aioresponses
     aiounittest
     pytestCheckHook
     requests-mock
   ];
-
-  postPatch = ''
-    # Not used requirement
-    substituteInPlace setup.py \
-      --replace '"vol",' ""
-  '';
 
   pythonImportsCheck = [
     "yalexs"

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pysrt";
   version = "1.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "byroot";

@@ -8,6 +8,7 @@ rebooting.chapter.md
 user-sessions.chapter.md
 control-groups.chapter.md
 logging.chapter.md
+system-state.chapter.md
 cleaning-store.chapter.md
 containers.chapter.md
 troubleshooting.chapter.md

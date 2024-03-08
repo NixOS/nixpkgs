@@ -2,9 +2,13 @@
 , stdenv
 , python3
 , fetchFromGitHub
+, fetchpatch
 , fetchPypi
 , nix-update-script
 , runtimeShell
+, installShellFiles
+, testers
+, pdm
 }:
 let
   python = python3.override {
@@ -31,23 +35,26 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.9.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "2.12.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/IAU3S/7cnF5qOwCQ8+sntOp3EU0i+HX+X0fKQrWD8s=";
+    hash = "sha256-0Eh3Ni+Vz5/8HSw4uFH2k3BuSSiEDkiYauV22tV0FJY=";
   };
 
   nativeBuildInputs = [
     pdm-backend
+    installShellFiles
   ];
 
   propagatedBuildInputs = [
     blinker
     certifi
     cachecontrol
+    dep-logic
     findpython
     installer
     packaging
@@ -68,7 +75,27 @@ buildPythonApplication rec {
   ]
   ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
+  ]
+  ++ lib.optionals (pythonAtLeast "3.10") [
+    truststore
   ];
+
+  makeWrapperArgs = [
+    "--set PDM_CHECK_UPDATE 0"
+  ];
+
+  preInstall = ''
+    # Silence network warning during pypaInstallPhase
+    # by disabling latest version check
+    export PDM_CHECK_UPDATE=0
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd pdm \
+      --bash <($out/bin/pdm completion bash) \
+      --fish <($out/bin/pdm completion fish) \
+      --zsh <($out/bin/pdm completion zsh)
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -85,7 +112,7 @@ buildPythonApplication rec {
   preCheck = ''
     export HOME=$TMPDIR
     substituteInPlace tests/cli/test_run.py \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-warn "/bin/bash" "${runtimeShell}"
   '';
 
   disabledTests = [
@@ -98,13 +125,18 @@ buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests.version = testers.testVersion {
+    package = pdm;
+  };
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://pdm.fming.dev";
+    homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "pdm";
   };
 }

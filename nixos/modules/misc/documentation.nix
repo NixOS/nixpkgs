@@ -77,7 +77,11 @@ let
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filter (pkgs.path + "/nixos");
-          modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
+          modules =
+            "[ "
+            + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
+            + " ]";
+          passAsFile = [ "modules" ];
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
@@ -87,7 +91,7 @@ let
             --argstr libPath "$libPath" \
             --argstr pkgsLibPath "$pkgsLibPath" \
             --argstr nixosPath "$nixosPath" \
-            --arg modules "[ $modules ]" \
+            --arg modules "import $modulesPath" \
             --argstr stateVersion "${options.system.stateVersion.default}" \
             --argstr release "${config.system.nixos.release}" \
             $nixosPath/lib/eval-cacheable-options.nix > $out \

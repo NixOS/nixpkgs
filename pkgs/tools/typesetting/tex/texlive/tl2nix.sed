@@ -91,6 +91,7 @@ $a}
       t next-doc # loop if the previous lines matched
 
     / (texmf-dist|RELOC)\/doc\/man\//i\  hasManpages = true;
+    / (texmf-dist|RELOC)\/doc\/info\//i\  hasInfo = true;
 
     D # restart cycle
   }

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kCkMZnHbFUuBBvlQ5rn0tNeL7uTAq0aodpj2JvPo968=";
+    hash = "sha256-yyPUNFDq9W5OW1muHtQ10QgAHhXI8w7CY77fsWhIy0k=";
   };
 
   propagatedBuildInputs = [

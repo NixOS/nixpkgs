@@ -21,14 +21,16 @@
 , dht
 , libnatpmp
 , libiconv
-, darwin
+, Foundation
   # Build options
 , enableGTK3 ? false
 , gtkmm3
 , xorg
 , wrapGAppsHook
-, enableQt ? false
+, enableQt5 ? false
+, enableQt6 ? false
 , qt5
+, qt6Packages
 , nixosTests
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , enableDaemon ? true
@@ -37,35 +39,49 @@
 , apparmorRulesFromClosure
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (lib) cmakeBool optionals;
+
+  apparmorRules = apparmorRulesFromClosure { name = "transmission-daemon"; } ([
+    curl
+    libdeflate
+    libevent
+    libnatpmp
+    libpsl
+    miniupnpc
+    openssl
+    pcre
+    zlib
+  ]
+  ++ optionals enableSystemd [ systemd ]
+  ++ optionals stdenv.isLinux [ inotify-tools ]);
+
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.0.4";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
-    hash = "sha256-Sz3+5VvfOgET1aiormEnBOrF+yN79tiSQvjLAoGqTLw=";
+    rev = finalAttrs.version;
+    hash = "sha256-gd1LGAhMuSyC/19wxkoE2mqVozjGPfupIPGojKY0Hn4=";
     fetchSubmodules = true;
   };
 
   outputs = [ "out" "apparmor" ];
 
-  cmakeFlags =
-    let
-      mkFlag = opt: if opt then "ON" else "OFF";
-    in
-    [
-      "-DENABLE_MAC=OFF" # requires xcodebuild
-      "-DENABLE_GTK=${mkFlag enableGTK3}"
-      "-DENABLE_QT=${mkFlag enableQt}"
-      "-DENABLE_DAEMON=${mkFlag enableDaemon}"
-      "-DENABLE_CLI=${mkFlag enableCli}"
-      "-DINSTALL_LIB=${mkFlag installLib}"
-    ] ++ lib.optionals stdenv.isDarwin [
-      # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
-    ];
+  cmakeFlags = [
+    (cmakeBool "ENABLE_CLI" enableCli)
+    (cmakeBool "ENABLE_DAEMON" enableDaemon)
+    (cmakeBool "ENABLE_GTK" enableGTK3)
+    (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
+    (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
+    (cmakeBool "INSTALL_LIB" installLib)
+  ] ++ optionals stdenv.isDarwin [
+    # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
 
   postPatch = ''
     # Clean third-party libraries to ensure system ones are used.
@@ -89,8 +105,9 @@ stdenv.mkDerivation rec {
     cmake
     python3
   ]
-  ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
-  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
+  ++ optionals enableGTK3 [ wrapGAppsHook ]
+  ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
+  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
   ;
 
   buildInputs = [
@@ -109,11 +126,12 @@ stdenv.mkDerivation rec {
     utf8cpp
     zlib
   ]
-  ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
-  ++ lib.optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
-  ++ lib.optionals enableSystemd [ systemd ]
-  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Foundation ];
+  ++ optionals enableQt5 (with qt5; [ qttools qtbase ])
+  ++ optionals enableQt6 (with qt6Packages; [ qttools qtbase qtsvg ])
+  ++ optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
+  ++ optionals enableSystemd [ systemd ]
+  ++ optionals stdenv.isLinux [ inotify-tools ]
+  ++ optionals stdenv.isDarwin [ libiconv Foundation ];
 
   postInstall = ''
     mkdir $apparmor
@@ -123,26 +141,29 @@ stdenv.mkDerivation rec {
       include <abstractions/base>
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
-      include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib libdeflate libpsl libnatpmp miniupnpc
-      ] ++ lib.optionals enableSystemd [ systemd ]
-        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-      )}"
+      include "${apparmorRules}"
       r @{PROC}/sys/kernel/random/uuid,
       r @{PROC}/sys/vm/overcommit_memory,
       r @{PROC}/@{pid}/environ,
       r @{PROC}/@{pid}/mounts,
       rwk /tmp/tr_session_id_*,
 
-      r $out/share/transmission/web/**,
+      r $out/share/transmission/public_html/**,
 
       include <local/bin.transmission-daemon>
     }
     EOF
+    install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
   '';
 
-  meta = {
+  passthru.tests = {
+    apparmor = nixosTests.transmission_4; # starts the service with apparmor enabled
+    smoke-test = nixosTests.bittorrent;
+  };
+
+  meta = with lib; {
     description = "A fast, easy and free BitTorrent client";
+    mainProgram = if (enableQt5 || enableQt6) then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
       on top of a cross-platform back-end.
@@ -154,11 +175,9 @@ stdenv.mkDerivation rec {
         * Bluetack (PeerGuardian) blocklists with automatic updates
         * Full encryption, DHT, and PEX support
     '';
-    homepage = "http://www.transmissionbt.com/";
-    license = with lib.licenses; [ gpl2Plus mit ];
-    maintainers = with lib.maintainers; [ astsmtl ];
-    platforms = lib.platforms.unix;
-    # Needs macOS >= 10.14.6
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    homepage = "https://www.transmissionbt.com/";
+    license = with licenses; [ gpl2Plus mit ];
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.unix;
   };
-}
+})

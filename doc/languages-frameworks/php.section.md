@@ -58,7 +58,7 @@ php.withExtensions ({ enabled, all }:
   ++ [ all.imagick ])
 ```
 
-To build your list of extensions from the ground up, you can simply
+To build your list of extensions from the ground up, you can
 ignore `enabled`:
 
 ```nix
@@ -140,7 +140,7 @@ Example of building `composer` with additional extensions:
 ### Overriding PHP packages {#ssec-php-user-guide-overriding-packages}
 
 `php-packages.nix` form a scope, allowing us to override the packages defined
-within. For example, to apply a patch to a `mysqlnd` extension, you can simply
+within. For example, to apply a patch to a `mysqlnd` extension, you can
 pass an overlay-style function to `php`’s `packageOverrides` argument:
 
 ```nix
@@ -191,7 +191,7 @@ using the `bin` attribute in `composer.json`, these binaries will be
 automatically linked and made accessible in the derivation. In this context,
 "binaries" refer to PHP scripts that are intended to be executable.
 
-To use the helper effectively, simply add the `vendorHash` attribute, which
+To use the helper effectively, add the `vendorHash` attribute, which
 enables the wrapper to handle the heavy lifting.
 
 Internally, the helper operates in three stages:
@@ -200,7 +200,7 @@ Internally, the helper operates in three stages:
    composer repository on the filesystem containing dependencies specified in
    `composer.json`. This process uses the function
    `php.mkComposerRepository` which in turn uses the
-   `php.composerHooks.composerRepositoryHook` hook. Internaly this function uses
+   `php.composerHooks.composerRepositoryHook` hook. Internally this function uses
    a custom
    [Composer plugin](https://github.com/nix-community/composer-local-repo-plugin) to
    generate the repository.

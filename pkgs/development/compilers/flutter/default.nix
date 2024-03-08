@@ -1,14 +1,23 @@
-{ callPackage, fetchzip, dart, lib, stdenv }:
+{ callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
-    in map (f: dir + ("/" + f)) files;
-  mkFlutter = { version, engineVersion, dartVersion, flutterHash, dartHash, patches }:
+    in if (builtins.pathExists dir) then map (f: dir + ("/" + f)) files else [ ];
+  mkFlutter =
+    { version
+    , engineVersion
+    , dartVersion
+    , flutterHash
+    , dartHash
+    , patches
+    , pubspecLock
+    , artifactHashes
+    }:
     let
       args = {
-        inherit version engineVersion patches;
+        inherit version engineVersion patches pubspecLock artifactHashes;
 
         dart = dart.override {
           version = dartVersion;
@@ -31,64 +40,33 @@ let
             };
           };
         };
-        src = {
-          x86_64-linux = fetchzip {
-            url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${version}-stable.tar.xz";
-            sha256 = flutterHash.x86_64-linux;
-          };
-          aarch64-linux = fetchzip {
-            url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${version}-stable.tar.xz";
-            sha256 = flutterHash.aarch64-linux;
-          };
-          x86_64-darwin = fetchzip {
-            url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_${version}-stable.zip";
-            sha256 = flutterHash.x86_64-darwin;
-          };
-          aarch64-darwin = fetchzip {
-            url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_${version}-stable.zip";
-            sha256 = flutterHash.aarch64-darwin;
-          };
-        }.${stdenv.hostPlatform.system};
+        src = fetchFromGitHub {
+          owner = "flutter";
+          repo = "flutter";
+          rev = version;
+          hash = flutterHash;
+        };
       };
     in
     (mkCustomFlutter args).overrideAttrs (prev: next: {
       passthru = next.passthru // rec {
         inherit wrapFlutter mkCustomFlutter mkFlutter;
-        buildFlutterApplication = callPackage ../../../build-support/flutter {
-          # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
-          flutter = (wrapFlutter (mkCustomFlutter args)).override {
-            supportsAndroid = false;
-            includedEngineArtifacts = {
-              common = [ "flutter_patched_sdk_product" ];
-              platform.linux = lib.optionals stdenv.hostPlatform.isLinux
-                (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
-                  (architecture: [ "release" ]));
-            };
-          };
-        };
+        buildFlutterApplication = callPackage ../../../build-support/flutter { flutter = wrapFlutter (mkCustomFlutter args); };
       };
     });
 
-  flutter3Patches = getPatches ./patches/flutter3;
+  flutterVersions = lib.mapAttrs'
+    (version: _:
+      let
+        versionDir = ./versions + "/${version}";
+        data = lib.importJSON (versionDir + "/data.json");
+      in
+      lib.nameValuePair "v${version}" (wrapFlutter (mkFlutter ({
+        patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
+      } // data))))
+    (builtins.readDir ./versions);
 in
-{
-  inherit wrapFlutter;
-  stable = mkFlutter {
-    version = "3.13.0";
-    engineVersion = "1ac611c64eadbd93c5f5aba5494b8fc3b35ee952";
-    dartVersion = "3.1.0";
-    dartHash = {
-      x86_64-linux = "sha256-sGpRyuUTkZ0cpG/O21NCHaOsQRjNklsl9G6Ia1tZxAw=";
-      aarch64-linux = "sha256-wcDtL/Lh0NFC01QlnKwx8ovTHZ5ww+rb1sELn92R1uU=";
-      x86_64-darwin = "sha256-h+e7ABlLWCxc6wrbjiy5lgp6O/DnNKdXFNJtgnXBZNA=";
-      aarch64-darwin = "sha256-sAWnd09mbcRLP0WjSjjWF7+WQ7LP3tWsq5Kqw8e4APg=";
-    };
-    flutterHash = rec {
-      x86_64-linux = "sha256-gXNQ9RuHVC/3puHNygWPRdezx8iiKmiOnxQmoX6XUFo=";
-      aarch64-linux = x86_64-linux;
-      x86_64-darwin = "sha256-vI8TsXIfTg4PYf5dzxDaJt+PIdmVFBmd2slKK7c1By0=";
-      aarch64-darwin = "sha256-VhGJlp+HG8QLZx8u0xK+cgbneoDM7zhNvm3Oco4nBms=";
-    };
-    patches = flutter3Patches;
-  };
+flutterVersions // {
+  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames flutterVersions))};
+  inherit wrapFlutter mkFlutter;
 }

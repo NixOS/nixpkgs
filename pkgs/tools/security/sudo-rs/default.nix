@@ -1,9 +1,9 @@
 { lib
 , bash
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , nix-update-script
+, nixosTests
 , pam
 , pandoc
 , rustPlatform
@@ -11,28 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sudo-rs";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "memorysafety";
     repo = "sudo-rs";
     rev = "v${version}";
-    hash = "sha256-Kk5D3387hdl6eGWTSV003r+XajuDh6YgHuqYlj9NnaQ=";
+    hash = "sha256-Fc9NgKo8Be8AqB1YcH/oH514f3pOjFtqNBIC+3xwagY=";
   };
-  cargoHash = "sha256-yeMK37tOgJcs9pW3IclpR5WMXx0gMDJ2wcmInxJYbQ8=";
+  cargoHash = "sha256-1XhdMHGZZOmSFuVW3Oa1Xwjy3dzkgJOE7h24Ly2F3ps=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
 
   buildInputs = [ pam ];
-
-  patches = [
-    (fetchpatch {
-      # @R-VdP's patch to work with NixOS' suid wrappers
-      name = "Skip self_check when executed as root.patch";
-      url = "https://github.com/R-VdP/sudo-rs/commit/a44541dcb36b94f938daaed66b3ff06cfc1c2b40.patch";
-      hash = "sha256-PdmOqp/NDjFy8ve4jEOi58e0N9xUnaVKioQwdC5Jf1U=";
-    })
-  ];
 
   # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
@@ -73,10 +64,13 @@ rustPlatform.buildRustPackage rec {
     "su::context::tests::invalid_shell"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = nixosTests.sudo-rs;
+  };
 
   meta = with lib; {
-    description = "A memory safe implementation of sudo and su.";
+    description = "A memory safe implementation of sudo and su";
     homepage = "https://github.com/memorysafety/sudo-rs";
     changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

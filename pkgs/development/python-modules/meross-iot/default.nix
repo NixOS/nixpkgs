@@ -7,12 +7,13 @@
 , pythonOlder
 , requests
 , retrying
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "meross-iot";
-  version = "0.4.5.9";
-  format = "setuptools";
+  version = "0.4.6.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,8 +21,12 @@ buildPythonPackage rec {
     owner = "albertogeniola";
     repo = "MerossIot";
     rev = "refs/tags/${version}";
-    hash = "sha256-Wyg9Y4THnjNTWQsiOanoyEEBqVgsG5MeyoGE69/n8sM=";
+    hash = "sha256-fekiN4AHb/RNEMibQqV7By0FAyTcERZmmi0+qCG4NzQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

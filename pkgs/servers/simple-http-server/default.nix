@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.7";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Xi5tJIfK4zjckKERhxHuDqeyOB9Dxul/eFLKOtpgR/w=";
+    sha256 = "sha256-JY3j/SCBm485w4x3EDTjDQw/N+t+3FvQyY9b7SQKhak=";
   };
 
-  cargoSha256 = "sha256-wv1hlBTQe1Mm67J2FqrrXSSlZkFPB0TzKc5VUMMfUIQ=";
+  cargoHash = "sha256-6Gg4CDqlMtiOHJSeMfg9rP0CgP57GGfnuoqAXFuL8jo=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda mephistophiles ];
+    mainProgram = "simple-http-server";
   };
 }

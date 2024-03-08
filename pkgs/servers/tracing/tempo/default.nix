@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "tempo";
-  version = "2.2.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-FeQTg0EuAwpSMf+rPLFNegXEXfVa6dqR2xjl4MfZnYg=";
+    hash = "sha256-ory7UllnV6Qzjvk2dy5B9pell0Ezse2NAn2rQ1gDsGM=";
   };
 
   vendorHash = null;
@@ -38,6 +38,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/tempo/";
     maintainers = with maintainers; [ willibutz ];
-    platforms = platforms.linux;
   };
 }

@@ -61,6 +61,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/catppuccin/cursors";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ PlayerNameHere ];
+    maintainers = with maintainers; [ dixslyf ];
   };
 }

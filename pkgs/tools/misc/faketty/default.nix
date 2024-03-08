@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faketty";
-  version = "1.0.13";
+  version = "1.0.16";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-jV5b6mB81Nz0Q+Toj5DTQq2QcM+EoQ7jRYV/OXgtemA=";
+    hash = "sha256-BlQnVjYPFUfEurFUE2MHOL2ad56Nu/atzRuFu4OoCSI=";
   };
 
-  cargoHash = "sha256-9t1Km/ZXzxyO72CaWM81fWGcFkri7F+wMAVom0GV/YM=";
+  cargoHash = "sha256-q9jx03XYA977481B9xuUfaaMBDbSVx4xREj4Q1Ti/Yw=";
 
   postPatch = ''
     patchShebangs tests/test.sh
@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dtolnay/faketty/releases/tag/${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "faketty";
   };
 }

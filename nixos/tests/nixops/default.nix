@@ -9,7 +9,7 @@ let
     #  - Alternatively, blocked on a NixOps 2 release
     #    https://github.com/NixOS/nixops/issues/1242
     # stable = testsLegacyNetwork { nixopsPkg = pkgs.nixops; };
-    unstable = testsForPackage { nixopsPkg = pkgs.nixops_unstable; };
+    unstable = testsForPackage { nixopsPkg = pkgs.nixops_unstable_minimal; };
 
     # inherit testsForPackage;
   };
@@ -19,7 +19,7 @@ let
     passthru.override = args': testsForPackage (args // args');
   };
 
-  testLegacyNetwork = { nixopsPkg, ... }: pkgs.nixosTest ({
+  testLegacyNetwork = { nixopsPkg, ... }: pkgs.testers.nixosTest ({
     name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
@@ -32,6 +32,7 @@ let
           pkgs.hello
           pkgs.figlet
         ];
+        virtualisation.memorySize = 2048;
 
         # TODO: make this efficient, https://github.com/NixOS/nixpkgs/issues/180529
         system.includeBuildDependencies = true;

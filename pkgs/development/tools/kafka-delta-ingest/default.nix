@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     description = "A highly efficient daemon for streaming data from Kafka into Delta Lake";
     homepage = "https://github.com/delta-io/kafka-delta-ingest";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ ];
   };
 }

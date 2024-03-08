@@ -1,14 +1,37 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    collect
+    concatLists
+    concatStringsSep
+    flip
+    getAttrFromPath
+    hasPrefix
+    isList
+    length
+    literalExpression
+    literalMD
+    mapAttrsRecursiveCond
+    mapAttrsToList
+    mdDoc
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    optional
+    optionalAttrs
+    optionalString
+    types
+    ;
+
   cfg = config.services.thanos;
 
   nullOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
-    description = lib.mdDoc description;
+    description = mdDoc description;
   };
 
   optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
@@ -32,7 +55,7 @@ let
     option = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -41,7 +64,7 @@ let
     option = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -50,7 +73,7 @@ let
     option = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -59,7 +82,7 @@ let
     option = mkOption {
       type = types.str;
       inherit default;
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -86,7 +109,7 @@ let
     defaultText = literalMD ''
       calculated from `config.services.thanos.${cmd}`
     '';
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Arguments to the `thanos ${cmd}` command.
 
       Defaults to a list of arguments formed by converting the structured
@@ -127,10 +150,10 @@ let
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
           '';
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Path to YAML file that contains tracing configuration.
 
-            See format details: <https://thanos.io/tracing.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/tracing.md/#configuration>
           '';
         };
       };
@@ -147,7 +170,7 @@ let
 
             If {option}`tracing.config-file` is set this option has no effect.
 
-            See format details: <https://thanos.io/tracing.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/tracing.md/#configuration>
           '';
         };
     };
@@ -192,10 +215,10 @@ let
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
           '';
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Path to YAML file that contains object store configuration.
 
-            See format details: <https://thanos.io/storage.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage>
           '';
         };
       };
@@ -212,7 +235,7 @@ let
 
             If {option}`objstore.config-file` is set this option has no effect.
 
-            See format details: <https://thanos.io/storage.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage>
           '';
         };
     };
@@ -231,7 +254,7 @@ let
           type = types.str;
           default = "/var/lib/${config.services.prometheus.stateDir}/data";
           defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Data directory of TSDB.
           '';
         };
@@ -266,14 +289,14 @@ let
         Maximum size of concurrently allocatable bytes for chunks.
       '';
 
-      store.grpc.series-sample-limit = mkParamDef types.int 0 ''
-        Maximum amount of samples returned via a single Series call.
+      store.limits.request-samples = mkParamDef types.int 0 ''
+        The maximum samples allowed for a single Series request.
+        The Series call fails if this limit is exceeded.
 
         `0` means no limit.
 
-        NOTE: for efficiency we take 120 as the number of samples in chunk (it
-        cannot be bigger than that), so the actual number of samples might be
-        lower, even though the maximum could be hit.
+        NOTE: For efficiency the limit is internally implemented as 'chunks limit'
+        considering each chunk contains a maximum of 120 samples.
       '';
 
       store.grpc.series-max-concurrency = mkParamDef types.int 20 ''
@@ -371,24 +394,24 @@ let
         Maximum number of queries processed concurrently by query node.
       '';
 
-      query.replica-label = mkParam types.str ''
-        Label to treat as a replica indicator along which data is
+      query.replica-labels = mkListParam "query.replica-label" ''
+        Labels to treat as a replica indicator along which data is
         deduplicated.
 
         Still you will be able to query without deduplication using
-        `dedup=false` parameter.
+        'dedup=false' parameter. Data includes time series, recording
+        rules, and alerting rules.
       '';
 
       selector-labels = mkAttrsParam "selector-label" ''
         Query selector labels that will be exposed in info endpoint.
       '';
 
-      store.addresses = mkListParam "store" ''
-        Addresses of statically configured store API servers.
+      endpoints = mkListParam "endpoint" ''
+        Addresses of statically configured Thanos API servers (repeatable).
 
-        The scheme may be prefixed with `dns+` or
-        `dnssrv+` to detect store API servers through
-        respective DNS lookups.
+        The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect
+        Thanos API servers through respective DNS lookups.
       '';
 
       store.sd-files = mkListParam "store.sd-files" ''
@@ -430,6 +453,12 @@ let
       '';
     };
 
+    query-frontend = params.common cfg.query-frontend // {
+      query-frontend.downstream-url = mkParamDef types.str "http://localhost:9090" ''
+        URL of downstream Prometheus Query compatible API.
+      '';
+    };
+
     rule = params.common cfg.rule // params.objstore cfg.rule // {
 
       labels = mkAttrsParam "label" ''
@@ -447,7 +476,7 @@ let
         Rule files that should be used by rule manager. Can be in glob format.
       '';
 
-      eval-interval = mkParamDef types.str "30s" ''
+      eval-interval = mkParamDef types.str "1m" ''
         The default evaluation interval to use.
       '';
 
@@ -597,10 +626,6 @@ let
         to render all samples for a human eye anyway
       '';
 
-      block-sync-concurrency = mkParamDef types.int 20 ''
-        Number of goroutines to use when syncing block metadata from object storage.
-      '';
-
       compact.concurrency = mkParamDef types.int 1 ''
         Number of goroutines to use when compacting groups.
       '';
@@ -625,7 +650,7 @@ let
         Data directory relative to `/var/lib` of TSDB.
       '';
 
-      labels = mkAttrsParam "labels" ''
+      labels = mkAttrsParam "label" ''
         External labels to announce.
 
         This flag will be removed in the future when handling multiple tsdb
@@ -656,57 +681,56 @@ in {
 
   options.services.thanos = {
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.thanos;
-      defaultText = literalExpression "pkgs.thanos";
-      description = lib.mdDoc ''
-        The thanos package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "thanos" {};
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos sidecar for Prometheus server");
+        (mdDoc "the Thanos sidecar for Prometheus server");
       arguments = mkArgumentsOption "sidecar";
     };
 
     store = paramsToOptions params.store // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos store node giving access to blocks in a bucket provider.");
+        (mdDoc "the Thanos store node giving access to blocks in a bucket provider.");
       arguments = mkArgumentsOption "store";
     };
 
     query = paramsToOptions params.query // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos query node exposing PromQL enabled Query API " +
+        (mdDoc ("the Thanos query node exposing PromQL enabled Query API " +
          "with data retrieved from multiple store nodes"));
       arguments = mkArgumentsOption "query";
     };
 
+    query-frontend = paramsToOptions params.query-frontend // {
+      enable = mkEnableOption
+        (mdDoc ("the Thanos query frontend implements a service deployed in front of queriers to
+          improve query parallelization and caching."));
+      arguments = mkArgumentsOption "query-frontend";
+    };
+
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos ruler service which evaluates Prometheus rules against" +
+        (mdDoc ("the Thanos ruler service which evaluates Prometheus rules against" +
         " given Query nodes, exposing Store API and storing old blocks in bucket"));
       arguments = mkArgumentsOption "rule";
     };
 
     compact = paramsToOptions params.compact // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos compactor which continuously compacts blocks in an object store bucket");
+        (mdDoc "the Thanos compactor which continuously compacts blocks in an object store bucket");
       arguments = mkArgumentsOption "compact";
     };
 
     downsample = paramsToOptions params.downsample // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos downsampler which continuously downsamples blocks in an object store bucket");
+        (mdDoc "the Thanos downsampler which continuously downsamples blocks in an object store bucket");
       arguments = mkArgumentsOption "downsample";
     };
 
     receive = paramsToOptions params.receive // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos receiver which accept Prometheus remote write API requests " +
-         "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)"));
+        (mdDoc ("the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb"));
       arguments = mkArgumentsOption "receive";
     };
   };
@@ -736,6 +760,7 @@ in {
           User = "prometheus";
           Restart = "always";
           ExecStart = thanos "sidecar";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };
     })
@@ -751,6 +776,7 @@ in {
             StateDirectory = cfg.store.stateDir;
             Restart = "always";
             ExecStart = thanos "store";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }
@@ -764,6 +790,20 @@ in {
           DynamicUser = true;
           Restart = "always";
           ExecStart = thanos "query";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
+      };
+    })
+
+    (mkIf cfg.query-frontend.enable {
+      systemd.services.thanos-query-frontend = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        serviceConfig = {
+          DynamicUser = true;
+          Restart = "always";
+          ExecStart = thanos "query-frontend";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };
     })
@@ -779,6 +819,7 @@ in {
             StateDirectory = cfg.rule.stateDir;
             Restart = "always";
             ExecStart = thanos "rule";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }
@@ -797,6 +838,7 @@ in {
               DynamicUser = true;
               StateDirectory = cfg.compact.stateDir;
               ExecStart = thanos "compact";
+              ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             };
           } // optionalAttrs (!wait) { inherit (cfg.compact) startAt; };
       }
@@ -813,6 +855,7 @@ in {
             StateDirectory = cfg.downsample.stateDir;
             Restart = "always";
             ExecStart = thanos "downsample";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }
@@ -829,6 +872,7 @@ in {
             StateDirectory = cfg.receive.stateDir;
             Restart = "always";
             ExecStart = thanos "receive";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }

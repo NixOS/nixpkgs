@@ -22,7 +22,7 @@ buildPythonPackage rec {
   postPatch = ''
     patchShebangs bin/*
     substituteInPlace bin/speak-ipa \
-      --replace '${"\${src_dir}:"}' "$out/lib/${python.libPrefix}/site-packages:" \
+      --replace '${"\${src_dir}:"}' "$out/${python.sitePackages}:" \
       --replace "do espeak" "do ${espeak}/bin/espeak"
   '';
 

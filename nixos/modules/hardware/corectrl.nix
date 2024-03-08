@@ -8,13 +8,17 @@ in
 {
   options.programs.corectrl = {
     enable = mkEnableOption (lib.mdDoc ''
-      A tool to overclock amd graphics cards and processors.
+      CoreCtrl, a tool to overclock amd graphics cards and processors.
       Add your user to the corectrl group to run corectrl without needing to enter your password
     '');
 
+    package = mkPackageOption pkgs "corectrl" {
+      extraDescription = "Useful for overriding the configuration options used for the package.";
+    };
+
     gpuOverclock = {
       enable = mkEnableOption (lib.mdDoc ''
-        true
+        GPU overclocking
       '');
       ppfeaturemask = mkOption {
         type = types.str;
@@ -32,9 +36,9 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
-      environment.systemPackages = [ pkgs.corectrl ];
+      environment.systemPackages = [ cfg.package ];
 
-      services.dbus.packages = [ pkgs.corectrl ];
+      services.dbus.packages = [ cfg.package ];
 
       users.groups.corectrl = { };
 

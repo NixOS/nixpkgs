@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "nginx-sso";
-  version = "0.27.1";
+  version = "0.27.3";
 
   src = fetchFromGitHub {
     owner = "Luzifer";
     repo = "nginx-sso";
     rev = "v${version}";
-    hash = "sha256-mJwUAMjFUSbJZ8o096o2ntfd7c7dNU+LbgbL/l8aDGc=";
+    hash = "sha256-8ZfNHjf5sbcBasu3o3AHCL0tGROixdNZkDF9yd/uPbs=";
   };
 
-  vendorHash = "sha256-nyzcFYnUm2xxAdiy16vVyeF57zRI9D+P+/58pP6evDs=";
+  vendorHash = "sha256-bquK6/xT+xhEGBDeNN3U1qwSxrHWQhdHNuw9RXoqM+8=";
 
   postInstall = ''
     mkdir -p $out/share

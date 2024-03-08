@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "ds4drv";
   version = "0.5.1";
+  format = "setuptools";
 
   # PyPi only carries py3 wheel
   src = fetchFromGitHub {

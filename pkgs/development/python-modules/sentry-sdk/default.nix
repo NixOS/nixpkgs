@@ -4,7 +4,6 @@
 , apache-beam
 , asttokens
 , blinker
-, botocore
 , bottle
 , buildPythonPackage
 , celery
@@ -15,33 +14,32 @@
 , falcon
 , fetchFromGitHub
 , flask
-, flask-login
 , gevent
 , httpx
 , jsonschema
 , mock
 , pure-eval
-, pyramid
 , pyrsistent
 , pyspark
+, pysocks
 , pytest-forked
 , pytest-localserver
 , pytest-watch
 , pytestCheckHook
 , pythonOlder
+, quart
 , rq
 , sanic
+, setuptools
 , sqlalchemy
 , tornado
-, trytond
 , urllib3
-, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.31.0";
-  format = "setuptools";
+  version = "1.40.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -49,8 +47,12 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-/TQwkk/NkQulYVuLIs30rV4hsv4LVB/VfPhqMjpq0vE=";
+    hash = "sha256-cGAPSF+kjGsY9IeRxRZUiAEiDR2uNBheet5Z+fok/eY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     certifi
@@ -95,7 +97,7 @@ buildPythonPackage rec {
       pure-eval
     ];
     quart = [
-      # quart missing
+      quart
       blinker
     ];
     rq = [
@@ -120,6 +122,7 @@ buildPythonPackage rec {
     mock
     pure-eval
     pyrsistent
+    pysocks
     pytest-forked
     pytest-localserver
     pytest-watch
@@ -131,11 +134,12 @@ buildPythonPackage rec {
   disabledTests = [
     # Issue with the asseration
     "test_auto_enabling_integrations_catches_import_error"
+    "test_default_release"
   ];
 
   disabledTestPaths = [
     # Varius integration tests fail every once in a while when we
-    # upgrade depencies, so don't bother testing them.
+    # upgrade dependencies, so don't bother testing them.
     "tests/integrations/"
   ] ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
     # test crashes on aarch64

@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "http://brouits.free.fr/csv2latex/";
     license = licenses.gpl2;
     maintainers = [ maintainers.catern ];
+    mainProgram = "csv2latex";
   };
 }

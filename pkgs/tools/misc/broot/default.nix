@@ -8,24 +8,26 @@
 , libgit2
 , oniguruma
 , libiconv
+, Foundation
 , Security
 , xorg
 , zlib
 , buildPackages
+, withClipboard ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.25.1";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CgWng5b0w6LGt2m9bx3IVMxOXwqYjgsIddTQdBnN/IY=";
+    hash = "sha256-L9a1fQZkCHSHseZtQYwqIt1CokPGBqLcqY0jccHYqGw=";
   };
 
-  cargoHash = "sha256-xcUDg2vfGq4nmdbN6kFfWwbwaH/WqdLpIO0qrvQ7/t4=";
+  cargoHash = "sha256-DRW1gv5lqdXWcRLD2yf7+u6J/xIUWmELmb/l729Sqo4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,10 +36,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.isDarwin [
+    Foundation
     libiconv
     Security
     zlib
   ];
+
+  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -88,5 +93,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
     maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
+    mainProgram = "broot";
   };
 }

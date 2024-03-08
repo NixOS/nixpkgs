@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "synadm";
-  version = "0.43.1";
+  version = "0.45";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z8OXrra7+fptd4zs1gxJVGLR+SA8hoexK2qY9zpSowU=";
+    hash = "sha256-KstWVSU0IE1ncfIkIH1QsaQc/Yfs2lF+6+5x9zw9cA8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     longDescription = ''
       A CLI tool to help admins of Matrix Synapse homeservers
       conveniently issue commands available via its admin API's
-      (matrix-org/synapse@master/docs/admin_api)
+      (element-hq/synapse@master/docs/admin_api)
     '';
     changelog = "https://github.com/JOJ0/synadm/releases/tag/v${version}";
     homepage = "https://github.com/JOJ0/synadm";

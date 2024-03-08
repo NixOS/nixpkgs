@@ -2,16 +2,17 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.31.0";
+  version = "0.33.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "mtr";
     repo = "ducc";
     rev = "ducc0_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-4aNIq5RNo1Qqiqr2wjYB/FXKyvbARsRF1yW1ZzZlAOo=";
+    hash = "sha256-MezcqQRitBkK4/1rRQM2c9w+iZb2kIsDdcNd6I8CPoI=";
   };
 
   buildInputs = [ pybind11 ];

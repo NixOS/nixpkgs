@@ -17,14 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.6.0";
+  version = "3.6.1";
+  format = "setuptools";
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
     rev = "refs/tags/${version}";
-    hash = "sha256-XMJg1azsvMtVnKuIulrrZ1Of3CFk2/EgQjkN1g0FpmQ=";
+    hash = "sha256-ynAhu89VpvtQJRkIeVyffQHhd+OvWSiZzaI/7nd6fXA=";
   };
 
   # force pyproj to use ${proj}
@@ -82,6 +83,9 @@ buildPythonPackage rec {
     "test_sync_download__directory"
     "test_sync_download__system_directory"
     "test_transformer_group__download_grids"
+
+    # proj-data grid required
+    "test_azimuthal_equidistant"
   ];
 
   pythonImportsCheck = [
@@ -100,11 +104,11 @@ buildPythonPackage rec {
     "pyproj.exceptions"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Python interface to PROJ library";
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lsix dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; teams.geospatial.members ++ [ lsix dotlambda ];
   };
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "Flask-Migrate";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-fdnoX7ypTpH2mQ+7Xuhzdh706Of7PIVhHQGVbe0jv1s=";
   };
 

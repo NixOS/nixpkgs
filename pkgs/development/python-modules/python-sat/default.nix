@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "python-sat";
   version = "0.1.7.dev1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pysathq";

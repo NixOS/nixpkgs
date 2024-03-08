@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "hlk-sw16";
   version = "0.0.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jameshilliard";

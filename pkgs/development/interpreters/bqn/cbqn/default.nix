@@ -23,13 +23,13 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
     rev = "v${version}";
-    hash = "sha256-jS60phZMrpGa+GVzZSGZwVVtW9RBp/oHRIYP/pXRU2I=";
+    hash = "sha256-PCpePevWQ+aPG6Yx3WqBZ4yTeyJsCGkYMSY6kzGDL1U=";
   };
 
   nativeBuildInputs = [

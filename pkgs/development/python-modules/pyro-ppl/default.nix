@@ -13,6 +13,7 @@
 , torch
 , scikit-learn
 , seaborn
+, setuptools
 , torchvision
 , tqdm
 , wget
@@ -20,15 +21,19 @@
 
 buildPythonPackage rec {
   pname = "pyro-ppl";
-  version = "1.8.6";
-  format = "setuptools";
+  version = "1.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-ANL03ailPmbZVRJNxuSektz1cM071waCUJHbdk2TzQc=";
+    hash = "sha256-QfTABRWVaCgPvFEWSJYKmKKxpBACfYvQpDIgrJsQLN8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyro-api

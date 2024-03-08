@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "spidev";
   version = "3.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

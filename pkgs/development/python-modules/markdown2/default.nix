@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "markdown2";
   version = "2.4.10";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

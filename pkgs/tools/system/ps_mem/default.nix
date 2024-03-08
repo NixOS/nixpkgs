@@ -17,5 +17,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.lgpl21;
     maintainers = [ ];
     platforms = platforms.linux;
+    mainProgram = "ps_mem";
   };
 }

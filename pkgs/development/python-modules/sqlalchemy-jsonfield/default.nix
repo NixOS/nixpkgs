@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";
-  version = "1.0.1.post0+2023-04-24";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,11 +22,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "penguinolog";
     repo = "sqlalchemy_jsonfield";
-    rev = "a1efda9755055c1d382257fb4ef78006b713d07e";
-    hash = "sha256-6l4LEGpA8dKPw8M4quStd1nWyshMNiwQojBCxKwRRXA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4zLXB3UQh6pgQ80KrxkLeC5yiv1R8t2+JmSukmGXr7I=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   nativeBuildInputs = [
     setuptools-scm

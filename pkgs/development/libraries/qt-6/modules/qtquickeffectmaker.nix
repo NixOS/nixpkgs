@@ -5,5 +5,5 @@
 
 qtModule {
   pname = "qtquickeffectmaker";
-  qtInputs = [ qtbase qtquick3d ];
+  propagatedBuildInputs = [ qtbase qtquick3d ];
 }

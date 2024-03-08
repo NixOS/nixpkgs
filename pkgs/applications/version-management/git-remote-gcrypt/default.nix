@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ellis montag451 ];
     platforms = platforms.unix;
+    mainProgram = "git-remote-gcrypt";
   };
 }

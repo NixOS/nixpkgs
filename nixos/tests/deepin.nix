@@ -36,12 +36,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Check that logging in has given the user ownership of devices"):
           machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
-      with subtest("Check if DDE wm chooser actually start"):
-          machine.wait_until_succeeds("pgrep -f dde-wm-chooser")
-          machine.wait_for_window("dde-wm-chooser")
-          machine.execute("pkill dde-wm-chooser")
-
-
       with subtest("Check if Deepin session components actually start"):
           machine.wait_until_succeeds("pgrep -f dde-session-daemon")
           machine.wait_for_window("dde-session-daemon")

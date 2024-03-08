@@ -12,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "mopeka-iot-ble";
-  version = "0.4.1";
-  format = "pyproject";
+  version = "0.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,8 +21,13 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-x/cKg2NC6kssUQeBuQH4yghlRDgs/fJ0bWWL+qnHgcM=";
+    hash = "sha256-wF3ZSR9kjn6qWaB7SRKsQuHfbNMwdKS/5qR9nStsw1c=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -38,11 +43,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "mopeka_iot_ble"

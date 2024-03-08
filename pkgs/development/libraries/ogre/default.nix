@@ -6,7 +6,6 @@
 , unzip
 , SDL2
 , boost
-, freeimage
 , freetype
 , libpng
 , ois
@@ -55,7 +54,6 @@ let
     buildInputs = [
       SDL2
       boost
-      freeimage
       freetype
       libpng
       ois
@@ -100,8 +98,8 @@ let
 in
 {
   ogre_14 = common {
-    version = "14.0.1";
-    hash = "sha256-jtUm0jy0GsxkGlFdODGodPsuSaQgiE77BORnA6SFViU=";
+    version = "14.1.2";
+    hash = "sha256-qPoC5VXA9IC1xiFLrvE7cqCZFkuiEM0OMowUXDlmhF4=";
   };
 
   ogre_13 = common {

@@ -281,6 +281,20 @@ let
           packageRequires = [ self.haskell-mode ];
         });
 
+        hotfuzz = super.hotfuzz.overrideAttrs (old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
+
+          dontUseCmakeBuildDir = true;
+
+          preBuild = ''
+            make -j$NIX_BUILD_CORES
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            install source/hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
+          '';
+        });
+
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
@@ -315,7 +329,7 @@ let
         ivy-rtags = fix-rtags super.ivy-rtags;
 
         jinx = super.jinx.overrideAttrs (old: let
-          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+          libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
         in {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.pkg-config
@@ -462,6 +476,13 @@ let
         orgit-forge = buildWithGit super.orgit-forge;
 
         ox-rss = buildWithGit super.ox-rss;
+
+        python-isort = super.python-isort.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace python-isort.el \
+              --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+          '';
+        });
 
         # upstream issue: missing file header
         mhc = super.mhc.override {
@@ -688,9 +709,31 @@ let
               --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
           '';
         });
+
+        # Build a helper executable that interacts with the macOS Dictionary.app
+        osx-dictionary =
+          if pkgs.stdenv.isDarwin
+          then super.osx-dictionary.overrideAttrs (old: {
+            buildInputs =
+              old.buildInputs ++
+              (with pkgs.darwin.apple_sdk.frameworks; [CoreServices Foundation]);
+            dontUnpack = false;
+            buildPhase = (old.buildPhase or "") + ''
+              cd source
+              $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
+            '';
+            postInstall = (old.postInstall or "") + "\n" + ''
+              outd=$out/share/emacs/site-lisp/elpa/osx-dictionary-*
+              mkdir -p $out/bin
+              install -m444 -t $out/bin osx-dictionary-cli
+              rm $outd/osx-dictionary.m
+            '';
+          })
+          else super.osx-dictionary;
       };
 
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
-generateMelpa { }
+(generateMelpa { })
+// { __attrsFailEvaluation = true; }

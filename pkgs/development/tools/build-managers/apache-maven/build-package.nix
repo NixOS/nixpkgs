@@ -5,11 +5,15 @@
 
 { src
 , sourceRoot ? null
+, buildOffline ? false
 , patches ? [ ]
 , pname
 , version
 , mvnHash ? ""
 , mvnFetchExtraArgs ? { }
+, mvnDepsParameters ? ""
+, manualMvnArtifacts ? [ ]
+, manualMvnSources ? [ ]
 , mvnParameters ? ""
 , ...
 } @args:
@@ -28,9 +32,25 @@ let
 
     buildPhase = ''
       runHook preBuild
+    '' + lib.optionalString buildOffline ''
+      mvn de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
 
+      for artifactId in ${builtins.toString manualMvnArtifacts}
+      do
+        echo "downloading manual $artifactId"
+        mvn dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
+      done
+
+      for artifactId in ${builtins.toString manualMvnSources}
+      do
+        group=$(echo $artifactId | cut -d':' -f1)
+        artifact=$(echo $artifactId | cut -d':' -f2)
+        echo "downloading manual sources $artifactId"
+        mvn dependency:sources -DincludeGroupIds="$group" -DincludeArtifactIds="$artifact" -Dmaven.repo.local=$out/.m2
+      done
+    '' + lib.optionalString (!buildOffline) ''
       mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
-
+    '' + ''
       runHook postBuild
     '';
 
@@ -65,7 +85,7 @@ stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
     runHook preBuild
 
     mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
-    mvn package --offline "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
+    mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
 
     runHook postBuild
   '';

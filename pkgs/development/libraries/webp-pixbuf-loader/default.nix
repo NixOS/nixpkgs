@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "webp-pixbuf-loader";
-  version = "0.2.2";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "aruiz";
     repo = "webp-pixbuf-loader";
     rev = version;
-    sha256 = "sha256-TdZK2OTwetLVmmhN7RZlq2NV6EukH1Wk5Iwer2W/aHc=";
+    sha256 = "sha256-2GDH5+YCwb2mPdMfEscmWDOzdGnWRcppE+4rcDCZog4=";
   };
 
   nativeBuildInputs = [

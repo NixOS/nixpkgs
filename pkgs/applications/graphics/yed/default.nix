@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yEd";
-  version = "3.23.1";
+  version = "3.23.2";
 
   src = fetchzip {
     url = "https://www.yworks.com/resources/yed/demo/${pname}-${version}.zip";
-    sha256 = "sha256-MboljULek5vCcHpRFL9kdT4AROTD774AOBYeOTzcdig=";
+    sha256 = "sha256-u83OmIzq9VygKbfa886mj6BIa/9ET1btry2nR/wxeyI=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip wrapGAppsHook ];
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     description = "A powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "yed";
   };
 }

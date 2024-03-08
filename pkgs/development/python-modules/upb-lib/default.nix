@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "upb-lib";
   version = "0.5.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

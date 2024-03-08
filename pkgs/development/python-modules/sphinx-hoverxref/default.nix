@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "sphinx-hoverxref";
   version = "1.3.0";
-  format = "flit";
+  format = "pyproject";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {

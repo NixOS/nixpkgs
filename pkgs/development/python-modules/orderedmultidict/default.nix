@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "orderedmultidict";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

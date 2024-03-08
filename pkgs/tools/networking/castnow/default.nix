@@ -23,5 +23,6 @@ buildNpmPackage rec {
     homepage = "commandline chromecast player";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
+    mainProgram = "castnow";
   };
 }

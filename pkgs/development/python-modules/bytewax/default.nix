@@ -1,22 +1,33 @@
 { lib
 , stdenv
 , buildPythonPackage
-, cmake
-, confluent-kafka
-, cyrus_sasl
 , fetchFromGitHub
-, openssl
-, pkg-config
-, protobuf
-, pytestCheckHook
 , pythonOlder
+
+# build-system
+, cmake
+, pkg-config
 , rustPlatform
-, setuptools-rust
+
+# native dependencies
+, cyrus_sasl
+, openssl
+, protobuf
+
+# dependencies
+, jsonpickle
+
+# optional dependencies
+, confluent-kafka
+
+# test
+, myst-docutils
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bytewax";
-  version = "0.16.2";
+  version = "0.17.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +36,7 @@ buildPythonPackage rec {
     owner = "bytewax";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PHjKEZMNhtLliOSGt4XHQFDm8Rc4TejQUVSqFN6Au38=";
+    hash = "sha256-BecZvBJsaTHIhJhWM9GZldSL6Irrc7fiedulTN9e76I=";
   };
 
   env = {
@@ -34,13 +45,16 @@ buildPythonPackage rec {
 
   # Remove docs tests, myst-docutils in nixpkgs is not compatible with package requirements.
   # Package uses old version.
-  patches = [ ./remove-docs-test.patch ];
+  patches = [
+    ./remove-docs-test.patch
+  ];
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "columnation-0.1.0" = "sha256-RAyZKR+sRmeWGh7QYPZnJgX9AtWqmca85HcABEFUgX8=";
       "timely-0.12.0" = "sha256-sZuVLBDCXurIe38m4UAjEuFeh73VQ5Jawy+sr3U/HbI=";
+      "libsqlite3-sys-0.26.0" = "sha256-WpJA+Pm5dWKcdUrP0xS5ps/oE/yAXuQvvsdyDfDet1o=";
     };
   };
 
@@ -59,6 +73,10 @@ buildPythonPackage rec {
     protobuf
   ];
 
+  propagatedBuildInputs = [
+    jsonpickle
+  ];
+
   passthru.optional-dependencies = {
     kafka = [
       confluent-kafka
@@ -70,8 +88,14 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
+    myst-docutils
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  disabledTestPaths = [
+    # dependens on an old myst-docutils version
+    "docs"
+  ];
 
   pythonImportsCheck = [
     "bytewax"

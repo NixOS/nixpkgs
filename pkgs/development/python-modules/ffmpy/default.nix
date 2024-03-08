@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , pytestCheckHook
 , go
 , ffmpeg-headless
@@ -9,8 +10,8 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.3.1";
-  format = "setuptools";
+  version = "0.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "Ch00k";
     repo = "ffmpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-kuLhmCG80BmXdqpW67UanBnuYiL2Oh1jKt7IgmVNEAM=";
+    hash = "sha256-q41JjAWcIiD2nJck5Zzb/lhfIZ3xJGU1I2crsMN0T8Q=";
   };
 
   postPatch = ''
@@ -33,6 +34,10 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "ffmpy" ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -10,23 +10,24 @@
 , CoreServices
 , Security
 , zig
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "0.18.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-un+GQflxhMHCMH5UEeUVsYx59ryn7MR4ApooeOuhccc=";
+    hash = "sha256-KSJn8DRvm/ZLikCT8Tp9lb/ej0KSlZqRROs1yLNDa6c=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cargo-test-macro-0.1.0" = "sha256-XvTKAbP/r1BthpEM84CYZ2yfJczxqzscGkN4JXLgvfA=";
+      "cargo-test-macro-0.1.0" = "sha256-s3PM5SHGwZRr1cKt3LTL9fSAhzZ6CaZmDMVUgnOr6R0=";
     };
   };
 
@@ -37,10 +38,15 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl CoreServices Security ];
 
   checkFlags = [
-    # Disabled because they accesses the network.
+    # Disabled because they access the network.
     "--skip=test_build_basic_extension"
     "--skip=test_build_basic_function"
+    "--skip=test_build_basic_zip_extension"
+    "--skip=test_build_basic_zip_function"
+    "--skip=test_build_event_type_function"
+    "--skip=test_build_http_feature_function"
     "--skip=test_build_http_function"
+    "--skip=test_build_internal_zip_extension"
     "--skip=test_build_logs_extension"
     "--skip=test_build_telemetry_extension"
     "--skip=test_download_example"
@@ -58,6 +64,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Cargo subcommand to help you work with AWS Lambda";

@@ -3,13 +3,13 @@
 , fetchPypi
 , substituteAll
 , pythonOlder
-, cudatoolkit
 , addOpenGLRunpath
 }:
 
 buildPythonPackage rec {
   pname = "pynvml";
   version = "11.5.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -23,8 +23,6 @@ buildPythonPackage rec {
       inherit (addOpenGLRunpath) driverLink;
     })
   ];
-
-  propagatedBuildInputs = [ cudatoolkit ];
 
   doCheck = false;  # no tests in PyPi dist
   pythonImportsCheck = [ "pynvml" "pynvml.smi" ];

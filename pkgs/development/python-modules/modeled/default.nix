@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "modeled";
   version = "0.1.8";
+  format = "setuptools";
 
   src = fetchPypi {
     extension = "zip";

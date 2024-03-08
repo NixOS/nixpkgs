@@ -56,6 +56,14 @@ This partition table type uses GPT and:
 - creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
 - creates an primary ext4 partition starting after the boot partition and extending to the full disk image
 
+#### `efixbootldr`
+
+This partition table type uses GPT and:
+
+- creates an FAT32 ESP partition from 8MiB to 100MiB, set it bootable ;
+- creates an FAT32 BOOT partition from 100MiB to specified `bootSize` parameter (256MiB by default), set `bls_boot` flag ;
+- creates an primary ext4 partition starting after the boot partition and extending to the full disk image
+
 #### `hybrid`
 
 This partition table type uses GPT and:
@@ -111,19 +119,7 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
   # When setting one of `user' or `group', the other needs to be set too.
   contents ? []
 
-, # Type of partition table to use; either "legacy", "efi", or "none".
-  # For "efi" images, the GPT partition table is used and a mandatory ESP
-  #   partition of reasonable size is created in addition to the root partition.
-  # For "legacy", the msdos partition table is used and a single large root
-  #   partition is created.
-  # For "legacy+gpt", the GPT partition table is used, a 1MiB no-fs partition for
-  #   use by the bootloader is created, and a single large root partition is
-  #   created.
-  # For "hybrid", the GPT partition table is used and a mandatory ESP
-  #   partition of reasonable size is created in addition to the root partition.
-  #   Also a legacy MBR will be present.
-  # For "none", no partition table is created. Enabling `installBootLoader`
-  #   most likely fails as GRUB will probably refuse to install.
+, # Type of partition table to use; described in the `Image Partitioning` section above.
   partitionTableType ? "legacy"
 
 , # Whether to invoke `switch-to-configuration boot` during image creation
@@ -193,11 +189,11 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
   additionalPaths ? []
 }:
 
-assert (lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "hybrid" "none" ]);
+assert (lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "efixbootldr" "hybrid" "none" ]);
 assert (lib.assertMsg (fsType == "ext4" && deterministic -> rootFSUID != null) "In deterministic mode with a ext4 partition, rootFSUID must be non-null, by default, it is equal to rootGPUID.");
   # We use -E offset=X below, which is only supported by e2fsprogs
 assert (lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4");
-assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi or legacy+gpt.");
+assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "efixbootldr" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi, efixbootldr, or legacy+gpt.");
   # If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
 assert (lib.assertMsg (onlyNixStore -> contents == [] && configFile == null && !installBootLoader) "In a only Nix store image, the contents must be empty, no configuration must be provided and no bootloader should be installed.");
 # Either both or none of {user,group} need to be set
@@ -225,6 +221,7 @@ let format' = format; in let
     legacy = "1";
     "legacy+gpt" = "2";
     efi = "2";
+    efixbootldr = "3";
     hybrid = "3";
   }.${partitionTableType};
 
@@ -263,6 +260,23 @@ let format' = format; in let
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
           --partition-guid=2:${rootGPUID} \
+          $diskImage
+      ''}
+    '';
+    efixbootldr = ''
+      parted --script $diskImage -- \
+        mklabel gpt \
+        mkpart ESP fat32 8MiB 100MiB \
+        set 1 boot on \
+        mkpart BOOT fat32 100MiB ${bootSize} \
+        set 2 bls_boot on \
+        mkpart ROOT ext4 ${bootSize} -1
+      ${optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC  \
+          --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F  \
+          --partition-guid=3:${rootGPUID} \
           $diskImage
       ''}
     '';
@@ -436,7 +450,7 @@ let format' = format; in let
     diskImage=nixos.raw
 
     ${if diskSize == "auto" then ''
-      ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
+      ${if partitionTableType == "efi" || partitionTableType == "efixbootldr" || partitionTableType == "hybrid" then ''
         # Add the GPT at the end
         gptSpace=$(( 512 * 34 * 1 ))
         # Normally we'd need to account for alignment and things, if bootSize
@@ -522,15 +536,23 @@ let format' = format; in let
     chmod 0644 $efiVars
   '';
 
+  createHydraBuildProducts = ''
+    mkdir -p $out/nix-support
+    echo "file ${format}-image $out/${filename}" >> $out/nix-support/hydra-build-products
+  '';
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
       preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = moveOrConvertImage + postVM;
+      postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
       QEMU_OPTS =
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
         ++ lib.optionals touchEFIVars [
           "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ] ++ lib.optionals (OVMF.systemManagementModeRequired or false) [
+          "-machine" "q35,smm=on"
+          "-global" "driver=cfi.pflash01,property=secure,value=on"
         ]
       );
       inherit memSize;
@@ -562,6 +584,15 @@ let format' = format; in let
 
         ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
+      ${optionalString (partitionTableType == "efixbootldr") ''
+        mkdir -p /mnt/{boot,efi}
+        mkfs.vfat -n ESP /dev/vda1
+        mkfs.vfat -n BOOT /dev/vda2
+        mount /dev/vda1 /mnt/efi
+        mount /dev/vda2 /mnt/boot
+
+        ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
+      ''}
 
       # Install a configuration.nix
       mkdir -p /mnt/etc/nixos
@@ -578,6 +609,13 @@ let format' = format; in let
         ''}
 
         # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
+
+        # NOTE: systemd-boot-builder.py calls nix-env --list-generations which
+        # clobbers $HOME/.nix-defexpr/channels/nixos This would cause a  folder
+        # /homeless-shelter to show up in the final image which  in turn breaks
+        # nix builds in the target image if sandboxing is turned off (through
+        # __noChroot for example).
+        export HOME=$TMPDIR
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
         # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
@@ -616,5 +654,5 @@ let format' = format; in let
 in
   if onlyNixStore then
     pkgs.runCommand name {}
-      (prepareImage + moveOrConvertImage + postVM)
+      (prepareImage + moveOrConvertImage + createHydraBuildProducts + postVM)
   else buildImage

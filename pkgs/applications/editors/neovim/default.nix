@@ -7,21 +7,41 @@
 , buildPackages
 , treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
+, fixDarwinDylibNames
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc), see
 # also: https://github.com/neovim/neovim/issues/16233
-, doCheck ? false
 , nodejs ? null, fish ? null, python3 ? null
 }:
-
-let
+stdenv.mkDerivation (finalAttrs:
+  let
+  nvim-lpeg-dylib = luapkgs: if stdenv.isDarwin
+    then (luapkgs.lpeg.overrideAttrs (oa: {
+      preConfigure = ''
+        # neovim wants clang .dylib
+        sed -i makefile -e "s/CC = gcc/CC = clang/"
+        sed -i makefile -e "s/-bundle/-dynamiclib/"
+      '';
+      preBuild = ''
+        # there seems to be implicit calls to Makefile from luarocks, we need to
+        # add a stage to build our dylib
+        make macosx
+        mkdir -p $out/lib
+        mv lpeg.so $out/lib/lpeg.dylib
+      '';
+      nativeBuildInputs =
+        oa.nativeBuildInputs
+        ++ (
+          lib.optional stdenv.isDarwin fixDarwinDylibNames
+        );
+    }))
+    else luapkgs.lpeg;
   requiredLuaPkgs = ps: (with ps; [
-    lpeg
+    (nvim-lpeg-dylib ps)
     luabitop
     mpack
-  ] ++ lib.optionals doCheck [
-    nvim-client
+  ] ++ lib.optionals finalAttrs.doCheck [
     luv
     coxpcall
     busted
@@ -40,20 +60,21 @@ let
             deterministicStringIds = true;
             self = deterministicLuajit;
           };
-        in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
+        in deterministicLuajit.withPackages(ps: [ ps.mpack (nvim-lpeg-dylib ps) ])
       else lua.luaOnBuild;
 
-  pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
-in
-  stdenv.mkDerivation rec {
+
+in {
     pname = "neovim-unwrapped";
-    version = "0.9.2";
+    version = "0.9.5";
+
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "v${version}";
-      hash = "sha256-kKstlq1BzoBAy+gy9iL1auRViJ223cVpAt5X7pUWT1U=";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-CcaBqA0yFCffNPmXOJTo8c9v1jrEBiqAl8CG5Dj5YxE=";
     };
 
     patches = [
@@ -65,7 +86,7 @@ in
 
     dontFixCmake = true;
 
-    inherit lua;
+    inherit lua treesitter-parsers;
 
     buildInputs = [
       gperf
@@ -83,15 +104,17 @@ in
       tree-sitter
       unibilium
     ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
-      ++ lib.optionals doCheck [ glibcLocales procps ]
+      ++ lib.optionals finalAttrs.doCheck [ glibcLocales procps ]
     ;
 
-    inherit doCheck;
+    doCheck = false;
 
     # to be exhaustive, one could run
     # make oldtests too
     checkPhase = ''
+      runHook preCheck
       make functionaltest
+      runHook postCheck
     '';
 
     nativeBuildInputs = [
@@ -101,7 +124,9 @@ in
     ];
 
     # extra programs test via `make functionaltest`
-    nativeCheckInputs = [
+    nativeCheckInputs = let
+      pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
+    in [
       fish
       nodejs
       pyEnv      # for src/clint.py
@@ -144,11 +169,11 @@ in
         ln -s \
           ${tree-sitter.buildGrammar {
             inherit language src;
-            version = "neovim-${version}";
+            version = "neovim-${finalAttrs.version}";
           }}/parser \
           $out/lib/nvim/parser/${language}.so
       '')
-      treesitter-parsers);
+      finalAttrs.treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
@@ -177,4 +202,4 @@ in
       maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
-  }
+  })

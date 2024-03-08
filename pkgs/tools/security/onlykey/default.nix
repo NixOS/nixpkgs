@@ -1,9 +1,11 @@
 { lib
 , node_webkit
 , pkgs
-, runCommand
+, copyDesktopItems
+, makeDesktopItem
 , stdenv
 , writeShellScript
+, wrapGAppsHook
 }:
 
 let
@@ -47,7 +49,26 @@ let
     ${node_webkit}/bin/nw ${onlykey}/lib/node_modules/${onlykey.packageName}/build
   '';
 in
-runCommand "${onlykey.packageName}-${onlykey.version}" { } ''
-  mkdir -p $out/bin
-  ln -s ${script} $out/bin/onlykey
-''
+stdenv.mkDerivation {
+  pname = "${onlykey.packageName}";
+  inherit (onlykey) version;
+  dontUnpack = true;
+  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = onlykey.packageName;
+      exec = script;
+      icon = "${onlykey}/lib/node_modules/${onlykey.packageName}/resources/onlykey_logo_128.png";
+      desktopName = onlykey.packageName;
+      genericName = onlykey.packageName;
+    })
+  ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    ln -s ${script} $out/bin/onlykey
+
+    runHook postInstall
+  '';
+}

@@ -1,10 +1,10 @@
 { lib
-, fetchFromGitLab
-, fetchpatch
+, fetchFromGitea
 , desktop-file-utils
 , gettext
 , glib
 , gobject-introspection
+, blueprint-compiler
 , gtk4
 , libadwaita
 , libnotify
@@ -19,15 +19,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.23.0";
+  version = "1.38.1";
 
   format = "other";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-duWAOod2co62NJ5Jk+7eWTf2LcfV5ZbFw0BhrbdGdUY=";
+    hash = "sha256-eVNW8Iuhee9WBbiXP7ijvd0K44/IpwdrdiT4RkBNcxI=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     glib # for glib-compile-resources
     desktop-file-utils
     gobject-introspection
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -50,20 +52,21 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
     beautifulsoup4
     brotli
-    cloudscraper
+    colorthief
     dateparser
     emoji
     keyring
     lxml
-    python-magic
     natsort
     piexif
     pillow
     pure-protobuf
+    pygobject3
+    python-magic
     rarfile
+    requests
     unidecode
   ];
 
@@ -85,9 +88,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Manga reader for GNOME";
-    homepage = "https://valos.gitlab.io/Komikku/";
+    homepage = "https://apps.gnome.org/Komikku/";
     license = licenses.gpl3Plus;
-    changelog = "https://gitlab.com/valos/Komikku/-/releases/v${version}";
+    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
     maintainers = with maintainers; [ chuangzhu infinitivewitch ];
   };
 }

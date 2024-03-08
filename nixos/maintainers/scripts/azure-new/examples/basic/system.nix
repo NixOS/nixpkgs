@@ -21,7 +21,6 @@ in
 
   virtualisation.azureImage.diskSize = 2500;
 
-  system.stateVersion = "20.03";
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # test user doesn't have a password

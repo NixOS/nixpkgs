@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "mnemonic";
   version = "0.20";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trezor";

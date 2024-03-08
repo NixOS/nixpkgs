@@ -7,21 +7,21 @@
 , postgresqlTestHook
 , postgresql
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , server-mode ? true
 }:
 
 let
   pname = "pgadmin";
-  version = "7.5";
-  yarnSha256 = "sha256-rEKMUZksmR2jPwtXy6drNwAJktK/3Dee6EZVFHPngWs=";
+  version = "8.3";
+  yarnHash = "sha256-nhHss4YOFu2cGkIhA909lIdnf3H3pD9BQx4PvP9+9c0=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-o8jPqp4jLF/lZ0frCzPDCSxCy51Nt0mbdeNB44ZwNHI=";
+    hash = "sha256-2L/JLkuyjx1oD9akQULmzW0FlSq8/MQlZ1HmlO81jj0=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -30,7 +30,7 @@ let
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    hash = yarnSha256;
+    hash = yarnHash;
   };
 
 in
@@ -59,17 +59,8 @@ pythonPackages.buildPythonApplication rec {
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
       --replace "code_snippets" ""
-    patchShebangs .
-
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    #TODO: Can be removed once boto3>=1.28.0 and cryptography>=41 has been merged to master
-    substituteInPlace requirements.txt \
-      --replace "boto3>=1.28.*" "boto3>=1.26.*"
-    substituteInPlace requirements.txt \
-      --replace "botocore>=1.31.*" "botocore>=1.29.*"
-    substituteInPlace requirements.txt \
-      --replace "cryptography>=41.0.*" "cryptography>=40.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
@@ -110,7 +101,7 @@ pythonPackages.buildPythonApplication rec {
     rm yarn.lock
     cp ${./yarn.lock} yarn.lock
     chmod +w yarn.lock
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     yarn webpacker
@@ -134,7 +125,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn fixup_yarn_lock nodejs ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn prefetch-yarn-deps nodejs ];
   buildInputs = [
     zlib
     pythonPackages.wheel
@@ -165,7 +156,6 @@ pythonPackages.buildPythonApplication rec {
     cryptography
     sshtunnel
     ldap3
-    flask-babelex
     flask-babel
     gssapi
     flask-socketio
@@ -190,6 +180,8 @@ pythonPackages.buildPythonApplication rec {
     google-auth-oauthlib
     google-api-python-client
     keyring
+    typer
+    rich
   ];
 
   passthru.tests = {

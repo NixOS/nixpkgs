@@ -1,28 +1,42 @@
 { lib
 , fetchFromGitea
 , rustPlatform
+, nix-update-script
+, imagemagick
+, makeWrapper
 }:
-rustPlatform.buildRustPackage rec {
+let
+  version = "2.10.0";
+in
+rustPlatform.buildRustPackage {
   pname = "wallust";
-  version = "2.6.1";
+  inherit version;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "explosion-mental";
-    repo = pname;
+    repo = "wallust";
     rev = version;
-    hash = "sha256-xcsOOA6esvIhzeka8E9OvCT8aXMWWSHO4lNLtaocTSo=";
+    hash = "sha256-0kPmr7/2uVncpCGVOeIkYlm2M0n9+ypVl7bQ9HnqLb4=";
   };
 
-  cargoSha256 = "sha256-YDIBn2fjlvNTYwMVn/MkID/EMmzz4oLieVgG2R95q4M=";
+  cargoHash = "sha256-p1NKEppBYLdCsTY7FHPzaGladLv5HqIVNJxSoFJOx50=";
 
-  meta = with lib; {
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/wallust \
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "A better pywal";
     homepage = "https://codeberg.org/explosion-mental/wallust";
-    license = licenses.mit;
-    maintainers = with maintainers; [onemoresuza iynaix];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onemoresuza iynaix ];
     downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
-    platforms = platforms.unix;
     mainProgram = "wallust";
   };
 }

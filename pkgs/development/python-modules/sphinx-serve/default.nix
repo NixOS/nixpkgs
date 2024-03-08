@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "sphinx-serve";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

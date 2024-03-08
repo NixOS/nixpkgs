@@ -1,3 +1,5 @@
+{ pkgs, haskellLib }:
+
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
 #
 # This file should only contain packages that are not in ./hackage-packages.nix.
@@ -6,6 +8,8 @@
 # configuration-common.nix or to one of the compiler specific configuration
 # files.
 self: super: {
+
+  changelog-d = self.callPackage ../misc/haskell/changelog-d {};
 
   dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 
@@ -36,4 +40,14 @@ self: super: {
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
+
+  # Hotfixes
+  hercules-ci-agent = self.callPackage ./hotfixes/hercules-ci-agent.nix {};
+  hercules-ci-api = self.callPackage ./hotfixes/hercules-ci-api.nix {};
+  hercules-ci-api-agent = self.callPackage ./hotfixes/hercules-ci-api-agent.nix {};
+  hercules-ci-api-core = self.callPackage ./hotfixes/hercules-ci-api-core.nix {};
+  hercules-ci-cli = self.callPackage ./hotfixes/hercules-ci-cli.nix {};
+  hercules-ci-cnix-expr = self.callPackage ./hotfixes/hercules-ci-cnix-expr.nix {};
+  hercules-ci-cnix-store = self.callPackage ./hotfixes/hercules-ci-cnix-store.nix {};
+  openapi3 = self.callPackage ./hotfixes/openapi3.nix {};
 }

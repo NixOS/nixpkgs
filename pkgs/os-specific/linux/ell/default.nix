@@ -3,18 +3,20 @@
 , autoreconfHook
 , pkg-config
 , dbus
+, sysctl
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.57";
+  version = "0.62";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    sha256 = "sha256-9d9WMCByQ1TKWpzWe5msts1LG+BKKqwCgaMBbD74/+4=";
+    hash = "sha256-HgYwyE0jejEzg9LorjDz7F0GbiXUfYpKNJ+tFIBbYWA=";
   };
 
   nativeBuildInputs = [
@@ -24,12 +26,20 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     dbus
+    # required as the sysctl test works on some machines
+    sysctl
   ];
 
   enableParallelBuilding = true;
 
   # tests sporadically fail on musl
   doCheck = !stdenv.hostPlatform.isMusl;
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/libs/ell/ell.git";

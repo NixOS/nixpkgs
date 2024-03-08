@@ -5,19 +5,26 @@
 , lxml
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pymeteoclimatic";
-  version = "0.0.6";
-  disabled = pythonOlder "3.6";
+  version = "0.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adrianmo";
-    repo = pname;
-    rev = version;
-    sha256 = "0ys0d6jy7416gbsd0pqgvm5ygzn36pjdaklqi4q56vsb13zn7y0h";
+    repo = "pymeteoclimatic";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rP0+OYDnQ4GuoV7DzR6jtgH6ilTMLjdaEFJcz3L0GYQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -28,11 +35,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "meteoclimatic" ];
+  pythonImportsCheck = [
+    "meteoclimatic"
+  ];
 
   meta = with lib; {
     description = "Python wrapper around the Meteoclimatic service";
     homepage = "https://github.com/adrianmo/pymeteoclimatic";
+    changelog = "https://github.com/adrianmo/pymeteoclimatic/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

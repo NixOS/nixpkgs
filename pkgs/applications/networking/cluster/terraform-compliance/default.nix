@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terraform-compliance";
-  version = "1.3.44";
+  version = "1.3.47";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-eE9bqu9ipuas+rdcJpn09V6nkdoYPOpChHgPH8U0rNw=";
+    sha256 = "sha256-QJDKBM5CTOdF7oT42vL+Yp1UsQXWvkSZzo+WSsDxAZw=";
   };
 
   postPatch = ''

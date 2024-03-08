@@ -15,14 +15,8 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.vim;
-      defaultText = literalExpression "pkgs.vim";
-      example = literalExpression "pkgs.vim-full";
-      description = lib.mdDoc ''
-        vim package to use.
-      '';
+    package = mkPackageOption pkgs "vim" {
+      example = "vim-full";
     };
   };
 

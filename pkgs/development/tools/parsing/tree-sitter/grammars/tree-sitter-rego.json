@@ -4,6 +4,7 @@
   "date": "2022-11-18T14:07:12+02:00",
   "path": "/nix/store/ky8xv5v5i273n0zqin0mnsx810382wfn-tree-sitter-rego",
   "sha256": "18qw5ahx6qcfq9gs6gcakl178gnnryksv6gyamyd6vypz20kwz6b",
+  "hash": "sha256-y3w+gfjXb9N8Vf6ZrafP1j50Ap2KPaNfwo5h06EqHKM=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

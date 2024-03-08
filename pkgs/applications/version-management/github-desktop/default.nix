@@ -21,11 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.2.5";
+  version = "3.3.6";
+  rcversion = "3";
+  arch = "amd64";
 
   src = fetchurl {
-    url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux1/GitHubDesktop-linux-${finalAttrs.version}-linux1.deb";
-    hash = "sha256-p+qr9/aEQcfkKArC3oTyIijHkaNzLum3xXeSnNexgbU=";
+    url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${finalAttrs.rcversion}/GitHubDesktop-linux-${finalAttrs.arch}-${finalAttrs.version}-linux${finalAttrs.rcversion}.deb";
+    hash = "sha256-900JhfHN78CuAXptPX2ToTvT9E+g+xRXqmlm34J9l6k=";
   };
 
   nativeBuildInputs = [
@@ -79,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dan4ik605743 ];
     platforms = lib.platforms.linux;
+    mainProgram = "github-desktop";
   };
 })

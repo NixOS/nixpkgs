@@ -30,6 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronjheng ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "jump";
   };
 }

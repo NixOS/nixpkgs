@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.16" }:
+{ lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.16.0" }:
 
 { pname
 , version ? defaultVersion

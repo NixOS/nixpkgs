@@ -17,7 +17,7 @@ cargoNextestHook() {
     fi
 
     if [ "${cargoCheckType}" != "debug" ]; then
-        cargoCheckProfileFlag="--${cargoCheckType}"
+        cargoCheckProfileFlag="--cargo-profile ${cargoCheckType}"
     fi
 
     if [ -n "${cargoCheckNoDefaultFeatures-}" ]; then
@@ -29,7 +29,7 @@ cargoNextestHook() {
     fi
 
     argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
-        --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}"
+        --target @rustHostPlatformSpec@ --frozen ${cargoTestFlags}"
 
     (
         set -x

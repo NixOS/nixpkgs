@@ -26,10 +26,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mctc-lib mstore toml-f blas ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/s-dftd3.pc \
-      --replace "''${prefix}/" ""
+  outputs = [ "out" "dev" ];
+
+  # Fix the Pkg-Config files for doubled store paths
+  postPatch = ''
+    substituteInPlace config/template.pc \
+      --replace "\''${prefix}/" ""
   '';
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
 
   doCheck = true;
   preCheck = ''

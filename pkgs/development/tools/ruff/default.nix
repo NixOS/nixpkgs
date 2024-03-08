@@ -4,44 +4,32 @@
 , installShellFiles
 , stdenv
 , darwin
-  # tests
+, rust-jemalloc-sys
 , ruff-lsp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.290";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-w2RqT0n++ggeNoEcrZSAF0056ctDBKGkV+GAscQcwOc=";
+    repo = "ruff";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MuvVpMBEQSOz6vSEhw7fmvAwgUu/7hrbtP8/MsIL57c=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
-    };
-  };
+  cargoHash = "sha256-zC4rXgqT0nw22adtoe51wN8XVbr6drXvqWqyJeqSGYc=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
-
-  cargoBuildFlags = [ "--package=ruff_cli" ];
-  cargoTestFlags = cargoBuildFlags;
-
-  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    # See https://github.com/jemalloc/jemalloc/issues/1997
-    # Using a value of 48 should work on both emulated and native x86_64-darwin.
-    export JEMALLOC_SYS_WITH_LG_VADDR=48
-  '';
 
   # tests expect no colors
   preCheck = ''

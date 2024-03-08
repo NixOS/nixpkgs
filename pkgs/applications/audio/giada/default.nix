@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.25.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SW2qT+pMKTMBnkaL+Dg87tqutcLTqaY4nCeFfJjHIw4=";
+    sha256 = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   nativeBuildInputs = [

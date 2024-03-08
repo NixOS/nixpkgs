@@ -2,14 +2,13 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, pythonAtLeast
 , pythonOlder
 
 # build-system
 , setuptools
 , types-psutil
 , types-setuptools
-, types-typed-ast
 
 # propagates
 , mypy-extensions
@@ -32,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.4.1";
+  version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,23 +40,14 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2PeE/L9J6J0IuUpHZasemM8xxefNJrdzYnutgJjevWQ=";
+    hash = "sha256-1YgAswqLadOVV5ZSi5ZXWYK3p114882IlSx0nKChGPs=";
   };
-
-  patches = [
-    (fetchpatch {
-      # pytest 7.4 compat
-      url = "https://github.com/python/mypy/commit/0a020fa73cf5339a80d81c5b44e17116a5c5307e.patch";
-      hash = "sha256-3HQPo+V7T8Gr92clXAt5QJUJPmhjnGjQgFq0qR0whfw=";
-    })
-  ];
 
   nativeBuildInputs = [
     mypy-extensions
     setuptools
     types-psutil
     types-setuptools
-    types-typed-ast
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
@@ -111,6 +101,11 @@ buildPythonPackage rec {
     tomli
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # requires distutils
+    "test_c_unit_test"
+  ];
+
   disabledTestPaths = [
     # fails to find tyoing_extensions
     "mypy/test/testcmdline.py"
@@ -119,6 +114,9 @@ buildPythonPackage rec {
     "mypyc/test/test_commandline.py"
     # fails to find hatchling
     "mypy/test/testpep561.py"
+  ] ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # https://github.com/python/mypy/issues/15221
+    "mypyc/test/test_run.py"
   ];
 
   meta = with lib; {
@@ -126,6 +124,6 @@ buildPythonPackage rec {
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
     mainProgram = "mypy";
-    maintainers = with maintainers; [ martingms lnl7 ];
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

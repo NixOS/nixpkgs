@@ -23,14 +23,7 @@ in
   options.programs.gamescope = {
     enable = mkEnableOption (mdDoc "gamescope");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gamescope;
-      defaultText = literalExpression "pkgs.gamescope";
-      description = mdDoc ''
-        The GameScope package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "gamescope" { };
 
     capSysNice = mkOption {
       type = types.bool;

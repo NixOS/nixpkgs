@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "jonnenauha";
     repo = "prometheus_varnish_exporter";
     rev = version;
-    sha256 = "15w2ijz621caink2imlp1666j0ih5pmlj62cbzggyb34ncl37ifn";
+    hash = "sha256-1sUzKLNkLP/eX0wYSestMAJpjAmX1iimjYoFYb6Mgpc=";
   };
 
-  vendorSha256 = "00i9znb1pk5jpmyhxfg9zbw935fk3c1r0qrgf868xlcf9p8x2rrz";
+  vendorHash = "sha256-P2fR0U2O0Y4Mci9jkAMb05WR+PrpuQ59vbLMG5b9KQI=";
 
   nativeBuildInputs = [ makeWrapper ];
 

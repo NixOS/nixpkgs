@@ -8,19 +8,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.23.2";
-  format = "setuptools";
+  version = "1.28.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3QdHomKKN8bSUtyFCZJliw/FxNixVj9pdkzMwJWT880=";
+    hash = "sha256-80syqWoK2J+CjsBFO6LJEuF+pimJGpufgRLObHSKcAw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     grpc-google-iam-v1
@@ -43,8 +48,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Security Command Center API API client library";
-    homepage = "https://github.com/googleapis/python-securitycenter";
-    changelog = "https://github.com/googleapis/python-securitycenter/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-securitycenter";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-securitycenter-v${version}/packages/google-cloud-securitycenter/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

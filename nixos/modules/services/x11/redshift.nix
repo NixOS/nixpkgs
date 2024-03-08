@@ -73,14 +73,7 @@ in {
       };
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.redshift;
-      defaultText = literalExpression "pkgs.redshift";
-      description = lib.mdDoc ''
-        redshift derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "redshift" { };
 
     executable = mkOption {
       type = types.str;

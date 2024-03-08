@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "timeago";
   version = "1.0.16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hustcc";

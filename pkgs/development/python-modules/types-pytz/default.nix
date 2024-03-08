@@ -1,17 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "types-pytz";
-  version = "2023.3.1.0";
-  format = "setuptools";
+  version = "2024.1.0.20240203";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jn0hmMukSnLfdiiIfJD2ilaOFEXxTbZGMa9Qw8q4wJA=";
+    hash = "sha256-yTdR7iDfxuBUoBSPj1InuaALeckKTTyfRkcRpzF5yJ4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Modules doesn't have tests
   doCheck = false;

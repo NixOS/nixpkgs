@@ -17,14 +17,15 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.8.2";
+  version = "1.8.3";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qz4EWAO++yq72/AGwyNOtH/fTRSFbiCo/K98htROUxI=";
+    hash = "sha256-H1JfdvxJvX5dmC9aTqIOkjAqFEL44KoUXEhoYj2uRY8=";
   };
 
   # It's used to locate headers

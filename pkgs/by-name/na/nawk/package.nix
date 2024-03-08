@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
-  version = "20230909";
+  version = "20230911";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
-    rev = finalAttrs.version;
-    hash = "sha256-sBJ+ToFkhU5Ei84nqzbS0bUbsa+60iLSz2oeV5+PXEk=";
+    rev = "2ndEdition";
+    hash = "sha256-9SxeYsTFrsJ+Cg43QjQihi2Ij0qdJvTnyGGhUHJHjuU=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/onetrueawk/awk";
+    homepage = "https://awk.dev";
     description = "The one, true implementation of AWK";
     longDescription = ''
-      This is the version of awk described in "The AWK Programming Language", by
-      Al Aho, Brian Kernighan, and Peter Weinberger (Addison-Wesley, 1988, ISBN
-      0-201-07981-X).
+      This is the version of awk described in "The AWK Programming Language",
+      Second Edition, by Al Aho, Brian Kernighan, and Peter Weinberger
+      (Addison-Wesley, 2023, ISBN 0-13-826972-6).
     '';
     changelog = "https://github.com/onetrueawk/awk/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.mit;

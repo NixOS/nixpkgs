@@ -16,6 +16,15 @@ in
       '';
     };
 
+    rawTestDerivation = mkOption {
+      type = types.package;
+      description = mdDoc ''
+        Unfiltered version of `test`, for troubleshooting the test framework and `testBuildFailure` in the test framework's test suite.
+        This is not intended for general use. Use `test` instead.
+      '';
+      internal = true;
+    };
+
     test = mkOption {
       type = types.package;
       # TODO: can the interactive driver be configured to access the network?
@@ -29,25 +38,28 @@ in
   };
 
   config = {
+    rawTestDerivation = hostPkgs.stdenv.mkDerivation {
+      name = "vm-test-run-${config.name}";
+
+      requiredSystemFeatures = [ "nixos-test" ]
+        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
+        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
+
+      buildCommand = ''
+        mkdir -p $out
+
+        # effectively mute the XMLLogger
+        export LOGFILE=/dev/null
+
+        ${config.driver}/bin/nixos-test-driver -o $out
+      '';
+
+      passthru = config.passthru;
+
+      meta = config.meta;
+    };
     test = lib.lazyDerivation { # lazyDerivation improves performance when only passthru items and/or meta are used.
-      derivation = hostPkgs.stdenv.mkDerivation {
-        name = "vm-test-run-${config.name}";
-
-        requiredSystemFeatures = [ "kvm" "nixos-test" ];
-
-        buildCommand = ''
-          mkdir -p $out
-
-          # effectively mute the XMLLogger
-          export LOGFILE=/dev/null
-
-          ${config.driver}/bin/nixos-test-driver -o $out
-        '';
-
-        passthru = config.passthru;
-
-        meta = config.meta;
-      };
+      derivation = config.rawTestDerivation;
       inherit (config) passthru meta;
     };
 

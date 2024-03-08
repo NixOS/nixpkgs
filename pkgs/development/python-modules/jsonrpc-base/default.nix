@@ -4,21 +4,26 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-base";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "emlove";
-    repo = pname;
-    rev = version;
-    hash = "sha256-C03m/zeLIFqsmEMSzt84LMOWAHUcpdEHhaa5hx2NsoQ=";
+    repo = "jsonrpc-base";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AbpuAW+wuGc+Vj4FDFlyB2YbiwDxPLuyAGiNcmGU+Ss=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

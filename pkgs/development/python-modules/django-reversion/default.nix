@@ -3,19 +3,24 @@
 , fetchPypi
 , django
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "5.0.4";
-  format = "setuptools";
+  version = "5.0.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
 src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wSurRS0x3TwkRFbPHfODrPFLoUfPmUBMXkRBJZbeQvw=";
+    hash = "sha256-wEfMmanxukqubbicOsJDR41t6Y7Ipgxwc/zIddicXNs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     django
@@ -31,6 +36,7 @@ src = fetchPypi {
   meta = with lib; {
     description = "An extension to the Django web framework that provides comprehensive version control facilities";
     homepage = "https://github.com/etianen/django-reversion";
+    changelog = "https://github.com/etianen/django-reversion/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

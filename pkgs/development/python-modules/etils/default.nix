@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "etils";
-  version = "1.4.1";
-  format = "pyproject";
+  version = "1.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Uxk7V7KP8UxO4rJ/yh0JxME1bOuTJLQW6dnC7vX239s=";
+    hash = "sha256-l7aP0l4YVoMhUobvOlTjgZm2JF9f6L5r7cEYm+QlY1A=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
-    description = "Collection of eclectic utils for python";
+    description = "Collection of eclectic utils";
     homepage = "https://github.com/google/etils";
     license = licenses.asl20;
     maintainers = with maintainers; [ mcwitt ];

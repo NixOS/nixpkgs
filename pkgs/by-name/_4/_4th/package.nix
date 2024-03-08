@@ -23,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "-C sources"
-    "CC=${stdenv.cc.targetPrefix}cc"
+    "CC:=$(CC)"
+    "AR:=$(AR)"
   ];
 
   preInstall = ''

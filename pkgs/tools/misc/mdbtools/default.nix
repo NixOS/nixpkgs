@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-scrollkeeper" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unused-but-set-variable";
+
   nativeBuildInputs = [
     pkg-config bison flex autoreconfHook txt2man which
   ];

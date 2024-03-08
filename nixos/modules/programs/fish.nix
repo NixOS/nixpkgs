@@ -208,7 +208,7 @@ in
         end
 
         # if we haven't sourced the login config, do it
-        status --is-login; and not set -q __fish_nixos_login_config_sourced
+        status is-login; and not set -q __fish_nixos_login_config_sourced
         and begin
           ${sourceEnv "loginShellInit"}
 
@@ -220,7 +220,7 @@ in
         end
 
         # if we haven't sourced the interactive config, do it
-        status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
+        status is-interactive; and not set -q __fish_nixos_interactive_config_sourced
         and begin
           ${fishAbbrs}
           ${fishAliases}
@@ -258,20 +258,17 @@ in
             preferLocalBuild = true;
             allowSubstitutes = false;
           };
-          generateCompletions = package: pkgs.runCommand
-            "${package.name}_fish-completions"
-            (
-              {
-                inherit package;
-                preferLocalBuild = true;
-                allowSubstitutes = false;
-              }
-              // optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
-            )
+          generateCompletions = package: pkgs.runCommandLocal
+            ( with lib.strings; let
+                storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
+                pathName = substring storeLength (stringLength package - storeLength) package;
+              in (package.name or pathName) + "_fish-completions")
+            ( { inherit package; } //
+              optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; })
             ''
               mkdir -p $out
               if [ -d $package/share/man ]; then
-                find $package/share/man -type f | xargs ${pkgs.python3.pythonForBuild.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
+                find $package/share/man -type f | xargs ${pkgs.python3.pythonOnBuildForHost.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
               fi
             '';
         in

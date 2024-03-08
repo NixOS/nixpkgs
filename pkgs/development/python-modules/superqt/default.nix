@@ -36,8 +36,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "superqt" ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   meta = with lib; {
     description = "Missing widgets and components for Qt-python (napari/superqt)";
     homepage = "https://github.com/napari/superqt";

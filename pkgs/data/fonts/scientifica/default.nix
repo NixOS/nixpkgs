@@ -26,6 +26,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/NerdyPepper/scientifica";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "patatt";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WaEq4qWL6xAZ3cJJ/lkJ5XTIrXcOMIESbytvWbsYx2s=";
+    sha256 = "sha256-mAgm9lKdJXbCZ8ofVk1b7wRstH5UIVu1mO1sS5stCig=";
   };
 
   propagatedBuildInputs = with python3Packages; [

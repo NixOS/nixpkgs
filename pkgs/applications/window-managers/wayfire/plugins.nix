@@ -7,5 +7,6 @@ lib.makeScope pkgs.newScope (self:
     wayfire-plugins-extra = callPackage ./wayfire-plugins-extra.nix { };
     wcm = callPackage ./wcm.nix { };
     wf-shell = callPackage ./wf-shell.nix { };
+    windecor = callPackage ./windecor.nix { };
   }
 )

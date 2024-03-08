@@ -27,15 +27,15 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.26";
+  version = "0.0.28";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
-    rev = "v${version}";
-    hash = "sha256-p+ZL3oxzwKhh+j1bxakgyStH+1GAu2aEwNmsqo6fNFo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UjSm/J/y7MUg3Exmw0P56+bcjiLxXdGS2brocdzgJ+c=";
   };
 
   nativeBuildInputs = [
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

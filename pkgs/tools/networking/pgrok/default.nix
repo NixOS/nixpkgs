@@ -3,23 +3,22 @@
 , callPackage
 , fetchFromGitHub
 }:
-let
-  version = "1.4.0";
+buildGoModule rec {
+  pname = "pgrok";
+  version = "1.4.1";
+
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     rev = "v${version}";
-    hash = "sha256-2k3XLXmf1Xnx4HvS7sD/aq+78Z4I7uY4djV958n5TX4=";
+    hash = "sha256-P36rpFi5J+dF6FrVaPhqupG00h4kwr0qumt4ehL/7vU=";
   };
+
+  vendorHash = "sha256-X5FjzliIJdfJnNaUXBjv1uq5tyjMVjBbnLCBH/P0LFM=";
+
+  outputs = [ "out" "server" ];
+
   web = callPackage ./web.nix { inherit src version; };
-in
-buildGoModule {
-  pname = "pgrok";
-  inherit version src;
-
-  vendorHash = "sha256-M0xVHRh9NKPxmUEmx1dDQUZc8aXcdAfHisQAnt72RdY=";
-
-  outputs = [ "out" "server" "web" ];
 
   ldflags = [
     "-s"
@@ -43,7 +42,6 @@ buildGoModule {
 
   postInstall = ''
     moveToOutput bin/pgrokd $server
-    cp -r ${web} $web
   '';
 
   passthru.updateScript = ./update.sh;
@@ -53,5 +51,6 @@ buildGoModule {
     homepage = "https://github.com/pgrok/pgrok";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marie ];
+    mainProgram = "pgrok";
   };
 }

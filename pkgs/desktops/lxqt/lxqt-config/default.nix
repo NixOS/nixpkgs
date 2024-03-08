@@ -1,11 +1,11 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , glib
 , lxqt-build-tools
+, lxqt-menu-data
 , qtbase
 , qtx11extras
 , qttools
@@ -21,31 +21,32 @@
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "Gm/Y/5i7Abob9eRdLZHpRma2+Mdh2LBZUGKM4mMZMFk=";
+    hash = "sha256-ypHjUYRtrWx1Cp9KGSqsWpRHg7zoV0YDW6P4amJKapI=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     glib.bin
     qtbase
     qtx11extras
-    qttools
     qtsvg
     kwindowsystem
     libkscreen
     liblxqt
     libqtxdg
+    lxqt-menu-data
     xorg.libpthreadstubs
     xorg.libXdmcp
     xorg.libXScrnSaver

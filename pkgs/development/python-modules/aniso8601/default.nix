@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "aniso8601";
   version = "9.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,20 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitea, fetchYarnDeps
-, fixup_yarn_lock, yarn, nodejs
+, prefetch-yarn-deps, yarn, nodejs
 , python3, pkg-config, libsass
 }:
 
 stdenv.mkDerivation rec {
   pname = "admin-fe";
-  version = "unstable-2023-02-11";
+  version = "unstable-2024-02-25";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "admin-fe";
-    rev = "130c17808bc50269f8444612f4ab378a08cd5e43";
-    hash = "sha256-+ZU8J4rOyRMSZP+CUyLeOhRI2fKiw2s31coTYAoReWM=";
+    rev = "2a1e175f7c2b02e66d728f808cb7e9449231a288";
+    hash = "sha256-PLSJ+doZUZ2n4hWUahY299VoCvNq76Tm8qpdvOIHD9c=";
   };
 
   patches = [ ./deps.patch ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    prefetch-yarn-deps
     yarn
     nodejs
     pkg-config
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     export HOME="$(mktemp -d)"
 
     yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/cross-env

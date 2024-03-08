@@ -1,36 +1,35 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitLab
 , autoreconfHook
 , autoconf-archive
+, flex
 , pkg-config
 , perl
 , python3
 , dbus
 , polkit
-, systemdMinimal
+, systemdLibs
 , IOKit
+, testers
+, nix-update-script
 , pname ? "pcsclite"
 , polkitSupport ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "1.9.5";
+  version = "2.0.1";
 
-  outputs = [ "bin" "out" "dev" "doc" "man" ];
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
 
-  src = fetchurl {
-    url = "https://pcsclite.apdu.fr/files/pcsc-lite-${version}.tar.bz2";
-    hash = "sha256-nuP5szNTdWIXeJNVmtT3uNXCPr6Cju9TBWwC2xQEnQg=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "rousseau";
+    repo = "PCSC";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-7NGlU4byGxtGBticewg8K4FUiDSQZAiB7Q/y+LaqKPo=";
   };
-
-  patches = [ ./no-dropdir-literals.patch ];
-
-  postPatch = ''
-    sed -i configure.ac \
-      -e "s@polkit_policy_dir=.*@polkit_policy_dir=$bin/share/polkit-1/actions@"
-  '';
 
   configureFlags = [
     "--enable-confdir=/etc"
@@ -40,13 +39,19 @@ stdenv.mkDerivation rec {
     (lib.enableFeature polkitSupport "polkit")
   ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
-    "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
-  postConfigure = ''
-    sed -i -re '/^#define *PCSCLITE_HP_DROPDIR */ {
-      s/(DROPDIR *)(.*)/\1(getenv("PCSCLITE_HP_DROPDIR") ? : \2)/
-    }' config.h
+  makeFlags = [
+    "POLICY_DIR=$(out)/share/polkit-1/actions"
+  ];
+
+  # disable building pcsc-wirecheck{,-gen} when cross compiling
+  # see also: https://github.com/LudovicRousseau/PCSC/issues/25
+  postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace src/Makefile.am \
+      --replace "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
+                "noinst_PROGRAMS = testpcsc"
   '';
 
   postInstall = ''
@@ -56,17 +61,34 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    flex
+    pkg-config
+    perl
+  ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ systemdMinimal ]
+    ++ lib.optionals stdenv.isLinux [ systemdLibs ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals polkitSupport [ dbus polkit ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "pcscd --version";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
+    changelog = "https://salsa.debian.org/rousseau/PCSC/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.bsd3;
+    mainProgram = "pcscd";
+    maintainers = [ maintainers.anthonyroussel ];
     platforms = with platforms; unix;
   };
-}
+})

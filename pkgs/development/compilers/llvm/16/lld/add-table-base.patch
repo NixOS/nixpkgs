@@ -1,0 +1,190 @@
+From 93adcb770b99351b18553089c164fe3ef2119699 Mon Sep 17 00:00:00 2001
+From: Sam Clegg <sbc@chromium.org>
+Date: Fri, 25 Aug 2023 13:56:16 -0700
+Subject: [PATCH] [lld][WebAssembly] Add `--table-base` setting
+
+This is similar to `--global-base` but determines where to place the
+table segments rather than that data segments.
+
+See https://github.com/emscripten-core/emscripten/issues/20097
+
+Differential Revision: https://reviews.llvm.org/D158892
+---
+ test/wasm/table-base.s | 72 ++++++++++++++++++++++++++++++++++++++
+ wasm/Driver.cpp        | 19 ++++++++--
+ wasm/Options.td        |  5 ++-
+ wasm/Writer.cpp        |  8 -----
+ 4 files changed, 93 insertions(+), 11 deletions(-)
+ create mode 100644 test/wasm/table-base.s
+
+diff --git a/test/wasm/table-base.s b/test/wasm/table-base.s
+new file mode 100644
+index 000000000000000..56fff414fd31d96
+--- /dev/null
++++ b/test/wasm/table-base.s
+@@ -0,0 +1,72 @@
++# RUN: llvm-mc -filetype=obj -triple=wasm32-unknown-unknown %s -o %t.o
++
++# RUN: wasm-ld --export=__table_base -o %t.wasm %t.o
++# RUN: obj2yaml %t.wasm | FileCheck %s  -check-prefix=CHECK-DEFAULT
++
++# RUN: wasm-ld --table-base=100 --export=__table_base -o %t.wasm %t.o
++# RUN: obj2yaml %t.wasm | FileCheck %s  -check-prefix=CHECK-100
++
++.globl _start
++_start:
++  .functype _start () -> ()
++  i32.const _start
++  drop
++  end_function
++
++# CHECK-DEFAULT:       - Type:            TABLE
++# CHECK-DEFAULT-NEXT:    Tables:
++# CHECK-DEFAULT-NEXT:      - Index:           0
++# CHECK-DEFAULT-NEXT:        ElemType:        FUNCREF
++# CHECK-DEFAULT-NEXT:        Limits:
++# CHECK-DEFAULT-NEXT:          Flags:           [ HAS_MAX ]
++# CHECK-DEFAULT-NEXT:          Minimum:         0x2
++# CHECK-DEFAULT-NEXT:          Maximum:         0x2
++
++# CHECK-DEFAULT:       - Type:            GLOBAL
++# CHECK-DEFAULT-NEXT:    Globals:
++# CHECK-DEFAULT-NEXT:      - Index:           0
++# CHECK-DEFAULT-NEXT:        Type:            I32
++# CHECK-DEFAULT-NEXT:        Mutable:         true
++# CHECK-DEFAULT-NEXT:        InitExpr:
++# CHECK-DEFAULT-NEXT:          Opcode:          I32_CONST
++# CHECK-DEFAULT-NEXT:          Value:           66560
++# CHECK-DEFAULT-NEXT:      - Index:           1
++# CHECK-DEFAULT-NEXT:        Type:            I32
++# CHECK-DEFAULT-NEXT:        Mutable:         false
++# CHECK-DEFAULT-NEXT:        InitExpr:
++# CHECK-DEFAULT-NEXT:          Opcode:          I32_CONST
++# CHECK-DEFAULT-NEXT:          Value:           1
++
++# CHECK-DEFAULT:       - Type:            EXPORT
++# CHECK-DEFAULT:           - Name:            __table_base
++# CHECK-DEFAULT-NEXT:        Kind:            GLOBAL
++# CHECK-DEFAULT-NEXT:        Index:           1
++
++# CHECK-100:       - Type:            TABLE
++# CHECK-100-NEXT:    Tables:
++# CHECK-100-NEXT:      - Index:           0
++# CHECK-100-NEXT:        ElemType:        FUNCREF
++# CHECK-100-NEXT:        Limits:
++# CHECK-100-NEXT:          Flags:           [ HAS_MAX ]
++# CHECK-100-NEXT:          Minimum:         0x65
++# CHECK-100-NEXT:          Maximum:         0x65
++
++# CHECK-100:       - Type:            GLOBAL
++# CHECK-100-NEXT:    Globals:
++# CHECK-100-NEXT:      - Index:           0
++# CHECK-100-NEXT:        Type:            I32
++# CHECK-100-NEXT:        Mutable:         true
++# CHECK-100-NEXT:        InitExpr:
++# CHECK-100-NEXT:          Opcode:          I32_CONST
++# CHECK-100-NEXT:          Value:           66560
++# CHECK-100-NEXT:      - Index:           1
++# CHECK-100-NEXT:        Type:            I32
++# CHECK-100-NEXT:        Mutable:         false
++# CHECK-100-NEXT:        InitExpr:
++# CHECK-100-NEXT:          Opcode:          I32_CONST
++# CHECK-100-NEXT:          Value:           100
++
++# CHECK-100:       - Type:            EXPORT
++# CHECK-100:           - Name:            __table_base
++# CHECK-100-NEXT:        Kind:            GLOBAL
++# CHECK-100-NEXT:        Index:           1
+diff --git a/wasm/Driver.cpp b/wasm/Driver.cpp
+index 84304881f5ca34e..c2f5f0185781f36 100644
+--- a/wasm/Driver.cpp
++++ b/wasm/Driver.cpp
+@@ -502,6 +502,7 @@ static void readConfigs(opt::InputArgList &args) {
+ 
+   config->initialMemory = args::getInteger(args, OPT_initial_memory, 0);
+   config->globalBase = args::getInteger(args, OPT_global_base, 0);
++  config->tableBase = args::getInteger(args, OPT_table_base, 0);
+   config->maxMemory = args::getInteger(args, OPT_max_memory, 0);
+   config->zStackSize =
+       args::getZOptionValue(args, OPT_z, "stack-size", WasmPageSize);
+@@ -573,6 +574,17 @@ static void setConfigs() {
+     if (config->exportTable)
+       error("-shared/-pie is incompatible with --export-table");
+     config->importTable = true;
++  } else {
++    // Default table base.  Defaults to 1, reserving 0 for the NULL function
++    // pointer.
++    if (!config->tableBase)
++      config->tableBase = 1;
++    // The default offset for static/global data, for when --global-base is
++    // not specified on the command line.  The precise value of 1024 is
++    // somewhat arbitrary, and pre-dates wasm-ld (Its the value that
++    // emscripten used prior to wasm-ld).
++    if (!config->globalBase && !config->relocatable && !config->stackFirst)
++      config->globalBase = 1024;
+   }
+ 
+   if (config->relocatable) {
+@@ -666,8 +678,11 @@ static void checkOptions(opt::InputArgList &args) {
+     warn("-Bsymbolic is only meaningful when combined with -shared");
+   }
+ 
+-  if (config->globalBase && config->isPic) {
+-    error("--global-base may not be used with -shared/-pie");
++  if (config->isPic) {
++    if (config->globalBase)
++      error("--global-base may not be used with -shared/-pie");
++    if (config->tableBase)
++      error("--table-base may not be used with -shared/-pie");
+   }
+ }
+ 
+diff --git a/wasm/Options.td b/wasm/Options.td
+index 50417d2928e0a34..bb764396bf4df14 100644
+--- a/wasm/Options.td
++++ b/wasm/Options.td
+@@ -191,7 +191,7 @@ def growable_table: FF<"growable-table">,
+   HelpText<"Remove maximum size from function table, allowing table to grow">;
+ 
+ def global_base: JJ<"global-base=">,
+-  HelpText<"Where to start to place global data">;
++  HelpText<"Memory offset at which to place global data (Defaults to 1024)">;
+ 
+ def import_memory: FF<"import-memory">,
+   HelpText<"Import the module's memory from the default module of \"env\" with the name \"memory\".">;
+@@ -224,6 +224,9 @@ def no_entry: FF<"no-entry">,
+ def stack_first: FF<"stack-first">,
+   HelpText<"Place stack at start of linear memory rather than after data">;
+ 
++def table_base: JJ<"table-base=">,
++  HelpText<"Table offset at which to place address taken functions (Defaults to 1)">;
++
+ defm whole_archive: B<"whole-archive",
+     "Force load of all members in a static library",
+     "Do not force load of all members in a static library (default)">;
+diff --git a/wasm/Writer.cpp b/wasm/Writer.cpp
+index f25d358dc5bae6f..0576bf2907e49c4 100644
+--- a/wasm/Writer.cpp
++++ b/wasm/Writer.cpp
+@@ -358,13 +358,6 @@ void Writer::layoutMemory() {
+       memoryPtr = config->globalBase;
+     }
+   } else {
+-    if (!config->globalBase && !config->relocatable && !config->isPic) {
+-      // The default offset for static/global data, for when --global-base is
+-      // not specified on the command line.  The precise value of 1024 is
+-      // somewhat arbitrary, and pre-dates wasm-ld (Its the value that
+-      // emscripten used prior to wasm-ld).
+-      config->globalBase = 1024;
+-    }
+     memoryPtr = config->globalBase;
+   }
+ 
+@@ -1685,7 +1678,6 @@ void Writer::run() {
+   // For PIC code the table base is assigned dynamically by the loader.
+   // For non-PIC, we start at 1 so that accessing table index 0 always traps.
+   if (!config->isPic) {
+-    config->tableBase = 1;
+     if (WasmSym::definedTableBase)
+       WasmSym::definedTableBase->setVA(config->tableBase);
+     if (WasmSym::definedTableBase32)

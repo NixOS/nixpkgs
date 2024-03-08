@@ -30,3 +30,9 @@ assignees: ''
 [open documentation issues]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+label%3A%229.needs%3A+documentation%22
 [open documentation pull requests]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+is%3Apr+label%3A%228.has%3A+documentation%22%2C%226.topic%3A+documentation%22
 
+---
+
+Add a :+1: [reaction] to [issues you find important].
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+[issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc

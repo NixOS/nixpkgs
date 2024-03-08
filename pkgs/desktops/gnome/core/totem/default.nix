@@ -91,9 +91,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
     gnome-desktop
     gsettings-desktop-schemas
-    # for plug-ins
     python3Packages.pygobject3
-    python3Packages.dbus-python
   ];
 
   nativeCheckInputs = [
@@ -123,8 +121,6 @@ stdenv.mkDerivation rec {
 
     runHook postCheck
   '';
-
-  wrapPrefixVariables = [ "PYTHONPATH" ];
 
   passthru = {
     updateScript = gnome.updateScript {

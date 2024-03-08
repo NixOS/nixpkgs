@@ -5,10 +5,8 @@
 , rustc
 , setuptools
 , setuptools-rust
-, isPyPy
 , fetchPypi
 , pythonOlder
-, cffi
 , pytestCheckHook
 , libiconv
 , stdenv
@@ -22,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.0.1";
+  version = "4.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
+    hash = "sha256-3zf1QY1PHNz/hF9g50egFTifpOY3A8kYMwhl4GrYAAc=";
   };
 
   cargoRoot = "src/_bcrypt";
@@ -37,7 +35,7 @@ buildPythonPackage rec {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+    hash = "sha256-QYg1+DsZEdXB74vuS4SFvV0n5GXkuwHkOS9j1ogSTjA=";
   };
 
   nativeBuildInputs = [
@@ -50,14 +48,6 @@ buildPythonPackage rec {
 
   # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
   buildInputs = lib.optional stdenv.isDarwin libiconv;
-
-  propagatedBuildInputs = [
-    cffi
-  ];
-
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook

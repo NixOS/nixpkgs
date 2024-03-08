@@ -18,8 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-1MEk0U00a5cpVhqnDZkwBIk4NYgsRXTVsI/ANNQ/OH0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -38,6 +36,6 @@ buildPythonPackage rec {
     description = "Extension to Python-Markdown which provides an include function";
     homepage = "https://github.com/cmacmackin/markdown-include";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -18,12 +18,12 @@ let
   searchPath = lib.makeBinPath
     (lib.filter (x: x != null) [ lisp-compiler rlwrap tk gnuplot ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maxima";
   version = "5.46.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-c5Dwa0jaZckDPosvYpuXi5AFZFSlQCLbfecOIiWqiwc=";
   };
 
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     done
     # Move emacs modules and documentation into the right place.
     mkdir -p $out/share/emacs $out/share/doc
-    ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
-    ln -s ../maxima/${version}/doc $out/share/doc/maxima
+    ln -s ../maxima/${finalAttrs.version}/emacs $out/share/emacs/site-lisp
+    ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
   ''
    + (lib.optionalString (lisp-compiler.pname == "ecl") ''
-     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
+     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${finalAttrs.version}/binary-ecl/"
    '')
   ;
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.unix;
   };
-}
+})

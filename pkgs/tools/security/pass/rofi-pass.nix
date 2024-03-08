@@ -29,13 +29,13 @@ assert lib.assertOneOf "backend" backend [ "x11" "wayland" ];
 
 stdenv.mkDerivation {
   pname = "rofi-pass";
-  version = "unstable-2023-07-04";
+  version = "unstable-2024-02-13";
 
   src = fetchFromGitHub {
     owner = "carnager";
     repo = "rofi-pass";
-    rev = "fa16c0211d898d337e76397d22de4f92e2405ede";
-    hash = "sha256-GGa8ZNHZZD/sU+oL5ekHXxAe3bpX/42x6zO2LJuypNw=";
+    rev = "8aa6b9293a8f0af267425326fa966966ca42085e";
+    hash = "sha256-g/AuLYj0yvLCXFR3y9GbMiE6hDCPBeuFM145c2Ukvys=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

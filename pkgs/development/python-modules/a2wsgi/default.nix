@@ -4,24 +4,22 @@
 , asgiref
 , httpx
 , pdm-backend
-, pdm-pep517
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "a2wsgi";
-  version = "1.7.0";
-  format = "pyproject";
+  version = "1.10.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qQb2LAJQ6wIBEguTQX3QsSsQW12zWvQxv+hu8NxburI=";
+    hash = "sha256-RrLKQnz5rVOMFF4y6zaFfhy/R3ty/h7Q49NemMBgYbk=";
   };
 
   nativeBuildInputs = [
     pdm-backend
-    pdm-pep517
   ];
 
   nativeCheckInputs = [

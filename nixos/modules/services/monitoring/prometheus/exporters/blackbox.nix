@@ -21,11 +21,11 @@ let
       throw
       "${logPrefix}: configuration file must not reside within /tmp - it won't be visible to the systemd service."
     else
-      true;
+      file;
   checkConfig = file:
     pkgs.runCommand "checked-blackbox-exporter.conf" {
       preferLocalBuild = true;
-      buildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
+      nativeBuildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
     } ''
       ln -s ${coerceConfigFile file} $out
       blackbox_exporter --config.check --config.file $out

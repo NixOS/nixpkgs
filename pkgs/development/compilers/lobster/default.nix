@@ -16,15 +16,15 @@
 , ForceFeedback
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2023.11";
+  version = "2023.13";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${version}";
-    sha256 = "sha256-c0EElDvoFzIZvYZpjWd9az+KUxDXTETOp89I/tRCrQ0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-7lMIIJ3iduyxZKwK65tle3c+az2G2Mpi4JwAeCCsTxw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

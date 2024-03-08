@@ -37,5 +37,6 @@ buildGoModule rec {
     homepage = "https://labctl.net";
     license = licenses.asl20;
     maintainers = with maintainers; [ janik ];
+    mainProgram = "labctl";
   };
 }

@@ -11,11 +11,15 @@
 , glib
 , glib-networking
 , gtk4
+, gtksourceview5
+, gxml
 , json-glib
 , libadwaita
 , libgee
 , libical
 , libportal-gtk4
+, libsecret
+, libsoup_3
 , pantheon
 , sqlite
 , webkitgtk_6_0
@@ -23,16 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.1.1";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    # The commit is named as "Release 4.1.1", published to Flathub, but not tags
-    # https://github.com/flathub/io.github.alainm23.planify/commit/2a353ccfcf3379add6778d569f49da37f40accfa
-    # https://github.com/alainm23/planify/issues/1002
-    rev = "adf3629bcacfc9978f6dde5b87eff0278533ab3e";
-    hash = "sha256-xqklvSYmqBQ+IQ3lRjMbV4W4vD/rLCln7rBVCbYiBGo=";
+    rev = version;
+    hash = "sha256-huHNcAIwTvKssPQmOGCc6UzPxCh7JP1gM6BGbD0QM/w=";
   };
 
   nativeBuildInputs = [
@@ -49,14 +50,22 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk4
+    gtksourceview5
+    gxml
     json-glib
     libadwaita
     libgee
     libical
     libportal-gtk4
+    libsecret
+    libsoup_3
     pantheon.granite7
     sqlite
     webkitgtk_6_0
+  ];
+
+  mesonFlags = [
+    "-Dprofile=default"
   ];
 
   meta = with lib; {

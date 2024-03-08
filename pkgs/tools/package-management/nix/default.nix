@@ -4,9 +4,9 @@
 , boehmgc
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , fetchpatch
 , fetchpatch2
+, runCommand
 , Security
 
 , storeDir ? "/nix/store"
@@ -17,8 +17,19 @@ let
   boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
 
   boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
-    # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-    patches = (drv.patches or [ ]) ++ [ ./patches/boehmgc-coroutine-sp-fallback.patch ];
+    patches = (drv.patches or [ ]) ++ [
+      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+      ./patches/boehmgc-coroutine-sp-fallback.patch
+
+      # Required since 2.20, and has always been a valid change
+      # Awaiting 8.2 patch release of https://github.com/ivmai/bdwgc/commit/d1d4194c010bff2dc9237223319792cae834501c
+      # or master release of https://github.com/ivmai/bdwgc/commit/86b3bf0c95b66f718c3cb3d35fd7387736c2a4d7
+      (fetchpatch {
+        name = "boehmgc-traceable_allocator-public.diff";
+        url = "https://github.com/NixOS/nix/raw/2.20.0/dep-patches/boehmgc-traceable_allocator-public.diff";
+        hash = "sha256-FLsHY/JS46neiSyyQkVpbHZEFvWSCzWrFQu1CC71sh4=";
+      })
+    ];
   });
 
   # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply
@@ -112,23 +123,53 @@ let
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
-  patch-fix-aarch64-darwin-static = fetchpatch {
-    # https://github.com/NixOS/nix/pull/8068
-    name = "fix-aarch64-darwin-static.patch";
-    url = "https://github.com/NixOS/nix/commit/220aa8e0ac9d17de2c9f356a68be43b673d851a1.patch";
-    hash = "sha256-YrmFkVpwPreiig1/BsP+DInpTdQrPmS7bEY0WUGpw+c=";
+  patch-rapidcheck-shared = fetchpatch2 {
+    # https://github.com/NixOS/nix/pull/9431
+    name = "fix-missing-librapidcheck.patch";
+    url = "https://github.com/NixOS/nix/commit/46131567da96ffac298b9ec54016b37114b0dfd5.patch";
+    hash = "sha256-lShYxYKRDWwBqCysAFmFBudhhAL1eendWcL8sEFLCGg=";
   };
 
+  # Intentionally does not support overrideAttrs etc
+  # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
+  addTestsShallowly = tests: pkg: pkg // {
+    tests = pkg.tests // tests;
+    # In case someone reads the wrong attribute
+    passthru.tests = pkg.tests // tests;
+  };
+
+  addFallbackPathsCheck = pkg: addTestsShallowly
+    { nix-fallback-paths =
+        runCommand "test-nix-fallback-paths-version-equals-nix-stable" {
+          paths = lib.concatStringsSep "\n" (builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix));
+        } ''
+          if [[ "" != $(grep -v 'nix-${pkg.version}$' <<< "$paths") ]]; then
+            echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
+            echo "The following paths are not up to date:"
+            grep -v 'nix-${pkg.version}$' <<< "$paths"
+            echo
+            echo "Fix it by running in nixpkgs:"
+            echo
+            echo "curl https://releases.nixos.org/nix/nix-${pkg.version}/fallback-paths.nix >nixos/modules/installer/tools/nix-fallback-paths.nix"
+            echo
+            exit 1
+          else
+            echo "nix-fallback-paths versions up to date"
+            touch $out
+          fi
+        '';
+    }
+    pkg;
+
 in lib.makeExtensible (self: ({
-  nix_2_3 = (common rec {
-    version = "2.3.16";
-    src = fetchurl {
-      url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
-      hash = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
-    };
+  nix_2_3 = (common {
+    version = "2.3.17";
+    hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
       patch-monitorfdhup
+      ./patches/2_3/CVE-2024-27297.patch
     ];
+    maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; };
 
   nix_2_10 = common {
@@ -164,31 +205,62 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_13 = common {
-    version = "2.13.5";
-    hash = "sha256-yHZMgMs/6/aQUwfMwmPUQov17JMGS7squLJsjmucnLc=";
-    patches = [
-      patch-fix-aarch64-darwin-static
-    ];
+    version = "2.13.6";
+    hash = "sha256-pd2yGmHWn4njfbrSP6cMJx8qL+yeGieqcbLNICzcRFs=";
   };
 
   nix_2_14 = common {
     version = "2.14.1";
     hash = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_15 = common {
-    version = "2.15.2";
-    hash = "sha256-0BxVsvp4JfliYu4EdpZ/zPYOt9Qn5w9Ix5r0sagZZ7o=";
+    version = "2.15.3";
+    hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_16 = common {
-    version = "2.16.1";
-    hash = "sha256-/XCWa2osNFIpPC5MkxlX6qTZf/DaTLwS3LWN0SRFiuU=";
+    version = "2.16.2";
+    hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_17 = common {
-    version = "2.17.0";
-    hash = "sha256-QMYAkdtU+g9HlZKtoJ+AI6TbWzzovKGnPZJHfZdclc8=";
+    version = "2.17.1";
+    hash = "sha256-Q5L+rHzjp0bYuR2ogg+YPCn6isjmlQ4CJVT0zpn/hFc=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
+  };
+
+  nix_2_18 = common {
+    version = "2.18.1";
+    hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
+    patches = [
+      patch-rapidcheck-shared
+      ./patches/2_18/CVE-2024-27297.patch
+    ];
+  };
+
+  nix_2_19 = common {
+    version = "2.19.3";
+    hash = "sha256-EtL6M0H5+0mFbFh+teVjm+0B+xmHoKwtBvigS5NMWoo=";
+    patches = [
+      ./patches/2_19/CVE-2024-27297.patch
+    ];
+  };
+
+  nix_2_20 = common {
+    version = "2.20.5";
+    hash = "sha256-bfFe38BkoQws7om4gBtBWoNTLkt9piMXdLLoHYl+vBQ=";
   };
 
   # The minimum Nix version supported by Nixpkgs
@@ -208,9 +280,9 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = self.nix_2_17;
+  stable = addFallbackPathsCheck self.nix_2_18;
 
-  unstable = self.stable;
+  unstable = self.nix_2_20;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 

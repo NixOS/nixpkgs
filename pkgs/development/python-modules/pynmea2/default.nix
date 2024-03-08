@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pynmea2";
   version = "1.19.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,22 +8,22 @@
 , docutils
 , filelock
 , lockfile
+, numpy
 , pytest-qt
 , pytestCheckHook
-, python
 , qasync
 , qt5
-, writeShellScript
-, xvfb-run
+, requests-cache
 }:
 
 buildPythonPackage rec {
   pname = "orange-canvas-core";
-  version = "0.1.31";
+  version = "0.1.35";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kqh/c0pEWFLqf1BMD79li1MqLpH/4xrdTH9+/7YO/tg=";
+    hash = "sha256-xLCwjeNDx9RqxlNkIWMo0Pcrg7akGuu4Rv9oRDgOK18=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,9 @@ buildPythonPackage rec {
     docutils
     filelock
     lockfile
+    numpy
     qasync
+    requests-cache
   ];
 
   pythonImportsCheck = [ "orangecanvas" ];

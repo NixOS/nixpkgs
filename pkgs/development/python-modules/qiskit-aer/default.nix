@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.11.2";
+  version = "0.13.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = "refs/tags/${version}";
-    hash = "sha256-ew9ucqOWDztjB+hJTh9WkJiutVBJyVQobtEcWeUwEcw=";
+    hash = "sha256-GxQgqCUDwalgM9m+XeRiZCRL93KrCSUPoLvDgHJJGCQ=";
   };
 
   postPatch = ''
@@ -147,7 +147,7 @@ buildPythonPackage rec {
   postCheck = "popd";
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = true;
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";

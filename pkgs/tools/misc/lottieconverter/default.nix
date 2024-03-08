@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ CRTified nickcao ];
+    mainProgram = "lottieconverter";
   };
 })

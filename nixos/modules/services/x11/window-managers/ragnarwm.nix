@@ -11,14 +11,7 @@ in
   options = {
     services.xserver.windowManager.ragnarwm = {
       enable = mkEnableOption (lib.mdDoc "ragnarwm");
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ragnarwm;
-        defaultText = literalExpression "pkgs.ragnarwm";
-        description = lib.mdDoc ''
-          The ragnar package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "ragnarwm" { };
     };
   };
 

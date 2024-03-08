@@ -1,15 +1,21 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man
+{ stdenv
+, lib
+, fetchurl
+, ncurses
+, perl
+, help2man
 , apparmorRulesFromClosure
 , libxcrypt
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-F4nWsbGlff4qere1M+6fXf2cv1tZuxuzwmEu0I0PaLI=";
+    hash = "sha256-h2l9YKMeELXLhqnwZR4ex77pgyDQSMBzlDGqw9V2T7Y=";
   };
 
   outputs = ["out" "apparmor"];
@@ -22,6 +28,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
   buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # This is a temporary workaround for missing headers in the 10.12 SDK to avoid a mass rebuild.
+    # A commit to revert this change will be included in the fix PR targeting staging.
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
@@ -40,9 +52,7 @@ stdenv.mkDerivation rec {
     "--disable-rexec"
   ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
 
-  # Test fails with "UNIX socket name too long", probably because our
-  # $TMPDIR is too long.
-  doCheck = false;
+  doCheck = true;
 
   installFlags = [ "SUIDMODE=" ];
 
@@ -78,5 +88,15 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+
+    /**
+      The `logger` binary from `util-linux` is preferred over `inetutils`.
+      To instead prioritize this package, set a _lower_ `meta.priority`, or
+      use e.g. `lib.setPrio 5 inetutils`.
+
+      Note that the default `meta.priority` is defined in `buildEnv` and is
+      currently 5.
+    */
+    priority = (util-linux.meta.priority or 5) + 1;
   };
 }

@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     chmod a+x $out/bin/xvfb-run
     patchShebangs $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
-      --set FONTCONFIG_FILE "${fontsConf}" \
+      --set-default FONTCONFIG_FILE "${fontsConf}" \
       --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux gawk coreutils ]}
   '';
 

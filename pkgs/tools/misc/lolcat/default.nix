@@ -12,5 +12,6 @@ bundlerApp {
     homepage    = "https://github.com/busyloop/lolcat";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ StillerHarpo manveru nicknovitski ];
+    mainProgram = "lolcat";
   };
 }

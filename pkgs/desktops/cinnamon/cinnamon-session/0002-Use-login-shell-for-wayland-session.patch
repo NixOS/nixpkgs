@@ -1,0 +1,76 @@
+From 174d14edcbb401aa2bfb77932b214512befb486c Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Sat, 23 Dec 2023 23:24:59 +0800
+Subject: [PATCH] cinnamon-session: make sure wayland sessions get a login
+ shell
+
+Users expect their shell profiles to get sourced at startup, which
+doesn't happen with wayland sessions.
+
+This commit brings back that feature, by making the cinnamon-session
+wrapper script run a login shell.
+
+ref: https://gitlab.gnome.org/GNOME/gnome-session/-/commit/7e307f8ddb91db5d4051c4c792519a660ba67f35
+---
+ cinnamon-session/cinnamon-session.in | 16 ++++++++++++++++
+ cinnamon-session/meson.build         | 14 +++++++++++++-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
+ create mode 100755 cinnamon-session/cinnamon-session.in
+
+diff --git a/cinnamon-session/cinnamon-session.in b/cinnamon-session/cinnamon-session.in
+new file mode 100755
+index 0000000..d9d7cb2
+--- /dev/null
++++ b/cinnamon-session/cinnamon-session.in
+@@ -0,0 +1,16 @@
++#!/bin/sh
++
++if [ "x$XDG_SESSION_TYPE" = "xwayland" ] &&
++   [ "x$XDG_SESSION_CLASS" != "xgreeter" ] &&
++   [  -n "$SHELL" ] &&
++   grep -q "$SHELL" /etc/shells &&
++   ! (echo "$SHELL" | grep -q "false") &&
++   ! (echo "$SHELL" | grep -q "nologin"); then
++  if [ "$1" != '-l' ]; then
++    exec bash -c "exec -l '$SHELL' -c '$0 -l $*'"
++  else
++    shift
++  fi
++fi
++
++exec @libexecdir@/cinnamon-session-binary "$@"
+diff --git a/cinnamon-session/meson.build b/cinnamon-session/meson.build
+index 10092ee..3d32fdc 100644
+--- a/cinnamon-session/meson.build
++++ b/cinnamon-session/meson.build
+@@ -54,7 +54,7 @@ cinnamon_session_sources = [
+ ]
+ 
+ dbus_glib = dependency('dbus-glib-1')
+-executable('cinnamon-session',
++executable('cinnamon-session-binary',
+   cinnamon_session_sources,
+   dependencies: [
+     cinnamon_desktop,
+@@ -76,6 +76,18 @@ executable('cinnamon-session',
+   ],
+   include_directories: [ rootInclude ],
+   install: true,
++  install_dir: get_option('libexecdir'),
++)
++
++script_conf = configuration_data()
++script_conf.set('libexecdir', get_option('prefix') / get_option('libexecdir'))
++
++configure_file(
++  input: 'cinnamon-session.in',
++  output: 'cinnamon-session',
++  install: true,
++  install_dir: get_option('bindir'),
++  configuration: script_conf
+ )
+ 
+ units = [
+-- 
+2.42.0
+

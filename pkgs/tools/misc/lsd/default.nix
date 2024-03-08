@@ -48,5 +48,6 @@ rustPlatform.buildRustPackage rec {
     description = "The next gen ls command";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam zowoq SuperSandro2000 ];
+    mainProgram = "lsd";
   };
 }

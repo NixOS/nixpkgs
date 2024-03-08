@@ -1,24 +1,22 @@
 { lib
 , fetchFromGitHub
-, buildPythonPackage
-, aiofiles
-, django_3
-, fastapi
-, msgpack
-, pynacl
-, redis
-, typing-extensions
 , withLdap ? true
-, python-ldap
+, python3
 , withPostgres ? true
-, psycopg2
 , nix-update-script
+, nixosTests
 }:
 
-buildPythonPackage rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pydantic = super.pydantic_1;
+    };
+  };
+in
+python.pkgs.buildPythonPackage rec {
   pname = "etebase-server";
   version = "0.11.0";
-  format = "other";
 
   src = fetchFromGitHub {
     owner = "etesync";
@@ -29,32 +27,46 @@ buildPythonPackage rec {
 
   patches = [ ./secret.patch ];
 
-  propagatedBuildInputs = [
+  doCheck = false;
+
+  propagatedBuildInputs = with python.pkgs; [
     aiofiles
     django_3
     fastapi
     msgpack
     pynacl
     redis
+    uvicorn
+    websockets
+    watchfiles
+    uvloop
+    pyyaml
+    python-dotenv
+    httptools
     typing-extensions
   ] ++ lib.optional withLdap python-ldap
     ++ lib.optional withPostgres psycopg2;
 
-  installPhase = ''
+  postInstall = ''
     mkdir -p $out/bin $out/lib
-    cp -r . $out/lib/etebase-server
-    ln -s $out/lib/etebase-server/manage.py $out/bin/etebase-server
+    cp manage.py $out/bin/etebase-server
     wrapProgram $out/bin/etebase-server --prefix PYTHONPATH : "$PYTHONPATH"
     chmod +x $out/bin/etebase-server
   '';
 
   passthru.updateScript = nix-update-script {};
+  passthru.python = python;
+  # PYTHONPATH of all dependencies used by the package
+  passthru.pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+  passthru.tests = {
+    nixosTest = nixosTests.etebase-server;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/etesync/server";
     description = "An Etebase (EteSync 2.0) server so you can run your own";
     changelog = "https://github.com/etesync/server/blob/${version}/ChangeLog.md";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ felschr ];
+    maintainers = with maintainers; [ felschr phaer ];
   };
 }

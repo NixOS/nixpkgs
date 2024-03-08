@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "23.0.knots20220529";
+  version = "25.1.knots20231115";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/23.x/${version}/bitcoin-${version}.tar.gz";
-    sha256 = "0c6l4bvj4ck8gp5vm4dla3l32swsp6ijk12fyf330wgry4mhqxyi";
+    url = "https://bitcoinknots.org/files/25.x/${version}/bitcoin-${version}.tar.gz";
+    sha256 = "b6251beee95cf6701c6ebc443b47fb0e99884880f2661397f964a8828add4002";
   };
 
   nativeBuildInputs =
@@ -67,10 +67,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
-
-  passthru.tests = {
-    smoke-test = nixosTests.bitcoind-knots;
-  };
 
   meta = with lib; {
     description = "A derivative of Bitcoin Core with a collection of improvements";

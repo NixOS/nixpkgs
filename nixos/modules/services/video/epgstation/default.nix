@@ -80,11 +80,11 @@ in
   options.services.epgstation = {
     enable = lib.mkEnableOption (lib.mdDoc description);
 
-    package = lib.mkPackageOptionMD pkgs "epgstation" { };
+    package = lib.mkPackageOption pkgs "epgstation" { };
 
-    ffmpeg = lib.mkPackageOptionMD pkgs "ffmpeg" {
-      default = [ "ffmpeg-headless" ];
-      example = "pkgs.ffmpeg-full";
+    ffmpeg = lib.mkPackageOption pkgs "ffmpeg" {
+      default = "ffmpeg-headless";
+      example = "ffmpeg-full";
     };
 
     usePreconfiguredStreaming = lib.mkOption {
@@ -309,17 +309,25 @@ in
         (lib.mkIf cfg.usePreconfiguredStreaming streamingConfig)
       ];
 
-    systemd.tmpfiles.rules = [
-      "d '/var/lib/epgstation/key' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/drop' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/recorded' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/thumbnail' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/db/subscribers' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/db/migrations/mysql' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/db/migrations/postgres' - ${username} ${groupname} - -"
-      "d '/var/lib/epgstation/db/migrations/sqlite' - ${username} ${groupname} - -"
-    ];
+    systemd.tmpfiles.settings."10-epgstation" =
+      lib.listToAttrs
+        (map (dir: lib.nameValuePair dir {
+          d = {
+            user = username;
+            group = groupname;
+          };
+        })
+        [
+          "/var/lib/epgstation/key"
+          "/var/lib/epgstation/streamfiles"
+          "/var/lib/epgstation/drop"
+          "/var/lib/epgstation/recorded"
+          "/var/lib/epgstation/thumbnail"
+          "/var/lib/epgstation/db/subscribers"
+          "/var/lib/epgstation/db/migrations/mysql"
+          "/var/lib/epgstation/db/migrations/postgres"
+          "/var/lib/epgstation/db/migrations/sqlite"
+        ]);
 
     systemd.services.epgstation = {
       inherit description;

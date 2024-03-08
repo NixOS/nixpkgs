@@ -3,6 +3,7 @@
 , buildPythonPackage
 , certifi
 , charset-normalizer
+, cvss
 , deepl
 , django
 , fetchFromGitHub
@@ -14,6 +15,7 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , reptor
 , requests
@@ -21,15 +23,17 @@
 , setuptools
 , sqlparse
 , termcolor
-, toml
+, tomli
+, tomli-w
+, tomlkit
 , urllib3
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.4";
-  format = "pyproject";
+  version = "0.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,10 +41,13 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-3FRMdiSKWlEUmggtSDea9w386uwAn/VUzXiD1xRNuxQ=";
+    hash = "sha256-8XjEWs+LKKc7ztNchNVmW+YGdYpmi5ee4eOoXIUBoM8=";
   };
 
+  pythonRelaxDeps = true;
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -48,6 +55,7 @@ buildPythonPackage rec {
     asgiref
     certifi
     charset-normalizer
+    cvss
     django
     idna
     markdown-it-py
@@ -58,7 +66,9 @@ buildPythonPackage rec {
     rich
     sqlparse
     termcolor
-    toml
+    tomli
+    tomlkit
+    tomli-w
     urllib3
     xmltodict
   ];
@@ -66,7 +76,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     ghostwriter = [
       gql
-    ];
+    ] ++ gql.optional-dependencies.aiohttp;
     translate = [
       deepl
     ];
@@ -78,6 +88,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$(mktemp -d)
+    export PATH="$PATH:$out/bin";
   '';
 
   pythonImportsCheck = [
@@ -87,6 +98,13 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests want to use pip install dependencies
     "reptor/plugins/importers/GhostWriter/tests/test_ghostwriter.py"
+  ];
+
+  disabledTests = [
+    # Tests need network access
+    "TestDummy"
+    "TestIntegration"
+
   ];
 
   meta = with lib; {

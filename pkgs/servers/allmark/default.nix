@@ -23,5 +23,6 @@ buildGoPackage rec {
     changelog = "https://github.com/andreaskoch/allmark/-/releases/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ urandom ];
+    mainProgram = "allmark";
   };
 }

@@ -31,7 +31,7 @@
 , enablePluginBsfilter ? true
 , enablePluginClamd ? true
 , enablePluginDillo ? true
-, enablePluginFancy ? true, libsoup, webkitgtk
+, enablePluginFancy ? true, webkitgtk
 , enablePluginFetchInfo ? true
 , enablePluginKeywordWarner ? true
 , enablePluginLibravatar ? enablePluginRavatar
@@ -67,7 +67,7 @@ let
     { flags = [ "dbus" ]; enabled = enableDbus; deps = [ dbus dbus-glib ]; }
     { flags = [ "dillo-plugin" ]; enabled = enablePluginDillo; }
     { flags = [ "enchant" ]; enabled = enableEnchant; deps = [ enchant ]; }
-    { flags = [ "fancy-plugin" ]; enabled = enablePluginFancy; deps = [ libsoup webkitgtk ]; }
+    { flags = [ "fancy-plugin" ]; enabled = enablePluginFancy; deps = [ webkitgtk ]; }
     { flags = [ "fetchinfo-plugin" ]; enabled = enablePluginFetchInfo; }
     { flags = [ "keyword_warner-plugin" ]; enabled = enablePluginKeywordWarner; }
     { flags = [ "gnutls" ]; enabled = enableGnuTLS; deps = [ gnutls ]; }
@@ -96,11 +96,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
-  version = "4.1.1";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    hash = "sha256-sYnnAMGJb14N6wt21L+oIOt6wZNe4Qqpr7raPPU6A0Q=";
+    hash = "sha256-fIqxcy10GX3wbWGmt+vHxYDs9ukuse9q5bAQdTPxrwc=";
   };
 
   outputs = [ "out" "dev" ];
@@ -136,8 +136,6 @@ in stdenv.mkDerivation rec {
       "--disable-manual"   # Missing docbook-tools, e.g., docbook2html
       "--disable-compface" # Missing compface library
       "--disable-jpilot"   # Missing jpilot library
-
-      "--disable-gdata-plugin" # Complains about missing libgdata, even when provided
     ] ++
     (map (feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags) features);
 
@@ -158,6 +156,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 srapenne ];
+    maintainers = with maintainers; [ fpletz globin orivej oxzi ajs124 ];
   };
 }

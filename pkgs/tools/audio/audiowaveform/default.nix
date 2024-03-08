@@ -2,14 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
-  version = "1.8.1";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "bbc";
     repo = "audiowaveform";
     rev = version;
-    sha256 = "sha256-MbOQY1Yvtwuy6IPV1BfwwRBhEQIzQ7mPzedE74xsQSk=";
+    sha256 = "sha256-FcQq0xWs3jH2MfhFQ5r5Vaz8B3akBHBSg8Z/k9An/Wg=";
   };
+
+  cmakeFlags = [
+    # gtest no longer supports C++11.
+    "-DCMAKE_CXX_STANDARD=14"
+  ];
 
   nativeBuildInputs = [ cmake gtest ];
 
@@ -33,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ edbentley ];
+    mainProgram = "audiowaveform";
   };
 }

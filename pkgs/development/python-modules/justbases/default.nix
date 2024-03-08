@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "justbases";
   version = "0.15.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mulkieran";

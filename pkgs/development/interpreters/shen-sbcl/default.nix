@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Shen-Language/shen-cl/raw/v${version}/CHANGELOG.md";
     platforms = sbcl.meta.platforms;
     maintainers = with maintainers; [ bsima ];
+    broken = true;
     license = licenses.bsd3;
   };
 }

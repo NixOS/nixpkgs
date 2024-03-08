@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "postgres_exporter";
-  version = "0.13.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "postgres_exporter";
     rev = "v${version}";
-    sha256 = "sha256-K0B6EsRCWznYf4xS+9T4HafOSUPHCNsu2ZSIVXneGyk=";
+    sha256 = "sha256-fxVU2z1RGgI8AoKiJb+3LIEa1KDhPptmdP21/ESzmgw=";
   };
 
-  vendorHash = "sha256-0MQS42/4iImtq3yBGVCe0BwV0HiJCo7LVEAbsKltE4g=";
+  vendorHash = "sha256-/AL9Qkcrp5Kvj2epJMuNrtwqBbyCy4P6oVGUfODXS/Q=";
 
   ldflags =
     let

@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "scheme-manpages";
-  version = "unstable-2023-08-13";
+  version = "unstable-2024-02-11";
 
   src = fetchFromGitHub {
     owner = "schemedoc";
     repo = "manpages";
-    rev = "c17abb7dfb733fede4cf776a932e9696ccc7a4f2";
-    hash = "sha256-9s/1sJEA4nowzQRpySOFzY+PxiUdz1Z3D931rMet4CA=";
+    rev = "1ef440525db569799774c83634d28bfa630358da";
+    hash = "sha256-ZBovG9i0qKD6dP4qcLP1T1fke0hC8MmRjZRzxuojd60=";
   };
 
   dontBuild = true;

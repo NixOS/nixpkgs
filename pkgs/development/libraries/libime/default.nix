@@ -7,12 +7,14 @@
 , boost
 , python3
 , fcitx5
+, zstd
 }:
 
 let
+  tableVer = "20240108";
   table = fetchurl {
-    url = "https://download.fcitx-im.org/data/table.tar.gz";
-    sha256 = "1dw7mgbaidv3vqy0sh8dbfv8631d2zwv5mlb7npf69a1f8y0b5k1";
+    url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.gz";
+    hash = "sha256-cpxZbYaQfecnx00Pw/0kHEBsXevStMt07v4CI4funa4=";
   };
   arpaVer = "20230712";
   arpa = fetchurl {
@@ -27,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.0";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-r1Px93Ly7FzcRaPUNTHNcedzHPHocnUj8t8VMZqXkFM=";
+    hash = "sha256-PhzJtAGmSkMeXMSe2uR/JKHKlZtL0e3tPDZVoRCvAis=";
     fetchSubmodules = true;
   };
 
@@ -50,6 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    zstd
     boost
     fcitx5
   ];

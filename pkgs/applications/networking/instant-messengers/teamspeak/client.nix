@@ -30,11 +30,11 @@ in
 stdenv.mkDerivation rec {
   pname = "teamspeak-client";
 
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
-    hash = "sha256-j4sgZ+tJpV6ST0yLmbLTLgBxQTcK1LZoEEfMe3TUAC4=";
+    hash = "sha256-WfEQQ4lxoj+QSnAOfdCoEc+Z1Oa5dbo6pFli1DsAZCI=";
   };
 
   # grab the plugin sdk for the desktop icon

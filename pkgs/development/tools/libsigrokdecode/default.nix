@@ -1,18 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, glib, python3, check, libxcrypt }:
+{ lib, stdenv, fetchgit, pkg-config, autoreconfHook, glib, python3, check, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "libsigrokdecode";
-  version = "0.5.3";
+  version = "0.5.3-unstable-2023-10-23";
 
-  src = fetchurl {
-    url = "https://sigrok.org/download/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1h1zi1kpsgf6j2z8j8hjpv1q7n49i3fhqjn8i178rka3cym18265";
+  src = fetchgit {
+    url = "git://sigrok.org/libsigrokdecode";
+    rev = "0c35c5c5845d05e5f624c99d58af992d2f004446";
+    hash = "sha256-1kQB7uk2c+6Uriw+1o6brThDcBLoCdPV0MVWAha7ohk=";
   };
-
-  # upstream was rleased before Python 3.9 and thus only checks versions up to 3.8
-  postPatch = ''
-    substituteInPlace configure.ac --replace '[python-3.8-embed]' '[python3-embed]'
-  '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ glib python3 libxcrypt ];
@@ -24,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor vifino ];
   };
 }

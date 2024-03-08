@@ -5,7 +5,6 @@
 , cryptography
 , cssselect
 , fetchPypi
-, fetchpatch
 , glibcLocales
 , installShellFiles
 , itemadapter
@@ -14,6 +13,7 @@
 , lxml
 , packaging
 , parsel
+, pexpect
 , protego
 , pydispatcher
 , pyopenssl
@@ -21,29 +21,31 @@
 , pythonOlder
 , queuelib
 , service-identity
+, setuptools
 , sybil
 , testfixtures
 , tldextract
 , twisted
 , w3lib
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.10.1";
-  format = "setuptools";
+  version = "2.11.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-kdZ4dfu1N2B7B+MTY0RXGKNTK1RObitLr4oEKyGh0Q8=";
+    hash = "sha256-czoDnHQj5StpvygQtTMgk9TkKoSEYDWcB7Auz/j3Pr4=";
   };
 
   nativeBuildInputs = [
     installShellFiles
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -62,13 +64,14 @@ buildPythonPackage rec {
     tldextract
     twisted
     w3lib
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
     botocore
     glibcLocales
     jmespath
+    pexpect
     pytestCheckHook
     sybil
     testfixtures
@@ -101,6 +104,8 @@ buildPythonPackage rec {
     "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
+    "test_unbounded_response"
+    "CookiesMiddlewareTest"
     # Depends on uvloop
     "test_asyncio_enabled_reactor_different_loop"
     "test_asyncio_enabled_reactor_same_loop"
@@ -109,6 +114,8 @@ buildPythonPackage rec {
     "test_peek_one_element"
     "test_peek_lifo"
     "test_callback_kwargs"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"

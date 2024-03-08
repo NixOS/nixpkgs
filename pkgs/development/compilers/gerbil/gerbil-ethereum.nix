@@ -2,24 +2,25 @@
 
 rec {
   pname = "gerbil-ethereum";
-  version = "unstable-2023-05-30";
-  git-version = "0.0-375-g989a5ca";
+  version = "unstable-2023-12-04";
+  git-version = "0.2-11-g124ec58";
   softwareName = "Gerbil-ethereum";
-  gerbil-package = "mukn/ethereum";
+  gerbil-package = "clan/ethereum";
   version-path = "version";
 
-  gerbilInputs = with gerbilPackages; [ gerbil-utils gerbil-crypto gerbil-poo gerbil-persist ];
+  gerbilInputs = with gerbilPackages; [
+    gerbil-utils gerbil-crypto gerbil-poo gerbil-persist gerbil-leveldb ];
 
   pre-src = {
     fun = fetchFromGitHub;
-    owner = "fare";
+    owner = "mighty-gerbils";
     repo = "gerbil-ethereum";
-    rev = "989a5ca78958e42c4a1ec242786ade89f1887e48";
-    sha256 = "0bs2knhx3hy3k72yidgaplwjd48y86arqscdik8hgxwmhm9z8kwp";
+    rev = "124ec585157e2c505cd3c449a389c124ca6da9e9";
+    sha256 = "0xg07k421r5p0qx98id66k0k2l3vi1is875857sd8q3h6bks0z54";
   };
 
   postInstall = ''
-    cp scripts/{croesus.prv,genesis.json,logback.xml,yolo-evm.conf,yolo-kevm.conf,run-ethereum-test-net.ss} $out/gerbil/lib/mukn/ethereum/scripts/
+    cp scripts/{croesus.prv,genesis.json,logback.xml,yolo-evm.conf,yolo-kevm.conf,run-ethereum-test-net.ss} $out/gerbil/lib/clan/ethereum/scripts/
     mkdir -p $out/bin
     cat > $out/bin/run-ethereum-test-net <<EOF
     #!/bin/sh
@@ -33,7 +34,7 @@ rec {
     export GERBIL_PATH GERBIL_LOADPATH GLOW_SOURCE ORIG_GERBIL_PATH ORIG_GERBIL_LOADPATH
     exec ${gerbil}/bin/gxi "\$0" "\$@"
     |#
-    (import :mukn/ethereum/scripts/run-ethereum-test-net :clan/multicall)
+    (import :clan/ethereum/scripts/run-ethereum-test-net :std/lib/multicall)
     (apply call-entry-point (cdr (command-line)))
     EOF
     chmod a+x $out/bin/run-ethereum-test-net

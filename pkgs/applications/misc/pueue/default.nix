@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "3.2.0";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
-    hash = "sha256-Fk31k0JIe1KJW7UviA8yikjfwlcdRD92wehNbuEoH2w=";
+    hash = "sha256-Q1x97eJNjtET+L3KpWTXLKbz62XgkjxNZkAAZWhbMmM=";
   };
 
-  cargoHash = "sha256-eVJuebau0Y9oelniCzvOk9riMMZ9cS7E/G6KinbQa6k=";
+  cargoHash = "sha256-i9SPOZo9AuITm6iI++D3ipY8c0xfZzkeHW7tb9SZ3iQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
       any terminal on the same machine. The queue will be continuously
       processed, even if you no longer have any active ssh sessions.
     '';
-    changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Nukesor/pueue/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

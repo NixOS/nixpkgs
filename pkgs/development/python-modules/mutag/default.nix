@@ -8,6 +8,7 @@
 buildPythonPackage {
   pname = "mutag";
   version = "0.0.2-2ffa0258ca";
+  format = "setuptools";
   disabled = ! isPy3k;
 
   src = fetchFromGitHub {

@@ -45,7 +45,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     black
-    ruff
   ];
 
   nativeCheckInputs = [
@@ -54,6 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pytest_examples"
+  ];
+
+  disabledTests = [
+    # Test fails with latest ruff v0.1.2
+    # See https://github.com/pydantic/pytest-examples/issues/26
+    "test_ruff_error"
   ];
 
   meta = with lib; {

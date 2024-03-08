@@ -4,7 +4,7 @@
 , curl
 }:
 let
-  version = "2020.3.18";
+  version = "2020.3.19";
   shortVersion = builtins.substring 0 6 version;
 in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-bMHPJVaxckB5KezyurJDLG+wXuFt0ZAm6QNp8lc2Nso=";
+    sha256 = "sha256-O5N8W5RCJHjl15EUvc1seOQ6Cm/7qXVEqG1EHD+ejDo=";
   };
 
   nativeBuildInputs = [ cmake ];

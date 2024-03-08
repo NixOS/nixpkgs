@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.3.5";
+  version = "0.3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,10 +22,8 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4eYDaQwjnYCTnobXRtFrToRyxxH2N2n9sh8z7oPC2Wc=";
+    hash = "sha256-Nfr9gD2FLZ+KvHh1mcpReUWnzFr/NxpvperzZPoFeT4=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

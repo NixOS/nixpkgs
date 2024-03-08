@@ -5,20 +5,26 @@
 
 buildGoModule rec {
   pname = "cloudlist";
-  version = "1.0.3";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-PWOC+Y+tCr5LqWJpSVoIeOquO2vMb06KW25pBEER3Ys=";
+    repo = "cloudlist";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-F1oiatNP4tSRWI25r1uoiLT9Et+PyqU0p2HVICMBUNA=";
   };
 
-  vendorHash = "sha256-FesvXH29thy6B9VXZnuvllJ+9VQR4i6q1JzrULaU82s=";
+  vendorHash = "sha256-3QS9YYypqEJhibfBFxFq1gxTVpTWBy35tXcO9+DBehY=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   meta = with lib; {
     description = "Tool for listing assets from multiple cloud providers";
     homepage = "https://github.com/projectdiscovery/cloudlist";
+    changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

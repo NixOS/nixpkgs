@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vkd3d";
-  version = "1.8";
+  version = "1.10";
 
   nativeBuildInputs = [ autoreconfHook pkg-config wine flex bison ];
   buildInputs = [ vulkan-loader vulkan-headers spirv-headers ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "wine";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-v2UhJvfB5Clupmgoykei3AoWYBOp5l9pQFkUEQVlajs=";
+    sha256 = "sha256-/5tc8agqpRbFRnfv8O1fBo2SPNOuO6exs0BZ9MnOTA0=";
   };
 
   meta = with lib; {

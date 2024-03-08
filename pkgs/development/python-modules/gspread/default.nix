@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , google-auth
 , google-auth-oauthlib
 , pytest-vcr
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "gspread";
-  version = "5.11.1";
+  version = "5.12.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     owner = "burnash";
     repo = "gspread";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a8A47il9NrMdHkSX4YmQj4VIAYDXK5V+FUdwv+LGIfQ=";
+    hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
   };
 
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
 
   propagatedBuildInputs = [

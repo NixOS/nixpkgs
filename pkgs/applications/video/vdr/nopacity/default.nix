@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitLab, vdr, graphicsmagick }:
 stdenv.mkDerivation rec {
   pname = "vdr-skin-nopacity";
-  version = "1.1.14";
+  version = "1.1.16";
 
   src = fetchFromGitLab {
     repo = "SkinNopacity";
     owner = "kamel5";
-    sha256 = "sha256-zSAnjBkFR8m+LXeoYO163VkNtVpfQZR5fI5CEzUABdQ=";
+    sha256 = "sha256-5TTilBKlNsFBm5BaCoRV1LzZgpad2lOIQGyk94jGYls=";
     rev = version;
   };
 

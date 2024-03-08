@@ -55,15 +55,14 @@ in {
       description = lib.mdDoc ''
         The directory under which vaultwarden will backup its persistent data.
       '';
+      example = "/var/backup/vaultwarden";
     };
 
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
       default = {
-        config = {
-          ROCKET_ADDRESS = "::1"; # default to localhost
-          ROCKET_PORT = 8222;
-        };
+        ROCKET_ADDRESS = "::1"; # default to localhost
+        ROCKET_PORT = 8222;
       };
       example = literalExpression ''
         {
@@ -158,12 +157,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.vaultwarden;
-      defaultText = literalExpression "pkgs.vaultwarden";
-      description = lib.mdDoc "Vaultwarden package to use.";
-    };
+    package = mkPackageOption pkgs "vaultwarden" { };
 
     webVaultPackage = mkOption {
       type = package;
@@ -186,7 +180,6 @@ in {
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      aliases = [ "bitwarden_rs.service" ];
       after = [ "network.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
@@ -208,7 +201,6 @@ in {
     };
 
     systemd.services.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs.service" ];
       description = "Backup vaultwarden";
       environment = {
         DATA_FOLDER = "/var/lib/bitwarden_rs";
@@ -228,7 +220,6 @@ in {
     };
 
     systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs.timer" ];
       description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";
@@ -237,8 +228,18 @@ in {
       };
       wantedBy = [ "multi-user.target" ];
     };
+
+    systemd.tmpfiles.settings = mkIf (cfg.backupDir != null) {
+      "10-vaultwarden".${cfg.backupDir}.d = {
+        inherit user group;
+        mode = "0770";
+      };
+    };
   };
 
-  # uses attributes of the linked package
-  meta.buildDocsInSandbox = false;
+  meta = {
+    # uses attributes of the linked package
+    buildDocsInSandbox = false;
+    maintainers = with lib.maintainers; [ dotlambda SuperSandro2000 ];
+  };
 }

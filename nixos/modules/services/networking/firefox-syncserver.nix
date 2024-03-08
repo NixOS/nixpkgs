@@ -224,10 +224,12 @@ in
           Settings for the sync server. These take priority over values computed
           from NixOS options.
 
-          See the doc comments on the `Settings` structs in
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/settings.rs>
+          See the example config in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/config/local.example.toml>
+          and the doc comments on the `Settings` structs in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage-settings/src/lib.rs>
           and
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/tokenserver/settings.rs>
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/tokenserver-settings/src/lib.rs>
           for available options.
         '';
       };

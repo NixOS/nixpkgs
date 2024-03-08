@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "fastecdsa";
-  version = "2.3.1";
+  version = "2.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8ZjORPaUbKuwKYip9J0U78QQ26XiEemDIbqdhzeyP/g=";
+    hash = "sha256-81JVptPkEQkWa11LCIZtWsu5ny4eZNOn50x3RmTNqEI=";
   };
 
   buildInputs = [

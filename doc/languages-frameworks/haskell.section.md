@@ -70,39 +70,42 @@ compilers like this:
 ```console
 $ nix-env -f '<nixpkgs>' -qaP -A haskell.compiler
 haskell.compiler.ghc810                  ghc-8.10.7
-haskell.compiler.ghc88                   ghc-8.8.4
 haskell.compiler.ghc90                   ghc-9.0.2
-haskell.compiler.ghc924                  ghc-9.2.4
 haskell.compiler.ghc925                  ghc-9.2.5
 haskell.compiler.ghc926                  ghc-9.2.6
-haskell.compiler.ghc92                   ghc-9.2.7
-haskell.compiler.ghc942                  ghc-9.4.2
-haskell.compiler.ghc943                  ghc-9.4.3
-haskell.compiler.ghc94                   ghc-9.4.4
-haskell.compiler.ghcHEAD                 ghc-9.7.20221224
-haskell.compiler.ghc8102Binary           ghc-binary-8.10.2
-haskell.compiler.ghc8102BinaryMinimal    ghc-binary-8.10.2
-haskell.compiler.ghc8107BinaryMinimal    ghc-binary-8.10.7
+haskell.compiler.ghc927                  ghc-9.2.7
+haskell.compiler.ghc92                   ghc-9.2.8
+haskell.compiler.ghc945                  ghc-9.4.5
+haskell.compiler.ghc946                  ghc-9.4.6
+haskell.compiler.ghc947                  ghc-9.4.7
+haskell.compiler.ghc94                   ghc-9.4.8
+haskell.compiler.ghc963                  ghc-9.6.3
+haskell.compiler.ghc96                   ghc-9.6.4
+haskell.compiler.ghc98                   ghc-9.8.1
+haskell.compiler.ghcHEAD                 ghc-9.9.20231121
 haskell.compiler.ghc8107Binary           ghc-binary-8.10.7
 haskell.compiler.ghc865Binary            ghc-binary-8.6.5
 haskell.compiler.ghc924Binary            ghc-binary-9.2.4
-haskell.compiler.ghc924BinaryMinimal     ghc-binary-9.2.4
-haskell.compiler.integer-simple.ghc810   ghc-integer-simple-8.10.7
 haskell.compiler.integer-simple.ghc8107  ghc-integer-simple-8.10.7
-haskell.compiler.integer-simple.ghc88    ghc-integer-simple-8.8.4
-haskell.compiler.integer-simple.ghc884   ghc-integer-simple-8.8.4
+haskell.compiler.integer-simple.ghc810   ghc-integer-simple-8.10.7
 haskell.compiler.native-bignum.ghc90     ghc-native-bignum-9.0.2
 haskell.compiler.native-bignum.ghc902    ghc-native-bignum-9.0.2
-haskell.compiler.native-bignum.ghc924    ghc-native-bignum-9.2.4
 haskell.compiler.native-bignum.ghc925    ghc-native-bignum-9.2.5
 haskell.compiler.native-bignum.ghc926    ghc-native-bignum-9.2.6
-haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.7
 haskell.compiler.native-bignum.ghc927    ghc-native-bignum-9.2.7
-haskell.compiler.native-bignum.ghc942    ghc-native-bignum-9.4.2
-haskell.compiler.native-bignum.ghc943    ghc-native-bignum-9.4.3
-haskell.compiler.native-bignum.ghc94     ghc-native-bignum-9.4.4
-haskell.compiler.native-bignum.ghc944    ghc-native-bignum-9.4.4
-haskell.compiler.native-bignum.ghcHEAD   ghc-native-bignum-9.7.20221224
+haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.8
+haskell.compiler.native-bignum.ghc928    ghc-native-bignum-9.2.8
+haskell.compiler.native-bignum.ghc945    ghc-native-bignum-9.4.5
+haskell.compiler.native-bignum.ghc946    ghc-native-bignum-9.4.6
+haskell.compiler.native-bignum.ghc947    ghc-native-bignum-9.4.7
+haskell.compiler.native-bignum.ghc94     ghc-native-bignum-9.4.8
+haskell.compiler.native-bignum.ghc948    ghc-native-bignum-9.4.8
+haskell.compiler.native-bignum.ghc963    ghc-native-bignum-9.6.3
+haskell.compiler.native-bignum.ghc96     ghc-native-bignum-9.6.4
+haskell.compiler.native-bignum.ghc964    ghc-native-bignum-9.6.4
+haskell.compiler.native-bignum.ghc98     ghc-native-bignum-9.8.1
+haskell.compiler.native-bignum.ghc981    ghc-native-bignum-9.8.1
+haskell.compiler.native-bignum.ghcHEAD   ghc-native-bignum-9.9.20231121
 haskell.compiler.ghcjs                   ghcjs-8.10.7
 ```
 
@@ -177,7 +180,7 @@ exactly one version. Those versions need to satisfy all the version constraints
 given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
-It will simply take as input packages with names off the desired dependencies
+It will take as input packages with names off the desired dependencies
 and just check whether they fulfill the version bounds and fail if they don’t
 (by default, see `jailbreak` to circumvent this).
 
@@ -221,7 +224,7 @@ Sadly we currently don’t have tooling for this. For this you might be
 interested in the alternative [haskell.nix] framework, which, be warned, is
 completely incompatible with packages from `haskellPackages`.
 
-<!-- TODO(@maralorn) Link to package set generation docs in the contributers guide below. -->
+<!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
 
 ## `haskellPackages.mkDerivation` {#haskell-mkderivation}
 
@@ -780,7 +783,7 @@ there instead.
 The top level `pkgs.haskell-language-server` attribute is just a convenience
 wrapper to make it possible to install HLS for multiple GHC versions at the
 same time. If you know, that you only use one GHC version, e.g., in a project
-specific `nix-shell` you can simply use
+specific `nix-shell` you can use
 `pkgs.haskellPackages.haskell-language-server` or
 `pkgs.haskell.packages.*.haskell-language-server` from the package set you use.
 
@@ -1029,7 +1032,7 @@ ugly, and we may want to deprecate them at some point. -->
 `disableCabalFlag flag drv`
 : Makes sure that the Cabal flag `flag` is disabled in Cabal's configure step.
 
-`appendBuildflags list drv`
+`appendBuildFlags list drv`
 : Adds the strings in `list` to the `buildFlags` argument for `drv`.
 
 <!-- TODO(@sternenseemann): removeConfigureFlag -->
@@ -1192,7 +1195,7 @@ with GHC), it is recommended to use overlays for Nixpkgs to change them.
 Since the interrelated parts, i.e. the package set and GHC, are connected
 via the Nixpkgs fixpoint, we need to modify them both in a way that preserves
 their connection (or else we'd have to wire it up again manually). This is
-achieved by changing GHC and the package set in seperate overlays to prevent
+achieved by changing GHC and the package set in separate overlays to prevent
 the package set from pulling in GHC from `prev`.
 
 The result is two overlays like the ones shown below. Adjustable parts are
@@ -1226,10 +1229,12 @@ in
   in
 
   {
-    haskell = lib.recursiveUpdate prev.haskell {
-      compiler.${ghcName} = prev.haskell.compiler.${ghcName}.override {
-        # Unfortunately, the GHC setting is named differently for historical reasons
-        enableProfiledLibs = enableProfiling;
+    haskell = prev.haskell // {
+      compiler = prev.haskell.compiler // {
+        ${ghcName} = prev.haskell.compiler.${ghcName}.override {
+          # Unfortunately, the GHC setting is named differently for historical reasons
+          enableProfiledLibs = enableProfiling;
+        };
       };
     };
   })
@@ -1241,31 +1246,33 @@ in
   in
 
   {
-    haskell = lib.recursiveUpdate prev.haskell {
-      packages.${ghcName} = prev.haskell.packages.${ghcName}.override {
-        overrides = hfinal: hprev: {
-          mkDerivation = args: hprev.mkDerivation (args // {
-            # Since we are forcing our ideas upon mkDerivation, this change will
-            # affect every package in the package set.
-            enableLibraryProfiling = enableProfiling;
+    haskell = prev.haskell // {
+      packages = prev.haskell.packages // {
+        ${ghcName} = prev.haskell.packages.${ghcName}.override {
+          overrides = hfinal: hprev: {
+            mkDerivation = args: hprev.mkDerivation (args // {
+              # Since we are forcing our ideas upon mkDerivation, this change will
+              # affect every package in the package set.
+              enableLibraryProfiling = enableProfiling;
 
-            # To actually use profiling on an executable, executable profiling
-            # needs to be enabled for the executable you want to profile. You
-            # can either do this globally or…
-            enableExecutableProfiling = enableProfiling;
-          });
+              # To actually use profiling on an executable, executable profiling
+              # needs to be enabled for the executable you want to profile. You
+              # can either do this globally or…
+              enableExecutableProfiling = enableProfiling;
+            });
 
-          # …only for the package that contains an executable you want to profile.
-          # That saves on unnecessary rebuilds for packages that you only depend
-          # on for their library, but also contain executables (e.g. pandoc).
-          my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
+            # …only for the package that contains an executable you want to profile.
+            # That saves on unnecessary rebuilds for packages that you only depend
+            # on for their library, but also contain executables (e.g. pandoc).
+            my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
 
-          # If you are disabling profiling to save on build time, but want to
-          # retain the ability to substitute from the binary cache. Drop the
-          # override for mkDerivation above and instead have an override like
-          # this for the specific packages you are building locally and want
-          # to make cheaper to build.
-          my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+            # If you are disabling profiling to save on build time, but want to
+            # retain the ability to substitute from the binary cache. Drop the
+            # override for mkDerivation above and instead have an override like
+            # this for the specific packages you are building locally and want
+            # to make cheaper to build.
+            my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+          };
         };
       };
     };

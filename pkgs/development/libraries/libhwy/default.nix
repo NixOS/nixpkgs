@@ -1,23 +1,31 @@
-{ lib, stdenv, cmake, ninja, gtest, fetchFromGitHub, fetchpatch }:
+{ lib
+, stdenv
+, cmake
+, ninja
+, gtest
+, fetchFromGitHub
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-Gym2iHq5ws9kuG4HWSQndD8hVugV4USZt6dUFnEkLwY=";
+    hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
   };
-  patches = [
-    # backport for compilation issue on aarch64
-    # https://github.com/google/highway/issues/1613
+
+  patches = lib.optional stdenv.hostPlatform.isRiscV
+    # Adds CMake option HWY_CMAKE_RVV
+    # https://github.com/google/highway/pull/1743
     (fetchpatch {
-      url = "https://github.com/google/highway/commit/7ad89efa911cb906ccf3f78fe510db415e921801.diff";
-      hash = "sha256-hTSkeCh2QLMqeIKG/CAqJXaPqD/66Z02gjGXk591f+U=";
-    })
-  ];
+      name = "libhwy-add-rvv-optout.patch";
+      url = "https://github.com/google/highway/commit/5d58d233fbcec0c6a39df8186a877329147324b3.patch";
+      hash = "sha256-ileSNYddOt1F5rooRB0fXT20WkVlnG+gP5w7qJdBuww=";
+    });
 
   nativeBuildInputs = [ cmake ninja ];
 
@@ -45,6 +53,11 @@ stdenv.mkDerivation rec {
     #   HwyMathTestGroup/HwyMathTest.TestAllAtanh/EMU128
     #   HwyMathTestGroup/HwyMathTest.TestAllLog1p/EMU128
     "-DHWY_CMAKE_SSE2=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    # Runtime dispatch is not implemented https://github.com/google/highway/issues/838
+    # so tests (and likely normal operation) fail with SIGILL on processors without V.
+    # Until the issue is resolved, we disable RVV completely.
+    "-DHWY_CMAKE_RVV=OFF"
   ];
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
@@ -53,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Performance-portable, length-agnostic SIMD with runtime dispatch";
     homepage = "https://github.com/google/highway";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 bsd3 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ zhaofengli ];
   };

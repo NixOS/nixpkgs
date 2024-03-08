@@ -26,13 +26,28 @@ let
     };
   };
 
-  defaultSwayPackage = pkgs.sway.override {
-    extraSessionCommands = cfg.extraSessionCommands;
-    extraOptions = cfg.extraOptions;
-    withBaseWrapper = cfg.wrapperFeatures.base;
-    withGtkWrapper = cfg.wrapperFeatures.gtk;
-    isNixOS = true;
-  };
+  genFinalPackage = pkg:
+    let
+      expectedArgs = lib.naturalSort [
+        "extraSessionCommands"
+        "extraOptions"
+        "withBaseWrapper"
+        "withGtkWrapper"
+        "isNixOS"
+      ];
+      existedArgs = with lib;
+        naturalSort
+        (intersectLists expectedArgs (attrNames (functionArgs pkg.override)));
+    in if existedArgs != expectedArgs then
+      pkg
+    else
+      pkg.override {
+        extraSessionCommands = cfg.extraSessionCommands;
+        extraOptions = cfg.extraOptions;
+        withBaseWrapper = cfg.wrapperFeatures.base;
+        withGtkWrapper = cfg.wrapperFeatures.gtk;
+        isNixOS = true;
+      };
 in {
   options.programs.sway = {
     enable = mkEnableOption (lib.mdDoc ''
@@ -44,14 +59,16 @@ in {
 
     package = mkOption {
       type = with types; nullOr package;
-      default = defaultSwayPackage;
+      default = pkgs.sway;
+      apply = p: if p == null then null else genFinalPackage p;
       defaultText = literalExpression "pkgs.sway";
       description = lib.mdDoc ''
-        Sway package to use. Will override the options
-        'wrapperFeatures', 'extraSessionCommands', and 'extraOptions'.
-        Set to `null` to not add any Sway package to your
-        path. This should be done if you want to use the Home Manager Sway
-        module to install Sway.
+        Sway package to use. If the package does not contain the override arguments
+        `extraSessionCommands`, `extraOptions`, `withBaseWrapper`, `withGtkWrapper`,
+        `isNixOS`, then the module options {option}`wrapperFeatures`,
+        {option}`wrapperFeatures` and {option}`wrapperFeatures` will have no effect.
+        Set to `null` to not add any Sway package to your path. This should be done if
+        you want to use the Home Manager Sway module to install Sway.
       '';
     };
 
@@ -102,10 +119,10 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        swaylock swayidle foot dmenu
+        swaylock swayidle foot dmenu wmenu
       ];
       defaultText = literalExpression ''
-        with pkgs; [ swaylock swayidle foot dmenu ];
+        with pkgs; [ swaylock swayidle foot dmenu wmenu ];
       '';
       example = literalExpression ''
         with pkgs; [
@@ -149,6 +166,8 @@ in {
             "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
           };
         };
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
+        xdg.portal.config.sway.default = mkDefault [ "wlr" "gtk" ];
         # To make a Sway session available if a display manager like SDDM is enabled:
         services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ]; }
       (import ./wayland-session.nix { inherit lib pkgs; })

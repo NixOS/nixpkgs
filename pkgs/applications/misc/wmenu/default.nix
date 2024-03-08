@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wmenu";
-  version = "0.1.4";
+  version = "0.1.7";
 
   strictDeps = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "~adnano";
     repo = "wmenu";
     rev = version;
-    hash = "sha256-aB23wi8kLBKAvQv2UPsfqVMCjakdsM6AzH8LgGv3HPs=";
+    hash = "sha256-9do7zL7yaZuqVjastySwjsByo5ja+KUP3590VjIyVnI=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ eken ];
+    mainProgram = "wmenu";
   };
 }
 

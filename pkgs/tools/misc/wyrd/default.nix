@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;
+    mainProgram = "wyrd";
   };
 }

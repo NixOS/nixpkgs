@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hhydraa ];
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "warpd";
   };
 }

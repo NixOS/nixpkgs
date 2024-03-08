@@ -4,6 +4,7 @@
 , chalice
 , cherrypy
 , django
+, docker
 , falcon
 , fastapi
 , fetchFromGitHub
@@ -18,6 +19,7 @@
 , pytestCheckHook
 , pythonOlder
 , sanic
+, setuptools
 , sanic-testing
 , slack-sdk
 , starlette
@@ -30,8 +32,8 @@
 
 buildPythonPackage rec {
   pname = "slack-bolt";
-  version = "1.18.0";
-  format = "setuptools";
+  version = "1.18.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -39,7 +41,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "bolt-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s9djd/MDNnyNkjkeApY6Fb1mhI6iop8RghaSJdi4eAs=";
+    hash = "sha256-UwVStemFVA4hgqnSpCKpQGwLYG+p5z7MwFXXnIhrvNk=";
   };
 
   # The packaged pytest-runner version is too new as of 2023-07-27. It's not really needed anyway. Unfortunately,
@@ -48,7 +50,13 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pytest-runner==5.2" ""
   '';
 
-  propagatedBuildInputs = [ slack-sdk ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    slack-sdk
+  ];
 
   passthru.optional-dependencies = {
     async = [
@@ -78,6 +86,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    docker
     pytest-asyncio
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);

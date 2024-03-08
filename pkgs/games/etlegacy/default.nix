@@ -100,7 +100,6 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCROSS_COMPILE32=0"
     "-DBUILD_SERVER=1"
     "-DBUILD_CLIENT=1"

@@ -28,8 +28,8 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "0.18.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-2OcGaZQwzgxcwrXinmJjFc91620Ri0O79c8WZWfDdlQ=";
+    hash = "sha256-5sNI6ujqDQ5L4afVHYZkm2pKa8yATtHFo7MF3eFF8Ig=";
   };
 
   postPatch = ''
@@ -104,7 +104,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client-side and server-side support for the OpenAPI Specification v3";
-    homepage = "https://github.com/p1c2u/openapi-core";
+    homepage = "https://github.com/python-openapi/openapi-core";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];
   };

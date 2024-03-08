@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
      * a comprehensive discussion.
      */
     license = lib.licenses.free;
+    mainProgram = "afio";
   };
 }

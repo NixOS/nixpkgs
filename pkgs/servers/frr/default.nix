@@ -85,13 +85,13 @@ lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "9.0.1";
+  version = "9.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-o0AVx7sDRowQz6NpKPQThC8NcGA3QN8xFzfE0k4AIVg=";
+    hash = "sha256-oDPr51vI+tlT1IiUPufmZh/UE0TNKWrn4RqpnGoGxNo=";
   };
 
   nativeBuildInputs = [
@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3.pkgs.sphinx
     texinfo
+    protobufc
   ];
 
   buildInputs = [
@@ -227,7 +228,8 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ woffs thillux ];
-    platforms = platforms.unix;
+    # adapt to platforms stated in http://docs.frrouting.org/en/latest/overview.html#supported-platforms
+    platforms = (platforms.linux ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd);
   };
 
   passthru.tests = { inherit (nixosTests) frr; };

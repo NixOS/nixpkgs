@@ -6,35 +6,45 @@ let
   cfg = config.services.matrix-synapse;
   format = pkgs.formats.yaml { };
 
+  filterRecursiveNull = o:
+    if isAttrs o then
+      mapAttrs (_: v: filterRecursiveNull v) (filterAttrs (_: v: v != null) o)
+    else if isList o then
+      map filterRecursiveNull (filter (v: v != null) o)
+    else
+      o;
+
   # remove null values from the final configuration
-  finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
+  finalSettings = filterRecursiveNull cfg.settings;
   configFile = format.generate "homeserver.yaml" finalSettings;
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
-    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+    usePostgresql
+    && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]))
+    && config.services.postgresql.enable;
   hasWorkers = cfg.workers != { };
+
+  listenerSupportsResource = resource: listener:
+    lib.any ({ names, ... }: builtins.elem resource names) listener.resources;
+
+  clientListener = findFirst
+    (listenerSupportsResource "client")
+    null
+    (cfg.settings.listeners
+      ++ concatMap ({ worker_listeners, ... }: worker_listeners) (attrValues cfg.workers));
 
   registerNewMatrixUser =
     let
-      isIpv6 = x: lib.length (lib.splitString ":" x) > 1;
-      listener =
-        lib.findFirst (
-          listener: lib.any (
-            resource: lib.any (
-              name: name == "client"
-            ) resource.names
-          ) listener.resources
-        ) (lib.last cfg.settings.listeners) cfg.settings.listeners;
-        # FIXME: Handle cases with missing client listener properly,
-        # don't rely on lib.last, this will not work.
+      isIpv6 = hasInfix ":";
 
       # add a tail, so that without any bind_addresses we still have a useable address
-      bindAddress = head (listener.bind_addresses ++ [ "127.0.0.1" ]);
-      listenerProtocol = if listener.tls
+      bindAddress = head (clientListener.bind_addresses ++ [ "127.0.0.1" ]);
+      listenerProtocol = if clientListener.tls
         then "https"
         else "http";
     in
+    assert assertMsg (clientListener != null) "No client listener found in synapse or one of its workers";
     pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
       exec ${cfg.package}/bin/register_new_matrix_user \
         $@ \
@@ -44,7 +54,7 @@ let
             "[${bindAddress}]"
           else
             "${bindAddress}"
-        }:${builtins.toString listener.port}/"
+        }:${builtins.toString clientListener.port}/"
     '';
 
   defaultExtras = [
@@ -58,7 +68,6 @@ let
     ++ lib.optional (cfg.settings ? oidc_providers) "oidc"
     ++ lib.optional (cfg.settings ? jwt_config) "jwt"
     ++ lib.optional (cfg.settings ? saml2_config) "saml2"
-    ++ lib.optional (cfg.settings ? opentracing) "opentracing"
     ++ lib.optional (cfg.settings ? redis) "redis"
     ++ lib.optional (cfg.settings ? sentry) "sentry"
     ++ lib.optional (cfg.settings ? user_directory) "user-search"
@@ -70,13 +79,12 @@ let
     inherit (cfg) plugins;
   };
 
-  logConfig = logName: {
+  defaultCommonLogConfig = {
     version = 1;
     formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
     handlers.journal = {
       class = "systemd.journal.JournalHandler";
       formatter = "journal_fmt";
-      SYSLOG_IDENTIFIER = logName;
     };
     root = {
       level = "INFO";
@@ -84,33 +92,40 @@ let
     };
     disable_existing_loggers = false;
   };
+
+  defaultCommonLogConfigText = generators.toPretty { } defaultCommonLogConfig;
+
   logConfigText = logName:
-    let
-      expr = ''
-        {
-          version = 1;
-          formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
-          handlers.journal = {
-            class = "systemd.journal.JournalHandler";
-            formatter = "journal_fmt";
-            SYSLOG_IDENTIFIER = "${logName}";
-          };
-          root = {
-            level = "INFO";
-            handlers = [ "journal" ];
-          };
-          disable_existing_loggers = false;
-        };
-      '';
-    in
     lib.literalMD ''
       Path to a yaml file generated from this Nix expression:
 
       ```
-      ${expr}
+      ${generators.toPretty { } (
+        recursiveUpdate defaultCommonLogConfig { handlers.journal.SYSLOG_IDENTIFIER = logName; }
+      )}
       ```
     '';
-  genLogConfigFile = logName: format.generate "synapse-log-${logName}.yaml" (logConfig logName);
+
+  genLogConfigFile = logName: format.generate
+    "synapse-log-${logName}.yaml"
+    (cfg.log // optionalAttrs (cfg.log?handlers.journal) {
+      handlers.journal = cfg.log.handlers.journal // {
+        SYSLOG_IDENTIFIER = logName;
+      };
+    });
+
+  toIntBase8 = str:
+    lib.pipe str [
+      lib.stringToCharacters
+      (map lib.toInt)
+      (lib.foldl (acc: digit: acc * 8 + digit) 0)
+    ];
+
+  toDecimalFilePermission = value:
+    if value == null then
+      null
+    else
+      toIntBase8 value;
 in {
 
   imports = [
@@ -198,10 +213,11 @@ in {
   ];
 
   options = let
-    listenerType = workerContext: types.submodule {
+    listenerType = workerContext: types.submodule ({ config, ... }: {
       options = {
         port = mkOption {
-          type = types.port;
+          type = types.nullOr types.port;
+          default = null;
           example = 8448;
           description = lib.mdDoc ''
             The port to listen for HTTP(S) requests on.
@@ -209,11 +225,20 @@ in {
         };
 
         bind_addresses = mkOption {
-          type = types.listOf types.str;
-          default = [
+          type = types.nullOr (types.listOf types.str);
+          default = if config.path != null then null else [
             "::1"
             "127.0.0.1"
           ];
+          defaultText = literalExpression ''
+            if path != null then
+              null
+            else
+              [
+                "::1"
+                "127.0.0.1"
+              ]
+          '';
           example = literalExpression ''
             [
               "::"
@@ -223,6 +248,35 @@ in {
           description = lib.mdDoc ''
             IP addresses to bind the listener to.
           '';
+        };
+
+        path = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = ''
+            Unix domain socket path to bind this listener to.
+
+            ::: {.note}
+              This option is incompatible with {option}`bind_addresses`, {option}`port`, {option}`tls`
+              and also does not support the `metrics` and `manhole` listener {option}`type`.
+            :::
+          '';
+        };
+
+        mode = mkOption {
+          type = types.nullOr (types.strMatching "^[0,2-7]{3,4}$");
+          default = if config.path != null then "660" else null;
+          defaultText = literalExpression ''
+            if path != null then
+              "660"
+            else
+              null
+          '';
+          example = "660";
+          description = ''
+            File permissions on the UNIX domain socket.
+          '';
+          apply = toDecimalFilePermission;
         };
 
         type = mkOption {
@@ -240,17 +294,30 @@ in {
         };
 
         tls = mkOption {
-          type = types.bool;
-          default = !workerContext;
+          type = types.nullOr types.bool;
+          default = if config.path != null then
+            null
+          else
+            !workerContext;
+          defaultText = ''
+            Enabled for the main instance listener, unless it is configured with a UNIX domain socket path.
+          '';
           example = false;
           description = lib.mdDoc ''
             Whether to enable TLS on the listener socket.
+
+            ::: {.note}
+              This option will be ignored for UNIX domain sockets.
+            :::
           '';
         };
 
         x_forwarded = mkOption {
           type = types.bool;
-          default = false;
+          default = config.path != null;
+          defaultText = ''
+            Enabled if the listener is configured with a UNIX domain socket path
+          '';
           example = true;
           description = lib.mdDoc ''
             Use the X-Forwarded-For (XFF) header as the client IP and not the
@@ -297,10 +364,39 @@ in {
           '';
         };
       };
-    };
+    });
   in {
     services.matrix-synapse = {
       enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
+
+      enableRegistrationScript = mkOption {
+        type = types.bool;
+        default = clientListener.bind_addresses != [];
+        example = false;
+        defaultText = ''
+          Enabled if the client listener uses TCP sockets
+        '';
+        description = ''
+          Whether to install the `register_new_matrix_user` script, that
+          allows account creation on the terminal.
+
+          ::: {.note}
+            This script does not work when the client listener uses UNIX domain sockets
+          :::
+        '';
+      };
+
+      serviceUnit = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+        description = lib.mdDoc ''
+          The systemd unit (a service or a target) for other services to depend on if they
+          need to be started after matrix-synapse.
+
+          This option is useful as the actual parent unit for all matrix-synapse processes
+          changes when configuring workers.
+        '';
+      };
 
       configFile = mkOption {
         type = types.path;
@@ -339,7 +435,6 @@ in {
           [
             "cache-memory" # Provide statistics about caching memory consumption
             "jwt"          # JSON Web Token authentication
-            "opentracing"  # End-to-end tracing support using Jaeger
             "oidc"         # OpenID Connect authentication
             "postgres"     # PostgreSQL database backend
             "redis"        # Redis support for the replication stream between worker processes
@@ -394,11 +489,54 @@ in {
         '';
       };
 
+      log = mkOption {
+        type = types.attrsOf format.type;
+        defaultText = literalExpression defaultCommonLogConfigText;
+        description = mdDoc ''
+          Default configuration for the loggers used by `matrix-synapse` and its workers.
+          The defaults are added with the default priority which means that
+          these will be merged with additional declarations. These additional
+          declarations also take precedence over the defaults when declared
+          with at least normal priority. For instance
+          the log-level for synapse and its workers can be changed like this:
+
+          ```nix
+          { lib, ... }: {
+            services.matrix-synapse.log.root.level = "WARNING";
+          }
+          ```
+
+          And another field can be added like this:
+
+          ```nix
+          {
+            services.matrix-synapse.log = {
+              loggers."synapse.http.matrixfederationclient".level = "DEBUG";
+            };
+          }
+          ```
+
+          Additionally, the field `handlers.journal.SYSLOG_IDENTIFIER` will be added to
+          each log config, i.e.
+          * `synapse` for `matrix-synapse.service`
+          * `synapse-<worker name>` for `matrix-synapse-worker-<worker name>.service`
+
+          This is only done if this option has a `handlers.journal` field declared.
+
+          To discard all settings declared by this option for each worker and synapse,
+          `lib.mkForce` can be used.
+
+          To discard all settings declared by this option for a single worker or synapse only,
+          [](#opt-services.matrix-synapse.workers._name_.worker_log_config) or
+          [](#opt-services.matrix-synapse.settings.log_config) can be used.
+        '';
+      };
+
       settings = mkOption {
         default = { };
         description = mdDoc ''
           The primary synapse configuration. See the
-          [sample configuration](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
+          [sample configuration](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
           for possible values.
 
           Secrets should be passed in by using the `extraConfigFiles` option.
@@ -568,11 +706,8 @@ in {
                   compress = false;
                 }];
               }] ++ lib.optional hasWorkers {
-                port = 9093;
-                bind_addresses = [ "127.0.0.1" ];
+                path = "/run/matrix-synapse/main_replication.sock";
                 type = "http";
-                tls = false;
-                x_forwarded = false;
                 resources = [{
                   names = [ "replication" ];
                   compress = false;
@@ -582,7 +717,7 @@ in {
                 List of ports that Synapse should listen on, their purpose and their configuration.
 
                 By default, synapse will be configured for client and federation traffic on port 8008, and
-                for worker replication traffic on port 9093. See [`services.matrix-synapse.workers`](#opt-services.matrix-synapse.workers)
+                use a UNIX domain socket for worker replication. See [`services.matrix-synapse.workers`](#opt-services.matrix-synapse.workers)
                 for more details.
               '';
             };
@@ -701,7 +836,7 @@ in {
                     by the module, but in practice it broke on runtime and as a result, no URL
                     preview worked anywhere if this was set.
 
-                    See https://matrix-org.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
+                    See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
                     on how to configure it properly.
                   ''))
                   (types.attrsOf types.str));
@@ -825,7 +960,7 @@ in {
                 Redis configuration for synapse.
 
                 See the
-                [upstream documentation](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/usage/configuration/config_documentation.md#redis)
+                [upstream documentation](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/usage/configuration/config_documentation.md#redis)
                 for available options.
               '';
             };
@@ -838,7 +973,7 @@ in {
         description = lib.mdDoc ''
           Options for configuring workers. Worker support will be enabled if at least one worker is configured here.
 
-          See the [worker documention](https://matrix-org.github.io/synapse/latest/workers.html#worker-configuration)
+          See the [worker documention](https://element-hq.github.io/synapse/latest/workers.html#worker-configuration)
           for possible options for each worker. Worker-specific options overriding the shared homeserver configuration can be
           specified here for each worker.
 
@@ -852,9 +987,9 @@ in {
             using [`services.matrix-synapse.configureRedisLocally`](#opt-services.matrix-synapse.configureRedisLocally).
 
             Workers also require a proper reverse proxy setup to direct incoming requests to the appropriate process. See
-            the [reverse proxy documentation](https://matrix-org.github.io/synapse/latest/reverse_proxy.html) for a
+            the [reverse proxy documentation](https://element-hq.github.io/synapse/latest/reverse_proxy.html) for a
             general reverse proxying setup and
-            the [worker documentation](https://matrix-org.github.io/synapse/latest/workers.html#available-worker-applications)
+            the [worker documentation](https://element-hq.github.io/synapse/latest/workers.html#available-worker-applications)
             for the available endpoints per worker application.
           :::
         '';
@@ -884,7 +1019,7 @@ in {
                 The file for log configuration.
 
                 See the [python documentation](https://docs.python.org/3/library/logging.config.html#configuration-dictionary-schema)
-                for the schema and the [upstream repository](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_log_config.yaml)
+                for the schema and the [upstream repository](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_log_config.yaml)
                 for an example.
               '';
             };
@@ -938,20 +1073,10 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
+        assertion = clientListener != null;
         message = ''
-          Cannot deploy matrix-synapse with a configuration for a local postgresql database
-            and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
-            database (please read the thread in https://github.com/NixOS/nixpkgs/pull/80447 for
-            further reference).
-
-            If you
-            - try to deploy a fresh synapse, you need to configure the database yourself. An example
-              for this can be found in <nixpkgs/nixos/tests/matrix/synapse.nix>
-            - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
-              to your configuration.
-
-          For further information about this update, please read the release-notes of 20.03 carefully.
+          At least one listener which serves the `client` resource via HTTP is required
+          by synapse in `services.matrix-synapse.settings.listeners` or in one of the workers!
         '';
       }
       {
@@ -968,14 +1093,20 @@ in {
             listener = lib.findFirst
               (
                 listener:
-                  listener.port == main.port
-                  && (lib.any (resource: builtins.elem "replication" resource.names) listener.resources)
-                  && (lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses)
+                  (
+                    lib.hasAttr "port" main && listener.port or null == main.port
+                    || lib.hasAttr "path" main && listener.path or null == main.path
+                  )
+                  && listenerSupportsResource "replication" listener
+                  && (
+                    lib.hasAttr "host" main &&  lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses
+                    || lib.hasAttr "path" main
+                  )
               )
               null
               cfg.settings.listeners;
           in
-          hasWorkers -> (listener != null);
+          hasWorkers -> (cfg.settings.instance_map ? main && listener != null);
         message = ''
           Workers for matrix-synapse require setting `services.matrix-synapse.settings.instance_map.main`
           to any listener configured in `services.matrix-synapse.settings.listeners` with a `"replication"`
@@ -984,22 +1115,54 @@ in {
           This is done by default unless you manually configure either of those settings.
         '';
       }
-    ];
+      {
+        assertion = cfg.enableRegistrationScript -> clientListener.path == null;
+        message = ''
+          The client listener on matrix-synapse is configured to use UNIX domain sockets.
+          This configuration is incompatible with the `register_new_matrix_user` script.
+
+          Disable  `services.mastrix-synapse.enableRegistrationScript` to continue.
+        '';
+      }
+    ]
+    ++ (map (listener: {
+      assertion = (listener.path == null) != (listener.bind_addresses == null);
+      message = ''
+        Listeners require either a UNIX domain socket `path` or `bind_addresses` for a TCP socket.
+      '';
+    }) cfg.settings.listeners)
+    ++ (map (listener: {
+      assertion = listener.path != null -> (listener.bind_addresses == null && listener.port == null && listener.tls == null);
+      message = let
+        formatKeyValue = key: value: lib.optionalString (value != null) "  - ${key}=${toString value}\n";
+      in ''
+        Listener configured with UNIX domain socket (${toString listener.path}) ignores the following options:
+        ${formatKeyValue "bind_addresses" listener.bind_addresses}${formatKeyValue "port" listener.port}${formatKeyValue "tls" listener.tls}
+      '';
+    }) cfg.settings.listeners)
+    ++ (map (listener: {
+      assertion = listener.path == null || listener.type == "http";
+      message = ''
+        Listener configured with UNIX domain socket (${toString listener.path}) only supports the "http" listener type.
+      '';
+    }) cfg.settings.listeners);
 
     services.matrix-synapse.settings.redis = lib.mkIf cfg.configureRedisLocally {
       enabled = true;
       path = config.services.redis.servers.matrix-synapse.unixSocket;
     };
     services.matrix-synapse.settings.instance_map.main = lib.mkIf hasWorkers (lib.mkDefault {
-      host = "127.0.0.1";
-      port = 9093;
+      path = "/run/matrix-synapse/main_replication.sock";
     });
 
+    services.matrix-synapse.serviceUnit = if hasWorkers then "matrix-synapse.target" else "matrix-synapse.service";
     services.matrix-synapse.configFile = configFile;
     services.matrix-synapse.package = wrapped;
 
     # default them, so they are additive
     services.matrix-synapse.extras = defaultExtras;
+
+    services.matrix-synapse.log = mapAttrsRecursive (const mkDefault) defaultCommonLogConfig;
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";
@@ -1015,7 +1178,8 @@ in {
 
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
-      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
     };
 
@@ -1027,9 +1191,12 @@ in {
             partOf = [ "matrix-synapse.target" ];
             wantedBy = [ "matrix-synapse.target" ];
             unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
+            requires = optional hasLocalPostgresDB "postgresql.service";
           }
           else {
-            after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+            requires = optional hasLocalPostgresDB "postgresql.service";
             wantedBy = [ "multi-user.target" ];
           };
         baseServiceConfig = {
@@ -1041,6 +1208,8 @@ in {
             User = "matrix-synapse";
             Group = "matrix-synapse";
             WorkingDirectory = cfg.dataDir;
+            RuntimeDirectory = "matrix-synapse";
+            RuntimeDirectoryPreserve = true;
             ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
             Restart = "on-failure";
             UMask = "0077";
@@ -1063,7 +1232,7 @@ in {
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
             ProtectSystem = "strict";
-            ReadWritePaths = [ cfg.dataDir ];
+            ReadWritePaths = [ cfg.dataDir cfg.settings.media_store_path ];
             RemoveIPC = true;
             RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
             RestrictNamespaces = true;
@@ -1133,7 +1302,9 @@ in {
       user = "matrix-synapse";
     };
 
-    environment.systemPackages = [ registerNewMatrixUser ];
+    environment.systemPackages = lib.optionals cfg.enableRegistrationScript [
+      registerNewMatrixUser
+    ];
   };
 
   meta = {

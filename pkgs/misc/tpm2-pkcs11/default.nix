@@ -2,31 +2,37 @@
 , pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
 , tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python3, glibc, libyaml
 , abrmdSupport ? true, tpm2-abrmd ? null
+, fapiSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-pkcs11";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "sha256-f5wi0nIM071yaQCwPkY1agKc7OEQa/IxHJc4V2i0Q9I=";
+    sha256 = "sha256-SoHtgZRIYNJg4/w1MIocZAM26mkrM+UOQ+RKCh6nwCk=";
   };
 
-  patches = lib.singleton (
-    substituteAll {
-      src = ./0001-configure-ac-version.patch;
-      VERSION = version;
-    });
+  patches = [
+    ./version.patch
+    ./graceful-fapi-fail.patch
+  ];
 
   # The preConfigure phase doesn't seem to be working here
   # ./bootstrap MUST be executed as the first step, before all
   # of the autoreconfHook stuff
   postPatch = ''
+    echo ${version} > VERSION
     ./bootstrap
   '';
+
+  configureFlags = lib.optionals (!fapiSupport) [
+    # Note: this will be renamed to with-fapi in next release.
+    "--enable-fapi=no"
+  ];
 
   nativeBuildInputs = [
     pkg-config autoreconfHook autoconf-archive makeWrapper patchelf
@@ -74,6 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "tpm2_ptool";
   };
 }

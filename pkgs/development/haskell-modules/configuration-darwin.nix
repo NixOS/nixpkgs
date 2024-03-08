@@ -123,6 +123,14 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  hidapi =
+    addExtraLibraries [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.CoreFoundation
+    ]
+    (super.hidapi.override { systemd = null; });
+
   hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
   blas-hs = overrideCabal (drv: {
@@ -337,7 +345,7 @@ self: super: ({
   }) (disableCabalFlag "fixity-th" super.fourmolu);
 
   # https://github.com/NixOS/nixpkgs/issues/149692
-  Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
+  Agda = disableCabalFlag "optimise-heavily" super.Agda;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

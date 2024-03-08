@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "coreschema";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "python-coreschema";

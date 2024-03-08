@@ -29,18 +29,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  "@forge/cli" = prev."@forge/cli".override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      libsecret
-      final.node-gyp-build
-      final.node-pre-gyp
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
-  };
-
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -52,17 +40,13 @@ final: prev: {
     };
   };
 
-  aws-azure-login = prev.aws-azure-login.override (oldAttrs: {
+  bash-language-server = prev.bash-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    prePatch = ''
-      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-    '';
     postInstall = ''
-      wrapProgram $out/bin/aws-azure-login \
-          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
+      wrapProgram "$out/bin/bash-language-server" \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.shellcheck ]}
     '';
-    meta = oldAttrs.meta // { platforms = lib.platforms.linux; };
-  });
+  };
 
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -96,19 +80,13 @@ final: prev: {
     '';
   };
 
-
-  graphite-cli = prev."@withgraphite/graphite-cli".override {
-    name = "graphite-cli";
-    nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
-    buildInputs = with pkgs; [ cairo pango pixman ];
-    # 'gt completion' auto-detects zshell from environment variables:
-    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
-    postInstall = ''
-      installShellCompletion --cmd gt \
-        --bash <($out/bin/gt completion) \
-        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
-    '';
-  };
+  grammarly-languageserver = prev.grammarly-languageserver.override (old: {
+    meta = old.meta // {
+      # requires EOL Node.js 16
+      # https://github.com/znck/grammarly/issues/334
+      broken = true;
+    };
+  });
 
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -190,21 +168,6 @@ final: prev: {
     '';
   };
 
-  mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
-  if stdenv.isDarwin
-  then {}
-  else {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    prePatch = ''
-      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-    '';
-    postInstall = ''
-      wrapProgram $out/bin/mmdc \
-      --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-    '';
-  });
-
-
   node-gyp = prev.node-gyp.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
@@ -280,7 +243,10 @@ final: prev: {
         inherit (final) postcss-cli;
       };
     };
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ Luflosi ]; };
+    meta = oldAttrs.meta // {
+      maintainers = with lib.maintainers; [ Luflosi ];
+      license = lib.licenses.mit;
+    };
   });
 
   # To update prisma, please first update prisma-engines to the latest
@@ -293,7 +259,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-HiZtNHXkoSl3Q4cAerUs8c138AiDJJxzYNQT3I4+ea8=";
+      hash = "sha256-ej3h4LlF/pkAYeDxePb7wMc8zrfxKMnrp1ogZLoFU+0=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -347,10 +313,11 @@ final: prev: {
     };
   };
 
-  teck-programmer = prev.teck-programmer.override {
+  teck-programmer = prev.teck-programmer.override ({ meta, ... }: {
     nativeBuildInputs = [ final.node-gyp-build ];
     buildInputs = [ pkgs.libusb1 ];
-  };
+    meta = meta // { license = lib.licenses.gpl3Plus; };
+  });
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
     nativeBuildInputs = [ final.node-pre-gyp ];
@@ -432,9 +399,10 @@ final: prev: {
       };
   };
 
-  volar = final."@volar/vue-language-server".override {
+  volar = final."@volar/vue-language-server".override ({ meta, ... }: {
     name = "volar";
-  };
+    meta = meta // { mainProgram = "vue-language-server"; };
+  });
 
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
@@ -454,12 +422,61 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  wrangler = prev.wrangler.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = before "16.13"; };
-    buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
-    preFixup = ''
-      # patch elf is trying to patch binary for sunos
-      rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
-    '';
-  });
+  wrangler = prev.wrangler.override (oldAttrs:
+    let
+      linuxWorkerd = {
+        name = "_at_cloudflare_slash_workerd-linux-64";
+        packageName = "@cloudflare/workerd-linux-64";
+        # Should be same version as workerd
+        version = "1.20240129.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20240129.0.tgz";
+          sha512 = "sFV1uobHgDI+6CKBS/ZshQvOvajgwl6BtiYaH4PSFSpvXTmRx+A9bcug+6BnD+V4WgwxTiEO2iR97E1XuwDAVw==";
+        };
+      };
+      linuxWorkerdArm = {
+        name = "_at_cloudflare_slash_workerd-linux-arm64";
+        packageName = "@cloudflare/workerd-linux-arm64";
+        # Should be same version as workerd
+        version = "1.20240129.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-1.20240129.0.tgz";
+          sha512 = "O7q7htHaFRp8PgTqNJx1/fYc3+LnvAo6kWWB9a14C5OWak6AAZk42PNpKPx+DXTmGvI+8S1+futBGUeJ8NPDXg==";
+        };
+      };
+      darwinWorkerd = {
+        name = "_at_cloudflare_slash_workerd-darwin-64";
+        packageName = "@cloudflare/workerd-darwin-64";
+        # Should be same version as workerd
+        version = "1.20240129.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-1.20240129.0.tgz";
+          sha512 = "DfVVB5IsQLVcWPJwV019vY3nEtU88c2Qu2ST5SQxqcGivZ52imagLRK0RHCIP8PK4piSiq90qUC6ybppUsw8eg==";
+        };
+      };
+      darwinWorkerdArm = {
+        name = "_at_cloudflare_slash_workerd-darwin-arm64";
+        packageName = "@cloudflare/workerd-darwin-arm64";
+        # Should be same version as workerd
+        version = "1.20240129.0";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-1.20240129.0.tgz";
+          sha512 = "t0q8ABkmumG1zRM/MZ/vIv/Ysx0vTAXnQAPy/JW5aeQi/tqrypXkO9/NhPc0jbF/g/hIPrWEqpDgEp3CB7Da7Q==";
+        };
+      };
+
+    in
+    {
+      meta = oldAttrs.meta // { broken = before "16.13"; };
+      buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
+      preFixup = ''
+        # patch elf is trying to patch binary for sunos
+        rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
+      '';
+      dependencies = oldAttrs.dependencies
+        ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) linuxWorkerd
+        ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) linuxWorkerdArm
+        ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) darwinWorkerd
+        ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwinWorkerdArm;
+    });
 }

@@ -1,4 +1,7 @@
-{ lib, fetchurl, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage, ocaml }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.1")
+  "ocaml-migrate-parsetree is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
    pname = "ocaml-migrate-parsetree";

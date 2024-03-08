@@ -14,21 +14,20 @@ let
   pythonPackages = python3Packages;
   pyqt5 =
     if enablePlayback then
-      pythonPackages.pyqt5_with_qtmultimedia
+      pythonPackages.pyqt5-multimedia
     else
-      pythonPackages.pyqt5
-  ;
+      pythonPackages.pyqt5;
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.9.2";
+  version = "2.11";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-Sk4QlwJqqgCWAgguhIVscJfpf/5imoHYN9yVWv5qYG8=";
+    hash = "sha256-2RGKHJKJ/QXR6Rehch4r1UtI+frRXa4G+n0bUmCGSu8=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +60,7 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
   ];
 
-  setupPyGlobalFlags = [ "build" "--disable-autoupdate" ];
+  setupPyGlobalFlags = [ "build" "--disable-autoupdate" "--localedir=$out/share/locale" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -78,7 +77,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
     description = "The official MusicBrainz tagger";
-    maintainers = with maintainers; [ ehmry paveloom ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

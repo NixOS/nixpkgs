@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "conntrack-tools";
-  version = "1.4.7";
+  version = "1.4.8";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/conntrack-tools/files/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-CZ3rz1foFpDO1X9Ra0k1iKc1GPSMFNZW+COym0/CS10=";
+    url = "https://www.netfilter.org/projects/conntrack-tools/files/${pname}-${version}.tar.xz";
+    hash = "sha256-BnZ39MX2VkgZ547TqdSomAk16pJz86uyKkIOowq13tY=";
   };
 
   buildInputs = [

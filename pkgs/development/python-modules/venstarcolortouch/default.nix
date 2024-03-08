@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "venstarcolortouch";
   version = "0.19";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

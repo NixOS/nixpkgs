@@ -8,16 +8,17 @@
 , readline
 , openssl
 , python3Packages
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.7";
+  version = "2.14";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-UsyJYQB6YzwcL6H1nyCW8ZTpBzacZMAp39mCfsZqwHY=";
+    hash = "sha256-35hKb8IVL8jQG80y48a5CcozUEWxLCdTqAHhZlPFCYE=";
   };
 
   outputs = [ "out" "man" "doc" ]
@@ -86,6 +87,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
+  };
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";

@@ -2,27 +2,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "34.0";
+  version = "38.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+uicO6tPLzwlA4/Fao2J8n82Qnt3C6OfqRxn1pVh7XE=";
+    hash = "sha256-Lhug7DCa+QutlvksL6EFQa04UK/sWebDIkqQmwPUpX4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "acpi_tables-0.1.0" = "sha256-OdtnF2fV6oun3NeCkXdaGU3U7ViBcgFKqHKdyZsRsPA=";
-      "kvm-bindings-0.6.0" = "sha256-wGdAuPwsgRIqx9dh0m+hC9A/Akz9qg9BM+p06Fi5ACM=";
-      "kvm-ioctls-0.13.0" = "sha256-jHnFGwBWnAa2lRu4a5eRNy1Y26NX5MV8alJ86VR++QE=";
-      "micro_http-0.1.0" = "sha256-w2witqKXE60P01oQleujmHSnzMKxynUGKWyq5GEh1Ew=";
-      "mshv-bindings-0.1.1" = "sha256-9Q7IXznZ+qdf/d4gO7qVEjbNUUygQDNYLNxz2BECLHc=";
-      "versionize_derive-0.1.4" = "sha256-oGuREJ5+FDs8ihmv99WmjIPpL2oPdOr4REk6+7cV/7o=";
-      "vfio-bindings-0.4.0" = "sha256-8zdpLD9e1TAwG+m6ifS7/Fh39fAs5VxtnS5gUj/eKmY=";
-      "vfio_user-0.1.0" = "sha256-b/gL6vPMW44O44lBIjqS+hgqVUUskBmttGk5UKIMgZk=";
-      "vhost-0.7.0" = "sha256-KdVROh44UzZJqtzxfM6gwAokzY6El8iDPfw2nnkmhiQ=";
+      "acpi_tables-0.1.0" = "sha256-syDq+db1hTne6QoP0vMGUv4tB0J9arQG2Ea2hHW1k3M=";
+      "igvm-0.1.0" = "sha256-l+Qyhdy3b8h8hPLHg5M0os8aSkjM55hAP5nqi0AGmjo=";
+      "kvm-bindings-0.7.0" = "sha256-hXv5N3TTwGQaVxdQ/DTzLt+uwLxFnstJwNhxRD2K8TM=";
+      "micro_http-0.1.0" = "sha256-gyeOop6AMXEIbLXhJMN/oYGGU8Un8Y0nFZc9ucCa0y4=";
+      "mshv-bindings-0.1.1" = "sha256-yWvkpOcW3lV47s+rWnN4Bki8tt8CkiPVZ0I36nrWMi4=";
+      "versionize_derive-0.1.6" = "sha256-eI9fM8WnEBZvskPhU67IWeN6QAPg2u5EBT+AOxfb/fY=";
+      "vfio-bindings-0.4.0" = "sha256-Dk4T2dMzPZ+Aoq1YSXX2z1Nky8zvyDl7b+A8NH57Hkc=";
+      "vfio_user-0.1.0" = "sha256-LJ84k9pMkSAaWkuaUd+2LnPXnNgrP5LdbPOc1Yjz5xA=";
       "vm-fdt-0.2.0" = "sha256-lKW4ZUraHomSDyxgNlD5qTaBTZqM0Fwhhh/08yhrjyE=";
     };
   };
@@ -37,7 +36,8 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [
     "--workspace"
     "--bins" "--lib" # Integration tests require root.
-    "--exclude" "net_util" # Tries to access /dev/net/tun
+    "--exclude" "net_util" # /dev/net/tun
+    "--exclude" "vmm"      # /dev/kvm
   ];
 
   meta = with lib; {
@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     description = "Open source Virtual Machine Monitor (VMM) that runs on top of KVM";
     changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${version}";
     license = with licenses; [ asl20 bsd3 ];
+    mainProgram = "cloud-hypervisor";
     maintainers = with maintainers; [ offline qyliss ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };

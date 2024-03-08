@@ -5,7 +5,7 @@ lib:
   # commit hash
   k3sCommit,
   k3sRepoSha256 ? lib.fakeHash,
-  k3sVendorSha256 ? lib.fakeHash,
+  k3sVendorHash ? lib.fakeHash,
   # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
   k3sRootVersion,
   k3sRootSha256 ? lib.fakeHash,
@@ -30,6 +30,7 @@ lib:
 # It is likely we will have to split out additional builders for additional
 # versions in the future, or customize this one further.
 { lib
+, fetchpatch
 , makeWrapper
 , socat
 , iptables
@@ -129,7 +130,7 @@ let
   k3sCNIPlugins = buildGoModule rec {
     pname = "k3s-cni-plugins";
     version = k3sCNIVersion;
-    vendorSha256 = null;
+    vendorHash = null;
 
     subPackages = [ "." ];
 
@@ -182,7 +183,17 @@ let
     version = k3sVersion;
 
     src = k3sRepo;
-    vendorSha256 = k3sVendorSha256;
+    vendorHash = k3sVendorHash;
+
+    patches =
+      # Disable: Add runtime checking of golang version
+      lib.optional (lib.versionAtLeast k3sVersion "1.28")
+        (fetchpatch {
+          # https://github.com/k3s-io/k3s/pull/9054
+          url = "https://github.com/k3s-io/k3s/commit/b297996b9252b02e56e9425f55f6becbf6bb7832.patch";
+          hash = "sha256-xBOY2jnLhT9dtVKtq26V9QUnuX1q6E/9UcO9IaU719U=";
+          revert = true;
+        });
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp sqlite.dev ];
@@ -226,7 +237,7 @@ let
       rev = "v${containerdVersion}";
       sha256 = containerdSha256;
     };
-    vendorSha256 = null;
+    vendorHash = null;
     buildInputs = [ btrfs-progs ];
     subPackages = [ "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;
@@ -238,7 +249,7 @@ buildGoModule rec {
 
   tags = [ "libsqlite3" "linux" "ctrd" ];
   src = k3sRepo;
-  vendorSha256 = k3sVendorSha256;
+  vendorHash = k3sVendorHash;
 
   postPatch = ''
     # Nix prefers dynamically linked binaries over static binary.
@@ -296,7 +307,7 @@ buildGoModule rec {
   # Specifically, it has a 'go generate' which runs part of the package. See
   # this comment:
   # https://github.com/NixOS/nixpkgs/pull/158089#discussion_r799965694
-  # So, why do we use buildGoModule at all? For the `vendorSha256` / `go mod download` stuff primarily.
+  # So, why do we use buildGoModule at all? For the `vendorHash` / `go mod download` stuff primarily.
   buildPhase = ''
     patchShebangs ./scripts/package-cli ./scripts/download ./scripts/build-upload
 
@@ -344,6 +355,7 @@ buildGoModule rec {
   passthru.mkTests = version:
     let k3s_version = "k3s_" + lib.replaceStrings ["."] ["_"] (lib.versions.majorMinor version);
     in {
+      etcd = nixosTests.k3s.etcd.${k3s_version};
       single-node = nixosTests.k3s.single-node.${k3s_version};
       multi-node = nixosTests.k3s.multi-node.${k3s_version};
     };

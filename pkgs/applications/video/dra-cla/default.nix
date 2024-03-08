@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "dra-cla";
-  version = "unstable-2023-03-10";
+  version = "unstable-2023-10-10";
 
   src = fetchFromGitHub {
     owner = "CoolnsX";
     repo = "dra-cla";
-    rev = "fd5e43bb32b5bc9013382917d1efacda9c3071a8";
-    hash = "sha256-SMtuflVsxe0PWmzabSDy+vhIN2bTqyiYAT/T1ChY+xY=";
+    rev = "12e9557fb8dfdff7350e0102a625170bb69acf01";
+    hash = "sha256-cGY/FRV2BAS4fzJqIfD7FlIPIS0fCIIBenQYjB2dEsc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -41,5 +41,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ idlip ];
     platforms = platforms.unix;
+    mainProgram = "dra-cla";
   };
 }

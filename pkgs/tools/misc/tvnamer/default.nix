@@ -38,15 +38,16 @@ pypkgs.buildPythonApplication rec {
     sha256 = "dc2ea8188df6ac56439343630466b874c57756dd0b2538dd8e7905048f425f04";
   };
 
-  propagatedBuildInputs = with pypkgs; [ tvdb_api ];
+  propagatedBuildInputs = with pypkgs; [ tvdb-api ];
 
   # no tests from pypi
   doCheck = false;
 
   meta = with lib; {
-    description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
+    description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api";
     homepage = "https://github.com/dbr/tvnamer";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "tvnamer";
   };
 }

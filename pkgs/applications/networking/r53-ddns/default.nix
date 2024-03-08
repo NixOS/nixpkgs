@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/fleaz/r53-ddns";
     description = "A DIY DynDNS tool based on Route53";
     maintainers = with maintainers; [ fleaz ];
+    mainProgram = "r53-ddns";
   };
 }

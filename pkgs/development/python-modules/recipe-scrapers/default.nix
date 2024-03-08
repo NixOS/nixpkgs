@@ -9,18 +9,21 @@
 , pytestCheckHook
 , responses
 , setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.43.0";
-  format = "pyproject";
+  version = "14.55.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
     rev = "refs/tags/${version}";
-    hash = "sha256-ik/ADmu6yGY7xWXCAn0kcWJphANIIwM8QKWjm9xoVYQ=";
+    hash = "sha256-HjR4Lwlcrpeqv6BXI+aYCL9e7ZTaTa522z0lSW03wW0=";
   };
 
   nativeBuildInputs = [
@@ -40,16 +43,19 @@ buildPythonPackage rec {
     responses
   ];
 
-  disabledTestPaths = [
-    # This is not actual code, just some pre-written boiler-plate template
-    "templates/test_scraper.py"
+  disabledTests = [
+    # Fixture is broken
+    "test_instructions"
   ];
 
-  pythonImportsCheck = [ "recipe_scrapers" ];
+  pythonImportsCheck = [
+    "recipe_scrapers"
+  ];
 
   meta = with lib; {
-    description = "Python package for scraping recipes data ";
+    description = "Python package for scraping recipes data";
     homepage = "https://github.com/hhursev/recipe-scrapers";
+    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];
   };

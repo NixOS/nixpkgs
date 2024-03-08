@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "dicttoxml";
   version = "1.7.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

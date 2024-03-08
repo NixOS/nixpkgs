@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
+, chardet
 , fetchPypi
 , freetype
 , pillow
+, setuptools
 , glibcLocales
 , python
 , isPyPy
@@ -12,26 +14,18 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.6.13";
+  version = "4.1.0";
+  pyproject = true;
+
+  # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b3XTP3o3IM9HNxq2PO0PDr0a622xk4aukviXegm+lhE=";
+    hash = "sha256-Opn69BJpEVnAaLP/AcFTB84v0s9rhgGZQ0h04AIECoQ=";
   };
 
-  patches = [
-    ./darwin-m1-compat.patch
-  ];
-
-  nativeCheckInputs = [ glibcLocales ];
-
-  buildInputs = [ ft ];
-  propagatedBuildInputs = [ pillow ];
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mif = findFile(d,'ft2build.h')" "mif = findFile('${lib.getDev ft}','ft2build.h')"
-
     # Remove all the test files that require access to the internet to pass.
     rm tests/test_lib_utils.py
     rm tests/test_platypus_general.py
@@ -42,16 +36,35 @@ in buildPythonPackage rec {
     rm tests/test_graphics_charts.py
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  buildInputs = [
+    ft
+  ];
+
+  propagatedBuildInputs = [
+    chardet
+    pillow
+  ];
+
+  nativeCheckInputs = [
+    glibcLocales
+  ];
+
   checkPhase = ''
-    cd tests
+    runHook preCheck
+    pushd tests
     LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
+    popd
+    runHook postCheck
   '';
 
-  # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
-  disabled = isPyPy;
-
-  meta = {
+  meta = with lib; {
     description = "An Open Source Python library for generating PDFs and graphics";
-    homepage = "http://www.reportlab.com/";
+    homepage = "https://www.reportlab.com/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

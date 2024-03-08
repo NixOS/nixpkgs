@@ -27,5 +27,6 @@ stdenv_32bit.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];
     license = licenses.gpl2;
+    mainProgram = "mpclient";
   };
 }

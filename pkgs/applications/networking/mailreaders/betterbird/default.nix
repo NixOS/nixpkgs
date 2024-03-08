@@ -10,15 +10,15 @@
 }:
 
 let
-  thunderbird-unwrapped = thunderbirdPackages.thunderbird-102;
+  thunderbird-unwrapped = thunderbirdPackages.thunderbird-115;
 
-  version = "102.15.0";
+  version = "115.6.0";
   majVer = lib.versions.major version;
 
   betterbird-patches = fetchFromGitHub {
     owner = "Betterbird";
     repo = "thunderbird-patches";
-    rev = "${version}-bb40";
+    rev = "${version}-bb21-correct-series-take2";
     postFetch = ''
       echo "Retrieving external patches"
 
@@ -36,7 +36,7 @@ let
       . ./external.sh
       rm external.sh
     '';
-    hash = "sha256-7/JEcP76rp0hSSxzlIlHqkcxTSEJQswFhCoOLYntQ5I=";
+    hash = "sha256-YERSRyLfFTexvAYmP9qG6joQkK5fSIvU4pNLhCyIbOY=";
   };
 in ((buildMozillaMach {
   pname = "betterbird";
@@ -49,7 +49,7 @@ in ((buildMozillaMach {
   src = fetchurl {
     # https://download.cdn.mozilla.net/pub/thunderbird/releases/
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "11d4c77049c532753c9b693d69ab9a0bcd0eb13d49f87a511ad8ba680b70041ac6f64c5f9cd5dd44246d46e7695d9bd51146b1fe62b0b7c9fbc862eb53d5cfda";
+    hash = "sha256-Oxz5drDQ9IJVpgP4/+jiQ5Ds1b0oX8TRD+SOG6JRN0Q=";
   };
 
   extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
@@ -57,8 +57,6 @@ in ((buildMozillaMach {
     patches=$(mktemp -d)
     for dir in branding bugs external features misc; do
       cp -r ${betterbird-patches}/${majVer}/$dir/*.patch $patches/
-      # files is not in series file and duplicated with external patch
-      [[ $dir == bugs ]] && rm $patches/1820504-optimise-grapheme-m-c.patch
     done
     cp ${betterbird-patches}/${majVer}/series* $patches/
     chmod -R +w $patches

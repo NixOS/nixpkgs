@@ -7,12 +7,12 @@ with builtins;
 
 stdenv.mkDerivation rec {
   pname = "ttyd";
-  version = "1.7.3";
+  version = "1.7.4";
   src = fetchFromGitHub {
     owner = "tsl0922";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-zwKK8TPEATAgJwHh04hurzU3NrhyHA70qkf5kXW1yQc=";
+    sha256 = "sha256-BNvJkDOSlcNXt5W9/3/4I+MhQYn0W37zrJRYpAoZWaA=";
   };
 
   nativeBuildInputs = [ pkg-config cmake xxd ];
@@ -20,11 +20,16 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+  passthru.tests = {
+    inherit (nixosTests) ttyd;
+  };
+
   meta = {
     description = "Share your terminal over the web";
     homepage    = "https://github.com/tsl0922/ttyd";
     license     = lib.licenses.mit;
     maintainers = [ lib.maintainers.thoughtpolice ];
     platforms   = lib.platforms.all;
+    mainProgram = "ttyd";
   };
 }

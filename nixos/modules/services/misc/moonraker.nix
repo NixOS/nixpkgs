@@ -1,8 +1,8 @@
 { config, lib, options, pkgs, ... }:
 with lib;
 let
-  pkg = pkgs.moonraker;
   cfg = config.services.moonraker;
+  pkg = cfg.package;
   opt = options.services.moonraker;
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
@@ -17,6 +17,11 @@ in {
   options = {
     services.moonraker = {
       enable = mkEnableOption (lib.mdDoc "Moonraker, an API web server for Klipper");
+
+      package = mkPackageOption pkgs "moonraker" {
+        nullable = true;
+        example = "moonraker.override { useGpiod = true; }";
+      };
 
       klipperSocket = mkOption {
         type = types.path;
@@ -98,17 +103,18 @@ in {
 
   config = mkIf cfg.enable {
     warnings = []
-      ++ optional (cfg.settings ? update_manager)
-        ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.''
-      ++ optional (cfg.configDir != null)
-        ''
-          services.moonraker.configDir has been deprecated upstream and will be removed.
+      ++ (optional (head (cfg.settings.update_manager.enable_system_updates or [false])) ''
+        Enabling system updates is not supported on NixOS and will lead to non-removable warnings in some clients.
+      '')
+      ++ (optional (cfg.configDir != null) ''
+        services.moonraker.configDir has been deprecated upstream and will be removed.
 
-          Action: ${
-            if cfg.configDir == unifiedConfigDir then "Simply remove services.moonraker.configDir from your config."
-            else "Move files from `${cfg.configDir}` to `${unifiedConfigDir}` then remove services.moonraker.configDir from your config."
-          }
-        '';
+        Action: ${
+          if cfg.configDir == unifiedConfigDir
+          then "Simply remove services.moonraker.configDir from your config."
+          else "Move files from `${cfg.configDir}` to `${unifiedConfigDir}` then remove services.moonraker.configDir from your config."
+        }
+        '');
 
     assertions = [
       {
@@ -179,6 +185,12 @@ in {
         Group = cfg.group;
         User = cfg.user;
       };
+    };
+
+    # set this to false, otherwise we'll get a warning indicating that `/etc/klipper.cfg`
+    # is not located in the moonraker config directory.
+    services.moonraker.settings = lib.mkIf (!config.services.klipper.mutableConfig) {
+      file_manager.check_klipper_config_path = false;
     };
 
     security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''

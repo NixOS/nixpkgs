@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsa-lib
-, mpg123, releasePath ? null }:
+{ lib
+, stdenv
+, alsa-lib
+, fetchurl
+, libjack2
+, libX11
+, libXcursor
+, libXext
+, libXinerama
+, libXrandr
+, libXtst
+, mpg123
+, pipewire
+, releasePath ? null
+}:
 
 # To use the full release version:
 # 1) Sign into https://backstage.renoise.com and download the release version to some stable location.
@@ -7,28 +20,44 @@
 # Note: Renoise creates an individual build for each license which screws somewhat with the
 # use of functions like requireFile as the hash will be different for every user.
 let
-  urlVersion = lib.replaceStrings [ "." ] [ "_" ];
-in
+  platforms = {
+    x86_64-linux = {
+      archSuffix = "x86_64";
+      hash = "sha256-Etz6NaeLMysSkcQGC3g+IqUy9QrONCrbkyej63uLflo=";
+    };
+    aarch64-linux = {
+      archSuffix = "arm64";
+      hash = "sha256-PVpgxhJU8RY6QepydqImQnisWBjbrsuW4j49Xot3C6Y=";
+    };
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "renoise";
-  version = "3.3.2";
+  version = "3.4.3";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-        if releasePath == null then
-        fetchurl {
-          urls = [
-              "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
-              "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
-          ];
-          sha256 = "0d9pnrvs93d4bwbfqxwyr3lg3k6gnzmp81m95gglzwdzczxkw38k";
-        }
-        else
-          releasePath
-    else throw "Platform is not supported. Use instalation native to your platform https://www.renoise.com/";
+  src = if releasePath != null then
+    releasePath
+  else
+    let
+      platform = platforms.${stdenv.system};
+      urlVersion = lib.replaceStrings [ "." ] [ "_" ] version;
+    in fetchurl {
+      url =
+        "https://files.renoise.com/demo/Renoise_${urlVersion}_Demo_Linux_${platform.archSuffix}.tar.gz";
+      hash = platform.hash;
+    };
 
-  buildInputs = [ alsa-lib libjack2 libX11 libXcursor libXext libXrandr ];
+  buildInputs = [
+    alsa-lib
+    libjack2
+    libX11
+    libXcursor
+    libXext
+    libXinerama
+    libXrandr
+    libXtst
+    pipewire
+  ];
 
   installPhase = ''
     cp -r Resources $out
@@ -79,7 +108,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.renoise.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ uakci ];
+    platforms = lib.attrNames platforms;
+    mainProgram = "renoise";
   };
 }

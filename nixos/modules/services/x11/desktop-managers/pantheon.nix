@@ -201,7 +201,7 @@ in
         onboard
         orca # elementary/greeter#668
         sound-theme-freedesktop
-        xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+        xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
       ]) ++ (with pkgs.pantheon; [
         # Artwork
         elementary-gtk-theme
@@ -229,15 +229,14 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
-        # Some Pantheon apps enforce portal usage, we need this for e.g. notifications.
-        # Currently we have buildPortalsInGnome enabled, if you run into issues related
-        # to https://github.com/flatpak/xdg-desktop-portal/issues/656 please report to us.
         pkgs.xdg-desktop-portal-gtk
       ] ++ (with pkgs.pantheon; [
         elementary-files
         elementary-settings-daemon
         xdg-desktop-portal-pantheon
       ]);
+
+      xdg.portal.configPackages = mkDefault [ pkgs.pantheon.elementary-default-settings ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

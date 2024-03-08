@@ -13,7 +13,7 @@ in
         '';
       };
 
-      package = lib.mkPackageOptionMD pkgs "minipro" { };
+      package = lib.mkPackageOption pkgs "minipro" { };
     };
   };
 

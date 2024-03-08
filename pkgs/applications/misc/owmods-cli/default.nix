@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, nix-update-script
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -11,21 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "owmods-cli";
-  version = "0.10.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     rev = "cli_v${version}";
-    hash = "sha256-kumYLlp2LRqTQz23N9lriJJf7x2pPXbqqUvkiAhyMDY=";
+    hash = "sha256-AfqpLL3cGZLKW5/BE6SaBe4S8GzYM2GKUZU8mFH5uX4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-window-state-0.1.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
-    };
-  };
+  cargoHash = "sha256-PhdfpiUgeOB13ROgzPBYM+sBLGMP+RtV9j9ebo8PpJU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,6 +48,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd owmods \
       dist/cli/completions/owmods.{bash,fish,zsh}
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "CLI version of the mod manager for Outer Wilds Mod Loader";

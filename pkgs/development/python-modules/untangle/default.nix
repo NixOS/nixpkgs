@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "untangle";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stchris";

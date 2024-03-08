@@ -5,7 +5,6 @@
 , pythonOlder
 , pytestCheckHook
 , aiohttp
-, aiohttp-cors
 , click
 , colorama
 , hatch-fancy-pypi-readme
@@ -19,21 +18,20 @@
 , platformdirs
 , tokenize-rt
 , tomli
-, typed-ast
 , typing-extensions
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "black";
-  version = "23.9.1";
+  version = "23.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JLaz/1xtnqCKiIj2l36uhY4fNA1yYM9W1wpJgjI2ti0=";
+    hash = "sha256-TGiFWCX/Qy0ZcimEb5cbxNZmbOkEkuWwIBO8rKTZqwU=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +75,10 @@ buildPythonPackage rec {
     pytestCheckHook
     parameterized
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"

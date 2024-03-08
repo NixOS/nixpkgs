@@ -53,10 +53,10 @@ let
       maintainers = with lib.maintainers; [
         AndersonTorres
         adisbladis
-        atemu
         jwiegley
         lovek323
         matthewbauer
+        # atemu for issues relating to Macport
       ];
       platforms = {
         "mainline" = lib.platforms.all;
@@ -67,7 +67,7 @@ let
   };
 in
 {
-  emacs28 = import ./generic.nix (mkArgs {
+  emacs28 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
     version = "28.2";
     variant = "mainline";
@@ -75,15 +75,15 @@ in
     hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
   });
 
-  emacs29 = import ./generic.nix (mkArgs {
+  emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "29.1";
+    version = "29.2";
     variant = "mainline";
-    rev = "29.1";
-    hash = "sha256-3HDCwtOKvkXwSULf3W7YgTz4GV8zvYnh2RrL28qzGKg=";
+    rev = "29.2";
+    hash = "sha256-qSQmQzVyEGSr4GAI6rqnEwBvhl09D2D8MNasHqZQPL8=";
   });
 
-  emacs28-macport = import ./generic.nix (mkArgs {
+  emacs28-macport = import ./make-emacs.nix (mkArgs {
     pname = "emacs-mac";
     version = "28.2";
     variant = "macport";
@@ -91,7 +91,7 @@ in
     hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
   });
 
-  emacs29-macport = import ./generic.nix (mkArgs {
+  emacs29-macport = import ./make-emacs.nix (mkArgs {
     pname = "emacs-mac";
     version = "29.1";
     variant = "macport";

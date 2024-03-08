@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.3.16";
+  version = "6.4.06";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0g16EblefuUU99RgcwtGrPWniGGlOt6GjVjyNdzN3GY=";
+    hash = "sha256-eZYNXNmxrvI+jR1UEgXrsUTriZ8zTTwM9cEy7HgiZzs=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dt $out/bin praat
+    install -Dm444 main/praat.desktop -t $out/share/applications
+    install -Dm444 main/praat-32.ico $out/share/icons/hicolor/32x32/apps/praat.ico
+    install -Dm444 main/praat-256.ico $out/share/icons/hicolor/256x256/apps/praat.ico
+    install -Dm444 main/praat-480.png $out/share/icons/hicolor/480x480/apps/praat.png
+    install -Dm444 main/praat-480.svg $out/share/icons/hicolor/scalable/apps/praat.svg
 
     runHook postInstall
   '';

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "op-geth";
-  version = "1.101200.0";
+  version = "1.101305.3";
 
   src = fetchFromGitHub {
     owner = "ethereum-optimism";
     repo = "op-geth";
     rev = "v${version}";
-    hash = "sha256-KUq2BSl+9FU7xX0BLWlOEolIgx0VFDXBK6o1YIo9QDQ=";
+    hash = "sha256-AKVwwvt77FZlm7089EeayYVRYLo7c3v6LFVpsQN68Zk=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ buildGoModule rec {
     "cmd/utils"
   ];
 
-  vendorHash = "sha256-oGMvazo3X9tOmy/o4xUYRlHsQBR0teBj3kF0TlI7mdg=";
+  vendorHash = "sha256-pcIydpKWZt3vwShwzGlPKGq+disdxYFOB8gxHou3mVU=";
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =

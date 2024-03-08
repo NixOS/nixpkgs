@@ -4,19 +4,19 @@
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3, qtbase, qtsvg, boost
 , zlib, perl, curl
-, texLive, texinfo
+, texliveSmall, texinfo
 , darwin
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.86";
+  version = "2.87";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    hash = "sha256-Bk8/WIQTfrbOo9b2hw580vJwiK6P1OBV5HMqMH+LkuE=";
+    hash = "sha256-xzRZ7NOWeu+uC5WeTxwh5MFm7psXMhxrxucT4PVtRxM=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ghostscriptX imagemagick fftw
     boehmgc ncurses readline gsl libsigsegv
     zlib perl curl qtbase qtsvg boost
-    texLive
+    (texliveSmall.withPackages (ps: with ps; [ epsf cm-super ps.texinfo media9 ocgx2 collection-latexextra ]))
     (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
   ];
 

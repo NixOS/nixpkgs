@@ -8,19 +8,15 @@
 , libosmo-netif
 }:
 
-let
-  inherit (stdenv) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-bts";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bts";
     rev = version;
-    hash = "sha256-tg6SxTSmPAkmoWsA0U69/EESlziR4cnq/+PWLavS3mk=";
+    hash = "sha256-dje+B1jobsVdQZYyIkLTZzez4HQirCcjyosTQCo/v64=";
   };
 
   postPatch = ''

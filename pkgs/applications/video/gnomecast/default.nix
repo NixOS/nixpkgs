@@ -41,5 +41,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/keredson/gnomecast";
     license = with licenses; [ gpl3 ];
     broken = stdenv.isDarwin;
+    mainProgram = "gnomecast";
   };
 }

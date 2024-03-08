@@ -46,6 +46,11 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
   nativeBuildInputs = [ protobuf rustfmt ];
 
+  checkFlags = [
+    # test requires database access
+    "--skip=session_middleware::tests::test_session_auth"
+  ];
+
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
@@ -53,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
+    maintainers = with maintainers; [ happysalada billewanick ];
     mainProgram = "lemmy_server";
   };
 }

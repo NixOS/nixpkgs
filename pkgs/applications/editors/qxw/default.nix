@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.tckmn ];
     platforms = platforms.linux;
+    mainProgram = "qxw";
   };
 }

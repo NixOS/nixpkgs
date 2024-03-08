@@ -1,15 +1,19 @@
-{ callPackage, fetchFromGitHub, gambit-unstable, gambit-support }:
+{ callPackage, fetchFromGitHub, gambit-unstable, gambit-support, pkgs, gccStdenv }:
 
 callPackage ./build.nix rec {
-  version = "unstable-2023-08-07";
-  git-version = "0.17.0-187-gba545b77";
+  version = "unstable-2023-12-06";
+  git-version = "0.18.1";
   src = fetchFromGitHub {
-    owner = "vyzo";
+    owner = "mighty-gerbils";
     repo = "gerbil";
-    rev = "ba545b77e8e85118089232e3cd263856e414b24b";
-    sha256 = "1f4v1qawx2i8333kshj4pbj5r21z0868pwrr3r710n6ng3pd9gqn";
+    rev = "23c30a6062cd7e63f9d85300ce01585bb9035d2d";
+    sha256 = "15fh0zqkmnjhan1mgymq5fgbjsh5z9d2v6zjddplqib5zd2s3z6k";
+    fetchSubmodules = true;
   };
   inherit gambit-support;
-  gambit = gambit-unstable;
   gambit-params = gambit-support.unstable-params;
+  # These are available in pkgs.gambit-unstable.passthru.git-version, etc.
+  gambit-git-version = "4.9.5-78-g8b18ab69";
+  gambit-stampYmd = "20231029";
+  gambit-stampHms = "163035";
 }

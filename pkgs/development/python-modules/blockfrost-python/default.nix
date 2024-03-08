@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "blockfrost-python";
-  version = "0.5.3";
+  version = "0.6.0";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "blockfrost";
     repo = "blockfrost-python";
-    rev = "${version}";
-    hash = "sha256-mQ8avjyLARJONYn18neCyuHEuv3ySyCNMe+P4+Dlxck=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mN26QXxizDR+o2V5C2MlqVEbRns1BTmwZdUnnHNcFzw=";
   };
 
   propagatedBuildInputs = [

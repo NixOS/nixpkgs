@@ -13,6 +13,7 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/128636
   # https://github.com/ansible/ansible/blob/devel/requirements.txt
   version = "0.5.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
@@ -45,6 +46,6 @@ buildPythonPackage rec {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
     license = licenses.isc;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

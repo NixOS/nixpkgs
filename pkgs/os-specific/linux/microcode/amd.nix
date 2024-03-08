@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  buildInputs = [ libarchive ];
+  nativeBuildInputs = [ libarchive ];
 
   buildPhase = ''
     mkdir -p kernel/x86/microcode

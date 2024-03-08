@@ -5,25 +5,36 @@
 , pkg-config
 , IOKit
 , Foundation
+, libclang
+, nix-update-script
 }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_formats";
-in
-rustPlatform.buildRustPackage {
-  inherit pname;
-  version = "0.84.0";
-  src = nushell.src;
-  cargoHash = "sha256-pwOdSJHd9njR0lr4n2EzCcqRonh0cbBHGZgAJ1l8FEk=";
+  inherit (nushell) version src;
+  cargoHash = "sha256-sEc+Oa2s8d3/9mye/9cHipjamPmLj6P38Jh24VrpfXM=";
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    LIBCLANG_PATH = "${libclang.lib}/lib";
+  };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ IOKit Foundation ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit Foundation ];
   cargoBuildFlags = [ "--package nu_plugin_formats" ];
-  doCheck = false;
+
+  checkPhase = ''
+    cargo test --manifest-path crates/nu_plugin_formats/Cargo.toml
+  '';
+
+  passthru.updateScript = nix-update-script {
+    # Skip the version check and only check the hash because we inherit version from nushell.
+    extraArgs = [ "--version=skip" ];
+  };
+
   meta = with lib; {
     description = "A formats plugin for Nushell";
-    homepage = "https://github.com/nushell/nushell/tree/main/crates/nu_plugin_formats";
+    homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_formats";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with maintainers; [ viraptor aidalgol ];
     platforms = with platforms; all;
   };
 }

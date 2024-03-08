@@ -1,22 +1,41 @@
-{ lib, stdenv, buildPackages, fetchurl, flex, cracklib, db4, gettext, audit, libxcrypt
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch
+, flex, cracklib, db4, gettext, audit, libxcrypt
 , nixosTests
+, autoreconfHook269, pkg-config-unwrapped
 }:
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchurl {
-    url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    sha256 = "sha256-5OxxMakdpEUSV0Jo9JPG2MoQXIcJFpG46bVspoXU+U0=";
+    url = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
+    hash = "sha256-//SjTlu+534ujxmS8nYx4jKby/igVj3etcM4m04xaa0=";
   };
 
-  patches = [ ./suid-wrapper-path.patch ];
+  patches = [
+    ./suid-wrapper-path.patch
+
+    # Backport fix for missing include breaking musl builds.
+    (fetchpatch {
+      name = "pam_namespace-stdint.h.patch";
+      url = "https://github.com/linux-pam/linux-pam/commit/cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13.patch";
+      hash = "sha256-tCnH2yPO4dBbJOZA0fP2gm1EavHRMEJyfzB5Vy7YjAA=";
+    })
+  ];
+
+  # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
+  postPatch = if stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform then ''
+    rm CHANGELOG
+    touch ChangeLog
+  '' else null;
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ flex ]
+  # autoreconfHook269 is needed for `suid-wrapper-path.patch` above.
+  # pkg-config-unwrapped is needed for `AC_CHECK_LIB` and `AC_SEARCH_LIBS`
+  nativeBuildInputs = [ flex autoreconfHook269 pkg-config-unwrapped ]
     ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [ cracklib db4 libxcrypt ]
@@ -35,6 +54,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--includedir=${placeholder "out"}/include/security"
     "--enable-sconfigdir=/etc/security"
+    # The module is deprecated. We re-enable it explicitly until NixOS
+    # module stops using it.
+    "--enable-lastlog"
   ];
 
   installFlags = [

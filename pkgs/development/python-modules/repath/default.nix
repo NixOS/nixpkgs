@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "repath";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

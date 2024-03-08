@@ -20,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "lifelines";
-  version = "0.27.7";
+  version = "0.28.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6ulg3R59QHy31CXit8tddi6F0vPKVRZDIu0zdS19xu0=";
+    hash = "sha256-6j+RgKeBCvpcREf7j8NE2x+IUI/LaoT6jsnHny4ccVo=";
   };
 
   propagatedBuildInputs = [

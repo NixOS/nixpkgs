@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "sops";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-nUeygUZdtDyYGW3hZdxBHSUxYILJcHoIIYRpoxkAlI4=";
+    hash = "sha256-4K09wLV1+TvYTtvha6YyGhjlhEldWL1eVazNwcEhi3Q=";
   };
 
-  vendorHash = "sha256-/fh6pQ7u1icIYGM4gJHXyDNQlAbLnVluw5icovBMZ5k=";
+  vendorHash = "sha256-iRgLspYhwSVuL0yarPdjXCKfjK7TGDZeQCOcIYtNvzA=";
 
   subPackages = [ "cmd/sops" ];
 
@@ -21,6 +21,7 @@ buildGoModule rec {
     homepage = "https://github.com/getsops/sops";
     description = "Simple and flexible tool for managing secrets";
     changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
+    mainProgram = "sops";
     maintainers = [ maintainers.marsam ];
     license = licenses.mpl20;
   };

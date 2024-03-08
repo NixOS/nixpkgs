@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "1.0.1";
+  format = "setuptools";
   pname = "vultr";
 
   src = fetchFromGitHub {

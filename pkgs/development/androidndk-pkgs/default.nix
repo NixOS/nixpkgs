@@ -29,7 +29,7 @@
       # these two really are the same.
       buildAndroidndk = buildAndroidComposition.ndk-bundle;
       androidndk = androidComposition.ndk-bundle;
-      targetAndroidndkPkgs = targetPackages.androidndkPkgs_21;
+      targetAndroidndkPkgs = if targetPackages ? androidndkPkgs_21 then targetPackages.androidndkPkgs_21 else throw "androidndkPkgs_21: no targetPackages, use `buildPackages.androidndkPkgs_21";
     };
 
   "23b" =
@@ -59,7 +59,7 @@
       # these two really are the same.
       buildAndroidndk = buildAndroidComposition.ndk-bundle;
       androidndk = androidComposition.ndk-bundle;
-      targetAndroidndkPkgs = targetPackages.androidndkPkgs_23b;
+      targetAndroidndkPkgs = if targetPackages ? androidndkPkgs_23b then targetPackages.androidndkPkgs_23b else throw "androidndkPkgs_23b: no targetPackages, use `buildPackages.androidndkPkgs_23b";
     };
 
   "24" =
@@ -89,7 +89,7 @@
       # these two really are the same.
       buildAndroidndk = buildAndroidComposition.ndk-bundle;
       androidndk = androidComposition.ndk-bundle;
-      targetAndroidndkPkgs = targetPackages.androidndkPkgs_24;
+      targetAndroidndkPkgs = if targetPackages ? androidndkPkgs_24 then targetPackages.androidndkPkgs_24 else throw "androidndkPkgs_24: no targetPackages, use `buildPackages.androidndkPkgs_24";
     };
 
 }

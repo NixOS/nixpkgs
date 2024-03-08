@@ -6,8 +6,8 @@ let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "sha256-UiUMoqdfkk6mzaPGctpQW3dvOWKhNBNuScJ5BpCykVg=";
-  version = "4.8";
+  sha256 = "sha256-2L7+k/tgI6trkstDTY4xxfFzmNDlxbCHDRKAFaERQeM=";
+  version = "5.0a";
 
   inherit (kernel) stdenv;
 
@@ -17,10 +17,18 @@ let
     inherit version;
     src = fetchgit { inherit url rev sha256; };
     nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
-    buildInputs = [ elfutils gettext ];
+    buildInputs = [ elfutils gettext python3 ];
     enableParallelBuilding = true;
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
+
+  ## symlink farm for --sysroot flag
+  sysroot = runCommand "systemtap-sysroot-${kernel.version}" { } ''
+    mkdir -p $out/boot $out/usr/lib/debug
+    ln -s ${kernel.dev}/vmlinux ${kernel.dev}/lib $out
+    ln -s ${kernel.dev}/vmlinux $out/usr/lib/debug
+    ln -s ${kernel}/System.map $out/boot/System.map-${kernel.version}
+  '';
 
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
@@ -40,7 +48,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   done
   rm $out/bin/stap $out/bin/dtrace
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
-    --add-flags "-r ${kernel.dev}" \
+    --add-flags "--sysroot ${sysroot}" \
     --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
   makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
     --prefix PYTHONPATH : ${pypkgs}

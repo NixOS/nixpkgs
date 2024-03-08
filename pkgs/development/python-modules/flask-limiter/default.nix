@@ -13,13 +13,14 @@
 , pythonOlder
 , redis
 , rich
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.3.1";
-  format = "setuptools";
+  version = "3.5.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = "refs/tags/${version}";
-    hash = "sha256-UtmMd180bwFm426YevARq6r7DL182dI7dGAUPFKLWuM=";
+    hash = "sha256-U7qgl8yg0ddKDPXqYE2Vqyc2ofxSP+6liWs5j4qD6fM=";
   };
 
   postPatch = ''
@@ -36,6 +37,10 @@ buildPythonPackage rec {
     # flask-restful is unmaintained and breaks regularly, don't depend on it
     sed -i "/import flask_restful/d" tests/test_views.py
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     flask

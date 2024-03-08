@@ -13,10 +13,12 @@ in {
     # The only thing the client needs to do is download a file.
     client = { ... }: {
       services.davfs2.enable = true;
-      system.activationScripts.davfs2-secrets = ''
-        echo "http://nextcloud/remote.php/dav/files/${adminuser} ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
-        chmod 600 /tmp/davfs2-secrets
-      '';
+      systemd.tmpfiles.settings.nextcloud = {
+        "/tmp/davfs2-secrets"."f+" = {
+          mode = "0600";
+          argument = "http://nextcloud/remote.php/dav/files/${adminuser} ${adminuser} ${adminpass}";
+        };
+      };
       virtualisation.fileSystems = {
         "/mnt/dav" = {
           device = "http://nextcloud/remote.php/dav/files/${adminuser}";
@@ -36,8 +38,6 @@ in {
       systemd.tmpfiles.rules = [
         "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
       ];
-
-      system.stateVersion = "22.11"; # stateVersion >=21.11 to make sure that we use OpenSSL3
 
       services.nextcloud = {
         enable = true;

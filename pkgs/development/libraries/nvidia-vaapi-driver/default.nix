@@ -14,14 +14,18 @@
 
 stdenv.mkDerivation rec {
   pname = "nvidia-vaapi-driver";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "elFarto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j6AIleVZCgV7CD7nP/dKz5we3sUW9pldy0QKi8xwXB0=";
+    sha256 = "sha256-mVVRpCyT374P1Vql0yPY0e5tNktHNJ8XHoixvxp3b20=";
   };
+
+  patches = [
+    ./0001-hardcode-install_dir.patch
+  ];
 
   nativeBuildInputs = [
     meson

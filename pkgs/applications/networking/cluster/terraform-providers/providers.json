@@ -1,22 +1,22 @@
 {
   "aci": {
-    "hash": "sha256-rJ4xiBLrwhYkVPFDo6vZkk+w3v07EuK5a2gn1cbEA6Q=",
+    "hash": "sha256-Xe6RDA9Ijq6BnrTzlXHt+6hfNf7CkrJ4TY6dp4TUm4E=",
     "homepage": "https://registry.terraform.io/providers/CiscoDevNet/aci",
     "owner": "CiscoDevNet",
     "repo": "terraform-provider-aci",
-    "rev": "v2.10.1",
+    "rev": "v2.13.2",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "acme": {
-    "hash": "sha256-5KR32V4sE5AkOVroLmelNBzBZpD4KfhC491X+5eo+n8=",
+    "hash": "sha256-ZhL5u6v7ZraajKaSK6hwzXbXr+ySdFmBSJnmsOhOJok=",
     "homepage": "https://registry.terraform.io/providers/vancluever/acme",
     "owner": "vancluever",
     "proxyVendor": true,
     "repo": "terraform-provider-acme",
-    "rev": "v2.17.0",
+    "rev": "v2.20.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-UIV0dIoRZxNiaEq1HGPIV4mFLn4pAoGPo6tx6zV3r3A="
+    "vendorHash": "sha256-eiWGI8sp+gGL8UiRBG6lHmCATVUebYwdXJbLNGfi6xY="
   },
   "age": {
     "hash": "sha256-bJrzjvkrCX93bNqCA+FdRibHnAw6cb61StqtwUY5ok4=",
@@ -28,29 +28,29 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "aiven": {
-    "hash": "sha256-3agD22viTP+yntNg2nyYi5OpknXnfI2Jk/xEcvXgia8=",
+    "hash": "sha256-7dKlhPGkt1WB/nlXV2IrNT7E3w2kNdishJB/xL299Cw=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.8.2",
+    "rev": "v4.13.2",
     "spdx": "MIT",
-    "vendorHash": "sha256-sVPby/MLAgU7DfBDACqxvkLWblBhisHcUaoOgR3fMaM="
+    "vendorHash": "sha256-rIyAhe4YQ9XG3nODCSxZRohHgNIPQ94pDLrh7+4Rj1k="
   },
   "akamai": {
-    "hash": "sha256-jVl4B7YfBDri+G/cJHTvPJquCALEdKxRY1DKeJOC2p0=",
+    "hash": "sha256-j1UTi4ygixwSfu9Wp//JzKe58xSV/tZM3kRo1ikBo3Y=",
     "homepage": "https://registry.terraform.io/providers/akamai/akamai",
     "owner": "akamai",
     "repo": "terraform-provider-akamai",
-    "rev": "v5.2.0",
+    "rev": "v5.6.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-GjGv4q0+Yfu4Vc/eZHcch/Y5MMj1QszDrIlu/sY33Ho="
+    "vendorHash": "sha256-/gW1vxaDaUMpm0QSghd/Glo3S/XVa5t9x3QrIs4Bqyk="
   },
   "alicloud": {
-    "hash": "sha256-Ni69AvtyRgwT89OayULlqS8mWdoK+BLK35H0sQEiksg=",
+    "hash": "sha256-YD9q4sjX9Bmp1k6MIy7EKIT2fY0e9Mb939hJ5w1Hh2Y=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.209.1",
+    "rev": "v1.217.2",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -64,75 +64,83 @@
     "vendorHash": "sha256-OAd8SeTqTrH0kMoM2LsK3vM2PI23b3gl57FaJYM9hM0="
   },
   "archive": {
-    "hash": "sha256-fhKN7aqQlurzKB568LC7wt0yikUrsEjS8vngMedqQY8=",
+    "hash": "sha256-jkqbj7NGrTQeMQcg52JVurV3ce8iosxAJjBGdoQ3PLY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/archive",
     "owner": "hashicorp",
     "repo": "terraform-provider-archive",
-    "rev": "v2.4.0",
+    "rev": "v2.4.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LSAxibOYXxyIAsprMzbW+mnUXX7gHtYjMZYaUrGLtD4="
+    "vendorHash": "sha256-buKYDNVCIcSDLCrCL4ZAKNQ7HqkH3+/7RHjyyR4dLmU="
   },
   "argocd": {
-    "hash": "sha256-7BOBk2wrCvI8sAzjgDWYNhK+Uht4SaySLK6lJdR1o9Q=",
+    "hash": "sha256-nJrXbeI/07LlKngEkAnqPG6CiOLFTFugmZMVl2FEvIo=",
     "homepage": "https://registry.terraform.io/providers/oboukili/argocd",
     "owner": "oboukili",
     "repo": "terraform-provider-argocd",
-    "rev": "v6.0.2",
+    "rev": "v6.0.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-q9PO9tMbaXTs3nBLElwU05GcDZMZqNmLVVGDmiSRSfo="
   },
+  "artifactory": {
+    "hash": "sha256-W8IWBc9tWmj4Rkp4CgZV9tsAL41EOnEhH+iTImP/+D4=",
+    "homepage": "https://registry.terraform.io/providers/jfrog/artifactory",
+    "owner": "jfrog",
+    "repo": "terraform-provider-artifactory",
+    "rev": "v10.1.5",
+    "spdx": "Apache-2.0",
+    "vendorHash": "sha256-J/+OcqRtcHaqoDkrWIDpPlBHQ/UWupwchA1aeSoHSh4="
+  },
   "auth0": {
-    "hash": "sha256-QljqPcupvU7AgVSuarpd0FwLuAPJI9umgsgMXc2/v6w=",
+    "hash": "sha256-Yoje6btftS0slz2newORBbb9kTjWXaXzbP94YKT6+3E=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v0.50.0",
+    "rev": "v1.2.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-+ZYbaQICwcABnJE9p6Lwk0gXqeHfO/TLkvwvLD9v8ng="
+    "vendorHash": "sha256-kBLyk8glOuvgpbGLUUwtzKecqDDU8VS3JxN6tPIhMro="
   },
   "avi": {
-    "hash": "sha256-xis3uVCK+dck6R5ru8suNQov9qTLwLIdeQCAR9Jwqcs=",
+    "hash": "sha256-EGpHajrTTOx7LrFHzsrrkGMqsuUEJLJAN6AJ48QdJis=",
     "homepage": "https://registry.terraform.io/providers/vmware/avi",
     "owner": "vmware",
-    "proxyVendor": true,
     "repo": "terraform-provider-avi",
-    "rev": "v22.1.4",
+    "rev": "v22.1.5",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vORXHX6VKP/JHP/InB2b9Rqej2JIIDOzS3r05wO2I+c="
+    "vendorHash": "sha256-r42KHzvRBXuWgLgtg+WUVt0ThjSMXtUKjEE9y/s/1uQ="
   },
   "aviatrix": {
-    "hash": "sha256-T/GPJBcKxWhBxB7fVACkkwRm6dqixQpkAzi6UYw6TRw=",
+    "hash": "sha256-84MtHPrDVaLMQQYnAfuP/pZuzruWxUTLpziwn3ny1oU=",
     "homepage": "https://registry.terraform.io/providers/AviatrixSystems/aviatrix",
     "owner": "AviatrixSystems",
     "repo": "terraform-provider-aviatrix",
-    "rev": "v3.1.2",
+    "rev": "v3.1.4",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-Wt6rcHCxn1RPIxblL/Y6JWfsmOcloMZ8DMWvoVz/xrI=",
+    "hash": "sha256-/KJMoRsEKA4cqY/TpSWQDBpNjtqmZcqnpMSLf2E0LXY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v5.14.0",
+    "rev": "v5.39.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-wF4dsQItVSXpJWBiOmdt/5ZaZeROmIxNW66Ec80PudU="
+    "vendorHash": "sha256-q5Tsm7JLrX5OK4fKV0SBRgK6ZHogG16OtMFeJrR0bBc="
   },
   "azuread": {
-    "hash": "sha256-aLckXkWxMsDS1ddPucAmjFS6+mkwHeAO1+BlPNaF6cI=",
+    "hash": "sha256-lumXl3orK5Jq5+qnRfiIA94NjK2bCjd3LhRzHmW1h8I=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azuread",
     "owner": "hashicorp",
     "repo": "terraform-provider-azuread",
-    "rev": "v2.41.0",
+    "rev": "v2.47.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-l26MIkMpB4/vO6r2u7vyepAGxRw8CNPDhcUD/USWteg=",
+    "hash": "sha256-HPbEbFw99HM6+a+EAbkwE6hvzh4/FU/cAbl6DT1dbp0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.71.0",
+    "rev": "v3.94.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -146,31 +154,32 @@
     "vendorHash": null
   },
   "baiducloud": {
-    "hash": "sha256-5tydl+IMHz1wYxNUHJY6l+yIgtjc0gy5ufa+DQHiNf0=",
+    "deleteVendor": true,
+    "hash": "sha256-wPfWcc4OD3KXEfe9IsK/4NPdX/4bQNKTiGBsKL0OZC8=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.19.15",
+    "rev": "v1.19.37",
     "spdx": "MPL-2.0",
-    "vendorHash": null
+    "vendorHash": "sha256-puTQKvIvyBRgdZZTZCXEAdc8HYNgtoSmzjpqHCIEAKk="
   },
   "bigip": {
-    "hash": "sha256-dlQRjIf2lffWqD42ykZdm6HJT0qdID9gdc0vjq2nl9k=",
+    "hash": "sha256-GrHd9plKhe7BdCBgsnTv+CM82F7oDPWamtXxOpiwKPE=",
     "homepage": "https://registry.terraform.io/providers/F5Networks/bigip",
     "owner": "F5Networks",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.19.0",
+    "rev": "v1.21.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-En53+Lj7cQxzkKgXDPWNptVbg0wMAc5WRmsilBOlgEM=",
+    "hash": "sha256-rapsVhYfyASIn9zVQTwhAF4A2Taw9djYlh+sJXCpJNA=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.35.0",
+    "rev": "v2.40.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-xaa/NAJfKlSM4P9o4xNsJhL5ZyUGNYMC9/WbCqMKiLM="
+    "vendorHash": "sha256-oDMKf39uNMO9/kyiZ1IuZlj2yIF1q5Z3wewxEBh3yso="
   },
   "brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
@@ -182,22 +191,22 @@
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
   "buildkite": {
-    "hash": "sha256-LZyfyiPyGToJMMue9049CnMnioJblko/WXt2PSNv4WE=",
+    "hash": "sha256-3r2vxoPRTehKTswcNoAkVKuLbo6OFuyLy1WEyjw2zO8=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v0.26.0",
+    "rev": "v1.5.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-G4aKekEqEZVMxXDjPgnzvXidv0u1WydZqxSPj5d+WKg="
+    "vendorHash": "sha256-21OyBnW86A3Tm0OAHilCM+pgJcgx2a+P9up3/jeA8qg="
   },
   "checkly": {
-    "hash": "sha256-tOTrAi6hd4HFbHAj0p/LTYdxQl1R1WuQ9L4hzqmDVqI=",
+    "hash": "sha256-Wxw87/9BG/bTDGqgKdle6WF38oDoHkrc0HIKjJlaQOQ=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
     "owner": "checkly",
     "repo": "terraform-provider-checkly",
-    "rev": "v1.6.9",
+    "rev": "v1.7.6",
     "spdx": null,
-    "vendorHash": "sha256-EhsfA53xkGFgiwJxBtpD1ZKjb0+14dKD9rQ0Jrrm3ck="
+    "vendorHash": "sha256-zxlKKA2bi+PV0T+znLAFEbTe5ynGfl0bE913GWojwEo="
   },
   "ciscoasa": {
     "hash": "sha256-xzc44FEy2MPo51Faq/VFwg411JK9e0kQucpt0vdN8yg=",
@@ -209,47 +218,48 @@
     "vendorHash": null
   },
   "cloudamqp": {
-    "hash": "sha256-35pcXFmVCO2naCeDDcNtgzUeMdkGfGBxZvYSSGtH824=",
+    "hash": "sha256-aEbGvGPYvW3NOO+Q89/ebcJWNrXIoNQkqAIbv9ikiI8=",
     "homepage": "https://registry.terraform.io/providers/cloudamqp/cloudamqp",
     "owner": "cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.27.0",
+    "rev": "v1.29.4",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-qIgr+ynaNSfNx1iW5RJrNHvEnlr46dBzIi+5IXYn+3Q="
+    "vendorHash": "sha256-cI3brJwN+7FTceOMwR0HMbZCNHhwvm31OXqjAEvrzrs="
   },
   "cloudflare": {
-    "hash": "sha256-l1cTzPiOOLyvbvbt7dWR9lRgqVFiO5gRq4XNnLqvac0=",
+    "hash": "sha256-b9qsA0V/ncQPiP2SQyFpVDaQdEyAMBQp4WfCQlcd9xk=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v4.13.0",
+    "rev": "v4.25.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uZ0zc+/RmEiqxBSZLgLPmwN29BEJitPN13HE88zPxcI="
+    "vendorHash": "sha256-TBELRtWlzXqP64fPM3e1pn/w8FVERQ3BLf+kRoahNXk="
   },
   "cloudfoundry": {
-    "hash": "sha256-yEqsdgTSlwppt6ILRZQ6Epyh5WVN6Il3xsBOa/NfIdo=",
+    "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
     "homepage": "https://registry.terraform.io/providers/cloudfoundry-community/cloudfoundry",
     "owner": "cloudfoundry-community",
+    "proxyVendor": true,
     "repo": "terraform-provider-cloudfoundry",
-    "rev": "v0.51.3",
+    "rev": "v0.52.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-0hq4dR1KqnE2IXMwif2/NVKQKRO/QplW/A6sB4pJ+FM="
+    "vendorHash": "sha256-g1T6kH8Rv9bpvb6Q3YHCseEi1ayydJIxlplH3k12s8c="
   },
   "cloudinit": {
-    "hash": "sha256-fdtUKD8XC1Y72IzrsCfTZYVYZwLqY3gV2sajiw4Krzw=",
+    "hash": "sha256-etZeCGtYhO0szRGxnj1c3/WOelxScWiHEA9w1Jb7bEE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/cloudinit",
     "owner": "hashicorp",
     "repo": "terraform-provider-cloudinit",
-    "rev": "v2.3.2",
+    "rev": "v2.3.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-h4CO3sC41RPSmkTlWUCiRvQ1NRZkT2v1uHFOemvBN8s="
+    "vendorHash": "sha256-MFhKJEuylDnyj9ltugxGXgfIxBT3/mYaxB0JmTJxK3M="
   },
   "cloudscale": {
-    "hash": "sha256-fthgKxMYubc0y+6C6ON/zw+bZ9pd73N0Q0qDR715KCo=",
+    "hash": "sha256-GjtWkty9mNMnTzXUf9U56b9HkjrjUdouA41ZptXMKeQ=",
     "homepage": "https://registry.terraform.io/providers/cloudscale-ch/cloudscale",
     "owner": "cloudscale-ch",
     "repo": "terraform-provider-cloudscale",
-    "rev": "v4.2.0",
+    "rev": "v4.2.3",
     "spdx": "MIT",
     "vendorHash": null
   },
@@ -264,13 +274,13 @@
     "vendorHash": "sha256-UJHDX/vx3n/RTuQ50Y6TAhpEEFk9yBoaz8yK02E8Fhw="
   },
   "consul": {
-    "hash": "sha256-2oujZd7tqvMnp48m3bs45p5dRC7U5a7hsiS5qBuPUHU=",
+    "hash": "sha256-Glgig56QdXZ9VNZx25/60YPChg9MtLq/S95nuAco3m0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/consul",
     "owner": "hashicorp",
     "repo": "terraform-provider-consul",
-    "rev": "v2.18.0",
+    "rev": "v2.20.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-0SRbKFKl1lfiiMDZW20ak9m09T3tSOH/fc+UwGeXmuk="
+    "vendorHash": "sha256-OKKcyx5JAQGMoUMRxIbe3lg825vhwCcWcPNZqo+/gl4="
   },
   "ct": {
     "hash": "sha256-c1cqTfMlZ5fXDNMYLsk4447X0p/qIQYvRTqVY8cSs+E=",
@@ -282,38 +292,39 @@
     "vendorHash": "sha256-ZCMSmOCPEMxCSpl3DjIUGPj1W/KNJgyjtHpmQ19JquA="
   },
   "datadog": {
-    "hash": "sha256-FAqtbze6Lw6SCU84R6aB0oY+pcWyDBdTZRBZhM2pjyc=",
+    "hash": "sha256-gmFD9VG9mcxw7lpt25bz8z2RnmeCSbd2EkFJHbZNP0Y=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.29.0",
+    "rev": "v3.37.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-UJRuj5qmWWjkqMBGf0500//83ky0Dxx04IQETPwwSsw="
+    "vendorHash": "sha256-20ANWw/0rqhCVhkl2r1PusXKOAKrvpxgvpGKmKMzbZM="
   },
   "dexidp": {
-    "hash": "sha256-69r3m3lIKftZQ8NXBD5KEHbsNUwCGpFgn/CYO+921M4=",
+    "hash": "sha256-3UgiOeAGpGG2mkImPDvb24WjV2mavhY0E12j7W+SJs8=",
     "homepage": "https://registry.terraform.io/providers/marcofranssen/dexidp",
     "owner": "marcofranssen",
     "repo": "terraform-provider-dexidp",
-    "rev": "v0.3.0",
+    "rev": "v0.3.4",
     "spdx": "MIT",
-    "vendorHash": "sha256-EWEc7tILolAIzT7ZOLXlrlrt3hsgJxFD89y/USLeE40="
+    "vendorHash": "sha256-ejM1RmVBW3v0OStYzJTCym2ByWHJ1zzz/yWVbUiQWN0="
   },
   "dhall": {
-    "hash": "sha256-K0j90YAzYqdyJD4aofyxAJF9QBYNMbhSVm/s1GvWuJ4=",
+    "hash": "sha256-QjY5ZazQn4HiLQtdmw9X7o5tFw+27B2IISzmzMMHjHE=",
     "homepage": "https://registry.terraform.io/providers/awakesecurity/dhall",
     "owner": "awakesecurity",
+    "proxyVendor": true,
     "repo": "terraform-provider-dhall",
-    "rev": "v0.0.3",
+    "rev": "v0.0.7",
     "spdx": "BSD-3-Clause",
-    "vendorHash": "sha256-BpXhKjfxyCLdGRHn1GexW0MoLj4/C6Bn7scZ76JARxQ="
+    "vendorHash": "sha256-e/+czUeOACwRC7xY90pZp2EWDzDpLU6Ud9RPzuNKaOY="
   },
   "digitalocean": {
-    "hash": "sha256-CnakqGO/adv44knzp3Q5nC17tD+ZpOEFqfQXPk20klg=",
+    "hash": "sha256-pu6QTKT5ikm3B12zDpWFsMbSjv8zl1oMvWtA4qtjluk=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.29.0",
+    "rev": "v2.34.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -327,22 +338,22 @@
     "vendorHash": null
   },
   "dns": {
-    "hash": "sha256-feMN0Fpq8ct3l0u1Y8Zjgee4iC+e90CwAZmk5VQj2So=",
+    "hash": "sha256-7PRRdL1LhcHKHqqdB7KvBsrrPjaYEKfoSPpc31/Ki/c=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/dns",
     "owner": "hashicorp",
     "repo": "terraform-provider-dns",
-    "rev": "v3.3.2",
+    "rev": "v3.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-SvyeMKuAJ4vu++7Fx0hutx3vQvgf1sh1PFSLPRqJPjw="
+    "vendorHash": "sha256-z2p2tjTK7eL0gRU8XnXw9SY9qokqiqJOVhkiBQlHRnA="
   },
   "dnsimple": {
-    "hash": "sha256-Q/EjVBjZyML1coMblzqGU7AFdG+of1hVQ4GibM7MiRw=",
+    "hash": "sha256-iH35dJLa/63s+CU5PdeMbqXUVGfWfpKIXH3znNUApEc=",
     "homepage": "https://registry.terraform.io/providers/dnsimple/dnsimple",
     "owner": "dnsimple",
     "repo": "terraform-provider-dnsimple",
-    "rev": "v1.1.2",
+    "rev": "v1.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rCM+PL78zD1FYK2v9ihdLkoFwbkgtJTSEq5vKXZPAsU="
+    "vendorHash": "sha256-fuIaNHlZica6PxFLzXGA+b6ODWrGWXdWYOeWzgiQRXo="
   },
   "docker": {
     "hash": "sha256-UyHOI8C0eDV5YllAi9clHp/CEldHjIp3FHHMPy1rK58=",
@@ -354,13 +365,13 @@
     "vendorHash": "sha256-XxltOTtCgmJ9wZX8Yw39HkwVVZb58kZjAH7jfKPhjKM="
   },
   "doppler": {
-    "hash": "sha256-VwyJrgPiZW9DzAFS3SeLxV6sdVjD5MzsekOSg3ByhXk=",
+    "hash": "sha256-FJS1lPYieTWI/AX7pBbFmGtJw5kPD7MCZp+LWWIsnus=",
     "homepage": "https://registry.terraform.io/providers/DopplerHQ/doppler",
     "owner": "DopplerHQ",
     "repo": "terraform-provider-doppler",
-    "rev": "v1.2.4",
+    "rev": "v1.6.2",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-Z5GKIty78BUFF3VbTcsZKi437gw/kOIHEKkAYu3uB2o="
+    "vendorHash": "sha256-qJ1mOuMyJ/f2/yCns7qY8zUt2lgDuBgzN0w1HCKBk7E="
   },
   "elasticsearch": {
     "hash": "sha256-a6kHN3w0sQCP+0+ZtFwcg9erfVBYkhNo+yOrnwweGWo=",
@@ -372,115 +383,106 @@
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw="
   },
   "equinix": {
-    "hash": "sha256-6fY1gDQLPOaq2FiuT0Mue8dcsJbFCFQ1N38tmyBcdWg=",
+    "hash": "sha256-WWW4X5fCQAZZiAVi79realf0EtB0AGnfS5yjSJrlZTU=",
     "homepage": "https://registry.terraform.io/providers/equinix/equinix",
     "owner": "equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v1.16.0",
+    "rev": "v1.26.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-SqT25WhGmJM/ZTd7QdVPJFxo7zo5OB9AuuDK4RdjKeI="
+    "vendorHash": "sha256-vMmHoQEXXPbFS/q+wy35SQd5+yEXLQFVWX9AKsmbTn4="
   },
   "exoscale": {
-    "hash": "sha256-93pCsHrsYLJYgg8MXHz2Gg+vaPC9gcHdLastb89/BMg=",
+    "hash": "sha256-t1yZmayoZkDImcIr+VkNhQRzlfteGuvgcjSDOmmCF5I=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.51.0",
+    "rev": "v0.56.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "external": {
-    "hash": "sha256-+0AqlVGKSEeXlcKfNiYDqh0B9rRqyt9FDNWstdOFACI=",
+    "hash": "sha256-NCHG3lE+PuKm/8ox+d+zDSoKMXjSCCwi2JWTOn7NezE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/external",
     "owner": "hashicorp",
     "repo": "terraform-provider-external",
-    "rev": "v2.3.1",
+    "rev": "v2.3.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-E1gzdES/YVxQq2J47E2zosvud2C/ViBeQ8+RfNHMBAg="
+    "vendorHash": "sha256-qeKXdjrDPJWO4xW8by6djJReeYbCjh8VzQmE5/65zII="
   },
   "fastly": {
-    "hash": "sha256-Pd79xIFu+vwynwVqDFqkuhg8NczkbCF2eWOXrLOPCGI=",
+    "hash": "sha256-trDTXsZZTSxYe8ybFYpw8FkjxWJhTjyavT21c8wN0y0=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v5.3.1",
+    "rev": "v5.7.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "flexibleengine": {
-    "hash": "sha256-9qwGI7JBhX2WDX7u3SY2l9RJeiDffEpkE16f8/qqlI8=",
+    "hash": "sha256-8wp6chQBysKEZ2088PY+h62FnTI8nIapmhQpTHO1TIQ=",
     "homepage": "https://registry.terraform.io/providers/FlexibleEngineCloud/flexibleengine",
     "owner": "FlexibleEngineCloud",
     "repo": "terraform-provider-flexibleengine",
-    "rev": "v1.40.0",
+    "rev": "v1.45.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-RqYzqKPzb5GcrzHnEDZC7GaBt1zP8g28Wo3WNAe07Ck="
-  },
-  "fly": {
-    "hash": "sha256-9QB2fbggCKcJz8tkSYgq/X8r+MB2M76VCWXgsHARTkU=",
-    "homepage": "https://registry.terraform.io/providers/fly-apps/fly",
-    "owner": "fly-apps",
-    "repo": "terraform-provider-fly",
-    "rev": "v0.0.23",
-    "spdx": "BSD-3-Clause",
-    "vendorHash": "sha256-f+Z6Y2WPxqJoHoCwuK6sgFa8nUnkW/WwrD55dtU0wtM="
+    "vendorHash": "sha256-hpoeXO3RfnI49UAqtF4rmX75DXCfsl4XTjIPGFyI/Nc="
   },
   "fortios": {
-    "hash": "sha256-fWz3OAIOSVHNA6x8i6f/ewcC0WwWDYzeaT8rz3vFDWA=",
+    "hash": "sha256-SENWlcDkb6S73yKratGSlT151wWuR43B40SoK7Hb6Qs=",
     "homepage": "https://registry.terraform.io/providers/fortinetdev/fortios",
     "owner": "fortinetdev",
     "proxyVendor": true,
     "repo": "terraform-provider-fortios",
-    "rev": "1.17.0",
+    "rev": "1.19.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-DwRfbD4AqB+4KLuYtqY5fUdzRrEpTIvL4VAM7nieJJA="
   },
   "gandi": {
-    "hash": "sha256-eVSMjXSYRedig93Tm2ZLpbuJhG3wKSBwfLli7OWs3dU=",
+    "hash": "sha256-fsCtmwyxkXfOtiZG27VEb010jglK35yr4EynnUWlFog=",
     "homepage": "https://registry.terraform.io/providers/go-gandi/gandi",
     "owner": "go-gandi",
     "repo": "terraform-provider-gandi",
-    "rev": "v2.2.3",
+    "rev": "v2.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uWTY8cFztXFrQQ7GW6/R+x9M6vHmsb934ldq+oeW5vk="
+    "vendorHash": "sha256-EiTWJ4bw8IwsRTD9Lt28Up2DXH0oVneO2IaO8VqWtkw="
   },
   "github": {
-    "hash": "sha256-I1FOJitXPJo/mlJCTXsJ1i+UCTImbtkJtEWAvV8wUP0=",
+    "hash": "sha256-y8DMpNSySMbe7E+sGVQcQdEyulq4Wnp5ryYD7FQO/fc=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v5.34.0",
+    "rev": "v6.0.0",
     "spdx": "MIT",
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-91hv73KEer3FyS9FWoQ0gV1VwRKZqAu/6fAughmX5D0=",
+    "hash": "sha256-sk18gC7ZecdvXIzYrNhyYLduttZrVVgekNjgYR379TY=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v16.3.0",
+    "rev": "v16.8.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-G7+3vqxdi4i21o1hYj2GVvoCdcmFN3ue1i4fuepucsw="
+    "vendorHash": "sha256-dfsIEyLyTTJJxMPXWyo0YuSaRrjL+qGL654TAgECWPM="
   },
   "google": {
-    "hash": "sha256-MysIqOj2FTxZL1K/+Ai9/Fv69kIFGEmhWJpWxvsiTcc=",
+    "hash": "sha256-mP2/XDQX/AagEmmUMDGzS6ATJpuJU21lmEvs2wFe7Tg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v4.80.0",
+    "rev": "v5.19.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jf7BnPmCMTMS3+vCy5AVIO4/tFBDtLDItXn9sDZNLRM="
+    "vendorHash": "sha256-0yCgFgRDGaJLGFEX3lZxoqrS1xWjqmRfYaYdMVpI2KI="
   },
   "google-beta": {
-    "hash": "sha256-xaSse89edfKWBM56oAE3r7IwJ7gdaArSw6flcFC7ZLk=",
+    "hash": "sha256-Hx9/hGT0cqNYkn1xojeolWrvFPWhh1gsKl/qxeejBzA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.80.0",
+    "rev": "v5.19.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jf7BnPmCMTMS3+vCy5AVIO4/tFBDtLDItXn9sDZNLRM="
+    "vendorHash": "sha256-0yCgFgRDGaJLGFEX3lZxoqrS1xWjqmRfYaYdMVpI2KI="
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
@@ -492,47 +494,47 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-pgyyOLkMu7W4llDb4oY72ujZ26SiQqvufVGWVv7y3Sk=",
+    "hash": "sha256-FcoWovmdPUcX4LcSF9MLpxvwK1ObFejump4ha0Fmdbw=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v2.2.0",
+    "rev": "v2.12.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-+I0nCbe/OK+9ax8PzLw+PCBHrNDTm96J1GITiNCQEfc="
+    "vendorHash": "sha256-lbtWI96iAjHNRbhJw2e8yWSGJD7hsMqy4ZGCScSH8ME="
   },
   "gridscale": {
-    "hash": "sha256-Xs3eWLwsHFTvuH0rUroB6lkzusjUiH3ajt6ila9v/9M=",
+    "hash": "sha256-5gidBMUfJ4DPKuRx/pF5Rlff7DPkIXBJ7qzCIy6bZm8=",
     "homepage": "https://registry.terraform.io/providers/gridscale/gridscale",
     "owner": "gridscale",
     "repo": "terraform-provider-gridscale",
-    "rev": "v1.21.1",
+    "rev": "v1.23.2",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "hcloud": {
-    "hash": "sha256-kuC4tm8ob9bg7iLcUaGEHMYh6XaZp4rQiVlnbo1Xzek=",
+    "hash": "sha256-D7RBrpOxfSfeip7z+mAkWBjSTVnnM/MfN7Qvl/E+nA0=",
     "homepage": "https://registry.terraform.io/providers/hetznercloud/hcloud",
     "owner": "hetznercloud",
     "repo": "terraform-provider-hcloud",
-    "rev": "v1.42.1",
+    "rev": "v1.45.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-r8njRjQGYESeHuD8pF6rRUe1j2VVMwoDITFi2StC5bk="
+    "vendorHash": "sha256-sipYN9Z76fib4j15VIn/1Rn7QelNNB2+KeFn5rIA6hM="
   },
   "helm": {
-    "hash": "sha256-pgV1xXhg8WIyF4RhJwAenTI6eAmtINveO8zqrKzLajQ=",
+    "hash": "sha256-Zj0mZfQhZimk3QozKHNU7quO/SqV3278Y+l9bFa8w/k=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/helm",
     "owner": "hashicorp",
     "repo": "terraform-provider-helm",
-    "rev": "v2.11.0",
+    "rev": "v2.12.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-a80+gjjoFOKI96pUMvTMyM90F5oCb1Ime8hPQcFedFE="
+    "vendorHash": "sha256-qoXWnAbjRsvFDtlDCfeaIjc5hZIbCgosyH0pXhHkWiA="
   },
   "heroku": {
-    "hash": "sha256-PexzolGXe0dy+6vGXVDTqtHGjF66DTtt4/GUyx78RMQ=",
+    "hash": "sha256-B/NaFe8KOKGJJlF3vZnpdMnbD1VxBktqodPBk+4NZEc=",
     "homepage": "https://registry.terraform.io/providers/heroku/heroku",
     "owner": "heroku",
     "repo": "terraform-provider-heroku",
-    "rev": "v5.2.6",
+    "rev": "v5.2.8",
     "spdx": null,
     "vendorHash": null
   },
@@ -556,20 +558,20 @@
     "vendorHash": "sha256-+D8HxLRUSh7bCN6j+NSkPZTabvqknY7uJ9F5JxefomA="
   },
   "http": {
-    "hash": "sha256-zffR6NS3i+aWF89c5NzKvuqWe6q8OPbRONY5gjsrUWE=",
+    "hash": "sha256-druSExXZeZMNWFIJQoQ/Xh0gCQQx0AnKbIAJQlRi8Po=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/http",
     "owner": "hashicorp",
     "repo": "terraform-provider-http",
-    "rev": "v3.4.0",
+    "rev": "v3.4.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-hxT9mpKifb63wlCUeUzgVo4UB2TnYZy9lXF4fmGYpc4="
+    "vendorHash": "sha256-GDeuiT3PV92t3CsD60CAmN8ED9j8UzDbRlk59SSCVCM="
   },
   "huaweicloud": {
-    "hash": "sha256-ogxzt57zD122xJv0qpHVyUzhHrH8U1RHfJihTLUcBbI=",
+    "hash": "sha256-gNMeblhzUWa2YTvy0bmMzP0NQ3Qe0Ibec4tEKHyTHR0=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.54.1",
+    "rev": "v1.62.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -592,13 +594,13 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-AGAr1O6gzkEG3MQ/AQZarzYnhMK2yilyf9rtKDOwKsM=",
+    "hash": "sha256-zTrVz4SqjqbU5T/kxvhKsJnx/VPPRUvQ6CMCqiclj7M=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.56.2",
+    "rev": "v1.61.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uUVU+2mXyhWq653ig8YlsRyqcQBHO9rrRJQwSHovQiM="
+    "vendorHash": "sha256-/kbrtNvEYU0mfoe2lPaZ/b8kAfkuP/6QVzUxRry/4+I="
   },
   "icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -609,32 +611,41 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "incus": {
+    "hash": "sha256-0KCP5ll6TszSTP2J9+dDK6qqNcVCPgLQrdMMrfVhmds=",
+    "homepage": "https://registry.terraform.io/providers/lxc/incus",
+    "owner": "lxc",
+    "repo": "terraform-provider-incus",
+    "rev": "v0.1.0",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-pKWKef0MtW90HBhDVtQlETt9TqnHnfW6Ck4gXShJVF0="
+  },
   "infoblox": {
-    "hash": "sha256-655WGpwE1BmWRdikvHtxxX8u4kOZ9cSLCZDr6QGfn5Y=",
+    "hash": "sha256-rjqtqfmQQoJIhMtP6sFOu/XfJ691E77P0Bf9gjml2yg=",
     "homepage": "https://registry.terraform.io/providers/infobloxopen/infoblox",
     "owner": "infobloxopen",
     "repo": "terraform-provider-infoblox",
-    "rev": "v2.4.1",
+    "rev": "v2.5.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "jetstream": {
-    "hash": "sha256-CFjgF02JZJ072mAMvRnObaq3t+SPeT2uXqkRvlRrG5c=",
+    "hash": "sha256-RlYl8DNx+XjLjMQ8CbVJH0p2ZwBrDNp2OCvzHxQ7zLA=",
     "homepage": "https://registry.terraform.io/providers/nats-io/jetstream",
     "owner": "nats-io",
     "repo": "terraform-provider-jetstream",
-    "rev": "v0.0.35",
+    "rev": "v0.1.1",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-OMDMpL9ox6tI9tkoSU0oVuFzRObmUGgGQy6RtsNbyIg="
+    "vendorHash": "sha256-NEGjgtrn6ZowqSF6NAK1NnSjYVUvfWuH/4R5ZPdTZSs="
   },
   "kafka": {
-    "hash": "sha256-cWFPuKU7CQU8TYy125N88saBGPkrGa+7mKLi3TlnM2I=",
+    "hash": "sha256-EECV3JMile7Lif/GuC5330OcAGm5ylc6k43fY4jRy80=",
     "homepage": "https://registry.terraform.io/providers/Mongey/kafka",
     "owner": "Mongey",
     "repo": "terraform-provider-kafka",
-    "rev": "v0.5.4",
+    "rev": "v0.6.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-gWomOX/NaYdcqspquqpRjqGnzLRY3iIUJALACf78TV8="
+    "vendorHash": "sha256-DKyDjcj7tovmlZeKjzun5YsCffTAJirp0z49kcOBq54="
   },
   "kafka-connect": {
     "hash": "sha256-PiSVfzNPEXAgONb/eaVAN4yPudn5glcHL0BLqE5PWsw=",
@@ -646,13 +657,13 @@
     "vendorHash": "sha256-cLp8w0UcO9Hork/GTLOGCcSvfaYEIKl5so3/0ELm79Y="
   },
   "keycloak": {
-    "hash": "sha256-itnXalLx5Bku7sxM5wKJs2vCvDeJnhR1bQ55ye1tpKs=",
+    "hash": "sha256-2Z7nQ5NKS18OtoXXLm/P1n64NAxLR8nfMGyS2y17lag=",
     "homepage": "https://registry.terraform.io/providers/mrparkers/keycloak",
     "owner": "mrparkers",
     "repo": "terraform-provider-keycloak",
-    "rev": "v4.3.1",
+    "rev": "v4.4.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-GhmawLENmRuG5ZbXEZAw8pYmHn2SN2ONzfSIVEyN4U4="
+    "vendorHash": "sha256-F78OR8EG0Vy3WVJWTOlAsIBazsSXGD6KeceYuGnBqjQ="
   },
   "kubectl": {
     "hash": "sha256-UkUwWi7Z9cSMyZakD6JxMl+qdczAYfZQgwroCUjFIUM=",
@@ -664,40 +675,40 @@
     "vendorHash": "sha256-lXQHo66b9X0jZhoF+5Ix5qewQGyI82VPJ7gGzc2CHao="
   },
   "kubernetes": {
-    "hash": "sha256-aPplKT6L9Lmp4St6DLtHywiunqLaABEB9urbtSfK8Ec=",
+    "hash": "sha256-CxzBTixyvsSSjZDv8GrxAB1oeRjJBB9nRAuKoASeKbI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/kubernetes",
     "owner": "hashicorp",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.23.0",
+    "rev": "v2.26.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-9AmfvoEf7E6lAblPIWizElng5GQJG/hQ5o6Mo3AN+EA="
+    "vendorHash": "sha256-mVC3Uf+4zWM7lXHXOfVI+okXI8gP1W5VyZyH+qVNX7o="
   },
   "launchdarkly": {
-    "hash": "sha256-sIu+3Vu99wxcA+fdYMXRMZzK7RpUlV37136wyn5H4WQ=",
+    "hash": "sha256-rv/jgGrjJrUzGBpUnkc0n/x/msxAc/45n/JKCrGPWMA=",
     "homepage": "https://registry.terraform.io/providers/launchdarkly/launchdarkly",
     "owner": "launchdarkly",
     "repo": "terraform-provider-launchdarkly",
-    "rev": "v2.15.1",
+    "rev": "v2.18.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-I+9hfKWBbclXXpthQc9LAHhZ7MYr/8I89mLeIVeae+Q="
+    "vendorHash": "sha256-JbrecA5pNIifikBHwqFL72hRfRFHHl29mFKE4nDdbkY="
   },
   "libvirt": {
-    "hash": "sha256-VO9fbRLz7mDYT8WORodnN4l3II2j+TdpV8cZ9M+NjTM=",
+    "hash": "sha256-yGlNBbixrQxjh7zgZoK3YXpUmr1vrLiLZhKpXvQULYg=",
     "homepage": "https://registry.terraform.io/providers/dmacvicar/libvirt",
     "owner": "dmacvicar",
     "repo": "terraform-provider-libvirt",
-    "rev": "v0.7.1",
+    "rev": "v0.7.6",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-4jAJf2FC83NdH4t1l7EA26yQ0pqteWmTIyrZDJdi7fg="
+    "vendorHash": "sha256-K/PH8DAi6Wj+isPx9xefQcLPKnrimfItZFSPfktTias="
   },
   "linode": {
-    "hash": "sha256-rGInk/2GCwd+pNnL3+009xuqhpR4kr7u8NYho1XRtqs=",
+    "hash": "sha256-ZhZ6Y8hPLL3ZxemCgDdGNC8waxNEKLMVtv3cNZtAoic=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v2.7.0",
+    "rev": "v2.16.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-KlzQ336zOsMUsCX8eanypXP32LxP+iTJDBvQdeWSv2k="
+    "vendorHash": "sha256-rwto/tgKfmUYCNNMZpBpZ3vHyl9I8RrgLVmPogkMYe8="
   },
   "linuxbox": {
     "hash": "sha256-MzasMVtXO7ZeZ+qEx2Z+7881fOIA0SFzSvXVHeEROtg=",
@@ -709,29 +720,29 @@
     "vendorHash": "sha256-Jlg3a91pOhMC5SALzL9onajZUZ2H9mXfU5CKvotbCbw="
   },
   "local": {
-    "hash": "sha256-LN9mYtFNPPlG3Wdz0ggS57zYMO2chf6JipRmn+OKCnw=",
+    "hash": "sha256-FeraMYTrcGQ7JwlCOMyOJdwhtdRHS1b5PA0lpSIwAVY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/local",
     "owner": "hashicorp",
     "repo": "terraform-provider-local",
-    "rev": "v2.4.0",
+    "rev": "v2.4.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ZjS40Xc8y2UBPn4rX3EgRoSapRvMEeVMGZE6z9tpsAQ="
+    "vendorHash": "sha256-T/YQsNpPISDSVi00KrLRX/+jFNQVl2ze/3D2ZRxmUjI="
   },
   "lxd": {
-    "hash": "sha256-0/nIdfCsmPaUkGkSkmWWioc6RZGTb0XWtvprjuDg2gU=",
+    "hash": "sha256-culY1Im8D4CtgC2LtTFFB0BgrNgLfDLT0I290+0NE3A=",
     "homepage": "https://registry.terraform.io/providers/terraform-lxd/lxd",
     "owner": "terraform-lxd",
     "repo": "terraform-provider-lxd",
-    "rev": "v1.10.2",
+    "rev": "v2.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-DMOyP8BX1502a+Hd7rwhpV2/nT0ECFKmKDPtWE6o0IM="
+    "vendorHash": "sha256-NHf6xjbbDHsTdjzZ0gIa08PE53Bjv2llBRIgNTx7fj4="
   },
   "mailgun": {
-    "hash": "sha256-r1E2Y5JRu77T29ebUNTXUEypnrsfYYbBhvpKZGt5T9w=",
+    "hash": "sha256-fg1I1lt2cA0DgxLnxYrm0V55pD9AkpAdonXVGYeFZwQ=",
     "homepage": "https://registry.terraform.io/providers/wgebis/mailgun",
     "owner": "wgebis",
     "repo": "terraform-provider-mailgun",
-    "rev": "v0.7.4",
+    "rev": "v0.7.5",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-yUXxq8NTOv8ZmWp0WiIID2cRU6AZiItIs99uGZpt9dc="
   },
@@ -753,30 +764,39 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI="
   },
+  "migadu": {
+    "hash": "sha256-4mT5BbOXl4OY99ao6nyQQgQImPk/1X7lOAZcAxYToQw=",
+    "homepage": "https://registry.terraform.io/providers/metio/migadu",
+    "owner": "metio",
+    "repo": "terraform-provider-migadu",
+    "rev": "2024.1.25",
+    "spdx": "0BSD",
+    "vendorHash": "sha256-eee9X1QTDqL9rIGOnnxLU6QlcSIeMLlTZnHYis+ht+w="
+  },
   "minio": {
-    "hash": "sha256-skwM0rqhsqQaut0Vuh5Baf8bWzsLOFCjUDk9w2mgB1E=",
+    "hash": "sha256-i3YYBffP7Jp3f0wN1ZwP+c7C8WN8EKUh7JOKzbH0R/I=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v1.17.2",
-    "spdx": "Apache-2.0",
-    "vendorHash": "sha256-4axdVO1VujG9qXtuNJHQqhANjciHIACMjuneqCj2omc="
+    "rev": "v2.0.1",
+    "spdx": "AGPL-3.0",
+    "vendorHash": "sha256-aIIkj0KpkIR+CsgPk4NCfhG7BMKaAQZy/49unQx4nWQ="
   },
   "mongodbatlas": {
-    "hash": "sha256-xFVCYeEcdQ/w+s99Ykd10liASIDJaA/eTfnMGT2hybU=",
+    "hash": "sha256-6XLPk4UNZVQLpY44MIVXabmHtkoQQ58WNfhmhW+/4Ow=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v1.11.0",
+    "rev": "v1.15.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Ae3y/lwIYFi6p5gCBVgo1GuCu218JB3zKljexETWu0s="
+    "vendorHash": "sha256-LBgZmVuBkeKNTPIk274owej+E4Ir0xcGkL4L05PhZUg="
   },
   "namecheap": {
-    "hash": "sha256-cms8YUL+SjTeYyIOQibksi8ZHEBYq2JlgTEpOO1uMZE=",
+    "hash": "sha256-g3i7jZBOl2umsyRk1z7Radv8a9Ry6oQ8oorv3YbY7Xo=",
     "homepage": "https://registry.terraform.io/providers/namecheap/namecheap",
     "owner": "namecheap",
     "repo": "terraform-provider-namecheap",
-    "rev": "v2.1.0",
+    "rev": "v2.1.2",
     "spdx": "Apache-2.0",
     "vendorHash": null
   },
@@ -790,68 +810,68 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-tbXRo7VNwjidyg/KcnwqmrxbnplMsUkCQAAsQb0WxSE=",
+    "hash": "sha256-4/MFR8AJanto5OuY0J3Yce3zI62D5bx2UklrTccpvP0=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.26.1",
+    "rev": "v3.32.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-BWCL84bDsfrcM9Bkc3G6r0RQ1YnonH1D9bDSywTcigw="
+    "vendorHash": "sha256-QluXNbTBc/EXCO3PmnBOSwSERK3t5NhCS4Jnz5hU97k="
   },
   "nomad": {
-    "hash": "sha256-urxTfyBv/vuX3Xowca625aNEsU4sxkmd24tis2YjR3Y=",
+    "hash": "sha256-KHbdP5kAs65Z31Fe7EjwUVlFaezgjCqECryF/hSXXXs=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/nomad",
     "owner": "hashicorp",
     "repo": "terraform-provider-nomad",
-    "rev": "v2.0.0",
+    "rev": "v2.1.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-L8BpkzTs5qcr31Nho66xzlNMVg2SqfZbj9pPAZrNuqA="
+    "vendorHash": "sha256-+0UAB4ZQfIyoCopQkm1hTCxDIa/J4gLDGwv4iInN4os="
   },
   "ns1": {
-    "hash": "sha256-faxvq99kkJS0rxNflmIhSDCO/VAVvPsIGV4MTgyRf+Y=",
+    "hash": "sha256-UHoOVITbfwZ7tviDuZ1Tp9aVgRpB9ZnCzk5EOZeH/Eo=",
     "homepage": "https://registry.terraform.io/providers/ns1-terraform/ns1",
     "owner": "ns1-terraform",
     "repo": "terraform-provider-ns1",
-    "rev": "v2.0.5",
+    "rev": "v2.0.10",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-FLQhshuqIcMeqrW6h68pXzPaY0VqRXhfL0YMpHyKfkY="
+    "vendorHash": "sha256-nkpKq8cAusokeuOk32n8QA9He9zQlaTFzUwLMHKzpqM="
   },
   "null": {
-    "hash": "sha256-ExXDbAXMVCTZBlYmi4kD/7JFB1fCFAoPL637+1N6rEI=",
+    "hash": "sha256-KOwJXGvMc9Xgq4Kbr72aW6RDwzldUrU1C3aDxpKO3qE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/null",
     "owner": "hashicorp",
     "repo": "terraform-provider-null",
-    "rev": "v3.2.1",
+    "rev": "v3.2.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vXyE0/tXzFHJPNq8MZ+NZItDWS3K7ZhtY23hGjtqRh8="
+    "vendorHash": "sha256-9MeLKrKV3OESkJ4kTB9A9c9IYY1QsME0CODIoGU+anU="
   },
   "nutanix": {
     "deleteVendor": true,
-    "hash": "sha256-p7ryvJEoMxfJWKNkUlpZL6lgJt5I93eHRh5qev5RGJ4=",
+    "hash": "sha256-p1VhGSor/uxQYiSb9enAeu6dtLRuXMKk9m2DtPEj6vs=",
     "homepage": "https://registry.terraform.io/providers/nutanix/nutanix",
     "owner": "nutanix",
     "repo": "terraform-provider-nutanix",
-    "rev": "v1.9.2",
+    "rev": "v1.9.5",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-xZHk/rkq2H4Bkr+ugTHrkb4Al2ky0zOWEQmZtiXV48s=",
+    "hash": "sha256-X7/v25Ges3F69LQs1SEXNLwiCkHX+/VrJ7y2XtE+2bg=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v5.11.0",
+    "rev": "v5.31.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-Y3sLtuN55vgO35aWM6c2zIChkF5Q+8zlvH5NOJF/tRU=",
+    "hash": "sha256-PaiLWAvEW7YKAWgd6n0ZaLFrkq+5GxV+O2eF5nPZAeE=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v4.3.0",
+    "rev": "v4.8.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-2w/cdB8ySt+nimU4KXSpWjWMkeX7rEmhYHBJWQPJ5PI="
+    "vendorHash": "sha256-LDKnlCxp1NWSWjb0vujoq3npeQXfyT+dJK6gp1gMQDc="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
@@ -863,76 +883,85 @@
     "vendorHash": null
   },
   "opennebula": {
-    "hash": "sha256-0XeGaHyN+u5QEU9RUr51FVi13HNmjBN6mnFwfilPw5s=",
+    "hash": "sha256-Bz/JKPbdxKS7VDnQoXnZ5ajqh++ujl+4wIS49BDtT94=",
     "homepage": "https://registry.terraform.io/providers/OpenNebula/opennebula",
     "owner": "OpenNebula",
     "repo": "terraform-provider-opennebula",
-    "rev": "v1.3.0",
+    "rev": "v1.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-W7UGOtyFsIMXPqFDnde2XlzU7klR7Fs00mSuJ9ID20A="
+    "vendorHash": "sha256-Hd6vh4ihuR1rRk5yIu1mPuDMb4Not4soKld10MfOuGU="
   },
   "openstack": {
-    "hash": "sha256-Iauu0sQf8wq4Ev8JflxrthXYe99YDnt5ZzWQ/q3Bjfw=",
+    "hash": "sha256-kD1UfsnSLMFBzPZNguT3XaIXk0+Tp4qCPfNV3FonaIo=",
     "homepage": "https://registry.terraform.io/providers/terraform-provider-openstack/openstack",
     "owner": "terraform-provider-openstack",
     "repo": "terraform-provider-openstack",
-    "rev": "v1.52.1",
+    "rev": "v1.54.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-NnB8deqIeiB66Kba9LWT62fyI23HL57VcsTickoTRwI="
+    "vendorHash": "sha256-WHsYDcvLE1i+wCHGNF6eE8yVpPbP5SLG7ZK1AL7xMXI="
   },
   "opentelekomcloud": {
-    "hash": "sha256-dNA6rNzbXFycKRKwJl+/HqUKCKn678KqthIRhmOe72M=",
+    "hash": "sha256-ZDZ5sOWpmsGc+ESWkib2gws8XOeN35WEpi9/R2262yg=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.35.6",
+    "rev": "v1.36.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-PHtTE3puaeIKXr9mf2bDhhHI51L4XVfOPhL7c5AvlBA="
+    "vendorHash": "sha256-2gZ3+XK5FF4hQ2zGjULrPj3QYrCG9MNFLdcVdxgzX9s="
   },
   "opsgenie": {
-    "hash": "sha256-Jz3JMq39C2NvA0kvJdjjkOHNvZOMuw4Fq2+nyVHRIL4=",
+    "hash": "sha256-ZssKhfwFrzCjvlebEmKAHWBInN5daVqxbmVFoA92dv8=",
     "homepage": "https://registry.terraform.io/providers/opsgenie/opsgenie",
     "owner": "opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.29",
+    "rev": "v0.6.35",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "ovh": {
-    "hash": "sha256-U1gjD3NUm3/KqnbjgM91qe5gy/x/9Mn3Q4VW2XXBRw4=",
+    "hash": "sha256-jQ+eitK5kX12yso+cSltZWRPc/3P2v4W4H2+TbPKvNI=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v0.33.0",
+    "rev": "v0.37.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "pagerduty": {
-    "hash": "sha256-wVXGDWpKVujS5FfvDM7quCuXRFP2MBlJra7qTyFJgDM=",
+    "hash": "sha256-WjRfkMMgGuqSpJd4514heDQD4SaiH7gIkZwJzzqxoZk=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v2.16.2",
+    "rev": "v3.9.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "pass": {
-    "hash": "sha256-hFgNWw6ZmATo0bFZvJL9z/lJF506KsBewigGoFj67sM=",
+    "hash": "sha256-GQ2g7VyK+eeBqW3LMR4U0gMYsvQnG3y+KEKKkvnmfsk=",
     "homepage": "https://registry.terraform.io/providers/camptocamp/pass",
     "owner": "camptocamp",
     "repo": "terraform-provider-pass",
-    "rev": "v2.0.0",
+    "rev": "v2.1.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-sV6JPKzpA1+uoUBmdWpUSk70cl9ofQqr7USbK+4RVDs="
+    "vendorHash": "sha256-Koojva0MAw5WC942VbxZ6d1Pf1VwFvJMmp16TsHRS3w="
+  },
+  "porkbun": {
+    "hash": "sha256-YWUccesHNy8mdP5iWtXP1macOLGRKqqla6dWGYihJAo=",
+    "homepage": "https://registry.terraform.io/providers/cullenmcdermott/porkbun",
+    "owner": "cullenmcdermott",
+    "repo": "terraform-provider-porkbun",
+    "rev": "v0.2.5",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-pbJk35O8EowCa2dgLCrPDgakR0EJVaAnEvePGnrl/YQ="
   },
   "postgresql": {
-    "hash": "sha256-8ihu/qnPknrHeZjZ0MNcUL3qjH/gvEsOnZKDI93Hdh4=",
+    "hash": "sha256-UNnAe5alro4dEZ9x2ZDsjybOgHq2IVs8w9rMcMJBm8w=",
     "homepage": "https://registry.terraform.io/providers/cyrilgdn/postgresql",
     "owner": "cyrilgdn",
     "repo": "terraform-provider-postgresql",
-    "rev": "v1.20.0",
+    "rev": "v1.22.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-zsjx61qUV7nB26ghpl3T2AcXVMHblUQ0JNQ0xUnO+6Y="
+    "vendorHash": "sha256-omJjWeCLIdHIySQW8tcDPQ1XPmfWbPDOGwPUedrb8Bw="
   },
   "powerdns": {
     "hash": "sha256-NtJs2oNJbjUYNFsbrfo2RYhqOlKA15GJt9gi1HuTIw0=",
@@ -942,6 +971,24 @@
     "rev": "v1.5.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
+  },
+  "project": {
+    "hash": "sha256-ZE3OW83tz2DfcwFn8KfZZYQuWdl335zJecC3Qzn0xPg=",
+    "homepage": "https://registry.terraform.io/providers/jfrog/project",
+    "owner": "jfrog",
+    "repo": "terraform-provider-project",
+    "rev": "v1.4.0",
+    "spdx": "Apache-2.0",
+    "vendorHash": "sha256-i7wota4ezfBA2AoSGO8OdbJcZQizXrPRJYE/WJSTFss="
+  },
+  "proxmox": {
+    "hash": "sha256-ikXLLNoAjrnGGGI3fHTKFXm8YwqNazE/U39JTjOBsW4=",
+    "homepage": "https://registry.terraform.io/providers/Telmate/proxmox",
+    "owner": "Telmate",
+    "repo": "terraform-provider-proxmox",
+    "rev": "v2.9.14",
+    "spdx": "MIT",
+    "vendorHash": "sha256-um4iOwYO6ASv9wpu5Jua9anUZBKly4yVgI224Fk2dOM="
   },
   "rabbitmq": {
     "hash": "sha256-ArteHTNNUxgiBJamnR1bJFDrvNnqjbJ6D3mj1XlpVUA=",
@@ -953,22 +1000,22 @@
     "vendorHash": "sha256-j+3qtGlueKZgf0LuNps4Wc9G3EmpSgl8ZNSLqslyizI="
   },
   "rancher2": {
-    "hash": "sha256-thojEtfA8vn5fMTBuOClAKt3rlKs2XK7/RRMYSHAoMM=",
+    "hash": "sha256-k4lJszOUxeOmpBX8wFiIg6MmVUWqH6OTuj0/OJgr0ZA=",
     "homepage": "https://registry.terraform.io/providers/rancher/rancher2",
     "owner": "rancher",
     "repo": "terraform-provider-rancher2",
-    "rev": "v3.1.1",
+    "rev": "v4.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-2uNawlNPmByjoIjufl3yMfo2MdV+MsXqSRVEWursHKc="
+    "vendorHash": "sha256-8XBsQuzEtg8nybJOFHkkr4nfp4WxnmgXqt0ci7q0CbI="
   },
   "random": {
-    "hash": "sha256-IsXKdS3B5kWY5LlNKM0fYjp2uM96ngi6vZ9F46MmfcA=",
+    "hash": "sha256-8RRfoxDXa9pScyZ8CXBuWODlahd3lH0IzPaV0yb7GpI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/random",
     "owner": "hashicorp",
     "repo": "terraform-provider-random",
-    "rev": "v3.5.1",
+    "rev": "v3.6.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ScY/hAb14SzEGhKLpnJ8HrWOccwc2l0XW6t+f62LyWM="
+    "vendorHash": "sha256-f89G4Ln6JX1uJNeH7Vv69Fkibh1K3jOiULVvcn4ILao="
   },
   "remote": {
     "hash": "sha256-x0mTouv+hRGznyn2XxohWzPb0vjJvJf6kDlWrLJ/JvA=",
@@ -980,22 +1027,22 @@
     "vendorHash": "sha256-dMT3PEYNu9NxwLmY5SHa79yeVSB8Pi3UBEHiGvGGVmU="
   },
   "rundeck": {
-    "hash": "sha256-GkX5p6hV66G45JG3aJmYD5e2LQvf6kmfa6fQK10tc68=",
+    "hash": "sha256-VPkHnSOTnRvvX6+K0L0q5IqSSFCE6VPdg2BaSejFMNc=",
     "homepage": "https://registry.terraform.io/providers/rundeck/rundeck",
     "owner": "rundeck",
     "repo": "terraform-provider-rundeck",
-    "rev": "v0.4.3",
+    "rev": "v0.4.7",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "scaleway": {
-    "hash": "sha256-YARTRjmrweBJAa5PAWZ/2yayBa9Q09vp1AgVJNxB53Q=",
+    "hash": "sha256-ygCr2kxnVoR2IvtvQI483Urd5sLU6U+TCHYW1FXy1Tc=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.27.0",
+    "rev": "v2.37.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-TiR7t6RaaLT+1gqgdq/Dsegft3dqv7xwFAeeT6pNRbM="
+    "vendorHash": "sha256-JXSXDJqRGZDk1xyyWhv+S9Jl5duBN9RR71eukDc6ODQ="
   },
   "secret": {
     "hash": "sha256-MmAnA/4SAPqLY/gYcJSTnEttQTsDd2kEdkQjQj6Bb+A=",
@@ -1007,22 +1054,22 @@
     "vendorHash": null
   },
   "selectel": {
-    "hash": "sha256-oA//8+TedHk1zB4xj47kUNVEYXaMhEGas72xjU2uVHk=",
+    "hash": "sha256-p9XH9/sIVyY2f957/8KI91y5GCn1/MEGY+QBsArvYJA=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v3.11.0",
+    "rev": "v4.0.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-3oVyxtl/d9coyNDk2Cj3WnkVUAsW56YZPXhUXL3DJGk="
+    "vendorHash": "sha256-FjJosTjFRJnBW22IB9UHfZe9KWrT1h12InyUl0q7a28="
   },
   "sentry": {
-    "hash": "sha256-L/aZ4/xCVZk3C6AGglzCj5T9XnoI/uiLbRASNAHwcro=",
+    "hash": "sha256-sUXOH0cbD5Zf3e4KHLUYM8vu2knJdfIWZ+fq9HMfJ54=",
     "homepage": "https://registry.terraform.io/providers/jianyuan/sentry",
     "owner": "jianyuan",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.11.2",
+    "rev": "v0.12.2",
     "spdx": "MIT",
-    "vendorHash": "sha256-5XAetSjMtRffP/xExRUXfclDutEFV0VL3drusaB4rnM="
+    "vendorHash": "sha256-C4gyHcfWN7v5a5gB8CjoDkAlqRxgd6bpsT8n9St2tEM="
   },
   "shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",
@@ -1034,13 +1081,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "signalfx": {
-    "hash": "sha256-ILh5mdTyzU0AfJzyGH9JK1QsOER0BtKn9vXyRaGeb8g=",
+    "hash": "sha256-n8IpbCt8DKl4AIurIy5NnoZ3vWJyqrQvYEho6UEDmWc=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.0.0",
+    "rev": "v9.1.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-PQU4VC5wHcB70UkZaRT8jtz+qOAONU2SxtRrTmml9vY="
+    "vendorHash": "sha256-aw1q9iCQKu4SynnbTRI8Tx+UbKWjG+2PFS5iDIirgh8="
   },
   "skytap": {
     "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",
@@ -1051,122 +1098,140 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "slack": {
+    "hash": "sha256-efYNaDvy9cQmR4VhUABF+ozAh6M3y+em8bQtHlU7A2o=",
+    "homepage": "https://registry.terraform.io/providers/pablovarela/slack",
+    "owner": "pablovarela",
+    "repo": "terraform-provider-slack",
+    "rev": "v1.2.2",
+    "spdx": "GPL-3.0",
+    "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
+  },
   "snowflake": {
-    "hash": "sha256-v4rpdOsEYy0coZUq7frvF+IVLhI3Vz8Q6fk4koFg9a4=",
+    "hash": "sha256-ZPqKctqmAaF7obRDdK2Jn5kGihjyPZhl8IoAprcXuUI=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
     "owner": "Snowflake-Labs",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.70.0",
+    "rev": "v0.87.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-7jB1p6+EVUp03Bw7AyL8jH/n1tslkPmK7FIqFbde1n4="
+    "vendorHash": "sha256-hvaZBOeAVutoKv46BLE1ud1Ox0K0InpTSG5G2WwTj5s="
   },
   "sops": {
-    "hash": "sha256-D1Yzs8hDimMP9y8ZRbizEhic3vGtLcZjOVSuSMUAqPk=",
+    "hash": "sha256-ZastswL5AVurQY3xn6yx3M1BMvQ9RjfcZdXX0S/oZqw=",
     "homepage": "https://registry.terraform.io/providers/carlpett/sops",
     "owner": "carlpett",
     "repo": "terraform-provider-sops",
-    "rev": "v0.7.2",
+    "rev": "v1.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
+    "vendorHash": "sha256-8W1PK4T98iK1N6EB6AVjvr1P9Ja51+kSOmYAEosxrh8="
   },
   "spotinst": {
-    "hash": "sha256-PzIQ8hYCoZOdNoFvHGBGG/3ROIBl6micozonoMojG0Q=",
+    "hash": "sha256-9hSrU4pSlbcGM0HHKg/xIPz4DTvds6+yIFYbQ+xmPrA=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.134.0",
+    "rev": "v1.162.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ptMO8xtL5STVapeZbie+6UHR4AcLbHkzXTz7sPfbsV4="
+    "vendorHash": "sha256-lOLX/ZcBbh7TzsKO9w/dB1gm0KD9ezlXNjWRBBQVgsQ="
+  },
+  "ssh": {
+    "hash": "sha256-1UN5QJyjCuxs2vQYlSuz2jsu/HgGTxOoWWRcv4qcwow=",
+    "homepage": "https://registry.terraform.io/providers/loafoe/ssh",
+    "owner": "loafoe",
+    "repo": "terraform-provider-ssh",
+    "rev": "v2.7.0",
+    "spdx": "MIT",
+    "vendorHash": "sha256-vcuUt3WIo1TnLApch410JgtyCzliQRYMQQQ2Z9diDZ8="
   },
   "stackpath": {
-    "hash": "sha256-7KQUddq+M35WYyAIAL8sxBjAaXFcsczBRO1R5HURUZg=",
+    "hash": "sha256-aCaoRxlV/UxYobHC5OqFO8nt9oQgyug1AuJffhnwauc=",
     "homepage": "https://registry.terraform.io/providers/stackpath/stackpath",
     "owner": "stackpath",
     "repo": "terraform-provider-stackpath",
-    "rev": "v1.5.0",
+    "rev": "v2.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-OGYiynCwbJU2KisS7Y6xmLuBKOtQvh3MWPrvBk/x95U="
+    "vendorHash": "sha256-G+5vSXhxmt0Qsqt7vnecPZfIxAonNF3l7ygQZ0nemnU="
   },
   "statuscake": {
-    "hash": "sha256-yky6aCRK1I9NOEWcz6n6uvU+6HBJcLPQr1LLVO+34jE=",
+    "hash": "sha256-zXBZZA+2uRN2FeGrayq0a4EBk7T+PvlBIwbuxwM7yBc=",
     "homepage": "https://registry.terraform.io/providers/StatusCakeDev/statuscake",
     "owner": "StatusCakeDev",
     "repo": "terraform-provider-statuscake",
-    "rev": "v2.1.0",
+    "rev": "v2.2.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-fgvNdBwkz+YHOrLRQSe1D+3/VUhttKkJGzV6cg57g8s="
+    "vendorHash": "sha256-9M1DsE/FPQK8TG7xCJWbU3HAJCK3p/7lxdzjO1oAfWs="
   },
   "sumologic": {
-    "hash": "sha256-R2t754J438nDkifE0zEtYO5q6g6N4CVQdZn9DoBiuVQ=",
+    "hash": "sha256-fO7EsELdBElvosfbyKYnun7pJhoy5tTADGgYHqi9nEQ=",
     "homepage": "https://registry.terraform.io/providers/SumoLogic/sumologic",
     "owner": "SumoLogic",
     "repo": "terraform-provider-sumologic",
-    "rev": "v2.25.0",
+    "rev": "v2.28.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-iNBM4Y24vDGPKyb5cppSogk145F0/pAFmOzEeiWgfLI="
   },
   "tailscale": {
-    "hash": "sha256-kQARVkZM0lZtZNTftQ5JXHtVoeCiChNmq9t9yRXvK0g=",
+    "hash": "sha256-1OSGJham+oJLQUcSm+Iea9SDM5VhOcE7Bz+ZgxM4Lww=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.13.9",
+    "rev": "v0.13.13",
     "spdx": "MIT",
-    "vendorHash": "sha256-7qDPVKcBQuJQlya6UHjo5YPLgKl0qz1NlU2TuEf8T+0="
+    "vendorHash": "sha256-w0S9ACnDNZsEvYEkS2Q/8I2doM3AmgpzmgRXgA7CaTw="
   },
   "talos": {
-    "hash": "sha256-aP5hiR+b31+QjVWvNPxYkzijTUnFGpgR3f5XuN1Pzx8=",
+    "hash": "sha256-DoO2aGoBkuafPJGNz0opmkFw4wwUgsczA2D0bSXQAlg=",
     "homepage": "https://registry.terraform.io/providers/siderolabs/talos",
     "owner": "siderolabs",
     "repo": "terraform-provider-talos",
-    "rev": "v0.3.2",
+    "rev": "v0.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-0HRhwUGDE4y7UFlXyD0w8zl4NV5436L4SRhrb8vQGyc="
+    "vendorHash": "sha256-FWwHAaUKUw7DyNs4sAlkLkGNj48wMJgpFvfQgbp8lFs="
   },
   "tencentcloud": {
-    "hash": "sha256-OA/GnrdOv9gbnGESdMdw7sc9kRcWI4A6A79ZLOQzyJU=",
+    "hash": "sha256-vcq7DvYv4dHd7nO4iwCWePuPwM2mIMfC438FkpG/Iwo=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.81.22",
+    "rev": "v1.81.77",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "tfe": {
-    "hash": "sha256-KYJ37/lr/ZC3CSbWEYemM9pzzWDAlfNQS0KP68VqPso=",
+    "hash": "sha256-/YEDeDH+6J1p/p0myonruRx4BiYao2zy40kMMb+Jv6o=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/tfe",
     "owner": "hashicorp",
     "repo": "terraform-provider-tfe",
-    "rev": "v0.48.0",
+    "rev": "v0.52.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Q66BRTiZ/Yuk7+fQWhqM8WCCRNVnfu6qx4E9jr+goXI="
+    "vendorHash": "sha256-kDR4CB3RAvGC/NkT4PJ7BxI2v8WSfI2mfGSW+d1J2ZI="
   },
   "thunder": {
-    "hash": "sha256-CZjoWme/f1F5JzYlntEKL5ijRF/qR3h4ZTiv9vwzbJI=",
+    "hash": "sha256-ezolcZ652YUV/CDoNKNRZkiRpRoa5AMqHxeYLxluA5A=",
     "homepage": "https://registry.terraform.io/providers/a10networks/thunder",
     "owner": "a10networks",
     "repo": "terraform-provider-thunder",
-    "rev": "v1.2.2",
+    "rev": "v1.4.1",
     "spdx": "BSD-2-Clause",
     "vendorHash": null
   },
   "time": {
-    "hash": "sha256-FehWmIkL0o2pleafN/mlBa46cdFqCFUS+coOwFPdb9M=",
+    "hash": "sha256-5AOp6y/Nmu59uB9QXqwkcgakyzAyiAclZ9EJa7+MvpY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/time",
     "owner": "hashicorp",
     "repo": "terraform-provider-time",
-    "rev": "v0.9.1",
+    "rev": "v0.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-MLh/we8KNrDBy2BAMZ6B/gBe0p3xJ7l/imNzTHciJjs="
+    "vendorHash": "sha256-TrkmjqUJi28sN9POzEuKzKyPQiS1RtVpj9NbsM3jW0I="
   },
   "tls": {
-    "hash": "sha256-DBOkfvT0+mlgaWiBHggZUKvHL8jLZjQjRi0xFZKgcoM=",
+    "hash": "sha256-2K18jY2+oPvelMtZ2o4WJcAPhc93nCvJdHq+VNfmWZI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/tls",
     "owner": "hashicorp",
     "repo": "terraform-provider-tls",
-    "rev": "v4.0.4",
+    "rev": "v4.0.5",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-k7aW5ZD6pAtdT6tTXy8YaJlFS5WR5FzPd9eINgPBYJM="
+    "vendorHash": "sha256-6uzqx9Tz9JcHYHhG/tWYJaUP8yWe533gB0h1+YF+tgQ="
   },
   "triton": {
     "deleteVendor": true,
@@ -1179,59 +1244,67 @@
     "vendorHash": "sha256-UuLHaOEG6jmOAgfdNOtLyUimlAr3g6K8n3Ehu64sKqk="
   },
   "turbot": {
-    "hash": "sha256-oG6Mme9Q4T/IgQF1jheL0SaV3NDCEGHvw5fbXIcgwPE=",
+    "hash": "sha256-OmhNZZcCw6tGsL3Ha4cdg76GHqMjKeRB6aOXfqkIOjQ=",
     "homepage": "https://registry.terraform.io/providers/turbot/turbot",
     "owner": "turbot",
     "repo": "terraform-provider-turbot",
-    "rev": "v1.10.0",
+    "rev": "v1.10.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "ucloud": {
-    "hash": "sha256-+xqt0y/DIx+h8L+73B00ou0Cy9f60sGijgw95N8eROk=",
+    "hash": "sha256-OFnNEmODAluhEzVvQ22jblUhpzIlIvjsYZZmtepAcX8=",
     "homepage": "https://registry.terraform.io/providers/ucloud/ucloud",
     "owner": "ucloud",
     "repo": "terraform-provider-ucloud",
-    "rev": "v1.37.0",
+    "rev": "v1.38.6",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "utils": {
-    "hash": "sha256-+11qnWZPtCyAjON5XZye9069332lKEpJdy504dYhOLw=",
+    "hash": "sha256-DW2O1tou+HfOgzSca/SS3tFeo0efGt1ATVs5SmwUvmk=",
     "homepage": "https://registry.terraform.io/providers/cloudposse/utils",
     "owner": "cloudposse",
     "repo": "terraform-provider-utils",
-    "rev": "1.11.0",
+    "rev": "1.18.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-D7geLjmJoelbHolyS5IhnGNNl6kD8ZGtCRWcy+j2dxA="
+    "vendorHash": "sha256-srhu8iepW/JmPrJ7PuXyk0GEWMwzpNpkny33z7ZdrdM="
   },
   "vault": {
-    "hash": "sha256-IPVD4VVC6jn3BWltqfCk2+GFSkQRNK7jkJ3/QmgBxqg=",
+    "hash": "sha256-hxEy9S6BH4pjHzmGu7LMFuV/dXc9oJ4PKLX4TYlxAJo=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vault",
     "owner": "hashicorp",
-    "proxyVendor": true,
     "repo": "terraform-provider-vault",
-    "rev": "v3.20.0",
+    "rev": "v3.25.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-xd2tsJ5k/8PCSegHqeyJ1ePFBS0ho8SD+4m4QyFMTL0="
+    "vendorHash": "sha256-cKD8+YiclFNR9xWr68F17mQjtxhAsPBpXhT6luvXp3I="
   },
   "vcd": {
-    "hash": "sha256-ltdkB9PqmuCs5daRjcThVhy1wIoDW21yBiwtRo/pMss=",
+    "hash": "sha256-TP9COMofx4c2GZ0dQkfopn4iq8ddfV3WwuNjTu6yQnU=",
     "homepage": "https://registry.terraform.io/providers/vmware/vcd",
     "owner": "vmware",
     "repo": "terraform-provider-vcd",
-    "rev": "v3.10.0",
+    "rev": "v3.11.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-p/wTnEr/+qe8S83x6EtfsnIMVUF1VWZVHOq0vLDbh60="
+    "vendorHash": "sha256-IqmmlLr+bwfSRJtKbK/fiBdbf2vX61+6h6rZizD1vw8="
   },
   "venafi": {
-    "hash": "sha256-/5X/+BilaYwi1Vce7mIvVeHjTpVX/OuYquZ+2BGfxrs=",
+    "hash": "sha256-GkbBD6oDtHy18utI2dsDWmVIUiU8bILg6rsXEX7gfbI=",
     "homepage": "https://registry.terraform.io/providers/Venafi/venafi",
     "owner": "Venafi",
     "repo": "terraform-provider-venafi",
-    "rev": "v0.16.1",
+    "rev": "v0.18.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-smeySV1kReZyF9bRCunEr89IV219f9845wcHHI1zFz8="
+    "vendorHash": "sha256-Afe3fzzdQi4fvliAb42sP47BYlpefu9zeeI0o814j40="
+  },
+  "virtualbox": {
+    "hash": "sha256-Oijdx22s7wIDC+Sms097rFVNRF9tzMlUNlPMV7GSsiI=",
+    "homepage": "https://registry.terraform.io/providers/terra-farm/virtualbox",
+    "owner": "terra-farm",
+    "repo": "terraform-provider-virtualbox",
+    "rev": "v0.2.2-alpha.1",
+    "spdx": "MIT",
+    "vendorHash": "sha256-SF11E60OQiRdf+Pf6XyJg60yGRnGOcSzhrYccrWaeYE="
   },
   "vpsadmin": {
     "hash": "sha256-MFEerVGKros+9zubcjK8qUpYQveKuBgbfyai32Y0KLI=",
@@ -1243,48 +1316,48 @@
     "vendorHash": "sha256-OzcDMLWwnBYIkBcL6U1t9oCNhZZokBUf2TONb+OfgPE="
   },
   "vra7": {
-    "hash": "sha256-J+lhKDl8CGpDgdfuv0uWd7yDNiwrWAzoXCxkEidqJH4=",
+    "hash": "sha256-dvdsfUKhl1z/iHsh+/2HDb6mEX86P9FgynkzVQgtM5w=",
     "homepage": "https://registry.terraform.io/providers/vmware/vra7",
     "owner": "vmware",
     "repo": "terraform-provider-vra7",
-    "rev": "v3.0.7",
+    "rev": "v3.0.12",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "vsphere": {
-    "hash": "sha256-Tvc3+HVsrD2CgfRVqfcF7DtszI+s7HrIgP2wiImqOXo=",
+    "hash": "sha256-VWPKSR6xIph5dnMBSmLB/laY+DmNdshn6+94amCFQ5g=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vsphere",
     "owner": "hashicorp",
     "repo": "terraform-provider-vsphere",
-    "rev": "v2.4.2",
+    "rev": "v2.6.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-MrDY1zx4aXKRGmhTPMLnIVBAJh+szdL6rH0m0amlYS8="
+    "vendorHash": "sha256-d9CdK5AHFZRC89Xko4vyx8jR10fkG1VYGVILlXM7zgw="
   },
   "vultr": {
-    "hash": "sha256-h9MQv4BTv9y4A6HSDE3dIV7aKwaIWRYy5EyE2T0mpG4=",
+    "hash": "sha256-+J4RHQWOy4Wfv2/8UNHe8g2fp2yAxzqzZZRv749B3Yc=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.15.1",
+    "rev": "v2.19.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "wavefront": {
-    "hash": "sha256-bBJZT5h/2ZFTKhFXMWj/xf+DAMGdUZw8E07PuIsMVpU=",
+    "hash": "sha256-yNNtOkodzwxKvHQq9GZlUicezGW6u2ih6ry/cOtJQGM=",
     "homepage": "https://registry.terraform.io/providers/vmware/wavefront",
     "owner": "vmware",
     "repo": "terraform-provider-wavefront",
-    "rev": "v5.0.1",
+    "rev": "v5.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-77pijBYzCQoaZgMRNRwZEAJVM51EMGezXXcrfn9ae1Q="
+    "vendorHash": "sha256-GRnVhGpVgFI83Lg34Zv1xgV5Kp8ioKTFV5uaqS80ATg="
   },
   "yandex": {
-    "hash": "sha256-Y4bEbqUTxP1QDf1r8a3vtxV+RG3dqjHxHN9p/nB3qz8=",
+    "hash": "sha256-utRegZYS19yjd1Gnqnet+XKaLop81JrNO+Oq7Gzms1M=",
     "homepage": "https://registry.terraform.io/providers/yandex-cloud/yandex",
     "owner": "yandex-cloud",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.97.0",
+    "rev": "v0.110.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-1Sw4a9HFYt24Om5Bbbmx6JskhbMd4zTv6K6WOrQetpQ="
+    "vendorHash": "sha256-eE8gYyIGVBmw02I6j9GoEm2TiOmHGWhOs5pcqj/6PaA="
   }
 }

@@ -55,11 +55,6 @@ pushd $SOURCE_DIR
 echo ":: Creating gemset.nix"
 bundix --lockfile=./Gemfile.lock  --gemfile=./Gemfile --gemset=$TARGET_DIR/gemset.nix
 
-echo ":: Creating yarn.nix"
-yarn install
-cp yarn.lock $TARGET_DIR
-yarn2nix > $TARGET_DIR/yarn.nix
-
 # needed to avoid import from derivation
 jq --arg VERSION "$VERSION" '. += {name: "Zammad", version: $VERSION}' package.json > $TARGET_DIR/package.json
 

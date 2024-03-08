@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "primesieve";
-  version = "11.1";
+  version = "12.0";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primesieve";
     rev = "v${version}";
-    hash = "sha256-b6X3zhoJsO3UiWfeW4zbKsaoofIWArJi5usof3efQ0k=";
+    hash = "sha256-xmOq18falvT8PKhJPwWm/aeOMf7I3ywR+h5OkTM3G6s=";
   };
 
   nativeBuildInputs = [ cmake ];

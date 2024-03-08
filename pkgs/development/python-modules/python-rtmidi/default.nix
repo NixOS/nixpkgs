@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "python-rtmidi";
-  version = "1.5.5";
+  version = "1.5.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_rtmidi";
     inherit version;
-    hash = "sha256-Pz6bD6SX6BPMC91zsorgeXfJGAPk1VULx8ejShUBy94=";
+    hash = "sha256-f5reaLBorgkADstWKulSHaOiNDYa1USeg/xzRUTQBPo=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SpotlightKid/python-rtmidi";
     changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

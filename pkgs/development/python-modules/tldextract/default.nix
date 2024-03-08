@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , filelock
 , idna
 , pytest-mock
@@ -14,15 +14,17 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "tldextract";
-  version = "3.5.0";
-  format = "pyproject";
+  pname = "tldextract";
+  version = "5.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TfHGW5W+YdWUKOhhHpVeVObx1Eg9Po1XM9OpBiFV6RA=";
+  src = fetchFromGitHub {
+    owner = "john-kurkowski";
+    repo = "tldextract";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/VBbU8FuB8MEuX6MgGO44+gfqVjl1aHHDHncHY2Jo38=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +45,6 @@ buildPythonPackage rec {
     responses
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --pylint" ""
-  '';
-
   pythonImportsCheck = [
     "tldextract"
   ];
@@ -59,6 +56,7 @@ buildPythonPackage rec {
       from the registered domain and subdomains of a URL.
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
+    changelog = "https://github.com/john-kurkowski/tldextract/blob/${version}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

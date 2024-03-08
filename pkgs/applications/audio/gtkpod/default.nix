@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.skeidel ];
+    maintainers = [ ];
   };
 }

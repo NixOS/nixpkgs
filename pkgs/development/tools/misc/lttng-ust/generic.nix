@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   configureFlags = [ "--disable-examples" ];
 
   propagatedBuildInputs = [ liburcu ];

@@ -16,5 +16,6 @@ bundlerApp {
     license = licenses.gpl3;
     maintainers = with maintainers; [ manveru nicknovitski ];
     platforms = platforms.unix;
+    mainProgram = "docker-sync";
   };
 }

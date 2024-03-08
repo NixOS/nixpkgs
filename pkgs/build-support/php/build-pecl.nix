@@ -8,10 +8,9 @@
 , nativeBuildInputs ? [ ]
 , postPhpize ? ""
 , makeFlags ? [ ]
-, src ? fetchurl {
+, src ? fetchurl ({
     url = "https://pecl.php.net/get/${pname}-${version}.tgz";
-    inherit (args) sha256;
-  }
+  } // lib.filterAttrs (attrName: _: lib.elem attrName [ "sha256" "hash" ]) args)
 , passthru ? { }
 , ...
 }@args:

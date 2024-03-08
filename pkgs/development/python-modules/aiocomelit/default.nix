@@ -1,7 +1,9 @@
 { lib
 , aiohttp
 , buildPythonPackage
+, colorlog
 , fetchFromGitHub
+, pint
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -9,8 +11,8 @@
 
 buildPythonPackage rec {
   pname = "aiocomelit";
-  version = "0.0.6";
-  format = "pyproject";
+  version = "0.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -18,12 +20,12 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiocomelit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u6CyqDFLgnIVak0UqN4JmL8ll/li3k9EhFs7iC5oZ9U=";
+    hash = "sha256-Fjf7mXXUnBTtPfNHHJdFx5ho4eg0N3iHCGsACa4IMjY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiocomelit --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aiocomelit --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
@@ -32,9 +34,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    pint
   ];
 
   nativeCheckInputs = [
+    colorlog
     pytestCheckHook
   ];
 

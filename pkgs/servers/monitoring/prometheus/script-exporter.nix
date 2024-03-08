@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "adhocteam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "t/xgRalcHxEcT1peU1ePJUItD02rQdfz1uWpXDBo6C0=";
+    hash = "sha256-t/xgRalcHxEcT1peU1ePJUItD02rQdfz1uWpXDBo6C0=";
   };
 
-  vendorSha256 = "Hs1SNpC+t1OCcoF3FBgpVGkhR97ulq6zYhi8BQlgfVc=";
+  vendorHash = "sha256-Hs1SNpC+t1OCcoF3FBgpVGkhR97ulq6zYhi8BQlgfVc=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) script; };
 

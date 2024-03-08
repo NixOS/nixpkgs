@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   # Upstream has a `./vendor` directory with all deps which we rely upon.
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -21,5 +21,6 @@ buildGoModule rec {
     description = "Share terminal via browser for remote work or shared sessions";
     license = licenses.mit;
     maintainers = with maintainers; [ andys8 ];
+    mainProgram = "tty-share";
   };
 }

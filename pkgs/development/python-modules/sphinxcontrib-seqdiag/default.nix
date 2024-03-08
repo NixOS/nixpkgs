@@ -29,6 +29,8 @@ buildPythonPackage rec {
     "sphinxcontrib.seqdiag"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx seqdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-seqdiag";

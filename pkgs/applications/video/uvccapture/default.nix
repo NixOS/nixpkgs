@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "uvccapture";
   };
 }

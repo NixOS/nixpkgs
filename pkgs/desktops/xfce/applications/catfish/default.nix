@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     file
     which
     intltool
@@ -63,6 +63,12 @@ python3Packages.buildPythonApplication rec {
 
   # Disable check because there is no test in the source distribution
   doCheck = false;
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "${pname}-"; };
 

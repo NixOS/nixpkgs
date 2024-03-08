@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "w3lib";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DhGY8bdFGVtrPdGkzWYBH7+C8wpNnauu4fnlyG8CAnQ=";
+    hash = "sha256-7Vt06ZfuoqvjwTIfkW40QUTujpBypvM0Y+6OV/hYpLE=";
   };
 
   nativeCheckInputs = [

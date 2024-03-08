@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , flac
+, libgpiod
 , libmad
 , libpulseaudio
 , libvorbis
@@ -22,6 +23,7 @@
 , openssl
 , portaudioSupport ? stdenv.isDarwin
 , portaudio
+, slimserver
 , AudioToolbox
 , AudioUnit
 , Carbon
@@ -43,13 +45,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "1.9.9.1449";
+  version = "2.0.0.1468";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "8581aba8b1b67af272b89b62a7a9b56082307ab6";
-    hash = "sha256-/qyoc0/7Q8yiu5AhuLQFUiE88wf+/ejHjSucjpoN5bI=";
+    rev = "fd89d67b1b9a17a6dd212be0c91d0417b440f60a";
+    hash = "sha256-wYVRlv+Y1jvdAGlj2zXKUhQBwWX9pGgNX6U71PsfySg=";
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]
@@ -61,7 +63,8 @@ stdenv.mkDerivation {
     ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile
     ++ optional resampleSupport soxr
-    ++ optional sslSupport openssl;
+    ++ optional sslSupport openssl
+    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) libgpiod;
 
   enableParallelBuilding = true;
 
@@ -80,7 +83,8 @@ stdenv.mkDerivation {
     ++ optional portaudioSupport "-DPORTAUDIO"
     ++ optional pulseSupport "-DPULSEAUDIO"
     ++ optional resampleSupport "-DRESAMPLE"
-    ++ optional sslSupport "-DUSE_SSL";
+    ++ optional sslSupport "-DUSE_SSL"
+    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) "-DRPI";
 
   env = lib.optionalAttrs stdenv.isDarwin {
     LDADD = "-lportaudio -lpthread";
@@ -95,12 +99,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    inherit (slimserver) tests;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Lightweight headless squeezebox client emulator";
     homepage = "https://github.com/ralph-irving/squeezelite";
     license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
+    mainProgram = binName;
     maintainers = with maintainers; [ adamcstephens ];
     platforms = if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
   };

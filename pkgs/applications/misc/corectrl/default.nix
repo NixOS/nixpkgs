@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.3.5";
+  version = "1.3.10";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-HETD2+acxJf30iC6UwRXD/onFYo3ki4RwAAVs4NbSAw=";
+    sha256 = "sha256-fN4dX0Ya2DvPEkuwtKIw1zT+JEbC2zyJKtcGwLVdAUs=";
   };
   patches = [
     ./polkit-dir.patch

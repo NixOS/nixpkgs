@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "pretender";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3i7zNzwURSNSleiW+KBkxdqBv9yshtBu1hLKtjWe9OE=";
+    hash = "sha256-adWdUlsReRptSgRAjNH9bWy9dpwpuAWtVxlbDL2pMmk=";
   };
 
-  vendorHash = "sha256-uw3mpf27OH5uNKmvCFcTw+YFoxVEqT4Fz/CSl9Wjbv0=";
+  vendorHash = "sha256-kDHRjd3Y90ocBGSJ0B2jAM9tO+iDSXoUOzLEWX2G0J4=";
 
   # Tests require network access
   doCheck = false;

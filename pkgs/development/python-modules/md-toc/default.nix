@@ -5,21 +5,26 @@
 , pyfakefs
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.2.0";
-  format = "setuptools";
+  version = "8.2.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "frnmst";
-    repo = pname;
-    rev = version;
-    hash = "sha256-7Udmon/5E741+v2vBHHL7h31r91RR33hN1WhL3FiDQc=";
+    repo = "md-toc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nKkKtLEW0pohXiMtjWl2Kzh7SRwZJ/yzhXpDyluLodc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     fpyutils

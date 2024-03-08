@@ -6,11 +6,11 @@
 , databricks-cli
 , docker
 , entrypoints
-, fetchpatch
 , fetchPypi
 , flask
 , gitpython
 , gorilla
+, graphene
 , gunicorn
 , importlib-metadata
 , markdown
@@ -26,11 +26,11 @@
 , pyarrow
 , pytz
 , pyyaml
-, querystring_parser
+, querystring-parser
 , requests
+, setuptools
 , scikit-learn
 , scipy
-, shap
 , simplejson
 , sqlalchemy
 , sqlparse
@@ -38,25 +38,23 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "2.11.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+ZKujqnHNQI0S69IxOxEeqnvv6iWW8CQho5hYyNPTrA=";
+    hash = "sha256-ouwp7oYvGZVSCPuOBeUeXp0u3HF143zxNtlDuYGoJOk=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/core-requirements.txt \
-      --replace "gunicorn<21" "gunicorn"
-  '';
 
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
   pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [ "pytz" "pyarrow" ];
 
@@ -70,6 +68,7 @@ buildPythonPackage rec {
     flask
     gitpython
     gorilla
+    graphene
     gunicorn
     importlib-metadata
     markdown
@@ -83,7 +82,7 @@ buildPythonPackage rec {
     pyarrow
     pytz
     pyyaml
-    querystring_parser
+    querystring-parser
     requests
     scikit-learn
     scipy

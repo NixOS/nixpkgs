@@ -13,13 +13,13 @@
 
 buildDotnetModule rec {
   pname = "OpenUtau";
-  version = "0.1.158";
+  version = "0.1.327";
 
   src = fetchFromGitHub {
     owner = "stakira";
     repo = "OpenUtau";
     rev = "build/${version}";
-    hash = "sha256-/+hlL2sj/juzWrDcb5dELp8Zdg688XK8OnjKz20rx/M=";
+    hash = "sha256-Bss32Fk4yBEFqaIxT2dfdvWXz09sO6akiitDQBXoSvY=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -44,11 +44,15 @@ buildDotnetModule rec {
   # socket cannot bind to localhost on darwin for tests
   doCheck = !stdenv.isDarwin;
 
-  # needed until upstream bumps to dotnet 7
+  # net7.0 replacement needed until upstream bumps to dotnet 7
   postPatch = ''
     substituteInPlace OpenUtau/OpenUtau.csproj OpenUtau.Test/OpenUtau.Test.csproj --replace \
-      "<TargetFramework>net6.0</TargetFramework>" \
-      "<TargetFramework>net7.0</TargetFramework>"
+      '<TargetFramework>net6.0</TargetFramework>' \
+      '<TargetFramework>net7.0</TargetFramework>'
+
+    substituteInPlace OpenUtau/Program.cs --replace \
+      '/usr/bin/fc-match' \
+      '${lib.getExe' fontconfig "fc-match"}'
   '';
 
   # need to make sure proprietary worldline resampler is copied
@@ -74,12 +78,13 @@ buildDotnetModule rec {
       binaryNativeCode
     ];
     license = with licenses; [
-      # dotnet code
+      # dotnet code and worldline resampler binary
       mit
-      # worldline resampler
-      unfree
+      # worldline resampler binary - no source is available (hence "unfree") but usage of the binary is MIT
+      unfreeRedistributable
     ];
     maintainers = with maintainers; [ lilyinstarlight ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "OpenUtau";
   };
 }

@@ -31,6 +31,7 @@ buildFHSEnv rec {
     ocl-icd  # needed for opencl
     numactl  # needed by hfs ocl backend
     ncurses5  # needed by hfs ocl backend
+    zstd  # needed from 20.0
   ] ++ (with xorg; [
     libICE
     libSM
@@ -71,6 +72,8 @@ buildFHSEnv rec {
       "bin/hotl"  # hda/otl manipulation tool
       "bin/hython"  # hython
       "bin/hkey"  # license administration
+      "bin/husk"  # hydra rendereing tool
+      "bin/mantra"  # mantra renderer
       "houdini/sbin/sesinetd"
     ];
   in ''
@@ -80,7 +83,7 @@ buildFHSEnv rec {
       mkdir -p $out/$(dirname $executable)
 
       echo "#!${stdenv.shell}" >> $out/$executable
-      echo "$WRAPPER ${unwrapped}/$executable \$@" >> $out/$executable
+      echo "$WRAPPER ${unwrapped}/$executable \"\$@\"" >> $out/$executable
     done
 
     cd $out
@@ -93,6 +96,6 @@ buildFHSEnv rec {
   ];
 
   runScript = writeScript "${name}-wrapper" ''
-    exec $@
+    exec "$@"
   '';
 }

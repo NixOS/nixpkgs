@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "co2signal";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

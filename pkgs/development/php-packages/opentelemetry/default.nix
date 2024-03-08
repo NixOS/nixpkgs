@@ -1,7 +1,7 @@
 { lib, buildPecl, fetchFromGitHub }:
 
 let
-  version = "1.0.0beta7";
+  version = "1.0.1";
 in buildPecl {
   inherit version;
   pname = "opentelemetry";
@@ -10,7 +10,7 @@ in buildPecl {
     owner = "open-telemetry";
     repo = "opentelemetry-php-instrumentation";
     rev = version;
-    hash = "sha256-FDCgRN+aV9c6ceKszrHDBmi14dEhrirlU8cbYrmIGdY=";
+    hash = "sha256-VHUzRhTtHygHoW+poItaphV+mxe4rmmSfGgesUgPz8Q=";
   };
 
   sourceRoot = "source/ext";

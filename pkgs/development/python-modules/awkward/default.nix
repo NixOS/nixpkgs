@@ -1,28 +1,39 @@
 { lib
+, fsspec
+, stdenv
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
-, awkward-cpp
+, fetchFromGitHub
 , hatch-fancy-pypi-readme
 , hatchling
-, numba
+, awkward-cpp
+, importlib-metadata
 , numpy
 , packaging
-, setuptools
 , typing-extensions
+, jax
+, jaxlib
+, numba
+, setuptools
+, numexpr
+, pandas
+, pyarrow
+, pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.3.1";
-  format = "pyproject";
+  version = "2.6.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NLROXEbh4MKvBFuj+4+Wa2u37P9vuQ0Ww8kK+CYWt5E=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "awkward";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5wUTEB0iVffyCi671y4EsTum+7K1GDeAHlhdLpRgKnQ=";
   };
 
   nativeBuildInputs = [
@@ -32,26 +43,38 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     awkward-cpp
+    fsspec
+    importlib-metadata
     numpy
     packaging
-  ]  ++ lib.optionals (pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    importlib-metadata
   ];
 
   dontUseCmakeConfigure = true;
 
+  pythonImportsCheck = [ "awkward" ];
+
   nativeCheckInputs = [
-    pytestCheckHook
+    fsspec
     numba
     setuptools
+    numexpr
+    pandas
+    pyarrow
+    pytest-xdist
+    pytestCheckHook
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # no support for darwin
+    jax
+    jaxlib
   ];
 
+  # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
     "tests-cuda"
-  ];
-
-  pythonImportsCheck = [
-    "awkward"
   ];
 
   meta = with lib; {

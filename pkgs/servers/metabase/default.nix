@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metabase";
-  version = "0.46.7";
+  version = "0.48.7";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${version}/metabase.jar";
-    hash = "sha256-LGtjzODVkoOr8yGcE+fpgMzINQG3lBchTujTsZGgARU=";
+    hash = "sha256-W0FP9c6vMLCfK93eaXPeF1mkBAI2KMjQ9EpGx7hbRg8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     license     = licenses.agpl3Only;
     platforms   = platforms.all;
     maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+    mainProgram = "metabase";
   };
   passthru.tests = {
     inherit (nixosTests) metabase;

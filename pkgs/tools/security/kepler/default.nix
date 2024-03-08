@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Exein-io/kepler";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kepler";
   };
 }

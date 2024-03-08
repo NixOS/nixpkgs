@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
+, setuptools
 , pytestCheckHook
 , scipy
 , numpy
@@ -13,22 +14,21 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.21.0";
+  version = "0.23.0";
+  pyproject = true;
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7G4tIoQGS7/YPpAhUn0CRf8fl/DdjdqySPWgJEL0trA=";
+    hash = "sha256-TUZ8SdQAOV1CaIlDl4uXYVHvdlEkOz6E48S3pUS6UE0=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  # image tests download files over the network
-  pytestFlagsArray = [ "-sv" "--ignore=mlxtend/image" ];
-  # Fixed in master, but failing in release version
-  # see: https://github.com/rasbt/mlxtend/pull/721
-  disabledTests = [ "test_variance_explained_ratio" ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     scipy
@@ -37,6 +37,19 @@ buildPythonPackage rec {
     pandas
     matplotlib
     joblib
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-sv"
+  ];
+
+  disabledTestPaths = [
+    # image tests download files over the network
+    "mlxtend/image"
   ];
 
   meta = with lib; {

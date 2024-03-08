@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "commentjson";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "vaidik";

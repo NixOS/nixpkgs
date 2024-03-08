@@ -76,5 +76,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/thestinger/termite/";
     maintainers = with maintainers; [ koral ];
     platforms = platforms.all;
+    mainProgram = "termite";
   };
 }

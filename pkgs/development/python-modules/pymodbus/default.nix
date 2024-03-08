@@ -3,14 +3,15 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
-, mock
 , prompt-toolkit
 , pygments
 , pyserial
 , pytest-asyncio
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , redis
+, setuptools
 , sqlalchemy
 , twisted
 , typer
@@ -18,15 +19,26 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.5.2";
-  format = "setuptools";
+  version = "3.6.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
-    repo = pname;
+    repo = "pymodbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FOmR9yqLagqcsAVxqHxziEcnZ5M9QpL2qIp8x2gS2PU=";
+    hash = "sha256-CnMCHFwzNyzTgVyFDSlE7ggI6eXXYbtGuERIomUa3uA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov-report html " ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   passthru.optional-dependencies = {
     repl = [
@@ -42,7 +54,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    mock
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
@@ -66,6 +77,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests often hang
     "test_connected"
+  ] ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+    "test_split_serial_packet"
+    "test_serial_poll"
+    "test_simulator"
   ];
 
   meta = with lib; {

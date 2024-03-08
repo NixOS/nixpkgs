@@ -164,6 +164,15 @@ let
           of the wireguard network has to be adjusted as well.
         '';
       };
+
+      metric = mkOption {
+        default = null;
+        type = with types; nullOr int;
+        example = 700;
+        description = lib.mdDoc ''
+          Set the metric of routes related to this Wireguard interface.
+        '';
+      };
     };
 
   };
@@ -395,7 +404,7 @@ let
             optionalString interfaceCfg.allowedIPsAsRoutes
               (concatMapStringsSep "\n"
                 (allowedIP:
-                  ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
+                  ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}" ${optionalString (interfaceCfg.metric != null) "metric ${toString interfaceCfg.metric}"}''
                 ) peer.allowedIPs);
         in ''
           ${wg_setup}
@@ -577,6 +586,7 @@ in
         }) all_peers;
 
     boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+    boot.kernelModules = [ "wireguard" ];
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
     systemd.services =

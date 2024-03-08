@@ -18,16 +18,21 @@ stdenv.mkDerivation rec {
 
   configureFlags = if !stdenv.isDarwin
     then [ "--with-libc=libc.so.6" ]
-    else [ "--with-libc=libc${stdenv.targetPlatform.extensions.sharedLibrary}" ];
+    else [ "--with-libc=libc${stdenv.hostPlatform.extensions.sharedLibrary}" ];
 
   dontAddDisableDepTrack = stdenv.isDarwin;
 
-  patches = lib.optionals remove_getaddrinfo_checks [
+  patches = [
+    # Fixes several issues with `osint.m4` that causes incorrect check failures when using newer
+    # versions of clang: missing `stdint.h` for `uint8_t` and unused `sa_len_ptr`.
+    ./clang-osint-m4.patch
+  ] ++ lib.optionals remove_getaddrinfo_checks [
     (fetchpatch {
       name = "0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";
       url = "https://raw.githubusercontent.com/buildroot/buildroot/master/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";
       sha256 = "sha256-e+qF8lB5tkiA7RlJ+tX5O6KxQrQp33RSPdP1TxU961Y=";
-    }) ];
+    })
+  ];
 
   postPatch = ''
     substituteInPlace include/redefgen.sh --replace 'PATH=/bin:/usr/bin:/sbin:/usr/sbin' ""

@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "gtop";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "aksakalli";
     repo = "gtop";
     rev = "v${version}";
-    hash = "sha256-7jcfJOdy3PKT6+07iaZnjWnlPLk9BhPn8LApk23E8l4=";
+    hash = "sha256-FKbaUV28d0JH9tmTSJBFYQrM5iensnIpcXUFFvXDMe4=";
   };
 
-  npmDepsHash = "sha256-CUfoVkG74C7HpcO3T9HmwbxHsYAgW1vYBAgNvx2av0k=";
+  npmDepsHash = "sha256-QKMLFalaOQjhgVkv8lIDnKyH7+GOqOKIl3zoLwrHIF4=";
 
   dontNpmBuild = true;
 
@@ -23,5 +23,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/aksakalli/gtop";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tfc ];
+    mainProgram = "gtop";
   };
 }

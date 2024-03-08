@@ -1,8 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  python3
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,11 +11,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "t3l3machus";
     repo = "psudohash";
+    # https://github.com/t3l3machus/psudohash/issues/8
     rev = "2d586dec8b5836546ae54b924eb59952a7ee393c";
     hash = "sha256-l/Rp9405Wf6vh85PFrRTtTLJE7GPODowseNqEw42J18=";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [
+    python3
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -36,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/t3l3machus/psudohash";
     license = licenses.mit;
     maintainers = with maintainers; [ exploitoverload ];
+    mainProgram = "psudohash";
   };
 }

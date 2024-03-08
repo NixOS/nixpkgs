@@ -90,6 +90,7 @@ stdenvNoCC.mkDerivation {
     ${netrcPhase}
     # required that git uses the netrc file
     mv {,.}netrc
+    export NETRC=$PWD/.netrc
     export HOME=$PWD
   '';
 

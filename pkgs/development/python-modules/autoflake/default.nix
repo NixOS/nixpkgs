@@ -9,12 +9,12 @@
 }:
 buildPythonPackage rec {
   pname = "autoflake";
-  version = "2.0.1";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HOUgExt/OWkVJC/pHlciH01CQIUpu+Ouk62v7ShlkeA=";
+    hash = "sha256-jCAR+jRwG519zwW5hzvEhZ1Pzk5i3+qQ3/79FXb18B0=";
   };
 
   nativeBuildInputs = [

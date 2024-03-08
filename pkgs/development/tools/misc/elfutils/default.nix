@@ -8,11 +8,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.189";
+  version = "0.190";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Ob2PGjOOK3zUq8P/EaDt3G5pD2lXildHjYF5tBSHCMg=";
+    hash = "sha256-jgCjqbXwS8HcJzroYoHS0m7UEgILOR/8wjGY8QIx1pI=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     description = "A set of utilities to handle ELF objects";
     platforms = platforms.linux;
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
-    broken = stdenv.hostPlatform.isStatic;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
     license = with licenses; [ gpl2Only lgpl3Plus gpl3Plus ];

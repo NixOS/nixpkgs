@@ -7,7 +7,7 @@ let
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
     name="${pname}-${version}.AppImage";
-    sha512 = "CrSXmRVatVSkMyB1QaNSL/tK60rQvT9JraRtYYLl0Fau3M1LJXK9yqvt77AjwIwIvi2Dm5SROG+c4rA1XtI4Yg==";
+    hash = "sha512-CrSXmRVatVSkMyB1QaNSL/tK60rQvT9JraRtYYLl0Fau3M1LJXK9yqvt77AjwIwIvi2Dm5SROG+c4rA1XtI4Yg==";
   };
 
   appimageContents = appimageTools.extractType2 {

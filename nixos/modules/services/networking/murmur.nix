@@ -119,12 +119,7 @@ in
         description = lib.mdDoc "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.murmur;
-        defaultText = literalExpression "pkgs.murmur";
-        description = lib.mdDoc "Overridable attribute of the murmur package to use.";
-      };
+      package = mkPackageOption pkgs "murmur" { };
 
       password = mkOption {
         type = types.str;
@@ -331,6 +326,29 @@ in
         RuntimeDirectoryMode = "0700";
         User = "murmur";
         Group = "murmur";
+
+        # service hardening
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "full";
+        RestrictAddressFamilies = "~AF_PACKET AF_NETLINK";
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
       };
     };
 

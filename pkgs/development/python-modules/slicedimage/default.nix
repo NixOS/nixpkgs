@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "slicedimage";
   version = "4.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spacetx";

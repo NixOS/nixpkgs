@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , gfortran, blas, lapack, eigen
 , useMpi ? false
 , mpi
 , openssh
+, igraph
 }:
 
 # MPI version can only be built with LP64 interface.
@@ -11,24 +12,14 @@ assert useMpi -> !blas.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "arpack";
-  version = "3.8.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "opencollab";
     repo = "arpack-ng";
     rev = version;
-    sha256 = "sha256-nc710iLRqy/p3EaVgbEoCRzNJ9GpKqqQp33tbn7R6lA=";
+    sha256 = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
   };
-
-  patches = [
-    # https://github.com/opencollab/arpack-ng/pull/301
-    (fetchpatch {
-      name = "pkg-config-paths.patch";
-      url = "https://github.com/opencollab/arpack-ng/commit/47fc83cb371a9cc8a8c058097de5e0298cd548f5.patch";
-      excludes = [ "CHANGES" ];
-      sha256 = "1aijvrfsxkgzqmkzq2dmaj8q3jdpg2hwlqpfl8ddk9scv17gh9m8";
-    })
-  ];
 
   nativeBuildInputs = [ cmake gfortran ];
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
@@ -56,10 +47,16 @@ stdenv.mkDerivation rec {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
 
-  passthru = { inherit (blas) isILP64; };
+  passthru = {
+    inherit (blas) isILP64;
+    tests = {
+      inherit igraph;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
+    changelog = "https://github.com/opencollab/arpack-ng/blob/${src.rev}/CHANGES";
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
       problems.

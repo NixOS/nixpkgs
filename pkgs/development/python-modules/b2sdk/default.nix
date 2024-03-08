@@ -11,6 +11,7 @@
 , pytest-mock
 , pythonOlder
 , requests
+, setuptools
 , setuptools-scm
 , tqdm
 , typing-extensions
@@ -18,17 +19,18 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.24.0";
-  format = "setuptools";
+  version = "1.29.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6zSjCt+J6530f1GMc/omP1zXKQKU1SDLLvslMWoqMcU=";
+    hash = "sha256-Talw1P0JnPdU+dDgC8J2TJSOV/LshgQyBbPYEqzKpfA=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -67,6 +69,7 @@ buildPythonPackage rec {
     "test_raw_api"
     "test_files_headers"
     "test_large_file"
+    "test_file_info_b2_attributes"
   ];
 
   pythonImportsCheck = [

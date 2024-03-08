@@ -5,13 +5,14 @@
 , cargo
 , fetchFromGitHub
 , fetchYarnDeps
-, fixup_yarn_lock
 , installShellFiles
 , lame
 , mpv-unwrapped
 , ninja
+, nixosTests
 , nodejs
 , nodejs-slim
+, prefetch-yarn-deps
 , protobuf
 , python3
 , qt6
@@ -27,29 +28,30 @@
 
 let
   pname = "anki";
-  version = "2.1.66";
-  rev = "70506aeb99d4afbe73321feaf75a2fabaa011d55";
+  version = "23.12.1";
+  rev = "1a1d4d5419c6b57ef3baf99c9d2d9cf85d36ae0a";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-eE64i/jTMvipakbQXzKu/dN+dyim7E4M+eP3d9GZhII=";
+    hash = "sha256-K38bhfU1076PxdKJFvnFb2w6Q9Q2MUmL+j8be3RZQYk=";
     fetchSubmodules = true;
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "csv-1.1.6" = "sha256-w728ffOVkI+IfK6FbmkGhr0CjuyqgJnPB1kutMJIUYg=";
+      "fsrs-0.1.0" = "sha256-KJgT01OmMbqgYFE5Fu8nblZl9rL5QVVMa2DNFsw6cdk=";
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
   };
+  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-3DUiwGTg7Nzd+bPJlc8aUW8bYrl7BF+CcjqkF6nW0qc=";
+    hash = "sha256-tOl+gLBE6SNPQvVWT/N7RKFaaP9SnpCBJf5dq2wCPuM=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -100,15 +102,15 @@ let
     inherit version src yarnOfflineCache;
 
     nativeBuildInputs = [
-      fixup_yarn_lock
       nodejs-slim
+      prefetch-yarn-deps
       yarn
     ];
 
     configurePhase = ''
       export HOME=$NIX_BUILD_TOP
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
     '';
@@ -121,13 +123,13 @@ in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
 
-  outputs = [ "doc" "man" "out" ];
+  outputs = [ "out" "doc" "man" ];
 
   inherit src;
 
   patches = [
-    ./patches/gl-fixup.patch
-    ./patches/no-update-check.patch
+    ./patches/disable-auto-update.patch
+    ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
   ];
 
@@ -135,8 +137,8 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [
     fakeGit
-    fixup_yarn_lock
     offlineYarn
+    prefetch-yarn-deps
 
     cargo
     installShellFiles
@@ -148,6 +150,7 @@ python3.pkgs.buildPythonApplication {
 
   buildInputs = [
     qt6.qtbase
+    qt6.qtsvg
   ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -232,7 +235,7 @@ python3.pkgs.buildPythonApplication {
 
     export HOME=$NIX_BUILD_TOP
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     patchShebangs ./ninja
     PIP_USER=1 ./ninja build wheels
@@ -266,6 +269,12 @@ python3.pkgs.buildPythonApplication {
     )
   '';
 
+  passthru = {
+    # cargoLock is reused in anki-sync-server
+    inherit cargoLock;
+    tests.anki-sync-server = nixosTests.anki-sync-server;
+  };
+
   meta = with lib; {
     description = "Spaced repetition flashcard program";
     longDescription = ''
@@ -283,7 +292,7 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ euank oxij paveloom ];
+    maintainers = with maintainers; [ euank oxij ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.isDarwin;
   };

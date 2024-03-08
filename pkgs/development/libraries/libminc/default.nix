@@ -1,16 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, zlib, netcdf, nifticlib, hdf5 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname   = "libminc";
-  version = "2.4.05";
-
-  owner = "BIC-MNI";
+  version = "2.4.06";
 
   src = fetchFromGitHub {
-    inherit owner;
-    repo   = pname;
-    rev    = "aa08255f0856e70fb001c5f9ee1f4e5a8c12d47d";  # new release, but no git tag
-    sha256 = "XMTO6/HkyrrQ0s5DzJLCmmWheye2DGMnpDbcGdP6J+A=";
+    owner = "BIC-MNI";
+    repo = "libminc";
+    rev = "refs/tags/release-${finalAttrs.version}";
+    hash = "sha256-HTt3y0AFM9pkEkWPb9cDmvUz4iBQWfpX7wLF9Vlg8hc=";
   };
 
   postPatch = ''
@@ -18,8 +16,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib nifticlib ];
-  propagatedBuildInputs = [ netcdf hdf5 ];
+  buildInputs = [
+    zlib
+    nifticlib
+  ];
+  propagatedBuildInputs = [
+    netcdf
+    hdf5
+  ];
 
   cmakeFlags = [
     "-DLIBMINC_MINC1_SUPPORT=ON"
@@ -41,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.free;
   };
-}
+})

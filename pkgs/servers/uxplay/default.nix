@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxplay";
-  version = "1.65.3";
+  version = "1.68.2";
 
   src = fetchFromGitHub {
     owner = "FDH2";
     repo = "UxPlay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ghimxgukQHBc0yVSpttF5lEVE6BTf9OL7RWmR5izxCo=";
+    hash = "sha256-Ax2RhIIWb7BvBvE8GQlR3lwTSA5P5Qpj45cOc8xZNtY=";
   };
 
   postPatch = ''
@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.azuwis ];
     platforms = lib.platforms.unix;
+    mainProgram = "uxplay";
   };
 })

@@ -1,22 +1,25 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
-  version = "0.36.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
     rev = "v${version}";
-    hash = "sha256-WZ+tyrx4ayFyPmDJq6dGaTRiR6bSQq5k5iOfb+ETe/I=";
+    hash = "sha256-BoFoF7V6bTQiJ+afGnivviU/s2ikOxAX06s+AwRxo8Q=";
   };
 
-  cargoHash = "sha256-HZiWmqIh21b12DP+hnx1pWBWgSa5j71kp6GCRKGMHv0=";
+  cargoHash = "sha256-B0K/lco7suYM0/02LaDbeqyt4zyiwoeBxhmUPsVTvkw=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -29,6 +32,13 @@ rustPlatform.buildRustPackage rec {
     # tests depend on network interface, may fail with virtual IPs.
     "--skip=validate_printed_urls"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd dufs \
+      --bash <($out/bin/dufs --completions bash) \
+      --fish <($out/bin/dufs --completions fish) \
+      --zsh <($out/bin/dufs --completions zsh)
+  '';
 
   meta = with lib; {
     description = "A file server that supports static serving, uploading, searching, accessing control, webdav";

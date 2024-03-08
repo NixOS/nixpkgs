@@ -19,6 +19,16 @@
       patch = ./bridge-stp-helper.patch;
     };
 
+  # Reverts the buggy commit causing https://bugzilla.kernel.org/show_bug.cgi?id=217802
+  dell_xps_regression = {
+    name = "dell_xps_regression";
+    patch = fetchpatch {
+      name = "Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
+      url = "https://raw.githubusercontent.com/openSUSE/kernel-source/1b02b1528a26f4e9b577e215c114d8c5e773ee10/patches.suse/Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
+      sha256 = "sha256-RHJdQ4p0msTOVPR+/dYiKuwwEoG9IpIBqT4dc5cJjf8=";
+    };
+  };
+
   request_key_helper =
     { name = "request-key-helper";
       patch = ./request-key-helper.patch;
@@ -33,8 +43,6 @@
     { name = "modinst-arglist-too-long";
       patch = ./modinst-arg-list-too-long.patch;
     };
-
-  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
     mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
@@ -56,5 +64,28 @@
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
+  };
+
+  rust_1_74 = {
+    name = "rust-1.74.patch";
+    patch = fetchpatch {
+      name = "rust-1.74.patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=80fe9e51510b23472ad0f97175556490549ed714";
+      hash = "sha256-yGt7PwqN/G+ZtZSt6eARvVFdkC8tnUiu0Fz4cFCyguM=";
+    };
+  };
+
+  rust_1_75 = {
+    name = "rust-1.75.patch";
+    patch = ./rust-1.75.patch;
+  };
+
+  rust_1_76 = {
+    name = "rust-1.76.patch";
+    patch = fetchurl {
+      name = "rust-1.76.patch";
+      url = "https://lore.kernel.org/rust-for-linux/20240217002638.57373-2-ojeda@kernel.org/raw";
+      hash = "sha256-q3iNBo8t4b1Rn5k5lau2myqOAqdA/9V9A+ok2jGkLdY=";
+    };
   };
 }

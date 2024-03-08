@@ -1,21 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, libcap, acl, oniguruma }:
+{ lib, stdenv, fetchFromGitHub, libcap, acl, oniguruma, liburing }:
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "3.0.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "sha256-/CiQUK6nmu3MtkG5PMQPn05qIO/M0Oy/LdBI/8oFdqA=";
+    hash = "sha256-/thPPueNrYzbxxZYAqlxZ2GEsceCzd+LkI84S8AS1mo=";
   };
 
-  buildInputs = [ oniguruma ] ++ lib.optionals stdenv.isLinux [ libcap acl ];
+  buildInputs = [ oniguruma ] ++ lib.optionals stdenv.isLinux [ libcap acl liburing ];
 
   # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "-flto" ""
+    substituteInPlace GNUMakefile --replace "-flto=auto" ""
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tavianator/bfs";
     license = licenses.bsd0;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ yesbox ];
+    maintainers = with maintainers; [ yesbox cafkafk ];
+    mainProgram = "bfs";
   };
 }

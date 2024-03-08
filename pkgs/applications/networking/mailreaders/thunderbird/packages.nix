@@ -11,7 +11,7 @@ rec {
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "4ae3f216833aec55421f827d55bc1b5fc2f0ad4fefecb27724a5be3318c351df24d30a4897b924e733ed2e3995be284b6d135049d46001143fb1c961fefc1830";
+      hash = "sha512-SuPyFoM67FVCH4J9VbwbX8LwrU/v7LJ3JKW+MxjDUd8k0wpIl7kk5zPtLjmVvihLbRNQSdRgARQ/sclh/vwYMA==";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -29,6 +29,7 @@ rec {
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = licenses.mpl20;
+      knownVulnerabilities = [ "Thunderbird 102 support has ended" ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-unwrapped";
@@ -43,13 +44,13 @@ rec {
 
   thunderbird-115 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "115.2.2";
+    version = "115.8.0";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "45843709c21eb19d69d43205da6b2f943b584811a29942ffef1933c1ce7882b48046b201c2ff198658fec2c53d479311d8a353731afe6ea53f97b31674d6074a";
+      sha512 = "a0bdd34bebda4973f714422293f10a5a96c2b12f097c68d76fa37c48943fdbfb32dd2e504faa0b88fd699118b1903e18c3bb54cb32cd5e2ff60c09966b23e79c";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.

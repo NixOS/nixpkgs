@@ -2,8 +2,8 @@
 # https://nim-lang.org/docs/nimc.html
 
 { lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
-, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security, nim-unwrapped
-, nim-unwrapped-2, nimble-unwrapped, nim }:
+, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
+, nim-unwrapped-2, nim-unwrapped-1, nim }:
 
 let
   parseCpu = platform:
@@ -74,14 +74,14 @@ let
 
 in {
 
-  nim-unwrapped = stdenv.mkDerivation (finalAttrs: {
+  nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
-    version = "1.6.14";
+    version = "2.0.2";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-0HDS8oriQA33/kpJ7OufRc1TmQaxB0gYVqCveo+oLck=";
+      hash = "sha256-ZPUdO/Vt6dDueeLKapzpRFSvmmOhQaaWnOjFmmC4LM8=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
@@ -96,7 +96,10 @@ in {
 
       ./extra-mangling.patch
       # Mangle store paths of modules to prevent runtime dependence.
-    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
+
+      ./openssl.patch
+      # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
+    ];
 
     configurePhase = let
       bootstrapCompiler = stdenv.mkDerivation {
@@ -144,7 +147,7 @@ in {
       ln -sf $out/nim/bin/nim $out/bin/nim
       ln -sf $out/nim/lib $out/lib
       ./install.sh $out
-      cp -a tools $out/nim/
+      cp -a tools dist $out/nim/
       runHook postInstall
     '';
 
@@ -157,12 +160,13 @@ in {
     };
   });
 
-  nim-unwrapped-2 = nim-unwrapped.overrideAttrs (finalAttrs: rec {
-    version = "2.0.0";
+  nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (finalAttrs: prevAttrs: {
+    version = "1.6.18";
     src = fetchurl {
-      url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-vWEB2EADb7eOk6ad9s8/n9DCHNdUtpX/hKO0rdjtCvc=";
+      url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
+      hash = "sha256-UCQaxyIpG6ljdT8EWqo1h7c8GqKK4pxXPBWluKYCoss=";
     };
+
     patches = [
       ./NIM_CONFIG_DIR.patch
       # Override compiler configuration via an environmental variable
@@ -172,51 +176,13 @@ in {
 
       ./extra-mangling.patch
       # Mangle store paths of modules to prevent runtime dependence.
-    ];
+    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
   });
 
-  nimble-unwrapped = stdenv.mkDerivation rec {
-    pname = "nimble-unwrapped";
-    version = "0.14.2";
-    strictDeps = true;
-
-    src = fetchFromGitHub {
-      owner = "nim-lang";
-      repo = "nimble";
-      rev = "v${version}";
-      hash = "sha256-8b5yKvEl7c7wA/8cpdaN2CSvawQJzuRce6mULj3z/mI=";
-    };
-
-    depsBuildBuild = [ nim-unwrapped ];
-    buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
-
-    nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
-
-    buildPhase = ''
-      runHook preBuild
-      HOME=$NIX_BUILD_TOP nim c $nimFlags src/nimble
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preBuild
-      install -Dt $out/bin src/nimble
-      runHook postBuild
-    '';
-
-    meta = with lib; {
-      description = "Package manager for the Nim programming language";
-      homepage = "https://github.com/nim-lang/nimble";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ ehmry ];
-      mainProgram = "nimble";
-    };
-  };
 } // (let
-  wrapNim = { nim', nimble', patches }:
-    let
-      targetPlatformConfig = stdenv.targetPlatform.config;
-      self = stdenv.mkDerivation (finalAttrs: {
+  wrapNim = { nim', patches }:
+    let targetPlatformConfig = stdenv.targetPlatform.config;
+    in stdenv.mkDerivation (finalAttrs: {
         name = "${targetPlatformConfig}-nim-wrapper-${nim'.version}";
         inherit (nim') version;
         preferLocalBuild = true;
@@ -328,20 +294,11 @@ in {
             $wrapperArgs
           ln -s $out/bin/${targetPlatformConfig}-testament $out/bin/testament
 
-        '' + lib.strings.optionalString (nimble' != null) ''
-          makeWrapper \
-            ${nimble'}/bin/nimble $out/bin/${targetPlatformConfig}-nimble \
-            --suffix PATH : $out/bin
-          ln -s $out/bin/${targetPlatformConfig}-nimble $out/bin/nimble
-
         '' + ''
           runHook postInstall
         '';
 
-        passthru = {
-          nim = nim';
-          nimble = nimble';
-        };
+        passthru = { nim = nim'; };
 
         meta = nim'.meta // {
           description = nim'.meta.description
@@ -349,20 +306,16 @@ in {
           platforms = with lib.platforms; unix ++ genode;
         };
       });
-    in self // {
-      pkgs = callPackage ../../../top-level/nim-packages.nix { nim = self; };
-    };
 in {
-
-  nim = wrapNim {
-    nim' = buildPackages.nim-unwrapped;
-    nimble' = buildPackages.nimble-unwrapped;
-    patches = [ ./nim.cfg.patch ];
-  };
 
   nim2 = wrapNim {
     nim' = buildPackages.nim-unwrapped-2;
-    nimble' = null;
     patches = [ ./nim2.cfg.patch ];
   };
+
+  nim1 = wrapNim {
+    nim' = buildPackages.nim-unwrapped-1;
+    patches = [ ./nim.cfg.patch ];
+  };
+
 })

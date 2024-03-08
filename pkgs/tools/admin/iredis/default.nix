@@ -6,26 +6,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iredis";
-  version = "1.13.2";
-  format = "pyproject";
+  version = "1.14.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laixintao";
     repo = "iredis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dGOB7emhuP+V0pHlSdS1L1OC4jO3jtf5RFOy0UFYiuY=";
+    hash = "sha256-ojS2wtxggZPp73n9SjPRAzBlnF1ScK/pNVGvAYKmQ5Y=";
   };
 
-  pythonRelaxDeps = [
-    "configobj"
-    "wcwidth"
-    "click"
-    "packaging"
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"'
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -65,5 +62,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://iredis.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
+    mainProgram = "iredis";
   };
 }

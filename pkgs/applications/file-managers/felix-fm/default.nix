@@ -3,31 +3,39 @@
 , fetchFromGitHub
 , pkg-config
 , bzip2
+, libgit2
+, zlib
 , zstd
 , zoxide
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.8.1";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = "felix";
     rev = "v${version}";
-    hash = "sha256-RDCX5+Viq/VRb0SXUYxCtWF+aVahI5WGhp9/Vn+uHqI=";
+    hash = "sha256-M+auLJeD5rDk5LJfTBg9asZ3J4DHsZG4UGRhXdZZVkc=";
   };
 
-  cargoHash = "sha256-kgI+afly+/Ag0witToM95L9b3yQXP5Gskwl4Lf4SusY=";
+  cargoHash = "sha256-GzaBaaGjBCz+xd1bpU2cebQvg5DO0qipHwhOerbq+ow=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     bzip2
+    libgit2
+    zlib
     zstd
   ];
 
   nativeCheckInputs = [ zoxide ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   buildFeatures = [ "zstd/pkg-config" ];
 
@@ -36,11 +44,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=functions::tests::test_list_up_contents"
     "--skip=state::tests::test_has_write_permission"
   ];
-
-  # Cargo.lock is outdated
-  postConfigure = ''
-    cargo metadata --offline
-  '';
 
   meta = with lib; {
     description = "A tui file manager with vim-like key mapping";

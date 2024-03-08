@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, lib, utils, pkgs, ... }:
+{ config, options, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -284,7 +284,7 @@ let
       # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
       # corresponding udev rules for now.  This was the behaviour in
       # udev <= 154.  See also
-      #   http://www.spinics.net/lists/hotplug/msg03935.html
+      #   https://www.spinics.net/lists/hotplug/msg03935.html
       substituteInPlace $out/60-persistent-storage.rules \
         --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
     ''; # */
@@ -307,7 +307,7 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit linkUnits udevRules extraUtils modulesClosure;
+    inherit linkUnits udevRules extraUtils;
 
     inherit (config.boot) resumeDevice;
 
@@ -316,7 +316,7 @@ let
     inherit (config.system.build) earlyMountScript;
 
     inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
+      preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
                     (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
@@ -348,6 +348,9 @@ let
     contents =
       [ { object = bootStage1;
           symlink = "/init";
+        }
+        { object = "${modulesClosure}/lib";
+          symlink = "/lib";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
@@ -432,7 +435,7 @@ let
          }
 
         # mindepth 1 so that we don't change the mode of /
-        (cd "$tmp" && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
+        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
@@ -524,6 +527,14 @@ in
       '';
     };
 
+    boot.initrd.postResumeCommands = mkOption {
+      default = "";
+      type = types.lines;
+      description = lib.mdDoc ''
+        Shell commands to be executed immediately after attempting to resume.
+      '';
+    };
+
     boot.initrd.postMountCommands = mkOption {
       default = "";
       type = types.lines;
@@ -610,6 +621,11 @@ in
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
             path inside and out).
+
+            Note that `nixos-rebuild switch` will generate the initrd
+            also for past generations, so if secrets are moved or deleted
+            you will also have to garbage collect the generations that
+            use those secrets.
           '';
         example = literalExpression
           ''
@@ -620,10 +636,8 @@ in
       };
 
     boot.initrd.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc "Names of supported filesystem types in the initial ramdisk.";
+      default = { };
+      inherit (options.boot.supportedFilesystems) example type description;
     };
 
     boot.initrd.verbose = mkOption {

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pathlib";
   version = "1.0.1";
+  format = "setuptools";
   disabled = pythonAtLeast "3.4"; # Was added to std library in Python 3.4
 
   src = fetchPypi {

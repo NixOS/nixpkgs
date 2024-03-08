@@ -83,12 +83,12 @@ in {
         Group = "typesense";
 
         StateDirectory = "typesense";
-        StateDirectoryMode = "0700";
+        StateDirectoryMode = "0750";
 
         # Hardening
         CapabilityBoundingSet = "";
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        # MemoryDenyWriteExecute = true; needed since 0.25.1
         NoNewPrivileges = true;
         PrivateUsers = true;
         PrivateTmp = true;

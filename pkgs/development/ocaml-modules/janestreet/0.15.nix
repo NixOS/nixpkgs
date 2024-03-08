@@ -3,6 +3,7 @@
 , fetchpatch
 , fzf
 , lib
+, ocaml
 , openssl
 , zstd
 }:
@@ -143,7 +144,7 @@ with self;
     hash = "1b7f7p3xj4jr2n2dxy2lp7a9k7944w6x2nrg6524clvcsd1ax4hn";
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ async ctypes openssl ];
+    propagatedBuildInputs = [ async ctypes ctypes-foreign openssl ];
     # in ctypes.foreign 0.18.0 threaded and unthreaded have been merged
     postPatch = ''
       substituteInPlace bindings/dune \
@@ -264,6 +265,7 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base base_bigstring base_quickcheck ppx_jane time_now ];
     doCheck = false; # circular dependency with core_kernel
+    meta.broken = lib.versionAtLeast ocaml.version "5.1";
   };
 
   core_bench = janePackage {

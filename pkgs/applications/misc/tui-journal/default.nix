@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tui-journal";
-  version = "0.3.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
     rev = "v${version}";
-    hash = "sha256-DKactqPyZTDmD4F15wKHvwuzsZUj6y1MJuPyASnia/c=";
+    hash = "sha256-qHNB+jRLQoiHPuTblpCHg2+6e5j8W6YPsuygRlTidtE=";
   };
 
-  cargoHash = "sha256-dLyI2cmIz1ucKdhAEs3Nz1tamcJUDZtdv4Fk/Wo+Zxs=";
+  cargoHash = "sha256-T+fXSca1u9+c305yuKOF+soxnSZ1YbBs57wco5TLpQw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,11 +31,12 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
-    description = "Your journal app if you live in a terminl";
+    description = "Your journal app if you live in a terminal";
     homepage = "https://github.com/AmmarAbouZor/tui-journal";
     changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${src.rev}/CHANGELOG.ron";
     license = licenses.mit;

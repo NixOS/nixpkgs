@@ -22,7 +22,7 @@ in
   options = {
     services.honk = {
       enable = lib.mkEnableOption (lib.mdDoc "the Honk server");
-      package = lib.mkPackageOptionMD pkgs "honk" { };
+      package = lib.mkPackageOption pkgs "honk" { };
 
       host = lib.mkOption {
         default = "127.0.0.1";
@@ -116,7 +116,7 @@ in
       unitConfig = {
         ConditionPathExists = [
           # Skip this service if the database already exists
-          "!$STATE_DIRECTORY/honk.db"
+          "!%S/honk/honk.db"
         ];
       };
     };

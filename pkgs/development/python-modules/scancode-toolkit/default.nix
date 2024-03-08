@@ -16,7 +16,6 @@
 , extractcode-libarchive
 , fasteners
 , fetchPypi
-, fetchpatch
 , fingerprints
 , ftfy
 , gemfileparser2
@@ -48,12 +47,12 @@
 , pythonOlder
 , requests
 , saneyaml
+, setuptools
 , spdx-tools
 , text-unidecode
 , toml
 , typecode
 , typecode-libmagic
-, typing
 , urlpy
 , xmltodict
 , zipp
@@ -61,16 +60,21 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "31.2.6";
+  version = "32.0.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VvhgXZpV58DHeY5+7nPbrbTTVuHkawFw5akbm4hPnBY=";
+    hash = "sha256-W6Ev1MV8cZU4bauAfmuZsBzMJKz7xpw8siO3Afn5mc8=";
   };
 
   dontConfigure = true;
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -126,32 +130,11 @@ buildPythonPackage rec {
     xmltodict
   ] ++ lib.optionals (pythonOlder "3.9") [
     zipp
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  patches = [
-    (fetchpatch {
-      name = "${pname}-allow-stable-spdx-tools.patch";
-      url = "https://github.com/nexB/scancode-toolkit/commit/d89ab6584d3df6b7eb1d1394559e9d967d6db6ae.patch";
-      includes = [ "src/*" ];
-      hash = "sha256-AU3vJlOxmCy3yvkupVaAVxAKxJI3ymXEk+A5DWSkfOM=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pdfminer.six >= 20200101" "pdfminer.six" \
-      --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
-      --replace "pygmars >= 0.7.0" "pygmars" \
-      --replace "license_expression >= 21.6.14" "license_expression" \
-      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset" \
-      --replace "spdx_tools == 0.7.0a3" "spdx_tools"
-  '';
 
   # Importing scancode needs a writeable home, and preCheck happens in between
   # pythonImportsCheckPhase and pytestCheckPhase.
@@ -163,7 +146,13 @@ buildPythonPackage rec {
     "scancode"
   ];
 
-  # takes a long time and doesn't appear to do anything
+  disabledTestPaths = [
+    # Tests are outdated
+    "src/formattedcode/output_spdx.py"
+    "src/scancode/cli.py"
+  ];
+
+  # Takes a long time and doesn't appear to do anything
   dontStrip = true;
 
   meta = with lib; {

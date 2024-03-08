@@ -11,6 +11,7 @@
 
 , bison
 , cmake
+, draco
 , exiv2
 , fcgi
 , flex
@@ -51,6 +52,7 @@ let
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        withSerialPort = true;
       };
     };
   };
@@ -63,8 +65,8 @@ let
     owslib
     psycopg2
     pygments
-    pyqt-builder
     pyqt5
+    pyqt-builder
     python-dateutil
     pytz
     pyyaml
@@ -76,14 +78,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.32.3";
+  version = "3.36.0";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-ge5ne22sDLKbrJk2vYQxpu3iRXSoOk9924c/RdtD3Nc=";
+    hash = "sha256-uO9Bu+7n8xzsjumbp0t/yYQNvyDgRH1bdfqpX9oLoTY=";
   };
 
   passthru = {
@@ -103,6 +105,7 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
+    draco
     exiv2
     fcgi
     geos
@@ -150,8 +153,9 @@ in mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
-    "-DWITH_PDAL=TRUE"
+    "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let

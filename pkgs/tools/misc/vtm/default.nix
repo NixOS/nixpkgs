@@ -4,26 +4,29 @@
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vtm";
-  version = "0.9.9u";
+  version = "0.9.74";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
-    rev = "v${version}";
-    sha256 = "sha256-ySelsabe5J3Wne8L/F01R/CMPibUR18ZKWH2s25t+KY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-O8fnh8I3KbiOD40bU0eO7tbvpMoSCVonKPVFx5pynR4=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   cmakeFlags = [ "../src" ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal multiplexer with window manager and session sharing";
     homepage = "https://vtm.netxs.online/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ahuzik ];
+    license = lib.licenses.mit;
+    mainProgram = "vtm";
+    maintainers = with lib.maintainers; [ ahuzik ];
+    platforms = lib.platforms.all;
   };
-}
+})

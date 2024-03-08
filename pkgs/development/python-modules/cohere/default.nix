@@ -9,28 +9,20 @@
 , fastavro
 , importlib-metadata
 , requests
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "4.21";
-  format = "pyproject";
+  version = "4.52";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9hFDj0Cd/F1aChU6WFNJ9agLFpxxArWZTZmZ7PhECGY=";
+    hash = "sha256-C2w447+hxsFrjLpV3wrSzptuVb1JTyppq+NUzMCU+Iw=";
   };
-
-  patches = [
-    # https://github.com/cohere-ai/cohere-python/pull/289
-    (fetchpatch {
-      name = "replace-poetry-with-poetry-core.patch";
-      url = "https://github.com/cohere-ai/cohere-python/commit/e86480336331c0cf6f67e26b0825467dfca5b277.patch";
-      hash = "sha256-P1Ioq5ypzT3tx6cxrI3ep34Fi4cUx88YkfJ5ErN3VHk=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -42,6 +34,7 @@ buildPythonPackage rec {
     fastavro
     importlib-metadata
     requests
+    urllib3
   ];
 
   # tests require CO_API_KEY

@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchbzr
+, fetchFromGitLab
 , fetchpatch
 , testers
 , cmake
@@ -16,12 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbustest";
-  version = "unstable-2017-01-06";
+  version = "0.3.2";
 
-  src = fetchbzr {
-    url = "lp:libqtdbustest";
-    rev = "42";
-    sha256 = "sha256-5MQdGGtEVE/pM9u0B0xFXyITiRln9p+8/MLtrrCZqi8=";
+  src = fetchFromGitLab {
+    owner = "ubports";
+    repo = "development/core/libqtdbustest";
+    rev = finalAttrs.version;
+    hash = "sha256-yqqyKxsbqiVTrkas79YoPMi28dKFNntiE7+dx1v+Qh4=";
   };
 
   patches = [
@@ -31,20 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Disable QProcess start timeout
     (fetchpatch {
-      url = "https://salsa.debian.org/debian-ayatana-team/libqtdbustest/-/raw/0788df10bc6f2aa47c2b73fc1df944686a9ace1e/debian/patches/1003_no-QProcess-waitForstarted-timeout.patch";
+      url = "https://salsa.debian.org/ubports-team/libqtdbustest/-/raw/debian/0.3.2-3/debian/patches/1003_no-QProcess-waitForstarted-timeout.patch";
       hash = "sha256-ThDbn6URvkj5ARDMj+xO0fb1Qh2YQRzVy24O03KglHI=";
     })
 
     # More robust dbus address reading
     (fetchpatch {
-      url = "https://salsa.debian.org/debian-ayatana-team/libqtdbustest/-/raw/7e55c79cd032c702b30d834c1fb0b65661fc6eeb/debian/patches/1004_make-reading-address-from-dbus-daemon-more-robust.patch";
+      url = "https://salsa.debian.org/ubports-team/libqtdbustest/-/raw/debian/0.3.2-3/debian/patches/1004_make-reading-address-from-dbus-daemon-more-robust.patch";
       hash = "sha256-hq8pdducp/udxoGWGt1dgL/7VHcbJO/oT1dOY1zew8M=";
     })
   ];
 
   strictDeps = true;
 
-  postPatch =  lib.optionalString (!finalAttrs.doCheck) ''
+  postPatch =  lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Don't build tests when we're not running them
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';

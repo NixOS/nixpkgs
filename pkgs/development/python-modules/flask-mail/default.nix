@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "flask-mail";
   version = "0.9.1";
+  format = "setuptools";
 
   meta = {
     description = "Flask-Mail is a Flask extension providing simple email sending capabilities.";

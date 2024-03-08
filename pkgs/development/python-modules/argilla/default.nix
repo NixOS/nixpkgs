@@ -61,11 +61,11 @@
 , pytest-cov
 , pytest-mock
 , pytest-asyncio
-, factory_boy
+, factory-boy
 }:
 let
   pname = "argilla";
-  version = "1.15.0";
+  version = "1.25.0";
   optional-dependencies = {
     server = [
       fastapi
@@ -126,7 +126,7 @@ buildPythonPackage {
     owner = "argilla-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CEB2Q+8JJmYWeqKS1QuOysedCSuPWXcljlmaclwZzmY=";
+    hash = "sha256-KU67tu14pX1nCRl9k/Na9EqelO3Uz7It1dpFBU2IjZA=";
   };
 
   pythonRelaxDeps = [
@@ -166,7 +166,7 @@ buildPythonPackage {
     pytest-cov
     pytest-mock
     pytest-asyncio
-    factory_boy
+    factory-boy
   ]
     ++ optional-dependencies.server
     ++ optional-dependencies.postgresql

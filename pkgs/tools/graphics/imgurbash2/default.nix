@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
     homepage = "https://github.com/ram-on/imgurbash2";
+    mainProgram = "imgurbash2";
   };
 }

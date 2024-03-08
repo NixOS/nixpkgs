@@ -17,17 +17,17 @@ setKV () {
 
 setKV version ${VERSION}
 setKV sha256 ${SHA256}
-setKV vendorSha256 "0000000000000000000000000000000000000000000000000000" # Necessary to force clean build.
+setKV vendorHash "sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=" # Necessary to force clean build.
 
 cd ../../../../../
 set +e
-VENDOR_SHA256=$(nix-build --no-out-link -A linkerd_edge 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
+VENDOR_HASH=$(nix-build --no-out-link -A linkerd_edge 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
 set -e
 cd - > /dev/null
 
-if [ -n "${VENDOR_SHA256:-}" ]; then
-    setKV vendorSha256 ${VENDOR_SHA256}
+if [ -n "${VENDOR_HASH:-}" ]; then
+    setKV vendorHash ${VENDOR_HASH}
 else
-    echo "Update failed. VENDOR_SHA256 is empty."
+    echo "Update failed. VENDOR_HASH is empty."
     exit 1
 fi

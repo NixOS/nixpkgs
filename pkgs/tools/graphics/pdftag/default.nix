@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.unix;
+    mainProgram = "pdftag";
   };
 }

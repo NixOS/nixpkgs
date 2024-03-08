@@ -2,12 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, pythonRelaxDepsHook
 , which
 # runtime dependencies
 , numpy
 , torch
-, pyre-extensions
 # check dependencies
 , pytestCheckHook
 , pytest-cov
@@ -27,46 +25,62 @@
 #, flash-attn
 }:
 let
-  version = "0.0.21";
+  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
+  version = "0.0.23.post1";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
-    rev = "v${version}";
-    hash = "sha256-zYziynjLtqjPPHjDbruuuG9209y0Sh+wYUFHUj+QG2Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AJXow8MmX4GxtEE2jJJ/ZIBr+3i+uS4cA6vofb390rY=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./0001-fix-allow-building-without-git.patch
+  ];
 
   preBuild = ''
     cat << EOF > ./xformers/version.py
     # noqa: C801
     __version__ = "${version}"
     EOF
+  '' + lib.optionalString cudaSupport ''
+    export CUDA_HOME=${cudaPackages.cuda_nvcc}
+    export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    which
-  ];
+  buildInputs = lib.optionals cudaSupport (with cudaPackages; [
+    # flash-attn build
+    cuda_cudart # cuda_runtime_api.h
+    libcusparse.dev # cusparse.h
+    cuda_cccl.dev # nv/target
+    libcublas.dev # cublas_v2.h
+    libcusolver.dev # cusolverDn.h
+    libcurand.dev # curand_kernel.h
+  ]);
 
-  pythonRelaxDeps = [
-    "pyre-extensions"
+  nativeBuildInputs = [
+    which
   ];
 
   propagatedBuildInputs = [
     numpy
     torch
-    pyre-extensions
   ];
 
   pythonImportsCheck = [ "xformers" ];
+
+  # Has broken 0.03 version:
+  # https://github.com/NixOS/nixpkgs/pull/285495#issuecomment-1920730720
+  passthru.skipBulkUpdate = true;
 
   dontUseCmakeConfigure = true;
 

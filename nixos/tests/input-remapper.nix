@@ -46,7 +46,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.execute("su - sybil -c input-remapper-gtk >&2 &")
 
       machine.wait_for_text("Input Remapper")
-      machine.wait_for_text("Preset")
-      machine.wait_for_text("Change Key")
+      machine.wait_for_text("Device")
+      machine.wait_for_text("Presets")
+      machine.wait_for_text("Editor")
     '';
   })

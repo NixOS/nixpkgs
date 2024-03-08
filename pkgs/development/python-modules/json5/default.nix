@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "json5";
   version = "0.9.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dpranke";

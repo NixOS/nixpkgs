@@ -28,5 +28,6 @@ mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nicbk ];
+    mainProgram = "veikk-linux-driver-gui";
   };
 }

@@ -28,8 +28,6 @@ buildPythonPackage rec {
       --replace '"--cov-config=setup.cfg", ' ""
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatchling
     hatch-vcs

@@ -130,9 +130,9 @@ let cfg = config.services.xserver.libinput;
         default = true;
         description =
           lib.mdDoc ''
-            Disables horizontal scrolling. When disabled, this driver will discard any horizontal scroll
-            events from libinput. Note that this does not disable horizontal scrolling, it merely
-            discards the horizontal axis from any scroll events.
+            Enables or disables horizontal scrolling. When disabled, this driver will discard any
+            horizontal scroll events from libinput. This does not disable horizontal scroll events
+            from libinput; it merely discards the horizontal axis from any scroll events.
           '';
       };
 

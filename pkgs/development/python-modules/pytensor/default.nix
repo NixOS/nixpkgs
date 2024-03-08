@@ -1,40 +1,49 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
-, cons
-, cython
-, etuples
 , fetchFromGitHub
+, cython
+, versioneer
+, cons
+, etuples
 , filelock
-, jax
-, jaxlib
 , logical-unification
 , minikanren
-, numba
-, numba-scipy
 , numpy
-, pytestCheckHook
-, pythonOlder
 , scipy
 , typing-extensions
+, jax
+, jaxlib
+, numba
+, numba-scipy
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, tensorflow-probability
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.11.3";
-  format = "setuptools";
+  version = "2.18.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
-    repo = pname;
+    repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-4GDur8S19i8pZkywKHZUelmd2e0jZmC5HzF7o2esDl4=";
+    hash = "sha256-SMh4wVZwmc87ztFn2OOI234VP3JzmxVMBkn7lYwVu6M=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "versioneer[toml]==0.28" "versioneer[toml]"
+  '';
 
   nativeBuildInputs = [
     cython
+    versioneer
   ];
 
   propagatedBuildInputs = [
@@ -48,18 +57,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jax
     jaxlib
     numba
     numba-scipy
+    pytest-mock
     pytestCheckHook
+    tensorflow-probability
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--durations=50" ""
-  '';
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -82,7 +88,6 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sandbox/"
     "tests/sparse/sandbox/"
   ];
 

@@ -7,11 +7,13 @@
 , lib
 , rpm
 , urllib3
+, keyring
 }:
 
 buildPythonPackage rec {
   pname = "osc";
   version = "1.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
@@ -22,7 +24,7 @@ buildPythonPackage rec {
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
   nativeCheckInputs = [ rpm diffstat ];
-  propagatedBuildInputs = [ urllib3 cryptography ];
+  propagatedBuildInputs = [ urllib3 cryptography keyring ];
 
   postInstall = ''
     install -D -m444 contrib/osc.fish $out/etc/fish/completions/osc.fish

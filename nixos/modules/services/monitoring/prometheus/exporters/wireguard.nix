@@ -11,7 +11,7 @@ in {
     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
   ];
   extraOpts = {
-    verbose = mkEnableOption (lib.mdDoc "Verbose logging mode for prometheus-wireguard-exporter");
+    verbose = mkEnableOption (lib.mdDoc "verbose logging mode for prometheus-wireguard-exporter");
 
     wireguardConfig = mkOption {
       type = with types; nullOr (either path str);

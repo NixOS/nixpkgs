@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "ydiff";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

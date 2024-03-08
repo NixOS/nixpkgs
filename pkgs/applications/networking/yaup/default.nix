@@ -8,7 +8,7 @@
 , miniupnpc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "yaup";
   version = "unstable-2019-10-16";
 
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     # ld: unknown option: --export-dynamic
     broken = stdenv.isDarwin;
+    mainProgram = "yaup";
   };
 }

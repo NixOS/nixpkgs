@@ -12,9 +12,9 @@ nixFlags="--option experimental-features nix-command eval --raw --impure --expr"
 export NIX_PATH=nixpkgs=../../../../..
 export WP_VERSION=$(nix $nixFlags '(import <nixpkgs> {}).wordpress.version')
 
-PLUGINS=`cat wordpress-plugins.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
-THEMES=`cat wordpress-themes.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
-LANGUAGES=`cat wordpress-languages.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
+PLUGINS=`cat wordpress-plugins.json | jq -r 'keys|.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
+THEMES=`cat wordpress-themes.json | jq -r 'keys|.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
+LANGUAGES=`cat wordpress-languages.json | jq -r 'keys|.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
 
 wp4nix -p $PLUGINS -pl en
 wp4nix -t $THEMES -tl en

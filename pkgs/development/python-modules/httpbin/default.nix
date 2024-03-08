@@ -1,56 +1,75 @@
 { lib
-, brotlipy
 , buildPythonPackage
-, decorator
-, fetchpatch
 , fetchPypi
+, fetchpatch
+, pythonRelaxDepsHook
+
+# build-system
+, setuptools
+
+# dependencies
+, brotlicffi
+, decorator
+, flasgger
 , flask
-, flask-limiter
-, itsdangerous
-, markupsafe
-, raven
+, greenlet
 , six
-, pytestCheckHook
 , werkzeug
+
+# optional-dependencies
+, gunicorn
+, gevent
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.10.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y7N3kMkVdfTxV1f0KtQdn3KesifV7b6J5OwXVIbbjfo=";
+    hash = "sha256-e4WWvrDnWntlPDnR888mPW1cR20p4d9ve7K3C/nwaj0=";
   };
 
   patches = [
     (fetchpatch {
-      # Replaces BaseResponse class with Response class for Werkezug 2.1.0 compatibility
-      # https://github.com/postmanlabs/httpbin/pull/674
-      url = "https://github.com/postmanlabs/httpbin/commit/5cc81ce87a3c447a127e4a1a707faf9f3b1c9b6b.patch";
-      hash = "sha256-SbEWjiqayMFYrbgAPZtSsXqSyCDUz3z127XgcKOcrkE=";
+      # backport flask 3.0 support; drop after 0.10.1
+      url = "https://github.com/psf/httpbin/commit/c1d9e33049263fed3cb27806a97f094acc350905.patch";
+      hash = "sha256-SYJgQN3ERDgLIaBc4eqDfey+EX4z6CSxLoAA7j+16xI=";
     })
   ];
 
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "greenlet"
+  ];
+
   propagatedBuildInputs = [
-    brotlipy
+    brotlicffi
     decorator
     flask
-    flask-limiter
-    itsdangerous
-    markupsafe
-    raven
+    flasgger
+    greenlet
     six
     werkzeug
-  ] ++ raven.optional-dependencies.flask;
+  ];
+
+  passthru.optional-dependencies = {
+    mainapp = [
+      gunicorn
+      gevent
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "test_httpbin.py"
   ];
 
   disabledTests = [
@@ -70,7 +89,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTTP Request and Response Service";
-    homepage = "https://github.com/kennethreitz/httpbin";
+    homepage = "https://github.com/psf/httpbin";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

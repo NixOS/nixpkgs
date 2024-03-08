@@ -17,6 +17,10 @@ let
       jdk11 = pkgs.callPackage ../formats/java-properties/test { jdk = pkgs.jdk11_headless; };
       jdk17 = pkgs.callPackage ../formats/java-properties/test { jdk = pkgs.jdk17_headless; };
     };
+
+    libconfig = recurseIntoAttrs (import ../formats/libconfig/test { inherit pkgs; });
+
+    hocon = recurseIntoAttrs (import ../formats/hocon/test { inherit pkgs; });
   };
 
   flatten = prefix: as:

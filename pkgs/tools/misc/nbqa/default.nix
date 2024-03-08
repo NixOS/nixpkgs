@@ -7,14 +7,19 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
-  version = "1.7.0";
+  version = "1.8.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbQA-dev";
     repo = "nbQA";
-    rev = version;
-    hash = "sha256-CTF5HisBS44Ta18cVT04UrMIF30WmEBwZBGW7fkKXwk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RucDwXXEOTInhV/hk6gYXUmxUu660/pSTrBtHLrLkQ8=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   passthru.optional-dependencies = {
     black = [ black ];
@@ -76,6 +81,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_running_in_different_dir_works"
     "test_unable_to_reconstruct_message_pythonpath"
     "test_with_subcommand"
+    "test_pylint_works"
   ];
 
   disabledTestPaths = [
@@ -89,5 +95,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
     license = licenses.mit;
     maintainers = with maintainers; [ l0b0 ];
+    mainProgram = "nbqa";
   };
 }

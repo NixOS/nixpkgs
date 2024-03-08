@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "6.26.0";
+  version = "7.6.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7UUnDtTRf162xKMUuZoKh+y47oeUtrOsFHUTAvtOryM=";
+    hash = "sha256-fD2kTwH692x6Nm93NrUQvmbcXiX9hHBpo4wvUvBqLAM=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-2V8H6ElvzS5yw1di+XZvMssuokUT5zP3aTzpDpMsMac=";
+      hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
       zeroconf
       jeepney
       pycryptodome
+      xxhash
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${python3Packages.python.pythonForBuild.interpreter} setup.py install --root=$out \
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \

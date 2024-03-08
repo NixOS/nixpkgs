@@ -6,15 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.9.9";
-  format = "pyproject";
+  version = "3.11.21";
+  pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kZ+RHkqmmRd7Ew5u8/SQADzOUa9YwCsj+nmtthCDlDw=";
+    hash = "sha256-KSOuNH+y7+mCK8XfGxiyn+C1H6g9a/ej96k8KG/EE9k=";
   };
 
   postPatch = ''
@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     loguru
     more-itertools
     packaging
+    pendulum_3
     psutil
     pynzb
     pyrsistent

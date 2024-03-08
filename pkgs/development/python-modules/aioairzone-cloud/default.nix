@@ -4,13 +4,12 @@
 , fetchFromGitHub
 , pythonOlder
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "aioairzone-cloud";
-  version = "0.2.1";
-  format = "pyproject";
+  version = "0.4.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,12 +17,11 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "aioairzone-cloud";
     rev = "refs/tags/${version}";
-    hash = "sha256-GOt6oFf1ogxODrgs6/OdgTjA1UNyiNZOPFr+0DRgz0M=";
+    hash = "sha256-EcvHwBSHjKvPqwGCPPpannuSZcDI2Lt2hT5NSgkwfq8=";
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [

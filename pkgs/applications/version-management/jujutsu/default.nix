@@ -20,23 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.9.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-5RN2xaH591/83iNXRcW9i/TyU5ndPZq3P/BesHM9I6w=";
+    hash = "sha256-xnGnervyXPfZyQTYsPu09fj+QvbEZ6rDJ4fYHBeF/RY=";
   };
 
-  cargoHash = "sha256-G4W3GeTWTuIZO1PupuZ0hACwhNoNBQhULyT9f6qVckg=";
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    # enable 'packaging' feature, which enables extra features such as support
-    # for watchman
-    "packaging"
-  ];
+  cargoHash = "sha256-wuZ0zthaemzyDn5J2au2L2k0QJnzbrCRjSBIPivEbnQ=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
   useNextest = true; # nextest is the upstream integration framework
@@ -65,9 +58,9 @@ rustPlatform.buildRustPackage rec {
     installManPage ./jj.1
 
     installShellCompletion --cmd jj \
-      --bash <($out/bin/jj util completion --bash) \
-      --fish <($out/bin/jj util completion --fish) \
-      --zsh <($out/bin/jj util completion --zsh)
+      --bash <($out/bin/jj util completion bash) \
+      --fish <($out/bin/jj util completion fish) \
+      --zsh <($out/bin/jj util completion zsh)
   '';
 
   passthru = {

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "click-help-colors";
-  version = "0.9.2";
+  version = "0.9.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dWJF5ULSkia7O8BWv6WIhvISuiuC9OjPX8iEF2rJbXI=";
+    hash = "sha256-9Mq+Us9VApm4iI9PLuTF81msJ+M7z+TWHbR3haXMk2w=";
   };
 
   propagatedBuildInputs = [

@@ -54,5 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/gnebbia/kb/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wesleyjrz ];
+    mainProgram = "kb";
   };
 }

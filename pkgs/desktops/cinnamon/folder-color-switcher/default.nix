@@ -7,14 +7,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "folder-color-switcher";
-  version = "1.5.9";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     # They don't really do tags, this is just a named commit.
-    rev = "b735ed90b798eda541885735368930d045430e6e";
-    sha256 = "sha256-acbBghi3LWpGH1dBF8icuTGgliA+NM+pE8YDN3WxOic=";
+    rev = "18102c72ba072cd83ccee69e9051e87e93cab01a";
+    sha256 = "sha256-o2+KfHwPvoqDMBa9C/Sm/grDf0GWcjx2OtT4rhnCk5Q=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace usr/share/nemo-python/extensions/nemo-folder-color-switcher.py \
-      --replace "/usr/share/locale" "$out/share" \
+      --replace "/usr/share/locale" "$out/share/locale" \
       --replace "/usr/share/folder-color-switcher/colors.d" "/run/current-system/sw/share/folder-color-switcher/colors.d" \
       --replace "/usr/share/folder-color-switcher/color.svg" "$out/share/folder-color-switcher/color.svg"
 

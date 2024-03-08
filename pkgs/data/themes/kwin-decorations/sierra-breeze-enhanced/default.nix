@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=$out"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_TESTING=OFF"
     "-DKDE_INSTALL_USE_QT_SYS_PATHS=ON"
   ];
@@ -33,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kupiqu/SierraBreezeEnhanced";
     changelog = "https://github.com/kupiqu/SierraBreezeEnhanced/releases/tag/V${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ flexagoon ];
+    maintainers = with maintainers; [ ];
   };
 }

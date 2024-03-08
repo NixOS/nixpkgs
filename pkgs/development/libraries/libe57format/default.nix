@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-4vVhKrCxnWO106DSAk+xxo4uk6zC89m9VQAPaDJ8Ed4=";
     })
   ];
+  CXXFLAGS = [
+    # GCC 13: error: 'int16_t' has not been declared in 'std'
+    "-include cstdint"
+  ];
 
   nativeBuildInputs = [
     cmake

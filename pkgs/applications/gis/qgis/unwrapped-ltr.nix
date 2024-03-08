@@ -1,5 +1,7 @@
 { lib
+, callPackage
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , mkDerivation
 , substituteAll
@@ -23,7 +25,7 @@
 , netcdf
 , ninja
 , openssl
-, pdal
+# , pdal
 , postgresql
 , proj
 , protobuf
@@ -45,7 +47,6 @@
 }:
 
 let
-
   py = python3.override {
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
@@ -75,14 +76,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.28.11";
+  version = "3.28.15";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-3yV47GlIhYGR7+ZlPLQw1vy1x8xuJd5erUJO3Pw7L+g=";
+    hash = "sha256-R6p1MVeCMbaD74Eqn+OLQkTYP+00y9mBucJR1JXPEJ4=";
   };
 
   passthru = {
@@ -126,7 +127,7 @@ in mkDerivation rec {
     qtserialport
     qtxmlpatterns
     qt3d
-    pdal
+    # pdal
     zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
@@ -138,11 +139,18 @@ in mkDerivation rec {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
+    (fetchpatch {
+      name = "qgis-3.28.9-exiv2-0.28.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-geosciences/qgis/files/qgis-3.28.9-exiv2-0.28.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
+      hash = "sha256-mPRo0A7ko4GCHJrfJ2Ls0dUKvkFtDmhKekI2CR9StMw=";
+    })
   ];
 
+  # PDAL is disabled until https://github.com/qgis/QGIS/pull/54940
+  # is backported.
   cmakeFlags = [
     "-DWITH_3D=True"
-    "-DWITH_PDAL=TRUE"
+    "-DWITH_PDAL=False"  # TODO: re-enable PDAL
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let

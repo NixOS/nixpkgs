@@ -6,20 +6,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "keepwn";
-  version = "0.1";
-  format = "setuptools";
+  version = "0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "KeePwn";
     rev = "refs/tags/${version}";
-    hash = "sha256-s+r6QEUzkzCbs5j1G+PVgDx8cvnmQzEQ1MHAakG+skA=";
+    hash = "sha256-haKWuoTtyC9vIise+gznruHEwMIDz1W6euihLLKnSdc=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     chardet
     impacket
     lxml
+    pefile
+    pykeepass
+    python-magic
     termcolor
   ];
 

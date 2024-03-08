@@ -1,8 +1,7 @@
-{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg, buildPackages
 , icu
 , lua
 , nixosTests
-, withLibevent ? true
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
@@ -16,7 +15,6 @@ let
   luaEnv = lua.withPackages(p: with p; [
       luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
     ]
-    ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
     ++ withExtraLuaPackages p
   );
@@ -42,8 +40,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "7c105277a9ca";
-    sha256 = "eiObn5Kw7dS+oxdQiJ8NhSC4P7EvILIOEnMoxCWIFro=";
+    rev = "b109773ce6fe";
+    hash = "sha256-N1vmShDWtWsHD4b1x7UjX6Sj28iPaDeCLSYeDOLLhzo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,9 +52,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--ostype=linux"
+    "--with-lua-bin=${lib.getBin buildPackages.lua}/bin"
     "--with-lua-include=${luaEnv}/include"
     "--with-lua=${luaEnv}"
+    "--c-compiler=${stdenv.cc.targetPrefix}cc"
+    "--linker=${stdenv.cc.targetPrefix}cc"
   ];
+  configurePlatforms = [];
 
   postBuild = ''
     make -C tools/migration
@@ -82,6 +84,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ toastal ];
   };
 }

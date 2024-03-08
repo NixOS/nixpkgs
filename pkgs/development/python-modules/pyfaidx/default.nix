@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, importlib-metadata
 , nose
 , numpy
 , setuptools
@@ -12,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.7.2.1";
+  version = "0.8.1.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MPDSCp49UzU/sg62m34i5vAaU+1PIbPhfdQI8L5QUaA=";
+    hash = "sha256-bwSCNSYZ8sxWADyiIyG9sNB2S2VnlbweQGKx+psIaGs=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    importlib-metadata
     six
   ];
 

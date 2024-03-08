@@ -20,36 +20,19 @@ let
           hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
         };
       });
-
-      okta = super.okta.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
-        format = "setuptools";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-U+eSxo02hP9BQLTLHAKvOCEJA2j4EQ/eVMC9tjhEkzI=";
-        };
-        propagatedBuildInputs = [
-          self.six
-          self.python-dateutil
-          self.requests
-        ];
-        pythonImportsCheck = [ "okta" ];
-        doCheck = false; # no tests were included with this version
-      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
-  version = "2.7.2"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.8.0"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
     rev = "v${version}";
-    hash = "sha256-ydzGaUQ43vvQqU9xvhPJqHG/2PUtBbASIVpZCDnsR60=";
+    hash = "sha256-RcqvI+jR7TiNAzq8F6VGVhyj6MxnmsjQKh0CiZvLY9Q=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -69,6 +52,8 @@ python.pkgs.buildPythonApplication rec {
     requests
     okta
     pyjwt
+    html5lib
+    furl
   ];
 
   preCheck = ''

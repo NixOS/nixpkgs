@@ -4,7 +4,7 @@
 , fetchPypi
 , jinja2
 , mock
-, nose
+, pynose
 , poetry-core
 , pythonOlder
 , terminaltables
@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "envs";
   version = "1.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    nose
+    pynose
   ];
 
   checkPhase = ''

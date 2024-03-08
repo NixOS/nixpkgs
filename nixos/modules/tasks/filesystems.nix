@@ -105,7 +105,7 @@ let
         type = types.bool;
         description = lib.mdDoc ''
           If the device does not currently contain a filesystem (as
-          determined by {command}`blkid`, then automatically
+          determined by {command}`blkid`), then automatically
           format it with the filesystem type specified in
           {option}`fsType`.  Use with caution.
         '';
@@ -187,9 +187,8 @@ let
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
       # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
       escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
-    in fstabFileSystems: { rootPrefix ? "" }: concatMapStrings (fs:
-      (optionalString (isBindMount fs) (escape rootPrefix))
-      + (if fs.device != null then escape fs.device
+    in fstabFileSystems: { }: concatMapStrings (fs:
+      (if fs.device != null then escape fs.device
          else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
@@ -199,9 +198,7 @@ let
       + "\n"
     ) fstabFileSystems;
 
-    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
-      rootPrefix = "/sysroot";
-    });
+    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) { });
 
 in
 
@@ -249,10 +246,23 @@ in
     };
 
     boot.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc "Names of supported filesystem types.";
+      default = { };
+      example = lib.literalExpression ''
+        {
+          btrfs = true;
+          zfs = lib.mkForce false;
+        }
+      '';
+      type = types.coercedTo
+        (types.listOf types.str)
+        (enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled))
+        (types.attrsOf types.bool);
+      description = lib.mdDoc ''
+        Names of supported filesystem types, or an attribute set of file system types
+        and their state. The set form may be used together with `lib.mkForce` to
+        explicitly disable support for specific filesystems, e.g. to disable ZFS
+        with an unsupported kernel.
+      '';
     };
 
     boot.specialFileSystems = mkOption {
@@ -409,7 +419,8 @@ in
             ConditionVirtualization = "!container";
             DefaultDependencies = false; # needed to prevent a cycle
           };
-          before = [ "systemd-pstore.service" ];
+          before = [ "systemd-pstore.service" "shutdown.target" ];
+          conflicts = [ "shutdown.target" ];
           wantedBy = [ "systemd-pstore.service" ];
         };
       };

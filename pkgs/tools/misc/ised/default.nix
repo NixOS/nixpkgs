@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux;
     license = lib.licenses.gpl3Plus;
+    mainProgram = "ised";
   };
 }

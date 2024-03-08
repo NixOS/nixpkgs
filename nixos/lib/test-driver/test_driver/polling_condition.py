@@ -1,11 +1,11 @@
-from typing import Callable, Optional
-from math import isfinite
 import time
+from math import isfinite
+from typing import Callable, Optional
 
 from .logger import rootlog
 
 
-class PollingConditionFailed(Exception):
+class PollingConditionError(Exception):
     pass
 
 
@@ -60,7 +60,7 @@ class PollingCondition:
 
     def maybe_raise(self) -> None:
         if not self.check():
-            raise PollingConditionFailed(self.status_message(False))
+            raise PollingConditionError(self.status_message(False))
 
     def status_message(self, status: bool) -> str:
         return f"Polling condition {'succeeded' if status else 'failed'}: {self.description}"

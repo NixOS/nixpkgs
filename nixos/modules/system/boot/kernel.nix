@@ -81,6 +81,13 @@ in
             extraStructuredConfig.FOO = lib.kernel.yes;
             features.foo = true;
           }
+          {
+            name = "foo-ml-mbox";
+            patch = (fetchurl {
+              url = "https://lore.kernel.org/lkml/19700205182810.58382-1-email@domain/t.mbox.gz";
+              hash = "sha256-...";
+            });
+          }
         ]
       '';
       description = lib.mdDoc ''
@@ -96,8 +103,8 @@ in
                                         # (required, but can be null if only config changes
                                         # are needed)
 
-          extraStructuredConfig = {     # attrset of extra configuration parameters
-            FOO = lib.kernel.yes;       # (without the CONFIG_ prefix, optional)
+          extraStructuredConfig = {     # attrset of extra configuration parameters without the CONFIG_ prefix
+            FOO = lib.kernel.yes;       # (optional)
           };                            # values should generally be lib.kernel.yes,
                                         # lib.kernel.no or lib.kernel.module
 
@@ -105,8 +112,9 @@ in
             foo = true;                 # (may be checked by other NixOS modules, optional)
           };
 
-          extraConfig = "CONFIG_FOO y"; # extra configuration options in string form
-                                        # (deprecated, use extraStructuredConfig instead, optional)
+          extraConfig = "FOO y";        # extra configuration options in string form without the CONFIG_ prefix
+                                        # (optional, multiple lines allowed to specify multiple options)
+                                        # (deprecated, use extraStructuredConfig instead)
         }
         ```
 
@@ -268,6 +276,9 @@ in
             "sata_uli"
             "ata_piix"
             "pata_marvell"
+
+            # NVMe
+            "nvme"
 
             # Standard SCSI stuff.
             "sd_mod"

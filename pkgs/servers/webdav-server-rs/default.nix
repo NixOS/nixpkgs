@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/miquels/webdav-server-rs";
     license = licenses.asl20;
     maintainers = with maintainers; [ pmy ];
+    mainProgram = "webdav-server";
   };
 }

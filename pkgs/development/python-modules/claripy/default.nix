@@ -8,21 +8,21 @@
 , pysmt
 , pythonOlder
 , pytestCheckHook
-, z3
+, z3-solver
 }:
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.68";
-  format = "pyproject";
+  version = "9.2.84";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "claripy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZMXlCfeSt2Dcvuc0CdB27rfSIEIgvMS81s7nAbmw5QM=";
+    hash = "sha256-wgCWMngda0gB+AEDFpRxQ2ots5YXE4bkBSxMtYJqLEo=";
   };
 
   nativeBuildInputs = [
@@ -34,18 +34,12 @@ buildPythonPackage rec {
     decorator
     future
     pysmt
-    z3
+    z3-solver
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Use upstream z3 implementation
-    substituteInPlace setup.cfg \
-      --replace "z3-solver==4.10.2.0" ""
-  '';
 
   pythonImportsCheck = [
     "claripy"

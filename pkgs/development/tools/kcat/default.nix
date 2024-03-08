@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib rdkafka yajl avro-c libserdes ];
 
-  preConfigure = ''
-    patchShebangs ./configure
-  '';
-
   meta = with lib; {
     description = "A generic non-JVM producer and consumer for Apache Kafka";
     homepage = "https://github.com/edenhill/kcat";

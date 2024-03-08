@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "motor";
-  version = "3.1.1";
+  version = "3.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mongodb";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PD41ZyUFY4fYaO4Fo7kiTWcn1a6LOd81K3PWAAagmr4=";
+    hash = "sha256-ajlZleaaq0LIEW5PdTRQWL312guYA+7+x1xtPNKZQC0=";
   };
 
   propagatedBuildInputs = [

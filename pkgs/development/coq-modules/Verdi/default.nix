@@ -24,9 +24,4 @@ mkCoqDerivation {
   release."20181102".sha256 = "1vw47c37k5vaa8vbr6ryqy8riagngwcrfmb3rai37yi9xhdqg55z";
 
   propagatedBuildInputs = [ Cheerios InfSeqExt ssreflect ];
-  preConfigure = ''
-    if [ -f ./configure ]; then
-      patchShebangs ./configure
-    fi
-  '';
 }

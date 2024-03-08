@@ -1,23 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, glibcLocales
-, urwid
 , fetchpatch
+, setuptools
+, urwid
 }:
 
 buildPythonPackage rec {
   pname = "urwidtrees";
   version  = "1.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "urwidtrees";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-yGSjwagCd5TiwEFtF6ZhDuVqj4PTa5pVXhs8ebr2O/g=";
   };
-
-  propagatedBuildInputs = [ urwid ];
 
   patches = [
     (fetchpatch {
@@ -26,13 +25,26 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [ glibcLocales ];
-  LC_ALL="en_US.UTF-8";
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    urwid
+  ];
+
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "urwidtrees"
+  ];
 
   meta = with lib; {
     description = "Tree widgets for urwid";
     homepage = "https://github.com/pazz/urwidtrees";
-    license = licenses.gpl3;
+    changelog = "https://github.com/pazz/urwidtrees/releases/tag/${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
   };
-
 }

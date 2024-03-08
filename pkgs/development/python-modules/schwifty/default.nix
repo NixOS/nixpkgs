@@ -1,55 +1,63 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, importlib-resources
-, importlib-metadata
+
+# build-system
+, hatchling
+, hatch-vcs
+
+# dependencies
 , iso3166
 , pycountry
+
+# optional-dependencies
+, pydantic
+
+# tests
 , pytestCheckHook
 , pytest-cov
 , pythonOlder
-, setuptools
-, setuptools-scm
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2023.6.0";
+  version = "2024.1.1.post0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hDNAoITt2Ak5aVWmMgqg2oA9rDFsiuum5JXc7v7sspU=";
+    hash = "sha256-ZFDu+stuKdsVc8bTuSZ4LZX8BuQhORjyEMosnrk1rX0=";
   };
 
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-    wheel
+    hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [
     iso3166
     pycountry
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-resources
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-metadata
   ];
+
+  passthru.optional-dependencies = {
+    pydantic = [
+      pydantic
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-cov
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "schwifty"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";
     description = "Validate/generate IBANs and BICs";
     homepage = "https://github.com/mdomke/schwifty";
     license = licenses.mit;

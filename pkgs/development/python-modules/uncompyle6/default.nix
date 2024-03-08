@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
-, spark_parser
+, spark-parser
 , xdis
 , nose
 , pytest
@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "uncompyle6";
   version = "3.9.0";
+  format = "setuptools";
   disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
   src = fetchPypi {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ nose pytest hypothesis six ];
-  propagatedBuildInputs = [ spark_parser xdis ];
+  propagatedBuildInputs = [ spark-parser xdis ];
 
   # six import errors (yet it is supplied...)
   checkPhase = ''

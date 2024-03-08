@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
 , cmake
 , cython_3
+, fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , rapidfuzz
 , rapidfuzz-cpp
 , scikit-build
@@ -13,16 +13,17 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.21.1";
-  format = "pyproject";
+  version = "0.25.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I1kVGbZI1hQRNv0e44giWiMqmeqaqFZks20IyFQ9VIU=";
+    hash = "sha256-MkzIwTZU8hqPDOlfN4qADCKjGJIQrNhhOmVRAnAfNK0=";
+    fetchSubmodules = true; ## for vendored `rapidfuzz-cpp`
   };
 
   nativeBuildInputs = [

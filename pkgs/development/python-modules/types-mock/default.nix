@@ -1,17 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "types-mock";
-  version = "5.1.0.2";
-  format = "setuptools";
+  version = "5.1.0.20240106";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3kjTdm5OMDTv2LJtqeCeSQjzHlMTel/i778fur7haZY=";
+    hash = "sha256-E8o3nVcQzLPxj2mt5bCIgYdMuDOD2PtJsdTaydXF0JA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Module has no tests
   doCheck = false;

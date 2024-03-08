@@ -15,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.9.6";
-  format = "setuptools";
+  version = "0.10.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,18 +24,18 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-c6H7t+aPPWn1i/30G9DLOmwHhdHHHbcP3FRVVjk1XR4=";
+    hash = "sha256-MjO2ZYFat+byH0DEt2v/wPXaYL2lmlESgQCZXD4Jpt0=";
   };
 
   nativeBuildInputs = [
     makeWrapper
+    setuptools
   ];
 
   propagatedBuildInputs = [
     crytic-compile
     packaging
     prettytable
-    setuptools
     web3
   ];
 

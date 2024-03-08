@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.dancek ];
     license = lib.licenses.agpl3;
+    mainProgram = "illum-d";
   };
 }

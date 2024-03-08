@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , python3
 , makeWrapper
@@ -17,23 +17,23 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.9.2";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-kCvMUhN1kjGb5rV+lkKm1FFYBJUSQGOKTY1DQdiAWLU=";
+    hash = "sha256-02agp4EGT23QBKC8j1JIAkzVLRykFl55aH/wPF0bU/Y=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-kHZL7TENVK58dvr8PBFtWYZ2PSKEYESX4e1xYmMA5+Y=";
+    hash = "sha256-hd0wY1an12zY0E6VPjiD23Mn5ZDPvFvIdu6FGoc7nYY=";
   };
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    prefetch-yarn-deps
     nodejs
     python3
     makeWrapper
@@ -47,12 +47,19 @@ in stdenv.mkDerivation rec {
     ./fix-non-steam-shortcuts.patch
   ];
 
+  postPatch = ''
+    # We are not packaging this as an Electron application bundle, so Electron
+    # reports to the application that is is not "packaged", which causes Heroic
+    # to take some incorrect codepaths meant for development environments.
+    substituteInPlace src/**/*.ts --replace 'app.isPackaged' 'true'
+  '';
+
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

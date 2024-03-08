@@ -1,33 +1,25 @@
-https://github.com/AcademySoftwareFoundation/openexr/pull/1264
-https://github.com/AcademySoftwareFoundation/openexr/commit/d0088a3c6943a9a53fc24e29885414d082d531fe.patch
+From 8aa103fe6e815514990e59708468eabc36f7f332 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=A9clairevoyant?=
+ <848000+eclairevoyant@users.noreply.github.com>
+Date: Fri, 5 Jan 2024 18:12:16 -0500
+Subject: [PATCH] gcc13
 
---- a/OpenEXR/IlmImf/ImfDwaCompressor.cpp
-+++ b/OpenEXR/IlmImf/ImfDwaCompressor.cpp
-@@ -159,6 +159,7 @@
- #include <limits>
- 
- #include <cstddef>
-+#include <cstdint>
- 
- 
- // Windows specific addition to prevent the indirect import of the redefined min/max macros
---- a/OpenEXR/IlmImf/ImfHuf.cpp
-+++ b/OpenEXR/IlmImf/ImfHuf.cpp
-@@ -53,6 +53,7 @@
- #include <cstring>
- #include <cassert>
- #include <algorithm>
-+#include <cstdint>
- 
- 
- using namespace std;
---- a/OpenEXR/IlmImf/ImfMisc.cpp
-+++ b/OpenEXR/IlmImf/ImfMisc.cpp
-@@ -52,6 +52,7 @@
- #include <ImfConvert.h>
- #include <ImfPartType.h>
+---
+ OpenEXR/IlmImf/ImfTiledMisc.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/OpenEXR/IlmImf/ImfTiledMisc.cpp b/OpenEXR/IlmImf/ImfTiledMisc.cpp
+index 06ea3144..749537d4 100644
+--- a/OpenEXR/IlmImf/ImfTiledMisc.cpp
++++ b/OpenEXR/IlmImf/ImfTiledMisc.cpp
+@@ -46,6 +46,7 @@
  #include <ImfTileDescription.h>
+ #include <algorithm>
+ #include <limits>
 +#include <cstdint>
+ 
  #include "ImfNamespace.h"
  
- OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
+-- 
+2.42.0
+

@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "formencode";
-  version = "2.0.1";
+  version = "2.1.0";
+  format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     pname = "FormEncode";
     inherit version;
-    sha256 = "8f2974112c2557839d5bae8b76490104c03830785d923abbdef148bf3f710035";
+    sha256 = "sha256-63TSIweKKM8BX6iJZsbjTy0Y11EnMY1lwUS+2a/EJj8=";
   };
 
   postPatch = ''

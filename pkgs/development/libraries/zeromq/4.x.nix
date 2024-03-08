@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , asciidoc
 , pkg-config
@@ -11,24 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "zeromq";
-  version = "4.3.4";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "libzmq";
     rev = "v${version}";
-    sha256 = "sha256-epOEyHOswUGVwzz0FLxhow/zISmZHxsIgmpOV8C8bQM=";
+    sha256 = "sha256-q2h5y0Asad+fGB9haO4Vg7a1ffO2JSb7czzlhmT3VmI=";
   };
-
-  patches = [
-    # Backport gcc-13 fix:
-    #   https://github.com/zeromq/libzmq/pull/4480
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/zeromq/libzmq/commit/438d5d88392baffa6c2c5e0737d9de19d6686f0d.patch";
-      hash = "sha256-tSTYSrQzgnfbY/70QhPdOnpEXX05VAYwVYuW8P1LWf0=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake asciidoc pkg-config ];
   buildInputs = [ libsodium ];
@@ -37,11 +26,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   meta = with lib; {
     branch = "4";
     homepage = "http://www.zeromq.org";
     description = "The Intelligent Transport Layer";
-    license = licenses.lgpl3Plus;
+    license = licenses.mpl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
   };

@@ -49,5 +49,6 @@ stdenv.mkDerivation {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ AndersonTorres vrthra ];
     platforms = lib.platforms.unix;
+    mainProgram = "edit";
   };
 }

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "universal-ctags";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XlqBndo8g011SDGp3zM7S+AQ0aCp6rpQlqJF6e5Dd6w=";
+    hash = "sha256-f8+Ifjn7bhSYozOy7kn+zCLdHGrH3iFupHUZEGynz9Y=";
   };
 
   depsBuildBuild = [
@@ -55,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Tmain/utils.sh \
       --replace /bin/echo ${coreutils}/bin/echo
-
+    # fails on sandbox
+    rm -fr Tmain/ptag-proc-cwd.d/
     patchShebangs misc/*
   '';
 

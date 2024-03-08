@@ -29,7 +29,7 @@ We welcome new contributors of new packages to Nixpkgs, arguably the greatest so
 Before adding a new package, please consider the following questions:
 
 * Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
-* Does the project have a clear license statement? Remember that softwares are unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
+* Does the project have a clear license statement? Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
 * How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
 
@@ -113,6 +113,25 @@ Now that this is out of the way. To add a package to Nixpkgs:
    ```
 
 7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
+
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- Format the commit messages in the following way:
+
+  ```
+  (pkg-name): (from -> to | init at version | refactor | etc)
+
+  (Motivation for change. Link to release notes. Additional information.)
+  ```
+
+  Examples:
+
+  * nginx: init at 2.0.1
+  * firefox: 54.0.1 -> 55.0
+
+    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
 
 ## Category Hierarchy
 [categories]: #category-hierarchy
@@ -327,13 +346,17 @@ There are a few naming guidelines:
 
 - The `pname` attribute _should_ be identical to the upstream package name.
 
-- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
+- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer"` instead of `"MPlayer"`.
 
-- The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
+- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"`.
 
 - If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
 
 Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+
+- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning / tagging schema - then the latest upstream version in the above schema should be `0`.
+
+Example: Given a project that has no tags / released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
 
 - Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
@@ -361,25 +384,23 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 * `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
-* `meta.mainProgram` must be set when appropriate.
-* `meta.maintainers` should be set.
+* `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
+  * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`. For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.
+  * Packages like `polkit_gnome` that have no executables in the applicable directory should not set `meta.mainProgram`.
+  * Packages like `e2fsprogs` that have multiple executables, none of which can be considered the main program, should not set `meta.mainProgram`.
+  * Packages which are not primarily used for a single executable do not need to set `meta.mainProgram`.
+  * Always prefer using a hardcoded string (don't use `pname`, for example).
+  * When in doubt, ask for reviewer input.
+* `meta.maintainers` must be set for new packages.
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
 ### Import From Derivation
 
-Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
-[Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
-
-[Hydra]: https://github.com/NixOS/hydra
+[Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs for performance reasons:
+[Hydra](https://github.com/NixOS/hydra) evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
 
 Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
-
-<!-- TODO: remove the following and link to Nix manual once https://github.com/NixOS/nix/pull/7332 is merged -->
-
-See also [NixOS Wiki: Import From Derivation].
-
-[NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation
 
 ## Sources
 
@@ -395,7 +416,6 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 
   ```nix
   src = fetchgit {
-    url = "git@github.com:NixOS/nix.git"
     url = "git://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
     hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
@@ -459,7 +479,7 @@ Preferred source hash type is sha256. There are several ways to get it.
 
    in the package expression, attempt build and extract correct hash from error messages.
 
-   > **Warning**
+   > [!Warning]
    > You must use one of these four fake hashes and not some arbitrarily-chosen hash.
    > See [here][secure-hashes]
 
@@ -576,7 +596,7 @@ This is how the pull request looks like in this case: [https://github.com/NixOS/
 To run the main types of tests locally:
 
 - Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
-- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTest.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTests.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
 - Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
 - See `lib/tests/NAME.nix` for instructions on running specific library tests
 
@@ -704,16 +724,16 @@ It can happen that non-trivial updates include patches or more complex changes.
 
 Reviewing process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit text fits the guidelines.
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
   - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
-- Ensure that the meta field information is correct.
+- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
 - Ensure that the code contains no typos.
-- Building the package locally.
-  - pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
+- Build the package locally.
+  - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
   - It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
 
     ```ShellSession
@@ -730,7 +750,7 @@ Reviewing process:
     ```ShellSession
     $ nix-shell -p nixpkgs-review --run "nixpkgs-review pr PRNUMBER"
     ```
-- Running every binary.
+- Run every binary.
 
 Sample template for a package update review is provided below.
 
@@ -739,7 +759,7 @@ Sample template for a package update review is provided below.
 
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
@@ -756,18 +776,20 @@ New packages are a common type of pull requests. These pull requests consists in
 
 Review process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit name fits the guidelines.
-- Ensure that the meta fields contain correct information.
+- Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
+- Ensure that the package name and version [fits the guidelines](#package-naming).
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
+- Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
 - Report detected typos.
 - Ensure the package source:
-  - Uses mirror URLs when available.
+  - Uses `mirror://` URLs when available.
   - Uses the most appropriate functions (e.g. packages from GitHub should use `fetchFromGitHub`).
-- Building the package locally.
-- Running every binary.
+- Build the package locally.
+- Run every binary.
 
 Sample template for a new package review is provided below.
 
@@ -777,7 +799,7 @@ Sample template for a new package review is provided below.
 - [ ] package path fits guidelines
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] `meta.description` is set and fits guidelines
 - [ ] `meta.license` fits upstream license

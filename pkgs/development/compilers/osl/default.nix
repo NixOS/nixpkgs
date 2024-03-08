@@ -24,13 +24,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openshadinglanguage";
-  version = "1.12.13.0";
+  version = "1.13.7.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     rev = "v${version}";
-    hash = "sha256-EVV7YHovWwbRju+uv8IK2wpcpoK1ndZ8yNRHzU8LUuE=";
+    hash = "sha256-M8B5lnLEnWu0PQx4BKidFHXm4+Xs26EaD2caOA+bZ1k=";
   };
 
   cmakeFlags = [

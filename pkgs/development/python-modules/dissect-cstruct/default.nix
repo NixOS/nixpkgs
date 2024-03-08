@@ -9,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "dissect-cstruct";
-  version = "3.9";
-  format = "pyproject";
+  version = "3.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -18,10 +18,8 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cstruct";
     rev = "refs/tags/${version}";
-    hash = "sha256-v0giDdH6bYCSrotd9WGSlIMzylTz7FHeCE/JkCw7frY=";
+    hash = "sha256-QfnvWCI67y8GdCfXIRaehzb26IVZ8N0muUnNpr1NGJo=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

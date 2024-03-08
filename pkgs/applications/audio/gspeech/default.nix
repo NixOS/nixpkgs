@@ -55,6 +55,11 @@ python3.pkgs.buildPythonApplication rec {
     librsvg
   ];
 
+  postInstall = ''
+    install -Dm444 gspeech.desktop -t $out/share/applications
+    install -Dm444 icons/*.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/gspeech --prefix PATH : ${lib.makeBinPath [ picotts sox ]}
     wrapProgram $out/bin/gspeech-cli --prefix PATH : ${lib.makeBinPath [ picotts sox ]}

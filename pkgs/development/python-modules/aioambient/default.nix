@@ -3,7 +3,6 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -16,36 +15,17 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2023.08.0";
-  format = "pyproject";
+  version = "2024.01.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aioambient";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y8I4iPvxcK98Olb3JURNK37MKggdhcweKvNBa0ZtG6I=";
+    hash = "sha256-eqZVY0L+2BWF7cCXW/VLQYYXNPtUF6tJHQmeZNW1W5o=";
   };
-
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/aioambient/pull/295
-    #
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/aioambient/commit/fa21a2e82678a231a73c8a1153032980926f4c35.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'websockets = ">=11.0.1"' 'websockets = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core

@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "clifford";
   version = "1.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

@@ -2,6 +2,7 @@
 , automake
 , bison
 , fetchFromGitHub
+, fetchpatch
 , flex
 , git
 , lib
@@ -15,15 +16,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "19.13.0";
+  version = "19.14.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C775tL+x1IX4kfCM/7gOg/V8xunq/rkhIfdkwkhLENk=";
+    hash = "sha256-lxBn/T01Tsa7tid3mRJUigUwv9d3BAPZhV9Mp1lywBU=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix gcc-13 build failure due to missing <stdexcept> include
+    #   https://github.com/stellar/medida/pull/34
+    (fetchpatch {
+      name = "gcc-13-p1.patch";
+      url = "https://github.com/stellar/medida/commit/f91354b0055de939779d392999975d611b1b1ad5.patch";
+      stripLen = 1;
+      extraPrefix = "lib/libmedida/";
+      hash = "sha256-iVeSUY5Rcy62apIKJdbcHGgxAxpQCkygf85oSjbTTXU=";
+    })
+    (fetchpatch {
+      name = "gcc-13-p2.patch";
+      url = "https://github.com/stellar/stellar-core/commit/477b3135281b629554cabaeacfcdbcdc170aa335.patch";
+      hash = "sha256-UVRcAIA5LEaCn16lWfhg19UU7b/apigzTsfPROLZtYg=";
+    })
+  ];
 
   nativeBuildInputs = [
     automake
@@ -71,5 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "stellar-core";
   };
 })

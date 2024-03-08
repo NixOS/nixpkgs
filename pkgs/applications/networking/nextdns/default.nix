@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "nextdns";
-  version = "1.40.1";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "nextdns";
     repo = "nextdns";
     rev = "v${version}";
-    sha256 = "sha256-VK6e8+r0A642zP0Pae8qbQCWT+CGpHY7B9ZGobXl92A=";
+    sha256 = "sha256-aQUz6FK04h3nzieK9fX7odVVt/zcdhXlX3T1Z1rN/ak=";
   };
 
-  vendorHash = "sha256-CKKyLtqSzbmvpmDcoyGD79msAudlumqxcXaMTNbCbNI=";
+  vendorHash = "sha256-DATSGSFRMrX972CWCiSIlOhDuAG3zcVyuILZ3IpVirM=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://nextdns.io";
     license = licenses.mit;
     maintainers = with maintainers; [ pnelson ];
+    mainProgram = "nextdns";
   };
 }

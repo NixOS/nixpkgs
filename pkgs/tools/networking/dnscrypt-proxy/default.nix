@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "dnscrypt-proxy";
   version = "2.1.5";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

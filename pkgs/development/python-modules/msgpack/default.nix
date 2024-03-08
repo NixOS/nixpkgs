@@ -4,18 +4,19 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, borgbackup
 }:
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.0.5";
+  version = "1.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wHVUQoTq3Fzdxw9HVzMdmdy8FrK71ISdFfiq5M820xw=";
+    hash = "sha256-Vy78k9t6TSfkBFAZdcptLZd1cFwtkiOQ2Hj892jZLIc=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "msgpack"
   ];
+
+  passthru.tests = {
+    # borgbackup is sensible to msgpack versions: https://github.com/borgbackup/borg/issues/3753
+    # please be mindful before bumping versions.
+    inherit borgbackup;
+  };
 
   meta = with lib;  {
     description = "MessagePack serializer implementation";

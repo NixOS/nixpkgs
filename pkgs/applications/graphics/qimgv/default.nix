@@ -29,6 +29,10 @@ mkDerivation rec {
     pkg-config
   ];
 
+  cmakeFlags = [
+    "-DVIDEO_SUPPORT=ON"
+  ];
+
   buildInputs = [
     exiv2
     mpv

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pylnk3";
   version = "0.4.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

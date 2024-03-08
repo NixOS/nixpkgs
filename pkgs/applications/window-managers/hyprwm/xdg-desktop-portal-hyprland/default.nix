@@ -1,13 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, meson
-, ninja
+, cmake
 , pkg-config
 , wayland-scanner
 , makeWrapper
 , wrapQtAppsHook
 , hyprland-protocols
+, hyprlang
 , libdrm
 , mesa
 , pipewire
@@ -19,22 +19,22 @@
 , wayland
 , wayland-protocols
 , hyprland
+, hyprpicker
 , slurp
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "unstable-2023-09-10";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "aca51609d4c415b30e88b96c6f49f0142cbcdae7";
-    hash = "sha256-RF6LXm4J6mBF3B8VcQuABuU4g4tCPHgMYJQSoJ3DW+8=";
+    rev = "v${self.version}";
+    hash = "sha256-wP611tGIWBA4IXShWbah7TxqdbvhfcfT2vnXalX/qzk=";
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
+    cmake
     pkg-config
     wayland-scanner
     makeWrapper
@@ -43,6 +43,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     hyprland-protocols
+    hyprlang
     libdrm
     mesa
     pipewire
@@ -63,7 +64,7 @@ stdenv.mkDerivation {
       --prefix PATH ":" ${lib.makeBinPath [slurp hyprland]}
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${lib.makeBinPath [(placeholder "out")]}
+      --prefix PATH ":" ${lib.makeBinPath [(placeholder "out") hyprpicker]}
   '';
 
   meta = with lib; {
@@ -73,4 +74,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;
   };
-}
+})

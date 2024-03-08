@@ -4,26 +4,22 @@ Date: Thu, 18 May 2017 11:56:12 -0500
 Subject: [PATCH] "purity" patch for 5.0
 
 ---
- lib/Driver/ToolChains/Gnu.cpp | 7 -------
- 1 file changed, 7 deletions(-)
+ lib/Driver/ToolChains/Gnu.cpp | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
 index fe3c0191bb..c6a482bece 100644
 --- a/lib/Driver/ToolChains/Gnu.cpp
 +++ b/lib/Driver/ToolChains/Gnu.cpp
-@@ -487,13 +487,7 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
-   } else {
-     if (Args.hasArg(options::OPT_rdynamic))
-       CmdArgs.push_back("-export-dynamic");
-
--    if (!Args.hasArg(options::OPT_shared) && !IsStaticPIE &&
--        !Args.hasArg(options::OPT_r)) {
+@@ -446,9 +446,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+                            ToolChain.isPIEDefault(Args));
+       if (IsPIE)
+         CmdArgs.push_back("-pie");
 -      CmdArgs.push_back("-dynamic-linker");
 -      CmdArgs.push_back(Args.MakeArgString(Twine(D.DyldPrefix) +
 -                                           ToolChain.getDynamicLinker(Args)));
--    }
+     }
    }
  
-   CmdArgs.push_back("-o");
 -- 
 2.11.0

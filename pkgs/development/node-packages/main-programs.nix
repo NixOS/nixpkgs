@@ -5,20 +5,14 @@
   "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
-  "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@antora/cli" = "antora";
   "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
-  "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
-  "@mermaid-js/mermaid-cli" = "mmdc";
-  "@nerdwallet/shepherd" = "shepherd";
   "@prisma/language-server" = "prisma-language-server";
-  "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";
   "@vue/cli" = "vue";
   "@webassemblyjs/repl-1.11.1" = "wasm";
@@ -38,7 +32,6 @@
   fkill-cli = "fkill";
   fleek-cli = "fleek";
   git-run = "gr";
-  gitmoji-cli = "gitmoji";
   graphql-cli = "graphql";
   graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
@@ -52,10 +45,12 @@
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
   prettier = "prettier";
+  pulp = "pulp";
+  purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
-  react-native-cli = "react-native";
-  react-tools = "jsx";
+  purty = "purty";
+  pscid = "pscid";
   remod-cli = "remod";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
@@ -65,6 +60,6 @@
   vscode-css-languageserver-bin = "css-languageserver";
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";
+  vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
-  "@zwave-js/server" = "zwave-server";
 }

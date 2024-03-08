@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkg-config
+{ stdenv, lib, fetchurl, fetchpatch, cmake, pkg-config
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
@@ -37,6 +37,16 @@ stdenv.mkDerivation rec {
     ./bootstrap_logging.patch
   ];
 
+  postPatch = ''
+    cp ${fetchpatch {
+      # Backport fix for binutils-2.41.
+      name = "binutils-2.41.patch";
+      url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+      hash = "sha256-s9PcYbt0mFb2wvgMcFL1J+2OS6Sxyd2wYkGzLr2qd9M=";
+      stripLen = 1;
+    }} avidemux_core/ffmpeg_package/patches/
+  '';
+
   nativeBuildInputs =
     [ yasm cmake pkg-config makeWrapper ]
     ++ lib.optional withQT wrapQtAppsHook;
@@ -54,6 +64,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withOpus libopus
     ++ lib.optionals withQT [ qttools qtbase ]
     ++ lib.optional withVPX libvpx;
+
+  dontWrapQtApps = true;
 
   buildCommand = let
     wrapWith = makeWrapper: filename:
@@ -83,6 +95,11 @@ stdenv.mkDerivation rec {
 
     ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
 
+    # make the install path match the rpath
+    if [[ -d ''${!outputLib}/lib64 ]]; then
+      mv ''${!outputLib}/lib64 ''${!outputLib}/lib
+      ln -s lib ''${!outputLib}/lib64
+    fi
     fixupPhase
   '';
 

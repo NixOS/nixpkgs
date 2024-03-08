@@ -12,7 +12,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.0.2";
+  version = "1.0.29";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
@@ -51,19 +51,19 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-QvoEakfR5wmP10d6MDpfS8THke975bVyZc5pLVliUbQ=";
+        hash = "sha256-tcrFHzGJkpVDkrEUff6OR4i76E2+dmYIXuwJ3BiNvQc=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-izVtW28QE7Tty6DfQDKmw1oqD5GOolTzCeIUmtgI1Uw=";
+        hash = "sha256-ujiVw1Pemlo+OHPj8JtazNzYVziq8a65mYdXcS5ViL4=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-e/VXNCq2CwNsM7ruk8IGSwU/swkVhcvvQRv/yiIQtCU=";
+        hash = "sha256-rY9VixMXgn8E2NzZpJg873eADM9ZnJnAkdAVnj91S2o=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-kHv8PU48Le4lG3pf304hXggAtx/I5uBeu4aHmLsbdgw=";
+        hash = "sha256-mhDFX6Z1UFGXLqDbUAt8TP/8Ejavzu+WdFGayrtS2Ns=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -75,7 +75,7 @@ stdenvNoCC.mkDerivation rec {
           exit 0
       fi
       for platform in ${lib.escapeShellArgs meta.platforms}; do
-        update-source-version "bun" "0" "${lib.fakeSha256}" --source-key="sources.$platform"
+        update-source-version "bun" "0" "${lib.fakeHash}" --source-key="sources.$platform"
         update-source-version "bun" "$NEW_VERSION" --source-key="sources.$platform"
       done
     '';
@@ -94,5 +94,8 @@ stdenvNoCC.mkDerivation rec {
     ];
     maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower ];
     platforms = builtins.attrNames passthru.sources;
+    # Broken for Musl at 2024-01-13, tracking issue:
+    # https://github.com/NixOS/nixpkgs/issues/280716
+    broken = stdenvNoCC.hostPlatform.isMusl;
   };
 }

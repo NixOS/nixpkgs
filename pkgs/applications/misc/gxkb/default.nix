@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.omgbebebe ];
     platforms = platforms.linux;
+    mainProgram = "gxkb";
   };
 }

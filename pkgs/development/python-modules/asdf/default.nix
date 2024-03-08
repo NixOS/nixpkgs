@@ -33,8 +33,6 @@ buildPythonPackage rec {
     hash = "sha256-u8e7ot5NDRqQFH0eLVnGinBQmQD73BlR5K9HVjA7SIg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   patches = [
     # Fix default validation, https://github.com/asdf-format/asdf/pull/1203
     (fetchpatch {
@@ -94,5 +92,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    # Many tests fail, according to Hydra
+    broken = true;
   };
 }

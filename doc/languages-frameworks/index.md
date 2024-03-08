@@ -21,9 +21,11 @@ go.section.md
 haskell.section.md
 hy.section.md
 idris.section.md
+idris2.section.md
 ios.section.md
 java.section.md
 javascript.section.md
+julia.section.md
 lisp.section.md
 lua.section.md
 maven.section.md

@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "msitools";
-  version = "0.102";
+  version = "0.103";
 
   src = fetchurl {
     url = "mirror://gnome/sources/msitools/${lib.versions.majorMinor version}/msitools-${version}.tar.xz";
-    hash = "sha256-+khaQhOX71/gLfWrk/ztkav2hXMPQPlMcVe0MNJKNJg=";
+    hash = "sha256-0XYi7rvzf6TAm1m+C8jbCLJr4wCmcxx02h684mK86Dk=";
   };
 
   nativeBuildInputs = [

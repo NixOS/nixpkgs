@@ -10,12 +10,12 @@
 , glibcLocales
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "castget";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "http://savannah.nongnu.org/download/castget/castget-${version}.tar.bz2";
+    url = "http://savannah.nongnu.org/download/castget/castget-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Q4tffsfjGkXtN1ZjD+RH9CAVrNpT7AkgL0hihya16HU=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-}
+})

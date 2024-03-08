@@ -10,17 +10,15 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "3.22.1";
+  version = "3.26.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-r/Yb0/XXTfIKYjKEQ+OqnIYNUzD9+xnE2N3ETLYEAy8=";
+    hash = "sha256-Y+xwg5tkkJgQpkqns+W4UIhGLpPH4u08MuvvtwLzZyM=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace setup.cfg \

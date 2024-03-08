@@ -1,12 +1,10 @@
 { lib
-, aiohttp
 , platformdirs
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
 , flaky
 , installShellFiles
-, packaging
 , pycurl
 , pytest-asyncio
 , pytest-httpbin
@@ -20,31 +18,29 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.12";
-  format = "pyproject";
+  version = "2.13.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6mhVDC2jpIIOZeoKz4AxxU7jj8dqPVBKRWupbuY/T7E=";
+    hash = "sha256-q+az9oaxxIOv/vLFpkT3cF5GDJsa0Cid4oPWEKg5s7M=";
   };
 
   nativeBuildInputs = [
+    setuptools
     docutils
     installShellFiles
   ];
 
   propagatedBuildInputs = [
-    aiohttp
-    platformdirs
-    packaging
-    pycurl
-    setuptools
     structlog
+    platformdirs
     tornado
+    pycurl
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];

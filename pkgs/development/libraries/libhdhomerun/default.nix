@@ -6,34 +6,37 @@
 
 stdenv.mkDerivation rec {
   pname = "libhdhomerun";
-  version = "20220303";
+  version = "20231214";
 
   src = fetchurl {
     url = "https://download.silicondust.com/hdhomerun/libhdhomerun_${version}.tgz";
-    sha256 = "sha256-HlT/78LUiTkRUB2jHmYrnQY+bBiv4stcZlMyUnelSpc=";
+    hash = "sha256-VSoQLoqiq8xBYJDewvb4DaWfl/kfV5aOnp17PcAF268=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile \
-      --replace "-arch x86_64" "-arch ${stdenv.hostPlatform.darwinArch}"
-  '';
+  patches = [
+    ./nixos-darwin-no-fat-dylib.patch
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib,include/hdhomerun}
     install -Dm444 libhdhomerun${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
     install -Dm555 hdhomerun_config $out/bin
     cp *.h $out/include/hdhomerun
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Implements the libhdhomerun protocol for use with Silicondust HDHomeRun TV tuners";
     homepage = "https://www.silicondust.com/support/linux";
     license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ sielicki titanous ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.titanous ];
   };
 }

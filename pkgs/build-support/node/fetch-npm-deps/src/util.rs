@@ -4,7 +4,7 @@ use isahc::{
     Body, Request, RequestExt,
 };
 use serde_json::{Map, Value};
-use std::{env, path::Path};
+use std::{env, io::Read, path::Path};
 use url::Url;
 
 pub fn get_url(url: &Url) -> Result<Body, isahc::Error> {
@@ -28,7 +28,7 @@ pub fn get_url(url: &Url) -> Result<Body, isahc::Error> {
     if let Some(host) = url.host_str() {
         if let Ok(npm_tokens) = env::var("NIX_NPM_TOKENS") {
             if let Ok(tokens) = serde_json::from_str::<Map<String, Value>>(&npm_tokens) {
-                if let Some(token) = tokens.get(host).and_then(|val| val.as_str()) {
+                if let Some(token) = tokens.get(host).and_then(serde_json::Value::as_str) {
                     request = request.header("Authorization", format!("Bearer {token}"));
                 }
             }
@@ -38,15 +38,23 @@ pub fn get_url(url: &Url) -> Result<Body, isahc::Error> {
     Ok(request.body(())?.send()?.into_body())
 }
 
-pub fn get_url_with_retry(url: &Url) -> Result<Body, isahc::Error> {
+pub fn get_url_body_with_retry(url: &Url) -> Result<Vec<u8>, isahc::Error> {
     retry(ExponentialBackoff::default(), || {
-        get_url(url).map_err(|err| {
-            if err.is_network() || err.is_timeout() {
-                backoff::Error::transient(err)
-            } else {
-                backoff::Error::permanent(err)
-            }
-        })
+        get_url(url)
+            .and_then(|mut body| {
+                let mut buf = Vec::new();
+
+                body.read_to_end(&mut buf)?;
+
+                Ok(buf)
+            })
+            .map_err(|err| {
+                if err.is_network() || err.is_timeout() {
+                    backoff::Error::transient(err)
+                } else {
+                    backoff::Error::permanent(err)
+                }
+            })
     })
     .map_err(|backoff_err| match backoff_err {
         backoff::Error::Permanent(err)

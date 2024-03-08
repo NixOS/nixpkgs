@@ -31,7 +31,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     })
   ];
 
-  pythonRelaxDeps = [ "attrs" ];
+  pythonRelaxDeps = [ "attrs" "ruamel.yaml" ];
 
   nativeBuildInputs = [
     wrapQtAppsHook

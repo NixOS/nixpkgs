@@ -3,14 +3,13 @@
 , fetchurl
 , fetchpatch
 , texlive
+, texliveInfraOnly
 , buildPackages
 }:
 
 let
   buildPlatformTools = [ "pse2unic" "adobe2h" ];
-  tex = texlive.combine {
-    inherit (texlive) collection-fontsrecommended;
-  };
+  tex = texliveInfraOnly.withPackages (ps: [ ps.collection-fontsrecommended ]);
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-d3CPDxXdVVLNtKkN0rC2G02dh/bJrRll/nVzQNggwkk=";
     })
   ];
+
+  # fix implicit-int compile error in test code used in configure script
+  postPatch = ''
+    sed -i 's/^main()/int main()/' configure
+  '';
 
   hardeningDisable = [ "format" ];
 

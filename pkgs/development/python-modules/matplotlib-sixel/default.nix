@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "matplotlib-sixel";
   version = "0.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

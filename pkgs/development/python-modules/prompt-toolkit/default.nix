@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.38";
+  version = "3.0.41";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    hash = "sha256-I6xdUFOKmjjIveBf7LR9C0A+zQZihXqG+Ib3mFY9W5s=";
+    hash = "sha256-lBNn2X/IFVSIIqomwqJp/cTrIensBfxdRHzwm61ddfA=";
   };
 
   propagatedBuildInputs = [

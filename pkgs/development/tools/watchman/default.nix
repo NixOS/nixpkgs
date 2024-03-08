@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "watchman";
-  version = "2023.08.14.00";
+  version = "2024.01.22.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    hash = "sha256-41bBPFlLYFHySyX4/GUllT1pNywSRcH7x/pnb5iN/1o=";
+    hash = "sha256-+qlcdekBcRwmgrtQ8HcLHphURf0c4oRCs6nbjAzT26c=";
   };
 
   cmakeFlags = [
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Watches files and takes action when they change";
     homepage = "https://facebook.github.io/watchman";
-    maintainers = with maintainers; [ cstrahan kylesferrazza ];
+    maintainers = with maintainers; [ kylesferrazza ];
     platforms = platforms.unix;
     license = licenses.mit;
   };

@@ -1,20 +1,29 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, runCommand
+, web-ext
 }:
 
 buildNpmPackage rec {
   pname = "web-ext";
-  version = "7.6.2";
+  version = "7.11.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "web-ext";
     rev = version;
-    hash = "sha256-tFMngcoHFA3QmR0AK68elUVpli37PsVlcL978o7DQCs=";
+    hash = "sha256-tXYqAAzxAFQGREkNGgBrHLp7ukRDMtr0bPYW7hOEniY=";
   };
 
-  npmDepsHash = "sha256-KPBKUjCxva11w/E+Qhlx+1vikpCL7Hr9MiKenYHEVSU=";
+  npmDepsHash = "sha256-uKAEWe28zUgE7Fv00sGXD5dKje/pHh22yJlYtk+7tN8=";
+
+  npmBuildFlags = [ "--production" ];
+
+  passthru.tests.help = runCommand "${pname}-tests" { } ''
+    ${web-ext}/bin/web-ext --help
+    touch $out
+  '';
 
   meta = {
     description = "A command line tool to help build, run, and test web extensions";

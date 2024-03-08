@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "nest-cli";
-  version = "10.1.17";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
     owner = "nestjs";
     repo = pname;
     rev = version;
-    hash = "sha256-03GDrKjlvl3O3kJlbbyDYxtlfwLkZbvxC9gvP534zSY=";
+    hash = "sha256-FSI87oeHiNqL8FhGavPtqurOr/1Y5iGawSwhBhLB2Ls=";
   };
 
-  npmDepsHash = "sha256-nZ9ant2c+15bRBikFcKZW8aiFqI3WC6hktSiBfnma/I=";
+  npmDepsHash = "sha256-RqotLpMISfB2xE9zng0TkapJ0y1fuVWP/0nY2VcMVRU=";
 
   env = {
     npm_config_build_from_source = true;
@@ -37,6 +37,5 @@ buildNpmPackage rec {
     license = licenses.mit;
     mainProgram = "nest";
     maintainers = [ maintainers.ehllie ];
-    broken = stdenv.isDarwin; # https://github.com/nestjs/nest-cli/pull/2281
   };
 }

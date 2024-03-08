@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/theimpossibleastronaut/rmw/blob/${src.rev}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "rmw";
   };
 }

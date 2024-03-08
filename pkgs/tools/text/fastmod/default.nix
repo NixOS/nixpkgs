@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fastmod";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j5+6ijJ04/Non7AUSN35OhfZ04MiPUDU4V1HLwZaM9k=";
+    sha256 = "sha256-A/3vzfwaStoQ9gdNM8yjmL2J/pQjj6yb68WThiTF+1E=";
   };
 
-  cargoSha256 = "sha256-RNTnP3RKRZXo3+L54y/8nBunGbsxVY72sbl+ZrqfeMI=";
+  cargoHash = "sha256-sFrABp4oYhel+GONFsTbunq+4We2DicvF9A3FT/ZArc=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

@@ -8,6 +8,7 @@
 , extra-cmake-modules
 , cairo
 , pango
+, expat
 , fribidi
 , fmt
 , wayland
@@ -19,7 +20,6 @@
 , enchant
 , gdk-pixbuf
 , libGL
-, libevent
 , libuuid
 , libselinux
 , libXdmcp
@@ -29,6 +29,7 @@
 , libdatrie
 , xcbutilkeysyms
 , pcre
+, xcbutil
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
@@ -43,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.0";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-tnYyHhldPmMZcygpcOcbaYFQbRQjPr/FlvyYfRylTmQ=";
+    hash = "sha256-MeknggrpOzpkT1EXZCftIrlevuMEEHM5d8vszKRp+DI=";
   };
 
   prePatch = ''
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    expat
     fmt
     isocodes
     cairo
@@ -77,13 +79,13 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json_c
     libGL
-    libevent
     libuuid
     libselinux
     libsepol
     libXdmcp
     libxkbcommon
     pcre
+    xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit

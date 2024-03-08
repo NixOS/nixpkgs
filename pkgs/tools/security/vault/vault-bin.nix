@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vault-bin";
-  version = "1.14.3";
+  version = "1.15.6";
 
   src =
     let
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       sha256 = selectSystem {
-        x86_64-linux = "sha256-zgRX4RfyZMHuE/yYFGLfbEi2SJ1DIxp5UShOvIYZmG8=";
-        aarch64-linux = "sha256-ZGLzZylXnkS/0BuUz/PSGHDXRZoVqSA/+hREDp9tmsE=";
-        i686-linux = "sha256-qG2dpE/snBL7eVTrtX1ZP9gtCIyhPqebUo3T515uHBU=";
-        x86_64-darwin = "sha256-21OH98/vlUtnb3s4wA3iDV4b5jVnN2BFJ3AWMonHpPw=";
-        aarch64-darwin = "sha256-Usbwmqyo/RKUeGXCBPul14cccjawt1Des/hsr8mKA/Q=";
+        x86_64-linux = "sha256-qZXR0bqsU0BcM4hWbCZ6vqnjh5pnddl7WTKKBGt1ioU=";
+        aarch64-linux = "sha256-4f0D+D+rL28mzCN8ku/FWrRFFUevY5yWIgifvZrDbuw=";
+        i686-linux = "sha256-YoG2NC6cBCunIql7kIRIOs0hU0dIQKIHN/Z27IGj1io=";
+        x86_64-darwin = "sha256-sdbwnoWZKbq0l86ikfHAR+LYI285IGRiZBB7woD/s/8=";
+        aarch64-darwin = "sha256-JcTt67eWgORgEmuiBpY5fSGJr8vvCOwKbnOTYZh2fIM=";
       };
     in
     fetchzip {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "A tool for managing secrets, this binary includes the UI";
     homepage = "https://www.vaultproject.io";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mpl20;
+    license = licenses.bsl11;
     maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man techknowlogick mkaito ];
     mainProgram = "vault";
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];

@@ -55,10 +55,6 @@ let
       # used as a garbage collection root.
       ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
 
-      # Prevent the current configuration from being garbage-collected.
-      mkdir -p /nix/var/nix/gcroots
-      ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
-
       exit $_status
     '';
 
@@ -233,23 +229,15 @@ in
   config = {
 
     system.activationScripts.stdio = ""; # obsolete
+    system.activationScripts.var = ""; # obsolete
 
-    system.activationScripts.var =
-      ''
-        # Various log/runtime directories.
-
-        mkdir -p /var/tmp
-        chmod 1777 /var/tmp
-
-        # Empty, immutable home directory of many system accounts.
-        mkdir -p /var/empty
-        # Make sure it's really empty
-        ${pkgs.e2fsprogs}/bin/chattr -f -i /var/empty || true
-        find /var/empty -mindepth 1 -delete
-        chmod 0555 /var/empty
-        chown root:root /var/empty
-        ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
-      '';
+    systemd.tmpfiles.rules = [
+      # Prevent the current configuration from being garbage-collected.
+      "d /nix/var/nix/gcroots -"
+      "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
+      "D /var/empty 0555 root root -"
+      "h /var/empty - - - - +i"
+    ];
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
       then ''

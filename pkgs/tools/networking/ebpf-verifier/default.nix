@@ -39,8 +39,6 @@ stdenv.mkDerivation {
     yaml-cpp
   ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   installPhase = ''
     runHook preInstall
 
@@ -56,5 +54,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gaelreyrol ];
+    mainProgram = "ebpf-verifier";
   };
 }

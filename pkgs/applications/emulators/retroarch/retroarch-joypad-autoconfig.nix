@@ -1,22 +1,27 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, gitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "retroarch-joypad-autoconfig";
-  version = "1.15.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "retroarch-joypad-autoconfig";
     rev = "v${version}";
-    hash = "sha256-/F2Y08uDA/pIIeLiLfOQfGVjX2pkuOqPourlx2RbZ28=";
+    hash = "sha256-rmbZxXxHwIPb/zVBQiWTRPLVS+DXTrsw8d6t9nTg/ng=";
   };
 
   makeFlags = [
     "PREFIX=$(out)"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Joypad autoconfig files";

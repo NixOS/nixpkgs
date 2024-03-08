@@ -90,7 +90,7 @@ lib.mkOption {
 ```
 :::
 
-### `mkPackageOption`, `mkPackageOptionMD` {#sec-option-declarations-util-mkPackageOption}
+### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
 
 Usage:
 
@@ -121,15 +121,13 @@ valid attribute path in pkgs (if name is a list).
 
 If you wish to explicitly provide no default, pass `null` as `default`.
 
-During the transition to CommonMark documentation `mkPackageOption` creates an option with a DocBook description attribute, once the transition is completed it will create a CommonMark description instead. `mkPackageOptionMD` always creates an option with a CommonMark description attribute and will be removed some time after the transition is completed.
-
 []{#ex-options-declarations-util-mkPackageOption}
 Examples:
 
 ::: {#ex-options-declarations-util-mkPackageOption-hello .example}
 ### Simple `mkPackageOption` usage
 ```nix
-lib.mkPackageOptionMD pkgs "hello" { }
+lib.mkPackageOption pkgs "hello" { }
 # is like
 lib.mkOption {
   type = lib.types.package;
@@ -143,7 +141,7 @@ lib.mkOption {
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
 ### `mkPackageOption` with explicit default and example
 ```nix
-lib.mkPackageOptionMD pkgs "GHC" {
+lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
   example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }

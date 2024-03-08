@@ -74,9 +74,22 @@ in {
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = if lib.versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+      default =
+        if lib.versionAtLeast config.system.stateVersion "24.05"
+        then pkgs.netbox_3_7
+        else if lib.versionAtLeast config.system.stateVersion "23.11"
+        then pkgs.netbox_3_6
+        else if lib.versionAtLeast config.system.stateVersion "23.05"
+        then pkgs.netbox_3_5
+        else pkgs.netbox_3_3;
       defaultText = lib.literalExpression ''
-        if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+        if lib.versionAtLeast config.system.stateVersion "24.05"
+        then pkgs.netbox_3_7
+        else if lib.versionAtLeast config.system.stateVersion "23.11"
+        then pkgs.netbox_3_6
+        else if lib.versionAtLeast config.system.stateVersion "23.05"
+        then pkgs.netbox_3_5
+        else pkgs.netbox_3_3;
       '';
       description = lib.mdDoc ''
         NetBox package to use.
@@ -248,9 +261,7 @@ in {
       ensureUsers = [
         {
           name = "netbox";
-          ensurePermissions = {
-            "DATABASE netbox" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -260,6 +271,7 @@ in {
     systemd.targets.netbox = {
       description = "Target for all NetBox services";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "redis-netbox.service" ];
     };
 
@@ -298,19 +310,20 @@ in {
           ${pkg}/bin/netbox trace_paths --no-input
           ${pkg}/bin/netbox collectstatic --no-input
           ${pkg}/bin/netbox remove_stale_contenttypes --no-input
-          # TODO: remove the condition when we remove netbox_3_3
-          ${lib.optionalString
-            (lib.versionAtLeast cfg.package.version "3.5.0")
-            "${pkg}/bin/netbox reindex --lazy"}
+          ${pkg}/bin/netbox reindex --lazy
           ${pkg}/bin/netbox clearsessions
-          ${pkg}/bin/netbox clearcache
+          ${lib.optionalString
+            # The clearcache command was removed in 3.7.0:
+            # https://github.com/netbox-community/netbox/issues/14458
+            (lib.versionOlder cfg.package.version "3.7.0")
+            "${pkg}/bin/netbox clearcache"}
 
           echo "${cfg.package.version}" > "$versionFile"
         '';
 
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
-            ${pkgs.python3Packages.gunicorn}/bin/gunicorn netbox.wsgi \
+            ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
               --bind ${cfg.listenAddress}:${toString cfg.port} \
               --pythonpath ${pkg}/opt/netbox/netbox
           '';

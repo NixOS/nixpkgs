@@ -1,26 +1,13 @@
-diff --git a/consensus/types/Cargo.toml b/consensus/types/Cargo.toml
-index 46b88af66..c8c909234 100644
---- a/consensus/types/Cargo.toml
-+++ b/consensus/types/Cargo.toml
-@@ -37,7 +37,7 @@ cached_tree_hash = { path = "../cached_tree_hash" }
- serde_yaml = "0.8.13"
- tempfile = "3.1.0"
- derivative = "2.1.1"
--rusqlite = { version = "0.28.0", features = ["bundled"], optional = true }
-+rusqlite = { version = "0.28.0", optional = true }
- # The arbitrary dependency is enabled by default since Capella to avoid complexity introduced by
- # `AbstractExecPayload`
- arbitrary = { version = "1.0", features = ["derive"] }
-diff --git a/validator_client/slashing_protection/Cargo.toml b/validator_client/slashing_protection/Cargo.toml
-index 631e54dc4..dec95156b 100644
---- a/validator_client/slashing_protection/Cargo.toml
-+++ b/validator_client/slashing_protection/Cargo.toml
-@@ -12,7 +12,7 @@ path = "tests/main.rs"
- [dependencies]
- tempfile = "3.1.0"
- types = { path = "../../consensus/types" }
--rusqlite = { version = "0.28.0", features = ["bundled"] }
-+rusqlite = { version = "0.28.0" }
- r2d2 = "0.8.9"
- r2d2_sqlite = "0.21.0"
- serde = "1.0.116"
+diff --git a/Cargo.toml b/Cargo.toml
+index 62c0e7bd2..a089e3c5b 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -138,7 +138,7 @@ rayon = "1.7"
+ regex = "1"
+ reqwest = { version = "0.11", default-features = false, features = ["blocking", "json", "stream", "rustls-tls"] }
+ ring = "0.16"
+-rusqlite = { version = "0.28", features = ["bundled"] }
++rusqlite = { version = "0.28" }
+ serde = { version = "1", features = ["derive"] }
+ serde_json = "1"
+ serde_repr = "0.1"

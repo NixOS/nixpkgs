@@ -4,6 +4,7 @@
 , fetchpatch
 , autoreconfHook
 , perl
+, nixosTests
 , withDebug ? false
 }:
 
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook perl ];
 
   configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
+  passthru.tests = { inherit (nixosTests) tinyproxy; };
 
   meta = with lib; {
     homepage = "https://tinyproxy.github.io/";
@@ -37,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.carlosdagos ];
+    mainProgram = "tinyproxy";
   };
 }

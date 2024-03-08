@@ -14,12 +14,13 @@
 , pythonOlder
 , pytz
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "8.8.0";
-  format = "setuptools";
+  version = "9.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,8 +28,12 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-fWAVTaie+6lz5cX7hg0s22kHXelIfhh5FNTfxxbUEPw=";
+    hash = "sha256-5PhINmG1y+oAEpfxaB8ZFHfWlo0jRZnUKO5oUPcnFuM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -38,6 +43,9 @@ buildPythonPackage rec {
     pytz
     requests
   ];
+
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     aiounittest

@@ -1,33 +1,64 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, nbformat
-, sphinx
+, fetchFromGitHub
+, hatchling
+, ipykernel
+, ipython
 , ipywidgets
-, pythonOlder
 , nbconvert
+, nbformat
+, pythonOlder
+, sphinx
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-sphinx";
-  version = "0.4.0";
+  version = "0.5.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "jupyter_sphinx";
-    hash = "sha256-DBGjjxNDE48sUFHA00xMVF9EgBdMG9QcAlb+gm4LqlU=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "jupyter";
+    repo = "jupyter-sphinx";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-o/i3WravKZPf7uw2H4SVYfAyaZGf19ZJlkmeHCWcGtE=";
   };
 
-  propagatedBuildInputs = [ nbconvert nbformat sphinx ipywidgets ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    ipykernel
+    ipython
+    ipywidgets
+    nbconvert
+    nbformat
+    sphinx
+  ];
 
-  disabled = pythonOlder "3.5";
+  pythonImportsCheck = [
+    "jupyter_sphinx"
+  ];
+
+  env.JUPYTER_PLATFORM_DIRS = 1;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Jupyter Sphinx Extensions";
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
+    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/${src.rev}";
     license = licenses.bsd3;
   };
-
 }

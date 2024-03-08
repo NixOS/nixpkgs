@@ -6,15 +6,14 @@
 
 buildPythonPackage {
   pname = "std2";
-  version = "unstable-2023-07-09";
-
-  format = "pyproject";
+  version = "unstable-2023-10-07";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "std2";
-    rev = "2d5594b40585ecae60ce5175bee68cc8b3085ee6";
-    hash = "sha256-phGIWow7PGOtS1Pre1Gz0Xg6izGp6BiUTmze5jI/BwY=";
+    rev = "6332e559ee51c3a7c956804afdd7e1cc6ad47965";
+    hash = "sha256-huN7P/Ws6anrFXDG7L5xxMenS25BHquV9cMi1s7WFJ4=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "flask-elastic";
   version = "0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Elastic";

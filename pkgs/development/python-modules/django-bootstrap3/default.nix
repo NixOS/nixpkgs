@@ -3,7 +3,8 @@
 , fetchFromGitHub
 
 # build-system
-, hatchling
+, setuptools
+, setuptools-scm
 
 # non-propagates
 , django
@@ -15,22 +16,19 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "23.4";
+  version = "23.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1/JQ17GjBHH0JbY4EnHOS2B3KhEJdG2yL6O2nc1HNNc=";
+    hash = "sha256-qqG9w0bQYoQgWXCks/WwwQVoh2DhIMLaFXDQ4z6D84g=";
   };
 
-  postPatch = ''
-    sed -i '/beautifulsoup4/d' pyproject.toml
-  '';
-
   nativeBuildInputs = [
-    hatchling
+    setuptools
+    setuptools-scm
   ];
 
   buildInputs = [

@@ -70,13 +70,14 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - mopidy mopidy - -"
-    ];
+    systemd.tmpfiles.settings."10-mopidy".${cfg.dataDir}.d = {
+      user = "mopidy";
+      group = "mopidy";
+    };
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "sound.target" ];
+      after = [ "network-online.target" "sound.target" ];
       description = "mopidy music player daemon";
       serviceConfig = {
         ExecStart = "${mopidyEnv}/bin/mopidy --config ${concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";

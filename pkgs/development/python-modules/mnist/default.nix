@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "mnist";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "datapythonista";

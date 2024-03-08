@@ -4,8 +4,8 @@
 }:
 
 let params = if lib.versionAtLeast ocaml.version "5.0" then {
-    version = "4.0.0";
-    hash = "sha256-yNLN5bBe4aft9Rl5VHmlOYTlnCdR2NgDWsc3uJHaZy4=";
+    version = "5.1.0";
+    hash = "sha256-J3qkytgJkk2gT83KJ47nNM4cXqVHbx4iTPK+fLwR7Wk=";
     propagatedBuildInputs = [ algaeff bwd ];
   } else {
     version = "2.0.0";
@@ -18,7 +18,6 @@ buildDunePackage rec {
   inherit (params) version;
 
   minimalOCamlVersion = "4.12";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "RedPRL";

@@ -18,7 +18,7 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      checksum = "sha256-9f5Ewd63pLpMbewtQ0u4WsRnZQEn1lfh6b/jZ8yDSMU=";
+      checksum = "sha256-9o0nprGcJhudS1LNm+T7Vf0Dwd1RBauYKI+w1FBQ3ZM=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
@@ -30,7 +30,7 @@ let
   inherit (binary) platform checksum;
 in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "12.17.4";
+  version = "13.2.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";

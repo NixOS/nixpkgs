@@ -17,8 +17,6 @@ python3Packages.buildPythonApplication rec {
     hatch-vcs
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = with python3Packages; [
     pykeepass
     pynput

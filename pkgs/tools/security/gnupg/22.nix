@@ -5,6 +5,7 @@
 , enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
 , guiSupport ? stdenv.isDarwin, pinentry
+, nixosTests
 }:
 
 assert guiSupport -> enableMinimal == false;
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = lib.nixosTests.gnupg;
+  passthru.tests = nixosTests.gnupg;
 
   meta = with lib; {
     homepage = "https://gnupg.org";

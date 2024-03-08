@@ -47,5 +47,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ gpl2 ];
     homepage = "https://deanproxy.com/code";
     platforms = lib.platforms.unix;
+    mainProgram = "email";
   };
 }

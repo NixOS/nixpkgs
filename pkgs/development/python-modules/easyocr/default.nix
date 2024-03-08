@@ -4,7 +4,7 @@
 , hdf5
 , numpy
 , onnx
-, opencv3
+, opencv4
 , pillow
 , pyaml
 , pyclipper
@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "easyocr";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "JaidedAI";
     repo = "EasyOCR";
     rev = "refs/tags/v${version}";
-    hash = "sha256-01Exz55eTIO/xzdq/dzV+ELkU75hpxe/EbjIqLBA8h0=";
+    hash = "sha256-EiiJ2LJ3uYIvgPd2y25MraV5kTa47JalDR7SLbkM9UI=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     hdf5
     numpy
-    opencv3
+    opencv4
     pillow
     pyaml
     pyclipper

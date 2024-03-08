@@ -3,6 +3,9 @@
 , pythonOlder
 , fetchPypi
 
+# build-system
+, setuptools
+
 # docs
 , python
 , sphinx
@@ -31,12 +34,13 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     sphinx
     sphinx-rtd-theme
   ];
 
   postInstall = ''
-    ${python.pythonForBuild.interpreter} setup.py build_sphinx --build-dir=$doc
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_sphinx --build-dir=$doc
   '';
 
   nativeCheckInputs = [

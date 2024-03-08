@@ -19,7 +19,6 @@
 , glibc
 , gnome
 , gnome-desktop
-, gnome-online-accounts
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -39,7 +38,6 @@
 , libwacom
 , libxml2
 , libxslt
-, magpie
 , meson
 , modemmanager
 , networkmanager
@@ -55,18 +53,19 @@
 , upower
 , webp-pixbuf-loader
 , wrapGAppsHook
+, enableSshSocket ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "budgie-control-center";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-7E23cgX7TkBJT/yansBfvMx0ddfAwrF7mGfqzbyLY4Q=";
+    sha256 = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
   };
 
   patches = [
@@ -102,13 +101,13 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gnome-desktop
-    gnome-online-accounts
     gnome.adwaita-icon-theme
     gnome.cheese
     gnome.gnome-bluetooth_1_0
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
     gnome.gnome-user-share
+    gnome.mutter
     gsettings-desktop-schemas
     gsound
     gtk3
@@ -126,13 +125,16 @@ stdenv.mkDerivation rec {
     libsecret
     libwacom
     libxml2
-    magpie
     modemmanager
     networkmanager
     polkit
     samba
     udisks2
     upower
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "ssh" enableSshSocket)
   ];
 
   preConfigure = ''
@@ -159,7 +161,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       # WM keyboard shortcuts
-      --prefix XDG_DATA_DIRS : "${magpie}/share"
+      --prefix XDG_DATA_DIRS : "${gnome.mutter}/share"
     )
   '';
 

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
-, gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
+, gtk3, webkitgtk, glib-networking, gnome, gspell, texliveMedium
 , shared-mime-info, libhandy, fira, sassc
 }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     appstream-glib wrapGAppsHook sassc gobject-introspection ];
 
   buildInputs = [ glib pythonEnv gtk3
-    gnome.adwaita-icon-theme webkitgtk gspell texlive
+    gnome.adwaita-icon-theme webkitgtk gspell texliveMedium
     glib-networking libhandy ];
 
   postPatch = ''
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
-      --prefix PATH : "${texlive}/bin"
+      --prefix PATH : "${texliveMedium}/bin"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';
@@ -54,5 +54,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "apostrophe";
   };
 }

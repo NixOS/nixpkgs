@@ -45,15 +45,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, versionAttr ? {
-  major = "3.10";
-  minor = "7";
-  patch = "0";
-}
+, version ? "3.10.9.2"
 }:
 
 let
-  sourceSha256 = "sha256-7fIQMcx90wI4mAZmR26/rkBKPKhNxgu3oWpJTV3C+Ek=";
+  sourceSha256 = "sha256-SMalZwIvATZ3rqAAqeSmf8/RJ1d9pp7NvoWO/YP0BMc=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -252,6 +248,11 @@ let
     gr-zeromq = {
       runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
@@ -271,7 +272,7 @@ let
       removeReferencesTo
       featuresInfo
       features
-      versionAttr
+      version
       sourceSha256
       overrideSrc
       fetchFromGitHub
@@ -279,33 +280,17 @@ let
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared.passthru) hasFeature; # function
 in
 
-stdenv.mkDerivation {
-  inherit pname;
-  inherit (shared)
-    version
-    src
-    nativeBuildInputs
-    buildInputs
-    cmakeFlags
-    disallowedReferences
-    stripDebugList
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
+stdenv.mkDerivation (finalAttrs: (shared // {
+  inherit pname version;
+  # Will still evaluate correctly if not used here. It only helps nix-update
+  # find the right file in which version is defined.
+  inherit (shared) src;
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
-    # https://github.com/gnuradio/gnuradio/pull/6808
-    (fetchpatch {
-      name = "gnuradio-fmt10.1.patch";
-      url = "https://github.com/gnuradio/gnuradio/commit/9357c17721a27cc0aae3fe809af140c84e492f37.patch";
-      hash = "sha256-w3b22PTqoORyYQ3RKRG+2htQWbITzQiOdSDyuejUtHQ=";
-    })
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must
@@ -332,4 +317,4 @@ stdenv.mkDerivation {
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;
-}
+}))

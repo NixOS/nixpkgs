@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bedtools";
-  version = "2.31.0";
+  version = "2.31.1";
 
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "bedtools2";
     rev = "v${version}";
-    sha256 = "sha256-LBD3z0+zGbQJ67oyPRFPgbiMY9EP17vSk1EKz3DrkEc=";
+    sha256 = "sha256-rrk+FSv1bGL0D1lrIOsQu2AT7cw2T4lkDiCnzil5fpg=";
   };
 
   strictDeps = true;

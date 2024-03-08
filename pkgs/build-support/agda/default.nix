@@ -47,6 +47,7 @@ let
     "lagda.org"
     "lagda.rst"
     "lagda.tex"
+    "lagda.typ"
   ];
 
   defaults =

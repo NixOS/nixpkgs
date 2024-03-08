@@ -5,24 +5,18 @@
 
 buildGoModule rec {
   pname = "cel-go";
-  version = "0.18.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cel-go";
     rev = "v${version}";
-    hash = "sha256-+YGRcTlPKTdecMicW4UjupSnuuq5msfGKTP/bwOf7dw=";
+    hash = "sha256-RN3Eqdf1Zon0gSsP3jGxydVEa0NL5filAei4+xPFNv8=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-RSCZOR++WBoGffCQp114Sa1Dbms2tBa0xceVQ3skwR4=";
-
-  patches = [
-    # repl/go.mod and repl/go.sum are outdated
-    # ran `go mod tidy` in the repl directory
-    ./go-mod-tidy.patch
-  ];
+  vendorHash = "sha256-jNlzsx1QII9UBHQDU7nSzkNLtfbuce4O1AcPaFqtj9c=";
 
   subPackages = [
     "main"

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "drf-jwt";
   version = "1.19.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Styria-Digital";

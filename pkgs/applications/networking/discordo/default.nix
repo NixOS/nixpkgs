@@ -3,16 +3,16 @@
 
 buildGoModule rec {
   pname = "discordo";
-  version = "unstable-2023-04-07";
+  version = "unstable-2024-03-03";
 
   src = fetchFromGitHub {
     owner = "ayn2op";
     repo = pname;
-    rev = "f8c58057945b1ded2f78dc0956ea25aa281a0b31";
-    hash = "sha256-FUSPQK4rB0J89s+I7yhF8SQ/Q9uygQSCF9o6ltYxOk4=";
+    rev = "ce2091d566f2d999d83b3c9463860b73f1d163ae";
+    hash = "sha256-71i/8t768RtD0Gk2cpSdznERSNf1gErQrrOGYiZz05g=";
   };
 
-  vendorHash = "sha256-fLhyyIChqh+eEzht3CSLPfx6glw0YhiTb9PsbWJafWQ=";
+  vendorHash = "sha256-dBJYTe8aZtNuBwmcpXb3OEHoLVCa/GbGExLIRc8cVbo=";
 
   CGO_ENABLED = 0;
 
@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/ayn2op/discordo";
     license = licenses.mit;
     maintainers = [ maintainers.arian-d ];
+    mainProgram = "discordo";
   };
 }

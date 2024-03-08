@@ -153,6 +153,7 @@ let
       maintainers = with maintainers; [ deliciouslytyped lilyinstarlight ];
       platforms = platforms.unix;
       knownVulnerabilities = [
+        "CVE-2023-38545"  # SOCKS5 heap buffer overflow - https://curl.se/docs/CVE-2023-38545.html
         "CVE-2023-32001"  # fopen TOCTOU race condition - https://curl.se/docs/CVE-2023-32001.html
         "CVE-2022-43551"  # HSTS bypass - https://curl.se/docs/CVE-2022-43551.html
         "CVE-2022-42916"  # HSTS bypass - https://curl.se/docs/CVE-2022-42916.html

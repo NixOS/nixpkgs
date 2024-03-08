@@ -12,6 +12,7 @@ let
     inherit (cfg)
       verbose
       temp
+      turbo
       ;
     # `core` and `cache` are both intentionally set to `cfg.coreOffset` as according to the undervolt docs:
     #
@@ -47,14 +48,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.undervolt;
-      defaultText = literalExpression "pkgs.undervolt";
-      description = lib.mdDoc ''
-        undervolt derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "undervolt" { };
 
     coreOffset = mkOption {
       type = types.nullOr types.int;
@@ -112,6 +106,14 @@ in
       '';
     };
 
+    turbo = mkOption {
+      type = types.nullOr types.int;
+      default = null;
+      description = lib.mdDoc ''
+        Changes the Intel Turbo feature status (1 is disabled and 0 is enabled).
+      '';
+    };
+
     p1.limit = mkOption {
       type = with types; nullOr int;
       default = null;
@@ -159,7 +161,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    hardware.cpu.x86.msr.enable = true;
 
     environment.systemPackages = [ cfg.package ];
 

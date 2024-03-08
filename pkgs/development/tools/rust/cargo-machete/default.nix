@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-machete";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "bnjbvr";
     repo = "cargo-machete";
     rev = "v${version}";
-    hash = "sha256-AOi4SnFkt82iQIP3bp/9JIaYiqjiEjKvJKUvrLQJTX8=";
+    hash = "sha256-xLquursKMpV6ZELCRBrAEZ40Ypx2+vtpTVmVvOPdYS4=";
   };
 
-  cargoHash = "sha256-Q/2py0zgCYgnxFpcJD5PfNfIfIEUjtjFPjxDe25f0BQ=";
+  cargoHash = "sha256-F0pNAZ5ZcpGrfYt1TqtBcC2WUwjOEYf/yHero250fl0=";
 
   # tests require internet access
   doCheck = false;

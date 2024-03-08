@@ -72,10 +72,11 @@ in stdenv.mkDerivation rec {
     (lit.override { python = kleePython; })
   ];
 
+  cmakeBuildType = if debug then "Debug" else if !debug && includeDebugInfo then "RelWithDebInfo" else "MinSizeRel";
+
   cmakeFlags = let
     onOff = val: if val then "ON" else "OFF";
   in [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else if !debug && includeDebugInfo then "RelWithDebInfo" else "MinSizeRel"}"
     "-DKLEE_RUNTIME_BUILD_TYPE=${if debugRuntime then "Debug" else "Release"}"
     "-DLLVMCC=${clang}/bin/clang"
     "-DLLVMCXX=${clang}/bin/clang++"

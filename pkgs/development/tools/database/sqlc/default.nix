@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 let
-  version = "1.21.0";
+  version = "1.25.0";
 in
 buildGoModule {
   pname = "sqlc";
@@ -11,11 +11,11 @@ buildGoModule {
     owner = "sqlc-dev";
     repo = "sqlc";
     rev = "v${version}";
-    hash = "sha256-BJKqVSyMjTedMuao8Bz92+B64B/x3M3MXKbSF+d0kDE=";
+    hash = "sha256-VrR/oSGyKtbKHfQaiLQ9oKyWC1Y7lTZO1aUSS5bCkKY=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-AnPC0x5V8ce9KH0B4Ujz2MrTIJA+P/BZG+fsRJ3LM78=";
+  vendorHash = "sha256-C5OOTAYoSt4anz1B/NGDHY5NhxfyTZ6EHis04LFnMPM=";
 
   subPackages = [ "cmd/sqlc" ];
 

@@ -58,6 +58,8 @@ mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
 
   meta = with lib; {
+    # Does not build against gcc-13, the repository is archived upstream.
+    broken = true;
     description = "Interactive, thoroughly customizable maps in native Android, iOS, macOS, Node.js, and Qt applications, powered by vector tiles and OpenGL";
     homepage = "https://mapbox.com/mobile";
     license = licenses.bsd2;

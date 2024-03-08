@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "0.20.7";
+  format = "setuptools";
   pname = "azure-servicemanagement-legacy";
 
   src = fetchPypi {

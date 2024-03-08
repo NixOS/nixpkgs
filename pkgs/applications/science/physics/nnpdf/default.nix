@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nnpdf";
-  version = "4.0.6";
+  version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "NNPDF";
     repo = pname;
     rev = version;
-    hash = "sha256-mwOMNlYFhHZq/wakO1/HGwcxvKGKh5OyFa2D9d3Y3IA=";
+    hash = "sha256-PyhkHlOlzKfDxUX91NkeZWjdEzFR4PW0Yh5Yz6ZA27g=";
   };
 
   postPatch = ''

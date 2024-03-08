@@ -6,31 +6,20 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "strictdoc";
   version = "0.0.40";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
-    repo = pname;
+    repo = "strictdoc";
     rev = "refs/tags/${version}";
     hash = "sha256-kZ8qVhroSPSGAcgUFZb1vRI6JoFyjeg/0qYosbRnwyc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"textx >= 3.0.0, == 3.*"' '"textx"' \
-      --replace '"docutils >= 0.16, == 0.*"' '"docutils"' \
-      --replace '"pygments >= 2.10.0, == 2.*"' '"pygments"' \
-      --replace '"lxml >= 4.6.2, == 4.*"' '"lxml"' \
-      --replace '"beautifulsoup4 >= 4.12.0, == 4.*"' '"beautifulsoup4"' \
-      --replace '"python-datauri >= 0.2.9, == 0.*"' '"python-datauri"' \
-      --replace '"XlsxWriter >= 1.3.7, == 1.*"' '"XlsxWriter"' \
-      --replace '"xlrd >= 2.0.1, == 2.*"' '"xlrd"' \
-      --replace '"reqif >= 0.0.33, == 0.*"' '"reqif"' \
-      --replace '"pybtex >= 0.23.0, == 0.*"' '"pybtex"'
-  '';
+  pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -46,16 +35,20 @@ python3.pkgs.buildPythonApplication rec {
     pygments
     python-multipart
     reqif
+    selenium
     setuptools
+    spdx-tools
     textx
     toml
     uvicorn
+    webdriver-manager
     websockets
     xlrd
     xlsxwriter
   ] ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = with python3.pkgs; [
+    httpx
     pytestCheckHook
   ];
 

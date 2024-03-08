@@ -35,12 +35,7 @@ in {
       description = lib.mdDoc "Cachix uri to use.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cachix;
-      defaultText = literalExpression "pkgs.cachix";
-      description = lib.mdDoc "Cachix Client package to use.";
-    };
+    package = mkPackageOption pkgs "cachix" { };
 
     credentialsFile = mkOption {
       type = types.path;
@@ -54,6 +49,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.cachix-agent = {
       description = "Cachix Deploy Agent";
+      wants = [ "network-online.target" ];
       after = ["network-online.target"];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];

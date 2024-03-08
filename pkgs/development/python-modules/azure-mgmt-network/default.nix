@@ -5,27 +5,29 @@
 , fetchPypi
 , isodate
 , pythonOlder
-, typing-extensions
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-network";
-  version = "25.0.0";
-  format = "setuptools";
+  version = "25.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rZPbkUQJFIeNSSPWHTK79INWeRX5+GJ7o7mEMLhyJ9E=";
+    hash = "sha256-3OLK+xrg5WPgte/FN9yYp8Ctgk1CYeZL7XX3iBlt1cY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
     isodate
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   # Module has no tests
@@ -41,7 +43,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/network/azure-mgmt-network";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-network_${version}/sdk/network/azure-mgmt-network/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ olcai maxwilson jonringer ];
   };

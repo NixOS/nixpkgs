@@ -2,34 +2,29 @@
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
-, flaky
-, hypothesis
 , pytest
-, pytestCheckHook
 , pythonOlder
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.21.1";
-  format = "pyproject";
+  version = "0.23.5"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
-    repo = pname;
+    repo = "pytest-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wpo8MpCPGiXrckT2x5/yBYtGlzso/L2urG7yGc7SPkA=";
+    hash = "sha256-sA9ix69oywr1D6ByAxzAFWrAPHJOuq4C8UMiMNkmGJs=";
   };
 
   outputs = [
     "out"
     "testout"
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

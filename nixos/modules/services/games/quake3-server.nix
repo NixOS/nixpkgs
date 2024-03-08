@@ -41,7 +41,7 @@ in {
   options = {
     services.quake3-server = {
       enable = mkEnableOption (lib.mdDoc "Quake 3 dedicated server");
-      package = lib.mkPackageOptionMD pkgs "ioquake3" { };
+      package = lib.mkPackageOption pkgs "ioquake3" { };
 
       port = mkOption {
         type = types.port;

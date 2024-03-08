@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptominisat";
-  version = "5.11.12";
+  version = "5.11.21";
 
   src = fetchFromGitHub {
     owner = "msoos";
     repo = "cryptominisat";
     rev = version;
-    hash = "sha256-1AJx8gPf+qDpAp0p4cfCObKZDWKDAKdGopllr2ajpHw=";
+    hash = "sha256-8oH9moMjQEWnQXKmKcqmXuXcYkEyvr4hwC1bC4l26mo=";
   };
 
   buildInputs = [ python3 boost ];

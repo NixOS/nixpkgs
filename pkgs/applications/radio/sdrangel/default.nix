@@ -24,7 +24,7 @@
 , libbladeRF
 , mbelib
 , ninja
-, opencv3
+, opencv4
 , pkg-config
 , qtcharts
 , qtdeclarative
@@ -52,13 +52,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.15.4";
+  version = "7.18.1";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oSFnoNmoXvdb5lpx/j3DVVhOfbsDZlGNZNcvud1w8Ks=";
+    hash = "sha256-7sGjO2DyjA/KeAEBTrli+/9QZTKu7VKkJFp3BJk9UVs=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     limesuite
     mbelib
-    opencv3
+    opencv4
     qtcharts
     qtdeclarative
     qtgamepad

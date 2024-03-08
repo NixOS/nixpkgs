@@ -1,9 +1,9 @@
-{ mkDerivation
-, fetchFromGitHub
+{ stdenv
+, fetchurl
 , lib
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
+, wrapQtAppsHook
 , baloo
 , karchive
 , kconfig
@@ -12,25 +12,25 @@
 , kinit
 , kirigami2
 , knewstuff
+, okular
 , plasma-framework
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peruse";
-  version = "1.2.20200208";
+  # while technically a beta, the latest release is from 2016 and doesn't build without a lot of
+  # patching
+  version = "1.80";
 
-  # The last formal release from 2016 uses kirigami1 which is deprecated
-  src = fetchFromGitHub {
-    owner = "KDE";
-    repo = pname;
-    rev = "4a1b3f954d2fe7e4919c0c5dbee1917776da582e";
-    sha256 = "1s5yy240x4cvrk93acygnrp5m10xp7ln013gdfbm0r5xvd8xy19k";
+  src = fetchurl {
+    url = "mirror://kde/stable/peruse/peruse-${finalAttrs.version}.tar.xz";
+    hash = "sha256-xnSVnKF20jbxVoFW41A22NZWVZUry/F7G+Ts5NK6M1E=";
   };
 
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    wrapGAppsHook
+    wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
@@ -42,16 +42,21 @@ mkDerivation rec {
     kinit
     kirigami2
     knewstuff
+    okular
     plasma-framework
   ];
+
+  # the build is otherwise crazy loud
+  cmakeFlags = [ "-Wno-dev" ];
 
   pathsToLink = [ "/etc/xdg/peruse.knsrc" ];
 
   meta = with lib; {
     description = "A comic book reader";
     homepage = "https://peruse.kde.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "peruse";
+    inherit (kirigami2.meta) platforms;
   };
-
-}
+})

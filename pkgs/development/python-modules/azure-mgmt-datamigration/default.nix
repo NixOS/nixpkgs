@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-datamigration";
   version = "10.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -48,8 +48,8 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ln -s $out/lib/libblis.so.3 $out/lib/libblas.so.3
-    ln -s $out/lib/libblis.so.3 $out/lib/libcblas.so.3
+    ln -s $out/lib/libblis.so.4 $out/lib/libblas.so.3
+    ln -s $out/lib/libblis.so.4 $out/lib/libcblas.so.3
     ln -s $out/lib/libblas.so.3 $out/lib/libblas.so
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';

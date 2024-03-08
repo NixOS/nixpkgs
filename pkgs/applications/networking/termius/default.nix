@@ -1,14 +1,15 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , squashfsTools
+, alsa-lib
 , fetchurl
 , makeDesktopItem
 , makeWrapper
 , stdenv
 , lib
+, libsecret
+, mesa
 , udev
 , wrapGAppsHook
-, libxshmfence
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +42,14 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
+  # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
 
-  buildInputs = atomEnv.packages ++ [ libxshmfence ];
+  buildInputs = [
+    alsa-lib
+    libsecret
+    mesa
+  ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -79,5 +85,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ Br1ght0ne th0rgal ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "termius-app";
   };
 }

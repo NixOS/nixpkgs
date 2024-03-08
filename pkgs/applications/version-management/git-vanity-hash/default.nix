@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "Tool for creating commit hashes with a specific prefix";
     license = [ licenses.mit ];
     maintainers = [ maintainers.kaction ];
+    mainProgram = "git-vanity-hash";
   };
 }

@@ -26,14 +26,14 @@ let
     gnused # needed by ssh-copy-id
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.0.0";
+  version = "1.1.1";
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-anywhere";
-    rev = version;
-    hash = "sha256-zM+N7+XDR34DuTrVLJd7Ggq1JPlURddsqNOjXY/rcQM=";
+    rev = finalAttrs.version;
+    hash = "sha256-GN0G3g3QEzb2ZG3zSzbRaRBsmQsWJu81CZy9mIofRZ0=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
@@ -48,8 +48,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Install nixos everywhere via ssh";
     homepage = "https://github.com/numtide/nixos-anywhere";
+    mainProgram = "nixos-anywhere";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.mic92 maintainers.lassulus maintainers.phaer ];
   };
-}
+})

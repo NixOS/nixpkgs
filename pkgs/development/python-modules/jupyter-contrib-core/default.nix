@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "jupyter-contrib-core";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jupyter-contrib";

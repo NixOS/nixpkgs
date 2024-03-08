@@ -1,4 +1,4 @@
-{ version, src, stdenv, lib, fetchFromGitHub, fetchYarnDeps, fixup_yarn_lock, yarn, nodejs }:
+{ version, src, stdenv, lib, fetchYarnDeps, prefetch-yarn-deps, yarn, nodejs }:
 
 stdenv.mkDerivation rec {
   inherit version src;
@@ -7,15 +7,15 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/ui/yarn.lock";
-    sha256 = "sha256-37P+acjaeG7TCyLoIHIHsB+DCUOsQOJ1H9T5SgajtLc=";
+    sha256 = "sha256-4boZCEly4HovK9BXlSoFd3wZoPaGnzbJg5AygSC/Lrg=";
   };
 
-  nativeBuildInputs = [ fixup_yarn_lock yarn nodejs ];
+  nativeBuildInputs = [ prefetch-yarn-deps yarn nodejs ];
 
   buildPhase = ''
     export HOME=$(mktemp -d)
     cd ui
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     patchShebangs node_modules

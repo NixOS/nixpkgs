@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://git.sr.ht/~zethra/kitty-img/refs/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gaykitty ];
+    mainProgram = "kitty-img";
   };
 }

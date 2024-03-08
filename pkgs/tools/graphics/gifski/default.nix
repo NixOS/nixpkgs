@@ -1,26 +1,25 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , pkg-config
 , ffmpeg
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.11.0";
+  version = "1.14.4";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    hash = "sha256-sPsq/hntNqOdPJcoob1jrDUrLLiBEnfRoDANyFUjOuM=";
+    hash = "sha256-Yhcz3pbEsSlpxQ1couFgQuaS8Eru7PLiGFNHcKmiFak=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ffmpeg-sys-next-6.0.1" = "sha256-/KxW57lt9/qKqNUUZqJucsP0cKvZ1m/FdGCsZxBlxYc=";
+      "ffmpeg-sys-next-6.1.0" = "sha256-RB9sDQoP68Dzqk8tIuYlOX3dZcS64hKI5KpTGq/7xbM=";
     };
   };
 
@@ -45,9 +44,9 @@ rustPlatform.buildRustPackage rec {
   #
   checkType = "debug";
 
-  # error: linker `/usr/bin/x86_64-linux-gnu-gcc` not found
+  # Cargo.lock is outdated
   postPatch = ''
-    rm .cargo/config.toml;
+    cargo metadata --offline
   '';
 
   meta = with lib; {

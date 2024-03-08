@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.2.1";
+  version = "9.2.3";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-Uq6CmbEJfN8ajpVmIutkDy2b8fZcT4wtprcWbMkaNkQ=";
+    hash = "sha256-WqRqf10QKYepCoaNzG26O2jv54Do3qFawDupSkrAPKk=";
   };
 
   # NOTE: The upstream README indicates that flex is needed for some features,

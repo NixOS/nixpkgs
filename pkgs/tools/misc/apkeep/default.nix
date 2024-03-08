@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/EFForg/apkeep/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ joelkoen ];
+    mainProgram = "apkeep";
   };
 }

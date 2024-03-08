@@ -21,11 +21,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-Erh7tR6WX8pt89PRicgbVZd8CLlv18Vyq44O+ZnJVzU=";
+    hash = "sha256-WPzth7HOAbPVJpvN8zSZJGUzsBtACNlwHrHhDPlOScU=";
   };
 
   format = "pyproject";
@@ -87,5 +87,6 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ raskin abbradar ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
+    mainProgram = "gajim";
   };
 }

@@ -16,7 +16,7 @@ with lib;
           Whether to enable goxlr-utility for controlling your TC-Helicon GoXLR or GoXLR Mini
         '';
       };
-      package = mkPackageOptionMD pkgs "goxlr-utility" { };
+      package = mkPackageOption pkgs "goxlr-utility" { };
       autoStart.xdg = mkOption {
         default = true;
         type = with types; bool;

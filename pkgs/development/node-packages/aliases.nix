@@ -41,14 +41,21 @@ mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
+  "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
+  "@mermaid-js/mermaid-cli" = pkgs.mermaid-cli; # added 2023-10-01
+  "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
+  "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
+  "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
   alloy = pkgs.titanium-alloy; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
   inherit (pkgs) asar; # added 2023-08-26
+  inherit (pkgs) aws-azure-login; # added 2023-09-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
@@ -62,6 +69,7 @@ mapAliases {
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   inherit (pkgs) cordova; # added 2023-08-18
+  inherit (pkgs) create-react-app; # added 2023-09-25
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
@@ -70,15 +78,19 @@ mapAliases {
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   inherit (pkgs) firebase-tools; # added 2023-08-18
   flood = pkgs.flood; # Added 2023-07-25
+  generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) gitmoji-cli; # added 2023-09-23
   glob = pkgs.node-glob; # added 2023-08-18
   inherit (pkgs) gqlint; # added 2023-08-19
+  inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
   hs-client = pkgs.hsd; # added 2023-08-20
   inherit (pkgs) hsd; # added 2023-08-19
   inherit (pkgs) html-minifier; # added 2023-08-19
   inherit (pkgs) htmlhint; # added 2023-08-19
+  inherit (pkgs) http-server; # added 2024-01-20
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
   immich = pkgs.immich-cli; # added 2023-08-19
@@ -91,21 +103,29 @@ mapAliases {
   manta = pkgs.node-manta; # Added 2023-05-06
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
+  inherit (pkgs) mathjax-node-cli; # added 2023-11-02
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
+  inherit (pkgs) mermaid-cli; # added 2023-10-01
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = parcel; # added 2023-09-04
+  pkg = pkgs.vercel-pkg; # added 2023-10-04
+  inherit (pkgs) pm2; # added 2024-01-22
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
+  inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
+  react-native-cli = throw "react-native-cli was removed because it was deprecated"; # added 2023-09-25
   inherit (pkgs) react-static; # added 2023-08-21
+  react-tools = throw "react-tools was removed because it was deprecated"; # added 2023-09-25
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
+  inherit (pkgs) serverless; # Added 2023-11-29
   inherit (pkgs) snyk; # Added 2023-08-30
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21

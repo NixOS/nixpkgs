@@ -1,28 +1,43 @@
 { lib
 , stdenv
 , fetchurl
+, curl
+, gmp
 , gsl
+, mpfr
+, ncurses
 , plotutils
 , postgresql
+, pkg-config
 , withPDFDoc ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.3.22";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
-    hash = "sha256-cSD6lngCy7SC2P7GyUCajk6i863a3vvCjtgZLF0TrIA=";
+    hash = "sha256-hKiRMU98sZhGgHhjgtwUNSIv2iPgb4T+dgYw58IGK8Q=";
   };
 
-  outputs = [ "out" "man" ] ++ lib.optional withPDFDoc "doc";
+  outputs = [ "out" "man" ] ++ lib.optionals withPDFDoc [ "doc" ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
+    curl
+    mpfr
+    ncurses
+    gmp
     gsl
     plotutils
     postgresql
   ];
+
+  strictDeps = true;
 
   postInstall = let
     pdfdoc = fetchurl {
@@ -47,8 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       scientific library and PostgreSQL.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "a68g";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://ctop.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ apeyroux marsam ];
+    mainProgram = "ctop";
   };
 }
