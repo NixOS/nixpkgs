@@ -296,6 +296,7 @@ let
       str
     ];
     downloadPage = str;
+    repository = str;
     changelog = union [
       (listOf str)
       str
@@ -444,10 +445,14 @@ let
     let
       outputs = attrs.outputs or [ "out" ];
     in
-    {
-      # should always point to an http-browsable source tree, if available.
+    lib.attrsets.optionalAttrs (attrs ? src.meta.homepage) {
+      # should point to an http-browsable source tree, if available.
       # fetchers like fetchFromGitHub set it automatically.
-      repository = attrs.src.meta.homepage or null;
+      # this could be handled a lot easier if we nulled it instead
+      # of having it be undefined, but that wouldn't match the
+      # other attributes.
+      repository = attrs.src.meta.homepage;
+    } // {
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
       # Let's have a clean always accessible version here.
