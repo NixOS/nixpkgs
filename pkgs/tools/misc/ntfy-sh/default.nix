@@ -5,21 +5,21 @@
 
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
     rev = "v${version}";
-    hash = "sha256-YO6nf1tY+tEgPlvq7JDgeG0ywE8+HEpZH7ToFzvYfvY=";
+    hash = "sha256-nCW7D2iQEv9NeIvVn1+REacspchzJ7SJgl0glEWkAoE=";
   };
 
-  vendorHash = "sha256-Gvk/EI5b6AIYBCKYqSFKva0SfiWI/oNCeq7cTyVRpwY=";
+  vendorHash = "sha256-nnAw3BIiPMNa/7WSH8vurt8GUFM7Bf80CmtH4WjfC6Q=";
 
   ui = buildNpmPackage {
     inherit src version;
     pname = "ntfy-sh-ui";
-    npmDepsHash = "sha256-G2yEIiKc/gxcUPS+97B68C/HukabGZAX2XY1gstGBvg=";
+    npmDepsHash = "sha256-+4VL+bY3Nz5LT5ZyW9aJlrl3NsfOGv6CaiwLqpC5ywo=";
 
     prePatch = ''
       cd web/
