@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.5.3";
+  version = "2.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YTNV67uKGRag6ICkNjjY9YrOiKFB1hSZkKcUXjSrhwM=";
+    hash = "sha256-neTdG/IcXopCmevzFY5/XDlhPHmOb6dhyAnzaobmeG8=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
