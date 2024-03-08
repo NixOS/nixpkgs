@@ -1,6 +1,6 @@
 { lib
-, stdenv
 , asciidoc
+, bash
 , coreutils
 , cryptsetup
 , curl
@@ -9,48 +9,53 @@
 , gnused
 , jansson
 , jose
+, jq
 , libpwquality
 , luksmeta
 , makeWrapper
 , meson
 , ninja
-, pkg-config
-, tpm2-tools
 , nixosTests
+, pkg-config
+, stdenv
+, tpm2-tools
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clevis";
   version = "19";
 
   src = fetchFromGitHub {
     owner = "latchset";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "clevis";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-3J3ti/jRiv+p3eVvJD7u0ko28rPd8Gte0mCJaVaqyOs=";
   };
+
+  outputs = [ "out" "man" ];
 
   patches = [
     # Replaces the clevis-decrypt 300s timeout to a 10s timeout
     # https://github.com/latchset/clevis/issues/289
-    ./tang-timeout.patch
+    ./001-tang-timeout.patch
   ];
 
   postPatch = ''
     for f in $(find src/ -type f); do
-      grep -q "/bin/cat" "$f" && substituteInPlace "$f" \
-        --replace '/bin/cat' '${coreutils}/bin/cat' || true
+      grep -q "/bin/cat" "$f" && \
+      substituteInPlace "$f" \
+        --replace-fail '/bin/cat' '${coreutils}/bin/cat' || true
     done
   '';
 
-  postInstall = ''
-    # We wrap the main clevis binary entrypoint but not the sub-binaries.
-    wrapProgram $out/bin/clevis \
-      --prefix PATH ':' "${lib.makeBinPath [tpm2-tools jose cryptsetup libpwquality luksmeta gnugrep gnused coreutils]}:${placeholder "out"}/bin"
-  '';
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     asciidoc
+    cryptsetup
+    jq
     makeWrapper
     meson
     ninja
@@ -58,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cryptsetup
+    bash
     curl
     jansson
     jose
@@ -67,24 +72,43 @@ stdenv.mkDerivation rec {
     tpm2-tools
   ];
 
-  outputs = [
-    "out"
-    "man"
-  ];
+  strictDeps = true;
+
+  postFixup = let
+    binPath = lib.makeBinPath [
+      coreutils
+      cryptsetup
+      gnugrep
+      gnused
+      jose
+      libpwquality
+      luksmeta
+      tpm2-tools
+    ];
+    # We wrap the main clevis binary entrypoint - but not the sub-command
+    # binaries
+  in ''
+    patchShebangs --host $out/bin/clevis
+    wrapProgram $out/bin/clevis \
+      --prefix PATH ':' "${binPath}:${placeholder "out"}/bin"
+  '';
 
   passthru.tests = {
-    inherit (nixosTests.installer) clevisBcachefs clevisBcachefsFallback clevisLuks clevisLuksFallback clevisZfs clevisZfsFallback;
+    inherit (nixosTests.installer)
+      clevisBcachefs clevisBcachefsFallback clevisLuks clevisLuksFallback
+      clevisZfs clevisZfsFallback;
     clevisLuksSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuks;
     clevisLuksFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksFallback;
     clevisZfsSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfs;
     clevisZfsFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfsFallback;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automated Encryption Framework";
     homepage = "https://github.com/latchset/clevis";
-    changelog = "https://github.com/latchset/clevis/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/latchset/clevis/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ gpl3Plus ];
+    mainProgram = "clevis";
+    maintainers = with lib.maintainers; [ ];
   };
-}
+})
