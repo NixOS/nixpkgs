@@ -7,13 +7,14 @@
 , protobuf
 , pythonOlder
 , pythonRelaxDepsHook
+, pydantic
 , tqdm
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.3.2";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "generative-ai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SL0jnuDHjeiqDq1VvWr4vQPFZ5yyea/OAGArmxztwB4=";
+    hash = "sha256-SrWAjvSqfHGMOe1hM0R4CBTOn+NsQtzR6b0hVn75LqY=";
   };
 
   pythonRelaxDeps = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     google-auth
     google-api-core
     protobuf
+    pydantic
     tqdm
     typing-extensions
   ];
