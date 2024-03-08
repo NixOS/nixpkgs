@@ -5700,6 +5700,8 @@ self: super: with self; {
 
   invoke = callPackage ../development/python-modules/invoke { };
 
+  iocsearcher = callPackage ../development/python-modules/iocsearcher { };
+
   iodata = callPackage ../development/python-modules/iodata { };
 
   iocapture = callPackage ../development/python-modules/iocapture { };

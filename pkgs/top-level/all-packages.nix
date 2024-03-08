@@ -9382,6 +9382,8 @@ with pkgs;
 
   iocextract = with python3Packages; toPythonApplication iocextract;
 
+  iocsearcher = with python3Packages; toPythonApplication iocsearcher;
+
   ioping = callPackage ../tools/system/ioping { };
 
   ior = callPackage ../tools/system/ior { };
