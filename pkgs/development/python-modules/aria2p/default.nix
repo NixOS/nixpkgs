@@ -21,15 +21,15 @@
 
 buildPythonPackage rec {
   pname = "aria2p";
-  version = "0.11.2";
+  version = "0.12.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pawamoy";
     repo = pname;
-    rev = version;
-    hash = "sha256-z74ej6J6Yh1aVsXR5fE+XhoCzCS+zfDxQL8gKFd7tBA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WlbZP2+qUSyfmeFFiuarXI3VaNZvD9cnOef/WM+J0OE=";
   };
 
   nativeBuildInputs = [
