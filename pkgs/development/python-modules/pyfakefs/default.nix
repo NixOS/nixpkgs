@@ -9,18 +9,19 @@
 
 # tests
 , pytestCheckHook
+, undefined
 }:
 
 buildPythonPackage rec {
   pname = "pyfakefs";
-  version = "5.3.2";
+  version = "5.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qDd2o8EEbU0QPy9TACmqbN/18Dht/9WcFe4WkmE1STw=";
+    hash = "sha256-fNxQCzWiFMt6YU4ZQFQ6zGZQ5pqUrHbjDzPJNzvZz5A=";
   };
 
   postPatch = ''
@@ -46,11 +47,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    undefined
   ];
-
-  # https://github.com/jmcgeheeiv/pyfakefs/issues/581 (OSError: [Errno 9] Bad file descriptor)
-  #disabledTests = [ "test_open_existing_pipe" ];
-
 
   meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
