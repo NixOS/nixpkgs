@@ -92,7 +92,7 @@ stdenv.mkDerivation (removeAttrs ({
     or ([ coq ] ++ (args.buildInputs or []) ++ extraBuildInputs);
   inherit enableParallelBuilding;
 
-  meta = ({ platforms = coq.meta.platforms; broken = false; } //
+  meta = ({ platforms = coq.meta.platforms; } //
     (switch domain [{
         case = pred.union isGitHubDomain isGitLabDomain;
         out = { homepage = "https://${domain}/${owner}/${repo}"; };
