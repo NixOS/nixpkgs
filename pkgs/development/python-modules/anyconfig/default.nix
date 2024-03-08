@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "anyconfig";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A/8uF2KvOI+7vtHBq3+fHsAGqR2n2zpouWPabneV0qw=";
+    hash = "sha256-LN9Ur12ujpF0Pe2CxU7Z2Krvo6lyL11F6bX3S2A+AU0=";
   };
 
   postPatch = ''
