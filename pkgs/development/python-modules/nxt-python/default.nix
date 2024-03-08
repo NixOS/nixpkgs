@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "nxt-python";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "schodet";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PWeR8xteLMxlOHcJJCtTI0o8QNzwGJVkUACmvf4tXWY=";
+    hash = "sha256-v65KEP5DuJsZAifd1Rh46x9lSAgBZgyo+e8PKSDKnhw=";
   };
 
   propagatedBuildInputs = [
