@@ -30,14 +30,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.50.1";
+  version = "3.51.91";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-terminal";
     rev = version;
-    sha256 = "sha256-lJAzmz8tvEbr371VtYjlV4+z3cSy4QrmP0vmD5WiJD4=";
+    sha256 = "sha256-wYCbXqVBgXvYr5TBxxu5oqnta+bCrGqxMOu88JOfHI4=";
   };
 
   nativeBuildInputs = [
