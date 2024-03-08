@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "rich-pixels";
-  version = "2.2.0";
+  version = "3.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "rich-pixels";
-    rev = version;
-    hash = "sha256-fbpnHEfBPWLSYhgETqKbdmmzt7Lu/4oKgetjgNvv04c=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-73CEtK/p4JVOtJgP7CNyee9vEJXaxaAj/kHjWIGETeQ=";
   };
 
   patches = [
