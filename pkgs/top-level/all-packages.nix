@@ -14848,8 +14848,6 @@ with pkgs;
 
   woeusb-ng = callPackage ../tools/misc/woeusb-ng { };
 
-  wslu = callPackage ../tools/system/wslu { };
-
   chase = callPackage ../tools/system/chase { };
 
   wimlib = callPackage ../tools/archivers/wimlib { };
@@ -35252,17 +35250,16 @@ with pkgs;
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
-  syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray { };
-  syncthingtray-minimal = libsForQt5.callPackage ../applications/misc/syncthingtray {
+  syncthingtray = kdePackages.callPackage ../applications/misc/syncthingtray {
+    # renamed in KF5 -> KF6
+    plasma-framework = kdePackages.libplasma;
+  };
+  syncthingtray-minimal = syncthingtray.override {
     webviewSupport = false;
     jsSupport = false;
     kioPluginSupport = false;
     plasmoidSupport = false;
     systemdSupport = true;
-  };
-  syncthingtray-qt6 = kdePackages.callPackage ../applications/misc/syncthingtray {
-    # renamed in KF5 -> KF6
-    plasma-framework = kdePackages.libplasma;
   };
 
   synergy = libsForQt5.callPackage ../applications/misc/synergy {

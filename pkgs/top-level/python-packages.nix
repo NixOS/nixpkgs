@@ -4215,7 +4215,7 @@ self: super: with self; {
 
   flask-principal = callPackage ../development/python-modules/flask-principal { };
 
-  flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
+  flask-pymongo = callPackage ../development/python-modules/flask-pymongo { };
 
   flask-restful = callPackage ../development/python-modules/flask-restful { };
 
@@ -9046,6 +9046,8 @@ self: super: with self; {
 
   osc = callPackage ../development/python-modules/osc { };
 
+  osc-diagram = callPackage ../development/python-modules/osc-diagram { };
+
   osc-lib = callPackage ../development/python-modules/osc-lib { };
 
   osc-sdk-python = callPackage ../development/python-modules/osc-sdk-python { };
@@ -13676,7 +13678,7 @@ self: super: with self; {
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
-  smpp_pdu = callPackage ../development/python-modules/smpp.pdu { };
+  smpp-pdu = callPackage ../development/python-modules/smpp.pdu { };
 
   smtpdfix = callPackage ../development/python-modules/smtpdfix { };
 
