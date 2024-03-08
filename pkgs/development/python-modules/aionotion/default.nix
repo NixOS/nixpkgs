@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2024.02.2";
+  version = "2024.03.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xehHOB4iUMT1kKEK4jQzaj7hH9fmiY7mZxGC3CLnpAs=";
+    hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
   };
 
   nativeBuildInputs = [
