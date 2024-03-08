@@ -81,6 +81,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+    # $out is first in path which causes "import file mismatch"
+    PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
