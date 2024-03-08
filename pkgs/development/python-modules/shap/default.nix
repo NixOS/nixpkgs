@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.43.0";
+  version = "0.44.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "slundberg";
     repo = "shap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ylkpXhaLXsQiu6YMC3pUtlicptQmtjITzW+ydinB4ls=";
+    hash = "sha256-pC201Q/i3UAuJPZw0H+giebhJKVTmmKfxhFdonmkxtI=";
   };
 
   nativeBuildInputs = [
