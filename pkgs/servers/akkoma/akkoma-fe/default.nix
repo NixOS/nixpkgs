@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitea, fetchYarnDeps
-, prefetch-yarn-deps, yarn, nodejs
+, fixup-yarn-lock, yarn, nodejs
 , jpegoptim, oxipng, nodePackages
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
     nodejs
     jpegoptim

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , nodejs-slim
 , matrix-sdk-crypto-nodejs
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs-slim
     nodejs.pkgs.yarn
     nodejs.pkgs.node-gyp-build

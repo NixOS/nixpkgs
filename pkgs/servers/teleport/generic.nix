@@ -14,7 +14,7 @@
 , stdenv
 , xdg-utils
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nixosTests
 
 , withRdpClient ? true
@@ -72,7 +72,7 @@ let
     nativeBuildInputs = [
       nodejs
       yarn
-      prefetch-yarn-deps
+      fixup-yarn-lock
     ];
 
     configurePhase = ''
