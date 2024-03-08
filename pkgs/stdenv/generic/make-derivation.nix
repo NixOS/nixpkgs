@@ -1,3 +1,68 @@
+let
+
+  #
+  # This is a list of pnames of packages that have failed to splice.
+  # Every one of these is an unfixed bug.  Please fix them instead
+  # of taking shameful behavior, you scoundrel!
+  #
+  list-of-shame =
+    builtins.listToAttrs
+      (builtins.map
+        (name: { inherit name; value = true; })
+        [
+          # shame on you, python
+          "pypa-build-hook.sh"
+          "pypa-install-hook"
+          "pytest-check-hook"
+          "python-catch-conflicts-hook"
+          "python-imports-check-hook.sh"
+          "python-namespaces-hook.sh"
+          "python-output-dist-hook"
+          "python-remove-bin-bytecode-hook"
+          "python-remove-tests-dir-hook"
+          "python-remove-tests-dir-hook"
+          "python-runtime-deps-check-hook.sh"
+          "python3-3.11.5-env"
+          "setuptools-check-hook"
+          "setuptools-setup-hook"
+          "unittest-check-hook"
+          "wrap-python-hook"
+          "wrap-python-hook"
+          "wrap-python-hook"
+
+          # shame on you, llvm!
+          "llvm"
+          "compiler-rt"
+          "libcxx"
+          "libcxxabi"
+          "libunwind"
+
+          # shame on you, embedded ARM!
+          "arm-none-eabi-gcc-wrapper"
+          "arm-none-eabi-binutils-wrapper"
+
+          # wasm doesn't care about shamefulness, so I won't bother...
+          "rustc-wasm32"
+
+          # windows
+          # has overrides which discard splicing
+          # improvement: convert makeScope to makeScopeWithSplicing'
+          # may not fix it but it'll improve the set
+          # https://github.com/NixOS/nixpkgs/blob/53aa767c849b159cdb8c59dce4a5a44f167fc31b/pkgs/os-specific/windows/default.nix#L20
+          "mcfgthread"
+          "i686-w64-mingw32-gcc-wrapper"
+          "x86_64-w64-mingw32-gcc-wrapper"
+
+          # other shameful derivations
+          "git-minimal"
+          "busybox"
+          "avr-gcc-wrapper"
+          "boost-build"
+          "cmake-minimal"
+          "perl" # only for libxcrypt; we should fix this
+        ]);
+in
+
 { lib, config }:
 
 stdenv:
@@ -289,32 +354,89 @@ else let
   references = nativeBuildInputs ++ buildInputs
             ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
+  # Returns dep.__spliced if it exists or warns if the package is
+  # not spliced correctly.
+  getSpliced = type: dep:
+    dep.__spliced or
+      (let approximate-pname = dep.pname or dep.name; in
+        assert
+          (dep?stdenv &&
+           dep.stdenv.buildPlatform != dep.stdenv.targetPlatform &&
+
+           # I can't test on Darwin, so let's just ignore it for now.
+           !dep.stdenv.buildPlatform.isDarwin &&
+           !dep.stdenv.hostPlatform.isDarwin &&
+           !dep.stdenv.targetPlatform.isDarwin &&
+
+           !(list-of-shame ? ${approximate-pname})
+          )
+
+            # If you're reading this, it's probably
+            # because the line below caused your PR to fail CI.
+            # Most likely, what happened is that you
+            # used one of the following as a dependency (i.e. in a
+            # `buildInputs`, `nativeBuildInputs`, or
+            # `deps{Build,Host,Target}{Build,Host,Target}` attribute).
+            #
+            # - `buildPackages.something`
+            # - `targetPackages.something`
+            # - `pkgs{Build,Host,Target}{Build,Host,Target}.something`
+            #
+            # Instead just use `something` instead. The explicit
+            # packagesets (the three bullet points above) are mainly
+            # for when you need to reference a package with string
+            # interpolation (e.g. "cat blah | ${buildPackages.jq}")
+            # since interpolation cannot use splicing.
+            # For dependencies, you control which packageset is used
+            # by *which attribute you put the dependency in* -- if
+            # you put it in `depsBuildHost`, it will get pulled from
+            # `pkgsBuildHost`.
+            #
+            # Please take a moment to try to fix your PR.
+            # If this is a crisis situation and
+            # the future of humanity depends on your PR passing CI
+            # pronto, you can mute the warning by adding your
+            # package's `pname` to the `list-of-shame` at the top of
+            # this file but please avoid that if possible as it is a bug.
+            #
+               -> lib.warn
+                 ''derivation ${attrs.pname or "!!no pname!!"}:
+                     has unspliced ${type} dependency ${approximate-pname}
+                       build=${dep.stdenv.buildPlatform.config}
+                       host=${dep.stdenv.hostPlatform.config}
+                       target=${dep.stdenv.targetPlatform.config}
+                     For advice on fixing this, read the comment above the lib.warn that produced this message.
+                 '' true;
+        {});
+
   dependencies = map (map chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
+      (map (drv: (getSpliced "build-build" drv).buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
+      (map (drv: (getSpliced "build-host" drv).buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
+      (map (drv: (getSpliced "build-target" drv).buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
+      (map (drv: (getSpliced "host-host" drv).hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
       (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+      #(map (drv: (getSpliced "host-target" drv).hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
+      (map (drv: (getSpliced "target-target" drv).targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
     ]
   ];
   propagatedDependencies = map (map chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
+      (map (drv: (getSpliced "build-build propagated" drv).buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
+      (map (drv: (getSpliced "build-host propagated" drv).buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
+      (map (drv: (getSpliced "build-target propagated" drv).buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
+      (map (drv: (getSpliced "host-host propagated" drv).hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
       (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+      #(map (drv: (getSpliced "host-target propagated" drv).hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
+      (map (drv: (getSpliced "target-target propagated" drv).targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
     ]
   ];
 

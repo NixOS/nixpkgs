@@ -15810,6 +15810,10 @@ with pkgs;
     then overrideCC stdenv buildPackages.llvmPackages.clangNoLibc
     else gccCrossLibcStdenv;
 
+  # This needs to have a top-level entry here in all-packages.nix in
+  # order to be spliced.
+  targetPackages_bintools = targetPackages.stdenv.cc.bintools;
+
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc = assert stdenv.targetPlatform != stdenv.hostPlatform; let
@@ -15823,12 +15827,12 @@ with pkgs;
         reproducibleBuild = true;
         profiledCompiler = false;
 
-        isl = if !stdenv.isDarwin then isl_0_20 else null;
+        isl = if !stdenv.isDarwin then __splicedPackages.isl_0_20 else null;
 
         withoutTargetLibc = true;
         langCC = false;
         libcCross = libcCross1;
-        targetPackages.stdenv.cc.bintools = binutilsNoLibc;
+        targetPackages_bintools = __splicedPackages.binutilsNoLibc;
         enableShared =
           stdenv.targetPlatform.hasSharedLibraries
 
@@ -18435,7 +18439,10 @@ with pkgs;
       enableGold = false;
     };
   });
-  binutilsNoLibc = wrapBintoolsWith {
+  binutilsNoLibc =
+    # this `if..then null else` is an ugly hack to prevent infinite recursion
+    if stdenv.hostPlatform == stdenv.targetPlatform then null else
+    wrapBintoolsWith {
     bintools = binutils-unwrapped;
     libc = preLibcCrossHeaders;
   };

@@ -2,7 +2,6 @@
 , stdenv
 , version
 , buildPackages
-, targetPackages
 , texinfo
 , which
 , gettext
@@ -12,6 +11,7 @@
 , gmp
 , mpfr
 , libmpc
+, targetPackages_bintools
 , libucontext ? null
 , libxcrypt ? null
 , cloog ? null
@@ -62,7 +62,7 @@ in
   depsBuildTarget =
     (
       if hostPlatform == buildPlatform then [
-        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+        targetPackages_bintools # newly-built gcc will be used
       ] else assert targetPlatform == hostPlatform; [
         # build != host == target
         stdenv.cc
@@ -77,7 +77,7 @@ in
   ]
   ++ optionals (lib.versionAtLeast version "10") [ libxcrypt ]
   ++ [
-    targetPackages.stdenv.cc.bintools # For linking code at run-time
+    targetPackages_bintools # For linking code at run-time
   ]
   ++ optionals (lib.versionOlder version "5" && cloog != null) [ cloog ]
   ++ optionals (isl != null) [ isl ]
