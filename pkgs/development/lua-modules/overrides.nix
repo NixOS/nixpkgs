@@ -605,6 +605,7 @@ with prev;
 
     doCheck = true;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
+    propagatedBuildInputs = [ luv ];
 
     # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
     checkPhase = ''
