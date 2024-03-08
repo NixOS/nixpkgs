@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.5.2";
+  version = "3.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-lIEitS/pyOq4RjyUqPzfKOcNtAIWp14sQcLfQ1FwEoE=";
+    hash = "sha256-6HocnnPG/Id+49NN3WqnSYEnsijA2r13WM2NJIxVwFs=";
   };
 
   nativeBuildInputs = [
