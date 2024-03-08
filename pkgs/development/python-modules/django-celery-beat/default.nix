@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zQpH9ZWEAvUawMcVvJQq4z17ULTkjLqRvD8nEr5QXfE=";
+    hash = "sha256-91stEpcx8SFL6Dg+GPrmv+rNtV3/shFs6EkiLAEG+a0=";
   };
 
   propagatedBuildInputs = [
