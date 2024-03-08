@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgemodels";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-models";
     rev = "refs/tags/${version}";
-    hash = "sha256-4nbTsVRqtoX4UhTrQS4HwoLtx0RO1VA8UewSAWOSsik=";
+    hash = "sha256-9k85tqJO/YtkYncfNQBelmDkd3SYtf6SHURfumvqUo0=";
   };
 
   patches = [
