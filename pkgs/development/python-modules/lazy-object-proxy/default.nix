@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.9.0";
+  version = "1.10.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZZ+1gJ+kYpuKGsUQb2ac/HvvJvuzid2lOz4BDRrE664=";
+    hash = "sha256-eCR7bUX0OlLvNcJbVYFFnoURciVAikEoo9r4v5ZIrGk=";
   };
 
   nativeBuildInputs = [
