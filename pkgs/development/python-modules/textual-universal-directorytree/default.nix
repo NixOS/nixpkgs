@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "juftin";
     repo = "textual-universal-directorytree";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FL2bwPGqBmDn33Rhj7+VEpuqB4znEAw+GGAODTs25oo=";
+    hash = "sha256-ncQ3IRaZaCv1rMUWT9dkUKo6OAEC5pziMCM7adIBGWo=";
   };
 
   patches = [
