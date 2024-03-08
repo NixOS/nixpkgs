@@ -7467,6 +7467,13 @@
     githubId = 443978;
     name = "Gabriel Volpe";
   };
+  gwg313 = {
+    email = "gwg313@pm.me";
+    matrix = "@gwg313:matrix.org";
+    github = "gwg313";
+    githubId = 70684146;
+    name = "Glen Goodwin";
+  };
   gytis-ivaskevicius = {
     name = "Gytis Ivaskevicius";
     email = "me@gytis.io";
