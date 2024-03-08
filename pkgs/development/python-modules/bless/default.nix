@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bless";
-  version = "0.2.5";
+  version = "0.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "kevincar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+rnMLqNfhIJASCKkIfOKpVil3S/d8BcMxnLHmdOcRIY=";
+    hash = "sha256-dAdA+d75iE6v6t4mfgvwhRsIARLW+IqCGmaMABaDlZg=";
   };
 
   propagatedBuildInputs = [
