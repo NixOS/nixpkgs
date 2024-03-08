@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-fvfEHJioyjQoEvIgZZKt9/AKtzTgo0APGUK7lDrbahs=";
+    hash = "sha256-FHtuZ6NUmCveAJOXEajfTLRMR8W1Jz/pjFKdE6PHW2g=";
   };
 
   nativeBuildInputs = [
