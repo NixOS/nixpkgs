@@ -31657,6 +31657,8 @@ with pkgs;
       shiboken2;
   };
 
+  freecad-wayland = freecad.override { withWayland = true; };
+
   freedv = callPackage ../applications/radio/freedv {
     inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
     codec2 = codec2.override {

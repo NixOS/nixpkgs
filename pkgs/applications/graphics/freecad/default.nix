@@ -33,6 +33,7 @@
 , pyyaml
 , qtbase
 , qttools
+, qtwayland
 , qtwebengine
 , qtx11extras
 , qtxmlpatterns
@@ -47,6 +48,7 @@
 , wrapGAppsHook
 , xercesc
 , zlib
+, withWayland ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -96,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     pyyaml # (at least for) PyrateWorkbench
     qtbase
     qttools
+    qtwayland
     qtwebengine
     qtxmlpatterns
     scipy
@@ -140,8 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
     "--prefix PATH : ${libredwg}/bin"
-    "--set QT_QPA_PLATFORM xcb"
-  ];
+  ] ++ lib.optionals (!withWayland) [ "--set QT_QPA_PLATFORM xcb" ];
 
   postFixup = ''
     mv $out/share/doc $out
