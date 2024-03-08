@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals qtClient [
       "--enable-client=qt"
+      "--with-qtver=qt5"
       "--with-qt5-includes=${qt5.qtbase.dev}/include"
     ] ++ lib.optionals gtkClient [ "--enable-client=gtk3.22" ]
     ++ lib.optional enableSqlite "--enable-fcdb=sqlite3"
@@ -82,5 +83,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pierron ];
     platforms = platforms.unix;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin
+    broken = qtClient && stdenv.isDarwin; # Missing Qt5 development files
   };
 }
