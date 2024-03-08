@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.15.3";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9BCV3jYq8svvMbhKoQVMAlGYTggyi1qreG6T/yEIfy8=";
+    hash = "sha256-DWmh96XviHVsmeVrivTDnq5A0hBog/DieUxcs2QmltU=";
   };
 
   nativeBuildInputs = [
