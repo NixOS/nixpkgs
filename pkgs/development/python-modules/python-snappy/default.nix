@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "python-snappy";
-  version = "0.6.1";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tqEHqwYgasxTWdTFYyvZsi1EhwKnmzFpsMYuD7gIuyo=";
+    hash = "sha256-G8KdNiEdRLufBPPXzPuurrvC9ittQPT8Tt0fsWvFLBM=";
   };
 
   buildInputs = [ snappy ];
