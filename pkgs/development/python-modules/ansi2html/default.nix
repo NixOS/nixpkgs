@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "ansi2html";
-  version = "1.8.0";
+  version = "1.9.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OLgqKYSCofomE/D5yb6z23Ko+DLurFjrLke/Ms039tU=";
+    hash = "sha256-XGg3oT7MGQOqt6VFNTMSBJ3+3+UQU2KtOo2dIHhx7HE=";
   };
 
   patches = [
