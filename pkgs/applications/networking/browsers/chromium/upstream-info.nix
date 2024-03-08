@@ -15,9 +15,9 @@
         version = "2024-01-22";
       };
     };
-    hash = "sha256-7fIs8qQon9L0iNmM/cHuyqtVm09qf7L4j9qb6KSbw2w=";
-    hash_deb_amd64 = "sha256-hOm7YZ9ya/SmwKhj6uIPkdgIDv5bIbss398szBYHuXk=";
-    version = "122.0.6261.94";
+    hash = "sha256-43h11bx/k78W7fEPZz4LwxNVExwGSSt74mlbiUYf5ig=";
+    hash_deb_amd64 = "sha256-juwTFdJB1hgAA14aabNIrql5aaP1JWQy7nOsoTF2Vto=";
+    version = "122.0.6261.111";
   };
   ungoogled-chromium = {
     deps = {
@@ -28,12 +28,12 @@
         version = "2024-01-22";
       };
       ungoogled-patches = {
-        hash = "sha256-vqiizzSVWV2/iADPac8qgfdZcbunc0QgMqN15NwJ9js=";
-        rev = "122.0.6261.94-1";
+        hash = "sha256-7c4VQLotLHmSFKfzzXrlwXKB3XPFpyRTnuATrS9RfEw=";
+        rev = "122.0.6261.111-1";
       };
     };
-    hash = "sha256-7fIs8qQon9L0iNmM/cHuyqtVm09qf7L4j9qb6KSbw2w=";
-    hash_deb_amd64 = "sha256-hOm7YZ9ya/SmwKhj6uIPkdgIDv5bIbss398szBYHuXk=";
-    version = "122.0.6261.94";
+    hash = "sha256-43h11bx/k78W7fEPZz4LwxNVExwGSSt74mlbiUYf5ig=";
+    hash_deb_amd64 = "sha256-juwTFdJB1hgAA14aabNIrql5aaP1JWQy7nOsoTF2Vto=";
+    version = "122.0.6261.111";
   };
 }
