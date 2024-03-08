@@ -16,6 +16,8 @@
 , udev
 , xorg
 , mesa
+, patchelf
+, libGL
 , libdrm
 , libappindicator
 }:
@@ -33,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     dpkg
     wrapGAppsHook
+    patchelf
   ];
 
   buildInputs = [
@@ -58,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib udev)
     libappindicator
     libsecret
+    libGL
   ];
 
   unpackPhase = ''
@@ -86,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = /* sh */ ''
     substituteInPlace $out/share/applications/Mailspring.desktop \
       --replace Exec=mailspring Exec=$out/bin/mailspring
+    patchelf --add-needed libGL.so.1 $out/share/mailspring/libEGL.so
   '';
 
   meta = {
