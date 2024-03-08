@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "celery-types";
-  version = "0.20.0";
+  version = "0.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5cdiVVYF7QWSuu2dUZIwBGzo56EcZ6ghVVwIt87OGWA=";
+    hash = "sha256-DsrS+lpu3tCh+Rnl4eOBzC/wY1/ksh21O0ZhtodtWzA=";
   };
 
   propagatedBuildInputs = [
