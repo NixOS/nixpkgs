@@ -4247,6 +4247,12 @@
     githubId = 49398;
     name = "Daniël de Kok";
   };
+  daniel-fahey = {
+    name = "Daniel Fahey";
+    email = "daniel.fahey+nixpkgs@pm.me";
+    github = "daniel-fahey";
+    githubId = 7294692;
+  };
   danielfullmer = {
     email = "danielrf12@gmail.com";
     github = "danielfullmer";
