@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch2
 , setuptools
 , aiohttp
 , incremental
@@ -21,6 +22,13 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-AjdWDEotz5AUo+auxBqXu7EMv/Kt97DZ6vOrFunZ2Fw=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/timmo001/system-bridge-connector/commit/a9030cf175ab4b51d77010de89e83cbb426448c2.patch";
+      hash = "sha256-0N8knoaEvymSvC92BxDKR0j52oasvOzWosFtHMI2Qmc=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
