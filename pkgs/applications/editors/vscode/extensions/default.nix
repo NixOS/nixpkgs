@@ -3548,6 +3548,23 @@ let
         };
       };
 
+      smcpeak.default-keys-windows = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "default-keys-windows";
+          publisher = "smcpeak";
+          version = "0.0.10";
+          sha256 = "sha256-v1JY5ZGWOfF14H235Y9CLlPwIvmNwCeRhIkdmcgCCFU=";
+        };
+        meta = {
+          changelog = "https://github.com/smcpeak/vscode-default-keys-windows/blob/master/CHANGELOG.md";
+          description = "VSCode extension that provides default Windows keybindings on any platform";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=smcpeak.default-keys-windows";
+          homepage = "https://github.com/smcpeak/vscode-default-keys-windows";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
+
       sonarsource.sonarlint-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "sonarlint-vscode";
