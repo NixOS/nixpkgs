@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pycognito";
-  version = "2023.5.0";
+  version = "2024.2.0";
   format = "setuptools";
   disabled = isPy27;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pvizeli";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2Aqid2bd5BAnWQ+Wtji0zXjLAmSpyJNGqJ0VroGi6lY=";
+    hash = "sha256-VYko5KcJvnhPUceTll2BBJWb88SYnSL7S3mZ7XSLPSQ=";
   };
 
   propagatedBuildInputs = [
