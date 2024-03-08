@@ -10,12 +10,12 @@
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "4.7.0";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ktb9RrHXm1T7awYLuzlCgHM5bOxxfV8uEiqZDUtqpeg=";
+    hash = "sha256-XQVP4BHFbzsQ+Xj0Go77Llrfx+aA7zb7VxraHyR3nZA=";
   };
 
   nativeBuildInputs = [
