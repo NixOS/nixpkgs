@@ -4,12 +4,12 @@
 , fetchPypi
 
 # build-system
-, cython
+, cython_3
 , gfortran
 , numpy
-, oldest-supported-numpy
 , scipy
 , setuptools
+, wheel
 
 # native dependencies
 , glibcLocales
@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.4.0";
+  version = "1.4.1.post1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1Dc8mE66IOOTIW7dUaPj7t5Wy+k9QkdRbSBWQ8O5MSE=";
+    hash = "sha256-k9PUlv8ZZUcPmXfQXl7DN2+x5jsQ5P2l450jwtiWmjA=";
   };
 
   buildInputs = [
@@ -42,18 +42,24 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython
     gfortran
+  ];
+
+  build-system = [
+    cython_3
     numpy
-    oldest-supported-numpy
     scipy
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
+    numpy.blas
+  ];
+
+  dependencies = [
     joblib
     numpy
-    numpy.blas
     scipy
     threadpoolctl
   ];
