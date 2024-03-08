@@ -6,6 +6,7 @@ lib.makeOverridable (
 , deepClone ? false, private ? false, forceFetchGit ? false
 , sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
+, passthru ? { }
 , meta ? { }
 , ... # For hash agility
 }@args:
@@ -17,6 +18,9 @@ let
     else builtins.unsafeGetAttrPos "rev" args
   );
   baseUrl = "https://${githubBase}/${owner}/${repo}";
+  newPassthru = passthru // {
+    inherit rev owner repo;
+  };
   newMeta = meta // {
     homepage = meta.homepage or baseUrl;
   } // lib.optionalAttrs (position != null) {
@@ -53,16 +57,19 @@ let
   fetcherArgs = (if useFetchGit
     then {
       inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
+      passthru = newPassthru;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
       url = "${baseUrl}/archive/${rev}.tar.gz";
 
-      passthru = {
+      passthru = newPassthru // {
         inherit gitRepoUrl;
       };
     }
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta = newMeta; inherit rev owner repo; }
+(fetcher fetcherArgs).overrideAttrs (finalAttrs: previousAttrs: {
+  meta = newMeta;
+})
 )
