@@ -32,14 +32,14 @@
 
 let
   # macOS - versions
-  fusionVersion = "13.0.2";
-  fusionBuild = "21581413";
-  unlockerVersion = "3.0.4";
+  fusionVersion = "13.5.1";
+  fusionBuild = "23298085";
+  unlockerVersion = "3.0.5";
 
   # macOS - ISOs
   darwinIsoSrc = fetchurl {
     url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
-    sha256 = "sha256-8IaEQn1+e+WtjRX9Aopbi6tVTNt9RVyGrpaARtVH6j0=";
+    sha256 = "sha256-bn6hoicby2YVj1pZTBzBhabNhKefzVQTm5vIrdTO2K4=";
   };
 
   # macOS - Unlocker
@@ -47,7 +47,7 @@ let
     owner = "paolo-projects";
     repo = "unlocker";
     rev = "${unlockerVersion}";
-    sha256 = "sha256-kpvrRiiygfjQni8z+ju9mPBVqy2gs08Wj4cHxE9eorQ=";
+    sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
   gdbm3 = gdbm.overrideAttrs (old: rec {
@@ -71,8 +71,8 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vmware-workstation";
-  version = "17.0.2";
-  build = "21581411";
+  version = "17.5.1";
+  build = "23298084";
 
   buildInputs = [
     libxslt
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download3.vmware.com/software/WKST-${builtins.replaceStrings ["."] [""] version}-LX/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
-    sha256 = "sha256-9ONh+uvL4YGNGxbpPX1mWO8P4oKPUpwzTsKKBJNxHMc=";
+    sha256 = "sha256-qmC3zvKoes77z3x6UkLHsJ17kQrL1a/rxe9mF+UMdJY=";
   };
 
   unpackPhase = ''
@@ -255,18 +255,16 @@ stdenv.mkDerivation rec {
     unpacked="unpacked/vmware-network-editor"
     cp -r $unpacked/lib $out/lib/vmware/
 
-    ## VMware Tools + Virtual Printer
-    echo "Installing VMware Tools + Virtual Printer"
+    ## VMware Tools
+    echo "Installing VMware Tools"
     mkdir -p $out/lib/vmware/isoimages/
-    cp unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
-       unpacked/vmware-tools-windows/windows.iso \
-       unpacked/vmware-tools-winPreVista/winPreVista.iso \
-       unpacked/vmware-virtual-printer/VirtualPrinter-Linux.iso \
-       unpacked/vmware-virtual-printer/VirtualPrinter-Windows.iso \
-       unpacked/vmware-tools-winPre2k/winPre2k.iso \
-       unpacked/vmware-tools-linux/linux.iso \
+    cp unpacked/vmware-tools-linux/linux.iso \
+       unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
        unpacked/vmware-tools-netware/netware.iso \
        unpacked/vmware-tools-solaris/solaris.iso \
+       unpacked/vmware-tools-winPre2k/winPre2k.iso \
+       unpacked/vmware-tools-winPreVista/winPreVista.iso \
+       unpacked/vmware-tools-windows/windows.iso \
        $out/lib/vmware/isoimages/
 
     ${lib.optionalString enableMacOSGuests ''
@@ -281,16 +279,9 @@ stdenv.mkDerivation rec {
     echo "Installing VMware Player Application"
     unpacked="unpacked/vmware-player-app"
     cp -r $unpacked/lib/* $out/lib/vmware/
-    cp -r $unpacked/etc/* $out/etc/
     cp -r $unpacked/share/* $out/share/
     cp -r $unpacked/bin/* $out/bin/
     cp -r $unpacked/doc/* $out/share/doc/ # Licences
-
-    mkdir -p $out/etc/thnuclnt
-    cp -r $unpacked/extras/.thnumod $out/etc/thnuclnt/
-
-    mkdir -p $out/lib/cups/filter
-    cp -r $unpacked/extras/thnucups $out/lib/cups/filter/
 
     for target in "vmplayer" "vmware-enter-serial" "vmware-setup-helper" "licenseTool" "vmware-mount" "vmware-fuseUI" "vmware-app-control" "vmware-zenity"
     do
@@ -395,6 +386,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cawilliamson deinferno ];
+    maintainers = with maintainers; [ cawilliamson deinferno vifino ];
   };
 }
