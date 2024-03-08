@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "3.6.0";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "globocom";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-JLYRkibcvmNct2eIBfBP7z3gR680xhZL/Kn/1S7feoo=";
+    hash = "sha256-sxLT3a9f38RZqzEzqyZos3G38vzHPzhMexfBN2qzbxQ=";
   };
 
   propagatedBuildInputs = [
