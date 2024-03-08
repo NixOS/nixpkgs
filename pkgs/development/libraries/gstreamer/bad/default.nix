@@ -68,6 +68,7 @@
 , zbar
 , wayland-protocols
 , wildmidi
+, svt-av1
 , fluidsynth
 , libva
 , libvdpau
@@ -192,6 +193,7 @@ stdenv.mkDerivation rec {
     zxing-cpp
     usrsctp
     wildmidi
+    svt-av1
   ] ++ lib.optionals opencvSupport [
     opencv4
   ] ++ lib.optionals enableZbar [
