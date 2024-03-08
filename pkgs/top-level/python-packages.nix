@@ -11160,7 +11160,7 @@ self: super: with self; {
   pyomo = callPackage ../development/python-modules/pyomo { };
 
   pyp = callPackage ../development/python-modules/pyp {
-    inherit (pkgs) jq;
+    inherit (pkgs) bc jq;
   };
 
   pypng = callPackage ../development/python-modules/pypng { };

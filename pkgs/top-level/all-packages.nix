@@ -12341,6 +12341,9 @@ with pkgs;
 
   pywal = with python3Packages; toPythonApplication pywal;
 
+  # pyp: tests fail on Python 3.11 -- why?
+  pyp = with python310Packages; toPythonApplication pyp;
+
   pystring = callPackage ../development/libraries/pystring { };
 
   raysession = python3Packages.callPackage ../applications/audio/raysession {};
