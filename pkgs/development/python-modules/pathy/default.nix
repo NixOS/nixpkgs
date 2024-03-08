@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pathy";
-  version = "0.10.3";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tFGF0G+bGMbTNG06q4gauWh0VT9mHuiMzS5gJG4QPCI=";
+    hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
   };
 
   propagatedBuildInputs = [
