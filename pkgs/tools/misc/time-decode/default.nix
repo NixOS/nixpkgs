@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "time-decode";
   version = "6.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalsleuth";
@@ -14,6 +14,10 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-LbXycu3Yiku9ToW+WS/yUqwicvckj2IkP09TiZkRXnk=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     colorama
