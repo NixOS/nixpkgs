@@ -14,7 +14,6 @@
 , gst_all_1
 , glib-networking
 , darwin
-, libsoup_3
 }:
 
 stdenv.mkDerivation rec {
@@ -68,12 +67,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.IOKit
   ];
-
-  # FIXME: gst-plugins-good missing libsoup breaks streaming
-  # (https://github.com/nixos/nixpkgs/issues/271960)
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsoup_3 ]}")
-  '';
 
   meta = with lib; {
     description = "Linux/macOS media player based on GStreamer and GTK";

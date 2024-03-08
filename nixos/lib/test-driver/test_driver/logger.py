@@ -1,6 +1,3 @@
-# mypy: disable-error-code="no-untyped-call"
-# drop the above line when mypy is upgraded to include
-# https://github.com/python/typeshed/commit/49b717ca52bf0781a538b04c0d76a5513f7119b8
 import codecs
 import os
 import sys
@@ -10,6 +7,7 @@ from contextlib import contextmanager
 from queue import Empty, Queue
 from typing import Any, Dict, Iterator
 from xml.sax.saxutils import XMLGenerator
+from xml.sax.xmlreader import AttributesImpl
 
 from colorama import Fore, Style
 
@@ -22,7 +20,7 @@ class Logger:
         self.queue: "Queue[Dict[str, str]]" = Queue()
 
         self.xml.startDocument()
-        self.xml.startElement("logfile", attrs={})
+        self.xml.startElement("logfile", attrs=AttributesImpl({}))
 
         self._print_serial_logs = True
 
@@ -44,7 +42,7 @@ class Logger:
         return message
 
     def log_line(self, message: str, attributes: Dict[str, str]) -> None:
-        self.xml.startElement("line", attributes)
+        self.xml.startElement("line", attrs=AttributesImpl(attributes))
         self.xml.characters(message)
         self.xml.endElement("line")
 
@@ -89,8 +87,8 @@ class Logger:
             )
         )
 
-        self.xml.startElement("nest", attrs={})
-        self.xml.startElement("head", attributes)
+        self.xml.startElement("nest", attrs=AttributesImpl({}))
+        self.xml.startElement("head", attrs=AttributesImpl(attributes))
         self.xml.characters(message)
         self.xml.endElement("head")
 

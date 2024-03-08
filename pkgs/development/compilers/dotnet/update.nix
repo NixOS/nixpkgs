@@ -50,7 +50,6 @@ in writeScript "update-dotnet-vmr.sh" ''
               .draft == false and
               (.name | startswith(".NET ${channel}")))) |
       first | (
-          .name,
           .tag_name,
           (.assets |
               .[] |
@@ -67,18 +66,22 @@ in writeScript "update-dotnet-vmr.sh" ''
       curl -fsL https://api.github.com/repos/dotnet/dotnet/releases | \
       jq -r "$query" \
   ) | (
-      read name
       read tagName
       read releaseUrl
       read sigUrl
 
-      if [[ "$name" == ".NET ${release}" ]]; then
-          >&2 echo "release is already $name"
-          exit
-      fi
-
       tmp="$(mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
+
+      cd "$tmp"
+
+      curl -fsL "$releaseUrl" -o release.json
+      release=$(jq -r .release release.json)
+
+      if [[ "$release" == "${release}" ]]; then
+          >&2 echo "release is already $release"
+          exit
+      fi
 
       tarballUrl=https://github.com/dotnet/dotnet/archive/refs/tags/$tagName.tar.gz
 
@@ -86,7 +89,6 @@ in writeScript "update-dotnet-vmr.sh" ''
       tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
       tarball=''${prefetch[1]}
 
-      cd "$tmp"
       curl -L "$sigUrl" -o release.sig
 
       export GNUPGHOME=$PWD/.gnupg
@@ -118,6 +120,6 @@ in writeScript "update-dotnet-vmr.sh" ''
               "artifactsHash": $_2,
           }' > "${toString releaseInfoFile}"
 
-      curl -fsL "$releaseUrl" -o ${toString releaseManifestFile}
+      cp release.json "${toString releaseManifestFile}"
   )
 ''

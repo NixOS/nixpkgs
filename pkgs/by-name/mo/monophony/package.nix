@@ -6,7 +6,6 @@
 , gobject-introspection
 , yt-dlp
 , libadwaita
-, libsoup_3
 , glib-networking
 , nix-update-script
 }:
@@ -38,7 +37,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libadwaita
     # needed for gstreamer https
-    libsoup_3
     glib-networking
   ] ++ (with gst_all_1; [
     gst-plugins-base
@@ -53,8 +51,6 @@ python3Packages.buildPythonApplication rec {
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
       --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
-      # needed for gstreamer https
-      --prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib"
     )
   '';
 
