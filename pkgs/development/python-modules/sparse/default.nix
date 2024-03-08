@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.14.0";
+  version = "0.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X1gno39s1vZzClQfmUyVxgo64jKeAfS6Ic7VM5rqAJg=";
+    hash = "sha256-lzrcuIqNuOPYBHlTMx4m0/ZKVlf5tGprhZxHZjw+75k=";
   };
 
   patches = [
