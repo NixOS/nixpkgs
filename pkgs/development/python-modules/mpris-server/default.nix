@@ -10,13 +10,13 @@
 }:
 buildPythonPackage rec {
   pname = "mpris-server";
-  version = "0.4.2";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mpris_server";
     inherit version;
-    hash = "sha256-p3nM80fOMtRmeKvOXuX40Fu9xH8gPgYyneXbUS678fE=";
+    hash = "sha256-ia0567r6CGKRgXxvGVY+ATvXJ/atWaGGZT8fQzvLzrY=";
   };
 
   nativeBuildInputs = [
