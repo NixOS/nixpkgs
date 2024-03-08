@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "gcovr";
-  version = "6.0";
+  version = "7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hjjV9E3vEOOOMWbIozvvZkPsIEaH4Kx9NFzkGpjFdQs=";
+    hash = "sha256-4+lctWyojbvnQctdaaor5JTrL8KgnuT2UWRKZw7lrrM=";
   };
 
   propagatedBuildInputs = [
