@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   inherit (flit) src patches;
 
-  sourceRoot = "source/flit_core";
+  sourceRoot = "${src.name}/flit_core";
 
   # Tests are run in the "flit" package.
   doCheck = false;
