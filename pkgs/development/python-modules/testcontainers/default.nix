@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "3.7.1";
+  version = "4.0.0";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
-    rev = "v${version}";
-    hash = "sha256-OHuvUi5oa0fVcfo0FW9XwaUp52MEH4NTM6GqK4ic0oM=";
+    rev = "refs/tags/testcontainers-v${version}";
+    hash = "sha256-cVVP9nGRTLC09KHalQDz7KOszjuFVVpMlee4btPNgd4=";
   };
 
   postPatch = ''
