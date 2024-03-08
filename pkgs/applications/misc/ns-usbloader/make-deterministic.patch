@@ -1,0 +1,130 @@
+From 3f85e2754144bbf2805ba68d8c76b3dec3299f4d Mon Sep 17 00:00:00 2001
+From: Sofi <sofi+git@mailbox.org>
+Date: Sat, 29 Jul 2023 11:16:38 +0200
+Subject: [PATCH] make deterministic
+
+---
+ pom.xml | 63 +++++++++++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 57 insertions(+), 6 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 320d4f3..5a594e6 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -51,6 +51,7 @@
+         <maven.build.timestamp.format>yyyyMMdd.HHmmss</maven.build.timestamp.format>
+         <javafx.version>19.0.2.1</javafx.version>
+         <maven.compiler.release>11</maven.compiler.release>
++        <project.build.outputTimestamp>2023-01-01T00:00:00Z</project.build.outputTimestamp>
+     </properties>
+ 
+     <issueManagement>
+@@ -166,7 +167,7 @@
+         </dependency>
+     </dependencies>
+     <build>
+-        <finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName>
++        <finalName>${project.artifactId}-${project.version}</finalName>
+         <resources>
+             <resource>
+                 <directory>src/main/resources</directory>
+@@ -193,26 +194,51 @@
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-surefire-plugin</artifactId>
+-                <version>2.22.2</version>
++                <version>3.1.2</version>
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-failsafe-plugin</artifactId>
+-                <version>2.22.2</version>
++                <version>3.1.2</version>
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-compiler-plugin</artifactId>
+-                <version>3.10.1</version>
++                <version>3.11.0</version>
+                 <configuration>
+                     <release>11</release>
+                 </configuration>
+             </plugin>
++            <plugin>
++              <groupId>org.apache.maven.plugins</groupId>
++              <artifactId>maven-enforcer-plugin</artifactId>
++              <version>3.3.0</version>
++              <executions>
++                <execution>
++                  <id>enforce-versions</id>
++                  <phase>validate</phase>
++                  <goals>
++                    <goal>enforce</goal>
++                  </goals>
++                  <configuration>
++                    <rules>
++                      <requireMavenVersion>
++                        <version>[3.2.5,)</version>
++                      </requireMavenVersion>
++                      <requireJavaVersion>
++                        <version>[1.8,)</version>
++                      </requireJavaVersion>
++                      <requirePluginVersions />
++                    </rules>
++                  </configuration>
++                </execution>
++              </executions>
++            </plugin>
+             <!-- Don't generate default JAR without dependencies -->
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-jar-plugin</artifactId>
+-                <version>3.1.2</version>
++                <version>3.3.0</version>
+                 <!--
+                 <configuration>
+                     <manifestEntries>
+@@ -231,7 +257,7 @@
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-assembly-plugin</artifactId>
+-                <version>3.1.0</version>
++                <version>3.6.0</version>
+                 <configuration>
+                     <archive>
+                         <manifest>
+@@ -253,6 +279,31 @@
+                     </execution>
+                 </executions>
+             </plugin>
++            <plugin>
++              <groupId>org.apache.maven.plugins</groupId>
++              <artifactId>maven-deploy-plugin</artifactId>
++              <version>3.1.1</version>
++            </plugin>
++            <plugin>
++              <groupId>org.apache.maven.plugins</groupId>
++              <artifactId>maven-resources-plugin</artifactId>
++              <version>3.3.1</version>
++            </plugin>
++            <plugin>
++              <groupId>org.apache.maven.plugins</groupId>
++              <artifactId>maven-site-plugin</artifactId>
++              <version>4.0.0-M9</version>
++            </plugin>
++            <plugin>
++              <groupId>org.apache.maven.plugins</groupId>
++              <artifactId>maven-install-plugin</artifactId>
++              <version>3.1.1</version>
++            </plugin>
++            <plugin>
++              <groupId>org.apache.maven.plugins</groupId>
++              <artifactId>maven-clean-plugin</artifactId>
++              <version>3.3.1</version>
++            </plugin>
+         </plugins>
+     </build>
+ </project>
+-- 
+2.41.0
+

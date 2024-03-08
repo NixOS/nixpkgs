@@ -1,0 +1,13 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index fcbe50c..27d4c30 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1390,7 +1390,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "tokio-console"
+-version = "0.1.8"
++version = "0.1.9"
+ dependencies = [
+  "atty",
+  "clap",

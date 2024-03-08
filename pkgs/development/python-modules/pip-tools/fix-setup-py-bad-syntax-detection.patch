@@ -1,0 +1,21 @@
+diff --color -ru a/piptools/scripts/compile.py b/piptools/scripts/compile.py
+--- a/piptools/scripts/compile.py	2022-06-30 11:24:26.000000000 +0200
++++ b/piptools/scripts/compile.py	2022-08-01 13:40:58.392515765 +0200
+@@ -6,7 +6,7 @@
+ from typing import IO, Any, BinaryIO, List, Optional, Tuple, Union, cast
+ 
+ import click
+-from build import BuildBackendException
++from build import BuildException
+ from build.util import project_wheel_metadata
+ from click.utils import LazyFile, safecall
+ from pip._internal.commands import create_command
+@@ -421,7 +421,7 @@
+                 metadata = project_wheel_metadata(
+                     os.path.dirname(os.path.abspath(src_file))
+                 )
+-            except BuildBackendException as e:
++            except (BuildException,StopIteration) as e:
+                 log.error(str(e))
+                 log.error(f"Failed to parse {os.path.abspath(src_file)}")
+                 sys.exit(2)

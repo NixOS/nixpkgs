@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 62db8af..4a980c1 100755
+--- a/setup.py
++++ b/setup.py
+@@ -52,7 +52,7 @@ setuptools.setup(
+         'ruamel.yaml>0.15.69',
+         'jsonschema>=4.1.2',
+         'rfc3987',
+-        'pylibfdt',
++        'libfdt',
+     ],
+ 
+     classifiers=[
