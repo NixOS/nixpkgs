@@ -9290,6 +9290,8 @@ self: super: with self; {
 
   paypalhttp = callPackage ../development/python-modules/paypalhttp { };
 
+  paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
+
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
   pbr = callPackage ../development/python-modules/pbr { };
