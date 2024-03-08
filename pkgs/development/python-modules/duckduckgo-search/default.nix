@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "3.9.9";
+  version = "5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "deedy5";
     repo = "duckduckgo_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-swuMCobYF5u41O1Qp5Gx/n8BIgSEnhRVZ5Owk3IPbeI=";
+    hash = "sha256-OZFkSFyXC2MFP2MbKwF/qR8zvCFzPKgLmX+nuIztOpw=";
   };
 
   nativeBuildInputs = [
