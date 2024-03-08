@@ -12341,8 +12341,6 @@ with pkgs;
 
   pywal = with python3Packages; toPythonApplication pywal;
 
-  pyp = with python3Packages; toPythonApplication pyp;
-
   pystring = callPackage ../development/libraries/pystring { };
 
   raysession = python3Packages.callPackage ../applications/audio/raysession {};
