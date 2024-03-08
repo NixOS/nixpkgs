@@ -12,7 +12,7 @@
 
 let self = buildPythonPackage rec {
   pname = "pydantic-settings";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ let self = buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-settings";
-    rev = "v${version}";
-    hash = "sha256-hU7u/AzaqCHKSUDHybsgXTW8IWi9hzBttPYDmMqdZbI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4o8LlIFVizoxb484lVT67e24jhtUl49otr1lX/2zZ4M=";
   };
 
   nativeBuildInputs = [
