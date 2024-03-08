@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "nbval";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tKzv3BEyrvihtbYr+ak9Eo66UoObKFTqPkJZj023vrM=";
+    hash = "sha256-d8lXl2B7CpaLq9JZfuNJQQLSXDrTdDXeu9rA5G43kJQ=";
   };
 
   buildInputs = [
