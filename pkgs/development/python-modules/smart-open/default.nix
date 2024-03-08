@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "6.4.0";
+  version = "7.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fciNaVw603FAcgrSrND+LEycJffmnFQij2ZpatYZ/e4=";
+    hash = "sha256-yGy4xNoHCE+LclBBTMVtTKP6GYZ5w09NJ0OmsUPnir4=";
   };
 
   passthru.optional-dependencies = {
