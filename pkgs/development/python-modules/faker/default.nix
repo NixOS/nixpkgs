@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "20.1.0";
+  version = "24.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Faker";
     inherit version;
-    hash = "sha256-Vio6CcPtOhp7IOE9efkE39/F50D3KBPs+V5M9x5aL1I=";
+    hash = "sha256-6m94TEBzDeD3cGfknnjN1ZDvsAvsPTP1d0kiYiBsF/w=";
   };
 
   nativeBuildInputs = [
