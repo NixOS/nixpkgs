@@ -20785,6 +20785,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
   };
 
+  hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
+
+  # Allow downgrade to nix 2.16 if needed.
   hercules-ci-agent_only_safe_with_daemon = callPackage ../development/tools/continuous-integration/hercules-ci-agent {
     haskellPackages = haskellPackages.extend (self: super: {
       hercules-ci-cnix-store-nix = nixVersions.nix_2_16.overrideAttrs (old: {
