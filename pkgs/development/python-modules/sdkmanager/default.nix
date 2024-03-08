@@ -2,14 +2,16 @@
 , buildPythonPackage
 , fetchFromGitLab
 , pythonOlder
+, pythonAtLeast
 , argcomplete
 , requests
+, looseversion
 , gnupg
 }:
 
 buildPythonPackage rec {
   pname = "sdkmanager";
-  version = "0.6.5";
+  version = "0.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,12 +20,15 @@ buildPythonPackage rec {
     owner = "fdroid";
     repo = pname;
     rev = version;
-    hash = "sha256-EQ24OjQZr42C1PFtIXr4yFzYb/M4Tatqu8Zo+9dgtEE=";
+    hash = "sha256-Vuht2gH9ivNG7PgG+XKtkdKoszkkoI91reQKg6D50xs=";
   };
 
   propagatedBuildInputs = [
     argcomplete
     requests
+  ] ++ requests.optional-dependencies.socks
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    looseversion
   ];
 
   postInstall = ''

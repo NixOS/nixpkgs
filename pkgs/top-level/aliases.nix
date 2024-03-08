@@ -1098,6 +1098,7 @@ mapAliases ({
   swift-im = throw "swift-im has been removed as it is unmaintained and depends on deprecated Python 2 / Qt WebKit"; # Added 2023-01-06
   swtpm-tpm2 = swtpm; # Added 2021-02-26
   syncthing-cli = syncthing; # Added 2021-04-06
+  syncthingtray-qt6 = syncthingtray; # Added 2024-03-06
 
   ### T ###
 

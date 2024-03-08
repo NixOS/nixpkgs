@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.55";
+  version = "3.56";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HGOHJQWEvTTL+GXVb8ZS8DlL9dHWuS0PioP1bZ32PhI=";
+    hash = "sha256-dHc5t8QO4wtwFlLkiaSu5Ern/MsxNHZMd5aeqWdKwNo=";
   };
 
   nativeBuildInputs = [

@@ -13,6 +13,30 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sYs7b6I1VhO2TLLhMFuaV9AtLoavcoKvCRYfVNGAg20=";
   };
 
+  patchPhase = ''
+    runHook prePatch
+
+    patchShebangs bash_unit
+
+    for t in tests/test_*; do
+      chmod +x "$t" # make test file visible to `patchShebangs`
+      patchShebangs "$t"
+      chmod -x "$t"
+    done
+
+    runHook postPatch
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./bash_unit ./tests/test_core.sh
+
+    runHook postCheck
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp bash_unit $out/bin/
