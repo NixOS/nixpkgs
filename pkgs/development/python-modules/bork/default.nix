@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "bork";
-  version = "7.0.2";
+  version = "8.0.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-sHCPT6nTenE6mbTifNPtg0OMNIJCs7LRcF8Xuk+MwLs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BDwVhKmZ/F8CvpT6dEI5moQZx8wHy1TwdOl889XogEo=";
   };
 
   nativeBuildInputs = [
