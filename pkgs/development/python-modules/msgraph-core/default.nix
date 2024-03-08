@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "0.2.2";
+  version = "1.0.0";
 
   disabled = pythonOlder "3.5";
 
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
-    rev = "v${version}";
-    hash = "sha256-eRRlG3GJX3WeKTNJVWgNTTHY56qiUGOlxtvEZ2xObLA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VizjN7sXqPvo9VOSaaUnogTlUDJ1OA2COYNTcVRqhJA=";
   };
 
   nativeBuildInputs = [
