@@ -341,6 +341,7 @@ let
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     Formula = [ pkgs.gmp ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
+    GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = with pkgs; [ pkgs.libpng.dev ];
     git2r = with pkgs; [ zlib.dev openssl.dev libssh2.dev libgit2 pkg-config ];
     GLAD = [ pkgs.gsl ];
