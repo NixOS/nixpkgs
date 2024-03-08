@@ -16,8 +16,17 @@ let
       self.lib.nameValuePair attrName (import path {
         inherit jitSupport self;
       })
-    ) versions;
+      ) versions;
+
+  withoutJIT = mkAttributes false;
+  withJIT = mkAttributes true;
+
+  # Always selects libpq as the latest postgresql version
+  libpq = let
+    vs = builtins.map (v: withoutJIT.${v}) (builtins.attrNames versions);
+    latestFirst = builtins.sort (v1: v2: (builtins.compareVersions v1.version v2.version) > 0) vs;
+  in
+  builtins.head latestFirst;
 
 in
-# variations without and with JIT
-(mkAttributes false) // (mkAttributes true)
+withoutJIT // withJIT // { inherit libpq; }
