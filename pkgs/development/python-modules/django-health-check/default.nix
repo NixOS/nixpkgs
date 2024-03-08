@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.17.0";
+  version = "3.18.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-f87dgB2pDc+A0h41FX13qTj6Zzw5I4QwsDoC6yPkvAE=";
+    hash = "sha256-jzpxWFkhUW4CRBt3ERh6a6Emh2kAhfFh2cTouaWGzlo=";
     leaveDotGit = true;
   };
 
