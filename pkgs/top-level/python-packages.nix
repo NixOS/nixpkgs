@@ -1884,6 +1884,8 @@ self: super: with self; {
 
   case = callPackage ../development/python-modules/case { };
 
+  cashaddress = callPackage ../development/python-modules/cashaddress { };
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   castepxbin = callPackage ../development/python-modules/castepxbin { };
