@@ -135,7 +135,6 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - GeBoP
  - GenI
- - GenSmsPdu
  - Genbank
  - Gene-CluEDO
  - GenussFold
@@ -621,6 +620,7 @@ dont-distribute-packages:
  - beam-th
  - beautifHOL
  - bech32-th
+ - bech32-th_1_1_5
  - beeminder-api
  - bein
  - belka
@@ -672,6 +672,7 @@ dont-distribute-packages:
  - blatex
  - blaze-builder-enumerator
  - blaze-colonnade
+ - blaze-colonnade_1_2_3_0
  - ble
  - blink1
  - blip
@@ -981,7 +982,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_6
+ - crackNum_3_10
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1238,6 +1239,7 @@ dont-distribute-packages:
  - errors-ext
  - ersatz-toysat
  - esotericbot
+ - esqueleto-postgis
  - esqueleto-streaming
  - essence-of-live-coding-PortMidi
  - essence-of-live-coding-gloss
@@ -3720,6 +3722,7 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
+ - syslog
  - systemd-api
  - systemstats
  - t3-client
@@ -3944,6 +3947,8 @@ dont-distribute-packages:
  - util-exception
  - util-primitive-control
  - util-universe
+ - utxorpc-client
+ - utxorpc-server
  - uu-cco-examples
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
