@@ -1410,6 +1410,16 @@ let
       RGL_USE_NULL = "true";
     });
 
+    reticulate = old.reticulate.overrideAttrs (_: {
+      preConfigure = ''
+        if [ ! -z ''${python+x} ] ; then
+          substituteInPlace R/zzz.R --replace \
+            ".onLoad <- function(libname, pkgname) {" \
+            ".onLoad <- function(libname, pkgname) { Sys.setenv(RETICULATE_PYTHON='$python/bin/python');"
+        fi
+      '';
+    });
+
     Rhdf5lib = let
       hdf5 = pkgs.hdf5_1_10.overrideAttrs (attrs: {configureFlags = attrs.configureFlags ++ ["--enable-cxx"];});
     in old.Rhdf5lib.overrideAttrs (attrs: {
