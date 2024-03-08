@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkd3d-proton";
-  version = "2.11.1";
+  version = "2.11.1-unstable-2024-03-07";
 
   src = fetchFromGitHub {
     owner = "HansKristian-Work";
     repo = "vkd3d-proton";
-    rev = "v${finalAttrs.version}";
+    rev = "ffb04fb7091f932ca95da236d63ab9a4064d6443";
     fetchSubmodules = true;
-    hash = "sha256-NhHtuXdoccrvpUSplho1FZd47URTBWhzycXhi7Il0Mc=";
+    hash = "sha256-xkDWquEbsJD6b8vvZsMHiqN0IgyyNY0G36ol8Sq041U=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,17 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = let
     # these are both embedded in the output files; they are obtained via
-    # git describe --always --exclude='*' --abbrev=15 --dirty=0
-    # git describe --always --tags --dirty=+
-    rev = "105b5b77c9a34fd336b5c604e3c7a6cc48f39c3a";
-    shortRev = lib.substring 0 8 rev;
-    realVersion = finalAttrs.src.rev;
+    # vkd3dBuild = $(git describe --always --exclude='*' --abbrev=15 --dirty=0)
+    # vkd3dVersion = $(git describe --always --tags --dirty=+)
+    inherit (finalAttrs.src) rev; # Change this to raw rev when needed
+    vkd3dBuild = lib.substring 0 15 rev;
+    vkd3dVersion = "v2.11.1-135-g${lib.substring 0 8 rev}";
   in ''
     substituteInPlace meson.build \
       --replace "vkd3d_build = vcs_tag(" \
-                "vkd3d_build = vcs_tag( fallback : '${shortRev}'", \
+                "vkd3d_build = vcs_tag( fallback : '${vkd3dBuild}'", \
       --replace "vkd3d_version = vcs_tag(" \
-                "vkd3d_version = vcs_tag( fallback : '${realVersion}'",
+                "vkd3d_version = vcs_tag( fallback : '${vkd3dVersion}'",
   '';
 
   meta = {
