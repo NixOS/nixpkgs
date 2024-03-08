@@ -6,7 +6,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nat-418";
-    repo = pname;
+    repo ="knock";
     rev = "a3749685381cae178bb5836c67645e0fce7aa1d0";
     hash = "sha256-VXrWphfBDGDNsz4iuUdwwd46oqnmhJ9i3TtzMqHoSJk=";
   };
