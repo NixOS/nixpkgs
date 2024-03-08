@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "overrides";
-  version = "7.6.0";
+  version = "7.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mkorpela";
     repo = "overrides";
     rev = "refs/tags/${version}";
-    hash = "sha256-UdahbhmRfuxKTxb6Afjny/hMgXX1UuDUrIcLjZ0Jtak=";
+    hash = "sha256-gQDw5/RpAFNYWFOuxIAArPkCOoBYWUnsDtv1FEFteHo=";
   };
 
   nativeBuildInputs = [
