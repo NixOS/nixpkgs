@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ysa1RAWuFFQCF6bYwAUVFou7nxCKHLZbUtrUtXiSpPk=";
+    hash = "sha256-RNv/6Rs7NapP/XOdBFIWPg+/BmaK1+OY0+bP/i2YKaA=";
   };
 
   nativeBuildInputs = [
