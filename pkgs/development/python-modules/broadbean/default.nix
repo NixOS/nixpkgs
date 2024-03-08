@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "broadbean";
-  version = "0.11.0";
+  version = "0.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e+LAcmWxT+SkaWtToPgg+x3QRu5fCSm+w4dLCcyZrw8=";
+    hash = "sha256-v+Ov6mlSnaJG98ooA9AhPGJflrFafKQoO5wi+PxcZVw=";
   };
 
   patches = [
