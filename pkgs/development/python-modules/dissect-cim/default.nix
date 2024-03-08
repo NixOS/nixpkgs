@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-cim";
-  version = "3.7";
+  version = "3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cim";
     rev = "refs/tags/${version}";
-    hash = "sha256-+HHjDUSepAEebMD5ckjXbfgA4AKlNMBYHwxDq+jdhxw=";
+    hash = "sha256-NbGI6d1C3X7PbTsbDSCS4AUK6ueCBOuQDTNhkULrLYc=";
   };
 
   nativeBuildInputs = [
