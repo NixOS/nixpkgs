@@ -18,13 +18,14 @@
 , opencv4
 , faad2
 , ldacbt
+, liblc3
 , libass
 , libkate
 , lrdf
 , ladspaH
 , lcms2
 , libnice
-, webrtc-audio-processing
+, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -110,13 +111,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.22.9";
+  version = "1.24.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-G8ZdD9X1OjY2Vk79P88xjD7c3sOcQQmlA8H8ggOECh0=";
+    hash = "sha256-8aGDlm6pE2oA8VnuQttNHRBqvvAi0bSeY/ui/L5QyPg=";
   };
 
   patches = [
@@ -148,10 +149,10 @@ stdenv.mkDerivation rec {
     json-glib
     lcms2
     ldacbt
+    liblc3
     libass
     libkate
-    webrtc-audio-processing # required by webrtcdsp
-    #webrtc-audio-processing_1 # required by isac
+    webrtc-audio-processing_1 # required by isac
     libbs2b
     libmodplug
     openjpeg
@@ -262,6 +263,7 @@ stdenv.mkDerivation rec {
     "-Damfcodec=disabled" # Windows-only
     "-Davtp=disabled"
     "-Ddirectshow=disabled" # Windows-only
+    "-Dqt6d3d11=disabled"
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
@@ -281,6 +283,7 @@ stdenv.mkDerivation rec {
     "-Dmusepack=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
+    "-Dsvtav1=disabled" # not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
@@ -289,11 +292,11 @@ stdenv.mkDerivation rec {
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
-    "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
+    "-Daja=disabled" # should pass libajantv2 via aja-sdk-dir instead
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "doc" enableDocumentation)
