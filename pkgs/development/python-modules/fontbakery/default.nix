@@ -44,12 +44,12 @@
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.10.4";
+  version = "0.11.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ye/TMGvURxSU2yoohwYbSo5RvrmbHKdMnFNj2lUvtMk=";
+    hash = "sha256-61EXlf+d5kJeUF41OEnGNLaOcSvFWUDFgarVvHQZYmw=";
   };
 
   patches = [
