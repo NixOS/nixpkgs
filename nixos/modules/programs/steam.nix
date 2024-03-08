@@ -187,5 +187,5 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ mkg20001 ];
+  meta.maintainers = teams.steam;
 }
