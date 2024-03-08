@@ -98,6 +98,7 @@ in
         ExecStart = lib.getExe cfg.package;
         StateDirectory = "matrix-sliding-sync";
         WorkingDirectory = "%S/matrix-sliding-sync";
+        RuntimeDirectory = "matrix-sliding-sync";
         Restart = "on-failure";
         RestartSec = "1s";
       };
