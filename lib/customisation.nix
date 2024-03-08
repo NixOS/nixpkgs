@@ -306,18 +306,117 @@ rec {
     in if drv == null then null else
       deepSeq drv' drv';
 
-  /* Make a set of packages with a common scope. All packages called
-     with the provided `callPackage` will be evaluated with the same
-     arguments. Any package in the set may depend on any other. The
-     `overrideScope'` function allows subsequent modification of the package
-     set in a consistent way, i.e. all packages in the set will be
-     called with the overridden packages. The package sets may be
-     hierarchical: the packages in the set are called with the scope
-     provided by `newScope` and the set provides a `newScope` attribute
-     which can form the parent scope for later package sets.
+  /**
+    Make an attribute set (a "scope") from functions that take arguments from that same attribute set.
 
-     Type:
-       makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> AttrSet
+    :::{#ex-makeScope .example}
+    # Create an interdependent package set based on the scope of `pkgs`
+
+    The functions in `foo.nix` and `bar.nix` can depend on each other, in the sense that `foo.nix` can contain a function that expects `bar` as an attribute in its argument.
+
+    ```nix
+    let
+      pkgs = import <nixpkgs> { };
+    in
+    pkgs.lib.makeScope pkgs.newScope (self: {
+      foo = self.callPackage ./foo.nix { };
+      bar = self.callPackage ./bar.nix { };
+    })
+    ```
+
+    evaluates to
+
+    ```nix
+    {
+      callPackage = «lambda»;
+      newScope = «lambda»;
+      overrideScope = «lambda»;
+      packages = «lambda»;
+      foo = «derivation»;
+      bar = «derivation»;
+    }
+    ```
+    :::
+
+    # Inputs
+
+    1. `newScope` (`AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a`)
+
+       A function that Takes an attribute set `attrs` and returns what ends up as `callPackage` in the output.
+
+       Typical values are `callPackageWith` or `(makeScope callPackageWith f).newScope`.
+
+    2. `f` (`AttrSet -> AttrSet`)
+
+       A function that takes an attribute set as returned by `makeScope newScope f` (a "scope") and returns any attribute set.
+       This function is used to compute the fixpoint of the resulting scope using `callPackage`.
+
+    # Output
+
+    `makeScope` returns an attribute set of a form called `scope`, which also contains the final attributes produced by `f`:
+
+    ```
+    scope :: {
+      callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+      newScope = AttrSet -> scope
+      overrideScope = (AttrSet -> AttrSet) -> scope
+      packages :: AttrSet -> AttrSet
+    }
+    ```
+
+    - `callPackage` (`((AttrSet -> a) | Path) -> AttrSet -> a`)
+
+      A function that
+
+      1. Takes a function `p`, or a path to a Nix file that contains a function `p`, which takes an attribute set and returns value of arbitrary type `a`,
+      2. Takes an attribute set `args` with explicit attributes to pass to `p`,
+      3. Calls `f` with attributes from the original attribute set `attrs` passed to `newScope` updated with `args, i.e. `attrs // args`, if they match the attributes in the argument of `p`.
+
+      All such functions `p` will be called with the same value for `attrs`.
+
+    - `newScope` (`AttrSet -> scope`)
+
+      Takes an attribute set `attrs` and returns a scope that extends the original scope.
+
+    - `overrideScope` (`(AttrSet -> AttrSet) -> scope`)
+
+      Takes a function `g` like the argument `f` to `makeScope`, and returns a new scope where values returned by the original `f` are overriddne with values returned by `g`.
+      This allows subsequent modification of the final attribute set in a consistent way, i.e. all functions `p` invoked with `callPackage` will be called with the overridden values.
+
+    - `packages` (`AttrSet -> AttrSet`)
+
+      The value of the argument `f` to `makeScope`.
+
+    - final attributes
+
+      The final values returned by `f`.
+
+    :::{#ex-makeScope-callPackage .example}
+    # Using `callPackage` from a scope
+
+    ```nix
+    let
+      pkgs = import <nixpkgs> { };
+      inherit (pkgs) lib;
+      scope = lib.makeScope lib.callPackageWith (self: { a = 1; b = 2; });
+      three = scope.callPackage ({ a, b }: a + b) { };
+      four = scope.callPackage ({ a, b }: a + b) { a = 2; };
+    in
+    [ three four ]
+    ```
+
+    evaluates to
+
+    ```nix
+    [ 3 4 ]
+    ```
+    :::
+
+    # Type
+
+    ```
+    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> scope
+    ```
   */
   makeScope = newScope: f:
     let self = f self // {
