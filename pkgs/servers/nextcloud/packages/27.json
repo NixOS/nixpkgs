@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "18mi6ccq640jq21hmir35v2967h07bjv226072d9qz5qkzkmrhss",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.5/calendar-v4.6.5.tar.gz",
-    "version": "4.6.5",
+    "sha256": "0rasf00cm5c32i3v70rs8dnr3qh3jgc7q6w6ah448khnr0i95zld",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.6/calendar-v4.6.6.tar.gz",
+    "version": "4.6.6",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "0g6pbzm7bxllpkf9jqkrb3ys8xvbmayxc3rqwspalzckayjbz98m",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.2/contacts-v5.5.2.tar.gz",
-    "version": "5.5.2",
+    "sha256": "0xyrkr5p7xa8cn33kgx1hyblpbsdzaakpfm5bk6w9sm71a42688w",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.3/contacts-v5.5.3.tar.gz",
+    "version": "5.5.3",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -209,6 +209,16 @@
       "agpl"
     ]
   },
+  "oidc_login": {
+    "sha256": "00hraam87v4faj6xxy3kzshkj7rmshky6x9aas8z4a71ak75mpkh",
+    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.0.2/oidc_login.tar.gz",
+    "version": "3.0.2",
+    "description": "# OpenID Connect Login\n\nProvides user creation and login via one single OpenID Connect provider. Even though this is a fork of [nextcloud-social-login](https://github.com/zorn-v/nextcloud-social-login), it fundamentally differs in two ways - aims for simplistic, single provider login (and hence is very minimalistic), and it supports having LDAP as the primary user backend. This way, you can use OpenID Connect to login to Nextcloud while maintaining an LDAP backend with attributes with the LDAP plugin.\n\n### Features\n\n- Automatic [Identity provider endpoints discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)\n- User creation at first login\n- User profile update at login (name, email, avatar, groups etc.)\n- Group creation\n- Automatic redirection from the nextcloud login page to the Identity Provider login page\n- WebDAV endpoints `Bearer` and `Basic` authentication",
+    "homepage": "https://github.com/pulsejet/nextcloud-single-openid-connect",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "onlyoffice": {
     "sha256": "0wnlm12wy7vsjmgh49ag7mm51mr2h8m05vdiwzkrfm7zazgdwadh",
     "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v8.2.4/onlyoffice.tar.gz",
@@ -290,9 +300,9 @@
     ]
   },
   "twofactor_nextcloud_notification": {
-    "sha256": "0gaqgzbryim580dxarak7p4g3wd8wp3w6lw9jhl84jh46wrsbrj8",
-    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.8.0/twofactor_nextcloud_notification-v3.8.0.tar.gz",
-    "version": "3.8.0",
+    "sha256": "0qpg6i6iw6ldnryf0p56kd7fgs5vyckw9m6yjcf8r4j3mwfka273",
+    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.9.0/twofactor_nextcloud_notification-v3.9.0.tar.gz",
+    "version": "3.9.0",
     "description": "Allows using any of your logged in devices as second factor",
     "homepage": "https://github.com/nextcloud/twofactor_nextcloud_notification",
     "licenses": [
