@@ -17014,6 +17014,12 @@
     githubId = 1153271;
     name = "Sander van der Burg";
   };
+  Sanskarzz = {
+    email = "sanskar.gur@gmail.com";
+    github = "Sanskarzz";
+    githubId = 92817635;
+    name = "Sanskar Gurdasani";
+  };
   sarcasticadmin = {
     email = "rob@sarcasticadmin.com";
     github = "sarcasticadmin";
