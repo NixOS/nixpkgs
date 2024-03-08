@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OIWykfFbVskrkPG/zSmZtZjc+W956KSfIzK7f5QOqpI=";
   };
 
-  buildInputs = [ postgresql openssl zlib readline libkrb5 ]
-    ++ lib.optionals (stdenv.isLinux && lib.versionOlder postgresql.version "13") [ libxcrypt ];
+  buildInputs = postgresql.buildInputs ++ [ postgresql ];
 
   installPhase = ''
     install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
