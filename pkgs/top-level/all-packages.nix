@@ -2934,6 +2934,8 @@ with pkgs;
 
   felix-fm = callPackage ../applications/file-managers/felix-fm { };
 
+  forklift = callPackage ../applications/file-managers/forklift { };
+
   joshuto = callPackage ../applications/file-managers/joshuto { };
 
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
