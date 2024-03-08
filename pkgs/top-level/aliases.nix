@@ -362,6 +362,12 @@ mapAliases ({
   haxe_3_2 = throw "'haxe_3_2' has been removed because it is old and no longer used by any packages in nixpkgs"; # Added 2023-03-15
   haxe_3_4 = throw "'haxe_3_4' has been removed because it is old and no longer used by any packages in nixpkgs"; # Added 2023-03-15
   hepmc = throw "'hepmc' has been renamed to/replaced by 'hepmc2'"; # Converted to throw 2023-09-10
+  hercules-ci-agent = throw ''
+    If you are using a Nix daemon, you are *not* vulnerable to CVE-2024-27297,
+    despite hercules-ci-agent using that version for evaluation.
+    If you'd like to continue using hercules-ci-agent 0.9, use the package
+    hercules-ci-agent_only_safe_with_daemon while we work on a backport.
+  '';
   hip = throw "'hip' has been removed in favor of 'rocmPackages.clr'"; # Added 2023-10-08
   hipcc = throw "'hipcc' has been replaced with 'rocmPackages.hipcc'"; # Added 2023-10-08
   hipify = throw "'hipify' has been replaced with 'rocmPackages.hipify'"; # Added 2023-10-08

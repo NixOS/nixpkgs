@@ -20785,7 +20785,15 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
   };
 
-  hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
+  hercules-ci-agent_only_safe_with_daemon = callPackage ../development/tools/continuous-integration/hercules-ci-agent {
+    haskellPackages = haskellPackages.extend (self: super: {
+      hercules-ci-cnix-store-nix = nixVersions.nix_2_16.overrideAttrs (old: {
+        meta = old.meta // {
+          knownVulnerabilities = lib.filter (vuln: vuln != "CVE-2024-27297") old.meta.knownVulnerabilities;
+        };
+      });
+    });
+  };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
 

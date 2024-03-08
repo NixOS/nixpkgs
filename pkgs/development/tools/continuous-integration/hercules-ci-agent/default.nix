@@ -54,7 +54,7 @@ in pkg.overrideAttrs (finalAttrs: o: {
           fileSystems."/".device = "bogus";
           services.hercules-ci-agent = {
             enable = true;
-            package = pkgs.hercules-ci-agent;
+            # package = pkgs.hercules-ci-agent;
             settings = {
               workDirectory = "/var/tmp/hci";
               binaryCachesPath = "/var/keys/binary-caches.json";
