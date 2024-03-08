@@ -1,7 +1,9 @@
 { lib, fetchgit, fetchzip }:
 
 lib.makeOverridable (
-{ owner, repo, rev, name ? "source"
+{ owner, repo, rev
+, name ? null # Override with nullbto use the default value
+, pname ? "source-${owner}-${repo}"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
 , sparseCheckout ? []
@@ -12,6 +14,8 @@ lib.makeOverridable (
 }@args:
 
 let
+  name = if args.name or null != null then args.name
+  else "${pname}-${rev}";
 
   position = (if args.meta.description or null != null
     then builtins.unsafeGetAttrPos "description" args.meta
