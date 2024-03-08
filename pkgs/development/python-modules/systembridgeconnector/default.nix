@@ -7,6 +7,9 @@
 , aiohttp
 , incremental
 , systembridgemodels
+, pytest-aiohttp
+, pytest-socket
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -28,6 +31,10 @@ buildPythonPackage rec {
       url = "https://github.com/timmo001/system-bridge-connector/commit/a9030cf175ab4b51d77010de89e83cbb426448c2.patch";
       hash = "sha256-0N8knoaEvymSvC92BxDKR0j52oasvOzWosFtHMI2Qmc=";
     })
+    (fetchpatch2 {
+      url = "https://github.com/timmo001/system-bridge-connector/commit/25aa172775ee983dc4a29b8dda880aefbad70040.patch";
+      hash = "sha256-PedW1S1gZmWkS4sJBqSAx3aoA1KppYS5Xlhoaxqkcd4=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -42,8 +49,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "systembridgeconnector" ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-aiohttp
+    pytest-socket
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # ConnectionClosedException: Connection closed to server
+    "test_get_files"
+  ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-connector/releases/tag/${version}";
