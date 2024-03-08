@@ -10,13 +10,14 @@
 , pyyaml
 , requests
 , responses
+, setuptools
 , unidiff
 }:
 
 buildPythonPackage rec {
   pname = "bc-detect-secrets";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "1.5.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,8 +25,12 @@ buildPythonPackage rec {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     rev = "refs/tags/${version}";
-    hash = "sha256-PNeSm0+4MwlxFO7d5um1DGhRZcgri2srXZwlsWW1nQs=";
+    hash = "sha256-Gm8PYN9vqYkGaGKpLZkx0Ehd1P3G2d5LkSjWXxpPerI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyyaml
