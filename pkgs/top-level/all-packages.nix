@@ -10786,8 +10786,6 @@ with pkgs;
 
   microserver = callPackage ../servers/microserver { };
 
-  midisheetmusic = callPackage ../applications/audio/midisheetmusic { };
-
   mikutter = callPackage ../applications/networking/instant-messengers/mikutter { };
 
   mimeo = callPackage ../tools/misc/mimeo { };
