@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , isPyPy
 , fetchFromGitHub
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "3.1.1";
+  version = "3.1.3";
   format = "pyproject";
   disabled = pythonOlder "3.5";
 
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     owner = "falconry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5Lhz4qI/x7yK9tqQg4CvYNug+fp9l6ErNGH1pVybZ6c=";
+    hash = "sha256-7719gOM8WQVjODwOSo7HpH3HMFFeCGQQYBKktBAevig=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +89,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # needs a running server
     "tests/asgi/test_asgi_servers.py"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # ModuleNotFoundError: No module named 'distutils'
+    "tests/asgi/test_cythonized_asgi.py"
   ];
 
   meta = with lib; {
