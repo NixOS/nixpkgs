@@ -19,7 +19,7 @@ let
 
   format = pkgs.formats.yaml { };
 
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ null ])) cfg.settings;
+  filteredConfig = lib.filterAttrsRecursiveBottomUp (_: v: v != null) cfg.settings;
 
   cameraFormat = with types; submodule {
     freeformType = format.type;
