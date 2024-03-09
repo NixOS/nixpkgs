@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "git-releaser";
-  version = "0.1.3";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "git-releaser";
     repo = "git-releaser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-27xUsqFuAu02jYLi3LiTnVjifqZIr39lPwMfJea7a4A=";
+    hash = "sha256-nKmHTqnpWoWMyXxsD/+pk+uSeqZSG18h2T6sJ/wEr/w=";
   };
 
-  vendorHash = "sha256-uKS7MwCak/CjnMjzFKqYypBVZFl+3hD1xVaOPvQV9E0=";
+  vendorHash = "sha256-RROA+nvdZnGfkUuB+ksUWGG16E8tqdyMQss2z/XWGd8=";
 
   ldflags = [ "-X main.version=${version}" ];
 

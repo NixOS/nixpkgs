@@ -17,7 +17,7 @@
 
 let
   pname = "spotube";
-  version = "3.4.1";
+  version = "3.5.0";
 
   meta = {
     description = "An open source, cross-platform Spotify client compatible across multiple platforms";
@@ -46,7 +46,7 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-macos-universal.dmg";
-      hash = "sha256-VobLCxsmE5kGIlDDa3v5xIHkw2x2YV14fgHHcDb+bLo=";
+      hash = "sha256-omXhiH/hVxFef03GqmpYf65SfdLjLyeMyuAWuvSpYiI=";
     };
 
     sourceRoot = ".";
@@ -67,7 +67,7 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-NEGhzNz0E8jK2NPmigzoPAvYcU7zN9YHikuXHpzWfx0=";
+      hash = "sha256-Rea4GvxdkUfZF8lCBzI9UrD9Iz9D5vq9oxYBn5bahZE=";
     };
 
     nativeBuildInputs = [

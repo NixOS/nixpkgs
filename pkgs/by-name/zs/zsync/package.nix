@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1wjslvfy76szf0mgg2i9y9q30858xyjn6v2acc24zal76d1m778b";
   };
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # Suppress error "call to undeclared library function 'strcasecmp'" during compilation.
+    # The function is found by the linker correctly, so this doesn't introduce any issues.
+    NIX_CFLAGS_COMPILE = " -Wno-implicit-function-declaration";
+  };
+
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
   meta = with lib; {

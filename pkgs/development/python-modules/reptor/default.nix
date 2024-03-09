@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.12";
+  version = "0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-8XjEWs+LKKc7ztNchNVmW+YGdYpmi5ee4eOoXIUBoM8=";
+    hash = "sha256-7jFS3GCaPeGBBxB++XTtIYh+m0uXTm5NHuLeIen0KYc=";
   };
 
   pythonRelaxDeps = true;
