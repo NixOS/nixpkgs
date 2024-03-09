@@ -321,7 +321,12 @@ rec {
     2. `f` (`AttrSet -> AttrSet`)
 
        A function that takes an attribute set as returned by `makeScope newScope f` (a "scope") and returns any attribute set.
+
        This function is used to compute the fixpoint of the resulting scope using `callPackage`.
+       Its argument is the lazily evaluated reference to the value of that fixpoint, and is typically called `self` or `final`.
+
+       See [](#ex-makeScope) for how to use it.
+       See [](#sec-functions-library-fixedPoints) for details on fixpoint computation.
 
     # Output
 
