@@ -48,6 +48,8 @@ buildGoModule rec {
 
   postInstall = ''
     mkdir -p $out/
+    # include frontend so that the nixos module can use it.
+    cp -r ${ui}/site/ $out/
     wrapProgram  $out/bin/wg-access-server \
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
