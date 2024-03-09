@@ -425,6 +425,13 @@ in
   #   meta.broken = true;
   # });
 
+  lua-resty-openidc =  prev.lua-resty-openidc.overrideAttrs (_: {
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace '"lua-resty-session >= 2.8, <= 3.10",' '"lua-resty-session >= 2.8",'
+    '';
+  });
+
   lua-yajl =  prev.lua-yajl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       yajl
