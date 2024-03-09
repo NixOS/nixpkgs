@@ -703,6 +703,10 @@ in
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace '"luasystem = 0.2.1",' '"luasystem",'
+    '';
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
       chmod -x $out/bin/vusted_entry.vim
