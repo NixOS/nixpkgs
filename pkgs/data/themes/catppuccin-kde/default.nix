@@ -2,9 +2,9 @@
 , stdenvNoCC
 , fetchFromGitHub
 , fetchpatch
-, flavour ? [ "frappe" ]
-, accents ? [ "blue" ]
-, winDecStyles ? [ "modern" ]
+, flavour ? "frappe"
+, accent ? "blue"
+, winDecStyle ? "modern"
 }:
 
 let
@@ -15,9 +15,9 @@ let
   colorScript = ./color.sh;
 in
 
-  lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}" validAccents accents
-  lib.checkListOfEnum "Invalid flavour, valid flavours are ${toString validFlavours}" validFlavours flavour
-  lib.checkListOfEnum "Invalid window decoration style, valid styles are ${toString validWinDecStyles}" validWinDecStyles winDecStyles
+  lib.throwIfNot (builtins.elem accent validAccents) "Invalid accent ${accent}, valid accents are ${toString validAccents}"
+  lib.throwIfNot (builtins.elem flavour validFlavours) "Invalid flavour ${flavour}, valid flavours are ${toString validFlavours}"
+  lib.throwIfNot (builtins.elem winDecStyle validWinDecStyles) "Invalid window decoration style ${winDecStyle}, valid styles are ${toString validWinDecStyles}"
 
 stdenvNoCC.mkDerivation rec {
   pname = "kde";
@@ -41,14 +41,11 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     patchShebangs .
 
-    for WINDECSTYLE in ${toString winDecStyles}; do
-      for FLAVOUR in ${toString flavour}; do
-        for ACCENT in ${toString accents}; do
-          source ${colorScript}
-          ./install.sh $FLAVOUR $ACCENT $WINDECSTYLE
-        done;
-      done;
-    done;
+    WINDECSTYLE='${winDecStyle}'
+    FLAVOUR='${flavour}'
+    ACCENT='${accent}'
+    source '${colorScript}'
+    ./install.sh "$FLAVOUR" "$ACCENT" "$WINDECSTYLE"
 
     runHook postInstall
   '';
