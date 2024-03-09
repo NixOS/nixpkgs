@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
+    "-DINSTALL_TO_SITEPACKAGES=OFF" # https://github.com/FreeCAD/FreeCAD/pull/11885
     "-DBUILD_FLAT_MESH:BOOL=ON"
     "-DBUILD_QT5=ON"
     "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"

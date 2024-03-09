@@ -31655,6 +31655,8 @@ with pkgs;
       shiboken2;
   };
 
+  ondsel = callPackage ../applications/graphics/freecad/ondsel.nix {};
+
   freedv = callPackage ../applications/radio/freedv {
     inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
     codec2 = codec2.override {
