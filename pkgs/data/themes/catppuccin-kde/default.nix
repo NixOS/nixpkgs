@@ -2,23 +2,51 @@
 , stdenvNoCC
 , fetchFromGitHub
 , fetchpatch
+, writeShellApplication
+, gnutar
 , flavour ? "frappe"
 , accent ? "blue"
 , winDecStyle ? "modern"
 }:
 
 let
-  validFlavours = [ "mocha" "macchiato" "frappe" "latte" ];
-  validAccents = [ "rosewater" "flamingo" "pink" "mauve" "red" "maroon" "peach" "yellow" "green" "teal" "sky" "sapphire" "blue" "lavender" ];
-  validWinDecStyles = [ "modern" "classic" ];
+  # The ordering of these options is important; they must match the indicies in
+  # the installation script.
+  #
+  # https://github.com/catppuccin/kde/blob/main/install.sh
+  indicies = builtins.mapAttrs (_: values: builtins.listToAttrs (lib.imap1 (lib.flip lib.nameValuePair) values)) {
+    flavour = [
+      "mocha"
+      "macchiato"
+      "frappe"
+      "latte"
+    ];
+    accent = [
+      "rosewater"
+      "flamingo"
+      "pink"
+      "mauve"
+      "red"
+      "maroon"
+      "peach"
+      "yellow"
+      "green"
+      "teal"
+      "sky"
+      "sapphire"
+      "blue"
+      "lavender"
+    ];
+    winDecStyle = [
+      "modern"
+      "classic"
+    ];
+  };
 
-  colorScript = ./color.sh;
+  options = builtins.mapAttrs
+    (option: value: (indicies.${option}).${value} or (builtins.throw "Invalid ${option} ${value}, valid ${option}s are: ${builtins.concatStringsSep ", " (builtins.attrNames indicies.${option})}"))
+    { inherit flavour accent winDecStyle; };
 in
-
-  lib.throwIfNot (builtins.elem accent validAccents) "Invalid accent ${accent}, valid accents are ${toString validAccents}"
-  lib.throwIfNot (builtins.elem flavour validFlavours) "Invalid flavour ${flavour}, valid flavours are ${toString validFlavours}"
-  lib.throwIfNot (builtins.elem winDecStyle validWinDecStyles) "Invalid window decoration style ${winDecStyle}, valid styles are ${toString validWinDecStyles}"
-
 stdenvNoCC.mkDerivation rec {
   pname = "kde";
   version = "0.2.4";
@@ -30,22 +58,48 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-w77lzeSisx/PPxctMJKIdRJenq0s8HwR8gLmgNh4SH8=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/michaelBelsanti/catppuccin-kde/commit/81a8edb3c24bd6af896c92b5051e09af97d69c51.patch";
-      hash = "sha256-cb4/dQ52T+H8UqXEgExblmnMfxwO0Y1BrjMCay/EAkI=";
+  nativeBuildInputs = [
+    # Stub out tools for interactivity.
+    (writeShellApplication { name = "sleep"; text = ""; })
+    (writeShellApplication { name = "clear"; text = ""; })
+    (writeShellApplication { name = "lookandfeeltool"; text = ""; })
+
+    # As Plasma is not available in the build environment, do not dynamically
+    # install packages.
+    #
+    # kpackagetool5 is only used by the install script to install the global theme.
+    (writeShellApplication {
+      name = "kpackagetool5";
+      runtimeInputs = [ gnutar ];
+      text = ''
+        mkdir -p "''${XDG_DATA_HOME:-$HOME/.local/share}/plasma/look-and-feel"
+        tar xf "$2" -C "''${XDG_DATA_HOME:-$HOME/.local/share}/plasma/look-and-feel"
+      '';
     })
+    (writeShellApplication { name = "kpackagetool6"; text = ''kpackagetool5 "$@"''; })
   ];
+
+  postPatch = ''
+    patchShebangs .
+
+    substituteInPlace install.sh \
+      --replace-warn '$CONFIRMATION' Y \
+      --replace-warn '  InstallCursor' ""
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    mkdir -p .local
+    HOME="$PWD" ./install.sh '${toString options.flavour}' '${toString options.accent}' '${toString options.winDecStyle}'
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-    patchShebangs .
 
-    WINDECSTYLE='${winDecStyle}'
-    FLAVOUR='${flavour}'
-    ACCENT='${accent}'
-    source '${colorScript}'
-    ./install.sh "$FLAVOUR" "$ACCENT" "$WINDECSTYLE"
+    mv .local "$out"
 
     runHook postInstall
   '';
