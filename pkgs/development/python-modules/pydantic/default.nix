@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 
 # build-system
@@ -37,6 +38,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-neTdG/IcXopCmevzFY5/XDlhPHmOb6dhyAnzaobmeG8=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/pydantic/pydantic/pull/8678
+      name = "fix-pytest8-compatibility.patch";
+      url = "https://github.com/pydantic/pydantic/commit/825a6920e177a3b65836c13c7f37d82b810ce482.patch";
+      hash = "sha256-Dap5DtDzHw0jS/QUo5CRI9sLDJ719GRyC4ZNDWEdzus=";
+     })
+  ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
     libxcrypt
@@ -75,6 +85,17 @@ buildPythonPackage rec {
       --replace "'--benchmark-warmup', 'on'," "" \
       --replace "'--benchmark-disable'," ""
   '';
+
+  pytestFlagsArray = [
+    # suppress warnings with pytest>=8
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince20"
+    "-Wignore::pydantic.json_schema.PydanticJsonSchemaWarning"
+  ];
+
+  disabledTests = [
+    # disable failing test with pytest>=8
+    "test_assert_raises_validation_error"
+  ];
 
   disabledTestPaths = [
     "tests/benchmarks"
