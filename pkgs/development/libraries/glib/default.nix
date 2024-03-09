@@ -49,8 +49,11 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  # Avoid introducing cairo, which enables gobjectSupport by default.
-  gobject-introspection' = buildPackages.gobject-introspection.override { x11Support = false; };
+  gobject-introspection' = buildPackages.gobject-introspection.override {
+    propagateFullGlib = false;
+    # Avoid introducing cairo, which enables gobjectSupport by default.
+    x11Support = false;
+  };
 
   librarySuffix = if (stdenv.targetPlatform.extensions.library == ".so") then "2.0.so.0"
                   else if (stdenv.targetPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
