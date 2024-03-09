@@ -100,4 +100,6 @@ self: super: {
     tsja = super.callPackage ./ext/tsja.nix { };
 
     wal2json = super.callPackage ./ext/wal2json.nix { };
+
+    mysql_fdw = super.callPackage ./ext/mysql_fdw.nix { };
 }
