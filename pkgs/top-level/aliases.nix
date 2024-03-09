@@ -693,6 +693,7 @@ mapAliases ({
   markdown-pp = throw "markdown-pp was removed from nixpkgs, because the upstream archived it on 2021-09-02"; # Added 2023-07-22
   markmind = throw "markmind has been removed from nixpkgs, because it depended on an old version of electron"; # Added 2023-09-12
   matrique = spectral; # Added 2020-01-27
+  matrixcli = throw "'matrixcli' has been removed due to being unmaintained and broken functionality. Recommend 'matrix-commander' as an alternative"; # Added 2024-03-09
   matrix-recorder = throw "matrix-recorder has been removed due to being unmaintained"; # Added 2023-05-21
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
   mbox = throw "'mbox' has been removed, as it was broken and unmaintained"; # Added 2023-12-21

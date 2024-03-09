@@ -33213,12 +33213,6 @@ with pkgs;
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
-  matrixcli = callPackage ../applications/networking/instant-messengers/matrixcli {
-    inherit (python3Packages) buildPythonApplication buildPythonPackage
-      pygobject3 pytest-runner requests responses pytest python-olm
-      canonicaljson;
-  };
-
   matrix-commander = python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander { };
 
   matrix-dl = callPackage ../applications/networking/instant-messengers/matrix-dl { };
