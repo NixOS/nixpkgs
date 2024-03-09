@@ -3641,6 +3641,8 @@ self: super: with self; {
 
   effect = callPackage ../development/python-modules/effect { };
 
+  egcd = callPackage ../development/python-modules/egcd { };
+
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
   eigenpy = toPythonModule (callPackage ../development/python-modules/eigenpy { });

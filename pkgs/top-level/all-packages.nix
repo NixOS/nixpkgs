@@ -6431,6 +6431,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  rsactftool = callPackage ../tools/security/rsactftool { };
+
   rsbep = callPackage ../tools/backup/rsbep { };
 
   rsbkb = callPackage ../tools/text/rsbkb { };
@@ -39538,6 +39540,12 @@ with pkgs;
     enableGui = true;
     enableJupyter = false;
   };
+
+  yafu = callPackage ../applications/science/math/yafu { };
+
+  ysieve = callPackage ../applications/science/math/ysieve { };
+
+  ytools = callPackage ../development/libraries/ytools { };
 
   speedcrunch = libsForQt5.callPackage ../applications/science/math/speedcrunch { };
 
