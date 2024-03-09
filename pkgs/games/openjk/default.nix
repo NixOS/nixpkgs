@@ -32,13 +32,13 @@ let
   };
 in stdenv.mkDerivation {
   pname = "OpenJK";
-  version = "0-unstable-2024-02-20";
+  version = "0-unstable-2024-03-05";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "1e8a7998ca2fe434daebb41d586ac3cd5296433a";
-    sha256 = "sha256-TKJNaz+oWNYyReFZVefg1frPXyd3Yl96JDklp1qY1to=";
+    rev = "62124e18ef09b293ea66a1f673b827d83e073928";
+    sha256 = "sha256-2LgxRWoAfxNE6YDyrpNmDH9APhi2XH4ufNCNMd91llU=";
   };
 
   dontAddPrefix = true;
