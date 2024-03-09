@@ -382,6 +382,7 @@ let
     nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
+    opencv = [ pkgs.pkg-config ];
     pak = [ pkgs.curl.dev ];
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
@@ -1408,6 +1409,13 @@ let
 
     geomorph = old.geomorph.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
+    });
+
+
+    opencv = let
+      opencvGtk = pkgs.opencv.override (old : { enableGtk2 = true; });
+    in old.opencv.overrideAttrs (attrs: {
+      buildInputs = attrs.buildInputs ++ [ opencvGtk ];
     });
 
     Rhdf5lib = let
