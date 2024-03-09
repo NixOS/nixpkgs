@@ -25,18 +25,22 @@ buildNpmPackage rec {
   buildInputs = [ ffmpeg yt-dlp ];
 
   desktopItem = makeDesktopItem {
-    name = "YTDownloader";
+    name = "ytDownloader";
     exec = "ytdownloader %U";
     icon = "ytdownloader";
-    desktopName = "YT Downloader";
+    desktopName = "ytDownloader";
     comment = "A modern GUI video and audio downloader";
     categories = [ "Utility" ];
-    startupWMClass = "YTDownloader";
+    startupWMClass = "ytDownloader";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   dontNpmBuild = true;
+
+  # Patch config dir to ~/.config/ytdownloader
+  # Otherwise it stores config in ~/.config/Electron
+  patches = [ ./config-dir.patch ];
 
   # Replace hardcoded ffmpeg and ytdlp paths
   # Also stop it from downloading ytdlp
