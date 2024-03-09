@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , fetchpatch
 , writeShellApplication
+, lightly-plasma
 , gnutar
 , flavour ? "frappe"
 , accent ? "blue"
 , winDecStyle ? "modern"
+, withLightly ? true
 }:
 
 let
@@ -91,6 +93,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preBuild
 
     mkdir -p .local
+    ${lib.optionalString withLightly "cp --recursive --dereference --no-preserve=all '${lightly-plasma}'/* .local"}
     HOME="$PWD" ./install.sh '${toString options.flavour}' '${toString options.accent}' '${toString options.winDecStyle}'
 
     runHook postBuild
