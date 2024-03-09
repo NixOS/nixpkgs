@@ -233,6 +233,37 @@ sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 
 It returns a derivation with all `package-lock.json` dependencies downloaded into `$out/`, usable as an npm cache.
 
+#### importNpmLock {#javascript-buildNpmPackage-importNpmLock}
+
+`importNpmLock` is a Nix function that requires the following optional arguments:
+
+- `npmRoot`: Path to package directory containing the source tree
+- `package`: Parsed contents of `package.json`
+- `packageLock`: Parsed contents of `package-lock.json`
+- `pname`: Package name
+- `version`: Package version
+
+It returns a derivation with a patched `package.json` & `package-lock.json` with all dependencies resolved to Nix store paths.
+
+This function is analogous to using `fetchNpmDeps`, but instead of specifying `hash` it uses metadata from `package.json` & `package-lock.json`.
+
+Note that `npmHooks.npmConfigHook` cannot be used with `importNpmLock`. You will instead need to use `importNpmLock.npmConfigHook`:
+
+```nix
+{ buildNpmPackage, importNpmLock }:
+
+buildNpmPackage {
+  pname = "hello";
+  version = "0.1.0";
+
+  npmDeps = importNpmLock {
+    npmRoot = ./.;
+  };
+
+  npmConfigHook = importNpmLock.npmConfigHook;
+}
+```
+
 ### corepack {#javascript-corepack}
 
 This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.

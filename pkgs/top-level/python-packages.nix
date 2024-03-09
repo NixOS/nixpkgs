@@ -123,6 +123,8 @@ self: super: with self; {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  ago = callPackage ../development/python-modules/ago { };
+
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
   aigpy = callPackage ../development/python-modules/aigpy { };
@@ -3566,6 +3568,8 @@ self: super: with self; {
 
   dynd = callPackage ../development/python-modules/dynd { };
 
+  dsl2html = callPackage ../development/python-modules/dsl2html { };
+
   e3-core = callPackage ../development/python-modules/e3-core { };
 
   e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
@@ -5417,6 +5421,8 @@ self: super: with self; {
   humblewx = callPackage ../development/python-modules/humblewx { };
 
   hupper = callPackage ../development/python-modules/hupper { };
+
+  hurry-filesize = callPackage ../development/python-modules/hurry-filesize { };
 
   huum = callPackage ../development/python-modules/huum { };
 
@@ -16686,6 +16692,8 @@ self: super: with self; {
   };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
+
+  xdxf2html = callPackage ../development/python-modules/xdxf2html { };
 
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 

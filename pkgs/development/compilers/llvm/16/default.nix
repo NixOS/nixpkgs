@@ -149,6 +149,10 @@ in let
       inherit llvm_meta;
     };
 
+    mlir = callPackage ../common/mlir {
+      inherit llvm_meta;
+    };
+
     lldb = callPackage ../common/lldb.nix {
       src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
         mkdir -p "$out"

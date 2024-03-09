@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, setuptools
 , async-timeout
 , attrs
 , buildPythonPackage
@@ -14,16 +15,20 @@
 buildPythonPackage rec {
   pname = "snitun";
   version = "0.36.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
-    repo = pname;
+    repo = "snitun";
     rev = "refs/tags/${version}";
     hash = "sha256-ViNsmTq1iLxNujA71b9JZB5AZ79ZbiqdTyDeBGd4gUA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     async-timeout
@@ -36,19 +41,30 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # broke after aiohttp 3.8.5 upgrade
-    "test_client_stop_no_wait"
-  ] ++ lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.isDarwin [
     "test_multiplexer_data_channel_abort_full" # https://github.com/NabuCasa/snitun/issues/61
     # port binding conflicts
     "test_snitun_single_runner_timeout"
     "test_snitun_single_runner_throttling"
     # ConnectionResetError: [Errno 54] Connection reset by peer
     "test_peer_listener_timeout"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # TypeError: Passing coroutines is forbidden, use tasks explicitly.
-    "test_snitun_runner_updown"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # blocking
+    "test_flow_client_peer"
+    "test_close_client_peer"
+    "test_init_connector"
+    "test_flow_connector"
+    "test_close_connector_remote"
+    "test_init_connector_whitelist"
+    "test_init_multiplexer_server"
+    "test_init_multiplexer_client"
+    "test_init_multiplexer_server_throttling"
+    "test_init_multiplexer_client_throttling"
+    "test_multiplexer_ping"
+    "test_multiplexer_ping_error"
+    "test_multiplexer_init_channel_full"
+    "test_multiplexer_close_channel_full"
+    "test_init_dual_peer_with_multiplexer"
   ];
 
   pythonImportsCheck = [ "snitun" ];

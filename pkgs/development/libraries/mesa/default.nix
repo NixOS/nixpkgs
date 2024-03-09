@@ -3,7 +3,7 @@
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau
+, elfutils, libvdpau
 , libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
 , galliumDrivers ?
@@ -81,8 +81,8 @@
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 
 let
-  version = "24.0.1";
-  hash = "sha256-84cZKwjEccVFWQ3RIjCio0MkSAS1/oZv7GrqAuq1dhM=";
+  version = "24.0.2";
+  hash = "sha256-lOKKjtrQbY7SuD61PyU7nrWqYsMID5OXAuGzA5tWyeg=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -141,6 +141,11 @@ self = stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+
+    # Backport crash fix for Radeon (legacy) kernel driver
+    # see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10613
+    # FIXME: remove when merged upstream
+    ./backport-radeon-crash-fix.patch
   ];
 
   postPatch = ''
@@ -241,7 +246,7 @@ self = stdenv.mkDerivation {
   buildInputs = with xorg; [
     expat glslang llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
-    libffi libvdpau libelf libXvMC
+    libffi libvdpau libXvMC
     libpthreadstubs openssl
     zstd
   ] ++ lib.optionals withLibunwind [
@@ -249,7 +254,7 @@ self = stdenv.mkDerivation {
   ] ++ [
     python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
+    ++ lib.optionals stdenv.isLinux [ elfutils libomxil-bellagio libva-minimal udev lm_sensors ]
     ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , cmocka
 
@@ -14,27 +13,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eE11hYPsOKqfoX8fx/oYfOAichhUe4mMpNQNVZ6vAUI=";
+    hash = "sha256-N1xYkZw/6lX/nX/TE6/pVuEFgSyDiUJ50msK42NrKwI=";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Pull fix pending upstream inclusion to support
-    # `CMAKE_INSTALL_INCLUDEDIR`:
-    #   https://github.com/PJK/libcbor/pull/297
-    (fetchpatch {
-      name = "includedir.patch";
-      url = "https://github.com/PJK/libcbor/commit/d00a63e6d6858a2ed6be9b431b42799ed2c99ad8.patch";
-      hash = "sha256-kBCSbAHOCGOs/4Yu6Vh0jcmzA/jYPkkPXPGPrptRfyk=";
-    })
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [ cmake ];

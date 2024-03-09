@@ -111,8 +111,7 @@ in buildFHSEnv rec {
     xorg.libXdamage
     xorg.libxshmfence
     xorg.libXxf86vm
-    libelf
-    (lib.getLib elfutils)
+    elfutils
 
     # Without these it silently fails
     xorg.libXinerama

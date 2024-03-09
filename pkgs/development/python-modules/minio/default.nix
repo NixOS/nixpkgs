@@ -11,6 +11,7 @@
 , certifi
 , urllib3
 , pycryptodome
+, typing-extensions
 
 # test
 , faker
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.2.0";
+  version = "7.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +30,13 @@ buildPythonPackage rec {
     owner = "minio";
     repo = "minio-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-hZn1T75JbnJ5lIyWnX3f8r6OET/d6ZltuRr6jjYOp2o=";
+    hash = "sha256-26naoSccz/LEf56iQIePrNKllq6XkEQD9Peld7VeGqY=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/unit/crypto_test.py \
+      --replace-fail "assertEquals" "assertEqual"
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -41,6 +47,7 @@ buildPythonPackage rec {
     certifi
     urllib3
     pycryptodome
+    typing-extensions
   ];
 
   nativeCheckInputs = [

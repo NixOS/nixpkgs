@@ -18,7 +18,6 @@
 , libadwaita
 , glib-networking
 , gst_all_1
-, libsoup_3
 }:
 
 stdenv.mkDerivation rec {
@@ -70,12 +69,6 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
     gst-plugins-ugly
   ]);
-
-  # FIXME: gst-plugins-good missing libsoup breaks streaming
-  # (https://github.com/nixos/nixpkgs/issues/271960)
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsoup_3 ]}")
-  '';
 
   meta = with lib; {
     description = "A Rust + GTK based netease cloud music player";

@@ -83,7 +83,6 @@ buildPythonPackage rec {
     docutils
     flexmock
     psycopg2
-    psycopg2cffi
     pg8000
     pytz
     python-dateutil
@@ -91,6 +90,10 @@ buildPythonPackage rec {
     pyodbc
   ]
   ++ lib.flatten (builtins.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (pythonOlder "3.12") [
+    # requires distutils, which were removed in 3.12
+    psycopg2cffi
+  ]
   ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ];

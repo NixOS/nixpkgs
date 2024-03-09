@@ -1,0 +1,30 @@
+commit 166afaf144d6473464975438353257359dd51708
+Author: Andreas Wiese <andreas.wiese@kernkonzept.com>
+Date:   Thu Feb 1 11:35:02 2024 +0100
+
+    aa-remove-unknown: fix readability check
+    
+    This check is intended for ensuring that the profiles file can actually
+    be opened.  The *actual* check is performed by the shell, not the read
+    utility, which won't even be executed if the input redirection (and
+    hence the test) fails.
+    
+    If the test succeeds, though, using `read` here might actually
+    jeopardize the test result if there are no profiles loaded and the file
+    is empty.
+    
+    This commit fixes that case by simply using `true` instead of `read`.
+
+diff --git a/utils/aa-remove-unknown b/utils/aa-remove-unknown
+index 0e00d6a0..3351feef 100755
+--- a/utils/aa-remove-unknown
++++ b/utils/aa-remove-unknown
+@@ -63,7 +63,7 @@ fi
+ # We have to do this check because error checking awk's getline() below is
+ # tricky and, as is, results in an infinite loop when apparmorfs returns an
+ # error from open().
+-if ! IFS= read -r _ < "$PROFILES" ; then
++if ! true < "$PROFILES" ; then
+ 	echo "ERROR: Unable to read apparmorfs profiles file" 1>&2
+ 	exit 1
+ elif [ ! -w "$REMOVE" ] ; then

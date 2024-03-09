@@ -4323,11 +4323,15 @@ let
         mktplcRef = {
           name = "markdown-all-in-one";
           publisher = "yzhang";
-          version = "3.5.1";
-          sha256 = "sha256-ZyvkRp0QTjoMEXRGHzp3udGngYcU9EkTCvx8o2CEaBE=";
+          version = "3.6.2";
+          sha256 = "1n9d3qh7vypcsfygfr5rif9krhykbmbcgf41mcjwgjrf899f11h4";
         };
         meta = {
+          description = "All you need to write Markdown (keyboard shortcuts, table of contents, auto preview and more)";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one";
+          homepage = "https://github.com/yzhang-gh/vscode-markdown";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.raroh73 ];
         };
       };
 

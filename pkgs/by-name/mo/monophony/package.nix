@@ -6,13 +6,12 @@
 , gobject-introspection
 , yt-dlp
 , libadwaita
-, libsoup_3
 , glib-networking
 , nix-update-script
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.6.1";
+  version = "2.7.0";
   format = "other";
 
   sourceRoot = "source/source";
@@ -20,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-op6XUfP0EM9P5vT2nM4o+NOHxBcASIl1+6Mp/u9ub3U=";
+    hash = "sha256-uOmaTkjlfrct8CPqKcTTTqmURVncPZm4fXZYW+yZUf8=";
   };
 
   pythonPath = with python3Packages; [
@@ -38,7 +37,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libadwaita
     # needed for gstreamer https
-    libsoup_3
     glib-networking
   ] ++ (with gst_all_1; [
     gst-plugins-base
@@ -53,8 +51,6 @@ python3Packages.buildPythonApplication rec {
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
       --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
-      # needed for gstreamer https
-      --prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib"
     )
   '';
 

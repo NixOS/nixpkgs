@@ -1,4 +1,6 @@
 { lib
+, anyio
+, async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , cpyparsing
@@ -30,6 +32,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    anyio
+    async-generator
     cpyparsing
     ipykernel
     mypy
@@ -50,11 +54,14 @@ buildPythonPackage rec {
     "coconut/tests/constants_test.py"
   ];
 
-  pythonImportsCheck = [ "coconut" ];
+  pythonImportsCheck = [
+    "coconut"
+  ];
 
   meta = with lib; {
-    homepage = "http://coconut-lang.org/";
     description = "Simple, elegant, Pythonic functional programming";
+    homepage = "http://coconut-lang.org/";
+    changelog = "https://github.com/evhub/coconut/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fabianhjr ];
   };

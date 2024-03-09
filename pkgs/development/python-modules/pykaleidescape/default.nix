@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -39,6 +40,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires network access
     "test_resolve_succeeds"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # stuck in EpollSelector.poll()
+    "test_manual_disconnect"
+    "test_concurrency"
   ];
 
   meta = with lib; {
