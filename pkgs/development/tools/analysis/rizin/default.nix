@@ -1,13 +1,13 @@
 { lib
 , pkgs # for passthru.plugins
 , stdenv
-, fetchpatch
 , fetchurl
 , pkg-config
 , libusb-compat-0_1
 , readline
 , libewf
 , perl
+, pcre2
 , zlib
 , openssl
 , file
@@ -22,15 +22,16 @@
 , ninja
 , capstone
 , tree-sitter
+, zstd
 }:
 
 let rizin = stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.6.3";
+  version = "0.7.2";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    hash = "sha256-lfZMarnm2qnp+lY0OY649s206/LoFNouTLlp0x9FCcI=";
+    hash = "sha256-/P8/tFrit14/YEvHoIB24yLm4U3veQmBhjeAZcyzWCo=";
   };
 
   mesonFlags = [
@@ -39,11 +40,13 @@ let rizin = stdenv.mkDerivation rec {
     "-Duse_sys_libzip=enabled"
     "-Duse_sys_zlib=enabled"
     "-Duse_sys_lz4=enabled"
+    "-Duse_sys_libzstd=enabled"
     "-Duse_sys_lzma=enabled"
     "-Duse_sys_xxhash=enabled"
     "-Duse_sys_openssl=enabled"
     "-Duse_sys_libmspack=enabled"
     "-Duse_sys_tree_sitter=enabled"
+    "-Duse_sys_pcre2=enabled"
     # this is needed for wrapping (adding plugins) to work
     "-Dportable=true"
   ];
@@ -55,12 +58,8 @@ let rizin = stdenv.mkDerivation rec {
     # caching it. This patch replaces the entire logic to only look at
     # the env var NIX_RZ_PREFIX
     ./librz-wrapper-support.patch
-    # Fix tree-sitter 0.20.9 build failure: https://github.com/rizinorg/rizin/pull/4165
-    (fetchpatch {
-      name = "tree-sitter-0.20.9.patch";
-      url = "https://github.com/rizinorg/rizin/commit/1bb08712dbc9e062bb439a65dcebeb4221ded699.patch";
-      hash = "sha256-mE0eQAFhyxX5bwrz+S1IVl6HNV9ITQ+tRRvGLLif5VI=";
-    })
+
+    ./0001-fix-compilation-with-clang.patch
   ];
 
 
@@ -96,6 +95,7 @@ let rizin = stdenv.mkDerivation rec {
     readline
     libusb-compat-0_1
     libewf
+    pcre2
     perl
     zlib
     lz4
@@ -104,6 +104,7 @@ let rizin = stdenv.mkDerivation rec {
     tree-sitter
     xxHash
     xz
+    zstd
   ];
 
   postPatch = ''
