@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.18.6";
+  version = "2.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-SMh4wVZwmc87ztFn2OOI234VP3JzmxVMBkn7lYwVu6M=";
+    hash = "sha256-EmBgyITUNjhfT2DRaWSFHyajBdu/owt5ZlgRGbkzo8A=";
   };
 
   postPatch = ''
@@ -97,6 +97,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/pymc-devs/pytensor/releases";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }
