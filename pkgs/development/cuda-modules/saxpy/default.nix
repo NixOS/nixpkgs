@@ -2,6 +2,7 @@
   cmake,
   cudaPackages,
   lib,
+  saxpy,
 }:
 let
   inherit (cudaPackages)
@@ -50,6 +51,16 @@ backendStdenv.mkDerivation {
       with flags; lib.concatStringsSep ";" (lib.lists.map dropDot cudaCapabilities)
     ))
   ];
+
+  passthru.gpuChecks.withCuda = saxpy.overrideAttrs (
+    _: {
+      requiredSystemFeatures = ["cuda"];
+      doInstallCheck = true;
+      postInstallCheck = ''
+        $out/bin/saxpy
+      '';
+    }
+  );
 
   meta = rec {
     description = "A simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";

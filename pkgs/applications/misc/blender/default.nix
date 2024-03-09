@@ -361,7 +361,9 @@ stdenv.mkDerivation (finalAttrs: {
             --render-frame 1
         done
       '';
+
     };
+    gpuChecks = callPackage ./gpu-checks.nix { };
   };
 
   meta = {
