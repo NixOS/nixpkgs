@@ -11,7 +11,7 @@
 , mono
 , wrapWithMono ? true
 , openssl
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   env = {
