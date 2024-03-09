@@ -126,6 +126,7 @@ let
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
       Vpl = callPackage ../development/coq-modules/Vpl {};
+      VplTactic = callPackage ../development/coq-modules/VplTactic {};
       vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server {};
       VST = callPackage ../development/coq-modules/VST ((lib.optionalAttrs
         (lib.versionAtLeast self.coq.version "8.14") {
