@@ -65,6 +65,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
     mainProgram = "owmods";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ locochoco ];
+    maintainers = with maintainers; [ bwc9876 spoonbaker locochoco ];
   };
 }
