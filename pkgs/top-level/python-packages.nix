@@ -2932,6 +2932,8 @@ self: super: with self; {
 
   directv = callPackage ../development/python-modules/directv { };
 
+  dirsearch = callPackage ../development/python-modules/dirsearch { };
+
   dirty-equals = callPackage ../development/python-modules/dirty-equals { };
 
   dirtyjson = callPackage ../development/python-modules/dirtyjson { };
