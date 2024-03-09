@@ -70,6 +70,9 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
     if [ -d "plugins/remote-dev-server" ]; then
       patch -F3 -p1 < ${../patches/jetbrains-remote-dev.patch}
+
+      patch -F3 -p1 < ${../patches/jetbrains-remote-vmopts.patch}
+      substituteInPlace plugins/remote-dev-server/bin/launcher.sh --replace 'HINAME' '${hiName}'
     fi
 
     vmopts_file=bin/linux/${vmoptsName}

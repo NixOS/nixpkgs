@@ -1,0 +1,22 @@
+--- a/plugins/remote-dev-server/bin/launcher.sh
++++ b/plugins/remote-dev-server/bin/launcher.sh
+@@ -468,12 +468,16 @@ printf '\nide.ui.font.force.use.inter.font=true' >> "$TEMP_REMOTE_DEV_PROPERTIES
+ # --------------------------------
+
+ TEMP_REMOTE_DEV_VM_OPTIONS="$TEMP_SYSTEM_LIKE_DIR/pid.$$.temp.vmoptions"
+-if [ $IS_DARWIN -eq 1 ]; then
+-  cp "$IDE_BIN_DIR/${IDE_PRODUCT_VM_OPTIONS}.vmoptions" "$TEMP_REMOTE_DEV_VM_OPTIONS"
++if [[ -n "${HINAME_VM_OPTIONS+1}" ]]; then
++  BASE_VM_OPTIONS="${HINAME_VM_OPTIONS}"
++elif [ $IS_DARWIN -eq 1 ]; then
++  BASE_VM_OPTIONS="$IDE_BIN_DIR/${IDE_PRODUCT_VM_OPTIONS}.vmoptions"
+ else
+-  cp "$IDE_BIN_DIR/${IDE_PRODUCT_VM_OPTIONS}64.vmoptions" "$TEMP_REMOTE_DEV_VM_OPTIONS"
++  BASE_VM_OPTIONS="$IDE_BIN_DIR/${IDE_PRODUCT_VM_OPTIONS}64.vmoptions"
+ fi
+
++cp "$BASE_VM_OPTIONS" "$TEMP_REMOTE_DEV_VM_OPTIONS"
++
+ # [+ <IDE_HOME>.vmoptions (Toolbox style)
+ if [ -r "${IDE_HOME}.vmoptions" ]; then
+   cat "${IDE_HOME}.vmoptions" >>"$TEMP_REMOTE_DEV_VM_OPTIONS"
