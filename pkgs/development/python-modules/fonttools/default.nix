@@ -97,6 +97,11 @@ buildPythonPackage rec {
     "Tests/misc/plistlib_test.py"
     "Tests/pens"
     "Tests/ufoLib"
+
+    # test suite fails with pytest>=8.0.1
+    # https://github.com/fonttools/fonttools/issues/3458
+    "Tests/ttLib/woff2_test.py"
+    "Tests/ttx/ttx_test.py"
   ];
 
   meta = with lib; {
