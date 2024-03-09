@@ -1119,7 +1119,7 @@ self: super: builtins.intersectAttrs super {
   hercules-ci-cnix-store = overrideCabal
     (old: {
       passthru = old.passthru or { } // {
-        nixPackage = self.hercules-ci-cnix-store-nix;
+        nixPackage = self.hercules-ci-cnix-store-nix or pkgs.nix;
       };
     })
     (super.hercules-ci-cnix-store.override {
