@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-lazy-fixture";
   version = "0.6.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -20,13 +21,21 @@ buildPythonPackage rec {
     ./pytest-8-compatible.patch
   ];
 
+  build-system = [
+    setuptools
+  ];
+
+  pythonImportsCheck = [
+    "pytest_lazyfixture"
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
   meta = with lib; {
     description = "Helps to use fixtures in pytest.mark.parametrize";
-    homepage = "https://github.com/pytest-dev/pytest-repeat";
+    homepage = "https://github.com/tvorog/pytest-lazy-fixture";
     license = licenses.mit;
     maintainers = with maintainers; [ tobim ];
   };
