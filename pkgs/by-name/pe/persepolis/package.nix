@@ -8,39 +8,33 @@
 , libnotify
 , pulseaudio
 , sound-theme-freedesktop
+, pkg-config
+, meson
+, ninja
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";
-  version = "4.0.0";
+  version = "4.0.1";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2S6s/tWhI9RBFA26jkwxYTGeaok8S8zv/bY+Zr8TOak=";
+    rev = "57dc9d438bb3f126070a17c7a3677c45ea4dd332";
+    hash = "sha256-7OXAITFQJ2/aY0QmqlAo7if7cY7+T3j6PUjfJJV8Z2Q=";
   };
 
   patches = [
     # Upstream does currently not allow building from source on macOS. These patches can likely
     # be removed if https://github.com/persepolisdm/persepolis/issues/943 is fixed upstream
-    ./0001-Allow-building-on-darwin.patch
-    ./0002-Fix-startup-crash-on-darwin.patch
     ./0003-Search-PATH-for-aria2c-on-darwin.patch
     ./0004-Search-PATH-for-ffmpeg-on-darwin.patch
   ];
 
   postPatch = ''
-    sed -i "s|'persepolis = persepolis.__main__'|'persepolis = persepolis.scripts.persepolis:main'|" setup.py
-
-    # Automatically answer yes to all interactive questions during setup
-    substituteInPlace setup.py --replace-fail "answer = input(" "answer = 'y'#"
-
-    # Ensure dependencies with hard-coded FHS paths are properly detected
-    substituteInPlace setup.py --replace-fail "isdir(notifications_path)" "isdir('${sound-theme-freedesktop}/share/sounds/freedesktop')"
-
-    # Fix oversight in test script (can be removed once https://github.com/persepolisdm/persepolis/pull/942 is merged upstream)
-    substituteInPlace setup.py --replace-fail "sys.exit('0')" "sys.exit(0)"
+    # Ensure dependencies with hard-coded FHS dependencies are properly detected
+    substituteInPlace check_dependencies.py --replace-fail "isdir(notifications_path)" "isdir('${sound-theme-freedesktop}/share/sounds/freedesktop')"
   '';
 
   postInstall = ''
@@ -50,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # prevent double wrapping
   dontWrapQtApps = true;
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config qt5.wrapQtAppsHook ];
 
   # feed args to wrapPythonApp
   makeWrapperArgs = [
