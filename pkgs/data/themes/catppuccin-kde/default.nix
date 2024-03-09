@@ -69,6 +69,9 @@ stdenvNoCC.mkDerivation rec {
     (writeShellApplication { name = "clear"; text = ""; })
     (writeShellApplication { name = "lookandfeeltool"; text = ""; })
 
+    # Stub out tools that access the network.
+    (writeShellApplication { name = "wget"; text = "echo 2>&1 'Cannot use wget in the build environment!'; exit 1"; })
+
     # As Plasma is not available in the build environment, do not dynamically
     # install packages.
     #
