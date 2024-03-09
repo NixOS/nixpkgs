@@ -31641,22 +31641,6 @@ with pkgs;
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
 
-  freecad = libsForQt5.callPackage ../applications/graphics/freecad {
-    boost = python3Packages.boost;
-    inherit (python3Packages)
-      gitpython
-      matplotlib
-      pivy
-      ply
-      pycollada
-      pyside2
-      pyside2-tools
-      python
-      pyyaml
-      scipy
-      shiboken2;
-  };
-
   freedv = callPackage ../applications/radio/freedv {
     inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
     codec2 = codec2.override {
