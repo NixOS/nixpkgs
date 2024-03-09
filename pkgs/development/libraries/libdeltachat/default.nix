@@ -23,22 +23,20 @@ let
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "email-0.0.21" = "sha256-u4CsK/JqFgq5z3iJGxxGtb7QbSkOAqmOvrmagsqfXIU=";
+      "email-0.0.20" = "sha256-rV4Uzqt2Qdrfi5Ti1r+Si1c2iW1kKyWLwOgLkQ5JGGw=";
       "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
-      "imap-proto-0.16.3" = "sha256-okIHA8MQ1K/tcKHZYGh83zom1ULGHZ/KGxgcwiE1+sE=";
-      "iroh-0.4.2" = "sha256-VXNMmj+AvlY/W2JRWMICoNOqpFEahsUDxypHRg185Ao=";
       "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
     };
   };
 in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.131.9";
+  version = "1.136.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-xZai5RsrfT6bYzMpNdKncmDzBzcAcEtZZmh7f+3g5Hs=";
+    hash = "sha256-+mwOTm9SWgZjGI0TFHMmLgQJQSXyYMqteqQiubGhFkU=";
   };
 
   patches = [

@@ -52,6 +52,7 @@ for package in *; do
     fi
 
     used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
+    found=false
 
     if [[ -d "$used_source" ]]; then
         continue
@@ -80,7 +81,7 @@ for package in *; do
       fi
     done
 
-    if ! ${found-false}; then
+    if [[ $found = false ]]; then
       echo "couldn't find $package $version" >&2
       exit 1
     fi
