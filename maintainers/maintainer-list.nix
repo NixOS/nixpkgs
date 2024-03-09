@@ -18266,6 +18266,11 @@
     githubId = 950799;
     name = "Tomasz Czyż";
   };
+  spoonbaker = {
+    github = "Spoonbaker";
+    githubId = 47164123;
+    name = "Spoonbaker";
+  };
   sprock = {
     email = "rmason@mun.ca";
     github = "sprock";
