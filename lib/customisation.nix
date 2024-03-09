@@ -308,35 +308,7 @@ rec {
 
   /**
     Make an attribute set (a "scope") from functions that take arguments from that same attribute set.
-
-    :::{#ex-makeScope .example}
-    # Create an interdependent package set based on the scope of `pkgs`
-
-    The functions in `foo.nix` and `bar.nix` can depend on each other, in the sense that `foo.nix` can contain a function that expects `bar` as an attribute in its argument.
-
-    ```nix
-    let
-      pkgs = import <nixpkgs> { };
-    in
-    pkgs.lib.makeScope pkgs.newScope (self: {
-      foo = self.callPackage ./foo.nix { };
-      bar = self.callPackage ./bar.nix { };
-    })
-    ```
-
-    evaluates to
-
-    ```nix
-    {
-      callPackage = «lambda»;
-      newScope = «lambda»;
-      overrideScope = «lambda»;
-      packages = «lambda»;
-      foo = «derivation»;
-      bar = «derivation»;
-    }
-    ```
-    :::
+    See [](#ex-makeScope) for how to use it.
 
     # Inputs
 
@@ -344,7 +316,7 @@ rec {
 
        A function that takes an attribute set `attrs` and returns what ends up as `callPackage` in the output.
 
-       Typical values are `callPackageWith` or `(makeScope callPackageWith f).newScope`.
+       Typical values are `callPackageWith` or the output attribute `newScope`.
 
     2. `f` (`AttrSet -> AttrSet`)
 
@@ -374,6 +346,8 @@ rec {
 
       All such functions `p` will be called with the same value for `attrs`.
 
+      See [](#ex-makeScope-callPackage) for how to use it.
+
     - `newScope` (`AttrSet -> scope`)
 
       Takes an attribute set `attrs` and returns a scope that extends the original scope.
@@ -390,6 +364,37 @@ rec {
     - final attributes
 
       The final values returned by `f`.
+
+    # Examples
+
+    :::{#ex-makeScope .example}
+    # Create an interdependent package set on top of `pkgs`
+
+    The functions in `foo.nix` and `bar.nix` can depend on each other, in the sense that `foo.nix` can contain a function that expects `bar` as an attribute in its argument.
+
+    ```nix
+    let
+      pkgs = import <nixpkgs> { };
+    in
+    pkgs.lib.makeScope pkgs.newScope (self: {
+      foo = self.callPackage ./foo.nix { };
+      bar = self.callPackage ./bar.nix { };
+    })
+    ```
+
+    evaluates to
+
+    ```nix
+    {
+      callPackage = «lambda»;
+      newScope = «lambda»;
+      overrideScope = «lambda»;
+      packages = «lambda»;
+      foo = «derivation»;
+      bar = «derivation»;
+    }
+    ```
+    :::
 
     :::{#ex-makeScope-callPackage .example}
     # Using `callPackage` from a scope
