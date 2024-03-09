@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
       hash = "sha256-/8UJuypiQzywarE+o3BEMtqM+f+YzkHylugi+xTJf+w=";
       excludes = [ "ChangeLog" ];
     })
+
+    # Fix yodascale for scatters
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/yoda/-/commit/35559c05ec966fe3d5f6c5438c2247e7e1f37dd3.diff";
+      hash = "sha256-4skEGwUUBLW1S2S/u74XsuEQxix22qOC+1A0cg1s+cE=";
+    })
   ];
 
   nativeBuildInputs = with python.pkgs; [
