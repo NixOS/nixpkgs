@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2024.02.2";
-  format = "pyproject";
+  version = "2024.03.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aionotion";
     rev = "refs/tags/${version}";
-    hash = "sha256-xehHOB4iUMT1kKEK4jQzaj7hH9fmiY7mZxGC3CLnpAs=";
+    hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
-    changelog = "https://github.com/bachya/aionotion/releases/tag/${src.rev}";
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
