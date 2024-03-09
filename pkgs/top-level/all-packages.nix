@@ -39905,6 +39905,10 @@ with pkgs;
 
   dump = callPackage ../tools/backup/dump { };
 
+  dwarffs = callPackage ../by-name/dw/dwarffs/package.nix {
+    nix = nixVersions.nix_2_19;
+  };
+
   ec2stepshell = callPackage ../tools/security/ec2stepshell { };
 
   ecdsatool = callPackage ../tools/security/ecdsatool { };
