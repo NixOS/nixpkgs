@@ -1,0 +1,1 @@
+SUBSYSTEM=="hidraw", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1915", ATTRS{idProduct}=="521f", ATTRS{product}=="OpenSK", MODE="0660", GROUP="logindev", TAG+="uaccess"

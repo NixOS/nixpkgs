@@ -29434,6 +29434,8 @@ with pkgs;
 
   open-sans = callPackage ../data/fonts/open-sans { };
 
+  opensk-udev-rules = callPackage ../os-specific/linux/opensk-udev-rules { };
+
   openmoji-color = callPackage ../data/fonts/openmoji { variant = "color"; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { variant = "black"; };
