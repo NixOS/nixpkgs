@@ -18,6 +18,8 @@ self: super: {
 
     postgis = super.callPackage ./ext/postgis.nix { };
 
+    postgresml = super.callPackage ./ext/pgml { };
+
     pg_auto_failover = super.callPackage ./ext/pg_auto_failover.nix { };
 
     pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
