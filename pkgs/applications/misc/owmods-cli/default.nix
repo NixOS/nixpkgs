@@ -6,6 +6,10 @@
 , pkg-config
 , installShellFiles
 , zstd
+, libsoup_3
+, makeWrapper
+, mono
+, wrapWithMono ? true
 , openssl
 , Security
 }:
@@ -26,10 +30,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ];
+  ] ++ lib.optional wrapWithMono makeWrapper;
 
   buildInputs = [
     zstd
+    libsoup_3
   ] ++ lib.optionals stdenv.isLinux [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
@@ -44,9 +49,11 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     cargo xtask dist_cli
-    installManPage man/man*/*
+    installManPage dist/cli/man/*
     installShellCompletion --cmd owmods \
-      dist/cli/completions/owmods.{bash,fish,zsh}
+    dist/cli/completions/owmods.{bash,fish,zsh}
+    '' + lib.optionalString wrapWithMono ''
+    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
   '';
 
   passthru.updateScript = nix-update-script {};
@@ -58,6 +65,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
     mainProgram = "owmods";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ locochoco ];
+    maintainers = with maintainers; [ bwc9876 locochoco ];
   };
 }
