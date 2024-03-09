@@ -66,18 +66,17 @@ rustPlatform.buildRustPackage rec {
 
   passthru.providedSessions = ["niri"];
 
-  postInstall = ''
-    mkdir -p $out/share/{systemd/user,wayland-sessions,xdg-desktop-portal}
-
-    cp ./resources/niri-session $out/bin/niri-session
-    cp ./resources/niri.service $out/share/systemd/user/niri.service
-    cp ./resources/niri-shutdown.target $out/share/systemd/user/niri-shutdown.target
-    cp ./resources/niri.desktop $out/share/wayland-sessions/niri.desktop
-    cp ./resources/niri-portals.conf $out/share/xdg-desktop-portal/niri-portals.conf
+  postPatch = ''
+    patchShebangs ./resources/niri-session
+    substituteInPlace ./resources/niri.service \
+      --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  postFixup = ''
-    sed -i "s#/usr#$out#" $out/share/systemd/user/niri.service
+  postInstall = ''
+    install -Dm0755 ./resources/niri-session -t $out/bin
+    install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
+    install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
+    install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
   '';
 
   meta = with lib; {
