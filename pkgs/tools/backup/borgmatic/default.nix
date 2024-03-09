@@ -2,6 +2,7 @@
   borgbackup,
   borgmatic,
   coreutils,
+  enableApprise ? false,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
   fetchpatch,
@@ -22,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-WYs7wiwZ1TvTdeUpWv7FbREXWfdGcYRarP4FXFOfp0Y=";
   };
 
-  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov apprise ];
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
@@ -40,11 +41,7 @@ python3Packages.buildPythonApplication rec {
     requests
     ruamel-yaml
     setuptools
-  ];
-
-  passthru.optional-dependencies = {
-    apprise = [ python3Packages.apprise ];
-  };
+  ] ++ lib.optional enableApprise apprise;
 
   postInstall = ''
     installShellCompletion --cmd borgmatic \
