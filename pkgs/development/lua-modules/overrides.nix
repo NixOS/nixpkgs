@@ -654,17 +654,19 @@ with prev;
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ magic-enum sol2 ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace \
-        "TOML_PLUS_PLUS_SRC" \
-        "${tomlplusplus.src}"
+      substituteInPlace CMakeLists.txt \
+        --replace "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}" \
+        --replace "MAGIC_ENUM_SRC" "${magic-enum.src}"
     '';
+      #
+      # cat CMakeLists.txt
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-gvUqkLOa0WvAK4GcTkufr0lC2BOs2FQ2bgFpB0qa47k=";
+      hash = "sha256-Hx4Lq2ZtoY1YDisikXvhhv9lsXskmhUCyRvvTy/rkV4=";
     };
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
