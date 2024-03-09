@@ -1884,6 +1884,8 @@ self: super: with self; {
 
   case = callPackage ../development/python-modules/case { };
 
+  cashaddress = callPackage ../development/python-modules/cashaddress { };
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   castepxbin = callPackage ../development/python-modules/castepxbin { };
@@ -2931,6 +2933,8 @@ self: super: with self; {
   dipy = callPackage ../development/python-modules/dipy { };
 
   directv = callPackage ../development/python-modules/directv { };
+
+  dirigera = callPackage ../development/python-modules/dirigera { };
 
   dirty-equals = callPackage ../development/python-modules/dirty-equals { };
 
@@ -4044,6 +4048,8 @@ self: super: with self; {
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
+
+  feedfinder2 = callPackage ../development/python-modules/feedfinder2 { };
 
   feedgen = callPackage ../development/python-modules/feedgen { };
 
@@ -5697,6 +5703,8 @@ self: super: with self; {
   invocations = callPackage ../development/python-modules/invocations { };
 
   invoke = callPackage ../development/python-modules/invoke { };
+
+  iocsearcher = callPackage ../development/python-modules/iocsearcher { };
 
   iodata = callPackage ../development/python-modules/iodata { };
 
@@ -12714,6 +12722,8 @@ self: super: with self; {
 
   readability-lxml = callPackage ../development/python-modules/readability-lxml { };
 
+  readabilipy = callPackage ../development/python-modules/readabilipy { };
+
   readchar = callPackage ../development/python-modules/readchar { };
 
   readlike = callPackage ../development/python-modules/readlike { };
@@ -14752,6 +14762,8 @@ self: super: with self; {
   tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
 
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
+
+  tinysegmenter = callPackage ../development/python-modules/tinysegmenter { };
 
   tissue = callPackage ../development/python-modules/tissue { };
 
