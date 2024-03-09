@@ -32727,8 +32727,6 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kooha = callPackage ../applications/video/kooha { };
-
   kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreFoundation CoreServices CoreText CoreGraphics
       CoreMedia OpenGL AudioUnit ApplicationServices Foundation AGL Security SystemConfiguration
