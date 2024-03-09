@@ -336,7 +336,7 @@ rec {
     scope :: {
       callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
       newScope = AttrSet -> scope
-      overrideScope = (AttrSet -> AttrSet) -> scope
+      overrideScope = (scope -> scope -> AttrSet) -> scope
       packages :: AttrSet -> AttrSet
     }
     ```
@@ -357,10 +357,12 @@ rec {
 
       Takes an attribute set `attrs` and returns a scope that extends the original scope.
 
-    - `overrideScope` (`(AttrSet -> AttrSet) -> scope`)
+    - `overrideScope` (`(scope -> scope -> AttrSet) -> scope`)
 
-      Takes a function `g` like the argument `f` to `makeScope`, and returns a new scope where values returned by the original `f` are overriddne with values returned by `g`.
-      This allows subsequent modification of the final attribute set in a consistent way, i.e. all functions `p` invoked with `callPackage` will be called with the overridden values.
+      Takes a function `g` of the form `final: prev: { # attributes }` to act as an overlay on `f`, and returns a new scope with values determined by `extends g f`.
+      See [](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.fixedPoints.extends) for details.
+
+      This allows subsequent modification of the final attribute set in a consistent way, i.e. all functions `p` invoked with `callPackage` will be called with the modified values.
 
     - `packages` (`AttrSet -> AttrSet`)
 
