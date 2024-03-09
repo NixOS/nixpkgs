@@ -14662,8 +14662,6 @@ with pkgs;
 
   unnaturalscrollwheels = callPackage ../tools/inputmethods/unnaturalscrollwheels { };
 
-  unrar = callPackage ../tools/archivers/unrar { };
-
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
 
   uptime-kuma = callPackage ../servers/monitoring/uptime-kuma { };
