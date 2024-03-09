@@ -1070,6 +1070,7 @@
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
   ./services/networking/onedrive.nix
+  ./services/networking/opencanary.nix
   ./services/networking/openconnect.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
