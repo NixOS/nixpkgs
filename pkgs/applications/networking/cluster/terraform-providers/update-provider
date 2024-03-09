@@ -1,0 +1,164 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nurl
+# shellcheck shell=bash
+# vim: ft=sh
+#
+# Update a terraform provider to the latest version advertised at the
+# provider source address.
+#
+set -euo pipefail
+shopt -s inherit_errexit
+
+show_usage() {
+  cat <<DOC
+Usage: ./update-provider [--force] [--no-build] [<owner>/]<provider>
+
+Update a single provider in the providers.json inventory file.
+
+For example to update 'terraform-providers.aws' run:
+
+    ./update-provider aws
+
+If the provider is not in the list already, use the form '<owner>/<provider>'
+to add the provider to the list:
+
+    ./update-provider hetznercloud/hcloud
+
+Options:
+
+  * --force: Force the update even if the version matches.
+  * --no-build: Don't build provider
+DOC
+}
+
+build=1
+force=
+provider=
+spdx=1
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -h | --help)
+    show_usage
+    exit
+    ;;
+  --force)
+    force=1
+    shift
+    ;;
+  --no-build)
+    build=0
+    shift
+    ;;
+  --no-spdx)
+    spdx=0
+    shift
+    ;;
+  *)
+    if [[ -n ${provider} ]]; then
+      echo "ERROR: provider name was passed two times: '${provider}' and '$1'"
+      echo "Use --help for more info"
+      exit 1
+    fi
+    provider=$1
+    shift
+    ;;
+  esac
+done
+
+if [[ -z ${provider} ]]; then
+  echo "ERROR: No providers specified!"
+  echo
+  show_usage
+  exit 1
+fi
+
+# Usage: read_attr <key>
+read_attr() {
+  jq -r ".\"${provider}\".\"$1\"" providers.json
+}
+
+# Usage: update_attr <key> <value>
+update_attr() {
+  if [[ $2 == "null" ]]; then
+    jq -S ".\"${provider}\".\"$1\" = null" providers.json | sponge providers.json
+  else
+    jq -S ".\"${provider}\".\"$1\" = \"$2\"" providers.json | sponge providers.json
+  fi
+}
+
+repo_root=$(git rev-parse --show-toplevel)
+
+generate_hash() {
+  nurl --expr "(import ${repo_root} {}).terraform-providers.${provider}.$1"
+}
+
+echo_provider() {
+  echo "== terraform-providers.${provider}: $* =="
+}
+
+pushd "$(dirname "$0")" >/dev/null
+
+if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
+  homepage="https://registry.terraform.io/providers/${provider}"
+  provider=$(basename "${provider}")
+  echo_provider "init"
+  update_attr homepage "${homepage}"
+  # create empty stings so nix-prefetch works
+  update_attr hash ""
+  update_attr vendorHash ""
+  update_attr spdx ""
+fi
+
+homepage="$(read_attr homepage)"
+
+registry_response=$(curl -s "${homepage//providers/v1/providers}")
+
+old_rev="$(read_attr rev)"
+rev="$(jq -r '.tag' <<<"${registry_response}")"
+if [[ ${force} != 1 ]]; then
+  if [[ ${old_rev} == "${rev}" ]]; then
+    echo_provider "already at version ${rev}"
+    exit
+  fi
+  if [[ ${rev//v/} =~ [[:alpha:]] ]]; then
+    echo_provider "not updating to unstable version ${rev}"
+    exit
+  fi
+fi
+echo_provider "updating from ${old_rev} to ${rev}"
+update_attr rev "${rev}"
+
+provider_source_url="$(jq -r '.source' <<<"${registry_response}")"
+
+org="$(echo "${provider_source_url}" | cut -d '/' -f 4)"
+update_attr owner "${org}"
+repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
+update_attr repo "${repo}"
+
+if [[ ${spdx} == 1 ]]; then
+  old_spdx="$(read_attr spdx)"
+  if [[ ${old_spdx} != null ]]; then
+    spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+    update_attr spdx "${spdx}"
+  fi
+fi
+
+echo_provider "calculating hash"
+hash=$(generate_hash src)
+update_attr hash "${hash}"
+
+old_vendor_hash="$(read_attr vendorHash)"
+if [[ ${old_vendor_hash} != null ]]; then
+  echo_provider "calculating vendorHash"
+  vendorHash=$(generate_hash goModules)
+  update_attr vendorHash "${vendorHash}"
+fi
+
+# Check that the provider builds
+if [[ ${build} == 1 ]]; then
+  echo_provider "building"
+  nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider}"
+fi
+
+popd >/dev/null

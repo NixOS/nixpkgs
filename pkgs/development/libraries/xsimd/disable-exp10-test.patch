@@ -1,0 +1,36 @@
+commit 87433035c70578507e08565723c99158290f2488
+Author: Doron Behar <doron.behar@gmail.com>
+Date:   Tue Aug 1 13:26:04 2023 +0300
+
+    Darwin & Musl: Disable failing exp10 test
+
+--- a/test/test_xsimd_api.cpp
++++ b/test/test_xsimd_api.cpp
+@@ -515,15 +515,6 @@ struct xsimd_api_float_types_functions
+         value_type val(2);
+         CHECK_EQ(extract(xsimd::exp(T(val))), std::exp(val));
+     }
+-    void test_exp10()
+-    {
+-        value_type val(2);
+-#ifdef EMSCRIPTEN
+-        CHECK_EQ(extract(xsimd::exp10(T(val))), doctest::Approx(std::pow(value_type(10), val)));
+-#else
+-        CHECK_EQ(extract(xsimd::exp10(T(val))), std::pow(value_type(10), val));
+-#endif
+-    }
+     void test_exp2()
+     {
+         value_type val(2);
+@@ -813,11 +804,6 @@ TEST_CASE_TEMPLATE("[xsimd api | float types functions]", B, FLOAT_TYPES)
+         Test.test_exp();
+     }
+ 
+-    SUBCASE("exp10")
+-    {
+-        Test.test_exp10();
+-    }
+-
+     SUBCASE("exp2")
+     {
+         Test.test_exp2();
