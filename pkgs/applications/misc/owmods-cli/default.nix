@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "owmods-cli";
-  version = "0.12.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     rev = "cli_v${version}";
-    hash = "sha256-AfqpLL3cGZLKW5/BE6SaBe4S8GzYM2GKUZU8mFH5uX4=";
+    hash = "sha256-JCPuKGO0pbhQaNmZUcZ95EZbXubrjZnw0qJmKCGuAoQ=";
   };
 
-  cargoHash = "sha256-PhdfpiUgeOB13ROgzPBYM+sBLGMP+RtV9j9ebo8PpJU=";
+  cargoHash = "sha256-dTEEpjonvFYFv16e0eS71B4OMiYueYSfcs8gmSYeHPc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -65,6 +65,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
     mainProgram = "owmods";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bwc9876 locochoco ];
+    maintainers = with maintainers; [ locochoco ];
   };
 }
