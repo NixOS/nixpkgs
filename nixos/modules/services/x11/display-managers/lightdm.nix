@@ -81,6 +81,7 @@ in
     ./lightdm-greeters/mini.nix
     ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
+    ./lightdm-greeters/lomiri.nix
     ./lightdm-greeters/tiny.nix
     ./lightdm-greeters/slick.nix
     ./lightdm-greeters/mobile.nix
