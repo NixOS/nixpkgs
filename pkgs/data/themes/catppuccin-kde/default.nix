@@ -5,6 +5,7 @@
 , writeShellApplication
 , lightly-plasma
 , gnutar
+, unzip
 , flavour ? "frappe"
 , accent ? "blue"
 , winDecStyle ? "modern"
@@ -61,6 +62,8 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    unzip
+
     # Stub out tools for interactivity.
     (writeShellApplication { name = "sleep"; text = ""; })
     (writeShellApplication { name = "clear"; text = ""; })
