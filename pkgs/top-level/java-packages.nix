@@ -148,6 +148,8 @@ in {
         inherit openjdk17-bootstrap;
       });
 
+    openjdk21-bootstrap = temurin-bin.jdk-21;
+
     openjdk8 = mkOpenjdk
       ../development/compilers/openjdk/8.nix
       ../development/compilers/zulu/8.nix
@@ -223,7 +225,7 @@ in {
       ../development/compilers/openjdk/21.nix
       ../development/compilers/zulu/21.nix
       {
-        openjdk21-bootstrap = temurin-bin.jdk-21;
+        inherit openjdk21-bootstrap;
         openjfx = openjfx21;
       };
 
