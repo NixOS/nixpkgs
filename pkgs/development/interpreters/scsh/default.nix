@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];
     platforms = with platforms; unix;
+    mainProgram = "scsh";
   };
 }
