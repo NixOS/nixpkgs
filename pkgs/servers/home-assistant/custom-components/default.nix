@@ -20,5 +20,7 @@
 
   prometheus_sensor = callPackage ./prometheus_sensor {};
 
+  tuya-local = callPackage ./tuya-local {};
+
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
 }
