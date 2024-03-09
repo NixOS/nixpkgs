@@ -18818,8 +18818,6 @@ with pkgs;
 
   devtodo = callPackage ../development/tools/devtodo { };
 
-  dfeet = callPackage ../development/tools/misc/d-feet { };
-
   d-spy = callPackage ../development/tools/misc/d-spy { };
 
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
@@ -20477,9 +20475,6 @@ with pkgs;
   bionic = if stdenv.hostPlatform.useAndroidPrebuilt
     then pkgs."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries
     else callPackage ../os-specific/linux/bionic-prebuilt { };
-
-
-  boehmgc = callPackage ../development/libraries/boehm-gc { };
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
@@ -23520,8 +23515,6 @@ with pkgs;
   yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
 
   yas = callPackage ../development/libraries/yas { };
-
-  libyang = callPackage ../development/libraries/libyang { };
 
   libcyaml = callPackage ../development/libraries/libcyaml { };
 
@@ -27746,8 +27739,6 @@ with pkgs;
   projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
-
-  tgpt = callPackage ../tools/misc/tgpt { };
 
   tgt = callPackage ../tools/networking/tgt { };
 
@@ -33829,7 +33820,9 @@ with pkgs;
 
   shod = callPackage ../applications/window-managers/shod { };
 
-  shotcut = qt6Packages.callPackage ../applications/video/shotcut { };
+  shotcut = qt6Packages.callPackage ../applications/video/shotcut {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
     protobuf = protobuf_21;
@@ -34718,10 +34711,6 @@ with pkgs;
   revanced-cli = callPackage ../applications/misc/revanced-cli { };
 
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
-
-  ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet {
-    protobuf = protobuf_21;
-  };
 
   ries = callPackage ../applications/science/math/ries { };
 
@@ -35910,6 +35899,8 @@ with pkgs;
 
   vkeybd = callPackage ../applications/audio/vkeybd { };
 
+  vlc-bin-universal = vlc-bin.override { variant = "universal"; };
+
   libvlc = vlc.override {
     withQt5 = false;
     onlyLibVLC = true;
@@ -36872,8 +36863,6 @@ with pkgs;
 
   conmon-rs = callPackage ../applications/virtualization/conmon-rs { };
 
-  digikam = libsForQt5.callPackage ../applications/graphics/digikam { };
-
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   eureka-ideas = callPackage ../applications/misc/eureka-ideas {
@@ -37041,16 +37030,6 @@ with pkgs;
   zdbsp = callPackage ../games/doom-ports/zdoom/zdbsp.nix { };
 
   zdoom = callPackage ../games/doom-ports/zdoom { };
-
-  ### GAMES/LGAMES
-
-  barrage = callPackage ../games/lgames/barrage { };
-
-  lbreakout2 = callPackage ../games/lgames/lbreakout2 { };
-
-  lbreakouthd = callPackage ../games/lgames/lbreakouthd { };
-
-  lpairs2 = callPackage ../games/lgames/lpairs2 { };
 
   maelstrom = callPackage ../games/maelstrom { };
 

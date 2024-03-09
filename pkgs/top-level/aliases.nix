@@ -223,6 +223,7 @@ mapAliases ({
   demjson = with python3Packages; toPythonApplication demjson; # Added 2022-01-18
   dep = throw "'dep' has been removed, because it is deprecated and archived in favor of Go modules"; # Added 2023-12-26
   devserver = throw "'devserver' has been removed in favor of 'miniserve' or other alternatives"; # Added 2023-01-13
+  dfeet = throw "'dfeet' has been removed because it is archived upstream. Please use 'd-spy' instead"; # Added 2024-03-07
   dhcp = throw "dhcp (ISC DHCP) has been removed from nixpkgs, because it reached its end of life"; # Added 2023-04-04
   dnnl = oneDNN; # Added 2020-04-22
   docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
@@ -965,6 +966,7 @@ mapAliases ({
   restya-board = throw "'restya-board' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-01-22
   retdec-full = throw "'retdec-full' is no longer needed, please use 'retdec'"; # Added 2024-02-05
   retroshare06 = retroshare;
+  ricochet = throw "ricochet has been deprecated in favor of ricochet-refresh"; # Added 2024-02-26
   rigsofrods = rigsofrods-bin; # Added 2023-03-22
   ring-daemon = jami-daemon; # Added 2021-10-26
   rockbox_utility = rockbox-utility; # Added 2022-03-17
