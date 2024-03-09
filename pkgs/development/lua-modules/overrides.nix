@@ -677,12 +677,13 @@ in
   toml = prev.toml.overrideAttrs (oa: {
     patches = [ ./toml.patch ];
 
-    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ magic-enum sol2 ];
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ tomlplusplus ];
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ sol2 ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace \
-        "TOML_PLUS_PLUS_SRC" \
-        "${tomlplusplus.src}"
+      substituteInPlace CMakeLists.txt \
+        --replace "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}" \
+        --replace "MAGIC_ENUM_SRC" "${magic-enum.src}"
     '';
   });
 
