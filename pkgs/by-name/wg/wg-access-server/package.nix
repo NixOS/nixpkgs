@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , makeWrapper
 , iptables
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -55,6 +56,10 @@ buildGoModule rec {
     wrapProgram  $out/bin/wg-access-server \
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) wg-access-server; };
+  };
 
   meta = with lib; {
     description = "An all-in-one WireGuard VPN solution with a web ui for connecting devices";
