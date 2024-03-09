@@ -29,6 +29,7 @@ in
 
       incus.enable = true;
     };
+    networking.nftables.enable = true;
   };
 
   testScript = ''
