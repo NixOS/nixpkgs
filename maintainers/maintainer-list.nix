@@ -19959,6 +19959,13 @@
     githubId = 1607770;
     name = "Ulrik Strid";
   };
+  ulysseszhan = {
+    email = "ulysseszhan@gmail.com";
+    github = "UlyssesZh";
+    githubId = 26196187;
+    matrix = "@ulysseszhan:matrix.org";
+    name = "Ulysses Zhan";
+  };
   umlx5h = {
     github = "umlx5h";
     githubId = 20206121;
