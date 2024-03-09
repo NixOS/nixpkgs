@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.19.1";
+  version = "1.19.2";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vB1Xbz3YRqBzmtxB/6pwJATGdn0rYILeufL5fLsko6k=";
+    hash = "sha256-zFYNNFc0ImwbOecadpeX5/3eImXLt3685UJwS7pInlU=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
