@@ -1884,6 +1884,8 @@ self: super: with self; {
 
   case = callPackage ../development/python-modules/case { };
 
+  cashaddress = callPackage ../development/python-modules/cashaddress { };
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   castepxbin = callPackage ../development/python-modules/castepxbin { };
@@ -5701,6 +5703,8 @@ self: super: with self; {
   invocations = callPackage ../development/python-modules/invocations { };
 
   invoke = callPackage ../development/python-modules/invoke { };
+
+  iocsearcher = callPackage ../development/python-modules/iocsearcher { };
 
   iodata = callPackage ../development/python-modules/iodata { };
 
@@ -12717,6 +12721,8 @@ self: super: with self; {
   re-assert = callPackage ../development/python-modules/re-assert { };
 
   readability-lxml = callPackage ../development/python-modules/readability-lxml { };
+
+  readabilipy = callPackage ../development/python-modules/readabilipy { };
 
   readchar = callPackage ../development/python-modules/readchar { };
 
