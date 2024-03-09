@@ -65,7 +65,14 @@ let
 
     allowAliases = mkOption {
       type = types.bool;
-      default = true;
+      default =
+        let
+          envVar = builtins.getEnv "NIXPKGS_ALLOW_ALIASES";
+        in
+        if envVar != ""
+        then envVar != "0"
+        else true;
+      defaultText = literalMD ''`true` unless `getEnv "NIXPKGS_ALLOW_ALIASES" == "0"`'';
       description = lib.mdDoc ''
         Whether to expose old attribute names for compatibility.
 
