@@ -4,6 +4,7 @@ gappsWrapperArgs=()
 find_gio_modules() {
     if [ -d "$1/lib/gio/modules" ] && [ -n "$(ls -A "$1/lib/gio/modules")" ] ; then
         gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES : "$1/lib/gio/modules")
+        addToSearchPath GIO_EXTRA_MODULES "$1/lib/gio/modules" # for nix develop shells
     fi
 }
 
