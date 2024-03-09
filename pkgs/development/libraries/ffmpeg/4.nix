@@ -7,6 +7,12 @@ import ./generic.nix {
       url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
       hash = "sha256-mSnmAkoNikDpxcN+A/hpB7mUbbtcMvm4tG6gZFuroe8=";
     }
+    {
+        # Backport fix for binutils-2.41.
+        name = "binutils-2.41.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+        hash = "sha256-vlBUMJ1bORQHRNpuzc5iXsTWwS/CN5BmGIA8g7H7mJE=";
+    }
     # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
     # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
     {
