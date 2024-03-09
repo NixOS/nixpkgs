@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , pythonOlder
 , gitpython
 , pbr
@@ -13,7 +12,7 @@
 buildPythonPackage rec {
   pname = "bandit";
   version = "1.7.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
