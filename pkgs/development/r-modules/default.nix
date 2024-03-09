@@ -632,6 +632,7 @@ let
     seqbias = [ pkgs.zlib.dev ];
     sparkwarc = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
+    pexm = [ pkgs.jags ];
     rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
     rawrr = [ pkgs.mono ];
     HDF5Array = [ pkgs.zlib.dev ];
