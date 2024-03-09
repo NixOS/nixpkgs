@@ -627,9 +627,12 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.0.89"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0ba8f7aaa012f30d5b2861462f6708eccd49c3c39863fe083a308035f63d723"
+checksum = "f1174fb0b6ec23863f8b971027804a42614e347eafb0a95bf0b12cdae21fc4d0"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "cfb-mode"
@@ -1085,7 +1088,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.136.1"
+version = "1.136.3"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1166,7 +1169,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.136.1"
+version = "1.136.3"
 dependencies = [
  "anyhow",
  "async-channel 2.2.0",
@@ -1190,7 +1193,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-repl"
-version = "1.136.1"
+version = "1.136.3"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1205,7 +1208,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-rpc-server"
-version = "1.136.1"
+version = "1.136.3"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -1234,7 +1237,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat_ffi"
-version = "1.136.1"
+version = "1.136.3"
 dependencies = [
  "anyhow",
  "deltachat",
