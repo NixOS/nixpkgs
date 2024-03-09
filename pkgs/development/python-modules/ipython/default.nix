@@ -23,6 +23,7 @@
 , pickleshare
 , pytest-asyncio
 , pytestCheckHook
+, pytest_7
 , testpath
 }:
 
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pickleshare
     pytest-asyncio
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     testpath
   ];
 
