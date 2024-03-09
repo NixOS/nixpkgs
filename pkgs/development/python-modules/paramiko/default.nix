@@ -52,6 +52,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTestPaths = [
     # disable tests that require pytest-relaxed, which is broken
     "tests/test_client.py"
