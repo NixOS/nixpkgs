@@ -7427,6 +7427,12 @@
     githubId = 21156405;
     name = "GuangTao Zhang";
   };
+  Guanran928 = {
+    email = "guanran928@outlook.com";
+    github = "Guanran928";
+    githubId = 68757440;
+    name = "Guanran928";
+  };
   guekka = {
     github = "Guekka";
     githubId = 39066502;
