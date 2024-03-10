@@ -1,15 +1,15 @@
 { lib
-, coreutils
 , fetchFromGitHub
+, python3
+, glibcLocales
+, coreutils
 , git
 , gitUpdater
-, glibcLocales
-, python3
 }:
 
 let
   pname = "xonsh";
-  version = "0.14.4";
+  version = "0.15.1";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -21,18 +21,12 @@ python3.pkgs.buildPythonApplication {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-7qOEc4RSdOO059LietKnrxY7cy9MfgmfJjdqZZ5ENLU=";
+    hash = "sha256-mHOCkUGiSSPmkIQ4tgRZIaCTLgnx39SMwug5EIx/jrU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     wheel
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    ply
-    prompt-toolkit
-    pygments
   ];
 
   env.LC_ALL = "en_US.UTF-8";
@@ -61,6 +55,7 @@ python3.pkgs.buildPythonApplication {
     "test_command_pipeline_capture"
     "test_dirty_working_directory"
     "test_man_completion"
+    "test_procproxy_not_captured[hiddenobject]"
     "test_vc_get_branch"
     "test_bash_and_is_alias_is_only_functional_alias"
   ];
@@ -75,20 +70,14 @@ python3.pkgs.buildPythonApplication {
     "tests/completers/test_bash_completer.py"
   ];
 
-  nativeCheckInputs = [
-    git
-    glibcLocales
-  ] ++ (with python3.pkgs; [
-    pip
-    pyte
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-  ]);
-
   preCheck = ''
     export HOME=$TMPDIR
   '';
+
+  nativeCheckInputs = [ glibcLocales git ] ++
+    (with python3.pkgs; [ pip pyte pytestCheckHook pytest-mock pytest-subprocess ]);
+
+  propagatedBuildInputs = with python3.pkgs; [ ply prompt-toolkit pygments ];
 
   passthru = {
     shellPath = "/bin/xonsh";
@@ -101,6 +90,6 @@ python3.pkgs.buildPythonApplication {
     description = "A Python-ish, BASHwards-compatible shell";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres greg ];
   };
 }
