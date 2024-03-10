@@ -28431,8 +28431,8 @@ with self; {
     };
     env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
-    propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
+    buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException ];
+    propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple XSObjectMagic ];
     NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm -lxcb-randr -lxcb-xkb";
     doCheck = false; # requires an X server
     meta = {
