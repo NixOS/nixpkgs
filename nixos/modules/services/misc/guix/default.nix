@@ -333,8 +333,8 @@ in
         in ''
           [ -d "${userProfile}" ] && ln -sfn "${userProfile}" "${location}"
         '';
-        linkProfileToPath = acc: profile: location: let
-          in acc + (linkProfile profile location);
+        linkProfileToPath = acc: profile: location:
+          acc + (linkProfile profile location);
 
         # This should contain export-only Guix user profiles. The rest of it is
         # handled manually in the activation script.
@@ -450,7 +450,7 @@ in
           Type = "oneshot";
 
           PrivateDevices = true;
-          PrivateNetworks = true;
+          PrivateNetwork = true;
           ProtectControlGroups = true;
           ProtectHostname = true;
           ProtectKernelTunables = true;
