@@ -168,7 +168,7 @@ let
           {
             name = "wrap-qt6-apps-hook";
             propagatedBuildInputs = [ makeBinaryWrapper ];
-            depsTargetTargetPropagated = lib.optionals stdenv.isLinux [ qtwayland.out ];
+            depsTargetTargetPropagated = lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [ qtwayland.out ];
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
