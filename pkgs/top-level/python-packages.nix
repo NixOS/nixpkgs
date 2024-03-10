@@ -13166,6 +13166,8 @@ self: super: with self; {
 
   safety = callPackage ../development/python-modules/safety { };
 
+  safety-schemas = callPackage ../development/python-modules/safety-schemas { };
+
   sagemaker = callPackage ../development/python-modules/sagemaker { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
