@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , buildPythonPackage
+, selenium-manager
 , certifi
 , pytestCheckHook
 , pythonOlder
@@ -14,25 +14,6 @@
 , stdenv
 , python
 }:
-
-let
-  # TODO: build these from source, e.g. for aarch64-linux support
-  # https://github.com/SeleniumHQ/selenium/blob/selenium-4.18.1/common/selenium_manager.bzl
-  selenium-manager = let
-    darwin = fetchurl {
-      url = "https://github.com/SeleniumHQ/selenium_manager_artifacts/releases/download/selenium-manager-8fab886/selenium-manager-macos";
-      sha256 = "43168f3c79747b5dd86a6aeb5fc8fb642614899c4ce427e8dcd57737cf70be7f";
-    };
-    linux = fetchurl {
-      url = "https://github.com/SeleniumHQ/selenium_manager_artifacts/releases/download/selenium-manager-8fab886/selenium-manager-linux";
-      sha256 = "ec6db2c8ea49cf4fafaf52e70ffcbcac3d49d07df7ca11dba49652b9d51d2d1a";
-    };
-  in {
-    x86_64-linux = linux;
-    aarch64-darwin = darwin;
-    x86_64_darwin = darwin;
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
-in
 
 buildPythonPackage rec {
   pname = "selenium";
@@ -64,10 +45,10 @@ buildPythonPackage rec {
     cp ../third_party/js/selenium/webdriver.json $DST_FF/webdriver_prefs.json
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $DST_PREFIX/common/macos
-    cp ${selenium-manager} $DST_PREFIX/common/macos
+    ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/macos/
   '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $DST_PREFIX/common/linux/
-    cp ${selenium-manager} $DST_PREFIX/common/linux/
+    ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/linux/
   '';
 
   propagatedBuildInputs = [
@@ -88,11 +69,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isAarch64 && stdenv.isLinux; # no supported manager binary
     description = "Bindings for Selenium WebDriver";
     homepage = "https://selenium.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ jraygauthier ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
