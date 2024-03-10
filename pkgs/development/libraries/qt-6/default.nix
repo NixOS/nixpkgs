@@ -190,6 +190,14 @@ let
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
+      wrapQtClisHook = callPackage
+        ({ makeBinaryWrapper }: makeSetupHook
+          {
+            name = "wrap-qt6-clis-hook";
+            propagatedBuildInputs = [ makeBinaryWrapper ];
+          } ./hooks/wrap-qt-apps-hook.sh)
+        { };
+
       qmake = callPackage
         ({ qtbase }: makeSetupHook
           {
