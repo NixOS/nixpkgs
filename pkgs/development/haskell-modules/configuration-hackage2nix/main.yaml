@@ -266,7 +266,6 @@ package-maintainers:
     - hlint
     - hmatrix
     - hspec-discover
-    - iCalendar
     - matrix-client
     - optics
     - pandoc
