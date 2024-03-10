@@ -64,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib;{
     description = "Interactive Parallel Computing with IPython";
     homepage = "https://ipyparallel.readthedocs.io/";
+    changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
   };
