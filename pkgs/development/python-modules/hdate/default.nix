@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.4";
+  version = "0.10.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "py-libhdate";
     repo = "py-libhdate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
+    hash = "sha256-e4na/dcGlvE42DaEfUYNgKm0d+HWkc4KLlmOFVN2tkc=";
   };
 
   postPatch = ''
