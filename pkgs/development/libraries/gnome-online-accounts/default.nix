@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , pkg-config
 , vala
 , glib
@@ -43,6 +44,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-USl0Qay9pSgbbp3n/L8eBaRQwaBYledht5j+afmo++o=";
   };
+
+  patches = [
+    # Fix crash with EWS and libxml2.12.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/commit/b9638e2418408be4906752297e700506766dcf20.patch";
+      hash = "sha256-l9+qS9WF3RuG9NtQQzSjpFSLNJV4FkXxOsLKYbINqrQ=";
+    })
+  ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
