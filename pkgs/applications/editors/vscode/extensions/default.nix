@@ -1785,8 +1785,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.156.691";
-          sha256 = "sha256-K7lzwfgqb0gUJAivro/ePaQetM31M+zTBRZMBy92ZuA=";
+          version = "1.172.758";
+          sha256 = "sha256-sK3IiA4mQ6Hse+UpZ81Zb5iBSREzTrs7ypsfGbJiXm4=";
         };
 
         meta = {
@@ -1802,7 +1802,7 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.12.2024013003"; # latest version compatible with vscode 1.86
+          version = "0.14.2024030801"; # compatible with vscode >= 1.87
           sha256 = "sha256-4ArWVFko2T6ze/i+HTdXAioWC7euWCycDsQxFTrEtUw=";
         };
         meta = {
