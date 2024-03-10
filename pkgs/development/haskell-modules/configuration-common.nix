@@ -260,8 +260,20 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
-  # 2023-04-17: https://gitlab.haskell.org/ghc/ghc-debug/-/issues/20
-  ghc-debug-brick = doJailbreak super.ghc-debug-brick;
+  # 2024-03-10: Compatibility fixes have been applied upstream, but are unreleased.
+  ghc-debug-brick = appendPatches [
+      (fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/ghc-debug/-/commit/4f195b98a8d3159bd4586af49ea8e269214a848e.patch";
+        sha256 = "sha256-ZMxDkkI365w/qtRc21k9UTcIiTjoOd/BGJgt/6C6P6A=";
+        relative = "ghc-debug-brick";
+        includes = ["ghc-debug-brick.cabal"];
+      })
+      (fetchpatch {
+        url = "https://gitlab.haskell.org/ghc/ghc-debug/-/commit/5b8f848b82ea4c5a1867b9965a973e73e5d58dad.patch";
+        sha256 = "sha256-XydmqScUuXyxqvW1HeKlKiiGFQi/MkM81RMPxmADrhw=";
+        relative = "ghc-debug-brick";
+      })
+    ] super.ghc-debug-brick;
 
   # Test failure.  Tests also disabled in Stackage:
   # https://github.com/jtdaugherty/brick/issues/499
