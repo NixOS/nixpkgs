@@ -1,4 +1,5 @@
-{ qtModule
+{ lib
+, qtModule
 , qtbase
 , qtdeclarative
 , wayland
@@ -36,4 +37,9 @@ qtModule {
       sha256 = "sha256-1EIcMj6+yIpqXAGZB3ZbrwRkl4n1o7TVP2SC1Nu1t78=";
     })
   ];
+
+  meta = {
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
+  };
 }
