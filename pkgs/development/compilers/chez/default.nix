@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
 , coreutils, cctools
+, darwin
 , ncurses, libiconv, libX11, libuuid, testers
 }:
 
@@ -12,7 +13,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-03GZASte0ZhcQGnWqH/xjl4fWi3yfkApkfr0XcTyIyw=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    cctools
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
+  ];
   buildInputs = [ ncurses libiconv libX11 libuuid ];
 
   enableParallelBuilding = true;
@@ -20,10 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   /*
-  ** We patch out a very annoying 'feature' in ./configure, which
-  ** tries to use 'git' to update submodules.
-  **
-  ** We have to also fix a few occurrences to tools with absolute
+  ** We have to fix a few occurrences to tools with absolute
   ** paths in some helper scripts, otherwise the build will fail on
   ** NixOS or in any chroot build.
   */
