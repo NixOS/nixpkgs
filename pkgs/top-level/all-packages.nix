@@ -3581,8 +3581,8 @@ with pkgs;
   bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
   bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
-  inherit (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot {})
-    buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
+  buildbotPackages = recurseIntoAttrs (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot { });
+  inherit (buildbotPackages) buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
 
@@ -5528,8 +5528,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
-
   gpg-tui = callPackage ../tools/security/gpg-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
     inherit (darwin) libobjc libresolv;
@@ -7297,7 +7295,7 @@ with pkgs;
     builtins.mapAttrs (_: pin-to-gcc12-if-gcc13)
       (darwin.apple_sdk_11_0.callPackage ../tools/networking/curl-impersonate { });
   curl-impersonate-ff = pin-to-gcc12-if-gcc13 curl-impersonate.curl-impersonate-ff;
-  curl-impersonate-chrom = pin-to-gcc12-if-gcc13 curl-impersonate.curl-impersonate-chrome;
+  curl-impersonate-chrome = pin-to-gcc12-if-gcc13 curl-impersonate.curl-impersonate-chrome;
 
   curlie = callPackage ../tools/networking/curlie { };
 
@@ -9381,6 +9379,8 @@ with pkgs;
   ioccheck = callPackage ../tools/security/ioccheck { };
 
   iocextract = with python3Packages; toPythonApplication iocextract;
+
+  iocsearcher = with python3Packages; toPythonApplication iocsearcher;
 
   ioping = callPackage ../tools/system/ioping { };
 
@@ -11990,13 +11990,13 @@ with pkgs;
 
   piknik = callPackage ../tools/networking/piknik { };
 
-  pinentry = libsForQt5.callPackage ../tools/security/pinentry { };
-
-  pinentry-curses = (lib.getOutput "curses" pinentry);
-  pinentry-emacs = (lib.getOutput "emacs" pinentry);
-  pinentry-gtk2 = (lib.getOutput "gtk2" pinentry);
-  pinentry-qt = (lib.getOutput "qt" pinentry);
-  pinentry-gnome = (lib.getOutput "gnome3" pinentry);
+  inherit (callPackages ../tools/security/pinentry { })
+    pinentry-curses
+    pinentry-emacs
+    pinentry-gtk2
+    pinentry-gnome3
+    pinentry-qt
+    pinentry-all;
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -14664,8 +14664,6 @@ with pkgs;
 
   unnaturalscrollwheels = callPackage ../tools/inputmethods/unnaturalscrollwheels { };
 
-  unrar = callPackage ../tools/archivers/unrar { };
-
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
 
   uptime-kuma = callPackage ../servers/monitoring/uptime-kuma { };
@@ -15221,8 +15219,6 @@ with pkgs;
 
   zsv = callPackage ../development/tools/zsv { };
 
-  zsync = callPackage ../tools/compression/zsync { };
-
   zxing = callPackage ../tools/graphics/zxing { };
 
   zkar = callPackage ../tools/security/zkar { };
@@ -15346,8 +15342,8 @@ with pkgs;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-19;
-  temurin-jre-bin = temurin-jre-bin-19;
+  temurin-bin = temurin-bin-21;
+  temurin-jre-bin = temurin-jre-bin-21;
 
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
   semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
@@ -16346,8 +16342,8 @@ with pkgs;
   jdk21_headless = openjdk21_headless;
 
   /* default JDK */
-  jdk = jdk19;
-  jdk_headless = jdk19_headless;
+  jdk = jdk21;
+  jdk_headless = jdk21_headless;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
@@ -26047,11 +26043,11 @@ with pkgs;
 
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
-  envoy = pin-to-gcc12-if-gcc13 (callPackage ../servers/http/envoy {
+  envoy = callPackage ../servers/http/envoy {
     go = go_1_20;
     jdk = openjdk11_headless;
     gn = gn1924;
-  });
+  };
 
   ergochat = callPackage ../servers/irc/ergochat { };
 
@@ -28095,7 +28091,9 @@ with pkgs;
 
   goverview = callPackage ../tools/security/goverview { };
 
-  go-tools = callPackage ../development/tools/go-tools { };
+  go-tools = callPackage ../development/tools/go-tools {
+    buildGoModule = buildGo122Module;
+  };
 
   gotest = callPackage ../development/tools/gotest { };
 
@@ -30347,7 +30345,9 @@ with pkgs;
 
   bgpq4 = callPackage ../tools/networking/bgpq4 { };
 
-  blackbox = callPackage ../applications/version-management/blackbox { };
+  blackbox = callPackage ../applications/version-management/blackbox {
+    pinentry = pinentry-curses;
+  };
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
@@ -31644,22 +31644,6 @@ with pkgs;
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
 
-  freecad = libsForQt5.callPackage ../applications/graphics/freecad {
-    boost = python3Packages.boost;
-    inherit (python3Packages)
-      gitpython
-      matplotlib
-      pivy
-      ply
-      pycollada
-      pyside2
-      pyside2-tools
-      python
-      pyyaml
-      scipy
-      shiboken2;
-  };
-
   freedv = callPackage ../applications/radio/freedv {
     inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
     codec2 = codec2.override {
@@ -32730,8 +32714,6 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kooha = callPackage ../applications/video/kooha { };
-
   kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreFoundation CoreServices CoreText CoreGraphics
       CoreMedia OpenGL AudioUnit ApplicationServices Foundation AGL Security SystemConfiguration
@@ -33206,12 +33188,6 @@ with pkgs;
   mastodon-bot = nodePackages.mastodon-bot;
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
-
-  matrixcli = callPackage ../applications/networking/instant-messengers/matrixcli {
-    inherit (python3Packages) buildPythonApplication buildPythonPackage
-      pygobject3 pytest-runner requests responses pytest python-olm
-      canonicaljson;
-  };
 
   matrix-commander = python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander { };
 
@@ -36525,7 +36501,7 @@ with pkgs;
 
   zerobin = callPackage ../applications/networking/zerobin { };
 
-  zeroc-ice = disable-warnings-if-gcc13 (callPackage ../development/libraries/zeroc-ice { });
+  zeroc-ice = callPackage ../development/libraries/zeroc-ice { };
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
 
@@ -41271,7 +41247,9 @@ with pkgs;
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 
-  tomb = callPackage ../os-specific/linux/tomb { };
+  tomb = callPackage ../os-specific/linux/tomb {
+    pinentry = pinentry-curses;
+  };
 
   sccache = callPackage ../development/tools/misc/sccache { };
 

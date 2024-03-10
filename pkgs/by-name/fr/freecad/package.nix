@@ -1,14 +1,10 @@
 { lib
-, fmt
-, stdenv
-, fetchFromGitHub
 , cmake
-, doxygen
-, ninja
-, gitpython
-, boost
 , coin3d
+, doxygen
 , eigen
+, fetchFromGitHub
+, fmt
 , freecad  # for passthru.tests
 , gfortran
 , gts
@@ -17,38 +13,48 @@
 , libXmu
 , libf2c
 , libredwg
+, libsForQt5
 , libspnav
-, matplotlib
 , medfile
 , mpi
+, ninja
 , ode
 , opencascade-occt
-, pivy
 , pkg-config
-, ply
-, pycollada
-, pyside2
-, pyside2-tools
-, python
-, pyyaml
-, qtbase
-, qttools
-, qtwebengine
-, qtx11extras
-, qtxmlpatterns
+, python3Packages
 , runCommand  # for passthru.tests
-, scipy
-, shiboken2
-, soqt
 , spaceNavSupport ? stdenv.isLinux
+, stdenv
 , swig
 , vtk
-, wrapQtAppsHook
 , wrapGAppsHook
 , xercesc
 , zlib
 }:
 
+let
+  boost = python3Packages.boost;
+  inherit (libsForQt5)
+    qtbase
+    qttools
+    qtwebengine
+    qtx11extras
+    qtxmlpatterns
+    soqt
+    wrapQtAppsHook;
+  inherit (python3Packages)
+    gitpython
+    matplotlib
+    pivy
+    ply
+    pycollada
+    pyside2
+    pyside2-tools
+    python
+    pyyaml
+    scipy
+    shiboken2;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
   version = "0.21.2";

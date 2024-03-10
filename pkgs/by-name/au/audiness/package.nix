@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "audiness";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audiness";
     rev = "refs/tags/${version}";
-    hash = "sha256-PkzYsfEhwrMoB+a2eJMmt/PRCbjASQRm38reA8PP4aI=";
+    hash = "sha256-r+xWwXRKuTp5ifUUlF1K6BIVWh67hNLMBKBB7wnLLAM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

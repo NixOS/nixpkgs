@@ -694,6 +694,7 @@ mapAliases ({
   markdown-pp = throw "markdown-pp was removed from nixpkgs, because the upstream archived it on 2021-09-02"; # Added 2023-07-22
   markmind = throw "markmind has been removed from nixpkgs, because it depended on an old version of electron"; # Added 2023-09-12
   matrique = spectral; # Added 2020-01-27
+  matrixcli = throw "'matrixcli' has been removed due to being unmaintained and broken functionality. Recommend 'matrix-commander' as an alternative"; # Added 2024-03-09
   matrix-recorder = throw "matrix-recorder has been removed due to being unmaintained"; # Added 2023-05-21
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
   mbox = throw "'mbox' has been removed, as it was broken and unmaintained"; # Added 2023-12-21
@@ -901,12 +902,23 @@ mapAliases ({
   timescaledb = postgresqlPackages.timescaledb;
   tsearch_extras = postgresqlPackages.tsearch_extras;
 
+  # pinentry was using multiple outputs, this emulates the old interface for i.e. home-manager
+  # soon: throw "'pinentry' has been removed. Pick an appropriate variant like 'pinentry-curses' or 'pinentry-gnome3'";
+  pinentry = pinentry-all // {
+    curses = pinentry-curses;
+    gtk2 = pinentry-gtk2;
+    gnome2 = pinentry-gnome3;
+    qt = pinentry-qt;
+    emacs = pinentry-emacs;
+    flavors = [ "curses" "gtk2" "gnome2" "qt" "emacs" ];
+  }; # added 2024-01-15
   pinentry_curses = throw "'pinentry_curses' has been renamed to/replaced by 'pinentry-curses'"; # Converted to throw 2023-09-10
   pinentry_emacs = throw "'pinentry_emacs' has been renamed to/replaced by 'pinentry-emacs'"; # Converted to throw 2023-09-10
   pinentry_gnome = throw "'pinentry_gnome' has been renamed to/replaced by 'pinentry-gnome'"; # Converted to throw 2023-09-10
   pinentry_gtk2 = throw "'pinentry_gtk2' has been renamed to/replaced by 'pinentry-gtk2'"; # Converted to throw 2023-09-10
   pinentry_qt = throw "'pinentry_qt' has been renamed to/replaced by 'pinentry-qt'"; # Converted to throw 2023-09-10
   pinentry_qt5 = pinentry-qt; # Added 2020-02-11
+
   PlistCpp = plistcpp; # Added 2024-01-05
   pocket-updater-utility = pupdate; # Added 2024-01-25
   poetry2nix = throw "poetry2nix is now maintained out-of-tree. Please use https://github.com/nix-community/poetry2nix/"; # Added 2023-10-26
