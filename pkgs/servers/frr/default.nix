@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build time
 , autoreconfHook
@@ -93,6 +94,15 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     hash = "sha256-shubNBTZFN6osHmel3uKKkBTloC360lgpuRVYemlPic=";
   };
+
+  patches = [
+    # fixes crash in OSPF TE parsing
+    (fetchpatch {
+      name = "CVE-2024-27913.patch";
+      url = "https://github.com/FRRouting/frr/commit/541503eecd302d2cc8456167d130014cd2cf1134.patch";
+      hash = "sha256-7NxPlQK/6lbLs/NqNi4OZ2uBWfXw99SiXDR6okNvJlg=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
