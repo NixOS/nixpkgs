@@ -3,14 +3,13 @@ let
 cfg = config.services.duckdns;
 in
 {
-  options = {
-    services.duckdns = {
-      enable = lib.mkEnableOption (lib.mdDoc "DuckDNS Dynamic DNS Client");
+  options.services.duckdns = {
+      enable = lib.mkEnableOption ("DuckDNS Dynamic DNS Client");
 
       tokenFile = lib.mkOption {
         default = null;
-        type = lib.types.str;
-        description = lib.mdDoc ''
+        type = lib.types.path;
+        description = ''
           The path to a file containing the token
           used to authenticate with DuckDNS.
           '';
@@ -20,7 +19,7 @@ in
         default = null;
         type = lib.types.nullOr (lib.types.listOf lib.types.str);
         example = [ "examplehost" ];
-        description = lib.mdDoc ''
+        description = ''
           The record(s) to update in DuckDNS
           (without the .duckdns.org prefix)
           '';
@@ -28,8 +27,8 @@ in
 
       domainsFile = lib.mkOption {
         default = null;
-        type = lib.types.nullOr lib.types.str;
-        description = lib.mdDoc ''
+        type = lib.types.nullOr lib.types.path;
+        description = ''
           The path to a file containing a
           newline-separated list of DuckDNS
           domain(s) to be updated
@@ -37,9 +36,14 @@ in
       };
 
     };
-  };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+        {
+          assertion = (cfg.domains != null || cfg.domainsFile != null);
+          message = "services.duckdns.domains or services.duckdns.domainsFile has to be defined";
+        }
+    ];
     systemd.services.duckdns = {
       description = "DuckDNS Dynamic DNS Client";
       after = [ "network.target" ];
@@ -64,4 +68,6 @@ in
         '';
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ notthebee ];
 }
