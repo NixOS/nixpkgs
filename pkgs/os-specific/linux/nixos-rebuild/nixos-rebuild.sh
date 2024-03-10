@@ -762,6 +762,9 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "--service-type=exec"
         "--unit=nixos-rebuild-switch-to-configuration"
         "--wait"
+        # Grabs the output of switching configurations and sends it to the
+        # journal without disturbing the terminal attachment
+        "$pathToConfig/bin/capture-pty-to-journal"
     )
     # Check if we have a working systemd-run. In chroot environments we may have
     # a non-working systemd, so we fallback to not using systemd-run.
