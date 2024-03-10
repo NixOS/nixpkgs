@@ -311,8 +311,37 @@ self: super: {
     })
   ]) super.memory;
 
-  # 2023-06-10: Too strict version bound on https://github.com/haskell/ThreadScope/issues/118
-  threadscope = doJailbreak super.threadscope;
+  # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
+  threadscope = overrideCabal (drv: {
+    prePatch = drv.prePatch or "" + ''
+      ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+    '';
+    editedCabalFile = null;
+    revision = null;
+  })
+  (appendPatches [
+    (fetchpatch {
+      name = "loosen-bounds-1.patch";
+      url = "https://github.com/haskell/ThreadScope/commit/8f9f21449adb3af07eed539dcaf267c9c9ee987b.patch";
+      sha256 = "sha256-egKM060QplSmUeDptHXoSom1vf5KBrvNcjb2Vk59N7A=";
+    })
+    (fetchpatch {
+      name = "loosen-bounds-2.patch";
+      url = "https://github.com/haskell/ThreadScope/commit/f366a9ee455eda16cd6a4dc26f0275e2cf2b5798.patch";
+      sha256 = "sha256-DaPTK5LRbZZS1KDIr5X/eXQasqtofrCteTbUQUZPu0Q=";
+    })
+    (fetchpatch {
+      name = "loosen-bounds-3.patch";
+      url = "https://github.com/haskell/ThreadScope/commit/12819abaa2322976004b7582e598db1cf952707a.patch";
+      sha256 = "sha256-r7MVw8wwKU4R5VmcypBzhOBfTlRCISoRJtwie3+2Vb0=";
+    })
+    (fetchpatch {
+      name = "import-monad.patch";
+      url = "https://github.com/haskell/ThreadScope/commit/8846508e9769a8dfd82b3ff66259ba4d58255932.patch";
+      sha256 = "sha256-wBqDJWmqvmU1sFuw/ZlxHOb8xPhZO2RBuyYFP9bJCVI=";
+    })
+  ]
+    super.threadscope);
 
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
