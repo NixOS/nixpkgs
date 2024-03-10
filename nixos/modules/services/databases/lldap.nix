@@ -123,7 +123,9 @@ in
       '';
       serviceConfig = {
         StateDirectory = "lldap";
+        StateDirectoryMode = "0750";
         WorkingDirectory = "%S/lldap";
+        UMask = "0027";
         User = "lldap";
         Group = "lldap";
         DynamicUser = true;
