@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nose
 , dbus
+, gobject-introspection
 , dbus-python
 , pygobject3
 , bluez
@@ -40,6 +41,7 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     dbus
+    gobject-introspection
     pygobject3
     bluez
     pbap-client
