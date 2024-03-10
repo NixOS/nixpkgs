@@ -1,13 +1,22 @@
-diff --git a/xsdata/codegen/writer.py b/xsdata/codegen/writer.py
-index 0301631f..3185c526 100644
---- a/xsdata/codegen/writer.py
-+++ b/xsdata/codegen/writer.py
-@@ -73,7 +73,7 @@ class CodeWriter:
-         """Run ruff format on the src code."""
+diff --git a/xsdata/formats/dataclass/generator.py b/xsdata/formats/dataclass/generator.py
+index eaf23f8d..5ba80a43 100644
+--- a/xsdata/formats/dataclass/generator.py
++++ b/xsdata/formats/dataclass/generator.py
+@@ -221,7 +221,7 @@ class DataclassGenerator(AbstractGenerator):
+         """
          commands = [
              [
 -                "ruff",
 +                "@ruff@",
                  "format",
+                 "--stdin-filename",
+                 str(file_path),
+@@ -229,7 +229,7 @@ class DataclassGenerator(AbstractGenerator):
+                 str(self.config.output.max_line_length),
+             ],
+             [
+-                "ruff",
++                "@ruff@",
+                 "checks",
                  "--stdin-filename",
                  str(file_path),
