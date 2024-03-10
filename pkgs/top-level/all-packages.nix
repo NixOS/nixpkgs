@@ -35302,6 +35302,12 @@ with pkgs;
       else stdenv;
   };
 
+  _64gram = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/64gram {
+    stdenv = if stdenv.isDarwin
+      then overrideSDK stdenv "11.0"
+      else stdenv;
+  };
+
   telegram-bot-api = callPackage ../servers/telegram-bot-api { };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
