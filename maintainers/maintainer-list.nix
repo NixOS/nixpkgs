@@ -4797,6 +4797,12 @@
     github = "dfithian";
     githubId = 8409320;
   };
+  dflores = {
+    email = "dflores.country455@passinbox.com";
+    name = "David Flores";
+    github = "dflores1";
+    githubId = 8538265;
+  };
   dfordivam = {
     email = "dfordivam+nixpkgs@gmail.com";
     github = "dfordivam";
