@@ -1,11 +1,9 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg, ffmpeg_4, libjpeg, libpng, libtiff, eigen
-, Carbon ? null, Cocoa ? null
+, xorg, ffmpeg_4, libjpeg, libpng, libtiff, eigen, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "pangolin";
-
   version = "0.9.1";
 
   src = fetchFromGitHub {
@@ -26,8 +24,10 @@ stdenv.mkDerivation rec {
     libpng
     libtiff
     eigen
-  ]
-  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Carbon
+    darwin.apple_sdk.frameworks.Cocoa
+  ];
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).
