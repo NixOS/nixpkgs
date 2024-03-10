@@ -64,6 +64,8 @@ self: super: {
 
     pg_net = super.callPackage ./ext/pg_net.nix { };
 
+    pg_jsonschema = super.callPackage ./ext/pg_jsonschema.nix { };
+
     pgtap = super.callPackage ./ext/pgtap.nix { };
 
     smlar = super.callPackage ./ext/smlar.nix { };
