@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "river-filtile";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "pkulak";
     repo = "filtile";
     rev = "v${version}";
-    hash = "sha256-51lrmti5/fTJpl0eF4BRvosT76wWfWdYI1yJJahi0Aw=";
+    hash = "sha256-Zcn0hjq4bJ1V5fwaMUq3XSlGaG9QdwsVxN3aHBKAgZs=";
   };
 
-  cargoHash = "sha256-KWapy2p9kVzgx5oqCo0+7DNaVlDaHYHNi8Mra2I13DQ=";
+  cargoHash = "sha256-xA0k9FS8GjI5945uztwcUOJwEFJcBeWgEZTOu0Xocno=";
 
   nativeBuildInputs = [
     pkg-config
