@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ## Required
     opencv
+    opencv.cxxdev
     pcl
     liblapack
     xorg.libSM
