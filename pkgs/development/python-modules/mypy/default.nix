@@ -9,6 +9,7 @@
 , setuptools
 , types-psutil
 , types-setuptools
+, wheel
 
 # propagates
 , mypy-extensions
@@ -23,44 +24,42 @@
 , attrs
 , filelock
 , pytest-xdist
-, pytest-forked
 , pytestCheckHook
-, py
-, six
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.8.0";
-  format = "pyproject";
+  version = "1.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1YgAswqLadOVV5ZSi5ZXWYK3p114882IlSx0nKChGPs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uOOZX8bKRunTOgYVbmetu2m0B7kijxBgWdNiLCAhiQ4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     mypy-extensions
     setuptools
     types-psutil
     types-setuptools
     typing-extensions
+    wheel
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mypy-extensions
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dmypy = [
       psutil
     ];
@@ -89,17 +88,14 @@ buildPythonPackage rec {
     "mypy.report"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     filelock
     pytest-xdist
-    pytest-forked
     pytestCheckHook
-    py
     setuptools
-    six
     tomli
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # requires distutils
