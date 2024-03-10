@@ -8394,6 +8394,8 @@ with pkgs;
 
   gauge = callPackage ../development/tools/gauge { };
 
+  gawd = python3Packages.toPythonApplication python3Packages.gawd;
+
   gawk = callPackage ../tools/text/gawk {
     inherit (darwin) locale;
   };
