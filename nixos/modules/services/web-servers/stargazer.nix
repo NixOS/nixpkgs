@@ -83,6 +83,21 @@ in
       '';
     };
 
+    allowCgiUser = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        When enabled, the stargazer process will be given `CAP_SETGID`
+        and `CAP_SETUID` so that it can run cgi processes as a different
+        user. This is required if the `cgi-user` option is used for a route.
+        Note that these capabilities could allow privilege escalation so be
+        careful. For that reason, this is disabled by default.
+
+        You will need to create the user mentioned `cgi-user` if it does not
+        already exist.
+      '';
+    };
+
     store = lib.mkOption {
       type = lib.types.path;
       default = /var/lib/gemini/certs;
@@ -206,6 +221,10 @@ in
         # User and group
         User = cfg.user;
         Group = cfg.group;
+        AmbientCapabilities = lib.mkIf cfg.allowCgiUser [
+          "CAP_SETGID"
+          "CAP_SETUID"
+        ];
       };
     };
 
