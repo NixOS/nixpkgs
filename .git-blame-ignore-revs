@@ -102,3 +102,6 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # systemd: break too long lines of Nix code
 67643f8ec84bef1482204709073e417c9f07eb87
+
+# postgresql: move packages.nix to ext/default.nix
+719034f6f6749d624faa28dff259309fc0e3e730
