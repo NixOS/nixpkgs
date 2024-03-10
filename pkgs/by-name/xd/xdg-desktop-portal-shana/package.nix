@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xdg-desktop-portal-shana";
-  version = "0.3.9";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "xdg-desktop-portal-shana";
     rev = "v${version}";
-    sha256 = "cgiWlZbM0C47CisR/KlSV0xqfeKgM41QaQihjqSy9CU=";
+    sha256 = "sha256-bUskzFDd4qjH4Isp6vAJHe5qzgCLudQbkh+JNNTSMu8=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   mesonBuildType = "release";
 
-  cargoHash = "sha256-uDM4a7AB0753c/H1nfic/LjWrLmjEvi/p2S/tLIDXaQ=";
+  cargoHash = "sha256-FzEdQePDnSCuMDqbz0ZUywDzNfbiOwottSrE+eWL9to=";
 
   meta = with lib; {
     description = "A filechooser portal backend for any desktop environment";
