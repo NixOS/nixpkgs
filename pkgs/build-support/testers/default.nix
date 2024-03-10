@@ -118,7 +118,6 @@
        * make sense for this evaluation of Nixpkgs.
        */
       nixosTesting =
-        lib.warn "testers.nixosTest is deprecated. Use testers.runNixOSTest instead."
         (import ../../../nixos/lib/testing-python.nix {
           inherit (stdenv.hostPlatform) system;
           inherit pkgs;
@@ -136,6 +135,7 @@
             else test;
           calledTest = lib.toFunction loadedTest pkgs;
         in
+          lib.warn "testers.nixosTest is deprecated. Use testers.runNixOSTest instead. See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest"
           nixosTesting.simpleTest calledTest;
 
   hasPkgConfigModule =
