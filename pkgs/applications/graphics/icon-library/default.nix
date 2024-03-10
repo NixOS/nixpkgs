@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "icon-library";
-  version = "0.0.17";
+  version = "0.0.18";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/8c4cad88809cd4ddc0eeae6f5170c001/icon-library-${version}.tar.xz";
-    hash = "sha256-Gspx3fJl+ZoUN3heGWaeMuxUsjWCrIdg4pJj7DeMTSY=";
+    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/874b27fcf34662d9686f670d406142c2/icon-library-${version}.tar.xz";
+    hash = "sha256-qCGwTePA817mulFjyRZKw+Fw1S77+QTtA7WH+KocL48=";
   };
 
   nativeBuildInputs = [

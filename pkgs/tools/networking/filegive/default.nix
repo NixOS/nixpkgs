@@ -19,5 +19,6 @@ buildGoModule rec {
     description = "Easy p2p file sending program";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ viric ];
+    mainProgram = "filegive";
   };
 }

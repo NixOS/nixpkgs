@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.6.2";
+  version = "6.7.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
     rev = "refs/tags/${version}";
-    hash = "sha256-hh2sfWOUp3ac75NEuTrw3YkvS7hXpzJp39v6cfrhNiQ=";
+    hash = "sha256-eTItw+wYo5lCla4oKSF97N4TFajjFtCMMq4DU9ahi1U=";
   };
 
   propagatedBuildInputs = [

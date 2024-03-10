@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "hpccm";
   version = "22.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

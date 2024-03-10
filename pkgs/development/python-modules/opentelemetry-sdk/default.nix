@@ -15,20 +15,19 @@ let
   self = buildPythonPackage {
     inherit (opentelemetry-api) version src;
     pname = "opentelemetry-sdk";
-    disabled = pythonOlder "3.7";
+    pyproject = true;
+
+    disabled = pythonOlder "3.8";
 
     sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-sdk";
 
-    format = "pyproject";
-
-    nativeBuildInputs = [
+    build-system = [
       hatchling
     ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       opentelemetry-api
       opentelemetry-semantic-conventions
-      setuptools
       typing-extensions
     ];
 

@@ -38,5 +38,6 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ tfmoraes ];
+    mainProgram = "zettlr";
   };
 }

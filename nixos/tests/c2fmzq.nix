@@ -9,6 +9,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       passphraseFile = builtins.toFile "pwfile" "hunter2"; # don't do this on real deployments
       settings = {
         verbose = 3; # debug
+        # make sure multiple freeform options evaluate
+        allow-new-accounts = true;
+        auto-approve-new-accounts = true;
+        licenses = false;
       };
     };
     environment = {
@@ -71,5 +75,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     with subtest("Test that PWA is served"):
         msg = machine.succeed("curl -sSfL http://localhost:8080")
         assert "c2FmZQ" in msg, f"Could not find 'c2FmZQ' in the output:\n{msg}"
+
+    with subtest("A setting with false value is properly passed"):
+        machine.succeed("systemctl show -p ExecStart --value c2fmzq-server.service | grep -F -- '--licenses=false'");
   '';
 })

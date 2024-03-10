@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "premid";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "https://github.com/premid/Linux/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-TuID63cVZkQ2kBl2iZeuVvjRUJYBt62ppPvgffBlOXY=";
+    sha256 = "sha256-ime6SCxm+fhMR2wagv1RItqwLjPxvJnVziW3DZafP50=";
   };
 
   nativeBuildInputs = [
@@ -89,5 +89,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ natto1784 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "premid";
   };
 }

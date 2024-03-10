@@ -597,6 +597,8 @@ let
           "DHCP"
           "DHCPServer"
           "LinkLocalAddressing"
+          "IPv6LinkLocalAddressGenerationMode"
+          "IPv6StableSecretAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -645,9 +647,10 @@ let
           "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
-        (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
+        (assertValueOneOf "DHCP" (boolValues ++ ["ipv4" "ipv6"]))
         (assertValueOneOf "DHCPServer" boolValues)
-        (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "fallback" "ipv4-fallback"])
+        (assertValueOneOf "LinkLocalAddressing" (boolValues ++ ["ipv4" "ipv6" "fallback" "ipv4-fallback"]))
+        (assertValueOneOf "IPv6LinkLocalAddressGenerationMode" ["eui64" "none" "stable-privacy" "random"])
         (assertValueOneOf "IPv4LLRoute" boolValues)
         (assertValueOneOf "DefaultRouteOnDevice" boolValues)
         (assertValueOneOf "LLMNR" (boolValues ++ ["resolve"]))
@@ -794,6 +797,7 @@ let
           "UseHostname"
           "Hostname"
           "UseDomains"
+          "UseGateway"
           "UseRoutes"
           "UseTimezone"
           "ClientIdentifier"
@@ -826,6 +830,7 @@ let
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
@@ -1612,7 +1617,7 @@ let
         description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
           `[WireGuardPeer]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
+          {manpage}`systemd.netdev(5)` for details.
         '';
       };
     };
@@ -2986,15 +2991,9 @@ let
 
       systemd.services.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        # These before and conflicts lines can be removed when this PR makes it into a release:
-        # https://github.com/systemd/systemd/pull/27791
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
       systemd.sockets.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
 
       systemd.services.systemd-network-generator.wantedBy = [ "sysinit.target" ];

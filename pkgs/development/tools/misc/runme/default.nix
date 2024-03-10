@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "2.0.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-EUAYwm7nd7VRGbTth+ZXcgqqPSGKthv8sciO+iCpdds=";
+    hash = "sha256-a+7Gff3Z1V17uaywoUE+nLVeVprB50Gslarcle/NPB8=";
   };
 
-  vendorHash = "sha256-xQuxoizcxut4qjXqgMEWMROiG53goxEXQas5n/2NiaY=";
+  vendorHash = "sha256-QoZzEq1aC7cjY/RVp5Z5HhSuTFf2BSYQnfg0jSaeTJU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,11 +50,6 @@ buildGoModule rec {
   postPatch = ''
     substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \
       --replace /bin/bash "${runtimeShell}"
-  '';
-
-  # version test assumes `ldflags` is unspecified
-  preCheck = ''
-    unset ldflags
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

@@ -16,7 +16,7 @@ in {
     services.flexget = {
       enable = mkEnableOption (lib.mdDoc "FlexGet daemon");
 
-      package = mkPackageOptionMD pkgs "flexget" {};
+      package = mkPackageOption pkgs "flexget" {};
 
       user = mkOption {
         default = "deluge";

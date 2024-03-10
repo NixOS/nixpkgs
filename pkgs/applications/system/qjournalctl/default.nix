@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qjournalctl";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "pentix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j27cmfq29mwrbjfrrwi6m1grcamhbfhk47xzlfsx5wr2q9m6qkz";
+    sha256 = "sha256-anNNzqjbIaQI+MAwwMwzy6v4SKqi4u9F5IbFBErm4q8=";
   };
 
   postPatch = ''

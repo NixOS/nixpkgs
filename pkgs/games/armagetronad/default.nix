@@ -82,7 +82,7 @@ let
   let
     # Split the version into the major and minor parts
     versionParts = lib.splitString "-" version;
-    splitVersion = lib.splitString "." (builtins.elemAt versionParts 0);
+    splitVersion = lib.splitVersion (builtins.elemAt versionParts 0);
     majorVersion = builtins.concatStringsSep "." (lib.lists.take 2 splitVersion);
 
     minorVersionPart =  parts: sep: expectedSize:
@@ -128,6 +128,12 @@ let
 
       nativeBuildInputs = [ autoconf automake gnum4 pkg-config which python3 ]
         ++ extraNativeBuildInputs;
+
+      postInstall = lib.optionalString (!dedicatedServer) ''
+        mkdir -p $out/share/{applications,icons/hicolor}
+        ln -s $out/share/games/armagetronad/desktop/armagetronad*.desktop $out/share/applications/
+        ln -s $out/share/games/armagetronad/desktop/icons $out/share/icons/hicolor
+      '';
 
       doInstallCheck = true;
 

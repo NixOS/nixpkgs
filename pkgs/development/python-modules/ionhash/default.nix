@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ionhash";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "amzn";

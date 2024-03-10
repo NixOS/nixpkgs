@@ -14,7 +14,7 @@ in
         description = lib.mdDoc "Path to the signing key that will be used for signing the cache";
       };
 
-      package = lib.mkPackageOptionMD pkgs "harmonia" { };
+      package = lib.mkPackageOption pkgs "harmonia" { };
 
       settings = lib.mkOption {
         inherit (format) type;
@@ -29,6 +29,11 @@ in
 
   config = lib.mkIf cfg.enable {
     nix.settings.extra-allowed-users = [ "harmonia" ];
+    users.users.harmonia = {
+      isSystemUser = true;
+      group = "harmonia";
+    };
+    users.groups.harmonia = { };
 
     systemd.services.harmonia = {
       description = "harmonia binary cache service";
@@ -50,7 +55,7 @@ in
         ExecStart = lib.getExe cfg.package;
         User = "harmonia";
         Group = "harmonia";
-        DynamicUser = true;
+        Restart = "on-failure";
         PrivateUsers = true;
         DeviceAllow = [ "" ];
         UMask = "0066";

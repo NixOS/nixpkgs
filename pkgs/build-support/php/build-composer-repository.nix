@@ -78,9 +78,9 @@ let
 
       doInstallCheck = previousAttrs.doInstallCheck or false;
       installCheckPhase = previousAttrs.installCheckPhase or ''
-        runHook preCheckInstall
+        runHook preInstallCheck
 
-        runHook postCheckInstall
+        runHook postInstallCheck
       '';
 
       COMPOSER_CACHE_DIR = "/dev/null";

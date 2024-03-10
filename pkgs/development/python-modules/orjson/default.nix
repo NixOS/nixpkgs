@@ -1,38 +1,54 @@
 { lib
 , stdenv
-, pythonOlder
-, rustPlatform
-, fetchFromGitHub
 , buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# build-system
+, rustPlatform
 , cffi
+
+# native dependencies
 , libiconv
+
+# tests
 , numpy
 , psutil
 , pytestCheckHook
 , python-dateutil
 , pytz
 , xxhash
+, python
+
+# for passthru.tests
+, falcon
+, fastapi
+, gradio
+, mashumaro
+, ufolib2
 }:
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.9.10";
-  format = "pyproject";
+  version = "3.9.15";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
-    repo = pname;
+    repo = "orjson";
     rev = "refs/tags/${version}";
-    hash = "sha256-MkcuayNDt7/GcswXoFTvzuaZzhQEQV+V7OfKqgJwVIQ=";
+    hash = "sha256-6fcj64d/uFCxaez+xxOdHd+NqILKOPqK+YlxYX7D0DI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2eRV+oZQvsWWJ4AUTeuE0CHtTHC6jNZiX/y5uXuwvns=";
+    hash = "sha256-/Aa3saUP4QjSBIS9T8Vd0yggiJn2SIk7dYMA5icb1yA=";
   };
+
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     cffi
@@ -57,6 +73,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "orjson"
   ];
+
+  passthru.tests = {
+    inherit
+      falcon
+      fastapi
+      gradio
+      mashumaro
+      ufolib2
+    ;
+  };
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";

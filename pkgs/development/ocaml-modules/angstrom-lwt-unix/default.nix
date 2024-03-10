@@ -5,8 +5,6 @@ buildDunePackage rec {
 
   inherit (angstrom) version src;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [ angstrom lwt ];
 
   doCheck = true;

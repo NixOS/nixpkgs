@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.20";
+  version = "5.12.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-oOxto0X/GBAA9q691uwC0PtCdHDTMBqi80ov4xCXPn0=";
+    hash = "sha256-8qfpNM2rci4subdodxfJZLP3OvAxXl7QRl4MHGr15nA=";
   };
 
   postPatch = ''

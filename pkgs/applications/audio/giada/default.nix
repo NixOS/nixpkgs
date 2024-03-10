@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.26.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
     rev = version;
-    sha256 = "sha256-q3Lu3UaEKfS7F59G6rPx+5cKcsaXk+xcdtJRIXPwVIs=";
+    sha256 = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
     fetchSubmodules = true;
   };
 

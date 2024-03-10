@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
 , pythonOlder
 
 # build
@@ -9,6 +8,7 @@
 
 # propagates
 , aiohttp
+, authlib
 , pydantic
 , toml
 
@@ -20,18 +20,22 @@
 
 let
   pname = "kanidm";
-  version = "0.0.3";
+  version = "0.0.3-unstable-2023-08-23";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sTkAKxtJa7CVYKuXC//eMmf3l8ABsrEr2mdf1r2Gf9A=";
+  src = fetchFromGitHub {
+    owner = "kanidm";
+    repo = "kanidm";
+    rev = "def4420c4c5c3ec4f9b02776e1d5fdb07aa3a729";
+    hash = "sha256-5qQb+Itguw2v1Wdvc2vp00zglfvNd3LFEDvaweRJcOc=";
   };
+
+  sourceRoot = "source/pykanidm";
 
   nativeBuildInputs = [
     poetry-core
@@ -39,6 +43,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     aiohttp
+    authlib
     pydantic
     toml
   ];

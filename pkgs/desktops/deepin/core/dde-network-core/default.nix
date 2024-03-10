@@ -5,40 +5,27 @@
 , qttools
 , pkg-config
 , wrapQtAppsHook
+, qtbase
+, qtsvg
 , dtkwidget
 , dde-dock
 , dde-control-center
 , dde-session-shell
-, dde-qt-dbus-factory
-, gsettings-qt
-, gio-qt
 , networkmanager-qt
 , glib
-, pcre
-, util-linux
-, libselinux
-, libsepol
-, dbus
 , gtest
-, qtbase
 }:
+
 stdenv.mkDerivation rec {
   pname = "dde-network-core";
-  version = "1.1.8";
+  version = "2.0.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ysmdB9CT7mhN/0r8CRT4FQsK12HkhjbezGXwWiNScqg=";
+    hash = "sha256-AMuWEz3Eyw0tG0srLWpqS7MO7Z4ZzIay4z59cZQZU0o=";
   };
-
-  postPatch = ''
-    substituteInPlace dock-network-plugin/networkplugin.cpp dcc-network-plugin/dccnetworkmodule.cpp dss-network-plugin/network_module.cpp \
-      --replace "/usr/share" "$out/share"
-    substituteInPlace dss-network-plugin/notification/bubbletool.cpp \
-      --replace "/usr/share" "/run/current-system/sw/share"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -48,25 +35,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qtbase
+    qtsvg
     dtkwidget
     dde-dock
     dde-control-center
     dde-session-shell
-    dde-qt-dbus-factory
-    gsettings-qt
-    gio-qt
     networkmanager-qt
     glib
-    pcre
-    util-linux
-    libselinux
-    libsepol
     gtest
   ];
 
   cmakeFlags = [
     "-DVERSION=${version}"
   ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "DDE network library framework";

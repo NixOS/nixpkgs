@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "${python3.pkgs.pygobject3}/${python3.sitePackages}:$out/lib/rhythmbox/plugins/"
+      --prefix PYTHONPATH : "$out/lib/rhythmbox/plugins/"
     )
   '';
 

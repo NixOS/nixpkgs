@@ -1,0 +1,14 @@
+diff --git a/loaders/python/peas-plugin-loader-python.c b/loaders/python/peas-plugin-loader-python.c
+index 26edbf3..0d65ada 100644
+--- a/loaders/python/peas-plugin-loader-python.c
++++ b/loaders/python/peas-plugin-loader-python.c
+@@ -248,6 +248,9 @@ peas_plugin_loader_python_initialize (PeasPluginLoader *loader)
+       goto python_init_error;
+     }
+ 
++  /* Add PyGObject to path */
++  PyRun_SimpleString("import site; import functools; functools.reduce(lambda k, p: site.addsitedir(p, k), [@pythonPaths@], site._init_pathinfo())");
++
+   /* Initialize PyGObject */
+   pygobject_init (PYGOBJECT_MAJOR_VERSION,
+                   PYGOBJECT_MINOR_VERSION,

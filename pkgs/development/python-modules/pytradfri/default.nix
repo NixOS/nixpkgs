@@ -48,5 +48,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/home-assistant-libs/pytradfri/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    # https://github.com/home-assistant-libs/pytradfri/issues/720
+    broken = versionAtLeast pydantic.version "2";
   };
 }

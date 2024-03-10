@@ -28,5 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/barnybug/cli53";
     license = licenses.mit;
     maintainers = with maintainers; [ benley ];
+    mainProgram = "cli53";
   };
 }

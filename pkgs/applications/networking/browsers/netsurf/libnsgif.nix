@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libnsgif";
-  version = "0.2.1";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/libnsgif-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-nq6lNM1wtTxar0UxeulXcBaFprSojb407Sb0+q6Hmks=";
+    hash = "sha256-YBTIQvYUVNL1oPgkPXqNe96bfaPM/cotNGx8CyxMBhs=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

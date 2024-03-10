@@ -5,7 +5,7 @@
 , pytestCheckHook
 , pytest-asyncio
 , colorlog
-, smpp_pdu
+, smpp-pdu
 , pyscard
 , packaging
 , gsm0338
@@ -53,7 +53,7 @@ buildPythonPackage {
     pyserial
     pytlv
     pyyaml
-    smpp_pdu
+    smpp-pdu
     termcolor
   ];
 

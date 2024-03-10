@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mokutil";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "lcp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qwSEv14mMpaKmm6RM882JzEnBQG3loqsoglg4qTFWUg=";
+    sha256 = "sha256-vxSYwsQ+xjW7a7gZhvgX4lzA7my6BZCYGwE1bLceTQA=";
   };
 
   nativeBuildInputs = [

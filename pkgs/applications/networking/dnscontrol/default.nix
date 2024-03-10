@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dnscontrol";
-  version = "4.6.1";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = "dnscontrol";
     rev = "v${version}";
-    sha256 = "sha256-FJxr3uq2f8jDG3g06SRO8sTIc6qHqSAOJVYHr4Ug1ag=";
+    hash = "sha256-9myo073/yl9CWwmVb3Gkihf6I/60kSOl0Pk8+dE39KM=";
   };
 
-  vendorHash = "sha256-O7uuUkS9kX0TdevSg1mrrPMVl4kMZW3rwoIVb/eaNiM=";
+  vendorHash = "sha256-jOLFqCeBxQLXgUAdDbk/QnPBAtMBQi5VR+oKjgZLb28=";
 
   subPackages = [ "." ];
 

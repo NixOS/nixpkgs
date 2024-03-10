@@ -1,12 +1,11 @@
-{ lib, stdenv, fetchgit, libgit2 }:
+{ lib, stdenv, fetchzip, libgit2 }:
 
 stdenv.mkDerivation rec {
   pname = "l2md";
   version = "unstable-2021-10-27";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git";
-    rev = "9db252bc1716ebaf0abd3a47a59ea78e4e6253d6";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git/snapshot/l2md-9db252bc1716ebaf0abd3a47a59ea78e4e6253d6.tar.gz";
     sha256 = "sha256-H/leDUwQM55akyXsmTnI2YsnG4i1KQtf4bBt1fizy8E=";
   };
 

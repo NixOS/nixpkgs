@@ -3,7 +3,30 @@
 
 { lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
-with lib;
+let
+  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
+
+  packageBuild = stdenv.mkDerivation {
+    name = "package-build";
+    src = fetchFromGitHub {
+      owner = "melpa";
+      repo = "package-build";
+      rev = "c48aa078c01b4f07b804270c4583a0a58ffea1c0";
+      sha256 = "sha256-MzPj375upIiYXdQR+wWXv3A1zMqbSrZlH0taLuxx/1M=";
+    };
+
+    patches = [ ./package-build-dont-use-mtime.patch ];
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = "
+      mkdir -p $out
+      cp -r * $out
+    ";
+  };
+
+in
 
 { /*
     pname: Nix package name without special symbols and without version or
@@ -20,43 +43,17 @@ with lib;
 , ...
 }@args:
 
-let
-
-  defaultMeta = {
-    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
-  };
-
-in
-
-import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
+genericBuild ({
 
   ename =
     if ename == null
     then pname
     else ename;
 
-  packageBuild = stdenv.mkDerivation {
-    name = "package-build";
-    src = fetchFromGitHub {
-      owner = "melpa";
-      repo = "package-build";
-      rev = "c3c535e93d9dc92acd21ebc4b15016b5c3b90e7d";
-      sha256 = "17z0wbqdd6fspbj43yq8biff6wfggk74xgnaf1xx6ynsp1i74is5";
-    };
-
-    patches = [ ./package-build-dont-use-mtime.patch ];
-
-    dontConfigure = true;
-    dontBuild = true;
-
-    installPhase = "
-      mkdir -p $out
-      cp -r * $out
-    ";
-  };
-
   elpa2nix = ./elpa2nix.el;
   melpa2nix = ./melpa2nix.el;
+
+  inherit packageBuild;
 
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
@@ -104,7 +101,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
     runHook postInstall
   '';
 
-  meta = defaultMeta // meta;
+  meta = {
+    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
+  } // meta;
 }
 
 // removeAttrs args [ "meta" ])

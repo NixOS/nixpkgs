@@ -68,9 +68,6 @@
   "true-color-invert@jackkenney" = "true-color-invert";
   "true-color-window-invert@lynet101" = "true-color-window-invert";
 
-  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
-  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
-
   # ####### GNOME 41 #######
 
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
@@ -88,7 +85,6 @@
 
   # ####### GNOME 40 #######
 
-  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
 
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
@@ -109,9 +105,6 @@
   # Forks of each other, azan@faissal.bensefia.id is more recent
   "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
   "azan@hatem.masmoudi.org" = null;
-
-  # That extension is broken because of https://github.com/NixOS/nixpkgs/issues/118612
-  "flypie@schneegans.github.com" = null;
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

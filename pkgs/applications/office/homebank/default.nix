@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   pname = "homebank";
-  version = "5.7.2";
+  version = "5.7.4";
   src = fetchurl {
     url = "https://www.gethomebank.org/public/sources/homebank-${version}.tar.gz";
-    hash = "sha256-Mx1++I2Q8/NMpmEPfxjonpNUQ7GLCRqH2blL11Vjme8=";
+    hash = "sha256-Qs5xRsh16gyjyTORtqm/RxTbRiHGP0oJTcxviYW7VOQ=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Free, easy, personal accounting for everyone";
     homepage = "https://www.gethomebank.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub frlan ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

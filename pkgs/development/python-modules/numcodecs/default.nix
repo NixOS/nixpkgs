@@ -1,29 +1,39 @@
 { lib
 , stdenv
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
-, isPy27
 , setuptools
 , setuptools-scm
 , cython
-, entrypoints
 , numpy
 , msgpack
 , py-cpuinfo
 , pytestCheckHook
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.11.0";
-  format ="pyproject";
-  disabled = isPy27;
+  version = "0.12.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bAWLMh3oShcpKZsOrk1lKy5I6hyn+d8NplyxNHDmNes=";
+    hash = "sha256-BdkaQzcz5+7yaNfoDsImoCMtokQolhSo84JpAa7BCY4=";
   };
+
+  patches = [
+    # https://github.com/zarr-developers/numcodecs/pull/487
+    (fetchpatch {
+      name = "fix-tests.patch";
+      url = "https://github.com/zarr-developers/numcodecs/commit/4896680087d3ff1f959401c51cf5aea0fd56554e.patch";
+      hash = "sha256-+lMWK5IsNzJ7H2SmLckgxbSSRIIcC7FtGYSBKQtuo+Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
@@ -33,10 +43,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    entrypoints
     numpy
-    msgpack
   ];
+
+  passthru.optional-dependencies = {
+    msgpack = [ msgpack ];
+    # zfpy = [ zfpy ];
+  };
 
   preBuild = if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then ''
     export DISABLE_NUMCODECS_AVX2=
@@ -44,6 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    msgpack
   ];
 
   pytestFlagsArray = [

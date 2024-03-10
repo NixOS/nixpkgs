@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.5.0";
+  version = "3.6.0";
 
   format = "pyproject";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "v${version}";
-    hash = "sha256-apBzx1qMHEA0wiWh82sS7I+AaiMEoAchhPsrtAgujbQ=";
+    hash = "sha256-hy5e6DEAwLKn0l2nJD7fyW5r4ZZiH+fuTEDLQen+dNk=";
   };
 
   propagatedBuildInputs = [

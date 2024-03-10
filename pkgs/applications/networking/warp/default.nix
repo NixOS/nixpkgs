@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Uc9N2kRTpi9cCFskngkiclLpEcp4dtI2mhldG4s/GFY=";
+    hash = "sha256-pntHIY0cScDKhWR6kXp6YrEbBQiQjUId3MrJzy5l+K8=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-GN9TjsGBU3D/mc6/XtRAk5pliKRPTQ9f3fMdS6weCaE=";
+    hash = "sha256-Go/a7aVHF1Yt3yIccKJIVeFy5rckXhSKfd13hdhlLUQ=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fast and secure file transfer";
-    homepage = "https://apps.gnome.org/app/app.drey.Warp";
+    homepage = "https://apps.gnome.org/Warp/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
     platforms = lib.platforms.all;

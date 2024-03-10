@@ -19,7 +19,7 @@ in {
 
       serviceConfig = {
         EnvironmentFile = "${cfg.package}/etc/conf.d/preload";
-        ExecStart = "${getExe cfg.package} --foreground $PRELOAD_OPTS";
+        ExecStart = "${getExe cfg.package} -l '' --foreground $PRELOAD_OPTS";
         Type = "simple";
         # Only preload data during CPU idle time
         IOSchedulingClass = 3;

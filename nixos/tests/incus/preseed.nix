@@ -3,7 +3,9 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
 {
   name = "incus-preseed";
 
-  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   nodes.machine = { lib, ... }: {
     virtualisation = {
@@ -46,6 +48,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
         ];
       };
     };
+    networking.nftables.enable = true;
   };
 
   testScript = ''

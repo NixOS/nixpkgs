@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , chardet
 , hatchling
 , html5lib
@@ -32,6 +33,18 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-SSu8adyjXRLarHHE2xv/8Mh2wA70ov+sziJtRjjrcto=";
   };
+
+  patches = [
+    # Fix test with libxml 2.12.
+    # https://bugs.launchpad.net/beautifulsoup/+bug/2045481
+    (fetchpatch {
+      url = "https://bugs.launchpad.net/beautifulsoup/+bug/2045481/+attachment/5726132/+files/2045481.diff";
+      hash = "sha256-f/Wkh7El4r1iWM2/CSi5AKE1+NsEP3D5pxWgBcZ//Vs=";
+      excludes = [
+        "CHANGELOG"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     hatchling

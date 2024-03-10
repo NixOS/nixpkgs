@@ -2,6 +2,7 @@
 , stdenv
 , wrapQtAppsHook
 , fetchFromGitHub
+, unstableGitUpdater
 , cmake
 , ninja
 , pkg-config
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "libfive";
-  version = "unstable-2023-06-07";
+  version = "0-unstable-2024-02-14";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "c85ffe1ba1570c2551434c5bad731884aaf80598";
-    hash = "sha256-OITy3fJx+Z6856V3D/KpSQRJztvOdJdqUv1c65wNgCc=";
+    rev = "7af5f43684a8a497ac8610d39f7fca935364a9b9";
+    hash = "sha256-GQzsHKeKsCWKOVfBrTuUFq2XasPxhsN+19stWY0WtVc=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config python.pkgs.pythonImportsCheckHook ];
@@ -61,6 +62,10 @@ stdenv.mkDerivation {
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=enum-constexpr-conversion";
+  };
+
   postInstall = lib.optionalString stdenv.isDarwin ''
     # No rules to install the mac app, so do it manually.
     mkdir -p $out/Applications
@@ -90,6 +95,8 @@ stdenv.mkDerivation {
     "libfive.shape"
     "libfive.stdlib"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";

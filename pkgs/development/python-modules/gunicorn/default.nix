@@ -1,17 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, packaging
 , pythonOlder
+
+# build-system
+, setuptools
+
+# dependencies
+, packaging
+
+# optional-dependencies
 , eventlet
 , gevent
+, tornado
+, setproctitle
+
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
   version = "21.2.0";
-  format = "setuptools";
+  pyproject = true;
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
@@ -26,22 +37,44 @@ buildPythonPackage rec {
       --replace "--cov=gunicorn --cov-report=xml" ""
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     packaging
   ];
 
-  nativeCheckInputs = [
-    eventlet
-    gevent
-    pytestCheckHook
+  passthru.optional-dependencies = {
+    gevent = [
+      gevent
+    ];
+    eventlet = [
+      eventlet
+    ];
+    tornado = [
+      tornado
+    ];
+    gthread = [];
+    setproctitle = [
+      setproctitle
+    ];
+  };
+
+  pythonImportsCheck = [
+    "gunicorn"
   ];
 
-  pythonImportsCheck = [ "gunicorn" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   meta = with lib; {
+    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
     homepage = "https://github.com/benoitc/gunicorn";
     description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "gunicorn";
   };
 }

@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.5.1";
+  version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qs+axm2+UWNuWzLW8CI4qBV7k7Ra8gBajid8mYKDsso=";
+    hash = "sha256-1YgAswqLadOVV5ZSi5ZXWYK3p114882IlSx0nKChGPs=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +101,11 @@ buildPythonPackage rec {
     tomli
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # requires distutils
+    "test_c_unit_test"
+  ];
+
   disabledTestPaths = [
     # fails to find tyoing_extensions
     "mypy/test/testcmdline.py"
@@ -118,6 +124,6 @@ buildPythonPackage rec {
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
     mainProgram = "mypy";
-    maintainers = with maintainers; [ martingms lnl7 ];
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

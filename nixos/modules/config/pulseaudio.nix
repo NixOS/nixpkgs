@@ -8,8 +8,6 @@ let
   cfg = config.hardware.pulseaudio;
   alsaCfg = config.sound;
 
-  systemWide = cfg.enable && cfg.systemWide;
-  nonSystemWide = cfg.enable && !cfg.systemWide;
   hasZeroconf = let z = cfg.zeroconf; in z.publish.enable || z.discovery.enable;
 
   overriddenPackage = cfg.package.override
@@ -217,16 +215,10 @@ in {
   };
 
 
-  config = mkMerge [
+  config = lib.mkIf cfg.enable (mkMerge [
     {
-      environment.etc = {
-        "pulse/client.conf".source = clientConf;
-      };
+      environment.etc."pulse/client.conf".source = clientConf;
 
-      hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
-    }
-
-    (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
       sound.enable = true;
@@ -242,6 +234,8 @@ in {
         "libao.conf".source = writeText "libao.conf" "default_driver=pulse";
       };
 
+      hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
+
       # Disable flat volumes to enable relative ones
       hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
 
@@ -255,7 +249,7 @@ in {
 
       # PulseAudio is packaged with udev rules to handle various audio device quirks
       services.udev.packages = [ overriddenPackage ];
-    })
+    }
 
     (mkIf (cfg.extraModules != []) {
       hardware.pulseaudio.daemon.config.dl-search-path = let
@@ -277,7 +271,7 @@ in {
       services.avahi.publish.userServices = true;
     })
 
-    (mkIf nonSystemWide {
+    (mkIf (!cfg.systemWide) {
       environment.etc = {
         "pulse/default.pa".source = myConfigFile;
       };
@@ -297,7 +291,7 @@ in {
       };
     })
 
-    (mkIf systemWide {
+    (mkIf cfg.systemWide {
       users.users.pulse = {
         # For some reason, PulseAudio wants UID == GID.
         uid = assert uid == gid; uid;
@@ -305,6 +299,7 @@ in {
         extraGroups = [ "audio" ];
         description = "PulseAudio system service user";
         home = stateDir;
+        homeMode = "755";
         createHome = true;
         isSystemUser = true;
       };
@@ -327,6 +322,6 @@ in {
 
       environment.variables.PULSE_COOKIE = "${stateDir}/.config/pulse/cookie";
     })
-  ];
+  ]);
 
 }

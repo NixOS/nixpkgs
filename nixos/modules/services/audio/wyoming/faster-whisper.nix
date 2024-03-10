@@ -12,7 +12,7 @@ let
     mkOption
     mdDoc
     mkEnableOption
-    mkPackageOptionMD
+    mkPackageOption
     types
     ;
 
@@ -24,7 +24,7 @@ in
 
 {
   options.services.wyoming.faster-whisper = with types; {
-    package = mkPackageOptionMD pkgs "wyoming-faster-whisper" { };
+    package = mkPackageOption pkgs "wyoming-faster-whisper" { };
 
     servers = mkOption {
       default = {};
@@ -121,6 +121,7 @@ in
   in mkIf (cfg.servers != {}) {
     systemd.services = mapAttrs' (server: options:
       nameValuePair "wyoming-faster-whisper-${server}" {
+        inherit (options) enable;
         description = "Wyoming faster-whisper server instance ${server}";
         after = [
           "network-online.target"

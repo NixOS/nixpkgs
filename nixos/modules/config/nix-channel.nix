@@ -12,7 +12,6 @@ let
     mkDefault
     mkIf
     mkOption
-    stringAfter
     types
     ;
 

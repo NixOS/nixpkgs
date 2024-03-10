@@ -11,6 +11,7 @@
 , libxml2
 , libzip
 , ncurses
+, xlsSupport ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -35,11 +36,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnuplot
-    libxls
-    libxlsxwriter
     libxml2
     libzip
     ncurses
+  ] ++ lib.optionals xlsSupport [
+    libxls
+    libxlsxwriter
   ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

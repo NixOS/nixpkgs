@@ -1,22 +1,45 @@
-{ lib, stdenv, fetchurl, cxxtools, postgresql, libmysqlclient, sqlite, zlib, openssl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, cxxtools
+, postgresql
+, libmysqlclient
+, sqlite
+, zlib
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "tntdb";
-  version = "1.3";
+  version = "1.4";
 
-  src = fetchurl {
-    url = "http://www.tntnet.org/download/${pname}-${version}.tar.gz";
-    sha256 = "0js79dbvkic30bzw1pf26m64vs2ssw2sbj55w1dc0sy69dlv4fh9";
+  src = fetchFromGitHub {
+    owner = "maekitalo";
+    repo = "tntdb";
+    rev = "V${version}";
+    hash = "sha256-ciqHv077sXnvCx+TJjdY1uPrlCP7/s972koXjGLgWhU=";
   };
 
-  buildInputs = [ cxxtools postgresql libmysqlclient sqlite zlib openssl ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  buildInputs = [
+    cxxtools
+    postgresql
+    libmysqlclient
+    sqlite
+    zlib
+    openssl
+  ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://www.tntnet.org/tntdb.html";
     description = "C++ library which makes accessing SQL databases easy and robust";
-    platforms = platforms.linux ;
+    platforms = platforms.linux;
     license = licenses.lgpl21;
     maintainers = [ maintainers.juliendehos ];
   };

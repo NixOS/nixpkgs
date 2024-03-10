@@ -272,6 +272,9 @@ update /etc/fstab.
     # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
     # parted /dev/sda -- set 3 esp on
     ```
+    ::: {.note}
+    In case you decided to not create a swap partition, replace `3` by `2`. To be sure of the id number of ESP, run `parted --list`.
+    :::
 
 Once complete, you can follow with
 [](#sec-installation-manual-partitioning-formatting).

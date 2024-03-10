@@ -2,11 +2,14 @@
 , buildPythonPackage
 , emoji
 , fetchFromGitHub
+, networkx
 , numpy
+, peft
 , protobuf
 , pythonOlder
 , requests
 , six
+, toml
 , torch
 , tqdm
 , transformers
@@ -14,24 +17,27 @@
 
 buildPythonPackage rec {
   pname = "stanza";
-  version = "1.6.1";
+  version = "1.8.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-8WH83K/1SbzjlAmjKVh3gT9KVvQ6BMRmg3Z0SSeL1j8=";
+    hash = "sha256-MO9trPkemVDzlVrO6v6N27RY2SNwflj+XlUrB1NqFGc=";
   };
 
   propagatedBuildInputs = [
     emoji
+    networkx
     numpy
+    peft
     protobuf
     requests
     six
+    toml
     torch
     tqdm
     transformers

@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;
-    broken = !stdenv.isx86_64;
+    broken = !stdenv.isx86_64 || stdenv.cc.isClang or false;
     maintainers = with maintainers; [ veprbl ];
     license = licenses.lgpl21;
   };

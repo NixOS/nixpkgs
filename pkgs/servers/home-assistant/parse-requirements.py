@@ -41,6 +41,7 @@ PKG_SET = "home-assistant.python.pkgs"
 PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "HAP-python": "hap-python",
+    "SQLAlchemy": "sqlalchemy",
     "tensorflow": "tensorflow",
     "yt-dlp": "yt-dlp",
 }
@@ -314,6 +315,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     run_sync(["pyright", __file__])
-    run_sync(["ruff", "--ignore=E501", __file__])
+    run_sync(["ruff", "check", "--ignore=E501", __file__])
     run_sync(["isort", __file__])
     main()

@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   version = "1.3.2";
+  format = "setuptools";
   pname = "pyvoro";
 
   src = fetchPypi {

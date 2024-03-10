@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , fetchFromGitHub
 , perl
 , rustPlatform
@@ -9,20 +8,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rover";
-  version = "0.14.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fVgo5Ds/VK0kBpF+F2FdMvBnQj2IB+B5ToOK8ONdq6c=";
+    sha256 = "sha256-+BsD7SRinU57Alg71N3tdL9iFGGdomVA7SrBE6G1f4E=";
   };
 
-  cargoSha256 = "sha256-fNqnpLNENLJEhbqxLFUqyjAf8tEPCLoGSRV91gOY9LI=";
+  cargoSha256 = "sha256-SDvOxvfv8FNUebfwSFnBc6ormK2xpXPjmACwtllHfQE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeBuildInputs = [
@@ -35,15 +35,6 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [
     "-- --skip=latest_plugins_are_valid_versions"
   ];
-
-  # The rover-client's build script (xtask/src/commands/prep/schema.rs) will try to
-  # download the API's graphql schema at build time to our read-only filesystem.
-  # To avoid this we pre-download it to a location the build script checks.
-  preBuild = ''
-    cp ${./schema}/hash.id              crates/rover-client/.schema/
-    cp ${./schema}/etag.id              crates/rover-client/.schema/
-    cp ${./schema}/schema.graphql       crates/rover-client/.schema/
-  '';
 
   passthru.updateScript = ./update.sh;
 

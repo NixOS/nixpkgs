@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3
 , version
 , hash
@@ -59,6 +58,7 @@
         pillow
         psycopg2
         pyyaml
+        requests
         sentry-sdk
         social-auth-core
         social-auth-app-django
@@ -94,6 +94,7 @@
       passthru = {
         # PYTHONPATH of all dependencies used by the package
         pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+        gunicorn = python3.pkgs.gunicorn;
         inherit tests;
       };
 

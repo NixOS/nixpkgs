@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ellsclytn/nofi/";
     changelog = "https://github.com/ellsclytn/nofi/raw/v${version}/CHANGELOG.md";
     license = [ licenses.asl20 /* or */ licenses.mit ];
-    mainProgram = pname;
+    mainProgram = "nofi";
     maintainers = [ maintainers.magnetophon ];
   };
 }

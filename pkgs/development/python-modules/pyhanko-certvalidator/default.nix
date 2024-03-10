@@ -16,8 +16,8 @@
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.23.0";
-  format = "pyproject";
+  version = "0.26.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q2YxncyMHmbRmcoLb68huK02CYiKqF2CFRl8vkUfxg4=";
+    hash = "sha256-uUmsWiN182g+kxrCny7UNLDHdAdqKk64w6vnjmGBNjM=";
   };
 
   postPatch = ''
@@ -68,8 +68,8 @@ buildPythonPackage rec {
     "test_revocation_mode_hard_aiohttp_autofetch"
     # The path could not be validated because no revocation information could be found for intermediate certificate 1
     "test_revocation_mode_hard"
-    # certificate expired 2022-09-17
-    "test_revocation_mode_soft"
+    # ValueError: Hash algorithm not known for ed448
+    "test_ed"
   ];
 
   pythonImportsCheck = [

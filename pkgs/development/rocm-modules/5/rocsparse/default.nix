@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-30q9bqgZJUaNrkMXTAG+Z34yjsQ5DpJP+WBcCiEmF58=";
@@ -140,10 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm SPARSE implementation";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
+    homepage = "https://github.com/ROCm/rocSPARSE";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

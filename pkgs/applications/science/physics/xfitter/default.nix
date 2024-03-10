@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-I${libtirpc.dev}/include/tirpc";
   NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
 
+  hardeningDisable = [ "format" ];
+
   # workaround wrong library IDs
   postInstall = lib.optionalString stdenv.isDarwin ''
     ln -sv "$out/lib/xfitter/"* "$out/lib/"

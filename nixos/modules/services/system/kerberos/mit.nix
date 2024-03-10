@@ -4,7 +4,7 @@ let
   inherit (lib) mkIf concatStrings concatStringsSep concatMapStrings toList
     mapAttrs mapAttrsToList;
   cfg = config.services.kerberos_server;
-  kerberos = config.krb5.kerberos;
+  kerberos = config.security.krb5.package;
   stateDir = "/var/lib/krb5kdc";
   PIDFile = "/run/kdc.pid";
   aclMap = {

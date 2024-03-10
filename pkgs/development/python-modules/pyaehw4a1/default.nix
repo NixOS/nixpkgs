@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyaehw4a1";
   version = "0.3.9";
+  format = "setuptools";
 
   disabled = isPy27;
 

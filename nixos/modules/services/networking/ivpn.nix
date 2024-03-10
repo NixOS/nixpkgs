@@ -27,7 +27,7 @@ with lib;
     systemd.services.ivpn-service = {
       description = "iVPN daemon";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" ];
+      wants = [ "network.target" "network-online.target" ];
       after = [
         "network-online.target"
         "NetworkManager.service"

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
-  version = "3.0.10";
+  version = "3.0.12";
 
   src = fetchFromGitHub {
     owner = "SpiderLabs";
     repo = "ModSecurity";
     rev = "v${version}";
-    sha256 = "sha256-VaoPpJ0twuGWU7G9AvKK4kq9Ed0BeG2J7B81sOuJVrE=";
+    sha256 = "sha256-WIFAg9LvKAC8e3gpcIxtNHT53AIfPtUTyrv30woxP4M=";
     fetchSubmodules = true;
   };
 

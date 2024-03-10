@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "mpl-scatter-density";
   version = "0.7";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -42,8 +43,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ matplotlib numpy fast-histogram ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeCheckInputs = [
     pytestCheckHook

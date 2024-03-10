@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "globre";
   version = "0.1.5";
+  format = "setuptools";
   # https://github.com/metagriffin/globre/issues/7
   disabled = pythonAtLeast "3.7";
 

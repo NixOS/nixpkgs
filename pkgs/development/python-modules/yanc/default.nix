@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "yanc";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

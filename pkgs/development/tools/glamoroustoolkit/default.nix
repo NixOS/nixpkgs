@@ -14,6 +14,7 @@
 , libXi
 , libXrandr
 , libXrender
+, libgit2
 , libglvnd
 , libuuid
 , libxcb
@@ -21,12 +22,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.0.6";
+  version = "1.0.11";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-263Bl5zd2k5DAPB/Ar8QMpthMiAv7BUSZ5+G03ZL5m0=";
+    hash = "sha256-GQeYR232zoHLIt1AzznD7rp6u4zMiAdj1+0OfXfT6AQ=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -91,7 +92,8 @@ preFixup = let
 
     ln -s $out/lib/libcrypto.so $out/lib/libcrypto.so.1.1
     ln -s $out/lib/libcairo.so $out/lib/libcairo.so.2
-    ln -s $out/lib/libgit2.so $out/lib/libgit2.so.1.1
+    rm $out/lib/libgit2.so
+    ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
   '';
 
   meta = {

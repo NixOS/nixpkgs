@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
+, substituteAll
 , meson
 , nasm
 , ninja
@@ -24,9 +24,10 @@
 , gdk-pixbuf
 , aalib
 , libcaca
-, libsoup
+, libsoup_3
 , libpulseaudio
 , libintl
+, libxml2
 , Cocoa
 , lame
 , mpg123
@@ -43,6 +44,7 @@
 , libgudev
 , wavpack
 , glib
+, openssl
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
@@ -53,14 +55,22 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.6";
+  version = "1.22.9";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-s7B/4/HOf+k6qb5yF4ZgRFSPNcSneSKA7sfhCKMvmBc=";
+    hash = "sha256-JpWfz+v/9jfU6gjvQDFrrzG2G7dymCCwaE6ADDoUeLY=";
   };
+
+  patches = [
+    # dlopen libsoup_3 with an absolute path
+    (substituteAll {
+      src = ./souploader.diff;
+      nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
+    })
+  ];
 
   strictDeps = true;
 
@@ -101,14 +111,16 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     aalib
     libcaca
-    libsoup
+    libsoup_3
     libshout
+    libxml2
     lame
     mpg123
     twolame
     libintl
     ncurses
     wavpack
+    openssl
   ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
   ] ++ lib.optionals enableX11 [

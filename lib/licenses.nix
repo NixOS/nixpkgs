@@ -104,6 +104,7 @@ in mkLicense lset) ({
   };
 
   arphicpl = {
+    spdxId = "Arphic-1999";
     fullName = "Arphic Public License";
     url = "https://www.freedesktop.org/wiki/Arphic_Public_License/";
   };
@@ -236,6 +237,7 @@ in mkLicense lset) ({
   };
 
   cal10 = {
+    spdxId = "CAL-1.0";
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
     url = "https://opensource.org/licenses/CAL-1.0";
   };
@@ -335,6 +337,11 @@ in mkLicense lset) ({
     fullName = "Creative Commons Attribution 1.0";
   };
 
+  cc-by-20 = {
+    spdxId = "CC-BY-2.0";
+    fullName = "Creative Commons Attribution 2.0";
+  };
+
   cc-by-30 = {
     spdxId = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
@@ -405,6 +412,11 @@ in mkLicense lset) ({
     fullName = "Detection Rule License 1.0";
   };
 
+  dtoa = {
+    spdxId = "dtoa";
+    fullName = "dtoa License";
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
@@ -429,6 +441,7 @@ in mkLicense lset) ({
   };
 
   elastic20 = {
+    spdxId = "Elastic-2.0";
     fullName = "Elastic License 2.0";
     url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
@@ -598,6 +611,7 @@ in mkLicense lset) ({
 
   # Intel's license, seems free
   iasl = {
+    spdxId = "Intel-ACPI";
     fullName = "iASL";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
@@ -609,7 +623,7 @@ in mkLicense lset) ({
 
   imagemagick = {
     fullName = "ImageMagick License";
-    spdxId = "imagemagick";
+    spdxId = "ImageMagick";
   };
 
   imlib2 = {
@@ -803,6 +817,7 @@ in mkLicense lset) ({
   };
 
   miros = {
+    spdxId = "MirOS";
     fullName = "MirOS License";
     url = "https://opensource.org/licenses/MirOS";
   };
@@ -842,6 +857,11 @@ in mkLicense lset) ({
   mpl20 = {
     spdxId = "MPL-2.0";
     fullName = "Mozilla Public License 2.0";
+  };
+
+  mplus = {
+    spdxId = "mplus";
+    fullName = "M+ Font License";
   };
 
   mspl = {
@@ -1051,6 +1071,11 @@ in mkLicense lset) ({
     url = "https://sources.debian.org/copyright/license/debianutils/4.9.1/";
   };
 
+  smlnj = {
+    spdxId = "SMLNJ";
+    fullName = "Standard ML of New Jersey License";
+  };
+
   sspl = {
     shortName = "SSPL";
     fullName = "Server Side Public License";
@@ -1066,6 +1091,12 @@ in mkLicense lset) ({
     shortName = "stk";
     fullName = "Synthesis Tool Kit 4.3";
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
+  };
+
+  sudo = {
+    shortName = "sudo";
+    fullName = "Sudo License (ISC-style)";
+    url = "https://www.sudo.ws/about/license/";
   };
 
   sustainableUse = {
@@ -1132,6 +1163,7 @@ in mkLicense lset) ({
   };
 
   upl = {
+    spdxId = "UPL-1.0";
     fullName = "Universal Permissive License";
     url = "https://oss.oracle.com/licenses/upl/";
   };
@@ -1188,8 +1220,14 @@ in mkLicense lset) ({
   };
 
   xfig = {
+    spdxId = "Xfig";
     fullName = "xfig";
     url = "https://mcj.sourceforge.net/authors.html#xfig";
+  };
+
+  xinetd = {
+    spdxId = "xinetd";
+    fullName = "xinetd License";
   };
 
   zlib = {
@@ -1205,6 +1243,11 @@ in mkLicense lset) ({
   zpl21 = {
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
+  };
+
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
   };
 } // {
   # TODO: remove legacy aliases

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

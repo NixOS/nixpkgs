@@ -39,8 +39,8 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.13";
-  format = "pyproject";
+  version = "3.16";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -48,10 +48,13 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-4dtKAFhxaS8PRoeLY6ZYrE/4P1pbcii1gWQ9RRVOBzs=";
+    hash = "sha256-2c8OFwbgSc7zwbjQm2g8y1ZyiYM0KPFjTEUrk06c174=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-warn "flow.record~=" "flow.record>="
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -104,15 +107,17 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_cpio"
     # Test requires rdump
     "test_exec_target_command"
     # Issue with tar file
-    "test_tar_sensitive_drive_letter"
     "test_dpapi_decrypt_blob"
-    "test_notifications_appdb"
     "test_md"
-    "test_notifications_wpndatabase"
     "test_nested_md_lvm"
+    "test_notifications_appdb"
+    "test_notifications_wpndatabase"
+    "test_tar_anonymous_filesystems"
+    "test_tar_sensitive_drive_letter"
     # Tests compare dates and times
     "yum"
     # Filesystem access, windows defender tests
@@ -123,7 +128,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests are using Windows paths
-    "tests/test_plugins_browsers.py"
+    "tests/plugins/apps/browser/"
+    # ValueError: Invalid Locate file magic. Expected /x00LOCATE02/x00
+    "tests/plugins/os/unix/locate/"
+    # Missing plugin support
+    "tests/tools/test_reg.py"
   ];
 
   meta = with lib; {

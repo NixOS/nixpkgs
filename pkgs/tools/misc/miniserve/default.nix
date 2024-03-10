@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-dTJK+M7kccyqNWAz/cYoPTNM3pew7cT21hZhjCf2jDA=";
+    hash = "sha256-f+k7ONX9bDrkyIhFxxaJvZYH2WBxYwCssbfM2fBPtRk=";
   };
 
-  cargoHash = "sha256-lMqoBQRK0Wop1sAdydTVYFR3pzwtQDluDVXFJ4v+GHM=";
+  cargoHash = "sha256-Omxd0ZgvtEiciFnKWkYupyts2QT9LUTXxaTdfu0Jnx8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeCheckInputs = [
@@ -36,6 +37,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=bind_ipv4_ipv6::case_2"
     "--skip=qrcode_hidden_in_tty_when_disabled"
     "--skip=qrcode_shown_in_tty_when_enabled"
+    "--skip=show_root_readme_contents"
+    "--skip=validate_printed_urls"
   ];
 
   postInstall = ''

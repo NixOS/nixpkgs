@@ -12,19 +12,17 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.38.0";
-  format = "pyproject";
+  version = "0.41.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "griffe";
     rev = "refs/tags/${version}";
-    hash = "sha256-GhohFO5tHb9ByISPUf4U2MrDATE4WjuekcC9QZaP2Ls=";
+    hash = "sha256-bRg7pqoGrsSO7wQLA0FKMmIBcYPNGIUueOfXjuvazrE=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     pdm-backend

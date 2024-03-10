@@ -12,11 +12,12 @@
 , exiftool
 , ghostscript
 , imagemagick
-, mupdf
+, mupdf-headless
 , netpbm
 , numpy
 , poppler_utils
 , pytestCheckHook
+, runCommand
 , scipy
 }:
 
@@ -41,7 +42,10 @@ buildPythonPackage rec {
       srgbProfile = if stdenv.isDarwin then
         "/System/Library/ColorSync/Profiles/sRGB Profile.icc"
       else
-        "${colord}/share/color/icc/colord/sRGB.icc";
+        # break runtime dependency chain all of colord dependencies
+        runCommand "sRGC.icc" { } ''
+          cp ${colord}/share/color/icc/colord/sRGB.icc $out
+        '';
     })
     (fetchpatch {
       # https://gitlab.mister-muffin.de/josch/img2pdf/issues/178
@@ -70,7 +74,7 @@ buildPythonPackage rec {
     exiftool
     ghostscript
     imagemagick
-    mupdf
+    mupdf-headless
     netpbm
     numpy
     poppler_utils

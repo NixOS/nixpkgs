@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -10,23 +11,27 @@
 
 buildPythonPackage rec {
   pname = "croniter";
-  version = "1.4.1";
-  format = "setuptools";
+  version = "2.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gm32DqzsO3oKpSqPLvJRrj3Sp8fIuYdOc+eRY21Vo2E=";
+    hash = "sha256-i/8Wya9O8ftvBUFpc7j3y1SZfALy+DZSUfm/Hd7ZGGY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-dateutil
+    pytz
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytz
     tzlocal
   ];
 

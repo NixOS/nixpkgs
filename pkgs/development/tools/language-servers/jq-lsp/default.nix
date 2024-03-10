@@ -3,18 +3,29 @@
 , fetchFromGitHub
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "jq-lsp";
-  version = "unstable-2023-10-27";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "jq-lsp";
-    rev = "b4707e7776a4eb3093b1a7533ebd41368240095a";
-    hash = "sha256-AU4xGweeFx+kSsrqkTtSjl+N77cITF/qvAVZGUZY5SE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-a3ZqVWG7kjWQzL1efrKc4s4D14qD/+6JM26vaduxhWg=";
   };
 
-  vendorHash = "sha256-ppQ81uERHBgOr/bm/CoDSWcK+IqHwvcL6RFi0DgoLuw=";
+  vendorHash = "sha256-bIe006I1ryvIJ4hC94Ux2YVdlmDIM4oZaK/qXafYYe0=";
+
+  # based on https://github.com/wader/jq-lsp/blob/master/.goreleaser.yml
+  CGO_ENABLED = 0;
+  GOFLAGS = [ "-trimpath" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
+    "-X main.builtBy=Nix"
+  ];
 
   meta = with lib; {
     description = "jq language server";

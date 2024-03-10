@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "numactl";
-  version = "2.0.16";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aDKzkmvrPDzQl4n0KgeiU5LOLhQA0tmwzGiXvJDp7ZI=";
+    hash = "sha256-ry29RUNa0Hv5gIhy2RTVT94mHhgfdIwb5aqjBycxxj0=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs test
   '';
-
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   # You probably shouldn't ever run these! They will reconfigure Linux
   # NUMA settings, which on my build machine makes the rest of package

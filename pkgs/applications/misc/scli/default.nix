@@ -10,13 +10,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scli";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "isamert";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7yyORM77oByH1gxx/TNkjJQBsig6ZxsfeI3ijg71oBs=";
+    sha256 = "sha256-x5NLYqA/sdQkT/8oG/ija/+4+KjRHa1q0T3mqymAuV8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

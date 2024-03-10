@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     install -d $out/bin
     install build/llpp $out/bin
     install misc/llpp.inotify $out/bin/llpp.inotify
+    install -Dm444 misc/llpp.desktop -t $out/share/applications
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/llpp \
         --prefix PATH ":" "${xclip}/bin"

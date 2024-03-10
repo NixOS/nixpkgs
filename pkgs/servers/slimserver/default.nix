@@ -16,16 +16,19 @@
 
 let
   perlPackages = perl538Packages;
+
+  binPath = lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio));
+  libPath = lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ];
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "8.3.1";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "Logitech";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-yMFOwh/oPiJnUsKWBGvd/GZLjkWocMAUK0r+Hx/SUPo=";
+    hash = "sha256-92mKchgAWRIrNOeK/zXUYRqIAk6THdtz1zQe3fg2kE0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -118,6 +121,9 @@ perlPackages.buildPerlPackage rec {
     rm -r CPAN
     mv CPAN_used CPAN
 
+    # another set of vendored/modified modules exist in lib, more selectively cleaned for now
+    rm -rf lib/Audio
+
     ${lib.optionalString (!enableUnfreeFirmware) ''
       # remove unfree firmware
       rm -rf Firmware
@@ -130,9 +136,8 @@ perlPackages.buildPerlPackage rec {
 
   installPhase = ''
     cp -r . $out
-    wrapProgram $out/slimserver.pl \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ]}" \
-      --prefix PATH : "${lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio))}"
+    wrapProgram $out/slimserver.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
+    wrapProgram $out/scanner.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
     mkdir $out/bin
     ln -s $out/slimserver.pl $out/bin/slimserver
   '';
@@ -145,8 +150,9 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Logitech/slimserver";
+    changelog = "https://github.com/Logitech/slimserver/blob/${version}/Changelog${lib.versions.major version}.html";
     description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
-    # the firmware is not under a free license, but not included in the default package
+    # the firmware is not under a free license, so we do not include firmware in the default package
     # https://github.com/Logitech/slimserver/blob/public/8.3/License.txt
     license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
     mainProgram = "slimserver";

@@ -8,7 +8,11 @@ in
 
 self: super: {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+  # ghcjs does not use `llvmPackages` and exposes `null` attribute.
+  llvmPackages =
+    if self.ghc.llvmPackages != null
+    then pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages
+    else null;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
@@ -39,14 +43,14 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
@@ -85,13 +89,6 @@ self: super: {
   shellmet = doJailbreak super.shellmet;
   shower = doJailbreak super.shower;
 
-  # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    name = "language-haskell-extract-0.2.4.patch";
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
-    sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  }) (doJailbreak super.language-haskell-extract);
-
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
     (overrideCabal (drv: {
@@ -105,14 +102,9 @@ self: super: {
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
 
-  mod = super.mod_0_1_2_2;
   path-io = doJailbreak super.path-io;
 
-
-  ormolu = self.ormolu_0_5_0_1;
-  fourmolu = dontCheck self.fourmolu_0_9_0_0;
   hlint = self.hlint_3_4_1;
-  stylish-haskell = doJailbreak self.stylish-haskell_0_14_3_0;
 
   mime-string = disableOptimization super.mime-string;
 
@@ -175,4 +167,7 @@ self: super: {
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+
+  # No instance for (Show B.Builder) arising from a use of ‘print’
+  http-types = dontCheck super.http-types;
 }

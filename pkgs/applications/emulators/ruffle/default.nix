@@ -15,17 +15,18 @@
 , wrapGAppsHook
 , gsettings-desktop-schemas
 , glib
+, libxkbcommon
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2023-04-10";
+  version = "nightly-2024-02-09";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u5Ri9KnYzE3JedUP9fGgYeG8G9uxrL6/zt3KPiKjhU0=";
+    hash = "sha256-C4wfR5io0FBFmNfYHlE/v81jQAb0SEoaCzI6tenRYGg=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +56,12 @@ rustPlatform.buildRustPackage rec {
 
   dontWrapGApps = true;
 
+  preFixup = ''
+    patchelf $out/bin/ruffle_desktop \
+      --add-needed libxkbcommon-x11.so \
+      --add-rpath ${libxkbcommon}/lib
+  '';
+
   postFixup = ''
     # This name is too generic
     mv $out/bin/exporter $out/bin/ruffle_exporter
@@ -73,29 +80,23 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--workspace" ];
 
-  # Currently, buildRustPackage can't handle having both the Crates.io dasp-0.11
-  # and the git dasp-0.11, as it tries to symlink both to the same place. For
-  # now, unify both dasp versions to the (newer) Git version.
-  # Related issues: #22177, #183344
-  cargoPatches = [ ./unify-dasp-version.patch ];
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "dasp-0.11.0" = "sha256-CZNgTLL4IG7EJR2xVp9X9E5yre8foY6VX2hUMRawxiI=";
-      "flash-lso-0.5.0" = "sha256-9uH3quxRzLtmHJs5WF/GRxWkXL/KFyOl182HKcHNnuc=";
-      "gc-arena-0.2.2" = "sha256-/H9VcTesBD+IA7bUf208b0HQ/cIUDAz9TJBBywf6akA=";
-      "h263-rs-0.1.0" = "sha256-4kBg09VHyiQTvUbvcTb5g/BVcOpRFZ1fVEuRWXv5XwE=";
+      "flash-lso-0.6.0" = "sha256-SHWIOVp3MGIATKDKAGNWG3B3jX3a0jDE2c8bt7NptrE=";
+      "h263-rs-0.1.0" = "sha256-Akf1SBjo8qikhiHI8NPvO3vJvVfm0dQBf2X9V7OdgQc=";
+      "jpegxr-0.3.0" = "sha256-jirUbse2MiUDCmwBO7ykWNKHgDgL/6ZM5o2HeDUhm0c=";
       "nellymoser-rs-0.1.2" = "sha256-GykDQc1XwySOqfxW/OcSxkKCFJyVmwSLy/CEBcwcZJs=";
-      "nihav_codec_support-0.1.0" = "sha256-rE9AIiQr+PnHC9xfDQULndSfFHSX4sqKkCAQYVNaJcQ=";
+      "nihav_codec_support-0.1.0" = "sha256-HAJS4I6yyzQzCf+vmaFp1MWXpcUgFAHPxLhfMVXmN1c=";
     };
   };
 
   meta = with lib; {
-    description = "An Adobe Flash Player emulator written in the Rust programming language.";
+    description = "An Adobe Flash Player emulator written in the Rust programming language";
     homepage = "https://ruffle.rs/";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ govanify ];
+    maintainers = with maintainers; [ govanify jchw ];
     platforms = platforms.linux;
+    mainProgram = "ruffle_desktop";
   };
 }

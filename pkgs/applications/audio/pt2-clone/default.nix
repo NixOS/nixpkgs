@@ -6,19 +6,26 @@
 , SDL2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pt2-clone";
-  version = "1.65.1";
+  version = "1.66.1";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "pt2-clone";
-    rev = "v${version}";
-    sha256 = "sha256-0bZGiulLeAZ8bR0lj0Bm7te3T3YhxSOBFgMgWADRkIY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-j7VPC1sj1Q+wL2TBgv06uYLPqym8F57HG1SRvj0Ggeo=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ] ++ lib.optional stdenv.isLinux alsa-lib;
+
+  postInstall = ''
+    install -Dm444 "$src/release/other/Freedesktop.org Resources/ProTracker 2 clone.desktop" \
+      -t $out/share/applications
+    install -Dm444 "$src/release/other/Freedesktop.org Resources/ProTracker 2 clone.png" \
+      -t $out/share/icons/hicolor/512x512/apps
+  '';
 
   passthru.tests = {
     pt2-clone-opens = nixosTests.pt2-clone;
@@ -32,6 +39,6 @@ stdenv.mkDerivation rec {
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
     platforms = platforms.littleEndian;
+    mainProgram = "pt2-clone";
   };
-}
-
+})

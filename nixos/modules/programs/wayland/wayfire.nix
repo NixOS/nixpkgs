@@ -8,7 +8,7 @@ in
   options.programs.wayfire = {
     enable = lib.mkEnableOption (lib.mdDoc "Wayfire, a wayland compositor based on wlroots");
 
-    package = lib.mkPackageOptionMD pkgs "wayfire" { };
+    package = lib.mkPackageOption pkgs "wayfire" { };
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.package;

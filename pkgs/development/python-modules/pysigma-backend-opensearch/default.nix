@@ -6,13 +6,14 @@
 , pysigma-backend-elasticsearch
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
   version = "1.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,11 +26,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
+      --replace-fail " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
   '';
+
+  pythonRelaxDeps = [
+    "pysigma"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

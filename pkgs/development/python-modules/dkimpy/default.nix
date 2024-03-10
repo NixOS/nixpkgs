@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "dkimpy";
   version = "1.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

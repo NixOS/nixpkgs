@@ -3,13 +3,13 @@
 buildKodiAddon rec {
   pname = "netflix";
   namespace = "plugin.video.netflix";
-  version = "1.22.3";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "CastagnaIT";
     repo = namespace;
     rev = "v${version}";
-    sha256 = "sha256-8NGj8n1p8euqYYdPDSeFh2ZE9lly5ThSmg69yXY3Te8=";
+    hash = "sha256-/wHKwFZbuxK0iwlqvZpyfi0lnRkjm/HSn221IgCN7VQ=";
   };
 
   propagatedBuildInputs = [

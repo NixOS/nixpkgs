@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bugdom";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
     rev = version;
-    hash = "sha256-oe7xxvoL82YF+EoIJDK6AfN3PmpqeGRlIsbaGx8xGeM=";
+    hash = "sha256-0c7v5tSqYuqtLOFl4sqD7+naJNqX/wlKHVntkZQGJ8A=";
     fetchSubmodules = true;
   };
 
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     mv Data $out/share/bugdom
     install -Dm755 {.,$out/bin}/Bugdom
     wrapProgram $out/bin/Bugdom --run "cd $out/share/bugdom"
-    install -Dm644 $src/packaging/bugdom.desktop $out/share/applications/bugdom.desktop
-    install -Dm644 $src/packaging/bugdom-desktopicon.png $out/share/pixmaps/bugdom-desktopicon.png
+    install -Dm644 $src/packaging/io.jor.bugdom.desktop $out/share/applications/io.jor.bugdom.desktop
+    install -Dm644 $src/packaging/io.jor.bugdom.png $out/share/pixmaps/io.jor.bugdom.png
   '') + ''
 
     runHook postInstall

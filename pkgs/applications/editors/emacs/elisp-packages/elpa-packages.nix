@@ -88,7 +88,7 @@ self: let
         ];
 
         buildInputs = [
-          pkgs.gnatcoll-xref
+          pkgs.gnatPackages.gnatcoll-xref
         ];
 
         buildPhase = ''
@@ -181,4 +181,4 @@ self: let
 
   in elpaPackages // { inherit elpaBuild; });
 
-in generateElpa { }
+in (generateElpa { }) // { __attrsFailEvaluation = true; }

@@ -6,6 +6,8 @@
 , glib
 , fuse
 , installShellFiles
+, wrapGAppsHook
+, wrapperDir ? "/run/wrappers/bin"
 }:
 let
   pname = "onedriver";
@@ -22,7 +24,7 @@ buildGoModule {
   inherit pname version src;
   vendorHash = "sha256-OOiiKtKb+BiFkoSBUQQfqm4dMfDW3Is+30Kwcdg8LNA=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [ pkg-config installShellFiles wrapGAppsHook ];
   buildInputs = [ webkitgtk_4_1 glib fuse ];
 
   ldflags = [ "-X github.com/jstaf/onedriver/cmd/common.commit=v${version}" ];
@@ -39,6 +41,7 @@ buildGoModule {
     install -Dm644 ./pkg/resources/onedriver-128.png $out/share/icons/onedriver/onedriver-128.png
 
     install -Dm644 ./pkg/resources/onedriver.desktop $out/share/applications/onedriver.desktop
+    install -Dm644 ./pkg/resources/onedriver@.service $out/lib/systemd/user/onedriver@.service
 
     mkdir -p $out/share/man/man1
     installManPage ./pkg/resources/onedriver.1
@@ -46,6 +49,10 @@ buildGoModule {
     substituteInPlace $out/share/applications/onedriver.desktop \
       --replace "/usr/bin/onedriver-launcher" "$out/bin/onedriver-launcher" \
       --replace "/usr/share/icons" "$out/share/icons"
+
+    substituteInPlace $out/lib/systemd/user/onedriver@.service \
+      --replace "/usr/bin/onedriver" "$out/bin/onedriver" \
+      --replace "/usr/bin/fusermount" "${wrapperDir}/fusermount"
   '';
 
   meta = with lib; {

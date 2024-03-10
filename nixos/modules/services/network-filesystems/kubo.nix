@@ -52,7 +52,7 @@ let
 
   multiaddrsToListenStreams = addrIn:
     let
-      addrs = if builtins.typeOf addrIn == "list"
+      addrs = if builtins.isList addrIn
       then addrIn else [ addrIn ];
       unfilteredResult = map multiaddrToListenStream addrs;
     in
@@ -60,7 +60,7 @@ let
 
   multiaddrsToListenDatagrams = addrIn:
     let
-      addrs = if builtins.typeOf addrIn == "list"
+      addrs = if builtins.isList addrIn
       then addrIn else [ addrIn ];
       unfilteredResult = map multiaddrToListenDatagram addrs;
     in
@@ -99,14 +99,14 @@ in
 
     services.kubo = {
 
-      enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degradation)");
+      enable = mkEnableOption (lib.mdDoc ''
+        the Interplanetary File System (WARNING: may cause severe network degradation).
+        NOTE: after enabling this option and rebuilding your system, you need to log out
+        and back in for the `IPFS_PATH` environment variable to be present in your shell.
+        Until you do that, the CLI tools won't be able to talk to the daemon by default
+      '');
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.kubo;
-        defaultText = literalExpression "pkgs.kubo";
-        description = lib.mdDoc "Which Kubo package to use.";
-      };
+      package = mkPackageOption pkgs "kubo" { };
 
       user = mkOption {
         type = types.str;
@@ -150,18 +150,6 @@ in
         type = types.bool;
         default = true;
         description = lib.mdDoc "Whether Kubo should try to run the fs-repo-migration at startup.";
-      };
-
-      ipfsMountDir = mkOption {
-        type = types.str;
-        default = "/ipfs";
-        description = lib.mdDoc "Where to mount the IPFS namespace to";
-      };
-
-      ipnsMountDir = mkOption {
-        type = types.str;
-        default = "/ipns";
-        description = lib.mdDoc "Where to mount the IPNS namespace to";
       };
 
       enableGC = mkOption {
@@ -209,6 +197,18 @@ in
                 "/ip6/::/udp/4001/quic-v1/webtransport"
               ];
               description = lib.mdDoc "Where Kubo listens for incoming p2p connections";
+            };
+
+            Mounts.IPFS = mkOption {
+              type = types.str;
+              default = "/ipfs";
+              description = lib.mdDoc "Where to mount the IPFS namespace to";
+            };
+
+            Mounts.IPNS = mkOption {
+              type = types.str;
+              default = "/ipns";
+              description = lib.mdDoc "Where to mount the IPNS namespace to";
             };
           };
         };
@@ -279,16 +279,17 @@ in
       {
         assertion = !((lib.versionAtLeast cfg.package.version "0.21") && (builtins.hasAttr "Experimental" cfg.settings) && (builtins.hasAttr "AcceleratedDHTClient" cfg.settings.Experimental));
         message = ''
-    The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
-  '';
+          The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
+        '';
       }
     ];
 
     environment.systemPackages = [ cfg.package ];
     environment.variables.IPFS_PATH = fakeKuboRepo;
 
-    # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    # https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
     boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
+    boot.kernel.sysctl."net.core.wmem_max" = mkDefault 2500000;
 
     programs.fuse = mkIf cfg.autoMount {
       userAllowOther = true;
@@ -311,12 +312,13 @@ in
       ipfs.gid = config.ids.gids.ipfs;
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-    ] ++ optionals cfg.autoMount [
-      "d '${cfg.ipfsMountDir}' - ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-kubo" = let
+      defaultConfig = { inherit (cfg) user group; };
+    in {
+      ${cfg.dataDir}.d = defaultConfig;
+      ${cfg.settings.Mounts.IPFS}.d = mkIf (cfg.autoMount) defaultConfig;
+      ${cfg.settings.Mounts.IPNS}.d = mkIf (cfg.autoMount) defaultConfig;
+    };
 
     # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
     systemd.packages = if cfg.autoMount
@@ -325,8 +327,6 @@ in
 
     services.kubo.settings = mkIf cfg.autoMount {
       Mounts.FuseAllowOther = lib.mkDefault true;
-      Mounts.IPFS = lib.mkDefault cfg.ipfsMountDir;
-      Mounts.IPNS = lib.mkDefault cfg.ipnsMountDir;
     };
 
     systemd.services.ipfs = {
@@ -357,8 +357,8 @@ in
           ipfs --offline config replace -
       '';
       postStop = mkIf cfg.autoMount ''
-        # After an unclean shutdown the fuse mounts at cfg.ipnsMountDir and cfg.ipfsMountDir are locked
-        umount --quiet '${cfg.ipnsMountDir}' '${cfg.ipfsMountDir}' || true
+        # After an unclean shutdown the fuse mounts at cfg.settings.Mounts.IPFS and cfg.settings.Mounts.IPNS are locked
+        umount --quiet '${cfg.settings.Mounts.IPFS}' '${cfg.settings.Mounts.IPNS}' || true
       '';
       serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${kuboFlags}" ];
@@ -366,6 +366,8 @@ in
         Group = cfg.group;
         StateDirectory = "";
         ReadWritePaths = optionals (!cfg.autoMount) [ "" cfg.dataDir ];
+        # Make sure the socket units are started before ipfs.service
+        Sockets = [ "ipfs-gateway.socket" "ipfs-api.socket" ];
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // optionalAttrs (!cfg.startWhenNeeded) {
       wantedBy = [ "default.target" ];
@@ -408,8 +410,8 @@ in
     (mkRenamedOptionModule [ "services" "ipfs" "defaultMode" ] [ "services" "kubo" "defaultMode" ])
     (mkRenamedOptionModule [ "services" "ipfs" "autoMount" ] [ "services" "kubo" "autoMount" ])
     (mkRenamedOptionModule [ "services" "ipfs" "autoMigrate" ] [ "services" "kubo" "autoMigrate" ])
-    (mkRenamedOptionModule [ "services" "ipfs" "ipfsMountDir" ] [ "services" "kubo" "ipfsMountDir" ])
-    (mkRenamedOptionModule [ "services" "ipfs" "ipnsMountDir" ] [ "services" "kubo" "ipnsMountDir" ])
+    (mkRenamedOptionModule [ "services" "ipfs" "ipfsMountDir" ] [ "services" "kubo" "settings" "Mounts" "IPFS" ])
+    (mkRenamedOptionModule [ "services" "ipfs" "ipnsMountDir" ] [ "services" "kubo" "settings" "Mounts" "IPNS" ])
     (mkRenamedOptionModule [ "services" "ipfs" "gatewayAddress" ] [ "services" "kubo" "settings" "Addresses" "Gateway" ])
     (mkRenamedOptionModule [ "services" "ipfs" "apiAddress" ] [ "services" "kubo" "settings" "Addresses" "API" ])
     (mkRenamedOptionModule [ "services" "ipfs" "swarmAddress" ] [ "services" "kubo" "settings" "Addresses" "Swarm" ])
@@ -424,5 +426,7 @@ in
     (mkRenamedOptionModule [ "services" "kubo" "gatewayAddress" ] [ "services" "kubo" "settings" "Addresses" "Gateway" ])
     (mkRenamedOptionModule [ "services" "kubo" "apiAddress" ] [ "services" "kubo" "settings" "Addresses" "API" ])
     (mkRenamedOptionModule [ "services" "kubo" "swarmAddress" ] [ "services" "kubo" "settings" "Addresses" "Swarm" ])
+    (mkRenamedOptionModule [ "services" "kubo" "ipfsMountDir" ] [ "services" "kubo" "settings" "Mounts" "IPFS" ])
+    (mkRenamedOptionModule [ "services" "kubo" "ipnsMountDir" ] [ "services" "kubo" "settings" "Mounts" "IPNS" ])
   ];
 }

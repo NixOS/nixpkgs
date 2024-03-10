@@ -17,18 +17,18 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.10.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-umPQIxwIahjbO4QbkKEoeSSeYT2UatsTGRPrLgw5KW8=";
+    hash = "sha256-02agp4EGT23QBKC8j1JIAkzVLRykFl55aH/wPF0bU/Y=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-o5ztk4okH21Op1jqHZfranR12M8B1Y/K95aWb10tf5o=";
+    hash = "sha256-hd0wY1an12zY0E6VPjiD23Mn5ZDPvFvIdu6FGoc7nYY=";
   };
 
   nativeBuildInputs = [
@@ -45,9 +45,6 @@ in stdenv.mkDerivation rec {
     ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
-    # Fix reg add infinite loop
-    # Submitted upstream: https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/3210
-    ./fix-infinite-loop.patch
   ];
 
   postPatch = ''

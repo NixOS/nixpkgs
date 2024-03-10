@@ -2,7 +2,6 @@
 , cups
 , dpkg
 , fetchurl
-, gjs
 , glib
 , gtk3
 , lib
@@ -10,7 +9,9 @@
 , libdrm
 , libgcrypt
 , libkrb5
+, libnotify
 , mesa # for libgbm
+, libGL
 , nss
 , xorg
 , systemd
@@ -19,7 +20,6 @@
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
-, makeWrapper
 }:
 
 let
@@ -43,8 +43,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    # makeBinaryWrapper not support shell wrapper specifically for `NIXOS_OZONE_WL`.
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    wrapGAppsHook
     dpkg
   ];
 
@@ -76,7 +75,9 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/qq.desktop \
       --replace "/opt/QQ/qq" "$out/bin/qq" \
       --replace "/usr/share" "$out/share"
-    ln -s $out/opt/QQ/qq $out/bin/qq
+    makeWrapper $out/opt/QQ/qq $out/bin/qq \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
@@ -88,14 +89,10 @@ stdenv.mkDerivation {
     ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
       $out/opt/QQ/libappindicator3.so
 
-    runHook postInstall
-  '';
+    ln -s ${libnotify}/lib/libnotify.so \
+      $out/opt/QQ/libnotify.so
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gjs ]}"
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-    )
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;

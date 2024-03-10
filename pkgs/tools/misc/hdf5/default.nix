@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
     ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
     ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
-    ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" "CC=${mpi}/bin/mpicc" ]
+    ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
     ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
     ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
     ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"

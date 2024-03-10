@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpeditor";
-  version = "6.11.1";
+  version = "6.11.2";
 
   src = fetchFromGitHub {
     owner = "cpeditor";
     repo = "cpeditor";
     rev = version;
-    sha256 = "sha256-Uwo7ZE+9yrHV/+D6rvfew2d3ZJbpFOjgek38iYkPppw=";
+    sha256 = "sha256-zotbXzRjIwZdYluJiz6GWUIOXl/wz1TWt+dcTwMhURo=";
     fetchSubmodules = true;
   };
 

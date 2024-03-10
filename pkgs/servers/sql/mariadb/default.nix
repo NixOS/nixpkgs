@@ -58,6 +58,10 @@ let
 
       patches = [
         ./patch/cmake-includedir.patch
+
+        # Fix build with libxml 2.12 and Clang 16.
+        # https://github.com/MariaDB/server/pull/2983
+        ./patch/0001-Fix-build-with-libxml2-2.12.patch
       ]
         # Fixes a build issue as documented on
         # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
@@ -136,7 +140,7 @@ let
         description = "An enhanced, drop-in replacement for MySQL";
         homepage    = "https://mariadb.org/";
         license     = licenses.gpl2;
-        maintainers = with maintainers; [ thoughtpolice ajs124 das_j ];
+        maintainers = with maintainers; [ thoughtpolice ] ++ teams.helsinki-systems.members;
         platforms   = platforms.all;
       };
     };
@@ -234,7 +238,6 @@ let
       '';
 
       CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
-      NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
     });
   in
     server // {

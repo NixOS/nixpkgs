@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "stem";
-  version = "1.8.2";
+  version = "1.8.3-unstable-2024-02-13";
 
   disabled = pythonOlder "3.6";
 
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "torproject";
     repo = "stem";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9BXeE/sVa13jr8G060aWjc49zgDVBhjaR6nt4lSxc0g=";
+    rev = "9a9c7d43a7fdcde6d4a9cf95b831fb5e5923a160";
+    hash = "sha256-Oc73Jx31SLzuhT9Iym5HHszKfflKZ+3aky5flXudvmI=";
   };
 
   nativeBuildInputs = [

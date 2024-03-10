@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "usb-devices";
-  version = "0.4.1";
+  version = "0.4.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9w7YCAEpdptQC0GCnJCEyhZgcHMDIw0alj7q4Y82hmA=";
+    hash = "sha256-Nfdl5oRIdOfAo5PFAJJpadRyu2zeEkmYzxDQxbvpt6c=";
   };
 
   postPatch = ''

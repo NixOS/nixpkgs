@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, flutter
+, flutter313
 , makeDesktopItem
 , pkg-config
 , libayatana-appindicator
@@ -11,21 +11,26 @@
 
 let
   pname = "localsend";
-  version = "1.12.0";
+  version = "1.14.0";
 
-  linux = flutter.buildFlutterApplication {
+  linux = flutter313.buildFlutterApplication {
     inherit pname version;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-mk0CLZP0x/mEixeAig7X41aFgQzs+kZkBJx6T//3ZKY=";
+      hash = "sha256-CO0uFcZnOfE31EZxRUpgtod3+1lyXPpbytHB45DEM98=";
     };
 
     sourceRoot = "source/app";
-    depsListFile = ./deps.json;
-    vendorHash = "sha256-fXzxT7KBi/WT2A5PEIx+B+UG4HWEbMPMsashVQsXdmU=";
+
+    pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+    gitHashes = {
+      "permission_handler_windows" = "sha256-a7bN7/A65xsvnQGXUvZCfKGtslbNWEwTWR8fAIjMwS0=";
+      "tray_manager" = "sha256-eF14JGf5jclsKdXfCE7Rcvp72iuWd9wuSZ8Bej17tjg=";
+    };
 
     nativeBuildInputs = [ pkg-config ];
 
@@ -47,10 +52,12 @@ let
       exec = "@out@/bin/localsend_app";
       icon = "localsend";
       desktopName = "LocalSend";
-      startupWMClass = "localsend";
+      startupWMClass = "localsend_app";
       genericName = "An open source cross-platform alternative to AirDrop";
       categories = [ "Network" ];
     };
+
+    passthru.updateScript = ./update.sh;
 
     meta = meta // {
       mainProgram = "localsend_app";
@@ -62,7 +69,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-XKYc3lA7x0Tf1Mf3o7D2RYwYDRDVHoSb/lj9PhKzV5U=";
+      hash = "sha256-L7V48QoOA0cjx45n+9Xav/zzCzCsZB3TBip0WGusMXg=";
     };
 
     nativeBuildInputs = [ undmg ];
@@ -85,7 +92,7 @@ let
     homepage = "https://localsend.org/";
     license = licenses.mit;
     mainProgram = "localsend";
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [ sikmir linsui ];
   };
 in
 if stdenv.isDarwin

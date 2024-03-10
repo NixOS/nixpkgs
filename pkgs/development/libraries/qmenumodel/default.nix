@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
       --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-  '' + lib.optionalString finalAttrs.doCheck ''
+  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/{client,script}/*.py
   '';
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.doCheck}"
+    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

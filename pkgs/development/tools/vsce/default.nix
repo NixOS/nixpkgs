@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "vsce";
-  version = "2.21.1";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     rev = "v${version}";
-    hash = "sha256-cFqjoWQu/6cvbT1vxReERybuKpeL4LCVl5qhvSwr6fs=";
+    hash = "sha256-MX+tGjz/Nn18ivfjQeOlQtQiyRkB1cGnLl2jlz5Str8=";
   };
 
   npmDepsHash = "sha256-Difk9a9TYmfwzP9SawEuaxm7iHVjdfO+FxFCE7aEMzM=";
@@ -44,5 +44,6 @@ buildNpmPackage rec {
     description = "Visual Studio Code Extension Manager";
     maintainers = with maintainers; [ aaronjheng ];
     license = licenses.mit;
+    mainProgram = "vsce";
   };
 }

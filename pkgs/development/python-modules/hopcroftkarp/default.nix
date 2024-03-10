@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "hopcroftkarp";
   version = "1.2.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

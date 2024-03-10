@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = with maintainers; [ anderspapitto ];
     platforms = with platforms; linux;
+    mainProgram = "dirt";
   };
 }

@@ -54,12 +54,7 @@ in
         description = lib.mdDoc "Enable logstash.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.logstash;
-        defaultText = literalExpression "pkgs.logstash";
-        description = lib.mdDoc "Logstash package to use.";
-      };
+      package = mkPackageOption pkgs "logstash" { };
 
       plugins = mkOption {
         type = types.listOf types.path;

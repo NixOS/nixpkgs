@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitLab
+, fetchpatch
 , autoreconfHook, pkg-config, python3, addOpenGLRunpath
 , libX11, libXext, xorgproto
 }:
@@ -14,6 +15,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
   };
+
+  patches = [
+    # Enable 64-bit file APIs on 32-bit systems:
+    #   https://gitlab.freedesktop.org/glvnd/libglvnd/-/merge_requests/288
+    (fetchpatch {
+      name = "large-file.patch";
+      url = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/commit/956d2d3f531841cabfeddd940be4c48b00c226b4.patch";
+      hash = "sha256-Y6YCzd/jZ1VZP9bFlHkHjzSwShXeA7iJWdyfxpgT2l0=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];

@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.mpickering ];
     platforms = with lib.platforms; linux;
+    mainProgram = "osm2xmap";
   };
 }

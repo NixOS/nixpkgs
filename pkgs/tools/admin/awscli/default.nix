@@ -10,13 +10,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.30.2"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.32.21"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XbYsPbYUIJPCS+nhcE3A5K7yxHcGUkulT5vHPT5T9kM=";
+    hash = "sha256-euz3pcTKCPjgP7mKVoOf/62JPp0rRevbcYf/RfZTNd0=";
   };
-
 
   propagatedBuildInputs = with python3.pkgs; [
     botocore

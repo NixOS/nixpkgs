@@ -26,7 +26,7 @@ This file contains general contributing information, but individual parts also h
 
 This section describes in some detail how changes can be made and proposed with pull requests.
 
-> **Note**
+> [!Note]
 > Be aware that contributing implies licensing those contributions under the terms of [COPYING](./COPYING), an MIT-like license.
 
 0. Set up a local version of Nixpkgs to work with using GitHub and Git
@@ -129,19 +129,17 @@ When a PR is created, it will be pre-populated with some checkboxes detailed bel
 
 #### Tested using sandboxing
 
-When sandbox builds are enabled, Nix will setup an isolated environment for each build process. It is used to remove further hidden dependencies set by the build environment to improve reproducibility. This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store. Depending on the operating system access to other resources are blocked as well (ex. inter process communication is isolated on Linux); see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
+When sandbox builds are enabled, Nix will set up an isolated environment for each build process.
+It is used to remove further hidden dependencies set by the build environment to improve reproducibility.
+This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store.
+Depending on the operating system, access to other resources is blocked as well (e.g., inter-process communication is isolated on Linux); see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
 
-Sandboxing is not enabled by default in Nix due to a small performance hit on each build. In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
+In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
 
-Depending if you use NixOS or other platforms you can use one of the following methods to enable sandboxing **before** building the package:
+If you are on Linux, sandboxing is enabled by default.
+On other platforms, sandboxing is disabled by default due to a small performance hit on each build.
 
-- **Globally enable sandboxing on NixOS**: add the following to `configuration.nix`
-
-  ```nix
-  nix.settings.sandbox = true;
-  ```
-
-- **Globally enable sandboxing on non-NixOS platforms**: add the following to: `/etc/nix/nix.conf`
+Please enable sandboxing **before** building the package by adding the following to: `/etc/nix/nix.conf`:
 
   ```ini
   sandbox = true
@@ -273,7 +271,7 @@ Once a pull request has been merged into `master`, a backport pull request to th
 
 ### Automatically backporting changes
 
-> **Note**
+> [!Note]
 > You have to be a [Nixpkgs maintainer](./maintainers) to automatically create a backport pull request.
 
 Add the [`backport release-YY.MM` label](https://github.com/NixOS/nixpkgs/labels?q=backport) to the pull request on the `master` branch.
@@ -285,16 +283,17 @@ This can be done on both open or already merged pull requests.
 To manually create a backport pull request, follow [the standard pull request process][pr-create], with these notable differences:
 
 - Use `release-YY.MM` for the base branch, both for the local branch and the pull request.
-  > **Warning**
-  > Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
+
+> [!Warning]
+> Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
 
 - Instead of manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit from the pull request you'd like to backport.
   Either `git cherry-pick -x <commit>` when the reason for the backport is obvious (such as minor versions, fixes, etc.), otherwise use `git cherry-pick -xe <commit>` to add a reason for the backport to the commit message.
   Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8) of this.
 
-  > **Warning**
-  > Ensure the commits exists on the master branch.
-  > In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
+> [!Warning]
+> Ensure the commits exists on the master branch.
+> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
 
 - In the pull request description, link to the original pull request to `master`.
   The pull request title should include `[YY.MM]` matching the release you're backporting to.
@@ -305,7 +304,7 @@ To manually create a backport pull request, follow [the standard pull request pr
 ## How to review pull requests
 [pr-review]: #how-to-review-pull-requests
 
-> **Warning**
+> [!Warning]
 > The following section is a draft, and the policy for reviewing is still being discussed in issues such as [#11166](https://github.com/NixOS/nixpkgs/issues/11166) and [#20836](https://github.com/NixOS/nixpkgs/issues/20836).
 
 The Nixpkgs project receives a fairly high number of contributions via GitHub pull requests. Reviewing and approving these is an important task and a way to contribute to the project.
@@ -322,7 +321,7 @@ All the review template samples provided in this section are generic and meant a
 
 To get more information about how to review specific parts of Nixpkgs, refer to the documents linked to in the [overview section][overview].
 
-If a pull request contains documentation changes that might require feedback from the documentation team, ping @NixOS/documentation-team on the pull request.
+If a pull request contains documentation changes that might require feedback from the documentation team, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on the pull request.
 
 If you consider having enough knowledge and experience in a topic and would like to be a long-term reviewer for related submissions, please contact the current reviewers for that topic. They will give you information about the reviewing process. The main reviewers for a topic can be hard to find as there is no list, but checking past pull requests to see who reviewed or git-blaming the code to see who committed to that topic can give some hints.
 
@@ -377,14 +376,14 @@ The staging workflow exists to batch Hydra builds of many packages together.
 It works by directing commits that cause [mass rebuilds][mass-rebuild] to a separate `staging` branch that isn't directly built by Hydra.
 Regularly, the `staging` branch is _manually_ merged into a `staging-next` branch to be built by Hydra using the [`nixpkgs:staging-next` jobset](https://hydra.nixos.org/jobset/nixpkgs/staging-next).
 The `staging-next` branch should then only receive direct commits in order to fix Hydra builds.
-Once it is verified that there are no major regressions, it is merged into `master` using [a pull requests](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
+Once it is verified that there are no major regressions, it is merged into `master` using [a pull request](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
 This is done manually in order to ensure it's a good use of Hydra's computing resources.
 By keeping the `staging-next` branch separate from `staging`, this batching does not block developers from merging changes into `staging`.
 
 In order for the `staging` and `staging-next` branches to be up-to-date with the latest commits on `master`, there are regular _automated_ merges from `master` into `staging-next` and `staging`.
 This is implemented using GitHub workflows [here](.github/workflows/periodic-merge-6h.yml) and [here](.github/workflows/periodic-merge-24h.yml).
 
-> **Note**
+> [!Note]
 > Changes must be sufficiently tested before being merged into any branch.
 > Hydra builds should not be used as testing platform.
 
@@ -440,14 +439,14 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging` | `staging-next` |
+| branch | `master` | `staging-next` | `staging` |
 | --- | --- | --- | --- |
-| Used for development | ✔️ | ✔️ | ❌ |
-| Built by Hydra | ✔️ | ❌ | ✔️ |
-| [Mass rebuilds][mass-rebuild] | ❌ | ✔️ | ⚠️  Only to fix Hydra builds |
-| Critical security fixes | ✔️ for non-mass-rebuilds | ❌ | ✔️ for mass-rebuilds |
-| Automatically merged into | `staging-next` | - | `staging` |
-| Manually merged into | - | `staging-next` | `master` |
+| Used for development | ✔️ | ❌ | ✔️ |
+| Built by Hydra | ✔️ | ✔️ | ❌ |
+| [Mass rebuilds][mass-rebuild] | ❌ | ⚠️  Only to fix Hydra builds | ✔️ |
+| Critical security fixes | ✔️ for non-mass-rebuilds | ✔️ for mass-rebuilds | ❌ |
+| Automatically merged into | `staging-next` | `staging` | - |
+| Manually merged into | - | `master` | `staging-next` |
 
 The staging workflow is used for all main branches, `master` and `release-YY.MM`, with corresponding names:
 - `master`/`release-YY.MM`

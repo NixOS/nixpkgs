@@ -59,5 +59,6 @@ in mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
+    mainProgram = "AwesomeBump";
   };
 }

@@ -4,12 +4,13 @@
 , beautifulsoup4
 , enum-compat
 , pyserial
-, nose
+, pynose
 }:
 
 buildPythonPackage rec {
   pname = "enocean";
   version = "0.60.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kipe";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
   ];
 
   checkPhase = ''

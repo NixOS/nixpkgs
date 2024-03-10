@@ -16,5 +16,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://keepass-diff.narigo.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ wamserma ];
+    mainProgram = "keepass-diff";
   };
 }

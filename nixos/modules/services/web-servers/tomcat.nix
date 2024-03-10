@@ -8,7 +8,7 @@ in
 
 {
   meta = {
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = with lib.maintainers; [ danbst anthonyroussel ];
   };
 
   ###### interface
@@ -17,7 +17,9 @@ in
     services.tomcat = {
       enable = lib.mkEnableOption (lib.mdDoc "Apache Tomcat");
 
-      package = lib.mkPackageOptionMD pkgs "tomcat9" { };
+      package = lib.mkPackageOption pkgs "tomcat9" {
+        example = "tomcat10";
+      };
 
       purifyOnStart = lib.mkOption {
         type = lib.types.bool;
@@ -151,7 +153,7 @@ in
         description = lib.mdDoc "Whether to enable logging per virtual host.";
       };
 
-      jdk = lib.mkPackageOptionMD pkgs "jdk" { };
+      jdk = lib.mkPackageOption pkgs "jdk" { };
 
       axis2 = {
         enable = lib.mkEnableOption "Apache Axis2 container";

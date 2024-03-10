@@ -19,12 +19,7 @@ in
   options.services.node-red = {
     enable = mkEnableOption (lib.mdDoc "the Node-RED service");
 
-    package = mkOption {
-      default = pkgs.nodePackages.node-red;
-      defaultText = literalExpression "pkgs.nodePackages.node-red";
-      type = types.package;
-      description = lib.mdDoc "Node-RED package to use.";
-    };
+    package = mkPackageOption pkgs [ "nodePackages" "node-red" ] { };
 
     openFirewall = mkOption {
       type = types.bool;

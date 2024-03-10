@@ -10,7 +10,7 @@ in
   options.services.centrifugo = {
     enable = lib.mkEnableOption (lib.mdDoc "Centrifugo messaging server");
 
-    package = lib.mkPackageOptionMD pkgs "centrifugo" { };
+    package = lib.mkPackageOption pkgs "centrifugo" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;

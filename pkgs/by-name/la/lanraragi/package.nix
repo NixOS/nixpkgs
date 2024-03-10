@@ -32,7 +32,6 @@ buildNpmPackage rec {
       hash = "sha256-Cu9d/dDlO0yuFCTKOyg5A0gIuiA+FcWD9PjexB/BK0U=";
     })
     ./install.patch
-    ./loosen-dep-reqs.patch # Can be removed once perl.pkgs.URI is updated
     ./fix-paths.patch
     ./expose-password-hashing.patch # Used by the NixOS module
   ];

@@ -2,10 +2,11 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
-, prefetch-yarn-deps
 , grafana-agent
+, nix-update-script
 , nixosTests
 , nodejs
+, prefetch-yarn-deps
 , stdenv
 , systemd
 , testers
@@ -14,21 +15,21 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.38.0";
+  version = "0.40.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-lXjtKZJNkYffizNiX+rrRVu94mr+WXnsKKpEaLdd2Rs=";
+    hash = "sha256-muSgFBg+/XWx2f9EGYYLQ0wUzZ7AxEC2F19A5Qs5cgw=";
   };
 
-  vendorHash = "sha256-+6ReDdjCHED8kYVt7WSUFT+Gsmg+AIyS3oIfj2kTCGo=";
+  vendorHash = "sha256-ekFl+aSmyUvgv4pkpS86HwPMfqtDaJEaZhWiwHjHp9g=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/web/ui/yarn.lock";
-    hash = "sha256-rT0UCInISo/p60xzQC7wAJFuKFByIzhNf0RxFFJx+3k=";
+    hash = "sha256-WqbIg18qUNcs9O2wh7DAzwXKb60iEuPL8zFCIgScqI0=";
   };
 
   ldflags = let
@@ -89,13 +90,18 @@ buildGoModule rec {
       $out/bin/grafana-agent
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) grafana-agent;
-    version = testers.testVersion {
-      inherit version;
-      command = "${lib.getExe grafana-agent} --version";
-      package = grafana-agent;
+  passthru = {
+    tests = {
+      inherit (nixosTests) grafana-agent;
+      version = testers.testVersion {
+        inherit version;
+        command = "${lib.getExe grafana-agent} --version";
+        package = grafana-agent;
+      };
     };
+    updateScript = nix-update-script { };
+    # alias for nix-update to be able to find and update this attribute
+    offlineCache = frontendYarnOfflineCache;
   };
 
   meta = {

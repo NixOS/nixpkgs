@@ -32,12 +32,7 @@ in
       enable = mkEnableOption (lib.mdDoc "GVfs, a userspace virtual filesystem");
 
       # gvfs can be built with multiple configurations
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gnome.gvfs;
-        defaultText = literalExpression "pkgs.gnome.gvfs";
-        description = lib.mdDoc "Which GVfs package to use.";
-      };
+      package = mkPackageOption pkgs [ "gnome" "gvfs" ] { };
 
     };
 

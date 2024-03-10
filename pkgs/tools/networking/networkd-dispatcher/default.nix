@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , python3Packages
 , asciidoc
 , makeWrapper
@@ -23,6 +24,12 @@ stdenv.mkDerivation rec {
     # Support rule files in NixOS store paths. Required for the networkd-dispatcher
     # module to work
     ./support_nix_store_path.patch
+
+    # Fixes: networkd-dispatcher.service: Got notification message from PID XXXX, but reception only permitted for main PID XXXX
+    (fetchpatch {
+      url = "https://gitlab.com/craftyguy/networkd-dispatcher/-/commit/4796368d88da516fafda321d8565ae8ccf465120.patch";
+      hash = "sha256-RAoCSmZCjTXxVKesatWjiePY4xECGn5pwvOOV0clL+Q=";
+    })
   ];
 
   postPatch = ''

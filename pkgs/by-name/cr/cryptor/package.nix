@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptor";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "moson-mo";
     repo = "cryptor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bgOOueOKSc6dLyxGU+ds9XYWM5mO+qCKC4dkCu2B1sQ=";
+    hash = "sha256-EqiaWgwhSLwZnovqYQ9rfHwvhWucmK0ujSsOhMJEJ1A=";
   };
 
   nativeBuildInputs = [

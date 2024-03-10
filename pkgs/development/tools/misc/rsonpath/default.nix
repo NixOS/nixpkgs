@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsonpath";
-  version = "0.8.4";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "v0ldek";
     repo = "rsonpath";
     rev = "v${version}";
-    hash = "sha256-V7Ir1FGKjKYu/J2KSBaDwLdH/MHTS+aChHWcrVTu4dY=";
+    hash = "sha256-AMnUErmufHc05MxHru/b4mFHH+HF9jfhoNi8yIejc64=";
   };
 
-  cargoHash = "sha256-eiYUlHA4vK/zhfULwekt3dRVx//u5mrQ6tRdQh0tmTc=";
+  cargoHash = "sha256-flMzNxA1NWGy4ea7/dmPiEKspBmVuy82VPe5r8jaEGg=";
 
   cargoBuildFlags = [ "-p=rsonpath" ];
   cargoTestFlags = cargoBuildFlags;

@@ -152,12 +152,7 @@ in
       description = lib.mdDoc "Group under which cloudflared runs.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cloudflared;
-      defaultText = "pkgs.cloudflared";
-      description = lib.mdDoc "The package to use for Cloudflared.";
-    };
+    package = mkPackageOption pkgs "cloudflared" { };
 
     tunnels = mkOption {
       description = lib.mdDoc ''
@@ -281,9 +276,11 @@ in
             ingressesSet = filterIngressSet tunnel.ingress;
             ingressesStr = filterIngressStr tunnel.ingress;
 
-            fullConfig = {
+            fullConfig = filterConfig {
               tunnel = name;
               "credentials-file" = tunnel.credentialsFile;
+              warp-routing = filterConfig tunnel.warp-routing;
+              originRequest = filterConfig tunnel.originRequest;
               ingress =
                 (map
                   (key: {
@@ -299,6 +296,7 @@ in
                   (attrNames ingressesStr))
                 ++ [{ service = tunnel.default; }];
             };
+
             mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
           in
           nameValuePair "cloudflared-tunnel-${name}" ({
@@ -327,5 +325,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ bbigras ];
+  meta.maintainers = with maintainers; [ bbigras anpin ];
 }

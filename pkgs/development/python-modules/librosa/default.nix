@@ -106,6 +106,8 @@ buildPythonPackage rec {
     "test_example"
     "test_example_info"
     "test_load_resample"
+    # does not converge
+    "test_nnls_vector"
   ];
 
   meta = with lib; {

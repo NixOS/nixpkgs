@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.3.3";
+  version = "1.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q8oV0mw8POFscFcdsYZfTkavNVQyqWdLAdb4lDX4ahM=";
+    hash = "sha256-N2StqGUqOYS9mW/DAeSntNg3kii+UPdTUHDV7g1Hvus=";
   };
 
   nativeBuildInputs = [

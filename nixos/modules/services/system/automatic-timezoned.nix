@@ -18,14 +18,7 @@ in
           the timezone.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.automatic-timezoned;
-        defaultText = literalExpression "pkgs.automatic-timezoned";
-        description = mdDoc ''
-          Which `automatic-timezoned` package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "automatic-timezoned" { };
     };
   };
 
@@ -57,7 +50,7 @@ in
         serviceConfig = {
           Type = "exec";
           User = "automatic-timezoned";
-          ExecStart = "${cfg.package}/bin/automatic-timezoned --zoneinfo-path=${pkgs.tzdata}/share/zoneinfo/zone1970.tab";
+          ExecStart = "${cfg.package}/bin/automatic-timezoned";
         };
         wantedBy = [ "default.target" ];
       };

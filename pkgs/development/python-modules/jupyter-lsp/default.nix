@@ -1,18 +1,23 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , jupyter-server
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-lsp";
-  version = "2.2.0";
+  version = "2.2.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jrvLUzrbQeXWNeuP6ClWsKr78P1EO2xL+pBu3uuGNaE=";
+    hash = "sha256-M9vLxd8kI3/1yLaWsE/0aJ/NMWy41JV9Yg/lUE19LD8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     jupyter-server

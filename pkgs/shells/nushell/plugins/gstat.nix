@@ -5,14 +5,18 @@
 , nushell
 , pkg-config
 , Security
+, libclang
 , nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_gstat";
   inherit (nushell) version src;
-  cargoHash = "sha256-9wUOKj6kMfXEFdYvVBqxme4MRkR6HORx+spTVT9t9VM=";
+  cargoHash = "sha256-wtw4S5fbZPh6OXmbbQu8oXpo0/rXWdOGHspx+z8Fjns=";
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    LIBCLANG_PATH = "${libclang.lib}/lib";
+  };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
   cargoBuildFlags = [ "--package nu_plugin_gstat" ];

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.59.1"; # N.B: if you change this, please update:
+  version = "1.62.0"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-4bou7oFQOgyxjFqJdmiFT8xEMCsOap9v34W6SPrT4WQ=";
+    hash = "sha256-iqoxgo/oocO9gBq0o5bmZvre/EwRguMrWnmwvyLGLr8=";
     fetchSubmodules = true;
   };
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilds = true;
 
   passthru.tests = {
-    inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
     inherit arrow-cpp;
   };
 

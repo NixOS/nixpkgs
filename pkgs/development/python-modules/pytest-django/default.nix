@@ -1,28 +1,55 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
 , django
+, setuptools
 , setuptools-scm
 , django-configurations
-, pytest-xdist
-, six
+, pytest
+, pytestCheckHook
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  version = "4.5.2";
+  version = "4.7.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9076f759bb7c36939dbdd5ae6633c18edfc2902d1a69fdbefd2426b970ce6c2";
+    hash = "sha256-ktb9RrHXm1T7awYLuzlCgHM5bOxxfV8uEiqZDUtqpeg=";
   };
 
-  nativeBuildInputs = [ pytest setuptools-scm ];
-  nativeCheckInputs = [ pytest django-configurations pytest-xdist six ];
-  propagatedBuildInputs = [ django ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
-  # Complicated. Requires Django setup.
-  doCheck = false;
+  buildInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    django
+  ];
+
+  nativeCheckInputs = [
+    django-configurations
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # bring pytest_django_test module into PYTHONPATH
+    export PYTHONPATH="$(pwd):$PYTHONPATH"
+
+    # test the lightweight sqlite flavor
+    export DJANGO_SETTINGS_MODULE="pytest_django_test.settings_sqlite"
+  '';
+
+  disabledTests = [
+    # AttributeError: type object 'TestLiveServer' has no attribute '_test_settings_before_run'
+    "test_settings_restored"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "py.test plugin for testing of Django applications";

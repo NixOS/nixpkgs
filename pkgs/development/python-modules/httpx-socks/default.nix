@@ -23,16 +23,16 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.8.0";
-  format = "pyproject";
+  version = "0.9.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "romis2012";
-    repo = pname;
+    repo = "httpx-socks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Dj+rrH5Pil5xQE6sAAD5RTycwlKq+TVsAeB2NVqGjY=";
+    hash = "sha256-9v5DfxEtM7jq+b8wR0M1klTSnSdFjQ4aDl8ZSZWxbFA=";
   };
 
   nativeBuildInputs = [

@@ -13,6 +13,12 @@ stdenv.mkDerivation {
   buildInputs = [ gtk2 ];
   sourceRoot = "scintilla/gtk";
 
+  CXXFLAGS = [
+    # GCC 13: error: 'intptr_t' does not name a type
+    "-include cstdint"
+    "-include system_error"
+  ];
+
   buildPhase = ''
     make
     cd ../../lexilla/src

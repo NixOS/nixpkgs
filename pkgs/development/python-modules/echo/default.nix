@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "echo";
   version = "0.8.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -40,8 +41,6 @@ buildPythonPackage rec {
     numpy
     qtpy
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   # collecting ... qt.qpa.xcb: could not connect to display
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.

@@ -15,14 +15,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "retext";
-  version = "8.0.0";
+  version = "8.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "retext-project";
     repo = pname;
-    rev = version;
-    hash = "sha256-22yqNwIehgTfeElqhN5Jzye7LbcAiseTeoMgenpmsL0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7zNEmFf0FZCzaNq9EMfGCje66/v5T/QvI5DTftLhi7g=";
   };
 
   toolbarIcons = fetchzip {

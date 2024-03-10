@@ -13,15 +13,19 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.99.0";
-  format = "setuptools";
+  version = "2.120.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5zP9DyyHk7GgANXmmsgbG57AZltEW37YO9u7ADiXMwY=";
+    hash = "sha256-oMh2nK2VdnaLyzGRyx9VD2qzKQy6BCutsPsXu6A/cMw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-auth
@@ -30,7 +34,6 @@ buildPythonPackage rec {
     httplib2
     uritemplate
     oauth2client
-    setuptools
   ];
 
   # No tests included in archive

@@ -12,8 +12,9 @@
 , pyopenssl
 , pythonOlder
 , requests
-, requests_ntlm
+, requests-ntlm
 , unicrypto
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -47,8 +48,9 @@ buildPythonPackage rec {
     pycryptodome
     pyopenssl
     requests
-    requests_ntlm
+    requests-ntlm
     unicrypto
+    setuptools
   ];
 
   # Project has no tests

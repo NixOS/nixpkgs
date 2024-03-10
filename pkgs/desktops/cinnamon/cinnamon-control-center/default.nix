@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , glib
+, glib-networking
 , gettext
 , cinnamon-desktop
 , gtk3
@@ -35,18 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "5.8.2";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-7AXm4ZTpI/4Xa2lwDmEvomNdwmgVoXSKqojpFZMuoVQ=";
+    hash = "sha256-AYnI+k6CzpWUutusCSDR5KhOmv5FWoChotAbCJXTh4I=";
   };
 
   buildInputs = [
     gtk3
     glib
+    glib-networking
     cinnamon-desktop
     libnotify
     cinnamon-menus

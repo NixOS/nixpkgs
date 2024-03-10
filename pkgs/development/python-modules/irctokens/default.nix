@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "irctokens";
   version = "2.0.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";  # f-strings
 
   src = fetchFromGitHub {

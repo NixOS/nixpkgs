@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "2.0.2";
+  format = "setuptools";
   pname = "kafka-python";
 
   src = fetchPypi {

@@ -20,20 +20,20 @@
 
 let
   pname = "torchmetrics";
-  version = "1.2.0";
+  version = "1.3.1";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g5JuTbiRd8yWx2nM3UE8ejOhuZ0XpAQdS5AC9AlrSFY=";
+    hash = "sha256-ZFpLoF4t1ld2c3exX9H8AYG0XQM7MKmWe/I8XZmdrZw=";
   };
-
-  disabled = pythonOlder "3.8";
 
   propagatedBuildInputs = [
     numpy
@@ -90,6 +90,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Machine learning metrics for distributed, scalable PyTorch applications (used in pytorch-lightning)";
     homepage = "https://lightning.ai/docs/torchmetrics/";
+    changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       SomeoneSerge

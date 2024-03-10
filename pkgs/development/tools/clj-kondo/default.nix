@@ -3,12 +3,12 @@
 
 buildGraalvmNativeImage rec {
   pname = "clj-kondo";
-  version = "2023.10.20";
+  version = "2024.02.12";
 
   src = fetchurl {
     url =
       "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-f9u/pk3CEEmiLgnS2biaUHpsMHjVEwZL2jyB/1PiZUY=";
+    sha256 = "sha256-up98q1/GWP9wZP95lHNE1z2xhzGzb8ZyTeuhP7a+qHw=";
   };
 
   graalvmDrv = graalvmCEPackages.graalvm-ce;
@@ -29,6 +29,6 @@ buildGraalvmNativeImage rec {
     license = licenses.epl10;
     changelog =
       "https://github.com/clj-kondo/clj-kondo/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ jlesquembre bandresen thiagokokada ];
+    maintainers = with maintainers; [ jlesquembre bandresen ];
   };
 }

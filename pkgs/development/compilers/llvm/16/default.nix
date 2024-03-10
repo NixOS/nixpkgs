@@ -59,6 +59,12 @@ in let
   inherit (releaseInfo) release_version version;
   inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
+  lldbPlugins = lib.makeExtensible (lldbPlugins: let
+    callPackage = newScope (lldbPlugins // { inherit stdenv; inherit (tools) lldb; });
+  in {
+    llef = callPackage ../common/lldb-plugins/llef.nix {};
+  });
+
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
     major = lib.versions.major release_version;
@@ -143,6 +149,10 @@ in let
       inherit llvm_meta;
     };
 
+    mlir = callPackage ../common/mlir {
+      inherit llvm_meta;
+    };
+
     lldb = callPackage ../common/lldb.nix {
       src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
         mkdir -p "$out"
@@ -162,7 +172,7 @@ in let
         [
           # FIXME: do we need this? ./procfs.patch
           resourceDirPatch
-          ./lldb/gnu-install-dirs.patch
+          ../common/lldb/gnu-install-dirs.patch
         ]
         # This is a stopgap solution if/until the macOS SDK used for x86_64 is
         # updated.
@@ -220,6 +230,7 @@ in let
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -281,7 +292,7 @@ in let
     # Has to be in tools despite mostly being a library,
     # because we use a native helper executable from a
     # non-cross build in cross builds.
-    libclc = callPackage ./libclc {
+    libclc = callPackage ../common/libclc.nix {
       inherit buildLlvmTools;
     };
   });
@@ -370,4 +381,4 @@ in let
   });
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+in { inherit tools libraries release_version lldbPlugins; } // (noExtend libraries) // (noExtend tools)

@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2023.10.06";
+  version = "2024.03.01";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-YNYtYqcpTOx4xS/LXI53h3S+na8JVpn4w8Dhf4fWNBQ=";
+    hash = "sha256-EcAp7KyqXdBACEbPgkM1INoKeGVo7hMDUx97y2RcX+k=";
   };
 
   strictDeps = true;
@@ -65,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     Carbon
     Cocoa
   ];
+
+  # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";
 
   configureFlags = [ "--enable-sdl2" ];
 

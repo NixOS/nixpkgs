@@ -10,18 +10,19 @@
 , cairo
 , dbus
 , pango
+, gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdecor";
-  version = "0.1.1";
+  version = "0.2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libdecor";
     repo = "libdecor";
     rev = version;
-    hash = "sha256-8b6qCqOSDDbhYwAeAaUyI71tSopTkGtCJaxZaJw1vQQ=";
+    hash = "sha256-mID19uHXFKJUZtQsSOXjRdz541YVjMxmSHVa+DlkPRc=";
   };
 
   outputs = [ "out" "dev" ];
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     cairo
     dbus
     pango
+    gtk3
   ];
 
   meta = with lib; {

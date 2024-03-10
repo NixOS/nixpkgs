@@ -3,9 +3,7 @@
 , fetchurl
 , makeWrapper
 , makeDesktopItem
-# sweethome3d 6.5.2 does not yet fully build&run with jdk 9 and later?
-, jdk8
-, jre8
+, jdk
 , ant
 , gtk3
 , gsettings-desktop-schemas
@@ -13,6 +11,7 @@
 , autoPatchelfHook
 , libXxf86vm
 , unzip
+, libGL
 }:
 
 let
@@ -42,7 +41,7 @@ let
     };
 
     postPatch = ''
-      addAutoPatchelfSearchPath ${jre8}/lib/openjdk/jre/lib/
+      addAutoPatchelfSearchPath ${jdk}/lib/openjdk/lib/
       autoPatchelf lib
 
       # Nix cannot see the runtime references to the paths we just patched in
@@ -52,7 +51,7 @@ let
     '';
 
     nativeBuildInputs = [ makeWrapper unzip autoPatchelfHook ];
-    buildInputs = [ ant jdk8 p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
+    buildInputs = [ ant jdk p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
 
     buildPhase = ''
       runHook preBuild
@@ -75,13 +74,9 @@ let
 
       cp "${sweethome3dItem}/share/applications/"* $out/share/applications
 
-      # MESA_GL_VERSION_OVERRIDE is needed since the update from MESA 19.3.3 to 20.0.2:
-      # without it a "Profiles [GL4bc, GL3bc, GL2, GLES1] not available on device null"
-      # exception is thrown on startup.
-      # https://discourse.nixos.org/t/glx-not-recognised-after-mesa-update/6753
-      makeWrapper ${jre8}/bin/java $out/bin/$exec \
-        --set MESA_GL_VERSION_OVERRIDE 2.1 \
+      makeWrapper ${jdk}/bin/java $out/bin/$exec \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
         --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
 
 
@@ -102,6 +97,7 @@ let
       inherit license;
       maintainers = [ lib.maintainers.edwtjo ];
       platforms = lib.platforms.linux;
+      mainProgram = exec;
     };
   };
 

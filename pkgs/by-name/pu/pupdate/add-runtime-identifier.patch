@@ -1,0 +1,24 @@
+From f56083d95304752c45cc569fe42c3b0d7a2430bd Mon Sep 17 00:00:00 2001
+From: Philipp Rintz <git@rintz.net>
+Date: Wed, 24 Jan 2024 22:11:50 +0100
+Subject: [PATCH] uncommited
+
+---
+ pupdate.csproj | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pupdate.csproj b/pupdate.csproj
+index a6f59a8..0563137 100644
+--- a/pupdate.csproj
++++ b/pupdate.csproj
+@@ -12,6 +12,7 @@
+     <Authors>Matt Pannella</Authors>
+     <Product>Pupdate</Product>
+     <RepositoryUrl>https://github.com/mattpannella/pocket-updater-utility</RepositoryUrl>
++    <RuntimeIdentifier>@RuntimeIdentifier@</RuntimeIdentifier>
+   </PropertyGroup>
+   <ItemGroup>
+     <PackageReference Include="CommandLineParser" Version="2.9.1" />
+-- 
+2.40.1
+

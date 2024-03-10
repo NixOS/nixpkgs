@@ -33,5 +33,6 @@ buildGoModule rec {
     homepage = "https://github.com/McKael/madonctl";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "madonctl";
   };
 }

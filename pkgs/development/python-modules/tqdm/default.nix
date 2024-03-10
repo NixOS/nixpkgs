@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , setuptools-scm
 , wheel
@@ -30,6 +31,9 @@ buildPythonPackage rec {
     wheel
   ];
 
+  # https://github.com/tqdm/tqdm/issues/1537
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
@@ -44,6 +48,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W" "ignore::FutureWarning"
+    "-W" "ignore::DeprecationWarning"
   ];
 
   # Remove performance testing.

@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gnaural.sourceforge.net/";
     maintainers = with maintainers; [ ehmry ];
     license = with licenses; [ gpl2Only ];
+    mainProgram = "gnaural";
   };
 }

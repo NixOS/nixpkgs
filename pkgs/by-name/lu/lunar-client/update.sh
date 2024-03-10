@@ -6,7 +6,7 @@ target="$(dirname "$(readlink -f "$0")")/package.nix"
 host="https://launcherupdates.lunarclientcdn.com"
 metadata=$(curl "$host/latest-linux.yml")
 version=$(echo "$metadata" | yq .version -r)
-sha512=$(echo "$metadata" | yq .sha512 -r)
+hash=$(echo "$metadata" | yq .sha512 -r)
 
 sed -i "s@version = .*;@version = \"$version\";@g" "$target"
-sed -i "s@hash.* = .*;@hash = \"sha512-$sha512\";@g" "$target"
+sed -i "s@hash.* = .*;@hash = \"sha512-$hash\";@g" "$target"

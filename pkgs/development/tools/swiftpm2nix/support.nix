@@ -29,6 +29,7 @@ in rec {
         url = dep.packageRef.location;
         rev = dep.state.checkoutState.revision;
         sha256 = hashes.${dep.subpath};
+        fetchSubmodules = true;
       })) workspaceState.object.dependencies
     );
 

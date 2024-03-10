@@ -21,7 +21,7 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "3.9.0";
+  version = "3.10.0";
   pname = "h5py";
   format = "pyproject";
 
@@ -29,7 +29,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5gTbZSHB42fGvX+tI5yEf1PMRmRvLSZRNy0Frl6V+Bc=";
+    hash = "sha256-2TrcSM7rMzR+skpjT7eH78euRkTm6kunM9CZYFBFwEk=";
   };
 
   # avoid strict pinning of numpy
@@ -47,7 +47,7 @@ in buildPythonPackage rec {
     ${lib.optionalString mpiSupport "export OMPI_MCA_rmaps_base_oversubscribe=yes"}
   '';
 
-  preBuild = lib.optionalString mpiSupport "export CC=${mpi}/bin/mpicc";
+  preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
   nativeBuildInputs = [
     cython

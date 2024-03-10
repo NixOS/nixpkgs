@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-int";
+
   meta = with lib; {
     homepage = "https://rzip.samba.org/";
     description = "Compression program";

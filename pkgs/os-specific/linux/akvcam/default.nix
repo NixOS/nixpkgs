@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "akvcam";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "webcamoid";
     repo = "akvcam";
     rev = version;
-    sha256 = "sha256-zvMPwgItp1bTq64DZcUbYls60XhgufOeEKaAoAFf64M=";
+    sha256 = "sha256-SzyamP6kcJI/GEeFp3uf1APdoBtwoUj0/9Otwtmygvs=";
   };
   sourceRoot = "${src.name}/src";
 

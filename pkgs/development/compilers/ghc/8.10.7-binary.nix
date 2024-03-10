@@ -250,6 +250,8 @@ stdenv.mkDerivation rec {
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
+      test -d ghc-${version}/inplace/bin && \
+        patchShebangs ghc-${version}/inplace/bin
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
     # Note that musl bindists do not contain them,
@@ -440,7 +442,7 @@ stdenv.mkDerivation rec {
     # platforms than the default libcs (i. e. glibc / libSystem).
     # This is done for the benefit of Hydra, so `packagePlatforms`
     # won't return any platforms that would cause an evaluation
-    # failure for `pkgsMusl.haskell.compiler.ghc8102Binary`, as
+    # failure for `pkgsMusl.haskell.compiler.ghc8107Binary`, as
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};

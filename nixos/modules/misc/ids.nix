@@ -288,7 +288,7 @@ in
       telegraf = 256;
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs  = 261;
       # stanchion = 262; # unused, removed 2020-10-14
@@ -313,7 +313,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       #monero = 287; # dynamically allocated as of 2021-05-08
@@ -599,7 +599,7 @@ in
       #telegraf = 256; # unused
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
@@ -623,7 +623,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       # monero = 287; # dynamically allocated as of 2021-05-08

@@ -1,5 +1,6 @@
 { stdenv, lib, fetchgit, darwin, writeText
 , ninja, python3
+, disable-warnings-if-gcc13
 , ...
 }:
 
@@ -17,7 +18,7 @@ let
     #endif  // OUT_LAST_COMMIT_POSITION_H_
   '';
 
-in stdenv.mkDerivation {
+in disable-warnings-if-gcc13 (stdenv.mkDerivation {
   pname = "gn-unstable";
   inherit version;
 
@@ -57,4 +58,4 @@ in stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [ stesie matthewbauer primeos ];
   };
-}
+})

@@ -13,20 +13,22 @@ let
     findFirst
     isDerivation
     length
-    mapAttrsToList
-    mergeDefinitions
+    concatMap
     mutuallyExclusive
     optional
     optionalAttrs
     optionalString
     optionals
-    remove
-    unknownModule
+    isAttrs
+    isString
+    mapAttrs
   ;
 
   inherit (lib.lists)
     any
     toList
+    isList
+    elem
   ;
 
   # If we're in hydra, we can dispense with the more verbose error
@@ -59,11 +61,15 @@ let
   hasLicense = attrs:
     attrs ? meta.license;
 
-  hasAllowlistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && any (l: builtins.elem l allowlist) (toList attrs.meta.license);
+  hasListedLicense = assert areLicenseListsValid; list: attrs:
+    length list > 0 && hasLicense attrs && (
+      if isList attrs.meta.license then any (l: elem l list) attrs.meta.license
+      else elem attrs.meta.license list
+    );
 
-  hasBlocklistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && any (l: builtins.elem l blocklist) (toList attrs.meta.license);
+  hasAllowlistedLicense = attrs: hasListedLicense allowlist attrs;
+
+  hasBlocklistedLicense = attrs: hasListedLicense blocklist attrs;
 
   allowBroken = config.allowBroken
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
@@ -71,11 +77,16 @@ let
   allowUnsupportedSystem = config.allowUnsupportedSystem
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
-  isUnfree = licenses: any (l: !l.free or true) licenses;
+  isUnfree = licenses:
+    if isAttrs licenses then !licenses.free or true
+    # TODO: Returning false in the case of a string is a bug that should be fixed.
+    # In a previous implementation of this function the function body
+    # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
+    # which always evaluates to `!true` for strings.
+    else if isString licenses then false
+    else lib.lists.any (l: !l.free or true) licenses;
 
-  hasUnfreeLicense = attrs:
-    hasLicense attrs &&
-    isUnfree (toList attrs.meta.license);
+  hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
   hasNoMaintainers = attrs:
     attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
@@ -270,44 +281,37 @@ let
       isEnabled = findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
-  # Deep type-checking. Note that calling `type.check` is not enough: see `lib.mkOptionType`'s documentation.
-  # We don't include this in lib for now because this function is flawed: it accepts things like `mkIf true 42`.
-  typeCheck = type: value: let
-    merged = mergeDefinitions [ ] type [
-      { file = unknownModule; inherit value; }
-    ];
-    eval = builtins.tryEval (builtins.deepSeq merged.mergedValue null);
-  in eval.success;
-
-  # TODO make this into a proper module and use the generic option documentation generation?
   metaTypes = let
-    inherit (lib.types)
-      anything
-      attrsOf
-      bool
-      either
-      int
-      listOf
-      mkOptionType
-      str
-      unspecified
-    ;
-
-    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
+    types = import ./meta-types.nix { inherit lib; };
+    inherit (types) str union int attrs attrsOf any listOf bool;
+    platforms = listOf (union [ str (attrsOf any) ]);  # see lib.meta.platformMatch
   in {
     # These keys are documented
     description = str;
     mainProgram = str;
     longDescription = str;
     branch = str;
-    homepage = either (listOf str) str;
+    homepage = union [
+      (listOf str)
+      str
+    ];
     downloadPage = str;
-    changelog = either (listOf str) str;
+    changelog = union [
+      (listOf str)
+      str
+    ];
     license = let
-      licenseType = either (attrsOf anything) str; # TODO disallow `str` licenses, use a module
-    in either licenseType (listOf licenseType);
-    sourceProvenance = listOf lib.types.attrs;
-    maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      # TODO disallow `str` licenses, use a module
+      licenseType = union [
+        (attrsOf any)
+        str
+      ];
+    in union [
+      (listOf licenseType)
+      licenseType
+    ];
+    sourceProvenance = listOf attrs;
+    maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
     pkgConfigModules = listOf str;
     inherit platforms;
@@ -316,16 +320,13 @@ let
     unfree = bool;
     unsupported = bool;
     insecure = bool;
-    # TODO: refactor once something like Profpatsch's types-simple will land
-    # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
-    tests = attrsOf (mkOptionType {
+    tests = {
       name = "test";
-      check = x: x == {} || ( # Accept {} for tests that are unsupported
+      verify = x: x == {} || ( # Accept {} for tests that are unsupported
         isDerivation x &&
         x ? meta.timeout
       );
-      merge = lib.options.mergeOneOption;
-    });
+    };
     timeout = int;
 
     # Needed for Hydra to expose channel tarballs:
@@ -341,7 +342,7 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
-    available = unspecified;
+    available = any;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
     isFcitxEngine = bool;
@@ -350,17 +351,20 @@ let
     badPlatforms = platforms;
   };
 
-  checkMetaAttr = k: v:
+  checkMetaAttr = let
+    # Map attrs directly to the verify function for performance
+    metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
+  in k: v:
     if metaTypes?${k} then
-      if typeCheck metaTypes.${k} v then
-        null
+      if metaTypes'.${k} v then
+        [ ]
       else
-        "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.description}, got\n    ${
+        [ "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
           lib.generators.toPretty { indent = "    "; } v
-        }"
+        }" ]
     else
-      "key 'meta.${k}' is unrecognized; expected one of: \n  [${concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)}]";
-  checkMeta = meta: optionals config.checkMeta (remove null (mapAttrsToList checkMetaAttr meta));
+      [ "key 'meta.${k}' is unrecognized; expected one of: \n  [${concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)}]" ];
+  checkMeta = meta: optionals config.checkMeta (concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta));
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
@@ -479,16 +483,21 @@ let
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
-    in validity // {
+      inherit (validity) valid;
+  in validity // {
       # Throw an error if trying to evaluate a non-valid derivation
       # or, alternatively, just output a warning message.
       handled =
-        {
-          no = handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; };
-          warn = handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; };
-          yes = true;
-        }.${validity.valid};
-
+        (
+          if valid == "yes" then true
+          else if valid == "no" then (
+            handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; }
+          )
+          else if valid == "warn" then (
+            handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; }
+          )
+          else throw "Unknown validitiy: '${valid}'"
+        );
   };
 
 in { inherit assertValidity commonMeta; }

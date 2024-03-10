@@ -2,12 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , zope-proxy
-, zope_testrunner
+, zope-testrunner
 }:
 
 buildPythonPackage rec {
   pname = "zope-deferredimport";
   version = "5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.deferredimport";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope-proxy ];
 
-  nativeCheckInputs = [ zope_testrunner ];
+  nativeCheckInputs = [ zope-testrunner ];
 
   checkPhase = ''
     zope-testrunner --test-path=src []

@@ -50,16 +50,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.10"; # always change at once with ./minimal.nix
+  version = "8.12"; # always change at once with ./minimal.nix
 
-  src = (lib.makeOverridable ({ name, sha256 }:
+  src = (lib.makeOverridable ({ name, hash }:
     fetchurl {
       url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-      inherit sha256;
+      inherit hash;
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-Dklj2iwX5/bVdCi9odz2Ttp0N+Lya7bMSLR/QXo9k6M=";
+    hash = "sha256-or26nirm5dGhg2S8to99BFOOSS2Oksn7Yb0y2L5b69c=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -136,6 +136,8 @@ stdenv.mkDerivation rec {
   configureScript = "../configure";
 
   enableParallelBuilding = false;
+
+  dontStrip = stdenv.isDarwin;
 
   meta = with lib; {
     description = "A programmable programming language";

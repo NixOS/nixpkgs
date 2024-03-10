@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "A simple TCP proxy";
     license = licenses.gpl2;
     maintainers = [ maintainers.montag451 ];
+    mainProgram = "simpleproxy";
   };
 }

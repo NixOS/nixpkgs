@@ -42,6 +42,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/httpd/commit/918620a183d843fb393ed939423a25d42c1044ec.patch";
       hash = "sha256-YZi3t++hjM0skisax2xuh9DifZVZjCjVn6XQr6QKGEs=";
     })
+  ] ++ lib.optionals libxml2Support [
+    (fetchpatch {
+      name = "compat-with-libxml2-2.12.patch";
+      url = "https://github.com/apache/httpd/commit/27a68e54b7c6d2ae80dca396fd2727852897dab1.patch";
+      hash = "sha256-k2EqCaDkckrXLsHnjP4h+b1brTnde4pUyrbOiPFB6qk=";
+    })
   ];
 
   postPatch = ''

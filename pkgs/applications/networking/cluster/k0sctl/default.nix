@@ -1,21 +1,21 @@
 { lib
-, buildGo121Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "k0sctl";
-  version = "0.16.0";
+  version = "0.17.4";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DUDvsF4NCFimpW9isqEhodieiJXwjhwhfXR2t/ho3kE=";
+    hash = "sha256-E9EIyBDYsLqfKsb25o1SEh0lUAT/xEtcHHlkunS5Meg=";
   };
 
-  vendorHash = "sha256-eJTVUSAcgE1AaOCEEc202sC0yIfMj30UoK/ObowJ9Zk=";
+  vendorHash = "sha256-0P1v7mZ+k7Th8/cwxRNlhDodzyagv0V9ZBXy1BUGk+k=";
 
   ldflags = [
     "-s"
@@ -26,9 +26,6 @@ buildGo121Module rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  # https://github.com/k0sproject/k0sctl/issues/569
-  checkFlags = [ "-skip=^Test(Unmarshal|VersionDefaulting)/version_not_given$" ];
 
   postInstall = ''
     for shell in bash zsh fish; do
@@ -41,7 +38,7 @@ buildGo121Module rec {
     description = "A bootstrapping and management tool for k0s clusters.";
     homepage = "https://k0sproject.io/";
     license = licenses.asl20;
-    mainProgram = pname;
+    mainProgram = "k0sctl";
     maintainers = with maintainers; [ nickcao qjoly ];
   };
 }

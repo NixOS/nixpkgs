@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "construct";
-  version = "2.10.69";
+  version = "2.10.70";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "construct";
     repo = "construct";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v1ieZytX9I2BR6UBD6TztCBT4KWtqfFZVKNtXIRNEB0=";
+    hash = "sha256-5otjjIyje0+z/Y/C2ivmu08PNm0oJcSSvZkQfGxHDuQ=";
   };
 
   nativeBuildInputs = [

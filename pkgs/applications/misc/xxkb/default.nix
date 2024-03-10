@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.artistic2;
     maintainers = with maintainers; [ rasendubi ];
     platforms = platforms.linux;
+    mainProgram = "xxkb";
   };
 }

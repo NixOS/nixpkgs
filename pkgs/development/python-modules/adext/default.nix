@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "adext";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ajschmidt8";
@@ -16,8 +17,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0h5k9kzms2f0r48pdhsgv8pimk0vsxw8vs0k6880mank8ij914wr";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

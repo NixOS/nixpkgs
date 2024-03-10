@@ -7,7 +7,7 @@
 }:
 
 let
-  self = stdenv.mkDerivation (rec {
+  self = stdenv.mkDerivation (finalAttrs: rec {
     pname = "clang";
     inherit version;
 
@@ -21,6 +21,7 @@ let
     sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake ninja python3 ]
+      ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -30,6 +31,7 @@ let
       "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
+      "-DLLVM_INCLUDE_TESTS=OFF"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -52,8 +54,8 @@ let
       ./gnu-install-dirs.patch
       ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
-        src = ../../clang-11-12-LLVMgold-path.patch;
-        libllvmLibdir = "${libllvm.lib}/lib";
+        src = ../../common/clang/clang-at-least-16-LLVMgold-path.patch;
+       libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
 
@@ -65,14 +67,11 @@ let
 
     outputs = [ "out" "lib" "dev" "python" ];
 
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-      # The following warning is triggered with (at least) gcc >=
-      # 12, but appears to occur only for cross compiles.
-      NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
-    };
-
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
+
+      mkdir -p $lib/lib/clang
+      mv $lib/lib/${lib.versions.major version} $lib/lib/clang/${lib.versions.major version}
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
@@ -81,13 +80,12 @@ let
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
-      mkdir -p $python/bin $python/share/{clang,scan-view}
+      mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
-      mv $out/share/scan-view/*.py $python/share/scan-view
       rm $out/bin/c-index-test
       patchShebangs $python/bin
 
@@ -98,7 +96,12 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [ "fortify3" ];
+      hardeningUnsupportedFlags = [
+        "fortify3"
+      ];
+      hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
+        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
     };
 
     meta = llvm_meta // {

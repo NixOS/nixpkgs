@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gitpython";
-  version = "3.1.37";
+  version = "3.1.40";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "gitpython-developers";
     repo = "GitPython";
     rev = "refs/tags/${version}";
-    hash = "sha256-w3aSgIaD6tkxhYctkvvsdKlWXS8xU4+F0cCYeYTNHig=";
+    hash = "sha256-a5Ez6SuSqrJE306FrFjEnSoVhALVvubF1pLW4awK4gM=";
   };
 
   propagatedBuildInputs = [

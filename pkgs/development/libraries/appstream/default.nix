@@ -23,20 +23,23 @@
 , gperf
 , vala
 , curl
+, systemd
 , nixosTests
+, testers
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "0.15.5";
+  version = "1.0.1";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "ximion";
     repo = "appstream";
-    rev = "v${version}";
-    sha256 = "sha256-KVZCtu1w5FMgXZMiSW55rbrI6W/A9zWWKKvACtk/jjk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-ULqRHepWVuAluXsXJUoqxqJfrN168MGlwdVkoLLwSN0=";
   };
 
   patches = [
@@ -82,6 +85,8 @@ stdenv.mkDerivation rec {
     libxmlb
     libyaml
     curl
+  ] ++ lib.optionals withSystemd [
+    systemd
   ];
 
   mesonFlags = [
@@ -89,11 +94,14 @@ stdenv.mkDerivation rec {
     "-Ddocs=false"
     "-Dvapi=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ] ++ lib.optionals (!withSystemd) [
+    "-Dsystemd=false"
   ];
 
-  passthru = {
-    tests = {
-      installed-tests = nixosTests.installed-tests.appstream;
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.appstream;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
@@ -109,5 +117,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     mainProgram = "appstreamcli";
     platforms = platforms.unix;
+    pkgConfigModules = [ "appstream" ];
   };
-}
+})

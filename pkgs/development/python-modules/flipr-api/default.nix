@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "flipr-api";
-  version = "1.5.0";
-  format = "pyproject";
+  version = "1.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cnico";
-    repo = pname;
+    repo = "flipr-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-IAxB3i/HkwO5sjDh2aBCtijOcG0VIbatQjTWIh0inoM=";
+    hash = "sha256-xgLi2lH+EPPNlMixqOzdBGVLuoJh5dhZ2tHZ0UH+lOk=";
   };
 
   nativeBuildInputs = [

@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "gpt-2-simple";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "minimaxir";

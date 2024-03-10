@@ -43,6 +43,7 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/SamHH/bukubrow-host";
     license = licenses.gpl3;
     maintainers = with maintainers; [ infinisil ];
+    mainProgram = "bukubrow";
   };
 }
 

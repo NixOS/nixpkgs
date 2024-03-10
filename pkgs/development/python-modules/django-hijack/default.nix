@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.4.2";
+  version = "3.4.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
     rev = "refs/tags/${version}";
-    hash = "sha256-E5gM/5MIB65gdyv/I+Kuw8rbjPvtUnbCPXpasaIDzyo=";
+    hash = "sha256-FXh5OFMTjsKgjEeIS+CiOwyGOs4AisJA+g49rCILDsQ=";
   };
 
   postPatch = ''
@@ -40,10 +40,8 @@ buildPythonPackage rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-4ZVb+V/oYfflIZdme6hbpoSBFVV7lk5wLfEzzBqZv/Y=";
+    hash = "sha256-cZEr/7FW4vCR8gpraT+/rPwYK9Xn22b5WH7lnuK5L4U=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     gettext

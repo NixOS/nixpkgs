@@ -2,10 +2,10 @@
 { lib }:
 
 let
-  inherit (builtins) head tail length;
-  inherit (lib.trivial) id mergeAttrs;
+  inherit (builtins) head length;
+  inherit (lib.trivial) mergeAttrs warn;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
+  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
 
 rec {
@@ -13,6 +13,14 @@ rec {
 
 
   /* Return an attribute from nested attribute sets.
+
+     Nix has an [attribute selection operator `. or`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+     ```nix
+     (x.a.b or 6) == attrByPath ["a" "b"] 6 x
+     # and
+     (x.${f p}."example.com" or 6) == attrByPath [ (f p) "example.com" ] 6 x
+     ```
 
      Example:
        x = { a = { b = 3; }; }
@@ -51,12 +59,27 @@ rec {
 
   /* Return if an attribute from nested attribute set exists.
 
+     Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+     ```nix
+     (x?a.b) == hasAttryByPath ["a" "b"] x
+     # and
+     (x?${f p}."example.com") == hasAttryByPath [ (f p) "example.com" ] x
+     ```
+
+     **Laws**:
+      1.  ```nix
+          hasAttrByPath [] x == true
+          ```
+
      Example:
        x = { a = { b = 3; }; }
        hasAttrByPath ["a" "b"] x
        => true
        hasAttrByPath ["z" "z"] x
        => false
+       hasAttrByPath [] (throw "no need")
+       => true
 
     Type:
       hasAttrByPath :: [String] -> AttrSet -> Bool
@@ -79,6 +102,71 @@ rec {
       );
     in
       hasAttrByPath' 0 e;
+
+  /*
+    Return the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
+
+    Can be used after [`mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) to apply a condition,
+    although this will evaluate the predicate function on sibling attributes as well.
+
+    Note that the empty attribute path is valid for all values, so this function only throws an exception if any of its inputs does.
+
+    **Laws**:
+    1.  ```nix
+        attrsets.longestValidPathPrefix [] x == []
+        ```
+
+    2.  ```nix
+        hasAttrByPath (attrsets.longestValidPathPrefix p x) x == true
+        ```
+
+    Example:
+      x = { a = { b = 3; }; }
+      attrsets.longestValidPathPrefix ["a" "b" "c"] x
+      => ["a" "b"]
+      attrsets.longestValidPathPrefix ["a"] x
+      => ["a"]
+      attrsets.longestValidPathPrefix ["z" "z"] x
+      => []
+      attrsets.longestValidPathPrefix ["z" "z"] (throw "no need")
+      => []
+
+    Type:
+      attrsets.longestValidPathPrefix :: [String] -> Value -> [String]
+  */
+  longestValidPathPrefix =
+    # A list of strings representing the longest possible path that may be returned.
+    attrPath:
+    # The nested attribute set to check.
+    v:
+    let
+      lenAttrPath = length attrPath;
+      getPrefixForSetAtIndex =
+        # The nested attribute set to check, if it is an attribute set, which
+        # is not a given.
+        remainingSet:
+        # The index of the attribute we're about to check, as well as
+        # the length of the prefix we've already checked.
+        remainingPathIndex:
+
+          if remainingPathIndex == lenAttrPath then
+            # All previously checked attributes exist, and no attr names left,
+            # so we return the whole path.
+            attrPath
+          else
+            let
+              attr = elemAt attrPath remainingPathIndex;
+            in
+            if remainingSet ? ${attr} then
+              getPrefixForSetAtIndex
+                remainingSet.${attr}      # advance from the set to the attribute value
+                (remainingPathIndex + 1)  # advance the path
+            else
+              # The attribute doesn't exist, so we return the prefix up to the
+              # previously checked length.
+              take remainingPathIndex attrPath;
+    in
+      getPrefixForSetAtIndex v 0;
 
   /* Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
 
@@ -105,6 +193,14 @@ rec {
   /* Like `attrByPath`, but without a default value. If it doesn't find the
      path it will throw an error.
 
+     Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+
+    ```nix
+     x.a.b == getAttrByPath ["a" "b"] x
+     # and
+     x.${f p}."example.com" == getAttrByPath [ (f p) "example.com" ] x
+     ```
+
      Example:
        x = { a = { b = 3; }; }
        getAttrFromPath ["a" "b"] x
@@ -120,8 +216,7 @@ rec {
     attrPath:
     # The nested attribute set to find the value in.
     set:
-    let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
-    in attrByPath attrPath (abort errorMsg) set;
+    attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
 
   /* Map each attribute in the given set and merge them into a new attribute set.
 
@@ -273,7 +368,7 @@ rec {
      Type:
        attrValues :: AttrSet -> [Any]
   */
-  attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
+  attrValues = builtins.attrValues;
 
 
   /* Given a set of attribute names, return the set of the corresponding
@@ -302,8 +397,7 @@ rec {
      Type:
        catAttrs :: String -> [AttrSet] -> [Any]
   */
-  catAttrs = builtins.catAttrs or
-    (attr: l: concatLists (map (s: if s ? ${attr} then [s.${attr}] else []) l));
+  catAttrs = builtins.catAttrs;
 
 
   /* Filter an attribute set by removing all attributes for which the
@@ -512,9 +606,7 @@ rec {
      Type:
        mapAttrs :: (String -> Any -> Any) -> AttrSet -> AttrSet
   */
-  mapAttrs = builtins.mapAttrs or
-    (f: set:
-      listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set)));
+  mapAttrs = builtins.mapAttrs;
 
 
   /* Like `mapAttrs`, but allows the name of each attribute to be
@@ -587,65 +679,79 @@ rec {
   attrsToList = mapAttrsToList nameValuePair;
 
 
-  /* Like `mapAttrs`, except that it recursively applies itself to
-     the *leaf* attributes of a potentially-nested attribute set:
-     the second argument of the function will never be an attrset.
-     Also, the first argument of the argument function is a *list*
-     of the attribute names that form the path to the leaf attribute.
+  /**
+    Like `mapAttrs`, except that it recursively applies itself to the *leaf* attributes of a potentially-nested attribute set:
+    the second argument of the function will never be an attrset.
+    Also, the first argument of the mapping function is a *list* of the attribute names that form the path to the leaf attribute.
 
-     For a function that gives you control over what counts as a leaf,
-     see `mapAttrsRecursiveCond`.
+    For a function that gives you control over what counts as a leaf, see `mapAttrsRecursiveCond`.
 
-     Example:
-       mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
-         { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
-       => { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
+    :::{#map-attrs-recursive-example .example}
+    # Map over leaf attributes
 
-     Type:
-       mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```nix
+    mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
+      { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
+    ```
+    evaluates to
+    ```nix
+    { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
+    ```
+    :::
+
+    # Type
+    ```
+    mapAttrsRecursive :: ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```
   */
   mapAttrsRecursive =
-    # A function, given a list of attribute names and a value, returns a new value.
+    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
     f:
-    # Set to recursively map over.
+    # Attribute set to recursively map over.
     set:
     mapAttrsRecursiveCond (as: true) f set;
 
 
-  /* Like `mapAttrsRecursive`, but it takes an additional predicate
-     function that tells it whether to recurse into an attribute
-     set.  If it returns false, `mapAttrsRecursiveCond` does not
-     recurse, but does apply the map function.  If it returns true, it
-     does recurse, and does not apply the map function.
+  /**
+    Like `mapAttrsRecursive`, but it takes an additional predicate that tells it whether to recurse into an attribute set.
+    If the predicate returns false, `mapAttrsRecursiveCond` does not recurse, but instead applies the mapping function.
+    If the predicate returns true, it does recurse, and does not apply the mapping function.
 
-     Example:
-       # To prevent recursing into derivations (which are attribute
-       # sets with the attribute "type" equal to "derivation"):
-       mapAttrsRecursiveCond
-         (as: !(as ? "type" && as.type == "derivation"))
-         (x: ... do something ...)
-         attrs
+    :::{#map-attrs-recursive-cond-example .example}
+    # Map over an leaf attributes defined by a condition
 
-     Type:
-       mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+    Map derivations to their `name` attribute.
+    Derivatons are identified as attribute sets that contain `{ type = "derivation"; }`.
+    ```nix
+    mapAttrsRecursiveCond
+      (as: !(as ? "type" && as.type == "derivation"))
+      (x: x.name)
+      attrs
+    ```
+    :::
+
+    # Type
+    ```
+    mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> AttrSet
+    ```
   */
   mapAttrsRecursiveCond =
-    # A function, given the attribute set the recursion is currently at, determine if to recurse deeper into that attribute set.
+    # A function that, given the attribute set the recursion is currently at, determines if to recurse deeper into that attribute set.
     cond:
-    # A function, given a list of attribute names and a value, returns a new value.
+    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
+    # The attribute value is either an attribute set for which `cond` returns false, or something other than an attribute set.
     f:
     # Attribute set to recursively map over.
     set:
     let
       recurse = path:
-        let
-          g =
-            name: value:
+        mapAttrs
+          (name: value:
             if isAttrs value && cond value
-              then recurse (path ++ [name]) value
-              else f (path ++ [name]) value;
-        in mapAttrs g;
-    in recurse [] set;
+            then recurse (path ++ [ name ]) value
+            else f (path ++ [ name ]) value);
+    in
+    recurse [ ] set;
 
 
   /* Generate an attribute set by mapping a function over a list of
@@ -777,10 +883,7 @@ rec {
      Type:
        zipAttrs :: [ AttrSet ] -> AttrSet
   */
-  zipAttrs =
-    # List of attribute sets to zip together.
-    sets:
-    zipAttrsWith (name: values: values) sets;
+  zipAttrs = zipAttrsWith (name: values: values);
 
   /*
     Merge a list of attribute sets together using the `//` operator.
@@ -1045,10 +1148,7 @@ rec {
    Type: chooseDevOutputs :: [Derivation] -> [String]
 
   */
-  chooseDevOutputs =
-    # List of packages to pick `dev` outputs from
-    drvs:
-    builtins.map getDev drvs;
+  chooseDevOutputs = builtins.map getDev;
 
   /* Make various Nix tools consider the contents of the resulting
      attribute set when looking for what to build, find, etc.
@@ -1101,9 +1201,10 @@ rec {
       (x // y) // mask;
 
   # DEPRECATED
-  zipWithNames = zipAttrsWithNames;
+  zipWithNames = warn
+    "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
 
   # DEPRECATED
-  zip = builtins.trace
-    "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
+  zip = warn
+    "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 }

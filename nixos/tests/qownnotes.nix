@@ -21,6 +21,7 @@ import ./make-test-python.nix ({ lib, pkgs, ...} :
 
   enableOCR = true;
 
+  # https://nixos.org/manual/nixos/stable/#ssec-machine-objects
   testScript = { nodes, ... }: let
     aliceDo = cmd: ''machine.succeed("su - alice -c '${cmd}' >&2 &");'';
     in ''
@@ -52,8 +53,13 @@ import ./make-test-python.nix ({ lib, pkgs, ...} :
         machine.wait_for_text("App metric")
         machine.send_key("ret")
 
+        # Doesn't work for non-root
+        #machine.wait_for_window("QOwnNotes - ${pkgs.qownnotes.version}")
+
+        # OCR doesn't seem to be able any more to handle the main window
+        #machine.wait_for_text("QOwnNotes - ${pkgs.qownnotes.version}")
+
         # The main window should now show up
-        machine.wait_for_text("QOwnNotes - ${pkgs.qownnotes.version}")
         machine.wait_for_open_port(22222)
         machine.wait_for_console_text("QOwnNotes server listening on port 22222")
 
@@ -63,7 +69,13 @@ import ./make-test-python.nix ({ lib, pkgs, ...} :
         machine.send_key("ctrl-n")
         machine.sleep(1)
         machine.send_chars("This is a NixOS test!\n")
-        machine.wait_for_text("This is a NixOS test!")
+        machine.wait_until_succeeds("find /home/alice/Notes -type f | grep -qi 'Note 2'")
+
+        # OCR doesn't seem to be able any more to handle the main window
+        #machine.wait_for_text("This is a NixOS test!")
+
+        # Doesn't work for non-root
+        #machine.wait_for_window("- QOwnNotes - ${pkgs.qownnotes.version}")
 
         machine.screenshot("QOwnNotes-NewNote")
   '';

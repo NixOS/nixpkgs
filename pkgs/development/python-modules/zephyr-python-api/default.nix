@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "zephyr-python-api";
-  version = "0.0.3";
+  version = "0.0.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M9Kf0RtoSeDFAAgAuks+Ek+Wg5OM8qmd3eDoaAgAa3A=";
+    hash = "sha256-GIXxpItbRH31PJ7dX48w92LrYY0axbZQoAFXrRGeLas=";
   };
 
   nativeBuildInputs = [ setuptools ];

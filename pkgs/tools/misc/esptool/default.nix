@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "4.6.2";
+  version = "4.7.0";
 
   format = "setuptools";
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    hash = "sha256-3uvTyJrGCpulu/MR/VfCgnIxibxJj2ehBIBSveq7EfI=";
+    hash = "sha256-yrEwCg0e+8jZorL6jcqeuKUCFoV0oP9HVFh1n/ezjPg=";
   };
 
   postPatch = ''
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     bitstring
     cryptography
     ecdsa
+    intelhex
     pyserial
     reedsolo
     pyyaml

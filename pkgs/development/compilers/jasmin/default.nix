@@ -1,31 +1,49 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , unzip
-, jdk8
 , ant
+, jdk8
 , makeWrapper
+, canonicalize-jars-hook
 , callPackage
 }:
 
-let jre = jdk8.jre; jdk = jdk8; in
-stdenv.mkDerivation rec {
+let
+  jdk = jdk8;
+  jre = jdk8.jre;
+
+in stdenv.mkDerivation (finalAttrs: {
   pname = "jasmin";
   version = "2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/jasmin/jasmin-${version}/jasmin-${version}.zip";
-    sha256 = "17a41vr96glcdrdbk88805wwvv1r6w8wg7if23yhd0n6rrl0r8ga";
+    url = "mirror://sourceforge/jasmin/jasmin-${finalAttrs.version}.zip";
+    hash = "sha256-6qEMaM7Gggb9EC6exxE3OezNeQEIoblabow+k/IORJ0=";
   };
 
-  nativeBuildInputs = [ unzip jdk ant makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    ant
+    jdk
+    makeWrapper
+    canonicalize-jars-hook
+  ];
 
-  buildPhase = "ant all";
-  installPhase =
-  ''
+  buildPhase = ''
+    runHook preBuild
+    ant all
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
     install -Dm644 jasmin.jar $out/share/java/jasmin.jar
-    mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/jasmin \
       --add-flags "-jar $out/share/java/jasmin.jar"
+
+    runHook postInstall
   '';
 
   passthru.tests = {
@@ -34,11 +52,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An assembler for the Java Virtual Machine";
-    homepage = "https://jasmin.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/jasmin/files/latest/download";
+    homepage = "https://jasmin.sourceforge.net/";
     license = licenses.bsd3;
+    mainProgram = "jasmin";
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
-
+})

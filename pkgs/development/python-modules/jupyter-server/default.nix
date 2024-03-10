@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.10.1";
-  format = "pyproject";
+  version = "2.12.5";
+  pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-5tomV6lUp4ee7SjMCOCBewH/2B1+q4Y0ZgOXtV+SZHI=";
+    hash = "sha256-DttibJS6oigJvhMj+XcM8cAKlSsXCXWS5A0D5qOVFok=";
   };
 
   nativeBuildInputs = [
@@ -93,11 +93,11 @@ buildPythonPackage rec {
     "test_cull_idle"
     "test_server_extension_list"
     "test_subscribe_websocket"
+    # test is presumable broken in sandbox
+    "test_authorized_requests"
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
-    # test is presumable broken in sandbox
-    "test_authorized_requests"
     # Insufficient access privileges for operation
     "test_regression_is_hidden"
   ] ++ lib.optionals stdenv.isLinux [

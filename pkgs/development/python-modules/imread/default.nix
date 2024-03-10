@@ -1,8 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytestCheckHook
 , pkg-config
+, setuptools
 , libjpeg
 , libpng
 , libtiff
@@ -12,18 +13,48 @@
 
 buildPythonPackage rec {
   pname = "python-imread";
-  version = "0.7.4";
+  version = "0.7.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "imread";
-    sha256 = "0kvlpy62vc16i0mysv1b2gv746in41q75hb815q6h8d227psv1q4";
+    hash = "sha256-GiWpA128GuLlbBW1CQQHHVVeoZfu9Yyh2RFzSdtHDbc=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+    setuptools
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ nose libjpeg libpng libtiff libwebp ];
+  buildInputs = [
+    libjpeg
+    libpng
+    libtiff
+    libwebp
+  ];
+
   propagatedBuildInputs = [ numpy ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # verbose build outputs needed to debug hard-to-reproduce hydra failures
+    "-v"
+    "--pyargs" "imread"
+  ];
+
+  pythonImportsCheck = [
+    "imread"
+  ];
+
+  preCheck = ''
+    cd $TMPDIR
+    export HOME=$TMPDIR
+    export OMP_NUM_THREADS=1
+  '';
 
   meta = with lib; {
     description = "Python package to load images as numpy arrays";

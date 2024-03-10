@@ -16,12 +16,12 @@
 }:
 
 let
-  version = "2.2";
+  version = "2.3.1";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    hash = "sha256-yFxKqEMF77aRFc1JehIOvdECWJk7TPEjqCRbPZnUmHQ=";
+    hash = "sha256-9oFIIvwwinpTLyU0hckDgYPGKWpsXfRwqeODtPjnYFs=";
   };
 in
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2/IsDZJAtERs2AG6J4LR/ffy4XYmaj0KeSwZLQ849Lc=";
+    hash = "sha256-RM29WjzsYnn26x/Xr2RKp0p87/v+Jl8skEcAwxhZEtU=";
   };
 
   #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.

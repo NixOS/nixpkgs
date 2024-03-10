@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "unstable-2023-10-30";
+  version = "unstable-2023-12-01";
 
   src = fetchFromGitHub {
     owner = "zbelial";
     repo = "lspce";
-    rev = "34c59787bcdbf414c92d9b3bf0a0f5306cb98d64";
-    hash = "sha256-kUHGdeJo2zXA410FqXGclgXmgWrll30Zv8fSprcmnIo=";
+    rev = "1958b6fcdfb6288aa17fa42360315d6c4aa85991";
+    hash = "sha256-HUIRm1z6xNJWgX7ykujzniBrOTh76D3dJHrm0LR3nuQ=";
   };
 
   meta = {
@@ -30,17 +30,19 @@ let
     inherit version src meta;
     pname = "lspce-module";
 
-    cargoHash = "sha256-eqSromwJrFhtJWedDVJivfbKpAtSFEtuCP098qOxFgI=";
+    cargoHash = "sha256-qMLwdZwqrK7bPXL1bIbOqM7xQPpeiO8FDoje0CEJeXQ=";
 
     checkFlags = [
       # flaky test
       "--skip=msg::tests::serialize_request_with_null_params"
     ];
 
-    postFixup = ''
+    postInstall = ''
+      mkdir -p $out/share/emacs/site-lisp
       for f in $out/lib/*; do
-        mv $f $out/lib/lspce-module.''${f##*.}
+        mv $f $out/share/emacs/site-lisp/lspce-module.''${f##*.}
       done
+      rmdir $out/lib
     '';
   };
 in
@@ -48,25 +50,16 @@ trivialBuild rec {
   inherit version src meta;
   pname = "lspce";
 
-  preBuild = ''
-    ln -s ${lspce-module}/lib/lspce-module* .
-
-    # Fix byte-compilation
-    substituteInPlace lspce-util.el \
-      --replace "(require 'yasnippet)" "(require 'yasnippet)(require 'url-util)"
-    substituteInPlace lspce-calltree.el \
-      --replace "(require 'compile)" "(require 'compile)(require 'cl-lib)"
-  '';
-
   buildInputs = propagatedUserEnvPkgs;
 
   propagatedUserEnvPkgs = [
     f
     markdown-mode
     yasnippet
+    lspce-module
   ];
 
-  postInstall = ''
-    install lspce-module* $LISPDIR
-  '';
+  passthru = {
+    inherit lspce-module;
+  };
 }

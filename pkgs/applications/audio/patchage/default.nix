@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nico202 ];
+    mainProgram = "patchage";
   };
 }

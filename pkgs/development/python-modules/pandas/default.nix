@@ -2,10 +2,11 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
-, cython
+, cython_3
 , meson-python
 , meson
 , oldest-supported-numpy
@@ -23,7 +24,6 @@
 , beautifulsoup4
 , bottleneck
 , blosc2
-, brotlipy
 , fsspec
 , gcsfs
 , html5lib
@@ -39,7 +39,6 @@
 , pymysql
 , pyqt5
 , pyreadstat
-, python-snappy
 , qtpy
 , s3fs
 , scipy
@@ -63,9 +62,9 @@
 , runtimeShell
 }:
 
-buildPythonPackage rec {
+let pandas = buildPythonPackage rec {
   pname = "pandas";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -74,17 +73,18 @@ buildPythonPackage rec {
     owner = "pandas-dev";
     repo = "pandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6SgW4BtO7EFnS8P8LL4AGk5EdPwOQ0+is0wXgqsm9w0=";
+    hash = "sha256-PMrqniyyFYRnAeFBruPrTrGKzX2dRxMRct8AHeghstA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
-      --replace "meson==1.2.1" "meson>=1.2.1"
+      --replace-fail "Cython==3.0.5" "Cython>=3.0.5" \
+      --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
+      --replace-fail "meson==1.2.1" "meson>=1.2.1"
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_3
     meson-python
     meson
     numpy
@@ -116,8 +116,6 @@ buildPythonPackage rec {
         qtpy
       ];
       compression = [
-        brotlipy
-        python-snappy
         zstandard
       ];
       computation = [
@@ -187,16 +185,23 @@ buildPythonPackage rec {
     all = lib.concatLists (lib.attrValues extras);
   };
 
+  doCheck = false; # various infinite recursions
+
+  passthru.tests.pytest = pandas.overridePythonAttrs (_: { doCheck = true; });
+
   nativeCheckInputs = [
     glibcLocales
     hypothesis
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ]
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (stdenv.isLinux) [
     # for locale executable
     glibc
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ]
+  ++ lib.optionals (stdenv.isDarwin) [
     # for locale executable
     adv_cmds
   ];
@@ -263,4 +268,5 @@ buildPythonPackage rec {
     '';
     maintainers = with maintainers; [ raskin fridh knedlsepp ];
   };
-}
+};
+in pandas

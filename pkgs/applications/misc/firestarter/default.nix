@@ -105,5 +105,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ astro marenz ];
     license = licenses.gpl3;
+    mainProgram = "FIRESTARTER";
   };
 }

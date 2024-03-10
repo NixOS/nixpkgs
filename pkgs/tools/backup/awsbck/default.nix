@@ -2,27 +2,25 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, installShellFiles
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "awsbck";
-  version = "0.3.5";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
     rev = "v${version}";
-    hash = "sha256-BitR4f1VzYs5L7hT5OCbBbe4JvPIOPDQ9byKEkfBDBY=";
+    hash = "sha256-asYXmBPNsIac+c/UXSijol+DFI7qZVpg/SKxaadlBOI=";
   };
 
-  cargoHash = "sha256-J5BI6Gv20iAe2XCt1riLATCnlOg+pcj7q2Gzo2ZN0ms=";
-
-  nativeBuildInputs = [ installShellFiles ];
+  cargoHash = "sha256-vFIBl/ZvSZn/9yLYMtzFvlPM+OYkZndkT6qPCIWVlOM=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
+  # tests run in CI on the source repo
   doCheck = false;
 
   meta = with lib; {

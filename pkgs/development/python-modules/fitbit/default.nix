@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-1u3h47lRBrJ7EUWBl5+RLGW4KHHqXqqrXbboZdy7VPA=";
   };
 
+  postPatch = ''
+    substituteInPlace fitbit_tests/test_api.py \
+      --replace-fail assertRaisesRegexp assertRaisesRegex
+  '';
+
   propagatedBuildInputs = [
     python-dateutil
     requests-oauthlib

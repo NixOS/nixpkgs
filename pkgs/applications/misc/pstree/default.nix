@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.c0bw3b ];
     platforms = platforms.unix;
     priority = 5; # Lower than psmisc also providing pstree on Linux platforms
+    mainProgram = "pstree";
   };
 }

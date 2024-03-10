@@ -33,8 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     pytest-dependency
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
   '';

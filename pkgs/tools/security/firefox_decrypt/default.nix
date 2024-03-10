@@ -6,6 +6,7 @@
 , wheel
 , nss
 , nix-update-script
+, stdenv
 }:
 
 buildPythonApplication rec {
@@ -26,7 +27,12 @@ buildPythonApplication rec {
     wheel
   ];
 
-  makeWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ nss ]) ];
+  makeWrapperArgs = [
+    "--prefix"
+    (if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH")
+    ":"
+    (lib.makeLibraryPath [ nss ])
+  ];
 
   passthru.updateScript = nix-update-script { };
 

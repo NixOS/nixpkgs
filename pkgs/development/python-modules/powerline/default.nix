@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   version  = "2.8.3";
   pname = "powerline";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

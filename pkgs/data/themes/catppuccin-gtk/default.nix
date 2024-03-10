@@ -16,7 +16,7 @@
 let
   validAccents = [ "blue" "flamingo" "green" "lavender" "maroon" "mauve" "peach" "pink" "red" "rosewater" "sapphire" "sky" "teal" "yellow" ];
   validSizes = [ "standard" "compact" ];
-  validTweaks = [ "black" "rimless" "normal" ];
+  validTweaks = [ "black" "rimless" "normal" "float" ];
   validVariants = [ "latte" "frappe" "macchiato" "mocha" ];
 
   pname = "catppuccin-gtk";
@@ -82,6 +82,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/catppuccin/gtk";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fufexan PlayerNameHere ];
+    maintainers = with maintainers; [ fufexan dixslyf ];
   };
 }

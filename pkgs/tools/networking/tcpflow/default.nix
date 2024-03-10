@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     maintainers = with maintainers; [ raskin obadz ];
     platforms   = platforms.unix;
+    mainProgram = "tcpflow";
   };
 }

@@ -18,6 +18,7 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonRelaxDepsHook
+, pythonAtLeast
 , pythonOlder
 , requests
 , setuptools
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.14.4";
+  version = "0.14.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w3WOlZFfuCmekUsr8msi2LXTm6j8/Bk49L3MiYF7lOM=";
+    hash = "sha256-Uykj9MIUFcZyTWOBjUhL9+qItbnpwtuTd2Cx5jI7Wtw=";
   };
 
   postPatch = ''
@@ -92,7 +93,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  disabledTests = [
+    # https://github.com/postlund/pyatv/issues/2307
+    "test_zeroconf_service_published"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/postlund/pyatv/issues/2365
+    "test_simple_dispatch"
+  ] ++ lib.optionals (stdenv.isDarwin) [
     # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
     "test_stream_retransmission"
   ];

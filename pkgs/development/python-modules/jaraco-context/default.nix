@@ -19,8 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-YdbkpKv7k62uyhmjKoxeA9uf5BWnRD/rK+z46FJN4xk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonNamespaces = [
     "jaraco"
   ];

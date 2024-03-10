@@ -3,13 +3,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "bento4";
-  version = "1.6.0-640";
+  version = "1.6.0-641";
 
   src = fetchFromGitHub {
     owner = "axiomatic-systems";
     repo = "Bento4";
     rev = "v${version}";
-    hash = "sha256-VhlFfNYw3xpAIyWqDyhgXIv3JtpFJH0BL97dFX8diRY=";
+    hash = "sha256-Qy8D3cbCVHmLAaXtiF64rL2oRurXNCtd5Dsgt0W7WdY=";
   };
 
   patches = [

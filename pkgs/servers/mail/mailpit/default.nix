@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.10.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = "sha256-6nACvAhmFsZGWOqa3pwFqJLnh6Cueq2eYeg4Ns8gCmk=";
+    hash = "sha256-50amJ4pFNVcV7WT303ObPJiCx6tNYWNks3oFnexHRoA=";
   };
 
   # Separate derivation, because if we mix this in buildGoModule, the separate
@@ -30,7 +30,7 @@ let
 
     npmDeps = fetchNpmDeps {
       inherit src;
-      hash = "sha256-DlklRc9Mt4bMAOm/dZnvWPU74oGkc8RLof37Q/977Tk=";
+      hash = "sha256-KleFztYmbgIPg/3acXJTg1J5uyWsVZUQ0caK+hT1uxQ=";
     };
 
     env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
@@ -56,7 +56,7 @@ buildGoModule {
   pname = "mailpit";
   inherit src version;
 
-  vendorHash = "sha256-COkJF6JX4NnlPtCeGjaTLYvAKgXEhh+AJC0R9V7J4CM=";
+  vendorHash = "sha256-iNNs9vLvOKqVpLKt65wVmffgq1l/9KOtnbRPg+2kbsM=";
 
   CGO_ENABLED = 0;
 
@@ -67,7 +67,6 @@ buildGoModule {
   '';
 
   passthru.tests.version = testers.testVersion {
-    inherit version;
     package = mailpit;
     command = "mailpit version";
   };

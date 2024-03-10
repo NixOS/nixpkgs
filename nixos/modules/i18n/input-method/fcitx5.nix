@@ -5,7 +5,10 @@ with lib;
 let
   im = config.i18n.inputMethod;
   cfg = im.fcitx5;
-  fcitx5Package = pkgs.fcitx5-with-addons.override { inherit (cfg) addons; };
+  fcitx5Package =
+    if cfg.plasma6Support
+    then pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
+    else pkgs.libsForQt5.fcitx5-with-addons.override { inherit (cfg) addons; };
   settingsFormat = pkgs.formats.ini { };
 in
 {
@@ -17,6 +20,23 @@ in
         example = literalExpression "with pkgs; [ fcitx5-rime ]";
         description = lib.mdDoc ''
           Enabled Fcitx5 addons.
+        '';
+      };
+      waylandFrontend = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Use the Wayland input method frontend.
+          See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland).
+        '';
+      };
+      plasma6Support = mkOption {
+        type = types.bool;
+        default = config.services.xserver.desktopManager.plasma6.enable;
+        defaultText = literalExpression "config.services.xserver.desktopManager.plasma6.enable";
+        description = lib.mdDoc ''
+          Use qt6 versions of fcitx5 packages.
+          Required for configuring fcitx5 in KDE System Settings.
         '';
       };
       quickPhrase = mkOption {
@@ -118,10 +138,11 @@ in
       ];
 
     environment.variables = {
-      GTK_IM_MODULE = "fcitx";
-      QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
       QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
+    } // lib.optionalAttrs (!cfg.waylandFrontend) {
+      GTK_IM_MODULE = "fcitx";
+      QT_IM_MODULE = "fcitx";
     } // lib.optionalAttrs cfg.ignoreUserConfig {
       SKIP_FCITX_USER_PATH = "1";
     };

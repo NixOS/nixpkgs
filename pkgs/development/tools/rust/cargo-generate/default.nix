@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2_1_6
+, libgit2
 , openssl
 , stdenv
 , darwin
@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.18.5";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-be0jgjhaboutT+c3rRyp6fjmv8nAkggkcqofWmH83Zc=";
+    sha256 = "sha256-OT2cjNYcEKk6Thnlq7SZvK2RJ6M1Zn62GrqpKbtrUdM=";
   };
 
-  cargoHash = "sha256-Sset3+jRm6yOUkvLYxBHdFvVCYOq3bvix9b3pnt7AV8=";
+  cargoHash = "sha256-DAJsW3uKrSyIju7K13dMQFNOwE9WDuBuPx8imdPAxqk=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2_1_6 openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -48,8 +48,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=git::utils::should_canonicalize"
   ];
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
+
   meta = with lib; {
-    description = "A tool to generaet a new Rust project by leveraging a pre-existing git repository as a template";
+    description = "A tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

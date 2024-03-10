@@ -3,7 +3,7 @@
 # files.
 #
 # The list of modules can be found in this file
-# https://github.com/MaterializeInc/materialize/blob/master/src/materialized/build/npm.rs
+# https://github.com/MaterializeInc/materialize/blob/master/src/npm/lib.rs
 [
   {
     name = "@hpcc-js/wasm";
@@ -17,9 +17,9 @@
     };
   }
   {
-    name = "babel-standalone";
-    version = "6.26.0";
-    hash = "sha256-zdeTj4aOEzWvrnh90T80jL+RD8qg8PaeG0Ceua82Dz4=";
+    name = "@babel/standalone";
+    version = "7.23.3";
+    hash = "sha256-yxhB4OVOdV8hYNPqcap+5/JXYeaVrNGOSOG8lKpiG9E=";
     js_prod_file = "babel.min.js";
     js_dev_file = "babel.js";
   }

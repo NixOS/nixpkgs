@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reshape";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-pTEOVDeCE69dn005nj1ULGKjguCtC1uReI/l3WEz4+w=";
+    hash = "sha256-wv2gKyXCEH+tnZkUUAisMbuseth3dsFiJujH8VO1ii4=";
   };
 
-  cargoHash = "sha256-KYU5drTVHdWmlE01Fq1TxJZTe87yBpDKIGm4P+RRCGw=";
+  cargoHash = "sha256-VTJ3FNhVLgxo/VVBhk1yF9UUktLXcbrEkYwoyoWFhXA=";
 
   nativeCheckInputs = [
     postgresqlTestHook

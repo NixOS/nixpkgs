@@ -8,18 +8,17 @@
 , gtk3
 , gtk-mac-integration
 , glib
-, amtk
 , tepl
+, libgedit-amtk
+, libgedit-gtksourceview
 , libpeas
 , libxml2
-, gtksourceview4
 , gsettings-desktop-schemas
 , wrapGAppsHook
 , gtk-doc
 , gobject-introspection
 , docbook-xsl-nons
 , ninja
-, libsoup
 , gnome
 , gspell
 , perl
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "44.2";
+  version = "46.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
-    sha256 = "O7sbN3XUwnfa9UqqtEsOuDpOsfCfA5GAAEHJ5WiT7BE=";
+    sha256 = "wIZkErrRR+us4tKC/8u1oOmjBLIP1VZAvuIcgebVAe8=";
   };
 
   patches = [
@@ -64,15 +63,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    amtk
     tepl
     glib
     gsettings-desktop-schemas
     gspell
     gtk3
-    gtksourceview4
+    libgedit-amtk
+    libgedit-gtksourceview
     libpeas
-    libsoup
   ] ++ lib.optionals stdenv.isDarwin [
     gtk-mac-integration
   ];
@@ -94,9 +92,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gedit";
+    homepage = "https://gedit-technology.github.io/apps/gedit/";
     description = "Former GNOME text editor";
-    maintainers = [ ];
+    maintainers = with maintainers; [ bobby285271 ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "gedit";

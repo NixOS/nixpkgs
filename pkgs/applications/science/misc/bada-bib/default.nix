@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "RogerCrocker";
     repo = "BadaBib";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mdAoJh3qOwtPX8cMCYw7MDDNy10GdhynnS8gtszJROI=";
+    sha256 = "sha256-8lpkmQCVh94+qhFJijAIVyYeJRFz2u/OYR1C5E+gtOE=";
   };
 
   nativeBuildInputs = [

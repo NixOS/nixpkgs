@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "future-typing";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "future_typing";

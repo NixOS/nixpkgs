@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "picosvg";
   version = "0.22.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googlefonts";

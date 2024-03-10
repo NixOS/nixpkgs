@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "taskw";
   version = "2.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

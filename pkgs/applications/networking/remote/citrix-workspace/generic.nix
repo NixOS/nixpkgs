@@ -5,6 +5,7 @@
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
 , libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
 , libfaketime
+, libinput, libcap, libjson, libsecret, libcanberra-gtk3
 
 , homepage, version, prefix, hash
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
       ${homepage}
 
       (if you do not find version ${version} there, try at
-      https://www.citrix.com/downloads/workspace-app/
+      https://www.citrix.com/downloads/workspace-app/)
 
       Once you have downloaded the file, please use the following command and re-run the
       installation:
@@ -80,11 +81,16 @@ stdenv.mkDerivation rec {
     gtk_engines
     heimdal
     krb5
+    libcap
+    libcanberra-gtk3
     libcxx
     libcxxabi
+    libinput
     libjpeg
+    libjson
     libpng12
     libpulseaudio
+    libsecret
     libsoup
     libvorbis
     libxml2
@@ -119,6 +125,8 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
+    xorg.xprop
+    xorg.xdpyinfo
   ];
 
   installPhase = let

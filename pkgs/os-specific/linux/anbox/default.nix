@@ -80,10 +80,13 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  # Flag needed by GCC 12 but unrecognized by GCC 9 (aarch64-linux default now)
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (with stdenv; cc.isGNU && lib.versionAtLeast cc.version "12") [
-    "-Wno-error=mismatched-new-delete"
-  ]);
+  env.CXXFLAGS = toString [ "-include cstdint" ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU (toString [
+    "-Wno-error=redundant-move"
+    # Flag needed by GCC 12 but unrecognized by GCC 9 (aarch64-linux default now)
+    (lib.optionalString (lib.versionAtLeast stdenv.cc.version "12") "-Wno-error=mismatched-new-delete")
+   ]);
 
   prePatch = ''
     patchShebangs scripts
@@ -127,6 +130,8 @@ stdenv.mkDerivation rec {
     })
     # Ensures generated desktop files work on store path change
     ./0001-NixOS-Use-anbox-from-PATH-in-desktop-files.patch
+    # Allows android-emugl to build with gtest 1.13+
+    ./0002-NixOS-Build-android-emugl-with-cpp-14.patch
     # Provide window icons
     (fetchpatch {
       url = "https://github.com/samueldr/anbox/commit/2387f4fcffc0e19e52e58fb6f8264fbe87aafe4d.patch";

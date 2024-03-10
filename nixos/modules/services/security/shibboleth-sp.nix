@@ -1,44 +1,43 @@
-{pkgs, config, lib, ...}:
+{ config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.services.shibboleth-sp;
 in {
   options = {
     services.shibboleth-sp = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc "Whether to enable the shibboleth service";
       };
 
-      configFile = mkOption {
-        type = types.path;
-        example = literalExpression ''"''${pkgs.shibboleth-sp}/etc/shibboleth/shibboleth2.xml"'';
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        example = lib.literalExpression ''"''${pkgs.shibboleth-sp}/etc/shibboleth/shibboleth2.xml"'';
         description = lib.mdDoc "Path to shibboleth config file";
       };
 
-      fastcgi.enable = mkOption {
-        type = types.bool;
+      fastcgi.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc "Whether to include the shibauthorizer and shibresponder FastCGI processes";
       };
 
-      fastcgi.shibAuthorizerPort = mkOption {
-        type = types.int;
+      fastcgi.shibAuthorizerPort = lib.mkOption {
+        type = lib.types.int;
         default = 9100;
         description = lib.mdDoc "Port for shibauthorizer FastCGI process to bind to";
       };
 
-      fastcgi.shibResponderPort = mkOption {
-        type = types.int;
+      fastcgi.shibResponderPort = lib.mkOption {
+        type = lib.types.int;
         default = 9101;
         description = lib.mdDoc "Port for shibauthorizer FastCGI process to bind to";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.shibboleth-sp = {
       description = "Provides SSO and federation for web applications";
       after       = lib.optionals cfg.fastcgi.enable [ "shibresponder.service" "shibauthorizer.service" ];
@@ -48,7 +47,7 @@ in {
       };
     };
 
-    systemd.services.shibresponder = mkIf cfg.fastcgi.enable {
+    systemd.services.shibresponder = lib.mkIf cfg.fastcgi.enable {
       description = "Provides SSO through Shibboleth via FastCGI";
       after       = [ "network.target" ];
       wantedBy    = [ "multi-user.target" ];
@@ -59,7 +58,7 @@ in {
       };
     };
 
-    systemd.services.shibauthorizer = mkIf cfg.fastcgi.enable {
+    systemd.services.shibauthorizer = lib.mkIf cfg.fastcgi.enable {
       description = "Provides SSO through Shibboleth via FastCGI";
       after       = [ "network.target" ];
       wantedBy    = [ "multi-user.target" ];
@@ -71,5 +70,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ jammerful ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

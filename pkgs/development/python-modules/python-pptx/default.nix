@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "python-pptx";
   version = "0.6.23";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

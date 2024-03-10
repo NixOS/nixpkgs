@@ -32,6 +32,14 @@
       buildInputs = buildInputs ++ [ getdns ];
     };
 
+  hashlib = lockAttrs:
+    lib.trivial.warnIf
+      (lockAttrs.rev == "84e0247555e4488594975900401baaf5bbbfb531")
+      "the selected version of the hashlib Nim library is hardware specific"
+      # https://github.com/khchen/hashlib/pull/4
+      # remove when fixed upstream
+      (_: _: { });
+
   nimraylib_now = lockAttrs: finalAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ raylib ];

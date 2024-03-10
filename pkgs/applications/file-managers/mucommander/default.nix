@@ -105,5 +105,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.all;
+    mainProgram = "mucommander";
   };
 }

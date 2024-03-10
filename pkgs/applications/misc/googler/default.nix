@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ koral Br1ght0ne ];
     platforms = python.meta.platforms;
+    mainProgram = "googler";
   };
 }

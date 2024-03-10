@@ -1,12 +1,13 @@
-{ fetchFromGitHub
+{ lib
+, fetchFromGitHub
+, python3Packages
 , gobject-introspection
-, lib
 , libadwaita
-, python3
 , wrapGAppsHook
 , lmmath
 }:
-python3.pkgs.buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "plots";
   version = "0.8.5";
 
@@ -17,36 +18,21 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-GjNpaorxkkhZsqrKq4kO5nqF5+4I4tmSc023AZpY8Sw=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    wrapGAppsHook
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  buildInputs = [ libadwaita ];
+
+  propagatedBuildInputs = with python3Packages; [
+    pygobject3
+    numpy
+    lark
+    jinja2
+    freetype-py
+    pyopengl
+    pycairo
+    pyglm
   ];
 
-  propagatedBuildInputs = [
-    libadwaita
-    (python3.withPackages (p: with p; [
-      numpy
-      pygobject3
-      lark
-      jinja2
-      freetype-py
-      pyopengl
-      pycairo
-      pyglm
-    ]))
-  ];
-
-  nativeCheckInputs = [
-    (python3.withPackages (p: with p; [
-      pytest
-    ]))
-  ];
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  nativeCheckInputs = with python3Packages; [ pytest ];
 
   postInstall = ''
     install -D ${lmmath}/share/fonts/opentype/latinmodern-math.otf -t $out/share/fonts/
@@ -60,6 +46,12 @@ python3.pkgs.buildPythonApplication rec {
       lang=$(basename "$lang_dir")
       install -D -t $out/share/help/$lang/plots/ $lang_dir/*
     done
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {

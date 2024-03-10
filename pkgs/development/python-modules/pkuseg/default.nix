@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pkuseg";
   version = "0.0.25";
+  format = "setuptools";
 
   disabled = !isPy3k || pythonAtLeast "3.9";
 

@@ -1,6 +1,7 @@
 { lib
 , buildLua
 , fetchFromGitHub
+, gitUpdater
 , curl
 , wl-clipboard
 , xclip
@@ -8,13 +9,16 @@
 
 buildLua rec {
   pname = "mpvacious";
-  version = "0.25";
+  version = "0.26";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-XTnib4cguWFEvZtmsLfkesbjFbkt2YoyYLT587ajyUM=";
+    sha256 = "sha256-QPLJC6SxocvOPeY6qI8q+EyXNGVef3J/Z38W0/rzFCg=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   postPatch = ''
@@ -31,6 +35,8 @@ buildLua rec {
     make PREFIX=$out/share/mpv install
     runHook postInstall
   '';
+
+  passthru.scriptName = "mpvacious";
 
   meta = with lib; {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";

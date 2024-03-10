@@ -54,9 +54,9 @@
     '';
   }.${flavour};
 
-in import ../make-test-python.nix ({ pkgs, ... }: {
+in import ../make-test-python.nix ({ pkgs, lib, ... }: {
   name = "lvm2-${flavour}-systemd-stage-1";
-  meta.maintainers = with pkgs.lib.maintainers; [ das_j ];
+  meta.maintainers = lib.teams.helsinki-systems.members;
 
   nodes.machine = { pkgs, lib, ... }: {
     imports = [ extraConfig ];

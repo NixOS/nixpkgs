@@ -4,18 +4,13 @@ with lib;
 let
   cfg = config.services.greetd;
   tty = "tty${toString cfg.vt}";
-  settingsFormat = pkgs.formats.toml {};
+  settingsFormat = pkgs.formats.toml { };
 in
 {
   options.services.greetd = {
     enable = mkEnableOption (lib.mdDoc "greetd");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.greetd.greetd;
-      defaultText = literalExpression "pkgs.greetd.greetd";
-      description = lib.mdDoc "The greetd package that should be used.";
-    };
+    package = mkPackageOption pkgs [ "greetd" "greetd" ] { };
 
     settings = mkOption {
       type = settingsFormat.type;
@@ -32,7 +27,7 @@ in
       '';
     };
 
-    vt = mkOption  {
+    vt = mkOption {
       type = types.int;
       default = 1;
       description = lib.mdDoc ''
@@ -83,7 +78,7 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
 
-        Restart = mkIf cfg.restart "always";
+        Restart = mkIf cfg.restart "on-success";
 
         # Defaults from greetd upstream configuration
         IgnoreSIGPIPE = false;
@@ -102,12 +97,18 @@ in
 
     systemd.defaultUnit = "graphical.target";
 
+    # Create directories potentially required by supported greeters
+    # See https://github.com/NixOS/nixpkgs/issues/248323
+    systemd.tmpfiles.rules = [
+      "d '/var/cache/tuigreet' - greeter greeter - -"
+    ];
+
     users.users.greeter = {
       isSystemUser = true;
       group = "greeter";
     };
 
-    users.groups.greeter = {};
+    users.groups.greeter = { };
   };
 
   meta.maintainers = with maintainers; [ queezle ];

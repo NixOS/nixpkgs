@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.linux;
+    mainProgram = "ntttcp";
   };
 }

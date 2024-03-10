@@ -28,13 +28,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.4";
+  version = "5.5";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
-    # Upstream uploaded a -1 tarball on the same release, remove on next release
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}-1.tar.bz2";
-    hash = "sha256-d0EWXW1lLqe0oehJjPQ5pWuBpcyLZTKRpZBU8jYqv8w=";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
+    hash = "sha256-tNr2e7iStwYyP2Lp+pckIDnX3QouHhB3HgwlgX3Q7Ts=";
   };
 
   nativeBuildInputs = [
@@ -77,12 +76,6 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
-    # this patch fixes a test that fails due to a type error, remove on next release
-    (fetchpatch {
-      name = "0005-utest-gnc-pricedb-fix.patch";
-      url = "https://github.com/Gnucash/gnucash/commit/0bd556c581ac462ca41b3cb533323fc3587051e1.patch";
-      hash = "sha256-k0ANZuOkWrtU4q380oDu/hC9PeGmujF49XEFQ8eCLGM=";
-    })
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
@@ -106,7 +99,7 @@ stdenv.mkDerivation rec {
       owner = "Gnucash";
       repo = "gnucash-docs";
       rev = version;
-      hash = "sha256-aPxQEcpo8SPv8lPQbxMl1wg8ijH9Rz0oo4K5lp3C/bw=";
+      hash = "sha256-ilDh4PH+tdrJReIpgvEd0Gvs8Xvt5Q43XM5r7Bn+5IM=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -137,6 +130,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/finance-quote-wrapper \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://www.gnucash.org/";

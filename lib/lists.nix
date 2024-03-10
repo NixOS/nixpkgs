@@ -2,7 +2,7 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min id;
+  inherit (lib.trivial) compare min id warn;
   inherit (lib.attrsets) mapAttrs;
 in
 rec {
@@ -171,7 +171,7 @@ rec {
        concatMap (x: [x] ++ ["z"]) ["a" "b"]
        => [ "a" "z" "b" "z" ]
   */
-  concatMap = builtins.concatMap or (f: list: concatLists (map f list));
+  concatMap = builtins.concatMap;
 
   /* Flatten the argument into a single list; that is, nested lists are
      spliced into the top-level lists.
@@ -315,7 +315,7 @@ rec {
        any isString [ 1 { } ]
        => false
   */
-  any = builtins.any or (pred: foldr (x: y: if pred x then true else y) false);
+  any = builtins.any;
 
   /* Return true if function `pred` returns true for all elements of
      `list`.
@@ -328,7 +328,7 @@ rec {
        all (x: x < 3) [ 1 2 3 ]
        => false
   */
-  all = builtins.all or (pred: foldr (x: y: if pred x then y else false) true);
+  all = builtins.all;
 
   /* Count how many elements of `list` match the supplied predicate
      function.
@@ -427,12 +427,7 @@ rec {
        partition (x: x > 2) [ 5 1 2 3 4 ]
        => { right = [ 5 3 4 ]; wrong = [ 1 2 ]; }
   */
-  partition = builtins.partition or (pred:
-    foldr (h: t:
-      if pred h
-      then { right = [h] ++ t.right; wrong = t.wrong; }
-      else { right = t.right; wrong = [h] ++ t.wrong; }
-    ) { right = []; wrong = []; });
+  partition = builtins.partition;
 
   /* Splits the elements of a list into many lists, using the return value of a predicate.
      Predicate should return a string which becomes keys of attrset `groupBy` returns.
@@ -591,26 +586,53 @@ rec {
      the second argument.  The returned list is sorted in an increasing
      order.  The implementation does a quick-sort.
 
+     See also [`sortOn`](#function-library-lib.lists.sortOn), which applies the
+     default comparison on a function-derived property, and may be more efficient.
+
      Example:
-       sort (a: b: a < b) [ 5 3 7 ]
+       sort (p: q: p < q) [ 5 3 7 ]
        => [ 3 5 7 ]
+
+     Type:
+       sort :: (a -> a -> Bool) -> [a] -> [a]
   */
-  sort = builtins.sort or (
-    strictLess: list:
+  sort = builtins.sort;
+
+  /*
+    Sort a list based on the default comparison of a derived property `b`.
+
+    The items are returned in `b`-increasing order.
+
+    **Performance**:
+
+    The passed function `f` is only evaluated once per item,
+    unlike an unprepared [`sort`](#function-library-lib.lists.sort) using
+    `f p < f q`.
+
+    **Laws**:
+    ```nix
+    sortOn f == sort (p: q: f p < f q)
+    ```
+
+    Example:
+      sortOn stringLength [ "aa" "b" "cccc" ]
+      => [ "b" "aa" "cccc" ]
+
+    Type:
+      sortOn :: (a -> b) -> [a] -> [a], for comparable b
+  */
+  sortOn = f: list:
     let
-      len = length list;
-      first = head list;
-      pivot' = n: acc@{ left, right }: let el = elemAt list n; next = pivot' (n + 1); in
-        if n == len
-          then acc
-        else if strictLess first el
-          then next { inherit left; right = [ el ] ++ right; }
-        else
-          next { left = [ el ] ++ left; inherit right; };
-      pivot = pivot' 1 { left = []; right = []; };
+      # Heterogenous list as pair may be ugly, but requires minimal allocations.
+      pairs = map (x: [(f x) x]) list;
     in
-      if len < 2 then list
-      else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right));
+      map
+        (x: builtins.elemAt x 1)
+        (sort
+          # Compare the first element of the pairs
+          # Do not factor out the `<`, to avoid calls in hot code; duplicate instead.
+          (a: b: head a < head b)
+          pairs);
 
   /* Compare two lists element-by-element.
 
@@ -805,8 +827,8 @@ rec {
       crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
       => [ "13" "14" "23" "24" ]
   */
-  crossLists = builtins.trace
-    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
+  crossLists = warn
+    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead."
     (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
 

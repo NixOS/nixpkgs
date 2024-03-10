@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "imaplib2";
   version = "3.6";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

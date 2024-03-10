@@ -82,5 +82,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ magnetophon ];
+    mainProgram = "Odin2";
   };
 }

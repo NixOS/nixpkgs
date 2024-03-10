@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "oslo-config";
   version = "9.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.config";

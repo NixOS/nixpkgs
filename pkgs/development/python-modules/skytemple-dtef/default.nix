@@ -9,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "skytemple-dtef";
-  version = "1.1.5";
-  format = "setuptools";
+  version = "1.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-QL+nLmjz0wCED2RjidIDK0tB6mAPnoaSJWpyLFu0pP4=";
+    hash = "sha256-vVh4WRjx/iFJnTZC7D/OCi0gOwKaXs/waVXUEu5Cda8=";
   };
 
   propagatedBuildInputs = [

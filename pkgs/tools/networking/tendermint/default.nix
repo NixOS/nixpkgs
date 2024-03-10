@@ -27,5 +27,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ alexfmpe ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "tendermint";
   };
 }

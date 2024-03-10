@@ -33,12 +33,7 @@ in
       '';
     };
 
-    package = mkOption {
-      default = pkgs.healthchecks;
-      defaultText = literalExpression "pkgs.healthchecks";
-      type = types.package;
-      description = lib.mdDoc "healthchecks package to use.";
-    };
+    package = mkPackageOption pkgs "healthchecks" { };
 
     user = mkOption {
       default = defaultUser;
@@ -181,6 +176,7 @@ in
     systemd.targets.healthchecks = {
       description = "Target for all Healthchecks services";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
     };
 

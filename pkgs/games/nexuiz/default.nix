@@ -6,6 +6,8 @@
   libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, libXxf86dga, alsa-lib
 , # sdl
   SDL
+, # icon
+  copyDesktopItems, makeDesktopItem
 }:
 
 let
@@ -21,7 +23,7 @@ in stdenv.mkDerivation {
     sha256 = "0010jrxc68qqinkvdh1qn2b8z3sa5v1kcd8d1m4llp3pr6y7xqm5";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip copyDesktopItems ];
   buildInputs = [
     # glx
     libX11 libGLU libGL libXpm libXext libXxf86vm libXxf86dga alsa-lib
@@ -56,6 +58,7 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -pv "$out/bin/"
     cp -v sources/darkplaces/darkplaces-glx "$out/bin/nexuiz-glx"
     cp -v sources/darkplaces/darkplaces-sdl "$out/bin/nexuiz-sdl"
@@ -63,9 +66,23 @@ in stdenv.mkDerivation {
     mkdir -pv "$out/share/nexuiz/"
     cp -rv data/ "$out/share/nexuiz/"
     ln -s "$out/bin/nexuiz-sdl" "$out/bin/nexuiz"
+    mkdir -pv $out/share/icon/
+    cp sources/darkplaces/nexuiz.ico $out/share/icon/nexuiz.ico
+    runHook postInstall
   '';
 
   dontPatchELF = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Nexuiz";
+      exec = "nexuiz";
+      icon = "nexuiz";
+      desktopName = "Nexuiz";
+      comment = "A free first-person shooter video game developed and published by Alientrap";
+      categories = [ "Game" "ActionGame" ];
+    })
+  ];
 
   meta = {
     description = "A free fast-paced first-person shooter";

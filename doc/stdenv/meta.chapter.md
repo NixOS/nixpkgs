@@ -3,16 +3,16 @@
 Nix packages can declare *meta-attributes* that contain information about a package such as a description, its homepage, its license, and so on. For instance, the GNU Hello package has a `meta` declaration like this:
 
 ```nix
-meta = with lib; {
+meta = {
   description = "A program that produces a familiar, friendly greeting";
   longDescription = ''
     GNU Hello is a program that prints "Hello, world!" when you run it.
     It is fully customizable.
   '';
   homepage = "https://www.gnu.org/software/hello/manual/";
-  license = licenses.gpl3Plus;
-  maintainers = with maintainers; [ eelco ];
-  platforms = platforms.all;
+  license = lib.licenses.gpl3Plus;
+  maintainers = with lib.maintainers; [ eelco ];
+  platforms = lib.platforms.all;
 };
 ```
 

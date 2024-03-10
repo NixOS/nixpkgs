@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/amaanq/tree-sitter-bitbake",
+  "rev": "ffe6c2f3dbf30224479a28ca5d50df594b2486a9",
+  "date": "2023-11-08T10:34:03-05:00",
+  "path": "/nix/store/zzckcglck1cr32cmp14i95r7q0qkgajf-tree-sitter-bitbake",
+  "sha256": "1g547sq2xsfn7xmdmz1ny4lvk75akwi7k1vrrq6bdfkcg7gzkp1b",
+  "hash": "sha256-K9z533lsurYMznmHeSKfqpy5KfE2/NpqP9bpLrA+pLw=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

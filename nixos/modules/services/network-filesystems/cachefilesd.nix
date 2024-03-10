@@ -56,8 +56,10 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.cacheDir} 0700 root root - -"
-    ];
+    systemd.tmpfiles.settings."10-cachefilesd".${cfg.cacheDir}.d = {
+      user = "root";
+      group = "root";
+      mode = "0700";
+    };
   };
 }

@@ -3,7 +3,8 @@
 , makeSetupHook
 }:
 
-{ pname
+{ owner
+, domain
 , version
 , format ? "other"
 , ...
@@ -17,13 +18,14 @@ let
 in
 home-assistant.python.pkgs.buildPythonPackage (
   {
+    pname = "${owner}/${domain}";
     inherit format;
 
     installPhase = ''
       runHook preInstall
 
       mkdir $out
-      cp -r $src/custom_components/ $out/
+      cp -r ./custom_components/ $out/
 
       runHook postInstall
     '';

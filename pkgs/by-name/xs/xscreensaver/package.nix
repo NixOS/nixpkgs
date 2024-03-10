@@ -22,6 +22,7 @@
 , makeWrapper
 , pam
 , perlPackages
+, xorg
 , pkg-config
 , systemd
 , forceInstallAllHacks ? true
@@ -102,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH : "$out/libexec/xscreensaver" \
-        --prefix PATH : "${lib.makeBinPath [ coreutils perlPackages.perl ]}" \
+        --prefix PATH : "${lib.makeBinPath [ coreutils perlPackages.perl xorg.appres ]}" \
         --prefix PERL5LIB ':' $PERL5LIB
     done
   ''

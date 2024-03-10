@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "openshift";
   version = "0.13.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openshift";

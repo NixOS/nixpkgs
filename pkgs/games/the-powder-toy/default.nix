@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -26,6 +27,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-LYohsqFU9LBgTXMaV6cf8/zf3fBvT+s5A1JBpPHekH8=";
   };
+
+  patches = [
+    # Fix gcc-13 build failure:
+    #   https://github.com/The-Powder-Toy/The-Powder-Toy/pull/898
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/The-Powder-Toy/The-Powder-Toy/commit/162bce9a1036e0c233399941410364c4a4370980.patch";
+      hash = "sha256-oQNwKemV3BjMLSUd6zMCKqiClcc3Ouxwn3jagf/Q1/I=";
+    })
+  ];
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];
 

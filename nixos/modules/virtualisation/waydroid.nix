@@ -32,7 +32,7 @@ in
     system.requiredKernelConfig = [
       (kCfg.isEnabled "ANDROID_BINDER_IPC")
       (kCfg.isEnabled "ANDROID_BINDERFS")
-      (kCfg.isEnabled "ASHMEM") # FIXME Needs memfd support instead on Linux 5.18 and waydroid 1.2.1
+      (kCfg.isEnabled "MEMFD_CREATE")
     ];
 
     /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on

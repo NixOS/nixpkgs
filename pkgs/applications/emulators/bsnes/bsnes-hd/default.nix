@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkg-config
 , wrapGAppsHook
 , libX11, libXv
@@ -36,6 +36,14 @@ stdenv.mkDerivation {
     # be set to $out, so this will result in the .app ending up in the
     # Applications directory in the current nix profile.
     ./macos-copy-app-to-prefix.patch
+
+    # Fix build against gcc-13:
+    #   https://github.com/DerKoun/bsnes-hd/pull/124
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/DerKoun/bsnes-hd/commit/587e496f667970d60b6ea29976c171da1681388e.patch";
+      hash = "sha256-7KBXh8b4xGTzgV2Pt8B1eFZHOaXcCKXKzqGOf0rFG0c=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ]

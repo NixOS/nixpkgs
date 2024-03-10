@@ -74,12 +74,13 @@ diff '--color=auto' -ur '--color=never' a/tests/libqtdbustest/TestQProcessDBusSe
 diff '--color=auto' -ur '--color=never' a/tests/libqtdbustest/TestSuicidalProcess.cpp b/tests/libqtdbustest/TestSuicidalProcess.cpp
 --- a/tests/libqtdbustest/TestSuicidalProcess.cpp	2023-01-20 21:36:16.948292559 +0100
 +++ b/tests/libqtdbustest/TestSuicidalProcess.cpp	2023-01-20 21:55:07.219951081 +0100
-@@ -51,8 +51,7 @@
+@@ -51,9 +51,7 @@
  	pgrep.waitForFinished();
  	pgrep.waitForReadyRead();
- 
--	EXPECT_EQ("sleep 5",
--			QString::fromUtf8(pgrep.readAll().trimmed()).toStdString());
+
+-	EXPECT_TRUE(QString::fromUtf8(pgrep.readAll().trimmed())
+-                .toStdString()
+-                .find("sleep 5") != std::string::npos);
 +	EXPECT_TRUE(pgrep.readAll().contains("sleep 5"));
  }
  

@@ -30,7 +30,7 @@ dotnetInstallHook() {
         env dotnet publish ${project-} \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            --output "$out/lib/${pname}" \
+            --output "${installPath-$out/lib/$pname}" \
             --configuration "@buildType@" \
             --no-build \
             ${runtimeIdFlags[@]} \

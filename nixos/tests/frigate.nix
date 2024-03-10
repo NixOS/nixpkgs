@@ -41,6 +41,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         serviceConfig = {
           DynamicUser = true;
           ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -re -f lavfi -i smptebars=size=800x600:rate=10 -f mpegts -listen 1 http://0.0.0.0:8080";
+          Restart = "always";
         };
       };
     };
@@ -51,10 +52,14 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 
     machine.wait_for_unit("frigate.service")
 
+    # Frigate startup
     machine.wait_for_open_port(5001)
 
-    machine.succeed("curl http://localhost:5001")
+    # nginx startup
+    machine.wait_for_open_port(80)
 
-    machine.wait_for_file("/var/cache/frigate/test-*.mp4")
+    machine.succeed("curl http://localhost")
+
+    machine.wait_for_file("/var/cache/frigate/test@*.mp4")
   '';
 })

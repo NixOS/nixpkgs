@@ -3,7 +3,8 @@
 , cryptography
 , defusedxml
 , fetchFromGitHub
-, importlib-resources
+, fetchPypi
+, paste
 , poetry-core
 , pyasn1
 , pymongo
@@ -11,27 +12,30 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , pytz
+, repoze-who
 , requests
 , responses
 , setuptools
 , substituteAll
 , xmlschema
 , xmlsec
+, zope-interface
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.4.2";
+  version = "7.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
-    repo = pname;
+    repo = "pysaml2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f8qd1Mfy32CYH9/PshfMMBviDg7OhOPlwz69bPjlYbg=";
+    hash = "sha256-M/tdKGu6K38TeBZc8/dt376bHhPB0svHB3iis/se0DY=";
   };
 
   patches = [
@@ -46,8 +50,13 @@ buildPythonPackage rec {
     sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
 
+  pythonRelaxDeps = [
+    "xmlschema"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -59,9 +68,15 @@ buildPythonPackage rec {
     requests
     setuptools
     xmlschema
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
+
+  passthru.optional-dependencies = {
+    s2repoze = [
+      paste
+      repoze-who
+      zope-interface
+    ];
+  };
 
   nativeCheckInputs = [
     pyasn1

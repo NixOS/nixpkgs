@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) any boolToString concatStringsSep isBool isString mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption optionalAttrs types mkPackageOptionMD;
+  inherit (lib) any boolToString concatStringsSep isBool isString mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption optionalAttrs types mkPackageOption;
 
   package = cfg.package.override { inherit (cfg) stateDir; };
 
@@ -50,7 +50,7 @@ in
   options.services.dolibarr = {
     enable = mkEnableOption (lib.mdDoc "dolibarr");
 
-    package = mkPackageOptionMD pkgs "dolibarr" { };
+    package = mkPackageOption pkgs "dolibarr" { };
 
     domain = mkOption {
       type = types.str;

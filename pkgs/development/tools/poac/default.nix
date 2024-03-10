@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     homepage = "https://poac.pm";
     description = "Package Manager for C++";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ken-matsui ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     # https://github.com/NixOS/nixpkgs/pull/189712#issuecomment-1237791234
     broken = (stdenv.isLinux && stdenv.isAarch64)

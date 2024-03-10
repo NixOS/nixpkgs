@@ -1,17 +1,18 @@
 { lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences
+, coreutils
 , runCommand
 , graphicsmagick  # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
-  version = "1.3.39";
+  version = "1.3.42";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "sha256-4wscpY6HPQoe4gg4RyRCTbLTwzpUA04mHRTo+7j40E8=";
+    sha256 = "sha256-SE/M/Ssvr2wrqRUUaezlByvLkbpO1z517T2ORsdZ1Vc=";
   };
 
   patches = [
@@ -19,6 +20,9 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    # specify delegates explicitly otherwise `gm` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
     "--enable-shared"
     "--with-frozenpaths"
     "--with-quantum-depth=${toString quantumdepth}"
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
       issue-157920 = runCommand "issue-157920-regression-test" {
         buildInputs = [ graphicsmagick ];
       } ''
-        gm convert ${graphviz}/share/graphviz/doc/pdf/neatoguide.pdf jpg:$out
+        gm convert ${graphviz}/share/doc/graphviz/neatoguide.pdf jpg:$out
       '';
     };
   };

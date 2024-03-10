@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material-extensions";
-  version = "1.1.1";
+  version = "1.3.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FHI6WEQRd/Ff6pmU13f8f0zPSeFhhbmDdk4/0rdIl4I=";
+    hash = "sha256-/jU30Ol10/4haR3ZPJWZ3iWRfXG/RUOU1oclOYGjjAY=";
   };
 
   nativeBuildInputs = [

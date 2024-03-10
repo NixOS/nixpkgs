@@ -25,20 +25,20 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.9.5";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-uCWdDmHzNx1vkZFttQZLD4YfXoXz5VZQfir9sGOoDhw=";
+    hash = "sha256-JbLP65fC6uHrHXpSUwtgYHB+VLfheo5RU3C44lx8QlQ=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace "-Wl,-ld_classic" ""
+      --replace-fail "-Wl,-ld_classic" ""
     substituteInPlace src/CMakeLists.txt \
-      --replace "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
+      --replace-fail "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
     sed -i "/codesign/d;/hdiutil/d" src/CMakeLists.txt
   '';
 
@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ mvs wegank ];
     platforms = platforms.unix;
+    mainProgram = "freedv";
   };
 }

@@ -27,7 +27,7 @@
 , pygobject3
 , pyopenssl
 , qrcode
-, pytest-asyncio
+, pytest-asyncio_0_21
 , python-snappy
 , pytestCheckHook
 , pythonOlder
@@ -43,7 +43,7 @@
   # , xbr
 , yapf
   # , zlmdb
-, zope_interface
+, zope-interface
 }@args:
 
 buildPythonPackage rec {
@@ -72,7 +72,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytestCheckHook
   ] ++ passthru.optional-dependencies.scram
   ++ passthru.optional-dependencies.serialization
@@ -99,7 +99,7 @@ buildPythonPackage rec {
     nvx = [ cffi ];
     scram = [ argon2-cffi cffi passlib ];
     serialization = [ cbor2 flatbuffers msgpack ujson py-ubjson ];
-    twisted = [ attrs args.twisted zope_interface ];
+    twisted = [ attrs args.twisted zope-interface ];
     ui = [ pygobject3 ];
     xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc /* py-eth-sig-utils */ py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
   };

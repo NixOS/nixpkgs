@@ -10,7 +10,7 @@ in {
   options.services.zwave-js = {
     enable = mkEnableOption (mdDoc "the zwave-js server on boot");
 
-    package = mkPackageOptionMD pkgs "zwave-js-server" { };
+    package = mkPackageOption pkgs "zwave-js-server" { };
 
     port = mkOption {
       type = types.port;

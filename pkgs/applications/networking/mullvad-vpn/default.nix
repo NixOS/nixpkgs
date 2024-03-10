@@ -64,7 +64,7 @@ let
     systemd
   ];
 
-  version = "2023.5";
+  version = "2023.6";
 
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -74,8 +74,8 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-FpVruI80PmpBo2JrMvgvOg7ou6LceTeit9HbWKgcPa4=";
-    aarch64-linux = "sha256-NlYh8K5Xbad4xSoZ02yC5fh3SrQzyNyS9uoA73REcpo=";
+    x86_64-linux = "sha256-IhE93NXX8iwlvso+ei9wbVyJJLtkjrZf8qB43AZre+4=";
+    aarch64-linux = "sha256-HRAGDps0Cf7qOWTS7die9uouxMpAaM83t1Ixz7ElF6g=";
   };
 in
 

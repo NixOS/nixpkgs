@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     protobuf
     pyogg
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
     pyxdg
     requests
     setuptools

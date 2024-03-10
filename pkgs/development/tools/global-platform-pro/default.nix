@@ -28,7 +28,7 @@ mavenJdk8.buildMavenPackage rec {
     sha256 = "sha256-z38I61JR4oiAkImkbwcvXoK5QsdoR986dDrOzhHsCeY=";
   };
 
-  mvnHash = "sha256-+297ttqBT4Q4NyNIvTYTtiDrB1dfmuu9iWmAxxBZiW8=";
+  mvnHash = "sha256-Qbx1cNKFtSEnzhFImtCz2psYts2yhTDKzjmBBZavWwU=";
 
   nativeBuildInputs = [ jdk8 makeWrapper ];
 
@@ -47,7 +47,7 @@ mavenJdk8.buildMavenPackage rec {
     cp tool/target/gp.jar "$out/share/java"
     makeWrapper "${jre8_headless}/bin/java" "$out/bin/gp" \
       --add-flags "-jar '$out/share/java/gp.jar'" \
-      --prefix LD_LIBRARY_PATH : "${pcsclite.out}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib"
   '';
 
   meta = with lib; {

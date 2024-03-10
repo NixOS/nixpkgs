@@ -39,6 +39,12 @@ in stdenv.mkDerivation {
   '';
 
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
+    # Fix build on gcc-13 due to missing includes
+    sed -e '1i #include <cstdint>' -i \
+      Libraries/libutil/Headers/libutil/Permissions.h \
+      Libraries/pbxbuild/Headers/pbxbuild/Tool/AuxiliaryFile.h \
+      Libraries/pbxbuild/Headers/pbxbuild/Tool/Invocation.h
+
     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h

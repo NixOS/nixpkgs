@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "23.3";
+  version = "23.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AV/hVVguGAW0Bik0Tkps88xARQgn0pTQQLS4wXSan6Y=";
+    hash = "sha256-Z1g6pDuR/oxJ90qDLZX02EQr5ij9TG1l6fgR9RU6Tlw=";
   };
 
   nativeBuildInputs = [ flit-core ];

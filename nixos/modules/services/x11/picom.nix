@@ -61,7 +61,7 @@ in {
       '';
     };
 
-    package = mkPackageOptionMD pkgs "picom" { };
+    package = mkPackageOption pkgs "picom" { };
 
     fade = mkOption {
       type = types.bool;

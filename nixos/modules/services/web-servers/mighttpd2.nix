@@ -101,6 +101,7 @@ in {
       ];
     systemd.services.mighttpd2 = {
       description = "Mighttpd2 web server";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

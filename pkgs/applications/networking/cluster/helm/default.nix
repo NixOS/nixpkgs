@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "kubernetes-helm";
-  version = "3.13.2";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-WXtEXgKco50D1TR775lIm/VuD+MJMbOMQpPC0W4MAYo=";
+    sha256 = "sha256-7Cd5lxPSXXCvYLLh334qnDmd9zbF1LMxTNoZEBpzHS4=";
   };
-  vendorHash = "sha256-kvler6o4On4SbFF7AvPSCF5fRYtPNI5fsOcUbrTGYcQ=";
+  vendorHash = "sha256-pYB9J7Zf6MApGpFL7HzqIDcC/vERiVE4z8SsipIeJ7c=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
@@ -20,9 +20,24 @@ buildGoModule rec {
     "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
   ];
 
+  preBuild = ''
+    # set k8s version to client-go version, to match upstream
+    K8S_MODULES_VER="$(go list -f '{{.Version}}' -m k8s.io/client-go)"
+    K8S_MODULES_MAJOR_VER="$(($(cut -d. -f1 <<<"$K8S_MODULES_VER") + 1))"
+    K8S_MODULES_MINOR_VER="$(cut -d. -f2 <<<"$K8S_MODULES_VER")"
+    old_ldflags="''${ldflags}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''
+    # restore ldflags for tests
+    ldflags="''${old_ldflags}"
+
     # skipping version tests because they require dot git directory
     substituteInPlace cmd/helm/version_test.go \
       --replace "TestVersion" "SkipVersion"

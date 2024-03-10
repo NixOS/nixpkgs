@@ -2,20 +2,22 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "opensensemap-api";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UrgQjZYw7TlFvhnaI7wFUpuUYeVKO5hsnx8h1OKfV8w=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-opensensemap-api";
+    rev = "refs/tags/${version}";
+    hash = "sha256-iUSdjU41JOT7k044EI2XEvJiSo6V4mO6S51EcIughEM=";
   };
 
   propagatedBuildInputs = [

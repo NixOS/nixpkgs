@@ -226,7 +226,7 @@ in {
     };
     meta = {
       homepage = "https://bitbucket.org/proximus/smseagle-graylog/";
-      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog.";
+      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -253,7 +253,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-spaceweather";
-      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
+      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate";
     };
   };
   splunk = glPlugin rec {
@@ -266,7 +266,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
-      description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP.";
+      description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP";
       license = lib.licenses.gpl3Only;
     };
   };

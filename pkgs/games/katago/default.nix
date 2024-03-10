@@ -19,6 +19,7 @@
 , enableBigBoards ? false
 , enableContrib ? false
 , enableTcmalloc ? true
+, enableTrtPlanCache ? false
 }:
 
 assert lib.assertOneOf "backend" backend [ "opencl" "cuda" "tensorrt" "eigen" ];
@@ -27,14 +28,14 @@ assert lib.assertOneOf "backend" backend [ "opencl" "cuda" "tensorrt" "eigen" ];
 # of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
 stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.13.1";
-  githash = "3539a3d410b12f79658bb7a2cdaf1ecb6c95e6c1";
+  version = "1.14.0";
+  githash = "c6de1bbda837a0717eaeca46102f7326ed0da0d4";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-A2ZvFcklYQoxfqYrLrazksrJkfdELnn90aAbkm7pJg0=";
+    sha256 = "sha256-0WB/weQIJkLXedcOJO7D/N85oXTufvbmyfIp8XdrACg=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";
@@ -67,25 +68,15 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DNO_GIT_REVISION=ON"
-  ] ++ lib.optionals enableAVX2 [
-    "-DUSE_AVX2=ON"
-  ] ++ lib.optionals (backend == "eigen") [
-    "-DUSE_BACKEND=EIGEN"
-  ] ++ lib.optionals (backend == "cuda") [
-    "-DUSE_BACKEND=CUDA"
-  ] ++ lib.optionals (backend == "tensorrt") [
-    "-DUSE_BACKEND=TENSORRT"
-  ] ++ lib.optionals (backend == "opencl") [
-    "-DUSE_BACKEND=OPENCL"
+    (lib.cmakeFeature "USE_BACKEND" (lib.toUpper backend))
+    (lib.cmakeBool "USE_AVX2" enableAVX2)
+    (lib.cmakeBool "USE_TCMALLOC" enableTcmalloc)
+    (lib.cmakeBool "USE_BIGGER_BOARDS_EXPENSIVE" enableBigBoards)
+    (lib.cmakeBool "USE_CACHE_TENSORRT_PLAN" enableTrtPlanCache)
+    (lib.cmakeBool "NO_GIT_REVISION" (!enableContrib))
   ] ++ lib.optionals enableContrib [
-    "-DBUILD_DISTRIBUTED=1"
-    "-DNO_GIT_REVISION=OFF"
-    "-DGIT_EXECUTABLE=${fakegit}/bin/git"
-  ] ++ lib.optionals enableTcmalloc [
-    "-DUSE_TCMALLOC=ON"
-  ] ++ lib.optionals enableBigBoards [
-    "-DUSE_BIGGER_BOARDS_EXPENSIVE=ON"
+    (lib.cmakeBool "BUILD_DISTRIBUTED" true)
+    (lib.cmakeFeature "GIT_EXECUTABLE" "${fakegit}/bin/git")
   ];
 
   preConfigure = ''

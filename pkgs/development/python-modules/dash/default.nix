@@ -3,12 +3,12 @@
 , pythonOlder
 , fetchFromGitHub
 
+, setuptools
 , nodejs
 , yarn
 , prefetch-yarn-deps
 , fetchYarnDeps
 
-, setuptools
 , flask
 , werkzeug
 , plotly
@@ -19,7 +19,6 @@
 , typing-extensions
 , requests
 , retrying
-, ansi2html
 , nest-asyncio
 
 , celery
@@ -37,26 +36,27 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.14.1";
-  format = "setuptools";
+  version = "2.15.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "plotly";
-    repo = pname;
+    repo = "dash";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vQOfX9RCIbr5lfUyT2knwrO374/vm7jH+/1+BeqmRjI=";
+    hash = "sha256-38BOw/CrauT/usVWCI735J0zRf9wzScUgbfGTy5B7ng=";
   };
 
   nativeBuildInputs = [
+    setuptools
     nodejs
     yarn
     prefetch-yarn-deps
   ];
 
-  yarnDeps = fetchYarnDeps {
-    yarnLock = src + "/@plotly/dash-jupyterlab/yarn.lock";
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
     hash = "sha256-mkiyrA0jGiP0zbabSjgHFLEUX3f+LZdJ8eARI5QA8CU=";
   };
 
@@ -65,12 +65,12 @@ buildPythonPackage rec {
 
     export HOME=$(mktemp -d)
 
-    yarn config --offline set yarn-offline-mirror ${yarnDeps}
+    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
     fixup-yarn-lock yarn.lock
 
     substituteInPlace package.json --replace jlpm yarn
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts
-    patchShebangs .
+    patchShebangs node_modules
 
     # Generates the jupyterlab extension files
     yarn run build:pack
@@ -79,7 +79,6 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    setuptools # for importing pkg_resources
     flask
     werkzeug
     plotly
@@ -90,7 +89,6 @@ buildPythonPackage rec {
     typing-extensions
     requests
     retrying
-    ansi2html
     nest-asyncio
   ];
 
@@ -125,9 +123,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dash" ];
 
   meta = {
+    changelog = "https://github.com/plotly/dash/blob/${src.rev}/CHANGELOG.md";
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
-    changelog = "https://github.com/plotly/dash/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ antoinerg tomasajt ];
   };

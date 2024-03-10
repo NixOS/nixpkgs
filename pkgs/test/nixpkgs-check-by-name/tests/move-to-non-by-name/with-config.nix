@@ -1,0 +1,1 @@
+{ someDrv, enableFoo }: someDrv

@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
@@ -22,16 +21,20 @@ let
       pin = "2.2.1-20230117.075740-16";
     };
   };
+  jackson-datatype-jsr310 = fetchurl {
+    url = "https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar";
+    hash = "sha256-vqHXgAnrxOXVSRij967F2p+9CfZiwZGiF//PN+hSfF4=";
+  };
 in
 stdenv.mkDerivation rec {
-  version = "5.11";
+  version = "5.12";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-MTnM4QHTFXJt/T8SOWwHlZ1CuegSGjpT3qDaMRi5n18=";
+    hash = "sha256-+ltd9hItmMkEpKzX6TFfFy5fiOkLBK/tQNsh8OVDeoc=";
     fetchSubmodules = true;
   };
 
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
 
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit src version patches postPatch;
+    inherit src version postPatch;
 
     nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
@@ -61,25 +64,19 @@ stdenv.mkDerivation rec {
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
+      find $GRADLE_USER_HOME/caches/modules-2/ -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
         | sh
       mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
         $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
+      # This is used but not cached by Gradle.
+      cp ${jackson-datatype-jsr310} $out/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar
     '';
     # Don't move info to share/
     forceShare = [ "dummy" ];
     outputHashMode = "recursive";
-    outputHash = "sha256-sMbAv122EcLPOqbEVKowfxp9B71iJaccLRlKS75b3Xc=";
+    outputHash = "sha256-baP/zNgcc6oYwwbWvT7ontULcKKCw0rTQRkdZMgcWfY=";
   };
-
-  patches = [
-    # Use JavaFX 21
-    (fetchpatch {
-      url = "https://github.com/JabRef/jabref/commit/2afd1f622a3ab85fc2cf5fa879c5a4d41c245eca.patch";
-      hash = "sha256-cs7TSSnEY4Yf5xrqMOpfIA4jVdzM3OQQV/anQxJyy64=";
-    })
-  ];
 
   postPatch = ''
     # Pin the version
@@ -91,6 +88,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
       --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
         'VERSION_CHECK_ENABLED, Boolean.FALSE'
+
+    # Find OpenOffice/LibreOffice binary
+    substituteInPlace src/main/java/org/jabref/logic/openoffice/OpenOfficePreferences.java \
+      --replace '/usr' '/run/current-system/sw'
+
+    # Don't fetch predatory sources. These source are fetched from online webpages.
+    sed -i -e '/new PJSource/,/);/c);' src/main/java/org/jabref/logic/journals/predatory/PredatoryJournalListCrawler.java
 
     # Add back downloadDependencies task for deps download which is removed upstream in https://github.com/JabRef/jabref/pull/10326
     cat <<EOF >> build.gradle
@@ -152,7 +156,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -dm755 $out/share/java/jabref
-    install -Dm644 LICENSE.md $out/share/licenses/jabref/LICENSE.md
+    install -Dm644 LICENSE $out/share/licenses/jabref/LICENSE
     install -Dm644 src/main/resources/icons/jabref.svg $out/share/pixmaps/jabref.svg
 
     # script to support browser extensions

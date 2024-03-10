@@ -19,5 +19,6 @@ bundlerApp rec {
     license = licenses.mit;
     maintainers = with maintainers; [ erictapen jgillich nicknovitski bbenno ];
     platforms = platforms.unix;
+    mainProgram = "gollum";
   };
 }

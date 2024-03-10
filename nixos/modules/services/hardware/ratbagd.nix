@@ -11,6 +11,8 @@ in
   options = {
     services.ratbagd = {
       enable = mkEnableOption (lib.mdDoc "ratbagd for configuring gaming mice");
+
+      package = mkPackageOption pkgs "libratbag" { };
     };
   };
 
@@ -18,10 +20,10 @@ in
 
   config = mkIf cfg.enable {
     # Give users access to the "ratbagctl" tool
-    environment.systemPackages = [ pkgs.libratbag ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.libratbag ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.libratbag ];
+    systemd.packages = [ cfg.package ];
   };
 }

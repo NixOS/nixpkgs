@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "bugzilla";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "python-${pname}";

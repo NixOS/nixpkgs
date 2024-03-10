@@ -27,8 +27,6 @@ buildPythonPackage rec {
   ];
 
   # HACK https://github.com/NixOS/nixpkgs/pull/229460
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   patchPhase = ''
     runHook prePatch
 

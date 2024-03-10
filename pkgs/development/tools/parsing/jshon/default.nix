@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jansson ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=strict-prototypes";
+
   patches = [
     (fetchpatch {
       # https://github.com/keenerd/jshon/pull/62

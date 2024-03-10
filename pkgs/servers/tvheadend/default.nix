@@ -102,8 +102,6 @@ in stdenv.mkDerivation {
   ];
 
   preConfigure = ''
-    patchShebangs ./configure
-
     substituteInPlace src/config.c \
       --replace /usr/bin/tar ${gnutar}/bin/tar
 

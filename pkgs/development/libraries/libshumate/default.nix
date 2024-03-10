@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.1.2";
+  version = "1.1.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -29,8 +29,13 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
-    sha256 = "g/82LQNwM/dwQ/zKDhAGtZE7JEtQ0jFWcylcP1azvSY=";
+    sha256 = "+h0dKLECtvfsxwD5aRTIgiNI9jG/tortUJYFiYMe60g=";
   };
+
+  depsBuildBuild = [
+    # required to find native gi-docgen when cross compiling
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gi-docgen
@@ -79,7 +84,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

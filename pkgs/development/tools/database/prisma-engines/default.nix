@@ -14,13 +14,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.4.1";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-KYPDocC6S6YhJeneyI++UmmpuAYDoX6okqgOtGetilw=";
+    sha256 = "sha256-zyF2NAOPNJe23tIuOHalsvnYytALKZq8QY1L8EWJMno=";
   };
 
   # Use system openssl.
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "barrel-0.6.6-alpha.0" = "sha256-USh0lQ1z+3Spgc69bRFySUzhuY79qprLlEExTmYWFN8=";
+      "cuid-1.3.2" = "sha256-ZihFrLerEIOdbJggaBbByRbC1sZRvF4M0LN2albB7vA=";
       "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
       "mysql_async-0.31.3" = "sha256-QIO9s0Upc0/1W7ux1RNJNGKqzO4gB4gMV3NoakAbxkQ=";
       "postgres-native-tls-0.5.0" = "sha256-UYPsxhCkXXWk8yPbqjNS0illwjS5mVm3Z/jFwpVwqfw=";

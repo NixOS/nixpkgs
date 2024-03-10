@@ -3,7 +3,6 @@
 with lib;
 
 let
-  pkg = pkgs.pgadmin4;
   cfg = config.services.pgadmin;
 
   _base = with types; [ int bool str ];
@@ -36,6 +35,8 @@ in
       default = 5050;
     };
 
+    package = mkPackageOptionMD pkgs "pgadmin4" { };
+
     initialEmail = mkOption {
       description = lib.mdDoc "Initial email for the pgAdmin account";
       type = types.str;
@@ -43,10 +44,17 @@ in
 
     initialPasswordFile = mkOption {
       description = lib.mdDoc ''
-        Initial password file for the pgAdmin account.
+        Initial password file for the pgAdmin account. Minimum length by default is 6.
+        Please see `services.pgadmin.minimumPasswordLength`.
         NOTE: Should be string not a store path, to prevent the password from being world readable
       '';
       type = types.path;
+    };
+
+    minimumPasswordLength = mkOption {
+      description = lib.mdDoc "Minimum length of the password";
+      type = types.int;
+      default = 6;
     };
 
     emailServer = {
@@ -115,7 +123,9 @@ in
 
     services.pgadmin.settings = {
       DEFAULT_SERVER_PORT = cfg.port;
+      PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
       SERVER_MODE = true;
+      UPGRADE_CHECK_ENABLED = false;
     } // (optionalAttrs cfg.openFirewall {
       DEFAULT_SERVER = mkDefault "::";
     }) // (optionalAttrs cfg.emailServer.enable {
@@ -139,6 +149,14 @@ in
 
       preStart = ''
         # NOTE: this is idempotent (aka running it twice has no effect)
+        # Check here for password length to prevent pgadmin from starting
+        # and presenting a hard to find error message
+        # see https://github.com/NixOS/nixpkgs/issues/270624
+        PW_LENGTH=$(wc -m < ${escapeShellArg cfg.initialPasswordFile})
+        if [ $PW_LENGTH -lt ${toString cfg.minimumPasswordLength} ]; then
+            echo "Password must be at least ${toString cfg.minimumPasswordLength} characters long"
+            exit 1
+        fi
         (
           # Email address:
           echo ${escapeShellArg cfg.initialEmail}
@@ -150,7 +168,7 @@ in
           echo "$PW"
           # Retype password:
           echo "$PW"
-        ) | ${pkg}/bin/pgadmin4-setup
+        ) | ${cfg.package}/bin/pgadmin4-cli setup-db
       '';
 
       restartTriggers = [
@@ -162,7 +180,7 @@ in
         DynamicUser = true;
         LogsDirectory = "pgadmin";
         StateDirectory = "pgadmin";
-        ExecStart = "${pkg}/bin/pgadmin4";
+        ExecStart = "${cfg.package}/bin/pgadmin4";
       };
     };
 

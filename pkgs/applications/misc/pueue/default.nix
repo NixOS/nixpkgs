@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
-    hash = "sha256-EDd8SChQ8Vh2uNSZq5mrWdsLNT0KC4IMA7e3BPk6p04=";
+    hash = "sha256-Q1x97eJNjtET+L3KpWTXLKbz62XgkjxNZkAAZWhbMmM=";
   };
 
-  cargoHash = "sha256-H4Oyn2cLyj/RNkiMQMzbHjhs1AJIcmSkZOO83ETByWk=";
+  cargoHash = "sha256-i9SPOZo9AuITm6iI++D3ipY8c0xfZzkeHW7tb9SZ3iQ=";
 
   nativeBuildInputs = [
     installShellFiles

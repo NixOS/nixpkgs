@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "crc";
-  version = "5.0.0";
-  format = "pyproject";
+  version = "6.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Nicoretti";
-    repo = pname;
+    repo = "crc";
     rev = "refs/tags/${version}";
-    hash = "sha256-+C4cUKXZCpAXil8X4gTK3AhqNVWDrBQYY2Kgkd3+gqc=";
+    hash = "sha256-GlXDDG8NZ3Lp0IwYKS0+fZG85uVdo4V8mZnCa+za02U=";
   };
 
   nativeBuildInputs = [

@@ -3,6 +3,13 @@
 
 { buildPackages, runCommand, lib, substituteAll }:
 
+let
+  builder = substituteAll {
+    src = ./builder.pl;
+    inherit (builtins) storeDir;
+  };
+in
+
 lib.makeOverridable
 ({ name
 
@@ -42,13 +49,6 @@ lib.makeOverridable
 , passthru ? {}
 , meta ? {}
 }:
-
-let
-  builder = substituteAll {
-    src = ./builder.pl;
-    inherit (builtins) storeDir;
-  };
-in
 
 runCommand name
   rec {

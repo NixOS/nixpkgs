@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "133";
+  version = "136";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KCpHiIdid5h5CU2uyMOo+p5h50h3Ki5/4mUpdTAPKQA=";
+    hash = "sha256-Hks/MWusPiBVdb5L+53qtR6VmXG/P4rDzsvHxLeA8Do=";
   };
 
   patches = [

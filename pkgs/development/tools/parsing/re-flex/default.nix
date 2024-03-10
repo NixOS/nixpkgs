@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re-flex";
-  version = "3.5.1";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "RE-flex";
     rev = "v${version}";
-    sha256 = "sha256-AP8889MQSAq/CIfZRDOkaqkTrT6EPqHK0bbeLa9v6h8=";
+    sha256 = "sha256-eQ2+RthvOKCd2Dl6i+9DahJArFfOhPJkn6PI/yuaqos=";
   };
 
   nativeBuildInputs = [ boost autoconf automake ];

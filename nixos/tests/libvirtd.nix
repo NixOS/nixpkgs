@@ -14,10 +14,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           libvirtd.hooks.qemu.is_working = "${pkgs.writeShellScript "testHook.sh" ''
             touch /tmp/qemu_hook_is_working
           ''}";
+          libvirtd.nss.enable = true;
         };
         boot.supportedFilesystems = [ "zfs" ];
         networking.hostId = "deadbeef"; # needed for zfs
-        networking.nameservers = [ "192.168.122.1" ];
         security.polkit.enable = true;
         environment.systemPackages = with pkgs; [ virt-manager ];
       };

@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.gpl3Plus;
     maintainers = with maintainers; [viric];
     platforms   = with platforms; linux;
+    mainProgram = "pwnat";
   };
 }

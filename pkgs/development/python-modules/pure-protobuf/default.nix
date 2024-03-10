@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "2.3.0";
+  version = "2.3.0";  # Komikku not launching w/ 3.0.0, #280551
 
   format = "pyproject";
   disabled = pythonOlder "3.7";
@@ -23,8 +23,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-nJ3F8dUrqMeWqTV9ErGqrMvofJwBKwNUDfxWIqFh4nY=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatch-vcs

@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dysinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "flwrap";
   };
 }

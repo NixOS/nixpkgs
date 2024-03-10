@@ -5,7 +5,7 @@ let
   inherit (lib) generators maintainers types;
   inherit (lib.attrsets) attrValues filterAttrs mapAttrs mapAttrsToList recursiveUpdate;
   inherit (lib.lists) flatten optional optionals;
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatMapStringsSep concatStringsSep optionalString versionOlder;
   inherit (lib.trivial) mapNullable;
   inherit (lib.modules) mkBefore mkDefault mkForce mkIf mkMerge
@@ -680,14 +680,8 @@ in
     };
 
     git = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.git;
-        defaultText = literalExpression "pkgs.git";
-        example = literalExpression "pkgs.gitFull";
-        description = lib.mdDoc ''
-          Git package for git.sr.ht. This can help silence collisions.
-        '';
+      package = mkPackageOption pkgs "git" {
+        example = "gitFull";
       };
       fcgiwrap.preforkProcess = mkOption {
         description = lib.mdDoc "Number of fcgiwrap processes to prefork.";
@@ -697,14 +691,7 @@ in
     };
 
     hg = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mercurial;
-        defaultText = literalExpression "pkgs.mercurial";
-        description = lib.mdDoc ''
-          Mercurial package for hg.sr.ht. This can help silence collisions.
-        '';
-      };
+      package = mkPackageOption pkgs "mercurial" { };
       cloneBundles = mkOption {
         type = types.bool;
         default = false;
@@ -803,13 +790,21 @@ in
         '';
       };
       systemd.tmpfiles.settings."10-sourcehut-gitsrht" = mkIf cfg.git.enable (
-        builtins.listToAttrs (map (name: {
-          name = "/var/log/sourcehut/gitsrht-${name}";
-          value.f = {
-            inherit (cfg.git) user group;
-            mode = "0644";
-          };
-        }) [ "keys" "shell" "update-hook" ])
+        mkMerge [
+          (builtins.listToAttrs (map (name: {
+            name = "/var/log/sourcehut/gitsrht-${name}";
+            value.f = {
+              inherit (cfg.git) user group;
+              mode = "0644";
+            };
+          }) [ "keys" "shell" "update-hook" ]))
+          {
+            ${cfg.settings."git.sr.ht".repos}.d = {
+              inherit (cfg.git) user group;
+              mode = "0644";
+            };
+          }
+        ]
       );
       systemd.services.sshd = {
         preStart = mkIf cfg.hg.enable ''
@@ -1383,5 +1378,5 @@ in
   ];
 
   meta.doc = ./default.md;
-  meta.maintainers = with maintainers; [ tomberek nessdoor ];
+  meta.maintainers = with maintainers; [ tomberek nessdoor christoph-heiss ];
 }

@@ -2,7 +2,7 @@
 
 buildNimPackage (finalAttrs: {
   pname = "mosdepth";
-  version = "0.3.5";
+  version = "0.3.6";
 
   requiredNimVersion = 1;
 
@@ -10,7 +10,7 @@ buildNimPackage (finalAttrs: {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tG3J51PS6A0WBCZ+j/Nf7aaukFV+DZJsxpbTbvwu0zc=";
+    sha256 = "sha256-7N42S3xfQRkrBmoLf0DsbLMpVULAFpHm5JugDMDzAgU=";
   };
 
   lockFile = ./lock.json;

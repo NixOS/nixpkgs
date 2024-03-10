@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Cross-platform version of flock(1)";
     maintainers = with maintainers; [ matthewbauer msfjarvis ];
+    mainProgram = "flock";
     platforms = platforms.all;
     license = licenses.isc;
   };

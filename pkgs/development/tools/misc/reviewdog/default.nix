@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "reviewdog";
-  version = "0.15.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EKDs0Xv38RLC3qDkb8QT3CMWdi7tEPRXxhlZiC/dyZo=";
+    hash = "sha256-l7jQaOFNhhWqkYaTd8BdH9au/wjlnWZnV5DAco93qlQ=";
   };
 
-  vendorHash = "sha256-IKndnxeLy9hLFzs0SesRQzii9h8MX9FrEcpHaaKIq4k=";
+  vendorHash = "sha256-p/WvGGadf/O2DFIUWjw7mpg8DhcaIYlgp1xgKV89+GM=";
 
   doCheck = false;
 

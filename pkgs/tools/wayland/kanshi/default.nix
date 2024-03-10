@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "kanshi";
     rev = "v${version}";
-    sha256 = "sha256-5dIBQBA3OMlmaSYswwggFuedsb3i4uy9bcTZahIS2gQ=";
+    sha256 = "sha256-Ck0yRt9TYLFRojn+VKnjP5RzkX0hciuQOT6drTH7gtU=";
   };
 
   strictDeps = true;

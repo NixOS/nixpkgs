@@ -57,6 +57,7 @@ let
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
     "systemd-halt.service"
+    "systemd-hibernate-resume.service"
     "systemd-journald-audit.socket"
     "systemd-journald-dev-log.socket"
     "systemd-journald.service"
@@ -70,6 +71,7 @@ let
     "systemd-tmpfiles-setup.service"
     "timers.target"
     "umount.target"
+    "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
 
   upstreamWants = [
@@ -87,10 +89,6 @@ let
     inherit upstreamWants;
     inherit (cfg) packages package;
   };
-
-  fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
-
-  needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
@@ -398,8 +396,7 @@ in {
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
 
-        "/lib/modules".source = "${modulesClosure}/lib/modules";
-        "/lib/firmware".source = "${modulesClosure}/lib/firmware";
+        "/lib".source = "${modulesClosure}/lib";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
@@ -427,15 +424,17 @@ in {
 
       storePaths = [
         # systemd tooling
+        "${cfg.package}/lib/systemd/systemd-executor"
         "${cfg.package}/lib/systemd/systemd-fsck"
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
-        (lib.mkIf needMakefs "${cfg.package}/lib/systemd/systemd-makefs")
+        "${cfg.package}/lib/systemd/systemd-makefs"
         "${cfg.package}/lib/systemd/systemd-modules-load"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
+        "${cfg.package}/lib/systemd/systemd-bsod"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"

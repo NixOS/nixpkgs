@@ -21,7 +21,7 @@ import ./make-test-python.nix ({ lib, ... }: {
           }
         ];
       };
-      services.paperless.extraConfig = {
+      services.paperless.settings = {
         PAPERLESS_DBHOST = "/run/postgresql";
       };
     };

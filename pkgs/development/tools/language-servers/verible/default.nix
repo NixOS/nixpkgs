@@ -2,7 +2,8 @@
 , stdenv
 , buildBazelPackage
 , fetchFromGitHub
-, bazel_4
+, bazel_5
+, jdk
 , bison
 , flex
 , python3
@@ -17,8 +18,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2023-10-26";
-  GIT_VERSION = "v0.0-3428-gcfcbb82b";
+  GIT_DATE = "2024-02-01";
+  GIT_VERSION = "v0.0-3515-g2d841599";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
@@ -27,35 +28,22 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo  = "verible";
     rev   = "${GIT_VERSION}";
-    hash  = "sha256-snWhOuGyAdtdJDMttcbEjlkwPUO1mdR9vuro0tZt+Z8=";
+    hash  = "sha256-D/blcex/St1nLKvjzuKnmAJE8HVlGy8ampmXIxKK11M=";
   };
 
-  patches = [
-    # Patch WORKSPACE file to not include windows-related dependencies,
-    # as they are removed by bazel, breaking the fixed output derivation
-    # TODO: fix upstream
-    ./remove-unused-deps.patch
-  ];
-
-  bazel = bazel_4;
+  bazel = bazel_5;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
-    "--javabase=@bazel_tools//tools/jdk:remote_jdk11"
-    "--host_javabase=@bazel_tools//tools/jdk:remote_jdk11"
+    "--java_runtime_version=local_jdk"
+    "--tool_java_runtime_version=local_jdk"
   ];
 
   fetchAttrs = {
-    # Fixed output derivation hash after bazel fetch.
-    # This varies per platform, probably from the JDK pulled in being part
-    # of the output derivation ? Is there a more robust way to do this ?
-    # (Hashes extracted from the ofborg build logs)
-    sha256 = {
-      aarch64-linux = "sha256-Hf/jF5Y7QS2ZNFmSx2LIb0b6gdjditE97HwWGqQJac8=";
-      x86_64-linux = "sha256-WBp5Fi5vvKLVgRWvQ3VB7sY6ySpbwCdhU5KqZH9sLy4=";
-    }.${system} or (throw "No hash for system: ${system}");
+    sha256 = "sha256-2YruKvU7OZQ7mKNrqYITat+cmf/DEytDElYw7CvkxJk=";
   };
 
   nativeBuildInputs = [
+    jdk        # bazel uses that.
     bison      # We use local flex and bison as WORKSPACE sources fail
     flex       # .. to compile with newer glibc
     python3
@@ -103,6 +91,7 @@ buildBazelPackage rec {
     homepage = "https://github.com/chipsalliance/verible";
     license = licenses.asl20;
     maintainers = with maintainers; [ hzeller newam ];
+    # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
     platforms = platforms.linux;
   };
 }

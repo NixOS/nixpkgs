@@ -1,0 +1,68 @@
+diff --git a/misc/dconfig/org.deepin.dde.appearance.json b/misc/dconfig/org.deepin.dde.appearance.json
+index b612e6e..371f966 100644
+--- a/misc/dconfig/org.deepin.dde.appearance.json
++++ b/misc/dconfig/org.deepin.dde.appearance.json
+@@ -143,7 +143,7 @@
+             "visibility": "private"
+         },
+         "Background_Uris": {
+-            "value": ["file:///usr/share/backgrounds/default_background.jpg"],
++            "value": ["file:///run/current-system/sw/share/backgrounds/default_background.jpg"],
+             "serial": 0,
+             "flags": [],
+             "name": "Background_Uris",
+diff --git a/src/service/dbus/deepinwmfaker.cpp b/src/service/dbus/deepinwmfaker.cpp
+index 5d455fa..40ec608 100644
+--- a/src/service/dbus/deepinwmfaker.cpp
++++ b/src/service/dbus/deepinwmfaker.cpp
+@@ -54,13 +54,13 @@ Q_GLOBAL_STATIC_WITH_ARGS(QGSettings, _gsettings_dde_zone, ("com.deepin.dde.zone
+ 
+ #define KWinDBusCompositorInterface "org.kde.kwin.Compositing"
+ #define KWinDBusCompositorPath "/Compositor"
+-const char defaultFirstBackgroundUri[] = "file:///usr/share/wallpapers/deepin/desktop.jpg";
++const char defaultFirstBackgroundUri[] = "file:///run/current-system/sw/share/wallpapers/deepin/desktop.jpg";
+ const char defaultSecondBackgroundUri[] = "francesco-ungaro-1fzbUyzsHV8-unsplash";
+ 
+ //default cursor size :24
+ #define DEFAULTCURSORSIZE 24
+ 
+-const char fallback_background_name[] = "file:///usr/share/backgrounds/default_background.jpg";
++const char fallback_background_name[] = "file:///run/current-system/sw/share/backgrounds/default_background.jpg";
+ 
+ //using org::kde::KWin;
+ 
+diff --git a/src/service/impl/appearancemanager.cpp b/src/service/impl/appearancemanager.cpp
+index 360ca6f..6db93ab 100644
+--- a/src/service/impl/appearancemanager.cpp
++++ b/src/service/impl/appearancemanager.cpp
+@@ -821,7 +821,7 @@ void AppearanceManager::doUpdateWallpaperURIs()
+     }
+ 
+     // 如果是用户自己设置的桌面壁纸, 需要将主题更新为自定义
+-    if (!monitorWallpaperUris.first().startsWith("/usr/share/wallpapers/deepin")) {
++    if (!monitorWallpaperUris.first().startsWith("/run/current-system/sw/share/wallpapers/deepin")) {
+         updateCustomTheme(TYPEWALLPAPER, monitorWallpaperUris.first());
+     }
+ }
+@@ -1689,7 +1689,7 @@ QString AppearanceManager::getWallpaperUri(const QString &index, const QString &
+             const Background &bg = backgroudlist.at(QRandomGenerator::global()->generate() % backgroudlist.size());
+             wallpaper = bg.getId();
+         } else {
+-            wallpaper = "file:///usr/share/wallpapers/deepin/desktop.jpg";
++            wallpaper = "file:///run/current-system/sw/share/wallpapers/deepin/desktop.jpg";
+         }
+ 
+         PhaseWallPaper::setWallpaperUri(index, monitorName, wallpaper);
+diff --git a/src/service/modules/background/backgrounds.cpp b/src/service/modules/background/backgrounds.cpp
+index bf739a5..1076d59 100644
+--- a/src/service/modules/background/backgrounds.cpp
++++ b/src/service/modules/background/backgrounds.cpp
+@@ -11,7 +11,7 @@
+ #include <pwd.h>
+ #include <QDBusReply>
+ 
+-QStringList Backgrounds::systemWallpapersDir = { "/usr/share/wallpapers/deepin" };
++QStringList Backgrounds::systemWallpapersDir = { "/run/current-system/sw/share/wallpapers/deepin" };
+ QStringList Backgrounds::uiSupportedFormats = { "jpeg", "png", "bmp", "tiff", "gif" };
+ 
+ Backgrounds::Backgrounds(QObject *parent)

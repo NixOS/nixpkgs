@@ -8,8 +8,11 @@
 , setuptools
 
 # dependencies
+, aiohappyeyeballs
+, async-interrupt
 , async-timeout
 , chacha20poly1305-reuseable
+, cryptography
 , noiseprotocol
 , protobuf
 , zeroconf
@@ -22,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "18.5.2";
+  version = "23.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +34,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kj4FHsNsGsMxK+EI1jgqBfvldkyAoBkCTGT1yiZMmzY=";
+    hash = "sha256-iYaRA1Jj9Ew/s/LyS6U+NZ3TsAlXdDq0DAaudgFV5/o=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +43,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiohappyeyeballs
+    async-interrupt
     chacha20poly1305-reuseable
+    cryptography
     noiseprotocol
     protobuf
     zeroconf
@@ -48,19 +54,25 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  pythonImportsCheck = [
-    "aioesphomeapi"
-  ];
   nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/esphome/aioesphomeapi/issues/837
+    "test_reconnect_logic_stop_callback"
+  ];
+
+  pythonImportsCheck = [
+    "aioesphomeapi"
+  ];
+
   meta = with lib; {
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab hexa ];
   };

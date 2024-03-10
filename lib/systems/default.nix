@@ -89,6 +89,13 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
+      # The standard lib directory name that non-nixpkgs binaries distributed
+      # for this platform normally assume.
+      libDir = if final.isLinux then
+        if final.isx86_64 || final.isMips64 || final.isPower64
+        then "lib64"
+        else "lib"
+      else null;
       extensions = lib.optionalAttrs final.hasSharedLibraries {
         sharedLibrary =
           if      final.isDarwin  then ".dylib"
@@ -324,7 +331,8 @@ rec {
               "riscv64" = "riscv64gc";
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;
-          in rust.config
+          # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
+          in args.rust.rustcTarget or args.rustc.config
             or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
           # The name of the rust target if it is standard, or the json file

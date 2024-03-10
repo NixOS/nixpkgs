@@ -17,48 +17,48 @@ let
   asio = fetchFromGitHub {
     owner = "chriskohlhoff";
     repo = "asio";
-    rev = "refs/tags/asio-1-22-1";
-    hash = "sha256-UDLhx2yI6Txg0wP5H4oNIhgKIB2eMxUGCyT2x/7GgVg=";
+    rev = "refs/tags/asio-1-28-2";
+    hash = "sha256-8Sw0LuAqZFw+dxlsTstlwz5oaz3+ZnKBuvSdLW6/DKQ=";
   };
 
   # Derived from subprojects/bitsery.wrap
   bitsery = fetchFromGitHub {
     owner = "fraillt";
     repo = "bitsery";
-    rev = "refs/tags/v5.2.2";
-    hash = "sha256-VwzVtxt+E/SVcxqIJw8BKPO2q7bu/hkhY+nB7FHrZpY=";
+    rev = "refs/tags/v5.2.3";
+    hash = "sha256-rmfcIYCrANycFuLtibQ5wOPwpMVhpTMpdGsUfpR3YsM=";
   };
 
   # Derived from subprojects/clap.wrap
   clap = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap";
-    rev = "refs/tags/1.1.7";
-    hash = "sha256-WcMTxE+QCzlp4lhFdghZI8UI/5mdVeRvrl24Xynd0qk=";
+    rev = "refs/tags/1.1.9";
+    hash = "sha256-z2P0U2NkDK1/5oDV35jn/pTXCcspuM1y2RgZyYVVO3w=";
   };
 
   # Derived from subprojects/function2.wrap
   function2 = fetchFromGitHub {
     owner = "Naios";
     repo = "function2";
-    rev = "refs/tags/4.2.0";
-    hash = "sha256-wrt+fCcM6YD4ZRZYvqqB+fNakCNmltdPZKlNkPLtgMs=";
+    rev = "refs/tags/4.2.3";
+    hash = "sha256-+fzntJn1fRifOgJhh5yiv+sWR9pyaeeEi2c1+lqX3X8=";
   };
 
   # Derived from subprojects/ghc_filesystem.wrap
   ghc_filesystem = fetchFromGitHub {
     owner = "gulrak";
     repo = "filesystem";
-    rev = "refs/tags/v1.5.12";
-    hash = "sha256-j4RE5Ach7C7Kef4+H9AHSXa2L8OVyJljDwBduKcC4eE=";
+    rev = "refs/tags/v1.5.14";
+    hash = "sha256-XZ0IxyNIAs2tegktOGQevkLPbWHam/AOFT+M6wAWPFg=";
   };
 
   # Derived from subprojects/tomlplusplus.wrap
   tomlplusplus = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "refs/tags/v3.3.0";
-    hash = "sha256-INX8TOEumz4B5coSxhiV7opc3rYJuQXT2k1BJ3Aje1M=";
+    rev = "refs/tags/v3.4.0";
+    hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
   };
 
   # Derived from vst3.wrap
@@ -72,14 +72,14 @@ let
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
-  version = "5.0.5";
+  version = "5.1.0";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "yabridge";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-SB2/zKxj9GDOOb3Zn4kWj7dXhDg/wbx6nPKYbQ041Cs=";
+    hash = "sha256-vnSdGedpiit8nym26i1QFiNnATk0Bymm7e5Ha2H41/M=";
   };
 
   # Unpack subproject sources
@@ -159,6 +159,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A modern and transparent way to use Windows VST2 and VST3 plugins on Linux";
     homepage = "https://github.com/robbert-vdh/yabridge";
+    changelog = "https://github.com/robbert-vdh/yabridge/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];

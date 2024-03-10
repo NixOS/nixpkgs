@@ -32,11 +32,16 @@ let cross = if crossSystem != null
 in with import pkgspath ({ inherit localSystem overlays; } // cross // custom-bootstrap);
 
 rec {
-  coreutils_ = coreutils.override (args: {
+  coreutils_ = (coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
     # Cannot use a single binary build, or it gets dynamically linked against gmp.
     singleBinary = false;
+  })).overrideAttrs (oa: {
+    # Increase header size to be able to inject extra RPATHs. Otherwise
+    # x86_64-darwin build fails as:
+    #    https://cache.nixos.org/log/g5wyq9xqshan6m3kl21bjn1z88hx48rh-stdenv-bootstrap-tools.drv
+    NIX_LDFLAGS = (oa.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
   });
 
   cctools_ = darwin.cctools;

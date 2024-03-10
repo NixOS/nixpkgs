@@ -19,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iotas";
-  version = "0.2.2";
+  version = "0.2.7";
   format = "other";
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "cheywood";
     repo = pname;
     rev = version;
-    hash = "sha256-oThsyTsNM3283e4FViISdFzmeQnU7qXHh4xEJWA2fkc=";
+    hash = "sha256-k3Qbi/BwkJlQzlyTlo9SjJ1M3zMFHo4669rzd+BBPzQ=";
   };
 
   nativeBuildInputs = [

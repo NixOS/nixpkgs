@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "yolink-api";
-  version = "0.3.1";
-  format = "pyproject";
+  version = "0.3.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
-    repo = pname;
+    repo = "yolink-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bxaxjUKmhScku9mBjtuwiaT4TLTsRlro3y/XatyAfs0=";
+    hash = "sha256-RXO++8Dh0hLkjXev/WDhPixLHKXlqRabbrPW6Hs/xoM=";
   };
 
   nativeBuildInputs = [

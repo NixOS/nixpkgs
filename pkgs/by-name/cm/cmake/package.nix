@@ -29,10 +29,11 @@
 , buildDocs ? !(isMinimalBuild || (uiToolkits == []))
 , darwin
 , libsForQt5
+, gitUpdater
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
@@ -46,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.27.7";
+  version = "3.28.3";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-CPcaEGA2vwUfaSdg75VYwFd8Qqw56Wugl+dmK9QVjY4=";
+    hash = "sha256-crdXDlyFk95qxKtDO3PqsYxfsyiIBGDIbOMmCBQa1cE=";
   };
 
   patches = [
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
+  separateDebugInfo = true;
   setOutputFlags = false;
 
   setupHooks = [
@@ -96,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional useOpenSSL openssl
   ++ lib.optional cursesUI ncurses
   ++ lib.optional qt5UI qtbase
+  ++ lib.optional stdenv.isDarwin CoreServices
   ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
@@ -138,8 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-D_FILE_OFFSET_BITS=64"
     "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
   ]
-  # Workaround missing atomic ops with gcc <13
-  ++ lib.optional stdenv.hostPlatform.isRiscV "LDFLAGS=-latomic"
   ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
@@ -161,6 +162,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
   ];
 
+  # `pkgsCross.musl64.cmake.override { stdenv = pkgsCross.musl64.llvmPackages_16.libcxxStdenv; }`
+  # fails with `The C++ compiler does not support C++11 (e.g.  std::unique_ptr).`
+  # The cause is a compiler warning `warning: argument unused during compilation: '-pie' [-Wunused-command-line-argument]`
+  # interfering with the feature check.
+  env.NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+
   # make install attempts to use the just-built cmake
   preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
@@ -170,6 +177,12 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = false; # fails
+
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.kitware.com/cmake/cmake.git";
+    rev-prefix = "v";
+    ignoredVersions = "-"; # -rc1 and friends
+  };
 
   meta = {
     homepage = "https://cmake.org/";
@@ -185,6 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
     platforms = lib.platforms.all;
+    mainProgram = "cmake";
     broken = (qt5UI && stdenv.isDarwin);
   };
 })

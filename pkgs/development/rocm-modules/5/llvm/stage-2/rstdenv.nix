@@ -12,6 +12,7 @@ overrideCC stdenv (wrapCCWith rec {
   inherit bintools;
   libcxx = runtimes;
   cc = clang-unwrapped;
+  gccForLibs = stdenv.cc.cc;
 
   extraPackages = [
     llvm

@@ -5,13 +5,14 @@
 , requests
 , setuptools
 , hypothesis
-, nose
+, pynose
 , responses
 }:
 
 buildPythonPackage rec {
   pname = "habitipy";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ASMfreaK";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    nose
+    pynose
     responses
   ];
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "kcleal";
     repo = "pywfa";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oeVXK9uyH4E98tApKrA7dXifQYb41KuDTAZ40XgAaF8=";
+    hash = "sha256-TeJ7Jq4LR+I1+zeMeBtHZa9dR+CRJJG5sT99tB227P8=";
   };
 
   nativeBuildInputs = [

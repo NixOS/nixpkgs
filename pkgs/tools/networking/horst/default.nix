@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.fpletz ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "horst";
   };
 }

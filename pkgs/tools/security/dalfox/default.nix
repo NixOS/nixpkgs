@@ -5,16 +5,21 @@
 
 buildGoModule rec {
   pname = "dalfox";
-  version = "2.9.0";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "hahwul";
-    repo = pname;
+    repo = "dalfox";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-AG5CNqkxPQJQ+HN3JGUIgSYxgFigmUqVGn1yAHmo7Mo=";
+    hash = "sha256-sKW6UYSPgXkZbLiOeYru/XpG/Cpvvhwos6Z5J/WxjXo=";
   };
 
-  vendorHash = "sha256-OLT85GOcTnWmU+ZRem2+vY29nzvzXhnmIN2W+U6phPk=";
+  vendorHash = "sha256-0eNaH82iCmxaie+nA9qxEWb8Uq6LaEQoU9wRFJ+GFv0=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   # Tests require network access
   doCheck = false;

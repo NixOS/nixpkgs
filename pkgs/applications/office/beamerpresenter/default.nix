@@ -90,5 +90,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ agpl3 gpl3Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien dotlambda ];
+    mainProgram = "beamerpresenter";
   };
 }

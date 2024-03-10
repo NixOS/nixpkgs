@@ -1,9 +1,8 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , cmake
+, fetchFromGitHub
 , pkg-config
-, qmake
 , qtbase
 , qtscript
 , qtsvg
@@ -15,14 +14,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vym";
-  version = "2.8.42";
+  version = "2.9.26";
 
   src = fetchFromGitHub {
     owner = "insilmaril";
     repo = "vym";
-    rev = "89f50bcba953c410caf459b0a4bfbd09018010b7"; # not tagged yet (why??)
-    hash = "sha256-xMXvc8gt3nfKWbU+WoS24wCUTGDQRhG0Q9m7yDhY5/w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5cHhv9GDjJvSqGJ+7fI0xaWCiXw/0WP0Bem/ZRV8Y7M=";
   };
+
+  outputs = [ "out" "man" ];
 
   patches = [
     (substituteAll {
@@ -44,11 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
   ];
 
+  strictDeps = true;
+
   qtWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ unzip zip ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.insilmaril.de/vym/";
     description = "A mind-mapping software";
     longDescription = ''
@@ -62,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       drawn by hand or any drawing software vym offers much more features to
       work with such maps.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 })

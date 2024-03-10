@@ -85,5 +85,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/GPGTools/pinentry-mac";
     platforms = lib.platforms.darwin;
+    mainProgram = passthru.binaryPath;
   };
 }

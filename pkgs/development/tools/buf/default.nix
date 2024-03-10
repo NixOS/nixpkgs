@@ -10,20 +10,21 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.27.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QBU04/w7Z8yaTzDqhiVcxC8xEuDpDJs7rNRpOtwodGg=";
+    hash = "sha256-SHwmX9/9qqhpTDVKf+0HAJqPvSKKoUyxHqCe8WXhMUc=";
   };
 
-  vendorHash = "sha256-4JSmn/TUojZjCQMZCgJic0y84VMP26J7uBybB5/BCoE=";
+  vendorHash = "sha256-4ccctJ5C4/Ff+wLrZPR1oS0tjqkULAsTjKm3X8WDr6o=";
 
   patches = [
-    # Skip a test that requires networking to be available to work.
-    ./skip_test_requiring_network.patch
+    # Skip a test that requires networking to be available to work,
+    # and a test which requires the source checkout to be part of a git repository
+    ./skip_broken_tests.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];

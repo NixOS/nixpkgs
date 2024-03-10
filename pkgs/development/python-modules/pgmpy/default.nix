@@ -23,7 +23,7 @@
 }:
 let
   pname = "pgmpy";
-  version = "0.1.24";
+  version = "0.1.25";
   # optional-dependencies = {
   #   all = [ daft ];
   # };
@@ -38,7 +38,7 @@ buildPythonPackage {
     owner = "pgmpy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IMlo4SBxO9sPoZl0rQGc3FcvvIN/V/WZz+1BD7aBfzs=";
+    hash = "sha256-d2TNcJQ82XxTWdetLgtKXRpFulAEEzrr+cyRewoA6YI=";
   };
 
   propagatedBuildInputs = [

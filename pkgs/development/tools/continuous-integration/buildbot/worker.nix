@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , buildbot
+, stdenv
 
 # patch
 , coreutils
@@ -27,7 +28,7 @@ buildPythonPackage (rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jI38ZhCcHbjah6lST6YtSZAwaeZPBWsgY3VTUf6s2x8=";
+    hash = "sha256-hRsmgP8IiWg5+YCqMVYgZc4ljWwz7YWfAFrmMHx8wBY=";
   };
 
   postPatch = ''
@@ -58,7 +59,8 @@ buildPythonPackage (rec {
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = with maintainers; [ ryansydnor lopsided98 ];
+    maintainers = teams.buildbot.members;
     license = licenses.gpl2;
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/243534318/nixlog/6
   };
 })

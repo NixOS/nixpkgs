@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "fast-histogram";
   version = "0.12";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -40,8 +41,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonImportsCheck = [ "fast_histogram" ];
 

@@ -11,7 +11,7 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "Navidrome music server");
 
-      package = mkPackageOptionMD pkgs "navidrome" { };
+      package = mkPackageOption pkgs "navidrome" { };
 
       settings = mkOption rec {
         type = settingsFormat.type;
@@ -53,6 +53,7 @@ in {
         RuntimeDirectory = "navidrome";
         RootDirectory = "/run/navidrome";
         ReadWritePaths = "";
+        BindPaths = lib.optional (cfg.settings ? DataFolder) cfg.settings.DataFolder;
         BindReadOnlyPaths = [
           # navidrome uses online services to download additional album metadata / covers
           "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"

@@ -28,16 +28,16 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.57.0";
-  format = "pyproject";
+  version = "0.61.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pennersr";
-    repo = pname;
-    rev = version;
-    hash = "sha256-zhKqvm43rw28UKNFdfJ2C1dIeZfPqmchb1rJykm1lx4=";
+    repo = "django-allauth";
+    rev = "refs/tags/${version}";
+    hash = "sha256-C9SYlL1yMnSb+Zpi2opvDw1stxAHuI9/XKHyvkM36Cg=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    python3-openid
     pyjwt
+    python3-openid
     requests
     requests-oauthlib
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   passthru.optional-dependencies = {
     saml = [
@@ -70,8 +69,12 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
     pytest-django
-  ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    # Tests require network access
+    "test_login"
+  ];
 
   passthru.tests = {
     inherit dj-rest-auth;

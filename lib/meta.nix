@@ -4,8 +4,8 @@
 { lib }:
 
 let
-  inherit (lib) matchAttrs any all;
-  inherit (builtins) isString;
+  inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (builtins) isString match typeOf;
 
 in
 rec {
@@ -87,6 +87,10 @@ rec {
 
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
+
+     Example:
+      lib.meta.platformMatch { system = "aarch64-darwin"; } "aarch64-darwin"
+      => true
   */
   platformMatch = platform: elem: (
     # Check with simple string comparison if elem was a string.
@@ -112,6 +116,10 @@ rec {
           platform, or `meta.platforms` is not present.
 
        2. None of `meta.badPlatforms` pattern matches the given platform.
+
+     Example:
+       lib.meta.availableOn { system = "aarch64-darwin"; } pkg.zsh
+       => true
   */
   availableOn = platform: pkg:
     ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
@@ -154,16 +162,12 @@ rec {
        getExe pkgs.mustache-go
        => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
   */
-  getExe = x:
-    let
-      y = x.meta.mainProgram or (
-        # This could be turned into an error when 23.05 is at end of life
-        lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
-          lib.getName
-          x
-      );
-    in
-    getExe' x y;
+  getExe = x: getExe' x (x.meta.mainProgram or (
+    # This could be turned into an error when 23.05 is at end of life
+    lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
+    lib.getName
+    x
+  ));
 
   /* Get the path of a program of a derivation.
 
@@ -175,11 +179,11 @@ rec {
        => "/nix/store/5rs48jamq7k6sal98ymj9l4k2bnwq515-imagemagick-7.1.1-15/bin/convert"
   */
   getExe' = x: y:
-    assert lib.assertMsg (lib.isDerivation x)
-      "lib.meta.getExe': The first argument is of type ${builtins.typeOf x}, but it should be a derivation instead.";
-    assert lib.assertMsg (lib.isString y)
-     "lib.meta.getExe': The second argument is of type ${builtins.typeOf y}, but it should be a string instead.";
-    assert lib.assertMsg (builtins.length (lib.splitString "/" y) == 1)
-     "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
-    "${lib.getBin x}/bin/${y}";
+    assert assertMsg (isDerivation x)
+      "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+    assert assertMsg (isString y)
+      "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
+    assert assertMsg (match ".*\/.*" y == null)
+      "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+    "${getBin x}/bin/${y}";
 }

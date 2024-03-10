@@ -52,12 +52,7 @@ in {
     services.netdata = {
       enable = mkEnableOption (lib.mdDoc "netdata");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.netdata;
-        defaultText = literalExpression "pkgs.netdata";
-        description = lib.mdDoc "Netdata package to use.";
-      };
+      package = mkPackageOption pkgs "netdata" { };
 
       user = mkOption {
         type = types.str;
@@ -203,6 +198,7 @@ in {
         }
       ];
 
+    services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 
@@ -210,7 +206,15 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk iproute2 which procps bash ])
+      path = (with pkgs; [
+          curl
+          gawk
+          iproute2
+          which
+          procps
+          bash
+          util-linux # provides logger command; required for syslog health alarms
+      ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {

@@ -5,20 +5,25 @@
 , fetchPypi
 , isodate
 , pythonOlder
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-queue";
-  version = "12.8.0";
-  format = "setuptools";
+  version = "12.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mHwAjOv6d+Xh6mwKhVK6w3Rsh3HgijntkvEmRqOrYRk=";
+    hash = "sha256-mBAbDhfaDUcM9XALbEDP50Q57Dycds84OYCW5zcbnRs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     azure-core

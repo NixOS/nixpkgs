@@ -143,12 +143,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.searxng;
-        defaultText = literalExpression "pkgs.searxng";
-        description = lib.mdDoc "searx package to use.";
-      };
+      package = mkPackageOption pkgs "searxng" { };
 
       runInUwsgi = mkOption {
         type = types.bool;
@@ -218,7 +213,7 @@ in
       serviceConfig = {
         User  = "searx";
         Group = "searx";
-        ExecStart = "${cfg.package}/bin/searx-run";
+        ExecStart = lib.getExe cfg.package;
       } // optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
       environment = {

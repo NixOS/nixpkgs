@@ -16,12 +16,7 @@ in
         description = lib.mdDoc "The directory where Lidarr stores its data files.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.lidarr;
-        defaultText = literalExpression "pkgs.lidarr";
-        description = lib.mdDoc "The Lidarr package to use";
-      };
+      package = mkPackageOption pkgs "lidarr" { };
 
       openFirewall = mkOption {
         type = types.bool;
@@ -50,9 +45,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-lidarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.lidarr = {
       description = "Lidarr";

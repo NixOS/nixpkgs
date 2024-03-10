@@ -1,0 +1,13 @@
+diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
+index 3532c23114..25dfcae4c7 100644
+--- a/bin/internal/shared.sh
++++ b/bin/internal/shared.sh
+@@ -229,8 +229,6 @@ function shared::execute() {
+     exit 1
+   fi
+ 
+-  upgrade_flutter 7< "$PROG_NAME"
+-
+   BIN_NAME="$(basename "$PROG_NAME")"
+   case "$BIN_NAME" in
+     flutter*)

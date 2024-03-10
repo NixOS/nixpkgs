@@ -54,5 +54,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ colinsane ];
     platforms = platforms.linux;
     license = licenses.mit;
+    mainProgram = "lightdm-mobile-greeter";
   };
 }

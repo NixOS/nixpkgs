@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "blurhash";
   version = "1.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "halcy";

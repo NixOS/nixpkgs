@@ -130,7 +130,7 @@ with self;
     hash = "0ykys3ckpsx5crfgj26v2q3gy6wf684aq0bfb4q8p92ivwznvlzy";
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ async ctypes openssl ];
+    propagatedBuildInputs = [ async ctypes ctypes-foreign openssl ];
     # in ctypes.foreign 0.18.0 threaded and unthreaded have been merged
     postPatch = ''
       substituteInPlace bindings/dune \

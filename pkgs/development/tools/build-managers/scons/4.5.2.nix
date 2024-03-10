@@ -1,15 +1,19 @@
-{ lib, fetchurl, python3 }:
+{ lib, fetchFromGitHub, python3 }:
 
 let
   pname = "scons";
   version = "4.5.2";
-  src = fetchurl {
-    url = "mirror://sourceforge/project/scons/scons/${version}/SCons-${version}.tar.gz";
-    hash = "sha256-ziaqyV01CnmkGSGWsL6sPLJPTMq84BI+so0zcPV28HI=";
+  src = fetchFromGitHub {
+    owner = "Scons";
+    repo = "scons";
+    rev = version;
+    hash = "sha256-vxJsz24jDsPcttwPXq9+ztc/N7W4Gkydgykk/FLgZLo=";
   };
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
+
+  outputs = [ "out" "man" ];
 
   patches = [
     ./env.patch
@@ -21,9 +25,13 @@ python3.pkgs.buildPythonApplication {
       --replace "build/doc/man/" ""
   '';
 
+  preConfigure = ''
+    python scripts/scons.py
+  '';
+
   postInstall = ''
-    mkdir -p "$out/share/man/man1"
-    mv "$out/"*.1 "$out/share/man/man1/"
+    mkdir -p "$man/share/man/man1"
+    mv "$out/"*.1 "$man/share/man/man1/"
   '';
 
   setupHook = ./setup-hook.sh;

@@ -1,10 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, flake8
 , mock
-, nose
-, pytest
+, pytestCheckHook
 , cryptography
 , pythonOlder
 }:
@@ -26,10 +24,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    flake8
     mock
-    nose
-    pytest
+    pytestCheckHook
   ];
 
   meta = with lib; {

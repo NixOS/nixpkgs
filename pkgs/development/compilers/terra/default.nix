@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
 , symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
-, libobjc, Cocoa, Foundation
+, libffi, libobjc, libpfm, Cocoa, Foundation
 }:
 
 let
@@ -42,16 +42,25 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmMerged ncurses libxml2 ]
+  buildInputs = [ llvmMerged ncurses libffi libxml2 ]
     ++ lib.optionals enableCUDA [ cuda ]
+    ++ lib.optional (!stdenv.isDarwin) libpfm
     ++ lib.optionals stdenv.isDarwin [ libobjc Cocoa Foundation ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    resourceDir = "${llvmMerged}/lib/clang/" + (
+      if lib.versionOlder clangVersion "16"
+      then
+        clangVersion
+      else
+        lib.versions.major clangVersion
+    );
+  in [
     "-DHAS_TERRA_VERSION=0"
     "-DTERRA_VERSION=${version}"
     "-DTERRA_LUA=luajit"
     "-DTERRA_SKIP_LUA_DOWNLOAD=ON"
-    "-DCLANG_RESOURCE_DIR=${llvmMerged}/lib/clang/${clangVersion}"
+    "-DCLANG_RESOURCE_DIR=${resourceDir}"
   ] ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
 
   doCheck = true;
@@ -88,6 +97,8 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];
     license = licenses.mit;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    # Linux Aarch64 broken above LLVM11
+    # https://github.com/terralang/terra/issues/597
+    broken = stdenv.isAarch64;
   };
 }

@@ -52,13 +52,13 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.3.18";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = "aelsabbahy";
+    owner = "goss-org";
     repo = "goss";
-    rev = "v${version}";
-    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dpMTUBMEG5tDi7E6ZRg1KHqIj5qDlvwfwJEgq/5z7RE=";
   };
 
   dontConfigure = true;
@@ -81,11 +81,12 @@ resholve.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/aelsabbahy/goss/blob/v${version}/extras/dgoss/README.md";
+    homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual ];
+    maintainers = with maintainers; [ hyzual anthonyroussel ];
   };
 }
 ```

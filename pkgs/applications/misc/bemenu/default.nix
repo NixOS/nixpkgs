@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bemenu";
-  version = "0.6.16";
+  version = "0.6.19";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    sha256 = "sha256-K9a9BUodpKwvEOhnF2/TGo5zLm7F9RzqSCcWzuhKcWA=";
+    hash = "sha256-k7xpMZUANacW/Qw7PSt+6XMPshSkmTHh/OGQlu7nmKY=";
   };
 
   strictDeps = true;

@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fg-virgil";
-  version = "0.16.1";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "excalidraw";
     repo = "excalidraw";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iziCCHacaShPqb0f5nI8cCinFFs5fB3TcMJrifNhg4I=";
+    hash = "sha256-j8fT17RkgMQAAS4KsC2+uItT8Z300SZWnLkyo4XI1WY=";
   };
 
   installPhase = ''

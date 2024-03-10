@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/efernau/rot8";
     license = licenses.mit;
     maintainers = [ maintainers.smona ];
-    mainProgram = pname;
+    mainProgram = "rot8";
     platforms = platforms.linux;
   };
 }

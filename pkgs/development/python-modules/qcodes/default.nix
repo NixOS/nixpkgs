@@ -4,7 +4,7 @@
 , cf-xarray
 , dask
 , deepdiff
-, fetchPypi
+, fetchFromGitHub
 , h5netcdf
 , h5py
 , hypothesis
@@ -31,7 +31,6 @@
 , pythonOlder
 , pyvisa
 , pyvisa-sim
-, qcodes-loop
 , rsa
 , ruamel-yaml
 , setuptools
@@ -49,14 +48,16 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.41.1";
-  format = "pyproject";
+  version = "0.44.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3Ncg51E4KYbvzlEyesVbTmzmz+UPfFkj3tudVbNYqHQ=";
+  src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "Qcodes";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AggAVq/yfJUZRwoQb29QoIbVIAdV3solKCjivqucLZk=";
   };
 
   nativeBuildInputs = [
@@ -97,12 +98,6 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  passthru.optional-dependencies = {
-    loop = [
-      qcodes-loop
-    ];
-  };
-
   nativeCheckInputs = [
     deepdiff
     hypothesis
@@ -120,32 +115,49 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
+    "-v"
+    "-n"
+    "$NIX_BUILD_CORES"
     # Follow upstream with settings
+    "-m 'not serial'"
+    "--hypothesis-profile ci"
     "--durations=20"
   ];
 
   disabledTestPaths = [
     # Test depends on qcodes-loop, causing a cyclic dependency
-    "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
+    "tests/dataset/measurement/test_load_legacy_data.py"
     # TypeError
-    "qcodes/tests/dataset/test_dataset_basic.py"
+    "tests/dataset/test_dataset_basic.py"
   ];
 
   disabledTests = [
     # Tests are time-sensitive and power-consuming
-    # Those tests fails repeatably
+    # Those tests fails repeatably and are flaky
     "test_access_channels_by_slice"
+    "test_aggregator"
+    "test_datasaver"
     "test_do1d_additional_setpoints_shape"
     "test_dond_1d_additional_setpoints_shape"
     "test_field_limits"
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
     "test_ramp_safely"
+
+    # more flaky tests
+    # https://github.com/microsoft/Qcodes/issues/5551
+    "test_query_close_once_at_init"
+    "test_step_ramp"
   ];
 
   pythonImportsCheck = [
     "qcodes"
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   postInstall = ''
     export HOME="$TMPDIR"

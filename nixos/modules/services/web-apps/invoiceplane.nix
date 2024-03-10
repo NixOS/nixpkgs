@@ -252,11 +252,11 @@ in
         };
 
         options.webserver = mkOption {
-          type = types.enum [ "caddy" ];
+          type = types.enum [ "caddy" "nginx" ];
           default = "caddy";
+          example = "nginx";
           description = lib.mdDoc ''
-            Which webserver to use for virtual host management. Currently only
-            caddy is supported.
+            Which webserver to use for virtual host management.
           '';
         };
       };
@@ -385,6 +385,40 @@ in
             file_server
             php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
           '';
+        }
+      )) eachSite;
+    };
+  })
+
+  (mkIf (cfg.webserver == "nginx") {
+    services.nginx = {
+      enable = true;
+      virtualHosts = mapAttrs' (hostName: cfg: (
+        nameValuePair hostName {
+          root = pkg hostName cfg;
+          extraConfig = ''
+            index index.php index.html index.htm;
+
+            if (!-e $request_filename){
+              rewrite ^(.*)$ /index.php break;
+            }
+          '';
+
+          locations = {
+            "/setup".extraConfig = ''
+              rewrite ^(.*)$ http://${hostName}/ redirect;
+            '';
+
+            "~ .php$" = {
+              extraConfig = ''
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_pass unix:${config.services.phpfpm.pools."invoiceplane-${hostName}".socket};
+                include ${config.services.nginx.package}/conf/fastcgi_params;
+                include ${config.services.nginx.package}/conf/fastcgi.conf;
+              '';
+            };
+          };
         }
       )) eachSite;
     };

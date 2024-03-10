@@ -1,13 +1,17 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.services.matrix-synapse.sliding-sync;
+  cfg = config.services.matrix-sliding-sync;
 in
 {
-  options.services.matrix-synapse.sliding-sync = {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "matrix-synapse" "sliding-sync" ] [ "services" "matrix-sliding-sync" ])
+  ];
+
+  options.services.matrix-sliding-sync = {
     enable = lib.mkEnableOption (lib.mdDoc "sliding sync");
 
-    package = lib.mkPackageOptionMD pkgs "matrix-sliding-sync" { };
+    package = lib.mkPackageOption pkgs "matrix-sliding-sync" { };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -33,7 +37,7 @@ in
             type = lib.types.str;
             default = "127.0.0.1:8009";
             example = "[::]:8008";
-            description = lib.mdDoc "The interface and port to listen on.";
+            description = lib.mdDoc "The interface and port or path (for unix socket) to listen on.";
           };
 
           SYNCV3_LOG_LEVEL = lib.mkOption {
@@ -83,6 +87,7 @@ in
     systemd.services.matrix-sliding-sync = rec {
       after =
         lib.optional cfg.createDatabase "postgresql.service"
+        ++ lib.optional config.services.dendrite.enable "dendrite.service"
         ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
       wants = after;
       wantedBy = [ "multi-user.target" ];
@@ -93,6 +98,7 @@ in
         ExecStart = lib.getExe cfg.package;
         StateDirectory = "matrix-sliding-sync";
         WorkingDirectory = "%S/matrix-sliding-sync";
+        RuntimeDirectory = "matrix-sliding-sync";
         Restart = "on-failure";
         RestartSec = "1s";
       };

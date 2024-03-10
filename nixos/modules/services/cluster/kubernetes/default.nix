@@ -122,12 +122,7 @@ in {
       type = types.listOf (types.enum ["master" "node"]);
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Kubernetes package to use.";
-      type = types.package;
-      default = pkgs.kubernetes;
-      defaultText = literalExpression "pkgs.kubernetes";
-    };
+    package = mkPackageOption pkgs "kubernetes" { };
 
     kubeconfig = mkKubeConfigOptions "Default kubeconfig";
 
@@ -290,7 +285,7 @@ in {
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
         "d /run/kubernetes 0755 kubernetes kubernetes -"
-        "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
+        "d ${cfg.dataDir} 0755 kubernetes kubernetes -"
       ];
 
       users.users.kubernetes = {
@@ -299,6 +294,7 @@ in {
         group = "kubernetes";
         home = cfg.dataDir;
         createHome = true;
+        homeMode = "755";
       };
       users.groups.kubernetes.gid = config.ids.gids.kubernetes;
 

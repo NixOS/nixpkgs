@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nextflow.io/";
     changelog = "https://github.com/nextflow-io/nextflow/releases";
     license = licenses.asl20;
-    maintainers = [ maintainers.Etjean ];
+    maintainers = with maintainers; [ Etjean edmundmiller ];
     mainProgram = "nextflow";
     platforms = platforms.unix;
   };

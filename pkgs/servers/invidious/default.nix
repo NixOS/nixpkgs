@@ -1,11 +1,11 @@
-{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
+{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, videojs, nixosTests }:
 let
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
   #   * pick the latest commit
-  #   * update .invidious.rev, .invidious.version, and .invidious.sha256
+  #   * update .invidious.rev, .invidious.version, and .invidious.hash
   #   * prefetch the videojs dependencies with scripts/fetch-player-dependencies.cr
-  #     and update .videojs.sha256 (they are normally fetched during build
+  #     and update .videojs.hash (they are normally fetched during build
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
@@ -23,7 +23,7 @@ crystal.buildCrystalPackage rec {
     owner = "iv-org";
     repo = pname;
     fetchSubmodules = true;
-    inherit (versions.invidious) rev sha256;
+    inherit (versions.invidious) rev hash;
   };
 
   postPatch =
@@ -45,7 +45,7 @@ crystal.buildCrystalPackage rec {
       substituteInPlace src/invidious.cr \
           --replace ${lib.escapeShellArg branchTemplate} '"master"' \
           --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
-          --replace ${lib.escapeShellArg versionTemplate} '"${lib.replaceStrings ["-"] ["."] (lib.substring 9 10 version)}"' \
+          --replace ${lib.escapeShellArg versionTemplate} '"${lib.concatStringsSep "." (lib.drop 2 (lib.splitString "-" version))}"' \
           --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
 
       # Patch the assets and locales paths to be absolute
@@ -75,19 +75,8 @@ crystal.buildCrystalPackage rec {
       "--verbose"
       "--no-debug"
       "-Dskip_videojs_download"
-      "-Ddisable_quic"
     ];
   };
-
-  postConfigure = ''
-    # lib includes nix store paths which can’t be patched, so the links have to
-    # be dereferenced first.
-    cp -rL lib lib2
-    rm -r lib
-    mv lib2 lib
-    chmod +w -R lib
-    cp ${lsquic}/lib/liblsquic.a lib/lsquic/src/lsquic/ext
-  '';
 
   postInstall = ''
     mkdir -p $out/share/invidious/config
@@ -102,15 +91,16 @@ crystal.buildCrystalPackage rec {
   # environment variable. Even though the database and hmac_key are
   # bogus, --help still works.
   installCheckPhase = ''
-    INVIDIOUS_CONFIG="$(cat <<EOF
+    export INVIDIOUS_CONFIG="$(cat <<EOF
     database_url: sqlite3:///dev/null
     hmac_key: "this-is-required"
     EOF
-    )" $out/bin/invidious --help
+    )"
+    $out/bin/invidious --help
+    $out/bin/invidious --version
   '';
 
   passthru = {
-    inherit lsquic;
     tests = { inherit (nixosTests) invidious; };
     updateScript = ./update.sh;
   };

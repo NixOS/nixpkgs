@@ -34,7 +34,7 @@ let
       # copy additional plugin(s), theme(s) and language(s)
       ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
       ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
-      ${concatMapStringsSep "\n" (language: "cp -r ${language}/* $out/share/wordpress/wp-content/languages/") cfg.languages}
+      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
@@ -104,12 +104,7 @@ let
   siteOpts = { lib, name, config, ... }:
     {
       options = {
-        package = mkOption {
-          type = types.package;
-          default = pkgs.wordpress;
-          defaultText = literalExpression "pkgs.wordpress";
-          description = lib.mdDoc "Which WordPress package to use.";
-        };
+        package = mkPackageOption pkgs "wordpress" { };
 
         uploadsDir = mkOption {
           type = types.path;
@@ -179,22 +174,22 @@ let
             List of path(s) to respective language(s) which are copied from the 'languages' directory.
           '';
           example = literalExpression ''
-            [(
+            [
               # Let's package the German language.
               # For other languages try to replace language and country code in the download URL with your desired one.
               # Reference https://translate.wordpress.org for available translations and
               # codes.
-              language-de = pkgs.stdenv.mkDerivation {
+              (pkgs.stdenv.mkDerivation {
                 name = "language-de";
                 src = pkgs.fetchurl {
                   url = "https://de.wordpress.org/wordpress-''${pkgs.wordpress.version}-de_DE.tar.gz";
                   # Name is required to invalidate the hash when wordpress is updated
-                  name = "wordpress-''${pkgs.wordpress.version}-language-de"
+                  name = "wordpress-''${pkgs.wordpress.version}-language-de";
                   sha256 = "sha256-dlas0rXTSV4JAl8f/UyMbig57yURRYRhTMtJwF9g8h0=";
                 };
                 installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
-              };
-            )];
+              })
+            ];
           '';
         };
 

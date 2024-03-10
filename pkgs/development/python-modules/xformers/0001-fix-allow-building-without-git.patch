@@ -1,0 +1,25 @@
+From 4c2b65c47d328c2f20cc74adcec2286fee6cb5de Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Tue, 30 Jan 2024 18:18:35 +0100
+Subject: [PATCH] fix: allow building without git
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index e01c008..92eca62 100644
+--- a/setup.py
++++ b/setup.py
+@@ -71,7 +71,7 @@ def get_flash_version() -> str:
+             ["git", "describe", "--tags", "--always"],
+             cwd=flash_dir,
+         ).decode("ascii")[:-1]
+-    except subprocess.CalledProcessError:
++    except Exception:
+         version = flash_dir / "version.txt"
+         if version.is_file():
+             return version.read_text().strip()
+-- 
+2.43.0
+

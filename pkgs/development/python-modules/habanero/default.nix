@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "habanero";
-  version = "1.2.3";
+  version = "1.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sckott";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IQp85Cigs0in3X07a9d45nMC3X2tAkPzl5hFVhfr00o=";
+    hash = "sha256-Pw0TgXxDRmR565hdNGipfDZ7P32pxWkmPWfaYK0RaI4=";
   };
 
   nativeBuildInputs = [

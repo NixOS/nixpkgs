@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
 
   cfg = config.services.mediawiki;
@@ -194,12 +194,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "MediaWiki");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mediawiki;
-        defaultText = literalExpression "pkgs.mediawiki";
-        description = lib.mdDoc "Which MediaWiki package to use.";
-      };
+      package = mkPackageOption pkgs "mediawiki" { };
 
       finalPackage = mkOption {
         type = types.package;

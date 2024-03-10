@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, gettext
-, vim, glib, libxml2, ncurses, popt, screen
+, xxd, glib, libxml2, ncurses, popt, screen
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config autoreconfHook gettext
+    pkg-config autoreconfHook gettext xxd
   ];
 
   buildInputs = [
-    libxml2 ncurses vim glib popt screen
+    libxml2 ncurses glib popt screen
   ];
 
   configureFlags = [ "--disable-history" ];

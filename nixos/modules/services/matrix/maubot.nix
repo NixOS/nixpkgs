@@ -42,7 +42,7 @@ let
       database = lib.last (lib.splitString "/" noSchema);
     };
 
-  postgresDBs = [
+  postgresDBs = builtins.filter isPostgresql [
     cfg.settings.database
     cfg.settings.crypto_database
     cfg.settings.plugin_databases.postgres
@@ -59,7 +59,7 @@ in
   options.services.maubot = with lib; {
     enable = mkEnableOption (mdDoc "maubot");
 
-    package = lib.mkPackageOptionMD pkgs "maubot" { };
+    package = lib.mkPackageOption pkgs "maubot" { };
 
     plugins = mkOption {
       type = types.listOf types.package;

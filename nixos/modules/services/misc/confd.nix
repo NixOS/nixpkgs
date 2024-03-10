@@ -61,12 +61,7 @@ in {
       type = types.path;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Confd package to use.";
-      default = pkgs.confd;
-      defaultText = literalExpression "pkgs.confd";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "confd" { };
   };
 
   config = mkIf cfg.enable {

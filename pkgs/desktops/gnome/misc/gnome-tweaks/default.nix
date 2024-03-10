@@ -20,12 +20,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
-  version = "45.0";
+  version = "45.1";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "JTmUZYroYXlNDG4OD0dd/hyvJ342dLh5J5AjjzTP1u4=";
+    sha256 = "lf+n842bHf1eTOvvt1JBn+ohzUBwITla3J8RKFRBbU8=";
   };
 
   nativeBuildInputs = [

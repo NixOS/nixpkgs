@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
       --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
       --prefix PYTHONPATH : ${python3Packages.makePythonPath (propagatedBuildInputs ++ [(placeholder "out")])} \
-      --add-flags $out/lib/${python3Packages.python.libPrefix}/site-packages/OneDriveGUI.py
+      --add-flags $out/${python3Packages.python.sitePackages}/OneDriveGUI.py
   '';
 
   meta = with lib; {

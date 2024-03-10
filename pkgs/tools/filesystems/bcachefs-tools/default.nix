@@ -19,19 +19,19 @@
 , rustPlatform
 , makeWrapper
 , writeScript
+, python3
 , fuseSupport ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.3.3";
-
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-73vgwgBqyRLQ/Tts7bl6DhZMOs8ndIOiCke5tN89Wps=";
+    hash = "sha256-+KqTiIp9dIJWG2KvgvPwXC7p754XfgvKHjvwjCdbvCs=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ] ++ lib.optional fuseSupport fuse3;
 
+  # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
@@ -72,22 +73,28 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+    "BCACHEFS_FUSE=${toString fuseSupport}"
   ];
 
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
   '';
 
+  # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
+  installFlags = [
+    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
+    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
+  ];
+
+  postInstall = ''
+    substituteInPlace $out/libexec/bcachefsck_all \
+      --replace "/usr/bin/python3" "${python3}/bin/python3"
+  '';
+
   passthru = {
     tests = {
       smoke-test = nixosTests.bcachefs;
-
-      inherit (nixosTests.installer)
-        bcachefsSimple
-        bcachefsEncrypted
-        bcachefsMulti
-        bcachefsLinuxTesting
-        bcachefsUpgradeToLinuxTesting;
+      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
 
     updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''

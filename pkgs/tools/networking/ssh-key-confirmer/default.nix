@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/benjojo/ssh-key-confirmer";
     license = licenses.mit;
     maintainers = with maintainers; [ oxzi ];
+    mainProgram = "ssh-key-confirmer";
   };
 }
