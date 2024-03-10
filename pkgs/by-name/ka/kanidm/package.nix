@@ -107,7 +107,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
-      inherit (nixosTests) kanidm;
+      inherit (nixosTests) kanidm kanidm-provisioning;
     };
 
     updateScript = nix-update-script { };
