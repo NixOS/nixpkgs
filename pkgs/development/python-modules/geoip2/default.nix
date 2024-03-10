@@ -2,6 +2,8 @@
 , aiohttp
 , buildPythonPackage
 , fetchPypi
+, setuptools
+, setuptools-scm
 , maxminddb
 , mocket
 , pytestCheckHook
@@ -15,7 +17,7 @@
 buildPythonPackage rec {
   pname = "geoip2";
   version = "4.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -23,6 +25,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-3ZzBgLfUFyQkDqSB1dU5FJ5lsjT2QoKyMbkXB5SprDU=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     aiohttp
