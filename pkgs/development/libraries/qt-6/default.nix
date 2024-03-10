@@ -172,6 +172,14 @@ let
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
+      wrapQtAppsNoGuiHook = callPackage
+        ({ makeBinaryWrapper }: makeSetupHook
+          {
+            name = "wrap-qt6-apps-no-gui-hook";
+            propagatedBuildInputs = [ makeBinaryWrapper ];
+          } ./hooks/wrap-qt-apps-hook.sh)
+        { };
+
       qmake = callPackage
         ({ qtbase }: makeSetupHook
           {
