@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "dissect-executable";
   version = "1.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
