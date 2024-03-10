@@ -7,6 +7,7 @@
 
 # darwin
 , Security
+, SystemConfiguration
 
 # tests
 , firefox-esr-unwrapped
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage {
     openssl
   ] ++ lib.optionals (stdenv.isDarwin) [
     Security
+    SystemConfiguration
   ];
 
   checkFlags = [
