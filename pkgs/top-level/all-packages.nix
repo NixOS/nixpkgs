@@ -5406,9 +5406,7 @@ with pkgs;
   texlive = callPackage ../tools/typesetting/tex/texlive { };
   inherit (texlive.schemes) texliveBasic texliveBookPub texliveConTeXt texliveFull texliveGUST texliveInfraOnly texliveMedium texliveMinimal texliveSmall texliveTeTeX;
 
-  fop = callPackage ../tools/typesetting/fop {
-    jdk = openjdk8;
-  };
+  fop = callPackage ../tools/typesetting/fop { };
 
   fondu = callPackage ../tools/misc/fondu {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
