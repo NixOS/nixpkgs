@@ -35,14 +35,15 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Parser for HCL2 written in Python using Lark";
+    description = "Parser for HCL2 written in Python using Lark - an incompatible fork of python-hcl2";
     longDescription = ''
       This parser only supports HCL2 and isn't backwards compatible with HCL v1.
       It can be used to parse any HCL2 config file such as Terraform.
+
+      This is a fork of the Python HCL2 repo by Amplify and is officially supported by Bridgecrew.
+      The two projects are now deviating in a way that pushing new changes upstream doesn't make sense anymore.
     '';
-    # Although this is the main homepage from PyPi but it is also a homepage
-    # of another PyPi package (python-hcl2). But these two are different.
-    homepage = "https://github.com/amplify-education/python-hcl2";
+    homepage = "https://github.com/bridgecrewio/python-hcl2";
     license = licenses.mit;
     maintainers = with maintainers; [ anhdle14 ];
   };
