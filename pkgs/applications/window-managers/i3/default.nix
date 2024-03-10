@@ -36,20 +36,32 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+
+    # This testcase generates a Perl executable file with a shebang, and
+    # patchShebangs can't replace a shebang in the middle of a file.
+    substituteInPlace testcases/t/318-i3-dmenu-desktop.t \
+      --replace-fail "#!/usr/bin/env perl" "#!${perl}/bin/perl"
   '';
 
-  # Tests have been failing (at least for some people in some cases)
-  # and have been disabled until someone wants to fix them. Some
-  # initial digging uncovers that the tests call out to `git`, which
-  # they shouldn't, and then even once that's fixed have some
-  # perl-related errors later on. For more, see
-  # https://github.com/NixOS/nixpkgs/issues/7957
-  doCheck = false; # stdenv.hostPlatform.system == "x86_64-linux";
+  doCheck = stdenv.hostPlatform.system == "x86_64-linux";
 
   checkPhase = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
   ''
-    (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
-    ! grep -q '^not ok' testcases/latest/complete-run.log
+    test_failed=
+    # "| cat" disables fancy progress reporting which makes the log unreadable.
+    ./complete-run.pl -p 1 --keep-xserver-output | cat || test_failed="complete-run.pl returned $?"
+    if [ -z "$test_failed" ]; then
+      # Apparently some old versions of `complete-run.pl` did not return a
+      # proper exit code, so check the log for signs of errors too.
+      grep -q '^not ok' latest/complete-run.log && test_failed="test log contains errors" ||:
+    fi
+    if [ -n "$test_failed" ]; then
+      echo "***** Error: $test_failed"
+      echo "===== Test log ====="
+      cat latest/complete-run.log
+      echo "===== End of test log ====="
+      false
+    fi
   '';
 
   postInstall = ''
