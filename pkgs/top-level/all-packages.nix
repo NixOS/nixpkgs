@@ -24233,8 +24233,6 @@ with pkgs;
 
   prime-server = callPackage ../development/libraries/prime-server { };
 
-  primecount = callPackage ../applications/science/math/primecount { };
-
   proj = callPackage ../development/libraries/proj {
     stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
   };
