@@ -145,8 +145,6 @@ in
     geminiserver.wait_for_unit("scgi_server")
     geminiserver.wait_for_open_port(1099)
     geminiserver.wait_for_unit("stargazer")
-    geminiserver.wait_for_unit("stargazer")
-    cgiTestServer.wait_for_open_port(1965)
     cgiTestServer.wait_for_open_port(1965)
 
     with subtest("stargazer test suite"):
