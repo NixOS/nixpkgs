@@ -164,10 +164,11 @@ let
       qtwebview = callPackage ./modules/qtwebview.nix { };
 
       wrapQtAppsHook = callPackage
-        ({ makeBinaryWrapper }: makeSetupHook
+        ({ makeBinaryWrapper, qtwayland }: makeSetupHook
           {
             name = "wrap-qt6-apps-hook";
             propagatedBuildInputs = [ makeBinaryWrapper ];
+            depsTargetTargetPropagated = lib.optionals stdenv.isLinux [ qtwayland.out ];
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
