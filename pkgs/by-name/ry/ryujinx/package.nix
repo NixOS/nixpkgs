@@ -94,11 +94,12 @@ buildDotnetModule rec {
     pushd ${src}/distribution/linux
 
     install -D ./Ryujinx.desktop $out/share/applications/Ryujinx.desktop
+    install -D ./Ryujinx.sh $out/bin/Ryujinx.sh
     install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
     install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
     substituteInPlace $out/share/applications/Ryujinx.desktop \
-      --replace "Ryujinx %f" "$out/bin/Ryujinx %f"
+      --replace "Ryujinx.sh %f" "$out/bin/Ryujinx.sh %f"
 
     ln -s $out/bin/Ryujinx $out/bin/ryujinx
 

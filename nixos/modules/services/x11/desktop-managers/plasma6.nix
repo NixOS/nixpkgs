@@ -175,7 +175,7 @@ in {
       ++ lib.optional config.powerManagement.enable powerdevil
       ++ lib.optional config.services.colord.enable colord-kde
       ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
-      ++ lib.optionals config.services.samba.enable [kdenetwork-filesharing pkgs.samba]
+      ++ lib.optional config.services.samba.enable kdenetwork-filesharing
       ++ lib.optional config.services.xserver.wacom.enable wacomtablet
       ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
@@ -210,6 +210,7 @@ in {
       serif = ["Noto Serif"];
     };
 
+    programs.gnupg.agent.pinentryPackage = pkgs.pinentry-qt;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
