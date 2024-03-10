@@ -877,6 +877,7 @@ let
     "aroma_cn"
     "aroma_core"
     "csodata"
+    "connections"
     "DiceView"
     "MSnID"
     "OmnipathR"
