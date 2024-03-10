@@ -71,7 +71,7 @@ rec {
 
   mypy-boto3-apigatewayv2 = buildMypyBoto3Package "apigatewayv2" "1.34.0" "sha256-ydpZ3osSSMwTtGsnRn1SygX5d9Kq8jHwqdQDKcmKXTY=";
 
-  mypy-boto3-appconfig = buildMypyBoto3Package "appconfig" "1.34.0" "sha256-mhA3LnS9upyI89XPjdTOaTKWbHMRF/xIhnYl432s6x4=";
+  mypy-boto3-appconfig = buildMypyBoto3Package "appconfig" "1.34.58" "sha256-f073cXEkDyzkPeOPclhS0O6ZVvEmYPkGPMXrAD8LkE4=";
 
   mypy-boto3-appconfigdata = buildMypyBoto3Package "appconfigdata" "1.34.24" "sha256-pSo1Qw6ZKN0XzERlCRmCtvJEOjgyd+a82t6Q3pPaU8Q=";
 
