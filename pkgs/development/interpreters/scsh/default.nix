@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, scheme48 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, scheme48, unstableGitUpdater }:
 
 stdenv.mkDerivation {
   pname = "scsh";
@@ -15,6 +15,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ scheme48 ];
   configureFlags = [ "--with-scheme48=${scheme48}" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "A Scheme shell";
