@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-QXRzvSMi6gKISJo44KIjTYENNqxh1yDhUUhEZa8uz6Q=";
   };
 
+  patches = [
+    ./11.6.1-CVE-2024-24246.patch
+  ];
+
   nativeBuildInputs = [ cmake perl ];
 
   buildInputs = [ zlib libjpeg ];
