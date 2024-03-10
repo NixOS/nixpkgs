@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hayagriva";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-nXfoPAUU8pDUj8MdpiYbN9ToJbWk4CsUTGehgGDvykg=";
+    hash = "sha256-hE0Oi+0vDQGDEOYtHiPit1RrrkrlLZs20nEHOm/bp5M=";
   };
 
-  cargoHash = "sha256-xKCnHqQn4mNvZ9LBgDnD4VDlUBgRO1SYLmvqq11GFsc=";
+  cargoHash = "sha256-WZbbjLDHYJTiuM0Lh9YfVvLTvK/jfO8fRbLqZ8XOLGg=";
 
   buildFeatures = [ "cli" ];
 

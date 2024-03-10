@@ -1,20 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , substituteAll
 , pythonOlder
 , addOpenGLRunpath
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pynvml";
   version = "11.5.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0CeyG5WxCIufwngRf59ht8Z/jjOnh+n4P3NfD3GsMtA=";
+  src = fetchFromGitHub {
+    owner = "gpuopenanalytics";
+    repo = "pynvml";
+    rev = "refs/tags/${version}";
+    hash = "sha256-K3ZENjgi+TVDxr55dRK1y8SwzfgVIzcnD4oEI+KHRa4=";
   };
 
   patches = [
@@ -24,12 +28,22 @@ buildPythonPackage rec {
     })
   ];
 
-  doCheck = false;  # no tests in PyPi dist
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   pythonImportsCheck = [ "pynvml" "pynvml.smi" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # OSError: /run/opengl-driver/lib/libnvidia-ml.so.1: cannot open shared object file: No such file or directory
+  doCheck = false;
 
   meta = with lib; {
     description = "Python bindings for the NVIDIA Management Library";
-    homepage = "https://www.nvidia.com";
+    homepage = "https://github.com/gpuopenanalytics/pynvml";
     license = licenses.bsd3;
     maintainers = [ maintainers.bcdarwin ];
   };
