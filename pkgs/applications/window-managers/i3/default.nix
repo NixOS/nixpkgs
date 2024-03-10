@@ -39,8 +39,10 @@ stdenv.mkDerivation rec {
 
     # This testcase generates a Perl executable file with a shebang, and
     # patchShebangs can't replace a shebang in the middle of a file.
-    substituteInPlace testcases/t/318-i3-dmenu-desktop.t \
-      --replace-fail "#!/usr/bin/env perl" "#!${perl}/bin/perl"
+    if [ -f testcases/t/318-i3-dmenu-desktop.t ]; then
+      substituteInPlace testcases/t/318-i3-dmenu-desktop.t \
+        --replace-fail "#!/usr/bin/env perl" "#!${perl}/bin/perl"
+    fi
   '';
 
   doCheck = stdenv.hostPlatform.system == "x86_64-linux";
