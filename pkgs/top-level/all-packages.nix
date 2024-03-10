@@ -24235,8 +24235,6 @@ with pkgs;
 
   primecount = callPackage ../applications/science/math/primecount { };
 
-  primesieve = callPackage ../applications/science/math/primesieve { };
-
   proj = callPackage ../development/libraries/proj {
     stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
   };
