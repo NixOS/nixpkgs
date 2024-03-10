@@ -15,20 +15,20 @@
 buildPythonPackage rec {
   pname = "aiopvpc";
   version = "4.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "azogue";
-    repo = pname;
+    repo = "aiopvpc";
     rev = "refs/tags/v${version}";
     hash = "sha256-8CNmrE3EMFg/bCrdI+K/8f0MRzKtGI74ILFMuSg1Ivo=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      " --cov --cov-report term --cov-report html" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov --cov-report term --cov-report html" ""
   '';
 
   nativeBuildInputs = [
