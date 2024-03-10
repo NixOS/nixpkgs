@@ -56,6 +56,8 @@ lib.makeScope newScope (self: with self; {
 
   tide = callPackage ./tide.nix { };
 
+  transient-fish = callPackage ./transient-fish.nix { };
+
   wakatime-fish = callPackage ./wakatime-fish.nix { };
 
   z = callPackage ./z.nix { };
