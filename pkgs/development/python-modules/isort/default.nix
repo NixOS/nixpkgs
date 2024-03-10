@@ -52,6 +52,8 @@ buildPythonPackage rec {
     "--ignore=tests/benchmark/" # requires pytest-benchmark
     "--ignore=tests/integration/" # pulls in 10 other packages
     "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [
