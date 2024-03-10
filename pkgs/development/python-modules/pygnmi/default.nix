@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pygnmi";
-  version = "0.8.13";
+  version = "0.8.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "akarneliuk";
     repo = "pygnmi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-NkByimHk1DoBjMMD7ywplo38VxBpp1pnClYUzhtKwY4=";
+    sha256 = "sha256-ncp/OwELy/QOvGhLUZW2qTQZsckWI4CGrlEAZ20RtQI=";
   };
 
   propagatedBuildInputs = [
