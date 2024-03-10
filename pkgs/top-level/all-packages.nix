@@ -1941,6 +1941,8 @@ with pkgs;
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
+  makehuman = libsForQt5.callPackage ../applications/misc/makehuman { };
+
   markdownlint-cli = callPackage ../tools/text/markdownlint-cli { };
 
   markdownlint-cli2 = callPackage ../tools/text/markdownlint-cli2 { };
@@ -8391,6 +8393,8 @@ with pkgs;
   gau = callPackage ../tools/security/gau { };
 
   gauge = callPackage ../development/tools/gauge { };
+
+  gawd = python3Packages.toPythonApplication python3Packages.gawd;
 
   gawk = callPackage ../tools/text/gawk {
     inherit (darwin) locale;
@@ -21099,9 +21103,7 @@ with pkgs;
     };
   };
 
-  freetts = callPackage ../development/libraries/freetts {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  freetts = callPackage ../development/libraries/freetts { };
 
   frog = res.languageMachines.frog;
 
