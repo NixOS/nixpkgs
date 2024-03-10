@@ -16,6 +16,7 @@
 , libclang
 , autoPatchelfHook
 , clang
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,6 +29,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-VTtXEfxc3OCdtdYiEdtftOQ7gDJNb679Yw8v1Lu3lhY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "revert-viewporter.patch";
+      url = "https://github.com/YaLTeR/niri/commit/40cec34aa4a7f99ab12b30cba1a0ee83a706a413.patch";
+      hash = "sha256-3fg8v0eotfjUQY6EVFEPK5BBIBrr6vQpXbjDcsw2E8Q=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
