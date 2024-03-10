@@ -1,10 +1,10 @@
 { lib
-, stdenv
 , fetchurl
-, gettext
-, python3
-, wrapQtAppsHook
 , fsuae
+, gettext
+, python3Packages
+, stdenv
+, libsForQt5
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,15 +18,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gettext
-    python3
-    wrapQtAppsHook
+    python3Packages.python
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = with python3.pkgs; [
+  buildInputs = with python3Packages; [
     pyqt5
     requests
     setuptools
   ];
+
+  strictDeps = true;
 
   makeFlags = [ "prefix=$(out)" ];
 
@@ -47,8 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fs-uae.net";
     description = "Graphical front-end for the FS-UAE emulator";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "fs-uae-launcher";
     maintainers = with lib.maintainers; [ sander AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = with lib.systems.inspect;
+      patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })
-
