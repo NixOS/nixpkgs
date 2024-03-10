@@ -31084,8 +31084,6 @@ with pkgs;
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
-  gtkcord4 = callPackage ../applications/audio/gtkcord4 { };
-
   haruna = libsForQt5.callPackage ../applications/video/haruna { };
 
   hdrmerge = libsForQt5.callPackage ../applications/graphics/hdrmerge { };
