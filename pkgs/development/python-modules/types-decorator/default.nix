@@ -1,17 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "types-decorator";
   version = "5.1.8.20240310";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-UuMWsDeDiGqKKr3CKPcHFoC6ZYlFRc0ghevjz4hoSg4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Modules doesn't have tests
   doCheck = false;
