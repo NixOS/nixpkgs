@@ -1,7 +1,10 @@
-{ lib, appleDerivation', stdenv }:
+{ lib
+, Libsystem
+, stdenvBootstrap
+, appleDerivation'
+}:
 
-appleDerivation' stdenv {
-
+appleDerivation' stdenvBootstrap {
   prePatch = ''
     substituteInPlace Makefile \
       --replace /usr/lib /lib \

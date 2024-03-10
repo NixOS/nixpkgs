@@ -1404,7 +1404,9 @@ with pkgs;
 
   fixDarwinDylibNames = makeSetupHook {
     name = "fix-darwin-dylib-names-hook";
-    substitutions = { inherit (binutils) targetPrefix; };
+    substitutions = {
+      targetPrefix = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) "${stdenv.targetPlatform.config}-";
+    };
     meta.platforms = lib.platforms.darwin;
   } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
 
@@ -21353,7 +21355,7 @@ with pkgs;
     inherit (stdenv.targetPlatform) libc;
   in     if stdenv.targetPlatform.isMinGW then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
-    else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
+    else if libc == "libSystem" then targetPackages.darwin.LibsystemCross
     else null;
 
   # We can choose:

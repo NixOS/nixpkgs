@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
+{ stdenvNoCC, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
 
 let
   # sadly needs to be exported because security_tool needs it
-  sdk = stdenv.mkDerivation rec {
+  sdk = stdenvNoCC.mkDerivation rec {
     pname = "MacOS_SDK";
     version = "10.12";
 
@@ -55,7 +55,7 @@ let
     substArgs = lib.concatMap (x: [ "--subst-var-by" x deps'."${x}" ]) (lib.attrNames deps');
   in lib.escapeShellArgs substArgs;
 
-  framework = name: deps: stdenv.mkDerivation {
+  framework = name: deps: stdenvNoCC.mkDerivation {
     name = "apple-framework-${name}";
 
     dontUnpack = true;
@@ -181,7 +181,7 @@ let
     };
   };
 
-  tbdOnlyFramework = name: { private ? true }: stdenv.mkDerivation {
+  tbdOnlyFramework = name: { private ? true }: stdenvNoCC.mkDerivation {
     name = "apple-framework-${name}";
     dontUnpack = true;
     installPhase = ''
@@ -207,7 +207,7 @@ let
   };
 in rec {
   libs = {
-    xpc = stdenv.mkDerivation {
+    xpc = stdenvNoCC.mkDerivation {
       name   = "apple-lib-xpc";
       dontUnpack = true;
 
@@ -220,7 +220,7 @@ in rec {
       '';
     };
 
-    Xplugin = stdenv.mkDerivation {
+    Xplugin = stdenvNoCC.mkDerivation {
       name   = "apple-lib-Xplugin";
       dontUnpack = true;
 
@@ -239,7 +239,7 @@ in rec {
       '';
     };
 
-    utmp = stdenv.mkDerivation {
+    utmp = stdenvNoCC.mkDerivation {
       name   = "apple-lib-utmp";
       dontUnpack = true;
 
@@ -252,7 +252,7 @@ in rec {
       '';
     };
 
-    sandbox = stdenv.mkDerivation {
+    sandbox = stdenvNoCC.mkDerivation {
       name = "apple-lib-sandbox";
       dontUnpack = true;
 
