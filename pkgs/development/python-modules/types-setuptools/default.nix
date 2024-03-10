@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-setuptools";
-  version = "69.1.0.20240308";
+  version = "69.1.0.20240310";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rU9eUSUe7cvkqo2whEr2ZUBUqvycD20/H6APcHPBd2c=";
+    hash = "sha256-/A4QgvVcl0YRvOhEseW+stGolVAfSkZOSDBVkqQmgQA=";
   };
 
   nativeBuildInputs = [
