@@ -10,13 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.5.0";
+  version = "4.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    hash = "sha256-HORGtpiZGWpeRDhr4E9KW5LSAD6r74l7rl6RhhVtiJo=";
+    hash = "sha256-qAvoBVZt2IwrWFNzGWpCZqj8gbjysGlB/VXaa1CMH4o=";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [
@@ -24,10 +25,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    setuptools
     git
     pyqt5
     qtpy
     send2trash
+    polib
   ];
 
   nativeBuildInputs = with python3Packages; [
