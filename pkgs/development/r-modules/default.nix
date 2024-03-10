@@ -1029,6 +1029,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    RcppCGAL = old.RcppCGAL.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
    gmailr = old.gmailr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
