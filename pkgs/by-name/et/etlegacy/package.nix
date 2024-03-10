@@ -15,7 +15,7 @@
 , libogg
 , libpng
 , libtheora
-, lua
+, lua5_4
 , minizip
 , openal
 , SDL2
@@ -23,7 +23,7 @@
 , zlib
 }:
 let
-  version = "2.81.1";
+  version = "2.82.0";
 
   fetchAsset = { asset, hash }: fetchurl {
     url = "https://mirror.etlegacy.com/etmain/${asset}";
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     owner = "etlegacy";
     repo = "etlegacy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CGXtc51vaId/SHbD34ZeT0gPsrl7p2DEw/Kp+GBZIaA="; # 2.81.1
+    hash = "sha256-yNVVEa+3+Swm3hgwm9cSLV0K88E37TgVVjh1uUl8O2o=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
     libogg
     libpng
     libtheora
-    lua
+    lua5_4
     minizip
     openal
     SDL2

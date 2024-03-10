@@ -1785,8 +1785,6 @@ with pkgs;
 
   dysk = callPackage ../tools/filesystems/dysk { };
 
-  etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
-
   fastfetch = callPackage ../tools/misc/fastfetch {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
