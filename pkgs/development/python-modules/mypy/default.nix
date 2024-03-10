@@ -97,7 +97,11 @@ buildPythonPackage rec {
     tomli
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+  disabledTests = [
+    # fails with typing-extensions>=4.10
+    # https://github.com/python/mypy/issues/17005
+    "test_runtime_typing_objects"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
     # requires distutils
     "test_c_unit_test"
   ];
