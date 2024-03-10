@@ -1,4 +1,5 @@
-{ qtModule
+{ lib
+, qtModule
 , qtbase
 , qtdeclarative
 , wayland
@@ -11,4 +12,7 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ wayland libdrm ];
   nativeBuildInputs = [ pkg-config ];
+  meta = {
+    platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
+  };
 }
