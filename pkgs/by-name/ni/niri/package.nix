@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     description = "A scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iogamaster foo-dogsquared ];
+    maintainers = with maintainers; [ iogamaster foo-dogsquared sodiboo ];
     mainProgram = "niri";
     platforms = platforms.linux;
   };
