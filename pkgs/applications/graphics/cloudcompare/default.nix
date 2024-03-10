@@ -143,6 +143,7 @@ mkDerivation rec {
     homepage = "https://cloudcompare.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nh2 ];
+    mainProgram = "CloudCompare";
     platforms = with platforms; linux; # only tested here; might work on others
   };
 }
