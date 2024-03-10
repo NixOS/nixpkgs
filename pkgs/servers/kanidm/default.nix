@@ -12,6 +12,10 @@
 , pam
 , bashInteractive
 , rust-jemalloc-sys
+, kanidm
+# If this is enables, kanidm will be built with two patches allowing both
+# oauth2 basic secrets and admin credentials to be provisioned
+, enableSecretProvisioning ? false
 }:
 
 let
@@ -37,6 +41,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
+
+  patches = lib.optionals enableSecretProvisioning [
+    ./patches/oauth2-basic-secret-modify.patch
+    ./patches/recover-account.patch
+  ];
 
   postPatch =
     let
@@ -86,7 +95,11 @@ rustPlatform.buildRustPackage rec {
     mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
   '';
 
-  passthru.tests = { inherit (nixosTests) kanidm; };
+  passthru = {
+    tests = { inherit (nixosTests) kanidm; };
+    inherit enableSecretProvisioning;
+    withSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
+  };
 
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
