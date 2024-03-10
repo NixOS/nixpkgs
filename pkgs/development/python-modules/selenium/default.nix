@@ -93,5 +93,6 @@ buildPythonPackage rec {
     homepage = "https://selenium.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ jraygauthier ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
