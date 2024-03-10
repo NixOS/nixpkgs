@@ -283,7 +283,7 @@ let
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
-      in import ./packages.nix newSelf newSuper;
+      in import ./ext newSelf newSuper;
 
       withPackages = postgresqlWithPackages {
                        inherit makeWrapper buildEnv;
