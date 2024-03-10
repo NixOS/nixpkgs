@@ -20,6 +20,7 @@
 , pipewire
 , gdk-pixbuf
 , librsvg
+, gobject-introspection
 , python3
 , pkg-config
 , stdenv
@@ -97,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    gobject-introspection
     python3.pkgs.pytest
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3
