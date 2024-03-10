@@ -8712,9 +8712,7 @@ with pkgs;
 
   goreplay = callPackage ../tools/networking/goreplay { };
 
-  gost = callPackage ../tools/networking/gost {
-    buildGoModule = buildGo120Module; # go 1.21 build failure
-  };
+  gost = callPackage ../tools/networking/gost { };
 
   gource = callPackage ../applications/version-management/gource { };
 
