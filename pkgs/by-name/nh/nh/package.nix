@@ -14,7 +14,7 @@
 assert use-nom -> nix-output-monitor != null;
 
 let
-  version = "3.5.3";
+  version = "3.5.4";
   runtimeDeps = [ nvd ] ++ lib.optionals use-nom [ nix-output-monitor ];
 in
 rustPlatform.buildRustPackage {
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage {
     owner = "viperML";
     repo = "nh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-37BcFt67NZj4YQ9kqm69O+OJkgt+TXWTu53bvJvOtn8=";
+    hash = "sha256-fnuVQqdK48c66EC4mL8t7uLhwsY6JDyn7H5tjRpx9Sg=";
   };
 
   strictDeps = true;
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage {
       ${lib.optionalString use-nom "--set-default NH_NOM 1"}
   '';
 
-  cargoHash = "sha256-uRibycYznqzdf8QVX6bHfq3J3Imu8KnWCL0ZS1w4KFk=";
+  cargoHash = "sha256-njJdwaJtLB4S36mS8miwrk7jo5U7BzOIlXqh3qNyA5E=";
 
   passthru.updateScript = nix-update-script { };
 
