@@ -12461,8 +12461,6 @@ with pkgs;
 
   quickfix = callPackage ../development/libraries/quickfix { };
 
-  quickjs = callPackage ../development/interpreters/quickjs { };
-
   quickserve = callPackage ../tools/networking/quickserve { };
 
   quictls = callPackage ../development/libraries/quictls { };
