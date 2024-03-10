@@ -915,6 +915,7 @@ version = "0.0.1"
 dependencies = [
  "anyhow",
  "cache-key",
+ "chrono",
  "data-encoding",
  "distribution-filename",
  "fs-err",
@@ -970,6 +971,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7268b386296a025e474d5140678f75d6de9493ae55a5d709eeb9dd08149945e1"
 dependencies = [
  "cfg-if",
+]
+
+[[package]]
+name = "encoding_rs_io"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1cc3c5651fb62ab8aa3103998dade57efdd028544bd300516baa31840c252a83"
+dependencies = [
+ "encoding_rs",
 ]
 
 [[package]]
@@ -2883,16 +2893,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "reqwest-netrc"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eca0c58cd4b2978f9697dea94302e772399f559cd175356eb631cb6daaa0b6db"
-dependencies = [
- "reqwest-middleware",
- "rust-netrc",
-]
-
-[[package]]
 name = "reqwest-retry"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4179,13 +4179,14 @@ checksum = "f00cc9702ca12d3c81455259621e676d0f7251cec66a21e98fe2e9a37db93b2a"
 
 [[package]]
 name = "uv"
-version = "0.1.16"
+version = "0.1.17"
 dependencies = [
  "anstream",
  "anyhow",
  "assert_cmd",
  "assert_fs",
  "base64 0.21.7",
+ "byteorder",
  "chrono",
  "clap",
  "clap_complete_command",
@@ -4282,7 +4283,6 @@ dependencies = [
  "tokio",
  "toml",
  "tracing",
- "uv-extract",
  "uv-fs",
  "uv-interpreter",
  "uv-traits",
@@ -4318,6 +4318,7 @@ dependencies = [
  "async-trait",
  "async_http_range_reader",
  "async_zip",
+ "base64 0.21.7",
  "cache-key",
  "chrono",
  "distribution-filename",
@@ -4335,10 +4336,10 @@ dependencies = [
  "pypi-types",
  "reqwest",
  "reqwest-middleware",
- "reqwest-netrc",
  "reqwest-retry",
  "rkyv",
  "rmp-serde",
+ "rust-netrc",
  "rustc-hash",
  "serde",
  "serde_json",
@@ -4500,10 +4501,12 @@ name = "uv-fs"
 version = "0.0.1"
 dependencies = [
  "dunce",
+ "encoding_rs_io",
  "fs-err",
  "fs2",
  "junction",
  "tempfile",
+ "tokio",
  "tracing",
  "urlencoding",
  "uv-warnings",
@@ -4688,7 +4691,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.1.16"
+version = "0.1.17"
 
 [[package]]
 name = "uv-virtualenv"
