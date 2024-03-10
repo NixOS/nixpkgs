@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{ lib, fetchurl, appimageTools, makeWrapper, electron }:
 
 let
   pname = "framesh";
@@ -23,7 +23,7 @@ appimageTools.wrapType2 {
 
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/${pname}" \
-       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
 
     substituteInPlace $out/share/applications/frame.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'

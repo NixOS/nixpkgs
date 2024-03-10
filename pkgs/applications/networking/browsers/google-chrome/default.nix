@@ -37,6 +37,9 @@
 # Only needed for getting information about upstream binaries
 , chromium
 
+# Only needed for NIXOS_OZONE_WL flags
+, electron
+
 , gsettings-desktop-schemas
 , gnome
 
@@ -146,7 +149,7 @@ in stdenv.mkDerivation {
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
       --set CHROME_WRAPPER  "google-chrome-$dist" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary}}; do

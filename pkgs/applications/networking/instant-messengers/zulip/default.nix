@@ -1,6 +1,7 @@
 { lib
 , fetchurl
 , appimageTools
+, electron
 }:
 
 let
@@ -20,7 +21,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}";
+  runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}";
 
   extraInstallCommands = ''
     mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"

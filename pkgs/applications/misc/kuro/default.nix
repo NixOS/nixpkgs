@@ -57,7 +57,7 @@ mkYarnPackage rec {
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/kuro" \
       --add-flags "$out/share/lib/kuro/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
       --inherit-argv0
 
     runHook postInstall

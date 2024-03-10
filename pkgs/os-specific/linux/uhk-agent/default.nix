@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation {
 
     makeWrapper "${electron}/bin/electron" "$out/bin/${pname}" \
       --add-flags "$out/opt/${pname}/app.asar.unpacked" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
