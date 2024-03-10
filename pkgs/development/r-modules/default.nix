@@ -513,6 +513,7 @@ let
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
     RationalMatrix = [ pkgs.pkg-config pkgs.gmp.dev];
+    gfilogisreg = [ pkgs.gmp.dev ];
     RcppCWB = [ pkgs.pkg-config pkgs.pcre2 ];
     redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
