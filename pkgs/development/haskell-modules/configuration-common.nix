@@ -958,6 +958,9 @@ self: super: {
   selda-json
   ;
 
+  # 2024-03-10: Getting the test suite to run requires a correctly crafted GHC_ENVIRONMENT variable.
+  graphql-client = dontCheck super.graphql-client;
+
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = overrideCabal (drv: {
