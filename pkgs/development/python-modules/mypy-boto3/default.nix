@@ -319,7 +319,7 @@ rec {
 
   mypy-boto3-glue = buildMypyBoto3Package "glue" "1.34.35" "sha256-+Kvk8uB9KZp7mw3sMAM6mHdBTnkO5J8nSVClttndMDY=";
 
-  mypy-boto3-grafana = buildMypyBoto3Package "grafana" "1.34.0" "sha256-J8ccxvUnjvC6aITCuLHnEXMlQ3Bdh6HxP+Spu326ZwA=";
+  mypy-boto3-grafana = buildMypyBoto3Package "grafana" "1.34.58" "sha256-dr+fCDf0DcWGxPPLMnzqrOCRMfoLhznyv6n679fFU/0=";
 
   mypy-boto3-greengrass = buildMypyBoto3Package "greengrass" "1.34.0" "sha256-ZU/xVWGlMngX0JiAhy9NEFDoXS4fsZvmLAkWqv2pocQ=";
 
