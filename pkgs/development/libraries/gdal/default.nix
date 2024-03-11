@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
@@ -87,6 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-R9VLof13OXPbWGHOG1Q4WZWSPoF739C6WuNWxoIwKTw=";
   };
+
+  patches = [
+    # bump java source option to fix build with JDK 21
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/ca2eb4130750b0e6365f738a5f8ff77081f5c5bb.patch";
+      sha256 = "sha256-wShYm9yA7twJR72co+Tvf/IuYXqbI0OrjWl0uqC3bwo=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
