@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.14.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/refind/${version}/refind-src-${version}.tar.gz";
     hash = "sha256-JqDFXf01ZUmeH4LY/ldGTb7xnKiGzm0BqBUii478iw8=";
   };
 
@@ -95,14 +95,7 @@ stdenv.mkDerivation rec {
     install -D -m0644 keys/* $out/share/refind/keys/
 
     # Fix variable definition of 'RefindDir' which is used to locate ressource files.
-    sed -i "s,\bRefindDir=.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
-
-    # Patch uses of `which`.  We could patch in calls to efibootmgr,
-    # openssl, convert, and openssl, but that would greatly enlarge
-    # refind's closure (from ca 28MB to over 400MB).
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+    sed -i "s,\bRefindDir=\"\$This.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
 
     runHook postInstall
   '';
