@@ -4389,6 +4389,22 @@ let
         };
       };
 
+      vscjava.vscode-java-pack = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-java-pack";
+          publisher = "vscjava";
+          version = "0.25.2023121402";
+          sha256 = "sha256-JhVJK2gZe3R6dpynon+9wauSAWPdW4LmG9oRWylCexM=";
+        };
+        meta = {
+          description = "Popular extensions for Java development that provides Java IntelliSense, debugging, testing, Maven/Gradle support, project management and more";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack";
+          homepage = "https://github.com/Microsoft/vscode-java-pack";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       vscjava.vscode-maven = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-maven";
