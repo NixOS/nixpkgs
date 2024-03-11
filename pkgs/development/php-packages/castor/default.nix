@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , php
 , nix-update-script
@@ -8,16 +9,25 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "castor";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Sm6I306iKVr66sBp+ADeTZAKGToVMc+Y/BCymUdszNc=";
+    hash = "sha256-sSIkXNW6RR1mx15dKouQLMaHBr5FEkTTc/0QIkWV8sg=";
   };
 
-  vendorHash = "sha256-KbmovAnejShyVclF4IcZ9ckUOWysfEz3DFqE8OxlzI0=";
+  patches = [
+    # Upstream lock is invalid. https://github.com/jolicode/castor/issues/319
+    (fetchpatch {
+      name = "fix-invalid-lock.patch";
+      url = "https://github.com/jolicode/castor/commit/5ff0c3ecbdddad20146adbc2f055b83f5aadba0f.patch";
+      hash = "sha256-1a3Dpk/UXp92Ugw9zSoLPsbWOJEuP2FBWc/pQ/EKwaM=";
+    })
+  ];
+
+  vendorHash = "sha256-HfEjwlkozeuT4LDnYwiCu7T0spcf4GLhkd7Kc1VRnro=";
 
   nativeBuildInputs = [ installShellFiles ];
 

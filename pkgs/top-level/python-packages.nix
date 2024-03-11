@@ -15034,6 +15034,8 @@ self: super: with self; {
 
   turnt = callPackage ../development/python-modules/turnt { };
 
+  tuya-device-sharing-sdk = callPackage ../development/python-modules/tuya-device-sharing-sdk { };
+
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
 
   tuyaha = callPackage ../development/python-modules/tuyaha { };

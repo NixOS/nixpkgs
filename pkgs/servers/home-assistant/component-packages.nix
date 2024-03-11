@@ -5265,7 +5265,8 @@
     ];
     "tuya" = ps: with ps; [
       ha-ffmpeg
-    ]; # missing inputs: tuya-device-sharing-sdk
+      tuya-device-sharing-sdk
+    ];
     "twentemilieu" = ps: with ps; [
       twentemilieu
     ];
@@ -6574,6 +6575,7 @@
     "transport_nsw"
     "trend"
     "tts"
+    "tuya"
     "twentemilieu"
     "twilio"
     "twinkly"
