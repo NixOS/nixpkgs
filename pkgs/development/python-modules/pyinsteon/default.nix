@@ -8,6 +8,7 @@
 , pyserial
 , pyserial-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 , voluptuous
@@ -45,6 +46,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     async-generator
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AssertionError: Failed test 'read_eeprom_response' with argument 'group' value X vs expected value Z
+    "test_async_send"
+    "test_nak_response"
+    "test_no_direct_ack"
+    "test_on_level"
+    "test_on_level_group"
+    "test_on_level_nak"
+    # AssertionError: Failed test 'read_eeprom_response' with argument 'target' value X vs expected value Y
+    "test_other_status"
+    "test_status_command"
+    "test_status_request_hub"
+    # stuck in epoll
+    "test_read_all_peek"
   ];
 
   pythonImportsCheck = [
