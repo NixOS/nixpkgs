@@ -116,7 +116,7 @@ let
     else drv;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { cmakeFlags, mesonFlags, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
+  makeDerivationArgument = { cmakeFlags, mesonFlags, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
@@ -171,6 +171,8 @@ let
     configurePlatforms ? optionals
       (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
       [ "build" "host" ],
+
+    enableParallelBuilding ? config.enableParallelBuildingByDefault,
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
@@ -479,8 +481,6 @@ let
   cmakeFlags ? []
 , mesonFlags ? []
 
-, enableParallelBuilding ? config.enableParallelBuildingByDefault
-
 , meta ? {}
 , passthru ? {}
 , pos ? # position used in error messages and for meta.position
@@ -551,7 +551,7 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit cmakeFlags mesonFlags enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
+    { inherit cmakeFlags mesonFlags hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
