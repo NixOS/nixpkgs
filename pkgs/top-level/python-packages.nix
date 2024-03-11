@@ -10703,6 +10703,8 @@ self: super: with self; {
 
   pyfronius = callPackage ../development/python-modules/pyfronius { };
 
+  pyft232 = callPackage ../development/python-modules/pyft232 { };
+
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pyftgl = callPackage ../development/python-modules/pyftgl { };
