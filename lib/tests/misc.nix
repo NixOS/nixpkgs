@@ -85,6 +85,11 @@ runTests {
     expected = 2;
   };
 
+  testOn = {
+    expr = on (x: y: x + y) toString 4 2;
+    expected = "42";
+  };
+
   testPipe = {
     expr = pipe 2 [
       (x: x + 2) # 2 + 2 = 4

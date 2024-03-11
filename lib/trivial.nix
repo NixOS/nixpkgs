@@ -41,6 +41,21 @@ in {
     # Value to ignore
     y: x;
 
+  /* Apply a binary function to the results of applying a unary function to two arguments
+
+     Type: on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+     Example:
+       on (x: y: x + y) toString 4 2
+       => "42"
+  */
+  on =
+    # The binary function
+    f:
+    # The unary function
+    g:
+      # The two arguments
+      x: y: f (g x) (g y);
+
   /* Pipes a value through a list of functions, left to right.
 
      Type: pipe :: a -> [<functions>] -> <return type of last function>

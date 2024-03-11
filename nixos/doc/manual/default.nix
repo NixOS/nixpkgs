@@ -53,9 +53,9 @@ let
         declarations =
           map
             (decl:
-              if hasPrefix (toString ../../..) (toString decl)
+              if lib.on hasPrefix toString ../../.. decl
               then
-                let subpath = removePrefix "/" (removePrefix (toString ../../..) (toString decl));
+                let subpath = removePrefix "/" (lib.on removePrefix toString ../../.. decl);
                 in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
               else decl)
             opt.declarations;
