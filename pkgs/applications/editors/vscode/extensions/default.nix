@@ -3228,6 +3228,22 @@ let
         meta.license = lib.licenses.mit;
       };
 
+      redhat.ansible = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ansible";
+          publisher = "redhat";
+          version = "2.12.143";
+          sha256 = "sha256-NEV7sVYJJvapZjk5sylkzijH8qLZ7xzmBzHI7qcj2Ok=";
+        };
+        meta = {
+          description = "Ansible language support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=redhat.ansible";
+          homepage = "https://github.com/ansible/vscode-ansible";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "java";
