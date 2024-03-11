@@ -58,6 +58,7 @@
 , avahi
 , raopSupport ? true
 , openssl
+, opusSupport ? true
 , rocSupport ? true
 , roc-toolkit
 , x11Support ? true
@@ -133,6 +134,7 @@ stdenv.mkDerivation(finalAttrs: {
   ++ lib.optionals bluezSupport [ bluez libfreeaptx liblc3 sbc fdk_aac libopus ]
   ++ lib.optional ldacbtSupport ldacbt
   ++ lib.optional nativeModemManagerSupport modemmanager
+  ++ lib.optional opusSupport libopus
   ++ lib.optional pulseTunnelSupport libpulseaudio
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
@@ -171,6 +173,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" ldacbtSupport)
+    (lib.mesonEnable "opus" opusSupport)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
     (lib.mesonOption "session-managers" "")
