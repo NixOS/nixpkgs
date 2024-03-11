@@ -116,7 +116,7 @@ let
     ...
   }:
     (removeAttrs attrs
-      (["meta" "passthru" "pos"
+      ([
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__contentAddressed"
@@ -547,7 +547,7 @@ else let
 
   derivationArg = makeDerivationArgument
     { inherit envIsExportable dontAddHostSuffix checkedEnv outputs strictDeps configureFlags configurePlatforms doCheck cmakeFlags mesonFlags dependencies propagatedDependencies patches doInstallCheck __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions computedSandboxProfile computedPropagatedSandboxProfile propagatedSandboxProfile sandboxProfile computedImpureHostDeps computedPropagatedImpureHostDeps __propagatedImpureHostDeps __impureHostDeps __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
-    attrs;
+    (removeAttrs attrs ["meta" "passthru" "pos"]);
 
   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
   validity = checkMeta.assertValidity { inherit meta attrs; };
