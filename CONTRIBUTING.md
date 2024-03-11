@@ -753,7 +753,7 @@ acceptable uses:
 - `meta = with lib; { ... }`
   this allows you to not have to write `lib` twice for `licenses` and `maintainers`, at the cost of nesting `with`.
 
-unaccaptable uses:
+unacceptable uses:
 - `with lib;` anywhere outside of `meta`
 - nested `with` anywhere outside of `meta`
 - `with` at the top of a file
