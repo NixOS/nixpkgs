@@ -40,6 +40,12 @@ let
     unique
   ;
 
+  mkDerivation =
+    fnOrAttrs:
+      if builtins.isFunction fnOrAttrs
+      then makeDerivationExtensible fnOrAttrs
+      else makeDerivationExtensibleConst fnOrAttrs;
+
   checkMeta = import ./check-meta.nix {
     inherit lib config;
     # Nix itself uses the `system` field of a derivation to decide where
@@ -603,7 +609,4 @@ extendDerivation
   (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
 
 in
-  fnOrAttrs:
-    if builtins.isFunction fnOrAttrs
-    then makeDerivationExtensible fnOrAttrs
-    else makeDerivationExtensibleConst fnOrAttrs
+  mkDerivation
