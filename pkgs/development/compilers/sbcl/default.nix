@@ -98,7 +98,7 @@ stdenv.mkDerivation (self: rec {
     # Declare at the point of actual use in case the caller wants to override
     # buildInputs to sidestep this.
     assert lib.assertMsg (!purgeNixReferences) ''
-      Cannot enable coreCompression when purging Nix references, because compression requires linking in zlib
+      Cannot enable coreCompression when purging Nix references, because compression requires linking in zstd
     '';
     [ zstd ]
   );
