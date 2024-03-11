@@ -26003,7 +26003,6 @@ with pkgs;
   engelsystem = callPackage ../servers/web-apps/engelsystem { };
 
   envoy = callPackage ../servers/http/envoy {
-    go = go_1_20;
     jdk = openjdk11_headless;
     gn = gn1924;
   };
