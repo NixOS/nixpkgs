@@ -4080,6 +4080,22 @@ let
         };
       };
 
+      vlanguage.vscode-vlang = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-vlang";
+          publisher = "vlanguage";
+          version = "0.1.14";
+          sha256 = "sha256-hlBALxBs5wZZFk4lgAkdkGs731Xuc2p0qxffOW6mMWQ=";
+        };
+        meta = {
+          description = "V language support (syntax highlighting, formatter, snippets) for Visual Studio Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vlanguage.vscode-vlang";
+          homepage = "https://github.com/vlang/vscode-vlang";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       vscjava.vscode-gradle = buildVscodeMarketplaceExtension rec {
         mktplcRef = {
           name = "vscode-gradle";
