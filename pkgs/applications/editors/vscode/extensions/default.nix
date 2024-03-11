@@ -3746,6 +3746,22 @@ let
         };
       };
 
+      tal7aouy.icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "icons";
+          publisher = "tal7aouy";
+          version = "3.8.0";
+          sha256 = "sha256-PdhNFyVUWcOfli/ZlT+6TmtWrV31fBP1E1Vd4QWOY+A=";
+        };
+        meta = {
+          description = "Icons for Visual Studio Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=tal7aouy.icons";
+          homepage = "https://github.com/tal7aouy/vscode-icons";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
