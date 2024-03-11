@@ -116,7 +116,7 @@ let
     else drv;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { configureFlags, configurePlatforms, cmakeFlags, mesonFlags, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
+  makeDerivationArgument = { cmakeFlags, mesonFlags, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
@@ -161,6 +161,13 @@ let
     patches ? [],
 
     configureFlags ? [],
+    # Target is not included by default because most programs don't care.
+    # Including it then would cause needless mass rebuilds.
+    #
+    # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
+    configurePlatforms ? optionals
+      (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
+      [ "build" "host" ],
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
@@ -468,13 +475,6 @@ let
 # Configure Phase
   cmakeFlags ? []
 , mesonFlags ? []
-, # Target is not included by default because most programs don't care.
-  # Including it then would cause needless mass rebuilds.
-  #
-  # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
-  configurePlatforms ? optionals
-    (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
-    [ "build" "host" ]
 
 , enableParallelBuilding ? config.enableParallelBuildingByDefault
 
@@ -552,7 +552,7 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit configurePlatforms cmakeFlags mesonFlags __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
+    { inherit cmakeFlags mesonFlags __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
