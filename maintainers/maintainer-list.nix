@@ -2753,6 +2753,12 @@
     githubId = 115711;
     name = "bpaulin";
   };
+  bprevor = {
+    email = "benprevor@gmail.com";
+    github = "charles37";
+    githubId = 29279583;
+    name = "Benjamin Prevor";
+  };
   Br1ght0ne = {
     email = "brightone@protonmail.com";
     github = "Br1ght0ne";
