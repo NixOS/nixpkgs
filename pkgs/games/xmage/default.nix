@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     homepage = "http://xmage.de/";
+    hydraPlatforms = []; # the current version won't succeed on Hydra
   };
 
 })
