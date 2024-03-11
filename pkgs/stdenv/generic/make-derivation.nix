@@ -609,4 +609,6 @@ extendDerivation
   (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
 
 in
-  mkDerivation
+{
+  inherit mkDerivation;
+}
