@@ -79,12 +79,12 @@ in
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-02-18";
+  version = "2024-03-10";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "f5688998760d6b85d7b280300388448c162edc42";
-    hash = "sha256-rQnih7Am7NvlrTwIGAN4QbZCcziFm6YOOT27wmjcY8A=";
+    rev = "db167b1df31fbd8a2101cf3a13dac148b0c2165d";
+    hash = "sha256-i2ZGYsNfMLDi3wRd/lohs9BuO2KuQ/7kJIXGtV65OQU=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [
