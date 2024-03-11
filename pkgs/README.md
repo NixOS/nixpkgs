@@ -176,7 +176,7 @@ For example, the `libxml2` package builds both a library and some tools; but itâ
 
   - **If itâ€™s a _language server_:**
 
-    - `development/tools/language-servers` (e.g. `ccls` or `rnix-lsp`)
+    - `development/tools/language-servers` (e.g. `ccls` or `nil`)
 
   - **Else:**
 
