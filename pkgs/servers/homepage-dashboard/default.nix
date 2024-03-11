@@ -94,7 +94,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    description = "A highly customisable dashboard with Docker and service API integrations.";
+    description = "A highly customisable dashboard with Docker and service API integrations";
     changelog = "https://github.com/gethomepage/homepage/releases/tag/v${version}";
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
