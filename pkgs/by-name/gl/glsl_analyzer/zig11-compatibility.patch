@@ -1,0 +1,87 @@
+diff --git a/build.zig b/build.zig
+index abe55e8..08463b7 100644
+--- a/build.zig
++++ b/build.zig
+@@ -97,7 +97,7 @@ fn attachModules(step: *std.Build.CompileStep) !void {
+         &.{b.build_root.path orelse "."},
+     );
+     options.addOption([]const u8, "build_root", build_root_path);
+-    options.addOption([]const u8, "version", b.run(&.{ "git", "describe", "--tags", "--always" }));
++    options.addOption([]const u8, "version", b.exec(&.{ "git", "describe", "--tags", "--always" }));
+     step.addOptions("build_options", options);
+ }
+ 
+diff --git a/src/Document.zig b/src/Document.zig
+index a8c4418..b68af49 100644
+--- a/src/Document.zig
++++ b/src/Document.zig
+@@ -61,7 +61,11 @@ pub fn utf8FromPosition(self: @This(), position: lsp.Position) u32 {
+     var codepoints = std.unicode.Utf8View.initUnchecked(rest).iterator();
+     while (remaining_chars != 0) {
+         const codepoint = codepoints.nextCodepoint() orelse break;
+-        remaining_chars -|= std.unicode.utf16CodepointSequenceLength(codepoint) catch unreachable;
++        if (codepoint <= 0xFFFF) {
++            remaining_chars -|= 1;
++        } else if (codepoint <= 0x10FFFF) {
++            remaining_chars -|= 2;
++        }
+     }
+ 
+     return @intCast(i + codepoints.i);
+diff --git a/src/analysis.zig b/src/analysis.zig
+index 5a3b27e..1dbe671 100644
+--- a/src/analysis.zig
++++ b/src/analysis.zig
+@@ -28,6 +28,12 @@ pub const Reference = struct {
+     }
+ };
+ 
++pub const formatTypeData = struct {
++    tree: Tree,
++    source: []const u8,
++    type: Type,
++};
++
+ pub const Type = struct {
+     qualifiers: ?syntax.QualifierList = null,
+     specifier: ?syntax.TypeSpecifier = null,
+@@ -44,7 +50,7 @@ pub const Type = struct {
+     }
+ 
+     fn formatType(
+-        data: struct { tree: Tree, source: []const u8, type: Type },
++        data: formatTypeData,
+         _: anytype,
+         _: anytype,
+         writer: anytype,
+diff --git a/src/parse.zig b/src/parse.zig
+index 7321210..18d2f4c 100644
+--- a/src/parse.zig
++++ b/src/parse.zig
+@@ -233,7 +233,7 @@ pub const Tree = struct {
+         const nodes = &self.nodes;
+         for (nodes.items(.tag), nodes.items(.span), 0..) |tag_, span, index| {
+             if (!tag_.isSyntax()) continue;
+-            @memset(nodes.items(.parent)[span.start..span.end], @intCast(index));
++            @memset(nodes.items(.parent)[span.start..span.end], @as(u32, @intCast(index)));
+         }
+     }
+ 
+diff --git a/src/syntax.zig b/src/syntax.zig
+index 181ecf0..50e6f22 100644
+--- a/src/syntax.zig
++++ b/src/syntax.zig
+@@ -299,8 +299,8 @@ pub fn Extractor(comptime expected_tag: Tag, comptime T: type) type {
+ }
+ 
+ pub fn ListExtractor(comptime tag: Tag, comptime Prefix: ?type, comptime Item: type, comptime Suffix: ?type) type {
+-    const PrefixMatch = if (Prefix) |P| MatchResult(P) else noreturn;
+-    const SuffixMatch = if (Suffix) |S| MatchResult(S) else noreturn;
++    const PrefixMatch = if (Prefix) |P| MatchResult(P) else u0;
++    const SuffixMatch = if (Suffix) |S| MatchResult(S) else u0;
+ 
+     return struct {
+         pub usingnamespace ExtractorMixin(@This());
+-- 
+2.42.0
+
