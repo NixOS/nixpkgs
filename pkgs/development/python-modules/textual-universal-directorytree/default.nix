@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , hatchling
 , textual
 , universal-pathlib
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,17 +24,8 @@ buildPythonPackage rec {
     owner = "juftin";
     repo = "textual-universal-directorytree";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FL2bwPGqBmDn33Rhj7+VEpuqB4znEAw+GGAODTs25oo=";
+    hash = "sha256-ncQ3IRaZaCv1rMUWT9dkUKo6OAEC5pziMCM7adIBGWo=";
   };
-
-  patches = [
-    # universal-pathlib upgrade, https://github.com/juftin/textual-universal-directorytree/pull/2
-    (fetchpatch {
-      name = "universal-pathlib-upgrade.patch";
-      url = "https://github.com/juftin/textual-universal-directorytree/commit/e445aff21ddf756e3f180c8308a75c41487667c3.patch";
-      hash = "sha256-Fftx8rrLPb6lQ+HBdB5Ai55LHMWEO6XftmFfZXbXIyk=";
-    })
-  ];
 
   nativeBuildInputs = [
     hatchling
