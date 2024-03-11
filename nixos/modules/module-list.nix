@@ -230,6 +230,7 @@
   ./programs/neovim.nix
   ./programs/nethoscope.nix
   ./programs/nexttrace.nix
+  ./programs/nh.nix
   ./programs/nix-index.nix
   ./programs/nix-ld.nix
   ./programs/nm-applet.nix
