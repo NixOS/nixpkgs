@@ -588,5 +588,5 @@ extendDerivation
 
 in
 {
-  inherit mkDerivation;
+  inherit mkDerivation makeDerivationArgument;
 }

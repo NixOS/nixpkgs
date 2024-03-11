@@ -158,6 +158,9 @@ let
 
       mkDerivation = mkDerivationFromStdenv stdenv;
 
+      # FIXME: figure out why mkDerivationFromStdenv is overridable and adapt this
+      makeDerivationArgument = (import ./make-derivation.nix { inherit lib config; } stdenv).makeDerivationArgument;
+
       inherit fetchurlBoot;
 
       inherit overrides;
