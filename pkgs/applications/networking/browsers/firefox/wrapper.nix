@@ -70,7 +70,7 @@ let
             [pkg]
           else [];
 
-      allNativeMessagingHosts = builtins.map lib.getBin (
+      allNativeMessagingHosts =
         nativeMessagingHosts
           ++ deprecatedNativeMessagingHost "enableBrowserpass" browserpass
           ++ deprecatedNativeMessagingHost "enableBukubrow" bukubrow
@@ -82,8 +82,7 @@ let
           ++ deprecatedNativeMessagingHost "enableKeePassXC" keepassxc
           ++ (if extraNativeMessagingHosts != []
                 then lib.warn "The extraNativeMessagingHosts argument for the Firefox wrapper is deprecated, please use `nativeMessagingHosts`" extraNativeMessagingHosts
-                else [])
-       );
+                else []);
 
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
