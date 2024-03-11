@@ -26931,8 +26931,6 @@ with pkgs;
 
   redstore = callPackage ../servers/http/redstore { };
 
-  reproxy = callPackage ../servers/reproxy { };
-
   repro-get = callPackage ../tools/package-management/repro-get { };
 
   restic = callPackage ../tools/backup/restic { };
