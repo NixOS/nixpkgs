@@ -12,6 +12,9 @@ buildPythonPackage rec {
     sha256 = "sha256-ItDan9ajJ1tUySapyXsYD5JYqtZRE+oY8/7FLLrc2Bg=";
   };
 
+  # there are no tests
+  doCheck = false;
+
   pythonImportsCheck = [
     "daff"
   ];
