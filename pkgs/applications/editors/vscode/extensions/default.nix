@@ -40,6 +40,22 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
+      "13xforever".language-x86-64-assembly = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "language-x86-64-assembly";
+          publisher = "13xforever";
+          version = "3.1.4";
+          sha256 = "sha256-FJRDm1H3GLBfSKBSFgVspCjByy9m+j9OStlU+/pMfs8=";
+        };
+        meta = {
+          description = "Cutting edge x86 and x86_64 assembly syntax highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=13xforever.language-x86-64-assembly";
+          homepage = "https://github.com/13xforever/x86_64-assembly-vscode";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       "1Password".op-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "1Password";
