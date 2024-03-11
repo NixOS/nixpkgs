@@ -116,11 +116,14 @@ let
     else drv;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { cmakeFlags, mesonFlags, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
+  makeDerivationArgument = { cmakeFlags, mesonFlags, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
     __structuredAttrs ? config.structuredAttrsByDefault or false,
+    __contentAddressed ?
+      (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
+      && config.contentAddressedByDefault,
 
     # TODO(@Ericson2314): Make always true and remove / resolve #178468
     strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform,
@@ -491,10 +494,6 @@ let
 , hardeningEnable ? []
 , hardeningDisable ? []
 
-, __contentAddressed ?
-  (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-  && config.contentAddressedByDefault
-
 # Experimental.  For simple packages mostly just works,
 # but for anything complex, be prepared to debug if enabling.
 , __structuredAttrs ? config.structuredAttrsByDefault or false
@@ -552,7 +551,7 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit cmakeFlags mesonFlags __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
+    { inherit cmakeFlags mesonFlags enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
