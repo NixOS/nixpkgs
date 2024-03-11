@@ -2971,6 +2971,23 @@ let
         };
       };
 
+      naumovs.theme-oceanicnext = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "theme-oceanicnext";
+          publisher = "naumovs";
+          version = "0.0.4";
+          sha256 = "sha256-romhWL3s0NVZ3kptSNT4/X9WkgakgNNfFElaBCo6jj4=";
+        };
+        meta = {
+          description = "Oceanic Next theme for VSCode + dimmed bg version for better looking UI";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=naumovs.theme-oceanicnext";
+          homepage = "https://github.com/voronianski/oceanic-next-color-scheme";
+          license = lib.licenses.unlicense;
+          maintainers = [ lib.maintainers.themaxmur ];
+          platforms = [ "x86_64-linux" "aarch64-darwin" ];
+        };
+      };
+
       njpwerner.autodocstring = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "autodocstring";
