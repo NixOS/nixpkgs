@@ -25,6 +25,10 @@ buildPythonPackage rec {
     hypothesis
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   pythonImportsCheck = [ "hid_parser" ];
 
   meta = with lib; {
