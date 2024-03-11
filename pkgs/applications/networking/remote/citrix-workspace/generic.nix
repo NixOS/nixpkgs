@@ -238,7 +238,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
     maintainers = with maintainers; [ michaeladler ];
     inherit homepage;
   };
