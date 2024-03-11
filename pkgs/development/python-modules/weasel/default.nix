@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "cloudpathlib"
+    "smart-open"
   ];
 
   nativeBuildInputs = [
