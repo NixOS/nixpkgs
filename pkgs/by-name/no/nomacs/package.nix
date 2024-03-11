@@ -22,10 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jHr7J0X1v2n/ZK0y3b/XPDISk7e08VWS6nicJU4fKKY=";
   };
 
-  # Because some unknown reason split outputs is breaking on Darwin
-  outputs = if stdenv.isDarwin
-            then [ "out" ]
-            else [ "out" "man" ];
+  outputs = [ "out" ]
+    # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
+    ++ lib.optionals (!stdenv.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
