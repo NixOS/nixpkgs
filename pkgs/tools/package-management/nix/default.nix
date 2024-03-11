@@ -162,7 +162,7 @@ let
     pkg;
 
 in lib.makeExtensible (self: ({
-  nix_2_3 = (common {
+  nix_2_3 = ((common {
     version = "2.3.17";
     hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
@@ -170,7 +170,11 @@ in lib.makeExtensible (self: ({
       ./patches/2_3/CVE-2024-27297.patch
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
-  }).override { boehmgc = boehmgc-nix_2_3; };
+  }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
+    # https://github.com/NixOS/nix/issues/10222
+    # spurious test/add.sh failures
+    enableParallelChecking = false;
+  };
 
   nix_2_10 = common {
     version = "2.10.3";
