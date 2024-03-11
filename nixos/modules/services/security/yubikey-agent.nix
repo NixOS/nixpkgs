@@ -37,7 +37,7 @@ in
 
     # This overrides the systemd user unit shipped with the
     # yubikey-agent package
-    systemd.user.services.yubikey-agent = mkIf (pinentryFlavor != null) {
+    systemd.user.services.yubikey-agent = mkIf (config.programs.gnupg.agent.pinentryPackage != null) {
       path = [ config.programs.gnupg.agent.pinentryPackage ];
       wantedBy = [ "default.target" ];
     };

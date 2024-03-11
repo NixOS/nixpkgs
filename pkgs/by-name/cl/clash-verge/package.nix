@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     mv usr/* $out
-    rm $out/bin/{clash,clash-meta}
 
     runHook postInstall
   '';
 
   postFixup = ''
-    ln -s ${lib.getExe clash-meta} $out/bin/clash-meta
+    rm -f $out/bin/clash
+    ln -sf ${lib.getExe clash-meta} $out/bin/${clash-meta.meta.mainProgram}
   '';
 
   meta = with lib; {

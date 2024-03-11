@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-btEamGLqCC5PRigxHbe49/bnJNVGm6Czf852JaAdB38=";
+    hash = "sha256-r04Q6zbt8VM1jYkoGOdJZqKPPxXy4jC1X1d9nJ+fEWY=";
   };
 
   nativeBuildInputs = [
