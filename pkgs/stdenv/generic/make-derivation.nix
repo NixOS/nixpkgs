@@ -109,21 +109,19 @@ let
       attrs;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { envIsExportable, dontAddHostSuffix, checkedEnv, outputs, strictDeps, configureFlags, configurePlatforms, doCheck, cmakeFlags, mesonFlags, dependencies, propagatedDependencies, patches, doInstallCheck, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, computedSandboxProfile, computedPropagatedSandboxProfile, propagatedSandboxProfile, sandboxProfile, computedImpureHostDeps, computedPropagatedImpureHostDeps, __propagatedImpureHostDeps, __impureHostDeps, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
+  makeDerivationArgument = { dontAddHostSuffix, outputs, strictDeps, configureFlags, configurePlatforms, doCheck, cmakeFlags, mesonFlags, dependencies, propagatedDependencies, patches, doInstallCheck, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, computedSandboxProfile, computedPropagatedSandboxProfile, propagatedSandboxProfile, sandboxProfile, computedImpureHostDeps, computedPropagatedImpureHostDeps, __propagatedImpureHostDeps, __impureHostDeps, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
   attrs@{
     __structuredAttrs ? config.structuredAttrsByDefault or false,
-    env ? { },
     ...
   }:
     (removeAttrs attrs
-      ([
+      [
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__contentAddressed"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
-       ++ optional (__structuredAttrs || envIsExportable) "env"))
+       "sandboxProfile" "propagatedSandboxProfile"])
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
@@ -151,7 +149,7 @@ let
             assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
             "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
-    }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
+    }) // {
       builder = attrs.realBuilder or stdenv.shell;
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
@@ -546,8 +544,13 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit envIsExportable dontAddHostSuffix checkedEnv outputs strictDeps configureFlags configurePlatforms doCheck cmakeFlags mesonFlags dependencies propagatedDependencies patches doInstallCheck __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions computedSandboxProfile computedPropagatedSandboxProfile propagatedSandboxProfile sandboxProfile computedImpureHostDeps computedPropagatedImpureHostDeps __propagatedImpureHostDeps __impureHostDeps __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
-    (removeAttrs attrs ["meta" "passthru" "pos"]);
+    { inherit dontAddHostSuffix outputs strictDeps configureFlags configurePlatforms doCheck cmakeFlags mesonFlags dependencies propagatedDependencies patches doInstallCheck __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions computedSandboxProfile computedPropagatedSandboxProfile propagatedSandboxProfile sandboxProfile computedImpureHostDeps computedPropagatedImpureHostDeps __propagatedImpureHostDeps __impureHostDeps __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
+    (removeAttrs
+      attrs
+        (["meta" "passthru" "pos"]
+        ++ optional (__structuredAttrs || envIsExportable) "env"
+        )
+    // optionalAttrs __structuredAttrs { env = checkedEnv; });
 
   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
   validity = checkMeta.assertValidity { inherit meta attrs; };
