@@ -37,12 +37,12 @@ in {
   ];
 
   options.services.vaultwarden = {
-    enable = lib.mkEnableOption (lib.mdDoc "vaultwarden");
+    enable = lib.mkEnableOption "vaultwarden";
 
     dbBackend = lib.mkOption {
       type = lib.types.enum [ "sqlite" "mysql" "postgresql" ];
       default = "sqlite";
-      description = lib.mdDoc ''
+      description = ''
         Which database backend vaultwarden will be using.
       '';
     };
@@ -50,7 +50,7 @@ in {
     backupDir = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The directory under which vaultwarden will backup its persistent data.
       '';
       example = "/var/backup/vaultwarden";
@@ -99,7 +99,7 @@ in {
           SMTP_FROM_NAME = "example.com Bitwarden server";
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         The configuration of vaultwarden is done through environment variables,
         therefore it is recommended to use upper snake case (e.g. {env}`DISABLE_2FA_REMEMBER`).
 
@@ -127,7 +127,7 @@ in {
       type = with lib.types; nullOr path;
       default = null;
       example = "/var/lib/vaultwarden.env";
-      description = lib.mdDoc ''
+      description = ''
         Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
@@ -161,7 +161,7 @@ in {
       type = lib.types.package;
       default = pkgs.vaultwarden.webvault;
       defaultText = lib.literalExpression "pkgs.vaultwarden.webvault";
-      description = lib.mdDoc "Web vault package to use.";
+      description = "Web vault package to use.";
     };
   };
 
