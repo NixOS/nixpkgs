@@ -41,106 +41,113 @@ rec {
 
     nativeBuildInputs = [ nukeReferences dumpnar ];
 
-    buildCommand = ''
+    buildCommand = let
+      inherit (lib)
+        getBin
+        getDev
+        getLib
+        ;
+    in
+    ''
       mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
 
       ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
         # Copy libSystem's .o files for various low-level boot stuff.
-        cp -d ${lib.getLib darwin.Libsystem}/lib/*.o $out/lib
+        cp -d ${getLib darwin.Libsystem}/lib/*.o $out/lib
 
         # Resolv is actually a link to another package, so let's copy it properly
-        cp -L ${lib.getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
+        cp -L ${getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
       ''}
 
-      cp -rL ${darwin.Libsystem}/include $out
+      cp -rL ${getDev darwin.Libsystem}/include $out
       chmod -R u+w $out/include
-      cp -rL ${darwin.ICU}/include* $out/include
-      cp -rL ${libiconv}/include/* $out/include
-      cp -rL ${lib.getDev gnugrep.pcre2}/include/* $out/include
+      cp -rL ${getDev darwin.ICU}/include* $out/include
+      cp -rL ${getDev libiconv}/include/* $out/include
+      cp -rL ${getDev gnugrep.pcre2}/include/* $out/include
       mv $out/include $out/include-Libsystem
 
       # Copy coreutils, bash, etc.
-      cp ${coreutils_}/bin/* $out/bin
+      cp ${getBin coreutils_}/bin/* $out/bin
       (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
-      cp ${bash}/bin/bash $out/bin
+      cp ${getBin bash}/bin/bash $out/bin
       ln -s bash $out/bin/sh
-      cp ${findutils}/bin/find $out/bin
-      cp ${findutils}/bin/xargs $out/bin
-      cp -d ${diffutils}/bin/* $out/bin
-      cp -d ${gnused}/bin/* $out/bin
-      cp -d ${gnugrep}/bin/grep $out/bin
-      cp ${gawk}/bin/gawk $out/bin
-      cp -d ${gawk}/bin/awk $out/bin
-      cp ${gnutar}/bin/tar $out/bin
-      cp ${gzip}/bin/.gzip-wrapped $out/bin/gzip
-      cp ${bzip2_.bin}/bin/bzip2 $out/bin
+      cp ${getBin findutils}/bin/find $out/bin
+      cp ${getBin findutils}/bin/xargs $out/bin
+      cp -d ${getBin diffutils}/bin/* $out/bin
+      cp -d ${getBin gnused}/bin/* $out/bin
+      cp -d ${getBin gnugrep}/bin/grep $out/bin
+      cp ${getBin gawk}/bin/gawk $out/bin
+      cp -d ${getBin gawk}/bin/awk $out/bin
+      cp ${getBin gnutar}/bin/tar $out/bin
+      cp ${getBin gzip}/bin/.gzip-wrapped $out/bin/gzip
+      cp ${getBin bzip2_}/bin/bzip2 $out/bin
       ln -s bzip2 $out/bin/bunzip2
-      cp -d ${gnumake}/bin/* $out/bin
-      cp -d ${patch}/bin/* $out/bin
-      cp -d ${xz.bin}/bin/xz $out/bin
-      cp ${cpio}/bin/cpio $out/bin
+      cp -d ${getBin gnumake}/bin/* $out/bin
+      cp -d ${getBin patch}/bin/* $out/bin
+      cp -d ${getBin xz}/bin/xz $out/bin
+      cp ${getBin cpio}/bin/cpio $out/bin
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
-      cp ${curl_.bin}/bin/curl $out/bin
-      cp -d ${curl_.out}/lib/libcurl*.dylib $out/lib
-      cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
-      cp -d ${lib.getLib openssl}/lib/*.dylib $out/lib
+      cp ${getBin curl_}/bin/curl $out/bin
+      cp -d ${getLib curl_}/lib/libcurl*.dylib $out/lib
+      cp -d ${getLib libssh2}/lib/libssh*.dylib $out/lib
+      cp -d ${getLib openssl}/lib/*.dylib $out/lib
 
-      cp -d ${gnugrep.pcre2.out}/lib/libpcre2*.dylib $out/lib
-      cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
-      cp -d ${lib.getLib gettext}/lib/libintl*.dylib $out/lib
+      cp -d ${getLib gnugrep.pcre2}/lib/libpcre2*.dylib $out/lib
+      cp -d ${getLib libiconv}/lib/lib*.dylib $out/lib
+      cp -d ${getLib gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
-      cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
-      cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
+      cp -d ${getLib ncurses}/lib/libncurses*.dylib $out/lib
+      cp -d ${getLib libxml2}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
-      cp -rd ${lib.getLib llvmPackages.clang-unwrapped}/lib/* $out/lib
+      cp -d ${getBin llvmPackages.clang-unwrapped}/bin/clang* $out/bin
+      cp -rd ${getLib llvmPackages.clang-unwrapped}/lib/* $out/lib
 
-      cp -d ${lib.getLib llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${getLib llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
     ''
     # libc++abi is contained in libcxx for LLVM12+. Remove once unpinned from LLVM11
     + lib.optionalString (llvmPackages ? libcxxabi) ''
-      cp -d ${lib.getLib llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${getLib llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
     '' + ''
-      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
-      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
-      cp -d ${lib.getLib llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
-      cp -d ${lib.getLib libffi}/lib/libffi*.dylib $out/lib
+      cp -d ${getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
+      cp -d ${getLib llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
+      cp -d ${getLib llvmPackages.llvm}/lib/libLLVM.dylib $out/lib
+      cp -d ${getLib libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
+      cp -rd ${getDev llvmPackages.libcxx}/include/c++     $out/include
 
       # copy .tbd assembly utils
-      cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-      cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
+      cp -d ${getBin pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
+      cp -d ${getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
 
       # copy package extraction tools
-      cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
-      cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
-      cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
+      cp -d ${getBin pkgs.pbzx}/bin/pbzx $out/bin
+      cp -d ${getLib pkgs.xar}/lib/libxar*.dylib $out/lib
+      cp -d ${getLib pkgs.bzip2}/lib/libbz2*.dylib $out/lib
 
       # copy sigtool
-      cp -d ${pkgs.darwin.sigtool}/bin/sigtool $out/bin
-      cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
+      cp -d ${getBin pkgs.darwin.sigtool}/bin/sigtool $out/bin
+      cp -d ${getBin pkgs.darwin.sigtool}/bin/codesign $out/bin
 
-      cp -d ${lib.getLib darwin.ICU}/lib/libicu*.dylib $out/lib
-      cp -d ${zlib.out}/lib/libz.*       $out/lib
-      cp -d ${gmpxx.out}/lib/libgmp*.*   $out/lib
-      cp -d ${xz.out}/lib/liblzma*.*     $out/lib
+      cp -d ${getLib darwin.ICU}/lib/libicu*.dylib $out/lib
+      cp -d ${getLib zlib}/lib/libz.*       $out/lib
+      cp -d ${getLib gmpxx}/lib/libgmp*.*   $out/lib
+      cp -d ${getLib xz}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
-        cp ${cctools_}/bin/$i $out/bin
+        cp ${getBin cctools_}/bin/$i $out/bin
       done
 
-      cp -d ${lib.getLib darwin.libtapi}/lib/libtapi* $out/lib
+      cp -d ${getLib darwin.libtapi}/lib/libtapi* $out/lib
 
-      cp -rd ${pkgs.darwin.CF}/Library $out
+      cp -rd ${getLib pkgs.darwin.CF}/Library $out
       ${lib.optionalString stdenv.targetPlatform.isAarch64 ''
-        cp -rd ${pkgs.darwin.libobjc}/lib/* $out/lib/
+        cp -rd ${getLib pkgs.darwin.libobjc}/lib/* $out/lib/
       ''}
 
       chmod -R u+w $out
@@ -194,7 +201,7 @@ rec {
       mv $out/.pack $out/pack
 
       mkdir $out/on-server
-      dumpnar $out/pack | ${xz}/bin/xz > $out/on-server/bootstrap-tools.nar.xz
+      dumpnar $out/pack | ${getBin xz}/bin/xz > $out/on-server/bootstrap-tools.nar.xz
     '';
 
     allowedReferences = [];
