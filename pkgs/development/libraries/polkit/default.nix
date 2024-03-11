@@ -10,7 +10,6 @@
 , ninja
 , perl
 , python3
-, fetchpatch
 , gettext
 , duktape
 , gobject-introspection
@@ -53,10 +52,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
-      sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
-    })
+    ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
   ];
 
   depsBuildBuild = [
