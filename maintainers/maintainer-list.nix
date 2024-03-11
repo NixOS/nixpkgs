@@ -7034,7 +7034,7 @@
     github = "Gerschtli";
     githubId = 10353047;
     name = "Tobias Happ";
-  };
+  };  
   getchoo = {
     email = "getchoo@tuta.io";
     github = "getchoo";
@@ -7047,6 +7047,12 @@
     matrix = "@getpsyched:matrix.org";
     github = "getpsyched";
     githubId = 43472218;
+  };
+  getreu = {
+    email = "getreu@web.de";
+    github = "getreu";
+    githubId = 579082;
+    name = "Jens Getreu";
   };
   gfrascadorio = {
     email = "gfrascadorio@tutanota.com";
