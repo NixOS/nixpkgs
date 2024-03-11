@@ -201,6 +201,14 @@ in {
       ];
     };
 
+    linux_6_8 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.8";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -605,6 +613,7 @@ in {
     linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_7 = recurseIntoAttrs (packagesFor kernels.linux_6_7);
+    linux_6_8 = recurseIntoAttrs (packagesFor kernels.linux_6_8);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
@@ -669,7 +678,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_7;
+    linux_latest = packages.linux_6_8;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_6;
