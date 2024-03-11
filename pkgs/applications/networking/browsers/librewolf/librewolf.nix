@@ -9,7 +9,6 @@ rec {
   extraPatches = [ ];
 
   extraConfigureFlags = [
-    "--with-app-name=librewolf"
     "--with-app-basename=LibreWolf"
     "--with-unsigned-addon-scopes=app,system"
   ];
