@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, git, qt5, gitUpdater }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3Packages
+, gettext
+, git
+, qt5
+, gitUpdater
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
@@ -11,10 +19,27 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-HORGtpiZGWpeRDhr4E9KW5LSAD6r74l7rl6RhhVtiJo=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [ qt5.qtwayland ];
-  propagatedBuildInputs = with python3Packages; [ git pyqt5 qtpy send2trash ];
-  nativeBuildInputs = with python3Packages; [ setuptools-scm gettext qt5.wrapQtAppsHook ];
-  nativeCheckInputs = with python3Packages; [ git pytestCheckHook ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    qt5.qtwayland
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    git
+    pyqt5
+    qtpy
+    send2trash
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+    gettext
+    qt5.wrapQtAppsHook
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    git
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     "qtpy/"
