@@ -109,7 +109,7 @@ let
       attrs;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { configureFlags, configurePlatforms, doCheck, cmakeFlags, mesonFlags, patches, doInstallCheck, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
+  makeDerivationArgument = { configureFlags, configurePlatforms, cmakeFlags, mesonFlags, patches, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
@@ -151,9 +151,27 @@ let
     sandboxProfile ? "",
     propagatedSandboxProfile ? "",
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
+    # Check phase
+    doCheck ? config.doCheckByDefault or false,
+
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
+    # InstallCheck phase
+    doInstallCheck ? config.doCheckByDefault or false,
+
     ...
   }:
     let
+      # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
+      # no package has `doCheck = true`.
+      doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    in
+    let
+      # These intentionally shadow the original argument
+      doCheck = doCheck';
+      doInstallCheck = doInstallCheck';
+
       outputs' = outputs ++ optional separateDebugInfo' "debug";
       separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
       nativeBuildInputs' = nativeBuildInputs
@@ -448,14 +466,6 @@ let
     (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
     [ "build" "host" ]
 
-# TODO(@Ericson2314): Make unconditional / resolve #33599
-# Check phase
-, doCheck ? config.doCheckByDefault or false
-
-# TODO(@Ericson2314): Make unconditional / resolve #33599
-# InstallCheck phase
-, doInstallCheck ? config.doCheckByDefault or false
-
 , enableParallelBuilding ? config.enableParallelBuildingByDefault
 
 , meta ? {}
@@ -497,11 +507,6 @@ assert attrs ? outputHash -> (
 );
 
 let
-  # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
-  # no package has `doCheck = true`.
-  doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
   unsafeDerivationToUntrackedOutpath = drv:
@@ -542,13 +547,11 @@ then abort ("mkDerivation was called with unsupported hardening flags: " + lib.g
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
 })
 else let
-  doCheck = doCheck';
-  doInstallCheck = doInstallCheck';
 
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit configureFlags configurePlatforms doCheck cmakeFlags mesonFlags patches doInstallCheck __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
+    { inherit configureFlags configurePlatforms cmakeFlags mesonFlags patches __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
