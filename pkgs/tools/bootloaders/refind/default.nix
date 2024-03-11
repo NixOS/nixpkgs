@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, gnu-efi, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, gnu-efi
+, nixosTests
+, efibootmgr
+, openssl
+, sbsigntool
+, makeWrapper
+}:
 
 let
   archids = {
@@ -26,6 +35,7 @@ stdenv.mkDerivation rec {
     ./0001-toolchain.patch
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
@@ -98,6 +108,13 @@ stdenv.mkDerivation rec {
     sed -i "s,\bRefindDir=\"\$This.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/refind-install \
+      --prefix PATH : ${lib.makeBinPath [ efibootmgr openssl sbsigntool ]}
+    wrapProgram $out/bin/refind-mvrefind \
+      --prefix PATH : ${lib.makeBinPath [ efibootmgr ]}
   '';
 
   passthru.tests = {
