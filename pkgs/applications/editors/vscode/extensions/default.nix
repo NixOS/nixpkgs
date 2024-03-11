@@ -1032,6 +1032,22 @@ let
         };
       };
 
+      cweijan.dbclient-jdbc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dbclient-jdbc";
+          publisher = "cweijan";
+          version = "1.3.4";
+          sha256 = "sha256-qknooeedRhTvEWSuGXFoO/BczGanYCdMr7WWjthxG+k=";
+        };
+        meta = {
+          description = "JDBC Adapter For Database Client";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=cweijan.dbclient-jdbc";
+          homepage = "https://github.com/database-client/jdbc-adapter-server";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       cweijan.vscode-database-client2 = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-database-client2";
