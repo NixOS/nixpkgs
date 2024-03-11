@@ -1670,6 +1670,22 @@ let
         };
       };
 
+      firsttris.vscode-jest-runner = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-jest-runner";
+          publisher = "firsttris";
+          version = "0.4.72";
+          sha256 = "sha256-1nUpOXdteWsyFYJ2uATCcr1SUbeusmbpa09Bkw9/TZM=";
+        };
+        meta = {
+          description = "Simple way to run or debug a single (or multiple) tests from context-menu";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner";
+          homepage = "https://github.com/firsttris/vscode-jest-runner";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       foam.foam-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "foam-vscode";
