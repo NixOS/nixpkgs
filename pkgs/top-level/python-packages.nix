@@ -10903,6 +10903,8 @@ self: super: with self; {
 
   pykwb = callPackage ../development/python-modules/pykwb { };
 
+  pylablib = callPackage ../development/python-modules/pylablib { };
+
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
 
   pylama = callPackage ../development/python-modules/pylama { };
