@@ -3,6 +3,7 @@
 , fetchgit
 , ant
 , jdk
+, stripJavaArchivesHook
 , makeWrapper
 , jre
 , coreutils
@@ -22,6 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     ant
     jdk
+    stripJavaArchivesHook
     makeWrapper
   ];
 
