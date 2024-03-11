@@ -108,6 +108,205 @@ let
           makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
+  # Subset of argument, matching mkDerivation below
+  makeDerivationArgument = { envIsExportable, dontAddHostSuffix, checkedEnv, outputs, strictDeps, configureFlags, configurePlatforms, doCheck, cmakeFlags, mesonFlags, dependencies, propagatedDependencies, patches, doInstallCheck, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, computedSandboxProfile, computedPropagatedSandboxProfile, propagatedSandboxProfile, sandboxProfile, computedImpureHostDeps, computedPropagatedImpureHostDeps, __propagatedImpureHostDeps, __impureHostDeps, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
+  attrs@{
+    __structuredAttrs ? config.structuredAttrsByDefault or false,
+    env ? { },
+    ...
+  }:
+    (removeAttrs attrs
+      (["meta" "passthru" "pos"
+       "checkInputs" "installCheckInputs"
+       "nativeCheckInputs" "nativeInstallCheckInputs"
+       "__contentAddressed"
+       "__darwinAllowLocalNetworking"
+       "__impureHostDeps" "__propagatedImpureHostDeps"
+       "sandboxProfile" "propagatedSandboxProfile"]
+       ++ optional (__structuredAttrs || envIsExportable) "env"))
+    // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
+      name =
+        let
+          # Indicate the host platform of the derivation if cross compiling.
+          # Fixed-output derivations like source tarballs shouldn't get a host
+          # suffix. But we have some weird ones with run-time deps that are
+          # just used for their side-affects. Those might as well since the
+          # hash can't be the same. See #32986.
+          hostSuffix = optionalString
+            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
+            "-${stdenv.hostPlatform.config}";
+
+          # Disambiguate statically built packages. This was originally
+          # introduce as a means to prevent nix-env to get confused between
+          # nix and nixStatic. This should be also achieved by moving the
+          # hostSuffix before the version, so we could contemplate removing
+          # it again.
+          staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
+        in
+        lib.strings.sanitizeDerivationName (
+          if attrs ? name
+          then attrs.name + hostSuffix
+          else
+            # we cannot coerce null to a string below
+            assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
+            "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
+        );
+    }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
+      builder = attrs.realBuilder or stdenv.shell;
+      args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
+      inherit stdenv;
+
+      # The `system` attribute of a derivation has special meaning to Nix.
+      # Derivations set it to choose what sort of machine could be used to
+      # execute the build, The build platform entirely determines this,
+      # indeed more finely than Nix knows or cares about. The `system`
+      # attribute of `buildPlatfom` matches Nix's degree of specificity.
+      # exactly.
+      inherit (stdenv.buildPlatform) system;
+
+      userHook = config.stdenv.userHook or null;
+      __ignoreNulls = true;
+      inherit __structuredAttrs strictDeps;
+
+      depsBuildBuild              = elemAt (elemAt dependencies 0) 0;
+      nativeBuildInputs           = elemAt (elemAt dependencies 0) 1;
+      depsBuildTarget             = elemAt (elemAt dependencies 0) 2;
+      depsHostHost                = elemAt (elemAt dependencies 1) 0;
+      buildInputs                 = elemAt (elemAt dependencies 1) 1;
+      depsTargetTarget            = elemAt (elemAt dependencies 2) 0;
+
+      depsBuildBuildPropagated    = elemAt (elemAt propagatedDependencies 0) 0;
+      propagatedNativeBuildInputs = elemAt (elemAt propagatedDependencies 0) 1;
+      depsBuildTargetPropagated   = elemAt (elemAt propagatedDependencies 0) 2;
+      depsHostHostPropagated      = elemAt (elemAt propagatedDependencies 1) 0;
+      propagatedBuildInputs       = elemAt (elemAt propagatedDependencies 1) 1;
+      depsTargetTargetPropagated  = elemAt (elemAt propagatedDependencies 2) 0;
+
+      # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
+      configureFlags =
+        configureFlags
+        ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
+        ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
+        ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
+
+      cmakeFlags =
+        cmakeFlags
+        ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+          "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
+        ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
+          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+        ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
+          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+        ] ++ optionals (stdenv.hostPlatform.isDarwin) [
+          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+        ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
+          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+        ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
+          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+        ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
+          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+        ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
+        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
+        ]);
+
+      mesonFlags =
+        let
+          # See https://mesonbuild.com/Reference-tables.html#cpu-families
+          cpuFamily = platform: with platform;
+            /**/ if isAarch32 then "arm"
+            else if isx86_32  then "x86"
+            else platform.uname.processor;
+
+          crossFile = builtins.toFile "cross-file.conf" ''
+            [properties]
+            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
+            needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
+
+            [host_machine]
+            system = '${stdenv.targetPlatform.parsed.kernel.name}'
+            cpu_family = '${cpuFamily stdenv.targetPlatform}'
+            cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
+            endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+
+            [binaries]
+            llvm-config = 'llvm-config-native'
+            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
+          '';
+          crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
+        in crossFlags ++ mesonFlags;
+
+      inherit patches;
+
+      inherit doCheck doInstallCheck;
+
+      inherit outputs;
+    } // optionalAttrs (__contentAddressed) {
+      inherit __contentAddressed;
+      # Provide default values for outputHashMode and outputHashAlgo because
+      # most people won't care about these anyways
+      outputHashAlgo = attrs.outputHashAlgo or "sha256";
+      outputHashMode = attrs.outputHashMode or "recursive";
+    } // optionalAttrs (enableParallelBuilding) {
+      inherit enableParallelBuilding;
+      enableParallelChecking = attrs.enableParallelChecking or true;
+      enableParallelInstalling = attrs.enableParallelInstalling or true;
+    } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
+      NIX_HARDENING_ENABLE = enabledHardeningOptions;
+    } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
+      requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
+    } // optionalAttrs (stdenv.buildPlatform.isDarwin) {
+      inherit __darwinAllowLocalNetworking;
+      # TODO: remove `unique` once nix has a list canonicalization primitive
+      __sandboxProfile =
+      let profiles = [ stdenv.extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
+          final = concatStringsSep "\n" (filter (x: x != "") (unique profiles));
+      in final;
+      __propagatedSandboxProfile = unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
+      __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ stdenv.__extraImpureHostDeps ++ [
+        "/dev/zero"
+        "/dev/random"
+        "/dev/urandom"
+        "/bin/sh"
+      ];
+      __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+    } //
+    # If we use derivations directly here, they end up as build-time dependencies.
+    # This is especially problematic in the case of disallowed*, since the disallowed
+    # derivations will be built by nix as build-time dependencies, while those
+    # derivations might take a very long time to build, or might not even build
+    # successfully on the platform used.
+    # We can improve on this situation by instead passing only the outPath,
+    # without an attached string context, to nix. The out path will be a placeholder
+    # which will be replaced by the actual out path if the derivation in question
+    # is part of the final closure (and thus needs to be built). If it is not
+    # part of the final closure, then the placeholder will be passed along,
+    # but in that case we know for a fact that the derivation is not part of the closure.
+    # This means that passing the out path to nix does the right thing in either
+    # case, both for disallowed and allowed references/requisites, and we won't
+    # build the derivation if it wouldn't be part of the closure, saving time and resources.
+    # While the problem is less severe for allowed*, since we want the derivation
+    # to be built eventually, we would still like to get the error early and without
+    # having to wait while nix builds a derivation that might not be used.
+    # See also https://github.com/NixOS/nix/issues/4629
+    optionalAttrs (attrs ? disallowedReferences) {
+      disallowedReferences =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+    } //
+    optionalAttrs (attrs ? disallowedRequisites) {
+      disallowedRequisites =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+    } //
+    optionalAttrs (attrs ? allowedReferences) {
+      allowedReferences =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+    } //
+    optionalAttrs (attrs ? allowedRequisites) {
+      allowedRequisites =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+    };
+
   mkDerivationSimple = overrideAttrs:
 
 
@@ -346,198 +545,9 @@ else let
 
   envIsExportable = isAttrs env && !isDerivation env;
 
-  derivationArg =
-    (removeAttrs attrs
-      (["meta" "passthru" "pos"
-       "checkInputs" "installCheckInputs"
-       "nativeCheckInputs" "nativeInstallCheckInputs"
-       "__contentAddressed"
-       "__darwinAllowLocalNetworking"
-       "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
-       ++ optional (__structuredAttrs || envIsExportable) "env"))
-    // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
-      name =
-        let
-          # Indicate the host platform of the derivation if cross compiling.
-          # Fixed-output derivations like source tarballs shouldn't get a host
-          # suffix. But we have some weird ones with run-time deps that are
-          # just used for their side-affects. Those might as well since the
-          # hash can't be the same. See #32986.
-          hostSuffix = optionalString
-            (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
-            "-${stdenv.hostPlatform.config}";
-
-          # Disambiguate statically built packages. This was originally
-          # introduce as a means to prevent nix-env to get confused between
-          # nix and nixStatic. This should be also achieved by moving the
-          # hostSuffix before the version, so we could contemplate removing
-          # it again.
-          staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
-        in
-        lib.strings.sanitizeDerivationName (
-          if attrs ? name
-          then attrs.name + hostSuffix
-          else
-            # we cannot coerce null to a string below
-            assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
-            "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
-        );
-    }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
-      builder = attrs.realBuilder or stdenv.shell;
-      args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
-      inherit stdenv;
-
-      # The `system` attribute of a derivation has special meaning to Nix.
-      # Derivations set it to choose what sort of machine could be used to
-      # execute the build, The build platform entirely determines this,
-      # indeed more finely than Nix knows or cares about. The `system`
-      # attribute of `buildPlatfom` matches Nix's degree of specificity.
-      # exactly.
-      inherit (stdenv.buildPlatform) system;
-
-      userHook = config.stdenv.userHook or null;
-      __ignoreNulls = true;
-      inherit __structuredAttrs strictDeps;
-
-      depsBuildBuild              = elemAt (elemAt dependencies 0) 0;
-      nativeBuildInputs           = elemAt (elemAt dependencies 0) 1;
-      depsBuildTarget             = elemAt (elemAt dependencies 0) 2;
-      depsHostHost                = elemAt (elemAt dependencies 1) 0;
-      buildInputs                 = elemAt (elemAt dependencies 1) 1;
-      depsTargetTarget            = elemAt (elemAt dependencies 2) 0;
-
-      depsBuildBuildPropagated    = elemAt (elemAt propagatedDependencies 0) 0;
-      propagatedNativeBuildInputs = elemAt (elemAt propagatedDependencies 0) 1;
-      depsBuildTargetPropagated   = elemAt (elemAt propagatedDependencies 0) 2;
-      depsHostHostPropagated      = elemAt (elemAt propagatedDependencies 1) 0;
-      propagatedBuildInputs       = elemAt (elemAt propagatedDependencies 1) 1;
-      depsTargetTargetPropagated  = elemAt (elemAt propagatedDependencies 2) 0;
-
-      # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
-      configureFlags =
-        configureFlags
-        ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
-        ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
-        ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
-
-      cmakeFlags =
-        cmakeFlags
-        ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-          "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-        ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
-          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-        ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
-          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-        ] ++ optionals (stdenv.hostPlatform.isDarwin) [
-          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-        ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
-          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-        ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
-          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-        ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
-          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-        ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
-        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
-        ]);
-
-      mesonFlags =
-        let
-          # See https://mesonbuild.com/Reference-tables.html#cpu-families
-          cpuFamily = platform: with platform;
-            /**/ if isAarch32 then "arm"
-            else if isx86_32  then "x86"
-            else platform.uname.processor;
-
-          crossFile = builtins.toFile "cross-file.conf" ''
-            [properties]
-            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
-            needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
-
-            [host_machine]
-            system = '${stdenv.targetPlatform.parsed.kernel.name}'
-            cpu_family = '${cpuFamily stdenv.targetPlatform}'
-            cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-            endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-
-            [binaries]
-            llvm-config = 'llvm-config-native'
-            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
-          '';
-          crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ mesonFlags;
-
-      inherit patches;
-
-      inherit doCheck doInstallCheck;
-
-      inherit outputs;
-    } // optionalAttrs (__contentAddressed) {
-      inherit __contentAddressed;
-      # Provide default values for outputHashMode and outputHashAlgo because
-      # most people won't care about these anyways
-      outputHashAlgo = attrs.outputHashAlgo or "sha256";
-      outputHashMode = attrs.outputHashMode or "recursive";
-    } // optionalAttrs (enableParallelBuilding) {
-      inherit enableParallelBuilding;
-      enableParallelChecking = attrs.enableParallelChecking or true;
-      enableParallelInstalling = attrs.enableParallelInstalling or true;
-    } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
-      NIX_HARDENING_ENABLE = enabledHardeningOptions;
-    } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
-      requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
-    } // optionalAttrs (stdenv.buildPlatform.isDarwin) {
-      inherit __darwinAllowLocalNetworking;
-      # TODO: remove `unique` once nix has a list canonicalization primitive
-      __sandboxProfile =
-      let profiles = [ stdenv.extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
-          final = concatStringsSep "\n" (filter (x: x != "") (unique profiles));
-      in final;
-      __propagatedSandboxProfile = unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
-      __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ stdenv.__extraImpureHostDeps ++ [
-        "/dev/zero"
-        "/dev/random"
-        "/dev/urandom"
-        "/bin/sh"
-      ];
-      __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-    } //
-    # If we use derivations directly here, they end up as build-time dependencies.
-    # This is especially problematic in the case of disallowed*, since the disallowed
-    # derivations will be built by nix as build-time dependencies, while those
-    # derivations might take a very long time to build, or might not even build
-    # successfully on the platform used.
-    # We can improve on this situation by instead passing only the outPath,
-    # without an attached string context, to nix. The out path will be a placeholder
-    # which will be replaced by the actual out path if the derivation in question
-    # is part of the final closure (and thus needs to be built). If it is not
-    # part of the final closure, then the placeholder will be passed along,
-    # but in that case we know for a fact that the derivation is not part of the closure.
-    # This means that passing the out path to nix does the right thing in either
-    # case, both for disallowed and allowed references/requisites, and we won't
-    # build the derivation if it wouldn't be part of the closure, saving time and resources.
-    # While the problem is less severe for allowed*, since we want the derivation
-    # to be built eventually, we would still like to get the error early and without
-    # having to wait while nix builds a derivation that might not be used.
-    # See also https://github.com/NixOS/nix/issues/4629
-    optionalAttrs (attrs ? disallowedReferences) {
-      disallowedReferences =
-        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-    } //
-    optionalAttrs (attrs ? disallowedRequisites) {
-      disallowedRequisites =
-        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-    } //
-    optionalAttrs (attrs ? allowedReferences) {
-      allowedReferences =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-    } //
-    optionalAttrs (attrs ? allowedRequisites) {
-      allowedRequisites =
-        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
-    };
+  derivationArg = makeDerivationArgument
+    { inherit envIsExportable dontAddHostSuffix checkedEnv outputs strictDeps configureFlags configurePlatforms doCheck cmakeFlags mesonFlags dependencies propagatedDependencies patches doInstallCheck __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions computedSandboxProfile computedPropagatedSandboxProfile propagatedSandboxProfile sandboxProfile computedImpureHostDeps computedPropagatedImpureHostDeps __propagatedImpureHostDeps __impureHostDeps __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
+    attrs;
 
   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
   validity = checkMeta.assertValidity { inherit meta attrs; };
