@@ -10,6 +10,7 @@
 , makeBinaryWrapper
 , nixosTests
 , enableLocalIcons ? false
+, nix-update-script
 }:
 let
   dashboardIcons = fetchFromGitHub {
@@ -99,8 +100,11 @@ buildNpmPackage rec {
 
   doDist = false;
 
-  passthru.tests = {
-    inherit (nixosTests) homepage-dashboard;
+  passthru = {
+    tests = {
+      inherit (nixosTests) homepage-dashboard;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
