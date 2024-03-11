@@ -20,6 +20,8 @@ in
 
     src = builtins.path {path = "${src}/backend";};
 
+    outputs = ["out"];
+
     preBuild = let
       frontend = mkPnpmPackage {
         src = builtins.path {path = "${src}/frontend";};
