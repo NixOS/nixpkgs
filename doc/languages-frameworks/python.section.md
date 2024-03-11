@@ -344,6 +344,16 @@ applied to the reference:
 youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 ```
 
+Since the advent of `pkgs/by-name` hierarchy, there is an extra alternative:
+instead of writing the code above in `all-packages.nix`, the corresponding code
+below can be written in `pkgs/by-name/yo/youtube-dl/package.nix`:
+
+```nix
+{ python3Packages }:
+
+with python3Packages; toPythonApplication youtube-dl
+```
+
 #### `toPythonModule` function {#topythonmodule-function}
 
 In some cases, such as bindings, a package is created using
