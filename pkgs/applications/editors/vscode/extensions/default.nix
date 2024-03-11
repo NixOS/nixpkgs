@@ -2096,6 +2096,22 @@ let
         };
       };
 
+      hediet.vscode-drawio = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-drawio";
+          publisher = "hediet";
+          version = "1.6.6";
+          sha256 = "sha256-SPcSnS7LnRL5gdiJIVsFaN7eccrUHSj9uQYIQZllm0M=";
+        };
+        meta = {
+          description = "This unofficial extension integrates Draw.io into VS Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio";
+          homepage = "https://github.com/hediet/vscode-drawio";
+          license = lib.licenses.gpl3Only;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "beautify";
