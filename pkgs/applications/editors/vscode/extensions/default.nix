@@ -1986,6 +1986,22 @@ let
         };
       };
 
+      hashicorp.hcl = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "HCL";
+          publisher = "HashiCorp";
+          version = "0.3.2";
+          sha256 = "sha256-cxF3knYY29PvT3rkRS8SGxMn9vzt56wwBXpk2PqO0mo=";
+        };
+        meta = {
+          description = "HashiCorp HCL syntax";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=HashiCorp.HCL";
+          homepage = "https://github.com/hashicorp/vscode-hcl";
+          license = lib.licenses.mpl20;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       hashicorp.terraform = callPackage ./hashicorp.terraform { };
 
       haskell.haskell = buildVscodeMarketplaceExtension {
@@ -2971,6 +2987,22 @@ let
         };
       };
 
+      naumovs.theme-oceanicnext = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "theme-oceanicnext";
+          publisher = "naumovs";
+          version = "0.0.4";
+          sha256 = "sha256-romhWL3s0NVZ3kptSNT4/X9WkgakgNNfFElaBCo6jj4=";
+        };
+        meta = {
+          description = "Oceanic Next theme for VSCode + dimmed bg version for better looking UI";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=naumovs.theme-oceanicnext";
+          homepage = "https://github.com/voronianski/oceanic-next-color-scheme";
+          license = lib.licenses.unlicense;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       njpwerner.autodocstring = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "autodocstring";
@@ -3447,8 +3479,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.10";
-          sha256 = "sha256-BjTV2uH9QqCS1VJ94XXgzNMJb4FB4Ee+t/5uAQfJCuM=";
+          version = "0.8.12";
+          sha256 = "sha256-4Iq6idux029i7cBV3x79ZRAbSk3ymqx+Q2jv0zV9ZTI=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -3727,6 +3759,22 @@ let
         };
         meta = {
           license = lib.licenses.mpl20;
+        };
+      };
+
+      tal7aouy.icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "icons";
+          publisher = "tal7aouy";
+          version = "3.8.0";
+          sha256 = "sha256-PdhNFyVUWcOfli/ZlT+6TmtWrV31fBP1E1Vd4QWOY+A=";
+        };
+        meta = {
+          description = "Icons for Visual Studio Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=tal7aouy.icons";
+          homepage = "https://github.com/tal7aouy/vscode-icons";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
         };
       };
 
@@ -4060,6 +4108,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      vlanguage.vscode-vlang = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-vlang";
+          publisher = "vlanguage";
+          version = "0.1.14";
+          sha256 = "sha256-hlBALxBs5wZZFk4lgAkdkGs731Xuc2p0qxffOW6mMWQ=";
+        };
+        meta = {
+          description = "V language support (syntax highlighting, formatter, snippets) for Visual Studio Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vlanguage.vscode-vlang";
+          homepage = "https://github.com/vlang/vscode-vlang";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
         };
       };
 

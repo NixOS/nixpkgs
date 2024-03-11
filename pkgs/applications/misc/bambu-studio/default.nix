@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix for webkitgtk linking
     ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Fix build with cgal-5.6.1+
+    ./meshboolean-const.patch
   ];
 
   doCheck = true;
