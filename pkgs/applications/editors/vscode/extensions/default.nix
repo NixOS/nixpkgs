@@ -4303,6 +4303,22 @@ let
         };
       };
 
+      visualstudioexptteam.vscodeintellicode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscodeintellicode";
+          publisher = "VisualStudioExptTeam";
+          version = "1.2.30";
+          sha256 = "sha256-f2Gn+W0QHN8jD5aCG+P93Y+JDr/vs2ldGL7uQwBK4lE=";
+        };
+        meta = {
+          description = "AI-assisted development";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode";
+          homepage = "https://github.com/MicrosoftDocs/intellicode";
+          license = lib.licenses.cc-by-40;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       vlanguage.vscode-vlang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-vlang";
