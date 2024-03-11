@@ -116,7 +116,7 @@ let
     else drv;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { cmakeFlags, mesonFlags, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
+  makeDerivationArgument = { cmakeFlags, mesonFlags, __darwinAllowLocalNetworking }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
@@ -172,6 +172,9 @@ let
       (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
       [ "build" "host" ],
 
+    hardeningEnable ? [],
+    hardeningDisable ? [],
+
     enableParallelBuilding ? config.enableParallelBuildingByDefault,
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
@@ -194,6 +197,38 @@ let
       # These intentionally shadow the original argument
       doCheck = doCheck';
       doInstallCheck = doInstallCheck';
+
+      hardeningDisable' = if any (x: x == "fortify") hardeningDisable
+        # disabling fortify implies fortify3 should also be disabled
+        then unique (hardeningDisable ++ [ "fortify3" ])
+        else hardeningDisable;
+      knownHardeningFlags = [
+        "bindnow"
+        "format"
+        "fortify"
+        "fortify3"
+        "pic"
+        "pie"
+        "relro"
+        "stackprotector"
+        "strictoverflow"
+        "trivialautovarinit"
+        "zerocallusedregs"
+      ];
+      defaultHardeningFlags =
+        (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
+          # fallback safe-ish set of flags
+          (remove "pie" knownHardeningFlags);
+      enabledHardeningOptions =
+        if builtins.length erroneousHardeningFlags != 0
+        then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
+          inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
+        })
+        else if builtins.elem "all" hardeningDisable'
+        then []
+        else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
+      # hardeningDisable additionally supports "all".
+      erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
 
       outputs' = outputs ++ optional separateDebugInfo' "debug";
       separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
@@ -491,9 +526,6 @@ let
       else builtins.unsafeGetAttrPos "name" attrs)
 , __darwinAllowLocalNetworking ? false
 
-, hardeningEnable ? []
-, hardeningDisable ? []
-
 # Experimental.  For simple packages mostly just works,
 # but for anything complex, be prepared to debug if enabling.
 , __structuredAttrs ? config.structuredAttrsByDefault or false
@@ -514,44 +546,10 @@ assert attrs ? outputHash -> (
 );
 
 let
-  hardeningDisable' = if any (x: x == "fortify") hardeningDisable
-    # disabling fortify implies fortify3 should also be disabled
-    then unique (hardeningDisable ++ [ "fortify3" ])
-    else hardeningDisable;
-  knownHardeningFlags = [
-    "bindnow"
-    "format"
-    "fortify"
-    "fortify3"
-    "pic"
-    "pie"
-    "relro"
-    "stackprotector"
-    "strictoverflow"
-    "trivialautovarinit"
-    "zerocallusedregs"
-  ];
-  defaultHardeningFlags =
-    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
-      # fallback safe-ish set of flags
-      (remove "pie" knownHardeningFlags);
-  enabledHardeningOptions =
-    if builtins.elem "all" hardeningDisable'
-    then []
-    else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
-  # hardeningDisable additionally supports "all".
-  erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
-
-in if builtins.length erroneousHardeningFlags != 0
-then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
-  inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
-})
-else let
-
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit cmakeFlags mesonFlags hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
+    { inherit cmakeFlags mesonFlags __darwinAllowLocalNetworking; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
