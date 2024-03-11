@@ -4640,8 +4640,6 @@ with pkgs;
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
-  clash-verge = callPackage ../applications/networking/clash-verge { };
-
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
   clevis = callPackage ../tools/security/clevis {
@@ -8498,9 +8496,7 @@ with pkgs;
 
   gitlab-pages = callPackage ../applications/version-management/gitlab/gitlab-pages { };
 
-  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner {
-    buildGoModule = buildGo120Module;
-  };
+  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
@@ -9547,8 +9543,6 @@ with pkgs;
   jsvc = callPackage ../tools/system/jsvc { };
 
   junkie = callPackage ../tools/networking/junkie { };
-
-  just = callPackage ../development/tools/just { };
 
   go-jira = callPackage ../applications/misc/go-jira { };
 
@@ -11576,6 +11570,8 @@ with pkgs;
   };
 
   ssh-copy-id = callPackage ../tools/networking/openssh/copyid.nix { };
+
+  sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
@@ -18348,29 +18344,34 @@ with pkgs;
     buildJdk = jdk11_headless;
     buildJdkName = "java11";
     runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else gcc10StdenvCompat;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv
+      else if stdenv.cc.isGNU then gcc10Stdenv
+      else stdenv;
     bazel_self = bazel_4;
   };
 
-  bazel_5 = pin-to-gcc12-if-gcc13 (callPackage ../development/tools/build-managers/bazel/bazel_5 {
+  bazel_5 = callPackage ../development/tools/build-managers/bazel/bazel_5 {
     inherit (darwin) cctools sigtool;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv
+      else if stdenv.cc.isGNU then gcc12Stdenv
+      else stdenv;
     bazel_self = bazel_5;
-  });
+  };
 
-  bazel_6 = pin-to-gcc12-if-gcc13 (darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/bazel/bazel_6 {
+  bazel_6 = darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/bazel/bazel_6 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
-    stdenv = if stdenv.isDarwin then
-      darwin.apple_sdk_11_0.stdenv else
-      if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv
+      else if stdenv.cc.isClang then llvmPackages.stdenv
+      else if stdenv.cc.isGNU then gcc12Stdenv
+      else stdenv;
     bazel_self = bazel_6;
-  });
+  };
 
   bazel_7 = darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/bazel/bazel_7 {
     inherit (darwin) cctools sigtool;
@@ -25132,7 +25133,7 @@ with pkgs;
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
-  v8 = pin-to-gcc12-if-gcc13 (callPackage ../development/libraries/v8 (
+  v8 = callPackage ../development/libraries/v8 (
     let
       stdenv' = if stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "16"
         then overrideLibcxx llvmPackages_15.stdenv
@@ -25141,7 +25142,7 @@ with pkgs;
     {
       stdenv = if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
     }
-  ));
+  );
 
   intel-vaapi-driver = callPackage ../development/libraries/intel-vaapi-driver { };
 
@@ -26663,7 +26664,9 @@ with pkgs;
 
   azuredatastudio = callPackage ../applications/misc/azuredatastudio { };
 
-  miniflux = callPackage ../servers/miniflux { };
+  miniflux = callPackage ../servers/miniflux {
+    buildGoModule = buildGo122Module;
+  };
 
   mir = callPackage ../servers/mir { };
 

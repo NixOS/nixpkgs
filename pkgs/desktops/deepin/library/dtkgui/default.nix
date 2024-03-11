@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , qttools
@@ -16,24 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.17";
+  version = "5.6.22";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ssCVMFCE1vhucYMxXkEZV5YlFxT1JdYGqrzILhWX1XI=";
+    hash = "sha256-h3DFG6FaJXP9o9u8R31MtX3Z1+P3DrNDT8Xbd8tlI4Y=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
-
-    (fetchpatch {
-      name = "fix_svg_with_filter_attribute_rendering_exception.patch";
-      url = "https://github.com/linuxdeepin/dtkgui/commit/f2c9327eb4989ab8ea96af7560c67d1cada794de.patch";
-      hash = "sha256-lfg09tgS4vPuYachRbHdaMYKWdZZ0lP0Hxakkr9JKGs=";
-    })
   ];
 
   nativeBuildInputs = [
