@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "shapely";
   version = "2.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
