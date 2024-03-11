@@ -2884,7 +2884,6 @@ broken-packages:
   - iotransaction # failure in job https://hydra.nixos.org/build/233226259 at 2023-09-02
   - ip2location # failure in job https://hydra.nixos.org/build/233208648 at 2023-09-02
   - ip2proxy # failure in job https://hydra.nixos.org/build/233218808 at 2023-09-02
-  - ipa # failure in job https://hydra.nixos.org/build/233242228 at 2023-09-02
   - ipfs # failure in job https://hydra.nixos.org/build/233598054 at 2023-09-02
   - ipopt-hs # failure in job https://hydra.nixos.org/build/233210102 at 2023-09-02
   - ip-quoter # failure in job https://hydra.nixos.org/build/233234581 at 2023-09-02
