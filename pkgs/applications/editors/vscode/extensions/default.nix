@@ -1556,6 +1556,22 @@ let
 
       equinusocio.vsc-material-theme = callPackage ./equinusocio.vsc-material-theme { };
 
+      equinusocio.vsc-material-theme-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vsc-material-theme-icons";
+          publisher = "Equinusocio";
+          version = "3.5.0";
+          sha256 = "sha256-XqtyZVlsPaPkKB9HdigKSXjCwqXe9wzJWeRcPpS6EVM=";
+        };
+        meta = {
+          description = "Material Theme Icons, the most epic icons theme for Visual Studio Code and Material Theme.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme-icons";
+          homepage = "https://github.com/material-theme/vsc-material-theme-icons";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "prettier-vscode";
