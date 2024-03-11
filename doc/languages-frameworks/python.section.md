@@ -336,20 +336,71 @@ Python versions or modules, which is why they don't go in `python3Packages`.
 
 A distinction is made between applications and libraries, however, sometimes a
 package is used as both. In this case the package is added as a library to
-`python-packages.nix` and as an application to `all-packages.nix`. To reduce
-duplication the `toPythonApplication` can be used to convert a library to an
-application.
+`python-packages.nix` and as an application to the top-level. To reduce
+duplication the `toPythonApplication` function can be used to convert a library
+to an application.
 
-The Nix expression shall use [`buildPythonPackage`](#buildpythonpackage-function) and be called from
-`python-packages.nix`. A reference shall be created from `all-packages.nix` to
-the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
-applied to the reference:
+The Nix expression shall use [`buildPythonPackage`](#buildpythonpackage-function)
+and be called from `python-packages.nix`, as usual. A reference shall be created
+from the top-level to the attribute in `python-packages.nix`, and
+`toPythonApplication` shall be applied to that reference.
+
+At the current moment there are two methods for achieving this. Let's start with
+the legacy one.
+
+The legacy method consists in registering a reference from `all-packages.nix`
+to the attribute in `python-packages.nix`, and applying `toPythonApplication` to
+that reference. Let's take `youtube-dl` as an example:
 
 ```nix
-{
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
-}
 ```
+
+::: {.note}
+The legacy method is deprecated and should be avoided for new packages; use the
+new method instead.
+:::
+
+Now that we describe the legacy method, let's take the new one.
+
+The new method consists in registering a reference from `pkgs/by-name`
+hierarchy, in a `callPackage` fashion. Taking the above `youtube-dl` as an
+example, the reference is registered at
+`pkgs/by-name/yo/youtube-dl/package.nix`:
+
+```nix
+{ python3Packages }:
+
+with python3Packages; toPythonApplication youtube-dl
+```
+
+Sometimes, the top-level Python application requires a specific Python
+version. In such cases, do not hardcode it; instead, change the implicit default
+value of `python3Packages` to the desired Python package set, following the
+[pkgs/by-name](https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name#changing-implicit-attribute-defaults)
+documentation. This ensures consistency in the
+[`<pkg>.override](#sec-pkg-override) interface.
+
+For the sake of completeness, let's take another example: suppose `youtube-dl`
+requires Python 3.12. Then, besides the reference already registered on
+`pkgs/by-name/yo/youtube-dl/package.nix`, add the following lines at
+`pkgs/top-level/all-packages.nix`:
+
+```nix
+  youtube-dl = callPackage ../by-name/yo/youtube-dl/package.nix {
+    python3Packages = python312Packages;
+  };
+```
+
+::: {.note}
+Migration from the legacy method to the new one has the potential to bring
+changes in their respective [override](#sec-pkg-override) interfaces, therefore
+causing backward incompatibility.
+
+A bulk migration is being worked on. Manual migration is not recommended, being
+lightly encouraged if the relevant code is being worked on anyways - for
+example, in case of package refactoring or update.
+:::
 
 #### `toPythonModule` function {#topythonmodule-function}
 
