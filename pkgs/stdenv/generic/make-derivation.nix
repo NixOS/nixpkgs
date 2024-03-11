@@ -160,6 +160,8 @@ let
 
     patches ? [],
 
+    configureFlags ? [],
+
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
     doCheck ? config.doCheckByDefault or false,
@@ -464,8 +466,7 @@ let
 {
 
 # Configure Phase
-  configureFlags ? []
-, cmakeFlags ? []
+  cmakeFlags ? []
 , mesonFlags ? []
 , # Target is not included by default because most programs don't care.
   # Including it then would cause needless mass rebuilds.
@@ -551,7 +552,7 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit configureFlags configurePlatforms cmakeFlags mesonFlags __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
+    { inherit configurePlatforms cmakeFlags mesonFlags __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
