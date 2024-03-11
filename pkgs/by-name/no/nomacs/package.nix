@@ -58,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/lib
+    mkdir -p $out/{Applications,lib}
+    mv $out/nomacs.app $out/Applications/nomacs.app
     mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib
   '';
 
