@@ -39,6 +39,8 @@ let
     subtractLists
     unique
   ;
+  inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
+  inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
 
   mkDerivation =
     fnOrAttrs:
@@ -116,8 +118,7 @@ let
     else drv;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { cmakeFlags, mesonFlags }:
-  attrs@{
+  makeDerivationArgument = attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
     __structuredAttrs ? config.structuredAttrsByDefault or false,
@@ -380,54 +381,6 @@ let
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
-      cmakeFlags =
-        cmakeFlags
-        ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-          "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-        ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
-          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-        ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
-          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-        ] ++ optionals (stdenv.hostPlatform.isDarwin) [
-          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-        ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
-          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-        ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
-          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-        ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
-          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-        ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
-        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
-        ]);
-
-      mesonFlags =
-        let
-          # See https://mesonbuild.com/Reference-tables.html#cpu-families
-          cpuFamily = platform: with platform;
-            /**/ if isAarch32 then "arm"
-            else if isx86_32  then "x86"
-            else platform.uname.processor;
-
-          crossFile = builtins.toFile "cross-file.conf" ''
-            [properties]
-            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
-            needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
-
-            [host_machine]
-            system = '${stdenv.targetPlatform.parsed.kernel.name}'
-            cpu_family = '${cpuFamily stdenv.targetPlatform}'
-            cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-            endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-
-            [binaries]
-            llvm-config = 'llvm-config-native'
-            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
-          '';
-          crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ mesonFlags;
-
       inherit patches;
 
       inherit doCheck doInstallCheck;
@@ -549,13 +502,16 @@ let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit cmakeFlags mesonFlags; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
         ++ optional (__structuredAttrs || envIsExportable) "env"
         )
-    // optionalAttrs __structuredAttrs { env = checkedEnv; });
+    // optionalAttrs __structuredAttrs { env = checkedEnv; }
+    // {
+      cmakeFlags = makeCMakeFlags attrs;
+      mesonFlags = makeMesonFlags attrs;
+    });
 
   meta = checkMeta.commonMeta {
     inherit validity attrs pos;
