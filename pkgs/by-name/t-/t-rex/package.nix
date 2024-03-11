@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, gdal, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, gdal, openssl, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "t-rex";
@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ gdal openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ gdal openssl ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
     description = "Vector tile server specialized on publishing MVT tiles";

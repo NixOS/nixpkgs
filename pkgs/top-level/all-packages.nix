@@ -27236,10 +27236,6 @@ with pkgs;
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
 
-  t-rex = callPackage ../servers/geospatial/t-rex {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   tegola = callPackage ../servers/geospatial/tegola { };
 
   tile38 = callPackage ../servers/geospatial/tile38 { };
