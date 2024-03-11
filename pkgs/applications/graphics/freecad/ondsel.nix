@@ -7,6 +7,7 @@
 , ninja
 , pkg-config
 , yaml-cpp
+, requests
 }:
 let
   ondsel = freecad.overrideAttrs (finalAttrs: previousAttrs: {
@@ -28,6 +29,7 @@ let
       pkg-config
       gfortran
       yaml-cpp
+      requests
     ];
 
     postPatch = ''

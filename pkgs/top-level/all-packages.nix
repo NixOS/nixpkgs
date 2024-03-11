@@ -31685,7 +31685,8 @@ with pkgs;
       python
       pyyaml
       scipy
-      shiboken2;
+      shiboken2
+      requests;
   };
 
   ondsel = callPackage ../applications/graphics/freecad/ondsel.nix {};
