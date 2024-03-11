@@ -1,5 +1,6 @@
 { backports-functools-lru-cache
 , wcwidth
+, lib
 }:
 
 wcwidth.overridePythonAttrs(oldAttrs: {
@@ -14,4 +15,10 @@ wcwidth.overridePythonAttrs(oldAttrs: {
       https://github.com/jquast/wcwidth/pull/117#issuecomment-1946609638
   */
   disabled = false;
+
+  meta = oldAttrs.meta // {
+    /** maintainers overridden here for python2; this makes sure that python3
+        maintainers are not blamed for the breakage here. */
+    maintainers = with lib.maintainers; [ bryango ];
+  };
 })
