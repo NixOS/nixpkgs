@@ -1,4 +1,5 @@
 { gauge-unwrapped
+, gauge
 , makeWrapper
 , stdenvNoCC
 , lib
@@ -43,6 +44,8 @@ stdenvNoCC.mkDerivation {
   '';
 
   nativeBuildInputs = [ gauge-unwrapped makeWrapper xorg.lndir ];
+
+  passthru.withPlugins = f: gauge.override { plugins = f gaugePlugins; };
 
   inherit (gauge-unwrapped) meta;
 }
