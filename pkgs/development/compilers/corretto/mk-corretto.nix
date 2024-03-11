@@ -33,11 +33,23 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
   inherit pname version src;
   name = "${pname}-${version}";
 
-      # Fix "error: 'ptrauth.h' file not found"
-  env.NIX_CFLAGS_COMPILE="-I${darwin.xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers";
+  # env.NIX_DEBUG = "7";
+  #
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-int-float-conversion";
 
-
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin [ zip autoconf which xcbuild darwin.xattr darwin.stubs.setfile cups darwin.xnu ];
+  nativeBuildInputs = oldAttrs.nativeBuildInputs
+                      ++ [ jdk gradle rsync ]
+                      ++ lib.optionals stdenv.isDarwin [
+                        zip
+                        autoconf
+                        which
+                        xcbuild
+                        darwin.xattr
+                        darwin.stubs.setfile
+                        cups
+                        darwin.libobjc
+                        darwin.apple_sdk.frameworks.Foundation
+                      ];
    
 
   postPatch = ''
@@ -52,7 +64,6 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
     done
   '';
 
-
   buildPhase =
     let
       # The Linux installer is placed at linux/universal/tar whereas the MacOS
@@ -61,6 +72,15 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
         if stdenv.isDarwin then
           ":installers:mac:tar:packaging"
         else ":installers:linux:universal:tar:packageBuildResults";
+      extraConfig = builtins.concatStringsSep " " [
+        # Fix "configure: error: Invalid SDK or SYSROOT path, dependent framework headers not found"
+        "--with-xcode-path=$(xcode-select -p)"
+        # Fix error: 'new' file not found
+        "--disable-precompiled-headers"
+        # Fix missing cups
+        "--with-cups=${cups.dev}"
+      ];
+
     in
     ''
       runHook preBuild
@@ -69,12 +89,7 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
       # OS X ..." because $HOME/.gradle is not accessible.
       export GRADLE_USER_HOME=$(mktemp -d)
 
-      # Fix "configure: error: Invalid SDK or SYSROOT path, dependent framework headers not found"
-      # Fix error: 'new' file not found
-      # Fix missing cups
-      export EXTRA_CORRETTO_CONFIG_OPTIONS="--with-xcode-path=$(xcode-select -p) --disable-precompiled-headers --with-cups=${cups.dev}"
-
-      gradle -Pcorretto.extra_config="$EXTRA_CORRETTO_CONFIG_OPTIONS" --console=plain --no-daemon ${task}
+      gradle -Pcorretto.extra_config="${extraConfig}" --console=plain --no-daemon ${task}
 
       # Prepare for the installPhase so that it looks like if a normal
       # OpenJDK had been built.
