@@ -2951,6 +2951,22 @@ let
 
       ms-vscode.cpptools = callPackage ./ms-vscode.cpptools { };
 
+      ms-vscode.cpptools-extension-pack = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cpptools-extension-pack";
+          publisher = "ms-vscode";
+          version = "1.3.0";
+          sha256 = "sha256-rHST7CYCVins3fqXC+FYiS5Xgcjmi7QW7M4yFrUR04U=";
+        };
+        meta = {
+          description = "Popular extensions for C++ development in Visual Studio Code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack";
+          homepage = "https://github.com/microsoft/vscode-cpptools";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       ms-vscode.hexeditor = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "hexeditor";
