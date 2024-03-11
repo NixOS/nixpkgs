@@ -3392,6 +3392,22 @@ let
         };
       };
 
+      reloadedextensions.reloaded-cpp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "reloaded-cpp";
+          publisher = "reloadedextensions";
+          version = "0.1.9";
+          sha256 = "sha256-KQiSD18W9NnsqhRt+XM3ko70u4zX4enn3OpMt0ebViU=";
+        };
+        meta = {
+          description = "C/C++ must-have highlighter that understands many coding styles and APIs. Use with 'Reloaded Themes' extension.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=reloadedextensions.reloaded-cpp";
+          homepage = "https://github.com/kobalicek/reloaded-cpp";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       richie5um2.snake-trail = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "snake-trail";
