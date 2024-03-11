@@ -116,7 +116,7 @@ let
     else drv;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { configureFlags, configurePlatforms, cmakeFlags, mesonFlags, patches, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
+  makeDerivationArgument = { configureFlags, configurePlatforms, cmakeFlags, mesonFlags, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
@@ -157,6 +157,8 @@ let
 
     sandboxProfile ? "",
     propagatedSandboxProfile ? "",
+
+    patches ? [],
 
     # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
@@ -488,8 +490,6 @@ let
 , hardeningEnable ? []
 , hardeningDisable ? []
 
-, patches ? []
-
 , __contentAddressed ?
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
   && config.contentAddressedByDefault
@@ -551,7 +551,7 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit configureFlags configurePlatforms cmakeFlags mesonFlags patches __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
+    { inherit configureFlags configurePlatforms cmakeFlags mesonFlags __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
