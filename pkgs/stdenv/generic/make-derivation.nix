@@ -108,8 +108,15 @@ let
           makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
+  # Turn a derivation into its outPath without a string context attached.
+  # See the comment at the usage site.
+  unsafeDerivationToUntrackedOutpath = drv:
+    if isDerivation drv
+    then builtins.unsafeDiscardStringContext drv.outPath
+    else drv;
+
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { configureFlags, configurePlatforms, cmakeFlags, mesonFlags, patches, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
+  makeDerivationArgument = { configureFlags, configurePlatforms, cmakeFlags, mesonFlags, patches, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
@@ -507,13 +514,6 @@ assert attrs ? outputHash -> (
 );
 
 let
-  # Turn a derivation into its outPath without a string context attached.
-  # See the comment at the usage site.
-  unsafeDerivationToUntrackedOutpath = drv:
-    if isDerivation drv
-    then builtins.unsafeDiscardStringContext drv.outPath
-    else drv;
-
   hardeningDisable' = if any (x: x == "fortify") hardeningDisable
     # disabling fortify implies fortify3 should also be disabled
     then unique (hardeningDisable ++ [ "fortify3" ])
@@ -551,7 +551,7 @@ else let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit configureFlags configurePlatforms cmakeFlags mesonFlags patches __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
+    { inherit configureFlags configurePlatforms cmakeFlags mesonFlags patches __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
