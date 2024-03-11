@@ -2050,6 +2050,22 @@ let
         };
       };
 
+      hars.cppsnippets = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cppsnippets";
+          publisher = "hars";
+          version = "0.0.15";
+          sha256 = "sha256-KXdEKcxPclbD22aKGAKSmdpVBZP2IpQRaKfc2LDsL0U=";
+        };
+        meta = {
+          description = "Code snippets for C/C++";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=hars.CppSnippets";
+          homepage = "https://github.com/one-harsh/vscode-cpp-snippets";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       hashicorp.hcl = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "HCL";
