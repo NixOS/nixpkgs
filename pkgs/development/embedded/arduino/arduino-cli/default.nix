@@ -53,7 +53,7 @@ let
       "-s" "-w" "-X github.com/arduino/arduino-cli/version.versionString=${version}" "-X github.com/arduino/arduino-cli/version.commit=unknown"
     ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
 
-    postInstall = ''
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       export HOME="$(mktemp -d)"
       for s in {bash,zsh,fish}; do
         $out/bin/arduino-cli completion $s > completion.$s
@@ -85,6 +85,7 @@ if stdenv.isLinux then
 
     extraInstallCommands = ''
       mv $out/bin/$name $out/bin/arduino-cli
+    '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       cp -r ${pkg.outPath}/share $out/share
     '';
     passthru.pureGoPkg = pkg;
