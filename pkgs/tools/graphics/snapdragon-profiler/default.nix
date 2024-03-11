@@ -10,7 +10,6 @@
 , gtk-sharp-2_0
 , gtk2
 , libcxx
-, libcxxabi
 , coreutils
 , requireFile
 , archive ? requireFile {
@@ -42,7 +41,6 @@ stdenv.mkDerivation rec {
     gtk-sharp-2_0
     gtk2
     libcxx
-    libcxxabi
   ];
 
   installPhase = ''

@@ -116,7 +116,11 @@ rec {
       cp -rd ${lib.getLib llvmPackages.clang-unwrapped}/lib/* $out/lib
 
       cp -d ${lib.getLib llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+    ''
+    # libc++abi is contained in libcxx for LLVM12+. Remove once unpinned from LLVM11
+    + lib.optionalString (llvmPackages ? libcxxabi) ''
       cp -d ${lib.getLib llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+    '' + ''
       cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
       cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
       cp -d ${lib.getLib llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib

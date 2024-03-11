@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env.NIX_LDFLAGS = lib.optionalString stdenv.cc.isClang "-l${stdenv.cc.libcxx.cxxabi.libName}";
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   postPatch = ''

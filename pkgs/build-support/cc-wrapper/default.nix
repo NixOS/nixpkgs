@@ -543,8 +543,11 @@ stdenv.mkDerivation {
     ''
     + optionalString (libcxx.isLLVM or false) ''
       echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
-      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
+    ''
+    # can remove once LLVM9 and LLVM11 are dropped from nixpkgs
+    + optionalString (libcxx.isLLVM or false && lib.versionOlder (lib.getVersion libcxx) "12" && libcxx ? cxxabi.libName) ''
+      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-l${libcxx.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
     ''
 

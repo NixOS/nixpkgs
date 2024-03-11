@@ -152,7 +152,7 @@ let
         # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
         # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
         substituteInPlace src/llvm/lib_llvm.cr \
-          --replace '@[Link("stdc++")]' '@[Link("c++", "-l${stdenv.cc.libcxx.cxxabi.libName}")]'
+          --replace '@[Link("stdc++")]' '@[Link("c++")]'
       '';
 
       # Defaults are 4
