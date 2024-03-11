@@ -1,0 +1,87 @@
+From e130bda12537448bb531a18073f7ce5ca3a04d93 Mon Sep 17 00:00:00 2001
+From: Locochoco <ivanrwpf@gmail.com>
+Date: Mon, 11 Mar 2024 11:10:04 -0300
+Subject: [PATCH] opengl executables patch
+
+---
+ CMakeLists.txt | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9baa1e8..744d75f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -322,6 +322,10 @@ message(STATUS "Found magic_enum ${magic_enum_VERSION} in: ${magic_enum_DIR}")
+ add_library(basalt::magic_enum INTERFACE IMPORTED)
+ set_property(TARGET basalt::magic_enum PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${magic_enum_INCLUDE_DIRS})
+ 
++find_package(OpenGL REQUIRED)
++find_package(GLUT REQUIRED)
++find_package(GLEW REQUIRED)
++
+ # main library
+ add_library(basalt_internal STATIC)
+ 
+@@ -453,47 +457,47 @@ target_link_libraries(basalt basalt_internal)
+ if(NOT BASALT_BUILD_SHARED_LIBRARY_ONLY)
+ 
+ add_executable(basalt_calibrate src/calibrate.cpp src/calibration/cam_calib.cpp)
+-target_link_libraries(basalt_calibrate basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_calibrate basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} )
+ 
+ add_executable(basalt_calibrate_imu src/calibrate_imu.cpp src/calibration/cam_imu_calib.cpp)
+-target_link_libraries(basalt_calibrate_imu basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_calibrate_imu basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ 
+ add_executable(basalt_vio_sim src/vio_sim.cpp)
+-target_link_libraries(basalt_vio_sim basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_vio_sim basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ add_executable(basalt_mapper_sim src/mapper_sim.cpp)
+-target_link_libraries(basalt_mapper_sim basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_mapper_sim basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ # mapper sim native doesn't use template free interface
+ if(BASALT_INSTANTIATIONS_DOUBLE)
+   add_executable(basalt_mapper_sim_naive src/mapper_sim_naive.cpp)
+-  target_link_libraries(basalt_mapper_sim_naive basalt_internal pangolin CLI11::CLI11)
++  target_link_libraries(basalt_mapper_sim_naive basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ endif()
+ 
+ add_executable(basalt_mapper src/mapper.cpp)
+-target_link_libraries(basalt_mapper basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_mapper basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ 
+ add_executable(basalt_opt_flow src/opt_flow.cpp)
+-target_link_libraries(basalt_opt_flow basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_opt_flow basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ add_executable(basalt_vio src/vio.cpp)
+-target_link_libraries(basalt_vio basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_vio basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ add_executable(basalt_time_alignment src/time_alignment.cpp)
+-target_link_libraries(basalt_time_alignment basalt_internal pangolin CLI11::CLI11)
++target_link_libraries(basalt_time_alignment basalt_internal pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ add_executable(basalt_kitti_eval src/kitti_eval.cpp)
+-target_link_libraries(basalt_kitti_eval basalt::basalt-headers CLI11::CLI11)
++target_link_libraries(basalt_kitti_eval basalt::basalt-headers CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+ find_package(realsense2 QUIET)
+ if(realsense2_FOUND)
+   add_executable(basalt_rs_t265_record src/rs_t265_record.cpp src/device/rs_t265.cpp)
+-  target_link_libraries(basalt_rs_t265_record basalt_internal realsense2::realsense2 pangolin CLI11::CLI11)
++  target_link_libraries(basalt_rs_t265_record basalt_internal realsense2::realsense2 pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ 
+   add_executable(basalt_rs_t265_vio src/rs_t265_vio.cpp src/device/rs_t265.cpp)
+-  target_link_libraries(basalt_rs_t265_vio basalt_internal realsense2::realsense2 pangolin CLI11::CLI11)
++  target_link_libraries(basalt_rs_t265_vio basalt_internal realsense2::realsense2 pangolin CLI11::CLI11 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES})
+ endif()
+ 
+ endif(NOT BASALT_BUILD_SHARED_LIBRARY_ONLY)
+-- 
+2.43.1
+

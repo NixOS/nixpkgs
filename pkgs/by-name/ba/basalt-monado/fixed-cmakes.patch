@@ -1,0 +1,277 @@
+From ff6346a567d78a9aaa09db2043034c6034e678bd Mon Sep 17 00:00:00 2001
+From: Locochoco <ivanrwpf@gmail.com>
+Date: Sun, 10 Mar 2024 21:31:59 -0300
+Subject: [PATCH] fixed cmakes
+
+---
+ CMakeLists.txt                     |  41 +++++-----
+ thirdparty/CMakeLists.txt          | 120 -----------------------------
+ thirdparty/apriltag/CMakeLists.txt |   1 +
+ 3 files changed, 22 insertions(+), 140 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dbea255..5d58478 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,11 +2,10 @@ cmake_minimum_required(VERSION 3.10...3.18)
+ 
+ project(basalt)
+ 
+-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/" ${CMAKE_MODULE_PATH})
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ 
+ if(NOT EIGEN_ROOT)
+-  set(EIGEN_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/basalt-headers/thirdparty/eigen")
++  set(EIGEN_ROOT "${BASALT_HEADERS_SRC}/eigen")
+ endif()
+ 
+ string(TOLOWER "${PROJECT_NAME}" PROJECT_NAME_LOWERCASE)
+@@ -277,7 +276,7 @@ set(CMAKE_CXX_FLAGS "${BASALT_CXX_FLAGS} ${BASALT_MARCH_FLAGS} ${BASALT_PASSED_C
+ 
+ 
+ set(EIGEN_INCLUDE_DIR_HINTS ${EIGEN_ROOT})
+-find_package(Eigen3 3.4.0 EXACT REQUIRED MODULE)
++find_package(Eigen3 3.4.0 EXACT REQUIRED)
+ message(STATUS "Found Eigen headers in: ${EIGEN3_INCLUDE_DIR}")
+ if(NOT EIGEN3_INCLUDE_DIR MATCHES "^${EIGEN_ROOT}")
+   message(WARNING "Found Eigen headers are outside of specified EIGEN_ROOT '${EIGEN_ROOT}'")
+@@ -310,13 +309,15 @@ add_library(basalt::vit INTERFACE IMPORTED)
+ set_property(TARGET basalt::vit PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/vit)
+ target_sources(basalt::vit INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/vit/vit_implementation_helper.cpp)
+ 
+-# custom scoped cli11 target
+-add_library(basalt::cli11 INTERFACE IMPORTED)
+-set_property(TARGET basalt::cli11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/CLI11/include)
++# custom scoped CLI11::CLI11 target
++find_package(CLI11 REQUIRED)
++message(STATUS "Found CLI11::CLI11 ${CLI11_VERSION} in: ${CLI11_DIR}")
+ 
+ # custom scoped magic_enum target
++find_package(magic_enum REQUIRED)
++message(STATUS "Found magic_enum ${magic_enum_VERSION} in: ${magic_enum_DIR}")
+ add_library(basalt::magic_enum INTERFACE IMPORTED)
+-set_property(TARGET basalt::magic_enum PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/magic_enum/include)
++set_property(TARGET basalt::magic_enum PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${magic_enum_INCLUDE_DIRS})
+ 
+ # main library
+ add_library(basalt_internal STATIC)
+@@ -402,7 +403,7 @@ target_sources(basalt_internal
+ )
+ 
+ target_link_libraries(basalt_internal
+-  PUBLIC ${STD_CXX_FS} basalt::opencv basalt::basalt-headers TBB::tbb pangolin basalt::cli11 basalt::vit basalt::magic_enum
++  PUBLIC ${STD_CXX_FS} basalt::opencv basalt::basalt-headers TBB::tbb pangolin CLI11::CLI11 basalt::vit basalt::magic_enum
+   PRIVATE nlohmann::json fmt::fmt)
+ target_include_directories(basalt_internal PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ target_compile_definitions(basalt_internal PUBLIC ${BASALT_COMPILE_DEFINITIONS})
+@@ -450,47 +451,47 @@ target_link_libraries(basalt basalt_internal)
+ if(NOT BASALT_BUILD_SHARED_LIBRARY_ONLY)
+ 
+ add_executable(basalt_calibrate src/calibrate.cpp src/calibration/cam_calib.cpp)
+-target_link_libraries(basalt_calibrate basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_calibrate basalt_internal pangolin CLI11::CLI11)
+ 
+ add_executable(basalt_calibrate_imu src/calibrate_imu.cpp src/calibration/cam_imu_calib.cpp)
+-target_link_libraries(basalt_calibrate_imu basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_calibrate_imu basalt_internal pangolin CLI11::CLI11)
+ 
+ 
+ add_executable(basalt_vio_sim src/vio_sim.cpp)
+-target_link_libraries(basalt_vio_sim basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_vio_sim basalt_internal pangolin CLI11::CLI11)
+ 
+ add_executable(basalt_mapper_sim src/mapper_sim.cpp)
+-target_link_libraries(basalt_mapper_sim basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_mapper_sim basalt_internal pangolin CLI11::CLI11)
+ 
+ # mapper sim native doesn't use template free interface
+ if(BASALT_INSTANTIATIONS_DOUBLE)
+   add_executable(basalt_mapper_sim_naive src/mapper_sim_naive.cpp)
+-  target_link_libraries(basalt_mapper_sim_naive basalt_internal pangolin basalt::cli11)
++  target_link_libraries(basalt_mapper_sim_naive basalt_internal pangolin CLI11::CLI11)
+ endif()
+ 
+ add_executable(basalt_mapper src/mapper.cpp)
+-target_link_libraries(basalt_mapper basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_mapper basalt_internal pangolin CLI11::CLI11)
+ 
+ 
+ add_executable(basalt_opt_flow src/opt_flow.cpp)
+-target_link_libraries(basalt_opt_flow basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_opt_flow basalt_internal pangolin CLI11::CLI11)
+ 
+ add_executable(basalt_vio src/vio.cpp)
+-target_link_libraries(basalt_vio basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_vio basalt_internal pangolin CLI11::CLI11)
+ 
+ add_executable(basalt_time_alignment src/time_alignment.cpp)
+-target_link_libraries(basalt_time_alignment basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_time_alignment basalt_internal pangolin CLI11::CLI11)
+ 
+ add_executable(basalt_kitti_eval src/kitti_eval.cpp)
+-target_link_libraries(basalt_kitti_eval basalt::basalt-headers basalt::cli11)
++target_link_libraries(basalt_kitti_eval basalt::basalt-headers CLI11::CLI11)
+ 
+ find_package(realsense2 QUIET)
+ if(realsense2_FOUND)
+   add_executable(basalt_rs_t265_record src/rs_t265_record.cpp src/device/rs_t265.cpp)
+-  target_link_libraries(basalt_rs_t265_record basalt_internal realsense2::realsense2 pangolin basalt::cli11)
++  target_link_libraries(basalt_rs_t265_record basalt_internal realsense2::realsense2 pangolin CLI11::CLI11)
+ 
+   add_executable(basalt_rs_t265_vio src/rs_t265_vio.cpp src/device/rs_t265.cpp)
+-  target_link_libraries(basalt_rs_t265_vio basalt_internal realsense2::realsense2 pangolin basalt::cli11)
++  target_link_libraries(basalt_rs_t265_vio basalt_internal realsense2::realsense2 pangolin CLI11::CLI11)
+ endif()
+ 
+ endif(NOT BASALT_BUILD_SHARED_LIBRARY_ONLY)
+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
+index 5beecd9..c30867c 100644
+--- a/thirdparty/CMakeLists.txt
++++ b/thirdparty/CMakeLists.txt
+@@ -4,7 +4,6 @@ add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
+ set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/json/)
+ 
+ add_subdirectory(basalt-headers EXCLUDE_FROM_ALL)
+-add_subdirectory(ros EXCLUDE_FROM_ALL)
+ add_subdirectory(apriltag EXCLUDE_FROM_ALL)
+ 
+ 
+@@ -26,124 +25,5 @@ set(BUILD_PANGOLIN_FFMPEG OFF CACHE BOOL "Build support for ffmpeg video input")
+ set(EIGEN_INCLUDE_DIR "${EIGEN3_INCLUDE_DIR}")
+ set(EIGEN_INCLUDE_DIRS "${EIGEN3_INCLUDE_DIR}")
+ 
+-
+-# Hack to disable march=native in opengv
+-macro(add_definitions)
+-  if(NOT ${ARGV0} STREQUAL "-march=native")
+-    _add_definitions(${ARGN})
+-  endif()
+-endmacro()
+-add_subdirectory(opengv EXCLUDE_FROM_ALL)
+-
+-# Hack to disable CPack in Pangolin.
+-macro(include)
+-  if(NOT ${ARGV0} STREQUAL "CPack")
+-    _include(${ARGN})
+-  endif()
+-endmacro()
+-add_subdirectory(Pangolin EXCLUDE_FROM_ALL)
+-
+-
+ # fix aprilgrid
+ target_compile_options(apriltag PRIVATE "-Wno-unused-private-field")
+-
+-# fix opengv: c++17 and debug postfix
+-set_target_properties(opengv PROPERTIES
+-  CXX_STANDARD 17
+-  DEBUG_POSTFIX "")
+-
+-# fix opengv: compile options (CMAKE_CXX_FLAGS is overwritten by Opengv)
+-target_compile_options(opengv PRIVATE
+-  -Wno-unused-private-field
+-  ${BASALT_MARCH_FLAGS}
+-  "SHELL:${BASALT_PASSED_CXX_FLAGS}")
+-
+-# TODO: enable once mpark issue is fixed upstream pangolin
+-#set_target_properties(pangolin PROPERTIES
+-#  CXX_STANDARD 17)
+-
+-# fix pangolin: gcc
+-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+-  target_compile_options(pangolin PRIVATE "-Wno-implicit-fallthrough")
+-endif()
+-
+-# fix pangolin: macOS
+-if(APPLE)
+-  target_compile_options(pangolin PRIVATE "-Wno-objc-missing-super-calls")
+-endif()
+-
+-# fix pangolin: macOS >= 10.14 Mojave
+-if(APPLE AND CMAKE_SYSTEM_VERSION VERSION_GREATER_EQUAL 18.0.0)
+-  target_compile_options(pangolin PRIVATE "-Wno-deprecated-declarations")
+-
+-  if((CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0.0)
+-    target_compile_options(pangolin PRIVATE "-Wno-deprecated-copy")
+-  endif()
+-
+-endif()
+-
+-# fix pangolin: clang
+-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+-  target_compile_options(pangolin PRIVATE "-Wno-null-pointer-arithmetic")
+-endif()
+-
+-# fix pangolin: clang >= 8.0
+-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 8.0.0)
+-  target_compile_options(pangolin PRIVATE "-Wno-defaulted-function-deleted")
+-endif()
+-
+-# fix pangolin: clang >= 10.0
+-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0.0)
+-  target_compile_options(pangolin PRIVATE "-Wno-deprecated-copy")
+-endif()
+-
+-# fix pangolin: clang >= 13.0
+-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0.0)
+-  target_compile_options(pangolin PRIVATE "-Wno-unused-but-set-variable;-Wno-null-pointer-subtraction")
+-endif()
+-
+-# fix pangolin: clang >= 14.0
+-if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14.0.0)
+-  target_compile_options(pangolin PRIVATE "-Wno-unused-but-set-variable")
+-endif()
+-
+-# fix pangolin: GCC >= 9.0
+-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.0)
+-  target_compile_options(pangolin PRIVATE "-Wno-stringop-truncation;-Wno-deprecated-copy")
+-endif()
+-
+-# fix pangolin: GCC >= 10.0
+-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0)
+-  target_compile_options(pangolin PRIVATE "-Wno-parentheses")
+-endif()
+-
+-# check here the directories for the pangolin and opengv targets, and
+-# confirm that the eigen-related include dirs match.
+-foreach(_target opengv pangolin)
+-  get_target_property(_include_dirs ${_target} INTERFACE_INCLUDE_DIRECTORIES)
+-  foreach(_dir IN LISTS _include_dirs)
+-    if("${_dir}" MATCHES ".*/eigen3?(/unsupported)?$")
+-      if(NOT _dir MATCHES "^${EIGEN3_INCLUDE_DIR}.*")
+-      endif()
+-    endif()
+-  endforeach()
+-endforeach()
+-
+-# opengv and pangolin assume that eigen is found outside the source
+-# directory and thus include it in INTERFACE_INCLUDE_DIRECTORIES,
+-# which makes cmake complain that that property contains paths in the
+-# source folder. Thus, we update the property to only include these
+-# eigen paths in the "BUILD_INTERFACE" (not "INSTALL").
+-if (EIGEN3_INCLUDE_DIR MATCHES "^${CMAKE_SOURCE_DIR}.*")
+-  foreach(_target opengv pangolin)
+-    get_target_property(_include_dirs ${_target} INTERFACE_INCLUDE_DIRECTORIES)
+-    set(_include_dirs_new "")
+-    foreach(_dir IN LISTS _include_dirs)
+-      if(_dir MATCHES ".*/eigen(/unsupported)?$")
+-        string(REGEX REPLACE "(^${CMAKE_SOURCE_DIR}.*$)" "$<BUILD_INTERFACE:\\1>" _dir "${_dir}")
+-      endif()
+-      list(APPEND _include_dirs_new "${_dir}")
+-    endforeach()
+-    set_target_properties(${_target} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${_include_dirs_new}")
+-  endforeach()
+-endif()
+diff --git a/thirdparty/apriltag/CMakeLists.txt b/thirdparty/apriltag/CMakeLists.txt
+index 9c36fa8..7af2715 100644
+--- a/thirdparty/apriltag/CMakeLists.txt
++++ b/thirdparty/apriltag/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ cmake_minimum_required(VERSION 3.2...3.18)
+ 
++find_package(Sophus REQUIRED)
+ 
+ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+-- 
+2.44.1
+
