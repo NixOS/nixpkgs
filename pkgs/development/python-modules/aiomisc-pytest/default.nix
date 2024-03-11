@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiomisc-pytest";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aiomisc_pytest";
     inherit version;
-    hash = "sha256-LDeMQbB4wFdgJ95r9/vFN6fmkoXSPq9NRXONXQ3lbdM=";
+    hash = "sha256-Zja0cNFrn6mUFlZOtzAtBJ/Gn27akD59qX6p88ytD6w=";
   };
 
   nativeBuildInputs = [
