@@ -5075,6 +5075,11 @@
       fingerprint = "EE7D 158E F9E7 660E 0C33  86B2 8FC5 F7D9 0A5D 8F4D";
     }];
   };
+  doosty = {
+    name = "Doosty";
+    github = "Doosty";
+    githubId = 747588;
+  };
   donteatoreo = {
     name = "DontEatOreo";
     github = "DontEatOreo";
