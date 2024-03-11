@@ -539,10 +539,10 @@
         "src": {
             "owner": "libretro",
             "repo": "mupen64plus-libretro-nx",
-            "rev": "fa55ddca926d3c3ad2285911646919def4aa6fa3",
-            "hash": "sha256-Fn/qSQDR8FuHG9eLE0I24wUa0sdosrl6+lhnf9cD+yQ="
+            "rev": "3f794eec4dc4af2f22ecce507f2da324381d3d92",
+            "hash": "sha256-xO01TAjW8otnoU8fzmK69BufoQn3eY9BPamc3ISqBn8="
         },
-        "version": "unstable-2024-02-06"
+        "version": "unstable-2024-03-07"
     },
     "neocd": {
         "fetcher": "fetchFromGitHub",
