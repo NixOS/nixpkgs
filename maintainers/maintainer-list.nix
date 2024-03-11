@@ -5075,11 +5075,6 @@
       fingerprint = "EE7D 158E F9E7 660E 0C33  86B2 8FC5 F7D9 0A5D 8F4D";
     }];
   };
-  doosty = {
-    name = "Doosty";
-    github = "Doosty";
-    githubId = 747588;
-  };
   donteatoreo = {
     name = "DontEatOreo";
     github = "DontEatOreo";
@@ -5087,6 +5082,11 @@
     keys = [{
       fingerprint = "33CD 5C0A 673C C54D 661E  5E4C 0DB5 361B EEE5 30AB";
     }];
+  };
+  doosty = {
+    name = "Doosty";
+    github = "Doosty";
+    githubId = 747588;
   };
   doriath = {
     email = "tomasz.zurkowski@gmail.com";
