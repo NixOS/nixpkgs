@@ -3829,6 +3829,22 @@ let
         };
       };
 
+      stylelint.vscode-stylelint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-stylelint";
+          publisher = "stylelint";
+          version = "1.3.0";
+          sha256 = "sha256-JoCa2d0ayBEuCcQi3Z/90GJ4AIECVz8NCpd+i+9uMeA=";
+        };
+        meta = {
+          description = "Official Stylelint extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint";
+          homepage = "https://github.com/stylelint/vscode-stylelint";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       sumneko.lua = callPackage ./sumneko.lua { };
 
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
