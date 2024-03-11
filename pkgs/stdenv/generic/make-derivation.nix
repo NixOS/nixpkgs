@@ -109,11 +109,127 @@ let
       attrs;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { dontAddHostSuffix, outputs, strictDeps, configureFlags, configurePlatforms, doCheck, cmakeFlags, mesonFlags, dependencies, propagatedDependencies, patches, doInstallCheck, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, computedSandboxProfile, computedPropagatedSandboxProfile, propagatedSandboxProfile, sandboxProfile, computedImpureHostDeps, computedPropagatedImpureHostDeps, __propagatedImpureHostDeps, __impureHostDeps, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
+  makeDerivationArgument = { configureFlags, configurePlatforms, doCheck, cmakeFlags, mesonFlags, patches, doInstallCheck, __contentAddressed, enableParallelBuilding, hardeningDisable, hardeningEnable, enabledHardeningOptions, __darwinAllowLocalNetworking, unsafeDerivationToUntrackedOutpath }:
   attrs@{
+    separateDebugInfo ? false,
+    outputs ? [ "out" ],
     __structuredAttrs ? config.structuredAttrsByDefault or false,
+
+    # TODO(@Ericson2314): Make always true and remove / resolve #178468
+    strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform,
+
+    # These types of dependencies are all exhaustively documented in
+    # the "Specifying Dependencies" section of the "Standard
+    # Environment" chapter of the Nixpkgs manual.
+
+    # TODO(@Ericson2314): Stop using legacy dep attribute names
+
+    #                                 host offset -> target offset
+    depsBuildBuild                    ? [], # -1 -> -1
+    depsBuildBuildPropagated          ? [], # -1 -> -1
+    nativeBuildInputs                 ? [], # -1 ->  0  N.B. Legacy name
+    propagatedNativeBuildInputs       ? [], # -1 ->  0  N.B. Legacy name
+    depsBuildTarget                   ? [], # -1 ->  1
+    depsBuildTargetPropagated         ? [], # -1 ->  1
+
+    depsHostHost                      ? [], #  0 ->  0
+    depsHostHostPropagated            ? [], #  0 ->  0
+    buildInputs                       ? [], #  0 ->  1  N.B. Legacy name
+    propagatedBuildInputs             ? [], #  0 ->  1  N.B. Legacy name
+
+    depsTargetTarget                  ? [], #  1 ->  1
+    depsTargetTargetPropagated        ? [], #  1 ->  1
+
+    checkInputs                       ? [],
+    installCheckInputs                ? [],
+    nativeCheckInputs                 ? [],
+    nativeInstallCheckInputs          ? [],
+
+    __impureHostDeps ? [],
+    __propagatedImpureHostDeps ? [],
+
+    sandboxProfile ? "",
+    propagatedSandboxProfile ? "",
+
     ...
   }:
+    let
+      outputs' = outputs ++ optional separateDebugInfo' "debug";
+      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      nativeBuildInputs' = nativeBuildInputs
+        ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
+        ++ optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
+        ++ optionals doCheck nativeCheckInputs
+        ++ optionals doInstallCheck nativeInstallCheckInputs;
+      buildInputs' = buildInputs
+        ++ optionals doCheck checkInputs
+        ++ optionals doInstallCheck installCheckInputs;
+
+      checkDependencyList = checkDependencyList' [];
+      checkDependencyList' = positions: name: deps: flip imap1 deps (index: dep:
+        if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
+        else if isList dep then checkDependencyList' ([index] ++ positions) name dep
+        else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
+
+      dependencies = map (map chooseDevOutputs) [
+        [
+          (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
+          (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
+          (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
+        ]
+        [
+          (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
+          (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+        ]
+        [
+          (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
+        ]
+      ];
+      propagatedDependencies = map (map chooseDevOutputs) [
+        [
+          (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
+          (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
+          (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
+        ]
+        [
+          (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
+          (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+        ]
+        [
+          (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
+        ]
+      ];
+
+      computedSandboxProfile =
+        concatMap (input: input.__propagatedSandboxProfile or [])
+          (stdenv.extraNativeBuildInputs
+          ++ stdenv.extraBuildInputs
+          ++ concatLists dependencies);
+
+      computedPropagatedSandboxProfile =
+        concatMap (input: input.__propagatedSandboxProfile or [])
+          (concatLists propagatedDependencies);
+
+      computedImpureHostDeps =
+        unique (concatMap (input: input.__propagatedImpureHostDeps or [])
+          (stdenv.extraNativeBuildInputs
+          ++ stdenv.extraBuildInputs
+          ++ concatLists dependencies));
+
+      computedPropagatedImpureHostDeps =
+        unique (concatMap (input: input.__propagatedImpureHostDeps or [])
+          (concatLists propagatedDependencies));
+
+      noNonNativeDeps =
+        0 ==
+          builtins.length
+            (depsBuildTarget ++ depsBuildTargetPropagated
+              ++ depsHostHost ++ depsHostHostPropagated
+              ++ buildInputs ++ propagatedBuildInputs
+              ++ depsTargetTarget ++ depsTargetTargetPropagated);
+
+      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
+    in
     (removeAttrs attrs
       [
        "checkInputs" "installCheckInputs"
@@ -239,7 +355,7 @@ let
 
       inherit doCheck doInstallCheck;
 
-      inherit outputs;
+      outputs = outputs';
     } // optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
       # Provide default values for outputHashMode and outputHashAlgo because
@@ -320,35 +436,8 @@ let
 #   Explanation about derivations in general
 {
 
-# These types of dependencies are all exhaustively documented in
-# the "Specifying Dependencies" section of the "Standard
-# Environment" chapter of the Nixpkgs manual.
-
-# TODO(@Ericson2314): Stop using legacy dep attribute names
-
-#                                 host offset -> target offset
-  depsBuildBuild                    ? [] # -1 -> -1
-, depsBuildBuildPropagated          ? [] # -1 -> -1
-, nativeBuildInputs                 ? [] # -1 ->  0  N.B. Legacy name
-, propagatedNativeBuildInputs       ? [] # -1 ->  0  N.B. Legacy name
-, depsBuildTarget                   ? [] # -1 ->  1
-, depsBuildTargetPropagated         ? [] # -1 ->  1
-
-, depsHostHost                      ? [] #  0 ->  0
-, depsHostHostPropagated            ? [] #  0 ->  0
-, buildInputs                       ? [] #  0 ->  1  N.B. Legacy name
-, propagatedBuildInputs             ? [] #  0 ->  1  N.B. Legacy name
-
-, depsTargetTarget                  ? [] #  1 ->  1
-, depsTargetTargetPropagated        ? [] #  1 ->  1
-
-, checkInputs                       ? []
-, installCheckInputs                ? []
-, nativeCheckInputs                 ? []
-, nativeInstallCheckInputs          ? []
-
 # Configure Phase
-, configureFlags ? []
+  configureFlags ? []
 , cmakeFlags ? []
 , mesonFlags ? []
 , # Target is not included by default because most programs don't care.
@@ -367,9 +456,6 @@ let
 # InstallCheck phase
 , doInstallCheck ? config.doCheckByDefault or false
 
-, # TODO(@Ericson2314): Make always true and remove / resolve #178468
-  strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
-
 , enableParallelBuilding ? config.enableParallelBuildingByDefault
 
 , meta ? {}
@@ -380,13 +466,7 @@ let
       else if attrs.version or null != null
       then builtins.unsafeGetAttrPos "version" attrs
       else builtins.unsafeGetAttrPos "name" attrs)
-, separateDebugInfo ? false
-, outputs ? [ "out" ]
 , __darwinAllowLocalNetworking ? false
-, __impureHostDeps ? []
-, __propagatedImpureHostDeps ? []
-, sandboxProfile ? ""
-, propagatedSandboxProfile ? ""
 
 , hardeningEnable ? []
 , hardeningDisable ? []
@@ -422,21 +502,12 @@ let
   doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
-  outputs' = outputs ++ optional separateDebugInfo' "debug";
-
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
   unsafeDerivationToUntrackedOutpath = drv:
     if isDerivation drv
     then builtins.unsafeDiscardStringContext drv.outPath
     else drv;
-
-  noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
-                                  ++ depsHostHost ++ depsHostHostPropagated
-                                  ++ buildInputs ++ propagatedBuildInputs
-                                  ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
-  dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
 
   hardeningDisable' = if any (x: x == "fortify") hardeningDisable
     # disabling fortify implies fortify3 should also be disabled
@@ -466,11 +537,6 @@ let
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
 
-  checkDependencyList = checkDependencyList' [];
-  checkDependencyList' = positions: name: deps: flip imap1 deps (index: dep:
-    if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
-    else if isList dep then checkDependencyList' ([index] ++ positions) name dep
-    else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
@@ -478,73 +544,11 @@ then abort ("mkDerivation was called with unsupported hardening flags: " + lib.g
 else let
   doCheck = doCheck';
   doInstallCheck = doInstallCheck';
-  buildInputs' = buildInputs
-         ++ optionals doCheck checkInputs
-         ++ optionals doInstallCheck installCheckInputs;
-  nativeBuildInputs' = nativeBuildInputs
-         ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
-         ++ optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
-         ++ optionals doCheck nativeCheckInputs
-         ++ optionals doInstallCheck nativeInstallCheckInputs;
-
-  outputs = outputs';
-
-  references = nativeBuildInputs ++ buildInputs
-            ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
-
-  dependencies = map (map chooseDevOutputs) [
-    [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
-    ]
-    [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
-    ]
-    [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
-    ]
-  ];
-  propagatedDependencies = map (map chooseDevOutputs) [
-    [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
-    ]
-    [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
-    ]
-    [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
-    ]
-  ];
-
-  computedSandboxProfile =
-    concatMap (input: input.__propagatedSandboxProfile or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies);
-
-  computedPropagatedSandboxProfile =
-    concatMap (input: input.__propagatedSandboxProfile or [])
-      (concatLists propagatedDependencies);
-
-  computedImpureHostDeps =
-    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies));
-
-  computedPropagatedImpureHostDeps =
-    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-      (concatLists propagatedDependencies));
 
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit dontAddHostSuffix outputs strictDeps configureFlags configurePlatforms doCheck cmakeFlags mesonFlags dependencies propagatedDependencies patches doInstallCheck __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions computedSandboxProfile computedPropagatedSandboxProfile propagatedSandboxProfile sandboxProfile computedImpureHostDeps computedPropagatedImpureHostDeps __propagatedImpureHostDeps __impureHostDeps __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
+    { inherit configureFlags configurePlatforms doCheck cmakeFlags mesonFlags patches doInstallCheck __contentAddressed enableParallelBuilding hardeningDisable hardeningEnable enabledHardeningOptions __darwinAllowLocalNetworking unsafeDerivationToUntrackedOutpath; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
@@ -552,7 +556,11 @@ else let
         )
     // optionalAttrs __structuredAttrs { env = checkedEnv; });
 
-  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  meta = checkMeta.commonMeta {
+    inherit validity attrs pos;
+    references = attrs.nativeBuildInputs ++ attrs.buildInputs
+              ++ attrs.propagatedNativeBuildInputs ++ attrs.propagatedBuildInputs;
+  };
   validity = checkMeta.assertValidity { inherit meta attrs; };
 
   checkedEnv =
