@@ -6933,6 +6933,8 @@ with pkgs;
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
 
+  evremap = callPackage ../tools/inputmethods/evremap { };
+
   evsieve = callPackage ../tools/inputmethods/evsieve { };
 
   eyedropper = callPackage ../applications/graphics/eyedropper { };
