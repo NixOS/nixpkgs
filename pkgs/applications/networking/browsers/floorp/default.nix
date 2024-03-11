@@ -24,7 +24,6 @@
   };
 
   extraConfigureFlags = [
-    "--with-app-name=${pname}"
     "--with-app-basename=${applicationName}"
     "--with-distribution-id=one.ablaze.floorp"
     "--with-unsigned-addon-scopes=app,system"

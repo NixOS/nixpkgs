@@ -9,7 +9,6 @@ rec {
   extraPatches = [ ];
 
   extraConfigureFlags = [
-    "--with-app-name=librewolf"
     "--with-app-basename=LibreWolf"
     "--with-branding=browser/branding/librewolf"
     "--with-distribution-id=io.gitlab.librewolf-community"
