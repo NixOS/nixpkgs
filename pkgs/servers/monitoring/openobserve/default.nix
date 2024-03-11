@@ -27,7 +27,7 @@ let
     inherit src version;
     pname = "openobserve-ui";
 
-    sourceRoot = "source/web";
+    sourceRoot = "${src.name}/web";
 
     npmDepsHash = "sha256-RNUCR80ewFt9F/VHv7kXLa87h0fz0YBp+9gSOUhtrdU=";
 

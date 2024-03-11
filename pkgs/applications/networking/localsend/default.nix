@@ -13,7 +13,7 @@ let
   pname = "localsend";
   version = "1.14.0";
 
-  linux = flutter313.buildFlutterApplication {
+  linux = flutter313.buildFlutterApplication rec {
     inherit pname version;
 
     src = fetchFromGitHub {
@@ -23,7 +23,7 @@ let
       hash = "sha256-CO0uFcZnOfE31EZxRUpgtod3+1lyXPpbytHB45DEM98=";
     };
 
-    sourceRoot = "source/app";
+    sourceRoot = "${src.name}/app";
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -59,7 +59,7 @@ let
 
     passthru.updateScript = ./update.sh;
 
-    meta = meta // {
+    meta = metaCommon // {
       mainProgram = "localsend_app";
     };
   };
@@ -81,13 +81,13 @@ let
       cp -r *.app $out/Applications
     '';
 
-    meta = meta // {
+    meta = metaCommon // {
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = [ "x86_64-darwin" "aarch64-darwin" ];
     };
   };
 
-  meta = with lib; {
+  metaCommon = with lib; {
     description = "An open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
     license = licenses.mit;

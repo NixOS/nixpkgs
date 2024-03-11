@@ -10,14 +10,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt6_Charts";
+  pname = "pyqt6-charts";
   version = "6.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyQt6_Charts";
+    inherit version;
     sha256 = "sha256-FMxuXRnK6AEpUkpC+mMy0NXa2kKCqUI0Jea5rhtrxW0=";
   };
 

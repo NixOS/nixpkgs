@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-i40VpPDK991mgBdGtufMFXuQuKuvqr0qIvl7q2KXQrg=";
+    hash = "sha256-rNXzhJazOi815dhqviqtfSTM60Y/5ncKBVn2YhqcKJM=";
   };
 
   cargoLock = {

@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
 
   inherit (python3.pkgs.linien-common) src version;
 
-  sourceRoot = "source/linien-gui";
+  sourceRoot = "${src.name}/linien-gui";
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
