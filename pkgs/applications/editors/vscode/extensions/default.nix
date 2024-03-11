@@ -2984,7 +2984,6 @@ let
           homepage = "https://github.com/voronianski/oceanic-next-color-scheme";
           license = lib.licenses.unlicense;
           maintainers = [ lib.maintainers.themaxmur ];
-          platforms = [ "x86_64-linux" "aarch64-darwin" ];
         };
       };
 
