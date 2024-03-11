@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     systemd
   ];
 
-  sourceRoot = "source/gui";
+  sourceRoot = "${src.name}/gui";
 
   postInstall = ''
     install -Dm0644 ./ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg

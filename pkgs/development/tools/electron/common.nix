@@ -34,9 +34,11 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     yarnLock = (fetchdep info.deps."src/electron") + "/yarn.lock";
     sha256 = info.electron_yarn_hash;
   };
-  npmDeps = fetchNpmDeps {
+  npmDeps = fetchNpmDeps rec {
     src = fetchdep info.deps."src";
-    sourceRoot = "source/third_party/node";
+    # Assume that the fetcher always unpack the source,
+    # based on update.py
+    sourceRoot = "${src.name}/third_party/node";
     hash = info.chromium_npm_hash;
   };
 

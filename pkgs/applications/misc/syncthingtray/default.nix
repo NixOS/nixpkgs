@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , qtbase
 , qtsvg
+, qtwayland
 , qtwebengine
 , qtdeclarative
 , extra-cmake-modules
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qtbase
     qtsvg
+    qtwayland
     cpp-utilities
     qtutilities
     boost
