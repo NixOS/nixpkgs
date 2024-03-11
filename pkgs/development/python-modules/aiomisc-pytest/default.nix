@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "aiomisc-pytest";
   version = "1.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pytest integration for aiomisc";
-    homepage = "https://github.com/aiokitchen/aiomisc";
+    homepage = "https://github.com/aiokitchen/aiomisc-pytest";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
