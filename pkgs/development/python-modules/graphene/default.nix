@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--benchmark-disable"
+    "-W ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   pythonImportsCheck = [
