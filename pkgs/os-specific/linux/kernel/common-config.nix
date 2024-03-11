@@ -1011,6 +1011,9 @@ let
 
       # Set system time from RTC on startup and resume
       RTC_HCTOSYS = option yes;
+
+      # Expose watchdog information in sysfs
+      WATCHDOG_SYSFS = yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
