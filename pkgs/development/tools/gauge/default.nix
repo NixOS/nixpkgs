@@ -26,6 +26,6 @@ buildGoModule rec {
     mainProgram = "gauge";
     homepage = "https://gauge.org";
     license = licenses.asl20;
-    maintainers = [ maintainers.vdemeester ];
+    maintainers = with maintainers; [ vdemeester marie ];
   };
 }
