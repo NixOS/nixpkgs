@@ -1986,6 +1986,22 @@ let
         };
       };
 
+      hashicorp.hcl = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "HCL";
+          publisher = "HashiCorp";
+          version = "0.3.2";
+          sha256 = "sha256-cxF3knYY29PvT3rkRS8SGxMn9vzt56wwBXpk2PqO0mo=";
+        };
+        meta = {
+          description = "HashiCorp HCL syntax";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=HashiCorp.HCL";
+          homepage = "https://github.com/hashicorp/vscode-hcl";
+          license = lib.licenses.mpl20;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       hashicorp.terraform = callPackage ./hashicorp.terraform { };
 
       haskell.haskell = buildVscodeMarketplaceExtension {
