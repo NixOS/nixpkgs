@@ -2601,6 +2601,22 @@ let
         meta.license = lib.licenses.mit;
       };
 
+      mathiasfrohlich.kotlin = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Kotlin";
+          publisher = "mathiasfrohlich";
+          version = "1.7.1";
+          sha256 = "sha256-MuAlX6cdYMLYRX2sLnaxWzdNPcZ4G0Fdf04fmnzQKH4=";
+        };
+        meta = {
+          description = "Kotlin language support for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mathiasfrohlich.Kotlin";
+          homepage = "https://github.com/mathiasfrohlich/vscode-kotlin";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       matthewpi.caddyfile-support = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "caddyfile-support";
