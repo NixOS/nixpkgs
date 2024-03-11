@@ -4287,6 +4287,22 @@ let
         };
       };
 
+      visualstudioexptteam.intellicode-api-usage-examples = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "intellicode-api-usage-examples";
+          publisher = "VisualStudioExptTeam";
+          version = "0.2.8";
+          sha256 = "sha256-aXAS3QX+mrX0kJqf1LUsvguqRxxC0o+jj1bKQteXPNA=";
+        };
+        meta = {
+          description = "See relevant code examples from GitHub for over 100K different APIs right in your editor.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.intellicode-api-usage-examples";
+          homepage = "https://github.com/MicrosoftDocs/intellicode";
+          license = lib.licenses.cc-by-40;
+          maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
       vlanguage.vscode-vlang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-vlang";
