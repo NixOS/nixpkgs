@@ -11,12 +11,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "CairoSVG";
+  pname = "cairosvg";
   version = "2.7.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "CairoSVG";
+    inherit version;
     hash = "sha256-rE3HwdOLOhVxfbJjOjo4MBLgvmZMcnyRFjfmr2pJKTw=";
   };
 
