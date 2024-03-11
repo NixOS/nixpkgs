@@ -116,7 +116,7 @@ let
     else drv;
 
   # Subset of argument, matching mkDerivation below
-  makeDerivationArgument = { cmakeFlags, mesonFlags, __darwinAllowLocalNetworking }:
+  makeDerivationArgument = { cmakeFlags, mesonFlags }:
   attrs@{
     separateDebugInfo ? false,
     outputs ? [ "out" ],
@@ -157,6 +157,7 @@ let
 
     __impureHostDeps ? [],
     __propagatedImpureHostDeps ? [],
+    __darwinAllowLocalNetworking ? false,
 
     sandboxProfile ? "",
     propagatedSandboxProfile ? "",
@@ -524,7 +525,6 @@ let
       else if attrs.version or null != null
       then builtins.unsafeGetAttrPos "version" attrs
       else builtins.unsafeGetAttrPos "name" attrs)
-, __darwinAllowLocalNetworking ? false
 
 # Experimental.  For simple packages mostly just works,
 # but for anything complex, be prepared to debug if enabling.
@@ -549,7 +549,7 @@ let
   envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg = makeDerivationArgument
-    { inherit cmakeFlags mesonFlags __darwinAllowLocalNetworking; }
+    { inherit cmakeFlags mesonFlags; }
     (removeAttrs
       attrs
         (["meta" "passthru" "pos"]
