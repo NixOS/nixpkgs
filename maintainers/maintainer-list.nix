@@ -3651,6 +3651,13 @@
     githubId = 46303707;
     name = "Christian Lütke-Stetzkamp";
   };
+  clot27 = {
+    name = "Clot";
+    email = "adityayadav11082@protonmail.com";
+    github = "clot27";
+    githubId = 69784758;
+    matrix = "@clot27:matrix.org";
+  };
   clr-cera = {
     email = "clrcera05@gmail.com";
     github = "clr-cera";
