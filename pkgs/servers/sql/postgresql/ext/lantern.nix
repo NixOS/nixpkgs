@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lantern";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-B8Dpt/VmD/QzNzfRSlhijnVEd/EuTOP+MI/qERcIbOU=";
+    hash = "sha256-UP3txEBBJV/iOOBDVpRCrsoiAp6QEOHTomlLmbeTQdU=";
     fetchSubmodules = true;
   };
 
