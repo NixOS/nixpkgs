@@ -259,6 +259,12 @@ with pkgs;
 
   anime-downloader = callPackage ../applications/video/anime-downloader { };
 
+  ### TO-PYTHON-APPLICATION
+
+  circus = callPackage ../by-name/ci/circus/package.nix {
+    python3Packages = python310Packages;
+  };
+
   aocd = with python3Packages; toPythonApplication aocd;
 
   aesfix = callPackage ../tools/security/aesfix { };
@@ -6758,8 +6764,6 @@ with pkgs;
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
   circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
-
-  circus = with python310Packages; toPythonApplication circus;
 
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
