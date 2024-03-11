@@ -907,11 +907,11 @@ mapAliases ({
   pinentry = pinentry-all // {
     curses = pinentry-curses;
     emacs = pinentry-emacs;
-    gnome2 = pinentry-gnome3;
+    gnome3 = pinentry-gnome3;
     gtk2 = pinentry-gtk2;
     qt = pinentry-qt;
     tty = pinentry-tty;
-    flavors = [ "curses" "emacs" "gnome2" "gtk2" "qt" "tty" ];
+    flavors = [ "curses" "emacs" "gnome3" "gtk2" "qt" "tty" ];
   }; # added 2024-01-15
   pinentry_curses = throw "'pinentry_curses' has been renamed to/replaced by 'pinentry-curses'"; # Converted to throw 2023-09-10
   pinentry_emacs = throw "'pinentry_emacs' has been renamed to/replaced by 'pinentry-emacs'"; # Converted to throw 2023-09-10
