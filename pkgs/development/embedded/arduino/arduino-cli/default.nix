@@ -55,10 +55,10 @@ let
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       export HOME="$(mktemp -d)"
-      for s in {bash,zsh,fish}; do
-        $out/bin/arduino-cli completion $s > completion.$s
-        installShellCompletion --cmd arduino-cli --$s completion.$s
-      done
+      installShellCompletion --cmd arduino-cli \
+        --bash <($out/bin/arduino-cli completion bash) \
+        --zsh <($out/bin/arduino-cli completion zsh) \
+        --fish <($out/bin/arduino-cli completion fish)
       unset HOME
     '';
 
