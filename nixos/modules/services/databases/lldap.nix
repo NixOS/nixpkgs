@@ -31,6 +31,30 @@ in
       '';
     };
 
+    user = mkOption {
+      type = types.str;
+      default = "lldap";
+      description = lib.mdDoc ''
+        User under which lldap should run (default lldap).
+      '';
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "lldap";
+      description = lib.mdDoc ''
+        Group under which lldap should run (default lldap).
+      '';
+    };
+
+    dynamicUser = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        System User or dynamic systemd User.
+      '';
+    };
+
     settings = mkOption {
       description = mdDoc ''
         Free-form settings written directly to the `lldap_config.toml` file.
@@ -102,6 +126,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    users = lib.mkIf (! cfg.dynamicUser) {
+       groups."${cfg.group}" = {};
+       users."${cfg.user}" = {
+           isSystemUser = true;
+           group = cfg.group;
+       };
+    };
+
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
       wants = [ "network-online.target" ];
@@ -111,9 +143,9 @@ in
         ExecStart = "${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}";
         StateDirectory = "lldap";
         WorkingDirectory = "%S/lldap";
-        User = "lldap";
-        Group = "lldap";
-        DynamicUser = true;
+        User = cfg.user;
+        Group = cfg.group;
+        DynamicUser = cfg.dynamicUser;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
       };
       inherit (cfg) environment;
