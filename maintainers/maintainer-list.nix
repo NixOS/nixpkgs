@@ -19227,6 +19227,12 @@
     githubId = 3105057;
     name = "Jan Beinke";
   };
+  themaxmur = {
+    name = "Maxim Muravev";
+    email = "muravjev.mak@yandex.ru";
+    github = "TheMaxMur";
+    githubId = 31189199;
+  };
   thenonameguy = {
     email = "thenonameguy24@gmail.com";
     name = "Krisztian Szabo";
