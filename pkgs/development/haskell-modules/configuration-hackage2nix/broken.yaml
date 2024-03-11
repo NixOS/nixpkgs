@@ -4749,7 +4749,6 @@ broken-packages:
   - SableCC2Hs # failure in job https://hydra.nixos.org/build/233213351 at 2023-09-02
   - safe-buffer-monad # failure in job https://hydra.nixos.org/build/233192108 at 2023-09-02
   - safe-coerce # failure in job https://hydra.nixos.org/build/233244289 at 2023-09-02
-  - safe-coloured-text-gen # failure in job https://hydra.nixos.org/build/233225146 at 2023-09-02
   - safe-coloured-text-layout # failure in job https://hydra.nixos.org/build/233247031 at 2023-09-02
   - safecopy-migrate # failure in job https://hydra.nixos.org/build/233224574 at 2023-09-02
   - safecopy-store # failure in job https://hydra.nixos.org/build/233227973 at 2023-09-02
