@@ -3,6 +3,7 @@
 , buildPythonPackage
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , gtest
 , nbval
 , numpy
@@ -31,6 +32,15 @@ in buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
   };
+
+  patches = [
+    ./1.15.0-CVE-2024-27318.patch
+    (fetchpatch {
+      name = "CVE-2024-27319.patch";
+      url = "https://github.com/onnx/onnx/commit/08a399ba75a805b7813ab8936b91d0e274b08287.patch";
+      hash = "sha256-9X92N9i/hpQjDGe4I/C+FwUcTUTtP2Nf7+pcTA2sXoA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
