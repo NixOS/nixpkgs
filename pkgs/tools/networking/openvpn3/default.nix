@@ -25,20 +25,20 @@ let
   openvpn3-core = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3";
-    rev = "7590cb109349809b948e8edaeecabdbfe24e4b17";
-    hash = "sha256-S9D/FQa7HYj0FJnyb5dCrtgTH9Nf2nvtyp/VHiebq7I=";
+    rev = "release/3.8.4";
+    hash = "sha256-hn9gOU1ojTUSD3t+JZecztWsvLFN8BNNJL3Ihi/gTPE=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "openvpn3";
   # also update openvpn3-core
-  version = "20";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     rev = "v${version}";
-    hash = "sha256-Weyb+rcx04mpDdcL7Qt4O+PvPf5MLPAP/Uy+8qoNXbQ=";
+    hash = "sha256-Vee1p6WzdAmQ5/FG6+rimc9LW2UIAf78naUD/udEhJ0=";
   };
 
   postPatch = ''
