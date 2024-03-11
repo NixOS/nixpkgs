@@ -1,9 +1,8 @@
 set -euo pipefail
 
-export PATH=$tools/bin
-
-cp -R $tools $out
-chmod -R u+w $out
+echo Unpacking the bootstrap tools... >&2
+mkdir $out
+tar xf "$1" -C $out
 
 updateInstallName() {
   local path="$1"
