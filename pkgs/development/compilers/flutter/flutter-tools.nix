@@ -18,7 +18,7 @@ buildDartApplication.override { inherit dart; } rec {
   dartOutputType = "jit-snapshot";
 
   src = flutterSrc;
-  sourceRoot = "source/packages/flutter_tools";
+  sourceRoot = "${src.name}/packages/flutter_tools";
   postUnpack = ''chmod -R u+w "$NIX_BUILD_TOP/source"'';
 
   inherit patches;

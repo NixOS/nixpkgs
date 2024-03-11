@@ -25,7 +25,7 @@ mkDerivation rec {
     sha256 = "sha256-G4KlYAjOT1UV29vcX7Q8dMTj0BX0rsJcLtK2MQag5nU=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   qmakeFlags = [ "PREFIX=${placeholder "out"}" "CONFIG+=unixvlc" ];
 

@@ -996,7 +996,7 @@
       spectre_oxi = rustPlatform.buildRustPackage {
         pname = "spectre_oxi";
         inherit (old) version src;
-        sourceRoot = "source/spectre_oxi";
+        sourceRoot = "${old.src.name}/spectre_oxi";
 
         cargoHash = "sha256-gCGuD5kipgfR0Le8npNmyBxNsUq0PavXvKkxkiPx13E=";
 

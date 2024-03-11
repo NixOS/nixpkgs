@@ -36,7 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-kRR715Vnt9ZAmxuWvtH0z093crH0JFrEKPtbjO3QMRc=";
   };
 
-  sourceRoot = "source/openllm-core";
+  sourceRoot = "${src.name}/openllm-core";
 
   nativeBuildInputs = [
     pythonRelaxDepsHook

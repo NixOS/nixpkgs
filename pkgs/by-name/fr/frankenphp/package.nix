@@ -35,7 +35,7 @@ in buildGoModule rec {
     hash = "sha256-tQ35GZuw7Ag1YfmOUarVY45yk4yugNLJetEV4m2w3GE=";
   };
 
-  sourceRoot = "source/caddy";
+  sourceRoot = "${src.name}/caddy";
 
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366

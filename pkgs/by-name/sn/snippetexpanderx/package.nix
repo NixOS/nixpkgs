@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   pname = "snippetexpanderx";
 
-  sourceRoot = "source/cmd/snippetexpanderx";
+  sourceRoot = "${src.name}/cmd/snippetexpanderx";
 
   nativeBuildInputs = [
     pkg-config

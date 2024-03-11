@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   version = "2.7.0";
   format = "other";
 
-  sourceRoot = "source/source";
+  sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
