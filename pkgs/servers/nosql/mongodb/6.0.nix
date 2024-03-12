@@ -10,7 +10,6 @@ buildMongoDB {
   sha256 = "sha256-BD3XrTdv4sCa3h37o1A2s3/R0R8zHiR59a4pY0RxLGU=";
   patches = [
     # Patches a bug that it couldn't build MongoDB 6.0 on gcc 13 because a include in ctype.h was missing
-    # PR at https://github.com/NixOS/nixpkgs/pull/293556
     ./fix-gcc-13-ctype-6_0.patch
 
     (fetchpatch {
