@@ -3,13 +3,13 @@
 buildKodiAddon rec {
   pname = "orftvthek";
   namespace = "plugin.video.orftvthek";
-  version = "0.12.6";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "s0faking";
     repo = namespace;
     rev = version;
-    sha256 = "sha256-r18vQ+2TSeflwByEAX33vIZG5qIGneraf5rLBugl5BU=";
+    sha256 = "sha256-bqGY9PPukn5/HJa3OqU5NM+ReeDJdVn60jXh1+2Qef8=";
   };
 
   propagatedBuildInputs = [
