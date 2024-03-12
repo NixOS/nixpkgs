@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , brotli
+, hatchling
 , certifi
 , ffmpeg
 , rtmpdump
@@ -9,7 +10,9 @@
 , pycryptodomex
 , websockets
 , mutagen
+, requests
 , secretstorage
+, urllib3
 , atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
@@ -22,19 +25,27 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2023.12.30";
+  version = "2024.3.10";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oRhi5XchsKDwiD3+taTXm6ITotTEXhiA6f1w+OZXDDg=";
+    inherit version;
+    pname = "yt_dlp";
+    hash = "sha256-bnTLFKadvrhyyO9OC4u+0u6EbsYzUTzzEkp0wfrtwHs=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     brotli
     certifi
     mutagen
     pycryptodomex
+    requests
     secretstorage  # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
+    urllib3
     websockets
   ];
 
@@ -48,7 +59,7 @@ buildPythonPackage rec {
         ++ lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump;
-    in lib.optionalString (packagesToBinPath != [])
+    in lib.optionals (packagesToBinPath != [])
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [
