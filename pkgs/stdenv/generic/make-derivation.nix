@@ -130,6 +130,15 @@ let
     "zerocallusedregs"
   ];
 
+  removedOrReplacedAttrs = [
+    "checkInputs" "installCheckInputs"
+    "nativeCheckInputs" "nativeInstallCheckInputs"
+    "__contentAddressed"
+    "__darwinAllowLocalNetworking"
+    "__impureHostDeps" "__propagatedImpureHostDeps"
+    "sandboxProfile" "propagatedSandboxProfile"
+  ];
+
   # Subset of argument, matching mkDerivation below
   makeDerivationArgument = attrs@{
     separateDebugInfo ? false,
@@ -291,14 +300,7 @@ let
 
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
     in
-    (removeAttrs attrs
-      [
-       "checkInputs" "installCheckInputs"
-       "nativeCheckInputs" "nativeInstallCheckInputs"
-       "__contentAddressed"
-       "__darwinAllowLocalNetworking"
-       "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"])
+    (removeAttrs attrs removedOrReplacedAttrs)
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
