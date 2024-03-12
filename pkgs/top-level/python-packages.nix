@@ -16673,6 +16673,8 @@ self: super: with self; {
 
   xml-marshaller = callPackage ../development/python-modules/xml-marshaller { };
 
+  xmod = callPackage ../development/python-modules/xmod { };
+
   xmodem = callPackage ../development/python-modules/xmodem { };
 
   xnatpy = callPackage ../development/python-modules/xnatpy { };
