@@ -364,6 +364,67 @@ have a predefined type and string generator already declared under
     and returning a set with [CDN](https://github.com/dzikoysk/cdn)-specific
     attributes `type` and `generate` as specified [below](#pkgs-formats-result).
 
+`pkgs.formats.kdl` { `version` }
+
+:   A function taking a version number (which must be exactly `1`, for future extensibility)
+    and returning a set with [KDL](https://kdl.dev/)-specific attributes `type`,
+    `lib` and `generate` as specified [below](#pkgs-formats-result).
+
+    `lib` is a set containing the functions `node` and `typed`, which are helper
+    functions intended to facilitate generating the required structure for pkgs.formats.kdl
+    in an ergonomic way.
+
+    Their signatures are as follows:
+
+    `node`:
+
+    ```nix
+    name: type: arguments: properties: children: { inherit name type arguments properties children; };
+    ```
+
+    `typed`:
+
+    ```nix
+    type: value: { inherit type value; };
+    ```
+
+    This allows writing the KDL node
+
+    ```kdl
+    name "arg1" (special-type)"arg2" prop=1 {
+      child
+    }
+    ```
+
+    as
+
+    ```nix
+    (node "name" null [ "arg1" (typed "special-type" "arg2") ] { prop = 1; } [
+      (node "child" null [ ] { } [ ])
+    ])
+    ```
+
+    instead of
+
+    ```nix
+    {
+      name = "name";
+      arguments = [
+        "arg1"
+        {
+          type = "special-type";
+          value = "arg2";
+        }
+      ];
+      properties = { prop = 1; };
+      children = [
+        {
+          name = "child";
+        }
+      ];
+    }
+    ```
+
 `pkgs.formats.elixirConf { elixir ? pkgs.elixir }`
 
 :   A function taking an attribute set with values

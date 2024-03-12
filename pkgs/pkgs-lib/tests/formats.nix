@@ -923,4 +923,44 @@ runBuildTests {
       </root>
     '';
   };
+
+  kdlAtoms = shouldPass {
+    format = formats.kdl {
+      version = 1;
+    };
+    input = [
+      {
+        name = "foo";
+        type = "bar";
+        arguments = [
+          null
+          false
+          true
+          123
+          3.141
+          "foo"
+        ];
+        properties = {
+          null = null;
+          false = false;
+          true = true;
+          int = 10;
+          float = 3.141;
+          path = ./testfile;
+          str = "foo";
+        };
+        children = [
+          {
+            name = "nested";
+          }
+        ];
+      }
+    ];
+    expected = ''
+      (bar)foo null false true 123 3.141 "foo" false=false float=3.141 int=10 null=null path="${./testfile}" str="foo" true=true {
+          nested {
+          }
+      }
+    '';
+  };
 }

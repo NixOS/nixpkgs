@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/AgathaSorceress/json2kdl";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-        feathecutie
-        kiara
+      feathecutie
+      kiara
     ];
   };
 }
