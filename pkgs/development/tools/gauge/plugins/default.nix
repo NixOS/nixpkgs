@@ -6,4 +6,5 @@ in {
   dotnet = callPackage ./dotnet { };
   html-report = callPackage ./html-report { };
   java = callPackage ./java { };
+  ruby = callPackage ./ruby { };
 })
