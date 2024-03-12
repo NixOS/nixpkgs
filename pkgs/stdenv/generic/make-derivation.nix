@@ -133,6 +133,13 @@ let
     "sandboxProfile" "propagatedSandboxProfile"
   ];
 
+  # Turn a derivation into its outPath without a string context attached.
+  # See the comment at the usage site.
+  unsafeDerivationToUntrackedOutpath = drv:
+    if isDerivation drv
+    then builtins.unsafeDiscardStringContext drv.outPath
+    else drv;
+
   makeDerivationArgument =
 
 
@@ -241,13 +248,6 @@ let
 
   separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
   outputs' = outputs ++ optional separateDebugInfo' "debug";
-
-  # Turn a derivation into its outPath without a string context attached.
-  # See the comment at the usage site.
-  unsafeDerivationToUntrackedOutpath = drv:
-    if isDerivation drv
-    then builtins.unsafeDiscardStringContext drv.outPath
-    else drv;
 
   noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                   ++ depsHostHost ++ depsHostHostPropagated
