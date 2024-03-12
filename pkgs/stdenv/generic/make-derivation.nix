@@ -18,7 +18,6 @@ let
     extendDerivation
     filter
     findFirst
-    flip
     getDev
     head
     imap1
@@ -261,10 +260,13 @@ let
   erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
 
   checkDependencyList = checkDependencyList' [];
-  checkDependencyList' = positions: name: deps: flip imap1 deps (index: dep:
-    if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
-    else if isList dep then checkDependencyList' ([index] ++ positions) name dep
-    else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
+  checkDependencyList' = positions: name: deps:
+    imap1
+      (index: dep:
+        if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
+        else if isList dep then checkDependencyList' ([index] ++ positions) name dep
+        else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}")
+      deps;
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
