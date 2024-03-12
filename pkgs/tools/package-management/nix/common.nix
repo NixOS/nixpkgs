@@ -42,6 +42,7 @@ in
 , docbook5
 , editline
 , flex
+, git
 , gnutar
 , gtest
 , gzip
@@ -54,6 +55,7 @@ in
 , libxml2
 , libxslt
 , lowdown
+, man
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
@@ -140,6 +142,11 @@ self = stdenv.mkDerivation {
     libseccomp
   ] ++ lib.optionals withAWS [
     aws-sdk-cpp
+  ];
+
+  installCheckInputs = lib.optionals atLeast221 [
+    git
+    man
   ];
 
   propagatedBuildInputs = [
