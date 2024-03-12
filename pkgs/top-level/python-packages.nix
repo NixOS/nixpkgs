@@ -2873,6 +2873,8 @@ self: super: with self; {
 
   copier = callPackage ../development/python-modules/copier { };
 
+  copier-template-tester = callPackage ../development/python-modules/copier-template-tester { };
+
   copykitten = callPackage ../development/python-modules/copykitten { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
