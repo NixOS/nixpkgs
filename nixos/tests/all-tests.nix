@@ -686,6 +686,7 @@ in {
   pgbouncer = handleTest ./pgbouncer.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
+  pgvecto-rs = handleTest ./pgvecto-rs.nix {};
   phosh = handleTest ./phosh.nix {};
   photoprism = handleTest ./photoprism.nix {};
   php = handleTest ./php {};

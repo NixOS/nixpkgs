@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  sourceRoot = "source/openllm-client";
+  sourceRoot = "${src.name}/openllm-client";
 
   postPatch = ''
     substituteInPlace pyproject.toml \

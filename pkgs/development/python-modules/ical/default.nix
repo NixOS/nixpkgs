@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "7.0.0";
+  version = "7.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "ical";
     rev = "refs/tags/${version}";
-    hash = "sha256-S/6zyUFXSWcnnLNSwz1smovSyodhKeRVbT9lj7+KLWo=";
+    hash = "sha256-kvZZfmrE42uoB9v0PuXopH3g9Cf0hwLkCvaNi6CGX8M=";
   };
 
   nativeBuildInputs = [

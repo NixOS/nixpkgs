@@ -14,21 +14,21 @@
 
 buildPythonPackage rec {
   pname = "aiopvpc";
-  version = "4.2.2";
-  format = "pyproject";
+  version = "4.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "azogue";
-    repo = pname;
+    repo = "aiopvpc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k02lNjFjOcMfHa1jLJlMFUOOVrdTrACNoEXDSZ693K8=";
+    hash = "sha256-8CNmrE3EMFg/bCrdI+K/8f0MRzKtGI74ILFMuSg1Ivo=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      " --cov --cov-report term --cov-report html" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov --cov-report term --cov-report html" ""
   '';
 
   nativeBuildInputs = [

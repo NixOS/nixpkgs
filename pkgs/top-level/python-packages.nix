@@ -2618,6 +2618,8 @@ self: super: with self; {
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
 
+  daff = callPackage ../development/python-modules/daff { };
+
   daiquiri = callPackage ../development/python-modules/daiquiri { };
 
   dalle-mini = callPackage ../development/python-modules/dalle-mini { };
@@ -5742,7 +5744,7 @@ self: super: with self; {
 
   ipwhois = callPackage ../development/python-modules/ipwhois { };
 
-  ipy = callPackage ../development/python-modules/IPy { };
+  ipy = callPackage ../development/python-modules/ipy { };
 
   ipycanvas = callPackage ../development/python-modules/ipycanvas { };
 
@@ -11317,7 +11319,7 @@ self: super: with self; {
 
   pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix { };
 
-  pyqt6-charts = callPackage ../development/python-modules/pyqt6-charts.nix { };
+  pyqt6-charts = callPackage ../development/python-modules/pyqt6-charts { };
 
   pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix { };
 
@@ -15033,6 +15035,8 @@ self: super: with self; {
   tubeup = callPackage ../development/python-modules/tubeup { };
 
   turnt = callPackage ../development/python-modules/turnt { };
+
+  tuya-device-sharing-sdk = callPackage ../development/python-modules/tuya-device-sharing-sdk { };
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
 

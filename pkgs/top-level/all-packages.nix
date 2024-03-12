@@ -18190,10 +18190,6 @@ with pkgs;
 
   pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
 
-  rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp {
-    nix = nixVersions.nix_2_15;
-  };
-
   ruff-lsp = python3Packages.callPackage ../development/tools/language-servers/ruff-lsp { };
 
   rune-languageserver = callPackage ../development/tools/language-servers/rune-languageserver { };
@@ -18341,18 +18337,6 @@ with pkgs;
   bandit = with python3Packages; toPythonApplication bandit;
 
   bazel = bazel_6;
-
-  bazel_4 = callPackage ../development/tools/build-managers/bazel/bazel_4 {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk11_headless;
-    buildJdkName = "java11";
-    runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv
-      else if stdenv.cc.isGNU then gcc10Stdenv
-      else stdenv;
-    bazel_self = bazel_4;
-  };
 
   bazel_5 = callPackage ../development/tools/build-managers/bazel/bazel_5 {
     inherit (darwin) cctools sigtool;
@@ -26935,8 +26919,6 @@ with pkgs;
 
   redstore = callPackage ../servers/http/redstore { };
 
-  reproxy = callPackage ../servers/reproxy { };
-
   repro-get = callPackage ../tools/package-management/repro-get { };
 
   restic = callPackage ../tools/backup/restic { };
@@ -27029,7 +27011,7 @@ with pkgs;
 
   smcroute = callPackage ../servers/smcroute { };
 
-  snipe-it = callPackage ../servers/web-apps/snipe-it {
+  snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {
     php = php81;
   };
 
@@ -37719,7 +37701,9 @@ with pkgs;
 
   pacvim = callPackage ../games/pacvim { };
 
-  papermc = callPackage ../games/papermc { };
+  papermcServers = callPackages ../games/papermc { };
+
+  papermc = papermcServers.papermc;
 
   path-of-building = qt6Packages.callPackage ../games/path-of-building {};
 
