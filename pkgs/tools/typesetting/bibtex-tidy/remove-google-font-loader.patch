@@ -1,0 +1,52 @@
+diff --git a/build.ts b/build.ts
+index ae4e350..3498ae7 100644
+--- a/build.ts
++++ b/build.ts
+@@ -312,7 +312,6 @@ async function buildWebBundle() {
+ 		target: ['esnext'],
+ 		plugins: [
+ 			sveltePlugin({ preprocess: autoPreprocess() }),
+-			googleFontPlugin,
+ 			regexpuPlugin,
+ 		],
+ 	});
+@@ -344,7 +343,6 @@ async function serveWeb() {
+ 				preprocess: autoPreprocess(),
+ 				compilerOptions: { enableSourcemap: true },
+ 			}),
+-			googleFontPlugin,
+ 		],
+ 	});
+ 	const server = await ctx.serve({ servedir: WEB_PATH });
+@@ -375,31 +373,6 @@ const regexpuPlugin: Plugin = {
+ 	},
+ };
+ 
+-// Downloads google fonts and injects them as base64 urls into bundle css
+-const googleFontPlugin: Plugin = {
+-	name: 'google-font-loader',
+-	setup(build) {
+-		build.onResolve({ filter: /^https?:\/\/fonts\./ }, (args) => ({
+-			path: args.path,
+-			namespace: 'http-url',
+-		}));
+-		build.onLoad(
+-			{ filter: /.*/, namespace: 'http-url' },
+-			async (args): Promise<OnLoadResult> => {
+-				const res = await fetch(args.path, {
+-					headers: {
+-						// ensures google responds with woff2 fonts
+-						'User-Agent': 'Mozilla/5.0 Firefox/90.0',
+-					},
+-				});
+-				const contents = Buffer.from(await res.arrayBuffer());
+-				const loader = args.path.endsWith('.woff2') ? 'dataurl' : 'css';
+-				return { contents, loader };
+-			}
+-		);
+-	},
+-};
+-
+ /**
+  * swc converts js syntax to support older browsers. ESBuild can kinda do this
+  * but only for more recent browsers. swc is also far easier to configure than

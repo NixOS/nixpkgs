@@ -1,0 +1,107 @@
+From 5330b6af9f832af59aa5c61d9ef6971053a8e709 Mon Sep 17 00:00:00 2001
+From: Jonathan Ringer <jonringer117@gmail.com>
+Date: Mon, 9 Nov 2020 10:24:35 -0800
+Subject: [PATCH] CPython: Don't use ldconfig
+
+---
+ Lib/ctypes/util.py | 77 ++--------------------------------------------
+ 1 file changed, 2 insertions(+), 75 deletions(-)
+
+diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
+index 0c2510e161..7fb98af308 100644
+--- a/Lib/ctypes/util.py
++++ b/Lib/ctypes/util.py
+@@ -100,53 +100,7 @@ def _is_elf(filename):
+             return thefile.read(4) == elf_header
+ 
+     def _findLib_gcc(name):
+-        # Run GCC's linker with the -t (aka --trace) option and examine the
+-        # library name it prints out. The GCC command will fail because we
+-        # haven't supplied a proper program with main(), but that does not
+-        # matter.
+-        expr = os.fsencode(r'[^\(\)\s]*lib%s\.[^\(\)\s]*' % re.escape(name))
+-
+-        c_compiler = shutil.which('gcc')
+-        if not c_compiler:
+-            c_compiler = shutil.which('cc')
+-        if not c_compiler:
+-            # No C compiler available, give up
+-            return None
+-
+-        temp = tempfile.NamedTemporaryFile()
+-        try:
+-            args = [c_compiler, '-Wl,-t', '-o', temp.name, '-l' + name]
+-
+-            env = dict(os.environ)
+-            env['LC_ALL'] = 'C'
+-            env['LANG'] = 'C'
+-            try:
+-                proc = subprocess.Popen(args,
+-                                        stdout=subprocess.PIPE,
+-                                        stderr=subprocess.STDOUT,
+-                                        env=env)
+-            except OSError:  # E.g. bad executable
+-                return None
+-            with proc:
+-                trace = proc.stdout.read()
+-        finally:
+-            try:
+-                temp.close()
+-            except FileNotFoundError:
+-                # Raised if the file was already removed, which is the normal
+-                # behaviour of GCC if linking fails
+-                pass
+-        res = re.findall(expr, trace)
+-        if not res:
+-            return None
+-
+-        for file in res:
+-            # Check if the given file is an elf file: gcc can report
+-            # some files that are linker scripts and not actual
+-            # shared objects. See bpo-41976 for more details
+-            if not _is_elf(file):
+-                continue
+-            return os.fsdecode(file)
++        return None
+ 
+ 
+     if sys.platform == "sunos5":
+@@ -268,34 +222,7 @@ def find_library(name, is64 = False):
+     else:
+ 
+         def _findSoname_ldconfig(name):
+-            import struct
+-            if struct.calcsize('l') == 4:
+-                machine = os.uname().machine + '-32'
+-            else:
+-                machine = os.uname().machine + '-64'
+-            mach_map = {
+-                'x86_64-64': 'libc6,x86-64',
+-                'ppc64-64': 'libc6,64bit',
+-                'sparc64-64': 'libc6,64bit',
+-                's390x-64': 'libc6,64bit',
+-                'ia64-64': 'libc6,IA-64',
+-                }
+-            abi_type = mach_map.get(machine, 'libc6')
+-
+-            # XXX assuming GLIBC's ldconfig (with option -p)
+-            regex = r'\s+(lib%s\.[^\s]+)\s+\(%s'
+-            regex = os.fsencode(regex % (re.escape(name), abi_type))
+-            try:
+-                with subprocess.Popen(['/sbin/ldconfig', '-p'],
+-                                      stdin=subprocess.DEVNULL,
+-                                      stderr=subprocess.DEVNULL,
+-                                      stdout=subprocess.PIPE,
+-                                      env={'LC_ALL': 'C', 'LANG': 'C'}) as p:
+-                    res = re.search(regex, p.stdout.read())
+-                    if res:
+-                        return os.fsdecode(res.group(1))
+-            except OSError:
+-                pass
++            return None
+ 
+         def _findLib_ld(name):
+             # See issue #9998 for why this is needed
+-- 
+2.33.1
+

@@ -1,0 +1,43 @@
+diff --git a/makefile b/makefile
+--- a/makefile
++++ b/makefile
+@@ -86,10 +86,6 @@ install-common:
+ 	install -m 0755 -D -T $(SOURCEDIR)/stranglevk.sh $(DESTDIR)$(bindir)/stranglevk
+ 	install -m 0644 -D -T $(SOURCEDIR)/vulkan/libstrangle_vk.json $(DESTDIR)$(datarootdir)/vulkan/implicit_layer.d/libstrangle_vk.json
+ 
+-install-ld: ld
+-	install -m 0644 -D -T $(BUILDDIR)/libstrangle.conf $(DESTDIR)/etc/ld.so.conf.d/libstrangle.conf
+-	if [ -z "$(DESTDIR)" ]; then ldconfig; fi
+-
+ install-32: 32-bit
+ 	install -m 0755 -D -T $(BUILDDIR)/libstrangle32.so $(DESTDIR)$(LIB32_PATH)/libstrangle.so
+ 	install -m 0755 -D -T $(BUILDDIR)/libstrangle32_nodlsym.so $(DESTDIR)$(LIB32_PATH)/libstrangle_nodlsym.so
+@@ -109,8 +105,7 @@ install: \
+ 	all \
+ 	install-common \
+ 	install-32 \
+-	install-64 \
+-	install-ld
++	install-64
+ 
+ clean:
+ 	rm -f $(BUILDDIR)/libstrangle64.so
+diff --git a/src/strangle.sh b/src/strangle.sh
+--- a/src/strangle.sh
++++ b/src/strangle.sh
+@@ -130,6 +130,5 @@ if [ "$STRANGLE_VKONLY" != "1" ]; then
+ 	fi
+ fi
+ 
+-# Execute the strangled program under a clean environment
+ # pass through the FPS and overriden LD_PRELOAD environment variables
+-exec env ENABLE_VK_LAYER_TORKEL104_libstrangle=1 LD_PRELOAD="${LD_PRELOAD}" "$@"
++ENABLE_VK_LAYER_TORKEL104_libstrangle=1 XDG_DATA_DIRS="${XDG_DATA_DIRS}${XDG_DATA_DIRS:+:}@out@/share" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}${LD_LIBRARY_PATH:+:}@out@/lib/libstrangle/lib64:@out@/lib/libstrangle/lib32" LD_PRELOAD="${LD_PRELOAD}" exec "$@"
+diff --git a/src/stranglevk.sh b/src/stranglevk.sh
+--- a/src/stranglevk.sh
++++ b/src/stranglevk.sh
+@@ -1,3 +1,3 @@
+ #!/bin/sh
+
+-ENABLE_VK_LAYER_TORKEL104_libstrangle=1 STRANGLE_VKONLY=1 strangle "$@"
++ENABLE_VK_LAYER_TORKEL104_libstrangle=1 STRANGLE_VKONLY=1 @out@/bin/strangle "$@"

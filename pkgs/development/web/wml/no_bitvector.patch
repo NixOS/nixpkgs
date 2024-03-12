@@ -1,0 +1,10 @@
+--- a/wml_common/Makefile.in	2014-12-17 00:28:25.156736048 +0100
++++ b/wml_common/Makefile.in	2014-12-17 00:28:30.501817958 +0100
+@@ -45,7 +45,6 @@
+      have_gd=0
+ 
+ SUBDIRS = \
+-     bitvector \
+      filepathconvert \
+      gd \
+      getoptlong \

@@ -1,0 +1,43 @@
+--- a/src/modules/include/module_common_types_public.h
++++ b/src/modules/include/module_common_types_public.h
+@@ -11,6 +11,7 @@
+ #ifndef MODULES_INCLUDE_MODULE_COMMON_TYPES_PUBLIC_H_
+ #define MODULES_INCLUDE_MODULE_COMMON_TYPES_PUBLIC_H_
+ 
++#include <cstdint>
+ #include <limits>
+ 
+ #include "absl/types/optional.h"
+diff --git a/src/common_video/h265/h265_pps_parser.h b/src/common_video/h265/h265_pps_parser.h
+index 28c95ea9..790b0b73 100644
+--- a/src/common_video/h265/h265_pps_parser.h
++++ b/src/common_video/h265/h265_pps_parser.h
+@@ -13,6 +13,8 @@
+ 
+ #include "absl/types/optional.h"
+ 
++#include <stdint.h>
++
+ namespace rtc {
+ class BitBuffer;
+ }
+--- a/src/rtc_base/third_party/base64/base64.h
++++ b/src/rtc_base/third_party/base64/base64.h
+@@ -11,6 +11,7 @@
+ #ifndef RTC_BASE_THIRD_PARTY_BASE64_BASE64_H_
+ #define RTC_BASE_THIRD_PARTY_BASE64_BASE64_H_
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+
+--- a/src/modules/audio_processing/transient/file_utils.h
++++ b/src/modules/audio_processing/transient/file_utils.h
+@@ -11,6 +11,7 @@
+ #ifndef MODULES_AUDIO_PROCESSING_TRANSIENT_FILE_UTILS_H_
+ #define MODULES_AUDIO_PROCESSING_TRANSIENT_FILE_UTILS_H_
+ 
++#include <stdint.h>
+ #include <string.h>
+ 
+ #include "rtc_base/system/file_wrapper.h"

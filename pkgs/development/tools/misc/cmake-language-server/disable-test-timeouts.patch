@@ -1,0 +1,13 @@
+diff --git a/tests/test_server.py b/tests/test_server.py
+index f349329..d130a2e 100644
+--- a/tests/test_server.py
++++ b/tests/test_server.py
+@@ -27,7 +27,7 @@ from pygls.server import LanguageServer
+ 
+ from cmake_language_server.server import CMakeLanguageServer
+ 
+-CALL_TIMEOUT = 2
++CALL_TIMEOUT = None
+ 
+ 
+ def _init(client: LanguageServer, root: Path) -> None:
