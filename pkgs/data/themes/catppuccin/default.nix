@@ -84,8 +84,8 @@ let
       name = "plymouth";
       owner = "catppuccin";
       repo = "plymouth";
-      rev = "d4105cf336599653783c34c4a2d6ca8c93f9281c";
-      hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
+      rev = "67759fbe15eb9490d096ef8014d9f92fc5748fe7";
+      hash = "sha256-IzoyVOi44Uay7DTfzR9RdRLSjORsdBM4pPrgeXk5YMI=";
     };
 
     qt5ct = fetchFromGitHub {
