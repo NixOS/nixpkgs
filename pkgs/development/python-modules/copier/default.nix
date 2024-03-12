@@ -1,6 +1,6 @@
 { lib, git, python3, fetchFromGitHub }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "copier";
   version = "9.1.0";
   format = "pyproject";

@@ -1791,8 +1791,6 @@ with pkgs;
 
   fscan = callPackage ../tools/security/fscan { };
 
-  copier = callPackage ../tools/misc/copier { };
-
   gabutdm = callPackage ../applications/networking/gabutdm { };
 
   gamemode = callPackage ../tools/games/gamemode {
