@@ -2865,6 +2865,8 @@ self: super: with self; {
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
+  corallium = callPackage ../development/python-modules/corallium { };
+
   coreapi = callPackage ../development/python-modules/coreapi { };
 
   coredis = callPackage ../development/python-modules/coredis { };
