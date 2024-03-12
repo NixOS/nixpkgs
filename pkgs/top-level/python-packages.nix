@@ -3633,6 +3633,8 @@ self: super: with self; {
 
   editdistance-s = callPackage ../development/python-modules/editdistance-s { };
 
+  editor = callPackage ../development/python-modules/editor { };
+
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
   edk2-pytool-library = callPackage ../development/python-modules/edk2-pytool-library { };
