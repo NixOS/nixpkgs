@@ -60,8 +60,8 @@ let
       name = "k9s";
       owner = "catppuccin";
       repo = "k9s";
-      rev = "516f44dd1a6680357cb30d96f7e656b653aa5059";
-      hash = "sha256-PtBJRBNbLkj7D2ko7ebpEjbfK9Ywjs7zbE+Y8FQVEfA=";
+      rev = "590a762110ad4b6ceff274265f2fe174c576ce96";
+      hash = "sha256-EBDciL3F6xVFXvND+5duT+OiVDWKkFMWbOOSruQ0lus=";
     };
 
     kvantum = fetchFromGitHub {
@@ -174,7 +174,8 @@ stdenvNoCC.mkDerivation {
 
   '' + lib.optionalString (lib.elem "k9s" themeList) ''
     mkdir -p $out/k9s
-    cp "${sources.k9s}/dist/${variant}.yml" "$out/k9s/"
+    cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s/"
+    cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s/"
 
   '' + lib.optionalString (lib.elem "kvantum" themeList) ''
     mkdir -p $out/share/Kvantum
