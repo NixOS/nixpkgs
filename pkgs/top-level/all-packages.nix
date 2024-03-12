@@ -11990,6 +11990,7 @@ with pkgs;
     pinentry-gtk2
     pinentry-gnome3
     pinentry-qt
+    pinentry-tty
     pinentry-all;
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
