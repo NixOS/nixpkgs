@@ -14419,6 +14419,8 @@ self: super: with self; {
 
   tcxreader = callPackage ../development/python-modules/tcxreader { };
 
+  tdir = callPackage ../development/python-modules/tdir { };
+
   teamcity-messages = callPackage ../development/python-modules/teamcity-messages { };
 
   telegram = callPackage ../development/python-modules/telegram { };
