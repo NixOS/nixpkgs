@@ -84,6 +84,7 @@ buildPythonPackage rec {
     [
       cmake
       ninja
+      setuptools
     ]
     ++ lib.optionals withDocs [
       git
@@ -125,7 +126,6 @@ buildPythonPackage rec {
       jinja2
       numpy
       pyopengl
-      setuptools
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic
