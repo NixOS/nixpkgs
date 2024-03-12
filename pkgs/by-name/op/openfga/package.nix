@@ -6,7 +6,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "openfga";
-    repo = pname;
+    repo = "openfga";
     rev = "v${version}";
     sha256 = "sha256-lqAoIOnizfvZm/NjGeinXzoci+ykmzdFtLDGeNoi97c=";
   };
