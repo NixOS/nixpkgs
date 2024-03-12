@@ -7094,6 +7094,8 @@ with pkgs;
 
   certstrap = callPackage ../tools/security/certstrap { };
 
+  cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
+
   cfssl = callPackage ../tools/security/cfssl { };
 
   cfs-zen-tweaks = callPackage ../os-specific/linux/cfs-zen-tweaks { };
@@ -19987,7 +19989,9 @@ with pkgs;
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
-  terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
+  terraform-ls = callPackage ../development/tools/misc/terraform-ls {
+    buildGoModule = buildGo122Module;
+  };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
@@ -27232,10 +27236,6 @@ with pkgs;
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
 
-  t-rex = callPackage ../servers/geospatial/t-rex {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   tegola = callPackage ../servers/geospatial/tegola { };
 
   tile38 = callPackage ../servers/geospatial/tile38 { };
@@ -33617,8 +33617,6 @@ with pkgs;
     webkitgtk = webkitgtk_6_0;
   };
 
-  nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus { };
-
   nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell { };
@@ -34881,10 +34879,6 @@ with pkgs;
   spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
 
   spotify-tray = callPackage ../applications/misc/spotify-tray { };
-
-  spotify-tui = callPackage ../applications/audio/spotify-tui {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
-  };
 
   sptlrx = callPackage ../applications/audio/sptlrx { };
 

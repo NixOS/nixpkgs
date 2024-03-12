@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lynis";
-  version = "3.0.9";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "CISOfy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Qf5YVvsw4o2ZS3KjrHPJt8+iPr7G97egdDRN+peL8eU=";
+    sha256 = "sha256-NdGq/sItJIjLX+7qKIwKpaZKqS/0PNFSO9H4Hp5umVk=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
