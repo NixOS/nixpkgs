@@ -8,4 +8,5 @@ in {
   java = callPackage ./java { };
   js = callPackage ./js { };
   ruby = callPackage ./ruby { };
+  go = callPackage ./go { };
 })
