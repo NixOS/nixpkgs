@@ -19,9 +19,16 @@ with lib.lists;
 with lib.types;
 with lib.attrsets;
 with lib.strings;
-with lib.systems.inspect.predicates;
 
 let
+  inherit (lib.systems.inspect.predicates)
+    isAarch32
+    isBigEndian
+    isDarwin
+    isLinux
+    isPower64
+    isWindows
+    ;
   inherit (lib.options) mergeOneOption;
 
   setTypes = type:
