@@ -1,18 +1,36 @@
 { lib }:
 
 let
-  inherit (lib.trivial)
-    isFunction
+  inherit (builtins)
+    div
+    fromTOML
+    getEnv
     isInt
-    functionArgs
     pathExists
-    release
-    setFunctionArgs
-    toBaseDigits
-    version
-    versionSuffix
-    warn;
-in {
+    readFile
+    sub
+    trace
+    ;
+
+  inherit (lib.lists)
+    elem
+    foldl'
+    foldr
+    reverseList
+    subtractLists
+    ;
+
+  inherit (lib.sources)
+    commitIdFromGitRepo
+    pathIsGitRepo
+    ;
+
+  inherit (lib.strings)
+    concatMapStrings
+    concatStringsSep
+    fileContents
+    fromJSON
+    ;
 
   ## Simple (higher order) functions
 
@@ -70,7 +88,7 @@ in {
      of the next function, and the last function returns the
      final value.
   */
-  pipe = builtins.foldl' (x: f: f x);
+  pipe = foldl' (x: f: f x);
 
   # note please don’t add a function like `compose = flip pipe`.
   # This would confuse users, because the order of the functions
@@ -96,7 +114,7 @@ in {
   and = x: y: x && y;
 
   /* bitwise “not” */
-  bitNot = builtins.sub (-1);
+  bitNot = sub (-1);
 
   /* Convert a boolean to a string.
 
@@ -146,20 +164,13 @@ in {
     # Argument to check for null before passing it to `f`
     a: if a == null then a else f a;
 
-  # Pull in some builtins not included elsewhere.
-  inherit (builtins)
-    pathExists readFile isBool
-    isInt isFloat add sub lessThan
-    seq deepSeq genericClosure
-    bitAnd bitOr bitXor;
-
   ## nixpkgs version strings
 
   /* Returns the current full nixpkgs version number. */
   version = release + versionSuffix;
 
   /* Returns the current nixpkgs release number as string. */
-  release = lib.strings.fileContents ./.version;
+  release = fileContents ./.version;
 
   /* The latest release that is supported, at the time of release branch-off,
      if applicable.
@@ -183,7 +194,7 @@ in {
        Set it to the upcoming release, matching the nixpkgs/.version file.
     */
     release:
-      release <= lib.trivial.oldestSupportedRelease;
+      release <= oldestSupportedRelease;
 
   /* Returns the current nixpkgs release code name.
 
@@ -196,7 +207,7 @@ in {
   versionSuffix =
     let suffixFile = ../.version-suffix;
     in if pathExists suffixFile
-    then lib.strings.fileContents suffixFile
+    then fileContents suffixFile
     else "pre-git";
 
   /* Attempts to return the the current revision of nixpkgs and
@@ -210,9 +221,9 @@ in {
     let
       revisionFile = "${toString ./..}/.git-revision";
       gitRepo      = "${toString ./..}/.git";
-    in if lib.pathIsGitRepo gitRepo
-       then lib.commitIdFromGitRepo gitRepo
-       else if lib.pathExists revisionFile then lib.fileContents revisionFile
+    in if pathIsGitRepo gitRepo
+       then commitIdFromGitRepo gitRepo
+       else if pathExists revisionFile then fileContents revisionFile
        else default;
 
   nixpkgsVersion = warn "lib.nixpkgsVersion is a deprecated alias of lib.version." version;
@@ -222,7 +233,7 @@ in {
 
      Type: inNixShell :: bool
   */
-  inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
+  inNixShell = getEnv "IN_NIX_SHELL" != "";
 
   /* Determine whether the function is being called from inside pure-eval mode
      by seeing whether `builtins` contains `currentSystem`. If not, we must be in
@@ -248,7 +259,7 @@ in {
        mod 1 10
        => 1
   */
-  mod = base: int: base - (int * (builtins.div base int));
+  mod = base: int: base - (int * (div base int));
 
 
   ## Comparisons
@@ -305,14 +316,14 @@ in {
      Type: importJSON :: path -> any
   */
   importJSON = path:
-    builtins.fromJSON (builtins.readFile path);
+    fromJSON (readFile path);
 
   /* Reads a TOML file.
 
      Type: importTOML :: path -> any
   */
   importTOML = path:
-    builtins.fromTOML (builtins.readFile path);
+    fromTOML (readFile path);
 
   ## Warnings
 
@@ -340,9 +351,9 @@ in {
     Type: string -> a -> a
   */
   warn =
-    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
-    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
-    else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+    if elem (getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
+    then msg: trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+    else msg: trace "[1;31mwarning: ${msg}[0m";
 
   /*
     Like warn, but only warn when the first argument is `true`.
@@ -399,14 +410,14 @@ in {
   */
   checkListOfEnum = msg: valid: given:
     let
-      unexpected = lib.subtractLists valid given;
+      unexpected = subtractLists valid given;
     in
-      lib.throwIfNot (unexpected == [])
-        "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
+      throwIfNot (unexpected == [])
+        "${msg}: ${concatStringsSep ", " (map toString unexpected)} unexpected; valid ones: ${concatStringsSep ", " (map toString valid)}";
 
-  info = msg: builtins.trace "INFO: ${msg}";
+  info = msg: trace "INFO: ${msg}";
 
-  showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
+  showWarnings = warnings: res: foldr (w: x: warn w x) res warnings;
 
   ## Function annotations
 
@@ -518,7 +529,7 @@ in {
       if d < 10
       then toString d
       else hexDigits.${toString d};
-  in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+  in i: concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:
@@ -545,5 +556,73 @@ in {
       assert (isInt i);
       assert (base >= 2);
       assert (i >= 0);
-      lib.reverseList (go i);
+      reverseList (go i);
+
+
+in
+
+# Everything in this attrset is the public interface of the file.
+{
+  inherit (builtins)
+    add
+    bitAnd
+    bitOr
+    bitXor
+    deepSeq
+    genericClosure
+    isBool
+    isFloat
+    lessThan
+    seq
+    ;
+
+  inherit
+    and
+    bitNot
+    boolToString
+    checkListOfEnum
+    codeName
+    compare
+    concat
+    const
+    flip
+    functionArgs
+    id
+    importJSON
+    importTOML
+    inNixShell
+    inPureEvalMode
+    info
+    isFunction
+    isInOldestRelease
+    isInt
+    mapNullable
+    max
+    mergeAttrs
+    min
+    mirrorFunctionArgs
+    mod
+    nixpkgsVersion
+    oldestSupportedRelease
+    or
+    pathExists
+    pipe
+    readFile
+    release
+    revisionWithDefault
+    setFunctionArgs
+    showWarnings
+    splitByAndCompare
+    sub
+    throwIf
+    throwIfNot
+    toBaseDigits
+    toFunction
+    toHexString
+    version
+    versionSuffix
+    warn
+    warnIf
+    warnIfNot
+    ;
 }
