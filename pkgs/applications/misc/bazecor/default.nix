@@ -14,7 +14,7 @@ let
     postExtract = ''
       substituteInPlace \
         $out/usr/lib/${pname}/resources/app/.webpack/main/index.js \
-        --replace \
+        --replace-fail \
           'checkUdev=()=>{try{if(c.default.existsSync(f))return c.default.readFileSync(f,"utf-8").trim()===l.trim()}catch(e){console.error(e)}return!1}' \
           'checkUdev=()=>{return 1}'
     '';
@@ -45,7 +45,7 @@ in appimageTools.wrapType2 {
        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
 
     substituteInPlace $out/share/applications/Bazecor.desktop \
-      --replace 'Exec=Bazecor' 'Exec=${pname}'
+      --replace-fail 'Exec=Bazecor' 'Exec=${pname}'
   '';
 
   meta = {
