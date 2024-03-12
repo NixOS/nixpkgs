@@ -20,8 +20,8 @@ let
       name = "bat";
       owner = "catppuccin";
       repo = "bat";
-      rev = "ba4d16880d63e656acced2b7d4e034e4a93f74b1";
-      hash = "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=";
+      rev = "2bafe4454d8db28491e9087ff3a1382c336e7d27";
+      hash = "sha256-yHt3oIjUnljARaihalcWSNldtaJfVDfmfiecYfbzGs0=";
     };
 
     bottom = fetchFromGitHub {
@@ -135,7 +135,7 @@ lib.checkListOfEnum "${pname}: themes" validThemes themeList
 
 stdenvNoCC.mkDerivation {
   inherit pname;
-  version = "unstable-2023-10-09";
+  version = "unstable-2024-03-12";
 
   srcs = selectedSources;
 
@@ -154,7 +154,7 @@ stdenvNoCC.mkDerivation {
 
   '' + lib.optionalString (lib.elem "bat" themeList) ''
     mkdir -p $out/bat
-    cp "${sources.bat}/Catppuccin-${variant}.tmTheme" "$out/bat/"
+    cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
 
   '' + lib.optionalString (lib.elem "btop" themeList) ''
     mkdir -p $out/btop
