@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     libstartup_notification libX11 pcre2 libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
+  ] ++ lib.optionals doCheck [
     xorgserver xvfb-run xdotool xorg.setxkbmap xorg.xrandr which
   ];
 
