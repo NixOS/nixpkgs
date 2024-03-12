@@ -2432,6 +2432,12 @@
     github = "blaggacao";
     githubId = 7548295;
   };
+  blakesmith = {
+    name = "Blake Smith";
+    email = "blakesmith0@gmail.com";
+    github = "blakesmith";
+    githubId = 44368;
+  };
   blankparticle = {
     name = "BlankParticle";
     email = "blankparticle@gmail.com";
