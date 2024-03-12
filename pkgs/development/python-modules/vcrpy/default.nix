@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "5.1.0";
+  version = "6.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u/FTLyYYoE8RvOKpmvOpZHoyyICVcpP/keCl8Ye2s9I=";
+    hash = "sha256-ngI/7n+JK6oLvaL32nyKxRFlwcbjj/hohoOhKkvekng=";
   };
 
   propagatedBuildInputs = [

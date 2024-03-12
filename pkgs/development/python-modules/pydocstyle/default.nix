@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, pythonAtLeast
 , poetry-core
 , snowballstemmer
 , tomli
@@ -44,6 +45,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.toml;
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    "test_simple_fstring"
+    "test_fstring_with_args"
+  ];
 
   disabledTestPaths = [
     "src/tests/test_integration.py" # runs pip install

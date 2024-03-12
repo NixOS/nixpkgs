@@ -47,6 +47,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ networkx numpy scipy ];
   nativeCheckInputs = [ matplotlib nose pytestCheckHook ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   pythonImportsCheck = [ "skfuzzy" ];
 
   meta = with lib; {

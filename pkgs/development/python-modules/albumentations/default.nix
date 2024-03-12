@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZJ+KFIlveIs1bsxwCDxPuRvtq0/04rOa0heoJOGJ3tA=";
+    hash = "sha256-VWxTqVi9Js5IT1RQWNdVr1XbE6gLiu9pRrh63LOKVUU=";
   };
 
   nativeBuildInputs = [

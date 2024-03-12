@@ -23,18 +23,19 @@
 , pickleshare
 , pytest-asyncio
 , pytestCheckHook
+, pytest_7
 , testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.22.1";
+  version = "8.22.2";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ocb578B5+xm/sPF+7pA5eP6aKQsbgtaBlsZBzst26iI=";
+    hash = "sha256-LcqtkEn5BW8f72NRTxdsfUH5MNqnjQW4KhdiAoGPLBQ=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pickleshare
     pytest-asyncio
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     testpath
   ];
 

@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.12.2";
+  version = "0.12.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "CryptoParser";
     inherit version;
-    hash = "sha256-SG7I/uOWZapjZ5zGW1HndGqaYc2k2aRWf3IWlartIJE=";
+    hash = "sha256-1A0VEpUPsYtEu2aT+ldt/Z/PtV8lvD+9jSx75yGB6Ao=";
   };
 
   postPatch = ''

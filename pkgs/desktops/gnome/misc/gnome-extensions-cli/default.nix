@@ -1,11 +1,12 @@
 { lib
 , fetchPypi
 , buildPythonApplication
+, pythonRelaxDepsHook
 , poetry-core
 , colorama
 , more-itertools
 , packaging
-, pydantic
+, pydantic_1
 , requests
 , pygobject3
 , gobject-introspection
@@ -27,13 +28,18 @@ buildPythonApplication rec {
     gobject-introspection
     poetry-core
     wrapGAppsNoGuiHook
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "more-itertools"
   ];
 
   propagatedBuildInputs = [
     colorama
     more-itertools
     packaging
-    pydantic
+    pydantic_1
     requests
     pygobject3
   ];

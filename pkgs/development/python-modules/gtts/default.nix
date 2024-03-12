@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , beautifulsoup4
 , click
 , gtts-token
@@ -25,7 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-CCxD73fpHGsO4zSifWLQtgDkbPvPEnA2357umhOCNoI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     beautifulsoup4
     click
     gtts-token

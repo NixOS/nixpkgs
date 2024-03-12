@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "trio-asyncio";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "trio_asyncio";
     inherit version;
-    hash = "sha256-fKJLIaGxes3mV1LWkziGuiQoTlL0srDe/k6o7YpjSmI=";
+    hash = "sha256-msSKQ8vhZxtBIh7HNq4M2qc0yKOErGNiCWLBXXse3WQ=";
   };
 
   postPatch = ''

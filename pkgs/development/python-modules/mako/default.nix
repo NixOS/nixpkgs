@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Mako";
     inherit version;
-    hash = "sha256-46nTiP0A6HBD7b6HkvRYgKwBFOnErcafbpv7LFXjsRs=";
+    hash = "sha256-KgyK1/YnQnGzu3Rn3TfPnMbatLwZy2mk7xBmlALeaY4=";
   };
 
   nativeBuildInputs = [

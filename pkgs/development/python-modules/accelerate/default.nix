@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, pytest_7
 , setuptools
 , numpy
 , packaging
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.26.1";
+  version = "0.27.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-l0RSBVAa2u3bGDLbg/e/1UP5WO8z2+YBqzwdviAcMA0=";
+    hash = "sha256-7rnI8UXyAql8fLMKoSRrWzVw5CnyYVE2o6dJOzSgWxw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -46,7 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     evaluate
     parameterized
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     transformers
   ];
   preCheck = ''

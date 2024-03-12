@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sigstore-rekor-types";
-  version = "0.0.11";
+  version = "0.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = "sigstore-rekor-types";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oOFdRiDp9USc3A+aaPExprEO2i/RERNahiyi2kVpkns=";
+    hash = "sha256-B6u2YbtZtgjYJoWL2DfgP7LL20onNaaTTFbC6JIA4bE=";
   };
 
   nativeBuildInputs = [

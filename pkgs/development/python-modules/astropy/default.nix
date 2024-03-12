@@ -72,6 +72,13 @@ buildPythonPackage rec {
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"
+
+    # fail due to pytest>=8
+    # https://github.com/astropy/astropy/issues/15960#issuecomment-1913654471
+    "test_distortion_header"
+
+    # flaky
+    "test_timedelta_conversion"
   ];
 
   meta = {

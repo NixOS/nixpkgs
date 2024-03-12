@@ -54,7 +54,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "23.10.0";
+  version = "24.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-mHhHoHkKLFlxl2E2huJ4T9VBZ986VdD7F8hBIwXXbOU=";
+    hash = "sha256-azi27Ocpa14SLJ6xfaLuqz2YoZj1DKnv0A+wPltP1K4=";
   };
 
   patches = [

@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "3.0.2";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KNM/HjSWVwenLqtXbaRP70k7b7YXk//aKGEkBxPp1fA=";
+    hash = "sha256-53pbt7kNaYQRsLb+OI8gLwR3cBE18ZKLZmG4aP1/93E=";
   };
 
   postPatch = ''

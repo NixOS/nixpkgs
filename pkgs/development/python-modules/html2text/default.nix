@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "html2text";
-  version = "2020.1.16";
+  version = "2024.2.26";
   format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Alir3z4";
     repo = pname;
-    rev = version;
-    sha256 = "1y924clp2hiqg3a9437z808p29mqcx537j5fmz71plx8qrcm5jf9";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-1CLkTFR+/XQ428WjMF7wliyAG6CB+n8JSsLDdLHPO7I=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
