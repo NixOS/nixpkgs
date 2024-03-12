@@ -25,7 +25,7 @@ let
       configEnv = concatMapAttrs (name: value: optionalAttrs (value != null) {
         ${nameToEnvVar name} = if isBool value then boolToString value else toString value;
       }) cfg.config;
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in { DATA_FOLDER = "/var/lib/vaultwarden"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
@@ -194,7 +194,7 @@ in {
         ProtectHome = "true";
         ProtectSystem = "strict";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        StateDirectory = "bitwarden_rs";
+        StateDirectory = "vaultwarden";
         StateDirectoryMode = "0700";
         RemoveIPC = true;
         NoNewPrivileges = true;
@@ -229,7 +229,7 @@ in {
       aliases = [ "backup-bitwarden_rs.service" ];
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = "/var/lib/bitwarden_rs";
+        inherit (configEnv) DATA_FOLDER;
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
@@ -241,7 +241,7 @@ in {
         User = mkDefault user;
         Group = mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
-        ReadOnlyDirectories = mkIf (!hasPrefix "/var/lib/bitwarden_rs" cfg.backupDir) [ "/var/lib/bitwarden_rs" ];
+        ReadOnlyDirectories = mkIf (!hasPrefix configEnv.DATA_FOLDER cfg.backupDir) [ configEnv.DATA_FOLDER ];
         ReadWriteDirectories = [ "-${cfg.backupDir}" ];
 
         # Hardening
