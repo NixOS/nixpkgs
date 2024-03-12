@@ -31,7 +31,7 @@
 , pulseaudio
 , libsamplerate
 
-, openGLSupport ? false
+, openGLSupport ? true
 , xorgSupport ? true
 , waylandSupport ? true
 , pipewireSupport ? true
