@@ -8,12 +8,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.9.0";
+  version = "1.9.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4ealEeFS7HzU26vE9Pahh0hwvUnJfRfTkLkjLdpoXOM=";
+    hash = "sha256-m7fRxKelHMH54WOUh1yUC0X6hLaY8CkVKTFrJ9dOfzI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
