@@ -13132,6 +13132,8 @@ self: super: with self; {
 
   rules = callPackage ../development/python-modules/rules { };
 
+  runs = callPackage ../development/python-modules/runs { };
+
   ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
 
   ruyaml = callPackage ../development/python-modules/ruyaml { };
