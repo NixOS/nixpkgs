@@ -21,8 +21,6 @@ in appimageTools.wrapType2 {
   extraInstallCommands = ''
     mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/caido.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/caido.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
     install -m 444 -D ${appimageContents}/caido.png \
       $out/share/icons/hicolor/512x512/apps/caido.png
     source "${makeWrapper}/nix-support/setup-hook"
