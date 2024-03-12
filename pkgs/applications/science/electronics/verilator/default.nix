@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  env = {
+    SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";
+    SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
+  };
+
   meta = with lib; {
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage    = "https://www.veripool.org/verilator";
