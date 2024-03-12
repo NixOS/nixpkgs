@@ -110,6 +110,20 @@ let
           makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
+  knownHardeningFlags = [
+    "bindnow"
+    "format"
+    "fortify"
+    "fortify3"
+    "pic"
+    "pie"
+    "relro"
+    "stackprotector"
+    "strictoverflow"
+    "trivialautovarinit"
+    "zerocallusedregs"
+  ];
+
   makeDerivationArgument =
 
 
@@ -235,19 +249,6 @@ let
     # disabling fortify implies fortify3 should also be disabled
     then unique (hardeningDisable ++ [ "fortify3" ])
     else hardeningDisable;
-  knownHardeningFlags = [
-    "bindnow"
-    "format"
-    "fortify"
-    "fortify3"
-    "pic"
-    "pie"
-    "relro"
-    "stackprotector"
-    "strictoverflow"
-    "trivialautovarinit"
-    "zerocallusedregs"
-  ];
   defaultHardeningFlags =
     (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
       # fallback safe-ish set of flags
