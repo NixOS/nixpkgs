@@ -143,6 +143,7 @@
   ./programs/adb.nix
   ./programs/alvr.nix
   ./programs/appgate-sdp.nix
+  ./programs/appimage.nix
   ./programs/atop.nix
   ./programs/ausweisapp.nix
   ./programs/autojump.nix
