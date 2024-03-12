@@ -1,11 +1,10 @@
 { lib
-, stdenv
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , gettext
 , gobject-introspection
-, gtk3
+, gtk4
 , python3Packages
 }:
 
@@ -17,15 +16,15 @@ python3Packages.buildPythonApplication rec {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-dl4fTa+CXsycC+hhSkIzQQxrSkBDPsdrmKdrHPakGig=";
+    hash = "sha256-dl4fTa+CXsycC+hhSkIzQQxrSkBDPsdrmKdrHPakGig=";
   };
 
-  nativeBuildInputs = [ gettext wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ gettext wrapGAppsHook4 gobject-introspection ];
 
   propagatedBuildInputs = [
     gdk-pixbuf
     gobject-introspection
-    gtk3
+    gtk4
     python3Packages.pygobject3
   ];
 
@@ -35,14 +34,13 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}"
     )
   '';
 
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A graphical client for the SoulSeek peer-to-peer system";
     longDescription = ''
       Nicotine+ aims to be a pleasant, free and open source (FOSS) alternative
