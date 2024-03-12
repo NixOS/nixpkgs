@@ -294,6 +294,7 @@ let
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
               "zerocallusedregs"
+              "trivialautovarinit"
             ]
           ) super'.stdenv;
         })

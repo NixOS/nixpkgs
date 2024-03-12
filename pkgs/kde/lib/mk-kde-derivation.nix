@@ -100,6 +100,8 @@ in
       cmakeFlags = ["-DQT_MAJOR_VERSION=6"] ++ extraCmakeFlags;
 
       separateDebugInfo = true;
+
+      env.LANG = "C.UTF-8";
     };
 
     cleanArgs = builtins.removeAttrs args [

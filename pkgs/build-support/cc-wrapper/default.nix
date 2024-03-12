@@ -604,8 +604,11 @@ stdenv.mkDerivation {
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
+    #
+    # For clang, this is handled in add-clang-cc-cflags-before.sh
+
     # TODO: aarch64-darwin has mcpu incompatible with gcc
-    + optionalString ((targetPlatform ? gcc.arch) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64)) &&
+    + optionalString ((targetPlatform ? gcc.arch) && !isClang && !(stdenv.isDarwin && stdenv.isAarch64) &&
                       isGccArchSupported targetPlatform.gcc.arch) ''
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
@@ -694,6 +697,10 @@ stdenv.mkDerivation {
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
     ##
     + optionalString isClang ''
+      # Escape twice: once for this script, once for the one it gets substituted into.
+      export march=${lib.escapeShellArg
+        (lib.optionalString (targetPlatform ? gcc.arch)
+          (lib.escapeShellArg "-march=${targetPlatform.gcc.arch}"))}
       export defaultTarget=${targetPlatform.config}
       substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''

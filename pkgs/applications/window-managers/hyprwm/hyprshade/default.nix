@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "hyprshade";
-  version = "3.0.3";
+  version = "3.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "loqusion";
     repo = "hyprshade";
     rev = "refs/tags/${version}";
-    hash = "sha256-vX1Cc170ifevn1aji5s0MI7G0zktPuvSpAbYpGPMudA=";
+    hash = "sha256-bNgXnN4F9kzbi1vTuBqn8H7A8QMznr7QA65eNLumkAA=";
   };
 
   nativeBuildInputs = [

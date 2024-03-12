@@ -3,7 +3,7 @@
 , xorg, libcap, alsa-lib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
-, soxr, speexdsp, systemd, webrtc-audio-processing
+, soxr, speexdsp, systemd, webrtc-audio-processing_1
 , gst_all_1
 , check, libintl, meson, ninja, m4, wrapGAppsHook
 
@@ -37,26 +37,17 @@
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}pulseaudio";
-  version = "16.1";
+  version = "17.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "sha256-ju8yzpHUeXn5X9mpNec4zX63RjQw2rxyhjJRdR5QSuQ=";
+    hash = "sha256-BTeU1mcaPjl9hJ5HioC4KmPLnYyilr01tzMXu1zrh7U=";
   };
 
   patches = [
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
-    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654 (merged)
-    ./0001-Make-gio-2.0-optional-16.patch
-    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/746 (merged)
-    ./0002-Ignore-SCM_CREDS-on-darwin.patch
-    ./0003-Ignore-HAVE_CPUID_H-on-aarch64-darwin.patch
-    ./0004-Prefer-HAVE_CLOCK_GETTIME-on-darwin.patch
-    ./0005-Enable-CoreAudio-on-darwin.patch
-    ./0006-Fix-libpulsecommon-sources-on-darwin.patch
-    ./0007-Fix-link-args-on-darwin.patch
   ];
 
   outputs = [ "out" "dev" ];
@@ -74,7 +65,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices CoreAudio libintl ]
     ++ lib.optionals (!libOnly) (
-      [ libasyncns webrtc-audio-processing ]
+      [ libasyncns webrtc-audio-processing_1 ]
       ++ lib.optional jackaudioSupport libjack2
       ++ lib.optionals x11Support [ xorg.libICE xorg.libSM xorg.libX11 xorg.libXi xorg.libXtst ]
       ++ lib.optional useSystemd systemd
@@ -126,6 +117,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "systemduserunitdir" "${placeholder "out"}/lib/systemd/user")
   ]
   ++ lib.optionals stdenv.isDarwin [
+    (lib.mesonEnable "consolekit" false)
     (lib.mesonEnable "dbus" false)
     (lib.mesonEnable "glib" false)
     (lib.mesonEnable "oss-output" false)

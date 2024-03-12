@@ -5,24 +5,29 @@
 , fetchPypi
 , isodate
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datafactory";
-  version = "5.0.0";
-  format = "setuptools";
+  version = "6.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WX/lFsU8qGg3Mg5bk+U0SBdR6cQpjtfmbX02Hr8uz7o=";
+    hash = "sha256-0B+K8u9M/z3edwlc8LNR8DeqV9y6vIVCmevoUIWN0YM=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    isodate
     azure-common
     azure-mgmt-core
+    isodate
   ];
 
   # has no tests

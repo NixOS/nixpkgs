@@ -150,6 +150,7 @@ Or if you have an older card, you may have to use one of the legacy
 drivers:
 
 ```nix
+services.xserver.videoDrivers = [ "nvidiaLegacy470" ];
 services.xserver.videoDrivers = [ "nvidiaLegacy390" ];
 services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
 services.xserver.videoDrivers = [ "nvidiaLegacy304" ];

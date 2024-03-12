@@ -1,8 +1,8 @@
-# User’s Guide to Lua Infrastructure {#users-guide-to-lua-infrastructure}
+# Lua {#lua}
 
-## Using Lua {#using-lua}
+## Using Lua {#lua-userguide}
 
-### Overview of Lua {#overview-of-lua}
+### Overview of Lua {#lua-overview}
 
 Several versions of the Lua interpreter are available: luajit, lua 5.1, 5.2, 5.3.
 The attribute `lua` refers to the default interpreter, it is also possible to refer to specific versions, e.g. `lua5_2` refers to Lua 5.2.
@@ -118,7 +118,7 @@ Again, it is possible to launch the interpreter from the shell.
 The Lua interpreter has the attribute `pkgs` which contains all Lua libraries for that specific interpreter.
 
 
-## Developing with Lua {#developing-with-lua}
+## Developing with lua {#lua-developing}
 
 Now that you know how to get a working Lua environment with Nix, it is time
 to go forward and start actually developing with Lua. There are two ways to
@@ -193,10 +193,10 @@ luaposix = buildLuarocksPackage {
   disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ bit32 lua std_normalize ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
-    maintainers = with maintainers; [ vyp lblasc ];
+    maintainers = with lib.maintainers; [ vyp lblasc ];
     license.fullName = "MIT/X11";
   };
 };
@@ -234,30 +234,20 @@ The `lua.withPackages` takes a function as an argument that is passed the set of
 Using the `withPackages` function, the previous example for the luafilesystem environment can be written like this:
 
 ```nix
-with import <nixpkgs> {};
-
 lua.withPackages (ps: [ps.luafilesystem])
 ```
 
 `withPackages` passes the correct package set for the specific interpreter version as an argument to the function. In the above example, `ps` equals `luaPackages`.
-But you can also easily switch to using `lua5_2`:
+But you can also easily switch to using `lua5_1`:
 
 ```nix
-with import <nixpkgs> {};
-
-lua5_2.withPackages (ps: [ps.lua])
+lua5_1.withPackages (ps: [ps.lua])
 ```
 
-Now, `ps` is set to `lua52Packages`, matching the version of the interpreter.
+Now, `ps` is set to `lua5_1.pkgs`, matching the version of the interpreter.
 
-### Possible Todos {#possible-todos}
-
-* export/use version specific variables such as `LUA_PATH_5_2`/`LUAROCKS_CONFIG_5_2`
-* let luarocks check for dependencies via exporting the different rocktrees in temporary config
-
-### Lua Contributing guidelines {#lua-contributing-guidelines}
+### Lua Contributing guidelines {#lua-contributing}
 
 Following rules should be respected:
 
-* Make sure libraries build for all Lua interpreters.
 * Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.

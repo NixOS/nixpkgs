@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./pcre.patch
+
     # fix build with gcc 13
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/opencollada/files/opencollada-1.6.68-gcc13.patch?id=b76590f9fb8615da3da9d783ad841c0e3881a27b";
@@ -27,7 +29,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libxml2 pcre ];
 
   postPatch = ''
-    patch -p1 < ${./pcre.patch}
+    # Drop blanket -Werror as it tends to fail on newer toolchain for
+    # minor warnings. In this case it was gcc-13 build failure.
+    substituteInPlace DAEValidator/CMakeLists.txt --replace-fail ' -Werror"' '"'
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
       --replace math.h cmath

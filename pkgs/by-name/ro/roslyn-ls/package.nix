@@ -1,8 +1,8 @@
-{ lib, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, stdenvNoCC, testers, roslyn-ls }:
+{ lib, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, stdenvNoCC, testers, roslyn-ls, jq }:
 let
   pname = "roslyn-ls";
   # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_7_0 sdk_8_0 ];
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
   # need sdk on runtime as well
   dotnet-runtime = dotnetCorePackages.sdk_8_0;
 
@@ -27,7 +27,13 @@ buildDotnetModule rec {
   useDotnetFromEnv = true;
   nugetDeps = ./deps.nix;
 
+  nativeBuildInputs = [ jq ];
+
   postPatch = ''
+    # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
+    jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
+    mv global.json.tmp global.json
+
     substituteInPlace $projectFile \
       --replace-fail \
         '<RuntimeIdentifiers>win-x64;win-x86;win-arm64;linux-x64;linux-arm64;alpine-x64;alpine-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>' \

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  sourceRoot = "source/openllm-client";
+  sourceRoot = "${src.name}/openllm-client";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -29,20 +29,20 @@ buildPythonPackage rec {
       --replace-fail "hatch-vcs==0.3.0" "hatch-vcs"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     distro
     httpx
     openllm-core
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     grpc = [
       bentoml
     ] ++ bentoml.optional-dependencies.grpc;
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       # diffusers
       soundfile
     ] ++ transformers.optional-dependencies.agents;
-    full = passthru.optional-dependencies.grpc ++ passthru.optional-dependencies.agents;
+    full = optional-dependencies.grpc ++ optional-dependencies.agents;
   };
 
   # there is no tests

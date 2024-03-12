@@ -163,6 +163,7 @@
   ./programs/clash-verge.nix
   ./programs/cnping.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/coolercontrol.nix
   ./programs/criu.nix
   ./programs/darling.nix
   ./programs/dconf.nix
@@ -719,6 +720,7 @@
   ./services/misc/libreddit.nix
   ./services/misc/lidarr.nix
   ./services/misc/lifecycled.nix
+  ./services/misc/llama-cpp.nix
   ./services/misc/logkeys.nix
   ./services/misc/mame.nix
   ./services/misc/mbpfan.nix
@@ -781,6 +783,7 @@
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/sysprof.nix
+  ./services/misc/tabby.nix
   ./services/misc/tandoor-recipes.nix
   ./services/misc/taskserver
   ./services/misc/tautulli.nix

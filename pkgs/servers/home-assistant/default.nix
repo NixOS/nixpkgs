@@ -3,8 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch
-, python311
+, python312
 , substituteAll
 , ffmpeg-headless
 , inetutils
@@ -31,15 +30,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aemet-opendata = super.aemet-opendata.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.7";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-kmU2HtNyYhfwWQv6asOtDpLZ6+O+eEICzBNLxUhAwaY=";
-        };
-      });
-
       aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
         version = "22.10.1";
         src = fetchFromGitHub {
@@ -52,23 +42,6 @@ let
           aiohttp
           async-timeout
           backoff
-        ];
-      });
-
-      aionotion = super.aionotion.overridePythonAttrs (oldAttrs: rec {
-        version = "2023.05.5";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "aionotion";
-          rev = "refs/tags/${version}";
-          hash = "sha256-/2sF8m5R8YXkP89bi5zR3h13r5LrFOl1OsixAcX0D4o=";
-        };
-        patches = [
-          (fetchpatch {
-            # clean up build dependencies; https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83
-            url = "https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83.patch";
-            hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-          })
         ];
       });
 
@@ -85,16 +58,6 @@ let
             '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
             '"poetry-core"'
         '';
-      });
-
-      aiopvapi = super.aiopvapi.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.4";
-        src = fetchFromGitHub {
-          owner = "sander76";
-          repo = "aio-powerview-api";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-cghfNi5T343/7GxNLDrE0iAewMlRMycQTP7SvDVpU2M=";
-        };
       });
 
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
@@ -147,15 +110,6 @@ let
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
           self.pytz
         ];
-      });
-
-      brother = super.brother.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-rRzcWT9DcNTBUYxyYYC7WORBbrkgj0toCp2e8ADUN5s=";
-        };
       });
 
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
@@ -348,16 +302,6 @@ let
         };
       });
 
-      python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
-        version = "8.0.1";
-        src = fetchFromGitHub {
-          owner = "un33k";
-          repo =  "python-slugify";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-MJac63XjgWdUQdyyEm8O7gAGVszmHxZzRF4frJtR0BU=";
-        };
-      });
-
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.1";
         src = fetchFromGitHub {
@@ -375,6 +319,9 @@ let
           inherit version;
           hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
         };
+        pytestFlagsArray = [
+          "-W" "ignore::DeprecationWarning"
+        ];
       });
 
       voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
@@ -395,16 +342,6 @@ let
           repo = "python-vultr";
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
-        };
-      });
-
-      wyoming = super.wyoming.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.2";
-        src = fetchFromGitHub {
-          owner = "rhasspy";
-          repo = "wyoming";
-          rev = "refs/tags/${version}";
-          hash = "sha256-2bc5coKL5KlTeL9fdghPmRF66NXfimHOKGtE2yPXgrA=";
         };
       });
 
@@ -444,7 +381,7 @@ let
     })
   ];
 
-  python = python311.override {
+  python = python312.override {
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -462,7 +399,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.2.5";
+  hassVersion = "2024.3.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -480,13 +417,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-RRoxWNcubpxzmExzrifRKhgNm0IM5OuNZYHz6tp9zm8=";
+    hash = "sha256-/DCE2IHdS+oImpzwIaFgXotAsoiPPbe3X3HG7RXbv9g=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-qhUfOMSM4FKUQ9LdeoHLLrVm5cWFrlTER02s+tLVAMU=";
+    hash = "sha256-G9M1WV+s4zu9BY10RWmJ71ghafAOHMjnCR6BOlggguM=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -496,7 +433,10 @@ in python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "attrs"
+    "bcrypt"
     "ciso8601"
+    "cryptography"
+    "httpx"
     "orjson"
     "pyopenssl"
     "typing-extensions"
@@ -534,7 +474,7 @@ in python.pkgs.buildPythonApplication rec {
     aiohttp-fast-url-dispatcher
     aiohttp-zlib-ng
     astral
-    async-timeout
+    async-interrupt
     atomicwrites-homeassistant
     attrs
     awesomeversion
@@ -555,7 +495,9 @@ in python.pkgs.buildPythonApplication rec {
     python-slugify
     pyyaml
     requests
+    typing-extensions
     ulid-transform
+    urllib3
     voluptuous
     voluptuous-serialize
     yarl
@@ -563,7 +505,7 @@ in python.pkgs.buildPythonApplication rec {
     pyotp
     pyqrcode
     # Implicit dependency via homeassistant/requirements.py
-    setuptools
+    packaging
   ];
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -593,7 +535,9 @@ in python.pkgs.buildPythonApplication rec {
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
+    "debugpy"
     "hue"
+    "sentry"
   ];
 
   pytestFlagsArray = [

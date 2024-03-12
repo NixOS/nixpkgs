@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , php
+, phpCfg ? null
 , withPgsql ? true # “strongly recommended” according to docs
 , withMysql ? false
 }:
@@ -16,14 +17,16 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-9MBe2IRYxvUuCc5m7ajvIlBU7YVm4A3RABlOOIjpKoM=";
   };
 
-  php = php.buildEnv {
+  php = php.buildEnv ({
     extensions = ({ all, enabled }:
       enabled
-      ++ (with all; [ curl dom gd imagick mbstring ])
-      ++ lib.optional withPgsql all.pgsql
-      ++ lib.optional withMysql all.mysqli
+        ++ (with all; [ curl dom gd imagick mbstring pdo simplexml ])
+        ++ lib.optionals withPgsql (with all; [ pdo_pgsql pgsql ])
+        ++ lib.optionals withMysql (with all; [ mysqli mysqlnd pdo_mysql ])
     );
-  };
+  } // lib.optionalAttrs (phpCfg != null) {
+    extraConfig = phpCfg;
+  });
 
   # no listed license
   # pinned commonmark

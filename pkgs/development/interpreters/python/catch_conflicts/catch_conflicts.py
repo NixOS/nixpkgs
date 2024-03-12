@@ -57,7 +57,8 @@ def find_packages(store_path: Path, site_packages_path: str, parents: List[str])
         with open(propagated_build_inputs, "r") as f:
             build_inputs: List[str] = f.read().strip().split(" ")
             for build_input in build_inputs:
-                find_packages(Path(build_input), site_packages_path, parents + [build_input])
+                if build_input not in parents:
+                    find_packages(Path(build_input), site_packages_path, parents + [build_input])
 
 
 find_packages(out_path, site_packages_path, [f"this derivation: {out_path}"])

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gimoji";
-  version = "0.7.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "zeenix";
     repo = "gimoji";
     rev = version;
-    hash = "sha256-ipsEFZGC3JYOeNVI4AUb2c/9tt+TTIbeXuJ15ShEH6U=";
+    hash = "sha256-0mLFrFxMbX9Gl72W3EC7kfXHqDBo5QU+ut+1psntphY=";
   };
 
-  cargoHash = "sha256-786OPEaIHQtgUHlkjLprKfJ7VoeSW+IzHto3XXZ6Fu8=";
+  cargoHash = "sha256-pKHhYWEF9L0UX9hc2Ga3WOUWzISA8ONwn3rcI9u2/n0=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit

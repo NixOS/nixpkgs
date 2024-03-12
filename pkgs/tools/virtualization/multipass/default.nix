@@ -70,8 +70,8 @@ stdenv.mkDerivation
 
     # Patch the patch of the OVMF binaries to use paths from the nix store.
     substituteInPlace ./src/platform/backends/qemu/linux/qemu_platform_detail_linux.cpp \
-      --replace "OVMF.fd" "${OVMF.firmware}" \
-      --replace "QEMU_EFI.fd" "${OVMF.firmware}"
+      --replace "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
+      --replace "QEMU_EFI.fd" "${OVMF.fd}/FV/QEMU_EFI.fd"
 
     # Copy the grpc submodule we fetched into the source code.
     cp -r --no-preserve=mode ${grpc_src} 3rd-party/grpc
@@ -122,6 +122,7 @@ stdenv.mkDerivation
       dnsmasq
       iproute2
       iptables
+      OVMF.fd
       qemu
       qemu-utils
       xterm

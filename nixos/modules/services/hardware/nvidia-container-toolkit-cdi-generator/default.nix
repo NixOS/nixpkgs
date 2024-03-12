@@ -26,9 +26,11 @@
       serviceConfig = {
         RuntimeDirectory = "cdi";
         RemainAfterExit = true;
-        ExecStart = let
-          script = (pkgs.writeScriptBin "nvidia-cdi-generator"
-            (import ./cdi-generate.nix { inherit config lib pkgs; })); in (lib.getExe script);
+        ExecStart =
+          let
+            script = pkgs.callPackage ./cdi-generate.nix { nvidia-driver = config.hardware.nvidia.package; };
+          in
+          lib.getExe script;
         Type = "oneshot";
       };
     };

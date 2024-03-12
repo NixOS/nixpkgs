@@ -704,6 +704,11 @@ in {
     in stringAfter [ "users" ] ''
       if [ -e ${lingerDir} ] ; then
         cd ${lingerDir}
+        for user in ${lingerDir}/*; do
+          if ! id "$user" >/dev/null 2>&1; then
+            rm --force -- "$user"
+          fi
+        done
         ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
         ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
       fi

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "prometheus-restic-exporter";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ngosang";
     repo = "restic-exporter";
     rev = version;
-    hash = "sha256-Qwhlecginl5+V+iddN/vIHfJA1kQOZtscECsoD4LJPE=";
+    hash = "sha256-SC2ZCIQ33RaFI9+l/WI6edNzGEtsxJ2bBdeGNMHuyqY=";
   };
 
   buildInputs = [
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
 
     install -D -m0755 restic-exporter.py $out/bin/restic-exporter.py
 
-    substituteInPlace $out/bin/restic-exporter.py --replace \"restic\" \"${lib.makeBinPath [ restic ]}/restic\"
+    substituteInPlace $out/bin/restic-exporter.py --replace-fail \"restic\" \"${lib.makeBinPath [ restic ]}/restic\"
 
     patchShebangs $out/bin/restic-exporter.py
 

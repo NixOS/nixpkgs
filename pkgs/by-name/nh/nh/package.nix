@@ -7,15 +7,11 @@
 , fetchFromGitHub
 , nix-update-script
 , nvd
-, use-nom ? true
-, nix-output-monitor ? null
+, nix-output-monitor
 }:
-
-assert use-nom -> nix-output-monitor != null;
-
 let
-  version = "3.5.2";
-  runtimeDeps = [ nvd ] ++ lib.optionals use-nom [ nix-output-monitor ];
+  version = "3.5.4";
+  runtimeDeps = [ nvd nix-output-monitor ];
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -25,7 +21,7 @@ rustPlatform.buildRustPackage {
     owner = "viperML";
     repo = "nh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TwCR7tZvrjsvz6SmgjWYOne7Qz7J2jn4Cr4Er0Yj+LA=";
+    hash = "sha256-fnuVQqdK48c66EC4mL8t7uLhwsY6JDyn7H5tjRpx9Sg=";
   };
 
   strictDeps = true;
@@ -48,11 +44,10 @@ rustPlatform.buildRustPackage {
 
   postFixup = ''
     wrapProgram $out/bin/nh \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps} \
-      ${lib.optionalString use-nom "--set-default NH_NOM 1"}
+      --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-/mYEjIq4dtt9noRDzFWwLZ3CSz7cmlViEGubi6m9R1o=";
+  cargoHash = "sha256-njJdwaJtLB4S36mS8miwrk7jo5U7BzOIlXqh3qNyA5E=";
 
   passthru.updateScript = nix-update-script { };
 

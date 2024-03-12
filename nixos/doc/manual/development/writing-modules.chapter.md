@@ -104,9 +104,8 @@ functions system environment substitution should *not* be disabled explicitly.
 ```nix
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) concatStringsSep mkIf mkOption optionalString types;
   cfg = config.services.locate;
 in {
   options.services.locate = {
@@ -163,9 +162,7 @@ in {
 ::: {#exec-escaping-example .example}
 ### Escaping in Exec directives
 ```nix
-{ config, lib, pkgs, utils, ... }:
-
-with lib;
+{ config, pkgs, utils, ... }:
 
 let
   cfg = config.services.echo;

@@ -342,6 +342,7 @@ in
         User = cfg.user;
         Restart = "on-failure";
 
+        LimitNOFILE = 65536;
         # gunicorn needs setuid, liblapack needs mbind
         SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid mbind" ];
         # Needs to serve web page

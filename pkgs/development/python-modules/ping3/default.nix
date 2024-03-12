@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ping3";
-  version = "4.0.4";
+  version = "4.0.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HqEqz2dS1GZmFjQf18Y5PGZM/8UQxpPvBvc2+yZ6E7o=";
+    hash = "sha256-HwkYXokyFDZSSZayEtID08q1rSJofedGRXDxx/udwFE=";
   };
 
   nativeBuildInputs = [

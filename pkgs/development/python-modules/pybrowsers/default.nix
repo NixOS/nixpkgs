@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "pybrowsers";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = "browsers";
-    rev = version;
-    hash = "sha256-bsmOUa33VzqWCv2jhu6oukdRhWfpkeAM3FBjiBBwjSQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-hjaQUfH7pNwC6+6liOUQQZU6NdhxLmtabvDD7JnQ3GU=";
   };
 
   postPatch = ''

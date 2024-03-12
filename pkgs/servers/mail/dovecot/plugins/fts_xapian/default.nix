@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, sqlite, pkg-config, dovecot, libtool, xapian, icu64 }:
 stdenv.mkDerivation rec {
   pname = "dovecot-fts-xapian";
-  version = "1.6.5";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    sha256 = "sha256-jkQM5J3Yqjo2j4kXhw/woV0kID2bghCmpFMuxbdMHuk=";
+    sha256 = "sha256-xhQdEgW/FqzK/OBGq0QVZhEHj/hCnvfV7joEKUsk/Uk=";
   };
 
   buildInputs = [ dovecot xapian icu64 sqlite ];

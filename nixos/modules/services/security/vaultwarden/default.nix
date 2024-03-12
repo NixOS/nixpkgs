@@ -180,7 +180,6 @@ in {
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      aliases = [ "bitwarden_rs.service" ];
       after = [ "network.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
@@ -202,7 +201,6 @@ in {
     };
 
     systemd.services.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs.service" ];
       description = "Backup vaultwarden";
       environment = {
         DATA_FOLDER = "/var/lib/bitwarden_rs";
@@ -222,7 +220,6 @@ in {
     };
 
     systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs.timer" ];
       description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";
@@ -240,6 +237,9 @@ in {
     };
   };
 
-  # uses attributes of the linked package
-  meta.buildDocsInSandbox = false;
+  meta = {
+    # uses attributes of the linked package
+    buildDocsInSandbox = false;
+    maintainers = with lib.maintainers; [ dotlambda SuperSandro2000 ];
+  };
 }

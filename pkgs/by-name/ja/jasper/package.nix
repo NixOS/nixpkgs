@@ -1,8 +1,15 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , cmake
+, fetchFromGitHub
+, freeglut
+, libGL
+, libheif
+, libjpeg
 , pkg-config
+, stdenv
+, enableHEIFCodec ? true
+, enableJPGCodec ? true
+, enableOpenGL ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,11 +23,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SE3zB+8zZuuT+W6QYTuQhM+dBgYuFzYK4a7QaquGB60=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  # Splitting outputs going bad on Darwin
+  outputs = if stdenv.isDarwin
+            then [ "out" ]
+            else [ "out" "dev" "doc" "lib" "man" ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+  ];
+
+  buildInputs = [
+  ] ++ lib.optionals enableHEIFCodec [
+    libheif
+  ] ++ lib.optionals enableJPGCodec [
+    libjpeg
+  ] ++ lib.optionals enableOpenGL [
+    freeglut
+    libGL
   ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
@@ -28,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildDir = "build-directory";
   cmakeFlags = [
     (lib.cmakeBool "ALLOW_IN_SOURCE_BUILD" true)
+    (lib.cmakeBool "JAS_ENABLE_HEIC_CODEC" enableHEIFCodec)
+    (lib.cmakeBool "JAS_INCLUDE_HEIC_CODEC" enableHEIFCodec)
+    (lib.cmakeBool "JAS_ENABLE_JPG_CODEC" enableJPGCodec)
+    (lib.cmakeBool "JAS_INCLUDE_JPG_CODEC" enableJPGCodec)
+    (lib.cmakeBool "JAS_ENABLE_MIF_CODEC" false) # Dangerous!
+    (lib.cmakeBool "JAS_ENABLE_OPENGL" enableOpenGL)
   ];
 
   strictDeps = true;
@@ -52,11 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
       was chosen primarily due to the availability of C development environments
       for most computing platforms when JasPer was first developed, circa 1999.
     '';
-    license = lib.licenses.mit;
+    license = with lib.licenses; [ mit ];
+    mainProgram = "jasper";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-
-    # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling.
+    # The value of __STDC_VERSION__ cannot be automatically determined when
+    # cross-compiling.
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
+# TODO: investigate opengl support

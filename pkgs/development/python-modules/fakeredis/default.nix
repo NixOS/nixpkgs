@@ -1,8 +1,8 @@
 { lib
-, aioredis
 , buildPythonPackage
 , fetchFromGitHub
 , hypothesis
+, jsonpath-ng
 , lupa
 , poetry-core
 , pybloom-live
@@ -49,8 +49,8 @@ buildPythonPackage rec {
     lua = [
       lupa
     ];
-    aioredis = [
-      aioredis
+    json = [
+      jsonpath-ng
     ];
     bf = [
       pyprobables

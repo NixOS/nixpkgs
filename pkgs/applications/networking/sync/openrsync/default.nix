@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openrsync";
   version = "unstable-2022-05-08";
 

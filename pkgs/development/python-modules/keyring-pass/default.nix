@@ -9,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "keyring-pass";
-  version = "0.9.2";
+  version = "0.9.3";
   disabled = pythonOlder "3.6";
 
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nazarewk";
     repo = "keyring_pass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sf7eDOB3prH2s6BzdBtxewSweC0ibLXVxNHBJRRaJe4=";
+    hash = "sha256-EsM+RUhYtelslRpxR5NQbqpOt8KaeCsFqkqZ1ZFx0I0=";
   };
 
   postPatch = ''

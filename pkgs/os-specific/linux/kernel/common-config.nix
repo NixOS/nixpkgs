@@ -371,6 +371,8 @@ let
       DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
       DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
       DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
+      # Enable new firmware (and by extension NVK) for compatible hardware on Nouveau
+      DRM_NOUVEAU_GSP_DEFAULT = whenAtLeast "6.8" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = yes;
@@ -500,7 +502,7 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = whenOlder "6.2" yes;
+      NFSD_V2_ACL            = whenOlder "6.1" yes;
       NFSD_V3                = whenOlder "5.18" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;

@@ -7,22 +7,33 @@
 , orjson
 , packaging
 , pythonOlder
+, setuptools
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "48";
-  format = "setuptools";
+  version = "53";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Kane610";
-    repo = pname;
+    repo = "axis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/Iz1F40Y00bgJUvNrkPGyA8Kkch92Kijeg8TQ8mostM=";
+    hash = "sha256-M5uaRiZP66RApSztvgzzpAUBKCcSCqC6fxzmB52mibY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==68.0.0" "setuptools" \
+      --replace-fail "wheel==0.40.0" "wheel"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     async-timeout

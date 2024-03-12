@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation rec {
   name = "holochain-launcher";
-  version = "0.11.0";
+  version = "0.11.5";
   prerelease = "beta-2";
 
   src = fetchurl {
     url = "https://github.com/holochain/launcher/releases/download/v${version}/holochain-launcher-${prerelease}_${version}_amd64.deb";
-    sha256 = "sha256-yxovSsPyIzFONa1ACeLkZqDCElDI3uTm81YOYW0/FXE=";
+    sha256 = "sha256-MRFQJRfvJ+dLmPDfPQX9wErIwEr07EAUqxic8kbKVdo=";
   };
 
   nativeBuildInputs = [

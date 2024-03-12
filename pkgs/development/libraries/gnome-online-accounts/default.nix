@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchFromGitLab
+, fetchurl
+, fetchpatch
 , pkg-config
 , vala
 , glib
@@ -30,19 +31,24 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
   version = "3.48.0";
 
   outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-online-accounts";
-    rev = version;
-    sha256 = "sha256-USl0Qay9pSgbbp3n/L8eBaRQwaBYledht5j+afmo++o=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";
+    hash = "sha256-QYu5/P/b1yqYIFrTZRN2F/weNVGlTedPapjUXSZhdb8=";
   };
+
+  patches = [
+    # Fix crash with EWS and libxml2.12.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/commit/b9638e2418408be4906752297e700506766dcf20.patch";
+      hash = "sha256-l9+qS9WF3RuG9NtQQzSjpFSLNJV4FkXxOsLKYbINqrQ=";
+    })
+  ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
@@ -91,7 +97,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       versionPolicy = "odd-unstable";
-      packageName = pname;
+      packageName = "gnome-online-accounts";
     };
   };
 
@@ -102,4 +108,4 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

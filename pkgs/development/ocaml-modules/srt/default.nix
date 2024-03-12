@@ -2,6 +2,7 @@
 , dune-configurator
 , posix-socket
 , srt
+, ctypes-foreign
 }:
 
 buildDunePackage rec {
@@ -9,7 +10,6 @@ buildDunePackage rec {
   version = "0.3.0";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";
@@ -19,7 +19,7 @@ buildDunePackage rec {
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ posix-socket srt ];
+  propagatedBuildInputs = [ ctypes-foreign posix-socket srt ];
 
   meta = with lib; {
     description = "OCaml bindings for the libsrt library";

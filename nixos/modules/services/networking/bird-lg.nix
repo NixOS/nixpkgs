@@ -194,8 +194,8 @@ in
         allowedIPs = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          example = [ "192.168.25.52" "192.168.25.53" ];
-          description = lib.mdDoc "List of IPs to allow (default all allowed).";
+          example = [ "192.168.25.52" "192.168.25.53" "192.168.0.0/24" ];
+          description = lib.mdDoc "List of IPs or networks to allow (default all allowed).";
         };
 
         birdSocket = mkOption {

@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -63,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
+    (fetchpatch {
+      name = "GLib-against-PCRE2-10.43.patch";
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/cce3ae98a2c1966719daabff5a4ec6cf94a846f6.patch";
+      hash = "sha256-vgKzb5hQmFQGD8zxRrXnuX9Gpg/TeSrzehlOH2vA1xU=";
+    })
+
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 

@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "popeye";
-  version = "0.20.4";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-rUG2tZokWXWVvGiyDAxVYfVwSDInaLptBCBuawtP1bc=";
+    sha256 = "sha256-e3ANhF2g1YpCipnHej2ZegoAq20MOyTIjxgNMs3qGbk=";
   };
 
   ldflags = [
@@ -17,7 +17,16 @@ buildGoModule rec {
     "-X github.com/derailed/popeye/cmd.commit=${version}"
   ];
 
-  vendorHash = "sha256-ThldEPzAwMfNnhUEgHL5/asc+SETKxTrPIJt307tqsg=";
+  vendorHash = "sha256-lRm3cS+VYP9vptr6ixmkni7DpNnexrhyccKDV7TWKg0=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd popeye \
+      --bash <($out/bin/popeye completion bash) \
+      --fish <($out/bin/popeye completion fish) \
+      --zsh <($out/bin/popeye completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

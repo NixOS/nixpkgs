@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dogpile-cache";
-  version = "1.3.0";
+  version = "1.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dogpile.cache";
     inherit version;
-    hash = "sha256-Cjh/GTLAce6P2XHS/1H4q6EQbFWUOaUbjHSiB/QOIV0=";
+    hash = "sha256-T3HcAzOtNRycb3BPW6Kje/Ucbu0EN9Gt9W4HWVmv5js=";
   };
 
   nativeBuildInputs = [

@@ -159,7 +159,7 @@ in {
   version = release + versionSuffix;
 
   /* Returns the current nixpkgs release number as string. */
-  release = lib.strings.fileContents ../.version;
+  release = lib.strings.fileContents ./.version;
 
   /* The latest release that is supported, at the time of release branch-off,
      if applicable.

@@ -1,5 +1,5 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, stdenvNoCC, cmake, ninja
-, gccForLibs, preLibcCrossHeaders
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+, preLibcCrossHeaders
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -25,7 +25,7 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? { version = "18.1.0-rc3"; sha256 = "sha256-qRzY2kTLeRxXQCSuVP592Awafm5wjVeFY60d6082mSc="; }
+, officialRelease ? { version = "18.1.0-rc4"; sha256 = "sha256-fVpwewbjoPMPslIEZ+WAtaQ+YKc0XWGl8EbP/TbQb8o="; }
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -274,6 +274,12 @@ in let
       nixSupport.cc-cflags = [ "-fno-exceptions" ];
     });
 
+    # Has to be in tools despite mostly being a library,
+    # because we use a native helper executable from a
+    # non-cross build in cross builds.
+    libclc = callPackage ../common/libclc.nix {
+      inherit buildLlvmTools;
+    };
   });
 
   libraries = lib.makeExtensible (libraries: let

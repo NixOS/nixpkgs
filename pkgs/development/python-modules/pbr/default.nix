@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 , setuptools
 , callPackage
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     description = "Python Build Reasonableness";
     homepage = "https://github.com/openstack/pbr";
     license = licenses.asl20;
-    broken = pythonAtLeast "3.12"; # uses removed distutils
     maintainers = teams.openstack.members;
   };
 }

@@ -9,6 +9,7 @@
 , scdoc
 , tzdata
 , substituteAll
+, fetchpatch
 , callPackage
 , enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit)
 , pkgsCross
@@ -32,6 +33,11 @@ in
 
 let
   arch = stdenv.hostPlatform.uname.processor;
+  qbePlatform = {
+    x86_64 = "amd64_sysv";
+    aarch64 = "arm64";
+    riscv64 = "rv64";
+  }.${arch};
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   embeddedOnBinaryTools =
     let
@@ -74,6 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./001-tzdata.patch;
       inherit tzdata;
     })
+    # Use correct comment syntax for debug+riscv64.
+    (fetchpatch {
+      url = "https://git.sr.ht/~sircmpwn/hare/commit/80e45e4d931a6e90d999846b86471cac00d2a6d5.patch";
+      hash = "sha256-S7nXpiO0tYnKpmpj+fLkolGeHb1TrmgKlMF0+j0qLPQ=";
+    })
+    # Don't build haredoc since it uses the build `hare` bin, which breaks
+    # cross-compilation.
+    ./002-dont-build-haredoc.patch
   ];
 
   nativeBuildInputs = [
@@ -95,6 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${builtins.placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
+    "QBEFLAGS=-t${qbePlatform}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AS=${stdenv.cc.targetPrefix}as"
+    "LD=${stdenv.cc.targetPrefix}ld"
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
     "HAREPATH=$(SRCDIR)/hare/stdlib"

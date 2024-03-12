@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.55.10";
+  version = "0.55.13";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-O3WEzcurQnT3bOy80lYEBIh8Nbr1iQnV0u9Y0qrjXW4=";
+    hash = "sha256-qTQ4tmSFFqO2tnp+7fVeXO6dNbPsx37vT6GElz8dLdQ=";
   };
 
-  vendorHash = "sha256-gXqpBi89VVxHSuHzzcxVRAsdu7TRsNo/vQgI1tMVuaM=";
+  vendorHash = "sha256-sdEA/5QQ85tGfo7qSCD/lD20uAh045fl3tF9nFfH6x0=";
 
   doCheck = false;
 

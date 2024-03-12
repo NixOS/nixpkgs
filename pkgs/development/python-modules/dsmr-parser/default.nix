@@ -5,6 +5,7 @@
 , pyserial
 , pyserial-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pytz
 , tailer
@@ -34,6 +35,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    "test_receive_packet"
   ];
 
   pythonImportsCheck = [
