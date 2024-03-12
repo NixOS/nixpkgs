@@ -22,6 +22,11 @@ addToLuaSearchPathWithCustomDelimiter() {
   # export only if we haven't already got this dir in the search path
   if [[ ${!varName-} == *"$absPattern"* ]]; then return; fi
 
+  # if the path variable has not yet been set, initialize it to ";;"
+  # this is a magic value that will be replaced by the default,
+  # allowing relative modules to be used even when there are system modules.
+  if [[ ! -v "${varName}" ]]; then export "${varName}=;;"; fi
+
   export "${varName}=${!varName:+${!varName};}${absPattern}"
 }
 
