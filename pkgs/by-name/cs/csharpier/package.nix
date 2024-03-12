@@ -1,6 +1,6 @@
-{ buildDotnetGlobalTool, lib }:
+{ dotnet_6, lib }:
 
-buildDotnetGlobalTool {
+dotnet_6.buildDotnetGlobalTool {
   pname = "csharpier";
   version = "0.27.2";
   executables = "dotnet-csharpier";

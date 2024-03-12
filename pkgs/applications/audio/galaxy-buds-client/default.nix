@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, buildDotnetModule
+, dotnet_6
 , fetchFromGitHub
 , autoPatchelfHook
 , fontconfig
@@ -11,7 +11,7 @@
 , graphicsmagick
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "galaxy-buds-client";
   version = "4.5.4";
 

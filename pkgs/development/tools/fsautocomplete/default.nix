@@ -1,6 +1,9 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages }:
+{ lib, fetchFromGitHub, dotnet_7, dotnet_6 }:
 
-buildDotnetModule rec {
+let
+  dotnet = dotnet_7.withExtraSDKs [ dotnet_6.sdk ];
+
+in dotnet.buildDotnetModule rec {
   pname = "fsautocomplete";
   version = "0.69.0";
 
@@ -20,8 +23,7 @@ buildDotnetModule rec {
       --replace TargetFrameworks TargetFramework \
   '';
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 ];
-  dotnet-runtime = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnet_7.sdk;
 
   projectFile = "src/FsAutoComplete/FsAutoComplete.fsproj";
   executables = [ "fsautocomplete" ];

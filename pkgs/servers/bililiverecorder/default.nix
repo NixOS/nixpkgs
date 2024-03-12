@@ -2,15 +2,16 @@
 , stdenv
 , fetchzip
 , makeWrapper
+, dotnet_6
 , dotnetCorePackages
 }:
 
 let
   pname = "bililiverecorder";
 
-  dotnet = with dotnetCorePackages; combinePackages [
-    runtime_6_0
-    aspnetcore_6_0
+  dotnet = with dotnet_6; dotnetCorePackages.combinePackages [
+    runtime
+    aspnetcore
   ];
 
   version = "2.10.1";

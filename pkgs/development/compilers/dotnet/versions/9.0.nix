@@ -2,7 +2,7 @@
 
 # v9.0 (preview)
 {
-  aspnetcore_9_0 = buildAspNetCore {
+  aspnetcore = buildAspNetCore {
     version = "9.0.0-preview.1.24081.5";
     srcs = {
       x86_64-linux = {
@@ -24,7 +24,7 @@
     };
   };
 
-  runtime_9_0 = buildNetRuntime {
+  runtime = buildNetRuntime {
     version = "9.0.0-preview.1.24080.9";
     srcs = {
       x86_64-linux = {
@@ -46,7 +46,7 @@
     };
   };
 
-  sdk_9_0 = buildNetSdk {
+  sdk = buildNetSdk {
     version = "9.0.100-preview.1.24101.2";
     srcs = {
       x86_64-linux = {

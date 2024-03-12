@@ -1,11 +1,10 @@
 { lib
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_7
 , fetchpatch
 }:
 
-buildDotnetModule rec {
+dotnet_7.buildDotnetModule rec {
   pname = "torrentstream";
   version = "1.0.1.6";
 
@@ -20,8 +19,7 @@ buildDotnetModule rec {
 
   projectFile = "TorrentStream.sln";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-runtime = dotnet_7.aspnetcore;
   executables = [ "TorrentStream" ];
 
   patches = [

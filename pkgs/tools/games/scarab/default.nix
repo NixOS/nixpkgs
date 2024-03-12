@@ -1,5 +1,5 @@
 { lib
-, buildDotnetModule
+, dotnet_6
 , fetchFromGitHub
 , glibc
 , zlib
@@ -14,7 +14,7 @@
 , makeDesktopItem
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "scarab";
   version = "2.5.0.0";
 

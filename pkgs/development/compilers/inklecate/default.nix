@@ -1,12 +1,11 @@
 { lib
 , stdenv
 , autoPatchelfHook
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_6
 , fetchFromGitHub
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "inklecate";
   version = "1.1.1";
 
@@ -23,9 +22,6 @@ buildDotnetModule rec {
   projectFile = "inklecate/inklecate.csproj";
   nugetDeps = ./deps.nix;
   executables = [ "inklecate" ];
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   meta = with lib; {
     description = "Compiler for ink, inkle's scripting language";

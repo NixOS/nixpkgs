@@ -1,12 +1,11 @@
 { lib
 , fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_8
 , marksman
 , testers
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "marksman";
   version = "2023-12-09";
 
@@ -24,9 +23,6 @@ buildDotnetModule rec {
   testProjectFile = "Tests/Tests.fsproj";
 
   nugetDeps = ./deps.nix;
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   postInstall = ''
     install -m 644 -D -t "$out/share/doc/${pname}" LICENSE
@@ -53,7 +49,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/artempyanykh/marksman";
     license = licenses.mit;
     maintainers = with maintainers; [ stasjok plusgut ];
-    platforms = dotnet-sdk.meta.platforms;
     mainProgram = "marksman";
   };
 }

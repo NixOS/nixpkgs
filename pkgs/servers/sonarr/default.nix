@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dotnet-runtime, icu, ffmpeg, openssl, sqlite, curl, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, dotnet_6, icu, ffmpeg, openssl, sqlite, curl, makeWrapper, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/sonarr-${version}}
     cp -r * $out/share/sonarr-${version}/.
 
-    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/NzbDrone \
+    makeWrapper "${dotnet_6.runtime}/bin/dotnet" $out/bin/NzbDrone \
       --add-flags "$out/share/sonarr-${version}/Sonarr.dll" \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite openssl icu ]}

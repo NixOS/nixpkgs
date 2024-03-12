@@ -2,7 +2,7 @@
 , stdenv
 , lib
 , fetchFromGitHub
-, buildDotnetModule
+, dotnet_6
 , dotnetCorePackages
 , openssl
 , zlib
@@ -10,7 +10,7 @@
 , nix-update-script
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "pupdate";
   version = "3.2.1";
 
@@ -45,9 +45,6 @@ buildDotnetModule rec {
   dotnetFlags = [
     "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
   ];
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   passthru = {
     updateScript = nix-update-script { };

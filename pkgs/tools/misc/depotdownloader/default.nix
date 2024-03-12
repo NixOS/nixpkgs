@@ -1,9 +1,9 @@
 { lib
-, buildDotnetModule
+, dotnet_6
 , fetchFromGitHub
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "depotdownloader";
   version = "2.5.0";
 

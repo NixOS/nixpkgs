@@ -1,11 +1,10 @@
 { lib
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_7
 , callPackage
 }:
 
-buildDotnetModule rec {
+dotnet_7.buildDotnetModule rec {
   pname = "certdump";
   version = "unstable-2023-07-12";
 
@@ -23,8 +22,7 @@ buildDotnetModule rec {
   executables = [ "CertDump" ];
   xBuildFiles = [ "CertDump/CertDump.csproj" ];
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnet_7.aspnetcore;
 
   dotnetFlags = [
     "-property:ImportByWildcardBeforeSolution=false"

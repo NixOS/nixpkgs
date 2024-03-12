@@ -1,14 +1,13 @@
 { lib
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_8
 , libkrb5
 , zlib
 , openssl
 , callPackage
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
   version = "5.5.3.4";
@@ -20,8 +19,7 @@ buildDotnetModule rec {
     hash = "sha256-9ISEIKrAK6UTDM3TPizBRMU+wfiinhnaWmS5CkXpkYo=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnet_8.aspnetcore;
 
   nugetDeps = ./deps.nix;
 

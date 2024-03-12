@@ -2,7 +2,7 @@
 
 # v7.0 (maintenance)
 {
-  aspnetcore_7_0 = buildAspNetCore {
+  aspnetcore = buildAspNetCore {
     version = "7.0.16";
     srcs = {
       x86_64-linux = {
@@ -24,7 +24,7 @@
     };
   };
 
-  runtime_7_0 = buildNetRuntime {
+  runtime = buildNetRuntime {
     version = "7.0.16";
     srcs = {
       x86_64-linux = {
@@ -46,7 +46,7 @@
     };
   };
 
-  sdk_7_0 = buildNetSdk {
+  sdk = buildNetSdk {
     version = "7.0.406";
     srcs = {
       x86_64-linux = {

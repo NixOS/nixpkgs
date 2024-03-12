@@ -3,8 +3,7 @@
 , fetchurl
 , nixosTests
 , stdenv
-, dotnetCorePackages
-, buildDotnetModule
+, dotnet_6
 , ffmpeg
 , fontconfig
 , freetype
@@ -12,7 +11,7 @@
 , sqlite
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "jellyfin";
   version = "10.8.13"; # ensure that jellyfin-web has matching version
 
@@ -40,8 +39,7 @@ buildDotnetModule rec {
     fontconfig
     freetype
   ];
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-runtime = dotnet_6.aspnetcore;
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   preInstall = ''

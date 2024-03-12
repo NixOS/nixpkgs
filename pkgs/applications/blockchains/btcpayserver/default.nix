@@ -1,10 +1,9 @@
 { lib
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_8
 , altcoinSupport ? false }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "btcpayserver";
   version = "1.12.5";
 
@@ -18,8 +17,7 @@ buildDotnetModule rec {
   projectFile = "BTCPayServer/BTCPayServer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-runtime = dotnet_8.aspnetcore;
 
   buildType = if altcoinSupport then "Altcoins-Release" else "Release";
 

@@ -6,10 +6,10 @@
 , linkFarmFromDrvs
 , symlinkJoin
 , makeWrapper
+, dotnet
 , dotnetCorePackages
 , mkNugetSource
 , mkNugetDeps
-, nuget-to-nix
 , cacert
 , coreutils
 , runtimeShellPackage
@@ -81,9 +81,9 @@
   # Whether to explicitly enable UseAppHost when building. This is redundant if useDotnetFromEnv is enabledz
 , useAppHost ? true
   # The dotnet SDK to use.
-, dotnet-sdk ? dotnetCorePackages.sdk_6_0
+, dotnet-sdk ? dotnet.sdk
   # The dotnet runtime to use.
-, dotnet-runtime ? dotnetCorePackages.runtime_6_0
+, dotnet-runtime ? dotnet.runtime
   # The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
 , dotnet-test-sdk ? dotnet-sdk
 , ...
@@ -208,7 +208,7 @@ stdenvNoCC.mkDerivation (args // {
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
 
-        export PATH="${lib.makeBinPath [ coreutils runtimeShellPackage dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
+        export PATH="${lib.makeBinPath [ coreutils runtimeShellPackage dotnet-sdk (dotnetCorePackages.nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
 
         for arg in "$@"; do
             case "$arg" in

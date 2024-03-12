@@ -2,7 +2,7 @@
 , stdenv
 , fetchzip
 , autoPatchelfHook
-, dotnet-runtime
+, dotnet_6
 , ffmpeg
 , libglvnd
 , makeWrapper
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dotnet-runtime
+    dotnet_6.runtime
     ffmpeg
     libglvnd
     openal
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib/famistudio}
     mv * $out/lib/famistudio
 
-    makeWrapper ${lib.getExe dotnet-runtime} $out/bin/famistudio \
+    makeWrapper ${lib.getExe dotnet_6.runtime} $out/bin/famistudio \
       --add-flags $out/lib/famistudio/FamiStudio.dll \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]} \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}

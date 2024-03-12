@@ -2,11 +2,10 @@
 , fetchPypi
 , buildPythonPackage
 , pytestCheckHook
-, dotnetCorePackages
+, dotnet_6
 , setuptools
 , setuptools-scm
 , wheel
-, buildDotnetModule
 , cffi
 }:
 
@@ -21,7 +20,7 @@ let
 
   # This buildDotnetModule is used only to get nuget sources, the actual
   # build is done in `buildPythonPackage` below.
-  dotnet-build = buildDotnetModule {
+  dotnet-build = dotnet_6.buildDotnetModule {
     inherit pname version src;
     projectFile = [ "netfx_loader/ClrLoader.csproj" "example/example.csproj" ];
     nugetDeps = ./deps.nix;
@@ -36,7 +35,7 @@ buildPythonPackage {
     setuptools
     setuptools-scm
     wheel
-    dotnetCorePackages.sdk_6_0
+    dotnet_6.sdk
   ];
 
   propagatedBuildInputs = [

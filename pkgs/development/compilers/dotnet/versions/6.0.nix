@@ -2,7 +2,7 @@
 
 # v6.0 (active)
 {
-  aspnetcore_6_0 = buildAspNetCore {
+  aspnetcore = buildAspNetCore {
     version = "6.0.27";
     srcs = {
       x86_64-linux = {
@@ -24,7 +24,7 @@
     };
   };
 
-  runtime_6_0 = buildNetRuntime {
+  runtime = buildNetRuntime {
     version = "6.0.27";
     srcs = {
       x86_64-linux = {
@@ -46,7 +46,7 @@
     };
   };
 
-  sdk_6_0 = buildNetSdk {
+  sdk = buildNetSdk {
     version = "6.0.419";
     srcs = {
       x86_64-linux = {

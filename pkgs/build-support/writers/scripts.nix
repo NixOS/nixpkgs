@@ -421,7 +421,7 @@ rec {
     writePyPy3 "/bin/${name}";
 
 
-  makeFSharpWriter = { dotnet-sdk ? pkgs.dotnet-sdk, fsi-flags ? "", libraries ? _: [] }: nameOrPath:
+  makeFSharpWriter = { dotnet-sdk ? pkgs.dotnet_8.sdk, fsi-flags ? "", libraries ? _: [] }: nameOrPath:
   let
     fname = last (builtins.split "/" nameOrPath);
     path = if strings.hasSuffix ".fsx" nameOrPath then nameOrPath else "${nameOrPath}.fsx";

@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_7
 , libX11
 , libICE
 , libSM
@@ -18,7 +17,7 @@
 }:
 
 assert withLibsecretSupport -> withGuiSupport;
-buildDotnetModule rec {
+dotnet_7.buildDotnetModule rec {
   pname = "git-credential-manager";
   version = "2.4.1";
 
@@ -31,8 +30,6 @@ buildDotnetModule rec {
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
   dotnetInstallFlags = [ "--framework" "net7.0" ];
   executables = [ "git-credential-manager" ];
 

@@ -1,5 +1,6 @@
-{ buildDotnetModule
-, dotnetCorePackages
+{ dotnet_6
+, dotnet_7
+, dotnet_8
 , fetchFromGitHub
 , lib
 , stdenv
@@ -7,9 +8,9 @@
 , expect
 }:
 let
-  inherit (dotnetCorePackages) sdk_8_0 runtime_6_0;
-in
-let finalPackage = buildDotnetModule rec {
+  dotnet = dotnet_8.withExtraSDKs [ dotnet_6.sdk ];
+  finalPackage = dotnet.buildDotnetModule rec {
+
   pname = "omnisharp-roslyn";
   version = "1.39.11";
 
@@ -23,8 +24,7 @@ let finalPackage = buildDotnetModule rec {
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
-  dotnet-runtime = sdk_8_0;
+  dotnet-runtime = dotnet_8.sdk;
 
   dotnetInstallFlags = [ "--framework net6.0" ];
   dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
@@ -34,7 +34,7 @@ let finalPackage = buildDotnetModule rec {
     "-property:AssemblyVersion=${version}.0"
     "-property:FileVersion=${version}.0"
     "-property:InformationalVersion=${version}"
-    "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
+    "-property:RuntimeFrameworkVersion=${dotnet_6.runtime.version}"
     "-property:RollForward=LatestMajor"
   ];
 
@@ -62,7 +62,7 @@ let finalPackage = buildDotnetModule rec {
           send_error "timeout!\n"
           exit 1
         }
-        expect ".NET Core SDK ${if sdk ? version then sdk.version else sdk_8_0.version}"
+        expect ".NET Core SDK ${if sdk ? version then sdk.version else dotnet_7.sdk.version}"
         expect "{\"Event\":\"started\","
         send \x03
         expect eof
@@ -73,9 +73,9 @@ let finalPackage = buildDotnetModule rec {
     '';
   in {
     # Make sure we can run OmniSharp with any supported SDK version, as well as without
-    with-net6-sdk = with-sdk dotnetCorePackages.sdk_6_0;
-    with-net7-sdk = with-sdk dotnetCorePackages.sdk_7_0;
-    with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
+    with-net6-sdk = with-sdk dotnet_6.sdk;
+    with-net7-sdk = with-sdk dotnet_7.sdk;
+    with-net8-sdk = with-sdk dotnet_8.sdk;
     no-sdk = with-sdk null;
   };
 

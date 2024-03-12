@@ -1,12 +1,9 @@
-{ buildDotnetGlobalTool, dotnetCorePackages, lib }:
+{ buildDotnetGlobalTool, dotnet_8, lib }:
 
-buildDotnetGlobalTool {
+dotnet_8.buildDotnetGlobalTool {
   pname = "csharprepl";
   nugetName = "CSharpRepl";
   version = "0.6.6";
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nugetSha256 = "sha256-VkZGnfD8p6oAJ7i9tlfwJfmKfZBHJU7Wdq+K4YjPoRs=";
 

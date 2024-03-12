@@ -1,12 +1,12 @@
 { lib
-, buildDotnetModule
+, dotnet_6
 , fetchFromGitHub
 , writeScript
 , jdk11
 , z3
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "Dafny";
   version = "4.4.0";
 

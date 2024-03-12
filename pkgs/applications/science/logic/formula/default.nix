@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, unstableGitUpdater }:
+{ lib, stdenv, fetchFromGitHub, dotnet_6, unstableGitUpdater }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "formula-dotnet";
   version = "2.0";
 
@@ -17,7 +17,7 @@ buildDotnetModule rec {
   postFixup = if stdenv.isLinux then ''
     mv $out/bin/CommandLine $out/bin/formula
   '' else lib.optionalString stdenv.isDarwin ''
-    makeWrapper ${dotnetCorePackages.runtime_6_0}/bin/dotnet $out/bin/formula \
+    makeWrapper ${dotnet_6.runtime}/bin/dotnet $out/bin/formula \
       --add-flags "$out/lib/formula-dotnet/CommandLine.dll" \
       --prefix DYLD_LIBRARY_PATH : $out/lib/formula-dotnet/runtimes/macos/native
   '';

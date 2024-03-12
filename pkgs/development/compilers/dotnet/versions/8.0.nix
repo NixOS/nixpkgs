@@ -2,7 +2,7 @@
 
 # v8.0 (active)
 {
-  aspnetcore_8_0 = buildAspNetCore {
+  aspnetcore = buildAspNetCore {
     version = "8.0.2";
     srcs = {
       x86_64-linux = {
@@ -24,7 +24,7 @@
     };
   };
 
-  runtime_8_0 = buildNetRuntime {
+  runtime = buildNetRuntime {
     version = "8.0.2";
     srcs = {
       x86_64-linux = {
@@ -46,7 +46,7 @@
     };
   };
 
-  sdk_8_0 = buildNetSdk {
+  sdk = buildNetSdk {
     version = "8.0.201";
     srcs = {
       x86_64-linux = {

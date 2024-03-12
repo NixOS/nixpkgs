@@ -1,4 +1,4 @@
-{ buildDotnetModule, emptyDirectory, mkNugetDeps, dotnet-sdk }:
+{ emptyDirectory, mkNugetDeps, dotnet }:
 
 { pname
 , version
@@ -12,11 +12,11 @@
   # a default of `pname` instead of null, to avoid auto-wrapping everything
 , executables ? pname
   # The dotnet runtime to use, dotnet tools need a full SDK to function
-, dotnet-runtime ? dotnet-sdk
+, dotnet-runtime ? dotnet.runtime
 , ...
 } @ args:
 
-buildDotnetModule (args // {
+dotnet.buildDotnetModule (args // {
   inherit pname version dotnet-runtime executables;
 
   src = emptyDirectory;

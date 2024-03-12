@@ -921,28 +921,22 @@ with pkgs;
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
-  dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
-  dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
-  dotnet-sdk_8 = dotnetCorePackages.sdk_8_0;
+  inherit (dotnetCorePackages)
+    dotnet_6-bin
+    dotnet_7-bin
+    dotnet_8-bin
+    dotnet_9-bin
+    dotnet_6
+    dotnet_7
+    dotnet_8
+    dotnet_9;
 
-  dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
-  dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
-  dotnet-runtime_8 = dotnetCorePackages.runtime_8_0;
-
-  dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
-  dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
-  dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
-
-  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
-  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { dotnet = dotnet_6; };
+  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { dotnet = dotnet_6; };
   mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
   mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
 
-  buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
+  buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { dotnet = dotnet_6; };
 
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
 
@@ -3243,7 +3237,7 @@ with pkgs;
 
   aptly = callPackage ../tools/misc/aptly { };
 
-  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
+  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { dotnet_8 = dotnet_8-bin; };
 
   archivebox = callPackage ../applications/misc/archivebox { };
 

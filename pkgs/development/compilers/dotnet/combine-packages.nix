@@ -9,8 +9,9 @@ let cli = builtins.head dotnetPackages;
 in
 assert lib.assertMsg ((builtins.length dotnetPackages) > 0)
     ''You must include at least one package, e.g
-      `with dotnetCorePackages; combinePackages [
-          sdk_6_0 aspnetcore_7_0
+      `combinePackages [
+          dotnet_6.sdk
+          dotnet_7.sdk
        ];`'' ;
   buildEnv {
     name = "dotnet-core-combined";

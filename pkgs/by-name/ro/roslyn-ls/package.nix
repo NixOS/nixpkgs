@@ -1,15 +1,16 @@
-{ lib, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, stdenvNoCC, testers, roslyn-ls, jq }:
+{ lib, fetchFromGitHub, buildDotnetModule, dotnet_8, dotnet_7, dotnet_6, dotnetCorePackages, stdenvNoCC, testers, roslyn-ls, jq }:
 let
   pname = "roslyn-ls";
   # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
+  dotnet = dotnet_8.withExtraSDKs [ dotnet_6.sdk dotnet_7.sdk ];
   # need sdk on runtime as well
-  dotnet-runtime = dotnetCorePackages.sdk_8_0;
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
 in
-buildDotnetModule rec {
-  inherit pname dotnet-sdk dotnet-runtime;
+dotnet.buildDotnetModule rec {
+  inherit pname;
+
+  dotnet-runtime = dotnet_8.sdk;
 
   vsVersion = "2.17.7";
   src = fetchFromGitHub {

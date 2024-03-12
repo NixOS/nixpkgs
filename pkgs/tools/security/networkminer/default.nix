@@ -1,12 +1,12 @@
 { lib
-, buildDotnetModule
+, dotnet_6
 , fetchurl
 , unzip
 , dos2unix
 , msbuild
 , mono
 }:
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "networkminer";
   version = "2.8";
 

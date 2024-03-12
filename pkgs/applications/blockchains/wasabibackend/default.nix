@@ -2,13 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
+  dotnet_7,
   autoPatchelfHook,
   zlib,
   openssl,
 }:
-buildDotnetModule rec {
+dotnet_7.buildDotnetModule rec {
   pname = "wasabibackend";
   version = "2.0.2.1";
 
@@ -22,8 +21,7 @@ buildDotnetModule rec {
   projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-runtime = dotnet_7.aspnetcore;
 
   nativeBuildInputs = [autoPatchelfHook];
   buildInputs = [stdenv.cc.cc.lib zlib];

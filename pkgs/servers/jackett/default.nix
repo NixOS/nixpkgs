@@ -1,13 +1,12 @@
 { lib
 , stdenv
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_6
 , openssl
 , mono
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "jackett";
   version = "0.21.1915";
 
@@ -21,7 +20,7 @@ buildDotnetModule rec {
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-runtime = dotnet_6.aspnetcore;
 
   dotnetInstallFlags = [ "-p:TargetFramework=net6.0" ];
 

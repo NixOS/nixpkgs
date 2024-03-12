@@ -1,6 +1,5 @@
 { lib
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_8
 , fetchFromGitHub
 , pkg-config
 , blueprint-compiler
@@ -13,7 +12,7 @@
 , cava
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "cavalier";
   version = "2024.1.0";
 
@@ -23,9 +22,6 @@ buildDotnetModule rec {
     rev = "refs/tags/${version}";
     hash = "sha256-SFhEKtYrlnkbLMnxU4Uf4jnFsw0MJHstgZgLLnGC2d8=";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "NickvisionCavalier.GNOME/NickvisionCavalier.GNOME.csproj";
   nugetDeps = ./deps.nix;

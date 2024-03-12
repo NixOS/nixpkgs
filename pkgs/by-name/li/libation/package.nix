@@ -1,8 +1,7 @@
 { lib
 , stdenv
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_8
 , wrapGAppsHook
 
 , libX11
@@ -17,7 +16,7 @@
 , gtk3
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "libation";
   version = "11.3.1";
 
@@ -29,9 +28,6 @@ buildDotnetModule rec {
   };
 
   sourceRoot = "${src.name}/Source";
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nugetDeps = ./deps.nix;
 

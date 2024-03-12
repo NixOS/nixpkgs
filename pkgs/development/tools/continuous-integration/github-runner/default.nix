@@ -1,6 +1,6 @@
 { autoPatchelfHook
 , autoSignDarwinBinariesHook
-, buildDotnetModule
+, dotnet_6
 , dotnetCorePackages
 , fetchFromGitHub
 , fetchpatch
@@ -21,7 +21,7 @@
 # Node.js runtimes supported by upstream
 assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "github-runner";
   version = "2.314.1";
 
@@ -121,9 +121,6 @@ buildDotnetModule rec {
   ];
 
   buildInputs = [ stdenv.cc.cc.lib ];
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   dotnetFlags = [ "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ];
 
@@ -236,7 +233,7 @@ buildDotnetModule rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
-      --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
+      --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet_6.runtime}/shared/Microsoft.NETCore.App/${dotnet_6.runtime.version}/' \
       --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
   '' + ''
     # Remove uneeded copy for run-helper template
