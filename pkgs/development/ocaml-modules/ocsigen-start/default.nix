@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocsigen-start";
-  version = "6.1.2";
+  version = "6.2.0";
 
   nativeBuildInputs = [ ocaml findlib eliom ];
   buildInputs = [ ocsigen-ppx-rpc ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = "ocsigen-start";
     rev = version;
-    hash = "sha256-GhuH3rNdauJztEhygct6jCf+EmAtbSeyYP45stMzGFU=";
+    hash = "sha256-i2nj/m1Ihb/bprtHvZh47/oK0v+aFNVH+A2CB4rrrPk=";
   };
 
   preInstall = ''

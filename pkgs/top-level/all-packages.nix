@@ -34873,10 +34873,6 @@ with pkgs;
 
   spotify-tray = callPackage ../applications/misc/spotify-tray { };
 
-  spotify-tui = callPackage ../applications/audio/spotify-tui {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
-  };
-
   sptlrx = callPackage ../applications/audio/sptlrx { };
 
   sptk = callPackage ../development/libraries/sptk { };
