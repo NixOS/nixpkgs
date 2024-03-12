@@ -21,6 +21,8 @@ in
     inherit src;
     sourceRoot = "${src.name}/backend";
 
+    # outputs = ["out"];
+
     preBuild = let
       frontend = mkPnpmPackage {
         inherit src;
