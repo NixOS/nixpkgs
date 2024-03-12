@@ -136,8 +136,9 @@ let
   makeDerivationArgument =
 
 
-# `mkDerivation` wraps the builtin `derivation` function to
-# produce derivations that use this stdenv and its shell.
+# `makeDerivationArgument` is responsible for the `mkDerivation` arguments that
+# affect the actual derivation, excluding a few behaviors that are not
+# essential, and specific to `mkDerivation`: `env`, `cmakeFlags`, `mesonFlags`.
 #
 # See also:
 #
@@ -490,6 +491,11 @@ mkDerivationSimple = overrideAttrs:
 # `mkDerivation` wraps the builtin `derivation` function to
 # produce derivations that use this stdenv and its shell.
 #
+# Internally, it delegates most of its behavior to `makeDerivationArgument`,
+# except for the `env`, `cmakeFlags`, and `mesonFlags` attributes, as well
+# as the attributes `meta` and `passthru` that affect [package attributes],
+# and not the derivation itself.
+#
 # See also:
 #
 # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
@@ -497,6 +503,8 @@ mkDerivationSimple = overrideAttrs:
 #
 # * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
 #   Explanation about derivations in general
+#
+# * [package attributes]: https://nixos.org/manual/nix/stable/glossary#package-attribute-set
 {
 
 # Configure Phase
