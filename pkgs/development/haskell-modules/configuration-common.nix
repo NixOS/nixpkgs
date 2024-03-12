@@ -1627,26 +1627,31 @@ self: super: {
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   # 2022-03-16: Pullrequest for ghc 9 compat https://github.com/reflex-frp/reflex-dom/pull/433
-  reflex-dom-core = overrideCabal (old: {
-    postPatch = old.postPatch or "" + ''
-      sed -i 's/template-haskell.*2.17/template-haskell/' reflex-dom-core.cabal
-      sed -i 's/semialign.*1.3/semialign/' reflex-dom-core.cabal
-      sed -i 's/these.*0.9/these/' reflex-dom-core.cabal
-    '';
-    })
-    ((appendPatches [
-      (fetchpatch {
-        url = "https://github.com/reflex-frp/reflex-dom/commit/1814640a14c6c30b1b2299e74d08fb6fcaadfb94.patch";
-        sha256 = "sha256-QyX2MLd7Tk0M1s0DU0UV3szXs8ngz775i3+KI62Q3B8=";
-        relative = "reflex-dom-core";
-      })
-      (fetchpatch {
-        url = "https://github.com/reflex-frp/reflex-dom/commit/56fa8a484ccfc7d3365d07fea3caa430155dbcac.patch";
-        sha256 = "sha256-IogAYJZac17Bg99ZnnFX/7I44DAnHo2PRBWD0iVHbNA=";
-        relative = "reflex-dom-core";
-      })
-    ]
-          (doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core))))));
+  reflex-dom-core = lib.pipe super.reflex-dom-core [
+      doDistribute
+      unmarkBroken
+      dontCheck
+      (appendPatches [
+        (fetchpatch {
+          name = "fix-th-build-order.patch";
+          url = "https://github.com/reflex-frp/reflex-dom/commit/1814640a14c6c30b1b2299e74d08fb6fcaadfb94.patch";
+          sha256 = "sha256-QyX2MLd7Tk0M1s0DU0UV3szXs8ngz775i3+KI62Q3B8=";
+          relative = "reflex-dom-core";
+        })
+        (fetchpatch {
+          name = "bump-reflex-dom-core-bounds.patch";
+          url = "https://github.com/reflex-frp/reflex-dom/commit/51cdd96dde9d65fcde326a16a797397bf62102d9.patch";
+          sha256 = "sha256-Ct8gMbXqN+6vqTwFiqnKxddAfs+YFaBocF4G7PPMzFo=";
+          relative = "reflex-dom-core";
+        })
+        (fetchpatch {
+          name = "new-mtl-compat.patch";
+          url = "https://github.com/reflex-frp/reflex-dom/commit/df95bfc0b9baf70492f20daddfe6bb180f80c413.patch";
+          sha256 = "sha256-zkLZtcnfqpfiv6zDEmkZjWHr2b7lOnZ4zujm0/pkxQg=";
+          relative = "reflex-dom-core";
+        })
+      ])
+    ];
 
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarball of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
