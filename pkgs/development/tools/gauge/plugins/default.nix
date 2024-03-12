@@ -4,4 +4,5 @@ lib.makeScope pkgs.newScope (final: {
   dotnet = final.callPackage ./dotnet { };
   html-report = final.callPackage ./html-report { };
   java = final.callPackage ./java { };
+  ruby = final.callPackage ./ruby { };
 })
