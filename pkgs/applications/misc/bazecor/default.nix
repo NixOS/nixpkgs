@@ -1,4 +1,4 @@
-{ lib, appimageTools, fetchurl }:
+{ lib, appimageTools, fetchurl, makeWrapper }:
 let
   pname = "bazecor";
   version = "1.3.9";
@@ -40,6 +40,9 @@ in appimageTools.wrapType2 {
     mkdir -p $out/lib/udev/rules.d
     ln -s ${./10-dygma.rules} $out/lib/udev/rules.d
 
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram "$out/bin/${pname}" \
+       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
 
     substituteInPlace $out/share/applications/Bazecor.desktop \
       --replace 'Exec=Bazecor' 'Exec=${pname}'
