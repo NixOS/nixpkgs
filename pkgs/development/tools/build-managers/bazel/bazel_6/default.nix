@@ -179,7 +179,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "bazel";
+  pname = "bazel${ lib.optionalString enableNixHacks "-hacks" }";
   inherit version;
 
   meta = with lib; {
