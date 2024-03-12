@@ -19,7 +19,7 @@ with lib.lists;
 with lib.types;
 with lib.attrsets;
 with lib.strings;
-with (import ./inspect.nix { inherit lib; }).predicates;
+with lib.systems.inspect.predicates;
 
 let
   inherit (lib.options) mergeOneOption;

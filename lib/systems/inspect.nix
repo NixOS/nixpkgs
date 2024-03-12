@@ -1,5 +1,5 @@
 { lib }:
-with import ./parse.nix { inherit lib; };
+with lib.systems.parse;
 with lib.attrsets;
 with lib.lists;
 
