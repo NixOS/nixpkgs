@@ -1978,6 +1978,8 @@ self: super: with self; {
 
   copier = callPackage ../development/python-modules/copier { };
 
+  copier-template-tester = callPackage ../development/python-modules/copier-template-tester { };
+
   corallium = callPackage ../development/python-modules/corallium { };
 
   correctionlib = callPackage ../development/python-modules/correctionlib { };
