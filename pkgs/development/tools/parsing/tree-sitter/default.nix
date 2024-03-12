@@ -22,14 +22,14 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.9";
-  sha256 = "sha256-NxWqpMNwu5Ajffw1E2q9KS4TgkCH6M+ctFyi9Jp0tqQ=";
+  version = "0.22.1";
+  hash = "sha256-vUvDWh0DFKYKbNb4jAbX0Y7qPfoDXjGCvaBOPrdUVOQ=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
     fetchSubmodules = true;
   };
 
@@ -105,8 +105,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoLock.lockFile = ./Cargo.lock;
-  cargoLock.outputHashes."cranelift-bforest-0.102.0" = "sha256-rJeRbRDrAnKb8s98gNn1NTMKuB8B4aOI8Fh6JeLX7as=";
+  cargoHash = "sha256-gfFKy+hNUdNbB1+mSrPAvY4sqzdFP9QjM8xRkdiHUvM=";
 
   buildInputs =
     lib.optionals stdenv.isDarwin [ Security CoreServices ];
@@ -119,7 +118,7 @@ rustPlatform.buildRustPackage {
     sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
     sed -e 's/playground,//' \
-        -e 's/playground::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+        -e 's/playground::serve(&grammar_path.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 
@@ -157,6 +156,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "A parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
+    changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.
