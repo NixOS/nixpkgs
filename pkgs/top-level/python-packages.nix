@@ -1951,6 +1951,8 @@ self: super: with self; {
 
   copier = callPackage ../development/python-modules/copier { };
 
+  corallium = callPackage ../development/python-modules/corallium { };
+
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
