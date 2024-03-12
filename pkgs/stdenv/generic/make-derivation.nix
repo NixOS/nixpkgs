@@ -155,8 +155,6 @@ let
 
 # Configure Phase
 , configureFlags ? []
-, cmakeFlags ? []
-, mesonFlags ? []
 , # Target is not included by default because most programs don't care.
   # Including it then would cause needless mass rebuilds.
   #
@@ -178,14 +176,6 @@ let
 
 , enableParallelBuilding ? config.enableParallelBuildingByDefault
 
-, meta ? {}
-, passthru ? {}
-, pos ? # position used in error messages and for meta.position
-    (if attrs.meta.description or null != null
-      then builtins.unsafeGetAttrPos "description" attrs.meta
-      else if attrs.version or null != null
-      then builtins.unsafeGetAttrPos "version" attrs
-      else builtins.unsafeGetAttrPos "name" attrs)
 , separateDebugInfo ? false
 , outputs ? [ "out" ]
 , __darwinAllowLocalNetworking ? false
@@ -206,8 +196,6 @@ let
 # Experimental.  For simple packages mostly just works,
 # but for anything complex, be prepared to debug if enabling.
 , __structuredAttrs ? config.structuredAttrsByDefault or false
-
-, env ? { }
 
 , ... } @ attrs:
 
@@ -295,9 +283,6 @@ else let
 
   outputs = outputs';
 
-  references = nativeBuildInputs ++ buildInputs
-            ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
-
   dependencies = map (map chooseDevOutputs) [
     [
       (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
@@ -347,18 +332,14 @@ else let
     unique (concatMap (input: input.__propagatedImpureHostDeps or [])
       (concatLists propagatedDependencies));
 
-  envIsExportable = isAttrs env && !isDerivation env;
-
   derivationArg =
-    (removeAttrs attrs
-      (["meta" "passthru" "pos"
+    removeAttrs attrs [
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__contentAddressed"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
        "sandboxProfile" "propagatedSandboxProfile"]
-       ++ optional (__structuredAttrs || envIsExportable) "env"))
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
@@ -386,7 +367,7 @@ else let
             assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
             "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
-    }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
+    }) // {
       builder = attrs.realBuilder or stdenv.shell;
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
@@ -423,54 +404,6 @@ else let
         ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
-
-      cmakeFlags =
-        cmakeFlags
-        ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-          "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-        ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
-          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-        ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
-          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-        ] ++ optionals (stdenv.hostPlatform.isDarwin) [
-          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-        ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
-          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-        ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
-          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-        ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
-          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-        ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
-        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
-        ]);
-
-      mesonFlags =
-        let
-          # See https://mesonbuild.com/Reference-tables.html#cpu-families
-          cpuFamily = platform: with platform;
-            /**/ if isAarch32 then "arm"
-            else if isx86_32  then "x86"
-            else platform.uname.processor;
-
-          crossFile = builtins.toFile "cross-file.conf" ''
-            [properties]
-            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
-            needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
-
-            [host_machine]
-            system = '${stdenv.targetPlatform.parsed.kernel.name}'
-            cpu_family = '${cpuFamily stdenv.targetPlatform}'
-            cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-            endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-
-            [binaries]
-            llvm-config = 'llvm-config-native'
-            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
-          '';
-          crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ mesonFlags;
 
       inherit patches;
 
@@ -541,22 +474,6 @@ else let
       allowedRequisites =
         mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
-
-  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
-  validity = checkMeta.assertValidity { inherit meta attrs; };
-
-  checkedEnv =
-    let
-      overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
-    in
-    assert assertMsg envIsExportable
-      "When using structured attributes, `env` must be an attribute set of environment variables.";
-    assert assertMsg (overlappingNames == [ ])
-      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${concatStringsSep ", " overlappingNames}";
-    mapAttrs
-      (n: v: assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
-        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
-      env;
 
 in
   derivationArg;
