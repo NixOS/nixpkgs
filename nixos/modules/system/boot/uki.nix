@@ -75,6 +75,8 @@ in
         OSRelease = lib.mkOptionDefault "@${config.system.build.etc}/etc/os-release";
         # This is needed for cross compiling.
         EFIArch = lib.mkOptionDefault efiArch;
+      } // lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null) {
+        DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
       };
     };
 
