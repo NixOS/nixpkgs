@@ -73,8 +73,9 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
           ":installers:mac:tar:packaging"
         else ":installers:linux:universal:tar:packageBuildResults";
       extraConfig = builtins.concatStringsSep " " [
+        "--with-sysroot=${darwin.apple_sdk.frameworks.Foundation}"
         # Fix "configure: error: Invalid SDK or SYSROOT path, dependent framework headers not found"
-        "--with-xcode-path=$(xcode-select -p)"
+        "--with-xcode-path=${xcbuild}/Applications/Xcode.app"
         # Fix error: 'new' file not found
         "--disable-precompiled-headers"
         # Fix missing cups
