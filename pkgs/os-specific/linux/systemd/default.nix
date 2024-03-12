@@ -756,7 +756,6 @@ stdenv.mkDerivation (finalAttrs: {
         '';
     in
     ''
-      mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
       export LC_ALL="en_US.UTF-8";
 
       ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
