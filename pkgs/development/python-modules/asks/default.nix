@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 , anyio
@@ -37,6 +38,12 @@ buildPythonPackage rec {
     overly
     pytestCheckHook
     trio
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # stuck in threading waiter.acquire()
+    "test_https_get"
+    "test_https_get_checks_cert"
   ];
 
   pythonImportsCheck = [ "asks" ];
