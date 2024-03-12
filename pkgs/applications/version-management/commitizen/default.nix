@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest-freezer
     pytest-mock
     pytest-regressions
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   doCheck = true;
