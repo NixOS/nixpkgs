@@ -8,7 +8,8 @@ let
       , linux-pam
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
+      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
+      , enableSystemd ? null
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
@@ -39,6 +40,8 @@ let
     lz4Enabled = atLeast "14";
     zstdEnabled = atLeast "15";
 
+    systemdSupport' = if enableSystemd == null then systemdSupport else (lib.warn "postgresql: argument enableSystemd is deprecated, please use systemdSupport instead." enableSystemd);
+
     pname = "postgresql";
 
     stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
@@ -66,7 +69,7 @@ let
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
-      ++ lib.optionals enableSystemd [ systemd ]
+      ++ lib.optionals systemdSupport' [ systemd ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals stdenv'.isLinux [ linux-pam ]
@@ -97,7 +100,7 @@ let
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
-      (lib.optionalString enableSystemd "--with-systemd")
+      (lib.optionalString systemdSupport' "--with-systemd")
       (if stdenv'.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
