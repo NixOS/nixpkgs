@@ -314,26 +314,6 @@ else let
     ]
   ];
 
-  computedSandboxProfile =
-    concatMap (input: input.__propagatedSandboxProfile or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies);
-
-  computedPropagatedSandboxProfile =
-    concatMap (input: input.__propagatedSandboxProfile or [])
-      (concatLists propagatedDependencies);
-
-  computedImpureHostDeps =
-    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies));
-
-  computedPropagatedImpureHostDeps =
-    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-      (concatLists propagatedDependencies));
-
   derivationArg =
     removeAttrs attrs [
        "checkInputs" "installCheckInputs"
@@ -426,7 +406,28 @@ else let
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
-    } // optionalAttrs (stdenv.buildPlatform.isDarwin) {
+    } // optionalAttrs (stdenv.buildPlatform.isDarwin) (
+      let
+        computedSandboxProfile =
+          concatMap (input: input.__propagatedSandboxProfile or [])
+            (stdenv.extraNativeBuildInputs
+            ++ stdenv.extraBuildInputs
+            ++ concatLists dependencies);
+
+        computedPropagatedSandboxProfile =
+          concatMap (input: input.__propagatedSandboxProfile or [])
+            (concatLists propagatedDependencies);
+
+        computedImpureHostDeps =
+          unique (concatMap (input: input.__propagatedImpureHostDeps or [])
+            (stdenv.extraNativeBuildInputs
+            ++ stdenv.extraBuildInputs
+            ++ concatLists dependencies));
+
+        computedPropagatedImpureHostDeps =
+          unique (concatMap (input: input.__propagatedImpureHostDeps or [])
+            (concatLists propagatedDependencies));
+    in {
       inherit __darwinAllowLocalNetworking;
       # TODO: remove `unique` once nix has a list canonicalization primitive
       __sandboxProfile =
@@ -441,7 +442,7 @@ else let
         "/bin/sh"
       ];
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-    } //
+    }) //
     # If we use derivations directly here, they end up as build-time dependencies.
     # This is especially problematic in the case of disallowed*, since the disallowed
     # derivations will be built by nix as build-time dependencies, while those
