@@ -3,7 +3,7 @@
   buildGo122Module,
   fetchFromGitLab,
 }: let
-  version = "1.0";
+  version = "1.1";
 in
   buildGo122Module {
     pname = "invidious-router";
@@ -13,7 +13,7 @@ in
       owner = "gaincoder";
       repo = "invidious-router";
       rev = version;
-      hash = "sha256-6apw+UnhDSuPa9QB3S8b8Ej3NJTK+UCdbDjC2LkhLIg=";
+      hash = "sha256-t8KQqMPkBbVis1odDcSu+H0uvyvoFqCmtWoHqVRxmfc=";
     };
 
     vendorHash = "sha256-c03vYidm8SkoesRVQZdg/bCp9LIpdTmpXdfwInlHBKk=";
