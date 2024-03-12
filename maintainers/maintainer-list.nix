@@ -9255,6 +9255,15 @@
     githubId = 1102396;
     name = "Jussi Maki";
   };
+  joaquintrinanes = {
+    email = "hi@joaquint.io";
+    github = "JoaquinTrinanes";
+    name = "Joaquín Triñanes";
+    githubId = 1385934;
+    keys = [{
+      fingerprint = "3A13 5C15 E1D5 850D 2F90  AB25 6E14 46DD 451C 6BAF";
+    }];
+  };
   jobojeha = {
     email = "jobojeha@jeppener.de";
     github = "jobojeha";
