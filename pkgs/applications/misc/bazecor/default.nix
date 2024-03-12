@@ -1,4 +1,4 @@
-{ lib, appimageTools, fetchurl, makeWrapper }:
+{ lib, appimageTools, fetchurl, makeWrapper, enableWayland ? false }:
 let
   pname = "bazecor";
   version = "1.3.9";
@@ -40,9 +40,14 @@ in appimageTools.wrapType2 {
     mkdir -p $out/lib/udev/rules.d
     ln -s ${./10-dygma.rules} $out/lib/udev/rules.d
 
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram "$out/bin/${pname}" \
-       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+    # Bazecor with wayland crashes on startup. Disable wayland flags by default
+    # https://github.com/Dygmalab/Bazecor/issues/683
+    ${if enableWayland then ''
+      source "${makeWrapper}/nix-support/setup-hook"
+      wrapProgram "$out/bin/${pname}" \
+         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+    '' else
+      ""}
 
     substituteInPlace $out/share/applications/Bazecor.desktop \
       --replace-fail 'Exec=Bazecor' 'Exec=${pname}'
