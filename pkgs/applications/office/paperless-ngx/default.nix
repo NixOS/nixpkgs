@@ -22,13 +22,13 @@
 }:
 
 let
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sBzy3C59630moKuv3cmE9YI/FQkoZbF0SoSFbpJdNd8=";
+    hash = "sha256-i7zQQbNF9uAmvC5qAlNKV8Ip9K6sM1xOeOV4wxe5hts=";
   };
 
   python = python3;
