@@ -124,6 +124,15 @@ let
     "zerocallusedregs"
   ];
 
+  removedOrReplacedAttrNames = [
+    "checkInputs" "installCheckInputs"
+    "nativeCheckInputs" "nativeInstallCheckInputs"
+    "__contentAddressed"
+    "__darwinAllowLocalNetworking"
+    "__impureHostDeps" "__propagatedImpureHostDeps"
+    "sandboxProfile" "propagatedSandboxProfile"
+  ];
+
   makeDerivationArgument =
 
 
@@ -316,13 +325,7 @@ else let
   ];
 
   derivationArg =
-    removeAttrs attrs [
-       "checkInputs" "installCheckInputs"
-       "nativeCheckInputs" "nativeInstallCheckInputs"
-       "__contentAddressed"
-       "__darwinAllowLocalNetworking"
-       "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
+    removeAttrs attrs removedOrReplacedAttrNames
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
