@@ -6,6 +6,7 @@
 , pkg-config
 , rustPlatform
 , stdenv
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,6 +47,8 @@ rustPlatform.buildRustPackage rec {
   env = {
     OPENSSL_NO_VENDOR = true;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An extremely fast Python package installer and resolver, written in Rust";
