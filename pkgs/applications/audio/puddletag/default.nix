@@ -21,14 +21,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "puddletag";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
     rev = "refs/tags/${version}";
-    hash = "sha256-KaFfpOWI9u2ZC/3kuCLneWOOKSmAaIuHPFHptkKMH/g=";
+    hash = "sha256-oScT8YcQoDf2qZ+J7xKm22Sbfym3tkVUrWT5D2LU5e8=";
   };
 
   pythonRelaxDeps = true;
