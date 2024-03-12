@@ -94,7 +94,14 @@ stdenv.mkDerivation (self: rec {
       strace
     ]
   );
-  buildInputs = lib.optionals coreCompression [ zstd ];
+  buildInputs = lib.optionals coreCompression (
+    # Declare at the point of actual use in case the caller wants to override
+    # buildInputs to sidestep this.
+    assert lib.assertMsg (!purgeNixReferences) ''
+      Cannot enable coreCompression when purging Nix references, because compression requires linking in zstd
+    '';
+    [ zstd ]
+  );
 
   patches = lib.optionals (lib.versionOlder self.version "2.4.2") [
     # Fixed in 2.4.2

@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-imread";
+  pname = "imread";
   version = "0.7.5";
   pyproject = true;
 
