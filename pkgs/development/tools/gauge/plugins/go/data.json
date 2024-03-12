@@ -1,0 +1,27 @@
+{
+  "version": "0.4.0",
+  "aarch64-darwin": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-darwin.arm64.zip",
+    "hash": "sha256-tMo3+gQPnldCARm0WB7UYSMwaVpz90N2BiTzmvIFTg0="
+  },
+  "i386-windows": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-windows.x86.zip",
+    "hash": "sha256-GOU5SFaDrr9gQ5oAtTp4K3TC0t+WVnws1ycuOKNH3CQ="
+  },
+  "i686-linux": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-linux.x86.zip",
+    "hash": "sha256-0ByHpbmYTEXcKd8lSOb6Hvf51HvZKD7GA3zEx8bbE2I="
+  },
+  "x86_64-darwin": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-darwin.x86_64.zip",
+    "hash": "sha256-zfrEDRyflvvp4Hf2+42RL+5ooY0iBU0bkO2caOAGp74="
+  },
+  "x86_64-linux": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-linux.x86_64.zip",
+    "hash": "sha256-JEHjk51vYCFAcj9xant2vBU3BZI0krYbfZk9ALjdIs0="
+  },
+  "x86_64-windows": {
+    "url": "https://github.com/getgauge-contrib/gauge-go/releases/download/v0.4.0/gauge-go-0.4.0-windows.x86_64.zip",
+    "hash": "sha256-ioCF3G89PSyH+E20ZaN98TvkX2KYptJrgT7HW/l0ZNQ="
+  }
+}
