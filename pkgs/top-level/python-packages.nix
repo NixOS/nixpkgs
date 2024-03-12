@@ -2836,6 +2836,8 @@ self: super: with self; {
 
   deid = callPackage ../development/python-modules/deid { };
 
+  dek = callPackage ../development/python-modules/dek { };
+
   delegator-py = callPackage ../development/python-modules/delegator-py { };
 
   delorean = callPackage ../development/python-modules/delorean { };
