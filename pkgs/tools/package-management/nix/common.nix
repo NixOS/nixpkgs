@@ -1,9 +1,10 @@
 { lib
 , fetchFromGitHub
 , version
+, rev ? version
 , suffix ? ""
 , hash ? null
-, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
+, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; inherit hash rev; }
 , patches ? [ ]
 , maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ma27 ]
 }@args:
