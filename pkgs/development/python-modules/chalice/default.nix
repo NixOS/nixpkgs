@@ -66,6 +66,10 @@ buildPythonPackage rec {
     websocket-client
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTestPaths = [
     # Don't check the templates and the sample app
     "chalice/templates"
