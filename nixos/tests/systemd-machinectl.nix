@@ -52,6 +52,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
         ];
         overrideStrategy = "asDropin";
       };
+
+      # open DHCP for container
+      networking.firewall.extraCommands = ''
+        ${pkgs.iptables}/bin/iptables -A nixos-fw -i ve-+ -p udp -m udp --dport 67 -j nixos-fw-accept
+      '';
     };
 
     testScript = ''
@@ -76,6 +81,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       # Test nss_mymachines via nscd
       machine.succeed("getent hosts ${containerName}");
+
+      # Test systemd-nspawn network configuration to container
+      machine.succeed("networkctl --json=short status ve-${containerName} | ${pkgs.jq}/bin/jq -e '.OperationalState == \"routable\"'");
+
+      # Test systemd-nspawn network configuration to host
+      machine.succeed("machinectl shell ${containerName} /run/current-system/sw/bin/networkctl --json=short status host0 | ${pkgs.jq}/bin/jq -r '.OperationalState == \"routable\"'");
 
       # Test systemd-nspawn network configuration
       machine.succeed("ping -n -c 1 ${containerName}");
