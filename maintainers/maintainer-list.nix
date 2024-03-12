@@ -17830,6 +17830,7 @@
   };
   sikmir = {
     email = "sikmir@disroot.org";
+    matrix = "@sikmir:matrix.org";
     github = "sikmir";
     githubId = 688044;
     name = "Nikolay Korotkiy";
