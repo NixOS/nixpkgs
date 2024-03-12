@@ -18,13 +18,15 @@ in
     pname = "upsnap";
     version = version;
 
-    src = builtins.path {path = "${src}/backend";};
-
-    outputs = ["out"];
+    inherit src;
+    sourceRoot = "${src.name}/backend";
 
     preBuild = let
       frontend = mkPnpmPackage {
-        src = builtins.path {path = "${src}/frontend";};
+        inherit src;
+        sourceRoot = "${src.name}/frontend";
+        packageJSON = "${src}/frontend/package.json";
+        pnpmLockYaml = "${src}/frontend/pnpm-lock.yaml";
         distDir = ".";
       };
     in ''
