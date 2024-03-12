@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.c0bw3b ];
     mainProgram = "psl";
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libpsl" ];
   };
 }

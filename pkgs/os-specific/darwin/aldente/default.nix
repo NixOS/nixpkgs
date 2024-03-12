@@ -16,16 +16,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  nativeBuildInputs = [ _7zz ];
-
   # AlDente.dmg is APFS formatted, unpack with 7zz
-  unpackCmd = ''
-    runHook preUnpack
-
-    7zz x $src
-
-    runHook postUnpack
-  '';
+  nativeBuildInputs = [ _7zz ];
 
   sourceRoot = "AlDente.app";
 

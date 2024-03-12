@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tang";
-  version = "14";
+  version = "15";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "tang";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QKURKb2g71pZvuZlJk3Rc26H3oU0WSkjgQtJQLrYGbw=";
+    hash = "sha256-nlC2hdNzQZrfirjS2gX4oFp2OD1OdxmLsN03hfxD3ug=";
   };
 
   nativeBuildInputs = [

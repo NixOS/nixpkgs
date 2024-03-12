@@ -43,7 +43,7 @@ let
       ./revert-malloc-alignment-assumption.patch
       ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
-        src = ../../clang-11-15-LLVMgold-path.patch;
+        src = ../../common/clang/clang-11-15-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];

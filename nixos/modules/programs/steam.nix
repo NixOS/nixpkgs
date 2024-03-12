@@ -43,6 +43,9 @@ in {
         }
       '';
       apply = steam: steam.override (prev: {
+        extraEnv = (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
+            STEAM_EXTRA_COMPAT_TOOLS_PATHS = makeBinPath cfg.extraCompatPackages;
+          }) // (prev.extraEnv or {});
         extraLibraries = pkgs: let
           prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
           additionalLibs = with config.hardware.opengl;
@@ -56,6 +59,8 @@ in {
           # use the setuid wrapped bubblewrap
           bubblewrap = "${config.security.wrapperDir}/..";
         };
+      } // optionalAttrs cfg.extest.enable {
+        extraEnv.LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
       });
       description = lib.mdDoc ''
         The Steam package to use. Additional libraries are added from the system
@@ -63,6 +68,16 @@ in {
 
         Use this option to customise the Steam package rather than adding your
         custom Steam to {option}`environment.systemPackages` yourself.
+      '';
+    };
+
+    extraCompatPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = lib.mdDoc ''
+        Extra packages to be used as compatibility tools for Steam on Linux. Packages will be included
+        in the `STEAM_EXTRA_COMPAT_TOOLS_PATHS` environmental variable. For more information see
+        <https://github.com/ValveSoftware/steam-for-linux/issues/6310">.
       '';
     };
 
@@ -79,6 +94,14 @@ in {
       default = false;
       description = lib.mdDoc ''
         Open ports in the firewall for Source Dedicated Server.
+      '';
+    };
+
+    localNetworkGameTransfers.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open ports in the firewall for Steam Local Network Game Transfers.
       '';
     };
 
@@ -106,6 +129,11 @@ in {
         };
       };
     };
+
+    extest.enable = mkEnableOption (lib.mdDoc ''
+      Load the extest library into Steam, to translate X11 input events to
+      uinput events (e.g. for using Steam Input on Wayland)
+    '');
   };
 
   config = mkIf cfg.enable {
@@ -139,17 +167,25 @@ in {
     ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope;
 
     networking.firewall = lib.mkMerge [
+      (mkIf (cfg.remotePlay.openFirewall || cfg.localNetworkGameTransfers.openFirewall) {
+        allowedUDPPorts = [ 27036 ]; # Peer discovery
+      })
+
       (mkIf cfg.remotePlay.openFirewall {
         allowedTCPPorts = [ 27036 ];
-        allowedUDPPortRanges = [ { from = 27031; to = 27036; } ];
+        allowedUDPPortRanges = [ { from = 27031; to = 27035; } ];
       })
 
       (mkIf cfg.dedicatedServer.openFirewall {
         allowedTCPPorts = [ 27015 ]; # SRCDS Rcon port
         allowedUDPPorts = [ 27015 ]; # Gameplay traffic
       })
+
+      (mkIf cfg.localNetworkGameTransfers.openFirewall {
+        allowedTCPPorts = [ 27040 ]; # Data transfers
+      })
     ];
   };
 
-  meta.maintainers = with maintainers; [ mkg20001 ];
+  meta.maintainers = teams.steam;
 }

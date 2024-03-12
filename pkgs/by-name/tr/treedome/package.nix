@@ -19,12 +19,12 @@
 
 let
   pname = "treedome";
-  version = "0.4";
+  version = "0.4.2";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-HzpfctEeiPj5fO1LCiQDvWRuXCPJIX7RsYYr/Y/sahA=";
+    hash = "sha256-Ypc5+HXmpyMjJDQCyxYwauozaf4HkjcbpDZNGVGPW7o=";
     fetchLFS = true;
   };
 
@@ -34,7 +34,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-SU020NgQY2TXbAsGzrXa0gLEt0hllsgD82S5L2lEtKU=";
+      hash = "sha256-nUOKN/0BTibRI66Do+iQUFy8NKkcaxFKr5AOtK3K13Q=";
     };
 
     packageJSON = ./package.json;

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.7.0";
+  version = "2.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-spKz0rKTI8hWdO6r8VLtP3G8tS9ANsjYRbinXOARCOQ=";
+    hash = "sha256-5lvdt1JbOmdts0CYU00bSmv0LsMQsOe//yUgyevBULE=";
   };
 
   nativeBuildInputs = [

@@ -16,12 +16,12 @@ debianPatch = patchname: hash: fetchpatch {
   sha256 = hash;
 };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "titanion";
   version = "0.3";
 
   src = fetchurl {
-    url = "http://abagames.sakura.ne.jp/windows/ttn${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "http://abagames.sakura.ne.jp/windows/ttn${lib.replaceStrings ["."] ["_"] finalAttrs.version}.zip";
     sha256 = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
   };
 
@@ -88,4 +88,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

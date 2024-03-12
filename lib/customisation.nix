@@ -221,9 +221,10 @@ rec {
     let
       f = if isFunction fn then fn else import fn;
       auto = intersectAttrs (functionArgs f) autoArgs;
+      mirrorArgs = mirrorFunctionArgs f;
       origArgs = auto // args;
       pkgs = f origArgs;
-      mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
+      mkAttrOverridable = name: _: makeOverridable (mirrorArgs (newArgs: (f newArgs).${name})) origArgs;
     in
       if isDerivation pkgs then throw
         ("function `callPackages` was called on a *single* derivation "
@@ -305,18 +306,129 @@ rec {
     in if drv == null then null else
       deepSeq drv' drv';
 
-  /* Make a set of packages with a common scope. All packages called
-     with the provided `callPackage` will be evaluated with the same
-     arguments. Any package in the set may depend on any other. The
-     `overrideScope'` function allows subsequent modification of the package
-     set in a consistent way, i.e. all packages in the set will be
-     called with the overridden packages. The package sets may be
-     hierarchical: the packages in the set are called with the scope
-     provided by `newScope` and the set provides a `newScope` attribute
-     which can form the parent scope for later package sets.
+  /**
+    Make an attribute set (a "scope") from functions that take arguments from that same attribute set.
+    See [](#ex-makeScope) for how to use it.
 
-     Type:
-       makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> AttrSet
+    # Inputs
+
+    1. `newScope` (`AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a`)
+
+       A function that takes an attribute set `attrs` and returns what ends up as `callPackage` in the output.
+
+       Typical values are `callPackageWith` or the output attribute `newScope`.
+
+    2. `f` (`AttrSet -> AttrSet`)
+
+       A function that takes an attribute set as returned by `makeScope newScope f` (a "scope") and returns any attribute set.
+
+       This function is used to compute the fixpoint of the resulting scope using `callPackage`.
+       Its argument is the lazily evaluated reference to the value of that fixpoint, and is typically called `self` or `final`.
+
+       See [](#ex-makeScope) for how to use it.
+       See [](#sec-functions-library-fixedPoints) for details on fixpoint computation.
+
+    # Output
+
+    `makeScope` returns an attribute set of a form called `scope`, which also contains the final attributes produced by `f`:
+
+    ```
+    scope :: {
+      callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
+      newScope = AttrSet -> scope
+      overrideScope = (scope -> scope -> AttrSet) -> scope
+      packages :: AttrSet -> AttrSet
+    }
+    ```
+
+    - `callPackage` (`((AttrSet -> a) | Path) -> AttrSet -> a`)
+
+      A function that
+
+      1. Takes a function `p`, or a path to a Nix file that contains a function `p`, which takes an attribute set and returns value of arbitrary type `a`,
+      2. Takes an attribute set `args` with explicit attributes to pass to `p`,
+      3. Calls `f` with attributes from the original attribute set `attrs` passed to `newScope` updated with `args, i.e. `attrs // args`, if they match the attributes in the argument of `p`.
+
+      All such functions `p` will be called with the same value for `attrs`.
+
+      See [](#ex-makeScope-callPackage) for how to use it.
+
+    - `newScope` (`AttrSet -> scope`)
+
+      Takes an attribute set `attrs` and returns a scope that extends the original scope.
+
+    - `overrideScope` (`(scope -> scope -> AttrSet) -> scope`)
+
+      Takes a function `g` of the form `final: prev: { # attributes }` to act as an overlay on `f`, and returns a new scope with values determined by `extends g f`.
+      See [](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.fixedPoints.extends) for details.
+
+      This allows subsequent modification of the final attribute set in a consistent way, i.e. all functions `p` invoked with `callPackage` will be called with the modified values.
+
+    - `packages` (`AttrSet -> AttrSet`)
+
+      The value of the argument `f` to `makeScope`.
+
+    - final attributes
+
+      The final values returned by `f`.
+
+    # Examples
+
+    :::{#ex-makeScope .example}
+    # Create an interdependent package set on top of `pkgs`
+
+    The functions in `foo.nix` and `bar.nix` can depend on each other, in the sense that `foo.nix` can contain a function that expects `bar` as an attribute in its argument.
+
+    ```nix
+    let
+      pkgs = import <nixpkgs> { };
+    in
+    pkgs.lib.makeScope pkgs.newScope (self: {
+      foo = self.callPackage ./foo.nix { };
+      bar = self.callPackage ./bar.nix { };
+    })
+    ```
+
+    evaluates to
+
+    ```nix
+    {
+      callPackage = «lambda»;
+      newScope = «lambda»;
+      overrideScope = «lambda»;
+      packages = «lambda»;
+      foo = «derivation»;
+      bar = «derivation»;
+    }
+    ```
+    :::
+
+    :::{#ex-makeScope-callPackage .example}
+    # Using `callPackage` from a scope
+
+    ```nix
+    let
+      pkgs = import <nixpkgs> { };
+      inherit (pkgs) lib;
+      scope = lib.makeScope lib.callPackageWith (self: { a = 1; b = 2; });
+      three = scope.callPackage ({ a, b }: a + b) { };
+      four = scope.callPackage ({ a, b }: a + b) { a = 2; };
+    in
+    [ three four ]
+    ```
+
+    evaluates to
+
+    ```nix
+    [ 3 4 ]
+    ```
+    :::
+
+    # Type
+
+    ```
+    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> scope
+    ```
   */
   makeScope = newScope: f:
     let self = f self // {

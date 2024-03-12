@@ -5,29 +5,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gam";
-  version = "6.25";
+  version = "6.58";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "GAM-team";
-    repo = "gam";
+    repo = "GAM";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/VmBFMjCkd1xhudlcjYGGv+6tgEsyY/xqQoGdupJvOg=";
+    sha256 = "sha256-AIaPzYavbBlJyi9arZN8HTmUXM7Tef0SIfE07PmV9Oo=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  patches = [
-    # Also disables update check
-    ./signal_files_as_env_vars.patch
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
+    chardet
+    cryptography
     distro
     filelock
     google-api-python-client
     google-auth
     google-auth-oauthlib
+    httplib2
+    lxml
     passlib
     pathvalidate
     python-dateutil
@@ -66,6 +65,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Command line management for Google Workspace";
     homepage = "https://github.com/GAM-team/GAM/wiki";
+    changelog = "https://github.com/GAM-team/GAM/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ thanegill ];
   };

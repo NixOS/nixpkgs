@@ -3,6 +3,7 @@
 , cmake
 , llvm
 , fetchFromGitHub
+, fetchpatch
 , mbedtls
 , gtk3
 , pkg-config
@@ -22,16 +23,14 @@
 }:
 
 let
-  # FIXME: unstable, stable needs #252945 (details in #258964)
-  # Next version bump should be stabilized
-  version = "unstable-2023-10-01";
-  patterns_version = "1.31.0";
+  version = "1.32.2";
+  patterns_version = "1.32.2";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${patterns_version}";
-    hash = "sha256-lTTXu9RxoD582lXWI789gNcWvJmxmBIlBRIiyY3DseM=";
+    hash = "sha256-K+LiQvykCrOwhEVy37lh7VSf5YJyBQtLz8AGFsuRznQ=";
   };
 
 in
@@ -43,9 +42,19 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     owner = "WerWolv";
     repo = pname;
-    rev = "a62ede784018f9d5aaf40587f71a1271429ab50b";
-    hash = "sha256-L3ncmM7Ro60DvOF/Y0fjo2Smlw2LL8cPa8H6yVGdGAk=";
+    rev = "v${version}";
+    hash = "sha256-MYOZHQMYbbP01z0FyoCgTzwY1/71eUCmJYYfYvN9+so=";
   };
+
+  patches = [
+    # Backport fixes (and fix to fix) for default plugin not being loaded.
+    (fetchpatch {
+      url = "https://github.com/WerWolv/PatternLanguage/compare/ImHex-v1.32.2..1adcdd358d3772681242267ddd3459c9d0913796.patch";
+      stripLen = 1;
+      extraPrefix = "lib/external/pattern_language/";
+      hash = "sha256-aGvt7vQ6PtFE3sw4rAXUP7Pq8cL29LEKyC0rJKkxOZI=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
 

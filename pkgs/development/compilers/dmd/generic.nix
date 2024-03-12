@@ -220,7 +220,7 @@ stdenv.mkDerivation rec {
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
-    maintainers = with maintainers; [ ThomasMader lionello dukc jtbx ];
+    maintainers = with maintainers; [ lionello dukc jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

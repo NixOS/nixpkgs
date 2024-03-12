@@ -224,7 +224,7 @@ stdenv.mkDerivation (rec {
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -289,6 +289,8 @@ stdenv.mkDerivation (rec {
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 

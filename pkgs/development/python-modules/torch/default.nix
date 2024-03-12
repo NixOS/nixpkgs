@@ -8,7 +8,7 @@
   magma-hip,
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
-  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported),
+  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
   MPISupport ? false, mpi,
   buildDocs ? false,
 
@@ -127,7 +127,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8.0";
@@ -145,7 +145,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-FfFjgx6yrPEQlF8CLglsWq+zWGr6MD4z0F+lYoy6grc=";
+    hash = "sha256-6z8G5nMbGHbpA+xfmOR726h9E4N9NoEtaFgcYE0DuUE=";
   };
 
   patches = lib.optionals cudaSupport [

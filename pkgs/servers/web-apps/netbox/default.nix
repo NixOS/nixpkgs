@@ -22,12 +22,11 @@ lib.fix (self: {
   };
 
   netbox_3_7 = callPackage generic {
-    version = "3.7.1";
-    hash = "sha256-hAwkrrjrV+XVIYe3C8f/342SPlllXUhiFuaAp+TLMUw=";
+    version = "3.7.3";
+    hash = "sha256-8apjw3mO3RKT/IgJOG1+2GSjNwFhddZ9rIChdP26leE=";
     extraPatches = [
       # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
       ./config.patch
-      ./fix-doc-link.patch
     ];
     tests = {
       netbox = nixosTests.netbox_3_7;

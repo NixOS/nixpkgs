@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.25.2";
+  version = "2.25.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-vQ7HqZ687ci8/5Oe+G5Sw3jkTCcH4FP82B0EbOl57mM=";
+    hash = "sha256-hG8SWooZZWYR31sD5ZEsg5POppAIWbqmT6UV62So3EA=";
   };
 
   postPatch = ''

@@ -1,1 +1,9 @@
-pkgs.foo: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/fo/foo/package.nix { ... }` with a non-empty second argument.
+- Because pkgs/by-name/fo/foo exists, the attribute `pkgs.foo` must be defined like
+
+    foo = callPackage ./pkgs/by-name/fo/foo/package.nix { /* ... */ };
+
+  However, in this PR, it isn't defined that way. See the definition in all-packages.nix:4
+
+    foo = self.bar;
+
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

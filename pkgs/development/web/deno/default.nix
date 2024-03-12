@@ -9,20 +9,20 @@
 , libiconv
 , darwin
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
+,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.40.2";
+  version = "1.41.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ycQN4BKuvK4FRYbHUKFFMVFg0LAG64xFiXbAkmQ46Cs=";
+    hash = "sha256-l8He7EM9n8r7OTC6jN6F8ldf3INXxEeaUI1u6AfR7RI=";
   };
 
-  cargoHash = "sha256-5OnYtVsuf6q4nQGO1+qL+2WFaKW0k13fNFS29gKaWhk=";
+  cargoHash = "sha256-T+6b4bGx7y/7E0CIacKFQ32DCAiNFXFi15ibq7rDfI4=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
   buildInputs = lib.optionals stdenv.isDarwin (
-    [ libiconv darwin.libobjc ] ++
-    (with darwin.apple_sdk_11_0.frameworks; [
+    [ libiconv darwin.libobjc ]
+    ++ (with darwin.apple_sdk_11_0.frameworks; [
       Security
       CoreServices
       Metal

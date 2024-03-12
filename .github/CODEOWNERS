@@ -185,11 +185,18 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Licenses
 /lib/licenses.nix @alyssais
 
-# Qt / KDE
-/pkgs/applications/kde @ttuegel
-/pkgs/desktops/plasma-5 @ttuegel
-/pkgs/development/libraries/kde-frameworks @ttuegel
-/pkgs/development/libraries/qt-5 @ttuegel
+# Qt
+/pkgs/development/libraries/qt-5 @NixOS/qt-kde
+/pkgs/development/libraries/qt-6 @NixOS/qt-kde
+
+# KDE / Plasma 5
+/pkgs/applications/kde @NixOS/qt-kde
+/pkgs/desktops/plasma-5 @NixOS/qt-kde
+/pkgs/development/libraries/kde-frameworks @NixOS/qt-kde
+
+# KDE / Plasma 6
+/pkgs/kde @NixOS/qt-kde
+/maintainers/scripts/kde @NixOS/qt-kde
 
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @thoughtpolice @marsam
@@ -271,13 +278,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions   @jonringer
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/php                                     @drupol @etu
-/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @globin @ma27 @talyz
+/pkgs/build-support/php                                     @drupol
+/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @drupol @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @globin @ma27 @talyz
 
 # Docker tools
 /pkgs/build-support/docker                   @roberth

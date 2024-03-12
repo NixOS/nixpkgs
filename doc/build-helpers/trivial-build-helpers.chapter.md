@@ -7,7 +7,9 @@ Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers cre
 
 `runCommand :: String -> AttrSet -> String -> Derivation`
 
-`runCommand name drvAttrs buildCommand` returns a derivation that is built by running the specified shell commands.
+The result of `runCommand name drvAttrs buildCommand` is a derivation that is built by running the specified shell commands.
+
+By default `runCommand` runs in a stdenv with no compiler environment, whereas [`runCommandCC`](#trivial-builder-runCommandCC) uses the default stdenv, `pkgs.stdenv`.
 
 `name :: String`
 :   The name that Nix will append to the store path in the same way that `stdenv.mkDerivation` uses its `name` attribute.
@@ -152,6 +154,12 @@ Write a text file to the Nix store.
   It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
   Default: `true`
+
+`derivationArgs` (Attribute set, _optional_)
+
+: Extra arguments to pass to the underlying call to `stdenv.mkDerivation`.
+
+  Default: `{}`
 
 The resulting store path will include some variation of the name, and it will be a file unless `destination` is used, in which case it will be a directory.
 

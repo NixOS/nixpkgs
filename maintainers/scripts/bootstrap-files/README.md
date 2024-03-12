@@ -39,7 +39,7 @@ target:
    ```
 
    To validate cross-targets `binfmt` `NixOS` helper can be useful.
-   For `riscv64-unknown-linux-gnu` the `/etc/nixox/configuraqtion.nix`
+   For `riscv64-unknown-linux-gnu` the `/etc/nixos/configuration.nix`
    entry would be `boot.binfmt.emulatedSystems = [ "riscv64-linux" ]`.
 
 3. Propose the commit as a PR to update bootstrap tarballs, tag people

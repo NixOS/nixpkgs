@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rwpspread";
-  version = "0.1.9";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
     rev = "v${version}";
-    hash = "sha256-oZgHMklHMKUpVY3g7wS2rna+5+ePEbcvdVJc9jPTeoI=";
+    hash = "sha256-I9zZtk+Byn2DBMvhRVUBJ5O8fzzy1uSTniMUDXi07ho=";
   };
 
   cargoLock = {

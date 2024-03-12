@@ -4,13 +4,6 @@
 , gitUpdater
 }:
 
-let
-  # Strip optional dependencies from logs to make the closure smaller as this
-  # package contains a binary
-  logs' = logs.override { jsooSupport = false; lwtSupport = false; };
-
-in
-
 buildDunePackage rec {
   pname = "mdx";
   version = "2.3.1";
@@ -24,7 +17,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [
-    astring fmt logs' csexp ocaml-version camlp-streams re findlib
+    astring fmt logs csexp ocaml-version camlp-streams re findlib
   ];
   checkInputs = [ alcotest lwt ];
 

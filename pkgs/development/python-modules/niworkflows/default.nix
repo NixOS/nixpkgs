@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
     rev = "refs/tags/${version}";
-    hash = "sha256-wQPk9imDvomg+NTWk+VeW1TE2QlvMyi1YYVVaznhktU=";
+    hash = "sha256-ZOn3KSaPAA8zTdyexrjF9Wkb5C5qA/5eSJahg2DcX20=";
   };
 
   postPatch = ''

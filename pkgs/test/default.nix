@@ -175,4 +175,8 @@ with pkgs;
   nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
+
+  systemd = callPackage ./systemd { };
+
+  substitute = recurseIntoAttrs (callPackage ./substitute { });
 }

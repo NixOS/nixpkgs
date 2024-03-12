@@ -1,19 +1,37 @@
-{ config, lib, pkgs, ... }: let
+{ config, lib, pkgs, ... }:
+let
+  inherit (lib) types;
 
   cfg = config.services.ollama;
-
-in {
-
+  ollamaPackage = cfg.package.override {
+    inherit (cfg) acceleration;
+    linuxPackages = config.boot.kernelPackages // {
+      nvidia_x11 = config.hardware.nvidia.package;
+    };
+  };
+in
+{
   options = {
     services.ollama = {
       enable = lib.mkEnableOption (
         lib.mdDoc "Server for local large language models"
       );
       listenAddress = lib.mkOption {
-        type = lib.types.str;
+        type = types.str;
         default = "127.0.0.1:11434";
         description = lib.mdDoc ''
           Specifies the bind address on which the ollama server HTTP interface listens.
+        '';
+      };
+      acceleration = lib.mkOption {
+        type = types.nullOr (types.enum [ "rocm" "cuda" ]);
+        default = null;
+        example = "rocm";
+        description = lib.mdDoc ''
+          Specifies the interface to use for hardware acceleration.
+
+          - `rocm`: supported by modern AMD GPUs
+          - `cuda`: supported by modern NVIDIA GPUs
         '';
       };
       package = lib.mkPackageOption pkgs "ollama" { };
@@ -21,7 +39,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-
     systemd = {
       services.ollama = {
         wantedBy = [ "multi-user.target" ];
@@ -33,7 +50,7 @@ in {
           OLLAMA_HOST = cfg.listenAddress;
         };
         serviceConfig = {
-          ExecStart = "${lib.getExe cfg.package} serve";
+          ExecStart = "${lib.getExe ollamaPackage} serve";
           WorkingDirectory = "/var/lib/ollama";
           StateDirectory = [ "ollama" ];
           DynamicUser = true;
@@ -41,10 +58,8 @@ in {
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
-
+    environment.systemPackages = [ ollamaPackage ];
   };
 
-  meta.maintainers = with lib.maintainers; [ onny ];
-
+  meta.maintainers = with lib.maintainers; [ abysssol onny ];
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pfetch-rs";
-  version = "2.8.1";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "Gobidev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/eVtI+Uvb0r1af20MlQU8sDSNf6YyIBvFKSVp47JMfQ=";
+    hash = "sha256-tpJk31Z7QzZNLmEv/L1008tf6hpJJI6b7E1o/kwbJe0=";
   };
 
-  cargoHash = "sha256-eEBtrMF6dl5TzOZHnqjX4Yz2SfknGM2bzJcQWQIctPc=";
+  cargoHash = "sha256-CQVPEUpblypDyr48MrLY3roGunOxem0eM1OtbcKlnsw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit

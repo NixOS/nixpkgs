@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.8.0";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-JilYPIeJbVf9wgGpLTy8pbMwFRrW7Od+8y0tWwAXU84=";
+    hash = "sha256-629hJLSGf0LJ+P1j1b87RV6XGgsDaWif1a6+Eo3NmMw=";
   };
 
-  cargoHash = "sha256-oXO2TBdKmVIpZD0jLI1CK9b48r3SwdeygcJoUG6HGXo=";
+  cargoHash = "sha256-ZRiDlsSZ5jjTrOrB/bg2xOcOTsCNFdP0jY0SwZ1zwGU=";
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     rustPlatform.bindgenHook
@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional audioSupport "audio";
 
+  passthru.updateScript = ./update.sh;
   passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
     uiua init
     diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')

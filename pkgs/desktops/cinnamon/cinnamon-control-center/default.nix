@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , glib
+, glib-networking
 , gettext
 , cinnamon-desktop
 , gtk3
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     glib
+    glib-networking
     cinnamon-desktop
     libnotify
     cinnamon-menus

@@ -18,7 +18,7 @@
 , dvc-task
 , fetchFromGitHub
 , flatten-dict
-, flufl_lock
+, flufl-lock
 , funcy
 , grandalf
 , gto
@@ -98,7 +98,7 @@ buildPythonPackage rec {
     dvc-studio-client
     dvc-task
     flatten-dict
-    flufl_lock
+    flufl-lock
     funcy
     grandalf
     gto

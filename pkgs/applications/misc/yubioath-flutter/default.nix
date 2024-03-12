@@ -13,24 +13,27 @@
 
 flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.3.1";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    hash = "sha256-XgRIX2Iv5niJw2NSBPwM0K4uF5sPj9c+Xj4oHtAQSbU=";
+    hash = "sha256-aXUnmKEUCi0rsVr3HVhEk6xa1z9HMsH+0AIY531hqiU=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes = {
+    window_manager = "sha256-mLX51nbWFccsAfcqLQIYDjYz69y9wAz4U1RZ8TIYSj0=";
+  };
 
   postPatch = ''
     rm -f pubspec.lock
 
     substituteInPlace linux/CMakeLists.txt \
-      --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
+      --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
 
   preInstall = ''

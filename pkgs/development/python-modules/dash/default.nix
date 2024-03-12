@@ -19,7 +19,6 @@
 , typing-extensions
 , requests
 , retrying
-, ansi2html
 , nest-asyncio
 
 , celery
@@ -37,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.14.2";
+  version = "2.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -45,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    rev = "v${version}";
-    hash = "sha256-EFEsFgd3VbzlIUiz1fBIsKHywgWrL74taDFx0yIM/Ks=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-38BOw/CrauT/usVWCI735J0zRf9wzScUgbfGTy5B7ng=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +89,6 @@ buildPythonPackage rec {
     typing-extensions
     requests
     retrying
-    ansi2html
     nest-asyncio
   ];
 

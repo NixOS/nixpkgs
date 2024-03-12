@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ipyvue";
-  version = "1.10.1";
+  version = "1.10.2";
   format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IGFc6GulFs8Leq2EzGB+TiyRBCMulUzQ7MvzNTCl4dQ=";
+    hash = "sha256-qZc1hvouKWUQ2aJLk1oiokUKzKBXtd6fC6tm7LHDOrQ=";
   };
 
   propagatedBuildInputs = [ ipywidgets ];

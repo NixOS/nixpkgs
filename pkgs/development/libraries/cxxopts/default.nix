@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cxxopts";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "jarro2783";
     repo = "cxxopts";
     rev = "v${version}";
-    sha256 = "sha256-tOO0YCIG3MxSJZhurNcDR1pWIUEO/Har9mrCrZs3iVk=";
+    sha256 = "sha256-aOF3owz7SIV4trJY0PnMtIcwqoUpDbB3tNxZcsl9dzM=";
   };
 
   buildInputs = lib.optionals enableUnicodeHelp [ icu.dev ];

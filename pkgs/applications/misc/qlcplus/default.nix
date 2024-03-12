@@ -29,15 +29,19 @@ mkDerivation rec {
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
-
   postPatch = ''
     patchShebangs .
     sed -i -e '/unix:!macx:INSTALLROOT += \/usr/d' \
             -e "s@\$\$LIBSDIR/qt4/plugins@''${qtPluginPrefix}@" \
             -e "s@/etc/udev/rules.d@''${out}/lib/udev/rules.d@" \
       variables.pri
+
+    # Fix gcc-13 build failure by removing blanket -Werror.
+    fgrep Werror variables.pri
+    substituteInPlace variables.pri --replace-fail "QMAKE_CXXFLAGS += -Werror" ""
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     ln -sf $out/lib/*/libqlcplus* $out/lib

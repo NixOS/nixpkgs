@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , hatchling
+, pythonRelaxDepsHook
 , numpy
 , typeguard
 , typing-extensions
@@ -19,7 +20,7 @@
 let
   self = buildPythonPackage rec {
     pname = "jaxtyping";
-    version = "0.2.25";
+    version = "0.2.28";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -28,22 +29,22 @@ let
       owner = "google";
       repo = "jaxtyping";
       rev = "refs/tags/v${version}";
-      hash = "sha256-+JqpI5xrM7o73LG6oMix88Jr5aptmWYjJQcqUNo7icg=";
+      hash = "sha256-xDFrgPecUIfCACg/xkMQ8G1+6hNiUUDg9eCZKNpNfzs=";
     };
-
-    postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace "typeguard>=2.13.3,<3" "typeguard"
-    '';
 
     nativeBuildInputs = [
       hatchling
+      pythonRelaxDepsHook
     ];
 
     propagatedBuildInputs = [
       numpy
       typeguard
       typing-extensions
+    ];
+
+    pythonRelaxDeps = [
+      "typeguard"
     ];
 
     nativeCheckInputs = [

@@ -118,3 +118,83 @@ $ ./pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh master
 ```
 
 See [here](../../.github/workflows/check-by-name.yml) for more info.
+
+## Recommendation for new packages with multiple versions
+
+These checks of the `pkgs/by-name` structure can cause problems in combination:
+1. New top-level packages using `callPackage` must be defined via `pkgs/by-name`.
+2. Packages in `pkgs/by-name` cannot refer to files outside their own directory.
+
+This means that outside `pkgs/by-name`, multiple already-present top-level packages can refer to some common file.
+If you open a PR to another instance of such a package, CI will fail check 1,
+but if you try to move the package to `pkgs/by-name`, it will fail check 2.
+
+This is often the case for packages with multiple versions, such as
+
+```nix
+  foo_1 = callPackage ../tools/foo/1.nix { };
+  foo_2 = callPackage ../tools/foo/2.nix { };
+```
+
+The best way to resolve this is to not use `callPackage` directly, such that check 1 doesn't trigger.
+This can be done by using `inherit` on a local package set:
+```nix
+  inherit
+    ({
+      foo_1 = callPackage ../tools/foo/1.nix { };
+      foo_2 = callPackage ../tools/foo/2.nix { };
+    })
+    foo_1
+    foo_2
+    ;
+```
+
+While this may seem pointless, this can in fact help with future package set refactorings,
+because it establishes a clear connection between related attributes.
+
+### Further possible refactorings
+
+This is not required, but the above solution also allows refactoring the definitions into a separate file:
+
+```nix
+  inherit (import ../tools/foo pkgs)
+    foo_1 foo_2;
+```
+
+```nix
+# pkgs/tools/foo/default.nix
+pkgs: {
+  foo_1 = callPackage ./1.nix { };
+  foo_2 = callPackage ./2.nix { };
+}
+```
+
+Alternatively using [`callPackages`](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.callPackagesWith)
+if `callPackage` isn't used underneath and you want the same `.override` arguments for all attributes:
+
+```nix
+  inherit (callPackages ../tools/foo { })
+    foo_1 foo_2;
+```
+
+```nix
+# pkgs/tools/foo/default.nix
+{
+  stdenv
+}: {
+  foo_1 = stdenv.mkDerivation { /* ... */ };
+  foo_2 = stdenv.mkDerivation { /* ... */ };
+}
+```
+
+### Exposing the package set
+
+This is not required, but the above solution also allows exposing the package set as an attribute:
+
+```nix
+  foo-versions = import ../tools/foo pkgs;
+  # Or using callPackages
+  # foo-versions = callPackages ../tools/foo { };
+
+  inherit (foo-versions) foo_1 foo_2;
+```

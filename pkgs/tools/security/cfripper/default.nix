@@ -12,23 +12,24 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.4";
+  version = "1.15.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-heVFum+Eaofd9L0dNHqD9GgHP+ckGwJi+NfeFci+ESc=";
+    hash = "sha256-h/NNTE5u1coyD4owiGjsK6SIuvDq1SQOPW4RM4yJtno=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pluggy~=0.13.1" "pluggy" \
-  '';
+  pythonRelaxDeps = [
+    "pluggy"
+  ];
 
   nativeBuildInputs = with python.pkgs; [
+    pythonRelaxDepsHook
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = with python.pkgs; [

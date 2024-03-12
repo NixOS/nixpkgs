@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transgui";
-  version = "unstable-2023-10-19";
+  version = "unstable-2024-02-26";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gui";
     repo = "transgui";
-    rev = "b1f5c2334edb6659c04863ef4a534ba1e57284f0";
-    hash = "sha256-XCokcA5lINC9B+qwg0vjkymwa16ZNHRKLI829+X7CvE=";
+    rev = "25df397d92fbd53b970ef72a6ffd9f644458f935";
+    hash = "sha256-jQIe2vTDeJM/lhl6alNhEPOqXjyd18x+Kg29+le/dks=";
   };
 
   nativeBuildInputs = [ pkg-config unzip ];

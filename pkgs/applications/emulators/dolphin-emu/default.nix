@@ -32,6 +32,7 @@
 , pugixml
 , qtbase
 , qtsvg
+, SDL2
 , sfml
 , udev
 , vulkan-loader
@@ -57,13 +58,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-20347";
+  version = "5.0-21088";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "dc0814ae4622313d513468bdc377ee9c031de199";
-    hash = "sha256-s3mGwXkgdoLLfPEUVyjaqXb+a5KPKC3dhHIyKC2BF1w=";
+    rev = "9240f579eab18a2f67eef23846a6b508393d0e6c";
+    hash = "sha256-lOiDbEQZoi9Bsiyta/w+B1VXNNW4qST2cBZekqo5dDA=";
     fetchSubmodules = true;
   };
 
@@ -112,6 +113,7 @@ stdenv.mkDerivation rec {
     pugixml
     qtbase
     qtsvg
+    SDL2
     sfml
     xxHash
     xz # LibLZMA

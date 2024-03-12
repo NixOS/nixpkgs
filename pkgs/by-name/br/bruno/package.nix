@@ -18,20 +18,21 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-Vf4UHN13eE9W4rekOEGAWIP3x79cVH3vI9sxuIscv8c=";
+    hash = "sha256-STWGZzFtU3UpctgNz3m96JyfSRzHy2ZZQPr8R+zpDgM=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-pfV9omdJiozJ9VotTImfM/DRsBPNGAEzmSdj3/C//4A=";
+  npmDepsHash = "sha256-0Uac4Q3EYiTkg6RFuwR+saXiVm7jISyZBjkN30uYnnE=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     (writeShellScriptBin "phantomjs" "echo 2.1.1")
@@ -68,6 +69,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   postBuild = ''
+    npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query

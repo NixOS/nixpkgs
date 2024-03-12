@@ -93,6 +93,7 @@ CROSS_TARGETS=(
     mips64el-unknown-linux-gnuabi64
     mips64el-unknown-linux-gnuabin32
     mipsel-unknown-linux-gnu
+    powerpc64-unknown-linux-gnuabielfv2
     powerpc64le-unknown-linux-gnu
     riscv64-unknown-linux-gnu
 )

@@ -9,7 +9,7 @@
 # use ./update.sh to help with updating for each quarterly release
 #
 # then, to test:
-# for e in cpp dsl modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
+# for e in cpp dsl embedcpp modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix-build -A ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
 
 let
   platform_major = "4";
@@ -60,6 +60,21 @@ in rec {
         hash = {
           x86_64 = "sha256-U9CMwcDZP1ptnc+C7gTfTOcyppe7r6RtgPp65b3A7Qk=";
           aarch64 = "sha256-wuh6IZtRPDNJAVcfukFjZfuOVJgfj2zI616YNDnRgWM=";
+        }.${arch};
+      };
+  };
+
+  ### Eclipse IDE for Embedded C/C++ Developers
+
+  eclipse-embedcpp = buildEclipse {
+    name = "eclipse-embedcpp-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Embedded C/C++ Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-embedcpp-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-c/dd/3PzTSnrtaa2gNw+crdNu/xA428hYr8YNeBSEyw=";
+          aarch64 = "sha256-tF6o3NpFNxXALf2UA8tLzFhqYe46cI2swvym8vDSxNI=";
         }.${arch};
       };
   };

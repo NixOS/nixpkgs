@@ -139,6 +139,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -f ${placeholder "out"}/lib/*.a
+  ''
+  # For mingw, libs are located in $out/bin not $out/lib
+  + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    ln -s $out/bin/*.dll $out/lib
   '';
 
   meta = with lib; {

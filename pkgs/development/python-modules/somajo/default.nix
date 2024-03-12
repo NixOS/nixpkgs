@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "somajo";
-  version = "2.4.1";
+  version = "2.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "tsproisl";
     repo = "SoMaJo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-44avfokFgOQ62dswGpsNX+mywrtZLMTkMV4s+y0UusE=";
+    hash = "sha256-5rlgDnPYTtuVMincG5CgVwNh/IGmZk6ItvzdB/wHmgg=";
   };
 
   nativeBuildInputs = [

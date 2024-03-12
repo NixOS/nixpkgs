@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faketty";
-  version = "1.0.14";
+  version = "1.0.16";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-oma8Vmp1AMmEGyZG8i/ztiyYH0RrLZ/l/vXgPJs+5o0=";
+    hash = "sha256-BlQnVjYPFUfEurFUE2MHOL2ad56Nu/atzRuFu4OoCSI=";
   };
 
-  cargoHash = "sha256-+gojthIR5WMSjN1gCUyN0cKHWYBKBezsckVZJD7JncM=";
+  cargoHash = "sha256-q9jx03XYA977481B9xuUfaaMBDbSVx4xREj4Q1Ti/Yw=";
 
   postPatch = ''
     patchShebangs tests/test.sh

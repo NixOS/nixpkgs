@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xiu";
-  version = "0.10.0";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "harlanc";
     repo = "xiu";
     rev = "v${version}";
-    hash = "sha256-wJXVxkW+jbqc2zFOn8RGUVI9G0+oow+eFGtF4Nsj5pA=";
+    hash = "sha256-tXZCWbqwt3v20rvfre/gAUzs8i78FpbNd5qAGNOX5VE=";
   };
 
-  cargoHash = "sha256-gpPEHe/RDmEapkioXq7TicrFRrJlcRqiilY+munQKws=";
+  cargoHash = "sha256-6nWnw31A27VWJe8JGM+S05sqcZwQRrb1aanamv6ITZ4=";
 
   nativeBuildInputs = [
     cmake
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   OPENSSL_NO_VENDOR = 1;

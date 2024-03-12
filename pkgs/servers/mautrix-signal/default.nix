@@ -1,18 +1,14 @@
 { lib, buildGoModule, fetchFromGitHub, olm, libsignal-ffi }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "mautrix-signal";
-  # mautrix-signal's latest released version v0.4.3 still uses the Python codebase
-  # which is broken for new devices, see https://github.com/mautrix/signal/issues/388.
-  # The new Go version fixes this by using the official libsignal as a library and
-  # can be upgraded to directly from the Python version.
-  version = "unstable-2024-01-31";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "103666990f30a692c63dd84a499b0dd390cef8a4";
-    hash = "sha256-UttLMI+jX5PNG02vs7Dty8pxdko2aM0sVB/90eWwmYw=";
+    rev = "v${version}";
+    hash = "sha256-qlWp9SnS8dWZNAua9HOyOrQwBXQFaaWB3eP9aCGlDFc=";
   };
 
   buildInputs = [
@@ -22,7 +18,7 @@ buildGoModule {
     libsignal-ffi
   ];
 
-  vendorHash = "sha256-LKs/9yCJ7alKQh1VYQsPEg7y+ugZwUnnJh2l4IEjbaQ=";
+  vendorHash = "sha256-sa6M9rMrI7fa8T4su3yfJID4AYB6YnlfrVBM6cPQLvY=";
 
   doCheck = false;
 

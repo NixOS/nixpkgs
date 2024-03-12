@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tuleap-cli";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "csgroup-oss";
     repo = "tuleap-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZNAMhKszly2C+ljFGbP8xqUplQaxqaoArRJykuPNrkY=";
+    hash = "sha256-hL0mGWXzvHYFc8u4RXCDys3Fe/cgsGljfhSkPAjzt4o=";
   };
 
-  vendorHash = "sha256-T5GA9IqH3PPQV2b0uJq2O4Nzu82Q5y/LgKAVJV/XqC4=";
+  vendorHash = "sha256-N9Hmxw/70Cgc790AVRn7lmuhMtDhI94CTUlqHU4VbaY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,6 +23,8 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  subPackages = [ "." ];
 
   postInstall = ''
     installShellCompletion --cmd tuleap-cli \

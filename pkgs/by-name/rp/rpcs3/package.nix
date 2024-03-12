@@ -22,6 +22,7 @@
 , flatbuffers
 , llvm_16
 , cubeb
+, enableDiscordRpc ? false
 , faudioSupport ? true
 , faudio
 , SDL2
@@ -36,7 +37,7 @@ let
   rpcs3Revision = "ebf48800e6bf2569fa0a59974ab2daaeb3a92f23";
   rpcs3Hash = "sha256-HJQ+DCZy8lwMCfq0N9StKD8bP1hCBxGMAucbQ9esy/I=";
 
-  inherit (qt6Packages) qtbase qtmultimedia wrapQtAppsHook;
+  inherit (qt6Packages) qtbase qtmultimedia wrapQtAppsHook qtwayland;
 in
 stdenv.mkDerivation {
   pname = "rpcs3";
@@ -62,30 +63,32 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_ZLIB=ON"
-    "-DUSE_SYSTEM_LIBUSB=ON"
-    "-DUSE_SYSTEM_LIBPNG=ON"
-    "-DUSE_SYSTEM_FFMPEG=ON"
-    "-DUSE_SYSTEM_CURL=ON"
-    "-DUSE_SYSTEM_WOLFSSL=ON"
-    "-DUSE_SYSTEM_FAUDIO=ON"
-    "-DUSE_SYSTEM_PUGIXML=ON"
-    "-DUSE_SYSTEM_FLATBUFFERS=ON"
-    "-DUSE_SYSTEM_SDL=ON"
-    "-DWITH_LLVM=ON"
-    "-DBUILD_LLVM=OFF"
-    "-DUSE_NATIVE_INSTRUCTIONS=OFF"
-    "-DUSE_FAUDIO=${if faudioSupport then "ON" else "OFF"}"
+    (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
+    (lib.cmakeBool "USE_SYSTEM_LIBUSB" true)
+    (lib.cmakeBool "USE_SYSTEM_LIBPNG" true)
+    (lib.cmakeBool "USE_SYSTEM_FFMPEG" true)
+    (lib.cmakeBool "USE_SYSTEM_CURL" true)
+    (lib.cmakeBool "USE_SYSTEM_WOLFSSL" true)
+    (lib.cmakeBool "USE_SYSTEM_FAUDIO" true)
+    (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
+    (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
+    (lib.cmakeBool "USE_SYSTEM_SDL" true)
+    (lib.cmakeBool "USE_SDL" true)
+    (lib.cmakeBool "WITH_LLVM" true)
+    (lib.cmakeBool "BUILD_LLVM" false)
+    (lib.cmakeBool "USE_NATIVE_INSTRUCTIONS" false)
+    (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
+    (lib.cmakeBool "USE_FAUDIO" faudioSupport)
   ];
 
   nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
 
   buildInputs = [
     qtbase qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
+    libevdev zlib libusb1 curl wolfssl python3 pugixml SDL2 flatbuffers llvm_16 libSM
   ] ++ cubeb.passthru.backendLibs
-    ++ lib.optionals faudioSupport [ faudio SDL2 ]
-    ++ lib.optional waylandSupport wayland;
+    ++ lib.optional faudioSupport faudio
+    ++ lib.optionals waylandSupport [ wayland qtwayland ];
 
   postInstall = ''
     # Taken from https://wiki.rpcs3.net/index.php?title=Help:Controller_Configuration

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.1.6";
+  version = "3.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "kislyuk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Akwa6dsf8w/Sw0ydUrqKEP5+dzHYX4hS8vcl7Gw4ePc=";
+    hash = "sha256-gOKuFv04Qv9ry7LEKC9zIe7kJvHNFhTBDUrL+zu8AYk=";
   };
 
   nativeBuildInputs = [

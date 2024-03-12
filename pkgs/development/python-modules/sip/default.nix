@@ -1,10 +1,8 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , setuptools
-, wheel
 , packaging
 , ply
 , toml
@@ -18,21 +16,22 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.8.1";
-
-  format = "pyproject";
+  version = "6.8.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MALfQV4WisP/45OULbxxMcuCreUAAOFSb0aoit4m9Zg=";
+    hash = "sha256-iIVHsBi7JMNq3tUZ6T0+UT1MaqC6VbfMGv+9Rc8Qdiw=";
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [ packaging ply toml ] ++ lib.optionals (pythonOlder "3.11") [
+  propagatedBuildInputs = [
+    packaging
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 

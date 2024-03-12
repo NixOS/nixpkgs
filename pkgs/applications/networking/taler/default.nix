@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, curl, gnunet, jansson, libgcrypt, libmicrohttpd_0_9_74
+{ lib, stdenv, fetchgit, curl, gnunet, jansson, libgcrypt, libmicrohttpd
 , qrencode, libsodium, libtool, libunistring, pkg-config, postgresql
 , autoreconfHook, python39, recutils, wget, jq, gettext, texinfo
 }:
@@ -36,7 +36,7 @@ let
     ];
     buildInputs = [
       libgcrypt
-      libmicrohttpd_0_9_74
+      libmicrohttpd
       jansson
       libsodium
       postgresql

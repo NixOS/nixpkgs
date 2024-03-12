@@ -53,6 +53,7 @@ let
     pkgsStatic = true;
     pkgsCross = true;
     pkgsi686Linux = true;
+    pkgsLinux = true;
     pkgsExtraHardening = true;
   };
 

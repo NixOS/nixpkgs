@@ -3,7 +3,7 @@
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config, cmake, ninja
-, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr, mupdf
+, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr, mupdf-headless
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 , biber-ms
@@ -322,46 +322,27 @@ context = stdenv.mkDerivation rec {
   };
 };
 
-dvisvgm = stdenv.mkDerivation {
+dvisvgm = stdenv.mkDerivation rec {
   pname = "dvisvgm";
-  inherit (texlive.pkgs.dvisvgm) version;
+  version = "3.1.2";
 
-  inherit (common) src;
+  src = assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version) "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm"; fetchurl {
+    url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
+    hash = "sha256-vqeDrf6TG3eUoMMNeQK4Kw1NmtaBbc2KCVqTHNM+rPY=";
+  };
 
-  patches = [
-    # do not use deprecated NEWPDF option with Ghostscript >= 10.02.0
-    # https://github.com/mgieseki/dvisvgm/issues/245
-    (fetchpatch {
-      name = "dont-use-NEWPDF-with-GS-10.02.0.patch";
-      url = "https://github.com/mgieseki/dvisvgm/commit/f31cdf14d73f586e2b92b4b0891d097a90274a0b.patch";
-      hash = "sha256-Yf/GhmJYM87M0ITZ/+7q2ZvSYnac4N2/NkTkFlJ2VII=";
-      stripLen = 1;
-      extraPrefix = "texk/dvisvgm/dvisvgm-src/";
-    })
+  configureFlags = [
+    "--disable-manpage" # man pages are provided by the doc container
   ];
 
-  # since we are running configure directly in texk/dvisvgm,
-  # the option --with-system-potrace is not picked up properly
-  # and dvisvgm tries to build a vendored copy of potrace
+  # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
   postPatch = ''
-    cat > texk/dvisvgm/dvisvgm-src/libs/potrace/Makefile <<EOF
-    all:
-    install:
-    EOF
-  '' +
-    # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
-  ''
-    substituteInPlace texk/dvisvgm/dvisvgm-src/src/PDFHandler.cpp \
-      --replace 'Process("mutool"' "Process(\"$(PATH="$HOST_PATH" command -v mutool)\""
+    substituteInPlace src/PDFHandler.cpp \
+      --replace-fail 'Process("mutool"' "Process(\"$(PATH="$HOST_PATH" command -v mutool)\""
   '';
 
-  preConfigure = "cd texk/dvisvgm";
-
-  configureFlags = common.configureFlags
-    ++ [ "--with-system-kpathsea" ];
-
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash mupdf ];
+  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash mupdf-headless ];
 
   enableParallelBuilding = true;
 };

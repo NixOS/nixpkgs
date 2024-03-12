@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "cloudlist";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cloudlist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oq+JmcENFcB4AoVEhxoYIKZArgzVm6QFsPF8ybtNMak=";
+    hash = "sha256-F1oiatNP4tSRWI25r1uoiLT9Et+PyqU0p2HVICMBUNA=";
   };
 
-  vendorHash = "sha256-4eGmfPXqohdRHT0xExF1Z5jE8GscQGlVEmS3cHMX4x8=";
+  vendorHash = "sha256-3QS9YYypqEJhibfBFxFq1gxTVpTWBy35tXcO9+DBehY=";
 
   ldflags = [
     "-w"

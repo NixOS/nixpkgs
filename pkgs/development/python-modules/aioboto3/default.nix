@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "12.1.0";
+  version = "12.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "terrycain";
     repo = "aioboto3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CVRDQhymQRi5dyVBLJYTnF3RI4jPBB966dVMT4lOd8g=";
+    hash = "sha256-GDuxy/V+j0LRJ2lbcRHMEAga+pdCbYIWhEt3ItrHMB4=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiobotocore
-    boto3
-  ];
+  ] ++ aiobotocore.optional-dependencies.boto3;
 
   passthru.optional-dependencies = {
     chalice = [

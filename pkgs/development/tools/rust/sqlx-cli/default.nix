@@ -11,6 +11,7 @@
 , CoreFoundation
 , Security
 , SystemConfiguration
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -71,6 +72,8 @@ rustPlatform.buildRustPackage rec {
     package = sqlx-cli;
     command = "sqlx --version";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description =

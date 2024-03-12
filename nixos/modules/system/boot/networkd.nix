@@ -647,9 +647,9 @@ let
           "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
-        (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
+        (assertValueOneOf "DHCP" (boolValues ++ ["ipv4" "ipv6"]))
         (assertValueOneOf "DHCPServer" boolValues)
-        (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "fallback" "ipv4-fallback"])
+        (assertValueOneOf "LinkLocalAddressing" (boolValues ++ ["ipv4" "ipv6" "fallback" "ipv4-fallback"]))
         (assertValueOneOf "IPv6LinkLocalAddressGenerationMode" ["eui64" "none" "stable-privacy" "random"])
         (assertValueOneOf "IPv4LLRoute" boolValues)
         (assertValueOneOf "DefaultRouteOnDevice" boolValues)
@@ -797,6 +797,7 @@ let
           "UseHostname"
           "Hostname"
           "UseDomains"
+          "UseGateway"
           "UseRoutes"
           "UseTimezone"
           "ClientIdentifier"
@@ -829,6 +830,7 @@ let
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])

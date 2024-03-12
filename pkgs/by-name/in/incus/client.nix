@@ -3,12 +3,13 @@
 
   lib,
   buildGoModule,
+  fetchpatch,
   fetchFromGitHub,
   installShellFiles,
 }:
 let
   releaseFile = if lts then ./lts.nix else ./latest.nix;
-  inherit (import releaseFile) version hash vendorHash;
+  inherit (import releaseFile { inherit fetchpatch; }) version hash vendorHash;
 in
 
 buildGoModule rec {

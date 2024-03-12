@@ -71,37 +71,32 @@ rustPlatform.buildRustPackage rec {
 
   env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
 
-  addBuildInputRunpathsPhase = ''
-    declare _extraRunpaths
-    _sep=
-    for p in "''${pkgsHostTarget[@]}" ; do
-      if [[ -d "$p/lib" ]] ; then
-        _extraRunpaths+="$_sep$p/lib"
-        if [[ -z "$_sep" ]] ; then
-          _sep=:
-        fi
-      fi
-    done
+  addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libxkbcommon
+      vulkan-loader
+      wayland
+    ]
+  );
 
+  addDlopenRunpathsPhase = ''
     elfHasDynamicSection() {
         patchelf --print-rpath "$1" >& /dev/null
     }
 
     while IFS= read -r -d $'\0' path ; do
-      if elfHasDynamicSection "$path" ; then
-        patchelf "$path" --add-rpath "''${_extraRunpaths}"
-      fi
+      elfHasDynamicSection "$path" || continue
+      for dep in $addDlopenRunpaths ; do
+        patchelf "$path" --add-rpath "$dep"
+      done
     done < <(
       for o in $(getAllOutputNames) ; do
         find "''${!o}" -type f -and "(" -executable -or -iname '*.so' ")" -print0
       done
     )
-
-    unset _extraRunpaths
-    unset _sep
   '';
 
-  postPhases = lib.optionals stdenv.isLinux [ "addBuildInputRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux  [ "addDlopenRunpathsPhase" ];
 
   cargoTestFlags = [
     "-p"

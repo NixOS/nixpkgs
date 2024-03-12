@@ -22,7 +22,7 @@ let
   pname = "kanidm";
   version = "0.0.3-unstable-2023-08-23";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   inherit pname version;
   pyproject = true;
 
@@ -35,7 +35,7 @@ buildPythonPackage {
     hash = "sha256-5qQb+Itguw2v1Wdvc2vp00zglfvNd3LFEDvaweRJcOc=";
   };
 
-  sourceRoot = "source/pykanidm";
+  sourceRoot = "${src.name}/pykanidm";
 
   nativeBuildInputs = [
     poetry-core

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "8.4.4";
+  version = "8.4.12";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-d3pUVhn9oi1ILDR4sfRh6HypbDn2JZMha27h0twixPc=";
+    hash = "sha256-ehQIrTw1+klFW+Hu4WsWaCJ0YoN2hIqryqqaoNQb1us=";
     # https://github.com/python-versioneer/python-versioneer/issues/217
     postFetch = ''
       sed -i "$out"/snakemake/_version.py -e 's#git_refnames = ".*"#git_refnames = " (tag: v${version})"#'

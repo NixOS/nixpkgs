@@ -43,20 +43,20 @@ let
   };
 in {
   nextcloud26 = generic {
-    version = "26.0.11";
-    hash = "sha256-Vc0QCCy495oYeRnpWaYwc4Nf4D/ko4VsODoKcS7YADA=";
+    version = "26.0.12";
+    hash = "sha256-fuTAIAJB9pRfMd0Ewh19FmY0Vj4MuH1iMkkS1BiTI0w=";
     packages = nextcloud26Packages;
   };
 
   nextcloud27 = generic {
-    version = "27.1.6";
-    hash = "sha256-rntyt/xSWsSXmMLeaml6TP8ls0ly1p1GmVmIXTNRvvo=";
+    version = "27.1.7";
+    hash = "sha256-hEPi0bsojcQU+q0Kb+/i41uznt0359pcXzTexsDdG+s=";
     packages = nextcloud27Packages;
   };
 
   nextcloud28 = generic {
-    version = "28.0.2";
-    hash = "sha256-3jTWuvPszqz90TjoVSDNheHSzmeY2f+keKwX6x76HQg=";
+    version = "28.0.3";
+    hash = "sha256-ntQTwN4W9bAzzu/8ypnA1h/GmNvrjbhRrJrfnu+VGQY=";
     packages = nextcloud28Packages;
   };
 

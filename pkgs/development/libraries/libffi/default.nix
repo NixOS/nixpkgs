@@ -6,15 +6,16 @@
 , doCheck ? !(stdenv.hostPlatform.isStatic)
 , dejagnu
 , nix-update-script
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.4.4";
+  version = "3.4.6";
 
   src = fetchurl {
-    url = "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1mxWrSWags8qnfxAizK/XaUjcVALhHRff7i2RXEt9nY=";
+    url = with finalAttrs; "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-sN6p3yPIY6elDoJUQPPr/6vWXfFJcQjl1Dd0eEOJWk4=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -22,9 +23,6 @@ stdenv.mkDerivation rec {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
-    # Fix implicit function declarations (clang-16 build failure):
-    #     https://github.com/libffi/libffi/pull/764
-    ./fix-implicit-fun-decl.patch
   ];
 
   strictDeps = true;
@@ -53,6 +51,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -75,5 +78,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
+    pkgConfigModules = [ "libffi" ];
   };
-}
+})

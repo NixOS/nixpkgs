@@ -1,14 +1,14 @@
 { lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle_7, openjdk17, git, perl, cmake }:
 let
   pname = "fastddsgen";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-3REInKZ787RSXED8iAMlt2mJodJTp5+/ldQsbUGpn0g=";
+    hash = "sha256-oqbSIzsYUwD8bTqGKZ9he9d18EDq9mHZFoNUp0RK0qU=";
   };
 
   gradle = gradle_7;

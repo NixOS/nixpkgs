@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     "botocore"
     "google-api-python-client"
     "slack-sdk"
+    "pydantic"
   ];
 
   nativeBuildInputs = with python3.pkgs; [

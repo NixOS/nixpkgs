@@ -2,6 +2,7 @@ use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::utils;
 use crate::validation::{self, ResultIteratorExt, Validation::Success};
 use crate::NixFileStore;
+use relative_path::RelativePath;
 
 use anyhow::Context;
 use rowan::ast::AstNode;
@@ -12,14 +13,14 @@ use std::path::Path;
 /// Both symlinks and Nix path expressions are checked.
 pub fn check_references(
     nix_file_store: &mut NixFileStore,
-    relative_package_dir: &Path,
+    relative_package_dir: &RelativePath,
     absolute_package_dir: &Path,
 ) -> validation::Result<()> {
     // The first subpath to check is the package directory itself, which we can represent as an
     // empty path, since the absolute package directory gets prepended to this.
     // We don't use `./.` to keep the error messages cleaner
     // (there's no canonicalisation going on underneath)
-    let subpath = Path::new("");
+    let subpath = RelativePath::new("");
     check_path(
         nix_file_store,
         relative_package_dir,
@@ -29,7 +30,7 @@ pub fn check_references(
     .with_context(|| {
         format!(
             "While checking the references in package directory {}",
-            relative_package_dir.display()
+            relative_package_dir
         )
     })
 }
@@ -41,11 +42,11 @@ pub fn check_references(
 /// The absolute package directory gets prepended before doing anything with it though.
 fn check_path(
     nix_file_store: &mut NixFileStore,
-    relative_package_dir: &Path,
+    relative_package_dir: &RelativePath,
     absolute_package_dir: &Path,
-    subpath: &Path,
+    subpath: &RelativePath,
 ) -> validation::Result<()> {
-    let path = absolute_package_dir.join(subpath);
+    let path = subpath.to_path(absolute_package_dir);
 
     Ok(if path.is_symlink() {
         // Check whether the symlink resolves to outside the package directory
@@ -55,8 +56,8 @@ fn check_path(
                 // entire directory recursively anyways
                 if let Err(_prefix_error) = target.strip_prefix(absolute_package_dir) {
                     NixpkgsProblem::OutsideSymlink {
-                        relative_package_dir: relative_package_dir.to_path_buf(),
-                        subpath: subpath.to_path_buf(),
+                        relative_package_dir: relative_package_dir.to_owned(),
+                        subpath: subpath.to_owned(),
                     }
                     .into()
                 } else {
@@ -64,9 +65,9 @@ fn check_path(
                 }
             }
             Err(io_error) => NixpkgsProblem::UnresolvableSymlink {
-                relative_package_dir: relative_package_dir.to_path_buf(),
-                subpath: subpath.to_path_buf(),
-                io_error,
+                relative_package_dir: relative_package_dir.to_owned(),
+                subpath: subpath.to_owned(),
+                io_error: io_error.to_string(),
             }
             .into(),
         }
@@ -80,11 +81,12 @@ fn check_path(
                         nix_file_store,
                         relative_package_dir,
                         absolute_package_dir,
-                        &subpath.join(entry.file_name()),
+                        // TODO: The relative_path crate doesn't seem to support OsStr
+                        &subpath.join(entry.file_name().to_string_lossy().to_string()),
                     )
                 })
                 .collect_vec()
-                .with_context(|| format!("Error while recursing into {}", subpath.display()))?,
+                .with_context(|| format!("Error while recursing into {}", subpath))?,
         )
     } else if path.is_file() {
         // Only check Nix files
@@ -96,7 +98,7 @@ fn check_path(
                     absolute_package_dir,
                     subpath,
                 )
-                .with_context(|| format!("Error while checking Nix file {}", subpath.display()))?
+                .with_context(|| format!("Error while checking Nix file {}", subpath))?
             } else {
                 Success(())
             }
@@ -105,7 +107,7 @@ fn check_path(
         }
     } else {
         // This should never happen, git doesn't support other file types
-        anyhow::bail!("Unsupported file type for path {}", subpath.display());
+        anyhow::bail!("Unsupported file type for path {}", subpath);
     })
 }
 
@@ -113,11 +115,11 @@ fn check_path(
 /// directory
 fn check_nix_file(
     nix_file_store: &mut NixFileStore,
-    relative_package_dir: &Path,
+    relative_package_dir: &RelativePath,
     absolute_package_dir: &Path,
-    subpath: &Path,
+    subpath: &RelativePath,
 ) -> validation::Result<()> {
-    let path = absolute_package_dir.join(subpath);
+    let path = subpath.to_path(absolute_package_dir);
 
     let nix_file = nix_file_store.get(&path)?;
 
@@ -135,32 +137,32 @@ fn check_nix_file(
 
             match nix_file.static_resolve_path(path, absolute_package_dir) {
                 ResolvedPath::Interpolated => NixpkgsProblem::PathInterpolation {
-                    relative_package_dir: relative_package_dir.to_path_buf(),
-                    subpath: subpath.to_path_buf(),
+                    relative_package_dir: relative_package_dir.to_owned(),
+                    subpath: subpath.to_owned(),
                     line,
                     text,
                 }
                 .into(),
                 ResolvedPath::SearchPath => NixpkgsProblem::SearchPath {
-                    relative_package_dir: relative_package_dir.to_path_buf(),
-                    subpath: subpath.to_path_buf(),
+                    relative_package_dir: relative_package_dir.to_owned(),
+                    subpath: subpath.to_owned(),
                     line,
                     text,
                 }
                 .into(),
                 ResolvedPath::Outside => NixpkgsProblem::OutsidePathReference {
-                    relative_package_dir: relative_package_dir.to_path_buf(),
-                    subpath: subpath.to_path_buf(),
+                    relative_package_dir: relative_package_dir.to_owned(),
+                    subpath: subpath.to_owned(),
                     line,
                     text,
                 }
                 .into(),
                 ResolvedPath::Unresolvable(e) => NixpkgsProblem::UnresolvablePathReference {
-                    relative_package_dir: relative_package_dir.to_path_buf(),
-                    subpath: subpath.to_path_buf(),
+                    relative_package_dir: relative_package_dir.to_owned(),
+                    subpath: subpath.to_owned(),
                     line,
                     text,
-                    io_error: e,
+                    io_error: e.to_string(),
                 }
                 .into(),
                 ResolvedPath::Within(..) => {

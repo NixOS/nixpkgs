@@ -1,1 +1,2 @@
 pkgs/by-name/fo/foo: Missing required "package.nix" file.
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

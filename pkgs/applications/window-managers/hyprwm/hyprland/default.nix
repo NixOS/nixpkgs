@@ -9,6 +9,7 @@
 , cairo
 , git
 , hyprland-protocols
+, hyprlang
 , jq
 , libGL
 , libdrm
@@ -31,7 +32,7 @@
 , debug ? false
 , enableXWayland ? true
 , legacyRenderer ? false
-, withSystemd ? true
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , wrapRuntimeDeps ? true
   # deprecated flags
 , nvidiaPatches ? false
@@ -43,13 +44,13 @@ assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` ha
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.35.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dU5m6Cd4+WQZal2ICDVf1kww/dNzo1YUWRxWeCctEig=";
+    hash = "sha256-oZe4k6jtO/0govmERGcbeyvE9EfTvXY5bnyIs6AsL9U=";
   };
 
   patches = [
@@ -92,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       cairo
       git
       hyprland-protocols
+      hyprlang
       libGL
       libdrm
       libinput
@@ -116,10 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonAutoFeatures = "disabled";
 
-  mesonFlags = builtins.concatLists [
-    (lib.optional enableXWayland "-Dxwayland=enabled")
-    (lib.optional legacyRenderer "-Dlegacy_renderer=enabled")
-    (lib.optional withSystemd "-Dsystemd=enabled")
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" enableXWayland)
+    (lib.mesonEnable "legacy_renderer" legacyRenderer)
+    (lib.mesonEnable "systemd" withSystemd)
   ];
 
   postInstall = ''

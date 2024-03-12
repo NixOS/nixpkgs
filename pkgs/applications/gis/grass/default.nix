@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.3.1";
+  version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-SoJq4SuDYImfkM2e991s47vYusrmnrQaXn7p3xwyOOQ=";
+    hash = "sha256-loeg+7h676d2WdYOMcJFyzeEZcxjBynir6Hz0J/GBns=";
   };
 
   nativeBuildInputs = [
@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-blas"
-    "--with-fftw"
     "--with-geos"
     # It complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
@@ -107,11 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
     "--with-readline"
-    "--with-wxwidgets"
-    "--with-zstd"
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--with-pdal"
   ] ++ lib.optionals stdenv.isDarwin [
     "--without-cairo"
     "--without-freetype"

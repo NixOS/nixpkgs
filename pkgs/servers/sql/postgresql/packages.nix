@@ -44,6 +44,8 @@ self: super: {
 
     pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
 
+    pgvecto-rs = super.callPackage ./ext/pgvecto-rs { };
+
     pgvector = super.callPackage ./ext/pgvector.nix { };
 
     plpgsql_check = super.callPackage ./ext/plpgsql_check.nix { };

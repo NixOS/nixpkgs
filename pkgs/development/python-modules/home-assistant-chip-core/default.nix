@@ -8,8 +8,8 @@
 , autoPatchelfHook
 
 # runtime
+, glib
 , libnl
-, openssl_1_1
 
 # propagates
 , aenum
@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2024.1.0";
+  version = "2024.2.1";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -37,11 +37,11 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-UiikZ2DVhTqX6WYfiE8sp2e52BMlyoQnDjLap/efmNc=";
+        hash = "sha256-gHnTuiyCD9A9Ru8xhniNEpCyn+W9zYnCAoTJeGOW7TI=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-/+gegUMd2n7MpJvdilS5VWefXc0tuRcLrXBBXSH35b0=";
+        hash = "sha256-gKZKcCXQ8PvZAPV2QRQl+u+r95CVLBDDDgtC0MT7xw4=";
       };
     }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   in fetchPypi {
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    glib
     libnl
-    openssl_1_1
   ];
 
   propagatedBuildInputs = [

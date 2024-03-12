@@ -64,7 +64,7 @@ in
       pname = "${pname}-pnpm-deps";
       inherit src version;
 
-      sourceRoot = "source/gephgui-wry/gephgui";
+      sourceRoot = "${src.name}/gephgui-wry/gephgui";
 
       nativeBuildInputs = [
         jq
@@ -95,7 +95,7 @@ in
       pname = "gephgui-wry";
       inherit version src;
 
-      sourceRoot = "source/gephgui-wry";
+      sourceRoot = "${src.name}/gephgui-wry";
 
       cargoLock = {
         lockFile = ./Cargo.lock;

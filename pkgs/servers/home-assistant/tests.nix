@@ -82,6 +82,11 @@ let
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
+    velux = [
+      # uses unmocked sockets
+      "--deselect tests/components/velux/test_config_flow.py::test_user_success"
+      "--deselect tests/components/velux/test_config_flow.py::test_import_valid_config"
+    ];
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {

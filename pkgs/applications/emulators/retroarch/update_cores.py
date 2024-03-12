@@ -50,6 +50,11 @@ CORES = {
     "dolphin": {"repo": "dolphin"},
     "dosbox": {"repo": "dosbox-libretro"},
     "dosbox-pure": {"repo": "dosbox-pure", "owner": "schellingb"},
+    # The EasyRPG core is pinned to 0.8 since it depends on version 0.8 of liblcf, which
+    # was released in April 2023.
+    # Update the version when a compatible liblcf is available.
+    # See pkgs/games/easyrpg-player/default.nix for details.
+    "easyrpg": {"repo": "Player", "owner": "EasyRPG", "fetch_submodules": True, "rev": "0.8"},
     "eightyone": {"repo": "81-libretro"},
     "fbalpha2012": {"repo": "fbalpha2012"},
     "fbneo": {"repo": "fbneo"},

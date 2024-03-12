@@ -198,13 +198,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phive = callPackage ../development/php-packages/phive { };
 
+    php-codesniffer = callPackage ../development/php-packages/php-codesniffer { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
-
-    phpcbf = callPackage ../development/php-packages/phpcbf { };
-
-    phpcs = callPackage ../development/php-packages/phpcs { };
 
     phpmd = callPackage ../development/php-packages/phpmd { };
 
@@ -215,9 +213,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     psalm = callPackage ../development/php-packages/psalm { };
 
     psysh = callPackage ../development/php-packages/psysh { };
+  } // lib.optionalAttrs config.allowAliases {
+    phpcbf = throw "`phpcbf` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+    phpcs = throw "`phpcs` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
   };
-
-
 
   # This is a set of PHP extensions meant to be used in php.buildEnv
   # or php.withExtensions to extend the functionality of the PHP
@@ -235,7 +234,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     ast = callPackage ../development/php-packages/ast { };
 
-    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
+    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { };
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
@@ -318,7 +317,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     redis = callPackage ../development/php-packages/redis { };
 
-    relay = callPackage ../development/php-packages/relay { inherit php; };
+    relay = callPackage ../development/php-packages/relay { };
 
     rrd = callPackage ../development/php-packages/rrd { };
 
@@ -373,7 +372,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             "--enable-dom"
           ];
           # Add a PHP lower version bound constraint to avoid applying the patch on older PHP versions.
-          patches = lib.optionals (lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.1") [
+          patches = lib.optionals ((lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.2.7") || (lib.versions.majorMinor php.version == "8.1" && lib.versionAtLeast php.version "8.1.27")) [
             # Fix tests with libxml 2.12
             # Part of 8.3.1RC1+, 8.2.14RC1+
             (fetchpatch {
