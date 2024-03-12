@@ -108,6 +108,53 @@ have a predefined type and string generator already declared under
     and returning a set with TOML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
 
+`pkgs.formats.kdl` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with [KDL](https://kdl.dev/)-specific attributes `type`,
+    `lib` and `generate` as specified [below](#pkgs-formats-result).
+
+    `lib` is a set containing a single function `node`, which is a helper
+    function indended to facilitate generating the required structure for pkgs.formats.kdl
+    in an ergonomic way.
+
+    Its signature is as follows:
+
+    ```nix
+    identifier: arguments: properties: children: { inherit identifier arguments properties children; };
+    ```
+
+    This allows writing the KDL node
+
+    ```kdl
+    name "arg1" "arg2" prop=1 {
+      child
+    }
+    ```
+
+    as
+
+    ```nix
+    (node "name" [ "arg1" "arg2" ] { prop = 1; } [
+      (node "child" [ ] { } [ ])
+    ])
+    ```
+
+    instead of
+
+    ```nix
+    {
+      identifier = "name";
+      arguments = [ "arg1" "arg2" ];
+      properties = { prop = 1; };
+      children = [
+        {
+          identifier = "child";
+        }
+      ];
+    }
+    ```
+
 `pkgs.formats.elixirConf { elixir ? pkgs.elixir }`
 
 :   A function taking an attribute set with values
