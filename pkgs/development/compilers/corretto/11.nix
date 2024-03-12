@@ -12,11 +12,12 @@
 , zip
 , darwin
 , cups
+, iconv
 }:
 
 let
   corretto = import ./mk-corretto.nix {
-    inherit lib stdenv autoconf rsync runCommand testers which xcbuild zip darwin cups;
+    inherit lib stdenv autoconf rsync runCommand testers which xcbuild zip darwin cups iconv;
     jdk = jdk11;
     gradle = gradle_7;
     version = "11.0.20.9.1";
