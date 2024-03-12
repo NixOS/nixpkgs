@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       infinisil
       asymmetric
+      hsjobeki
     ];
     platforms   = platforms.unix;
   };
