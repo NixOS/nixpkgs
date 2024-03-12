@@ -6,10 +6,10 @@
 
 let
   pname = "caido";
-  version = "0.29.2";
+  version = "0.33.0";
   src = fetchurl {
-    url = "https://storage.googleapis.com/caido-releases/v${version}/caido-desktop-linux-v${version}-e0f8102b.AppImage";
-    hash = "sha256-4PgQK52LAX1zacmoUK0muIhrvFDF7anQ6sx35I+ErVs=";
+    url = "https://storage.googleapis.com/caido-releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
+    hash = "sha256-MUQ1tVcIpLrC2RKsWDqv8MBGaHfh56OxIC/ARArQjiU=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 
