@@ -76,8 +76,8 @@ let
       name = "lazygit";
       owner = "catppuccin";
       repo = "lazygit";
-      rev = "0543c28e8af1a935f8c512ad9451facbcc17d8a8";
-      hash = "sha256-OVihY5E+elPKag2H4RyWiSv+MdIqHtfGNM3/1u2ik6U=";
+      rev = "v2.0.0";
+      hash = "sha256-gM0HplHhcpvtpmIVdlX/p59h0v+ihKEidS1imqPYlBg=";
     };
 
     plymouth = fetchFromGitHub {
@@ -183,8 +183,8 @@ stdenvNoCC.mkDerivation {
 
   '' + lib.optionalString (lib.elem "lazygit" themeList) ''
     mkdir -p $out/lazygit/{themes,themes-mergable}
-    cp "${sources.lazygit}/themes/${variant}/${variant}-${accent}.yml" "$out/lazygit/themes/"
-    cp "${sources.lazygit}/themes-mergable/${variant}/${variant}-${accent}.yml" "$out/lazygit/themes-mergable/"
+    cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes/"
+    cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable/"
 
   '' + lib.optionalString (lib.elem "plymouth" themeList) ''
     mkdir -p $out/share/plymouth/themes/catppuccin-${variant}
