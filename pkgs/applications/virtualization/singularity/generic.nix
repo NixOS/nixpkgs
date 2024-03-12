@@ -80,6 +80,20 @@ in
   externalLocalStateDir ? null,
   # Remove the symlinks to `singularity*` when projectName != "singularity"
   removeCompat ? false,
+  # The defaultPath values to substitute in each source files.
+  #
+  # `defaultPath` are PATH variables hard-coded inside Apptainer/Singularity
+  # binaries to search for third-party utilities, as a hardening for
+  # `$out/bin/starter-suid`.
+  #
+  # The upstream provided values are suitable for FHS-conformant environment.
+  # We substitute them and insert Nixpkgs-specific values.
+  #
+  # Example:
+  # {
+  #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
+  # }
+  sourceFilesWithDefaultPaths ? { },
   # Workaround #86349
   # should be removed when the issue is resolved
   vendorHash ? _defaultGoVendorArgs.vendorHash,
@@ -88,7 +102,6 @@ in
 }:
 
 let
-  defaultPathOriginal = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
   privileged-un-utils =
     if ((newuidmapPath == null) && (newgidmapPath == null)) then
       null
@@ -98,6 +111,12 @@ let
         ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
         ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
       '');
+
+  concatMapStringAttrsSep =
+    sep: f: attrs:
+    lib.concatMapStringsSep sep (name: f name attrs.${name}) (lib.attrNames attrs);
+
+  addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
   inherit pname version src;
@@ -201,8 +220,19 @@ in
     patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
 
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
-    substituteInPlace cmd/internal/cli/actions.go \
-      --replace "defaultPath = \"${defaultPathOriginal}\"" "defaultPath = \"''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}${defaultPathOriginal}\""
+    ${concatMapStringAttrsSep "\n" (fileName: originalDefaultPaths: ''
+      substituteInPlace ${lib.escapeShellArg fileName} \
+        ${
+          lib.concatMapStringsSep " \\\n  " (
+            originalDefaultPath:
+            lib.concatStringsSep " " [
+              "--replace-fail"
+              (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
+              (addShellDoubleQuotes ''$inputsDefaultPath''${inputsDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}'')
+            ]
+          ) originalDefaultPaths
+        }
+    '') sourceFilesWithDefaultPaths}
 
     substituteInPlace internal/pkg/util/gpu/nvidia.go \
       --replace \
@@ -238,7 +268,7 @@ in
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}"
+      --prefix PATH : "$inputsDefaultPath"
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
@@ -296,7 +326,9 @@ in
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {
+      inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
       passthru = prevAttrs.passthru or { } // {
+        inherit sourceFilesWithDefaultPaths;
         tests = {
           image-hello-cowsay = singularity-tools.buildImage {
             name = "hello-cowsay";
