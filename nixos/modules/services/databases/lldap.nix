@@ -106,10 +106,25 @@ in
       description = "Lightweight LDAP server (lldap)";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      # lldap defaults to a hardcoded `jwt_secret` value if none is provided, which is bad, because
+      # an attacker could create a valid admin jwt access token fairly trivially.
+      # Because there are 3 different ways `jwt_secret` can be provided, we check if any one of them is present,
+      # and if not, bootstrap a secret in `/var/lib/lldap/jwt_secret_file` and give that to lldap.
+      script = lib.optionalString (!cfg.settings ? jwt_secret) ''
+        if [[ -z "$LLDAP_JWT_SECRET_FILE" ]] && [[ -z "$LLDAP_JWT_SECRET" ]]; then
+          if [[ ! -e "./jwt_secret_file" ]]; then
+            ${lib.getExe pkgs.openssl} rand -base64 -out ./jwt_secret_file 32
+          fi
+          export LLDAP_JWT_SECRET_FILE="./jwt_secret_file"
+        fi
+      '' + ''
+         ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
+      '';
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}";
         StateDirectory = "lldap";
+        StateDirectoryMode = "0750";
         WorkingDirectory = "%S/lldap";
+        UMask = "0027";
         User = "lldap";
         Group = "lldap";
         DynamicUser = true;
