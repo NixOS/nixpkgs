@@ -63,8 +63,17 @@ import ./make-test-python.nix ({ pkgs, ... }:
       start_all()
       machine.wait_for_unit("default.target");
 
-      # Install container
+      # create containers root
       machine.succeed("mkdir -p ${containerRoot}");
+
+      # start container with shared nix store by using same arguments as for systemd-nspawn@.service
+      machine.succeed("systemd-run systemd-nspawn --machine=${containerName} --network-veth -U --bind-ro=/nix/store ${containerSystem}/init")
+      machine.wait_until_succeeds("systemctl -M ${containerName} is-active default.target");
+
+      # Test machinectl stop
+      machine.succeed("machinectl stop ${containerName}");
+
+      # Install container
       # Workaround for nixos-install
       machine.succeed("chmod o+rx /var/lib/machines");
       machine.succeed("nixos-install --root ${containerRoot} --system ${containerSystem} --no-channel-copy --no-root-passwd");
