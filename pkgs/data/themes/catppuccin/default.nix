@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "starship" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "starship" "thunderbird" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -120,6 +120,14 @@ let
       hash = "sha256-nsRuxQFKbQkyEI4TXgvAjcroVdG+heKX5Pauq/4Ota0=";
     };
 
+    thunderbird = fetchFromGitHub {
+      name = "thunderbird";
+      owner = "catppuccin";
+      repo = "thunderbird";
+      rev = "d61882ad9fd35909a75da6bb95fca38db552135c";
+      hash = "sha256-wn8//8lHScbbB1nEiDY8DphnLUMKZBFMc1GPaTRjTOY=";
+    };
+
     waybar = fetchFromGitHub {
       name = "waybar";
       owner = "catppuccin";
@@ -207,6 +215,10 @@ stdenvNoCC.mkDerivation {
   '' + lib.optionalString (lib.elem "starship" themeList) ''
     mkdir -p $out/starship
     cp ${sources.starship}/palettes/${variant}.toml $out/starship/
+
+  '' + lib.optionalString (lib.elem "thunderbird" themeList) ''
+    mkdir -p $out/thunderbird
+    cp ${sources.thunderbird}/themes/${variant}/${variant}-${accent}.xpi $out/thunderbird/
 
   '' + lib.optionalString (lib.elem "waybar" themeList) ''
     mkdir -p $out/waybar
