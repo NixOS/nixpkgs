@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  doCheck = stdenv.hostPlatform.system == "x86_64-linux";
+  # xvfb-run is available only on Linux
+  doCheck = stdenv.isLinux;
 
-  checkPhase = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-  ''
+  checkPhase = ''
     test_failed=
     # "| cat" disables fancy progress reporting which makes the log unreadable.
     ./complete-run.pl -p 1 --keep-xserver-output | cat || test_failed="complete-run.pl returned $?"
