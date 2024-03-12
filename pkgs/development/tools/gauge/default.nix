@@ -25,6 +25,7 @@ buildGoModule rec {
     description = "Light weight cross-platform test automation";
     homepage = "https://gauge.org";
     license = licenses.asl20;
+    mainProgram = "gauge";
     maintainers = with maintainers; [ vdemeester marie ];
   };
 }
