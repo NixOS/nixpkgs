@@ -506,4 +506,98 @@ rec {
     '') {};
   };
 
+  # The KDL document language (https://kdl.dev/)
+  kdl = {}: {
+
+    type = (with lib.types; let
+      # https://github.com/kdl-org/kdl/blob/main/SPEC.md#value
+      kdlValue = (nullOr (oneOf [ str bool number ])) // { description = "KDL value"; };
+      node = submoduleWith {
+        modules = lib.toList {
+          options = {
+            identifier = lib.mkOption {
+              type = str;
+              description = ''
+                [Identifier](https://github.com/kdl-org/kdl/blob/main/SPEC.md#identifier) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
+              '';
+            };
+            arguments = lib.mkOption {
+              type = listOf kdlValue;
+              default = [ ];
+              description = ''
+                [Arguments](https://github.com/kdl-org/kdl/blob/main/SPEC.md#argument) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
+              '';
+            };
+            properties = lib.mkOption {
+              type = attrsOf kdlValue;
+              default = { };
+              description = ''
+                [Properties](https://github.com/kdl-org/kdl/blob/main/SPEC.md#property) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
+              '';
+            };
+            children = lib.mkOption {
+              type = listOf (node // {
+                # Prevent Nix from trying to recurse into suboptions or submodules, as this leads to a stack overflow
+                getSubOptions = prefix: {};
+                getSubModules = null;
+              });
+              default = [ ];
+              description = ''
+                [Children](https://github.com/kdl-org/kdl/blob/main/SPEC.md#children-block) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
+              '';
+            };
+          };
+        };
+        description = "KDL node";
+      };
+      valueType = listOf node;
+    in
+    valueType);
+
+    lib = {
+      /**
+        Helper function for generating attrsets expect by pkgs.formats.kdl
+
+        # Example
+
+        ```nix
+        let
+          settingsFormat = pkgs.formats.kdl { };
+          inherit (settingsFormat.lib) node;
+        in
+        settingsFormat.generate "sample.kdl" [
+          (node "foo" [ ] { } [
+            (node "bar" [ "baz" ] { a = 1; } [ ])
+          ])
+        ]
+        ```
+
+        # Arguments
+
+        identifier
+        : The identifier of the node, represented by a string
+
+        arguments
+        : The arguments of the node, represented as a list of KDL values
+
+        properties
+        : The properties of the node, represented as an attrset of KDL values
+
+        children
+        : The children of the node, represented as a list of nodes
+
+      */
+      node = identifier: arguments: properties: children: { inherit identifier arguments properties children; };
+    };
+
+    generate = name: value: pkgs.callPackage ({ runCommand, json2kdl }: runCommand name {
+      nativeBuildInputs = [ json2kdl ];
+      value = builtins.toJSON value;
+      passAsFile = [ "value" ];
+    } ''
+      json2kdl "$valuePath" "$out"
+    '') {};
+
+  };
+
 }
