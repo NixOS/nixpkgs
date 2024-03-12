@@ -1976,6 +1976,8 @@ self: super: with self; {
 
   conway-polynomials = callPackage ../development/python-modules/conway-polynomials {};
 
+  copier = callPackage ../development/python-modules/copier { };
+
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
