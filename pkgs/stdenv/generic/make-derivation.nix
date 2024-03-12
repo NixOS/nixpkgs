@@ -40,6 +40,9 @@ let
     unique
   ;
 
+  inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
+  inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
+
   mkDerivation =
     fnOrAttrs:
       if builtins.isFunction fnOrAttrs
@@ -108,7 +111,7 @@ let
           makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
-  mkDerivationSimple = overrideAttrs:
+  makeDerivationArgument =
 
 
 # `mkDerivation` wraps the builtin `derivation` function to
@@ -540,6 +543,90 @@ else let
     };
 
   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  validity = checkMeta.assertValidity { inherit meta attrs; };
+
+  checkedEnv =
+    let
+      overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+    in
+    assert assertMsg envIsExportable
+      "When using structured attributes, `env` must be an attribute set of environment variables.";
+    assert assertMsg (overlappingNames == [ ])
+      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${concatStringsSep ", " overlappingNames}";
+    mapAttrs
+      (n: v: assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
+        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+      env;
+
+in
+  derivationArg;
+
+mkDerivationSimple = overrideAttrs:
+
+# `mkDerivation` wraps the builtin `derivation` function to
+# produce derivations that use this stdenv and its shell.
+#
+# See also:
+#
+# * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+#   Details on how to use this mkDerivation function
+#
+# * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
+#   Explanation about derivations in general
+{
+
+# Configure Phase
+  cmakeFlags ? []
+, mesonFlags ? []
+
+, meta ? {}
+, passthru ? {}
+, pos ? # position used in error messages and for meta.position
+    (if attrs.meta.description or null != null
+      then builtins.unsafeGetAttrPos "description" attrs.meta
+      else if attrs.version or null != null
+      then builtins.unsafeGetAttrPos "version" attrs
+      else builtins.unsafeGetAttrPos "name" attrs)
+
+# Experimental.  For simple packages mostly just works,
+# but for anything complex, be prepared to debug if enabling.
+, __structuredAttrs ? config.structuredAttrsByDefault or false
+
+, env ? { }
+
+, ... } @ attrs:
+
+# Policy on acceptable hash types in nixpkgs
+assert attrs ? outputHash -> (
+  let algo =
+    attrs.outputHashAlgo or (head (splitString "-" attrs.outputHash));
+  in
+  if algo == "md5" then
+    throw "Rejected insecure ${algo} hash '${attrs.outputHash}'"
+  else
+    true
+);
+
+let
+  envIsExportable = isAttrs env && !isDerivation env;
+
+  derivationArg = makeDerivationArgument
+    (removeAttrs
+      attrs
+        (["meta" "passthru" "pos"]
+        ++ optional (__structuredAttrs || envIsExportable) "env"
+        )
+    // optionalAttrs __structuredAttrs { env = checkedEnv; }
+    // {
+      cmakeFlags = makeCMakeFlags attrs;
+      mesonFlags = makeMesonFlags attrs;
+    });
+
+  meta = checkMeta.commonMeta {
+    inherit validity attrs pos;
+    references = attrs.nativeBuildInputs ++ attrs.buildInputs
+              ++ attrs.propagatedNativeBuildInputs ++ attrs.propagatedBuildInputs;
+  };
   validity = checkMeta.assertValidity { inherit meta attrs; };
 
   checkedEnv =
