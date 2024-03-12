@@ -32,9 +32,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
-    gtest
     pkg-config
     asciidoc
     doxygen
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     giflib
     gperftools # provides `libtcmalloc`
+    gtest
     libjpeg
     libpng
     libwebp

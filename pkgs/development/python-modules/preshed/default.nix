@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "preshed";
-  version = "3.0.9";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-chhjxSRP/NJlGtCSiVGix8d7EC9OEaJRrYXTfudiFmA=";
+    hash = "sha256-XisLKgfdGo3uqtZhIBmEXGAu4kkH9pNuqvF6q9VuVEw=";
   };
 
   nativeBuildInputs = [

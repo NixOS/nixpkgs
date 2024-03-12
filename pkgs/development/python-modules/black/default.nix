@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "23.11.0";
+  version = "24.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TGiFWCX/Qy0ZcimEb5cbxNZmbOkEkuWwIBO8rKTZqwU=";
+    hash = "sha256-vOTyXCfDQ15NrOSBW8sgCLh+Fn479O5HzNxc6QbrSJQ=";
   };
 
   nativeBuildInputs = [

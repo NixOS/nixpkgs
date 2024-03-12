@@ -19,6 +19,11 @@ updateInstallName() {
 
   cp "$path" "$path.new"
   install_name_tool -id "$path" "$path.new"
+  # workaround for https://github.com/NixOS/nixpkgs/issues/294518
+  # libc++.1.0.dylib contains wrong LC_RPATH
+  if [[ ${path} == *libc++.1.0.dylib ]]; then
+    install_name_tool -add_rpath @loader_path/.. "${path}.new"
+  fi
   codesign -f -i "$(basename "$path")" -s - "$path.new"
   mv -f "$path.new" "$path"
 }

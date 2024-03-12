@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.20.2";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3LhQI/hjenTxG/1DZP/zn2zs00rT5BviDAQYb2vucBM=";
+    hash = "sha256-YAMZku8jbdQ8JvUr5aLATIGIiTDmG6CGvfUKo28q7ks=";
   };
 
   nativeBuildInputs = [

@@ -64,6 +64,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::UserWarning"
+  ];
+
   # Test environment setup broken under Nix for a few tests:
   disabledTests = [
     "test_bash_completion_with_dot_in_path"

@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch2
 , pythonOlder
 , substituteAll
 
@@ -43,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.2.10";
+  version = "4.2.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sSYO04GxChF1PHNERAjhmGnzJB/EXJhc1VowF3x4nRM=";
+    hash = "sha256-bm/z2y2N0MmGtO7IVUyOT5GbXB/2KltDkMF6/y7W5cQ=";
   };
 
   patches = [
@@ -62,11 +61,6 @@ buildPythonPackage rec {
     # and disable failing tests
     ./django_4_tests.patch
 
-    (fetchpatch2 {
-      # fix test on 3.12; https://github.com/django/django/pull/17843
-      url = "https://github.com/django/django/commit/bc8471f0aac8f0c215b9471b594d159783bac19b.patch";
-      hash = "sha256-g1T9b73rmQ0uk1lB+iQy1XwK3Qin3mf5wpRsyYISJaw=";
-    })
   ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_4_set_geos_gdal_lib.patch;

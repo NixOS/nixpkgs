@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "1.1.2";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GUSoGx4cwhjQO4AiC9s0YIcK3N/Gr+PrYR3+B8G9CoQ=";
+    hash = "sha256-cqzsrEsYFX9HnC6fRKqefysT0ZSgAllTJEXleOdepXc=";
   };
 
   nativeBuildInputs = [

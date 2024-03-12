@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "1.3.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "python";
-    rev = "v${version}";
-    hash = "sha256-spPZdQ+x3isyeBXZ/J2QE6zNhyHRfyRQGiHreuXzzik=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/RINDyO0cngDy9APqsFHBFBKi8aDf7Tah/IIFdXQURo=";
   };
 
   nativeBuildInputs = [

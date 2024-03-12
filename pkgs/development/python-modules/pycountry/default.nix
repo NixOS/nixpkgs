@@ -1,25 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
+, poetry-core
+, importlib-metadata
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pycountry";
-  version = "22.3.5";
-  format = "setuptools";
+  version = "23.12.11";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-shY6JGxYWJTYCPGHg+GRN8twoMGPs2dI3AH8bxCcFkY=";
+    hash = "sha256-AFadgurvvGpJCjEb+oSpxXHP+d2/iwpPTntPhotK2SU=";
   };
 
   propagatedBuildInputs = [
-    setuptools
+    poetry-core
   ];
 
   nativeCheckInputs = [
+    importlib-metadata
     pytestCheckHook
   ];
 

@@ -38,16 +38,16 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.109.0";
+  version = "0.110.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = pname;
+    repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-iZBc0tYGmhQuOL/pdthhBYYnZhe+wEttoinePNAIgEs=";
+    hash = "sha256-OXWJ1PKJSJGzYNT8HHXvxMxjUtI4K6edpI+Z5B3TvhI=";
   };
 
   nativeBuildInputs = [

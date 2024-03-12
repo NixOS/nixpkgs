@@ -3,21 +3,23 @@
 , fetchFromGitHub
 , hatchling
 , pydantic
+, pendulum
 , phonenumbers
 , pycountry
+, python-ulid
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pydantic-extra-types";
-  version = "2.1.0";
+  version = "2.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-extra-types";
-    rev = "v${version}";
-    hash = "sha256-QPBOHIssTsWQlEg2WRpLRKrB6zmae43EExnPn5P4oAY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XLVhoZ3+TfVYEuk/5fORaGpCBaB5NcuskWhHgt+llS0=";
   };
 
   nativeBuildInputs = [
@@ -30,8 +32,10 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     all = [
+      pendulum
       phonenumbers
       pycountry
+      python-ulid
     ];
   };
 
