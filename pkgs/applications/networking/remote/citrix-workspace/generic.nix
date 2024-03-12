@@ -196,7 +196,7 @@ stdenv.mkDerivation rec {
 
     ${mkWrappers copyCert extraCerts}
 
-    # See https://developer-docs.citrix.com/projects/workspace-app-for-linux-oem-guide/en/latest/reference-information/#library-files
+    # See https://developer-docs.citrix.com/en-us/citrix-workspace-app-for-linux/citrix-workspace-app-for-linux-oem-reference-guide/reference-information/#library-files
     # Those files are fallbacks to support older libwekit.so and libjpeg.so
     rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
     rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
