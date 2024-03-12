@@ -1,10 +1,19 @@
 { lib }:
-with lib.systems.parse;
+
 with lib.attrsets;
 with lib.lists;
 
-let abis_ = abis; in
-let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
+let
+  inherit (lib.systems.parse)
+    kernels
+    kernelFamilies
+    significantBytes
+    cpuTypes
+    execFormats
+    ;
+
+  abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) lib.systems.parse.abis;
+in
 
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
