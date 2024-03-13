@@ -44,14 +44,6 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionOlder info.version "27")
-    (substituteAll {
-      name = "version.patch";
-      src = ./version.patch;
-      inherit (info) version;
-    })
-  ;
-
   unpackPhase = ''
     runHook preUnpack
   '' + (
@@ -167,7 +159,6 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_widevine = false;
     use_perfetto_client_library = false;
     enable_check_raw_ptr_fields = false;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "27")  {
     override_electron_version = info.version;
   };
 
