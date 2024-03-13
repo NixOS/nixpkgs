@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256:1a7cnr4r03mv7j0d6sji07m892ygcr7wgya4mzj5l7w2lfm6rqjn";
   };
   dontBuild = true;
+  passthru.tests = nixosTests.druid.default.passthru.override {
+    druidPackage = finalAttrs.finalPackage;
+  };
   loadExtensions = (concatStringsSep "\n"
     (mapAttrsToList
       (dir: files:
