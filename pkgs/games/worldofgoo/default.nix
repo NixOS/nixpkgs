@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   helpMsg = ''
     We cannot download the full version automatically, as you require a license.
     Once you have bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/${pname}.Linux${version}.sh"
+    You can do this by using "nix-prefetch-url file://\$PWD/${pname}.Linux.${version}.sh"
     in the directory where you saved it.
   '';
 
