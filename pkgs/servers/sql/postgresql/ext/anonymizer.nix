@@ -1,15 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, postgresql, nixosTests, ... }:
+{ lib, stdenv, pg-dump-anon, postgresql, runtimeShell }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "postgresql_anonymizer";
-  version = "1.3.1";
 
-  src = fetchFromGitLab {
-    owner = "dalibo";
-    repo = "postgresql_anonymizer";
-    rev = finalAttrs.version;
-    hash = "sha256-Z5Oz/cIYDxFUZwQijRk4xAOUdOK0LWR+px8WOcs+Rs0=";
-  };
+  inherit (pg-dump-anon) version src passthru;
 
   buildInputs = [ postgresql ];
   nativeBuildInputs = [ postgresql ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
@@ -23,12 +17,16 @@ stdenv.mkDerivation (finalAttrs: {
     "DESTDIR="
   ];
 
-  passthru.tests = { inherit (nixosTests) pg_anonymizer; };
+  postInstall = ''
+    cat >$out/bin/pg_dump_anon.sh <<'EOF'
+    #!${runtimeShell}
+    echo "This script is deprecated by upstream. To use the new script,"
+    echo "please install pkgs.pg-dump-anon."
+    exit 1
+    EOF
+  '';
 
-  meta = with lib; {
+  meta = pg-dump-anon.meta // {
     description = "postgresql_anonymizer is an extension to mask or replace personally identifiable information (PII) or commercially sensitive data from a PostgreSQL database.";
-    homepage = "https://postgresql-anonymizer.readthedocs.io/en/stable/";
-    maintainers = teams.flyingcircus.members;
-    license = licenses.postgresql;
   };
 })
