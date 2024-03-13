@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fbthrift";
-  version = "2024.01.22.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fbthrift";
     rev = "v${version}";
-    sha256 = "sha256-vIYXX4NOs2JdhrAJKmIhf4+hQEXHue2Ok7e4cw6yups=";
+    sha256 = "sha256-iCiiKNDlfKm1Y4SGzcSP6o/OdiRRrj9UEawW6qpBpSY=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.isDarwin then "OFF" else "ON"}"
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
