@@ -28686,8 +28686,6 @@ with pkgs;
 
   andika = callPackage ../data/fonts/andika { };
 
-  androguard = with python3.pkgs; toPythonApplication androguard;
-
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
   ankacoder = callPackage ../data/fonts/ankacoder { };
