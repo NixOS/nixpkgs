@@ -20595,6 +20595,12 @@
     githubId = 70410;
     name = "Rahul Gopinath";
   };
+  vsharathchandra = {
+    email = "chandrasharath.v@gmail.com";
+    github = "vsharathchandra";
+    githubId = 12689380;
+    name = "sharath chandra";
+  };
   vskilet = {
     email = "victor@sene.ovh";
     github = "Vskilet";
