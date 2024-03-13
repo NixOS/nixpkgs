@@ -1,20 +1,22 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , cmake
+, fetchFromGitHub
 , primesieve
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "primecount";
   version = "7.10";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primecount";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-z7sHGR6zZSTV1PbL0WPGHf52CYQ572KC1yznCuIEJbQ=";
   };
+
+  outputs = [ "out" "dev" "lib" "man" ];
 
   nativeBuildInputs = [
     cmake
@@ -24,17 +26,18 @@ stdenv.mkDerivation rec {
     primesieve
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
-    "-DBUILD_LIBPRIMESIEVE=ON"
-    "-DBUILD_PRIMECOUNT=ON"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_STATIC_LIBS=OFF"
-    "-DBUILD_TESTS=ON"
+    (lib.cmakeBool "BUILD_LIBPRIMESIEVE" true)
+    (lib.cmakeBool "BUILD_PRIMECOUNT" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "BUILD_TESTS" true)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kimwalisch/primecount";
-    changelog = "https://github.com/kimwalisch/primecount/blob/v${version}/ChangeLog";
     description = "Fast prime counting function implementations";
     longDescription = ''
       primecount is a command-line program and C/C++ library that counts the
@@ -50,7 +53,9 @@ stdenv.mkDerivation rec {
       of CPU cores. primecount has already been used to compute several prime
       counting function world records.
     '';
-    license = licenses.bsd2;
+    changelog = "https://github.com/kimwalisch/primecount/blob/${finalAttrs.src.rev}/ChangeLog";
+    license = lib.licenses.bsd2;
+    mainProgram = "primecount";
     inherit (primesieve.meta) maintainers platforms;
   };
-}
+})

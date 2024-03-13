@@ -1,25 +1,35 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , cmake
+, fetchFromGitHub
+, stdenv
+, primecount
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "primesieve";
   version = "12.1";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primesieve";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AHl2GfZ1oJ8ZyjJzvg10AqN7TA7HFZ+qa6N2v51Qa78=";
   };
 
+  outputs = [ "out" "dev" "lib" "man" ];
+
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  passthru = {
+    tests = {
+      inherit primecount; # dependent
+    };
+  };
+
+  meta = {
     homepage = "https://primesieve.org/";
-    changelog = "https://github.com/kimwalisch/primesieve/blob/v${version}/ChangeLog";
     description = "Fast C/C++ prime number generator";
     longDescription = ''
       primesieve is a command-line program and C/C++ library for quickly
@@ -29,9 +39,11 @@ stdenv.mkDerivation rec {
       CPU cores whenever possible i.e. if sequential ordering is not
       required. primesieve can generate primes and prime k-tuplets up to 264.
     '';
-    license = licenses.bsd2;
-    maintainers = teams.sage.members ++
-      (with maintainers; [ abbradar AndersonTorres ]);
-    platforms = platforms.unix;
+    changelog = "https://github.com/kimwalisch/primesieve/blob/${finalAttrs.src.rev}/ChangeLog";
+    license = lib.licenses.bsd2;
+    mainProgram = "primesieve";
+    maintainers = lib.teams.sage.members ++
+      (with lib.maintainers; [ abbradar AndersonTorres ]);
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,6 +4,7 @@ import base64
 import binascii
 import json
 import pathlib
+from typing import Optional
 from urllib.parse import urlparse
 
 import bs4
@@ -57,19 +58,26 @@ def to_sri(hash):
     ),
     default=pathlib.Path(__file__).parent.parent.parent.parent
 )
-def main(set: str, version: str, nixpkgs: pathlib.Path):
+@click.option(
+    "--sources-url",
+    type=str,
+    default=None,
+)
+def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: Optional[str]):
     root_dir = nixpkgs / "pkgs/kde"
     set_dir = root_dir / set
     generated_dir = root_dir / "generated"
     metadata = utils.KDERepoMetadata.from_json(generated_dir)
 
-    set_url = {
-        "frameworks": "kf",
-        "gear": "releases",
-        "plasma": "plasma",
-    }[set]
+    if sources_url is None:
+        set_url = {
+            "frameworks": "kf",
+            "gear": "releases",
+            "plasma": "plasma",
+        }[set]
+        sources_url = f"https://kde.org/info/sources/source-{set_url}-{version}.html"
 
-    sources = httpx.get(f"https://kde.org/info/sources/source-{set_url}-{version}.html")
+    sources = httpx.get(sources_url)
     sources.raise_for_status()
     bs = bs4.BeautifulSoup(sources.text, features="html.parser")
 

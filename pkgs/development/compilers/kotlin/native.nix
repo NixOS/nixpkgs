@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-native";
-  version = "1.9.22";
+  version = "1.9.23";
 
   src = let
     getArch = {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${arch}-${version}.tar.gz";
 
     getHash = arch: {
-      "macos-aarch64" = "1pf81rplikbp194pjrm2la101iz8vz3jv55109nipd26xghc15ca";
-      "macos-x86_64" = "1r7dmk8cc7f3iwaxamlnlcjl4mbvx443nwvsp8141a21ibrvrmx9";
-      "linux-x86_64" = "1m77qld44gbarjxm99gsdscncx4v0cf6ca3h9bdh2m7d3i4adc62";
+      "macos-aarch64" = "1v1ld4nxa77vjxiz4jw5h29s8i4ghfbmq0d01r15i75pr46md8r7";
+      "macos-x86_64" = "05ywdhagj3qzjaw5sd94sgjk89dysky7d7lfqpwvc8s35v77rv8f";
+      "linux-x86_64" = "1j2lpl1r7r30dgard6ia29n3qrsr98wb3qwpc80z4jh6k42qn6id";
     }.${arch};
   in
     fetchurl {
