@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Session manager for Budgie";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-session";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [federicoschonborn];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })
