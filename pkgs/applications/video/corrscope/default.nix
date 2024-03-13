@@ -1,35 +1,27 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivationWith
 , python3Packages
 , fetchFromGitHub
-, fetchpatch
 , wrapQtAppsHook
 , ffmpeg
 , qtbase
+, qtwayland
 , testers
 , corrscope
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.8.1";
-  format = "pyproject";
+  version = "0.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
     rev = version;
-    hash = "sha256-pS7upOYZAjgR3lWxny8TNZEj3Rrbg+L90ANZWFO9UPQ=";
+    hash = "sha256-kOPhVm4epIhBSsgQVKNCoQ7DZcMG/b3sapxwwKo/V+U=";
   };
-
-  patches = [
-    # https://github.com/corrscope/corrscope/pull/446
-    (fetchpatch {
-      name = "remove-setuptools-dependency.patch";
-      url = "https://github.com/corrscope/corrscope/commit/70b123173a7a012d9f29d6d3a8960b85caf6cc79.patch";
-      hash = "sha256-YCtb7v8cGP0pdceAKeoempnRzw+LRKQqDb3AfN0z/9s=";
-    })
-  ];
 
   pythonRelaxDeps = [ "attrs" "ruamel.yaml" ];
 
@@ -43,6 +35,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   buildInputs = [
     ffmpeg
     qtbase
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
   ];
 
   propagatedBuildInputs = with python3Packages; [
