@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ExifRead";
+  pname = "exifread";
   version = "3.0.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ExifRead";
+    inherit version;
     hash = "sha256-CsWjZBadvfK9YvlPXAc5cKtmlKMWYXf15EixDJQ+LKQ=";
   };
 
