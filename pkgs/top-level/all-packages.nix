@@ -33145,8 +33145,6 @@ with pkgs;
 
   lime = callPackage ../development/libraries/lime { };
 
-  livi = callPackage ../applications/video/livi { };
-
   luakit = callPackage ../applications/networking/browsers/luakit {
     inherit (luajitPackages) luafilesystem;
   };
