@@ -45,6 +45,7 @@
 , libxml2
 , llvmPackages_14
 , m17n_lib
+, mailutils
 , makeWrapper
 , motif
 , ncurses
@@ -75,6 +76,7 @@
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
+, withMailutils ? true
 , withMotif ? false
 , withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
 , withPgtk ? false
@@ -337,6 +339,7 @@ mkDerivation (finalAttrs: {
     (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
     (lib.withFeature withNativeCompilation "native-compilation")
     (lib.withFeature withImageMagick "imagemagick")
+    (lib.withFeature withMailutils "mailutils")
     (lib.withFeature withSmallJaDic "small-ja-dic")
     (lib.withFeature withTreeSitter "tree-sitter")
     (lib.withFeature withXinput2 "xinput2")
