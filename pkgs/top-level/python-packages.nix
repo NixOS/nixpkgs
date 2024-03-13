@@ -13858,6 +13858,8 @@ self: super: with self; {
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
+  snap-helpers = callPackage ../development/python-modules/snap-helpers { };
+
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
