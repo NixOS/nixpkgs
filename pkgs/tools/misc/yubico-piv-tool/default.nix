@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       command = "yubico-piv-tool --version";
     };
+    pkcs11Module = "${finalAttrs.finalPackage}/lib/libykcs11.so";
   };
 
   meta = with lib; {
