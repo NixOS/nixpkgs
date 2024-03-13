@@ -3349,8 +3349,6 @@ with pkgs;
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
-  autoflake = with python3.pkgs; toPythonApplication autoflake;
-
   autospotting = callPackage ../applications/misc/autospotting { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
