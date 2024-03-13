@@ -12,10 +12,9 @@ rec {
   inherit (builtins) head tail length isList elemAt concatLists filter elem genList map;
 
   /**
-    Create a list consisting of a single element.  `singleton x` is
-        sometimes more convenient with respect to indentation than `[x]`
-        when x spans multiple lines.
-
+    Create a list consisting of a single element. `singleton x` is
+    sometimes more convenient with respect to indentation than `[x]`
+    when x spans multiple lines.
 
     # Inputs
 
@@ -43,9 +42,8 @@ rec {
   singleton = x: [x];
 
   /**
-    Apply the function to each element in the list. Same as `map`, but arguments
-        flipped.
-
+    Apply the function to each element in the list.
+    Same as `map`, but arguments flipped.
 
     # Inputs
 
@@ -80,8 +78,8 @@ rec {
 
   /**
     “right fold” a binary function `op` between successive elements of
-        `list` with `nul` as the starting value, i.e.,
-        `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.
+    `list` with `nul` as the starting value, i.e.,
+    `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.
 
 
     # Inputs
@@ -138,8 +136,8 @@ rec {
 
   /**
     “left fold”, like `foldr`, but from the left:
-        `foldl op nul [x_1 x_2 ... x_n] == op (... (op (op nul x_1) x_2) ... x_n)`.
 
+    `foldl op nul [x_1 x_2 ... x_n] == op (... (op (op nul x_1) x_2) ... x_n)`.
 
     # Inputs
 
@@ -219,7 +217,6 @@ rec {
     op (op (... (op (op (op acc₀ x₀) x₁) x₂) ...) xₙ₋₁) xₙ
     ```
 
-
     # Inputs
 
     `op`
@@ -267,7 +264,6 @@ rec {
 
   /**
     Map with index starting from 0
-
 
     # Inputs
 
@@ -355,7 +351,7 @@ rec {
 
   /**
     Flatten the argument into a single list; that is, nested lists are
-        spliced into the top-level lists.
+    spliced into the top-level lists.
 
 
     # Inputs
@@ -391,7 +387,11 @@ rec {
 
     `e`
 
-    : Element to remove from the list
+    : Element to remove from `list`
+
+    `list`
+
+    : The list
 
     # Type
 
@@ -415,8 +415,10 @@ rec {
 
   /**
     Find the sole element in the list matching the specified
-        predicate, returns `default` if no such element exists, or
-        `multiple` if there are multiple matching elements.
+    predicate.
+
+    Returns `default` if no such element exists, or
+    `multiple` if there are multiple matching elements.
 
 
     # Inputs
@@ -470,8 +472,7 @@ rec {
 
   /**
     Find the first index in the list matching the specified
-        predicate or return `default` if no such element exists.
-
+    predicate or return `default` if no such element exists.
 
     # Inputs
 
@@ -545,8 +546,7 @@ rec {
 
   /**
     Find the first element in the list matching the specified
-        predicate or return `default` if no such element exists.
-
+    predicate or return `default` if no such element exists.
 
     # Inputs
 
@@ -595,7 +595,7 @@ rec {
 
   /**
     Return true if function `pred` returns true for at least one
-        element of `list`.
+    element of `list`.
 
     # Inputs
 
@@ -630,7 +630,7 @@ rec {
 
   /**
     Return true if function `pred` returns true for all elements of
-        `list`.
+    `list`.
 
     # Inputs
 
@@ -665,8 +665,7 @@ rec {
 
   /**
     Count how many elements of `list` match the supplied predicate
-        function.
-
+    function.
 
     # Inputs
 
@@ -696,9 +695,8 @@ rec {
 
   /**
     Return a singleton list or an empty list, depending on a boolean
-        value.  Useful when building lists with optional elements
-        (e.g. `++ optional (system == "i686-linux") firefox`).
-
+    value.  Useful when building lists with optional elements
+    (e.g. `++ optional (system == "i686-linux") firefox`).
 
     # Inputs
 
@@ -733,7 +731,6 @@ rec {
 
   /**
     Return a list or an empty list, depending on a boolean value.
-
 
     # Inputs
 
@@ -771,16 +768,14 @@ rec {
 
   /**
     If argument is a list, return it; else, wrap it in a singleton
-        list.  If you're using this, you should almost certainly
-        reconsider if there isn't a more "well-typed" approach.
-
+    list. If you're using this, you should almost certainly
+    reconsider if there isn't a more "well-typed" approach.
 
     # Inputs
 
     `x`
 
     : 1\. Function argument
-
 
     # Examples
     :::{.example}
@@ -799,7 +794,6 @@ rec {
 
   /**
     Return a list of integers from `first` up to and including `last`.
-
 
     # Inputs
 
@@ -841,7 +835,6 @@ rec {
   /**
     Return a list with `n` copies of an element.
 
-
     # Inputs
 
     `n`
@@ -875,7 +868,7 @@ rec {
 
   /**
     Splits the elements of a list in two lists, `right` and
-        `wrong`, depending on the evaluation of a predicate.
+    `wrong`, depending on the evaluation of a predicate.
 
     # Inputs
 
@@ -910,7 +903,6 @@ rec {
     Splits the elements of a list into many lists, using the return value of a predicate.
     Predicate should return a string which becomes keys of attrset `groupBy` returns.
     `groupBy'` allows to customise the combining function and initial value
-
 
     # Inputs
 
@@ -967,9 +959,8 @@ rec {
 
   /**
     Merges two lists of the same size together. If the sizes aren't the same
-        the merging stops at the shortest. How both lists are merged is defined
-        by the first argument.
-
+    the merging stops at the shortest. How both lists are merged is defined
+    by the first argument.
 
     # Inputs
 
@@ -1011,8 +1002,7 @@ rec {
 
   /**
     Merges two lists of the same size together. If the sizes aren't the same
-        the merging stops at the shortest.
-
+    the merging stops at the shortest.
 
     # Inputs
 
@@ -1045,7 +1035,6 @@ rec {
 
   /**
     Reverse the order of the elements of a list.
-
 
     # Inputs
 
@@ -1134,8 +1123,8 @@ rec {
 
   /**
     Sort a list based on a partial ordering using DFS. This
-        implementation is O(N^2), if your ordering is linear, use `sort`
-        instead.
+    implementation is O(N^2), if your ordering is linear, use `sort`
+    instead.
 
     `before a b == true` means that `b` should be after `a`
     in the result.
@@ -1193,13 +1182,12 @@ rec {
 
   /**
     Sort a list based on a comparator function which compares two
-        elements and returns true if the first argument is strictly below
-        the second argument.  The returned list is sorted in an increasing
-        order.  The implementation does a quick-sort.
+    elements and returns true if the first argument is strictly below
+    the second argument.  The returned list is sorted in an increasing
+    order.  The implementation does a quick-sort.
 
     See also [`sortOn`](#function-library-lib.lists.sortOn), which applies the
-        default comparison on a function-derived property, and may be more efficient.
-
+    default comparison on a function-derived property, and may be more efficient.
 
     # Inputs
 
@@ -1290,7 +1278,6 @@ rec {
   /**
     Compare two lists element-by-element.
 
-
     # Inputs
 
     `cmp`
@@ -1337,7 +1324,7 @@ rec {
 
   /**
     Sort list using "Natural sorting".
-        Numeric portions of strings are sorted in numeric order.
+    Numeric portions of strings are sorted in numeric order.
 
 
     # Inputs
@@ -1483,8 +1470,7 @@ rec {
 
   /**
     Remove the first list as a prefix from the second list.
-     Error if the first list isn't a prefix of the second list.
-
+    Error if the first list isn't a prefix of the second list.
 
     # Inputs
 
@@ -1525,8 +1511,7 @@ rec {
 
   /**
     Return a list consisting of at most `count` elements of `list`,
-        starting at index `start`.
-
+    starting at index `start`.
 
     # Inputs
 
@@ -1709,7 +1694,7 @@ rec {
 
 
   /**
-    Remove duplicate elements from the list. O(n^2) complexity.
+    Remove duplicate elements from the `list`. O(n^2) complexity.
 
 
     # Inputs
@@ -1770,8 +1755,9 @@ rec {
 
 
   /**
-    Intersects list 'e' and another list. O(nm) complexity.
+    Intersects list 'list1' and another list (`list2`).
 
+    O(nm) complexity.
 
     # Inputs
 
@@ -1798,8 +1784,9 @@ rec {
   intersectLists = e: filter (x: elem x e);
 
   /**
-    Subtracts list 'e' from another list. O(nm) complexity.
+    Subtracts list 'e' from another list (`list2`).
 
+    O(nm) complexity.
 
     # Inputs
 
@@ -1827,8 +1814,7 @@ rec {
 
   /**
     Test if two lists have no common element.
-        It should be slightly more efficient than (intersectLists a b == [])
-
+    It should be slightly more efficient than (intersectLists a b == [])
 
     # Inputs
 
