@@ -9,7 +9,7 @@
 , gdal
 , wxGTK32
 , proj
-, dxflib
+, libsForQt5
 , curl
 , libiodbc
 , xz
@@ -17,7 +17,7 @@
 , opencv
 , vigra
 , postgresql
-, Cocoa
+, darwin
 , unixODBC
 , poppler
 , hdf5
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    dxflib
+    libsForQt5.dxflib
     fftw
     libsvm
     hdf5
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
   # for why the have additional buildInputs on darwin
   ++ lib.optionals stdenv.isDarwin [
-    Cocoa
+    darwin.apple_sdk.frameworks.Cocoa
     unixODBC
     poppler
     netcdf
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DOpenMP_SUPPORT=${if stdenv.isDarwin then "OFF" else "ON"}"
+    (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.isDarwin))
   ];
 
   meta = with lib; {
