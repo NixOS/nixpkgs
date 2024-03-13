@@ -291,7 +291,7 @@ in
       };
 
       dns = mkOption {
-        type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
+        type = types.enum [ "default" "dnsmasq" "systemd-resolved" "none" ];
         default = "default";
         description = lib.mdDoc ''
           Set the DNS (`resolv.conf`) processing mode.
