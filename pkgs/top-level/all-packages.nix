@@ -18414,8 +18414,6 @@ with pkgs;
   libbpf = callPackage ../os-specific/linux/libbpf { };
   libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
 
-  bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
-
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
   bcc = callPackage ../os-specific/linux/bcc {
