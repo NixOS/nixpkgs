@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, p7zip }:
 
 stdenv.mkDerivation rec {
   pname = "freepats";
-  version = "20060219";
+  version = "20221026";
 
   src = fetchurl {
-    url = "https://freepats.zenvoid.org/freepats-${version}.tar.bz2";
-    sha256 = "12iw36rd94zirll96cd5k0va7p5hxmf2shvjlhzihcmjaw8flq82";
+    url = "https://freepats.zenvoid.org/SoundSets/FreePats-GeneralMIDI/FreePatsGM-SF2-${version}.7z";
+    hash = "sha256-wvXHd4UeOthsuhGb+RqmuRUCJRLoHDfqAQ7mo/i1QV0=";
   };
+
+  nativeBuildInputs = [ p7zip ];
 
   installPhase = ''mkdir "$out"; cp -r . "$out"'';
 
