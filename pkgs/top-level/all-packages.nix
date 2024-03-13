@@ -4306,8 +4306,6 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  beautysh = with python3.pkgs; toPythonApplication beautysh;
-
   bc = callPackage ../tools/misc/bc { };
 
   gavin-bc = callPackage ../tools/misc/gavin-bc { };
