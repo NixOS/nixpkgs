@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sshs";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
     repo = pname;
     rev = version;
-    hash = "sha256-phVwNPElQOTgsrDxzyUcDMByxi7t1IIPFCEHJTXiBdY=";
+    hash = "sha256-aUn2O3yToSEJVLpVcYGsKaWrDR/iTDX9BMBCBKXyx0I=";
   };
 
   cargoLock = {
