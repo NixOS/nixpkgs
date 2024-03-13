@@ -20,6 +20,20 @@ in
       };
 
       debug = mkEnableOption (lib.mdDoc "mate-session debug messages");
+
+      extraPanelApplets = mkOption {
+        default = [ ];
+        example = literalExpression "with pkgs.mate; [ mate-applets ]";
+        type = types.listOf types.package;
+        description = lib.mdDoc "Extra applets to add to mate-panel.";
+      };
+
+      extraCajaExtensions = mkOption {
+        default = [ ];
+        example = lib.literalExpression "with pkgs.mate; [ caja-extensions ]";
+        type = types.listOf types.package;
+        description = lib.mdDoc "Extra extensions to add to caja.";
+      };
     };
 
     environment.mate.excludePackages = mkOption {
@@ -44,6 +58,12 @@ in
       (pkgs.mate.basePackages ++
       pkgs.mate.extraPackages ++
       [
+        (pkgs.mate.caja-with-extensions.override {
+          extensions = cfg.extraCajaExtensions;
+        })
+        (pkgs.mate.mate-panel-with-applets.override {
+          applets = cfg.extraPanelApplets;
+        })
         pkgs.desktop-file-utils
         pkgs.glib
         pkgs.gtk3.out

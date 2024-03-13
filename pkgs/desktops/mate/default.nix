@@ -54,8 +54,8 @@ let
     pluma = callPackage ./pluma { };
     python-caja = callPackage ./python-caja { };
 
+    # Caja and mate-panel are managed in NixOS module.
     basePackages = [
-      caja-with-extensions
       libmatekbd
       libmatemixer
       libmateweather
@@ -66,7 +66,6 @@ let
       mate-icon-theme
       mate-menus
       mate-notification-daemon
-      mate-panel-with-applets
       mate-polkit
       mate-session-manager
       mate-settings-daemon
