@@ -118,8 +118,8 @@ in stdenv.mkDerivation rec {
     #ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
 
     # Install desktop file
-    mkdir -p $out/share/autostart
-    cp -v other/vboxclient.desktop $out/share/autostart
+    mkdir -p $out/etc/xdg/autostart
+    cp -v other/vboxclient.desktop $out/etc/xdg/autostart
 
     # Install Xorg drivers
     mkdir -p $out/lib/xorg/modules/{drivers,input}
