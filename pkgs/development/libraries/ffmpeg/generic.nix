@@ -391,14 +391,14 @@ stdenv.mkDerivation (finalAttrs: {
         '';
       }
     ]
-    ++ (lib.optional (lib.versionAtLeast finalAttrs.version "6" && lib.versionOlder finalAttrs.version "6.1")
+    ++ (lib.optional (lib.versionAtLeast version "6" && lib.versionOlder version "6.1")
       { # this can be removed post 6.1
         name = "fix_aacps_tablegen";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/814178f92647be2411516bbb82f48532373d2554";
         hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
       }
     )
-    ++ (lib.optional (lib.versionAtLeast finalAttrs.version "6.1" && lib.versionOlder finalAttrs.version "6.2")
+    ++ (lib.optional (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
@@ -459,7 +459,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature buildAvdevice "avdevice")
     (enableFeature buildAvfilter "avfilter")
     (enableFeature buildAvformat "avformat")
-  ] ++ optionals (lib.versionOlder finalAttrs.version "5") [
+  ] ++ optionals (lib.versionOlder version "5") [
     # Ffmpeg > 4 doesn't know about the flag anymore
     (enableFeature buildAvresample "avresample")
   ] ++ [
@@ -490,7 +490,7 @@ stdenv.mkDerivation (finalAttrs: {
      */
     (enableFeature withAlsa "alsa")
     (enableFeature withAom "libaom")
-  ] ++ optionals (versionAtLeast finalAttrs.version "6.1") [
+  ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
     (enableFeature withAss "libass")
@@ -515,7 +515,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withGme "libgme")
     (enableFeature withGnutls "gnutls")
     (enableFeature withGsm "libgsm")
-  ] ++ optionals (versionAtLeast finalAttrs.version "6.1") [
+  ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withHarfbuzz "libharfbuzz")
   ] ++ [
     (enableFeature withIconv "iconv")
@@ -538,7 +538,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenjpeg "libopenjpeg")
     (enableFeature withOpenmpt "libopenmpt")
     (enableFeature withOpus "libopus")
-  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+  ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withPlacebo "libplacebo")
   ] ++ [
     (enableFeature withPulse "libpulse")
@@ -546,7 +546,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withRtmp "librtmp")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
-  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+  ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withShaderc "libshaderc")
   ] ++ [
     (enableFeature withSoxr "libsoxr")
@@ -644,7 +644,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
-  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
+  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
@@ -654,7 +654,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpenjpeg [ openjpeg ]
   ++ optionals withOpenmpt [ libopenmpt ]
   ++ optionals withOpus [ libopus ]
-  ++ optionals withPlacebo [ (if (lib.versionAtLeast finalAttrs.version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
+  ++ optionals withPlacebo [ (if (lib.versionAtLeast version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withPulse [ libpulseaudio ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
@@ -753,7 +753,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
-    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${finalAttrs.version}/Changelog";
+    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines
