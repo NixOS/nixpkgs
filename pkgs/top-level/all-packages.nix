@@ -18729,8 +18729,6 @@ with pkgs;
 
   dolt = callPackage ../servers/sql/dolt { };
 
-  dot2tex = with python3.pkgs; toPythonApplication dot2tex;
-
   doxygen = darwin.apple_sdk_11_0.callPackage ../development/tools/documentation/doxygen {
     qt5 = null;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
