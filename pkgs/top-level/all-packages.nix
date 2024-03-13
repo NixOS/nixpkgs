@@ -746,8 +746,6 @@ with pkgs;
 
   kdePackages = callPackage ../kde { };
 
-  buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
-
   probe-rs = callPackage ../development/tools/rust/probe-rs {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     inherit (darwin) DarwinTools;
