@@ -20076,8 +20076,6 @@ with pkgs;
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
-
   yq-go = callPackage ../development/tools/yq-go { };
 
   ytt = callPackage ../development/tools/ytt { };
