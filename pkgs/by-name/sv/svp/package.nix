@@ -20,9 +20,12 @@
 , vapoursynth
 , xdg-utils
 , xorg
+  # MPV dependencies for easier override
+, mpv-unwrapped
+, wrapMpv
 }:
 let
-  mpvForSVP = callPackage ./mpv.nix { };
+  mpvForSVP = callPackage ./mpv.nix { inherit mpv-unwrapped wrapMpv; };
 
   # Script provided by GitHub user @xrun1
   # https://github.com/xddxdd/nur-packages/issues/31#issuecomment-1812591688
