@@ -5115,15 +5115,6 @@ with pkgs;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
-  dvc = with python3.pkgs; toPythonApplication dvc;
-
-  dvc-with-remotes = dvc.override {
-    enableGoogle = true;
-    enableAWS = true;
-    enableAzure = true;
-    enableSSH = true;
-  };
-
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   dynamic-wallpaper = callPackage ../tools/graphics/dynamic-wallpaper { };
