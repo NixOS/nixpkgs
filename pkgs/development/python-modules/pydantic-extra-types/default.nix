@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pydantic-extra-types";
   version = "2.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
@@ -45,11 +45,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.all;
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/pydantic/pydantic-extra-types/blob/${src.rev}/HISTORY.md";
     description = "Extra Pydantic types";
     homepage = "https://github.com/pydantic/pydantic-extra-types";
     license = licenses.mit;

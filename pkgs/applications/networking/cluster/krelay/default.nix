@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "krelay";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "knight42";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hyjseBIyPdY/xy163bGtfNR1rN/cQczJO53gu4/WmiU=";
+    hash = "sha256-FB+N4gSjAG/HyL5a/D44G4VVzlAQZ8Vjt+YUclCcy3w=";
   };
 
-  vendorHash = "sha256-uDLc1W3jw3F+23C5S65Tcljiurobw4IRw7gYzZyBxQ0=";
+  vendorHash = "sha256-Nktv3yRrK2AypCzvQDH9gax65GJEXq6Fb3eBWvltQVk=";
 
   subPackages = [ "cmd/client" ];
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A better alternative to `kubectl port-forward` that can forward TCP or UDP traffic to IP/Host which is accessible inside the cluster.";
+    description = "A drop-in replacement for `kubectl port-forward` with some enhanced features";
     homepage = "https://github.com/knight42/krelay";
     changelog = "https://github.com/knight42/krelay/releases/tag/v${version}";
     license = licenses.mit;

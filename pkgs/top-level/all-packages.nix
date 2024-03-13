@@ -278,8 +278,6 @@ with pkgs;
 
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
 
-  asn = callPackage ../applications/networking/asn { };
-
   asnmap = callPackage ../tools/security/asnmap { };
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
@@ -36203,8 +36201,6 @@ with pkgs;
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 
   xdg-desktop-portal-xapp = callPackage ../development/libraries/xdg-desktop-portal-xapp { };
-
-  xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
   xdg-utils = callPackage ../tools/X11/xdg-utils {};
 
