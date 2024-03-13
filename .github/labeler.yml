@@ -65,6 +65,11 @@
   - pkgs/top-level/haskell-packages.nix
   - pkgs/top-level/release-haskell.nix
 
+"6.topic: julia":
+  - doc/languages-frameworks/julia.section.md
+  - pkgs/development/compilers/julia/**/*
+  - pkgs/development/julia-modules/**/*
+
 "6.topic: jupyter":
   - pkgs/development/python-modules/jupyter*/**/*
   - pkgs/development/python-modules/mkdocs-jupyter/*
