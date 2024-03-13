@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     maintainers = with maintainers; [ donovanglover ];
     platforms = platforms.unix;
+    mainProgram = "xdg-user-dirs-update";
   };
 })
