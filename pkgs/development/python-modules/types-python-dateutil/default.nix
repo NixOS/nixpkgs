@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
-  version = "2.8.19.20240106";
+  version = "2.8.19.20240311";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H42yIcO5jmygLqg6WDcbIsN09Crlu98YbbnJp2WBRZ8=";
+    hash = "sha256-UReCJ7vUy+w13Jrf+/Wdgy8g4JhC19y4xzsWm4eAt8s=";
   };
 
   nativeBuildInputs = [
