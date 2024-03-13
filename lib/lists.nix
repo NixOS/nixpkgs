@@ -255,16 +255,8 @@ rec {
     :::
   */
   foldl' =
-    /**
-      The binary operation to run, where the two arguments are:
-
-         1. `acc`: The current accumulator value: Either the initial one for the first iteration, or the result of the previous iteration
-         2. `x`: The corresponding list element for this iteration
-    */
     op:
-    # The initial accumulator value
     acc:
-    # The list to fold
     list:
 
     # The builtin `foldl'` is a bit lazier than one might expect.
@@ -419,7 +411,6 @@ rec {
     :::
   */
   remove =
-    # Element to remove from the list
     e: filter (x: x != e);
 
   /**
@@ -468,13 +459,9 @@ rec {
     :::
   */
   findSingle =
-    # Predicate
     pred:
-    # Default value to return if element was not found.
     default:
-    # Default value to return if more than one element was found
     multiple:
-    # Input list
     list:
     let found = filter pred list; len = length found;
     in if len == 0 then default
@@ -520,11 +507,8 @@ rec {
     :::
   */
   findFirstIndex =
-    # Predicate
     pred:
-    # Default value to return
     default:
-    # Input list
     list:
     let
       # A naive recursive implementation would be much simpler, but
@@ -598,11 +582,8 @@ rec {
     :::
   */
   findFirst =
-    # Predicate
     pred:
-    # Default value to return
     default:
-    # Input list
     list:
     let
       index = findFirstIndex pred null list;
@@ -615,6 +596,16 @@ rec {
   /**
     Return true if function `pred` returns true for at least one
         element of `list`.
+
+    # Inputs
+
+    `pred`
+
+    : Predicate
+
+    `list`
+
+    : Input list
 
     # Type
 
@@ -640,6 +631,16 @@ rec {
   /**
     Return true if function `pred` returns true for all elements of
         `list`.
+
+    # Inputs
+
+    `pred`
+
+    : Predicate
+
+    `list`
+
+    : Input list
 
     # Type
 
@@ -691,7 +692,6 @@ rec {
     :::
   */
   count =
-    # Predicate
     pred: foldl' (c: x: if pred x then c + 1 else c) 0;
 
   /**
@@ -765,9 +765,7 @@ rec {
     :::
   */
   optionals =
-    # Condition
     cond:
-    # List to return if condition is true
     elems: if cond then elems else [];
 
 
@@ -833,9 +831,7 @@ rec {
     :::
   */
   range =
-    # First integer in the range
     first:
-    # Last integer in the range
     last:
     if first > last then
       []
@@ -881,6 +877,16 @@ rec {
     Splits the elements of a list in two lists, `right` and
         `wrong`, depending on the evaluation of a predicate.
 
+    # Inputs
+
+    `pred`
+
+    : Predicate
+
+    `list`
+
+    : Input list
+
     # Type
 
     ```
@@ -902,9 +908,8 @@ rec {
 
   /**
     Splits the elements of a list into many lists, using the return value of a predicate.
-        Predicate should return a string which becomes keys of attrset `groupBy` returns.
-
-        `groupBy'` allows to customise the combining function and initial value
+    Predicate should return a string which becomes keys of attrset `groupBy` returns.
+    `groupBy'` allows to customise the combining function and initial value
 
 
     # Inputs
@@ -998,11 +1003,8 @@ rec {
     :::
   */
   zipListsWith =
-    # Function to zip elements of both lists
     f:
-    # First list
     fst:
-    # Second list
     snd:
     genList
       (n: f (elemAt fst n) (elemAt snd n)) (min (length fst) (length snd));
@@ -1010,6 +1012,17 @@ rec {
   /**
     Merges two lists of the same size together. If the sizes aren't the same
         the merging stops at the shortest.
+
+
+    # Inputs
+
+    `fst`
+
+    : First list
+
+    `snd`
+
+    : Second list
 
     # Type
 
@@ -1063,8 +1076,8 @@ rec {
   /**
     Depth-First Search (DFS) for lists `list != []`.
 
-        `before a b == true` means that `b` depends on `a` (there's an
-        edge from `b` to `a`).
+    `before a b == true` means that `b` depends on `a` (there's an
+    edge from `b` to `a`).
 
 
     # Inputs
@@ -1124,8 +1137,8 @@ rec {
         implementation is O(N^2), if your ordering is linear, use `sort`
         instead.
 
-        `before a b == true` means that `b` should be after `a`
-        in the result.
+    `before a b == true` means that `b` should be after `a`
+    in the result.
 
 
     # Inputs
@@ -1184,8 +1197,19 @@ rec {
         the second argument.  The returned list is sorted in an increasing
         order.  The implementation does a quick-sort.
 
-        See also [`sortOn`](#function-library-lib.lists.sortOn), which applies the
+    See also [`sortOn`](#function-library-lib.lists.sortOn), which applies the
         default comparison on a function-derived property, and may be more efficient.
+
+
+    # Inputs
+
+    `comparator`
+
+    : 1\. Function argument
+
+    `list`
+
+    : 2\. Function argument
 
     # Type
 
@@ -1356,6 +1380,10 @@ rec {
 
     : Number of elements to take
 
+    `list`
+
+    : Input list
+
     # Type
 
     ```
@@ -1376,7 +1404,6 @@ rec {
     :::
   */
   take =
-    # Number of elements to take
     count: sublist 0 count;
 
   /**
@@ -1413,9 +1440,7 @@ rec {
     :::
   */
   drop =
-    # Number of elements to drop
     count:
-    # Input list
     list: sublist count (length list) list;
 
   /**
@@ -1537,11 +1562,8 @@ rec {
     :::
   */
   sublist =
-    # Index at which to start the sublist
     start:
-    # Number of elements to take
     count:
-    # Input list
     list:
     let len = length list; in
     genList
@@ -1602,7 +1624,7 @@ rec {
   /**
     Return the last element of a list.
 
-        This function throws an error if the list is empty.
+    This function throws an error if the list is empty.
 
 
     # Inputs
@@ -1635,7 +1657,7 @@ rec {
   /**
     Return all elements but the last.
 
-        This function throws an error if the list is empty.
+    This function throws an error if the list is empty.
 
 
     # Inputs
@@ -1688,6 +1710,13 @@ rec {
 
   /**
     Remove duplicate elements from the list. O(n^2) complexity.
+
+
+    # Inputs
+
+    `list`
+
+    : Input list
 
     # Type
 
@@ -1746,9 +1775,13 @@ rec {
 
     # Inputs
 
-    `e`
+    `list1`
 
-    : 1\. Function argument
+    : First list
+
+    `list2`
+
+    : Second list
 
 
     # Examples
@@ -1772,7 +1805,11 @@ rec {
 
     `e`
 
-    : 1\. Function argument
+    : First list
+
+    `list2`
+
+    : Second list
 
 
     # Examples
