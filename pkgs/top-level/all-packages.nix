@@ -5137,8 +5137,6 @@ with pkgs;
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
 
-  easyocr = with python3.pkgs; toPythonApplication easyocr;
-
   ecasound = callPackage ../applications/audio/ecasound { };
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
