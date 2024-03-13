@@ -51,7 +51,7 @@ mkDerivation {
     description = "Graphical disk usage analyzer";
     homepage = src.meta.homepage;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ donovanglover ];
     platforms = platforms.linux;
     mainProgram = "qdirstat";
   };
