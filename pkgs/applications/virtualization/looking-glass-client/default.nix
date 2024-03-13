@@ -59,10 +59,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix failing cmake assertion when disabling X11 whithout explicitly enabling Wayland.
+    ./0001-client-cmake-move-X11-config-directives-to-displayse.patch
+  ];
+
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libGL freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
-    ++ lib.optionals xorgSupport [ libX11 libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr libXdmcp ]
+  buildInputs = [ libX11 libGL freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
+    ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr libXdmcp ]
     ++ lib.optionals waylandSupport [ libxkbcommon wayland wayland-protocols ]
     ++ lib.optionals pipewireSupport [ pipewire libsamplerate ]
     ++ lib.optionals pulseSupport [ pulseaudio libsamplerate ];
@@ -71,7 +76,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!openGLSupport) [ "-DENABLE_OPENGL=no" ]
     ++ lib.optionals (!xorgSupport) [ "-DENABLE_X11=no" ]
     ++ lib.optionals (!waylandSupport) [ "-DENABLE_WAYLAND=no" ]
-    ++ lib.optionals (waylandSupport) [ "-DENABLE_WAYLAND=yes" ]
     ++ lib.optionals (!pulseSupport) [ "-DENABLE_PULSEAUDIO=no" ]
     ++ lib.optionals (!pipewireSupport) [ "-DENABLE_PIPEWIRE=no" ];
 
