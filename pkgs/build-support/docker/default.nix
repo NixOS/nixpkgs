@@ -1154,6 +1154,7 @@ rec {
 
           # Root certificates for internet access
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
           # PATH = "/path-not-set";
