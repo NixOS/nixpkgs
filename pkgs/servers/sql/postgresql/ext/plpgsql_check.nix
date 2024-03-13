@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/okbob/plpgsql_check/releases/tag/v${version}";
     platforms = postgresql.meta.platforms;
     license = licenses.mit;
-    broken = versionOlder postgresql.version "12";
     maintainers = [ maintainers.marsam ];
   };
 }

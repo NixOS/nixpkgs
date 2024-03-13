@@ -81,6 +81,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
     inherit (postgresql.meta) platforms;
-    broken = versionOlder postgresql.version "12";
   };
 }

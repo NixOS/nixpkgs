@@ -7,6 +7,7 @@
 , overrideCC
 , makeWrapper
 , stdenv
+, nixosTests
 
 , pkgs
 , cmake
@@ -163,8 +164,8 @@ goBuild ((lib.optionalAttrs enableRocm {
     "-X=github.com/jmorganca/ollama/server.mode=release"
   ];
 
-  # for now, just test that rocm and cuda build
-  passthru.tests = lib.optionalAttrs stdenv.isLinux {
+  passthru.tests = {
+    service = nixosTests.ollama;
     rocm = pkgs.ollama.override { acceleration = "rocm"; };
     cuda = pkgs.ollama.override { acceleration = "cuda"; };
   };
