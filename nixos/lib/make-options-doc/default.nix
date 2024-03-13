@@ -1,20 +1,109 @@
-/* Generate JSON, XML and DocBook documentation for given NixOS options.
+/**
+  Generates documentation for nix modules.
 
-   Minimal example:
+  # Outputs
 
-    { pkgs,  }:
+  This function offers the following outputs
 
-    let
-      eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-        baseModules = [
-          ../module.nix
-        ];
-        modules = [];
-      };
-    in pkgs.nixosOptionsDoc {
-      options = eval.options;
+  ## optionsCommonMark
+
+  Documentation in CommonMark text format.
+
+  ## optionsJSON
+
+  JSON format suitable for further automated processing.
+
+  `example.json`
+  ```json
+  {
+    ...
+    "fileSystems.<name>.options": {
+      "declarations": ["nixos/modules/tasks/filesystems.nix"],
+      "default": {
+        "_type": "literalExpression",
+        "text": "[\n  \"defaults\"\n]"
+      },
+      "description": "Options used to mount the file system.",
+      "example": {
+        "_type": "literalExpression",
+        "text": "[\n  \"data=journal\"\n]"
+      },
+      "loc": ["fileSystems", "<name>", "options"],
+      "readOnly": false,
+      "type": "non-empty (list of string (with check: non-empty))"
+    },
+    ...
+  }
+  ```
+
+  Overall the following fields are available per option:
+
+  ```
+  declarations
+  description
+  loc
+  readOnly
+  type
+  default
+  example
+  relatedPackages
+  ```
+
+  ## optionsDocBook
+
+  deprecated since 23.11 and will be removed in 24.05.
+
+  ## optionsAsciiDoc
+
+  Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
+
+  > Note: NixOS uses this to build the man-pages available via `man configuration.nix` on every NixOS machine.
+
+  ## optionsNix
+
+  - Raw options as Nix attribute set, with the same schema as `optionsJSON`.
+
+  # Example
+
+  A minimal usage example requires evaluating the included modules.
+
+  ## Example: NixOS configuration
+
+  > Note:
+  >
+  > `/nixos/lib/eval-config.nix` takes care to evaluate a NixOS-configuration.
+
+  ```nix
+  let
+    eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
+      # Overriden explizitly here, this would include all modules from NixOS otherwise.
+      # See: docs of eval-config.nix for more details
+      baseModules = [];
+      modules = [
+        ./module.nix
+      ];
+    };
+  in
+    pkgs.nixosOptionsDoc {
+      inherit (eval) options;
     }
+  ```
 
+  ## Example: Nix modules
+
+  Nix modules don't always represent a NixOS configuration.
+  In that case you can use `lib.evalModules` to evaluate the modules.
+
+  ```nix
+  let
+    eval = lib.evalModules {
+      modules = [];
+    };
+  in
+    pkgs.nixosOptionsDoc {
+      inherit (eval) options;
+    }
+  ```
 */
 { pkgs
 , lib
