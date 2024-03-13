@@ -1,19 +1,24 @@
-{ lib, stdenvNoCC, fetchurl, p7zip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sarasa-gothic";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchurl {
     # Use the 'ttc' files here for a smaller closure size.
     # (Using 'ttf' files gives a closure size about 15x larger, as of November 2021.)
-    url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/Sarasa-TTC-${version}.7z";
-    hash = "sha256-OPoX6GNCilA8Lj9kLO6RHapU7mpZTiNa/8LL72TG1Wk=";
+    url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${finalAttrs.version}b/Sarasa-TTC-${finalAttrs.version}.zip";
+    hash = "sha256-MkbmEn4vV2WEDC8pW+WewPuVhlLPi2iGmhvJW6Szksw=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
@@ -24,11 +29,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A CJK programming font based on Iosevka and Source Han Sans";
     homepage = "https://github.com/be5invis/Sarasa-Gothic";
-    license = licenses.ofl;
-    maintainers = [ maintainers.ChengCat ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [
+      ChengCat
+      wegank
+    ];
+    platforms = lib.platforms.all;
   };
-}
+})
