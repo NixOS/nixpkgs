@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, qmake
+{ lib, fetchFromGitHub, libsForQt5
 , coreutils, xdg-utils, bash
-, makeWrapper, perlPackages, mkDerivation }:
+, makeWrapper, perlPackages }:
 
 let
   pname = "qdirstat";
@@ -14,10 +14,10 @@ let
   };
 in
 
-mkDerivation {
+libsForQt5.mkDerivation {
   inherit pname version src;
 
-  nativeBuildInputs = [ qmake makeWrapper ];
+  nativeBuildInputs = [ libsForQt5.qmake makeWrapper ];
 
   buildInputs = [ perlPackages.perl ];
 
