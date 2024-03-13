@@ -10033,6 +10033,8 @@ self: super: with self; {
 
   pre-commit-hooks = callPackage ../development/python-modules/pre-commit-hooks { };
 
+  pre-commit-po-hooks = callPackage ../development/python-modules/pre-commit-po-hooks { };
+
   preggy = callPackage ../development/python-modules/preggy { };
 
   premailer = callPackage ../development/python-modules/premailer { };
