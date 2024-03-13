@@ -95,6 +95,14 @@
         - pkgs/top-level/haskell-packages.nix
         - pkgs/top-level/release-haskell.nix
 
+"6.topic: julia":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/julia.section.md
+        - pkgs/development/compilers/julia/**/*
+        - pkgs/development/julia-modules/**/*
+
 "6.topic: jupyter":
   - any:
     - changed-files:
