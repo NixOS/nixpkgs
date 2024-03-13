@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
 , cohttp-lwt-unix, eliom
 , resource-pooling
 , ocsigen-ppx-rpc
@@ -14,7 +14,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  patches = [ ./templates-dir.patch ];
+  patches = [ ./templates-dir.patch
+    # Compatibility with tyxml 4.6.x
+    (fetchpatch {
+       url = "https://github.com/ocsigen/ocsigen-start/commit/0b70506f94fcb2e06cb65ce0d6a28b9b84c695f3.patch";
+       hash = "sha256-p/VvIu9reI8lc9lxWiTrjZvn46vuF00QInYuWPtRVyk=";
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "ocsigen";
