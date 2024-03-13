@@ -20960,50 +20960,19 @@ with pkgs;
 
   linbox = callPackage ../development/libraries/linbox { };
 
-  ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
-    inherit (darwin.apple_sdk.frameworks)
-      Cocoa CoreServices CoreAudio CoreMedia AVFoundation MediaToolbox
-      VideoDecodeAcceleration VideoToolbox;
-  };
-  ffmpeg_4-headless = ffmpeg_4.override {
-    ffmpegVariant = "headless";
-  };
-  ffmpeg_4-full = ffmpeg_4.override {
-    ffmpegVariant = "full";
-  };
-
-  ffmpeg_5 = callPackage ../development/libraries/ffmpeg/5.nix {
-    inherit (darwin.apple_sdk.frameworks)
-      Cocoa CoreServices CoreAudio CoreMedia AVFoundation MediaToolbox
-      VideoDecodeAcceleration VideoToolbox;
-  };
-  ffmpeg_5-headless = ffmpeg_5.override {
-    ffmpegVariant = "headless";
-  };
-  ffmpeg_5-full = ffmpeg_5.override {
-    ffmpegVariant = "full";
-  };
-
-  ffmpeg_6 = callPackage ../development/libraries/ffmpeg/6.nix {
-     inherit (darwin.apple_sdk.frameworks)
-      Cocoa CoreServices CoreAudio CoreMedia AVFoundation MediaToolbox
-      VideoDecodeAcceleration VideoToolbox;
-  };
-  ffmpeg_6-headless = ffmpeg_6.override {
-    ffmpegVariant = "headless";
-  };
-  ffmpeg_6-full = ffmpeg_6.override {
-    ffmpegVariant = "full";
-  };
-
-  # Aliases
-  # Please make sure this is updated to the latest version on the next major
-  # update to ffmpeg
-  # Packages which use ffmpeg as a library, should pin to the relevant major
-  # version number which the upstream support.
-  ffmpeg = ffmpeg_6;
-  ffmpeg-headless = ffmpeg_6-headless;
-  ffmpeg-full = ffmpeg_6-full;
+  inherit (callPackage ../development/libraries/ffmpeg { })
+    ffmpeg_4
+    ffmpeg_4-headless
+    ffmpeg_4-full
+    ffmpeg_5
+    ffmpeg_5-headless
+    ffmpeg_5-full
+    ffmpeg_6
+    ffmpeg_6-headless
+    ffmpeg_6-full
+    ffmpeg
+    ffmpeg-headless
+    ffmpeg-full;
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 

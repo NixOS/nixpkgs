@@ -1,6 +1,14 @@
-{ version, hash, extraPatches ? [] }:
-
 { lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+
+  # You can fetch any upstream version using this derivation by specifying version and hash
+  # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
+, version # ffmpeg ABI version. Also declare this if you're overriding the source.
+, hash # hash of the upstream source for the given ABI version
+, source ? fetchgit {
+    url = "https://git.ffmpeg.org/ffmpeg.git";
+    rev = "n${version}";
+    inherit hash;
+  }
 
 , ffmpegVariant ? "small" # Decides which dependencies are enabled by default
 
@@ -346,12 +354,7 @@ assert buildSwscale -> buildAvutil;
 stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpeg" + (optionalString (ffmpegVariant != "small") "-${ffmpegVariant}");
   inherit version;
-
-  src = fetchgit {
-    url = "https://git.ffmpeg.org/ffmpeg.git";
-    rev = "n${finalAttrs.version}";
-    inherit hash;
-  };
+  src = source;
 
   postPatch = ''
     patchShebangs .
@@ -362,7 +365,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
-  patches = map (patch: fetchpatch patch) (extraPatches
+  patches = map (patch: fetchpatch patch) ([ ]
     ++ optionals (versionOlder version "5") [
       {
         name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
