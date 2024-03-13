@@ -11,6 +11,8 @@
 , solc
 , web3
 , withSolc ? false
+, testers
+, slither-analyzer
 }:
 
 buildPythonPackage rec {
@@ -44,8 +46,37 @@ buildPythonPackage rec {
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
   '';
 
+  # required for pythonImportsCheck
+  postInstall = ''
+    export HOME="$TEMP"
+  '';
+
+  pythonImportsCheck = [
+    "slither"
+    "slither.all_exceptions"
+    "slither.analyses"
+    "slither.core"
+    "slither.detectors"
+    "slither.exceptions"
+    "slither.formatters"
+    "slither.printers"
+    "slither.slither"
+    "slither.slithir"
+    "slither.solc_parsing"
+    "slither.utils"
+    "slither.visitors"
+    "slither.vyper_parsing"
+  ];
+
   # No Python tests
   doCheck = false;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = slither-analyzer;
+      command = "HOME=$TMPDIR slither --version";
+    };
+  };
 
   meta = with lib; {
     description = "Static Analyzer for Solidity";
@@ -57,6 +88,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/trailofbits/slither";
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
     license = licenses.agpl3Plus;
+    mainProgram = "slither";
     maintainers = with maintainers; [ arturcygan fab hellwolf ];
   };
 }
