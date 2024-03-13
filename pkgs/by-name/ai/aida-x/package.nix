@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AidsDSP/AIDA-X";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ hampgoodwin ];
   };
 
   # Dependencies
