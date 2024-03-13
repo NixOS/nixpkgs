@@ -36444,8 +36444,6 @@ with pkgs;
 
   scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
 
-  beancount = with python3.pkgs; toPythonApplication beancount;
-
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
   bench = haskell.lib.compose.justStaticExecutables haskellPackages.bench;
