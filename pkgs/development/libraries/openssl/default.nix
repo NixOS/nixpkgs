@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
-, makeWrapper
+, makeWrapper, symlinkJoin
 , withCryptodev ? false, cryptodev
+, libp11
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
@@ -216,7 +217,21 @@ let
       fi
     '';
 
-    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    passthru = {
+      tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      withPkcs11Module = { pkcs11Module, ... }: symlinkJoin {
+        name = "${finalAttrs.pname}-with-pkcs11";
+        paths = [ finalAttrs.finalPackage ];
+        buildInputs = [ makeWrapper ];
+        postBuild = ''
+          find -L $out/bin -type f | while read program; do
+            wrapProgram "$program" \
+              --suffix OPENSSL_ENGINES : ${libp11}/lib/engines \
+              --suffix PKCS11_MODULE_PATH : ${pkcs11Module}
+          done
+        '';
+      };
+    };
 
     meta = with lib; {
       homepage = "https://www.openssl.org/";
