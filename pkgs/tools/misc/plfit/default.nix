@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plfit";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "ntamas";
     repo = "plfit";
     rev = version;
-    hash = "sha256-hnmP/56P2anR0S8zQyQqN1lbge5GgK+P8Lx8bRkwSxA=";
+    hash = "sha256-XRl6poEdgPNorFideQmEJHCU+phs4rIhMYa8iAOtL1A=";
   };
 
   nativeBuildInputs = [
