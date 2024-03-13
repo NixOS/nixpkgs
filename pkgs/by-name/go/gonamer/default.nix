@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "Hacky-The-Sheep";
     repo = "gonamer";
     rev = "v${version}";
-    hash = lib.fakeHash;
+    hash = "sha256-tETbOQ3+alWATj+cljddPwRV+WN2Y50W+OW+rG3FW6g=";
   };
 
-  vendorHash = lib.fakeHash;
+  vendorHash = null;
 
   GOWORK = "off";
 
@@ -22,8 +22,6 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   postInstall = ''
-    $out/bin/gonamer man > gonamer.1
-    installManPage gonamer.1
     installShellCompletion --cmd gonamer \
       --bash <($out/bin/gonamer completion bash) \
       --fish <($out/bin/gonamer completion fish) \
