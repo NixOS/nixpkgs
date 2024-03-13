@@ -20,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Beaker";
+  pname = "beaker";
   version = "1.11.0";
 
   # The pypy release do not contains the tests
