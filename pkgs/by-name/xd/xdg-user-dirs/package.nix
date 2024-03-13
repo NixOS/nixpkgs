@@ -1,17 +1,30 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, gettext, libiconv, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxslt,
+  docbook_xsl,
+  gettext,
+  libiconv,
+  makeWrapper,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-user-dirs";
   version = "0.18";
 
   src = fetchurl {
-    url = "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${version}.tar.gz";
-    sha256 = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
+    url = "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${finalAttrs.version}.tar.gz";
+    hash = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  nativeBuildInputs = [ makeWrapper libxslt docbook_xsl ] ++ lib.optionals stdenv.isDarwin [ gettext ];
+  nativeBuildInputs = [
+    makeWrapper
+    libxslt
+    docbook_xsl
+  ] ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   preFixup = ''
     # fallback values need to be last
@@ -26,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ donovanglover ];
     platforms = platforms.unix;
   };
-}
+})
