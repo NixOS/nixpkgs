@@ -53,6 +53,7 @@
 , libdatachannel
 , libvpl
 , qrcodegencpp
+, nix-update-script
 }:
 
 let
@@ -201,6 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Link libcef again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Free and open source software for video recording and live streaming";
