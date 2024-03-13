@@ -261,6 +261,14 @@ with pkgs;
 
   ### TO-PYTHON-APPLICATION
 
+  certbot-full = certbot.withPlugins (cp: with cp; [
+    certbot-dns-cloudflare
+    certbot-dns-google
+    certbot-dns-ovh
+    certbot-dns-rfc2136
+    certbot-dns-route53
+  ]);
+
   circus = callPackage ../by-name/ci/circus/package.nix {
     python3Packages = python310Packages;
   };
@@ -20445,16 +20453,6 @@ with pkgs;
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
 
   cegui = callPackage ../development/libraries/cegui { };
-
-  certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
-
-  certbot-full = certbot.withPlugins (cp: with cp; [
-    certbot-dns-cloudflare
-    certbot-dns-google
-    certbot-dns-ovh
-    certbot-dns-rfc2136
-    certbot-dns-route53
-  ]);
 
   caf = callPackage ../development/libraries/caf { };
 
