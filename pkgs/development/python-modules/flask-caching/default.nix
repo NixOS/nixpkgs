@@ -12,13 +12,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Caching";
+  pname = "flask-caching";
   version = "2.1.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Flask-Caching";
+    inherit version;
     hash = "sha256-t1AMFFE1g2qVLj3jqAiB2WVOMnopyFLJJlYH9cRJI1w=";
   };
 
