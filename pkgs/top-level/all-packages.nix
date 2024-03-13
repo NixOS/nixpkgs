@@ -1556,8 +1556,6 @@ with pkgs;
 
   act = callPackage ../development/tools/misc/act { };
 
-  actdiag = with python3.pkgs; toPythonApplication actdiag;
-
   actkbd = callPackage ../tools/system/actkbd { };
 
   adafruit-ampy = callPackage ../tools/misc/adafruit-ampy { };
