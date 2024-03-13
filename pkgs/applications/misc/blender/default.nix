@@ -112,6 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://projects.blender.org/blender/blender/commit/cf4365e555a759d5b3225bce77858374cb07faad.diff";
       hash = "sha256-Nypd04yFSHYa7RBa8kNmoApqJrU4qpaOle3tkj44d4g=";
     })
+    (fetchpatch {
+      # https://projects.blender.org/blender/blender/issues/117145
+      url = "https://projects.blender.org/blender/blender/commit/eb99895c972b6c713294f68a34798aa51d36034a.patch";
+      hash = "sha256-95nG5mW408lhKJ2BppgaUwBMMeXeGyBqho6mCfB53GI=";
+    })
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   postPatch =

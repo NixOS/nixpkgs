@@ -11993,6 +11993,7 @@ with pkgs;
     pinentry-gtk2
     pinentry-gnome3
     pinentry-qt
+    pinentry-tty
     pinentry-all;
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
@@ -16743,7 +16744,7 @@ with pkgs;
   rasm = callPackage ../development/compilers/rasm { };
 
   replibyte = callPackage ../development/tools/database/replibyte {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   rgbds = callPackage ../development/compilers/rgbds { };
@@ -24223,10 +24224,6 @@ with pkgs;
   present = callPackage ../misc/present { };
 
   prime-server = callPackage ../development/libraries/prime-server { };
-
-  primecount = callPackage ../applications/science/math/primecount { };
-
-  primesieve = callPackage ../applications/science/math/primesieve { };
 
   proj = callPackage ../development/libraries/proj {
     stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
@@ -35776,6 +35773,7 @@ with pkgs;
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
+    jdk = openjdk17;
   };
 
   virtualboxKvm = lowPrio (virtualbox.override {
@@ -36597,13 +36595,6 @@ with pkgs;
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet {
     buildGoModule = buildGo120Module;
-  };
-
-  dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
-    withGui = true;
-  };
-  dogecoind = callPackage ../applications/blockchains/dogecoin {
-    withGui = false;
   };
 
   eclair = callPackage ../applications/blockchains/eclair { };

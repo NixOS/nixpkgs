@@ -1,29 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, scheme48, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, scheme48, unstableGitUpdater }:
 
 stdenv.mkDerivation {
   pname = "scsh";
-  version = "0.7pre";
+  version = "0.7-unstable-2024-03-09";
 
   src = fetchFromGitHub {
     owner = "scheme";
     repo = "scsh";
-    rev = "4acf6e4ed7b65b46186ef0c9c2a1e10bef8dc052";
-    sha256 = "sha256-92NtMK5nVd6+WtHj/Rk6iQEkGsNEZySTVZkkbqKrLYY=";
+    rev = "6770db21b08edd907d1c9bd962297ff55664e3fe";
+    hash = "sha256-U95Rc/Ks5AytB5UwbzQLI3/Sj4TYybrp8/45fu9krSU=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Don't not include util.h if libutil.h is available
-    # https://github.com/scheme/scsh/pull/49
-    (fetchpatch {
-      url = "https://github.com/scheme/scsh/commit/b04e902de983761d7f432b2cfa364ca5d162a364.patch";
-      hash = "sha256-XSHzzCOBkraqW2re1ePoFl9tKQB81iQ0W9wvv83iGdA=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ scheme48 ];
   configureFlags = [ "--with-scheme48=${scheme48}" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "A Scheme shell";
