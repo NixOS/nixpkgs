@@ -41278,8 +41278,6 @@ with pkgs;
 
   udict = callPackage ../applications/misc/udict { };
 
-  duden = python3Packages.toPythonApplication python3Packages.duden;
-
   zf = callPackage ../tools/misc/zf { };
 
   isolate = callPackage ../tools/security/isolate { };
