@@ -80,6 +80,7 @@
   - lib/**
 
 "6.topic: lua":
+  - pkgs/development/tools/misc/luarocks/*
   - pkgs/development/interpreters/lua-5/**/*
   - pkgs/development/interpreters/luajit/**/*
   - pkgs/development/lua-modules/**/*
