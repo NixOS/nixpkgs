@@ -4328,8 +4328,6 @@ with pkgs;
 
   bicon = callPackage ../applications/misc/bicon { };
 
-  biliass = with python3.pkgs; toPythonApplication biliass;
-
   bilibili = callPackage ../applications/video/bilibili { };
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
