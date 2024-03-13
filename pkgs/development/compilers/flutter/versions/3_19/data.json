@@ -1,20 +1,20 @@
 {
-  "version": "3.19.0",
-  "engineVersion": "04817c99c9fd4956f27505204f7e344335810aed",
-  "dartVersion": "3.3.0",
+  "version": "3.19.3",
+  "engineVersion": "2e4ba9c6fb499ccd4e81420543783cc7267ae406",
+  "dartVersion": "3.3.1",
   "dartHash": {
-    "x86_64-linux": "sha256-wUg8GpieBD84LkrqfbZ6goHKgq+ZNJFzN8DMMmHJTns=",
-    "aarch64-linux": "sha256-s/RiVtOLtTtA1CAcYi/okothRO/0Ph+s9eogL84V6zc=",
-    "x86_64-darwin": "sha256-aseeiQkv8/9yuAVMn2nxL7tNjfK2H9zM+GtXBvV6R3E=",
-    "aarch64-darwin": "sha256-A6Ru36rYKf+IyUTB6LZkzl+hj1fJmuMJedltiSSxtF0="
+    "x86_64-linux": "sha256-9UL7Aau5hU01sJKEFHnOW76a9NbQQICtSndEjBB7Mns=",
+    "aarch64-linux": "sha256-swlCUfl4fi2oWeaiJAYZeG3HHVOZU8lusX7RZLk0+mw=",
+    "x86_64-darwin": "sha256-BfCMLy028MSd64Rma0OI0fyheF8AK62sA71XOnOEE7g=",
+    "aarch64-darwin": "sha256-79At/M1fPieI6ZsPaCuJfQdUiv8GvFl5KkkdEGD5Phk="
   },
-  "flutterHash": "sha256-rIPveNuzNEvWhO/1aY0hFfmJbsV3hTm6fTfLH6pWZ7c=",
+  "flutterHash": "sha256-6cKXtevLM5u/zUpITSifhKa+/Z/uoaEFmQK8EfTUO6o=",
   "artifactHashes": {
     "android": {
-      "aarch64-darwin": "sha256-U1DFJZDf7m7WL3cOHeAWa0D01nO5Trsd/EUZFbU2iY0=",
-      "aarch64-linux": "sha256-ACQdmNgU52jWmp9BWOzSdPEkEigXts16/pYVgbBM11k=",
-      "x86_64-darwin": "sha256-U1DFJZDf7m7WL3cOHeAWa0D01nO5Trsd/EUZFbU2iY0=",
-      "x86_64-linux": "sha256-ACQdmNgU52jWmp9BWOzSdPEkEigXts16/pYVgbBM11k="
+      "aarch64-darwin": "sha256-XHDNgbw6SY9dmQ0Ni50x+2pYknWxYcePiWItkPMXwwA=",
+      "aarch64-linux": "sha256-30R0zQjVxL0krpNBtooODSgx/UJ0FyIfzChvy/t+re0=",
+      "x86_64-darwin": "sha256-XHDNgbw6SY9dmQ0Ni50x+2pYknWxYcePiWItkPMXwwA=",
+      "x86_64-linux": "sha256-30R0zQjVxL0krpNBtooODSgx/UJ0FyIfzChvy/t+re0="
     },
     "fuchsia": {
       "aarch64-darwin": "sha256-eu0BERdz53CkSexbpu3KA7O6Q4g0s9SGD3t1Snsk3Fk=",
@@ -23,40 +23,40 @@
       "x86_64-linux": "sha256-eu0BERdz53CkSexbpu3KA7O6Q4g0s9SGD3t1Snsk3Fk="
     },
     "ios": {
-      "aarch64-darwin": "sha256-nMtIjyLeDNLERmjU8CCtmGrCckG5uXnu53zvKPEii9g=",
-      "aarch64-linux": "sha256-nMtIjyLeDNLERmjU8CCtmGrCckG5uXnu53zvKPEii9g=",
-      "x86_64-darwin": "sha256-nMtIjyLeDNLERmjU8CCtmGrCckG5uXnu53zvKPEii9g=",
-      "x86_64-linux": "sha256-nMtIjyLeDNLERmjU8CCtmGrCckG5uXnu53zvKPEii9g="
+      "aarch64-darwin": "sha256-+n+uoZHp5buswxG82cTM3QxDggYPn3R9oAgyZqMxd6M=",
+      "aarch64-linux": "sha256-+n+uoZHp5buswxG82cTM3QxDggYPn3R9oAgyZqMxd6M=",
+      "x86_64-darwin": "sha256-+n+uoZHp5buswxG82cTM3QxDggYPn3R9oAgyZqMxd6M=",
+      "x86_64-linux": "sha256-+n+uoZHp5buswxG82cTM3QxDggYPn3R9oAgyZqMxd6M="
     },
     "linux": {
-      "aarch64-darwin": "sha256-XqrkmbUjNvcVSoHQlGK75JsxHEcsSrzBplRtx8xNrIU=",
-      "aarch64-linux": "sha256-XqrkmbUjNvcVSoHQlGK75JsxHEcsSrzBplRtx8xNrIU=",
-      "x86_64-darwin": "sha256-J3J+gE0nSOnhMEo7mjVLCxdZtaBrWsQHr6xfBdvHamU=",
-      "x86_64-linux": "sha256-J3J+gE0nSOnhMEo7mjVLCxdZtaBrWsQHr6xfBdvHamU="
+      "aarch64-darwin": "sha256-y0/OHw6P/Cd/ZJkzwClWcViqv+sz2BHGfxYcH5oY330=",
+      "aarch64-linux": "sha256-y0/OHw6P/Cd/ZJkzwClWcViqv+sz2BHGfxYcH5oY330=",
+      "x86_64-darwin": "sha256-PzwgC2vV+whga7fL/1109g7ix7z87KFQ+Vxisvuv/P4=",
+      "x86_64-linux": "sha256-PzwgC2vV+whga7fL/1109g7ix7z87KFQ+Vxisvuv/P4="
     },
     "macos": {
-      "aarch64-darwin": "sha256-PJ1y+yZEHgB74rJAtnTZKgn6R9m4p5eiwVap6QkLx/Q=",
-      "aarch64-linux": "sha256-PJ1y+yZEHgB74rJAtnTZKgn6R9m4p5eiwVap6QkLx/Q=",
-      "x86_64-darwin": "sha256-PJ1y+yZEHgB74rJAtnTZKgn6R9m4p5eiwVap6QkLx/Q=",
-      "x86_64-linux": "sha256-PJ1y+yZEHgB74rJAtnTZKgn6R9m4p5eiwVap6QkLx/Q="
+      "aarch64-darwin": "sha256-s41J2wsCajiNG0xHk/qOgVzHty7AuCdMLgDN15F7Bac=",
+      "aarch64-linux": "sha256-s41J2wsCajiNG0xHk/qOgVzHty7AuCdMLgDN15F7Bac=",
+      "x86_64-darwin": "sha256-s41J2wsCajiNG0xHk/qOgVzHty7AuCdMLgDN15F7Bac=",
+      "x86_64-linux": "sha256-s41J2wsCajiNG0xHk/qOgVzHty7AuCdMLgDN15F7Bac="
     },
     "universal": {
-      "aarch64-darwin": "sha256-GgvIuqvGPjxx6V2Mz1/TK8c6p8Frc3XKbWCgsduFhWU=",
-      "aarch64-linux": "sha256-SwgsbQECd1uqU11V6jKZ0hf1NZRBiC3xZuIf3cthFz0=",
-      "x86_64-darwin": "sha256-q8Kn9F1w1zavq/LFvPITaWSRdCkAOKi3olDVoHpeu5g=",
-      "x86_64-linux": "sha256-iDV57cKmDL0eUqtJ28RO+Xwomzwnaet4g30gVUXv8jY="
+      "aarch64-darwin": "sha256-jbxyWiy+dkgGk2uXXuk6TrrSjdEzLJ2gnHbAZeSLDLM=",
+      "aarch64-linux": "sha256-zgBGvTU7Hox9MTsCFMF1CML+5JU+0bbGoiyk0zktQM8=",
+      "x86_64-darwin": "sha256-TUhw7BRqhV+0jwCyb5Jrg2E5KgAmHmu9zDgFodkt72E=",
+      "x86_64-linux": "sha256-Rf0PiXk55cLi8T0Fwu1cW5kpZKaZh0BqJFtISN5M3o8="
     },
     "web": {
-      "aarch64-darwin": "sha256-mttYf65rooXs3ctkaXrJsz4mGY2t4zqXZZ/R16EoCYw=",
-      "aarch64-linux": "sha256-mttYf65rooXs3ctkaXrJsz4mGY2t4zqXZZ/R16EoCYw=",
-      "x86_64-darwin": "sha256-mttYf65rooXs3ctkaXrJsz4mGY2t4zqXZZ/R16EoCYw=",
-      "x86_64-linux": "sha256-mttYf65rooXs3ctkaXrJsz4mGY2t4zqXZZ/R16EoCYw="
+      "aarch64-darwin": "sha256-LMf7Xaefp2o8VIsw+qFkyEqY2O8yCJqlKI7FgHy/5ew=",
+      "aarch64-linux": "sha256-LMf7Xaefp2o8VIsw+qFkyEqY2O8yCJqlKI7FgHy/5ew=",
+      "x86_64-darwin": "sha256-LMf7Xaefp2o8VIsw+qFkyEqY2O8yCJqlKI7FgHy/5ew=",
+      "x86_64-linux": "sha256-LMf7Xaefp2o8VIsw+qFkyEqY2O8yCJqlKI7FgHy/5ew="
     },
     "windows": {
-      "aarch64-darwin": "sha256-/ZQwetr5gqhrvLF7/Sl/9mmi9oAg9k3s7poqVk57GIA=",
-      "aarch64-linux": "sha256-/ZQwetr5gqhrvLF7/Sl/9mmi9oAg9k3s7poqVk57GIA=",
-      "x86_64-darwin": "sha256-/ZQwetr5gqhrvLF7/Sl/9mmi9oAg9k3s7poqVk57GIA=",
-      "x86_64-linux": "sha256-/ZQwetr5gqhrvLF7/Sl/9mmi9oAg9k3s7poqVk57GIA="
+      "aarch64-darwin": "sha256-M+5MSmPVtvcIFl6OdRLjeZzYyrSp/9itgAutuxfxHlw=",
+      "aarch64-linux": "sha256-M+5MSmPVtvcIFl6OdRLjeZzYyrSp/9itgAutuxfxHlw=",
+      "x86_64-darwin": "sha256-M+5MSmPVtvcIFl6OdRLjeZzYyrSp/9itgAutuxfxHlw=",
+      "x86_64-linux": "sha256-M+5MSmPVtvcIFl6OdRLjeZzYyrSp/9itgAutuxfxHlw="
     }
   },
   "pubspecLock": {
@@ -845,11 +845,11 @@
         "dependency": "direct main",
         "description": {
           "name": "unified_analytics",
-          "sha256": "fbcb0ad896a15c1ddea7ec45e8bfc92a894490e5792e07b74b2e6e992f4c77f8",
+          "sha256": "18204ce613142fc252b36f919d0f6dae4124df221812fe0b1bfb66251df280c1",
           "url": "https://pub.dev"
         },
         "source": "hosted",
-        "version": "5.8.0"
+        "version": "5.8.0+1"
       },
       "usage": {
         "dependency": "direct main",
