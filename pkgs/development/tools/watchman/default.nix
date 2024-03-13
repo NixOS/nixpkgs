@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "watchman";
-  version = "2024.01.22.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    hash = "sha256-+qlcdekBcRwmgrtQ8HcLHphURf0c4oRCs6nbjAzT26c=";
+    hash = "sha256-cD8mIYCc+8Z2p3rwKVRFcW9sOBbpb5KHU5VpbXHMpeg=";
   };
 
   cmakeFlags = [
