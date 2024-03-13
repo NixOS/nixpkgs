@@ -65,6 +65,8 @@ Now that this is out of the way. To add a package to Nixpkgs:
    $ git add pkgs/by-name/so/some-package/package.nix
    ```
 
+   If the package is written in a language other than C, you should use [the corresponding language framework](https://nixos.org/manual/nixpkgs/stable/#chap-language-support).
+
    You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done, some of which are also using the [category hierarchy](#category-hierarchy).
    Here are some good ones:
 
