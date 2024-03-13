@@ -36446,8 +36446,6 @@ with pkgs;
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 
-  beancount-black = with python3.pkgs; toPythonApplication beancount-black;
-
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
   bench = haskell.lib.compose.justStaticExecutables haskellPackages.bench;
