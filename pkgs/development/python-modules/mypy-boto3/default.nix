@@ -141,7 +141,7 @@ rec {
 
   mypy-boto3-clouddirectory = buildMypyBoto3Package "clouddirectory" "1.34.0" "sha256-lWJQClNEhyq9CN8ThcHtVcEsowIp+V8RXh4rgHAclfM=";
 
-  mypy-boto3-cloudformation = buildMypyBoto3Package "cloudformation" "1.34.55" "sha256-3p9NRdCk5Xu174uNegNHb47yT/olPWNs2CTN4GEidDk=";
+  mypy-boto3-cloudformation = buildMypyBoto3Package "cloudformation" "1.34.61" "sha256-fT48eggnNyP/cPXoXvm386zWKfmuyhAyxrtUGwOem0c=";
 
   mypy-boto3-cloudfront = buildMypyBoto3Package "cloudfront" "1.34.0" "sha256-3n/WEiQdcE253J+CFsskoYlNMXASdzkhPTWneSHDKoM=";
 
@@ -179,7 +179,7 @@ rec {
 
   mypy-boto3-codestar = buildMypyBoto3Package "codestar" "1.34.0" "sha256-BAueRLlYZGDiF6DtjxL24twLYYZqD3ErdJ73fsFoG1k=";
 
-  mypy-boto3-codestar-connections = buildMypyBoto3Package "codestar-connections" "1.34.10" "sha256-xAYeABwDIbIELhjcRA4ErYaAsChZD1vCPWAw7/PNXL0=";
+  mypy-boto3-codestar-connections = buildMypyBoto3Package "codestar-connections" "1.34.60" "sha256-WH/cN8BXG7c79gGR/0m3xvEPNdPAFRosInmO9DeAVdM=";
 
   mypy-boto3-codestar-notifications = buildMypyBoto3Package "codestar-notifications" "1.34.0" "sha256-JmXEpHbOhcO9F++G+ohXPuXoNILbcL9r5qyH4OooCtc=";
 
@@ -197,7 +197,7 @@ rec {
 
   mypy-boto3-config = buildMypyBoto3Package "config" "1.34.45" "sha256-LN1CcIOj9cgzSNCvnUVwLRNPXlitHAlt+5jj6wu6i8E=";
 
-  mypy-boto3-connect = buildMypyBoto3Package "connect" "1.34.29" "sha256-ITp3AxmopIkeVPezwN27Xcy5TnDn8O0rzWHokPzTGdE=";
+  mypy-boto3-connect = buildMypyBoto3Package "connect" "1.34.61" "sha256-LbiRcZWmULytWtEy0J2mXqQtHofbbfbRV2PyvEFcRfA=";
 
   mypy-boto3-connect-contact-lens = buildMypyBoto3Package "connect-contact-lens" "1.34.0" "sha256-Wx9vcjlgXdWZ2qP3Y/hTY2LAeTd+hyyV5JSIuKQ5I5k=";
 
@@ -251,7 +251,7 @@ rec {
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.34.0" "sha256-xIrrXOayZed+Jcn4CFXXNgKz/G+RdiuwA04wq+Ry/fs=";
 
-  mypy-boto3-ec2 = buildMypyBoto3Package "ec2" "1.34.58" "sha256-aKewHoA/tX5j8kFCc5zhstjZaM6pnFVdcaUAerWCb44=";
+  mypy-boto3-ec2 = buildMypyBoto3Package "ec2" "1.34.61" "sha256-rRK8Q3zUJuelfYvaUhrqxbsFUn1Xl6oxCahaRhI3+W8=";
 
   mypy-boto3-ec2-instance-connect = buildMypyBoto3Package "ec2-instance-connect" "1.34.0" "sha256-95TXW9HJHciM+lZCdlUYOwcLhkKE8RJpRx9/dEnu3FU=";
 
@@ -267,7 +267,7 @@ rec {
 
   mypy-boto3-elastic-inference = buildMypyBoto3Package "elastic-inference" "1.34.0" "sha256-gbWKw0zDQf3qBlp1KeO7MX1j/GqRUpFAxLG0BKFrHBk=";
 
-  mypy-boto3-elasticache = buildMypyBoto3Package "elasticache" "1.34.0" "sha256-ArUBQ5XbBz4kTABHwgpE6VoRCu2ILVSEvLb2yQWMbvU=";
+  mypy-boto3-elasticache = buildMypyBoto3Package "elasticache" "1.34.60" "sha256-D3WLH1FS8dddD6WKUmQApvtehGMmjWYzdaMwTHzvzYk=";
 
   mypy-boto3-elasticbeanstalk = buildMypyBoto3Package "elasticbeanstalk" "1.34.0" "sha256-ftVFUwY81mg/9zJ4xxVjhXF1HgKpzj1koIS32cMKRLw=";
 
@@ -389,7 +389,7 @@ rec {
 
   mypy-boto3-ivschat = buildMypyBoto3Package "ivschat" "1.34.0" "sha256-eNwL7uUI7x30KJwNO5U/0XSV1O4YZYu/zYvGQgz7p+8=";
 
-  mypy-boto3-kafka = buildMypyBoto3Package "kafka" "1.34.0" "sha256-fBTouiFX1z8WvIECcu8gocENiWMl50hbCEk7K+4OCV0=";
+  mypy-boto3-kafka = buildMypyBoto3Package "kafka" "1.34.61" "sha256-nXd3Qi8IZsQN595vnsMLSn6pfZU70yPb6Ebhv4SijfE=";
 
   mypy-boto3-kafkaconnect = buildMypyBoto3Package "kafkaconnect" "1.34.50" "sha256-frPPAQeFyO92uMqqzBcSC3MVK4V4hbdO9tx4awAKAUU=";
 
@@ -475,7 +475,7 @@ rec {
 
   mypy-boto3-mediapackage-vod = buildMypyBoto3Package "mediapackage-vod" "1.34.0" "sha256-XwGc3+WD8o/MUfcBocl52TPK/RhiCjEb2qDqcuYwB+g=";
 
-  mypy-boto3-mediapackagev2 = buildMypyBoto3Package "mediapackagev2" "1.34.0" "sha256-8UYtTNJDsu0CkxQguWOtNI0viERJ4bRBKNa/In4iIA0=";
+  mypy-boto3-mediapackagev2 = buildMypyBoto3Package "mediapackagev2" "1.34.60" "sha256-tm54AEKAAuhp8+KeoW/yesl0M8utg7iIbkOpLyotpa8=";
 
   mypy-boto3-mediastore = buildMypyBoto3Package "mediastore" "1.34.0" "sha256-v2G2wDXGJwMalYnHTRGvdRTUv41bm8adIOj9tgQV0ys=";
 
@@ -685,7 +685,7 @@ rec {
 
   mypy-boto3-sqs = buildMypyBoto3Package "sqs" "1.34.0" "sha256-C/iZX1iRmrKVOYEA5y6qfaiYrc/Z0zmkLzxIzkc0GdU=";
 
-  mypy-boto3-ssm = buildMypyBoto3Package "ssm" "1.34.47" "sha256-vnDMMvmgfmcBdG6+ZfuhTVnD8kqFEdJ1/YMiyTZfInA=";
+  mypy-boto3-ssm = buildMypyBoto3Package "ssm" "1.34.61" "sha256-TLyZ9CtpE8U2xsxBwC0/Flkg0ee6u5uxd4K0EFVs3gA=";
 
   mypy-boto3-ssm-contacts = buildMypyBoto3Package "ssm-contacts" "1.34.0" "sha256-wkKPGLm24/zgMKitcF9ZaPt/W4m+yHerR1wbEqJALBM=";
 
