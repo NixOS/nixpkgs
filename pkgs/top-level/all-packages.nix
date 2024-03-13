@@ -17108,8 +17108,6 @@ with pkgs;
 
   vala-lint = callPackage ../development/tools/vala-lint { };
 
-  vcard = python3Packages.toPythonApplication python3Packages.vcard;
-
   inherit (callPackage ../development/compilers/vala { })
     vala_0_56
     vala;
