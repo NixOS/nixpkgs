@@ -28445,8 +28445,6 @@ with pkgs;
 
   andika = callPackage ../data/fonts/andika { };
 
-  androguard = with python3.pkgs; toPythonApplication androguard;
-
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
   andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
