@@ -1867,7 +1867,7 @@ let
           publisher = "github";
           name = "copilot-chat";
           version = "0.14.2024030801"; # compatible with vscode >= 1.87
-          sha256 = "sha256-4ArWVFko2T6ze/i+HTdXAioWC7euWCycDsQxFTrEtUw=";
+          sha256 = "sha256-v9RS+pEEQzq2t0EY/gVTTfIwRlGmIuIq2qCockDpsn8=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
