@@ -9,6 +9,16 @@ let
   cfg = imcfg.fcitx5;
   fcitx5Package = pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; };
   settingsFormat = pkgs.formats.ini { };
+  mkKeyValue = lib.generators.mkKeyValueDefault {
+    mkValueString =
+      v:
+      if true == v then
+        "True"
+      else if false == v then
+        "False"
+      else
+        lib.generators.mkValueStringDefault { } v;
+  } "=";
 in
 {
   options = {
@@ -131,10 +141,13 @@ in
           };
       in
       lib.attrsets.mergeAttrsList [
-        (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
-        (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
+        (optionalFile "config" (lib.generators.toINI { inherit mkKeyValue; }) cfg.settings.globalOptions)
+        (optionalFile "profile" (lib.generators.toINI { inherit mkKeyValue; }) cfg.settings.inputMethod)
         (lib.concatMapAttrs (
-          name: value: optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection { }) value
+          name: value:
+          optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection {
+            inherit mkKeyValue;
+          }) value
         ) cfg.settings.addons)
       ];
 
