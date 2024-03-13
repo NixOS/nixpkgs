@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, gettext, libiconv, makeWrapper }:
+{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_43, gettext, libiconv, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-user-dirs";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  nativeBuildInputs = [ makeWrapper libxslt docbook_xsl ] ++ lib.optionals stdenv.isDarwin [ gettext ];
+  nativeBuildInputs = [ makeWrapper libxslt docbook_xsl docbook_xml_dtd_43 ] ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   preFixup = ''
     # fallback values need to be last
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     homepage = "http://freedesktop.org/wiki/Software/xdg-user-dirs";
     description = "A tool to help manage well known user directories like the desktop folder and the music folder";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ iFreilicht ];
     platforms = platforms.unix;
+    mainProgram = "xdg-user-dir";
   };
 }
