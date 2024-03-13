@@ -1,17 +1,14 @@
 { stdenv
 , lib
-, mkDerivationWith
 , python3Packages
 , fetchFromGitHub
-, wrapQtAppsHook
-, ffmpeg
-, qtbase
-, qtwayland
+, ffmpeg-full
+, libsForQt5
 , testers
 , corrscope
 }:
 
-mkDerivationWith python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "corrscope";
   version = "0.9.0";
   pyproject = true;
@@ -25,19 +22,20 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "attrs" "ruamel.yaml" ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = (with libsForQt5; [
     wrapQtAppsHook
-  ] ++ (with python3Packages; [
+  ]) ++ (with python3Packages; [
     poetry-core
     pythonRelaxDepsHook
   ]);
 
   buildInputs = [
-    ffmpeg
+    ffmpeg-full
+  ] ++ (with libsForQt5; [
     qtbase
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
-  ];
+  ]);
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
@@ -58,7 +56,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}
       "''${qtWrapperArgs[@]}"
     )
   '';
