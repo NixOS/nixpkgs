@@ -94,7 +94,6 @@ self: super: {
   statestack = doJailbreak super.statestack; # base < 4.19
   newtype-generics = doJailbreak super.newtype-generics; # base < 4.19
   hw-prim = doJailbreak super.hw-prim; # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
-  hw-fingertree = doJailbreak super.hw-fingertree; # deepseq <1.5, doctest < 0.22, hedgehog < 1.4
   svg-builder = doJailbreak super.svg-builder; # base <4.19, bytestring <0.12, text <2.1
   # Too strict bound on base, believe it or not.
   # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232

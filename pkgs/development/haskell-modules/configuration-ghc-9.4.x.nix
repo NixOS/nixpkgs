@@ -105,9 +105,6 @@ in {
   # Broken because of unix >= 2.8 for GHC >= 9.6
   darcs = unmarkBroken (doDistribute super.darcs);
 
-  # Test suite has too strict dependencies
-  hw-fingertree = dontCheck super.hw-fingertree;
-
   inherit
     (
       let

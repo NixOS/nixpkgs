@@ -311,6 +311,10 @@ self: super: {
     })
   ]) super.memory;
 
+  # Depends on outdated deps hedgehog < 1.4, doctest < 0.12 for tests
+  # As well as deepseq < 1.5 (so it forbids GHC 9.8)
+  hw-fingertree = doJailbreak super.hw-fingertree;
+
   # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
   threadscope = overrideCabal (drv: {
     prePatch = drv.prePatch or "" + ''
