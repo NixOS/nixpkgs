@@ -67,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    tests = nixosTests.druid.default.passthru.override { druidPackage = finalAttrs.finalPackage; };
+  };
+
   meta = {
     description = "Apache Druid: a high performance real-time analytics database";
     homepage = "https://github.com/apache/druid";
