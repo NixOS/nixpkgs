@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   postInstall = ''
-    $out/bin/gonamer man > pop.1
+    $out/bin/gonamer man > gonamer.1
     installManPage gonamer.1
     installShellCompletion --cmd gonamer \
       --bash <($out/bin/gonamer completion bash) \
