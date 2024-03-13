@@ -9,11 +9,11 @@ let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.14.1";
+  version = "0.14.2";
 
   web-assets = fetchurl {
     url = "https://github.com/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-cNO0LuTzgx3CAP+qjTBZ9Fgs4jrH3ypZREpKKipOJDA=";
+    hash = "sha256-3aSOP8BTHdlODQnZr6DOZuybLl+02SWgP9YZ21guAPU=";
   };
 in
 buildGoModule rec {
@@ -23,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     inherit owner repo;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gXriCpLPFBzIWm0xKE2LdT3+VWLNwJAHtT9ZuYO3sDI=";
+    hash = "sha256-oeOxP9FkGsOH66Uk946H0b/zggz536YvRRuo1cINxSM=";
   };
 
   vendorHash = null;
@@ -59,7 +59,7 @@ buildGoModule rec {
       advertised to! A light-weight alternative to Mastodon
       and Pleroma, with support for clients!
     '';
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [ misuzu blakesmith ];
     license = licenses.agpl3Only;
   };
 }

@@ -201,17 +201,12 @@ in
             Type = "oneshot";
             ExecStart = "${getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
           };
+          startAt = cfg.collector.schedule;
         };
       };
 
       timers = mkIf cfg.collector.enable {
-        scrutiny-collector = {
-          timerConfig = {
-            OnCalendar = cfg.collector.schedule;
-            Persistent = true;
-            Unit = "scrutiny-collector.service";
-          };
-        };
+        scrutiny-collector.timerConfig.Persistent = true;
       };
     };
   };
