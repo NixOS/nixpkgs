@@ -107,7 +107,7 @@ with pkgs;
     Please be informed that this pseudo-package is not the only part
     of Nixpkgs that fails to evaluate. You should not evaluate
     entire Nixpkgs without some special measures to handle failing
-    packages, like using pkgs/top-level/release-attrpaths.nix.
+    packages, like using pkgs/top-level/release-attrpaths-superset.nix.
   '';
 
   tests = callPackages ../test { };
