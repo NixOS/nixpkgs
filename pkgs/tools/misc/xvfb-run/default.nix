@@ -1,6 +1,6 @@
 { lib
 , stdenvNoCC
-, fetchFromGitHub
+, fetchFromGitLab
 , makeWrapper
 , xorgserver
 , getopt
@@ -13,15 +13,16 @@
 , installShellFiles
 , xterm
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xvfb-run";
-  version = "1+g87f6705";
+  version = "1+g842f671";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.archlinux.org";
     owner = "archlinux";
-    repo = "svntogit-packages";
-    rev = "87f67054c49b32511893acd22be94c47ecd44b4a";
-    sha256 = "sha256-KEg92RYgJd7naHFDKbdXEy075bt6NLcmX8VhQROHVPs=";
+    repo = "packaging/packages/xorg-server";
+    rev = "842f671c8b950e599a327e9abd4f01f65301203f";
+    sha256 = "sha256-2wy95ngMxNiZVMko0SVYi2bNR8y50hmFHyS+gpt4sd0=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -32,8 +33,8 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp $src/trunk/xvfb-run $out/bin/xvfb-run
-    installManPage $src/trunk/xvfb-run.1
+    cp $src/xvfb-run $out/bin/xvfb-run
+    installManPage $src/xvfb-run.1
 
     chmod a+x $out/bin/xvfb-run
     patchShebangs $out/bin/xvfb-run

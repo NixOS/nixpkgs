@@ -1,17 +1,17 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused nix-prefetch jq common-updater-scripts
+#!nix-shell -i bash -p jq common-updater-scripts nix-prefetch-git
 # shellcheck shell=bash
 
 set -e
 
-info=$(nix-prefetch-git --quiet --url "https://github.com/archlinux/svntogit-packages" --rev "refs/heads/packages/xorg-server")
+info=$(nix-prefetch-git --quiet --url "https://gitlab.archlinux.org/archlinux/packaging/packages/xorg-server.git" --rev "refs/heads/main")
 
 rev=$(jq -r '.rev' <<< "$info")
 sha256=$(nix hash to-sri --type sha256 "$(jq -r '.sha256' <<< "$info")")
 dir=$(jq -r '.path' <<< "$info")
 
-newXvfbsha=$(sha256sum "$dir/trunk/xvfb-run")
-oldXvfbsha=$(sha256sum "$(nix build --quiet ".#xvfb-run.src" --json --no-link | jq -r '.[].outputs.out')/trunk/xvfb-run")
+newXvfbsha=$(sha256sum "$dir/xvfb-run")
+oldXvfbsha=$(sha256sum "$(nix build --quiet ".#xvfb-run.src" --json --no-link | jq -r '.[].outputs.out')/xvfb-run")
 
 if [[ "$newXvfbsha" != "$oldXvfbsha" ]]; then
     (
