@@ -229,8 +229,6 @@ in {
       resolvconf = {
         useLocalResolver = mkDefault true;
       };
-
-      networkmanager.dns = "unbound";
     };
 
     environment.etc."unbound/unbound.conf".source = confFile;
