@@ -16144,6 +16144,8 @@ self: super: with self; {
 
   uuid = callPackage ../development/python-modules/uuid { };
 
+  uuid6 = callPackage ../development/python-modules/uuid6 { };
+
   uvcclient = callPackage ../development/python-modules/uvcclient { };
 
   uvicorn = callPackage ../development/python-modules/uvicorn { };
