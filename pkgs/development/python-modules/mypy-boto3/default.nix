@@ -267,7 +267,7 @@ rec {
 
   mypy-boto3-elastic-inference = buildMypyBoto3Package "elastic-inference" "1.34.0" "sha256-gbWKw0zDQf3qBlp1KeO7MX1j/GqRUpFAxLG0BKFrHBk=";
 
-  mypy-boto3-elasticache = buildMypyBoto3Package "elasticache" "1.34.0" "sha256-ArUBQ5XbBz4kTABHwgpE6VoRCu2ILVSEvLb2yQWMbvU=";
+  mypy-boto3-elasticache = buildMypyBoto3Package "elasticache" "1.34.60" "sha256-D3WLH1FS8dddD6WKUmQApvtehGMmjWYzdaMwTHzvzYk=";
 
   mypy-boto3-elasticbeanstalk = buildMypyBoto3Package "elasticbeanstalk" "1.34.0" "sha256-ftVFUwY81mg/9zJ4xxVjhXF1HgKpzj1koIS32cMKRLw=";
 
