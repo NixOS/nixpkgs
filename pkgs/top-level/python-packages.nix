@@ -10635,6 +10635,8 @@ self: super: with self; {
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
 
+  pydantic-yaml-0 = callPackage ../development/python-modules/pydantic-yaml-0 { };
+
   pydash = callPackage ../development/python-modules/pydash { };
 
   pydata-google-auth = callPackage ../development/python-modules/pydata-google-auth { };
