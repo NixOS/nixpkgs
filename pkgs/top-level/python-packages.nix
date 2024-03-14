@@ -4943,6 +4943,8 @@ self: super: with self; {
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
 
+  gpuctypes = callPackage ../development/python-modules/gpuctypes { };
+
   gpustat = callPackage ../development/python-modules/gpustat { };
 
   gpxpy = callPackage ../development/python-modules/gpxpy { };
@@ -14771,6 +14773,8 @@ self: super: with self; {
   tinycss = callPackage ../development/python-modules/tinycss { };
 
   tinydb = callPackage ../development/python-modules/tinydb { };
+
+  tinygrad = callPackage ../development/python-modules/tinygrad { };
 
   tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
 
