@@ -11273,6 +11273,15 @@
     }];
     name = "Joseph LaFreniere";
   };
+  laggron42 = {
+    name = "Auguste Charpentier";
+    email = "laggron42@gmail.com";
+    github = "laggron42";
+    githubId = 23153234;
+    keys = [{
+      fingerprint = "550B 75F1 FFB8 CB5D 047F  52DA 03BE 32E5 2B95 C97F";
+    }];
+  };
   lagoja = {
     github = "Lagoja";
     githubId =750845;
