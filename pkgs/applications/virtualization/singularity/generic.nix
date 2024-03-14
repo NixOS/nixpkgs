@@ -315,4 +315,8 @@ in
           { };
     };
   };
+  meta = previousAttrs.meta or { } // {
+    # Try to automate updating
+    inherit (finalAttrs.src.meta) position;
+  };
 })
