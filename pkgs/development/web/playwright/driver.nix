@@ -7,6 +7,8 @@
 , nodejs
 , fetchFromGitHub
 , fetchurl
+, linkFarm
+, callPackage
 , makeFontsConf
 , makeWrapper
 , runCommand
@@ -17,15 +19,15 @@ let
   inherit (stdenv.hostPlatform) system;
 
   throwSystem = throw "Unsupported system: ${system}";
+  suffix = {
+    x86_64-linux = "linux";
+    aarch64-linux = "linux-arm64";
+    x86_64-darwin = "mac";
+    aarch64-darwin = "mac-arm64";
+  }.${system} or throwSystem;
 
   driver = stdenv.mkDerivation (finalAttrs:
     let
-      suffix = {
-        x86_64-linux = "linux";
-        aarch64-linux = "linux-arm64";
-        x86_64-darwin = "mac";
-        aarch64-darwin = "mac-arm64";
-      }.${system} or throwSystem;
       filename = "playwright-${finalAttrs.version}-${suffix}.zip";
     in
     {
@@ -71,6 +73,8 @@ let
 
     passthru = {
       inherit filename;
+      browsersJSON = (lib.importJSON ./browsers.json).browsers;
+
       browsers = {
         x86_64-linux = browsers-linux { };
         aarch64-linux = browsers-linux { };
@@ -105,32 +109,19 @@ let
   };
 
   browsers-linux = { withChromium ? true }: let
-    fontconfig = makeFontsConf {
-      fontDirectories = [];
-    };
+    browsers = [ "ffmpeg" "firefox" ] ++ lib.optionals withChromium ["chromium"];
   in
-    runCommand ("playwright-browsers"
-    + lib.optionalString withChromium "-chromium")
-  {
-    nativeBuildInputs = [
-      makeWrapper
-      jq
-    ];
-  } (''
-    BROWSERS_JSON=${driver}/package/browsers.json
-  '' + lib.optionalString withChromium ''
-    CHROMIUM_REVISION=$(jq -r '.browsers[] | select(.name == "chromium").revision' $BROWSERS_JSON)
-    mkdir -p $out/chromium-$CHROMIUM_REVISION/chrome-linux
-
-    # See here for the Chrome options:
-    # https://github.com/NixOS/nixpkgs/issues/136207#issuecomment-908637738
-    makeWrapper ${chromium}/bin/chromium $out/chromium-$CHROMIUM_REVISION/chrome-linux/chrome \
-      --set SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
-      --set FONTCONFIG_FILE ${fontconfig}
-  '' + ''
-    FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
-    mkdir -p $out/ffmpeg-$FFMPEG_REVISION
-    ln -s ${ffmpeg}/bin/ffmpeg $out/ffmpeg-$FFMPEG_REVISION/ffmpeg-linux
-  '');
+    linkFarm
+      "playwright-browsers"
+      (lib.listToAttrs
+        (map
+          (name: let
+            value = driver.passthru.browsersJSON.${name};
+          in lib.nameValuePair
+            # TODO check platform for revisionOverrides
+            "${name}-${value.revision}"
+            (callPackage ./${name}.nix { inherit suffix; inherit (value) revision;})
+          )
+          browsers));
 in
   driver
