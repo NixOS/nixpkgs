@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
+, glib, pango, cairo, atk, gdk-pixbuf, gtk3, electron, cups, nspr, nss_latest, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 , pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu, libGL
@@ -155,7 +155,7 @@ stdenv.mkDerivation {
         ''} \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
         --prefix PATH : "${gnome.zenity}/bin" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
 
       # fix Icon line in the desktop file (#48062)
       sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"

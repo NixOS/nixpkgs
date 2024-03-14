@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper '${electron}/bin/electron' "$out/bin/redisinsight" \
       --add-flags "$out/share/redisinsight/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
       --chdir "$out/share/redisinsight" \
       --argv0 "$out/share/redisinsight/app.asar"
 

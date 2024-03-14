@@ -199,6 +199,8 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
         runHook postInstall
       '';
     };
+
+    ozoneFlags = "--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime";
   };
 
   meta = with lib; {

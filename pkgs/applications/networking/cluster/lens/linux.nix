@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, makeWrapper, nss_latest, stdenv }:
+{ lib, fetchurl, appimageTools, makeWrapper, nss_latest, stdenv, electron }:
 let
   common = import ./common.nix { inherit fetchurl; };
 
@@ -20,7 +20,7 @@ appimageTools.wrapType2 {
       mv $out/bin/${name} $out/bin/${pname}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
       install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
       install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/${pname}.png \
          $out/share/icons/hicolor/512x512/apps/${pname}.png

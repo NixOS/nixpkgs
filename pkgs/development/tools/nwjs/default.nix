@@ -6,6 +6,7 @@
 , cairo
 , cups
 , dbus
+, electron
 , expat
 , fetchurl
 , ffmpeg
@@ -113,7 +114,7 @@ stdenv.mkDerivation {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
     )
   '';
 

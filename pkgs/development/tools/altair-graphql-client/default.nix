@@ -1,4 +1,4 @@
-{ lib, appimageTools, makeWrapper, fetchurl }:
+{ lib, appimageTools, makeWrapper, fetchurl, electron }:
 
 let
   pname = "altair";
@@ -19,7 +19,7 @@ appimageTools.wrapType2 {
 
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
 
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \

@@ -64,7 +64,7 @@ buildNpmPackage rec {
     makeWrapper '${lib.getExe electron_28}' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${binPath}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron_28.ozoneFlags}}}" \
       --add-flags $out/lib/node_modules/webcord/
 
     runHook postInstall

@@ -73,7 +73,7 @@ buildNpmPackage rec {
     makeWrapper ${lib.getExe electron} $out/bin/jitsi-meet-electron \
         --add-flags $out/share/jitsi-meet-electron/resources/app.asar \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pipewire ]} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
         --inherit-argv0
 
     install -Dm644 resources/icons/512x512.png $out/share/icons/hicolor/512x512/apps/jitsi-meet-electron.png

@@ -17,6 +17,7 @@
 , freetype
 , fontconfig
 , dbus
+, electron
 , libX11
 , xorg
 , libXi
@@ -159,7 +160,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 

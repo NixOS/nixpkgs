@@ -2,6 +2,7 @@
 , fetchurl
 , lib
 , makeWrapper
+, electron
 }:
 
 appimageTools.wrapType2 rec {
@@ -19,7 +20,7 @@ appimageTools.wrapType2 rec {
       mv $out/bin/{lunar-client-*,lunar-client}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/lunar-client \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
       install -Dm444 ${contents}/launcher.desktop $out/share/applications/lunar-client.desktop
       install -Dm444 ${contents}/launcher.png $out/share/pixmaps/lunar-client.png
       substituteInPlace $out/share/applications/lunar-client.desktop \

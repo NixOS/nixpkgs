@@ -1,6 +1,6 @@
 { pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
 , makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
-, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
+, at-spi2-core, atk, cairo, cups, dbus, electron, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
         ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \

@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{ lib, fetchurl, appimageTools, makeWrapper, electron }:
 
 let
   pname = "anytype";
@@ -20,7 +20,7 @@ in appimageTools.wrapType2 {
     mv $out/bin/${name} $out/bin/${pname}
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
     install -m 444 -D ${appimageContents}/anytype.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/anytype.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'

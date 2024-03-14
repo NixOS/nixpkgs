@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString (!stdenv.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
       --add-flags $out/share/lib/youtube-music/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0

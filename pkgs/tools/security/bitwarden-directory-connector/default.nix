@@ -75,7 +75,7 @@ in {
 
       makeWrapper ${lib.getExe electron} $out/bin/bitwarden-directory-connector \
         --add-flags $out/share/bitwarden-directory-connector/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}" \
         --set-default ELECTRON_IS_DEV 0 \
         --inherit-argv0
 

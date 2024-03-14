@@ -3,6 +3,7 @@
 , lib
 , makeWrapper
 , stdenv
+, electron
 }:
 
 let
@@ -33,7 +34,7 @@ appimageTools.wrapType2 {
     mv $out/bin/{${pname}-${version},${pname}}
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
     install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
     substituteInPlace $out/share/applications/${pname}.desktop \

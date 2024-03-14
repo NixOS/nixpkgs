@@ -2,6 +2,7 @@
 , cups
 , dpkg
 , fetchurl
+, electron
 , glib
 , gtk3
 , lib
@@ -77,7 +78,7 @@ stdenv.mkDerivation {
       --replace "/usr/share" "$out/share"
     makeWrapper $out/opt/QQ/qq $out/bin/qq \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+${electron.ozoneFlags}}}"
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
