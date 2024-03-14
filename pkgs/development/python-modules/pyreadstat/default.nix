@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.2.6";
+  version = "1.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Roche";
     repo = "pyreadstat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VcPpGRrE/5udNijodO88Lw69JPOm6ZN7BZb4xD34srQ=";
+    hash = "sha256-XuLFLpZbaCj/MHq0+l6GoNqR5nAldAlEJhoO5ioWYTA=";
   };
 
   nativeBuildInputs = [ cython ];
