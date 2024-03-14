@@ -9792,9 +9792,7 @@ with pkgs;
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
-  kube-router = callPackage ../applications/networking/cluster/kube-router {
-    buildGoModule = buildGo120Module;
-  };
+  kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
   kubedock = callPackage ../development/tools/kubedock { };
 
