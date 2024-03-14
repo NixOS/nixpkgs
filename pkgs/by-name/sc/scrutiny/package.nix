@@ -6,13 +6,13 @@
 }:
 let
   pname = "scrutiny";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S7GW8z6EWB+5vntKew0+EDVqhun+Ae2//15dSIlfoSs=";
+    hash = "sha256-ysjE2nn1WwhEiFIvJ5cRCJQf9mECTgiGUyenwf3mKTA=";
   };
 
   frontend = buildNpmPackage {
