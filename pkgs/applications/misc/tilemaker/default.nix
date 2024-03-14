@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages, cmake, installShellFiles
-, boost, lua, protobuf, rapidjson, shapelib, sqlite, zlib, testers }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, cmake
+, installShellFiles
+, boost
+, lua
+, protobuf
+, rapidjson
+, shapelib
+, sqlite
+, zlib
+, testers
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tilemaker";
@@ -13,9 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace src/tilemaker.cpp \
-      --replace "config.json" "$out/share/tilemaker/config-openmaptiles.json" \
-      --replace "process.lua" "$out/share/tilemaker/process-openmaptiles.lua"
+    substituteInPlace src/options_parser.cpp \
+      --replace-fail "config.json" "$out/share/tilemaker/config-openmaptiles.json" \
+      --replace-fail "process.lua" "$out/share/tilemaker/process-openmaptiles.lua"
+    substituteInPlace server/server.cpp \
+      --replace-fail "default_value(\"static\")" "default_value(\"$out/share/tilemaker/static\")"
   '';
 
   nativeBuildInputs = [ cmake installShellFiles ];
@@ -23,13 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ boost lua protobuf rapidjson shapelib sqlite zlib ];
 
   cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    "-DPROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc";
+    (lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc");
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];
 
   postInstall = ''
     installManPage ../docs/man/tilemaker.1
-    install -Dm644 ../resources/* -t $out/share/tilemaker
+    install -Dm644 ../resources/*.{json,lua} -t $out/share/tilemaker
+    cp -r ../server/static $out/share/tilemaker
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -44,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.free; # FTWPL
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
+    mainProgram = "tilemaker";
   };
 })
