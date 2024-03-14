@@ -7942,10 +7942,6 @@ with pkgs;
 
   esshader = callPackage ../tools/graphics/esshader { };
 
-  etcher = callPackage ../tools/misc/etcher {
-    electron = electron_19;
-  };
-
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
