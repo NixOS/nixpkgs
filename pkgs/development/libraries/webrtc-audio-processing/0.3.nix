@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "A more Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
