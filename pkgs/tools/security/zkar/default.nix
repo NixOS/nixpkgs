@@ -9,8 +9,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "phith0n";
-    repo = pname;
-    rev = "v${version}";
+    repo = "zkar";
+    rev = "refs/tags/v${version}";
     hash = "sha256-JPkxJpx2guTaEfTYhQsgZG+kXqHXgEiOrS9sk5vOjVc=";
   };
 
@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Java serialization protocol analysis tool";
     homepage = "https://github.com/phith0n/zkar";
+    changelog = "https://github.com/phith0n/zkar/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "zkar";
