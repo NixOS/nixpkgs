@@ -599,6 +599,11 @@ in mkLicense lset) ({
     url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
   };
 
+  giftware = {
+    spdxId = "Giftware";
+    fullName = "Giftware License";
+  };
+
   hpnd = {
     spdxId = "HPND";
     fullName = "Historic Permission Notice and Disclaimer";
