@@ -6,6 +6,8 @@
 , nodejs
 , python3
 , gettext
+, nixosTests
+, plugins ? [ ]
 }:
 
 let
@@ -238,6 +240,9 @@ python.pkgs.buildPythonApplication rec {
         inherit (python.pkgs) callPackage;
       }
     );
+    tests = {
+      inherit (nixosTests) pretix;
+    };
   };
 
   meta = with lib; {
