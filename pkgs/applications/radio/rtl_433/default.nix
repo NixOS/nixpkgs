@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libusb1, rtl-sdr, soapysdr-with-plugins
+, libusb1, rtl-sdr-osmocom, soapysdr-with-plugins
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ libusb1 rtl-sdr soapysdr-with-plugins ];
+  buildInputs = [ libusb1 rtl-sdr-osmocom soapysdr-with-plugins ];
 
   doCheck = true;
 
