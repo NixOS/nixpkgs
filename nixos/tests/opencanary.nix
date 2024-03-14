@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "opencanary";
-  meta.maintainers = [ "James Adam" ];
+  meta.maintainers = with lib.maintainers; [ purefns ];
 
   nodes = {
     machine = { ... }: {

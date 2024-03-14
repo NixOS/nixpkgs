@@ -76,6 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "A low interaction honeypot intended to be run on internal networks.";
     homepage = "https://github.com/thinkst/opencanary";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ purefns ];
     mainProgram = "opencanaryd";
   };
 }
