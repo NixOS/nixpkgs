@@ -1,4 +1,5 @@
 { lib
+, aiodns
 , async-timeout
 , buildPythonPackage
 , cached-ipaddress
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.6.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiodiscover";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M3tus0r58YVJyi/S7UWq+OvaKke3hqkHGuYkUxEpVxg=";
+    hash = "sha256-7oeyuwirQ2mm0UQEOwTkAz126UnxkoMjg+DDu5DWY3E=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +34,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
+    aiodns
     cached-ipaddress
     dnspython
+    ifaddr
     netifaces
     pyroute2
-    ifaddr
   ];
 
   nativeCheckInputs = [
