@@ -34387,8 +34387,6 @@ with pkgs;
 
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
-  qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat { };
-
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
     inherit (darwin.stubs) rez setfile;
