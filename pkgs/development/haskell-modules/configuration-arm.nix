@@ -22,10 +22,16 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) lib;
-in
+  inherit (pkgs.lib) groupBy optionalAttrs;
 
-with haskellLib;
+  inherit (haskellLib)
+    doDistribute
+    dontCheck
+    dontHaddock
+    overrideCabal
+    triggerRebuild
+    ;
+in
 
 self: super: {
   # COMMON ARM OVERRIDES
@@ -43,7 +49,7 @@ self: super: {
     librarySystemDepends = librarySystemDepends ++ [pkgs.wiringpi];
   }) super.wiringPi;
 
-} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
+} // optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
 
   # Corrupted store path https://github.com/NixOS/nixpkgs/pull/272097#issuecomment-1848414265
@@ -121,7 +127,7 @@ self: super: {
   hls-rename-plugin = dontCheck super.hls-rename-plugin;
   hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
   hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
-} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
+} // optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
   # KAT/ECB/D2 test segfaults on armv7l
