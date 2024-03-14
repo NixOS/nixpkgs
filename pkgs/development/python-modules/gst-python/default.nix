@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.9";
+  version = "1.24.1";
 
   format = "other";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-P51cb/79omhwN0S1kqazmDqmcjJzsSIOy8tiwqWAAAk=";
+    hash = "sha256-WiNzJ4PtrgPMIWTGknwFR3u7OnAI+JOSkbhVRzeBplE=";
   };
 
   # Python 2.x is not supported.
@@ -51,7 +51,9 @@ buildPythonPackage rec {
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
-  doCheck = true;
+  # Reenable pending upstream fix in pygobject
+  # https://gitlab.gnome.org/GNOME/pygobject/-/issues/624
+  doCheck = false;
 
   # TODO: Meson setup hook does not like buildPythonPackage
   # https://github.com/NixOS/nixpkgs/issues/47390
