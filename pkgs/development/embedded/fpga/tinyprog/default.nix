@@ -3,10 +3,27 @@
 , fetchFromGitHub
 }:
 
-with python3Packages; buildPythonApplication rec {
+let
+  inherit (lib) licenses maintainers substring;
+
+  inherit (python3Packages)
+    buildPythonApplication
+    intelhex
+    jsonmerge
+    packaging
+    pyserial
+    pyusb
+    setuptools
+    setuptools-scm
+    six
+    tqdm
+    ;
+in
+
+buildPythonApplication rec {
   pname = "tinyprog";
   # `python setup.py --version` from repo checkout
-  version = "1.0.24.dev114+g${lib.substring 0 7 src.rev}";
+  version = "1.0.24.dev114+g${substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "tinyfpga";
@@ -30,7 +47,7 @@ with python3Packages; buildPythonApplication rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";
     description = "Programmer for FPGA boards using the TinyFPGA USB Bootloader";
     mainProgram = "tinyprog";
