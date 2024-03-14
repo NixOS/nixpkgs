@@ -13,12 +13,30 @@
 { lib, ncurses, graphviz, lua, fetchzip,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
   coqPackages, coq, hierarchy-builder, version ? null }@args:
-with builtins // lib;
+
 let
+  inherit (lib)
+    genAttrs
+    head
+    licenses
+    maintainers
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    pred
+    recurseIntoAttrs
+    splitList
+    switch
+    versions
+    ;
+
+  inherit (lib.versions) range;
+
   repo  = "math-comp";
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
-  defaultVersion = with versions; lib.switch coq.coq-version [
+  defaultVersion = switch coq.coq-version [
       { case = range "8.19" "8.19"; out = "1.19.0"; }
       { case = range "8.17" "8.18"; out = "1.18.0"; }
       { case = range "8.15" "8.18"; out = "1.17.0"; }
@@ -63,7 +81,7 @@ let
   packages = [ "ssreflect" "fingroup" "algebra" "solvable" "field" "character" "all" ];
 
   mathcomp_ = package: let
-      mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ (head (splitList (lib.pred.equal package) packages)));
+      mathcomp-deps = optionals (package != "single") (map mathcomp_ (head (splitList (pred.equal package) packages)));
       pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
