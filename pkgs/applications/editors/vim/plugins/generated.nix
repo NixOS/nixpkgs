@@ -10133,6 +10133,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/taglist.vim/";
   };
 
+  tailwindcss-colorizer-cmp-nvim = buildVimPlugin {
+    pname = "tailwindcss-colorizer-cmp.nvim";
+    version = "2023-09-09";
+    src = fetchFromGitHub {
+      owner = "roobert";
+      repo = "tailwindcss-colorizer-cmp.nvim";
+      rev = "bc25c56083939f274edcfe395c6ff7de23b67c50";
+      sha256 = "";
+    };
+    meta.homepage = "https://github.com/roobert/tailwindcss-colorizer-cmp.nvim/";
+  };
+
   tailwindcss-colors-nvim = buildVimPlugin {
     pname = "tailwindcss-colors.nvim";
     version = "2021-12-24";
