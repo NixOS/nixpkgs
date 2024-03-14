@@ -743,7 +743,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
 #### Use of `with`
 
-`with` is a somewhat controversial feature of nix syntax, it can reduce repition, but easily can make code unreadable or buggy if used carelessly.
+`with` is a somewhat controversial feature of nix syntax, it can reduce repetition, but easily can make code unreadable or buggy if used carelessly.
 
 recommended uses:
 - `meta.maintainers = with lib.maintainers; [ ... ]`
