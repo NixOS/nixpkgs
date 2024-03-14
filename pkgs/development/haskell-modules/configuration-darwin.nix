@@ -3,10 +3,24 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) lib darwin;
-in
+  inherit (pkgs) darwin;
 
-with haskellLib;
+  inherit (pkgs.lib) optionalAttrs;
+
+  inherit (haskellLib)
+    addBuildDepend
+    addExtraLibraries
+    addExtraLibrary
+    addPkgconfigDepends
+    addTestToolDepends
+    appendConfigureFlag
+    appendPatch
+    disableCabalFlag
+    doCheck
+    dontCheck
+    overrideCabal
+    ;
+in
 
 self: super: ({
 
@@ -94,7 +108,7 @@ self: super: ({
   # I think we can add a propagatedImpureHost dep here, but I’m hoping to
   # get a proper fix available soonish.
   x509-system = overrideCabal (drv:
-    lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+    optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
       postPatch = ''
         substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
       '' + (drv.postPatch or "");
@@ -317,7 +331,7 @@ self: super: ({
     stripLen = 1;
   }) super.inline-c-cpp;
 
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+} // optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
@@ -347,7 +361,7 @@ self: super: ({
   # https://github.com/NixOS/nixpkgs/issues/149692
   Agda = disableCabalFlag "optimise-heavily" super.Agda;
 
-} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+} // optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9
