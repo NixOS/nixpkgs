@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.7.9";
+  version = "1.7.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ff+cdY6xy14w30BDn1ct/2Q+4j8cQupJrJHb4vO58J0=";
+    hash = "sha256-0cKzQjAnj0JMrHyA/gOgYceM6g1URJFgQtp90m09Nkw=";
   };
 
   sourceRoot = "${src.name}/core";
