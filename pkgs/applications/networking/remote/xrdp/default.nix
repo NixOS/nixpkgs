@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "0.9.25";
+  version = "0.9.25.1";
   patchedXrdpSrc = applyPatches {
     patches = [ ./dynamic_config.patch ];
     name = "xrdp-patched-${version}";
@@ -31,7 +31,7 @@ let
       repo = "xrdp";
       rev = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-XVaNN+sBEACh/yGnCLn9GHszoofWbcyA+Mr6KZMVFB0=";
+      hash = "sha256-oAs0oWkCyj3ObdJuHLfT25ZzkTrxNAXDiFU64OOP4Ow=";
     };
   };
 

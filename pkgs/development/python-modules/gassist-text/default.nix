@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "gassist-text";
-  version = "0.0.10";
+  version = "0.0.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "tronikos";
     repo = "gassist_text";
     rev = "refs/tags/${version}";
-    hash = "sha256-BSMflCSYNAaQVTOqKWyr9U9Q70ley1jjF6ndOVum+GA=";
+    hash = "sha256-XFHyI48TuPBJjHA4dLSpYv62Y5zK0knrIqNKBoWnEeU=";
   };
 
   nativeBuildInputs = [
