@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "webdataset";
-  version = "0.2.86";
+  version = "0.2.88";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdataset";
     repo = "webdataset";
     rev = "refs/tags/${version}";
-    hash = "sha256-aTjxoSoQ9LH4gcFmV+7Aj0HNIpvsFHTrxFUpAtB3nkM=";
+    hash = "sha256-wsBOBUK4VIGMQXYdgbgsuSH4XYvxDsUv3rh0S5rvA6c=";
   };
 
   nativeBuildInputs = [
@@ -51,15 +51,16 @@ buildPythonPackage rec {
   disabledTests = [
     # requires network
     "test_batched"
+    "test_cache_dir"
+    "test_concurrent_download_and_open"
     "test_dataloader"
     "test_decode_handlers"
-    "test_decoder"
     "test_decoder"
     "test_download"
     "test_handlers"
     "test_pipe"
+    "test_remote_file"
     "test_shard_syntax"
-    "test_torchvision"
     "test_torchvision"
     "test_unbatched"
     "test_yaml3"
