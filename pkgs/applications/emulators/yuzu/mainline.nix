@@ -7,7 +7,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, nix-update-script
 , wrapQtAppsHook
 , autoconf
 , boost
@@ -190,10 +189,6 @@ stdenv.mkDerivation(finalAttrs: {
   postInstall = ''
     install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
   '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "mainline-0-(.*)" ];
-  };
 
   meta = with lib; {
     homepage = "https://yuzu-emu.org";
