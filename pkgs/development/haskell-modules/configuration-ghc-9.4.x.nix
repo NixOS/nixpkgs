@@ -1,18 +1,35 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch lib;
+  inherit (pkgs) fetchpatch;
+
+  inherit (pkgs.lib) dontRecurseIntoAttrs mapAttrs throw;
+
+  inherit (pkgs.lib.strings) compareVersions;
+
+  inherit (haskellLib)
+    addBuildDepends
+    allowInconsistentDependencies
+    doDistribute
+    doJailbreak
+    dontCheck
+    dontHaddock
+    enableSeparateBinOutput
+    generateOptparseApplicativeCompletions
+    overrideCabal
+    unmarkBroken
+    ;
+
   checkAgainAfter = pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then act
+    if compareVersions pkg.version ver <= 0 then act
     else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
+      throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
+
+  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 in
 
-with haskellLib;
-self: super: let
-  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
-in {
-  llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+self: super: {
+  llvmPackages = dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries.
   array = null;
@@ -112,7 +129,7 @@ in {
           Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
         };
       in
-      lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
+      mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
         fourmolu = super.fourmolu;
         ormolu = super.ormolu;
@@ -129,7 +146,7 @@ in {
 
   # Packages which need compat library for GHC < 9.6
   inherit
-    (lib.mapAttrs
+    (mapAttrs
       (_: addBuildDepends [ self.foldable1-classes-compat ])
       super)
     indexed-traversable
