@@ -614,6 +614,11 @@ in mkLicense lset) ({
     spdxId = "HPND-sell-variant";
   };
 
+  hpndUc = {
+    spdxId = "HPND-UC";
+    fullName = "Historical Permission Notice and Disclaimer - University of California variant";
+  };
+
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
