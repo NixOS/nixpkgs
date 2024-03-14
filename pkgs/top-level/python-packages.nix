@@ -15022,6 +15022,8 @@ self: super: with self; {
 
   ttls = callPackage ../development/python-modules/ttls { };
 
+  ttn-client = callPackage ../development/python-modules/ttn-client { };
+
   ttp = callPackage ../development/python-modules/ttp { };
 
   ttp-templates = callPackage ../development/python-modules/ttp-templates { };
