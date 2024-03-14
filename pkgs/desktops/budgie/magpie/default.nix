@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Softish fork of Mutter 43.x";
     homepage = "https://github.com/BuddiesOfBudgie/magpie";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ federicoschonborn ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 })

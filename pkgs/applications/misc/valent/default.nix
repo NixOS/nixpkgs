@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     homepage = "https://valent.andyholmes.ca";
     changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus cc0 cc-by-sa-30 ];
-    maintainers = with maintainers; [ federicoschonborn aleksana ];
+    maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
   };
 }
