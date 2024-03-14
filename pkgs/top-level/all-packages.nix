@@ -6808,12 +6808,11 @@ with pkgs;
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_23_02_0
-    citrix_workspace_23_07_0
     citrix_workspace_23_09_0
     citrix_workspace_23_11_0
+    citrix_workspace_24_02_0
   ;
-  citrix_workspace = citrix_workspace_23_11_0;
+  citrix_workspace = citrix_workspace_24_02_0;
 
   clima = callPackage ../tools/text/clima { };
 
@@ -9795,9 +9794,7 @@ with pkgs;
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
-  kube-router = callPackage ../applications/networking/cluster/kube-router {
-    buildGoModule = buildGo120Module;
-  };
+  kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
   kubedock = callPackage ../development/tools/kubedock { };
 
@@ -18289,10 +18286,11 @@ with pkgs;
   electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
   electron_25 = electron_25-bin;
-  electron_26 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_26 then electron-source.electron_26 else electron_26-bin;
+  electron_26 = electron_26-bin;
   electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
-  electron = electron_28;
+  electron_29 = electron-source.electron_29;
+  electron = electron_29;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
