@@ -85,6 +85,13 @@ stdenv.mkDerivation {
     done
   '';
 
+  # workaround needed for building darwin stdenvBootstrapTools which pins
+  # LLVM11 but doesn't provide libcxx.cxxabi in extraPackages to cc-wrapper and
+  # thus libcxx.cxxabi is not added to the link time library search paths.
+  postInstall = ''
+    ln -s ${lib.getLib cxxabi}/lib/lib${cxxabi.libName}* $out/lib/
+  '';
+
   passthru = {
     isLLVM = true;
     inherit cxxabi;
