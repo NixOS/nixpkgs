@@ -8,8 +8,38 @@
 , substituteAll
 }:
 
+let
+  inherit (lib) licenses maintainers optionals;
 
-with python3Packages; buildPythonApplication rec {
+  inherit (python3Packages)
+    aiofiles
+    ajsonrpc
+    bottle
+    buildPythonApplication
+    chardet
+    click
+    click-completion
+    colorama
+    jsondiff
+    lockfile
+    marshmallow
+    pyelftools
+    pyserial
+    pytestCheckHook
+    python
+    pythonRelaxDepsHook
+    requests
+    semantic-version
+    setuptools
+    starlette
+    stdenv
+    tabulate
+    uvicorn
+    wsproto
+    zeroconf
+    ;
+in
+buildPythonApplication rec {
   pname = "platformio";
   version = "6.1.11";
   pyproject = true;
@@ -27,7 +57,7 @@ with python3Packages; buildPythonApplication rec {
   patches = [
     (substituteAll {
       src = ./interpreter.patch;
-      interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
+      interpreter = (python.withPackages (_: propagatedBuildInputs)).interpreter;
     })
     (substituteAll {
       src = ./use-local-spdx-license-list.patch;
@@ -77,7 +107,7 @@ with python3Packages; buildPythonApplication rec {
     uvicorn
     wsproto
     zeroconf
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     chardet
   ];
 
@@ -194,10 +224,10 @@ with python3Packages; buildPythonApplication rec {
   ]);
 
   passthru = {
-    python = python3Packages.python;
+    inherit python;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
     description = "An open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
