@@ -149,4 +149,6 @@ in {
 
     users.groups.traefik = { };
   };
+
+  meta.maintainers = with lib.maintainers; [ Scrumplex ];
 }
