@@ -31,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6nkpflQY+1KNBGbotbkdG+iIV/o3BvSXd7KSWnKumSQ=";
   };
 
+  # Raise test timeout, 120s can be slightly exceeded on slower hardware
+  postPatch = ''
+    substituteInPlace test/meson.build \
+      --replace-fail 'timeout : 120' 'timeout : 240'
+  '';
+
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
   nativeBuildInputs = [ meson ninja pkg-config ];
