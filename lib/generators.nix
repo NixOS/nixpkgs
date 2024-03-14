@@ -16,67 +16,55 @@
 { lib }:
 
 let
-  inherit (builtins)
+  inherit (lib)
     addErrorContext
+    assertMsg
     attrNames
     concatLists
+    concatMapStringsSep
+    concatStrings
     concatStringsSep
+    const
     elem
+    escape
     filter
+    flatten
+    foldl
+    functionArgs  # Note: not the builtin; considers `__functor` in attrsets.
+    gvariant
+    hasInfix
     head
+    id
+    init
     isAttrs
     isBool
+    isDerivation
     isFloat
+    isFunction    # Note: not the builtin; considers `__functor` in attrsets.
     isInt
     isList
     isPath
     isString
+    last
     length
     mapAttrs
-    match
-    replaceStrings
-    split
-    tail
-    toJSON
-    typeOf
-    ;
-
-  inherit (lib.attrsets)
-    isDerivation
     mapAttrsToList
-    recursiveUpdate
-    ;
-
-  inherit (lib.lists)
-    init
-    flatten
-    foldl
-    last
     optionals
+    recursiveUpdate
+    replaceStrings
     reverseList
+    splitString
+    tail
     toList
     ;
 
   inherit (lib.strings)
-    concatMapStringsSep
-    concatStrings
-    escape
     escapeNixIdentifier
     floatToString
-    hasInfix
-    splitString
-    ;
-
-  inherit (lib.trivial)
-    const
-    id
-    isFunction    # Note: not the builtin, considers `__functor` in attrsets.
-    functionArgs  # Note: not the builtin; considers `__functor` in attrsets.
-    ;
-
-  inherit (lib)
-    assertMsg
-    gvariant
+    match
+    split
+    toJSON
+    typeOf
     ;
 
   ## -- HELPER FUNCTIONS & DEFAULTS --
