@@ -42,8 +42,18 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       virtualisation.additionalPaths = [ containerSystem ];
 
-      # not needed, but we want to test the nspawn file generation
-      systemd.nspawn.${containerName} = { };
+      systemd.tmpfiles.rules = [
+        "d /var/lib/machines/shared-decl 0755 root root - -"
+      ];
+      systemd.nspawn.shared-decl = {
+        execConfig = {
+          Boot = false;
+          Parameters = "${containerSystem}/init";
+        };
+        filesConfig = {
+          BindReadOnly = "/nix/store";
+        };
+      };
 
       systemd.services."systemd-nspawn@${containerName}" = {
         serviceConfig.Environment = [
@@ -62,6 +72,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
     testScript = ''
       start_all()
       machine.wait_for_unit("default.target");
+
+      # Test machinectl start stop of shared-decl
+      machine.succeed("machinectl start shared-decl");
+      machine.wait_until_succeeds("systemctl -M shared-decl is-active default.target");
+      machine.succeed("machinectl stop shared-decl");
 
       # create containers root
       machine.succeed("mkdir -p ${containerRoot}");
