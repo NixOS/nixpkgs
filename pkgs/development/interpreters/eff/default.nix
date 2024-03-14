@@ -1,6 +1,10 @@
 { lib, fetchFromGitHub, ocamlPackages }:
 
-with ocamlPackages; buildDunePackage rec {
+let
+  inherit (ocamlPackages) buildDunePackage js_of_ocaml menhir;
+in
+
+buildDunePackage rec {
   pname = "eff";
   version = "5.1";
 
