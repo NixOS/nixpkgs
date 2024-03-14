@@ -70,6 +70,7 @@
        (if localSystem.isMips64n32
         then ./bootstrap-files/mips64el-unknown-linux-gnuabin32.nix
         else ./bootstrap-files/mips64el-unknown-linux-gnuabi64.nix);
+      powerpc64-linux = import ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix;
       powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
       riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
     };

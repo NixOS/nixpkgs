@@ -3,6 +3,7 @@
 , buildDunePackage
 , xxHash
 , ctypes
+, ctypes-foreign
 , dune-configurator
 , ppx_expect
 }:
@@ -20,12 +21,17 @@ buildDunePackage rec {
     hash = "sha256-0+ac5EWV9DCVMT4wOcXC95GVEwsUIZzFn2laSzmK6jE=";
   };
 
+  postPatch = ''
+    substituteInPlace stubs/dune --replace-warn 'ctypes))' 'ctypes ctypes.stubs))'
+  '';
+
   buildInputs = [
     dune-configurator
   ];
 
   propagatedBuildInputs = [
     ctypes
+    ctypes-foreign
     xxHash
   ];
 

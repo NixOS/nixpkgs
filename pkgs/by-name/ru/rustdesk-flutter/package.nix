@@ -39,7 +39,7 @@
 
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
-in flutter316.buildFlutterApplication {
+in flutter316.buildFlutterApplication rec {
   pname = "rustdesk";
   version = "1.2.3-unstable-2024-02-11";
   src = fetchFromGitHub {
@@ -52,7 +52,7 @@ in flutter316.buildFlutterApplication {
   strictDeps = true;
 
   # Configure the Flutter/Dart build
-  sourceRoot = "source/flutter";
+  sourceRoot = "${src.name}/flutter";
   # curl https://raw.githubusercontent.com/rustdesk/rustdesk/16db977fd81e14af62ec5ac7760a7661a5c24be8/flutter/pubspec.lock | yq
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {

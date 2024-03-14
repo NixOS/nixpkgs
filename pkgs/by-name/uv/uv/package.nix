@@ -6,24 +6,25 @@
 , pkg-config
 , rustPlatform
 , stdenv
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.1.13";
+  version = "0.1.19";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = version;
-    hash = "sha256-MPDzuk6pE+uKr9ic0Q9gIk1yByZ/FdcVZx6ZheECR8A=";
+    hash = "sha256-OJDN6guJpUfGhX2Sk47wLHfT3XT2mnSINPiI2DgyfsU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
-      "pubgrub-0.2.1" = "sha256-p6RQ0pmatTnwp1s37ZktkhwakPTTehMlI3H5JUzwVrI=";
+      "pubgrub-0.2.1" = "sha256-Pn60v5tfpGrssCeuaUcxw5eJ1g8Dk/+un0s8+k4abpo=";
     };
   };
 
@@ -46,6 +47,8 @@ rustPlatform.buildRustPackage rec {
   env = {
     OPENSSL_NO_VENDOR = true;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An extremely fast Python package installer and resolver, written in Rust";

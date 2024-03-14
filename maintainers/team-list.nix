@@ -96,6 +96,14 @@ with lib.maintainers; {
     shortName = "Blockchains";
   };
 
+  budgie = {
+    members = [
+      bobby285271
+    ];
+    scope = "Maintain Budgie desktop environment";
+    shortName = "Budgie";
+  };
+
   buildbot = {
     members = [
       lopsided98
@@ -188,6 +196,7 @@ with lib.maintainers; {
       ivar
       mdarocha
       corngood
+      ggg
       raphaelr
       jamiemagee
       anpin
@@ -493,6 +502,7 @@ with lib.maintainers; {
     members = [
       aanderse
       cpages
+      dschrempf
       edwtjo
       minijackson
       peterhoeg
@@ -924,6 +934,18 @@ with lib.maintainers; {
     ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";
+  };
+
+  steam = {
+    members = [
+      atemu
+      eclairevoyant
+      jonringer
+      k900
+      mkg20001
+    ];
+    scope = "Maintain steam module and packages";
+    shortName = "Steam";
   };
 
   systemd = {

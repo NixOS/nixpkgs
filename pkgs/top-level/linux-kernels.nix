@@ -192,6 +192,17 @@ in {
         kernelPatches.request_key_helper
         kernelPatches.rust_1_74
         kernelPatches.rust_1_75
+        kernelPatches.rust_1_76
+      ];
+    };
+
+    linux_6_8 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.8";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.rust_1_75
+        kernelPatches.rust_1_76
       ];
     };
 
@@ -204,6 +215,7 @@ in {
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.rust_1_75
+          kernelPatches.rust_1_76
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -594,6 +606,7 @@ in {
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_7 = recurseIntoAttrs (packagesFor kernels.linux_6_7);
+    linux_6_8 = recurseIntoAttrs (packagesFor kernels.linux_6_8);
     __attrsFailEvaluation = true;
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
@@ -660,7 +673,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_7;
+    linux_latest = packages.linux_6_8;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_6;

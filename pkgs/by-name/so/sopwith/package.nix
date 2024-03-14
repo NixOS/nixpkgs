@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sopwith";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
     rev = "refs/tags/sdl-sopwith-${version}";
-    hash = "sha256-C0OpFA3q3K5lgoVe0F03/zXlNba/zW7YEIH+2BV/nCI=";
+    hash = "sha256-7/xTg41NYxzeGNyt/ClbM/uHMTAE87wn6vc9Ai6P+30=";
   };
 
   nativeBuildInputs = [

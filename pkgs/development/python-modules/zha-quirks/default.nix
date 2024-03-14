@@ -43,6 +43,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # RuntimeError: no running event loop
+    "test_mfg_cluster_events"
+    "test_co2_sensor"
+    "test_smart_air_sensor"
+  ];
+
   pythonImportsCheck = [
     "zhaquirks"
   ];

@@ -2,38 +2,48 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, pkg-config
+, openssl
+, xz
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.10.0";
+  version = "0.11.0-rc1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-qiskc0G/ZdLRZjTicoKIOztRFem59TM4ki23Rl55y9s=";
+    hash = "sha256-jOq+aoBSRUTXldg8iWGSJ1z0y+3KbhZfVAgjZo9IsGo=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "iai-0.1.1" = "sha256-EdNzCPht5chg7uF9O8CtPWR/bzSYyfYIXNdLltqdlR0=";
+      "typst-dev-assets-0.10.0" = "sha256-EBOZbblbavtsr2LEnoIF0UFmpSsm8Sq7ibxxWcAMIHY=";
     };
   };
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    openssl
+    xz
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.Security
   ];
 
   env = {
     GEN_ARTIFACTS = "artifacts";
+    OPENSSL_NO_VENDOR = true;
   };
 
   postInstall = ''

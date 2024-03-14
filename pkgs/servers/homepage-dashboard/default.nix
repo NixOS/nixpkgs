@@ -10,6 +10,7 @@
 , makeBinaryWrapper
 , nixosTests
 , enableLocalIcons ? false
+, nix-update-script
 }:
 let
   dashboardIcons = fetchFromGitHub {
@@ -28,16 +29,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-QPMjf+VpsjvIrjjhDuZqd8VLl2Uu5Wop286Yn8XeRWk=";
+    hash = "sha256-wG7+w6Hsqs1skxUyEMx2j3R8qh3dHXtBg2ADdWBPc/g=";
   };
 
-  npmDepsHash = "sha256-u15lDdXnV3xlXAC9WQQKLIeV/AgtRM1sFNsacw3j6kU=";
+  npmDepsHash = "sha256-ZpH9rVe3bAhVbq7uTVDvaPpA6XRRKT/ySdytZMlemCE=";
 
   preBuild = ''
     mkdir -p config
@@ -85,12 +86,16 @@ buildNpmPackage rec {
 
   doDist = false;
 
-  passthru.tests = {
-    inherit (nixosTests) homepage-dashboard;
+  passthru = {
+    tests = {
+      inherit (nixosTests) homepage-dashboard;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A highly customisable dashboard with Docker and service API integrations.";
+    description = "A highly customisable dashboard with Docker and service API integrations";
+    changelog = "https://github.com/gethomepage/homepage/releases/tag/v${version}";
     mainProgram = "homepage";
     homepage = "https://gethomepage.dev";
     license = lib.licenses.gpl3;

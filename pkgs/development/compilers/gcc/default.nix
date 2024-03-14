@@ -408,7 +408,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
     isGNU = true;
     hardeningUnsupportedFlags = lib.optional is48 "stackprotector"
       ++ lib.optional (!atLeast11) "zerocallusedregs"
-      ++ lib.optional (!atLeast12) "fortify3"
+      ++ lib.optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
       ++ lib.optionals (langFortran) [ "fortify" "format" ];
   };
 

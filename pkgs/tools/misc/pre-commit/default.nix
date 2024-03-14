@@ -18,7 +18,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.6.1";
+  version = "3.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UmQ1GehoMDXKEXo8wgPLxTDbtObk7YC2cfk1yNqesJM=";
+    hash = "sha256-rlGkoaVLrTCEPgPFNUWefJf6MJaKTA2RDSbV7eGtaAU=";
   };
 
   patches = [
@@ -134,6 +134,7 @@ buildPythonApplication rec {
     "test_docker_hook"
     "test_docker_image_hook_via_args"
     "test_docker_image_hook_via_entrypoint"
+    "test_during_commit_all"
     "test_golang_default_version"
     "test_golang_hook"
     "test_golang_hook_still_works_when_gobin_is_set"

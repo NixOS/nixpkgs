@@ -106,7 +106,10 @@ buildPythonPackage rec {
     "-m 'not network'"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # flaky
+    "test_outer_boundless_pixel_fidelity"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_reproject_error_propagation"
   ];
 

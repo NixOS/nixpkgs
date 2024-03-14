@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.8.7";
+  version = "2.8.8";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-lJRTw8Z//x6tMpwfwSodTz7aVbnJPt3rac7AudqF+DA=";
+    hash = "sha256-IvAUlCDtrtBiaKZbhAiXqQXbpKiqIaKwMVC3NxaAqtw=";
   };
 
   outputs = [ "out" "man" ];
@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Like neofetch, but much faster because written in C";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gerg-l khaneliman federicoschonborn ];
+    maintainers = with lib.maintainers; [ gerg-l khaneliman ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";
   };

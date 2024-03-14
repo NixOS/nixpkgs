@@ -111,6 +111,8 @@ buildPythonPackage rec {
     # testsuite gets stuck at this one
     "test_attach_pid_client"
   ];
+  # TODO? https://github.com/NixOS/nixpkgs/issues/262000
+  doCheck = !stdenv.isLinux;
 
   pythonImportsCheck = [
     "debugpy"

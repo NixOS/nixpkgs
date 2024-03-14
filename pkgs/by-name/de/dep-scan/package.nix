@@ -5,19 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.0.2";
+  version = "5.2.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qiJyGBGxznNF4LNG9fbmjG7wX0odhrUO2LxOWABtLQA=";
+    hash = "sha256-BEvuCdQcr35jWe9r9KR4Uov1zNVxfPSnENNPgy4N+nc=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace " --cov-append --cov-report term --cov depscan" ""
+    substituteInPlace pyproject.toml \
+      --replace "oras==0.1.26" "oras~=0.1.26"
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -26,9 +28,11 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     appthreat-vulnerability-db
+    cvss
     defusedxml
     jinja2
     oras
+    packageurl-python
     pdfkit
     pygithub
     pyyaml

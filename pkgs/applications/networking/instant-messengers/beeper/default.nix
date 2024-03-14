@@ -11,11 +11,11 @@
 }:
 let
   pname = "beeper";
-  version = "3.98.16";
+  version = "3.99.23";
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.98.16-build-240228llcputn9l-x86_64.AppImage";
-    hash = "sha256-CjtlE/owx7emzGDdOAw6pSlAuNbUspm1YP+kxm6Jrt8=";
+    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.99.23-build-240309svrjfqia1-x86_64.AppImage";
+    hash = "sha256-8kZk5tEJCcSPKgpsVKrHB5twujZF2LdepW7HIJsb52E=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;

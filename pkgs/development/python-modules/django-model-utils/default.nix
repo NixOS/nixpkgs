@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "django-model-utils";
-  version = "4.3.1";
+  version = "4.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-model-utils";
     rev = "refs/tags/${version}";
-    hash = "sha256-p3/JO6wNwZPYX7MIgMj/0caHt5s+uL51Sxa28/VITxo=";
+    hash = "sha256-/9gLovZGUwdoz3o3LZBfQ7iWr95cpTWq2YqFKoQC9kY=";
   };
 
   nativeBuildInputs = [

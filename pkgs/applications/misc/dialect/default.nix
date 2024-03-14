@@ -13,23 +13,32 @@
 , gobject-introspection
 , gst_all_1
 , libsoup_3
+, glib-networking
 , libadwaita
 , nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.1.1";
+  version = "2.2.0";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "dialect-app";
-    repo = pname;
+    repo = "dialect";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-ytZnolQTOj0dpv+ouN1N7sypr1LxSN/Uhp7qP0ZOTHE=";
+    hash = "sha256-+0qA+jFYrK3K3mJNvxTvnT/3q4c51H0KgEMjzvV34Zs=";
   };
+
+  # FIXME: remove in next release
+  postPatch = ''
+    substituteInPlace dialect/providers/lingva.py \
+      --replace-fail 'lingva.ml' 'lingva.dialectapp.org'
+    substituteInPlace dialect/providers/libretrans.py \
+      --replace-fail 'libretranslate.de' 'lt.dialectapp.org'
+  '';
 
   nativeBuildInputs = [
     appstream-glib
@@ -47,7 +56,9 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libsoup_3
+    glib-networking
     libadwaita
   ];
 
@@ -55,6 +66,7 @@ python3.pkgs.buildPythonApplication rec {
     dbus-python
     gtts
     pygobject3
+    beautifulsoup4
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
@@ -74,7 +86,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/dialect-app/dialect";
     description = "A translation app for GNOME";
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ aleksana ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "dialect";

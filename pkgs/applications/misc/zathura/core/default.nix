@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config
+{ lib, stdenv, fetchFromGitLab, meson, ninja, wrapGAppsHook, pkg-config, gitUpdater
 , appstream-glib, json-glib, desktop-file-utils, python3
 , gtk, girara, gettext, libxml2, check
 , sqlite, glib, texlive, libintl, libseccomp
@@ -8,11 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.4";
+  version = "0.5.5";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    sha256 = "0ckgamf98sydq543arp865jg1afwzhpzcsbhv6zrch2dm5x7y0x3";
+  src = fetchFromGitLab {
+    domain = "git.pwmt.org";
+    owner = "pwmt";
+    repo = "zathura";
+    rev = finalAttrs.version;
+    hash = "sha256-mHEYqgBB55p8nykFtvYtP5bWexp/IqFbeLs7gZmXCeE=";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -20,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Flag list:
   # https://github.com/pwmt/zathura/blob/master/meson_options.txt
   mesonFlags = [
-    "-Dsqlite=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
@@ -42,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/zathura";

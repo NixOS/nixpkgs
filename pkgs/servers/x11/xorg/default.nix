@@ -1958,11 +1958,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   mkfontscale = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto, zlib, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "mkfontscale";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/mkfontscale-1.2.2.tar.xz";
-      sha256 = "1i6mw97r2s1rb6spjj8fbdsgw6197smaqq2haqgnwhz73xdzpqwa";
+      url = "mirror://xorg/individual/app/mkfontscale-1.2.3.tar.xz";
+      sha256 = "0pp7dyfrrkrqxslk9q8660k0h4swaqlixsnnph2fxb7i8k1ws899";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

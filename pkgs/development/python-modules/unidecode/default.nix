@@ -3,21 +3,26 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "unidecode";
-  version = "1.3.6";
-  format = "setuptools";
+  version = "1.3.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "avian2";
-    repo = pname;
-    rev = "${pname}-${version}";
-    hash = "sha256-75E2OlrGIxvwR9MeZEB4bDLdFd1SdprCVcBIJCPS3hM=";
+    repo = "unidecode";
+    rev = "refs/tags/${pname}-${version}";
+    hash = "sha256-OoJSY+dNNISyVwKuRboMH7Je8nYFKxus2c4v3VsmyRE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

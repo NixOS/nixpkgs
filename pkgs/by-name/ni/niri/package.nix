@@ -16,23 +16,32 @@
 , libclang
 , autoPatchelfHook
 , clang
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-vO6ak5rT6ntBC20vYC36zcEcHv7Cki9y8A+c7ThfsUg=";
+    hash = "sha256-VTtXEfxc3OCdtdYiEdtftOQ7gDJNb679Yw8v1Lu3lhY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "revert-viewporter.patch";
+      url = "https://github.com/YaLTeR/niri/commit/40cec34aa4a7f99ab12b30cba1a0ee83a706a413.patch";
+      hash = "sha256-3fg8v0eotfjUQY6EVFEPK5BBIBrr6vQpXbjDcsw2E8Q=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-ZEWamojE5ZRlhPVv/DK2Mj+QIz7zudw9+AxFD7Onr9Q=";
+      "smithay-0.3.0" = "sha256-sXdixfPLAUIIVK+PhqRuMZ7XKNJIGkWNlH8nBzXlxCU=";
     };
   };
 
@@ -66,25 +75,24 @@ rustPlatform.buildRustPackage rec {
 
   passthru.providedSessions = ["niri"];
 
-  postInstall = ''
-    mkdir -p $out/share/{systemd/user,wayland-sessions,xdg-desktop-portal}
-
-    cp ./resources/niri-session $out/bin/niri-session
-    cp ./resources/niri.service $out/share/systemd/user/niri.service
-    cp ./resources/niri-shutdown.target $out/share/systemd/user/niri-shutdown.target
-    cp ./resources/niri.desktop $out/share/wayland-sessions/niri.desktop
-    cp ./resources/niri-portals.conf $out/share/xdg-desktop-portal/niri-portals.conf
+  postPatch = ''
+    patchShebangs ./resources/niri-session
+    substituteInPlace ./resources/niri.service \
+      --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  postFixup = ''
-    sed -i "s#/usr#$out#" $out/share/systemd/user/niri.service
+  postInstall = ''
+    install -Dm0755 ./resources/niri-session -t $out/bin
+    install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
+    install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
+    install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
   '';
 
   meta = with lib; {
     description = "A scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iogamaster ];
+    maintainers = with maintainers; [ iogamaster foo-dogsquared sodiboo ];
     mainProgram = "niri";
     platforms = platforms.linux;
   };

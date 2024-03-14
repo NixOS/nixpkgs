@@ -36,9 +36,11 @@ python.pkgs.buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace psycopg2-binary psycopg2 \
-      --replace 'flask = "^3.0.2"' 'flask = "*"' \
-      --replace 'pyopenssl = "^24.0.0"' 'pyopenssl = "*"'
+    substituteInPlace pyproject.toml \
+      --replace-fail psycopg2-binary psycopg2 \
+      --replace-fail 'flask = "^3.0.2"' 'flask = "*"' \
+      --replace-fail 'pyopenssl = "^24.0.0"' 'pyopenssl = "*"' \
+      --replace-fail 'sqlalchemy = "=1.4.51"' 'sqlalchemy = "*"'
   '';
 
   nativeBuildInputs = [

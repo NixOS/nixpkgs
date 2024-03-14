@@ -1,10 +1,10 @@
 { lib, stdenv, makeDesktopItem, copyDesktopItems, fetchurl, SDL, SDL_image, SDL_mixer }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnujump";
   version = "1.0.8";
   src = fetchurl {
-    url = "mirror://gnu/gnujump/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gnujump/gnujump-${finalAttrs.version}.tar.gz";
     sha256 = "05syy9mzbyqcfnm0hrswlmhwlwx54f0l6zhcaq8c1c0f8dgzxhqk";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.linux;
   };
-}
+})

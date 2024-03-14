@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-qt";
-  version = "4.3.1";
+  version = "4.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AlYEGveAgt/AjiLM+GCqqHjYApVX8D9L/CAH/CkbHmE=";
+    hash = "sha256-dolhQqlApChTOQCNaSijbUvnSv7H5jRXfoQsnMXFaEQ=";
   };
 
   nativeBuildInputs = [

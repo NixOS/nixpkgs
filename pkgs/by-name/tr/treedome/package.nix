@@ -19,12 +19,12 @@
 
 let
   pname = "treedome";
-  version = "0.4";
+  version = "0.4.3";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-HzpfctEeiPj5fO1LCiQDvWRuXCPJIX7RsYYr/Y/sahA=";
+    hash = "sha256-FBzRsBoV3wnt2nu5WMnaTnBNC51jG120E0Orm55KhBg=";
     fetchLFS = true;
   };
 
@@ -34,7 +34,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-SU020NgQY2TXbAsGzrXa0gLEt0hllsgD82S5L2lEtKU=";
+      hash = "sha256-CrD/n8z5fJKkBKEcvpRHJaqXBt1gbON7VsuLb2JGu1A=";
     };
 
     packageJSON = ./package.json;
@@ -75,6 +75,10 @@ rustPlatform.buildRustPackage {
     outputHashes = {
       "fix-path-env-0.0.0" = "sha256-ewE3CwqLC8dvi94UrQsWbp0mjmrzEJIGPDYtdmQ/sGs=";
     };
+  };
+
+  env = {
+    VERGEN_GIT_DESCRIBE = version;
   };
 
   preConfigure = ''
@@ -135,7 +139,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A local-first, encrypted, note taking application with tree-like structures, all written and saved in markdown";
+    description = "A local-first, encrypted, note taking application organized in tree-like structures";
     homepage = " https://codeberg.org/solver-orgz/treedome";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];

@@ -44,7 +44,7 @@ buildPythonPackage rec {
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/rust";
+    sourceRoot = "${src.name}/rust";
     name = "${pname}-${version}";
     hash = "sha256-6fw0KgnPIMfdseWcunsGjvjVB+lJNoG3pLDqkORPJ0I=";
     postPatch = ''

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signify";
-  version = "31";
+  version = "32";
 
   src = fetchFromGitHub {
     owner = "aperezdc";
     repo = "signify";
     rev = "v${version}";
-    sha256 = "sha256-y9jWG1JJhYCn6e5E2qjVqK8nmZpktiB7d9e9uP+3DLo=";
+    sha256 = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
   };
 
   doCheck = true;

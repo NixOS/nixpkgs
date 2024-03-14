@@ -134,7 +134,7 @@ in
     localSourceAllow = mkOption {
       type = types.listOf types.str;
       # Permissions snapshot and destroy are in case --no-sync-snap is not used
-      default = [ "bookmark" "hold" "send" "snapshot" "destroy" ];
+      default = [ "bookmark" "hold" "send" "snapshot" "destroy" "mount" ];
       description = lib.mdDoc ''
         Permissions granted for the {option}`services.syncoid.user` user
         for local source datasets. See

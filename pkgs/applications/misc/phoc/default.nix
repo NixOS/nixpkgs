@@ -24,12 +24,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-eAKHboICsuQ4lecxnnZ8+hZjt5l1DDQbfuwypDYtdKk=";
+    hash = "sha256-SQLoOjqDBL1G3SDO4mfVRV2U0i+M1EwiqUR52ytFJmM=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src;
         preferLocalBuild = true;
         allowSubstitutes = false;
-        phases = "unpackPhase installPhase";
         installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
       })
     ];

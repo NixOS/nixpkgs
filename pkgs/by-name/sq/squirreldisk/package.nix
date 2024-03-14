@@ -13,6 +13,8 @@
   rustPlatform,
   lib,
   stdenv,
+  copyDesktopItems,
+  makeDesktopItem,
 }: let
   pname = "squirreldisk";
   version = "0.3.4";
@@ -37,7 +39,7 @@
     dontInstall = true;
   };
 in
-  rustPlatform.buildRustPackage {
+  rustPlatform.buildRustPackage rec {
     inherit version src pname;
 
     sourceRoot = "${src.name}/src-tauri";
@@ -63,7 +65,7 @@ in
       cp ${parallel-disk-usage}/bin/pdu bin/pdu-${stdenv.hostPlatform.config}
     '';
 
-    nativeBuildInputs = [pkg-config wrapGAppsHook];
+    nativeBuildInputs = [pkg-config wrapGAppsHook copyDesktopItems];
     buildInputs = [dbus openssl freetype libsoup gtk3 webkitgtk];
 
     # Disable checkPhase, since the project doesn't contain tests
@@ -71,6 +73,10 @@ in
 
     postInstall = ''
       mv $out/bin/squirreldisk-tauri $out/bin/squirreldisk
+      install -DT icons/256x256.png $out/share/icons/hicolor/256x256/apps/squirrel-disk.png
+      install -DT icons/128x128@2x.png $out/share/icons/hicolor/128x128@2/apps/squirrel-disk.png
+      install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/squirrel-disk.png
+      install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/squirrel-disk.png
     '';
 
     # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
@@ -78,6 +84,16 @@ in
       wrapProgram "$out/bin/squirreldisk" \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     '';
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "SquirrelDisk";
+        exec = "squirreldisk";
+        icon = "squirrel-disk";
+        desktopName = "SquirrelDisk";
+        comment = meta.description;
+      })
+    ];
 
     meta = with lib; {
       description = "Cross-platform disk usage analysis tool";

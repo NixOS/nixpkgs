@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/zalesyc/budgie-media-player-applet";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = lib.teams.budgie.members;
   };
 }

@@ -10,25 +10,16 @@
 
 buildPythonPackage rec {
   pname = "plux";
-  version = "1.4.0";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
   # Tests are not available from PyPi
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "plux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AybMHkCUNJsL51XwiskkIltEtqZ27fGHrpyct8IUjmo=";
+    hash = "sha256-XHRQTgvxXJCjCD/9Invf/5OCtp12A5poRUv8tR9DJsk=";
   };
-
-  patches = [
-    # https://github.com/localstack/plux/pull/8
-    (fetchpatch {
-      name = "remove-pytest-runner.patch";
-      url = "https://github.com/localstack/plux/commit/3cda22e51f43a86304d0dedd7e554b21aa82c8b0.patch";
-      hash = "sha256-ZFHUTkUYFSTgKbx+c74JQzre0la+hFW9gNOxOehvVoE=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
