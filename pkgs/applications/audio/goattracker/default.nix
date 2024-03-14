@@ -43,10 +43,14 @@ in stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)/bin/" ];
 
   # The zip contains some build artifacts.
-  prePatch = "make clean";
+  prePatch = ''
+    make clean
+  '';
 
   # The destination does not get created automatically.
-  preBuild = "mkdir -p $out/bin";
+  preBuild = ''
+    mkdir -p $out/bin
+  '';
 
   # Other files get installed during the build phase.
   installPhase = ''
@@ -54,6 +58,7 @@ in stdenv.mkDerivation rec {
 
     convert goattrk2.bmp goattracker.png
     install -Dm644 goattracker.png $out/share/icons/hicolor/32x32/apps/goattracker.png
+    ${lib.optionalString (!isStereo) "install -Dm644 ../linux/goattracker.1 $out/share/man/man1/goattracker.1"}
 
     runHook postInstall
   '';
@@ -66,6 +71,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://cadaver.github.io/tools.html";
     downloadPage = "https://sourceforge.net/projects/goattracker2/";
     license = lib.licenses.gpl2Plus;
+    mainProgram = if isStereo then "gt2stereo" else "goattrk2";
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
