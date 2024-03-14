@@ -1,9 +1,8 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
-self: super:
 let
+  inherit (haskellLib) doJailbreak overrideCabal;
+
   # This contains updates to the dependencies, without which it would
   # be even more work to get it to build.
   # As of 2020-04, there's no new release in sight, which is why we're
@@ -20,7 +19,8 @@ let
     (overrideCabal (drv: { src = tensorflow-haskell; }) drv)
       .overrideAttrs (_oldAttrs: { sourceRoot = "${tensorflow-haskell.name}/${dir}"; });
 in
-{
+
+self: super: {
   tensorflow-proto = doJailbreak (setTensorflowSourceRoot "tensorflow-proto" super.tensorflow-proto);
 
   tensorflow = overrideCabal
