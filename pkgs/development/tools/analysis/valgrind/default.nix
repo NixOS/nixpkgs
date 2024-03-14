@@ -14,12 +14,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build on ELFv2 powerpc64
-    # https://bugs.kde.org/show_bug.cgi?id=398883
-    (fetchurl {
-      url = "https://github.com/void-linux/void-packages/raw/3e16b4606235885463fc9ab45b4c120f1a51aa28/srcpkgs/valgrind/patches/elfv2-ppc64-be.patch";
-      sha256 = "NV/F+5aqFZz7+OF5oN5MUTpThv4H5PEY9sBgnnWohQY=";
-    })
     # Fix checks on Musl.
     # https://bugs.kde.org/show_bug.cgi?id=453929
     (fetchpatch {
@@ -131,7 +125,12 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; lib.intersectLists
       (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
       (darwin ++ freebsd ++ illumos ++ linux);
-    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    badPlatforms = with lib.systems.inspect; [
+      platformPatterns.isStatic
+    ] ++ (map
+      (variant: lib.recursiveUpdate (lib.recursiveUpdate patterns.isPower64 patterns.isBigEndian) variant)
+      patterns.isAbiElfv2
+    );
     broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }
