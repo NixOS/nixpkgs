@@ -213,6 +213,7 @@ stdenv.mkDerivation(finalAttrs: {
     ];
     maintainers = with maintainers; [
       ashley
+      atemu # Maintains yuzu until a new fork is established
       ivar
       joshuafern
       sbruder

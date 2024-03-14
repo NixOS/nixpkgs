@@ -143,6 +143,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       abbradar
       ashley
+      atemu # Maintains citra until a new fork is established
       ivar
     ];
   };
