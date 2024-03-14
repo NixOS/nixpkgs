@@ -121,7 +121,7 @@ in pkgs.stdenv.mkDerivation {
       ${pkgs.documentation-highlighter}/mono-blue.css \
       ${pkgs.documentation-highlighter}/loader.js
 
-    cp -t out ./style.css
+    cp -t out ./style.css ./anchor.min.js ./anchor-use.js
 
     nixos-render-docs manual html \
       --manpage-urls ./manpage-urls.json \
@@ -130,6 +130,8 @@ in pkgs.stdenv.mkDerivation {
       --stylesheet highlightjs/mono-blue.css \
       --script ./highlightjs/highlight.pack.js \
       --script ./highlightjs/loader.js \
+      --script ./anchor.min.js \
+      --script ./anchor-use.js \
       --toc-depth 1 \
       --section-toc-depth 1 \
       manual.md \
