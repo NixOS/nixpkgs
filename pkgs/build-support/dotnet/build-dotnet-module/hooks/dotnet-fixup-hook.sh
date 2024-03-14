@@ -30,7 +30,7 @@ wrapDotnetProgram() {
 dotnetFixupHook() {
     echo "Executing dotnetFixupPhase"
 
-    if [ "${executables-}" ]; then
+    if [[ "$(declare -p executables)" =~ "declare -a" ]]; then
         for executable in ${executables[@]}; do
             path="${installPath-$out/lib/$pname}/$executable"
 
