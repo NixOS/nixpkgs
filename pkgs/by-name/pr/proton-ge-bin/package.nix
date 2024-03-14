@@ -1,24 +1,26 @@
 { lib
 , stdenvNoCC
-, fetchurl
+, fetchzip
 , writeScript
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
   version = "GE-Proton9-1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-wCIffeayOy3kEwmIKB7e+NrliuSpKXoVYC334fxVB3U=";
+    hash = "sha256-odpzRlzW7MJGRcorRNo784Rh97ssViO70/1azHRggf0=";
   };
 
   outputs = [ "out" "steamcompattool" ];
 
   buildCommand = ''
     runHook preBuild
-    mkdir -p $out $steamcompattool
 
-    tar -C $steamcompattool --strip=1 -x -f $src
+    # Intentionally empty
+    mkdir -p $out
+
+    ln -s $src $steamcompattool
 
     runHook postBuild
   '';
