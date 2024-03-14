@@ -138,6 +138,14 @@
   - nixos/tests/pantheon.nix
   - pkgs/desktops/pantheon/**/*
 
+"6.topic: php":
+  - doc/languages-frameworks/php.section.md
+  - pkgs/build-support/php/**/*
+  - pkgs/development/interpreters/php/*
+  - pkgs/development/php-packages/**/*
+  - pkgs/test/php/default.nix
+  - pkgs/top-level/php-packages.nix
+
 "6.topic: policy discussion":
   - .github/**/*
 
