@@ -2,6 +2,7 @@
 , stdenv
 , buildPerlPackage
 , fetchurl
+, gitUpdater
 , shortenPerlShebang
 }:
 
@@ -18,6 +19,12 @@ buildPerlPackage rec {
   postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://github.com/exiftool/exiftool.git";
+    };
+  };
 
   meta = {
     description = "A tool to read, write and edit EXIF meta information";
