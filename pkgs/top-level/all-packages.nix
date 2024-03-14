@@ -6996,6 +6996,10 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { };
 
+    mozc-ut = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
+      useUTDictionaries = true;
+    };
+
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
