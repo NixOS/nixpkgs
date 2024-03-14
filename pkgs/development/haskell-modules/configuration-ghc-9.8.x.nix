@@ -1,14 +1,24 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+
+  inherit (pkgs.lib) dontRecurseIntoAttrs;
+
+  inherit (haskellLib)
+    appendConfigureFlag
+    appendPatch
+    doDistribute
+    doJailbreak
+    dontCheck
+    overrideCabal
+    unmarkBroken
+    ;
 in
 
 self: super: {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+  llvmPackages = dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries.
   array = null;
