@@ -889,7 +889,7 @@ with pkgs;
 
   tarsum = callPackage ../build-support/docker/tarsum.nix { };
 
-  snapTools = callPackage ../build-support/snap { };
+  snapTools = throw "snapTools was removed because makeSnap produced broken snaps and it was the only function in snapTools. See https://github.com/NixOS/nixpkgs/issues/100618 for more details."; # 2024-03-04;
 
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
@@ -6137,10 +6137,6 @@ with pkgs;
 
   opam-publish = callPackage ../development/tools/ocaml/opam-publish { };
 
-  opencomposite = callPackage ../development/libraries/opencomposite { };
-
-  opencomposite-helper = callPackage ../development/libraries/opencomposite/helper.nix { };
-
   osdlyrics = callPackage ../applications/audio/osdlyrics { };
 
   ossutil = callPackage ../tools/admin/ossutil { };
@@ -7945,10 +7941,6 @@ with pkgs;
   escrotum = callPackage ../tools/graphics/escrotum { };
 
   esshader = callPackage ../tools/graphics/esshader { };
-
-  etcher = callPackage ../tools/misc/etcher {
-    electron = electron_19;
-  };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
 
@@ -29900,11 +29892,6 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
-  saga = callPackage ../applications/gis/saga {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-    inherit (libsForQt5) dxflib;
-  };
-
   spatialite_gui = callPackage ../applications/gis/spatialite-gui {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
     wxGTK = wxGTK32;
@@ -32063,20 +32050,6 @@ with pkgs;
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
-  hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
-    inherit (haskellPackages) ghcWithPackages;
-    packages = self: with self; [];
-  };
-
-  hyper-haskell = callPackage ../development/tools/haskell/hyper-haskell {
-    hyper-haskell-server = hyper-haskell-server-with-packages.override {
-      packages = self: with self; [
-        hyper-extra diagrams csound-catalog
-      ];
-    };
-    extra-packages = [ csound ];
-  };
-
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng {
     protobuf = protobuf_21;
   };
@@ -32572,12 +32545,6 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  k3s_1_24 = callPackage ../applications/networking/cluster/k3s/1_24 {
-    buildGoModule = buildGo120Module;
-  };
-  k3s_1_25 = callPackage ../applications/networking/cluster/k3s/1_25 {
-    buildGoModule = buildGo120Module;
-  };
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo120Module;
   }) k3s_1_26 k3s_1_27 k3s_1_28;
@@ -35012,8 +34979,6 @@ with pkgs;
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
 
-  smartgithg = callPackage ../applications/version-management/smartgithg { };
-
   smartdeblur = libsForQt5.callPackage ../applications/graphics/smartdeblur { };
 
   snapper = callPackage ../tools/misc/snapper { };
@@ -36027,7 +35992,7 @@ with pkgs;
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
   whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_21;
+    electron = electron_27;
   };
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
