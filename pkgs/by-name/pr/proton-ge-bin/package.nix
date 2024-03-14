@@ -12,14 +12,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-wCIffeayOy3kEwmIKB7e+NrliuSpKXoVYC334fxVB3U=";
   };
 
+  outputs = [ "out" "steamcompattool" ];
+
   buildCommand = ''
     runHook preBuild
-    mkdir -p $out/{bin,opt}
-    tar -C $out/opt --strip=1 -x -f $src
-    ln -s $out/opt/toolmanifest.vdf $out/bin/toolmanifest.vdf
-    install -Dm644 $out/opt/compatibilitytool.vdf $out/bin/compatibilitytool.vdf
-    substituteInPlace $out/bin/compatibilitytool.vdf \
-      --replace-fail '"install_path" "."' '"install_path" "${placeholder "out"}/opt"'
+    mkdir -p $out $steamcompattool
+
+    tar -C $steamcompattool --strip=1 -x -f $src
+
     runHook postBuild
   '';
 
