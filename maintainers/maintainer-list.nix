@@ -1532,6 +1532,12 @@
     githubId = 160646;
     name = "Patrick Jackson";
   };
+  arduano = {
+    email = "leonid.shchurov@gmail.com";
+    github = "arduano";
+    githubId = 13347712;
+    name = "Leo Shchurov";
+  };
   ardumont = {
     email = "eniotna.t@gmail.com";
     github = "ardumont";
