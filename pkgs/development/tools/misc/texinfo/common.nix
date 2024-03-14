@@ -1,7 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib, gawk
+, gnulib, gawk, libiconv
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -14,9 +14,19 @@
 
 let
   crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
-in
 
-with lib;
+  inherit (lib)
+    getDev
+    getLib
+    licenses
+    maintainers
+    optional
+    optionals
+    optionalString
+    platforms
+    versionOlder
+    ;
+in
 
 stdenv.mkDerivation {
   pname = "texinfo${optionalString interactive "-interactive"}";
@@ -35,7 +45,7 @@ stdenv.mkDerivation {
   # This patch is needed for IEEE-standard long doubles on
   # powerpc64; it does not apply cleanly to texinfo 5.x or
   # earlier.  It is merged upstream in texinfo 6.8.
-  + lib.optionalString (version == "6.7") ''
+  + optionalString (version == "6.7") ''
     patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
   '';
 
@@ -59,7 +69,7 @@ stdenv.mkDerivation {
     # fallbacks.
     # Also prevent the buildPlatform's awk being used in the texindex script
     ++ optionals crossBuildTools [ "--enable-perl-xs=no" "TI_AWK=${gawk}/bin/awk" ]
-    ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
+    ++ optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [ "install" "install-tex" ];
@@ -70,7 +80,7 @@ stdenv.mkDerivation {
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
 
-  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl && lib.versionOlder version "7") [
+  checkFlags = optionals (!stdenv.hostPlatform.isMusl && versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
     #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
     "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
@@ -91,7 +101,7 @@ stdenv.mkDerivation {
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra oxij ];
     # see comment above in patches section
-    broken = stdenv.hostPlatform.isPower64 && lib.strings.versionOlder version "6.0";
+    broken = stdenv.hostPlatform.isPower64 && versionOlder version "6.0";
 
     longDescription = ''
       Texinfo is the official documentation format of the GNU project.
