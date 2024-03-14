@@ -6137,10 +6137,6 @@ with pkgs;
 
   opam-publish = callPackage ../development/tools/ocaml/opam-publish { };
 
-  opencomposite = callPackage ../development/libraries/opencomposite { };
-
-  opencomposite-helper = callPackage ../development/libraries/opencomposite/helper.nix { };
-
   osdlyrics = callPackage ../applications/audio/osdlyrics { };
 
   ossutil = callPackage ../tools/admin/ossutil { };
