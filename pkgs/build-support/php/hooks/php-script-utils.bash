@@ -21,6 +21,10 @@ checkComposerValidate() {
             echo -e '\e[31mThe validation of the composer.json failed.\e[0m'
             echo -e '\e[31mMake sure that the file composer.json is valid.\e[0m'
             echo
+            echo -e '\e[31mTo address the issue efficiently, follow one of these steps:\e[0m'
+            echo -e '\e[31m  1. File an issue in the project'\''s issue tracker with detailed information, and apply any available remote patches as a temporary solution '\('with fetchpatch'\)'.\e[0m'
+            echo -e '\e[31m  2. If an immediate fix is needed or if reporting upstream isn'\''t suitable, develop a temporary local patch.\e[0m'
+            echo
             exit 1
         else
             echo
@@ -28,6 +32,10 @@ checkComposerValidate() {
             echo
             echo -e '\e[33mThe validation of the composer.json failed.\e[0m'
             echo -e '\e[33mMake sure that the file composer.json is valid.\e[0m'
+            echo
+            echo -e '\e[33mTo address the issue efficiently, follow one of these steps:\e[0m'
+            echo -e '\e[33m  1. File an issue in the project'\''s issue tracker with detailed information, and apply any available remote patches as a temporary solution with '\('with fetchpatch'\)'.\e[0m'
+            echo -e '\e[33m  2. If an immediate fix is needed or if reporting upstream isn'\''t suitable, develop a temporary local patch.\e[0m'
             echo
             echo -e '\e[33mThis check is not blocking, but it is recommended to fix the issue.\e[0m'
             echo
@@ -42,6 +50,12 @@ checkComposerValidate() {
             echo -e '\e[31mThe validation of the composer.json and composer.lock failed.\e[0m'
             echo -e '\e[31mMake sure that the file composer.lock is consistent with composer.json.\e[0m'
             echo
+            echo -e '\e[31mThis often indicates an issue with the upstream project, which can typically be resolved by reporting the issue to the relevant project maintainers.\e[0m'
+            echo
+            echo -e '\e[31mTo address the issue efficiently, follow one of these steps:\e[0m'
+            echo -e '\e[31m  1. File an issue in the project'\''s issue tracker with detailed information '\('run '\''composer update --lock --no-install'\'' to fix the issue'\)', and apply any available remote patches as a temporary solution with '\('with fetchpatch'\)'.\e[0m'
+            echo -e '\e[31m  2. If an immediate fix is needed or if reporting upstream isn'\''t suitable, develop a temporary local patch.\e[0m'
+            echo
             exit 1
         else
             echo
@@ -49,6 +63,12 @@ checkComposerValidate() {
             echo
             echo -e '\e[33mThe validation of the composer.json and composer.lock failed.\e[0m'
             echo -e '\e[33mMake sure that the file composer.lock is consistent with composer.json.\e[0m'
+            echo
+            echo -e '\e[33mThis often indicates an issue with the upstream project, which can typically be resolved by reporting the issue to the relevant project maintainers.\e[0m'
+            echo
+            echo -e '\e[33mTo address the issue efficiently, follow one of these steps:\e[0m'
+            echo -e '\e[33m  1. File an issue in the project'\''s issue tracker with detailed information '\('run '\''composer update --lock --no-install'\'' to fix the issue'\)', and apply any available remote patches as a temporary solution with '\('with fetchpatch'\)'.\e[0m'
+            echo -e '\e[33m  2. If an immediate fix is needed or if reporting upstream isn'\''t suitable, develop a temporary local patch.\e[0m'
             echo
             echo -e '\e[33mThis check is not blocking, but it is recommended to fix the issue.\e[0m'
             echo
