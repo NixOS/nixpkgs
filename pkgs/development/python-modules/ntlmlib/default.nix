@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "A robust, fast and efficient ‘first-class’ Python Library for NTLM authentication, signing and encryption";
     license = lib.licenses.asl20;
     homepage = "https://github.com/ianclegg/ntlmlib/";
+    maintainers = with lib.maintainers; [ purefns ];
   };
 }
