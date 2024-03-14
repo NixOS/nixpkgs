@@ -24,6 +24,8 @@ stdenv.mkDerivation {
     install -D ./LICENSE $out/share/doc
 
     mkdir -p $out/lib/firmware/vsc/soc_a1_prod
+    # According to Intel's documentation for prod platform the a1_prod postfix is need it (https://github.com/intel/ivsc-firmware)
+    # This fixes ipu6 webcams
     for file in $out/lib/firmware/vsc/*.bin; do
       ln -sf "$file" "$out/lib/firmware/vsc/soc_a1_prod/$(basename "$file" .bin)_a1_prod.bin"
     done
