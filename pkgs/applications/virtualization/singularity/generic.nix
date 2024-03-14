@@ -26,6 +26,7 @@ in
 { lib
 , buildGoModule
 , runCommandLocal
+, substituteAll
   # Native build inputs
 , addDriverRunpath
 , makeWrapper
@@ -70,7 +71,6 @@ in
   # Whether to compile with SUID support
 , enableSuid ? false
 , starterSuidPath ? null
-, substituteAll
   # newuidmapPath and newgidmapPath are to support --fakeroot
   # where those SUID-ed executables are unavailable from the FHS system PATH.
   # Path to SUID-ed newuidmap executable
