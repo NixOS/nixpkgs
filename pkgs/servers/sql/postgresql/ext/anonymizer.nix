@@ -27,6 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = pg-dump-anon.meta // {
-    description = "postgresql_anonymizer is an extension to mask or replace personally identifiable information (PII) or commercially sensitive data from a PostgreSQL database.";
+    description = "Extension to mask or replace personally identifiable information (PII) or commercially sensitive data from a PostgreSQL database";
   };
 })
