@@ -779,6 +779,8 @@ self: super: with self; {
 
   asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
 
+  asgi-lifespan = callPackage ../development/python-modules/asgi-lifespan{ };
+
   asgi-logger = callPackage ../development/python-modules/asgi-logger { };
 
   asgineer = callPackage ../development/python-modules/asgineer { };
@@ -1948,6 +1950,8 @@ self: super: with self; {
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
   connio = callPackage ../development/python-modules/connio { };
+
+  coolname = callPackage ../development/python-modules/coolname { };
 
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
@@ -10030,6 +10034,10 @@ self: super: with self; {
   prayer-times-calculator = callPackage ../development/python-modules/prayer-times-calculator { };
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
+
+  prefect = callPackage ../development/python-modules/prefect { };
+
+  prefect-dask = callPackage ../development/python-modules/prefect-dask { };
 
   prefixed = callPackage ../development/python-modules/prefixed { };
 
