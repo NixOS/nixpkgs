@@ -1,11 +1,63 @@
-{ pkgs, build-asdf-system, fixup ? pkgs.lib.id, ... }:
-
-with pkgs;
-with lib;
-with lib.lists;
-with lib.strings;
+{ pkgs, build-asdf-system, fixup ? pkgs.id, ... }:
 
 let
+  inherit (pkgs)
+    allegro5
+    assimp
+    cairo
+    cl
+    fetchzip
+    freeglut
+    freeimage
+    freetds
+    freetype
+    gdk-pixbuf
+    glfw
+    glib
+    glucose
+    gobject-introspection
+    gsl
+    gtk2-x11
+    gtk3
+    hdf5
+    libdevil
+    libev
+    libffi
+    libfixposix
+    libGL
+    libGLU
+    libpng
+    librsvg
+    libssh2
+    libuv
+    libxml2
+    libyaml
+    mariadb
+    minisat
+    ode
+    openblas
+    openssl_1_1
+    pango
+    patch
+    postgresql
+    rabbitmq-c
+    rdkafka
+    readline
+    runCommand
+    SDL
+    SDL2
+    sqlite
+    webkitgtk
+    which
+    zeromq
+    ;
+
+  inherit (pkgs.lib)
+    hasAttr
+    mapAttrs
+    optionalAttrs
+    pathExists
+    ;
 
   # FIXME: automatically add nativeLibs based on conditions signalled
 
@@ -19,8 +71,8 @@ let
       nativeLibs = [ openssl_1_1 ];
     };
     "cl-ana.hdf-cffi" = pkg: {
-      nativeBuildInputs = [ pkgs.hdf5 ];
-      nativeLibs = [ pkgs.hdf5 ];
+      nativeBuildInputs = [ hdf5 ];
+      nativeLibs = [ hdf5 ];
       NIX_LDFLAGS = [ "-lhdf5" ];
     };
     cl-async-ssl = pkg: {
@@ -48,8 +100,8 @@ let
       nativeLibs = [ gtk2-x11 ];
     };
     cl-devil = pkg: {
-      nativeBuildInputs = [ pkgs.libdevil ];
-      nativeLibs = [ pkgs.libdevil ];
+      nativeBuildInputs = [ libdevil ];
+      nativeLibs = [ libdevil ];
     };
     cl-freeimage = pkg: {
       nativeLibs = [ freeimage ];
@@ -96,10 +148,10 @@ let
       nativeLibs = [ libuv ];
     };
     cl-libxml2 = pkg: {
-      nativeLibs = [ pkgs.libxml2 ];
+      nativeLibs = [ libxml2 ];
     };
     cl-libyaml = pkg: {
-      nativeLibs = [ pkgs.libyaml ];
+      nativeLibs = [ libyaml ];
     };
     cl-mysql = pkg: {
       nativeLibs = [ mariadb.client ];
@@ -129,18 +181,18 @@ let
       nativeLibs = [ rdkafka ];
     };
     cl-readline = pkg: {
-      nativeLibs = [ pkgs.readline ];
+      nativeLibs = [ readline ];
     };
     cl-rsvg2 = pkg: {
       nativeLibs = [ librsvg ];
     };
     "cl-sat.glucose" = pkg: {
-      propagatedBuildInputs = [ pkgs.glucose ];
+      propagatedBuildInputs = [ glucose ];
       patches = [ ./patches/cl-sat.glucose-binary-from-PATH-if-present.patch ];
 
     };
     "cl-sat.minisat" = pkg: {
-      propagatedBuildInputs = [ pkgs.minisat ];
+      propagatedBuildInputs = [ minisat ];
     };
     cl-webkit2 = pkg: {
       nativeLibs = [ webkitgtk ];
@@ -159,8 +211,8 @@ let
       nativeLibs = [ mariadb.client ];
     };
     gsll = pkg: {
-      nativeBuildInputs = [ pkgs.gsl ];
-      nativeLibs = [ pkgs.gsl ];
+      nativeBuildInputs = [ gsl ];
+      nativeLibs = [ gsl ];
     };
     iolib = pkg: {
       nativeBuildInputs = [ libfixposix ];
@@ -183,24 +235,24 @@ let
       LD_LIBRARY_PATH = "${pkg}/posix/";
     };
     png = pkg: {
-      nativeBuildInputs = [ pkgs.libpng ];
-      nativeLibs = [ pkgs.libpng ];
+      nativeBuildInputs = [ libpng ];
+      nativeLibs = [ libpng ];
     };
     pzmq = pkg: {
-      nativeBuildInputs = [ pkgs.zeromq ];
-      nativeLibs = [ pkgs.zeromq ];
+      nativeBuildInputs = [ zeromq ];
+      nativeLibs = [ zeromq ];
     };
     pzmq-compat = pkg: {
-      nativeBuildInputs = [ pkgs.zeromq ];
-      nativeLibs = [ pkgs.zeromq ];
+      nativeBuildInputs = [ zeromq ];
+      nativeLibs = [ zeromq ];
     };
     pzmq-examples = pkg: {
-      nativeBuildInputs = [ pkgs.zeromq ];
-      nativeLibs = [ pkgs.zeromq ];
+      nativeBuildInputs = [ zeromq ];
+      nativeLibs = [ zeromq ];
     };
     pzmq-test = pkg: {
-      nativeBuildInputs = [ pkgs.zeromq ];
-      nativeLibs = [ pkgs.zeromq ];
+      nativeBuildInputs = [ zeromq ];
+      nativeLibs = [ zeromq ];
     };
     sdl2 = pkg: {
       nativeLibs = [ SDL2 ];
@@ -209,19 +261,19 @@ let
       nativeLibs = [ sqlite ];
     };
     trivial-package-manager = pkg: {
-      propagatedBuildInputs = [ pkgs.which ];
+      propagatedBuildInputs = [ which ];
     };
     trivial-ssh-libssh2 = pkg: {
       nativeLibs = [ libssh2 ];
     };
     zmq = pkg: {
-      nativeBuildInputs = [ pkgs.zeromq ];
-      nativeLibs = [ pkgs.zeromq ];
+      nativeBuildInputs = [ zeromq ];
+      nativeLibs = [ zeromq ];
     };
   };
 
   qlpkgs =
-    lib.optionalAttrs (builtins.pathExists ./imported.nix)
+    optionalAttrs (pathExists ./imported.nix)
       (import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; });
 
   builtQlpkgs = mapAttrs (n: v: build v) qlpkgs;
