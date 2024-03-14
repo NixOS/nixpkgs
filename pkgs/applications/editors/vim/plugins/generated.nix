@@ -1517,6 +1517,18 @@ final: prev:
     meta.homepage = "https://github.com/asheq/close-buffers.vim/";
   };
 
+  cmake-tools-nvim = buildVimPlugin {
+    pname = "cmake-tools.nvim";
+    version = "2024-02-02";
+    src = fetchFromGitHub {
+      owner = "Civitasv";
+      repo = "cmake-tools.nvim";
+      rev = "055d7bb37d5c4038ce1e400656b6504602934ce7";
+      sha256 = "";
+    };
+    meta.homepage = "https://github.com/Civitasv/cmake-tools.nvim/";
+  };
+
   cmd-parser-nvim = buildVimPlugin {
     pname = "cmd-parser.nvim";
     version = "2022-02-23";
