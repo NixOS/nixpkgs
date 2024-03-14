@@ -41521,8 +41521,6 @@ with pkgs;
 
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
-  navidrome = callPackage ../servers/misc/navidrome { };
-
   zalgo = callPackage ../tools/misc/zalgo { };
 
   inherit (callPackage ../applications/misc/zettlr { }) zettlr;
