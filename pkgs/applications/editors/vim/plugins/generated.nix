@@ -10140,7 +10140,7 @@ final: prev:
       owner = "roobert";
       repo = "tailwindcss-colorizer-cmp.nvim";
       rev = "bc25c56083939f274edcfe395c6ff7de23b67c50";
-      sha256 = "";
+      sha256 = "sha256-4wt4J6pENX7QRG7N1GzE9L6pM5E88tnHbv4NQa5JqSI=";
     };
     meta.homepage = "https://github.com/roobert/tailwindcss-colorizer-cmp.nvim/";
   };
