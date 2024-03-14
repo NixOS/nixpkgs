@@ -4,8 +4,25 @@
   hierarchy-builder,
   single ? false,
   coqPackages, coq, version ? null }@args:
-with builtins // lib;
+
 let
+  inherit (lib)
+    elem
+    genAttrs
+    head
+    licenses
+    maintainers
+    optionalAttrs
+    optionals
+    pred
+    recurseIntoAttrs
+    splitList
+    switch
+    versions
+    ;
+
+  inherit (lib.versions) range;
+
   repo  = "analysis";
   owner = "math-comp";
 
@@ -28,7 +45,7 @@ let
   release."0.3.1".sha256 = "1iad288yvrjv8ahl9v18vfblgqb1l5z6ax644w49w9hwxs93f2k8";
   release."0.2.3".sha256 = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
 
-  defaultVersion = with versions; lib.switch [ coq.version mathcomp.version ]  [
+  defaultVersion = switch [ coq.version mathcomp.version ]  [
       { cases = [ (range "8.17" "8.19") (range "2.0.0" "2.2.0") ]; out = "1.0.0"; }
       { cases = [ (range "8.17" "8.19") (range "1.17.0" "1.19.0") ]; out = "0.7.0"; }
       { cases = [ (range "8.17" "8.18") (range "1.15.0" "1.18.0") ]; out = "0.6.7"; }
@@ -50,7 +67,7 @@ let
   mathcomp_ = package: let
       classical-deps = [ mathcomp.algebra mathcomp-finmap ];
       analysis-deps = [ mathcomp.field mathcomp-bigenough ];
-      intra-deps = lib.optionals (package != "single") (map mathcomp_ (head (splitList (lib.pred.equal package) packages)));
+      intra-deps = optionals (package != "single") (map mathcomp_ (head (splitList (pred.equal package) packages)));
       pkgpath = if package == "single" then "."
         else if package == "analysis" then "theories" else "${package}";
       pname = if package == "single" then "mathcomp-analysis-single"
