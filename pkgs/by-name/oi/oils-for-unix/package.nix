@@ -6,12 +6,12 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "oil";
-  version = "0.20.0";
+  pname = "oils-for-unix";
+  version = "0.21.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oils-for-unix-${version}.tar.gz";
-    hash = "sha256-d4BIRj8bPyd7awZyJPlZYBwr+o82IKGh4y4/urOYOxc=";
+    hash = "sha256-g8uEK68J9BsCHEvJGDgsKUmsuR1MvChEC9A00Y2sZU4=";
   };
 
   postPatch = ''
