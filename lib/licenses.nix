@@ -894,6 +894,11 @@ in mkLicense lset) ({
     url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
   };
 
+  nistSoftware = {
+    spdxId = "NIST-Software";
+    fullName = "NIST Software License";
+  };
+
   nlpl = {
     spdxId = "NLPL";
     fullName = "No Limit Public License";
