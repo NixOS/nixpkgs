@@ -3,12 +3,13 @@
 , fetchPypi
 , pythonOlder
 , async-timeout
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "ha-ffmpeg";
   version = "3.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,6 +17,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-FW8WlrhVL+ryupHAKii8fKBku/6uxdw1uLCKUszkP50=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     async-timeout
