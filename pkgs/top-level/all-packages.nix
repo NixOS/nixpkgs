@@ -37191,8 +37191,6 @@ with pkgs;
 
   nudoku = callPackage ../games/nudoku { };
 
-  nxengine-evo = callPackage ../games/nxengine-evo { };
-
   oilrush = callPackage ../games/oilrush { };
 
   onscripter-en = callPackage ../games/onscripter-en { };
