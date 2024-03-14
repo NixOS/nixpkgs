@@ -45,6 +45,16 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         };
         openssh.enable = false;
       };
+      security.apparmor = {
+        enable = true;
+        policies."bin.opencanaryd" = {
+          enable = true;
+          enforce = true;
+          profile = ''
+            include ${pkgs.opencanary.apparmor}/bin.opencanaryd
+          '';
+        };
+      };
     };
   };
 
@@ -69,5 +79,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     machine.wait_for_open_port(80)   # http
     machine.wait_for_open_port(443)  # https
     machine.wait_for_open_port(8080) # http proxy
+
+    machine.succeed("aa-status")
   '';
 })

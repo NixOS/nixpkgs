@@ -1,7 +1,12 @@
 {
   lib,
+  apparmorRulesFromClosure,
   bash,
+  coreutils,
   fetchPypi,
+  glibc,
+  iana-etc,
+  locale,
   makeWrapper,
   nixosTests,
   python3,
@@ -60,6 +65,36 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : ${python3}/bin \
       --suffix PATH : ${lib.makeBinPath propagatedBuildInputs} \
       --set NIX_PYTHONPATH "$PYTHONPATH:$out/${python3.sitePackages}"
+
+    # Install apparmor profile
+    mkdir $apparmor
+    cat <<EOF > $apparmor/bin.opencanaryd
+    include <tunables/global>
+    $out/bin/opencanaryd {
+      include <abstractions/base>
+      include <abstractions/bash>
+      include <abstractions/consoles>
+      include <abstractions/python>
+      include "${apparmorRulesFromClosure { name = "opencanaryd"; } ([
+          coreutils glibc iana-etc locale python3
+      ] ++ propagatedBuildInputs)}"
+
+      r    @{PROC}/@{pid}/cgroup,
+      r    @{PROC}/@{pid}/net/dev,
+      r    @{PROC}/@{pid}/net/if_inet6,
+      r    @{PROC}/@{pid}/net/ipv6_route,
+      r    @{PROC}/@{pid}/net/route,
+      ix   ${lib.getExe bash},
+      rix  ${python3.pkgs.twisted}/bin/**,
+      rmix $out/**,
+      rw   /etc/opencanaryd/**,
+      rw   /var/lib/opencanaryd/**,
+      rw   /var/log/opencanaryd/**,
+      owner rw /var/tmp/*,
+      capability net_admin net_bind_service net_raw,
+      network tcp,
+    }
+    EOF
   '';
 
   checkPhase = ''

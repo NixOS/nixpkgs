@@ -16,12 +16,14 @@ let
     mkOption
     mkEnableOption
     mkPackageOption
+    optional
     optionalAttrs
     recursiveUpdate
     stringLength
     types
     ;
 
+  apparmor = config.security.apparmor.enable;
   cfg = config.services.opencanary;
   json = pkgs.formats.json {};
 
@@ -972,7 +974,9 @@ in
       in optionalAttrs (enabled != {}) {
         opencanaryd = {
           description = "OpenCanary daemon";
-          after = [ "networking.target" ];
+          after = [ "networking.target" ]
+            ++ optional (apparmor) "apparmor.service";
+          requires = optional (apparmor) "apparmor.service";
           wantedBy = [ "multi-user.target" ];
 
           serviceConfig = rec {
@@ -1017,6 +1021,8 @@ in
           description = "OpenCanary certificate generation";
           before = [ "opencanaryd.service" ];
           wantedBy = [ "opencanaryd.service" ];
+          after = optional (apparmor) "apparmor.service";
+          requires = optional (apparmor) "apparmor.service";
 
           path = with pkgs; [ openssl ];
           script = let
