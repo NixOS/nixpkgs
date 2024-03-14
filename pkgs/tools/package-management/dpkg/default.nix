@@ -18,12 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.4";
+  version = "1.22.5";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-tpYSOimBd78rAthQUga/MNraWll9qEA+vRG+/F+t3mM=";
+    hash = "sha256-Rm3DacQF/0yAVtDaixPzE8IZ2Y+RZneCCVBCoYM64K4=";
   };
 
   configureFlags = [
