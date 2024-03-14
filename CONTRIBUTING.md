@@ -757,6 +757,6 @@ unacceptable uses:
 - `with lib;` anywhere outside of `meta`
 - nested `with` anywhere outside of `meta`
 - `with` at the top of a file
-- `with` at the start of an expression that spans
+- `with` at the start of a longer expression that might not fit onto a single screen.
 
 uses of `with` other than those listed here are left up to the discretion of PR reviewers.
