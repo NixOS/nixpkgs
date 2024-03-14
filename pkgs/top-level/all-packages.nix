@@ -15589,6 +15589,7 @@ with pkgs;
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
   corretto19 = javaPackages.compiler.corretto19;
+  corretto21 = javaPackages.compiler.corretto21;
 
   cotton = callPackage ../development/tools/cotton {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -16305,8 +16306,6 @@ with pkgs;
   jdk17 = openjdk17;
   jdk17_headless = openjdk17_headless;
 
-  openjdk16-bootstrap = javaPackages.compiler.openjdk16-bootstrap;
-
   openjdk19 = javaPackages.compiler.openjdk19;
   openjdk19_headless = javaPackages.compiler.openjdk19.headless;
   jdk19 = openjdk19;
@@ -16317,6 +16316,7 @@ with pkgs;
   jdk20 = openjdk20;
   jdk20_headless = openjdk20_headless;
 
+  openjdk21-bootstrap = javaPackages.compiler.openjdk21-bootstrap;
   openjdk21 = javaPackages.compiler.openjdk21;
   openjdk21_headless = javaPackages.compiler.openjdk21.headless;
   jdk21 = openjdk21;
@@ -40377,7 +40377,6 @@ with pkgs;
     };
     mysql = mysql;
     pcre = pcre-cpp;
-    jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
 
   owmods-cli = callPackage ../applications/misc/owmods-cli {

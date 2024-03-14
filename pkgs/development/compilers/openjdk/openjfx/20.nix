@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, writeText, openjdk17_headless
-, openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
+, openjdk20_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
 , libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68
 , withMedia ? true
 , withWebKit ? false
@@ -7,8 +7,8 @@
 
 let
   major = "20";
-  update = "";
-  build = "+19";
+  update = "-ga";
+  build = "";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     # note: gradle does not yet support running on 19
@@ -32,7 +32,7 @@ let
 
     config = writeText "gradle.properties" (''
       CONF = Release
-      JDK_HOME = ${openjdk19_headless.home}
+      JDK_HOME = ${openjdk20_headless.home}
     '' + args.gradleProperties or "");
 
     buildPhase = ''
@@ -93,14 +93,14 @@ in makePackage {
 
   postFixup = ''
     # Remove references to bootstrap.
-    export openjdkOutPath='${openjdk19_headless.outPath}'
+    export openjdkOutPath='${openjdk20_headless.outPath}'
     find "$out" -name \*.so | while read lib; do
       new_refs="$(patchelf --print-rpath "$lib" | perl -pe 's,:?\Q$ENV{openjdkOutPath}\E[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
     done
   '';
 
-  disallowedReferences = [ openjdk17_headless openjdk19_headless ];
+  disallowedReferences = [ openjdk17_headless openjdk20_headless ];
 
   passthru.deps = deps;
 
@@ -110,5 +110,8 @@ in makePackage {
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "This OpenJFX version has reached its end of life."
+    ];
   };
 }

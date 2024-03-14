@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeDesktopItem
-, openjdk19
+, jre
 , gtk3
 , glib
 , gnome
@@ -10,9 +10,6 @@
 , libXtst
 , which
 }:
-let
-  jre = openjdk19;
-in
 stdenv.mkDerivation rec {
   pname = "smartgithg";
   version = "23.1.1";
