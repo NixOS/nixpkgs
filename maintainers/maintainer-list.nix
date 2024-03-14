@@ -21152,6 +21152,12 @@
     githubId = 3028542;
     name = "Guillermo NWDD";
   };
+  xokdvium = {
+    email = "xokdvium@proton.me";
+    github = "xokdvium";
+    githubId = 145775305;
+    name = "Sergei Zimmerman";
+  };
   xrelkd = {
     github = "xrelkd";
     githubId = 46590321;
