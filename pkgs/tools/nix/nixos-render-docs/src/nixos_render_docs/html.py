@@ -220,7 +220,7 @@ class HTMLRenderer(Renderer):
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if id := cast(str, token.attrs.get('id', '')):
             id = f'id="{escape(id, True)}"' if id else ''
-        return f'<div class="example"><a {id} />'
+        return f'<div class="example"><a {id} ></a>'
     def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '</div></div><br class="example-break" />'
     def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
