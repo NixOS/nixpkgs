@@ -1524,7 +1524,7 @@ final: prev:
       owner = "Civitasv";
       repo = "cmake-tools.nvim";
       rev = "055d7bb37d5c4038ce1e400656b6504602934ce7";
-      sha256 = "";
+      sha256 = "sha256-e16I51FbT0itLkyornd9RjShXmLxUzPrygFYVc66xoY=";
     };
     meta.homepage = "https://github.com/Civitasv/cmake-tools.nvim/";
   };
