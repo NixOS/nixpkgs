@@ -161,7 +161,7 @@ hr {
 h1 {
     font-weight: 800;
     line-height: 110%;
-    font-size: 250%;
+    font-size: 200%;
     margin-bottom: 1rem;
     color: #6586c8;
 }
@@ -169,7 +169,7 @@ h1 {
 h2 {
     font-weight: 800;
     line-height: 110%;
-    font-size: 200%;
+    font-size: 170%;
     margin-bottom: 0.625rem;
     color: #6586c8;
 }
@@ -184,6 +184,14 @@ h3 {
     margin-bottom: 1rem;
     font-size: 150%;
     color: #6586c8;
+}
+
+.note h3,
+.tip h3,
+.warning h3,
+.caution h3,
+.important h3 {
+    font-size: 120%;
 }
 
 h4 {
@@ -206,6 +214,7 @@ h6 {
     font-weight: 800;
     line-height: 110%;
     margin-bottom: 1rem;
+    font-size: 120%
 }
 
 strong {
@@ -242,25 +251,27 @@ code {
     line-height: 1.57777778;
 }
 
-div.book .programlisting {
-    border-radius: 1.25rem;
+div.book .programlisting,
+div.appendix .programlisting {
+    border-radius: 0.5rem;
     padding: 1rem;
     overflow: auto;
-}
-
-div.book .programlisting {
     background: #f2f8fd;
     color: #000000;
-    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1) inset;
 }
 
 div.book .note,
 div.book .tip,
 div.book .warning,
 div.book .caution,
-div.book .important {
+div.book .important,
+div.appendix .note,
+div.appendix .tip,
+div.appendix .warning,
+div.appendix .caution,
+div.appendix .important {
     margin-bottom: 1rem;
-    border-radius: 1.25rem;
+    border-radius: 0.5rem;
     padding: 1.5rem;
     overflow: auto;
     background: #f4f4f4;
@@ -270,7 +281,12 @@ div.book .note>.title,
 div.book .tip>.title,
 div.book .warning>.title,
 div.book .caution>.title,
-div.book .important>.title {
+div.book .important>.title,
+div.appendix .note>.title,
+div.appendix .tip>.title,
+div.appendix .warning>.title,
+div.appendix .caution>.title,
+div.appendix .important>.title {
     font-weight: 800;
     /* font-family: 'Overpass', serif; */
     line-height: 110%;
@@ -283,7 +299,12 @@ div.book .note> :first-child,
 div.book .tip> :first-child,
 div.book .warning> :first-child,
 div.book .caution> :first-child,
-div.book .important> :first-child {
+div.book .important> :first-child,
+div.appendix .note> :first-child,
+div.appendix .tip> :first-child,
+div.appendix .warning> :first-child,
+div.appendix .caution> :first-child,
+div.appendix .important> :first-child {
     margin-top: 0;
 }
 
@@ -291,55 +312,73 @@ div.book .note> :last-child,
 div.book .tip> :last-child,
 div.book .warning> :last-child,
 div.book .caution> :last-child,
-div.book .important> :last-child {
+div.book .important> :last-child,
+div.appendix .note> :last-child,
+div.appendix .tip> :last-child,
+div.appendix .warning> :last-child,
+div.appendix .caution> :last-child,
+div.appendix .important> :last-child {
     margin-bottom: 0;
 }
 
 div.book .note,
-div.book .tip {
+div.book .tip,
+div.appendix .note,
+div.appendix .tip {
     color: #5277c3;
     background: #f2f8fd;
 }
 
 div.book .warning,
-div.book .caution {
+div.book .caution,
+div.appendix .warning,
+div.appendix .caution {
     color: #cc3900;
     background-color: #fff5e1;
 }
 
-div.book .section {
+div.book .section,
+div.appendix .section {
     margin-top: 2em;
 }
 
-div.book div.example {
+div.book div.example,
+div.appendix div.example {
     margin-top: 1.5em;
 }
 
-div.book br.example-break {
+div.book br.example-break,
+div.appendix br.example-break {
     display: none;
 }
 
-div.book div.footnotes>hr {
+div.book div.footnotes>hr,
+div.appendix div.footnotes>hr {
     border-color: #d8d8d8;
 }
 
-div.book div.footnotes>br {
+div.book div.footnotes>br,
+div.appendix div.footnotes>br {
     display: none;
 }
 
-div.book dt {
+div.book dt,
+div.appendix dt {
     margin-top: 1em;
 }
 
-div.book .toc dt {
+div.book .toc dt,
+div.appendix .toc dt {
     margin-top: 0;
 }
 
-div.book .list-of-examples dt {
+div.book .list-of-examples dt,
+div.appendix .list-of-examples dt {
     margin-top: 0;
 }
 
-div.book code {
+div.book code,
+div.appendix code {
     padding: 0;
     border: 0;
     background-color: inherit;
@@ -350,16 +389,19 @@ div.book code {
     hyphens: none;
 }
 
-div.book div.toc {
+div.book div.toc,
+div.appendix div.toc {
     margin-bottom: 3em;
     border-bottom: 0.0625rem solid #d8d8d8;
 }
 
-div.book div.toc dd {
+div.book div.toc dd,
+div.appendix div.toc dd {
     margin-left: 2em;
 }
 
-div.book span.command {
+div.book span.command,
+div.appendix span.command {
     font-family: monospace;
     -webkit-hyphens: none;
     -moz-hyphens: none;
@@ -367,25 +409,8 @@ div.book span.command {
 }
 
 div.book .informaltable th,
-div.book .informaltable td {
+div.book .informaltable td,
+div.appendix .informaltable th,
+div.appendix .informaltable td {
     padding: 0.5rem;
-}
-
-div.book h1 {
-    font-size: 200%;
-    margin-bottom: 0.625rem;
-}
-
-div.book h2 {
-    font-size: 150%;
-    margin-bottom: 1rem;
-}
-
-div.book h3 {
-    font-size: 140%;
-}
-
-div.book h4 {
-    font-size: 130%;
-    color: #6a6a6a;
 }
