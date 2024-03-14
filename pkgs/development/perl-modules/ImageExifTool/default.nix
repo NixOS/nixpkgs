@@ -1,9 +1,11 @@
 { lib
 , stdenv
 , buildPerlPackage
+, exiftool
 , fetchurl
 , gitUpdater
 , shortenPerlShebang
+, testers
 }:
 
 buildPerlPackage rec {
@@ -21,6 +23,11 @@ buildPerlPackage rec {
   '';
 
   passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+      command = "${lib.getExe exiftool} -ver";
+      package = exiftool;
+    };
     updateScript = gitUpdater {
       url = "https://github.com/exiftool/exiftool.git";
     };
