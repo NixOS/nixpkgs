@@ -1,3 +1,9 @@
+# NOTICE: The company behind Yuzu was SLAPPed to death and was forced to nuke
+# the upstream repos. This package is therefore without an active upstream and
+# may break at any time. If you maintain a dependency of this package and yuzu
+# broke because of a change in your package, please notify us maintainers and
+# pay no further attention.
+
 { lib
 , stdenv
 , fetchFromGitHub
