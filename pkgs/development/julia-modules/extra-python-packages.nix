@@ -4,9 +4,14 @@
 
 # This file contains an extra mapping from Julia packages to the Python packages they depend on.
 
-with lib;
+let
+  inherit (lib)
+    concatMap
+    filter
+    getAttr
+    hasAttr
+    ;
 
-rec {
   packageMapping = {
     ExcelFiles = ["xlrd"];
     PyPlot = ["matplotlib"];
@@ -19,4 +24,7 @@ rec {
   in
     filter (x: hasAttr x python3.pkgs) allCandidates
   ) names;
+in
+{
+  inherit packageMapping getExtraPythonPackages;
 }
