@@ -5,11 +5,19 @@
 { pkgs, haskellLib }:
 
 let
-  removeLibraryHaskellDepends = pnames: depends:
-    builtins.filter (e: !(builtins.elem (e.pname or "") pnames)) depends;
-in
+  inherit (pkgs.lib) elem filter warn;
 
-with haskellLib;
+  inherit (haskellLib)
+    appendPatch
+    doJailbreak
+    dontCheck
+    overrideCabal
+    ;
+
+  removeLibraryHaskellDepends = pnames: depends:
+    filter (e: !(elem (e.pname or "") pnames)) depends;
+
+in
 
 self: super:
 
@@ -41,7 +49,7 @@ self: super:
   text-short = dontCheck super.text-short;
 
   # doctest doesn't work on ghcjs, but sometimes dontCheck doesn't seem to get rid of the dependency
-  doctest = pkgs.lib.warn "ignoring dependency on doctest" null;
+  doctest = warn "ignoring dependency on doctest" null;
 
   ghcjs-dom = overrideCabal (drv: {
     libraryHaskellDepends = with self; [
