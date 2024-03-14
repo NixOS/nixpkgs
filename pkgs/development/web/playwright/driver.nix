@@ -108,8 +108,17 @@ let
     meta.platforms = lib.platforms.darwin;
   };
 
-  browsers-linux = { withChromium ? true }: let
-    browsers = [ "ffmpeg" "firefox" ] ++ lib.optionals withChromium ["chromium"];
+  browsers-linux = {
+    withChromium ? true,
+    withFirefox ? true,
+    withWebkit ? true,
+    withFfmpeg ? true
+  }: let
+    browsers =
+      lib.optionals withChromium ["chromium"]
+      ++ lib.optionals withFirefox ["firefox"]
+      ++ lib.optionals withWebkit ["webkit"]
+      ++ lib.optionals withFfmpeg ["ffmpeg"];
   in
     linkFarm
       "playwright-browsers"
