@@ -1,0 +1,29 @@
+Description: Debian-specific changes to the cmake build system
+Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+Forwarded: not-needed
+Last-Update: 2018-11-25
+
+--- a/finger/CMakeLists.txt
++++ b/finger/CMakeLists.txt
+@@ -1,4 +1,9 @@
+ 
++set(
++    CMAKE_C_FLAGS
++    "${CMAKE_C_FLAGS} -D_GNU_SOURCE"
++)
++
+ add_executable(
+     finger
+     finger.c
+--- a/fingerd/CMakeLists.txt
++++ b/fingerd/CMakeLists.txt
+@@ -1,4 +1,9 @@
+ 
++set(
++    CMAKE_C_FLAGS
++    "${CMAKE_C_FLAGS} -D_GNU_SOURCE"
++)
++
+ add_executable(
+     in.fingerd
+     fingerd.c

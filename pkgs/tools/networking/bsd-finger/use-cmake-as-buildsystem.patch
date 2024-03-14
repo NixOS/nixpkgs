@@ -1,0 +1,59 @@
+Description: Use cmake as build system
+Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+Bug-Debian: 
+    https://bugs.debian.org/873085
+    https://bugs.debian.org/912121
+Last-Update: 2018-11-25
+
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,9 @@
++cmake_minimum_required(VERSION 3.7)
++project(bsd-finger)
++
++set(BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
++set(SBIN_DIR "${CMAKE_INSTALL_PREFIX}/sbin")
++set(MAN_DIR "${CMAKE_INSTALL_PREFIX}/share/man")
++
++add_subdirectory(finger)
++add_subdirectory(fingerd)
+--- /dev/null
++++ b/finger/CMakeLists.txt
+@@ -0,0 +1,19 @@
++
++add_executable(
++    finger
++    finger.c
++    lprint.c
++    net.c
++    sprint.c
++    util.c
++    display.c
++)
++install(
++    TARGETS finger
++    DESTINATION ${BIN_DIR}
++)
++
++install(
++    FILES finger.1
++    DESTINATION ${MAN_DIR}/man1/
++)
+--- /dev/null
++++ b/fingerd/CMakeLists.txt
+@@ -0,0 +1,15 @@
++
++add_executable(
++    in.fingerd
++    fingerd.c
++)
++install(
++    TARGETS in.fingerd
++    DESTINATION ${SBIN_DIR}
++)
++
++install(
++    FILES fingerd.8
++    DESTINATION ${MAN_DIR}/man8/
++    RENAME in.fingerd.8
++)

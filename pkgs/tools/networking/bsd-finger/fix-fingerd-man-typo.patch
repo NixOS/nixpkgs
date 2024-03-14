@@ -1,0 +1,15 @@
+Description: Fix typo at fingerd man page
+Author: Josue Ortega <josue@debian.org>
+Last-Update: 2019-05-11
+
+--- a/fingerd/fingerd.8
++++ b/fingerd/fingerd.8
+@@ -59,7 +59,7 @@
+ option is given, remote users will get an additional 
+ .Dq Welcome to ...
+ banner
+-which also shows some informations (e.g. uptime, operating system name and
++which also shows some information (e.g. uptime, operating system name and
+ release) about the system the
+ .Nm in.fingerd
+ is running on. Some sites may consider this a security risk as it

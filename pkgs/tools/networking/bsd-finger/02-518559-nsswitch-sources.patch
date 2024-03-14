@@ -1,0 +1,96 @@
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=518559
+
+Doesn't work with a non-iterable nsswitch source
+
+Currently, "finger tabbott" works by iterating through the list of users 
+on the system using getpwent and checking if any of them match "tabbott".  
+
+Some nsswitch backends (including Hesiod and LDAP[1]) do not support 
+iterating through the complete list of users.  These nsswitch backends 
+instead only fully support looking up a user's information by username or 
+uid.
+
+So, if tabbott is a user whose nsswitch information comes from LDAP, then 
+"finger tabbott" will incorrectly report "finger: tabbott: no such user."  
+"finger -m tabbott" does work correctly, however, because it looks up the 
+matching username using getpwnam.
+                                                                                    
+A fix for this is to always look up an argument to finger for a username 
+match, and having -m only control whether finger searches the entire user 
+database for real name matches.  Patch attached.
+
+This patch has the advantageous side effect that if there are some real 
+name matches and a username match, finger will always display the username 
+match first (rather than in some random place in the list).
+
+    -Tim Abbott
+
+[1] with LDAP, it is typically the case that one can iterate through only 
+the first 100 results from a query.
+
+Tim Abbott <tabbott@MIT.EDU>
+
+commit ab0b4e09b1281a11587fd0f9797e612cfb08ef57
+Author: Timothy G Abbott <tabbott@mit.edu>
+Date:   Fri Mar 6 22:30:00 2009 -0500
+
+    Add support for non-iterable nsswitch sources.
+    
+    Signed-off-by: Timothy G Abbott <tabbott@mit.edu>
+
+--- a/finger/finger.c
++++ b/finger/finger.c
+@@ -241,28 +241,35 @@
+ 	int i;
+ 	struct passwd *pw;
+ 
++	for (i = 0; i < argc; i++) {
++		if (used[i] >= 0 && (pw = getpwnam(argv[i]))) {
++			if (!check_nofinger(pw)) {
++				enter_person(pw);
++				used[i] = 1;
++			}
++		}
++	}
+ 	/*
+-	 * traverse the list of possible login names and check the login name
+-	 * and real name against the name specified by the user.
++	 * Traverse the list of users and check the real name against
++	 * the name specified by the user.
++	 *
++	 * Since we've already entered users whose usernames match,
++	 * ignore them when doing real name matching.
+ 	 */
+-	if (mflag) {
+-		for (i = 0; i < argc; i++)
+-			if (used[i] >= 0 && (pw = getpwnam(argv[i]))) {
+-				if (!check_nofinger(pw)) {
+-					enter_person(pw);
+-					used[i] = 1;
+-				}
+-			}
+-	} else for (pw = getpwent(); pw; pw = getpwent())
+-		for (i = 0; i < argc; i++)
+-			if (used[i] >= 0 &&
+-			    (!strcasecmp(pw->pw_name, argv[i]) ||
+-			    match(pw, argv[i]))) {
+-				if (!check_nofinger(pw)) {
+-					enter_person(pw);
+-					used[i] = 1;
++	if (!mflag) {
++		for (pw = getpwent(); pw; pw = getpwent()) {
++			for (i = 0; i < argc; i++) {
++				if (used[i] >= 0 &&
++				    strcasecmp(pw->pw_name, argv[i]) &&
++				    match(pw, argv[i])) {
++					if (!check_nofinger(pw)) {
++						enter_person(pw);
++						used[i] = 1;
++					}
+ 				}
+ 			}
++		}
++	}
+ 
+ 	/* list errors */
+ 	for (i = 0; i < argc; i++)
