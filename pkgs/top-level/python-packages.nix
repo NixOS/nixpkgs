@@ -6015,6 +6015,8 @@ self: super: with self; {
 
   jsonable = callPackage ../development/python-modules/jsonable { };
 
+  jsonformatter = callPackage ../development/python-modules/jsonformatter { };
+
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
