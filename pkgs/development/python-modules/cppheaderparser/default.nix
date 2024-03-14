@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "CppHeaderParser";
+  pname = "cppheaderparser";
   version = "2.7.4";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "CppHeaderParser";
+    inherit version;
     hash = "sha256-OCswQW2VsKXoUCshSBDcrCpWQykX4mUUR9Or4lPjzEI=";
   };
 
