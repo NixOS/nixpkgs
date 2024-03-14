@@ -18,11 +18,37 @@ in {
     version = "2088";
 
     src = fetchFromGitHub {
-      owner = "citra-emu";
-      repo = "citra-nightly";
-      rev = "nightly-${version}";
+      owner = "PabloMK7";
+      repo = "citra";
+      rev = "480604ec72433f8cde3a8f6d22d3f8c86bea402f";
       sha256 = "0l9w4i0zbafcv2s6pd1zqb11vh0i7gzwbqnzlz9al6ihwbsgbj3k";
-      fetchSubmodules = true;
+      fetchSubmodules = false; # We do fetch these but must substitute mirror URLs beforehand
+      leaveDotGit = true;
+
+      # We must use mirrors because upstream yuzu got nuked.
+      # Sadly, the regular nix-prefetch-git doesn't support changing submodule urls.
+      # This substitutes mirrors and fetches the submodules manually.
+      postFetch = ''
+        pushd $out
+        # Git won't allow working on submodules otherwise...
+        git restore --staged .
+
+        cp .gitmodules{,.bak}
+
+        substituteInPlace .gitmodules \
+          --replace-fail yuzu-emu yuzu-emu-mirror \
+          --replace-fail citra-emu PabloMK7 \
+          --replace-fail merryhime yuzu-mirror \
+
+        git submodule update --init --recursive -j ''${NIX_BUILD_CORES:-1} --progress --depth 1 --checkout --force
+
+        mv .gitmodules{.bak,}
+
+        # Remove .git dirs
+        find . -name .git -type f -exec rm -rf {} +
+        rm -rf .git/
+        popd
+      '';
     };
 
     inherit branch compat-list;
@@ -33,11 +59,37 @@ in {
     version = "2766";
 
     src = fetchFromGitHub {
-      owner = "citra-emu";
-      repo = "citra-canary";
+      owner = "alessiot89";
+      repo = "citrus-canary";
       rev = "canary-${version}";
       sha256 = "1gm3ajphpzwhm3qnchsx77jyl51za8yw3r0j0h8idf9y1ilcjvi4";
-      fetchSubmodules = true;
+      fetchSubmodules = false; # We do fetch these but must substitute mirror URLs beforehand
+      leaveDotGit = true;
+
+      # We must use mirrors because upstream yuzu got nuked.
+      # Sadly, the regular nix-prefetch-git doesn't support changing submodule urls.
+      # This substitutes mirrors and fetches the submodules manually.
+      postFetch = ''
+        pushd $out
+        # Git won't allow working on submodules otherwise...
+        git restore --staged .
+
+        cp .gitmodules{,.bak}
+
+        substituteInPlace .gitmodules \
+          --replace-fail yuzu-emu yuzu-emu-mirror \
+          --replace-fail citra-emu PabloMK7 \
+          --replace-fail merryhime yuzu-mirror \
+
+        git submodule update --init --recursive -j ''${NIX_BUILD_CORES:-1} --progress --depth 1 --checkout --force
+
+        mv .gitmodules{.bak,}
+
+        # Remove .git dirs
+        find . -name .git -type f -exec rm -rf {} +
+        rm -rf .git/
+        popd
+      '';
     };
 
     inherit branch compat-list;

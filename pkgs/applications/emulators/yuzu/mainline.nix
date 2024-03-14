@@ -39,11 +39,36 @@ stdenv.mkDerivation(finalAttrs: {
   version = "1727";
 
   src = fetchFromGitHub {
-    owner = "yuzu-emu";
+    owner = "yuzu-emu-mirror";
     repo = "yuzu-mainline";
     rev = "mainline-0-${finalAttrs.version}";
     hash = "sha256-DKIVXy3OGUfdw/mZtPzom40KU51CvXaV+KqRjQseDyk=";
-    fetchSubmodules = true;
+    fetchSubmodules = false; # We do fetch these but must substitute mirror URLs beforehand
+    leaveDotGit = true;
+
+    # We must use mirrors because upstream yuzu got nuked.
+    # Sadly, the regular nix-prefetch-git doesn't support changing submodule urls.
+    # This substitutes mirrors and fetches the submodules manually.
+    postFetch = ''
+      pushd $out
+      # Git won't allow working on submodules otherwise...
+      git restore --staged .
+
+      cp .gitmodules{,.bak}
+
+      substituteInPlace .gitmodules \
+        --replace-fail yuzu-emu yuzu-emu-mirror \
+        --replace-fail merryhime yuzu-mirror \
+
+      git submodule update --init --recursive -j ''${NIX_BUILD_CORES:-1} --progress --depth 1 --checkout --force
+
+      mv .gitmodules{.bak,}
+
+      # Remove .git dirs
+      find . -name .git -type f -exec rm -rf {} +
+      rm -rf .git/
+      popd
+    '';
   };
 
   nativeBuildInputs = [
