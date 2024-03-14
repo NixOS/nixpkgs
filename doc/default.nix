@@ -122,13 +122,12 @@ in pkgs.stdenv.mkDerivation {
       ${pkgs.documentation-highlighter}/mono-blue.css \
       ${pkgs.documentation-highlighter}/loader.js
 
-    cp -t out ./overrides.css ./style.css
+    cp -t out ./style.css
 
     nixos-render-docs manual html \
       --manpage-urls ./manpage-urls.json \
       --revision ${pkgs.lib.trivial.revisionWithDefault (pkgs.rev or "master")} \
       --stylesheet style.css \
-      --stylesheet overrides.css \
       --stylesheet highlightjs/mono-blue.css \
       --script ./highlightjs/highlight.pack.js \
       --script ./highlightjs/loader.js \

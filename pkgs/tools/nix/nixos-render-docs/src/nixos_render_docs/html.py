@@ -163,7 +163,7 @@ class HTMLRenderer(Renderer):
         # keycap-styled spans.
         (id_part, class_part) = ("", "")
         if s := token.attrs.get('id'):
-            id_part = f'<a id="{escape(cast(str, s), True)}" />'
+            id_part = f'<a id="{escape(cast(str, s), True)}"></a>'
         if s := token.attrs.get('class'):
             if s == 'keycap':
                 class_part = '<span class="keycap"><strong>'
