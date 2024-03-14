@@ -37,6 +37,8 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "websockets"
+    "cookiecutter"
+    "watchdog"
   ];
 
   propagatedBuildInputs = [
@@ -52,6 +54,8 @@ buildPythonPackage rec {
     packaging
     qrcode
     cookiecutter
+    fastapi
+    uvicorn
   ];
 
   doCheck = false;
