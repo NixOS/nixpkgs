@@ -467,11 +467,12 @@ let
         [ (findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
         ++ optional (hasOutput "man") "man";
     }
-    // attrs.meta or { }
     # Fill `meta.position` to identify the source location of the package.
     // optionalAttrs (pos != null) {
       position = pos.file + ":" + toString pos.line;
-    } // {
+    }
+    // attrs.meta or { }
+    // {
       # Expose the result of the checks for everyone to see.
       inherit (validity) unfree broken unsupported insecure;
 
