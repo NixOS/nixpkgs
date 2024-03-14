@@ -14,24 +14,33 @@
 , cairo
 , pango
 , npm-lockfile-fix
+, overrideSDK
+, darwin
 }:
 
-buildNpmPackage rec {
+let
+  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' =
+    buildNpmPackage.override {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    };
+in
+buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-STWGZzFtU3UpctgNz3m96JyfSRzHy2ZZQPr8R+zpDgM=";
+    hash = "sha256-wxQaKewKIfN93Wvb7WmOSuflTgfk1XKvHAA1UIVyMqk=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-0Uac4Q3EYiTkg6RFuwR+saXiVm7jISyZBjkN30uYnnE=";
+  npmDepsHash = "sha256-IXFFOegzJbDcQejqQsAg11jDnhSKi27Olm8m3qr7bqw=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -46,6 +55,8 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreText
   ];
 
   desktopItems = [
