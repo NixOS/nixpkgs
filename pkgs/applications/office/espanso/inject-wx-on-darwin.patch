@@ -1,17 +1,8 @@
-From 6a7400c20831c5ff502c7336d6db2be743f156be Mon Sep 17 00:00:00 2001
-From: Nikola Knezevic <nikola.knezevic@imc.com>
-Date: Tue, 16 Aug 2022 22:28:46 +0200
-Subject: [PATCH] Build using system wx on darwin
-
----
- espanso-modulo/build.rs | 174 ++++------------------------------------
- 1 file changed, 17 insertions(+), 157 deletions(-)
-
 diff --git a/espanso-modulo/build.rs b/espanso-modulo/build.rs
-index b8b889a..5d972ec 100644
+index 6d4ccb3..b767dde 100644
 --- a/espanso-modulo/build.rs
 +++ b/espanso-modulo/build.rs
-@@ -156,161 +156,6 @@ fn build_native() {
+@@ -151,161 +151,6 @@ fn build_native() {
    );
  }
  
@@ -71,7 +62,7 @@ index b8b889a..5d972ec 100644
 -      // See: https://github.com/actions/virtual-environments/issues/3288#issuecomment-830207746
 -      Command::new(out_wx_dir.join("configure"))
 -        .current_dir(build_dir.to_string_lossy().to_string())
--        .args(&[
+-        .args([
 -          "--disable-shared",
 -          "--without-libtiff",
 -          "--without-liblzma",
@@ -84,7 +75,7 @@ index b8b889a..5d972ec 100644
 -    } else {
 -      Command::new(out_wx_dir.join("configure"))
 -        .current_dir(build_dir.to_string_lossy().to_string())
--        .args(&[
+-        .args([
 -          "--disable-shared",
 -          "--without-libtiff",
 -          "--without-liblzma",
@@ -106,7 +97,7 @@ index b8b889a..5d972ec 100644
 -
 -    let mut handle = Command::new("make")
 -      .current_dir(build_dir.to_string_lossy().to_string())
--      .args(&["-j8"])
+-      .args(["-j8"])
 -      .spawn()
 -      .expect("failed to execute make");
 -    if !handle
@@ -173,7 +164,7 @@ index b8b889a..5d972ec 100644
  #[cfg(target_os = "macos")]
  fn convert_fat_libraries_to_arm(lib_dir: &Path) {
    for entry in
-@@ -440,12 +285,17 @@ fn macos_link_search_path() -> Option<String> {
+@@ -435,12 +280,17 @@ fn macos_link_search_path() -> Option<String> {
    None
  }
  
@@ -192,7 +183,7 @@ index b8b889a..5d972ec 100644
  fn build_native() {
    // Make sure wxWidgets is installed
    // Depending on the installation package, the 'wx-config' command might also be available as 'wx-config-gtk3',
-@@ -483,7 +333,8 @@ fn build_native() {
+@@ -478,7 +328,8 @@ fn build_native() {
      .file("src/sys/textview/textview.cpp")
      .file("src/sys/textview/textview_gui.cpp")
      .file("src/sys/troubleshooting/troubleshooting.cpp")
@@ -202,7 +193,7 @@ index b8b889a..5d972ec 100644
    build.flag("-std=c++17");
  
    for flag in cpp_flags {
-@@ -495,6 +346,15 @@ fn build_native() {
+@@ -490,6 +341,15 @@ fn build_native() {
    // Render linker flags
  
    generate_linker_flags(&config_path);
@@ -218,6 +209,3 @@ index b8b889a..5d972ec 100644
  }
  
  fn main() {
--- 
-2.37.1
-
