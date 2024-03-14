@@ -22,6 +22,11 @@ let
         expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname == "hello-overriden";
         expected = true;
       };
+      override-position = {
+        name = "override-position";
+        expr = (pkgs.hello.overrideAttrs (previousAttrs: { meta = previousAttrs.meta // { position = pkgs.cowsay.meta.position; }; })).meta.position == pkgs.cowsay.meta.position;
+        expected = true;
+      };
       overriding-using-only-attrset-no-final-attrs = {
         name = "overriding-using-only-attrset-no-final-attrs";
         expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
