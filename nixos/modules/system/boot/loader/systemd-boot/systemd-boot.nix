@@ -86,7 +86,7 @@ in {
     };
 
     editor = mkOption {
-      default = true;
+      default = false;
 
       type = types.bool;
 
