@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/EbonJaeger/budgie-user-indicator-redux/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
+    maintainers = teams.budgie.members;
   };
 }
