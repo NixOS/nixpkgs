@@ -47,5 +47,6 @@ buildPythonPackage rec {
     description = "Honeynet Project generic authenticated datafeed protocol";
     homepage = "https://github.com/hpfeeds/hpfeeds";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ purefns ];
   };
 }
