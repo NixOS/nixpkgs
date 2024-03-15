@@ -47,6 +47,10 @@
         "date": "2021-09-03",
         "new": "sqlite-lua"
     },
+    "vim-fsharp": {
+        "date": "2024-03-15",
+        "new": "zarchive-vim-fsharp"
+    },
     "vim-jade": {
         "date": "2020-03-27",
         "new": "vim-pug"
