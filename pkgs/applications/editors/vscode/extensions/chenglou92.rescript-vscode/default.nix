@@ -1,6 +1,6 @@
 { lib, stdenv, vscode-utils, callPackage }:
 let
-  version = "1.48.0";
+  version = "1.50.0";
   rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { inherit version; };
   arch =
     if stdenv.isLinux then "linux"
@@ -13,7 +13,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     name = "rescript-vscode";
     publisher = "chenglou92";
     inherit version;
-    sha256 = "sha256-/1nDuj/kSdkV6PlbdlOLfUKQeuvyL2VhPjUAr9kq2NM=";
+    sha256 = "sha256-Dt7mqZQ/vEUFyUD5SsY6RGzg9kq19/Amksrwtfv0TuE=";
   };
   postPatch = ''
     rm -r ${analysisDir}
