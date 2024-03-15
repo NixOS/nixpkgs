@@ -1,15 +1,17 @@
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh
-{ mkDerivation, base, cmdargs, directory, fetchzip, filepath, lib
+{ mkDerivation, base, cmdargs, directory, fetchFromGitHub, filepath, lib
 , megaparsec, mtl, parser-combinators, safe-exceptions, scientific
 , text, transformers, unix
 }:
 mkDerivation {
   pname = "nixfmt";
-  version = "0.5.0";
-  src = fetchzip {
-    url = "https://github.com/piegamesde/nixfmt/archive/2b5ee820690bae64cb4003e46917ae43541e3e0b.tar.gz";
-    sha256 = "1i1jbc1q4gd7fpilwy6s3a583yl5l8d8rlmipygj61mpclg9ihqg";
+  version = "0.6.0";
+  src = fetchFromGitHub {
+    owner = "NixOS";
+    repo = "nixfmt";
+    rev = "136005fc3dd34ff0d6af9f8c57cd1d3d7d342537";
+    sha256 = "sha256-g0MTMQZeRlKFQiKdEVc1IQ73nNeRwu0+GtUIvcm2NV4=";
   };
   isLibrary = true;
   isExecutable = true;
