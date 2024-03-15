@@ -19945,6 +19945,12 @@
       fingerprint = "E631 8869 586F 99B4 F6E6  D785 5942 58F0 389D 2802";
     }];
   };
+  twitchy0 = {
+    email = "code@nitinpassa.com";
+    github = "twitchy0";
+    githubId = 131159000;
+    name = "Nitin Passa";
+  };
   twitchyliquid64 = {
     name = "Tom";
     email = "twitchyliquid64@ciphersink.net";
