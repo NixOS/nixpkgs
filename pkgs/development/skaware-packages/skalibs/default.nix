@@ -4,7 +4,10 @@
 , pkgs
 }:
 
-with skawarePackages;
+let
+  inherit (lib) optionals;
+  inherit (skawarePackages) buildPackage skalibs;
+in
 
 buildPackage {
   pname = "skalibs";
@@ -26,7 +29,7 @@ buildPackage {
     # It would be set when PATH is empty. This hurts hermeticity.
     "--with-default-path="
 
-  ] ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
+  ] ++ optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
     # ./configure: sysdep posixspawnearlyreturn cannot be autodetected
     # when cross-compiling. Please manually provide a value with the
     # --with-sysdep-posixspawnearlyreturn=yes|no|... option.
