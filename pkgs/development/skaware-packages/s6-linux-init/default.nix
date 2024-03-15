@@ -1,6 +1,16 @@
 { lib, skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (lib) platforms;
+
+  inherit (skawarePackages)
+    buildPackage
+    execline
+    s6
+    s6-linux-init
+    skalibs
+    ;
+in
 
 buildPackage {
   pname = "s6-linux-init";
@@ -8,7 +18,7 @@ buildPackage {
   sha256 = "sha256-Ea4I0KZiELXla2uu4Pa5sbafvtsF/aEoWxFaMcpGx38=";
 
   description = "A set of minimalistic tools used to create a s6-based init system, including a /sbin/init binary, on a Linux kernel";
-  platforms = lib.platforms.linux;
+  platforms = platforms.linux;
 
   outputs = [ "bin" "dev" "doc" "out" ];
 
