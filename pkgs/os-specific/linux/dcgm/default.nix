@@ -15,19 +15,10 @@
 , symlinkJoin
 , tclap_1_4
 , yaml-cpp
+
+, static ? gcc11Stdenv.hostPlatform.isStatic
 }:
 let
-  # Flags copied from DCGM's libevent build script
-  libevent-nossl = libevent.override { sslSupport = false; };
-  libevent-nossl-static = libevent-nossl.overrideAttrs (super: {
-    CFLAGS = "-Wno-cast-function-type -Wno-implicit-fallthrough -fPIC";
-    CXXFLAGS = "-Wno-cast-function-type -Wno-implicit-fallthrough -fPIC";
-    configureFlags = super.configureFlags ++ [ "--disable-shared" "--with-pic" ];
-  });
-
-  jsoncpp-static = jsoncpp.override { enableStatic = true; };
-  yaml-cpp-static = yaml-cpp.override { static = true; };
-
   # DCGM depends on 3 different versions of CUDA at the same time.
   # The runtime closure, thankfully, is quite small because most things
   # are statically linked.
@@ -117,14 +108,18 @@ in gcc11Stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    plog.dev # header-only
-    tclap_1_4 # header-only
-
+    # Header-only
     catch2
-    fmt_9
-    jsoncpp-static
-    libevent-nossl-static
-    yaml-cpp-static
+    plog.dev
+    tclap_1_4
+
+    # Dependencies that can be either static or dynamic.
+    (fmt_9.override { enableShared = !static; }) # DCGM's build uses the static outputs regardless of enableShared
+    (yaml-cpp.override { inherit static; stdenv = gcc11Stdenv; })
+
+    # TODO: Dependencies that DCGM's CMake hard-codes to be static-only.
+    (jsoncpp.override { enableStatic = true; })
+    (libevent.override { sslSupport = false; static = true; })
   ];
 
   disallowedReferences = lib.concatMap (x: x.pkgSet) cudaPackageSetByVersion;
