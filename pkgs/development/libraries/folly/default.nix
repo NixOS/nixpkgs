@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, overrideSDK
 , fetchFromGitHub
 , boost
 , cmake
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2024.01.22.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-+z1wuEOgr7CMHFnOn5gLm9mtVH7mVURLstOoDqzxKbk=";
+    sha256 = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +73,8 @@ stdenv.mkDerivation rec {
     # see https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+  ] ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
   ];
 
   # split outputs to reduce downstream closure sizes
