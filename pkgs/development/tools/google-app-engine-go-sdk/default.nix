@@ -1,6 +1,10 @@
 { lib, stdenv, fetchzip, python3Packages, makeWrapper }:
 
-with python3Packages;
+let
+  inherit (lib) licenses maintainers platforms sourceTypes;
+
+  inherit (python3Packages) cffi cryptography pyopenssl python;
+in
 
 stdenv.mkDerivation rec {
   pname = "google-app-engine-go-sdk";
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Google App Engine SDK for Go";
     version = version;
     homepage = "https://cloud.google.com/appengine/docs/go/";
