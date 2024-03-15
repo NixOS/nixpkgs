@@ -1,6 +1,9 @@
 { lib, fetchFromGitHub, python3Packages }:
 
-with python3Packages;
+let
+  inherit (lib) licenses maintainers platforms;
+  inherit (python3Packages) buildPythonApplication;
+in
 
 buildPythonApplication rec {
   pname = "cppclean";
@@ -21,7 +24,7 @@ buildPythonApplication rec {
     ./test.bash
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Finds problems in C++ source that slow development of large code bases";
     mainProgram = "cppclean";
     homepage    = "https://github.com/myint/cppclean";
