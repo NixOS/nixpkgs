@@ -18230,6 +18230,13 @@ with pkgs;
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
   ant = apacheAnt;
 
+  patchAntBuildfilesHook = makeSetupHook {
+    name = "patchAntBuildfilesHook";
+    substitutions = {
+      xmlstarlet = lib.escapeShellArg (lib.getExe xmlstarlet);
+    };
+  } ../build-support/setup-hooks/patch-ant-buildfiles.sh;
+
   apacheKafka = apacheKafka_3_5;
   apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
   apacheKafka_3_0 = callPackage ../servers/apache-kafka { majorVersion = "3.0"; };
