@@ -10,4 +10,5 @@ in {
   ruby = callPackage ./ruby { };
   go = callPackage ./go { };
   screenshot = callPackage ./screenshot { };
+  xml-report = callPackage ./xml-report { };
 })
