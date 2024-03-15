@@ -5,13 +5,22 @@
 , writeShellScriptBin
 }:
 
-with pythonPackages;
-
 let
+  inherit (lib) licenses maintainers platforms;
 
-wsl_stub = writeShellScriptBin "wsl" "true";
+  inherit (pythonPackages)
+    buildPythonPackage
+    pytz
+    setuptools
+    six
+    tzlocal
+    ;
 
-in buildPythonPackage rec {
+  wsl_stub = writeShellScriptBin "wsl" "true";
+
+in
+
+buildPythonPackage rec {
   pname = "tasklib";
   version = "2.5.1";
   format = "setuptools";
@@ -32,7 +41,7 @@ in buildPythonPackage rec {
     wsl_stub
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/robgolding/tasklib";
     description = "Library for interacting with taskwarrior databases";
     changelog = "https://github.com/GothenburgBitFactory/tasklib/releases/tag/${version}";
