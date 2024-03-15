@@ -1,7 +1,13 @@
 { fetchFromGitHub, skawarePackages }:
 
-with skawarePackages;
 let
+  inherit (skawarePackages)
+    buildPackage
+    execline
+    execline-man-pages
+    skalibs
+    ;
+
   version = "2.9.4.0";
 
   # Maintainer of manpages uses following versioning scheme: for every
