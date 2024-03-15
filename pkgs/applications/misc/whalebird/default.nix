@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/opt
-    cp -r ./dist/linux-unpacked $out/opt/Whalebird
+    cp -r ./dist/*-unpacked $out/opt/Whalebird
 
     # Install icons
     # Taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=whalebird#n41
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Single-column Fediverse client for desktop";
     homepage = "https://whalebird.social";
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang colinsane weathercold ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
