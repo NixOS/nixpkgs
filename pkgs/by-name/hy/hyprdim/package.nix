@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,17 +19,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-hgcGzRLB1L3yxJjw1ECDJPmbl1W+2OS4KDojclyVYrc=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage target/man/hyprdim.1
 
     installShellCompletion --cmd hyprdim \
-      --bash <(cat target/completions/hyprdim.bash) \
-      --fish <(cat target/completions/hyprdim.fish) \
-      --zsh <(cat target/completions/_hyprdim)
+      --bash target/completions/hyprdim.bash \
+      --fish target/completions/hyprdim.fish \
+      --zsh target/completions/_hyprdim
   '';
 
   passthru.updateScript = nix-update-script { };
