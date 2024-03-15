@@ -1,6 +1,6 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docopts";
   version = "0.6.4-with-no-mangle-double-dash";
 
@@ -8,21 +8,26 @@ buildGoPackage rec {
     owner = "docopt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zxax0kl8wqpkzmw9ij4qgfhjbk4r7996pjyp9xf5icyk8knp00q";
+    hash = "sha256-GIBrJ5qexeJ6ul5ek9LJZC4J3cNExsTrnxdzRCfoqn8=";
   };
 
-  goPackagePath = "github.com/docopt/${pname}";
+  vendorHash = "sha256-+pMgaHB69itbQ+BDM7/oaJg3HrT1UN+joJL7BO/2vxE=";
 
-  goDeps = ./deps.nix;
+  preBuild = ''
+    cp ${./go.mod} go.mod
+    cp ${./go.sum} go.sum
+  '';
 
-  subPackages = [ "./" ];
+  subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" ];
 
   postInstall = ''
-    install -D -m 755 ./go/src/$goPackagePath/docopts.sh $out/bin/docopts.sh
+    install -D -m 755 ./docopts.sh $out/bin/docopts.sh
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/docopt/${pname}";
+    homepage = "https://github.com/docopt/docopts";
     description = "docopt CLI tool for shell scripting";
     license = licenses.mit;
     maintainers = [ maintainers.confus ];
