@@ -1,6 +1,8 @@
 { skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (skawarePackages) buildPackage nsss skalibs;
+in
 
 buildPackage {
   pname = "nsss";
