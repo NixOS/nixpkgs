@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-    hash = "sha256-UT1XhIgnkZis4TrUl1ENKyIgTV15S2QUPQW3vpdOts8=";
+    hash = "sha256-BoMU/KP1RSRwFJLfQy+lTEhf1OOWE8os0nXhNpZOgak=";
   };
 
   configureFlags = [
