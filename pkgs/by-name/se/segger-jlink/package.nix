@@ -15,7 +15,7 @@ let
   supported = {
     x86_64-linux = {
       name = "x86_64";
-      hash = "sha256-CELUteYzy0oMxDonOot+DR5MgGjSRwLgRCbJRAaS/EY=";
+      hash = "sha256-xo7QpRG3ueZkvknkpXpYmn/eMLj6e2mGoaN7ZdbDQgU=";
     };
     i686-linux = {
       name = "i386";
