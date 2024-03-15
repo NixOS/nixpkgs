@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Software development studio";
-    homepage = "http://anjuta.org/";
+    homepage = "https://gitlab.gnome.org/Archive/anjuta/";
     license = licenses.gpl2;
     maintainers = with maintainers; [];
     platforms = platforms.linux;

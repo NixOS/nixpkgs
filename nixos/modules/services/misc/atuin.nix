@@ -8,6 +8,8 @@ in
     services.atuin = {
       enable = lib.mkEnableOption (mdDoc "Atuin server for shell history sync");
 
+      package = lib.mkPackageOption pkgs "atuin" { };
+
       openRegistration = mkOption {
         type = types.bool;
         default = false;
@@ -85,7 +87,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.atuin}/bin/atuin server start";
+        ExecStart = "${lib.getExe cfg.package} server start";
         RuntimeDirectory = "atuin";
         RuntimeDirectoryMode = "0700";
         DynamicUser = true;
