@@ -17235,6 +17235,12 @@ with pkgs;
   zulu21 = callPackage ../development/compilers/zulu/21.nix { };
   zulu = zulu21;
 
+  zing8 = callPackage ../development/compilers/zing/8.nix { };
+  zing11 = callPackage ../development/compilers/zing/11.nix { };
+  zing17 = callPackage ../development/compilers/zing/17.nix { };
+  zing21 = callPackage ../development/compilers/zing/21.nix { };
+  zing = zing21;
+
   ### DEVELOPMENT / INTERPRETERS
 
   acl2 = callPackage ../development/interpreters/acl2 { };
