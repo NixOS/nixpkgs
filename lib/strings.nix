@@ -207,7 +207,7 @@ rec {
   makeLibraryPath = makeSearchPathOutput "lib" "lib";
 
   /* Construct a include search path (such as C_INCLUDE_PATH) containing the
-     libraries for a set of packages
+     includes for a set of packages
 
      Example:
        makeIncludePath [ "/usr" "/usr/local" ]
