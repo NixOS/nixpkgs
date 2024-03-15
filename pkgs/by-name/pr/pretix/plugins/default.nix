@@ -3,4 +3,5 @@
 }:
 
 {
+  passbook = callPackage ./passbook.nix { };
 }
