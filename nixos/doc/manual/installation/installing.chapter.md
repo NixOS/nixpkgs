@@ -410,7 +410,7 @@ Use the following commands:
     needs:
 
     ```ShellSession
-    # nano /mnt/etc/nixos/configuration.nix
+    # vim /mnt/etc/nixos/configuration.nix
     ```
 
     If you're using the graphical ISO image, other editors may be
@@ -574,7 +574,7 @@ With a partitioned disk.
 # mkdir -p /mnt/boot                      # (for UEFI systems only)
 # mount /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
 # nixos-generate-config --root /mnt
-# nano /mnt/etc/nixos/configuration.nix
+# vim /mnt/etc/nixos/configuration.nix
 # nixos-install
 # reboot
 ```

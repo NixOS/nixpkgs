@@ -8,7 +8,7 @@ in
   options = {
     programs.nano = {
       enable = lib.mkEnableOption (lib.mdDoc "nano") // {
-        default = true;
+        default = false;
       };
 
       package = lib.mkPackageOption pkgs "nano" { };

@@ -9,8 +9,8 @@ in
   options.programs.neovim = {
     enable = mkOption {
       type = types.bool;
-      default = false;
-      example = true;
+      default = true;
+      example = false;
       description = lib.mdDoc ''
         Whether to enable Neovim.
 
@@ -23,7 +23,7 @@ in
 
     defaultEditor = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = lib.mdDoc ''
         When enabled, installs neovim and configures neovim to be the default editor
         using the EDITOR environment variable.
@@ -32,7 +32,7 @@ in
 
     viAlias = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = lib.mdDoc ''
         Symlink {command}`vi` to {command}`nvim` binary.
       '';
@@ -40,7 +40,7 @@ in
 
     vimAlias = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = lib.mdDoc ''
         Symlink {command}`vim` to {command}`nvim` binary.
       '';
