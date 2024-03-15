@@ -254,13 +254,11 @@ rec {
   foldl' =
     op:
     acc:
-    list:
-
     # The builtin `foldl'` is a bit lazier than one might expect.
     # See https://github.com/NixOS/nix/pull/7158.
     # In particular, the initial accumulator value is not forced before the first iteration starts.
     builtins.seq acc
-      (builtins.foldl' op acc list);
+      (builtins.foldl' op acc);
 
   /**
     Map with index starting from 0
