@@ -16,8 +16,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Rust library and CLI to export an Obsidian vault to regular Markdown";
     homepage = "https://github.com/zoni/${pname}";
+    changelog = "https://github.com/zoni/obsidian-export/blob/main/CHANGELOG.md";
     license = licenses.bsd2Patent;
     platforms = platforms.linux;
     maintainers = with maintainers; [ programmerino ];
+    mainProgram = "obsidian-export";
   };
 }
