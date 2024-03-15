@@ -199,6 +199,7 @@ let
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
 
+    # TODO: Remove after the next set of minor releases on May 9th 2024
     preCheck =
       # On musl, comment skip the following tests, because they break due to
       #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
