@@ -1,6 +1,13 @@
 { skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (skawarePackages)
+    buildPackage
+    execline
+    skalibs
+    utmps
+    ;
+in
 
 buildPackage {
   pname = "utmps";
