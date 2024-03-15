@@ -182,7 +182,7 @@ stdenv.mkDerivation {
     # because it has no files to install.
     + ''
       install -Dm755 ./testing/testing_* ./sparse/testing/testing_* -t "$test/bin/"
-      install -Dm755 ./lib/libtester.so ./lib/liblapacktest.so -t "$test/lib/"
+      install -Dm755 ./lib/lib*test*.* -t "$test/lib/"
     ''
     # All of the test executables and libraries will have a reference to the build directory in their RPATH, which we
     # must remove. We do this by shrinking the RPATH to only include the Nix store. The autoPatchelfHook will take care
