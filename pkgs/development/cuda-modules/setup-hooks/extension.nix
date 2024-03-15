@@ -60,6 +60,9 @@ final: _: {
       )
       {};
 
+  # Deprecated: an alias kept for compatibility. Consider removing after 24.11
+  autoAddOpenGLRunpathHook = final.autoAddDriverRunpath;
+
   # autoAddCudaCompatRunpath hook must be added AFTER `setupCudaHook`. Both
   # hooks prepend a path with `libcuda.so` to the `DT_RUNPATH` section of
   # patched elf files, but `cuda_compat` path must take precedence (otherwise,
