@@ -39,12 +39,12 @@ let
 
 in {
   tomcat9 = common {
-    version = "9.0.85";
-    hash = "sha256-oYdNXi5yADqBJ25alSAASsoRPxNfyEEzQim2j20luh4=";
+    version = "9.0.87";
+    hash = "sha256-2kgvuSIAhtvzceGAqgnGQCr48EhYZzTN7dSgjEjUzgI=";
   };
 
   tomcat10 = common {
-    version = "10.1.18";
-    hash = "sha256-baC0y9MUDmSocZot4ZwgvzkC0mShQqgWrFUq4hat4xE=";
+    version = "10.1.19";
+    hash = "sha256-w+pp2SvPw+15Ko2AeUrNuFbxwF2KBF4XpxoliKDHULc=";
   };
 }
