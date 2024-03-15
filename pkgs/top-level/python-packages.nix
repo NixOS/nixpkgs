@@ -16349,6 +16349,8 @@ self: super: with self; {
 
   wallbox = callPackage ../development/python-modules/wallbox { };
 
+  wallet-py3k = callPackage ../development/python-modules/wallet-py3k { };
+
   walrus = callPackage ../development/python-modules/walrus { };
 
   wand = callPackage ../development/python-modules/wand { };
