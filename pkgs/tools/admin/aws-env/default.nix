@@ -1,20 +1,27 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "aws-env";
   version = "0.5";
   rev = "v${version}";
-
-  goPackagePath = "github.com/Droplr/aws-env";
 
   src = fetchFromGitHub {
     owner = "Droplr";
     repo = pname;
     inherit rev;
-    sha256 = "sha256-dzXgQW5noWT7u276tlwhvgvu2J8VYrOdW9vidZ3W3t0=";
+    hash = "sha256-dzXgQW5noWT7u276tlwhvgvu2J8VYrOdW9vidZ3W3t0=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-mZanveQJveLeAymlEloBYYnvBmnlBac0jXX1J55BrEg=";
+
+  preBuild = ''
+    cp ${./go.mod} go.mod
+    cp ${./go.sum} go.sum
+  '';
+
+
+  ldflags = [ "-s" "-w" ];
+
 
   meta = with lib; {
     description = "Secure way to handle environment variables in Docker and envfile with AWS Parameter Store";
