@@ -42,8 +42,18 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       virtualisation.additionalPaths = [ containerSystem ];
 
-      # not needed, but we want to test the nspawn file generation
-      systemd.nspawn.${containerName} = { };
+      systemd.tmpfiles.rules = [
+        "d /var/lib/machines/shared-decl 0755 root root - -"
+      ];
+      systemd.nspawn.shared-decl = {
+        execConfig = {
+          Boot = false;
+          Parameters = "${containerSystem}/init";
+        };
+        filesConfig = {
+          BindReadOnly = "/nix/store";
+        };
+      };
 
       systemd.services."systemd-nspawn@${containerName}" = {
         serviceConfig.Environment = [
@@ -52,14 +62,33 @@ import ./make-test-python.nix ({ pkgs, ... }:
         ];
         overrideStrategy = "asDropin";
       };
+
+      # open DHCP for container
+      networking.firewall.extraCommands = ''
+        ${pkgs.iptables}/bin/iptables -A nixos-fw -i ve-+ -p udp -m udp --dport 67 -j nixos-fw-accept
+      '';
     };
 
     testScript = ''
       start_all()
       machine.wait_for_unit("default.target");
 
-      # Install container
+      # Test machinectl start stop of shared-decl
+      machine.succeed("machinectl start shared-decl");
+      machine.wait_until_succeeds("systemctl -M shared-decl is-active default.target");
+      machine.succeed("machinectl stop shared-decl");
+
+      # create containers root
       machine.succeed("mkdir -p ${containerRoot}");
+
+      # start container with shared nix store by using same arguments as for systemd-nspawn@.service
+      machine.succeed("systemd-run systemd-nspawn --machine=${containerName} --network-veth -U --bind-ro=/nix/store ${containerSystem}/init")
+      machine.wait_until_succeeds("systemctl -M ${containerName} is-active default.target");
+
+      # Test machinectl stop
+      machine.succeed("machinectl stop ${containerName}");
+
+      # Install container
       # Workaround for nixos-install
       machine.succeed("chmod o+rx /var/lib/machines");
       machine.succeed("nixos-install --root ${containerRoot} --system ${containerSystem} --no-channel-copy --no-root-passwd");
@@ -76,6 +105,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       # Test nss_mymachines via nscd
       machine.succeed("getent hosts ${containerName}");
+
+      # Test systemd-nspawn network configuration to container
+      machine.succeed("networkctl --json=short status ve-${containerName} | ${pkgs.jq}/bin/jq -e '.OperationalState == \"routable\"'");
+
+      # Test systemd-nspawn network configuration to host
+      machine.succeed("machinectl shell ${containerName} /run/current-system/sw/bin/networkctl --json=short status host0 | ${pkgs.jq}/bin/jq -r '.OperationalState == \"routable\"'");
 
       # Test systemd-nspawn network configuration
       machine.succeed("ping -n -c 1 ${containerName}");

@@ -6,7 +6,7 @@
 
 let
   # N.B. Keep in sync with default arg for stdenv/generic.
-  defaultMkDerivationFromStdenv = import ./generic/make-derivation.nix { inherit lib config; };
+  defaultMkDerivationFromStdenv = stdenv: (import ./generic/make-derivation.nix { inherit lib config; } stdenv).mkDerivation;
 
   # Low level function to help with overriding `mkDerivationFromStdenv`. One
   # gives it the old stdenv arguments and a "continuation" function, and

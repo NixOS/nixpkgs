@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "1.60.1";
+  version = "1.62.0";
 in
 buildGoModule {
   pname = "tailscale";
@@ -22,9 +22,9 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-1BzzXRqbs8dS9263cXCujYYSStQlvyQr3dm3tyr+64k=";
+    hash = "sha256-qotoCKUb5INgdSELvJpDaDvCuzVqet5zeIazzRnYoqo=";
   };
-  vendorHash = "sha256-eci4f6golU1eIQOezplA+I+gmOfof40ktIdpr0v/uMc=";
+  vendorHash = "sha256-jyRjT/CQBlmjHzilxJvMuzZQlGyJB4X/yISgWjBVDxc=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "time-ghc-modules";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "codedownio";
     repo = "time-ghc-modules";
     rev = version;
-    sha256 = "0s6540gllhjn7366inhwa70rdnngnhbi07jn1h6x8a0pi71wdfm9";
+    sha256 = "sha256-/PhJAhP3KCWFyeSk8e5JV0cpBueH/eVDwQTMZSnnZCo=";
   };
 
   nativeBuildInputs = [makeWrapper];

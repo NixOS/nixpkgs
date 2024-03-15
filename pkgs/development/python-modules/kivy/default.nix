@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Kivy";
+  pname = "kivy";
   version = "2.1.0";
 
   src = fetchFromGitHub {

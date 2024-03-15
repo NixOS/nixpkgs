@@ -52,7 +52,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
   # This is convient to have as a parameter so the stdenv "adapters" work better
-  mkDerivationFromStdenv ? import ./make-derivation.nix { inherit lib config; }
+  mkDerivationFromStdenv ? stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation
 }:
 
 let

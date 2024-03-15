@@ -9,6 +9,7 @@
 , webkitgtk
 , udev
 , libayatana-appindicator
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +51,8 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/clash
     ln -sf ${lib.getExe clash-meta} $out/bin/${clash-meta.meta.mainProgram}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Clash GUI based on tauri";

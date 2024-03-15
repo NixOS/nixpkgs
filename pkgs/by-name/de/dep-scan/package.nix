@@ -5,21 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.2.11";
+  version = "5.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BEvuCdQcr35jWe9r9KR4Uov1zNVxfPSnENNPgy4N+nc=";
+    hash = "sha256-UoppQAokiWBcgTcSmwfoqrDKt/QHYd2NBR3CpNOqI4k=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace " --cov-append --cov-report term --cov depscan" ""
-    substituteInPlace pyproject.toml \
-      --replace "oras==0.1.26" "oras~=0.1.26"
   '';
 
   nativeBuildInputs = with python3.pkgs; [

@@ -409,6 +409,10 @@ let
       orga = "vrischmann";
       repo = "tree-sitter-templ";
     };
+    "tree-sitter-gleam" = {
+      orga = "gleam-lang";
+      repo = "tree-sitter-gleam";
+    };
   };
 
   allGrammars =

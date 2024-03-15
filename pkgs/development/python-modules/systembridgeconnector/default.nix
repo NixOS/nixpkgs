@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,19 +23,20 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-connector";
     rev = "refs/tags/${version}";
-    hash = "sha256-AjdWDEotz5AUo+auxBqXu7EMv/Kt97DZ6vOrFunZ2Fw=";
+    hash = "sha256-Guh9qbRLp+b2SuFgBx7jf16vRShuHJBi3WOVn9Akce8=";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/timmo001/system-bridge-connector/commit/a9030cf175ab4b51d77010de89e83cbb426448c2.patch";
-      hash = "sha256-0N8knoaEvymSvC92BxDKR0j52oasvOzWosFtHMI2Qmc=";
-    })
     (fetchpatch2 {
       url = "https://github.com/timmo001/system-bridge-connector/commit/25aa172775ee983dc4a29b8dda880aefbad70040.patch";
       hash = "sha256-PedW1S1gZmWkS4sJBqSAx3aoA1KppYS5Xlhoaxqkcd4=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace systembridgeconnector/_version.py \
+      --replace-fail ", dev=0" ""
+  '';
 
   nativeBuildInputs = [
     setuptools

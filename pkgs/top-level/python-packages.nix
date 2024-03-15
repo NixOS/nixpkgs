@@ -9054,6 +9054,8 @@ self: super: with self; {
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
+  orgparse = callPackage ../development/python-modules/orgparse { };
+
   orjson = callPackage ../development/python-modules/orjson { };
 
   orm = callPackage ../development/python-modules/orm { };
@@ -15021,6 +15023,8 @@ self: super: with self; {
   ttach = callPackage ../development/python-modules/ttach { };
 
   ttls = callPackage ../development/python-modules/ttls { };
+
+  ttn-client = callPackage ../development/python-modules/ttn-client { };
 
   ttp = callPackage ../development/python-modules/ttp { };
 

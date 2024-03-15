@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch2
 , setuptools
 , incremental
 , pytestCheckHook
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgemodels";
-  version = "4.0.1";
+  version = "4.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,15 +18,13 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-models";
     rev = "refs/tags/${version}";
-    hash = "sha256-9k85tqJO/YtkYncfNQBelmDkd3SYtf6SHURfumvqUo0=";
+    hash = "sha256-5rbj58E8iDu2Rjf0k9Y1UoF3hbN7ntkx6dm20HYpw6I=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/timmo001/system-bridge-models/commit/82fcee37cb302bc77384165b2ce10f2234c2a14a.patch";
-      hash = "sha256-tZSaWVUPCJmuzkae9LBTdyZ3UINMvrSMbdS5AvbId8Q=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace systembridgemodels/_version.py \
+      --replace-fail ", dev=0" ""
+  '';
 
   nativeBuildInputs = [
     setuptools

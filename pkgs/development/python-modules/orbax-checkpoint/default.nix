@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.5.3";
+  version = "0.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "orbax_checkpoint";
     inherit version;
-    hash = "sha256-FXKQTLv+hROSfg2A+AtzDg7y9oAzLTwoENhENTKTi0U=";
+    hash = "sha256-zry5byLxFzah+e52x4yIi6roU3Jox/9mY62cujB2xlU=";
   };
 
   nativeBuildInputs = [
