@@ -141,16 +141,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s configs/${platform}.mk config.mk
   '';
 
-  postInstall = ''
-    mkdir -p $out/nix-support
-    hare_default_flags="-q -R -a${stdenv.targetPlatform.uname.processor}" \
-      substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/hare \
       --prefix PATH : ${lib.makeBinPath [binutils-unwrapped harec qbe]}
   '';
+
+  setupHook = substituteAll {
+    src = ./setup-hook.sh;
+    hare_default_flags = "-q -R -a${stdenv.targetPlatform.uname.processor}";
+  };
 
   passthru = {
     updateScript = gitUpdater { };
