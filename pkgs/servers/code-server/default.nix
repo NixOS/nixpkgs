@@ -71,18 +71,18 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "0c98611e6b43803a9d5dba222d7023b569abfb49";
+  commit = "760d1318e98945d05133c6121f99541ca7a39bf8";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.19.1";
+  version = "4.22.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-J+6zuqVf1YKQjiRiqO4867DEwYzZsgQYgbsRXPo2hwY=";
+    hash = "sha256-rudK3cPbRB4aDUbGU2miYil9VlPOCNuvneWkChdQS+I=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-g2rwB+PuWuYgrzIuW0ngia7cdPMC8s7ffBEkbmPPzB4=";
+    outputHash = "sha256-ZipQjEOyfsn3soL+Dd6OomS0ykg8TWTTF61vVbdOcSI=";
   };
 
   nativeBuildInputs = [
@@ -130,9 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
     quilt
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (with xorg; [ libX11 libxkbfile ])
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    xorg.libX11
+    xorg.libxkbfile
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libsecret
+  ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
     CoreServices
@@ -154,9 +157,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # inject git commit
     substituteInPlace ./ci/build/build-vscode.sh \
-      --replace '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "${commit}"
     substituteInPlace ./ci/build/build-release.sh \
-      --replace '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "${commit}"
   '';
 
   configurePhase = ''
