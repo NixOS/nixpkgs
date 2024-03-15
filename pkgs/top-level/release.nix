@@ -246,7 +246,7 @@ let
               inherit (bootstrap) build dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
               # TODO: Re-enable once the new bootstrap-tools are in place.
-              #inherit (bootstrap.test-pkgs) stdenv;
+              inherit (bootstrap.test-pkgs) stdenv;
             }
           else
             abort "No bootstrap implementation for system: ${config}"

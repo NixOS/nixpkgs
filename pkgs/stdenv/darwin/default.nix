@@ -18,6 +18,7 @@
     import ./bootstrap-files/aarch64-apple-darwin.nix
   else
     import ./bootstrap-files/x86_64-apple-darwin.nix
+, bootstrapTest ? false
 }:
 
 assert crossSystem == localSystem;
@@ -48,7 +49,16 @@ let
     unset SDKROOT
   '';
 
-  bootstrapTools = derivation ({
+  bootstrapTools = derivation (if bootstrapTest then {
+    inherit system;
+
+    name = "bootstrap-tools";
+    builder = "${bootstrapFiles.unpack}/bin/bash";
+    args = [ ./patch-bootstrap-tools.sh bootstrapFiles.bootstrapTools ];
+    PATH = lib.makeBinPath [ (placeholder "out") bootstrapFiles.unpack ];
+    allowedReferences = [ "out" ];
+    __impureHostDeps = commonImpureHostDeps;
+  } else {
     inherit system;
 
     name = "bootstrap-tools";
@@ -220,8 +230,8 @@ in
       gnugrep = bootstrapTools;
 
       # Either pbzx or Libsystem is required from bootstrap tools (one is used building the other).
-      pbzx = if localSystem.isAarch64 then bootstrapTools else super.pbzx;
-      cpio = self.stdenv.mkDerivation {
+      pbzx = if localSystem.isAarch64 || bootstrapTest then bootstrapTools else super.pbzx;
+      cpio = if bootstrapTest then bootstrapTools else self.stdenv.mkDerivation {
         name = "bootstrap-stage0-cpio";
         buildCommand = ''
           mkdir -p $out/bin

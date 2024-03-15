@@ -21,6 +21,7 @@
 , enableStatic ? !enableShared
 , gnome
 , testers
+, forceNew ? false
 }:
 
 let
@@ -28,7 +29,7 @@ let
   # https://gitlab.gnome.org/GNOME/libxml2/-/commit/b706824b612adb2c8255819c9a55e78b52774a3c
   # This case is encountered "temporarily" during stdenv bootstrapping on darwin.
   # Beware that the old version has known security issues, so the final set shouldn't use it.
-  oldVer = python.pname == "python3-minimal";
+  oldVer = !forceNew && python.pname == "python3-minimal";
 in
   assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
 
