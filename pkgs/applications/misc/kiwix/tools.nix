@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiwix-tools";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-tools";
     rev = finalAttrs.version;
-    hash = "sha256-+th86lMAuCcmWj06yQoZ1L7rLZKqNvuTrV+Rra2km44=";
+    hash = "sha256-JwF4EN5kyHEfNoMhHb9ywe+7pmgQtjEd2FeRUeTjvQw=";
   };
 
   nativeBuildInputs = [
