@@ -1423,6 +1423,7 @@
   ./services/web-apps/kasmweb/default.nix
   ./services/web-apps/kavita.nix
   ./services/web-apps/keycloak.nix
+  ./services/web-apps/kimai.nix
   ./services/web-apps/komga.nix
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lemmy.nix
