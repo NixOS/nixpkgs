@@ -94,6 +94,16 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
+  dtkcommon = callPackage ../development/libraries/dtkcommon { };
+
+  dtkcore = callPackage ../development/libraries/dtkcore { };
+
+  dtkgui = callPackage ../development/libraries/dtkgui { };
+
+  dtkwidget = callPackage ../development/libraries/dtkwidget { };
+
+  dtkdeclarative = callPackage ../development/libraries/dtkdeclarative { };
+
   dxflib = callPackage ../development/libraries/dxflib {};
 
   drumstick = callPackage ../development/libraries/drumstick { };
