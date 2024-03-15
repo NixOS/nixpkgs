@@ -63,8 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     sourceRoot = ".";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/srb2
       cp -r *pk3 *dta *dat models/ $out/share/srb2/
+
+      runHook postInstall
     '';
   };
 
@@ -96,6 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/icons
 
     copyDesktopItems
@@ -105,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp bin/lsdlsrb2 $out/bin/srb2
     wrapProgram $out/bin/srb2 --set SRB2WADDIR "${finalAttrs.assets}/share/srb2"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
