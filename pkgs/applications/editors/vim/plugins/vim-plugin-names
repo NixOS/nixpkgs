@@ -1237,6 +1237,7 @@ https://github.com/Vimjas/vim-python-pep8-indent/,,
 https://github.com/romainl/vim-qf/,,
 https://github.com/romainl/vim-qlist/,,
 https://github.com/peterhoeg/vim-qml/,,
+https://github.com/codethread/qmk.nvim/,HEAD,qmk-nvim
 https://github.com/thinca/vim-quickrun/,,
 https://github.com/racer-rust/vim-racer/,,
 https://github.com/wlangstroth/vim-racket/,,
