@@ -38710,7 +38710,9 @@ with pkgs;
 
   getdp = callPackage ../applications/science/math/getdp { };
 
-  gurobi = callPackage ../applications/science/math/gurobi { };
+  gurobi = callPackage ../applications/science/math/gurobi {
+    python3 = python310;
+  };
 
   jags = callPackage ../applications/science/math/jags { };
 
