@@ -17,6 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "dnspython"
     "tqdm"
   ];
 

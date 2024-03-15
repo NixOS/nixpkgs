@@ -3297,6 +3297,39 @@ buildLuarocksPackage {
   };
 }) {};
 
+tiktoken_core = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder, luarocks-build-rust-mlua }:
+buildLuarocksPackage {
+  pname = "tiktoken_core";
+  version = "0.2.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/tiktoken_core-0.2.1-1.rockspec";
+    sha256 = "0mdmrpg82vmk0cqiqdayyk4vvl299z0xqrg58q18dfs5nc27wkla";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/gptlang/lua-tiktoken",
+  "rev": "61d831a81a01ba095f8c94e148b721b3aa7b1e45",
+  "date": "2024-03-03T23:24:06+00:00",
+  "path": "/nix/store/5ik17k726wl8hpz295n7dqq3438k8ddj-lua-tiktoken",
+  "sha256": "11lpzxmmb4zglkp9czlzggd8i46r7whpq021b5d3fx7bc5a81d3n",
+  "hash": "sha256-drSAVGHrdDdaWUEAfCE/2ZCI2nuffpbupO+TVWv/l4Y=",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path" "sha256"]) ;
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua luarocks-build-rust-mlua ];
+
+  meta = {
+    homepage = "https://github.com/gptlang/lua-tiktoken";
+    description = "An experimental port of OpenAI's Tokenizer to lua";
+    maintainers = with lib.maintainers; [ natsukium ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 tl = callPackage({ argparse, buildLuarocksPackage, compat53, fetchgit, fetchurl, luafilesystem }:
 buildLuarocksPackage {
   pname = "tl";
