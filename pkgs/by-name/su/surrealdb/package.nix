@@ -7,7 +7,7 @@
 , rocksdb
 , testers
 , surrealdb
-, SystemConfiguration
+, darwin
 , protobuf
 }:
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   doCheck = false;
 
