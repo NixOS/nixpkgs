@@ -2394,6 +2394,8 @@ self: super: with self; {
 
   conda = callPackage ../development/python-modules/conda { };
 
+  conda-libmamba-solver = callPackage ../development/python-modules/conda-libmamba-solver { };
+
   confection = callPackage ../development/python-modules/confection { };
 
   configargparse = callPackage ../development/python-modules/configargparse { };
