@@ -1629,6 +1629,21 @@ self: super: {
     '';
   }) (doJailbreak super.jsaddle-dom);
 
+  reflex-dom = lib.pipe super.reflex-dom [
+      (appendPatch
+        (fetchpatch {
+          name = "bump-reflex-dom-bounds.patch";
+          url = "https://github.com/reflex-frp/reflex-dom/commit/70ff88942f9d2bcd364e301c70df8702f452df38.patch";
+          sha256 = "sha256-xzk1+6CnfhEBfXdL5RUFbLRSn7knMwydmV8v2F2W5gE=";
+          relative = "reflex-dom";
+        })
+      )
+      (overrideCabal (drv: {
+        editedCabalFile = null;
+        revision = null;
+      }))
+    ];
+
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   # 2022-03-16: Pullrequest for ghc 9 compat https://github.com/reflex-frp/reflex-dom/pull/433
   reflex-dom-core = lib.pipe super.reflex-dom-core [
