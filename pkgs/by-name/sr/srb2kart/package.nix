@@ -83,5 +83,6 @@ in stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric donovanglover ];
+    mainProgram = "srb2kart";
   };
 }
