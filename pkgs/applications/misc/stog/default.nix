@@ -39,7 +39,9 @@ buildDunePackage rec {
   meta = with lib; {
     description = "XML documents and web site compiler";
     homepage = "https://www.good-eris.net/stog";
-    license = licenses.lgpl3;
+    changelog = "https://framagit.org/zoggy/stog/-/raw/${src.rev}/Changes";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ regnat ];
+    mainProgram = "stog";
   };
 }
