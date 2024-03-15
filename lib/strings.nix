@@ -206,6 +206,18 @@ rec {
   */
   makeLibraryPath = makeSearchPathOutput "lib" "lib";
 
+  /* Construct a include search path (such as C_INCLUDE_PATH) containing the
+     libraries for a set of packages
+
+     Example:
+       makeIncludePath [ "/usr" "/usr/local" ]
+       => "/usr/include:/usr/local/include"
+       pkgs = import <nixpkgs> { }
+       makeIncludePath [ pkgs.openssl pkgs.zlib ]
+       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/include:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8-dev/include"
+  */
+  makeIncludePath = makeSearchPathOutput "dev" "include";
+
   /* Construct a binary search path (such as $PATH) containing the
      binaries for a set of packages.
 
