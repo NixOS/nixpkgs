@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "dronecan";
-  version = "1.0.25";
+  version = "1.0.26";
   format = "setuptools";
   disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0WKmVZwE6OgBckWWvPcn5BYqXMEt6Mr1P68UMHfRp4I=";
+    hash = "sha256-D2odxa9ADswrg6rgKLTyQulHpGec1r0lWRUZDV5YvyE=";
   };
 
   nativeCheckInputs = [
