@@ -1,6 +1,9 @@
 { lib, skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (lib) platforms;
+  inherit (skawarePackages) buildPackage mdevd skalibs;
+in
 
 buildPackage {
   pname = "mdevd";
@@ -8,7 +11,7 @@ buildPackage {
   sha256 = "9uzw73zUjQTvx1rLLa2WfYULyIFb2wCY8cnvBDOU1DA=";
 
   description = "mdev-compatible Linux hotplug manager daemon";
-  platforms = lib.platforms.linux;
+  platforms = platforms.linux;
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
