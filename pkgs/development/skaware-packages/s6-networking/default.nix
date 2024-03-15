@@ -2,11 +2,21 @@
 
 # Whether to build the TLS/SSL tools and what library to use
 # acceptable values: "bearssl", "libressl", false
-, sslSupport ? "bearssl" , libressl, bearssl
+, sslSupport ? "bearssl", libressl, bearssl
 }:
 
-with skawarePackages;
 let
+  inherit (lib) getDev getLib optionals;
+
+  inherit (skawarePackages)
+    buildPackage
+    execline
+    s6
+    s6-dns
+    s6-networking
+    skalibs
+    ;
+
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
     libressl = libressl;
@@ -14,8 +24,8 @@ let
   };
 
 in
-assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
+assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 buildPackage {
   pname = "s6-networking";
@@ -47,11 +57,11 @@ buildPackage {
     "--with-dynlib=${s6.out}/lib"
     "--with-dynlib=${s6-dns.lib}/lib"
   ]
-  ++ (lib.optionals sslSupportEnabled [
+  ++ (optionals sslSupportEnabled [
        "--enable-ssl=${sslSupport}"
-       "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
-       "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
-       "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
+       "--with-include=${getDev sslLibs.${sslSupport}}/include"
+       "--with-lib=${getLib sslLibs.${sslSupport}}/lib"
+       "--with-dynlib=${getLib sslLibs.${sslSupport}}/lib"
      ]);
 
   postInstall = ''
