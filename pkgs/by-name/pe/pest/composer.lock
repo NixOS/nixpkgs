@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "886ef4e19557e54720685cf5af4bfcba",
+    "content-hash": "3334c385a76e74a9e5a3cc6af8daed8e",
     "packages": [
         {
             "name": "brianium/paratest",
@@ -1437,16 +1437,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.12",
+            "version": "10.5.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "41a9886b85ac7bf3929853baf96b95361cd69d2b"
+                "reference": "20a63fc1c6db29b15da3bd02d4b6cf59900088a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/41a9886b85ac7bf3929853baf96b95361cd69d2b",
-                "reference": "41a9886b85ac7bf3929853baf96b95361cd69d2b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/20a63fc1c6db29b15da3bd02d4b6cf59900088a7",
+                "reference": "20a63fc1c6db29b15da3bd02d4b6cf59900088a7",
                 "shasum": ""
             },
             "require": {
@@ -1518,7 +1518,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.12"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.13"
             },
             "funding": [
                 {
@@ -1534,7 +1534,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-09T12:04:07+00:00"
+            "time": "2024-03-12T15:37:41+00:00"
         },
         {
             "name": "psr/container",
@@ -3787,16 +3787,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.60",
+            "version": "1.10.62",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "95dcea7d6c628a3f2f56d091d8a0219485a86bbe"
+                "reference": "cd5c8a1660ed3540b211407c77abf4af193a6af9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/95dcea7d6c628a3f2f56d091d8a0219485a86bbe",
-                "reference": "95dcea7d6c628a3f2f56d091d8a0219485a86bbe",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cd5c8a1660ed3540b211407c77abf4af193a6af9",
+                "reference": "cd5c8a1660ed3540b211407c77abf4af193a6af9",
                 "shasum": ""
             },
             "require": {
@@ -3845,7 +3845,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-07T13:30:19+00:00"
+            "time": "2024-03-13T12:27:20+00:00"
         },
         {
             "name": "phpstan/phpstan-strict-rules",
@@ -4220,29 +4220,22 @@
         },
         {
             "name": "tomasvotruba/type-coverage",
-            "version": "0.2.3",
+            "version": "0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TomasVotruba/type-coverage.git",
-                "reference": "213ef9cfcdcb1472c5e1a1d7c3c99d39347433f7"
+                "reference": "47f75151c3b3c4e040e0c68d9bba47597bf5ad6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TomasVotruba/type-coverage/zipball/213ef9cfcdcb1472c5e1a1d7c3c99d39347433f7",
-                "reference": "213ef9cfcdcb1472c5e1a1d7c3c99d39347433f7",
+                "url": "https://api.github.com/repos/TomasVotruba/type-coverage/zipball/47f75151c3b3c4e040e0c68d9bba47597bf5ad6f",
+                "reference": "47f75151c3b3c4e040e0c68d9bba47597bf5ad6f",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.2",
-                "phpstan/phpstan": "^1.10.60"
-            },
-            "require-dev": {
-                "phpstan/extension-installer": "^1.3",
-                "phpunit/phpunit": "^10.5",
-                "rector/rector": "^1.0.2",
-                "symplify/easy-coding-standard": "^12.1",
-                "tomasvotruba/unused-public": "^0.2",
-                "tracy/tracy": "^2.10"
+                "nette/utils": "^3.2 || ^4.0",
+                "php": "^7.2 || ^8.0",
+                "phpstan/phpstan": "^1.9.3"
             },
             "type": "phpstan-extension",
             "extra": {
@@ -4268,7 +4261,7 @@
             ],
             "support": {
                 "issues": "https://github.com/TomasVotruba/type-coverage/issues",
-                "source": "https://github.com/TomasVotruba/type-coverage/tree/0.2.3"
+                "source": "https://github.com/TomasVotruba/type-coverage/tree/0.2.4"
             },
             "funding": [
                 {
@@ -4280,7 +4273,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-08T18:25:10+00:00"
+            "time": "2024-03-15T11:34:50+00:00"
         }
     ],
     "aliases": [],
