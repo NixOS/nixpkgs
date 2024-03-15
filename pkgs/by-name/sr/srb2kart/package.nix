@@ -20,7 +20,7 @@ let
 
   assets = fetchurl {
     url = "https://github.com/STJr/Kart-Public/releases/download/${release_tag}/AssetsLinuxOnly.zip";
-    sha256 = "sha256-ejhPuZ1C8M9B0S4+2HN1T5pbormT1eVL3nlivqOszdE=";
+    hash = "sha256-ejhPuZ1C8M9B0S4+2HN1T5pbormT1eVL3nlivqOszdE=";
   };
 
 in stdenv.mkDerivation {
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
     owner = "STJr";
     repo = "Kart-Public";
     rev = release_tag;
-    sha256 = "sha256-5sIHdeenWZjczyYM2q+F8Y1SyLqL+y77yxYDUM3dVA0=";
+    hash = "sha256-5sIHdeenWZjczyYM2q+F8Y1SyLqL+y77yxYDUM3dVA0=";
   };
 
   nativeBuildInputs = [
