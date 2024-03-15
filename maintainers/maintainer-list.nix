@@ -17621,15 +17621,6 @@
     matrix = "@shamrocklee:matrix.org";
     name = "Yueh-Shun Li";
   };
-  shanesveller = {
-    email = "shane@sveller.dev";
-    github = "shanesveller";
-    githubId = 831;
-    keys = [{
-      fingerprint = "F83C 407C ADC4 5A0F 1F2F  44E8 9210 C218 023C 15CD";
-    }];
-    name = "Shane Sveller";
-  };
   shard7 = {
     email = "sh7user@gmail.com";
     github = "shard77";

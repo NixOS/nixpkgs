@@ -1,14 +1,37 @@
 { lib }:
+
 let
-    inherit (builtins) head tail isList isAttrs isInt attrNames;
+  inherit (lib)
+    and
+    any
+    attrByPath
+    attrNames
+    compare
+    concat
+    concatMap
+    elem
+    filter
+    foldl
+    foldr
+    genericClosure
+    head
+    imap1
+    init
+    isAttrs
+    isFunction
+    isInt
+    isList
+    lists
+    listToAttrs
+    mapAttrs
+    mergeAttrs
+    meta
+    nameValuePair
+    tail
+    toList
+    ;
 
-in
-
-with lib.lists;
-with lib.attrsets;
-with lib.strings;
-
-rec {
+  inherit (lib.attrsets) removeAttrs;
 
   # returns default if env var is not set
   maybeEnv = name: default:
@@ -26,7 +49,7 @@ rec {
         base = (setAttrMerge "passthru" {} (f arg)
                         ( z: z // {
                             function = foldArgs merger f arg;
-                            args = (lib.attrByPath ["passthru" "args"] {} z) // x;
+                            args = (attrByPath ["passthru" "args"] {} z) // x;
                           } ));
         withStdOverrides = base // {
           override = base.passthru.function;
@@ -77,11 +100,11 @@ rec {
   # Output : are reqs satisfied? It's asserted.
   checkReqs = attrSet: argList: condList:
   (
-    foldr lib.and true
+    foldr and true
       (map (x: let name = (head x); in
 
         ((checkFlag attrSet name) ->
-        (foldr lib.and true
+        (foldr and true
         (map (y: let val=(getValue attrSet argList y); in
                 (val!=null) && (val!=false))
         (tail x))))) condList));
@@ -159,11 +182,11 @@ rec {
 
   closePropagationSlow = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
-  # This is an optimisation of lib.closePropagation which avoids the O(n^2) behavior
+  # This is an optimisation of closePropagation which avoids the O(n^2) behavior
   # Using a list of derivations, it generates the full closure of the propagatedXXXBuildInputs
   # The ordering / sorting / comparison is done based on the `outPath`
   # attribute of each derivation.
-  # On some benchmarks, it performs up to 15 times faster than lib.closePropagation.
+  # On some benchmarks, it performs up to 15 times faster than closePropagation.
   # See https://github.com/NixOS/nixpkgs/pull/194391 for details.
   closePropagationFast = list:
     builtins.map (x: x.val) (builtins.genericClosure {
@@ -250,10 +273,10 @@ rec {
   # foldArgs, composedArgsAndFun or applyAndFun. Example: composableDerivation in all-packages.nix
   mergeAttrByFunc = x: y:
     let
-          mergeAttrBy2 = { mergeAttrBy = lib.mergeAttrs; }
+          mergeAttrBy2 = { mergeAttrBy = mergeAttrs; }
                       // (maybeAttr "mergeAttrBy" {} x)
                       // (maybeAttr "mergeAttrBy" {} y); in
-    foldr lib.mergeAttrs {} [
+    foldr mergeAttrs {} [
       x y
       (mapAttrs ( a: v: # merge special names using given functions
           if x ? ${a}
@@ -273,9 +296,9 @@ rec {
 
   # sane defaults (same name as attr name so that inherit can be used)
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
-    listToAttrs (map (n: nameValuePair n lib.concat)
+    listToAttrs (map (n: nameValuePair n concat)
       [ "nativeBuildInputs" "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" "patches" ])
-    // listToAttrs (map (n: nameValuePair n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ])
+    // listToAttrs (map (n: nameValuePair n mergeAttrs) [ "passthru" "meta" "cfg" "flags" ])
     // listToAttrs (map (n: nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;
 
@@ -283,7 +306,7 @@ rec {
       if isAttrs x then
           if x ? outPath then "derivation"
           else "attrs"
-      else if lib.isFunction x then "function"
+      else if isFunction x then "function"
       else if isList x then "list"
       else if x == true then "bool"
       else if x == false then "bool"
@@ -304,4 +327,47 @@ rec {
   fakeHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   fakeSha256 = "0000000000000000000000000000000000000000000000000000000000000000";
   fakeSha512 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+
+in
+
+# Everything in this attrset is the public interface of the file.
+{
+  inherit
+    checkFlag
+    checkReqs
+    closePropagation
+    closePropagationFast
+    closePropagationSlow
+    condConcat
+    defaultMerge
+    defaultMergeArg
+    fakeHash
+    fakeSha256
+    fakeSha512
+    foldArgs
+    getValue
+    ifEnable
+    imap
+    innerClosePropagation
+    innerModifySumArgs
+    lazyGenericClosure
+    mapAttrsFlatten
+    maybeAttr
+    maybeAttrNullable
+    maybeEnv
+    mergeAttrBy
+    mergeAttrByFunc
+    mergeAttrsByFuncDefaults
+    mergeAttrsByFuncDefaultsClean
+    mergeAttrsConcatenateValues
+    mergeAttrsNoOverride
+    mergeAttrsWithFunc
+    modifySumArgs
+    nixType
+    nvs
+    setAttr
+    setAttrMerge
+    uniqList
+    uniqListExt
+    ;
 }
