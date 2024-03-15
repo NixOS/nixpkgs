@@ -640,6 +640,7 @@ in {
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
+  ollama = handleTest ./ollama.nix {};
   ombi = handleTest ./ombi.nix {};
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
@@ -682,6 +683,7 @@ in {
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   peroxide = handleTest ./peroxide.nix {};
+  pg_anonymizer = handleTest ./pg_anonymizer.nix {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
   pgbouncer = handleTest ./pgbouncer.nix {};
   pgjwt = handleTest ./pgjwt.nix {};

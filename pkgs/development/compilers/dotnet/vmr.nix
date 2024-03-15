@@ -319,6 +319,13 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # dotnet cli is in the root, so we need to strip from there
+  # TODO: should we install in $out/share/dotnet?
+  stripDebugList = [ "." ];
+  # stripping dlls results in:
+  # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
+  stripExclude = [ "*.dll" ];
+
   passthru = {
     inherit releaseManifest buildRid targetRid;
     icu = _icu;

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "The default background set for the Budgie Desktop";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-backgrounds";
     platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
+    maintainers = teams.budgie.members;
     license = licenses.cc0;
   };
 }

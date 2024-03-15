@@ -9,6 +9,7 @@
 , fetchYarnDeps
 , prefetch-yarn-deps
 , electron
+, libnotify
 , libpulseaudio
 , pipewire
 , alsa-utils
@@ -71,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
     popd
 
-    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
+    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, 'libpipewire' for screen sharing and 'libnotify' for notifications
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire libnotify ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

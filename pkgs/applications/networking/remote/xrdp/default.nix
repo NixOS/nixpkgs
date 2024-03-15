@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "0.9.24";
+  version = "0.9.25.1";
   patchedXrdpSrc = applyPatches {
     patches = [ ./dynamic_config.patch ];
     name = "xrdp-patched-${version}";
@@ -31,19 +31,19 @@ let
       repo = "xrdp";
       rev = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-Kvj72l+jmoad6VgmCYW2KtQAbJMJ8AZjNIYJ5lUNzRM=";
+      hash = "sha256-oAs0oWkCyj3ObdJuHLfT25ZzkTrxNAXDiFU64OOP4Ow=";
     };
   };
 
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
-    version = "0.9.19";
+    version = "0.9.20";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      hash = "sha256-WI1KyJDQkmNHwweZMbNd2KUfawaieoGMDMQfeD12cZs=";
+      hash = "sha256-cAAWk/GqR5zJmh7EAzX3qJiYNl/RrDWdncdFeqsFIaU=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];

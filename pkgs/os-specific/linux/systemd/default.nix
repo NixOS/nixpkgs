@@ -232,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/pull/282607
     (fetchpatch {
       url = "https://github.com/systemd/systemd/commit/8040fa55a1cbc34dede3205a902095ecd26c21e3.patch";
-      sha256 = "0l8jk0w0wavagzck0vy5m0s6fhxab0hpdr4ib111bacqrvvda3kd";
+      sha256 = "0c6z7bsndbkb8m130jnjpsl138sfv3q171726n5vkyl2n9ihnavk";
     })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let

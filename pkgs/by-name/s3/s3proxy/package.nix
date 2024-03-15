@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , jre
 , makeWrapper
@@ -19,6 +20,8 @@ maven.buildMavenPackage {
     rev = "s3proxy-${version}";
     hash = "sha256-GhZPvo8wlXInHwg8rSmpwMMkZVw5SMpnZyKqFUYLbrE=";
   };
+
+  mvnParameters = lib.optionalString stdenv.isDarwin "-DskipTests";
 
   nativeBuildInputs = [ makeWrapper ];
 

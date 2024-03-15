@@ -1987,6 +1987,8 @@ self: super: with self; {
 
   cf-xarray = callPackage ../development/python-modules/cf-xarray { };
 
+  cffconvert = callPackage ../development/python-modules/cffconvert { };
+
   cffi = callPackage ../development/python-modules/cffi { };
 
   cffsubr = callPackage ../development/python-modules/cffsubr { };
@@ -4936,6 +4938,8 @@ self: super: with self; {
   gps3 = callPackage ../development/python-modules/gps3 { };
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
+
+  gpuctypes = callPackage ../development/python-modules/gpuctypes { };
 
   gpustat = callPackage ../development/python-modules/gpustat { };
 
@@ -9050,6 +9054,8 @@ self: super: with self; {
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
+  orgparse = callPackage ../development/python-modules/orgparse { };
+
   orjson = callPackage ../development/python-modules/orjson { };
 
   orm = callPackage ../development/python-modules/orm { };
@@ -11171,10 +11177,6 @@ self: super: with self; {
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
-  pyp = callPackage ../development/python-modules/pyp {
-    inherit (pkgs) jq;
-  };
-
   pypng = callPackage ../development/python-modules/pypng { };
 
   phonemizer = callPackage ../development/python-modules/phonemizer { };
@@ -11323,7 +11325,7 @@ self: super: with self; {
 
   pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix { };
 
-  pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine.nix { };
+  pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine { };
 
   pyqt3d = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt3d {
     inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
@@ -14765,6 +14767,8 @@ self: super: with self; {
 
   tinydb = callPackage ../development/python-modules/tinydb { };
 
+  tinygrad = callPackage ../development/python-modules/tinygrad { };
+
   tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
 
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
@@ -15019,6 +15023,8 @@ self: super: with self; {
   ttach = callPackage ../development/python-modules/ttach { };
 
   ttls = callPackage ../development/python-modules/ttls { };
+
+  ttn-client = callPackage ../development/python-modules/ttn-client { };
 
   ttp = callPackage ../development/python-modules/ttp { };
 

@@ -107,7 +107,7 @@ with pkgs;
     Please be informed that this pseudo-package is not the only part
     of Nixpkgs that fails to evaluate. You should not evaluate
     entire Nixpkgs without some special measures to handle failing
-    packages, like using pkgs/top-level/release-attrpaths.nix.
+    packages, like using pkgs/top-level/release-attrpaths-superset.nix.
   '';
 
   tests = callPackages ../test { };
@@ -277,8 +277,6 @@ with pkgs;
   asciicam = callPackage ../applications/video/asciicam { };
 
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
-
-  asn = callPackage ../applications/networking/asn { };
 
   asnmap = callPackage ../tools/security/asnmap { };
 
@@ -891,7 +889,7 @@ with pkgs;
 
   tarsum = callPackage ../build-support/docker/tarsum.nix { };
 
-  snapTools = callPackage ../build-support/snap { };
+  snapTools = throw "snapTools was removed because makeSnap produced broken snaps and it was the only function in snapTools. See https://github.com/NixOS/nixpkgs/issues/100618 for more details."; # 2024-03-04;
 
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
@@ -6139,10 +6137,6 @@ with pkgs;
 
   opam-publish = callPackage ../development/tools/ocaml/opam-publish { };
 
-  opencomposite = callPackage ../development/libraries/opencomposite { };
-
-  opencomposite-helper = callPackage ../development/libraries/opencomposite/helper.nix { };
-
   osdlyrics = callPackage ../applications/audio/osdlyrics { };
 
   ossutil = callPackage ../tools/admin/ossutil { };
@@ -6810,12 +6804,11 @@ with pkgs;
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_23_02_0
-    citrix_workspace_23_07_0
     citrix_workspace_23_09_0
     citrix_workspace_23_11_0
+    citrix_workspace_24_02_0
   ;
-  citrix_workspace = citrix_workspace_23_11_0;
+  citrix_workspace = citrix_workspace_24_02_0;
 
   clima = callPackage ../tools/text/clima { };
 
@@ -7093,6 +7086,8 @@ with pkgs;
   certdump = callPackage ../tools/security/certdump { };
 
   certstrap = callPackage ../tools/security/certstrap { };
+
+  cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   cfssl = callPackage ../tools/security/cfssl { };
 
@@ -7946,10 +7941,6 @@ with pkgs;
   escrotum = callPackage ../tools/graphics/escrotum { };
 
   esshader = callPackage ../tools/graphics/esshader { };
-
-  etcher = callPackage ../tools/misc/etcher {
-    electron = electron_19;
-  };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
 
@@ -9792,9 +9783,7 @@ with pkgs;
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
-  kube-router = callPackage ../applications/networking/cluster/kube-router {
-    buildGoModule = buildGo120Module;
-  };
+  kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
   kubedock = callPackage ../development/tools/kubedock { };
 
@@ -11988,6 +11977,7 @@ with pkgs;
     pinentry-gtk2
     pinentry-gnome3
     pinentry-qt
+    pinentry-tty
     pinentry-all;
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
@@ -12216,7 +12206,8 @@ with pkgs;
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix {
-    inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation AppKit;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   proxychains = callPackage ../tools/networking/proxychains { };
@@ -16749,7 +16740,7 @@ with pkgs;
   rasm = callPackage ../development/compilers/rasm { };
 
   replibyte = callPackage ../development/tools/database/replibyte {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   rgbds = callPackage ../development/compilers/rgbds { };
@@ -18295,10 +18286,11 @@ with pkgs;
   electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
   electron_25 = electron_25-bin;
-  electron_26 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_26 then electron-source.electron_26 else electron_26-bin;
+  electron_26 = electron_26-bin;
   electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
-  electron = electron_28;
+  electron_29 = electron-source.electron_29;
+  electron = electron_29;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -19987,7 +19979,9 @@ with pkgs;
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
-  terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
+  terraform-ls = callPackage ../development/tools/misc/terraform-ls {
+    buildGoModule = buildGo122Module;
+  };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
@@ -22182,8 +22176,6 @@ with pkgs;
 
   libbs2b = callPackage ../development/libraries/audio/libbs2b { };
 
-  libbson = callPackage ../development/libraries/libbson { };
-
   libbytesize = callPackage ../development/libraries/libbytesize { };
 
   libcaca = callPackage ../development/libraries/libcaca { };
@@ -24228,10 +24220,6 @@ with pkgs;
   present = callPackage ../misc/present { };
 
   prime-server = callPackage ../development/libraries/prime-server { };
-
-  primecount = callPackage ../applications/science/math/primecount { };
-
-  primesieve = callPackage ../applications/science/math/primesieve { };
 
   proj = callPackage ../development/libraries/proj {
     stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
@@ -27232,10 +27220,6 @@ with pkgs;
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
 
-  t-rex = callPackage ../servers/geospatial/t-rex {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   tegola = callPackage ../servers/geospatial/tegola { };
 
   tile38 = callPackage ../servers/geospatial/tile38 { };
@@ -29915,11 +29899,6 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
-  saga = callPackage ../applications/gis/saga {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-    inherit (libsForQt5) dxflib;
-  };
-
   spatialite_gui = callPackage ../applications/gis/spatialite-gui {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
     wxGTK = wxGTK32;
@@ -30780,7 +30759,7 @@ with pkgs;
   dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_20_10 docker_24 docker_25;
+    docker_24 docker_25;
 
   docker = docker_24;
   docker-client = docker.override { clientOnly = true; };
@@ -31070,8 +31049,6 @@ with pkgs;
   };
 
   gspeech = callPackage ../applications/audio/gspeech { };
-
-  gtkcord4 = callPackage ../applications/audio/gtkcord4 { };
 
   haruna = libsForQt5.callPackage ../applications/video/haruna { };
 
@@ -31851,8 +31828,6 @@ with pkgs;
 
   gscreenshot = callPackage ../applications/graphics/gscreenshot { };
 
-  gtkpod = callPackage ../applications/audio/gtkpod { };
-
   guacamole-client = callPackage ../servers/guacamole-client { };
 
   guacamole-server = callPackage ../servers/guacamole-server { };
@@ -32079,20 +32054,6 @@ with pkgs;
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
-
-  hyper-haskell-server-with-packages = callPackage ../development/tools/haskell/hyper-haskell/server.nix {
-    inherit (haskellPackages) ghcWithPackages;
-    packages = self: with self; [];
-  };
-
-  hyper-haskell = callPackage ../development/tools/haskell/hyper-haskell {
-    hyper-haskell-server = hyper-haskell-server-with-packages.override {
-      packages = self: with self; [
-        hyper-extra diagrams csound-catalog
-      ];
-    };
-    extra-packages = [ csound ];
-  };
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng {
     protobuf = protobuf_21;
@@ -32589,12 +32550,6 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  k3s_1_24 = callPackage ../applications/networking/cluster/k3s/1_24 {
-    buildGoModule = buildGo120Module;
-  };
-  k3s_1_25 = callPackage ../applications/networking/cluster/k3s/1_25 {
-    buildGoModule = buildGo120Module;
-  };
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo120Module;
   }) k3s_1_26 k3s_1_27 k3s_1_28;
@@ -33617,8 +33572,6 @@ with pkgs;
     webkitgtk = webkitgtk_6_0;
   };
 
-  nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus { };
-
   nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell { };
@@ -34434,8 +34387,6 @@ with pkgs;
 
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
-  qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat { };
-
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
     inherit (darwin.stubs) rez setfile;
@@ -35031,8 +34982,6 @@ with pkgs;
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
 
-  smartgithg = callPackage ../applications/version-management/smartgithg { };
-
   smartdeblur = libsForQt5.callPackage ../applications/graphics/smartdeblur { };
 
   snapper = callPackage ../tools/misc/snapper { };
@@ -35295,8 +35244,6 @@ with pkgs;
   telepathy-mission-control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
 
   telepathy-idle = callPackage ../applications/networking/instant-messengers/telepathy/idle { };
-
-  teleprompter = callPackage ../applications/misc/teleprompter { };
 
   tempo = callPackage ../servers/tracing/tempo { };
 
@@ -35787,6 +35734,7 @@ with pkgs;
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
+    jdk = openjdk17;
   };
 
   virtualboxKvm = lowPrio (virtualbox.override {
@@ -36045,7 +35993,7 @@ with pkgs;
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
   whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_21;
+    electron = electron_27;
   };
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
@@ -36218,8 +36166,6 @@ with pkgs;
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 
   xdg-desktop-portal-xapp = callPackage ../development/libraries/xdg-desktop-portal-xapp { };
-
-  xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
   xdg-utils = callPackage ../tools/X11/xdg-utils {};
 
@@ -36608,13 +36554,6 @@ with pkgs;
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet {
     buildGoModule = buildGo120Module;
-  };
-
-  dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
-    withGui = true;
-  };
-  dogecoind = callPackage ../applications/blockchains/dogecoin {
-    withGui = false;
   };
 
   eclair = callPackage ../applications/blockchains/eclair { };

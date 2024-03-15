@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.2.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-jAZozcCHgKFTPCRktajrI77iH/GBbzhWa+QKZz1w62Y=";
+    hash = "sha256-T37zIYtfnoNJ/aHMfqKIx/zj6mqmY/3sN3LmxJglxHM=";
   };
 
   buildInputs = [
@@ -43,11 +43,11 @@ buildDotnetModule rec {
   executables = [ "pupdate" ];
 
   dotnetFlags = [
-    "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+    "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system} -p:TrimMode=partial"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   passthru = {
     updateScript = nix-update-script { };

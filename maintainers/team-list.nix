@@ -96,6 +96,14 @@ with lib.maintainers; {
     shortName = "Blockchains";
   };
 
+  budgie = {
+    members = [
+      bobby285271
+    ];
+    scope = "Maintain Budgie desktop environment";
+    shortName = "Budgie";
+  };
+
   buildbot = {
     members = [
       lopsided98
@@ -303,6 +311,8 @@ with lib.maintainers; {
       dpausp
       frlan
       leona
+      osnyx
+      ma27
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";

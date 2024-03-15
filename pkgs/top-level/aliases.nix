@@ -230,6 +230,8 @@ mapAliases ({
   docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
   docker-machine-kvm = throw "'docker-machine-kvm' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
   docker-machine-xhyve = throw "'docker-machine-xhyve' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
+  dogecoin = throw "'dogecoin' has been removed, as it was broken and unmaintained"; # Added 2024-03-11
+  dogecoind = throw "'dogecoind' has been removed, as it was broken and unmaintained"; # Added 2024-03-11
   dolphin-emu-beta = dolphin-emu; # Added 2023-02-11
   dolphinEmu = dolphin-emu; # Added 2021-11-10
   dolphinEmuMaster = dolphin-emu-beta; # Added 2021-11-10
@@ -284,6 +286,7 @@ mapAliases ({
   erlang_23 = throw "erlangR23 has been removed in favor of newer versions."; # added 2023-09-11
   erlangR23 = erlang_23;
   etcd_3_3 = throw "etcd_3_3 has been removed because upstream no longer maintains it"; # Added 2023-09-29
+  etcher = throw "'etcher' has been removed because it depended on an insecure version of Electron"; # Added 2024-03-14
   eterm = throw "eterm was removed because it is still insecure: https://github.com/mej/Eterm/issues/7"; # Added 2023-09-10
   exa = throw "'exa' has been removed because it is unmaintained upstream. Consider using 'eza', a maintained fork"; # Added 2023-09-07
   exhibitor = throw "'exhibitor' has been removed because it is unmaintained upstream"; # Added 2023-06-20
@@ -447,6 +450,8 @@ mapAliases ({
   gr-rds = throw "'gr-rds' has been renamed to/replaced by 'gnuradio3_7.pkgs.rds'"; # Converted to throw 2023-09-10
   grub2_full = grub2; # Added 2022-11-18
   grub = throw "grub1 was removed after not being maintained upstream for a decade. Please switch to another bootloader"; # Added 2023-04-11
+  gtkcord4 = dissent; # Added 2024-03-10
+  gtkpod = throw "'gtkpod' was removed due to one of its dependencies, 'anjuta' being unmaintained"; # Added 2024-01-16
   guile-disarchive = disarchive; # Added 2023-10-27
   guile-lint = throw "'guile-lint' has been removed, please use 'guild lint' instead"; # Added 2023-10-16
 
@@ -470,6 +475,8 @@ mapAliases ({
   hip-nvidia = throw "'hip-nvidia' has been removed in favor of 'rocmPackages.clr'"; # Added 2023-10-08
   ht-rust = xh; # Added 2021-02-13
   hydra-unstable = hydra_unstable; # added 2022-05-10
+  hyper-haskell = throw "'hyper-haskell' has been removed. reason: has been broken for a long time and depends on an insecure electron version"; # Added 2024-03-14
+  hyper-haskell-server-with-packages = throw "'hyper-haskell-server-with-packages' has been removed. reason: has been broken for a long time"; # Added 2024-03-14
 
   ### I ###
 
@@ -514,6 +521,8 @@ mapAliases ({
 
   ### K ###
 
+  k3s_1_24 = throw "'k3s_1_24' has been removed from nixpkgs as it has reached end of life"; # Added 2024-03-14
+  k3s_1_25 = throw "'k3s_1_25' has been removed from nixpkgs as it has reached end of life"; # Added 2024-03-14
   # k3d was a 3d editing software k-3d - "k3d has been removed because it was broken and has seen no release since 2016" Added 2022-01-04
   # now kube3d/k3d will take it's place
   kube3d = k3d; # Added 2022-0705
@@ -553,6 +562,7 @@ mapAliases ({
   libayatana-appindicator-gtk3 = libayatana-appindicator; # Added 2022-10-18
   libbencodetools = bencodetools; # Added 2022-07-30
   libbpf_1 = libbpf; # Added 2022-12-06
+  libbson = mongoc; # Added 2024-03-11
   libcap_pam = throw "'libcap_pam' has been replaced with 'libcap'"; # Converted to throw 2023-09-10
   libclc = llvmPackages_latest.libclc; # Added 2023-10-28
   libgme = game-music-emu; # Added 2022-07-20
@@ -909,11 +919,12 @@ mapAliases ({
   # soon: throw "'pinentry' has been removed. Pick an appropriate variant like 'pinentry-curses' or 'pinentry-gnome3'";
   pinentry = pinentry-all // {
     curses = pinentry-curses;
-    gtk2 = pinentry-gtk2;
-    gnome2 = pinentry-gnome3;
-    qt = pinentry-qt;
     emacs = pinentry-emacs;
-    flavors = [ "curses" "gtk2" "gnome2" "qt" "emacs" ];
+    gnome3 = pinentry-gnome3;
+    gtk2 = pinentry-gtk2;
+    qt = pinentry-qt;
+    tty = pinentry-tty;
+    flavors = [ "curses" "emacs" "gnome3" "gtk2" "qt" "tty" ];
   }; # added 2024-01-15
   pinentry_curses = throw "'pinentry_curses' has been renamed to/replaced by 'pinentry-curses'"; # Converted to throw 2023-09-10
   pinentry_emacs = throw "'pinentry_emacs' has been renamed to/replaced by 'pinentry-emacs'"; # Converted to throw 2023-09-10
@@ -1128,6 +1139,7 @@ mapAliases ({
   tdesktop = telegram-desktop; # Added 2023-04-07
   telegram-cli = throw "telegram-cli was removed because it was broken and abandoned upstream"; # Added 2023-07-28
   teleport_11 = throw "teleport 11 has been removed as it is EOL. Please upgrade to Teleport 12 or later"; # Added 2023-11-27
+  teleprompter = throw "teleprompter has been removed. reason: upstream dead and does not work with recent electron versions"; # Adedd 2024-03-14
   tensile = throw "'tensile' has been replaced with 'rocmPackages.tensile'"; # Added 2023-10-08
   testVersion = testers.testVersion; # Added 2022-04-20
   tfplugindocs = terraform-plugin-docs; # Added 2023-11-01

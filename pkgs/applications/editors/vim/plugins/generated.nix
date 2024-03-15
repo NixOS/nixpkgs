@@ -7908,12 +7908,12 @@ final: prev:
 
   nvim-solarized-lua = buildVimPlugin {
     pname = "nvim-solarized-lua";
-    version = "2024-03-01";
+    version = "2024-03-04";
     src = fetchFromGitHub {
       owner = "ishan9299";
       repo = "nvim-solarized-lua";
-      rev = "9ae0c5e56490e711d42d0636915b8b08b99a7f96";
-      sha256 = "1qis7dgw4dqrpmvii4qf1qwmlql4lly276zp89vsrng4cylyjfgd";
+      rev = "d69a263c97cbc765ca442d682b3283aefd61d4ac";
+      sha256 = "1m0f63ih6hhxmap9gyrp05px2a3pyswraf75vhmabwwxpn903l6h";
     };
     meta.homepage = "https://github.com/ishan9299/nvim-solarized-lua/";
   };
