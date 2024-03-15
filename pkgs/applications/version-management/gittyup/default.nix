@@ -13,6 +13,7 @@
 , pkg-config
 , qtbase
 , qttools
+, kio
 , wrapQtAppsHook
 }:
 
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     openssl
     qtbase
     qttools
+    kio
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreFoundation
     Security
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "A graphical Git client designed to help you understand and manage your source code history";
     homepage = "https://murmele.github.io/Gittyup";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pbek ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };
