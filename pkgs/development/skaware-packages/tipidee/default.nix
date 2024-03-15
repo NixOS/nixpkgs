@@ -1,6 +1,8 @@
 { skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (skawarePackages) buildPackage skalibs tipidee;
+in
 
 buildPackage {
   pname = "tipidee";
