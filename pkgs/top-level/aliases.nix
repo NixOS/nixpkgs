@@ -266,6 +266,36 @@ mapAliases ({
 
   # Electron
   electron_9 = throw "electron_9 has been removed in favor of newer versions"; # added 2023-09-11
+  electron_10 = throw "electron_10 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_10-bin = throw "electron_10-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_11 = throw "electron_11 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_11-bin = throw "electron_11-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_12 = throw "electron_12 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_12-bin = throw "electron_12-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_13 = throw "electron_13 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_13-bin = throw "electron_13-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_14 = throw "electron_14 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_14-bin = throw "electron_14-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_15 = throw "electron_15 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_15-bin = throw "electron_15-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_16 = throw "electron_16 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_16-bin = throw "electron_16-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_17 = throw "electron_17 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_17-bin = throw "electron_17-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_18 = throw "electron_18 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_18-bin = throw "electron_18-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_19 = throw "electron_19 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_19-bin = throw "electron_19-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_20 = throw "electron_20 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_20-bin = throw "electron_20-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_21 = throw "electron_21 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_21-bin = throw "electron_21-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_22 = throw "electron_22 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_22-bin = throw "electron_22-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_23 = throw "electron_23 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_23-bin = throw "electron_23-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_26 = throw "electron_26 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_26-bin = throw "electron_26-bin has been removed in favor of newer versions"; # added 2024-03-20
 
   elementary-planner = throw "elementary-planner has been renamed to planify"; # Added 2023-06-24
 
