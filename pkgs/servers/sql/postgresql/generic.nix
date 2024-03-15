@@ -139,6 +139,10 @@ let
         substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
         substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
+    '' + lib.optionalString stdenv'.hostPlatform.isMusl ''
+      # Fixes tests on musl. See:
+      # https://www.postgresql.org/message-id/flat/ef1b47df-0808-4bd7-b08c-5153d5d75f4c%40technowledgy.de
+      substituteInPlace src/backend/utils/misc/ps_status.c --replace '#define PS_USE_CLOBBER_ARGV' '#define PS_USE_NONE'
     '';
 
     postInstall =
@@ -199,17 +203,6 @@ let
     doCheck = !stdenv'.isDarwin;
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
-
-    preCheck =
-      # On musl, comment skip the following tests, because they break due to
-      #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
-      # See also here:
-      #     https://git.alpinelinux.org/aports/tree/main/postgresql/disable-broken-tests.patch?id=6d7d32c12e073a57a9e5946e55f4c1fbb68bd442
-      if stdenv'.hostPlatform.isMusl then ''
-        substituteInPlace src/test/regress/parallel_schedule \
-          --replace "subscription" "" \
-          --replace "object_address" ""
-      '' else null;
 
     disallowedReferences = [ stdenv'.cc ];
 
