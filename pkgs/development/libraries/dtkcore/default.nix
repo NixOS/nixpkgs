@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ dtkcommon ];
 
   cmakeFlags = [
-    "-DDTK_VERSION=${version}"
+    "-DDTK_VERSION=${lib.versions.major qtbase.version}.${lib.versions.minor version}.${lib.versions.patch version}"
     "-DBUILD_DOCS=ON"
     "-DBUILD_EXAMPLES=OFF"
-    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/share/doc"
     "-DDSG_PREFIX_PATH='/run/current-system/sw'"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
     "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
 
   outputs = [ "out" "dev" "doc" ];
