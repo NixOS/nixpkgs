@@ -7,4 +7,5 @@ lib.makeScope pkgs.newScope (final: {
   js = final.callPackage ./js { };
   go = final.callPackage ./go { };
   ruby = final.callPackage ./ruby { };
+  screenshot = final.callPackage ./screenshot { };
 })
