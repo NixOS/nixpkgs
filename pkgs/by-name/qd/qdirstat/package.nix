@@ -1,23 +1,26 @@
-{ lib, fetchFromGitHub, qmake
-, coreutils, xdg-utils, bash
-, makeWrapper, perlPackages, mkDerivation }:
+{
+  lib,
+  fetchFromGitHub,
+  libsForQt5,
+  coreutils,
+  xdg-utils,
+  bash,
+  makeWrapper,
+  perlPackages,
+}:
 
-let
+libsForQt5.mkDerivation rec {
   pname = "qdirstat";
   version = "1.9";
 
   src = fetchFromGitHub {
     owner = "shundhammer";
-    repo = pname;
+    repo = "qdirstat";
     rev = version;
-    sha256 = "sha256-pwdmltHDNwUMx1FNOoiXl5Pna0zlKqahmicBCN6UVSU=";
+    hash = "sha256-pwdmltHDNwUMx1FNOoiXl5Pna0zlKqahmicBCN6UVSU=";
   };
-in
 
-mkDerivation {
-  inherit pname version src;
-
-  nativeBuildInputs = [ qmake makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ (with libsForQt5; [ qmake ]);
 
   buildInputs = [ perlPackages.perl ];
 
@@ -49,9 +52,9 @@ mkDerivation {
 
   meta = with lib; {
     description = "Graphical disk usage analyzer";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/shundhammer/qdirstat";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ donovanglover ];
     platforms = platforms.linux;
     mainProgram = "qdirstat";
   };
