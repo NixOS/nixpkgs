@@ -201,14 +201,12 @@ let
     checkTarget = "check";
 
     preCheck =
-      # On musl, comment skip the following tests, because they break due to
-      #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
-      # See also here:
-      #     https://git.alpinelinux.org/aports/tree/main/postgresql/disable-broken-tests.patch?id=6d7d32c12e073a57a9e5946e55f4c1fbb68bd442
+      # On musl, some tests break because libpq.so.5 can't be found when calling dlopen(libpqwalreceiver.so).
+      # For unknown reasons LD_LIBRARY_PATH doesn't work in this case, so we temporarily add the tmp_install
+      # libdir as an rpath to the postgres binary. This rpath will be automatically removed when installing
+      # into the output anyway. This makes all regression tests pass on musl.
       if stdenv'.hostPlatform.isMusl then ''
-        substituteInPlace src/test/regress/parallel_schedule \
-          --replace "subscription" "" \
-          --replace "object_address" ""
+        patchelf --add-rpath "$PWD/tmp_install/$lib/lib" "$PWD/src/backend/postgres"
       '' else null;
 
     disallowedReferences = [ stdenv'.cc ];
