@@ -6911,6 +6911,8 @@ self: super: with self; {
 
   magic-wormhole-transit-relay = callPackage ../development/python-modules/magic-wormhole-transit-relay { };
 
+  magika = callPackage ../development/python-modules/magika { };
+
   mahotas = callPackage ../development/python-modules/mahotas { };
 
   mailcap-fix = callPackage ../development/python-modules/mailcap-fix { };
