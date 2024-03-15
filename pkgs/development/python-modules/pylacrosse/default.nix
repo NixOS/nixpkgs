@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , mock
-, nose
+, pynose
 , pyserial
 , pytestCheckHook
 , pythonOlder
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    nose
+    pynose
     pytestCheckHook
   ];
 
