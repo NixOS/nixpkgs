@@ -88,6 +88,12 @@ let
   } // lib.optionalAttrs config.allowAliases {
     dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
     dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
+    inherit (libsForQt5)
+      dtkcommon
+      dtkcore
+      dtkwidget
+      dtkdeclarative
+      ;
   };
 in
 lib.makeScope libsForQt5.newScope packages
