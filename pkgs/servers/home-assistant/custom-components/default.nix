@@ -10,6 +10,8 @@
 
   emporia_vue = callPackage ./emporia_vue {};
 
+  epex_spot = callPackage ./epex_spot {};
+
   govee-lan = callPackage ./govee-lan {};
 
   gpio = callPackage ./gpio {};
