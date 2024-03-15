@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , ant
 , jdk
-, canonicalize-jars-hook
+, patchAntBuildfilesHook
 }:
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     ant
     jdk
-    canonicalize-jars-hook
+    patchAntBuildfilesHook
   ];
 
   buildPhase = ''

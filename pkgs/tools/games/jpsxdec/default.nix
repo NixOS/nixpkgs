@@ -4,10 +4,10 @@
 , ant
 , jdk8 # the build script wants JAVA 8 for compilation
 , jre # version can be >= 8 (latest version by default)
+, patchAntBuildfilesHook
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, canonicalize-jars-hook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,9 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ant
     jdk8
+    patchAntBuildfilesHook
     makeWrapper
     copyDesktopItems
-    canonicalize-jars-hook
   ];
 
   buildPhase = ''

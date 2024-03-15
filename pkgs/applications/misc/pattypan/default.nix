@@ -3,11 +3,11 @@
 , fetchFromGitHub
 , ant
 , jdk
+, patchAntBuildfilesHook
 , makeWrapper
 , wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
-, canonicalize-jars-hook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ant
     jdk
+    patchAntBuildfilesHook
     makeWrapper
     wrapGAppsHook
     copyDesktopItems
-    canonicalize-jars-hook
   ];
 
   dontWrapGApps = true;

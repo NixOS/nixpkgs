@@ -4,9 +4,9 @@
 , ant
 , jdk
 , jre
+, patchAntBuildfilesHook
 , makeWrapper
 , copyDesktopItems
-, canonicalize-jars-hook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ant
     jdk
+    patchAntBuildfilesHook
     makeWrapper
     copyDesktopItems
-    canonicalize-jars-hook
   ];
 
   buildPhase = ''

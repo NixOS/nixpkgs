@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , ant
 , jdk17
+, patchAntBuildfilesHook
 , makeWrapper
 }:
 
@@ -24,6 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ant
     jdk
+    patchAntBuildfilesHook
     makeWrapper
   ];
 

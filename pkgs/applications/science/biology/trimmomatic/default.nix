@@ -4,8 +4,8 @@
 , ant
 , jdk
 , jre
+, patchAntBuildfilesHook
 , makeWrapper
-, canonicalize-jars-hook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,15 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Remove jdk version requirement
   postPatch = ''
-    substituteInPlace ./build.xml \
-      --replace 'source="1.5" target="1.5"' ""
+    substituteInPlace build.xml \
+        --replace-fail 'source="1.5" target="1.5"' ""
   '';
 
   nativeBuildInputs = [
     ant
     jdk
+    patchAntBuildfilesHook
     makeWrapper
-    canonicalize-jars-hook
   ];
 
   buildPhase = ''

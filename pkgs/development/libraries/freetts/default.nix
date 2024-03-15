@@ -3,6 +3,7 @@
 , fetchzip
 , ant
 , jdk8
+, patchAntBuildfilesHook
 , sharutils
 }:
 
@@ -19,16 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ant
     jdk8
+    patchAntBuildfilesHook
     sharutils
   ];
 
   sourceRoot = "${finalAttrs.src.name}/freetts-${finalAttrs.version}";
-
-  postPatch = ''
-    # Fix jar timestamps for reproducibility
-    substituteInPlace build.xml demo.xml \
-        --replace-fail '<jar ' '<jar modificationtime="0" '
-  '';
 
   buildPhase = ''
     runHook preBuild

@@ -4,8 +4,8 @@
 , ant
 , jdk
 , jre
+, patchAntBuildfilesHook
 , makeWrapper
-, canonicalize-jars-hook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ant
     jdk
+    patchAntBuildfilesHook
     makeWrapper
-    canonicalize-jars-hook
   ];
 
   buildPhase = ''

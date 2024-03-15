@@ -4,8 +4,8 @@
 , unzip
 , ant
 , jdk8
+, patchAntBuildfilesHook
 , makeWrapper
-, canonicalize-jars-hook
 , callPackage
 }:
 
@@ -26,8 +26,8 @@ in stdenv.mkDerivation (finalAttrs: {
     unzip
     ant
     jdk
+    patchAntBuildfilesHook
     makeWrapper
-    canonicalize-jars-hook
   ];
 
   buildPhase = ''

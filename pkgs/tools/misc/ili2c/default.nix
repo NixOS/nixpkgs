@@ -4,8 +4,8 @@
 , ant
 , jdk8
 , jre8
+, patchAntBuildfilesHook
 , makeWrapper
-, canonicalize-jars-hook
 }:
 
 let
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ant
     jdk
+    patchAntBuildfilesHook
     makeWrapper
-    canonicalize-jars-hook
   ];
 
   src = fetchFromGitHub {
