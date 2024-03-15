@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "rime-japanese";
-  version = "unstable-20230802";
+  version = "0-unstable-2023-08-02";
 
   src = fetchFromGitHub {
     owner = "gkovacs";
