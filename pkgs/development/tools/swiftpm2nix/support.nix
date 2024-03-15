@@ -1,6 +1,14 @@
 { lib, fetchgit, formats }:
-with lib;
+
 let
+  inherit (lib)
+    concatStrings
+    importJSON
+    listToAttrs
+    mapAttrsToList
+    nameValuePair
+    ;
+
   json = formats.json { };
 in rec {
 
@@ -19,7 +27,7 @@ in rec {
   # Make packaging helpers from swiftpm2nix generated output.
   helpers = generated: let
     inherit (import generated) workspaceStateFile hashes;
-    workspaceState = lib.importJSON workspaceStateFile;
+    workspaceState = importJSON workspaceStateFile;
     pinFile = mkPinFile workspaceState;
   in rec {
 
