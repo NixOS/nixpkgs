@@ -11,19 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.11.0-rc1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-jOq+aoBSRUTXldg8iWGSJ1z0y+3KbhZfVAgjZo9IsGo=";
+    hash = "sha256-RbkirnVrhYT/OuZSdJWMOvQXAeBmsFICsCrezyT6ukA=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-dev-assets-0.10.0" = "sha256-EBOZbblbavtsr2LEnoIF0UFmpSsm8Sq7ibxxWcAMIHY=";
+      "typst-dev-assets-0.11.0" = "sha256-wTmux3GsUIU+PX6SO9rrQHr3korPFBeP/Z8byC97KUI=";
     };
   };
 
