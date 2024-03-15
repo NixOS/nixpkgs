@@ -1,6 +1,8 @@
 { skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (skawarePackages) buildPackage s6-dns skalibs;
+in
 
 buildPackage {
   pname = "s6-dns";
