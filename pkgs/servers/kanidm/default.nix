@@ -19,7 +19,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-rc.16";
+  version = "1.1.0-rc.16-unstable-2024-03-02";
 
   src = fetchFromGitHub {
     owner = pname;
