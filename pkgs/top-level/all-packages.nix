@@ -33948,8 +33948,6 @@ with pkgs;
 
   parlatype = callPackage ../applications/audio/parlatype { };
 
-  packet = callPackage ../development/tools/packet { };
-
   packet-sd = callPackage ../development/tools/packet-sd { };
 
   metal-cli = callPackage ../development/tools/metal-cli { };
