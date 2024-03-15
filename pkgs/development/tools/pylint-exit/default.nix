@@ -1,6 +1,10 @@
 { lib, fetchFromGitHub, python3Packages }:
 
-with python3Packages; buildPythonApplication rec {
+let
+  inherit (python3Packages) buildPythonApplication m2r python;
+in
+
+buildPythonApplication rec {
   pname = "pylint-exit";
   version = "1.2.0";
 
