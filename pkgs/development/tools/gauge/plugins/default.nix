@@ -9,4 +9,5 @@ in {
   js = callPackage ./js { };
   ruby = callPackage ./ruby { };
   go = callPackage ./go { };
+  screenshot = callPackage ./screenshot { };
 })
