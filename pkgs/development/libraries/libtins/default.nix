@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Required for gtest 1.13+.
+    # Required for gtest 1.13+, see also upstream report at:
+    # https://github.com/mfontanini/libtins/issues/529
     ./0001-force-cpp-14.patch
   ];
 
