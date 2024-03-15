@@ -18,6 +18,8 @@
 
   miele = callPackage ./miele {};
 
+  omnik_inverter = callPackage ./omnik_inverter {};
+
   prometheus_sensor = callPackage ./prometheus_sensor {};
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
