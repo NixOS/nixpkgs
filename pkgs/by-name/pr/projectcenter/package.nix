@@ -1,17 +1,14 @@
 { lib
-, stdenv
+, clangStdenv
 , fetchFromGitHub
-, make
-, wrapGNUstepAppsHook
-, base
-, back
-, gui
+, gnustep-back
 , gorm
 , gnumake
 , gdb
+, wrapGNUstepAppsHook
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "projectcenter";
   version = "0.7.0";
 
@@ -22,12 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uXT2UUvMZNc6Fqi2BUXQimbZk8b3IqXzB+A2btBOmms=";
   };
 
-  nativeBuildInputs = [ make wrapGNUstepAppsHook ];
+  nativeBuildInputs = [ wrapGNUstepAppsHook ];
 
   # NOTE: need a patch for ProjectCenter to help it locate some necessary tools:
   # 1. Framework/PCProjectLauncher.m, locate gdb (say among NIX_GNUSTEP_SYSTEM_TOOLS)
   # 2. Framework/PCProjectBuilder.m, locate gmake (similar)
-  propagatedBuildInputs = [ base back gui gnumake gdb gorm ];
+  propagatedBuildInputs = [ gnustep-back gnumake gdb gorm ];
 
   meta = {
     description = "GNUstep's integrated development environment";

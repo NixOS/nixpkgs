@@ -38197,8 +38197,6 @@ with pkgs;
 
   gnome-2048 = callPackage ../desktops/gnome/games/gnome-2048 { };
 
-  gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
-
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
 
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });

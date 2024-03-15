@@ -1,11 +1,9 @@
 { lib
-, stdenv
-, make
+, clangStdenv
 , wrapGNUstepAppsHook
 , cairo
 , fetchzip
-, base
-, gui
+, gnustep-gui
 , fontconfig
 , freetype
 , pkg-config
@@ -13,7 +11,7 @@
 , libXmu
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-back";
   version = "0.30.0";
 
@@ -22,8 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-HD4PLdkE573nPWqFwffUmcHw8VYIl5rLiPKWrbnwpCI=";
   };
 
-  nativeBuildInputs = [ make pkg-config wrapGNUstepAppsHook ];
-  buildInputs = [ cairo base gui fontconfig freetype libXft libXmu ];
+  nativeBuildInputs = [ pkg-config wrapGNUstepAppsHook ];
+  buildInputs = [ cairo fontconfig freetype libXft libXmu ];
+  propagatedBuildInputs = [ gnustep-gui ];
 
   meta = {
     description = "A generic backend for GNUstep";
