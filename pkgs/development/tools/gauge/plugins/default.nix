@@ -8,4 +8,5 @@ lib.makeScope pkgs.newScope (final: {
   go = final.callPackage ./go { };
   ruby = final.callPackage ./ruby { };
   screenshot = final.callPackage ./screenshot { };
+  xml-report = final.callPackage ./xml-report { };
 })
