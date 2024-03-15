@@ -11,7 +11,7 @@
 
   ## optionsJSON
 
-  JSON format suitable for further automated processing.
+  All options in a JSON format suitable for further automated processing.
 
   `example.json`
   ```json
@@ -61,22 +61,18 @@
 
   ## optionsNix
 
-  - Raw options as Nix attribute set, with the same schema as `optionsJSON`.
+  All options as a Nix attribute set value, with the same schema as `optionsJSON`.
 
   # Example
 
-  A minimal usage example requires evaluating the included modules.
 
   ## Example: NixOS configuration
 
-  > Note:
-  >
-  > `/nixos/lib/eval-config.nix` takes care to evaluate a NixOS-configuration.
-
   ```nix
   let
+    # Evaluate a NixOS configuration
     eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-      # Overriden explizitly here, this would include all modules from NixOS otherwise.
+      # Overriden explicitly here, this would include all modules from NixOS otherwise.
       # See: docs of eval-config.nix for more details
       baseModules = [];
       modules = [
@@ -89,15 +85,16 @@
     }
   ```
 
-  ## Example: Nix modules
+  ## Example: non-NixOS modules
 
-  Nix modules don't always represent a NixOS configuration.
-  In that case you can use `lib.evalModules` to evaluate the modules.
+  `lib.evalModules` can also be used to evaluate non-NixOS modules.
 
   ```nix
   let
     eval = lib.evalModules {
-      modules = [];
+      modules = [
+        ./module.nix
+      ];
     };
   in
     pkgs.nixosOptionsDoc {
