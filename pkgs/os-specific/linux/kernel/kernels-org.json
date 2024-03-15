@@ -12,8 +12,8 @@
         "hash": "sha256:01pcrcjp5mifjjmfz7j1jb8nhq8nkxspavxmv1l7d1qnskcx4l6i"
     },
     "5.15": {
-        "version": "5.15.151",
-        "hash": "sha256:0jby224ncdardjwmf8c59s5j71inpvdlzah984ilf2b6y85pc7la"
+        "version": "5.15.152",
+        "hash": "sha256:0zm4wkryj4mim4fr7pf5g9rlzh31yb1c40lkp85lvcm5yhjm507h"
     },
     "5.10": {
         "version": "5.10.212",
