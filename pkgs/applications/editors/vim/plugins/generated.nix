@@ -2459,8 +2459,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "conform.nvim";
-      rev = "b05962622d3eebeefe6b1a90deb9eb86947e0349";
-      sha256 = "1r742kqrs2f0wglaf86ji0ahw1njjrqnx8fpdkkgjbaplvkj2pvy";
+      rev = "67ee2258e08ccb91345d52f62484b657feccef25";
+      sha256 = "0d76rrjbmi3rmvm27jh61zs35z9axc5l6yacr3yrrnfi0kahi0fy";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/conform.nvim/";
