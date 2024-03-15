@@ -1,6 +1,14 @@
 { lib, skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (lib) platforms;
+  inherit (skawarePackages)
+    buildPackage
+    s6
+    s6-linux-utils
+    skalibs
+    ;
+in
 
 buildPackage {
   pname = "s6-linux-utils";
@@ -8,7 +16,7 @@ buildPackage {
   sha256 = "j5RGM8qH09I+DwPJw4PRUC1QjJusFtOMP79yOl6rK7c=";
 
   description = "A set of minimalistic Linux-specific system utilities";
-  platforms = lib.platforms.linux;
+  platforms = platforms.linux;
 
   outputs = [ "bin" "dev" "doc" "out" ];
 
