@@ -32063,10 +32063,6 @@ with pkgs;
 
   hypnotix = callPackage ../applications/video/hypnotix { };
 
-  indiepass-desktop = callPackage ../by-name/in/indiepass-desktop/package.nix {
-    electron = electron_19;
-  };
-
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
