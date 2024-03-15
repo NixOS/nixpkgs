@@ -42,7 +42,17 @@ let
         }
       }
     }
-
+    plugins {
+       eap-peap {
+         load = no
+       }
+       eap-md5 {
+         load = no
+       }
+       eap-gtc {
+         load = no
+       }
+      }
     starter {
       config_file = ${ipsecConf { inherit setup connections ca; }}
     }
