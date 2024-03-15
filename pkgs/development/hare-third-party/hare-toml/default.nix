@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     scdoc
-    hare.hook
+    hare
   ];
 
   makeFlags = [

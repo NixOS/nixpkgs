@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    hare.hook
+    hare
     makeWrapper
     scdoc
   ];
