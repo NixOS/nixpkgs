@@ -1,6 +1,13 @@
 { skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (skawarePackages)
+    buildPackage
+    s6
+    s6-portable-utils
+    skalibs
+    ;
+in
 
 buildPackage {
   pname = "s6-portable-utils";
