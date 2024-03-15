@@ -1,22 +1,27 @@
-{ lib, fetchFromGitHub, buildGoPackage, pkg-config, libappindicator-gtk3 }:
+{ lib, fetchFromGitHub, buildGoModule, pkg-config, libappindicator-gtk3 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "syncthing-tray";
   version = "0.7";
-
-  goPackagePath = "github.com/alex2108/syncthing-tray";
 
   src = fetchFromGitHub {
     owner = "alex2108";
     repo = "syncthing-tray";
     rev = "v${version}";
-    sha256 = "0869kinnsfzb8ydd0sv9fgqsi1sy5rhqg4whfdnrv82xjc71xyw3";
+    hash = "sha256-g/seDpNdoJ1tc5CTh2EuXoeo8XNpa9CaR+s7bW2cySA=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-hGV5bivDUFEbOwU9sU+Eu5Wzz/aZtj6NUkpzHlmZTtw=";
+
+  preBuild = ''
+    cp ${./go.mod} go.mod
+    cp ${./go.sum} go.sum
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libappindicator-gtk3 ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Simple application tray for syncthing";
