@@ -1,6 +1,13 @@
 { skawarePackages }:
 
-with skawarePackages;
+let
+  inherit (skawarePackages)
+    buildPackage
+    execline
+    s6
+    skalibs
+    ;
+in
 
 buildPackage {
   pname = "s6";
