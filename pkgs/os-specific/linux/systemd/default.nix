@@ -102,6 +102,7 @@
 , withRepart ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
+, withFallbackNtpServers ? true
 , withFido2 ? true
   # conflicts with the NixOS /etc management
 , withFirstboot ? false
@@ -756,6 +757,11 @@ stdenv.mkDerivation (finalAttrs: {
         '';
     in
     ''
+      mesonFlagsArray+=(-Dntp-servers="${
+        if withFallbackNtpServers
+        then "0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org"
+        else ""
+      }")
       export LC_ALL="en_US.UTF-8";
 
       ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
