@@ -519,6 +519,7 @@ let
         compilerNames.ghc982
       ] released;
       hlint = lib.subtractLists [
+        compilerNames.ghc902
         compilerNames.ghc981
         compilerNames.ghc982
       ] released;
