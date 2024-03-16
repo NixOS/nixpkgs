@@ -311,6 +311,8 @@ with lib.maintainers; {
       dpausp
       frlan
       leona
+      osnyx
+      ma27
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";

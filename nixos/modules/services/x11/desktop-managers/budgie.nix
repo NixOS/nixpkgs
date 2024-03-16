@@ -159,7 +159,7 @@ in {
       ++ cfg.sessionPath;
 
     # Fonts.
-    fonts.packages = mkDefault [
+    fonts.packages = [
       pkgs.noto-fonts
       pkgs.hack-font
     ];

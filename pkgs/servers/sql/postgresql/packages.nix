@@ -2,6 +2,8 @@ self: super: {
 
     age = super.callPackage ./ext/age.nix { };
 
+    anonymizer = super.callPackage ./ext/anonymizer.nix { };
+
     apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
 
     citus = super.callPackage ./ext/citus.nix { };

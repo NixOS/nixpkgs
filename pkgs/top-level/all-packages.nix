@@ -1085,6 +1085,8 @@ with pkgs;
 
   ruler = callPackage ../tools/security/ruler { };
 
+  magika = with python3Packages; toPythonApplication magika;
+
   mblock-mlink = callPackage ../development/tools/mblock-mlink { };
 
   mod = callPackage ../development/tools/mod { };
@@ -26105,7 +26107,9 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
+    buildGoModule = buildGo122Module;
+  };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
@@ -32066,10 +32070,6 @@ with pkgs;
 
   hypnotix = callPackage ../applications/video/hypnotix { };
 
-  indiepass-desktop = callPackage ../by-name/in/indiepass-desktop/package.nix {
-    electron = electron_19;
-  };
-
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
@@ -35247,8 +35247,6 @@ with pkgs;
   telepathy-mission-control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
 
   telepathy-idle = callPackage ../applications/networking/instant-messengers/telepathy/idle { };
-
-  teleprompter = callPackage ../applications/misc/teleprompter { };
 
   tempo = callPackage ../servers/tracing/tempo { };
 

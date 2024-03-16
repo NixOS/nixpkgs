@@ -6,25 +6,41 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "oil";
-  version = "0.20.0";
+  pname = "oils-for-unix";
+  version = "0.21.0";
 
   src = fetchurl {
-    url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    hash = "sha256-QrhfUru6Sju44W8j/DlMQwK8/ZY48GfwHDfSPy7kSaA=";
+    url = "https://www.oilshell.org/download/oils-for-unix-${version}.tar.gz";
+    hash = "sha256-g8uEK68J9BsCHEvJGDgsKUmsuR1MvChEC9A00Y2sZU4=";
   };
 
   postPatch = ''
-    patchShebangs build
+    patchShebangs _build
   '';
 
   preInstall = ''
     mkdir -p $out/bin
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    _build/oils.sh
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    ./install
+
+    runHook postInstall
+  '';
+
   strictDeps = true;
   buildInputs = lib.optional withReadline readline;
-  # As of 0.20.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
+  # As of 0.19.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
   # whereas running it outside of Nix with clang version 15.0.0 generates just a warning. The shell seems to
   # work just fine though, so we disable the error here.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
@@ -39,16 +55,13 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    description = "A new unix shell - Old python build";
+    description = "A Unix shell with JSON-compatible structured data. It's our upgrade path from bash to a better language and runtime.";
     homepage = "https://www.oilshell.org/";
 
-    license = with lib.licenses; [
-      psfl # Includes a portion of the python interpreter and standard library
-      asl20 # Licence for Oil itself
-    ];
+    license = lib.licenses.asl20;
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lheckemann alva ];
+    maintainers = with lib.maintainers; [ lheckemann alva mkg20001 melkor333 ];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };
 
