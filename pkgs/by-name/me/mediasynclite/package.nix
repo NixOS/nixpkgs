@@ -1,17 +1,28 @@
-{ pkgs
-, lib
-}:
+{ lib 
+, stdenv
+, fetchFromGitHub
+, gtk3
+, glib
+, gsettings-desktop-schemas
+, pkg-config
+, curl
+, openssl
+, jansson
+, wrapGAppsHook
+}: 
 
-pkgs.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mediasynclite";
   version = "0.4.2";
 
-  src = pkgs.fetchgit {
-    url = "https://github.com/tobz619/MediaSyncLiteLinuxNix.git";
-    sha256 = "0qikr04nw9jkl3r7z0l9s3qy1p6h5ngln0lqmw023dbf6vmrwbcr";
+  src = fetchFromGitHub {
+    owner = "iBroadcastMediaServices";
+    repo = "MediaSyncLiteLinux";
+    rev = "d0d5caa2a1bb260f8081e4cf49cb0219b123f682";
+    hash = "sha256-mS2e6zZutSEAr5gCS58t0Nzg8dCJgn/yoFMmbgnIM2I=";
     };
 
-  buildInputs = with pkgs; [
+  buildInputs = [
    gtk3
    glib
    gsettings-desktop-schemas
