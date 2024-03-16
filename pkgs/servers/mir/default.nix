@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.16.3";
 
   src = fetchFromGitHub {
-    owner = "MirServer";
+    owner = "canonical";
     repo = "mir";
     rev = "v${finalAttrs.version}";
     hash = "sha256-W0THxr6qlL+VYo+r7deO0qBCFtCrUNUiPD7G3aGdEZw=";
@@ -139,18 +139,18 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
     (lib.cmakeBool "MIR_ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
-    # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
+    # https://github.com/canonical/mir/pull/1947#issuecomment-811810872
     (lib.cmakeBool "MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN" true)
     (lib.cmakeFeature "MIR_EXCLUDE_TESTS" (lib.strings.concatStringsSep ";" [
     ]))
     # These get built but don't get executed by default, yet they get installed when tests are enabled
     (lib.cmakeBool "MIR_BUILD_PERFORMANCE_TESTS" false)
     (lib.cmakeBool "MIR_BUILD_PLATFORM_TEST_HARNESS" false)
-    # https://github.com/MirServer/mir/issues/2987
+    # https://github.com/canonical/mir/issues/2987
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
     (lib.cmakeBool "MIR_USE_PRECOMPILED_HEADERS" false)
     (lib.cmakeFeature "MIR_COMPILER_QUIRKS" (lib.strings.concatStringsSep ";" [
-      # https://github.com/MirServer/mir/issues/3017 actually affects x86_64 as well
+      # https://github.com/canonical/mir/issues/3017 actually affects x86_64 as well
       "test_touchspot_controller.cpp:array-bounds"
     ]))
   ];
@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A display server and Wayland compositor developed by Canonical";
     homepage = "https://mir-server.io";
-    changelog = "https://github.com/MirServer/mir/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/canonical/mir/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ onny OPNA2608 ];
     platforms = platforms.linux;
