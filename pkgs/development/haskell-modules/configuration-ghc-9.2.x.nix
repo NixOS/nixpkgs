@@ -75,11 +75,17 @@ self: super: {
 
   stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
 
-  haskell-language-server = disableCabalFlag "fourmolu" (super.haskell-language-server.override {
+  haskell-language-server = lib.pipe (super.haskell-language-server.override {
+    hls-ormolu-plugin = null;
+    hls-stylish-haskell-plugin = null;
     hls-fourmolu-plugin = null;
     # Not buildable if GHC > 9.2.3, so we ship no compatible GHC
     hls-stan-plugin = null;
-  });
+  }) [
+     (disableCabalFlag "fourmolu")
+     (disableCabalFlag "ormolu")
+     (disableCabalFlag "stylishHaskell")
+    ];
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
