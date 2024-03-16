@@ -32856,8 +32856,9 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+  ladybird = darwin.apple_sdk_11_0.callPackage ../applications/networking/browsers/ladybird {
     stdenv = if stdenv.isDarwin then overrideLibcxx darwin.apple_sdk_11_0.llvmPackages_16.stdenv else stdenv;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
