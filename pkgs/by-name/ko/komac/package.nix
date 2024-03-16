@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, SystemConfiguration
 , testers
 , komac
 }:
@@ -19,6 +21,8 @@ rustPlatform.buildRustPackage {
   inherit pname version src;
 
   cargoHash = "sha256-S9y/SLs763CbLE9OiHYYMOaCrP74HSFiWcaukORLUis=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   doCheck = true;
 
