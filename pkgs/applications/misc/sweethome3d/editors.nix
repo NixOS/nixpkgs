@@ -44,6 +44,9 @@ let
     nativeBuildInputs = [ makeWrapper unzip ];
     buildInputs = [ ant jdk gtk3 gsettings-desktop-schemas ];
 
+    # upstream targets Java 7 by default
+    env.ANT_ARGS = "-DappletClassSource=8 -DappletClassTarget=8 -DclassSource=8 -DclassTarget=8";
+
     postPatch = ''
       sed -i -e 's,../SweetHome3D,${applicationSrc},g' build.xml
       sed -i -e 's,lib/macosx/java3d-1.6/jogl-all.jar,lib/java3d-1.6/jogl-all.jar,g' build.xml
