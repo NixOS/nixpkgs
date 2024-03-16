@@ -6625,14 +6625,14 @@ final: prev:
 
   neotest-pest = buildVimPlugin {
     pname = "neotest-pest";
-    version = "2024-02-16";
+    version = "2024-03-04";
     src = fetchFromGitHub {
-      owner = "theutz";
+      owner = "V13Axel";
       repo = "neotest-pest";
-      rev = "94ed941af4ea6e7d0caa4de8afbf966f3cfe35e4";
-      sha256 = "1655rpr007ix9z4nxkabnvdk8c0kj080waxddaq656dhdzdj7l1q";
+      rev = "25501800b5b8da578a03bb178a007d6f8abe7ae3";
+      sha256 = "sha256-S36yvNrg6rroZbySOt9SKrHGSV6HUgRlSPUh79RNZ7M=";
     };
-    meta.homepage = "https://github.com/theutz/neotest-pest/";
+    meta.homepage = "https://github.com/V13Axel/neotest-pest/";
   };
 
   neotest-phpunit = buildVimPlugin {

@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mycelium";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
     rev = "v${version}";
-    hash = "sha256-VWrWg9UpBSug0cvY/zuzGFI6Y0CRFcrh1Cy4mbYtg9Q=";
+    hash = "sha256-bA3ci+vqXBCPBaxMvfUdFcqdaZbAw/+r5UbH/as/fnc=";
   };
 
   cargoLock = {
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan ];
+    maintainers = with maintainers; [ flokli matthewcroughan ];
     mainProgram = "mycelium";
   };
 }
