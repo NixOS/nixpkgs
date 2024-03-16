@@ -328,11 +328,11 @@ context = stdenv.mkDerivation rec {
 
 dvisvgm = stdenv.mkDerivation rec {
   pname = "dvisvgm";
-  version = "3.1.2";
+  version = "3.2.2";
 
   src = assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version) "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm"; fetchurl {
     url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-    hash = "sha256-vqeDrf6TG3eUoMMNeQK4Kw1NmtaBbc2KCVqTHNM+rPY=";
+    hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
   };
 
   configureFlags = [
