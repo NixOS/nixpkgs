@@ -4,6 +4,9 @@
 , gitUpdater
 , cmake
 , nasm
+
+# for passthru.tests
+, ffmpeg
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,8 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSVT_AV1_LTO=ON"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+    tests = {
+      ffmpeg = ffmpeg.override { withSvtav1 = true; };
+    };
   };
 
   meta = with lib; {
