@@ -584,6 +584,7 @@ in
       description = "Ensure that NetworkManager declarative profiles are created";
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
+      after = [ "NetworkManager.service" ];
       script = let
         path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
       in ''
@@ -593,9 +594,7 @@ in
           ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
         '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
       + ''
-        if systemctl is-active --quiet NetworkManager; then
-          ${pkgs.networkmanager}/bin/nmcli connection reload
-        fi
+        ${pkgs.networkmanager}/bin/nmcli connection reload
       '';
       serviceConfig = {
         EnvironmentFile = cfg.ensureProfiles.environmentFiles;
