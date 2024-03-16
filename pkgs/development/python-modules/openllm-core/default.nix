@@ -89,7 +89,7 @@ buildPythonPackage rec {
     full = with optional-dependencies; (
       vllm
       # use absolute path to disambiguate with derivbation argument
-      ++ passthru.optional-dependencies.bentoml
+      ++ optional-dependencies.bentoml
       ++ fine-tune );
   };
 

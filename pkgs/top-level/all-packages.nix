@@ -3555,8 +3555,6 @@ with pkgs;
 
   blackmagic-desktop-video = callPackage ../tools/video/blackmagic-desktop-video { };
 
-  blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
-
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };

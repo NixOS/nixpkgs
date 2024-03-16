@@ -2,7 +2,7 @@
 , kernel
 , fetchurl
 , pkg-config, meson, ninja, makeWrapper
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
+, libbsd, numactl, libbpf, zlib, elfutils, jansson, openssl, libpcap, rdma-core
 , doxygen, python3, pciutils
 , withExamples ? []
 , shared ? false
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
   buildInputs = [
     jansson
     libbpf
-    libelf
+    elfutils
     libpcap
     numactl
     openssl.dev
