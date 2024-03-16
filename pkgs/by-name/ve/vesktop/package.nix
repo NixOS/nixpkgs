@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-27998q9wbaNP1xYY+KHTBeJRfR6Q/K0LNdbRb3YHC6c=";
+    hash = "sha256-OyAGzlwwdEKBbJJ7h3glwx/THy2VvUn/kA/Df3arWQU=";
   };
 
   # NOTE: This requires pnpm 8.10.0 or newer
