@@ -992,6 +992,7 @@ in {
   wireguard = handleTest ./wireguard {};
   without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
+  workout-tracker = handleTest ./workout-tracker.nix {};
   wpa_supplicant = handleTest ./wpa_supplicant.nix {};
   wordpress = handleTest ./wordpress.nix {};
   wrappers = handleTest ./wrappers.nix {};
