@@ -417,7 +417,7 @@ in lib.recursiveUpdate orig rec {
 
     # add minimal texlive.tlpdb
     postUnpack = ''
-      if [[ "$tlType" == "tlpkg" ]] ; then
+      if [[ -d "$out"/TeXLive ]] ; then
         xzcat "${tlpdbxz}" | sed -n -e '/^name \(00texlive.config\|00texlive.installation\)$/,/^$/p' > "$out"/texlive.tlpdb
       fi
     '';
