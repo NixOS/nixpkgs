@@ -12,7 +12,7 @@ in
     enable = mkEnableOption (lib.mdDoc "Restic REST Server");
 
     listenAddress = mkOption {
-      default = ":8000";
+      default = "8000";
       example = "127.0.0.1:8080";
       type = types.str;
       description = lib.mdDoc "Listen on a specific IP address and port.";
@@ -61,14 +61,19 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [{
+      assertion = lib.substring 0 1 cfg.listenAddress != ":";
+      message = "The restic-rest-server now uses systemd socket activation, which expects only the Port number: services.restic.server.listenAddress = \"${lib.substring 1 6 cfg.listenAddress}\";";
+    }];
+
     systemd.services.restic-rest-server = {
       description = "Restic REST Server";
-      after = [ "network.target" ];
+      after = [ "network.target" "restic-rest-server.socket" ];
+      requires = [ "restic-rest-server.socket" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/rest-server \
-          --listen ${cfg.listenAddress} \
           --path ${cfg.dataDir} \
           ${optionalString cfg.appendOnly "--append-only"} \
           ${optionalString cfg.privateRepos "--private-repos"} \
@@ -84,6 +89,7 @@ in
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
+        PrivateNetwork = true;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
@@ -98,6 +104,7 @@ in
         PrivateDevices = true;
         ReadWritePaths = [ cfg.dataDir ];
         RemoveIPC = true;
+        RestrictAddressFamilies = "none";
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -105,6 +112,11 @@ in
         SystemCallFilter = "@system-service";
         UMask = 027;
       };
+    };
+
+    systemd.sockets.restic-rest-server = {
+      listenStreams = [ cfg.listenAddress ];
+      wantedBy = [ "sockets.target" ];
     };
 
     systemd.tmpfiles.rules = mkIf cfg.privateRepos [

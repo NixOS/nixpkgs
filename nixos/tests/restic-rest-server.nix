@@ -44,7 +44,7 @@ import ./make-test-python.nix (
         services.restic.server = {
           enable = true;
           extraFlags = [ "--no-auth" ];
-          listenAddress = ":8001";
+          listenAddress = "8001";
         };
         networking.firewall.allowedTCPPorts = [ 8001 ];
       };
@@ -68,7 +68,7 @@ import ./make-test-python.nix (
     testScript = ''
       restic_rest_server.start()
       server.start()
-      restic_rest_server.wait_for_unit("restic-rest-server.service")
+      restic_rest_server.wait_for_unit("restic-rest-server.socket")
       restic_rest_server.wait_for_open_port(8001)
       server.wait_for_unit("dbus.socket")
       server.fail(
