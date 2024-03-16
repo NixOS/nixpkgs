@@ -21,10 +21,15 @@ rev="$1"
 set -euo pipefail
 
 if [ -z "$rev" ]; then
-    rev="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/jpochyla/psst/commits?per_page=1" | jq -r '.[0].sha')"
+    response="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/jpochyla/psst/commits?per_page=1")"
+    rev="$(jq -r '.[0].sha' <<< "$response")"
+    date="$(jq -r '.[0].commit.author.date' <<< "$response" | cut -dT -f1)"
+else
+    response="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/jpochyla/psst/commits/$rev")"
+    date="$(jq -r '.commit.author.date' <<< "$response" | cut -dT -f1)"
 fi
 
-version="unstable-$(date +%F)"
+version="unstable-$date"
 
 # Sources
 src_hash=$(nix-prefetch-github jpochyla psst --rev "$rev" | jq -r .hash)
