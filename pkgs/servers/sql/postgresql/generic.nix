@@ -16,7 +16,7 @@ let
       , self, newScope, buildEnv
 
       # source specification
-      , version, hash, muslPatches
+      , version, hash, muslPatches ? {}
 
       # for tests
       , testers, nixosTests
