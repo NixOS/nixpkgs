@@ -44,6 +44,7 @@ in ((buildMozillaMach {
 
   applicationName = "Betterbird";
   binaryName = "betterbird";
+  branding = "comm/mail/branding/betterbird";
   inherit (thunderbird-unwrapped) application extraPatches;
 
   src = fetchurl {
@@ -90,11 +91,6 @@ in ((buildMozillaMach {
 
   extraBuildInputs = [
     libdbusmenu-gtk3
-  ];
-
-  extraConfigureFlags = [
-    "--enable-application=comm/mail"
-    "--with-branding=comm/mail/branding/betterbird"
   ];
 
   meta = with lib; {

@@ -11,6 +11,8 @@
   applicationName = "Floorp";
   binaryName = "floorp";
   branding = "browser/branding/official";
+  requireSigning = false;
+  allowAddonSideload = true;
 
   # Must match the contents of `browser/config/version.txt` in the source tree
   version = "115.8.0";
@@ -26,9 +28,7 @@
   extraConfigureFlags = [
     "--with-app-name=${pname}"
     "--with-app-basename=${applicationName}"
-    "--with-distribution-id=one.ablaze.floorp"
     "--with-unsigned-addon-scopes=app,system"
-    "--allow-addon-sideload"
   ];
 
   meta = {
@@ -54,6 +54,5 @@
   mlsAPISupport = true;
 }).overrideAttrs (prev: {
   MOZ_DATA_REPORTING = "";
-  MOZ_REQUIRE_SIGNING = "";
   MOZ_TELEMETRY_REPORTING = "";
 })

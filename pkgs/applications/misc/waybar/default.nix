@@ -68,24 +68,24 @@ let
   libcava.src = fetchFromGitHub {
     owner = "LukashonakV";
     repo = "cava";
-    rev = "0.9.1";
-    hash = "sha256-FnRJJV0poRmw+y4nt1X7Z0ipX86LRK1TJhNKHFk0rTw=";
+    rev = "0.10.1";
+    hash = "sha256-iIYKvpOWafPJB5XhDOSIW9Mb4I3A4pcgIIPQdQYEqUw=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.9.24";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-JhLKGzqZ8akWcyHTav2TGcGmXk9dy9Xj4+/oFCPeNU0=";
+    hash = "sha256-p1VRrKT2kTDy48gDXPMHlLbfcokAOFeTZXGzTeO1SAE=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.9.1
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.1
     patchShebangs .
     popd
   '';
@@ -147,7 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = (lib.mapAttrsToList lib.mesonEnable {
     "cava" = cavaSupport;
     "dbusmenu-gtk" = traySupport;
-    "gtk-layer-shell" = true;
     "jack" = jackSupport;
     "libinput" = inputSupport;
     "libnl" = nlSupport;
