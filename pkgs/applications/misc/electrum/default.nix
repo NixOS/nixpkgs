@@ -97,6 +97,9 @@ python.pkgs.buildPythonApplication {
     ckcc-protocol
     keepkey
     trezor
+    bitbox02
+    cbor
+    pyserial
   ] ++ lib.optionals enableQt [
     pyqt5
     qdarkstyle
