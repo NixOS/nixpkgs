@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan ];
+    maintainers = with maintainers; [ flokli matthewcroughan ];
     mainProgram = "mycelium";
   };
 }
