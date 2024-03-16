@@ -35,13 +35,8 @@ final: _: {
   autoAddOpenGLRunpathHook =
     final.callPackage
       (
-        {addOpenGLRunpath, makeSetupHook}:
-        makeSetupHook
-          {
-            name = "auto-add-opengl-runpath-hook";
-            propagatedBuildInputs = [addOpenGLRunpath];
-          }
-          ./auto-add-opengl-runpath-hook.sh
+        { lib, autoAddDriverRunpathHook }:
+        lib.warn "autoAddOpenGLRunpathHook has been renamed to autoAddDriverRunpathHook, and moved to top-level pkgs" autoAddDriverRunpathHook
       )
       {};
 
