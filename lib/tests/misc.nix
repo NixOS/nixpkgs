@@ -2154,4 +2154,53 @@ runTests {
     };
     expected = "c";
   };
+
+  testFilterOptionsEmpty = {
+    expr = filterOptions (p: o: true) {};
+    expected = {};
+  };
+
+  testFilterOptionsNoFilter = {
+    expr = filterOptions (p: o: true) {foo-1 = mkOption {};};
+    expected = {foo-1 = mkOption {};};
+  };
+
+  testFilterOptionsFilter = {
+    expr = filterOptions (p: o: hasPrefix "foo-" o.description) {
+      foo-1 = mkOption {description = "foo-1";};
+      bar-1 = mkOption {description = "bar-1";};
+    };
+    expected = {
+      foo-1 = mkOption {description = "foo-1";};
+    };
+  };
+
+  testFilterOptionsFilterDeep = {
+    expr = filterOptions (p: o: o.description == "foo") {
+      nested.foo = mkOption {description = "foo";};
+      nested.bar = mkOption {description = "bar";};
+    };
+    expected.nested.foo = mkOption {description = "foo";};
+  };
+
+  testFilterOptionsFilterPath = {
+    expr = filterOptions (p: o: elem "foo" p) {
+      nested.foo = mkOption {};
+      nested.bar = mkOption {};
+    };
+    expected.nested.foo = mkOption {};
+  };
+
+  testFilterOptionsNoEmptyBranches = {
+    expr = filterOptions (p: o: elem "foo" p) {
+      foo.a = mkOption {};
+      bar.a = mkOption {};
+    };
+    expected.foo.a = mkOption {};
+  };
+
+  testFilterOptionsNonAttrsetValuesPassthrough = {
+    expr = filterOptions (p: o: false) { a = []; };
+    expected.a = [];
+  };
 }
