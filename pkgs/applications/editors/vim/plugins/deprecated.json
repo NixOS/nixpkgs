@@ -24,7 +24,7 @@
         "new": "nvchad-ui"
     },
     "nvim-base16": {
-        "date": "2024-02-15",
+        "date": "2024-03-16",
         "new": "base16-nvim"
     },
     "nvim-bufferline-lua": {
@@ -46,6 +46,10 @@
     "sql-nvim": {
         "date": "2021-09-03",
         "new": "sqlite-lua"
+    },
+    "vim-fsharp": {
+        "date": "2024-03-16",
+        "new": "zarchive-vim-fsharp"
     },
     "vim-jade": {
         "date": "2020-03-27",
