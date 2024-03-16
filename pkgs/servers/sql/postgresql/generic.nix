@@ -124,6 +124,7 @@ let
       })
 
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
+      # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
     ) ++ lib.optionals stdenv'.isLinux  [
       (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
