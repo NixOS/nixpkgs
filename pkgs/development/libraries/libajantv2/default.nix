@@ -6,6 +6,9 @@
 , pkg-config
 }:
 
+# Warning: We are aware that the upstream changed and there are new release, 
+# this got initally packaged for obs-studio which appears to fail to build even upstream with the new version.
+# https://github.com/NixOS/nixpkgs/pull/296191 / https://github.com/NixOS/nixpkgs/pull/296191
 stdenv.mkDerivation rec {
   pname = "libajantv2";
   version = "16.2-bugfix5";
