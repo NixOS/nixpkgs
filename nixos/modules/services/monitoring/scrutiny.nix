@@ -167,7 +167,8 @@ in
       systemd.services.scrutiny = {
         description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        after = [ "network.target" ] ++ lib.optional cfg.influxdb.enable "influxdb2.service";
+        wants = lib.optional cfg.influxdb.enable "influxdb2.service";
         environment = {
           SCRUTINY_VERSION = "1";
           SCRUTINY_WEB_DATABASE_LOCATION = "/var/lib/scrutiny/scrutiny.db";
