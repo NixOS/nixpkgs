@@ -26004,6 +26004,8 @@ with pkgs;
 
   dspam = callPackage ../servers/mail/dspam { };
 
+  edfbrowser = qt5.callPackage ../applications/misc/edfbrowser { };
+
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
   envoy = callPackage ../servers/http/envoy {
