@@ -83,6 +83,7 @@ self: super: {
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  primitive-unlifted = super.primitive-unlifted_0_1_3_1;
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
