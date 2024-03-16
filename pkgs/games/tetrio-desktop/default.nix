@@ -22,12 +22,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tetrio-desktop";
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20211228025517if_/https://tetr.io/about/desktop/builds/TETR.IO%20Setup.deb";
+    url = "https://web.archive.org/web/20240309215118if_/https://tetr.io/about/desktop/builds/9/TETR.IO%20Setup.deb";
     name = "tetrio-desktop.deb";
-    sha256 = "1nlblfhrph4cw8rpic9icrs78mzrxyskl7ggyy2i8bk9i07i21xf";
+    sha256 = "UriLwMB8D+/T32H4rPbkJAy/F/FFhNpd++0AR1lwEfs=";
   };
 
   nativeBuildInputs = [
@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
     cp -r opt/ usr/share/ $out
 
     mkdir $out/bin
-    ln -s $out/opt/TETR.IO/tetrio-desktop $out/bin/
+    ln -s $out/opt/TETR.IO/TETR.IO $out/bin/
 
-    substituteInPlace $out/share/applications/tetrio-desktop.desktop \
-      --replace "Exec=\"/opt/TETR.IO/tetrio-desktop\"" "Exec=\"$out/opt/TETR.IO/tetrio-desktop\""
+    substituteInPlace $out/share/applications/TETR.IO.desktop \
+      --replace-fail "Exec=/opt/TETR.IO/TETR.IO" "Exec=\"$out/opt/TETR.IO/TETR.IO\""
 
     runHook postInstall
   '';
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/opt/TETR.IO/tetrio-desktop \
+    wrapProgram $out/opt/TETR.IO/TETR.IO \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/TETR.IO \
       ''${gappsWrapperArgs[@]}
   '';
@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ wackbyte ];
+    mainProgram = "TETR.IO";
   };
 }
