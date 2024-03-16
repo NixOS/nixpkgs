@@ -80,13 +80,30 @@ in
         Group = "restic";
 
         # Security hardening
-        ReadWritePaths = [ cfg.dataDir ];
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectProc = "invisible";
         ProtectSystem = "strict";
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
         PrivateDevices = true;
+        ReadWritePaths = [ cfg.dataDir ];
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
+        UMask = 027;
       };
     };
 
