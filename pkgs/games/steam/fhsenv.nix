@@ -309,6 +309,7 @@ in buildFHSEnv rec {
       description = "Steam dependencies (dummy package, do not use)";
     };
 
+  passthru.steamargs = args;
   passthru.run = buildFHSEnv {
     name = "steam-run";
 
