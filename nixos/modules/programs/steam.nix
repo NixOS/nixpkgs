@@ -74,6 +74,11 @@ in {
     extraCompatPackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
+      example = literalExpression ''
+        with pkgs; [
+          proton-ge-bin
+        ]
+      '';
       description = lib.mdDoc ''
         Extra packages to be used as compatibility tools for Steam on Linux. Packages will be included
         in the `STEAM_EXTRA_COMPAT_TOOLS_PATHS` environmental variable. For more information see
