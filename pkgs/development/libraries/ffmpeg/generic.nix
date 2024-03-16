@@ -140,7 +140,7 @@
  *  Program options
  */
 , buildFfmpeg ? withHeadlessDeps # Build ffmpeg executable
-, buildFfplay ? withFullDeps # Build ffplay executable
+, buildFfplay ? withSmallDeps # Build ffplay executable
 , buildFfprobe ? withHeadlessDeps # Build ffprobe executable
 , buildQtFaststart ? withFullDeps # Build qt-faststart executable
 , withBin ? buildFfmpeg || buildFfplay || buildFfprobe || buildQtFaststart
