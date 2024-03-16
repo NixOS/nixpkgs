@@ -10,8 +10,9 @@
 , numactl
 , openssl
 , zlib
+, zstd
 , libbsd
-, libelf
+, elfutils
 , jansson
 , libnl
 }:
@@ -37,8 +38,9 @@ stdenv.mkDerivation rec {
     numactl
     openssl
     zlib
+    zstd
     libbsd
-    libelf
+    elfutils
     jansson
     libbpf
     libnl
