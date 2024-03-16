@@ -1,4 +1,4 @@
-{ lib 
+{ lib
 , stdenv
 , fetchFromGitHub
 , gtk3
@@ -9,7 +9,7 @@
 , openssl
 , jansson
 , wrapGAppsHook
-}: 
+}:
 
 stdenv.mkDerivation rec {
   pname = "mediasynclite";
