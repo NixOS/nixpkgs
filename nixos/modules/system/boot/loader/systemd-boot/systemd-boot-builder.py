@@ -296,7 +296,8 @@ def install_bootloader(args: argparse.Namespace) -> None:
         installed_out = subprocess.check_output([f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}", "status"], universal_newlines=True)
 
         # See status_binaries() in systemd bootctl.c for code which generates this
-        installed_match = re.search(r"^\W+File:.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
+        # Support multiple efi files
+        installed_match = re.search(r"^\W+.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
                       installed_out, re.IGNORECASE | re.MULTILINE)
 
         available_match = re.search(r"^\((.*)\)$", available_out)
