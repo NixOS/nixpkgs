@@ -231,6 +231,8 @@ with pkgs;
   # many more scenarios than just opengl now.
   addDriverRunpath = callPackage ../build-support/add-driver-runpath { };
 
+  autoAddDriverRunpathHook = callPackage ../build-support/auto-add-driver-runpath-hook/default.nix { };
+
   # addOpenGLRunpath should be added to aliases.nix after the 24.05 branch-off.
   # Post 24.11 branch-off, this should throw an error in aliases.nix.
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
