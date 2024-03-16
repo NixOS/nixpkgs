@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake
-, freeglut, ghostscriptX, imagemagick, fftw
+{ lib, stdenv, fetchurl, fetchpatch
+, autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake, pkg-config
+, freeglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3, qtbase, qtsvg, boost
 , zlib, perl, curl
@@ -9,17 +9,24 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.87";
+  version = "2.88";
   pname = "asymptote";
 
   outputs = [ "out" "man" "info" "doc" "tex" ];
 
-  src = fetchFromGitHub {
-    owner = "vectorgraphics";
-    repo = pname;
-    rev = version;
-    hash = "sha256-xzRZ7NOWeu+uC5WeTxwh5MFm7psXMhxrxucT4PVtRxM=";
+  src = fetchurl {
+    url = "mirror://sourceforge/asymptote/${version}/asymptote-${version}.src.tgz";
+    hash = "sha256-DecadD+m7pORuH3Sdcs/5M3vUbN6rhSkFoNN0Soq9bs=";
   };
+
+  patches = [
+    (fetchpatch {
+      # partial fix for macOS XDR/V3D support (LDFLAGS change seems like an unrelated bugfix)
+      name = "restore-LDFLAGS-dont-look-for-tirpc-under-MacOS.patch";
+      url = "https://github.com/vectorgraphics/asymptote/commit/7e17096b22d18d133d1bc5916b6e32c0cb24ad10.patch";
+      hash = "sha256-olCFzqfZwWOAjqlB5lDPXYRHU9i3VQNgoR0cO5TmW98=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -29,15 +36,16 @@ stdenv.mkDerivation rec {
     texinfo
     wrapQtAppsHook
     cmake
+    pkg-config
   ];
 
   buildInputs = [
-    ghostscriptX imagemagick fftw
+    ghostscriptX imagemagick fftw eigen
     boehmgc ncurses readline gsl libsigsegv
     zlib perl curl qtbase qtsvg boost
     (texliveSmall.withPackages (ps: with ps; [ epsf cm-super ps.texinfo media9 ocgx2 collection-latexextra ]))
     (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ libtirpc ];
 
   propagatedBuildInputs = [
     glm
@@ -56,6 +64,11 @@ stdenv.mkDerivation rec {
       --replace-fail 'install: install-notexhash install-texhash' 'install: install-notexhash install-asy'
     prependToVar configureFlags "--with-latex=$tex/tex/latex" "--with-context=$tex/tex/context/third"
   '';
+
+  # do not use bundled libgc.so
+  configureFlags = [ "--enable-gc=system" ]
+    # TODO add open_memstream to enable XDR/V3D on Darwin (requires memstream or >=10.13 Apple SDK)
+    ++ lib.optional stdenv.isDarwin "--enable-xdr=no";
 
   env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
