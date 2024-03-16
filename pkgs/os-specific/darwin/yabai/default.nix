@@ -17,7 +17,7 @@
 
 let
   pname = "yabai";
-  version = "6.0.15";
+  version = "7.0.2";
 
   test-version = testers.testVersion {
     package = yabai;
