@@ -275,7 +275,7 @@ rec {
 
   mypy-boto3-elb = buildMypyBoto3Package "elb" "1.34.0" "sha256-5Eh5D872pVDd7Q+DDh3zpGMVgS8fUJsV+63H1fet73s=";
 
-  mypy-boto3-elbv2 = buildMypyBoto3Package "elbv2" "1.34.32" "sha256-jDrQb4A0PVBSxH7vuPXehpEYdU8Hwgv2Sc2+j0OGVJg=";
+  mypy-boto3-elbv2 = buildMypyBoto3Package "elbv2" "1.34.63" "sha256-snXMLMHLEpJjfX1GJp6FfYgIjkS8vkbf/hESBdhxIfk=";
 
   mypy-boto3-emr = buildMypyBoto3Package "emr" "1.34.44" "sha256-zM1VpAaBSxqdZiSrNiaAKfvliNRXMLEmvFvXcFmkZO0=";
 
