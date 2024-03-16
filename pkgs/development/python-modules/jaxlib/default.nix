@@ -44,14 +44,14 @@
 , config
   # CUDA flags:
 , cudaSupport ? config.cudaSupport
-, cudaPackagesGoogle
+, cudaPackages
 
   # MKL:
 , mklSupport ? true
 }@inputs:
 
 let
-  inherit (cudaPackagesGoogle) cudaFlags cudaVersion cudnn nccl;
+  inherit (cudaPackages) cudaFlags cudaVersion cudnn nccl;
 
   pname = "jaxlib";
   version = "0.4.28";
@@ -59,7 +59,7 @@ let
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
   stdenv = throw "Use effectiveStdenv instead";
-  effectiveStdenv = if cudaSupport then cudaPackagesGoogle.backendStdenv else inputs.stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -77,7 +77,7 @@ let
   # These are necessary at build time and run time.
   cuda_libs_joined = symlinkJoin {
     name = "cuda-joined";
-    paths = with cudaPackagesGoogle; [
+    paths = with cudaPackages; [
       cuda_cudart.lib # libcudart.so
       cuda_cudart.static # libcudart_static.a
       cuda_cupti.lib # libcupti.so
@@ -91,11 +91,11 @@ let
   # These are only necessary at build time.
   cuda_build_deps_joined = symlinkJoin {
     name = "cuda-build-deps-joined";
-    paths = with cudaPackagesGoogle; [
+    paths = with cudaPackages; [
       cuda_libs_joined
 
       # Binaries
-      cudaPackagesGoogle.cuda_nvcc.bin # nvcc
+      cudaPackages.cuda_nvcc.bin # nvcc
 
       # Headers
       cuda_cccl.dev # block_load.cuh
@@ -404,7 +404,7 @@ buildPythonPackage {
   # for more info.
   postInstall = lib.optionalString cudaSupport ''
     mkdir -p $out/bin
-    ln -s ${cudaPackagesGoogle.cuda_nvcc.bin}/bin/ptxas $out/bin/ptxas
+    ln -s ${cudaPackages.cuda_nvcc.bin}/bin/ptxas $out/bin/ptxas
 
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       patchelf --add-rpath "${lib.makeLibraryPath [cuda_libs_joined cudnn nccl]}" "$lib"
