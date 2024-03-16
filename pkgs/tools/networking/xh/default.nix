@@ -59,6 +59,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda payas ];
+    maintainers = with maintainers; [ figsoda bhankas ];
   };
 }
