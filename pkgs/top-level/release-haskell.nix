@@ -332,7 +332,7 @@ let
         nota
         nvfetcher
         ormolu
-        pakcs
+        # pakcs broken by set-extra on 2024-03-15
         pandoc
         petrinizer
         place-cursor-at
@@ -359,7 +359,7 @@ let
         uusi
         uqm
         uuagc
-        vaultenv
+        # vaultenv: broken by connection on 2024-03-16
         wstunnel
         xmobar
         xmonadctl
@@ -374,7 +374,7 @@ let
           elm
           elm-format
           elm-instrument
-          elmi-to-json
+          # elmi-to-json broken by hashable-time on 2024-03-16
           ;
       };
 
@@ -567,10 +567,11 @@ let
         compilerNames.ghc902
         compilerNames.ghc928
       ];
-      ghc-tags = lib.subtractLists [
-        compilerNames.ghc981
-        compilerNames.ghc982
-      ] released;
+      # broken on 2024-03-16
+      # ghc-tags = lib.subtractLists [
+      #   compilerNames.ghc981
+      #   compilerNames.ghc982
+      # ] released;
       hashable = lib.subtractLists [
         compilerNames.ghc981
         compilerNames.ghc982
