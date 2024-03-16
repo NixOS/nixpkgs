@@ -730,6 +730,7 @@ in {
   pppd = handleTest ./pppd.nix {};
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   pretalx = runTest ./web-apps/pretalx.nix;
+  pretix = runTest ./web-apps/pretix.nix;
   printing-socket = handleTest ./printing.nix { socket = true; };
   printing-service = handleTest ./printing.nix { socket = false; };
   privoxy = handleTest ./privoxy.nix {};

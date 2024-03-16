@@ -359,3 +359,8 @@ nixos/tests/zfs.nix                       @raitobezarius
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
 nixos/tests/buildbot.nix                               @Mic92 @zowoq
 pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
+
+# Pretix
+pkgs/by-name/pr/pretix/ @mweinelt
+nixos/modules/services/web-apps/pretix.nix @mweinelt
+nixos/tests/web-apps/pretix.nix @mweinelt
