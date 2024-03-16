@@ -9,8 +9,12 @@
 , qtbase
 , dtkgui
 , qtdeclarative
-, qtquickcontrols2
-, qtgraphicaleffects
+# only for qt5
+, qtquickcontrols2 ? null
+, qtgraphicaleffects ? null
+# only for qt6
+, qtshadertools ? null
+, qt5compat ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -39,25 +43,30 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     dtkgui
+    qtbase
     qtdeclarative
+  ] ++ lib.optionals (lib.versionOlder qtbase.version "6") [
     qtquickcontrols2
     qtgraphicaleffects
+  ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [
+    qtshadertools
+    qt5compat
   ];
 
   cmakeFlags = [
-    "-DDTK_VERSION=${version}"
+    "-DDTK_VERSION=${lib.versions.major qtbase.version}.${lib.versions.minor version}.${lib.versions.patch version}"
     "-DBUILD_DOCS=ON"
     "-DBUILD_EXAMPLES=ON"
     "-DMKSPECS_INSTALL_DIR=${placeholder "dev"}/mkspecs/modules"
-    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/share/doc"
     "-DQML_INSTALL_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${qtdeclarative.bin}/${qtbase.qtQmlPrefix}
+    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    export QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}
   '';
 
   outputs = [ "out" "dev" "doc" ];

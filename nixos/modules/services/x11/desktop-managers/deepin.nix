@@ -134,11 +134,11 @@ in
             libsForQt5.kde-gtk-config # deepin-api/gtk-thumbnailer need
             libsForQt5.kglobalaccel
             xsettingsd # lightdm-deepin-greeter
-            dtkcommon
-            dtkcore
-            dtkgui
-            dtkwidget
-            dtkdeclarative
+            libsForQt5.dtkcommon
+            libsForQt5.dtkcore
+            libsForQt5.dtkgui
+            libsForQt5.dtkwidget
+            libsForQt5.dtkdeclarative
             qt5platform-plugins
             deepin-pw-check
             deepin-turbo

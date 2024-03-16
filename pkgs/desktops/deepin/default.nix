@@ -5,11 +5,6 @@ let
     inherit (self) callPackage;
   in {
     #### LIBRARIES
-    dtkcommon = callPackage ./library/dtkcommon { };
-    dtkcore = callPackage ./library/dtkcore { };
-    dtkgui = callPackage ./library/dtkgui { };
-    dtkwidget = callPackage ./library/dtkwidget { };
-    dtkdeclarative = callPackage ./library/dtkdeclarative { };
     deepin-pdfium = callPackage ./library/deepin-pdfium { };
     qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
     qt5integration = callPackage ./library/qt5integration { };
@@ -93,6 +88,12 @@ let
   } // lib.optionalAttrs config.allowAliases {
     dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
     dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
+    inherit (libsForQt5)
+      dtkcommon
+      dtkcore
+      dtkwidget
+      dtkdeclarative
+      ;
   };
 in
 lib.makeScope libsForQt5.newScope packages

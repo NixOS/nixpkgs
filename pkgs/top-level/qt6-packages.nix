@@ -33,6 +33,16 @@ makeScopeWithSplicing' {
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
+  dtkcommon = callPackage ../development/libraries/dtkcommon { };
+
+  dtkcore = callPackage ../development/libraries/dtkcore { };
+
+  dtkgui = callPackage ../development/libraries/dtkgui { };
+
+  dtkwidget = callPackage ../development/libraries/dtkwidget { };
+
+  dtkdeclarative = callPackage ../development/libraries/dtkdeclarative { };
+
   fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
   fcitx5-configtool = kdePackages.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
