@@ -135,7 +135,9 @@ in
 
       systemd.packages = [ pkgs.lifecycled ];
       systemd.services.lifecycled = {
-        wantedBy = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
         restartTriggers = [ configFile ];
       };
     })
@@ -153,6 +155,7 @@ in
       systemd.timers.lifecycled-queue-cleaner = {
         description = "Lifecycle Daemon Queue Cleaner Timer";
         wantedBy = [ "timers.target" ];
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         timerConfig = {
           Unit = "lifecycled-queue-cleaner.service";

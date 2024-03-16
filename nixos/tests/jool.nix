@@ -16,7 +16,6 @@ let
   webserver = ip: msg: {
     systemd.services.webserver = {
       description = "Mock webserver";
-      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
         while true; do
@@ -197,6 +196,9 @@ in
 
       for node in [client, homeserver, server]:
         node.wait_for_unit("network-addresses-eth1.service")
+        # Ensure interfaces come up
+        node.systemctl("start network-online.target")
+        node.wait_for_unit("network-online.target")
 
       with subtest("Client can ping the WAN server"):
         router.wait_for_unit("jool-nat64-default.service")

@@ -60,7 +60,8 @@ import ./make-test-python.nix {
     server.wait_for_unit("opensmtpd")
     server.wait_for_unit("dovecot2")
     server.wait_for_unit("nginx")
-    server.wait_for_unit("rss2email")
+    # rss2email finishes its work and then exits, so it may not still be running; thus we just wait till it exits success.
+    server.wait_until_succeeds("systemctl show rss2email.service | grep Result=success")
 
     server.wait_until_succeeds("check-mail-landed >&2")
   '';

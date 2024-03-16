@@ -100,6 +100,7 @@ with lib;
     in {
       description = "xl2tpd server";
 
+      after    = [ "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 

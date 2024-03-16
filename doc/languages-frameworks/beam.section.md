@@ -237,7 +237,7 @@ in
 {
   systemd.services.${release_name} = {
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" "postgresql.service" ];
+    after = [ "network-online.target" "postgresql.service" ];
     # note that if you are connecting to a postgres instance on a different host
     # postgresql.service should not be included in the requires.
     requires = [ "network-online.target" "postgresql.service" ];

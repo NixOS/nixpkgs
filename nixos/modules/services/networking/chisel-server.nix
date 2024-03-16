@@ -53,7 +53,11 @@ in {
   config = mkIf cfg.enable {
     systemd.services.chisel-server = {
       description = "Chisel Tunnel Server";
-      wantedBy = [ "network-online.target" ];
+
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+
+      after = [ "network-online.target" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.chisel}/bin/chisel server " + concatStringsSep " " (

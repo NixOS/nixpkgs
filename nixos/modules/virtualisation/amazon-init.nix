@@ -72,7 +72,7 @@ in {
       description = "Reconfigure the system from EC2 userdata on startup";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "multi-user.target" ];
+      after = [ "multi-user.target" "network-online.target" ];
       requires = [ "network-online.target" ];
 
       restartIfChanged = false;

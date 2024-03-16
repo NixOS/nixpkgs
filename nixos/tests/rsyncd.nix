@@ -30,6 +30,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     start_all()
     a.wait_for_unit("rsync")
     b.wait_for_unit("sockets.target")
+
+    # the network has to be "online" for the hosts to be reachable over IP
+    a.systemctl("start network-online.target")
+    b.systemctl("start network-online.target")
+    a.wait_for_unit("network-online.target")
+    b.wait_for_unit("network-online.target")
+
     b.succeed("rsync a::")
     a.succeed("rsync b::")
   '';

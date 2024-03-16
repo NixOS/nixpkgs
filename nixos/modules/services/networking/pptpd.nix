@@ -93,6 +93,7 @@ with lib;
     in {
       description = "pptpd server";
 
+      after    = [ "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 

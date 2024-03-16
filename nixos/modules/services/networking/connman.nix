@@ -100,7 +100,13 @@ in {
     systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ] ++ lib.optional enableIwd "iwd.service";
+
+      # see systemd.special(7): since we are a provider, we pull in
+      # network.target, while ordered before it.
+      before = [ "network.target" "NetworkManager-wait-online.service" ];
+      wants = [ "network.target" ];
+      after = [ "syslog.target" "network-pre.target" ] ++ lib.optional enableIwd "iwd.service";
+
       requires = lib.optional enableIwd "iwd.service";
       serviceConfig = {
         Type = "dbus";

@@ -31,6 +31,8 @@ import ./make-test-python.nix ({ lib, ... }: {
 
   testScript = ''
     start_all()
+    node1.systemctl("start network-online.target")
+    node2.systemctl("start network-online.target")
     node1.wait_for_unit("systemd-networkd-wait-online.service")
     node2.wait_for_unit("systemd-networkd-wait-online.service")
 
