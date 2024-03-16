@@ -155,7 +155,7 @@ let
     version = versions.${sdkName}.${pname};
   in fetchApple' pname version sha256;
 
-  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
+  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation (finalAttrs: {
     inherit pname version;
 
     src = if attrs ? srcs then null else (fetchApple' pname version sha256);
@@ -181,7 +181,7 @@ let
       fi
     '';
 
-  } // attrs // {
+  } // (if builtins.isFunction attrs then attrs finalAttrs else attrs) // {
     meta = (with lib; {
       platforms = platforms.darwin;
       license = licenses.apsl20;
