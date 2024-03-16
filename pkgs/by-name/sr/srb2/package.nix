@@ -1,18 +1,16 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
 , fetchFromGitHub
 , cmake
 , curl
 , nasm
 , libopenmpt
-, p7zip
 , game-music-emu
 , libpng
 , SDL2
 , SDL2_mixer
 , zlib
-, unzip
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -32,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     nasm
-    p7zip
     makeWrapper
     copyDesktopItems
   ];
@@ -51,22 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "srb2-data";
     version = finalAttrs.version;
 
-    nativeBuildInputs = [
-      unzip
-    ];
-
-    src = fetchurl {
+    src = fetchzip {
       url = "https://github.com/STJr/SRB2/releases/download/SRB2_release_${finalAttrs.version}/SRB2-v${lib.replaceStrings ["."] [""] finalAttrs.version}-Full.zip";
-      hash = "sha256-g7kaNRE1tjcF5J2v+kTnrDzz4zs5f1b/NH67ce2ifUo=";
+      hash = "sha256-/MJVOMMXxHa+xB60WlwLhh5lrZNKnHajTySNZVSlUWE=";
+      stripRoot = false;
     };
-
-    sourceRoot = ".";
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/share/srb2
-      cp -r *pk3 *dta *dat models/ $out/share/srb2/
+      cp -r * $out/share/srb2
 
       runHook postInstall
     '';
