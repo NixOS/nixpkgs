@@ -54,6 +54,6 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.linux;
     license = with licenses; [ asl20 mit ];
     mainProgram = "wl-clip";
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ thiagokokada donovanglover ];
   };
 }
