@@ -2948,6 +2948,13 @@
     githubId = 8891115;
     name = "Brian Choy";
   };
+  ByteSudoer = {
+    email = "ByteSudoer@gmail.com";
+    github = "ByteSudoer";
+    githubId = 88513682;
+    name = "ByteSudoer";
+
+  };
   bzizou = {
     email = "Bruno@bzizou.net";
     github = "bzizou";

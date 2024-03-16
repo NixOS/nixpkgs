@@ -27048,6 +27048,8 @@ with pkgs;
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
+  chess-tui = callPackage ../tools/misc/chess-tui { };
+
   thanos = callPackage ../servers/monitoring/thanos { };
 
   trafficserver = callPackage ../servers/http/trafficserver { };
