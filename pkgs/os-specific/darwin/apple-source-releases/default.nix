@@ -6,6 +6,9 @@ let
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
+    "macos-14.3" = {
+      system_cmds   = "970.0.4";
+    };
     "osx-10.12.6" = {
       xnu           = "3789.70.16";
       libiconv      = "50";
@@ -306,7 +309,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     else macosPackages_11_0_1.network_cmds;
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "sha256-kmEOprkiJGMVcl7yHkGX8ymk/5KjE99gWuF8j2hK5hY=" {};
-    system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "sha256-KBdGlHeXo2PwgRQOOeElJ1RBqCY1Tdhn5KD42CMhdzI=" {};
+    system_cmds     = applePackage "system_cmds"       "macos-14.3"      "sha256-qFp9nkzsq9uQ7zoyfvO+3gvDlc7kaPvn6luvmO/Io30=" {};
     text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "sha256-KSebU7ZyUsPeqn51nzuGNaNxs9pvmlIQQdkWXIVzDxw=" {};
     top             = applePackage "top"               "osx-10.11.6"     "sha256-jbz64ODogtpNyLpXGSZj1jCBdFPVXcVcBkL1vc7g5qQ=" {};
     PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "sha256-bYGtYnBOcE5W03AZzfVTJXPZ6GgryGAMt/LgLPxFkVk=" {};
