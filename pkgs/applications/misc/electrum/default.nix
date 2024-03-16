@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "4.5.3";
+  version = "4.5.4";
 
   python = python3.override {
     self = python;
@@ -46,7 +46,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-Lr6ynHAbyaiaxYAWU5j5Wh5acxO5HkP1/jpnFrL4j68=";
+    sha256 = "sha256-fDu2PlEQOF7ftlS6dYw15S2XiAx+D/bng4zC9ELj6uk=";
 
     postFetch = ''
       mv $out ./all
@@ -62,7 +62,7 @@ python.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-kej0msc7SB+51ad5xZrT8MMEY5rfYOGqum6RO1gBH5s=";
+    sha256 = "sha256-lDuwXhOjcbCx8x/oIoigrklDwCbhn1trf5lDf/X/1Qc=";
   };
 
   postUnpack = ''
