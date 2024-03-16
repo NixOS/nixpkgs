@@ -2934,8 +2934,6 @@ with pkgs;
 
   felix-fm = callPackage ../applications/file-managers/felix-fm { };
 
-  joshuto = callPackage ../applications/file-managers/joshuto { };
-
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
   lesscpy = callPackage ../development/compilers/lesscpy { };
@@ -3554,8 +3552,6 @@ with pkgs;
   bkyml = callPackage ../tools/misc/bkyml { };
 
   blackmagic-desktop-video = callPackage ../tools/video/blackmagic-desktop-video { };
-
-  blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
@@ -4778,8 +4774,6 @@ with pkgs;
 
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
-  swww = callPackage ../tools/wayland/swww { };
-
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl {
@@ -5633,8 +5627,6 @@ with pkgs;
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };  };
 
-  hyprdim = callPackage ../applications/misc/hyprdim { };
-
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
     wlroots = callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
     udis86 = callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
@@ -5645,8 +5637,6 @@ with pkgs;
   hyprland-per-window-layout = callPackage ../tools/wayland/hyprland-per-window-layout { };
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
-
-  hyprnome = callPackage ../applications/misc/hyprnome { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
@@ -9757,9 +9747,7 @@ with pkgs;
 
   kool = callPackage ../development/tools/misc/kool { };
 
-  kore = callPackage ../development/web/kore {
-    openssl = openssl_1_1;
-  };
+  kore = callPackage ../development/web/kore { };
 
   krakenx = callPackage ../tools/system/krakenx { };
 
@@ -16841,7 +16829,6 @@ with pkgs;
   };
   cargo-leptos = callPackage ../development/tools/rust/cargo-leptos { };
   cargo-kcov = callPackage ../development/tools/rust/cargo-kcov { };
-  cargo-graph = callPackage ../development/tools/rust/cargo-graph { };
   cargo-guppy = callPackage ../development/tools/rust/cargo-guppy { };
   cargo-hack = callPackage ../development/tools/rust/cargo-hack { };
   cargo-license = callPackage ../development/tools/rust/cargo-license { };
@@ -18274,7 +18261,8 @@ with pkgs;
     electron_25-bin
     electron_26-bin
     electron_27-bin
-    electron_28-bin;
+    electron_28-bin
+    electron_29-bin;
 
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
@@ -18295,7 +18283,7 @@ with pkgs;
   electron_26 = electron_26-bin;
   electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
-  electron_29 = electron-source.electron_29;
+  electron_29 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_29 then electron-source.electron_29 else electron_29-bin;
   electron = electron_29;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
@@ -24469,7 +24457,7 @@ with pkgs;
 
   rlottie = callPackage ../development/libraries/rlottie { };
 
-  rocksdb = pin-to-gcc12-if-gcc13 (callPackage ../development/libraries/rocksdb { });
+  rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rocksdb_7_10 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
@@ -29530,8 +29518,6 @@ with pkgs;
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
   sarabun-font = callPackage ../data/fonts/sarabun { };
-
-  sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
   savepagenow = callPackage ../tools/misc/savepagenow { };
 
@@ -37838,8 +37824,6 @@ with pkgs;
 
   srb2 = callPackage ../games/srb2 { };
 
-  srb2kart = callPackage ../games/srb2kart { };
-
   ssl-cert-check = callPackage ../tools/admin/ssl-cert-check { };
 
   stardust = callPackage ../games/stardust { };
@@ -38667,7 +38651,9 @@ with pkgs;
 
   getdp = callPackage ../applications/science/math/getdp { };
 
-  gurobi = callPackage ../applications/science/math/gurobi { };
+  gurobi = callPackage ../applications/science/math/gurobi {
+    python3 = python310;
+  };
 
   jags = callPackage ../applications/science/math/jags { };
 

@@ -2527,7 +2527,7 @@ self: super: with self; {
 
   css-inline = callPackage ../development/python-modules/css-inline {
     inherit (pkgs.darwin) libiconv;
-    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   css-parser = callPackage ../development/python-modules/css-parser { };
@@ -5681,6 +5681,8 @@ self: super: with self; {
   installer = callPackage ../development/python-modules/installer { };
 
   insteon-frontend-home-assistant = callPackage ../development/python-modules/insteon-frontend-home-assistant { };
+
+  instructor = callPackage ../development/python-modules/instructor { };
 
   intake = callPackage ../development/python-modules/intake { };
 
@@ -9289,6 +9291,8 @@ self: super: with self; {
   paypal-checkout-serversdk = callPackage ../development/python-modules/paypal-checkout-serversdk { };
 
   paypalhttp = callPackage ../development/python-modules/paypalhttp { };
+
+  paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
@@ -16346,6 +16350,8 @@ self: super: with self; {
   wakeonlan = callPackage ../development/python-modules/wakeonlan { };
 
   wallbox = callPackage ../development/python-modules/wallbox { };
+
+  wallet-py3k = callPackage ../development/python-modules/wallet-py3k { };
 
   walrus = callPackage ../development/python-modules/walrus { };
 

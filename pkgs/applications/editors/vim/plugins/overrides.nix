@@ -998,7 +998,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-gCGuD5kipgfR0Le8npNmyBxNsUq0PavXvKkxkiPx13E=";
+        cargoHash = "sha256-VDnrJ2EJ8LDykqxYKD1VR8BkDqzzifazJzL/0UsmSCk=";
 
 
         preCheck = ''
@@ -1134,7 +1134,7 @@
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-nlPSsp/HbS1DxhOHh5+7x1re46oiQa9FQMLClc7TQLg=";
+        cargoHash = "sha256-iGNLk3ckm90i5m05V/va+hO9RMiOUKL19dkszoUCwlU=";
 
         nativeBuildInputs = [ pkg-config ];
 

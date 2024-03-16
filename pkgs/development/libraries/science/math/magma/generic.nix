@@ -8,11 +8,11 @@
 { autoPatchelfHook
 , blas
 , cmake
+, cudaPackages_11 ? null
 , cudaPackages
 , cudaSupport ? config.cudaSupport
 , fetchurl
 , gfortran
-, cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , gpuTargets ? [ ] # Non-CUDA targets, that is HIP
 , rocmPackages
 , lapack
@@ -32,8 +32,17 @@
 
 let
   inherit (lib) lists strings trivial;
-  inherit (cudaPackages) cudaAtLeast cudaFlags cudaOlder;
   inherit (magmaRelease) version hash supportedGpuTargets;
+
+  # Per https://icl.utk.edu/magma/downloads, support for CUDA 12 wasn't added until 2.7.1.
+  # If we're building a version prior to that, use the latest release of the 11.x series.
+  effectiveCudaPackages =
+    if strings.versionOlder version "2.7.1"
+    then cudaPackages_11
+    else cudaPackages;
+
+  inherit (effectiveCudaPackages) cudaAtLeast cudaFlags cudaOlder;
+  inherit (cudaFlags) cudaCapabilities;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -115,7 +124,7 @@ stdenv.mkDerivation {
     ninja
     gfortran
   ] ++ lists.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
+    effectiveCudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -123,7 +132,7 @@ stdenv.mkDerivation {
     lapack
     blas
     python3
-  ] ++ lists.optionals cudaSupport (with cudaPackages; [
+  ] ++ lists.optionals cudaSupport (with effectiveCudaPackages; [
     cuda_cudart.dev # cuda_runtime.h
     cuda_cudart.lib # cudart
     cuda_cudart.static # cudart_static
@@ -173,6 +182,7 @@ stdenv.mkDerivation {
     # TODO(@connorbaker): This should be handled by having CMakeLists.txt install them, but such a patch is
     # out of the scope of the PR which introduces the `test` output: https://github.com/NixOS/nixpkgs/pull/283777.
     # See https://github.com/NixOS/nixpkgs/pull/283777#discussion_r1482125034 for more information.
+    # Such work is tracked by https://github.com/NixOS/nixpkgs/issues/296286.
     ''
       install -Dm755 ../testing/run_{tests,summarize}.py -t "$test/bin/"
     ''
@@ -182,7 +192,7 @@ stdenv.mkDerivation {
     # because it has no files to install.
     + ''
       install -Dm755 ./testing/testing_* ./sparse/testing/testing_* -t "$test/bin/"
-      install -Dm755 ./lib/libtester.so ./lib/liblapacktest.so -t "$test/lib/"
+      install -Dm755 ./lib/lib*test*.* -t "$test/lib/"
     ''
     # All of the test executables and libraries will have a reference to the build directory in their RPATH, which we
     # must remove. We do this by shrinking the RPATH to only include the Nix store. The autoPatchelfHook will take care
@@ -196,7 +206,8 @@ stdenv.mkDerivation {
     '';
 
   passthru = {
-    inherit cudaPackages cudaSupport rocmSupport gpuTargets;
+    inherit cudaSupport rocmSupport gpuTargets;
+    cudaPackages = effectiveCudaPackages;
   };
 
   meta = with lib; {
@@ -210,6 +221,7 @@ stdenv.mkDerivation {
     broken =
       !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
-      || (cudaSupport && cudaOlder "9.0");
+      || (cudaSupport && cudaOlder "9.0")
+      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null);
   };
 }
