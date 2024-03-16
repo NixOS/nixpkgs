@@ -17,10 +17,10 @@ from . import md
 from . import parallel
 from .asciidoc import AsciiDocRenderer, asciidoc_escape
 from .commonmark import CommonMarkRenderer
-from .docbook import DocBookRenderer, make_xml_id
+from .docbook import DocBookRenderer
 from .html import HTMLRenderer
 from .manpage import ManpageRenderer, man_escape
-from .manual_structure import XrefTarget
+from .manual_structure import make_xml_id, XrefTarget
 from .md import Converter, md_escape, md_make_code
 from .types import OptionLoc, Option, RenderedOption
 

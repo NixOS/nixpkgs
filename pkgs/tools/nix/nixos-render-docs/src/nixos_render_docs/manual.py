@@ -13,9 +13,9 @@ from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
 from markdown_it.token import Token
 
 from . import md, options
-from .docbook import DocBookRenderer, Heading, make_xml_id
+from .docbook import DocBookRenderer, Heading
 from .html import HTMLRenderer, UnresolvedXrefError
-from .manual_structure import check_structure, FragmentType, is_include, TocEntry, TocEntryType, XrefTarget
+from .manual_structure import check_structure, FragmentType, is_include, make_xml_id, TocEntry, TocEntryType, XrefTarget
 from .md import Converter, Renderer
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
