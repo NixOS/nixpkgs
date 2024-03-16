@@ -453,7 +453,7 @@ xdvi = stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace "$out/bin/xdvi" \
-      --replace "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
+      --replace-fail "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
   '';
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
 };
@@ -489,8 +489,8 @@ xindy = stdenv.mkDerivation {
   # hardcode clisp location
   postPatch = ''
     substituteInPlace xindy-*/user-commands/xindy.in \
-      --replace "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
-                "our \$clisp = '$(type -P clisp)';"
+      --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
+                     "our \$clisp = '$(type -P clisp)';"
   '';
 
   nativeBuildInputs = [
