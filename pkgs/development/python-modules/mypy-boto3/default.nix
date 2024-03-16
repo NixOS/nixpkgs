@@ -297,7 +297,7 @@ rec {
 
   mypy-boto3-firehose = buildMypyBoto3Package "firehose" "1.34.46" "sha256-Fgs7wrwKPK79cYduCR/RYQ2FEZvghDuWI1hXKzFLfJo=";
 
-  mypy-boto3-fis = buildMypyBoto3Package "fis" "1.34.0" "sha256-0TJ7iAF9hTOiKoW305p8a5fE0lZrdtoFDj/jjZzfdf0=";
+  mypy-boto3-fis = buildMypyBoto3Package "fis" "1.34.63" "sha256-TJnzgQGDcybpVqg+p7Tuvw/RoY79cQPPChyHWlMxhiY=";
 
   mypy-boto3-fms = buildMypyBoto3Package "fms" "1.34.0" "sha256-tzaSecIXzkC+Zr5MGpU7GaoiGHGsywEglZ8+Ja0XDDo=";
 
