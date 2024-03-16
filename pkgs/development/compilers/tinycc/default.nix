@@ -6,9 +6,16 @@
 , stdenv
 , texinfo
 , which
+, darwin
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  inherit
+    (if stdenv.isDarwin
+     then darwin.apple_sdk_11_0.stdenv
+     else stdenv) mkDerivation;
+in
+mkDerivation (finalAttrs: {
   pname = "tcc";
   version = "0.9.27-unstable-2022-07-15";
 
