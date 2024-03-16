@@ -26,6 +26,7 @@
   lib,
   newScope,
   pkgs,
+  config,
   __attrsFailEvaluation ? true,
 }:
 let
@@ -108,6 +109,8 @@ let
     })
     (callPackage ../development/cuda-modules/cuda-samples/extension.nix {inherit cudaVersion;})
     (callPackage ../development/cuda-modules/cuda-library-samples/extension.nix {})
+  ] ++ lib.optionals (config.allowAliases or true) [
+    (callPackage ../development/cuda-modules/aliases.nix {})
   ];
 
   cudaPackages = customisation.makeScope newScope (

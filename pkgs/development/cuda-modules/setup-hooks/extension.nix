@@ -32,14 +32,6 @@ final: _: {
       {}
     );
 
-  autoAddOpenGLRunpathHook =
-    final.callPackage
-      (
-        { lib, autoAddDriverRunpathHook }:
-        lib.warn "autoAddOpenGLRunpathHook has been renamed to autoAddDriverRunpathHook, and moved to top-level pkgs" autoAddDriverRunpathHook
-      )
-      {};
-
   # autoAddCudaCompatRunpathHook hook must be added AFTER `setupCudaHook`. Both
   # hooks prepend a path with `libcuda.so` to the `DT_RUNPATH` section of
   # patched elf files, but `cuda_compat` path must take precedence (otherwise,
