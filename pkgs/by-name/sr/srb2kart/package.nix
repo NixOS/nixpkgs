@@ -11,6 +11,8 @@
 , SDL2_mixer
 , zlib
 , makeWrapper
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     nasm
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -64,6 +67,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2}/include/SDL2"
+  ];
+
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "Sonic Robo Blast 2 Kart";
+      exec = finalAttrs.pname;
+      icon = finalAttrs.pname;
+      comment = "Kart racing mod based on SRB2";
+      desktopName = name;
+      genericName = name;
+      startupWMClass = ".srb2kart-wrapped";
+      categories = [ "Game" ];
+    })
   ];
 
   installPhase = ''
