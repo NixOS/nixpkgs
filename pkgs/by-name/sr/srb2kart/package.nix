@@ -1,43 +1,53 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
 , fetchFromGitHub
-, substituteAll
 , cmake
 , curl
 , nasm
-, unzip
 , game-music-emu
 , libpng
 , SDL2
 , SDL2_mixer
 , zlib
+, makeWrapper
 }:
 
-let
-
-  release_tag = "v1.6";
-
-  assets = fetchurl {
-    url = "https://github.com/STJr/Kart-Public/releases/download/${release_tag}/AssetsLinuxOnly.zip";
-    hash = "sha256-ejhPuZ1C8M9B0S4+2HN1T5pbormT1eVL3nlivqOszdE=";
-  };
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srb2kart";
-  version = "1.6.0";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "STJr";
     repo = "Kart-Public";
-    rev = release_tag;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5sIHdeenWZjczyYM2q+F8Y1SyLqL+y77yxYDUM3dVA0=";
+  };
+
+  assets = stdenv.mkDerivation {
+    pname = "srb2kart-data";
+    version = finalAttrs.version;
+
+    src = fetchzip {
+      url = "https://github.com/STJr/Kart-Public/releases/download/v${finalAttrs.version}/AssetsLinuxOnly.zip";
+      hash = "sha256-yaVdsQUnyobjSbmemeBEyu35GeZCX1ylTRcjcbDuIu4=";
+      stripRoot = false;
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/srb2kart
+      cp -r * $out/share/srb2kart
+
+      runHook postInstall
+    '';
   };
 
   nativeBuildInputs = [
     cmake
     nasm
-    unzip
+    makeWrapper
   ];
 
   buildInputs = [
@@ -50,31 +60,23 @@ in stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
+    "-DSRB2_ASSET_DIRECTORY=${finalAttrs.assets}/share/srb2kart"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2}/include/SDL2"
   ];
 
-  patches = [
-    ./wadlocation.patch
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  postPatch = ''
-    substituteInPlace src/sdl/i_system.c \
-        --replace '@wadlocation@' $out
-  '';
+    install -Dm644 ../srb2.png $out/share/pixmaps/srb2kart.png
+    install -Dm644 ../srb2.png $out/share/icons/srb2kart.png
+    install -Dm755 bin/srb2kart $out/bin/srb2kart
 
-  preConfigure = ''
-    mkdir assets/installer
-    pushd assets/installer
-    unzip ${assets} "*.kart" srb2.srb
-    popd
-  '';
+    wrapProgram $out/bin/srb2kart \
+      --set SRB2WADDIR "${finalAttrs.assets}/share/srb2kart"
 
-  postInstall = ''
-    mkdir -p $out/bin $out/share/games/SRB2Kart
-    mv $out/srb2kart* $out/bin/
-    mv $out/*.kart $out/share/games/SRB2Kart
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -85,4 +87,4 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ viric donovanglover ];
     mainProgram = "srb2kart";
   };
-}
+})
