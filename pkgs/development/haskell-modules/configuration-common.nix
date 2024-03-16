@@ -2982,6 +2982,9 @@ self: super: {
     ghc-lib-parser = self.ghc-lib-parser_9_8_1_20231121;
   });
 
+  # 2024-03-17: broken
+  vaultenv = dontDistribute super.vaultenv;
+
   # Support base16 1.0
   nix-serve-ng = appendPatch (fetchpatch {
     url = "https://github.com/aristanetworks/nix-serve-ng/commit/4d9eacfcf753acbcfa0f513bec725e9017076270.patch";
