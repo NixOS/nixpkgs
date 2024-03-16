@@ -53,7 +53,7 @@ in
 
     src = fetchzip {
       url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
-      hash = "sha256-L82N0IaC2OAZVhmu9NALencK78FeCZI2cWJyNkGH2vQ=";
+      hash = "sha256-04219vyhlz92awrsg0bjxkw9r5pn9xvjpzp49jliwkpbgvlvb0qj=";
     };
 
     nativeBuildInputs = [
