@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "forgit";
-  version = "24.03.1";
+  version = "24.03.2";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    hash = "sha256-DIaoD6o+oY+/FnwQadQh0XqMVP4xbE8gAPtWrvwsG+c=";
+    hash = "sha256-DnGQHWx3uFHFEI1kMTB6hfmaE4tY4O/hesPKj5s4uwQ=";
   };
 
   postInstall = ''
