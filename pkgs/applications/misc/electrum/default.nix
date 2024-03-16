@@ -140,7 +140,7 @@ python3.pkgs.buildPythonApplication {
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ joachifm np prusnak ];
+    maintainers = with maintainers; [ joachifm np prusnak chewblacka ];
     mainProgram = "electrum";
   };
 }
