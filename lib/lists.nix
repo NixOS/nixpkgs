@@ -228,7 +228,15 @@ rec {
 
     `acc`
 
-    : The initial accumulator value
+    : The initial accumulator value.
+
+      The accumulator value is evaluated in any case before the first iteration starts.
+
+      To avoid evaluation even before the `list` argument is given an eta expansion can be used:
+
+      ```nix
+      list: lib.foldl' op acc list
+      ```
 
     `list`
 
