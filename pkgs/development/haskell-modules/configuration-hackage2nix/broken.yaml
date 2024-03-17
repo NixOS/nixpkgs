@@ -5531,7 +5531,6 @@ broken-packages:
   - special-keys # failure in job https://hydra.nixos.org/build/233191988 at 2023-09-02
   - spectacle # failure in job https://hydra.nixos.org/build/233207488 at 2023-09-02
   - speculation # failure in job https://hydra.nixos.org/build/233211559 at 2023-09-02
-  - specup # failure in job https://hydra.nixos.org/build/252712918 at 2024-03-16
   - sphinxesc # failure in job https://hydra.nixos.org/build/233194825 at 2023-09-02
   - sphinx # failure in job https://hydra.nixos.org/build/233247449 at 2023-09-02
   - Spintax # failure in job https://hydra.nixos.org/build/233224001 at 2023-09-02
