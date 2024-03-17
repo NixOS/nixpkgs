@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , setuptools
+, setuptools-scm
 , pytestCheckHook
 , numpy
 , pandas
@@ -23,7 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-A0CI0bpoRYFAcPiNAf5haQu9BEqmBgxF7HfIl4qcML0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     numpy

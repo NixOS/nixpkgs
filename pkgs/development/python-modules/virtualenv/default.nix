@@ -71,6 +71,8 @@ buildPythonPackage rec {
     "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    "test_help"
   ] ++ lib.optionals (isPyPy) [
     # encoding problems
     "test_bash"

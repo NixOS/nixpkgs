@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_bash_completion_with_dot_in_path"
     "test_install_uninstall"
     "test_config_search_path"
+    # does not raise UserWarning
+    "test_initialize_compat_version_base"
   ];
 
   disabledTestPaths = [

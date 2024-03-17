@@ -619,6 +619,7 @@ in python.pkgs.buildPythonApplication rec {
     certifi
     ciso8601
     cryptography
+    hass-nabucasa
     httpx
     home-assistant-bluetooth
     ifaddr

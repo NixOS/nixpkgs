@@ -75,18 +75,12 @@ buildPythonPackage rec {
     export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
   '';
 
-  doCheck = !stdenv.isAarch64;
+  # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
+  doCheck = !stdenv.isDarwin;
 
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
-
-    # failing on macos
-    "check_regressors_train"
-    "check_classifiers_train"
-    "xfail_ignored_in_check_estimator"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    "test_graphical_lasso"
   ];
 
   pytestFlagsArray = [
