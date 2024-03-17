@@ -27249,8 +27249,6 @@ with pkgs;
     fftw = fftwFloat;
   };
 
-  apparency = callPackage ../os-specific/darwin/apparency { };
-
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
     buildArmTrustedFirmware
@@ -27285,8 +27283,6 @@ with pkgs;
   ath9k-htc-blobless-firmware = callPackage ../os-specific/linux/firmware/ath9k { };
   ath9k-htc-blobless-firmware-unstable =
     callPackage ../os-specific/linux/firmware/ath9k { enableUnstable = true; };
-
-  bartender = callPackage ../os-specific/darwin/bartender { };
 
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
@@ -33274,8 +33270,6 @@ with pkgs;
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
-  monitorcontrol = callPackage ../applications/misc/monitorcontrol { };
-
   xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
   xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
@@ -35591,8 +35585,6 @@ with pkgs;
   uvccapture = callPackage ../applications/video/uvccapture { };
 
   uwimap = callPackage ../tools/networking/uwimap { };
-
-  utm = callPackage ../os-specific/darwin/utm { };
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 

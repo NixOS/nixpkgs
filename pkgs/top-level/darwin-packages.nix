@@ -80,6 +80,10 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     extraBuildInputs = [];
   };
 
+  apparency = callPackage ../os-specific/darwin/apparency { };
+
+  bartender = callPackage ../os-specific/darwin/bartender { };
+
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs) binutils-unwrapped;
     inherit (pkgs.llvmPackages) llvm clang-unwrapped;
@@ -142,6 +146,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     propagatedBuildInputs = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
+  installBinaryPackage = callPackage ../os-specific/darwin/install-binary-package { };
+
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
@@ -175,6 +181,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     inherit (apple_sdk_11_0.libs) simd;
   };
 
+  monitorcontrol = callPackage ../os-specific/darwin/monitorcontrol { };
+
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
@@ -184,6 +192,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
 
   trash = callPackage ../os-specific/darwin/trash { };
+
+  utm = callPackage ../os-specific/darwin/utm { };
 
   xattr = pkgs.python3Packages.callPackage ../os-specific/darwin/xattr { };
 
