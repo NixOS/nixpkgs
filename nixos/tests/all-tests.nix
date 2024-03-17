@@ -522,6 +522,8 @@ in {
   matrix-conduit = handleTest ./matrix/conduit.nix {};
   matrix-synapse = handleTest ./matrix/synapse.nix {};
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix {};
+  mautrix-meta-postgres = handleTest ./matrix/mautrix-meta-postgres.nix {};
+  mautrix-meta-sqlite = handleTest ./matrix/mautrix-meta-sqlite.nix {};
   mattermost = handleTest ./mattermost.nix {};
   mealie = handleTest ./mealie.nix {};
   mediamtx = handleTest ./mediamtx.nix {};
