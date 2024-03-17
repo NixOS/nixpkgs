@@ -8,19 +8,19 @@
 
 buildDotnetModule rec {
   pname = "discordchatexporter-cli";
-  version = "2.41.2";
+  version = "2.42.8";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     rev = version;
-    hash = "sha256-8ETEIZXIo7Tx6Vb9Id/E/8IklpcvO9OpcrYD+mHRX3o=";
+    hash = "sha256-54NTeIs0a8hd2xKQkAxwfyGwEPUlSSXXvDamGLfa9ls=";
   };
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   postFixup = ''
     ln -s $out/bin/DiscordChatExporter.Cli $out/bin/discordchatexporter-cli
