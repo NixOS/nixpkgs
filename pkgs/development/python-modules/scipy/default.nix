@@ -13,7 +13,6 @@
 , pkg-config
 , pythran
 , wheel
-, nose
 , setuptools
 , hypothesis
 , pytestCheckHook
@@ -116,7 +115,6 @@ in buildPythonPackage {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    nose
     hypothesis
     # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
     (pytestCheckHook.override { pytest = pytest_7; })
