@@ -57,6 +57,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Soothing pastel theme for KDE";
     homepage = "https://github.com/catppuccin/kde";
     license = licenses.mit;
-    maintainers = with maintainers; [ michaelBelsanti ];
+    maintainers = with maintainers; [ michaelBelsanti gigglesquid ];
   };
 }
