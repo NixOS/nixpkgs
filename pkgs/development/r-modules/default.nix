@@ -1362,6 +1362,12 @@ let
       ];
     });
 
+    xslt = old.xslt.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+      };
+    });
+
     sparklyr = old.sparklyr.overrideAttrs (attrs: {
       # Pyspark's spark is full featured and better maintained than pkgs.spark
       preConfigure = ''
