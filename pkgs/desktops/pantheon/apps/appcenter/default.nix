@@ -24,15 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.4.0-unstable-2023-12-04";
+  version = "7.4.0-unstable-2024-02-07";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     # Add support for AppStream 1.0.
     # https://github.com/elementary/appcenter/pull/2099
-    rev = "d93e135a0b0c9a6e0fbad18fe90d46425823a42c";
-    hash = "sha256-b7xux6MuvYZFxufQ5T7DoDNBlsJ/fDR0aUY2Hk/xJoY=";
+    rev = "fce55d9373bfb82953191b32e276a2129ffcb8c1";
+    hash = "sha256-7VYiE1RkaqN1Yg4pFUBs6k8QjoljYFDgQ9jCTLG3uyk=";
   };
 
   nativeBuildInputs = [
