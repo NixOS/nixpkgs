@@ -9,8 +9,31 @@
 , rich
 , types-requests
 , typing-inspect
-, pytestCheckHook
+, # Optional dependencies
+  av
+, elasticsearch
+, elastic-transport
+, fastapi
+, hnswlib
+, jax
+, lz4
+, jaxlib
+, pandas
+, pillow
+, types-pillow
+, protobuf
+, pymilvus
+, pydub
+, qdrant-client
+, redis
+, smart-open
+, torch
+, trimesh
+, weaviate-client
+, # Test dependencies
+  pytestCheckHook
 , pytest-cov
+, pytest-asyncio
 ,
 }:
 buildPythonPackage rec {
@@ -38,9 +61,72 @@ buildPythonPackage rec {
     typing-inspect
   ];
 
+  passthru.optional-dependencies = {
+    proto = [
+      protobuf
+      lz4
+    ];
+    pandas = [
+      pandas
+    ];
+    image = [
+      pillow
+      types-pillow
+    ];
+    video = [
+      av
+    ];
+    audio = [
+      pydub
+    ];
+    mesh = [
+      trimesh
+    ];
+    hnswlib = [
+      hnswlib
+      protobuf
+    ];
+    elasticsearch = [
+      elasticsearch
+      elastic-transport
+    ];
+    jac = [
+      # jina-hubble-sdk
+    ];
+    aws = [
+      smart-open
+    ];
+    torch = [
+      torch
+    ];
+    web = [
+      fastapi
+    ];
+    qdrant = [
+      qdrant-client
+    ];
+    weaviate = [
+      weaviate-client
+    ];
+    milvus = [
+      pymilvus
+    ];
+    redis = [
+      redis
+    ];
+    jax = [
+      jaxlib
+      jax
+    ];
+    epsilla = [
+      # pyepsilla
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
+    pytest-asyncio
   ];
 
   pythonImportsCheck = [
