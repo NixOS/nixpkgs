@@ -29,7 +29,7 @@ BRANCH_PATTERN = re.compile(
 )
 
 
-def request_supported_refs() -> typing.List[str]:
+def request_supported_refs() -> list[str]:
     # Looks pretty shady but I think this should work with every version of the page in the last 20 years
     r = re.compile("^h\d$", re.IGNORECASE)
     soup = bs4.BeautifulSoup(
@@ -69,7 +69,7 @@ def handle_commit(
     rev: git.objects.commit.Commit,
     ref_name: str,
     ref_type: str,
-    supported_refs: typing.List[str],
+    supported_refs: list[str],
     old_versions: dict,
 ) -> dict[str, Any]:
     if old_versions.get(ref_name, {}).get("rev", None) == rev.hexsha:
