@@ -103,6 +103,12 @@ pythonPackages.buildPythonApplication rec {
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
     ./check-system-config-dir.patch
+    (fetchpatch {
+      name = "CVE-2024-2044.patch";
+      url = "https://github.com/pgadmin-org/pgadmin4/commit/4e49d752fba72953acceeb7f4aa2e6e32d25853d.patch";
+      hash = "sha256-uIOWefMjbequVfS6haJeSbXv/I6ZdA7uCEwCZSnCtRM=";
+      excludes = [ "docs/en_US/release_notes_8_4.rst" ];
+    })
   ];
 
   postPatch = ''
