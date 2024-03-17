@@ -1,10 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoModule rec {
+let
   pname = "shiori";
-  version = "1.5.5";
+  version = "1.6.0";
+in
+buildGoModule {
+  inherit pname version;
 
-  vendorHash = "sha256-suWdtqf5IZntEVD+NHGD6RsL1tjcGH9vh5skISW+aCc=";
+  vendorHash = "sha256-LLiBRsh9HsadeHQh4Yvops1r2GfjtvQKt5ZelQnPGdI=";
 
   doCheck = false;
 
@@ -12,7 +15,7 @@ buildGoModule rec {
     owner = "go-shiori";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kGPvCYvLLixEH9qih/F3StUyGPqlKukTWLSw41+Mq8E=";
+    sha256 = "sha256-Jb73qah5v6fOkapETQ42t0VqbYCEcRy5r7cS6eLVjRM=";
   };
 
   passthru.tests = {
