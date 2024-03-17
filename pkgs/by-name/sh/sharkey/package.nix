@@ -102,6 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm config set store-dir "$STORE_PATH"
     pnpm install --offline --frozen-lockfile --ignore-script
     patchShebangs node_modules/{*,.*}
+
+    (
+      cd node_modules/.pnpm/node_modules/v-code-diff
+      node scripts/postinstall.js
+    )
   '';
 
   postBuild = ''
