@@ -13,6 +13,8 @@
 , libiconv
 , pcre2
 , nixosTests
+, jitSupport
+, llvm
 }:
 
 let
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
                 ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
+  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
