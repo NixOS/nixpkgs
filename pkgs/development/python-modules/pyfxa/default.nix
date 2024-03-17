@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyfxa";
-  version = "0.7.7";
+  version = "0.7.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyFxA";
     inherit version;
-    hash = "sha256-bIXNCM8F9xON7hzyqKHWj9Qot7WtSIkXxwoqdj1lHNs=";
+    hash = "sha256-DMFZl1hbYNaScOTWkAbK2nKti6wD5SS5A30q7TW5vO4=";
   };
 
   propagatedBuildInputs = [

@@ -2001,6 +2001,11 @@ with pkgs;
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
+  openusd = python3Packages.openusd.override {
+    withTools = true;
+    withUsdView = true;
+  };
+
   osquery = callPackage ../tools/system/osquery { };
 
   paperview = callPackage ../tools/X11/paperview { };
@@ -2933,8 +2938,6 @@ with pkgs;
   };
 
   felix-fm = callPackage ../applications/file-managers/felix-fm { };
-
-  joshuto = callPackage ../applications/file-managers/joshuto { };
 
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
@@ -4775,8 +4778,6 @@ with pkgs;
   swaysome = callPackage ../tools/wayland/swaysome { };
 
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
-
-  swww = callPackage ../tools/wayland/swww { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
@@ -9754,9 +9755,7 @@ with pkgs;
 
   kool = callPackage ../development/tools/misc/kool { };
 
-  kore = callPackage ../development/web/kore {
-    openssl = openssl_1_1;
-  };
+  kore = callPackage ../development/web/kore { };
 
   krakenx = callPackage ../tools/system/krakenx { };
 
@@ -13245,6 +13244,8 @@ with pkgs;
 
   sockdump = callPackage ../tools/networking/sockdump { };
 
+  specup = haskellPackages.specup.bin;
+
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
   };
@@ -16093,13 +16094,13 @@ with pkgs;
   haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = dontRecurseIntoAttrs
-    # JS backend is only available for GHC >= 9.6
-    (if stdenv.hostPlatform.isGhcjs
-     then haskell.packages.native-bignum.ghc96
-     # Prefer native-bignum to avoid linking issues with gmp
-     else if stdenv.hostPlatform.isStatic
-     then haskell.packages.native-bignum.ghc94
-     else haskell.packages.ghc94)
+    # Prefer native-bignum to avoid linking issues with gmp
+    # GHC 9.6 rts can't be built statically with hadrian, so we need to use 9.4
+    # until 9.8 is ready
+    (if stdenv.hostPlatform.isStatic then haskell.packages.native-bignum.ghc94
+    # JS backend can't use gmp
+    else if stdenv.hostPlatform.isGhcjs then haskell.packages.native-bignum.ghc96
+    else haskell.packages.ghc96)
   // { __recurseIntoDerivationForReleaseJobs = true; };
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
@@ -16112,9 +16113,11 @@ with pkgs;
   # plain, cross-compiled compiler (which is only theoretical at the moment).
   ghc = targetPackages.haskellPackages.ghc or
     # Prefer native-bignum to avoid linking issues with gmp
-    (if stdenv.targetPlatform.isStatic
-       then haskell.compiler.native-bignum.ghc94
-       else haskell.compiler.ghc94);
+    # Use 9.4 for static over broken 9.6
+    (if stdenv.targetPlatform.isStatic then haskell.compiler.native-bignum.ghc94
+    # JS backend can't use GMP
+    else if stdenv.targetPlatform.isGhcjs then haskell.compiler.native-bignum.ghc96
+    else haskell.compiler.ghc96);
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
@@ -16823,7 +16826,6 @@ with pkgs;
   };
   cargo-leptos = callPackage ../development/tools/rust/cargo-leptos { };
   cargo-kcov = callPackage ../development/tools/rust/cargo-kcov { };
-  cargo-graph = callPackage ../development/tools/rust/cargo-graph { };
   cargo-guppy = callPackage ../development/tools/rust/cargo-guppy { };
   cargo-hack = callPackage ../development/tools/rust/cargo-hack { };
   cargo-license = callPackage ../development/tools/rust/cargo-license { };
@@ -29482,8 +29484,6 @@ with pkgs;
 
   sarabun-font = callPackage ../data/fonts/sarabun { };
 
-  sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
-
   savepagenow = callPackage ../tools/misc/savepagenow { };
 
   scheme-manpages = callPackage ../data/documentation/scheme-manpages { };
@@ -30624,9 +30624,8 @@ with pkgs;
 
   daktilo = callPackage ../tools/misc/daktilo { };
 
-  darcs = haskell.lib.compose.overrideCabal (drv: {
-    configureFlags = (lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
-  }) (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
+  darcs = haskell.lib.compose.disableCabalFlag "library"
+    (haskell.lib.compose.justStaticExecutables haskell.packages.ghc94.darcs);
 
   darkman = callPackage ../applications/misc/darkman { };
 

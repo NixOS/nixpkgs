@@ -468,6 +468,7 @@ in
           StateDirectory = [
             "pretix"
           ];
+          StateDirectoryMode = "0755";
           CacheDirectory = "pretix";
           LogsDirectory = "pretix";
           WorkingDirectory = cfg.settings.pretix.datadir;
@@ -506,7 +507,7 @@ in
             "~@privileged"
             "@chown"
           ];
-          UMask = "0077";
+          UMask = "0022";
         };
       };
     in {

@@ -150,6 +150,7 @@ mapAliases ({
   cargo-embed = throw "cargo-embed is now part of the probe-rs package"; # Added 2023-07-03
   cargo-espflash = espflash;
   cargo-flash = throw "cargo-flash is now part of the probe-rs package"; # Added 2023-07-03
+  cargo-graph = throw "cargo-graph has been removed as it is broken and archived upstream"; # Added 2024-03-16
   catfish = throw "'catfish' has been renamed to/replaced by 'xfce.catfish'"; # Converted to throw 2023-09-10
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
   ccloud-cli = throw "ccloud-cli has been removed, please use confluent-cli instead"; # Added 2023-06-09

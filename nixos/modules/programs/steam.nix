@@ -44,8 +44,8 @@ in {
       '';
       apply = steam: steam.override (prev: {
         extraEnv = (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
-            STEAM_EXTRA_COMPAT_TOOLS_PATHS = makeBinPath cfg.extraCompatPackages;
-          }) // (prev.extraEnv or {});
+          STEAM_EXTRA_COMPAT_TOOLS_PATHS = makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
+        }) // (prev.extraEnv or {});
         extraLibraries = pkgs: let
           prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
           additionalLibs = with config.hardware.opengl;
@@ -74,10 +74,17 @@ in {
     extraCompatPackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
+      example = literalExpression ''
+        with pkgs; [
+          proton-ge-bin
+        ]
+      '';
       description = lib.mdDoc ''
         Extra packages to be used as compatibility tools for Steam on Linux. Packages will be included
         in the `STEAM_EXTRA_COMPAT_TOOLS_PATHS` environmental variable. For more information see
-        <https://github.com/ValveSoftware/steam-for-linux/issues/6310">.
+        https://github.com/ValveSoftware/steam-for-linux/issues/6310.
+
+        These packages must be Steam compatibility tools that have a `steamcompattool` output.
       '';
     };
 
