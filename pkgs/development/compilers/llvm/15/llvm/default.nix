@@ -22,6 +22,7 @@
 , buildLlvmTools
 , debugVersion ? false
 , doCheck ? (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+  && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
   && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
