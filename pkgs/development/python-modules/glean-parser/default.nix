@@ -57,6 +57,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Network access
     "test_validate_ping"
+    "test_logging"
     # Fails since yamllint 1.27.x
     "test_yaml_lint"
   ];
