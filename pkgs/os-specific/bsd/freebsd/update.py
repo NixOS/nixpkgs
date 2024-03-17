@@ -44,7 +44,7 @@ def request_supported_refs() -> typing.List[str]:
     return list(df["Branch"])
 
 
-def query_version(repo: git.Repo):
+def query_version(repo: git.Repo) -> dict[str, Any]:
     # This only works on FreeBSD 13 and later
     text = (
         subprocess.check_output(
