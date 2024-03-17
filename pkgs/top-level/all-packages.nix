@@ -4662,7 +4662,7 @@ with pkgs;
   cloudflared = callPackage ../applications/networking/cloudflared {
     # https://github.com/cloudflare/cloudflared/issues/1151#issuecomment-1888819250
     buildGoModule = buildGoModule.override {
-      go = go.overrideAttrs {
+      go = go_1_21.overrideAttrs {
         pname = "cloudflare-go";
         version = "0-unstable-2023-12-06";
         src = fetchFromGitHub {
