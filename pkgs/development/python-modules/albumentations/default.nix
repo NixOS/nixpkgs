@@ -12,6 +12,8 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, torch
+, torchvision
 }:
 
 buildPythonPackage rec {
@@ -50,6 +52,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deepdiff
     pytestCheckHook
+    torch
+    torchvision
   ];
 
   disabledTests = [
