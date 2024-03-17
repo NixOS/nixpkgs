@@ -25,8 +25,8 @@ LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
 K3S_COMMIT=$(curl --silent -f ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-    https://api.github.com/repos/k3s-io/k3s/tags \
-    | jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
+    https://api.github.com/repos/k3s-io/k3s/git/refs/tags \
+    | jq -r "map(select(.ref == \"refs/tags/${LATEST_TAG_NAME}\")) | .[0] | .object.sha")
 
 K3S_REPO_SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/k3s-io/k3s/archive/refs/tags/${LATEST_TAG_NAME}.tar.gz)
 
