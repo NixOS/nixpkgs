@@ -6653,6 +6653,11 @@
     githubId = 46672819;
     name = "Frido Friedemann";
   };
+  friedrichaltheide = {
+    github = "friedrichaltheide";
+    githubId = 11352905;
+    name = "Friedrich Altheide";
+  };
   frlan = {
     email = "frank@frank.uvena.de";
     github = "frlan";

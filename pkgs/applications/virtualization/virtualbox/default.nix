@@ -281,7 +281,7 @@ in stdenv.mkDerivation {
     ];
     license = licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
-    maintainers = with maintainers; [ sander ];
+    maintainers = with maintainers; [ sander friedrichaltheide ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
   };

@@ -146,7 +146,7 @@ in stdenv.mkDerivation rec {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ lib.maintainers.sander lib.maintainers.friedrichaltheide ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };
