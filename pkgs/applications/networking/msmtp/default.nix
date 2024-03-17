@@ -29,7 +29,7 @@ let
 
   src = fetchFromGitHub {
     owner = "marlam";
-    repo = "msmtp-mirror";
+    repo = "msmtp";
     rev = "msmtp-${version}";
     hash = "sha256-Jt/uvGBrYYr6ua6LVPiP0nuRiIkxBJASdgHBNHivzxQ=";
   };
