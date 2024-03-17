@@ -449,10 +449,10 @@ in
       Example patch:
       ```patch
          networking.networkmanager = {
-      -    extraConfig = \'\'
+      -    extraConfig = '''
       -      [main]
       -      no-autodefault=*
-      -    \'\'
+      -    '''
       +    extraConfig.main.no-auto-default = "*";
          };
       ```
