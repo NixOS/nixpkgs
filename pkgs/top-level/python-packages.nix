@@ -8475,6 +8475,8 @@ self: super: with self; {
 
   netifaces = callPackage ../development/python-modules/netifaces { };
 
+  netket = callPackage ../development/python-modules/netket { };
+
   netmiko = callPackage ../development/python-modules/netmiko { };
 
   netio = callPackage ../development/python-modules/netio { };
@@ -8689,6 +8691,8 @@ self: super: with self; {
   numbaWithCuda = self.numba.override {
     cudaSupport = true;
   };
+
+  numba4jax = callPackage ../development/python-modules/numba4jax { };
 
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
