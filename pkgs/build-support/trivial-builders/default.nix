@@ -91,6 +91,7 @@ rec {
     , destination ? ""
     , checkPhase ? ""
     , meta ? { }
+    , passthru ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
@@ -107,6 +108,7 @@ rec {
           {
             mainProgram = lib.head matches;
           } // meta // derivationArgs.meta or {};
+        inherit passthru;
       } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
@@ -211,6 +213,12 @@ rec {
        */
       runtimeEnv ? null,
       /*
+         `stdenv.mkDerivation`'s `passthru` argument.
+
+         Type: AttrSet
+      */
+      passthru ? { },
+      /*
          `stdenv.mkDerivation`'s `meta` argument.
 
          Type: AttrSet
@@ -253,7 +261,7 @@ rec {
       derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta derivationArgs;
+      inherit name meta passthru derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
