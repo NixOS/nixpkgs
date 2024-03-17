@@ -64,6 +64,8 @@ buildPythonPackage rec {
     pytest-trio
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.tests = {
     testing-vaultwarden = nixosTests.vaultwarden;
   };
