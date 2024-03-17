@@ -76,11 +76,11 @@ in
           type = types.port;
           default =
             if cfg.database.type == "mysql" then config.services.mysql.port
-            else if cfg.database.type == "pgsql" then config.services.postgresql.port
+            else if cfg.database.type == "pgsql" then config.services.postgresql.settings.port
             else 1521;
           defaultText = literalExpression ''
             if config.${opt.database.type} == "mysql" then config.${options.services.mysql.port}
-            else if config.${opt.database.type} == "pgsql" then config.${options.services.postgresql.port}
+            else if config.${opt.database.type} == "pgsql" then config.services.postgresql.settings.port
             else 1521
           '';
           description = lib.mdDoc "Database host port.";

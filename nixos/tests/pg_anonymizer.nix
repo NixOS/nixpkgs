@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     services.postgresql = {
       enable = true;
       extraPlugins = ps: [ ps.anonymizer ];
-      settings.shared_preload_libraries = "anon";
+      settings.shared_preload_libraries = [ "anon" ];
     };
   };
 
