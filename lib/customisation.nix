@@ -170,7 +170,17 @@ rec {
       in
       if isAttrs result then
         result
-        // {
+        # Overriding `overrideDerivation` and `overrideAttrs` is a hack:
+        # `callPackage` shouldn't have to be aware of those functions and then
+        # fix them up, but it has to because the package arguments aren't part of
+        # the package fixpoint in `mkDerivation`.
+        #
+        # If the original package defines its own `override` method, but not
+        # `overrideDerivation`, we can assume it's a callPackage-aware `mkPackage`
+        # call.
+        # Otherwise, it is a legacy package, for which we still need to perform
+        # the hacky fixup.
+        // optionalAttrs (!(result ? override) || (result ? overrideDerivation)) {
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
