@@ -70,8 +70,8 @@ self: super: {
   # Version upgrades
   #
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_1_20231121;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_0;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_2_20240223;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   ghc-lib = doDistribute self.ghc-lib_9_8_1_20231121;
   megaparsec = doDistribute self.megaparsec_9_6_1;
   aeson = doDistribute self.aeson_2_2_1_0;
