@@ -14,6 +14,9 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
 , extraGrammars ? { }
+
+# tests
+, lunarvim
 }:
 
 let
@@ -150,6 +153,8 @@ rustPlatform.buildRustPackage {
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
+
+      inherit lunarvim;
     };
   };
 
