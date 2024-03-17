@@ -40593,10 +40593,6 @@ with pkgs;
 
   sct = callPackage ../tools/X11/sct { };
 
-  scylladb = callPackage ../servers/scylladb {
-    thrift = thrift-0_10;
-  };
-
   seafile-server = callPackage ../servers/seafile-server { };
 
   seafile-shared = callPackage ../misc/seafile-shared { };
