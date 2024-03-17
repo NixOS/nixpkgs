@@ -18,13 +18,14 @@
 , requests
 , sqlalchemy
 , tenacity
-  # optional dependencies
-, azure-core
+, # optional dependencies
+  azure-core
 , azure-cosmos
 , azure-identity
 , chardet
 , clarifai
 , cohere
+, docarray
 , esprima
 , huggingface-hub
 , lark
@@ -37,8 +38,8 @@
 , torch
 , transformers
 , typer
-  # test dependencies
-, freezegun
+, # test dependencies
+  freezegun
 , pandas
 , pytest-asyncio
 , pytest-mock
@@ -48,8 +49,8 @@
 , responses
 , syrupy
 , toml
+,
 }:
-
 buildPythonPackage rec {
   pname = "langchain";
   version = "0.1.11";
@@ -74,23 +75,25 @@ buildPythonPackage rec {
     bash
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    dataclasses-json
-    jsonpatch
-    langchain-community
-    langchain-core
-    langchain-text-splitters
-    langsmith
-    numpy
-    pydantic
-    pyyaml
-    requests
-    sqlalchemy
-    tenacity
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  propagatedBuildInputs =
+    [
+      aiohttp
+      dataclasses-json
+      jsonpatch
+      langchain-community
+      langchain-core
+      langchain-text-splitters
+      langsmith
+      numpy
+      pydantic
+      pyyaml
+      requests
+      sqlalchemy
+      tenacity
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      async-timeout
+    ];
 
   passthru.optional-dependencies = {
     llms = [
@@ -121,7 +124,7 @@ buildPythonPackage rec {
       cohere
     ];
     docarray = [
-      # docarray
+      docarray
     ];
     embeddings = [
       sentence-transformers
