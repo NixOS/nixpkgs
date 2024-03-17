@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
+, hatch-vcs
 , importlib-metadata
 , packaging
 , pip
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [

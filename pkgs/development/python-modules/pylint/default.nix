@@ -96,6 +96,8 @@ buildPythonPackage rec {
     "test_save_and_load_not_a_linter_stats"
     # Truncated string expectation mismatch
     "test_truncated_compare"
+    # Probably related to pytest versions, see pylint-dev/pylint#9477 and pylint-dev/pylint#9483
+    "test_functional"
     # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
     "test_functional_relation_extraction"
   ] ++ lib.optionals stdenv.isDarwin [

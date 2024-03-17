@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.3.0";
+  version = "2024.3.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2430,6 +2430,7 @@
     "joaoapps_join" = ps: with ps; [
     ]; # missing inputs: python-join-api
     "juicenet" = ps: with ps; [
+      python-juicenet
     ];
     "justnimbus" = ps: with ps; [
       justnimbus
