@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, libelf, ... }:
+{ lib, stdenv, mkDerivation, libelf }:
 mkDerivation ({
   path = "usr.bin/ldd";
   extraPaths = ["libexec/rtld-elf" "contrib/elftoolchain/libelf"];

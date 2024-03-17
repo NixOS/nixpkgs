@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, lib, compatIfNeeded, ...}:
+{ mkDerivation, stdenv, lib, compatIfNeeded }:
 mkDerivation {
   path = "lib/libnv";
   extraPaths = ["sys/contrib/libnv" "sys/sys"];

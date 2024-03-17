@@ -1,4 +1,4 @@
-{ mkDerivation, pkgsBuildBuild, patchesRoot, ...}:
+{ mkDerivation, pkgsBuildBuild, patchesRoot }:
 mkDerivation {
   path = "lib/ncurses/tinfo";
   extraPaths = ["lib/ncurses" "contrib/ncurses" "lib/Makefile.inc"];

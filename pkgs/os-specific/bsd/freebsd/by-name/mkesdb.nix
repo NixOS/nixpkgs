@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, buildPackages, buildFreebsd, ... }:
+{ stdenv, mkDerivation, buildPackages, buildFreebsd }:
 mkDerivation {
   path = "usr.bin/mkesdb";
 

@@ -1,4 +1,4 @@
-{ install-wrapper, mkDerivation, mtree, buildPackages, buildFreebsd, compatIfNeeded, lib, stdenv, libmd, libnetbsd, ... }:
+{ install-wrapper, mkDerivation, mtree, buildPackages, buildFreebsd, compatIfNeeded, lib, stdenv, libmd, libnetbsd }:
 let binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''
   @out@/bin/xinstall "''${args[@]}"
 ''); in mkDerivation {

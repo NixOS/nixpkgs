@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, csu, include, buildPackages, buildFreebsd, lib, hostVersion, patchesRoot, ... }:
+{ stdenv, mkDerivation, csu, include, buildPackages, buildFreebsd, lib, hostVersion, patchesRoot }:
 mkDerivation {
   isStatic = true;
   pname = "libc";

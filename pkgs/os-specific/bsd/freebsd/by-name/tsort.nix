@@ -1,4 +1,4 @@
-{ mkDerivation, buildPackages, buildFreebsd, lib, hostVersion, ... }:
+{ mkDerivation, buildPackages, buildFreebsd, lib, hostVersion }:
 mkDerivation {
   path = "usr.bin/tsort";
   extraPaths = [];

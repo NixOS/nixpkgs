@@ -1,4 +1,4 @@
-{ lib, crossLibcStdenv, stdenv, hostVersion, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, filterSource, ... }:
+{ lib, crossLibcStdenv, stdenv, hostVersion, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, filterSource }:
 lib.makeOverridable (attrs: let
   # the use of crossLibcStdenv in the isStatic case is kind of a misnomer but I think it works
   stdenv' = if (attrs.isStatic or false) then crossLibcStdenv else stdenv;

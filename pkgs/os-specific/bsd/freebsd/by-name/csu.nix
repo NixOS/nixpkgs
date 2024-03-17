@@ -1,4 +1,4 @@
-{ mkDerivation, buildPackages, buildFreebsd, include, lib, ... }:
+{ mkDerivation, buildPackages, buildFreebsd, include, lib }:
 mkDerivation {
   isStatic = true;
   path = "lib/csu";

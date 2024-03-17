@@ -1,4 +1,4 @@
-{ patchesRoot, mkDerivation, buildPackages, buildFreebsd, lib, stdenv, compat, ... }:
+{ patchesRoot, mkDerivation, buildPackages, buildFreebsd, lib, stdenv, compat }:
 mkDerivation ({
   path = "usr.bin/localedef";
 

@@ -1,4 +1,4 @@
-{ mkDerivation, ...}:
+{ mkDerivation }:
 mkDerivation {
   path = "bin/cp";
 

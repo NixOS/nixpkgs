@@ -1,4 +1,4 @@
-{ mkDerivation, buildPackages, buildFreebsd, stdenv, lib, patchesRoot, ... }:
+{ mkDerivation, buildPackages, buildFreebsd, stdenv, lib, patchesRoot }:
 mkDerivation {
   path = "lib/libnetbsd";
   nativeBuildInputs = [

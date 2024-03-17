@@ -1,4 +1,4 @@
-{ mkDerivation, patchesRoot, libnetbsd, libmd, compatIfNeeded, compatIsNeeded, lib, libutil, stdenv, ... }:
+{ mkDerivation, patchesRoot, libnetbsd, libmd, compatIfNeeded, compatIsNeeded, lib, libutil, stdenv }:
 mkDerivation {
   path = "contrib/mtree";
   extraPaths = [ "contrib/mknod" ];

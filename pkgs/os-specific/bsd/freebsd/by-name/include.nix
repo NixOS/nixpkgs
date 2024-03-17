@@ -1,4 +1,4 @@
-{ mkDerivation, buildPackages, buildFreebsd, lib, hostVersion, patchesRoot, ... }:
+{ mkDerivation, buildPackages, buildFreebsd, lib, hostVersion, patchesRoot }:
 mkDerivation {
   isStatic = true;
   inherit hostVersion;

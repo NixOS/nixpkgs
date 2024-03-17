@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, patchesRoot, ... }:
+{ mkDerivation, lib, stdenv, patchesRoot }:
 mkDerivation {
   path = "usr.bin/rpcgen";
   patches = lib.optionals (stdenv.hostPlatform.libc == "glibc") [

@@ -1,4 +1,4 @@
-{ mkDerivation, pkgsBuildBuild, buildPackages, buildFreebsd, libjail, libmd, libnetbsd, libcapsicum, libcasper, libelf, libxo, libncurses-tinfo, libedit, libkvm, lib, stdenv, ...}:
+{ mkDerivation, pkgsBuildBuild, buildPackages, buildFreebsd, libjail, libmd, libnetbsd, libcapsicum, libcasper, libelf, libxo, libncurses-tinfo, libedit, libkvm, lib, stdenv }:
 mkDerivation {
   pname = "bins";
   path = "bin";

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, bsdSetupHook, freebsdSetupHook, stdenv, buildFreebsd, buildPackages, ...}:
+{ mkDerivation, lib, bsdSetupHook, freebsdSetupHook, stdenv, buildFreebsd, buildPackages }:
 mkDerivation {
   path = "lib/libelf";
   extraPaths = ["lib/libc" "contrib/elftoolchain" "sys/sys/elf32.h" "sys/sys/elf64.h" "sys/sys/elf_common.h"];

@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, libnv, ...}:
+{ lib, stdenv, mkDerivation, libnv }:
 mkDerivation {
   path = "lib/libcasper/libcasper";
   extraPaths = ["lib/Makefile.inc" "lib/libcasper"];

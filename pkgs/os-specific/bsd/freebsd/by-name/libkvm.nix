@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, lib, libelf, ...}:
+{ mkDerivation, stdenv, lib, libelf }:
 mkDerivation {
   path = "lib/libkvm";
   extraPaths = ["sys"];

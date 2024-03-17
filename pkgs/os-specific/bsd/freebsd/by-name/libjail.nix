@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, ...}:
+{ mkDerivation, lib, stdenv }:
 mkDerivation {
   path = "lib/libjail";
   MK_TESTS = "no";

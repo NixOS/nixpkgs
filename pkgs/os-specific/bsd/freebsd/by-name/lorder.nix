@@ -1,4 +1,4 @@
-{ mkDerivation, freebsdSetupHook, buildPackages, buildFreebsd, ... }:
+{ mkDerivation, freebsdSetupHook, buildPackages, buildFreebsd }:
 mkDerivation {
   path = "usr.bin/lorder";
   noCC = true;

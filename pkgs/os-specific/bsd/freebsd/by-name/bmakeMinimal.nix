@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook, patchesRoot, hostVersion, ... }:
+{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook, patchesRoot, hostVersion }:
 mkDerivation {
   path = "contrib/bmake";
   extraPaths = [ "share/mk" ]

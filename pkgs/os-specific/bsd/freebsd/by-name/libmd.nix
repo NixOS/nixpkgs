@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, freebsdSetupHook, bsdSetupHook, buildFreebsd, ...}:
+{ lib, stdenv, mkDerivation, freebsdSetupHook, bsdSetupHook, buildFreebsd }:
 mkDerivation {
   path = "lib/libmd";
   extraPaths = ["sys/sys/md5.h" "sys/crypto/sha2" "sys/crypto/skein"];

@@ -1,5 +1,5 @@
 { mkDerivation, lib, hostVersion, buildFreebsd, buildPackages, symlinkJoin,
-allLocales ? true, locales ? [ "en_US.UTF-8" ], ... }:
+allLocales ? true, locales ? [ "en_US.UTF-8" ] }:
 let
   build = name: needsLocaledef: mkDerivation {
     path = "share/${name}";
