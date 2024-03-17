@@ -13368,6 +13368,8 @@ self: super: with self; {
 
   selenium = callPackage ../development/python-modules/selenium { };
 
+  selenium-wire = callPackage ../development/python-modules/selenium-wire { };
+
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
   semaphore-bot = callPackage ../development/python-modules/semaphore-bot { };
