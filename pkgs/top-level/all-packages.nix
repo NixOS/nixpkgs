@@ -4038,7 +4038,9 @@ with pkgs;
     buildGoModule = buildGo122Module;
   };
 
-  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
+  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix {
+    buildGoModule = buildGo122Module;
+  };
 
   gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix {
     buildGoModule = buildGo122Module;
