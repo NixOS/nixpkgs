@@ -24,11 +24,8 @@ let
       replicationConn = "postgresql://${replicationUser}@localhost";
       baseBackupDir = "/tmp/pg_basebackup";
       walBackupDir = "/tmp/pg_wal";
-      atLeast12 = lib.versionAtLeast pkg.version "12.0";
 
-      recoveryFile = if atLeast12
-          then pkgs.writeTextDir "recovery.signal" ""
-          else pkgs.writeTextDir "recovery.conf" "restore_command = 'cp ${walBackupDir}/%f %p'";
+      recoveryFile = pkgs.writeTextDir "recovery.signal" "";
 
     in makeTest {
       name = "postgresql-wal-receiver-${pkg.name}";
@@ -38,17 +35,13 @@ let
         services.postgresql = {
           package = pkg;
           enable = true;
-          settings = lib.mkMerge [
-            {
-              wal_level = "archive"; # alias for replica on pg >= 9.6
-              max_wal_senders = 10;
-              max_replication_slots = 10;
-            }
-            (lib.mkIf atLeast12 {
-              restore_command = "cp ${walBackupDir}/%f %p";
-              recovery_end_command = "touch recovery.done";
-            })
-          ];
+          settings = {
+            max_replication_slots = 10;
+            max_wal_senders = 10;
+            recovery_end_command = "touch recovery.done";
+            restore_command = "cp ${walBackupDir}/%f %p";
+            wal_level = "archive"; # alias for replica on pg >= 9.6
+          };
           authentication = ''
             host replication ${replicationUser} all trust
           '';
