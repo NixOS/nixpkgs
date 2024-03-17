@@ -2,15 +2,15 @@
 
 let
   phpExt = php.withExtensions
-    ({ enabled, all }: with all; [ filter mysqlnd mysqli pdo pdo_mysql ]);
+    ({ enabled, all }: with all; [ filter mysqlnd mysqli pdo pdo_mysql mbstring ] ++ enabled);
 in
 stdenv.mkDerivation rec {
   pname = "engelsystem";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchzip {
     url = "https://github.com/engelsystem/engelsystem/releases/download/v${version}/engelsystem-v${version}.zip";
-    hash = "sha256-5KniP1nrLfmWHruXnUJmlvgL95U+EsDmCs4tg/YLWtw=";
+    hash = "sha256-RbzAHBZN02u14WaLtq5EOh4XwIdHKvzX7NhDBhn/CaU=";
   };
 
   buildInputs = [ phpExt ];

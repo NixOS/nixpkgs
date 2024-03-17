@@ -21,6 +21,7 @@ buildGoModule rec {
     "app/vlstorage"
     "app/vmagent"
     "app/vmalert-tool"
+    "app/vmalert"
     "app/vmauth"
     "app/vmctl"
     "app/vminsert"

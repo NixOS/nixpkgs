@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wgetpaste";
-  version = "2.33";
+  version = "2.34";
 
   src = fetchurl {
     url = "https://github.com/zlin/wgetpaste/releases/download/${version}/wgetpaste-${version}.tar.xz";
-    sha256 = "sha256-6TWdhKOmO7vRKGIVNcUwLy46heI6UiAOgej6ubd+lxs=";
+    sha256 = "sha256-vW0G7ZAaPWPJyMVxJghP8JlPCZAb+xY4uHlT6sHpQz8=";
   };
   # currently zsh-autocompletion support is not installed
 
