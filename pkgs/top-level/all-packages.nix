@@ -24999,8 +24999,6 @@ with pkgs;
 
   thrift = callPackage ../development/libraries/thrift { };
 
-  thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix { };
-
   tidyp = callPackage ../development/libraries/tidyp { };
 
   tidal-hifi = callPackage ../applications/audio/tidal-hifi { };
