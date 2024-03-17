@@ -1,9 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, beautifulsoup4
 , deprecated
+, jmespath
+, lxml
 , oauthlib
 , requests
+, requests-kerberos
 , requests-oauthlib
 , six
 , pytestCheckHook
@@ -25,9 +29,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    beautifulsoup4
     deprecated
+    jmespath
+    lxml
     oauthlib
     requests
+    requests-kerberos
     requests-oauthlib
     six
   ];
