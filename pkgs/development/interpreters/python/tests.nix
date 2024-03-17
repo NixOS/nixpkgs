@@ -129,11 +129,18 @@ let
       chmod -R +w tests
       substituteAllInPlace tests/test_python.py
 
-      # run the tests by invoking the interpreter directly
-      ${attrs.interpreter} -m unittest discover --verbose tests | tee "$out/direct.txt"
+      # run the tests by invoking the interpreter via absolute path
+      echo "absolute path: ${attrs.interpreter}"
+      ${attrs.interpreter} -m unittest discover --verbose tests | tee "$out/absolute.txt"
+
+      # run the tests by invoking the interpreter via relative path
+      ln -s "${attrs.interpreter}" python
+      echo "relative path: ./python"
+      ./python -m unittest discover --verbose tests | tee "$out/relative.txt"
 
       # run the tests by invoking the interpreter via $PATH
       export PATH="$(dirname ${attrs.interpreter}):$PATH"
+      echo "PATH: $(basename ${attrs.interpreter})"
       "$(basename ${attrs.interpreter})" -m unittest discover --verbose tests | tee "$out/path.txt"
 
       # if we got this far, the tests passed
