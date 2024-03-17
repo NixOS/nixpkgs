@@ -13,6 +13,7 @@
 , withRpm ? !stdenv.isDarwin
 , rpm
 , db
+, withConda ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "openSUSE";
     repo = "libsolv";
     rev = version;
-    sha256 = "sha256-cL7SDwCzXM2qJQfiu/3nfAiFbcFNn1YXD23Sl3n9nzY=";
+    hash = "sha256-cL7SDwCzXM2qJQfiu/3nfAiFbcFNn1YXD23Sl3n9nzY=";
   };
 
   cmakeFlags = [
@@ -39,6 +40,8 @@ stdenv.mkDerivation rec {
     "-DENABLE_RPMDB=true"
     "-DENABLE_RPMDB_BYRPMHEADER=true"
     "-DENABLE_RPMMD=true"
+  ] ++ lib.optionals withConda [
+    "-DENABLE_CONDA=true"
   ];
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
