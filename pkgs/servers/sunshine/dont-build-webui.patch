@@ -1,14 +1,14 @@
 diff --git a/cmake/targets/common.cmake b/cmake/targets/common.cmake
-index 3dd629e..acec58d 100644
+index 9f2ce08..8c32b8f 100644
 --- a/cmake/targets/common.cmake
 +++ b/cmake/targets/common.cmake
-@@ -37,8 +37,4 @@ endif()
- 
- target_compile_options(sunshine PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${SUNSHINE_COMPILE_OPTIONS}>;$<$<COMPILE_LANGUAGE:CUDA>:${SUNSHINE_COMPILE_OPTIONS_CUDA};-std=c++17>)  # cmake-lint: disable=C0301
+@@ -48,8 +48,4 @@ else()
+     set(NPM_BUILD_HOMEBREW "")
+ endif()
  
 -#WebUI build
 -add_custom_target(web-ui ALL
 -        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 -        COMMENT "Installing NPM Dependencies and Building the Web UI"
--        COMMAND bash -c \"npm install && SUNSHINE_SOURCE_ASSETS_DIR=${SUNSHINE_SOURCE_ASSETS_DIR} SUNSHINE_ASSETS_DIR=${CMAKE_BINARY_DIR} npm run build\") # cmake-lint: disable=C0301
+-        COMMAND bash -c \"npm install && SUNSHINE_BUILD_HOMEBREW=${NPM_BUILD_HOMEBREW} SUNSHINE_SOURCE_ASSETS_DIR=${NPM_SOURCE_ASSETS_DIR} SUNSHINE_ASSETS_DIR=${NPM_ASSETS_DIR} npm run build\") # cmake-lint: disable=C0301
 +
