@@ -11,15 +11,16 @@
 , pkg-config
 , bison
 , flex
+, nix-update-script
+, testers
 , static ? stdenv.hostPlatform.isStatic
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
   version = "0.18.1";
 
-  src = fetchurl {
-    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
+    url = "https://archive.apache.org/dist/thrift/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-BMbxDl14jKeOE+4u8NIVLHsHDAr1VIPWuULinP8pZyY=";
   };
 
@@ -136,6 +137,14 @@ stdenv.mkDerivation rec {
 
   enableParallelChecking = false;
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "thrift -version";
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
@@ -144,4 +153,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor ];
   };
-}
+})
