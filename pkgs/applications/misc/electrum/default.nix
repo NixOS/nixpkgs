@@ -9,10 +9,27 @@
 , enableQt ? true
 , callPackage
 , qtwayland
+, fetchPypi
 }:
 
 let
-  version = "4.5.3";
+  version = "4.5.4";
+
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      # Pin ledger-bitcoin to 0.2.1
+      ledger-bitcoin = super.ledger-bitcoin.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.1";
+        format = "pyproject";
+        src = fetchPypi {
+          pname = "ledger_bitcoin";
+          inherit version;
+          hash = "sha256-AWl/q2MzzspNIo6yf30S92PgM/Ygsb+1lJsg7Asztso=";
+        };
+      });
+    };
+  };
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.{v}"
@@ -29,7 +46,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-Lr6ynHAbyaiaxYAWU5j5Wh5acxO5HkP1/jpnFrL4j68=";
+    sha256 = "sha256-fDu2PlEQOF7ftlS6dYw15S2XiAx+D/bng4zC9ELj6uk=";
 
     postFetch = ''
       mv $out ./all
@@ -39,13 +56,13 @@ let
 
 in
 
-python3.pkgs.buildPythonApplication {
+python.pkgs.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-kej0msc7SB+51ad5xZrT8MMEY5rfYOGqum6RO1gBH5s=";
+    sha256 = "sha256-lDuwXhOjcbCx8x/oIoigrklDwCbhn1trf5lDf/X/1Qc=";
   };
 
   postUnpack = ''
@@ -56,7 +73,7 @@ python3.pkgs.buildPythonApplication {
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
   buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -80,12 +97,15 @@ python3.pkgs.buildPythonApplication {
     ckcc-protocol
     keepkey
     trezor
+    bitbox02
+    cbor
+    pyserial
   ] ++ lib.optionals enableQt [
     pyqt5
     qdarkstyle
   ];
 
-  checkInputs = with python3.pkgs; lib.optionals enableQt [
+  checkInputs = with python.pkgs; lib.optionals enableQt [
     pyqt6
   ];
 
@@ -117,7 +137,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "tests" ];
 
@@ -140,7 +160,7 @@ python3.pkgs.buildPythonApplication {
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ joachifm np prusnak ];
+    maintainers = with maintainers; [ joachifm np prusnak chewblacka ];
     mainProgram = "electrum";
   };
 }

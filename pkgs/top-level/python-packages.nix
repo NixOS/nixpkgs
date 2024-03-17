@@ -5686,6 +5686,8 @@ self: super: with self; {
 
   insteon-frontend-home-assistant = callPackage ../development/python-modules/insteon-frontend-home-assistant { };
 
+  instructor = callPackage ../development/python-modules/instructor { };
+
   intake = callPackage ../development/python-modules/intake { };
 
   intake-parquet = callPackage ../development/python-modules/intake-parquet { };

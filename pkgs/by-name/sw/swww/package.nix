@@ -14,12 +14,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "LGFae";
-    repo = pname;
+    repo = "swww";
     rev = "refs/tags/v${version}";
     hash = "sha256-n7YdUmIZGu7W7cX6OvVW+wbkKjFvont4hEAhZXYDQd8=";
   };
 
-  cargoSha256 = "sha256-lZC71M3lbsI+itMydAp5VCz0cpSHo/FpkQFC1NlN4DU=";
+  cargoHash = "sha256-lZC71M3lbsI+itMydAp5VCz0cpSHo/FpkQFC1NlN4DU=";
 
   buildInputs = [
     lz4
@@ -42,9 +42,9 @@ rustPlatform.buildRustPackage rec {
     done
 
     installShellCompletion --cmd swww \
-      --bash <(cat completions/swww.bash) \
-      --fish <(cat completions/swww.fish) \
-      --zsh <(cat completions/_swww)
+      --bash completions/swww.bash \
+      --fish completions/swww.fish \
+      --zsh completions/_swww
   '';
 
   meta = with lib; {
