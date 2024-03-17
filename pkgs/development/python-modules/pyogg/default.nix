@@ -1,11 +1,12 @@
 { stdenv, lib, fetchPypi, buildPythonPackage, libvorbis, flac, libogg, libopus, opusfile, substituteAll }:
 
 buildPythonPackage rec {
-    pname = "PyOgg";
+    pname = "pyogg";
     version = "0.6.9a1";
 
     src = fetchPypi {
-      inherit pname version;
+      pname = "PyOgg";
+      inherit version;
       sha256 = "0xabqwyknpvfc53s7il5pq6b07fcaqvz5bi5vbs3pbaw8602qvim";
     };
 
