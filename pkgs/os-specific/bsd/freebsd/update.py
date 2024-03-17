@@ -71,7 +71,7 @@ def handle_commit(
     ref_type: str,
     supported_refs: typing.List[str],
     old_versions: dict,
-):
+) -> dict[str, Any]:
     if old_versions.get(ref_name, {}).get("rev", None) == rev.hexsha:
         print(f"{ref_name}: revision still {rev.hexsha}, skipping")
         return old_versions[ref_name]
