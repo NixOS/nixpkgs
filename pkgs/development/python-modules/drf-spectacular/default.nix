@@ -79,6 +79,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires django with gdal
     "test_rest_framework_gis"
+    # outdated test artifact
+    "test_pydantic_decoration"
   ];
 
   pythonImportsCheck = [ "drf_spectacular" ];
