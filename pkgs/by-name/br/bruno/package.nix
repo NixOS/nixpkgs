@@ -13,6 +13,7 @@
 , pixman
 , cairo
 , pango
+, giflib
 , npm-lockfile-fix
 , overrideSDK
 , darwin
@@ -55,6 +56,7 @@ buildNpmPackage' rec {
     pixman
     cairo
     pango
+    giflib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreText
   ];
