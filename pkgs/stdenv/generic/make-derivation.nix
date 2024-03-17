@@ -935,4 +935,5 @@ let
 in
 {
   inherit mkDerivation;
+  inherit makeDerivationArgument;
 }
