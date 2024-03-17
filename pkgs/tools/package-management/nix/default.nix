@@ -234,11 +234,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_17 = common {
-    version = "2.17.1";
-    hash = "sha256-Q5L+rHzjp0bYuR2ogg+YPCn6isjmlQ4CJVT0zpn/hFc=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
+    version = "2.17.2";
+    hash = "sha256-D5dgV4B7y5tD+nPU0Yus+R9nqgAelvm8imEeFzITLJA=";
   };
 
   nix_2_18 = common {
