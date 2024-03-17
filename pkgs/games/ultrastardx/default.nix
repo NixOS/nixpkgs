@@ -82,5 +82,6 @@ in stdenv.mkDerivation rec {
     description = "Free and open source karaoke game";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];
+    platforms = platforms.linux;
   };
 }
