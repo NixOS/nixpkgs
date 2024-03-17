@@ -478,7 +478,7 @@ let
     gmapR = [ pkgs.zlib.dev ];
     Rsubread = [ pkgs.zlib.dev ];
     XVector = [ pkgs.zlib.dev ];
-    Rsamtools = with pkgs; [ zlib.dev curl.dev ];
+    Rsamtools = with pkgs; [ zlib.dev curl.dev bzip2 xz ];
     rtracklayer = [ pkgs.zlib.dev ];
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
