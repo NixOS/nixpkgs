@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , buildPythonPackage
 
 # build-system
@@ -27,14 +26,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-eLdpLw1I4t9H0ek3AR9Cteb7Gfxo/LepM287p34Zw3s=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/Tethik/flask-session-captcha/pull/44
-      url = "https://github.com/Tethik/flask-session-captcha/commit/3f79c22a71c60dd60e9df61b550cce641603dcb6.patch";
-      hash = "sha256-MXsoSytBNbcg3HU6IWlvf2MgNUL78T5ToxKGv4YMtZw=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
