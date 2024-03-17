@@ -252,7 +252,7 @@ let
 
     doCheck = !stdenv'.hostPlatform.isDarwin;
     # autodetection doesn't seem to able to find this, but it's there.
-    checkTarget = "check";
+    checkTarget = "check-world";
 
     passthru = let
       this = self.callPackage generic args;
