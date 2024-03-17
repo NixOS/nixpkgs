@@ -17199,6 +17199,12 @@
     githubId = 2660;
     name = "Russell Sim";
   };
+  rutherther = {
+    name = "Rutherther";
+    email = "rutherther@proton.me";
+    github = "rutherther";
+    githubId = 12197024;
+  };
   ruuda = {
     email = "dev+nix@veniogames.com";
     github = "ruuda";
