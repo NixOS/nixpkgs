@@ -59,7 +59,7 @@ buildPythonPackage rec {
     description = "Quickly rewrite git repository history";
     homepage = "https://github.com/newren/git-filter-repo";
     license = with licenses; [ mit /* or */ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ aiotter fab ];
   };
 
   passthru.updateScript = writeScript "update-${pname}" ''
