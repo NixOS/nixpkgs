@@ -18,14 +18,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "netCDF4";
+  pname = "netcdf4";
   version = "1.6.2";
   format = "pyproject";
 
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "netCDF4";
+    inherit version;
     hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
   };
 
