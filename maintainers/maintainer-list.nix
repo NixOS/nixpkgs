@@ -4728,6 +4728,12 @@
     githubId = 4956158;
     name = "Robin Stumm";
   };
+  DerRockWolf = {
+    email = "git@rockwolf.eu";
+    github = "DerRockWolf";
+    githubId = 50499906;
+    name = "DerRockWolf";
+  };
   DerTim1 = {
     email = "tim.digel@active-group.de";
     github = "DerTim1";
