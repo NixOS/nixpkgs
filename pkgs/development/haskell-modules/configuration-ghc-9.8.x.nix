@@ -102,10 +102,4 @@ self: super: {
       })
     super.libmpd;
 
-  # Symbol syntax seems to have changed in 9.8, removing a seemingly redundant colon; appears to be an overspecified assertion.
-  # https://github.com/wz1000/HieDb/issues/74
-  hiedb =
-    assert super.hiedb.version == "0.5.0.1";
-    dontCheck super.hiedb;
-
 }
