@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libdbi sqlite postgresql ] ++ lib.optional (libmysqlclient != null) libmysqlclient;
 
+  patches = [
+    # https://sourceforge.net/p/libdbi-drivers/libdbi-drivers/ci/24f48b86c8988ee3aaebc5f303d71e9d789f77b6
+    ./libdbi-drivers-0.9.0-buffer_overflow.patch
+  ];
+
   postPatch = ''
     sed -i '/SQLITE3_LIBS/ s/-lsqlite/-lsqlite3/' configure;
   '';
