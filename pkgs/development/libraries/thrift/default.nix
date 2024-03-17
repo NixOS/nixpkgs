@@ -151,6 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://thrift.apache.org/";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor anthonyroussel ];
   };
 })
