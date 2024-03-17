@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     assert lib.versionAtLeast nodePackages.pnpm.version "8.10.0";
     stdenvNoCC.mkDerivation {
       pname = "${finalAttrs.pname}-pnpm-deps";
-      inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
+      inherit (finalAttrs) src version;
 
       nativeBuildInputs = [
         jq
