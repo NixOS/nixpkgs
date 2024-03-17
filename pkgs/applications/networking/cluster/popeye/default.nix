@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "popeye";
-  version = "0.20.5";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-e3ANhF2g1YpCipnHej2ZegoAq20MOyTIjxgNMs3qGbk=";
+    sha256 = "sha256-wEOmG15h3YRO/MmMj5QZxmc0itZJeIQs3LuB3GXWWQw=";
   };
 
   ldflags = [
@@ -17,7 +17,7 @@ buildGoModule rec {
     "-X github.com/derailed/popeye/cmd.commit=${version}"
   ];
 
-  vendorHash = "sha256-lRm3cS+VYP9vptr6ixmkni7DpNnexrhyccKDV7TWKg0=";
+  vendorHash = "sha256-qrw/7fauMVb3Ai5E5MXL84yXHcReJZZ1oioB/Cv32Is=";
 
   nativeBuildInputs = [ installShellFiles ];
 
