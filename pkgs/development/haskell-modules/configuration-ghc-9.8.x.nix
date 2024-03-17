@@ -50,23 +50,6 @@ self: super: {
   xhtml = null;
 
   #
-  # HLS
-  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html
-  #
-  haskell-language-server = super.haskell-language-server.override {
-    hls-class-plugin = null;
-    hls-fourmolu-plugin = null;
-    hls-gadt-plugin = null;
-    hls-hlint-plugin = null;
-    hls-ormolu-plugin = null;
-    hls-refactor-plugin = null;
-    hls-rename-plugin = null;
-    hls-retrie-plugin = null;
-    hls-splice-plugin = null;
-    hls-stylish-haskell-plugin = null;
-  };
-
-  #
   # Version upgrades
   #
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
