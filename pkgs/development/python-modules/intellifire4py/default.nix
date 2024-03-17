@@ -2,7 +2,8 @@
 , aenum
 , buildPythonPackage
 , fetchFromGitHub
-, httpx
+, aiohttp
+, aioresponses
 , poetry-core
 , pydantic
 , pytest-asyncio
@@ -31,13 +32,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiohttp
     aenum
-    httpx
     pydantic
     rich
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytest-httpx
     pytestCheckHook
