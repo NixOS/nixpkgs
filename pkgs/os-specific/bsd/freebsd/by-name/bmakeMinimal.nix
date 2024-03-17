@@ -19,30 +19,6 @@ mkDerivation {
     patchShebangs configure
     # make needs this to pick up our sys make files
     export NIX_CFLAGS_COMPILE+=" -D_PATH_DEFSYSPATH=\"$out/share/mk\""
-
-    # Copied from netbsd. we need to prevent it from trying to adjust the permissions of installed files.
-    #set +e
-    #find $BSDSRCDIR -print0 -name '*.mk' | while IFS= read -r -d "" f; do
-    #  echo $f
-    #  substituteInPlace "$f" \
-    #    --replace '-o ''${DOCOWN}' "" \
-    #    --replace '-g ''${DOCGRP}' "" \
-    #    --replace '-o ''${BINOWN}' "" \
-    #    --replace '-g ''${BINGRP}' "" \
-    #    --replace '-o ''${RUMPBINOWN}' "" \
-    #    --replace '-g ''${RUMPBINGRP}' "" \
-    #    --replace '-o ''${DEBUGOWN}' "" \
-    #    --replace '-g ''${DEBUGGRP}' "" \
-    #    --replace '-o ''${KMODULEOWN}' "" \
-    #    --replace '-g ''${KMODULEGRP}' "" \
-    #    --replace '-o ''${LIBOWN}' "" \
-    #    --replace '-g ''${LIBGRP}' "" \
-    #    --replace '-o ''${MANOWN}' "" \
-    #    --replace '-g ''${MANGRP}' "" \
-    #    --replace '-o ''${NLSOWN}' "" \
-    #    --replace '-g ''${NLSGRP}' ""
-    #done
-    #set -e
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
       --replace '-Wl,--fatal-warnings' "" \
