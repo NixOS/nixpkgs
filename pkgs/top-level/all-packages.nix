@@ -4026,7 +4026,9 @@ with pkgs;
 
   go-audit = callPackage ../tools/system/go-audit { };
 
-  gopass = callPackage ../tools/security/gopass { };
+  gopass = callPackage ../tools/security/gopass {
+    buildGoModule = buildGo122Module;
+  };
 
   gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
 
