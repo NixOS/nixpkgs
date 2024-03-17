@@ -9,6 +9,7 @@
 , fonttools
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools-scm
 , skia-pathops
 , ufolib2
@@ -28,6 +29,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "cffsubr"
   ];
 
   propagatedBuildInputs = [
