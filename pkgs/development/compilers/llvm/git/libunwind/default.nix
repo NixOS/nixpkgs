@@ -27,15 +27,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/runtimes";
 
-  prePatch = ''
-    cd ../${pname}
-    chmod -R u+w .
-  '';
-
-  postPatch = ''
-    cd ../runtimes
-  '';
-
   postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
     # libcxxabi wants to link to libunwind_shared.so (?).
     ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so

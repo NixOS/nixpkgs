@@ -70,9 +70,6 @@ let
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
 
-      mkdir -p $lib/lib/clang
-      mv $lib/lib/${lib.versions.major version} $lib/lib/clang/${lib.versions.major version}
-
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
       moveToOutput "lib/libclang-cpp.*" "$lib"

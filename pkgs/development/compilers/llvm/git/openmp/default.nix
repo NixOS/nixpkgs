@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-find-tool.patch
-    ./gnu-install-dirs.patch
     ./run-lit-directly.patch
   ];
 

@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/${pname}";
 
+  nativeBuildInputs = [ cmake ninja ];
+  buildInputs = [ libllvm libxml2 ];
+
   patches = [
     ./gnu-install-dirs.patch
   ];
-
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ libllvm libxml2 ];
 
   cmakeFlags = [
     "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"

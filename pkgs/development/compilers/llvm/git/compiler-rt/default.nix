@@ -87,12 +87,9 @@ stdenv.mkDerivation {
 
   patches = [
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
-    ./gnu-install-dirs.patch
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
-    # Prevent a compilation error on darwin
-    ./darwin-targetconditionals.patch
     # See: https://github.com/NixOS/nixpkgs/pull/186575
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
@@ -111,6 +108,8 @@ stdenv.mkDerivation {
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM && !haveLibc) ''
+    substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
+      --replace "<stdlib.h>" "<stddef.h>"
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
     substituteInPlace lib/builtins/clear_cache.c \
