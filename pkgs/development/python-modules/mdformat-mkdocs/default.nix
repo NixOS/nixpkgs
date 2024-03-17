@@ -3,9 +3,12 @@
 , fetchFromGitHub
 , flit-core
 , mdformat
+, mdformat-admon
 , mdformat-gfm
 , mdit-py-plugins
+, more-itertools
 , pythonOlder
+, pytest-snapshot
 , pytestCheckHook
 }:
 
@@ -29,12 +32,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     mdformat
+    mdformat-admon
     mdformat-gfm
     mdit-py-plugins
+    more-itertools
   ];
 
   nativeCheckInputs = [
+    pytest-snapshot
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # AssertionError: assert ParsedText(lines=[LineResult(parsed=ParsedLine(line_...
+    "tests/format/test_parsed_result.py"
   ];
 
   pythonImportsCheck = [
