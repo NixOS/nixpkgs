@@ -1,11 +1,11 @@
 { lib, buildNimPackage, fetchFromSourcehut, pkg-config, getdns }:
 
 buildNimPackage rec {
-  pname = "getdns";
+  pname = "getdns-nim";
   version = "20221222";
   src = fetchFromSourcehut {
     owner = "~ehmry";
-    repo = pname + "-nim";
+    repo = pname;
     rev = version;
     hash = "sha256-y7yzY1PcodIK2kC9409FuTpLn0TsWHGiEPnrULrob+k=";
   };
