@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-    pnpm build --reporter=ndjson 
+    pnpm build --reporter=ndjson
   '';
 
   # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
@@ -173,12 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An alternate client for Discord with Vencord built-in";
-    homepage = "https://github.com/Vencord/Vesktop";
+    description = "Sharkey description here";
+    homepage = "https://joinsharkey.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ getchoo Scrumplex vgskye pluiedev ];
+    maintainers = with maintainers; [ aprl ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    mainProgram = "vesktop";
+    mainProgram = "sharkey";
   };
 })
 
