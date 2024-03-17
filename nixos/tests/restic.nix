@@ -4,6 +4,7 @@ import ./make-test-python.nix (
   let
     remoteRepository = "/root/restic-backup";
     remoteFromFileRepository = "/root/restic-backup-from-file";
+    remoteInhibitTestRepository = "/root/restic-backup-inhibit-test";
     remoteNoInitRepository = "/root/restic-backup-no-init";
     rcloneRepository = "rclone:local:/root/restic-rclone-backup";
 
@@ -65,6 +66,12 @@ import ./make-test-python.nix (
               dynamicFilesFrom = ''
                 find /opt -mindepth 1 -maxdepth 1 ! -name a_dir # all files in /opt except for a_dir
               '';
+            };
+            inhibit-test = {
+              inherit passwordFile paths exclude pruneOpts;
+              repository = remoteInhibitTestRepository;
+              initialize = true;
+              inhibitsSleep = true;
             };
             remote-noinit-backup = {
               inherit passwordFile exclude pruneOpts paths;
@@ -189,6 +196,13 @@ import ./make-test-python.nix (
           "systemctl start restic-backups-remoteprune.service",
           'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
+      )
+
+      # test that the inhibit option is working
+      server.systemctl("start --no-block restic-backups-inhibit-test.service")
+      server.wait_until_succeeds(
+          "systemd-inhibit --no-legend --no-pager | grep -q restic",
+          5
       )
     '';
   }
