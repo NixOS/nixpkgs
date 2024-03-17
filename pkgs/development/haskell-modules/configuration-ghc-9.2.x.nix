@@ -65,27 +65,13 @@ self: super: {
     algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
   });
 
-  hls-cabal-plugin = super.hls-cabal-plugin.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
 
-  ormolu = self.ormolu_0_5_2_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
-
-  stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
-
-  haskell-language-server = lib.pipe (super.haskell-language-server.override {
-    hls-ormolu-plugin = null;
-    hls-stylish-haskell-plugin = null;
-    hls-fourmolu-plugin = null;
-    # Not buildable if GHC > 9.2.3, so we ship no compatible GHC
-    hls-stan-plugin = null;
-  }) [
+  haskell-language-server = lib.pipe super.haskell-language-server [
      (disableCabalFlag "fourmolu")
      (disableCabalFlag "ormolu")
      (disableCabalFlag "stylishHaskell")
     ];
+
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
@@ -117,9 +103,6 @@ self: super: {
   # https://github.com/NixOS/cabal2nix/issues/554
   # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
   clash-prelude = dontDistribute (markBroken super.clash-prelude);
-
-  # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
-  hiedb = dontCheck super.hiedb;
 
   # Too strict upper bound on bytestring, relevant for GHC 9.2.6 specifically
   # https://github.com/protolude/protolude/issues/127#issuecomment-1428807874
