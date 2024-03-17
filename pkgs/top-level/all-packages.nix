@@ -1180,7 +1180,7 @@ with pkgs;
               gmpSupport = false;
               aclSupport = false;
               attrSupport = false;
-              withAutoreconf = false;
+              autoreconfHook = null;
             };
             inherit perl;
           };
