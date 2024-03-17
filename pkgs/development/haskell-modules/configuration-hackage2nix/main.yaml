@@ -640,6 +640,7 @@ unsupported-platforms:
   piyo:                                         [ platforms.darwin ]
   PortMidi-simple:                              [ platforms.darwin ]
   PortMidi:                                     [ platforms.darwin ]
+  portmidi-utility:                             [ platforms.darwin ]
   posix-api:                                    [ platforms.darwin ]
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
