@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, colorlog
 , jinja2
 , lxml
 , pygments
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
@@ -20,9 +22,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    colorlog
     jinja2
     lxml
     pygments
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   # There are no unit tests in the pypi tarball. Most of the unit tests on the
@@ -32,7 +37,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "gcovr"
-    "gcovr.workers"
     "gcovr.configuration"
   ];
 
