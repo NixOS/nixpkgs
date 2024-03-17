@@ -7,7 +7,7 @@
 import ../make-test-python.nix ({ pkgs, ... }:
 let
 
-  ifAddr = node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
+  ifAddr = node: iface: (pkgs.lib.head node.networking.interfaces.${iface}.ipv4.addresses).address;
 
   bfdConf1 = neigh: ''
     bfd
