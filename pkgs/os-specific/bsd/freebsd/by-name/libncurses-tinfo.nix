@@ -9,8 +9,4 @@ mkDerivation {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T -D_WCHAR_T"
     make $makeFlags "CFLAGS=-D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -I$BSDSRCDIR/contrib/ncurses/ncurses -I$BSDSRCDIR/contrib/ncurses/include -I." ncurses_dll.h make_hash make_keys
   '';
-
-  #makeFlags = [
-  #  "STRIP=-s" # flag to install, not command
-  #] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
 }
