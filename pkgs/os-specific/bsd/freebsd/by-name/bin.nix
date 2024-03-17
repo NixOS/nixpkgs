@@ -2,7 +2,7 @@
 mkDerivation {
   pname = "bins";
   path = "bin";
-  extraPaths = [/*"sbin" "usr.bin" "usr.sbin"*/ "sys/conf" "sys/sys/param.h" "contrib/sendmail" "contrib/tcsh" "usr.bin/printf" "lib/libsm"];
+  extraPaths = [ "sys/conf" "sys/sys/param.h" "contrib/sendmail" "contrib/tcsh" "usr.bin/printf" "lib/libsm" ];
   buildInputs = [libjail libmd libnetbsd libcapsicum libcasper libelf libxo libncurses-tinfo libedit libkvm];
   nativeBuildInputs = [
     buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
