@@ -78,6 +78,14 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
+  ] ++ (with python.pkgs; [
+    pythonRelaxDepsHook
+    setuptools
+  ]);
+
+  pythonRelaxDeps = [
+    "django-csp"
+    "python-dateutil"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
