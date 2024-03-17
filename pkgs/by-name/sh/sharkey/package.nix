@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
-    export NODE_OPTIONS = "--max_old_space_size=4096"
+    export NODE_OPTIONS="--max_old_space_size=4096"
 
     cp -Tr "$pnpmDeps" "$STORE_PATH"
     chmod -R +w "$STORE_PATH"
