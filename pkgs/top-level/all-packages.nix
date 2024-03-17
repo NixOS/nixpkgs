@@ -37971,8 +37971,6 @@ with pkgs;
 
   umoria = callPackage ../games/umoria { };
 
-  unciv = callPackage ../games/unciv { };
-
   unnethack = callPackage ../games/unnethack { };
 
   uqm = callPackage ../games/uqm { };
