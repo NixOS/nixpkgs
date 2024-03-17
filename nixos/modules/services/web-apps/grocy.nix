@@ -117,8 +117,8 @@ in {
       user = "grocy";
       group = "nginx";
 
-      # PHP 8.1 and 8.2 are the only version which are supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v4.0.2/README.md#platform-support
+      # PHP 8.2 and 8.3 are the only version which are supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v4.2.0/README.md#platform-support
       phpPackage = pkgs.php82;
 
       inherit (cfg.phpfpm) settings;
@@ -145,7 +145,7 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${cfg.package}/public";
+        { root = "${cfg.package}/share/php/grocy/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';

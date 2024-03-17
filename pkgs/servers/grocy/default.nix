@@ -1,18 +1,37 @@
-{ lib, stdenv, fetchurl, unzip, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, php
+, yarn
+, prefetch-yarn-deps
+, nixosTests
+}:
 
-stdenv.mkDerivation rec {
+php.buildComposerProject (finalAttrs: {
   pname = "grocy";
-  version = "4.0.3";
+  version = "4.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
-    hash = "sha256-KBTsi634SolgA01eRthMuWx7DIF7rhvJSPxiHyuKSR8=";
+  src = fetchFromGitHub {
+    owner = "grocy";
+    repo = "grocy";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aX3DMy9Jv8rNp1/VIvUtNXYXGBrCgBMs5GsDf4XXSj0=";
   };
 
-  nativeBuildInputs = [ unzip ];
-  unpackPhase = ''
-    unzip ${src} -d .
-  '';
+  vendorHash = "sha256-KaYvA0Rd4pd1s/L8QbVUgkE+SjH+jv4+6RvIaGOpews=";
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-UvWY8+qSRvzJbm7z3CmLyeUHxemzNUB7dHYP95ZVtcI=";
+  };
+
+  nativeBuildInputs = [
+    yarn
+    prefetch-yarn-deps
+  ];
+
+  composerStrictValidation = false;
 
   # NOTE: if patches are created from a git checkout, those should be modified
   # with `unixdos` to make sure those apply here.
@@ -20,16 +39,19 @@ stdenv.mkDerivation rec {
     ./0001-Define-configs-with-env-vars.patch
     ./0002-Remove-check-for-config-file-as-it-s-stored-in-etc-g.patch
   ];
-  patchFlags = [ "--binary" "-p1" ];
 
-  dontBuild = true;
+  configurePhase = ''
+    runHook preConfigure
+
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup-yarn-lock yarn.lock
+    yarn install --offline --frozen-lockfile --no-progress --non-interactive
+
+    runHook postConfigure
+  '';
 
   passthru.tests = { inherit (nixosTests) grocy; };
-
-  installPhase = ''
-    mkdir -p $out/
-    cp -R . $out/
-  '';
 
   meta = with lib; {
     license = licenses.mit;
@@ -37,4 +59,4 @@ stdenv.mkDerivation rec {
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };
-}
+})
