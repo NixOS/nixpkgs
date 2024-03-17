@@ -3720,6 +3720,8 @@ with pkgs;
 
   diopser = callPackage ../applications/audio/diopser { };
 
+  discordphp = callPackage ../development/php-packages/discordphp { };
+
   diskonaut = callPackage ../tools/misc/diskonaut { };
 
   diskus = callPackage ../tools/misc/diskus {

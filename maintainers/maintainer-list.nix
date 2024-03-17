@@ -13263,6 +13263,11 @@
       fingerprint = "6FAD DB43 D5A5 FE52 6835  0943 5B33 79E9 81EF 48B1";
     }];
   };
+  mrtuxa = {
+    name = "mrtuxa";
+    github = "mrtuxa";
+    githubId = 69870860;
+  };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
     github = "mrVanDalo";
