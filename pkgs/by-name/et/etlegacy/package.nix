@@ -6,7 +6,7 @@
 , cjson
 , cmake
 , git
-, makeWrapper
+, makeBinaryWrapper
 , unzip
 , curl
 , freetype
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     cmake
     fakeGit
     git
-    makeWrapper
+    makeBinaryWrapper
     unzip
   ];
 
