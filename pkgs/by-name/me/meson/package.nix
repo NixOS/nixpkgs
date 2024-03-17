@@ -69,7 +69,6 @@ python3.pkgs.buildPythonApplication rec {
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
 
-  ] ++ lib.optionals stdenv.isFreeBSD [
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
   ];
