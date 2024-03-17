@@ -215,14 +215,30 @@ in
     };
 
     bsdcp = (prevStage.runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${prevStage.freebsd.cp}/bin/cp $out/bin/bsdcp");
+    initialPath = [
+      prevStage.coreutils
+      prevStage.gnutar
+      prevStage.findutils
+      prevStage.gnumake
+      prevStage.gnused
+      prevStage.patchelf
+      prevStage.gnugrep
+      prevStage.gawk
+      prevStage.diffutils
+      prevStage.patch
+      prevStage.bash
+      prevStage.gzip
+      prevStage.bzip2
+      prevStage.xz
+      bsdcp
+    ];
 
     stdenvNoCC = import ../generic {
-      inherit config fetchurlBoot;
+      inherit config fetchurlBoot initialPath;
       name = "stdenvNoCC-freebsd-boot-1";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
       shell = "${prevStage.bash}/bin/bash";
       cc = null;
     };
@@ -230,12 +246,11 @@ in
     in rec {
     inherit config overlays;
     stdenv = import ../generic {
-      inherit config fetchurlBoot;
+      inherit config fetchurlBoot initialPath;
       name = "stdenv-freebsd-boot-1";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
       extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
@@ -274,7 +289,6 @@ in
         bashReal = super.bash;
         gitMinimal = prevStage.gitMinimal;
         freebsd = super.freebsd.overrideScope (self': super': {
-          #stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
           locales = prevStage.freebsd.locales;
         });
       };
@@ -292,14 +306,30 @@ in
     };
 
     bsdcp = (prevStage.runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${prevStage.freebsd.cp}/bin/cp $out/bin/bsdcp");
+    initialPath = [
+      prevStage.coreutils
+      prevStage.gnutar
+      prevStage.findutils
+      prevStage.gnumake
+      prevStage.gnused
+      prevStage.patchelf
+      prevStage.gnugrep
+      prevStage.gawk
+      prevStage.diffutils
+      prevStage.patch
+      prevStage.bashReal
+      prevStage.gzip
+      prevStage.bzip2
+      prevStage.xz
+      bsdcp
+    ];
 
     stdenvNoCC = import ../generic {
-      inherit config fetchurlBoot;
+      inherit config fetchurlBoot initialPath;
       name = "stdenvNoCC-freebsd-boot-2";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bashReal prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
       shell = "${prevStage.bashReal}/bin/bash";
       cc = null;
     };
@@ -307,12 +337,11 @@ in
     in rec {
     inherit config overlays;
     stdenv = import ../generic {
-      inherit config fetchurlBoot;
+      inherit config fetchurlBoot initialPath;
       name = "stdenv-freebsd-boot-2";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bashReal prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
       extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bashReal}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
@@ -380,13 +409,30 @@ in
 
     bsdcp = (prevStage.runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${prevStage.freebsd.cp}/bin/cp $out/bin/bsdcp");
 
+    initialPath = [
+      prevStage.coreutils
+      prevStage.gnutar
+      prevStage.findutils
+      prevStage.gnumake
+      prevStage.gnused
+      prevStage.patchelf
+      prevStage.gnugrep
+      prevStage.gawk
+      prevStage.diffutils
+      prevStage.patch
+      prevStage.bash
+      prevStage.gzip
+      prevStage.bzip2
+      prevStage.xz
+      bsdcp
+    ];
+
     stdenvNoCC = import ../generic {
-      inherit config fetchurlBoot;
+      inherit config fetchurlBoot initialPath;
       name = "stdenvNoCC-freebsd";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
       shell = "${prevStage.bash}/bin/bash";
       cc = null;
     };
@@ -394,12 +440,11 @@ in
     in rec {
     inherit config overlays;
     stdenv = import ../generic {
-      inherit config fetchurlBoot;
+      inherit config fetchurlBoot initialPath;
       name = "stdenv-freebsd";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
       extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
