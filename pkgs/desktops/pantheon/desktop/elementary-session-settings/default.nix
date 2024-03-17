@@ -13,6 +13,7 @@
 , elementary-default-settings
 , gnome-settings-daemon
 , runtimeShell
+, systemd
 , writeText
 , meson
 , ninja
@@ -90,13 +91,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0";
+  version = "6.0.0-unstable-2023-09-05";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = version;
-    sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
+    rev = "3476c89bbb66564a72c6495ac0c61f8f9ed7a3ec";
+    sha256 = "sha256-Z1qW6m0XDkB92ZZVKx98JOMXiBDbGpQ0cAXgWdqK27c=";
   };
 
   nativeBuildInputs = [
@@ -111,6 +112,7 @@ stdenv.mkDerivation rec {
     gnome-settings-daemon
     onboard
     orca
+    systemd
   ];
 
   mesonFlags = [
