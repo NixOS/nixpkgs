@@ -1863,8 +1863,6 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
-  godns = callPackage ../tools/networking/godns { };
-
   godspeed = callPackage ../tools/networking/godspeed { };
 
   goodhosts = callPackage ../tools/networking/goodhosts { };
