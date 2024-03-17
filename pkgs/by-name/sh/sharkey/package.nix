@@ -2,14 +2,10 @@
 , stdenv
 , stdenvNoCC
 , fetchFromGitLab
-, substituteAll
 , makeWrapper
-, makeDesktopItem
 , copyDesktopItems
-, pipewire
-, libpulseaudio
-, libicns
-, libnotify
+, jemalloc
+, ffmpeg-headless
 , jq
 , python3
 , pkg-config
@@ -18,8 +14,6 @@
 , moreutils
 , cacert
 , nodePackages
-, speechd
-, withTTS ? true
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
@@ -95,10 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     vips
   ];
 
-  patches = [
-    #./disable_update_checking.patch
-  ];
-
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   preBuild = ''
@@ -118,29 +108,23 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm build --reporter=ndjson
   '';
 
-  # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
   installPhase =
     let
-      # this is mainly required for venmic
       libPath = lib.makeLibraryPath ([
-        libpulseaudio
-        libnotify
-        pipewire
+        jemalloc
+        ffmpeg-headless
         stdenv.cc.cc.lib
-      ] ++ lib.optional withTTS speechd);
+      ]);
     in
     ''
       runHook preInstall
 
       mkdir -p $out/data
-      cp dist/linux-*unpacked/resources/app.asar $out/opt/Vesktop/resources
 
       mkdir -p $out/data/packages/client
-      ln -s /var/lib/misskey $out/data/files
-      ln -s /run/misskey $out/data/.config
-      cp -r locales node_modules built $out/data
-      cp -r packages/backend $out/data/packages/backend
-      cp -r packages/client/assets $out/data/packages/client/assets
+      ln -s /var/lib/sharkey $out/data/files
+      ln -s /run/sharkey $out/data/.config
+      cp -r locales node_modules built fluent-emojis tossface-emojis sharkey-assets packages package.json pnpm-workspace.yaml $out/data
 
       # https://gist.github.com/MikaelFangel/2c36f7fd07ca50fac5a3255fa1992d1a
 
@@ -148,32 +132,17 @@ stdenv.mkDerivation (finalAttrs: {
         --run $out/data
         --prefix LD_LIBRARY_PATH : ${libPath} \
         --prefix NODE_ENV : production
-        --add-flags start \
-        ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags migrateandstart
 
       runHook postInstall
     '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "vesktop";
-      desktopName = "Vesktop";
-      exec = "vesktop %U";
-      icon = "vesktop";
-      startupWMClass = "Vesktop";
-      genericName = "Internet Messenger";
-      keywords = [ "discord" "vencord" "electron" "chat" ];
-      categories = [ "Network" "InstantMessaging" "Chat" ];
-    })
-  ];
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
   };
 
   meta = with lib; {
-    description = "Sharkey description here";
+    description = "🌎 A Sharkish microblogging platform 🚀";
     homepage = "https://joinsharkey.org";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aprl ];
