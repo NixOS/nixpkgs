@@ -53,6 +53,10 @@
 , gccForLibs ? if useCcForLibs then cc else null
 , fortify-headers ? null
 , includeFortifyHeaders ? null
+
+# https://github.com/NixOS/nixpkgs/issues/295322
+# should -march flag be used
+, disableMarch ? false
 }:
 
 with lib;
@@ -609,7 +613,7 @@ stdenv.mkDerivation {
 
     # TODO: aarch64-darwin has mcpu incompatible with gcc
     + optionalString ((targetPlatform ? gcc.arch) && !isClang && !(stdenv.isDarwin && stdenv.isAarch64) &&
-                      isGccArchSupported targetPlatform.gcc.arch) ''
+                      isGccArchSupported targetPlatform.gcc.arch && !disableMarch) ''
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
@@ -705,7 +709,7 @@ stdenv.mkDerivation {
     + optionalString isClang ''
       # Escape twice: once for this script, once for the one it gets substituted into.
       export march=${lib.escapeShellArg
-        (lib.optionalString (targetPlatform ? gcc.arch)
+        (lib.optionalString (targetPlatform ? gcc.arch && !disableMarch)
           (lib.escapeShellArg "-march=${targetPlatform.gcc.arch}"))}
       export defaultTarget=${targetPlatform.config}
       substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
