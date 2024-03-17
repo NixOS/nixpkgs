@@ -4,11 +4,14 @@
 , glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
-, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
+, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, writeScriptBin, python3, runCommand
 , libunity
 , speechd
 , wayland
 , branch
+, sway
+, jq
+, procps
 , withOpenASAR ? false, openasar
 , withVencord ? false, vencord
 , withTTS ? true }:
@@ -27,7 +30,7 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version src meta;
 
   nativeBuildInputs = [
@@ -158,5 +161,55 @@ stdenv.mkDerivation rec {
       version=''${version%%/*.tar.gz}
       update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
+
+    test-run-in-sway = writeScriptBin "discord-in-sway" ''
+      #! /usr/bin/env nix-shell
+      #! nix-shell -i bash -p bash sway dbus procps
+      # shellcheck shell=bash
+      set -xeu
+
+      export NIXOS_OZONE_WL=1
+      export WLR_BACKENDS=headless
+      export WLR_HEADLESS_OUTPUTS=1
+      export WLR_LIBINPUT_NO_DEVICES=1
+
+      export tempdir=$(mktemp -d)
+
+      export XDG_RUNTIME_DIR=$tempdir
+      export HOME=$tempdir
+      export SWAYSOCK=$tempdir/sway_discord.sock
+      sdconf=$tempdir/swaydiscordconfig
+
+      rm -f "$SWAYSOCK"
+      touch "$sdconf"
+
+      # shellcheck disable=SC2317
+      function cleanup {
+          pgrep -f "$sdconf" | xargs -r kill
+          # Can't remove, is busy...
+          # rm: cannot remove '/run/user/1000/tmp.Yt9aLBLszq/gvfs': Device or resource busy
+          # rm: cannot remove '/run/user/1000/tmp.Yt9aLBLszq/doc/by-app': Operation not permitted
+          # rm -rf "$tempdir"
+      }
+
+      trap cleanup EXIT
+
+      dbus-launch --config-file=${dbus}/share/dbus-1/session.conf \
+        sway --config "$sdconf" &
+
+      sleep 5
+      swaymsg exec "${finalAttrs.finalPackage}/bin/${binaryName}"
+
+      sub=$(timeout 15s swaymsg --socket "$SWAYSOCK" -t subscribe '["window"]')
+
+      sleep 10
+
+      if [[ "$(echo "$sub" | jq -r '.container | .app_id')" == discord ]]; then
+          kill "$(jq '.container | .pid' <<< "$sub")"
+          exit 0
+      else
+          exit 1
+      fi
+    '';
   };
-}
+})
