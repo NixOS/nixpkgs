@@ -68,6 +68,10 @@ python3.pkgs.buildPythonApplication rec {
 
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
+
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    # This edge case is explicitly part of meson but is wrong for nix
+    ./007-freebsd-pkgconfig-path.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -97,11 +101,6 @@ python3.pkgs.buildPythonApplication rec {
     libblocksruntime
     llvmPackages.openmp
   ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-    # This edge case is explicilty part of meson but is wrong for nix
-    sed -E -i -e s/mesonlib.is_freebsd../False/g mesonbuild/modules/pkgconfig.py
-  '';
 
   checkPhase = lib.concatStringsSep "\n" ([
     "runHook preCheck"

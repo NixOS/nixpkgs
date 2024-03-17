@@ -1,0 +1,13 @@
+diff --git a/mesonbuild/modules/pkgconfig.py b/mesonbuild/modules/pkgconfig.py
+index ebe0d92d5..99f84f8e3 100644
+--- a/mesonbuild/modules/pkgconfig.py
++++ b/mesonbuild/modules/pkgconfig.py
+@@ -693,7 +693,7 @@ def parse_variable_list(vardict: T.Dict[str, str]) -> T.List[T.Tuple[str, str]]:
+         pcfile = filebase + '.pc'
+         pkgroot = pkgroot_name = kwargs['install_dir'] or default_install_dir
+         if pkgroot is None:
+-            if mesonlib.is_freebsd():
++            if False:
+                 pkgroot = os.path.join(_as_str(state.environment.coredata.get_option(mesonlib.OptionKey('prefix'))), 'libdata', 'pkgconfig')
+                 pkgroot_name = os.path.join('{prefix}', 'libdata', 'pkgconfig')
+             elif mesonlib.is_haiku():
