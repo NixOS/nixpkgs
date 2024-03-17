@@ -6,6 +6,7 @@
 , installShellFiles
 , pythonOlder
 , setuptools-scm
+, writeScript
 }:
 
 buildPythonPackage rec {
@@ -60,4 +61,18 @@ buildPythonPackage rec {
     license = with licenses; [ mit /* or */ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
   };
+
+  passthru.updateScript = writeScript "update-${pname}" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl jq nix-update
+
+    set -eu -o pipefail
+
+    # Update program
+    nix-update ${pname}
+
+    # Update docs
+    docs_latest=$(curl -s https://api.github.com/repos/newren/git-filter-repo/commits/heads/docs/status | jq -r '.sha')
+    [[ "${docs_version}" = "$docs_latest" ]] || update-source-version ${pname} "$docs_latest" --version-key=docs_version --source-key=docs
+  '';
 }
