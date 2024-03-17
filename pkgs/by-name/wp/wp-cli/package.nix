@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "2.9.0";
+  version = "2.10.0";
 
   completion = fetchurl {
     url = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/wp-cli-${version}.phar";
-    hash = "sha256-r2t8zCHtCQfLUE21oFnw4SAReQWmAXv91Ddc7jyT2GQ=";
+    hash = "sha256-TGqTzsrn9JnKSB+nptbUKZyLkyFOXlMI4mdw2/02Md8=";
   };
 
   dontUnpack = true;
