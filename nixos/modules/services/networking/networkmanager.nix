@@ -442,9 +442,21 @@ in
       [ "networking" "networkmanager" "useDnsmasq" ]
       [ "networking" "networkmanager" "dns" ]
     )
-    (mkRenamedOptionModule
-      [ "networking" "networkmanager" "extraConfig" ]
-      [ "networking" "networkmanager" "settings" ]
+    (mkRemovedOptionModule [ "networking" "networkmanager" "extraConfig" ] ''
+      This option was removed in favour of `networking.networkmanager.settings`,
+      this was done because settings now exepcts nix-code equivilant to the ini
+      and allows for overriding other settings.
+      Example patch:
+      ```patch
+         networking.networkmanager = {
+      -    extraConfig = \'\'
+      -      [main]
+      -      no-autodefault=*
+      -    \'\'
+      +    extraConfig.main.no-auto-default = "*";
+         };
+      ```
+    ''
     )
     (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
       This option was removed, because using bundled FCC unlock scripts is risky,
