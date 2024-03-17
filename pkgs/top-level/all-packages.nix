@@ -37057,7 +37057,7 @@ with pkgs;
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
-  chiaki4deck = libsForQt5.callPackage ../games/chiaki4deck { };
+  chiaki4deck = qt6Packages.callPackage ../games/chiaki4deck { };
 
   chromium-bsu = callPackage ../games/chromium-bsu { };
 
