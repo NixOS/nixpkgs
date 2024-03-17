@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymc-devs/pymc";
     changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nidabdella ];
+    maintainers = with maintainers; [ nidabdella ferrine ];
   };
 }
