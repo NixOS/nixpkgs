@@ -97,6 +97,12 @@ stdenv.mkDerivation {
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
     # ../../common/compiler-rt/armv7l-15.patch
+
+    # disable an optimized implementation of asan checks that fails on bsd/gcc and compiles incorrectly on bsd/clang
+    # See: https://github.com/llvm/llvm-project/issues/57086
+    ./asan-offset.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    ./freebsd-i386.patch
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
@@ -113,10 +119,17 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM && !haveLibc) ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
+  '' + lib.optionalString (useLLVM && !haveLibc && !stdenv.hostPlatform.isFreeBSD) ''
     substituteInPlace lib/builtins/clear_cache.c \
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model.c \
       --replace "#include <assert.h>" ""
+  '' + lib.optionalString (useLLVM && !haveLibc && stdenv.hostPlatform.isFreeBSD) ''
+    # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
+    substituteInPlace lib/builtins/clear_cache.c \
+      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
+    substituteInPlace lib/builtins/cpu_model.c \
+      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
   '';
 
   # Hack around weird upsream RPATH bug

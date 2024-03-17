@@ -14,14 +14,16 @@ diff -ur a/exp_win.c b/exp_win.c
 diff -ur d/pty_termios.c c/pty_termios.c
 --- d/pty_termios.c	2023-10-10 07:59:23.244452442 -0400
 +++ c/pty_termios.c	2023-10-10 08:00:35.303231582 -0400
-@@ -7,7 +7,13 @@
+@@ -7,7 +7,15 @@
  
  */
  
 -#include <pty.h> /* openpty */
 +/* openpty */
-+#ifdef __APPLE__
++#if defined(__APPLE__)
 +#include <util.h>
++#elif defined(__FreeBSD__)
++#include <termios.h>
 +#else /* pty.h is Linux-specific */
 +#include <pty.h>
 +#endif

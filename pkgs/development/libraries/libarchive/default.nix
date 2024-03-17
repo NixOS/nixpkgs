@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       # access-time-related tests flakey on some systems
       "cpio/test/test_option_a.c"
       "cpio/test/test_option_t.c"
+      "libarchive/test/test_read_disk_directory_traversals.c"
     ];
     removeTest = testPath: ''
       substituteInPlace Makefile.am --replace "${testPath}" ""

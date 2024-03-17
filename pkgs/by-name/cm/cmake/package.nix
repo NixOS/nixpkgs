@@ -29,6 +29,7 @@
 , buildDocs ? !(isMinimalBuild || (uiToolkits == []))
 , darwin
 , libsForQt5
+, freebsd
 , gitUpdater
 }:
 
@@ -99,9 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional cursesUI ncurses
   ++ lib.optional qt5UI qtbase
   ++ lib.optional stdenv.isDarwin CoreServices
-  ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
+  ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration
+  ++ lib.optional stdenv.isFreeBSD freebsd.libkvm;
 
-  propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
+  propagatedBuildInputs = lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) ps;
 
   preConfigure = ''
     fixCmakeFiles .

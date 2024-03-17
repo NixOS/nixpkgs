@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xz }:
+{ lib, stdenv, fetchurl, xz, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "autoconf-archive";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ xz ];
+  nativeBuildInputs = lib.optionals stdenv.buildPlatform.isFreeBSD [ texinfo ];
 
   meta = with lib; {
     description = "Archive of autoconf m4 macros";

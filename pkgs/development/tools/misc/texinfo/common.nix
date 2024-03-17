@@ -1,7 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib, gawk
+, gnulib, gawk, freebsd
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -41,7 +41,8 @@ stdenv.mkDerivation {
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
-  NATIVE_TOOLS_CFLAGS = if crossBuildTools then "-I${getDev buildPackages.ncurses}/include" else null;
+  NATIVE_TOOLS_CFLAGS = lib.optionals crossBuildTools [ "-I${getDev buildPackages.ncurses}/include" ]
+  ++ lib.optionals stdenv.isFreeBSD [ "-I${libintl}/include" ];
   NATIVE_TOOLS_LDFLAGS = if crossBuildTools then "-L${getLib buildPackages.ncurses}/lib" else null;
 
   strictDeps = true;
@@ -64,7 +65,8 @@ stdenv.mkDerivation {
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [ "install" "install-tex" ];
 
-  nativeCheckInputs = [ procps ];
+  nativeCheckInputs = [ procps ]
+    ++ optional stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
 
   doCheck = interactive
     && !stdenv.isDarwin

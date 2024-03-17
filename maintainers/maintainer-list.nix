@@ -1647,6 +1647,7 @@
     email = "me@artem.ist";
     github = "artemist";
     githubId = 1226638;
+    matrix = "@artemist:mildlyfunctional.gay";
     name = "Artemis Tosini";
     keys = [{
       fingerprint = "3D2B B230 F9FA F0C5 1832  46DD 4FDC 96F1 61E7 BA8A";
@@ -16408,6 +16409,13 @@
     github = "rguevara84";
     githubId = 12279531;
     name = "Ricardo Guevara";
+  };
+  rhelmot = {
+    name = "Audrey Dutcher";
+    github = "rhelmot";
+    githubId = 2498805;
+    email = "audrey@rhelmot.io";
+    matrix = "@rhelmot:matrix.org";
   };
   rhendric = {
     name = "Ryan Hendrickson";

@@ -1,4 +1,4 @@
-/* The top-level package collection of nixpkgs.
+/* The top-level package collection of nixpkgs.all-packages
  * It is sorted by categories corresponding to the folder names in the /pkgs
  * folder. Inside the categories packages are roughly sorted by alphabet, but
  * strict sorting has been long lost due to merges. Please use the full-text
@@ -197,7 +197,7 @@ with pkgs;
       pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
       autoPatchelfScript = ../build-support/setup-hooks/auto-patchelf.py;
     };
-    meta.platforms = lib.platforms.linux;
+    meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
   tomato-c = callPackage ../applications/misc/tomato-c { };
@@ -727,6 +727,7 @@ with pkgs;
   kdePackages = callPackage ../kde { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
+  buildcatrust-minimal = with python3Minimal.pkgs; toPythonApplication buildcatrust;
 
   probe-rs = callPackage ../development/tools/rust/probe-rs {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -1168,7 +1169,7 @@ with pkgs;
             fetchurl = stdenv.fetchurlBoot;
           };
         });
-        perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
+        perl = buildPackages.perl.override { inherit zlib; fetchurl = stdenv.fetchurlBoot; };
         openssl = buildPackages.openssl.override {
           fetchurl = stdenv.fetchurlBoot;
           buildPackages = {
@@ -1176,9 +1177,10 @@ with pkgs;
               fetchurl = stdenv.fetchurlBoot;
               inherit perl;
               xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
-              gmp = null;
+              gmpSupport = false;
               aclSupport = false;
               attrSupport = false;
+              withAutoreconf = false;
             };
             inherit perl;
           };
@@ -16489,7 +16491,7 @@ with pkgs;
     # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then 16
-      else if platform.isFreeBSD then 12
+      else if platform.isFreeBSD then 16
       else if platform.isAndroid then 12
       else if platform.isLinux then 17
       else if platform.isWasm then 16
@@ -17220,6 +17222,7 @@ with pkgs;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     noLibc = !self.nativeLibc && (self.libc == null);
+    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? "man") && (cc ? "man"));
 
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
@@ -17240,8 +17243,8 @@ with pkgs;
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-
-    noLibc = (self.libc == null);
+    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? "man") && (bintools ? "man"));
+    noLibc = !self.nativeLibc && (self.libc == null);
 
     inherit bintools libc;
     inherit (darwin) postLinkSignHook signingUtils;
@@ -20744,7 +20747,7 @@ with pkgs;
   cypress = callPackage ../development/web/cypress { };
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
-    libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
+    #libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
   };
 
   cyrus-sasl-xoauth2 = callPackage ../development/libraries/cyrus-sasl-xoauth2 { };
@@ -22812,9 +22815,15 @@ with pkgs;
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" ]
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" "fblibc" ]
       then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
-        then libcCross
+          then libcCross
+        else if stdenv.cc.nativeLibc
+          then {
+            pname = "libc-${stdenv.hostPlatform.system}";
+            version = "native";
+            dev = stdenv.cc.nativePrefix;
+          }
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then darwin.libiconv
@@ -22835,6 +22844,8 @@ with pkgs;
       lib.getBin stdenv.cc.libc
     else if stdenv.hostPlatform.isDarwin then
       lib.getBin darwin.libiconv
+    else if stdenv.hostPlatform.isFreeBSD then
+      lib.getBin freebsd.iconv
     else
       lib.getBin libiconvReal;
 
@@ -27441,8 +27452,8 @@ with pkgs;
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
-  libuuid = if stdenv.isLinux
-    then util-linuxMinimal
+  libuuid = if stdenv.isLinux then util-linuxMinimal
+    else if stdenv.isFreeBSD then e2fsprogs
     else null;
 
   light = callPackage ../os-specific/linux/light { };
@@ -41287,8 +41298,8 @@ with pkgs;
     name = "bsd-setup-hook";
   } ../os-specific/bsd/setup-hook.sh;
 
-  freebsd = callPackage ../os-specific/bsd/freebsd { };
-  freebsdCross = callPackage ../os-specific/bsd/freebsd {
+  freebsd = callPackages ../os-specific/bsd/freebsd { };
+  freebsdCross = callPackages ../os-specific/bsd/freebsd {
     stdenv = crossLibcStdenv;
   };
 

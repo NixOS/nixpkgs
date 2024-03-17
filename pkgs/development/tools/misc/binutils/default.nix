@@ -173,7 +173,9 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE =
     if hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
-    else "-static-libgcc";
+    else if stdenv.cc.isGNU
+    then "-static-libgcc"
+    else "";
 
   hardeningDisable = [ "format" "pie" ];
 
@@ -217,6 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ (if enableShared
       then [ "--enable-shared" "--disable-static" ]
       else [ "--disable-shared" "--enable-static" ])
+  ++ lib.optionals (hostPlatform == targetPlatform) [ "--datarootdir=$lib/share" ]
   ;
 
   # Fails

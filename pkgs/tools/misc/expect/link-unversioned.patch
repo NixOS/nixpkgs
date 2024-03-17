@@ -1,0 +1,10 @@
+--- a/configure.in	2023-09-02 19:49:23.025990963 -0700
++++ b/configure.in	2023-09-02 23:46:03.955454000 -0700
+@@ -907,6 +907,7 @@
+     else
+         EXP_LIB_FLAG="-lexpect`echo ${EXP_LIB_VERSION} | tr -d .`"
+     fi
++    EXP_LIB_FLAG="-l:libexpect.so.1"
+     EXP_BUILD_LIB_SPEC="-L`pwd` ${EXP_LIB_FLAG}"
+     EXP_LIB_SPEC="-L${libdir} ${EXP_LIB_FLAG}"
+ fi

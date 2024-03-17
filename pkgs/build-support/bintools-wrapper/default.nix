@@ -23,7 +23,7 @@
   else
     lib.getLib libc
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, propagateDoc ? bintools != null && bintools ? man
+, propagateDoc ? bintools != null && bintools ? "man"
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? bintools.isGNU or false
 , isLLVM ? bintools.isLLVM or false
@@ -61,6 +61,7 @@
 
 with lib;
 
+assert propagateDoc -> bintools ? "man";
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
   bintools != null && coreutils != null && gnugrep != null;
@@ -113,7 +114,7 @@ let
     else if targetPlatform.isRiscV                    then "${sharedLibraryLoader}/lib/ld-linux-riscv*.so.1"
     else if targetPlatform.isLoongArch64              then "${sharedLibraryLoader}/lib/ld-linux-loongarch*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
-    else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
+    else if targetPlatform.isFreeBSD                  then "${sharedLibraryLoader}/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else "";
 
