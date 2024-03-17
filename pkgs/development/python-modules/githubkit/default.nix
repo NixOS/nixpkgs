@@ -7,6 +7,7 @@
 , poetry-core
 , pydantic
 , pyjwt
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
@@ -70,6 +71,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
