@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
-, fetchpatch
+, fetchFromGitHub
 , fetchPypi
+, fetchpatch
+, installShellFiles
 , pythonOlder
 , setuptools-scm
 }:
@@ -9,6 +11,7 @@
 buildPythonPackage rec {
   pname = "git-filter-repo";
   version = "2.38.0";
+  docs_version = "01ead411966a83dfcfb35f9d2e8a9f7f215eaa65";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -16,6 +19,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-/hdT4Y8L1tPJtXhoyAEa59BWpuurcGcGOWoV71MScl4=";
+  };
+
+  docs = fetchFromGitHub {
+    owner = "newren";
+    repo = pname;
+    rev = docs_version;
+    hash = "sha256-Z/3w3Rguo8sfuc/OQ25eFbMfiOHjxQqPY6S32zuvoY4=";
   };
 
   patches = [
@@ -28,8 +38,13 @@ buildPythonPackage rec {
     })
   ];
 
+  postInstall = ''
+    installManPage ${docs}/man1/git-filter-repo.1
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
+    installShellFiles
   ];
 
   # Project has no tests
