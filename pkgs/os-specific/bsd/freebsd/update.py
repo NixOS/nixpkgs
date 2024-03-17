@@ -44,7 +44,7 @@ def request_supported_refs() -> list[str]:
     return list(df["Branch"])
 
 
-def query_version(repo: git.Repo) -> dict[str, Any]:
+def query_version(repo: git.Repo) -> dict[str, typing.Any]:
     # This only works on FreeBSD 13 and later
     text = (
         subprocess.check_output(
@@ -70,8 +70,8 @@ def handle_commit(
     ref_name: str,
     ref_type: str,
     supported_refs: list[str],
-    old_versions: dict,
-) -> dict[str, Any]:
+    old_versions: dict[str, typing.Any],
+) -> dict[str, typing.Any]:
     if old_versions.get(ref_name, {}).get("rev", None) == rev.hexsha:
         print(f"{ref_name}: revision still {rev.hexsha}, skipping")
         return old_versions[ref_name]
@@ -99,80 +99,84 @@ def handle_commit(
     }
 
 
-# Normally uses /run/user/*, which is on a tmpfs and too small
-temp_dir = tempfile.TemporaryDirectory(dir="/tmp")
-print(f"Selected temporary directory {temp_dir.name}")
+def main() -> None:
+    # Normally uses /run/user/*, which is on a tmpfs and too small
+    temp_dir = tempfile.TemporaryDirectory(dir="/tmp")
+    print(f"Selected temporary directory {temp_dir.name}")
 
-if len(sys.argv) >= 2:
-    orig_repo = git.Repo(sys.argv[1])
-    print(f"Fetching updates on {orig_repo.git_dir}")
-    orig_repo.remote("origin").fetch()
-else:
-    print("Cloning source repo")
-    orig_repo = git.Repo.clone_from(
-        "https://git.FreeBSD.org/src.git", to_path=os.path.join(temp_dir.name, "orig")
-    )
-
-supported_refs = request_supported_refs()
-print(f"Supported refs are: {' '.join(supported_refs)}")
-
-print("Doing git crimes, do not run `git worktree prune` until after script finishes!")
-workdir = os.path.join(temp_dir.name, "work")
-git.cmd.Git(orig_repo.git_dir).worktree("add", "--orphan", workdir)
-
-# Have to create object before removing .git otherwise it will complain
-repo = git.Repo(workdir)
-repo.git.set_persistent_git_options(git_dir=repo.git_dir)
-# Remove so that nix hash doesn't see the file
-os.remove(os.path.join(workdir, ".git"))
-
-print(f"Working in directory {repo.working_dir} with git directory {repo.git_dir}")
-
-
-try:
-    with open(os.path.join(BASE_DIR, "versions.json"), "r") as f:
-        old_versions = json.load(f)
-except FileNotFoundError:
-    old_versions = dict()
-
-versions = dict()
-for tag in repo.tags:
-    m = TAG_PATTERN.match(tag.name)
-    if m is None:
-        continue
-    version = packaging.version.parse(m[1])
-    if version < MIN_VERSION:
-        print(f"Skipping old tag {tag.name} ({version})")
-        continue
-
-    print(f"Trying tag {tag.name} ({version})")
-
-    result = handle_commit(
-        repo, tag.commit, tag.name, "tag", supported_refs, old_versions
-    )
-    versions[tag.name] = result
-
-for branch in repo.remote("origin").refs:
-    m = BRANCH_PATTERN.match(branch.name)
-    if m is not None:
-        fullname = m[1]
-        version = packaging.version.parse(m[3])
-        if version < MIN_VERSION:
-            print(f"Skipping old branch {fullname} ({version})")
-            continue
-        print(f"Trying branch {fullname} ({version})")
-    elif branch.name == f"{REMOTE}/{MAIN_BRANCH}":
-        fullname = MAIN_BRANCH
-        print(f"Trying development branch {fullname}")
+    if len(sys.argv) >= 2:
+        orig_repo = git.Repo(sys.argv[1])
+        print(f"Fetching updates on {orig_repo.git_dir}")
+        orig_repo.remote("origin").fetch()
     else:
-        continue
+        print("Cloning source repo")
+        orig_repo = git.Repo.clone_from(
+            "https://git.FreeBSD.org/src.git", to_path=os.path.join(temp_dir.name, "orig")
+        )
 
-    result = handle_commit(
-        repo, branch.commit, fullname, "branch", supported_refs, old_versions
-    )
-    versions[fullname] = result
+    supported_refs = request_supported_refs()
+    print(f"Supported refs are: {' '.join(supported_refs)}")
+
+    print("Doing git crimes, do not run `git worktree prune` until after script finishes!")
+    workdir = os.path.join(temp_dir.name, "work")
+    git.cmd.Git(orig_repo.git_dir).worktree("add", "--orphan", workdir)
+
+    # Have to create object before removing .git otherwise it will complain
+    repo = git.Repo(workdir)
+    repo.git.set_persistent_git_options(git_dir=repo.git_dir)
+    # Remove so that nix hash doesn't see the file
+    os.remove(os.path.join(workdir, ".git"))
+
+    print(f"Working in directory {repo.working_dir} with git directory {repo.git_dir}")
 
 
-with open(os.path.join(BASE_DIR, "versions.json"), "w") as out:
-    json.dump(versions, out, sort_keys=True)
-    out.write("\n")
+    try:
+        with open(os.path.join(BASE_DIR, "versions.json"), "r") as f:
+            old_versions = json.load(f)
+    except FileNotFoundError:
+        old_versions = dict()
+
+    versions = dict()
+    for tag in repo.tags:
+        m = TAG_PATTERN.match(tag.name)
+        if m is None:
+            continue
+        version = packaging.version.parse(m[1])
+        if version < MIN_VERSION:
+            print(f"Skipping old tag {tag.name} ({version})")
+            continue
+
+        print(f"Trying tag {tag.name} ({version})")
+
+        result = handle_commit(
+            repo, tag.commit, tag.name, "tag", supported_refs, old_versions
+        )
+        versions[tag.name] = result
+
+    for branch in repo.remote("origin").refs:
+        m = BRANCH_PATTERN.match(branch.name)
+        if m is not None:
+            fullname = m[1]
+            version = packaging.version.parse(m[3])
+            if version < MIN_VERSION:
+                print(f"Skipping old branch {fullname} ({version})")
+                continue
+            print(f"Trying branch {fullname} ({version})")
+        elif branch.name == f"{REMOTE}/{MAIN_BRANCH}":
+            fullname = MAIN_BRANCH
+            print(f"Trying development branch {fullname}")
+        else:
+            continue
+
+        result = handle_commit(
+            repo, branch.commit, fullname, "branch", supported_refs, old_versions
+        )
+        versions[fullname] = result
+
+
+    with open(os.path.join(BASE_DIR, "versions.json"), "w") as out:
+        json.dump(versions, out, sort_keys=True)
+        out.write("\n")
+
+if __name__ == '__main__':
+    main()
