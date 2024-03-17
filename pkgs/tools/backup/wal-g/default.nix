@@ -21,7 +21,7 @@ buildGoModule rec {
 
   tags = [ "brotli" "libsodium" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version}" "-X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X github.com/wal-g/wal-g/cmd/pg.walgVersion=${version}" "-X github.com/wal-g/wal-g/cmd/pg.gitRevision=${src.rev}" ];
 
   postInstall = ''
     mv $out/bin/pg $out/bin/wal-g
