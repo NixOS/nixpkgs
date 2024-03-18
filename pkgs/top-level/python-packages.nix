@@ -13008,6 +13008,14 @@ self: super: with self; {
 
   rns = callPackage ../development/python-modules/rns { };
 
+  roadlib = callPackage ../development/python-modules/roadlib { };
+
+  roadrecon = callPackage ../development/python-modules/roadrecon { };
+
+  roadtools = callPackage ../development/python-modules/roadtools { };
+
+  roadtx = callPackage ../development/python-modules/roadtx { };
+
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   robot-detection = callPackage ../development/python-modules/robot-detection { };
@@ -13368,6 +13376,8 @@ self: super: with self; {
 
   selenium = callPackage ../development/python-modules/selenium { };
 
+  selenium-wire = callPackage ../development/python-modules/selenium-wire { };
+
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
   semaphore-bot = callPackage ../development/python-modules/semaphore-bot { };
@@ -13525,6 +13535,8 @@ self: super: with self; {
   signalslot = callPackage ../development/python-modules/signalslot { };
 
   signedjson = callPackage ../development/python-modules/signedjson { };
+
+  signxml = callPackage ../development/python-modules/signxml { };
 
   sigrok = callPackage ../development/python-modules/sigrok { };
 
