@@ -10,6 +10,8 @@
 , yubikey-personalization
 , libyubikey
 , libykclient
+, CoreServices
+, SystemConfiguration
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config asciidoc libxslt docbook_xsl ];
-  buildInputs = [ pam yubikey-personalization libyubikey libykclient ];
+  buildInputs = [ pam yubikey-personalization libyubikey libykclient ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices SystemConfiguration ];
 
   meta = with lib; {
     description = "Yubico PAM module";
