@@ -1593,6 +1593,8 @@ self: super: with self; {
 
   bloodhound-py = callPackage ../development/python-modules/bloodhound-py { };
 
+  bloodyad = callPackage ../development/python-modules/bloodyad { };
+
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
   bluecurrent-api = callPackage ../development/python-modules/bluecurrent-api { };
