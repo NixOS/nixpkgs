@@ -2685,8 +2685,8 @@ let
         mktplcRef = {
           name = "typst-preview";
           publisher = "mgt19937";
-          version = "0.10.8";
-          sha256 = "sha256-Ad6eCAuueeAeh6z/kk/F2HhbV4tp/XmiGySA2fn5wqY=";
+          version = "0.11.1";
+          sha256 = "sha256-OsCgkq0OSBu7RZYHlxgy7W7zDNDUgJFSeSET20CX8zA=";
         };
 
         buildInputs = [
