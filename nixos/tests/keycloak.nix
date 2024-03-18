@@ -6,8 +6,8 @@ let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   frontendUrl = "https://${certs.domain}";
 
-  keycloakTest = import ./make-test-python.nix (
-    { pkgs, databaseType, ... }:
+  keycloakTest = databaseType: import ./make-test-python.nix (
+    { pkgs, ... }:
     let
       initialAdminPassword = "h4Iho\"JFn't2>iQIR9";
       adminPasswordFile = pkgs.writeText "admin-password" "${initialAdminPassword}";
@@ -76,16 +76,18 @@ let
             enabled = true;
             realm = "test-realm";
             clients = [ client ];
-            users = [(
-              user // {
-                enabled = true;
-                credentials = [{
-                  type = "password";
-                  temporary = false;
-                  value = password;
-                }];
-              }
-            )];
+            users = [
+              (
+                user // {
+                  enabled = true;
+                  credentials = [{
+                    type = "password";
+                    temporary = false;
+                    value = password;
+                  }];
+                }
+              )
+            ];
           };
 
           realmDataJson = pkgs.writeText "realm-data.json" (builtins.toJSON realm);
@@ -177,7 +179,7 @@ let
   );
 in
 {
-  postgres = keycloakTest { databaseType = "postgresql"; };
-  mariadb = keycloakTest { databaseType = "mariadb"; };
-  mysql = keycloakTest { databaseType = "mysql"; };
+  postgres = keycloakTest "postgresql";
+  mariadb = keycloakTest "mariadb";
+  mysql = keycloakTest "mysql";
 }
