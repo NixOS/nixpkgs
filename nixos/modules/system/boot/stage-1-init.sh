@@ -100,22 +100,7 @@ waitDevice() {
     # alas...  So just wait for a few seconds for the device to
     # appear.
     for dev in $device; do
-        if test ! -e $dev; then
-            echo -n "waiting for device $dev to appear..."
-            try=20
-            while [ $try -gt 0 ]; do
-                sleep 1
-                # also re-try lvm activation now that new block devices might have appeared
-                lvm vgchange -ay
-                # and tell udev to create nodes for the new LVs
-                udevadm trigger --action=add
-                if test -e $dev; then break; fi
-                echo -n "."
-                try=$((try - 1))
-            done
-            echo
-            [ $try -ne 0 ]
-        fi
+	udevadm wait --timeout=20 "$dev"
     done
 }
 
