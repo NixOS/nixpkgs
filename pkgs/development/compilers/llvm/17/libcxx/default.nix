@@ -1,8 +1,7 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand, fetchpatch
 , cmake, lndir, ninja, python3, fixDarwinDylibNames, version
-, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else null
-, libcxxrt, libunwind
+, libunwind , cxxabi ? null
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
