@@ -688,7 +688,7 @@ in
 
   config = mkIf config.boot.initrd.enable {
     assertions = [
-      { assertion = any (fs: fs.mountPoint == "/") fileSystems;
+      { assertion = !config.boot.initrd.systemd.enable -> any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
       { assertion = let inherit (config.boot) resumeDevice; in

@@ -2,15 +2,7 @@ diff --git a/pom.xml b/pom.xml
 index dd0075d..46ac184 100644
 --- a/pom.xml
 +++ b/pom.xml
-@@ -46,6 +46,7 @@
-         <version.license-maven-plugin>4.2.rc3</version.license-maven-plugin>
-         <license.git.copyrightYears>2021</license.git.copyrightYears>
-         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-+        <project.build.outputTimestamp>1980-01-01T00:00:02Z</project.build.outputTimestamp>
-     </properties>
- 
-     <scm>
-@@ -103,6 +104,55 @@
+@@ -103,6 +103,55 @@
  
      <build>
          <plugins>
