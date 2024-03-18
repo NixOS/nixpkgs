@@ -51,6 +51,7 @@
 , mpdSupport ? true
 , mprisSupport ? stdenv.isLinux
 , nlSupport ? true
+, pipewireSupport ? true
 , pulseSupport ? true
 , rfkillSupport ? true
 , runTests ? true
@@ -122,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
     iniparser
     ncurses
-    pipewire
     portaudio
   ]
   ++ lib.optional evdevSupport libevdev
@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional udevSupport udev
   ++ lib.optional upowerSupport upower
   ++ lib.optional wireplumberSupport wireplumber
+  ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
@@ -154,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man-pages" = true;
     "mpd" = mpdSupport;
     "mpris" = mprisSupport;
+    "pipewire" = pipewireSupport;
     "pulseaudio" = pulseSupport;
     "rfkill" = rfkillSupport;
     "sndio" = sndioSupport;
