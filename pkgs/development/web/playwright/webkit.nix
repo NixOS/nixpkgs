@@ -7,7 +7,6 @@
 , at-spi2-atk
 , libgcc
 , cairo
-, libdrm
 , enchant
 , libepoxy
 , libevent
@@ -15,6 +14,7 @@
 , fontconfig
 , freetype
 , mesa
+, libglvnd
 , libgcrypt
 , gtk3
 , gdk-pixbuf
@@ -77,13 +77,13 @@ stdenv.mkDerivation {
     at-spi2-atk
     libgcc.lib
     cairo
-    libdrm
     enchant
     libepoxy
     libevent
     flite
     fontconfig.lib
     freetype
+    libglvnd
     mesa
     libgcrypt
     gtk3
@@ -93,6 +93,7 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav
     harfbuzzFull
     harfbuzz
     hyphen
