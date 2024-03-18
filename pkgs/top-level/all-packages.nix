@@ -24999,8 +24999,6 @@ with pkgs;
 
   thrift = callPackage ../development/libraries/thrift { };
 
-  thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix { };
-
   tidyp = callPackage ../development/libraries/tidyp { };
 
   tidal-hifi = callPackage ../applications/audio/tidal-hifi { };
@@ -40588,10 +40586,6 @@ with pkgs;
   };
 
   sct = callPackage ../tools/X11/sct { };
-
-  scylladb = callPackage ../servers/scylladb {
-    thrift = thrift-0_10;
-  };
 
   seafile-server = callPackage ../servers/seafile-server { };
 
