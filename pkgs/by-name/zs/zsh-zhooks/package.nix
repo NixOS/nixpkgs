@@ -4,7 +4,7 @@ let
   install_path = "share/zsh/${pname}";
 in
 stdenv.mkDerivation {
-  inherit pname;
+  pname = "zsh-${pname}";
   version = "0-unstable-10-31-2021";
   src = fetchFromGitHub {
     owner = "agkozak";
@@ -16,15 +16,15 @@ stdenv.mkDerivation {
   installPhase = ''
     install -m755 -D ${pname}.plugin.zsh --target-directory $out/${install_path}
   '';
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/agkozak/zhooks";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "A tool for displaying the code for all Zsh hook functions";
     longDescription = ''
       This Zsh plugin is a tool for displaying the code for all Zsh hook functions (such as precmd), as well as the contents of
       hook arrays (such as precmd_functions).
       ```
     '';
-    maintainers = with maintainers; [ fidgetingbits ];
+    maintainers = [ lib.maintainers.fidgetingbits ];
   };
 }
