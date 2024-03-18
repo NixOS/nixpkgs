@@ -3,8 +3,6 @@
 let
   inherit (lib) mkDefault mkEnableOption mkIf mkOption types mkPackageOption;
   cfg = config.services.engelsystem;
-  phpExt = pkgs.php.withExtensions
-    ({ enabled, all }: with all; [ filter mysqlnd mysqli pdo pdo_mysql mbstring ] ++ enabled);
 in {
   options = {
     services.engelsystem = {
@@ -101,7 +99,6 @@ in {
       '';
 
     services.phpfpm.pools.engelsystem = {
-      phpPackage = phpExt;
       user = "engelsystem";
       settings = {
         "listen.owner" = config.services.nginx.user;

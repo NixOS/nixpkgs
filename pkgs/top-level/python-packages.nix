@@ -3636,6 +3636,8 @@ self: super: with self; {
   editdistance = callPackage ../development/python-modules/editdistance { };
 
   editdistance-s = callPackage ../development/python-modules/editdistance-s { };
+  
+  editdistpy = callPackage ../development/python-modules/editdistpy { };
 
   editor = callPackage ../development/python-modules/editor { };
 
@@ -6258,6 +6260,8 @@ self: super: with self; {
   keyutils = callPackage ../development/python-modules/keyutils {
     inherit (pkgs) keyutils;
   };
+
+  khanaa = callPackage ../development/python-modules/khanaa {};
 
   kicad = toPythonModule (pkgs.kicad.override {
     python3 = python;
