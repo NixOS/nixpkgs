@@ -6253,6 +6253,8 @@ self: super: with self; {
     inherit (pkgs) keyutils;
   };
 
+  khanaa = callPackage ../development/python-modules/khanaa {};
+
   kicad = toPythonModule (pkgs.kicad.override {
     python3 = python;
   }).src;
