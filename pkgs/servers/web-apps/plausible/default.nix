@@ -88,7 +88,7 @@ beamPackages.mixRelease {
     homepage = "https://plausible.io/";
     changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
     description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
-    maintainers = with maintainers; [ softinio ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }
