@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 
 , setuptools
 
@@ -14,23 +13,15 @@
 
 buildPythonPackage {
   pname = "bpemb";
-  version = "0.3.2";
+  version = "0.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bheinzerling";
     repo = "bpemb";
-    rev = "c806757255706ad2f63870c06290cb985543db3e";
-    hash = "sha256-ssQlGeBZfPy0zOkb2h7QUHVKfrInDNW/UnKQEdpGmf4=";
+    rev = "ec85774945ca76dd93c1d9b4af2090e80c5779dc";
+    hash = "sha256-nVaMXb5TBhO/vWE8AYAA3P9dSPI8O+rmzFvbEj8VEkE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "make-content-header-check-more-robust.patch";
-      url = "https://github.com/bheinzerling/bpemb/commit/52ceabf4ca8bde1030be43f71f1f3cb292f4beca.patch";
-      hash = "sha256-kxyB0pToz78VAEKJvxe93mYxX58/5NxKUrx6jAGAy6s=";
-    })
-  ];
 
   build-system = [
     setuptools
