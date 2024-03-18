@@ -3904,6 +3904,8 @@ self: super: with self; {
 
   exitcode = callPackage ../development/python-modules/exitcode { };
 
+  extract-msg = callPackage ../development/python-modules/extract-msg { };
+
   extractcode = callPackage ../development/python-modules/extractcode { };
 
   extractcode-7z = callPackage ../development/python-modules/extractcode/7z.nix {
