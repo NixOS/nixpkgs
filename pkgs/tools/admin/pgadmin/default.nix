@@ -14,14 +14,14 @@
 
 let
   pname = "pgadmin";
-  version = "8.3";
-  yarnHash = "sha256-nhHss4YOFu2cGkIhA909lIdnf3H3pD9BQx4PvP9+9c0=";
+  version = "8.4";
+  yarnHash = "sha256-Wizgb3WgNPYOLytEj7hBVMV/U3RqW9vhNnhQU4k+j+8=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-2L/JLkuyjx1oD9akQULmzW0FlSq8/MQlZ1HmlO81jj0=";
+    hash = "sha256-kj/a1JjSDFnLY/UQNBqYdhs3J5wi0mlDyJ1jD/L12FM=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -54,20 +54,23 @@ pythonPackages.buildPythonApplication rec {
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
     substituteInPlace Makefile \
-      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+      --replace-fail 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
 
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
-      --replace "code_snippets" ""
+      --replace-fail "code_snippets" ""
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
+    # remove packageManager from package.json so we can work without corepack
+    substituteInPlace web/package.json \
+      --replace-fail "\"packageManager\": \"yarn@3.6.4\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
-      --replace "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
+      --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
     substituteInPlace web/config.py \
-      --replace "SERVER_MODE = True" "SERVER_MODE = False"
+      --replace-fail "SERVER_MODE = True" "SERVER_MODE = False"
     ''}
   '';
 
@@ -182,6 +185,7 @@ pythonPackages.buildPythonApplication rec {
     keyring
     typer
     rich
+    jsonformatter
   ];
 
   passthru.tests = {
@@ -209,8 +213,8 @@ pythonPackages.buildPythonApplication rec {
     # in /var/lib/pgadmin and /var/log/pgadmin
     # see https://github.com/pgadmin-org/pgadmin4/blob/fd1c26408bbf154fa455a49ee5c12895933833a3/web/regression/runtests.py#L217-L226
     cp -v regression/test_config.json.in regression/test_config.json
-    substituteInPlace regression/test_config.json --replace "localhost" "$PGHOST"
-    substituteInPlace regression/runtests.py --replace "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+    substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
+    substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
 
     ## Browser test ##
 

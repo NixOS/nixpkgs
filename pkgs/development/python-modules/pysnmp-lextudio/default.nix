@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp-lextudio";
-  version = "6.0.10";
+  version = "6.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
-    rev = "v${version}";
-    hash = "sha256-zxv/+IhIAnnn6gTyulPCuKainUcGMwRqw6ktYXR+d4Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-h/FxiGjBZqO82omkVqz+fws398Iz1EkHbZPMYIzG+t0=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,8 @@ buildPythonPackage rec {
     # pysnmp.smi.error.MibNotFoundError
     "test_send_v3_trap_notification"
     "test_addAsn1MibSource"
+    "test_v1_walk"
+    "test_v2_walk"
   ];
 
   pythonImportsCheck = [

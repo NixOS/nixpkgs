@@ -25,9 +25,13 @@ let
     #
     # The following selects the correct Clang version, matching the version
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
-    clang = if pkgs.stdenv.isDarwin
+    clang = let
+      # https://github.com/NixOS/nixpkgs/issues/295322
+      clangNoMarch = swiftLlvmPackages.clang.override { disableMarch = true; };
+    in
+    if pkgs.stdenv.isDarwin
       then
-        swiftLlvmPackages.clang.override rec {
+        clangNoMarch.override rec {
           libc = apple_sdk.Libsystem;
           bintools = pkgs.bintools.override { inherit libc; };
           # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
@@ -45,7 +49,7 @@ let
           ];
         }
       else
-        swiftLlvmPackages.clang;
+        clangNoMarch;
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`. These are similar to

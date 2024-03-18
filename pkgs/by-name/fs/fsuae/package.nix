@@ -1,8 +1,7 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , SDL2
 , autoreconfHook
+, fetchFromGitHub
 , freetype
 , gettext
 , glib
@@ -13,6 +12,7 @@
 , lua
 , openal
 , pkg-config
+, stdenv
 , zip
 , zlib
 }:
@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs:{
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    zip
   ];
 
   buildInputs = [
@@ -44,9 +45,10 @@ stdenv.mkDerivation (finalAttrs:{
     libmpeg2
     lua
     openal
-    zip
     zlib
   ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://fs-uae.net";
@@ -58,7 +60,9 @@ stdenv.mkDerivation (finalAttrs:{
       Amigas.
     '';
     license = lib.licenses.gpl2Plus;
+    mainProgram = "fs-uae";
     maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = with lib.systems.inspect;
+      patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })
