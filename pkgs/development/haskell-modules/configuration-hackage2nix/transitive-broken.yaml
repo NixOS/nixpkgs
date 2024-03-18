@@ -136,7 +136,6 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - GeBoP
  - GenI
- - GenSmsPdu
  - Genbank
  - Gene-CluEDO
  - GenussFold
@@ -593,8 +592,6 @@ dont-distribute-packages:
  - aws-kinesis-client
  - aws-kinesis-reshard
  - aws-lambda
- - aws-lambda-haskell-runtime
- - aws-lambda-haskell-runtime-wai
  - aws-mfa-credentials
  - aws-sdk
  - aws-sdk-xml-unordered
@@ -1021,7 +1018,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_6
+ - crackNum_3_10
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1290,6 +1287,7 @@ dont-distribute-packages:
  - errors-ext
  - ersatz-toysat
  - esotericbot
+ - esqueleto-postgis
  - esqueleto-streaming
  - essence-of-live-coding-PortMidi
  - essence-of-live-coding-gloss
@@ -1988,6 +1986,7 @@ dont-distribute-packages:
  - haskoin-bitcoind
  - haskoin-crypto
  - haskoin-node
+ - haskoin-node_1_1_0
  - haskoin-protocol
  - haskoin-script
  - haskoon
@@ -2671,6 +2670,7 @@ dont-distribute-packages:
  - lol-typing
  - loli
  - longshot
+ - looksee-trip
  - loop-effin
  - lorentz
  - lostcities
@@ -3923,6 +3923,7 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
+ - syslog
  - systemd-api
  - systemstats
  - t3-client
@@ -4156,6 +4157,8 @@ dont-distribute-packages:
  - util-exception
  - util-primitive-control
  - util-universe
+ - utxorpc-client
+ - utxorpc-server
  - uu-cco-examples
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
