@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+, setuptools-scm
 , coreutils
 , jinja2
 , pandas
@@ -14,7 +16,7 @@
 buildPythonPackage rec {
   pname = "edalize";
   version = "0.5.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,6 +32,11 @@ buildPythonPackage rec {
       --replace /usr/bin/touch ${coreutils}/bin/touch
     patchShebangs tests/mock_commands/vsim
   '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     jinja2

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     tox
     pytestCheckHook
@@ -50,6 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "nox"
+  ];
+
+  disabledTests = [
+    # our conda is not available on 3.11
+    "test__create_venv_options"
   ];
 
   disabledTestPaths = [

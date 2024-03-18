@@ -20,21 +20,19 @@ buildPythonPackage rec {
     hash = "sha256-/RINDyO0cngDy9APqsFHBFBKi8aDf7Tah/IIFdXQURo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pygments = [ pygments ];
     rich = [ rich ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    "tests/test_flavour.py" # would download a json to check correctness of flavours
-  ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "catppuccin" ];
 

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pdm-pep517
+, pdm-backend
 , appdirs
 , loguru
 , requests
@@ -13,6 +13,7 @@
 , pyperclip
 , aria2
 , fastapi
+, psutil
 , pytest-xdist
 , pytestCheckHook
 , responses
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
@@ -59,6 +60,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     responses
+    psutil
     uvicorn
   ] ++ passthru.optional-dependencies.tui;
 
@@ -67,6 +69,7 @@ buildPythonPackage rec {
     "test_add_downloads_torrents_and_metalinks"
     "test_add_downloads_uris"
     # require a running aria2 server
+    "test_cli_autoclear_commands"
     "test_get_files_method"
     "test_pause_subcommand"
     "test_resume_method"

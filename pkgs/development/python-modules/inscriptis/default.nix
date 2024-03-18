@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 , lxml
+, fastapi
+, httpx
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -10,7 +13,7 @@
 buildPythonPackage rec {
   pname = "inscriptis";
   version = "2.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,12 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-9KEkXcdZ7USXfyIXGDrp4p4kJTzF2q30fvOccxF1hBU=";
   };
 
+  build-system = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
     lxml
     requests
   ];
 
   nativeCheckInputs = [
+    fastapi
+    httpx
     pytestCheckHook
   ];
 

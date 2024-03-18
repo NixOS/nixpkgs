@@ -31,15 +31,6 @@ buildPythonPackage rec {
     hash = "sha256-lzbFwAg1aLCfBnSnqq4oVteArpkRBa7hU8V3vB5ODa8=";
   };
 
-  patches = [
-    # https://github.com/Fizzadar/pyinfra/pull/1018
-    (fetchpatch {
-      name = "bump-paramiko-major-version.patch";
-      url = "https://github.com/Fizzadar/pyinfra/commit/62a8f081279779c4f1eed246139f615cf5fed642.patch";
-      hash = "sha256-aT9SeSqXOD76LFzf6R/MWTtavcW6fZT7chkVg9aXiBg=";
-    })
-  ];
-
   propagatedBuildInputs = [
     click
     colorama

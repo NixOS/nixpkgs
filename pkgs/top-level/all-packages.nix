@@ -6769,7 +6769,9 @@ with pkgs;
 
   cicero-tui = callPackage ../tools/misc/cicero-tui { };
 
-  cilium-cli = callPackage ../applications/networking/cluster/cilium { };
+  cilium-cli = callPackage ../applications/networking/cluster/cilium {
+    buildGoModule = buildGo122Module;
+  };
 
   cjdns = callPackage ../tools/networking/cjdns { };
   cjdns-tools = callPackage ../tools/admin/cjdns-tools { };
@@ -20792,8 +20794,6 @@ with pkgs;
   dillong = callPackage ../applications/networking/browsers/dillong { };
 
   directfb = callPackage ../development/libraries/directfb { };
-
-  discordchatexporter-cli = callPackage ../tools/backup/discordchatexporter-cli { };
 
   discord-gamesdk = callPackage ../development/libraries/discord-gamesdk { };
 
@@ -35284,10 +35284,6 @@ with pkgs;
 
   tijolo = callPackage ../applications/editors/tijolo { };
 
-  tilemaker = callPackage ../applications/misc/tilemaker {
-    protobuf = protobuf_21;
-  };
-
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
     fftw = fftwSinglePrec;
   };
@@ -37019,7 +37015,7 @@ with pkgs;
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
-  chiaki4deck = libsForQt5.callPackage ../games/chiaki4deck { };
+  chiaki4deck = qt6Packages.callPackage ../games/chiaki4deck { };
 
   chromium-bsu = callPackage ../games/chromium-bsu { };
 
