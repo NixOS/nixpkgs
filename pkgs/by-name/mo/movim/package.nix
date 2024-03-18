@@ -6,9 +6,37 @@
 , phpCfg ? null
 , withPgsql ? true # “strongly recommended” according to docs
 , withMysql ? false
+, minifyStaticFiles ? false # default files are often not minified
+, parallel
+, esbuild
+, lightningcss
+, scour
 , nixosTests
 }:
 
+let
+  defaultMinifyOpts = {
+    script = {
+      enable = false;
+      target = "es2021";
+    };
+    style = {
+      enable = false;
+      browserslist = "defaults, Firefox ESR, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
+    };
+    svg = {
+      enable = false;
+    };
+  };
+
+  minify = lib.recursiveUpdate defaultMinifyOpts
+    (if lib.isBool minifyStaticFiles && minifyStaticFiles then
+      { script.enable = true; style.enable = true; svg.enable = true; }
+    else if lib.isAttrs minifyStaticFiles then
+      lib.filterAttrsRecursive (_: v: v != null) minifyStaticFiles
+    else
+      { });
+in
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
   version = "0.23.0.20240328";
@@ -30,6 +58,12 @@ php.buildComposerProject (finalAttrs: {
   } // lib.optionalAttrs (phpCfg != null) {
     extraConfig = phpCfg;
   });
+
+  nativeBuildInputs =
+    lib.optional (lib.any (x: x.enable) (lib.attrValues minify)) parallel
+    ++ lib.optional minify.script.enable esbuild
+    ++ lib.optional minify.style.enable lightningcss
+    ++ lib.optional minify.svg.enable scour;
 
   # no listed license
   # pinned commonmark
@@ -57,6 +91,42 @@ php.buildComposerProject (finalAttrs: {
     substituteInPlace src/Movim/Image.php \
       --replace-fail "Imagick::ALPHACHANNEL_REMOVE" "Imagick::ALPHACHANNEL_OFF" \
       --replace-fail "Imagick::ALPHACHANNEL_ACTIVATE" "Imagick::ALPHACHANNEL_ON"
+  '';
+
+  preBuild = lib.optionalString minify.script.enable ''
+    find ./public -type f -iname "*.js" \
+      | parallel ${lib.escapeShellArgs [
+          "--will-cite"
+          "-j $NIX_BUILD_CORES"
+          ''
+            tmp="$(mktemp)"
+            esbuild {} --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
+            [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s {})" ]] && mv $tmp {}
+          ''
+        ]}
+  '' + lib.optionalString minify.style.enable ''
+    export BROWSERLIST=${lib.escapeShellArg minify.style.browserslist}
+    find ./public -type f -iname "*.css" \
+      | parallel ${lib.escapeShellArgs [
+          "--will-cite"
+          "-j $NIX_BUILD_CORES"
+          ''
+            tmp="$(mktemp)"
+            lightningcss {} --minify --browserslist --output-file=$tmp
+            [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s {})" ]] && mv $tmp {}
+          ''
+        ]}
+  '' + lib.optionalString minify.svg.enable ''
+    find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" \
+      | parallel ${lib.escapeShellArgs [
+          "--will-cite"
+          "-j $NIX_BUILD_CORES"
+          ''
+            tmp="$(mktemp)"
+            scour -i {} -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
+            [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s {})" ]] && mv $tmp {}
+          ''
+        ]}
   '';
 
   postInstall = ''
