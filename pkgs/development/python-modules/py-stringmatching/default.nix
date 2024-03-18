@@ -16,8 +16,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "py_stringmatching";
-    inherit version;
+    inherit pname version;
     hash = "sha256-2XuhtWKtmO/8lGaHxdqwdMF6UVEUqw3PUCIC1c7J8rU=";
   };
 
