@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wleave";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "AMNatty";
     repo = "wleave";
     rev = version;
-    hash = "sha256-FAtAFoPLJsWSFkc5CB90wlI2tvDmoOQ8fHQ8LWQgDww=";
+    hash = "sha256-PkEj0RlSxhxG9qOJkuMTVj6r0lxsm7V8b1AIaCVaXCQ=";
   };
 
-  cargoHash = "sha256-MV3mzRrOnHwmJUW3o/PM3g3SY6Hpy1LRpxDcL0hAm2Y=";
+  cargoHash = "sha256-ivKPGA5UADKT47CL5jSOB4ZEfKh9uJkXgv9vfvEnBzw=";
 
   nativeBuildInputs = [
     pkg-config
