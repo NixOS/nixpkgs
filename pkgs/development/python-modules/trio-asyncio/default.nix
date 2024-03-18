@@ -2,13 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, greenlet
 , trio
 , outcome
 , sniffio
 , exceptiongroup
 , pytest-trio
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
+      --replace '"pytest-runner"' ""
   '';
 
   nativeBuildInputs = [
@@ -35,12 +35,16 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    greenlet
     trio
     outcome
     sniffio
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
   ];
+
+  # RuntimeWarning: Can't run the Python asyncio tests because they're not installed. On a Debian/Ubuntu system, you might need to install the libpython3.11-testsuite package.
+  doCheck = false;
 
   nativeCheckInputs = [
     pytest-trio
