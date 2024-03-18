@@ -12774,6 +12774,8 @@ self: super: with self; {
 
   recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
 
+  red-black-tree-mod = callPackage ../development/python-modules/red-black-tree-mod { };
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
