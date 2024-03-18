@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, click
 , dawg-python
 , docopt
 , pytestCheckHook
@@ -27,9 +28,13 @@ buildPythonPackage rec {
     pymorphy3-dicts-uk
   ];
 
+  optional-dependencies.CLI = [
+    click
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.CLI;
 
   pythonImportsCheck = [ "pymorphy3" ];
 
