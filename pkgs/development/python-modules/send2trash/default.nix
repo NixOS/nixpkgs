@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Send2Trash";
+  pname = "send2trash";
   version = "1.8.2";
   format = "pyproject";
 
