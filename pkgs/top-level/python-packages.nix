@@ -3602,6 +3602,8 @@ self: super: with self; {
 
   ebaysdk = callPackage ../development/python-modules/ebaysdk { };
 
+  ebcdic = callPackage ../development/python-modules/ebcdic { };
+
   ebooklib = callPackage ../development/python-modules/ebooklib { };
 
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
