@@ -357,6 +357,14 @@ package-maintainers:
   shlok:
     - streamly-archive
     - streamly-lmdb
+  slotThe:
+    - X11
+    - X11-xft
+    - html-parse-util
+    - optparse-applicative-cmdline-util
+    - xmonad
+    - xmonad-contrib
+    - xmonad-extras
   sorki:
     - cayenne-lpp
     - blockfrost-client
