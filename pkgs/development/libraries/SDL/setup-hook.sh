@@ -5,7 +5,7 @@ addSDLPath () {
     # will contain "include/SDL/" and "lib/" directories.
     #
     # However the SDL_LIB_PATH is consumed by SDL itself and serves to locate
-    # libraries like SDL2_mixer, SDL2_image, etc which are not split-package
+    # libraries like SDL_mixer, SDL_image, etc which are not split-package
     # so the check above will only trigger on them.
     if [ -e "$1/lib" ]; then
       export SDL_LIB_PATH="${SDL_LIB_PATH-}${SDL_LIB_PATH:+ }-L$1/lib"
