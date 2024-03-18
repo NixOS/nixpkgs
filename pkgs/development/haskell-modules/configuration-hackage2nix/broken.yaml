@@ -1018,7 +1018,6 @@ broken-packages:
   - cplusplus-th # failure in job https://hydra.nixos.org/build/233204461 at 2023-09-02
   - cps-except # failure in job https://hydra.nixos.org/build/252711064 at 2024-03-16
   - cpuperf # failure in job https://hydra.nixos.org/build/233252964 at 2023-09-02
-  - cpython # failure in job https://hydra.nixos.org/build/233255188 at 2023-09-02
   - cql-io # failure in job https://hydra.nixos.org/build/233245286 at 2023-09-02
   - cqrs-core # failure in job https://hydra.nixos.org/build/233192102 at 2023-09-02
   - crack # failure in job https://hydra.nixos.org/build/233229111 at 2023-09-02
