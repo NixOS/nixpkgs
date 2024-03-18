@@ -11,6 +11,7 @@
 , requests
 , responses
 , setuptools
+, typing-extensions
 , zeep
 }:
 
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     pendulum
     pyjwt
     requests
+    typing-extensions
     zeep
   ];
 
