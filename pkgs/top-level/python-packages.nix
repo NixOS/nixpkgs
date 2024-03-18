@@ -2353,6 +2353,8 @@ self: super: with self; {
 
   compressai = callPackage ../development/python-modules/compressai { };
 
+  compressed-rtf = callPackage ../development/python-modules/compressed-rtf { };
+
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
   conda = callPackage ../development/python-modules/conda { };
@@ -6941,7 +6943,7 @@ self: super: with self; {
 
   mako = callPackage ../development/python-modules/mako { };
 
-  malduck= callPackage ../development/python-modules/malduck { };
+  malduck = callPackage ../development/python-modules/malduck { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
 
