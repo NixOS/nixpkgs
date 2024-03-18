@@ -26,7 +26,6 @@
   };
 
   extraConfigureFlags = [
-    "--with-app-name=${pname}"
     "--with-app-basename=${applicationName}"
     "--with-unsigned-addon-scopes=app,system"
   ];
