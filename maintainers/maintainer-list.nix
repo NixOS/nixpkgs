@@ -10244,6 +10244,11 @@
     githubId = 691290;
     name = "Keshav Kini";
   };
+  kintrix = {
+    github = "kintrix007";
+    githubId = 60898798;
+    name = "kintrix";
+  };
   kinzoku = {
     email = "kinzokudev4869@gmail.com";
     github = "kinzoku-dev";
