@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchurl, perl
+{ lib, stdenv, fetchurl, fetchpatch, perl
 # Update the enabled crypt scheme ids in passthru when the enabled hashes change
 , enableHashes ? "strong"
 , nixosTests
 , runCommand
 , python3
+, autoreconfHook
 }:
 
+let
+  fbLLVM17 = stdenv.hostPlatform.isFreeBSD && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "17";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
   version = "4.4.36";
@@ -14,6 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
     hash = "sha256-5eH0yu4KAd4q7ibjE4gH1tPKK45nKHlm0f79ZeH9iUM=";
   };
+
+  patches = lib.optionals fbLLVM17 [
+    # https://github.com/besser82/libxcrypt/issues/181
+    # https://github.com/freebsd/freebsd-ports/commit/e787af0475b21b961316a7fb5c61f75e8a1e031b
+    # mentions freebsd15 but the actual culprit is LLVM 17
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/e787af0475b21b961316a7fb5c61f75e8a1e031b/security/libxcrypt/files/patch-Makefile.am";
+      hash = "sha256-zTqThz7wjwEiLTH49kHabTKjIrdpQeJvkw3szfugGzI=";
+      extraPrefix = "";
+      postFetch = ''sed -E -i -e 's/\.orig//g' $out'';
+    })
+  ];
 
   outputs = [
     "out"
@@ -33,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     perl
+  ] ++ lib.optionals fbLLVM17 [
+    autoreconfHook
   ];
 
   enableParallelBuilding = true;
