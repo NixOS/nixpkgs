@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , fetchFromGitHub
 , fetchpatch2
 , setuptools
@@ -53,6 +55,12 @@ buildPythonPackage rec {
     py
     pytestCheckHook
   ];
+
+  disabledTests = if (pythonAtLeast "3.12" && stdenv.isDarwin && stdenv.isx86_64) then [
+    # non reproducible test failure on hydra, works on community builder
+    # https://hydra.nixos.org/build/252537267
+    "test_xfail"
+  ] else null;
 
   setupHook = ./setup-hook.sh;
 
