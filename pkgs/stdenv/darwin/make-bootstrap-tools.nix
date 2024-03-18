@@ -56,6 +56,47 @@ rec {
       });
 
       xz_ = xz.override { enableStatic = true; };
+
+      unpackScript = writeText "bootstrap-tools-unpack.sh" ''
+        set -euo pipefail
+
+        echo Unpacking the bootstrap tools... >&2
+        mkdir $out
+        tar xf "$1" -C $out
+
+        updateInstallName() {
+          local path="$1"
+
+          cp "$path" "$path.new"
+          install_name_tool -id "$path" "$path.new"
+          codesign -f -i "$(basename "$path")" -s - "$path.new"
+          mv -f "$path.new" "$path"
+        }
+
+        find $out/lib -type f -name '*.dylib' -print0 | while IFS= read -r -d $'\0' lib; do
+          updateInstallName "$lib"
+        done
+
+        # Provide a gunzip script.
+        cat > $out/bin/gunzip <<EOF
+        #!$out/bin/sh
+        exec $out/bin/gzip -d "\$@"
+        EOF
+        chmod +x $out/bin/gunzip
+
+        # Provide fgrep/egrep.
+        echo "#! $out/bin/sh" > $out/bin/egrep
+        echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
+        echo "#! $out/bin/sh" > $out/bin/fgrep
+        echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+
+        cat >$out/bin/dsymutil << EOF
+        #!$out/bin/sh
+        EOF
+
+        chmod +x $out/bin/egrep $out/bin/fgrep $out/bin/dsymutil
+    '';
+
     in
     ''
       mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
@@ -157,6 +198,7 @@ rec {
       cp ${getBin coreutils_}/bin/mkdir unpack/bin
       cp ${getBin gnutar_}/bin/tar unpack/bin
       cp ${getBin xz_}/bin/xz unpack/bin
+      cp ${unpackScript} unpack/bootstrap-tools-unpack.sh
 
       #
       # All files copied. Perform processing to update references to point into
@@ -273,8 +315,15 @@ rec {
     name = "bootstrap-tools";
     builder = "${bootstrapFiles.unpack}/bin/bash";
 
-    args = [ ./patch-bootstrap-tools.sh bootstrapFiles.bootstrapTools ];
-    PATH = lib.makeBinPath [ (placeholder "out") bootstrapFiles.unpack ];
+    args = [
+      "${bootstrapFiles.unpack}/bootstrap-tools-unpack.sh"
+        bootstrapFiles.bootstrapTools
+    ];
+
+    PATH = lib.makeBinPath [
+      (placeholder "out")
+      bootstrapFiles.unpack
+    ];
 
     allowedReferences = [ "out" ];
   };
