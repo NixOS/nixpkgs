@@ -3,7 +3,6 @@
 , version
 , src
 , meta
-, unzip
 , undmg
 }:
 
@@ -15,8 +14,12 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    runHook postInstall
   '';
 
   # Immersed is notarized.

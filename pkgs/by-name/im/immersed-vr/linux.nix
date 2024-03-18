@@ -1,5 +1,4 @@
-{ stdenv
-, pname
+{ pname
 , version
 , src
 , meta
