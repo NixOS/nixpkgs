@@ -49,7 +49,7 @@ let
                   sed -e '1d' -e '3d' ".$prg-wrapped" >> "$out/bin/$prg"
                   chmod +x "$out/bin/$prg"
                 else
-                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" --argv0 "$out/bin/$prg" ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
+                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" --inherit-argv0 --resolve-argv0 ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
                 fi
               fi
             fi

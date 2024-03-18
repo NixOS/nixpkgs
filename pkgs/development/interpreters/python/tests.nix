@@ -129,20 +129,25 @@ let
       chmod -R +w tests
       substituteAllInPlace tests/test_python.py
 
-      # run the tests by invoking the interpreter via absolute path
+      # run the tests by invoking the interpreter via full path
       echo "absolute path: ${attrs.interpreter}"
-      ${attrs.interpreter} -m unittest discover --verbose tests | tee "$out/absolute.txt"
-
-      # run the tests by invoking the interpreter via relative path
-      ln -s "${attrs.interpreter}" python
-      echo "relative path: ./python"
-      ./python -m unittest discover --verbose tests | tee "$out/relative.txt"
+      ${attrs.interpreter} -m unittest discover --verbose tests 2>&1 | tee "$out/full.txt"
 
       # run the tests by invoking the interpreter via $PATH
       export PATH="$(dirname ${attrs.interpreter}):$PATH"
       echo "PATH: $(basename ${attrs.interpreter})"
-      "$(basename ${attrs.interpreter})" -m unittest discover --verbose tests | tee "$out/path.txt"
+      "$(basename ${attrs.interpreter})" -m unittest discover --verbose tests 2>&1 | tee "$out/path.txt"
 
+      # make sure we get the right path when invoking through a result link
+      ln -s "${attrs.env}" result
+      relative="result/bin/$(basename ${attrs.interpreter})"
+      expected="$PWD/$relative"
+      actual="$(./$relative -c "import sys; print(sys.executable)" | tee "$out/result.txt")"
+      if [ "$actual" != "$expected" ]; then
+        echo "expected $expected, got $actual"
+        exit 1
+      fi
+      
       # if we got this far, the tests passed
       touch $out/success
     '';
