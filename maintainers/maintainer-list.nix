@@ -3610,6 +3610,12 @@
     githubId = 1118859;
     name = "Scott Worley";
   };
+  chmouel = {
+    email = "chmouel@chmouel.com";
+    github = "chmouel";
+    githubId = 98980;
+    name = "Chmouel Boudjnah";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
