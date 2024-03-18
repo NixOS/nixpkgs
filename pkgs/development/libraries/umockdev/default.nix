@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.17.18";
+  version = "0.18.0";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-RmrT4McV5W9Q6mqWUWWCPQc6hBN6y4oeObZlc2SKmF8=";
+    hash = "sha256-uJkeaKK89C6mCYjfqLzvAFUNmo6IvvZvn2mxp7H44ng=";
   };
 
   patches = [
@@ -42,12 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./substitute-udevadm.patch;
       udevadm = "${systemdMinimal}/bin/udevadm";
-    })
-
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://github.com/martinpitt/umockdev/commit/d4efe24be59bd859b87473ea3d7efe8100bedc74.patch";
-      hash = "sha256-whf3p2e7FWN1xk5+HF9KsbMW74DPOQ0R0+FxBfCZTX0=";
     })
   ];
 
