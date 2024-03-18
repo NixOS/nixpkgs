@@ -36,12 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -pv $out/bin $out/share/oh-my-fish
     cp -vr * $out/share/oh-my-fish
 
-    cp -v ${substituteAll {
-      name = "omf-install";
-      src = ./omf-install;
-      OMF = placeholder "out";
-      inherit fish runtimeShell;
-    }} $out/bin/omf-install
+    cat << EOF > $out/bin/omf-install
+    #!${runtimeShell}
+    ${fish}/bin/fish \\
+      $out/share/oh-my-fish/bin/install \\
+      --noninteractive \\
+      --offline=$out/share/oh-my-fish
+    EOF
 
     chmod +x $out/bin/omf-install
     cat $out/bin/omf-install
