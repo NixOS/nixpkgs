@@ -44,11 +44,17 @@ let
 
   package =
     let
-      p = cfg.package.override {
-        inherit phpCfg;
-        withPgsql = cfg.database.type == "pgsql";
-        withMysql = cfg.database.type == "mysql";
-      };
+      p = cfg.package.override
+        ({
+          inherit phpCfg;
+          withPgsql = cfg.database.type == "pgsql";
+          withMysql = cfg.database.type == "mysql";
+          inherit (cfg) minifyStaticFiles;
+        } // lib.optionalAttrs (lib.isAttrs cfg.minifyStaticFiles) (with cfg.minifyStaticFiles; {
+          esbuild = esbuild.package;
+          lightningcss = lightningcss.package;
+          scour = scour.package;
+        }));
     in
     p.overrideAttrs (finalAttrs: prevAttrs:
       let
@@ -175,6 +181,47 @@ in
         type = types.bool;
         default = false;
         description = "Verbose logs.";
+      };
+
+      minifyStaticFiles = mkOption {
+        type = with types; either bool (submodule {
+          options = {
+            script = mkOption {
+              type = types.submodule {
+                options = {
+                  enable = mkEnableOption "Script minification";
+                  package = mkPackageOption pkgs "esbuild" { };
+                  target = mkOption {
+                    type = with types; nullOr nonEmptyStr;
+                    default = null;
+                  };
+                };
+              };
+            };
+            style = mkOption {
+              type = types.submodule {
+                options = {
+                  enable = mkEnableOption "Script minification";
+                  package = mkPackageOption pkgs "lightningcss" { };
+                  target = mkOption {
+                    type = with types; nullOr nonEmptyStr;
+                    default = null;
+                  };
+                };
+              };
+            };
+            svg = mkOption {
+              type = types.submodule {
+                options = {
+                  enable = mkEnableOption "SVG minification";
+                  package = mkPackageOption pkgs "scour" { };
+                };
+              };
+            };
+          };
+        });
+        default = true;
+        description = "Do minification on public static files";
       };
 
       podConfig = mkOption {
