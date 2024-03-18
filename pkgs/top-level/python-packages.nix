@@ -15207,6 +15207,8 @@ self: super: with self; {
 
   sphinxcontrib-tikz = callPackage ../development/python-modules/sphinxcontrib-tikz { };
 
+  sphinxcontrib-trio = callPackage ../development/python-modules/sphinxcontrib-trio { };
+
   sphinxcontrib-wavedrom = callPackage ../development/python-modules/sphinxcontrib-wavedrom { };
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
