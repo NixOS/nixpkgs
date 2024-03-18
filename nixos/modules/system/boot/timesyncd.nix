@@ -21,6 +21,9 @@ with lib;
         type = types.listOf types.str;
         description = lib.mdDoc ''
           The set of NTP servers from which to synchronise.
+          Note if this is set to an empty list, the defaults systemd itself is
+          compiled with ({0..4}.nixos.pool.ntp.org) apply,
+          In case you want to disable timesyncd altogether, use the `enable` option.
         '';
       };
       extraConfig = mkOption {
