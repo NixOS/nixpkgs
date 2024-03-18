@@ -56,7 +56,9 @@
 }:
 
 final: prev:
-with prev;
+let
+  inherit (prev) luaOlder luaAtLeast lua isLuaJIT;
+in
 {
   argparse = prev.argparse.overrideAttrs(oa: {
 
@@ -202,7 +204,7 @@ with prev;
     '';
     meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
 
-    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) luaffi;
+    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) final.luaffi;
   });
 
   lgi = prev.lgi.overrideAttrs (oa: {
@@ -349,7 +351,7 @@ with prev;
 
   luaevent = prev.luaevent.overrideAttrs (oa: {
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [
-      luasocket
+      final.luasocket
     ];
     externalDeps = [
       { name = "EVENT"; dep = libevent; }
