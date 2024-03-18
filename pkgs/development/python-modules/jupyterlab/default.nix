@@ -4,6 +4,7 @@
 , hatch-jupyter-builder
 , hatchling
 , async-lru
+, httpx
 , packaging
 , tornado
 , ipykernel
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-lru
+    httpx
     packaging
     tornado
     ipykernel
