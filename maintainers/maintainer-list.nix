@@ -16057,6 +16057,12 @@
     githubId = 20472367;
     name = "Peter Hebden";
   };
+  pizzapim = {
+    email = "pim@kunis.nl";
+    github = "pizzapim";
+    githubId = 23135512;
+    name = "Pim Kunis";
+  };
   pjbarnoy = {
     email = "pjbarnoy@gmail.com";
     github = "waaamb";
