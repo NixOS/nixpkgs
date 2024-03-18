@@ -48,7 +48,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       payas
       danth
+      ramblurr
     ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    mainProgram = "ocis";
   };
 }
