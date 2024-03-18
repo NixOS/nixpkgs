@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "certipy-ad";
   version = "4.8.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -37,6 +37,10 @@ buildPythonPackage rec {
       --replace "pyasn1==0.4.8" "pyasn1"
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     asn1crypto
     cryptography
@@ -49,8 +53,8 @@ buildPythonPackage rec {
     pyopenssl
     requests
     requests-ntlm
-    unicrypto
     setuptools
+    unicrypto
   ];
 
   # Project has no tests

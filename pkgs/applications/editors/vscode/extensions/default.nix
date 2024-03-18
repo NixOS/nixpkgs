@@ -4704,6 +4704,7 @@ let
     };
 
   aliases = super: {
+    _13xforever = super."13xforever";
     _1Password = super."1Password";
     _2gua = super."2gua";
     _4ops = super."4ops";

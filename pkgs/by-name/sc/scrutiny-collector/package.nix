@@ -4,6 +4,7 @@
 , smartmontools
 , nixosTests
 , lib
+, nix-update-script
 }:
 let
   version = "0.8.0";
@@ -41,6 +42,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny-collector = nixosTests.scrutiny;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hard disk metrics collector for Scrutiny.";

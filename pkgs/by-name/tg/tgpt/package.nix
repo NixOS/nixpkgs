@@ -1,18 +1,17 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "tgpt";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XuTDEcs1wIrAe7Oaok4aFP01jDcyWB01R3HNrx6UEpo=";
+    hash = "sha256-FbnweHiKfxqFegZnRlvdVbTmH4ImjddVOBlbGRT/SGw=";
   };
 
   vendorHash = "sha256-docq/r6yyMPsuUyFbtCMaYfEVL0gLmyTy4PbrAemR00=";
@@ -22,10 +21,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  # test tries to access the network
-  doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
+  preCheck = ''
+    # Remove test which need network access
+    rm providers/koboldai/koboldai_test.go
+  '';
 
   meta = with lib; {
     description = "ChatGPT in terminal without needing API keys";
