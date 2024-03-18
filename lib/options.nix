@@ -85,6 +85,8 @@ rec {
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
+    # Whether the option default will be merged or overridden when the option is set
+    additive ? false
     } @ attrs:
     attrs // { _type = "option"; };
 
