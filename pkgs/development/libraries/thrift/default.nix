@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchurl
-, fetchpatch
+, fetchFromGitHub
 , boost
 , zlib
 , libevent
@@ -11,6 +10,7 @@
 , pkg-config
 , bison
 , flex
+, glibcLocales
 , nix-update-script
 , testers
 , static ? stdenv.hostPlatform.isStatic
@@ -18,10 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
-  version = "0.18.1";
+  version = "0.20.0";
 
-    url = "https://archive.apache.org/dist/thrift/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-BMbxDl14jKeOE+4u8NIVLHsHDAr1VIPWuULinP8pZyY=";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "thrift";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
   };
 
   # Workaround to make the Python wrapper not drop this package:
@@ -40,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
   ] ++ lib.optionals (!static) [
-    (python3.withPackages (ps: [ps.twisted]))
+    (python3.withPackages (ps: [
+      ps.tornado
+      ps.twisted
+    ]))
   ];
 
   propagatedBuildInputs = [
@@ -68,72 +74,57 @@ stdenv.mkDerivation (finalAttrs: {
     export PY_PREFIX=$out
   '';
 
-  patches = [
-    # ToStringTest.cpp is failing from some reason due to locale issue, this
-    # doesn't disable all UnitTests as in Darwin.
-    ./disable-failing-test.patch
-    (fetchpatch {
-      name = "setuptools-gte-62.1.0.patch"; # https://github.com/apache/thrift/pull/2635
-      url = "https://github.com/apache/thrift/commit/c41ad9d5119e9bdae1746167e77e224f390f2c42.diff";
-      hash = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
-    })
-    (fetchpatch {
-      name = "thrift-install-FindLibevent.patch"; # https://github.com/apache/thrift/pull/2726
-      url = "https://github.com/apache/thrift/commit/2ab850824f75d448f2ba14a468fb77d2594998df.diff";
-      hash = "sha256-ejMKFG/cJgoPlAFzVDPI4vIIL7URqaG06/IWdQ2NkhY=";
-    })
-    (fetchpatch {
-      name = "thrift-fix-tests-OpenSSL3.patch"; # https://github.com/apache/thrift/pull/2760
-      url = "https://github.com/apache/thrift/commit/eae3ac418f36c73833746bcd53e69ed8a12f0e1a.diff";
-      hash = "sha256-0jlN4fo94cfGFUKcLFQgVMI/x7uxn5OiLiFk6txVPzs=";
-    })
-  ];
-
   cmakeFlags = [
-    "-DBUILD_JAVASCRIPT:BOOL=OFF"
-    "-DBUILD_NODEJS:BOOL=OFF"
+    (lib.cmakeBool "BUILD_JAVASCRIPT" false)
+    (lib.cmakeBool "BUILD_NODEJS" false)
 
     # FIXME: Fails to link in static mode with undefined reference to
     # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
-    "-DBUILD_TESTING:BOOL=${if static then "OFF" else "ON"}"
-  ] ++ lib.optionals static [
-    "-DWITH_STATIC_LIB:BOOL=ON"
-    "-DOPENSSL_USE_STATIC_LIBS=ON"
-  ];
-
-  disabledTests = [
-    "PythonTestSSLSocket"
-    "PythonThriftTNonblockingServer"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Tests that hang up in the Darwin sandbox
-    "SecurityTest"
-    "SecurityFromBufferTest"
-    "python_test"
-
-    # fails on hydra, passes locally
-    "concurrency_test"
-
-    # Tests that fail in the Darwin sandbox when trying to use network
-    "UnitTests"
-    "TInterruptTest"
-    "TServerIntegrationTest"
-    "processor"
-    "TNonblockingServerTest"
-    "TNonblockingSSLServerTest"
-    "StressTest"
-    "StressTestConcurrent"
-    "StressTestNonBlocking"
+    (lib.cmakeBool "BUILD_TESTING" (!static))
+    (lib.cmakeBool "WITH_STATIC_LIB" static)
+    (lib.cmakeBool "OPENSSL_USE_STATIC_LIBS" static)
   ];
 
   doCheck = !static;
 
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [
+    glibcLocales
+  ];
 
-    ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E "($(echo "$disabledTests" | tr " " "|"))"
+  checkPhase =
+    let
+      disabledTests = [
+        "PythonTestSSLSocket"
+        "PythonThriftTNonblockingServer"
+        "python_test"
+      ] ++ lib.optionals stdenv.isDarwin [
+        # Tests that hang up in the Darwin sandbox
+        "SecurityTest"
+        "SecurityFromBufferTest"
 
-    runHook postCheck
-  '';
+        # fails on hydra, passes locally
+        "concurrency_test"
+
+        # Tests that fail in the Darwin sandbox when trying to use network
+        "UnitTests"
+        "TInterruptTest"
+        "TServerIntegrationTest"
+        "processor"
+        "TNonblockingServerTest"
+        "TNonblockingSSLServerTest"
+        "StressTest"
+        "StressTestConcurrent"
+        "StressTestNonBlocking"
+      ];
+    in ''
+      runHook preCheck
+
+      export LD_LIBRARY_PATH=$PWD/lib
+      export DYLD_LIBRARY_PATH=$PWD/lib
+      ctest -E '^${lib.concatStringsSep "|" disabledTests}$'
+
+      runHook postCheck
+    '';
 
   enableParallelChecking = false;
 
@@ -149,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
     homepage = "https://thrift.apache.org/";
+    changelog = "https://github.com/apache/thrift/blob/v${finalAttrs.version}/CHANGES.md";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor anthonyroussel ];
