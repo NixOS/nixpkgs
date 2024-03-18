@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
-, cmake, ninja, python3, xcbuild, libllvm, linuxHeaders, libcxx, libcxxabi, libxcrypt
+, cmake, ninja, python3, xcbuild, libllvm, linuxHeaders, libcxx, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 

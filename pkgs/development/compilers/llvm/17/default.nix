@@ -203,7 +203,6 @@ in let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt-libc
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -226,7 +225,6 @@ in let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt-no-libc
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind

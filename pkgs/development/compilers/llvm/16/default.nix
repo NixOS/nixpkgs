@@ -218,7 +218,6 @@ cc = tools.clang-unwrapped;
 libcxx = targetLlvmLibraries.libcxx;
 bintools = bintools';
 extraPackages = [
-libcxx.cxxabi
 targetLlvmLibraries.compiler-rt-libc
 ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
 targetLlvmLibraries.libunwind
@@ -243,7 +242,6 @@ cc = tools.clang-unwrapped;
 libcxx = targetLlvmLibraries.libcxx;
 bintools = bintools';
 extraPackages = [
-  libcxx.cxxabi
   targetLlvmLibraries.compiler-rt-no-libc
 ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
   targetLlvmLibraries.libunwind
@@ -307,14 +305,6 @@ nixSupport.cc-cflags = [
       inherit buildLlvmTools;
     };
   });
-
-# Has to be in tools despite mostly being a library,
-# because we use a native helper executable from a
-# non-cross build in cross builds.
-libclc = callPackage ../common/libclc.nix {
-inherit buildLlvmTools;
-};
-});
 
 libraries = lib.makeExtensible (libraries: let
 callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
