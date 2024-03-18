@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A code surgeon for precise text and code transplantation.";
-    homepage = "https://github.com/NixOS/nixpkgs/issues/293066";
+    homepage = "https://github.com/alexpovel/srgn";
     license = licenses.mit;
     maintainers = with maintainers; [ binarycat ];
     mainProgram = "srgn";
