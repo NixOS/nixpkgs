@@ -105,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
 
+  # clang17 promotes bad version maps to an error, and zlib doesn't do this right for FreeBSD
+  env.NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.isFreeBSD && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "17") "--undefined-version";
+
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
