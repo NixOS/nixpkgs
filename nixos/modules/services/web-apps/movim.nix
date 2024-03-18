@@ -91,6 +91,37 @@ let
                   '')
               [ ]
               cfg.podConfig));
+
+        precompressStaticFilesJobs =
+          let
+            inherit (cfg.precompressStaticFiles) brotli gzip;
+
+            findTextFileNames = lib.concatStringsSep " -o "
+              (builtins.map (n: ''-iname "*.${n}"'')
+                [ "css" "ini" "js" "json" "manifest" "mjs" "svg" "webmanifest" ]);
+          in
+          lib.concatStringsSep "\n" [
+            (lib.optionalString brotli.enable ''
+              echo -n "Precompressing static files with Brotli …"
+              find ${appDir}/public -type f ${findTextFileNames} \
+                | ${lib.getExe pkgs.parallel} ${lib.escapeShellArgs [
+                    "--will-cite"
+                    "-j $NIX_BUILD_CORES"
+                    "${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output={}.br {}"
+                   ]}
+              echo " done."
+            '')
+            (lib.optionalString gzip.enable ''
+              echo -n "Precompressing static files with Gzip …"
+              find ${appDir}/public -type f ${findTextFileNames} \
+                | ${lib.getExe pkgs.parallel} ${lib.escapeShellArgs [
+                    "--will-cite"
+                    "-j $NIX_BUILD_CORES"
+                    "${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} {} > {}.gz"
+                   ]}
+              echo " done."
+            '')
+          ];
       in
       {
         postInstall = lib.concatStringsSep "\n\n" [
@@ -98,6 +129,7 @@ let
           stateDirectories
           exposeComposer
           podConfigInputDisableReplace
+          precompressStaticFilesJobs
         ];
       });
 
@@ -222,6 +254,36 @@ in
         });
         default = true;
         description = "Do minification on public static files";
+      };
+
+      precompressStaticFiles = mkOption {
+        type = with types; submodule {
+          options = {
+            brotli = {
+              enable = mkEnableOption "Brotli precompression";
+              package = mkPackageOption pkgs "brotli" { };
+              compressionLevel = mkOption {
+                type = types.ints.between 0 11;
+                default = 11;
+                description = "Brotli compression level";
+              };
+            };
+            gzip = {
+              enable = mkEnableOption "Gzip precompression";
+              package = mkPackageOption pkgs "gzip" { };
+              compressionLevel = mkOption {
+                type = types.ints.between 1 9;
+                default = 9;
+                description = "Gzip compression level";
+              };
+            };
+          };
+        };
+        default = {
+          brotli.enable = true;
+          gzip.enable = false;
+        };
+        description = "Aggressively precompress static files";
       };
 
       podConfig = mkOption {
