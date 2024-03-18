@@ -947,6 +947,10 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  neotest-gradle = super.neotest-gradle.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   };
