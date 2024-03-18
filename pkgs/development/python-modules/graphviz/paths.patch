@@ -1,5 +1,5 @@
 diff --git a/graphviz/backend/dot_command.py b/graphviz/backend/dot_command.py
-index 60654bd..2c62b47 100644
+index 3a62a85..a38bb9b 100644
 --- a/graphviz/backend/dot_command.py
 +++ b/graphviz/backend/dot_command.py
 @@ -9,7 +9,7 @@ from .. import parameters
@@ -38,20 +38,20 @@ index fde74a6..6f29b68 100644
      kwargs = {'stderr': subprocess.DEVNULL} if quiet else {}
      subprocess.Popen(cmd, **kwargs)
 diff --git a/tests/_common.py b/tests/_common.py
-index 87b4cbd..4188beb 100644
+index edc1309..42d730c 100644
 --- a/tests/_common.py
 +++ b/tests/_common.py
-@@ -14,9 +14,9 @@ __all__ = ['EXPECTED_DOT_BINARY', 'EXPECTED_UNFLATTEN_BINARY',
+@@ -14,9 +14,9 @@ __all__ = ['EXPECTED_DOT_BINARY',
             'as_cwd',
             'check_startupinfo', 'StartupinfoMatcher']
  
--EXPECTED_DOT_BINARY = _compat.make_subprocess_arg(pathlib.Path('dot'))
-+EXPECTED_DOT_BINARY = _compat.make_subprocess_arg(pathlib.Path('@graphviz@/bin/dot'))
+-EXPECTED_DOT_BINARY = pathlib.Path('dot')
++EXPECTED_DOT_BINARY = pathlib.Path('@graphviz@/bin/dot')
  
--EXPECTED_UNFLATTEN_BINARY = _compat.make_subprocess_arg(pathlib.Path('unflatten'))
-+EXPECTED_UNFLATTEN_BINARY = _compat.make_subprocess_arg(pathlib.Path('@graphviz@/bin/unflatten'))
+-EXPECTED_UNFLATTEN_BINARY = pathlib.Path('unflatten')
++EXPECTED_UNFLATTEN_BINARY = pathlib.Path('@graphviz@/bin/unflatten')
  
- EXPECTED_DEFAULT_ENCODING = 'utf-8'
+ EXPECTED_DEFAULT_ENGINE = 'dot'
  
 diff --git a/tests/backend/test_execute.py b/tests/backend/test_execute.py
 index 2cb853a..8093dfe 100644
