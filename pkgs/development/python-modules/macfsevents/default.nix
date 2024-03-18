@@ -6,11 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "MacFSEvents";
+  pname = "macfsevents";
   version = "0.8.4";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "MacFSEvents";
+    inherit version;
     sha256 = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
   };
 
