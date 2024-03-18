@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchgit
 , fetchFromGitHub
 , cmake
 , curl
@@ -48,10 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "srb2-data";
     version = finalAttrs.version;
 
-    src = fetchzip {
-      url = "https://github.com/STJr/SRB2/releases/download/SRB2_release_${finalAttrs.version}/SRB2-v${lib.replaceStrings ["."] [""] finalAttrs.version}-Full.zip";
-      hash = "sha256-/MJVOMMXxHa+xB60WlwLhh5lrZNKnHajTySNZVSlUWE=";
-      stripRoot = false;
+    src = fetchgit {
+      url = "https://git.do.srb2.org/STJr/srb2assets-public";
+      rev = "SRB2_release_${finalAttrs.version}";
+      hash = "sha256-OXvO5ZlujIYmYevc62Dtx192dxoujQMNFUCrH5quBBg=";
+      fetchLFS = true;
     };
 
     installPhase = ''
