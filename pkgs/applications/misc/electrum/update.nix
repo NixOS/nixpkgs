@@ -47,6 +47,11 @@ export PATH=${lib.makeBinPath [
   nix
 ]}
 
+# Download files to a temp directory
+tmpdir=$(mktemp -d --tmpdir electrum-update-XXXX)
+pushd "$tmpdir"
+trap 'rm -r -- "$tmpdir"' EXIT
+
 version=$(curl -L --list-only -- '${downloadPageUrl}' \
     | grep -Po '<a href="\K([[:digit:]]+\.?)+' \
     | sort -Vu \
@@ -69,5 +74,6 @@ gpg --batch --verify "$sigFile" "$srcFile"
 
 sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$srcFile")
 
+popd
 update-source-version electrum "$version" "$sha256"
 ''
