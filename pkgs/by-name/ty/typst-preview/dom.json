@@ -9,15 +9,16 @@
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "link:local": "yarn link @myriaddreamin/typst.ts @myriaddreamin/typst-ts-renderer"
+    "link:local": "yarn link @myriaddreamin/typst.ts @myriaddreamin/typst-ts-renderer",
+    "unlink:local": "yarn unlink @myriaddreamin/typst.ts @myriaddreamin/typst-ts-renderer"
   },
   "peerDependencies": {
-    "@myriaddreamin/typst-ts-renderer": "0.4.2-rc6",
-    "@myriaddreamin/typst.ts": "0.4.2-rc6"
+    "@myriaddreamin/typst-ts-renderer": "0.4.2-rc9",
+    "@myriaddreamin/typst.ts": "0.4.2-rc9"
   },
   "devDependencies": {
-    "@myriaddreamin/typst-ts-renderer": "0.4.2-rc6",
-    "@myriaddreamin/typst.ts": "0.4.2-rc6",
+    "@myriaddreamin/typst-ts-renderer": "0.4.2-rc9",
+    "@myriaddreamin/typst.ts": "0.4.2-rc9",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
     "vite-plugin-singlefile": "^0.13.5",
