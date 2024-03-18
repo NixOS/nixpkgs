@@ -315,10 +315,10 @@ buildPhase = ''
 '';
 ```
 
-The dist phase is also trying to build a binary, the only way to override it is with:
+The `distPhase` is packing the package's dependencies in a tarball using `yarn pack`. You can disable it using:
 
 ```nix
-distPhase = "true";
+doDist = false;
 ```
 
 The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:
