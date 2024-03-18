@@ -2,12 +2,12 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools-scm
-, toml
+, poetry-core
+, poetry-dynamic-versioning
+, pydantic
 , pytestCheckHook
 , pytest-benchmark
-, hatch-vcs
-, hatchling
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -24,14 +24,27 @@ buildPythonPackage rec {
     hash = "sha256-sGKnta+agrpJkQB0twFkqRreD5WB2O/06g75N0ic4mc=";
   };
 
-  nativeBuildInputs = [
-    hatch-vcs
-    hatchling
+  postPatch = ''
+    sed -i "/addopts =/d" pyproject.toml
+  '';
+
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
-  checkInputs = [
+  dependencies = [
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pydantic
     pytestCheckHook
     pytest-benchmark
+  ];
+
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
 
   pythonImportsCheck = [
