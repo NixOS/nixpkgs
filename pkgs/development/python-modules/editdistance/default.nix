@@ -2,14 +2,16 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, cython
+, cython_3
+, pdm-backend
+, setuptools
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "editdistance";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject =true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,15 +23,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
+    pdm-backend
+    setuptools
   ];
 
-  preBuild = ''
-    cythonize --inplace editdistance/bycython.pyx
-  '';
-
   nativeCheckInputs = [
-   pytestCheckHook
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
