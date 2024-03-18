@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nixosTests
 , lib
+, nix-update-script
 }:
 let
   pname = "scrutiny";
@@ -35,6 +36,8 @@ let
       cp -r dist/* $out
       runHook postInstall
     '';
+
+    passthru.updatescript = nix-update-script { };
   };
 in
 buildGoModule rec {
@@ -56,6 +59,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
+  passthru.updatescript = nix-update-script { };
 
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds.";
