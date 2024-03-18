@@ -195,6 +195,8 @@ in
       systemd = {
         services.scrutiny-collector = {
           description = "Scrutiny Collector Service";
+          after = lib.optional cfg.enable "scrutiny.service";
+          wants = lib.optional cfg.enable "scrutiny.service";
           environment = {
             COLLECTOR_VERSION = "1";
             COLLECTOR_API_ENDPOINT = cfg.collector.settings.api.endpoint;
