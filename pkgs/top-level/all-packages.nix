@@ -26511,8 +26511,6 @@ with pkgs;
 
   sympa = callPackage ../servers/mail/sympa { };
 
-  syncstorage-rs = callPackage ../servers/syncstorage-rs { };
-
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
