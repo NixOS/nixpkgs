@@ -5,8 +5,8 @@
 , fastparquet
 , fetchPypi
 , fsspec
+, hatchling
 , pandas
-, poetry-core
 , pyarrow
 , pythonOlder
 , sqlalchemy
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
   ];
 
   propagatedBuildInputs = [
