@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala
+, gnome, graphviz, glib, gobject-introspection, libiconv, libintl, libtool, expat, substituteAll, vala
 }:
 
 let
@@ -54,7 +54,7 @@ let
     outputs = [ "out" "devdoc" ];
 
     nativeBuildInputs = [
-      pkg-config flex bison libxslt
+      pkg-config flex bison libxslt gobject-introspection
     ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
@@ -101,8 +101,8 @@ in rec {
   };
 
   vala_0_56 = generic {
-    version = "0.56.14";
-    sha256 = "k4LCaMqb3AKq7cgVKpgYvzk1JzBB9inFbeQQ42Cj9Vc=";
+    version = "0.56.16";
+    sha256 = "BUh7VgD10vCeZqdTzM2POcG/+fFIrqG3d01QW5yLyps=";
   };
 
   vala = vala_0_56;
