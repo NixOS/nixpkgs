@@ -160,21 +160,6 @@ self: super: {
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 
-  # Fixes the build if Cabal >= 3.10.2 is used for Setup.hs, as it got stricter
-  # about c- vs. cxx-sources: https://github.com/haskell/double-conversion/issues/43
-  double-conversion = overrideCabal (drv: {
-    patches = drv.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        name = "double-conversion-c-to-cxx-sources.patch";
-        url = "https://github.com/haskell/double-conversion/pull/44/commits/d480fb057c5387251b8cfdeb3666b24087811219.patch";
-        sha256 = "0jw2i2cybmv190bhab0afhz2v3zva2chazhmngh884fsq2p3j1cv";
-      })
-    ];
-    prePatch = drv.prePatch or "" + ''
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-    '';
-  }) super.double-conversion;
-
   # Too strict bounds on hspec < 2.11
   http-api-data = doJailbreak super.http-api-data;
   tasty-discover = doJailbreak super.tasty-discover;
