@@ -201,9 +201,6 @@ self: super: {
   # currently, cabal-plan seems to get not much maintenance
   cabal-plan = doJailbreak super.cabal-plan;
 
-  # Too strict bounds on optparse-applicative
-  weeder = lib.warnIf (lib.versionAtLeast super.weeder.version "2.8.0") "jailbreak on weeder may be obsolete" doJailbreak super.weeder;
-
   # Allow scotty < 0.21
   # For < 0.22 add https://github.com/taffybar/taffybar/commit/71fe820d892a85e49ad2f2843eac0a59e01f3fd4
   taffybar = appendPatches [
@@ -1962,10 +1959,7 @@ self: super: {
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
   # Test suite does not compile.
-  feed = overrideCabal (drv: {
-    jailbreak = lib.warnIf (lib.toInt drv.revision >= 4) "haskellPackages.feed: jailbreak can be removed" true;
-    doCheck = false;
-  }) super.feed;
+  feed = dontCheck super.feed;
 
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or []) ++ [ pkgs.buildPackages.installShellFiles ];
@@ -2905,7 +2899,7 @@ self: super: {
   }) super.kmonad;
 
   ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_8_1_20231121;
+    ghc-lib-parser = self.ghc-lib-parser_9_8_2_20240223;
   });
 
   # 2024-03-17: broken
