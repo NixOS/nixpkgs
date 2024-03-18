@@ -33,7 +33,7 @@ let
   # these need to be updated for any changes to fetchAttrs
   depsHash = {
     x86_64-linux = "sha256-kIMAGlGIUcV/Oq7hWKqNpGl7nQmnztMjAmTIovKRT9E=";
-    aarch64-linux = "sha256-9/WemAAAA7bFeMNFC4J3mdTm3mrNmyMxiu5oadQcovU=";
+    aarch64-linux = "sha256-cMLJLMTqzGQirjDqWbPopq+LKtG6xAknvcsts5JR2qA=";
   }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
 buildBazelPackage {
