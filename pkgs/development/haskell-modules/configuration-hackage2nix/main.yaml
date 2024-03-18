@@ -350,6 +350,7 @@ package-maintainers:
     - mpi-hs-store
     - mpi-hs-cereal
     - mpi-hs-binary
+    - cpython
   shlok:
     - streamly-archive
     - streamly-lmdb
