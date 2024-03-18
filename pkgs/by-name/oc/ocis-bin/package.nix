@@ -46,9 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     maintainers = with maintainers; [
       ramblurr
-      payas
+      bhankas
       danth
+      ramblurr
     ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    mainProgram = "ocis";
   };
 })
