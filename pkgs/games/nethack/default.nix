@@ -100,7 +100,8 @@ in stdenv.mkDerivation rec {
     popd
   '';
 
-  enableParallelBuilding = true;
+  # https://github.com/NixOS/nixpkgs/issues/294751
+  enableParallelBuilding = false;
 
   preFixup = lib.optionalString qtMode ''
     wrapQtApp "$out/games/nethack"
