@@ -397,6 +397,11 @@ let
     sound = {
       SND_DYNAMIC_MINORS  = yes;
       SND_AC97_POWER_SAVE = yes; # AC97 Power-Saving Mode
+      # 10s for the idle timeout, Fedora does 1, Arch does 10.
+      # The kernel says we should do 10.
+      # Read: https://docs.kernel.org/sound/designs/powersave.html
+      SND_AC97_POWER_SAVE_DEFAULT = freeform "10";
+      SND_HDA_POWER_SAVE_DEFAULT = freeform "10";
       SND_HDA_INPUT_BEEP  = yes; # Support digital beep via input layer
       SND_HDA_RECONFIG    = yes; # Support reconfiguration of jack functions
       # Support configuring jack functions via fw mechanism at boot
