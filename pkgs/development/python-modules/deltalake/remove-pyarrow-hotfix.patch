@@ -1,0 +1,31 @@
+diff --git a/python/deltalake/table.py b/python/deltalake/table.py
+index 064ee3a..d6990b3 100644
+--- a/python/deltalake/table.py
++++ b/python/deltalake/table.py
+@@ -25,7 +25,6 @@ from typing import (
+ import pyarrow
+ import pyarrow.dataset as ds
+ import pyarrow.fs as pa_fs
+-import pyarrow_hotfix  # noqa: F401; addresses CVE-2023-47248; # type: ignore
+ from pyarrow.dataset import (
+     Expression,
+     FileSystemDataset,
+diff --git a/python/pyproject.toml b/python/pyproject.toml
+index 9b74760..0c4c070 100644
+--- a/python/pyproject.toml
++++ b/python/pyproject.toml
+@@ -19,7 +19,6 @@ classifiers = [
+ ]
+ dependencies = [
+     "pyarrow>=8",
+-    "pyarrow-hotfix",    
+ ]
+ 
+ [project.optional-dependencies]
+@@ -101,4 +100,4 @@ markers = [
+     "azure: marks tests as integration tests with Azure Blob Store",
+     "pandas: marks tests that require pandas",
+     "pyspark: marks tests that require pyspark",
+-]
+\ No newline at end of file
++]
