@@ -40,7 +40,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     # make sure we don't import pykdtree from the source tree
-    mv pykdtree tests
+    mv pykdtree/test_tree.py .
+    rm -rf pykdtree
   '';
 
   nativeCheckInputs = [

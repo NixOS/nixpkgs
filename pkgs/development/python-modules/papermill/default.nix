@@ -91,9 +91,18 @@ buildPythonPackage rec {
     "papermill"
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests = lib.optionals stdenv.isDarwin [
     # might fail due to the sandbox
     "test_end2end_autosave_slow_notebook"
+  ];
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "papermill/tests/test_s3.py"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "vultr-cli";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd vultr-cli \
       --bash <($out/bin/vultr-cli completion bash) \
       --fish <($out/bin/vultr-cli completion fish) \

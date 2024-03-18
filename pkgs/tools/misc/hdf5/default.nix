@@ -98,22 +98,11 @@ stdenv.mkDerivation rec {
   # The shared build creates binaries with -shared suffixes,
   # so we remove these suffixes.
   ''
-    mv ''${!outputBin}/bin/h5clear{-shared,}
-    mv ''${!outputBin}/bin/h5copy{-shared,}
-    mv ''${!outputBin}/bin/h5debug{-shared,}
-    mv ''${!outputBin}/bin/h5delete{-shared,}
-    mv ''${!outputBin}/bin/h5diff{-shared,}
-    mv ''${!outputBin}/bin/h5dump{-shared,}
-    mv ''${!outputBin}/bin/h5format_convert{-shared,}
-    mv ''${!outputBin}/bin/h5import{-shared,}
-    mv ''${!outputBin}/bin/h5jam{-shared,}
-    mv ''${!outputBin}/bin/h5ls{-shared,}
-    mv ''${!outputBin}/bin/h5mkgrp{-shared,}
-    mv ''${!outputBin}/bin/h5repack{-shared,}
-    mv ''${!outputBin}/bin/h5repart{-shared,}
-    mv ''${!outputBin}/bin/h5stat{-shared,}
-    mv ''${!outputBin}/bin/h5unjam{-shared,}
-    mv ''${!outputBin}/bin/h5watch{-shared,}
+    pushd ''${!outputBin}/bin
+    for file in *-shared; do
+      mv "$file" "''${file%%-shared}"
+    done
+    popd
   '';
 
   enableParallelBuilding = true;
