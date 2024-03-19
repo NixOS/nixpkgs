@@ -28,10 +28,51 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) lib;
-in
+  inherit (pkgs.lib)
+    elem
+    filter
+    getBin
+    getVersion
+    makeBinPath
+    mapAttrs
+    optional
+    optionals
+    optionalString
+    pipe
+    platforms
+    ;
 
-with haskellLib;
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    addBuildTool
+    addBuildTools
+    addExtraLibraries
+    addExtraLibrary
+    addPkgconfigDepend
+    addTestToolDepend
+    addTestToolDepends
+    appendConfigureFlag
+    appendConfigureFlags
+    appendPatch
+    disableCabalFlag
+    disableHardening
+    disableSharedExecutables
+    doCheck
+    doDistribute
+    doJailbreak
+    dontCheck
+    dontCheckIf
+    enableCabalFlag
+    enableSeparateBinOutput
+    enableSharedExecutables
+    generateOptparseApplicativeCompletions
+    justStaticExecutables
+    markBroken
+    overrideCabal
+    overrideSrc
+    ;
+in
 
 # All of the overrides in this set should look like:
 #
@@ -105,7 +146,7 @@ self: super: builtins.intersectAttrs super {
   # PLUGINS WITH ENABLED TESTS
   # haskell-language-server plugins all use the same test harness so we give them what they want in this loop.
   # Every hls plugin should either be in the test disabled list below, or up here in the list fixing it’s tests.
-  inherit (pkgs.lib.mapAttrs
+  inherit (mapAttrs
       (_: overrideCabal (drv: {
         testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
         preCheck = ''
@@ -121,7 +162,7 @@ self: super: builtins.intersectAttrs super {
 
   # PLUGINS WITH DISABLED TESTS
   # 2023-04-01: TODO: We should reenable all these tests to figure if they are still broken.
-  inherit (pkgs.lib.mapAttrs (_: dontCheck) super)
+  inherit (mapAttrs (_: dontCheck) super)
     # Tests require ghcide-test-utils which is broken
     hls-semantic-tokens-plugin
 
@@ -340,13 +381,13 @@ self: super: builtins.intersectAttrs super {
   );
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = lib.pipe super.gio
+  gio = pipe super.gio
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
     ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
-  gtk = lib.pipe super.gtk (
+  gtk = pipe super.gtk (
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
     ] ++
@@ -438,7 +479,7 @@ self: super: builtins.intersectAttrs super {
   # Test suite requires a running postgresql server,
   # avoid compiling twice by providing executable as a separate output (with small closure size),
   # generate shell completion
-  postgrest = lib.pipe super.postgrest [
+  postgrest = pipe super.postgrest [
     dontCheck
     enableSeparateBinOutput
     (self.generateOptparseApplicativeCompletions [ "postgrest" ])
@@ -603,7 +644,7 @@ self: super: builtins.intersectAttrs super {
   tasty = overrideCabal (drv: {
     libraryHaskellDepends =
       (drv.libraryHaskellDepends or [])
-      ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64
+      ++ optionals (!(pkgs.stdenv.hostPlatform.isAarch64
                           || pkgs.stdenv.hostPlatform.isx86_64)
                         || (self.ghc.isGhcjs or false)) [
         self.unbounded-delays
@@ -635,7 +676,7 @@ self: super: builtins.intersectAttrs super {
       ./patches/GLUT.patch
     ];
     prePatch = drv.prePatch or "" + ''
-      ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+      ${getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
     '';
   }) super.GLUT;
 
@@ -686,7 +727,7 @@ self: super: builtins.intersectAttrs super {
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
   # https://github.com/haskell-servant/servant/pull/1238
-  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.16" then
+  servant-client-core = if (getVersion super.servant-client-core) == "0.16" then
     appendPatch ./patches/servant-client-core-redact-auth-header.patch super.servant-client-core
   else
     super.servant-client-core;
@@ -794,7 +835,7 @@ self: super: builtins.intersectAttrs super {
     # This is an instance of https://github.com/NixOS/nix/pull/1085
     # Fails with:
     #   gpg: can't connect to the agent: File name too long
-    postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+    postPatch = optionalString pkgs.stdenv.isDarwin ''
       substituteInPlace Test.hs \
         --replace ', testCase "crypto" test_crypto' ""
     '' + (drv.postPatch or "");
@@ -804,7 +845,7 @@ self: super: builtins.intersectAttrs super {
     # where non-GNU coreutils are used by default.
     postFixup = ''
       wrapProgram $out/bin/git-annex \
-        --prefix PATH : "${pkgs.lib.makeBinPath (with pkgs; [ coreutils lsof ])}"
+        --prefix PATH : "${makeBinPath (with pkgs; [ coreutils lsof ])}"
     '' + (drv.postFixup or "");
     buildTools = [
       pkgs.buildPackages.makeWrapper
@@ -926,7 +967,7 @@ self: super: builtins.intersectAttrs super {
 
   # mplayer-spot uses mplayer at runtime.
   mplayer-spot =
-    let path = pkgs.lib.makeBinPath [ pkgs.mplayer ];
+    let path = makeBinPath [ pkgs.mplayer ];
     in overrideCabal (oldAttrs: {
       postInstall = ''
         wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
@@ -938,7 +979,7 @@ self: super: builtins.intersectAttrs super {
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
-    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
+    let path = makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
     in overrideCabal (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -984,7 +1025,7 @@ self: super: builtins.intersectAttrs super {
   # Tests access internet
   prune-juice = dontCheck super.prune-juice;
 
-  citeproc = lib.pipe super.citeproc [
+  citeproc = pipe super.citeproc [
     enableSeparateBinOutput
     # Enable executable being built and add missing dependencies
     (enableCabalFlag "executable")
@@ -1066,7 +1107,7 @@ self: super: builtins.intersectAttrs super {
       postInstall = ''
         wrapProgram $out/bin/cabal2nix \
           --prefix PATH ":" "${
-            pkgs.lib.makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]
+            makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]
           }"
       '';
     })
@@ -1090,7 +1131,7 @@ self: super: builtins.intersectAttrs super {
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
-          pkgs.lib.makeBinPath [
+          makeBinPath [
             pkgs.nvchecker
             pkgs.nix # nix-prefetch-url
             pkgs.nix-prefetch-git
@@ -1100,7 +1141,7 @@ self: super: builtins.intersectAttrs super {
       '';
     }) super.nvfetcher);
 
-  rel8 = pkgs.lib.pipe super.rel8 [
+  rel8 = pipe super.rel8 [
     (addTestToolDepend pkgs.postgresql)
     # https://github.com/NixOS/nixpkgs/issues/198495
     (dontCheckIf (!pkgs.postgresql.doCheck))
@@ -1135,7 +1176,7 @@ self: super: builtins.intersectAttrs super {
     preCheck = "export CI=true";
   }) super.aeson-typescript;
 
-  Agda = lib.pipe super.Agda [
+  Agda = pipe super.Agda [
     # Enable extra optimisations which increase build time, but also
     # later compiler performance, so we should do this for user's benefit.
     # Flag added in Agda 2.6.2
@@ -1286,7 +1327,7 @@ self: super: builtins.intersectAttrs super {
   # Tests assume dist-newstyle build directory is present
   cabal-hoogle = dontCheck super.cabal-hoogle;
 
-  nfc = lib.pipe super.nfc [
+  nfc = pipe super.nfc [
     enableSeparateBinOutput
     (addBuildDepend self.base16-bytestring)
     (appendConfigureFlag "-fbuild-examples")
@@ -1316,9 +1357,9 @@ self: super: builtins.intersectAttrs super {
       "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
 
       wrapProgram "$out/bin/cabal" \
-        --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
+        --prefix PATH : "${makeBinPath [ pkgs.groff ]}"
     '';
-    hydraPlatforms = pkgs.lib.platforms.all;
+    hydraPlatforms = platforms.all;
     broken = false;
   }) super.cabal-install;
 
@@ -1348,7 +1389,7 @@ self: super: builtins.intersectAttrs super {
   sydtest = dontCheck super.sydtest;
 
   # Prevent argv limit being exceeded when invoking $CC.
-  inherit (lib.mapAttrs (_: overrideCabal {
+  inherit (mapAttrs (_: overrideCabal {
     __onlyPropagateKnownPkgConfigModules = true;
     }) super)
       gi-javascriptcore
@@ -1367,13 +1408,13 @@ self: super: builtins.intersectAttrs super {
     let validMpi = [ "openmpi" "mpich" "mvapich" ];
         mpiImpl = pkgs.mpi.pname;
         disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
-     in lib.pipe
+     in pipe
           (super.mpi-hs_0_7_3_0.override { ompi = pkgs.mpi; })
           ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
             ++ disableUnused
-            ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
+            ++ optional (elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
           );
-  inherit (lib.mapAttrs (_: addTestToolDepends
+  inherit (mapAttrs (_: addTestToolDepends
     [ pkgs.openssh pkgs.mpiCheckPhaseHook ]
     ) super)
     mpi-hs-store
