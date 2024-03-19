@@ -12,13 +12,13 @@
 buildPythonPackage rec {
   pname = "aiocurrencylayer";
   version = "1.0.6";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
-    repo = pname;
+    repo = "aiocurrencylayer";
     rev = "refs/tags/${version}";
     hash = "sha256-VOzgWN+dDPaGEcahFPSWjBR989b9eNkx4zcnI9o2Xiw=";
   };
