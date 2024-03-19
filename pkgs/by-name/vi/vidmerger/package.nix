@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    # Example Run-time Additional Dependencies
     ffmpeg
   ];
   meta = with lib; {
