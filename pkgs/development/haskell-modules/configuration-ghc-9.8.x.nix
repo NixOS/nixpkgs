@@ -61,6 +61,20 @@ self: super: {
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
   xmonad = doDistribute self.xmonad_0_18_0;
 
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = self.ghc-exactprint_1_8_0_0;
+  ghc-exactprint_1_8_0_0 = addBuildDepends [
+    self.Diff
+    self.HUnit
+    self.data-default
+    self.extra
+    self.free
+    self.ghc-paths
+    self.ordered-containers
+    self.silently
+    self.syb
+  ] super.ghc-exactprint_1_8_0_0;
+
   #
   # Jailbreaks
   #
