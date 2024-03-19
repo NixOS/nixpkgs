@@ -12,7 +12,7 @@
 , llama-cpp
 
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
+, autoAddDriverRunpathHook
 
 , rocmSupport ? config.rocmSupport
 
@@ -135,9 +135,7 @@ rustPlatform.buildRustPackage {
     protobuf
     git
   ] ++ optionals enableCuda [
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = [ openssl ]

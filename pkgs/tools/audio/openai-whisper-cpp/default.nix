@@ -12,6 +12,7 @@
 , MetalKit
 
 , config
+, autoAddDriverRunpathHook
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
@@ -45,9 +46,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optionals cudaSupport ( with cudaPackages ;[
       cuda_nvcc
 
-      # TODO: Replace with autoAddDriverRunpath
-      # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-      autoAddOpenGLRunpathHook
+      autoAddDriverRunpathHook
     ]);
 
   buildInputs = [

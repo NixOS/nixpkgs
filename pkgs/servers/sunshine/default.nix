@@ -42,6 +42,7 @@
 , libnotify
 , miniupnpc
 , config
+, autoAddDriverRunpathHook
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 }:
@@ -94,7 +95,7 @@ stdenv'.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = [

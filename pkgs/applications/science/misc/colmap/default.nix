@@ -1,6 +1,7 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, boost179, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
   config,
+  autoAddDriverRunpathHook,
   cudaSupport ? config.cudaSupport, cudaPackages }:
 
 assert cudaSupport -> cudaPackages != { };
@@ -37,7 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   meta = with lib; {

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  config, cudaSupport ? config.cudaSupport, cudaPackages,
+  config, cudaSupport ? config.cudaSupport, cudaPackages, autoAddDriverRunpathHook,
   effectiveMagma ?
   if cudaSupport then magma-cuda-static
   else if rocmSupport then magma-hip
@@ -338,7 +338,7 @@ in buildPythonPackage rec {
     pythonRelaxDepsHook
     removeReferencesTo
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
     cuda_nvcc
   ])
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
