@@ -26,6 +26,7 @@
   lib,
   newScope,
   pkgs,
+  config,
   __attrsFailEvaluation ? true,
 }:
 let
@@ -85,7 +86,7 @@ let
       (strings.replaceStrings ["."] ["_"] (versions.majorMinor version))
     ];
 
-  composedExtension = fixedPoints.composeManyExtensions [
+  composedExtension = fixedPoints.composeManyExtensions ([
     (import ../development/cuda-modules/setup-hooks/extension.nix)
     (callPackage ../development/cuda-modules/cuda/extension.nix {inherit cudaVersion;})
     (callPackage ../development/cuda-modules/cuda/overrides.nix {inherit cudaVersion;})
@@ -108,7 +109,9 @@ let
     })
     (callPackage ../development/cuda-modules/cuda-samples/extension.nix {inherit cudaVersion;})
     (callPackage ../development/cuda-modules/cuda-library-samples/extension.nix {})
-  ];
+  ] ++ lib.optionals config.allowAliases [
+    (import ../development/cuda-modules/aliases.nix)
+  ]);
 
   cudaPackages = customisation.makeScope newScope (
     fixedPoints.extends composedExtension passthruFunction
