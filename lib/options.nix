@@ -182,6 +182,7 @@ rec {
        }
        => { ...; default = pkgs.javaPackages.openjfx20; defaultText = literalExpression "pkgs.javaPackages.openjfx20"; description = "The OpenJFX package to use."; type = package; }
   */
+
   mkPackageOption =
     # Package set (an instantiation of nixpkgs such as pkgs in modules or another package set)
     pkgs:
@@ -215,6 +216,43 @@ rec {
         description = "The ${name'} package to use."
           + (if extraDescription == "" then "" else " ") + extraDescription;
         type = with lib.types; (if nullable then nullOr else lib.id) package;
+      } // optionalAttrs (example != null) {
+        example = literalExpression
+          (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
+      });
+
+  # TODO make nicer
+  mkPackageOption' =
+      # Name for the package, shown in option description
+      name:
+      {
+        # Whether the package can be null, for example to disable installing a package altogether (defaults to false)
+        nullable ? false,
+        # The attribute path where the default package is located (may be omitted, in which case it is copied from `name`)
+        default ? name,
+        # A string or an attribute path to use as an example (may be omitted)
+        example ? null,
+        # Additional text to include in the option description (may be omitted)
+        extraDescription ? "",
+        # Representation of the package set passed as pkgs (defaults to `"pkgs"`)
+        pkgsText ? "pkgs"
+      }:
+      let
+        name' = if isList name then last name else name;
+        default' = if isList default then default else [ default ];
+        defaultText = concatStringsSep "." default';
+        defaultValue = pkgs: attrByPath default'
+          (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
+        defaults = if default != null then {
+          default = defaultValue;
+          defaultText = literalExpression ("${pkgsText}." + defaultText);
+        } else optionalAttrs nullable {
+          default = null;
+        };
+      in mkOption (defaults // {
+        description = "The ${name'} package to use."
+          + (if extraDescription == "" then "" else " ") + extraDescription;
+        type = with lib.types; functionTo ((if nullable then nullOr else lib.id) package);
       } // optionalAttrs (example != null) {
         example = literalExpression
           (if isList example then "${pkgsText}." + concatStringsSep "." example else example);

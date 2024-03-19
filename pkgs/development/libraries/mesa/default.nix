@@ -385,6 +385,8 @@ in stdenv.mkDerivation {
     inherit (libglvnd) driverLink;
     inherit llvmPackages;
 
+    apis = [ "opengl" ];
+
     tests.devDoesNotDependOnLLVM = stdenv.mkDerivation {
       name = "mesa-dev-does-not-depend-on-llvm";
       buildCommand = ''

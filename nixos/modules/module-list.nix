@@ -1730,6 +1730,8 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
+  ./hardware/drivers/mesa.nix
+  ./hardware/acceleration/opengl.nix
   {
     documentation.nixos.extraModules = [
       ./virtualisation/qemu-vm.nix
