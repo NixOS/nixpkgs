@@ -15,6 +15,7 @@
 , openclSupport ? false
 , clblast
 
+, autoAddDriverRunpathHook
 , blasSupport ? builtins.all (x: !x) [ cudaSupport metalSupport openclSupport rocmSupport vulkanSupport ]
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
@@ -87,9 +88,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
 
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs

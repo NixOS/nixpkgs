@@ -5,6 +5,7 @@
 , pythonAtLeast
 , pythonOlder
 , addOpenGLRunpath
+, autoAddDriverRunpathHook
 , cudaPackages
 , future
 , numpy
@@ -40,7 +41,7 @@ in buildPythonPackage {
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
