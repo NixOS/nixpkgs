@@ -61,13 +61,13 @@ buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/7307
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace mkosi/user.py \
-      --replace 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
+      --replace-fail 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
     substituteInPlace mkosi/__init__.py \
-      --replace '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
+      --replace-fail '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
   '' + lib.optionalString withQemu ''
     substituteInPlace mkosi/qemu.py \
-      --replace '/usr/share/ovmf/x64/OVMF_VARS.fd' "${OVMF.variables}" \
-      --replace '/usr/share/ovmf/x64/OVMF_CODE.fd' "${OVMF.firmware}"
+      --replace-fail '/usr/share/ovmf/x64/OVMF_VARS.fd' "${OVMF.variables}" \
+      --replace-fail '/usr/share/ovmf/x64/OVMF_CODE.fd' "${OVMF.firmware}"
   '';
 
   nativeBuildInputs = [
