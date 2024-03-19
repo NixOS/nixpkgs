@@ -127,7 +127,7 @@ buildPythonPackage rec {
     description = "Library expertly crafted for the representation, transmission, storage, and retrieval of multimodal data";
     homepage = "https://docs.docarray.org/";
     changelog = "https://github.com/docarray/docarray/blob/main/CHANGELOG.md";
-    licence = licenses.apache2;
+    license = "Apache-2.0";
     maintainers = with maintainers; [ loicreynier ];
   };
 }
