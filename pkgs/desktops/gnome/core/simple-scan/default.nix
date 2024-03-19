@@ -11,11 +11,11 @@
 , gdk-pixbuf
 , colord
 , glib
-, gtk3
+, gtk4
 , gusb
 , packagekit
-, libhandy
 , libwebp
+, libadwaita
 , libxml2
 , sane-backends
 , vala
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "44.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Obhw/Ub0R/dH6uzC3yYEnvdzGFCZ8OE8Z1ZWJk3ZjpU=";
+    sha256 = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     colord
     glib
     gusb
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     libwebp
     packagekit
     sane-backends
