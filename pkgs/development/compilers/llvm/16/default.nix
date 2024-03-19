@@ -275,6 +275,19 @@ nixSupport.cc-cflags = [
 ];
 };
 
+    clangNoLibcWithBasicRt = wrapCCWith rec {
+      cc = tools.clang-unwrapped;
+      libcxx = null;
+      bintools = bintoolsNoLibc';
+      extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
+      extraBuildCommands = mkExtraBuildCommandsNoLibc cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+        "-nostdlib++"
+      ];
+    };
+
       clangWithLibcAndNoRt = wrapCCWith rec {
         cc = tools.clang-unwrapped;
         libcxx = null;
