@@ -50,6 +50,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Kozea/CairoSVG/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
+    mainProgram = "cairosvg";
     maintainers = with maintainers; [ ];
   };
 }

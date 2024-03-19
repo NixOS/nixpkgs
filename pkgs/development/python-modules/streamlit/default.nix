@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.32.1";
+  version = "1.32.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7GQASW9niFIUPLwjxMQ4ifeLbJPC4nVv2OBgzM3kuP0=";
+    hash = "sha256-Eli5y8P/lXv30Jsb/IXO3DCPEGWzB0hUUpWpr41Vd6s=";
   };
 
   nativeBuildInputs = [
@@ -89,6 +89,7 @@ buildPythonPackage rec {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "The fastest way to build custom ML tools";
+    mainProgram = "streamlit";
     maintainers = with maintainers; [ natsukium yrashk ];
     license = licenses.asl20;
   };

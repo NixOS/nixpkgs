@@ -49,6 +49,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "Analyse and compare audio files in time and frequency";
+    mainProgram = "dfasma";
     longDescription = ''
       DFasma is free open-source software to compare audio files by time and
       frequency. The comparison is first visual, using wavforms and spectra. It

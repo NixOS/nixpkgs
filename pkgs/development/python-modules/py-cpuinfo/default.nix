@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Get CPU info with pure Python";
+    mainProgram = "cpuinfo";
     longDescription = ''
       Py-cpuinfo gets CPU info with pure Python and should work without any
       extra programs or libraries, beyond what your OS provides. It does not

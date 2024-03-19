@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";
+    mainProgram = "freedv_rx";
     homepage = "https://www.rowetel.com/codec2.html";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;

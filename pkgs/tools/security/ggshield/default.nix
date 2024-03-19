@@ -77,6 +77,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";
+    mainProgram = "ggshield";
     homepage = "https://github.com/GitGuardian/ggshield";
     changelog = "https://github.com/GitGuardian/ggshield/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

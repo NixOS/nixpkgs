@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.cytoscape.org";
     description = "A general platform for complex network analysis and visualization";
+    mainProgram = "cytoscape";
     license = lib.licenses.lgpl21;
     maintainers = [lib.maintainers.mimame];
     platforms = lib.platforms.unix;

@@ -23,6 +23,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   pythonImportsCheck = [
     "nocasedict"
   ];

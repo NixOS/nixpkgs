@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Leak git repositories from misconfigured websites";
+    mainProgram = "gitjacker";
     longDescription = ''
       Gitjacker downloads git repositories and extracts their contents
       from sites where the .git directory has been mistakenly uploaded.

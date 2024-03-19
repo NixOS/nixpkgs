@@ -85,6 +85,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asyncio UPnP Client library for Python";
+    mainProgram = "upnp-client";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
     changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
     license = licenses.asl20;

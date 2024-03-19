@@ -14,6 +14,7 @@
 , gnome
 , glib
 , gtk3
+, mate-desktop
 , mate-settings-daemon
 , wrapGAppsHook
 , mateUpdateScript
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "marco";
-  version = "1.26.2";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "EvGiVP4QcvAwSIRxHgiaVoJ4CgEVk0Au043muUgOB6M=";
+    sha256 = "JJbl5A7pgM1oSUk6w+D4/Q3si4HGdNqNm6GaV38KwuE=";
   };
 
   nativeBuildInputs = [
@@ -45,8 +46,14 @@ stdenv.mkDerivation rec {
     libstartup_notification
     gtk3
     gnome.zenity
+    mate-desktop
     mate-settings-daemon
   ];
+
+  postPatch = ''
+    substituteInPlace src/core/util.c \
+      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${gnome.zenity}/bin/zenity"'
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 

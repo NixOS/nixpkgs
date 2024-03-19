@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Helm-like configuration values loader with support for various sources";
+    mainProgram = "vals";
     license = licenses.asl20;
     homepage = "https://github.com/variantdev/vals";
     changelog = "https://github.com/variantdev/vals/releases/v${version}";

@@ -117,6 +117,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
+    mainProgram = "sublime-music";
     homepage = "https://sublimemusic.app/";
     changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;

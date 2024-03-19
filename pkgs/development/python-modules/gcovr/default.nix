@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, colorlog
 , jinja2
 , lxml
 , pygments
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
@@ -20,9 +22,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    colorlog
     jinja2
     lxml
     pygments
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   # There are no unit tests in the pypi tarball. Most of the unit tests on the
@@ -32,12 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "gcovr"
-    "gcovr.workers"
     "gcovr.configuration"
   ];
 
   meta = with lib; {
     description = "Python script for summarizing gcov data";
+    mainProgram = "gcovr";
     homepage = "https://www.gcovr.com/";
     changelog = "https://github.com/gcovr/gcovr/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd0;

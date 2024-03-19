@@ -78,6 +78,7 @@ in rec {
     meta = with lib;
       metaCommon // {
         description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
+        mainProgram = "stubby";
         longDescription = ''
           Stubby is an application that acts as a local DNS Privacy stub
           resolver (using RFC 7858, aka DNS-over-TLS). Stubby encrypts DNS

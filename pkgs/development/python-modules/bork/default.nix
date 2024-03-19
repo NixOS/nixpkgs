@@ -4,14 +4,14 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
-
+, setuptools
 , build
 , coloredlogs
 , packaging
 , pip
+, readme-renderer
 , toml
 , twine
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -27,24 +27,27 @@ buildPythonPackage rec {
     hash = "sha256-BDwVhKmZ/F8CvpT6dEI5moQZx8wHy1TwdOl889XogEo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
     "packaging"
+    "readme-renderer"
     "twine"
     "wheel"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     build
     coloredlogs
     packaging
     pip
-    toml
+    readme-renderer
     twine
-    wheel
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    toml
   ];
 
   pythonImportsCheck = [
@@ -56,12 +59,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
   pytestFlagsArray = [
     "-m 'not network'"
   ];
 
+  disabledTests = [
+    # tries to call python -m bork
+    "test_repo"
+  ];
+
   meta = with lib; {
     description = "Python build and release management tool";
+    mainProgram = "bork";
     homepage = "https://github.com/duckinator/bork";
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.all;

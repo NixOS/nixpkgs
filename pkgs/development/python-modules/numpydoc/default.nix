@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/numpy/numpydoc/releases/tag/v${version}";
     description = "Sphinx extension to support docstrings in Numpy format";
+    mainProgram = "validate-docstrings";
     homepage = "https://github.com/numpy/numpydoc";
     license = lib.licenses.free;
    };

@@ -22,11 +22,11 @@
 , scipy
 , sentencepiece
 , setuptools
+, setuptools-scm
 , slicer
 , tqdm
 , transformers
 , xgboost
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     oldest-supported-numpy
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

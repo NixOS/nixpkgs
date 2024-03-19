@@ -24,6 +24,7 @@ in appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Cross-Platform Passwords & Secrets Vault";
+    mainProgram = "buttercup-desktop";
     homepage = "https://buttercup.pw";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];

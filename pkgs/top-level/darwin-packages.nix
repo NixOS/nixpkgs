@@ -172,8 +172,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   moltenvk = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/moltenvk {
     inherit (apple_sdk_11_0.frameworks) AppKit Foundation Metal QuartzCore;
-    inherit (apple_sdk_11_0) MacOSX-SDK Libsystem;
-    inherit (pkgs.darwin) cctools sigtool;
+    inherit (apple_sdk_11_0.libs) simd;
   };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
@@ -199,7 +198,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     xcode_15 xcode_15_1
     xcode;
 
-  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication {
+    inherit (apple_sdk) darwin-stubs;
+  };
 
   # TODO: Remove the CF hook if a solution to the crashes is not found.
   CF =

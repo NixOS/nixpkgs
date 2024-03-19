@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to bypass 40X response codes";
+    mainProgram = "nomore403";
     homepage = "https://github.com/devploit/dontgo403";
     changelog = "https://github.com/devploit/dontgo403/releases/tag/${version}";
     license = licenses.asl20;

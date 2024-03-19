@@ -41,6 +41,7 @@ buildGoModule rec {
   meta = with lib; {
     description =
       "A high-level tool for the management of Linux filesystem encryption";
+    mainProgram = "fscrypt";
     longDescription = ''
       This tool manages metadata, key generation, key wrapping, PAM integration,
       and provides a uniform interface for creating and modifying encrypted

@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A libphonenumber command-line wrapper";
+    mainProgram = "pn";
     homepage = "https://github.com/Orange-OpenSource/pn";
     license = licenses.asl20;
     platforms = platforms.unix;

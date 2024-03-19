@@ -101,6 +101,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ahoneybun nyanbinary ];
     platforms = platforms.linux;

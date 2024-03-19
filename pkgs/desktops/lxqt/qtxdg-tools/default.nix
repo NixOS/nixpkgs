@@ -34,6 +34,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/qtxdg-tools";
     description = "libqtxdg user tools";
+    mainProgram = "qtxdg-mat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;

@@ -43,6 +43,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A silly speed painting game";
+    mainProgram = "90secondportraits";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;

@@ -1,15 +1,27 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+
+# build-system
+, hatchling
+
+# dependencies
 , click
 , redis
+
+# tests
+, psutil
+, pytestCheckHook
+, redis-server
+, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.16";
-  format = "setuptools";
+  version = "1.16.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,16 +29,33 @@ buildPythonPackage rec {
     owner = "rq";
     repo = "rq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2jseFyq4BpVLc7t1Y/O8olC6IM5A4VEI8Fkrb94dyn8=";
+    hash = "sha256-1E7jPTSQCjuKZVFL4uZqL1WZHnxWSLTNcnpyvfHz7oY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
     click
     redis
   ];
 
-  # Tests require a running Redis rerver
-  doCheck = false;
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+    sentry-sdk
+  ];
+
+  preCheck = lib.optionalString stdenv.isLinux ''
+    PATH=$out/bin:$PATH
+    ${redis-server}/bin/redis-server &
+    REDIS_PID=$!
+  '';
+
+  postCheck = lib.optionalString stdenv.isLinux ''
+    kill $REDIS_PID
+  '';
 
   pythonImportsCheck = [
     "rq"

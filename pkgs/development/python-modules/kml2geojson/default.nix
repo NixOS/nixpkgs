@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to convert KML to GeoJSON";
+    mainProgram = "k2g";
     homepage = "https://github.com/mrcagney/kml2geojson";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

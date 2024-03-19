@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GLib libusb wrapper";
+    mainProgram = "gusbcmd";
     homepage = "https://github.com/hughsie/libgusb";
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];

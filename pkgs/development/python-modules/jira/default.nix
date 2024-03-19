@@ -6,6 +6,7 @@
 , ipython
 , keyring
 , packaging
+, pillow
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
     requests-toolbelt
+    pillow
     typing-extensions
   ];
 

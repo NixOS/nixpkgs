@@ -35,6 +35,7 @@ buildPythonPackage rec {
     "test_load_should_create_object_from_uri"
     "test_load_should_create_object_from_uri_with_relative_segments"
     "test_load_should_remember_redirect"
+    "test_raise_timeout_exception_if_timeout_happens_when_loading_from_uri"
   ];
 
   pythonImportsCheck = [

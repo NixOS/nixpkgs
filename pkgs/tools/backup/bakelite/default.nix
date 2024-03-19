@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/richfelker/bakelite";
     description = "Incremental backup with strong cryptographic confidentality";
+    mainProgram = "bakelite";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mvs ];
     # no support for Darwin (yet: https://github.com/richfelker/bakelite/pull/5)

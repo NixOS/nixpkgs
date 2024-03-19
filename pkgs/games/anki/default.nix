@@ -277,6 +277,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Spaced repetition flashcard program";
+    mainProgram = "anki";
     longDescription = ''
       Anki is a program which makes remembering things easy. Because it is a lot
       more efficient than traditional study methods, you can either greatly

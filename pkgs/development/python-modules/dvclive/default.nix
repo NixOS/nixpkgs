@@ -17,13 +17,13 @@
 , optuna
 , pandas
 , pillow
-, pytestCheckHook
+, psutil
+, pynvml
 , pythonOlder
 , ruamel-yaml
 , scikit-learn
 , scmrepo
 , setuptools-scm
-, tabulate
 , tensorflow
 , torch
 , transformers
@@ -56,6 +56,8 @@ buildPythonPackage rec {
     gto
     ruamel-yaml
     scmrepo
+    psutil
+    pynvml
   ];
 
   passthru.optional-dependencies = {

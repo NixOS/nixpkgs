@@ -30,6 +30,7 @@ buildGoModule rec {
     description = "A syntax-aware linter for prose built with speed and extensibility in mind";
     homepage = "https://vale.sh/";
     changelog = "https://github.com/errata-ai/vale/releases/tag/v${version}";
+    mainProgram = "vale";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

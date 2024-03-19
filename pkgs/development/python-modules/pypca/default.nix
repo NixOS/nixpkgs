@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for interacting with the PCA 301 smart plugs";
+    mainProgram = "pypca";
     homepage = "https://github.com/majuss/pypca";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

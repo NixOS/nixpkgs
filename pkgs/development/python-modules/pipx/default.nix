@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
+, hatch-vcs
 , importlib-metadata
 , packaging
 , pip
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [
@@ -79,6 +81,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Install and run Python applications in isolated environments";
+    mainProgram = "pipx";
     homepage = "https://github.com/pipxproject/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -17,6 +17,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Mighty CSS linter that helps you avoid errors and enforce conventions";
+    mainProgram = "stylelint";
     homepage = "https://stylelint.io";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

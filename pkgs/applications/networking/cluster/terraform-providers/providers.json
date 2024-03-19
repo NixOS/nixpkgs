@@ -1188,6 +1188,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-FWwHAaUKUw7DyNs4sAlkLkGNj48wMJgpFvfQgbp8lFs="
   },
+  "temporalcloud": {
+    "hash": "sha256-ROFjDIzMLifFZAfetpDWOGylyg9Jp6vN9dEDLMZ3tz8=",
+    "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
+    "owner": "temporalio",
+    "repo": "terraform-provider-temporalcloud",
+    "rev": "v0.0.5",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-9sIVFZJXFR0+cJj6xL6bXRTY9dKIB6a+7ZCopeq9upM="
+  },
   "tencentcloud": {
     "hash": "sha256-vcq7DvYv4dHd7nO4iwCWePuPwM2mIMfC438FkpG/Iwo=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",

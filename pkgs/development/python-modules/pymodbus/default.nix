@@ -85,6 +85,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
+    mainProgram = "pymodbus.simulator";
     longDescription = ''
       Pymodbus is a full Modbus protocol implementation using twisted,
       torndo or asyncio for its asynchronous communications core. It can

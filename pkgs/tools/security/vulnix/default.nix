@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "NixOS vulnerability scanner";
+    mainProgram = "vulnix";
     homepage = "https://github.com/flyingcircusio/vulnix";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ckauhaus ];

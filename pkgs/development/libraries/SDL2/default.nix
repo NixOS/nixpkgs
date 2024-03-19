@@ -180,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A cross-platform multimedia library";
+    mainProgram = "sdl2-config";
     homepage = "http://www.libsdl.org/";
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${version}";
     license = licenses.zlib;

@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Rebuild Sphinx documentation on changes, with live-reload in the browser";
+    mainProgram = "sphinx-autobuild";
     homepage = "https://github.com/sphinx-doc/sphinx-autobuild";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [holgerpeters];

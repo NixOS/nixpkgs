@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A snazzy json log viewer";
+    mainProgram = "snazy";
     longDescription = ''
       Snazy is a simple tool to parse json logs and output them in a nice format
       with nice colors.

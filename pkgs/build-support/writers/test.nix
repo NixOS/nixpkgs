@@ -11,8 +11,38 @@
 
 # If you are reading this, you can test these writers by running: nix-build . -A tests.writers
 
-with writers;
 let
+  inherit (lib) getExe recurseIntoAttrs;
+
+  inherit (writers)
+    makeFSharpWriter
+    writeBash
+    writeBashBin
+    writeDash
+    writeDashBin
+    writeFish
+    writeFishBin
+    writeFSharp
+    writeHaskell
+    writeHaskellBin
+    writeJS
+    writeJSBin
+    writeJSON
+    writeLua
+    writeNu
+    writePerl
+    writePerlBin
+    writePyPy3
+    writePython3
+    writePython3Bin
+    writeRuby
+    writeRust
+    writeRustBin
+    writeText
+    writeTOML
+    writeYAML
+    ;
+
   expectSuccess = test:
     runCommand "run-${test.name}" {} ''
       if [[ "$(${test})" != success ]]; then
@@ -25,7 +55,7 @@ let
 
   expectSuccessBin = test:
     runCommand "run-${test.name}" {} ''
-      if [[ "$(${lib.getExe test})" != success ]]; then
+      if [[ "$(${getExe test})" != success ]]; then
         echo 'test ${test.name} failed'
         exit 1
       fi
@@ -39,8 +69,8 @@ let
     in
     testers.testEqualContents { expected = expectedFile; actual = file; assertion = "${file.name} matches"; };
 in
-lib.recurseIntoAttrs {
-  bin = lib.recurseIntoAttrs {
+recurseIntoAttrs {
+  bin = recurseIntoAttrs {
     bash = expectSuccessBin (writeBashBin "test-writers-bash-bin" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
     '');
@@ -140,7 +170,7 @@ lib.recurseIntoAttrs {
     #'');
   };
 
-  simple = lib.recurseIntoAttrs {
+  simple = recurseIntoAttrs {
     bash = expectSuccess (writeBash "test-writers-bash" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
     '');
@@ -265,7 +295,7 @@ lib.recurseIntoAttrs {
     '');
   };
 
-  path = lib.recurseIntoAttrs {
+  path = recurseIntoAttrs {
     bash = expectSuccess (writeBash "test-writers-bash-path" (writeText "test" ''
       if [[ "test" == "test" ]]; then echo "success"; fi
     ''));
@@ -306,7 +336,7 @@ lib.recurseIntoAttrs {
     };
   };
 
-  wrapping = lib.recurseIntoAttrs {
+  wrapping = recurseIntoAttrs {
     bash-bin = expectSuccessBin (
       writeBashBin "test-writers-wrapping-bash-bin"
         {

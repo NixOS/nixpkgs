@@ -30,6 +30,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sample Rate Converter for audio";
+    mainProgram = "sndfile-resample";
     homepage    = "http://www.mega-nerd.com/SRC/index.html";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];

@@ -176,7 +176,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "255.2";
+  version = "255.4";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-8SfJY/pcH4yrDeJi0GfIUpetTbpMwyswvSu+RSfgqfY=";
+    hash = "sha256-P1mKq+ythrv8MU7y2CuNtEx6qCDacugzfsPRZL+NPys=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -866,7 +866,7 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withBootloader withCryptsetup withHostnamed withImportd withKmod
+    inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
       withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {

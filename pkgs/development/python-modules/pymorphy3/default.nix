@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, click
 , dawg-python
 , docopt
 , pytestCheckHook
@@ -27,14 +28,19 @@ buildPythonPackage rec {
     pymorphy3-dicts-uk
   ];
 
+  optional-dependencies.CLI = [
+    click
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.CLI;
 
   pythonImportsCheck = [ "pymorphy3" ];
 
   meta = with lib; {
     description = "Morphological analyzer/inflection engine for Russian and Ukrainian";
+    mainProgram = "pymorphy";
     homepage = "https://github.com/no-plagiarism/pymorphy3";
     license = licenses.mit;
     maintainers = with maintainers; [ jboy ];

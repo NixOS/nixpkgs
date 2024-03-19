@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple monitoring of system events";
+    mainProgram = "eventstat";
     homepage = "https://github.com/ColinIanKing/eventstat";
     license = licenses.gpl2;
     platforms = platforms.linux;

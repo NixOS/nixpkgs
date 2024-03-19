@@ -8,12 +8,14 @@
 , fetchFromGitHub
 , fsspec
 , pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "adlfs";
   version = "2024.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-/Qakr7ISlzDqunoshUf8mpWCvFXOH3haUx/C79j4RZA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     aiohttp
     azure-core
     azure-datalake-store

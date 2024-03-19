@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatic SQL injection and database takeover tool";
+    mainProgram = "sqlmap";
     homepage = "https://sqlmap.org";
     changelog = "https://github.com/sqlmapproject/sqlmap/releases/tag/${version}";
     license = licenses.gpl2Plus;

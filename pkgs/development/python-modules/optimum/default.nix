@@ -107,6 +107,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
+    mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
     changelog = "https://github.com/huggingface/optimum/releases/tag/${src.rev}";
     license = licenses.asl20;

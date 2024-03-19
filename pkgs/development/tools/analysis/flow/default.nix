@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A static type checker for JavaScript";
+    mainProgram = "flow";
     homepage = "https://flow.org/";
     changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
     license = licenses.mit;

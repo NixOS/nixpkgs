@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Vulnerability fingerprinting and vulnerability finder for Wordpress blog engine";
+    mainProgram = "plecost";
     homepage = "https://github.com/iniqua/plecost";
     license = licenses.bsd3;
     maintainers = with maintainers; [ emilytrau ];

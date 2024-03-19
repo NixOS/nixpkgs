@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.23.4";
+  version = "5.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "briis";
     repo = "pyunifiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sBdu4XJkEtHf6dlHgJKFQvONp1x89NiS2EgxMiJFX7A=";
+    hash = "sha256-bZjfpatw4lcOgMCqung/DMfRijxwtuIht6QusIYaCQ0=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -102,6 +102,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for interacting with the Unifi Protect API";
+    mainProgram = "unifi-protect";
     homepage = "https://github.com/briis/pyunifiprotect";
     changelog = "https://github.com/AngellusMortis/pyunifiprotect/releases/tag/v${version}";
     license = with licenses; [ mit ];

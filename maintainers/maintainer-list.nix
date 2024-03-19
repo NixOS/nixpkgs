@@ -6276,6 +6276,16 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  federicoschonborn = {
+    name = "Federico Damián Schonborn";
+    email = "federicoschonborn@disroot.org";
+    github = "FedericoSchonborn";
+    githubId = 62166915;
+    matrix = "@FedericoDSchonborn:matrix.org";
+    keys = [
+      { fingerprint = "C43F 4052 D289 3B73 33F8  0259 E4F6 F544 DE9E 29E8"; }
+    ];
+  };
   fedx-sudo = {
     email = "fedx-sudo@pm.me";
     github = "FedX-sudo";
@@ -6652,6 +6662,11 @@
     github = "friedelino";
     githubId = 46672819;
     name = "Frido Friedemann";
+  };
+  friedrichaltheide = {
+    github = "friedrichaltheide";
+    githubId = 11352905;
+    name = "Friedrich Altheide";
   };
   frlan = {
     email = "frank@frank.uvena.de";
@@ -15899,7 +15914,7 @@
     githubId = 10837173;
   };
   qjoly = {
-    email = "github@thoughtless.eu";
+    email = "github@une-pause-cafe.fr";
     github = "qjoly";
     githubId = 82603435;
     name = "Quentin JOLY";
@@ -17915,7 +17930,7 @@
   };
   sinanmohd = {
     name = "Sinan Mohd";
-    email = "sinan@firemail.cc";
+    email = "sinan@sinanmohd.com";
     matrix = "@sinan:sinanmohd.com";
     github = "sinanmohd";
     githubId = 69694713;
@@ -18045,6 +18060,16 @@
     github = "SlothOfAnarchy";
     githubId = 12828415;
     name = "Michel Weitbrecht";
+  };
+  slotThe = {
+    name = "Tony Zorman";
+    email = "tonyzorman@mailbox.org";
+    github= "slotThe";
+    matrix = "@slot-:matrix.org";
+    githubId = 50166980;
+    keys = [{
+      fingerprint = "4896 FB6C 9528 46C3 414C 2475 C927 DE8C 7DFD 57B8";
+    }];
   };
   slwst = {
     email = "email@slw.st";

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 , cmake
 , cmark
 , Cocoa
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4VsoxZzi/EfEsnDvvwzg2xhj7j5B+k3gvaSqwJFDweE=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja canonicalize-jars-hook ];
+  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja stripJavaArchivesHook ];
   buildInputs =
     [
       qtbase

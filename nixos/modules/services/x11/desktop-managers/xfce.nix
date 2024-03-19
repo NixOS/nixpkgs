@@ -131,7 +131,7 @@ in
         xfdesktop
       ] ++ optional cfg.enableScreensaver xfce4-screensaver) excludePackages;
 
-    programs.gnupg.agent.pinentryPackage = pkgs.pinentry-gtk2;
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
 

@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Like neofetch, but much faster because written in C";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gerg-l khaneliman ];
+    maintainers = with lib.maintainers; [ gerg-l khaneliman federicoschonborn ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";
   };

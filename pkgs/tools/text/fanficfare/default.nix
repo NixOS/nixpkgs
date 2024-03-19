@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for making eBooks from fanfiction web sites";
+    mainProgram = "fanficfare";
     homepage = "https://github.com/JimmXinu/FanFicFare";
     license = licenses.gpl3;
     platforms = platforms.unix;

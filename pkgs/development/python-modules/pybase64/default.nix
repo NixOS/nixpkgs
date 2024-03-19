@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast Base64 encoding/decoding";
+    mainProgram = "pybase64";
     homepage = "https://github.com/mayeut/pybase64";
     changelog = "https://github.com/mayeut/pybase64/releases/tag/v${version}";
     license = licenses.bsd2;

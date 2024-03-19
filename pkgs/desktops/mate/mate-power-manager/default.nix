@@ -6,6 +6,7 @@
 , glib
 , itstool
 , libxml2
+, mate-desktop
 , mate-panel
 , libnotify
 , libcanberra-gtk3
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-power-manager";
-  version = "1.26.1";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IM2dIu0Eur+Yu1DnGg7F14qKR2KHcjJ4+H2nbKv7EEI=";
+    sha256 = "jr3LdLYH6Ggza6moFGze+Pl7zlNcKwyzv2UMWPce7iE=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     dbus-glib
     upower
     polkit
+    mate-desktop
     mate-panel
   ];
 

@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://git.sr.ht/~martijnbraam/among-sus";
     description = "Among us, but it's a text adventure";
+    mainProgram = "among-sus";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.eyjhb ];
     platforms = platforms.unix;

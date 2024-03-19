@@ -75,6 +75,7 @@ let pylama = buildPythonPackage rec {
 
   meta = with lib; {
     description = "Code audit tool for python";
+    mainProgram = "pylama";
     homepage = "https://github.com/klen/pylama";
     changelog = "https://github.com/klen/pylama/blob/${version}/Changelog";
     license = licenses.mit;

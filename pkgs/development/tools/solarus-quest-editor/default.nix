@@ -28,6 +28,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "The editor for the Zelda-like ARPG game engine, Solarus";
+    mainProgram = "solarus-quest-editor";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
       Many full-fledged games have been writen for the engine.

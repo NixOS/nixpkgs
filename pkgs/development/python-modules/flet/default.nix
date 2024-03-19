@@ -7,6 +7,7 @@
 , poetry-core
 
 # propagates
+, fastapi
 , flet-core
 , flet-runtime
 , httpx
@@ -14,6 +15,7 @@
 , packaging
 , qrcode
 , cookiecutter
+, uvicorn
 , watchdog
 , websocket-client
 , websockets
@@ -40,8 +42,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    fastapi
     flet-core
     flet-runtime
+    uvicorn
     websocket-client
     watchdog
     oauthlib

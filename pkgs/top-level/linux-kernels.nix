@@ -713,6 +713,5 @@ in {
     '';
   };
 
-  buildLinux = attrs: callPackage ../os-specific/linux/kernel/generic.nix attrs;
-
+  buildLinux = callPackage ../os-specific/linux/kernel/generic.nix {};
 }

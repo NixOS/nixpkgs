@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for BME280 sensor through spidev";
+    mainProgram = "bme280spi";
     homepage = "https://github.com/Kuzj/bme280spi";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

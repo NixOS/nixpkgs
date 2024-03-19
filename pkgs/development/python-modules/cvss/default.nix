@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for CVSS2/3/4";
+    mainProgram = "cvss_calculator";
     homepage = "https://github.com/RedHatProductSecurity/cvss";
     changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/v${version}";
     license = with licenses; [ lgpl3Plus ];

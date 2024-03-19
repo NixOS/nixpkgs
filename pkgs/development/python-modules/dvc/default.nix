@@ -66,7 +66,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     rev = "refs/tags/${version}";
-    hash = "sha256-k41MvkHuZEanOBXOcwsaSSRY0r446ks5eEGyqQbTZAY=";
+    hash = "sha256-NY3fwo7063hrgYK0a7/PLlPORxhqGgowNtLWo/CN+PY=";
   };
 
   pythonRelaxDeps = [
@@ -166,6 +166,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
+    mainProgram = "dvc";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;

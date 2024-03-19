@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SDL2 sound library";
+    mainProgram = "playsound";
     platforms = platforms.unix;
     license = licenses.zlib;
     homepage = "https://www.icculus.org/SDL_sound/";

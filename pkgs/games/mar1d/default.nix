@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "First person Super Mario Bros";
+    mainProgram = "MAR1D";
     longDescription = ''
       The original Super Mario Bros as you've never seen it. Step into Mario's
       shoes in this first person clone of the classic Mario game. True to the

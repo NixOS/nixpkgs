@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
   meta = with lib; {
     description = "GraphQL Server Engine Fingerprinting utility";
+    mainProgram = "graphw00f";
     homepage = "https://github.com/dolevf/graphw00f";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

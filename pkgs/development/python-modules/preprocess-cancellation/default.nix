@@ -22,10 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-MJ4mwOFswLYHhg2LNZ+/ZwDvSjoxElVxlaWjArHV2NY=";
   };
 
-  patches = [
-    ./pep-621.patch
-  ];
-
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
 

@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Live reload for Go apps";
+    mainProgram = "air";
     homepage = "https://github.com/cosmtrek/air";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Gonzih ];

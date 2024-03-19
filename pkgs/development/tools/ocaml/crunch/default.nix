@@ -25,6 +25,7 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/mirage/ocaml-crunch";
     description = "Convert a filesystem into a static OCaml module";
+    mainProgram = "ocaml-crunch";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };

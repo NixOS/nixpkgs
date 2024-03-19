@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Docker client for Python, designed to be fun and intuitive";
+    mainProgram = "python-on-whales";
     homepage = "https://github.com/gabrieldemarmiesse/python-on-whales";
     changelog = "https://github.com/gabrieldemarmiesse/python-on-whales/releases/tag/v${version}";
     license = licenses.mit;

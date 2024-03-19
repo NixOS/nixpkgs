@@ -67,6 +67,7 @@ let nbclient = buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbclient";
     description = "A client library for executing notebooks";
+    mainProgram = "jupyter-execute";
     license = licenses.bsd3;
     maintainers = [ ];
   };

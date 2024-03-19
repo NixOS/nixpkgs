@@ -8,4 +8,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [pkg-config];
   extraBuildInputs = [plymouth];
+  meta.mainProgram = "kplymouththemeinstaller";
 }

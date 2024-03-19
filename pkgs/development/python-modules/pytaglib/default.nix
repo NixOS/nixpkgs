@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for the Taglib audio metadata library";
+    mainProgram = "pyprinttags";
     homepage = "https://github.com/supermihi/pytaglib";
     changelog = "https://github.com/supermihi/pytaglib/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

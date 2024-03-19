@@ -20,6 +20,7 @@ in
       homepage = "https://github.com/mgmeyers/pdfannots2json";
       license = licenses.agpl3;
       description = "A tool to convert PDF annotations to JSON";
+      mainProgram = "pdfannots2json";
       maintainers = with maintainers; [ _0nyr ];
     };
   }

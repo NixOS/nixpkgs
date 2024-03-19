@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A network address manipulation library for Python";
+    mainProgram = "netaddr";
     homepage = "https://netaddr.readthedocs.io/";
     downloadPage = "https://github.com/netaddr/netaddr/releases";
     changelog = "https://github.com/netaddr/netaddr/blob/${version}/CHANGELOG";

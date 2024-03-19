@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Xubuntu/lightdm-gtk-greeter";
     description = "A GTK greeter for LightDM";
+    mainProgram = "lightdm-gtk-greeter";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bobby285271 ];

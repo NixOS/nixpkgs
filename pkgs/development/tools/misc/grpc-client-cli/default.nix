@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "generic gRPC command line client";
+    mainProgram = "grpc-client-cli";
     maintainers = with maintainers; [ Philipp-M ];
     homepage = "https://github.com/vadimi/grpc-client-cli";
     license = licenses.mit;

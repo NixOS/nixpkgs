@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Non-decompiling Android vulnerability scanner";
+    mainProgram = "trueseeing";
     homepage = "https://github.com/alterakey/trueseeing";
     changelog = "https://github.com/alterakey/trueseeing/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];

@@ -124,6 +124,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # require unpackaged kaleido and building it is a bit difficult
     "tests/visualization_tests"
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/artifacts_tests/test_boto3.py"
   ];
 
   pythonImportsCheck = [
@@ -132,6 +134,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A hyperparameter optimization framework";
+    mainProgram = "optuna";
     homepage = "https://optuna.org/";
     changelog = "https://github.com/optuna/optuna/releases/tag/${src.rev}";
     license = licenses.mit;

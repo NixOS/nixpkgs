@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A TUI interface to the StackExchange network";
+    mainProgram = "so";
     homepage = "https://github.com/samtay/so";
     license = licenses.mit;
     maintainers = with maintainers; [ mredaelli ];

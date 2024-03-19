@@ -65,6 +65,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "The Microsoft Azure Linux Agent (waagent)";
+    mainProgram = "waagent";
     longDescription = ''
       The Microsoft Azure Linux Agent (waagent)
       manages Linux provisioning and VM interaction with the Azure

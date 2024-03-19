@@ -15,6 +15,10 @@ buildPythonPackage rec {
     hash = "sha256-TOuyVH2wKKruy7SBNW3z62yzpmBT6l6RcKhoO1XUFhE=";
   };
 
+  postPatch = ''
+    sed -i '/addopts =/d' setup.cfg
+  '';
+
   nativeCheckInputs = [
     pytestCheckHook
     matplotlib

@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand for building dependency graphs of Rust projects";
+    mainProgram = "cargo-deps";
     homepage = "https://github.com/m-cat/cargo-deps";
     license = licenses.mit;
     maintainers = with maintainers; [ arcnmx matthiasbeyer ];

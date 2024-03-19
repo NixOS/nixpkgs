@@ -25,14 +25,14 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "slint-lsp";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-m1W+Q/SD5DmI3XGRZRAWj/dVY7fQM9CeIvX3E1GQdlU=";
+    sha256 = "sha256-IkXjO4XGRT19kJRp+1tgPR8nyIVulV412HgS4rVuFhc=";
   };
 
-  cargoHash = "sha256-X4xBPU49XskmRg8TuLtiAqpoeZOBTIFvhj7WWFNBRDw=";
+  cargoHash = "sha256-vXip1m34kF4Jdz4FQa58/hepJRVnDyS5xGUja4+O7Lo=";
 
   nativeBuildInputs = [ cmake pkg-config fontconfig ];
   buildInputs = rpathLibs ++ [ xorg.libxcb.dev ]
@@ -54,6 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Language Server Protocol (LSP) for Slint UI language";
+    mainProgram = "slint-lsp";
     homepage = "https://slint-ui.com/";
     changelog = "https://github.com/slint-ui/slint/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus ];

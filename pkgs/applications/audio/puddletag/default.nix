@@ -72,6 +72,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "An audio tag editor similar to the Windows program, Mp3tag";
+    mainProgram = "puddletag";
     homepage = "https://docs.puddletag.net";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg dschrempf ];

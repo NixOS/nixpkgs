@@ -57,6 +57,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Network access
     "test_validate_ping"
+    "test_logging"
     # Fails since yamllint 1.27.x
     "test_yaml_lint"
   ];
@@ -67,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
+    mainProgram = "glean_parser";
     homepage = "https://github.com/mozilla/glean_parser";
     changelog = "https://github.com/mozilla/glean_parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;

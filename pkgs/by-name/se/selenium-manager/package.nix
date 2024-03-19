@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +19,10 @@ rustPlatform.buildRustPackage rec {
   sourceRoot = "${src.name}/rust";
 
   cargoHash = "sha256-BystESOFIitw3ER2K1TPOf5luOBvKXFuqc/unL93yRY=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   # TODO: enable tests
   # The test suite depends on a number of browsers and network requests,

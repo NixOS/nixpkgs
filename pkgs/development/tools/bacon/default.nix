@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Background rust code checker";
+    mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
     changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Only;

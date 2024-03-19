@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, cbor2
 , docopt
 , fetchFromGitHub
 , jsonconversion
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cbor2
     docopt
     pytestCheckHook
     tabulate

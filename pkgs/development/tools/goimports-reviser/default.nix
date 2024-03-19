@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Right imports sorting & code formatting tool (goimports alternative)";
+    mainProgram = "goimports-reviser";
     homepage = "https://github.com/incu6us/goimports-reviser";
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];

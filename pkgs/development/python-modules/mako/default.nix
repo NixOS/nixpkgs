@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Super-fast templating language";
+    mainProgram = "mako-render";
     homepage = "https://www.makotemplates.org/";
     changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
     license = licenses.mit;

@@ -99,6 +99,7 @@ with lib.maintainers; {
   budgie = {
     members = [
       bobby285271
+      federicoschonborn
     ];
     scope = "Maintain Budgie desktop environment";
     shortName = "Budgie";

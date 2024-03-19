@@ -22,6 +22,7 @@ rec {
   meta = with lib; {
     homepage = "https://gitlab.com/greut/eclint";
     description = "EditorConfig linter written in Go";
+    mainProgram = "eclint";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins ];
   };

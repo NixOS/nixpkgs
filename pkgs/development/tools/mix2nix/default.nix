@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generate nix expressions from mix.lock file.";
+    mainProgram = "mix2nix";
     license = licenses.mit;
     maintainers = with maintainers; [ ydlr ] ++ teams.beam.members;
   };

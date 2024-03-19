@@ -68,6 +68,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Convert PDF to DOCX";
+    mainProgram = "pdf2docx";
     homepage = "https://github.com/dothinking/pdf2docx";
     changelog = "https://github.com/dothinking/pdf2docx/releases/tag/v${version}";
     license = licenses.gpl3Only;

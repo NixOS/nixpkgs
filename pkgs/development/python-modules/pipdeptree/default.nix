@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line utility to show dependency tree of packages";
+    mainProgram = "pipdeptree";
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${version}";
     license = licenses.mit;

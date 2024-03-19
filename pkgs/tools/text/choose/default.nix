@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A human-friendly and fast alternative to cut and (sometimes) awk";
+    mainProgram = "choose";
     homepage = "https://github.com/theryangeary/choose";
     license = licenses.gpl3;
     maintainers = with maintainers; [ sohalt ];

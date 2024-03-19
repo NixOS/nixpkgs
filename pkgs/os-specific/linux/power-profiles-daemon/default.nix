@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/hadess/power-profiles-daemon";
     description = "Makes user-selected power profiles handling available over D-Bus";
+    mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];

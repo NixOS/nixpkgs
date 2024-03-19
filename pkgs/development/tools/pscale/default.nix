@@ -41,6 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "The CLI for PlanetScale Database";
+    mainProgram = "pscale";
     changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
     homepage = "https://www.planetscale.com/";
     license = licenses.asl20;
