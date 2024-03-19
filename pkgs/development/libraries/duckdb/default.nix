@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
-  inherit (versions) version;
+  inherit (versions) rev version;
 
   src = fetchFromGitHub {
     # to update run:
@@ -32,22 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "lib" "dev" ];
 
-  patches = [
-    # remove calls to git and set DUCKDB_VERSION to version
-    (substituteAll {
-      src = ./version.patch;
-      version = "v${finalAttrs.version}";
-      rev = versions.rev;
-    })
-    # add missing file needed for httpfs compile
-    # remove on next update
-    (fetchpatch {
-      name = "missing-httpfs-file.patch";
-      url = "https://github.com/duckdb/duckdb/commit/3d7aa3ed46ecf5f18122559e385b75f1f5e9aba8.patch";
-      hash = "sha256-Q4IHCpMpxn86OquUZdEF7P0nHEPOcWS0TQijTkvBYbQ=";
-    })
-  ];
-
   nativeBuildInputs = [ cmake ninja python3 ];
   buildInputs = [ openssl ]
     ++ lib.optionals withJdbc [ openjdk11 ]
@@ -57,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
+    "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
   ] ++ lib.optionals finalAttrs.doInstallCheck [
     # development settings
     "-DBUILD_UNITTESTS=ON"
@@ -110,10 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
         "test/sql/copy/csv/auto/test_csv_auto.test"
         # test expects installed file timestamp to be > 2024
         "test/sql/table_function/read_text_and_blob.test"
-        # can re-enable next update (broken for 0.10.0)
-        "test/sql/secrets/create_secret_non_writable_persistent_dir.test"
-        # https://github.com/duckdb/duckdb/issues/10722
-        "test/sql/types/nested/list/list_aggregate_dict.test"
+        # fails with Out of Memory Error
+        "test/sql/copy/parquet/batched_write/batch_memory_usage.test"
+        # wants http connection
+        "test/sql/copy/csv/test_mixed_lines.test"
       ] ++ lib.optionals stdenv.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
