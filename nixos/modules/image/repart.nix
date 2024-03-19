@@ -286,7 +286,7 @@ in
         inherit fileSystems definitionsDirectory partitionsJSON mkfsEnv;
       };
 
-    meta.maintainers = with lib.maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur willibutz ];
 
   };
 }
