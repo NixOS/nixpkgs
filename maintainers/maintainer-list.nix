@@ -6276,6 +6276,16 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  federicoschonborn = {
+    name = "Federico Damián Schonborn";
+    email = "federicoschonborn@disroot.org";
+    github = "FedericoSchonborn";
+    githubId = 62166915;
+    matrix = "@FedericoDSchonborn:matrix.org";
+    keys = [
+      { fingerprint = "C43F 4052 D289 3B73 33F8  0259 E4F6 F544 DE9E 29E8"; }
+    ];
+  };
   fedx-sudo = {
     email = "fedx-sudo@pm.me";
     github = "FedX-sudo";
