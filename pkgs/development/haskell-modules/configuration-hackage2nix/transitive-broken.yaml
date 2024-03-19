@@ -2773,7 +2773,6 @@ dont-distribute-packages:
  - minilight
  - minilight-lua
  - minimung
- - minio-hs
  - minioperational
  - minirotate
  - mismi-kernel
