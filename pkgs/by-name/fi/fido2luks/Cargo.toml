@@ -1,0 +1,56 @@
+[package]
+name = "fido2luks"
+version = "0.2.21"
+authors = ["shimunn <shimun@shimun.net>"]
+edition = "2018"
+
+description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator"
+documentation = "https://github.com/shimunn/fido2luks/blob/master/README.md"
+homepage = "https://github.com/shimunn/fido2luks"
+repository = "https://github.com/shimunn/fido2luks"
+readme = "README.md"
+keywords = ["luks", "fido2", "u2f"]
+categories = ["command-line-utilities"]
+license = "MPL-2.0"
+
+[dependencies]
+ctap_hmac = { version="0.4.5", features = ["request_multiple"] }
+hex = "0.3.2"
+ring = "0.13.5"
+failure = "0.1.5"
+rpassword = "4.0.1"
+structopt = "0.3.2"
+libcryptsetup-rs = "0.5.1"
+serde_json = "1.0.51"
+serde_derive = "1.0.106"
+serde = "1.0.106"
+
+[build-dependencies]
+ctap_hmac = { version="0.4.5", features = ["request_multiple"] }
+hex = "0.3.2"
+ring = "0.13.5"
+failure = "0.1.5"
+rpassword = "4.0.1"
+libcryptsetup-rs = "0.9"
+structopt = "0.3.2"
+
+[profile.release]
+lto = true
+opt-level = 'z'
+panic = 'abort'
+incremental = false
+overflow-checks = false
+
+[package.metadata.deb]
+depends = "$auto, cryptsetup"
+build-depends = "libclang-dev, libcryptsetup-dev"
+extended-description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator"
+assets = [
+    ["target/release/fido2luks", "usr/bin/", "755"],
+    ["fido2luks.bash", "usr/share/bash-completion/completions/fido2luks", "644"],
+    ["pam_mount/fido2luksmounthelper.sh", "usr/bin/", "755"],
+    ["initramfs-tools/keyscript.sh", "/lib/cryptsetup/scripts/fido2luks", "755" ],
+    ["initramfs-tools/hook/fido2luks.sh", "etc/initramfs-tools/hooks/", "755" ],
+    ["initramfs-tools/fido2luks.conf", "etc/", "644"],
+]
+conf-files = ["/etc/fido2luks.conf"]
