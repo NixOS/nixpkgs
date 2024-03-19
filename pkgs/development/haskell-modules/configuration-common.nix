@@ -12,17 +12,61 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch fetchpatch2 lib;
-  inherit (lib) throwIfNot versionOlder versions;
-in
+  inherit (pkgs) fetchpatch fetchpatch2;
 
-with haskellLib;
+  inherit (pkgs.lib)
+    concatStringsSep
+    genAttrs
+    getBin
+    licenses
+    makeBinPath
+    mapAttrs
+    optionalAttrs
+    optionals
+    pipe
+    singleton
+    substring
+    throwIfNot
+    toInt
+    versionAtLeast
+    versionOlder
+    warnIf
+    ;
+
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    addBuildTool
+    addExtraLibrary
+    addTestToolDepends
+    appendConfigureFlag
+    appendConfigureFlags
+    appendPatch
+    appendPatches
+    disableCabalFlag
+    disableHardening
+    disableLibraryProfiling
+    doCheck
+    doDistribute
+    doHaddock
+    doJailbreak
+    dontCheck
+    dontCheckIf
+    dontDistribute
+    dontHaddock
+    generateOptparseApplicativeCompletions
+    markBroken
+    overrideCabal
+    overrideSrc
+    unmarkBroken
+    ;
+in
 
 self: super: {
   # Make sure that Cabal 3.10.* can be built as-is
   Cabal_3_10_2_1 = doDistribute (super.Cabal_3_10_2_1.override ({
     Cabal-syntax = self.Cabal-syntax_3_10_2_0;
-  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
+  } // optionalAttrs (versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
     process = self.process_1_6_18_0;
   }));
@@ -36,10 +80,10 @@ self: super: {
         {
           # Needs to be downgraded compared to Stackage LTS 21
           resolv = cself.resolv_0_1_2_0;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
+        } // optionalAttrs (versionOlder self.ghc.version "9.6") {
           Cabal = cself.Cabal_3_10_2_1;
           Cabal-syntax = cself.Cabal-syntax_3_10_2_0;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
+        } // optionalAttrs (versionOlder self.ghc.version "9.4") {
           # We need at least directory >= 1.3.7.0. Using the latest version
           # 1.3.8.* is not an option since it causes very annoying dependencies
           # on newer versions of unix and filepath than GHC 9.2 ships
@@ -61,7 +105,7 @@ self: super: {
 
       # Needs cabal-install >= 3.8 /as well as/ matching Cabal
       guardian =
-        lib.pipe
+        pipe
           (super.guardian.overrideScope cabalInstallOverlay)
           [
             # Tests need internet access (run stack)
@@ -123,7 +167,7 @@ self: super: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
-    testTarget = lib.concatStringsSep " " [
+    testTarget = concatStringsSep " " [
       "vector-tests-O0"
       "vector-tests-O2"
     ];
@@ -202,7 +246,7 @@ self: super: {
   cabal-plan = doJailbreak super.cabal-plan;
 
   # Too strict bounds on optparse-applicative
-  weeder = lib.warnIf (lib.versionAtLeast super.weeder.version "2.8.0") "jailbreak on weeder may be obsolete" doJailbreak super.weeder;
+  weeder = warnIf (versionAtLeast super.weeder.version "2.8.0") "jailbreak on weeder may be obsolete" doJailbreak super.weeder;
 
   # Allow scotty < 0.21
   # For < 0.22 add https://github.com/taffybar/taffybar/commit/71fe820d892a85e49ad2f2843eac0a59e01f3fd4
@@ -292,7 +336,7 @@ self: super: {
   # Patch would not work for GHC >= 9.2 where it breaks compilation on x86_64
   # https://github.com/haskell-foundation/foundation/pull/573#issuecomment-1669468867
   # TODO(@sternenseemann): make unconditional
-  basement = appendPatches (lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+  basement = appendPatches (optionals pkgs.stdenv.hostPlatform.is32bit [
     (fetchpatch {
       name = "basement-i686-ghc-9.4.patch";
       url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
@@ -303,7 +347,7 @@ self: super: {
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
-  memory = appendPatches (lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+  memory = appendPatches (optionals pkgs.stdenv.hostPlatform.is32bit [
     (fetchpatch {
       name = "memory-i686-ghc-9.4.patch";
       url = "https://github.com/vincenthz/hs-memory/pull/99/commits/2738929ce15b4c8704bbbac24a08539b5d4bf30e.patch";
@@ -443,7 +487,7 @@ self: super: {
       sha256 = "sha256-d9BohugsKajvjNgt+VyXHuDdLOFKr9mhwpdUNkpIP3s=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
-  }) (lib.pipe
+  }) (pipe
         (super.cachix.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
         })
@@ -988,7 +1032,7 @@ self: super: {
       } + "/${name}";
     }) super.${name};
   in
-    lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
+    genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
   )
   selda
   selda-sqlite
@@ -1215,7 +1259,7 @@ self: super: {
     buildTools = drv.buildTools or [] ++ [ pkgs.buildPackages.makeWrapper ];
     postInstall = drv.postInstall or "" + ''
       for b in $out/bin/cryptol $out/bin/cryptol-html; do
-        wrapProgram $b --prefix 'PATH' ':' "${lib.getBin pkgs.z3}/bin"
+        wrapProgram $b --prefix 'PATH' ':' "${getBin pkgs.z3}/bin"
       done
     '';
   }) super.cryptol;
@@ -1334,7 +1378,7 @@ self: super: {
   # The hpack test suite can't deal with the CRLF line endings hackage revisions insert
   hpack = overrideCabal (drv: {
     postPatch = drv.postPatch or "" + ''
-      "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+      "${getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
     '';
   }) super.hpack;
 
@@ -1400,7 +1444,7 @@ self: super: {
     pkgs.postgresqlTestHook
   ] super.postgresql-simple;
 
-  beam-postgres = lib.pipe super.beam-postgres [
+  beam-postgres = pipe super.beam-postgres [
     # Requires pg_ctl command during tests
     (addTestToolDepends [pkgs.postgresql])
     (dontCheckIf (!pkgs.postgresql.doCheck))
@@ -1600,7 +1644,7 @@ self: super: {
   # lsp-1.4.0.0 which is hard to build with this LTS. However, the latest
   # git version of dhall-lsp-server works with lsp-2.1.0.0, and only
   # needs jailbreaking to build successfully.
-  dhall-lsp-server = lib.pipe
+  dhall-lsp-server = pipe
     (super.dhall-lsp-server.overrideScope (lself: lsuper: {
       lsp = doJailbreak lself.lsp_2_1_0_0;  # sorted-list <0.2.2
       lsp-types = lself.lsp-types_2_0_2_0;
@@ -1629,7 +1673,7 @@ self: super: {
     '';
   }) (doJailbreak super.jsaddle-dom);
 
-  reflex-dom = lib.pipe super.reflex-dom [
+  reflex-dom = pipe super.reflex-dom [
       (appendPatch
         (fetchpatch {
           name = "bump-reflex-dom-bounds.patch";
@@ -1646,7 +1690,7 @@ self: super: {
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   # 2022-03-16: Pullrequest for ghc 9 compat https://github.com/reflex-frp/reflex-dom/pull/433
-  reflex-dom-core = lib.pipe super.reflex-dom-core [
+  reflex-dom-core = pipe super.reflex-dom-core [
       doDistribute
       unmarkBroken
       dontCheck
@@ -1776,7 +1820,7 @@ self: super: {
   hasura-ekg-json = super.hasura-ekg-json.override {
     ekg-core = self.hasura-ekg-core;
   };
-  pg-client = lib.pipe
+  pg-client = pipe
     (super.pg-client.override {
       resource-pool = self.hasura-resource-pool;
       ekg-core = self.hasura-ekg-core;
@@ -1839,14 +1883,14 @@ self: super: {
   # 2023-06-26: Test failure: https://hydra.nixos.org/build/225081865
   update-nix-fetchgit = let
       deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
-    in lib.pipe  super.update-nix-fetchgit [
+    in pipe  super.update-nix-fetchgit [
       dontCheck
       (self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ])
       (overrideCabal (drv: {
         buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
         postInstall = drv.postInstall or "" + ''
           wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${
-            lib.makeBinPath deps
+            makeBinPath deps
           }"
         '';
       }))
@@ -1937,7 +1981,7 @@ self: super: {
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
   hercules-ci-api-agent = dontCheck super.hercules-ci-api-agent;
 
-  hercules-ci-cli = lib.pipe super.hercules-ci-cli [
+  hercules-ci-cli = pipe super.hercules-ci-cli [
     unmarkBroken
     (overrideCabal (drv: { hydraPlatforms = super.hercules-ci-cli.meta.platforms; }))
     # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
@@ -2016,8 +2060,8 @@ self: super: {
   # test suite. This is of no great consequence for us, though.
   # Patch solving this has been submitted to upstream by me (@sternenseemann).
   filepath-bytestring =
-    lib.warnIf
-      (lib.versionAtLeast super.filepath-bytestring.version "1.4.100.4")
+    warnIf
+      (versionAtLeast super.filepath-bytestring.version "1.4.100.4")
       "filepath-bytestring override may be obsolete"
       dontCheck super.filepath-bytestring;
 
@@ -2037,7 +2081,7 @@ self: super: {
 
   # Test suite does not compile.
   feed = overrideCabal (drv: {
-    jailbreak = lib.warnIf (lib.toInt drv.revision >= 4) "haskellPackages.feed: jailbreak can be removed" true;
+    jailbreak = warnIf (toInt drv.revision >= 4) "haskellPackages.feed: jailbreak can be removed" true;
     doCheck = false;
   }) super.feed;
 
@@ -2069,7 +2113,7 @@ self: super: {
   fullstop = dontCheck super.fullstop;
 
   crypton-x509 =
-    lib.pipe
+    pipe
       super.crypton-x509
       [
         # Mistype in a dependency in a test.
@@ -2169,7 +2213,7 @@ self: super: {
     version = "1.0";
     sha256 = "0xl848q8z6qx2bi6xil0d35lra7wshwvysyfblki659d7272b1im";
     description = "GHC BigNum library";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     # ghc-bignum is not buildable if none of the three backends
     # is explicitly enabled. We enable Native for now as it doesn't
     # depend on anything else as oppossed to GMP and FFI.
@@ -2341,7 +2385,7 @@ self: super: {
   # Too strict bound on hspec (<2.11)
   utf8-light = doJailbreak super.utf8-light;
 
-  large-hashable = lib.pipe (super.large-hashable.override {
+  large-hashable = pipe (super.large-hashable.override {
     # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
     utf8-light = null;
   }) [
@@ -2373,7 +2417,7 @@ self: super: {
     }))
     # https://github.com/factisresearch/large-hashable/issues/25
     # Currently broken with text >= 2.0
-    (overrideCabal (lib.optionalAttrs (lib.versionAtLeast self.ghc.version "9.4") {
+    (overrideCabal (optionalAttrs (versionAtLeast self.ghc.version "9.4") {
       broken = true;
       hydraPlatforms = [];
     }))
@@ -2741,7 +2785,7 @@ self: super: {
       };
     in {
       purescript =
-        lib.pipe
+        pipe
           (super.purescript.overrideScope purescriptOverlay)
           ([
             # PureScript uses nodejs to run tests, so the tests have been disabled
@@ -2840,7 +2884,7 @@ self: super: {
   # with commonmark-extensions-0.2.5.3.
   commonmark-simple = assert super.commonmark-simple.version == "0.1.0.0";
     appendPatches (map ({ rev, hash }: fetchpatch {
-      name = "commonmark-simple-${lib.substring 0 7 rev}.patch";
+      name = "commonmark-simple-${substring 0 7 rev}.patch";
       url = "https://github.com/srid/commonmark-simple/commit/${rev}.patch";
       includes = [ "src/Commonmark/Simple.hs" ];
       inherit hash;
@@ -2867,7 +2911,7 @@ self: super: {
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
-  postgrest = lib.pipe super.postgrest [
+  postgrest = pipe super.postgrest [
     # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
     # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
@@ -3015,14 +3059,14 @@ self: super: {
 
   inherit
     (let
-      unbreakRepa = packageName: drv: lib.pipe drv [
+      unbreakRepa = packageName: drv: pipe drv [
         # 2023-12-23: Apply build fixes for ghc >=9.4
-        (appendPatches (lib.optionals (lib.versionAtLeast self.ghc.version "9.4") (repaPatches.${packageName} or [])))
+        (appendPatches (optionals (versionAtLeast self.ghc.version "9.4") (repaPatches.${packageName} or [])))
         # 2023-12-23: jailbreak for base <4.17, vector <0.13
         doJailbreak
       ];
       # https://github.com/haskell-repa/repa/pull/27
-      repaPatches = lib.mapAttrs (relative: hash: lib.singleton (pkgs.fetchpatch {
+      repaPatches = mapAttrs (relative: hash: singleton (pkgs.fetchpatch {
         name = "repa-pr-27.patch";
         url = "https://github.com/haskell-repa/repa/pull/27/commits/40cb2866bb4da51a8cac5e3792984744a64b016e.patch";
         inherit relative hash;
@@ -3033,7 +3077,7 @@ self: super: {
         repa-algorithms = "sha256-z/a7DpT3xJrIsif4cbciYcTSjapAtCoNNVX7PrZtc4I=";
       };
     in
-      lib.mapAttrs unbreakRepa super)
+      mapAttrs unbreakRepa super)
     repa
     repa-io
     repa-examples
