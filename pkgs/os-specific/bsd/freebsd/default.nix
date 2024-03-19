@@ -7,19 +7,20 @@ let
     callPackage = self.callPackage;
     directory = ./by-name;
   };
+  mkTerminate = terminate: target: if terminate then throw "Cannot recurse deeper than one level into FreeBSD scopes" else target;
 in byName // (with self; { inherit stdenv;
-  #stdenv = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
   # build a self which is parameterized with whatever the targeted version is
   # so e.g. pkgsCross.x86_64-freebsd.freebsd.branches."releng/14.0".buildFreebsd will get you
   # freebsd.branches."releng/14.0"
-  buildFreebsd = buildPackages.freebsd.overrideScope (_: _: { inherit hostBranch; });
-  branches = lib.flip lib.mapAttrs versions (branch: _: self.overrideScope (_: _: { hostBranch = branch; }));
+  buildFreebsd = mkTerminate terminate buildPackages.freebsd.overrideScope (_: _: { inherit hostBranch; terminate = true; });
+  branches = mkTerminate terminate lib.flip lib.mapAttrs versions (branch: _: self.overrideScope (_: _: { hostBranch = branch; terminate = true; }));
 
-  packages13 = self.overrideScope (_: _: { hostBranch = "release/13.2.0"; });
-  packages14 = self.overrideScope (_: _: { hostBranch = "release/14.0.0"; });
-  packagesGit = self.overrideScope (_: _: { hostBranch = "main"; });
+  packages13 = mkTerminate terminate self.overrideScope (_: _: { hostBranch = "release/13.2.0"; terminate = true; });
+  packages14 = mkTerminate terminate self.overrideScope (_: _: { hostBranch = "release/14.0.0"; terminate = true; });
+  packagesGit = mkTerminate terminate self.overrideScope (_: _: { hostBranch = "main"; terminate = true; });
+  terminate = false;
 
   hostBranch = let
     supportedBranches = builtins.attrNames (lib.filterAttrs (k: v: v.supported) versions);
@@ -72,7 +73,4 @@ in byName // (with self; { inherit stdenv;
 
   # libs, bins, and data
   libncurses-tinfo = if hostVersion == "13.2" then libncurses else byName.libncurses-tinfo;
-
-  drm-kmod-firmware-amd = self.drm-kmod-firmware.override { withIntel = false; };
-  drm-kmod-firmware-intel = self.drm-kmod-firmware.override { withAmd = false; };
 }))
