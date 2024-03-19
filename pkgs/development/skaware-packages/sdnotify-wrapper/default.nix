@@ -1,8 +1,10 @@
 { stdenv, lib, runCommandCC, skawarePackages }:
 
-with skawarePackages;
-
 let
+  inherit (lib) licenses maintainers platforms;
+
+  inherit (skawarePackages) sdnotify-wrapper skalibs;
+
   # From https://skarnet.org/software/misc/sdnotify-wrapper.c,
   # which is unversioned.
   src = ./sdnotify-wrapper.c;
@@ -15,9 +17,9 @@ in runCommandCC "sdnotify-wrapper" {
      homepage = "https://skarnet.org/software/misc/sdnotify-wrapper.c";
      description = "Use systemd sd_notify without having to link against libsystemd";
      mainProgram = "sdnotify-wrapper";
-     platforms = lib.platforms.linux;
-     license = lib.licenses.isc;
-     maintainers = with lib.maintainers; [ Profpatsch ];
+     platforms = platforms.linux;
+     license = licenses.isc;
+     maintainers = with maintainers; [ Profpatsch ];
    };
 
 } ''
