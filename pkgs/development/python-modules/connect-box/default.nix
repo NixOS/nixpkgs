@@ -3,22 +3,32 @@
 , attrs
 , buildPythonPackage
 , defusedxml
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, pytest-vcr
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "connect-box";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    pname = "connect_box";
-    inherit version;
-    hash = "sha256-raekHxzju9NrFXasA/MqGvjGjAPzJDt2YX8c/T3ncbw=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-connect-box";
+    rev = "refs/tags/${version}";
+    hash = "sha256-zUvZRnxVzg9izvUbp7QVcyu6Bw3dUXHOr0kOQRWEZVc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -26,11 +36,19 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  # No tests are present
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    pytest-vcr
+    syrupy
+  ];
 
   pythonImportsCheck = [
     "connect_box"
+  ];
+
+  pytestFlagsArray = [
+    "--vcr-record=none"
   ];
 
   meta = with lib; {
