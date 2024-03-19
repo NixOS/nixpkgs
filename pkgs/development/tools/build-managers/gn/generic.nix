@@ -38,6 +38,8 @@ in stdenv.mkDerivation {
     AppKit
   ]);
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
   buildPhase = ''
     python build/gen.py --no-last-commit-position
     ln -s ${lastCommitPosition} out/last_commit_position.h
