@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "botocore-stubs";
   version = "1.34.65";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
