@@ -28,28 +28,50 @@
 
 assert name == null -> pname != null;
 
-with  import ./functions.nix { inherit lib gemConfig; };
-
 let
+  inherit (lib)
+    attrValues
+    concatMapStringsSep
+    flip
+    hasAttr
+    mapAttrs
+    optional
+    optionalAttrs
+    optionalString
+    ;
+
+  inherit (lib.strings) typeOf;
+
+  functions = import ./functions.nix { inherit lib gemConfig; };
+
+  inherit (functions)
+    applyGemConfigs
+    bundlerFiles
+    composeGemAttrs
+    filterGemset
+    genStubsScript
+    pathDerivation
+    ;
+
   gemFiles = bundlerFiles args;
 
-  importedGemset = if builtins.typeOf gemFiles.gemset != "set"
+  importedGemset = if typeOf gemFiles.gemset != "set"
     then import gemFiles.gemset
     else gemFiles.gemset;
 
   filteredGemset = filterGemset { inherit ruby groups; } importedGemset;
 
-  configuredGemset = lib.flip lib.mapAttrs filteredGemset (name: attrs:
+  configuredGemset = flip mapAttrs filteredGemset (name: attrs:
     applyGemConfigs (attrs // { inherit ruby document; gemName = name; })
   );
 
-  hasBundler = builtins.hasAttr "bundler" filteredGemset;
+  hasBundler = hasAttr "bundler" filteredGemset;
 
   bundler =
     if hasBundler then gems.bundler
     else defs.bundler.override (attrs: { inherit ruby; });
 
-  gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
+  gems = flip mapAttrs configuredGemset (name: attrs: buildGem name attrs);
 
   name' = if name != null then
     name
@@ -66,11 +88,11 @@ let
     name;
 
   copyIfBundledByPath = { bundledByPath ? false, ...}:
-  (lib.optionalString bundledByPath (
+  (optionalString bundledByPath (
       assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/") #*/
   );
 
-  maybeCopyAll = pkgname: lib.optionalString (pkgname != null) (
+  maybeCopyAll = pkgname: optionalString (pkgname != null) (
     let
       mainGem = gems.${pkgname} or (throw "bundlerEnv: gem ${pkgname} not found");
     in
@@ -86,7 +108,7 @@ let
     cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
     cp ${gemFiles.lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
 
-    ${lib.concatMapStringsSep "\n" (path: "cp -r ${path} $out/") extraConfigPaths}
+    ${concatMapStringsSep "\n" (path: "cp -r ${path} $out/") extraConfigPaths}
   '';
 
   buildGem = name: attrs: (
@@ -99,7 +121,7 @@ let
       buildRubyGem gemAttrs
   );
 
-  envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
+  envPaths = attrValues gems ++ optional (!hasBundler) bundler;
 
 
   basicEnvArgs = {
@@ -113,11 +135,11 @@ let
     postBuild = genStubsScript (defs // args // {
       inherit confFiles bundler groups;
       binPaths = envPaths;
-    }) + lib.optionalString (postBuild != null) postBuild;
+    }) + optionalString (postBuild != null) postBuild;
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
-    passthru = (lib.optionalAttrs (pname != null) {
+    passthru = (optionalAttrs (pname != null) {
       inherit (gems.${pname}) gemType;
     } // rec {
       inherit ruby bundler gems confFiles envPaths;
