@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://snappymail.eu";
     changelog = "https://github.com/the-djmaze/snappymail/blob/v${version}/CHANGELOG.md";
     downloadPage = "https://github.com/the-djmaze/snappymail/releases";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];
   };

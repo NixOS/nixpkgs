@@ -30,7 +30,7 @@ buildGoModule rec {
     homepage = "https://github.com/parseablehq/pb";
     changelog = "https://github.com/parseablehq/pb/releases/tag/v${version}";
     description = "CLI client for Parseable server";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "pb";
   };
