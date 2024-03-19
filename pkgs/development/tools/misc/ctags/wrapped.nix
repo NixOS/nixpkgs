@@ -1,6 +1,13 @@
 { pkgs, ctags }:
 
-with pkgs.lib;
+let
+  inherit (pkgs.lib)
+    concatLists
+    concatStringsSep
+    escapeShellArg
+    makeOverridable
+    ;
+in
 
 # define some ctags wrappers adding support for some not that common languages
 # customization:
