@@ -30,10 +30,6 @@
 , torch
 , trimesh
 , weaviate-client
-, # Test dependencies
-  pytestCheckHook
-, pytest-cov
-, pytest-asyncio
 ,
 }:
 buildPythonPackage rec {
@@ -122,12 +118,6 @@ buildPythonPackage rec {
       # pyepsilla
     ];
   };
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-asyncio
-  ];
 
   pythonImportsCheck = [
     "docarray"
