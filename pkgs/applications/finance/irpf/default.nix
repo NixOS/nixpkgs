@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "irpf";
-  version = "2023-1.5";
+  version = "2024-1.0";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
     year = lib.head (lib.splitVersion version);
   in fetchzip {
     url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
-    hash = "sha256-L1X+xysQSJ43TO8NSdO+T4aalampd4REL+5Uv33kYUI=";
+    hash = "sha256-x47Ud/aSfPuZYMZSGhJLnNFtNE62I+WjaFFatJPMPYg=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
