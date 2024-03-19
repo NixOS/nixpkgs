@@ -1108,7 +1108,6 @@ broken-packages:
   - darcs2dot # failure in job https://hydra.nixos.org/build/233209236 at 2023-09-02
   - darcs-buildpackage # failure in job https://hydra.nixos.org/build/233213566 at 2023-09-02
   - darcs-cabalized # failure in job https://hydra.nixos.org/build/233234765 at 2023-09-02
-  - darcs # doesn't support unix >= 2.8, 2024-01-13
   - darcs-graph # failure in job https://hydra.nixos.org/build/233245230 at 2023-09-02
   - darcs-monitor # failure in job https://hydra.nixos.org/build/233249455 at 2023-09-02
   - darkplaces-rcon # failure in job https://hydra.nixos.org/build/233247609 at 2023-09-02
