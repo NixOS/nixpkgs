@@ -36,6 +36,12 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
+    # butler cannot be build with Go >=1.21
+    # See https://github.com/itchio/butler/issues/256
+    # and https://github.com/itchio/dmcunrar-go/issues/1
+    # The dependency causing the issue is marked as 'no maintainence intended'.
+    # Last butler release is from 05/2021.
+    broken = true;
     description = "Command-line itch.io helper";
     homepage = "https://github.com/itchio/butler";
     license = licenses.mit;
