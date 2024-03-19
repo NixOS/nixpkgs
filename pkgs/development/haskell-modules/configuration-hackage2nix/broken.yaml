@@ -4765,7 +4765,6 @@ broken-packages:
   - pushover # failure in job https://hydra.nixos.org/build/252739908 at 2024-03-16
   - putlenses # failure in job https://hydra.nixos.org/build/233197372 at 2023-09-02
   - puzzle-draw # failure in job https://hydra.nixos.org/build/233204953 at 2023-09-02
-  - pvar # failure in job https://hydra.nixos.org/build/252711515 at 2024-03-16
   - pvector # failure in job https://hydra.nixos.org/build/233217965 at 2023-09-02
   - pyffi # failure in job https://hydra.nixos.org/build/233260156 at 2023-09-02
   - pyfi # failure in job https://hydra.nixos.org/build/233214389 at 2023-09-02

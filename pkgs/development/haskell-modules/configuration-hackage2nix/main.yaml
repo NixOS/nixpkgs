@@ -353,6 +353,9 @@ package-maintainers:
     - mpi-hs-cereal
     - mpi-hs-binary
     - cpython
+    - massiv
+    - massiv-io
+    - massiv-test
   shlok:
     - streamly-archive
     - streamly-lmdb

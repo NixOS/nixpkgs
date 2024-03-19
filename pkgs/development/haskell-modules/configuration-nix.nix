@@ -1316,4 +1316,8 @@ self: super: builtins.intersectAttrs super {
     libraryPkgconfigDepends = drv.librarySystemDepends;
     librarySystemDepends = [];
   }) super.postgresql-libpq;
+
+  # Test failure is related to a GHC implementation detail of primitives and doesn't
+  # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
+  pvar = dontCheck super.pvar;
 }
