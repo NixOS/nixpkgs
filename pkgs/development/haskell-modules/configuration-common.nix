@@ -2409,11 +2409,19 @@ self: super: {
     ] ++ drv.testFlags or [];
   }) super.hschema-aeson;
   # https://github.com/minio/minio-hs/issues/165
+  # https://github.com/minio/minio-hs/pull/191 Use crypton-connection instead of unmaintained connection
   minio-hs = overrideCabal (drv: {
     testFlags = [
       "-p" "!/Test mkSelectRequest/"
     ] ++ drv.testFlags or [];
-  }) super.minio-hs;
+    patches = drv.patches or [ ] ++ [
+      (pkgs.fetchpatch {
+        name = "use-crypton-connection.patch";
+        url = "https://github.com/minio/minio-hs/commit/786cf1881f0b62b7539e63547e76afc3c1ade36a.patch";
+        sha256 = "sha256-zw0/jhKzShpqV1sUyxWTl73sQOzm6kA/yQOZ9n0L1Ag";
+      })
+    ];
+  }) (super.minio-hs.override { connection = self.crypton-connection; });
 
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
@@ -2954,5 +2962,16 @@ self: super: {
     url = "https://github.com/jhickner/smtp-mail/commit/4c724c80814ab1da7c37256a6c10e04c88b9af95.patch";
     hash = "sha256-rCyY4rB/wLspeAbLw1jji5BykYFLnmTjLiUyNkiEXmw";
   }) (super.smtp-mail.override { connection = self.crypton-connection; });
+
+  # Use recent git version as the hackage version is outdated and not building on recent GHC versions
+  haskell-to-elm = overrideSrc {
+    version = "unstable-2023-12-02";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell-to-elm";
+      repo = "haskell-to-elm";
+      rev = "52ab086a320a14051aa38d0353d957fb6b2525e9";
+      hash = "sha256-j6F4WplJy7NyhTAuiDd/tHT+Agk1QdyPjOEkceZSxq8=";
+    };
+  } (super.haskell-to-elm.override { generics-sop = self.generics-sop_0_5_1_4; } );
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
