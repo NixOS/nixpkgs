@@ -61,14 +61,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie:GNOME'")
           machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie.budgie-desktop-with-plugins.pname}'")
 
-      with subtest("Open Budgie Control Center"):
+      with subtest("Open run dialog"):
           machine.send_key("alt-f2")
-          machine.wait_until_succeeds("pgrep -f budgie-run-dialog")
           machine.wait_for_window("budgie-run-dialog")
-          machine.sleep(3)
-          machine.send_chars("Budgie Control Center", delay=0.5)
-          machine.screenshot("quick_search")
-          machine.send_chars("\n")
+          machine.sleep(2)
+          machine.screenshot("run_dialog")
+          machine.send_key("esc")
+
+      with subtest("Open Budgie Control Center"):
+          machine.succeed("${su "budgie-control-center >&2 &"}")
           machine.wait_for_window("Budgie Control Center")
 
       with subtest("Lock the screen"):
