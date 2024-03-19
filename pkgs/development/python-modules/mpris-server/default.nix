@@ -10,13 +10,13 @@
 }:
 buildPythonPackage rec {
   pname = "mpris-server";
-  version = "0.9.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mpris_server";
     inherit version;
-    hash = "sha256-ia0567r6CGKRgXxvGVY+ATvXJ/atWaGGZT8fQzvLzrY=";
+    hash = "sha256-p3nM80fOMtRmeKvOXuX40Fu9xH8gPgYyneXbUS678fE=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,10 @@ buildPythonPackage rec {
 
   # upstream has no tests
   doCheck = false;
+
+  # update doesn't support python311 and monophony, the only consumer requires
+  # 0.4.2
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Publish a MediaPlayer2 MPRIS device to D-Bus";

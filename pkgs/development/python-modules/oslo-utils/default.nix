@@ -67,12 +67,18 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkPhase = ''
+  # disabled tests:
+  # https://bugs.launchpad.net/oslo.utils/+bug/2054134
+  # netaddr default behaviour changed to be stricter
+  checkPhase =''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
     export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
-    stestr run
+    stestr run -e <(echo "
+      oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
+      oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
+    ")
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];
