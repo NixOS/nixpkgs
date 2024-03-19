@@ -1,10 +1,29 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , python3
 }:
 
-with python3.pkgs;
+let
+  inherit (lib) licenses maintainers platforms;
+
+  inherit (python3.pkgs)
+    behave
+    buildPythonApplication
+    click
+    crcmod
+    ecdsa
+    intelhex
+    libusb1
+    nose
+    pc-ble-driver-py
+    piccata
+    protobuf
+    pyserial
+    pyspinel
+    pyyaml
+    tqdm
+    ;
+in
 
 buildPythonApplication rec {
   pname = "nrfutil";
@@ -45,7 +64,7 @@ buildPythonApplication rec {
       --replace "protobuf >=3.17.3, < 4.0.0" "protobuf"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Device Firmware Update tool for nRF chips";
     homepage = "https://github.com/NordicSemiconductor/pc-nrfutil";
     license = licenses.unfreeRedistributable;
