@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/awslabs/mountpoint-s3";
     description = "A simple, high-throughput file client for mounting an Amazon S3 bucket as a local file system.";
-    license = licenses.amazonsl;
+    license = licenses.asl20;
     maintainers = with maintainers; [ lblasc ];
     platforms = platforms.linux;
   };
