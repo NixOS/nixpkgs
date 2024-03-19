@@ -716,8 +716,6 @@ dont-distribute-packages:
  - borel
  - both
  - bound-gen
- - bower-json
- - bower-json_1_0_0_1
  - breakout
  - bricks
  - bricks-internal-test
@@ -824,7 +822,6 @@ dont-distribute-packages:
  - chassis
  - chatty
  - cheapskate-highlight
- - cheapskate-lucid
  - cheapskate-terminal
  - check-pvp
  - chevalier-common
@@ -2310,7 +2307,6 @@ dont-distribute-packages:
  - ideas-statistics
  - identicon-style-squares
  - idna
- - idris
  - ifscs
  - ige-mac-integration
  - igrf
@@ -2348,7 +2344,6 @@ dont-distribute-packages:
  - inferno-vc
  - infinity
  - inline-java
- - inliterate
  - inspector-wrecker
  - instant-aeson
  - instant-bytes
@@ -3034,8 +3029,6 @@ dont-distribute-packages:
  - outsort
  - overeasy
  - overload
- - pa-field-parser
- - pa-json
  - package-o-tron
  - padKONTROL
  - pairing
@@ -3263,7 +3256,6 @@ dont-distribute-packages:
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
  - proton
- - psc-ide
  - psql
  - publicsuffixlist
  - puffytools
@@ -3273,10 +3265,7 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purenix
- - purescript
  - purescript-iso
- - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -4396,7 +4385,6 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
- - zephyr
  - zephyr-copilot
  - zerobin
  - zeromq3-conduit
