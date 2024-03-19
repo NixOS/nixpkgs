@@ -56,8 +56,37 @@ let
     });
   };
 
+
+  inherit (lib) licenses maintainers optionalString;
+
+  inherit (py.pkgs)
+    awscrt
+    bcdoc
+    bootstrap
+    botocore
+    buildPythonApplication
+    colorama
+    cryptography
+    distro
+    docutils
+    flit-core
+    jmespath
+    jsonschema
+    mock
+    prompt-toolkit
+    pytestCheckHook
+    python-dateutil
+    pyyaml
+    ruamel-yaml
+    setuptools
+    sphinx
+    toml
+    urllib3
+    wheel
+    ;
 in
-with py.pkgs; buildPythonApplication rec {
+
+buildPythonApplication rec {
   pname = "awscli2";
   version = "2.15.32"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
@@ -119,7 +148,7 @@ with py.pkgs; buildPythonApplication rec {
     installShellCompletion --cmd aws \
       --bash <(echo "complete -C $out/bin/aws_completer aws") \
       --zsh $out/bin/aws_zsh_completer.sh
-  '' + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+  '' + optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/aws.cmd
   '';
 
@@ -161,7 +190,7 @@ with py.pkgs; buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unified tool to manage your AWS services";
     homepage = "https://aws.amazon.com/cli/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
