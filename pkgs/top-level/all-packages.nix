@@ -17222,7 +17222,7 @@ with pkgs;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     noLibc = !self.nativeLibc && (self.libc == null);
-    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? "man") && (cc ? "man"));
+    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? man) && (cc ? man));
 
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
@@ -17243,7 +17243,7 @@ with pkgs;
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? "man") && (bintools ? "man"));
+    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? man) && (bintools ? man));
     noLibc = !self.nativeLibc && (self.libc == null);
 
     inherit bintools libc;
