@@ -32,19 +32,6 @@ final: _: {
       {}
     );
 
-  autoAddOpenGLRunpathHook =
-    final.callPackage
-      (
-        {addOpenGLRunpath, makeSetupHook}:
-        makeSetupHook
-          {
-            name = "auto-add-opengl-runpath-hook";
-            propagatedBuildInputs = [addOpenGLRunpath];
-          }
-          ./auto-add-opengl-runpath-hook.sh
-      )
-      {};
-
   # autoAddCudaCompatRunpathHook hook must be added AFTER `setupCudaHook`. Both
   # hooks prepend a path with `libcuda.so` to the `DT_RUNPATH` section of
   # patched elf files, but `cuda_compat` path must take precedence (otherwise,
