@@ -12,7 +12,7 @@
     if stdenv.targetPlatform.linker == "lld"
     then null
     else pkgs.bintoolsNoLibc
-  , bootBintools ?
+, bootBintools ?
     if stdenv.targetPlatform.linker == "lld"
     then null
     else pkgs.bintools
@@ -51,11 +51,10 @@ in
       (gitRelease != null)
       (officialRelease != null))
     ("must specify `gitRelease` or `officialRelease`" +
-    (lib.optionalString (gitRelease != null) " — not both"));
+      (lib.optionalString (gitRelease != null) " — not both"));
 let
   monorepoSrc' = monorepoSrc;
-in
-let
+in let
   # Import releaseInfo separately to avoid infinite recursion
   inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
   inherit (releaseInfo) release_version version;
@@ -64,7 +63,7 @@ let
   lldbPlugins = lib.makeExtensible (lldbPlugins: let
     callPackage = newScope (lldbPlugins // { inherit stdenv; inherit (tools) lldb; });
   in {
-    llef = callPackage ../common/lldb-plugins/llef.nix { };
+    llef = callPackage ../common/lldb-plugins/llef.nix {};
   });
 
   tools = lib.makeExtensible (tools: let
@@ -85,14 +84,14 @@ let
       ln -s "${targetLlvmLibraries.compiler-rt-libc.out}/share" "$rsrc/share"
     '';
 
-    bintoolsNoLibc' =
-      if bootBintoolsNoLibc == null
-      then tools.bintoolsNoLibc
-      else bootBintoolsNoLibc;
-    bintools' =
-      if bootBintools == null
-      then tools.bintools
-      else bootBintools;
+  bintoolsNoLibc' =
+    if bootBintoolsNoLibc == null
+    then tools.bintoolsNoLibc
+    else bootBintoolsNoLibc;
+  bintools' =
+    if bootBintools == null
+    then tools.bintools
+    else bootBintools;
 
   in rec {
 
@@ -112,23 +111,22 @@ let
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
-      python3 = pkgs.python3; # don't use python-boot
+      python3 = pkgs.python3;  # don't use python-boot
     });
 
     clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
-      python3 = pkgs.python3; # don't use python-boot
+      python3 = pkgs.python3;  # don't use python-boot
     });
 
     lldb-manpages = lowPrio (tools.lldb.override {
       enableManpages = true;
-      python3 = pkgs.python3; # don't use python-boot
+      python3 = pkgs.python3;  # don't use python-boot
     });
 
     # pick clang appropriate for package set we are targeting
     clang =
-      /**/
-      if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
 
@@ -160,13 +158,11 @@ let
     };
 
     lldb = callPackage ../common/lldb.nix {
-      src = callPackage
-        ({ runCommand }: runCommand "lldb-src-${version}" { } ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/lldb "$out"
-        '')
-        { };
+      src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" { } ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/lldb "$out"
+      '') { };
       patches =
         let
           resourceDirPatch = callPackage
@@ -191,12 +187,11 @@ let
         #
         # See here for some context:
         # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
-        ++ lib.optional
-          (
+        ++ lib.optional (
             stdenv.targetPlatform.isDarwin
             && !stdenv.targetPlatform.isAarch64
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
-          ) ./lldb/cpu_subtype_arm64e_replacement.patch;
+        ) ./lldb/cpu_subtype_arm64e_replacement.patch;
       inherit llvm_meta;
     };
 
@@ -229,8 +224,7 @@ let
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
       nixSupport.cc-cflags =
-        [
-          "-rtlib=compiler-rt"
+        [ "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt-libc}/lib"
         ]
@@ -324,60 +318,58 @@ let
     };
   });
 
-  libraries = lib.makeExtensible (libraries:
-    let
-      callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
-    in
-    {
+  libraries = lib.makeExtensible (libraries: let
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
+  in
+  {
 
-      compiler-rt-libc = callPackage ./compiler-rt {
-        inherit llvm_meta;
-        libxcrypt = libxcrypt.override {
-          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx;
-        };
-        stdenv =
-          if stdenv.hostPlatform.useLLVM or false
-          then overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-          else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
-          then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt
-          else stdenv;
+    compiler-rt-libc = callPackage ./compiler-rt {
+      inherit llvm_meta;
+      libxcrypt = libxcrypt.override {
+        stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx;
       };
+      stdenv =
+        if stdenv.hostPlatform.useLLVM or false
+        then overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+        else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
+        then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt
+        else stdenv;
+    };
 
-      compiler-rt-no-libc = callPackage ./compiler-rt {
-        inherit llvm_meta;
-        stdenv =
-          if stdenv.hostPlatform.useLLVM or false
-          then overrideCC stdenv buildLlvmTools.clangNoLibcNoRt
-          else stdenv;
-      };
+    compiler-rt-no-libc = callPackage ./compiler-rt {
+      inherit llvm_meta;
+      stdenv =
+        if stdenv.hostPlatform.useLLVM or false
+        then overrideCC stdenv buildLlvmTools.clangNoLibcNoRt
+        else stdenv;
+    };
 
-      compiler-rt = libraries.compiler-rt-libc;
+    compiler-rt = libraries.compiler-rt-libc;
 
-      stdenv = overrideCC stdenv buildLlvmTools.clang;
+    stdenv = overrideCC stdenv buildLlvmTools.clang;
 
-      libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
+    libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-      # so: we use the clang from this LLVM package set instead of the regular
-      # stdenv's compiler.
-      libcxx = callPackage ./libcxx {
-        inherit llvm_meta;
-        stdenv =
-          if stdenv.hostPlatform.isDarwin
-          then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt else overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
-      };
+    # so: we use the clang from this LLVM package set instead of the regular
+    # stdenv's compiler.
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv =
+        if stdenv.hostPlatform.isDarwin
+        then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt else overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+    };
 
-      libunwind = callPackage ./libunwind {
-        inherit llvm_meta;
-        stdenv =
-          if stdenv.hostPlatform.isDarwin
-          then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt else overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
-      };
+    libunwind = callPackage ./libunwind {
+      inherit llvm_meta;
+      stdenv =
+        if stdenv.hostPlatform.isDarwin
+        then overrideCC stdenv buildLlvmTools.clangWithLibcAndNoRt else overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+    };
 
-      openmp = callPackage ./openmp {
-        inherit llvm_meta targetLlvm;
-      };
-    });
+    openmp = callPackage ./openmp {
+      inherit llvm_meta targetLlvm;
+    };
+  });
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in
-{ inherit tools libraries release_version lldbPlugins; } // (noExtend libraries) // (noExtend tools)
+in { inherit tools libraries release_version lldbPlugins; } // (noExtend libraries) // (noExtend tools)
