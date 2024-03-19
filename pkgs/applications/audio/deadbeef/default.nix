@@ -130,6 +130,7 @@ in clangStdenv.mkDerivation {
 
   meta = with lib; {
     description = "Ultimate Music Player for GNU/Linux";
+    mainProgram = "deadbeef";
     homepage = "http://deadbeef.sourceforge.net/";
     downloadPage = "https://github.com/DeaDBeeF-Player/deadbeef";
     license = licenses.gpl2;

@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Automated WireGuard® Management Client";
+    mainProgram = "netclient";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netclient/releases/tag/v${version}";
     license = licenses.asl20;

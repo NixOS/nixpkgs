@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The Jupyter Notebook format";
+    mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh globin ];

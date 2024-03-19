@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
+    mainProgram = "ultrastardx";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];
     platforms = platforms.linux;

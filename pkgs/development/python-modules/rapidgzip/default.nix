@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for parallel decompression and seeking within compressed gzip files";
+    mainProgram = "rapidgzip";
     homepage = "https://github.com/mxmlnkn/rapidgzip";
     changelog = "https://github.com/mxmlnkn/rapidgzip/blob/rapidgzip-v${version}/python/rapidgzip/CHANGELOG.md";
     license = licenses.mit; # dual MIT and asl20, https://internals.rust-lang.org/t/rationale-of-apache-dual-licensing/8952

@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://github.com/sqlcipher/sqlcipher/blob/v${version}/CHANGELOG.md";
     description = "SQLite extension that provides 256 bit AES encryption of database files";
+    mainProgram = "sqlcipher";
     homepage = "https://www.zetetic.net/sqlcipher/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

@@ -122,6 +122,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast Java Decompiler with powerful GUI";
+    mainProgram = "jd-gui";
     homepage    = "https://java-decompiler.github.io/";
     sourceProvenance = with sourceTypes; [
       fromSource

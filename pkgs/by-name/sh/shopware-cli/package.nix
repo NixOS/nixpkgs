@@ -43,6 +43,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line tool for Shopware 6";
+    mainProgram = "shopware-cli";
     homepage = "https://github.com/FriendsOfShopware/shopware-cli";
     changelog = "https://github.com/FriendsOfShopware/shopware-cli/releases/tag/${version}";
     license = licenses.mit;

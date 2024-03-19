@@ -58,6 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools to work with CAN bus";
+    mainProgram = "cantools";
     homepage = "https://github.com/cantools/cantools";
     changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
     license = licenses.mit;

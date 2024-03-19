@@ -114,6 +114,7 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    mainProgram = "llvm-spirv";
     license     = licenses.ncsa;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ gloaming ];

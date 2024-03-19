@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Terminal based IRC client";
+    mainProgram = "irssi";
     homepage = "https://irssi.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab lovek323 ];

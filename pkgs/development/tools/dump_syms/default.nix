@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     changelog = "https://github.com/mozilla/dump_syms/releases/tag/v${version}";
     description = "Command-line utility for parsing the debugging information the compiler provides in ELF or stand-alone PDB files";
+    mainProgram = "dump_syms";
     license = licenses.asl20;
     homepage = "https://github.com/mozilla/dump_syms/";
     maintainers = with maintainers; [ hexa ];

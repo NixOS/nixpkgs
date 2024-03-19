@@ -109,6 +109,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to do automated pentest reporting with SysReptor";
+    mainProgram = "reptor";
     homepage = "https://github.com/Syslifters/reptor";
     changelog = "https://github.com/Syslifters/reptor/releases/tag/${version}";
     license = licenses.mit;

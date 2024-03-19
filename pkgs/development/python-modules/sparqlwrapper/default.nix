@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is a wrapper around a SPARQL service. It helps in creating the query URI and, possibly, convert the result into a more manageable format";
+    mainProgram = "rqw";
     homepage = "http://rdflib.github.io/sparqlwrapper";
     license = licenses.w3c;
   };

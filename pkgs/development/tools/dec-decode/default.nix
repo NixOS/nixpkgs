@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Nintendo Wii iso.dec decoder";
+    mainProgram = "dec-decode";
     homepage = "https://github.com/sammiq/dec-decode";
     license = licenses.unlicense;
     maintainers = with maintainers; [ hughobrien ];

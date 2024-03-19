@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://stockfishchess.org/";
     description = "Strong open source chess engine";
+    mainProgram = "stockfish";
     longDescription = ''
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.

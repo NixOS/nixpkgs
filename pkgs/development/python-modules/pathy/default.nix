@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Path interface for local and cloud bucket storage";
+    mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];

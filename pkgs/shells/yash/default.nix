@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://yash.osdn.jp/index.html.en";
     description = "Yet another POSIX-compliant shell";
+    mainProgram = "yash";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qbit ];
     platforms = platforms.all;

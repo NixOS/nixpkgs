@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A distributed stream processing framework";
+    mainProgram = "flink";
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";
     license = licenses.asl20;

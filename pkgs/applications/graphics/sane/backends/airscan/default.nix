@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/alexpevzner/sane-airscan";
     description = "Scanner Access Now Easy - Apple AirScan (eSCL) driver";
+    mainProgram = "airscan-discover";
     longDescription = ''
       sane-airscan: Linux support of Apple AirScan (eSCL) compatible document scanners.
     '';

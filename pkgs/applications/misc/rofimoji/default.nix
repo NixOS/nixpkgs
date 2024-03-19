@@ -50,6 +50,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A simple emoji and character picker for rofi";
+    mainProgram = "rofimoji";
     homepage = "https://github.com/fdw/rofimoji";
     license = licenses.mit;
     platforms = platforms.linux;

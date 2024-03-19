@@ -48,6 +48,7 @@ let
 
     meta = with lib; {
       description = "Low-latency, high quality voice chat software";
+      mainProgram = "mumble-server";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
       maintainers = with maintainers; [ infinisil felixsinger ];

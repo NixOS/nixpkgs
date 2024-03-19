@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python docstring style checker";
+    mainProgram = "pydocstyle";
     homepage = "https://github.com/PyCQA/pydocstyle";
     changelog = "https://github.com/PyCQA/pydocstyle/blob/${version}/docs/release_notes.rst";
     license = licenses.mit;

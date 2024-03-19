@@ -38,6 +38,7 @@ buildPythonPackage {
   meta = with lib; {
     changelog  = "https://github.com/home-assistant/hassil/blob/v${version}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
+    mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;

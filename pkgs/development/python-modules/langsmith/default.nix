@@ -82,6 +82,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
+    mainProgram = "langsmith";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
     license = licenses.mit;

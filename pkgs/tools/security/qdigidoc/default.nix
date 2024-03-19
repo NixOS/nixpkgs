@@ -60,6 +60,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
+    mainProgram = "qdigidoc4";
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

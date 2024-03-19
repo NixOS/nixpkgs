@@ -45,6 +45,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Write tests against structured configuration data";
+    mainProgram = "conftest";
     downloadPage = "https://github.com/open-policy-agent/conftest";
     homepage = "https://www.conftest.dev";
     changelog = "https://github.com/open-policy-agent/conftest/releases/tag/v${version}";

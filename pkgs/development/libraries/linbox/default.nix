@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ library for exact, high-performance linear algebra";
+    mainProgram = "linbox-config";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

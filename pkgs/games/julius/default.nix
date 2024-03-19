@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bvschaik/julius";
     description = "An open source re-implementation of Caesar III";
+    mainProgram = "julius";
     license = licenses.agpl3;
     maintainers = with maintainers; [ Thra11 ];
     platforms = platforms.all;

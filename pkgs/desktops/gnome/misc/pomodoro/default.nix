@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
+    mainProgram = "gnome-pomodoro";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.

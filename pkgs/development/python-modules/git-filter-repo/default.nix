@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly rewrite git repository history";
+    mainProgram = "git-filter-repo";
     homepage = "https://github.com/newren/git-filter-repo";
     license = with licenses; [ mit /* or */ gpl2Plus ];
     maintainers = with maintainers; [ fab ];

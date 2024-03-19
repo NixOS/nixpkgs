@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Lightweight Extensible Message Format for Reticulum";
+    mainProgram = "lxmd";
     homepage = "https://github.com/markqvist/lxmf";
     changelog = "https://github.com/markqvist/LXMF/releases/tag/${version}";
     license = licenses.mit;

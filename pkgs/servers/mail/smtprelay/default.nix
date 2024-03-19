@@ -32,6 +32,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/decke/smtprelay";
     description = "Simple Golang SMTP relay/proxy server";
+    mainProgram = "smtprelay";
     changelog = "https://github.com/decke/smtprelay/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ juliusrickert ];

@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Fast and multi-source CLI program for managing Minecraft mods and modpacks from Modrinth, CurseForge, and GitHub Releases";
+    mainProgram = "ferium";
     homepage = "https://github.com/gorilla-devs/ferium";
     license = licenses.mpl20;
     maintainers = with maintainers; [ leo60228 soupglasses ];

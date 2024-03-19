@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Color picker application";
+    mainProgram = "deepin-picker";
     homepage = "https://github.com/linuxdeepin/deepin-picker";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

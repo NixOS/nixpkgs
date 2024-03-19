@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "DVC's data management subsystem";
+    mainProgram = "dvc-data";
     homepage = "https://github.com/iterative/dvc-data";
     changelog = "https://github.com/iterative/dvc-data/releases/tag/${version}";
     license = licenses.asl20;

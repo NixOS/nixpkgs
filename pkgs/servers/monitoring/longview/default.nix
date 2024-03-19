@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.linode.com/longview";
     description = "Collects all of your system-level metrics and sends them to Linode";
+    mainProgram = "longview";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rvl ];
     inherit version;

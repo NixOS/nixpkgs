@@ -104,6 +104,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Lightweight Groestlcoin wallet";
+    mainProgram = "electrum-grs";
     longDescription = ''
       An easy-to-use Groestlcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)

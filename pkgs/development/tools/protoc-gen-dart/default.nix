@@ -19,6 +19,7 @@ buildDartApplication rec {
 
   meta = with lib; {
     description = "Protobuf plugin for generating Dart code";
+    mainProgram = "protoc-gen-dart";
     homepage = "https://pub.dev/packages/protoc_plugin";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lelgenio ];

@@ -179,6 +179,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Argilla: the open-source data curation platform for LLMs";
+    mainProgram = "argilla";
     homepage = "https://github.com/argilla-io/argilla";
     changelog = "https://github.com/argilla-io/argilla/releases/tag/v${version}";
     license = licenses.asl20;

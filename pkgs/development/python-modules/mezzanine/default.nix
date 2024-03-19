@@ -66,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Content management platform built using the Django framework";
+    mainProgram = "mezzanine-project";
     longDescription = ''
       Mezzanine is a powerful, consistent, and flexible content
       management platform. Built using the Django framework, Mezzanine

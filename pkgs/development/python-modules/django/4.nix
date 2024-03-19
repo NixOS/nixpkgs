@@ -143,6 +143,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design.";
+    mainProgram = "django-admin";
     homepage = "https://www.djangoproject.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];

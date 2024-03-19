@@ -150,6 +150,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to build flatpaks from source";
+    mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];

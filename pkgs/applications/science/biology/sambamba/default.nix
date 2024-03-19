@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SAM/BAM processing tool";
+    mainProgram = "sambamba";
     homepage = "https://lomereiter.github.io/sambamba/";
     maintainers = with maintainers; [ jbedo ];
     license = with licenses; gpl2;

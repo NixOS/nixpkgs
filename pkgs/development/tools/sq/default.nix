@@ -42,6 +42,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Swiss army knife for data";
+    mainProgram = "sq";
     homepage = "https://sq.io/";
     license = licenses.mit;
     platforms = platforms.all;

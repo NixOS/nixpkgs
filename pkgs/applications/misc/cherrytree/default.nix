@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An hierarchical note taking application";
+    mainProgram = "cherrytree";
     longDescription = ''
       Cherrytree is an hierarchical note taking application, featuring rich
       text, syntax highlighting and powerful search capabilities. It organizes

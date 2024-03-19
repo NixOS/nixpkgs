@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools and library for Habitica restful API";
+    mainProgram = "habitipy";
     homepage = "https://github.com/ASMfreaK/habitipy";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

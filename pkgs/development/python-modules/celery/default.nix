@@ -103,6 +103,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distributed task queue";
+    mainProgram = "celery";
     homepage = "https://github.com/celery/celery/";
     changelog = "https://github.com/celery/celery/releases/tag/v${version}";
     license = licenses.bsd3;

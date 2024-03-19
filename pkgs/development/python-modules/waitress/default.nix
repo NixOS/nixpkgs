@@ -18,6 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
      homepage = "https://github.com/Pylons/waitress";
      description = "Waitress WSGI server";
+     mainProgram = "waitress-serve";
      license = licenses.zpl20;
      maintainers = with maintainers; [ domenkozar ];
   };

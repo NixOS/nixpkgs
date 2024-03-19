@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
+    mainProgram = "scmp_sys_resolver";
     homepage = "https://github.com/seccomp/libseccomp";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;

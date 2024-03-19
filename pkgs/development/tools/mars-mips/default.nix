@@ -41,6 +41,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "An IDE for programming in MIPS assembly language intended for educational-level use";
+    mainProgram = "mars-mips";
     homepage = "https://courses.missouristate.edu/KenVollmar/MARS/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;

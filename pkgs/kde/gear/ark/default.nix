@@ -7,4 +7,5 @@ mkKdeDerivation {
   pname = "ark";
 
   extraBuildInputs = [libarchive libzip];
+  meta.mainProgram = "ark";
 }

@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for the SFR Box API";
+    mainProgram = "sfrbox-api";
     homepage = "https://github.com/hacf-fr/sfrbox-api";
     changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/v${version}";
     license = licenses.mit;

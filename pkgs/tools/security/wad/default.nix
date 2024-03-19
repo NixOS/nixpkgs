@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for detecting technologies used by web applications";
+    mainProgram = "wad";
     longDescription = ''
       WAD lets you analyze given URL(s) and detect technologies used by web
       application behind that URL, from the OS and web server level, to the

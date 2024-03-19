@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Share end-to-end encrypted secrets with others via a one-time URL";
+    mainProgram = "ots";
     homepage = "https://ots.sniptt.com";
     changelog = "https://github.com/sniptt-official/ots/releases/tag/v${version}";
     license = licenses.asl20;

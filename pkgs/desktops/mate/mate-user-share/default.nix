@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "User level public file sharing for the MATE desktop";
+    mainProgram = "mate-file-share-properties";
     homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.unix;

@@ -171,6 +171,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Web server and web framework";
+    mainProgram = "sanic";
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;

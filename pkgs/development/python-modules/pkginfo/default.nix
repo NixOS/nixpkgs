@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";
+    mainProgram = "pkginfo";
     homepage = "https://pythonhosted.org/pkginfo/";
     longDescription = ''
       This package provides an API for querying the distutils metadata

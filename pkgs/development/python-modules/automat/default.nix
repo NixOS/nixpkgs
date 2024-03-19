@@ -43,6 +43,7 @@ let automat = buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/glyph/Automat";
     description = "Self-service finite-state machines for the programmer on the go";
+    mainProgram = "automat-visualize";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

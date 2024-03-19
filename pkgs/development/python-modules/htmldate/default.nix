@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast and robust extraction of original and updated publication dates from URLs and web pages";
+    mainProgram = "htmldate";
     homepage = "https://htmldate.readthedocs.io";
     changelog = "https://github.com/adbar/htmldate/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";
+    mainProgram = "vcpkg";
     homepage = "https://github.com/microsoft/vcpkg-tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka gracicot ];

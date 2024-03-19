@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool for learning vector representations of words and entities from Wikipedia";
+    mainProgram = "wikipedia2vec";
     homepage = "https://wikipedia2vec.github.io/wikipedia2vec/";
     changelog = "https://github.com/wikipedia2vec/wikipedia2vec/releases/tag/v${version}";
     license = licenses.asl20;

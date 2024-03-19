@@ -60,6 +60,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Mattermost Desktop client";
+    mainProgram = "mattermost-desktop";
     homepage = "https://about.mattermost.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;

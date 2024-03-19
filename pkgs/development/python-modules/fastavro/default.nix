@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast read/write of AVRO files";
+    mainProgram = "fastavro";
     homepage = "https://github.com/fastavro/fastavro";
     changelog = "https://github.com/fastavro/fastavro/blob/${version}/ChangeLog";
     license = licenses.mit;

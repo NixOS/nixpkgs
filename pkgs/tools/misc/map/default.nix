@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Map lines from stdin to commands";
+    mainProgram = "map";
     homepage = "https://github.com/soveran/map";
     license = licenses.bsd2;
     maintainers = with maintainers; [ pogobanane ];

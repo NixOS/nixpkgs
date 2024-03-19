@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus Alertmanager alert acknowledgement management daemon";
+    mainProgram = "kthxbye";
     homepage = "https://github.com/prymitive/kthxbye";
     license = licenses.asl20;
     maintainers = with maintainers; [ nukaduka ];

@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An XMPP library for C++, used by the Swift client";
+    mainProgram = "swiften-config";
     homepage = "http://swift.im/swiften.html";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

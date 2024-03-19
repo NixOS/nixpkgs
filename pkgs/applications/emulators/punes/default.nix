@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
+    mainProgram = "punes";
     homepage = "https://github.com/punesemu/puNES";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];

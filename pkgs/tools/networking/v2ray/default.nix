@@ -55,6 +55,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://www.v2fly.org/en_US/";
     description = "A platform for building proxies to bypass network restrictions";
+    mainProgram = "v2ray";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ servalcatty ];
   };

@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";
+    mainProgram = "texlab";
     homepage = "https://github.com/latex-lsp/texlab";
     changelog = "https://github.com/latex-lsp/texlab/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

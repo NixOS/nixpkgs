@@ -63,6 +63,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "The client of the Tryton application platform";
+    mainProgram = "tryton";
     longDescription = ''
       The client for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using

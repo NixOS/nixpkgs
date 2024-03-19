@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/roehling/postsrsd";
     description = "Postfix Sender Rewriting Scheme daemon";
+    mainProgram = "postsrsd";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];

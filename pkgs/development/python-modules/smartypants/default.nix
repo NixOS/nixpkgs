@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python with the SmartyPants";
+    mainProgram = "smartypants";
     homepage = "https://github.com/leohemsted/smartypants.py";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];
