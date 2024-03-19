@@ -6,7 +6,24 @@
 , wrapGAppsHook
 }:
 
-with python3Packages; buildPythonApplication {
+let
+  inherit (lib)
+    licenses
+    maintainers
+    makeBinPath
+    platforms
+    ;
+
+  inherit (python3Packages)
+    buildPythonApplication
+    numpy
+    pycairo
+    pygobject3
+    xcffib
+    ;
+in
+
+buildPythonApplication {
   pname = "escrotum";
   version = "unstable-2020-12-07";
 
@@ -34,14 +51,14 @@ with python3Packages; buildPythonApplication {
 
   outputs = [ "out" "man" ];
 
-  makeWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}"];
+  makeWrapperArgs = ["--prefix PATH : ${makeBinPath [ ffmpeg-full ]}"];
 
   postInstall = ''
     mkdir -p $man/share/man/man1
     cp man/escrotum.1 $man/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Roger/escrotum";
     description = "Linux screen capture using pygtk, inspired by scrot";
     platforms = platforms.linux;
