@@ -12,7 +12,7 @@ let
       nativeBuildInputs = [ pkgs.yq ];
     } ''
     tomlq -s -t 'reduce .[] as $item ({}; . * $item)' \
-      ${lib.concatStringsSep " " (map (f: "${pkgs.starship}/share/starship/presets/${f}.toml") cfg.presets)} \
+      ${lib.concatStringsSep " " (map (f: "${cfg.package}/share/starship/presets/${f}.toml") cfg.presets)} \
       ${userSettingsFile} \
       > $out
   '';
@@ -27,6 +27,8 @@ in
 {
   options.programs.starship = {
     enable = lib.mkEnableOption (lib.mdDoc "the Starship shell prompt");
+
+    package = lib.mkPackageOption pkgs "starship" { };
 
     interactiveOnly = lib.mkOption {
       default = true;
@@ -68,7 +70,7 @@ in
         if [[ ! -f "$HOME/.config/starship.toml" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
-        eval "$(${pkgs.starship}/bin/starship init bash)"
+        eval "$(${cfg.package}/bin/starship init bash)"
       fi
     '';
 
@@ -81,7 +83,7 @@ in
         if not test -f "$HOME/.config/starship.toml";
           set -x STARSHIP_CONFIG ${settingsFile}
         end
-        eval (${pkgs.starship}/bin/starship init fish)
+        eval (${cfg.package}/bin/starship init fish)
       end
     '';
 
@@ -94,7 +96,7 @@ in
         if [[ ! -f "$HOME/.config/starship.toml" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
-        eval "$(${pkgs.starship}/bin/starship init zsh)"
+        eval "$(${cfg.package}/bin/starship init zsh)"
       fi
     '';
   };
