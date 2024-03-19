@@ -25,7 +25,6 @@
   # Optional dependencies
 , withQemu ? false
 , qemu
-, OVMF
 }:
 let
   # For systemd features used by mkosi, see
@@ -45,7 +44,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "21";
+  version = "22";
   format = "pyproject";
 
   outputs = [ "out" "man" ];
@@ -54,7 +53,7 @@ buildPythonApplication rec {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-ONahHWDPB9EOdqyiogLjrSwdtXidWG0aYXE4F7khg0I=";
+    hash = "sha256-Zom1GlyhqgpTKfjcBOUEJMlubSn+TQsk97js1/UfDHY=";
   };
 
   # Fix ctypes finding library
@@ -66,8 +65,7 @@ buildPythonApplication rec {
       --replace '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
   '' + lib.optionalString withQemu ''
     substituteInPlace mkosi/qemu.py \
-      --replace '/usr/share/ovmf/x64/OVMF_VARS.fd' "${OVMF.variables}" \
-      --replace '/usr/share/ovmf/x64/OVMF_CODE.fd' "${OVMF.firmware}"
+      --replace "usr/share/qemu/firmware" "${qemu}/share/qemu/firmware"
   '';
 
   nativeBuildInputs = [
