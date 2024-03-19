@@ -266,14 +266,14 @@ in
           format
           (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) finalPartitions);
 
-        partitions = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
+        partitionsJSON = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
 
         mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
-        inherit (cfg) imageFileBasename compression split seed sectorSize;
-        inherit fileSystems definitionsDirectory partitions mkfsEnv;
+        inherit (cfg) name version imageFileBasename compression split seed sectorSize;
+        inherit fileSystems definitionsDirectory partitionsJSON mkfsEnv;
       };
 
     meta.maintainers = with lib.maintainers; [ nikstur ];
