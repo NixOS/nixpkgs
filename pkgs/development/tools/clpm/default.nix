@@ -9,12 +9,11 @@
 # Broken on newer versions:
 # "https://gitlab.common-lisp.net/clpm/clpm/-/issues/51". Once that bug is
 # fixed, remove this, and all 2.1.9 references from the SBCL build file.
-with rec {
+let
   sbcl_2_1_9 = sbcl.override (_: {
     version = "2.1.9";
   });
-};
-
+in
 
 stdenv.mkDerivation rec {
   pname = "clpm";
