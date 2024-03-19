@@ -45,7 +45,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "21";
+  version = "22";
   format = "pyproject";
 
   outputs = [ "out" "man" ];
@@ -54,7 +54,7 @@ buildPythonApplication rec {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-ONahHWDPB9EOdqyiogLjrSwdtXidWG0aYXE4F7khg0I=";
+    hash = "sha256-Zom1GlyhqgpTKfjcBOUEJMlubSn+TQsk97js1/UfDHY=";
   };
 
   # Fix ctypes finding library
