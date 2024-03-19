@@ -7487,6 +7487,8 @@ self: super: with self; {
 
   mouseinfo = callPackage ../development/python-modules/mouseinfo { };
 
+  mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
+
   moviepy = callPackage ../development/python-modules/moviepy { };
 
   mox3 = callPackage ../development/python-modules/mox3 { };
