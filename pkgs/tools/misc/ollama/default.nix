@@ -14,7 +14,7 @@
 , gcc12
 , clblast
 , libdrm
-, rocmPackages
+, rocmPackages_6
 , cudaPackages
 , linuxPackages
 , darwin
@@ -46,13 +46,13 @@ let
   enableCuda = validAccel && (acceleration == "cuda") && (warnIfNotLinux "cuda");
 
   rocmClang = linkFarm "rocm-clang" {
-    llvm = rocmPackages.llvm.clang;
+    llvm = rocmPackages_6.llvm.clang;
   };
   rocmPath = buildEnv {
     name = "rocm-path";
     paths = [
-      rocmPackages.rocm-device-libs
-      pkgs.rocmPackages.clr
+      rocmPackages_6.rocm-device-libs
+      pkgs.rocmPackages_6.clr
       rocmClang
     ];
   };
@@ -67,7 +67,7 @@ let
   };
 
   runtimeLibs = lib.optionals enableRocm [
-    rocmPackages.rocm-smi
+    rocmPackages_6.rocm-smi
   ] ++ lib.optionals enableCuda [
     linuxPackages.nvidia_x11
   ];
@@ -113,11 +113,11 @@ goBuild ((lib.optionalAttrs enableRocm {
     metalFrameworks;
 
   buildInputs = lib.optionals enableRocm [
-    rocmPackages.clr
-    rocmPackages.hipblas
-    rocmPackages.rocblas
-    rocmPackages.rocsolver
-    rocmPackages.rocsparse
+    rocmPackages_6.clr
+    rocmPackages_6.hipblas
+    rocmPackages_6.rocblas
+    rocmPackages_6.rocsolver
+    rocmPackages_6.rocsparse
     libdrm
   ] ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
