@@ -7727,8 +7727,6 @@ with pkgs;
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
-  soupault = callPackage ../tools/typesetting/soupault { };
-
   stratisd = callPackage ../tools/filesystems/stratisd { };
 
   stratis-cli = callPackage ../tools/filesystems/stratis-cli { };
