@@ -1139,9 +1139,11 @@ self: super: builtins.intersectAttrs super {
     {
       fourmolu = fourmoluTestFix super.fourmolu;
       fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
+      fourmolu_0_15_0_0 = fourmoluTestFix super.fourmolu_0_15_0_0;
     })
     fourmolu
     fourmolu_0_14_1_0
+    fourmolu_0_15_0_0
     ;
 
   # Test suite needs to execute 'disco' binary

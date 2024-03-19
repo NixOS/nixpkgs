@@ -60,6 +60,11 @@ self: super: {
   aeson = doDistribute self.aeson_2_2_1_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
   xmonad = doDistribute self.xmonad_0_18_0;
+  apply-refact = self.apply-refact_0_14_0_0;
+  ormolu = self.ormolu_0_7_4_0;
+  fourmolu = self.fourmolu_0_15_0_0;
+  stylish-haskell = self.stylish-haskell_0_14_6_0;
+  hlint = self.hlint_3_8;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = self.ghc-exactprint_1_8_0_0;
