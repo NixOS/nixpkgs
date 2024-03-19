@@ -2193,7 +2193,6 @@ dont-distribute-packages:
  - hs-sdl-term-emulator
  - hs2ats
  - hs2dot
- - hsautogui
  - hsbackup
  - hsbencher-codespeed
  - hsbencher-fusion
@@ -3668,7 +3667,6 @@ dont-distribute-packages:
  - servant-streaming-docs
  - servant-streaming-server
  - servant-swagger-tags
- - servant-to-elm
  - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
