@@ -252,6 +252,7 @@ in {
     services.xserver.displayManager.sddm = {
       package = kdePackages.sddm;
       theme = mkDefault "breeze";
+      wayland.compositor = "kwin";
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami
