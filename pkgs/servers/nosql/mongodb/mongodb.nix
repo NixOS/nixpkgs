@@ -144,6 +144,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
+  '' + optionalString (!stdenv.isDarwin) ''
     sconsFlags+=" AR=$AR"
   '' + optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"

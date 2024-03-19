@@ -15,7 +15,7 @@
 , nixosTests
 }:
 
-{ # The kernel source tarball.
+lib.makeOverridable ({ # The kernel source tarball.
   src
 
 , # The kernel version.
@@ -240,4 +240,4 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
     in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
-})
+}))

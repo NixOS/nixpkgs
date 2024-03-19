@@ -20,20 +20,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "salmon";
-  version = "1.10.2";
+  version = "1.10.3";
 
   pufferFishSrc = fetchFromGitHub {
     owner = "COMBINE-lab";
     repo = "pufferfish";
     rev = "salmon-v${finalAttrs.version}";
-    hash = "sha256-JKbUFBEsqnENl4vFqve1FCd4TI3n9bRi2RNHC8QGQGc=";
+    hash = "sha256-g4pfNuc620WQ7UDv8PQHVbbTVt78aGVqcHHMszmBIkA=";
   };
 
   src = fetchFromGitHub {
     owner = "COMBINE-lab";
     repo = "salmon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kwqoUmVCqjr/xRxJjQKaFjjCQW+MFASHJ2f9OiAumNU=";
+    hash = "sha256-HGcDqu0XzgrU3erHavigXCoj3VKk82ixMLY10Kk9MW4=";
   };
 
   patches = [

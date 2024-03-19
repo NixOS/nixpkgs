@@ -212,14 +212,18 @@ core-big = stdenv.mkDerivation {
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=lua_fixed_hash.patch;msg=45";
       sha256 = "sha256-FTu1eRd3AUU7IRs2/7e7uwHuvZsrzTBPypbcEZkU7y4=";
     })
-    # fixes a security-issue in luatex that allows arbitrary code execution even with shell-escape disabled, see https://tug.org/~mseven/luatex.html
-    # fixed in LuaTeX 1.17.0, remove patch when upgrading to TL 2024
+    # update to LuaTeX 1.16.1 to prepare for 1.17.0 below
     (fetchpatch {
-      name = "CVE-2023-32700.patch";
-      url = "https://tug.org/~mseven/luatex-files/2023/patch";
-      hash = "sha256-AvMedFkZJAFsCJ51eQqBQM4MpzLzn+GeBrzuTzISVkk=";
-      excludes = [  "build.sh" ];
-      stripLen = 1;
+      name = "luatex-1.16.1.patch";
+      url = "https://github.com/TeX-Live/texlive-source/commit/ad8702a45e317fa9d396ef4d50467c37964a9543.patch";
+      hash = "sha256-qfzUfkJUfW285w+fnbpO8JLArM7/uj3yb9PONgZrJLE=";
+    })
+    # fixes security issues in luatex that allows arbitrary code execution even with shell-escape disabled and network requests, see https://tug.org/~mseven/luatex.html
+    # fixed in LuaTeX 1.17.0, shipped as a rare binary update in TL 2023
+    (fetchpatch {
+      name = "luatex-1.17.0.patch";
+      url = "https://github.com/TeX-Live/texlive-source/commit/6ace460233115bd42b36e63c7ddce11cc92a1ebd.patch";
+      hash = "sha256-2fbIdwnw/XQXci9OqRrb6B5tHiSR0co08NyFgMyXCvc=";
     })
     # Fixes texluajitc crashes on aarch64, backport of the upstream fix
     # https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c

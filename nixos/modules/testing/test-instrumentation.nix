@@ -42,8 +42,10 @@ let
         # Otherwise we get errors on the terminal because bash tries to
         # setup things like job control.
         # Note: calling bash explicitly here instead of sh makes sure that
-        # we can also run non-NixOS guests during tests.
-        PS1= exec /usr/bin/env bash --norc /dev/hvc0
+        # we can also run non-NixOS guests during tests. This, however, is
+        # mostly futureproofing as the test instrumentation is still very
+        # tightly coupled to NixOS.
+        PS1= exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
       '';
       serviceConfig.KillSignal = "SIGHUP";
   };
@@ -121,7 +123,9 @@ in
           }
         ];
 
-        contents."/usr/bin/env".source = "${pkgs.coreutils}/bin/env";
+        storePaths = [
+          "${pkgs.coreutils}/bin/env"
+        ];
       })
     ];
 
