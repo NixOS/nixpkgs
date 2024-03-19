@@ -32,8 +32,26 @@ let
 
     };
   };
+
+  inherit (py.pkgs)
+    arrow
+    buildPythonApplication
+    certifi
+    click
+    cryptography
+    jmespath
+    oci
+    prompt-toolkit
+    pyopenssl
+    python-dateutil
+    pytz
+    pyyaml
+    retrying
+    setuptools
+    six
+    terminaltables
+    ;
 in
-with py.pkgs;
 
 buildPythonApplication rec {
   pname = "oci-cli";
