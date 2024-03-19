@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck-minimal }:
+{ lib, config, stdenv, stdenvNoCC, jq, lndir, runtimeShell, shellcheck-minimal }:
 
 let
   inherit (lib)
@@ -625,18 +625,22 @@ rec {
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile
-  writeReferencesToFile = path: runCommand "runtime-deps"
+  # TODO: Convert to throw after Nixpkgs 24.05 branch-off.
+  writeReferencesToFile = (if config.allowAliases then lib.warn else throw)
+    "writeReferencesToFile is deprecated in favour of writeClosure"
+    (path: writeClosure [ path ]);
+
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
+  writeClosure = paths: runCommand "runtime-deps"
     {
-      exportReferencesGraph = [ "graph" path ];
+      # Get the cleaner exportReferencesGraph interface
+      __structuredAttrs = true;
+      exportReferencesGraph.graph = paths;
+      nativeBuildInputs = [ jq ];
     }
     ''
-      touch $out
-      while read path; do
-        echo $path >> $out
-        read dummy
-        read nrRefs
-        for ((i = 0; i < nrRefs; i++)); do read ref; done
-      done < graph
+      jq -r ".graph | map(.path) | sort | .[]" "$NIX_ATTRS_JSON_FILE" > "$out"
     '';
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
