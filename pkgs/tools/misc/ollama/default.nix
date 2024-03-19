@@ -52,6 +52,7 @@ let
     name = "rocm-path";
     paths = [
       rocmPackages.rocm-device-libs
+      pkgs.rocmPackages.clr
       rocmClang
     ];
   };

@@ -7703,6 +7703,7 @@ with pkgs;
 
   rocmPackages = rocmPackages_5;
   rocmPackages_5 = recurseIntoAttrs (callPackage ../development/rocm-modules/5 { });
+  rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
 
   rune = callPackage ../development/interpreters/rune { };
 
