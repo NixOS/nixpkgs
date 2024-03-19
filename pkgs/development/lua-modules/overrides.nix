@@ -58,6 +58,18 @@
 final: prev:
 with prev;
 {
+  argparse = prev.argparse.overrideAttrs(oa: {
+
+    doCheck = true;
+    checkInputs = [ final.busted ];
+
+    checkPhase = ''
+      runHook preCheck
+      export LUA_PATH="src/?.lua;$LUA_PATH"
+      busted spec/
+      runHook postCheck
+    '';
+  });
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3

@@ -26471,8 +26471,6 @@ with pkgs;
 
   sympa = callPackage ../servers/mail/sympa { };
 
-  syncstorage-rs = callPackage ../servers/syncstorage-rs { };
-
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
@@ -26987,10 +26985,6 @@ with pkgs;
 
   storm = callPackage ../servers/computing/storm { };
 
-  surrealdb = callPackage ../servers/nosql/surrealdb {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-  };
-
   switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
 
   slurm = callPackage ../servers/computing/slurm { };
@@ -27316,8 +27310,6 @@ with pkgs;
   cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
 
   cpustat = callPackage ../os-specific/linux/cpustat { };
-
-  cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   cockroachdb-bin = callPackage ../servers/sql/cockroachdb/cockroachdb-bin.nix { };
 

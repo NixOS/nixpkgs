@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smlfut";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlfut";
     rev = "v${version}";
-    hash = "sha256-bPqvHExAoOCd6Z2/rfKd6kHeYxu/jNDz5qTklqJtlzI=";
+    hash = "sha256-Oj5+UNtV2GKB2GNsSFKePVpa1msSZwwJI/YElwBSH98=";
   };
 
   enableParallelBuilding = true;
