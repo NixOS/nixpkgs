@@ -1,0 +1,82 @@
+Submodule lib/libappimage contains modified content
+diff --git a/lib/libappimage/cmake/dependencies.cmake b/lib/libappimage/cmake/dependencies.cmake
+index 8d96484..c7b17a1 100644
+--- a/lib/libappimage/cmake/dependencies.cmake
++++ b/lib/libappimage/cmake/dependencies.cmake
+@@ -91,9 +91,18 @@ if(NOT USE_SYSTEM_SQUASHFUSE)
+         INCLUDE_DIRS "<SOURCE_DIR>"
+     )
+ else()
+-    message(STATUS "Using system squashfuse")
++    message(STATUS "Using system squashfsfuse from ${SQUASHFUSE}")
+
+-    import_pkgconfig_target(TARGET_NAME libsquashfuse PKGCONFIG_TARGET squashfuse)
++    add_library(libsquashfuse INTERFACE IMPORTED GLOBAL)
++
++    set(squashfuse_INCLUDE_DIRS "${SQUASHFUSE}/include")
++    set(squashfuse_LIBRARIES "${SQUASHFUSE}/lib/libsquashfuse.a;${SQUASHFUSE}/lib/libsquashfuse_ll.a;${SQUASHFUSE}/lib/libfuseprivate.a")
++
++    set_property(
++      TARGET libsquashfuse
++      PROPERTY INTERFACE_LINK_LIBRARIES ${squashfuse_LIBRARIES}
++    )
++    include_directories(${squashfuse_INCLUDE_DIRS})
+ endif()
+
+
+diff --git a/src/appimagetool.c b/src/appimagetool.c
+index 6b37419..23425e7 100644
+--- a/src/appimagetool.c
++++ b/src/appimagetool.c
+@@ -38,7 +38,7 @@
+ #include <argp.h>
+
+ #include <fcntl.h>
+-#include "squashfuse.h"
++#include <squashfuse.h>
+
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -96,7 +96,7 @@ static void die(const char *msg) {
+ }
+
+ /* Function that prints the contents of a squashfs file
+-* using libsquashfuse (#include "squashfuse.h") */
++* using libsquashfuse (#include <squashfuse.h>) */
+ int sfs_ls(char* image) {
+     sqfs_err err = SQFS_OK;
+     sqfs_traverse trv;
+diff --git a/src/appimagetoolnoglib.c b/src/appimagetoolnoglib.c
+index f900e76..ffa87f8 100644
+--- a/src/appimagetoolnoglib.c
++++ b/src/appimagetoolnoglib.c
+@@ -3,7 +3,7 @@
+
+ #include <stdlib.h>
+ #include <fcntl.h>
+-#include "squashfuse.h"
++#include <squashfuse.h>
+
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -118,7 +118,7 @@ int is_regular_file(const char *path)
+ }
+
+ /* Function that prints the contents of a squashfs file
+- * using libsquashfuse (#include "squashfuse.h") */
++ * using libsquashfuse (#include <squashfuse.h>) */
+ int sfs_ls(char* image) {
+ 	sqfs_err err = SQFS_OK;
+ 	sqfs_traverse trv;
+diff --git a/src/runtime.c b/src/runtime.c
+index bada3af..70a642b 100644
+--- a/src/runtime.c
++++ b/src/runtime.c
+@@ -29,7 +29,7 @@
+
+ #define _GNU_SOURCE
+
+-#include "squashfuse.h"
++#include <squashfuse.h>
+ #include <squashfs_fs.h>
+ #include <nonstd.h>

@@ -1,0 +1,24 @@
+diff --git a/settings/QvkSettings.cpp b/settings/QvkSettings.cpp
+index 3008e62..07485bd 100644
+--- a/settings/QvkSettings.cpp
++++ b/settings/QvkSettings.cpp
+@@ -66,17 +66,8 @@ void QvkSettings::readAll()
+       Minimized = settings.value( "Minimized", 0 ).toUInt();
+       MinimizedByStart = settings.value( "MinimizedByStart", 0 ).toUInt();
+       Countdown = settings.value( "Countdown", 0 ).toUInt();
+-      QFile file;
+-      if ( file.exists( qApp->applicationDirPath().append( "/bin/ffmpeg" ) ) == true )
+-      {
+-        vokoscreenWithLibs = true;
+-        Recorder = qApp->applicationDirPath().append( "/bin/ffmpeg" );
+-      }
+-      else
+-      {
+-        vokoscreenWithLibs = false;
+-        Recorder = settings.value( "Recorder", "ffmpeg" ).toString();
+-      }
++      vokoscreenWithLibs = true;
++      Recorder = settings.value( "Recorder", "@ffmpeg@/bin/ffmpeg" ).toString();
+     settings.endGroup();
+     
+     settings.beginGroup( "Videooptions" );

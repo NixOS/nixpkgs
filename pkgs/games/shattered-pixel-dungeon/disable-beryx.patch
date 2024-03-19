@@ -1,0 +1,40 @@
+diff --git a/desktop/build.gradle b/desktop/build.gradle
+index 97f35f7..afd5116 100644
+--- a/desktop/build.gradle
++++ b/desktop/build.gradle
+@@ -1,6 +1,7 @@
+-plugins {
+-    id 'org.beryx.runtime' version '1.12.7'
+-}
++//plugins {
++//    id 'org.beryx.runtime' version '1.12.7'
++//}
++apply plugin: "java"
+ 
+ [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+ sourceCompatibility = targetCompatibility = appJavaCompatibility
+@@ -43,11 +44,11 @@ task release(type: Jar) {
+         attributes 'Implementation-Version': appVersionCode
+     }
+ }
+-installDist.dependsOn release
+-startScripts.dependsOn release
+-jpackageImage.dependsOn release
++//installDist.dependsOn release
++//startScripts.dependsOn release
++//jpackageImage.dependsOn release
+ 
+-runtime {
++/*runtime {
+     modules = ['java.base',
+                'java.desktop',
+                'jdk.unsupported',
+@@ -102,7 +103,7 @@ runtime {
+         }
+     }
+ 
+-}
++}*/
+ 
+ dependencies {
+     implementation project(':core')

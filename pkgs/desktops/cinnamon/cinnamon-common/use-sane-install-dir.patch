@@ -1,0 +1,33 @@
+From f7e802959d7a5c217ed574cab30404fc769f174d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Sat, 6 Feb 2021 14:26:26 +0100
+Subject: [PATCH] use sane install dir
+
+---
+ meson.build | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index bd803f20..3c1e9a4f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -127,8 +127,14 @@ configure_file(
+ )
+ 
+ install_subdir(
+-    'files',
+-    install_dir: '/',
++    'files/usr',
++    install_dir: get_option('prefix'),
++    strip_directory: true,
++)
++
++install_subdir(
++    'files/etc',
++    install_dir: join_paths(get_option('prefix'), 'etc'),
+     strip_directory: true,
+ )
+ 
+-- 
+2.30.0
+

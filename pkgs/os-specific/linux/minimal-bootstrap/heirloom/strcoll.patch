@@ -1,0 +1,73 @@
+--- comm/comm.c
++++ comm/comm.c
+@@ -242,7 +242,7 @@ compare(const char *a, const char *b)
+ 			return(2);
+ 		}
+ 	} else {
+-		n = strcoll(a, b);
++		n = strcmp(a, b);
+ 		return n ? n > 0 ? 2 : 1 : 0;
+ 	}
+ }
+--- expr/expr.y
++++ expr/expr.y
+@@ -234,7 +234,7 @@ _rel(int op, register char *r1, register char *r2)
+ 	if (numeric(r1) && numeric(r2))
+ 		i = atoll(r1) - atoll(r2);
+ 	else
+-		i = strcoll(r1, r2);
++		i = strcmp(r1, r2);
+ 	switch(op) {
+ 	case EQ: i = i==0; break;
+ 	case GT: i = i>0; break;
+--- join/join.c
++++ join/join.c
+@@ -65,7 +65,7 @@ enum {
+ 	JF = -1
+ };
+ #define	ppi(f, j)	((j) >= 0 && (j) < ppisize[f] ? ppibuf[f][j] : null)
+-#define comp() strcoll(ppi(F1, j1),ppi(F2, j2))
++#define comp() strcmp(ppi(F1, j1),ppi(F2, j2))
+ 
+ #define	next(wc, s, n)	(*(s) & 0200 ? ((n) = mbtowi(&(wc), (s), mb_cur_max), \
+ 		(n) = ((n) > 0 ? (n) : (n) < 0 ? (wc=WEOF, 1) : 1)) : \
+--- ls/ls.c
++++ ls/ls.c
+@@ -575,13 +575,13 @@ _mergesort(struct file **al)
+ static int
+ namecmp(struct file *f1, struct file *f2)
+ {
+-	return strcoll(f1->name, f2->name);
++	return strcmp(f1->name, f2->name);
+ }
+ 
+ static int
+ extcmp(struct file *f1, struct file *f2)
+ {
+-	return strcoll(extension(f1->name), extension(f2->name));
++	return strcmp(extension(f1->name), extension(f2->name));
+ }
+ 
+ static int
+--- nawk/run.c
++++ nawk/run.c
+@@ -608,7 +608,7 @@ Cell *relop(Node **a, int n)
+ 		j = x->fval - y->fval;
+ 		i = j<0? -1: (j>0? 1: 0);
+ 	} else {
+-		i = strcoll((char*)getsval(x), (char*)getsval(y));
++		i = strcmp((char*)getsval(x), (char*)getsval(y));
+ 	}
+ 	tempfree(x, "");
+ 	tempfree(y, "");
+--- sort/sort.c
++++ sort/sort.c
+@@ -1148,7 +1148,7 @@ cmpl(const char *pa, const char *pb)
+ 
+ 	ecpy(collba, pa, '\n');
+ 	ecpy(collbb, pb, '\n');
+-	n = strcoll(collba, collbb);
++	n = strcmp(collba, collbb);
+ 	return n ? n > 0 ? -fields[0].rflg : fields[0].rflg : 0;
+ }
+ 

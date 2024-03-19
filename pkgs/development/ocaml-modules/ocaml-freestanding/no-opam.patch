@@ -1,0 +1,47 @@
+commit 637b7ce639d54e617170433aa9596176b167d085
+Author: sternenseemann <0rpkxez4ksa01gb3typccl0i@systemli.org>
+Date:   Thu Mar 18 01:07:49 2021 +0100
+
+    Allow building without ocamlfind and opam
+    
+    This change is the result of my first go at packaging ocaml-freestanding
+    for NixOS. Our build infrastructure for ocaml there is completely
+    independent of opam at the moment, so depending on opam for the build
+    time is not an option, especially in this case where the information it
+    would give us would be garbage.
+    
+    Fortunately the build environment plays nicely with pkg-config which is
+    already heavily used by ocaml-freestanding. This patch leaves pkg-config
+    to its own devices if opam is not present (it can be assisted by a
+    manually set PKG_CONFIG_PATH environment variable).
+    
+    Additionally, in configure.sh we check if the target ocaml source
+    directory already exists. This allows for building ocaml-freestanding
+    without the ocaml-src package (which would be unnecessarily cumbersome
+    to package for NixOS) and ocamlfind (one less dependency is always a
+    nice bonus). The Makefile needs no fix since the target ocaml/Makefile
+    won't be built if it's already present.
+
+diff --git a/configure.sh b/configure.sh
+index 4d154ed..c254f7b 100755
+--- a/configure.sh
++++ b/configure.sh
+@@ -1,6 +1,8 @@
+ #!/bin/sh
+ 
+-export PKG_CONFIG_PATH=$(opam config var prefix)/lib/pkgconfig
++if command -v opam &> /dev/null; then
++    export PKG_CONFIG_PATH=$(opam config var prefix)/lib/pkgconfig
++fi
+ pkg_exists() {
+     pkg-config --exists "$@"
+ }
+@@ -21,7 +23,7 @@ if [ -z "${PKG_CONFIG_DEPS}" ]; then
+     echo "ERROR: solo5-bindings-hvt, solo5-bindings-spt, solo5-bindings-virtio, solo5-bindings-muen, solo5-bindings-genode or solo5-bindings-xen must be installed." 1>&2
+     exit 1
+ fi
+-ocamlfind query ocaml-src >/dev/null || exit 1
++[ -e "$(dirname "$0")/ocaml" ] || ocamlfind query ocaml-src >/dev/null || exit 1
+ 
+ FREESTANDING_CFLAGS="$(pkg-config --cflags ${PKG_CONFIG_DEPS})"
+ BUILD_ARCH="$(uname -m)"

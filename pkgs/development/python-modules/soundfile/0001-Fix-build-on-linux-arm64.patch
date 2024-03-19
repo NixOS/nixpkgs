@@ -1,0 +1,25 @@
+From b3eabd314f050a7491e82bc1560e8d8633569a06 Mon Sep 17 00:00:00 2001
+From: Zhong Jianxin <azuwis@gmail.com>
+Date: Fri, 24 Feb 2023 11:03:41 +0800
+Subject: [PATCH] Fix build on linux arm64
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index ef99bcc..81c2dcb 100644
+--- a/setup.py
++++ b/setup.py
+@@ -80,7 +80,7 @@ else:
+             elif platform == 'linux':
+                 # the oldest mainline github runner available is ubuntu 20.04,
+                 # which runs glibc 2.31:
+-                oses = 'manylinux_2_31_x86_64'
++                oses = 'manylinux_2_31_{}'.format(architecture0)
+             else:
+                 pythons = 'py2.py3'
+                 oses = 'any'
+-- 
+2.39.1
+

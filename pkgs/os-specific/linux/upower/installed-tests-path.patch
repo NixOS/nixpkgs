@@ -1,0 +1,56 @@
+diff --git a/meson_options.txt b/meson_options.txt
+index eec3659..f064a1b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -6,6 +6,10 @@ option('gtk-doc',
+        type : 'boolean',
+        value : 'true',
+        description : 'Build developer documentation')
++option('installed_test_prefix',
++       type: 'string',
++       value: '',
++       description: 'Prefix for installed tests')
+ option('introspection',
+        type : 'feature',
+        value : 'auto',
+diff --git a/src/meson.build b/src/meson.build
+index a2352ac..c1f25ac 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -85,6 +85,7 @@ install_subdir('does-not-exist', install_dir: historydir, strip_directory : true
+ 
+ cdata = configuration_data()
+ cdata.set('libexecdir', get_option('prefix') / get_option('libexecdir'))
++cdata.set('installed_test_bindir', get_option('installed_test_prefix') / 'libexec' / 'upower')
+ cdata.set('historydir', historydir)
+ 
+ configure_file(
+@@ -147,16 +148,16 @@ if os_backend == 'linux' and gobject_introspection.found()
+         'linux/integration-test.py',
+         'linux/output_checker.py',
+       ],
+-      install_dir: get_option('prefix') / get_option('libexecdir') / 'upower'
++      install_dir: get_option('installed_test_prefix') / 'libexec' / 'upower'
+     )
+     install_subdir('linux/tests/',
+-      install_dir: get_option('prefix') / get_option('libexecdir') / 'upower'
++      install_dir: get_option('installed_test_prefix') / 'libexec' / 'upower'
+     )
+ 
+     configure_file(
+       input: 'upower-integration.test.in',
+       output: 'upower-integration.test',
+-      install_dir: get_option('datadir') / 'installed-tests' / 'upower',
++      install_dir: get_option('installed_test_prefix') / 'share' / 'installed-tests' / 'upower',
+       configuration: cdata
+     )
+ endif
+diff --git a/src/upower-integration.test.in b/src/upower-integration.test.in
+index 151ded0..b0a9bec 100644
+--- a/src/upower-integration.test.in
++++ b/src/upower-integration.test.in
+@@ -1,3 +1,3 @@
+ [Test]
+ Type=session
+-Exec=@libexecdir@/upower/integration-test.py
++Exec=@installed_test_bindir@/integration-test.py

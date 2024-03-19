@@ -1,0 +1,13 @@
+diff -Naur hybrid-portsrc-x86_32-v5_10_91_9.orig/src/wl/sys/wl_linux.c hybrid-portsrc-x86_32-v5_10_91_9/src/wl/sys/wl_linux.c
+--- hybrid-portsrc-x86_32-v5_10_91_9.orig/src/wl/sys/wl_linux.c	2009-04-23 02:48:59.000000000 +0900
++++ hybrid-portsrc-x86_32-v5_10_91_9/src/wl/sys/wl_linux.c	2009-05-08 00:48:20.000000000 +0900
+@@ -171,6 +171,8 @@
+ static void wl_free_if(wl_info_t *wl, wl_if_t *wlif);
+ static void wl_get_driver_info(struct net_device *dev, struct ethtool_drvinfo *info);
+ 
++MODULE_LICENSE("MIXED/Proprietary");
++
+ #if defined(WL_CONFIG_RFKILL)
+ #include <linux/rfkill.h>
+ static int wl_init_rfkill(wl_info_t *wl);
+

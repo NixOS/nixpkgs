@@ -1,0 +1,12 @@
+diff --git a/nuget.config b/nuget.config
+index 08b468c..349bb11 100644
+--- a/nuget.config
++++ b/nuget.config
+@@ -3,7 +3,6 @@
+   <packageSources>
+     <clear/>
+     <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+-    <add key="AvaloniaCI" value="https://www.myget.org/F/avalonia-ci/api/v2" />
+     <add key="dotnet-tools" value="https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json" />
+   </packageSources>
+ </configuration>

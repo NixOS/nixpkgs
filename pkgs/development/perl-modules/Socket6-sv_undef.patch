@@ -1,0 +1,18 @@
+diff --git a/Socket6.xs b/Socket6.xs
+index 05c791c..058e9d9 100644
+--- a/Socket6.xs
++++ b/Socket6.xs
+@@ -105,10 +105,6 @@ const struct in6_addr in6addr_loopback = IN6ADDR_LOOPBACK_INIT;
+ #define	HAVE_INET_PTON		1
+ #endif
+ 
+-#ifndef HAVE_PL_SV_UNDEF
+-#define	PL_sv_undef		sv_undef
+-#endif
+-
+ static int
+ not_here(char *s)
+ {
+-- 
+2.16.3
+

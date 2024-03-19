@@ -1,0 +1,17 @@
+diff --git a/libgnome-desktop/gnome-desktop-thumbnail-script.c b/libgnome-desktop/gnome-desktop-thumbnail-script.c
+index ddcc1511..546c2a36 100644
+--- a/libgnome-desktop/gnome-desktop-thumbnail-script.c
++++ b/libgnome-desktop/gnome-desktop-thumbnail-script.c
+@@ -555,9 +555,9 @@ add_bwrap (GPtrArray   *array,
+   g_return_val_if_fail (script->s_infile != NULL, FALSE);
+ 
+   add_args (array,
+-	    "bwrap",
+-	    "--ro-bind", "/usr", "/usr",
+-	    "--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache",
++	    "@bubblewrap_bin@",
++	    "--ro-bind", "@storeDir@", "@storeDir@",
++	    "--ro-bind-try", "/run/current-system", "/run/current-system",
+ 	    NULL);
+ 
+   /* These directories might be symlinks into /usr/... */

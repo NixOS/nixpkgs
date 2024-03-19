@@ -1,0 +1,19 @@
+diff --git a/config/Makefile.am b/config/Makefile.am
+index c98a2ab..58b7f0a 100644
+--- a/config/Makefile.am
++++ b/config/Makefile.am
+@@ -36,10 +36,10 @@ endif
+ #
+ 
+ install-data-local: install-config-files
+-	mkdir -pm 0755 $(DESTDIR)$(localstatedir)/netatalk/
+-	mkdir -pm 0755 $(DESTDIR)$(localstatedir)/netatalk/CNID/
+-	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(localstatedir)/netatalk/
+-	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(localstatedir)/netatalk/CNID/
++#	mkdir -pm 0755 $(DESTDIR)$(localstatedir)/netatalk/
++#	mkdir -pm 0755 $(DESTDIR)$(localstatedir)/netatalk/CNID/
++#	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(localstatedir)/netatalk/
++#	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(localstatedir)/netatalk/CNID/
+ 
+ uninstall-local:
+ 	@for f in $(CONFFILES) $(GENFILES); do \

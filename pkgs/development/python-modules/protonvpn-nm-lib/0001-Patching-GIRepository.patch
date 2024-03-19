@@ -1,0 +1,22 @@
+From 2867f022aad754fe54d95222b3ae52f6e7f14c2f Mon Sep 17 00:00:00 2001
+From: "P. R. d. O" <d.ol.rod@tutanota.com>
+Date: Wed, 27 Apr 2022 21:49:12 -0600
+Subject: [PATCH] Patching GIRepository
+
+---
+ protonvpn_nm_lib/__init__.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/protonvpn_nm_lib/__init__.py b/protonvpn_nm_lib/__init__.py
+index e69de29..00b95f4 100644
+--- a/protonvpn_nm_lib/__init__.py
++++ b/protonvpn_nm_lib/__init__.py
+@@ -0,0 +1,5 @@
++import gi
++gi.require_version('GIRepository', '2.0')
++from gi.repository import GIRepository
++repo = GIRepository.Repository.get_default()
++repo.prepend_search_path('@networkmanager_path@')
+-- 
+2.35.1
+

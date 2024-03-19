@@ -1,0 +1,11 @@
+Support building with compilers such as Clang.
+
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ all: nrg2iso.c
+-	gcc nrg2iso.c -o nrg2iso
++	cc nrg2iso.c -o nrg2iso
+
+ clean:
+ 	rm -f nrg2iso

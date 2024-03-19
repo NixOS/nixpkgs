@@ -1,0 +1,16 @@
+diff -ruN dozenal-12010904/dozenal/dozcal/call_lua.c dozenal-patched/dozenal/dozcal/call_lua.c
+--- dozenal-12010904/dozenal/dozcal/call_lua.c	2017-09-04 19:25:01.000000000 +0200
++++ dozenal-patched/dozenal/dozcal/call_lua.c	2018-06-13 10:19:57.821950327 +0200
+@@ -38,9 +38,9 @@
+ #include"utility.h"
+ #include"conv.h"
+ #include"proc_date.h"
+-#include<lua5.2/lua.h>
+-#include<lua5.2/lauxlib.h>
+-#include<lua5.2/lualib.h>
++#include<lua.h>
++#include<lauxlib.h>
++#include<lualib.h>
+ 
+ void bail(lua_State *L, int err_code, char *filename);
+ int file_prefix(char **s, char *t);

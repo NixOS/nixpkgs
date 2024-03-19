@@ -1,0 +1,24 @@
+--- a/tests/proportional_cbdt.ttx
++++ b/tests/proportional_cbdt.ttx
+@@ -13,7 +13,7 @@
+     <mtx name=".notdef" width="0" lsb="5"/>
+     <mtx name=".space" width="0" lsb="0"/>
+     <mtx name="e000" width="110" lsb="0"/>
+-    <mtx name="e001" width="73" lsb="0"/>
++    <mtx name="e001" width="74" lsb="0"/>
+   </hmtx>
+ 
+   <cmap>
+@@ -79,10 +79,10 @@
+       <cbdt_bitmap_format_17 name="e001">
+         <SmallGlyphMetrics>
+           <height value="128"/>
+-          <width value="85"/>
++          <width value="86"/>
+           <BearingX value="0"/>
+           <BearingY value="104"/>
+-          <Advance value="85"/>
++          <Advance value="86"/>
+         </SmallGlyphMetrics>
+         <extfileimagedata value="e001.png"/>
+       </cbdt_bitmap_format_17>

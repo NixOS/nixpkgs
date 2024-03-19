@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas Benes <nbenes.gh@xandea.de>
+Date: Mon, 22 May 2023 09:25:27 +0200
+Subject: [PATCH] Fix pkg-config paths
+
+
+diff --git a/libxisf.pc.in b/libxisf.pc.in
+index b0b8b53..944b068 100644
+--- a/libxisf.pc.in
++++ b/libxisf.pc.in
+@@ -1,7 +1,7 @@
+ prefix="@CMAKE_INSTALL_PREFIX@"
+ exec_prefix="${prefix}"
+-libdir="${exec_prefix}/@CMAKE_INSTALL_LIBDIR@"
+-includedir="${prefix}/@CMAKE_INSTALL_INCLUDEDIR@"
++libdir="@CMAKE_INSTALL_FULL_LIBDIR@"
++includedir="@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+ 
+ Name: @PROJECT_NAME@
+ Description: @CMAKE_PROJECT_DESCRIPTION@
+-- 
+2.38.5
+

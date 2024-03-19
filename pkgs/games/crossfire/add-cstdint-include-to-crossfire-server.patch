@@ -1,0 +1,13 @@
+diff --git a/include/Treasures.h b/include/Treasures.h
+index 614078f..a00b4f6 100644
+--- a/include/Treasures.h
++++ b/include/Treasures.h
+@@ -13,6 +13,8 @@
+ #ifndef TREASURES_H
+ #define TREASURES_H
+ 
++#include <cstdint>
++
+ #include "AssetsCollection.h"
+ 
+ extern "C" {

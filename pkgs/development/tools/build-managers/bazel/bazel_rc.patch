@@ -1,0 +1,13 @@
+diff --git a/src/main/cpp/option_processor.cc b/src/main/cpp/option_processor.cc
+index 8f8f15685f..a7ae52d1e4 100644
+--- a/src/main/cpp/option_processor.cc
++++ b/src/main/cpp/option_processor.cc
+@@ -56,7 +56,7 @@ OptionProcessor::OptionProcessor(
+     : workspace_layout_(workspace_layout),
+       startup_options_(std::move(default_startup_options)),
+       parse_options_called_(false),
+-      system_bazelrc_path_(BAZEL_SYSTEM_BAZELRC_PATH) {}
++      system_bazelrc_path_("@bazelSystemBazelRCPath@") {}
+ 
+ OptionProcessor::OptionProcessor(
+     const WorkspaceLayout* workspace_layout,

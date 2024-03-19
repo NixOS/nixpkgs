@@ -1,0 +1,34 @@
+diff --git a/serapi/serapi_paths.ml b/serapi/serapi_paths.ml
+index 17cbb98..1fd85a0 100644
+--- a/serapi/serapi_paths.ml
++++ b/serapi/serapi_paths.ml
+@@ -23,10 +23,10 @@
+ let coq_loadpath_default ~implicit ~coq_path =
+   let open Mltop in
+   let mk_path prefix = coq_path ^ "/" ^ prefix in
+-  let mk_lp ~ml ~root ~dir ~implicit =
++  let mk_lp ~ml ~root ~dir ~implicit ~absolute =
+     { recursive = true;
+       path_spec = VoPath {
+-          unix_path = mk_path dir;
++          unix_path = if absolute then dir else mk_path dir;
+           coq_path  = root;
+           has_ml    = ml;
+           implicit;
+@@ -35,10 +35,12 @@ let coq_loadpath_default ~implicit ~coq_path =
+   (* in 8.8 we can use Libnames.default_* *)
+   let coq_root     = Names.DirPath.make [Libnames.coq_root] in
+   let default_root = Libnames.default_root_prefix in
+-  [mk_lp ~ml:AddRecML ~root:coq_root     ~implicit       ~dir:"plugins";
+-   mk_lp ~ml:AddNoML  ~root:coq_root     ~implicit       ~dir:"theories";
+-   mk_lp ~ml:AddRecML ~root:default_root ~implicit:false ~dir:"user-contrib";
+-  ]
++  [mk_lp ~ml:AddRecML ~root:coq_root     ~implicit       ~dir:"plugins" ~absolute:false;
++   mk_lp ~ml:AddNoML  ~root:coq_root     ~implicit       ~dir:"theories" ~absolute:false;
++   mk_lp ~ml:AddRecML ~root:default_root ~implicit:false ~dir:"user-contrib" ~absolute:false;
++  ] @
++  List.map (fun dir -> mk_lp ~ml:AddRecML ~root:default_root ~implicit:false ~dir ~absolute:true)
++    Envars.coqpath
+ 
+ (******************************************************************************)
+ (* Generate a module name given a file                                        *)

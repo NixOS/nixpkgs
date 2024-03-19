@@ -1,0 +1,11 @@
+--- a/meson.build
++++ b/meson.build
+@@ -100,7 +100,7 @@
+      args : model_quirks)
+ 
+ udev_rules_config = configuration_data()
+-udev_rules_config.set('UDEV_TEST_PATH', '')
++udev_rules_config.set('UDEV_TEST_PATH', dir_udev + '/')
+ configure_file(input : 'udev/80-libinput-device-groups.rules.in',
+ 	       output : '80-libinput-device-groups.rules',
+ 	       install : true,

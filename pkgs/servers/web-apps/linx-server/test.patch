@@ -1,0 +1,74 @@
+diff --git a/server_test.go b/server_test.go
+index fc225ce..2df3608 100644
+--- a/server_test.go
++++ b/server_test.go
+@@ -446,63 +446,6 @@ func TestPostJSONUpload(t *testing.T) {
+ 	}
+ }
+ 
+-func TestPostJSONUploadMaxExpiry(t *testing.T) {
+-	mux := setup()
+-	Config.maxExpiry = 300
+-
+-	// include 0 to test edge case
+-	// https://github.com/andreimarcu/linx-server/issues/111
+-	testExpiries := []string{"86400", "-150", "0"}
+-	for _, expiry := range testExpiries {
+-		w := httptest.NewRecorder()
+-
+-		filename := generateBarename() + ".txt"
+-
+-		var b bytes.Buffer
+-		mw := multipart.NewWriter(&b)
+-		fw, err := mw.CreateFormFile("file", filename)
+-		if err != nil {
+-			t.Fatal(err)
+-		}
+-
+-		fw.Write([]byte("File content"))
+-		mw.Close()
+-
+-		req, err := http.NewRequest("POST", "/upload/", &b)
+-		req.Header.Set("Content-Type", mw.FormDataContentType())
+-		req.Header.Set("Accept", "application/json")
+-		req.Header.Set("Linx-Expiry", expiry)
+-		if err != nil {
+-			t.Fatal(err)
+-		}
+-
+-		mux.ServeHTTP(w, req)
+-
+-		if w.Code != 200 {
+-			t.Log(w.Body.String())
+-			t.Fatalf("Status code is not 200, but %d", w.Code)
+-		}
+-
+-		var myjson RespOkJSON
+-		err = json.Unmarshal([]byte(w.Body.String()), &myjson)
+-		if err != nil {
+-			t.Fatal(err)
+-		}
+-
+-		myExp, err := strconv.ParseInt(myjson.Expiry, 10, 64)
+-		if err != nil {
+-			t.Fatal(err)
+-		}
+-
+-		expected := time.Now().Add(time.Duration(Config.maxExpiry) * time.Second).Unix()
+-		if myExp != expected {
+-			t.Fatalf("File expiry is not %d but %s", expected, myjson.Expiry)
+-		}
+-	}
+-
+-	Config.maxExpiry = 0
+-}
+-
+ func TestPostExpiresJSONUpload(t *testing.T) {
+ 	mux := setup()
+ 	w := httptest.NewRecorder()
+@@ -1301,5 +1244,4 @@ func TestPutAndGetCLI(t *testing.T) {
+ 	if !strings.HasPrefix(contentType, "text/plain") {
+ 		t.Fatalf("Didn't receive file directly but %s", contentType)
+ 	}
+-
+ }

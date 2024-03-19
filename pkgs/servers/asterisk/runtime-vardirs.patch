@@ -1,0 +1,50 @@
+diff -rupN asterisk-14.1.2/build_tools/make_defaults_h asterisk-14.1.2-patched/build_tools/make_defaults_h
+--- asterisk-14.1.2/build_tools/make_defaults_h	2016-11-10 20:43:02.000000000 +0100
++++ asterisk-14.1.2-patched/build_tools/make_defaults_h	2016-11-16 10:09:04.189625495 +0100
+@@ -1,4 +1,13 @@
+ #!/bin/sh
++
++ASTLOGDIR=/var/log/asterisk
++ASTVARRUNDIR=/run/asterisk
++ASTVARLIBDIR=/var/lib/asterisk
++ASTDBDIR=${ASTVARLIBDIR}
++ASTDATADIR=${ASTVARLIBDIR}
++AGI_DIR=${ASTDATADIR}/agi-bin
++ASTSPOOLDIR=/var/spool/asterisk
++
+ cat << END
+ /*
+  * defaults.h 
+@@ -9,21 +18,21 @@ cat << END
+ 
+ #define DEFAULT_CONFIG_DIR "${INSTALL_PATH}${ASTETCDIR}"
+ #define DEFAULT_MODULE_DIR "${INSTALL_PATH}${ASTMODDIR}"
+-#define DEFAULT_AGI_DIR    "${INSTALL_PATH}${AGI_DIR}"
+-#define DEFAULT_LOG_DIR    "${INSTALL_PATH}${ASTLOGDIR}"
++#define DEFAULT_AGI_DIR    "${AGI_DIR}"
++#define DEFAULT_LOG_DIR    "${ASTLOGDIR}"
+ 
+-#define DEFAULT_RUN_DIR    "${INSTALL_PATH}${ASTVARRUNDIR}"
+-#define DEFAULT_SOCKET     "${INSTALL_PATH}${ASTVARRUNDIR}/asterisk.ctl"
+-#define DEFAULT_PID        "${INSTALL_PATH}${ASTVARRUNDIR}/asterisk.pid"
++#define DEFAULT_RUN_DIR    "${ASTVARRUNDIR}"
++#define DEFAULT_SOCKET     "${ASTVARRUNDIR}/asterisk.ctl"
++#define DEFAULT_PID        "${ASTVARRUNDIR}/asterisk.pid"
+ 
+-#define DEFAULT_VAR_DIR    "${INSTALL_PATH}${ASTVARLIBDIR}"
+-#define DEFAULT_DB         "${INSTALL_PATH}${ASTDBDIR}/astdb"
++#define DEFAULT_VAR_DIR    "${ASTVARLIBDIR}"
++#define DEFAULT_DB         "${ASTDBDIR}/astdb"
+ 
+-#define DEFAULT_DATA_DIR   "${INSTALL_PATH}${ASTDATADIR}"
+-#define DEFAULT_KEY_DIR    "${INSTALL_PATH}${ASTDATADIR}/keys"
++#define DEFAULT_DATA_DIR   "${ASTDATADIR}"
++#define DEFAULT_KEY_DIR    "${ASTDATADIR}/keys"
+ 
+-#define DEFAULT_SPOOL_DIR  "${INSTALL_PATH}${ASTSPOOLDIR}"
+-#define DEFAULT_TMP_DIR    "${INSTALL_PATH}${ASTSPOOLDIR}/tmp"
++#define DEFAULT_SPOOL_DIR  "${ASTSPOOLDIR}"
++#define DEFAULT_TMP_DIR    "${ASTSPOOLDIR}/tmp"
+ 
+ #define DEFAULT_SBIN_DIR   "${INSTALL_PATH}${ASTSBINDIR}"
+ END

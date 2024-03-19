@@ -1,0 +1,14 @@
+diff --git a/src/vcpkg/vcpkgpaths.cpp b/src/vcpkg/vcpkgpaths.cpp
+index 3f588c21..e6f2bbed 100644
+--- a/src/vcpkg/vcpkgpaths.cpp
++++ b/src/vcpkg/vcpkgpaths.cpp
+@@ -579,7 +579,8 @@ namespace vcpkg
+                 if (!args.do_not_take_lock)
+                 {
+                     std::error_code ec;
+-                    const auto vcpkg_root_file = root / ".vcpkg-root";
++                    fs.create_directories(Path{"/tmp/vcpkg"}, VCPKG_LINE_INFO);
++                    const auto vcpkg_root_file = Path{"/tmp/vcpkg"} / Hash::get_string_sha256(root.c_str());
+                     if (args.wait_for_lock.value_or(false))
+                     {
+                         file_lock_handle = fs.take_exclusive_file_lock(vcpkg_root_file, ec);

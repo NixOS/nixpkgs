@@ -1,0 +1,23 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -52,7 +52,7 @@ clean:
+ replaced/%: %
+ 	mkdir -p $(dir $@)
+ 	sed < $< > $@ \
+-	-e 's:__SYSSHAREDIR_PREFIX__:$(PREFIX):' \
++	-e 's:__SYSSHAREDIR_PREFIX__:$(DESTDIR):' \
+ 	-e 's:__SYSCONFDIR_PREFIX__:$(ETCPREFIX):' \
+ 	-e 's:__SYSDATADIR_PREFIX__:$(LOCALSTATEDIR):'
+ 
+diff --git a/src/share/keytrans b/src/share/keytrans
+--- a/src/share/keytrans
++++ b/src/share/keytrans
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -T
++#!/usr/bin/perl
+ 
+ # keytrans: this is an RSA key translation utility; it is capable of
+ # transforming RSA keys (both public keys and secret keys) between
+-- 
+2.16.3

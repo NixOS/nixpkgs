@@ -1,0 +1,12 @@
+diff --git a/config/environments/production.rb b/config/environments/production.rb
+index 6b73c82e9d..0cefea6fc0 100644
+--- a/config/environments/production.rb
++++ b/config/environments/production.rb
+@@ -32,5 +32,6 @@ Discourse::Application.configure do
+       user_name: GlobalSetting.smtp_user_name,
+       password: GlobalSetting.smtp_password,
+       authentication: GlobalSetting.smtp_authentication,
++      ca_file: "/etc/ssl/certs/ca-certificates.crt",
+       enable_starttls_auto: GlobalSetting.smtp_enable_start_tls,
+       open_timeout: GlobalSetting.smtp_open_timeout,
+       read_timeout: GlobalSetting.smtp_read_timeout

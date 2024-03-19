@@ -1,0 +1,12 @@
+diff --git a/src/parquet/arrow/reader.cc b/src/parquet/arrow/reader.cc
+--- a/src/parquet/arrow/reader.cc
++++ b/src/parquet/arrow/reader.cc
+@@ -1421,7 +1421,7 @@ Status StructImpl::DefLevelsToNullArray(std::shared_ptr<Buffer>* null_bitmap_out
+   const int16_t* def_levels_data;
+   size_t def_levels_length;
+   RETURN_NOT_OK(GetDefLevels(&def_levels_data, &def_levels_length));
+-  RETURN_NOT_OK(AllocateEmptyBitmap(pool_, def_levels_length, &null_bitmap));
++  RETURN_NOT_OK(GetEmptyBitmap(pool_, def_levels_length, &null_bitmap));
+   uint8_t* null_bitmap_ptr = null_bitmap->mutable_data();
+   for (size_t i = 0; i < def_levels_length; i++) {
+     if (def_levels_data[i] < struct_def_level_) {

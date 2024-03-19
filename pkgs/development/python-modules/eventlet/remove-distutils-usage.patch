@@ -1,0 +1,143 @@
+diff --git a/eventlet/hubs/hub.py b/eventlet/hubs/hub.py
+index db55958..c27b81f 100644
+--- a/eventlet/hubs/hub.py
++++ b/eventlet/hubs/hub.py
+@@ -21,7 +21,7 @@ else:
+ 
+ import eventlet.hubs
+ from eventlet.hubs import timer
+-from eventlet.support import greenlets as greenlet, clear_sys_exc_info
++from eventlet.support import greenlets as greenlet
+ try:
+     from monotonic import monotonic
+ except ImportError:
+@@ -309,7 +309,6 @@ class BaseHub(object):
+                 cur.parent = self.greenlet
+         except ValueError:
+             pass  # gets raised if there is a greenlet parent cycle
+-        clear_sys_exc_info()
+         return self.greenlet.switch()
+ 
+     def squelch_exception(self, fileno, exc_info):
+@@ -397,13 +396,11 @@ class BaseHub(object):
+         if self.debug_exceptions:
+             traceback.print_exception(*exc_info)
+             sys.stderr.flush()
+-            clear_sys_exc_info()
+ 
+     def squelch_timer_exception(self, timer, exc_info):
+         if self.debug_exceptions:
+             traceback.print_exception(*exc_info)
+             sys.stderr.flush()
+-            clear_sys_exc_info()
+ 
+     def add_timer(self, timer):
+         scheduled_time = self.clock() + timer.seconds
+@@ -478,7 +475,6 @@ class BaseHub(object):
+                 raise
+             except:
+                 self.squelch_timer_exception(timer, sys.exc_info())
+-                clear_sys_exc_info()
+ 
+     # for debugging:
+ 
+diff --git a/eventlet/hubs/kqueue.py b/eventlet/hubs/kqueue.py
+index bad4a87..8438805 100644
+--- a/eventlet/hubs/kqueue.py
++++ b/eventlet/hubs/kqueue.py
+@@ -109,4 +109,3 @@ class Hub(hub.BaseHub):
+                 raise
+             except:
+                 self.squelch_exception(fileno, sys.exc_info())
+-                support.clear_sys_exc_info()
+diff --git a/eventlet/hubs/poll.py b/eventlet/hubs/poll.py
+index 1bbd401..d3f9c6a 100644
+--- a/eventlet/hubs/poll.py
++++ b/eventlet/hubs/poll.py
+@@ -113,7 +113,6 @@ class Hub(hub.BaseHub):
+                 raise
+             except:
+                 self.squelch_exception(fileno, sys.exc_info())
+-                support.clear_sys_exc_info()
+ 
+         if self.debug_blocking:
+             self.block_detect_post()
+diff --git a/eventlet/hubs/selects.py b/eventlet/hubs/selects.py
+index 0ead5b8..0386a1e 100644
+--- a/eventlet/hubs/selects.py
++++ b/eventlet/hubs/selects.py
+@@ -61,4 +61,3 @@ class Hub(hub.BaseHub):
+                     raise
+                 except:
+                     self.squelch_exception(fileno, sys.exc_info())
+-                    support.clear_sys_exc_info()
+diff --git a/eventlet/support/__init__.py b/eventlet/support/__init__.py
+index 43bac91..b1c1607 100644
+--- a/eventlet/support/__init__.py
++++ b/eventlet/support/__init__.py
+@@ -30,15 +30,6 @@ def get_errno(exc):
+         return None
+ 
+ 
+-if sys.version_info[0] < 3 and not greenlets.preserves_excinfo:
+-    from sys import exc_clear as clear_sys_exc_info
+-else:
+-    def clear_sys_exc_info():
+-        """No-op In py3k.
+-        Exception information is not visible outside of except statements.
+-        sys.exc_clear became obsolete and removed."""
+-        pass
+-
+ if sys.version_info[0] < 3:
+     def bytes_to_str(b, encoding='ascii'):
+         return b
+diff --git a/eventlet/support/greenlets.py b/eventlet/support/greenlets.py
+index d4e1793..b939328 100644
+--- a/eventlet/support/greenlets.py
++++ b/eventlet/support/greenlets.py
+@@ -1,8 +1,4 @@
+-import distutils.version
+-
+ import greenlet
+ getcurrent = greenlet.greenlet.getcurrent
+ GreenletExit = greenlet.greenlet.GreenletExit
+-preserves_excinfo = (distutils.version.LooseVersion(greenlet.__version__)
+-                     >= distutils.version.LooseVersion('0.3.2'))
+ greenlet = greenlet.greenlet
+diff --git a/setup.py b/setup.py
+index a8f4684..9b927e0 100644
+--- a/setup.py
++++ b/setup.py
+@@ -19,7 +19,7 @@ setuptools.setup(
+     packages=setuptools.find_packages(exclude=['benchmarks', 'tests', 'tests.*']),
+     install_requires=(
+         'dnspython >= 1.15.0',
+-        'greenlet >= 0.3',
++        'greenlet >= 1.0',
+         'monotonic >= 1.4;python_version<"3.5"',
+         'six >= 1.10.0',
+     ),
+diff --git a/tests/hub_test.py b/tests/hub_test.py
+index a531b75..05c0024 100644
+--- a/tests/hub_test.py
++++ b/tests/hub_test.py
+@@ -194,7 +194,6 @@ class TestExceptionInMainloop(tests.LimitedTestCase):
+ 
+ class TestExceptionInGreenthread(tests.LimitedTestCase):
+ 
+-    @skip_unless(greenlets.preserves_excinfo)
+     def test_exceptionpreservation(self):
+         # events for controlling execution order
+         gt1event = eventlet.Event()
+diff --git a/tests/test__refcount.py b/tests/test__refcount.py
+index 1090a1f..5c1c002 100644
+--- a/tests/test__refcount.py
++++ b/tests/test__refcount.py
+@@ -57,7 +57,6 @@ def run_interaction(run_client):
+ 
+ def run_and_check(run_client):
+     w = run_interaction(run_client=run_client)
+-    # clear_sys_exc_info()
+     gc.collect()
+     fd = w()
+     print('run_and_check: weakref fd:', fd)

@@ -1,0 +1,143 @@
+From c1d1eed00099af8d858536b659864b7ccea41974 Mon Sep 17 00:00:00 2001
+From: Paul Howarth <paul@city-fan.org>
+Date: Sat, 13 Mar 2021 17:46:57 +0000
+Subject: [PATCH 1/2] Update for Getopt-Long-Descriptive 0.106
+
+GLD is now outputting text with wrapping depending on the terminal
+width. This update is enough to get the tests to pass when running
+within "expect", which provides a PTY. It's almost certainly not
+enough for general use.
+---
+ t/104_override_usage.t           |  8 ++++++++
+ t/107_no_auto_help.t             |  2 +-
+ t/109_help_flag.t                |  2 +-
+ t/110_sort_usage_by_attr_order.t | 12 ++++++++++++
+ 4 files changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/t/104_override_usage.t b/t/104_override_usage.t
+index bc45029..6641540 100644
+--- a/t/104_override_usage.t
++++ b/t/104_override_usage.t
+@@ -61,9 +61,17 @@ use Test::Exception;
+ \t--foo INT          A foo
+ }
+         :
++         $Getopt::Long::Descriptive::VERSION < 0.106 ?
+          qq{usage: 104_override_usage.t [-?] [long options...]
+ \t-? --[no-]usage --[no-]help       Prints this usage information.
+ \t--foo INT                         A foo
++}
++        :
++         qq{usage: 104_override_usage.t [-?] [long options...]
++\t--[no-]help (or -?)  Prints
++\t             this usage information.
++\t             aka --usage
++\t--foo INT    A foo
+ }
+ 
+      ];
+diff --git a/t/107_no_auto_help.t b/t/107_no_auto_help.t
+index 27f87f5..103df43 100644
+--- a/t/107_no_auto_help.t
++++ b/t/107_no_auto_help.t
+@@ -60,7 +60,7 @@ END {
+ warning_like {
+     throws_ok { Class->new_with_options }
+            #usage: 107_no_auto_help.t [-?] [long options...]
+-        qr/^usage: [\d\w]+\Q.t [-?] [long options...]\E.\s+\Q-? --\E(\[no-\])?usage --(\[no-\])?\Qhelp\E\s+\QPrints this usage information.\E.\s+--configfile/ms,
++        qr/^usage: [\d\w]+\Q.t [-?] [long options...]\E.\s+(\Q-? --\E(\[no-\])?usage )?--(\[no-\])?\Qhelp\E(\Q (or -?)\E)?\s+\QPrints this usage information.\E.(\s+\Qaka --usage\E.)?\s+--configfile/ms,
+         'usage information looks good';
+     }
+     qr/^Specified configfile \'this_value_unimportant\' does not exist, is empty, or is not readable$/,
+diff --git a/t/109_help_flag.t b/t/109_help_flag.t
+index 8c658e2..58dbca6 100644
+--- a/t/109_help_flag.t
++++ b/t/109_help_flag.t
+@@ -40,7 +40,7 @@ foreach my $args ( ['--help'], ['--usage'], ['--?'], ['-?'] )
+     local @ARGV = @$args;
+ 
+     throws_ok { MyClass->new_with_options() }
+-        qr/^usage: (?:[\d\w]+)\Q.t [-?] [long options...]\E.^\t\Q-? --\E(\[no-\])?usage --(\[no-\])?help\s+\QPrints this usage information.\E$/ms,
++        qr/^usage: (?:[\d\w]+)\Q.t [-?] [long options...]\E.^\s+(\Q-? --\E(\[no-\])?usage )?--(\[no-\])?help(\Q (or -?)\E)?\s+Prints ?(.\s+)?\Qthis usage information.\E.(\s+\Qaka --usage\E.)?$/ms,
+         'Help request detected; usage information properly printed';
+ }
+ 
+diff --git a/t/110_sort_usage_by_attr_order.t b/t/110_sort_usage_by_attr_order.t
+index e7dd177..7ec0c99 100644
+--- a/t/110_sort_usage_by_attr_order.t
++++ b/t/110_sort_usage_by_attr_order.t
+@@ -64,6 +64,18 @@ usage: 110_sort_usage_by_attr_order.t [-?] [long options...]
+     --baz STR                         Documentation for "baz"
+ USAGE
+ }
++if ( $Getopt::Long::Descriptive::VERSION >= 0.106 )
++{
++$expected = <<'USAGE';
++usage: 110_sort_usage_by_attr_order.t [-?] [long options...]
++    --[no-]help (or -?)  Prints
++                 this usage information.
++                 aka --usage
++    --foo STR    Documentation for "foo"
++    --bar STR    Documentation for "bar"
++    --baz STR    Documentation for "baz"
++USAGE
++}
+ $expected =~ s/^[ ]{4}/\t/xmsg;
+ is($obj->usage->text, $expected, 'Usage text has nicely sorted options');
+ 
+
+From 45ae6aaabc5413e985860fbfcc8da3bdc929a054 Mon Sep 17 00:00:00 2001
+From: Paul Howarth <paul@city-fan.org>
+Date: Mon, 15 Mar 2021 10:43:14 +0000
+Subject: [PATCH 2/2] Update for Getopt-Long-Descriptive 0.107
+
+GLD's use of Term::ReadKey has been reverted, so this update should now
+work reliably. Use with GLD 0.106 is not supported.
+---
+ t/104_override_usage.t           | 6 +++---
+ t/110_sort_usage_by_attr_order.t | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/t/104_override_usage.t b/t/104_override_usage.t
+index 6641540..f7c6a31 100644
+--- a/t/104_override_usage.t
++++ b/t/104_override_usage.t
+@@ -61,15 +61,15 @@ use Test::Exception;
+ \t--foo INT          A foo
+ }
+         :
+-         $Getopt::Long::Descriptive::VERSION < 0.106 ?
++         # Note: Getopt::Long::Descriptive 0.106 not supported
++         $Getopt::Long::Descriptive::VERSION < 0.107 ?
+          qq{usage: 104_override_usage.t [-?] [long options...]
+ \t-? --[no-]usage --[no-]help       Prints this usage information.
+ \t--foo INT                         A foo
+ }
+         :
+          qq{usage: 104_override_usage.t [-?] [long options...]
+-\t--[no-]help (or -?)  Prints
+-\t             this usage information.
++\t--[no-]help (or -?)  Prints this usage information.
+ \t             aka --usage
+ \t--foo INT    A foo
+ }
+diff --git a/t/110_sort_usage_by_attr_order.t b/t/110_sort_usage_by_attr_order.t
+index 7ec0c99..16cdaa1 100644
+--- a/t/110_sort_usage_by_attr_order.t
++++ b/t/110_sort_usage_by_attr_order.t
+@@ -64,12 +64,12 @@ usage: 110_sort_usage_by_attr_order.t [-?] [long options...]
+     --baz STR                         Documentation for "baz"
+ USAGE
+ }
+-if ( $Getopt::Long::Descriptive::VERSION >= 0.106 )
++# Note: Getopt::Long::Descriptive 0.106 not supported
++if ( $Getopt::Long::Descriptive::VERSION >= 0.107 )
+ {
+ $expected = <<'USAGE';
+ usage: 110_sort_usage_by_attr_order.t [-?] [long options...]
+-    --[no-]help (or -?)  Prints
+-                 this usage information.
++    --[no-]help (or -?)  Prints this usage information.
+                  aka --usage
+     --foo STR    Documentation for "foo"
+     --bar STR    Documentation for "bar"

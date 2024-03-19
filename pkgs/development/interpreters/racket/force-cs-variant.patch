@@ -1,0 +1,18 @@
+Hardcode Racket variant to CS
+
+Hardcode variant detection because nixpkgs wraps the Racket binary making it
+fail to detect its variant at runtime.
+https://github.com/NixOS/nixpkgs/issues/114993#issuecomment-812951247
+
+--- old/collects/setup/variant.rkt
++++ new/collects/setup/variant.rkt
+@@ -7,7 +7,8 @@
+ (provide variant-suffix
+          script-variant?)
+ 
+-(define plain-variant
++(define plain-variant 'cs)
++#;(define plain-variant
+   (delay/sync
+    (cond
+      [(cross-installation?)

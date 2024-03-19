@@ -1,0 +1,38 @@
+diff --git a/daemon/gdm-x-session.c.orig b/daemon/gdm-x-session.c
+index d835b34..1f4b7f1 100644
+--- a/daemon/gdm-x-session.c.orig
++++ b/daemon/gdm-x-session.c
+@@ -211,6 +211,7 @@ spawn_x_server (State        *state,
+         char     *vt_string = NULL;
+         char     *display_number;
+         gsize     display_number_size;
++        gchar   **xserver_extra_args = NULL;
+ 
+         auth_file = prepare_auth_file ();
+ 
+@@ -285,6 +286,17 @@ spawn_x_server (State        *state,
+         if (state->debug_enabled) {
+                 g_ptr_array_add (arguments, "-core");
+         }
++
++        if (g_getenv ("GDM_X_SERVER_EXTRA_ARGS") != NULL) {
++                g_debug ("using GDM_X_SERVER_EXTRA_ARGS: %s", g_getenv("GDM_X_SERVER_EXTRA_ARGS"));
++                xserver_extra_args = g_strsplit(g_getenv("GDM_X_SERVER_EXTRA_ARGS"), " ", -1);
++                for (gchar **extra_arg = xserver_extra_args; *extra_arg; extra_arg++) {
++                        if (strlen(*extra_arg) < 1) continue;
++			g_debug ("adding: %s", *extra_arg);
++                        g_ptr_array_add (arguments, *extra_arg);
++                }
++        }
++
+         g_ptr_array_add (arguments, NULL);
+ 
+         subprocess = g_subprocess_launcher_spawnv (launcher,
+@@ -332,6 +344,7 @@ spawn_x_server (State        *state,
+ 
+         is_running = TRUE;
+ out:
++	g_strfreev(xserver_extra_args);
+         g_clear_pointer (&auth_file, g_free);
+         g_clear_object (&data_stream);
+         g_clear_object (&subprocess);
