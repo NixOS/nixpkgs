@@ -3,13 +3,14 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zeep
 }:
 
 buildPythonPackage rec {
   pname = "python-stdnum";
   version = "1.20";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,8 +21,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
+      --replace-fail " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
