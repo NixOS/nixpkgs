@@ -4,7 +4,26 @@
 , glibcLocales
 }:
 
-with python3.pkgs;
+let
+  inherit (python3.pkgs)
+    buildPythonApplication
+    click
+    cli-helpers
+    configobj
+    cryptography
+    importlib-resources
+    paramiko
+    prompt-toolkit
+    pyaes
+    pycrypto
+    pygments
+    pymysql
+    pyperclip
+    pytestCheckHook
+    sqlglot
+    sqlparse
+    ;
+in
 
 buildPythonApplication rec {
   pname = "mycli";
