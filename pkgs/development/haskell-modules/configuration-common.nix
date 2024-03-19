@@ -2984,4 +2984,6 @@ self: super: {
     hash = "sha256-hT4IZw70DxTw6iMofQHjPycz6IE6U76df72ftR2UB6Q=";
   }) (super.HaskellNet-SSL.override { connection = self.crypton-connection; });
 
+  type-errors = dontCheck super.type-errors;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
