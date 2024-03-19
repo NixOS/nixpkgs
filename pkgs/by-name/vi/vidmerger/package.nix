@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Merge video & audio files via CLI ";
     homepage = "https://github.com/TGotwig/vidmerger";
-    license = licenses.free;
+    license = licenses.unfree;
     maintainers = with maintainers; [ ByteSudoer ];
     mainProgram = "vidmerger";
   };
