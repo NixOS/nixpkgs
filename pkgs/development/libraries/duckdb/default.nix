@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , cmake
 , ninja
@@ -18,13 +17,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qGUq0iYTaLNHKqbXNLRmvqHMqunvIlP991IKb4qdSt4=";
+    hash = "sha256-/j/DaUzsfACI5Izr4lblkYmIEmKsOXr760UTwC0l/qg=";
   };
 
   patches = [
@@ -32,13 +31,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./version.patch;
       version = "v${version}";
-    })
-    # add missing file needed for httpfs compile
-    # remove on next update
-    (fetchpatch {
-      name = "missing-httpfs-file.patch";
-      url = "https://github.com/duckdb/duckdb/commit/3d7aa3ed46ecf5f18122559e385b75f1f5e9aba8.patch";
-      hash = "sha256-Q4IHCpMpxn86OquUZdEF7P0nHEPOcWS0TQijTkvBYbQ=";
     })
   ];
 
