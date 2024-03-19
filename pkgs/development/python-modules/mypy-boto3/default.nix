@@ -715,7 +715,7 @@ rec {
 
   mypy-boto3-textract = buildMypyBoto3Package "textract" "1.34.0" "sha256-AeukQ85jOCNpUxfnedEyacm/bK6pFA32tmhQrieLoMo=";
 
-  mypy-boto3-timestream-query = buildMypyBoto3Package "timestream-query" "1.34.0" "sha256-YriLmrbBd3zPny4MBMJV5G0WB4mQZElBZDOd3DTin74=";
+  mypy-boto3-timestream-query = buildMypyBoto3Package "timestream-query" "1.34.65" "sha256-RSGOulFIOZi/9Z5grP/Zv0A5fy3MJTzph+D9a45MkHA=";
 
   mypy-boto3-timestream-write = buildMypyBoto3Package "timestream-write" "1.34.0" "sha256-fKi5nIyU5BffflHVh21HjcuYE+RXDiq0gXbFOKOAYPE=";
 
