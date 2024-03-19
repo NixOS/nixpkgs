@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   docs = fetchFromGitHub {
     owner = "newren";
-    repo = pname;
+    repo = "git-filter-repo";
     rev = docs_version;
     hash = "sha256-Z/3w3Rguo8sfuc/OQ25eFbMfiOHjxQqPY6S32zuvoY4=";
   };
