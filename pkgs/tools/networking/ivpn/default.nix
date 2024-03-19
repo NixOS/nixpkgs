@@ -15,13 +15,13 @@
 
 builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
   inherit pname;
-  version = "3.10.15";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     rev = "v${version}";
-    hash = "sha256-3yVRVM98tVjot3gIkUb/CDwmwKdOOBjBjzGL6htDtpk=";
+    hash = "sha256-zJB/G/Yt+bw54j6agq+QG3xQKQPo+MJhizB4JLNsGBc=";
   };
 
   ldflags = [
@@ -50,7 +50,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
   };
   ivpn-service = {
     modRoot = "daemon";
-    vendorHash = "sha256-9Rk6ruMpyWtQe+90kw4F8OLq7/JcDSrG6ufkfcrS4W8=";
+    vendorHash = "sha256-tvl0xTWdnOsrujdaMF8TzIafS5NFI08MYgSA8EobtvY=";
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ wirelesstools ];
 
