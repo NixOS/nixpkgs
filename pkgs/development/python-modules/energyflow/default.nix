@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "EnergyFlow";
+  pname = "energyflow";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "pkomiske";
-    repo = pname;
+    repo = "EnergyFlow";
     rev = "v${version}";
     hash = "sha256-fjT8c0ZTjdufP334upPzRVdTJDIBs84I7PkFu4CMcQw=";
   };

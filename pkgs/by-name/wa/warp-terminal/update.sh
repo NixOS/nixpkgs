@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq moreutils nix-prefetch
+#!nix-shell -i bash -p cacert curl jq nix moreutils --pure
 #shellcheck shell=bash
 set -eu -o pipefail
 
@@ -7,6 +7,7 @@ dirname="$(dirname "$0")"
 
 err() {
     echo "$*" >&2
+    exit 1
 }
 
 json_get() {
@@ -31,7 +32,6 @@ resolve_url() {
             ;;
         *)
             err "Unexpected download type: $1"
-            exit 1
             ;;
     esac
     url="https://app.warp.dev/download?package=${pkg}"
@@ -40,7 +40,7 @@ resolve_url() {
         url=$(curl -s -o /dev/null -w '%{redirect_url}' "${url}")
         [[ ${url} != *.${sfx} ]] || break
     done
-    ((i < max_redirects)) || { err "too many redirects"; exit 1; }
+    ((i < max_redirects)) || { err "too many redirects"; }
     echo "${url}"
 }
 
@@ -48,13 +48,27 @@ get_version() {
     echo "$1" | grep -oP -m 1 '(?<=/v)[\d.\w]+(?=/)'
 }
 
+# nix-prefect-url seems to be uncompressing the archive then taking the hash
+# so just get the hash from fetchurl
+sri_get() {
+    local ouput sri
+    output=$(nix-build  --expr \
+        'with import <nixpkgs>{};
+         fetchurl {
+           url = "'"$1"'";
+         }' 2>&1 || true)
+    sri=$(echo "$output" | awk '/^\s+got:\s+/{ print $2 }')
+    [[ -z "$sri" ]] && err "$output"
+    echo "$sri"
+}
+
+
 for sys in darwin linux; do
     url=$(resolve_url ${sys})
     version=$(get_version "${url}")
-    if [[ ${version} != "$(json_get ".${sys}.version")" ]];
-        then
-            sri=$(nix hash to-sri --type sha256 "$(nix-prefetch-url --type sha256 "${url}")")
-            json_set ".${sys}.version" "${version}"
-            json_set ".${sys}.hash" "${sri}"
+    if [[ ${version} != "$(json_get ".${sys}.version")" ]]; then
+        sri=$(sri_get "${url}")
+        json_set ".${sys}.version" "${version}"
+        json_set ".${sys}.hash" "${sri}"
     fi
 done

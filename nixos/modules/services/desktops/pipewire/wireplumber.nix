@@ -56,24 +56,28 @@ in
 
   config =
     let
-      pwNotForAudioConfigPkg = pkgs.writeTextDir "share/wireplumber/main.lua.d/80-pw-not-for-audio.lua" ''
-        -- PipeWire is not used for audio, so prevent it from grabbing audio devices
-        alsa_monitor.enable = function() end
+      pwNotForAudioConfigPkg = pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/90-nixos-no-audio.conf" ''
+        # PipeWire is not used for audio, so WirePlumber should not be handling it
+        wireplumber.profiles = {
+          main = {
+            hardware.audio = disabled
+            hardware.bluetooth = disabled
+          }
+        }
       '';
-      systemwideConfigPkg = pkgs.writeTextDir "share/wireplumber/main.lua.d/80-systemwide.lua" ''
-        -- When running system-wide, these settings need to be disabled (they
-        -- use functions that aren't available on the system dbus).
-        alsa_monitor.properties["alsa.reserve"] = false
-        default_access.properties["enable-flatpak-portal"] = false
-      '';
-      systemwideBluetoothConfigPkg = pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/80-systemwide.lua" ''
-        -- When running system-wide, logind-integration needs to be disabled.
-        bluez_monitor.properties["with-logind"] = false
+
+      systemwideConfigPkg = pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/90-nixos-systemwide.conf" ''
+        # When running system-wide, we don't have logind to call ReserveDevice
+        wireplumber.profiles = {
+          main = {
+            support.reserve-device = disabled
+          }
+        }
       '';
 
       configPackages = cfg.configPackages
           ++ lib.optional (!pwUsedForAudio) pwNotForAudioConfigPkg
-          ++ lib.optionals config.services.pipewire.systemWide [ systemwideConfigPkg systemwideBluetoothConfigPkg ];
+          ++ lib.optional config.services.pipewire.systemWide systemwideConfigPkg;
 
       configs = pkgs.buildEnv {
         name = "wireplumber-configs";
