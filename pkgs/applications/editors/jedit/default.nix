@@ -1,63 +1,97 @@
-{ lib, stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging, bsh }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  ant,
+  jdk,
+  jre,
+  makeWrapper,
+  stripJavaArchivesHook,
+}:
 
-let
-  version = "5.2.0";
-  bcpg = fetchurl {
-    url = "mirror://maven/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar";
-    sha256 = "16xhmwks4l65m5x150nd23y5lyppha9sa5fj65rzhxw66gbli82d";
-  };
-  jsr305 = fetchurl {
-    url = "mirror://maven/com/google/code/findbugs/jsr305/2.0.0/jsr305-2.0.0.jar";
-    sha256 = "0s74pv8qjc42c7q8nbc0c3b1hgx0bmk3b8vbk1z80p4bbgx56zqy";
-  };
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jedit";
-  inherit version;
-  src = fetchurl {
-    url = "mirror://sourceforge/jedit/jedit${version}source.tar.bz2";
-    sha256 = "03wmbh90rl5lsc35d7jwcp9j5qyyzq1nccxf4fal8bmnx8n4si0x";
+  version = "5.6.0-unstable-2023-11-19";
+
+  src = fetchsvn {
+    url = "https://svn.code.sf.net/p/jedit/svn/jEdit/trunk";
+    rev = "25703";
+    sha256 = "sha256-z1KTZqKl6Dlqayw/3h/JvHQK3kSfio02R8V6aCb4g4Q=";
   };
 
-  buildInputs = [ ant jdk commonsBsf commonsLogging ];
+  ivyDeps = stdenv.mkDerivation {
+    name = "jedit-${finalAttrs.version}-ivy-deps";
+    inherit (finalAttrs) src;
 
-  # This patch removes from the build process:
-  #  - the automatic download of dependencies (see configurePhase);
-  #  - the tests
-  patches = [ ./build.xml.patch ];
+    nativeBuildInputs = [
+      ant
+      jdk
+    ];
 
-  configurePhase = ''
-    mkdir -p lib/ant-contrib/ lib/scripting lib/compile lib/default-plugins
-    cp ${ant}/lib/ant/lib/ant-contrib-*.jar lib/ant-contrib/
-    cp ${bsh} ${bcpg} lib/scripting/
-    cp ${jsr305} lib/compile/
+    dontConfigure = true;
+
+    buildPhase = ''
+      ant retrieve
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib
+      cp -r lib/* $out/lib
+    '';
+
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash = "sha256-J5i5IhXlXw84y/4K6Vt84au4eVXVLupmtfscO+y1Fi0=";
+  };
+
+  # ignore a test failing because of the build environment
+  postPatch = ''
+    substituteInPlace test/org/gjt/sp/jedit/MiscUtilitiesTest.java \
+        --replace-fail "public class MiscUtilitiesTest" "@org.junit.Ignore public class MiscUtilitiesTest"
   '';
 
-  buildPhase = "ant build";
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    stripJavaArchivesHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    ln -s ${finalAttrs.ivyDeps}/lib ./lib
+    ant build -Divy.done=true
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/jEdit
     cp -r build/jedit.jar doc icons keymaps macros modes startup $out/share/jEdit
 
-    sed -i "s|Icon=.*|Icon=$out/share/jEdit/icons/jedit-icon48.png|g" package-files/linux/deb/jedit.desktop
-    mkdir -p $out/share/applications
-    mv package-files/linux/deb/jedit.desktop $out/share/applications/jedit.desktop
+    install -Dm644 package-files/linux/deb/jedit.desktop -t $out/share/applications
+    sed -i "s|Icon=.*|Icon=$out/share/jEdit/icons/jedit-icon48.png|g" $out/share/applications/jedit.desktop
 
-    # specify the correct JAVA_HOME
-    sed -i '1a JAVA_HOME=${jdk}' package-files/linux/jedit
-    sed -i "s|/usr/share/jEdit/@jar.filename@|$out/share/jEdit/jedit.jar|g" package-files/linux/jedit
-    mkdir -p $out/bin
-    cp package-files/linux/jedit $out/bin/jedit
-    chmod +x $out/bin/jedit
+    install -Dm755 package-files/linux/jedit $out/bin/jedit
+    sed -i "s|/usr/share/jEdit/@jar.filename@|$out/share/jEdit/jedit.jar|g" $out/bin/jedit
+    wrapProgram $out/bin/jedit --set JAVA_HOME ${jre}
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Mature programmer's text editor (Java based)";
+  meta = {
+    description = "A programmer's text editor written in Java";
     homepage = "http://www.jedit.org";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Only;
+    mainProgram = "jedit";
+    maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # ivy-deps are .jar files
+    ];
   };
-}
+})
