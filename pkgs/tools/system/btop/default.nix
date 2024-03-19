@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
