@@ -206,7 +206,7 @@ rec {
   */
   makeLibraryPath = makeSearchPathOutput "lib" "lib";
 
-  /* Construct a include search path (such as C_INCLUDE_PATH) containing the
+  /* Construct an include search path (such as C_INCLUDE_PATH) containing the
      includes for a set of packages
 
      Example:
