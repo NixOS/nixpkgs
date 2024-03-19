@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     ffmpeg
   ];
+  
   meta = with lib; {
     description = "Merge video & audio files via CLI ";
     homepage = "https://github.com/TGotwig/vidmerger";
