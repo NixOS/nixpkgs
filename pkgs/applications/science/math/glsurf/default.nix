@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://raffalli.eu/~christophe/glsurf/";
     description = "A program to draw implicit surfaces and curves";
+    mainProgram = "glsurf";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };

@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
+    mainProgram = "virtualenv-clone";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

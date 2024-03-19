@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Test various memory protection measures";
+    mainProgram = "paxtest";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ copumpkin joachifm ];

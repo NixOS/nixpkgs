@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A converter from Rich Text Format to other formats";
+    mainProgram = "unrtf";
     longDescription = ''
       UnRTF converts documents in Rich Text Format to other
       formats, including HTML, LaTeX, and RTF itself.

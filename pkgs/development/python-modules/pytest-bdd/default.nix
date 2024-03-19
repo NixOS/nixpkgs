@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "BDD library for the pytest";
+    mainProgram = "pytest-bdd";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
     license = licenses.mit;
     maintainers = with maintainers; [ jm2dev ];

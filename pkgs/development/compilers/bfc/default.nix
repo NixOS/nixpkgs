@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An industrial-grade brainfuck compiler";
+    mainProgram = "bfc";
     homepage = "https://bfc.wilfred.me.uk";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ figsoda ];

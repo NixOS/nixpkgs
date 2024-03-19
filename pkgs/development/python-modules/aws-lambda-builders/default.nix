@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool to compile, build and package AWS Lambda functions";
+    mainProgram = "lambda-builders";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
     changelog = "https://github.com/aws/aws-lambda-builders/releases/tag/v${version}";
     longDescription = ''

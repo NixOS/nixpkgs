@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Validate patterns used to express cyber observable content in STIX Indicators";
+    mainProgram = "validate-patterns";
     homepage = "https://github.com/oasis-open/cti-pattern-validator";
     changelog = "https://github.com/oasis-open/cti-pattern-validator/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;

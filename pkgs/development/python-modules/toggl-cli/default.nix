@@ -88,6 +88,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
+    mainProgram = "toggl";
     homepage = "https://toggl.uhlir.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];

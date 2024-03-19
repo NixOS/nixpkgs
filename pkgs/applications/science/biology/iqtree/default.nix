@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.iqtree.org/";
     description = "Efficient and versatile phylogenomic software by maximum likelihood";
+    mainProgram = "iqtree2";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ bzizou ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

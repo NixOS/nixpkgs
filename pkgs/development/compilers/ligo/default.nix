@@ -127,6 +127,7 @@ ocamlPackages.buildDunePackage rec {
     homepage = "https://ligolang.org/";
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
+    mainProgram = "ligo";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
     broken = stdenv.isLinux && stdenv.isAarch64;

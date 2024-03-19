@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";
+    mainProgram = "cloudsmith";
     changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ ];
     license = licenses.asl20;

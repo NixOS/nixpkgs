@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Framework for end-to-end testing threat detection rules";
+    mainProgram = "threatest";
     homepage = "https://github.com/DataDog/threatest";
     changelog = "https://github.com/DataDog/threatest/releases/tag/v${version}";
     license = licenses.asl20;

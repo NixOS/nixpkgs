@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
+    mainProgram = "ares";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
     platforms = lib.platforms.unix;

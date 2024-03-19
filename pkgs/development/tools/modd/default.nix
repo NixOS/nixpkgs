@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A flexible developer tool that runs processes and responds to filesystem changes";
+    mainProgram = "modd";
     homepage = "https://github.com/cortesi/modd";
     license = licenses.mit;
     maintainers = with maintainers; [ kierdavis ];

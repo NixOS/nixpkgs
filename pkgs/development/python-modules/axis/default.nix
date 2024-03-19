@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for communicating with devices from Axis Communications";
+    mainProgram = "axis";
     homepage = "https://github.com/Kane610/axis";
     changelog = "https://github.com/Kane610/axis/releases/tag/v${version}";
     license = with licenses; [ mit ];

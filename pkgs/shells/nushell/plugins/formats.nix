@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A formats plugin for Nushell";
+    mainProgram = "nu_plugin_formats";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_formats";
     license = licenses.mpl20;
     maintainers = with maintainers; [ viraptor aidalgol ];

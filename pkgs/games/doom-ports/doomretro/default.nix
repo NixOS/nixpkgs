@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.doomretro.com/";
     description = "A classic, refined DOOM source port";
+    mainProgram = "doomretro";
     longDescription = ''
       DOOM Retro is the classic, refined DOOM source port for Windows PC. It
       represents how I like my DOOM to be today, in all its dark and gritty,

@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/LBCrion/sfwbar";
     description = "A flexible taskbar application for wayland compositors, designed with a stacking layout in mind";
+    mainProgram = "sfwbar";
     platforms = platforms.linux;
     maintainers = with maintainers; [ NotAShelf ];
     license = licenses.gpl3Only;

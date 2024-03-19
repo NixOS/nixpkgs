@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A vmprof client";
+    mainProgram = "vmprofshow";
     license = licenses.mit;
     homepage = "https://vmprof.readthedocs.org/";
   };

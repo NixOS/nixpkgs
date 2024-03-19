@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for detecting, labeling, and reasoning about microarchitectures";
+    mainProgram = "archspec";
     homepage = "https://archspec.readthedocs.io/";
     changelog = "https://github.com/archspec/archspec/releases/tag/v${version}";
     license = with licenses; [ mit asl20 ];

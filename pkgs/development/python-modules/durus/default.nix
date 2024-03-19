@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object persistence layer";
+    mainProgram = "durus";
     homepage = "https://github.com/nascheme/durus";
     license = licenses.mit;
     maintainers = with maintainers; [ grindhold ];

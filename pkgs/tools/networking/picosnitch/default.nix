@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Monitor network traffic per executable with hashing";
+    mainProgram = "picosnitch";
     homepage = "https://github.com/elesiuta/picosnitch";
     changelog = "https://github.com/elesiuta/picosnitch/releases";
     license = licenses.gpl3Plus;

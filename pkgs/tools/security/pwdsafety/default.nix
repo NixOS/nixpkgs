@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line tool checking password safety";
+    mainProgram = "cmd";
     homepage = "https://github.com/edoardottt/pwdsafety";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];

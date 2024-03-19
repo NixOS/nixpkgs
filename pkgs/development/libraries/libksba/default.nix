@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
+    mainProgram = "ksba-config";
     platforms = platforms.all;
     maintainers = with maintainers; [ ];
     license = licenses.lgpl3;

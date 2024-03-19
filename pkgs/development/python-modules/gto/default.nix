@@ -88,6 +88,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for Git Tag Operations";
+    mainProgram = "gto";
     homepage = "https://github.com/iterative/gto";
     changelog = "https://github.com/iterative/gto/releases/tag/${version}";
     license = licenses.asl20;

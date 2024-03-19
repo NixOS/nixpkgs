@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Viceroy provides local testing for developers working with Compute@Edge";
+    mainProgram = "viceroy";
     homepage = "https://github.com/fastly/Viceroy";
     license = licenses.asl20;
     maintainers = with maintainers; [ ereslibre shyim ];

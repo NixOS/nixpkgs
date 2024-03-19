@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of simple, yet elegant wizarding tools for interacting with the Python dataclasses module";
+    mainProgram = "wiz";
     homepage = "https://github.com/rnag/dataclass-wizard";
     changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/v${version}";
     license = licenses.asl20;

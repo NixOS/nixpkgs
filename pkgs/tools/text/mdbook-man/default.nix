@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Generate manual pages from mdBooks";
+    mainProgram = "mdbook-man";
     homepage = "https://github.com/vv9k/mdbook-man";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];

@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line client for the Scalingo PaaS";
+    mainProgram = "scalingo";
     homepage = "https://doc.scalingo.com/platform/cli/start";
     changelog = "https://github.com/Scalingo/cli/blob/master/CHANGELOG.md";
     license = licenses.bsdOriginal;

@@ -354,6 +354,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GStreamer Bad Plugins";
+    mainProgram = "gst-transcoder-1.0";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that aren't up to par compared to the

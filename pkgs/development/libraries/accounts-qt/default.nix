@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Qt library for accessing the online accounts database";
+    mainProgram = "accountstest";
     homepage = "https://gitlab.com/accounts-sso";
     license = licenses.lgpl21;
     platforms = platforms.linux;

@@ -73,6 +73,7 @@ in python.pkgs.buildPythonApplication {
 
   meta = {
     description = "ABC music notation editor";
+    mainProgram = "easyabc";
     homepage = "https://easyabc.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

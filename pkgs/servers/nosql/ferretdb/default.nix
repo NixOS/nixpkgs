@@ -39,6 +39,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A truly Open Source MongoDB alternative";
+    mainProgram = "ferretdb";
     changelog = "https://github.com/FerretDB/FerretDB/releases/tag/v${version}";
     homepage = "https://www.ferretdb.io/";
     license = licenses.asl20;

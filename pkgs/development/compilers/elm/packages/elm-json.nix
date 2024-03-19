@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Install, upgrade and uninstall Elm dependencies";
+    mainProgram = "elm-json";
     homepage = "https://github.com/zwilias/elm-json";
     license = licenses.mit;
     maintainers = [ maintainers.turbomack ];

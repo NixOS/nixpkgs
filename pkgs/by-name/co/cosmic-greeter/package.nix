@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-greeter";
     description = "Greeter for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-greeter";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nyanbinary ];
     platforms = platforms.linux;

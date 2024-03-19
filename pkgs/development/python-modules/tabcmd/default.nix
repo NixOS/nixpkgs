@@ -90,6 +90,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A command line client for working with Tableau Server.";
+    mainProgram = "tabcmd";
     homepage = "https://github.com/tableau/tabcmd";
     changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
     license = licenses.mit;

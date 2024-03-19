@@ -21,6 +21,7 @@ let
 
   meta = with lib; {
     description = "Virtual Tabletop for playing roleplaying games with remote players or face to face";
+    mainProgram = "maptool";
     homepage = "https://www.rptools.net/toolbox/maptool/";
     sourceProvenance = with sourceTypes; [
       binaryBytecode

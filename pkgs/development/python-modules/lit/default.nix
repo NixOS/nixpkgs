@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Portable tool for executing LLVM and Clang style test suites";
+    mainProgram = "lit";
     homepage = "http://llvm.org/docs/CommandGuide/lit.html";
     license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ dtzWill ];

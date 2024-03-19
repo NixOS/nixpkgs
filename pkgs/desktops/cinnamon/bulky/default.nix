@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bulk rename app";
+    mainProgram = "bulky";
     homepage = "https://github.com/linuxmint/bulky";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

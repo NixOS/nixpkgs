@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Multi-machine audio network performance over the Internet";
+    mainProgram = "jacktrip";
     homepage = "https://jacktrip.github.io/jacktrip/";
     license = with licenses; [ gpl3 lgpl3 mit ];
     maintainers = [ maintainers.iwanb ];

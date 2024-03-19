@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Export Kea Metrics in the Prometheus Exposition Format";
+    mainProgram = "kea-exporter";
     homepage = "https://github.com/mweinelt/kea-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

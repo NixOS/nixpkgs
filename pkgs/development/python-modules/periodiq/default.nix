@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple Scheduler for Dramatiq Task Queue";
+    mainProgram = "periodiq";
     homepage = "https://pypi.org/project/periodiq/";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ traxys ];

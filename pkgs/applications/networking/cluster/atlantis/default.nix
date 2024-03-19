@@ -27,6 +27,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/runatlantis/atlantis";
     description = "Terraform Pull Request Automation";
+    mainProgram = "atlantis";
     license = licenses.asl20;
     maintainers = with maintainers; [ jpotier ];
   };

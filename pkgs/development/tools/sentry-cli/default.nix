@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://docs.sentry.io/cli/";
     license = licenses.bsd3;
     description = "A command line utility to work with Sentry";
+    mainProgram = "sentry-cli";
     changelog = "https://github.com/getsentry/sentry-cli/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ rizary loewenheim ];
   };

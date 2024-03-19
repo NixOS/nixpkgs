@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks for out-of-date package versions";
+    mainProgram = "luddite";
     homepage = "https://github.com/jumptrading/luddite";
     license = licenses.asl20;
     maintainers = with maintainers; [ emilytrau ];

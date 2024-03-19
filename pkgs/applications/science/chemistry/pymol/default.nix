@@ -71,6 +71,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     inherit description;
+    mainProgram = "pymol";
     homepage = "https://www.pymol.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ samlich ];

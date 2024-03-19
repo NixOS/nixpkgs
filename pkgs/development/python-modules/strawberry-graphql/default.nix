@@ -186,6 +186,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A GraphQL library for Python that leverages type annotations";
+    mainProgram = "strawberry";
     homepage = "https://strawberry.rocks";
     changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

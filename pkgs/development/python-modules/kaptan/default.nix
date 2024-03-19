@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Configuration manager for python applications";
+    mainProgram = "kaptan";
     homepage = "https://kaptan.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

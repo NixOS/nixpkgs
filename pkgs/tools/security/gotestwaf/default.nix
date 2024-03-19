@@ -40,6 +40,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for API and OWASP attack simulation";
+    mainProgram = "gotestwaf";
     homepage = "https://github.com/wallarm/gotestwaf";
     changelog = "https://github.com/wallarm/gotestwaf/releases/tag/v${version}";
     license = licenses.mit;

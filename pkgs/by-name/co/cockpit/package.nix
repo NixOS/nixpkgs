@@ -217,6 +217,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Web-based graphical interface for servers";
+    mainProgram = "cockpit-bridge";
     homepage = "https://cockpit-project.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ lucasew ];

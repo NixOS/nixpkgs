@@ -52,6 +52,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A meta-build system that generates build files for Ninja";
+    mainProgram = "gn";
     homepage = "https://gn.googlesource.com/gn";
     license = licenses.bsd3;
     platforms = platforms.unix;

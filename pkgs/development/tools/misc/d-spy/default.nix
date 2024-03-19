@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "D-Bus exploration tool";
+    mainProgram = "d-spy";
     homepage = "https://gitlab.gnome.org/GNOME/d-spy";
     license = with licenses; [
       lgpl3Plus # library

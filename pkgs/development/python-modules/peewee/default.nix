@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python ORM with support for various database implementation";
+    mainProgram = "pwiz.py";
     homepage = "http://peewee-orm.com";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

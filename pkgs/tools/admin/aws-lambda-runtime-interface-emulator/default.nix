@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Locally test Lambda functions packaged as container images";
+    mainProgram = "aws-lambda-rie";
     homepage = "https://github.com/aws/aws-lambda-runtime-interface-emulator";
     license = licenses.asl20;
     maintainers = with maintainers; [ teto ];

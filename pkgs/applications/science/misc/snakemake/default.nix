@@ -89,6 +89,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://snakemake.github.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";
+    mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
       creating workflows by providing a fast and comfortable execution environment,

@@ -30,6 +30,7 @@ buildGoModule (rec {
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/pages.sr.ht";
     description = "Web hosting service for the sr.ht network";
+    mainProgram = "pages.sr.ht";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu christoph-heiss ];
   };

@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast and extensible Markdown parser";
+    mainProgram = "mistletoe";
     homepage = "https://github.com/miyuchina/mistletoe";
     changelog = "https://github.com/miyuchina/mistletoe/releases/tag/v${version}";
     license = licenses.mit;

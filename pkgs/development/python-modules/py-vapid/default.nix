@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for VAPID header generation";
+    mainProgram = "vapid";
     homepage = "https://github.com/mozilla-services/vapid";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ];

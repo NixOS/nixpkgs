@@ -76,6 +76,7 @@ mkYarnPackage rec {
 
   meta = with lib; {
     description = "A bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA";
+    mainProgram = "matrix-hookshot";
     maintainers = with maintainers; [ chvp ];
     license = licenses.asl20;
     platforms = platforms.linux;

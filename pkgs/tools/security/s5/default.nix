@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "cipher/decipher text within a file";
+    mainProgram = "s5";
     homepage = "https://github.com/mvisonneau/s5";
     license = licenses.asl20;
     platforms = platforms.unix ++ platforms.darwin;

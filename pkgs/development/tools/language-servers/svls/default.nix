@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "SystemVerilog language server";
+    mainProgram = "svls";
     homepage = "https://github.com/dalance/svls";
     license = licenses.mit;
     maintainers = with maintainers; [ trepetti ];

@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
+    mainProgram = "radeontop";
     longDescription = ''
       View GPU utilization, both for the total activity percent and individual
       blocks. Supports R600 and later cards: even Southern Islands should work.

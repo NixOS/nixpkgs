@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://blog.sarine.nl/tag/gpxviewer/";
     description = "Simple tool to visualize tracks and waypoints stored in a gpx file";
+    mainProgram = "gpx-viewer";
     changelog = "https://github.com/DaveDavenport/gpx-viewer/blob/${src.rev}/NEWS";
     platforms = with platforms; linux;
     license = licenses.gpl2Plus;

@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flyinghead/flycast";
     changelog = "https://github.com/flyinghead/flycast/releases/tag/v${version}";
     description = "A multi-platform Sega Dreamcast, Naomi and Atomiswave emulator";
+    mainProgram = "flycast";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.ivar ];

@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for encoding H264/AVC video streams";
+    mainProgram = "x264";
     homepage = "http://www.videolan.org/developers/x264.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix ++ platforms.windows;

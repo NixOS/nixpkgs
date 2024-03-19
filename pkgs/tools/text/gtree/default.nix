@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Generate directory trees and directories using Markdown or programmatically";
+    mainProgram = "gtree";
     homepage = "https://github.com/ddddddO/gtree";
     changelog = "https://github.com/ddddddO/gtree/releases/tag/${src.rev}";
     license = licenses.bsd2;

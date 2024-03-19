@@ -30,6 +30,7 @@ mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "An x509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
+    mainProgram = "xca";
     homepage    = "https://hohnstaedt.de/xca/";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ offline peterhoeg ];

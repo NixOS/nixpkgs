@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Find bugs in Javascript programs";
+    mainProgram = "quick-lint-js";
     homepage = "https://quick-lint-js.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ratsclub ];

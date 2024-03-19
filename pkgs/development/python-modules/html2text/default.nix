@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Turn HTML into equivalent Markdown-structured text";
+    mainProgram = "html2text";
     homepage = "https://github.com/Alir3z4/html2text/";
     license = licenses.gpl3Only;
   };

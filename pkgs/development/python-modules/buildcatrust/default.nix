@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Build SSL/TLS trust stores";
+    mainProgram = "buildcatrust";
     homepage = "https://github.com/lukegb/buildcatrust";
     license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];

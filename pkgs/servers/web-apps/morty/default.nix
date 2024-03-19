@@ -15,6 +15,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Privacy aware web content sanitizer proxy as a service";
+    mainProgram = "morty";
     longDescription = ''
       Morty rewrites web pages to exclude malicious HTML tags and attributes.
       It also replaces external resource references to prevent third party information leaks.

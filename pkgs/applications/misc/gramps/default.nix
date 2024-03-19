@@ -109,6 +109,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Genealogy software";
+    mainProgram = "gramps";
     homepage = "https://gramps-project.org";
     maintainers = with maintainers; [ jk pinpox ];
     changelog = "https://github.com/gramps-project/gramps/blob/v${version}/ChangeLog";

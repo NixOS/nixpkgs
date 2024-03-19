@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A cargo subcommand to fetch the source code of a Rust crate";
+    mainProgram = "cargo-clone";
     homepage = "https://github.com/janlikar/cargo-clone";
     changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

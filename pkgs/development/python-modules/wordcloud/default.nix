@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Word cloud generator in Python";
+    mainProgram = "wordcloud_cli";
     homepage = "https://github.com/amueller/word_cloud";
     changelog = "https://github.com/amueller/word_cloud/releases/tag/${version}";
     license = licenses.mit;

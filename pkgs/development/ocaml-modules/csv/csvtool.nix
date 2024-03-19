@@ -14,5 +14,6 @@ buildDunePackage {
 
   meta = csv.meta // {
     description = "Command line tool for handling CSV files";
+    mainProgram = "csvtool";
   };
 }

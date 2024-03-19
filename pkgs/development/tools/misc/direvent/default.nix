@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Directory event monitoring daemon";
+    mainProgram = "direvent";
     homepage = "https://www.gnu.org.ua/software/direvent/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

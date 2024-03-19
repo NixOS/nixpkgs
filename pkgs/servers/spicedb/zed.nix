@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line for managing SpiceDB";
+    mainProgram = "zed";
     longDescription = ''
       SpiceDB is an open-source permissions database inspired by
       Google Zanzibar. zed is the command line client for SpiceDB.
