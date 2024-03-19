@@ -42,16 +42,12 @@ let
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
+  githash = "sha256-baMCeJlsC1C9S2lSolKk3oOFTGNRffTUO3yLluXrp+c=";
   tests = fetchFromGitHub {
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-fDu2PlEQOF7ftlS6dYw15S2XiAx+D/bng4zC9ELj6uk=";
-
-    postFetch = ''
-      mv $out ./all
-      mv ./all/tests $out
-    '';
+    hash = githash;
   };
 
 in
@@ -62,12 +58,12 @@ python.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-lDuwXhOjcbCx8x/oIoigrklDwCbhn1trf5lDf/X/1Qc=";
+    hash = "sha256-lDuwXhOjcbCx8x/oIoigrklDwCbhn1trf5lDf/X/1Qc=";
   };
 
   postUnpack = ''
     # can't symlink, tests get confused
-    cp -ar ${tests} $sourceRoot/tests
+    cp -ar "${tests}/tests" $sourceRoot/tests
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
