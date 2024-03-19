@@ -3,7 +3,26 @@
 , fetchPypi
 }:
 
-with python3Packages;
+let
+  inherit (lib) licenses maintainers;
+
+  inherit (python3Packages)
+    buildPythonApplication
+    click
+    click-log
+    distlib
+    gitpython
+    humanize
+    jinja2
+    natsort
+    pony
+    ponywhoosh
+    pythonOlder
+    pyyaml
+    requests
+    whoosh
+    ;
+in
 
 buildPythonApplication rec {
   pname = "agda-pkg";
@@ -38,7 +57,7 @@ buildPythonApplication rec {
     ponywhoosh
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://agda.github.io/agda-pkg/";
     description = "Package manager for Agda";
     license = licenses.mit;
