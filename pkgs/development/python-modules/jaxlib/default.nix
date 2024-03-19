@@ -3,6 +3,7 @@
 , stdenv
 
   # Build-time dependencies:
+, autoAddDriverRunpathHook
 , addOpenGLRunpath
 , bazel_6
 , binutils
@@ -332,7 +333,7 @@ buildPythonPackage {
     done
   '';
 
-  nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
+  nativeBuildInputs = lib.optionals cudaSupport [ autoAddDriverRunpathHook ];
 
   propagatedBuildInputs = [
     absl-py

@@ -1,5 +1,5 @@
 {
-  autoAddOpenGLRunpathHook,
+  autoAddDriverRunpathHook,
   backendStdenv,
   cmake,
   cudatoolkit,
@@ -31,7 +31,7 @@ backendStdenv.mkDerivation (
 
     nativeBuildInputs =
       [
-        autoAddOpenGLRunpathHook
+        autoAddDriverRunpathHook
         pkg-config
       ]
       # CMake has to run as a native, build-time dependency for libNVVM samples.

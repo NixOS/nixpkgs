@@ -15,8 +15,9 @@
 , openclSupport ? false
 , clblast
 
-, blasSupport ? !rocmSupport && !cudaSupport
+, blasSupport ? builtins.all (x: !x) [ cudaSupport metalSupport openclSupport rocmSupport vulkanSupport ]
 , openblas
+, autoAddDriverRunpathHook
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 , patchelf
@@ -84,6 +85,94 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     openblas
   ];
 
+<<<<<<< HEAD
+||||||| parent of 1b668154cee1 (treewide: {cudaPackages.,}autoAddDriverRunpathHook)
+  rocmBuildInputs = with rocmPackages; [
+    clr
+    hipblas
+    rocblas
+  ];
+
+  vulkanBuildInputs = [
+    vulkan-headers
+    vulkan-loader
+  ];
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
+  pname = "llama-cpp";
+  version = "2454";
+
+  src = fetchFromGitHub {
+    owner = "ggerganov";
+    repo = "llama.cpp";
+    rev = "refs/tags/b${finalAttrs.version}";
+    hash = "sha256-eZvApj2yLFCbS/TWaHeXJIVQ4PXbPlrxxu/eiov2T8k=";
+  };
+
+  postPatch = ''
+    substituteInPlace ./ggml-metal.m \
+      --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+  '';
+
+  nativeBuildInputs = [ cmake ninja pkg-config git ]
+    ++ optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+
+    # TODO: Replace with autoAddDriverRunpath
+    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
+
+  buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
+    ++ optionals cudaSupport cudaBuildInputs
+    ++ optionals mpiSupport mpi
+    ++ optionals openclSupport [ clblast ]
+    ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals vulkanSupport vulkanBuildInputs;
+
+=======
+  rocmBuildInputs = with rocmPackages; [
+    clr
+    hipblas
+    rocblas
+  ];
+
+  vulkanBuildInputs = [
+    vulkan-headers
+    vulkan-loader
+  ];
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
+  pname = "llama-cpp";
+  version = "2454";
+
+  src = fetchFromGitHub {
+    owner = "ggerganov";
+    repo = "llama.cpp";
+    rev = "refs/tags/b${finalAttrs.version}";
+    hash = "sha256-eZvApj2yLFCbS/TWaHeXJIVQ4PXbPlrxxu/eiov2T8k=";
+  };
+
+  postPatch = ''
+    substituteInPlace ./ggml-metal.m \
+      --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+  '';
+
+  nativeBuildInputs = [ cmake ninja pkg-config git ]
+    ++ optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+
+    autoAddDriverRunpathHook
+  ];
+
+  buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
+    ++ optionals cudaSupport cudaBuildInputs
+    ++ optionals mpiSupport mpi
+    ++ optionals openclSupport [ clblast ]
+    ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals vulkanSupport vulkanBuildInputs;
+
+>>>>>>> 1b668154cee1 (treewide: {cudaPackages.,}autoAddDriverRunpathHook)
   cmakeFlags = [
     "-DLLAMA_NATIVE=OFF"
     "-DLLAMA_BUILD_SERVER=ON"

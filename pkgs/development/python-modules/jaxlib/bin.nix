@@ -14,6 +14,7 @@
 #   * https://github.com/google/jax/issues/5723#issuecomment-913038780
 
 { absl-py
+, autoAddDriverRunpathHook
 , autoPatchelfHook
 , buildPythonPackage
 , config
@@ -32,7 +33,7 @@
 }:
 
 let
-  inherit (cudaPackagesGoogle) autoAddOpenGLRunpathHook cudatoolkit cudnn cudaVersion;
+  inherit (cudaPackagesGoogle) cudatoolkit cudnn cudaVersion;
 
   version = "0.4.24";
 
@@ -180,7 +181,7 @@ buildPythonPackage {
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals cudaSupport [ autoAddOpenGLRunpathHook ];
+    ++ lib.optionals cudaSupport [ autoAddDriverRunpathHook ];
   # Dynamic link dependencies
   buildInputs = [ stdenv.cc.cc.lib ];
 

@@ -2,6 +2,7 @@
 , rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , config
 , enableCuda ? config.cudaSupport
+, autoAddDriverRunpathHook
 , cudaPackages
 , enableRocm ? config.rocmSupport
 , rocmPackages
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = [

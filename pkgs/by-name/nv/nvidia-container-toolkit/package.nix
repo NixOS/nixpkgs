@@ -10,7 +10,7 @@
 , configTemplate ? null
 , configTemplatePath ? null
 , libnvidia-container
-, cudaPackages
+, autoAddDriverRunpathHook
 }:
 
 assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePath == null);
@@ -87,7 +87,7 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
     makeWrapper
   ];
 

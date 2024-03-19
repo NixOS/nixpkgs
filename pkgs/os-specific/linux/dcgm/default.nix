@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , catch2
 , cmake
+, autoAddDriverRunpathHook
 , cudaPackages_10_2
 , cudaPackages_11_8
 , cudaPackages_12
@@ -105,10 +106,7 @@ in gcc11Stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    # autoAddOpenGLRunpathHook does not actually depend on or incur any dependency
-    # of cudaPackages. It merely adds an impure, non-Nix PATH to the RPATHs of
-    # executables that need to use cuda at runtime.
-    cudaPackages_12.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
 
     cmake
     git

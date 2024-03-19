@@ -12,7 +12,7 @@
 }:
 let
   inherit (cudaPackages)
-    autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
     backendStdenv
     cuda_cccl
     cuda_cudart
@@ -44,7 +44,7 @@ backendStdenv.mkDerivation (
     nativeBuildInputs =
       [
         which
-        autoAddOpenGLRunpathHook
+        autoAddDriverRunpathHook
         python3
       ]
       ++ lib.optionals (lib.versionOlder cudaVersion "11.4") [cudatoolkit]

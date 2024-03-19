@@ -7,8 +7,7 @@
 , removeReferencesTo
 , btop
 , testers
-, cudaSupport ? config.cudaSupport
-, cudaPackages
+, autoAddDriverRunpathHook
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +21,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-kjSyIgLTObTOKMG5dk49XmWPXZpCWbLdpkmAsJcFliA=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+  nativeBuildInputs = [
+    cmake
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
