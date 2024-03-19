@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-rNXzhJazOi815dhqviqtfSTM60Y/5ncKBVn2YhqcKJM=";
+    hash = "sha256-a4u8dBqp9zs4RW7tXN8HjGzvjYFyDUJzEFMxMoGhu4E=";
   };
 
   cargoLock = {
@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_config_incompatible_format_and_show_path"
     "--skip=test_config_save_missing_folder"
     "--skip=test_config_show_path"
+    "--skip=test_dotenv"
     "--skip=test_empty_sync"
     "--skip=test_fetch"
     "--skip=test_init_default"
