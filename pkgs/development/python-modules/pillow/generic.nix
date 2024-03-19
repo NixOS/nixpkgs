@@ -5,10 +5,35 @@
 , patches ? []
 , meta
 , passthru ? {}
+, buildPythonPackage
+, format
+, lib
+, stdenv
+, olefile
+, defusedxml
+, pytestCheckHook
+, numpy
+, setuptools
+, freetype
+, libjpeg
+, openjpeg
+, libimagequant
+, zlib
+, libtiff
+, libwebp
+, libxcrypt
+, tcl
+, lcms2
+, libxcb
+, isPyPy
+, tk
+, libX11
 , ...
-}@args:
+}:
 
-with args;
+let
+  inherit (lib) optionals optionalString versionAtLeast;
+in
 
 buildPythonPackage rec {
   inherit pname version format src meta passthru patches;
@@ -27,7 +52,7 @@ buildPythonPackage rec {
     "test_roundtrip"
     "test_basic"
     "test_custom_metadata"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     # Disable darwin tests which require executables: `iconutil` and `screencapture`
     "test_grab"
     "test_grabclipboard"
@@ -35,15 +60,15 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ olefile ]
-    ++ lib.optionals (lib.versionAtLeast version "8.2.0") [ defusedxml ];
+    ++ optionals (versionAtLeast version "8.2.0") [ defusedxml ];
 
   nativeCheckInputs = [ pytestCheckHook numpy ];
 
   nativeBuildInputs = [ setuptools ];
 
   buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp libxcrypt tcl lcms2 ]
-    ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ libxcb ]
-    ++ lib.optionals (isPyPy) [ tk libX11 ];
+    ++ optionals (versionAtLeast version "7.1.0") [ libxcb ]
+    ++ optionals (isPyPy) [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
   # NOTE: The Pillow install script will, by default, add paths like /usr/lib
@@ -70,7 +95,7 @@ buildPythonPackage rec {
             s|self\.disable_platform_guessing = None|self.disable_platform_guessing = True|g ;'
     export LDFLAGS="$LDFLAGS -L${libwebp}/lib"
     export CFLAGS="$CFLAGS -I${libwebp}/include"
-  '' + lib.optionalString (lib.versionAtLeast version "7.1.0") ''
+  '' + optionalString (versionAtLeast version "7.1.0") ''
     export LDFLAGS="$LDFLAGS -L${libxcb}/lib"
     export CFLAGS="$CFLAGS -I${libxcb.dev}/include"
   '';
