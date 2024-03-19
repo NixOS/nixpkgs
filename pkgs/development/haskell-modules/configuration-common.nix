@@ -1610,6 +1610,12 @@ self: super: {
   # Upstream issue: https://github.com/kowainik/trial/issues/62
   trial = doJailbreak super.trial;
 
+  # 2024-03-19: Fix for mtl >= 2.3
+  pattern-arrows = lib.pipe super.pattern-arrows [
+    doJailbreak
+    (appendPatches [./patches/pattern-arrows-add-fix-import.patch])
+  ];
+
   # 2020-06-24: Tests are broken in hackage distribution.
   # See: https://github.com/robstewart57/rdf4h/issues/39
   rdf4h = dontCheck super.rdf4h;

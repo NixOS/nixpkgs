@@ -4353,7 +4353,6 @@ broken-packages:
   - path-sing # failure in job https://hydra.nixos.org/build/237234354 at 2023-10-21
   - PathTree # failure in job https://hydra.nixos.org/build/233216203 at 2023-09-02
   - patronscraper # failure in job https://hydra.nixos.org/build/233258571 at 2023-09-02
-  - pattern-arrows # failure in job https://hydra.nixos.org/build/252718352 at 2024-03-16
   - pattern-trie # failure in job https://hydra.nixos.org/build/233237252 at 2023-09-02
   - paynow-zw # failure in job https://hydra.nixos.org/build/233221916 at 2023-09-02
   - paypal-adaptive-hoops # failure in job https://hydra.nixos.org/build/233244557 at 2023-09-02
