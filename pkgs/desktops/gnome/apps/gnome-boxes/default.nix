@@ -44,15 +44,16 @@
 , vte
 , glib-networking
 , qemu-utils
+, libportal-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "zGMIDu+hR6hHKrGl/wh7l6J6tyOk7gBe1B6Mndd5jkE=";
+    hash = "sha256-Z+616YkpSViyXDl8/FYV/2X0QxXHAAEPC54zbm80B8s=";
   };
 
   patches = [
@@ -114,6 +115,7 @@ stdenv.mkDerivation rec {
     vte
     webkitgtk_4_1
     yajl
+    libportal-gtk3
   ];
 
   preFixup = ''
