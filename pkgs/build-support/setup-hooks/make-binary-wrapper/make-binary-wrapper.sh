@@ -19,7 +19,7 @@ assertExecutable() {
 #                          (if unset or empty, defaults to EXECUTABLE)
 # --inherit-argv0        : the executable inherits argv0 from the wrapper.
 #                          (use instead of --argv0 '$0')
-# --resolve-argv0    : if argv0 doesn't include a / character, resolve it against PATH
+# --resolve-argv0        : if argv0 doesn't include a / character, resolve it against PATH
 # --set          VAR VAL : add VAR with value VAL to the executable's environment
 # --set-default  VAR VAL : like --set, but only adds VAR if not already set in
 #                          the environment
