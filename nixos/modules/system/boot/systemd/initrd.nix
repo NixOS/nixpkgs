@@ -584,5 +584,8 @@ in {
         serviceConfig.Type = "oneshot";
       };
     };
+
+    # disable emergency mode if the user cannot interact with it
+    systemd.enableEmergencyMode = lib.mkIf (cfg.emergencyAccess == false) false;
   };
 }
