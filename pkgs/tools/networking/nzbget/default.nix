@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     description = "A command line tool for downloading files from news servers";
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub devusb ];
     platforms = with platforms; unix;
     mainProgram = "nzbget";
   };
