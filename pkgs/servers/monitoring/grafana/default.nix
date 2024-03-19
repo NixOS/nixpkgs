@@ -78,7 +78,6 @@ buildGoModule rec {
     GOARCH= CGO_ENABLED=0 go generate ./pkg/plugins/plugindef
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/kindsys/report.go
     # Setup node_modules
     export HOME="$(mktemp -d)"
 
