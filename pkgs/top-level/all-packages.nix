@@ -25334,7 +25334,9 @@ with pkgs;
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
-  yubico-pam = callPackage ../development/libraries/yubico-pam { };
+  yubico-pam = callPackage ../development/libraries/yubico-pam {
+    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
+  };
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool {
     inherit (darwin.apple_sdk.frameworks) PCSC;
@@ -32805,8 +32807,9 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+  ladybird = darwin.apple_sdk_11_0.callPackage ../applications/networking/browsers/ladybird {
     stdenv = if stdenv.isDarwin then overrideLibcxx darwin.apple_sdk_11_0.llvmPackages_16.stdenv else stdenv;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -34730,7 +34733,9 @@ with pkgs;
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  sish = callPackage ../tools/networking/sish { };
+  sish = callPackage ../tools/networking/sish {
+    buildGoModule = buildGo122Module;
+  };
 
   sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
     libjpeg_turbo = libjpeg8;

@@ -658,14 +658,18 @@ This creates a derivation with a directory structure like the following:
 
 ## `writeReferencesToFile` {#trivial-builder-writeReferencesToFile}
 
-Writes the closure of transitive dependencies to a file.
+Deprecated. Use [`writeClosure`](#trivial-builder-writeClosure) instead.
 
-This produces the equivalent of `nix-store -q --requisites`.
+## `writeClosure` {#trivial-builder-writeClosure}
+
+Given a list of [store paths](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) (or string-like expressions coercible to store paths), write their collective [closure](https://nixos.org/manual/nix/stable/glossary#gloss-closure) to a text file.
+
+The result is equivalent to the output of `nix-store -q --requisites`.
 
 For example,
 
 ```nix
-writeReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
+writeClosure [ (writeScriptBin "hi" ''${hello}/bin/hello'') ]
 ```
 
 produces an output path `/nix/store/<hash>-runtime-deps` containing
