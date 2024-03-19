@@ -1,6 +1,19 @@
 { lib, fetchFromGitHub, ocamlPackages }:
 
-with ocamlPackages;
+let
+  inherit (lib) licenses maintainers;
+
+  inherit (ocamlPackages)
+    buildDunePackage
+    cmdliner
+    github
+    github-unix
+    lwt_ssl
+    opam-core
+    opam-format
+    opam-state
+    ;
+in
 
 buildDunePackage rec {
   pname = "opam-publish";
@@ -25,7 +38,7 @@ buildDunePackage rec {
     github-unix
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocaml-opam/${pname}";
     description = "A tool to ease contributions to opam repositories";
     mainProgram = "opam-publish";
