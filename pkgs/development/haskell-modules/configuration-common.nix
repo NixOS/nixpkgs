@@ -2990,6 +2990,6 @@ self: super: {
       rev = "52ab086a320a14051aa38d0353d957fb6b2525e9";
       hash = "sha256-j6F4WplJy7NyhTAuiDd/tHT+Agk1QdyPjOEkceZSxq8=";
     };
-  } (super.haskell-to-elm.override { generics-sop = self.generics-sop_0_5_1_4; } );
+  } super.haskell-to-elm.override;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
