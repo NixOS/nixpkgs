@@ -5,33 +5,37 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.1.22";
+  version = "0.2.4";
   pyproject = true;
+
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     rev = "refs/tags/${version}";
-    hash = "sha256-hRbPlRuwM3NspTNd3mPhVxPJl8zA9qyFwDGNKH3Slag=";
+    hash = "sha256-p0ns+8qmcyX4gcg0CfYdDMn1Ie0atVBuQbVQoDRQ9+c=";
   };
 
   pythonRelaxDeps = [
+    "aiosql"
     "aiosqlite"
-    "pillow"
     "httpx"
+    "packaging"
+    "pillow"
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    textual
-    typer
-    python-dotenv
-    httpx
+    aiohttp
     aiosql
     aiosqlite
-    pyperclip
+    httpx
+    ollama
     packaging
-    rich-pixels
     pillow
-    aiohttp
+    pyperclip
+    python-dotenv
+    rich-pixels
+    textual
+    typer
   ];
 
   nativeBuildInputs = with python3Packages; [
