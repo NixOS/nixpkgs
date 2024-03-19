@@ -233,7 +233,9 @@ in
         symlinks because modprobe only supports one directory.
       '';
       # Convert the list of path to only one path.
-      apply = pkgs.aggregateModules;
+      apply = let
+        kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+      in modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
     };
 
     system.requiredKernelConfig = mkOption {
