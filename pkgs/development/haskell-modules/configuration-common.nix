@@ -1626,6 +1626,12 @@ self: super: {
     (appendPatches [./patches/pattern-arrows-add-fix-import.patch])
   ];
 
+  # 2024-03-19: Fix for mtl >= 2.3
+  cheapskate = lib.pipe super.cheapskate [
+    doJailbreak
+    (appendPatches [./patches/cheapskate-mtl-2-3-support.patch])
+  ];
+
   # 2020-06-24: Tests are broken in hackage distribution.
   # See: https://github.com/robstewart57/rdf4h/issues/39
   rdf4h = dontCheck super.rdf4h;

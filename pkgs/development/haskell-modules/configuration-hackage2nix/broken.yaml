@@ -745,7 +745,6 @@ broken-packages:
   - chatty-text # failure in job https://hydra.nixos.org/build/233199498 at 2023-09-02
   - chatty-utils # failure in job https://hydra.nixos.org/build/252710715 at 2024-03-16
   - chatwork # failure in job https://hydra.nixos.org/build/233240489 at 2023-09-02
-  - cheapskate # failure in job https://hydra.nixos.org/build/233197892 at 2023-09-02
   - check-cfg-ambiguity # failure in job https://hydra.nixos.org/build/233251852 at 2023-09-02
   - checked # failure in job https://hydra.nixos.org/build/233223182 at 2023-09-02
   - Checked # failure in job https://hydra.nixos.org/build/233257598 at 2023-09-02
