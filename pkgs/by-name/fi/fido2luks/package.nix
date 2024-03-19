@@ -31,6 +31,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ctap_hmac-0.4.5" = "sha256-3IL8bHxJEblPkHptjifltcmMNOBn5ZJl5emImJr1O5o=";
+    };
   };
 
   meta = {

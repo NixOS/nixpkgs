@@ -14,7 +14,7 @@ categories = ["command-line-utilities"]
 license = "MPL-2.0"
 
 [dependencies]
-ctap_hmac = { version="0.4.5", features = ["request_multiple"] }
+ctap_hmac = { git="https://github.com/robin-nitrokey/ctap", rev="29f684c88b6247b3fabaaa8bb75da45d48a92c69", features = ["request_multiple"] }
 hex = "0.3.2"
 ring = "0.13.5"
 failure = "0.1.5"
@@ -26,7 +26,7 @@ serde_derive = "1.0.106"
 serde = "1.0.106"
 
 [build-dependencies]
-ctap_hmac = { version="0.4.5", features = ["request_multiple"] }
+ctap_hmac = { git="https://github.com/robin-nitrokey/ctap", rev="29f684c88b6247b3fabaaa8bb75da45d48a92c69", features = ["request_multiple"] }
 hex = "0.3.2"
 ring = "0.13.5"
 failure = "0.1.5"
