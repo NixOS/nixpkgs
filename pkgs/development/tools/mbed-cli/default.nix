@@ -1,6 +1,9 @@
 { lib, python3Packages, fetchPypi, git, mercurial }:
 
-with python3Packages;
+let
+  inherit (lib) licenses maintainers;
+  inherit (python3Packages) buildPythonApplication pytest;
+in
 
 buildPythonApplication rec {
   pname = "mbed-cli";
@@ -24,11 +27,10 @@ buildPythonApplication rec {
     pytest test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ARMmbed/mbed-cli";
     description = "Arm Mbed Command Line Interface";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
 }
-
