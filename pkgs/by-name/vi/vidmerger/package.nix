@@ -35,5 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ ByteSudoer ];
     mainProgram = "vidmerger";
   };
-
 }
