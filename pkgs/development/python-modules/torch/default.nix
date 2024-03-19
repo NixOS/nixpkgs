@@ -245,7 +245,7 @@ in buildPythonPackage rec {
   USE_MKLDNN_CBLAS = setBool mklDnnSupport;
 
   # Default is 1 for Linux and Windows yet 0 for MacOS. Make them the same.
-  USE_DISTRIBUTED=1
+  USE_DISTRIBUTED = 1;
 
   # Avoid using pybind11 from git submodule
   # Also avoids pytorch exporting the headers of pybind11
