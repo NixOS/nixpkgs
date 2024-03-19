@@ -71,7 +71,6 @@ broken-packages:
   - adtrees # failure in job https://hydra.nixos.org/build/233192320 at 2023-09-02
   - AERN-Basics # failure in job https://hydra.nixos.org/build/233246999 at 2023-09-02
   - aeson-applicative # failure in job https://hydra.nixos.org/build/233213824 at 2023-09-02
-  - aeson-better-errors # failure in job https://hydra.nixos.org/build/252717339 at 2024-03-16
   - aeson-bson # failure in job https://hydra.nixos.org/build/233201964 at 2023-09-02
   - aeson-commit # failure in job https://hydra.nixos.org/build/233198515 at 2023-09-02
   - aeson-compat # failure in job https://hydra.nixos.org/build/233208257 at 2023-09-02
