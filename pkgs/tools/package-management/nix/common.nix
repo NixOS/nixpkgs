@@ -19,6 +19,7 @@ let
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
+    "2.16"
     "2.18"
     "2.19"
     "2.20"
