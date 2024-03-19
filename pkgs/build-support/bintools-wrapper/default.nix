@@ -416,12 +416,11 @@ stdenv.mkDerivation {
 
   meta =
     let bintools_ = lib.optionalAttrs (bintools != null) bintools; in
-    (lib.optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta ["priority"])) //
+    (lib.optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta ["priority" "outputsToInstall"])) //
     { description =
         lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
       priority = 10;
-      outputsToInstall = [ "out" ] ++ optional propagateDoc "man";
   } // optionalAttrs useMacosReexportHack {
     platforms = lib.platforms.darwin;
   };

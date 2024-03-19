@@ -760,7 +760,7 @@ stdenv.mkDerivation {
 
   meta =
     let cc_ = optionalAttrs (cc != null) cc; in
-    (optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
+    (optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority" "outputsToInstall"])) //
     { description = attrByPath ["meta" "description"] "System C compiler" cc_ + " (wrapper script)";
       priority = 10;
       mainProgram = if name != "" then name else ccName;
