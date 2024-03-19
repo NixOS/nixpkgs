@@ -287,7 +287,9 @@ package-maintainers:
     - weeder
     - witch
   ncfavier:
+    - irc-client
     - lambdabot
+    - shake
   nomeata:
     - cabal-plan-bounds
     - candid
