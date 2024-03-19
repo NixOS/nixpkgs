@@ -44,6 +44,8 @@ let
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
 in {
+  meta.maintainers = lib.teams.budgie.members;
+
   options = {
     services.xserver.desktopManager.budgie = {
       enable = mkEnableOption (mdDoc "the Budgie desktop");

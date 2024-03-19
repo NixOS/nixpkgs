@@ -362,7 +362,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.11.4";
+    version = "3.11.5";
 
     lispLibs = (with super; [
       alexandria
@@ -445,6 +445,8 @@ let
                     "slynk/profiler" "slynk/stickers" "slynk/indentation"
                     "slynk/retro" ];
       }))
+      iterate
+      symbol-munger
     ]) ++ (with self; [
       history-tree
       nhooks
@@ -457,7 +459,6 @@ let
       nfiles
       cl-containers
       # remove this override after quicklisp one is updated.
-      # Because of building failure with new sbcl, the slime version is different from the nyxt pinned one
       (swank.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
           owner = "slime";
@@ -472,8 +473,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.11.4";
-      hash = "sha256-5LhpcuQTioOXZtzwN9B1vWo/xsYXxn9fSKRCdhSPM7A=";
+      rev = "3.11.5";
+      hash = "sha256-l3igC4jfCvx7Q0WO2Zf2ByWLz7sCteYdW1rNvwrc97g=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];

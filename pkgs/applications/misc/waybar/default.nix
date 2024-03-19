@@ -2,6 +2,7 @@
 , stdenv
 , bash
 , fetchFromGitHub
+, fetchFromGitLab
 , SDL2
 , alsa-lib
 , catch2_3
@@ -72,6 +73,17 @@ let
     rev = "0.10.1";
     hash = "sha256-iIYKvpOWafPJB5XhDOSIW9Mb4I3A4pcgIIPQdQYEqUw=";
   };
+
+  wireplumber_0_4 = wireplumber.overrideAttrs (attrs: rec {
+    version = "0.4.17";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      owner = "pipewire";
+      repo = "wireplumber";
+      rev = version;
+      hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
@@ -138,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional traySupport libdbusmenu-gtk3
   ++ lib.optional udevSupport udev
   ++ lib.optional upowerSupport upower
-  ++ lib.optional wireplumberSupport wireplumber
+  ++ lib.optional wireplumberSupport wireplumber_0_4
   ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
 
