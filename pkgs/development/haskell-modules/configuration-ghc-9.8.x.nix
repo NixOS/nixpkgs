@@ -92,6 +92,7 @@ self: super: {
   # Too strict bound on base, believe it or not.
   # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
   terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
+  raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
 
   #
   # Test suite issues
