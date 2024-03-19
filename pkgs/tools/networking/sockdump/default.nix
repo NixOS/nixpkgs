@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sockdump";
-  version = "unstable-2023-09-16";
+  version = "unstable-2023-12-11";
 
   src = fetchFromGitHub {
     owner = "mechpen";
     repo = pname;
-    rev = "713759e383366feae76863881e851a6411c73b68";
-    hash = "sha256-q6jdwFhl2G9o2C0BVU6Xz7xizO00yaSQ2KSR/z4fixY=";
+    rev = "d40ec77e960d021861220bc14a273c5dcad13160";
+    hash = "sha256-FLK1rgWvIoFGv/6+DtDhZGeOZrn7V1jYNS3S8qwL/dc=";
   };
 
   propagatedBuildInputs = [ bcc ];
@@ -21,6 +21,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Dump unix domain socket traffic with bpf";
     mainProgram = "sockdump";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ehmry ];
+    maintainers = with lib.maintainers; [ ehmry picnoir ];
   };
 }
