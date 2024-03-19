@@ -2971,4 +2971,15 @@ self: super: {
     #   repa-query, repa-scalar, repa-store, repa-stream
   ;
 
+  # Use recent git version as the hackage version is outdated and not building on recent GHC versions
+  haskell-to-elm = overrideSrc {
+    version = "unstable-2023-12-02";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell-to-elm";
+      repo = "haskell-to-elm";
+      rev = "52ab086a320a14051aa38d0353d957fb6b2525e9";
+      hash = "sha256-j6F4WplJy7NyhTAuiDd/tHT+Agk1QdyPjOEkceZSxq8=";
+    };
+  } (super.haskell-to-elm.override { generics-sop = self.generics-sop_0_5_1_4; } );
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -2349,7 +2349,6 @@ broken-packages:
   - haskell-src-match # failure in job https://hydra.nixos.org/build/233233529 at 2023-09-02
   - haskell-src-meta-mwotton # failure in job https://hydra.nixos.org/build/233251914 at 2023-09-02
   - haskell-stack-trace-plugin # failure in job https://hydra.nixos.org/build/233231305 at 2023-09-02
-  - haskell-to-elm # failure in job https://hydra.nixos.org/build/233210318 at 2023-09-02
   - HaskellTorrent # failure in job https://hydra.nixos.org/build/233231874 at 2023-09-02
   - HaskellTutorials # failure in job https://hydra.nixos.org/build/233209605 at 2023-09-02
   - haskell-type-exts # failure in job https://hydra.nixos.org/build/233209731 at 2023-09-02
