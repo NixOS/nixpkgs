@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.19.1";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
-    repo = pname;
+    repo = "vcluster";
     rev = "v${version}";
-    hash = "sha256-W9BSLGUrW8Us+yYQLIz3oY8JKJSo43cL+oWQQf3xWJE=";
+    hash = "sha256-fzHaB+EeS8Gr1EVlxAZzKDYgv3Jij4LwmYaXN4tjYBg=";
   };
 
   vendorHash = null;
@@ -45,12 +45,13 @@ buildGoModule rec {
     command = "vcluster --version";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/loft-sh/vcluster/releases/tag/v${version}";
     description = "Create fully functional virtual Kubernetes clusters";
     mainProgram = "vcluster";
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterromfeldhk berryp qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ berryp peterromfeldhk qjoly superherointj ];
   };
 }

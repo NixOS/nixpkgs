@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "valent";
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Shell integration for Valent";
     homepage = "https://valent.andyholmes.ca/";
     changelog = "https://github.com/andyholmes/gnome-shell-extension-valent/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ federicoschonborn ];
+    platforms = lib.platforms.linux;
   };
 }
