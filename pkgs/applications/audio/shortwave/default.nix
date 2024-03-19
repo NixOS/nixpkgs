@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Shortwave";
     description = "Find and listen to internet radio stations";
+    mainProgram = "shortwave";
     longDescription = ''
       Shortwave is a streaming audio player designed for the GNOME
       desktop. It is the successor to the older Gradio application.

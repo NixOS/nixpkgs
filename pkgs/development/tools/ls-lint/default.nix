@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An extremely fast file and directory name linter";
+    mainProgram = "ls_lint";
     homepage = "https://ls-lint.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];

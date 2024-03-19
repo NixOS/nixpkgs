@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Single-column Fediverse client for desktop";
+    mainProgram = "whalebird";
     homepage = "https://whalebird.social";
     changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
     license = licenses.gpl3Only;

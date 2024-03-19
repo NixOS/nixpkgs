@@ -42,6 +42,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/Houston4444/Patchance";
     description = "JACK Patchbay GUI";
+    mainProgram = "patchance";
     license = licenses.gpl2;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

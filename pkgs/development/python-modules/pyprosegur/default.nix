@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to communicate with Prosegur Residential Alarms";
+    mainProgram = "pyprosegur";
     homepage = "https://github.com/dgomes/pyprosegur";
     changelog = "https://github.com/dgomes/pyprosegur/releases/tag/${version}";
     license = with licenses; [ mit ];

@@ -102,6 +102,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Clarifai Python Utilities";
+    mainProgram = "clarifai";
     homepage = "https://github.com/Clarifai/clarifai-python";
     changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${version}";
     license = licenses.asl20;

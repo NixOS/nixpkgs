@@ -64,6 +64,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A small and easy workflow system";
+    mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
     changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
     license = licenses.mit;

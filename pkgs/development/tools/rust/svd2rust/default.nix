@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
+    mainProgram = "svd2rust";
     homepage = "https://github.com/rust-embedded/svd2rust";
     changelog = "https://github.com/rust-embedded/svd2rust/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];

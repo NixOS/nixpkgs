@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Cross-platform C++ application framework";
+    mainProgram = "juceaide";
     longDescription = "JUCE is an open-source cross-platform C++ application framework for desktop and mobile applications, including VST, VST3, AU, AUv3, RTAS and AAX audio plug-ins";
     homepage = "https://github.com/juce-framework/JUCE";
     license = with licenses; [ isc gpl3Plus ];

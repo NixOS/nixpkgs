@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Standalone CFF subroutinizer based on AFDKO tx";
+    mainProgram = "cffsubr";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

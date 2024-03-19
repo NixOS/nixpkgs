@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A mutation testing tool for Rust";
+    mainProgram = "cargo-mutants";
     homepage = "https://github.com/sourcefrog/cargo-mutants";
     changelog = "https://github.com/sourcefrog/cargo-mutants/releases/tag/${src.rev}";
     license = licenses.mit;

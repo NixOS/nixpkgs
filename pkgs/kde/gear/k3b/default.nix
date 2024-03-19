@@ -50,4 +50,5 @@ mkKdeDerivation {
       flac
     ]}"
   ];
+  meta.mainProgram = "k3b";
 }

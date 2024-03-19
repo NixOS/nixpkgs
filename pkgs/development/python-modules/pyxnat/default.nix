@@ -67,6 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pyxnat.github.io/pyxnat";
     description = "Python API to XNAT";
+    mainProgram = "sessionmirror.py";
     changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];

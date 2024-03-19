@@ -52,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "SIGMA-based detection tool for EVTX, Auditd, Sysmon and other logs";
+    mainProgram = "zircolite";
     homepage = "https://github.com/wagga40/Zircolite";
     changelog = "https://github.com/wagga40/Zircolite/releases/tag/${version}";
     license = licenses.gpl3Only;

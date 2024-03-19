@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenStack Command-line Client";
+    mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

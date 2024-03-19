@@ -43,6 +43,7 @@ buildGoModule rec {
     homepage = "https://github.com/cloudflare/cfrpki#octorpki";
     changelog = "https://github.com/cloudflare/cfrpki/releases/tag/v${version}";
     description = "A software used to download RPKI (RFC 6480) certificates and validate them";
+    mainProgram = "octorpki";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = teams.wdz.members;

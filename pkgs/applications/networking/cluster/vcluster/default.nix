@@ -47,6 +47,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Create fully functional virtual Kubernetes clusters";
+    mainProgram = "vcluster";
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = licenses.asl20;

@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "KeepKey Python client";
+    mainProgram = "keepkeyctl";
     homepage = "https://github.com/keepkey/python-keepkey";
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];

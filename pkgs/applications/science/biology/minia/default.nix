@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Short read genome assembler";
+    mainProgram = "minia";
     homepage = "https://github.com/GATB/minia";
     license = licenses.agpl3;
     maintainers = with maintainers; [ jbedo ];

@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "A task runner with DAG-based parallelism";
+    mainProgram = "engage";
     homepage = "https://or.computer.surgery/charles/engage";
     changelog = "https://or.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 mit ];

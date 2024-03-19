@@ -15,6 +15,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "JavaScript parser, mangler and compressor toolkit for ES6+";
+    mainProgram = "terser";
     homepage = "https://terser.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ talyz ];

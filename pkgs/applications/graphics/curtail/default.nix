@@ -69,6 +69,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple & useful image compressor";
+    mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ anselmschueler ];

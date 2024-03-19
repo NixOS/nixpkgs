@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A C library implementing a suite of algorithms to factor large integers";
+    mainProgram = "msieve";
     license = lib.licenses.publicDomain;
     homepage = "http://msieve.sourceforge.net/";
     maintainers = [ lib.maintainers.roconnor ];

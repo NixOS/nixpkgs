@@ -71,6 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client library for OpenStack Manila API";
+    mainProgram = "manila";
     homepage = "https://github.com/openstack/python-manilaclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

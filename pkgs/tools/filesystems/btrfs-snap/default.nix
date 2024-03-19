@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Create and maintain the history of snapshots of btrfs filesystems";
+    mainProgram = "btrfs-snap";
     homepage = "https://github.com/jf647/btrfs-snap";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lionello ];

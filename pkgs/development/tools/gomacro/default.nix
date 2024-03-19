@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Interactive Go interpreter and debugger with generics and macros";
+    mainProgram = "gomacro";
     homepage = "https://github.com/cosmos72/gomacro";
     license = licenses.mpl20;
     maintainers = with maintainers; [ shofius ];

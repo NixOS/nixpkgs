@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
+    mainProgram = "pysemver";
     homepage = "https://python-semver.readthedocs.io/";
     changelog = "https://github.com/python-semver/python-semver/releases/tag/3.0.0";
     license = licenses.bsd3;

@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module dependency visualization";
+    mainProgram = "pydeps";
     homepage = "https://github.com/thebjorn/pydeps";
     changelog = "https://github.com/thebjorn/pydeps/releases/tag/v${version}";
     license = licenses.bsd2;

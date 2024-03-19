@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Facebook's branch of Apache Thrift";
+    mainProgram = "thrift1";
     homepage = "https://github.com/facebook/fbthrift";
     license = licenses.asl20;
     platforms = platforms.unix;

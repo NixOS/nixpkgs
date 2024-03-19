@@ -150,6 +150,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
+    mainProgram = "espanso";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kimat thehedgeh0g ];

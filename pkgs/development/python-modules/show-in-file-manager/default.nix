@@ -27,6 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/damonlynch/showinfilemanager";
     description = "Open the system file manager and select files in it";
+    mainProgram = "showinfilemanager";
     longDescription = ''
       Show in File Manager is a Python package to open the system file
       manager and optionally select files in it. The point is not to

@@ -36,6 +36,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "A video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
+    mainProgram = "igir";
     homepage = "https://igir.io";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ TheBrainScrambler ];

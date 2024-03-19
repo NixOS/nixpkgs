@@ -30,6 +30,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Windows/Samba enumeration tool";
+    mainProgram = "enum4linux-ng";
     longDescription = ''
       enum4linux-ng.py is a rewrite of Mark Lowe's enum4linux.pl, a tool for
       enumerating information from Windows and Samba systems.

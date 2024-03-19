@@ -27,6 +27,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "Open source client for Windows Terminal Services";
+    mainProgram = "rdesktop";
     homepage = "http://www.rdesktop.org/";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl2;

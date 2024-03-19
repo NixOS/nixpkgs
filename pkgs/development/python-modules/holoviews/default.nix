@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python data analysis and visualization seamless and simple";
+    mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

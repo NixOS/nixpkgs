@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Morphological analyzer/inflection engine for Russian and Ukrainian";
+    mainProgram = "pymorphy";
     homepage = "https://github.com/no-plagiarism/pymorphy3";
     license = licenses.mit;
     maintainers = with maintainers; [ jboy ];

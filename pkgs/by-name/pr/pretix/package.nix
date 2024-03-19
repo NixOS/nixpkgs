@@ -247,6 +247,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Ticketing software that cares about your event—all the way";
+    mainProgram = "pretix-manage";
     homepage = "https://github.com/pretix/pretix";
     license = with licenses; [
       agpl3Only

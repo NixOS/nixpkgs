@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gitg";
     description = "GNOME GUI client to view git repositories";
+    mainProgram = "gitg";
     maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

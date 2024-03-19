@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tokenizer and sentence splitter for German and English web texts";
+    mainProgram = "somajo-tokenizer";
     homepage = "https://github.com/tsproisl/SoMaJo";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

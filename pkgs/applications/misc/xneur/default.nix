@@ -67,6 +67,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Utility for switching between keyboard layouts";
+    mainProgram = "xneur";
     homepage = "https://xneur.ru";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.raskin ];

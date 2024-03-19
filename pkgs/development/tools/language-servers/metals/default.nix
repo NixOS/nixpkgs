@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Language server for Scala";
+    mainProgram = "metals";
     maintainers = with maintainers; [ fabianhjr tomahna ];
   };
 }

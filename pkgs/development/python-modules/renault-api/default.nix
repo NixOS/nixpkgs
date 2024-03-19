@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to interact with the Renault API";
+    mainProgram = "renault-api";
     homepage = "https://github.com/hacf-fr/renault-api";
     changelog = "https://github.com/hacf-fr/renault-api/releases/tag/v${version}";
     license = licenses.mit;

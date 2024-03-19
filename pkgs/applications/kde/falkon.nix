@@ -32,6 +32,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "QtWebEngine based cross-platform web browser";
+    mainProgram = "falkon";
     homepage    = "https://www.falkon.org";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nix-community/acpi_call";
     platforms = platforms.linux;
     description = "A module allowing arbitrary ACPI calls; use case: hybrid video";
+    mainProgram = "test_discrete_video_off.sh";
     license = licenses.gpl3Plus;
   };
 }

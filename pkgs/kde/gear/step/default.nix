@@ -13,4 +13,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [qttools qtsvg pkg-config shared-mime-info];
   extraBuildInputs = [eigen gsl libqalculate];
+  meta.mainProgram = "step";
 }

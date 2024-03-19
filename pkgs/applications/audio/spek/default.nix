@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Analyse your audio files by showing their spectrogram";
+    mainProgram = "spek";
     homepage = "http://spek.cc/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ bjornfor ];

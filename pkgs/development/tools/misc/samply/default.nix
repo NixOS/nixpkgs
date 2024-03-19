@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A command line profiler for macOS and Linux";
+    mainProgram = "samply";
     homepage = "https://github.com/mstange/samply";
     changelog = "https://github.com/mstange/samply/releases/tag/samply-v${version}";
     license = with licenses; [ asl20 mit ];

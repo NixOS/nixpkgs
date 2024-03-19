@@ -106,6 +106,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python version of the Playwright testing and automation library";
+    mainProgram = "playwright";
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ techknowlogick yrd ];

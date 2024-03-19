@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo plugin to manage dependency features";
+    mainProgram = "cargo-feature";
     homepage = "https://github.com/Riey/cargo-feature";
     license = licenses.mit;
     platforms = platforms.unix;

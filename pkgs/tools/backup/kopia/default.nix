@@ -25,6 +25,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://kopia.io";
     description = "Cross-platform backup tool with fast, incremental backups, client-side end-to-end encryption, compression and data deduplication";
+    mainProgram = "kopia";
     license = licenses.asl20;
     maintainers = [ maintainers.bbigras ];
   };

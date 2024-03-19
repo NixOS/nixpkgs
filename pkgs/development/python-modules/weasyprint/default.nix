@@ -100,6 +100,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Converts web documents to PDF";
+    mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];

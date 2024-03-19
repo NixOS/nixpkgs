@@ -211,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://upower.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "A D-Bus service for power management";
+    mainProgram = "upower";
     maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

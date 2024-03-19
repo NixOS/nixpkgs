@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python build and release management tool";
+    mainProgram = "bork";
     homepage = "https://github.com/duckinator/bork";
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.all;

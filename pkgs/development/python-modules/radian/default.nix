@@ -69,6 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A 21 century R console";
+    mainProgram = "radian";
     homepage = "https://github.com/randy3k/radian";
     changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

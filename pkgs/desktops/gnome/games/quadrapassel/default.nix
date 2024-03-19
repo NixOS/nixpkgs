@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Classic falling-block game, Tetris";
+    mainProgram = "quadrapassel";
     homepage = "https://wiki.gnome.org/Apps/Quadrapassel";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

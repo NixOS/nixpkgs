@@ -58,6 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTML content extractor";
+    mainProgram = "readabilipy";
     homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
     changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubernetes CLI plugin to decode Kubernetes secrets";
+    mainProgram = "kubectl-view-secret";
     homepage = "https://github.com/elsesiy/kubectl-view-secret";
     changelog = "https://github.com/elsesiy/kubectl-view-secret/releases/tag/v${version}";
     license = licenses.mit;

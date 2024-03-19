@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library & console tool for controlling Roborock vacuum";
+    mainProgram = "roborock";
     homepage = "https://github.com/humbertogontijo/python-roborock";
     changelog = "https://github.com/humbertogontijo/python-roborock/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;

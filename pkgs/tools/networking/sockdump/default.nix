@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = src.meta // {
     description = "Dump unix domain socket traffic with bpf";
+    mainProgram = "sockdump";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ ehmry ];
   };

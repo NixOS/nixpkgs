@@ -40,6 +40,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Virtual planetarium astronomy software";
+    mainProgram = "kstars";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
     longDescription = ''
       It provides an accurate graphical simulation of the night sky, from any location on Earth, at any date and time.

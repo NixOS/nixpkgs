@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
+    mainProgram = "MiniZincIDE";
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
       language. It is high-level enough to express most

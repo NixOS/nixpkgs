@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Note editor designed to remain simple to use";
+    mainProgram = "bijiben";
     homepage = "https://wiki.gnome.org/Apps/Notes";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;

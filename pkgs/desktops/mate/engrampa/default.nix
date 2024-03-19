@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Archive Manager for MATE";
+    mainProgram = "engrampa";
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;

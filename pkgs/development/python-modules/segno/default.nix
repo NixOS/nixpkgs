@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/heuer/segno/releases/tag/${version}";
     description = "QR Code and Micro QR Code encoder";
+    mainProgram = "segno";
     homepage = "https://github.com/heuer/segno/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ phaer ];

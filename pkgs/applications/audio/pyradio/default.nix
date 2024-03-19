@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "http://www.coderholic.com/pyradio/";
     description = "Curses based internet radio player";
+    mainProgram = "pyradio";
     changelog = "https://github.com/coderholic/pyradio/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ contrun ];

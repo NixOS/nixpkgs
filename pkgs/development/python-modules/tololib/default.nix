@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
+    mainProgram = "tolo-cli";
     homepage = "https://gitlab.com/MatthiasLohr/tololib";
     changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = isQt6 && stdenv.isDarwin;
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     description = "GPS log file viewer and analyzer";
+    mainProgram = "gpxsee";
     homepage = "https://www.gpxsee.org/";
     license = lib.licenses.gpl3Only;
     longDescription = ''

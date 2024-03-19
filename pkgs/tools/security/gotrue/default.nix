@@ -25,6 +25,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/netlify/gotrue";
     description = "An SWT based API for managing users and issuing SWT tokens";
+    mainProgram = "gotrue";
     changelog = "https://github.com/netlify/gotrue/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ urandom ];

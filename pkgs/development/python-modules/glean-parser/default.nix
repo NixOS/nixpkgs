@@ -67,6 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
+    mainProgram = "glean_parser";
     homepage = "https://github.com/mozilla/glean_parser";
     changelog = "https://github.com/mozilla/glean_parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;

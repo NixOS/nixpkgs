@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for listing assets from multiple cloud providers";
+    mainProgram = "cloudlist";
     homepage = "https://github.com/projectdiscovery/cloudlist";
     changelog = "https://github.com/projectdiscovery/cloudlist/releases/tag/v${version}";
     license = licenses.mit;

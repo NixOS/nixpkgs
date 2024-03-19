@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Abstraction layer for smart contract build systems";
+    mainProgram = "crytic-compile";
     homepage = "https://github.com/crytic/crytic-compile";
     changelog = "https://github.com/crytic/crytic-compile/releases/tag/${version}";
     license = licenses.agpl3Plus;

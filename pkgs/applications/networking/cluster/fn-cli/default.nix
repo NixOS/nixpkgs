@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command-line tool for the fn project";
+    mainProgram = "fn";
     homepage = "https://fnproject.io";
     license = licenses.asl20;
     maintainers = [ maintainers.c4605 ];
