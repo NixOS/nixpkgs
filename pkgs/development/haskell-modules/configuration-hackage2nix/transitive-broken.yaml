@@ -2693,7 +2693,6 @@ dont-distribute-packages:
  - magicbane
  - mahoro
  - maid
- - mail-pool
  - mailgun
  - majordomo
  - majority
