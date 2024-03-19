@@ -2992,4 +2992,11 @@ self: super: {
     };
   } super.haskell-to-elm;
 
+  # https://github.com/dpwright/HaskellNet-SSL/pull/33 Use crypton-connection instead of connection
+  HaskellNet-SSL = appendPatch (pkgs.fetchpatch {
+    name = "HaskellNet-SSL-crypton-connection.patch";
+    url = "https://github.com/dpwright/HaskellNet-SSL/pull/34/commits/cab639143efb65acf96abb35ae6c48db8d37867c.patch";
+    hash = "sha256-hT4IZw70DxTw6iMofQHjPycz6IE6U76df72ftR2UB6Q=";
+  }) (super.HaskellNet-SSL.override { connection = self.crypton-connection; });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
