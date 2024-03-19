@@ -22,269 +22,391 @@
 }@args:
 
 let
+  # Takes a mapping from a package to its replacement and transforms it into a list of
+  # mappings by output (e.g., a package with three outputs produces a list of size 3).
+  expandOutputs =
+    mapping:
+    map (output: {
+      key = builtins.unsafeDiscardStringContext (lib.getOutput output mapping.original);
+      replacement = lib.getOutput output mapping.replacement;
+    }) mapping.original.outputs;
+
+  # Produces a list of mappings from an SDK path specified by `attr` in the given
+  # package set and SDK version.
+  mkMapping =
+    attr: pkgs: sdk:
+    lib.foldlAttrs (
+      mappings: name: pkg:
+      let
+        # Avoid evaluation failures due to missing or throwing
+        # frameworks (such as QuickTime in the 11.0 SDK).
+        maybeReplacement = builtins.tryEval sdk.${attr}.${name} or { success = false; };
+      in
+      if maybeReplacement.success then
+        mappings
+        ++ expandOutputs {
+          original = pkg;
+          replacement = maybeReplacement.value;
+        }
+      else
+        mappings
+    ) [ ] pkgs.darwin.apple_sdk.${attr};
+
+  # Produces a list of overrides for the given package set and SDK Version.
+  # If you want to manually specify a mapping, this is where you should do it.
+  mkOverrides =
+    pkgs: sdk: version:
+    lib.concatMap expandOutputs [
+      # Libsystem needs to match the one used by the SDK or weird errors happen.
+      {
+        original = pkgs.darwin.apple_sdk.Libsystem;
+        replacement = sdk.Libsystem;
+      }
+      # Make sure darwin.CF is mapped to the correct version for the SDK.
+      {
+        original = pkgs.darwin.CF;
+        replacement = sdk.frameworks.CoreFoundation;
+      }
+      # libobjc needs to be handled specially because it’s not actually in the SDK.
+      {
+        original = pkgs.darwin.libobjc;
+        replacement = sdk.objc4;
+      }
+      # Unfortunately, this is not consistent between Dariwn SDKs in nixpkgs, so
+      # try both versions to map between them.
+      {
+        original = pkgs.darwin.apple_sdk.sdk or pkgs.darwin.apple_sdk.MacOSX-SDK;
+        replacement = sdk.sdk or sdk.MacOSX-SDK;
+      }
+      # Remap the SDK root. This is used by clang to set the SDK version when
+      # linking. This behavior is automatic by clang and can’t be overriden.
+      # Otherwise, without the SDK root set, the SDK version will be inferred to
+      # be the same as the deployment target, which is not usually what you want.
+      {
+        original = pkgs.darwin.apple_sdk.sdkRoot;
+        replacement = sdk.sdkRoot;
+      }
+      # Override xcodebuild because it hardcodes the SDK version.
+      # TODO: Make xcodebuild defer to the SDK root set in the stdenv.
+      {
+        original = pkgs.xcodebuild;
+        replacement = pkgs.xcodebuild.override {
+          # Do the override manually to avoid an infinite recursion.
+          stdenv = pkgs.stdenv.override (old: {
+            buildPlatform = mkPlatform version old.buildPlatform;
+            hostPlatform = mkPlatform version old.hostPlatform;
+            targetPlatform = mkPlatform version old.targetPlatform;
+
+            allowedRequisites = null;
+            cc = mkCC sdk.Libsystem old.cc;
+          });
+        };
+      }
+    ];
+
+  mkCC =
+    Libsystem: cc:
+    if cc ? override then
+      cc.override {
+        bintools = cc.bintools.override { libc = Libsystem; };
+        libc = Libsystem;
+      }
+    else
+      builtins.throw "CC has no override: ${cc}";
+
+  mkPlatform =
+    version: platform:
+    platform
+    // lib.optionalAttrs platform.isDarwin { inherit (version) darwinMinVersion darwinSdkVersion; };
+
+  # Creates a stub package. Unchanged files from the original package are symlinked
+  # into the package. The contents of `nix-support` are updated to reference any
+  # replaced packages.
+  #
+  # Note: `env` is an attrset containing `outputs` and `dependencies`.
+  # `dependncies` is a regex passed to sed and must be `passAsFile`.
+  mkStub =
+    name: env:
+    pkgsHostTarget.runCommand name env (
+      # Map over the outputs in the package being replace to make sure the proxy is
+      # a fully functional replacement. This is like `symlinkJoin` except for
+      # outputs and the contents of `nix-support`, which will be customized.
+      ''
+        for outputName in $outputs; do
+          mkdir -p "''${!outputName}"
+
+          for targetPath in "''${!outputName}"/*; do
+            targetName=$(basename "$targetPath")
+
+            # `nix-support` is special-cased because any propagated inputs need their
+            # SDK frameworks replaced with those from the requested SDK.
+            if [ "$targetName" == "nix-support" ]; then
+              mkdir "''${!outputName}/nix-support"
+
+              for file in "$targetPath"/*; do
+                fileName=$(basename "$file")
+                targetFile="''${!outputName}/nix-support/$fileName"
+
+                sed -f "$dependenciesPath" < "$file" > "$targetFile"
+                if cmp -s "$file" "$targetFile"; then
+                  rm "$targetFile"
+                  ln -s "$file" "$targetFile"
+                fi
+              done
+            else
+              ln -s "$targetPath" "''${!outputName}/$targetName"
+            fi
+          done
+        done
+      '');
+
+  # Looks up the replacement for `pkg` in the `newPackages` mapping. If `pkg` is a
+  # compiler (meaning it has a `libc` attribute), the compiler will be overriden.
+  getReplacement =
+    newPackages: pkg:
+    let
+      pkgOrCC = if pkg.libc or null != null then mkCC (getReplacement newPackages pkg.libc) pkg else pkg;
+    in
+    if lib.isDerivation pkg then
+      newPackages.${builtins.unsafeDiscardStringContext pkg} or pkgOrCC
+    else
+      pkg;
+
+  # Replaces all packages propagated by `pkgs` using the `newPackages` mapping.
+  # It is assumed that all possible overrides have already been incorporated into
+  # the mapping. If any propagated packages are replaced, a stub package will be
+  # created with references to the old packages replaced in `nix-support`.
+  replacePropagatedPackages =
+    newPackages: pkg:
+    let
+      propagatedInputs = lib.attrValues {
+        inherit (pkg)
+          depsBuildBuildPropagated
+          propagatedNativeBuildInputs
+          depsBuildTargetPropagated
+          depsHostHostPropagated
+          propagatedBuildInputs
+          depsTargetTargetPropagated
+          ;
+      };
+
+      env = {
+        inherit (pkg) outputs;
+
+        # Old dependencies are replaced with new ones via a sed script. It is assumed
+        # that `|` will not appear in a store path.
+        dependencies = lib.pipe propagatedInputs [
+          lib.flatten
+          (lib.concatMapStrings (
+            dep:
+            let
+              replacement = getReplacement newPackages dep;
+            in
+            lib.optionalString (dep != replacement) "s|${dep}|${replacement}|g;"
+          ))
+        ];
+
+        passAsFile = [ "dependencies" ];
+      };
+    in
+    # Only remap the package’s propagated inputs if there are any and if any of them
+    # had packages remapped (with frameworks or proxy packages).
+    if
+      lib.isDerivation pkg && lib.any (inputs: inputs != [ ]) propagatedInputs && env.dependencies != ""
+    then
+      mkStub pkg.name env
+    else
+      pkg;
+
+  propagatedInputs = [
+    "depsBuildBuildPropagated"
+    "propagatedNativeBuildInputs"
+    "depsBuildTargetPropagated"
+    "depsHostHostPropagated"
+    "propagatedBuildInputs"
+    "depsTargetTargetPropagated"
+  ];
+
+  # Gets all propagated inputs in a package. This does not recurse.
+  getPropagatedInputs =
+    pkg:
+    lib.concatMap (input: pkg.${input} or [ ]) [
+      "depsBuildBuildPropagated"
+      "propagatedNativeBuildInputs"
+      "depsBuildTargetPropagated"
+      "depsHostHostPropagated"
+      "propagatedBuildInputs"
+      "depsTargetTargetPropagated"
+    ];
+
+  # Gets all propagated dependencies in a package.
+  getPropagatedDependencies =
+    pkgs:
+    lib.genericClosure {
+      startSet = map (pkg: {
+        key = pkg.outPath;
+        deps = getPropagatedInputs pkg;
+      }) pkgs;
+      operator =
+        { key, deps }:
+        map (dep: {
+          key = dep.outPath;
+          deps = getPropagatedInputs dep;
+        }) deps;
+    };
+
+  # Returns a package mapping based on remapping all propagated packages.
+  #
+  # Implementation note: recursion is avoided because it is costly. Instead, a flat
+  # list of dependencies is obtained then sorted topologically, so that dependencies
+  # can be updated in order (and only once). This produces a new mapping that must
+  # be used to perform the actual updates to the propagated packages.
+  getPackageMapping =
+    baseMapping: input:
+    let
+      dependencies = lib.pipe input [
+        getPropagatedDependencies
+        (lib.toposort (x: y: lib.any (z: x.key == z) y.deps))
+        (lib.getAttr "result")
+        lib.reverseList
+      ];
+    in
+    lib.foldl' (
+      newPackages: pkg:
+      let
+        replacement = replacePropagatedPackages newPackages pkg;
+        outPath = builtins.unsafeDiscardStringContext pkg;
+      in
+      if pkg == null || newPackages ? ${outPath} then
+        newPackages
+      else
+        newPackages // { ${outPath} = replacement; }
+    ) baseMapping input;
+
   overrideSDK =
     stdenv: sdkVersion:
     let
-      inherit
-        (
-          {
-            inherit (stdenv.hostPlatform) darwinMinVersion darwinSdkVersion;
-          }
-          // (if lib.isAttrs sdkVersion then sdkVersion else { darwinSdkVersion = sdkVersion; })
-        )
-        darwinMinVersion
-        darwinSdkVersion
-        ;
+      newVersion = {
+        inherit (stdenv.hostPlatform) darwinMinVersion darwinSdkVersion;
+      } // (if lib.isAttrs sdkVersion then sdkVersion else { darwinSdkVersion = sdkVersion; });
 
-      resolveSDK =
-        pkgs:
-        # TODO: Treat `darwinSdkVersion` as a constraint rather than as an exact version.
-        pkgs.darwin."apple_sdk_${lib.replaceStrings [ "." ] [ "_" ] darwinSdkVersion}";
+      inherit (newVersion) darwinMinVersion darwinSdkVersion;
 
-      mkMapping =
-        attr: pkgs: sdk:
-        lib.pipe pkgs.darwin.apple_sdk."${attr}" [
-          lib.attrsToList
-          (map (
-            pkg:
-            let
-              # Avoid evaluation failures due to missing or throwing
-              # frameworks (such as QuickTime in the 11.0 SDK).
-              replacement = builtins.tryEval sdk."${attr}"."${pkg.name}" or { success = false; };
-            in
-            if replacement.success then
-              {
-                original = pkg.value;
-                replacement = replacement.value;
-              }
-            else
-              false
-          ))
-          (lib.filter (x: x != false))
-        ];
-
-      uniqueBy =
-        proj: lib.foldl' (acc: e: if lib.any (x: proj e == proj x) acc then acc else acc ++ [ e ]) [ ];
+      # Used to get an SDK version corresponding to the requested `darwinSdkVersion`.
+      # TODO: Treat `darwinSdkVersion` as a constraint rather than as an exact version.
+      resolveSDK = pkgs: pkgs.darwin."apple_sdk_${lib.replaceStrings [ "." ] [ "_" ] darwinSdkVersion}";
 
       # `newSdkPackages` is constructed based on the assumption that SDK packages only
       # propagate versioned packages from that SDK -- that they neither propagate
       # unversioned packages SDK packages nor propagate non-SDK packages (such as curl).
-      newSdkPackages = lib.pipe args [
-        (lib.flip removeAttrs [
-          "lib"
-          "extendMkDerivationArgs"
-        ])
-        lib.attrValues
-        (lib.filter (lib.hasAttr "darwin"))
-        (uniqueBy (lib.getAttr "stdenv"))
-        (lib.concatMap (
-          pkgs:
-          let
-            newSDK = resolveSDK pkgs;
-          in
-          mkMapping "frameworks" pkgs newSDK
-          ++ mkMapping "libs" pkgs newSDK
-          # Manual overrides for darwin.Libsystem, darwin.libobjc, darwin.sdk, and xcodebuild.
-          ++ [
-            # Libsystem needs to match the one used by the SDK or weird errors happen.
-            {
-              original = pkgs.darwin.apple_sdk.Libsystem;
-              replacement = newSDK.Libsystem;
-            }
-            # Make sure darwin.CF is mapped to the correct version for the SDK.
-            {
-              original = pkgs.darwin.CF;
-              replacement = newSDK.frameworks.CoreFoundation;
-            }
-            # libobjc needs to be handled specially because it’s not actually in the SDK.
-            {
-              original = pkgs.darwin.libobjc;
-              replacement = newSDK.objc4;
-            }
-            # Unfortunately, this is not consistent between Dariwn SDKs in nixpkgs, so
-            # try both versions to map between them.
-            {
-              original = pkgs.darwin.apple_sdk.sdk or pkgs.darwin.apple_sdk.MacOSX-SDK;
-              replacement = newSDK.sdk or newSDK.MacOSX-SDK;
-            }
-            # Remap the SDK root. This is used by clang to set the SDK version when
-            # linking. This behavior is automatic by clang and can’t be overriden.
-            # Otherwise, without the SDK root set, the SDK version will be inferred to
-            # be the same as the deployment target, which is not usually what you want.
-            {
-              original = pkgs.darwin.apple_sdk.sdkRoot;
-              replacement = newSDK.sdkRoot;
-            }
-            # Override xcodebuild because it hardcodes the SDK version.
-            # TODO: Make xcodebuild defer to the SDK root set in the stdenv.
-            {
-              original = pkgs.xcodebuild;
-              replacement = pkgs.xcodebuild.override {
-                # Do the override manually to avoid an infinite recursion.
-                stdenv = pkgs.stdenv.override (old: {
-                  buildPlatform = mkPlatform old.buildPlatform;
-                  hostPlatform = mkPlatform old.hostPlatform;
-                  targetPlatform = mkPlatform old.targetPlatform;
-
-                  allowedRequisites = null;
-                  cc = mkCC newSDK.Libsystem old.cc;
-                });
-              };
-            }
-          ]
-        ))
-        # `builtins.unsafeDiscardStringContext` is used to create a mapping from
-        # a store path to a replacement derivation. This is safe because these paths
-        # won’t be persisted, and the replacements retain their context.
-        #
-        # Without being able map from a path to a derivation, every lookup would have
-        # to be a linear scan keying off the source derivation. While effectively still
-        # O(1) with a big constant (because the number of SDK packages mapped is fixed),
-        # the resulting evaluation performance is generally worse overall.
-        (lib.concatMap (
-          pair:
-          map (output: {
-            name = lib.pipe pair.original [
-              (lib.getOutput output)
-              (lib.getAttr "outPath")
-              builtins.unsafeDiscardStringContext
+      #
+      # Note: `builtins.unsafeDiscardStringContext` is used to allow the path from the
+      # original package output to be mapped to the replacement. This is safe because
+      # the value is not persisted anywhere and necessary because store paths are not
+      # allowed as attrset names otherwise.
+      baseSdkMapping =
+        let
+          sdkPackages = lib.genericClosure {
+            startSet = lib.pipe args [
+              (lib.flip removeAttrs [
+                "lib"
+                "extendMkDerivationArgs"
+              ])
+              (lib.filterAttrs (_: lib.hasAttr "darwin"))
+              (lib.mapAttrs (
+                name: value: {
+                  key = name;
+                  inherit value;
+                }
+              ))
+              lib.attrValues
             ];
-            value = lib.getOutput output pair.replacement;
-          }) pair.original.outputs
-        ))
-        lib.listToAttrs
-      ];
-
-      getReplacement =
-        pkg:
-        let
-          replacedPkg =
-            if pkg.libc or null != null then
-              mkCC (getReplacement pkg.libc) pkg
-            else
-              replacePropagatedFrameworks pkg;
-        in
-        if lib.isDerivation pkg then
-          newSdkPackages.${builtins.unsafeDiscardStringContext pkg.outPath} or replacedPkg
-        else
-          pkg;
-
-      replacePropagatedFrameworks =
-        pkg:
-        let
-          propagatedInputs = {
-            inherit (pkg)
-              depsBuildBuildPropagated
-              propagatedNativeBuildInputs
-              depsBuildTargetPropagated
-              depsHostHostPropagated
-              propagatedBuildInputs
-              depsTargetTargetPropagated
-              ;
-          };
-
-          mappedInputs = lib.mapAttrs (name: map getReplacement) propagatedInputs;
-
-          flattenAttrs = lib.flip lib.pipe [
-            lib.attrValues
-            lib.flatten
-          ];
-
-          env = {
-            inherit (pkg) outputs;
-
-            # Old dependencies are replaced with new ones via a sed script. It is assumed
-            # that `|` will not appear in a store path.
-            dependencies = lib.flip lib.pipe [
-              (map (pair: "s|${pair.fst}|${pair.snd}|g;"))
-              lib.unique
-              lib.concatStrings
-            ] (lib.zipLists (flattenAttrs propagatedInputs) (flattenAttrs mappedInputs));
-
-            passAsFile = [ "dependencies" ];
+            operator =
+              item:
+              let
+                newSDK = resolveSDK item.value;
+              in
+              if item ? replacement then
+                [ ]
+              else if item ? replacementList then
+                item.replacementList
+              else
+                [
+                  {
+                    key = "frameworks";
+                    replacementList = mkMapping "frameworks" item.value newSDK;
+                  }
+                  {
+                    key = "libs";
+                    pkgs = mkMapping "libs" item.value newSDK;
+                  }
+                  {
+                    key = "overrides";
+                    replacementList = mkOverrides item.value newSDK newVersion;
+                  }
+                ];
           };
         in
-        # Only remap the package’s propagated inputs if there are any and if any of them
-        # had packages remapped (with frameworks or proxy packages).
-        if
-          lib.any (inputs: lib.length inputs > 0) (lib.attrValues propagatedInputs)
-          && propagatedInputs != mappedInputs
-        then
-          pkgsHostTarget.runCommand pkg.name env (
-            # Map over the outputs in the package being replace to make sure the proxy is
-            # a fully functional replacement. This is like `symlinkJoin` except for
-            # outputs and the contents of `nix-support`, which will be customized.
-            lib.concatMapStringsSep "\n" (output: ''
-              outputName='${output}'
-              pkgOutputPath='${lib.getOutput output pkg}'
+        lib.pipe sdkPackages [
+          (lib.filter (attrs: attrs ? replacement))
+          (map (
+            { key, replacement }:
+            {
+              name = key;
+              value = replacement;
+            }
+          ))
+          lib.listToAttrs
+        ];
 
-              mkdir -p "''${!outputName}"
-              for targetPath in "$pkgOutputPath"/*; do
-                targetName=$(basename "$targetPath")
-
-                # `nix-support` is special-cased because any propagated inputs need their
-                # SDK frameworks replaced with those from the requested SDK.
-                if [ "$targetName" == "nix-support" ]; then
-                  mkdir "''${!outputName}/nix-support"
-
-                  for file in "$targetPath"/*; do
-                    fileName=$(basename "$file")
-                    targetFile="''${!outputName}/nix-support/$fileName"
-
-                    sed -f "$dependenciesPath" < "$file" > "$targetFile"
-                    if cmp -s "$file" "$targetFile"; then
-                      rm "$targetFile"
-                      ln -s "$file" "$targetFile"
-                    fi
-                  done
-                else
-                  ln -s "$targetPath" "''${!outputName}/$targetName"
-                fi
-              done
-            '') pkg.outputs
-          )
-        else
-          pkg;
-
+      # Remaps all inputs given to the requested SDK version. The result is an attrset
+      # that can be passed to `extendMkDerivationArgs`.
       mapInputsToSDK =
-        inputs: args: lib.genAttrs inputs (input: map getReplacement (args."${input}" or [ ]));
-
-      mkCC =
-        Libsystem: cc:
-        cc.override {
-          bintools = cc.bintools.override { libc = Libsystem; };
-          libc = Libsystem;
-        };
-
-      mkPlatform =
-        platform:
-        platform // lib.optionalAttrs platform.isDarwin { inherit darwinMinVersion darwinSdkVersion; };
+        inputs: args:
+        lib.pipe inputs [
+          (lib.filter (input: args ? ${input}))
+          (lib.flip lib.genAttrs (
+            inputName:
+            let
+              input = args.${inputName};
+              newPackages = getPackageMapping baseSdkMapping input;
+            in
+            map (getReplacement newPackages) input
+          ))
+        ];
     in
-    stdenv.override (old: {
-      buildPlatform = mkPlatform old.buildPlatform;
-      hostPlatform = mkPlatform old.hostPlatform;
-      targetPlatform = mkPlatform old.targetPlatform;
+    stdenv.override (
+      old:
+      {
+        buildPlatform = mkPlatform newVersion old.buildPlatform;
+        hostPlatform = mkPlatform newVersion old.hostPlatform;
+        targetPlatform = mkPlatform newVersion old.targetPlatform;
+      }
+      # Only perform replacements if the SDK version has changed. Changing only the
+      # deployment target does not require replacing the libc or SDK dependencies.
+      // lib.optionalAttrs (old.hostPlatform.darwinSdkVersion != darwinSdkVersion) {
+        allowedRequisites = null;
 
-      allowedRequisites = null;
-      cc = getReplacement old.cc;
+        mkDerivationFromStdenv = extendMkDerivationArgs old (mapInputsToSDK [
+          "depsBuildBuild"
+          "nativeBuildInputs"
+          "depsBuildTarget"
+          "depsHostHost"
+          "buildInputs"
+          "depsTargetTarget"
+          "depsBuildBuildPropagated"
+          "propagatedNativeBuildInputs"
+          "depsBuildTargetPropagated"
+          "depsHostHostPropagated"
+          "propagatedBuildInputs"
+          "depsTargetTargetPropagated"
+        ]);
 
-      extraBuildInputs = map getReplacement stdenv.extraBuildInputs;
-      extraNativeBuildInputs = map getReplacement stdenv.extraNativeBuildInputs;
+        cc = getReplacement baseSdkMapping old.cc;
 
-      mkDerivationFromStdenv = extendMkDerivationArgs old (mapInputsToSDK [
-        "depsBuildBuild"
-        "nativeBuildInputs"
-        "depsBuildTarget"
-        "depsHostHost"
-        "buildInputs"
-        "depsTargetTarget"
-        "depsBuildBuildPropagated"
-        "propagatedNativeBuildInputs"
-        "depsBuildTargetPropagated"
-        "depsHostHostPropagated"
-        "propagatedBuildInputs"
-        "depsTargetTargetPropagated"
-      ]);
-    });
+        extraBuildInputs = map (getReplacement baseSdkMapping) stdenv.extraBuildInputs;
+        extraNativeBuildInputs = map (getReplacement baseSdkMapping) stdenv.extraNativeBuildInputs;
+      }
+    );
 in
 overrideSDK
