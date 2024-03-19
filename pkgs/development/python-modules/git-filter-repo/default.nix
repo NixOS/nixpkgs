@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "git-filter-repo";
   version = "2.38.0";
   docs_version = "01ead411966a83dfcfb35f9d2e8a9f7f215eaa65";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
