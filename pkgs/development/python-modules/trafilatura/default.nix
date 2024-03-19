@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package and command-line tool designed to gather text on the Web";
+    mainProgram = "trafilatura";
     homepage = "https://trafilatura.readthedocs.io";
     changelog = "https://github.com/adbar/trafilatura/blob/v${version}/HISTORY.md";
     license = licenses.gpl3Plus;

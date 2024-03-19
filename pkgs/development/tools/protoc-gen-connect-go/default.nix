@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simple, reliable, interoperable, better gRPC";
+    mainProgram = "protoc-gen-connect-go";
     homepage = "https://github.com/connectrpc/connect-go";
     changelog = "https://github.com/connectrpc/connect-go/releases/tag/v${version}";
     license = licenses.asl20;

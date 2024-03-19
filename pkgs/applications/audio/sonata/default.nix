@@ -46,6 +46,7 @@ in buildPythonApplication rec {
 
   meta = {
     description = "An elegant client for the Music Player Daemon";
+    mainProgram = "sonata";
     longDescription = ''
       Sonata is an elegant client for the Music Player Daemon.
 

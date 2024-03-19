@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Ccache with Cloud Storage";
+    mainProgram = "sccache";
     homepage = "https://github.com/mozilla/sccache";
     changelog = "https://github.com/mozilla/sccache/releases/tag/v${version}";
     maintainers = with maintainers; [ doronbehar figsoda ];

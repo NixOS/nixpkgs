@@ -28,6 +28,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Simple cross-platform mind map and note-taking tool written in Qt";
+    mainProgram = "heimer";
     homepage = "https://github.com/juzzlin/Heimer";
     changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
     license = licenses.gpl3Plus;

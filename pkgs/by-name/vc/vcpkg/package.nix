@@ -43,6 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++ Library Manager";
+    mainProgram = "vcpkg";
     homepage = "https://vcpkg.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka gracicot ];

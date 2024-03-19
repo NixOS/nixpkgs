@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Daemon used to serve static websites for GitLab users";
+    mainProgram = "gitlab-pages";
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
     changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

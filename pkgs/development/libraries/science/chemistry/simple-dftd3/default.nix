@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Reimplementation of the DFT-D3 program";
+    mainProgram = "s-dftd3";
     license = with licenses; [ lgpl3Only gpl3Only ];
     homepage = "https://github.com/dftd3/simple-dftd3";
     platforms = [ "x86_64-linux" ];

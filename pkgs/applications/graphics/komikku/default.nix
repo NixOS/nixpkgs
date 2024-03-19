@@ -88,6 +88,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Manga reader for GNOME";
+    mainProgram = "komikku";
     homepage = "https://apps.gnome.org/Komikku/";
     license = licenses.gpl3Plus;
     changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";

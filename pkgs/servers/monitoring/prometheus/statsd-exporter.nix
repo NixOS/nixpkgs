@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";
+    mainProgram = "statsd_exporter";
     homepage = "https://github.com/prometheus/statsd_exporter";
     changelog = "https://github.com/prometheus/statsd_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

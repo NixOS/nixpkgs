@@ -185,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A window manager for GNOME";
+    mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2Plus;
     maintainers = teams.pantheon.members;

@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A mpc-like control interface for mpv";
+    mainProgram = "mpvc";
     homepage = "https://github.com/lwilletts/mpvc";
     license = licenses.mit;
     maintainers = [ maintainers.neeasade ];

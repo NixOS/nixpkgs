@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tests SSL/TLS services and discover supported cipher suites";
+    mainProgram = "sslscan";
     homepage = "https://github.com/rbsec/sslscan";
     changelog = "https://github.com/rbsec/sslscan/blob/${version}/Changelog";
     license = licenses.gpl3Only;

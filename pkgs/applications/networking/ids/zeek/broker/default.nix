@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Zeek's Messaging Library";
+    mainProgram = "broker-benchmark";
     homepage = "https://github.com/zeek/broker";
     license = licenses.bsd3;
     platforms = platforms.unix;

@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for situational awareness of cloud penetration tests";
+    mainProgram = "cloudfox";
     homepage = "https://github.com/BishopFox/cloudfox";
     changelog = "https://github.com/BishopFox/cloudfox/releases/tag/v${version}";
     license = licenses.mit;

@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "Checks Java source against a coding standard";
+    mainProgram = "checkstyle";
     longDescription = ''
       checkstyle is a development tool to help programmers write Java code that
       adheres to a coding standard. By default it supports the Sun Code

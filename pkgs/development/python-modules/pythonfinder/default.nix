@@ -75,6 +75,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cross platform search tool for finding Python";
+    mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
     changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

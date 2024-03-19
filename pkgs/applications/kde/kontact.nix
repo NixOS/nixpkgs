@@ -13,6 +13,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kontact/";
     description = "Personal information manager";
+    mainProgram = "kontact";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };

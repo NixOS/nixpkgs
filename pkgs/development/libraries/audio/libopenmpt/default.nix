@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform C++ and C library to decode tracked music files into a raw PCM audio stream";
+    mainProgram = "openmpt123";
     longDescription = ''
       libopenmpt is a cross-platform C++ and C library to decode tracked music files (modules) into a raw PCM audio stream.
       openmpt123 is a cross-platform command-line or terminal based module file player.

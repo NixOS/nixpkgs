@@ -29,6 +29,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Scans and monitors projects for security vulnerabilities";
+    mainProgram = "snyk";
     homepage = "https://snyk.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

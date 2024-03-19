@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "FUSE filesystem for LXC";
+    mainProgram = "lxcfs";
     homepage = "https://linuxcontainers.org/lxcfs";
     changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = lib.licenses.asl20;

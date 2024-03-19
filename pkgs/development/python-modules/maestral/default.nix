@@ -96,6 +96,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
+    mainProgram = "maestral";
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;

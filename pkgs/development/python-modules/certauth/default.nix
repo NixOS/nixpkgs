@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple CertificateAuthority and host certificate creation, useful for man-in-the-middle HTTPS proxy";
+    mainProgram = "certauth";
     homepage = "https://github.com/ikreymer/certauth";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];

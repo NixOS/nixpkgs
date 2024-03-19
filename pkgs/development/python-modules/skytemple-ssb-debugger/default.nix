@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple-ssb-debugger";
     description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple-ssb-debugger";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 xfix ];
   };

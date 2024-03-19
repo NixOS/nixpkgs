@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "SMB enumeration tool";
+    mainProgram = "smbmap";
     homepage = "https://github.com/ShawnDEvans/smbmap";
     changelog = "https://github.com/ShawnDEvans/smbmap/releases/tag/v${version}";
     license = licenses.gpl3Only;

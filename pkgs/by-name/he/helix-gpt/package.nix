@@ -56,6 +56,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/leona/helix-gpt";
     description = "Code completion LSP for Helix with support for Copilot + OpenAI";
+    mainProgram = "helix-gpt";
     maintainers = with maintainers; [ happysalada ];
     license = with licenses; [ mit ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];

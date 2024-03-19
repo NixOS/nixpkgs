@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Project management tool for Roblox";
+    mainProgram = "rojo";
     longDescription = ''
       Rojo is a tool designed to enable Roblox developers to use professional-grade software engineering tools.
     '';

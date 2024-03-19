@@ -48,6 +48,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/alexellis/k3sup";
     description = "Bootstrap Kubernetes with k3s over SSH";
+    mainProgram = "k3sup";
     license = licenses.mit;
     maintainers = with maintainers; [ welteki qjoly ];
   };

@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Plugin wrapper around Pure Data to allow patching in a wide selection of DAWs";
+    mainProgram = "plugdata";
     homepage = "https://plugdata.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;

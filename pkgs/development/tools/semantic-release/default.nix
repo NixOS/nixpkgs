@@ -34,6 +34,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Fully automated version management and package publishing";
+    mainProgram = "semantic-release";
     homepage = "https://semantic-release.gitbook.io/semantic-release/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sestrella ];

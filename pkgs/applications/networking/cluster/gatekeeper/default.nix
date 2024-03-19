@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Policy Controller for Kubernetes";
+    mainProgram = "gator";
     homepage = "https://github.com/open-policy-agent/gatekeeper";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];

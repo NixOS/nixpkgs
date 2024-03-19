@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A HTTP proxy injecting credentials from a .netrc file";
+    mainProgram = "netproxrc";
     homepage = "https://github.com/timbertson/netproxrc";
     license = licenses.mit;
     maintainers = with maintainers; [ timbertson ];

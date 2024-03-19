@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool for quantizing image colors using tile-based palette restrictions";
+    mainProgram = "tilequant";
     homepage = "https://github.com/SkyTemple/tilequant";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 xfix ];

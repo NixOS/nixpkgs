@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for controlling the IKEA Dirigera Smart Home Hub";
+    mainProgram = "generate-token";
     homepage = "https://github.com/Leggin/dirigera";
     changelog = "https://github.com/Leggin/dirigera/releases/tag/v${version}";
     license = licenses.mit;

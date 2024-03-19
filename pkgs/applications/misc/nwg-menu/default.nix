@@ -39,6 +39,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/nwg-piotr/nwg-menu";
     description = "MenuStart plugin for nwg-panel";
+    mainProgram = "nwg-menu";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ berbiche ];

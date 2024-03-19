@@ -39,6 +39,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI for interacting with Civo resources";
+    mainProgram = "civo";
     homepage = "https://github.com/civo/cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ berryp ];

@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Docker CLI plugin to define and run multi-container applications with Docker";
+    mainProgram = "docker-compose";
     homepage = "https://github.com/docker/compose";
     license = licenses.asl20;
     maintainers = with maintainers; [ babariviere ];

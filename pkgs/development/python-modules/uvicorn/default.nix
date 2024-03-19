@@ -72,6 +72,7 @@ buildPythonPackage rec {
     homepage = "https://www.uvicorn.org/";
     changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
     description = "The lightning-fast ASGI server";
+    mainProgram = "uvicorn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];
   };

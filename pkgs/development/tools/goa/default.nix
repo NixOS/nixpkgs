@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Design-based APIs and microservices in Go";
+    mainProgram = "goa";
     homepage = "https://goa.design";
     license = licenses.mit;
     maintainers = with maintainers; [ rushmorem ];

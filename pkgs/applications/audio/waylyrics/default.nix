@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Desktop lyrics with QQ and NetEase Music source";
+    mainProgram = "waylyrics";
     homepage = "https://github.com/poly000/waylyrics";
     license = with licenses; [ mit cc-by-40 ];
     maintainers = with maintainers; [ shadowrz aleksana ];

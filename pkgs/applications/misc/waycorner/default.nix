@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Hot corners for Wayland";
+    mainProgram = "waycorner";
     changelog = "https://github.com/AndreasBackx/waycorner/blob/main/CHANGELOG.md";
     homepage = "https://github.com/AndreasBackx/waycorner";
     platforms = platforms.linux;

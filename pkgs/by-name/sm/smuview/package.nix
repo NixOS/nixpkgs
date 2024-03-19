@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Qt based source measure unit GUI for sigrok";
+    mainProgram = "smuview";
     longDescription = "SmuView is a GUI for sigrok that supports power supplies, electronic loads and all sorts of measurement devices like multimeters, LCR meters and so on";
     homepage = "https://github.com/knarfS/smuview";
     license = licenses.gpl3Plus;

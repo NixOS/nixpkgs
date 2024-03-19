@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     description =
       "A command line tool to switch between different versions of terraform";
+    mainProgram = "tfswitch";
     homepage = "https://github.com/warrensbox/terraform-switcher";
     license = licenses.mit;
     maintainers = with maintainers; [ psibi ];

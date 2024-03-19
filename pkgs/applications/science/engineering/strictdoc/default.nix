@@ -67,6 +67,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Software requirements specification tool";
+    mainProgram = "strictdoc";
     homepage = "https://github.com/strictdoc-project/strictdoc";
     changelog = "https://github.com/strictdoc-project/strictdoc/releases/tag/${version}";
     license = licenses.asl20;

@@ -361,6 +361,8 @@ self: super: with self; {
 
   aioquic = callPackage ../development/python-modules/aioquic { };
 
+  aioraven = callPackage ../development/python-modules/aioraven { };
+
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };

@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.splint.org/";
     description = "Annotation-assisted lightweight static analyzer for C";
+    mainProgram = "splint";
 
     longDescription = ''
       Splint is a tool for statically checking C programs for security

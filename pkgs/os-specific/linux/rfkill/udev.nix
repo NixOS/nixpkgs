@@ -50,6 +50,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
     description = "Rules+hook for udev to catch rfkill state changes";
+    mainProgram = "rfkill-hook.sh";
     platforms = platforms.linux;
     license = licenses.mit;
   };

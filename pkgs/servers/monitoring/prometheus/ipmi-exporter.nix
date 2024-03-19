@@ -33,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An IPMI exporter for Prometheus";
+    mainProgram = "ipmi_exporter";
     homepage = "https://github.com/prometheus-community/ipmi_exporter";
     changelog = "https://github.com/prometheus-community/ipmi_exporter/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

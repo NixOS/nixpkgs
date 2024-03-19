@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";
+    mainProgram = "send2trash";
     homepage = "https://github.com/hsoft/send2trash";
     changelog = "https://github.com/arsenetar/send2trash/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;

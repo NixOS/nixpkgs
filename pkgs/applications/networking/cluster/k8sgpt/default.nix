@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Giving Kubernetes Superpowers to everyone";
+    mainProgram = "k8sgpt";
     homepage = "https://k8sgpt.ai";
     changelog = "https://github.com/k8sgpt-ai/k8sgpt/releases/tag/v${version}";
     license = licenses.asl20;

@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PEP 440 version manager";
+    mainProgram = "newversion";
     homepage = "https://github.com/vemel/newversion";
     changelog = "https://github.com/vemel/newversion/releases/tag/${version}";
     license = with licenses; [ mit ];

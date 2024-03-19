@@ -29,6 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/doitintl/kube-no-trouble";
     description = "Easily check your cluster for use of deprecated APIs";
+    mainProgram = "kubent";
     license = licenses.mit;
     maintainers = with maintainers; [ peterromfeldhk ];
   };

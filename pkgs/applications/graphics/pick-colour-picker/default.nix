@@ -47,6 +47,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     description = "A colour picker that remembers where you picked colours from";
+    mainProgram = "pick-colour-picker";
     maintainers = [ maintainers.mkg20001 ];
 
     longDescription = ''

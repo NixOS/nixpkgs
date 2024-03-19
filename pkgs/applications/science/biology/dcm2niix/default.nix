@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "DICOM to NIfTI converter";
+    mainProgram = "dcm2niix";
     longDescription = ''
       dcm2niix is designed to convert neuroimaging data from the DICOM format to the NIfTI format.
     '';

@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://com-lihaoyi.github.io/mill/";
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
+    mainProgram = "mill";
     longDescription = ''
       Mill is a build tool borrowing ideas from modern tools like Bazel, to let you build
       your projects in a way that's simple, fast, and predictable. Mill has built in

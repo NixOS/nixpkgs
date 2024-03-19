@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A pure python3 version of ICMP ping implementation using raw socket";
+    mainProgram = "ping3";
     homepage = "https://pypi.org/project/ping3";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];

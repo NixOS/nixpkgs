@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Phoneme editor for espeak";
+    mainProgram = "espeakedit";
     homepage = "https://espeak.sourceforge.net/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -61,6 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to 1-Wire temperature sensors";
+    mainProgram = "w1thermsensor";
     longDescription = ''
       A Python package and CLI tool to work with w1 temperature sensors like
       DS1822, DS18S20 & DS18B20 on the Raspberry Pi, Beagle Bone and other

@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";
+    mainProgram = "nginx-prometheus-exporter";
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz willibutz globin ];

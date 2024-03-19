@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Run your GitHub Actions locally";
+    mainProgram = "act";
     homepage = "https://github.com/nektos/act";
     changelog = "https://github.com/nektos/act/releases/tag/v${version}";
     license = licenses.mit;

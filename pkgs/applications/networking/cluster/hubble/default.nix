@@ -40,6 +40,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
+    mainProgram = "hubble";
     license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
     maintainers = with maintainers; [ humancalico bryanasdev000 ];

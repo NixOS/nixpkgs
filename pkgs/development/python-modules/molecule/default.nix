@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Molecule aids in the development and testing of Ansible roles";
+    mainProgram = "molecule";
     homepage = "https://github.com/ansible-community/molecule";
     maintainers = with maintainers; [ dawidd6 ];
     license = licenses.mit;

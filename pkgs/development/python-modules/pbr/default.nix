@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Build Reasonableness";
+    mainProgram = "pbr";
     homepage = "https://github.com/openstack/pbr";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

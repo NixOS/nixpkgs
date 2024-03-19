@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
+    mainProgram = "pithos";
     homepage = "https://pithos.github.io/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz ];

@@ -31,4 +31,5 @@ with haskellPackages; mkDerivation {
   description = "Write formal proofs in natural language and LaTeX";
   maintainers = with lib.maintainers; [ jvanbruegge ];
   license = lib.licenses.gpl3Only;
+  mainProgram = "Naproche-SAD";
 }
