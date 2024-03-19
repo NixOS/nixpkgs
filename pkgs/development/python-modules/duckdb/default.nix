@@ -25,7 +25,8 @@ buildPythonPackage rec {
     # 2. default to extension autoload & autoinstall disabled
     substituteInPlace setup.py \
       --replace-fail "ParallelCompile()" 'ParallelCompile("NIX_BUILD_CORES")' \
-      --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" ""
+      --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" "" \
+      --replace 'version=get_version()' 'version="${version}"'
   '';
 
   env = {
