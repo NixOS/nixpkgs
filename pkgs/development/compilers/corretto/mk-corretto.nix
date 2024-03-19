@@ -64,6 +64,8 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
                         darwin.apple_sdk.frameworks.Foundation
                         darwin.apple_sdk.frameworks.Cocoa
                         darwin.apple_sdk.frameworks.Kerberos
+                        darwin.apple_sdk.frameworks.JavaRuntimeSupport
+                        darwin.apple_sdk.frameworks.JavaVM
                         iconv
                         xnu
                       ];
