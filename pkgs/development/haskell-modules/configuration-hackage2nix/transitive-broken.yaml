@@ -68,7 +68,6 @@ dont-distribute-packages:
  - Chart-fltkhs
  - ClustalParser
  - Coadjute
- - Color
  - Combinatorrent
  - ComonadSheet
  - Condor
@@ -1153,7 +1152,6 @@ dont-distribute-packages:
  - differential
  - digestive-foundation-lucid
  - digestive-functors-hsp
- - digraph
  - dimensional-tf
  - dimensions
  - dingo-core
@@ -1571,7 +1569,6 @@ dont-distribute-packages:
  - gloss-accelerate
  - gloss-devil
  - gloss-raster-accelerate
- - gloss-raster-massiv
  - gloss-sodium
  - glpk-hs
  - gltf-loader
@@ -2732,10 +2729,7 @@ dont-distribute-packages:
  - marvin
  - marxup
  - masakazu-bot
- - massiv
- - massiv-io
  - massiv-persist
- - massiv-test
  - matchers
  - math-programming-glpk
  - math-programming-tests
@@ -3576,7 +3570,6 @@ dont-distribute-packages:
  - scalpel-search
  - scan-metadata
  - scan-vector-machine
- - scheduler
  - scheduling
  - schematic
  - scholdoc
