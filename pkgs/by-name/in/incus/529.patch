@@ -1,0 +1,29 @@
+From 32a4beecbf8098fdbb15ef5f36088956922630f7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@stgraber.org>
+Date: Fri, 23 Feb 2024 18:47:15 -0500
+Subject: [PATCH] incusd/device/disk: Fix incorrect block volume usage
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Stéphane Graber <stgraber@stgraber.org>
+---
+ internal/server/device/disk.go | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/internal/server/device/disk.go b/internal/server/device/disk.go
+index 0d19e21139..4f9a3e7c1b 100644
+--- a/internal/server/device/disk.go
++++ b/internal/server/device/disk.go
+@@ -339,6 +339,11 @@ func (d *disk) validateConfig(instConf instance.ConfigReader) error {
+ 				var usedBy []string
+ 
+ 				err = storagePools.VolumeUsedByInstanceDevices(d.state, d.pool.Name(), storageProjectName, &dbVolume.StorageVolume, true, func(inst db.InstanceArgs, project api.Project, usedByDevices []string) error {
++					// Don't count the current instance.
++					if d.inst != nil && d.inst.Project().Name == inst.Project && d.inst.Name() == inst.Name {
++						return nil
++					}
++
+ 					usedBy = append(usedBy, inst.Name)
+ 
+ 					return nil

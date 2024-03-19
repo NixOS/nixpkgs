@@ -1,28 +1,28 @@
 {
   lts ? false,
+  meta,
+  patches,
+  src,
+  vendorHash,
+  version,
 
   lib,
   buildGoModule,
-  fetchpatch,
-  fetchFromGitHub,
   installShellFiles,
 }:
 let
-  releaseFile = if lts then ./lts.nix else ./latest.nix;
-  inherit (import releaseFile { inherit fetchpatch; }) version hash vendorHash;
+  pname = "incus${lib.optionalString lts "-lts"}-client";
 in
 
-buildGoModule rec {
-  pname = "incus-client";
-
-  inherit vendorHash version;
-
-  src = fetchFromGitHub {
-    owner = "lxc";
-    repo = "incus";
-    rev = "refs/tags/v${version}";
-    inherit hash;
-  };
+buildGoModule {
+  inherit
+    meta
+    patches
+    pname
+    src
+    vendorHash
+    version
+    ;
 
   CGO_ENABLED = 0;
 
@@ -41,14 +41,4 @@ buildGoModule rec {
 
   # don't run the full incus test suite
   doCheck = false;
-
-  meta = {
-    description = "Powerful system container and virtual machine manager";
-    homepage = "https://linuxcontainers.org/incus";
-    changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.lxc.members;
-    platforms = lib.platforms.unix;
-    mainProgram = "incus";
-  };
 }
