@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
         "test/sql/copy/parquet/delta_byte_array_multiple_pages.test"
         "test/sql/copy/csv/test_csv_httpfs_prepared.test"
         "test/sql/copy/csv/test_csv_httpfs.test"
+        "test/sql/copy/csv/test_mixed_lines.test"
         "test/sql/settings/test_disabled_file_system_httpfs.test"
         "test/sql/copy/csv/parallel/test_parallel_csv.test"
         "test/sql/copy/csv/parallel/csv_parallel_httpfs.test"
