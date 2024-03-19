@@ -1,15 +1,25 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
-  inherit (pkgs) lib;
+
+  inherit (pkgs.lib) dontRecurseIntoAttrs mapAttrs;
+
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    appendConfigureFlags
+    doDistribute
+    doJailbreak
+    dontCheck
+    overrideCabal
+    unmarkBroken
+    ;
 in
 
 self: super: {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+  llvmPackages = dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 9.0.x core libraries.
   array = null;
@@ -139,7 +149,7 @@ self: super: {
 
   # Packages which need compat library for GHC < 9.6
   inherit
-    (lib.mapAttrs
+    (mapAttrs
       (_: addBuildDepends [ self.foldable1-classes-compat ])
       super)
     indexed-traversable
