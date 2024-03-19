@@ -20962,6 +20962,12 @@
     githubId = 15619766;
     name = "wldhx";
   };
+  w-lfchen = {
+    email = "w-lfchen@posteo.net";
+    github = "w-lfchen";
+    githubId = 115360611;
+    name = "Wölfchen";
+  };
   wmertens = {
     email = "Wout.Mertens@gmail.com";
     github = "wmertens";
