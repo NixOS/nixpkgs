@@ -1,6 +1,9 @@
 { lib, python, fetchPypi }:
 
-with python.pkgs;
+let
+  inherit (lib) licenses maintainers;
+  inherit (python.pkgs) buildPythonApplication python-lzf redis;
+in
 
 buildPythonApplication rec {
   pname = "rdbtools";
@@ -16,7 +19,7 @@ buildPythonApplication rec {
   # No tests in published package
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Parse Redis dump.rdb files, Analyze Memory, and Export Data to JSON";
     homepage = "https://github.com/sripathikrishnan/redis-rdb-tools";
     license = licenses.mit;
