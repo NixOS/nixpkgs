@@ -4026,12 +4026,13 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      aioraven
       fnv-hash-fast
       psutil-home-assistant
       pyserial
       pyudev
       sqlalchemy
-    ]; # missing inputs: aioraven
+    ];
     "rainmachine" = ps: with ps; [
       regenmaschine
     ];
@@ -6396,6 +6397,7 @@
     "radiotherm"
     "rainbird"
     "rainforest_eagle"
+    "rainforest_raven"
     "rainmachine"
     "random"
     "rapt_ble"
