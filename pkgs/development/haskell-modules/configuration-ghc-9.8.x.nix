@@ -61,6 +61,20 @@ self: super: {
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
   xmonad = doDistribute self.xmonad_0_18_0;
 
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = self.ghc-exactprint_1_8_0_0;
+  ghc-exactprint_1_8_0_0 = addBuildDepends [
+    self.Diff
+    self.HUnit
+    self.data-default
+    self.extra
+    self.free
+    self.ghc-paths
+    self.ordered-containers
+    self.silently
+    self.syb
+  ] super.ghc-exactprint_1_8_0_0;
+
   #
   # Jailbreaks
   #
@@ -79,6 +93,7 @@ self: super: {
   # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
   terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
+  raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
 
   #
   # Test suite issues
