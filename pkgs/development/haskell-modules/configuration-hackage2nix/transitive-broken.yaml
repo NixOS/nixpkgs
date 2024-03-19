@@ -3741,7 +3741,6 @@ dont-distribute-packages:
  - smtlib2-pipe
  - smtlib2-quickcheck
  - smtlib2-timing
- - smtp-mail
  - smtp2mta
  - snap-auth-cli
  - snap-elm
