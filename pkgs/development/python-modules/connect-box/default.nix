@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "connect-box";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "connect_box";
     inherit version;
-    hash = "sha256-x1ozcj3IL+iI/QtS12yEudCqNknCmyb5ew88Z39xaLA=";
+    hash = "sha256-raekHxzju9NrFXasA/MqGvjGjAPzJDt2YX8c/T3ncbw=";
   };
 
   propagatedBuildInputs = [
