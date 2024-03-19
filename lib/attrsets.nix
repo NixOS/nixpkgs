@@ -63,11 +63,8 @@ rec {
     :::
   */
   attrByPath =
-    # A list of strings representing the attribute path to return from `set`
     attrPath:
-    # Default value if `attrPath` does not resolve to an existing value
     default:
-    # The nested attribute set to select values from
     set:
     let
       lenAttrPath = length attrPath;
@@ -134,9 +131,7 @@ rec {
     :::
   */
   hasAttrByPath =
-    # A list of strings representing the attribute path to check from `set`
     attrPath:
-    # The nested attribute set to check
     e:
     let
       lenAttrPath = length attrPath;
@@ -205,9 +200,7 @@ rec {
     :::
   */
   longestValidPathPrefix =
-    # A list of strings representing the longest possible path that may be returned.
     attrPath:
-    # The nested attribute set to check.
     v:
     let
       lenAttrPath = length attrPath;
@@ -270,9 +263,7 @@ rec {
     :::
   */
   setAttrByPath =
-    # A list of strings representing the attribute path to set
     attrPath:
-    # The value to set at the location described by `attrPath`
     value:
     let
       len = length attrPath;
@@ -284,15 +275,15 @@ rec {
 
   /**
     Like `attrByPath`, but without a default value. If it doesn't find the
-     path it will throw an error.
+    path it will throw an error.
 
-     Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+    Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
-     x.a.b == getAttrByPath ["a" "b"] x
-     # and
-     x.${f p}."example.com" == getAttrByPath [ (f p) "example.com" ] x
-     ```
+    x.a.b == getAttrByPath ["a" "b"] x
+    # and
+    x.${f p}."example.com" == getAttrByPath [ (f p) "example.com" ] x
+    ```
 
 
     # Inputs
@@ -326,9 +317,7 @@ rec {
     :::
   */
   getAttrFromPath =
-    # A list of strings representing the attribute path to get from `set`
     attrPath:
-    # The nested attribute set to find the value in.
     set:
     attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
 
@@ -522,9 +511,7 @@ rec {
     :::
   */
   attrVals =
-    # The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
     nameList:
-    # The set to get attribute values from
     set: map (x: set.${x}) nameList;
 
 
@@ -585,9 +572,7 @@ rec {
     :::
   */
   getAttrs =
-    # A list of attribute names to get out of `set`
     names:
-    # The set to get the named attributes from
     attrs: genAttrs names (name: attrs.${name});
 
   /**
@@ -647,9 +632,7 @@ rec {
     :::
   */
   filterAttrs =
-    # Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
     pred:
-    # The attribute set to filter
     set:
     listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
@@ -687,9 +670,7 @@ rec {
     :::
   */
   filterAttrsRecursive =
-    # Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
     pred:
-    # The attribute set to filter
     set:
     listToAttrs (
       concatMap (name:
@@ -709,9 +690,9 @@ rec {
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
 
     Attention:
-      There is a completely different function
-      `lib.foldAttrs`
-      which has nothing to do with this function, despite the similar name.
+
+    There is a completely different function `lib.foldAttrs`
+    which has nothing to do with this function, despite the similar name.
 
 
     # Inputs
@@ -824,11 +805,8 @@ rec {
     :::
   */
   foldAttrs =
-    # A function, given a value and a collector combines the two.
     op:
-    # The starting value.
     nul:
-    # A list of attribute sets to fold together by key.
     list_of_attrs:
     foldr (n: a:
         foldr (name: o:
@@ -839,7 +817,7 @@ rec {
 
   /**
     Recursively collect sets that verify a given predicate named `pred`
-    from the set `attrs`.  The recursion is stopped when the predicate is
+    from the set `attrs`. The recursion is stopped when the predicate is
     verified.
 
 
@@ -875,10 +853,8 @@ rec {
     :::
   */
   collect =
-  # Given an attribute's value, determine if recursion should stop.
-  pred:
-  # The attribute set to recursively collect.
-  attrs:
+    pred:
+    attrs:
     if pred attrs then
       [ attrs ]
     else if isAttrs attrs then
@@ -919,7 +895,6 @@ rec {
     :::
   */
   cartesianProductOfSets =
-    # Attribute set with attributes that are lists of values
     attrsOfLists:
     foldl' (listOfAttrs: attrName:
       concatMap (attrs:
@@ -960,9 +935,7 @@ rec {
     :::
   */
   nameValuePair =
-    # Attribute name
     name:
-    # Attribute value
     value:
     { inherit name value; };
 
@@ -1026,9 +999,7 @@ rec {
     :::
   */
   mapAttrs' =
-    # A function, given an attribute's name and value, returns a new `nameValuePair`.
     f:
-    # Attribute set to map over.
     set:
     listToAttrs (map (attr: f attr set.${attr}) (attrNames set));
 
@@ -1036,7 +1007,6 @@ rec {
   /**
     Call a function for each attribute in the given set and return
     the result in a list.
-
 
     # Inputs
 
@@ -1067,9 +1037,7 @@ rec {
     :::
   */
   mapAttrsToList =
-    # A function, given an attribute's name and value, returns a new value.
     f:
-    # Attribute set to map over.
     attrs:
     map (name: f name attrs.${name}) (attrNames attrs);
 
@@ -1139,9 +1107,7 @@ rec {
     ```
   */
   mapAttrsRecursive =
-    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
     f:
-    # Attribute set to recursively map over.
     set:
     mapAttrsRecursiveCond (as: true) f set;
 
@@ -1170,12 +1136,8 @@ rec {
     ```
   */
   mapAttrsRecursiveCond =
-    # A function that, given the attribute set the recursion is currently at, determines if to recurse deeper into that attribute set.
     cond:
-    # A function that, given an attribute path as a list of strings and the corresponding attribute value, returns a new value.
-    # The attribute value is either an attribute set for which `cond` returns false, or something other than an attribute set.
     f:
-    # Attribute set to recursively map over.
     set:
     let
       recurse = path:
@@ -1221,9 +1183,7 @@ rec {
     :::
   */
   genAttrs =
-    # Names of values in the resulting attribute set.
     names:
-    # A function, given the name of the attribute, returns the attribute's value.
     f:
     listToAttrs (map (n: nameValuePair n (f n)) names);
 
@@ -1260,7 +1220,6 @@ rec {
     :::
   */
   isDerivation =
-    # Value to check.
     value: value.type or null == "derivation";
 
    /**
@@ -1280,7 +1239,6 @@ rec {
     ```
   */
    toDerivation =
-     # A store path to convert to a derivation.
      path:
      let
        path' = builtins.storePath path;
@@ -1330,9 +1288,7 @@ rec {
     :::
   */
   optionalAttrs =
-    # Condition under which the `as` attribute set is returned.
     cond:
-    # The attribute set to return if `cond` is `true`.
     as:
     if cond then as else {};
 
@@ -1374,11 +1330,8 @@ rec {
     :::
   */
   zipAttrsWithNames =
-    # List of attribute names to zip.
     names:
-    # A function, accepts an attribute name, all the values, and returns a combined value.
     f:
-    # List of values from the list of attribute sets.
     sets:
     listToAttrs (map (name: {
       inherit name;
@@ -1551,11 +1504,8 @@ rec {
     :::
   */
   recursiveUpdateUntil =
-    # Predicate, taking the path to the current attribute as a list of strings for attribute names, and the two values at that path from the original arguments.
     pred:
-    # Left attribute set of the merge.
     lhs:
-    # Right attribute set of the merge.
     rhs:
     let f = attrPath:
       zipAttrsWith (n: values:
@@ -1613,9 +1563,7 @@ rec {
     :::
   */
   recursiveUpdate =
-    # Left attribute set of the merge.
     lhs:
-    # Right attribute set of the merge.
     rhs:
     recursiveUpdateUntil (path: lhs: rhs: !(isAttrs lhs && isAttrs rhs)) lhs rhs;
 
@@ -1654,9 +1602,7 @@ rec {
     :::
   */
   matchAttrs =
-    # Attribute set structure to match
     pattern:
-    # Attribute set to check
     attrs:
     assert isAttrs pattern;
     all
@@ -1712,9 +1658,7 @@ rec {
     :::
   */
   overrideExisting =
-    # Original attribute set
     old:
-    # Attribute set with attributes to override in `old`.
     new:
     mapAttrs (name: value: new.${name} or value) old;
 
@@ -1752,7 +1696,6 @@ rec {
     :::
   */
   showAttrPath =
-    # Attribute path to render to a string
     path:
     if path == [] then "<root attribute path>"
     else concatMapStringsSep "." escapeNixIdentifier path;
@@ -1937,7 +1880,6 @@ rec {
     :::
   */
   recurseIntoAttrs =
-    # An attribute set to scan for derivations.
     attrs:
     attrs // { recurseForDerivations = true; };
 
@@ -1958,7 +1900,6 @@ rec {
     ```
   */
   dontRecurseIntoAttrs =
-    # An attribute set to not scan for derivations.
     attrs:
     attrs // { recurseForDerivations = false; };
 
