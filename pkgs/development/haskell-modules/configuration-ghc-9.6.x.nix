@@ -1,18 +1,28 @@
 { pkgs, haskellLib }:
 
-with haskellLib;
-
 let
-  inherit (pkgs) lib;
+  inherit (pkgs.lib) dontRecurseIntoAttrs mapAttrs optionalAttrs versionOlder;
+
+  inherit (pkgs.lib.strings) compareVersions;
+
+  inherit (haskellLib)
+    appendConfigureFlag
+    appendPatch
+    appendPatches
+    doDistribute
+    doJailbreak
+    dontCheck
+    overrideCabal
+    ;
 
   jailbreakWhileRevision = rev:
     overrideCabal (old: {
       jailbreak = assert old.revision or "0" == toString rev; true;
     });
   checkAgainAfter = pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then act
+    if compareVersions pkg.version ver <= 0 then act
     else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
+      throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 
   # Workaround for a ghc-9.6 issue: https://gitlab.haskell.org/ghc/ghc/-/issues/23392
@@ -20,7 +30,7 @@ let
 in
 
 self: super: {
-  llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+  llvmPackages = dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries
   array = null;
@@ -117,7 +127,7 @@ self: super: {
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck (doJailbreak super.relude);
 
-  inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
+  inherit (mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin
     ghc-trace-events
     gi-cairo-connector          # mtl <2.3
@@ -183,12 +193,12 @@ self: super: {
   }) super.ConfigFile;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
-// lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {
+// optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && versionOlder super.ghc.version "9.6.4") {
   # The NCG backend for aarch64 generates invalid jumps in some situations,
   # the workaround on 9.6 is to revert to the LLVM backend (which is used
   # for these sorts of situations even on 9.2 and 9.4).
   # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
-  inherit (lib.mapAttrs (_: self.forceLlvmCodegenBackend) super)
+  inherit (mapAttrs (_: self.forceLlvmCodegenBackend) super)
     tls
     mmark
     ;
