@@ -71,7 +71,6 @@ broken-packages:
   - adtrees # failure in job https://hydra.nixos.org/build/233192320 at 2023-09-02
   - AERN-Basics # failure in job https://hydra.nixos.org/build/233246999 at 2023-09-02
   - aeson-applicative # failure in job https://hydra.nixos.org/build/233213824 at 2023-09-02
-  - aeson-better-errors # failure in job https://hydra.nixos.org/build/252717339 at 2024-03-16
   - aeson-bson # failure in job https://hydra.nixos.org/build/233201964 at 2023-09-02
   - aeson-commit # failure in job https://hydra.nixos.org/build/233198515 at 2023-09-02
   - aeson-compat # failure in job https://hydra.nixos.org/build/233208257 at 2023-09-02
@@ -746,7 +745,6 @@ broken-packages:
   - chatty-text # failure in job https://hydra.nixos.org/build/233199498 at 2023-09-02
   - chatty-utils # failure in job https://hydra.nixos.org/build/252710715 at 2024-03-16
   - chatwork # failure in job https://hydra.nixos.org/build/233240489 at 2023-09-02
-  - cheapskate # failure in job https://hydra.nixos.org/build/233197892 at 2023-09-02
   - check-cfg-ambiguity # failure in job https://hydra.nixos.org/build/233251852 at 2023-09-02
   - checked # failure in job https://hydra.nixos.org/build/233223182 at 2023-09-02
   - Checked # failure in job https://hydra.nixos.org/build/233257598 at 2023-09-02
@@ -4354,7 +4352,6 @@ broken-packages:
   - path-sing # failure in job https://hydra.nixos.org/build/237234354 at 2023-10-21
   - PathTree # failure in job https://hydra.nixos.org/build/233216203 at 2023-09-02
   - patronscraper # failure in job https://hydra.nixos.org/build/233258571 at 2023-09-02
-  - pattern-arrows # failure in job https://hydra.nixos.org/build/252718352 at 2024-03-16
   - pattern-trie # failure in job https://hydra.nixos.org/build/233237252 at 2023-09-02
   - paynow-zw # failure in job https://hydra.nixos.org/build/233221916 at 2023-09-02
   - paypal-adaptive-hoops # failure in job https://hydra.nixos.org/build/233244557 at 2023-09-02

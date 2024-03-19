@@ -420,6 +420,12 @@ package-maintainers:
     - irc-client
     - chatter
     - envy
+  t4ccer:
+    - aeson-better-errors
+    - cheapskate
+    - containers-unicode-symbols
+    - numerals-base
+    - pattern-arrows
   tbidne:
     - rest-rewrite
   terlar:

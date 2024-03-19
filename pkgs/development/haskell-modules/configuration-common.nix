@@ -166,7 +166,17 @@ self: super: {
 
   # Allow aeson == 2.1.*
   # https://github.com/hdgarrood/aeson-better-errors/issues/23
-  aeson-better-errors = doJailbreak super.aeson-better-errors;
+  aeson-better-errors = lib.pipe super.aeson-better-errors [
+    doJailbreak
+    (appendPatches [
+      # https://github.com/hdgarrood/aeson-better-errors/pull/25
+      (fetchpatch {
+        name = "mtl-2-3.patch";
+        url = "https://github.com/hdgarrood/aeson-better-errors/commit/1ec49ab7d1472046b680b5a64ae2930515b47714.patch";
+        hash = "sha256-xuuocWxSoBDclVp0bJ9UrDamVcDVOAFgJIi/un1xBvk=";
+      })
+    ])
+  ];
 
   # 2023-08-09: Jailbreak because of vector < 0.13
   # 2023-11-09: don't check because of https://github.com/tweag/monad-bayes/pull/326
@@ -1597,6 +1607,18 @@ self: super: {
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
   # Upstream issue: https://github.com/kowainik/trial/issues/62
   trial = doJailbreak super.trial;
+
+  # 2024-03-19: Fix for mtl >= 2.3
+  pattern-arrows = lib.pipe super.pattern-arrows [
+    doJailbreak
+    (appendPatches [./patches/pattern-arrows-add-fix-import.patch])
+  ];
+
+  # 2024-03-19: Fix for mtl >= 2.3
+  cheapskate = lib.pipe super.cheapskate [
+    doJailbreak
+    (appendPatches [./patches/cheapskate-mtl-2-3-support.patch])
+  ];
 
   # 2020-06-24: Tests are broken in hackage distribution.
   # See: https://github.com/robstewart57/rdf4h/issues/39
