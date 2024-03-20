@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyprosegur";
-  version = "0.0.9";
+  version = "0.0.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FTCQ2noxodFKN7qXdc7DG3Zt4j/pR6DeuWIs0GtGRy8=";
+    hash = "sha256-OHFJhufymD181FODHlIu+O5xh9dfKwEIVQX/zTOC6ks=";
   };
 
   propagatedBuildInputs = [
