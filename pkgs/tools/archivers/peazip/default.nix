@@ -6,6 +6,8 @@
 , lazarus
 , xorg
 , libqt5pas
+, makeWrapper
+, runCommand
 , _7zz
 , archiver
 , brotli
@@ -25,6 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-75EkVRx6bX1ZZzeNSR7IvKNjTA5NvzFzUJdORiAVHBo=";
   };
   sourceRoot = "${src.name}/peazip-sources";
+
+  postPatch = ''
+    substituteInPlace dev/peach.pas --replace "  HSYSBIN       = 0;" "  HSYSBIN       = 2;"
+  '';
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -47,36 +53,39 @@ stdenv.mkDerivation rec {
     cd ..
   '';
 
+  _7z = runCommand "7z" {} ''
+    mkdir -p $out/bin
+    ln -s ${_7zz}/bin/7zz $out/bin/7z
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    # Executables
-    ## Main programs
     install -D dev/{pea,peazip} -t $out/lib/peazip
+    wrapProgram $out/lib/peazip/peazip --prefix PATH : ${lib.makeBinPath [
+      _7z
+      archiver
+      brotli
+      upx
+      zpaq
+      zstd
+    ]}
     mkdir -p $out/bin
     ln -s $out/lib/peazip/{pea,peazip} $out/bin/
 
-    ## Symlink the available compression algorithm programs.
-    mkdir -p $out/lib/peazip/res/bin/7z
-    ln -s ${_7zz}/bin/7zz $out/lib/peazip/res/bin/7z/7z
-    mkdir -p $out/lib/peazip/res/bin/arc
-    ln -s ${archiver}/bin/arc $out/lib/peazip/res/bin/arc/
-    mkdir -p $out/lib/peazip/res/bin/brotli
-    ln -s ${brotli}/bin/brotli $out/lib/peazip/res/bin/brotli/
-    mkdir -p $out/lib/peazip/res/bin/upx
-    ln -s ${upx}/bin/upx $out/lib/peazip/res/bin/upx/
-    mkdir -p $out/lib/peazip/res/bin/zpaq
-    ln -s ${zpaq}/bin/zpaq $out/lib/peazip/res/bin/zpaq/
-    mkdir -p $out/lib/peazip/res/bin/zstd
-    ln -s ${zstd}/bin/zstd $out/lib/peazip/res/bin/zstd/
-
     mkdir -p $out/share/peazip
+    mkdir $out/lib/peazip/res
     ln -s $out/share/peazip $out/lib/peazip/res/share
     cp -r res/share/{icons,lang,themes,presets} $out/share/peazip/
-    install -D res/share/batch/freedesktop_integration/peazip.png -t "$out/share/icons/hicolor/256x256/apps"
-    install -D res/share/icons/peazip_{7z,rar,zip}.png -t "$out/share/icons/hicolor/256x256/mimetypes"
-    install -D res/share/batch/freedesktop_integration/peazip_{add,extract}.png -t "$out/share/icons/hicolor/256x256/actions"
-    install -D res/share/batch/freedesktop_integration/*.desktop -t "$out/share/applications"
+    # Install desktop entries
+    install -D res/share/batch/freedesktop_integration/*.desktop -t $out/share/applications
+    # Install desktop entries's icons
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    ln -s $out/share/peazip/icons/peazip.png -t $out/share/icons/hicolor/256x256/apps/
+    mkdir $out/share/icons/hicolor/256x256/mimetypes
+    ln -s $out/share/peazip/icons/peazip_{7z,zip,cd}.png $out/share/icons/hicolor/256x256/mimetypes/
+    mkdir $out/share/icons/hicolor/256x256/actions
+    ln -s $out/share/peazip/icons/peazip_{add,extract,convert}.png $out/share/icons/hicolor/256x256/actions/
 
     runHook postInstall
   '';
