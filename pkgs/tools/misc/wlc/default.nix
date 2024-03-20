@@ -3,7 +3,18 @@
 , fetchPypi
 }:
 
-with python3.pkgs;
+let
+  inherit (python3.pkgs)
+    argcomplete
+    buildPythonPackage
+    pytestCheckHook
+    python-dateutil
+    pyxdg
+    requests
+    responses
+    twine
+    ;
+in
 
 buildPythonPackage rec {
   pname = "wlc";
