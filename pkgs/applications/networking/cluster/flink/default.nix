@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.all;
     maintainers = with maintainers; [ mbode autophagy ];
   };
