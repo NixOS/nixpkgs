@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "firebase-messaging";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";
-    rev = version;
-    hash = "sha256-e3Ny3pnAfOpNERvvtE/jqSDIsM+YwLq/hbw753QpJ6o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8e+S12ZMqAmK7OR7O45QsRa0UKQq6cngeaqz2ugi6iY=";
   };
 
   outputs = [
