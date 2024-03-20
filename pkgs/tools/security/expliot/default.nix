@@ -16,8 +16,28 @@ let
       });
     };
   };
+
+  inherit (py.pkgs)
+    aiocoap
+    awsiotpythonsdk
+    bluepy
+    buildPythonApplication
+    can
+    cmd2
+    cryptography
+    paho-mqtt
+    pyi2cflash
+    pymodbus
+    pynetdicom
+    pyparsing
+    pyserial
+    pyspiflash
+    pythonRelaxDepsHook
+    upnpy
+    xmltodict
+    zeroconf
+    ;
 in
-with py.pkgs;
 
 buildPythonApplication rec {
   pname = "expliot";
