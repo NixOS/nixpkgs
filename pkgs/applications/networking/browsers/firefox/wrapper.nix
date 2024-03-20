@@ -239,7 +239,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo];
+      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -415,8 +415,8 @@ let
 
       disallowedRequisites = [ stdenv.cc ];
       postInstall = ''
-      find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-    '';
+        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;
