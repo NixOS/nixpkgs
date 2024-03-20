@@ -2,8 +2,13 @@
 , buildPackages
 , fetchFromGitHub
 , lib
+# Enable experimental wasilibc pthread support
+, enableThreads ? false
+# For tests
 , firefox-unwrapped
 , firefox-esr-unwrapped
+, pkgsCross
+, wasmtime
 }:
 
 let
@@ -38,8 +43,7 @@ stdenv.mkDerivation {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773200
-      "BULK_MEMORY_SOURCES:="
+      "THREAD_MODEL=${if enableThreads then "posix" else "single"}"
     )
 
   '';
@@ -53,8 +57,46 @@ stdenv.mkDerivation {
     ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
   '';
 
-  passthru.tests = {
-    inherit firefox-unwrapped firefox-esr-unwrapped;
+  passthru = {
+    tests = {
+      inherit firefox-unwrapped firefox-esr-unwrapped;
+      simple-c-cxx-binaries = pkgsCross.wasi32.runCommandCC "simple-c-cxx-binaries" {
+        nativeBuildInputs = [
+          wasmtime
+        ];
+      } ''
+        cat > test.c <<EOF
+        #include <stdio.h>
+        int main(void) {
+          puts("Hello from C");
+          return 0;
+        }
+        EOF
+        cat > test.cpp <<EOF
+        #include <iostream>
+        int main(void) {
+          std::cout<<"Hello from C++\n";
+          return 0;
+        }
+        EOF
+
+        mkdir -p "$out/bin"
+        # TODO(@sternenseemann): compile with -pthread if enableThreads
+        $CC -o "$out/bin/test-c" test.c
+        $CXX -o "$out/bin/test-cxx" test.cpp -lc++ -lc++abi
+
+        export HOME=$TMPDIR
+        export WASMTIME_FLAGS=(${
+          lib.escapeShellArgs (lib.optionals enableThreads [
+            "--wasm-features=threads"
+            "--wasi-modules=experimental-wasi-threads"
+          ])
+        })
+        wasmtime run "''${WASMTIME_FLAGS[@]}" "$out/bin/test-c"
+        wasmtime run "''${WASMTIME_FLAGS[@]}" "$out/bin/test-cxx"
+      '';
+    };
+    hasThreads = enableThreads;
   };
 
   meta = with lib; {
