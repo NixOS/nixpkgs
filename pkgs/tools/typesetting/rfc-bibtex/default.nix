@@ -3,7 +3,16 @@
 , python3
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+let
+  inherit (python3.pkgs)
+    buildPythonApplication
+    pytestCheckHook
+    setuptools
+    vcrpy
+    ;
+in
+
+buildPythonApplication rec {
   pname = "rfc-bibtex";
   version = "0.3.2";
   format = "setuptools";
