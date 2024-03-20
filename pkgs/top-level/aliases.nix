@@ -829,6 +829,7 @@ mapAliases ({
   o = orbiton; # Added 2023-04-09
   oathToolkit = oath-toolkit; # Added 2022-04-04
   oauth2_proxy = oauth2-proxy; # Added 2021-04-18
+  obinskit = throw "'obinskit' has been removed from nixpkgs, because the package was unmaintained and depended on an insecure version of electron"; # Added 2024-03-20
   octant = throw "octant has been dropped due to being archived and vulnerable"; # Added 2023-09-29
   octant-desktop = throw "octant-desktop has been dropped due to being archived and vulnerable"; # Added 2023-09-29
   ogre1_9 = throw "ogre1_9 has been removed, use ogre instead"; # Added 2023-03-22
