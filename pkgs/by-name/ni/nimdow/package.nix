@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitHub, testers }:
+{ lib, buildNimPackage, fetchFromGitHub, nixosTests, testers }:
 
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
@@ -25,9 +25,12 @@ buildNimPackage (finalAttrs: {
     substituteInPlace src/nimdowpkg/config/configloader.nim --replace "/usr/share/nimdow" "$out/share/nimdow"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "v${finalAttrs.version}";
+  passthru.tests = {
+    nimdow = nixosTests.nimdow;
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
+    };
   };
 
   meta = with lib;
