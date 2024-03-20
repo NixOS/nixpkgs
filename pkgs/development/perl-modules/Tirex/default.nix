@@ -12,13 +12,13 @@
 
 buildPerlPackage rec {
   pname = "Tirex";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "tirex";
-    rev = "v${version}";
-    hash = "sha256-0QbPfCPBdNBbUiZ8Ppg2zao98+Ddl3l+yX6y1/J50rg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-p2P19tifA/AvJatTzboyhtt7W1SwKJQzqpU4oDalfhU=";
   };
 
   patches = [
