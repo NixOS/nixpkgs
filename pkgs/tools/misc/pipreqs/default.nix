@@ -1,6 +1,8 @@
 { lib, python3, fetchPypi }:
 
-with python3.pkgs;
+let
+  inherit (python3.pkgs) buildPythonApplication docopt yarg;
+in
 
 buildPythonApplication rec {
   pname = "pipreqs";
