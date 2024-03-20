@@ -352,7 +352,7 @@ in
             show-trace = true;
 
             system-features = [ "big-parallel" "kvm" "recursive-nix" ];
-            sandbox-paths = { "/bin/sh" = "''${pkgs.busybox-sandbox-shell.out}/bin/busybox"; };
+            sandbox-paths = [ "/bin/sh=''${pkgs.busybox-sandbox-shell.out}/bin/busybox" ];
           }
         '';
         description = lib.mdDoc ''

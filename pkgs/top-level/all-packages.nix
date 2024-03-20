@@ -24180,7 +24180,9 @@ with pkgs;
 
   protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
   protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
-  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix { };
+  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix {
+    abseil-cpp = abseil-cpp_202301;
+  };
   protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
     abseil-cpp = abseil-cpp_202103;
   };
@@ -29931,8 +29933,6 @@ with pkgs;
 
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
-
-  amfora = callPackage ../applications/networking/browsers/amfora { };
 
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
