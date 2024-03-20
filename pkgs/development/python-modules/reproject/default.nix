@@ -4,7 +4,7 @@
 , astropy-healpix
 , buildPythonPackage
 , cloudpickle
-, cython
+, cython_3
 , dask
 , fetchPypi
 , fsspec
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    cython
+    cython_3
     numpy
     oldest-supported-numpy
     setuptools-scm
