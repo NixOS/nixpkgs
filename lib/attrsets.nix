@@ -579,6 +579,16 @@ rec {
     Collect each attribute named `attr` from a list of attribute
     sets.  Sets that don't contain the named attribute are ignored.
 
+    # Inputs
+
+    `attr`
+
+    : The attribute name to get out of the sets.
+
+    `list`
+
+    : The list of attribute sets to go through
+
     # Type
 
     ```
@@ -943,6 +953,16 @@ rec {
   /**
     Apply a function to each element in an attribute set, creating a new attribute set.
 
+    # Inputs
+
+    `f`
+
+    : A function that takes an attribute name and its value, and returns the new value for the attribute.
+
+    `attrset`
+
+    : The attribute set to iterate through.
+
     # Type
 
     ```
@@ -1060,6 +1080,12 @@ rec {
 
     This is because the `listToAttrs` removes duplicate names and doesn't preserve the order of the list.
     :::
+
+    # Inputs
+
+    `set`
+
+    : The attribute set to deconstruct.
 
     # Type
 
@@ -1742,6 +1768,12 @@ rec {
     Get a package's `bin` output.
     If the output does not exist, fallback to `.out` and then to the default.
 
+    # Inputs
+
+    `pkg`
+
+    : The package whose `bin` output will be retrieved.
+
     # Type
 
     ```
@@ -1765,6 +1797,12 @@ rec {
   /**
     Get a package's `lib` output.
     If the output does not exist, fallback to `.out` and then to the default.
+
+    # Inputs
+
+    `pkg`
+
+    : The package whose `lib` output will be retrieved.
 
     # Type
 
@@ -1790,6 +1828,12 @@ rec {
     Get a package's `dev` output.
     If the output does not exist, fallback to `.out` and then to the default.
 
+    # Inputs
+
+    `pkg`
+
+    : The package whose `dev` output will be retrieved.
+
     # Type
 
     ```
@@ -1814,6 +1858,12 @@ rec {
     Get a package's `man` output.
     If the output does not exist, fallback to `.out` and then to the default.
 
+    # Inputs
+
+    `pkg`
+
+    : The package whose `man` output will be retrieved.
+
     # Type
 
     ```
@@ -1835,6 +1885,12 @@ rec {
 
   /**
     Pick the outputs of packages to place in `buildInputs`
+
+    # Inputs
+
+    `pkgs`
+
+    : List of packages.
 
     # Type
 
