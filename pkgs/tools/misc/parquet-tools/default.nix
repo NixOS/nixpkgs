@@ -3,7 +3,23 @@
 , python3Packages
 }:
 
-with python3Packages;
+let
+  inherit (python3Packages)
+    boto3
+    buildPythonApplication
+    colorama
+    halo
+    moto
+    pandas
+    poetry-core
+    pyarrow
+    pytestCheckHook
+    pytest-mock
+    pythonRelaxDepsHook
+    tabulate
+    thrift
+    ;
+in
 
 buildPythonApplication rec {
   pname = "parquet-tools";
