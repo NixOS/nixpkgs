@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, kernel }:
+{ lib, stdenv, fetchFromGitLab, kernel, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
     "INCLUDEDIR=$(out)/include"
   ];
 
+  patches = [
+    # fix to support linux 6.8
+    (fetchpatch {
+      url = "https://gitlab.com/Sweenu/ddcci-driver-linux/-/commit/7f851f5fb8fbcd7b3a93aaedff90b27124e17a7e.patch";
+      sha256 = "sha256-Y1ktYaJTd9DtT/mwDqtjt/YasW9cVm0wI43wsQhl7Bg=";
+    })
+  ];
+
   meta = with lib; {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sweenu ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.1";
   };
