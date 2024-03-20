@@ -16,59 +16,114 @@ in {
 
   ## Simple (higher order) functions
 
-  /* The identity function
-     For when you need a function that does “nothing”.
+  /**
+    The identity function
+    For when you need a function that does “nothing”.
 
-     Type: id :: a -> a
+
+    # Inputs
+
+    `x`
+
+    : The value to return
+
+    # Type
+
+    ```
+    id :: a -> a
+    ```
   */
-  id =
-    # The value to return
-    x: x;
+  id = x: x;
 
-  /* The constant function
+  /**
+    The constant function
 
-     Ignores the second argument. If called with only one argument,
-     constructs a function that always returns a static value.
+    Ignores the second argument. If called with only one argument,
+    constructs a function that always returns a static value.
 
-     Type: const :: a -> b -> a
-     Example:
-       let f = const 5; in f 10
-       => 5
+
+    # Inputs
+
+    `x`
+
+    : Value to return
+
+    `y`
+
+    : Value to ignore
+
+    # Type
+
+    ```
+    const :: a -> b -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.const` usage example
+
+    ```nix
+    let f = const 5; in f 10
+    => 5
+    ```
+
+    :::
   */
   const =
-    # Value to return
     x:
-    # Value to ignore
     y: x;
 
-  /* Pipes a value through a list of functions, left to right.
+  /**
+    Pipes a value through a list of functions, left to right.
 
-     Type: pipe :: a -> [<functions>] -> <return type of last function>
-     Example:
-       pipe 2 [
-         (x: x + 2)  # 2 + 2 = 4
-         (x: x * 2)  # 4 * 2 = 8
-       ]
-       => 8
+    # Inputs
 
-       # ideal to do text transformations
-       pipe [ "a/b" "a/c" ] [
+    `value`
 
-         # create the cp command
-         (map (file: ''cp "${src}/${file}" $out\n''))
+    : Value to start piping.
 
-         # concatenate all commands into one string
-         lib.concatStrings
+    `fns`
 
-         # make that string into a nix derivation
-         (pkgs.runCommand "copy-to-out" {})
+    : List of functions to apply sequentially.
 
-       ]
-       => <drv which copies all files to $out>
+    # Type
 
-     The output type of each function has to be the input type
-     of the next function, and the last function returns the
-     final value.
+    ```
+    pipe :: a -> [<functions>] -> <return type of last function>
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.pipe` usage example
+
+    ```nix
+    pipe 2 [
+        (x: x + 2)  # 2 + 2 = 4
+        (x: x * 2)  # 4 * 2 = 8
+      ]
+    => 8
+
+    # ideal to do text transformations
+    pipe [ "a/b" "a/c" ] [
+
+      # create the cp command
+      (map (file: ''cp "${src}/${file}" $out\n''))
+
+      # concatenate all commands into one string
+      lib.concatStrings
+
+      # make that string into a nix derivation
+      (pkgs.runCommand "copy-to-out" {})
+
+    ]
+    => <drv which copies all files to $out>
+
+    The output type of each function has to be the input type
+    of the next function, and the last function returns the
+    final value.
+    ```
+
+    :::
   */
   pipe = builtins.foldl' (x: f: f x);
 
@@ -79,71 +134,197 @@ in {
 
   ## Named versions corresponding to some builtin operators.
 
-  /* Concatenate two lists
+  /**
+    Concatenate two lists
 
-     Type: concat :: [a] -> [a] -> [a]
 
-     Example:
-       concat [ 1 2 ] [ 3 4 ]
-       => [ 1 2 3 4 ]
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    concat :: [a] -> [a] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.concat` usage example
+
+    ```nix
+    concat [ 1 2 ] [ 3 4 ]
+    => [ 1 2 3 4 ]
+    ```
+
+    :::
   */
   concat = x: y: x ++ y;
 
-  /* boolean “or” */
+  /**
+    boolean “or”
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+  */
   or = x: y: x || y;
 
-  /* boolean “and” */
+  /**
+    boolean “and”
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+  */
   and = x: y: x && y;
 
-  /* bitwise “not” */
+  /**
+    bitwise “not”
+  */
   bitNot = builtins.sub (-1);
 
-  /* Convert a boolean to a string.
+  /**
+    Convert a boolean to a string.
 
-     This function uses the strings "true" and "false" to represent
-     boolean values. Calling `toString` on a bool instead returns "1"
-     and "" (sic!).
+    This function uses the strings "true" and "false" to represent
+    boolean values. Calling `toString` on a bool instead returns "1"
+    and "" (sic!).
 
-     Type: boolToString :: bool -> string
+
+    # Inputs
+
+    `b`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    boolToString :: bool -> string
+    ```
   */
   boolToString = b: if b then "true" else "false";
 
-  /* Merge two attribute sets shallowly, right side trumps left
+  /**
+    Merge two attribute sets shallowly, right side trumps left
 
-     mergeAttrs :: attrs -> attrs -> attrs
+    mergeAttrs :: attrs -> attrs -> attrs
 
-     Example:
-       mergeAttrs { a = 1; b = 2; } { b = 3; c = 4; }
-       => { a = 1; b = 3; c = 4; }
+
+    # Inputs
+
+    `x`
+
+    : Left attribute set
+
+    `y`
+
+    : Right attribute set (higher precedence for equal keys)
+
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.mergeAttrs` usage example
+
+    ```nix
+    mergeAttrs { a = 1; b = 2; } { b = 3; c = 4; }
+    => { a = 1; b = 3; c = 4; }
+    ```
+
+    :::
   */
   mergeAttrs =
-    # Left attribute set
     x:
-    # Right attribute set (higher precedence for equal keys)
     y: x // y;
 
-  /* Flip the order of the arguments of a binary function.
+  /**
+    Flip the order of the arguments of a binary function.
 
-     Type: flip :: (a -> b -> c) -> (b -> a -> c)
 
-     Example:
-       flip concat [1] [2]
-       => [ 2 1 ]
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
+
+    `a`
+
+    : 2\. Function argument
+
+    `b`
+
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    flip :: (a -> b -> c) -> (b -> a -> c)
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.flip` usage example
+
+    ```nix
+    flip concat [1] [2]
+    => [ 2 1 ]
+    ```
+
+    :::
   */
   flip = f: a: b: f b a;
 
-  /* Apply function if the supplied argument is non-null.
+  /**
+    Apply function if the supplied argument is non-null.
 
-     Example:
-       mapNullable (x: x+1) null
-       => null
-       mapNullable (x: x+1) 22
-       => 23
+
+    # Inputs
+
+    `f`
+
+    : Function to call
+
+    `a`
+
+    : Argument to check for null before passing it to `f`
+
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.mapNullable` usage example
+
+    ```nix
+    mapNullable (x: x+1) null
+    => null
+    mapNullable (x: x+1) 22
+    => 23
+    ```
+
+    :::
   */
   mapNullable =
-    # Function to call
     f:
-    # Argument to check for null before passing it to `f`
     a: if a == null then a else f a;
 
   # Pull in some builtins not included elsewhere.
@@ -155,57 +336,84 @@ in {
 
   ## nixpkgs version strings
 
-  /* Returns the current full nixpkgs version number. */
+  /**
+    Returns the current full nixpkgs version number.
+  */
   version = release + versionSuffix;
 
-  /* Returns the current nixpkgs release number as string. */
+  /**
+    Returns the current nixpkgs release number as string.
+  */
   release = lib.strings.fileContents ./.version;
 
-  /* The latest release that is supported, at the time of release branch-off,
-     if applicable.
+  /**
+    The latest release that is supported, at the time of release branch-off,
+    if applicable.
 
-     Ideally, out-of-tree modules should be able to evaluate cleanly with all
-     supported Nixpkgs versions (master, release and old release until EOL).
-     So if possible, deprecation warnings should take effect only when all
-     out-of-tree expressions/libs/modules can upgrade to the new way without
-     losing support for supported Nixpkgs versions.
+    Ideally, out-of-tree modules should be able to evaluate cleanly with all
+    supported Nixpkgs versions (master, release and old release until EOL).
+    So if possible, deprecation warnings should take effect only when all
+    out-of-tree expressions/libs/modules can upgrade to the new way without
+    losing support for supported Nixpkgs versions.
 
-     This release number allows deprecation warnings to be implemented such that
-     they take effect as soon as the oldest release reaches end of life. */
+    This release number allows deprecation warnings to be implemented such that
+    they take effect as soon as the oldest release reaches end of life.
+  */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
     2311;
 
-  /* Whether a feature is supported in all supported releases (at the time of
-     release branch-off, if applicable). See `oldestSupportedRelease`. */
+  /**
+    Whether a feature is supported in all supported releases (at the time of
+    release branch-off, if applicable). See `oldestSupportedRelease`.
+
+
+    # Inputs
+
+    `release`
+
+    : Release number of feature introduction as an integer, e.g. 2111 for 21.11.
+    Set it to the upcoming release, matching the nixpkgs/.version file.
+  */
   isInOldestRelease =
-    /* Release number of feature introduction as an integer, e.g. 2111 for 21.11.
-       Set it to the upcoming release, matching the nixpkgs/.version file.
-    */
     release:
       release <= lib.trivial.oldestSupportedRelease;
 
-  /* Returns the current nixpkgs release code name.
+  /**
+    Returns the current nixpkgs release code name.
 
-     On each release the first letter is bumped and a new animal is chosen
-     starting with that new letter.
+    On each release the first letter is bumped and a new animal is chosen
+    starting with that new letter.
   */
   codeName = "Uakari";
 
-  /* Returns the current nixpkgs version suffix as string. */
+  /**
+    Returns the current nixpkgs version suffix as string.
+  */
   versionSuffix =
     let suffixFile = ../.version-suffix;
     in if pathExists suffixFile
     then lib.strings.fileContents suffixFile
     else "pre-git";
 
-  /* Attempts to return the the current revision of nixpkgs and
-     returns the supplied default value otherwise.
+  /**
+    Attempts to return the the current revision of nixpkgs and
+    returns the supplied default value otherwise.
 
-     Type: revisionWithDefault :: string -> string
+
+    # Inputs
+
+    `default`
+
+    : Default value to return if revision can not be determined
+
+    # Type
+
+    ```
+    revisionWithDefault :: string -> string
+    ```
   */
   revisionWithDefault =
-    # Default value to return if revision can not be determined
     default:
     let
       revisionFile = "${toString ./..}/.git-revision";
@@ -217,47 +425,115 @@ in {
 
   nixpkgsVersion = warn "lib.nixpkgsVersion is a deprecated alias of lib.version." version;
 
-  /* Determine whether the function is being called from inside a Nix
-     shell.
+  /**
+    Determine whether the function is being called from inside a Nix
+    shell.
 
-     Type: inNixShell :: bool
+    # Type
+
+    ```
+    inNixShell :: bool
+    ```
   */
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
 
-  /* Determine whether the function is being called from inside pure-eval mode
-     by seeing whether `builtins` contains `currentSystem`. If not, we must be in
-     pure-eval mode.
+  /**
+    Determine whether the function is being called from inside pure-eval mode
+    by seeing whether `builtins` contains `currentSystem`. If not, we must be in
+    pure-eval mode.
 
-     Type: inPureEvalMode :: bool
+    # Type
+
+    ```
+    inPureEvalMode :: bool
+    ```
   */
   inPureEvalMode = ! builtins ? currentSystem;
 
   ## Integer operations
 
-  /* Return minimum of two numbers. */
+  /**
+    Return minimum of two numbers.
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+  */
   min = x: y: if x < y then x else y;
 
-  /* Return maximum of two numbers. */
+  /**
+    Return maximum of two numbers.
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+  */
   max = x: y: if x > y then x else y;
 
-  /* Integer modulus
+  /**
+    Integer modulus
 
-     Example:
-       mod 11 10
-       => 1
-       mod 1 10
-       => 1
+
+    # Inputs
+
+    `base`
+
+    : 1\. Function argument
+
+    `int`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.mod` usage example
+
+    ```nix
+    mod 11 10
+    => 1
+    mod 1 10
+    => 1
+    ```
+
+    :::
   */
   mod = base: int: base - (int * (builtins.div base int));
 
 
   ## Comparisons
 
-  /* C-style comparisons
+  /**
+    C-style comparisons
 
-     a < b,  compare a b => -1
-     a == b, compare a b => 0
-     a > b,  compare a b => 1
+    a < b,  compare a b => -1
+    a == b, compare a b => 0
+    a > b,  compare a b => 1
+
+
+    # Inputs
+
+    `a`
+
+    : 1\. Function argument
+
+    `b`
+
+    : 2\. Function argument
   */
   compare = a: b:
     if a < b
@@ -266,50 +542,100 @@ in {
          then 1
          else 0;
 
-  /* Split type into two subtypes by predicate `p`, take all elements
-     of the first subtype to be less than all the elements of the
-     second subtype, compare elements of a single subtype with `yes`
-     and `no` respectively.
+  /**
+    Split type into two subtypes by predicate `p`, take all elements
+    of the first subtype to be less than all the elements of the
+    second subtype, compare elements of a single subtype with `yes`
+    and `no` respectively.
 
-     Type: (a -> bool) -> (a -> a -> int) -> (a -> a -> int) -> (a -> a -> int)
 
-     Example:
-       let cmp = splitByAndCompare (hasPrefix "foo") compare compare; in
+    # Inputs
 
-       cmp "a" "z" => -1
-       cmp "fooa" "fooz" => -1
+    `p`
 
-       cmp "f" "a" => 1
-       cmp "fooa" "a" => -1
-       # while
-       compare "fooa" "a" => 1
+    : Predicate
+
+    `yes`
+
+    : Comparison function if predicate holds for both values
+
+    `no`
+
+    : Comparison function if predicate holds for neither value
+
+    `a`
+
+    : First value to compare
+
+    `b`
+
+    : Second value to compare
+
+    # Type
+
+    ```
+    (a -> bool) -> (a -> a -> int) -> (a -> a -> int) -> (a -> a -> int)
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.splitByAndCompare` usage example
+
+    ```nix
+    let cmp = splitByAndCompare (hasPrefix "foo") compare compare; in
+
+    cmp "a" "z" => -1
+    cmp "fooa" "fooz" => -1
+
+    cmp "f" "a" => 1
+    cmp "fooa" "a" => -1
+    # while
+    compare "fooa" "a" => 1
+    ```
+
+    :::
   */
   splitByAndCompare =
-    # Predicate
-    p:
-    # Comparison function if predicate holds for both values
-    yes:
-    # Comparison function if predicate holds for neither value
-    no:
-    # First value to compare
-    a:
-    # Second value to compare
-    b:
+    p: yes: no: a: b:
     if p a
     then if p b then yes a b else -1
     else if p b then 1 else no a b;
 
 
-  /* Reads a JSON file.
+  /**
+    Reads a JSON file.
 
-     Type: importJSON :: path -> any
+
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    importJSON :: path -> any
+    ```
   */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
-  /* Reads a TOML file.
+  /**
+    Reads a TOML file.
 
-     Type: importTOML :: path -> any
+
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    importTOML :: path -> any
+    ```
   */
   importTOML = path:
     builtins.fromTOML (builtins.readFile path);
@@ -329,7 +655,7 @@ in {
   # TODO: figure out a clever way to integrate location information from
   # something like __unsafeGetAttrPos.
 
-  /*
+  /**
     Print a warning before returning the second argument. This function behaves
     like `builtins.trace`, but requires a string message and formats it as a
     warning, including the `warning: ` prefix.
@@ -337,28 +663,80 @@ in {
     To get a call stack trace and abort evaluation, set the environment variable
     `NIX_ABORT_ON_WARN=true` and set the Nix options `--option pure-eval false --show-trace`
 
-    Type: string -> a -> a
+    # Inputs
+
+    `msg`
+
+    : Warning message to print.
+
+    `val`
+
+    : Value to return as-is.
+
+    # Type
+
+    ```
+    string -> a -> a
+    ```
   */
   warn =
     if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
     then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
     else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
 
-  /*
+  /**
     Like warn, but only warn when the first argument is `true`.
 
-    Type: bool -> string -> a -> a
+
+    # Inputs
+
+    `cond`
+
+    : 1\. Function argument
+
+    `msg`
+
+    : 2\. Function argument
+
+    `val`
+
+    : Value to return as-is.
+
+    # Type
+
+    ```
+    bool -> string -> a -> a
+    ```
   */
   warnIf = cond: msg: if cond then warn msg else x: x;
 
-  /*
+  /**
     Like warnIf, but negated (warn if the first argument is `false`).
 
-    Type: bool -> string -> a -> a
+
+    # Inputs
+
+    `cond`
+
+    : 1\. Function argument
+
+    `msg`
+
+    : 2\. Function argument
+
+    `val`
+
+    : Value to return as-is.
+
+    # Type
+
+    ```
+    bool -> string -> a -> a
+    ```
   */
   warnIfNot = cond: msg: if cond then x: x else warn msg;
 
-  /*
+  /**
     Like the `assert b; e` expression, but with a custom error message and
     without the semicolon.
 
@@ -369,33 +747,95 @@ in {
     Calls can be juxtaposed using function application, as `(r: r) a = a`, so
     `(r: r) (r: r) a = a`, and so forth.
 
-    Type: bool -> string -> a -> a
 
-    Example:
+    # Inputs
 
-        throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
-        lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
-        pkgs
+    `cond`
 
+    : 1\. Function argument
+
+    `msg`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    bool -> string -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.throwIfNot` usage example
+
+    ```nix
+    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
+    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+    pkgs
+    ```
+
+    :::
   */
   throwIfNot = cond: msg: if cond then x: x else throw msg;
 
-  /*
+  /**
     Like throwIfNot, but negated (throw if the first argument is `true`).
 
-    Type: bool -> string -> a -> a
+
+    # Inputs
+
+    `cond`
+
+    : 1\. Function argument
+
+    `msg`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    bool -> string -> a -> a
+    ```
   */
   throwIf = cond: msg: if cond then throw msg else x: x;
 
-  /* Check if the elements in a list are valid values from a enum, returning the identity function, or throwing an error message otherwise.
+  /**
+    Check if the elements in a list are valid values from a enum, returning the identity function, or throwing an error message otherwise.
 
-     Example:
-       let colorVariants = ["bright" "dark" "black"]
-       in checkListOfEnum "color variants" [ "standard" "light" "dark" ] colorVariants;
-       =>
-       error: color variants: bright, black unexpected; valid ones: standard, light, dark
 
-     Type: String -> List ComparableVal -> List ComparableVal -> a -> a
+    # Inputs
+
+    `msg`
+
+    : 1\. Function argument
+
+    `valid`
+
+    : 2\. Function argument
+
+    `given`
+
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    String -> List ComparableVal -> List ComparableVal -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.checkListOfEnum` usage example
+
+    ```nix
+    let colorVariants = ["bright" "dark" "black"]
+    in checkListOfEnum "color variants" [ "standard" "light" "dark" ] colorVariants;
+    =>
+    error: color variants: bright, black unexpected; valid ones: standard, light, dark
+    ```
+
+    :::
   */
   checkListOfEnum = msg: valid: given:
     let
@@ -410,15 +850,27 @@ in {
 
   ## Function annotations
 
-  /* Add metadata about expected function arguments to a function.
-     The metadata should match the format given by
-     builtins.functionArgs, i.e. a set from expected argument to a bool
-     representing whether that argument has a default or not.
-     setFunctionArgs : (a → b) → Map String Bool → (a → b)
+  /**
+    Add metadata about expected function arguments to a function.
+    The metadata should match the format given by
+    builtins.functionArgs, i.e. a set from expected argument to a bool
+    representing whether that argument has a default or not.
+    setFunctionArgs : (a → b) → Map String Bool → (a → b)
 
-     This function is necessary because you can't dynamically create a
-     function of the { a, b ? foo, ... }: format, but some facilities
-     like callPackage expect to be able to query expected arguments.
+    This function is necessary because you can't dynamically create a
+    function of the { a, b ? foo, ... }: format, but some facilities
+    like callPackage expect to be able to query expected arguments.
+
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
+
+    `args`
+
+    : 2\. Function argument
   */
   setFunctionArgs = f: args:
     { # TODO: Should we add call-time "type" checking like built in?
@@ -426,84 +878,133 @@ in {
       __functionArgs = args;
     };
 
-  /* Extract the expected function arguments from a function.
-     This works both with nix-native { a, b ? foo, ... }: style
-     functions and functions with args set with 'setFunctionArgs'. It
-     has the same return type and semantics as builtins.functionArgs.
-     setFunctionArgs : (a → b) → Map String Bool.
+  /**
+    Extract the expected function arguments from a function.
+    This works both with nix-native { a, b ? foo, ... }: style
+    functions and functions with args set with 'setFunctionArgs'. It
+    has the same return type and semantics as builtins.functionArgs.
+    setFunctionArgs : (a → b) → Map String Bool.
+
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
   */
   functionArgs = f:
     if f ? __functor
     then f.__functionArgs or (functionArgs (f.__functor f))
     else builtins.functionArgs f;
 
-  /* Check whether something is a function or something
-     annotated with function args.
+  /**
+    Check whether something is a function or something
+    annotated with function args.
+
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
   */
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
 
-  /*
+  /**
     `mirrorFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)
     but its function arguments mirroring `f` (`lib.functionArgs g' == lib.functionArgs f`).
 
-    Type:
-      mirrorFunctionArgs :: (a -> b) -> (a -> c) -> (a -> c)
 
-    Example:
-      addab = {a, b}: a + b
-      addab { a = 2; b = 4; }
-      => 6
-      lib.functionArgs addab
-      => { a = false; b = false; }
-      addab1 = attrs: addab attrs + 1
-      addab1 { a = 2; b = 4; }
-      => 7
-      lib.functionArgs addab1
-      => { }
-      addab1' = lib.mirrorFunctionArgs addab addab1
-      addab1' { a = 2; b = 4; }
-      => 7
-      lib.functionArgs addab1'
-      => { a = false; b = false; }
+    # Inputs
+
+    `f`
+
+    : Function to provide the argument metadata
+
+    `g`
+
+    : Function to set the argument metadata to
+
+    # Type
+
+    ```
+    mirrorFunctionArgs :: (a -> b) -> (a -> c) -> (a -> c)
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.mirrorFunctionArgs` usage example
+
+    ```nix
+    addab = {a, b}: a + b
+    addab { a = 2; b = 4; }
+    => 6
+    lib.functionArgs addab
+    => { a = false; b = false; }
+    addab1 = attrs: addab attrs + 1
+    addab1 { a = 2; b = 4; }
+    => 7
+    lib.functionArgs addab1
+    => { }
+    addab1' = lib.mirrorFunctionArgs addab addab1
+    addab1' { a = 2; b = 4; }
+    => 7
+    lib.functionArgs addab1'
+    => { a = false; b = false; }
+    ```
+
+    :::
   */
   mirrorFunctionArgs =
-    # Function to provide the argument metadata
     f:
     let
       fArgs = functionArgs f;
     in
-    # Function to set the argument metadata to
     g:
     setFunctionArgs g fArgs;
 
-  /*
+  /**
     Turns any non-callable values into constant functions.
     Returns callable values as is.
 
-    Example:
 
-      nix-repl> lib.toFunction 1 2
-      1
+    # Inputs
 
-      nix-repl> lib.toFunction (x: x + 1) 2
-      3
+    `v`
+
+    : Any value
+
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.toFunction` usage example
+
+    ```nix
+    nix-repl> lib.toFunction 1 2
+    1
+
+    nix-repl> lib.toFunction (x: x + 1) 2
+    3
+    ```
+
+    :::
   */
   toFunction =
-    # Any value
     v:
     if isFunction v
     then v
     else k: v;
 
-  /* Convert the given positive integer to a string of its hexadecimal
-     representation. For example:
+  /**
+    Convert the given positive integer to a string of its hexadecimal
+    representation. For example:
 
-     toHexString 0 => "0"
+    toHexString 0 => "0"
 
-     toHexString 16 => "10"
+    toHexString 16 => "10"
 
-     toHexString 250 => "FA"
+    toHexString 250 => "FA"
   */
   toHexString = let
     hexDigits = {
@@ -520,14 +1021,26 @@ in {
       else hexDigits.${toString d};
   in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
-  /* `toBaseDigits base i` converts the positive integer i to a list of its
-     digits in the given base. For example:
+  /**
+    `toBaseDigits base i` converts the positive integer i to a list of its
+    digits in the given base. For example:
 
-     toBaseDigits 10 123 => [ 1 2 3 ]
+    toBaseDigits 10 123 => [ 1 2 3 ]
 
-     toBaseDigits 2 6 => [ 1 1 0 ]
+    toBaseDigits 2 6 => [ 1 1 0 ]
 
-     toBaseDigits 16 250 => [ 15 10 ]
+    toBaseDigits 16 250 => [ 15 10 ]
+
+
+    # Inputs
+
+    `base`
+
+    : 1\. Function argument
+
+    `i`
+
+    : 2\. Function argument
   */
   toBaseDigits = base: i:
     let
