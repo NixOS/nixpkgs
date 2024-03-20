@@ -15,7 +15,28 @@
 , pre-commit
 }:
 
-with python3Packages;
+let
+  inherit (lib) licenses maintainers optionalString;
+
+  inherit (python3Packages)
+    buildPythonApplication
+    cfgv
+    identify
+    nodeenv
+    pytestCheckHook
+    pytest-env
+    pytest-forked
+    pytest-xdist
+    pythonOlder
+    pyyaml
+    re-assert
+    setuptools
+    stdenv
+    toml
+    virtualenv
+    ;
+in
+
 buildPythonApplication rec {
   pname = "pre-commit";
   version = "3.6.2";
@@ -81,7 +102,7 @@ buildPythonApplication rec {
     "--forked"
   ];
 
-  preCheck = lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
+  preCheck = optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
     # Disable outline atomics for rust tests on aarch64-linux.
     export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
   '' + ''
@@ -182,7 +203,7 @@ buildPythonApplication rec {
     package = pre-commit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "A framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
     license = licenses.mit;
