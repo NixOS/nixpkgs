@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.28.3";
+  version = "3.28.4";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-crdXDlyFk95qxKtDO3PqsYxfsyiIBGDIbOMmCBQa1cE=";
+    hash = "sha256-65x4fgeISNxJP0+D+KS77IV80fOKtkJc6NJ3ap9qpvs=";
   };
 
   patches = [
