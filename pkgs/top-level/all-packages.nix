@@ -27358,8 +27358,6 @@ with pkgs;
 
   disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
 
-  displaycal = callPackage ../applications/graphics/displaycal { };
-
   displaylink = callPackage ../os-specific/linux/displaylink {
     inherit (linuxPackages) evdi;
   };
