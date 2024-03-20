@@ -19087,7 +19087,7 @@ with pkgs;
   img = callPackage ../development/tools/img { };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_17;
+    llvmPackages = llvmPackages_18;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
