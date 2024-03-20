@@ -201,6 +201,7 @@
 , "purs-tidy"
 , "purty"
 , "pyright"
+, "rebase-editor"
 , "remod-cli"
 , "reveal.js"
 , "rimraf"
