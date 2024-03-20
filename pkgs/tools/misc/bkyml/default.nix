@@ -3,7 +3,14 @@
 , fetchPypi
 }:
 
-with python3.pkgs;
+let
+  inherit (python3.pkgs)
+    buildPythonApplication
+    pyscaffold
+    ruamel-yaml
+    setuptools
+    ;
+in
 
 buildPythonApplication rec {
   pname = "bkyml";
