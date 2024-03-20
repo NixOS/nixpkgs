@@ -7,22 +7,26 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.4.4.post2";
+  version = "1.4.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiosmtpd";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iWKOxXtOBmszDBgeSHNY4a74D00p/9Pf7h/n+ohpTqs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8nQ4BVSLYgZHRGkbujy/olV/+GABlkDhe5wef3hyQpQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "--cov=aiosmtpd/ --cov-report term" ""
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -31,8 +35,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     atpublic
     attrs
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -56,7 +58,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asyncio based SMTP server";
-    mainProgram = "aiosmtpd";
     homepage = "https://aiosmtpd.readthedocs.io/";
     longDescription = ''
       This is a server for SMTP and related protocols, similar in utility to the
@@ -64,5 +65,6 @@ buildPythonPackage rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ eadwu ];
+    mainProgram = "aiosmtpd";
   };
 }
