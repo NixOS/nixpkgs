@@ -4,7 +4,6 @@
 , cachetools
 , decorator
 , fetchFromGitHub
-, future
 , pysmt
 , pythonOlder
 , pytestCheckHook
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.84";
+  version = "9.2.85";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,8 +21,14 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "claripy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wgCWMngda0gB+AEDFpRxQ2ots5YXE4bkBSxMtYJqLEo=";
+    hash = "sha256-jMACLZN7hYukUgavtdpdVjV1WmPF9UupaNi/FE2Y2aM=";
   };
+
+  postPatch = ''
+    # The detection doesn't seem to work for z3-solver
+    substituteInPlace setup.cfg \
+      --replace "z3-solver==4.10.2.0" ""
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -32,7 +37,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cachetools
     decorator
-    future
     pysmt
     z3-solver
   ];

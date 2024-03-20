@@ -24,15 +24,17 @@
 , pyvex
 , rich
 , rpyc
+, setuptools
 , sortedcontainers
 , sqlalchemy
 , sympy
 , unicorn
+, unique-log-filter
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.84";
+  version = "9.2.85";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -41,8 +43,12 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qav9SUvQtcEad9lvgyrMhOcFhPAhzU/9s7ekTfohqRc=";
+    hash = "sha256-6e77O4gt+td2dTzwwnH+nbPMMU5ZGdAOFgi1Yn26CVc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ailment
@@ -67,10 +73,16 @@ buildPythonPackage rec {
     rich
     rpyc
     sortedcontainers
-    sqlalchemy
     sympy
     unicorn
+    unique-log-filter
   ];
+
+  passthru.optional-dependencies = {
+    AngrDB = [
+      sqlalchemy
+    ];
+  };
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
     "--plat-name"
