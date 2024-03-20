@@ -15,18 +15,16 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.6.0";
-
-  format = "pyproject";
+  version = "3.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  # no tests data included in PyPI tarball
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
-    rev = "v${version}";
-    hash = "sha256-hy5e6DEAwLKn0l2nJD7fyW5r4ZZiH+fuTEDLQen+dNk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-krMOjXzI9tmLGLEswXLLqc8J68Gwnl1VrRO2fLbDv0o=";
   };
 
   propagatedBuildInputs = [
