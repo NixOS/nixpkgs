@@ -47,7 +47,7 @@ The package’s homepage. Example: `https://www.gnu.org/software/hello/manual/`
 
 ### `repository` {#var-meta-repository}
 
-HTTP-browsable source tree of the package. Automatically set if the package uses a `fetchFrom*` fetcher for its `src`. Example: `https://github.com/forthy42/gforth`
+A webpage where the package's source code can be viewed.  `https` links are preferred if available.  Automatically set to a default value if the package uses a `fetchFrom*` fetcher for its `src`. Example: `https://github.com/forthy42/gforth`
 
 ### `downloadPage` {#var-meta-downloadPage}
 
