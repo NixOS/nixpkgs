@@ -17,7 +17,7 @@ let
     "ghc865Binary"
     "ghc8107Binary"
     "ghc924Binary"
-    "ghc963Binary"
+    "ghc964Binary"
     # ghcjs
     "ghcjs"
     "ghcjs810"
@@ -66,7 +66,7 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
 
-    ghc963Binary = callPackage ../development/compilers/ghc/9.6.3-binary.nix {
+    ghc964Binary = callPackage ../development/compilers/ghc/9.6.4-binary.nix {
       llvmPackages = pkgs.llvmPackages_15;
     };
 
@@ -299,7 +299,7 @@ in {
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc963
         else
-          packages.ghc963Binary;
+          packages.ghc964Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -317,7 +317,7 @@ in {
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc963
         else
-          packages.ghc963Binary;
+          packages.ghc964Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -336,7 +336,7 @@ in {
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc963
         else
-          packages.ghc963Binary;
+          packages.ghc964Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -399,9 +399,9 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc963Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc963Binary;
-      ghc = bh.compiler.ghc963Binary;
+    ghc964Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc964Binary;
+      ghc = bh.compiler.ghc964Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
