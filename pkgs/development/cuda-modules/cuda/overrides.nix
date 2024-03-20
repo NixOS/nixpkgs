@@ -170,11 +170,29 @@ filterAndCreateOverrides {
     }:
     prevAttrs: {
       # Remove once cuda-find-redist-features has a special case for libcuda
-      # TODO(@connorbaker): The order of build outputs matters as we traverse them when creating split outputs.
-      # The `lib` output cannot come after `static` as it moves all the static libraries back to the `lib` output.
       outputs =
-        prevAttrs.outputs
-        ++ lib.lists.optionals (!(builtins.elem "lib" prevAttrs.outputs)) [ "lib" ];
+        # NOTE: The order of build outputs matters as we traverse them when creating
+        # split outputs. The `lib` output cannot come after `static` as it moves all
+        # the static libraries back to the `lib` output.
+        let
+          libOutputIsPresent = builtins.elem "lib" prevAttrs.outputs;
+          staticOutputPos = lib.lists.findFirstIndex (x: x == "static") null prevAttrs.outputs;
+          outputsBeforeStatic = lib.lists.take staticOutputPos prevAttrs.outputs;
+          outputsFromStaticAndLater = lib.lists.drop staticOutputPos prevAttrs.outputs;
+          newOutputs =
+            if libOutputIsPresent then
+              # If the lib output is present, we want to keep it in the same position
+              prevAttrs.outputs
+            else if staticOutputPos == null then
+              # If the static output is not present, location of the lib output
+              # doesn't matter and we can append it
+              prevAttrs.outputs ++ [ "lib" ]
+            else
+              # The lib output is missing and the static output is present.
+              # We need to insert the lib output before the static output.
+              outputsBeforeStatic ++ [ "lib" ] ++ outputsFromStaticAndLater;
+        in
+        newOutputs;
 
       # Patch the nvcc.profile.
       # Syntax:
