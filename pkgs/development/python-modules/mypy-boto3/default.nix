@@ -639,7 +639,7 @@ rec {
 
   mypy-boto3-sagemaker-runtime = buildMypyBoto3Package "sagemaker-runtime" "1.34.0" "sha256-OJYEdi4xILUZoePcGBcLRHAhwppeybNO+l0kyW3a0Co=";
 
-  mypy-boto3-savingsplans = buildMypyBoto3Package "savingsplans" "1.34.0" "sha256-HaloEU3+2VgDekIQ5JltgCCG1jJ/ap1qqDGWR51ggtU=";
+  mypy-boto3-savingsplans = buildMypyBoto3Package "savingsplans" "1.34.67" "sha256-t+0Ko+Onv24p1Sn59mvR/auXkDTowOEpKwpzuMUqk8w=";
 
   mypy-boto3-scheduler = buildMypyBoto3Package "scheduler" "1.34.0" "sha256-+gnQjWPtp7KVI/qIY2aXHD9iM7RZIDl0JwRostfhjzc=";
 
