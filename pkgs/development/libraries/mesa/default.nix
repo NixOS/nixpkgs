@@ -213,6 +213,11 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
 
+    # Enable Intel Xe KMD support.
+    # can be removed after it's made the default in 24.1
+    # https://gitlab.freedesktop.org/mesa/mesa/-/commit/31920cb60c3cf487bc29ebd1d8ad8b1825e09fab
+    "-Dintel-xe-kmd=enabled"
+
     # Enable RT for Intel hardware
     # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
     (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
