@@ -2941,6 +2941,12 @@
     githubId = 37375448;
     name = "Buildit";
   };
+  bwc9876 = {
+    email = "bwc9876@gmail.com";
+    github = "Bwc9876";
+    githubId = 25644444;
+    name = "Ben C";
+  };
   bwlang = {
     email = "brad@langhorst.com";
     github = "bwlang";
@@ -18402,6 +18408,11 @@
     github = "spinus";
     githubId = 950799;
     name = "Tomasz Czyż";
+  };
+  spoonbaker = {
+    github = "Spoonbaker";
+    githubId = 47164123;
+    name = "Spoonbaker";
   };
   sprock = {
     email = "rmason@mun.ca";
