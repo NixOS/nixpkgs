@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "unstable-2024-03-04";
+  version = "xrGetSystem-regression-unstable-2024-03-04";
 
   src = fetchFromGitLab {
     owner = "znixian";
