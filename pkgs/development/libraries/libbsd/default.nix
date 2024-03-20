@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libbsd";
-  version = "0.11.8";
+  version = "0.12.2";
 
   src = fetchurl {
     url = "https://libbsd.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    hash = "sha256-Vf36Jpb7TVWlkvqa0Uqd+JfHsACN2zswxBmRSEH4XzM=";
+    hash = "sha256-uIzJFj0MZSqvOamZkdl03bocOpcR248bWDivKhRzEBQ=";
   };
 
   outputs = [ "out" "dev" "man" ];
