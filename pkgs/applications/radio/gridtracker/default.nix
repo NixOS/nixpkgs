@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
-  version = "1.24.0104";
+  version = "1.24.0104-1";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
