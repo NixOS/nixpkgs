@@ -761,6 +761,11 @@
     githubId = 786394;
     name = "Alexander Krupenkin ";
   };
+  akshayka = {
+    github = "akshayka";
+    githubId = 1994308;
+    name = "Akshay Agrawal";
+  };
   akshgpt7 = {
     email = "akshgpt7@gmail.com";
     github = "akshgpt7";
@@ -5004,6 +5009,12 @@
     github = "dlip";
     githubId = 283316;
     name = "Dane Lipscombe";
+  };
+  dmadisetti = {
+    email = "nix@madisetti.me";
+    github = "dmadisetti";
+    githubId = 2689338;
+    name = "Dylan Madisetti";
   };
   dmalikov = {
     email = "malikov.d.y@gmail.com";
