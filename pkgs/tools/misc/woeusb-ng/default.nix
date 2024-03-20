@@ -7,7 +7,14 @@
 , grub2
 }:
 
-with python3Packages;
+let
+  inherit (python3Packages)
+    buildPythonApplication
+    six
+    termcolor
+    wxpython
+    ;
+in
 
 buildPythonApplication rec {
   pname = "woeusb-ng";
