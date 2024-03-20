@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation {
       repo = "Andromeda-gtk";
       rev = "250751a546dd0fa2e67eef86d957fbf993b61dfe";
       hash = "sha256-exr9j/jW2P9cBhKUPQy3AtK5Vgav5vOyWInXUyVhBk0=";
-      name = "Andromeda-gtk";
+      name = "Andromeda";
     })
 
     (fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation {
       repo = "Andromeda-gtk";
       rev = "11a6194d19cb846447db048455a5e782ec830ae1";
       hash = "sha256-Yy3mih0nyA+ahLqj2D99EKqtmWYJRsvQMkmlLfUPcqQ=";
-      name = "Andromeda-gtk-standard-buttons";
+      name = "Andromeda-standard-buttons";
     })
   ];
 
