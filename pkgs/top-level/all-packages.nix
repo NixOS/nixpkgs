@@ -3408,6 +3408,8 @@ with pkgs;
 
   betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
 
+  betterfox = callPackage ../misc/betterfox { };
+
   binocle = callPackage ../applications/misc/binocle {
     inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreVideo Foundation Metal QuartzCore;
   };
