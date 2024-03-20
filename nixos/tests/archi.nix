@@ -27,5 +27,14 @@ import ./make-test-python.nix ({ lib, ... }: {
          machine.wait_for_text("Welcome to Archi")
 
          machine.screenshot("welcome-screen")
+
+         for s in machine.get_screen_text_variants():
+           if "error" in s.lower():
+             print("############################################")
+             print("# Error detected:")
+             print("############################################")
+             print(s)
+             print("############################################")
+             exit(1)
   '';
 })
