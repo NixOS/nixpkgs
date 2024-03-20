@@ -6221,6 +6221,12 @@
     githubId = 303897;
     name = "Fabián Heredia Montiel";
   };
+  fabius = {
+    email = "deifussfabian@icloud.com";
+    github = "fabius";
+    githubId = 52584036;
+    name = "Fabian Deifuß";
+  };
   fadenb = {
     email = "tristan.helmich+nixos@gmail.com";
     github = "fadenb";
