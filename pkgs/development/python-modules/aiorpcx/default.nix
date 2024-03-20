@@ -3,31 +3,41 @@
 , buildPythonPackage
 , pythonOlder
 , attrs
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiorpcx";
   version = "0.23.1";
-  format = "setuptools";
+  pypoject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "aiorpcX";
-    sha256 = "sha256-WyMALxpNXTCF4xVVoHUZxe+NTEAHHrSZVW/9qBFIYKI=";
+    hash = "sha256-WyMALxpNXTCF4xVVoHUZxe+NTEAHHrSZVW/9qBFIYKI=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  disabled = pythonOlder "3.6";
+  propagatedBuildInputs = [
+    attrs
+  ];
 
   # Checks needs internet access
   doCheck = false;
 
-  pythonImportsCheck = [ "aiorpcx" ];
+  pythonImportsCheck = [
+    "aiorpcx"
+  ];
 
   meta = with lib; {
     description = "Transport, protocol and framing-independent async RPC client and server implementation";
     homepage = "https://github.com/kyuupichan/aiorpcX";
+    changelog = "https://github.com/kyuupichan/aiorpcX/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };
