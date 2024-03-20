@@ -17,8 +17,21 @@ let
       });
     };
   };
+
+  inherit (py.pkgs)
+    argcomplete
+    buildPythonApplication
+    colored
+    icecream
+    packaging
+    paramiko
+    pytz
+    pyyaml
+    rich
+    setuptools
+    sshpubkeys
+    ;
 in
-with py.pkgs;
 
 buildPythonApplication rec {
   pname = "ssh-mitm";
