@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Safe, minimal import sorting for Python projects";
     homepage = "https://github.com/facebook/usort";
-    changelog = "https://github.com/facebook/usort/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/facebook/usort/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

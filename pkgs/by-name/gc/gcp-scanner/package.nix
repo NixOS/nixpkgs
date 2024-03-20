@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "A comprehensive scanner for Google Cloud";
     homepage = "https://github.com/google/gcp_scanner";
-    changelog = "https://github.com/google/gcp_scanner/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/google/gcp_scanner/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "gcp-scanner";

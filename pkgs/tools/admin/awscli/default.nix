@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";
-    changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aws/aws-cli/blob/v${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
     mainProgram = "aws";
