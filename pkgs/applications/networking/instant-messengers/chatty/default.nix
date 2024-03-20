@@ -15,6 +15,7 @@
 , gnome-desktop
 , gspell
 , gtk4
+, gst_all_1
 , json-glib
 , libgcrypt
 , libadwaita
@@ -29,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     repo = "Chatty";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-5IkQnXAKl0duy/B6+z7PXYv5zxakxJCgQhWBw5wioWg=";
+    hash = "sha256-7SdoN9JjGwELOdISJwS1Afcydp/rE2uq/tHO/UrFKNU=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gspell
     gtk4
+    gst_all_1.gstreamer
     json-glib
     libgcrypt
     libadwaita
