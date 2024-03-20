@@ -77,13 +77,13 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.38";
+  version = "0.39";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
-    hash  = "sha256-mzMBhnIEgToez6mGFOvO7zBA+rNivZ9OnLQsjBBDamA=";
+    hash  = "sha256-lWN6hmihZQUKGBfybqBhjmgM8PqzezsFLr+whCyaWwg=";
   };
 
   enableParallelBuilding = true;
@@ -109,11 +109,6 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./Makefile \
       --replace-fail 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
 
-    # https://github.com/YosysHQ/yosys/pull/4199
-    substituteInPlace ./tests/various/clk2fflogic_effects.sh \
-      --replace-fail 'tail +3' 'tail -n +3'
-
-    chmod +x ./misc/yosys-config.in
     patchShebangs tests ./misc/yosys-config.in
   '';
 
