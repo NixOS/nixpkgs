@@ -1,6 +1,14 @@
 { lib, python3, fetchPypi }:
 
-with python3.pkgs;
+let
+  inherit (python3.pkgs)
+    buildPythonApplication
+    click
+    pyserial
+    python-dotenv
+    setuptools-scm
+    ;
+in
 
 buildPythonApplication rec {
   pname = "adafruit-ampy";
