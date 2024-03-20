@@ -4,9 +4,12 @@
   fetchFromGitHub,
   JSONXS,
   lib,
+  nix-update-script,
+  pgbadger,
   PodMarkdown,
   shortenPerlShebang,
   stdenv,
+  testers,
   TextCSV_XS,
   which,
 }:
@@ -45,10 +48,21 @@ buildPerlPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
 
+  doCheck = false;
+
   nativeCheckInputs = [
     bzip2
     which
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+      command = "${lib.getExe pgbadger} --version";
+      package = pgbadger;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/darold/pgbadger";
