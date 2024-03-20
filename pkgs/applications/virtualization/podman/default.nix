@@ -155,5 +155,6 @@ buildGoModule rec {
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
+    mainProgram = "podman";
   };
 }
