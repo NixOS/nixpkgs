@@ -9463,10 +9463,10 @@ with self; {
 
   FFICStat = buildPerlPackage {
     pname = "FFI-C-Stat";
-    version = "0.02";
+    version = "0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.02.tar.gz";
-      hash = "sha256-ThXY9vn5hAfGUtnTE7URUHcTkgGOBx18GShDrILBvlk=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.03.tar.gz";
+      hash = "sha256-YOjveCyLs0cFXJ49ov1BTzX2EP5P77eNBzncyiQoQx4=";
     };
     buildInputs = [ Filechdir PathTiny Test2Suite TestScript ];
     propagatedBuildInputs = [ FFIPlatypus RefUtil ];
@@ -19781,10 +19781,10 @@ with self; {
 
   ParallelLoops = buildPerlPackage {
     pname = "Parallel-Loops";
-    version = "0.10";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.10.tar.gz";
-      hash = "sha256-b5Z7RuejY7FocbmZHDWeFC3Dsigc/psa85kEcEyL0qo=";
+      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.12.tar.gz";
+      hash = "sha256-tmyP4v1RmHPIp7atHRoE3yAmkSJZteKKQeUdnJsVQVA=";
     };
     propagatedBuildInputs = [ ParallelForkManager ];
     meta = {
