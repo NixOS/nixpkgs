@@ -1,6 +1,20 @@
 { lib, fetchurl, python3Packages }:
 
-with python3Packages;
+let
+  inherit (python3Packages)
+    ansible-core
+    boto
+    buildPythonApplication
+    cffi
+    cryptography
+    libcloud
+    markupsafe
+    netaddr
+    pyasn1
+    requests
+    setuptools
+    ;
+in
 
 buildPythonApplication rec {
   version = "0.4.8";
