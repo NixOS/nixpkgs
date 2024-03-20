@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
-, pytestCheckHook
 , python
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -11,19 +11,17 @@ buildPythonPackage rec {
   version = "1.0.1";
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LexiLang";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-TLkaqCE9NDjN2XuYOUkeeWIRcqkxrdg31fS4mEnlcEo=";
   };
 
   nativeBuildInputs = [
     setuptools
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
   ];
 
   checkPhase = ''
@@ -32,10 +30,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [
+    "lexilang"
+  ];
+
   meta = with lib; {
-    description = "Simple, fast dictionary-based language detector for short texts";
+    description = "Dictionary-based language detector for short texts";
     homepage = "https://github.com/LibreTranslate/LexiLang";
+    changelog = "https://github.com/LibreTranslate/LexiLang/releases/tag/v${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with maintainers; [ fab izorkin ];
   };
 }
