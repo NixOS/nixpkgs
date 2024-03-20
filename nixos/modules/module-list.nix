@@ -214,6 +214,7 @@
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/i3lock.nix
+  ./programs/iio-hyprland.nix
   ./programs/immersed-vr.nix
   ./programs/iotop.nix
   ./programs/java.nix
