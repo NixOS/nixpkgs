@@ -15046,6 +15046,12 @@
     github = "pennae";
     githubId = 82953136;
   };
+  perchun = {
+    name = "Perchun Pak";
+    email = "nixpkgs@perchun.it";
+    github = "PerchunPak";
+    githubId = 68118654;
+  };
   peret = {
     name = "Peter Retzlaff";
     github = "peret";
