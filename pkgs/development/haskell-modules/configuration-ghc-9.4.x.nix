@@ -137,4 +137,6 @@ in {
     self.foldable1-classes-compat
     self.OneTuple
   ] super.base-compat-batteries;
+
+  primitive-addr = self.primitive-addr_0_1_0_2;
 }

@@ -76,6 +76,7 @@ self: super: {
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   primitive-unlifted = super.primitive-unlifted_0_1_3_1;
+  primitive-addr = super.primitive-addr_0_1_0_2;
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
