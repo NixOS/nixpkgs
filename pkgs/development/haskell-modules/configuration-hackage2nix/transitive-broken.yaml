@@ -1488,10 +1488,6 @@ dont-distribute-packages:
  - funion
  - funnyprint
  - funsat
- - fused-effects-lens
- - fused-effects-optics
- - fused-effects-random
- - fused-effects-readline
  - fused-effects-squeal
  - fwgl-glfw
  - fwgl-javascript
@@ -2113,7 +2109,6 @@ dont-distribute-packages:
  - hinduce-classifier
  - hinduce-classifier-decisiontree
  - hinduce-examples
- - hinit
  - hinvaders
  - hinze-streams
  - hipbot
@@ -2813,7 +2808,6 @@ dont-distribute-packages:
  - monad-metrics-extensible
  - monad-state
  - monad-stlike-stm
- - monadic-bang
  - monadiccp-gecode
  - monarch
  - monetdb-mapi

@@ -204,6 +204,15 @@ self: super: {
   # Too strict bounds on optparse-applicative
   weeder = lib.warnIf (lib.versionAtLeast super.weeder.version "2.8.0") "jailbreak on weeder may be obsolete" doJailbreak super.weeder;
 
+  # test dependency has incorrect upper bound but still supports the newer dependency
+  # https://github.com/fused-effects/fused-effects/issues/451
+  # https://github.com/fused-effects/fused-effects/pull/452
+  fused-effects = doJailbreak super.fused-effects;
+
+  # support for transformers >= 0.6
+  fused-effects-random = doJailbreak super.fused-effects-random;
+  fused-effects-readline = doJailbreak super.fused-effects-readline;
+
   # Allow scotty < 0.21
   # For < 0.22 add https://github.com/taffybar/taffybar/commit/71fe820d892a85e49ad2f2843eac0a59e01f3fd4
   taffybar = appendPatches [
