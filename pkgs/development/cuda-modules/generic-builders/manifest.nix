@@ -314,9 +314,9 @@ backendStdenv.mkDerivation (
 
     # For each output, create a symlink to it in the out output.
     # NOTE: We must recreate the out output here, because the setup hook will have deleted it if it was empty.
-    # TODO: Previously we used `meta.getExe lndir` to get the path to lndir, but that doesn't work under
-    # cross-compilation -- whatever machinery Nixpkgs uses to get a version built for hostPlatform (so it can run
-    # during the build) doesn't extend to `meta.getExe`.
+    # NOTE: Rely on nativeBuildInputs adding lndir to the path because meta.getExe has no concept of spliced
+    # attributes and will select the hostPlatform variant instead of the buildPlatform variant.
+    # TODO(@connorbaker): This should be removed when https://github.com/NixOS/nixpkgs/issues/271792 is resolved.
     postPatchelf = ''
       mkdir -p "$out"
       for output in $(getAllOutputNames); do
