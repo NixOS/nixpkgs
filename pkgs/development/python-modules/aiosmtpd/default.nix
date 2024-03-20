@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asyncio based SMTP server";
     homepage = "https://aiosmtpd.readthedocs.io/";
+    changelog = "https://github.com/aio-libs/aiosmtpd/releases/tag/v${version}";
     longDescription = ''
       This is a server for SMTP and related protocols, similar in utility to the
       standard library's smtpd.py module.
