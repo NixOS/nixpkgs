@@ -6,7 +6,7 @@
 , makeWrapper
 , monkeysAudio
 , nixosTests
-, perl538Packages
+, perlPackages
 , sox
 , stdenv
 , wavpack
@@ -15,20 +15,18 @@
 }:
 
 let
-  perlPackages = perl538Packages;
-
   binPath = lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio));
   libPath = lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ];
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
-    owner = "Logitech";
+    owner = "LMS-Community";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-92mKchgAWRIrNOeK/zXUYRqIAk6THdtz1zQe3fg2kE0=";
+    hash = "sha256-yDJVqZ0+qVm4r/wmQK/hf9uRJaN56WQMO28RE59mNNI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -58,7 +56,7 @@ perlPackages.buildPerlPackage rec {
     DataURIEncode
     DBDSQLite
     DBI
-    # DBIxClass # https://github.com/Logitech/slimserver/issues/138
+    # DBIxClass # https://github.com/LMS-Community/slimserver/issues/138
     DigestSHA1
     EncodeDetect
     EV
@@ -144,16 +142,20 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  passthru.tests = {
-    inherit (nixosTests) slimserver;
+  passthru = {
+    tests = {
+      inherit (nixosTests) slimserver;
+    };
+
+    updateScript = ./update.nu;
   };
 
   meta = with lib; {
-    homepage = "https://github.com/Logitech/slimserver";
-    changelog = "https://github.com/Logitech/slimserver/blob/${version}/Changelog${lib.versions.major version}.html";
+    homepage = "https://github.com/LMS-Community/slimserver";
+    changelog = "https://github.com/LMS-Community/slimserver/blob/${version}/Changelog${lib.versions.major version}.html";
     description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
     # the firmware is not under a free license, so we do not include firmware in the default package
-    # https://github.com/Logitech/slimserver/blob/public/8.3/License.txt
+    # https://github.com/LMS-Community/slimserver/blob/public/8.3/License.txt
     license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
     mainProgram = "slimserver";
     maintainers = with maintainers; [ adamcstephens jecaro ];

@@ -1955,6 +1955,8 @@ self: super: with self; {
 
   connio = callPackage ../development/python-modules/connio { };
 
+  conway-polynomials = callPackage ../development/python-modules/conway-polynomials {};
+
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
@@ -7005,6 +7007,8 @@ self: super: with self; {
 
   mariadb = callPackage ../development/python-modules/mariadb { };
 
+  marimo = callPackage ../development/python-modules/marimo { };
+
   marisa = callPackage ../development/python-modules/marisa {
     inherit (pkgs) marisa;
   };
@@ -8853,6 +8857,8 @@ self: super: with self; {
 
   oletools = callPackage ../development/python-modules/oletools { };
 
+  ollama = callPackage ../development/python-modules/ollama { };
+
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
   omemo-dr = callPackage ../development/python-modules/omemo-dr { };
@@ -10303,8 +10309,6 @@ self: super: with self; {
   py-sr25519-bindings = callPackage ../development/python-modules/py-sr25519-bindings { };
 
   py-tes = callPackage ../development/python-modules/py-tes { };
-
-  py-tree-sitter = callPackage ../development/python-modules/py-tree-sitter { };
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 

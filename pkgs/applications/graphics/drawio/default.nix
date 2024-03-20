@@ -6,6 +6,7 @@
 , copyDesktopItems
 , prefetch-yarn-deps
 , makeWrapper
+, autoSignDarwinBinariesHook
 , nodejs
 , yarn
 , electron
@@ -23,6 +24,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-+TCnVXcmAEpa7MiL0dyeoh2aUfIIO8eze9pEaHgKnME=";
   };
 
+  # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
+  postPatch = ''
+    sed -i -e 's/resetAdHocDarwinSignature:.*/resetAdHocDarwinSignature: false,/' build/fuses.js
+  '';
+
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
     hash = "sha256-QS0bkDDQq3sn79TQ+pTZsmbmXgMccyLmlPLTsko7eGg=";
@@ -35,6 +41,8 @@ stdenv.mkDerivation rec {
     yarn
   ] ++ lib.optionals (!stdenv.isDarwin) [
     copyDesktopItems
+  ] ++ lib.optionals stdenv.isDarwin [
+    autoSignDarwinBinariesHook
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = true;

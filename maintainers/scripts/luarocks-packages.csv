@@ -95,6 +95,7 @@ magick,,,,,5.1,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
 middleclass,,,,,,
+mimetypes,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nlua,,,,,,teto
