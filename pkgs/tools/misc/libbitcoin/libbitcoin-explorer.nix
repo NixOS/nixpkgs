@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bitcoin command line tool";
+    mainProgram = "bx";
     homepage = "https://github.com/libbitcoin/libbitcoin-explorer";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ asymmetric ];

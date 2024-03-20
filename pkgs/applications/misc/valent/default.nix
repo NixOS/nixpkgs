@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
-  version = "unstable-2023-11-11";
+  version = "0-unstable-2024-02-12";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "51bca834b1c52a1cc49b79fe79d45dfcd9113c02";
+    rev = "70ef1aa42eb2df5e9c3aa4faa014c8d539450018";
     fetchSubmodules = true;
-    hash = "sha256-jmhio/vS+w37IW81XgV4xfb/6ralMgAlwi3zigr4t20=";
+    hash = "sha256-JdrkAtn21NoX+SI6PNWMdE8HLKhLc3HKFhwKydENkvg=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +60,30 @@ stdenv.mkDerivation rec {
     "-Dvapi=false"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "An implementation of the KDE Connect protocol, built on GNOME platform libraries";
-    homepage = "https://github.com/andyholmes/valent/";
+    mainProgram = "valent";
+    longDescription = ''
+      Note that you have to open firewall ports for other devices
+      to connect to it. Use either:
+      ```nix
+      programs.kdeconnect = {
+        enable = true;
+        package = pkgs.valent;
+      }
+      ```
+      or open corresponding firewall ports directly:
+      ```nix
+      networking.firewall = rec {
+        allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+        allowedUDPPortRanges = allowedTCPPortRanges;
+      }
+      ```
+    '';
+    homepage = "https://valent.andyholmes.ca";
     changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ gpl3Plus cc0 ];
-    maintainers = with maintainers; [ federicoschonborn aleksana ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3Plus cc0 cc-by-sa-30 ];
+    maintainers = with lib.maintainers; [ aleksana federicoschonborn ];
+    platforms = lib.platforms.linux;
   };
 }

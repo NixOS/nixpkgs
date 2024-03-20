@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Static code analysis for Kotlin";
+    mainProgram = "detekt";
     homepage = "https://detekt.dev/";
     license = licenses.asl20;
     platforms = jre_headless.meta.platforms;

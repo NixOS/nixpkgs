@@ -1,51 +1,60 @@
 { lib
-, fetchFromGitHub
-, python3
 , bc
+, fetchFromGitHub
 , jq
+, python3
 }:
 
 let
-  version = "1.1.0";
-in python3.pkgs.buildPythonApplication {
-  pname = "pyp";
-  inherit version;
-  format = "pyproject";
+  pythonPackages = python3.pkgs;
+  finalAttrs = {
+    pname = "pyp";
+    version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "hauntsaninja";
-    repo = "pyp";
-    rev = "v${version}";
-    hash = "sha256-A1Ip41kxH17BakHEWEuymfa24eBEl5FIHAWL+iZFM4I=";
+    src = fetchFromGitHub {
+      owner = "hauntsaninja";
+      repo = "pyp";
+      rev = "refs/tags/v${finalAttrs.version}";
+      hash = "sha256-hnEgqWOIVj2ugOhd2aS9IulfkVnrlkhwOtrgH4qQqO8=";
+    };
+
+    pyproject = true;
+
+    build-system = with pythonPackages; [
+      flit-core
+    ];
+
+    nativeCheckInputs = (with pythonPackages; [
+      pytestCheckHook
+    ]) ++ [
+      bc
+      jq
+    ];
+
+    pythonImportsCheck = [
+      "pyp"
+    ];
+
+    # without this, the tests fail because they are unable to find the pyp tool
+    # itself...
+    preCheck = ''
+      _OLD_PATH_=$PATH
+      PATH=$out/bin:$PATH
+   '';
+
+    # And a cleanup!
+    postCheck = ''
+      PATH=$_OLD_PATH_
+    '';
+
+    meta = {
+      homepage = "https://github.com/hauntsaninja/pyp";
+      description = "Easily run Python at the shell";
+      changelog = "https://github.com/hauntsaninja/pyp/blob/${finalAttrs.version}/CHANGELOG.md";
+      license = with lib.licenses; [ mit ];
+      mainProgram = "pyp";
+      maintainers = with lib.maintainers; [ rmcgibbo AndersonTorres ];
+    };
   };
-
-  nativeBuildInputs = [
-    python3.pkgs.flit-core
-  ];
-
-  nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
-    bc
-    jq
-  ];
-
-  # without this, the tests fail because they are unable to find the pyp tool
-  # itself...
-  preCheck = ''
-     _OLD_PATH_=$PATH
-     PATH=$out/bin:$PATH
-  '';
-
-  # And a cleanup
-  postCheck = ''
-    PATH=$_OLD_PATH_
-  '';
-
-  meta = {
-    homepage = "https://github.com/hauntsaninja/pyp";
-    description = "Easily run Python at the shell";
-    changelog = "https://github.com/hauntsaninja/pyp/blob/${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-  };
-}
+in
+pythonPackages.buildPythonPackage finalAttrs

@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Golang language host plugin for Pulumi";
+    mainProgram = "pulumi-language-go";
     homepage = "https://github.com/pulumi/pulumi/tree/master/sdk/go";
     license = licenses.asl20;
   };

@@ -93,6 +93,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/jaraco/jaraco.abode/blob/${version}/CHANGES.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
+    mainProgram = "abode";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee dotlambda ];
   };

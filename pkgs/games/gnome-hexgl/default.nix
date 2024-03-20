@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Gthree port of HexGL";
+    mainProgram = "gnome-hexgl";
     homepage = "https://github.com/alexlarsson/gnome-hexgl";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

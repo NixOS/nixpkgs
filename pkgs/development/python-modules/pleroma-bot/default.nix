@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Bot for mirroring one or multiple Twitter accounts in Pleroma/Mastodon";
+    mainProgram = "pleroma-bot";
     homepage = "https://robertoszek.github.io/pleroma-bot/";
     license = licenses.mit;
     maintainers = with maintainers; [ robertoszek ];

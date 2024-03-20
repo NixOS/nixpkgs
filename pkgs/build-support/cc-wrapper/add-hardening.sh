@@ -32,7 +32,7 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 stackprotector pie pic strictoverflow format zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 stackprotector pie pic strictoverflow format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -105,6 +105,10 @@ for flag in "${!hardeningEnableMap[@]}"; do
       else
         hardeningCFlagsBefore+=('-fno-strict-overflow')
       fi
+      ;;
+    trivialautovarinit)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling trivialautovarinit >&2; fi
+      hardeningCFlagsBefore+=('-ftrivial-auto-var-init=pattern')
       ;;
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi

@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Objects and routines pertaining to date and time";
+    mainProgram = "calc-prorate";
     homepage = "https://github.com/jaraco/tempora";
     changelog = "https://github.com/jaraco/tempora/blob/v${version}/NEWS.rst";
     license = licenses.mit;

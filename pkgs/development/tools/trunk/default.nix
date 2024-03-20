@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.18.8";
 
   src = fetchFromGitHub {
-    owner = "thedodd";
+    owner = "trunk-rs";
     repo = "trunk";
     rev = "v${version}";
     hash = "sha256-cx14IVqsu1SQezs8T1HFZ75+MPWkvf5RcvGCodW5G4A=";
@@ -52,8 +52,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/thedodd/trunk";
+    homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
+    mainProgram = "trunk";
     maintainers = with maintainers; [ freezeboy ];
     license = with licenses; [ asl20 ];
   };

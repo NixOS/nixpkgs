@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.74.6";
+  version = "0.74.7";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "grype";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2KLVIwiSrs+e0srXkfBdk/RxCIvSq/Lixe83th2KvRA=";
+    hash = "sha256-mP9Yjg5AVMIMvlOI+5AaCYzlw7h2K9WCFLY9ZwXmZk0=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-wgcbP/VbHOMuc0PxWaOsiYTrr77ztLDVaDMhAD50vuQ=";
+  vendorHash = "sha256-X+E2g/FoDgjKq8XcPeEA/XbRJV8JkhY5AHPnw26hRnM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -109,6 +109,7 @@ buildGoModule rec {
     homepage = "https://github.com/anchore/grype";
     changelog = "https://github.com/anchore/grype/releases/tag/v${version}";
     description = "Vulnerability scanner for container images and filesystems";
+    mainProgram = "grype";
     longDescription = ''
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.

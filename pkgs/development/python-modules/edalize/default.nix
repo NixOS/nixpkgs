@@ -96,6 +96,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Abstraction library for interfacing EDA tools";
+    mainProgram = "el_docker";
     homepage = "https://github.com/olofk/edalize";
     changelog = "https://github.com/olofk/edalize/releases/tag/v${version}";
     license = licenses.bsd2;

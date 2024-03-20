@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clight";
-  version = "4.10";
+  version = "4.11";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
-    sha256 = "sha256-IAoz4f4XrX8bgesWL4yLK6m5F+c75WNIMFgKBj+W61Q=";
+    sha256 = "sha256-Fu38HRP83Yn2jsq9xnCWOXNlV/0hJKD1/cOOp3EV45Q=";
   };
 
   nativeBuildInputs = [

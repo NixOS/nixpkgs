@@ -1,26 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , glibcLocales
 , pycodestyle
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , tomli
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "2.0.4";
-  format = "setuptools";
+  version = "2.0.4-unstable-2023-10-27";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hhatto";
     repo = "autopep8";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TuaDnZqn9mRUsoDJkj9JK4ztvzl9JTwAk8nghIkZBvw=";
+    rev = "af7399d90926f2fe99a71f15197a08fa197f73a1";
+    hash = "sha256-psGl9rXxTQGHyXf1VskJ/I/goVH5hRRP5bUXQdaT/8M=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pycodestyle

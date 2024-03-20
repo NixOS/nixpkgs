@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "XStatic-Bootbox";
+  pname = "xstatic-bootbox";
   version = "5.5.1.1";
 
   src = fetchPypi {
-    inherit version pname;
+    pname = "XStatic-Bootbox";
+    inherit version;
     sha256 = "4b2120bb33a1d8ada8f9e0532ad99987aa03879b17b08bfdc6b8326d6eb7c205";
   };
 

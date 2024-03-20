@@ -141,6 +141,7 @@ stdenv.mkDerivation {
   meta = llvm_meta // {
     homepage = "https://compiler-rt.llvm.org/";
     description = "Compiler runtime libraries";
+    mainProgram = "hwasan_symbolize";
     longDescription = ''
       The compiler-rt project provides highly tuned implementations of the
       low-level code generator support routines like "__fixunsdfdi" and other

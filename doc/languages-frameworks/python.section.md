@@ -7,7 +7,6 @@
 | Package    | Aliases         | Interpreter |
 |------------|-----------------|-------------|
 | python27   | python2, python | CPython 2.7 |
-| python38   |                 | CPython 3.8 |
 | python39   |                 | CPython 3.9 |
 | python310  |                 | CPython 3.10 |
 | python311  | python3         | CPython 3.11 |
@@ -60,7 +59,6 @@ sets are
 
 * `pkgs.python27Packages`
 * `pkgs.python3Packages`
-* `pkgs.python38Packages`
 * `pkgs.python39Packages`
 * `pkgs.python310Packages`
 * `pkgs.python311Packages`
@@ -132,12 +130,12 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
     description = "Framework for writing tests";
     homepage = "https://github.com/pytest-dev/pytest";
-    license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ domenkozar lovek323 madjar lsix ];
   };
 }
 ```
@@ -175,7 +173,7 @@ following are specific to `buildPythonPackage`:
   from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`
   even if the package only has a `setup.py`. When set to `false`, you can
-  use the existing [hooks](#setup-hooks0 or provide your own logic to build the
+  use the existing [hooks](#setup-hooks) or provide your own logic to build the
   package. This can be useful for packages that don't support the pyproject
   format. When unset, the legacy `setuptools` hooks are used for backwards
   compatibility.
@@ -314,7 +312,7 @@ python3Packages.buildPythonApplication rec {
     python-daemon
   ];
 
-  meta = with lib; {
+  meta = {
     # ...
   };
 }
@@ -475,7 +473,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   be added as `build-system`.
 - `pipInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
-- `pythonCatchConflictsHook` to check whether a Python package is not already existing.
+- `pythonCatchConflictsHook` to fail if the package depends on two different versions of the same dependency.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
@@ -901,12 +899,12 @@ buildPythonPackage rec {
     "toolz.dicttoolz"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1036,12 +1034,12 @@ buildPythonPackage rec {
     pytest
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
     homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1086,12 +1084,12 @@ buildPythonPackage rec {
     libxslt
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${version}";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sjourdois ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sjourdois ];
   };
 }
 ```
@@ -1157,12 +1155,12 @@ buildPythonPackage rec {
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
-    license = with licenses; [ bsd2 bsd3 ];
-    maintainers = with maintainers; [ fridh ];
+    license = with lib.licenses; [ bsd2 bsd3 ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1532,12 +1530,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     homepage = "https://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -2016,6 +2014,10 @@ example of such a situation is when `py.test` is used.
 
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
+* Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
+  This can be fixed with two changes in the derivation: 1) replacing `pytest` with
+  `pytestCheckHook` and 2) adding a `preCheck` containing `cd $out` to run
+  tests within the built output.
 
 ## Contributing {#contributing}
 

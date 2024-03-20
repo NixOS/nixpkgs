@@ -9,12 +9,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyWavelets";
+  pname = "pywavelets";
   version = "1.4.1";
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyWavelets";
+    inherit version;
     hash = "sha256-ZDevPd8IMRjCbY+Xq0OwckuVbJ+Vjp6niGWfaig0upM=";
   };
 

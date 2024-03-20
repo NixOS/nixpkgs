@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "popeye";
-  version = "0.11.3";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-yxYG74k/HpzIrAFLLSnaqKeODIL+ioNXeyx0aTlsCi0=";
+    sha256 = "sha256-zk3SMIvaFV6t+VCMvcmMaHpTEYx/LinaPLNXUU+JSwk=";
   };
 
   ldflags = [
@@ -17,7 +17,16 @@ buildGoModule rec {
     "-X github.com/derailed/popeye/cmd.commit=${version}"
   ];
 
-  vendorHash = "sha256-Vt5QwggdasVk4j2huSIneBMemi3Q0R4MgZn2yNlOH5E=";
+  vendorHash = "sha256-qrw/7fauMVb3Ai5E5MXL84yXHcReJZZ1oioB/Cv32Is=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd popeye \
+      --bash <($out/bin/popeye completion bash) \
+      --fish <($out/bin/popeye completion fish) \
+      --zsh <($out/bin/popeye completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -26,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A Kubernetes cluster resource sanitizer";
+    mainProgram = "popeye";
     homepage = "https://github.com/derailed/popeye";
     changelog = "https://github.com/derailed/popeye/releases/tag/v${version}";
     license = licenses.asl20;

@@ -193,6 +193,7 @@ buildBazelPackage {
     homepage = "https://envoyproxy.io";
     changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
+    mainProgram = "envoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

@@ -4,16 +4,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "typos-lsp";
-  version = "0.1.12";
+  version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "tekumara";
     repo = "typos-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LzemgHVCuLkLaJyyrJhIsOOn+OnYuiJsMSxITNz6R8g=";
+    hash = "sha256-8mCK/NKik1zf6hqJN4pflDbtFALckHR/8AQborbOoHs=";
   };
 
-  cargoHash = "sha256-LFRg/Y/nudrdPw/o3WUH6aM+ThE8N/HII5J0Ikid8GI=";
+  cargoHash = "sha256-aL7arYAiTpz9jy7Kh8u7OJmPMjayX4JiKoa7u8K0UiE=";
 
   # fix for compilation on aarch64
   # see https://github.com/NixOS/nixpkgs/issues/145726

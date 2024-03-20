@@ -44,6 +44,8 @@ let
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
 in {
+  meta.maintainers = lib.teams.budgie.members;
+
   options = {
     services.xserver.desktopManager.budgie = {
       enable = mkEnableOption (mdDoc "the Budgie desktop");
@@ -159,7 +161,7 @@ in {
       ++ cfg.sessionPath;
 
     # Fonts.
-    fonts.packages = mkDefault [
+    fonts.packages = [
       pkgs.noto-fonts
       pkgs.hack-font
     ];

@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences
+, coreutils
 , runCommand
 , graphicsmagick  # for passthru.tests
 }:
@@ -19,6 +20,9 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    # specify delegates explicitly otherwise `gm` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
     "--enable-shared"
     "--with-frozenpaths"
     "--with-quantum-depth=${toString quantumdepth}"

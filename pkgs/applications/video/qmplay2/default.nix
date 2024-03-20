@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
-  version = "23.10.22";
+  version = "24.03.16";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-yDymUXuILgT4AFTt302GniPi/WNwrTCOuOfdUiKOIyk=";
+    hash = "sha256-yIBQBRdmaY7qaBirANxMqfm5vn3T4usokJUxwSYUHjQ=";
   };
 
   nativeBuildInputs = [

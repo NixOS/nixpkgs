@@ -31,6 +31,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Phone Simulator for modem testing";
+    mainProgram = "phonesim";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];

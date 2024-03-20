@@ -43,6 +43,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Executing shell commands via HTTP server";
+    mainProgram = "shell2http";
     homepage = "https://github.com/msoap/shell2http";
     changelog = "https://github.com/msoap/shell2http/releases/tag/${src.rev}";
     license = licenses.mit;

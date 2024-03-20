@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , qtbase
@@ -8,19 +8,20 @@
 , wrapQtAppsHook
 , cmake
 , python3
-, stdenv
+, unstableGitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ripes";
-  version = "2.2.6";
+  # Pulling unstable version as latest stable does not build against gcc-13.
+  version = "2.2.6-unstable-2024-03-03";
 
   src = fetchFromGitHub {
     owner = "mortbopet";
     repo = "Ripes";
-    rev = "v${version}";
+    rev = "b71f0ddd5d2d346cb97b28fd3f70fef55bb9b6b7";
     fetchSubmodules = true;
-    sha256 = "sha256-fRkab0G2zjK1VYzH21yhL7Cr0rS4I8ir8gwH9ALy60A=";
+    hash = "sha256-zQrrWBHNIacRoAEIjR0dlgUTncBCiodcBeT/wbDClWg=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +50,14 @@ mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     description = "A graphical processor simulator and assembly editor for the RISC-V ISA";
     homepage = "https://github.com/mortbopet/Ripes";
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "Ripes";
     maintainers = with maintainers; [ rewine ];
   };
 }

@@ -17,6 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "a CLI tool to manage packet.net services";
+    mainProgram = "packet";
     homepage = "https://github.com/ebsarr/packet";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc ];

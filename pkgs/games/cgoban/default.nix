@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Client for the KGS Go Server";
+    mainProgram = "cgoban";
     homepage = "https://www.gokgs.com/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.free;

@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.12.0";
+  version = "1.13.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v623+dxttNDAfVh+2h64SqT4FvaOGRe0zvHCchIy/Wg=";
+    hash = "sha256-8SHXUrPLZ7lgvB0jqZlcvKq5Zv2d2UqXjJpgiBpR8P8=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,10 @@ buildPythonPackage rec {
     dirty-equals
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Tests make network requests
     "test_streaming_response"
@@ -87,6 +91,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client library for the OpenAI API";
+    mainProgram = "openai";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;

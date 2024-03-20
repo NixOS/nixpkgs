@@ -60,6 +60,11 @@ let
       };
     };
   };
+
+  mkfsOptionsToEnv = opts: lib.mapAttrs' (fsType: options: {
+    name = "SYSTEMD_REPART_MKFS_OPTIONS_${lib.toUpper fsType}";
+    value = builtins.concatStringsSep " " options;
+  }) opts;
 in
 {
   options.image.repart = {
@@ -183,6 +188,29 @@ in
       '';
     };
 
+    mkfsOptions = lib.mkOption {
+      type = with lib.types; attrsOf (listOf str);
+      default = {};
+      example = lib.literalExpression ''
+        {
+          vfat = [ "-S 512" "-c" ];
+        }
+      '';
+      description = lib.mdDoc ''
+        Specify extra options for created file systems. The specified options
+        are converted to individual environment variables of the format
+        `SYSTEMD_REPART_MKFS_OPTIONS_<FSTYPE>`.
+
+        See [upstream systemd documentation](https://github.com/systemd/systemd/blob/v255/docs/ENVIRONMENT.md?plain=1#L575-L577)
+        for information about the usage of these environment variables.
+
+        The example would produce the following environment variable:
+        ```
+        SYSTEMD_REPART_MKFS_OPTIONS_VFAT="-S 512 -c"
+        ```
+      '';
+    };
+
   };
 
   config = {
@@ -239,11 +267,13 @@ in
           (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) finalPartitions);
 
         partitions = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
+
+        mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
         inherit (cfg) imageFileBasename compression split seed sectorSize;
-        inherit fileSystems definitionsDirectory partitions;
+        inherit fileSystems definitionsDirectory partitions mkfsEnv;
       };
 
     meta.maintainers = with lib.maintainers; [ nikstur ];

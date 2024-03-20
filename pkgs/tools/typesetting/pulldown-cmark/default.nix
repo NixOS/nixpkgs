@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pulldown-cmark";
-  version = "0.9.6";
+  version = "0.10.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-5rCoFI+QWQVxF4YUzwP7jQytiIzTXtlOr3AJzHMdtR8=";
+    hash = "sha256-7ZO3MdQBNgltrd4Anu19g0Gkye6Bc2WHDuSng6mB9pM=";
   };
 
-  cargoHash = "sha256-it18jXKqUE43A6KAsx+BFc7YwufXjk1FJ0u8D2EolHQ=";
+  cargoHash = "sha256-4UUdsS3dK5a6phwYZqjNwX52UMLLe/LHxOiBanTRMZM=";
 
   meta = {
     description = "A pull parser for CommonMark written in Rust";

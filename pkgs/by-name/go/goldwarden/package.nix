@@ -4,19 +4,19 @@
 , makeBinaryWrapper
 , libfido2
 , dbus
-, pinentry
+, pinentry-gnome3
 , nix-update-script
 }:
 
 buildGoModule rec {
   pname = "goldwarden";
-  version = "0.2.12";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "quexten";
     repo = "goldwarden";
     rev = "v${version}";
-    hash = "sha256-W6dqxHGZGHuVOUNYWMpfswzG2bSCRyY58ya/ZqAMxyY=";
+    hash = "sha256-4KxPtsIEW46p+cFx6yeSdNlsffy9U31k+ZSkE6V0AFc=";
   };
 
   vendorHash = "sha256-IH0p7t1qInA9rNYv6ekxDN/BT5Kguhh4cZfmL+iqwVU=";
@@ -29,7 +29,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/goldwarden \
-      --suffix PATH : ${lib.makeBinPath [dbus pinentry]}
+      --suffix PATH : ${lib.makeBinPath [dbus pinentry-gnome3]}
 
     install -Dm644 $src/resources/com.quexten.goldwarden.policy -t $out/share/polkit-1/actions
   '';

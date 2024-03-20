@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bird";
-  version = "2.14";
+  version = "2.15";
 
   src = fetchurl {
     url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
-    hash = "sha256-sLn2+FZlQbm+SvHwysZ1xaN4VgGlVmen7D194pc1p4Y=";
+    hash = "sha256-emRY+kEQnABVMbI+P3q9Y9cACpnRldtJROvMtTntAvA=";
   };
 
   nativeBuildInputs = [ flex bison ];

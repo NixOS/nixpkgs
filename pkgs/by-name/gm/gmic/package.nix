@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.3.1";
+  version = "3.3.5";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -34,15 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-HagGabJ1jkg5SkMlr0Y5rGFw64jPW8QLuR0I2idM1N0=";
+    hash = "sha256-881+o6Wz4yNf92JNNLQn9x44SSjXAp/cZLkBGCfM6DY=";
   };
 
   # TODO: build this from source
-  # Reference: src/Makefile, directive gmic_stdlib.h
+  # Reference: src/Makefile, directive gmic_stdlib_community.h
   gmic_stdlib = fetchurl {
-    name = "gmic_stdlib.h";
-    url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
-    hash = "sha256-7JzFU4HvAtC5Nz5vusKCnJ8VMuKfSi1yFmjj0Hh+vA4=";
+    name = "gmic_stdlib_community.h";
+    url = "http://gmic.eu/gmic_stdlib_community${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
+    hash = "sha256-UZzCAs+x9dVMeaeEvPgyVZ5S6UO0yhJWVMgBvBiW2ME=";
   };
 
   nativeBuildInputs = [
@@ -71,10 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib.h
-
-    # CMake build files were moved to subdirectory.
-    mv resources/CMakeLists.txt resources/cmake .
+    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
   ''
   + lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
@@ -114,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gmic.eu/";
     description = "Open and full-featured framework for image processing";
+    mainProgram = "gmic";
     license = lib.licenses.cecill21;
     maintainers = [
       lib.maintainers.AndersonTorres

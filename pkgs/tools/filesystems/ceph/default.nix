@@ -195,6 +195,9 @@ let
           hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
         };
 
+        # Not using the normal `(old.patches or []) ++` pattern here to use
+        # the overridden package's patches, because current nixpkgs's `cryptography`
+        # has patches that do not apply on this old version.
         patches = [
           # Fix https://nvd.nist.gov/vuln/detail/CVE-2023-49083 which has no upstream backport.
           # See https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a#diff-f5134bf8f3cf0a5cc8601df55e50697acc866c603a38caff98802bd8e17976c5R1893

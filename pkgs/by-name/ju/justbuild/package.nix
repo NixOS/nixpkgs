@@ -170,7 +170,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = true; # last successful build 2024-01-26
     description = "a generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
     license = licenses.asl20;

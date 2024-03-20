@@ -57,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.9.1";
+  version = "4.19.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   # and upstream has stopped tagging releases since 3.41.0
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KosxlmU5pYvuy5zysscuWM25IGXin7RLGEM9V2xPQrU=";
+    hash = "sha256-b+WBW7Tfru0fx0Ijv/2R2nChtGMVivjF4D0BuwkGih0=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
@@ -79,6 +79,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "tomlkit"
+  ];
+
+  pythonRemoveDeps = [
+    # our package is presented as a binary, not a python lib - and
+    # this isn't a real runtime dependency
+    "ruff"
   ];
 
   nativeBuildInputs = [
@@ -164,6 +170,9 @@ buildPythonPackage rec {
 
     # shap is too often broken in nixpkgs
     "test_shapley_text"
+
+    # fails without network
+    "test_download_if_url_correct_parse"
   ];
   disabledTestPaths = [
     # 100% touches network
@@ -193,7 +202,6 @@ buildPythonPackage rec {
       gradio-pdf = null;
     })).overridePythonAttrs (old: {
       pname = old.pname + "-sans-client";
-      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pythonRelaxDepsHook ];
       pythonRemoveDeps = (old.pythonRemoveDeps or []) ++ [ "gradio-client" ];
       doInstallCheck = false;
       doCheck = false;

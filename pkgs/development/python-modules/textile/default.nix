@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "MOdule for generating web text";
+    mainProgram = "pytextile";
     homepage = "https://github.com/textile/python-textile";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

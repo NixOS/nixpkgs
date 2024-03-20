@@ -16,12 +16,12 @@ debianPatch = patchname: hash: fetchpatch {
   sha256 = hash;
 };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "titanion";
   version = "0.3";
 
   src = fetchurl {
-    url = "http://abagames.sakura.ne.jp/windows/ttn${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "http://abagames.sakura.ne.jp/windows/ttn${lib.replaceStrings ["."] ["_"] finalAttrs.version}.zip";
     sha256 = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
   };
 
@@ -84,8 +84,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/ttn_e.html";
     description = "Strike down super high-velocity swooping insects";
+    mainProgram = "titanion";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

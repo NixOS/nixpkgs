@@ -184,11 +184,11 @@ buildNpmPackage rec {
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
-  meta = with lib; {
+  meta = {
     description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ winter ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ winter ];
   };
 }
 ```
@@ -232,6 +232,37 @@ sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 - `hash`: The output hash of the node dependencies defined in `package-lock.json`.
 
 It returns a derivation with all `package-lock.json` dependencies downloaded into `$out/`, usable as an npm cache.
+
+#### importNpmLock {#javascript-buildNpmPackage-importNpmLock}
+
+`importNpmLock` is a Nix function that requires the following optional arguments:
+
+- `npmRoot`: Path to package directory containing the source tree
+- `package`: Parsed contents of `package.json`
+- `packageLock`: Parsed contents of `package-lock.json`
+- `pname`: Package name
+- `version`: Package version
+
+It returns a derivation with a patched `package.json` & `package-lock.json` with all dependencies resolved to Nix store paths.
+
+This function is analogous to using `fetchNpmDeps`, but instead of specifying `hash` it uses metadata from `package.json` & `package-lock.json`.
+
+Note that `npmHooks.npmConfigHook` cannot be used with `importNpmLock`. You will instead need to use `importNpmLock.npmConfigHook`:
+
+```nix
+{ buildNpmPackage, importNpmLock }:
+
+buildNpmPackage {
+  pname = "hello";
+  version = "0.1.0";
+
+  npmDeps = importNpmLock {
+    npmRoot = ./.;
+  };
+
+  npmConfigHook = importNpmLock.npmConfigHook;
+}
+```
 
 ### corepack {#javascript-corepack}
 
@@ -284,10 +315,10 @@ buildPhase = ''
 '';
 ```
 
-The dist phase is also trying to build a binary, the only way to override it is with:
+The `distPhase` is packing the package's dependencies in a tarball using `yarn pack`. You can disable it using:
 
 ```nix
-distPhase = "true";
+doDist = false;
 ```
 
 The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:

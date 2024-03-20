@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W" "ignore::FutureWarning"
+    "-W" "ignore::DeprecationWarning"
   ];
 
   # Remove performance testing.
@@ -62,6 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Fast, Extensible Progress Meter";
+    mainProgram = "tqdm";
     homepage = "https://github.com/tqdm/tqdm";
     changelog = "https://tqdm.github.io/releases/";
     license = with licenses; [ mit ];

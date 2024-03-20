@@ -31,7 +31,12 @@ stdenv.mkDerivation rec {
     libinput
   ];
 
-  makeFlags = [ "DESTDIR=$(out) PREFIX= PREFIX_ETC= ROOT_ETC=$(out)/etc"];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "PREFIX_ETC=${placeholder "out"}"
+    "CC:=$(CC)"
+    "CXX:=$(CXX)"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/alex-courtis/way-displays";

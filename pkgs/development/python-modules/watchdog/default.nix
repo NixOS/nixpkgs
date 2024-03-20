@@ -102,6 +102,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API and shell utilities to monitor file system events";
+    mainProgram = "watchmedo";
     homepage = "https://github.com/gorakhargosh/watchdog";
     changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
     license = licenses.asl20;

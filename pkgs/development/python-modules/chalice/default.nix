@@ -102,6 +102,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
+    mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
     changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

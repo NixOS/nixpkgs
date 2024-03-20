@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-screensaver";
     mainProgram = "budgie-screensaver";
     platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
+    maintainers = teams.budgie.members;
     license = licenses.gpl2Only;
   };
 }

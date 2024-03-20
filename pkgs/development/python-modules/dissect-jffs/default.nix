@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-jffs";
-  version = "1.0";
+  version = "1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.jffs";
     rev = "refs/tags/${version}";
-    hash = "sha256-Rj8/WRHNl2IQ6zwvLhqEIEMzk8BH1fv7KQkw1NzoDjI=";
+    hash = "sha256-jzSPR4pkvXRQ3Q/qL7Oa3mLX3hW2IhbXuuO0jTc8Gvg=";
   };
 
   nativeBuildInputs = [

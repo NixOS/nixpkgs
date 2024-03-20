@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "IPC library used by GnuPG and related software";
+    mainProgram = "libassuan-config";
     longDescription = ''
       Libassuan is a small library implementing the so-called Assuan
       protocol.  This protocol is used for IPC between most newer

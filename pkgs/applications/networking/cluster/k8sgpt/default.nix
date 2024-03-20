@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "k8sgpt";
-  version = "0.3.27";
+  version = "0.3.28";
 
   src = fetchFromGitHub {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
     rev = "v${version}";
-    hash = "sha256-HWcEcufn0NM+7AF4/M29bsUoQYlVA1nbrkCKt9F1g6k=";
+    hash = "sha256-VDVCkGTLoAZZyTX+zn43KisnUV9XQ9xo9ZIQf3AwDcY=";
   };
 
-  vendorHash = "sha256-b8Y95BDOR5HI6QMU4XLn5FmSHFD9fntc80r84KgmkuY=";
+  vendorHash = "sha256-NOXySV9sQl4Q1eDbcGMk0msMSosjyxYyJfhu7hd/4gw=";
 
   CGO_ENABLED = 0;
 
@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Giving Kubernetes Superpowers to everyone";
+    mainProgram = "k8sgpt";
     homepage = "https://k8sgpt.ai";
     changelog = "https://github.com/k8sgpt-ai/k8sgpt/releases/tag/v${version}";
     license = licenses.asl20;

@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for the snap7 PLC communication library";
+    mainProgram = "snap7-server";
     homepage = "https://github.com/gijzelaerr/python-snap7";
     license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];

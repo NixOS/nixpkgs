@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to parse the registry hive";
+    mainProgram = "awinreg";
     homepage = "https://github.com/skelsec/aiowinreg";
     changelog = "https://github.com/skelsec/aiowinreg/releases/tag/${version}";
     license = with licenses; [ mit ];

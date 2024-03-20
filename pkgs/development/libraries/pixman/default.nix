@@ -16,14 +16,15 @@
 , xwayland
 
 , gitUpdater
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
   version = "0.43.2";
 
   src = fetchurl {
-    urls = [
+    urls = with finalAttrs; [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
@@ -60,6 +61,9 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit cairo qemu scribus tigervnc wlroots xwayland;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
     updateScript = gitUpdater {
       url = "https://gitlab.freedesktop.org/pixman/pixman.git";
@@ -72,5 +76,6 @@ stdenv.mkDerivation rec {
     description = "A low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;
+    pkgConfigModules = [ "pixman-1" ];
   };
-}
+})

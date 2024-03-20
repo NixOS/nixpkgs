@@ -283,6 +283,8 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    ctypes-foreign = callPackage ../development/ocaml-modules/ctypes/foreign.nix { };
+
     ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {
       inherit (pkgs) nodejs;
     };
@@ -786,7 +788,7 @@ let
           inherit conduit ipaddr-sexp;
         };
       in {
-        inherit (self) dune-configurator alcotest re num octavius uutf ounit ctypes;
+        inherit (self) dune-configurator alcotest re num octavius uutf ounit ctypes ctypes-foreign;
         ppxlib = self.ppxlib.override { inherit (self') stdio; };
         cohttp-async = self.cohttp-async.override {
           inherit (self') ppx_sexp_conv base async async_kernel async_unix core_unix sexplib0 core;
@@ -823,8 +825,6 @@ let
         uri = self.uri.override { inherit angstrom; };
         cfstream = self.cfstream.override { inherit core_kernel; };
       };
-
-      magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
 
       phylogenetics = let
         angstrom = self.angstrom.override { inherit ppx_let; };
@@ -1022,7 +1022,7 @@ let
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
-    magic-trace = janeStreet_0_15.magic-trace;
+    magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
 
     mariadb = callPackage ../development/ocaml-modules/mariadb {
       inherit (pkgs) mariadb;
@@ -1032,7 +1032,9 @@ let
 
     mccs = callPackage ../development/ocaml-modules/mccs { };
 
-    mdx = callPackage ../development/ocaml-modules/mdx { };
+    mdx = callPackage ../development/ocaml-modules/mdx {
+      logs = logs.override { jsooSupport = false; lwtSupport = false; };
+    };
 
     mec = callPackage ../development/ocaml-modules/mec { };
 
@@ -1131,8 +1133,6 @@ let
     mirage-flow-combinators = callPackage ../development/ocaml-modules/mirage-flow/combinators.nix { };
 
     mirage-flow-unix = callPackage ../development/ocaml-modules/mirage-flow/unix.nix { };
-
-    mirage-fs = callPackage ../development/ocaml-modules/mirage-fs { };
 
     mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
 
@@ -1813,6 +1813,8 @@ let
 
     type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
+    type_id = callPackage ../development/ocaml-modules/type_id { };
+
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
     tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
@@ -1869,6 +1871,8 @@ let
 
     vorbis = callPackage ../development/ocaml-modules/vorbis { };
 
+    vpl-core = callPackage ../development/ocaml-modules/vpl-core { };
+
     ### W ###
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
@@ -1902,6 +1906,8 @@ let
     xtmpl = callPackage ../development/ocaml-modules/xtmpl { };
 
     xtmpl_ppx = callPackage ../development/ocaml-modules/xtmpl/ppx.nix { };
+
+    xxhash = callPackage ../development/ocaml-modules/xxhash/default.nix { };
 
     ### Y ###
 

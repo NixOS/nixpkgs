@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Compares and merges 2 or 3 files or directories";
+    mainProgram = "kdiff3";
     homepage = "https://invent.kde.org/sdk/kdiff3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "unstable-2024-02-16";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
-    repo = pname;
-    rev = "4968d1edb5daf2f24a22183e3c8ffebf19f898de";
-    sha256 = "sha256-Rn8wIwjprpfPjhY4gvCMrP3cz2XSutdCGVi5Wk5lB4w=";
+    repo = "reindeer";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cClbSJuEs4yIjx+13GSIevZO2PWEEHVDaMEmf729keA=";
   };
 
-  cargoSha256 = "sha256-ec3CG4wQhtsEKdinqvlr0vAjcNYge2FMn319BmZ77f8=";
+  cargoHash = "sha256-TtbkzU48j3dmqRocJdY8KJz/3YHYIi3SZYM/eB9zoIg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Reindeer is a tool which takes Rust Cargo dependencies and generates Buck build rules";
+    mainProgram = "reindeer";
     homepage = "https://github.com/facebookincubator/reindeer";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ nickgerace ];

@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "just a useless shell";
+    mainProgram = "jush";
     homepage = "https://github.com/troglobit/jush";
     license = licenses.isc;
     platforms = platforms.all;

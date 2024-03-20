@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "budgie";
 
-  meta.maintainers = [ lib.maintainers.federicoschonborn ];
+  meta.maintainers = lib.teams.budgie.members;
 
   nodes.machine = { ... }: {
     imports = [
@@ -29,6 +29,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   testScript = { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
+      env = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus DISPLAY=:0";
+      su = command: "su - ${user.name} -c '${env} ${command}'";
     in
     ''
       with subtest("Wait for login"):
@@ -47,21 +49,46 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
       with subtest("Check if Budgie session components actually start"):
-          machine.wait_until_succeeds("pgrep budgie-daemon")
-          machine.wait_for_window("budgie-daemon")
-          machine.wait_until_succeeds("pgrep budgie-panel")
-          machine.wait_for_window("budgie-panel")
-          # We don't check xwininfo for this one.
+          for i in ["budgie-daemon", "budgie-panel", "budgie-wm", "budgie-desktop-view", "gsd-media-keys"]:
+              machine.wait_until_succeeds(f"pgrep -f {i}")
+          # We don't check xwininfo for budgie-wm.
           # See https://github.com/NixOS/nixpkgs/pull/216737#discussion_r1155312754
-          machine.wait_until_succeeds("pgrep budgie-wm")
+          machine.wait_for_window("budgie-daemon")
+          machine.wait_for_window("budgie-panel")
+
+      with subtest("Check if various environment variables are set"):
+          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/budgie-wm)/environ"
+          machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie:GNOME'")
+          machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie.budgie-desktop-with-plugins.pname}'")
+
+      with subtest("Open run dialog"):
+          machine.send_key("alt-f2")
+          machine.wait_for_window("budgie-run-dialog")
+          machine.sleep(2)
+          machine.screenshot("run_dialog")
+          machine.send_key("esc")
+
+      with subtest("Open Budgie Control Center"):
+          machine.succeed("${su "budgie-control-center >&2 &"}")
+          machine.wait_for_window("Budgie Control Center")
+
+      with subtest("Lock the screen"):
+          machine.succeed("${su "budgie-screensaver-command -l >&2 &"}")
+          machine.wait_until_succeeds("${su "budgie-screensaver-command -q"} | grep 'The screensaver is active'")
+          machine.sleep(2)
+          machine.send_chars("${user.password}", delay=0.5)
+          machine.screenshot("budgie_screensaver")
+          machine.send_chars("\n")
+          machine.wait_until_succeeds("${su "budgie-screensaver-command -q"} | grep 'The screensaver is inactive'")
+          machine.sleep(2)
 
       with subtest("Open MATE terminal"):
-          machine.succeed("su - ${user.name} -c 'DISPLAY=:0 mate-terminal >&2 &'")
+          machine.succeed("${su "mate-terminal >&2 &"}")
           machine.wait_for_window("Terminal")
 
-      with subtest("Check if budgie-wm has ever coredumped"):
-          machine.fail("coredumpctl --json=short | grep budgie-wm")
-          machine.sleep(20)
+      with subtest("Check if Budgie has ever coredumped"):
+          machine.fail("coredumpctl --json=short | grep budgie")
+          machine.sleep(10)
           machine.screenshot("screen")
     '';
 })

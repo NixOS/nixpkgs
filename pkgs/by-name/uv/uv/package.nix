@@ -1,66 +1,59 @@
 { lib
-, cargo
 , cmake
 , darwin
 , fetchFromGitHub
-, libgit2
 , openssl
 , pkg-config
-, python3
 , rustPlatform
-, rustc
 , stdenv
-, zlib
+, nix-update-script
 }:
 
-python3.pkgs.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.1.6";
-  pyproject = true;
+  version = "0.1.22";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = version;
-    hash = "sha256-cwnZBKJcMgdSkOV0rojxF8kLQH59iOxjaE5yZkkY2/4=";
+    hash = "sha256-AbixSkwyhj3eBMLvGlodpz7XE3ln0IokNMdu5SOZjOE=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
-      "pubgrub-0.2.1" = "sha256-yCeUJp0Cy5Fe0g3Ba9ZFqTJ7IzSFqrX8Dv3+N8DAEZs=";
+      "pubgrub-0.2.1" = "sha256-Pn60v5tfpGrssCeuaUcxw5eJ1g8Dk/+un0s8+k4abpo=";
     };
   };
 
   nativeBuildInputs = [
-    cargo
     cmake
     pkg-config
-    rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
-    rustc
   ];
 
   buildInputs = [
-    libgit2
     openssl
-    zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  dontUseCmakeConfigure = true;
+  cargoBuildFlags = [ "--package" "uv" ];
 
-  pythonImportsCheck = [ "uv" ];
+  # Tests require network access
+  doCheck = false;
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "An extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
+    changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ marsam ];
     mainProgram = "uv";

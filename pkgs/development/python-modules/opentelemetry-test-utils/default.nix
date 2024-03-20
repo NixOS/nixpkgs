@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , buildPythonPackage
 , pythonOlder
 , asgiref
@@ -9,19 +8,20 @@
 }:
 
 buildPythonPackage {
-  inherit (opentelemetry-api) version src;
+  inherit (opentelemetry-api) src;
   pname = "opentelemetry-test-utils";
-  disabled = pythonOlder "3.7";
+  version = "0.44b0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/tests/opentelemetry-test-utils";
 
-  format = "pyproject";
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     opentelemetry-api
     opentelemetry-sdk

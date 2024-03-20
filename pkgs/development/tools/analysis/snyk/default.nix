@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "snyk";
-  version = "1.1276.0";
+  version = "1.1284.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-l5Xx6z3NbtwdtKe8MmRWTJoKaEH3AZjHKXqoLv3rHfU=";
+    hash = "sha256-CM9172gSeWf+12e6tsro6O1NtiZqUAT0EsA6LAhZ+8s=";
   };
 
-  npmDepsHash = "sha256-FJGxCEhBADH4c1khJaVFHL4e25Mq4PHrez+2NPFBx0w=";
+  npmDepsHash = "sha256-aode80HyGSyZoEiCdsnEPrVo8KSqTW0GxxsGdRyNdiQ=";
 
   postPatch = ''
     substituteInPlace package.json --replace '"version": "1.0.0-monorepo"' '"version": "${version}"'
@@ -29,6 +29,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Scans and monitors projects for security vulnerabilities";
+    mainProgram = "snyk";
     homepage = "https://snyk.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Human friendly output for text interfaces using Python";
+    mainProgram = "humanfriendly";
     homepage = "https://humanfriendly.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ montag451 ];

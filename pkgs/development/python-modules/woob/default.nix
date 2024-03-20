@@ -78,6 +78,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Collection of applications and APIs to interact with websites";
+    mainProgram = "woob";
     homepage = "https://woob.tech";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ DamienCassou ];

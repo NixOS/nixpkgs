@@ -5,11 +5,11 @@ in
 {
   openssh = common rec {
     pname = "openssh";
-    version = "9.6p1";
+    version = "9.7p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-kQIRwHJVqMWtZUORtA7lmABxDdgRndU2LeCThap6d3w=";
+      hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
@@ -18,15 +18,15 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "9.5p1";
+    version = "9.7p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-8Cbnt5un+1QPdRgq+W3IqPHbOV+SK7yfbKYDZyaGCGs=";
+      hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
     };
 
-    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/700625bcd86b74cf3fb9536aeea250d7f8cd1fd5/security/openssh-portable/files/extra-patch-hpn"; in
+    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/b3f86656fc67aa397f60747c85f7f7b967c3279d/security/openssh-portable/files/extra-patch-hpn"; in
     [
       ./ssh-keysign-8.5.patch
 
@@ -36,7 +36,7 @@ in
         inherit url;
         stripLen = 1;
         excludes = [ "channels.c" ];
-        hash = "sha256-hYB3i0ifNOgGLYwElMJFcT+ktczLKciq3qw1tTHZHcc=";
+        hash = "sha256-MydulQvz8sDVQ6Up9U1yrsiyI5EGmyKl/stUk7DvVOU=";
       })
 
       (fetchpatch {
@@ -58,12 +58,12 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "9.5p1";
+    version = "9.6p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-8Cbnt5un+1QPdRgq+W3IqPHbOV+SK7yfbKYDZyaGCGs=";
+      hash = "sha256-kQIRwHJVqMWtZUORtA7lmABxDdgRndU2LeCThap6d3w=";
     };
 
     extraPatches = [
@@ -72,7 +72,7 @@ in
       (fetchpatch {
         name = "openssh-gssapi.patch";
         url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-1/debian/patches/gssapi.patch";
-        sha256 = "sha256-E36jxnPcu6RTyXXb9yVBCoFIVchiOSLX7L74ng1Dmao=";
+        hash = "sha256-gzDQdO6yOoN0apGj5aoKFdUkmKzFyphFUdgNhDLMp8U=";
       })
     ];
 

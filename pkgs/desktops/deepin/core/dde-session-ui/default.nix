@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-session-ui";
-  version = "6.0.10";
+  version = "6.0.16";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-JwktVbwWdfqURhZuEFdB5oaKMsBZu5DekpZ2WGpcL4Q=";
+    hash = "sha256-hxunGK7DxRuAbmi6PtylHCBajV3b1qbFVA+AiuOCcN0=";
   };
 
   postPatch = ''

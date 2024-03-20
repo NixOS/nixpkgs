@@ -18,29 +18,18 @@ let
     done
     rm -r packages/grafana-e2e
   '';
-
-  # Injects a `t.Skip()` into a given test since
-  # there's apparently no other way to skip tests here.
-  skipTest = lineOffset: testCase: file:
-    let
-      jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);
-    in ''
-      sed -i -e '/${testCase}/{
-      ${jumpAndAppend} t.Skip();
-      }' ${file}
-    '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.3.3";
+  version = "10.4.0";
 
-  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" "modowners" ];
+  subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-uAfHcW9j+al8IIH2N6X5wssQmSXqJjVQzwERBCxGxVE=";
+    hash = "sha256-Rp2jGspbmqJFzSbiVy2/5oqQJnAdGG/T+VNBHVsHSwg=";
   };
 
   offlineCache = stdenv.mkDerivation {
@@ -48,7 +37,7 @@ buildGoModule rec {
     inherit src;
     nativeBuildInputs = [
       yarn nodejs cacert
-      jq moreutils
+      jq moreutils python3
     ];
     postPatch = ''
       ${patchAwayGrafanaE2E}
@@ -67,12 +56,12 @@ buildGoModule rec {
     dontInstall = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-70eMa8E483f/Bz7iy+4Seap1EfIdjD5krnt6W9CUows=";
+    outputHash = "sha256-QdyXSPshzugkDTJoUrJlHNuhPAyR9gae5Cbk8Q8FSl4=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-nGv/DBNnQ4AOJtrsYIGLCrV1xNmBN0dDf6u46R3TAHo=";
+  vendorHash = "sha256-cNkMVLXp3hPMcW0ilOM0VlrrDX/IsZaze+/6qlTfmRs=";
 
   nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ];
 
@@ -90,35 +79,6 @@ buildGoModule rec {
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./pkg/kindsys/report.go
-
-    # Work around `main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/pkg/util/xorm`.
-    # Apparently these files confuse the dependency resolution for the go builder implemented here.
-    rm pkg/util/xorm/go.{mod,sum}
-
-    # The testcase makes an API call against grafana.com:
-    #
-    # [...]
-    # grafana> t=2021-12-02T14:24:58+0000 lvl=dbug msg="Failed to get latest.json repo from github.com" logger=update.checker error="Get \"https://raw.githubusercontent.com/grafana/grafana/main/latest.json\": dial tcp: lookup raw.githubusercontent.com on [::1]:53: read udp [::1]:36391->[::1]:53: read: connection refused"
-    # grafana> t=2021-12-02T14:24:58+0000 lvl=dbug msg="Failed to get plugins repo from grafana.com" logger=plugin.manager error="Get \"https://grafana.com/api/plugins/versioncheck?slugIn=&grafanaVersion=\": dial tcp: lookup grafana.com on [::1]:53: read udp [::1]:41796->[::1]:53: read: connection refused"
-    ${skipTest 1 "Request is not forbidden if from an admin" "pkg/tests/api/plugins/api_plugins_test.go"}
-
-    # Skip a flaky test (https://github.com/NixOS/nixpkgs/pull/126928#issuecomment-861424128)
-    ${skipTest 2 "it should change folder successfully and return correct result" "pkg/services/libraryelements/libraryelements_patch_test.go"}
-
-    # Skip flaky tests (https://logs.ofborg.org/?key=nixos/nixpkgs.263185&attempt_id=5b056a17-67a7-4b74-9dc7-888eb1d6c2dd)
-    ${skipTest 1 "TestIntegrationRulerAccess" "pkg/tests/api/alerting/api_alertmanager_test.go"}
-    ${skipTest 1 "TestIntegrationRulePause" "pkg/tests/api/alerting/api_ruler_test.go"}
-
-    # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
-    rm -r scripts/go
-
-    # Requires making API calls against storage.googleapis.com:
-    #
-    # [...]
-    # grafana> 2023/08/24 08:30:23 failed to copy objects, err: Post "https://storage.googleapis.com/upload/storage/v1/b/grafana-testing-repo/o?alt=json&name=test-path%2Fbuild%2FTestCopyLocalDir2194093976%2F001%2Ffile2.txt&prettyPrint=false&projection=full&uploadType=multipart": dial tcp: lookup storage.googleapis.com on [::1]:53: read udp [::1]:36436->[::1]:53: read: connection refused
-    # grafana> panic: test timed out after 10m0s
-    rm pkg/build/gcloud/storage/gsutil_test.go
-
     # Setup node_modules
     export HOME="$(mktemp -d)"
 

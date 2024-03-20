@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abseil-cpp";
-  version = "20240116.0";
+  version = "20240116.1";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-HtJh2oYGx87bNT6Ll3WLeYPPxH1f9JwVqCXGErykGnE=";
+    hash = "sha256-D4E11bICKr3Z5RRah7QkfXVsXtuUg32FMmKpiOGjZDM=";
   };
 
   cmakeFlags = [

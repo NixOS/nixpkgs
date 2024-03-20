@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, libopus, soxr
 , IOKit, AudioToolbox
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # not needed
   buildInputs = [
     boost179
-    asio avahi flac libogg libvorbis
+    asio avahi flac libogg libvorbis libopus
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
   ++ lib.optional stdenv.isLinux alsa-lib

@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parser for JET databases";
+    mainProgram = "antdsparse";
     homepage = "https://github.com/skelsec/aesedb";
     changelog = "https://github.com/skelsec/aesedb/releases/tag/${version}";
     license = with licenses; [ mit ];

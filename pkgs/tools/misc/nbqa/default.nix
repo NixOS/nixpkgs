@@ -7,14 +7,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
-  version = "1.7.1";
+  version = "1.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbQA-dev";
     repo = "nbQA";
     rev = "refs/tags/${version}";
-    hash = "sha256-a/FuhJyf8BmZekUibzEiGgkHL51A+75R4a6S+h5i28s=";
+    hash = "sha256-clxIe97pWeA9IGt+650tJfxTmU+qbrL/9B2VRVIML+s=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -81,6 +81,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_running_in_different_dir_works"
     "test_unable_to_reconstruct_message_pythonpath"
     "test_with_subcommand"
+    "test_pylint_works"
   ];
 
   disabledTestPaths = [

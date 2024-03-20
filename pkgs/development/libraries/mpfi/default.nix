@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aj/QmJ38ifsW36JFQcbp55aIQRvOpiqLHwEh/aFXsgo=";
   };
 
-  sourceRoot = "source/mpfi";
+  sourceRoot = "${src.name}/mpfi";
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ mpfr ];

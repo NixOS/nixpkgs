@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation rec {
   pname = "lxd-ui";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
     rev = "refs/tags/${version}";
-    hash = "sha256-3Ts6lKyzpMDVATCKD1fFIGTskWzWpQUT9S8cPFnlEOs=";
+    hash = "sha256-DJLkXZpParmEYHbTpl6KFC9l9y5DqzUTrC0pb2dJXI4=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-0pyxwMGGqogEe1w3sail8NUDHtxLQZU9Wg8E6rQNy4o=";
+    hash = "sha256-ckTWE/czzvxbGOF8fsJ3W1sal7+NaHquoSjZSPjkGj4=";
   };
 
   nativeBuildInputs = [

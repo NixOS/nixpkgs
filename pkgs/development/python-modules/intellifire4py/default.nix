@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to read Intellifire fireplace status data";
+    mainProgram = "intellifire4py";
     homepage = "https://github.com/jeeftor/intellifire4py";
     changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/v${version}";
     license = with licenses; [ mit ];

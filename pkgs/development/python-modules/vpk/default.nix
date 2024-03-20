@@ -22,6 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for working with Valve Pak files";
+    mainProgram = "vpk";
     homepage = "https://github.com/ValvePython/vpk";
     license = licenses.mit;
     maintainers = with maintainers; [ joshuafern ];

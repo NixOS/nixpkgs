@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-appearance";
-  version = "1.1.6";
+  version = "1.1.25";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-7oRbydLXw8yRzi9L1GH/q0cjMY/DLyWbj4RUSyNpVNM=";
+    hash = "sha256-H9TvWF6Q0lX4GF4mQ71E3SUqWbhH7dzHIlScovbN7lM=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/service/modules/api/themethumb.cpp \
       --replace "/usr/lib/deepin-api" "/run/current-system/sw/lib/deepin-api"
 
-    substituteInPlace src/service/dbus/deepinwmfaker.cpp \
+    substituteInPlace fakewm/dbus/deepinwmfaker.cpp \
       --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace src/service/modules/api/locale.cpp \

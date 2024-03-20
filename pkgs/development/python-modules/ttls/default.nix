@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to interact with Twinkly LEDs";
+    mainProgram = "ttls";
     homepage = "https://github.com/jschlyter/ttls";
     changelog = "https://github.com/jschlyter/ttls/blob/v${version}/CHANGES.md";
     license = licenses.mit;

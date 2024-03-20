@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inInitrd = any (fs: fs == "nfs") config.boot.initrd.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.nfs or false;
 
   nfsStateDir = "/var/lib/nfs";
 
@@ -58,7 +58,7 @@ in
 
   ###### implementation
 
-  config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.nfs or config.boot.supportedFilesystems.nfs4 or false) {
 
     services.rpcbind.enable = true;
 

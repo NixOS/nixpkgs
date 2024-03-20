@@ -10,17 +10,16 @@
 
 buildPythonPackage rec {
   pname = "poetry-audit-plugin";
-  version = "0.3.0";
+  version = "0.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "opeco17";
     repo = "poetry-audit-plugin";
     rev = "refs/tags/${version}";
-    hash = "sha256-49OnYz3EFiqOe+cLgfynjy14Ve4Ga6OUrLdM8HhZuKQ=";
+    hash = "sha256-kiNtzEup2ygCTk0zk8YV2jxAj6ZzOhP8v0U4FbV15hI=";
   };
 
   nativeBuildInputs = [

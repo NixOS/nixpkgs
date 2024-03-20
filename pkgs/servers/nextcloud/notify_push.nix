@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage rec {
       buildAndTestSubdir = "test_client";
 
       cargoHash = "sha256-OUALNd64rr2qXyRNV/O+pi+dE0HYogwlbWx5DCACzyk=";
+
+      meta = meta // {
+        mainProgram = "test_client";
+      };
     };
     tests = {
       inherit (nixosTests.nextcloud)
@@ -38,6 +42,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
+    mainProgram = "notify_push";
     homepage = "https://github.com/nextcloud/notify_push";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

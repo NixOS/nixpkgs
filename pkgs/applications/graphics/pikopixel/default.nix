@@ -1,9 +1,10 @@
 { lib
+, clangStdenv
 , fetchurl
 , gnustep
 }:
 
-gnustep.gsmakeDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "pikopixel";
   version = "1.0-b10";
 
@@ -13,6 +14,11 @@ gnustep.gsmakeDerivation rec {
   };
 
   sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
+
+  nativeBuildInputs = [
+    gnustep.make
+    gnustep.wrapGNUstepAppsHook
+  ];
 
   buildInputs = [
     gnustep.base
@@ -33,6 +39,7 @@ gnustep.gsmakeDerivation rec {
 
   meta = with lib; {
     description = "Application for drawing and editing pixel-art images";
+    mainProgram = "PikoPixel";
     homepage = "https://twilightedge.com/mac/pikopixel/";
     downloadPage = "https://twilightedge.com/mac/pikopixel/";
     license = licenses.agpl3;

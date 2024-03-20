@@ -18,29 +18,31 @@
 , requests
 , requests-mock
 , responses
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "4.0.1";
-  format = "setuptools";
+  version = "4.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
-    repo = pname;
+    repo = "pyrainbird";
     rev = "refs/tags/${version}";
-    hash = "sha256-OcCg6Q+FJnmrYf70uNLWTg/tfWVJpiQlnyKfREcP2YM=";
+    hash = "sha256-4AoxLZv0u8wCG3ihw0JqsqsO5zG5UyP4ebSX99ve8sg=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=pyrainbird --cov-report=term-missing" ""
-
-    substituteInPlace setup.cfg \
-      --replace "pycryptodome>=3.16.0" "pycryptodome"
+      --replace-fail "--cov=pyrainbird --cov-report=term-missing" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp-retry

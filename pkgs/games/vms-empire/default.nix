@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://catb.org/~esr/vms-empire/";
     description = "The ancestor of all expand/explore/exploit/exterminate games";
+    mainProgram = "vms-empire";
     longDescription = ''
       Empire is a simulation of a full-scale war between two emperors, the
       computer and you. Naturally, there is only room for one, so the object of

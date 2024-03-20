@@ -1,5 +1,5 @@
 { linkFarmFromDrvs, fetchurl }:
-{ name, nugetDeps, sourceFile ? null }:
+{ name, nugetDeps ? import sourceFile, sourceFile ? null }:
 linkFarmFromDrvs "${name}-nuget-deps" (nugetDeps {
   fetchNuGet = { pname, version, sha256
     , url ? "https://www.nuget.org/api/v2/package/${pname}/${version}" }:

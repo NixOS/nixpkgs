@@ -13,7 +13,6 @@
 , gzip
 , gnutar
 , git
-, esbuild
 , cacert
 , util-linux
 , gawk
@@ -47,13 +46,13 @@
 }@args:
 
 let
-  version = "3.2.0.beta1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-HVjt5rsLSuyOaQxkbiTrsYsSXj3oSWjke98QVp+tEqk=";
+    sha256 = "sha256-Iv7VSnK8nZDpmIwIRPedSWlftABKuMOQ4MXDGpjuWrY=";
   };
 
   ruby = ruby_3_2;
@@ -66,7 +65,6 @@ let
     gnutar
     git
     brotli
-    esbuild
 
     # Misc required system utils
     which
@@ -204,7 +202,7 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "070h66zp8kmsigbrkh5d3jzbzvllzhbx0fa2yzx5lbpgnjhih3p2";
+      sha256 = "0sclrv3303dgg3r08dwhd1yvi3pvlnvnikn300vjsh6c71fnzhnj";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -217,7 +215,6 @@ let
       nodejs_18
       jq
       moreutils
-      esbuild
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -241,12 +238,6 @@ let
       # hasn't been `patchShebangs`-ed yet. So instead we just use
       # `patch-package` from `nativeBuildInputs`.
       ./asserts_patch-package_from_path.patch
-
-      # `lib/discourse_js_processor.rb`
-      # tries to call `../node_modules/.bin/esbuild`, which
-      # hasn't been `patchShebangs`-ed yet. So instead we just use
-      # `esbuild` from `nativeBuildInputs`.
-      ./assets_esbuild_from_path.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -279,7 +270,6 @@ let
       popd &>/dev/null
 
       redis-server >/dev/null &
-      REDIS_PID=$!
 
       initdb -A trust $NIX_BUILD_TOP/postgres >/dev/null
       postgres -D $NIX_BUILD_TOP/postgres -k $NIX_BUILD_TOP >/dev/null &
@@ -305,8 +295,6 @@ let
 
       bundle exec rake db:migrate >/dev/null
       chmod -R +w tmp
-
-      kill $REDIS_PID
     '';
 
     buildPhase = ''
@@ -363,12 +351,6 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
-
-      # `lib/discourse_js_processor.rb`
-      # tries to call `../node_modules/.bin/esbuild`, which
-      # hasn't been `patchShebangs`-ed yet. So instead we just use
-      # `esbuild` from `nativeBuildInputs`.
-      ./assets_esbuild_from_path.patch
     ];
 
     postPatch = ''

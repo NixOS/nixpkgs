@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.3.5";
+  version = "2.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zZ3dV2WHDqPFRbbLR6qtXwTZowpijdP82082eijCIIU=";
+    hash = "sha256-shdKEtytLcLzQuqCh2iY9WigtmxTVoYAv4BXcVj8uhw=";
   };
 
   patches = [
@@ -103,6 +103,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helps when interfacing with Ansible";
+    mainProgram = "ansible-runner";
     homepage = "https://github.com/ansible/ansible-runner";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

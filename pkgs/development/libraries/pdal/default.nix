@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-bYTSmrel8MLza+OxO+aOSsnkahjjqRRqUiVwAk23Gxk=";
+    sha256 = "sha256-wrgEbCYOGW1yrVxyX+UDa5jcUqab3letEGuvWnYvtac=";
   };
 
   patches = [

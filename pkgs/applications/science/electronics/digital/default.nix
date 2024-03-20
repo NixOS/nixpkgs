@@ -60,6 +60,7 @@ maven.buildMavenPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hneemann/Digital";
     description = pkgDescription;
+    mainProgram = "digital";
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ Dettorer ];

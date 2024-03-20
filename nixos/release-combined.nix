@@ -142,7 +142,6 @@ in rec {
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
         (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
-        (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")

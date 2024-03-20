@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.40.4";
+  version = "1.42.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-WyjyV1oBaRPDyawPckkgoA6JB974CNJG1h5YmmA10uo=";
+    hash = "sha256-LZn7oWwKdHi/KScitFnNDX7pI92mNkC6niGP+BixjtA=";
   };
 
   nativeBuildInputs = [

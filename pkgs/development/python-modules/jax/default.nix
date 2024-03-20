@@ -1,6 +1,7 @@
 { lib
 , blas
 , buildPythonPackage
+, callPackage
 , setuptools
 , importlib-metadata
 , fetchFromGitHub
@@ -125,6 +126,23 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "jax" ];
+
+  # Test CUDA-enabled jax and jaxlib. Running CUDA-enabled tests is not
+  # currently feasible within the nix build environment so we have to maintain
+  # this script separately. See https://github.com/NixOS/nixpkgs/pull/256230
+  # for a possible remedy to this situation.
+  #
+  # Run these tests with eg
+  #
+  #   NIXPKGS_ALLOW_UNFREE=1 nixglhost -- nix run --impure .#python3Packages.jax.passthru.tests.test_cuda_jaxlibBin
+  passthru.tests = {
+    test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib.override { cudaSupport = true; };
+    };
+    test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib-bin.override { cudaSupport = true; };
+    };
+  };
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

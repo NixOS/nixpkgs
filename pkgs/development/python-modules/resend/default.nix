@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "resend";
-  version = "0.7.2";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "resend";
     repo = "resend-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3wX2xNz/6Erv97TlQCuF0Sha0fbJJX1LK9dx8xYG4M0=";
+    hash = "sha256-6cQtI3it2AS8UdT83fp3y3IcbjSyPmBlQuymN74fBNo=";
   };
 
   nativeBuildInputs = [

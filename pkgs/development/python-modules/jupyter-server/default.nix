@@ -118,6 +118,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
     description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
+    mainProgram = "jupyter-server";
     homepage = "https://github.com/jupyter-server/jupyter_server";
     license = licenses.bsdOriginal;
     maintainers = lib.teams.jupyter.members;

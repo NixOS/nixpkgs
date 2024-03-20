@@ -70,16 +70,6 @@ let
     hash = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
   };
 
-  gtest' = gtest.overrideAttrs (oldAttrs: rec {
-    version = "1.13.0";
-    src = fetchFromGitHub {
-      owner = "google";
-      repo = "googletest";
-      rev = "v${version}";
-      hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
-    };
-  });
-
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
@@ -143,7 +133,7 @@ effectiveStdenv.mkDerivation rec {
     nlohmann_json
     microsoft-gsl
   ] ++ lib.optionals pythonSupport (with python3Packages; [
-    gtest'
+    gtest
     numpy
     pybind11
     packaging
@@ -197,8 +187,8 @@ effectiveStdenv.mkDerivation rec {
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" cutlass)
-    (lib.cmakeFeature "onnxruntime_CUDNN_HOME" cudaPackages.cudnn)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
+    (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
   ];
 

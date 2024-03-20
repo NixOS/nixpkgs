@@ -507,6 +507,16 @@ This allows the function to produce reproducible images.
 
   _Default value:_ `"1970-01-01T00:00:01Z"`.
 
+`uid` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-uid}
+`gid` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-gid}
+`uname` (String; _optional_) []{#dockerTools-buildLayeredImage-arg-uname}
+`gname` (String; _optional_) []{#dockerTools-buildLayeredImage-arg-gname}
+
+: Credentials for Nix store ownership.
+  Can be overridden to e.g. `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
+
+  _Default value:_ `0` / `0` / `"root"` / `"root"`
+
 `maxLayers` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-maxLayers}
 
 : The maximum number of layers that will be used by the generated image.

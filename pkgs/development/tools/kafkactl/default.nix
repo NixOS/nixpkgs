@@ -22,6 +22,7 @@ buildGoModule rec {
     homepage = "https://github.com/deviceinsight/kafkactl";
     changelog = "https://github.com/deviceinsight/kafkactl/blob/v${version}/CHANGELOG.md";
     description = "Command Line Tool for managing Apache Kafka";
+    mainProgram = "kafkactl";
     longDescription = ''
       A command-line interface for interaction with Apache Kafka.
       Features:

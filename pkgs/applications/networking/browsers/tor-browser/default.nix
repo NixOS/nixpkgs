@@ -101,7 +101,7 @@ lib.warnIf (useHardenedMalloc != null)
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.0.9";
+  version = "13.0.12";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -111,7 +111,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-qcB3DLVt2J4WNJLunDSnZdyflMY9/NIsGrj+TkQeJEg=";
+      hash = "sha256-2AzcDYngLr+J+s12tAMdB9SjDzOWPnQY9WL7/3+N0FA=";
     };
 
     i686-linux = fetchurl {
@@ -121,7 +121,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-aq2WffQ3ZUL0vopbDU5n9bWb8MC7rHoaz54kz2oaXz8=";
+      hash = "sha256-ect++2xZe00Hlikz6eMNMiiHnVoETSvjD0Cf1oBgj9E=";
     };
   };
 
@@ -323,6 +323,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Privacy-focused browser routing traffic through the Tor network";
+    mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames sources;

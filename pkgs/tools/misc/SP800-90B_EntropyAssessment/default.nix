@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace "-march=native" ""
   '';
 
-  sourceRoot = "source/cpp";
+  sourceRoot = "${src.name}/cpp";
 
   makeFlags = [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"

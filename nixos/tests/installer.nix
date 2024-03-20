@@ -82,47 +82,36 @@ let
   testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi, grubIdentifier
                   , postInstallCommands, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig, testFlakeSwitch, clevisTest, clevisFallbackTest
+                  , disableFileSystems
                   }:
-    let iface = "virtio";
-        isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
-        bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
+    let
+      qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
+      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+      qemu = qemu-common.qemuBinary pkgs.qemu_test;
     in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then ''
       machine.succeed("true")
     '' else ''
-      import subprocess
-      tpm_folder = os.environ['NIX_BUILD_TOP']
-      def assemble_qemu_flags():
-          flags = "-cpu max"
-          ${if (system == "x86_64-linux" || system == "i686-linux")
-            then ''flags += " -m 1024"''
-            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
-          }
-          ${optionalString clevisTest ''flags += f" -chardev socket,id=chrtpm,path={tpm_folder}/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"''}
-          ${optionalString clevisTest ''flags += " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:11:02 -netdev vde,id=vlan1,sock=\"$QEMU_VDE_SOCKET_1\""''}
-          return flags
-
-
-      qemu_flags = {"qemuFlags": assemble_qemu_flags()}
-
       import os
+      import subprocess
+
+      tpm_folder = os.environ['NIX_BUILD_TOP']
+
+      startcommand = "${qemu} -m 2048"
+
+      ${optionalString clevisTest ''
+        startcommand += f" -chardev socket,id=chrtpm,path={tpm_folder}/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
+        startcommand += " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:11:02 -netdev vde,id=vlan1,sock=\"$QEMU_VDE_SOCKET_1\""
+      ''}
+      ${optionalString isEfi ''
+        startcommand +=" -drive if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware} -drive if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
+      ''}
 
       image_dir = machine.state_dir
       disk_image = os.path.join(image_dir, "machine.qcow2")
-
-      hd_flags = {
-          "hdaInterface": "${iface}",
-          "hda": disk_image,
-      }
-      ${optionalString isEfi ''
-        hd_flags.update(
-            bios="${pkgs.OVMF.fd}/FV/${bios}"
-        )''
-      }
-      default_flags = {**hd_flags, **qemu_flags}
-
+      startcommand += f" -drive file={disk_image},if=virtio,werror=report"
 
       def create_machine_named(name):
-          return create_machine({**default_flags, "name": name})
+          return create_machine(startcommand, name=name)
 
       class Tpm:
             def __init__(self):
@@ -175,7 +164,7 @@ let
       ${createPartitions}
 
       with subtest("Create the NixOS configuration"):
-          machine.succeed("nixos-generate-config --root /mnt")
+          machine.succeed("nixos-generate-config ${optionalString disableFileSystems "--no-filesystems"} --root /mnt")
           machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
           machine.copy_from_host(
               "${ makeConfig {
@@ -445,6 +434,7 @@ let
     , testFlakeSwitch ? false
     , clevisTest ? false
     , clevisFallbackTest ? false
+    , disableFileSystems ? false
     }:
     makeTest {
       inherit enableOCR;
@@ -471,7 +461,7 @@ let
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
-          virtualisation.memorySize = 1536;
+          virtualisation.memorySize = 2048;
 
           boot.initrd.systemd.enable = systemdStage1;
 
@@ -526,8 +516,7 @@ let
             curl
           ]
           ++ optionals (bootLoader == "grub") (let
-            zfsSupport = lib.any (x: x == "zfs")
-              (extraInstallerConfig.boot.supportedFilesystems or []);
+            zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })
@@ -554,7 +543,8 @@ let
       testScript = testScriptFun {
         inherit bootLoader createPartitions postInstallCommands preBootCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
-                testSpecialisationConfig testFlakeSwitch clevisTest clevisFallbackTest;
+                testSpecialisationConfig testFlakeSwitch clevisTest clevisFallbackTest
+                disableFileSystems;
       };
     };
 
@@ -1426,5 +1416,40 @@ in {
         ];
       };
     };
+  };
+
+  gptAutoRoot = let
+    rootPartType = {
+      ia32 = "44479540-F297-41B2-9AF7-D131D5F0458A";
+      x64 = "4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709";
+      arm = "69DAD710-2CE4-4E3C-B16C-21A1D49ABED3";
+      aa64 = "B921B045-1DF0-41C3-AF44-4C6F280D3FAE";
+    }.${pkgs.stdenv.hostPlatform.efiArch};
+  in makeInstallerTest "gptAutoRoot" {
+    disableFileSystems = true;
+    createPartitions = ''
+      machine.succeed(
+        "sgdisk --zap-all /dev/vda",
+        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
+        "sgdisk --new=3:0:+5G --typecode=0:${rootPartType} /dev/vda", # /
+        "udevadm settle",
+
+        "mkfs.vfat /dev/vda1",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.ext4 -L root /dev/vda3",
+        "udevadm settle",
+
+        "mount /dev/vda3 /mnt",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot"
+      )
+    '';
+    bootLoader = "systemd-boot";
+    extraConfig = ''
+      boot.initrd.systemd.root = "gpt-auto";
+      boot.initrd.supportedFilesystems = ["ext4"];
+    '';
   };
 }

@@ -79,6 +79,9 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+    # seems to only fail on higher core counts
+    # AssertionError: assert 3 == 0
+    "test_setup_security_disabled_serializers"
     # fails with pytest-xdist
     "test_itercapture_limit"
     "test_stamping_headers_in_options"
@@ -100,6 +103,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distributed task queue";
+    mainProgram = "celery";
     homepage = "https://github.com/celery/celery/";
     changelog = "https://github.com/celery/celery/releases/tag/v${version}";
     license = licenses.bsd3;

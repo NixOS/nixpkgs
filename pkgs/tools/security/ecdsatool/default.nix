@@ -21,6 +21,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Create and manipulate ECC NISTP256 keypairs";
+    mainProgram = "ecdsatool";
     homepage = "https://github.com/kaniini/ecdsatool/";
     license = with licenses; [free];
     platforms = platforms.unix;

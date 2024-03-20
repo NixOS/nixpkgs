@@ -66,6 +66,10 @@ in {
             "0.0.0.0@53"
             "::@53"
            ];
+          listen-quic = [
+            "0.0.0.0@853"
+            "::@853"
+           ];
           automatic-acl = true;
         };
 
@@ -129,8 +133,13 @@ in {
           key = "xfr_key";
         };
 
+        remote.primary-quic = {
+          address = "192.168.0.1@853";
+          key = "xfr_key";
+          quic = true;
+        };
+
         template.default = {
-          master = "primary";
           # zonefileless setup
           # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-2
           zonefile-sync = "-1";
@@ -139,8 +148,14 @@ in {
         };
 
         zone = {
-          "example.com".file = "example.com.zone";
-          "sub.example.com".file = "sub.example.com.zone";
+          "example.com" = {
+            master = "primary";
+            file = "example.com.zone";
+          };
+          "sub.example.com" = {
+            master = "primary-quic";
+            file = "sub.example.com.zone";
+          };
         };
 
         log.syslog.any = "debug";

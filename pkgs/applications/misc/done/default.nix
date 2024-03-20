@@ -21,21 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "done";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "done-devs";
     repo = "done";
     rev = "v${version}";
-    hash = "sha256-97bWBayEyhCMjTxxxFVdO8V2pBZuVzss1Tp9/TnfDB0=";
+    hash = "sha256-SbeP7PnJd7jjdXa9uDIAlMAJLOrYHqNP5p9gQclb6RU=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "directories-4.0.1" = "sha256-4M8WstNq5I7UduIUZI9q1R9oazp7MDBRBRBHZv6iGWI=";
-      "libset-0.1.2" = "sha256-+eA6pqafIYomXdlvwSzT/b/T4Je5HgPPmGL2M11VpMU=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-YJJGQR1tkK5z7vQQgkd8xPSqYhtiZIN+s9Xnwjn0z5A=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +69,7 @@ stdenv.mkDerivation rec {
     homepage = "https://done.edfloreshz.dev/";
     changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
     license = licenses.mpl20;
+    mainProgram = "done";
     maintainers = with maintainers; [ figsoda ];
   };
 }

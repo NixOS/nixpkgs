@@ -102,6 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = lib.teams.budgie.members;
   };
 })

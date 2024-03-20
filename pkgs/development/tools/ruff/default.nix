@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.2.2";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wCjPlKlw0IAh5oH4W7DUw3KBxR4bt9Ho7ncRL5TbD/0=";
+    hash = "sha256-2Pt2HuDB9JLD9E1q0JH7jyVoc0II5uVL1l8pAod+9V4=";
   };
 
-  cargoHash = "sha256-EHAlsEh3YnAhjIGC9rSgyK3gbKPCJqI6F3uAqZxv2nU=";
+  cargoHash = "sha256-njHpqWXFNdwenV58+VGznnqbaNK1GoGtHSTfKU2MRbs=";
 
   nativeBuildInputs = [
     installShellFiles

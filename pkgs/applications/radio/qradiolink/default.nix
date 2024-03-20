@@ -79,6 +79,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
 
   meta = with lib; {
     description = "SDR transceiver application for analog and digital modes";
+    mainProgram = "qradiolink";
     homepage = "http://qradiolink.org/";
     license = licenses.agpl3;
     maintainers = [ maintainers.markuskowa ];

@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/logisim-evolution/logisim-evolution";
     description = "Digital logic designer and simulator";
+    mainProgram = "logisim-evolution";
     maintainers = with maintainers; [ emilytrau ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;

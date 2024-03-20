@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
     packaging
     pillow
     questionary
+    setuptools
     tabulate
     toml
     tqdm

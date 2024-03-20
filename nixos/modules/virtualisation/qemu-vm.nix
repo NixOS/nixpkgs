@@ -1183,6 +1183,10 @@ in
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
         "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
       ])
+      (mkIf (pkgs.stdenv.hostPlatform.isx86 && cfg.efi.OVMF.systemManagementModeRequired) [
+        "-machine" "q35,smm=on"
+        "-global" "driver=cfi.pflash01,property=secure,value=on"
+      ])
     ];
 
     virtualisation.qemu.drives = mkMerge [

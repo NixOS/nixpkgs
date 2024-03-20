@@ -98,7 +98,9 @@ buildPythonPackage rec {
     # from panda[test]
     hypothesis
     pytest-asyncio
-  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+  ]
+  ++ passthru.optional-dependencies.dataframe
+  ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
     pyarrow
   ];
 
@@ -167,6 +169,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";
+    mainProgram = "dask";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;

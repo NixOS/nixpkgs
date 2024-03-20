@@ -4,13 +4,13 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "0.35.2";
+    version = "0.35.3";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-ctgDuWbNLMyQrxnarTbCtGXM5G+bPeS4Xa7eTbkFo0k=";
+      hash = "sha256-brWWoIOQhU/isd48VCx6tczAJnamBuOa6e/xezuHN7E=";
     };
 
     nativeBuildInputs = [
@@ -38,7 +38,7 @@ let
       ];
     in ''
       substituteInPlace Taskfile.yml \
-        --replace "go test" "go test -p $NIX_BUILD_CORES -skip '(${lib.concatStringsSep "|" skipTests})'"
+        --replace-fail "go test" "go test -p $NIX_BUILD_CORES -skip '(${lib.concatStringsSep "|" skipTests})'"
     '';
 
     doCheck = stdenv.isLinux;
@@ -53,18 +53,19 @@ let
       "-s" "-w" "-X github.com/arduino/arduino-cli/version.versionString=${version}" "-X github.com/arduino/arduino-cli/version.commit=unknown"
     ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
 
-    postInstall = ''
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       export HOME="$(mktemp -d)"
-      for s in {bash,zsh,fish}; do
-        $out/bin/arduino-cli completion $s > completion.$s
-        installShellCompletion --cmd arduino-cli --$s completion.$s
-      done
+      installShellCompletion --cmd arduino-cli \
+        --bash <($out/bin/arduino-cli completion bash) \
+        --zsh <($out/bin/arduino-cli completion zsh) \
+        --fish <($out/bin/arduino-cli completion fish)
       unset HOME
     '';
 
     meta = with lib; {
       inherit (src.meta) homepage;
       description = "Arduino from the command line";
+      mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
       license = licenses.gpl3Only;
       maintainers = with maintainers; [ ryantm ];
@@ -85,6 +86,7 @@ if stdenv.isLinux then
 
     extraInstallCommands = ''
       mv $out/bin/$name $out/bin/arduino-cli
+    '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       cp -r ${pkg.outPath}/share $out/share
     '';
     passthru.pureGoPkg = pkg;

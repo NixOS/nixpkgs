@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-user-indicator-redux";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "EbonJaeger";
     repo = "budgie-user-indicator-redux";
     rev = "v${version}";
-    hash = "sha256-HGfcNlkIQD9nNzHm97LpNz3smYwDhxu4EArPo6msahI=";
+    hash = "sha256-X9b4H4PnrYGb/T7Sg9iXQeNDLoO1l0VCdbOCGUAgwC4=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/EbonJaeger/budgie-user-indicator-redux/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
+    maintainers = teams.budgie.members;
   };
 }

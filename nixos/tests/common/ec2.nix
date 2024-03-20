@@ -61,7 +61,7 @@ with pkgs.lib;
             + " $QEMU_OPTS"
         )
 
-        machine = create_machine({"startCommand": start_command})
+        machine = create_machine(start_command)
         try:
       '' + indentLines script + ''
         finally:

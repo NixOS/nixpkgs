@@ -115,6 +115,7 @@ in buildPythonPackage rec {
     homepage = "https://github.com/pybind/pybind11";
     changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
+    mainProgram = "pybind11-config";
     longDescription = ''
       Pybind11 is a lightweight header-only library that exposes
       C++ types in Python and vice versa, mainly to create Python

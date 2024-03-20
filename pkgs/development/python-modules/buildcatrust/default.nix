@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "buildcatrust";
-  version = "0.1.3";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256:0s0m0fy943dakw9cbd40h46qmrhhgrcp292kppyb34m6y27sbagy";
+    hash = "sha256-mjX+T5xo6cD1GxJ49Tx7zthPbGPFPYaf2qcNKVHEzJA=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Build SSL/TLS trust stores";
+    mainProgram = "buildcatrust";
     homepage = "https://github.com/lukegb/buildcatrust";
     license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];

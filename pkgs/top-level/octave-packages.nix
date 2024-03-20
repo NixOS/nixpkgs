@@ -19,7 +19,15 @@
 , octave
 }:
 
-with lib;
+let
+  inherit (lib)
+    catAttrs
+    concatLists
+    filter
+    makeScope
+    unique
+    ;
+in
 
 makeScope newScope (self:
   let

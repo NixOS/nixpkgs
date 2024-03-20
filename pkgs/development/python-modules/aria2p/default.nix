@@ -78,6 +78,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pawamoy/aria2p";
     changelog = "https://github.com/pawamoy/aria2p/blob/${src.rev}/CHANGELOG.md";
     description = "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
+    mainProgram = "aria2p";
     license = licenses.isc;
     maintainers = with maintainers; [ koral ];
   };

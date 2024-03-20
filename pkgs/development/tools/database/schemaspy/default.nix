@@ -59,6 +59,7 @@ maven.buildMavenPackage rec {
   meta = with lib; {
     homepage = "https://schemaspy.org";
     description = "Document your database simply and easily";
+    mainProgram = "schemaspy";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jraygauthier ];
   };

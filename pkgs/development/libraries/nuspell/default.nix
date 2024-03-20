@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free and open source C++ spell checking library";
+    mainProgram = "nuspell";
     homepage = "https://nuspell.github.io/";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

@@ -72,6 +72,9 @@ buildPythonPackage rec {
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"
+    # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
+    "test_sidereal_lon_independent"
+    "test_timedelta_full_precision_arithmetic"
   ];
 
   meta = {

@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "RISC-V configuration validator";
+    mainProgram = "riscv-config";
     homepage = "https://github.com/riscv/riscv-config";
     changelog = "https://github.com/riscv-software-src/riscv-config/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ genericnerdyusername ];

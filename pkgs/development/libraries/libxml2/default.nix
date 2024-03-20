@@ -20,6 +20,7 @@
 , enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
+, testers
 }:
 
 let
@@ -32,9 +33,9 @@ in
   assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
 
 let
-libxml = stdenv.mkDerivation rec {
+libxml = stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxml2";
-  version = "2.12.4";
+  version = "2.12.5";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -43,7 +44,7 @@ libxml = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    hash = "sha256-SXNg5CPPC9merNt8YhXeqS5tbonulAOTwrrg53y5t9A=";
+    hash = "sha256-qXJ5Zpav04Bz4PWcKDw6L1pWC1JotLq8ORsoYWZSayE=";
   };
 
   strictDeps = true;
@@ -123,6 +124,11 @@ libxml = stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "none";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -131,8 +137,9 @@ libxml = stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
+    pkgConfigModules = [ "libxml-2.0" ];
   };
-};
+});
 in
 if oldVer then
   libxml.overrideAttrs (attrs: rec {

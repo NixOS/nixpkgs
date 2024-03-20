@@ -7,14 +7,14 @@
 , SDL2_image
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brogue-ce";
   version = "1.13";
 
   src = fetchFromGitHub {
     owner = "tmewett";
     repo = "BrogueCE";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FUIdi1Ytn+INeD9550MW41qXtLb6in0QS3Snt8QaXUA=";
   };
 
@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A community-lead fork of the minimalist roguelike game Brogue";
+    mainProgram = "brogue-ce";
     homepage = "https://github.com/tmewett/BrogueCE";
     license = licenses.agpl3;
     maintainers = with maintainers; [ AndersonTorres fgaz ];
     platforms = platforms.all;
   };
-}
+})

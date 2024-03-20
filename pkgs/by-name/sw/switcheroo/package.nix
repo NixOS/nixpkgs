@@ -1,6 +1,7 @@
 { lib
 , blueprint-compiler
 , cargo
+, darwin
 , desktop-file-utils
 , fetchFromGitLab
 , glib
@@ -17,19 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switcheroo";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Switcheroo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3JlI0Co3yuD6fKaKlmz1Vg0epXABO+7cRvm6/PgbGUE=";
+    hash = "sha256-hopN2ynksaYoNYjXrh7plmhfmGYyqqK75GOtbsE95ZY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
     name = "switcheroo-${finalAttrs.version}";
-    hash = "sha256-wC57VTJGiN2hDL2Z9fFw5H9c3Txqh30AHfR9o2DbcSk=";
+    hash = "sha256-wN6MsiOgYFgzDzdGei0ptRbG+h+xMJiFfzCcg6Xtryw=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +49,18 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
   ];
+
+  # Workaround for the gettext-sys issue
+  # https://github.com/Koka/gettext-rs/issues/114
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.cc.isClang &&
+      lib.versionAtLeast stdenv.cc.version "16"
+    )
+    "-Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
     changelog = "https://gitlab.com/adhami3310/Switcheroo/-/releases/v${finalAttrs.version}";
@@ -57,6 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     mainProgram = "switcheroo";
     maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

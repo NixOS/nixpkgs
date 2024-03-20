@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.11.1";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    hash = "sha256-DsKc+AT+0vIaJftBFLqVXx/CJRNNgE/vzSxlHkCSJaI=";
+    hash = "sha256-PCyPdUgvW2wCo1MZ/5jbPLfermbYKZKDbAFsc2goqlY=";
   };
 
   CGO_ENABLED = 0;
@@ -51,6 +51,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/alexellis/arkade";
     description = "Open Source Kubernetes Marketplace";
+    mainProgram = "arkade";
     license = licenses.mit;
     maintainers = with maintainers; [ welteki techknowlogick qjoly ];
   };

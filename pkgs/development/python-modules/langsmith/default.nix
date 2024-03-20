@@ -3,17 +3,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , freezegun
+, orjson
 , poetry-core
 , pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.3";
+  version = "0.1.29";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,16 +24,22 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-apczSNhj39Av5gsIM0QPF9eus3Z4eCv/ztxjHDgG8E0=";
+    hash = "sha256-E+N+Ge4BnkR4fvoe6HeTJOX1t+XYBpPitrQClLUzkK0=";
   };
 
   sourceRoot = "${src.name}/python";
 
+  pythonRelaxDeps = [
+    "orjson"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    orjson
     pydantic
     requests
   ];
@@ -74,6 +82,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
+    mainProgram = "langsmith";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
     license = licenses.mit;

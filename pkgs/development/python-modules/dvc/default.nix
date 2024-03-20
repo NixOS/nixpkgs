@@ -18,7 +18,7 @@
 , dvc-task
 , fetchFromGitHub
 , flatten-dict
-, flufl_lock
+, flufl-lock
 , funcy
 , grandalf
 , gto
@@ -98,7 +98,7 @@ buildPythonPackage rec {
     dvc-studio-client
     dvc-task
     flatten-dict
-    flufl_lock
+    flufl-lock
     funcy
     grandalf
     gto
@@ -166,6 +166,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
+    mainProgram = "dvc";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;

@@ -25,6 +25,7 @@ buildNpmPackage rec {
   meta = {
     changelog = "https://github.com/rtfeldman/node-test-runner/blob/${src.rev}/CHANGELOG.md";
     description = "Runs elm-test suites from Node.js";
+    mainProgram = "elm-test";
     homepage = "https://github.com/rtfeldman/node-test-runner";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ turbomack ];

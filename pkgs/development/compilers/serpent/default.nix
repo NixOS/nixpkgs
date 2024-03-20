@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Compiler for the Serpent language for Ethereum";
+    mainProgram = "serpent";
     longDescription = ''
       Serpent is one of the high-level programming languages used to
       write Ethereum contracts. The language, as suggested by its name,

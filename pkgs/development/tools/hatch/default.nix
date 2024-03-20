@@ -94,6 +94,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Modern, extensible Python project manager";
+    mainProgram = "hatch";
     homepage = "https://hatch.pypa.io/latest/";
     changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history/hatch.md";
     license = licenses.mit;

@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A trimmed version of the pommed hotkey handler for MacBooks";
+    mainProgram = "pommed";
     longDescription = ''
       This is a stripped-down version of pommed with client, dbus, and
       ambient light sensor support removed, optimized for use with dwm

@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python script for summarizing gcov data";
+    mainProgram = "gcovr";
     homepage = "https://www.gcovr.com/";
     changelog = "https://github.com/gcovr/gcovr/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd0;

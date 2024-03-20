@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , protobuf
 , bzip2
@@ -16,20 +15,20 @@
 }:
 
 let
-  version = "0.8.1";
+  version = "0.9.1";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     rev = "v${version}";
-    hash = "sha256-J8TuaWjtuR39XA7tizyI+DFkpOaLFweM+/9VImGj8UE=";
+    hash = "sha256-AQxSR2cMkNst5YEv4TqVNgdriMsg/0ed5YN4W8qZKxM=";
   };
   web = buildNpmPackage {
     inherit src version;
     pname = "openobserve-ui";
 
-    sourceRoot = "source/web";
+    sourceRoot = "${src.name}/web";
 
-    npmDepsHash = "sha256-RNUCR80ewFt9F/VHv7kXLa87h0fz0YBp+9gSOUhtrdU=";
+    npmDepsHash = "sha256-c82NLNLfqQrS/jv7ixpLCYDMEUtx6+Mm8cSwvVis2fc=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -56,12 +55,6 @@ rustPlatform.buildRustPackage {
   inherit version src;
 
   patches = [
-    (fetchpatch {
-      name = "fix-test-hash-partition.patch";
-      url = "https://github.com/openobserve/openobserve/commit/24919333d6b6696f0f9d9aff0a883431481e8fce.patch";
-      includes = ["src/common/meta/stream.rs"];
-      hash = "sha256-GB3Pgmp1swJt6ESgKL2eWOZ3jBcsN0r+5Dxasgg50D4=";
-    })
     # prevent using git to determine version info during build time
     ./build.rs.patch
   ];

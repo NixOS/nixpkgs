@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CLI tools for napi-rs";
+    mainProgram = "napi";
     homepage = "https://napi.rs";
     license = licenses.mit;
     maintainers = with maintainers; [ winter ];

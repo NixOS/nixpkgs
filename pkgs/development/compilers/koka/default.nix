@@ -2,6 +2,7 @@
 , pkgsHostTarget
 , cmake
 , makeWrapper
+, fetchpatch
 , mkDerivation
 , fetchFromGitHub
 , alex
@@ -19,7 +20,7 @@
 , FloatingHex
 , isocline
 , lens
-, lsp
+, lsp_2_4_0_0
 , mtl
 , network
 , network-simple
@@ -64,6 +65,14 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   libraryToolDepends = [ hpack ];
+  patches = [
+    (fetchpatch {
+      name = "koka-stackage-22.patch";
+      url = "https://github.com/koka-lang/koka/commit/95f9b360544996e06d4bb33321a83a6b9605d092.patch";
+      sha256 = "1a1sv1r393wkhsnj56awsi8mqxakqdy86p7dg9i9xfv13q2g4h6x";
+      includes = [ "src/**" ];
+    })
+  ];
   executableHaskellDepends = [
     aeson
     array
@@ -77,7 +86,7 @@ mkDerivation rec {
     FloatingHex
     isocline
     lens
-    lsp
+    lsp_2_4_0_0
     mtl
     network
     network-simple

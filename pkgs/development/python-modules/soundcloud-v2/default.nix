@@ -3,18 +3,26 @@
 , fetchPypi
 , dacite
 , python-dateutil
+, pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "soundcloud-v2";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "1.3.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a9c12aa22e71566e2ca6015267cabc1856afd79fa458f0fc43c44872c184741";
+    sha256 = "sha256-cHFxx/9fGQvpRuy0mGTUsh3CyU2xmE9frbd5+mnHo3Y=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     dacite
