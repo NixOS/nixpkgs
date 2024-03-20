@@ -15,7 +15,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "guake";
-  version = "3.9.0";
+  version = "3.10";
 
   format = "other";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Guake";
     repo = "guake";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-BW13fBH26UqMPMjV8JC4QkpgzyoPfCpAfSkJD68uOZU=";
+    sha256 = "sha256-e6Bf4HDftHBxFPcw9z02CqgZhSIvt6wlLF6dnIh9fEc=";
   };
 
   nativeBuildInputs = [
