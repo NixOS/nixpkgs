@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   darwin,
+  nim,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "taskopen";
