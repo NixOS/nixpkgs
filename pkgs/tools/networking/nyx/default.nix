@@ -1,6 +1,8 @@
 { lib, python3Packages, fetchPypi }:
 
-with python3Packages;
+let
+  inherit (python3Packages) buildPythonApplication stem;
+in
 
 buildPythonApplication rec {
   pname = "nyx";
