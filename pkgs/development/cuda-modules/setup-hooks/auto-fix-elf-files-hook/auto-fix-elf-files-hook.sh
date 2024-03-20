@@ -2,7 +2,7 @@
 # List all dynamically linked ELF files in the outputs and apply a generic fix
 # action provided as a parameter (currently used to add the CUDA or the
 # cuda_compat driver to the runpath of binaries)
-echo "Sourcing cuda/fix-elf-files.sh"
+echo "Sourcing auto-fix-elf-files-hook"
 
 # Returns the exit code of patchelf --print-rpath.
 # A return code of 0 (success) means the ELF file has a dynamic section, while
