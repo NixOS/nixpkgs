@@ -13,6 +13,13 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.gitRefName=v${version}"
+    "-X main.gitCommit=416d53e3f518898a0411889a5af08e8d9858e70e"
+  ];
+
   meta = {
     description = "QR code generator (ASCII & PNG) for SEPA payments";
     mainProgram = "payme";
