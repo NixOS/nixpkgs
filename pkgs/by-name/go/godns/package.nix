@@ -1,24 +1,49 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nodejs
+, npmHooks
+, fetchNpmDeps
 , nix-update-script
 }:
 
 buildGoModule rec {
   pname = "godns";
-  version = "3.0.7";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7zgvrEVt8xg54NijcqnXoZcXetzOu9h3Ucw7w03YagU=";
+    hash = "sha256-kdClyeU0hR0ymVLn9xe/kYVJE/9P/hAz/5UwRAQ2KCU=";
   };
 
-  vendorHash = "sha256-veDrGB6gjUa8G/UyKzEgH2ItGGEPlXDePahq2XP2nAo=";
+  vendorHash = "sha256-kSREFNIGH0MXiyKMp1LmrLkhKBhovvNRz46LTXT2XME=";
+  npmDeps = fetchNpmDeps {
+    src = "${src}/web";
+    hash = "sha256-2yeqLly0guU/kpX+yH/QOoDGzyJTxkTaCt8EleJhybU=";
+  };
+
+  npmRoot = "web";
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  overrideModAttrs = oldAttrs: {
+    # Do not add `npmConfigHook` to `goModules`
+    nativeBuildInputs = lib.remove npmHooks.npmConfigHook oldAttrs.nativeBuildInputs;
+    # Do not run `preBuild` when building `goModules`
+    preBuild = null;
+  };
 
   # Some tests require internet access, broken in sandbox
   doCheck = false;
+
+  preBuild = ''
+    npm --prefix="$npmRoot" run build
+    go generate ./...
+  '';
 
   ldflags = [
     "-s"
