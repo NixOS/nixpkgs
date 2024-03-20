@@ -1,0 +1,56 @@
+From 36edf848f6cb61becd883277eaff2bf3c9b297e3 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Wed, 1 Feb 2023 13:32:40 +0100
+Subject: [PATCH 5/5] use libdwarf 0.4 or later
+
+---
+ gum/backend-libdwarf/gumsymbolutil-libdwarf.c | 7 ++-----
+ meson.build                                   | 2 +-
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/gum/backend-libdwarf/gumsymbolutil-libdwarf.c b/gum/backend-libdwarf/gumsymbolutil-libdwarf.c
+index 727a8e96..7ebda045 100644
+--- a/gum/backend-libdwarf/gumsymbolutil-libdwarf.c
++++ b/gum/backend-libdwarf/gumsymbolutil-libdwarf.c
+@@ -1152,15 +1152,12 @@ gum_read_attribute_location (Dwarf_Debug dbg,
+   if (loclist_count != 1)
+     goto invalid_locations;
+ 
+-  if (dwarf_get_location_op_value_d (loclist,
++  if (dwarf_get_location_op_value_c (loclist,
+       0,
+       &atom,
+       &op1,
+       &op2,
+       &op3,
+-      &rawop1,
+-      &rawop2,
+-      &rawop3,
+       &offset_for_branch,
+       NULL) != DW_DLV_OK)
+   {
+@@ -1175,7 +1172,7 @@ gum_read_attribute_location (Dwarf_Debug dbg,
+   success = TRUE;
+ 
+ invalid_locations:
+-  dwarf_loc_head_c_dealloc (locations);
++  dwarf_dealloc_loc_head_c (locations);
+ 
+ invalid_type:
+   dwarf_dealloc (dbg, attribute, DW_DLA_ATTR);
+diff --git a/meson.build b/meson.build
+index 00e07f04..20d38c6b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -483,7 +483,7 @@ if host_os_family in ['linux', 'freebsd', 'qnx']
+     endif
+   endif
+ 
+-  libdwarf_dep = dependency('libdwarf', required: false, version: ['>= 0.3', '< 0.4'])
++  libdwarf_dep = dependency('libdwarf', required: false, version: '>= 0.4')
+   if not libdwarf_dep.found()
+     found = false
+     if not meson.is_cross_build()
+-- 
+2.42.0
+

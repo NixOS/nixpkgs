@@ -1,0 +1,158 @@
+From e10ebde67981ecf888d48b3f8ea22bf914ec8c70 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Wed, 1 Feb 2023 10:50:13 +0100
+Subject: [PATCH 2/5] use libdwarf 0.1
+
+---
+ gum/backend-libdwarf/gumsymbolutil-libdwarf.c | 40 ++++++++++++++-----
+ meson.build                                   |  4 +-
+ 2 files changed, 31 insertions(+), 13 deletions(-)
+
+diff --git a/gum/backend-libdwarf/gumsymbolutil-libdwarf.c b/gum/backend-libdwarf/gumsymbolutil-libdwarf.c
+index 87449c0a..b64438da 100644
+--- a/gum/backend-libdwarf/gumsymbolutil-libdwarf.c
++++ b/gum/backend-libdwarf/gumsymbolutil-libdwarf.c
+@@ -755,6 +755,7 @@ gum_symbol_util_deinitialize (void)
+   gum_module_entries = NULL;
+ }
+ 
++// unused
+ static void
+ gum_on_dwarf_error (Dwarf_Error error,
+                     Dwarf_Ptr errarg)
+@@ -779,7 +780,8 @@ gum_find_cu_die_by_virtual_address (Dwarf_Debug dbg,
+     return NULL;
+ 
+   result = NULL;
+-  dwarf_offdie (dbg, op.cu_die_offset, &result, NULL);
++  // TODO is_info? TRUE = debug_info, FALSE = debug_types
++  dwarf_offdie_b (dbg, op.cu_die_offset, TRUE, &result, NULL);
+ 
+   return result;
+ }
+@@ -795,6 +797,8 @@ gum_store_cu_die_offset_if_containing_address (const GumCuDieDetails * details,
+   Dwarf_Off ranges_offset;
+   Dwarf_Ranges * ranges;
+   Dwarf_Signed range_count, range_index;
++  Dwarf_Off real_offset; // unused
++  Dwarf_Unsigned byte_count; // unused
+ 
+   if (gum_read_attribute_address (dbg, die, DW_AT_low_pc, &low_pc) &&
+       dwarf_attr (die, DW_AT_high_pc, &high_pc_attr, NULL) == DW_DLV_OK)
+@@ -827,8 +831,8 @@ gum_store_cu_die_offset_if_containing_address (const GumCuDieDetails * details,
+   if (!gum_read_attribute_offset (dbg, die, DW_AT_ranges, &ranges_offset))
+     goto skip;
+ 
+-  if (dwarf_get_ranges_a (dbg, ranges_offset, die, &ranges, &range_count, NULL,
+-      NULL) != DW_DLV_OK)
++  if (dwarf_get_ranges_b (dbg, ranges_offset, die, &real_offset, &ranges, &range_count,
++      &byte_count, NULL) != DW_DLV_OK)
+     goto skip;
+ 
+   for (range_index = 0; range_index < range_count; range_index++)
+@@ -932,10 +936,14 @@ gum_find_line_by_virtual_address (Dwarf_Debug dbg,
+                                   GumDwarfSourceDetails * details)
+ {
+   gboolean success;
+-  Dwarf_Line * lines;
+-  Dwarf_Signed line_count, line_index;
+-
+-  if (dwarf_srclines (cu_die, &lines, &line_count, NULL) != DW_DLV_OK)
++  Dwarf_Line * lines = NULL;
++  Dwarf_Signed line_count = 0, line_index;
++  Dwarf_Line_Context line_context = 0;
++  Dwarf_Small table_count; // unused
++  Dwarf_Unsigned line_version; // unused
++
++  if (dwarf_srclines_b(cu_die, &line_version, &table_count, &line_context, NULL)
++      != DW_DLV_OK)
+     return FALSE;
+ 
+   success = FALSE;
+@@ -977,7 +985,7 @@ gum_find_line_by_virtual_address (Dwarf_Debug dbg,
+     }
+   }
+ 
+-  dwarf_srclines_dealloc (dbg, lines, line_count);
++  dwarf_srclines_dealloc_b (line_context);
+ 
+   return success;
+ }
+@@ -1062,7 +1070,8 @@ gum_enumerate_dies_recurse (Dwarf_Debug dbg,
+   {
+     int status;
+ 
+-    status = dwarf_siblingof (dbg, cur, &sibling, NULL);
++    // TODO is_info? TRUE = debug_info, FALSE = debug_types
++    status = dwarf_siblingof_b (dbg, cur, TRUE, &sibling, NULL);
+     dwarf_dealloc (dbg, cur, DW_DLA_DIE);
+     if (status != DW_DLV_OK)
+       break;
+@@ -1111,10 +1120,13 @@ gum_read_attribute_location (Dwarf_Debug dbg,
+   Dwarf_Unsigned loclist_count;
+   Dwarf_Locdesc_c loclist;
+   Dwarf_Small loclist_source;
++  Dwarf_Unsigned rawval1, rawval2; // unused
++  Dwarf_Bool debug_addr_unavailable; // unused
+   Dwarf_Unsigned expression_offset;
+   Dwarf_Unsigned locdesc_offset;
+   Dwarf_Small atom;
+   Dwarf_Unsigned op1, op2, op3;
++  Dwarf_Unsigned rawop1, rawop2, rawop3; // unused
+   Dwarf_Unsigned offset_for_branch;
+ 
+   success = FALSE;
+@@ -1128,9 +1140,12 @@ gum_read_attribute_location (Dwarf_Debug dbg,
+   if (count != 1)
+     goto invalid_locations;
+ 
+-  if (dwarf_get_locdesc_entry_c (locations,
++  if (dwarf_get_locdesc_entry_d (locations,
+       0,
+       &lle_value,
++      &rawval1,
++      &rawval2,
++      &debug_addr_unavailable,
+       &low_pc,
+       &high_pc,
+       &loclist_count,
+@@ -1148,12 +1163,15 @@ gum_read_attribute_location (Dwarf_Debug dbg,
+   if (loclist_count != 1)
+     goto invalid_locations;
+ 
+-  if (dwarf_get_location_op_value_c (loclist,
++  if (dwarf_get_location_op_value_d (loclist,
+       0,
+       &atom,
+       &op1,
+       &op2,
+       &op3,
++      &rawop1,
++      &rawop2,
++      &rawop3,
+       &offset_for_branch,
+       NULL) != DW_DLV_OK)
+   {
+diff --git a/meson.build b/meson.build
+index 1d607a50..7040ca6f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -483,13 +483,13 @@ if host_os_family in ['linux', 'freebsd', 'qnx']
+     endif
+   endif
+ 
+-  libdwarf_dep = dependency('libdwarf', required: false, version: '< 0.1')
++  libdwarf_dep = dependency('libdwarf', required: false, version: ['>= 0.1', '< 0.2'])
+   if not libdwarf_dep.found()
+     found = false
+     if not meson.is_cross_build()
+       foreach idir : ['/usr/include/libdwarf', '/usr/local/include/libdwarf']
+         inc_arg = '-I' + idir
+-        if not found and cc.has_header_symbol('libdwarf.h', 'dwarf_elf_init_b', args: inc_arg)
++        if not found and cc.has_header_symbol('libdwarf.h', 'dwarf_srclines_b', args: inc_arg)
+           libdwarf_dep = declare_dependency(compile_args: [inc_arg])
+           extra_libs_private += '-ldwarf'
+           extra_gir_args_private += '--extra-library=dwarf'
+-- 
+2.42.0
+
