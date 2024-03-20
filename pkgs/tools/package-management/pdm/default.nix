@@ -30,9 +30,40 @@ let
     };
     self = python;
   };
-in
 
-with python.pkgs;
+  inherit (python.pkgs)
+    blinker
+    buildPythonApplication
+    cachecontrol
+    certifi
+    dep-logic
+    findpython
+    first
+    importlib-metadata
+    installer
+    packaging
+    pdm-backend
+    platformdirs
+    pyproject-hooks
+    pytestCheckHook
+    pytest-httpserver
+    pytest-mock
+    pytest-rerunfailures
+    pytest-xdist
+    pythonAtLeast
+    python-dotenv
+    pythonOlder
+    requests-toolbelt
+    resolvelib
+    rich
+    shellingham
+    tomli
+    tomlkit
+    truststore
+    unearth
+    virtualenv
+    ;
+in
 buildPythonApplication rec {
   pname = "pdm";
   version = "2.12.4";
