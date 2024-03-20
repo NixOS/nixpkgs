@@ -47,7 +47,7 @@ let
     };
 in
 rec {
-  mypy-boto3-accessanalyzer = buildMypyBoto3Package "accessanalyzer" "1.34.54" "sha256-ZglQkseFlqe160S+v5baZ3rfI5QqKsh9IIRPOJEcD3E=";
+  mypy-boto3-accessanalyzer = buildMypyBoto3Package "accessanalyzer" "1.34.67" "sha256-tgiKSWgKebdPAsyuJTQoFGR9BSLfGMeTVbi1rnPnvfQ=";
 
   mypy-boto3-account = buildMypyBoto3Package "account" "1.34.0" "sha256-C2iAiA83tZ/7XRlccf1iddDfDNkuO2F0B5aOxKbHy2Q=";
 
