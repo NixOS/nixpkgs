@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "batchspawner";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "batchspawner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oyS47q+gsO7JmRsbVJXglZsSRfits5rS/nrHW5E7EV0=";
+    hash = "sha256-Z7kB8b7s11wokTachLI/N+bdUV+FfCRTemL1KYQpzio=";
   };
 
   propagatedBuildInputs = [
