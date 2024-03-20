@@ -20,13 +20,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "Logitech";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-92mKchgAWRIrNOeK/zXUYRqIAk6THdtz1zQe3fg2kE0=";
+    hash = "sha256-yDJVqZ0+qVm4r/wmQK/hf9uRJaN56WQMO28RE59mNNI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
