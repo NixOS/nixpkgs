@@ -127,11 +127,11 @@ in {
         default = {};
         type = with types; submodule {
 
-          freeformType = let
+          freeformType = (types.fix (final: {
             validSettingsPrimitiveTypes = oneOf [ int str bool float ];
-            validSettingsTypes = oneOf [ validSettingsPrimitiveTypes (listOf validSettingsPrimitiveTypes) ];
-            settingsType = oneOf [ str (attrsOf validSettingsTypes) ];
-          in attrsOf (oneOf [ settingsType (listOf settingsType) ])
+            validSettingsTypes = oneOf [ final.validSettingsPrimitiveTypes (listOf final.validSettingsPrimitiveTypes) ];
+            settingsType = oneOf [ str (attrsOf final.validSettingsTypes) ];
+            result = attrsOf (oneOf [ final.settingsType (listOf final.settingsType) ])
               // { description = ''
                 unbound.conf configuration type. The format consist of an attribute
                 set of settings. Each settings can be either one value, a list of
@@ -139,6 +139,7 @@ in {
                 strings, booleans or floats.
               '';
             };
+          })).result;
 
           options = {
             remote-control.control-enable = mkOption {
