@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , poetry-core
 , poetry-dynamic-versioning
@@ -10,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "1.3.2";
+  version = "2.1.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "python";
     rev = "v${version}";
-    hash = "sha256-spPZdQ+x3isyeBXZ/J2QE6zNhyHRfyRQGiHreuXzzik=";
+    hash = "sha256-/RINDyO0cngDy9APqsFHBFBKi8aDf7Tah/IIFdXQURo=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +33,10 @@ buildPythonPackage rec {
     rich = [ rich ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    "tests/test_flavour.py" # would download a json to check correctness of flavours
+  nativeCheckInputs = [
+    pytestCheckHook
+    pygments
+    rich
   ];
 
   pythonImportsCheck = [ "catppuccin" ];
