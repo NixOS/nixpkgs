@@ -8654,6 +8654,12 @@
     githubId = 2179419;
     name = "Arseniy Seroka";
   };
+  jakedevs = {
+    email = "work@jakedevs.net";
+    github = "jakedevs";
+    githubId = 153585330;
+    name = "Jacob Levi";
+  };
   jakehamilton = {
     name = "Jake Hamilton";
     email = "jake.hamilton@hey.com";
@@ -15046,6 +15052,12 @@
     github = "pennae";
     githubId = 82953136;
   };
+  perchun = {
+    name = "Perchun Pak";
+    email = "nixpkgs@perchun.it";
+    github = "PerchunPak";
+    githubId = 68118654;
+  };
   peret = {
     name = "Peter Retzlaff";
     github = "peret";
@@ -16721,6 +16733,15 @@
     github = "rongcuid";
     githubId = 1312525;
     name = "Rongcui Dong";
+  };
+  rookeur = {
+    email = "adrien.langou@hotmail.com";
+    github = "Rookeur";
+    githubId = 57438432;
+    name = "Adrien Langou";
+    keys = [{
+      fingerprint = "3B8F FC41 0094 2CB4 5A2A  7DF2 5A44 DA8F 9071 91B0";
+    }];
   };
   roosemberth = {
     email = "roosembert.palacios+nixpkgs@posteo.ch";

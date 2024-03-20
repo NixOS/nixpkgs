@@ -1,40 +1,35 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# build-system
-, poetry-core
-
-# dependencies
-, cryptography
-, http-ece
-, protobuf
-, requests
-
-# docs
-, sphinx
-, sphinxHook
-, sphinx-autodoc-typehints
-, sphinx-rtd-theme
-
-# tests
 , async-timeout
-, requests-mock
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, http-ece
+, poetry-core
+, protobuf
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, sphinx
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
+, sphinxHook
 }:
 
 buildPythonPackage rec {
   pname = "firebase-messaging";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";
-    rev = version;
-    hash = "sha256-e3Ny3pnAfOpNERvvtE/jqSDIsM+YwLq/hbw753QpJ6o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8e+S12ZMqAmK7OR7O45QsRa0UKQq6cngeaqz2ugi6iY=";
   };
 
   outputs = [
@@ -75,9 +70,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library to subscribe to GCM/FCM and receive notifications within a python application";
+    description = "Library to subscribe to GCM/FCM and receive notifications within a python application";
     homepage = "https://github.com/sdb9696/firebase-messaging";
-    changelog = "https://github.com/sdb9696/firebase-messaging/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
