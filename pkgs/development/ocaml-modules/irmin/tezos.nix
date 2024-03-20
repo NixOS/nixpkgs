@@ -7,7 +7,6 @@ buildDunePackage rec {
   pname = "irmin-tezos";
 
   inherit (irmin) version src strictDeps;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     irmin
