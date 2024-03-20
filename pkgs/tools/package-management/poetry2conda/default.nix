@@ -4,7 +4,20 @@
 , python3
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+let
+  inherit (python3.pkgs)
+    buildPythonApplication
+    poetry2conda
+    poetry-core
+    poetry-semver
+    pytestCheckHook
+    pytest-mock
+    pyyaml
+    toml
+    ;
+in
+
+buildPythonApplication rec {
   pname = "poetry2conda";
   version = "0.3.0";
 
