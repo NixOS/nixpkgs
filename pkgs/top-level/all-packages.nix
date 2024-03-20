@@ -28398,6 +28398,7 @@ with pkgs;
     ubootOlimexA64Olinuxino
     ubootOlimexA64Teres1
     ubootOrangePi3
+    ubootOrangePi5
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero

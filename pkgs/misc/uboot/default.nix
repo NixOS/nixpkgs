@@ -373,6 +373,14 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePi5 = buildUBoot {
+    defconfig = "orangepi-5-rk3588s_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = "${rkbin}/${rkbin.ROCKCHIP_TPL_RK3588}";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
   ubootOrangePiPc = buildUBoot {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
