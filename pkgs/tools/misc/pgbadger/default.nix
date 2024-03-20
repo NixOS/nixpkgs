@@ -16,13 +16,13 @@
 
 buildPerlPackage rec {
   pname = "pgbadger";
-  version = "12.2";
+  version = "12.4";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgbadger";
-    rev = "v${version}";
-    hash = "sha256-IzfpDqzS5VcehkPsFxyn3kJsvXs8nLgJ3WT8ZCmIDxI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-an/BOkQsMkTXS0HywV1JWerS16HRbO1MHVleYhVqmBM=";
   };
 
   postPatch = ''
@@ -47,8 +47,6 @@ buildPerlPackage rec {
   ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
-
-  doCheck = false;
 
   nativeCheckInputs = [
     bzip2
