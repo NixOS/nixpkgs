@@ -3,9 +3,14 @@
 , coreSize    ? "1MB"    # size of the binary image to flash
 , coreSha256  ? "0pkb2nmml0blrfiqpc46xpjc2dw927i89k1lfyqx827wanhc704x" }:
 
-with python3Packages;
-
 let
+  inherit (python3Packages)
+    buildPythonApplication
+    httplib2
+    netifaces
+    tornado
+    ;
+
   core = fetchurl {
     url    = "https://github.com/xoseperez/espurna/releases/download/${coreVersion}/espurna-${coreVersion}-espurna-core-${coreSize}.bin";
     sha256 = coreSha256;
