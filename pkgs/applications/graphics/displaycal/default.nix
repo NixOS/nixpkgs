@@ -10,13 +10,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "displaycal";
-  version = "3.9.11";
+  version = "3.9.12";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "DisplayCAL";
     inherit version;
-    hash = "sha256-zAZW2eMjwRYevlz8KEzTxzGO8vx5AydfY3vGTapNo1c=";
+    hash = "sha256-0NZ+fr3ilnyWE6+Xa8xqpccNe7WVvvQfQEYvdQ8rf/Q=";
   };
 
   nativeBuildInputs = [
