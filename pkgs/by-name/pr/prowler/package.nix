@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.12.1";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     rev = "refs/tags/${version}";
-    hash = "sha256-QauDqeCa499AcZurGjn2Yv4GH04F/pahAH2ms7gAca4=";
+    hash = "sha256-19B6b+xR+f7dIu/6eINsxs7UxuV96QdsNncodC8/N3Q=";
   };
 
   pythonRelaxDeps = [
@@ -20,6 +20,8 @@ python3.pkgs.buildPythonApplication rec {
     "boto3"
     "botocore"
     "google-api-python-client"
+    "jsonschema"
+    "pydantic"
     "slack-sdk"
     "pydantic"
   ];
@@ -33,7 +35,10 @@ python3.pkgs.buildPythonApplication rec {
     alive-progress
     awsipranges
     azure-identity
+    azure-mgmt-applicationinsights
     azure-mgmt-authorization
+    azure-mgmt-cosmosdb
+    azure-mgmt-rdbms
     azure-mgmt-security
     azure-mgmt-sql
     azure-mgmt-storage
@@ -46,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     google-api-python-client
     google-auth-httplib2
     jsonschema
-    msgraph-core
+    msgraph-sdk
     msrestazure
     pydantic_1
     schema
