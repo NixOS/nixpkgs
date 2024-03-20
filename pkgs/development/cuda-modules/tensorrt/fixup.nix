@@ -17,8 +17,11 @@ let
     strings
     versions
     ;
+
+  inherit (backendStdenv) hostPlatform;
+
   # targetArch :: String
-  targetArch = attrsets.attrByPath [ backendStdenv.hostPlatform.system ] "unsupported" {
+  targetArch = attrsets.attrByPath [ hostPlatform.system ] "unsupported" {
     x86_64-linux = "x86_64-linux-gnu";
     aarch64-linux = "aarch64-linux-gnu";
   };
@@ -106,7 +109,7 @@ finalAttrs: prevAttrs: {
   meta = prevAttrs.meta // {
     badPlatforms =
       prevAttrs.meta.badPlatforms or [ ]
-      ++ lib.optionals (targetArch == "unsupported") [ backendStdenv.hostPlatform.system ];
+      ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
     maintainers = prevAttrs.meta.maintainers ++ [maintainers.aidalgol];
   };

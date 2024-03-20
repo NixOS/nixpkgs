@@ -14,6 +14,7 @@
 }:
 let
   inherit (lib) lists strings;
+  inherit (backendStdenv.hostPlatform.parsed) cpu kernel;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
@@ -64,7 +65,7 @@ backendStdenv.mkDerivation (
     installPhase = ''
       runHook preInstall
 
-      install -Dm755 -t $out/bin bin/${backendStdenv.hostPlatform.parsed.cpu.name}/${backendStdenv.hostPlatform.parsed.kernel.name}/release/*
+      install -Dm755 -t $out/bin bin/${cpu.name}/${kernel.name}/release/*
 
       runHook postInstall
     '';

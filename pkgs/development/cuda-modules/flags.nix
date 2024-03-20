@@ -2,14 +2,12 @@
 # Gpu :: AttrSet
 #   - See the documentation in ./gpus.nix.
 {
+  backendStdenv,
   config,
   cudaCapabilities ? (config.cudaCapabilities or []),
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
   cudaVersion,
-  buildPlatform,
-  hostPlatform,
-  targetPlatform,
   # gpus :: List Gpu
   gpus,
 }:
@@ -20,6 +18,12 @@ let
     lists
     strings
     trivial
+    ;
+
+  inherit (backendStdenv)
+    buildPlatform
+    hostPlatform
+    targetPlatform
     ;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit

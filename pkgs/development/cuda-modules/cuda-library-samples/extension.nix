@@ -1,8 +1,10 @@
-{hostPlatform, lib}:
+{backendStdenv, lib}:
 let
+  inherit (backendStdenv.hostPlatform) isx86_64 isLinux;
+
   # Samples are built around the CUDA Toolkit, which is not available for
   # aarch64. Check for both CUDA version and platform.
-  platformIsSupported = hostPlatform.isx86_64 && hostPlatform.isLinux;
+  platformIsSupported = isx86_64 && isLinux;
 
   # Build our extension
   extension =

@@ -38,15 +38,17 @@ let
     sourceTypes
     ;
 
+  inherit (backendStdenv) hostPlatform;
+
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
   # redistArch :: String
   # The redistArch is the name of the architecture for which the redistributable is built.
   # It is `"unsupported"` if the redistributable is not supported on the hostPlatform.
-  redistArch = flags.getRedistArch backendStdenv.hostPlatform.system;
+  redistArch = flags.getRedistArch hostPlatform.system;
 
-  sourceMatchesHost = flags.getNixSystem redistArch == backendStdenv.hostPlatform.system;
+  sourceMatchesHost = flags.getNixSystem redistArch == hostPlatform.system;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
