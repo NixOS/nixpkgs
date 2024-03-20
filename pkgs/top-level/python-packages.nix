@@ -1955,6 +1955,12 @@ self: super: with self; {
 
   connio = callPackage ../development/python-modules/connio { };
 
+  copier = callPackage ../development/python-modules/copier { };
+
+  copier-template-tester = callPackage ../development/python-modules/copier-template-tester { };
+
+  corallium = callPackage ../development/python-modules/corallium { };
+
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
