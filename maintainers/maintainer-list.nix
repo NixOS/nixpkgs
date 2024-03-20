@@ -6107,6 +6107,12 @@
     githubId = 30512529;
     name = "Evils";
   };
+  evolutics = {
+    email = "benjamin.fischer@evolutics.info";
+    github = "evolutics";
+    githubId = 8361681;
+    name = "Benjamin Fischer";
+  };
   ewok = {
     email = "ewok@ewok.ru";
     github = "ewok-old";
