@@ -153,9 +153,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     propagatedBuildInputs = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
-  maloader = callPackage ../os-specific/darwin/maloader {
-  };
-
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
   iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
@@ -174,8 +171,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     inherit (apple_sdk_11_0.frameworks) AppKit Foundation Metal QuartzCore;
     inherit (apple_sdk_11_0.libs) simd;
   };
-
-  opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
     inherit (apple_sdk_11_0.frameworks) AppKit Foundation UniformTypeIdentifiers;
