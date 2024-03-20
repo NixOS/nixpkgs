@@ -10706,6 +10706,8 @@ with pkgs;
     inherit (python3Packages) mako;
   };
 
+  marimo = with python3Packages; toPythonApplication marimo;
+
   marktext = callPackage ../applications/misc/marktext { };
 
   mars-mips = callPackage ../development/tools/mars-mips { };
