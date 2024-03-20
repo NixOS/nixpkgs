@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation {
     cp -a Andromeda* $out/share/themes
 
     # remove uneeded files, which are not distributed in https://www.gnome-look.org/p/2039961/
+    rm -rf $out/share/themes/*/.gitignore
     rm -rf $out/share/themes/*/Art
     rm -rf $out/share/themes/*/LICENSE
     rm -rf $out/share/themes/*/README.md
