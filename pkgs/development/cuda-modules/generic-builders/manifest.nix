@@ -133,7 +133,18 @@ backendStdenv.mkDerivation (
     # brokenConditions :: AttrSet Bool
     # Sets `meta.broken = true` if any of the conditions are true.
     # Example: Broken on a specific version of CUDA or when a dependency has a specific version.
-    brokenConditions = { };
+    brokenConditions = {
+      # Unclear how this is handled by Nix internals.
+      "Duplicate entries in outputs" = finalAttrs.outputs != lists.unique finalAttrs.outputs;
+      # Typically this results in the static output being empty, as all libraries are moved
+      # back to the lib output.
+      "lib output follows static output" =
+        let
+          libIndex = lists.findFirstIndex (x: x == "lib") null finalAttrs.outputs;
+          staticIndex = lists.findFirstIndex (x: x == "static") null finalAttrs.outputs;
+        in
+        libIndex != null && staticIndex != null && libIndex > staticIndex;
+    };
 
     # badPlatformsConditions :: AttrSet Bool
     # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
