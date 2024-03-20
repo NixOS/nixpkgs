@@ -76,6 +76,16 @@ in {
   /**
     Pipes a value through a list of functions, left to right.
 
+    # Inputs
+
+    `value`
+
+    : Value to start piping.
+
+    `fns`
+
+    : List of functions to apply sequentially.
+
     # Type
 
     ```
@@ -653,6 +663,16 @@ in {
     To get a call stack trace and abort evaluation, set the environment variable
     `NIX_ABORT_ON_WARN=true` and set the Nix options `--option pure-eval false --show-trace`
 
+    # Inputs
+
+    `msg`
+
+    : Warning message to print.
+
+    `val`
+
+    : Value to return as-is.
+
     # Type
 
     ```
@@ -678,6 +698,10 @@ in {
 
     : 2\. Function argument
 
+    `val`
+
+    : Value to return as-is.
+
     # Type
 
     ```
@@ -699,6 +723,10 @@ in {
     `msg`
 
     : 2\. Function argument
+
+    `val`
+
+    : Value to return as-is.
 
     # Type
 
