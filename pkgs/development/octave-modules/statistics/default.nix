@@ -6,13 +6,13 @@
 
 buildOctavePackage rec {
   pname = "statistics";
-  version = "1.6.0";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "statistics";
     rev = "refs/tags/release-${version}";
-    sha256 = "sha256-XJXDiVDg3Nw7a/ih49jtkYRmyvAhTfs3LbBQmw+87oc=";
+    sha256 = "sha256-sN865X748WKt58THftjUDUfQUEIPaoF5s870OD4bVPI=";
   };
 
   requiredOctavePackages = [
