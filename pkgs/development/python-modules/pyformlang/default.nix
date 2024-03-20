@@ -34,11 +34,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyformlang" ];
+  pythonImportsCheck = [
+    "pyformlang"
+  ];
 
   meta = with lib; {
     description = "A python framework for formal grammars";
-    homepage = "https://pypi.org/project/pyformlang/";
+    homepage = "https://github.com/Aunsiels/pyformlang";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };
