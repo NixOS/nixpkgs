@@ -348,7 +348,11 @@ self: super: {
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
   # negatively affect any other packages, at least currently...
-  twain = super.twain.overrideScope (self: _: { http2 = self.http2_3_0_3; });
+  # https://github.com/alexmingoia/twain/issues/5
+  twain = super.twain.overrideScope (self: _: {
+    http2 = self.http2_3_0_3;
+    warp = self.warp_3_3_30;
+  });
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present

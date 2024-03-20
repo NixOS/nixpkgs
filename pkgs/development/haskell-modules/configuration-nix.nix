@@ -354,6 +354,7 @@ self: super: builtins.intersectAttrs super {
 
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
+  warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
