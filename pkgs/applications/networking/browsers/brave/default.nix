@@ -208,7 +208,11 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" ];
+=======
+    platforms = [ "x86_64-linux" "aarch64-linux"];
+>>>>>>> de0b27b0b (Merge branch 'NixOS:master' into brave)
     mainProgram = "brave";
   };
 }
