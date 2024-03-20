@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -20,6 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-U4ZdU0lxjZO/y0q20bG5CLKipnfpaxzV3AFR6fGS7m4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    #  Replace distutils with setuptools, https://github.com/tree-sitter/py-tree-sitter/pull/214
+    (fetchpatch {
+      name = "replace-distutils.patch";
+      url = "https://github.com/tree-sitter/py-tree-sitter/commit/80d3cae493c4a47e49cc1d2ebab0a8eaf7617825.patch";
+      hash = "sha256-00coI8/COpYMiSflAECwh6yJCMJj/ucFEn18Npj2g+Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
