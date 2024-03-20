@@ -39,13 +39,13 @@ assert stdenv.isDarwin -> !x11Support;
 assert stdenv.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
-  version = "2.1.8";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
     rev = "v${version}";
-    hash = "sha256-5TUo5B1UZZARgTHbK2+520e3mGZkZ5tTez1qvZvMnxs=";
+    hash = "sha256-41oF7aBxCy+Vbm1Tbx2qMkdywxVJpnH/kmKMtpgvWwc";
   };
 
   cargoLock = {
