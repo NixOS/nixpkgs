@@ -1,40 +1,70 @@
-{ appimageTools, fetchurl, lib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, makeWrapper
+, nodejs
+, prefetch-yarn-deps
+, python3
+, yarn
+, electron
+}:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "marktext";
   version = "0.17.1";
 
-  src = fetchurl {
-    url = "https://github.com/marktext/marktext/releases/download/v${version}/marktext-x86_64.AppImage";
-    sha256 = "2e2555113e37df830ba3958efcccce7020907b12fd4162368cfd906aeda630b7";
+  src = fetchFromGitHub {
+    owner = "marktext";
+    repo = "marktext";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kCBF0rIYcnTT8YVH0k4F2UF7eXZ+/gFcFU+q3+1WF8A=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-Jkq40BXC7wNolIfYbK2eu0U3YH7jH+zEnrOxMFz5AVQ=";
   };
-in
-appimageTools.wrapType2 rec {
-  inherit pname version src;
 
-  profile = ''
-    export LC_ALL=C.UTF-8
-  '';
-
-  multiArch = false; # no 32bit needed
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
-    p.libsecret
-    p.xorg.libxkbfile
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    prefetch-yarn-deps
+    python3
+    yarn
   ];
 
-  extraInstallCommands = ''
-    # Strip version from binary name.
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
+  configurePhase = ''
+    runHook preConfigure
 
-    install -m 444 -D ${appimageContents}/marktext.desktop $out/share/applications/marktext.desktop
-    substituteInPlace $out/share/applications/marktext.desktop \
-      --replace "Exec=AppRun" "Exec=${pname} --"
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup-yarn-lock yarn.lock
+    yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
+    patchShebangs node_modules
 
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    runHook postConfigure
+  '';
+
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn --offline build:dev
+    yarn --offline electron-builder \
+      --dir \
+      -c.electronDist=${electron}/libexec/electron \
+      -c.electronVersion=${electron.version}
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    # TODO
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -42,7 +72,6 @@ appimageTools.wrapType2 rec {
     homepage = "https://marktext.app";
     license = licenses.mit;
     maintainers = with maintainers; [ nh2 eduarrrd ];
-    platforms = [ "x86_64-linux" ];
     mainProgram = "marktext";
   };
-}
+})
