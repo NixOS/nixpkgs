@@ -55,7 +55,7 @@ recurseIntoAttrs {
     echo qux > qux.zsh
     echo quux > quux
 
-    installShellCompletion --bash foo bar --zsh baz qux.zsh --fish quux
+    installShellCompletion --size-check 4 --bash foo bar --zsh baz qux.zsh --fish quux
 
     cmp foo $out/share/bash-completion/completions/foo
     cmp bar $out/share/bash-completion/completions/bar
@@ -68,7 +68,7 @@ recurseIntoAttrs {
   } ''
     echo foo > foo
 
-    installShellCompletion --bash foo
+    installShellCompletion --size-check 4 --bash foo
 
     # assert it didn't go into $out
     [[ ! -f $out/share/bash-completion/completions/foo ]]
@@ -82,7 +82,7 @@ recurseIntoAttrs {
     echo bar > bar
     echo baz > baz
 
-    installShellCompletion --bash --name foobar.bash foo --zsh --name _foobar bar --fish baz
+    installShellCompletion --size-check 4 --bash --name foobar.bash foo --zsh --name _foobar bar --fish baz
 
     cmp foo $out/share/bash-completion/completions/foobar.bash
     cmp bar $out/share/zsh/site-functions/_foobar
@@ -93,7 +93,7 @@ recurseIntoAttrs {
     echo bar > bar.zsh
     echo baz > baz.fish
 
-    installShellCompletion foo.bash bar.zsh baz.fish
+    installShellCompletion --size-check 4 foo.bash bar.zsh baz.fish
 
     cmp foo.bash $out/share/bash-completion/completions/foo.bash
     cmp bar.zsh $out/share/zsh/site-functions/_bar
@@ -105,7 +105,7 @@ recurseIntoAttrs {
     echo baz > baz.fish
     echo qux > qux.fish
 
-    installShellCompletion --cmd foobar --bash foo.bash --zsh bar.zsh --fish baz.fish --name qux qux.fish
+    installShellCompletion --size-check 4 --cmd foobar --bash foo.bash --zsh bar.zsh --fish baz.fish --name qux qux.fish
 
     cmp foo.bash $out/share/bash-completion/completions/foobar.bash
     cmp bar.zsh $out/share/zsh/site-functions/_foobar
@@ -114,6 +114,7 @@ recurseIntoAttrs {
   '';
   install-completion-fifo = runTest "install-completion-fifo" {} ''
     installShellCompletion \
+      --size-check 4 \
       --bash --name foo.bash <(echo foo) \
       --zsh --name _foo <(echo bar) \
       --fish --name foo.fish <(echo baz)
