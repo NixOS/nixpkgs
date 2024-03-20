@@ -21,11 +21,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  # no tests data included in PyPI tarball
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-krMOjXzI9tmLGLEswXLLqc8J68Gwnl1VrRO2fLbDv0o=";
   };
 
