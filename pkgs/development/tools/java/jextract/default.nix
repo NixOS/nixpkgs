@@ -89,6 +89,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A tool which mechanically generates Java bindings from a native library headers";
+    mainProgram = "jextract";
     homepage = "https://github.com/openjdk/jextract";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sharzy ];

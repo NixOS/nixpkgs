@@ -216,6 +216,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Official reference compiler for the D language";
+    mainProgram = "dmd";
     homepage = "https://dlang.org/";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680

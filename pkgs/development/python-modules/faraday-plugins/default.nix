@@ -78,6 +78,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
+    mainProgram = "faraday-plugins";
     homepage = "https://github.com/infobyte/faraday_plugins";
     changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];

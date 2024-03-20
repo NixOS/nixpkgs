@@ -76,6 +76,7 @@ buildPythonPackage rec {
     changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
     homepage = "https://flask.palletsprojects.com/";
     description = "The Python micro framework for building web applications";
+    mainProgram = "flask";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is
       designed to make getting started quick and easy, with the ability

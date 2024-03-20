@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
+    mainProgram = "certstrap";
     longDescription = ''
       A simple certificate manager written in Go, to bootstrap your own
       certificate authority and public key infrastructure. Adapted from etcd-ca.

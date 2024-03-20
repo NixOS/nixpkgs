@@ -69,6 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python-based infrastructure automation";
+    mainProgram = "pyinfra";
     longDescription = ''
       pyinfra automates/provisions/manages/deploys infrastructure. It can be used for
       ad-hoc command execution, service deployment, configuration management and more.

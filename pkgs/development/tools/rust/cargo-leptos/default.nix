@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A build tool for the Leptos web framework";
+    mainProgram = "cargo-leptos";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
     changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${version}";
     license = with licenses; [ mit ];

@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A simple Command-line interface for manipulating toml files";
+    mainProgram = "toml-adapt";
     homepage = "https://github.com/firefly-cpp/toml-adapt";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];

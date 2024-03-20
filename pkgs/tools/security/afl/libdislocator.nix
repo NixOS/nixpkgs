@@ -28,6 +28,7 @@ stdenv.mkDerivation {
       the odds of bumping into heap-related security bugs in
       several ways.
     '';
+    mainProgram = "get-libdislocator-so";
     license = lib.licenses.asl20;
     maintainers = with maintainers; [ ris ];
   };

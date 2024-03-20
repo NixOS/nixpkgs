@@ -323,6 +323,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Privacy-focused browser routing traffic through the Tor network";
+    mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames sources;

@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "jq for binary formats";
+    mainProgram = "fq";
     homepage = "https://github.com/wader/fq";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];

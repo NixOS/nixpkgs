@@ -212,11 +212,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  canonicalize-jar = callPackage ../build-support/java/canonicalize-jar.nix { };
-  canonicalize-jars-hook = makeSetupHook {
-    name = "canonicalize-jars-hook";
-    substitutions = { canonicalize_jar = canonicalize-jar; };
-  } ../build-support/setup-hooks/canonicalize-jars.sh;
+  stripJavaArchivesHook = makeSetupHook {
+    name = "strip-java-archives-hook";
+    propagatedBuildInputs = [ strip-nondeterminism ];
+  } ../build-support/setup-hooks/strip-java-archives.sh;
 
   ensureNewerSourcesHook = { year }: makeSetupHook {
     name = "ensure-newer-sources-hook";
@@ -1736,7 +1735,6 @@ with pkgs;
 
   butler = callPackage ../by-name/bu/butler/package.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    buildGoModule = buildGo120Module;
   };
 
   carbon-now-cli = callPackage ../tools/typesetting/carbon-now-cli { };
@@ -2557,9 +2555,7 @@ with pkgs;
 
   lab = callPackage ../applications/version-management/lab { };
 
-  labctl = callPackage ../tools/networking/labctl {
-    buildGoModule = buildGo120Module;
-  };
+  labctl = callPackage ../tools/networking/labctl { };
 
   legit = callPackage ../applications/version-management/legit { };
 
@@ -8713,9 +8709,7 @@ with pkgs;
 
   goreplay = callPackage ../tools/networking/goreplay { };
 
-  gost = callPackage ../tools/networking/gost {
-    buildGoModule = buildGo120Module; # go 1.21 build failure
-  };
+  gost = callPackage ../tools/networking/gost { };
 
   gource = callPackage ../applications/version-management/gource { };
 
@@ -13936,7 +13930,6 @@ with pkgs;
 
   trezord = callPackage ../servers/trezord {
     inherit (darwin.apple_sdk.frameworks) AppKit;
-    buildGoModule = buildGo120Module;
   };
 
   trezor-agent = with python3Packages; toPythonApplication trezor-agent;
@@ -15114,9 +15107,7 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
-  zincsearch = callPackage ../servers/search/zincsearch {
-    buildGoModule = buildGo120Module;
-  };
+  zincsearch = callPackage ../servers/search/zincsearch { };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
@@ -24245,7 +24236,9 @@ with pkgs;
 
   protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
   protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
-  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix { };
+  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix {
+    abseil-cpp = abseil-cpp_202301;
+  };
   protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
     abseil-cpp = abseil-cpp_202103;
   };
@@ -25375,7 +25368,9 @@ with pkgs;
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
 
-  yubico-pam = callPackage ../development/libraries/yubico-pam { };
+  yubico-pam = callPackage ../development/libraries/yubico-pam {
+    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
+  };
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool {
     inherit (darwin.apple_sdk.frameworks) PCSC;
@@ -25562,17 +25557,6 @@ with pkgs;
   go = go_1_21;
   buildGoModule = buildGo121Module;
   buildGoPackage = buildGo121Package;
-
-  # requires a newer Apple SDK
-  go_1_20 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.20.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
-  };
-  buildGo120Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_20;
-  };
-  buildGo120Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
-    go = buildPackages.go_1_20;
-  };
 
   # requires a newer Apple SDK
   go_1_21 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.21.nix {
@@ -26010,7 +25994,6 @@ with pkgs;
   engelsystem = callPackage ../servers/web-apps/engelsystem { };
 
   envoy = callPackage ../servers/http/envoy {
-    go = go_1_20;
     jdk = openjdk11_headless;
     gn = gn1924;
   };
@@ -28011,9 +27994,7 @@ with pkgs;
 
   goconst = callPackage ../development/tools/goconst { };
 
-  goconvey = callPackage ../development/tools/goconvey {
-    buildGoModule = buildGo120Module;
-  };
+  goconvey = callPackage ../development/tools/goconvey { };
 
   go-callvis = callPackage ../development/tools/go-callvis { };
 
@@ -28069,9 +28050,7 @@ with pkgs;
 
   go-mod-graph-chart = callPackage ../development/tools/go-mod-graph-chart { };
 
-  gomacro = callPackage ../development/tools/gomacro {
-    buildGoModule = buildGo120Module;
-  };
+  gomacro = callPackage ../development/tools/gomacro { };
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
@@ -29394,9 +29373,9 @@ with pkgs;
 
   open-sans = callPackage ../data/fonts/open-sans { };
 
-  openmoji-color = callPackage ../data/fonts/openmoji { variant = "color"; };
+  openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = ["glyf_colr_0"]; };
 
-  openmoji-black = callPackage ../data/fonts/openmoji { variant = "black"; };
+  openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = ["glyf"]; };
 
   openzone-cursors = callPackage ../data/themes/openzone { };
 
@@ -30010,8 +29989,6 @@ with pkgs;
 
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
-
-  amfora = callPackage ../applications/networking/browsers/amfora { };
 
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
@@ -31025,9 +31002,7 @@ with pkgs;
 
   gigalixir = callPackage ../tools/misc/gigalixir { };
 
-  go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon {
-    buildGoModule = buildGo120Module;
-  };
+  go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
   go-motion = callPackage ../development/tools/go-motion { };
 
@@ -32846,8 +32821,9 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+  ladybird = darwin.apple_sdk_11_0.callPackage ../applications/networking/browsers/ladybird {
     stdenv = if stdenv.isDarwin then overrideLibcxx darwin.apple_sdk_11_0.llvmPackages_16.stdenv else stdenv;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -33100,9 +33076,7 @@ with pkgs;
 
   markscribe = callPackage ../tools/text/markscribe { };
 
-  magnetico = callPackage ../applications/networking/p2p/magnetico {
-    buildGoModule = buildGo120Module;
-  };
+  magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
   mastodon-bot = nodePackages.mastodon-bot;
 
@@ -33447,11 +33421,7 @@ with pkgs;
 
   normalize = callPackage ../applications/audio/normalize { };
 
-  norouter = callPackage ../tools/networking/norouter {
-    # doesn't build with go 1.21
-    # https://github.com/norouter/norouter/issues/165
-    buildGoModule = buildGo120Module;
-  };
+  norouter = callPackage ../tools/networking/norouter { };
 
   nqptp = callPackage ../tools/networking/nqptp { };
 
@@ -34771,7 +34741,9 @@ with pkgs;
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  sish = callPackage ../tools/networking/sish { };
+  sish = callPackage ../tools/networking/sish {
+    buildGoModule = buildGo122Module;
+  };
 
   sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
     libjpeg_turbo = libjpeg8;
@@ -36536,9 +36508,7 @@ with pkgs;
 
   dcrctl = callPackage ../applications/blockchains/dcrctl { };
   dcrd = callPackage ../applications/blockchains/dcrd { };
-  dcrwallet = callPackage ../applications/blockchains/dcrwallet {
-    buildGoModule = buildGo120Module;
-  };
+  dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
   eclair = callPackage ../applications/blockchains/eclair { };
 
@@ -40708,7 +40678,9 @@ with pkgs;
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
-  vcluster = callPackage ../applications/networking/cluster/vcluster { };
+  vcluster = callPackage ../applications/networking/cluster/vcluster {
+    buildGoModule = buildGo122Module;
+  };
 
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 

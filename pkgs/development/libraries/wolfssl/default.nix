@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
+    mainProgram = "wolfssl-config";
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
     platforms = platforms.all;

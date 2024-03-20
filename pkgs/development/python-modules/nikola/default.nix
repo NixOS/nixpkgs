@@ -120,6 +120,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Static website and blog generator";
+    mainProgram = "nikola";
     homepage = "https://getnikola.com/";
     changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
     license = licenses.mit;

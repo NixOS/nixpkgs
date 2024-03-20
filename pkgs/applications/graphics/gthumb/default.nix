@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gthumb";
     description = "Image browser and viewer for GNOME";
+    mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mimame ];

@@ -121,6 +121,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
+    mainProgram = "pomerium";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb devusb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

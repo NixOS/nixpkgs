@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A tool for installing rust binaries as an alternative to building from source";
+    mainProgram = "cargo-binstall";
     homepage = "https://github.com/cargo-bins/cargo-binstall";
     changelog = "https://github.com/cargo-bins/cargo-binstall/releases/tag/v${version}";
     license = licenses.gpl3Only;

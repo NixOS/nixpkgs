@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = {
     description = "glooctl is the unified CLI for Gloo";
+    mainProgram = "glooctl";
     homepage = "https://docs.solo.io/gloo-edge/latest/reference/cli/glooctl/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ];

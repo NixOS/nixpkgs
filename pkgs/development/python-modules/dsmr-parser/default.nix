@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to parse Dutch Smart Meter Requirements (DSMR)";
+    mainProgram = "dsmr_console";
     homepage = "https://github.com/ndokter/dsmr_parser";
     changelog = "https://github.com/ndokter/dsmr_parser/releases/tag/v${version}";
     license = with licenses; [ mit ];

@@ -169,6 +169,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";
+    mainProgram = "dask";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;

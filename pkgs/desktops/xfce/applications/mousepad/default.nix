@@ -33,6 +33,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Simple text editor for Xfce";
+    mainProgram = "mousepad";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

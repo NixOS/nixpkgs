@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/Grokzen/pykwalify";
     description = "YAML/JSON validation library";
+    mainProgram = "pykwalify";
     longDescription = ''
       This framework is a port with a lot of added functionality
       of the Java version of the framework kwalify that can be found at

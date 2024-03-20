@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
+    mainProgram = "dftd4";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
     homepage = "https://github.com/grimme-lab/dftd4";
     platforms = platforms.linux;

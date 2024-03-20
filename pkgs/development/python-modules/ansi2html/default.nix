@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Convert text with ANSI color codes to HTML";
+    mainProgram = "ansi2html";
     homepage = "https://github.com/ralphbean/ansi2html";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ davidtwco ];

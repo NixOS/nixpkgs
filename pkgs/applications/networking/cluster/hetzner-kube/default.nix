@@ -41,6 +41,7 @@ buildGoModule rec {
 
   meta = {
     description = "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";
+    mainProgram = "hetzner-kube";
     homepage = "https://github.com/xetys/hetzner-kube";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eliasp ];

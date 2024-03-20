@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line interface for SQLite";
+    mainProgram = "litecli";
     longDescription = ''
       A command-line client for SQLite databases that has auto-completion and syntax highlighting.
     '';

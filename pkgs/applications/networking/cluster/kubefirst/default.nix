@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "The Kubefirst CLI creates instant GitOps platforms that integrate some of the best tools in cloud native from scratch.";
+    mainProgram = "kubefirst";
     homepage = "https://github.com/kubefirst/kubefirst/";
     license = licenses.mit;
     maintainers = with maintainers; [ qjoly ];

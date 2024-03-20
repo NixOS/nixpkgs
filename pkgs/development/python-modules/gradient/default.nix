@@ -73,6 +73,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The command line interface for Gradient";
+    mainProgram = "gradient";
     homepage = "https://github.com/Paperspace/gradient-cli";
     license = licenses.isc;
     platforms = platforms.unix;

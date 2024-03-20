@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.doxygen.nl/";
     changelog = "https://www.doxygen.nl/manual/changelog.html";
     description = "Source code documentation generator tool";
+    mainProgram = "doxygen";
 
     longDescription = ''
       Doxygen is the de facto standard tool for generating documentation from

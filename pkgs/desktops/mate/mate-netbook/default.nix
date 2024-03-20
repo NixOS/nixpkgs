@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MATE utilities for netbooks";
+    mainProgram = "mate-maximus";
     longDescription = ''
       MATE utilities for netbooks are an applet and a daemon to maximize
       windows and move their titles on the panel.

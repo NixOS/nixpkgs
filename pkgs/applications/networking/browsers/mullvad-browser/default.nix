@@ -256,6 +256,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
+    mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
     maintainers = with maintainers; [ felschr panicgh ];

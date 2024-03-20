@@ -6276,6 +6276,16 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  federicoschonborn = {
+    name = "Federico Damián Schonborn";
+    email = "federicoschonborn@disroot.org";
+    github = "FedericoSchonborn";
+    githubId = 62166915;
+    matrix = "@FedericoDSchonborn:matrix.org";
+    keys = [
+      { fingerprint = "C43F 4052 D289 3B73 33F8  0259 E4F6 F544 DE9E 29E8"; }
+    ];
+  };
   fedx-sudo = {
     email = "fedx-sudo@pm.me";
     github = "FedX-sudo";
@@ -20951,6 +20961,12 @@
     github = "wldhx";
     githubId = 15619766;
     name = "wldhx";
+  };
+  w-lfchen = {
+    email = "w-lfchen@posteo.net";
+    github = "w-lfchen";
+    githubId = 115360611;
+    name = "Wölfchen";
   };
   wmertens = {
     email = "Wout.Mertens@gmail.com";

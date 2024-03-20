@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A CLI tool for downloading large files from Google Drive";
+    mainProgram = "gdown";
     homepage = "https://github.com/wkentaro/gdown";
     changelog = "https://github.com/wkentaro/gdown/releases/tag/v${version}";
     license = licenses.mit;

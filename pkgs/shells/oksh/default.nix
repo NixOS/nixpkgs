@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
+    mainProgram = "oksh";
     homepage = "https://github.com/ibara/oksh";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];

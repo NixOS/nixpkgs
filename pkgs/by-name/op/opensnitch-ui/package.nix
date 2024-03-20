@@ -67,6 +67,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "An application firewall";
+    mainProgram = "opensnitch-ui";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];

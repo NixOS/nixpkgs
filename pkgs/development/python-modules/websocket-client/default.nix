@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Websocket client for Python";
+    mainProgram = "wsdump";
     homepage = "https://github.com/websocket-client/websocket-client";
     changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
     license = licenses.lgpl21Plus;

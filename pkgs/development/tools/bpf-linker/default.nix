@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple BPF static linker";
+    mainProgram = "bpf-linker";
     homepage = "https://github.com/aya-rs/bpf-linker";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ nickcao ];

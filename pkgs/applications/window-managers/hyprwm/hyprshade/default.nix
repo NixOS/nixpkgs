@@ -27,6 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/loqusion/hyprshade";
     description = "Hyprland shade configuration tool";
+    mainProgram = "hyprshade";
     license = licenses.mit;
     maintainers = with maintainers; [ willswats ];
     platforms = platforms.linux;

@@ -29,7 +29,7 @@
 , tarsum
 , util-linux
 , vmTools
-, writeReferencesToFile
+, writeClosure
 , writeScript
 , writeShellScriptBin
 , writeText
@@ -630,7 +630,7 @@ rec {
           imageName = lib.toLower name;
           imageTag = lib.optionalString (tag != null) tag;
           inherit fromImage baseJson;
-          layerClosure = writeReferencesToFile layer;
+          layerClosure = writeClosure [ layer ];
           passthru.buildArgs = args;
           passthru.layer = layer;
           passthru.imageTag =

@@ -31,6 +31,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/securego/gosec";
     description = "Golang security checker";
+    mainProgram = "gosec";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit nilp0inter ];
   };

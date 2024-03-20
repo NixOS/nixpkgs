@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
+    mainProgram = "guitarix";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with
       JACK (Jack Audio Connection Kit). It is free as in speech and

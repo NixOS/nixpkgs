@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Pixiv FANBOX Downloader";
+    mainProgram = "fanbox-dl";
     homepage = "https://github.com/hareku/fanbox-dl";
     license = licenses.mit;
     maintainers = [ maintainers.moni ];

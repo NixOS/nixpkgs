@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to interact with a GraphQL endpoint";
+    mainProgram = "graphqlmap";
     homepage = "https://github.com/swisskyrepo/GraphQLmap";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

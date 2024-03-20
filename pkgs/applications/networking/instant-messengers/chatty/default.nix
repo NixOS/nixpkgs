@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
+    mainProgram = "chatty";
     homepage = "https://gitlab.gnome.org/World/Chatty";
     changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${src.rev}/NEWS";
     license = licenses.gpl3Plus;

@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation {
 
   meta = with lib; {
     description = "A nonsense phrase generator";
+    mainProgram = "bullshit";
     homepage = "https://github.com/fceschmidt/bullshit-arch";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ krloer ];

@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Fonts glyph set metadata";
+    mainProgram = "glyphsets";
     homepage = "https://github.com/googlefonts/glyphsets";
     license = licenses.asl20;
     maintainers = with maintainers; [ danc86 ];

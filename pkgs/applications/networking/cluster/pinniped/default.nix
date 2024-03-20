@@ -28,6 +28,7 @@ buildGoModule rec{
 
   meta = with lib; {
     description = "Tool to securely log in to your Kubernetes clusters";
+    mainProgram = "pinniped";
     homepage = "https://pinniped.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bpaulin ];

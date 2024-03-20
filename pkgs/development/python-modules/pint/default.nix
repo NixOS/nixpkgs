@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";
     description = "Physical quantities module";
+    mainProgram = "pint-convert";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
     maintainers = with maintainers; [ doronbehar ];

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; src.meta // {
     description = "Reference CLI for Tox";
+    mainProgram = "toxic";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;

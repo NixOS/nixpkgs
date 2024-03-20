@@ -236,9 +236,9 @@ in
     };
 
     services.hedgedoc.settings = {
-      defaultNotePath = lib.mkDefault "${cfg.package}/public/default.md";
-      docsPath = lib.mkDefault "${cfg.package}/public/docs";
-      viewPath = lib.mkDefault "${cfg.package}/public/views";
+      defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
+      docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
+      viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
     };
 
     systemd.services.hedgedoc = {
@@ -263,7 +263,7 @@ in
         Group = name;
 
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/hedgedoc";
+        ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = [ name ];
         StateDirectory = [ name ];
         WorkingDirectory = "/run/${name}";

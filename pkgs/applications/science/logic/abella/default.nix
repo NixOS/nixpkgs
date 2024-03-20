@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Interactive theorem prover";
+    mainProgram = "abella";
     longDescription = ''
       Abella is an interactive theorem prover based on lambda-tree syntax.
       This means that Abella is well-suited for reasoning about the meta-theory

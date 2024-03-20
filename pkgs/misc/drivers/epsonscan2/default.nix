@@ -136,6 +136,7 @@ stdenv.mkDerivation {
 
   meta = {
     inherit description;
+    mainProgram = "epsonscan2";
     longDescription = ''
       Epson Scan 2 scanner driver including optional non-free plugins such as OCR and network
       scanning.

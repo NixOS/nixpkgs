@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/wangp/bower";
     description = "A curses terminal client for the Notmuch email system";
+    mainProgram = "bower";
     maintainers = with maintainers; [ jgart ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

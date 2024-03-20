@@ -71,6 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
+    mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
     changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
     license = licenses.mit;

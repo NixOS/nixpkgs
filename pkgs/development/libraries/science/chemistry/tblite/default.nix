@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Light-weight tight-binding framework";
+    mainProgram = "tblite";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     homepage = "https://github.com/tblite/tblite";
     platforms = platforms.linux;

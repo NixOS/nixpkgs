@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to access single members of a zip archive without downloading the full content";
+    mainProgram = "remotezip";
     homepage = "https://github.com/gtsystem/python-remotezip";
     license = licenses.mit;
     maintainers = with maintainers; [ nickcao ];

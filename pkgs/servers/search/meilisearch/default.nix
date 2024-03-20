@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine";
+    mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;

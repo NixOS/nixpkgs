@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";
+    mainProgram = "insteon_tools";
     longDescription = ''
       This is a Python package to interface with an Insteon Modem. It has been
       tested to work with most USB or RS-232 serial based devices such as the

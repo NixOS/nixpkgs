@@ -34,6 +34,7 @@ in
     maintainers = [ maintainers.cab404 ];
     license = licenses.gpl3Plus;
     description = "Tool for converting Slic3r PE's SL1 files to Photon files for the Anycubic Photon 3D-Printer";
+    mainProgram = "sl1-to-photon";
     homepage = "https://github.com/fookatchu/SL1toPhoton";
   };
 

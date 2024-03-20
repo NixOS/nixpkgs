@@ -669,7 +669,7 @@
   };
 
   hardhat-nvim = super.hardhat-nvim.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
+    dependencies = with self; [ overseer-nvim plenary-nvim ];
   };
 
   harpoon = super.harpoon.overrideAttrs {

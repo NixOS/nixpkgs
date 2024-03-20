@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.27.0";
+  version = "0.27.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h7IdukvQr+B/Au70nK0Qc4FpkDiCMsIZuPAWsiCdnUo=";
+    hash = "sha256-GwFibsxMhWqirFn5cG9GfDZAtVWRx+BCqDBiQV6wuYU=";
   };
 
   nativeBuildInputs = [
@@ -147,6 +147,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "State-of-the-art diffusion models for image and audio generation in PyTorch";
+    mainProgram = "diffusers-cli";
     homepage = "https://github.com/huggingface/diffusers";
     changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.rev}";
     license = licenses.asl20;

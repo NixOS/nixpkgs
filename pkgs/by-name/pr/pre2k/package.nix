@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pre2k";
-  version = "3.0-unstable-2024-03-14";
+  version = "3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "pre2k";
-    rev = "3baa7b73aedd45f52e417210081da3dd010c1b22";
-    hash = "sha256-0lgH7Z9LuiZwODdFvKWcqS1TV02aVjzD9RgOhX0lU6s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-z1ttuRos7x/zdWiYYozxWzRarFExd4W5rUYAEiUMugU=";
   };
 
   pythonRelaxDeps = [
@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to query for the existence of pre-windows 2000 computer objects";
     homepage = "https://github.com/garrettfoster13/pre2k";
+    changelog = "https://github.com/garrettfoster13/pre2k/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "pre2k";

@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for working with verisure devices";
+    mainProgram = "vsure";
     homepage = "https://github.com/persandstrom/python-verisure";
     changelog = "https://github.com/persandstrom/python-verisure#version-history";
     license = with licenses; [ mit ];

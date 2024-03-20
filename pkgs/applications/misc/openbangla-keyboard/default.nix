@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   meta = {
     isIbusEngine = withIbusSupport;
     description = "An OpenSource, Unicode compliant Bengali Input Method";
+    mainProgram = "openbangla-gui";
     homepage = "https://openbangla.github.io/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eclairevoyant hqurve ];

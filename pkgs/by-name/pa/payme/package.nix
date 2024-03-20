@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = {
     description = "QR code generator (ASCII & PNG) for SEPA payments";
+    mainProgram = "payme";
     homepage = "https://github.com/jovandeginste/payme";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cimm ];

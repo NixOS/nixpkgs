@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";
+    mainProgram = "pgcli";
     longDescription = ''
       Rich command-line interface for PostgreSQL with auto-completion and
       syntax highlighting.

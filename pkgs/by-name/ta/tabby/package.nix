@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage {
   ] ++ optionals enableCuda [
     # TODO: Replace with autoAddDriverRunpath
     # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = [ openssl ]

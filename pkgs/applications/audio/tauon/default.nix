@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "The Linux desktop music player from the future";
+    mainProgram = "tauon";
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3;

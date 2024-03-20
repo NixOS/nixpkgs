@@ -49,6 +49,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/screengrab";
     description = "Crossplatform tool for fast making screenshots";
+    mainProgram = "screengrab";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;

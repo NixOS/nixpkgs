@@ -54,6 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python3 library and command line for GreyNoise";
+    mainProgram = "greynoise";
     homepage = "https://github.com/GreyNoise-Intelligence/pygreynoise";
     changelog = "https://github.com/GreyNoise-Intelligence/pygreynoise/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
