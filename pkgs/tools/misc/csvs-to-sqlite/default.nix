@@ -1,6 +1,21 @@
 { lib, python3, fetchFromGitHub, fetchpatch }:
 
-with python3.pkgs; buildPythonApplication rec {
+let
+  inherit (python3.pkgs)
+    buildPythonApplication
+    click
+    cogapp
+    dateparser
+    pandas
+    py-lru-cache
+    pytestCheckHook
+    pythonRelaxDepsHook
+    setuptools
+    six
+    ;
+in
+
+buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.3";
   format = "setuptools";
