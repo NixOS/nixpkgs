@@ -8847,6 +8847,8 @@ self: super: with self; {
 
   oletools = callPackage ../development/python-modules/oletools { };
 
+  ollama = callPackage ../development/python-modules/ollama { };
+
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
   omemo-dr = callPackage ../development/python-modules/omemo-dr { };
