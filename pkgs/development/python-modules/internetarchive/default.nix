@@ -11,6 +11,7 @@
 , tqdm
 , urllib3
 , pythonOlder
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   version = "3.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jjjake";
@@ -27,14 +28,19 @@ buildPythonPackage rec {
     hash = "sha256-krMOjXzI9tmLGLEswXLLqc8J68Gwnl1VrRO2fLbDv0o=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     tqdm
     docopt
     requests
     jsonpatch
     schema
-    setuptools # needs pkg_resources at runtime
     urllib3
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -65,7 +71,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
-    changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
+    changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.marsam ];
     mainProgram = "ia";
