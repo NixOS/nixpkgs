@@ -161,10 +161,7 @@ filterAndCreateOverrides {
   cuda_nvcc =
     {
       backendStdenv,
-      buildPackages,
       cuda_cudart,
-      cudaAtLeast,
-      cudaOlder,
       lib,
       setupCudaHook,
     }:
@@ -262,7 +259,6 @@ filterAndCreateOverrides {
   cuda_demo_suite =
     {
       freeglut,
-      lib,
       libcufft,
       libcurand,
       libGLU,
@@ -307,11 +303,8 @@ filterAndCreateOverrides {
 
   nsight_systems =
     {
-      alsa-lib,
-      boost178,
       cuda_cudart,
       cudaOlder,
-      e2fsprogs,
       gst_all_1,
       lib,
       nss,
