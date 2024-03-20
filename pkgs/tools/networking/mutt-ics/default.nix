@@ -1,6 +1,10 @@
 { lib, python3, fetchPypi }:
 
-with python3.pkgs; buildPythonApplication rec {
+let
+  inherit (python3.pkgs) buildPythonApplication icalendar;
+in
+
+buildPythonApplication rec {
   pname = "mutt-ics";
   version = "0.9.2";
 
