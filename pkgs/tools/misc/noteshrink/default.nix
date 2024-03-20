@@ -1,6 +1,13 @@
 { lib, fetchFromGitHub, python3, imagemagick }:
 
-with python3.pkgs;
+let
+  inherit (python3.pkgs)
+    buildPythonApplication
+    numpy
+    pillow
+    scipy
+    ;
+in
 
 buildPythonApplication rec {
   pname = "noteshrink";
