@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "python-uinput";
-  version = "0.11.2";
+  version = "1.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "033zqiypjz0nigav6vz0s57pbzikvds55mxphrdpkdbpdikjnfcr";
+    sha256 = "sha256-hTaXNEtk31U31K4yum+88FFdUakBCRD11QGZWQOLbro=";
   };
 
   buildInputs = [ udev ];
