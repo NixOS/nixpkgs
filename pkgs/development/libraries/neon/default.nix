@@ -15,12 +15,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.32.5";
+  version = "0.33.0";
   pname = "neon";
 
   src = fetchurl {
     url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SHLhL4Alct7dSwL4cAZYFLLVFB99va9wju2rgmtRpYo=";
+    sha256 = "sha256-ZZpcyc6gXm54ZAlPHhOneru9urRS8E11GowWqUR89Lg=";
   };
 
   patches = optionals stdenv.isDarwin [ ./darwin-fix-configure.patch ];
