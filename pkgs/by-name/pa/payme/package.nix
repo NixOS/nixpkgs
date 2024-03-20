@@ -3,6 +3,7 @@
 buildGoModule rec {
   pname = "payme";
   version = "1.2.0";
+  commit = "416d53e3f518898a0411889a5af08e8d9858e70e";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
@@ -16,8 +17,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.gitRefName=v${version}"
-    "-X main.gitCommit=416d53e3f518898a0411889a5af08e8d9858e70e"
+    "-X main.gitRefName=${src.rev}"
+    "-X main.gitCommit=${commit}"
   ];
 
   meta = {
