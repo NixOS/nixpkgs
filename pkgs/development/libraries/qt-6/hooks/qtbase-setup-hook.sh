@@ -75,9 +75,9 @@ else # Only set up Qt once.
     fi
 
     qtPreHook() {
-        # Check that wrapQtAppsHook is used, or it is explicitly disabled.
+        # Check that wrapQtAppsHook/wrapQtAppsNoGuiHook is used, or it is explicitly disabled.
         if [[ -z "$__nix_wrapQtAppsHook" && -z "$dontWrapQtApps" ]]; then
-            echo >&2 "Error: wrapQtAppsHook is not used, and dontWrapQtApps is not set."
+            echo >&2 "Error: wrapQtAppsHook and wrapQtAppsNoGuiHook are not used, and dontWrapQtApps is not set."
             exit 1
         fi
     }
