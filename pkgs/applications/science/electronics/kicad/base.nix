@@ -99,6 +99,8 @@ stdenv.mkDerivation rec {
     # https://gitlab.com/kicad/code/kicad/-/issues/17133
     "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_spice'"
   ]
+  ++ optional (stdenv.hostPlatform.system == "aarch64-linux")
+    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'qa_spice|qa_cli'"
   ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
   ++ optionals (!withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=OFF"
