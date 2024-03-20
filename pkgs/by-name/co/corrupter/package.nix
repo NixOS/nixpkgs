@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "corrupter";
-  version = "1.0-unstable-2023-01-11";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "r00tman";
