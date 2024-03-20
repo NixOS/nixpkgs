@@ -1,0 +1,13 @@
+diff --git a/src/p_lkrg_main.c b/src/p_lkrg_main.c
+index 9ed9d37..0fa83ed 100644
+--- a/src/p_lkrg_main.c
++++ b/src/p_lkrg_main.c
+@@ -29,7 +29,7 @@ unsigned int pint_enforce = 1;
+ unsigned int pcfi_validate = 2;
+ unsigned int pcfi_enforce = 1;
+ unsigned int umh_validate = 1;
+-unsigned int umh_enforce = 1;
++unsigned int umh_enforce = 0;
+ #if defined(CONFIG_X86)
+ unsigned int smep_validate = 1;
+ unsigned int smep_enforce = 2;
