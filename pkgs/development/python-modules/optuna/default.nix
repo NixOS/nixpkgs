@@ -44,7 +44,7 @@
 buildPythonPackage rec {
   pname = "optuna";
   version = "3.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -132,10 +132,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A hyperparameter optimization framework";
-    mainProgram = "optuna";
     homepage = "https://optuna.org/";
-    changelog = "https://github.com/optuna/optuna/releases/tag/${src.rev}";
+    changelog = "https://github.com/optuna/optuna/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
+    mainProgram = "optuna";
   };
 }
