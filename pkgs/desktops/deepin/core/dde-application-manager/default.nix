@@ -4,7 +4,7 @@
 , fetchpatch
 , cmake
 , pkg-config
-, wrapQtAppsHook
+, wrapQtClisHook
 , qtbase
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    wrapQtClisHook
   ];
 
   buildInputs = [
