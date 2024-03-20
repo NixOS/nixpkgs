@@ -3018,27 +3018,26 @@ buildLuarocksPackage {
   };
 }) {};
 
-rest-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder }:
+rest-nvim = callPackage ({ buildLuarocksPackage, fetchurl, fetchzip, lua, lua-curl, luaOlder, mimetypes, nvim-nio, xml2lua }:
 buildLuarocksPackage {
   pname = "rest.nvim";
-  version = "0.2-1";
+  version = "2.0.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rest.nvim-0.2-1.rockspec";
-    sha256 = "1yq8gx585c10j8kybp20swyv9q0i3lm5k0rrv4bgsbwz3ychn0k1";
+    url    = "mirror://luarocks/rest.nvim-2.0.1-1.rockspec";
+    sha256 = "1ra76wnhi4nh56amyd8zqmg0mpsnhp3m41m3iyiq4hp1fah6nbqb";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/rest-nvim/rest.nvim/archive/0.2.zip";
-    sha256 = "0ycjrrl37z465p71bdkas3q2ky1jmgr2cjnirnskdc6wz14wl09g";
+    url    = "https://github.com/rest-nvim/rest.nvim/archive/v2.0.1.zip";
+    sha256 = "09rs04d5h061zns1kdfycryx4ll8ix15q3ybpmqsdyp2gn8l77df";
   };
 
   disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
+  propagatedBuildInputs = [ lua lua-curl mimetypes nvim-nio xml2lua ];
 
   meta = {
     homepage = "https://github.com/rest-nvim/rest.nvim";
     description = "A fast Neovim http client written in Lua";
-    maintainers = with lib.maintainers; [ teto ];
-    license.fullName = "MIT";
+    license.fullName = "GPL-3.0";
   };
 }) {};
 
