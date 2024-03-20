@@ -1,7 +1,7 @@
 {
   # General callPackage-supplied arguments
-  autoAddOpenGLRunpathHook,
-  autoAddCudaCompatRunpathHook,
+  autoAddDriverRunpath,
+  autoAddCudaCompatRunpath,
   autoPatchelfHook,
   backendStdenv,
   fetchurl,
@@ -193,16 +193,16 @@ backendStdenv.mkDerivation (
       # in typically /lib/opengl-driver by adding that
       # directory to the rpath of all ELF binaries.
       # Check e.g. with `patchelf --print-rpath path/to/my/binary
-      autoAddOpenGLRunpathHook
+      autoAddDriverRunpath
       markForCudatoolkitRootHook
     ]
-    # autoAddCudaCompatRunpathHook depends on cuda_compat and would cause
+    # autoAddCudaCompatRunpath depends on cuda_compat and would cause
     # infinite recursion if applied to `cuda_compat` itself (beside the fact
     # that it doesn't make sense in the first place)
     ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
-      # autoAddCudaCompatRunpathHook must appear AFTER autoAddOpenGLRunpathHook.
+      # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
       # See its documentation in ./setup-hooks/extension.nix.
-      autoAddCudaCompatRunpathHook
+      autoAddCudaCompatRunpath
     ];
 
     buildInputs =

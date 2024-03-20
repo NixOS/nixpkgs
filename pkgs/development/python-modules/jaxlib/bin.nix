@@ -23,7 +23,7 @@
 }:
 
 let
-  inherit (cudaPackagesGoogle) autoAddOpenGLRunpathHook cudaVersion;
+  inherit (cudaPackagesGoogle) autoAddDriverRunpath cudaVersion;
 
   version = "0.4.24";
 
@@ -180,7 +180,7 @@ buildPythonPackage {
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals cudaSupport [ autoAddOpenGLRunpathHook ];
+    ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
   # Dynamic link dependencies
   buildInputs = [ stdenv.cc.cc.lib ];
 
