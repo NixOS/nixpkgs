@@ -258,7 +258,7 @@ buildFHSEnv {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll orivej ];
+    maintainers = with maintainers; [ amarshall jshcmpbll orivej ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve";
