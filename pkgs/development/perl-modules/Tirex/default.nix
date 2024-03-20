@@ -7,6 +7,7 @@
 , JSON
 , LWP
 , mapnik
+, nix-update-script
 }:
 
 buildPerlPackage rec {
@@ -42,6 +43,8 @@ buildPerlPackage rec {
     mv $out/$out/lib $out/$out/share $out
     rmdir $out/$out $out/nix/store $out/nix
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tools for running a map tile server";
