@@ -109,6 +109,7 @@ let
       CHT_DC_TI_PMIC_OPREGION          = whenAtLeast "5.10" yes;
       MFD_TPS68470                     = whenBetween "5.10" "5.13" yes;
       TPS68470_PMIC_OPREGION           = whenAtLeast "5.10" yes;
+      INTEL_HFI_THERMAL                = whenAtLeast "5.17" yes;
     };
 
     external-firmware = {
