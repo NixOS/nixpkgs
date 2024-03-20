@@ -74,8 +74,9 @@ and the aliases
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
-The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/mk-python-derivation.nix`
+The `buildPythonPackage` function has its name binding in
+`pkgs/development/interpreters/python/python-packages-base.nix` and is
+implemented in `pkgs/development/interpreters/python/mk-python-derivation.nix`
 using setup hooks.
 
 The following is an example:
