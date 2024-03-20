@@ -7487,6 +7487,8 @@ self: super: with self; {
 
   mox3 = callPackage ../development/python-modules/mox3 { };
 
+  mozjpeg-lossless-optimization = callPackage ../development/python-modules/mozjpeg-lossless-optimization { };
+
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
