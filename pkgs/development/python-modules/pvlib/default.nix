@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "pvlib";
   version = "0.10.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
