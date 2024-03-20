@@ -2,11 +2,12 @@
 , stdenv
 , fetchurl
 , python3
-, jdk
+, jdk17
 }:
 
 let
   timestamp = "202401111522";
+  jdk = jdk17;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jdt-language-server";
