@@ -9353,6 +9353,11 @@
     githubId = 49727155;
     name = "Paul Meyer";
   };
+  katrinafyi = {
+    name = "katrinafyi";
+    github = "katrinafyi";
+    githubId = 39479354;
+  };
   kayhide = {
     email = "kayhide@gmail.com";
     github = "kayhide";
