@@ -26953,8 +26953,6 @@ with pkgs;
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
-  slimserver = callPackage ../servers/slimserver { };
-
   smcroute = callPackage ../servers/smcroute { };
 
   snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {

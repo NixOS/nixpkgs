@@ -6,7 +6,7 @@
 , makeWrapper
 , monkeysAudio
 , nixosTests
-, perl538Packages
+, perlPackages
 , sox
 , stdenv
 , wavpack
@@ -15,8 +15,6 @@
 }:
 
 let
-  perlPackages = perl538Packages;
-
   binPath = lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio));
   libPath = lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ];
 in
@@ -144,8 +142,12 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  passthru.tests = {
-    inherit (nixosTests) slimserver;
+  passthru = {
+    tests = {
+      inherit (nixosTests) slimserver;
+    };
+
+    updateScript = ./update.nu;
   };
 
   meta = with lib; {
