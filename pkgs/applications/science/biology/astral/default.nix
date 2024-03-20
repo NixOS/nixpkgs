@@ -2,49 +2,67 @@
 , stdenvNoCC
 , fetchFromGitHub
 , jdk8
-, makeWrapper
 , jre8
+, strip-nondeterminism
+, makeWrapper
 , zip
 }:
+
 let
   jdk = jdk8;
   jre = jre8;
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "astral";
   version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "smirarab";
     repo = "ASTRAL";
-    rev = "v${version}";
-    sha256 = "043w2z6gbrisqirdid022f4b8jps1pp5syi344krv2bis1gjq5sn";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VhcsX9BxiZ0nISN6Xe4N+kq0iBMCtNhyxDrm9cwXfBA=";
   };
 
-  nativeBuildInputs = [ jdk makeWrapper jre zip ];
+  patches = [
+    # we can't use stripJavaArchivesHook here, because the build process puts a .jar file into a zip file
+    # this patch calls strip-nondeterminism manually
+    ./make-deterministic.patch
+  ];
+
+  nativeBuildInputs = [
+    jdk
+    zip
+    strip-nondeterminism
+    makeWrapper
+  ];
 
   buildPhase = ''
+    runHook preBuild
     patchShebangs ./make.sh
     ./make.sh
+    runHook postBuild
   '';
 
   doCheck = true;
 
   checkPhase = ''
     runHook preCheck
-    java -jar astral.${version}.jar -i main/test_data/song_primates.424.gene.tre
+    java -jar astral.${finalAttrs.version}.jar -i main/test_data/song_primates.424.gene.tre
     runHook postCheck
   '';
 
   installPhase = ''
-    mkdir -p $out/share/lib
-    mkdir -p $out/bin
-    mv astral.${version}.jar $out/share/
-    mv lib/*.jar $out/share/lib
-    mv Astral.${version}.zip $out/share/
-    cp -a  main/test_data $out/share/
+    runHook preInstall
+
+    install -Dm644 astral.${finalAttrs.version}.jar -t $out/share
+    install -Dm644 lib/*.jar -t $out/share/lib
+    install -Dm644 Astral.${finalAttrs.version}.zip -t $out/share
+    cp -a main/test_data $out/share
+
     makeWrapper ${jre}/bin/java $out/bin/astral \
-        --add-flags "-jar $out/share/astral.${version}.jar"
+        --add-flags "-jar $out/share/astral.${finalAttrs.version}.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -53,9 +71,9 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "astral";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ bzizou ];
+    maintainers = with maintainers; [ bzizou tomasajt ];
   };
-}
+})

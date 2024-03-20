@@ -1,5 +1,5 @@
 { lib
-, fetchFromGitea
+, fetchzip
 , ocamlPackages
 , soupault
 , testers
@@ -8,19 +8,19 @@
 let
   pname = "soupault";
 
-  version = "4.8.0";
+  version = "4.9.0";
 in
 ocamlPackages.buildDunePackage {
   inherit pname version;
 
   minimalOCamlVersion = "4.13";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "PataphysicalSociety";
-    repo = pname;
-    rev = version;
-    hash = "sha256-/QpT0zgrfMgRKjHyLHugaAlICpPkqaQ7f8fFAL0P02Y=";
+  src = fetchzip {
+    urls = [
+      "https://github.com/PataphysicalSociety/soupault/archive/${version}.tar.gz"
+      "https://codeberg.org/PataphysicalSociety/soupault/archive/${version}.tar.gz"
+    ];
+    hash = "sha256-vGTJUbAeYs/EYFykNSmCc4c9G66/Lz3BsUYnZQ8feFo=";
   };
 
   buildInputs = with ocamlPackages; [

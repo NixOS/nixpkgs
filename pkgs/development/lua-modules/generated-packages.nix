@@ -2726,6 +2726,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+mimetypes = callPackage({ buildLuarocksPackage, fetchurl, lua, luaOlder }:
+buildLuarocksPackage {
+  pname = "mimetypes";
+  version = "1.0.0-3";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/mimetypes-1.0.0-3.rockspec";
+    sha256 = "02f5x5pkz6fba71mp031arrgmddsyivn5fsa0pj3q3a7nxxpmnq9";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://github.com/lunarmodules/lua-mimetypes/archive/v1.0.0/lua-mimetypes-1.0.0.tar.gz";
+    sha256 = "1rc5lnzvw4cg8wxn4w4sar2xgf5vaivdd2hgpxxcqfzzcmblg1zk";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github/lunarmodules/lua-mimetypes/";
+    description = "A simple library for looking up the MIME types of files.";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
+
 moonscript = callPackage({ argparse, buildLuarocksPackage, fetchgit, lpeg, lua, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "moonscript";

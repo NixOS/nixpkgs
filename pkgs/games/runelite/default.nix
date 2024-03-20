@@ -3,13 +3,19 @@
 , makeDesktopItem
 , makeWrapper
 , maven
+, jdk17
 , jre
 , xorg
 , gitUpdater
 , libGL
 }:
 
-maven.buildMavenPackage rec {
+let
+  mavenJdk17 = maven.override {
+    jdk = jdk17;
+  };
+in
+mavenJdk17.buildMavenPackage rec {
   pname = "runelite";
   version = "2.6.13";
 
