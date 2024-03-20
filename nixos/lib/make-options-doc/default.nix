@@ -1,9 +1,11 @@
 /**
-  Generates documentation for nix modules.
+  Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/module-system.html).
+
+  It uses the declared `options` to generate documentation in various formats.
 
   # Outputs
 
-  This function offers the following outputs
+  This function returns an attribute set with the following entries.
 
   ## optionsCommonMark
 
@@ -31,22 +33,10 @@
       "loc": ["fileSystems", "<name>", "options"],
       "readOnly": false,
       "type": "non-empty (list of string (with check: non-empty))"
+      "relatedPackages": "- [`pkgs.tmux`](\n    https://search.nixos.org/packages?show=tmux&sort=relevance&query=tmux\n  )\n",
     },
     ...
   }
-  ```
-
-  Overall the following fields are available per option:
-
-  ```
-  declarations
-  description
-  loc
-  readOnly
-  type
-  default
-  example
-  relatedPackages
   ```
 
   ## optionsDocBook
@@ -57,14 +47,13 @@
 
   Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
 
-  > Note: NixOS uses this to build the man-pages available via `man configuration.nix` on every NixOS machine.
+  > Note: NixOS itself uses this ouput to to build the configuration.nix man page"
 
   ## optionsNix
 
   All options as a Nix attribute set value, with the same schema as `optionsJSON`.
 
   # Example
-
 
   ## Example: NixOS configuration
 
@@ -87,7 +76,7 @@
 
   ## Example: non-NixOS modules
 
-  `lib.evalModules` can also be used to evaluate non-NixOS modules.
+  `nixosOptionsDoc` can also be used to build documentation for non-NixOS modules.
 
   ```nix
   let
