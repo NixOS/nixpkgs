@@ -32,13 +32,16 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [ "k5test" ];
+  pythonImportsCheck = [
+    "k5test"
+  ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
+    changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    broken = stdenv.isDarwin;
   };
 }
