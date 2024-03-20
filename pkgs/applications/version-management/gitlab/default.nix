@@ -49,7 +49,7 @@ let
                 cp Cargo.lock $out
               '';
             };
-            hash = "sha256-csasA2RH1vwRdF/9/BpFmh0AKsP3xtGmrhCx6mbVf6k=";
+            hash = "sha256-7q2xWAsFkXHxkYNzIjPwJRy72xMXF278cpVzqGLt/9Y=";
           };
 
           dontBuild = false;
@@ -111,6 +111,8 @@ let
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
+
+    SKIP_YARN_INSTALL = 1;
 
     configurePhase = ''
       runHook preConfigure
