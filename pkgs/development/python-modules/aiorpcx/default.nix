@@ -4,6 +4,7 @@
 , pythonOlder
 , attrs
 , setuptools
+, websockets
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
   ];
+
+  passthru.optional-dependencies = {
+    ws = [
+      websockets
+    ];
+  };
 
   # Checks needs internet access
   doCheck = false;
