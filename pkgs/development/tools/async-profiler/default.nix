@@ -2,36 +2,34 @@
 
 stdenv.mkDerivation rec {
   pname = "async-profiler";
-  version = "2.9";
+  version = "3.0";
 
   src = fetchFromGitHub {
-    owner = "jvm-profiling-tools";
+    owner = "async-profiler";
     repo = "async-profiler";
     rev = "v${version}";
-    sha256 = "sha256-ngLUg6Fq6Ay06klGa/y8lod8W6rYMqhMhXFn5OBCSpk=";
+    sha256 = "sha256-0CCJoRjRLq4LpiRD0ibzK8So9qSQymePCTYUI60Oy2k=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ jdk ];
 
+  postPatch = ''
+    # Patching Java version since 7 is deprecated
+    sed -i 's/-source 7 -target 7/-source 8 -target 8/g' Makefile
+  '';
+
   installPhase = ''
     runHook preInstall
-    install -D "$src/profiler.sh" "$out/bin/async-profiler"
-    install -D build/jattach "$out/bin/jattach"
-    install -D build/libasyncProfiler.so "$out/lib/libasyncProfiler.so"
-    install -D -t "$out/share/java/" build/*.jar
+    install -D build/bin/asprof "$out/bin/asprof"
+    install -D build/lib/libasyncProfiler.so "$out/lib/libasyncProfiler.so"
+    install -D -t "$out/share/java/" build/lib/*.jar
     runHook postInstall
   '';
 
   fixupPhase = ''
-    substituteInPlace $out/bin/async-profiler \
-      --replace 'JATTACH=$SCRIPT_DIR/build/jattach' \
-                'JATTACH=${placeholder "out"}/bin/jattach' \
-      --replace 'PROFILER=$SCRIPT_DIR/build/libasyncProfiler.so' \
-                'PROFILER=${placeholder "out"}/lib/libasyncProfiler.so'
-
-    wrapProgram $out/bin/async-profiler --prefix PATH : ${lib.makeBinPath [ jdk ]}
+    wrapProgram $out/bin/asprof --prefix PATH : ${lib.makeBinPath [ jdk ]}
   '';
 
   meta = with lib; {
