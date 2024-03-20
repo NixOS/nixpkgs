@@ -1,19 +1,20 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
 , substituteAll
 , findutils
 , krb5
-, stdenv
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "k5test";
   version = "0.10.4";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,6 +28,10 @@ buildPythonPackage rec {
       # krb5-config is in dev output
       krb5Dev = krb5.dev;
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   # No tests
