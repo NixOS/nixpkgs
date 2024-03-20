@@ -13,41 +13,69 @@ in
         The address of the reverse proxy endpoint for oauth2_proxy
       '';
     };
+
+    domain = mkOption {
+      type = types.str;
+      default = lib.head cfg.virtualHosts;
+      defaultText = literalExpression "lib.head config.services.oauth2_proxy.nginx.virtualHosts";
+      description = lib.mdDoc ''
+        The domain under which the oauth2_proxy will be accesible and the path of cookies are set to.
+        If oauth2-proxy is configured with `cookie.domain` or multiple virtualHosts that are not on the same domain,
+        this setting must be set to ensure back-redirects are working properly.
+        In oauth2-proxy the `whitelist-domain` setting must be configured to allow the back-redirects.
+      '';
+    };
+
     virtualHosts = mkOption {
       type = types.listOf types.str;
       default = [];
       description = lib.mdDoc ''
-        A list of nginx virtual hosts to put behind the oauth2 proxy
+        A list of nginx virtual hosts to put behind the oauth2 proxy.
+        You can exclude specific locations by setting `auth_request off;` in the locations extraConfig setting.
       '';
     };
   };
+
   config.services.oauth2_proxy = mkIf (cfg.virtualHosts != [] && (hasPrefix "127.0.0.1:" cfg.proxy)) {
     enable = true;
   };
-  config.services.nginx = mkIf config.services.oauth2_proxy.enable (mkMerge
-  ((optional (cfg.virtualHosts != []) {
-    recommendedProxySettings = true; # needed because duplicate headers
-  }) ++ (map (vhost: {
-    virtualHosts.${vhost} = {
-      locations."/oauth2/" = {
+
+  config.services.nginx = mkIf config.services.oauth2_proxy.enable (mkMerge ([
+    {
+      virtualHosts.${cfg.domain}.locations."/oauth2/" = {
         proxyPass = cfg.proxy;
         extraConfig = ''
           proxy_set_header X-Scheme                $scheme;
           proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
         '';
       };
-      locations."/oauth2/auth" = {
-        proxyPass = cfg.proxy;
-        extraConfig = ''
-          proxy_set_header X-Scheme         $scheme;
-          # nginx auth_request includes headers but not body
-          proxy_set_header Content-Length   "";
-          proxy_pass_request_body           off;
-        '';
+    }
+  ] ++ optional (cfg.virtualHosts != []) {
+    recommendedProxySettings = true; # needed because duplicate headers
+  } ++ (map (vhost: {
+    virtualHosts.${vhost} = {
+      locations = {
+        "/oauth2/auth" = {
+          proxyPass = cfg.proxy;
+          extraConfig = ''
+            auth_request off;
+            proxy_set_header X-Scheme         $scheme;
+            # nginx auth_request includes headers but not body
+            proxy_set_header Content-Length   "";
+            proxy_pass_request_body           off;
+          '';
+        };
+        "@redirectToAuth2ProxyLogin" = {
+          return = "307 https://${cfg.domain}/oauth2/start?rd=$scheme://$host$request_uri";
+          extraConfig = ''
+            auth_request off;
+          '';
+        };
       };
-      locations."/".extraConfig = ''
+
+      extraConfig = ''
         auth_request /oauth2/auth;
-        error_page 401 = /oauth2/sign_in;
+        error_page 401 = @redirectToAuth2ProxyLogin;
 
         # pass information via X-User and X-Email headers to backend,
         # requires running with --set-xauthrequest flag
@@ -60,7 +88,6 @@ in
         auth_request_set $auth_cookie $upstream_http_set_cookie;
         add_header Set-Cookie $auth_cookie;
       '';
-
     };
   }) cfg.virtualHosts)));
 }
