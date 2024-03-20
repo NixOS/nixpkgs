@@ -18,15 +18,15 @@
 , externalEtc ? "/etc"
 }:
 
-stdenv.mkDerivation rec{
-  pname = "voms-unstable";
-  version = "2022-06-14";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "voms";
+  version = "2.1.0-rc3";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
     repo = "voms";
-    rev = "8e99bb96baaf197f0f557836e2829084bb1bb00e"; # develop branch
-    hash = "sha256-FG4fHO2lsQ3t/ZaKT9xY+xqdQHfdtzi5ULtxLhdPnss=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-QTYLLiR3VdTV7NWNv9juTcxPSR7D9sE5BwWARVCzr7s=";
   };
 
   passthru = {
@@ -70,6 +70,17 @@ stdenv.mkDerivation rec{
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
+  # include/voms/voms_api.h surprisingly expects config.h
+  # presented in the same directory, which does't get installed
+  # automatically. Here we manually install it to workaround that.
+  # See https://github.com/italiangrid/voms/issues/123
+  postInstall = ''
+    mkdir -p "''${!outputDev}/include/voms"
+    if [[ ! -e "''${!outputDev}/include/voms/config.h" ]]; then
+      install -m 644 src/autogen/config.h "''${!outputDev}/include/voms"
+    fi
+  '';
+
   postFixup = lib.optionalString (externalEtc != null) ''
     moveToOutput etc "$etc"
     ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
@@ -83,4 +94,4 @@ stdenv.mkDerivation rec{
     platforms = platforms.linux; # gsoap is currently Linux-only in Nixpkgs
     maintainers = with maintainers; [ ShamrockLee ];
   };
-}
+})
