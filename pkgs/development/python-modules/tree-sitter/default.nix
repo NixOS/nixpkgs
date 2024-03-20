@@ -1,36 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.20.4";
-  format = "pyproject";
+  version = "0.21.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "tree_sitter";
-    inherit version;
-    hash = "sha256-atsSPi8+VjmbvyNZkkYzyILMQO6DRIhSALygki9xO+U=";
+  src = fetchFromGitHub {
+    owner = "tree-sitter";
+    repo = "py-tree-sitter";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-U4ZdU0lxjZO/y0q20bG5CLKipnfpaxzV3AFR6fGS7m4=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
-  # PyPI tarball doesn't contains tests and source has additional requirements
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "tree_sitter"
   ];
+
+  preCheck = ''
+    rm -r tree_sitter
+  '';
 
   meta = with lib; {
     description = "Python bindings to the Tree-sitter parsing library";
