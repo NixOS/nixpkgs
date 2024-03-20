@@ -19,8 +19,19 @@ let
       });
     };
   };
+
+  inherit (py.pkgs)
+    buildPythonApplication
+    chardet
+    cyclonedx-python-lib
+    packageurl-python
+    pip-requirements-parser
+    poetry-core
+    pythonRelaxDepsHook
+    setuptools
+    toml
+    ;
 in
-with py.pkgs;
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cyclonedx-python";
@@ -34,12 +45,12 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-jU/0FkQCyph59TnEE+lckJXsU9whfvWp7dkdfzprYw8=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
+  nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = [
     chardet
     cyclonedx-python-lib
     packageurl-python
