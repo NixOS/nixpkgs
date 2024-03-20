@@ -3,7 +3,7 @@
 lib.makeOverridable (
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
-, deepClone ? false, private ? false, forceFetchGit ? false
+, deepClone ? false, private ? false, forceFetchGit ? false, keepSourceDate ? false
 , sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
 , meta ? { }
@@ -23,7 +23,7 @@ let
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
+  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "keepSourceDate" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
@@ -56,6 +56,8 @@ let
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
       url = "${baseUrl}/archive/${rev}.tar.gz";
+
+      inherit keepSourceDate;
 
       passthru = {
         inherit gitRepoUrl;
