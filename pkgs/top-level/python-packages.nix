@@ -1479,6 +1479,8 @@ self: super: with self; {
 
   betterproto = callPackage ../development/python-modules/betterproto { };
 
+  better-exceptions = callPackage ../development/python-modules/better-exceptions { };
+
   beziers = callPackage ../development/python-modules/beziers { };
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
@@ -11755,6 +11757,8 @@ self: super: with self; {
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
 
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
+
+  pytest-archon = callPackage ../development/python-modules/pytest-archon { };
 
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
