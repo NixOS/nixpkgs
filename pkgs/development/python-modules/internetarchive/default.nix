@@ -16,12 +16,10 @@
 buildPythonPackage rec {
   pname = "internetarchive";
   version = "3.7.0";
-
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  # no tests data included in PyPI tarball
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
