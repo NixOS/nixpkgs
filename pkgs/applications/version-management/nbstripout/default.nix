@@ -1,44 +1,38 @@
 { lib
 , python3
-, fetchPypi
-, coreutils
+, fetchFromGitHub
 , git
-, mercurial
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.6.1";
+  version = "0.7.1";
   pname = "nbstripout";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kGW83RSIs4bk88CB/8HUj0UTovjYv00NmiggjF2v6dM=";
+  src = fetchFromGitHub {
+    owner = "kynan";
+    repo = "nbstripout";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LqUK8JDUV0Fbr24BSzPz1Idbdu0Z1FXyvv3J4z1yclE=";
   };
 
-  # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
-  # force using the echo binary
-  postPatch = ''
-    substituteInPlace tests/test-git.t --replace "echo" "${coreutils}/bin/echo"
-  '';
+  build-system = [
+    python3.pkgs.setuptools
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    ipython
-    nbformat
+  dependencies = [
+    python3.pkgs.nbformat
   ];
 
   nativeCheckInputs = [
-    coreutils
     git
-    mercurial
-  ] ++ (with python3.pkgs; [
-    pytest-cram
-    pytestCheckHook
-  ]);
+    python3.pkgs.pytestCheckHook
+  ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PATH=$out/bin:$PATH
-    git config --global init.defaultBranch main
+    substituteInPlace pytest.ini \
+      --replace-fail "--ruff" ""
   '';
 
   meta = {
