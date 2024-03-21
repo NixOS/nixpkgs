@@ -12,6 +12,11 @@
 , patches ? [ ]
 , extraLibs ? [ ]
 , nixosTests
+# update script dependencies
+, writeScript
+, common-updater-scripts
+, coreutils
+, git
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,13 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  passthru.tests.test = nixosTests.terminal-emulators.st;
+  passthru = {
+    tests.test = nixosTests.terminal-emulators.st;
+    updateScript = writeScript "update-st" ''
+      PATH=${lib.makeBinPath [ common-updater-scripts coreutils git ]}
+      version=$(git ls-remote --exit-code --refs --tags --sort=version:refname git://git.suckless.org/st | tail -n1 | cut -d/ -f3)
+      update-source-version st "$version"
+    '';
+  };
 
   meta = with lib; {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [ andsild ];
+    maintainers = with maintainers; [ qusic ];
     platforms = platforms.unix;
     mainProgram = "st";
   };

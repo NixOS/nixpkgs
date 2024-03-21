@@ -8,6 +8,11 @@
 , libXdmcp
 , conf ? null
 , patches ? [ ]
+# update script dependencies
+, writeScript
+, common-updater-scripts
+, coreutils
+, git
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +40,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXau libXdmcp ];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = writeScript "update-slstatus" ''
+    PATH=${lib.makeBinPath [ common-updater-scripts coreutils git ]}
+    version=$(git ls-remote --exit-code --refs --tags --sort=version:refname git://git.suckless.org/slstatus | tail -n1 | cut -d/ -f3)
+    update-source-version slstatus "$version"
+  '';
 
   meta = with lib; {
     homepage = "https://tools.suckless.org/slstatus/";

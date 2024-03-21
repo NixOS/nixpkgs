@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [ ], conf ? null}:
+{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [ ], conf ? null
+# update script dependencies
+, writeScript, common-updater-scripts, coreutils, git
+}:
 
 stdenv.mkDerivation rec {
   pname = "dwm";
@@ -28,6 +31,12 @@ stdenv.mkDerivation rec {
     lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  passthru.updateScript = writeScript "update-dwm" ''
+    PATH=${lib.makeBinPath [ common-updater-scripts coreutils git ]}
+    version=$(git ls-remote --exit-code --refs --tags --sort=version:refname git://git.suckless.org/dwm | tail -n1 | cut -d/ -f3)
+    update-source-version dwm "$version"
+  '';
 
   meta = with lib; {
     homepage = "https://dwm.suckless.org/";

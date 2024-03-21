@@ -2,7 +2,10 @@
 , xorgproto, libX11, libXext, libXrandr, libxcrypt
 # default header can be obtained from
 # https://git.suckless.org/slock/tree/config.def.h
-, conf ? null }:
+, conf ? null
+# update script dependencies
+, writeScript, common-updater-scripts, coreutils, git
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slock";
@@ -24,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags = [ "CC:=$(CC)" ];
+
+  passthru.updateScript = writeScript "update-slock" ''
+    PATH=${lib.makeBinPath [ common-updater-scripts coreutils git ]}
+    version=$(git ls-remote --exit-code --refs --tags --sort=version:refname git://git.suckless.org/slock | tail -n1 | cut -d/ -f3)
+    update-source-version slock "$version"
+  '';
 
   meta = with lib; {
     homepage = "https://tools.suckless.org/slock";
