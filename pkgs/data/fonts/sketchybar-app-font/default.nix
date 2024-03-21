@@ -1,23 +1,56 @@
+let
+  artifacts = [ "shell" "lua" "font" ];
+in
 { lib
 , stdenvNoCC
 , fetchurl
+, artifactList ? artifacts
 }:
-
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
   pname = "sketchybar-app-font";
-  version = "2.0.12";
+  version = "2.0.14";
 
-  src = fetchurl {
-    url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${finalAttrs.version}/sketchybar-app-font.ttf";
-    hash = "sha256-qACf4eWDeubBmJV0ApWidp2ESLREi5qiLliWCXoMBKY=";
+  selectedSources = map (themeName: builtins.getAttr themeName sources) artifactList;
+  sources = {
+    font = fetchurl {
+      url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${version}/sketchybar-app-font.ttf";
+      hash = "sha256-lGzNLBtM+1Cl9tTB4yKkc46ZqDjyt8J0EPNTM/eAziY=";
+    };
+    lua = fetchurl {
+      url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${version}/icon_map.lua";
+      hash = "sha256-YLr7dlKliKLUEK18uG4ouXfLqodVpcDQzfu+H1+oe/w=";
+    };
+    shell = fetchurl {
+      url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${version}/icon_map.sh";
+      hash = "sha256-ZT/k6Vk/nO6mq1yplXaWyz9HxqwEiVWba+rk+pIRZq4=";
+    };
   };
+in
+lib.checkListOfEnum "${pname}: artifacts" artifacts artifactList
+  stdenvNoCC.mkDerivation
+{
+  inherit pname version;
 
-  dontUnpack = true;
+  srcs = selectedSources;
+
+  unpackPhase = ''
+    for s in $selectedSources; do
+      b=$(basename $s)
+      cp $s ''${b#*-}
+    done
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 $src $out/share/fonts/truetype/sketchybar-app-font.ttf
+  '' + lib.optionalString (lib.elem "font" artifactList) ''
+    install -Dm644 ${sources.font} "$out/share/fonts/truetype/sketchybar-app-font.ttf"
+
+  '' + lib.optionalString (lib.elem "shell" artifactList) ''
+    install -Dm755 ${sources.shell} "$out/bin/icon_map.sh"
+
+  '' + lib.optionalString (lib.elem "lua" artifactList) ''
+    install -Dm644 ${sources.lua} "$out/lib/${pname}/icon_map.lua"
 
     runHook postInstall
   '';
@@ -31,4 +64,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
-})
+}
