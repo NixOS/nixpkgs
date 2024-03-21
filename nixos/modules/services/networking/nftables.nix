@@ -312,7 +312,7 @@ in
                 ''
               else ""}
           '';
-          checkPhase = lib.optionalString cfg.checkRuleset ''
+          installCheckPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf
             sed 's|include "${deletionsScriptVar}"||' -i ruleset.conf
             ${cfg.preCheckRuleset}
