@@ -3865,6 +3865,8 @@ self: super: with self; {
 
   eve = callPackage ../development/python-modules/eve { };
 
+  eventkit = callPackage ../development/python-modules/eventkit { };
+
   eventlet = callPackage ../development/python-modules/eventlet { };
 
   events = callPackage ../development/python-modules/events { };
