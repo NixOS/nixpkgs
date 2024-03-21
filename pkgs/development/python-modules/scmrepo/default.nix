@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-A09nuT8qxganDYiJNXhdhmnFKUeeVNYQKdHdReSnnac=";
+    hash = "sha256-vAfqCr1/3S0yZ0wPDxSZ6b6NrcJxt7Lj7oCsTzAXX1k=";
   };
 
   nativeBuildInputs = [
