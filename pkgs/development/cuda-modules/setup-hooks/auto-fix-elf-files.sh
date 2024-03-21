@@ -59,7 +59,7 @@ autoFixElfFiles() {
     elif elfHasDynamicSection "$f"; then
       # patchelf returns an error on statically linked ELF files, and in
       # practice fixing actions all involve patchelf
-      echo "autoFixElfFiles: using $fixAction to fix $f" >&2
+      (( "${NIX_DEBUG:-0}" >= 1 )) && echo "autoFixElfFiles: using $fixAction to fix $f" >&2
       $fixAction "$f"
     elif (( "${NIX_DEBUG:-0}" >= 1 )); then
       echo "autoFixElfFiles: skipping a statically-linked ELF file $f"
