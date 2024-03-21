@@ -7,6 +7,7 @@
 , pendulum
 , pytest-mock
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pytz
 , setuptools
@@ -55,6 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "maya"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/timofurrer/maya/issues/202
+    "test_parse_iso8601"
   ];
 
   meta = with lib; {
