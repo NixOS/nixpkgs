@@ -81,13 +81,13 @@
     "vendorHash": "sha256-q9PO9tMbaXTs3nBLElwU05GcDZMZqNmLVVGDmiSRSfo="
   },
   "artifactory": {
-    "hash": "sha256-W8IWBc9tWmj4Rkp4CgZV9tsAL41EOnEhH+iTImP/+D4=",
+    "hash": "sha256-udgRoN1YoVaJpNS6MkZAThcuWGOL9Jc3lf3NAKS9WH8=",
     "homepage": "https://registry.terraform.io/providers/jfrog/artifactory",
     "owner": "jfrog",
     "repo": "terraform-provider-artifactory",
-    "rev": "v10.1.5",
+    "rev": "v10.4.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-J/+OcqRtcHaqoDkrWIDpPlBHQ/UWupwchA1aeSoHSh4="
+    "vendorHash": "sha256-P5L2Q8t9TxJnu5cjOwEKek1KNKAw78fqZoOSAo6AvzQ="
   },
   "auth0": {
     "hash": "sha256-Yoje6btftS0slz2newORBbb9kTjWXaXzbP94YKT6+3E=",
