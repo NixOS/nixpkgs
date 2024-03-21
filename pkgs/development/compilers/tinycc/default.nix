@@ -12,7 +12,7 @@
 let
   inherit
     (if stdenv.isDarwin
-     then darwin.apple_sdk_11_0.stdenv
+     then darwin.apple_sdk.stdenv
      else stdenv) mkDerivation;
 in
 mkDerivation (finalAttrs: {
