@@ -1,7 +1,6 @@
 { lib
 , python3Packages
 , fetchPypi
-, nixosTests
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -29,10 +28,6 @@ python3Packages.buildPythonApplication rec {
     $out/bin/kea-exporter --help > /dev/null
     $out/bin/kea-exporter --version | grep -q ${version}
   '';
-
-  passthru.tests = {
-    inherit (nixosTests.prometheus-exporters) kea;
-  };
 
   meta = with lib; {
     changelog = "https://github.com/mweinelt/kea-exporter/blob/v${version}/HISTORY";
