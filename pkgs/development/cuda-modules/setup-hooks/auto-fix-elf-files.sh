@@ -2,7 +2,11 @@
 # List all dynamically linked ELF files in the outputs and apply a generic fix
 # action provided as a parameter (currently used to add the CUDA or the
 # cuda_compat driver to the runpath of binaries)
-echo "Sourcing cuda/fix-elf-files.sh"
+
+[[ -n ${autoFixElfFiles_Once-} ]] && return
+declare -g autoFixElfFiles_Once=1
+
+echo "Sourcing auto-fix-elf-files.sh"
 
 # Returns the exit code of patchelf --print-rpath.
 # A return code of 0 (success) means the ELF file has a dynamic section, while
@@ -62,3 +66,69 @@ autoFixElfFiles() {
     fi
   done
 }
+
+inputsToArray() {
+    local inputVar="$1"
+    local outputVar="$2"
+    shift 2
+
+    local -n namerefOut="$outputVar"
+
+    if [ -z "${!inputVar+1}" ] ; then
+        # Undeclared variable
+        return
+    fi
+
+    local type="$(declare -p "$inputVar")"
+    if [[ "$type" =~ "declare -a" ]]; then
+        local -n namerefIn="$inputVar"
+        namerefOut=( "${namerefIn[@]}" )
+    else
+        read -r -a namerefOut <<< "${!inputVar}"
+    fi
+}
+
+elfBuildRunpathStrings() {
+    local path
+    local -a elfAddRunpathsArray elfPrependRunpathsArray
+
+    inputsToArray elfAddRunpaths elfAddRunpathsArray
+    inputsToArray elfPrependRunpaths elfPrependRunpathsArray
+
+    for path in "${elfPrependRunpathsArray[@]}" ; do
+        elfAddRunpathsPrefix="$elfAddRunpathsPrefix:$path"
+    done
+    elfAddRunpathsPrefix="${elfAddRunpathsPrefix##:}"
+
+    for path in "${elfAddRunpathsArray[@]}" ; do
+        elfAddRunpathsSuffix="$elfAddRunpathsSuffix:$path"
+    done
+    elfAddRunpathsSuffix="${elfAddRunpathsSuffix##:}"
+}
+
+# Expects that elfAddRunpathPrefix and elfAddRunpathSuffix are set
+elfAddRunpathsAction() {
+    local origPath="$(patchelf --print-rpath "$1")"
+    local newPath
+
+    newPath="$elfAddRunpathsPrefix"
+    newPath="${newPath}${newPath:+:}${origPath}"
+    newPath="${newPath}${elfAddRunpathsSuffix:+:}${elfAddRunpathsSuffix}"
+
+    (( "${NIX_DEBUG:-0}" >= 4 )) && echo patchelf --set-rpath "$newPath" "$1" >&2
+    patchelf --set-rpath "$newPath" "$1"
+}
+
+elfAddRunpathsHook() {
+    [[ -z "${elfAddRunpaths[@]}" ]] && [[ -z "${elfPrependRunpaths[@]}" ]] && return
+
+    echo "Executing elfAddRunpaths: ${elfAddRunpaths[@]}" >&2
+    [[ -z "${elfPrependRunpaths[@]}" ]] || echo "elfPrependRunpaths: ${elfPrependRunpaths[@]}" >&2
+
+    local elfAddRunpathsPrefix
+    local elfAddRunpathsSuffix
+    elfBuildRunpathStrings
+    autoFixElfFiles elfAddRunpathsAction
+}
+
+postFixupHooks+=(elfAddRunpathsHook)
