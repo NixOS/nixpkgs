@@ -141,7 +141,7 @@ let
   mkConfigFile = configString: pkgs.writeTextFile {
     name = "knot.conf";
     text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + configString;
-    checkPhase = lib.optionalString cfg.checkConfig ''
+    derivationArgs.installCheckPhase = lib.optionalString cfg.checkConfig ''
       ${cfg.package}/bin/knotc --config=$out conf-check
     '';
   };
