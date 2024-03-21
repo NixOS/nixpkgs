@@ -57,6 +57,11 @@ buildPythonPackage rec {
     "maya"
   ];
 
+  disabledTests = [
+    # https://github.com/timofurrer/maya/issues/202
+    "test_parse_iso8601"
+  ];
+
   meta = with lib; {
     description = "Datetimes for Humans";
     homepage = "https://github.com/timofurrer/maya";
