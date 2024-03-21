@@ -409,6 +409,8 @@ in {
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
+    zenergy = callPackage ../os-specific/linux/zenergy { };
+
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }))
     // { __attrsFailEvaluation = true; };
 
