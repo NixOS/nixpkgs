@@ -1,17 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+, wheel
+, jinja2
 , jupyterhub
-, packaging
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "batchspawner";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
@@ -20,9 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-Z7kB8b7s11wokTachLI/N+bdUV+FfCRTemL1KYQpzio=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    wheel
+  ];
+
+  dependencies = [
+    jinja2
     jupyterhub
-    packaging
   ];
 
   # Tests require a job scheduler e.g. slurm, pbs, etc.
