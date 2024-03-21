@@ -34895,7 +34895,7 @@ with pkgs;
 
   stalonetray = callPackage ../applications/window-managers/stalonetray { };
 
-  inherit (ocaml-ng.ocamlPackages_4_12) stog;
+  inherit (ocaml-ng.ocamlPackages) stog;
 
   stp = callPackage ../applications/science/logic/stp { };
 
