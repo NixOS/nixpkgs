@@ -1,7 +1,7 @@
 { testers, fetchpatch, ... }:
 
 let
-  isFetchpatch2 = fetchpatch.version == 2;
+  isFetchpatch2 = fetchpatch.fetchpatchVersion == 2;
 in
 
 {
