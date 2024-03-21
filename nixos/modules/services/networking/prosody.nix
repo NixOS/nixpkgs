@@ -336,10 +336,10 @@ let
         '';
       };
 
-      vcard_muc = mkOption {
-        type = types.bool;
-        default = true;
-      description = lib.mdDoc "Adds the ability to set vCard for Multi User Chat rooms";
+      extraModules = mkOption {
+        type = types.listOf types.str;
+        default = [ "muc_mam" "vcard_muc" ];
+        description = "Add more modules to the muc Component";
       };
 
       # Extra parameters. Defaulting to prosody default values.
@@ -814,7 +814,9 @@ in
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = { "muc_mam"; ${optionalString muc.vcard_muc ''"vcard_muc";'' } }
+            modules_enabled = {
+            ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") muc.extraModules)}
+            }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
