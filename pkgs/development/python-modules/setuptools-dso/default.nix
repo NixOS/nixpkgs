@@ -2,13 +2,14 @@
 , buildPythonPackage
 , fetchPypi
 , nose2
+, pytestCheckHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-dso";
   version = "2.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_dso";
@@ -16,15 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-sjAZ9enOw3vF3zqXNbhu45SM5/sv2kIwfKC6SWJdG0Q=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ nose2 ];
-
-  checkPhase = ''
-    runHook preCheck
-    nose2 -v
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ nose2 pytestCheckHook ];
 
   meta = with lib; {
     description = "setuptools extension for building non-Python Dynamic Shared Objects";
