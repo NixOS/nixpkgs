@@ -1,13 +1,11 @@
-{ buildPythonApplication
+{ lib
+, python3Packages
 , fetchFromGitHub
-, lib
-, python3
 , installShellFiles
 
 , waylandSupport ? true
 , x11Support ? true
 
-, configargparse
 , rofi
 , wl-clipboard
 , wtype
@@ -15,28 +13,28 @@
 , xsel
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rofimoji";
-  version = "6.1.0";
-  format = "pyproject";
+  version = "6.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-eyzdTMLW9nk0x74T/AhvoVSrxXugc1HgNJy8EB5BApE=";
+    rev = version;
+    hash = "sha256-9P9hXBEfq6sqCvb2SfPBNadEoXAdWF3cmcKGEOK+EHE=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.poetry-core
+    python3Packages.poetry-core
     installShellFiles
   ];
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.
-  propagatedBuildInputs = with lib; [ configargparse rofi ]
-    ++ optionals waylandSupport [ wl-clipboard wtype ]
-    ++ optionals x11Support [ xdotool xsel ];
+  propagatedBuildInputs = [ python3Packages.configargparse rofi ]
+    ++ lib.optionals waylandSupport [ wl-clipboard wtype ]
+    ++ lib.optionals x11Support [ xdotool xsel ];
 
   # The 'extractors' sub-module is used for development
   # and has additional dependencies.
@@ -52,6 +50,7 @@ buildPythonApplication rec {
     description = "A simple emoji and character picker for rofi";
     mainProgram = "rofimoji";
     homepage = "https://github.com/fdw/rofimoji";
+    changelog = "https://github.com/fdw/rofimoji/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ justinlovinger ];
