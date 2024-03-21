@@ -15,7 +15,7 @@ let
   configFile = pkgs.writeTextFile {
     name = "AdGuardHome.yaml";
     text = builtins.toJSON cfg.settings;
-    checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
+    derivationArgs.installCheckPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
   defaultBindPort = 3000;
 
