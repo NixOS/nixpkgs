@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tomcat.apache.org/download-connectors.cgi";
     changelog = "https://tomcat.apache.org/connectors-doc/miscellaneous/changelog.html";
     license = licenses.asl20;
+    maintainers = with maintainers; [ anthonyroussel ];
     platforms = platforms.unix;
   };
 }
