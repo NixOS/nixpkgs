@@ -704,8 +704,9 @@ in {
     in stringAfter [ "users" ] ''
       if [ -e ${lingerDir} ] ; then
         cd ${lingerDir}
-        for user in ${lingerDir}/*; do
-          if ! id "$user" >/dev/null 2>&1; then
+        for user in $(ls); do
+          if ! id "$user" >/dev/null; then
+            echo "Removing linger for deleted user $user"
             rm --force -- "$user"
           fi
         done
