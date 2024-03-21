@@ -11,7 +11,10 @@
 , python3
 , ninja
 , perl
-, autoconf
+# autoconf-2.71 fails on problematic configure:
+#   checking curl version... 7.84.0
+#   ./configure: line 6713: syntax error near unexpected token `;;'
+, autoconf269
 , automake
 , libtool
 , darwin
@@ -40,6 +43,10 @@ let
       ./curl-impersonate-0.5.2-fix-shebangs.patch
     ];
 
+    # Disable blanket -Werror to fix build on `gcc-13` related to minor
+    # warnings on `boringssl`.
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
     strictDeps = true;
 
     nativeBuildInputs = lib.optionals stdenv.isDarwin [
@@ -52,7 +59,7 @@ let
       python3.pkgs.gyp
       ninja
       perl
-      autoconf
+      autoconf269
       automake
       libtool
       unzip
