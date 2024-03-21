@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_python";
-  version = "unstable-2022-10-18";
+  version = "3.5.0.2";
 
   src = fetchFromGitHub {
     owner = "grisha";
     repo = pname;
-    rev = "d066b07564d2194839eceb535485eb1ba0c292d8";
+    rev = "refs/tags/${version}";
     hash = "sha256-EH8wrXqUAOFWyPKfysGeiIezgrVc789RYO4AHeSA6t4=";
   };
 
