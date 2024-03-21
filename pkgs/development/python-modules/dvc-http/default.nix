@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , dvc-objects
 , fsspec
+, funcy
 , pythonOlder
 , pythonRelaxDepsHook
 , setuptools-scm
@@ -28,9 +29,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiohttp-retry
     dvc-objects
     fsspec
-    aiohttp-retry
+    funcy
   ];
 
   # Currently it's not possible to run the tests
