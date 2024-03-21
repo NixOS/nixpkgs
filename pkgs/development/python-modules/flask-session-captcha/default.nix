@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "flask-session-captcha";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tethik";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-eLdpLw1I4t9H0ek3AR9Cteb7Gfxo/LepM287p34Zw3s=";
+    hash = "sha256-0g8nnnmTfcb9VqrtJ6kkfCFm+AYVrPZNWUPNQSjVTgQ=";
   };
 
   nativeBuildInputs = [
