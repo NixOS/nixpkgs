@@ -124,4 +124,4 @@ in
       position = "${pos.file}:${toString pos.line}";
     } // (args.meta or { });
   in
-    stdenv.mkDerivation (defaultArgs // cleanArgs) // { inherit meta; }
+    stdenv.mkDerivation (defaultArgs // cleanArgs // { inherit meta; })
