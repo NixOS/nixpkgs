@@ -337,6 +337,8 @@ in buildPythonPackage rec {
     pybind11
     pythonRelaxDepsHook
     removeReferencesTo
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cudaPackages.autoFixElfFiles
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     autoAddDriverRunpath
     cuda_nvcc
@@ -487,6 +489,10 @@ in buildPythonPackage rec {
     install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libshm.dylib
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
+
+  elfAddRunpaths = lib.optionals cudaSupport [
+    "${lib.getLib cudaPackages.cuda_nvrtc}/lib"
+  ];
 
   # Builds in 2+h with 2 cores, and ~15m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
