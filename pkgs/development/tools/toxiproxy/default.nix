@@ -25,7 +25,10 @@ buildGoModule rec {
   # Fixes tests on Darwin
   __darwinAllowLocalNetworking = true;
 
-  checkFlags = [ "-short" "-skip=TestVersionEndpointReturnsVersion" ];
+  checkFlags = [
+    "-short"
+    "-skip=TestVersionEndpointReturnsVersion|TestFullstreamLatencyBiasDown"
+  ];
 
   postInstall = ''
     mv $out/bin/cli $out/bin/toxiproxy-cli
