@@ -112,16 +112,17 @@ in
       "meta"
     ];
 
-    meta = let
-      pos = builtins.unsafeGetAttrPos "pname" args;
-    in {
+    meta = {
       description = projectInfo.${pname}.description;
       homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
       license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
       maintainers = lib.teams.qt-kde.members;
       # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
       platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-      position = "${pos.file}:${toString pos.line}";
     } // (args.meta or { });
+
+    position = let
+      pos = builtins.unsafeGetAttrPos "pname" args;
+    in "${pos.file}:${toString pos.line}";
   in
-    stdenv.mkDerivation (defaultArgs // cleanArgs // { inherit meta; })
+    lib.recursiveUpdate (stdenv.mkDerivation (defaultArgs // cleanArgs // { inherit meta; })) { meta = { inherit position; }; }
