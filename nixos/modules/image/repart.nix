@@ -211,6 +211,15 @@ in
       '';
     };
 
+    finalPartitions = lib.mkOption {
+      type = lib.types.attrs;
+      internal = true;
+      readOnly = true;
+      description = lib.mdDoc ''
+        Convenience option to access partitions with added closures.
+      '';
+    };
+
   };
 
   config = {
@@ -224,6 +233,16 @@ in
             "zstd" = ".zst";
             "xz" = ".xz";
           }."${cfg.compression.algorithm}";
+
+        makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
+
+        # Add the closure of the provided Nix store paths to cfg.partitions so
+        # that amend-repart-definitions.py can read it.
+        addClosure = _name: partitionConfig: partitionConfig // (
+          lib.optionalAttrs
+            (partitionConfig.storePaths or [ ] != [ ])
+            { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
+        );
       in
       {
         name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
@@ -239,6 +258,8 @@ in
             "xz" = 3;
           }."${cfg.compression.algorithm}";
         };
+
+        finalPartitions = lib.mapAttrs addClosure cfg.partitions;
       };
 
     system.build.image =
@@ -247,36 +268,25 @@ in
           (f: f != null)
           (lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions);
 
-        makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
-
-        # Add the closure of the provided Nix store paths to cfg.partitions so
-        # that amend-repart-definitions.py can read it.
-        addClosure = _name: partitionConfig: partitionConfig // (
-          lib.optionalAttrs
-            (partitionConfig.storePaths or [ ] != [ ])
-            { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
-        );
-
-        finalPartitions = lib.mapAttrs addClosure cfg.partitions;
 
         format = pkgs.formats.ini { };
 
         definitionsDirectory = utils.systemdUtils.lib.definitions
           "repart.d"
           format
-          (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) finalPartitions);
+          (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions);
 
-        partitions = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
+        partitionsJSON = pkgs.writeText "partitions.json" (builtins.toJSON cfg.finalPartitions);
 
         mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
-        inherit (cfg) imageFileBasename compression split seed sectorSize;
-        inherit fileSystems definitionsDirectory partitions mkfsEnv;
+        inherit (cfg) name version imageFileBasename compression split seed sectorSize;
+        inherit fileSystems definitionsDirectory partitionsJSON mkfsEnv;
       };
 
-    meta.maintainers = with lib.maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur willibutz ];
 
   };
 }

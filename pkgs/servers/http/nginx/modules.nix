@@ -77,7 +77,7 @@ let self = {
     meta = with lib; {
       description = "Validates Akamai v2 query string tokens";
       homepage = "https://github.com/kaltura/nginx-akamai-token-validate-module";
-      license = with licenses; [ agpl3 ];
+      license = with licenses; [ agpl3Only ];
       maintainers = with maintainers; [ ];
     };
   };
@@ -685,7 +685,7 @@ let self = {
     meta = with lib; {
       description = "Generates CDN tokens, either as a cookie or as a query string parameter";
       homepage = "https://github.com/kaltura/nginx-secure-token-module";
-      license = with licenses; [ agpl3 ];
+      license = with licenses; [ agpl3Only ];
       maintainers = with maintainers; [ ];
     };
   };
@@ -1004,7 +1004,7 @@ let self = {
     meta = with lib; {
       description = "VOD packager";
       homepage = "https://github.com/kaltura/nginx-vod-module";
-      license = with licenses; [ agpl3 ];
+      license = with licenses; [ agpl3Only ];
       maintainers = with maintainers; [ ];
     };
   };

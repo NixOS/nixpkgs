@@ -6227,6 +6227,12 @@
     githubId = 303897;
     name = "Fabián Heredia Montiel";
   };
+  fabianrig = {
+    email = "fabianrig@posteo.de";
+    github = "fabianrig";
+    githubId = 88741530;
+    name = "Fabian Rigoll";
+  };
   fadenb = {
     email = "tristan.helmich+nixos@gmail.com";
     github = "fadenb";
@@ -13722,6 +13728,12 @@
     github = "ne9z";
     githubId = 77314501;
     name = "Maurice Zhou";
+  };
+  nealfennimore = {
+    email = "hi@neal.codes";
+    github = "nealfennimore";
+    githubId = 5731551;
+    name = "Neal Fennimore";
   };
   Nebucatnetzer = {
     email = "andreas+nixpkgs@zweili.ch";
@@ -21331,6 +21343,12 @@
     email = "yanganto@gmail.com";
     github = "yanganto";
     githubId = 10803111;
+  };
+  yannickulrich = {
+    email = "yannick.ulrich@proton.me";
+    github = "yannickulrich";
+    githubId = 749922;
+    name = "Yannick Ulrich";
   };
   yannip = {
     email = "yPapandreou7@gmail.com";

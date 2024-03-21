@@ -4928,8 +4928,6 @@ with pkgs;
 
   csvs-to-sqlite = callPackage ../tools/misc/csvs-to-sqlite { };
 
-  cucumber = callPackage ../development/tools/cucumber { };
-
   cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
 
   dab_lib = callPackage ../development/libraries/dab_lib { };
@@ -11161,7 +11159,12 @@ with pkgs;
 
   numberstation = callPackage ../applications/misc/numberstation { };
 
-  nvchecker = with python3Packages; toPythonApplication nvchecker;
+  nvchecker = with python3Packages; toPythonApplication (
+    nvchecker.overridePythonAttrs (oldAttrs: {
+      propagatedBuildInputs = oldAttrs.propagatedBuildInputs
+        ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
+    })
+  );
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
@@ -20186,8 +20189,6 @@ with pkgs;
   ztags = callPackage ../development/tools/misc/ztags { };
 
   ### DEVELOPMENT / LIBRARIES
-
-  a52dec = callPackage ../development/libraries/a52dec { };
 
   aalib = callPackage ../development/libraries/aalib { };
 

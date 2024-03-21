@@ -529,6 +529,7 @@ in {
   memcached = handleTest ./memcached.nix {};
   merecat = handleTest ./merecat.nix {};
   metabase = handleTest ./metabase.nix {};
+  mihomo = handleTest ./mihomo.nix {};
   mindustry = handleTest ./mindustry.nix {};
   minecraft = handleTest ./minecraft.nix {};
   minecraft-server = handleTest ./minecraft-server.nix {};
@@ -581,6 +582,7 @@ in {
   ndppd = handleTest ./ndppd.nix {};
   nebula = handleTest ./nebula.nix {};
   netbird = handleTest ./netbird.nix {};
+  nimdow = handleTest ./nimdow.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };

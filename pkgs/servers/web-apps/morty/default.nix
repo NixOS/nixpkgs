@@ -24,6 +24,6 @@ buildGoModule {
     '';
     homepage = "https://github.com/asciimoo/morty";
     maintainers = with maintainers; [ leenaars SuperSandro2000 ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
   };
 }
