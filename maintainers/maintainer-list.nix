@@ -9518,6 +9518,12 @@
     githubId = 1843676;
     name = "Jonathan Reeve";
   };
+  jonboylecoding = {
+    email = "programmerfalcon@gmail.com";
+    github = "JonBoyleCoding";
+    githubId = 630329;
+    name = "Jonathan Boyle";
+  };
   jonnybolton = {
     email = "jonnybolton@gmail.com";
     github = "jonnynightingale";
