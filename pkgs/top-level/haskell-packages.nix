@@ -298,6 +298,9 @@ in {
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc963
+        # ghc963Binary.shake broken on MacOS
+        else if stdenv.hostPlatform.isDarwin then
+          packages.ghc964
         else
           packages.ghc963Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -316,6 +319,9 @@ in {
           packages.ghc963
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc963
+        # ghc963Binary.shake broken on MacOS
+        else if stdenv.hostPlatform.isDarwin then
+          packages.ghc964
         else
           packages.ghc963Binary;
       inherit (buildPackages.python3Packages) sphinx;
