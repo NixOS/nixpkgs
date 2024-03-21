@@ -1,0 +1,57 @@
+diff --git a/elf/ldconfig.c b/elf/ldconfig.c
+index 57bb95eb..1f4f663c 100644
+--- a/elf/ldconfig.c
++++ b/elf/ldconfig.c
+@@ -57,7 +57,7 @@
+ #define TLS_HWCAP_BIT 63
+ 
+ #ifndef LD_SO_CONF
+-# define LD_SO_CONF SYSCONFDIR "/ld.so.conf"
++# define LD_SO_CONF "/ld-nix.so.conf"
+ #endif
+ 
+ /* Get libc version number.  */
+diff --git a/elf/tst-glibc-hwcaps-prepend-cache.c b/elf/tst-glibc-hwcaps-prepend-cache.c
+index d70d27bb..e797361b 100644
+--- a/elf/tst-glibc-hwcaps-prepend-cache.c
++++ b/elf/tst-glibc-hwcaps-prepend-cache.c
+@@ -46,7 +46,7 @@ do_test (void)
+ 
+   /* Install the default implementation of libmarkermod1.so.  */
+   xmkdirp ("/etc", 0777);
+-  support_write_file_string ("/etc/ld.so.conf", "/glibc-test/lib\n");
++  support_write_file_string ("/etc/ld-nix.so.conf", "/glibc-test/lib\n");
+   xmkdirp ("/glibc-test/lib/glibc-hwcaps/prepend2", 0777);
+   xmkdirp ("/glibc-test/lib/glibc-hwcaps/prepend3", 0777);
+   {
+diff --git a/elf/tst-ldconfig-ld_so_conf-update.c b/elf/tst-ldconfig-ld_so_conf-update.c
+index 76064589..f627a118 100644
+--- a/elf/tst-ldconfig-ld_so_conf-update.c
++++ b/elf/tst-ldconfig-ld_so_conf-update.c
+@@ -33,7 +33,7 @@
+ 
+ #define DSO "libldconfig-ld-mod.so"
+ #define DSO_DIR "/tmp/tst-ldconfig"
+-#define CONF "/etc/ld.so.conf"
++#define CONF "/etc/ld-nix.so.conf"
+ 
+ 
+ static void
+@@ -84,7 +84,7 @@ do_test (void)
+ 
+   FILE *fp = xfopen (CONF, "a+");
+   if (!fp)
+-    FAIL_EXIT1 ("creating /etc/ld.so.conf failed: %m");
++    FAIL_EXIT1 ("creating /etc/ld-nix.so.conf failed: %m");
+   xfclose (fp);
+ 
+   /* Run ldconfig.  */
+@@ -97,7 +97,7 @@ do_test (void)
+   /* Add tst-ldconfig directory to /etc/ld.so.conf.  */
+   fp = xfopen (CONF, "w");
+   if (!(fwrite (DSO_DIR, 1, sizeof (DSO_DIR), fp)))
+-    FAIL_EXIT1 ("updating /etc/ld.so.conf failed: %m");
++    FAIL_EXIT1 ("updating /etc/ld-nix.so.conf failed: %m");
+   xfclose (fp);
+ 
+   /* Try to dlopen the same DSO again, we expect this to still fail.  */
