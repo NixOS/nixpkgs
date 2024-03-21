@@ -535,6 +535,7 @@ in
           fi
         '';
         serviceConfig = {
+          TimeoutStartSec = "5min";
           ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
           RuntimeDirectory = "pretix";
         };
