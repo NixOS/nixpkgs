@@ -17,7 +17,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w"
-    "-X main.version=v${version}"
+    "-X github.com/inspektor-gadget/inspektor-gadget/cmd/common.version=v${version}"
+    "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${version}"
     "-extldflags=-static"
   ];
 
