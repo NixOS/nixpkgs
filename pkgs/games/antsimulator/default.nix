@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "antsimulator";
-  version = "3.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "johnBuffer";
     repo = "AntSimulator";
     rev = "v${version}";
-    sha256 = "sha256-1KWoGbdjF8VI4th/ZjAzASgsLEuS3xiwObulzxQAppA=";
+    sha256 = "sha256-s3edG1NR0MoOMUkxDnaKWEYztlX8kCECcBHumxV9V8U=";
   };
 
   nativeBuildInputs = [ cmake ];
