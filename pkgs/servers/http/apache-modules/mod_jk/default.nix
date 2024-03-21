@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, apacheHttpd, jdk }:
 
 stdenv.mkDerivation rec {
-  pname = "tomcat-connectors";
+  pname = "mod_jk";
   version = "1.2.49";
 
   src = fetchurl {
-    url = "mirror://apache/tomcat/tomcat-connectors/jk/${pname}-${version}-src.tar.gz";
+    url = "mirror://apache/tomcat/tomcat-connectors/jk/tomcat-connectors-${version}-src.tar.gz";
     hash = "sha256-Q8sCg8koeOnU7xEGMdvSvra1VxPBJ84EMZCyswh1fpw=";
   };
 

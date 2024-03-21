@@ -435,7 +435,7 @@ in
         example = literalExpression ''
           [
             "proxy_connect"
-            { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
+            { name = "jk"; path = "''${pkgs.apacheHttpdPackages.mod_jk}/modules/mod_jk.so"; }
           ]
         '';
         description = ''
