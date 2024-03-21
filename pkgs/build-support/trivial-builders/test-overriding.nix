@@ -36,7 +36,7 @@ let
   # building this derivation would fail without overriding
   textFileCase = writeTextFile {
     name = "test-trivial-overriding-text-file";
-    checkPhase = "false";
+    derivationArgs.installCheckPhase = "false";
     text = ''
       #!${runtimeShell}
       echo success
@@ -55,7 +55,7 @@ let
     # in nix: With `assertFail` we want to make sure that the default
     # `checkPhase` would fail if extglob was used in the script.
     assertFail = x: x.overrideAttrs (old: {
-      checkPhase = ''
+      installCheckPhase = ''
         if
           ${old.checkPhase}
         then exit 1; fi
@@ -81,7 +81,7 @@ let
     binFail = mkCase binCase "fail" true;
     # Check that we can also override plain writeTextFile
     textFileSuccess = textFileCase.overrideAttrs (_: {
-      checkPhase = "true";
+      installCheckPhase = "true";
     });
   };
 
