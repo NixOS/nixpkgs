@@ -961,6 +961,15 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  tde = {
+    members = [
+      AndersonTorres
+    ];
+    scope = "Maintain the Trinity Desktop Environment.";
+    shortName = "tde";
+    enableFeatureFreezePing = true;
+  };
+
   tests = {
     members = [
       tfc

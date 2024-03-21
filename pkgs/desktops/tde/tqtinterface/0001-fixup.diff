@@ -1,0 +1,51 @@
+diff -Naur tqtinterface-trinity-14.1.1_old/CMakeLists.txt tqtinterface-trinity-14.1.1_new/CMakeLists.txt
+--- tqtinterface-trinity-14.1.1_old/CMakeLists.txt	2023-10-09 05:03:15.000000000 -0300
++++ tqtinterface-trinity-14.1.1_new/CMakeLists.txt	2023-11-30 23:29:31.742095231 -0300
+@@ -32,7 +32,7 @@
+ include( CheckCSourceCompiles   )
+ include( CheckCXXSourceCompiles )
+ 
+-include( GNUInstallDirs OPTIONAL )
++include( GNUInstallDirs )
+ 
+ 
+ ##### include our cmake modules
+@@ -47,17 +47,11 @@
+ 
+ ##### install paths setup
+ 
+-tde_setup_install_path( EXEC_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" )
+-tde_setup_install_path( BIN_INSTALL_DIR     "${EXEC_INSTALL_PREFIX}/bin" )
+-
+-if( CMAKE_INSTALL_LIBDIR )
+-   tde_setup_install_path( LIB_INSTALL_DIR  "${EXEC_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" )
+- else()
+-   tde_setup_install_path( LIB_INSTALL_DIR  "${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX}" )
+-endif()
+-
+-tde_setup_install_path( INCLUDE_INSTALL_DIR   "${CMAKE_INSTALL_PREFIX}/include/tqt" )
+-tde_setup_install_path( PKGCONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/pkgconfig" )
++tde_setup_install_path( EXEC_INSTALL_PREFIX    "${CMAKE_INSTALL_PREFIX}" )
++tde_setup_install_path( BIN_INSTALL_DIR        "${CMAKE_INSTALL_FULL_BINDIR}" )
++tde_setup_install_path( LIB_INSTALL_DIR        "${CMAKE_INSTALL_FULL_LIBDIR}" )
++tde_setup_install_path( INCLUDE_INSTALL_DIR   "${CMAKE_INSTALL_FULL_INCLUDEDIR}" )
++tde_setup_install_path( PKGCONFIG_INSTALL_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+ 
+ 
+ ##### optional stuff
+diff -Naur tqtinterface-trinity-14.1.1_old/qtinterface/CMakeLists.txt tqtinterface-trinity-14.1.1_new/qtinterface/CMakeLists.txt
+--- tqtinterface-trinity-14.1.1_old/qtinterface/CMakeLists.txt	2023-10-09 05:03:15.000000000 -0300
++++ tqtinterface-trinity-14.1.1_new/qtinterface/CMakeLists.txt	2023-11-30 23:09:05.157168963 -0300
+@@ -114,9 +114,9 @@
+ 
+ ##### tqt pkgconfig #############################
+ 
+-string( REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "\${prefix}" PC_EXEC_PREFIX ${EXEC_INSTALL_PREFIX} )
+-string( REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "\${prefix}" PC_INCLUDE_DIR ${INCLUDE_INSTALL_DIR} )
+-string( REGEX REPLACE "^${CMAKE_INSTALL_PREFIX}" "\${prefix}" PC_LIB_DIR ${LIB_INSTALL_DIR} )
++cmake_path(APPEND PC_EXEC_PREFIX "\${prefix}" "")
++cmake_path(APPEND PC_INCLUDE_DIR "\${prefix}" "${CMAKE_INSTALL_INCLUDEDIR}")
++cmake_path(APPEND PC_LIB_DIR     "\${prefix}" "${CMAKE_INSTALL_LIBDIR}")
+ 
+ unset( PC_TQT_LIBRARIES )
+ foreach( _lib ${TQT_LIBRARIES} )

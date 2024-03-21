@@ -38093,6 +38093,8 @@ with pkgs;
 
   surf-display = callPackage ../desktops/surf-display { };
 
+  tde = recurseIntoAttrs (callPackage ../desktops/tde { });
+
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
