@@ -102,6 +102,9 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     jdk=${jdk.home}
     item=${desktopItem}
 
+    # Jetbrains Remote Client is downloaded at invocation time and is unaware of Nix environment.
+    # Most downloads (after 2024.03.20) use JETBRAINS_CLIENT_JDK instead of JETBRAINSCLIENT_JDK,
+    # export both variants to be on safe side.
     wrapProgram  "$out/$pname/bin/${loName}.sh" \
       --prefix PATH : "${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
@@ -111,6 +114,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default ANDROID_JAVA_HOME "$jdk" \
       --set-default JAVA_HOME "$jdk" \
       --set-default JETBRAINSCLIENT_JDK "$jdk" \
+      --set-default JETBRAINS_CLIENT_JDK "$jdk" \
       --set-default ${hiName}_JDK "$jdk" \
       --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
 
