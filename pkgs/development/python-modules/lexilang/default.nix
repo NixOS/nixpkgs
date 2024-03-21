@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple, fast dictionary-based language detector for short texts";
     homepage = "https://github.com/LibreTranslate/LexiLang";
+    changelog = "https://github.com/LibreTranslate/LexiLang/releases/tag/v${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ izorkin ];
   };
