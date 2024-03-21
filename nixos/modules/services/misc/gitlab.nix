@@ -1463,6 +1463,8 @@ in {
         nodejs
         gnupg
 
+        "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
+
         # Needed for GitLab project imports
         gnutar
         gzip
@@ -1476,7 +1478,12 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
+        ExecStart = utils.escapeSystemdExecArgs [
+          "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster"
+          "-e" "production"
+          "-r" "."
+          "*" # all queue groups
+        ];
       };
     };
 
@@ -1574,7 +1581,7 @@ in {
         gnutar
         gzip
         openssh
-        gitlab-workhorse
+        cfg.packages.gitlab-workhorse
       ];
       serviceConfig = {
         Type = "simple";
