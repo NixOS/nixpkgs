@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pyathena";
   version = "3.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
