@@ -63,7 +63,7 @@ with lib;
       else pkgs.writeTextFile {
         name = "v2ray.json";
         text = builtins.toJSON cfg.config;
-        checkPhase = ''
+        derivationArgs.installCheckPhase = ''
           ${cfg.package}/bin/v2ray test -c $out
         '';
       };
