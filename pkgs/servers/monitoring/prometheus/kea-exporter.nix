@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kea-exporter";
-  version = "0.6.1";
+  version = "0.7.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "kea_exporter";
     inherit version;
-    hash = "sha256-PyNFSTDqT+PBY7d9NSG1FVhN+Y3ID13T6859kBYsFzU=";
+    hash = "sha256-kn2iwYWcyW90tgfWmzLF7rU06fJyLRzqYKNLOgu/Yqk=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests.prometheus-exporters) kea;
+    inherit (nixosTests) kea;
   };
 
   meta = with lib; {

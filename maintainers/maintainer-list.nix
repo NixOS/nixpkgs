@@ -21345,6 +21345,12 @@
     github = "yanganto";
     githubId = 10803111;
   };
+  yannickulrich = {
+    email = "yannick.ulrich@proton.me";
+    github = "yannickulrich";
+    githubId = 749922;
+    name = "Yannick Ulrich";
+  };
   yannip = {
     email = "yPapandreou7@gmail.com";
     github = "YanniPapandreou";
