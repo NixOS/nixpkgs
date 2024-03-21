@@ -50,10 +50,8 @@ in {
         }) // (prev.extraEnv or {});
         extraLibraries = pkgs: let
           prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
-          additionalLibs = with config.hardware.graphics;
-            if pkgs.stdenv.hostPlatform.is64bit
-            then [ package ] ++ extraPackages
-            else [ package32 ] ++ extraPackages32;
+          # TODO The finished packages need to be exposed somehow?
+          additionalLibs = map (selector: selector pkgs) config.hardware.acceleration.packages;
         in prevLibs ++ additionalLibs;
         extraPkgs = p: (cfg.extraPackages ++ lib.optionals (prev ? extraPkgs) (prev.extraPkgs p));
       } // lib.optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice)
@@ -176,9 +174,13 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    hardware.graphics = { # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
-      enable = true;
-      enable32Bit = true;
+    hardware.acceleration = {
+      # Steam games require OGL and VK
+      api.opengl.enable = lib.mkDefault true;
+      # api.vulkan.enable = mkDefault true; # TODO
+
+      # Some games are 32bit-only
+      support32Bit = lib.mkDefault true;
     };
 
     security.wrappers = lib.mkIf (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice) {

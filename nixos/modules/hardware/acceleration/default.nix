@@ -34,11 +34,13 @@ in
 
         If there is an option for your driver in {option}`hardware.drivers`, you should use that instead.
       '';
+      default = [ ];
     };
 
     support32Bit =
       mkEnableOption "32 bit drivers usable by 32 bit applications"
       // mkOption { default = false; };
+
     setLdLibraryPath = mkOption {
       type = types.bool;
       internal = true;
