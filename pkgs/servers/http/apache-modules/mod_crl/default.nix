@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_crl";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchurl {
     url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
-    sha256 = "1x186kp6fr8nwg0jlv5phagxndvw4rjqfga9mkibmn6dx252p61d";
+    hash = "sha256-w8YIhed9J1uo5uwhfOVe5LhNLUvFZCgUO4FrHm344Rg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
