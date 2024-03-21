@@ -776,7 +776,7 @@
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
     "rev": "v2.2.0",
-    "spdx": "AGPL-3.0",
+    "spdx": "AGPL-3.0-only",
     "vendorHash": "sha256-Uxexx5sK6D+EEEPWLnWFE0HPG1RKUsYnSJ/1bV9JBkw="
   },
   "mongodbatlas": {
