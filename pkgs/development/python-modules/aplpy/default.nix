@@ -32,6 +32,12 @@ buildPythonPackage rec {
     hash = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
   };
 
+
+  # Fix build with Astropy 6 and Python 3.12. See:
+  # https://github.com/aplpy/aplpy/pull/496
+  # https://github.com/aplpy/aplpy/pull/498
+  patches = [ ./fix-astropy6-compat.patch ./fix-distutil-depr.patch ];
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm

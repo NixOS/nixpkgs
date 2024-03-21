@@ -1,0 +1,20 @@
+diff --git a/aplpy/core.py b/aplpy/core.py
+index b25b1e2..8af632a 100644
+--- a/aplpy/core.py
++++ b/aplpy/core.py
+@@ -1,4 +1,4 @@
+-from distutils import version
++from setuptools._distutils import version
+ import os
+ import operator
+ from functools import reduce
+diff --git a/aplpy/rgb.py b/aplpy/rgb.py
+index f1d2ab6..c0427bd 100644
+--- a/aplpy/rgb.py
++++ b/aplpy/rgb.py
+@@ -1,4 +1,4 @@
+-from distutils import version
++from setuptools._distutils import version
+ import os
+ import warnings
+ 
