@@ -6408,6 +6408,8 @@ self: super: with self; {
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
+  lbmpy = callPackage ../development/python-modules/lbmpy { };
+
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
   lcd-i2c = callPackage ../development/python-modules/lcd-i2c { };
