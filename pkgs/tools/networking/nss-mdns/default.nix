@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     "--enable-avahi"
     # Connect to the daemon at `/var/run/avahi-daemon/socket'.
     "--localstatedir=/var"
+    # Read configuration at `/etc/mdns.allow`, not `$out/etc/mdns.allow`.
+    "--sysconfdir=/etc"
   ];
 
   meta = {
