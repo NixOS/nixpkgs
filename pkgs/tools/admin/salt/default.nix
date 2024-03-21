@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , python3
-, fetchpatch
 , fetchPypi
 , openssl
   # Many Salt modules require various Python modules to be installed,
@@ -11,21 +10,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3006.7";
+  version = "3007.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7ZLSG4TrnUefk7qJRoRTQIEX4NwQEGFCFJmejQwhCv0=";
+    hash = "sha256-Qb+E5x/GVb+KS1LrRA0GIa6WEJaghtIOEy4VEuLt3/g=";
   };
 
   patches = [
-    # https://github.com/saltstack/salt/pull/63795
-    (fetchpatch {
-      name = "remove-duplicate-scripts.patch";
-      url = "https://github.com/saltstack/salt/commit/6b9463836e70e40409dbf653f01aa94ef869dfe7.patch";
-      hash = "sha256-VcVdKC8EH4qoWHtq6eEPl8OviR4eA2k/S2lWNQbubJw=";
-    })
     ./fix-libcrypto-loading.patch
   ];
 
@@ -57,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     pyzmq
     requests
+    tornado
   ] ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
