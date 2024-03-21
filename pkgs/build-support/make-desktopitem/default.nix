@@ -114,5 +114,5 @@ writeTextFile {
   name = "${name}.desktop";
   destination = "/share/applications/${name}.desktop";
   text = builtins.concatStringsSep "\n" content;
-  checkPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
+  derivationArgs.installCheckPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
 })
