@@ -23,13 +23,15 @@
 , gobject-introspection
 , vala
 , withDemoAgent ? false
+, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
   version = "2.7.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -84,6 +86,8 @@ stdenv.mkDerivation rec {
     "-Dmozilla-api-key=5c28d1f4-9511-47ff-b11a-2bef80fc177c"
     "-Ddbus-srv-user=geoclue"
     "-Ddbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk-doc=${lib.boolToString withDocs}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"
