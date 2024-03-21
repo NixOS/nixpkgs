@@ -1724,6 +1724,7 @@ let
     stdune = callPackage ../development/ocaml-modules/stdune { };
 
     stog = callPackage ../applications/misc/stog { };
+    stog_asy = callPackage ../applications/misc/stog/asy.nix { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
