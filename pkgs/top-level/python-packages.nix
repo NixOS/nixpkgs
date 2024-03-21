@@ -10356,6 +10356,8 @@ self: super: with self; {
 
   pyaml = callPackage ../development/python-modules/pyaml { };
 
+  pyaml-env = callPackage ../development/python-modules/pyaml-env { };
+
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
   pyannote-audio = callPackage ../development/python-modules/pyannote-audio { };
@@ -13914,6 +13916,8 @@ self: super: with self; {
   speaklater = callPackage ../development/python-modules/speaklater { };
 
   speaklater3 = callPackage ../development/python-modules/speaklater3 { };
+
+  spectra = callPackage ../development/python-modules/spectra { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
