@@ -2457,8 +2457,6 @@ self: super: with self; {
 
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
-  cram = callPackage ../development/python-modules/cram { };
-
   cramjam = callPackage ../development/python-modules/cramjam { };
 
   crashtest = callPackage ../development/python-modules/crashtest { };
