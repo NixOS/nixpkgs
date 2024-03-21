@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, makeWrapper
 , rustPlatform
 , cmake
 , pkgconf
@@ -8,6 +9,7 @@
 , wayland
 , xorg
 , libxkbcommon
+, pop-launcher
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,13 +25,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-xC5nf7DJCMBR2gUoB5NWZJGuZ8brs8WklCzg/osCsho=";
 
-  nativeBuildInputs = [ cmake pkgconf ];
+  nativeBuildInputs = [ makeWrapper cmake pkgconf ];
   buildInputs = [ freetype expat wayland libxkbcommon xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi ];
 
   postFixup = let
     rpath = lib.makeLibraryPath buildInputs;
   in ''
     patchelf --set-rpath ${rpath} $out/bin/onagre
+    wrapProgram $out/bin/onagre \
+      --prefix PATH ':' ${lib.makeBinPath [
+        pop-launcher
+      ]}
   '';
 
   meta = with lib; {
