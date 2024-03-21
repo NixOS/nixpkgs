@@ -41,9 +41,9 @@ let
     # https://gitlab.com/armagetronad/armagetronad/-/tags
     ${latestVersionMajor} =
       let
-        version = "${latestVersionMajor}.1.1";
+        version = "${latestVersionMajor}.2.3";
         rev = "v${version}";
-        hash = "sha256-tvmKGqzH8IYTSeahc8XmN3RV+GdE5GsP8pAlwG8Ph3M=";
+        hash = "sha256-lfYJ3luGK9hB0aiiBiJIqq5ddANqGaVtKXckbo4fl2g=";
       in dedicatedServer: {
         inherit version;
         src = fetchArmagetron rev hash;
@@ -183,7 +183,6 @@ let
         inherit mainProgram;
         homepage = "https://www.armagetronad.org";
         description = "A multiplayer networked arcade racing game in 3D similar to Tron";
-        mainProgram = "armagetronad-dedicated";
         maintainers = with maintainers; [ numinit ];
         license = licenses.gpl2Plus;
         platforms = platforms.linux;
