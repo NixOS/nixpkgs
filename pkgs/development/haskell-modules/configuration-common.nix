@@ -144,6 +144,11 @@ self: super: {
   # https://github.com/lspitzner/czipwith/issues/5
   czipwith = doJailbreak super.czipwith;
 
+  # jacinda needs latest version of alex
+  jacinda = super.jacinda.override {
+    alex = self.alex_3_5_1_0;
+  };
+
   aeson =
     # aeson's test suite includes some tests with big numbers that fail on 32bit
     # https://github.com/haskell/aeson/issues/1060
