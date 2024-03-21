@@ -6,34 +6,40 @@
 , pkg-config
 , installShellFiles
 , zstd
+, libsoup_3
+, makeWrapper
+, mono
+, wrapWithMono ? true
 , openssl
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "owmods-cli";
-  version = "0.12.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     rev = "cli_v${version}";
-    hash = "sha256-AfqpLL3cGZLKW5/BE6SaBe4S8GzYM2GKUZU8mFH5uX4=";
+    hash = "sha256-JCPuKGO0pbhQaNmZUcZ95EZbXubrjZnw0qJmKCGuAoQ=";
   };
 
-  cargoHash = "sha256-PhdfpiUgeOB13ROgzPBYM+sBLGMP+RtV9j9ebo8PpJU=";
+  cargoHash = "sha256-dTEEpjonvFYFv16e0eS71B4OMiYueYSfcs8gmSYeHPc=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ];
+  ] ++ lib.optional wrapWithMono makeWrapper;
 
   buildInputs = [
     zstd
+    libsoup_3
   ] ++ lib.optionals stdenv.isLinux [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
@@ -44,9 +50,11 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     cargo xtask dist_cli
-    installManPage man/man*/*
+    installManPage dist/cli/man/*
     installShellCompletion --cmd owmods \
-      dist/cli/completions/owmods.{bash,fish,zsh}
+    dist/cli/completions/owmods.{bash,fish,zsh}
+    '' + lib.optionalString wrapWithMono ''
+    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
   '';
 
   passthru.updateScript = nix-update-script {};
@@ -58,6 +66,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
     mainProgram = "owmods";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ locochoco ];
+    maintainers = with maintainers; [ bwc9876 spoonbaker locochoco ];
   };
 }

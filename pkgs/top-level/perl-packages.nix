@@ -9463,10 +9463,10 @@ with self; {
 
   FFICStat = buildPerlPackage {
     pname = "FFI-C-Stat";
-    version = "0.02";
+    version = "0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.02.tar.gz";
-      hash = "sha256-ThXY9vn5hAfGUtnTE7URUHcTkgGOBx18GShDrILBvlk=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.03.tar.gz";
+      hash = "sha256-YOjveCyLs0cFXJ49ov1BTzX2EP5P77eNBzncyiQoQx4=";
     };
     buildInputs = [ Filechdir PathTiny Test2Suite TestScript ];
     propagatedBuildInputs = [ FFIPlatypus RefUtil ];
@@ -13205,40 +13205,7 @@ with self; {
     };
   };
 
-  ImageExifTool = buildPerlPackage rec {
-    pname = "Image-ExifTool";
-    version = "12.70";
-
-    src = fetchurl {
-      url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-TLJSJEXMPj870TkExq6uraX8Wl4kmNerrSlX3LQsr/4=";
-    };
-
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
-      shortenPerlShebang $out/bin/exiftool
-    '';
-
-    meta = {
-      description = "A tool to read, write and edit EXIF meta information";
-      longDescription = ''
-        ExifTool is a platform-independent Perl library plus a command-line
-        application for reading, writing and editing meta information in a wide
-        variety of files. ExifTool supports many different metadata formats
-        including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop
-        IRB, FlashPix, AFCP and ID3, as well as the maker notes of many digital
-        cameras by Canon, Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP,
-        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
-        Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
-        Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
-      '';
-      homepage = "https://exiftool.org/";
-      changelog = "https://exiftool.org/history.html";
-      license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-      maintainers = with maintainers; [ kiloreux anthonyroussel ];
-      mainProgram = "exiftool";
-    };
-  };
+  ImageExifTool = callPackage ../development/perl-modules/ImageExifTool { };
 
   Inline = buildPerlPackage {
     pname = "Inline";
@@ -19814,10 +19781,10 @@ with self; {
 
   ParallelLoops = buildPerlPackage {
     pname = "Parallel-Loops";
-    version = "0.10";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.10.tar.gz";
-      hash = "sha256-b5Z7RuejY7FocbmZHDWeFC3Dsigc/psa85kEcEyL0qo=";
+      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.12.tar.gz";
+      hash = "sha256-tmyP4v1RmHPIp7atHRoE3yAmkSJZteKKQeUdnJsVQVA=";
     };
     propagatedBuildInputs = [ ParallelForkManager ];
     meta = {

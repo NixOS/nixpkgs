@@ -1,0 +1,91 @@
+--- a/scripts/context/lua/mtxrun.lua	1970-01-01 01:00:01
++++ b/cont-lmt/scripts/context/lua/mtxrun.lua	2024-03-11 08:34:49
+@@ -2435,19 +2433,22 @@
+   tables[t]=tcopy
+  end
+  for i,v in next,t do 
++  local k
+   if type(i)=="table" then
+    if tables[i] then
+-    i=tables[i]
++    k=tables[i]
+    else
+-    i=copy(i,tables)
++    k=copy(i,tables)
+    end
++  else
++   k=i
+   end
+   if type(v)~="table" then
+-   tcopy[i]=v
++   tcopy[k]=v
+   elseif tables[v] then
+-   tcopy[i]=tables[v]
++   tcopy[k]=tables[v]
+   else
+-   tcopy[i]=copy(v,tables)
++   tcopy[k]=copy(v,tables)
+   end
+  end
+  local mt=getmetatable(t)
+@@ -12982,10 +13037,10 @@
+    else
+     value=is_boolean(value,value,true) 
+    end
+-   w=topattern(w,true,true)
++   local p=topattern(w,true,true)
+    for name,functions in sortedhash(data) do
+     if done[name] then
+-    elseif find(name,w) then
++    elseif find(name,p) then
+      done[name]=true
+      for i=1,#functions do
+       functions[i](value)
+@@ -13554,9 +13610,9 @@
+    if v then
+     v.state=value
+    else
+-    c=topattern(c,true,true)
++    local p=topattern(c,true,true)
+     for k,v in next,data do
+-     if find(k,c) then
++     if find(k,p) then
+       v.state=value
+      end
+     end
+@@ -14499,10 +14556,7 @@
+       realtime=realtime+real
+      end
+      totaltime=totaltime+total
+-     if line<0 then
+-      line=0
+-     end
+-     dataset[#dataset+1]={ real,total,count,name,source,line }
++     dataset[#dataset+1]={ real,total,count,name,source,line<0 and 0 or line }
+     end
+    end
+   end
+@@ -21135,10 +21251,10 @@
+  str=lpegmatch(stripper_1,str)
+  if validate then
+   for s in gmatch(str,"[^,]+") do
+-   s=validate(s)
+-   if s then
++   local v=validate(s)
++   if v then
+     n=n+1
+-    t[n]=s
++    t[n]=v
+    end
+   end
+  else
+@@ -23552,7 +23690,8 @@
+   local result={}
+   local status={}
+   local done={}
+-  for k,r in next,results do
++  for k=1,#results do
++   local r=results[k]
+    local method,list=r[1],r[2]
+    if method and list then
+     for i=1,#list do

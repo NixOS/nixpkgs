@@ -1,4 +1,4 @@
-{ alephone, requireFile }:
+{ lib, alephone, requireFile }:
 
 alephone.makeWrapper rec {
   pname = "apotheosis-x";
@@ -16,5 +16,6 @@ alephone.makeWrapper rec {
   meta = {
     description = "Total conversion for Marathon Infinity running on the Aleph One engine";
     homepage = "https://simplici7y.com/items/apotheosis-x-5";
+    license = lib.licenses.unfree;
   };
 }

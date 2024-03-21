@@ -308,11 +308,11 @@ chktex = stdenv.mkDerivation {
 # for details see https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live
 context = stdenv.mkDerivation rec {
   pname = "luametatex";
-  version = "2.10.08";
+  version = "2.11.02";
 
   src = fetchurl {
-    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?revision=67034&view=co";
-    hash = "sha256-3JeOUQ63jJOZWTxFCoyWjfcrspmdmC/yqgS1JaLfTWk=";
+    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?revision=70616&view=co";
+    hash = "sha256-o7esoBBTTYEstkd7l34BWxew3fIRdVcFiGxrT1/KP1o=";
   };
 
   enableParallelBuilding = true;
@@ -328,11 +328,11 @@ context = stdenv.mkDerivation rec {
 
 dvisvgm = stdenv.mkDerivation rec {
   pname = "dvisvgm";
-  version = "3.1.2";
+  version = "3.2.2";
 
   src = assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version) "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm"; fetchurl {
     url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-    hash = "sha256-vqeDrf6TG3eUoMMNeQK4Kw1NmtaBbc2KCVqTHNM+rPY=";
+    hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
   };
 
   configureFlags = [
@@ -453,7 +453,7 @@ xdvi = stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace "$out/bin/xdvi" \
-      --replace "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
+      --replace-fail "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
   '';
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
 };
@@ -489,8 +489,8 @@ xindy = stdenv.mkDerivation {
   # hardcode clisp location
   postPatch = ''
     substituteInPlace xindy-*/user-commands/xindy.in \
-      --replace "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
-                "our \$clisp = '$(type -P clisp)';"
+      --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
+                     "our \$clisp = '$(type -P clisp)';"
   '';
 
   nativeBuildInputs = [

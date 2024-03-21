@@ -1,57 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  makeBinaryWrapper,
-  cosmic-icons,
-  just,
-  pkg-config,
-  libglvnd,
-  libxkbcommon,
-  libinput,
-  fontconfig,
-  freetype,
-  mesa,
-  wayland,
-  xorg,
-  vulkan-loader,
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, appstream, makeBinaryWrapper
+, cosmic-icons, glib, just, pkg-config, libglvnd, libxkbcommon, libinput
+, fontconfig, flatpak, freetype, openssl, mesa, wayland, xorg, vulkan-loader
+, vulkan-validation-layers, }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "cosmic-edit";
-  version = "unstable-2024-02-28";
-
+  pname = "cosmic-store";
+  version = "unstable-2024-03-13";
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "536a66eff9c032afd76b60be6a9067a14ed38ab1";
-    hash = "sha256-UsZBxeamw8VuHtHrVtTwHhPPG+SMBrGY5taw+da/Ll0=";
+    rev = "df014ea82ae0465470f5d237bfe71d2c085d29a0";
+    hash = "sha256-1Sp6/qVONK+O5FLEcsu45eEBNaVbJLptt+ByXOZYwpo=";
+    fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
+      "appstream-0.2.2" = "sha256-Qb/zzZJ2sM97nGVtp8amecTlwuaDrx1cacDcZOwhUm8=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-Zyi95zcBAohM1WBropLzJczSIfNNNBK2odB4AmW4h5I=";
-      "cosmic-files-0.1.0" = "sha256-64An0MPgnFgyVlWmtBGBs+IV2z+4vmEY2uRPetZM4/M=";
-      "cosmic-syntax-theme-0.1.0" = "sha256-BNb9wrryD5FJImboD3TTdPRIfiBqPpItqwGdT1ZiNng=";
-      "cosmic-text-0.11.2" = "sha256-Y9i5stMYpx+iqn4y5DJm1O1+3UIGp0/fSsnNq3Zloug=";
+      "cosmic-config-0.1.0" = "sha256-J6c2pRCpyfCFMmzwJ4RdEghSaFDshDtZL6DteAiaq1o=";
+      "cosmic-text-0.11.2" = "sha256-6mvGyMCFC/tSIiDgDX+zuDUi15S9dXI6Dc6pj36hIJM=";
       "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
       "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
       "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
-      "systemicons-0.7.0" = "sha256-zzAI+6mnpQOh+3mX7/sJ+w4a7uX27RduQ99PNxLNF78=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
     };
   };
-
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-02-28";
-  env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
@@ -59,15 +36,19 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
   buildInputs = [
+    appstream
+    glib
     libxkbcommon
-    xorg.libX11
     libinput
     libglvnd
     fontconfig
+    flatpak
     freetype
-    mesa
+    openssl
+    xorg.libX11
     wayland
     vulkan-loader
+    vulkan-validation-layers
   ];
 
   dontUseJustBuild = true;
@@ -78,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-edit"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-store"
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
@@ -95,15 +76,22 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram "$out/bin/${pname}" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader libxkbcommon mesa.drivers wayland
-      ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXrandr
+          libxkbcommon
+          vulkan-loader
+          mesa.drivers
+        ]
+      }
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-edit";
-    description = "Text Editor for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-edit";
+    homepage = "https://github.com/pop-os/cosmic-store";
+    description = "App Store for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ahoneybun nyanbinary ];
     platforms = platforms.linux;
