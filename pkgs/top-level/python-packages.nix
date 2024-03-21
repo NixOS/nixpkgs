@@ -9655,6 +9655,8 @@ self: super: with self; {
 
   playwright = callPackage ../development/python-modules/playwright { };
 
+  playwright-stealth = callPackage ../development/python-modules/playwright-stealth { };
+
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
