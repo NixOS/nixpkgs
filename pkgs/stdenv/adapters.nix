@@ -237,14 +237,18 @@ rec {
       });
     });
 
+  /* Copy the libstdc++ from the model stdenv to the target stdenv.
+   *
+   * TODO(@connorbaker):
+   * This interface provides behavior which should be revisited prior to the
+   * release of 24.05. For a more detailed explanation and discussion, see
+   * https://github.com/NixOS/nixpkgs/issues/283517. */
   useLibsFrom = modelStdenv: targetStdenv:
     let
       ccForLibs = modelStdenv.cc.cc;
-      cc = pkgs.wrapCCWith {
-        /* NOTE: cc.cc is the unwrapped compiler. Should we respect the old
-         * wrapper instead? */
-        cc = targetStdenv.cc.cc;
-
+      /* NOTE(@connorbaker):
+       * This assumes targetStdenv.cc is a cc-wrapper. */
+      cc = targetStdenv.cc.override {
         /* NOTE(originally by rrbutani):
          * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
          * clang based `cc` to use `libstdc++` (from gcc).

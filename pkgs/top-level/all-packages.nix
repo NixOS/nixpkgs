@@ -1861,8 +1861,6 @@ with pkgs;
 
   gofu = callPackage ../applications/misc/gofu { };
 
-  godns = callPackage ../tools/networking/godns { };
-
   godspeed = callPackage ../tools/networking/godspeed { };
 
   goodhosts = callPackage ../tools/networking/goodhosts { };
@@ -6120,8 +6118,6 @@ with pkgs;
   optar = callPackage ../tools/graphics/optar { };
 
 
-  obinskit = callPackage ../applications/misc/obinskit { };
-
   ockam = callPackage ../tools/networking/ockam {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7724,8 +7720,6 @@ with pkgs;
   sonota = callPackage ../tools/misc/sonota { };
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
-
-  soupault = callPackage ../tools/typesetting/soupault { };
 
   stratisd = callPackage ../tools/filesystems/stratisd { };
 
@@ -10690,6 +10684,8 @@ with pkgs;
     mangohud32 = pkgsi686Linux.mangohud;
     inherit (python3Packages) mako;
   };
+
+  marimo = with python3Packages; toPythonApplication marimo;
 
   marktext = callPackage ../applications/misc/marktext { };
 
@@ -23900,31 +23896,7 @@ with pkgs;
 
   nvitop = callPackage ../tools/system/nvitop { };
 
-  nvtop = callPackage ../tools/system/nvtop { };
-  nvtop-amd = (callPackage ../tools/system/nvtop {
-    amd = true;
-    intel = false;
-    msm = false;
-    nvidia = false;
-  }).overrideAttrs { pname = "nvtop-amd"; };
-  nvtop-intel = (callPackage ../tools/system/nvtop {
-    amd = false;
-    intel = true;
-    msm = false;
-    nvidia = false;
-  }).overrideAttrs { pname = "nvtop-intel"; };
-  nvtop-msm = (callPackage ../tools/system/nvtop {
-    amd = false;
-    intel = false;
-    msm = true;
-    nvidia = false;
-  }).overrideAttrs { pname = "nvtop-msm"; };
-  nvtop-nvidia = (callPackage ../tools/system/nvtop {
-    amd = false;
-    intel = false;
-    msm = false;
-    nvidia = true;
-  }).overrideAttrs { pname = "nvtop-nvidia"; };
+  nvtopPackages = recurseIntoAttrs (import ../tools/system/nvtop { inherit callPackage; });
 
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
@@ -26978,8 +26950,6 @@ with pkgs;
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
-  slimserver = callPackage ../servers/slimserver { };
-
   smcroute = callPackage ../servers/smcroute { };
 
   snipe-it = callPackage ../by-name/sn/snipe-it/package.nix {
@@ -27382,8 +27352,6 @@ with pkgs;
   };
 
   disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
-
-  displaycal = callPackage ../applications/graphics/displaycal { };
 
   displaylink = callPackage ../os-specific/linux/displaylink {
     inherit (linuxPackages) evdi;
@@ -28658,6 +28626,8 @@ with pkgs;
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
+  andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
+
   ankacoder = callPackage ../data/fonts/ankacoder { };
   ankacoder-condensed = callPackage ../data/fonts/ankacoder/condensed.nix { };
 
@@ -28845,8 +28815,6 @@ with pkgs;
   combinatorial_designs = callPackage ../data/misc/combinatorial_designs { };
 
   commit-mono = callPackage ../data/fonts/commit-mono { };
-
-  conway_polynomials = callPackage ../data/misc/conway_polynomials { };
 
   cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
 
@@ -30776,7 +30744,9 @@ with pkgs;
 
   drawing = callPackage ../applications/graphics/drawing { };
 
-  drawio = callPackage ../applications/graphics/drawio { };
+  drawio = callPackage ../applications/graphics/drawio {
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
   drawio-headless = callPackage ../applications/graphics/drawio/headless.nix { };
 
   drawpile = libsForQt5.callPackage ../applications/graphics/drawpile { };
@@ -32796,9 +32766,7 @@ with pkgs;
 
   kupfer = callPackage ../applications/misc/kupfer { };
 
-  kuro = callPackage ../applications/misc/kuro {
-    electron = electron_22;
-  };
+  kuro = callPackage ../applications/misc/kuro { };
 
   timoni = callPackage ../applications/networking/cluster/timoni { };
 
@@ -39174,8 +39142,6 @@ with pkgs;
 
   jflap = callPackage ../applications/science/engineering/jflap { };
 
-  strictdoc = python3.pkgs.callPackage ../applications/science/engineering/strictdoc { };
-
   ### SCIENCE / ELECTRONICS
 
   adms = callPackage ../applications/science/electronics/adms { };
@@ -40298,10 +40264,6 @@ with pkgs;
     pcre = pcre-cpp;
     jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
-
-  owmods-cli = callPackage ../applications/misc/owmods-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   r128gain = callPackage ../applications/audio/r128gain { };
 
