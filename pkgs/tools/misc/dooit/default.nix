@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "dooit";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-GtXRzj+o+FClleh73kqelk0JrSyafZhf847lX1BiS9k=";
   };
 
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "textual"
     "tzlocal"
   ];
 
