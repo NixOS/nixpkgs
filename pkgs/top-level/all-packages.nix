@@ -20184,8 +20184,6 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES
 
-  a52dec = callPackage ../development/libraries/a52dec { };
-
   aalib = callPackage ../development/libraries/aalib { };
 
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix {
