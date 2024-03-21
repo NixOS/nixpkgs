@@ -22,6 +22,18 @@ in
       example = 4242;
       description = "The port on which Podgrab will listen for incoming HTTP traffic.";
     };
+
+    user = mkOption {
+      type = types.str;
+      default = "podgrab";
+      description = "User under which Podgrab runs, and which owns the download directory.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "podgrab";
+      description = "Group under which Podgrab runs, and which owns the download directory.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -35,7 +47,8 @@ in
         PORT = toString cfg.port;
       };
       serviceConfig = {
-        DynamicUser = true;
+        User = cfg.user;
+        Group = cfg.group;
         EnvironmentFile = lib.optionals (cfg.passwordFile != null) [
           cfg.passwordFile
         ];
@@ -44,6 +57,13 @@ in
         StateDirectory = [ "podgrab/config" "podgrab/data" ];
       };
     };
+
+    users.users.podgrab = lib.mkIf (cfg.user == "podgrab") {
+      isSystemUser = true;
+      group = cfg.group;
+    };
+
+    users.groups.podgrab = lib.mkIf (cfg.group == "podgrab") { };
   };
 
   meta.maintainers = with lib.maintainers; [ ambroisie ];
