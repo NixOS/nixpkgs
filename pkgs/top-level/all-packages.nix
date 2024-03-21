@@ -14105,8 +14105,6 @@ with pkgs;
 
   typos = callPackage ../development/tools/typos { };
 
-  typstfmt = callPackage ../tools/typesetting/typstfmt { };
-
   typst-live = callPackage ../tools/typesetting/typst-live { };
 
   tz = callPackage ../tools/misc/tz { };
