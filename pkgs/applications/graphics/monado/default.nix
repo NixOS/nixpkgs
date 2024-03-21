@@ -76,12 +76,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    clang
     cmake
     doxygen
     glslang
-    gradle
-    ninja
     pkg-config
     python3
   ];
@@ -152,9 +149,12 @@ stdenv.mkDerivation {
   ];
 
   passthru.devTools = [
+    clang
     cmake-format
     git
+    gradle
     gradle-completion
+    ninja
   ];
 
   passthru.tests = {
