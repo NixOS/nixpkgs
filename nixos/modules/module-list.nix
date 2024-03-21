@@ -1099,7 +1099,7 @@
   ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nextdns.nix
-  ./services/networking/nftables.nix
+  ./services/networking/nftables/default.nix
   ./services/networking/nghttpx/default.nix
   ./services/networking/ngircd.nix
   ./services/networking/nix-serve.nix

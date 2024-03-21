@@ -33,6 +33,13 @@ let
   };
 in
 {
+  imports = [
+    ./chains.nix
+    ./expressions.nix
+    ./flowtables.nix
+    ./statements.nix
+  ];
+
   ###### interface
 
   options = {
