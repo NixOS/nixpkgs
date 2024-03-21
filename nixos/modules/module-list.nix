@@ -1018,6 +1018,7 @@
   ./services/networking/lxd-image-server.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
+  ./services/networking/mihomo.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
   ./services/networking/miredo.nix

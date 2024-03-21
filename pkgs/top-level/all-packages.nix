@@ -34526,10 +34526,6 @@ with pkgs;
 
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
-  rofimoji = callPackage ../applications/misc/rofimoji {
-    inherit (python3Packages) buildPythonApplication configargparse;
-  };
-
   rootlesskit = callPackage ../tools/virtualization/rootlesskit { };
 
   rsclock = callPackage ../applications/misc/rsclock { };
