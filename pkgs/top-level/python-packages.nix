@@ -6415,6 +6415,8 @@ self: super: with self; {
 
   kornia = callPackage ../development/python-modules/kornia { };
 
+  kornia-rs = callPackage ../development/python-modules/kornia-rs { };
+
   krakenex = callPackage ../development/python-modules/krakenex { };
 
   krfzf-py = callPackage ../development/python-modules/krfzf-py { };
