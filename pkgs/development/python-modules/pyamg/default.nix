@@ -13,9 +13,9 @@
 buildPythonPackage rec {
   pname = "pyamg";
   version = "5.1.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyamg/pyamg";
     changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }
