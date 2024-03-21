@@ -1,16 +1,16 @@
-{ lib, stdenv
+{ lib
+, resholve
 , fetchFromGitHub
 , unstableGitUpdater
-, makeWrapper
+, bash
 , openssl
 , coreutils
-, gnugrep }:
+, gnugrep
+}:
 
-stdenv.mkDerivation {
+resholve.mkDerivation {
   pname = "bash-supergenpass";
   version = "unstable-2020-02-03";
-
-  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "lanzz";
@@ -21,8 +21,19 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -m755 -D supergenpass.sh "$out/bin/supergenpass"
-    wrapProgram "$out/bin/supergenpass" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnugrep ]}"
   '';
+
+  solutions = {
+    default = {
+      scripts = [ "bin/supergenpass" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = [
+        coreutils
+        openssl
+        gnugrep
+      ];
+    };
+  };
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/lanzz/bash-supergenpass.git";
