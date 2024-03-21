@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_scep";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchurl {
     url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
-    sha256 = "1imddqyi81l90valvndx9r0ywn32ggijrdfrjmbx8j1abaccagrc";
+    hash = "sha256-HFPQ1A3ULtT2MduIQZS1drdQvCdZqJqKpOsJLEw67sI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
