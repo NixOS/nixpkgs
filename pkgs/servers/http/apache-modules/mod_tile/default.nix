@@ -15,6 +15,7 @@
 , iniparser
 , libmemcached
 , mapnik
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/openstreetmap/mod_tile";
