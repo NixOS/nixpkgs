@@ -69,6 +69,12 @@ buildPythonPackage rec {
     "test_redis"
   ];
 
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/_async/test_storages.py"
+    "tests/_sync/test_storages.py"
+  ];
+
   meta = with lib; {
     description = "HTTP Cache implementation for HTTPX and HTTP Core";
     homepage = "https://github.com/karpetrosyan/hishel";

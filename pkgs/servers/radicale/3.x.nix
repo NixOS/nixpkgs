@@ -39,6 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     waitress
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   passthru.tests = {
     inherit (nixosTests) radicale;
   };

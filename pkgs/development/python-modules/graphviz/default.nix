@@ -11,7 +11,7 @@
 , freefont_ttf
 , setuptools
 , mock
-, pytest
+, pytest_7
 , pytest-mock
 , python
 }:
@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest
+    pytest_7
     pytest-mock
   ];
 

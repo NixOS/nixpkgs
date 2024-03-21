@@ -4,8 +4,8 @@
 , poetry-core
 , pyopenssl
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
-, setuptools
 }:
 
 buildPythonPackage rec {
@@ -24,6 +24,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pyopenssl"
   ];
 
   propagatedBuildInputs = [

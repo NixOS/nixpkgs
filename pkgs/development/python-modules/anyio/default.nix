@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9BxzdeQ5Yh4FDXGNVx9kiy7/fBmn8esvZkrK4wW4oGA=";
+    hash = "sha256-y58DQiTD0ZKaBNf0cA3MFE+7F68Svrl+Idz6BZY7HWQ=";
   };
 
   nativeBuildInputs = [

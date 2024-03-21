@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-runner";
-  version = "6.0.0";
+  version = "6.0.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tNhTYu0ptMNIZ43nl99Djw8FCUl924xkcJbAKm2HtoU=";
+    hash = "sha256-cNRzlYWnAI83v0kzwBP9sye4h4paafy7MxbIiILw9Js=";
   };
 
   postPatch = ''

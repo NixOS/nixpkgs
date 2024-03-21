@@ -17,13 +17,13 @@
 , optuna
 , pandas
 , pillow
-, pytestCheckHook
+, psutil
+, pynvml
 , pythonOlder
 , ruamel-yaml
 , scikit-learn
 , scmrepo
 , setuptools-scm
-, tabulate
 , tensorflow
 , torch
 , transformers
@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "3.42.0";
+  version = "3.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7MesRCfXr/f2MBokZhraFQqIuOyWCjIDRYZcvzM5Ezc=";
+    hash = "sha256-B5SH6Id3ZbiE/0g6RBYvES4Ao+uOHWMKB56J3Rn9p6s=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,8 @@ buildPythonPackage rec {
     gto
     ruamel-yaml
     scmrepo
+    psutil
+    pynvml
   ];
 
   passthru.optional-dependencies = {

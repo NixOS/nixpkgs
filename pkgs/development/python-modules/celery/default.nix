@@ -74,6 +74,8 @@ buildPythonPackage rec {
     # test_multi tries to create directories under /var
     "t/unit/bin/test_multi.py"
     "t/unit/apps/test_multi.py"
+    # requires moto<5
+    "t/unit/backends/test_s3.py"
   ];
 
   disabledTests = [

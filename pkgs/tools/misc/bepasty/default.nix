@@ -23,7 +23,7 @@ let
 #https://github.com/NixOS/nixpkgs/pull/38300
 in with bepastyPython.pkgs; buildPythonPackage rec {
   pname = "bepasty";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   propagatedBuildInputs = [
@@ -46,7 +46,7 @@ in with bepastyPython.pkgs; buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-R3bvrl/tOP0S9m6X+MwYK6fMQ51cI6W5AoxyYZ8aZ/w=";
+    sha256 = "sha256-08cyr2AruGAfHAwHHS8WMfJh7DBKymaYyz4AxI/ubkE=";
   };
 
   nativeCheckInputs = [

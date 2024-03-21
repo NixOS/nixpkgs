@@ -172,7 +172,6 @@ let
 
   # emulate split output derivation
   splitOutputs = {
-    out = out // { outputSpecified = true; };
     texmfdist = texmfdist // { outputSpecified = true; };
     texmfroot = texmfroot // { outputSpecified = true; };
   } // (lib.genAttrs pkgList.nonEnvOutputs (outName: (buildEnv {
@@ -186,9 +185,9 @@ let
     inherit meta passthru;
   }).overrideAttrs { outputs = [ outName ]; } // { outputSpecified = true; }));
 
-  passthru = lib.optionalAttrs (! __combine) (splitOutputs // {
-    all = builtins.attrValues splitOutputs;
-  }) // {
+  passthru = {
+    # these are not part of pkgList.nonEnvOutputs and must be exported in passthru
+    inherit (splitOutputs) texmfdist texmfroot;
     # This is set primarily to help find-tarballs.nix to do its job
     requiredTeXPackages = builtins.filter lib.isDerivation (pkgList.bin ++ pkgList.nonbin
       ++ lib.optionals (! __fromCombineWrapper)

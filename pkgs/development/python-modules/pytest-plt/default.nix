@@ -7,13 +7,17 @@
 
 buildPythonPackage rec {
   pname = "pytest-plt";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IkTNlierFXIG9WSVUfVoirfQ6z7JOYlCaa5NhnBSuxc=";
+    hash = "sha256-TOuyVH2wKKruy7SBNW3z62yzpmBT6l6RcKhoO1XUFhE=";
   };
+
+  postPatch = ''
+    sed -i '/addopts =/d' setup.cfg
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook

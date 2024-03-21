@@ -2,18 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , substituteAll
+, filelock
 , requests
 , unicode-character-database
 }:
 
 buildPythonPackage rec {
   pname = "youseedee";
-  version = "0.4.1";
+  version = "0.5.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fdI4CBUSMbdKW0qg4y22wjWI6bhotgDkQdFMc9X00as=";
+    hash = "sha256-hQkI8kdropLiO86LXDy6eQma3FEg48gLldU7bFg9dzI=";
   };
 
   patches = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    filelock
     requests
   ];
 

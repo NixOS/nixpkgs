@@ -39,14 +39,6 @@ let
           # that can happen when a Swift application dynamically links different versions
           # of libc++ and libc++abi than libraries it links are using.
           inherit (llvmPackages) libcxx;
-          extraPackages = [
-            llvmPackages.libcxxabi
-            # Use the compiler-rt associated with clang, but use the libc++abi from the stdenv
-            # to avoid linking against two different versions (for the same reasons as above).
-            (swiftLlvmPackages.compiler-rt.override {
-              inherit (llvmPackages) libcxxabi;
-            })
-          ];
         }
       else
         clangNoMarch;

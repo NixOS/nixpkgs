@@ -43,6 +43,11 @@ buildPythonPackage rec {
     pkgs.gitMinimal
   ];
 
+  pytestFlagsArray = [
+    # Pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d);
   '';

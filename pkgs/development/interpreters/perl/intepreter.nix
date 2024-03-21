@@ -123,7 +123,7 @@ stdenv.mkDerivation (rec {
 
   dontAddPrefix = !crossCompiling;
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = !crossCompiling;
 
   # perl includes the build date, the uname of the build system and the
   # username of the build user in some files.

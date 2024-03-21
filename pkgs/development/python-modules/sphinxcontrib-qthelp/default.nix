@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-qthelp";
-  version = "1.0.6";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_qthelp";
     inherit version;
-    hash = "sha256-YrnRoYarf17jNW2Qb2SMrLemvblNIB7nrfJttVCSmC0=";
+    hash = "sha256-BT3tw4gjqApyCagIYLFrci6eAgnjL+qYyQ5OZiRYjtY=";
   };
 
   nativeBuildInputs = [

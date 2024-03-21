@@ -36,13 +36,13 @@
 
 # tests
 , argon2-cffi
+, freezegun
 , mongoengine
 , mongomock
 , peewee
 , pony
 , pytestCheckHook
 , zxcvbn
-, freezegun
 }:
 
 buildPythonPackage rec {
@@ -98,6 +98,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     argon2-cffi
+    freezegun
     mongoengine
     mongomock
     peewee

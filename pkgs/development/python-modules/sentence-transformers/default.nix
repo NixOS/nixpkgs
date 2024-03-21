@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "2.2.2";
+  version = "2.5.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
-    rev = "v${version}";
-    hash = "sha256-hEYpDAL0lliaS1j+c5vaZ0q1hw802jfTUurx/FvgY9w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HIOizBf8YnPAj95cG1HopO9B/bhAmT0u3q5CM6POEjQ=";
   };
 
   propagatedBuildInputs = [

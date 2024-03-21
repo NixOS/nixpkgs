@@ -1,20 +1,47 @@
-{ lib, fetchPypi, buildPythonPackage, django }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+
+# build-system
+, setuptools
+
+# dependencies
+, django
+
+# tests
+, jinja2
+, pytest-django
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "django-csp";
-  version = "3.7";
-  format = "setuptools";
+  version = "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "django_csp";
-    sha256 = "01eda02ad3f10261c74131cdc0b5a6a62b7c7ad4fd017fbefb7a14776e0a9727";
+    hash = "sha256-7w8an32Nporm4WnALprGYcDs8E23Dg0dhWQFEqaEccA=";
   };
 
-  # too complicated to setup - needs a running django instance
-  doCheck = false;
+  postPatch = ''
+    sed -i "/addopts =/d" pyproject.toml
+  '';
 
-  propagatedBuildInputs = [ django ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    django
+  ];
+
+  nativeCheckInputs = [
+    jinja2
+    pytest-django
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Adds Content-Security-Policy headers to Django";

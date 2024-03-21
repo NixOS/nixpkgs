@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, cbor2
 , docopt
 , fetchFromGitHub
 , jsonconversion
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.11.3";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     # Test vectors require git submodule
     fetchSubmodules = true;
-    hash = "sha256-wA24ASd6+rTAqHNQ9ZGMnCK9ykJjogCtEWfrXY1B87o=";
+    hash = "sha256-L21FYl4Q+nhB3CU1maOxBHSLU+ox1POHtMio8SSZ/r0=";
   };
 
   postPatch = ''
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cbor2
     docopt
     pytestCheckHook
     tabulate

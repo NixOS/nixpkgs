@@ -234,18 +234,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    pytest-benchmark
     pytest-env
     filelock
     lxml
+  ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
-
-    # disable benchmarks
-    "benchmark/*"
   ];
   disabledTests = [
     # tests that attempt to make network requests

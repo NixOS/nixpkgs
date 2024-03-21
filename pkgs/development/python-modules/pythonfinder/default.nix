@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "2.0.6";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "sarugaku";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-C/Em8Vmv7q030hmH3jU/apBRSSC9QFK9mbBWjBjJHXg=";
+    hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
   };
 
   patches = [

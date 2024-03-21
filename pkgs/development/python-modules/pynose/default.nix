@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "pynose";
-  version = "1.4.8";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdmintz";
     repo = "pynose";
-    rev = "v${version}";
-    hash = "sha256-V6jZBEkEAKzClA/3s+Lyfm9xExgCEJbLCNnIHmZ94E4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Oi+vwInqgsdZfr5abJUa4zkTktpEuG0m89d1O8Oot0Q=";
   };
 
   nativeBuildInputs = [ setuptools ];
