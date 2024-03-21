@@ -14391,6 +14391,8 @@ self: super: with self; {
 
   sympy = callPackage ../development/python-modules/sympy { };
 
+  symspellpy = callPackage ../development/python-modules/symspellpy { };
+
   syncedlyrics = callPackage ../development/python-modules/syncedlyrics { };
 
   syncer = callPackage ../development/python-modules/syncer { };
