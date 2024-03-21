@@ -33,6 +33,6 @@ buildGoModule rec {
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kranurag7 ];
+    maintainers = with maintainers; [ kranurag7 devusb ];
   };
 }
