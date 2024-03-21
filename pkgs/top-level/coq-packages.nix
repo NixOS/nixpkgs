@@ -47,6 +47,7 @@ let
         })
       );
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
+      coqhammer-tactics = callPackage ../development/coq-modules/coqhammer-tactics {};
       coqide = callPackage ../development/coq-modules/coqide {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
