@@ -11158,7 +11158,12 @@ with pkgs;
 
   numberstation = callPackage ../applications/misc/numberstation { };
 
-  nvchecker = with python3Packages; toPythonApplication nvchecker;
+  nvchecker = with python3Packages; toPythonApplication (
+    nvchecker.overridePythonAttrs (oldAttrs: {
+      propagatedBuildInputs = oldAttrs.propagatedBuildInputs
+        ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
+    })
+  );
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
