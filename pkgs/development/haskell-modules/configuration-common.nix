@@ -2931,6 +2931,11 @@ self: super: {
   # Too strict bounds on mtl, servant and servant-client
   unleash-client-haskell = doJailbreak super.unleash-client-haskell;
 
+  # Requires a newer zlib version than stackage provides
+  futhark = super.futhark.override {
+    zlib = self.zlib_0_7_0_0;
+  };
+
   # Tests rely on (missing) submodule
   unleash-client-haskell-core = dontCheck super.unleash-client-haskell-core;
 
