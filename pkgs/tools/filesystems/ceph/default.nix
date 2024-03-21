@@ -239,6 +239,9 @@ let
           inherit version;
           hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
         };
+        pytestFlagsArray = [
+          "-W" "ignore::pytest.PytestRemovedIn8Warning"
+        ];
       });
 
       # Ceph does not support `kubernetes` >= 19, see:

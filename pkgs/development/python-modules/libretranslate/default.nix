@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.5.2";
+  version = "1.5.6";
 
   format = "setuptools";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8bbVpC53wH9GvwwHHlPEYQd/zqMXIqrwixwn4HY6FMg=";
+    hash = "sha256-43VnxgtapMRKyXxqsvBgSMUxvpbLI+iOfW3FA0/POpE=";
   };
 
   propagatedBuildInputs = [

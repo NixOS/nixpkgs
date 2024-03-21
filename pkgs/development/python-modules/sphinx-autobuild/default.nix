@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , colorama
 , sphinx
 , livereload
@@ -8,15 +9,20 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
-  version = "2021.3.14";
-  format = "setuptools";
+  version = "2024.2.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "de1ca3b66e271d2b5b5140c35034c89e47f263f2cd5db302c9217065f7443f05";
+    pname = "sphinx_autobuild";
+    inherit version;
+    hash = "sha256-y50hIaF21i1FRxYkhyr8X613Va1mJzir5ADs9KeVQwM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    flit-core
+  ];
+
+  dependencies = [
     colorama
     sphinx
     livereload
@@ -30,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rebuild Sphinx documentation on changes, with live-reload in the browser";
     mainProgram = "sphinx-autobuild";
-    homepage = "https://github.com/executablebooks/sphinx-autobuild";
+    homepage = "https://github.com/sphinx-doc/sphinx-autobuild";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [holgerpeters];
   };

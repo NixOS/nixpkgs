@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.5.0";
+  version = "5.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E+T8yZfQUJwzBtaEHwPpOBt+Xkayvr+ukVGvkAhfDCY=";
+    hash = "sha256-ortR4hIZdtkxNHs+QzkXw2S4P91fZO8nM2yGW/H7D3U=";
   };
 
   nativeBuildInputs = [

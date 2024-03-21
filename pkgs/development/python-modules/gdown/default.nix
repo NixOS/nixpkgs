@@ -2,6 +2,9 @@
 , beautifulsoup4
 , buildPythonPackage
 , fetchPypi
+, hatchling
+, hatch-vcs
+, hatch-fancy-pypi-readme
 , filelock
 , requests
 , tqdm
@@ -12,15 +15,21 @@
 
 buildPythonPackage rec {
   pname = "gdown";
-  version = "4.7.3";
-  format = "setuptools";
+  version = "5.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N+3DoO3aGn/l68xjHDqtBhJYJ2ZGBjDuUvSBuh7Hrv4=";
+    hash = "sha256-VQpy3FyigZ/kvMFdgNBdfJjAuQ5XJWJUt30CVrnfRoM=";
   };
+
+  build-system = [
+    hatchling
+    hatch-vcs
+    hatch-fancy-pypi-readme
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, flit-core
 , marshmallow
 , packaging
 , sqlalchemy
@@ -11,15 +12,20 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "0.30.0";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ka0KT9G0oeUtywf5Zz0oSmsHlRQZFswhadTuml0Ac0c=";
+    pname = "marshmallow_sqlalchemy";
+    inherit version;
+    hash = "sha256-IKDy/N1b3chkRPoBRh8X+bahKo3dTKjJs0/i8uNdAKI=";
   };
+
+  build-system = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     marshmallow

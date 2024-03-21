@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.12.6";
+  version = "0.12.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VYD1OrerqwzjaT1Eb6q+kryf15iHCMSHJZbon225bio=";
+    hash = "sha256-e4VEEudsdtfC2ek8wODxxoFuaOwl4GKS1cX3QeshuD8=";
   };
 
   nativeBuildInputs = [

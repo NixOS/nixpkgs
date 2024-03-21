@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "11.0.1";
+  version = "13.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-eeUjtRsP3c6fbGMJ+oxkMou3BrLWyEelP4ipPQFpXkM=";
+    hash = "sha256-gzeAyrfgVwNLNSeGIDr5TyGvywCUy+1gEEcfXcIaX5E=";
   };
 
   postPatch = ''
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Network access
     "test_validate_ping"
+    "test_logging"
     # Fails since yamllint 1.27.x
     "test_yaml_lint"
   ];

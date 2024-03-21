@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dm-sonnet";
-  version = "2.0.0";
+  version = "2.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "sonnet";
-    rev = "v${version}";
-    hash = "sha256-YSMeH5ZTfP1OdLBepsxXAVczBG/ghSjCWjoz/I+TFl8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WkloUbqSyPG3cbLG8ktsjdluACkCbUZ7t6rYWst8rs8=";
   };
 
   patches = [

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-zbar";
-  version = "0.23.90";
+  version = "0.23.93";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
-    rev = version;
-    hash = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
   };
 
   patches = [

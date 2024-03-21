@@ -7,6 +7,7 @@
 , poetry-core
 , pydantic
 , pyjwt
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nPXs6thXAshDojgHSNyEeBN/jNJkfFECSuY5f51Zozo=";
+    hash = "sha256-/xFBA30MZq8t0rYFympzgaymqZ/bFEpOoko7dDJLI7A=";
   };
 
   pythonRelaxDeps = [
@@ -70,6 +71,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [

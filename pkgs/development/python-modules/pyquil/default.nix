@@ -15,7 +15,6 @@
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , pythonRelaxDepsHook
 , qcs-sdk-python
@@ -31,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.6.1";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -40,12 +39,8 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "pyquil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-93dHujgGEh9/r9epAiUcUCiFCG7SFTAFoQbjQwwKhN0=";
+    hash = "sha256-jzQv9XBJSxdpSWDEEPuHwYfIemelpmVKJUigpz6NWdo=";
   };
-
-  patches = [
-    ./pydantic.patch
-  ];
 
   pythonRelaxDeps = [
     "lark"

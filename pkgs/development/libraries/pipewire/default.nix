@@ -58,6 +58,7 @@
 , avahi
 , raopSupport ? true
 , openssl
+, opusSupport ? true
 , rocSupport ? true
 , roc-toolkit
 , x11Support ? true
@@ -65,7 +66,6 @@
 , xorg
 , mysofaSupport ? true
 , libmysofa
-, tinycompress
 , ffadoSupport ? x11Support && stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
 , libselinux
@@ -76,7 +76,7 @@ assert ldacbtSupport -> bluezSupport;
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "pipewire";
-  version = "1.0.3";
+  version = "1.0.4";
 
   outputs = [
     "out"
@@ -92,7 +92,7 @@ stdenv.mkDerivation(finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-QVw7Q+RNo8BBy/uxoZeSQQn/vQcIl1bOiA9fYMR0+oI=";
+    sha256 = "sha256-LROI1rGQELlGXkapX3XfDqB7Rc5YAOdCwaMQUG/iU8c=";
   };
 
   patches = [
@@ -126,20 +126,20 @@ stdenv.mkDerivation(finalAttrs: {
     ncurses
     readline
     udev
-    tinycompress
   ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
   ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
   ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
-  ++ lib.optionals libcameraSupport [ libcamera libdrm ]
+  ++ lib.optionals libcameraSupport [ libcamera ]
   ++ lib.optional ffmpegSupport ffmpeg
   ++ lib.optionals bluezSupport [ bluez libfreeaptx liblc3 sbc fdk_aac libopus ]
   ++ lib.optional ldacbtSupport ldacbt
   ++ lib.optional nativeModemManagerSupport modemmanager
+  ++ lib.optional opusSupport libopus
   ++ lib.optional pulseTunnelSupport libpulseaudio
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
   ++ lib.optional rocSupport roc-toolkit
-  ++ lib.optionals vulkanSupport [ vulkan-headers vulkan-loader ]
+  ++ lib.optionals vulkanSupport [ libdrm vulkan-headers vulkan-loader ]
   ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
   ++ lib.optional mysofaSupport libmysofa
   ++ lib.optional ffadoSupport ffado;
@@ -162,6 +162,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "systemd-system-service" enableSystemd)
     (lib.mesonEnable "udev" (!enableSystemd))
     (lib.mesonEnable "ffmpeg" ffmpegSupport)
+    (lib.mesonEnable "pw-cat-ffmpeg" ffmpegSupport)
     (lib.mesonEnable "bluez5" bluezSupport)
     (lib.mesonEnable "bluez5-backend-hsp-native" nativeHspSupport)
     (lib.mesonEnable "bluez5-backend-hfp-native" nativeHfpSupport)
@@ -172,6 +173,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" ldacbtSupport)
+    (lib.mesonEnable "opus" opusSupport)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
     (lib.mesonOption "session-managers" "")

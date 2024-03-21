@@ -20,14 +20,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.13.3";
+  version = "0.13.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
     rev = "refs/tags/pyqtgraph-${version}";
-    hash = "sha256-kFTNhv8pgIRSJX0ePmp1I0+MGfCaW8b86baIYZ2bZQM=";
+    hash = "sha256-KVgsfvaVbR3eMRNqhJSBO4Hfk7KJgMdsZjKffx6vt84=";
   };
 
   nativeBuildInputs = [

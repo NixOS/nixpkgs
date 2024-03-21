@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "textual"
     "tzlocal"
   ];
 

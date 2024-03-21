@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , openssl
+, setuptools
 , cryptography
 , pytestCheckHook
 , pretend
@@ -13,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "23.3.0";
-  format = "setuptools";
+  version = "24.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    hash = "sha256-ayy6XMRugidQ7D5age4SgZhQsRMDYw1XXpgQigecKxI=";
+    hash = "sha256-aqMwOak//6RWPmVbYdETZNASZL6My0mQYQHgKjNFML8=";
   };
 
   outputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     openssl
+    setuptools
     sphinxHook
     sphinx-rtd-theme
   ];

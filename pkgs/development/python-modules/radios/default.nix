@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , poetry-core
+, pythonRelaxDepsHook
 , aiodns
 , aiohttp
 , awesomeversion
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "radios";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-radios";
     rev = "v${version}";
-    hash = "sha256-bzo+SA8kqc2GcxSV0TiIJyPVG+JshdsMoXSUhZYSphU=";
+    hash = "sha256-c0zfpfEdZvjvKtwGcNLLgEkBihhtz/wouHuYRLCxtBY=";
   };
 
   postPatch = ''
@@ -40,6 +41,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pycountry"
   ];
 
   propagatedBuildInputs = [
@@ -65,6 +71,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/frenck/python-radios/releases/tag/v${version}";
     description = "Asynchronous Python client for the Radio Browser API";
     homepage = "https://github.com/frenck/python-radios";
     license = licenses.mit;

@@ -12,6 +12,7 @@
 , psutil
 , pydantic
 , pytestCheckHook
+, pytest_7
 , pytest-cases
 , pytest-cov
 , pytest-xdist
@@ -65,7 +66,7 @@ buildPythonPackage rec {
     google-cloud-storage
     psutil
     pydantic
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     pytest-cases
     pytest-cov
     pytest-xdist

@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "manifest-ml";
-  version = "0.1.8";
+  version = "0.1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "HazyResearch";
     repo = "manifest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d34TIZYDB8EDEIZUH5mDzfDHzFT290DwjPLJkNneklc=";
+    hash = "sha256-6m1XZOXzflBYyq9+PinbrW+zqvNGFN/aRDHH1b2Me5E=";
   };
 
   __darwinAllowLocalNetworking = true;
