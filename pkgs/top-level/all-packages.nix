@@ -428,6 +428,9 @@ with pkgs;
 
   cartridges = callPackage ../applications/misc/cartridges { };
 
+  calico = callPackage ../tools/networking/calico { };
+  calicoctl = callPackage ../tools/networking/calico/calicoctl.nix { };
+
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml { };
