@@ -34572,6 +34572,8 @@ with pkgs;
 
   udiskie = callPackage ../applications/misc/udiskie { };
 
+  saber = callPackage ../applications/graphics/saber { };
+
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
   savvycan = libsForQt5.callPackage ../applications/networking/sniffers/savvycan {};
