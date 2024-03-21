@@ -146,6 +146,7 @@ in {
   bees = handleTest ./bees.nix {};
   binary-cache = handleTest ./binary-cache.nix {};
   bind = handleTest ./bind.nix {};
+  bind-test-module-test = runTest ./common/bind-dns-test.nix;
   bird = handleTest ./bird.nix {};
   birdwatcher = handleTest ./birdwatcher.nix {};
   bitcoind = handleTest ./bitcoind.nix {};
