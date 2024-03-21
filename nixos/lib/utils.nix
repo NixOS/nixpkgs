@@ -1,6 +1,7 @@
 { lib, config, pkgs }: with lib;
 
-rec {
+let
+utils = rec {
 
   # Copy configuration files to avoid having the entire sources in the system closure
   copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
@@ -227,11 +228,12 @@ rec {
       lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
 
   systemdUtils = {
-    lib = import ./systemd-lib.nix { inherit lib config pkgs; };
+    lib = import ./systemd-lib.nix { inherit lib config pkgs utils; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
     network = {
       units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
     };
   };
-}
+};
+in utils
