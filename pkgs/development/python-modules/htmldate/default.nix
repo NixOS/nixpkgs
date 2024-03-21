@@ -1,27 +1,33 @@
 { lib
+, backports-datetime-fromisoformat
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
 , charset-normalizer
 , dateparser
+, faust-cchardet
+, fetchPypi
 , lxml
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
+, setuptools
 , urllib3
-, backports-datetime-fromisoformat
 }:
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AqgA3SJMv3S/SDsEL2ThT1e6DkDGtEBLKE6YvGwwto0=";
+    hash = "sha256-+Ux9AX9Coc9CLlp8XvEMrLridohjFPJ6mGRkYn8wuxU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     charset-normalizer
@@ -32,6 +38,21 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.7") [
     backports-datetime-fromisoformat
   ];
+
+  passthru.optional-dependencies = {
+    speed = [
+      faust-cchardet
+      urllib3
+    ] ++ lib.optionals (pythonOlder "3.11") [
+      backports-datetime-fromisoformat
+    ] ++ urllib3.optional-dependencies.brotli;
+    all = [
+      faust-cchardet
+      urllib3
+    ] ++ lib.optionals (pythonOlder "3.11") [
+      backports-datetime-fromisoformat
+    ] ++ urllib3.optional-dependencies.brotli;
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -44,14 +65,16 @@ buildPythonPackage rec {
     "test_download"
   ];
 
-  pythonImportsCheck = [ "htmldate" ];
+  pythonImportsCheck = [
+    "htmldate"
+  ];
 
   meta = with lib; {
-    description = "Fast and robust extraction of original and updated publication dates from URLs and web pages";
-    mainProgram = "htmldate";
+    description = "Module for the extraction of original and updated publication dates from URLs and web pages";
     homepage = "https://htmldate.readthedocs.io";
     changelog = "https://github.com/adbar/htmldate/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jokatzke ];
+    mainProgram = "htmldate";
   };
 }
