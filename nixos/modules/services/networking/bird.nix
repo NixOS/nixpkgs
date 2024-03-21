@@ -65,7 +65,7 @@ in
     environment.etc."bird/bird2.conf".source = pkgs.writeTextFile {
       name = "bird2";
       text = cfg.config;
-      checkPhase = optionalString cfg.checkConfig ''
+      derivationArgs.installCheckPhase = optionalString cfg.checkConfig ''
         ln -s $out bird2.conf
         ${cfg.preCheckConfig}
         ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf
