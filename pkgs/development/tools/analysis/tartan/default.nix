@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, llvmPackages
+, llvmPackages_16
 , gobject-introspection
 , glib
 , unstableGitUpdater
@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tartan";
-  version = "unstable-2021-12-23";
+  version = "unstable-2023-05-15";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "tartan";
     repo = "tartan";
-    rev = "bd4ea95d8b3ce1258491e9fac7fcc37d2b241a16";
-    sha256 = "l3duPt8Kh/JljzOV+Dm26XbS7gZ+mmFfYUYofWSJRyo=";
+    rev = "6757cd29b5a33cf9496664cb03c6f4e61f150f19";
+    sha256 = "f3I12zjkF7pfVCE+TTJMWh3Jg6fHFwjDcp2AWtmTpao=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gobject-introspection
     glib
-    llvmPackages.libclang
-    llvmPackages.libllvm
+    llvmPackages_16.libclang
+    llvmPackages_16.libllvm
   ];
 
   passthru = {
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       # The updater tries src.url by default, which does not exist for fetchFromGitLab (fetchurl).
       url = "https://gitlab.freedesktop.org/tartan/tartan.git";
     };
+
+    llvmPackages = llvmPackages_16;
   };
 
   meta = with lib; {
