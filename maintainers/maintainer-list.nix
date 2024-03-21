@@ -5612,6 +5612,16 @@
     githubId = 5737945;
     name = "Elia Argentieri";
   };
+  elise = {
+      name = "Elise Amber Katze";
+      email = "nix@katze.sh";
+      matrix = "@elise:katze.sh";
+      github = "EliseZeroTwo";
+      githubId = 42453798;
+      keys = [{
+        fingerprint = "2E09 8C8A BC51 9D6A E4B1  BB1E FA8F 56FF FE6E 8B3E";
+      }];
+    };
   elisesouche = {
     email = "elise@souche.one";
     github = "elisesouche";
