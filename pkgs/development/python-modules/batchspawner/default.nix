@@ -6,6 +6,8 @@
 , jinja2
 , jupyterhub
 , pythonOlder
+, pytest-asyncio
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -32,8 +34,15 @@ buildPythonPackage rec {
     jupyterhub
   ];
 
-  # Tests require a job scheduler e.g. slurm, pbs, etc.
-  doCheck = false;
+  preCheck = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=batchspawner" ""
+  '';
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "batchspawner"
