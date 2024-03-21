@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_perl";
-  version = "2.0.12";
+  version = "2.0.13";
 
   src = fetchurl {
     url = "mirror://apache/perl/${pname}-${version}.tar.gz";
-    sha256 = "sha256-9bghtZsP3JZw5G7Q/PMtiRHyUSYYmotowWUvkiHu4mk=";
+    sha256 = "sha256-reO+McRHuESIaf7N/KziWNbVh7jGx3PF8ic19w2C1to=";
   };
 
   buildInputs = [
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     };
     tests = nixosTests.mod_perl;
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Integration of perl with the Apache2 web server";
