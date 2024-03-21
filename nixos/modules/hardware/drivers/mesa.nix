@@ -22,7 +22,7 @@ in
   };
 
   config = mkIf this.enable {
-    hardware.acceleration = genAttrs (this.package pkgs).passthru.apis (name: if true then { } else {
+    hardware.acceleration.api = genAttrs (this.package pkgs).passthru.apis (name: {
       drivers.mesa = this.package;
     });
   };

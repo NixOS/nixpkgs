@@ -1,12 +1,14 @@
-{ lib, ... }:
+{ lib, config, ... }:
 
 let
-  inherit (lib) mkEnableOption mkOption;
-  inherit (lib.types) attrsOf functionTo package;
+  inherit (lib) mkEnableOption mkOption mkIf attrValues filterAttrs;
+  inherit (lib.types) attrsOf nullOr packageSelector;
+
+  this = config.hardware.acceleration.api.opengl;
 in
 
 {
-  options.hardware.acceleration.opengl = {
+  options.hardware.acceleration.api.opengl = {
     enable = mkEnableOption ''
       the Open Graphics Layer acceleration API.
 
@@ -14,12 +16,12 @@ in
     '';
 
     drivers = mkOption {
-      # type = attrsOf (submodule {
-      #   options = {
-      #     "64" =
-      #   };
-      # });
-      # type = attrsOf (functionTo package);
+      default = { };
+      type = attrsOf (nullOr (packageSelector));
     };
+  };
+
+  config = mkIf this.enable {
+    hardware.acceleration.packages = attrValues (filterAttrs (n: v: v != null) this.drivers);
   };
 }

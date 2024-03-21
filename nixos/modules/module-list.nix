@@ -46,6 +46,8 @@
   ./config/xdg/sounds.nix
   ./config/xdg/terminal-exec.nix
   ./config/zram.nix
+  ./hardware/acceleration/default.nix
+  ./hardware/acceleration/opengl.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
@@ -61,6 +63,7 @@
   ./hardware/decklink.nix
   ./hardware/device-tree.nix
   ./hardware/digitalbitbox.nix
+  ./hardware/drivers/mesa.nix
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
   ./hardware/gkraken.nix
@@ -1730,8 +1733,6 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
-  ./hardware/drivers/mesa.nix
-  ./hardware/acceleration/opengl.nix
   {
     documentation.nixos.extraModules = [
       ./virtualisation/qemu-vm.nix
