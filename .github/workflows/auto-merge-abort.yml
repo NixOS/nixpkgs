@@ -1,0 +1,26 @@
+# This action aborts auto-merging by removing the label
+# when changes are pushed.
+
+name: "abort auto merge"
+
+on:
+  pull_request_target:
+    types: [synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  auto-merge-abort:
+    permissions:
+      contents: write
+      pull-requests: write
+    name: abort auto merge
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == false && contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove label on new commits
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: auto-merge
