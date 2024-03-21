@@ -9,7 +9,7 @@
 let
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  version = "2023.9-b110";
+  version = "2024.3-b148";
 
   arches = {
     aarch64-linux = "arm64";
@@ -19,8 +19,8 @@ let
   arch = arches.${stdenv.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
-    arm64 = "sha256-LWutD2pOJxCipG3ILHQfwl2bCDCy+cdtHCJ7+9BdsYc=";
-    x64 = "sha256-2fLUVg5afBcNqH9suVqRWoqVVESQOIFurWhYHQuuayo=";
+    arm64 = "sha256-2nQb/Tx3zJco+/Lw4DvonTH1W+jRs/ehSxdzsyCC4gA=";
+    x64 = "sha256-DxgH21bOJw3qFrVDJpYZGSvT5a+Qk7vl329Gik4EoRg=";
   };
 
   desktopItem = makeDesktopItem {
@@ -56,18 +56,18 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -pr bin lib license.html license-redist.txt probes samples $out
     cp ${./forbid-desktop-item-creation} $out/bin/forbid-desktop-item-creation
-    for i in attach integrate; do
-        substituteInPlace $out/bin/$i.sh \
-            --replace profiler.sh yourkit-java-profiler
-    done
-    for i in attach integrate profiler; do
-        mv $out/bin/$i.sh $out/bin/yourkit-java-$i
-    done
+    mv $out/bin/profiler.sh $out/bin/yourkit-java-profiler
     mkdir -p $out/share/icons
     convert $out/bin/profiler.ico\[0] \
             -size 256x256 \
             $out/share/icons/yourkit-java-profiler.png
     rm $out/bin/profiler.ico
+    rm -rf $out/bin/{windows-*,mac,linux-{*-32,musl-*,ppc-*}}
+    if [[ ${arch} = x64 ]]; then
+      rm -rf $out/bin/linux-arm-64
+    else
+      rm -rf $out/bin/linux-x86-64
+    fi
     substituteInPlace $out/bin/yourkit-java-profiler \
         --replace 'JAVA_EXE="$YD/jre64/bin/java"' JAVA_EXE=${jre}/bin/java
     # Use our desktop item, which will be purged when this package
