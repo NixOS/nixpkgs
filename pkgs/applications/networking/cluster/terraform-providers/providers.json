@@ -970,13 +970,13 @@
     "vendorHash": null
   },
   "project": {
-    "hash": "sha256-ZE3OW83tz2DfcwFn8KfZZYQuWdl335zJecC3Qzn0xPg=",
+    "hash": "sha256-eXieWiwDzTkOVvrjjnG8i8ke7mMTjluq5zEtiZqfiOA=",
     "homepage": "https://registry.terraform.io/providers/jfrog/project",
     "owner": "jfrog",
     "repo": "terraform-provider-project",
-    "rev": "v1.4.0",
+    "rev": "v1.5.1",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-i7wota4ezfBA2AoSGO8OdbJcZQizXrPRJYE/WJSTFss="
+    "vendorHash": "sha256-bJ6+i7fZ6PsUcwjwJKiMC10I44bojIifI7eWUhdT1Bw="
   },
   "proxmox": {
     "hash": "sha256-ikXLLNoAjrnGGGI3fHTKFXm8YwqNazE/U39JTjOBsW4=",
