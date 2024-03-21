@@ -33868,6 +33868,8 @@ with pkgs;
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client { };
 
+  vgc = qt5.callPackage ../applications/graphics/vgc { };
+
   opentoonz = let
     opentoonz-libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
   in qt5.callPackage ../applications/graphics/opentoonz {
