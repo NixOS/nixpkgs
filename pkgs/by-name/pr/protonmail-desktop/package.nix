@@ -1,33 +1,74 @@
 { lib
-, stdenv
+, mkYarnPackage
 , fetchurl
 , makeWrapper
-, dpkg
 , electron
-}:
+, zip
+, unzip
+, runCommandNoCC
+, git
+}: let
+  electronZip = runCommandNoCC "electronZip-${electron.version}" { buildInputs = [ electron zip ]; }
+  ''
+    cp -r ${electron}/libexec/electron/ .
+    chmod -R 777 .
+    mkdir -p $out
+    zip -r $out/electron-v29.0.1-linux-x64.zip .
+  '';
 
-let
   mainProgram = "proton-mail";
-in stdenv.mkDerivation rec {
-  pname = "protonmail-desktop";
   version = "1.0.2";
 
+in mkYarnPackage {
+  pname = "protonmail-desktop";
+  inherit version;
+
   src = fetchurl {
-    url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/proton-mail_${version}_amd64.deb";
-    hash = "sha256-c+0iFBpcg+t983oOttPokA5sLGsIQFIsC+GbsVY6hmI=";
+    url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/desktop-release-${version}.zip";
+    hash = lib.fakeHash;
   };
 
-  dontConfigure = true;
-  dontBuild = true;
+  nativeBuildInputs = [
+    electron
+    # fakeroot
+    makeWrapper
+    zip
+    unzip
+    git
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+    # nodePackages."@electron-forge/cli"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    cp -r usr/share/ $out/
-    cp -r usr/lib/proton-mail/resources/app.asar $out/share/
-    runHook postInstall
+  env = {
+    DEBUG = "electron-forge:electron-packager";
+    # ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    ELECTRON_OVERRIDE_DIST_PATH = "${electron}/bin/";
+  };
+
+  /*packageJSON = "$src/package.json";
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = "$/yarn.lock";
+    hash = lib.fakeHash;
+  };
+
+  # yarnPreBuild = "";
+  # yarnPostBuild = "";*/
+
+  buildPhase = ''
+    # set -x
+
+    pushd deps/proton-mail
+    rm proton-mail
+
+    substituteInPlace forge.config.ts \
+      --replace-fail "@ELECTRON_ZIP@" "${electronZip}"
+
+    popd
+
+    export HOME=$(mktemp -d)
+    # ./node_modules/.bin/electron-forge package -a x64 -p linux
+    yarn --offline run package -a x64 -p linux
   '';
 
   preFixup = ''
@@ -39,13 +80,13 @@ in stdenv.mkDerivation rec {
       --inherit-argv0
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application for Mail and Calendar, made with Electron";
     homepage = "https://github.com/ProtonMail/inbox-desktop";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rsniezek sebtm ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rsniezek sebtm ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     inherit mainProgram;
   };
 }
