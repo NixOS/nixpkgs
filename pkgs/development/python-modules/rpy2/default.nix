@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , isPyPy
 , R
 , rWrapper
@@ -38,6 +39,12 @@ buildPythonPackage rec {
       # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
       # This patch sets R_LIBS_SITE when rpy2 is imported.
       ./rpy2-3.x-r-libs-site.patch
+
+      # https://github.com/rpy2/rpy2/pull/1094
+      (fetchpatch {
+        url = "https://github.com/rpy2/rpy2/commit/026d069a008163a62d12567bcb938410d0f9bf7a.diff";
+        hash = "sha256-x778upSY3zab5EiRyOcsbDpPj7vN/7XzefEs+wvkNg0=";
+      })
     ];
 
     postPatch = ''
@@ -81,10 +88,6 @@ buildPythonPackage rec {
     ];
 
     doCheck = !stdenv.isDarwin;
-
-    # newlines in environment variables are a problem due to
-    # https://github.com/rpy2/rpy2/issues/1066
-    preCheck = "unset postPatch";
 
     nativeCheckInputs = [
       pytestCheckHook
