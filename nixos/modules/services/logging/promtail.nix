@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with lib;
+{ config, lib, utils, pkgs, ... }: with lib;
 let
   cfg = config.services.promtail;
 
@@ -45,7 +45,7 @@ in {
         Restart = "on-failure";
         TimeoutStopSec = 10;
 
-        ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${utils.escapeSystemdExecArgs cfg.extraFlags}";
 
         ProtectSystem = "strict";
         ProtectHome = true;

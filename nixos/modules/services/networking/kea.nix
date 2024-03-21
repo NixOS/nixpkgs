@@ -1,5 +1,6 @@
 { config
 , lib
+, utils
 , pkgs
 , ...
 }:
@@ -299,7 +300,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.ctrl-agent.extraArgs}";
+        ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${utils.escapeSystemdExecArgs cfg.ctrl-agent.extraArgs}";
         KillMode = "process";
         Restart = "on-failure";
       } // commonServiceConfig;
@@ -342,7 +343,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${package}/bin/kea-dhcp4 -c /etc/kea/dhcp4-server.conf ${lib.escapeShellArgs cfg.dhcp4.extraArgs}";
+        ExecStart = "${package}/bin/kea-dhcp4 -c /etc/kea/dhcp4-server.conf ${utils.escapeSystemdExecArgs cfg.dhcp4.extraArgs}";
         # Kea does not request capabilities by itself
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
@@ -392,7 +393,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${package}/bin/kea-dhcp6 -c /etc/kea/dhcp6-server.conf ${lib.escapeShellArgs cfg.dhcp6.extraArgs}";
+        ExecStart = "${package}/bin/kea-dhcp6 -c /etc/kea/dhcp6-server.conf ${utils.escapeSystemdExecArgs cfg.dhcp6.extraArgs}";
         # Kea does not request capabilities by itself
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
@@ -438,7 +439,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${package}/bin/kea-dhcp-ddns -c /etc/kea/dhcp-ddns.conf ${lib.escapeShellArgs cfg.dhcp-ddns.extraArgs}";
+        ExecStart = "${package}/bin/kea-dhcp-ddns -c /etc/kea/dhcp-ddns.conf ${utils.escapeSystemdExecArgs cfg.dhcp-ddns.extraArgs}";
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
         ];

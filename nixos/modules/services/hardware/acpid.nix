@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -135,7 +135,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeShellArgs
+        ExecStart = utils.escapeSystemdExecArgs
           ([ "${pkgs.acpid}/bin/acpid"
              "--foreground"
              "--netlink"

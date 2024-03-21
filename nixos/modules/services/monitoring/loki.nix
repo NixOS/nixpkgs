@@ -1,7 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 let
-  inherit (lib) escapeShellArgs mkEnableOption mkIf mkOption types;
+  inherit (lib) mkEnableOption mkIf mkOption types;
 
   cfg = config.services.loki;
 
@@ -101,7 +101,7 @@ in {
                else cfg.configFile;
       in
       {
-        ExecStart = "${cfg.package}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/loki --config.file=${conf} ${utils.escapeSystemdExecArgs cfg.extraFlags}";
         User = cfg.user;
         Restart = "always";
         PrivateTmp = true;
