@@ -21,6 +21,7 @@
 , libpng
 , libxml2
 , protobuf
+, xvfb-run
 , dedicatedServer ? false
 }:
 
@@ -61,6 +62,7 @@ let
         extraBuildInputs = [ protobuf boost ]
           ++ lib.optionals (!dedicatedServer) [ glew ftgl freetype SDL2 SDL2_image SDL2_mixer ];
         extraNativeBuildInputs = [ bison ];
+        extraNativeInstallCheckInputs = lib.optionals (!dedicatedServer) [ xvfb-run ];
       };
 
     # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
@@ -134,6 +136,8 @@ let
       nativeBuildInputs = [ autoconf automake gnum4 pkg-config which python3 ]
         ++ (resolvedParams.extraNativeBuildInputs or []);
 
+      nativeInstallCheckInputs = resolvedParams.extraNativeInstallCheckInputs or [];
+
       postInstall = lib.optionalString (!dedicatedServer) ''
         mkdir -p $out/share/{applications,icons/hicolor}
         ln -s $out/share/games/armagetronad/desktop/armagetronad*.desktop $out/share/applications/
@@ -145,9 +149,14 @@ let
       installCheckPhase = ''
         export XDG_RUNTIME_DIR=/tmp
         bin="$out/bin/${mainProgram}"
-        version="$("$bin" --version || true)"
-        prefix="$("$bin" --prefix || true)"
-        rubber="$("$bin" --doc | grep -m1 CYCLE_RUBBER)"
+        if command -v xvfb-run &>/dev/null; then
+          run="xvfb-run $bin"
+        else
+          run="$bin"
+        fi
+        version="$($run --version || true)"
+        prefix="$($run --prefix || true)"
+        rubber="$($run --doc | grep -m1 CYCLE_RUBBER)"
 
         echo "Version: $version" >&2
         echo "Prefix: $prefix" >&2
