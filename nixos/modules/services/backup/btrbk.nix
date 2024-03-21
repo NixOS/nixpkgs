@@ -73,7 +73,7 @@ let
   mkConfigFile = name: settings: pkgs.writeTextFile {
     name = "btrbk-${name}.conf";
     text = genConfig' (addDefaults settings);
-    checkPhase = ''
+    derivationArgs.installCheckPhase = ''
       set +e
       ${pkgs.btrbk}/bin/btrbk -c $out dryrun
       # According to btrbk(1), exit status 2 means parse error
