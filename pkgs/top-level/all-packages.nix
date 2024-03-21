@@ -23568,6 +23568,8 @@ with pkgs;
 
   taco = callPackage ../development/libraries/taco { };
 
+  togl = callPackage ../development/libraries/togl { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
@@ -38179,6 +38181,8 @@ with pkgs;
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
 
   wxmacmolplt = callPackage ../applications/science/chemistry/wxmacmolplt { };
+
+  xcrysden = callPackage ../applications/science/chemistry/xcrysden { };
 
   ### SCIENCE/GEOMETRY
 
