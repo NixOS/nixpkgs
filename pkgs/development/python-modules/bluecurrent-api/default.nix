@@ -28,8 +28,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonRemoveDeps = [
-    "asyncio"
+  pythonRelaxDeps = [
+    "pytz"
   ];
 
   propagatedBuildInputs = [
