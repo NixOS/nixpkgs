@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.podgrab;
+
+  stateDir = "/var/lib/podgrab";
 in
 {
   options.services.podgrab = with lib; {
@@ -23,6 +25,13 @@ in
       description = "The port on which Podgrab will listen for incoming HTTP traffic.";
     };
 
+    dataDirectory = mkOption {
+      type = types.path;
+      default = "${stateDir}/data";
+      example = "/mnt/podcasts";
+      description = "Directory to store downloads.";
+    };
+
     user = mkOption {
       type = types.str;
       default = "podgrab";
@@ -37,12 +46,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.settings."10-pyload" = {
+      ${cfg.dataDirectory}.d = { inherit (cfg) user group; };
+    };
+
     systemd.services.podgrab = {
       description = "Podgrab podcast manager";
       wantedBy = [ "multi-user.target" ];
       environment = {
-        CONFIG = "/var/lib/podgrab/config";
-        DATA = "/var/lib/podgrab/data";
+        CONFIG = "${stateDir}/config";
+        DATA = cfg.dataDirectory;
         GIN_MODE = "release";
         PORT = toString cfg.port;
       };
@@ -54,7 +67,7 @@ in
         ];
         ExecStart = "${pkgs.podgrab}/bin/podgrab";
         WorkingDirectory = "${pkgs.podgrab}/share";
-        StateDirectory = [ "podgrab/config" "podgrab/data" ];
+        StateDirectory = [ "podgrab/config" ];
       };
     };
 
