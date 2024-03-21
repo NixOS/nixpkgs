@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${finalAttrs.pname} ChangeLog README TODO
+    install -Dm444 -t $out/share/doc/mscompress ChangeLog README TODO
   '';
 
   meta = with lib; {
