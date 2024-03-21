@@ -479,7 +479,7 @@ in
           CapabilityBoundingSet = [ "" ];
           DevicePolicy = "closed";
           LockPersonality = true;
-          MemoryDenyWriteExecute = true;
+          MemoryDenyWriteExecute = false; # required by pdftk
           NoNewPrivileges = true;
           PrivateDevices = true;
           PrivateTmp = true;
