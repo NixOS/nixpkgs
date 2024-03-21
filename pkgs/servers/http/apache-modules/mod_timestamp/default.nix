@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_timestamp";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchurl {
     url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
-    sha256 = "1p18mgxx2ainfrc2wm27rl3lh6yl0ihx6snib60jnp694587bfwg";
+    hash = "sha256-X49gJ1wQtwQT3GOZkluxdMIY2ZRpM9Y7DZln6Ag9DvM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     aprutil
     mod_ca
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=int-conversion"
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   inherit (mod_ca) configureFlags installFlags;
 
