@@ -16539,9 +16539,7 @@ with pkgs;
     targetLlvm = targetPackages.llvmPackages_17.llvm or llvmPackages_17.llvm;
   }));
 
-  lorri = callPackage ../tools/misc/lorri {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  lorri = callPackageWithExtraSet "darwin.apple_sdk.frameworks" ../tools/misc/lorri { };
 
   lunarml = callPackage ../development/compilers/lunarml { };
 
