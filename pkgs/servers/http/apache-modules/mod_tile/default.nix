@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    rev = "v${version}";
-    hash = "sha256-jDuOcmKzZGU6L0aOfPKRGpDLbX0O9ueTufBy7Bd6KMU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zXUwTG8cqAkY5MC1jAc2TtMgNMQPLc5nc22okVYP4ME=";
   };
 
   nativeBuildInputs = [
