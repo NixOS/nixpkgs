@@ -1204,6 +1204,7 @@ mapAliases ({
   tokodon = plasma5Packages.tokodon;
   tokyo-night-gtk = tokyonight-gtk-theme; # Added 2024-01-28
   tootle = throw "'tootle' has been removed as it is not maintained upstream. Consider using 'tuba' instead"; # Added 2024-02-11
+  tomcat_connectors = throw "'tomcat_connectors' has been renamed to 'apacheHttpdPackages.mod_jk'"; # Added 2024-03-21
   tor-browser-bundle-bin = tor-browser; # Added 2023-09-23
   transfig = fig2dev; # Added 2022-02-15
   transifex-client = transifex-cli; # Added 2023-12-29
