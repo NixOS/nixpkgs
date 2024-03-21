@@ -1,36 +1,98 @@
 { lib
-, stdenv
+, mkYarnPackage
 , fetchurl
 , makeWrapper
-, dpkg
 , electron
-}:
-
-let
-  mainProgram = "proton-mail";
-in stdenv.mkDerivation rec {
-  pname = "protonmail-desktop";
-  version = "1.0.1";
-
+, zip
+, unzip
+, runCommandNoCC
+, fetchYarnDeps
+, yarn
+, git
+}: let
   src = fetchurl {
-    url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/proton-mail_${version}_amd64.deb";
-    hash = "sha256-fNK//x3DOsynWSkG9N+nZ3wjYoC+RreaYVC6KEDXh4w=";
+    url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v1.0.1/desktop-release-1.0.1.zip";
+    hash = "sha256-VChmz3SRcQzZL6p+MIIreQ3uzdKcpovi4safL1+pPss=";
   };
 
-  dontConfigure = true;
-  dontBuild = true;
+  sourceExtracted = runCommandNoCC "protonmail-desktop-${version}" { buildInputs = [ electron unzip yarn ]; } ''
+    unzip ${src} -d .
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+    pushd desktop-release-${version}
 
-  unpackPhase = ''
-    dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
+    # Remove electron to not have it in the offline-cache as it's not used so far and only blows the build
+    # sed -i '/"electron"/d' desktop-release-${version}/package.json
+    sed -i 's/"electron": ?"(.*)"(,?)/"electron": "${electron.version}"$2/' package.json
+    export HOME=$(mktemp -d)
+    yarn --offline generate-lock-entry
+
+    popd
+
+    mkdir -p $out
+    mv desktop-release-${version}/* $out
+    mv desktop-release-${version}/.* $out
+    cp -f ${./forge.config.ts} $out/forge.config.ts
+
+    rm -rf desktop-release-${version}/
   '';
 
-  installPhase = ''
+  electronZip = runCommandNoCC "electronZip-${electron.version}" { buildInputs = [ electron zip ]; }
+  ''
+    cp -r ${electron}/libexec/electron/ .
+    chmod -R 777 .
     mkdir -p $out
-    cp -r usr/share/ $out/
-    cp -r usr/lib/proton-mail/resources/app.asar $out/share/
-    runHook postInstall
+    zip -r $out/electron-v29.0.1-linux-x64.zip .
+  '';
+
+  mainProgram = "proton-mail";
+  version = "1.0.1";
+
+in mkYarnPackage rec {
+  pname = "protonmail-desktop";
+
+  src = sourceExtracted;
+
+  nativeBuildInputs = [
+    electron
+    # fakeroot
+    makeWrapper
+    zip
+    unzip
+    git
+
+    # nodePackages."@electron-forge/cli"
+  ];
+
+  env = {
+    DEBUG = "electron-forge:electron-packager";
+    # ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    ELECTRON_OVERRIDE_DIST_PATH = "${electron}/bin/";
+  };
+
+  /*packageJSON = "$src/package.json";
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = "$/yarn.lock";
+    hash = lib.fakeHash;
+  };
+
+  # yarnPreBuild = "";
+  # yarnPostBuild = "";*/
+
+  buildPhase = ''
+    # set -x
+
+    pushd deps/proton-mail
+    rm proton-mail
+
+    substituteInPlace forge.config.ts \
+      --replace-fail "@ELECTRON_ZIP@" "${electronZip}"
+
+    popd
+
+    export HOME=$(mktemp -d)
+    # ./node_modules/.bin/electron-forge package -a x64 -p linux
+    yarn --offline run package -a x64 -p linux
   '';
 
   preFixup = ''
