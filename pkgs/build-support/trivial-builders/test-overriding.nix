@@ -36,7 +36,7 @@ let
   # building this derivation would fail without overriding
   textFileCase = writeTextFile {
     name = "test-trivial-overriding-text-file";
-    checkPhase = "false";
+    installCheckPhase = "false";
     text = ''
       #!${runtimeShell}
       echo success
