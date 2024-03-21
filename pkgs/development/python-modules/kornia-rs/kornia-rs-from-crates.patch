@@ -1,7 +1,7 @@
 diff --git a/py-kornia/Cargo.toml b/py-kornia/Cargo.toml
 index e0563f3..e192654 100644
---- a/py-kornia/Cargo.toml
-+++ b/py-kornia/Cargo.toml
+--- a/Cargo.toml
++++ b/Cargo.toml
 @@ -9,6 +9,6 @@ crate-type = ["cdylib"]
 
  [dependencies]

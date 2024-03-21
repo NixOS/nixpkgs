@@ -26,10 +26,14 @@ buildPythonPackage rec {
     nasm # Only for dependencies.
   ];
 
-  cargoRoot = "py-kornia";
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
   };
+
+  prePatch = ''
+    cd py-kornia
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   # The path dependency doesn't vendor the dependencies correctly, so get kornia-rs from crates instead.
   patches = [
@@ -38,12 +42,6 @@ buildPythonPackage rec {
       inherit version;
     })
   ];
-
-  prePatch = ''
-    cp ${./Cargo.lock} py-kornia/Cargo.lock
-  '';
-
-  maturinBuildFlags = [ "-m" "py-kornia/Cargo.toml" ];
 
   dontUseCmakeConfigure = true; # We only want to use CMake to build some Rust dependencies.
 
