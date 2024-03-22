@@ -2870,6 +2870,8 @@ self: super: with self; {
 
   demjson3 = callPackage ../development/python-modules/demjson3 { };
 
+  demoji = callPackage ../development/python-modules/demoji { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   denonavr = callPackage ../development/python-modules/denonavr { };
