@@ -13729,6 +13729,12 @@
     githubId = 77314501;
     name = "Maurice Zhou";
   };
+  nealfennimore = {
+    email = "hi@neal.codes";
+    github = "nealfennimore";
+    githubId = 5731551;
+    name = "Neal Fennimore";
+  };
   Nebucatnetzer = {
     email = "andreas+nixpkgs@zweili.ch";
     github = "Nebucatnetzer";

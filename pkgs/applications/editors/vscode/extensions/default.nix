@@ -102,6 +102,23 @@ let
         };
       };
 
+      "42crunch".vscode-openapi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "42Crunch";
+          name = "vscode-openapi";
+          version = "4.25.1";
+          sha256 = "+hKQUJp9c0oyhePFmQEXAqtqKL3fkQ1nhopUPnhRZc4=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
+          description = "A Visual Studio Code extension with rich support for the OpenAPI Specification (OAS).";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi";
+          homepage = "https://github.com/42Crunch/vscode-openapi";
+          license = lib.licenses.gpl3;
+          maintainers = [ lib.maintainers.benhiemer ];
+        };
+      };
+
       a5huynh.vscode-ron = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-ron";
@@ -1576,8 +1593,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "10.1.0";
-          sha256 = "sha256-SQuf15Jq84MKBVqK6UviK04uo7gQw9yuw/WEBEXcQAc=";
+          version = "10.3.0";
+          sha256 = "sha256-Oc46dxOI+55Y6hiJe0zTakdTM1sikcF7ISWkkVlaO1c=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1743,8 +1760,8 @@ let
         mktplcRef = {
           name = "shell-format";
           publisher = "foxundermoon";
-          version = "7.1.0";
-          sha256 = "09z72mdr5bfdcb67xyzlv7lb9vyjlc3k9ackj4jgixfk40c68cnj";
+          version = "7.2.5";
+          sha256 = "sha256-kfpRByJDcGY3W9+ELBzDOUMl06D/vyPlN//wPgQhByk=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -2216,8 +2233,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.17.0";
-          sha256 = "sha256-CC6ySeuO61O/mAkQYGoK/1cd4hlyS0vG+Lqv0HQ7K6c=";
+          version = "7.18.2";
+          sha256 = "sha256-CEeTLiZktp5YzCRxDXa+s8W9N971iQla/FyCr8Co0SQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -3042,8 +3059,8 @@ let
         mktplcRef = {
           name = "remote-containers";
           publisher = "ms-vscode-remote";
-          version = "0.305.0";
-          sha256 = "sha256-srSRD/wgDbQo9P1uJk8YtcXPZO62keG5kRnp1TmHqOc=";
+          version = "0.347.0";
+          sha256 = "sha256-E9H1nPWG5JuzBxbYc/yWd8Y3azEWrd9whGirl0GK7kU=";
         };
         meta = {
           description = "Open any folder or repository inside a Docker container.";
@@ -3057,6 +3074,23 @@ let
       ms-vscode-remote.remote-ssh = callPackage ./ms-vscode-remote.remote-ssh { };
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
+
+      mshr-h.veriloghdl = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "veriloghdl";
+          publisher = "mshr-h";
+          version = "1.13.2";
+          sha256 = "sha256-MOU8zf2qS7P2pQ29w3mvhDc2OvZiH4HNe530BjIiRAA=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
+          description = "A Visual Studio Code extension for supporting Verilog-HDL, SystemVerilog, Bluespec and SystemVerilog";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL";
+          homepage = "https://github.com/mshr-h/vscode-verilog-hdl-support";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.newam ];
+        };
+      };
 
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3754,6 +3788,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      smcpeak.default-keys-windows = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "default-keys-windows";
+          publisher = "smcpeak";
+          version = "0.0.10";
+          sha256 = "sha256-v1JY5ZGWOfF14H235Y9CLlPwIvmNwCeRhIkdmcgCCFU=";
+        };
+        meta = {
+          changelog = "https://github.com/smcpeak/vscode-default-keys-windows/blob/master/CHANGELOG.md";
+          description = "VSCode extension that provides default Windows keybindings on any platform";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=smcpeak.default-keys-windows";
+          homepage = "https://github.com/smcpeak/vscode-default-keys-windows";
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 

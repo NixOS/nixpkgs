@@ -203,6 +203,7 @@
   ./programs/i3lock.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
   ./programs/k40-whisperer.nix
   ./programs/kbdlight.nix

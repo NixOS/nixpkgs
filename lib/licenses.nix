@@ -1266,11 +1266,6 @@ in mkLicense lset) ({
   };
 } // {
   # TODO: remove legacy aliases
-  agpl3 = {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
-    deprecated = true;
-  };
   gpl2 = {
     spdxId = "GPL-2.0";
     fullName = "GNU General Public License v2.0";

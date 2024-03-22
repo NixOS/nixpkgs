@@ -48,7 +48,7 @@
   meta = with lib; {
     description = "Touchscreen GUI for the Klipper 3D printer firmware";
     homepage = "https://github.com/jordanruthe/KlipperScreen";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ cab404 ];
     mainProgram = "KlipperScreen";
   };

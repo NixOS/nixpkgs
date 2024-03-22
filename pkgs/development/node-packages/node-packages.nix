@@ -89968,7 +89968,7 @@ in
     meta = {
       description = "A T-SQL formatting utility in JS, transpiled from the C# library of the same name.";
       homepage = "https://github.com/TaoK/poor-mans-t-sql-formatter-npm-cli#readme";
-      license = "AGPL-3.0";
+      license = "AGPL-3.0-only";
     };
     production = true;
     bypassCache = true;
