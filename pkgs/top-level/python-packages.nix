@@ -6079,6 +6079,8 @@ self: super: with self; {
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
 
+  jsonslicer = callPackage ../development/python-modules/jsonslicer { };
+
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
 
   json-tricks = callPackage ../development/python-modules/json-tricks { };
