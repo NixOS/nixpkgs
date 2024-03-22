@@ -3075,6 +3075,23 @@ let
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
 
+      mshr-h.veriloghdl = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "veriloghdl";
+          publisher = "mshr-h";
+          version = "1.13.2";
+          sha256 = "sha256-MOU8zf2qS7P2pQ29w3mvhDc2OvZiH4HNe530BjIiRAA=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
+          description = "A Visual Studio Code extension for supporting Verilog-HDL, SystemVerilog, Bluespec and SystemVerilog";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL";
+          homepage = "https://github.com/mshr-h/vscode-verilog-hdl-support";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.newam ];
+        };
+      };
+
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "one-dark-theme";
