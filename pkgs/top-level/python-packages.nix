@@ -6997,6 +6997,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
+  manim-slides = callPackage ../development/python-modules/manim-slides { };
+
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
   manifestoo = callPackage ../development/python-modules/manifestoo { };
