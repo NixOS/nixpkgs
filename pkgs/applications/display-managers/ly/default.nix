@@ -1,24 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, git, linux-pam, libxcb }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, linux-pam
+, libxcb
+, makeBinaryWrapper
+, zig
+, callPackage
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ly";
-  version = "0.6.0";
+  version = "0.6.0-unstable-2024-05-10";
 
+  # The unstable version fixes the issue where configurations are ignored due
+  # to a wrong array length during parsing the config file.
+  # When the next stable version is released, we should use stable one instead.
   src = fetchFromGitHub {
     owner = "fairyglade";
     repo = "ly";
-    rev = "v${version}";
-    hash = "sha256-78XD6DK9aQi8hITWJWnFZ3U9zWTcuw3vtRiU3Lhu7O4=";
-    fetchSubmodules = true;
+    rev = "7506d6a7d5ce841ee8c24e5b3eaa930681a39199";
+    hash = "sha256-UYTYcgkDMqyIDUigHoOEZEzo2GoeJlTpurSgKOkbt4w=";
   };
 
-  hardeningDisable = [ "all" ];
-  nativeBuildInputs = [ git ];
+  nativeBuildInputs = [ makeBinaryWrapper zig.hook ];
   buildInputs = [ libxcb linux-pam ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin/ly $out/bin
+  postPatch = ''
+    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
   meta = with lib; {
