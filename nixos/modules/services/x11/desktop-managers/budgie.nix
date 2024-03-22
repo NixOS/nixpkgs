@@ -146,7 +146,6 @@ in {
           mate.atril
           mate.engrampa
           mate.mate-calc
-          mate.mate-terminal
           mate.mate-system-monitor
           vlc
 
@@ -159,6 +158,9 @@ in {
           nixos-gsettings-overrides
         ] config.environment.budgie.excludePackages)
       ++ cfg.sessionPath;
+
+    # Both budgie-desktop-view and nemo defaults to this emulator.
+    programs.gnome-terminal.enable = mkDefault true;
 
     # Fonts.
     fonts.packages = [
