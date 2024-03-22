@@ -11,6 +11,8 @@ rec {
     inherit composeAndroidPackages;
   };
 
+  buildGradleApp = pkgs.callPackage ./build-gradle-app.nix { };
+
   emulateApp = pkgs.callPackage ./emulate-app.nix {
     inherit composeAndroidPackages;
   };
