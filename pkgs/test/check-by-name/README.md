@@ -1,7 +1,7 @@
-# CI-related Scripts
+# `pkgs/by-name` check CI scripts
 
 This directory contains scripts and files used and related to the CI running the `pkgs/by-name` checks in Nixpkgs.
-See also the [CI GitHub Action](../../../../.github/workflows/check-by-name.yml).
+See also the [CI GitHub Action](../../../.github/workflows/check-by-name.yml).
 
 ## `./run-local.sh BASE_BRANCH [REPOSITORY]`
 
@@ -18,17 +18,10 @@ Arguments:
 
 ## `./update-pinned-tool.sh`
 
-Updates the pinned CI tool in [`./pinned-tool.json`](./pinned-tool.json) to the
-[latest version from the `nixos-unstable` channel](https://hydra.nixos.org/job/nixos/trunk-combined/nixpkgs.tests.nixpkgs-check-by-name.x86_64-linux).
+Updates the pinned [nixpkgs-check-by-name tool](https://github.com/NixOS/nixpkgs-check-by-name) in [`./pinned-version.txt`](./pinned-version.txt) to the latest [release](https://github.com/NixOS/nixpkgs-check-by-name/releases).
+Each release contains a pre-built x86_64-linux version of the tool which is used by CI.
 
-This script needs to be called manually when the CI tooling needs to be updated.
-
-The `pinned-tool.json` file gets populated with both:
-- The `/nix/store` path for `x86_64-linux`, such that CI doesn't have to evaluate Nixpkgs and can directly fetch it from the cache instead.
-- The Nixpkgs revision, such that the `./run-local.sh` script can be used to run the checks locally on any system.
-
-To ensure that the tool is always pre-built for `x86_64-linux` in the `nixos-unstable` channel,
-it's included in the `tested` jobset description in [`nixos/release-combined.nix`](../../../nixos/release-combined.nix).
+This script currently needs to be called manually when the CI tooling needs to be updated.
 
 Why not just build the tooling right from the PRs Nixpkgs version?
 - Because it allows CI to check all PRs, even if they would break the CI tooling.
