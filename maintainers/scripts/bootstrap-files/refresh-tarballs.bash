@@ -6,6 +6,8 @@
 #! nix-shell -p nix
 #! nix-shell -p jq
 
+set -o pipefail
+
 # How the refresher works:
 #
 # For a given list of <targets>:
@@ -14,6 +16,9 @@
 # 3. fetch all the `.build` artifacts from '$out/on-server/' directory
 # 4. calculate hashes and craft the commit message with the details on
 #    how to upload the result to 'tarballs.nixos.org'
+
+scratch_dir=$(mktemp -d)
+trap 'rm -rf -- "${scratch_dir}"' EXIT
 
 usage() {
     cat >&2 <<EOF
@@ -101,15 +106,17 @@ is_cross() {
 }
 
 nar_sri_get() {
-    local ouput sri
-    output=$(nix-build  --expr \
-        'import <nix/fetchurl.nix> {
-           url = "'"$1"'";
-           unpack = true;
-         }' 2>&1 || true)
-    sri=$(echo "$output" | awk '/^\s+got:\s+/{ print $2 }')
-    [[ -z "$sri" ]] && die "$output"
-    echo "$sri"
+    local restore_path store_path
+    ((${#@} != 2)) && die "nar_sri_get /path/to/name.nar.xz name"
+    restore_path="${scratch_dir}/$2"
+    xz -d < "$1" | nix-store --restore "${restore_path}"
+    [[ $? -ne 0 ]] && die "Failed to unpack '$1'"
+
+    store_path=$(nix-store --add "${restore_path}")
+    [[ $? -ne 0 ]] && die "Failed to add '$restore_path' to store"
+    rm -rf -- "${restore_path}"
+
+    nix-hash --to-sri "$(nix-store --query --hash "${store_path}")"
 }
 
 # collect passed options
@@ -239,9 +246,12 @@ EOF
               executable_nix="executable = true;"
           fi
           unpack_nix=
-          if [[ $fname = *.nar.* ]]; then
+          name_nix=
+          if [[ $fname = *.nar.xz ]]; then
               unpack_nix="unpack = true;"
-              sri=$(nar_sri_get "file://$p")
+              name_nix="name = \"${fname%.nar.xz}\";"
+              sri=$(nar_sri_get "$p" "${fname%.nar.xz}")
+              [[ $? -ne 0 ]] && die "Failed to get hash of '$p'"
           else
               sha256=$(nix-prefetch-url $executable_arg --name "$fname" "file://$p")
               [[ $? -ne 0 ]] && die "Failed to get the hash for '$p'"
@@ -255,6 +265,7 @@ EOF
     url = "http://tarballs.nixos.org/${s3_prefix}/${nixpkgs_revision}/$fname";
     hash = "${sri}";$(
     [[ -n ${executable_nix} ]] && printf "\n    %s" "${executable_nix}"
+    [[ -n ${name_nix} ]]       && printf "\n    %s" "${name_nix}"
     [[ -n ${unpack_nix} ]]     && printf "\n    %s" "${unpack_nix}"
 )
   };

@@ -1400,12 +1400,12 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "14.1.1";
-          sha256 = "sha256-eSN48IudpHYzT4u+S4b2I2pyEPyOwBCSL49awT/mzEE=";
+          version = "14.9.0";
+          sha256 = "sha256-Z6KeIUw1SLZ4tUgs7sU9IJO/6diozPxQuTbXr6DayHA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
-          description = "GitLens supercharges the Git capabilities built into Visual Studio Code.";
+          description = "A Visual Studio Code extension that improves its built-in Git capabilities";
           longDescription = ''
             Supercharge the Git capabilities built into Visual Studio Code — Visualize code authorship at a glance via Git
             blame annotations and code lens, seamlessly navigate and explore Git repositories, gain valuable insights via
