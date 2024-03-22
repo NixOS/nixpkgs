@@ -32506,7 +32506,7 @@ with pkgs;
     stdenv = stdenv;
   });
 
-  kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
+  kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
