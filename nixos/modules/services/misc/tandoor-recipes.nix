@@ -82,6 +82,7 @@ in
         Restart = "on-failure";
 
         User = "tandoor_recipes";
+        Group = "tandoor_recipes";
         DynamicUser = true;
         StateDirectory = "tandoor-recipes";
         WorkingDirectory = "/var/lib/tandoor-recipes";
