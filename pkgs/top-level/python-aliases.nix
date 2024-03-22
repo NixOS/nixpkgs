@@ -91,6 +91,7 @@ mapAliases ({
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
   covCore = cov-core; # added 2024-01-03
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
+  cram = throw "cram has been removed, as it is abandoned and archived"; # added 2024-03-22
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   cx_Freeze = cx-freeze; # added 2023-08-02
   cx_oracle = cx-oracle; # added 2024-01-03
@@ -386,6 +387,7 @@ mapAliases ({
   PyStemmer = pystemmer; # added 2023-02-19
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
+  pytest-cram = throw "pytest-cram has been removed, as it is unmaintained and broken"; # added 2024-03-22
   pytest-ordering = throw "pytest-ordering has been removed, since it is no longer maintained and broken"; # added 2023-06-22
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytest-pep257 = throw "pytest-pep257 was removed, as the pep257 package was migrated into pycodestyle"; # added 2022-04-12

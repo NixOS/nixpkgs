@@ -2457,8 +2457,6 @@ self: super: with self; {
 
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
-  cram = callPackage ../development/python-modules/cram { };
-
   cramjam = callPackage ../development/python-modules/cramjam { };
 
   crashtest = callPackage ../development/python-modules/crashtest { };
@@ -11813,8 +11811,6 @@ self: super: with self; {
   pytest-console-scripts = callPackage ../development/python-modules/pytest-console-scripts { };
 
   pytest-cov = callPackage ../development/python-modules/pytest-cov { };
-
-  pytest-cram = callPackage ../development/python-modules/pytest-cram { };
 
   pytest-datadir = callPackage ../development/python-modules/pytest-datadir { };
 
