@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , Security
 , autoreconfHook
 , util-linux
@@ -22,6 +23,27 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "refs/tags/v${finalAttrs.version}-stable";
     hash = "sha256-HXl8GgngC1J8Dlt7fXBrVRa+IV7thVr+MIpeuf3Khcg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-0901.patch";
+      url = "https://github.com/wolfSSL/wolfssl/commit/9db20774d8abe0725734d48090bd4f650a477b8a.patch";
+      hash = "sha256-tO0fVBtEuvoJLUgDwjz3otk4yj1txASXEt0c0Rf9g3Q=";
+    })
+    # simply adds an optional rowhammer-resistant mode for RSA decryption,
+    # *not enabled by default*
+    (fetchpatch {
+      name = "CVE-2024-1545.patch";
+      url = "https://github.com/wolfSSL/wolfssl/commit/de4a6f9e00f6fbcaa7e20ed7bd89b5d50179e634.patch";
+      hash = "sha256-6DctT4GSBDqVeON9QsTsxVXTLD20zE64uUxGTZZFl5M=";
+    })
+    # CVE-2024-1545, but for eddsa
+    (fetchpatch {
+      name = "eddsa-check-priv.patch";
+      url = "https://github.com/wolfSSL/wolfssl/commit/c8d0bb0bd8fcd3dd177ec04e9a659a006df51b73.patch";
+      hash = "sha256-YlGBilR1pgH7BVuvL/liwOtgx/f+1troyV9Rl6Ftkr4=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./scripts
