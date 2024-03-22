@@ -3331,7 +3331,10 @@ let
           sha256 = "sha256-xxOEUvMjqJbl8lONB/So2NoIAVPOxysTq2YQY3iHGqo=";
         };
         meta = {
+          description = "Material Design file/folder icon theme for VSCode";
+          homepage = "https://github.com/PKief/vscode-material-icon-theme/blob/main/README.md";
           license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
