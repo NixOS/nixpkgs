@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3+uCMoOnyvI//ltEaqTIXytUxxgJrfMnFly11WCh66Q=";
   };
 
-  TIGERBEETLE_RELEASE = finalAttrs.version;
+  env.TIGERBEETLE_RELEASE = finalAttrs.version;
 
   nativeBuildInputs = [ custom_zig_hook ];
 
