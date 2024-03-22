@@ -1,10 +1,12 @@
 { lib
+, fetchpatch
 , fetchFromGitHub
 , dash
 , php
 , phpCfg ? null
 , withPgsql ? true # “strongly recommended” according to docs
 , withMysql ? false
+, nixosTests
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -36,6 +38,20 @@ php.buildComposerProject (finalAttrs: {
   vendorHash = "sha256-RFIi1I+gcagRgkDpgQeR1oGJeBGA7z9q3DCfW+ZDr2Y=";
 
   postPatch = ''
+    # Our modules are already wrapped, removes missing *.so warnings;
+    # replacing `$configuration` with actually-used flags.
+    substituteInPlace src/Movim/Daemon/Session.php \
+      --replace-fail "exec php ' . \$configuration " "exec php -dopcache.enable=1 -dopcache.enable_cli=1 ' "
+
+    # Point to PHP + PHP INI in the Nix store
+    substituteInPlace src/Movim/{Console/DaemonCommand.php,Daemon/Session.php} \
+      --replace-fail "exec php " "exec ${lib.getExe finalAttrs.php} "
+    substituteInPlace src/Movim/Console/DaemonCommand.php \
+      --replace-fail "<info>php vendor/bin/phinx migrate</info>" \
+        "<info>${lib.getBin finalAttrs.php} vendor/bin/phinx migrate</info>" \
+      --replace-fail "<info>php daemon.php setAdmin {jid}</info>" \
+        "<info>${finalAttrs.meta.mainProgram} setAdmin {jid}</info>"
+
     # BUGFIX: Imagick API Changes for 7.x+
     # See additionally: https://github.com/movim/movim/pull/1122
     substituteInPlace src/Movim/Image.php \
@@ -55,6 +71,10 @@ php.buildComposerProject (finalAttrs: {
     $out/bin/movim completion zsh | sed "s/daemon.php/movim/g" > $out/share/zsh/site-functions/_movim
     chmod +x $out/share/{bash-completion/completion/movim.bash,fish/vendor_completions.d/movim.fish,zsh/site-functions/_movim}
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) movim; };
+  };
 
   meta = {
     description = "a federated blogging & chat platform that acts as a web front end for the XMPP protocol";
