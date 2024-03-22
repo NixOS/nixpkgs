@@ -79,12 +79,19 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-4dG+5ZHDa+A4/CszYS8uXWlpmA89m7/jhbZ7rheMs7U=";
     })
     # https://github.com/lathiat/avahi/pull/499 merged Oct 25
-    # (but with the changes to '.github/workflows/smoke-tests.sh removed)
-    ./CVE-2023-38471-2.patch
+    (fetchpatch {
+      name = "CVE-2023-38471-2.patch";
+      url = "https://github.com/avahi/avahi/commit/b675f70739f404342f7f78635d6e2dcd85a13460.patch";
+      sha256 = "sha256-uDtMPWuz1lsu7n0Co/Gpyh369miQ6GWGyC0UPQB/yI8=";
+    })
     # CVE-2023-38469
     # https://github.com/lathiat/avahi/pull/500 merged Oct 25
-    # (but with the changes to '.github/workflows/smoke-tests.sh removed)
-    ./CVE-2023-38469.patch
+    (fetchpatch {
+      name = "CVE-2023-38469.patch";
+      url = "https://github.com/avahi/avahi/commit/61b9874ff91dd20a12483db07df29fe7f35db77f.patch";
+      sha256 = "sha256-qR7scfQqhRGxg2n4HQsxVxCLkXbwZi+PlYxrOSEPsL0=";
+      excludes = [ ".github/workflows/smoke-tests.sh" ];
+    })
   ];
 
   depsBuildBuild = [
