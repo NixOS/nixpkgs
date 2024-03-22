@@ -363,6 +363,37 @@
       },
       "name": "csv-editor"
     },
+    "11349": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.979": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14015.137": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14015.155": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14475.31": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14475.40": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14475.56": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14475.66": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14808.14": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14808.18": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14808.20": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip",
+        "233.14808.21": "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip"
+      },
+      "name": "aws-toolkit--amazon-q-codewhisperer-and-more"
+    },
     "12062": {
       "compatible": [
         "clion",
@@ -596,6 +627,7 @@
   },
   "files": {
     "https://plugins.jetbrains.com/files/10037/493012/CSVEditor-3.3.0-233.zip": "sha256-C3l3Z9a7maCrMjc2Fk/wf3AoExRbvN+fn2mAtXigt0A=",
+    "https://plugins.jetbrains.com/files/11349/509121/aws-toolkit-jetbrains-2.14-233.zip": "sha256-mzdVeQ9CYDEFK4sRB0tjDhKz/JjQM3KtwD2mHDsmv7Q=",
     "https://plugins.jetbrains.com/files/12062/445740/keymap-vscode-233.11799.188.zip": "sha256-9keDJ73bSHkzAEq8nT96I5sp05BgMZ08/4BzarOjO5g=",
     "https://plugins.jetbrains.com/files/12559/445772/keymap-eclipse-233.11799.165.zip": "sha256-IsmoWuUroAp1LLuphp4F1dun4tQOOitZxoG+Nxs5pYk=",
     "https://plugins.jetbrains.com/files/13017/445774/keymap-visualStudio-233.11799.165.zip": "sha256-Nb2tSxL+mAY1qJ3waipgV8ep+0R/BaYnzz7zfwtLHmk=",
