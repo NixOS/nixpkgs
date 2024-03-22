@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "gto";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "gto";
     rev = "refs/tags/${version}";
-    hash = "sha256-dovCItMhPKRSPfbTzM5dbz8hdygqrLdUi6gS4+G10ks=";
+    hash = "sha256-fUi+/PW05EvgTnoEv1Im1BjZ07VzpZhyW0EjhLUqJGI=";
   };
 
   postPatch = ''
