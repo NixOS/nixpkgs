@@ -19356,6 +19356,13 @@
     githubId = 42933;
     name = "Andrew Childs";
   };
+  thefossguy = {
+    name = "Pratham Patel";
+    email = "prathampatel@thefossguy.com";
+    matrix = "@thefossguy:matrix.org";
+    github = "thefossguy";
+    githubId = 44400303;
+  };
   thehedgeh0g = {
     name = "The Hedgehog";
     email = "hedgehog@mrhedgehog.xyz";

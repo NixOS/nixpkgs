@@ -89,3 +89,18 @@
     local method,list=r[1],r[2]
     if method and list then
      for i=1,#list do
+--- a/scripts/context/lua/mtx-context.lua	1970-01-01 01:00:01
++++ b/scripts/context/lua/mtx-context.lua	2024-03-11 08:34:49
+@@ -613,8 +615,11 @@
+     -- context flags get prepended by c: ... this will move to the sbx module
+     local t = { }
+     for k, v in table.sortedhash(flags) do
++        local p
+         if prefix then
+-            k = format("c:%s",k)
++            p = format("c:%s",k)
++        else
++            p = k
+         end
+         if not v or v == "" or v == '""' then
+             -- no need to flag false
