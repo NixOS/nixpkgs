@@ -16,9 +16,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-4KrFhchoIB2N89m7HrL0xj2Z+u/6/6Onxa2wIAX18Io=";
 
   meta = {
-    description = "boring data tool. A CLI tool to query parquet, json and avro files.";
+    description = "boring data tool. A CLI tool to query parquet, json and avro files";
     homepage = "https://github.com/datafusion-contrib/bdt";
     license = lib.licenses.asl20;
+    mainProgram = "bdt";
     maintainers = [];
   };
 }
