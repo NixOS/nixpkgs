@@ -8,6 +8,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , pydantic
+, setuptools
 , tqdm
 , typing-extensions
 }:
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "google-generativeai";
   version = "0.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -30,11 +31,12 @@ buildPythonPackage rec {
     "google-ai-generativelanguage"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-ai-generativelanguage
     google-auth
     google-api-core
