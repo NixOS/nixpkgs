@@ -49,7 +49,7 @@ buildGoModule rec {
     description = "Filebrowser is a web application for managing files and directories";
     homepage = "https://filebrowser.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nielsegberts christoph-heiss ];
+    maintainers = with maintainers; [ christoph-heiss ];
     mainProgram = "filebrowser";
   };
 }
