@@ -7,6 +7,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , starlette
 , trio
 }:
@@ -14,18 +15,26 @@
 buildPythonPackage rec {
   pname = "respx";
   version = "0.21.0";
-  format = "setuptools";
+  pyoroject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lundberg";
-    repo = pname;
-    rev = version;
+    repo = "respx";
+    rev = "refs/tags/${version}";
     hash = "sha256-fjZ5JMWOZUnDLTdIexhnB5ZVYJOVUGraxNpDpB9ZrAU=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     httpx
   ];
 
@@ -38,10 +47,6 @@ buildPythonPackage rec {
     starlette
     trio
   ];
-
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
 
   disabledTests = [
     "test_pass_through"
