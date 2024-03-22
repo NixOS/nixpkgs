@@ -48,13 +48,13 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "23.11";
+  version = "24.03";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5zQrfB14kXs75WbL3s4eyhxELglhLNxU2L2aVXiyVjg=";
+    hash = "sha256-EYf8GhXhsAx0Wxz9ibDZEV4E5scL3GPiu3Nje7N5C/I=";
   };
 
   stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
@@ -147,9 +147,6 @@ buildPythonPackage rec {
     ''
     + lib.optionalString withDocs ''
       mv $out/docs $doc
-    ''
-    + ''
-      rm $out/share -r # only examples
     '';
 
   meta = {
