@@ -13,7 +13,46 @@ let
   format = pkgs.formats.ini {};
 
   idmapdConfFile = format.generate "idmapd.conf" cfg.idmapd.settings;
-  nfsConfFile = pkgs.writeText "nfs.conf" cfg.extraConfig;
+
+  # merge parameters from services.nfs.server
+  nfsConfSettings =
+    optionalAttrs (cfg.server.nproc != null) {
+      nfsd.threads = cfg.server.nproc;
+    } // optionalAttrs (cfg.server.hostName != null) {
+      nfsd.host= cfg.hostName;
+    } // optionalAttrs (cfg.server.mountdPort != null) {
+      mountd.port = cfg.server.mountdPort;
+    } // optionalAttrs (cfg.server.statdPort != null) {
+      statd.port = cfg.server.statdPort;
+    } // optionalAttrs (cfg.server.lockdPort != null) {
+      lockd.port = cfg.server.lockdPort;
+      lockd.udp-port = cfg.server.lockdPort;
+    };
+
+  nfsConfDeprecated = cfg.extraConfig + ''
+    [nfsd]
+    threads=${toString cfg.server.nproc}
+    ${optionalString (cfg.server.hostName != null) "host=${cfg.server.hostName}"}
+    ${cfg.server.extraNfsdConfig}
+
+    [mountd]
+    ${optionalString (cfg.server.mountdPort != null) "port=${toString cfg.server.mountdPort}"}
+
+    [statd]
+    ${optionalString (cfg.server.statdPort != null) "port=${toString cfg.server.statdPort}"}
+
+    [lockd]
+    ${optionalString (cfg.server.lockdPort != null) ''
+      port=${toString cfg.server.lockdPort}
+      udp-port=${toString cfg.server.lockdPort}
+    ''}
+  '';
+
+  nfsConfFile =
+    if cfg.settings != {}
+    then format.generate "nfs.conf" (recursiveUpdate nfsConfSettings cfg.settings)
+    else pkgs.writeText "nfs.conf" nfsConfDeprecated;
+
   requestKeyConfFile = pkgs.writeText "request-key.conf" ''
     create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
   '';
@@ -46,6 +85,19 @@ in
           }
         '';
       };
+      settings = mkOption {
+        type = format.type;
+        default = {};
+        description = lib.mdDoc ''
+          General configuration for NFS daemons and tools.
+          See nfs.conf(5) and related man pages for details.
+        '';
+        example = literalExpression ''
+          {
+            mountd.manage-gids = true;
+          }
+        '';
+      };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -59,6 +111,17 @@ in
   ###### implementation
 
   config = mkIf (config.boot.supportedFilesystems.nfs or config.boot.supportedFilesystems.nfs4 or false) {
+
+    warnings =
+      (optional (cfg.extraConfig != "") ''
+        `services.nfs.extraConfig` is deprecated. Use `services.nfs.settings` instead.
+      '') ++ (optional (cfg.server.extraNfsdConfig != "") ''
+        `services.nfs.server.extraNfsdConfig` is deprecated. Use `services.nfs.settings` instead.
+      '');
+    assertions = [{
+      assertion = cfg.settings != {} -> cfg.extraConfig == "" && cfg.server.extraNfsdConfig == "";
+      message = "`services.nfs.settings` cannot be used together with `services.nfs.extraConfig` and `services.nfs.server.extraNfsdConfig`.";
+    }];
 
     services.rpcbind.enable = true;
 
