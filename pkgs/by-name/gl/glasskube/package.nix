@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "glasskube";
-  version = "0.0.4";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+5SinF85bU113C9B025DM83v8ApaXqLV4n1P9zZP3ns=";
+    hash = "sha256-iJjO4V2sK3e/SpDZ5Lfw7gILgZrI4CGg0wLLVKthGUE=";
   };
 
-  vendorHash = "sha256-DBqO2EyB1TydsdK2GWJoFGGgTS+E62GogysPX4WtzYU=";
+  vendorHash = "sha256-iFWcTzZP0DKJ9hrmfUWR4U/VX2zsR+3uojI+GRI2R3I=";
 
   CGO_ENABLED = 0;
 
