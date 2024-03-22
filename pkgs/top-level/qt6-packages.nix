@@ -33,6 +33,8 @@ makeScopeWithSplicing' {
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
+  drumstick = callPackage ../development/libraries/drumstick { };
+
   fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
   fcitx5-configtool = kdePackages.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
