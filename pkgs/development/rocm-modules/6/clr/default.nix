@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , makeWrapper
 , cmake
@@ -89,8 +90,16 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./add-missing-operators.patch
-    ./static-functions.patch
+    (fetchpatch {
+      name = "add-missing-operators.patch";
+      url = "https://github.com/ROCm/clr/commit/86bd518981b364c138f9901b28a529899d8654f3.patch";
+      hash = "sha256-lbswri+zKLxif0hPp4aeJDeVfadhWZz4z+m+G2XcCPI=";
+    })
+    (fetchpatch {
+      name = "static-functions.patch";
+      url = "https://github.com/ROCm/clr/commit/77c581a3ebd47b5e2908973b70adea66891159ee.patch";
+      hash = "sha256-auBedbd7rghlKav7A9V6l64J7VmtE9GizIdi5gWj+fs=";
+    })
   ];
 
   postPatch = ''
