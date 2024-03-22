@@ -34,15 +34,15 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=githubkit --cov-append --cov-report=term-missing" ""
+      --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
   '';
 
-  nativeBuildInputs = [
+  build-systems = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     hishel
     httpx
     pydantic
