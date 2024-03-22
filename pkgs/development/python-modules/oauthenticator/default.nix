@@ -30,11 +30,11 @@ buildPythonPackage rec {
       --replace-fail " --cov=oauthenticator" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyterhub
   ];
 
