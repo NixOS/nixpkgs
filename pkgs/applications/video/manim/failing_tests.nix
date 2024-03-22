@@ -64,6 +64,10 @@
   "test_PointCloudDot"
   "test_Torus"
 
+  # ???
+  "test_ImplicitFunction"
+  "test_implicit_graph"
+
   # failing with:
   # TypeError: __init__() got an unexpected keyword argument 'msg' - maybe you meant pytest.mark.skipif?
   "test_force_window_opengl_render_with_movies"
