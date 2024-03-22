@@ -15,42 +15,64 @@ in
 rec {
 
 
-  /* `overrideDerivation drv f` takes a derivation (i.e., the result
-     of a call to the builtin function `derivation`) and returns a new
-     derivation in which the attributes of the original are overridden
-     according to the function `f`.  The function `f` is called with
-     the original derivation attributes.
+  /**
+    `overrideDerivation drv f` takes a derivation (i.e., the result
+    of a call to the builtin function `derivation`) and returns a new
+    derivation in which the attributes of the original are overridden
+    according to the function `f`.  The function `f` is called with
+    the original derivation attributes.
 
-     `overrideDerivation` allows certain "ad-hoc" customisation
-     scenarios (e.g. in ~/.config/nixpkgs/config.nix).  For instance,
-     if you want to "patch" the derivation returned by a package
-     function in Nixpkgs to build another version than what the
-     function itself provides.
+    `overrideDerivation` allows certain "ad-hoc" customisation
+    scenarios (e.g. in ~/.config/nixpkgs/config.nix).  For instance,
+    if you want to "patch" the derivation returned by a package
+    function in Nixpkgs to build another version than what the
+    function itself provides.
 
-     For another application, see build-support/vm, where this
-     function is used to build arbitrary derivations inside a QEMU
-     virtual machine.
+    For another application, see build-support/vm, where this
+    function is used to build arbitrary derivations inside a QEMU
+    virtual machine.
 
-     Note that in order to preserve evaluation errors, the new derivation's
-     outPath depends on the old one's, which means that this function cannot
-     be used in circular situations when the old derivation also depends on the
-     new one.
+    Note that in order to preserve evaluation errors, the new derivation's
+    outPath depends on the old one's, which means that this function cannot
+    be used in circular situations when the old derivation also depends on the
+    new one.
 
-     You should in general prefer `drv.overrideAttrs` over this function;
-     see the nixpkgs manual for more information on overriding.
+    You should in general prefer `drv.overrideAttrs` over this function;
+    see the nixpkgs manual for more information on overriding.
 
-     Example:
-       mySed = overrideDerivation pkgs.gnused (oldAttrs: {
-         name = "sed-4.2.2-pre";
-         src = fetchurl {
-           url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-           hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
-         };
-         patches = [];
-       });
 
-     Type:
-       overrideDerivation :: Derivation -> ( Derivation -> AttrSet ) -> Derivation
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
+    `f`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    overrideDerivation :: Derivation -> ( Derivation -> AttrSet ) -> Derivation
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.customisation.overrideDerivation` usage example
+
+    ```nix
+    mySed = overrideDerivation pkgs.gnused (oldAttrs: {
+      name = "sed-4.2.2-pre";
+      src = fetchurl {
+        url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+        hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
+      };
+      patches = [];
+    });
+    ```
+
+    :::
   */
   overrideDerivation = drv: f:
     let
@@ -67,26 +89,44 @@ rec {
       });
 
 
-  /* `makeOverridable` takes a function from attribute set to attribute set and
-     injects `override` attribute which can be used to override arguments of
-     the function.
+  /**
+    `makeOverridable` takes a function from attribute set to attribute set and
+    injects `override` attribute which can be used to override arguments of
+    the function.
 
-     Please refer to  documentation on [`<pkg>.overrideDerivation`](#sec-pkg-overrideDerivation) to learn about `overrideDerivation` and caveats
-     related to its use.
+    Please refer to  documentation on [`<pkg>.overrideDerivation`](#sec-pkg-overrideDerivation) to learn about `overrideDerivation` and caveats
+    related to its use.
 
-     Example:
-       nix-repl> x = {a, b}: { result = a + b; }
 
-       nix-repl> y = lib.makeOverridable x { a = 1; b = 2; }
+    # Inputs
 
-       nix-repl> y
-       { override = «lambda»; overrideDerivation = «lambda»; result = 3; }
+    `f`
 
-       nix-repl> y.override { a = 10; }
-       { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
+    : 1\. Function argument
 
-     Type:
-       makeOverridable :: (AttrSet -> a) -> AttrSet -> a
+    # Type
+
+    ```
+    makeOverridable :: (AttrSet -> a) -> AttrSet -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.customisation.makeOverridable` usage example
+
+    ```nix
+    nix-repl> x = {a, b}: { result = a + b; }
+
+    nix-repl> y = lib.makeOverridable x { a = 1; b = 2; }
+
+    nix-repl> y
+    { override = «lambda»; overrideDerivation = «lambda»; result = 3; }
+
+    nix-repl> y.override { a = 10; }
+    { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
+    ```
+
+    :::
   */
   makeOverridable = f:
     let
@@ -120,7 +160,8 @@ rec {
       else result);
 
 
-  /* Call the package function in the file `fn` with the required
+  /**
+    Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
     arguments `args`, but any missing arguments are obtained from
     `autoArgs`.  This function is intended to be partially
@@ -147,8 +188,26 @@ rec {
 
     <!-- TODO: Apply "Example:" tag to the examples above -->
 
-    Type:
-      callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+
+    # Inputs
+
+    `autoArgs`
+
+    : 1\. Function argument
+
+    `fn`
+
+    : 2\. Function argument
+
+    `args`
+
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
   */
   callPackageWith = autoArgs: fn: args:
     let
@@ -210,12 +269,31 @@ rec {
        else abort "lib.customisation.callPackageWith: ${error}";
 
 
-  /* Like callPackage, but for a function that returns an attribute
-     set of derivations. The override function is added to the
-     individual attributes.
+  /**
+    Like callPackage, but for a function that returns an attribute
+    set of derivations. The override function is added to the
+    individual attributes.
 
-     Type:
-       callPackagesWith :: AttrSet -> ((AttrSet -> AttrSet) | Path) -> AttrSet -> AttrSet
+
+    # Inputs
+
+    `autoArgs`
+
+    : 1\. Function argument
+
+    `fn`
+
+    : 2\. Function argument
+
+    `args`
+
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    callPackagesWith :: AttrSet -> ((AttrSet -> AttrSet) | Path) -> AttrSet -> AttrSet
+    ```
   */
   callPackagesWith = autoArgs: fn: args:
     let
@@ -233,11 +311,30 @@ rec {
       else mapAttrs mkAttrOverridable pkgs;
 
 
-  /* Add attributes to each output of a derivation without changing
-     the derivation itself and check a given condition when evaluating.
+  /**
+    Add attributes to each output of a derivation without changing
+    the derivation itself and check a given condition when evaluating.
 
-     Type:
-       extendDerivation :: Bool -> Any -> Derivation -> Derivation
+
+    # Inputs
+
+    `condition`
+
+    : 1\. Function argument
+
+    `passthru`
+
+    : 2\. Function argument
+
+    `drv`
+
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    extendDerivation :: Bool -> Any -> Derivation -> Derivation
+    ```
   */
   extendDerivation = condition: passthru: drv:
     let
@@ -269,13 +366,24 @@ rec {
       outPath = assert condition; drv.outPath;
     };
 
-  /* Strip a derivation of all non-essential attributes, returning
-     only those needed by hydra-eval-jobs. Also strictly evaluate the
-     result to ensure that there are no thunks kept alive to prevent
-     garbage collection.
+  /**
+    Strip a derivation of all non-essential attributes, returning
+    only those needed by hydra-eval-jobs. Also strictly evaluate the
+    result to ensure that there are no thunks kept alive to prevent
+    garbage collection.
 
-     Type:
-       hydraJob :: (Derivation | Null) -> (Derivation | Null)
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    hydraJob :: (Derivation | Null) -> (Derivation | Null)
+    ```
   */
   hydraJob = drv:
     let
@@ -443,32 +551,65 @@ rec {
         };
     in self;
 
-  /* backward compatibility with old uncurried form; deprecated */
+  /**
+    backward compatibility with old uncurried form; deprecated
+
+
+    # Inputs
+
+    `splicePackages`
+
+    : 1\. Function argument
+
+    `newScope`
+
+    : 2\. Function argument
+
+    `otherSplices`
+
+    : 3\. Function argument
+
+    `keep`
+
+    : 4\. Function argument
+
+    `extra`
+
+    : 5\. Function argument
+
+    `f`
+
+    : 6\. Function argument
+  */
   makeScopeWithSplicing =
     splicePackages: newScope: otherSplices: keep: extra: f:
     makeScopeWithSplicing'
     { inherit splicePackages newScope; }
     { inherit otherSplices keep extra f; };
 
-  /* Like makeScope, but aims to support cross compilation. It's still ugly, but
-     hopefully it helps a little bit.
+  /**
+    Like makeScope, but aims to support cross compilation. It's still ugly, but
+    hopefully it helps a little bit.
 
-     Type:
-       makeScopeWithSplicing' ::
-         { splicePackages :: Splice -> AttrSet
-         , newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
-         }
-         -> { otherSplices :: Splice, keep :: AttrSet -> AttrSet, extra :: AttrSet -> AttrSet }
-         -> AttrSet
+    # Type
 
-       Splice ::
-         { pkgsBuildBuild :: AttrSet
-         , pkgsBuildHost :: AttrSet
-         , pkgsBuildTarget :: AttrSet
-         , pkgsHostHost :: AttrSet
-         , pkgsHostTarget :: AttrSet
-         , pkgsTargetTarget :: AttrSet
-         }
+    ```
+    makeScopeWithSplicing' ::
+      { splicePackages :: Splice -> AttrSet
+      , newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+      }
+      -> { otherSplices :: Splice, keep :: AttrSet -> AttrSet, extra :: AttrSet -> AttrSet }
+      -> AttrSet
+
+    Splice ::
+      { pkgsBuildBuild :: AttrSet
+      , pkgsBuildHost :: AttrSet
+      , pkgsBuildTarget :: AttrSet
+      , pkgsHostHost :: AttrSet
+      , pkgsHostTarget :: AttrSet
+      , pkgsTargetTarget :: AttrSet
+      }
+    ```
   */
   makeScopeWithSplicing' =
     { splicePackages
