@@ -105,7 +105,9 @@ in rec {
       mkdir -p $dst
 
       cp ${../../../doc/style.css} $dst/style.css
-      cp ${../../../doc/overrides.css} $dst/overrides.css
+      cp ${../../../doc/anchor.min.js} $dst/anchor.min.js
+      cp ${../../../doc/anchor-use.js} $dst/anchor-use.js
+
       cp -r ${pkgs.documentation-highlighter} $dst/highlightjs
 
       ${prepareManualFromMD}
@@ -115,10 +117,11 @@ in rec {
         --revision ${lib.escapeShellArg revision} \
         --generator "nixos-render-docs ${lib.version}" \
         --stylesheet style.css \
-        --stylesheet overrides.css \
         --stylesheet highlightjs/mono-blue.css \
         --script ./highlightjs/highlight.pack.js \
         --script ./highlightjs/loader.js \
+        --script ./anchor.min.js \
+        --script ./anchor-use.js \
         --toc-depth 1 \
         --chunk-toc-depth 1 \
         ./manual.md \
