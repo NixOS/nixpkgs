@@ -1,9 +1,9 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
 , pythonOlder
-, aiohttp
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-5mCHCzoDJ6+ao2guhAtVjvPaAS6Hutn+NwaQIjWDlgo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
   ];
 
