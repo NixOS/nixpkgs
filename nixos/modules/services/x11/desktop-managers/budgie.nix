@@ -214,7 +214,6 @@ in {
     services.colord.enable = mkDefault true; # for BCC's Color panel.
     services.gnome.at-spi2-core.enable = mkDefault true; # for BCC's A11y panel.
     services.accounts-daemon.enable = mkDefault true; # for BCC's Users panel.
-    services.fprintd.enable = mkDefault true; # for BCC's Users panel.
     services.udisks2.enable = mkDefault true; # for BCC's Details panel.
 
     # For BCC's Online Accounts panel.
