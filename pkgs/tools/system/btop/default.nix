@@ -11,6 +11,7 @@
 , cudaPackages
 , rocmSupport ? config.rocmSupport
 , rocmPackages
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddDriverRunpath
-  ];
+  ] ++ lib.optional rocmSupport makeWrapper;
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreFoundation
@@ -37,6 +38,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
+  '' + lib.optionalString rocmSupport ''
+    wrapProgram $out/bin/btop \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ rocmPackages.rocm-smi ]}"
   '';
 
   postPhases = lib.optionals rocmSupport [ "postPatchelf" ];
