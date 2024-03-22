@@ -31,11 +31,11 @@ buildPythonPackage rec {
       --replace-fail "wheel==0.40.0" "wheel"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     attrs
     httpx
