@@ -95,9 +95,6 @@ in with passthru; stdenv.mkDerivation {
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -delete
 
-    # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-
     runHook postInstall
   '';
 
