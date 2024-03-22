@@ -27,11 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-dq8PF5UJ5DHSu+P1H0JiVng9yVm49FjBNwyxnW974LE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     grpcio
