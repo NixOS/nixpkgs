@@ -7699,8 +7699,9 @@ with pkgs;
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
-  rocmPackages = rocmPackages_5;
+  rocmPackages = rocmPackages_6;
   rocmPackages_5 = recurseIntoAttrs (callPackage ../development/rocm-modules/5 { });
+  rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
 
   rune = callPackage ../development/interpreters/rune { };
 
@@ -18216,44 +18217,12 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron/binary { })
     electron-bin
-    electron_10-bin
-    electron_11-bin
-    electron_12-bin
-    electron_13-bin
-    electron_14-bin
-    electron_15-bin
-    electron_16-bin
-    electron_17-bin
-    electron_18-bin
-    electron_19-bin
-    electron_20-bin
-    electron_21-bin
-    electron_22-bin
-    electron_23-bin
     electron_24-bin
-    electron_25-bin
-    electron_26-bin
     electron_27-bin
     electron_28-bin
     electron_29-bin;
 
-  electron_10 = electron_10-bin;
-  electron_11 = electron_11-bin;
-  electron_12 = electron_12-bin;
-  electron_13 = electron_13-bin;
-  electron_14 = electron_14-bin;
-  electron_15 = electron_15-bin;
-  electron_16 = electron_16-bin;
-  electron_17 = electron_17-bin;
-  electron_18 = electron_18-bin;
-  electron_19 = electron_19-bin;
-  electron_20 = electron_20-bin;
-  electron_21 = electron_21-bin;
-  electron_22 = electron_22-bin;
-  electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
-  electron_25 = electron_25-bin;
-  electron_26 = electron_26-bin;
   electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
   electron_29 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_29 then electron-source.electron_29 else electron_29-bin;
@@ -33864,12 +33833,7 @@ with pkgs;
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client { };
 
-  opentoonz = let
-    opentoonz-libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
-  in qt5.callPackage ../applications/graphics/opentoonz {
-    libtiff = opentoonz-libtiff;
-    opencv = opencv.override { libtiff = opentoonz-libtiff; };
-  };
+  opentoonz = libsForQt5.callPackage ../applications/graphics/opentoonz { };
 
   opentabletdriver = callPackage ../tools/X11/opentabletdriver { };
 
