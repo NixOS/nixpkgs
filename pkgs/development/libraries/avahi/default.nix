@@ -92,6 +92,13 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-qR7scfQqhRGxg2n4HQsxVxCLkXbwZi+PlYxrOSEPsL0=";
       excludes = [ ".github/workflows/smoke-tests.sh" ];
     })
+    # https://github.com/avahi/avahi/pull/523 merged Nov 12
+    (fetchpatch {
+      name = "core-no-longer-supply-bogus-services-to-callbacks.patch";
+      url = "https://github.com/avahi/avahi/commit/93b14365c1c1e04efd1a890e8caa01a2a514bfd8.patch";
+      sha256 = "sha256-VBm8vsBZkTbbWAK8FI71SL89lZuYd1yFNoB5o+FvlEU=";
+      excludes = [ ".github/workflows/smoke-tests.sh" "fuzz/fuzz-packet.c" ];
+    })
   ];
 
   depsBuildBuild = [
