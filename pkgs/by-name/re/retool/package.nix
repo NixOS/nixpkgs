@@ -7,29 +7,24 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "retool";
-  version = "unstable-2023-08-24";
+  version = "2.02.2-unstable-2024-03-17";
 
-  format = "pyproject";
+  pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "unexpectedpanda";
     repo = "retool";
-    rev =  "d8acdb960d35b5a6b01d7dc66b7e40b3ec451301";
-    hash = "sha256-6y/7RR7O2xYKXdxaFtkRfnSlwygp/LRDUozUJo6ue7s=";
+    rev = "30d547c7d04b8cbf7710b2037388bf18a00a0c22";
+    hash = "sha256-5Tmi3eVJh9STP9A0dDNPDs4SlIWHw8sk+g1GgpnmqeE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
+    hatchling
     qt6.wrapQtAppsHook
   ];
 
   pythonRelaxDeps = true;
-
-  # ERROR: Could not find a version that satisfies the requirement PySide6 (from retool) (from versions: none)
-  # ERROR: No matching distribution found for PySide6
-  pythonRemoveDeps = [ "PySide6" ];
 
   buildInputs = [
     qt6.qtbase
@@ -40,11 +35,12 @@ python3.pkgs.buildPythonApplication {
 
   propagatedBuildInputs = with python3.pkgs; [
     alive-progress
+    darkdetect
     lxml
     psutil
-    validators
     pyside6
     strictyaml
+    validators
   ];
 
   # Upstream has no tests
