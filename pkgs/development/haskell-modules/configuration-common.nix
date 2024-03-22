@@ -2297,9 +2297,21 @@ self: super: {
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2023-07-03: allow lattices-2.2, waiting on https://github.com/haskell-CI/haskell-ci/pull/664
+  # 2024-03-21: pins specific version of ShellCheck
   haskell-ci = doJailbreak (super.haskell-ci.overrideScope (self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_2_0;
+    ShellCheck = self.ShellCheck_0_9_0;
   }));
+
+  # ShellCheck < 0.10.0 needs to be adjusted for changes in fgl >= 5.8
+  # https://github.com/koalaman/shellcheck/issues/2677
+  ShellCheck_0_9_0 = doJailbreak (appendPatches [
+    (fetchpatch {
+      name = "shellcheck-fgl-5.8.1.1.patch";
+      url = "https://github.com/koalaman/shellcheck/commit/c05380d518056189412e12128a8906b8ca6f6717.patch";
+      sha256 = "0gbx46x1a2sh5mvgpqxlx9xkqcw4wblpbgqdkqccxdzf7vy50xhm";
+    })
+  ] super.ShellCheck_0_9_0);
 
   # Too strict bound on hspec (<2.11)
   utf8-light = doJailbreak super.utf8-light;
