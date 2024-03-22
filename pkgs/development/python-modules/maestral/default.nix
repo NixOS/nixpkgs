@@ -23,12 +23,11 @@
 , watchdog
 , pytestCheckHook
 , nixosTests
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -37,7 +36,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YYbdd0GLVKE7+Oi0mpQjqhFdjdlquk/XnIg5WrtKcfI=";
+    hash = "sha256-xaopoB4lByFkEQY2CZoqJUCnrtFFrnL7Pgn53sSid60=";
   };
 
   propagatedBuildInputs = [
@@ -68,14 +67,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    # https://github.com/samschott/maestral/commit/2c50d2ddb49a845ea97bd6b0f68c45d723fb304c
-    # Allow the use of survey >= 5
-    # Remove after new maestral release along with pythonRelaxDepsHook
-    "survey"
   ];
 
   preCheck = ''
