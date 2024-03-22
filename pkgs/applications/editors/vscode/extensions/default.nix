@@ -3346,7 +3346,10 @@ let
           sha256 = "sha256-F6sukBQ61pHoKTxx88aa8QMLDOm9ozPF9nonIH34C7Q=";
         };
         meta = {
+          description = "Material Design product icon theme for VSCode";
+          homepage = "https://github.com/PKief/vscode-material-product-icons/blob/main/README.md";
           license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
