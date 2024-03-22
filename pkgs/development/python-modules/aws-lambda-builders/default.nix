@@ -7,15 +7,16 @@
 , pyelftools
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
   version = "1.47.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "awslabs";
@@ -26,10 +27,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=read_version()," 'version="${version}",'
+      --replace-fail "version=read_version()," 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     six
   ];
 
