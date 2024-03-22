@@ -2,34 +2,47 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, asio
 , dbus
 , libX11
 , libusb1
 , pkg-config
 , udev
 , wayland
+, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keymapper";
-  version = "3.0.0";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "keymapper";
     rev = finalAttrs.version;
-    hash = "sha256-X2Qk/cAczdkteB+6kyURGjvm1Ryio6WHj3Ga2POosCA=";
+    hash = "sha256-CfZdLeWgeNwy9tEJ3UDRplV0sRcKE4J6d3CxC9gqdmE=";
   };
 
-  # all the following must be in nativeBuildInputs
+  patches = lib.optionals stdenv.isDarwin [
+    # Avoid fetching asio dependency during buildtime, instead use asio from nixpkgs.
+    ./dont-fetch-asio.patch
+  ];
+
+  # all of the following must be in nativeBuildInputs
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optionals stdenv.isLinux [
     dbus
-    wayland
+    libusb1
     libX11
     udev
-    libusb1
+    wayland
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Carbon
+    asio
   ];
 
   meta = {
@@ -39,6 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "keymapper";
     maintainers = with lib.maintainers; [ dit7ya ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

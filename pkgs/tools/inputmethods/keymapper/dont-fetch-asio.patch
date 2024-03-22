@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b0daf21..9e13af4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -191,11 +191,6 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+     target_link_libraries(keymapper "-framework Carbon")
+   endif()
+ 
+-  include(FetchContent)
+-  FetchContent_Declare(asio GIT_REPOSITORY "https://github.com/chriskohlhoff/asio")
+-  FetchContent_MakeAvailable(asio)
+-  include_directories(${asio_SOURCE_DIR}/asio/include)
+-
+   include_directories(src/libs/Karabiner-DriverKit-VirtualHIDDevice/include)
+   target_link_libraries(keymapperd "-framework CoreFoundation" "-framework IOKit")
+ endif()
