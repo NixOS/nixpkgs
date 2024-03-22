@@ -40,6 +40,37 @@
       },
       "name": "python"
     },
+    "2162": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.979": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14015.137": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14015.155": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14475.31": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14475.40": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14475.56": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14475.66": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14808.14": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14808.18": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14808.20": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip",
+        "233.14808.21": "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip"
+      },
+      "name": "string-manipulation"
+    },
     "6954": {
       "compatible": [
         "idea-community",
@@ -510,6 +541,7 @@
     "https://plugins.jetbrains.com/files/164/491097/IdeaVim-2.9.1-signed.zip": "sha256-cUlxDF2aYw6od+dwLC3Gtv9tOzzMKo4NGZECBodIQPA=",
     "https://plugins.jetbrains.com/files/17718/499821/github-copilot-intellij-1.5.0.5148.zip": "sha256-/JuPSqFG6VyaDj2IQAYK3Lz7/FQWppfxxXUGuGQggrY=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
+    "https://plugins.jetbrains.com/files/2162/445223/StringManipulation-9.12.0.zip": "sha256-wGb66VI1HrXvd8yg3zvW6L8jwxL7GAnKgKfy+duIGKU=",
     "https://plugins.jetbrains.com/files/22407/498174/intellij-rust-233.24015.155.zip": "sha256-oFg2xlR3gB1DpmhqHlugSjnrBDgAHlwvroqwAHiUAzI=",
     "https://plugins.jetbrains.com/files/631/502576/python-233.14808.21.zip": "sha256-1YN+brLdFOgcSQwLzafrjbIZ4NWBllaKulLCJ6MfdGI=",
     "https://plugins.jetbrains.com/files/6981/487357/ini-233.14475.38.zip": "sha256-++4e6qSYfqoP3/M69xyNaNmkhyeX3h8dK9cJabeB5cY=",
