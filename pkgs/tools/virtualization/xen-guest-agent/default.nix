@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Xen agent running in Linux/BSDs (POSIX) VMs";
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [matdibu];
   };

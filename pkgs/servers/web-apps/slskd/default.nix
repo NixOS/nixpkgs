@@ -20,7 +20,7 @@ let
   meta = with lib; {
     description = "A modern client-server application for the Soulseek file sharing network";
     homepage = "https://github.com/slskd/slskd";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ ppom ];
     platforms = platforms.linux;
   };

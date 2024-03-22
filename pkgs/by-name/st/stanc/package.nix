@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, ocamlPackages
+{
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -17,15 +18,8 @@ ocamlPackages.buildDunePackage rec {
     hash = "sha256-ixZCix3oLZhzs08JbmbNCO0lhAu1Jf+KnpHNKlU/FaA=";
   };
 
-  # Error: This expression has type [ `Use_Sys_unix ]
-  postPatch = ''
-    substituteInPlace test/integration/run_bin_on_args.ml \
-      --replace "if Sys.file_exists (to_windows path) then to_windows cmd else cmd" "cmd"
-  '';
+  nativeBuildInputs = with ocamlPackages; [ menhir ];
 
-  nativeBuildInputs = with ocamlPackages; [
-    menhir
-  ];
   buildInputs = with ocamlPackages; [
     core_unix
     menhirLib
