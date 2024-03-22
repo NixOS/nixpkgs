@@ -93,6 +93,8 @@ let
       RT_GROUP_SCHED = lib.mkForce (option no);
       SCHED_AUTOGROUP = lib.mkForce (option no);
       SCHED_CORE = lib.mkForce (option no);
+      UCLAMP_TASK = lib.mkForce (option no);
+      UCLAMP_TASK_GROUP = lib.mkForce (option no);
 
       # ERROR: modpost: "sched_numa_hop_mask" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] undefined!
       MLX5_CORE = no;
