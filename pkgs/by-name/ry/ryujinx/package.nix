@@ -25,13 +25,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1239"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1242"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "d26ef2eec309a7a7b30b103c245044d1cdc08add";
-    sha256 = "0kdhxkgnnzhvmwlnzb5d0xx2f240y5h0vc1fhwiqk2cvwly5nd6y";
+    rev = "c94a73ec60f3f75b36179cbc93d046701ed96253";
+    sha256 = "0wksc3c63insll1jl0w6pa7vfgvkc50dzkwip676q3j8749fpzql";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
