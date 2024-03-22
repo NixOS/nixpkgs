@@ -39,16 +39,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvclive";
     rev = "refs/tags/${version}";
     hash = "sha256-76PjBPr3m1y5osW024dkhuvuXl2FiZ5oxlJ1Ucq8msI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dvc
     dvc-render
     dvc-studio-client
