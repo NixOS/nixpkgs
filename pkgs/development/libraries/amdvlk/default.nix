@@ -25,13 +25,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2023.Q4.2";
+  version = "2024.Q2.1";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "CmlFqHxP6WM4b/MnXbRhd2TvV3qhMiC6rHrn/SHtRdc=";
+    sha256 = "6++NuNuISIXMv/btII2KNzORI4mNaE9MjU18zGizwFY=";
   };
 
   buildInputs = [
@@ -59,7 +59,10 @@ in stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
-  ];
+  ] ++ (with python3.pkgs; [
+    jinja2
+    ruamel-yaml
+  ]);
 
   rpath = lib.makeLibraryPath [
     libdrm
