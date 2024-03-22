@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-FJHHEsdi2uGP9/GxrANsVEuxZiS4M4BPBGoARQBQpkA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     pythonRelaxDepsHook
     setuptools
   ];
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     "tzlocal"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aws-lambda-builders
     aws-sam-translator
     boto3
