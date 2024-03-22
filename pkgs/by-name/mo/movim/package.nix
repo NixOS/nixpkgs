@@ -71,6 +71,26 @@ php.buildComposerProject (finalAttrs: {
 
   vendorHash = "sha256-yMEeBaQcd3lv5EN04i86kUZ5wsOKLN6vPYjfDm/8bGM=";
 
+  patches = [
+    # Respect user agent font sizing
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/movim/movim/pull/1280.patch";
+      hash = "sha256-zOVFnndDb/cPQg7kxFAvRgfhXM7mYNlvjIxPJH5rnV0=";
+    })
+
+    # Defer scripts to prevent render blocking
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/movim/movim/pull/1284.patch";
+      hash = "sha256-LuSd1upDrgb8cZeWCes2uX3f+10AZ8VyKiGc5Z3muFs=";
+    })
+
+    # Prevent subnavs from shrinking inside parent
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/movim/movim/pull/1302.patch";
+      hash = "sha256-dXba9ifGd3JXBdHNTWhdeeNXFLUdoqLzbL/bFpa1H3Y=";
+    })
+  ];
+
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
     # replacing `$configuration` with actually-used flags.
