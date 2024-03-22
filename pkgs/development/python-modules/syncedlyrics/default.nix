@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-Q0Hu403Hxr4iDuZfGQjgTSuNMVgsqd9zLRl9Vc1YzyQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "rapidfuzz"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     rapidfuzz
     beautifulsoup4
