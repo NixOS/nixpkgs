@@ -1,4 +1,15 @@
-{ stdenv, lib, openssl, darwin, libgit2, makeWrapper, nix, pkg-config, rustPlatform, cachix, fetchFromGitHub }:
+{ stdenv
+, lib
+, openssl
+, darwin
+, libgit2
+, makeWrapper
+, nix
+, pkg-config
+, rustPlatform
+, cachix
+, fetchFromGitHub
+}:
 
 let
   devenv_nix = nix.overrideAttrs (old: {
@@ -13,6 +24,7 @@ let
     doCheck = false;
     doInstallCheck = false;
   });
+
   version = "1.0.1";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -38,4 +50,13 @@ in rustPlatform.buildRustPackage {
   postInstall = ''
     wrapProgram $out/bin/devenv --set DEVENV_NIX ${devenv_nix} --prefix PATH ":" "$out/bin:${cachix}/bin"
   '';
+
+  meta = {
+    changelog = "https://github.com/cachix/devenv/releases/tag/v${version}";
+    description = "Fast, Declarative, Reproducible, and Composable Developer Environments";
+    homepage = "https://github.com/cachix/devenv";
+    license = lib.licenses.asl20;
+    mainProgram = "devenv";
+    maintainers = with lib.maintainers; [ domenkozar drupol ];
+  };
 }
