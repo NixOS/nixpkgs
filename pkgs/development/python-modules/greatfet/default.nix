@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "greatfet";
-  version = "2019.5.1.dev0";
+  version = "2021.2.1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "greatfet";
-    rev = "v${version}";
-    sha256 = "054vkx4xkbhxhh5grjbs9kw3pjkv1zapp91ysrqr0c8mg1pc7zxv";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ZIZxK6P/LfYRAssME+5mJz5dTNLKo9217D7cAam+BgI=";
   };
 
   disabled = !isPy3k;
