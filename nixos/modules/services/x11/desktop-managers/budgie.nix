@@ -146,7 +146,6 @@ in {
           mate.atril
           mate.engrampa
           mate.mate-calc
-          mate.mate-terminal
           mate.mate-system-monitor
           vlc
 
@@ -159,6 +158,9 @@ in {
           nixos-gsettings-overrides
         ] config.environment.budgie.excludePackages)
       ++ cfg.sessionPath;
+
+    # Both budgie-desktop-view and nemo defaults to this emulator.
+    programs.gnome-terminal.enable = mkDefault true;
 
     # Fonts.
     fonts.packages = [
@@ -214,7 +216,6 @@ in {
     services.colord.enable = mkDefault true; # for BCC's Color panel.
     services.gnome.at-spi2-core.enable = mkDefault true; # for BCC's A11y panel.
     services.accounts-daemon.enable = mkDefault true; # for BCC's Users panel.
-    services.fprintd.enable = mkDefault true; # for BCC's Users panel.
     services.udisks2.enable = mkDefault true; # for BCC's Details panel.
 
     # For BCC's Online Accounts panel.

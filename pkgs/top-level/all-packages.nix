@@ -33981,9 +33981,9 @@ with pkgs;
 
   paprefs = callPackage ../applications/audio/paprefs { };
 
-  pantalaimon = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon { };
+  pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
 
-  pantalaimon-headless = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon {
+  pantalaimon-headless = callPackage ../applications/networking/instant-messengers/pantalaimon {
     enableDbusUi = false;
   };
 
