@@ -14955,6 +14955,8 @@ with pkgs;
     boost = boost179;
   };
 
+  xorriso = libisoburn;
+
   xurls = callPackage ../tools/text/xurls { };
 
   xxv = callPackage ../tools/misc/xxv { };
