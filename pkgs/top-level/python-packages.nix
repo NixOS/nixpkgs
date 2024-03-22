@@ -741,6 +741,8 @@ self: super: with self; {
 
   ariadne = callPackage ../development/python-modules/ariadne { };
 
+  arm-mango = callPackage ../development/python-modules/arm-mango { };
+
   arpy = callPackage ../development/python-modules/arpy { };
 
   arnparse = callPackage ../development/python-modules/arnparse { };
