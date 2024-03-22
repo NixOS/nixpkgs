@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
       --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
       --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
-      --replace-warn "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
+      --replace-fail "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
       --replace-quiet " -XX:PermSize=192m -XX:MaxPermSize=192m" "" \
       --replace-fail "com.fs.starfarer.StarfarerLauncher" "\"\$@\" com.fs.starfarer.StarfarerLauncher"
   '';
