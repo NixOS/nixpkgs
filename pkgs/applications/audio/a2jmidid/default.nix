@@ -3,14 +3,15 @@
 
 stdenv.mkDerivation rec {
   pname = "a2jmidid";
-  version = "9";
+  version = "12";
 
   src = fetchFromGitea {
     domain = "gitea.ladish.org";
     owner = "LADI";
     repo = "a2jmidid";
-    rev = version;
-    hash = "sha256-WNt74tSWV8bY4TnpLp86PsnrjkqWynJJt3Ra4gZl2fQ=";
+    rev = "refs/tags/${version}";
+    fetchSubmodules = true;
+    hash = "sha256-PZKGhHmPMf0AucPruOLB9DniM5A3BKdghFCrd5pTzeM=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper meson ninja ];
