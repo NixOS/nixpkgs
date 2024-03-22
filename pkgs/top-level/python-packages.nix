@@ -4603,6 +4603,8 @@ self: super: with self; {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  generate-chroma = callPackage ../development/python-modules/generate-chroma { };
+
   generic = callPackage ../development/python-modules/generic { };
 
   geniushub-client = callPackage ../development/python-modules/geniushub-client { };
@@ -8555,6 +8557,8 @@ self: super: with self; {
     python3 = python;
     withPython = true;
   });
+
+  nglview = callPackage ../development/python-modules/nglview { };
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
