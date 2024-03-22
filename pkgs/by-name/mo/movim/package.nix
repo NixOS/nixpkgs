@@ -9,13 +9,13 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
-  version = "0.23";
+  version = "0.23.0.20240328";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9MBe2IRYxvUuCc5m7ajvIlBU7YVm4A3RABlOOIjpKoM=";
+    rev = "c3a43cd7e3a1a3a6efd595470e6a85b2ec578cba";
+    hash = "sha256-x0C4w3SRP3NMOhGSZOQALk6PNWUre4MvFW5cESr8Wvk=";
   };
 
   php = php.buildEnv ({
@@ -33,7 +33,7 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-PBoJbVuF0Qy7nNlL4yx446ivlZpPYNIai78yC0wWkCM=";
+  vendorHash = "sha256-RFIi1I+gcagRgkDpgQeR1oGJeBGA7z9q3DCfW+ZDr2Y=";
 
   postPatch = ''
     # BUGFIX: Imagick API Changes for 7.x+
