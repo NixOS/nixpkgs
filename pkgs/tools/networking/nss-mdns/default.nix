@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.15.1";
 
   src = fetchFromGitHub {
-    owner = "lathiat";
+    owner = "avahi";
     repo = "nss-mdns";
     rev = "v${version}";
     hash = "sha256-iRaf9/gu9VkGi1VbGpxvC5q+0M8ivezCz/oAKEg5V1M=";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       resolution by common Unix/Linux programs in the ad-hoc mDNS
       domain `.local'.
     '';
-    homepage = "http://0pointer.de/lennart/projects/nss-mdns/";
+    homepage = "https://github.com/avahi/nss-mdns/";
     license = lib.licenses.lgpl2Plus;
     # Supports both the GNU and FreeBSD NSS.
     platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.freebsd;
