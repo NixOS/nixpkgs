@@ -29,11 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-j9HJZTt4VTq29Q+nynYmRWKx02GVdyA+iZzxZwspXn8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     httpx
     jinja2
