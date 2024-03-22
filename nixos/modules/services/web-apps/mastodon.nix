@@ -742,11 +742,16 @@ in {
         umask 077
         export PGPASSWORD="$(cat '${cfg.database.passwordFile}')"
       '' + ''
-        if [ `psql -c \
-                "select count(*) from pg_class c \
-                join pg_namespace s on s.oid = c.relnamespace \
-                where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
-                and s.nspname not like 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
+        result="$(psql -t --csv -c \
+            "select count(*) from pg_class c \
+            join pg_namespace s on s.oid = c.relnamespace \
+            where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
+            and s.nspname not like 'pg_temp%';")" || error_code=$?
+        if [ "''${error_code:-0}" -ne 0 ]; then
+          echo "Failure checking if database is seeded. psql gave exit code $error_code"
+          exit "$error_code"
+        fi
+        if [ "$result" -eq 0 ]; then
           echo "Seeding database"
           SAFETY_ASSURED=1 rails db:schema:load
           rails db:seed
