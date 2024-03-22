@@ -9027,6 +9027,12 @@
     githubId = 1667473;
     name = "Jethro Kuan";
   };
+  jetpackjackson = {
+    email = "baileyannew@tutanota.com";
+    github = "JetpackJackson";
+    githubId = 88674707;
+    name = "Bailey Watkins";
+  };
   jevy = {
     email = "jevin@quickjack.ca";
     github = "jevy";
