@@ -6144,7 +6144,6 @@ broken-packages:
   - typed-time # failure in job https://hydra.nixos.org/build/233246930 at 2023-09-02
   - typed-wire # failure in job https://hydra.nixos.org/build/233237626 at 2023-09-02
   - type-eq # failure in job https://hydra.nixos.org/build/233214388 at 2023-09-02
-  - type-errors # failure in job https://hydra.nixos.org/build/252734319 at 2024-03-16
   - type-errors-pretty # failure in job https://hydra.nixos.org/build/233238808 at 2023-09-02
   - typehash # failure in job https://hydra.nixos.org/build/233207184 at 2023-09-02
   - type-indexed-queues # failure in job https://hydra.nixos.org/build/233197833 at 2023-09-02
