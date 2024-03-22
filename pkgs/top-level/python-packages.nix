@@ -10966,6 +10966,8 @@ self: super: with self; {
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
 
+  pylacus = callPackage ../development/python-modules/pylacus { };
+
   pylama = callPackage ../development/python-modules/pylama { };
 
   pylast = callPackage ../development/python-modules/pylast { };
