@@ -173,6 +173,7 @@ stdenv.mkDerivation (self: rec {
 
   buildArgs = [
     "--prefix=$out"
+    "--dynamic-space-size=3072"
     "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
   ] ++ builtins.map (x: "--with-${x}") self.enableFeatures
   ++ builtins.map (x: "--without-${x}") self.disableFeatures
