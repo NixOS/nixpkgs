@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "5.0.1";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XwSKAXQzQ64NTIYjBgBzhs+5sURTxHrf2tJ363mkbVA=";
+    hash = "sha256-+Q+d55W04pWJ7dLrRG0R3bRmZ46+gj7TKfzzV1nqOQw=";
   };
 
   nativeBuildInputs = [
