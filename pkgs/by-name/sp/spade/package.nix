@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-MNMKUhXVBhSn91uTVCuxozJ2BVFQAX/YdnCPOztGQyM=";
+    hash = "sha256-oJfOgWobjt+DAVdP465E8iLMJCdqhs0vzJJFgRqVAP8=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-      "local-impl-0.1.0" = "sha256-w6kQ4wM/ZQJmOqmAAq9FFDzyt9xHOY14av5dsSIFRU0=";
       "tracing-tree-0.2.0" = "sha256-/JNeAKjAXmKPh0et8958yS7joORDbid9dhFB0VUAhZc=";
     };
   };

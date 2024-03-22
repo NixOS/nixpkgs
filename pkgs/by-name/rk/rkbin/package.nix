@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, rkbin
 }:
 
 stdenv.mkDerivation {
@@ -19,15 +20,16 @@ stdenv.mkDerivation {
     mv bin doc $out/
   '';
 
-  BL31_RK3568 = "bin/rk35/rk3568_ddr_1056MHz_v1.21.bin";
-  ROCKCHIP_TPL_RK3568 = "bin/rk35/rk3568_ddr_1056MHz_v1.21.bin";
-
-  ROCKCHIP_TPL_RK3588 = "bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin";
+  passthru = {
+    BL31_RK3568 = "${rkbin}/bin/rk35/rk3568_bl31_v1.44.elf";
+    TPL_RK3568 = "${rkbin}/bin/rk35/rk3568_ddr_1056MHz_v1.21.bin";
+    TPL_RK3588 = "${rkbin}/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin";
+  };
 
   meta = with lib; {
     description = "Rockchip proprietary bootloader blobs";
     homepage = "https://github.com/rockchip-linux/rkbin";
-    license = licenses.unfree;
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ thefossguy ];
     platforms = [ "aarch64-linux" ];
   };
