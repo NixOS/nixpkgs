@@ -239,6 +239,17 @@
       },
       "name": "asciidoc"
     },
+    "8024": {
+      "compatible": [
+        "idea-ultimate",
+        "phpstorm"
+      ],
+      "builds": {
+        "233.14015.106": "https://plugins.jetbrains.com/files/8024/321215/com.magento.idea.magento2plugin-5.1.1.zip",
+        "233.14015.96": "https://plugins.jetbrains.com/files/8024/321215/com.magento.idea.magento2plugin-5.1.1.zip"
+      },
+      "name": "magento-phpstorm"
+    },
     "8182": {
       "compatible": [
         "clion",
@@ -678,6 +689,7 @@
     "https://plugins.jetbrains.com/files/7322/559299/python-ce-241.18034.55.zip": "sha256-e+MewymlNWzbut8eADe8jwqco921ULe83eLEGpDf1GY=",
     "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip": "sha256-icVvR79Ut6RopPKqvUQf4ZHKg14LV8/KWUZfQh/BYV8=",
     "https://plugins.jetbrains.com/files/7391/561441/asciidoctor-intellij-plugin-0.42.2.zip": "sha256-oKczkLHAk2bJRNRgToVe0ySEJGF8+P4oWqQ33olwzWw=",
+    "https://plugins.jetbrains.com/files/8024/321215/com.magento.idea.magento2plugin-5.1.1.zip": "sha256-7jX+TTcfjjy9T5B8p4xeZa46Lb6Qziq5tfewUpJOWcE=",
     "https://plugins.jetbrains.com/files/8182/466854/intellij-rust-233.15445.zip": "sha256-+Lc/avYBLpyIV63DlbhAJtieHDv4HdggqdGFDw9iqN0=",
     "https://plugins.jetbrains.com/files/8554/535094/featuresTrainer-241.17011.14.zip": "sha256-p26GW1NyVI8OR1VypeWUFWW8qlwB+LtzrEoKyXBwiCw=",
     "https://plugins.jetbrains.com/files/8607/555059/NixIDEA-0.4.0.14.zip": "sha256-oP/tvAqzMSDLJ0Jah1eLJDZIm9WhOZas7lPWrvjWFMM=",
