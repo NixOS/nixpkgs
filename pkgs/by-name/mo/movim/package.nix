@@ -35,6 +35,14 @@ php.buildComposerProject (finalAttrs: {
 
   vendorHash = "sha256-PBoJbVuF0Qy7nNlL4yx446ivlZpPYNIai78yC0wWkCM=";
 
+  postPatch = ''
+    # BUGFIX: Imagick API Changes for 7.x+
+    # See additionally: https://github.com/movim/movim/pull/1122
+    substituteInPlace src/Movim/Image.php \
+      --replace-fail "Imagick::ALPHACHANNEL_REMOVE" "Imagick::ALPHACHANNEL_OFF" \
+      --replace-fail "Imagick::ALPHACHANNEL_ACTIVATE" "Imagick::ALPHACHANNEL_ON"
+  '';
+
   postInstall = ''
     mkdir -p $out/bin
     echo "#!${lib.getExe dash}" > $out/bin/movim
