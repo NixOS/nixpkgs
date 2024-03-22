@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "56";
+  version = "57";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "axis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vHdLDqNCErP5Wf9HYJP0X2S3mFbXB7ouBxoKwBtfVL4=";
+    hash = "sha256-OW5QdQMPgWLlqGXW9Hi2y4Z4EVpTbNrbhN0Lra8zP4Q=";
   };
 
   postPatch = ''
@@ -31,11 +31,11 @@ buildPythonPackage rec {
       --replace-fail "wheel==0.40.0" "wheel"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     attrs
     httpx
