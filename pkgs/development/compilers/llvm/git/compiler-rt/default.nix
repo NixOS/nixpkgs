@@ -111,6 +111,8 @@ stdenv.mkDerivation {
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM && !haveLibc) ''
+    substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
+      --replace "<stdlib.h>" "<stddef.h>"
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
     substituteInPlace lib/builtins/clear_cache.c \
