@@ -91,7 +91,12 @@ if __name__ == "__main__":
     args = argparser.parse_args()
 
     metadata = get_metadata(args.wheel)
-    tests = [test_requirement(requirement) for requirement in metadata.requires_dist]
+    requirements = metadata.requires_dist
+
+    if not requirements:
+        sys.exit(0)
+
+    tests = [test_requirement(requirement) for requirement in requirements]
 
     if not all(tests):
         sys.exit(1)
