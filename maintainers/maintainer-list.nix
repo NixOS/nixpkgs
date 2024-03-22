@@ -18642,6 +18642,11 @@
     githubId = 3889585;
     name = "Cheng Shao";
   };
+  tesnos6921 = {
+    github = "tesnos6921";
+    githubId = 7860497;
+    name = "tesnos6921";
+  };
   tesq0 = {
     email = "mikolaj.galkowski@gmail.com";
     github = "tesq0";
