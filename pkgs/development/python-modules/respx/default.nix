@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.20.2";
+  version = "0.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "lundberg";
     repo = pname;
     rev = version;
-    hash = "sha256-OiBKNK8V9WNQDe29Q5+E/jjBWD0qFcYUzhYUWA+7oFc=";
+    hash = "sha256-fjZ5JMWOZUnDLTdIexhnB5ZVYJOVUGraxNpDpB9ZrAU=";
   };
 
   propagatedBuildInputs = [
