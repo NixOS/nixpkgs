@@ -114,6 +114,37 @@
       },
       "name": "ini"
     },
+    "7086": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.979": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14015.137": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14015.155": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14475.31": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14475.40": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14475.56": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14475.66": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14808.14": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14808.18": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14808.20": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip",
+        "233.14808.21": "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip"
+      },
+      "name": "acejump"
+    },
     "7219": {
       "compatible": [
         "idea-ultimate",
@@ -546,6 +577,7 @@
     "https://plugins.jetbrains.com/files/631/502576/python-233.14808.21.zip": "sha256-1YN+brLdFOgcSQwLzafrjbIZ4NWBllaKulLCJ6MfdGI=",
     "https://plugins.jetbrains.com/files/6981/487357/ini-233.14475.38.zip": "sha256-++4e6qSYfqoP3/M69xyNaNmkhyeX3h8dK9cJabeB5cY=",
     "https://plugins.jetbrains.com/files/6981/502555/ini-233.14808.20.zip": "sha256-8uDtfKkWfYr2qTD4Etb/zne1IXiiVLKQGJHKIVtp5cI=",
+    "https://plugins.jetbrains.com/files/7086/460795/AceJump.zip": "sha256-LlW5r1JynP4FOHXht2/S0llpiyi1Hi1UUpSoafp0A3k=",
     "https://plugins.jetbrains.com/files/7219/497847/Symfony_Plugin-2023.1.265.zip": "sha256-lAAu2NamhKjGcVTu5cBlwSX8UP8bkKf9S++CW6xzvkk=",
     "https://plugins.jetbrains.com/files/7320/346181/PHP_Annotations-9.4.0.zip": "sha256-hT5K4w4lhvNwDzDMDSvsIDGj9lyaRqglfOhlbNdqpWs=",
     "https://plugins.jetbrains.com/files/7322/474341/python-ce-233.14015.106.zip": "sha256-yd70cSA/Icn5YlH4Q79cIWGFJ6huYUBDKk6vCIYa3DU=",
