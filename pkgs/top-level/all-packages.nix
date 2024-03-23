@@ -23159,11 +23159,9 @@ with pkgs;
   inherit
     ({
       libtiff = callPackage ../development/libraries/libtiff { };
-      libtiff_4_5 = callPackage ../development/libraries/libtiff/4.5.nix { };
       libtiff_and_tools = callPackage ../development/libraries/libtiff/libtiff_and_tools.nix { };
     })
     libtiff
-    libtiff_4_5
     libtiff_and_tools
     ;
 
