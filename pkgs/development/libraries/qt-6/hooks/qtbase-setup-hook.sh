@@ -22,11 +22,11 @@ else # Only set up Qt once.
     fi
 
     # Integration with CMake:
-    # Set the CMake build type corresponding to how qtbase was built.
+    # If the CMake build type is not set explicitly, set it to how qtbase was built.
     if [ -n "@debug@" ]; then
-        cmakeBuildType="Debug"
+        cmakeBuildType=${cmakeBuildType:-Debug}
     else
-        cmakeBuildType="Release"
+        cmakeBuildType=${cmakeBuildType:-Release}
     fi
 
     # Build tools are often confused if QMAKE is unset.
