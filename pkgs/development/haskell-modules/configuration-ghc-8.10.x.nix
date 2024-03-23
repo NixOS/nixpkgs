@@ -66,6 +66,9 @@ self: super: {
     self.base-orphans
   ] super.hashable;
 
+  # Too strict lower bounds on base
+  primitive-addr = doJailbreak super.primitive-addr;
+
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
