@@ -20,11 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-gs9MeCV1c0qJUyfyX/WDzpSZ1+K4Nv6IgLLXlhxrRis=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asdf-standard
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
