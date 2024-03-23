@@ -22,7 +22,7 @@ let
     rev = "v${version}";
     hash = "sha256-Uv0iEIFkTdBAi0WDBQHf0ATs4L2FOU4NmiE9p1MHSa0=";
   };
-  goModulesHash = "sha256-PQch046YjYhAmVlNNdgDLWIqFvEpXRgXAYFMwSZmk4w=";
+  goModulesHash = "sha256-thd1bhbPVedYd+Yq1IYYUJFr66AWRTzA3DceCXFTEQo=";
 
   buildZitadelProtocGen = name:
     buildGoModule {
