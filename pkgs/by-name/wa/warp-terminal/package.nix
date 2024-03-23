@@ -1,16 +1,79 @@
 { lib
 , stdenvNoCC
+, stdenv
 , fetchurl
+, autoPatchelfHook
 , undmg
+, zstd
+, curl
+, fontconfig
+, libglvnd
+, libxkbcommon
+, vulkan-loader
+, xdg-utils
+, xorg
+, zlib
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "warp-terminal";
-  version = "0.2023.11.07.08.02.stable_00";
 
+let
+pname = "warp-terminal";
+versions = lib.importJSON ./versions.json;
+passthru.updateScript = ./update.sh;
+
+linux = stdenv.mkDerivation (finalAttrs:  {
+  inherit pname meta passthru;
+  inherit (versions.linux) version;
   src = fetchurl {
-    url = "https://releases.warp.dev/stable/v${finalAttrs.version}/Warp.dmg";
-    hash = "sha256-oGsoIzNlrknaZtrGWT3oUEzwJIutxB1wnAvxTzF6Fis=";
+    inherit (versions.linux) hash;
+    url = "https://releases.warp.dev/stable/v${finalAttrs.version}/warp-terminal-v${finalAttrs.version}-1-x86_64.pkg.tar.zst";
   };
+
+  sourceRoot = ".";
+
+  postPatch = ''
+    substituteInPlace usr/bin/warp-terminal \
+      --replace /opt/ $out/opt/
+  '';
+
+  nativeBuildInputs = [ autoPatchelfHook zstd ];
+
+  buildInputs = [
+    curl
+    fontconfig
+    stdenv.cc.cc.lib # libstdc++.so libgcc_s.so
+    zlib
+  ];
+
+  runtimeDependencies = [
+    libglvnd # for libegl
+    libxkbcommon
+    stdenv.cc.libc
+    vulkan-loader
+    xdg-utils
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcursor
+    xorg.libXi
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out
+    cp -r opt usr/* $out
+
+    runHook postInstall
+  '';
+});
+
+darwin = stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit pname meta passthru;
+  inherit (versions.darwin) version;
+  src = fetchurl {
+    inherit (versions.darwin) hash;
+    url = "https://releases.warp.dev/stable/v${finalAttrs.version}/Warp.dmg";
+  };
+
   sourceRoot = ".";
 
   nativeBuildInputs = [ undmg ];
@@ -23,13 +86,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+});
 
-  meta = with lib; {
-    description = "Rust-based terminal";
-    homepage = "https://www.warp.dev";
-    license = licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
-    platforms = platforms.darwin;
-  };
-})
+meta = with lib; {
+  description = "Rust-based terminal";
+  homepage = "https://www.warp.dev";
+  license = licenses.unfree;
+  sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  maintainers = with maintainers; [ emilytrau Enzime imadnyc ];
+  platforms = platforms.darwin ++ [ "x86_64-linux" ];
+};
+
+in
+if stdenvNoCC.isDarwin
+then darwin
+else linux
