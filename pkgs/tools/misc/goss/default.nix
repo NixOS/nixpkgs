@@ -16,16 +16,16 @@ buildGoModule rec {
   pname = "goss";
 
   # Don't forget to update dgoss to the same version.
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dH052t30unWmrFTZK5niXNvbg1nngzWY7mwuZr4ULbM=";
+    hash = "sha256-aE6NfXBoX4yexBxz1drOtfqB8HBkD7hyy+hPjHvhM2A=";
   };
 
-  vendorHash = "sha256-4fEEz/c/xIeWxIzyyjwgSn2/2FWLA2tIedK65jGgYhY=";
+  vendorHash = "sha256-5/vpoJZu/swNwQQXtW6wuEVCtOq6HsbFywuipaiwHfs=";
 
   CGO_ENABLED = 0;
   ldflags = [
