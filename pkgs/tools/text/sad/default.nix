@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sad";
+    rev = "refs/tags/v${version}";
     hash = "sha256-G+Mkyw7TNx5+fhnaOe3Fsb1JuafqckcZ83BTnuWUZBU=";
   };
 
@@ -27,9 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "CLI tool to search and replace";
-    mainProgram = "sad";
     homepage = "https://github.com/ms-jpq/sad";
+    changelog = "https://github.com/ms-jpq/sad/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sad";
   };
 }
