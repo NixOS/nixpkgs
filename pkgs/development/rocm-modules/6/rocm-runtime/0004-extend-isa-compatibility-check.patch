@@ -1,0 +1,85 @@
+From: Cordell Bloor <cgmb@slerp.xyz>
+Date: Wed, 13 Jul 2022 19:36:26 -0600
+Subject: extend isa compatibility check
+
+There are a number of ISAs that are identical to each other, but are
+not being treated as compatible by the upstream rocr-runtime. This
+more sophisticated ISA compatibility check greatly reduces the number
+of code objects that must be included in a binary in order to support
+a wide variety of processors.
+
+This change to the rocr-runtime is useless on its own, but when
+combined with matching changes within rocclr and hipamd, it should
+always load compatible kernels whenever possible, threreby replacing
+the infamous HSA_OVERRIDE_GFX_VERSION variable for running compatible
+binaries.
+---
+ core/runtime/isa.cpp | 45 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 43 insertions(+), 2 deletions(-)
+
+--- a/core/runtime/isa.cpp
++++ b/core/runtime/isa.cpp
+@@ -43,6 +43,7 @@
+ #include "core/inc/isa.h"
+ 
+ #include <algorithm>
++#include <array>
+ #include <cstring>
+ #include <iostream>
+ #include <sstream>
+@@ -69,13 +70,53 @@
+   }
+ }
+ 
++template <class T, std::size_t N>
++static bool Contains(const std::array<T, N>& arr, const T& value) {
++  return std::find(std::begin(arr), std::end(arr), value) != std::end(arr);
++}
++
++static bool IsVersionCompatible(const Isa &code_object_isa,
++                                const Isa &agent_isa) {
++  if (code_object_isa.GetMajorVersion() == agent_isa.GetMajorVersion() &&
++      code_object_isa.GetMinorVersion() == agent_isa.GetMinorVersion()) {
++
++      if (code_object_isa.GetStepping() == agent_isa.GetStepping()) {
++        return true; // exact match
++      }
++
++      // the processor and code object may sometimes be compatible if
++      // they differ only by stepping version
++      if (code_object_isa.GetMajorVersion() == 9 &&
++          code_object_isa.GetMinorVersion() == 0) {
++        const std::array<int32_t, 4> gfx900_equivalent = { 0, 2, 9, 12 };
++        const std::array<int32_t, 5> gfx900_superset = { 0, 2, 6, 9, 12 };
++        if (Contains(gfx900_equivalent, code_object_isa.GetStepping()) &&
++            Contains(gfx900_superset, agent_isa.GetStepping())) {
++          return true; // gfx900 compatible
++        }
++      } else if (code_object_isa.GetMajorVersion() == 10) {
++        if (code_object_isa.GetMinorVersion() == 1) {
++          const std::array<int32_t, 1> gfx1010_equivalent = { 0 };
++          const std::array<int32_t, 4> gfx1010_superset = { 0, 1, 2, 3 };
++          if (Contains(gfx1010_equivalent, code_object_isa.GetStepping()) &&
++              Contains(gfx1010_superset, agent_isa.GetStepping())) {
++            return true; // gfx1010 compatible
++          }
++        } else if (code_object_isa.GetMinorVersion() == 3) {
++          return true; // gfx1030 compatible
++        }
++      }
++    }
++
++  return false;
++}
++
+ /* static */
+ bool Isa::IsCompatible(const Isa &code_object_isa,
+                        const Isa &agent_isa) {
+-  if (code_object_isa.GetVersion() != agent_isa.GetVersion())
++  if (!IsVersionCompatible(code_object_isa, agent_isa))
+     return false;
+ 
+-  assert(code_object_isa.IsSrameccSupported() == agent_isa.IsSrameccSupported()  && agent_isa.GetSramecc() != IsaFeature::Any);
+   if ((code_object_isa.GetSramecc() == IsaFeature::Enabled ||
+         code_object_isa.GetSramecc() == IsaFeature::Disabled) &&
+       code_object_isa.GetSramecc() != agent_isa.GetSramecc())

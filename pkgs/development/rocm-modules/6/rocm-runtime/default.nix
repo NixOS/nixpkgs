@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  patches = [
+    ./0004-extend-isa-compatibility-check.patch
+  ];
+
   postPatch = ''
     patchShebangs image/blit_src/create_hsaco_ascii_file.sh
     patchShebangs core/runtime/trap_handler/create_trap_handler_header.sh
