@@ -341,6 +341,8 @@ self: super: with self; {
 
   aiopg = callPackage ../development/python-modules/aiopg { };
 
+  aiopinboard = callPackage ../development/python-modules/aiopinboard { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aioprometheus = callPackage ../development/python-modules/aioprometheus { };
@@ -2867,6 +2869,8 @@ self: super: with self; {
   demetriek = callPackage ../development/python-modules/demetriek { };
 
   demjson3 = callPackage ../development/python-modules/demjson3 { };
+
+  demoji = callPackage ../development/python-modules/demoji { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
 
@@ -10961,6 +10965,8 @@ self: super: with self; {
   pykwb = callPackage ../development/python-modules/pykwb { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
+
+  pylacus = callPackage ../development/python-modules/pylacus { };
 
   pylama = callPackage ../development/python-modules/pylama { };
 

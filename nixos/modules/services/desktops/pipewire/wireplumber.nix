@@ -67,10 +67,12 @@ in
       '';
 
       systemwideConfigPkg = pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/90-nixos-systemwide.conf" ''
-        # When running system-wide, we don't have logind to call ReserveDevice
+        # When running system-wide, we don't have logind to call ReserveDevice,
+        # And bluetooth logind integration needs to be disabled
         wireplumber.profiles = {
           main = {
             support.reserve-device = disabled
+            monitor.bluez.seat-monitoring = disabled
           }
         }
       '';

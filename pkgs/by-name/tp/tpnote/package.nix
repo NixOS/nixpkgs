@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tpnote";
-  version = "1.23.9";
+  version = "1.23.10";
 
   src = fetchFromGitHub {
     owner = "getreu";
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-HOCd5N8oS8N+9alR3cG7IEghvhvcc8A+O24L6FD1F38=";
   };
 
-  cargoHash = "sha256-T1AYiwGPolYUhJQzTyR7v5dqqNFUCSfSBzU3CithZPw=";
+  cargoHash = "sha256-hI9vzPLcMaFSQpPgIf39UsWDpdHAmQ56D8pSWZ/R1aI=";
 
   nativeBuildInputs = [
     cmake

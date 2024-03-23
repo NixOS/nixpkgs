@@ -5689,6 +5689,12 @@
     githubId = 2536303;
     name = "Enno Lohmeier";
   };
+  elpdt852 = {
+    email = "nix@pdtpartners.com";
+    github = "elpdt852";
+    githubId = 122112154;
+    name = "Edgar Lee";
+  };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
     matrix = "@elvishjerricco:matrix.org";
@@ -16635,6 +16641,12 @@
     githubId = 641278;
     name = "Robert T. McGibbon";
   };
+  rmgpinto = {
+    email = "hessian_loom_0u@icloud.com";
+    github = "rmgpinto";
+    githubId = 24584;
+    name = "Ricardo Gândara Pinto";
+  };
   rnhmjoj = {
     email = "rnhmjoj@inventati.org";
     matrix = "@rnhmjoj:maxwell.ydns.eu";
@@ -19355,6 +19367,13 @@
     github = "thefloweringash";
     githubId = 42933;
     name = "Andrew Childs";
+  };
+  thefossguy = {
+    name = "Pratham Patel";
+    email = "prathampatel@thefossguy.com";
+    matrix = "@thefossguy:matrix.org";
+    github = "thefossguy";
+    githubId = 44400303;
   };
   thehedgeh0g = {
     name = "The Hedgehog";
