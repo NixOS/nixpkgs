@@ -4,14 +4,14 @@
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xxHash";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kofPs01jb189LUjYHHt+KxDifZQWl0Hm779711mvWtI=";
   };
 
@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
 
   # Using unofficial CMake build script to install CMake module files.
   cmakeDir = "../cmake_unofficial";
-
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
 
   meta = with lib; {
     description = "Extremely fast hash algorithm";
@@ -40,5 +36,8 @@ stdenv.mkDerivation rec {
     mainProgram = "xxhsum";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.all;
+    pkgConfigModules = [
+      "libxxhash"
+    ];
   };
-}
+})
