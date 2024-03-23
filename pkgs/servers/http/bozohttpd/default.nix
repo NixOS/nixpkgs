@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
       single machine. It is capable of servicing pages via the IPv6 protocol.
       It has SSL support. It has no configuration file by design.
     '';
-    homepage = "http://www.eterna.com.au/bozohttpd/";
-    changelog = "http://www.eterna.com.au/bozohttpd/CHANGES";
+    homepage = "http://eterna23.net/bozohttpd/";
+    changelog = "http://eterna23.net/bozohttpd/CHANGES";
     license = licenses.bsd2;
     maintainers = [ maintainers.embr ];
     platforms = platforms.all;
