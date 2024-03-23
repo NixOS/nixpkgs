@@ -1,0 +1,13 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -269,7 +269,7 @@ if(ENABLE_DAEMON)
+             DESTINATION "${CMAKE_INSTALL_MANDIR}"
+         )
+         install(FILES "${CMAKE_SOURCE_DIR}/contrib/init/gridcoinresearchd.service"
+-            DESTINATION /lib/systemd/system
++            DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/systemd/system"
+         )
+     endif()
+ endif()
+-- 
+2.43.2
