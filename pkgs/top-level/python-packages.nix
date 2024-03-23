@@ -127,6 +127,8 @@ self: super: with self; {
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
+  aifs = callPackage ../development/python-modules/aifs { };
+
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
@@ -5837,6 +5839,7 @@ self: super: with self; {
   ismartgate = callPackage ../development/python-modules/ismartgate { };
 
   iso-639 = callPackage ../development/python-modules/iso-639 { };
+
 
   iso4217 = callPackage ../development/python-modules/iso4217 { };
 
