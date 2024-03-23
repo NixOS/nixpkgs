@@ -450,6 +450,7 @@ let
       DRM_NOUVEAU_SVM = whenHasDevicePrivate yes;
 
       # Enable HDMI-CEC receiver support
+      RC_CORE = yes;
       MEDIA_CEC_RC = whenAtLeast "5.10" yes;
 
       # Enable CEC over DisplayPort
