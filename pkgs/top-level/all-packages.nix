@@ -5631,8 +5631,8 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };  };
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
-    wlroots = callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
-    udis86 = callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
+    wlroots-hyprland = callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
+    udis86-hyprland = callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
   };
 
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
@@ -13309,7 +13309,7 @@ with pkgs;
 
   sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
     openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
-    openjdk = openjdk.override { enableJavaFX = true; };
+    openjdk = openjdk21.override { enableJavaFX = true; };
   };
 
   sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix { };
@@ -15712,9 +15712,6 @@ with pkgs;
   gcc12Stdenv = overrideCC gccStdenv buildPackages.gcc12;
   gcc13Stdenv = overrideCC gccStdenv buildPackages.gcc13;
 
-  # Meant for packages that fail with newer than gcc10.
-  gcc10StdenvCompat = if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11" then gcc10Stdenv else stdenv;
-
   # This is not intended for use in nixpkgs but for providing a faster-running
   # compiler to nixpkgs users by building gcc with reproducibility-breaking
   # profile-guided optimizations
@@ -16641,7 +16638,7 @@ with pkgs;
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
   obliv-c = callPackage ../development/compilers/obliv-c {
-    stdenv = gcc10StdenvCompat;
+    stdenv = gcc10Stdenv;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
@@ -35957,7 +35954,7 @@ with pkgs;
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
 
-  xca = libsForQt5.callPackage ../applications/misc/xca { };
+  xca = qt6Packages.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 

@@ -417,6 +417,10 @@ let
       orga = "gleam-lang";
       repo = "tree-sitter-gleam";
     };
+    "tree-sitter-koka" = {
+      orga = "mtoohey31";
+      repo = "tree-sitter-koka";
+    };
   };
 
   allGrammars =
