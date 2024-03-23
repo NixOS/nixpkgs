@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , runCommand
 , cmake
@@ -21,8 +22,13 @@
 , buildBenchmarks ? false
 , tensileLogic ? "asm_full"
 , tensileCOVersion ? "default"
-, tensileSepArch ? true
-, tensileLazyLib ? true
+# https://github.com/ROCm/Tensile/issues/1757
+# Allows gfx101* users to use rocBLAS normally.
+# Turn the below two values to `true` after the fix has been cherry-picked
+# into a release. Just backporting that single fix is not enough because it
+# depends on some previous commits.
+, tensileSepArch ? false
+, tensileLazyLib ? false
 , tensileLibFormat ? "msgpack"
 , gpuTargets ? [ "all" ]
 }:
@@ -139,6 +145,14 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_CLIENTS_BENCHMARKS=ON"
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
     "-DCMAKE_CXX_FLAGS=-I${amd-blis}/include/blis"
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/rocBLAS/commit/89b75ff9cc731f71f370fad90517395e117b03bb.patch";
+      hash = "sha256-W/ohOOyNCcYYLOiQlPzsrTlNtCBdJpKVxO8s+4G7sjo=";
+    })
   ];
 
   postPatch = lib.optionalString (finalAttrs.pname != "rocblas") ''
