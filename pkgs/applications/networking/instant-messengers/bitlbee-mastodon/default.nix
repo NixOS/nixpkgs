@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bitlbee plugin for Mastodon";
-    homepage = "https://alexschroeder.ch/cgit/bitlbee-mastodon/about";
+    homepage = "https://src.alexschroeder.ch/bitlbee-mastodon.git";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jpotier ];
     platforms = lib.platforms.linux;
