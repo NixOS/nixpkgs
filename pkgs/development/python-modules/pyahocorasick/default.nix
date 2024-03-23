@@ -1,24 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "WojciechMula";
-    repo = pname;
+    repo = "pyahocorasick";
     rev = "refs/tags/${version}";
     hash = "sha256-SCIgu0uEjiSUiIP0WesJG+y+3ZqFBfI5PdgUzviOVrs=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
