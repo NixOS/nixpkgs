@@ -744,6 +744,10 @@
     dependencies = with self; [ lush-nvim ];
   };
 
+  jupytext-nvim = super.jupytext-nvim.overrideAttrs {
+    passthru.python3Dependencies = ps: [ ps.jupytext ];
+  };
+
   LanguageClient-neovim =
     let
       version = "0.1.161";
