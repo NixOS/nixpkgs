@@ -17108,7 +17108,9 @@ with pkgs;
   cargo-depgraph = callPackage ../development/tools/rust/cargo-depgraph { };
   cargo-dephell = callPackage ../development/tools/rust/cargo-dephell { };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
-  cargo-dist = callPackage ../development/tools/rust/cargo-dist { };
+  cargo-dist = callPackage ../development/tools/rust/cargo-dist {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-espmonitor = callPackage ../development/tools/rust/cargo-espmonitor { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-hakari = callPackage ../development/tools/rust/cargo-hakari { };
