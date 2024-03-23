@@ -109,6 +109,9 @@ stdenv.mkDerivation rec {
     ln -svf "$swap/bin/"* $bin/bin/
     '' + ''
 
+    ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
+    ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
+
     installShellCompletion --bash bash-completion/*
   '';
 
