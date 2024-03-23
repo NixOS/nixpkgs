@@ -4,11 +4,14 @@
 
 This contains instructions on how to package javascript applications.
 
-The various tools available will be listed in the [tools-overview](#javascript-tools-overview). Some general principles for packaging will follow. Finally some tool specific instructions will be given.
+The various tools available will be listed in the [tools-overview](#javascript-tools-overview).
+Some general principles for packaging will follow.
+Finally some tool specific instructions will be given.
 
 ## Getting unstuck / finding code examples {#javascript-finding-examples}
 
-If you find you are lacking inspiration for packing javascript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.
+If you find you are lacking inspiration for packaging javascript applications, the links below might prove useful.
+Searching online for prior art can be helpful if you are running into solved problems.
 
 ### Github {#javascript-finding-examples-github}
 
@@ -30,17 +33,23 @@ The following principles are given in order of importance with potential excepti
 
 It is often not documented which node version is used upstream, but if it is, try to use the same version when packaging.
 
-This can be a problem if upstream is using the latest and greatest and you are trying to use an earlier version of node. Some cryptic errors regarding V8 may appear.
+This can be a problem if upstream is using the latest and greatest and you are trying to use an earlier version of node.
+Some cryptic errors regarding V8 may appear.
 
 ### Try to respect the package manager originally used by upstream (and use the upstream lock file) {#javascript-upstream-package-manager}
 
-A lock file (package-lock.json, yarn.lock...) is supposed to make reproducible installations of node_modules for each tool.
+A lock file (package-lock.json, yarn.lock...) is supposed to make reproducible installations of `node_modules` for each tool.
 
-Guidelines of package managers, recommend to commit those lock files to the repos. If a particular lock file is present, it is a strong indication of which package manager is used upstream.
+Guidelines of package managers, recommend to commit those lock files to the repos.
+If a particular lock file is present, it is a strong indication of which package manager is used upstream.
 
-It's better to try to use a Nix tool that understand the lock file. Using a different tool might give you hard to understand error because different packages have been installed. An example of problems that could arise can be found [here](https://github.com/NixOS/nixpkgs/pull/126629). Upstream use NPM, but this is an attempt to package it with `yarn2nix` (that uses yarn.lock).
+It's better to try to use a Nix tool that understand the lock file.
+Using a different tool might give you hard to understand error because different packages have been installed.
+An example of problems that could arise can be found [here](https://github.com/NixOS/nixpkgs/pull/126629).
+Upstream use NPM, but this is an attempt to package it with `yarn2nix` (that uses yarn.lock).
 
-Using a different tool forces to commit a lock file to the repository. Those files are fairly large, so when packaging for nixpkgs, this approach does not scale well.
+Using a different tool forces to commit a lock file to the repository.
+Those files are fairly large, so when packaging for nixpkgs, this approach does not scale well.
 
 Exceptions to this rule are:
 
@@ -78,17 +87,23 @@ Exceptions to this rule are:
 
 ### Using node_modules directly {#javascript-using-node_modules}
 
-Each tool has an abstraction to just build the node_modules (dependencies) directory. You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command). The node_modules abstraction can be also used to build some web framework frontends. For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. `mkYarnModules` to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory.
+Each tool has an abstraction to just build the node_modules (dependencies) directory.
+You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command).
+The node_modules abstraction can be also used to build some web framework frontends.
+For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. `mkYarnModules` to make the derivation containing node_modules.
+Then when building the frontend you can just symlink the node_modules directory.
 
 ## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
 
 The [pkgs/development/node-packages](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages) folder contains a generated collection of [NPM packages](https://npmjs.com/) that can be installed with the Nix package manager.
 
-As a rule of thumb, the package set should only provide _end user_ software packages, such as command-line utilities. Libraries should only be added to the package set if there is a non-NPM package that requires it.
+As a rule of thumb, the package set should only provide _end user_ software packages, such as command-line utilities.
+Libraries should only be added to the package set if there is a non-NPM package that requires it.
 
 When it is desired to use NPM libraries in a development project, use the `node2nix` generator directly on the `package.json` configuration file of the project.
 
-The package set provides support for the official stable Node.js versions. The latest stable LTS release in `nodePackages`, as well as the latest stable current release in `nodePackages_latest`.
+The package set provides support for the official stable Node.js versions.
+The latest stable LTS release in `nodePackages`, as well as the latest stable current release in `nodePackages_latest`.
 
 If your package uses native addons, you need to examine what kind of native build system it uses. Here are some examples:
 
@@ -96,7 +111,8 @@ If your package uses native addons, you need to examine what kind of native buil
 - `node-gyp-builder`
 - `node-pre-gyp`
 
-After you have identified the correct system, you need to override your package expression while adding in build system as a build input. For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
+After you have identified the correct system, you need to override your package expression while adding in build system as a build input.
+For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
     dat = prev.dat.override (oldAttrs: {
@@ -159,7 +175,8 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 
 ### buildNpmPackage {#javascript-buildNpmPackage}
 
-`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
+`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)).
+It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
 
 Here's an example:
 
@@ -193,7 +210,9 @@ buildNpmPackage rec {
 }
 ```
 
-In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`. Additionally, the `bin` and `man` keys in the source's `package.json` are used to decide what binaries and manpages are supposed to be installed. If these are not defined, `npm pack` may miss some files, and no binaries will be produced.
+In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`.
+Additionally, the `bin` and `man` keys in the source's `package.json` are used to decide what binaries and manpages are supposed to be installed.
+If these are not defined, `npm pack` may miss some files, and no binaries will be produced.
 
 #### Arguments {#javascript-buildNpmPackage-arguments}
 
