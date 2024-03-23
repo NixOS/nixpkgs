@@ -1,0 +1,179 @@
+From f52172a0767f88bf386dc615a3354156d023bdb8 Mon Sep 17 00:00:00 2001
+From: Gavin Zhao <git@gzgz.dev>
+Date: Tue, 30 Jan 2024 09:10:00 -0500
+Subject: [PATCH] Improve hipamd compat check
+
+Signed-off-by: Gavin Zhao <git@gzgz.dev>
+---
+ hipamd/src/hip_code_object.cpp | 108 +++++++++++++++++++++++++++------
+ 1 file changed, 89 insertions(+), 19 deletions(-)
+
+diff --git a/hipamd/src/hip_code_object.cpp b/hipamd/src/hip_code_object.cpp
+index e9b41d316..b73efc206 100644
+--- a/hipamd/src/hip_code_object.cpp
++++ b/hipamd/src/hip_code_object.cpp
+@@ -390,47 +390,115 @@ static bool getTripleTargetID(std::string bundled_co_entry_id, const void* code_
+   return true;
+ }
+ 
+-static bool isCodeObjectCompatibleWithDevice(std::string co_triple_target_id,
+-                                             std::string agent_triple_target_id) {
++struct GfxPattern {
++  std::string root;
++  std::string suffixes;
++};
++
++static bool matches(const GfxPattern& p, const std::string& s) {
++  if (p.root.size() + 1 != s.size()) {
++    return false;
++  }
++  if (0 != std::memcmp(p.root.data(), s.data(), p.root.size())) {
++    return false;
++  }
++  return p.suffixes.find(s[p.root.size()]) != std::string::npos;
++}
++
++static bool isGfx900CompatibleProcessor(const std::string& processor) {
++  return matches(GfxPattern{"gfx90", "029c"}, processor);
++}
++
++static bool isGfx1030CompatibleProcessor(const std::string& processor) {
++  return matches(GfxPattern{"gfx103", "0123456"}, processor);
++}
++
++static bool isGfx1010CompatibleProcessor(const std::string& processor) {
++  return matches(GfxPattern{"gfx101", "0123456"}, processor);
++}
++
++enum CompatibilityScore {
++  CS_EXACT_MATCH           = 1 << 4,
++  CS_PROCESSOR_MATCH       = 1 << 3,
++  CS_PROCESSOR_COMPATIBLE  = 1 << 2,
++  CS_XNACK_SPECIALIZED     = 1 << 1,
++  CS_SRAM_ECC_SPECIALIZED  = 1 << 0,
++  CS_INCOMPATIBLE          = 0,
++};
++
++static int getProcessorCompatibilityScore(const std::string& co_processor,
++                                          const std::string& agent_processor) {
++  if (co_processor == agent_processor)
++    return CS_PROCESSOR_MATCH;
++
++  if (isGfx900CompatibleProcessor(agent_processor))
++    return isGfx900CompatibleProcessor(co_processor) ? CS_PROCESSOR_COMPATIBLE : CS_INCOMPATIBLE;
++
++  if (isGfx1010CompatibleProcessor(agent_processor))
++    return isGfx1010CompatibleProcessor(co_processor) ? CS_PROCESSOR_COMPATIBLE : CS_INCOMPATIBLE;
++
++  if (isGfx1030CompatibleProcessor(agent_processor))
++    return isGfx1030CompatibleProcessor(co_processor) ? CS_PROCESSOR_COMPATIBLE : CS_INCOMPATIBLE;
++
++  return CS_INCOMPATIBLE;
++}
++
++static int getCompatiblityScore(std::string co_triple_target_id,
++                                std::string agent_triple_target_id) {
+   // Primitive Check
+-  if (co_triple_target_id == agent_triple_target_id) return true;
++  if (co_triple_target_id == agent_triple_target_id) return CS_EXACT_MATCH;
+ 
+   // Parse code object triple target id
+   if (!consume(co_triple_target_id, std::string(AMDGCN_TARGET_TRIPLE) + '-')) {
+-    return false;
++    return CS_INCOMPATIBLE;
+   }
+ 
+   std::string co_processor;
+   char co_sram_ecc, co_xnack;
+   if (!getTargetIDValue(co_triple_target_id, co_processor, co_sram_ecc, co_xnack)) {
+-    return false;
++    return CS_INCOMPATIBLE;
+   }
+ 
+-  if (!co_triple_target_id.empty()) return false;
++  if (!co_triple_target_id.empty()) return CS_INCOMPATIBLE;
+ 
+   // Parse agent isa triple target id
+   if (!consume(agent_triple_target_id, std::string(AMDGCN_TARGET_TRIPLE) + '-')) {
+-    return false;
++    return CS_INCOMPATIBLE;
+   }
+ 
+   std::string agent_isa_processor;
+   char isa_sram_ecc, isa_xnack;
+   if (!getTargetIDValue(agent_triple_target_id, agent_isa_processor, isa_sram_ecc, isa_xnack)) {
+-    return false;
++    return CS_INCOMPATIBLE;
+   }
+ 
+-  if (!agent_triple_target_id.empty()) return false;
++  if (!agent_triple_target_id.empty()) return CS_INCOMPATIBLE;
+ 
+   // Check for compatibility
+-  if (agent_isa_processor != co_processor) return false;
+-  if (co_sram_ecc != ' ') {
+-    if (co_sram_ecc != isa_sram_ecc) return false;
++  int processor_score = getProcessorCompatibilityScore(co_processor, agent_isa_processor);
++  if (processor_score == CS_INCOMPATIBLE) {
++    return CS_INCOMPATIBLE;
++  }
++
++  int xnack_bonus;
++  if (co_xnack == ' ') {
++    xnack_bonus = 0;
++  } else if (co_xnack == isa_xnack) {
++    xnack_bonus = CS_XNACK_SPECIALIZED;
++  } else {
++    return CS_INCOMPATIBLE;
+   }
+-  if (co_xnack != ' ') {
+-    if (co_xnack != isa_xnack) return false;
++
++  int sram_ecc_bonus;
++  if (co_sram_ecc == ' ') {
++    sram_ecc_bonus = 0;
++  } else if (co_sram_ecc == isa_sram_ecc) {
++    sram_ecc_bonus = CS_SRAM_ECC_SPECIALIZED;
++  } else {
++    return CS_INCOMPATIBLE;
+   }
+ 
+-  return true;
++  return processor_score + xnack_bonus + sram_ecc_bonus;
+ }
+ 
+ // This will be moved to COMGR eventually
+@@ -483,6 +551,7 @@ hipError_t CodeObject::extractCodeObjectFromFatBinary(
+   for (size_t i = 0; i < agent_triple_target_ids.size(); i++) {
+     code_objs.push_back(std::make_pair(nullptr, 0));
+   }
++  std::vector<int> compatibilty_score(agent_triple_target_ids.size());
+ 
+   const auto obheader = reinterpret_cast<const __ClangOffloadBundleHeader*>(data);
+   const auto* desc = &obheader->desc[0];
+@@ -495,17 +564,18 @@ hipError_t CodeObject::extractCodeObjectFromFatBinary(
+         reinterpret_cast<const void*>(reinterpret_cast<uintptr_t>(obheader) + desc->offset);
+     const size_t image_size = desc->size;
+ 
+-    if (num_code_objs == 0) break;
+     std::string bundleEntryId{desc->bundleEntryId, desc->bundleEntryIdSize};
+ 
+     std::string co_triple_target_id;
+     if (!getTripleTargetID(bundleEntryId, image, co_triple_target_id)) continue;
+ 
+     for (size_t dev = 0; dev < agent_triple_target_ids.size(); ++dev) {
+-      if (code_objs[dev].first) continue;
+-      if (isCodeObjectCompatibleWithDevice(co_triple_target_id, agent_triple_target_ids[dev])) {
++      int score = getCompatiblityScore(co_triple_target_id, agent_triple_target_ids[dev]);
++      if (score > compatibilty_score[dev]) {
++        compatibilty_score[dev] = score;
++        if (!code_objs[dev].first)
++          --num_code_objs;
+         code_objs[dev] = std::make_pair(image, image_size);
+-        --num_code_objs;
+       }
+     }
+   }
+-- 
+2.44.0
+

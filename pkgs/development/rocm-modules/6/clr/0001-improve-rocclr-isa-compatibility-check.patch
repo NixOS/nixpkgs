@@ -1,0 +1,76 @@
+From 2783c57b0f225ad8bc553e2d244837d57d8375bc Mon Sep 17 00:00:00 2001
+From: Cordell Bloor <cgmb@slerp.xyz>
+Date: Wed, 13 Jul 2022 18:45:41 -0600
+Subject: [PATCH] improve rocclr isa compatibility check
+
+There are a number of ISAs that are identical to each other, but are
+not being treated as compatible by the upstream project. This more
+sophisticated ISA compatibility check significantly reduces the number
+of code objects that must be included in a binary in order to support
+a wide variety of processors.
+
+This change to rocclr is useless on its own because there are multiple
+places in the ROCm stack where kernels are checked for compatibility.
+However, when combined with matching changes within rocr and hipamd,
+this patch should allow HIP to load compatible kernels even when the
+GFX ISA number is not an exact match.
+
+Signed-off-by: Gavin Zhao <git@gzgz.dev>
+---
+ rocclr/device/device.cpp | 39 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 3 deletions(-)
+
+diff --git a/rocclr/device/device.cpp b/rocclr/device/device.cpp
+index 0249f31d6..739bb027c 100644
+--- a/rocclr/device/device.cpp
++++ b/rocclr/device/device.cpp
+@@ -234,10 +234,43 @@ std::string Isa::isaName() const {
+   return std::string(hsaIsaNamePrefix) + targetId();
+ }
+ 
++template <class T, std::size_t N>
++static bool Contains(const std::array<T, N>& arr, const T& value) {
++  return std::find(std::begin(arr), std::end(arr), value) != std::end(arr);
++}
++
++static bool IsVersionCompatible(const Isa &codeObjectIsa,
++                                const Isa &agentIsa) {
++  if (codeObjectIsa.versionMajor() == agentIsa.versionMajor() &&
++      codeObjectIsa.versionMinor() == agentIsa.versionMinor()) {
++
++      if (codeObjectIsa.versionStepping() == agentIsa.versionStepping()) {
++        return true; // exact match
++      }
++
++      // The code object and the agent may sometimes be compatible if
++      // they differ only by stepping version.
++      if (codeObjectIsa.versionMajor() == 9 &&
++          codeObjectIsa.versionMinor() == 0) {
++        const std::array<uint32_t, 4> equivalent_gfx90x = { 0, 2, 9, 12 };
++        if (Contains(equivalent_gfx90x, codeObjectIsa.versionStepping()) &&
++            Contains(equivalent_gfx90x, agentIsa.versionStepping())) {
++          return true; // gfx900 compatible object and agent
++        }
++      } else if (codeObjectIsa.versionMajor() == 10) {
++        if (codeObjectIsa.versionMinor() == 1) {
++          return true; // gfx1010 compatible object and agent
++        } else if (codeObjectIsa.versionMinor() == 3) {
++          return true; // gfx1030 compatible object and agent
++        }
++      }
++    }
++
++  return false;
++}
++
+ bool Isa::isCompatible(const Isa &codeObjectIsa, const Isa &agentIsa) {
+-  if (codeObjectIsa.versionMajor() != agentIsa.versionMajor() ||
+-      codeObjectIsa.versionMinor() != agentIsa.versionMinor() ||
+-      codeObjectIsa.versionStepping() != agentIsa.versionStepping())
++  if (!IsVersionCompatible(codeObjectIsa, agentIsa))
+     return false;
+ 
+   assert(codeObjectIsa.isSrameccSupported() == agentIsa.isSrameccSupported() &&
+-- 
+2.44.0
+
