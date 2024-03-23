@@ -395,9 +395,13 @@ in
 
 
         # handle database.passwordFile & permissions
-        DBPASS=${optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"}
         cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
-        sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
+
+        ${optionalString (cfg.database.passwordFile != null) ''
+          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+          sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
+        ''}
+
         chmod 440 "${cfg.stateDir}/config/database.yml"
 
 
