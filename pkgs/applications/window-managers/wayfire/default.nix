@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 , cmake
 , meson
 , ninja
@@ -82,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.providedSessions = [ "wayfire" ];
+
+  passthru.tests.mate = nixosTests.mate-wayland;
 
   meta = {
     homepage = "https://wayfire.org/";
