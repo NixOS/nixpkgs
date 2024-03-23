@@ -1,0 +1,59 @@
+From 416088b534618bd669a765afce59cfc7197064c1 Mon Sep 17 00:00:00 2001
+From: Gavin Zhao <git@gzgz.dev>
+Date: Tue, 20 Feb 2024 14:40:21 -0500
+Subject: [PATCH] Extend MIOpen ISA compatibility
+
+Signed-off-by: Gavin Zhao <git@gzgz.dev>
+---
+ src/hip/handlehip.cpp | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/src/hip/handlehip.cpp b/src/hip/handlehip.cpp
+index ff6d27d..b352896 100644
+--- a/src/hip/handlehip.cpp
++++ b/src/hip/handlehip.cpp
+@@ -57,6 +57,7 @@
+ #include <thread>
+ #include <mutex>
+ #include <shared_mutex>
++#include <string>
+ 
+ #define MIOPEN_WORKAROUND_ROCM_COMPILER_SUPPORT_ISSUE_30 \
+     (MIOPEN_USE_COMGR && BUILD_SHARED_LIBS && (HIP_PACKAGE_VERSION_FLAT < 4003000000ULL))
+@@ -228,9 +229,31 @@ struct HandleImpl
+         hipDeviceProp_t props{};
+         hipGetDeviceProperties(&props, device);
+ #if ROCM_FEATURE_HIP_GCNARCHNAME_RETURNS_CODENAME
+-        const std::string name("gfx" + std::to_string(props.gcnArch));
++        std::string name("gfx" + std::to_string(props.gcnArch));
+ #else
+-        const std::string name(props.gcnArchName);
++        std::string name(props.gcnArchName);
++
++        // coerce device name
++        size_t loc = std::string::npos;
++        if((loc = name.find("gfx103")) != std::string::npos)
++        {
++            size_t offset = std::char_traits<char>::length("gfx103");
++            name.at(loc + offset) = '0';
++        }
++        else if((loc = name.find("gfx101")) != std::string::npos)
++        {
++            size_t offset = std::char_traits<char>::length("gfx101");
++            name.at(loc + offset) = '0';
++        }
++        else if((loc = name.find("gfx90")) != std::string::npos)
++        {
++            size_t offset = std::char_traits<char>::length("gfx90");
++            char ver = name.at(loc + offset);
++            if (ver == '2' || ver == '9' || ver == 'c')
++            {
++                name.at(loc + offset) = '0';
++            }
++        }
+ #endif
+         MIOPEN_LOG_NQI("Raw device name: " << name);
+         return name; // NOLINT (performance-no-automatic-move)
+-- 
+2.43.1
+

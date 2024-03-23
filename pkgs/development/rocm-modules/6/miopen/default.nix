@@ -116,6 +116,7 @@ in stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/MIOpen/commit/3413d2daaeb44b7d6eadcc03033a5954a118491e.patch";
       hash = "sha256-ST4snUcTmmSI1Ogx815KEX9GdMnmubsavDzXCGJkiKs=";
     })
+    ./0001-Extend-MIOpen-ISA-compatibility.patch
   ];
 
   outputs = [
