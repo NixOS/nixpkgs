@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aiodhcpwatcher";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodhcpwatcher";
     rev = "v${version}";
-    hash = "sha256-t0roU91WblymcY69ieRq9zjlCq+gdJ0eDCkIoNQNjsc=";
+    hash = "sha256-yvmCp8luR26yFYun/YY/tt+peaAL4nOR9cC6lpMiJhk=";
   };
 
   postPatch = ''
