@@ -31597,6 +31597,12 @@ with pkgs;
 
   manim = callPackage ../applications/video/manim { };
 
+  manim-slides = python3Packages.toPythonApplication (
+    python3Packages.manim-slides.override {
+      withGui = true;
+    }
+  );
+
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
