@@ -5,11 +5,11 @@
 
 let
   pname = "zulip";
-  version = "5.10.5";
+  version = "5.11.0";
 
   src = fetchurl {
     url = "https://github.com/zulip/zulip-desktop/releases/download/v${version}/Zulip-${version}-x86_64.AppImage";
-    hash = "sha256-dWTczjE6QAW26bGTIeFTuXl1JwYr3Ma+8Ab6MjeDr78=";
+    hash = "sha256-snxeMgcLFMYDEsog7Xqeybw8GkU4kPqHMds1174bPd0=";
     name="${pname}-${version}.AppImage";
   };
 
@@ -20,7 +20,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}";
+  runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}";
 
   extraInstallCommands = ''
     mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"
