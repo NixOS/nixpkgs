@@ -17204,7 +17204,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  cargo-public-api = callPackage ../development/tools/rust/cargo-public-api { };
+  cargo-public-api = callPackage ../development/tools/rust/cargo-public-api {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild { };
 
