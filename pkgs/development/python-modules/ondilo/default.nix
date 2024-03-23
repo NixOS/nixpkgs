@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ondilo";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "JeromeHXP";
     repo = pname;
     rev = version;
-    hash = "sha256-MI6K+41I/IVi+GRBdmRIHbljULDFLAwpo3W8tdxCOBM=";
+    hash = "sha256-BieWdPakQts0QxzQzJYlP6a7ieZ40rAyYqhy8zEvU38=";
   };
 
   propagatedBuildInputs = [
