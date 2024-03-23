@@ -76,9 +76,6 @@ let
   inherit (lib) optional optionals makeLibraryPath makeSearchPathOutput makeBinPath
     optionalString strings escapeShellArg;
 
-  inherit (stdenv) targetPlatform;
-  ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
-
   deps = [
     alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
     fontconfig freetype gdk-pixbuf glib gtk3 gtk4 libdrm libX11 libGL
@@ -216,6 +213,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
     platforms = [ "x86_64-linux" "aarch64-linux"];
-    mainProgram = "brave";
+    mainProgram = pname;
   };
 }
