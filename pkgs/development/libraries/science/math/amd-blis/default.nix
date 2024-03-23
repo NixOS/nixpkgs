@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "BLAS-compatible library optimized for AMD CPUs";
-    homepage = "https://developer.amd.com/amd-aocl/blas-library/";
+    homepage = "https://www.amd.com/en/developer/aocl/dense.html";
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
