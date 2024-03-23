@@ -1,5 +1,14 @@
 { hostPlatform, callPackage }: {
-  brave = if hostPlatform.system == "aarch64-linux"
-    then callPackage ./brave-aarch64.nix { }
-    else callPackage ./brave.nix { };
+  brave = if hostPlatform.isAarch64
+    then callPackage ./generic.nix { } rec {
+      pname = "brave";
+      version = "1.64.109";
+      url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_arm64.deb";
+      hash = "sha256-5/tFuPuvk5fr7/ZKhFLLlikh8GnZaSHF9l0XU+0x2DA=";
+    } else callPackage /generic.nix { } rec {
+      pname = "brave";
+      version = "1.64.109";
+      url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
+      hash = "sha256-36igba0U3p8i7t91RxeG6PqlKYyHDDlj295ICcYmCNc=";
+    };
 }
