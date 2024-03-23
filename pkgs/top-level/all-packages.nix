@@ -15712,9 +15712,6 @@ with pkgs;
   gcc12Stdenv = overrideCC gccStdenv buildPackages.gcc12;
   gcc13Stdenv = overrideCC gccStdenv buildPackages.gcc13;
 
-  # Meant for packages that fail with newer than gcc10.
-  gcc10StdenvCompat = if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11" then gcc10Stdenv else stdenv;
-
   # This is not intended for use in nixpkgs but for providing a faster-running
   # compiler to nixpkgs users by building gcc with reproducibility-breaking
   # profile-guided optimizations
@@ -16641,7 +16638,7 @@ with pkgs;
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
   obliv-c = callPackage ../development/compilers/obliv-c {
-    stdenv = gcc10StdenvCompat;
+    stdenv = gcc10Stdenv;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
