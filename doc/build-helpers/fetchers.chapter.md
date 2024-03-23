@@ -27,15 +27,16 @@ The following table summarizes the differences:
 ## Caveats {#chap-pkgs-fetchers-caveats}
 
 Because Nixpkgs fetchers are [fixed-output derivations](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation), they need you to specify a hash (this is what turns them into a fixed-output derivation).
-This is usually done through a `hash` attribute.
-However, **this hash is not a hash of the contents that are downloaded**, it is a hash that corresponds to the derivation output itself, and is calculated by Nix.
-
+This is usually done through a `hash` attribute, which **can be different from the hash of the contents that are downloaded**.
+On top of that, Nix checks if there is already an object in the Nix store with the same hash, and reuses that object if it exists.
 This has the following implications that you should be aware of:
 
-- If you want to figure out the hash beforehand, you need Nix (or Nix-aware) tooling to give you the hash.
-  You can't just hash the contents and use it.
-- If you update the URL of the content to be fetched (or a version parameter, or some other parameter), you **must not** leave the hash unchanged, because it will reuse the old contents that were already fetched.
-  As [explained in the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash), if the contents with the given hash already exist, it won't do any other work and will reuse the existing contents.
+- In most cases, it's better to use Nix (or Nix-aware) tooling to give you the hash, because you may not be able to just hash the contents and use that result.
+  See [the tip](#fetchers-hash-tip) below for an easy way to do this.
+  If you can't use the method suggested by the tip, you should understand the hash [algorithm](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHashAlgo) and [mode](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHashMode) used by the fetcher you're using so you can calculate the hash by yourself beforehand.
+- If you update the URL of the content to be fetched (or a version parameter, or some other parameter), you **must not** leave the hash unchanged, because it will reuse the old contents that were already fetched (this will lead to unexpected behaviour when building the derivation).
+  If the contents with the given hash already exist, Nix won't fetch any content again (even if the URL changed!) and will reuse the existing contents.
+  The Nix manual [explains](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) why Nix ignores URL changes in this case.
 
 For example, consider the following recipe that only uses a fetcher:
 
@@ -79,6 +80,14 @@ error: hash mismatch in fixed-output derivation '/nix/store/7yynn53jpc93l76z9zdj
             got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
 error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
 ```
+
+[]{#fetchers-hash-tip}
+:::{.tip}
+For most cases, it is recommended to use the method illustrated above to figure out the appropriate hash to use in a fetcher:
+set the `hash` attribute to an empty string, try to build the derivation, and then copy the hash given by the error message.
+
+Remember to set the `hash` attribute to an empty string whenever you update fetcher parameters and expect the content to change!
+:::
 
 A similar problem arises while testing changes to a fetcher's implementation.
 If the output of the derivation already exists in the Nix store, test failures can go undetected.
