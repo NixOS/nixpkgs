@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Collective communication operations API";
+    mainProgram = "ucc_info";
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;

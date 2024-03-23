@@ -13,5 +13,6 @@ buildDotnetGlobalTool {
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ anpin mdarocha ];
+    mainProgram = "pbm";
   };
 }

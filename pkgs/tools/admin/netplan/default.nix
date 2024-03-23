@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.linux;
+    mainProgram = "netplan";
   };
 }

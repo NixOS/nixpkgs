@@ -73,6 +73,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ProtonVPN NetworkManager Library intended for every ProtonVPN service user";
+    mainProgram = "protonvpn_reconnector.py";
     homepage = "https://github.com/ProtonVPN/protonvpn-nm-lib";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];

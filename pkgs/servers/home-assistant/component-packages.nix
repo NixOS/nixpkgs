@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.2.1";
+  version = "2024.3.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -18,6 +18,8 @@
     ];
     "acmeda" = ps: with ps; [
       aiopulse
+    ];
+    "acomax" = ps: with ps; [
     ];
     "actiontec" = ps: with ps; [
     ];
@@ -224,6 +226,8 @@
     "apprise" = ps: with ps; [
       apprise
     ];
+    "aprilaire" = ps: with ps; [
+    ]; # missing inputs: pyaprilaire
     "aprs" = ps: with ps; [
       aprslib
       geopy
@@ -568,8 +572,7 @@
     "brel_home" = ps: with ps; [
     ];
     "bring" = ps: with ps; [
-      python-bring-api
-    ];
+    ]; # missing inputs: bring-api
     "broadlink" = ps: with ps; [
       broadlink
     ];
@@ -831,6 +834,7 @@
     "decora_wifi" = ps: with ps; [
     ]; # missing inputs: decora-wifi
     "default_config" = ps: with ps; [
+      aiodhcpwatcher
       aiodiscover
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -862,7 +866,6 @@
       python-matter-server
       pyturbojpeg
       pyudev
-      scapy
       securetar
       sqlalchemy
       webrtc-noise-gain
@@ -929,9 +932,9 @@
       pydexcom
     ];
     "dhcp" = ps: with ps; [
+      aiodhcpwatcher
       aiodiscover
       cached-ipaddress
-      scapy
     ];
     "diagnostics" = ps: with ps; [
       aiohttp-cors
@@ -980,7 +983,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "dlna_dms" = ps: with ps; [
       aiohttp-cors
@@ -991,7 +993,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "dnsip" = ps: with ps; [
       aiodns
@@ -1079,6 +1080,8 @@
     ];
     "duotecno" = ps: with ps; [
       pyduotecno
+    ];
+    "duquesne_light" = ps: with ps; [
     ];
     "dwd_weather_warnings" = ps: with ps; [
       dwdwfsapi
@@ -1807,10 +1810,11 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       fnv-hash-fast
+      govee-local-api
       ifaddr
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: govee-local-api
+    ];
     "gpsd" = ps: with ps; [
       gps3
     ];
@@ -2129,6 +2133,15 @@
       aiopvapi
     ];
     "hurrican_shutters_wholesale" = ps: with ps; [
+    ];
+    "husqvarna_automower" = ps: with ps; [
+      aioautomower
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      psutil-home-assistant
+      sqlalchemy
     ];
     "huum" = ps: with ps; [
       huum
@@ -2556,6 +2569,8 @@
       krakenex
       pykrakenapi
     ];
+    "krispol" = ps: with ps; [
+    ];
     "kulersky" = ps: with ps; [
       pykulersky
     ];
@@ -2731,7 +2746,8 @@
       limitlessled
     ];
     "linear_garage_door" = ps: with ps; [
-    ]; # missing inputs: linear-garage-door
+      linear-garage-door
+    ];
     "linksys_smart" = ps: with ps; [
     ];
     "linode" = ps: with ps; [
@@ -2851,6 +2867,8 @@
       fnv-hash-fast
       psutil-home-assistant
       sqlalchemy
+    ];
+    "madeco" = ps: with ps; [
     ];
     "mailbox" = ps: with ps; [
       aiohttp-cors
@@ -3018,8 +3036,19 @@
     "meteoclimatic" = ps: with ps; [
       pymeteoclimatic
     ];
+    "metoffice" = ps: with ps; [
+      datapoint
+    ];
     "mfi" = ps: with ps; [
     ]; # missing inputs: mficlient
+    "microbees" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      psutil-home-assistant
+      sqlalchemy
+    ]; # missing inputs: microBeesPy
     "microsoft" = ps: with ps; [
     ]; # missing inputs: pycsspeechtts
     "microsoft_face" = ps: with ps; [
@@ -3391,10 +3420,10 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      aiooui
       fnv-hash-fast
       getmac
       ifaddr
-      mac-vendor-lookup
       netmap
       psutil-home-assistant
       sqlalchemy
@@ -3997,12 +4026,13 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      aioraven
       fnv-hash-fast
       psutil-home-assistant
       pyserial
       pyudev
       sqlalchemy
-    ]; # missing inputs: aioraven
+    ];
     "rainmachine" = ps: with ps; [
       regenmaschine
     ];
@@ -4258,6 +4288,8 @@
     "saj" = ps: with ps; [
       pysaj
     ];
+    "samsam" = ps: with ps; [
+    ];
     "samsungtv" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -4271,7 +4303,6 @@
       samsungtvws
       sqlalchemy
       wakeonlan
-      zeroconf
     ]
     ++ samsungctl.optional-dependencies.websocket
     ++ samsungtvws.optional-dependencies.async
@@ -4722,7 +4753,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "starline" = ps: with ps; [
       starline
@@ -4882,8 +4912,9 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
+      systembridgeconnector
       zeroconf
-    ]; # missing inputs: systembridgeconnector
+    ];
     "system_health" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -4893,6 +4924,7 @@
     ];
     "systemmonitor" = ps: with ps; [
       psutil
+      psutil-home-assistant
     ];
     "tado" = ps: with ps; [
       python-tado
@@ -4911,7 +4943,8 @@
       tank-utility
     ];
     "tankerkoenig" = ps: with ps; [
-    ]; # missing inputs: aiotankerkoenig
+      aiotankerkoenig
+    ];
     "tapsaff" = ps: with ps; [
     ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [
@@ -4928,7 +4961,8 @@
     "tcp" = ps: with ps; [
     ];
     "technove" = ps: with ps; [
-    ]; # missing inputs: python-technove
+      python-technove
+    ];
     "ted5000" = ps: with ps; [
       xmltodict
     ];
@@ -5233,7 +5267,8 @@
     ];
     "tuya" = ps: with ps; [
       ha-ffmpeg
-    ]; # missing inputs: tuya-device-sharing-sdk
+      tuya-device-sharing-sdk
+    ];
     "twentemilieu" = ps: with ps; [
       twentemilieu
     ];
@@ -5322,7 +5357,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "uprise_smart_shades" = ps: with ps; [
     ];
@@ -5478,6 +5512,8 @@
     "weatherflow" = ps: with ps; [
       pyweatherflowudp
     ];
+    "weatherflow_cloud" = ps: with ps; [
+    ]; # missing inputs: weatherflow4py
     "weatherkit" = ps: with ps; [
       apple-weatherkit
     ];
@@ -5486,6 +5522,8 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
     ];
+    "webmin" = ps: with ps; [
+    ]; # missing inputs: webmin-xmlrpc
     "webostv" = ps: with ps; [
       aiowebostv
     ];
@@ -5547,7 +5585,7 @@
       wled
     ];
     "wolflink" = ps: with ps; [
-    ]; # missing inputs: wolf-smartset
+    ]; # missing inputs: wolf-comm
     "workday" = ps: with ps; [
       holidays
     ];
@@ -5685,7 +5723,6 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
-      zeroconf
     ];
     "yandex_transport" = ps: with ps; [
       aioymaps
@@ -5705,7 +5742,6 @@
       psutil-home-assistant
       sqlalchemy
       yeelight
-      zeroconf
     ];
     "yeelightsunflower" = ps: with ps; [
     ]; # missing inputs: yeelightsunflower
@@ -5789,6 +5825,8 @@
     ]; # missing inputs: ziggo-mediabox-xl
     "zodiac" = ps: with ps; [
     ];
+    "zondergas" = ps: with ps; [
+    ];
     "zone" = ps: with ps; [
     ];
     "zoneminder" = ps: with ps; [
@@ -5866,6 +5904,7 @@
     "arcam_fmj"
     "aseko_pool_live"
     "assist_pipeline"
+    "asterisk_mbox"
     "asuswrt"
     "atag"
     "august"
@@ -5897,7 +5936,6 @@
     "bond"
     "bosch_shc"
     "braviatv"
-    "bring"
     "broadlink"
     "brother"
     "brottsplatskartan"
@@ -6072,6 +6110,7 @@
     "google_travel_time"
     "google_wifi"
     "govee_ble"
+    "govee_light_local"
     "gpsd"
     "gpslogger"
     "graphite"
@@ -6115,6 +6154,7 @@
     "huisbaasje"
     "humidifier"
     "hunterdouglas_powerview"
+    "husqvarna_automower"
     "huum"
     "hvv_departures"
     "hydrawise"
@@ -6181,6 +6221,7 @@
     "life360"
     "lifx"
     "light"
+    "linear_garage_door"
     "litterrobot"
     "livisi"
     "local_calendar"
@@ -6220,6 +6261,7 @@
     "met_eireann"
     "meteo_france"
     "meteoclimatic"
+    "metoffice"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
@@ -6355,6 +6397,7 @@
     "radiotherm"
     "rainbird"
     "rainforest_eagle"
+    "rainforest_raven"
     "rainmachine"
     "random"
     "rapt_ble"
@@ -6480,6 +6523,7 @@
     "syncthing"
     "syncthru"
     "synology_dsm"
+    "system_bridge"
     "system_health"
     "system_log"
     "systemmonitor"
@@ -6487,9 +6531,11 @@
     "tag"
     "tailscale"
     "tailwind"
+    "tankerkoenig"
     "tasmota"
     "tautulli"
     "tcp"
+    "technove"
     "tedee"
     "telegram"
     "telegram_bot"
@@ -6532,6 +6578,7 @@
     "transport_nsw"
     "trend"
     "tts"
+    "tuya"
     "twentemilieu"
     "twilio"
     "twinkly"
@@ -6556,6 +6603,7 @@
     "vallox"
     "valve"
     "velbus"
+    "velux"
     "venstar"
     "vera"
     "verisure"

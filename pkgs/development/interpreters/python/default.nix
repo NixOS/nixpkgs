@@ -20,10 +20,10 @@
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "7";
+        patch = "8";
         suffix = "";
       };
-      hash = "sha256-GOGqfmb/OlhCPVntIoFaaVTlM0ISLEXfIMlod8Biubc=";
+      hash = "sha256-ngYAjIkBkkOVvB2jA+rFZ6cprgErqhgqs5Jp9lA4O7M=";
     };
   };
 
@@ -38,19 +38,6 @@ in {
       suffix = ".7"; # ActiveState's Python 2 extended support
     };
     hash = "sha256-zcjAoSq6491ePiDySBCKrLIyYoO/5fdH6aBTNg/NH8s=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
-  python38 = callPackage ./cpython {
-    self = __splicedPackages.python38;
-    sourceVersion = {
-      major = "3";
-      minor = "8";
-      patch = "18";
-      suffix = "";
-    };
-    hash = "sha256-P/txzTSaMmunsvrcfn34a6V33ZxJF+UqhAGtvadAXj8=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -92,10 +79,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "12";
-      patch = "1";
+      patch = "2";
       suffix = "";
     };
-    hash = "sha256-jfuPQm/NImZX+eK9Xx6W5TJkllF2+hfTJljoc1ka6yE=";
+    hash = "sha256-vigRLayBPSBTVFwUvxOhZAGiGHfxpp626l2ExKDz2HA=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -106,9 +93,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "a3";
+      suffix = "a5";
     };
-    hash = "sha256-IHhMgwTrHGnID5ZuvfB3W+LjfiPfO2JGHuwSqF3Pfq0=";
+    hash = "sha256-Hom1NVGD58iYpaAbL2AXKP5J/bidnJeB8TNghHqu+mI=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

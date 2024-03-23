@@ -18,37 +18,39 @@
 , libpng
 , python3
 , zlib
+, simde
 , bashInteractive
 , zsh
 , fish
 , nixosTests
-, go
-, buildGoModule
+, go_1_22
+, buildGo122Module
 , nix-update-script
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.32.1";
+  version = "0.33.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d+Xwn+po/pclAy4UZ4pR4KWmriHCLPeMhXxoHp6wHT8=";
+    hash = "sha256-0bdDolaFbVI3CqcOtKFrvRqrKXIiSIfH5rxJgK5XssI=";
   };
 
-  goModules = (buildGoModule {
+  goModules = (buildGo122Module {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-WRDP3Uyttz/kWm07tjv7wNguF/a1YgZqutbvFEOHuE0=";
+    vendorHash = "sha256-7301wHGCXUdfPFOhgLEJILmYxNohNm6H2zXGd9W11Wk=";
   }).goModules;
 
   buildInputs = [
     harfbuzz
     ncurses
+    simde
     lcms2
     librsync
     openssl.dev
@@ -78,7 +80,7 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
-    go
+    go_1_22
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
@@ -232,7 +234,9 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests.test = nixosTests.terminal-emulators.kitty;
+    tests = lib.mkIf stdenv.isLinux {
+      default = nixosTests.terminal-emulators.kitty;
+    };
     updateScript = nix-update-script {};
   };
 

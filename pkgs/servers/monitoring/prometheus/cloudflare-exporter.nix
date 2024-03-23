@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus Cloudflare Exporter";
+    mainProgram = "cloudflare-exporter";
     homepage = "https://github.com/lablabs/cloudflare-exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ bbigras ];

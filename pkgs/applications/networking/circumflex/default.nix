@@ -23,7 +23,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A command line tool for browsing Hacker News in your terminal";
     homepage = "https://github.com/bensadeh/circumflex";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mktip ];
     mainProgram = "clx";
   };

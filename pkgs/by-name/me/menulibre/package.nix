@@ -6,19 +6,20 @@
 , intltool
 , gobject-introspection
 , wrapGAppsHook
+, nix-update-script
 , testers
 , menulibre
 }:
 
 python3Packages.buildPythonApplication rec {
   name = "menulibre";
-  version = "2.2.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "bluesabre";
     repo = "menulibre";
     rev = "menulibre-${version}";
-    hash = "sha256-E0ukq3q4YaakOI2mDs3dh0ncZX/dqspCA+97r3JwWyA=";
+    hash = "sha256-IfsuOYP/H3r1GDWMVVSBfYvQS+01VJaAlZu+c05geWg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -45,9 +46,12 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = menulibre;
-    command = "HOME=$TMPDIR menulibre --version | cut -d' ' -f2";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = menulibre;
+      command = "HOME=$TMPDIR menulibre --version | cut -d' ' -f2";
+    };
   };
 
   meta = with lib; {

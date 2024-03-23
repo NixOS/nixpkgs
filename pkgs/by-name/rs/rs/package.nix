@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.mirbsd.org/htman/i386/man1/rs.htm";
     description = "Reshape a data array from standard input";
+    mainProgram = "rs";
     longDescription = ''
       rs reads the standard input, interpreting each line as a row of blank-
       separated entries in an array, transforms the array according to the op-

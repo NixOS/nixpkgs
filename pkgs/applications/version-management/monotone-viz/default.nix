@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Monotone ancestry visualiser";
+    mainProgram = "monotone-viz";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

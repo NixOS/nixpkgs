@@ -61,9 +61,10 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "Play Hack The Box directly on your system";
-    homepage = "https://github.com/D3vil0p3r/htb-toolkit";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ d3vil0p3r ];
     mainProgram = "htb-toolkit";
+    homepage = "https://github.com/D3vil0p3r/htb-toolkit";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
   };
 }

@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A cross-platform translation software";
+    mainProgram = "pot";
     homepage = "https://pot.pylogmon.com";
     platforms = platforms.linux;
     license = licenses.gpl3Only;

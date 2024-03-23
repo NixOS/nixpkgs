@@ -74,6 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
+    mainProgram = "censys";
     homepage = "https://github.com/censys/censys-python";
     changelog = "https://github.com/censys/censys-python/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

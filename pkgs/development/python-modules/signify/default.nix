@@ -9,21 +9,27 @@
 , pyasn1-modules
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "signify";
-  version = "0.5.2";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ralphje";
-    repo = pname;
+    repo = "signify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+UhZF+QYuv8pq/sTu7GDPUrlPNNixFgVZL+L0ulj/ko=";
+    hash = "sha256-29SyzqtZ1cI+1xrSPLFr63vwB5st/9i5b3FYtJn6eok=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -32,6 +38,7 @@ buildPythonPackage rec {
     oscrypto
     pyasn1
     pyasn1-modules
+    typing-extensions
   ];
 
   pythonImportsCheck = [
@@ -42,19 +49,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # chain doesn't validate because end-entitys certificate expired
-    # https://github.com/ralphje/signify/issues/27
-    "test_revoked_certificate"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/ralphje/signify/blob/${src.rev}/docs/changelog.rst";
     description = "library that verifies PE Authenticode-signed binaries";
     homepage = "https://github.com/ralphje/signify";
     license = licenses.mit;
     maintainers = with maintainers; [ baloo ];
-    # No support for pyasn1 > 0.5
-    # https://github.com/ralphje/signify/issues/37
-    broken = true;
   };
 }

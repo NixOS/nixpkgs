@@ -7,11 +7,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tortoisehg";
-  version = "6.2.2";
+  version = "6.6.3";
 
   src = fetchurl {
     url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
-    sha256 = "sha256-Xbvg/FcuX/AL2reWsaM2oaFyLby3+HDCfYtRyswE7DA=";
+    sha256 = "sha256-9pg1N5uj1ZaZCAm4N8toRwfVHme7nAsNMZkXSRgFves=";
   };
 
   nativeBuildInputs = [

@@ -28,15 +28,15 @@ qtModule {
   pname = "qtmultimedia";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libunwind orc ffmpeg_6 ]
-    ++ lib.optionals stdenv.isLinux [ libpulseaudio elfutils alsa-lib wayland libXrandr libva ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libpulseaudio elfutils alsa-lib wayland libXrandr libva ];
   propagatedBuildInputs = [ qtbase qtdeclarative qtsvg qtshadertools qtquick3d ]
-    ++ lib.optionals stdenv.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ]
-    ++ lib.optionals stdenv.isDarwin [ VideoToolbox ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ VideoToolbox ];
 
   cmakeFlags = [ "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin
     "-include AudioToolbox/AudioToolbox.h";
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
     "-framework AudioToolbox";
 }

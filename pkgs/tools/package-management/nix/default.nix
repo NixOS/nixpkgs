@@ -17,8 +17,19 @@ let
   boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
 
   boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
-    # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-    patches = (drv.patches or [ ]) ++ [ ./patches/boehmgc-coroutine-sp-fallback.patch ];
+    patches = (drv.patches or [ ]) ++ [
+      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+      ./patches/boehmgc-coroutine-sp-fallback.patch
+
+      # Required since 2.20, and has always been a valid change
+      # Awaiting 8.2 patch release of https://github.com/ivmai/bdwgc/commit/d1d4194c010bff2dc9237223319792cae834501c
+      # or master release of https://github.com/ivmai/bdwgc/commit/86b3bf0c95b66f718c3cb3d35fd7387736c2a4d7
+      (fetchpatch {
+        name = "boehmgc-traceable_allocator-public.diff";
+        url = "https://github.com/NixOS/nix/raw/2.20.0/dep-patches/boehmgc-traceable_allocator-public.diff";
+        hash = "sha256-FLsHY/JS46neiSyyQkVpbHZEFvWSCzWrFQu1CC71sh4=";
+      })
+    ];
   });
 
   # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply
@@ -151,14 +162,19 @@ let
     pkg;
 
 in lib.makeExtensible (self: ({
-  nix_2_3 = (common {
+  nix_2_3 = ((common {
     version = "2.3.17";
     hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
       patch-monitorfdhup
+      ./patches/2_3/CVE-2024-27297.patch
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
-  }).override { boehmgc = boehmgc-nix_2_3; };
+  }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
+    # https://github.com/NixOS/nix/issues/10222
+    # spurious test/add.sh failures
+    enableParallelChecking = false;
+  };
 
   nix_2_10 = common {
     version = "2.10.3";
@@ -214,11 +230,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_16 = common {
-    version = "2.16.2";
-    hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
+    version = "2.16.3";
+    hash = "sha256-/tnjRCk+VaWPThzdn3C0zU1AMON+7AFsHgTTzErFxV4=";
   };
 
   nix_2_17 = common {
@@ -230,16 +243,26 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.1";
-    hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
-    patches = [
-      patch-rapidcheck-shared
-    ];
+    version = "2.18.2";
+    hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
   };
 
   nix_2_19 = common {
     version = "2.19.3";
     hash = "sha256-EtL6M0H5+0mFbFh+teVjm+0B+xmHoKwtBvigS5NMWoo=";
+    patches = [
+      ./patches/2_19/CVE-2024-27297.patch
+    ];
+  };
+
+  nix_2_20 = common {
+    version = "2.20.5";
+    hash = "sha256-bfFe38BkoQws7om4gBtBWoNTLkt9piMXdLLoHYl+vBQ=";
+  };
+
+  nix_2_21 = common {
+    version = "2.21.0";
+    hash = "sha256-9b9qJ+7rGjLKbIswMf0/2pgUWH/xOlYLk7P4WYNcGDs=";
   };
 
   # The minimum Nix version supported by Nixpkgs
@@ -261,7 +284,7 @@ in lib.makeExtensible (self: ({
 
   stable = addFallbackPathsCheck self.nix_2_18;
 
-  unstable = self.nix_2_19;
+  unstable = self.nix_2_21;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 

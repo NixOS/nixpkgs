@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "231201";
+  version = "240306";
   format = "other";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     repo   = "IfcOpenShell";
     rev = "refs/tags/blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-T7XT5gvfzhagecB3jrTyWOawOm4iye7SCsmYhnjtOTE=";
+    sha256 = "sha256-DtA8KeWipPfOnztKG/lrgLZeOCUG3nWR9oW7OST7koc=";
   };
 
   nativeBuildInputs = [ gcc10 cmake ];

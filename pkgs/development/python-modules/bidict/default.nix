@@ -10,13 +10,14 @@
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
+, typing-extensions
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.22.1";
-  format = "pyproject";
+  version = "0.23.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "jab";
     repo = "bidict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mPBruasjQwErl5M91OBf71hArztdRVONOCnqos180DY=";
+    hash = "sha256-WE0YaRT4a/byvU2pzcByuf1DfMlOpYA9i0PPrKXsS+M=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     pytest-benchmark
     sortedcollections
     sortedcontainers
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "bidict" ];

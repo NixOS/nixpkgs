@@ -4,16 +4,16 @@
 , dj-email-url
 , django-cache-url
 , fetchFromGitHub
+, flit-core
 , marshmallow
 , pytestCheckHook
 , python-dotenv
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "environs";
-  version = "10.3.0";
+  version = "11.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     owner = "sloria";
     repo = "environs";
     rev = "refs/tags/${version}";
-    hash = "sha256-D6Kp8aHiUls7+cACJ3DwrS4OftA5uMbAu4l5IyR4F5U=";
+    hash = "sha256-9BqIlA2HcUlBiyTB7zxaLO0CzBRkx5mKMMdhvdr2Uqg=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   propagatedBuildInputs = [

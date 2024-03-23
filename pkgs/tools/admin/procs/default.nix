@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.14.4";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "procs";
     rev = "v${version}";
-    hash = "sha256-Gx3HRGWi+t/wT1WrbuHXVyX+cP+JvZV8lBun1Qs8Xys=";
+    hash = "sha256-9kxJrvlaEoEkPPoU4/9IlX2TvDUG9VZwtb4a3N9rAsc=";
   };
 
-  cargoHash = "sha256-0eLOAZnHbnvT8qgSfWO/RKXIdRr5wwfUQ9YQ77I6okQ=";
+  cargoHash = "sha256-2g+6FmcO4t9tjLq7xkBaLAgbzQoBgskr8csM/1tHbWI=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];

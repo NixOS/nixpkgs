@@ -23,11 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withCmd "cmd";
 
-  # Workaround for https://github.com/nixos/nixpkgs/issues/166205
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   postInstall = ''
     install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
   '';

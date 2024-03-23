@@ -19,7 +19,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+    lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nelsonjchen/speedtest-rs/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ GaetanLepage ];
+    mainProgram = "speedtest-rs";
   };
 }

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "links2";
 
   src = fetchurl {
-    url = "${finalAttrs.meta.homepage}/download/links-${finalAttrs.version}.tar.bz2";
+    url = "http://links.twibright.com/download/links-${finalAttrs.version}.tar.bz2";
     hash = "sha256-IqqWwLOOGm+PftnXpBZ6R/w3JGCXdZ72BZ7Pj56teZg=";
   };
 

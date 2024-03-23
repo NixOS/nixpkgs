@@ -15,11 +15,12 @@
 , pythonOlder
 , setuptools
 , testfixtures
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.4.0";
+  version = "11.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/UsrUzCd4aYEQ4epZggk2O2esJCUG0DxRseK+s6yJd4=";
+    hash = "sha256-VM4TP98bS9NmhxZz+YHMJrHKr5g6E6aYidxjKQyXp7k=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     pyperclip
     pytest
     testfixtures
+    typing-extensions
   ];
 
   nativeCheckInputs = [

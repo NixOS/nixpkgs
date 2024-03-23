@@ -549,6 +549,12 @@
       '';
   });
 
+  elixir-tools-nvim = super.elixir-tools-nvim.overrideAttrs {
+    fixupPhase = ''
+      patchShebangs $(find $out/bin/ -type f -not -name credo-language-server)
+    '';
+  };
+
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim ];
   };
@@ -660,6 +666,10 @@
 
   guard-nvim = super.guard-nvim.overrideAttrs {
     dependencies = with self; [ guard-collection ];
+  };
+
+  hardhat-nvim = super.hardhat-nvim.overrideAttrs {
+    dependencies = with self; [ overseer-nvim plenary-nvim ];
   };
 
   harpoon = super.harpoon.overrideAttrs {
@@ -941,12 +951,20 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  neotest-gradle = super.neotest-gradle.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   };
 
   noice-nvim = super.noice-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim ];
+  };
+
+  none-ls-nvim = super.none-ls-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
   };
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
@@ -986,9 +1004,9 @@
       spectre_oxi = rustPlatform.buildRustPackage {
         pname = "spectre_oxi";
         inherit (old) version src;
-        sourceRoot = "source/spectre_oxi";
+        sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-y2ZIgOApIShkIesXmItPKDO6XjFrG4GS5HCPncJUmN8=";
+        cargoHash = "sha256-VDnrJ2EJ8LDykqxYKD1VR8BkDqzzifazJzL/0UsmSCk=";
 
 
         preCheck = ''
@@ -1124,7 +1142,7 @@
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-BDNFZ/7nnfvtBA7T6a7MDNJsq/cOI9tgW0kxUoIcbV8=";
+        cargoHash = "sha256-iGNLk3ckm90i5m05V/va+hO9RMiOUKL19dkszoUCwlU=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1661,6 +1679,14 @@
     dependencies = with self; [ vim-repeat ];
   };
 
+  vim-tabby = super.vim-tabby.overrideAttrs {
+    postPatch = ''
+      substituteInPlace autoload/tabby/globals.vim --replace-fail \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', 'node')" \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', '${nodejs}/bin/node')"
+    '';
+  };
+
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {
     dependencies = with self; [ vim-textobj-user ];
     meta.maintainers = with lib.maintainers; [ farlion ];
@@ -1762,6 +1788,10 @@
 
   vim-zettel = super.vim-zettel.overrideAttrs {
     dependencies = with self; [ vimwiki fzf-vim ];
+  };
+
+  windows-nvim = super.windows-nvim.overrideAttrs {
+    dependencies = with self; [ luaPackages.middleclass animation-nvim ];
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {

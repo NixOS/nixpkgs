@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ orivej ] ++ teams.podman.members;
     platforms = platforms.linux;
+    mainProgram = "slirp4netns";
   };
 }

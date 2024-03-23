@@ -87,6 +87,10 @@ rec {
 
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
+
+     Example:
+      lib.meta.platformMatch { system = "aarch64-darwin"; } "aarch64-darwin"
+      => true
   */
   platformMatch = platform: elem: (
     # Check with simple string comparison if elem was a string.
@@ -112,6 +116,10 @@ rec {
           platform, or `meta.platforms` is not present.
 
        2. None of `meta.badPlatforms` pattern matches the given platform.
+
+     Example:
+       lib.meta.availableOn { system = "aarch64-darwin"; } pkg.zsh
+       => true
   */
   availableOn = platform: pkg:
     ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&

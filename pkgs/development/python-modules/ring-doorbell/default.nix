@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.8.7";
+  version = "0.8.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-Awi0Wa/ayzhpecTCKWRt+2bQvvvDxbjN+bIKAdorETs=";
+    hash = "sha256-Rz12Qpawi4/u14ywJGt9Yw7IqjYP4bg6zNr9oN3iQxQ=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to communicate with Ring Door Bell";
+    mainProgram = "ring-doorbell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
     changelog = "https://github.com/tchellomello/python-ring-doorbell/releases/tag/${version}";
     license = licenses.lgpl3Plus;

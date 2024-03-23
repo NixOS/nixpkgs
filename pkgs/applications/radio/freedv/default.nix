@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ mvs wegank ];
     platforms = platforms.unix;
+    mainProgram = "freedv";
   };
 }

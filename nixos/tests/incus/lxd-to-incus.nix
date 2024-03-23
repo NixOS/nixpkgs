@@ -67,6 +67,7 @@ import ../make-test-python.nix (
 
           incus.enable = true;
         };
+        networking.nftables.enable = true;
       };
 
     testScript = ''

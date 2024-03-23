@@ -19,8 +19,8 @@ rec {
   #   writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
   makeScriptWriter = { interpreter, check ? "" }: nameOrPath: content:
-    assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.str.check content);
+    assert (types.path.check nameOrPath) || (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
+    assert (types.path.check content) || (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
@@ -82,8 +82,8 @@ rec {
   # Examples:
   #   writeSimpleC = makeBinWriter { compileScript = name: "gcc -o $out $contentPath"; }
   makeBinWriter = { compileScript, strip ? true }: nameOrPath: content:
-    assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.str.check content);
+    assert (types.path.check nameOrPath) || (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
+    assert (types.path.check content) || (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in

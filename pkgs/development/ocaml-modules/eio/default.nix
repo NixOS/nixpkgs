@@ -1,6 +1,6 @@
 { lib
 , ocaml
-, version ? if lib.versionAtLeast ocaml.version "5.1" then "0.14" else "0.12"
+, version ? if lib.versionAtLeast ocaml.version "5.1" then "1.0" else "0.12"
 , buildDunePackage
 , bigstringaf
 , cstruct
@@ -24,9 +24,9 @@ let
       minimalOCamlVersion = "5.0";
       hash = "sha256-2EhHzoX/t4ZBSWrSS+PGq1zCxohc7a1q4lfsrFnZJqA=";
     };
-    "0.14" = {
+    "1.0" = {
       minimalOCamlVersion = "5.1";
-      hash = "sha256-UvhblH0+DecJQLW7qsDT54hB/qVkjnOvfYp1SrUchxs=";
+      hash = "sha256-2iYNnaOLPd6fMWZSogsTomHPkLhaJJisZpt9Vk5hlC0=";
     };
   }."${version}";
 in

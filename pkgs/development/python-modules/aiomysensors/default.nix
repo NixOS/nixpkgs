@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.11";
+  version = "0.3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiomysensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uBmFJFmUClTkaAg8jTThygzmZv7UZDPSt0bXo8BLu00=";
+    hash = "sha256-7Y7JE/GAX5gQrIGcErZTGQXyaf3QwsTFgviiHLWgGeI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=src --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=src --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to connect to MySensors gateways";
+    mainProgram = "aiomysensors";
     homepage = "https://github.com/MartinHjelmare/aiomysensors";
     changelog = "https://github.com/MartinHjelmare/aiomysensors/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

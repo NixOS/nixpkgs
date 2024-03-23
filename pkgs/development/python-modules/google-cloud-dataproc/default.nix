@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.9.1";
+  version = "5.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qDc6E6d6hIHgRBNDGUHaJ7ROP24xDUXK1rkXTX187g0=";
+    hash = "sha256-l9ZHiR5/TNJfa4Oa5XzTVYCd8so5ZlPtJK9itO8C9BI=";
   };
 
   nativeBuildInputs = [

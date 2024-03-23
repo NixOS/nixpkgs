@@ -20,6 +20,7 @@
 , nspr
 , pango
 , udev
+, libsecret
 , libuuid
 , libX11
 , libxcb
@@ -53,12 +54,12 @@ let
   dist = {
     aarch64-linux = {
       arch = "arm64";
-      sha256 = "sha256-shiUW7o6H0aaGCgHm3oVqjLZNsB4KIn7EIxWRVCAWi0=";
+      sha256 = "sha256-esboLFqCziTlCFHyK6GxFq9Rik9jHiqX6ED0D53P1K4=";
     };
 
     x86_64-linux = {
       arch = "64";
-      sha256 = "sha256-R6mejxuxSZv37nyjnt/oGvgqCw1pULCHCWnlw+pq8iY=";
+      sha256 = "sha256-NH5bfz74/WIXbNdYs6Hoh/FF54v2+b4Ci5T7Y095Akw=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
     pango
     udev
     libdrm
+    libsecret
     libuuid
     libX11
     libxcb

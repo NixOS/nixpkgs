@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pylsp-rope";
-  version = "0.1.11";
+  version = "0.1.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SKrfmT2vpej8oRCLSlQxMUz4C8eM/91WQA6tnEB1U74=";
+    hash = "sha256-0f0WzJcVOfH1abJnvZCLM5/W1JfVxSDAH+Z1ADA6kUQ=";
   };
 
   propagatedBuildInputs = [

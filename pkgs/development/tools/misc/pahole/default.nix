@@ -13,10 +13,10 @@
 
 stdenv.mkDerivation rec {
   pname = "pahole";
-  version = "1.25";
+  version = "1.26";
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-${version}.tar.gz";
-    hash = "sha256-s0YVT2UnMSO8jS/4XCt06wNPV4czHH6bmZRy/snO3jg=";
+    hash = "sha256-Lf9Z4vHRFplMrUf4VhJ7EDPn+S4RaS1Emm0wyEcG2HU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

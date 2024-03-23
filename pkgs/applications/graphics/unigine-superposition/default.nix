@@ -143,5 +143,6 @@ buildFHSEnv {
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.BarinovMaxim ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "Superposition";
   };
 }

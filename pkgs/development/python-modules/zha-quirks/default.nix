@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.111";
+  version = "0.0.112";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-e2Ho/LBdnEKn7hgykhstjv8ZUYAn41e1+rsgA1MEmf4=";
+    hash = "sha256-wI7mpX6oFV/RrxH/UP1X9Odago0CxJ5dhjKAsDS+Sq4=";
   };
 
   postPatch = ''
@@ -41,6 +41,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # RuntimeError: no running event loop
+    "test_mfg_cluster_events"
+    "test_co2_sensor"
+    "test_smart_air_sensor"
   ];
 
   pythonImportsCheck = [

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.7.6";
+  version = "3.7.7";
   format = "setuptools";
 
   # pypi version does not include tests
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "uber";
     repo = "h3-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QNiuiHJ4IMxpi39iobPSSlYUUj5oxpxO4B2+HXVQ/Zk=";
+    hash = "sha256-wXQaSMXQI0f7zfyj37mubxdqGFv7vhHQd6rH08H57d4=";
   };
 
   dontConfigure = true;

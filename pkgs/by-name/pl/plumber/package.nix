@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "plumber";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "streamdal";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ftXLipJQjRdOSNO56rIRfAKKU0kHtAK85hgcT3nYOKA=";
+    hash = "sha256-H1tyMedYKj1bePNcaEWYP3njHw57cJ0jgxwC7zDXQvk=";
   };
 
   vendorHash = null;
@@ -18,16 +18,17 @@ buildGoModule rec {
     export HOME="$(mktemp -d)"
   '';
 
+  subPackages = [ "." ];
+
   ldflags = [
     "-s"
     "-w"
     "-X github.com/streamdal/plumber/options.VERSION=${version}"
-    # remove once module in go.mod is renamed to github.com/batchcorp/streamdal
-    "-X github.com/batchcorp/plumber/options.VERSION=${version}"
   ];
 
   meta = with lib; {
     description = "A CLI devtool for interacting with data in message systems like Kafka, RabbitMQ, GCP PubSub and more";
+    mainProgram = "plumber";
     homepage = "https://github.com/streamdal/plumber";
     license = licenses.mit;
     maintainers = with maintainers; [ svrana ];

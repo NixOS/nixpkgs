@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-version="2.11.2"
+version="2.12.1"
 
 nix-update python311Packages.types-aiobotocore --commit --build
 

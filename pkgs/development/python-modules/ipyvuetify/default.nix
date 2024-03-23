@@ -2,19 +2,43 @@
 , buildPythonPackage
 , fetchPypi
   # Python Inputs
+, jupyter-packaging
+, jupyterlab
+, setuptools
+, wheel
 , ipyvue
 }:
 
 buildPythonPackage rec {
   pname = "ipyvuetify";
-  version = "1.8.10";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
 
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m6RCeUefM/XLg69AaqgTBQ7pYgGVXCy6CH/SOoQ9W04=";
+    hash = "sha256-MAqO6wREtnaVCgG88UXYsKlLpkizbtPqmeQ9u3UVnU0=";
   };
+
+  # drop pynpm which tries to install node_modules
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "jupyter_packaging~=0.7.9" "jupyter_packaging" \
+      --replace-fail "jupyterlab~=3.0" "jupyterlab" \
+      --replace-fail '"pynpm"' ""
+
+    substituteInPlace setup.py \
+      --replace-fail "from pynpm import NPMPackage" "" \
+      --replace-fail "from generate_source import generate_source" "" \
+      --replace-fail 'setup(cmdclass={"egg_info": js_prerelease(egg_info)})' 'setup()'
+  '';
+
+  nativeBuildInputs = [
+    jupyter-packaging
+    jupyterlab
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [ ipyvue ];
 

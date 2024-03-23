@@ -73,5 +73,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
     license = licenses.mit;
+    mainProgram = "emulsion";
   };
 }

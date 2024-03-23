@@ -3,12 +3,16 @@
 , capstone
 , stdenv
 , setuptools
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "capstone";
   version = lib.getVersion capstone;
   format = "setuptools";
+
+  # distutils usage
+  disabled = pythonAtLeast "3.12";
 
   src = capstone.src;
   sourceRoot = "${src.name}/bindings/python";

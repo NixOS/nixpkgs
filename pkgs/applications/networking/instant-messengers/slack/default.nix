@@ -181,7 +181,11 @@ let
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/pixmaps/slack.png slack \
         --replace bin/slack "bin/slack -s"
-
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Prevent Un-blacklist pipewire integration to enable screen sharing on wayland.
+      # https://github.com/flathub/com.slack.Slack/issues/101#issuecomment-1807073763
+      sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' $out/lib/slack/resources/app.asar
+    '' + ''
       runHook postInstall
     '';
   };

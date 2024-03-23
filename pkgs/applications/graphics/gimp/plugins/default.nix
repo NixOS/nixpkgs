@@ -5,7 +5,7 @@
 { config, lib, pkgs }:
 
 let
-  inherit (pkgs) stdenv fetchurl fetchpatch pkg-config intltool glib fetchFromGitHub;
+  inherit (pkgs) stdenv fetchurl fetchpatch pkg-config intltool glib fetchFromGitHub fetchFromGitLab;
 in
 
 lib.makeScope pkgs.newScope (self:
@@ -111,12 +111,17 @@ in
        Video
     */
     pname = "gap";
-    version = "2.6.0";
+    version = "2.6.0-unstable-2023-05-20";
 
-    src = fetchurl {
-      url = "https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2";
-      sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
+    src = fetchFromGitLab {
+      domain = "gitlab.gnome.org";
+      owner = "Archive";
+      repo = "gimp-gap";
+      rev = "b2aa06cc7ee4ae1938f14640fe46b75ef5b15982";
+      hash = "sha256-q5TgCy0+iIfxyqJRXsKxiFrWMFSzBqC0SA9MBGTHXcA=";
     };
+
+    nativeBuildInputs = with pkgs; [autoreconfHook];
 
     hardeningDisable = [ "format" ];
 

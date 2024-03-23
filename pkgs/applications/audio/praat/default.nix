@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.05";
+  version = "6.4.06";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ctCDxE//vH4i22bKYBs14pdmp+1M6K+w7Tm22ZoGOf8=";
+    hash = "sha256-eZYNXNmxrvI+jR1UEgXrsUTriZ8zTTwM9cEy7HgiZzs=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Doing phonetics by computer";
+    mainProgram = "praat";
     homepage = "https://www.fon.hum.uva.nl/praat/";
     license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
     maintainers = with lib.maintainers; [ orivej ];

@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p nodePackages.pyright ruff isort"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p nodePackages.pyright ruff isort
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -315,6 +315,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     run_sync(["pyright", __file__])
-    run_sync(["ruff", "--ignore=E501", __file__])
+    run_sync(["ruff", "check", "--ignore=E501", __file__])
     run_sync(["isort", __file__])
     main()

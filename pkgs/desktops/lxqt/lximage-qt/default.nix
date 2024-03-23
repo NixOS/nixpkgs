@@ -51,6 +51,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/lximage-qt";
     description = "The image viewer and screenshot tool for lxqt";
+    mainProgram = "lximage-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

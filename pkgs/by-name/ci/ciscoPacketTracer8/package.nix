@@ -29,19 +29,25 @@
 
 let
   hashes = {
-    "8.2.0" = "1b19885d59f6130ee55414fb02e211a1773460689db38bfd1ac7f0d45117ed16";
-    "8.2.1" = "1fh79r4fnh9gjxjh39gcp4j7npgs5hh3qhrhx74x8x546an3i0s2";
+    "8.2.0" = "sha256-GxmIXVn2Ew7lVBT7AuIRoXc0YGids4v9Gsfw1FEX7RY=";
+    "8.2.1" = "sha256-QoM4rDKkdNTJ6TBDPCAs+l17JLnspQFlly9B60hOB7o=";
+    "8.2.2" = "sha256-bNK4iR35LSyti2/cR0gPwIneCFxPP+leuA1UUKKn9y0=";
+  };
+  names = {
+    "8.2.0" = "CiscoPacketTracer_820_Ubuntu_64bit.deb";
+    "8.2.1" = "CiscoPacketTracer_821_Ubuntu_64bit.deb";
+    "8.2.2" = "CiscoPacketTracer822_amd64_signed.deb";
   };
 in
 
 stdenvNoCC.mkDerivation rec {
   pname = "ciscoPacketTracer8";
 
-  version = "8.2.1";
+  version = "8.2.2";
 
   src = requireFile {
-    name = "CiscoPacketTracer_${builtins.replaceStrings ["."] [""] version}_Ubuntu_64bit.deb";
-    sha256 = hashes.${version};
+    name = names.${version};
+    hash = hashes.${version};
     url = "https://www.netacad.com";
   };
 
@@ -114,5 +120,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ lucasew ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "packettracer8";
   };
 }

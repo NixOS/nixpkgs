@@ -19,7 +19,6 @@
 , glibc
 , gnome
 , gnome-desktop
-, gnome-online-accounts
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -54,18 +53,19 @@
 , upower
 , webp-pixbuf-loader
 , wrapGAppsHook
+, enableSshSocket ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
-    repo = pname;
-    rev = "v${version}";
+    repo = "budgie-control-center";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-7E23cgX7TkBJT/yansBfvMx0ddfAwrF7mGfqzbyLY4Q=";
+    sha256 = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
   };
 
   patches = [
@@ -101,7 +101,6 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gnome-desktop
-    gnome-online-accounts
     gnome.adwaita-icon-theme
     gnome.cheese
     gnome.gnome-bluetooth_1_0
@@ -134,6 +133,10 @@ stdenv.mkDerivation rec {
     upower
   ];
 
+  mesonFlags = [
+    (lib.mesonBool "ssh" enableSshSocket)
+  ];
+
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
@@ -164,12 +167,12 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  meta = with lib; {
+  meta = {
     description = "A fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     mainProgram = "budgie-control-center";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.budgie.members;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

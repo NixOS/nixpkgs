@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/dimkr/loksh";
     description = "Linux port of OpenBSD's ksh";
+    mainProgram = "loksh";
     longDescription = ''
       loksh is a Linux port of OpenBSD's ksh.
 

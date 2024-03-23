@@ -16,18 +16,19 @@
 , xwayland
 
 , gitUpdater
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
-  version = "0.43.2";
+  version = "0.43.4";
 
   src = fetchurl {
-    urls = [
+    urls = with finalAttrs; [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-6nkpflQY+1KNBGbotbkdG+iIV/o3BvSXd7KSWnKumSQ=";
+    hash = "sha256-oGJNuQGAx923n8epFRCT3DfGRtjDjT8jL3Z89kuFoiY=";
   };
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
@@ -53,13 +54,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   postInstall = glib.flattenInclude;
 
   passthru = {
     tests = {
       inherit cairo qemu scribus tigervnc wlroots xwayland;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
     updateScript = gitUpdater {
       url = "https://gitlab.freedesktop.org/pixman/pixman.git";
@@ -72,5 +76,6 @@ stdenv.mkDerivation rec {
     description = "A low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;
+    pkgConfigModules = [ "pixman-1" ];
   };
-}
+})

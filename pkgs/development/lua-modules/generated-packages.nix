@@ -2726,6 +2726,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+mimetypes = callPackage({ buildLuarocksPackage, fetchurl, lua, luaOlder }:
+buildLuarocksPackage {
+  pname = "mimetypes";
+  version = "1.0.0-3";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/mimetypes-1.0.0-3.rockspec";
+    sha256 = "02f5x5pkz6fba71mp031arrgmddsyivn5fsa0pj3q3a7nxxpmnq9";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://github.com/lunarmodules/lua-mimetypes/archive/v1.0.0/lua-mimetypes-1.0.0.tar.gz";
+    sha256 = "1rc5lnzvw4cg8wxn4w4sar2xgf5vaivdd2hgpxxcqfzzcmblg1zk";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github/lunarmodules/lua-mimetypes/";
+    description = "A simple library for looking up the MIME types of files.";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
+
 moonscript = callPackage({ argparse, buildLuarocksPackage, fetchgit, lpeg, lua, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "moonscript";
@@ -3293,6 +3317,39 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://github.com/nvim-telescope/telescope.nvim";
     description = "Find, Filter, Preview, Pick. All lua, all the time.";
+    license.fullName = "MIT";
+  };
+}) {};
+
+tiktoken_core = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder, luarocks-build-rust-mlua }:
+buildLuarocksPackage {
+  pname = "tiktoken_core";
+  version = "0.2.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/tiktoken_core-0.2.1-1.rockspec";
+    sha256 = "0mdmrpg82vmk0cqiqdayyk4vvl299z0xqrg58q18dfs5nc27wkla";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/gptlang/lua-tiktoken",
+  "rev": "61d831a81a01ba095f8c94e148b721b3aa7b1e45",
+  "date": "2024-03-03T23:24:06+00:00",
+  "path": "/nix/store/5ik17k726wl8hpz295n7dqq3438k8ddj-lua-tiktoken",
+  "sha256": "11lpzxmmb4zglkp9czlzggd8i46r7whpq021b5d3fx7bc5a81d3n",
+  "hash": "sha256-drSAVGHrdDdaWUEAfCE/2ZCI2nuffpbupO+TVWv/l4Y=",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path" "sha256"]) ;
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua luarocks-build-rust-mlua ];
+
+  meta = {
+    homepage = "https://github.com/gptlang/lua-tiktoken";
+    description = "An experimental port of OpenAI's Tokenizer to lua";
+    maintainers = with lib.maintainers; [ natsukium ];
     license.fullName = "MIT";
   };
 }) {};

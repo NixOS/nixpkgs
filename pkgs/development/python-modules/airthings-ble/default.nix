@@ -1,5 +1,6 @@
 { lib
 , async-interrupt
+, async-timeout
 , bleak
 , bleak-retry-connector
 , buildPythonPackage
@@ -11,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.6.1";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vincegio";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-A7Nrg0O+WVoHP+m8pz6idnNcxulwPYmMt9DfhKTHG24=";
+    repo = "airthings-ble";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BeOrGRVxvfQR1xqIpOp4tOTvlqTKCZHUjVKDqVjVnYM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "-v -Wdefault --cov=airthings_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail "-v -Wdefault --cov=airthings_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
@@ -36,6 +37,8 @@ buildPythonPackage rec {
     async-interrupt
     bleak
     bleak-retry-connector
+  ]  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [

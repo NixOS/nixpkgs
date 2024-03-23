@@ -17,6 +17,7 @@ buildDotnetGlobalTool rec {
 
   meta = with lib; {
     description = "Roslyn-based LSP language server for C#";
+    mainProgram = "csharp-ls";
     homepage = "https://github.com/razzmatazz/csharp-language-server";
     changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/v${version}";
     license = licenses.mit;

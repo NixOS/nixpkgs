@@ -28,13 +28,22 @@ let
   lib = import <test-nixpkgs/lib>;
 
   # The base fixed-point function to populate the resulting attribute set
-  pkgsFun = self: {
-    inherit lib;
-    newScope = extra: lib.callPackageWith (self // extra);
-    callPackage = self.newScope { };
-    callPackages = lib.callPackagesWith self;
-    someDrv = { type = "derivation"; };
-  };
+  pkgsFun =
+    self: {
+      inherit lib;
+      newScope = extra: lib.callPackageWith (self // extra);
+      callPackage = self.newScope { };
+      callPackages = lib.callPackagesWith self;
+    }
+    # This mapAttrs is a very hacky workaround necessary because for all attributes defined in Nixpkgs,
+    # the files that define them are verified to be within Nixpkgs.
+    # This is usually a very safe assumption, but it fails in these tests for someDrv,
+    # because it's technically defined outside the Nixpkgs directories of each test case.
+    # By using `mapAttrs`, `builtins.unsafeGetAttrPos` just returns `null`,
+    # which then doesn't trigger this check
+    // lib.mapAttrs (name: value: value) {
+      someDrv = { type = "derivation"; };
+    };
 
   baseDirectory = root + "/pkgs/by-name";
 

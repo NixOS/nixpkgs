@@ -33,6 +33,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Open source beer recipe creation tool";
+    mainProgram = "brewtarget";
     homepage = "http://www.brewtarget.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.mmahut ];

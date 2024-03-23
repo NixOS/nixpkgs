@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/krylovsk/mqtt-benchmark/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mqtt-benchmark";
   };
 }

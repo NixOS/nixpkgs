@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.289";
+  version = "1.2.297";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    hash = "sha256-0BinJVTjD8iDlhK50qVODQIKj1KDwhgOMg3HHstYHeg=";
+    hash = "sha256-AFuEpMSsfwjqoiLCiSyXecIe/UA72BEHs+kUaUtZU2U=";
   };
 
-  vendorHash = "sha256-YHLa0hTXCswkvVxyNp5ezqyEu18Jfnl9n7JMdqMeBSA=";
+  vendorHash = "sha256-mOHrNXaLnTt0WRVJI8GD48pxLvbSa6oWoxa4YFaIA6Y=";
 
   proxyVendor = true;
 
@@ -83,6 +83,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "GitOps delivery tool";
+    mainProgram = "werf";
     longDescription = ''
       The CLI tool gluing Git, Docker, Helm & Kubernetes with any CI system to
       implement CI/CD and Giterminism.

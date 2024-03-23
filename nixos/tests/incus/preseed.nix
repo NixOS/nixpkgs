@@ -48,6 +48,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
         ];
       };
     };
+    networking.nftables.enable = true;
   };
 
   testScript = ''

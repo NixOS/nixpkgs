@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ASN.1 parsing, encoding and decoding";
+    mainProgram = "asn1tools";
     homepage = "https://github.com/eerimoq/asn1tools";
     changelog = "https://github.com/eerimoq/asn1tools/releases/tag/${version}";
     license = licenses.mit;

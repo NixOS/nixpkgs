@@ -126,7 +126,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Static site generator that requires no database or server-side logic";
     homepage = "https://getpelican.com/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ offline prikhi ];
   };
 }

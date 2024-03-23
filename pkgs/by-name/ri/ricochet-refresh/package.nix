@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Secure chat without DNS or WebPKI";
+    mainProgram = "ricochet-refresh";
     longDescription = ''
       Ricochet Refresh is a peer-to-peer messenger app that uses Tor
       to connect clients.

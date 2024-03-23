@@ -101,7 +101,23 @@ let
     pre-down = "pre-down.d/";
   };
 
-  macAddressOpt = mkOption {
+  macAddressOptWifi = mkOption {
+    type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" "stable-ssid" ]);
+    default = "preserve";
+    example = "00:11:22:33:44:55";
+    description = lib.mdDoc ''
+      Set the MAC address of the interface.
+
+      - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
+      - `"permanent"`: Use the permanent MAC address of the device
+      - `"preserve"`: Don’t change the MAC address of the device upon activation
+      - `"random"`: Generate a randomized value upon each connect
+      - `"stable"`: Generate a stable, hashed MAC address
+      - `"stable-ssid"`: Generate a stable MAC addressed based on Wi-Fi network
+    '';
+  };
+
+  macAddressOptEth = mkOption {
     type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
@@ -258,10 +274,10 @@ in
         '';
       };
 
-      ethernet.macAddress = macAddressOpt;
+      ethernet.macAddress = macAddressOptEth;
 
       wifi = {
-        macAddress = macAddressOpt;
+        macAddress = macAddressOptWifi;
 
         backend = mkOption {
           type = types.enum [ "wpa_supplicant" "iwd" ];
@@ -291,7 +307,7 @@ in
       };
 
       dns = mkOption {
-        type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
+        type = types.enum [ "default" "dnsmasq" "systemd-resolved" "none" ];
         default = "default";
         description = lib.mdDoc ''
           Set the DNS (`resolv.conf`) processing mode.
@@ -436,6 +452,7 @@ in
             And if you edit a declarative profile NetworkManager will move it to the persistent storage and treat it like a ad-hoc one,
             but there will be two profiles as soon as the systemd unit from this option runs again which can be confusing since NetworkManager tools will start displaying two profiles with the same name and probably a bit different settings depending on what you edited.
             A profile won't be deleted even if it's removed from the config until the system reboots because that's when NetworkManager clears it's temp directory.
+            If `networking.resolvconf.enable` is true, attributes affecting the name resolution (such as `ignore-auto-dns`) may not end up changing `/etc/resolv.conf` as expected when other name services (for example `networking.dhcpcd`) are enabled. Run `resolvconf -l` in the terminal to see what each service produces.
           '';
         };
         environmentFiles = mkOption {
@@ -583,6 +600,7 @@ in
       description = "Ensure that NetworkManager declarative profiles are created";
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
+      after = [ "NetworkManager.service" ];
       script = let
         path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
       in ''
@@ -592,9 +610,7 @@ in
           ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
         '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
       + ''
-        if systemctl is-active --quiet NetworkManager; then
-          ${pkgs.networkmanager}/bin/nmcli connection reload
-        fi
+        ${pkgs.networkmanager}/bin/nmcli connection reload
       '';
       serviceConfig = {
         EnvironmentFile = cfg.ensureProfiles.environmentFiles;

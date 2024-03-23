@@ -16,6 +16,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/michaelmacinnis/oh";
     description = "A new Unix shell";
+    mainProgram = "oh";
     license = licenses.mit;
   };
 

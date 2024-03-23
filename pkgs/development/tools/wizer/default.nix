@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wizer";
-  version = "4.0.0";
+  version = "5.0.0";
 
   # the crate does not contain files which are necessary for the tests
   # see https://github.com/bytecodealliance/wizer/commit/3a95e27ce42f1fdaef07b52988e4699eaa221e04
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage rec {
     owner = "bytecodealliance";
     repo = "wizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KFMfNgoKZWVLXNUYHWpAP8CCnVQLv/cDmQgzz29lKxQ=";
+    hash = "sha256-VkWnmwOnlNkfgUyFXV+iwsUdJcJgzUCNus+FiV9sg0Y=";
   };
 
-  cargoHash = "sha256-kKN2JwzuFe7q8VZcKOjc5PkN3isHzzQcTJAvapGBdAE=";
+  cargoHash = "sha256-KSdQqt9szk8qmg3DxBatkJvv//KbSx/MEulJx1gNmB8=";
 
   cargoBuildFlags = [ "--bin" pname ];
 
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "The WebAssembly pre-initializer";
+    mainProgram = "wizer";
     homepage = "https://github.com/bytecodealliance/wizer";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins amesgen ];

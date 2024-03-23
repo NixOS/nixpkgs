@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.linux;
+    mainProgram = "tayga";
   };
 }

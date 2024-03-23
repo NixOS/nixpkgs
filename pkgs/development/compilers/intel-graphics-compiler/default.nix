@@ -20,8 +20,8 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.14.0";
-    hash = "sha256-t7m2y+DiZf0xum1vneXvoCyH767SKMOq4YzMIuZngR8=";
+    rev = "v0.16.0";
+    hash = "sha256-d197m80vSICdv4VKnyqdy3flzbKLKmB8jroY2difA7o=";
   };
 
   inherit (llvmPackages_14) lld llvm;
@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.15610.11";
+  version = "1.0.15985.7";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    hash = "sha256-Fu1g5M2lpcnLw6aSHI5gx47VOfx+rIdIhBlwe/Dv8bk=";
+    hash = "sha256-NXShD6M5OeKi0+Jszvoos+wjHZ9lWh/LIUFLFq8dzFM=";
   };
 
   nativeBuildInputs = [ bison cmake flex (python3.withPackages (ps : with ps; [ mako ])) ];
@@ -79,8 +79,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
+    homepage = "https://github.com/intel/intel-graphics-compiler";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${src.rev}";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ SuperSandro2000 ];

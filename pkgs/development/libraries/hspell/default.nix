@@ -5,17 +5,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     pname = "hspell";
-    version = "1.1";
+    version = "1.4";
   };
 
   PERL_USE_UNSAFE_INC = "1";
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
-    sha256 = "08x7rigq5pa1pfpl30qp353hbdkpadr1zc49slpczhsn0sg36pd6";
+    hash = "sha256-cxD11YdA0h1tIVwReWWGAu99qXqBa8FJfIdkvpeqvqM=";
   };
 
-  patchPhase = "patchShebangs .";
+  patches = [./remove-shared-library-checks.patch];
+  postPatch = "patchShebangs .";
   preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
     mv find_sizes find_sizes_build

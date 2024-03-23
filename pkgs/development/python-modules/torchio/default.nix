@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.19.1";
-  format = "pyproject";
+  version = "0.19.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fepegar";
-    repo = pname;
+    repo = "torchio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SNX558kSRCS9Eks00Kj2kFmo7hCUgV6saYLsnx/Kus0=";
+    hash = "sha256-RqKJStUZhnSmsifn3WjYLfmRkkme+GOe6dp0E0MW9tE=";
   };
 
   propagatedBuildInputs = [

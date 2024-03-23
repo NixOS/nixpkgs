@@ -23,5 +23,6 @@ buildGoPackage rec {
     homepage = "https://github.com/alex2108/syncthing-tray";
     license = licenses.mit;
     maintainers = with maintainers; [ nickhu ];
+    mainProgram = "syncthing-tray";
   };
 }

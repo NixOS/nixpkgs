@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "websocket-client";
-  version = "1.6.4";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-szJAGbPChXIIbEoxn5HR3NRObhHNNAIyl4xoSnZQ0N8=";
+    hash = "sha256-EOUR6jqMdEYx07135h6xftCTBMQTrULPbd+kx3h+j+Y=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Websocket client for Python";
+    mainProgram = "wsdump";
     homepage = "https://github.com/websocket-client/websocket-client";
     changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
     license = licenses.lgpl21Plus;

@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ embr ];
+    mainProgram = "cardpeek";
   };
 }

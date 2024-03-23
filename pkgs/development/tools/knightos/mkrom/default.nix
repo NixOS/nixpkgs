@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Packages KnightOS distribution files into a ROM";
+    mainProgram = "mkrom";
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     platforms   = platforms.all;

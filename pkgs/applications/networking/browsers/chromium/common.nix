@@ -25,7 +25,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libcap
-, xdg-utils, minizip, libwebp
+, minizip, libwebp
 , libusb1, re2
 , ffmpeg, libxslt, libxml2
 , nasm
@@ -184,9 +184,6 @@ let
       bzip2 flac speex opusWithCustomModes
       libevent expat libjpeg snappy
       libcap
-    ] ++ lib.optionals (!xdg-utils.meta.broken) [
-      xdg-utils
-    ] ++ [
       minizip libwebp
       libusb1 re2
       ffmpeg libxslt libxml2
@@ -219,6 +216,9 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+      # Chromium reads initial_preferences from its own executable directory
+      # This patch modifies it to read /etc/chromium/initial_preferences
+      ./patches/chromium-initial-prefs.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "120") [
       # We need to revert this patch to build M120+ with LLVM 17:
       ./patches/chromium-120-llvm-17.patch
@@ -294,10 +294,6 @@ let
         --replace \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
-
-    '' + lib.optionalString (!xdg-utils.meta.broken) ''
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
-        chrome/browser/shell_integration_linux.cc
 
     '' + lib.optionalString systemdSupport ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \

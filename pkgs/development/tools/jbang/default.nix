@@ -1,12 +1,12 @@
 { stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl }:
 
 stdenv.mkDerivation rec {
-  version = "0.114.0";
+  version = "0.115.0";
   pname = "jbang";
 
   src = fetchzip {
     url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
-    sha256 = "sha256-pLikm68JPG42XE5LCU/PB5rTUywWoQxtmHXYBDPASNE=";
+    sha256 = "sha256-JTyMX3120h+xtXnkTW313zc7OkWMB4DayeRW6hNc4/A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Run java as scripts anywhere";
+    mainProgram = "jbang";
     longDescription = ''
       jbang uses the java language to build scripts similar to groovy scripts. Dependencies are automatically
       downloaded and the java code runs.

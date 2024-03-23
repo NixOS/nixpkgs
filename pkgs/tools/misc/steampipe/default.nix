@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "steampipe";
-  version = "0.21.7";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
     rev = "v${version}";
-    hash = "sha256-puaqAMUnlQNOQmxhJCKQKTBypTjdModijtIpPBZsIXY=";
+    hash = "sha256-Qmb4dBLtztrhnm8fKEkaxX2tJAXsQ+/C8cweQbRc7uk=";
   };
 
-  vendorHash = "sha256-yS2FiTnK65LAY3tGSlMy0LMg6691tS/9yQ4w7HrW/pw=";
+  vendorHash = "sha256-2p/D/sycx78BXBe+WHeYP4hLz1aX33cCRQ/AbwKkidM=";
   proxyVendor = true;
 
   patchPhase = ''
@@ -41,7 +41,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://steampipe.io/";
     description = "select * from cloud;";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ hardselius ];
     changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
   };

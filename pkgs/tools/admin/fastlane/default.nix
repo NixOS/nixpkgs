@@ -24,5 +24,6 @@ bundlerApp {
       shahrukh330
       marsam
     ];
+    mainProgram = "fastlane";
   };
 }

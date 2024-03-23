@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Official Khronos OpenCL ICD Loader";
+    mainProgram = "cllayerinfo";
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader";
     license = licenses.asl20;
     maintainers = with maintainers; [ davidtwco ];

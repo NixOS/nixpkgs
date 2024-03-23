@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "notion-client";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ramnes";
     repo = "notion-sdk-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-u10iPSbFPv9RewEYru3V6MpwhhySzmnymmv4CsefGC8=";
+    hash = "sha256-IEWFrdqrawFbuwA8bUewanmBoGWsjHJ7ucgvHQEaMcA=";
   };
 
   nativeBuildInputs = [

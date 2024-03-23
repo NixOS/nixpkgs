@@ -32,4 +32,5 @@ stdenv.mkDerivation {
   inherit (builtins) storeDir;
   shell = lib.getBin shell + (shell.shellPath or "");
   signingUtils = if darwinCodeSign then signingUtils else null;
+  meta.mainProgram = "remove-references-to";
 }

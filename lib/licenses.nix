@@ -412,6 +412,11 @@ in mkLicense lset) ({
     fullName = "Detection Rule License 1.0";
   };
 
+  dtoa = {
+    spdxId = "dtoa";
+    fullName = "dtoa License";
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
@@ -594,6 +599,11 @@ in mkLicense lset) ({
     url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
   };
 
+  giftware = {
+    spdxId = "Giftware";
+    fullName = "Giftware License";
+  };
+
   hpnd = {
     spdxId = "HPND";
     fullName = "Historic Permission Notice and Disclaimer";
@@ -602,6 +612,11 @@ in mkLicense lset) ({
   hpndSellVariant = {
     fullName = "Historical Permission Notice and Disclaimer - sell variant";
     spdxId = "HPND-sell-variant";
+  };
+
+  hpndUc = {
+    spdxId = "HPND-UC";
+    fullName = "Historical Permission Notice and Disclaimer - University of California variant";
   };
 
   # Intel's license, seems free
@@ -889,6 +904,11 @@ in mkLicense lset) ({
     url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
   };
 
+  nistSoftware = {
+    spdxId = "NIST-Software";
+    fullName = "NIST Software License";
+  };
+
   nlpl = {
     spdxId = "NLPL";
     fullName = "No Limit Public License";
@@ -1066,6 +1086,11 @@ in mkLicense lset) ({
     url = "https://sources.debian.org/copyright/license/debianutils/4.9.1/";
   };
 
+  smlnj = {
+    spdxId = "SMLNJ";
+    fullName = "Standard ML of New Jersey License";
+  };
+
   sspl = {
     shortName = "SSPL";
     fullName = "Server Side Public License";
@@ -1215,6 +1240,11 @@ in mkLicense lset) ({
     url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
 
+  xinetd = {
+    spdxId = "xinetd";
+    fullName = "xinetd License";
+  };
+
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
@@ -1229,13 +1259,13 @@ in mkLicense lset) ({
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };
+
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
+  };
 } // {
   # TODO: remove legacy aliases
-  agpl3 = {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
-    deprecated = true;
-  };
   gpl2 = {
     spdxId = "GPL-2.0";
     fullName = "GNU General Public License v2.0";

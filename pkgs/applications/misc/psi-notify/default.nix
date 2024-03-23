@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cdown/psi-notify";
     platforms = platforms.linux;
     maintainers = with maintainers; [ eduarrrd ];
+    mainProgram = "psi-notify";
   };
 }

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.10.2";
+  version = "0.12.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pallets";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2V2FvZC8jM84fZEdK9ShzFrjO8goOQsN6cnJTHDDL9E=";
+    hash = "sha256-gSBY8zMGVn5Ndu4OexMP1v7bhXAAdl2UcEjjKFa21rE=";
   };
 
   nativeCheckInputs = [
@@ -27,6 +27,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # requires set up local server
     "tests/test_dynamodb_cache.py"
+    "tests/test_mongodb_cache.py"
   ];
 
   pythonImportsCheck = [ "cachelib" ];

@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for ICMP echo requests";
+    mainProgram = "ping_exporter";
     homepage = "https://github.com/czerwonk/ping_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ nudelsalat ];

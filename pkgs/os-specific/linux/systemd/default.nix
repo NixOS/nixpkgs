@@ -5,6 +5,7 @@
 , nixosTests
 , pkgsCross
 , fetchFromGitHub
+, fetchpatch
 , fetchzip
 , buildPackages
 , makeBinaryWrapper
@@ -224,6 +225,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-meson.build-do-not-create-systemdstatedir.patch
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+  ] ++ lib.optional (stdenv.hostPlatform.isPower || stdenv.hostPlatform.isRiscV) [
+    # Fixed upstream and included in the main and stable branches. Can be dropped
+    # when bumping to >= v255.5.
+    # https://github.com/systemd/systemd/issues/30448
+    # https://github.com/NixOS/nixpkgs/pull/282607
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/8040fa55a1cbc34dede3205a902095ecd26c21e3.patch";
+      sha256 = "0c6z7bsndbkb8m130jnjpsl138sfv3q171726n5vkyl2n9ihnavk";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -403,6 +413,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
+
+  hardeningDisable = [
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
+    "trivialautovarinit"
+  ];
 
   nativeBuildInputs =
     [
@@ -851,8 +866,8 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled
-      withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withBootloader withCryptsetup withEfi withHostnamed withImportd withKmod
+      withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests)

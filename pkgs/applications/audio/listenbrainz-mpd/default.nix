@@ -59,5 +59,6 @@ rustPlatform.buildRustPackage rec {
     description = "ListenBrainz submission client for MPD";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ DeeUnderscore ];
+    mainProgram = "listenbrainz-mpd";
   };
 }

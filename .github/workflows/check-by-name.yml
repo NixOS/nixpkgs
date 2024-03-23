@@ -87,7 +87,7 @@ jobs:
             exit 1
           fi
           echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
         with:
           # pull_request_target checks out the base branch by default
           ref: ${{ env.mergedSha }}
@@ -98,7 +98,7 @@ jobs:
           base=$(mktemp -d)
           git worktree add "$base" "$(git rev-parse HEAD^1)"
           echo "base=$base" >> "$GITHUB_ENV"
-      - uses: cachix/install-nix-action@6004951b182f8860210c8d6f0d808ec5b1a33d28 # v25
+      - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
       - name: Fetching the pinned tool
         # Update the pinned version using pkgs/test/nixpkgs-check-by-name/scripts/update-pinned-tool.sh
         run: |

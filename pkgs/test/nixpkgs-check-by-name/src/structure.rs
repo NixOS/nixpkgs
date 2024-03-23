@@ -7,8 +7,9 @@ use crate::NixFileStore;
 use itertools::concat;
 use lazy_static::lazy_static;
 use regex::Regex;
+use relative_path::RelativePathBuf;
 use std::fs::DirEntry;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 lazy_static! {
     static ref SHARD_NAME_REGEX: Regex = Regex::new(r"^[a-z0-9_-]{1,2}$").unwrap();
@@ -21,15 +22,15 @@ pub fn shard_for_package(package_name: &str) -> String {
     package_name.to_lowercase().chars().take(2).collect()
 }
 
-pub fn relative_dir_for_shard(shard_name: &str) -> PathBuf {
-    PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}"))
+pub fn relative_dir_for_shard(shard_name: &str) -> RelativePathBuf {
+    RelativePathBuf::from(format!("{BASE_SUBPATH}/{shard_name}"))
 }
 
-pub fn relative_dir_for_package(package_name: &str) -> PathBuf {
+pub fn relative_dir_for_package(package_name: &str) -> RelativePathBuf {
     relative_dir_for_shard(&shard_for_package(package_name)).join(package_name)
 }
 
-pub fn relative_file_for_package(package_name: &str) -> PathBuf {
+pub fn relative_file_for_package(package_name: &str) -> RelativePathBuf {
     relative_dir_for_package(package_name).join(PACKAGE_NIX_FILENAME)
 }
 
@@ -120,7 +121,8 @@ fn check_package(
 ) -> validation::Result<String> {
     let package_path = package_entry.path();
     let package_name = package_entry.file_name().to_string_lossy().into_owned();
-    let relative_package_dir = PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}/{package_name}"));
+    let relative_package_dir =
+        RelativePathBuf::from(format!("{BASE_SUBPATH}/{shard_name}/{package_name}"));
 
     Ok(if !package_path.is_dir() {
         NixpkgsProblem::PackageNonDir {
@@ -174,7 +176,7 @@ fn check_package(
         let result = result.and(references::check_references(
             nix_file_store,
             &relative_package_dir,
-            &path.join(&relative_package_dir),
+            &relative_package_dir.to_path(path),
         )?);
 
         result.map(|_| package_name.clone())

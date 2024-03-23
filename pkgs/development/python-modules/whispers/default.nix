@@ -86,6 +86,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool to identify hardcoded secrets in static structured text";
+    mainProgram = "whispers";
     homepage = "https://github.com/adeptex/whispers";
     changelog = "https://github.com/adeptex/whispers/releases/tag/${version}";
     license = with licenses; [ asl20 ];

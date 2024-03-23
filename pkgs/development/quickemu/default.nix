@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i \
-      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.fd}/FV/OVMF_CODE.fd","${OVMFFull.fd}/FV/OVMF_VARS.fd" |' \
-      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.fd}/FV/OVMF_CODE.fd","${OVMF.fd}/FV/OVMF_VARS.fd" |' \
+      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.firmware}","${OVMFFull.variables}" |' \
+      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
       -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       quickemu

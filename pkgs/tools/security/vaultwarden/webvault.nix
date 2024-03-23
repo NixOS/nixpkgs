@@ -4,16 +4,17 @@
 , git
 , nixosTests
 , python3
+, vaultwarden
 }:
 
 let
-  version = "2024.1.2";
+  version = "2024.1.2b";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-XpFGLZpX5BeP6cEZfGlNnh94aS6As0eCnllVyHLrOWo=";
+    hash = "sha256-p5UsI8T2cV5uQnQmOi5WBo2UirLLS83NHoaljxcRkqo=";
   };
 
 in buildNpmPackage rec {
@@ -69,6 +70,6 @@ in buildNpmPackage rec {
     changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda msteen mic92 ];
+    inherit (vaultwarden.meta) maintainers;
   };
 }

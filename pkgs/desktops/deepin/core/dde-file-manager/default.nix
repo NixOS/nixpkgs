@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , runtimeShell
 , dtkwidget
 , qt5integration
@@ -44,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
-  version = "6.0.31";
+  version = "6.0.40";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-mc2HcoLrwMXKU8w34KUEh62ZfEIfbJLVzz4JGnUE5EM=";
+    hash = "sha256-fvxP6wle4hezt9nEDpTgK+xB4J5XIC0mP5jWCmkjJPA=";
   };
 
   nativeBuildInputs = [
@@ -63,13 +62,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   patches = [
-    ./use_v23_dbus_interface.diff
-
-    (fetchpatch {
-      name = "use-pkgconfig-to-check-mount.patch";
-      url = "https://github.com/linuxdeepin/dde-file-manager/commit/b6c210057d991591df45b80607a614e7a57a9dc0.patch";
-      hash = "sha256-k0ZYlOVN3hHs1qvvRaJ3i6okOhDE+DoUKGs9AhSFBGU=";
-    })
+    ./patch_check_v23_interface.diff
   ];
 
   postPatch = ''
@@ -132,6 +125,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DVERSION=${version}"
+    "-DNIX_DEEPIN_VERSION=23"
+    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
   ];
 
   enableParallelBuilding = true;

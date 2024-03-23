@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "openwrt-luci-rpc";
-  version = "1.1.16";
+  version = "1.1.17";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZvPMJbYCNKMXuTrHwXQvBZ/mMenYTsV1X4COiVxvJGY=";
+    hash = "sha256-RFZCnQTDs3vre0qbedIEnng7lGo3Ikp0Bw4+7sbPRJk=";
   };
 
   propagatedBuildInputs = [

@@ -649,7 +649,6 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -705,6 +704,11 @@ in {
     in stringAfter [ "users" ] ''
       if [ -e ${lingerDir} ] ; then
         cd ${lingerDir}
+        for user in ${lingerDir}/*; do
+          if ! id "$user" >/dev/null 2>&1; then
+            rm --force -- "$user"
+          fi
+        done
         ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
         ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
       fi
@@ -897,7 +901,26 @@ in {
     ));
 
     warnings =
-      builtins.filter (x: x != null) (
+      flip concatMap (attrValues cfg.users) (user: let
+        unambiguousPasswordConfiguration = 1 >= length (filter (x: x != null) ([
+          user.hashedPassword
+          user.hashedPasswordFile
+          user.password
+        ] ++ optionals cfg.mutableUsers [
+          # For immutable users, initialHashedPassword is set to hashedPassword,
+          # so using these options would always trigger the assertion.
+          user.initialHashedPassword
+          user.initialPassword
+        ]));
+      in optional (!unambiguousPasswordConfiguration) ''
+        The user '${user.name}' has multiple of the options
+        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
+        & `initialHashedPassword` set to a non-null value.
+        The options silently discard others by the order of precedence
+        given above which can lead to surprising results. To resolve this warning,
+        set at most one of the options above to a non-`null` value.
+      '')
+      ++ builtins.filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the

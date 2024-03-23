@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aioapcaccess";
-  version = "0.4.2";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "yuxincs";
     repo = "aioapcaccess";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ig9aQduM9wby3DzPjvbubihopwhdMXHovMo3Id47mRk=";
+    hash = "sha256-nI8hfHfSLMOKPcG5idYqqa/msJuR/Xt+JmgzdftlN28=";
   };
 
   nativeBuildInputs = [

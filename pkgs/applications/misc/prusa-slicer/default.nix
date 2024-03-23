@@ -66,12 +66,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-hSHeh3qJroCFnzeoVz6LKtCK8r0ealWSFz9cW4xvSb8=";
+    hash = "sha256-IZRw6qEe4hM/Sfhx0je11vaMHeuW/e4ZP5zMTuptb2k=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ moredread tweber tmarkus ];
     platforms = platforms.unix;
   } // lib.optionalAttrs (stdenv.isDarwin) {

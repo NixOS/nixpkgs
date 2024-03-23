@@ -31,6 +31,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line interface to the public Gandi.net API";
+    mainProgram = "gandi";
     homepage = "https://cli.gandi.net/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

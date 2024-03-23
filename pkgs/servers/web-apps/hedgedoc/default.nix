@@ -75,6 +75,7 @@ in stdenv.mkDerivation {
     yarn --immutable-cache
     yarn run build
 
+    rm bin/heroku
     patchShebangs bin/*
 
     runHook postBuild
@@ -83,13 +84,19 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
+    mkdir -p $out/share/hedgedoc
+    cp -r bin $out
+    cp -r {app.js,lib,locales,node_modules,package.json,public} $out/share/hedgedoc
 
+    for bin in $out/bin/*; do
+      wrapProgram $bin \
+        --set NODE_ENV production \
+        --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
+    done
     makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
-      --add-flags $out/app.js \
+      --add-flags $out/share/hedgedoc/app.js \
       --set NODE_ENV production \
-      --set NODE_PATH "$out/lib/node_modules"
+      --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
 
     runHook postInstall
   '';
@@ -101,7 +108,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Only;
     homepage = "https://hedgedoc.org";
     mainProgram = "hedgedoc";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];

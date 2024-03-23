@@ -104,6 +104,8 @@ stdenv.mkDerivation rec {
     # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (isCross && stdenv.hostPlatform.libc != "glibc") libiconv;
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   configureFlags = [ "--with-packager=https://nixos.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")

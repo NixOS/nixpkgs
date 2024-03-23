@@ -7,7 +7,7 @@
 , ronn
 , stdenv
 , curl
-, libgit2_1_5
+, libgit2
 , libssh2
 , openssl
 , zlib
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
     libssh2
     openssl
     zlib
@@ -54,6 +54,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage man/*.1
   '';
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
     description = "A cargo subcommand for checking and applying updates to installed executables";

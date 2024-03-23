@@ -33,7 +33,7 @@ let
   mupdf-cxx = mupdf.override { enableOcr = true; enableCxx = true; enablePython = true; python3 = python; };
 in buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.23.7";
+  version = "1.23.26";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -42,7 +42,7 @@ in buildPythonPackage rec {
     owner = "pymupdf";
     repo = "PyMuPDF";
     rev = "refs/tags/${version}";
-    hash = "sha256-XVf9nKbcTS/rxRCD2u5u8ecCf0bWZ3FXXN/YulI9etU=";
+    hash = "sha256-m2zq04+PDnlzFuqeSt27UhdHXTHxpHdMPIg5RQl/5bQ=";
   };
 
   # swig is not wrapped as python package
@@ -107,7 +107,7 @@ in buildPythonPackage rec {
 
   pythonImportsCheck = [
     "fitz"
-    "fitz_new"
+    "fitz_old"
   ];
 
   meta = with lib; {

@@ -85,6 +85,7 @@ mapAliases ({
   cntk = throw "cntk has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-10-09
   codespell = throw "codespell has been promoted to a top-level attribute"; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
+  command_runner = command-runner; # added 2024-03-06
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
@@ -168,6 +169,9 @@ mapAliases ({
   flask-basicauth = throw "flask-basicauth was removed, as it is not compatible with flask 3.0 and unmaintained since 2016.";
   flask-sessionstore = throw "flask-sessionstore was removed, as it is not compatible with flask 3.0 and unmaintained since 2017.";
   flowlogs_reader = flowlogs-reader; # added 2024-01-03
+  flufl_bounce = flufl-bounce; # added 2023-11-03
+  flufl_i18n = flufl-i18n; # added 2023-11-03
+  flufl_lock = flufl-lock; # added 2023-11-03
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
@@ -298,7 +302,6 @@ mapAliases ({
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
   pathpy = path; # added 2022-04-12
-  paypalrestsdk = throw "paypalrestsdk was removed, the upstream repo was archived back in 2020"; # Added 2023-11-25
   pdfposter = throw "pdfposter was promoted to a top-level attribute"; # Added 2023-06-29
   pdfminer = pdfminer-six; # added 2022-05-25
   pep257 = pydocstyle; # added 2022-04-12
@@ -466,6 +469,7 @@ mapAliases ({
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
+  smpp_pdu = smpp-pdu; # added 2024-03-05
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
   sorl_thumbnail = sorl-thumbnail; # added 2023-11-12
   SPARQLWrapper = sparqlwrapper;
@@ -497,6 +501,7 @@ mapAliases ({
   thumborPexif = throw "thumborPexif has been removed, because it was unused."; # added 2024-01-07
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
+  py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20

@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "pyasyncore";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonrob";
     repo = "pyasyncore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e1iHC9mbQYlfpIdLk033wvoA5z5WcHjOZm6oFTfpRTA=";
+    hash = "sha256-ptqOsbkY7XYZT5sh6vctfxZ7BZPX2eLjo6XwZfcmtgk=";
   };
 
   nativeBuildInputs = [

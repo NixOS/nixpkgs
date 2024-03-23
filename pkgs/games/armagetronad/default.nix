@@ -176,6 +176,7 @@ let
       meta = with lib; {
         homepage = "http://armagetronad.org";
         description = "A multiplayer networked arcade racing game in 3D similar to Tron";
+        mainProgram = "armagetronad-dedicated";
         maintainers = with maintainers; [ numinit ];
         license = licenses.gpl2Plus;
         platforms = platforms.linux;

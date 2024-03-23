@@ -6,18 +6,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
-    repo = pname;
+    repo = "gallia";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JeEJ4xTIOFeMADnuPMLNGxB/qEPKMnaIhQ6FCUaNa7E=";
+    hash = "sha256-LvzEyBkhji7ruVVO2EpqM8pKOcTX8Dnkqu/GtWOfMZs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "httpx"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     can
     exitcode
+    httpx
     platformdirs
     psutil
     construct

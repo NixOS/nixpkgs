@@ -75,5 +75,6 @@ in stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     platforms = [ "i686-linux" ];
+    mainProgram = "kega-fusion";
   };
 }

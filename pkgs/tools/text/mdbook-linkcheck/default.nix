@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A backend for `mdbook` which will check your links for you";
+    mainProgram = "mdbook-linkcheck";
     homepage = "https://github.com/Michael-F-Bryan/mdbook-linkcheck";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];

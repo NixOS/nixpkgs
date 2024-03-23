@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "XStatic-asciinema-player";
+  pname = "xstatic-asciinema-player";
   version = "2.6.1.1";
 
   src = fetchPypi {
-    inherit version pname;
+    pname = "XStatic-asciinema-player";
+    inherit version;
     sha256 = "sha256-yA6WC067St82Dm6StaCKdWrRBhmNemswetIO8iodfcw=";
   };
 

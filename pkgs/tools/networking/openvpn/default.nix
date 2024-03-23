@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ viric peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "openvpn";
   };
 })

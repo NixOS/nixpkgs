@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A framework for layer 2 attacks";
+    mainProgram = "yersinia";
     homepage = "https://github.com/tomac/yersinia";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ vdot0x23 ];

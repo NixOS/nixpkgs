@@ -37,6 +37,10 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
+  postInstall = ''
+    $out/bin/git-branchless install-man-pages $out/share/man
+  '';
+
   preCheck = ''
     export TEST_GIT=${git}/bin/git
     export TEST_GIT_EXEC_PATH=$(${git}/bin/git --exec-path)

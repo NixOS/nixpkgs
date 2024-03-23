@@ -119,19 +119,6 @@ in
     let
       cfg = config.xdg.portal;
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
-      configPackages = cfg.configPackages;
-
-      joinedPortals = pkgs.buildEnv {
-        name = "xdg-portals";
-        paths = packages;
-        pathsToLink = [ "/share/xdg-desktop-portal/portals" "/share/applications" ];
-      };
-
-      joinedPortalConfigs = pkgs.buildEnv {
-        name = "xdg-portal-configs";
-        paths = configPackages;
-        pathsToLink = [ "/share/xdg-desktop-portal" ];
-      };
     in
     mkIf cfg.enable {
       warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
@@ -158,17 +145,18 @@ in
       systemd.packages = packages;
 
       environment = {
-        # fixes screen sharing on plasmawayland on non-chromium apps by linking
-        # share/applications/*.desktop files
-        # see https://github.com/NixOS/nixpkgs/issues/145174
-        systemPackages = [ joinedPortals ];
-        pathsToLink = [ "/share/applications" ];
+        systemPackages = packages ++ cfg.configPackages;
+        pathsToLink = [
+          # Portal definitions and upstream desktop environment portal configurations.
+          "/share/xdg-desktop-portal"
+          # .desktop files to register fallback icon and app name.
+          "/share/applications"
+        ];
 
         sessionVariables = {
           GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
           NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
-          XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
-          NIXOS_XDG_DESKTOP_PORTAL_CONFIG_DIR = mkIf (cfg.configPackages != [ ]) "${joinedPortalConfigs}/share/xdg-desktop-portal";
+          NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 
         etc = lib.concatMapAttrs

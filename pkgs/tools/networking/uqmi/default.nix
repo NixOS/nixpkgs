@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz mkg20001 ];
+    mainProgram = "uqmi";
   };
 }

@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
+    mainProgram = "jenkins-jobs";
     homepage = "https://jenkins-job-builder.readthedocs.io/en/latest/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Tool for Building Expert Systems";
+    mainProgram = "clips";
     homepage = "http://www.clipsrules.net/";
     longDescription = ''
       Developed at NASA's Johnson Space Center from 1985 to 1996,

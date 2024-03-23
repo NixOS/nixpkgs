@@ -1,20 +1,17 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , mock
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , setuptools
 , sybil
 , twisted
-, zope-component
 }:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "7.2.2";
+  version = "8.1.0";
   pyproject = true;
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -23,23 +20,14 @@ buildPythonPackage rec {
   # https://github.com/simplistix/testfixtures/issues/169
   # https://github.com/simplistix/testfixtures/issues/168
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gHdK7LAklFgnWreD9TCT++dXlf8rMhjSLOP/8KEsTaY=";
+    hash = "sha256-gISJkDBIWcOito3+S8r3e25kJaOSUEe8JaUnVSd7+m0=";
   };
 
-  patches = [
-    # https://github.com/simplistix/testfixtures/pull/188
-    (fetchpatch {
-      name = "python3.12-compatibility.patch";
-      url = "https://github.com/simplistix/testfixtures/commit/2b80b195e30e12c739dc4f98e9de17dec8f3558a.patch";
-      hash = "sha256-LrC0uI4k3F6ZGTqbKi319tRbVk5557xbyzQN36Y1160=";
-     })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -48,7 +36,6 @@ buildPythonPackage rec {
     pytestCheckHook
     sybil
     twisted
-    zope-component
   ];
 
   disabledTestPaths = [

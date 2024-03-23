@@ -8,29 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rwpspread";
-  version = "0.1.9";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
     rev = "v${version}";
-    hash = "sha256-oZgHMklHMKUpVY3g7wS2rna+5+ePEbcvdVJc9jPTeoI=";
+    hash = "sha256-ACYELJU7Y4Xv+abQ/Vgo3xaP+jbO43K/CBE2yuEddko=";
   };
+  cargoHash = "sha256-ZNWDUOEhh36YjbGZpljyXsL0g7iW6GheLi2WxCj4w+s=";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-client-toolkit-0.18.0" = "sha256-7s5XPmIflUw2qrKRAZUz30cybYKvzD5Hu4ViDpzGC3s=";
-    };
-  };
+  nativeBuildInputs = [ pkg-config ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    libxkbcommon
-  ];
+  buildInputs = [ libxkbcommon ];
 
   passthru.updateScript = nix-update-script { };
 

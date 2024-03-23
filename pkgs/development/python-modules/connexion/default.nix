@@ -89,10 +89,16 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError
     "test_headers"
+    # waiter.acquire() deadlock
+    "test_cors_server_error"
+    "test_get_bad_default_response"
+    "test_schema_response"
+    "test_writeonly"
   ];
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
+    mainProgram = "connexion";
     homepage = "https://github.com/spec-first/connexion";
     changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
     license = licenses.asl20;

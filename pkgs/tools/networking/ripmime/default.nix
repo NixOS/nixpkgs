@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     homepage = "https://pldaniels.com/ripmime/";
     platforms = platforms.all;
+    mainProgram = "ripmime";
   };
 
   passthru = {

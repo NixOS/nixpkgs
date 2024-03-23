@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A custom discord client that supports streaming with audio on Linux";
+    mainProgram = "discord-screenaudio";
     homepage = "https://github.com/maltejur/discord-screenaudio";
     downloadPage = "https://github.com/maltejur/discord-screenaudio/releases";
     changelog = "https://github.com/maltejur/discord-screenaudio/releases/tag/v${version}";

@@ -7,7 +7,9 @@ Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers cre
 
 `runCommand :: String -> AttrSet -> String -> Derivation`
 
-`runCommand name drvAttrs buildCommand` returns a derivation that is built by running the specified shell commands.
+The result of `runCommand name drvAttrs buildCommand` is a derivation that is built by running the specified shell commands.
+
+By default `runCommand` runs in a stdenv with no compiler environment, whereas [`runCommandCC`](#trivial-builder-runCommandCC) uses the default stdenv, `pkgs.stdenv`.
 
 `name :: String`
 :   The name that Nix will append to the store path in the same way that `stdenv.mkDerivation` uses its `name` attribute.
@@ -92,6 +94,107 @@ writeShellScript "evaluate-my-file.sh" ''
 ```
 ::::
 
+### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
+
+Write an [XDG desktop file](https://specifications.freedesktop.org/desktop-entry-spec/1.4/) to the Nix store.
+
+This function is usually used to add desktop items to a package through the `copyDesktopItems` hook.
+
+`makeDesktopItem` adheres to version 1.4 of the specification.
+
+#### Inputs {#trivial-builder-makeDesktopItem-inputs}
+
+`makeDesktopItem` takes an attribute set that accepts most values from the [XDG specification](https://specifications.freedesktop.org/desktop-entry-spec/1.4/ar01s06.html).
+
+All recognised keys from the specification are supported with the exception of the "Hidden" field. The keys are converted into camelCase format, but correspond 1:1 to their equivalent in the specification: `genericName`, `noDisplay`, `comment`, `icon`, `onlyShowIn`, `notShowIn`, `dbusActivatable`, `tryExec`, `exec`, `path`, `terminal`, `mimeTypes`, `categories`, `implements`, `keywords`, `startupNotify`, `startupWMClass`, `url`, `prefersNonDefaultGPU`.
+
+The "Version" field is hardcoded to the version `makeDesktopItem` currently adheres to.
+
+The following fields are either required, are of a different type than in the specification, carry specific default values, or are additional fields supported by `makeDesktopItem`:
+
+`name` (String)
+
+: The name of the desktop file in the Nix store.
+
+`type` (String; _optional_)
+
+: Default value: `"Application"`
+
+`desktopName` (String)
+
+: Corresponds to the "Name" field of the specification.
+
+`actions` (List of Attribute set; _optional_)
+
+: A list of attribute sets {name, exec?, icon?}
+
+`extraConfig` (Attribute set; _optional_)
+
+: Additional key/value pairs to be added verbatim to the desktop file. Attributes need to be prefixed with 'X-'.
+
+#### Examples {#trivial-builder-makeDesktopItem-examples}
+
+::: {.example #ex-makeDesktopItem}
+# Usage 1 of `makeDesktopItem`
+
+Write a desktop file `/nix/store/<store path>/my-program.desktop` to the Nix store.
+
+```nix
+{makeDesktopItem}:
+makeDesktopItem {
+  name = "my-program";
+  desktopName = "My Program";
+  genericName = "Video Player";
+  noDisplay = false;
+  comment = "Cool video player";
+  icon = "/path/to/icon";
+  onlyShowIn = [ "KDE" ];
+  dbusActivatable = true;
+  tryExec = "my-program";
+  exec = "my-program --someflag";
+  path = "/some/working/path";
+  terminal = false;
+  actions.example = {
+    name = "New Window";
+    exec = "my-program --new-window";
+    icon = "/some/icon";
+  };
+  mimeTypes = [ "video/mp4" ];
+  categories = [ "Utility" ];
+  implements = [ "org.my-program" ];
+  keywords = [ "Video" "Player" ];
+  startupNotify = false;
+  startupWMClass = "MyProgram";
+  prefersNonDefaultGPU = false;
+  extraConfig.X-SomeExtension = "somevalue";
+}
+```
+
+:::
+
+::: {.example #ex2-makeDesktopItem}
+# Usage 2 of `makeDesktopItem`
+
+Override the `hello` package to add a desktop item.
+
+```nix
+{ copyDesktopItems
+, hello
+, makeDesktopItem }:
+
+hello.overrideAttrs {
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [(makeDesktopItem {
+    name = "hello";
+    desktopName = "Hello";
+    exec = "hello";
+  })];
+}
+```
+
+:::
+
 ### `writeTextFile` {#trivial-builder-writeTextFile}
 
 Write a text file to the Nix store.
@@ -152,6 +255,12 @@ Write a text file to the Nix store.
   It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
   Default: `true`
+
+`derivationArgs` (Attribute set, _optional_)
+
+: Extra arguments to pass to the underlying call to `stdenv.mkDerivation`.
+
+  Default: `{}`
 
 The resulting store path will include some variation of the name, and it will be a file unless `destination` is used, in which case it will be a directory.
 
@@ -549,14 +658,18 @@ This creates a derivation with a directory structure like the following:
 
 ## `writeReferencesToFile` {#trivial-builder-writeReferencesToFile}
 
-Writes the closure of transitive dependencies to a file.
+Deprecated. Use [`writeClosure`](#trivial-builder-writeClosure) instead.
 
-This produces the equivalent of `nix-store -q --requisites`.
+## `writeClosure` {#trivial-builder-writeClosure}
+
+Given a list of [store paths](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) (or string-like expressions coercible to store paths), write their collective [closure](https://nixos.org/manual/nix/stable/glossary#gloss-closure) to a text file.
+
+The result is equivalent to the output of `nix-store -q --requisites`.
 
 For example,
 
 ```nix
-writeReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
+writeClosure [ (writeScriptBin "hi" ''${hello}/bin/hello'') ]
 ```
 
 produces an output path `/nix/store/<hash>-runtime-deps` containing

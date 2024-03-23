@@ -41,5 +41,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dotemup sarcasticadmin ];
     platforms = platforms.unix;
+    mainProgram = "pat";
   };
 }

@@ -18,11 +18,11 @@ assert lib.subtractLists [
 ] excludePorts == [];
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdcc";
-  version = "4.2.0";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-tJuuHSO81gV6gsT/5WE/nNDLz9HpQOnYTEv+nfCowFM=";
+    hash = "sha256-rowSFl6xdoDf9EsyjYh5mWMGtyQe+jqDsuOy0veQanU=";
   };
 
   outputs = [ "out" "doc" "man" ];

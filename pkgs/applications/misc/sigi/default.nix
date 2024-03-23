@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sigi-cli/sigi";
     license = licenses.gpl2;
     maintainers = with maintainers; [ booniepepper ];
+    mainProgram = "sigi";
   };
 }

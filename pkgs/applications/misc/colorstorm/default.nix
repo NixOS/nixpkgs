@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
     inherit (zig_0_9.meta) platforms;
+    mainProgram = "colorstorm";
   };
 })

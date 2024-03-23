@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "dploot";
-  version = "2.2.4";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40/5KOlEFvPL9ohCfR3kqoikpKFfJO22MToq3GhamKM=";
+    hash = "sha256-3PxPlN3jZglGFg6rHD1GIl+kUpUe/Fp1Zqcd/OEthLE=";
   };
 
   pythonRelaxDeps = true;
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zblurx/dploot";
     description = "DPAPI looting remotely in Python";
+    mainProgram = "dploot";
     changelog = "https://github.com/zblurx/dploot/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vncsb ];

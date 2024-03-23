@@ -72,13 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     gnome.mutter
     gnome.zenity
     graphene
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     gtk3
     ibus
     libcanberra-gtk3
     libgee
     libGL
     libnotify
-    libpeas
     libpulseaudio
     libuuid
     libwnck
@@ -88,10 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     upower
     xfce.libxfce4windowing
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-  ]);
+  ];
+
+  propagatedBuildInputs = [
+    # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
+    libpeas
+  ];
 
   passthru.providedSessions = [
     "budgie-desktop"
@@ -102,6 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = lib.teams.budgie.members;
   };
 })

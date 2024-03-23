@@ -45,7 +45,7 @@ in phpPackage.buildComposerProject rec {
       redis
       setuptools
       psutil
-      command_runner
+      command-runner
     ]))
   ];
 

@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for the Skybell alarm API";
+    mainProgram = "skybellpy";
     homepage = "https://github.com/MisterWil/skybellpy";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

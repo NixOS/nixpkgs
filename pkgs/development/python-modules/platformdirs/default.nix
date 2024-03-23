@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "4.0.0";
+  version = "4.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-27Cy8VEmbrO96G2mVStxkoWSRXlwZLWirI3tH6kBsus=";
+    hash = "sha256-DjRqOIkyhkA3Z1gl2o78R4kp23qJBj+pRmDBld8AbDI=";
   };
 
   nativeBuildInputs = [

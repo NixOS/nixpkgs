@@ -56,6 +56,7 @@ buildNpmPackage rec {
     homepage = "https://vieb.dev/";
     changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
+    mainProgram = "vieb";
     maintainers = with maintainers; [ gebner tejing ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;

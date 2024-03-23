@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
   # strictoverflow is disabled because it breaks aarch64-darwin
   hardeningDisable = [ "strictoverflow" ];
 
+  # Compatibility with ctypes ≥ 0.21
+  # see: https://github.com/cryspen/hacl-packages/commit/81303b83a54a92d3b5f54f1b8ddbea60438cc2bf
   postPatch = ''
+    substituteInPlace hacl-star-raw/META --replace-warn 'requires="ctypes"' 'requires="ctypes ctypes.stubs"'
     patchShebangs ./
   '';
 

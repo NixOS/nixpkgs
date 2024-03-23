@@ -10,12 +10,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "RoboMachine";
+  pname = "robomachine";
   version = "0.10.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "RoboMachine";
+    inherit version;
     hash = "sha256-XrxHaV9U7mZ2TvySHGm6qw1AsoukppzwPq4wufIjL+k=";
   };
 

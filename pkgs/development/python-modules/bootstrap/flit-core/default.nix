@@ -4,11 +4,11 @@
 , flit-core
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "${python.libPrefix}-bootstrap-${flit-core.pname}";
   inherit (flit-core) version src patches meta;
 
-  sourceRoot = "source/flit_core";
+  sourceRoot = "${src.name}/flit_core";
 
   buildPhase = ''
     runHook preBuild

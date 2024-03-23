@@ -1,4 +1,4 @@
-From 1cf6b108882669f1b20c18fb5f2d6dff0fc83296 Mon Sep 17 00:00:00 2001
+From eadfee17e7d3a1c1bb2a0ff8585772b40331ebd7 Mon Sep 17 00:00:00 2001
 From: Jan Tojnar <jtojnar@gmail.com>
 Date: Sat, 24 Dec 2022 15:31:51 +0100
 Subject: [PATCH 1/4] libbacktrace: avoid libtool wrapping tests
@@ -21,7 +21,7 @@ https://autotools.info/libtool/wrappers.html
  1 file changed, 23 insertions(+), 5 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
-index c53cbae..6eab991 100644
+index 3d67909..06ccf3f 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -107,6 +107,8 @@ check_DATA =
@@ -90,7 +90,7 @@ index c53cbae..6eab991 100644
  unittest_LDADD = libbacktrace.la
  
  BUILDTESTS += unittest
-@@ -253,7 +263,7 @@ if HAVE_OBJCOPY_DEBUGLINK
+@@ -254,7 +264,7 @@ if HAVE_OBJCOPY_DEBUGLINK
  
  b2test_SOURCES = $(btest_SOURCES)
  b2test_CFLAGS = $(libbacktrace_TEST_CFLAGS)
@@ -99,7 +99,7 @@ index c53cbae..6eab991 100644
  b2test_LDADD = libbacktrace_elf_for_test.la
  
  check_PROGRAMS += b2test
-@@ -263,7 +273,7 @@ if HAVE_DWZ
+@@ -264,7 +274,7 @@ if HAVE_DWZ
  
  b3test_SOURCES = $(btest_SOURCES)
  b3test_CFLAGS = $(libbacktrace_TEST_CFLAGS)
@@ -108,7 +108,7 @@ index c53cbae..6eab991 100644
  b3test_LDADD = libbacktrace_elf_for_test.la
  
  check_PROGRAMS += b3test
-@@ -276,6 +286,7 @@ endif HAVE_ELF
+@@ -278,6 +288,7 @@ endif HAVE_ELF
  
  btest_SOURCES = btest.c testlib.c
  btest_CFLAGS = $(libbacktrace_TEST_CFLAGS) -O
@@ -116,7 +116,7 @@ index c53cbae..6eab991 100644
  btest_LDADD = libbacktrace.la
  
  BUILDTESTS += btest
-@@ -330,6 +341,7 @@ endif HAVE_DWZ
+@@ -332,6 +343,7 @@ endif HAVE_DWZ
  
  stest_SOURCES = stest.c
  stest_CFLAGS = $(libbacktrace_TEST_CFLAGS)
@@ -124,7 +124,7 @@ index c53cbae..6eab991 100644
  stest_LDADD = libbacktrace.la
  
  BUILDTESTS += stest
-@@ -352,6 +364,7 @@ if HAVE_ELF
+@@ -354,6 +366,7 @@ if HAVE_ELF
  
  ztest_SOURCES = ztest.c testlib.c
  ztest_CFLAGS = $(libbacktrace_TEST_CFLAGS) -DSRCDIR=\"$(srcdir)\"
@@ -132,7 +132,7 @@ index c53cbae..6eab991 100644
  ztest_LDADD = libbacktrace.la
  ztest_alloc_LDADD = libbacktrace_alloc.la
  
-@@ -371,6 +384,7 @@ BUILDTESTS += ztest_alloc
+@@ -373,6 +386,7 @@ BUILDTESTS += ztest_alloc
  
  zstdtest_SOURCES = zstdtest.c testlib.c
  zstdtest_CFLAGS = $(libbacktrace_TEST_CFLAGS) -DSRCDIR=\"$(srcdir)\"
@@ -140,7 +140,7 @@ index c53cbae..6eab991 100644
  zstdtest_LDADD = libbacktrace.la
  zstdtest_alloc_LDADD = libbacktrace_alloc.la
  
-@@ -392,6 +406,7 @@ endif HAVE_ELF
+@@ -394,6 +408,7 @@ endif HAVE_ELF
  
  edtest_SOURCES = edtest.c edtest2_build.c testlib.c
  edtest_CFLAGS = $(libbacktrace_TEST_CFLAGS)
@@ -148,7 +148,7 @@ index c53cbae..6eab991 100644
  edtest_LDADD = libbacktrace.la
  
  BUILDTESTS += edtest
-@@ -422,6 +437,7 @@ BUILDTESTS += ttest
+@@ -424,6 +439,7 @@ BUILDTESTS += ttest
  
  ttest_SOURCES = ttest.c testlib.c
  ttest_CFLAGS = $(libbacktrace_TEST_CFLAGS) -pthread
@@ -156,7 +156,7 @@ index c53cbae..6eab991 100644
  ttest_LDADD = libbacktrace.la
  
  if USE_DSYMUTIL
-@@ -460,12 +476,12 @@ if HAVE_COMPRESSED_DEBUG
+@@ -472,12 +488,12 @@ if HAVE_COMPRESSED_DEBUG
  
  ctestg_SOURCES = btest.c testlib.c
  ctestg_CFLAGS = $(libbacktrace_TEST_CFLAGS)
@@ -171,7 +171,7 @@ index c53cbae..6eab991 100644
  ctesta_LDADD = libbacktrace.la
  
  BUILDTESTS += ctestg ctesta
-@@ -474,7 +490,7 @@ if HAVE_COMPRESSED_DEBUG_ZSTD
+@@ -486,7 +502,7 @@ if HAVE_COMPRESSED_DEBUG_ZSTD
  
  ctestzstd_SOURCES = btest.c testlib.c
  ctestzstd_CFLAGS = $(libbacktrace_TEST_CFLAGS)
@@ -180,7 +180,7 @@ index c53cbae..6eab991 100644
  ctestzstd_LDADD = libbacktrace.la
  
  BUILDTESTS += ctestzstd
-@@ -521,6 +537,7 @@ endif
+@@ -533,6 +549,7 @@ endif
  
  mtest_SOURCES = mtest.c testlib.c
  mtest_CFLAGS = $(libbacktrace_TEST_CFLAGS) -O
@@ -188,7 +188,7 @@ index c53cbae..6eab991 100644
  mtest_LDADD = libbacktrace.la
  
  BUILDTESTS += mtest
-@@ -553,6 +570,7 @@ if HAVE_ELF
+@@ -565,6 +582,7 @@ if HAVE_ELF
  
  xztest_SOURCES = xztest.c testlib.c
  xztest_CFLAGS = $(libbacktrace_TEST_CFLAGS) -DSRCDIR=\"$(srcdir)\"
@@ -197,5 +197,5 @@ index c53cbae..6eab991 100644
  
  xztest_alloc_SOURCES = $(xztest_SOURCES)
 -- 
-2.38.1
+2.43.1
 

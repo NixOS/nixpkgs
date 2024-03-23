@@ -6,14 +6,14 @@ let
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
   ltsVariant = {
-    version = "6.1.76";
-    hash = "sha256-0nBdUFRGMWM3IL/q8CYiDEUA/sIrYPMkzsBQen30o2E=";
+    version = "6.6.22";
+    hash = "sha256-vpWUdzgI8i/1r5nMp0tx+x67GDTnjQF5ueITIl36lvA=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.6.15";
-    hash = "sha256-KHn4Ntm1QStgJRWzwmPYXEbEcuZcF4pWJ964wc6J2Wk=";
+    version = "6.7.10";
+    hash = "sha256-uwlvQh11uf1skSdlIz7XdjRkdI/wf3VqEeOP20JO5OU=";
     variant = "main";
   };
 
@@ -32,9 +32,6 @@ let
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
-
-      # WineSync driver for fast kernel-backed Wine
-      WINESYNC = module;
 
       # Preemptive Full Tickless Kernel at 250Hz
       HZ = freeform "250";

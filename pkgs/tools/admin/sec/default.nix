@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     description = "Simple Event Correlator";
     maintainers = [ lib.maintainers.tv ];
     platforms = lib.platforms.all;
+    mainProgram = "sec";
   };
 }

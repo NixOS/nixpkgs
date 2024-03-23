@@ -2,10 +2,10 @@
 
 let
   pname = "jicofo";
-  version = "1.0-1062";
+  version = "1.0-1075";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "bU7h7kjs2yu1O+qhKcs6C63DH/omo/R1+Ms40KHkjHU=";
+    sha256 = "tRlCZGBWlonTkKMxr2Rry70ZqC3mjcbF627XEn2D2UI=";
   };
 in
 stdenv.mkDerivation {
@@ -36,6 +36,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A server side focus component used in Jitsi Meet conferences";
+    mainProgram = "jicofo";
     longDescription = ''
       JItsi COnference FOcus is a server side focus component used in Jitsi Meet conferences.
     '';

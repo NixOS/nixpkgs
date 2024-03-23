@@ -87,17 +87,18 @@ let
   enableFeatures = optionals enableVideoAcceleration [ "VaapiVideoDecoder" "VaapiVideoEncoder" ]
     ++ optional enableVulkan "Vulkan";
 
+  disableFeatures = [ "OutdatedBuildDetector" ] # disable automatic updates
     # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
-  disableFeatures = optional enableVideoAcceleration "UseChromeOSDirectVideoDecoder";
+    ++ optionals enableVideoAcceleration  [ "UseChromeOSDirectVideoDecoder" ];
 in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.62.162";
+  version = "1.64.109";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    hash = "sha256-hQG6LHYPhqzfgR0Z7R+hXB1vEVDd6VEyIttSae15Mpo=";
+    hash = "sha256-36igba0U3p8i7t91RxeG6PqlKYyHDDlj295ICcYmCNc=";
   };
 
   dontConfigure = true;

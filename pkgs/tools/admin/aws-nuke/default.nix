@@ -44,5 +44,6 @@ buildGoModule rec {
     changelog = "https://github.com/rebuy-de/aws-nuke/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc ];
+    mainProgram = "aws-nuke";
   };
 }

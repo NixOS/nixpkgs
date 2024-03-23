@@ -55,7 +55,13 @@ Here is a simple package example. It is a pure Coq library, thus it depends on C
 ```nix
 { lib, mkCoqDerivation, version ? null
 , coq, mathcomp, mathcomp-finmap, mathcomp-bigenough }:
-with lib; mkCoqDerivation {
+
+let
+  inherit (lib) licenses maintainers switch;
+  inherit (lib.versions) range;
+in
+
+mkCoqDerivation {
   /* namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2` */
   namePrefix = [ "coq" "mathcomp" ];
   pname = "multinomials";

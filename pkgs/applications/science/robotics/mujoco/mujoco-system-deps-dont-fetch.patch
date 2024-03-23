@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 285250b..32d03e3 100644
+index eea180c0..efb39178 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -92,7 +92,7 @@ add_subdirectory(src/render)
+@@ -93,7 +93,7 @@ add_subdirectory(src/render)
  add_subdirectory(src/thread)
  add_subdirectory(src/ui)
  
@@ -11,7 +11,7 @@ index 285250b..32d03e3 100644
  if(MUJOCO_ENABLE_AVX_INTRINSICS)
    target_compile_definitions(mujoco PUBLIC mjUSEPLATFORMSIMD)
  endif()
-@@ -117,7 +117,7 @@ target_link_libraries(
+@@ -118,7 +118,7 @@ target_link_libraries(
            lodepng
            qhullstatic_r
            tinyobjloader
@@ -21,30 +21,17 @@ index 285250b..32d03e3 100644
  
  set_target_properties(
 diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
-index 4e3e2c8..f6143d9 100644
+index 44962272..656beeb8 100644
 --- a/cmake/MujocoDependencies.cmake
 +++ b/cmake/MujocoDependencies.cmake
-@@ -90,153 +90,203 @@ set(BUILD_SHARED_LIBS
-     CACHE INTERNAL "Build SHARED libraries"
- )
- 
-+
+@@ -93,28 +93,36 @@ set(BUILD_SHARED_LIBS
  if(NOT TARGET lodepng)
--  FetchContent_Declare(
-+  fetchcontent_declare(
+   FetchContent_Declare(
      lodepng
 -    GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
 -    GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
    )
 +endif()
-+
-+if(NOT TARGET lodepng)
-+  if(NOT MUJOCO_USE_SYSTEM_lodepng)
-+    fetchcontent_declare(
-+      lodepng
-+      GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
-+      GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
-+    )
  
 -  FetchContent_GetProperties(lodepng)
 -  if(NOT lodepng_POPULATED)
@@ -56,9 +43,17 @@ index 4e3e2c8..f6143d9 100644
 -    target_compile_options(lodepng PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
 -    target_link_options(lodepng PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
 -    target_include_directories(lodepng PUBLIC ${lodepng_SOURCE_DIR})
-+    fetchcontent_getproperties(lodepng)
++if(NOT TARGET lodepng)
++  if(NOT MUJOCO_USE_SYSTEM_lodepng)
++    fetchcontent_declare(
++      lodepng
++      GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
++      GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
++    )
++
++    FetchContent_GetProperties(lodepng)
 +    if(NOT lodepng_POPULATED)
-+      fetchcontent_populate(lodepng)
++      FetchContent_Populate(lodepng)
 +      # This is not a CMake project.
 +      set(LODEPNG_SRCS ${lodepng_SOURCE_DIR}/lodepng.cpp)
 +      set(LODEPNG_HEADERS ${lodepng_SOURCE_DIR}/lodepng.h)
@@ -73,19 +68,14 @@ index 4e3e2c8..f6143d9 100644
  endif()
  
  if(NOT TARGET marchingcubecpp)
--  FetchContent_Declare(
-+  fetchcontent_declare(
+   FetchContent_Declare(
      marchingcubecpp
 -    GIT_REPOSITORY https://github.com/aparis69/MarchingCubeCpp.git
 -    GIT_TAG ${MUJOCO_DEP_VERSION_MarchingCubeCpp}
    )
  
--  FetchContent_GetProperties(marchingcubecpp)
-+  fetchcontent_getproperties(marchingcubecpp)
-   if(NOT marchingcubecpp_POPULATED)
--    FetchContent_Populate(marchingcubecpp)
-+    fetchcontent_populate(marchingcubecpp)
-     include_directories(${marchingcubecpp_SOURCE_DIR})
+   FetchContent_GetProperties(marchingcubecpp)
+@@ -124,119 +132,158 @@ if(NOT TARGET marchingcubecpp)
    endif()
  endif()
  
@@ -118,7 +108,6 @@ index 4e3e2c8..f6143d9 100644
 -)
 -target_compile_options(qhullstatic_r PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
 -target_link_options(qhullstatic_r PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
-+
 +if(NOT MUJOCO_USE_SYSTEM_qhull)
 +  # MuJoCo includes a file from libqhull_r which is not exported by the qhull include directories.
 +  # Add it to the target.
@@ -165,7 +154,6 @@ index 4e3e2c8..f6143d9 100644
  )
 -target_compile_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
 -target_link_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
-+
 +if(NOT MUJOCO_USE_SYSTEM_tinyxml2)
 +  target_compile_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
 +  target_link_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_LINK_OPTIONS})
@@ -297,7 +285,7 @@ index 4e3e2c8..f6143d9 100644
    set(ABSL_PROPAGATE_CXX_STD ON)
  
    # This specific version of Abseil does not have the following variable. We need to work with BUILD_TESTING
-@@ -249,15 +299,11 @@ if(MUJOCO_BUILD_TESTS)
+@@ -249,15 +296,11 @@ if(MUJOCO_BUILD_TESTS)
    set(ABSL_BUILD_TESTING OFF)
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -314,7 +302,7 @@ index 4e3e2c8..f6143d9 100644
      TARGETS
      absl::core_headers
      EXCLUDE_FROM_ALL
-@@ -268,6 +314,9 @@ if(MUJOCO_BUILD_TESTS)
+@@ -268,6 +311,9 @@ if(MUJOCO_BUILD_TESTS)
        CACHE BOOL "Build tests." FORCE
    )
  
@@ -324,7 +312,7 @@ index 4e3e2c8..f6143d9 100644
    # Avoid linking errors on Windows by dynamically linking to the C runtime.
    set(gtest_force_shared_crt
        ON
-@@ -276,22 +325,20 @@ if(MUJOCO_BUILD_TESTS)
+@@ -276,22 +322,20 @@ if(MUJOCO_BUILD_TESTS)
  
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -353,7 +341,7 @@ index 4e3e2c8..f6143d9 100644
    set(BENCHMARK_EXTRA_FETCH_ARGS "")
    if(WIN32 AND NOT MSVC)
      set(BENCHMARK_EXTRA_FETCH_ARGS
-@@ -310,15 +357,11 @@ if(MUJOCO_BUILD_TESTS)
+@@ -310,15 +354,11 @@ if(MUJOCO_BUILD_TESTS)
  
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -370,7 +358,7 @@ index 4e3e2c8..f6143d9 100644
      TARGETS
      benchmark::benchmark
      benchmark::benchmark_main
-@@ -328,26 +371,42 @@ if(MUJOCO_BUILD_TESTS)
+@@ -328,15 +368,18 @@ if(MUJOCO_BUILD_TESTS)
  endif()
  
  if(MUJOCO_TEST_PYTHON_UTIL)
@@ -387,21 +375,14 @@ index 4e3e2c8..f6143d9 100644
 +      set(CMAKE_POLICY_DEFAULT_CMP0057 NEW)
 +    endif()
  
--    FetchContent_Declare(
-+    fetchcontent_declare(
+     FetchContent_Declare(
        Eigen3
 -      GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
 -      GIT_TAG ${MUJOCO_DEP_VERSION_Eigen3}
      )
  
--    FetchContent_GetProperties(Eigen3)
-+    fetchcontent_getproperties(Eigen3)
-     if(NOT Eigen3_POPULATED)
--      FetchContent_Populate(Eigen3)
-+      fetchcontent_populate(Eigen3)
- 
-       # Mark the library as IMPORTED as a workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/15415
-       add_library(Eigen3::Eigen INTERFACE IMPORTED)
+     FetchContent_GetProperties(Eigen3)
+@@ -348,6 +391,19 @@ if(MUJOCO_TEST_PYTHON_UTIL)
        set_target_properties(
          Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${eigen3_SOURCE_DIR}"
        )
@@ -422,7 +403,7 @@ index 4e3e2c8..f6143d9 100644
    endif()
  endif()
 diff --git a/plugin/sdf/CMakeLists.txt b/plugin/sdf/CMakeLists.txt
-index 3e216fc..e7e3a1e 100644
+index 3e216fc4..e7e3a1eb 100644
 --- a/plugin/sdf/CMakeLists.txt
 +++ b/plugin/sdf/CMakeLists.txt
 @@ -37,7 +37,7 @@ set(MUJOCO_SDF_SRCS
@@ -435,7 +416,7 @@ index 3e216fc..e7e3a1e 100644
    sdf
    PRIVATE ${AVX_COMPILE_OPTIONS}
 diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
-index 666a372..d89bb49 100644
+index 666a3725..d89bb499 100644
 --- a/python/mujoco/util/CMakeLists.txt
 +++ b/python/mujoco/util/CMakeLists.txt
 @@ -63,8 +63,8 @@ if(BUILD_TESTING)
@@ -483,7 +464,7 @@ index 666a372..d89bb49 100644
    gtest_add_tests(TARGET tuple_tools_test SOURCES tuple_tools_test.cc)
  endif()
 diff --git a/simulate/cmake/SimulateDependencies.cmake b/simulate/cmake/SimulateDependencies.cmake
-index 5141406..75ff788 100644
+index 5141406c..75ff7884 100644
 --- a/simulate/cmake/SimulateDependencies.cmake
 +++ b/simulate/cmake/SimulateDependencies.cmake
 @@ -81,10 +81,6 @@ findorfetch(
@@ -498,7 +479,7 @@ index 5141406..75ff788 100644
    glfw
    EXCLUDE_FROM_ALL
 diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-index 6bec911..2a16c21 100644
+index 122760a9..ddd90819 100644
 --- a/test/CMakeLists.txt
 +++ b/test/CMakeLists.txt
 @@ -30,7 +30,7 @@ macro(mujoco_test name)
@@ -510,10 +491,10 @@ index 6bec911..2a16c21 100644
    target_include_directories(${name} PRIVATE ${MUJOCO_TEST_INCLUDE})
    set_target_properties(${name} PROPERTIES BUILD_RPATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
    # gtest_discover_tests is recommended over gtest_add_tests, but has some issues in Windows.
-@@ -59,20 +59,20 @@ target_link_libraries(
-   PUBLIC absl::core_headers
-          absl::strings
+@@ -60,20 +60,20 @@ target_link_libraries(
           absl::synchronization
+          absl::flat_hash_map
+          absl::flat_hash_set
 -         gtest
 -         gmock
 +         GTest::gtest
@@ -528,11 +509,11 @@ index 6bec911..2a16c21 100644
  
  mujoco_test(header_test)
 -target_link_libraries(header_test fixture gmock)
-+target_link_libraries(header_test fixture GTest::gmock)
++target_link_libraries(fixture_test fixture GTest::gmock)
  
  mujoco_test(pipeline_test)
 -target_link_libraries(pipeline_test fixture gmock)
-+target_link_libraries(pipeline_test fixture GTest::gmock)
++target_link_libraries(fixture_test fixture GTest::gmock)
  
  add_subdirectory(benchmark)
  add_subdirectory(engine)

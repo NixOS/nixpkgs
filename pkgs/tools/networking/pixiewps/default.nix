@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.nico202 ];
     platforms = lib.platforms.all;
+    mainProgram = "pixiewps";
   };
 }

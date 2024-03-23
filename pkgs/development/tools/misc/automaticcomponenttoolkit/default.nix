@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Toolkit to automatically generate software components: abstract API, implementation stubs and language bindings";
+    mainProgram = "act";
     homepage = "https://github.com/Autodesk/AutomaticComponentToolkit";
     license = licenses.bsd2;
     maintainers = with maintainers; [ gebner ];

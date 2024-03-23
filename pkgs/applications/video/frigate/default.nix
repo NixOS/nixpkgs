@@ -3,19 +3,20 @@
 , python3
 , fetchFromGitHub
 , fetchurl
+, fetchpatch2
 , frigate
 , nixosTests
 }:
 
 let
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     #name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2J7DhnYDX9ubbsk0qhji/vIKDouy9IqQztzbdPj2kxo=";
+    hash = "sha256-NVT7yaJkVA7b7GL0S0fHjNneBzhjCru56qY1Q4sTVcE=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -58,6 +59,14 @@ python.pkgs.buildPythonApplication rec {
 
   inherit src;
 
+  patches = [
+    (fetchpatch2 {
+      name = "frigate-flask3.0-compat.patch";
+      url = "https://github.com/blakeblackshear/frigate/commit/56bdacc1c661eff8a323e033520e75e2ba0a3842.patch";
+      hash = "sha256-s/goUJxIbjq/woCEOEZECdcZoJDoWc1eM63sd60cxeY=";
+    })
+  ];
+
   postPatch = ''
     echo 'VERSION = "${version}"' > frigate/version.py
 
@@ -97,6 +106,7 @@ python.pkgs.buildPythonApplication rec {
     click
     flask
     imutils
+    markupsafe
     matplotlib
     norfair
     numpy

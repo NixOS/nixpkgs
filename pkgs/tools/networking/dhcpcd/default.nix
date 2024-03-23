@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ eelco ];
+    mainProgram = "dhcpcd";
   };
 }

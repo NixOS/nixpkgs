@@ -145,6 +145,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Free 3D kart racing game";
+    mainProgram = "supertuxkart";
     longDescription = ''
       SuperTuxKart is a Free 3D kart racing game, with many tracks,
       characters and items for you to try, similar in spirit to Mario

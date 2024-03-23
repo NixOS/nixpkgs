@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "rich-click";
-  version = "1.7.3";
+  version = "1.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ewels";
     repo = "rich-click";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZTUJbW39SBaqgVG+ytmnPG6DK7J2XGPwmC2w3TCodBo=";
+    hash = "sha256-eqpxNurMHn4ClD0KjTQ7Yfny61tcYBRKlW74axjLI8A=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to format click help output nicely with rich";
+    mainProgram = "rich-click";
     homepage = "https://github.com/ewels/rich-click";
     changelog = "https://github.com/ewels/rich-click/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

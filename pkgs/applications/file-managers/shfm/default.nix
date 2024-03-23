@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
+    mainProgram = "shfm";
   };
 }

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.cs.helsinki.fi/u/jjaakkol/sgrep.html";
     description = "A grep for structured text formats such as XML";
+    mainProgram = "sgrep";
     longDescription = ''
       sgrep (structured grep) is a tool for searching and indexing text,
       SGML, XML and HTML files and filtering text streams using

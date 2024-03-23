@@ -33,7 +33,7 @@ let
     sendversion=${boolToString cfg.sendVersion}
 
     ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
-    ${optionalString (cfg.registerPassword == "") "registerPassword=${cfg.registerPassword}"}
+    ${optionalString (cfg.registerPassword != "") "registerPassword=${cfg.registerPassword}"}
     ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
     ${optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 

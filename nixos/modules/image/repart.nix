@@ -60,6 +60,11 @@ let
       };
     };
   };
+
+  mkfsOptionsToEnv = opts: lib.mapAttrs' (fsType: options: {
+    name = "SYSTEMD_REPART_MKFS_OPTIONS_${lib.toUpper fsType}";
+    value = builtins.concatStringsSep " " options;
+  }) opts;
 in
 {
   options.image.repart = {
@@ -183,6 +188,38 @@ in
       '';
     };
 
+    mkfsOptions = lib.mkOption {
+      type = with lib.types; attrsOf (listOf str);
+      default = {};
+      example = lib.literalExpression ''
+        {
+          vfat = [ "-S 512" "-c" ];
+        }
+      '';
+      description = lib.mdDoc ''
+        Specify extra options for created file systems. The specified options
+        are converted to individual environment variables of the format
+        `SYSTEMD_REPART_MKFS_OPTIONS_<FSTYPE>`.
+
+        See [upstream systemd documentation](https://github.com/systemd/systemd/blob/v255/docs/ENVIRONMENT.md?plain=1#L575-L577)
+        for information about the usage of these environment variables.
+
+        The example would produce the following environment variable:
+        ```
+        SYSTEMD_REPART_MKFS_OPTIONS_VFAT="-S 512 -c"
+        ```
+      '';
+    };
+
+    finalPartitions = lib.mkOption {
+      type = lib.types.attrs;
+      internal = true;
+      readOnly = true;
+      description = lib.mdDoc ''
+        Convenience option to access partitions with added closures.
+      '';
+    };
+
   };
 
   config = {
@@ -196,6 +233,16 @@ in
             "zstd" = ".zst";
             "xz" = ".xz";
           }."${cfg.compression.algorithm}";
+
+        makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
+
+        # Add the closure of the provided Nix store paths to cfg.partitions so
+        # that amend-repart-definitions.py can read it.
+        addClosure = _name: partitionConfig: partitionConfig // (
+          lib.optionalAttrs
+            (partitionConfig.storePaths or [ ] != [ ])
+            { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
+        );
       in
       {
         name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
@@ -211,6 +258,8 @@ in
             "xz" = 3;
           }."${cfg.compression.algorithm}";
         };
+
+        finalPartitions = lib.mapAttrs addClosure cfg.partitions;
       };
 
     system.build.image =
@@ -219,34 +268,25 @@ in
           (f: f != null)
           (lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions);
 
-        makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
-
-        # Add the closure of the provided Nix store paths to cfg.partitions so
-        # that amend-repart-definitions.py can read it.
-        addClosure = _name: partitionConfig: partitionConfig // (
-          lib.optionalAttrs
-            (partitionConfig.storePaths or [ ] != [ ])
-            { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
-        );
-
-        finalPartitions = lib.mapAttrs addClosure cfg.partitions;
 
         format = pkgs.formats.ini { };
 
         definitionsDirectory = utils.systemdUtils.lib.definitions
           "repart.d"
           format
-          (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) finalPartitions);
+          (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions);
 
-        partitions = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
+        partitionsJSON = pkgs.writeText "partitions.json" (builtins.toJSON cfg.finalPartitions);
+
+        mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
-        inherit (cfg) imageFileBasename compression split seed sectorSize;
-        inherit fileSystems definitionsDirectory partitions;
+        inherit (cfg) name version imageFileBasename compression split seed sectorSize;
+        inherit fileSystems definitionsDirectory partitionsJSON mkfsEnv;
       };
 
-    meta.maintainers = with lib.maintainers; [ nikstur ];
+    meta.maintainers = with lib.maintainers; [ nikstur willibutz ];
 
   };
 }

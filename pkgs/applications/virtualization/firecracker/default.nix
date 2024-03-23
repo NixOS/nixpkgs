@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "1.5.0";
+  version = "1.6.0";
   # nixpkgs-update: no auto update
 
   suffix = {
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-TzNPWcLDKOv12eJ9PHckdJ7tfdlozPoXj2fbdOzHfAk=";
-    aarch64-linux = "sha256-cHNMfcoHCBw+BnWx9USny8jyvH97gXCCJW1aKvPXgCs=";
+    x86_64-linux = "sha256-FflAYvWTcigIchVrAaUgg6IRleEtis6eh6fCqrZ5lb8=";
+    aarch64-linux = "sha256-4O0kPMl7RbMjszUNql0OQrl/4or/e8ZCHPngqq0CNxk=";
   };
 
   dontConfigure = true;
@@ -54,6 +54,6 @@ stdenv.mkDerivation {
     mainProgram = "firecracker";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice endocrimes ];
+    maintainers = with maintainers; [ thoughtpolice endocrimes qjoly ];
   };
 }

@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pythonRelaxDepsHook
 , poetry-core
 , aiohttp
 , async-timeout
@@ -12,6 +11,7 @@
 , langsmith
 , langchain-core
 , langchain-community
+, langchain-text-splitters
 , numpy
 , pydantic
 , pyyaml
@@ -52,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.1.1";
+  version = "0.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -61,14 +61,13 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cQz4u6FeVZLNbix4pyc6ulfj+nb/tARMJniusy7Q46A=";
+    hash = "sha256-I7H8W85WJCt8Dkep5UvFRVuhJS8uAeg0xF9mNPZwm2g=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [
@@ -76,18 +75,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    langchain-core
-    langchain-community
-    pydantic
-    sqlalchemy
-    requests
-    pyyaml
-    numpy
     aiohttp
-    tenacity
-    jsonpatch
     dataclasses-json
+    jsonpatch
+    langchain-community
+    langchain-core
+    langchain-text-splitters
     langsmith
+    numpy
+    pydantic
+    pyyaml
+    requests
+    sqlalchemy
+    tenacity
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
   ];
@@ -185,6 +185,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Building applications with LLMs through composability";
+    mainProgram = "langchain-server";
     homepage = "https://github.com/langchain-ai/langchain";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = licenses.mit;

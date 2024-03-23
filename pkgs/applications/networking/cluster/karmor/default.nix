@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "karmor";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
     rev = "v${version}";
-    hash = "sha256-HQJHtRi/ddKD+CNG3Ea61jz8zKcACBYCUR+qKbzADcI=";
+    hash = "sha256-NeLMHecfDyMhXmq1HO3qRIWeYpkoj9Od5wWStZEkHYU=";
   };
 
-  vendorHash = "sha256-Lzp6n66oMrzTk4oWERa8Btb3FwiASpSj8hdQmYxYges=";
+  vendorHash = "sha256-EIvwzgpC9Ls43RJEhxNYDlF4luKthFgJleaXcYzOYow=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -48,6 +48,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A client tool to help manage KubeArmor";
+    mainProgram = "karmor";
     homepage = "https://kubearmor.io";
     changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
     license = licenses.asl20;

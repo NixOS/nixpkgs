@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    mainProgram = "wolf-shaper";
   };
 }

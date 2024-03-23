@@ -1,4 +1,4 @@
-{ fetchFromGitHub, idris2Packages, makeWrapper }:
+{ lib, fetchFromGitHub, idris2Packages, makeWrapper }:
 
 let
   globalLibraries = let
@@ -40,5 +40,13 @@ let
       wrapProgram $out/bin/idris2-lsp \
         --suffix IDRIS2_PACKAGE_PATH ':' "${globalLibrariesPath}"
     '';
+
+    meta = with lib; {
+      description = "Language Server for Idris2";
+      mainProgram = "idris2-lsp";
+      homepage = "https://github.com/idris-community/idris2-lsp";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ mattpolzin ];
+    };
   };
 in lspPkg.executable

@@ -41,5 +41,6 @@ in appimageTools.wrapAppImage {
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ kylesferrazza pokon548 ];
+    mainProgram = "todoist-electron";
   };
 }

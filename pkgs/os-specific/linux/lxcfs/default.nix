@@ -61,11 +61,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    incus-container = nixosTests.incus.container;
+    incus-container-old-init = nixosTests.incus.container-old-init;
+    incus-container-new-init = nixosTests.incus.container-new-init;
   };
 
   meta = {
     description = "FUSE filesystem for LXC";
+    mainProgram = "lxcfs";
     homepage = "https://linuxcontainers.org/lxcfs";
     changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = lib.licenses.asl20;
