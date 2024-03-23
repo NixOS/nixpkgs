@@ -145,6 +145,8 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
+  ] ++ optionals (lib.versionAtLeast version "1.74.0") [
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
   # if we already have a rust compiler for build just compile the target std
@@ -181,7 +183,7 @@ in stdenv.mkDerivation (finalAttrs: {
   # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
   # to the bootstrap builder.
-  postConfigure = ''
+  postConfigure = lib.optionalString (lib.versionOlder version "1.74.0") ''
     substituteInPlace Makefile \
       --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
   '';
