@@ -63,7 +63,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     builder (3.2.4)
@@ -79,11 +79,11 @@ GEM
     childprocess (3.0.0)
     chunky_png (1.4.0)
     commonmarker (0.23.10)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.2.3)
     crass (1.0.6)
     css_parser (1.16.0)
       addressable
-    csv (3.2.8)
+    csv (3.2.9)
     deckar01-task_list (2.3.2)
       html-pipeline
     digest (3.1.1)
@@ -98,7 +98,7 @@ GEM
     htmlentities (4.3.4)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
-    listen (3.8.0)
+    listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.22.0)
@@ -106,17 +106,17 @@ GEM
       nokogiri (>= 1.12.0)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    marcel (1.0.2)
+    marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
-    minitest (5.20.0)
+    minitest (5.22.3)
     mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
-    mysql2 (0.5.5)
-    net-imap (0.2.3)
+    mysql2 (0.5.6)
+    net-imap (0.2.4)
       digest
       net-protocol
       strscan
@@ -125,22 +125,22 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-smtp (0.3.3)
+    net-smtp (0.3.4)
       net-protocol
-    nio4r (2.6.1)
-    nokogiri (1.15.5)
+    nio4r (2.7.1)
+    nokogiri (1.15.6)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    parallel (1.23.0)
-    parser (3.2.2.4)
+    parallel (1.24.0)
+    parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
     pg (1.4.6)
     public_suffix (5.0.4)
-    puma (6.4.0)
+    puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.7.3)
-    rack (2.2.8)
+    rack (2.2.9)
     rack-test (2.1.0)
       rack (>= 1.3)
     rails (6.1.7.6)
@@ -181,11 +181,11 @@ GEM
       rbpdf-font (~> 1.19.0)
     rbpdf-font (1.19.1)
     redcarpet (3.5.1)
-    regexp_parser (2.8.2)
+    regexp_parser (2.9.0)
     request_store (1.5.1)
       rack (>= 1.4)
     rexml (3.2.6)
-    roadie (5.2.0)
+    roadie (5.2.1)
       css_parser (~> 1.4)
       nokogiri (~> 1.15)
     roadie-rails (3.0.0)
@@ -206,8 +206,8 @@ GEM
       rubocop-ast (>= 1.16.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.30.0)
-      parser (>= 3.2.1.0)
+    rubocop-ast (1.31.2)
+      parser (>= 3.3.0.4)
     rubocop-performance (1.13.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
@@ -237,8 +237,9 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    strscan (3.0.7)
-    thor (1.3.0)
+    sqlite3 (1.4.4)
+    strscan (3.1.0)
+    thor (1.3.1)
     timeout (0.4.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -253,8 +254,8 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yard (0.9.34)
-    zeitwerk (2.6.12)
+    yard (0.9.36)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   ruby
@@ -301,6 +302,7 @@ DEPENDENCIES
   sanitize (~> 6.0)
   selenium-webdriver (~> 3.142.7)
   simplecov (~> 0.21.2)
+  sqlite3 (~> 1.4.0)
   tzinfo-data
   webdrivers (= 4.6.1)
   webrick
@@ -310,4 +312,4 @@ RUBY VERSION
    ruby 3.1.4p223
 
 BUNDLED WITH
-   2.4.12
+   2.4.22
