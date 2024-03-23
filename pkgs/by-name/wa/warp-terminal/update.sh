@@ -3,7 +3,8 @@
 #shellcheck shell=bash
 set -eu -o pipefail
 
-dirname="$(dirname "$0")"
+cd "$(dirname "$0")"
+nixpkgs=../../../../.
 
 err() {
     echo "$*" >&2
@@ -11,11 +12,11 @@ err() {
 }
 
 json_get() {
-    jq -r "$1" < "$dirname/versions.json"
+    jq -r "$1" < "./versions.json"
 }
 
 json_set() {
-    jq --arg x "$2" "$1 = \$x" < "$dirname/versions.json" | sponge "$dirname/versions.json"
+    jq --arg x "$2" "$1 = \$x" < "./versions.json" | sponge "./versions.json"
 }
 
 resolve_url() {
@@ -53,10 +54,10 @@ get_version() {
 sri_get() {
     local ouput sri
     output=$(nix-build  --expr \
-        'with import <nixpkgs>{};
+        "with import $nixpkgs {};
          fetchurl {
-           url = "'"$1"'";
-         }' 2>&1 || true)
+           url = \"$1\";
+         }" 2>&1 || true)
     sri=$(echo "$output" | awk '/^\s+got:\s+/{ print $2 }')
     [[ -z "$sri" ]] && err "$output"
     echo "$sri"
