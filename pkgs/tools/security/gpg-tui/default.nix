@@ -54,5 +54,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda matthiasbeyer ];
+    mainProgram = "gpg-tui";
   };
 }
