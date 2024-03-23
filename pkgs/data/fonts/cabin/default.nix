@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
       adjusted. The curved stem endings have a 10 degree angle. E and F have
       shorter center arms. M is splashed.
     '';
-    homepage = "http://www.impallari.com/cabin";
+    homepage = "https://github.com/impallari/Cabin";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;
