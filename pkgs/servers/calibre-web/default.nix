@@ -29,6 +29,7 @@ python.pkgs.buildPythonApplication rec {
     flask-babel
     flask-login
     flask-principal
+    flask-simpleldap
     flask-wtf
     flask-limiter
     iso-639
