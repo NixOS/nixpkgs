@@ -5,11 +5,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton9-1";
+  version = "GE-Proton9-2";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-odpzRlzW7MJGRcorRNo784Rh97ssViO70/1azHRggf0=";
+    hash = "sha256-NqBzKonCYH+hNpVZzDhrVf+r2i6EwLG/IFBXjE2mC7s=";
   };
 
   outputs = [ "out" "steamcompattool" ];
