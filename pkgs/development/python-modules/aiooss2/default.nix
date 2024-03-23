@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "aiooss2";
   version = "0.2.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -32,13 +32,13 @@ buildPythonPackage rec {
     "oss2"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     oss2
   ];
