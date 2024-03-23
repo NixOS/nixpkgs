@@ -102,6 +102,17 @@ in
                 '';
               };
 
+              extensionRepos = mkOption {
+                type = types.listOf types.str;
+                default = [];
+                example = [
+                  "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
+                ];
+                description = mdDoc ''
+                  URL of repositories from which the extensions can be installed.
+                '';
+              };
+
               localSourcePath = mkOption {
                 type = types.path;
                 default = cfg.dataDir;
