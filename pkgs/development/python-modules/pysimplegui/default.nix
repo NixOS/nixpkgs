@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python GUIs for Humans";
     homepage = "https://github.com/PySimpleGUI/PySimpleGUI";
-    license = licenses.lgpl3Plus;
+    license = licenses.unfree;
     maintainers = with maintainers; [ lucasew ];
   };
 }
