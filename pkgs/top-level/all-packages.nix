@@ -11221,6 +11221,8 @@ with pkgs;
 
   os-prober = callPackage ../tools/misc/os-prober { };
 
+  osgqt = libsForQt5.callPackage ../development/libraries/osgqt/package.nix { };
+
   oshka = callPackage ../development/tools/oshka { };
 
   osl = libsForQt5.callPackage ../development/compilers/osl {
