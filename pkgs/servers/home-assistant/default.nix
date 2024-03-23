@@ -141,6 +141,10 @@ let
           inherit version;
           hash = "sha256-XHVdtkiG0ff/OY8g+W5iur7OAyhhk1UGA+XUfB2L8/o=";
         };
+        build-system = oldAttrs.build-system ++ (with self; [
+          pythonRelaxDepsHook
+        ]);
+        pythonRemoveDeps = [ "asyncio" ];
       });
 
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
