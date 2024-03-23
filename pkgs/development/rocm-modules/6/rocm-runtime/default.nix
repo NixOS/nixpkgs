@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , pkg-config
 , cmake
@@ -44,7 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0004-extend-isa-compatibility-check.patch
+    # (fetchpatch {
+    #   name = "extend-isa-compatibility-check.patch";
+    #   url = "https://salsa.debian.org/rocm-team/rocr-runtime/-/raw/076026d43bbee7f816b81fea72f984213a9ff961/debian/patches/0004-extend-isa-compatibility-check.patch";
+    #   hash = "sha256-0cqIf0K6XsCtN+M5cjmSnPCCYDwBM3DFxtF6wIpMx6c=";
+    # })
   ];
+
+  # prePatch = ''
+  #   substituteInPlace extend-isa-compatibility-check.patch \
+  #     --replace-fail 'src/core' 'core'
+  # '';
 
   postPatch = ''
     patchShebangs image/blit_src/create_hsaco_ascii_file.sh
