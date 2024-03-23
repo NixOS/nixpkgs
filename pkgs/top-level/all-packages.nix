@@ -9167,8 +9167,9 @@ with pkgs;
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
 
   hylafaxplus = callPackage ../servers/hylafaxplus {
-    # libtiff >= 4.6 dropped many executables needed by hylafaxplus
-    libtiff = libtiff_4_5;
+    # needs this fork of libtiff, because original libtiff
+    # stopped packaging required tools with version 4.6
+    libtiff = libtiff_t;
   };
 
   hyphen = callPackage ../development/libraries/hyphen { };
