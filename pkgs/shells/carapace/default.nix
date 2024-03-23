@@ -31,7 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Multi-shell multi-command argument completer";
-    homepage = "https://rsteube.github.io/carapace-bin/";
+    homepage = "https://carapace.sh/";
     maintainers = with maintainers; [ star-szr ];
     license = licenses.mit;
     mainProgram = "carapace";
