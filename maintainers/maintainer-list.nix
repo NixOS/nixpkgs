@@ -18544,6 +18544,12 @@
     githubId = 6362238;
     name = "Christoph Honal";
   };
+  starsep = {
+    email = "nix@starsep.com";
+    github = "starsep";
+    githubId = 2798728;
+    name = "Filip Czaplicki";
+  };
   star-szr = {
     email = "nixpkgs@szr.fastmail.com";
     github = "star-szr";
