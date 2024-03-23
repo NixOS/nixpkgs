@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1173";
 
   src = fetchurl {
-    url = "https://cbftp.eu/${pname}-r${version}.tar.gz";
+    url = "https://cbftp.glftpd.io/${pname}-r${version}.tar.gz";
     hash = "sha256-DE6fnLzWsx6Skz2LRJAaijjIqrYFB8/HPp45P5CcEc8=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://cbftp.eu/";
+    homepage = "https://cbftp.glftpd.io/";
     description = " An advanced multi-purpose FTP/FXP client";
     longDescription = ''
       Cbftp is an advanced multi-purpose FTP/FXP client that focuses on
