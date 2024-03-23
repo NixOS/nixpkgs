@@ -11,5 +11,6 @@ lib.makeScope pkgs.newScope (self:
     wcm = callPackage ./wcm.nix { };
     wf-shell = callPackage ./wf-shell.nix { };
     windecor = callPackage ./windecor.nix { };
+    wwp-switcher = callPackage ./wwp-switcher.nix { };
   }
 )
