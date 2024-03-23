@@ -29,7 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Algolia’s official CLI devtool";
     mainProgram = "algolia";
-    homepage = "https://algolia.com/doc/tools/cli/";
+    homepage = "https://www.algolia.com/doc/tools/cli/get-started/overview/";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };
