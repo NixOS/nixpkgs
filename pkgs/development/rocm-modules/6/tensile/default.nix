@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , buildPythonPackage
 , pytestCheckHook
@@ -35,7 +36,11 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    ./0001-Extend-Tensile-HIP-ISA-compatibility.patch
+    (fetchpatch {
+      name = "Extend-Tensile-HIP-ISA-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/Tensile/commit/855cb15839849addb0816a6dde45772034a3e41f.patch";
+      hash = "sha256-d+fVf/vz+sxGqJ96vuxe0jRMgbC5K6j5FQ5SJ1e3Sl8=";
+    })
   ];
 
   doCheck = false; # Too many errors, not sure how to set this up properly
@@ -46,9 +51,9 @@ buildPythonPackage rec {
     rocminfo
   ];
 
-  preCheck = ''
-    export ROCM_PATH=${rocminfo}
-  '';
+  env = {
+    ROCM_PATH = rocminfo;
+  };
 
   pythonImportsCheck = [ "Tensile" ];
 
