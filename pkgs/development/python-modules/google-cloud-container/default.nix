@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-heNvRcepXqayn/impyP5h4L+eOJjGV1hMrZyg96aZKU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     libcst
     proto-plus
