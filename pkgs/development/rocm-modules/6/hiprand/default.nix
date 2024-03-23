@@ -5,30 +5,27 @@
 , cmake
 , rocm-cmake
 , clr
+, rocrand
 , gtest
-, gbenchmark
 , buildTests ? false
-, buildBenchmarks ? false
 , gpuTargets ? [ ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocrand";
+  pname = "hiprand";
   version = "6.0.2";
 
   outputs = [
     "out"
   ] ++ lib.optionals buildTests [
     "test"
-  ] ++ lib.optionals buildBenchmarks [
-    "benchmark"
   ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocRAND";
+    repo = "hipRAND";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-BBkcYOP+zh3OQTxuSkeiJizwnE9Gr5Jbhx0e8SU/mmU=";
+    hash = "sha256-uGHzOhUX5JEknVFwhHhWFdPmwLS/TuaXYMeItS7tXIg=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ];
 
-  buildInputs = lib.optionals buildTests [
-    gtest
-  ] ++ lib.optionals buildBenchmarks [
-    gbenchmark
-  ];
+  buildInputs = [ rocrand ] ++ (lib.optionals buildTests [ gtest ]);
 
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
@@ -56,18 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DBUILD_TEST=ON"
-  ] ++ lib.optionals buildBenchmarks [
-    "-DBUILD_BENCHMARK=ON"
   ];
 
   postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv $out/bin/test_* $test/bin
-  '' + lib.optionalString buildBenchmarks ''
-    mkdir -p $benchmark/bin
-    mv $out/bin/benchmark_* $benchmark/bin
-  '' + lib.optionalString (buildTests || buildBenchmarks) ''
-    rm -r $out/bin/rocRAND
+    rm -r $out/bin/hipRAND
     # Fail if bin/ isn't actually empty
     rmdir $out/bin
   '';
@@ -79,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Generate pseudo-random and quasi-random numbers";
-    homepage = "https://github.com/ROCm/rocRAND";
+    description = "A HIP wrapper for rocRAND and cuRAND";
+    homepage = "https://github.com/ROCm/hipRAND";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
