@@ -8,13 +8,13 @@ in
 }:
 let
   pname = "sketchybar-app-font";
-  version = "2.0.14";
+  version = "2.0.15";
 
   selectedSources = map (themeName: builtins.getAttr themeName sources) artifactList;
   sources = {
     font = fetchurl {
       url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${version}/sketchybar-app-font.ttf";
-      hash = "sha256-lGzNLBtM+1Cl9tTB4yKkc46ZqDjyt8J0EPNTM/eAziY=";
+      hash = "sha256-s1mnoHEozmDNsW0P4z97fupAVElxikia0TYLVHJPAM4=";
     };
     lua = fetchurl {
       url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${version}/icon_map.lua";
