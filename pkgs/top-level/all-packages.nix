@@ -5570,7 +5570,11 @@ with pkgs;
 
   grobi = callPackage ../tools/X11/grobi { };
 
-  gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
+  gscan2pdf = callPackage ../applications/graphics/gscan2pdf {
+    # needs this fork of libtiff, because original libtiff
+    # stopped packaging required tools with version 4.6
+    libtiff = libtiff_and_tools;
+  };
 
   gsctl = callPackage ../applications/misc/gsctl { };
 
