@@ -17145,7 +17145,9 @@ with pkgs;
   cargo-readme = callPackage ../development/tools/rust/cargo-readme { };
   cargo-risczero = callPackage ../development/tools/rust/cargo-risczero { };
   cargo-run-bin = callPackage ../development/tools/rust/cargo-run-bin {};
-  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks { };
+  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
   cargo-shuttle = callPackage ../development/tools/rust/cargo-shuttle { };
