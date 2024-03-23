@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "websecprobe";
-  version = "0.0.11";
+  version = "0.0.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "WebSecProbe";
     inherit version;
-    hash = "sha256-OKbKz3HSTtwyx/JNUtLJBTaHQcxkUWroMg9/msVWgk4=";
+    hash = "sha256-RX4tc6JaUVaNx8nidn8eMcbsmbcSY+VZbup6c6P7oOs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
