@@ -26,6 +26,7 @@
 , enable_fma ? true
 
 , with_tinydream ? false
+, ncnn
 
 , with_openblas ? false
 , openblas
@@ -262,6 +263,22 @@ let
     '';
   };
 
+  go-tiny-dream-ncnn = ncnn.overrideAttrs (self: {
+    name = "go-tiny-dream-ncnn";
+    inherit (go-tiny-dream) src;
+    sourceRoot = "source/ncnn";
+    cmakeFlags = self.cmakeFlags ++ [
+      (lib.cmakeBool "NCNN_SHARED_LIB" false)
+      (lib.cmakeBool "NCNN_OPENMP" false)
+      (lib.cmakeBool "NCNN_VULKAN" false)
+      (lib.cmakeBool "NCNN_AVX" enable_avx)
+      (lib.cmakeBool "NCNN_AVX2" enable_avx2)
+      (lib.cmakeBool "NCNN_AVX512" enable_avx512)
+      (lib.cmakeBool "NCNN_FMA" enable_fma)
+      (lib.cmakeBool "NCNN_F16C" enable_f16c)
+    ];
+  });
+
   go-tiny-dream = stdenv.mkDerivation {
     name = "go-tiny-dream";
     src = fetchFromGitHub {
@@ -271,16 +288,15 @@ let
       hash = "sha256-r+wzFIjaI6cxAm/eXN3q8LRZZz+lE5EA4lCTk5+ZnIY=";
       fetchSubmodules = true;
     };
-    patchPhase = ''
-      sed -i Makefile \
-        -e 's;lib/libncnn;lib64/libncnn;g'
+    postUnpack = ''
+      rm -rf source/ncnn
+      mkdir -p source/ncnn/build
+      cp -r --no-preserve=mode ${go-tiny-dream-ncnn} source/ncnn/build/install
     '';
     buildFlags = [ "libtinydream.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
     installPhase = ''
       mkdir $out
-      tar cf - --exclude=CMakeFiles --exclude="*.o" --exclude="*.so" --exclude="*.so.*" . \
+      tar cf - --exclude="*.o" . \
         | tar xf - -C $out
     '';
     meta.broken = lib.versionOlder go-tiny-dream.stdenv.cc.version "13";
@@ -408,7 +424,7 @@ let
     passthru.local-packages = {
       inherit
         go-tiny-dream go-rwkv go-bert go-llama-ggml gpt4all go-piper
-        llama-cpp-grpc whisper-cpp;
+        llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn;
     };
 
     passthru.features = {
