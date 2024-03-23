@@ -17159,7 +17159,9 @@ with pkgs;
   cargo-supply-chain = callPackage ../development/tools/rust/cargo-supply-chain { };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme { };
-  cargo-tally = callPackage ../development/tools/rust/cargo-tally { };
+  cargo-tally = callPackage ../development/tools/rust/cargo-tally {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
   cargo-toml-lint = callPackage ../development/tools/rust/cargo-toml-lint { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
