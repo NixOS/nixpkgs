@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.myfonts.com/fonts/jan-fromm/camingo-code/";
+    homepage = "https://www.myfonts.com/collections/camingo-code-font-jan-fromm";
     description = "A monospaced typeface designed for source-code editors";
     platforms = platforms.all;
     license = licenses.cc-by-nd-30;
