@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An open source implementation of the actor model in C++";
-    homepage = "http://actor-framework.org/";
+    homepage = "https://www.actor-framework.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
     changelog = "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
