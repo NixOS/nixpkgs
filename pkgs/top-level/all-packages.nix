@@ -40586,6 +40586,11 @@ with pkgs;
 
   uacme = callPackage ../tools/admin/uacme { };
 
+  ufbt = callPackage ../development/tools/build-managers/ufbt {
+    inherit (python3Packages)
+    buildPythonPackage setuptools setuptools-git-versioning;
+  };
+
   ufiformat = callPackage ../tools/system/ufiformat { };
 
   ums = callPackage ../servers/ums { };
