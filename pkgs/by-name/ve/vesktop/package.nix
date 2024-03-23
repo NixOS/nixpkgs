@@ -3,6 +3,7 @@
 , stdenvNoCC
 , gcc13Stdenv
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , makeWrapper
 , makeDesktopItem
@@ -75,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-v6ibAcfYgr1VjGK7NUF4DKd5da03mZndPUAnSl++RqE=";
+      outputHash = "sha256-hW7GXaYzdUe23pf46HAtFpd742yL8Guwno0M3CIGpQQ=";
     };
 
   nativeBuildInputs = [
@@ -88,6 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (substituteAll { inherit vencord; src = ./use_system_vencord.patch; })
     ./disable_update_checking.patch
+    (fetchpatch {
+      name = "use-tsx-4.6.1.patch";
+      url = "https://github.com/pluiedev/Vesktop/commit/5651f2674e90e21dc557733dcfcce9c9d316a10f.patch";
+      hash = "sha256-Qs87MuRrc8Sx3Gctfb90QJW3JyGqW6wI0aqtyzsP1aQ=";
+    })
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
