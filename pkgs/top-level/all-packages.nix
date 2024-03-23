@@ -17018,7 +17018,9 @@ with pkgs;
       inherit rustc cargo;
     };
   };
-  cargo-component = callPackage ../development/tools/rust/cargo-component { };
+  cargo-component = callPackage ../development/tools/rust/cargo-component {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-cranky = callPackage ../development/tools/rust/cargo-cranky { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
