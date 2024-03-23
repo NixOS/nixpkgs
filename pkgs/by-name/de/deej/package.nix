@@ -32,7 +32,8 @@ buildGoModule rec {
   buildInputs = [ libappindicator-gtk3 webkitgtk ];
 
   meta = with lib; {
-    description = ''
+    description = "An open-source hardware volume mixer";
+    longDescription = ''
       deej is an open-source hardware volume mixer for Windows and Linux PCs.
       It lets you use real-life sliders (like a DJ!) to seamlessly control the volumes
       of different apps (such as your music player, the game you're playing and your voice
