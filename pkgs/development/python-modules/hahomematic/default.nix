@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/danielperna84/hahomematic";
     changelog = "https://github.com/danielperna84/hahomematic/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ dotlambda fab ];
   };
 }
