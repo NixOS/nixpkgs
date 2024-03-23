@@ -40584,7 +40584,7 @@ with pkgs;
 
   uacme = callPackage ../tools/admin/uacme { };
 
-  ufbt = callPackage ../development/tools/build-managers/ufbt {
+  ufbt = callPackage ../by-name/uf/ufbt {
     inherit (python3Packages)
     buildPythonPackage setuptools setuptools-git-versioning;
   };
