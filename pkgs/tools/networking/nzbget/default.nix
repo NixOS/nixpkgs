@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "nzbget-ng";
+  pname = "nzbget";
   version = "23.0";
 
   src = fetchFromGitHub {
