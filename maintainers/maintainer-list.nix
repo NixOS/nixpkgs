@@ -3756,6 +3756,7 @@
   CodeRadu = {
     github = "CodeRadu";
     githubId = 47945947;
+    name = "Radu";
   };
   codifryed = {
     email = "gb@guyboldon.com";
