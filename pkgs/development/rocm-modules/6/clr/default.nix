@@ -111,8 +111,16 @@ in stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/clr/commit/77c581a3ebd47b5e2908973b70adea66891159ee.patch";
       hash = "sha256-auBedbd7rghlKav7A9V6l64J7VmtE9GizIdi5gWj+fs=";
     })
-    ./0001-Improve-hipamd-compat-check.patch
-    ./0001-improve-rocclr-isa-compatibility-check.patch
+    (fetchpatch {
+      name = "Improve-hipamd-compat-check.patch";
+      url = "https://github.com/GZGavinZhao/clr/commit/f52172a0767f88bf386dc615a3354156d023bdb8.patch";
+      hash = "sha256-kbEeJsQgAxbNfBCPB2Jny4z526UAnIxHNQLGsD2iFvg=";
+    })
+    (fetchpatch {
+      name = "improve-rocclr-isa-compatibility-check.patch";
+      url = "https://github.com/GZGavinZhao/clr/commit/2783c57b0f225ad8bc553e2d244837d57d8375bc.patch";
+      hash = "sha256-uQMex3gT/LqgQeMETbldpVODWorGLD/YMgjdwHlhd+M=";
+    })
   ];
 
   postPatch = ''
