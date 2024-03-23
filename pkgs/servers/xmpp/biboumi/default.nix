@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Modern XMPP IRC gateway";
     mainProgram = "biboumi";
     platforms = platforms.unix;
-    homepage = "https://lab.louiz.org/louiz/biboumi";
+    homepage = "https://biboumi.louiz.org/";
     license = licenses.zlib;
     maintainers = [ maintainers.woffs ];
   };
