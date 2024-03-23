@@ -92,19 +92,17 @@ let
       cd examples
       cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
       cp llava/clip.* llava/llava.* grpc-server
-      echo "add_subdirectory(grpc-server)" >> CMakeLists.txt
+      printf "\nadd_subdirectory(grpc-server)" >> CMakeLists.txt
 
       cp ${src}/backend/backend.proto grpc-server
       sed -i grpc-server/CMakeLists.txt \
-        -e '/get_filename_component/ s;[.\/]*backend/;;'
+        -e '/get_filename_component/ s;[.\/]*backend/;;' \
+        -e '$a\install(TARGETS ''${TARGET} RUNTIME)'
       cd ..
     '';
     cmakeFlags = prev.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     ];
-    installPhase = ''
-      install -Dt $out/bin bin/grpc-server
-    '';
     buildInputs = prev.buildInputs ++ [
       protobuf # provides also abseil_cpp as propagated build input
       grpc
@@ -317,7 +315,7 @@ let
           -e 's, && git checkout.*,,g' \
           -e '/mod download/ d' \
 
-        ${cp} ${llama-cpp-grpc}/bin/grpc-server backend/cpp/llama
+        ${cp} ${llama-cpp-grpc}/bin/*grpc-server backend/cpp/llama/grpc-server
         echo "grpc-server:" > backend/cpp/llama/Makefile
       ''
     ;
