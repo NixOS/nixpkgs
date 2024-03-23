@@ -76,7 +76,9 @@ let
   outputs = lib.optional hasBinfiles "out" ++
     lib.optional hasRunfiles "tex" ++
     lib.optional hasDocfiles "texdoc" ++
-    lib.optional hasSource "texsource" ++
+    # omit building sources, since as far as we know, installing them is not common
+    # the sources will still be available under drv.texsource
+    # lib.optional hasSource "texsource" ++
     lib.optional hasTlpkg "tlpkg" ++
     lib.optional hasManpages "man" ++
     lib.optional hasInfo "info";
