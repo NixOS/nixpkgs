@@ -8,7 +8,7 @@
 , nix-update-script
 }:
 
-let version = "1.6.2";
+let version = "1.7.3";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D8KAleYaeMv3rCwhGE0IteuDUVk4RiOxsTBe7LhLAKg=";
+    hash = "sha256-2kwogur6hS7/xjUhH9aRJevWbtgg5xQkvB/aIj7wyJ8=";
   };
 
   cargoBuildFlags = [
@@ -29,10 +29,9 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
-      "arroy-0.1.0" = "sha256-ybKdB0eP8AdxLMNM7Si9onWITNc2SPNTXMgKdWdy34E=";
-      "candle-core-0.3.1" = "sha256-KlkjTUcbnP+uZoA0fDZlEPT5qKC2ogMAuR8X14xRFgA=";
+      "candle-core-0.3.3" = "sha256-umWvG+82B793PQtY9VeHjPTtTVmSPdts25buw4v4TQc=";
+      "candle-kernels-0.3.1" = "sha256-KlkjTUcbnP+uZoA0fDZlEPT5qKC2ogMAuR8X14xRFgA=";
       "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
-      "nelson-0.1.0" = "sha256-eF672quU576wmZSisk7oDR7QiDafuKlSg0BTQkXnzqY=";
       "tokenizers-0.14.1" = "sha256-cq7dQLttNkV5UUhXujxKKMuzhD7hz+zTTKxUKlvz1s0=";
     };
   };

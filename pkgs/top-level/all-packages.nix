@@ -15542,7 +15542,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_8_17) compcert;
+  inherit (coqPackages) compcert;
 
   computecpp-unwrapped = callPackage ../development/compilers/computecpp { };
   computecpp = wrapCCWith rec {
@@ -16829,9 +16829,13 @@ with pkgs;
   buildPgxExtension = callPackage ../development/tools/rust/cargo-pgx/buildPgxExtension.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-pgrx = callPackage ../development/tools/rust/cargo-pgrx/default.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  inherit (callPackages ../development/tools/rust/cargo-pgrx { })
+    cargo-pgrx_0_10_2
+    cargo-pgrx_0_11_2
+    cargo-pgrx_0_11_3
+    ;
+  cargo-pgrx = cargo-pgrx_0_11_2;
+
   buildPgrxExtension = callPackage ../development/tools/rust/cargo-pgrx/buildPgrxExtension.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };

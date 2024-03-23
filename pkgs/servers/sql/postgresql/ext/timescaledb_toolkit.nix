@@ -3,30 +3,11 @@
 , buildPgrxExtension
 , postgresql
 , nixosTests
-, cargo-pgrx
+, cargo-pgrx_0_10_2
 , fetchCrate
 , nix-update-script
 , stdenv
 }:
-
-let
-  cargo-pgrx_0_10_2 = cargo-pgrx.overrideAttrs (old: rec {
-    name = "cargo-pgrx-${version}";
-    version = "0.10.2";
-
-    src = fetchCrate {
-      pname = "cargo-pgrx";
-      inherit version;
-      hash = "sha256-FqjfbJmSy5UCpPPPk4bkEyvQCnaH9zYtkI7txgIn+ls=";
-    };
-
-    cargoDeps = old.cargoDeps.overrideAttrs (_: {
-      inherit src;
-      outputHash = "sha256-XyI3RaPI3Edm/tCP2xoZemib2d2n2cAhobgk9Oafg6s=";
-    });
-  });
-
-in
 
 (buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
   inherit postgresql;
