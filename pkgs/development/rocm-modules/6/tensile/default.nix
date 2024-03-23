@@ -34,6 +34,10 @@ buildPythonPackage rec {
     joblib
   ];
 
+  patches = [
+    ./0001-Extend-Tensile-HIP-ISA-compatibility.patch
+  ];
+
   doCheck = false; # Too many errors, not sure how to set this up properly
 
   nativeCheckInputs = [
