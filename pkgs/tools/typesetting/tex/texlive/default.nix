@@ -103,7 +103,9 @@ let
       # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
       // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
       // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
-  ) overriddenTlpdb;
+  ) (removeAttrs overriddenTlpdb [ "00texlive.config" ])
+  # preserve version info
+  // { "00texlive.config" = overriddenTlpdb."00texlive.config"; };
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
@@ -142,7 +144,7 @@ let
     (builtins.groupBy (p: p.pname) pkgs);
 
   # export TeX packages as { pkgs = [ ... ]; } in the top attribute set
-  allPkgLists = lib.mapAttrs (n: drv: { pkgs = toTLPkgList drv; }) tl;
+  allPkgLists = lib.mapAttrs (n: drv: { pkgs = toTLPkgList drv; }) (removeAttrs tl [ "00texlive.config" ]);
 
   # function for creating a working environment from a set of TL packages
   # now a legacy wrapper around buildTeXEnv
