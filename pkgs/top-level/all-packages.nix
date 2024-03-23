@@ -17167,6 +17167,7 @@ with pkgs;
   cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
   cargo-toml-lint = callPackage ../development/tools/rust/cargo-toml-lint { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
+    inherit (rustPackages_1_76) rustPlatform;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
   cargo-ui = callPackage ../development/tools/rust/cargo-ui { };
