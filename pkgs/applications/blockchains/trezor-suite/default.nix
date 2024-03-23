@@ -60,5 +60,7 @@ appimageTools.wrapType2 rec {
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
     mainProgram = "trezor-suite";
+    # apparently there is some issue that prevents Trezor Suite from seeing the device on NixOS
+    broken = stdenv.isLinux;
   };
 }
