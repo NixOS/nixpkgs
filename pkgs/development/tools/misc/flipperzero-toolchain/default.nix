@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flipperdevices/flipperzero-toolchain";
     license = licenses.gpl3;
     maintainers = with maintainers; [ CodeRadu ];
+    platforms = platforms.linux;
   };
 }
