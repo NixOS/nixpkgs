@@ -1,6 +1,6 @@
 { lib
 , buildPgrxExtension
-, cargo-pgrx
+, cargo-pgrx_0_11_2
 , clang_16
 , fetchCrate
 , fetchFromGitHub
@@ -23,27 +23,11 @@ let
     bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
   };
 
+in
+(buildPgrxExtension.override {
   # Upstream only works with a fixed version of cargo-pgrx for each release,
   # so we're pinning it here to avoid future incompatibility.
   # See https://docs.pgvecto.rs/developers/development.html#environment, step 6
-  cargo-pgrx_0_11_2 = cargo-pgrx.overrideAttrs (old: rec {
-    pname = "cargo-pgrx";
-    version = "0.11.2";
-
-    src = fetchCrate {
-      pname = "cargo-pgrx";
-      inherit version;
-      hash = "sha256-8NlpMDFaltTIA8G4JioYm8LaPJ2RGKH5o6sd6lBHmmM=";
-    };
-
-    cargoDeps = old.cargoDeps.overrideAttrs (_: {
-      inherit src;
-      outputHash = "sha256-qTb3JV3u42EilaK2jP9oa5D09mkuHyRbGGRs9Rg4TzI=";
-    });
-  });
-
-in
-(buildPgrxExtension.override {
   cargo-pgrx = cargo-pgrx_0_11_2;
   rustPlatform = rustPlatform';
 }) rec {
