@@ -17176,7 +17176,9 @@ with pkgs;
   cargo-tally = callPackage ../development/tools/rust/cargo-tally {
     inherit (rustPackages_1_76) rustPlatform;
   };
-  cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
+  cargo-temp = callPackage ../development/tools/rust/cargo-temp {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-toml-lint = callPackage ../development/tools/rust/cargo-toml-lint { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (rustPackages_1_76) rustPlatform;
