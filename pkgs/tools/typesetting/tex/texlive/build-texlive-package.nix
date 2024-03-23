@@ -61,6 +61,11 @@ let
     license = map (x: lib.licenses.${x}) license;
     # TeX Live packages should not be installed directly into the user profile
     outputsToInstall = [ ];
+    longDescription = ''
+      This package cannot be installed directly. Please use `texlive.withPackages`.
+    '';
+  } // lib.optionalAttrs (args ? shortdesc) {
+    description = args.shortdesc;
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];

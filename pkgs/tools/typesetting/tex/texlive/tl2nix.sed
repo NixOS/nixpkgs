@@ -23,6 +23,12 @@ $a}
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
 
+  # extract short description
+  /^shortdesc (.+)$/{
+    s/"/\\"/g # escape quotes
+    s/^shortdesc (.+)/  shortdesc = "\1";/p
+  }
+
   # extract hashes of *.tar.xz
   s/^containerchecksum (.*)/  sha512.run = "\1";/p
   s/^doccontainerchecksum (.*)/  sha512.doc = "\1";/p
