@@ -111,6 +111,8 @@ in stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/clr/commit/77c581a3ebd47b5e2908973b70adea66891159ee.patch";
       hash = "sha256-auBedbd7rghlKav7A9V6l64J7VmtE9GizIdi5gWj+fs=";
     })
+    ./0001-Improve-hipamd-compat-check.patch
+    ./0001-improve-rocclr-isa-compatibility-check.patch
   ];
 
   postPatch = ''
@@ -124,6 +126,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
       --replace "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
+
+    # https://lists.debian.org/debian-ai/2024/02/msg00178.html
+    substituteInPlace rocclr/utils/flags.hpp \
+      --replace-fail "HIP_USE_RUNTIME_UNBUNDLER, false" "HIP_USE_RUNTIME_UNBUNDLER, true"
   '';
 
   postInstall = ''
