@@ -17091,7 +17091,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-careful = callPackage ../development/tools/rust/cargo-careful { };
-  cargo-chef = callPackage ../development/tools/rust/cargo-chef { };
+  cargo-chef = callPackage ../development/tools/rust/cargo-chef {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-crev = callPackage ../development/tools/rust/cargo-crev {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
