@@ -38,7 +38,7 @@ Reviewing helps to reduce the average time-to-merge for everyone.
 Thanks a lot if you do!
 
 List of open PRs: https://github.com/NixOS/nixpkgs/pulls
-Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-contributions
+Reviewing guidelines: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#reviewing-contributions
 -->
 
 ---
