@@ -17197,7 +17197,9 @@ with pkgs;
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
   cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces { };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
-  cargo-generate = callPackage ../development/tools/rust/cargo-generate { };
+  cargo-generate = callPackage ../development/tools/rust/cargo-generate {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-bootimage = callPackage ../development/tools/rust/bootimage { };
 
   cargo-whatfeatures = callPackage ../development/tools/rust/cargo-whatfeatures {
