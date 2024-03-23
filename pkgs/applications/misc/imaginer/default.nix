@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ImaginerApp";
     repo = "Imaginer";
     rev = "v${version}";
-    hash = "sha256-041liw80q824mgfgh4zsz41kssz13apxkxyhipdg89hyx6k8gl5p=";
+    hash = "sha256-t9CHpukeJvTajdD32a8a4Ws9A/n6E/jcq0QgDBCPNBA=";
   };
 
   format = "other";
