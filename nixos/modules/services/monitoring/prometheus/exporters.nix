@@ -35,6 +35,7 @@ let
     "dovecot"
     "fastly"
     "flow"
+    "fritz"
     "fritzbox"
     "graphite"
     "idrac"
