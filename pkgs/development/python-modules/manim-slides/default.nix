@@ -72,13 +72,16 @@ buildPythonPackage rec {
     rtoml
     tqdm
 
-    # dependency of qtpy (could also be pyqt5)
-    pyqt6
     # avconv is a potential alternative
     ffmpeg
     # This could also be manimgl, but that is not (yet) packaged
     manim
-  ] ++ lib.lists.optional withGui ipython;
+  ]
+  ++ lib.lists.optional (!withGui)
+    ipython
+  ++ lib.lists.optional withGui
+    # dependency of qtpy (could also be pyqt5)
+    pyqt6;
 
   pythonImportsCheck = [ "manim_slides" ];
 
