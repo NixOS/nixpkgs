@@ -30,7 +30,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libappindicator-gtk3 webkitgtk ];
-
+postInstall = "mv $out/bin/cmd $out/bin/deej";
   meta = with lib; {
     description = "An open-source hardware volume mixer";
     longDescription = ''
