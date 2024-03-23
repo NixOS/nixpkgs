@@ -14,14 +14,14 @@
 , vala
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-user-indicator-redux";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "EbonJaeger";
     repo = "budgie-user-indicator-redux";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-X9b4H4PnrYGb/T7Sg9iXQeNDLoO1l0VCdbOCGUAgwC4=";
   };
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     sassc
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage your user session from the Budgie panel";
     homepage = "https://github.com/EbonJaeger/budgie-user-indicator-redux";
-    changelog = "https://github.com/EbonJaeger/budgie-user-indicator-redux/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.budgie.members;
+    changelog = "https://github.com/EbonJaeger/budgie-user-indicator-redux/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.budgie.members;
   };
-}
+})

@@ -17,14 +17,14 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-screensaver";
   version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
-    repo = pname;
-    rev = "v${version}";
+    repo = "budgie-screensaver";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-N8x9hdbaMDisTbQPJedNO4UMLnCn+Q2hhm4udJZgQlc=";
   };
 
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE";
 
-  meta = with lib; {
+  meta = {
     description = "A fork of old GNOME Screensaver for purposes of providing an authentication prompt on wake";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-screensaver";
     mainProgram = "budgie-screensaver";
-    platforms = platforms.linux;
-    maintainers = teams.budgie.members;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.budgie.members;
+    license = lib.licenses.gpl2Only;
   };
-}
+})
