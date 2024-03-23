@@ -22,6 +22,7 @@ stdenv.mkDerivation {
 
   passthru = {
     BL31_RK3568 = "${rkbin}/bin/rk35/rk3568_bl31_v1.44.elf";
+    BL31_RK3588 = "${rkbin}/bin/rk35/rk3588_bl31_v1.45.elf";
     TPL_RK3568 = "${rkbin}/bin/rk35/rk3568_ddr_1056MHz_v1.21.bin";
     TPL_RK3588 = "${rkbin}/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin";
   };
