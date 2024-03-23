@@ -23031,8 +23031,16 @@ with pkgs;
 
   libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
 
-  libtiff = callPackage ../development/libraries/libtiff { };
-  libtiff_4_5 = callPackage ../development/libraries/libtiff/4.5.nix { };
+  inherit
+    ({
+      libtiff = callPackage ../development/libraries/libtiff { };
+      libtiff_4_5 = callPackage ../development/libraries/libtiff/4.5.nix { };
+      libtiff_t = callPackage ../development/libraries/libtiff/libtiff_t.nix { };
+    })
+    libtiff
+    libtiff_4_5
+    libtiff_t
+    ;
 
   libtiger = callPackage ../development/libraries/libtiger { };
 
