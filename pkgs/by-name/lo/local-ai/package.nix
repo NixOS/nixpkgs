@@ -18,6 +18,13 @@
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
 
+  # CPU extensions
+, enable_avx ? true
+, enable_avx2 ? true
+, enable_avx512 ? false
+, enable_f16c ? true
+, enable_fma ? true
+
 , with_tinydream ? false
 
 , with_openblas ? false
@@ -102,6 +109,11 @@ let
     '';
     cmakeFlags = prev.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_SHARED_LIBS" false)
+      (lib.cmakeBool "LLAMA_AVX" enable_avx)
+      (lib.cmakeBool "LLAMA_AVX2" enable_avx2)
+      (lib.cmakeBool "LLAMA_AVX512" enable_avx512)
+      (lib.cmakeBool "LLAMA_FMA" enable_fma)
+      (lib.cmakeBool "LLAMA_F16C" enable_f16c)
     ];
     buildInputs = prev.buildInputs ++ [
       protobuf # provides also abseil_cpp as propagated build input
@@ -199,6 +211,10 @@ let
       (lib.cmakeBool "WHISPER_CUBLAS" with_cublas)
       (lib.cmakeBool "WHISPER_CLBLAST" with_clblas)
       (lib.cmakeBool "WHISPER_OPENBLAS" with_openblas)
+      (lib.cmakeBool "WHISPER_NO_AVX" (!enable_avx))
+      (lib.cmakeBool "WHISPER_NO_AVX2" (!enable_avx2))
+      (lib.cmakeBool "WHISPER_NO_FMA" (!enable_fma))
+      (lib.cmakeBool "WHISPER_NO_F16C" (!enable_f16c))
       (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     ];
     postInstall = ''
