@@ -15,14 +15,12 @@
 #include <vector>
 
 #include <wfslib/wfslib.h>
-#include "../../wfslib/src/area.h"                        // TOOD: Public header?
-#include "../../wfslib/src/free_blocks_allocator_tree.h"  // TOOD: Public header?
+#include "../../wfslib/src/area.h"              // TOOD: Public header?
+#include "../../wfslib/src/free_blocks_tree.h"  // TOOD: Public header?
 
 std::string inline prettify_path(const std::filesystem::path& path) {
   return "/" + path.generic_string();
 }
-
-constexpr int blocks_counts[] = {0, 3, 6, 10, 14, 18, 22, 26};
 
 void dumpArea(int depth, const std::filesystem::path& path, const std::shared_ptr<Area>& area) {
   std::string padding(depth, '\t');
@@ -30,12 +28,15 @@ void dumpArea(int depth, const std::filesystem::path& path, const std::shared_pt
                            area->AbsoluteBlockNumber(area->BlocksCount()));
 
   padding += '\t';
-  std::shared_ptr<const FreeBlocksAllocator> allocator = throw_if_error(area->GetFreeBlocksAllocator());
-  std::cout << std::format("{}Free blocks: 0x{:08x}\n", padding, allocator->extra_header()->free_blocks_count.value());
+  std::shared_ptr<FreeBlocksAllocator> allocator = throw_if_error(area->GetFreeBlocksAllocator());
+  FreeBlocksTree tree(allocator.get());
+  auto* allocator_header = EPTree(allocator.get()).extra_header();
+
+  std::cout << std::format("{}Free blocks: 0x{:08x}\n", padding, allocator_header->free_blocks_count.value());
   std::cout << std::format("{}Free metadata blocks: 0x{:08x}\n", padding,
-                           allocator->extra_header()->free_metadata_blocks_count.value());
+                           allocator_header->free_metadata_blocks_count.value());
   std::cout << std::format("{}Free metadata block: 0x{:08x}\n", padding,
-                           area->AbsoluteBlockNumber(allocator->extra_header()->free_metadata_block.value()));
+                           area->AbsoluteBlockNumber(allocator_header->free_metadata_block.value()));
 
   if (depth == 0) {
     auto transactions_area = throw_if_error(area->GetTransactionsArea1());
@@ -43,35 +44,19 @@ void dumpArea(int depth, const std::filesystem::path& path, const std::shared_pt
                              transactions_area->AbsoluteBlockNumber(transactions_area->BlocksCount()));
   }
 
-  std::map<uint32_t, uint32_t> free_ranges;
-  for (const auto& [tree_block_number, free_tree] : *allocator) {
-    int size = 0;
-    for (const auto& free_tree_per_size : free_tree) {
-      for (const auto& [block_number, blocks_count] : free_tree_per_size) {
-        free_ranges[area->AbsoluteBlockNumber(block_number)] =
-            area->AbsoluteBlockNumber(block_number + (static_cast<int>(blocks_count) + 1) * (1 << blocks_counts[size]));
-      }
-      ++size;
-    }
+  std::vector<FreeBlocksRangeInfo> ranges;
+  for (const auto& extent : tree) {
+    if (!ranges.empty() && ranges.back().block_number + ranges.back().blocks_count == extent.block_number())
+      ranges.back().blocks_count += extent.blocks_count();
+    else
+      ranges.push_back({extent.block_number(), extent.blocks_count()});
   }
-  // Coalesce
-  auto current = free_ranges.begin();
-  while (current != free_ranges.end()) {
-    auto next = current;
-    ++next;
-    if (next == free_ranges.end())
-      break;
-    if (current->second == next->first) {
-      current->second = next->second;
-      free_ranges.erase(next);
-    } else {
-      ++current;
-    }
-  }
+
   std::cout << std::format("{}Free ranges:\n", padding);
   padding += '\t';
-  for (const auto& [start_block, end_block] : free_ranges) {
-    std::cout << std::format("{}[0x{:08x}-0x{:08x}]\n", padding, start_block, end_block);
+  for (const auto& range : ranges) {
+    std::cout << std::format("{}[0x{:08x}-0x{:08x}]\n", padding, area->AbsoluteBlockNumber(range.block_number),
+                             area->AbsoluteBlockNumber(range.block_number + range.blocks_count));
   }
 }
 

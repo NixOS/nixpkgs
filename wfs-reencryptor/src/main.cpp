@@ -19,7 +19,7 @@
 // TOOD: Public header?
 #include "../../wfslib/src/area.h"
 #include "../../wfslib/src/device_encryption.h"
-#include "../../wfslib/src/free_blocks_allocator_tree.h"
+#include "../../wfslib/src/free_blocks_tree.h"
 
 class ReencryptorBlocksDevice final : public BlocksDevice {
  public:
@@ -79,13 +79,8 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
     auto area = dir->area();
     try {
       auto allocator = throw_if_error(area->GetFreeBlocksAllocator());
-      for (const auto& [tree_block_number, free_tree] : *allocator) {
-        for (const auto& free_tree_per_size : free_tree) {
-          for (const auto& [block_number, blocks_count] : free_tree_per_size) {
-            std::ignore = block_number;
-            std::ignore = blocks_count;
-          }
-        }
+      FreeBlocksTree tree(allocator.get());
+      for ([[maybe_unused]] const auto& extent : tree) {
       }
     } catch (const WfsException& e) {
       std::cout << std::format("Error: Failed to explore {} free blocks allocator ({})\n", prettify_path(path),
