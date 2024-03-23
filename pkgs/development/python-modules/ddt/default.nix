@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.7.0";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0XjRFavyWhuDJ+lPhaA+8JsdewyiVvYgMoSwJPL8cN8=";
+    hash = "sha256-0hXWsIOWMBPEoZseTc1qlugOQ6t3UZWXpqz88umj4Es=";
   };
 
   nativeBuildInputs = [

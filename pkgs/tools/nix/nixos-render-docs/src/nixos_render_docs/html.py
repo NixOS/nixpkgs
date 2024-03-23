@@ -181,7 +181,7 @@ class HTMLRenderer(Renderer):
         if hstyle:
             hstyle = f'style="{escape(hstyle, True)}"'
         if anchor := cast(str, token.attrs.get('id', '')):
-            anchor = f'<span id="{escape(anchor, True)}"></span>'
+            anchor = f'id="{escape(anchor, True)}"'
         result = self._close_headings(hlevel)
         tag = self._heading_tag(token, tokens, i)
         toc_fragment = self._build_toc(tokens, i)
@@ -192,8 +192,7 @@ class HTMLRenderer(Renderer):
             f' <div class="titlepage">'
             f'  <div>'
             f'   <div>'
-            f'    <{htag} class="title" {hstyle}>'
-            f'     {anchor}'
+            f'    <{htag} {anchor} class="title" {hstyle}>'
         )
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         heading = self._headings[-1]

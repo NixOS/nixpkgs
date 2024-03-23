@@ -7,29 +7,34 @@
 , pyelftools
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.45.0";
-  format = "setuptools";
+  version = "1.47.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TmU7neEnHaRuGNzK9VuXUiEayBLZaPqjrnPLvBOQj5g=";
+    hash = "sha256-hfvqK27yxk/y67gz0N6VuFj8OR3cQMD4iYQtx1XJSgw=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=read_version()," 'version="${version}",'
+      --replace-fail "version=read_version()," 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     six
   ];
 
@@ -57,9 +62,15 @@ buildPythonPackage rec {
     "TestPythonPipWorkflow"
     "TestRubyWorkflow"
     "TestRustCargo"
+    "test_with_mocks"
     # Tests which are passing locally but not on Hydra
     "test_copy_dependencies_action_1_multiple_files"
     "test_move_dependencies_action_1_multiple_files"
+  ];
+
+  disabledTestPaths = [
+    # Dotnet binary needed
+    "tests/integration/workflows/dotnet_clipackage/test_dotnet.py"
   ];
 
   pythonImportsCheck = [

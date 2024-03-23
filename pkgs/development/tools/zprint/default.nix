@@ -7,11 +7,11 @@
 
 buildGraalvmNativeImage rec {
   pname = "zprint";
-  version = "1.2.8";
+  version = "1.2.9";
 
   src = fetchurl {
     url = "https://github.com/kkinnear/${pname}/releases/download/${version}/${pname}-filter-${version}";
-    sha256 = "sha256-o0yoW45a5r+sTGvjEqr5VZgQKm72qsPH/kbLTbMTgEM=";
+    sha256 = "sha256-4gSGD7Jiu1mqyPMoQrrPT60EFXs7ySfjpT9wSyhp3ig=";
   };
 
   extraNativeImageBuildArgs = [

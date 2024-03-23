@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.0";
+  version = "0.23.1";
   pyproject = true;
 
   disabled = isPy27;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "rasbt";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TUZ8SdQAOV1CaIlDl4uXYVHvdlEkOz6E48S3pUS6UE0=";
+    hash = "sha256-FlP6UqX/Ejk9c3Enm0EJ0xqy7iOhDlFqjWWxd4VIczQ=";
   };
 
   nativeBuildInputs = [

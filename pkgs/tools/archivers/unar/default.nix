@@ -50,12 +50,6 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ gnustep.make ] ++
     lib.optionals stdenv.isDarwin [ xcbuildHook ];
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  # xcbuild links with clang instead of clang++.
-  env = lib.optionalAttrs stdenv.isDarwin {
-    LD_FLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   xcbuildFlags = lib.optionals stdenv.isDarwin [
     "-target unar"
     "-target lsar"

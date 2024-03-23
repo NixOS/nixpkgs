@@ -1,38 +1,45 @@
 { lib
-, isPy27
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
-, importlib-metadata
-, typing ? null
 , pythonOlder
-, unittestCheckHook
+
+# build-system
+, setuptools
+, setuptools-scm
+
+# dependencies
+, importlib-metadata
+
+# tests
+, jaraco-collections
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "6.1.1";
-  format = "pyproject";
-  disabled = isPy27;
+  version = "6.1.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    hash = "sha256-OJOgASLq/eaJTFmRREalEvcooMGkX5u5tjchtrrPC0o=";
+    hash = "sha256-VvtFJRl7eFRKM1TqJ3k5UquT+TW7S/dGuEa7EBUCDys=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.5") [
-    typing
   ];
 
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
+    jaraco-collections
   ];
 
   pythonImportsCheck = [

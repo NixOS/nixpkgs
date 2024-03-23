@@ -17,7 +17,7 @@
 
 let
   pname = "dump_syms";
-  version = "2.3.0";
+  version = "2.3.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -26,15 +26,10 @@ rustPlatform.buildRustPackage {
     owner = "mozilla";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-F+yXFT6PsHpluxyF+aUiuLTLqlsjfQ5tk/JjcHgJkQ8=";
+    hash = "sha256-mSup3AMYsPu/Az6QXhdCFSxGcIpel4zNN0g/95gPDS0=";
   };
 
-  cargoSha256 = "sha256-I5CfrLWVTUwOtZrje3eATFen5u9MEH79Rk30ZNhaG98=";
-
-  # Workaround for https://github.com/nixos/nixpkgs/issues/166205
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
+  cargoSha256 = "sha256-INzCyF/tvCp4L6Btrw8AGTBAgdFiBlywzO3+SSE4beI=";
 
   nativeBuildInputs = [
     pkg-config

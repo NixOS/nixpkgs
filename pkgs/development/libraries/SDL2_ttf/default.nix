@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_ttf";
-  version = "2.20.2";
+  version = "2.22.0";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_ttf/release/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-ncce2TSHUhsQeixKnKa/Q/ti9r3dXCawVea5FBiiIFM=";
+    sha256 = "sha256-1Iy9HOR1ueF4IGvzty1Wtm2E1E9krAWAMyg5YjTWdyM=";
   };
 
   configureFlags = [ "--disable-harfbuzz-builtin" ]

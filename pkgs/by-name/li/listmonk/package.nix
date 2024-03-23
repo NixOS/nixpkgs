@@ -52,6 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/knadh/listmonk";
     changelog = "https://github.com/knadh/listmonk/releases/tag/v${version}";
     maintainers = with maintainers; [ raitobezarius ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
   };
 }

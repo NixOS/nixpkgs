@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
+, hatch-vcs
 , importlib-metadata
 , packaging
 , pip
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.3.1";
+  version = "1.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,11 +25,12 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-JZt4I0zw/Kmdgpd5tw6c+fHrHuxkN6jvN3fDmk0//vc=";
+    hash = "sha256-NxXOeVXwBhGqi4DUABV8UV+cDER0ROBFdgiyYTzdvuo=";
   };
 
   nativeBuildInputs = [
     hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [

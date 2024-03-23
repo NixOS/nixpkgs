@@ -8,6 +8,7 @@
 , oldest-supported-numpy
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , qdldl
 , scipy
 , setuptools-scm
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.3";
+  version = "0.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A+Rg5oPsLOD4OTU936PEyP+lCauM9qKyr7tYb6RT4YA=";
+    hash = "sha256-soEK7nviNzrdi2wL5a2ZuBAoh3SrykIXUcsDLWpa7e8=";
   };
 
   dontUseCmakeConfigure = true;
@@ -31,6 +32,11 @@ buildPythonPackage rec {
     cmake
     oldest-supported-numpy
     setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "scipy"
   ];
 
   propagatedBuildInputs = [

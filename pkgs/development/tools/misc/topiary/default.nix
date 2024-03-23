@@ -35,12 +35,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "topiary-cli" ];
   cargoTestFlags = cargoBuildFlags;
 
-  env = {
-    TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
+  env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
   postInstall = ''
     install -Dm444 queries/* -t $out/share/queries

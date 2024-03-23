@@ -1,25 +1,39 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, copyDesktopItems, makeDesktopItem, unzip }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, makeBinaryWrapper
+, copyDesktopItems
+, makeDesktopItem
+, desktopToDarwinBundle
+, unzip
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logisim";
   version = "2.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/circuit/${lib.versions.majorMinor version}.x/${version}/logisim-generic-${version}.jar";
-    sha256 = "1hkvc9zc7qmvjbl9579p84hw3n8wl3275246xlzj136i5b0phain";
+    url = "mirror://sourceforge/project/circuit/${lib.versions.majorMinor finalAttrs.version}.x/${finalAttrs.version}/logisim-generic-${finalAttrs.version}.jar";
+    hash = "sha256-Nip4wSrRjCA/7YaIcsSgHNnBIUE3nZLokrviw35ie8I=";
   };
-
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems unzip ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    copyDesktopItems
+    unzip
+  ] ++ lib.optionals stdenv.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "logisim";
       desktopName = "Logisim";
       exec = "logisim";
       icon = "logisim";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Education" ];
     })
   ];
@@ -34,19 +48,19 @@ stdenv.mkDerivation rec {
     unzip $src "resources/logisim/img/*"
     for size in 16 20 24 48 64 128
     do
-      install -D "./resources/logisim/img/logisim-icon-$size.png" "$out/share/icons/hicolor/''${size}x''${size}/apps/logisim.png"
+      install -Dm444 "./resources/logisim/img/logisim-icon-$size.png" "$out/share/icons/hicolor/''${size}x''${size}/apps/logisim.png"
     done
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.cburch.com/logisim/";
     description = "Educational tool for designing and simulating digital logic circuits";
     mainProgram = "logisim";
-    maintainers = with maintainers; [ emilytrau ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -44,6 +44,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   # Tests print “Fontconfig error: Cannot load default config file”
   preCheck = lib.optionalString withGraphviz ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf

@@ -60,13 +60,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.84.0";
+  version = "1.87.1";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-kYKvJrHWKHDIqJsN0j1WFN3OBWwEyNgY5hjNHBg+kKQ=";
+    hash = "sha256-v9q0+qhgDhqejSI6ioAUNsAKK27o/Uo0KUtuAuSQYig=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-oW/JngHpXb8kscikscI7N9csSyZsZQgG75jOdWll6dw=";
+    outputHash = "sha256-oRuy7PjVv3Y24GQlvX4tPPndvKTgxbv7TR8ytTBY2DQ=";
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.25.3";
+  version = "2.25.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-hG8SWooZZWYR31sD5ZEsg5POppAIWbqmT6UV62So3EA=";
+    hash = "sha256-IJgZjh6C4NuYJED5tRNhddc76izUKmSAqm/VAssjxPk=";
   };
 
   postPatch = ''
@@ -69,6 +69,10 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
 
   disabledTestPaths = [
     # require optional language pack packages for tests

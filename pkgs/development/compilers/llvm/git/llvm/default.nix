@@ -223,6 +223,10 @@ stdenv.mkDerivation (rec {
       --replace "PassBuilderCallbacksTest.cpp" ""
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
+
+    # Fails in the presence of anti-virus software or other intrusion-detection software that
+    # modifies the atime when run. See #284056.
+    rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \

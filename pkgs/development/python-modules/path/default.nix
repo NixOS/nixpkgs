@@ -1,30 +1,32 @@
 { lib
-, appdirs
 , buildPythonPackage
 , fetchPypi
-, packaging
+, more-itertools
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "path";
-  version = "16.7.1";
-  format = "pyproject";
+  version = "16.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K0d/WIcDPzy+oc/YVT7mpqSY6yVAoZ9KoIKCKq3Oowo=";
+    hash = "sha256-sysit2/oEKje1tE2JozItmmK58R8KblKnqEmI/MFHkY=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
   nativeCheckInputs = [
+    more-itertools
     pytestCheckHook
   ];
 

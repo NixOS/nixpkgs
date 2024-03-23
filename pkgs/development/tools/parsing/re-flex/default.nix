@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re-flex";
-  version = "4.1.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "RE-flex";
     rev = "v${version}";
-    hash = "sha256-pjYiCRKaskJg1IuCxNBUQ9FY2abGi4HEZxsfZ5ctjNY=";
+    hash = "sha256-w1aH04VGe9nPvwGdbTEsAcIPb7oC739LZjTI/1Ck7bU=";
   };
 
   outputs = [ "out" "bin" "dev" ];

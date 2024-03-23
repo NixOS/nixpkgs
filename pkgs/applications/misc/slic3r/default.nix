@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
     homepage = "https://slic3r.org/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
   };

@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "dissent";
-  version = "0.0.21";
+  version = "0.0.22";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
     rev = "v${version}";
-    hash = "sha256-stItrULEO4AAl77ykmxmUYZXrHsC8/sBv8tTHqq9/E0=";
+    hash = "sha256-HNNTF/a+sLFp+HCxltYRuDssoLnIhzEXuDLKTPxWzeM=";
   };
 
   nativeBuildInputs = [

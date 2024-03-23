@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     mainProgram = "90secondportraits";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
-    license = licenses.free;
+    license = with licenses; [ zlib cc-by-sa-40 cc-by-sa-30 /* vendored */ x11 mit ];
     downloadPage = "http://tangramgames.dk/games/90secondportraits";
   };
 

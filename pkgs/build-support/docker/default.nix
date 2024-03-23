@@ -523,7 +523,7 @@ rec {
     runCommand "${baseNameOf name}.tar${compress.ext}"
       {
         inherit (stream) imageName;
-        passthru = { inherit (stream) imageTag; };
+        passthru = { inherit (stream) imageTag; inherit stream; };
         nativeBuildInputs = compress.nativeInputs;
       } "${stream} | ${compress.compress} > $out"
   );

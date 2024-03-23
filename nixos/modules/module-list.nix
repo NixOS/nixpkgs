@@ -203,6 +203,7 @@
   ./programs/i3lock.nix
   ./programs/iotop.nix
   ./programs/java.nix
+  ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
   ./programs/k40-whisperer.nix
   ./programs/kbdlight.nix
@@ -1018,6 +1019,7 @@
   ./services/networking/lxd-image-server.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
+  ./services/networking/mihomo.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
   ./services/networking/miredo.nix

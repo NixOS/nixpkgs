@@ -32,11 +32,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs configure lds-gen.pl
-  '' + lib.optionalString (stdenv.cc.libcxx != null) ''
-    # fix for https://github.com/NixOS/nixpkgs/issues/166205
-    # llvm12+ isn't adding libc++abi
-    substituteInPlace src-cpp/Makefile \
-      --replace "LIBS += -lstdc++" "LIBS += -lc++ -l${stdenv.cc.libcxx.cxxabi.libName}"
   '';
 
   # Has a configure script but it’s not Autoconf so steal some bits from multiple-outputs.sh:

@@ -2,36 +2,59 @@
 , arabic-reshaper
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch2
 , html5lib
 , pillow
 , pyhanko
+, pyhanko-certvalidator
 , pypdf
 , pytestCheckHook
 , python-bidi
 , pythonOlder
+, pythonRelaxDepsHook
 , reportlab
+, setuptools
 , svglib
 }:
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.13";
+  version = "0.2.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "xhtml2pdf";
+    repo = "xhtml2pdf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K7gsTLYcXmKmEQzOXrJ2kvvLzKaDkZ/NRLRc0USii5M=";
+    hash = "sha256-JXxh/n1kUsy3O4P/6WTfa5p+mYy/t4ZBUhlHp+ypoQc=";
   };
+
+  patches = [
+    # https://github.com/xhtml2pdf/xhtml2pdf/pull/754
+    (fetchpatch2 {
+      name = "reportlab-compat.patch";
+      url = "https://github.com/xhtml2pdf/xhtml2pdf/commit/1252510bd23b833b45b4d252aeac62c1eb51eeef.patch";
+      hash = "sha256-9Fkn086uh2biabmiChbBna8Q4lJV/604yX1ng9j5TGs=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "reportlab"
+  ];
 
   propagatedBuildInputs = [
     arabic-reshaper
     html5lib
     pillow
     pyhanko
+    pyhanko-certvalidator
     pypdf
     python-bidi
     reportlab

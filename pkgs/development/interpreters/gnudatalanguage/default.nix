@@ -78,13 +78,15 @@ let
     if hdf5-forced != null
     then hdf5-forced
     else
-      hdf5.override {
+      hdf5.override ({
         usev110Api = useHdf5v110Api;
         mpiSupport = enableMPI;
         inherit mpi;
         szipSupport = enableSzip;
         inherit szip;
-      };
+      } // lib.optionalAttrs enableMPI {
+        cppSupport = false;
+      });
   netcdf-custom =
     if netcdf-forced != null
     then netcdf-forced

@@ -33,7 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Grafana Phlare is an open source database that provides fast, scalable, highly available, and efficient storage and querying of profiling data.";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     homepage = "https://grafana.com/oss/phlare";
     maintainers = with maintainers; [ cathalmullan ];
   };

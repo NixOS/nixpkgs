@@ -176,13 +176,10 @@ in {
       openjfx = openjfx15;
     };
 
-    openjdk16 = mkOpenjdk
-      ../development/compilers/openjdk/16.nix
-      ../development/compilers/zulu/16.nix
-      {
-        inherit openjdk16-bootstrap;
-        openjfx = openjfx15;
-      };
+    openjdk16 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/16.nix {
+      inherit openjdk16-bootstrap;
+      openjfx = openjfx15;
+    };
 
     openjdk17 = mkOpenjdk
       ../development/compilers/openjdk/17.nix

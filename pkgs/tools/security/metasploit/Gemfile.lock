@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 5df84967c30bc92484c217aa70754596ff358ad0
-  ref: refs/tags/6.3.60
+  revision: c82de1374a222da3ca6db840432a971cfd4e865e
+  ref: refs/tags/6.4.0
   specs:
-    metasploit-framework (6.3.60)
+    metasploit-framework (6.4.0)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -83,7 +83,7 @@ GIT
       rex-zip
       ruby-macho
       ruby-mysql
-      ruby_smb (~> 3.3.0)
+      ruby_smb (~> 3.3.3)
       rubyntlm
       rubyzip
       sinatra
@@ -166,7 +166,7 @@ GEM
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.0)
     bigdecimal (3.1.6)
-    bindata (2.5.0)
+    bindata (2.4.15)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
     bson (5.0.0)
@@ -398,8 +398,8 @@ GEM
     ruby-mysql (4.1.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
-    ruby_smb (3.3.2)
-      bindata
+    ruby_smb (3.3.4)
+      bindata (= 2.4.15)
       openssl-ccm
       openssl-cmac
       rubyntlm

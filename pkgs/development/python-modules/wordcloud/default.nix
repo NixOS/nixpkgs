@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "wordcloud";
-  version = "1.9.1.1";
+  version = "1.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "amueller";
     repo = "word_cloud";
     rev = "refs/tags/${version}";
-    hash = "sha256-Tcle9otT1eBN/RzajwKZDUq8xX0Lhi2t74OvhUrvHZE=";
+    hash = "sha256-UbryGiu1AW6Razbf4BJIKGKKhG6JOeZUGb1k0w8f8XA=";
   };
 
   postPatch = ''

@@ -32,7 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ ];
     mainProgram = "documize";
     homepage = "https://www.documize.com/";

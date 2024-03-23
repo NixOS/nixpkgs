@@ -78,7 +78,6 @@ buildGoModule rec {
     GOARCH= CGO_ENABLED=0 go generate ./pkg/plugins/plugindef
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/kindsys/report.go
     # Setup node_modules
     export HOME="$(mktemp -d)"
 
@@ -135,7 +134,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     homepage = "https://grafana.com";
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
     platforms = platforms.linux ++ platforms.darwin;

@@ -6,7 +6,7 @@ index a74cdd9..790cc58 100644
  {
      wxString path;
 
-+    if( wxGetEnv( wxT( "NIX_KICAD7_STOCK_DATA_PATH" ), &path ) ) {
++    if( wxGetEnv( wxT( "NIX_KICAD8_STOCK_DATA_PATH" ), &path ) ) {
 +        return path;
 +    }
 +

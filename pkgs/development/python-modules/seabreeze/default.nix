@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
     rev = "refs/tags/v${version}";
-    hash = "sha256-25rFGpfwJKj9lLDO/ZsqJ2NfCsgSSJghLZxffjX/+7w=";
+    hash = "sha256-Ead9G4i8/mFwPqL2PGsndtmX93Njld3nvTTr6ROJTac=";
     leaveDotGit = true;
   };
 

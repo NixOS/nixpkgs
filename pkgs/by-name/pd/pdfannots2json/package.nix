@@ -18,7 +18,7 @@ in
 
     meta = with lib; {
       homepage = "https://github.com/mgmeyers/pdfannots2json";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       description = "A tool to convert PDF annotations to JSON";
       mainProgram = "pdfannots2json";
       maintainers = with maintainers; [ _0nyr ];

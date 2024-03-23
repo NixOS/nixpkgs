@@ -1,17 +1,17 @@
 { lib
-, callPackage
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , mkDerivation
 , substituteAll
 , wrapGAppsHook
+, wrapQtAppsHook
 
 , withGrass ? true
 , withWebKit ? false
 
 , bison
 , cmake
+, draco
 , exiv2
 , fcgi
 , flex
@@ -25,7 +25,7 @@
 , netcdf
 , ninja
 , openssl
-# , pdal
+, pdal
 , postgresql
 , proj
 , protobuf
@@ -36,6 +36,7 @@
 , qtbase
 , qtkeychain
 , qtlocation
+, qtmultimedia
 , qtsensors
 , qtserialport
 , qtwebkit
@@ -63,8 +64,8 @@ let
     owslib
     psycopg2
     pygments
-    pyqt-builder
     pyqt5
+    pyqt-builder
     python-dateutil
     pytz
     pyyaml
@@ -76,14 +77,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.28.15";
+  version = "3.34.5";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-R6p1MVeCMbaD74Eqn+OLQkTYP+00y9mBucJR1JXPEJ4=";
+    hash = "sha256-TRSS1YclGUfBjNz+Lo8U8YlN4kdJ9JLcwd7qpgwRbG0=";
   };
 
   passthru = {
@@ -94,6 +95,7 @@ in mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     wrapGAppsHook
+    wrapQtAppsHook
 
     bison
     cmake
@@ -102,32 +104,34 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
-    openssl
-    proj
-    geos
-    sqlite
-    gsl
-    qwt
+    draco
     exiv2
-    protobuf
     fcgi
+    geos
+    gsl
+    hdf5
     libspatialindex
     libspatialite
-    postgresql
-    txt2tags
     libzip
-    hdf5
     netcdf
-    qtbase
-    qtsensors
+    openssl
+    pdal
+    postgresql
+    proj
+    protobuf
     qca-qt5
-    qtkeychain
     qscintilla
+    qt3d
+    qtbase
+    qtkeychain
     qtlocation
+    qtmultimedia
+    qtsensors
     qtserialport
     qtxmlpatterns
-    qt3d
-    # pdal
+    qwt
+    sqlite
+    txt2tags
     zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
@@ -135,22 +139,22 @@ in mkDerivation rec {
 
   patches = [
     (substituteAll {
-      src = ./set-pyqt-package-dirs-ltr.patch;
+      src = ./set-pyqt-package-dirs.patch;
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
-    (fetchpatch {
-      name = "qgis-3.28.9-exiv2-0.28.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-geosciences/qgis/files/qgis-3.28.9-exiv2-0.28.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
-      hash = "sha256-mPRo0A7ko4GCHJrfJ2Ls0dUKvkFtDmhKekI2CR9StMw=";
-    })
   ];
 
-  # PDAL is disabled until https://github.com/qgis/QGIS/pull/54940
-  # is backported.
+  # Add path to Qt platform plugins
+  # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
+  preBuild = ''
+    export QT_QPA_PLATFORM_PLUGIN_PATH=${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms
+  '';
+
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
-    "-DWITH_PDAL=False"  # TODO: re-enable PDAL
+    "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let
@@ -158,6 +162,10 @@ in mkDerivation rec {
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
     );
+
+  qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms"
+  ];
 
   dontWrapGApps = true; # wrapper params passed below
 

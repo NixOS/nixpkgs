@@ -16,7 +16,7 @@
 , python-docx
 }:
 let
-  version = "0.5.7";
+  version = "0.5.8";
 in
 buildPythonPackage {
   pname = "pdf2docx";
@@ -27,7 +27,7 @@ buildPythonPackage {
     owner = "dothinking";
     repo = "pdf2docx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GDftANn+ioaNR28VfRFDuFgdKoy7D4xiy0ezvWJ3zy0=";
+    hash = "sha256-tMITDm2NkxWS+H/hhd2LlaPbyuI86ZKaALqqHJqb8V0=";
   };
 
   nativeBuildInputs = [

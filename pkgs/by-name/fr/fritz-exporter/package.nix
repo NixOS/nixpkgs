@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fritz-exporter";
-  version = "2.4.3";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
     rev = "fritzexporter-v${version}";
-    hash = "sha256-2A8hw2XkdxkauG+lMlKfObEvLHUQk79xWmlp0hlrXYM=";
+    hash = "sha256-x5WCVDIKdreQCmVpiWbmVBNo42P5kSxX9dLMBKfZTWc=";
   };
 
   postPatch = ''

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "lsd-rs";
     repo = "lsd";
     rev = "v${version}";
-    hash = "sha256-syT+1LNdigUWkfJ/wkbY/kny2uW6qfpl7KmW1FjZKR8=";
+    hash = "sha256-pPCcKEmB1/BS6Q2j1fytwpZa/5KXIJu0ip0Zq97m6uw=";
   };
 
-  cargoHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
+  cargoHash = "sha256-E0ui9cmuSqUMTkKvNNuEPOVd/gs4O2oW0aPxlyI9qoA=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
 

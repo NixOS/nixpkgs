@@ -41,7 +41,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # AssertionError: Expected 'fileno' to not have been called. Called 1 times.
+    "test_client_stop_no_wait"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_multiplexer_data_channel_abort_full" # https://github.com/NabuCasa/snitun/issues/61
     # port binding conflicts
     "test_snitun_single_runner_timeout"

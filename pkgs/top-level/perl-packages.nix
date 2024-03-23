@@ -1700,7 +1700,7 @@ with self; {
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.65.tar.gz";
-      hash = "sha256-QQqonnIylB1JEGyeBI1jN0dVQ+wdIz6nzbcly1uWNQQ=i";
+      hash = "sha256-QQqonnIylB1JEGyeBI1jN0dVQ+wdIz6nzbcly1uWNQQ=";
     };
 
     preConfigure = ''
@@ -9463,10 +9463,10 @@ with self; {
 
   FFICStat = buildPerlPackage {
     pname = "FFI-C-Stat";
-    version = "0.02";
+    version = "0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.02.tar.gz";
-      hash = "sha256-ThXY9vn5hAfGUtnTE7URUHcTkgGOBx18GShDrILBvlk=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.03.tar.gz";
+      hash = "sha256-YOjveCyLs0cFXJ49ov1BTzX2EP5P77eNBzncyiQoQx4=";
     };
     buildInputs = [ Filechdir PathTiny Test2Suite TestScript ];
     propagatedBuildInputs = [ FFIPlatypus RefUtil ];
@@ -13205,40 +13205,7 @@ with self; {
     };
   };
 
-  ImageExifTool = buildPerlPackage rec {
-    pname = "Image-ExifTool";
-    version = "12.70";
-
-    src = fetchurl {
-      url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-TLJSJEXMPj870TkExq6uraX8Wl4kmNerrSlX3LQsr/4=";
-    };
-
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
-      shortenPerlShebang $out/bin/exiftool
-    '';
-
-    meta = {
-      description = "A tool to read, write and edit EXIF meta information";
-      longDescription = ''
-        ExifTool is a platform-independent Perl library plus a command-line
-        application for reading, writing and editing meta information in a wide
-        variety of files. ExifTool supports many different metadata formats
-        including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop
-        IRB, FlashPix, AFCP and ID3, as well as the maker notes of many digital
-        cameras by Canon, Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP,
-        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
-        Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
-        Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
-      '';
-      homepage = "https://exiftool.org/";
-      changelog = "https://exiftool.org/history.html";
-      license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-      maintainers = with maintainers; [ kiloreux anthonyroussel ];
-      mainProgram = "exiftool";
-    };
-  };
+  ImageExifTool = callPackage ../development/perl-modules/ImageExifTool { };
 
   Inline = buildPerlPackage {
     pname = "Inline";
@@ -19814,10 +19781,10 @@ with self; {
 
   ParallelLoops = buildPerlPackage {
     pname = "Parallel-Loops";
-    version = "0.10";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.10.tar.gz";
-      hash = "sha256-b5Z7RuejY7FocbmZHDWeFC3Dsigc/psa85kEcEyL0qo=";
+      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.12.tar.gz";
+      hash = "sha256-tmyP4v1RmHPIp7atHRoE3yAmkSJZteKKQeUdnJsVQVA=";
     };
     propagatedBuildInputs = [ ParallelForkManager ];
     meta = {
@@ -27493,47 +27460,7 @@ with self; {
     };
   };
 
-  Tirex = buildPerlPackage rec {
-    pname = "Tirex";
-    version = "0.7.0";
-
-    src = fetchFromGitHub {
-      owner = "openstreetmap";
-      repo = "tirex";
-      rev = "v${version}";
-      hash = "sha256-0QbPfCPBdNBbUiZ8Ppg2zao98+Ddl3l+yX6y1/J50rg=";
-    };
-
-    patches = [
-      # https://github.com/openstreetmap/tirex/pull/54
-      (fetchpatch {
-        url = "https://github.com/openstreetmap/tirex/commit/da0c5db926bc0939c53dd902a969b689ccf9edde.patch";
-        hash = "sha256-bnL1ZGy8ZNSZuCRbZn59qRVLg3TL0GjFYnhRKroeVO0=";
-      })
-    ];
-
-    buildInputs = [
-      GD
-      IPCShareLite
-      JSON
-      LWP
-      pkgs.mapnik
-    ] ++ pkgs.mapnik.buildInputs;
-
-    installPhase = ''
-      install -m 755 -d $out/usr/libexec
-      make install DESTDIR=$out INSTALLOPTS=""
-      mv $out/$out/lib $out/$out/share $out
-      rmdir $out/$out $out/nix/store $out/nix
-    '';
-
-    meta = {
-      description = "Tools for running a map tile server";
-      homepage = "https://wiki.openstreetmap.org/wiki/Tirex";
-      maintainers = with maintainers; [ jglukasik ];
-      license = with lib.licenses; [ gpl2Only ];
-    };
-  };
+  Tirex = callPackage ../development/perl-modules/Tirex { };
 
   Tk = buildPerlPackage {
     pname = "Tk";

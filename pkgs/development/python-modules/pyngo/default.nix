@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pydantic"
+    "typing-extensions"
   ];
 
   propagatedBuildInputs = [

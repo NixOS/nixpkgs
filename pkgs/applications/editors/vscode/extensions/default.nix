@@ -18,6 +18,7 @@
 , clojure-lsp
 , alejandra
 , millet
+, craftos-pc
 , shfmt
 , typst-lsp
 , typst-preview
@@ -99,6 +100,23 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
+        };
+      };
+
+      "42crunch".vscode-openapi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "42Crunch";
+          name = "vscode-openapi";
+          version = "4.25.1";
+          sha256 = "+hKQUJp9c0oyhePFmQEXAqtqKL3fkQ1nhopUPnhRZc4=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
+          description = "A Visual Studio Code extension with rich support for the OpenAPI Specification (OAS).";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi";
+          homepage = "https://github.com/42Crunch/vscode-openapi";
+          license = lib.licenses.gpl3;
+          maintainers = [ lib.maintainers.benhiemer ];
         };
       };
 
@@ -1383,12 +1401,12 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "14.1.1";
-          sha256 = "sha256-eSN48IudpHYzT4u+S4b2I2pyEPyOwBCSL49awT/mzEE=";
+          version = "14.9.0";
+          sha256 = "sha256-Z6KeIUw1SLZ4tUgs7sU9IJO/6diozPxQuTbXr6DayHA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
-          description = "GitLens supercharges the Git capabilities built into Visual Studio Code.";
+          description = "A Visual Studio Code extension that improves its built-in Git capabilities";
           longDescription = ''
             Supercharge the Git capabilities built into Visual Studio Code — Visualize code authorship at a glance via Git
             blame annotations and code lens, seamlessly navigate and explore Git repositories, gain valuable insights via
@@ -1576,8 +1594,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "10.1.0";
-          sha256 = "sha256-SQuf15Jq84MKBVqK6UviK04uo7gQw9yuw/WEBEXcQAc=";
+          version = "10.4.0";
+          sha256 = "sha256-8+90cZpqyH+wBgPFaX5GaU6E02yBWUoB+T9C2z2Ix8c=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1743,8 +1761,8 @@ let
         mktplcRef = {
           name = "shell-format";
           publisher = "foxundermoon";
-          version = "7.1.0";
-          sha256 = "09z72mdr5bfdcb67xyzlv7lb9vyjlc3k9ackj4jgixfk40c68cnj";
+          version = "7.2.5";
+          sha256 = "sha256-kfpRByJDcGY3W9+ELBzDOUMl06D/vyPlN//wPgQhByk=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -2216,8 +2234,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.17.0";
-          sha256 = "sha256-CC6ySeuO61O/mAkQYGoK/1cd4hlyS0vG+Lqv0HQ7K6c=";
+          version = "7.18.2";
+          sha256 = "sha256-CEeTLiZktp5YzCRxDXa+s8W9N971iQla/FyCr8Co0SQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2242,6 +2260,39 @@ let
           homepage = "https://github.com/IronGeek/vscode-env.git";
           license = lib.licenses.mit;
           maintainers = [ ];
+        };
+      };
+
+      jackmacwindows.craftos-pc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "craftos-pc";
+          publisher = "jackmacwindows";
+          version = "1.2.2";
+          sha256 = "sha256-A+MNroXv0t9Mw/gr0Fyov3cXyF/GGzwRLKrIxQ2tKCE=";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+
+          jq -e '
+            .contributes.configuration.properties."craftos-pc.executablePath.linux".default =
+              "${lib.meta.getExe craftos-pc}" |
+            .contributes.configuration.properties."craftos-pc.executablePath.mac".default =
+              "${lib.meta.getExe craftos-pc}" |
+            .contributes.configuration.properties."craftos-pc.executablePath.windows".default =
+              "${lib.meta.getExe craftos-pc}"
+          ' \
+          < package.json \
+          | sponge package.json
+        '';
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.craftos-pc/changelog";
+          description = "A Visual Studio Code extension for opening a CraftOS-PC window";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.craftos-pc";
+          homepage = "https://www.craftos-pc.cc/docs/extension";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ tomodachi94 ];
+          platforms = craftos-pc.meta.platforms;
         };
       };
 
@@ -3042,8 +3093,8 @@ let
         mktplcRef = {
           name = "remote-containers";
           publisher = "ms-vscode-remote";
-          version = "0.305.0";
-          sha256 = "sha256-srSRD/wgDbQo9P1uJk8YtcXPZO62keG5kRnp1TmHqOc=";
+          version = "0.347.0";
+          sha256 = "sha256-E9H1nPWG5JuzBxbYc/yWd8Y3azEWrd9whGirl0GK7kU=";
         };
         meta = {
           description = "Open any folder or repository inside a Docker container.";
@@ -3057,6 +3108,23 @@ let
       ms-vscode-remote.remote-ssh = callPackage ./ms-vscode-remote.remote-ssh { };
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
+
+      mshr-h.veriloghdl = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "veriloghdl";
+          publisher = "mshr-h";
+          version = "1.13.2";
+          sha256 = "sha256-MOU8zf2qS7P2pQ29w3mvhDc2OvZiH4HNe530BjIiRAA=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
+          description = "A Visual Studio Code extension for supporting Verilog-HDL, SystemVerilog, Bluespec and SystemVerilog";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL";
+          homepage = "https://github.com/mshr-h/vscode-verilog-hdl-support";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.newam ];
+        };
+      };
 
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3754,6 +3822,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      smcpeak.default-keys-windows = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "default-keys-windows";
+          publisher = "smcpeak";
+          version = "0.0.10";
+          sha256 = "sha256-v1JY5ZGWOfF14H235Y9CLlPwIvmNwCeRhIkdmcgCCFU=";
+        };
+        meta = {
+          changelog = "https://github.com/smcpeak/vscode-default-keys-windows/blob/master/CHANGELOG.md";
+          description = "VSCode extension that provides default Windows keybindings on any platform";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=smcpeak.default-keys-windows";
+          homepage = "https://github.com/smcpeak/vscode-default-keys-windows";
+          license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 

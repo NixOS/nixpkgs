@@ -9,11 +9,13 @@
 , libffi
 , makeWrapper
 , config
-, rocmPackages
+, rocmPackages_5
 , rocmSupport ? config.rocmSupport
 }:
 let
   inherit (llvmPackages_15) stdenv;
+  # move to newer ROCm version once supported
+  rocmPackages = rocmPackages_5;
 in
 stdenv.mkDerivation rec {
   pname = "OpenSYCL";

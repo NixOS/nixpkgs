@@ -79,6 +79,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   meta = with lib; {
     description = "An async Python micro framework for building web applications";
     mainProgram = "quart";

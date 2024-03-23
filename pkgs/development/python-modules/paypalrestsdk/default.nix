@@ -1,23 +1,23 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-
-# build-system
 , setuptools
-
-# dependencies
 , pyopenssl
+, pythonOlder
 , requests
 , six
 }:
 
 buildPythonPackage rec {
   pname = "paypalrestsdk";
-  version = "1.13.2";
+  version = "1.13.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kZUfNtsw1oW5ceFASYSRo1bPHfjv9xZWYDrKTtcs81o=";
+    hash = "sha256-2sI2SSqawSYKdgAUouVqs4sJ2BQylbXollRTWbYf7dY=";
   };
 
   build-system = [
@@ -30,15 +30,21 @@ buildPythonPackage rec {
     six
   ];
 
-  doCheck = false; # no tests
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "paypalrestsdk"
   ];
 
-  meta = {
-    homepage = "https://developer.paypal.com/";
+  meta = with lib; {
     description = "Python APIs to create, process and manage payment";
-    license = "PayPal SDK License";
+    homepage = "https://github.com/paypal/PayPal-Python-SDK";
+    changelog = "https://github.com/paypal/PayPal-Python-SDK/blob/master/CHANGELOG.md";
+    license = {
+      fullName = "PayPal SDK License";
+      url = "https://github.com/paypal/PayPal-Python-SDK/blob/master/LICENSE";
+    };
+    maintainers = with maintainers; [ ];
   };
 }

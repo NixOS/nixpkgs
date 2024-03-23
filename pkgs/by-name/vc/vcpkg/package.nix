@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vcpkg";
-  version = "2024.02.14";
+  version = "2024.03.19";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg";
     rev = finalAttrs.version;
-    hash = "sha256-qYRNf2NMvYkxq7CRbJIqC7HAhznTNK7zW6JCsP4+v6M=";
+    hash = "sha256-861r4XsXCyxUVDlSrekZ+g17td+idUN8qJmmTZNDzow=";
   };
 
   installPhase = let

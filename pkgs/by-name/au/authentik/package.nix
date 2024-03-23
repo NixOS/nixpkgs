@@ -11,13 +11,13 @@
 , makeWrapper }:
 
 let
-  version = "2023.10.7";
+  version = "2024.2.2";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-+1IdXRt28UZ2KTa0zsmjneNUOcutP99UUwqcYyVyqTI=";
+    hash = "sha256-2B1RgKY5tpDBdzguEyWqzg15w5x/dLS2ffjbnxbpINs=";
   };
 
   meta = with lib; {
@@ -32,7 +32,7 @@ let
   website = buildNpmPackage {
     pname = "authentik-website";
     inherit version src meta;
-    npmDepsHash = "sha256-4dgFxEvMnp+35nSQNsEchtN1qoS5X2KzEbLPvMnyR+k=";
+    npmDepsHash = "sha256-paACBXG7hEQSLekxCvxNns2Tg9rN3DUgz6o3A/lAhA8=";
 
     NODE_ENV = "production";
     NODE_OPTIONS = "--openssl-legacy-provider";
@@ -82,7 +82,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-5aCKlArtoEijGqeYiY3zoV0Qo7/Xt5hSXbmy2uYZpok=";
+    npmDepsHash = "sha256-Xtzs91m+qu7jTwr0tMeS74gjlZs4vufGGlplPVf9yew=";
 
     postPatch = ''
       cd web
@@ -105,26 +105,68 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
+      django-tenants = prev.buildPythonPackage rec {
+        pname = "django-tenants";
+        version = "unstable-2024-01-11";
+        src = fetchFromGitHub {
+          owner = "rissson";
+          repo = pname;
+          rev = "a7f37c53f62f355a00142473ff1e3451bb794eca";
+          hash = "sha256-YBT0kcCfETXZe0j7/f1YipNIuRrcppRVh1ecFS3cvNo=";
+        };
+        format = "setuptools";
+        doCheck = false; # Tests require postgres
+
+        propagatedBuildInputs = with prev; [
+          django
+          psycopg
+          gunicorn
+        ];
+      };
+
+      tenant-schemas-celery = prev.buildPythonPackage rec {
+        pname = "tenant-schemas-celery";
+        version = "2.2.0";
+        src = fetchFromGitHub {
+          owner = "maciej-gol";
+          repo = pname;
+          rev = version;
+          hash = "sha256-OpIJobjWZE5GQGnHADioeoJo3A6DAKh0HdO10k4rsX4=";
+        };
+        format = "setuptools";
+        doCheck = false;
+
+        propagatedBuildInputs = with prev; [
+          freezegun
+          more-itertools
+          psycopg2
+        ];
+      };
+
       authentik-django = prev.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
 
         postPatch = ''
+          rm lifecycle/system_migrations/tenant_files.py
           substituteInPlace authentik/root/settings.py \
             --replace-fail 'Path(__file__).absolute().parent.parent.parent' "\"$out\""
           substituteInPlace authentik/lib/default.yml \
-            --replace-fail '/blueprints' "$out/blueprints"
+            --replace-fail '/blueprints' "$out/blueprints" \
+            --replace-fail './media' '/var/lib/authentik/media'
           substituteInPlace pyproject.toml \
             --replace-fail 'dumb-init = "*"' "" \
-            --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
+            --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2' \
+            --replace-fail 'version = "4.9.4"' 'version = "*"' \
+            --replace-fail 'version = "<2"' 'version = "*"'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
 
         nativeBuildInputs = [ prev.poetry-core ];
 
-        propagatedBuildInputs = with prev; [
+        propagatedBuildInputs = with final; [
           argon2-cffi
           celery
           channels
@@ -140,6 +182,8 @@ let
           django-model-utils
           django-prometheus
           django-redis
+          django-storages
+          django-tenants
           djangorestframework
           djangorestframework-guardian2
           docker
@@ -153,6 +197,7 @@ let
           kubernetes
           ldap3
           lxml
+          jsonpatch
           opencontainers
           packaging
           paramiko
@@ -164,8 +209,10 @@ let
           pyyaml
           requests-oauthlib
           sentry-sdk
+          service-identity
           structlog
           swagger-spec-validator
+          tenant-schemas-celery
           twilio
           twisted
           ua-parser
@@ -178,7 +225,6 @@ let
           wsproto
           xmlsec
           zxcvbn
-          jsonpatch
         ] ++ [
           codespell
         ];
@@ -212,7 +258,7 @@ let
 
     CGO_ENABLED = 0;
 
-    vendorHash = "sha256-74rSuZrO5c7mjhHh0iQlJEkOslsFrcDb1aRXXC4RsUM=";
+    vendorHash = "sha256-UIJBCTq7AJGUDIlZtJaWCovyxlMPzj2BCJQqthybEz4=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik

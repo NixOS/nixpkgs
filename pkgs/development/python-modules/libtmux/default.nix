@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.31.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MzHS/HzEZ4vDfNRpJ9AU9vFkw7LwloltxyibxEGWRSw=";
+    hash = "sha256-1Xt2sl4L56TnveufD2j9k6eQQ+HllDxagv1APrErQYc=";
   };
 
   postPatch = ''
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://libtmux.git-pull.com/";
     changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ otavio ];
   };
 }

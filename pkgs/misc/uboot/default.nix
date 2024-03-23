@@ -13,6 +13,7 @@
 , meson-tools
 , ncurses
 , openssl
+, rkbin
 , swig
 , which
 , python3
@@ -21,15 +22,16 @@
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
+, armTrustedFirmwareRK3588
 , armTrustedFirmwareS905
 , buildPackages
 }:
 
 let
-  defaultVersion = "2023.07.02";
+  defaultVersion = "2024.01";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
+    hash = "sha256-uZYR8e0je/NUG9yENLaMlqbgWWcGH5kkQ8swqr6+9bM=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -371,6 +373,20 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePi5 = buildUBoot {
+    defconfig = "orangepi-5-rk3588s_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+
+    # FIXME: applied upstream, remove in 2024.04
+    extraConfig = ''
+      CONFIG_ROCKCHIP_SPI_IMAGE=y
+    '';
+
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
+  };
+
   ubootOrangePiPc = buildUBoot {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -513,6 +529,14 @@ in {
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRock5ModelB = buildUBoot {
+    defconfig = "rock5b-rk3588_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
   };
 
   ubootRock64 = buildUBoot {

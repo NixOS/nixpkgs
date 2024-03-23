@@ -309,6 +309,7 @@ in {
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
     inherit (pkgs) bcc bpftrace; # added 2021-12
     inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
+    inherit (pkgs) dpdk; # added 2024-03
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
@@ -344,8 +345,6 @@ in {
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
-
-    dpdk = pkgs.dpdk.override { inherit kernel; };
 
     exfat-nofuse = if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
 

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "3.0.0";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TZijIFldp6fFoY/EjLYzwuc82nj5PKwu9C1Cv2CaM/k=";
+    hash = "sha256-4+cGXL2r5hg6uCGZ16T2s7oKQ4xaUSpoVZhGzLdqeOw=";
   };
 
   # force kqueue on x86_64-darwin, because our api version does

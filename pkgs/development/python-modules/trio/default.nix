@@ -37,15 +37,20 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.23.1";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FviffcyPe53N7B/Nhj4MA5r20PmiL439Vvdddexz/Ug=";
+    hash = "sha256-/6CadKa/gbhPhhOQn7C+ruhHV0UBg6ei4LR7RVwMrF0=";
   };
+
+  postPatch = ''
+    substituteInPlace src/trio/_tests/test_subprocess.py \
+      --replace "/bin/sleep" "${coreutils}/bin/sleep"
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -75,10 +80,9 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    substituteInPlace trio/_tests/test_subprocess.py \
-      --replace "/bin/sleep" "${coreutils}/bin/sleep"
-
     export HOME=$TMPDIR
+    # $out is first in path which causes "import file mismatch"
+    PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
@@ -96,7 +100,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # linters
-    "trio/_tests/tools/test_gen_exports.py"
+    "src/trio/_tests/tools/test_gen_exports.py"
   ];
 
   pytestFlagsArray = [

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   preCheck = ''
     cd $TMP
   '';
-  pytestFlagsArray = ["--pyargs" "uarray"];
+  pytestFlagsArray = ["--pyargs" "uarray" "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
   pythonImportsCheck = [ "uarray" ];
 
   meta = with lib; {

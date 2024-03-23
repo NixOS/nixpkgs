@@ -19,21 +19,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.25.0";
+  version = "3.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JiPKFOew9Pd2NuY7wDlFQ/N06m9IRutWO+d/YJspry0=";
+    hash = "sha256-xKiqk55Ccm6DaB2aG5xo08nVqL69q8hvro+BPaY0/m4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     grpc-google-iam-v1
     google-api-core
     google-cloud-access-context-manager

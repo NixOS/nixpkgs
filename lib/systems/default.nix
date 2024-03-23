@@ -243,10 +243,14 @@ rec {
               vncSupport = false;
               gtkSupport = false;
               sdlSupport = false;
+              alsaSupport = false;
               pulseSupport = false;
               pipewireSupport = false;
+              jackSupport = false;
               smbdSupport = false;
               seccompSupport = false;
+              tpmSupport = false;
+              capstoneSupport = false;
               enableDocs = false;
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };

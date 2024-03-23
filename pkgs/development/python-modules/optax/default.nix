@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.1.7";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zSMJxagPe2rkhrawJ+TWXUzk6V58IY6MhWmEqLVtOoA=";
+    hash = "sha256-vimsVZV5Z11euLxsu998pMQZ0hG3xl96D3h9iONtl/E=";
   };
 
   outputs = [

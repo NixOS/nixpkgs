@@ -38,6 +38,16 @@ let
                 hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
               };
             });
+
+            netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
+              version = "0.9.0";
+
+              src = fetchPypi {
+                pname = "netaddr";
+                inherit version;
+                hash = "sha256-e0b6mxotcf1d6eSjeE7zOXAKU6CMgEDwi69fEZTaASg=";
+              };
+            });
           }
         )
 

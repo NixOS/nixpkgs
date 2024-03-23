@@ -146,6 +146,12 @@ stdenv.mkDerivation (self: rec {
         --replace-quiet /bin/uname "${coreutils}/bin/uname" \
         --replace-quiet /bin/sh "${stdenv.shell}"
     )
+    # Official source release tarballs will have a version.lispexpr, but if you
+    # want to override { src = ... } it might not exist. It’s required for
+    # building, so create a mock version as a backup.
+    if [[ ! -a version.lisp-expr ]]; then
+      echo '"${version}.nixos"' > version.lisp-expr
+    fi
   '';
 
   preBuild = ''

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "kiota-serialization-json";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-serialization-json-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DhuDIRTm6xATnXpQ+xLpMuaBcWxZHdr8dO1Rl8OvCKQ=";
+    hash = "sha256-igMqwoKArfQ37pzdjUICgXY795dfg/MX65iwTVe0sLM=";
   };
 
   nativeBuildInputs = [

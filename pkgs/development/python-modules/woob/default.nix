@@ -3,21 +3,19 @@
 , buildPythonPackage
 , fetchFromGitLab
 , fetchpatch
-, gnupg
 , html2text
-, libyaml
 , lxml
-, nose
 , packaging
 , pillow
 , prettytable
 , pycountry
+, pytestCheckHook
 , python-dateutil
 , pythonOlder
 , pyyaml
 , requests
 , rich
-, termcolor
+, setuptools
 , testers
 , unidecode
 , woob
@@ -26,27 +24,25 @@
 buildPythonPackage rec {
   pname = "woob";
   version = "3.6";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "woob";
-    repo = pname;
+    repo = "woob";
     rev = version;
     hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 
   nativeBuildInputs = [
-    packaging
+    setuptools
   ];
 
   propagatedBuildInputs = [
     babel
     python-dateutil
-    gnupg
     html2text
-    libyaml
     lxml
     packaging
     pillow
@@ -55,17 +51,18 @@ buildPythonPackage rec {
     pyyaml
     requests
     rich
-    termcolor
     unidecode
   ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  disabledTests = [
+    # require networking
+    "test_ciphers"
+    "test_verify"
+  ];
 
   pythonImportsCheck = [
     "woob"
@@ -77,6 +74,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
     description = "Collection of applications and APIs to interact with websites";
     mainProgram = "woob";
     homepage = "https://woob.tech";

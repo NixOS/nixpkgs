@@ -206,6 +206,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-o" "cache_dir=$TMPDIR"
     "-m" "'not refcount and not timing'"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    "-W" "ignore::pytest.PytestRemovedIn9Warning"
   ];
 
   postCheck = ''

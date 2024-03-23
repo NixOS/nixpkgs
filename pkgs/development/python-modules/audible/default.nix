@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A(Sync) Interface for internal Audible API written in pure Python";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     homepage = "https://github.com/mkb79/Audible";
     maintainers = with maintainers; [ jvanbruegge ];
   };

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.8.0";
+  version = "4.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typing_extensions";
     inherit version;
-    hash = "sha256-345DOenLdzV1WMvbzsozwwNxTPhh0e7xXhBwBVrot+8=";
+    hash = "sha256-sKvXyJ6PuW+Y2xjYYQb/HZCraSAE63Rs9u2iaC+Rs8s=";
   };
 
   nativeBuildInputs = [

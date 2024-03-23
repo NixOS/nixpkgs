@@ -8,10 +8,26 @@ buildGoModule rec {
     owner = "jovandeginste";
     repo = "payme";
     rev = "v${version}";
-    hash = "sha256-WE/sAs0VSeb5UKkUy1iyjyXtgDmlQhdZkw8HMMSbQiE=";
+    hash = "sha256-2gZgmYgLaJQRQ+3VOUDnMm5QBjfKyxyutVf9NrbGO3g=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   vendorHash = null;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.gitRefName=${src.rev}"
+  ];
+
+  preBuild = ''
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+  '';
 
   meta = {
     description = "QR code generator (ASCII & PNG) for SEPA payments";

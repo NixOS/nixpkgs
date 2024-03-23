@@ -25,7 +25,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/asciimoo/wuzz";
     description = "Interactive cli tool for HTTP inspection";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ pradeepchhetri ];
     mainProgram = "wuzz";
   };

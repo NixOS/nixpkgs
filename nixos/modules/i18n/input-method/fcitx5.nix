@@ -32,8 +32,8 @@ in
       };
       plasma6Support = mkOption {
         type = types.bool;
-        default = config.services.xserver.desktopManager.plasma6.enable;
-        defaultText = literalExpression "config.services.xserver.desktopManager.plasma6.enable";
+        default = config.services.desktopManager.plasma6.enable;
+        defaultText = literalExpression "config.services.desktopManager.plasma6.enable";
         description = lib.mdDoc ''
           Use qt6 versions of fcitx5 packages.
           Required for configuring fcitx5 in KDE System Settings.

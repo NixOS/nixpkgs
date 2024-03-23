@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "shtab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b2XXDyO/2AnlxViC6sEEYUGviF6+FGXBnBcdQOuTViY=";
+    hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
   };
 
   postPatch = ''

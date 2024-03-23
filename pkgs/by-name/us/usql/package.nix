@@ -50,11 +50,6 @@ buildGoModule rec {
     "no_adodb"
   ];
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   ldflags = [
     "-s"
     "-w"

@@ -5,6 +5,7 @@
 , dbt-postgres
 , fetchFromGitHub
 , hatchling
+, pythonRelaxDepsHook
 , hypothesis
 , importlib-metadata
 , jinja2
@@ -31,8 +32,13 @@ buildPythonPackage rec {
     hash = "sha256-uvwcnOKjwxEmA+/QRGSRofpoE4jZzmE02mGSDLINrJw=";
   };
 
+  pythonRelaxDeps = [
+    "importlib-metadata"
+  ];
+
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

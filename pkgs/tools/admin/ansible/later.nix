@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   pythonRelaxDeps = [
+    "anyconfig"
     "flake8"
     "jsonschema"
     "pathspec"

@@ -40,7 +40,7 @@ buildGoModule rec {
     broken = true;
     description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
     homepage     = "https://github.com/ireun/magnetico";
-    license      = licenses.agpl3;
+    license      = licenses.agpl3Only;
     badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };

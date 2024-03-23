@@ -17,6 +17,7 @@ with pkgs;
         (filter (n: n != "llvmPackages_7"))
         (filter (n: n != "llvmPackages_8"))
         (filter (n: n != "llvmPackages_10"))
+        (filter (n: n != "llvmPackages_11"))
       ];
       tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
         clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };

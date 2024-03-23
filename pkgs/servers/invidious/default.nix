@@ -109,7 +109,7 @@ crystal.buildCrystalPackage rec {
     description = "An open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ infinisil sbruder ];
   };
 }

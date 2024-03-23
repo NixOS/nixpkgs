@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "23.6.0";
+  version = "23.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -47,17 +47,8 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ffw92mlYNV+ikb6299uw24EI1XPpl3Ju2st1Yt/YHKw=";
+    hash = "sha256-TizjibqoLNMX0m5oPyncKgFnltXOLZUIPSzVIeKU25w=";
   };
-
-  patches = [
-    # https://github.com/sanic-org/sanic/pull/2801
-    (fetchpatch {
-      name = "fix-test-one-cpu.patch";
-      url = "https://github.com/sanic-org/sanic/commit/a1df2a6de1c9c88a85d166e7e2636d26f7925852.patch";
-      hash = "sha256-vljGuoP/Q9HrP+/AOoI1iUpbDQ4/1Pn7AURP1dncI00=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools

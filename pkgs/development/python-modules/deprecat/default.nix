@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "deprecat";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mjhajharia";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Xl/IC+ImFUxxLry15MIIVRf6aR+gA9K5S2IQomkv+o=";
+    hash = "sha256-uAabZAtZDhcX6TfiM0LnrAzxxS64ys+vdodmxO//0x8=";
   };
 
   nativeBuildInputs = [

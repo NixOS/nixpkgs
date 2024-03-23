@@ -122,11 +122,6 @@ in stdenv.mkDerivation {
   outputs = [ "out" "installer" ];
   setOutputFlags = false;
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   # change argv0 to "opam" as a workaround for
   # https://github.com/ocaml/opam/issues/2142
   postInstall = ''

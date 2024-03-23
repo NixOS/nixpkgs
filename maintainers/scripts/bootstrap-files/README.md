@@ -6,8 +6,9 @@ binaries (without the reliance on external inputs):
 - `bootstrap-tools`: an archive with the compiler toolchain and other
   helper tools enough to build the rest of the `nixpkgs`.
 - initial binaries needed to unpack `bootstrap-tools.*`. On `linux`
-  it's just `busybox`, on `darwin` it's `sh`, `bzip2`, `mkdir` and
-  `cpio`. These binaries can be executed directly from the store.
+  it's just `busybox`, on `darwin` it is unpack.nar.xz which contains
+  the binaries and script needed to unpack the tools. These binaries
+  can be executed directly from the store.
 
 These are called "bootstrap files".
 
@@ -74,12 +75,3 @@ There are two types of bootstrap files:
 The `.build` job contains `/on-server/` subdirectory with binaries to
 be uploaded to `tarballs.nixos.org`.
 The files are uploaded to `tarballs.nixos.org` by writers to `S3` store.
-
-## TODOs
-
-- `pkgs/stdenv/darwin` file layout is slightly different from
-  `pkgs/stdenv/linux`. Once `linux` seed update becomes a routine we can
-  bring `darwin` in sync if it's feasible.
-- `darwin` definition of `.build` `on-server/` directory layout differs
-  and should be updated.
-

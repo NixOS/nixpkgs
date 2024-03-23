@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flask-migrate";
-  version = "4.0.5";
+  version = "4.0.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "Flask-Migrate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fdnoX7ypTpH2mQ+7Xuhzdh706Of7PIVhHQGVbe0jv1s=";
+    hash = "sha256-TnihrZ+JQ1XCBlFp6k8lrNpZr4P2/Z6AmFwWZbabz+8=";
   };
 
   nativeBuildInputs = [

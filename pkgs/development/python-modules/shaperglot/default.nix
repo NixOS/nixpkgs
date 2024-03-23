@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "shaperglot";
-  version = "0.3.1";
+  version = "0.5.0";
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "shaperglot";
-    rev = "v${version}";
-    hash = "sha256-29MzD42rgh+7n/0kjqKGDxXPnUEvj/xxEIKWZg03pxw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jmYB1tsMMpFs0X/FW3z9el2nFr8De2jR1dO658w7U4Q=";
   };
 
   pyproject = true;

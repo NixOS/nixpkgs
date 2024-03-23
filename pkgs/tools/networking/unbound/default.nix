@@ -51,17 +51,42 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.19.1";
+  version = "1.19.2";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vB1Xbz3YRqBzmtxB/6pwJATGdn0rYILeufL5fLsko6k=";
+    hash = "sha256-zFYNNFc0ImwbOecadpeX5/3eImXLt3685UJwS7pInlU=";
   };
+
+
+  # Cherry pick some already merged upstream patches for configure
+  patches = [
+    # Search for protobuf-c with pkg-config
+    # https://github.com/NLnetLabs/unbound/pull/999
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/59d98b9ef64e597c331c27160715d7a1b40c8638.patch";
+      hash = "sha256-DvYoYBTXOwbR8Z0GRgt724WqX3dbIEOdICU2/VMRSVQ=";
+    })
+    # Fix for previous patch
+    # https://github.com/NLnetLabs/unbound/issues/1006
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/93490a0fc1bf9e62e6edcd6b69f1463c7ac410e9.patch";
+      hash = "sha256-mBo63ZlayD3YkOgIoQN0dG+xuFq/BxcjBmSo1vapiYA=";
+      excludes = [ "doc/Changelog" ];
+    })
+    # Fix for previous patch
+    # https://github.com/NLnetLabs/unbound/commit/3f5175584b0bb9ff7d417bc195ec6e4316ae58d3
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/3f5175584b0bb9ff7d417bc195ec6e4316ae58d3.patch";
+      hash = "sha256-DcWfvmk+4K3c9Z+4grwzEGIkEBYNpbTK3xuBqRI33fY=";
+    })
+  ];
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
   nativeBuildInputs =
     lib.optionals withMakeWrapper [ makeWrapper ]
+    ++ lib.optionals withDNSTAP [ protobufc ]
     ++ [ pkg-config ]
     ++ lib.optionals withPythonModule [ swig ];
 
@@ -97,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium=${symlinkJoin { name = "libsodium-full"; paths = [ libsodium.dev libsodium.out ]; }}"
   ] ++ lib.optionals withDNSTAP [
     "--enable-dnstap"
-    "--with-protobuf-c=${protobufc}"
   ] ++ lib.optionals withTFO [
     "--enable-tfo-client"
     "--enable-tfo-server"

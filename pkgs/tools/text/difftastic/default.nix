@@ -38,11 +38,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=options::tests::test_detect_display_width"
   ];
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   postPatch = ''
     patch -d $cargoDepsCopy/libmimalloc-sys-0.1.24/c_src/mimalloc \
       -p1 < ${mimallocPatch}

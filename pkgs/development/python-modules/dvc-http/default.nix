@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , dvc-objects
 , fsspec
+, funcy
 , pythonOlder
 , pythonRelaxDepsHook
 , setuptools-scm
@@ -12,25 +13,26 @@
 buildPythonPackage rec {
   pname = "dvc-http";
   version = "2.32.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc-http";
     rev = "refs/tags/${version}";
     hash = "sha256-ru/hOFv/RcS/7SBpTJU8xFxdllmaiH4dV1ouS6GGKkY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp-retry
     dvc-objects
     fsspec
-    aiohttp-retry
+    funcy
   ];
 
   # Currently it's not possible to run the tests

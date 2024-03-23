@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "oldest-supported-numpy";
-  version = "2023.10.25";
+  version = "2023.12.21";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dBqJrxLoyCMl9zEmtTORXc4QYNoPnk7GQtpGZoBoYpY=";
+    hash = "sha256-cdicMbtWeBTkfi4mjrLpK2+Z9c529MPbMIM2JOnvKeA=";
   };
 
   # The purpose of oldest-supported-numpy is to build a project against the

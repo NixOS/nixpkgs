@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "wtforms";
-  version = "3.1.1";
+  version = "3.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "wtforms";
     repo = "wtforms";
     rev = "refs/tags/${version}";
-    hash = "sha256-9EryEXGlGCtDH/XPM4Oihla42HnY0nho9DaauHfYnNQ=";
+    hash = "sha256-L6DmB7iVpJR775oRxuEkCKWlUJnmw8VPZTr2dZbqeEc=";
   };
 
   nativeBuildInputs = [

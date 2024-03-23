@@ -1,24 +1,29 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, setuptools
+, setuptools-scm
 , pytestCheckHook
 , requests
-, six
 }:
 
 buildPythonPackage rec {
   pname = "requests-file";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B9dCCNM4nQHDirie9AOvDP7GOVfVOgCB2OynONAkfY4=";
+    hash = "sha256-IMWTFinFWP2lZsrMEM/izVAkM+Yo9WjDTIDZagzJWXI=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     requests
-    six
   ];
 
   nativeCheckInputs = [

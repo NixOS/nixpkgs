@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.27.1";
+  version = "0.27.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GwFibsxMhWqirFn5cG9GfDZAtVWRx+BCqDBiQV6wuYU=";
+    hash = "sha256-aRnbU3jN40xaCsoMFyRt1XB+hyIYMJP2b/T1yZho90c=";
   };
 
   nativeBuildInputs = [

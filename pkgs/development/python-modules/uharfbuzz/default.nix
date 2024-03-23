@@ -3,7 +3,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, cython
+, cython_3
+, setuptools
 , setuptools-scm
 , pytestCheckHook
 , ApplicationServices
@@ -11,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.37.3";
-  format = "setuptools";
+  version = "0.39.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -21,11 +22,12 @@ buildPythonPackage rec {
     repo = "uharfbuzz";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-876gFYyMqeGYoXMdBguV6bi7DJKHJs9HNLw9xRu+Mxk=";
+    hash = "sha256-I4fCaomq26FdkpiJdj+zyrbdqdynnD2hIutYTuTFvQs=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
+    setuptools
     setuptools-scm
   ];
 

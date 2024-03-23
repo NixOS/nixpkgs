@@ -14,12 +14,12 @@
 
 let greenlet = buildPythonPackage rec {
   pname = "greenlet";
-  version = "3.0.1";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gWvZSIqUy6eNk+GrtYAA6CZvqcwqqczdbrBpasskAFs=";
+    hash = "sha256-QzdEQjUyWVVM4zWZ2otpLVqpb4l21WfUut8mM3H75JE=";
   };
 
   nativeBuildInputs = [

@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2_mixer";
-  version = "2.6.3";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_mixer/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-emuoakeGSM5hfjpekncYG8Z/fOmHZgXupq/9Sg1u6o8=";
+    sha256 = "sha256-HPs0yHsm29vHr9aMT1RcARarX5C7/sxa6+Kpy0uzFUk=";
   };
 
   configureFlags = [

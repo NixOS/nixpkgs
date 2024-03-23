@@ -1,25 +1,42 @@
-{ lib, stdenvNoCC, fetchurl, makeWrapper, copyDesktopItems, makeDesktopItem, unzip, imagemagick, jre }:
+{ lib
+, stdenv
+, fetchurl
+, makeBinaryWrapper
+, copyDesktopItems
+, makeDesktopItem
+, desktopToDarwinBundle
+, unzip
+, imagemagick
+, jre
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mars-mips";
   version = "4.5";
 
   src = fetchurl {
-    url = "https://courses.missouristate.edu/KenVollmar/MARS/MARS_${lib.replaceStrings ["."] ["_"] version}_Aug2014/Mars${lib.replaceStrings ["."] ["_"] version}.jar";
-    sha256 = "15kh1fahkkbbf4wvb6ijzny4fi5dh4pycxyzp5325dm2ddkhnd5c";
+    url = "https://courses.missouristate.edu/KenVollmar/MARS/MARS_${lib.replaceStrings ["."] ["_"] finalAttrs.version}_Aug2014/Mars${lib.replaceStrings ["."] ["_"] finalAttrs.version}.jar";
+    hash = "sha256-rDQLZ2uitiJGud935i+BrURHvP0ymrU5cWvNCZULcJY=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems unzip imagemagick ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    copyDesktopItems
+    unzip
+    imagemagick
+  ] ++ lib.optionals stdenv.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "mars";
       desktopName = "MARS";
-      exec = "mars-mips";
-      icon = "mars-mips";
-      comment = "An IDE for programming in MIPS assembly language";
+      exec = "Mars";
+      icon = "mars";
+      comment = finalAttrs.meta.description;
       categories = [ "Development" "IDE" ];
     })
   ];
@@ -27,25 +44,28 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    export JAR=$out/share/java/${pname}/${pname}.jar
-    install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    export JAR=$out/share/java/mars/Mars.jar
+    install -Dm444 $src $JAR
+    makeWrapper ${jre}/bin/java $out/bin/Mars \
       --add-flags "-jar $JAR"
 
-    unzip ${src} images/MarsThumbnail.gif
-    mkdir -p $out/share/pixmaps
-    convert images/MarsThumbnail.gif $out/share/pixmaps/mars-mips.png
+    unzip $src images/MarsThumbnail.gif
+    for size in 16 24 32 48 64 128 256 512
+    do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -resize "$size"x"$size" images/MarsThumbnail.gif $out/share/icons/hicolor/"$size"x"$size"/apps/mars.png
+    done
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An IDE for programming in MIPS assembly language intended for educational-level use";
-    mainProgram = "mars-mips";
+    mainProgram = "Mars";
     homepage = "https://courses.missouristate.edu/KenVollmar/MARS/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.all;
   };
-}
+})

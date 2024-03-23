@@ -60,6 +60,7 @@
 , static ? stdenv.hostPlatform.isStatic
 , enableFramework ? false
 , noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
+, enableGIL ? true
 
 # pgo (not reproducible) + -fno-semantic-interposition
 # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -111,6 +112,7 @@ let
   inherit (lib)
     concatMapStringsSep
     concatStringsSep
+    enableFeature
     getDev
     getLib
     optionals
@@ -304,7 +306,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
+  ] ++ optionals (pythonOlder "3.13") [
     ./virtualenv-permissions.patch
+  ] ++ optionals (pythonAtLeast "3.13") [
+    ./3.13/virtualenv-permissions.patch
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
@@ -399,6 +404,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "--enable-shared"
   ] ++ optionals enableFramework [
     "--enable-framework=${placeholder "out"}/Library/Frameworks"
+  ] ++ optionals (pythonAtLeast "3.13") [
+    (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
   ] ++ optionals (sqlite != null) [
@@ -603,6 +610,14 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     doc = stdenv.mkDerivation {
       inherit src;
       name = "python${pythonVersion}-${version}-doc";
+
+      patches = optionals (pythonAtLeast "3.9" && pythonOlder "3.10") [
+        # https://github.com/python/cpython/issues/98366
+        (fetchpatch {
+          url = "https://github.com/python/cpython/commit/5612471501b05518287ed61c1abcb9ed38c03942.patch";
+          hash = "sha256-p41hJwAiyRgyVjCVQokMSpSFg/VDDrqkCSxsodVb6vY=";
+        })
+      ];
 
       dontConfigure = true;
 

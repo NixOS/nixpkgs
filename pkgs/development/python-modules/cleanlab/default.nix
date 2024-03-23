@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.5.0";
+  version = "2.6.1";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "cleanlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5XQQVrhjpvjwtFM79DqttObmw/GQLkMQVXb5jhiC8e0=";
+    hash = "sha256-+uJtm/t6Ri25V/9N/2fcOgCOBaBy8PrsM/tO1uX7FEY=";
   };
 
   nativeBuildInputs = [ setuptools ];

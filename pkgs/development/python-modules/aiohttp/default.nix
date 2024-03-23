@@ -22,6 +22,7 @@
 , gunicorn
 , pytest-mock
 , pytestCheckHook
+, pytest_7
 , python-on-whales
 , re-assert
 , trustme
@@ -82,7 +83,7 @@ buildPythonPackage rec {
     freezegun
     gunicorn
     pytest-mock
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     python-on-whales
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [

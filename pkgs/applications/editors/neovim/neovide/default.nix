@@ -78,11 +78,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     darwin.apple_sdk.frameworks.AppKit
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   postFixup = let
     libPath = lib.makeLibraryPath ([
       libglvnd
