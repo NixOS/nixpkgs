@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://chocolate-doom.org/";
+    homepage = "https://www.chocolate-doom.org/wiki/index.php/Chocolate_Doom";
     description = "A Doom source port that accurately reproduces the experience of Doom as it was played in the 1990s";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
