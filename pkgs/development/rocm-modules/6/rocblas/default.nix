@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , runCommand
 , cmake
@@ -147,7 +148,11 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./0001-Extend-rocBLAS-HIP-ISA-compatibility.patch
+    (fetchpatch {
+      name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/rocBLAS/commit/89b75ff9cc731f71f370fad90517395e117b03bb.patch";
+      hash = "sha256-W/ohOOyNCcYYLOiQlPzsrTlNtCBdJpKVxO8s+4G7sjo=";
+    })
   ];
 
   postPatch = lib.optionalString (finalAttrs.pname != "rocblas") ''
