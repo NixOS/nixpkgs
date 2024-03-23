@@ -14,11 +14,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-RX4tc6JaUVaNx8nidn8eMcbsmbcSY+VZbup6c6P7oOs=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     requests
     tabulate
   ];
@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Web Security Assessment Tool";
     homepage = "https://github.com/spyboy-productions/WebSecProbe/";
+    changelog = "https://github.com/spyboy-productions/WebSecProbe/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "websecprobe";
