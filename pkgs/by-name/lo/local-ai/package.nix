@@ -9,6 +9,7 @@
   # needed for audio-to-text
 , ffmpeg
 , cmake
+, pkg-config
 , buildGoModule
 , makeWrapper
 , runCommand
@@ -185,26 +186,25 @@ let
     '';
   };
 
-  whisper = effectiveStdenv.mkDerivation {
-    name = "whisper";
+  # try to merge with openai-whisper-cpp in future
+  whisper-cpp = effectiveStdenv.mkDerivation {
+    name = "whisper-cpp";
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
       rev = "a56f435fd475afd7edf02bfbf9f8c77f527198c2";
-      hash = "sha256-ozTnxEuftAQQr5v/kwg5EKHuKF21d9ETIyvXcvr0Qos=";
-      fetchSubmodules = true;
+      hash = "sha256-g8ZhVB5sxpfrFzg/0seSrv0vFG0YOP56253n6/KWHfE=";
     };
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    buildFlags = [ "libwhisper.a" ];
+    nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = typedBuiltInputs;
-    env = lib.optionalAttrs with_cublas { WHISPER_CUBLAS = 1; }
-      // lib.optionalAttrs with_clblas { WHISPER_CLBLAS = 1; }
-      // lib.optionalAttrs with_openblas { WHISPER_OPENBLAS = 1; }
-    ;
-    installPhase = ''
-      cp -r --no-preserve=mode $src $out
-      cp *.a $out
+    cmakeFlags = [
+      (lib.cmakeBool "WHISPER_CUBLAS" with_cublas)
+      (lib.cmakeBool "WHISPER_CLBLAST" with_clblas)
+      (lib.cmakeBool "WHISPER_OPENBLAS" with_openblas)
+      (lib.cmakeBool "BUILD_SHARED_LIBS" false)
+    ];
+    postInstall = ''
+      install -Dt $out/bin bin/*
     '';
   };
 
@@ -310,7 +310,7 @@ let
           -e 's;git clone.*gpt4all$;${cp} ${gpt4all} sources/gpt4all;' \
           -e 's;git clone.*go-piper$;${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper;' \
           -e 's;git clone.*go-rwkv$;${cp} ${go-rwkv} sources/go-rwkv;' \
-          -e 's;git clone.*whisper\.cpp$;${cp} ${whisper} sources/whisper\.cpp;' \
+          -e 's;git clone.*whisper\.cpp$;${cp} ${whisper-cpp.src} sources/whisper\.cpp;' \
           -e 's;git clone.*go-bert$;${cp} ${go-bert} sources/go-bert;' \
           -e 's;git clone.*diffusion$;${cp} ${if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src} sources/go-stable-diffusion;' \
           -e 's;git clone.*go-tiny-dream$;${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream;' \
@@ -355,6 +355,7 @@ let
       make prepare-sources
       # avoid rebuild of prebuilt libraries
       touch sources/**/lib*.a
+      cp ${whisper-cpp}/lib/static/lib*.a sources/whisper.cpp
 
       local flagsArray=(
         ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
@@ -393,7 +394,7 @@ let
     passthru.local-packages = {
       inherit
         go-tiny-dream go-rwkv go-bert go-llama-ggml gpt4all go-piper
-        llama-cpp-grpc;
+        llama-cpp-grpc whisper-cpp;
     };
 
     passthru.features = {
