@@ -17154,7 +17154,9 @@ with pkgs;
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm {
     inherit (rustPackages_1_76) rustPlatform;
   };
-  cargo-shuttle = callPackage ../development/tools/rust/cargo-shuttle { };
+  cargo-shuttle = callPackage ../development/tools/rust/cargo-shuttle {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck {
