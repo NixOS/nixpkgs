@@ -20,6 +20,7 @@
 , pyarrow
 , pytest-xdist
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatchling
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -52,6 +54,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.12") [
     importlib-metadata
   ];
+
+  pythonRelaxDeps = [ "awkward-cpp" ];
 
   dontUseCmakeConfigure = true;
 
