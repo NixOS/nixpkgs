@@ -8087,6 +8087,8 @@ self: super: with self; {
 
   netdata = callPackage ../development/python-modules/netdata { };
 
+  netdata-pandas = callPackage ../development/python-modules/netdata-pandas { };
+
   netdisco = callPackage ../development/python-modules/netdisco { };
 
   nethsm = callPackage ../development/python-modules/nethsm { };
