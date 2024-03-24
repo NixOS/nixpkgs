@@ -10,16 +10,21 @@ let
   format = pkgs.formats.yaml {};
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
-  databaseYml = pkgs.writeText "database.yml" ''
-    production:
-      adapter: ${cfg.database.type}
-      database: ${cfg.database.name}
-      host: ${if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host}
-      port: ${toString cfg.database.port}
-      username: ${cfg.database.user}
-      password: #dbpass#
-      ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
-  '';
+  databaseSettings = {
+    production = {
+      adapter = cfg.database.type;
+      database = cfg.database.name;
+      host = if (cfg.database.type == "postgresql" && cfg.database.socket != null) then cfg.database.socket else cfg.database.host;
+      port = cfg.database.port;
+      username = cfg.database.user;
+    } // optionalAttrs (cfg.database.passwordFile != null) {
+      password = "#dbpass#";
+    } // optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
+      socket = cfg.database.socket;
+    };
+  };
+
+  databaseYml = format.generate "database.yml" databaseSettings;
 
   configurationYml = format.generate "configuration.yml" cfg.settings;
   additionalEnvironment = pkgs.writeText "additional_environment.rb" cfg.extraEnv;
