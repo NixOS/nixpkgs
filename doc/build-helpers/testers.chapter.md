@@ -44,7 +44,13 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 Check that internal hyperlinks are correct, using the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
 
-Only an offline check is performed, so that network access is not required.
+When building the check, only an offline check is performed, so that network access is not required.
+
+If you'd like to run the check with network access, the returned attribute `online` can be invoked with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). For example:
+
+```shell
+nix run nixpkgs#lychee.tests.ok.online
+```
 
 :::{.example #ex-lycheelinkcheck}
 
