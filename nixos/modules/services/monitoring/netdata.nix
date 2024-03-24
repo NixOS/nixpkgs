@@ -231,7 +231,9 @@ in {
 
     systemd.services.netdata = {
       description = "Real time performance monitoring";
-      after = [ "network.target" ];
+      after = [ "network.target" "suid-sgid-wrappers.service" ];
+      # No wrapper means no "useful" netdata.
+      requires = [ "suid-sgid-wrappers.service" ];
       wantedBy = [ "multi-user.target" ];
       path = (with pkgs; [
           curl
