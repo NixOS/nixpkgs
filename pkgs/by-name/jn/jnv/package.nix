@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jnv";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "jnv";
     rev = "v${version}";
-    hash = "sha256-22aoK1s8DhKttGGR9ouNDIWhYCv6dghT/jfAC0VX8Sw=";
+    hash = "sha256-szPMbcR6fg9mgJ0oE07aYTJZHJKbguK3IFKhuV0D/rI=";
   };
 
-  cargoHash = "sha256-CmupwWwopXpnPm8R17JVfAoGt4QEos5I+3qumDKEyM8=";
+  cargoHash = "sha256-vEyWawtWT/8GntlEUyrtBRXPcjgMg9oYemGzHSg50Hg=";
 
   nativeBuildInputs = [
     autoconf
