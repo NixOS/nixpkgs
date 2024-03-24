@@ -123,6 +123,15 @@ core = stdenv.mkDerivation rec {
 
   inherit (common) binToOutput src prePatch;
 
+  patches = [
+    (fetchpatch {
+      name = "ttfdump-CVE-2024-25262.patch";
+      url = "https://tug.org/svn/texlive/trunk/Build/source/texk/ttfdump/libttf/hdmx.c?r1=57915&r2=69520&view=patch";
+      stripLen = 2;
+      hash = "sha256-WH2kioqFAs3jaFmu4DdEUdrTf6eiymtiWTZi3vWwU7k=";
+    })
+  ];
+
   outputs = [ "out" "dev" "man" "info" ]
     ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
