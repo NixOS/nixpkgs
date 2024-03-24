@@ -58,7 +58,8 @@ in
 
     meta = with lib; {
       homepage = "https://www.anylogic.com/";
-      description = "AnyLogic is a cross-platform multimethod simulation modeling tool developed by The AnyLogic Company (former XJ Technologies). It supports agent-based, discrete event, and system dynamics simulation methodologies";
+      description = "AnyLogic Personal Learning Edition - for beginners and students";
+      longDescription = "AnyLogic is a cross-platform multimethod simulation modeling tool developed by The AnyLogic Company (former XJ Technologies). It supports agent-based, discrete event, and system dynamics simulation methodologies";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfreeRedistributable;
       platforms = ["x86_64-linux" "x86_64-darwin"];
