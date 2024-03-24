@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/xFBA30MZq8t0rYFympzgaymqZ/bFEpOoko7dDJLI7A=";
+    hash = "sha256-GRuEzRqDfhLCanuQnCkMXmDnfNkLFb35Gixl9pWmA8w=";
   };
 
   pythonRelaxDeps = [
@@ -34,15 +34,15 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=githubkit --cov-append --cov-report=term-missing" ""
+      --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
   '';
 
-  nativeBuildInputs = [
+  build-systems = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     hishel
     httpx
     pydantic

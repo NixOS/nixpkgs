@@ -12907,6 +12907,8 @@ self: super: with self; {
 
   requests-credssp = callPackage ../development/python-modules/requests-credssp { };
 
+  requests-gssapi = callPackage ../development/python-modules/requests-gssapi { };
+
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
   requests = callPackage ../development/python-modules/requests { };
@@ -16666,6 +16668,8 @@ self: super: with self; {
   wtforms = callPackage ../development/python-modules/wtforms { };
 
   wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
+
+  wunsen = callPackage ../development/python-modules/wunsen { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 

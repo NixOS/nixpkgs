@@ -611,6 +611,14 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
       inherit src;
       name = "python${pythonVersion}-${version}-doc";
 
+      patches = optionals (pythonAtLeast "3.9" && pythonOlder "3.10") [
+        # https://github.com/python/cpython/issues/98366
+        (fetchpatch {
+          url = "https://github.com/python/cpython/commit/5612471501b05518287ed61c1abcb9ed38c03942.patch";
+          hash = "sha256-p41hJwAiyRgyVjCVQokMSpSFg/VDDrqkCSxsodVb6vY=";
+        })
+      ];
+
       dontConfigure = true;
 
       dontBuild = true;

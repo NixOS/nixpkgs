@@ -23,7 +23,7 @@ let
 
 
   # configuration items have to be part of a subattrs
-  flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
+  flattenKConf = nested: mapAttrs (name: values: if length values == 1 then head values else throw "duplicate kernel configuration option: ${name}") (zipAttrs (attrValues nested));
 
   whenPlatformHasEBPFJit =
     mkIf (stdenv.hostPlatform.isAarch32 ||
@@ -110,9 +110,6 @@ let
 
       # Enable CPU energy model for scheduling
       ENERGY_MODEL                     = whenAtLeast "5.0" yes;
-
-      # Enable scheduling stats collection
-      SCHEDSTATS                       = yes;
 
       # Enable thermal interface netlink API
       THERMAL_NETLINK                  = whenAtLeast "5.9" yes;
@@ -413,7 +410,6 @@ let
       whenHasDevicePrivate = mkIf (!stdenv.isx86_32 && versionAtLeast version "5.1");
     in {
       DRM_LEGACY = whenOlder "6.8" no;
-      DRM_SIMPLEDRM = yes;
 
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
@@ -890,7 +886,6 @@ let
       NOTIFIER_ERROR_INJECTION = option no;
       RCU_PERF_TEST            = whenOlder "5.9" no;
       RCU_SCALE_TEST           = whenAtLeast "5.10" no;
-      RCU_TORTURE_TEST         = option no;
       TEST_ASYNC_DRIVER_PROBE  = option no;
       WW_MUTEX_SELFTEST        = option no;
       XZ_DEC_TEST              = option no;
@@ -999,7 +994,6 @@ let
       # Removed on 5.17 as it was unused
       # upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a4ee518185e902758191d968600399f3bc2be31
       CLEANCACHE = whenOlder "5.17" (option yes);
-      CRASH_DUMP = option no;
 
       FSCACHE_STATS = yes;
 

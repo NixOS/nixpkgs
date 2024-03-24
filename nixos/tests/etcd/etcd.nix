@@ -1,6 +1,6 @@
 # This test runs simple etcd node
 
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ../make-test-python.nix ({ pkgs, ... } : {
   name = "etcd";
 
   meta = with pkgs.lib.maintainers; {

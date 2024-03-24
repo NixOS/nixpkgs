@@ -2,7 +2,6 @@
 , callPackage
 , python3Packages
 , fetchFromGitHub
-, fetchpatch2
 , installShellFiles
 , platformio
 , esptool
@@ -20,23 +19,15 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.2.2";
+  version = "2024.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-SIp4hrllPgWNnrflUStSIcUB00eGU5pHoYveBPg7CVw=";
+    hash = "sha256-ha15MLTScFmgYjIRwCQ46DD+Zm64r+KReJTS8jfZX0o=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "esphome-voluptuous-0.14.2-compat.patch";
-      url = "https://github.com/esphome/esphome/commit/256d886d77fbff37e803593fdc6fce7be0b49487.patch";
-      hash = "sha256-Gm1iSSCMeHK2W41GpUjQWlQTpIyXzq44wSdGEtWiu0g=";
-    })
-  ];
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
@@ -80,6 +71,7 @@ python.pkgs.buildPythonApplication rec {
     python-magic
     pyyaml
     requests
+    ruamel-yaml
     tornado
     tzdata
     tzlocal
@@ -106,13 +98,6 @@ python.pkgs.buildPythonApplication rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # requires hypothesis 5.49, we have 6.x
-    # ImportError: cannot import name 'ip_addresses' from 'hypothesis.provisional'
-    "tests/unit_tests/test_core.py"
-    "tests/unit_tests/test_helpers.py"
   ];
 
   postCheck = ''

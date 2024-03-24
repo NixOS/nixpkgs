@@ -31,20 +31,20 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.33.0";
+  version = "0.33.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0bdDolaFbVI3CqcOtKFrvRqrKXIiSIfH5rxJgK5XssI=";
+    hash = "sha256-E6gFGgySXs2oCS4Ipevbr9aPWzF4tb4Arl4w+4lQ+wg=";
   };
 
   goModules = (buildGo122Module {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-7301wHGCXUdfPFOhgLEJILmYxNohNm6H2zXGd9W11Wk=";
+    vendorHash = "sha256-ypSZHJpk9wTXLH9sbmaSQB28iOIpv2nDPlgweM0Ldhs=";
   }).goModules;
 
   buildInputs = [
@@ -234,7 +234,7 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests = lib.mkIf stdenv.isLinux {
+    tests = lib.optionalAttrs stdenv.isLinux {
       default = nixosTests.terminal-emulators.kitty;
     };
     updateScript = nix-update-script {};
