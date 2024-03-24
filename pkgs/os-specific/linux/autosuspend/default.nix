@@ -1,31 +1,13 @@
 { lib
+, dbus
 , fetchFromGitHub
 , fetchPypi
 , python3
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      # autosuspend is incompatible with tzlocal v5
-      # See https://github.com/regebro/tzlocal#api-change
-      tzlocal = super.tzlocal.overridePythonAttrs (prev: rec {
-        version = "4.3.1";
-        src = fetchPypi {
-          inherit (prev) pname;
-          inherit version;
-          hash = "sha256-7jLvjCCAPBmpbtNmrd09SnKe9jCctcc1mgzC7ut/pGo=";
-        };
-        propagatedBuildInputs = with self; [
-          pytz-deprecation-shim
-        ];
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "6.0.0";
+  version = "6.1.1";
 
   disabled = python3.pythonOlder "3.8";
 
@@ -33,15 +15,15 @@ python.pkgs.buildPythonApplication rec {
     owner = "languitar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gS8NNks4GaIGl7cEqWSP53I4/tIV4LypkmZ5vNOjspY=";
+    hash = "sha256-LGU/yhwuc6BuctCibm0AaRheQkuSIgEVXzcWQHCJ/8Y=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace '--cov-config=setup.cfg' ""
+      --replace-fail '--cov-config=setup.cfg' ""
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     dbus-python
     icalendar
     jsonpath-ng
@@ -56,7 +38,8 @@ python.pkgs.buildPythonApplication rec {
     tzlocal
   ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
+    dbus
     freezegun
     pytest-datadir
     pytest-httpserver
