@@ -35,9 +35,9 @@ buildPythonPackage rec {
     ./0001-use-bin-sh-instead-of-bin-bash-for-system-bash.patch
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     discordpy
     click
     braceexpand
