@@ -39,9 +39,9 @@ buildPythonPackage rec {
       --replace-fail '"/bin/bash"' '"${lib.getExe bash}"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     discordpy
     click
     braceexpand
