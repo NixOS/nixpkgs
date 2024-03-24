@@ -170,6 +170,7 @@ in {
         breeze.qt5
         plasma-integration.qt5
         pkgs.plasma5Packages.kwayland-integration
+        pkgs.plasma5Packages.kio
         kio-extras-kf5
       ]
       # Optional hardware support features
@@ -252,6 +253,7 @@ in {
     services.xserver.displayManager.sddm = {
       package = kdePackages.sddm;
       theme = mkDefault "breeze";
+      wayland.compositor = "kwin";
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami

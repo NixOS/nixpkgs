@@ -8,14 +8,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waycorner";
-  version = "0.2.1";
+  version = "0.2.3";
   src = fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "waycorner";
     rev = version;
-    hash = "sha256-xvmvtn6dMqt8kUwvn5d5Nl1V84kz1eWa9BSIN/ONkSQ=";
+    hash = "sha256-b8juIhJ3kh+NJc8RUVVoatqjWISSW0ir/vk2Dz/428Y=";
   };
-  cargoHash = "sha256-Dl+GhJywWhaC4QMS70klazPsFipGVRW+6jrXH2XsEAI=";
+  cargoHash = "sha256-LGxFRGzQ8jOfxT5di3+YGqfS5KM4+Br6KlTFpPbkJyU=";
   buildInputs = [
     wayland
   ];

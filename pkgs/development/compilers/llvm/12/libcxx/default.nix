@@ -20,6 +20,7 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
   cxxabiCMakeFlags = lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
+    "-DLIBCXXABI_USE_COMPILER_RT=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"

@@ -114,8 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
+  ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -158,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
     "-Dlibelf=disabled"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin

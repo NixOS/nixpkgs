@@ -749,7 +749,7 @@ in
     boot.kernel.sysctl."fs.inotify.max_user_instances" = mkDefault 524288;
     boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
 
-    programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gnome3;
+    programs.gnupg.agent.pinentryPackage = lib.mkOverride 1100 pkgs.pinentry-gnome3;
 
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 

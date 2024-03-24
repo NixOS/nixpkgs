@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoPatchelfHook
 , makeWrapper
 , buildNpmPackage
@@ -50,32 +49,26 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.22.0";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-O9U4zP1o6yWtzk+2DW7ueimvsTuajLY8IETlvCT4jTE=";
+    sha256 = "sha256-So8fX0XQoW2cdTWWENoE07EU6e8vvjeTpizLoaDTjeg=";
     fetchSubmodules = true;
   };
 
   patches = [
     # remove npm install as it needs internet access -- handled separately below
     ./dont-build-webui.patch
-    # revert https://github.com/LizardByte/Sunshine/pull/2046 - let cmake install handle udev and systemd files
-    (fetchpatch {
-      url = "https://github.com/LizardByte/Sunshine/commit/0d4dfcd708c0027b7d8827a03163858800fa79fa.patch";
-      hash = "sha256-77NtfX0zB7ty92AyFOz9wJoa1jHshlNbPQ7NOpqUuYo=";
-      revert = true;
-    })
   ];
 
   # build webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-jAZUu2CfcqhC2xMiZYpY7KPCRVFQgT/kgUvSI+5Cpkc=";
+    npmDepsHash = "sha256-0487ntbJZ20MZHezQ+Z3EJkidF3Dgoh/mynYwR7k/+I=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -94,7 +87,7 @@ stdenv'.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -152,17 +145,21 @@ stdenv'.mkDerivation rec {
 
   cmakeFlags = [
     "-Wno-dev"
+    # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
+    (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
+    (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
   ];
 
   postPatch = ''
-    # fix hardcoded libevdev path
-    substituteInPlace cmake/compile_definitions/linux.cmake \
-      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
+    # remove upstream dependency on systemd and udev
+    substituteInPlace cmake/packaging/linux.cmake \
+      --replace-fail 'find_package(Systemd)' "" \
+      --replace-fail 'find_package(Udev)' ""
 
     substituteInPlace packaging/linux/sunshine.desktop \
-      --replace '@PROJECT_NAME@' 'Sunshine' \
-      --replace '@PROJECT_DESCRIPTION@' 'Self-hosted game stream host for Moonlight' \
-      --replace '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+      --subst-var-by PROJECT_NAME 'Sunshine' \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
   '';
 
   preBuild = ''

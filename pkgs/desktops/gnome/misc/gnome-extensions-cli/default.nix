@@ -5,7 +5,7 @@
 , poetry-core
 , colorama
 , packaging
-, pydantic_1
+, pydantic
 , requests
 , pygobject3
 , tqdm
@@ -38,7 +38,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     colorama
     packaging
-    pydantic_1
+    pydantic
     requests
     pygobject3
     tqdm

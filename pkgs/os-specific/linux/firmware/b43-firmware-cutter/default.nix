@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Firmware extractor for cards supported by the b43 kernel module";
     mainProgram = "b43-fwcutter";
     homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
-    license = lib.licenses.free;
+    license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
 }

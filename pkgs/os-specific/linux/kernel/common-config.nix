@@ -23,7 +23,7 @@ let
 
 
   # configuration items have to be part of a subattrs
-  flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
+  flattenKConf = nested: mapAttrs (name: values: if length values == 1 then head values else throw "duplicate kernel configuration option: ${name}") (zipAttrs (attrValues nested));
 
   whenPlatformHasEBPFJit =
     mkIf (stdenv.hostPlatform.isAarch32 ||
@@ -55,17 +55,33 @@ let
       DYNAMIC_DEBUG             = yes;
       DEBUG_STACK_USAGE         = no;
       RCU_TORTURE_TEST          = no;
-      SCHEDSTATS                = no;
+      SCHEDSTATS                = yes;
       DETECT_HUNG_TASK          = yes;
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
       SCHED_DEBUG               = yes;
+
+      # Count IRQ and steal CPU time separately
+      IRQ_TIME_ACCOUNTING       = yes;
+      PARAVIRT_TIME_ACCOUNTING  = yes;
+
+      # Enable CPU lockup detection
+      LOCKUP_DETECTOR           = yes;
+      SOFTLOCKUP_DETECTOR       = yes;
+      HARDLOCKUP_DETECTOR       = yes;
+
+      # Enable streaming logs to a remote device over a network
+      NETCONSOLE                = module;
+      NETCONSOLE_DYNAMIC        = yes;
+
+      # Export known printks in debugfs
+      PRINTK_INDEX              = whenAtLeast "5.15" yes;
     };
 
     power-management = {
-      CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
+      CPU_FREQ_DEFAULT_GOV_SCHEDUTIL   = yes;
       CPU_FREQ_GOV_SCHEDUTIL           = yes;
       PM_ADVANCED_DEBUG                = yes;
       PM_WAKELOCKS                     = yes;
@@ -85,6 +101,27 @@ let
       # depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT,
       # so we can't force-enable this
       RCU_LAZY                         = whenAtLeast "6.2" (option yes);
+
+      # Auto suspend Bluetooth devices at idle
+      BT_HCIBTUSB_AUTOSUSPEND          = yes;
+
+      # Expose cpufreq stats in sysfs
+      CPU_FREQ_STAT                    = yes;
+
+      # Enable CPU energy model for scheduling
+      ENERGY_MODEL                     = whenAtLeast "5.0" yes;
+
+      # Enable thermal interface netlink API
+      THERMAL_NETLINK                  = whenAtLeast "5.9" yes;
+
+      # Prefer power-efficient workqueue implementation to per-CPU workqueues,
+      # which is slightly slower, but improves battery life.
+      # This is opt-in per workqueue, and can be disabled globally with a kernel command line option.
+      WQ_POWER_EFFICIENT_DEFAULT       = yes;
+
+      # Default SATA link power management to "medium with device initiated PM"
+      # for some extra power savings.
+      SATA_MOBILE_LPM_POLICY           = whenAtLeast "5.18" (freeform "3");
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
@@ -109,6 +146,9 @@ let
       CHT_DC_TI_PMIC_OPREGION          = whenAtLeast "5.10" yes;
       MFD_TPS68470                     = whenBetween "5.10" "5.13" yes;
       TPS68470_PMIC_OPREGION           = whenAtLeast "5.10" yes;
+
+      # Enable Intel thermal hardware feedback
+      INTEL_HFI_THERMAL                = whenAtLeast "5.18" yes;
     };
 
     external-firmware = {
@@ -136,6 +176,16 @@ let
       DAMON_DBGFS = whenAtLeast "5.15" yes;
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
+      # Support recovering from memory failures on systems with ECC and MCA recovery.
+      MEMORY_FAILURE = yes;
+
+      # Collect ECC errors and retire pages that fail too often
+      RAS_CEC                   = yes;
+    } // optionalAttrs (stdenv.is32bit) {
+      # Enable access to the full memory range (aka PAE) on 32-bit architectures
+      # This check isn't super accurate but it's close enough
+      HIGHMEM                   = option yes;
+      BOUNCE                    = option yes;
     };
 
     memtest = {
@@ -154,6 +204,9 @@ let
       BFQ_GROUP_IOSCHED = yes;
       MQ_IOSCHED_KYBER = yes;
       IOSCHED_BFQ = module;
+      # Enable CPU utilization clamping for RT tasks
+      UCLAMP_TASK = whenAtLeast "5.3" yes;
+      UCLAMP_TASK_GROUP = whenAtLeast "5.4" yes;
     };
 
 
@@ -166,6 +219,7 @@ let
     # Enable NUMA.
     numa = {
       NUMA  = option yes;
+      NUMA_BALANCING = option yes;
     };
 
     networking = {
@@ -250,6 +304,9 @@ let
       # Bridge Netfilter Configuration
       NF_TABLES_BRIDGE            = mkMerge [ (whenOlder "5.3" yes)
                                               (whenAtLeast "5.3" module) ];
+      # Expose some debug info
+      NF_CONNTRACK_PROCFS         = yes;
+      NF_FLOW_TABLE_PROCFS        = whenAtLeast "6.0" yes;
 
       # needed for `dropwatch`
       # Builtin-only since https://github.com/torvalds/linux/commit/f4b6bcc7002f0e3a3428bac33cf1945abff95450
@@ -276,6 +333,10 @@ let
       INFINIBAND = module;
       INFINIBAND_IPOIB = module;
       INFINIBAND_IPOIB_CM = yes;
+
+      # Enable debugfs for wireless drivers
+      CFG80211_DEBUGFS = yes;
+      MAC80211_DEBUGFS = yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Not enabled by default, hides modules behind it
       NET_VENDOR_MEDIATEK = yes;
@@ -288,8 +349,8 @@ let
       CFG80211_WEXT               = option yes; # Without it, ipw2200 drivers don't build
       IPW2100_MONITOR             = option yes; # support promiscuous mode
       IPW2200_MONITOR             = option yes; # support promiscuous mode
-      HOSTAP_FIRMWARE             = option yes; # Support downloading firmware images with Host AP driver
-      HOSTAP_FIRMWARE_NVRAM       = option yes;
+      HOSTAP_FIRMWARE             = whenOlder "6.8" (option yes); # Support downloading firmware images with Host AP driver
+      HOSTAP_FIRMWARE_NVRAM       = whenOlder "6.8" (option yes);
       MAC80211_MESH               = option yes; # Enable 802.11s (mesh networking) support
       ATH9K_PCI                   = option yes; # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB                   = option yes; # Ditto, AHB bus
@@ -331,8 +392,8 @@ let
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FRAMEBUFFER_CONSOLE_DETECT_PRIMARY = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
-      # On 5.14 this conflicts with FB_SIMPLE.
-      DRM_SIMPLEDRM = whenAtLeast "5.14" no;
+      # Use simplefb on older kernels where we don't have simpledrm (enabled below)
+      FB_SIMPLE           = whenOlder "5.15" yes;
       DRM_FBDEV_EMULATION = yes;
     };
 
@@ -345,9 +406,21 @@ let
       FONT_TER16x32 = whenAtLeast "5.0" yes;
     };
 
-    video = {
+    video = let
+      whenHasDevicePrivate = mkIf (!stdenv.isx86_32 && versionAtLeast version "5.1");
+    in {
+      # compile in DRM so simpledrm can load before initrd if necessary
+      AGP = yes;
+      DRM = yes;
+
       DRM_LEGACY = whenOlder "6.8" no;
+
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
+
+      # Enable simpledrm and use it for generic framebuffer
+      # Technically added in 5.14, but adding more complex configuration is not worth it
+      DRM_SIMPLEDRM = whenAtLeast "5.15" yes;
+      SYSFB_SIMPLEFB = whenAtLeast "5.15" yes;
 
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
@@ -371,8 +444,26 @@ let
       DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
       DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
       DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
+
+      # Enable AMD Audio Coprocessor support for HDMI outputs
+      DRM_AMD_ACP = yes;
+
+      # Enable AMD secure display when available
+      DRM_AMD_SECURE_DISPLAY = whenAtLeast "5.13" yes;
+
       # Enable new firmware (and by extension NVK) for compatible hardware on Nouveau
       DRM_NOUVEAU_GSP_DEFAULT = whenAtLeast "6.8" yes;
+
+      # Enable Nouveau shared virtual memory (used by OpenCL)
+      DEVICE_PRIVATE = whenHasDevicePrivate yes;
+      DRM_NOUVEAU_SVM = whenHasDevicePrivate yes;
+
+      # Enable HDMI-CEC receiver support
+      RC_CORE = yes;
+      MEDIA_CEC_RC = whenAtLeast "5.10" yes;
+
+      # Enable CEC over DisplayPort
+      DRM_DP_CEC = yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = yes;
@@ -409,6 +500,7 @@ let
       SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
+      SND_USB_AUDIO_MIDI_V2 = whenAtLeast "6.5" yes;
     # Enable Sound Open Firmware support
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
                         versionAtLeast version "5.5") {
@@ -445,14 +537,23 @@ let
       SND_SOC_SOF_TIGERLAKE_SUPPORT     = whenOlder "5.12" yes;
     };
 
-    usb-serial = {
-      USB_SERIAL_GENERIC          = yes; # USB Generic Serial Driver
-    };
-
     usb = {
+      USB                  = yes; # compile USB core into kernel, so we can use USB_SERIAL_CONSOLE before modules
+
       USB_EHCI_ROOT_HUB_TT = yes; # Root Hub Transaction Translators
       USB_EHCI_TT_NEWSCHED = yes; # Improved transaction translator scheduling
       USB_HIDDEV = yes; # USB Raw HID Devices (like monitor controls and Uninterruptable Power Supplies)
+
+      # default to dual role mode
+      USB_DWC2_DUAL_ROLE = yes;
+      USB_DWC3_DUAL_ROLE = yes;
+    };
+
+    usb-serial = {
+      USB_SERIAL                  = yes;
+      USB_SERIAL_GENERIC          = yes; # USB Generic Serial Driver
+      USB_SERIAL_CONSOLE          = yes; # Allow using USB serial adapter as console
+      U_SERIAL_CONSOLE            = whenAtLeast "5.10" yes; # Allow using USB gadget as console
     };
 
     # Filesystem options - in particular, enable extended attributes and
@@ -533,6 +634,7 @@ let
 
       SQUASHFS_FILE_DIRECT         = yes;
       SQUASHFS_DECOMP_MULTI_PERCPU = whenOlder "6.2" yes;
+      SQUASHFS_CHOICE_DECOMP_BY_MOUNT = whenAtLeast "6.2" yes;
       SQUASHFS_XATTR               = yes;
       SQUASHFS_ZLIB                = yes;
       SQUASHFS_LZO                 = yes;
@@ -598,6 +700,16 @@ let
       CRYPTO_DRBG_HASH                 = yes;
       CRYPTO_DRBG_CTR                  = yes;
 
+      # Enable KFENCE
+      # See: https://docs.kernel.org/dev-tools/kfence.html
+      KFENCE                           = whenAtLeast "5.12" yes;
+
+      # Enable support for page poisoning. Still needs to be enabled on the command line to actually work.
+      PAGE_POISONING                   = yes;
+
+      # Enable stack smashing protections in schedule()
+      # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
+      SCHED_STACK_END_CHECK            = yes;
     } // optionalAttrs stdenv.hostPlatform.isx86_64 {
       # Enable Intel SGX
       X86_SGX     = whenAtLeast "5.11" yes;
@@ -614,6 +726,9 @@ let
       SEV_GUEST       = whenAtLeast "5.19" module;
       # Shadow stacks
       X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
+
+      # Mitigate straight line speculation at the cost of some file size
+      SLS = whenAtLeast "5.17" yes;
     };
 
     microcode = {
@@ -781,7 +896,6 @@ let
       NOTIFIER_ERROR_INJECTION = option no;
       RCU_PERF_TEST            = whenOlder "5.9" no;
       RCU_SCALE_TEST           = whenAtLeast "5.10" no;
-      RCU_TORTURE_TEST         = option no;
       TEST_ASYNC_DRIVER_PROBE  = option no;
       WW_MUTEX_SELFTEST        = option no;
       XZ_DEC_TEST              = option no;
@@ -791,6 +905,10 @@ let
       # Unconditionally enabled, because it is required for CRIU and
       # it provides the kcmp() system call that Mesa depends on.
       CHECKPOINT_RESTORE  = yes;
+
+      # Allows soft-dirty tracking on pages, used by CRIU.
+      # See https://docs.kernel.org/admin-guide/mm/soft-dirty.html
+      MEM_SOFT_DIRTY = mkIf (!stdenv.isx86_32) yes;
     };
 
     misc = let
@@ -804,6 +922,9 @@ let
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
       HIDRAW               = yes;
+
+      # Enable loading HID fixups as eBPF from userspace
+      HID_BPF            = whenAtLeast "6.3" yes;
 
       HID_ACRUX_FF       = yes;
       DRAGONRISE_FF      = yes;
@@ -832,7 +953,10 @@ let
       # Enable initrd support.
       BLK_DEV_INITRD    = yes;
 
-      PM_TRACE_RTC         = no; # Disable some expensive (?) features.
+      # Allows debugging systems that get stuck during suspend/resume
+      PM_TRACE             = yes;
+      PM_TRACE_RTC         = yes;
+
       ACCESSIBILITY        = yes; # Accessibility support
       AUXDISPLAY           = yes; # Auxiliary Display support
       HIPPI                = yes;
@@ -857,6 +981,11 @@ let
 
       BLK_SED_OPAL = yes;
 
+      # Enable support for block layer inline encryption
+      BLK_INLINE_ENCRYPTION = whenAtLeast "5.8" yes;
+      # ...but fall back to CPU encryption if unavailable
+      BLK_INLINE_ENCRYPTION_FALLBACK = whenAtLeast "5.8" yes;
+
       BSD_PROCESS_ACCT_V3 = yes;
 
       SERIAL_DEV_BUS = yes; # enables support for serial devices
@@ -875,7 +1004,6 @@ let
       # Removed on 5.17 as it was unused
       # upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a4ee518185e902758191d968600399f3bc2be31
       CLEANCACHE = whenOlder "5.17" (option yes);
-      CRASH_DUMP = option no;
 
       FSCACHE_STATS = yes;
 
@@ -971,7 +1099,7 @@ let
       # Disable the firmware helper fallback, udev doesn't implement it any more
       FW_LOADER_USER_HELPER_FALLBACK = option no;
 
-      FW_LOADER_COMPRESS = option yes;
+      FW_LOADER_COMPRESS = whenAtLeast "5.3" yes;
 
       HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
@@ -1018,6 +1146,13 @@ let
 
       # Set system time from RTC on startup and resume
       RTC_HCTOSYS = option yes;
+
+      # Expose watchdog information in sysfs
+      WATCHDOG_SYSFS = yes;
+
+      # Enable generic kernel watch queues
+      # See https://docs.kernel.org/core-api/watch_queue.html
+      WATCH_QUEUE = whenAtLeast "5.8" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
@@ -1048,10 +1183,9 @@ let
       # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
       CMA_SIZE_MBYTES = freeform "32";
 
-      # Many ARM SBCs hand off a pre-configured framebuffer.
-      # This always can can be replaced by the actual native driver.
-      # Keeping it a built-in ensures it will be used if possible.
-      FB_SIMPLE = yes;
+      # Add debug interfaces for CMA
+      CMA_DEBUGFS = yes;
+      CMA_SYSFS = yes;
 
       # https://docs.kernel.org/arch/arm/mem_alignment.html
       # tldr:
@@ -1093,6 +1227,24 @@ let
     } // optionalAttrs (versionAtLeast version "5.4" && stdenv.hostPlatform.system == "x86_64-linux") {
       CHROMEOS_LAPTOP = module;
       CHROMEOS_PSTORE = module;
+    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+      # Enable x86 resource control
+      X86_CPU_RESCTRL = whenAtLeast "5.0" yes;
+
+      # Enable TSX on CPUs where it's not vulnerable
+      X86_INTEL_TSX_MODE_AUTO = yes;
+
+      # Enable AMD Wi-Fi RF band mitigations
+      # See https://cateee.net/lkddb/web-lkddb/AMD_WBRF.html
+      AMD_WBRF = whenAtLeast "6.8" yes;
+
+      # Enable Intel Turbo Boost Max 3.0
+      INTEL_TURBO_MAX_3 = yes;
+    };
+
+    accel = {
+      # Build DRM accelerator devices
+      DRM_ACCEL = whenAtLeast "6.2" yes;
     };
   };
 in

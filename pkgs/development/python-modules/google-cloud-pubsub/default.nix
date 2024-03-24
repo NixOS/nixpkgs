@@ -17,21 +17,21 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.20.2";
+  version = "2.20.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I2BG6oYCMMeI5NTqLQ8SKZzfHZSscexC7RoM4boo1m8=";
+    hash = "sha256-dq8PF5UJ5DHSu+P1H0JiVng9yVm49FjBNwyxnW974LE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     grpcio

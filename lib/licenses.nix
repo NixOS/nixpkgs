@@ -599,6 +599,11 @@ in mkLicense lset) ({
     url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
   };
 
+  giftware = {
+    spdxId = "Giftware";
+    fullName = "Giftware License";
+  };
+
   hpnd = {
     spdxId = "HPND";
     fullName = "Historic Permission Notice and Disclaimer";
@@ -607,6 +612,11 @@ in mkLicense lset) ({
   hpndSellVariant = {
     fullName = "Historical Permission Notice and Disclaimer - sell variant";
     spdxId = "HPND-sell-variant";
+  };
+
+  hpndUc = {
+    spdxId = "HPND-UC";
+    fullName = "Historical Permission Notice and Disclaimer - University of California variant";
   };
 
   # Intel's license, seems free
@@ -892,6 +902,11 @@ in mkLicense lset) ({
     free = false;
     redistributable = true; # Only if used in Netdata products.
     url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
+  };
+
+  nistSoftware = {
+    spdxId = "NIST-Software";
+    fullName = "NIST Software License";
   };
 
   nlpl = {
@@ -1251,11 +1266,6 @@ in mkLicense lset) ({
   };
 } // {
   # TODO: remove legacy aliases
-  agpl3 = {
-    spdxId = "AGPL-3.0";
-    fullName = "GNU Affero General Public License v3.0";
-    deprecated = true;
-  };
   gpl2 = {
     spdxId = "GPL-2.0";
     fullName = "GNU General Public License v2.0";

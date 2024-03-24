@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-Ptc83sPZCMB6gqyr3cN/Lb2if5ps29aQBArLe6CtUMI=";
+    hash = "sha256-3N3w6JJ0SHa1EYBED/aU1g0IX9nDHf4iseGPwEK1zpw=";
   };
 
   postPatch = ''

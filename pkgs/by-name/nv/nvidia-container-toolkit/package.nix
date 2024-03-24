@@ -87,7 +87,7 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
     makeWrapper
   ];
 

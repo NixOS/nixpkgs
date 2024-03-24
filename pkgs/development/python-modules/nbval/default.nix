@@ -2,13 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , coverage
 , ipykernel
 , jupyter-client
 , nbformat
 , pytestCheckHook
 , pytest
-, six
 , glibcLocales
 , matplotlib
 , sympy
@@ -17,9 +17,9 @@
 buildPythonPackage rec {
   pname = "nbval";
   version = "0.11.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +30,11 @@ buildPythonPackage rec {
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     coverage
     ipykernel
     jupyter-client
@@ -68,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A py.test plugin to validate Jupyter notebooks";
     homepage = "https://github.com/computationalmodelling/nbval";
+    changelog = "https://github.com/computationalmodelling/nbval/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

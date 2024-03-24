@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    ${python.interpreter} dbf/test.py
+    ${python.interpreter} -m dbf.test
   '';
 
   pythonImportsCheck = [

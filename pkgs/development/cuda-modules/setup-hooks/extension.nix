@@ -1,4 +1,19 @@
 final: _: {
+  # Helper hook used in both autoAddCudaCompatRunpath and
+  # autoAddDriverRunpath that applies a generic patching action to all elf
+  # files with a dynamic linking section.
+  autoFixElfFiles =
+    final.callPackage
+      (
+        {makeSetupHook}:
+         makeSetupHook
+          {
+            name = "auto-fix-elf-files";
+          }
+          ./auto-fix-elf-files.sh
+      )
+      {};
+
   # Internal hook, used by cudatoolkit and cuda redist packages
   # to accommodate automatic CUDAToolkit_ROOT construction
   markForCudatoolkitRootHook =
@@ -32,31 +47,36 @@ final: _: {
       {}
     );
 
-  autoAddOpenGLRunpathHook =
+  autoAddDriverRunpath =
     final.callPackage
       (
-        {addOpenGLRunpath, makeSetupHook}:
+        {addDriverRunpath, autoFixElfFiles, makeSetupHook}:
         makeSetupHook
           {
             name = "auto-add-opengl-runpath-hook";
-            propagatedBuildInputs = [addOpenGLRunpath];
+            propagatedBuildInputs = [addDriverRunpath autoFixElfFiles];
           }
-          ./auto-add-opengl-runpath-hook.sh
+          ./auto-add-driver-runpath-hook.sh
       )
       {};
 
-  # autoAddCudaCompatRunpathHook hook must be added AFTER `setupCudaHook`. Both
+  # Deprecated: an alias kept for compatibility. Consider removing after 24.11
+  autoAddOpenGLRunpathHook = final.autoAddDriverRunpath;
+
+  # autoAddCudaCompatRunpath hook must be added AFTER `setupCudaHook`. Both
   # hooks prepend a path with `libcuda.so` to the `DT_RUNPATH` section of
   # patched elf files, but `cuda_compat` path must take precedence (otherwise,
   # it doesn't have any effect) and thus appear first. Meaning this hook must be
   # executed last.
-  autoAddCudaCompatRunpathHook =
+  autoAddCudaCompatRunpath =
     final.callPackage
       (
-        {makeSetupHook, cuda_compat ? null }:
+        {makeSetupHook, autoFixElfFiles, cuda_compat ? null }:
         makeSetupHook
           {
             name = "auto-add-cuda-compat-runpath-hook";
+            propagatedBuildInputs = [autoFixElfFiles];
+
             substitutions = {
               # Hotfix Ofborg evaluation
               libcudaPath = if final.flags.isJetsonBuild then "${cuda_compat}/compat" else null;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bvschaik/julius";
     description = "An open source re-implementation of Caesar III";
     mainProgram = "julius";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ Thra11 ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;

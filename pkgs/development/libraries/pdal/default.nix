@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , testers
 
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
@@ -28,23 +27,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.6.3";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-wrgEbCYOGW1yrVxyX+UDa5jcUqab3letEGuvWnYvtac=";
+    sha256 = "sha256-knyDVUZH+X563UzKkvDpi08EcXU5s4+Jvya3Xprpt1A=";
   };
-
-  patches = [
-    # Fix running tests
-    # https://github.com/PDAL/PDAL/issues/4280
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/PDAL/PDAL/pull/4291.patch";
-      sha256 = "sha256-jFS+trwMRBfm+MpT0CcuD/hdYmfyuQj2zyoe06B6G9U=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

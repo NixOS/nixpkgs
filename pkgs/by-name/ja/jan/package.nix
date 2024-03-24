@@ -5,10 +5,10 @@
 
 let
   pname = "jan";
-  version = "0.4.8";
+  version = "0.4.9";
   src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-linux-x86_64-${version}.AppImage";
-    hash = "sha256-8Vi2KK+5Wk/K+RJZ0/cbRUb8L25WEiLdo5ay8+ichdw=";
+    hash = "sha256-6XnDrr+AkZH69zXf0OKdi8R6LoRWWMZNqWilZhLGynk=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

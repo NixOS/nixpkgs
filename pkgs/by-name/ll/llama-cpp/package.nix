@@ -69,13 +69,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "2454";
+  version = "2481";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-eZvApj2yLFCbS/TWaHeXJIVQ4PXbPlrxxu/eiov2T8k=";
+    hash = "sha256-40GSZZEnjM9L9KVVKdSKtBoSRy996l98ORM4NeltsSM=";
   };
 
   postPatch = ''
@@ -86,10 +86,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ninja pkg-config git ]
     ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
-
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs

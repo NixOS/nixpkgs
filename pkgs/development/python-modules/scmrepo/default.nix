@@ -19,24 +19,24 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "3.2.0";
-  format = "pyproject";
+  version = "3.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "scmrepo";
     rev = "refs/tags/${version}";
-    hash = "sha256-A09nuT8qxganDYiJNXhdhmnFKUeeVNYQKdHdReSnnac=";
+    hash = "sha256-swv5uWsyM4mEXlurizUewnbdAOtjWgvzCO9IPfz2ZPE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncssh
     dulwich
     dvc-http

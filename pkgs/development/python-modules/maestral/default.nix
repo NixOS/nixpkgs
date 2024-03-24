@@ -23,6 +23,7 @@
 , watchdog
 , pytestCheckHook
 , nixosTests
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -67,6 +68,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # https://github.com/samschott/maestral/commit/2c50d2ddb49a845ea97bd6b0f68c45d723fb304c
+    # Allow the use of survey >= 5
+    # Remove after new maestral release along with pythonRelaxDepsHook
+    "survey"
   ];
 
   preCheck = ''

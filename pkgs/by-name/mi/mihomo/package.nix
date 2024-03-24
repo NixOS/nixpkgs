@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -30,6 +31,11 @@ buildGoModule rec {
 
   # network required
   doCheck = false;
+
+
+  passthru.tests = {
+    mihomo = nixosTests.mihomo;
+  };
 
   meta = with lib; {
     description = "A rule-based tunnel in Go";
