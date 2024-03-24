@@ -673,7 +673,11 @@ in
     # https://github.com/systemd/systemd/pull/12226
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
 
-    boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
+    boot.kernelParams = lib.mkMerge [
+      (lib.mkIf (!cfg.enableUnifiedCgroupHierarchy) [ "systemd.unified_cgroup_hierarchy=0" ])
+      (lib.mkIf (config.boot.resumeDevice != "") [ "resume=${config.boot.resumeDevice}" ])
+    ];
+    boot.initrd.availableKernelModules = lib.optional cfg.package.withEfi "efivarfs";
 
     # Avoid potentially degraded system state due to
     # "Userspace Out-Of-Memory (OOM) Killer was skipped because of a failed condition check (ConditionControlGroupController=v2)."

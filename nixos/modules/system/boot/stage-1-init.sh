@@ -100,22 +100,7 @@ waitDevice() {
     # alas...  So just wait for a few seconds for the device to
     # appear.
     for dev in $device; do
-        if test ! -e $dev; then
-            echo -n "waiting for device $dev to appear..."
-            try=20
-            while [ $try -gt 0 ]; do
-                sleep 1
-                # also re-try lvm activation now that new block devices might have appeared
-                lvm vgchange -ay
-                # and tell udev to create nodes for the new LVs
-                udevadm trigger --action=add
-                if test -e $dev; then break; fi
-                echo -n "."
-                try=$((try - 1))
-            done
-            echo
-            [ $try -ne 0 ]
-        fi
+	udevadm wait --timeout=20 "$dev"
     done
 }
 
@@ -227,6 +212,10 @@ for o in $(cat /proc/cmdline); do
         boot.panic_on_fail|stage1panic=1)
             panicOnFail=1
             ;;
+	resume=*)
+	    set -- $(IFS==; echo $o)
+	    resumeDevice=$2
+	    ;;
         root=*)
             # If a root device is specified on the kernel command
             # line, make it available through the symlink /dev/root.
@@ -475,29 +464,15 @@ lustrateRoot () {
 
 
 if test -e /sys/power/resume -a -e /sys/power/disk; then
-    if test -n "@resumeDevice@" && waitDevice "@resumeDevice@"; then
-        resumeDev="@resumeDevice@"
-        resumeInfo="$(udevadm info -q property "$resumeDev" )"
-    else
-        for sd in @resumeDevices@; do
-            # Try to detect resume device. According to Ubuntu bug:
-            # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
-            # when there are multiple swap devices, we can't know where the hibernate
-            # image will reside. We can check all of them for swsuspend blkid.
-            if waitDevice "$sd"; then
-                resumeInfo="$(udevadm info -q property "$sd")"
-                if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
-                    resumeDev="$sd"
-                    break
-                fi
-            fi
-        done
+    if test -n "$resumeDevice"; then
+        waitDevice "$resumeDevice"
+    elif modprobe efivarfs && mount -t efivarfs efivarfs /sys/firmware/efi/efivars && test -e /sys/firmware/efi/efivars/HibernateLocation-8cf2644b-4b0b-428f-9387-6d876050dc67; then
+	export GCONV_PATH=@extraUtils@/lib/gconv
+        UUID=$(dd status=none bs=1 skip=4 < /sys/firmware/efi/efivars/HibernateLocation-8cf2644b-4b0b-428f-9387-6d876050dc67 | iconv -f UTF-16 -t UTF-8 | jq -r .uuid) \
+	    && waitDevice "/dev/disk/by-uuid/$UUID"
     fi
-    if test -n "$resumeDev"; then
-        resumeMajor="$(echo "$resumeInfo" | sed -n 's/^MAJOR=//p')"
-        resumeMinor="$(echo "$resumeInfo" | sed -n 's/^MINOR=//p')"
-        echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
-    fi
+
+    systemd-hibernate-resume
 fi
 
 @postResumeCommands@

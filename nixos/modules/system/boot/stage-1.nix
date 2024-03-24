@@ -142,6 +142,13 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
+      # Hibernation
+      copy_bin_and_libs ${lib.getBin pkgs.stdenv.cc.libc}/bin/iconv
+      mkdir -p $out/lib/gconv
+      cp ${pkgs.stdenv.cc.libc.out}/lib/gconv/UTF-16.so $out/lib/gconv
+      copy_bin_and_libs ${pkgs.jq}/bin/jq
+      copy_bin_and_libs ${config.systemd.package}/lib/systemd/systemd-hibernate-resume
+
       # Copy multipath.
       ${optionalString config.services.multipath.enable ''
         copy_bin_and_libs ${config.services.multipath.package}/bin/multipath
@@ -202,6 +209,21 @@ let
         echo "patching $i..."
         patchelf --set-rpath $out/lib $i
       done
+      cp ${pkgs.writeText "gconv-modules" ''
+        alias   UTF16//                 UTF-16//
+        module  UTF-16//                INTERNAL                UTF-16          1
+        module  INTERNAL                UTF-16//                UTF-16          1
+
+        #       from                    to                      module          cost
+        alias   UTF16LE//               UTF-16LE//
+        module  UTF-16LE//              INTERNAL                UTF-16          1
+        module  INTERNAL                UTF-16LE//              UTF-16          1
+
+        #       from                    to                      module          cost
+        alias   UTF16BE//               UTF-16BE//
+        module  UTF-16BE//              INTERNAL                UTF-16          1
+        module  INTERNAL                UTF-16BE//              UTF-16          1
+      ''} $out/lib/gconv/gconv-modules
 
       if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
@@ -305,20 +327,12 @@ let
 
     inherit linkUnits udevRules extraUtils;
 
-    inherit (config.boot) resumeDevice;
-
     inherit (config.system.nixos) distroName;
 
     inherit (config.system.build) earlyMountScript;
 
     inherit (config.boot.initrd) checkJournalingFS verbose
       preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
-
-    resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
-                             # Don't include zram devices
-                             && !(hasPrefix "/dev/zram" sd.device)
-                            ) config.swapDevices);
 
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
@@ -347,6 +361,12 @@ let
         }
         { object = "${modulesClosure}/lib";
           symlink = "/lib";
+        }
+        { object = "${config.boot.initrd.osRelease}";
+          symlink = "/etc/os-release";
+        }
+        { object = "${config.boot.initrd.osRelease}";
+          symlink = "/etc/initrd-release";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
