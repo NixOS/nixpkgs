@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, testers, docker-credential-gcr }:
+{
+  buildGoModule,
+  docker-credential-gcr,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "docker-credential-gcr";
@@ -33,9 +40,12 @@ buildGoModule rec {
     "-X github.com/GoogleCloudPlatform/docker-credential-gcr/config.Version=${version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = docker-credential-gcr;
-    command = "docker-credential-gcr version";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = docker-credential-gcr;
+      command = "docker-credential-gcr version";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
