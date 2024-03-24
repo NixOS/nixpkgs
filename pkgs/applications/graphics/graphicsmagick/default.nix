@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
-  version = "1.3.42";
+  version = "1.3.43";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "sha256-SE/M/Ssvr2wrqRUUaezlByvLkbpO1z517T2ORsdZ1Vc=";
+    sha256 = "sha256-K4hYBzLNfkCdniLGEWI4vvSuBvzaEUUb8z0ln5y/OZ8=";
   };
 
   patches = [
