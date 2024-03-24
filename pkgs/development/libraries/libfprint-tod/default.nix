@@ -5,32 +5,21 @@
 
 # for the curious, "tod" means "Touch OEM Drivers" meaning it can load
 # external .so's.
-libfprint.overrideAttrs ({ postPatch ? "", mesonFlags ? [], ... }: let
-  version = "1.90.7+git20210222+tod1";
-in  {
+libfprint.overrideAttrs (old: rec {
   pname = "libfprint-tod";
-  inherit version;
+  version = "1.94.7+tod1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "3v1n0";
     repo = "libfprint";
     rev = "v${version}";
-    sha256 = "0cj7iy5799pchyzqqncpkhibkq012g3bdpn18pfb19nm43svhn4j";
+    hash = "sha256-q6m/J5GH86/z/mKnrYoanhKWR7+reKIRHqhDOUkknFA=";
   };
 
-  mesonFlags = [
-    # Include virtual drivers for fprintd tests
-    "-Ddrivers=all"
-    "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
-  ];
-
-
-  postPatch = ''
-    ${postPatch}
-    patchShebangs ./tests/*.py ./tests/*.sh
+  postPatch = old.postPatch + ''
+    patchShebangs libfprint/tod/tests/check-library-symbols.sh
   '';
-
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/3v1n0/libfprint";
