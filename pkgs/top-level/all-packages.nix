@@ -37839,6 +37839,12 @@ with pkgs;
 
   wesnoth = callPackage ../games/wesnoth {
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
+    # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
+    lua = lua5_4.override {
+      postConfigure = ''
+        makeFlagsArray+=("CC=$CXX")
+      '';
+    };
   };
 
   wesnoth-dev = wesnoth;
