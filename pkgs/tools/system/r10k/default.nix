@@ -6,6 +6,8 @@
   gzip,
   lib,
   makeWrapper,
+  r10k,
+  testers,
 }:
 
 bundlerApp {
@@ -25,7 +27,14 @@ bundlerApp {
     }
   '';
 
-  passthru.updateScript = bundlerUpdateScript "r10k";
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "${lib.getExe r10k} version";
+      package = r10k;
+      version = (import ./gemset.nix).r10k.version;
+    };
+    updateScript = bundlerUpdateScript "r10k";
+  };
 
   meta = {
     description = "Puppet environment and module deployment";
