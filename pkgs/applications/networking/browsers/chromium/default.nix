@@ -66,6 +66,10 @@ let
         };
       });
       recompressTarball = callPackage ./recompress-tarball.nix { };
+      # nixpkgs stable's rustc points to rustPackages_1_73.rustc, which is too old for chromium.
+      # To work around this we use rustc from rustPackages_1_76, which has been backported from
+      # unstable specifically for chromium.
+      buildPackages = buildPackages // { inherit (buildPackages.rustPackages_1_76) rustc; } ;
     });
 
     browser = callPackage ./browser.nix {
