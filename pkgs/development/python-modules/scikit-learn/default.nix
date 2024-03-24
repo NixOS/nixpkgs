@@ -43,6 +43,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [
+    numpy.blas
     pillow
     glibcLocales
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
@@ -59,8 +60,6 @@ buildPythonPackage rec {
     setuptools
     wheel
   ];
-
-  propagatedBuildInputs = [ numpy.blas ];
 
   dependencies = [
     joblib
