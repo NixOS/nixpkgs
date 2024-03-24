@@ -602,10 +602,11 @@ let
           mktplcRef = {
             name = "catppuccin-vsc-icons";
             publisher = "catppuccin";
-            version = "0.30.0";
-            sha256 = "sha256-D8pQ6qKjGLvAU59Q4X966RlxTb5AQNqBTrCY0meguQw=";
+            version = "1.10.0";
+            sha256 = "sha256-6klrnMHAIr+loz7jf7l5EZPLBhgkJODFHL9fzl1MqFI=";
           };
           meta = {
+            changelog = "https://marketplace.visualstudio.com/items/Catppuccin.catppuccin-vsc-icons/changelog";
             description = "Soothing pastel icon theme for VSCode";
             license = lib.licenses.mit;
             downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc-icons";
