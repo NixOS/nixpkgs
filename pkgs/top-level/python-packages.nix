@@ -2385,6 +2385,8 @@ self: super: with self; {
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
+  confusable_homoglyphs = callPackage ../development/python-modules/confusable_homoglyphs { };
+
   confuse = callPackage ../development/python-modules/confuse { };
 
   confight = callPackage ../development/python-modules/confight { };
@@ -3054,6 +3056,8 @@ self: super: with self; {
   # Pre-release
   django_5 = callPackage ../development/python-modules/django/5.nix { };
 
+  django4-background-tasks = callPackage ../development/python-modules/django4-background-tasks { };
+
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
@@ -3256,6 +3260,8 @@ self: super: with self; {
 
   django-redis = callPackage ../development/python-modules/django-redis { };
 
+  django-registration = callPackage ../development/python-modules/django-registration { };
+
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
@@ -3283,6 +3289,8 @@ self: super: with self; {
   djangorestframework-stubs = callPackage ../development/python-modules/djangorestframework-stubs { };
 
   django-reversion = callPackage ../development/python-modules/django-reversion { };
+
+  django-sass-processor = callPackage ../development/python-modules/django-sass-processor { };
 
   django-sekizai = callPackage ../development/python-modules/django-sekizai { };
 
@@ -7504,6 +7512,8 @@ self: super: with self; {
   motor = callPackage ../development/python-modules/motor { };
 
   mouseinfo = callPackage ../development/python-modules/mouseinfo { };
+
+  mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
@@ -16486,6 +16496,8 @@ self: super: with self; {
   wavefile = callPackage ../development/python-modules/wavefile { };
 
   wavinsentio = callPackage ../development/python-modules/wavinsentio { };
+
+  waybackpy = callPackage ../development/python-modules/waybackpy { };
 
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
