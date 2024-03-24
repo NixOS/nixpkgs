@@ -112,5 +112,6 @@ buildPythonApplication rec {
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ linsui jugendhacker ];
+    mainProgram = "fdroid";
   };
 }
