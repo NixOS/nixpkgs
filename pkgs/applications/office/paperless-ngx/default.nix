@@ -31,7 +31,23 @@ let
     hash = "sha256-k19dQeXuPwggTfrsxL4oesExAz4tkT/GN6lt7sLU3Nk=";
   };
 
-  python = python3;
+  # subpath installation is broken with uvicorn >= 0.26
+  # https://github.com/NixOS/nixpkgs/issues/298719
+  # https://github.com/paperless-ngx/paperless-ngx/issues/5494
+  python = python3.override {
+    packageOverrides = self: super: {
+      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: {
+        version = "0.25.0";
+        src = fetchFromGitHub {
+          owner = "encode";
+          repo = "uvicorn";
+          rev = "0.25.0";
+          hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
+        };
+      });
+    };
+  };
+
 
   path = lib.makeBinPath [
     ghostscript
