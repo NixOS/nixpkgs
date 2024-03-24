@@ -220,6 +220,10 @@ in {
           which
           procps
           bash
+          nvme-cli # for go.d
+          iw # for charts.d
+          apcupsd # for charts.d
+          # TODO: firehol # for FireQoS -- this requires more NixOS module support.
           util-linux # provides logger command; required for syslog health alarms
       ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
