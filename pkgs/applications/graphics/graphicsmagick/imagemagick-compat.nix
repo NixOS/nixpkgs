@@ -1,37 +1,48 @@
-{ lib, stdenv, graphicsmagick }:
+{ lib
+, graphicsmagick
+, stdenvNoCC
+}:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "graphicsmagick-imagemagick-compat";
   inherit (graphicsmagick) version;
 
-  dontUnpack = true;
-  buildPhase = "true";
+  outputs = [ "out" "man" ];
 
-  utils = [
-    "composite"
-    "conjure"
-    "convert"
-    "identify"
-    "mogrify"
-    "montage"
-    "animate"
-    "display"
-    "import"
-  ];
+  dontUnpack = true;
+  dontBuild = true;
 
   # TODO: symlink libraries?
-  installPhase = ''
+  installPhase = let
+    utilities = [
+      "animate"
+      "composite"
+      "conjure"
+      "convert"
+      "display"
+      "identify"
+      "import"
+      "mogrify"
+      "montage"
+    ];
+    linkUtilityBin = utility: ''
+      ln -s ${lib.getExe graphicsmagick} "$out/bin/${utility}"
+    '';
+    linkUtilityMan = utility: ''
+      ln -s ${lib.getMan graphicsmagick}/share/man/man1/gm.1.gz "$man/share/man/man1/${utility}.1.gz"
+    '';
+  in ''
+    runHook preInstall
+
     mkdir -p "$out"/bin
-    mkdir -p "$out"/share/man/man1
-    for util in ''${utils[@]}; do
-      ln -s ${graphicsmagick}/bin/gm "$out/bin/$util"
-      ln -s ${graphicsmagick}/share/man/man1/gm.1.gz "$out/share/man/man1/$util.1.gz"
-    done
+    ${lib.concatStringsSep "\n" (map linkUtilityBin utilities)}
+    mkdir -p "$man"/share/man/man1
+    ${lib.concatStringsSep "\n" (map linkUtilityMan utilities)}
+
+    runHook postInstall
   '';
 
-  meta = {
-    description = "ImageMagick interface for GraphicsMagick";
-    license = lib.licenses.free;
-    platforms = lib.platforms.all;
+  meta = graphicsmagick.meta // {
+    description = "A repack of GraphicsMagick that provides compatibility with ImageMagick interfaces";
   };
 }
