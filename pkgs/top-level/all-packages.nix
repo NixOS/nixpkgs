@@ -29740,6 +29740,9 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis { };
 
+  # FIXME: remove qgis-unwrapped
+  qgis-unwrapped =  libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix { };
+
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
   spatialite_gui = callPackage ../applications/gis/spatialite-gui {
