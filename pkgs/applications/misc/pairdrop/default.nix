@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "pairdrop";
-  version = "1.7.6";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
     owner = "schlagmichdoch";
     repo = "PairDrop";
     rev = "v${version}";
-    hash = "sha256-AOFATOCLf2KigeqoUzIfNngyeDesNrThRzxFvqtsXBs=";
+    hash = "sha256-xHE+amWrbNfXj5J+ZxXFVsZ2wSUDAZwZKrfgPH1N68I=";
   };
 
-  npmDepsHash = "sha256-3nKjmC5eizoV/mrKDBhsSlVQxEHyIsWR6KHFwZhBugI=";
+  npmDepsHash = "sha256-ulqVaT28gAGwzJHQaXl6vS2tsxKjOzYufiX/ktSoeLY=";
 
   dontNpmBuild = true;
 
