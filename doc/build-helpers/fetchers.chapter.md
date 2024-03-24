@@ -103,6 +103,7 @@ It uses {manpage}`curl(1)` internally, and allows its behaviour to be modified b
 ### File naming {#sec-pkgs-fetchers-fetchurl-file-naming}
 
 The name of the file within the Nix store is controlled by the hash given to `fetchurl`, and also the `name` (or `pname` and `version`) values.
+For more details, see [Store Path](https://nixos.org/manual/nix/stable/store/store-path) on the Nix manual.
 
 If neither `name` nor `pname` and `version` are specified when calling `fetchurl`, it will default to using the [basename](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-baseNameOf) of `url` or the first element of `urls`.
 
@@ -199,13 +200,13 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   _Default value:_ `""`.
 
 `name` (String; _optional_)
-: Name of the downloaded file when saved in the Nix store.
+: The symbolic name of the downloaded file when saved in the Nix store.
   See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
 
   _Default value:_ `""`.
 
 `pname` (String; _optional_)
-: The base name of the downloaded file, which will be combined with `version` to form the name of the downloaded file when saved in the Nix store.
+: A base name, which will be combined with `version` to form the symbolic name of the downloaded file when saved in the Nix store.
   See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
 
   :::{.note}
@@ -215,7 +216,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   _Default value:_ `""`.
 
 `version` (String; _optional_)
-: The version of the downloaded file, which will be combined with `pname` to form the name of the downloaded file when saved in the Nix store.
+: A version, which will be combined with `pname` to form the symbolic name of the downloaded file when saved in the Nix store.
   See [](#sec-pkgs-fetchers-fetchurl-file-naming) for details on how the name of the file is decided.
 
   _Default value:_ `""`.
