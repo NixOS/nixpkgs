@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.23.5.post1"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  version = "0.23.6"; # N.B.: when updating, tests bleak and aioesphomeapi tests
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = "pytest-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k+EmbUptZB2ZLiygwY9WwFA4PNJA+9fEAZYu0xaPZSQ=";
+    hash = "sha256-+kyKcVzW05kqtLeC81rk3fJpOtyW3xSYshgl5gqIddE=";
   };
 
   outputs = [
