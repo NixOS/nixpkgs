@@ -18452,6 +18452,15 @@
     githubId = 950799;
     name = "Tomasz Czyż";
   };
+  spitulax = {
+    name = "Bintang Adiputra Pratama";
+    email = "bintangadiputrapratama@gmail.com";
+    github = "spitulax";
+    githubId = 96517350;
+    keys = [{
+      fingerprint = "652F FAAD 5CB8 AF1D 3F96  9521 929E D6C4 0414 D3F5";
+    }];
+  };
   spoonbaker = {
     github = "Spoonbaker";
     githubId = 47164123;
