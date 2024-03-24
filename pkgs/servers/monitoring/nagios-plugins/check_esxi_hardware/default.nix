@@ -1,37 +1,44 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
-let
-  bName = "check_esxi_hardware";
-
-in python3Packages.buildPythonApplication rec {
-  pname = lib.replaceStrings [ "_" ] [ "-" ] bName;
+python3Packages.buildPythonApplication rec {
+  pname = "check_esxi_hardware";
   version = "20200710";
   format = "other";
 
   src = fetchFromGitHub {
-    owner  = "Napsty";
-    repo   = bName;
-    rev    = version;
+    owner = "Napsty";
+    repo = "check_esxi_hardware";
+    rev = "refs/tags/${version}";
     sha256 = "EC6np/01S+5SA2H9z5psJ9Pq/YoEyGdHL9wHUKKsNas=";
   };
 
   dontBuild = true;
+
+  dependencies = with python3Packages; [
+    pywbem
+    requests
+    setuptools
+  ];
+
   doCheck = false;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 ${bName}.py $out/bin/${bName}
+    install -Dm755 check_esxi_hardware.py $out/bin/check_esxi_hardware
     install -Dm644 -t $out/share/doc/${pname} README.md
 
     runHook postInstall
   '';
 
-  propagatedBuildInputs = with python3Packages; [ pywbem requests setuptools ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://www.claudiokuenzler.com/nagios-plugins/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "check_esxi_hardware";
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }
