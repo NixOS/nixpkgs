@@ -2,12 +2,12 @@
 [parsedmarc](https://domainaware.github.io/parsedmarc/) is a service
 which parses incoming [DMARC](https://dmarc.org/) reports and stores
 or sends them to a downstream service for further analysis. In
-combination with Elasticsearch, Grafana and the included Grafana
+combination with OpenSearch, Grafana and the included Grafana
 dashboard, it provides a handy overview of DMARC reports over time.
 
 ## Basic usage {#module-services-parsedmarc-basic-usage}
 A very minimal setup which reads incoming reports from an external
-email address and saves them to a local Elasticsearch instance looks
+email address and saves them to a local OpenSearch instance looks
 like this:
 
 ```nix
@@ -53,7 +53,7 @@ services.parsedmarc = {
 The reports can be visualized and summarized with parsedmarc's
 official Grafana dashboard. For all views to work, and for the data to
 be complete, GeoIP databases are also required. The following example
-shows a basic deployment where the provisioned Elasticsearch instance
+shows a basic deployment where the provisioned OpenSearch instance
 is automatically added as a Grafana datasource, and the dashboard is
 added to Grafana as well.
 
@@ -99,7 +99,7 @@ services.nginx = {
   recommendedOptimisation = true;
   recommendedGzipSettings = true;
   recommendedProxySettings = true;
-  upstreams.grafana.servers."unix:/${config.services.grafana.socket}" = {};
+  upstreams.grafana.servers."unix:/${config.services.grafana.settings.server.socket}" = {};
   virtualHosts.${url} = {
     root = config.services.grafana.staticRootPath;
     enableACME = true;

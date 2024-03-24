@@ -1,3 +1,24 @@
+{ pythonPackages }:
+let
+  packages = pythonPackages.overrideScope (final: prev: {
+    elasticsearch = prev.elasticsearch.overridePythonAttrs (oldAttrs: rec {
+      version = "7.13.1";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "d6bcca0b2e5665d08e6fe6fadc2d4d321affd76ce483603078fc9d3ccd2bc0f9";
+      };
+    });
+    elasticsearch-dsl = prev.elasticsearch-dsl.overridePythonAttrs (oldAttrs: rec {
+      version = "7.4.0";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "c4a7b93882918a413b63bed54018a1685d7410ffd8facbc860ee7fd57f214a6d";
+      };
+    });
+  });
+in
+packages.callPackage (
+
 { lib
 , azure-identity
 , azure-monitor-ingestion
@@ -49,12 +70,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-tK/cxOw50awcDAGRDTQ+Nxb9aJl2+zLZHuJq88xNmXM=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "elasticsearch<7.14.0" "elasticsearch" \
-      --replace "elasticsearch-dsl==7.4.0" "elasticsearch-dsl"
-  '';
 
   nativeBuildInputs = [
     hatchling
@@ -110,3 +125,5 @@ buildPythonPackage rec {
     mainProgram = "parsedmarc";
   };
 }
+
+) {}
