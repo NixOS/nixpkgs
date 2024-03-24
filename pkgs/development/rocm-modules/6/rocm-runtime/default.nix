@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "6.0.2";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
