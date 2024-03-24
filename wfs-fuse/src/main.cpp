@@ -197,10 +197,7 @@ int main(int argc, char* argv[]) {
   if (param.is_help) {
     return 0;
   }
-  if (!param.type) {
-    printf("Missing type (--otp)\n");
-    return 1;
-  }
+
   is_usb = !param.type || !strcmp(param.type, "usb");
   is_mlc = param.type && !strcmp(param.type, "mlc");
   is_plain = param.type && !strcmp(param.type, "plain");
