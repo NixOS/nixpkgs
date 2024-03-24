@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator";
     homepage = "https://github.com/shimunn/fido2luks";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ prusnak mmahut ];
+    maintainers = with maintainers; [ mmahut ];
     platforms = platforms.linux;
   };
 }
