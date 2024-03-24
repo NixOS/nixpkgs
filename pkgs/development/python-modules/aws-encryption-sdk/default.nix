@@ -41,14 +41,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
   disabledTestPaths = [
     # Tests require networking
     "examples"
     "test/integration"
+  ];
+
+  disabledTests = [
+    # pytest 8 compat issue
+    "test_happy_version"
   ];
 
   pythonImportsCheck = [
