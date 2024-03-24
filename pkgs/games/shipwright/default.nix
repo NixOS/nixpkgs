@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "8.0.4";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     rev = finalAttrs.version;
-    hash = "sha256-OoDToHCVNzccbKdsmek1kqCsW2HmVzA2vy3BtVW1DuM=";
+    hash = "sha256-o2VwOF46Iq4pwpumOau3bDXJ/CArx6NWBi00s3E4PnE=";
     fetchSubmodules = true;
   };
 
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/HarbourMasters/Shipwright/blob/e46c60a7a1396374e23f7a1f7122ddf9efcadff7/soh/CMakeLists.txt#L736
   gamecontrollerdb = fetchurl {
     name = "gamecontrollerdb.txt";
-    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/81d89fd1e2bd5878e57dfa629abeed3a8feea438/gamecontrollerdb.txt";
-    hash = "sha256-m1XzDc2dS0hkBTEGABgW4J/jjIw1TXtvHHtsvui6Bcc=";
+    url = "https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/e5a5fa2ac6e645d72c619ea99520a3a4586ee005/gamecontrollerdb.txt";
+    hash = "sha256-Y/AEYW7UmwWZltYpHejX0HY4D80dEVDI36xCx94yHhM=";
   };
 
   nativeBuildInputs = [
