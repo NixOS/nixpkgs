@@ -25849,6 +25849,7 @@ with pkgs;
   dmarc-metrics-exporter = callPackage ../servers/monitoring/prometheus/dmarc-metrics-exporter { };
 
   dmlive = callPackage ../applications/video/dmlive {
+    inherit (darwin) configd;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -36228,8 +36229,6 @@ with pkgs;
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
   ytmdl = callPackage ../tools/misc/ytmdl { };
-
-  yutto = callPackage ../tools/misc/yutto { };
 
   yuview = libsForQt5.yuview;
 
