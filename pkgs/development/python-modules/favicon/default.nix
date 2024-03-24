@@ -2,7 +2,7 @@
 , beautifulsoup4
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , requests
 , requests-mock
@@ -30,12 +30,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     requests-mock
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   pythonImportsCheck = [
