@@ -9,35 +9,27 @@
 
 buildGoModule rec {
   pname = "docker-credential-gcr";
-  version = "2.1.8";
+  version = "2.1.22";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
-    rev = "v${version}";
-    sha256 = "sha256-6f84NRqMx0NX+3g+pCYgRYkGK4DaQmUEau3oMswUmSE=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-vGX6Jhh91dUqZ+y+h1SlPiFE3dL0UO3iJyyzvQVoUsQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-TestGet_GCRCredentials.patch";
-      url = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/commit/a0c080e58bbfdeb0aa24e66551c4e8b0359bf178.patch";
-      sha256 = "sha256-aXp/1kNaxqQDPszC7pO+qP7ZBWHjpVljUHiKFnnDWuM=";
-    })
-  ];
 
   postPatch = ''
     rm -rf ./test
   '';
 
-  vendorHash = "sha256-e7XNTizZYp/tS7KRvB9KxY3Yurphnm6Ehz4dHZNReK8=";
+  vendorHash = "sha256-VsJ5OI8D1u9qZqtirYf682+z0wLJr/vAxRLHAEGwKSY=";
 
   CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/GoogleCloudPlatform/docker-credential-gcr/config.Version=${version}"
+    "-X github.com/GoogleCloudPlatform/docker-credential-gcr/v2/config.Version=${version}"
   ];
 
   passthru = {
@@ -48,6 +40,8 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A Docker credential helper for GCR (https://gcr.io) users";
     longDescription = ''
@@ -56,6 +50,7 @@ buildGoModule rec {
       authenticated requests to GCR's repositories (gcr.io, eu.gcr.io, etc.).
     '';
     homepage = "https://github.com/GoogleCloudPlatform/docker-credential-gcr";
+    changelog = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ suvash ];
     mainProgram = "docker-credential-gcr";
