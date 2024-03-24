@@ -37,7 +37,6 @@ in
       rm anylogic_extracted.tgz
       cd ./anylogic
       pwd
-      printf "directory and ready to run.\n\n"
       chmod -R a+wr plugins/com.anylogic.examples_*
       cd ..
       mkdir -p $out/opt
