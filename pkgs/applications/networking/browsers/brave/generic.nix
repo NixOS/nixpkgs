@@ -213,6 +213,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
     platforms = [ "x86_64-linux" "aarch64-linux"];
-    mainProgram = pname;
+    mainProgram = "brave";
   };
 }
