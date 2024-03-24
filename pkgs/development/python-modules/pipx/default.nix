@@ -77,6 +77,7 @@ buildPythonPackage rec {
     "determination"
     "json"
     "test_list_short"
+    "test_skip_maintenance"
   ];
 
   meta = with lib; {
