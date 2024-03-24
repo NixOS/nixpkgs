@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "warp";
     rev = "v${version}";
-    hash = "sha256-pntHIY0cScDKhWR6kXp6YrEbBQiQjUId3MrJzy5l+K8=";
+    hash = "sha256-GRxZ3y1PdJpBDnGCfmOmZgN8n1aaYf9IhyszRwo3MjQ=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Go/a7aVHF1Yt3yIccKJIVeFy5rckXhSKfd13hdhlLUQ=";
+    hash = "sha256-v/MhVcQmMYD/n/8wmPCYUy4YpXhL0v4fq8h6cllo/pw=";
   };
 
   nativeBuildInputs = [
