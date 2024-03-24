@@ -45,7 +45,7 @@ let
 
     basedir = '${cfg.buildbotDir}'
 
-    configfile = '${cfg.masterCfg}'
+    configfile = 'master.cfg'
 
     # Default umask for server
     umask = None
@@ -247,6 +247,18 @@ in {
         description = lib.mdDoc "Packages to add the to the PYTHONPATH of the buildbot process.";
         example = literalExpression "pythonPackages: with pythonPackages; [ requests ]";
       };
+
+      environmentFiles = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        example = [ "/run/secrets/buildbot-master" ];
+        description = lib.mdDoc ''
+          File to load as environment file. Environment variables from this file
+          will be interpolated into the config file using envsubst with this
+          syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
+          This is useful to avoid putting secrets into the nix store.
+        '';
+      };
     };
   };
 
@@ -276,6 +288,8 @@ in {
         mkdir -vp "${cfg.buildbotDir}"
         # Link the tac file so buildbot command line tools recognize the directory
         ln -sf "${tacFile}" "${cfg.buildbotDir}/buildbot.tac"
+        # substitute values as defined in environmentFiles
+        ${pkgs.envsubst}/bin/envsubst -i "${cfg.masterCfg}" > ${cfg.buildbotDir}/master.cfg
         ${cfg.package}/bin/buildbot create-master --db "${cfg.dbUrl}" "${cfg.buildbotDir}"
         rm -f buildbot.tac.new master.cfg.sample
       '';
@@ -285,6 +299,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
+        EnvironmentFile = config.services.buildbot-master.environmentFiles;
         # NOTE: call twistd directly with stdout logging for systemd
         ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${cfg.buildbotDir}/buildbot.tac";
         # To reload on upgrade, set the following in your configuration:
