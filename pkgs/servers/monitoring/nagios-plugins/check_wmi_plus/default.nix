@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   pname = "check-wmi-plus";
   version = "1.65";
 
-  # We fetch from github.com instead of the proper upstream as nix-build errors
-  # out with 406 when trying to fetch the sources
+  # Upstream has been moved from Github to tarballs on the author's website.
+  # See https://edcint.co.nz/checkwmiplus/releases/
   src = fetchFromGitHub {
     owner = "speartail";
     repo = "checkwmiplus";
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sensu/nagios plugin using WMI to query Windows hosts";
-    homepage = "http://edcint.co.nz/checkwmiplus";
+    homepage = "https://edcint.co.nz/checkwmiplus/";
     license = licenses.gpl2Plus;
     mainProgram = "check_wmi_plus";
     maintainers = with maintainers; [ peterhoeg ];
