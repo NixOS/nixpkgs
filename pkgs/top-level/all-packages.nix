@@ -5271,8 +5271,6 @@ with pkgs;
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
-  facter = callPackage ../tools/system/facter { };
-
   faketty = callPackage ../tools/misc/faketty { };
 
   fasd = callPackage ../tools/misc/fasd { };
