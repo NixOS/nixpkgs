@@ -13,6 +13,9 @@ let
     ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
     ln -s /run/wrappers/bin/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
+    ln -s /run/wrappers/bin/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
+    ln -s /run/wrappers/bin/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
+    ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
   '';
 
   plugins = [
@@ -312,6 +315,14 @@ in {
         permissions = "u+rx,g+x,o-rwx";
       };
 
+      "debugfs.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/debugfs.plugin.org";
+        capabilities = "cap_dac_read_search+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+
       "cgroup-network" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/cgroup-network.org";
         capabilities = "cap_setuid+ep";
@@ -336,6 +347,14 @@ in {
         permissions = "u+rx,g+x,o-rwx";
       };
 
+      "logs-management.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/logs-management.plugin.org";
+        capabilities = "cap_dac_read_search,cap_syslog+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+
       "slabinfo.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
         capabilities = "cap_dac_override+ep";
@@ -348,6 +367,14 @@ in {
       "freeipmi.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
         capabilities = "cap_dac_override,cap_fowner+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+    } // optionalAttrs (cfg.package.withNetworkViewer) {
+      "network-viewer.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/network-viewer.plugin.org";
+        capabilities = "cap_sys_admin,cap_dac_read_search,cap_sys_ptrace+ep";
         owner = cfg.user;
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
