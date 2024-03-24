@@ -6,6 +6,7 @@
 , cudaSupport ? opencv.cudaSupport or false
 
 # build
+, scons
 , addOpenGLRunpath
 , autoPatchelfHook
 , cmake
@@ -87,6 +88,7 @@ stdenv.mkDerivation rec {
       pybind11
       setuptools
     ]))
+    scons
     shellcheck
     sphinx
   ] ++ lib.optionals cudaSupport [
@@ -108,7 +110,9 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  dontUseCmakeBuildDir = true;
+  dontUseSconsCheck = true;
+  dontUseSconsBuild = true;
+  dontUseSconsInstall = true;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -125,8 +129,8 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" true)
-    (cmakeBool "ENABLE_INTEL_GNA" true)
+    (cmakeBool "ENABLE_INTEL_CPU" stdenv.isx86_64)
+    (cmakeBool "ENABLE_INTEL_GNA" stdenv.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -141,8 +145,6 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
 
   autoPatchelfIgnoreMissingDeps = [
     "libngraph_backend.so"
@@ -188,8 +190,7 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = (stdenv.isLinux && stdenv.isAarch64) # requires scons, then fails with *** Source directory cannot be under variant directory.
-      || stdenv.isDarwin; # Cannot find macos sdk
+    broken = stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }
