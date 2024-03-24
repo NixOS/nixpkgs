@@ -8,30 +8,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "elasticsearch-curator";
-  version = "8.0.10";
+  version = "8.0.12";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hGG7lyrVviZSKTUo+AOPIutn/mxtDo+ewFxCRdj/jts=";
+    hash = "sha256-CU/8l5607eKodcdpMKu0Wdlg+K6YnFX6uoDju12NDR0=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "elasticsearch8==" "elasticsearch8>=" \
-      --replace "es_client==" "es_client>=" \
-      --replace "ecs-logging==" "ecs-logging>=" \
-      --replace "click==" "click>="\
-      --replace "pyyaml==" "pyyaml>="
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     certifi
     click
     ecs-logging
@@ -43,7 +34,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    mock
     requests
     pytestCheckHook
   ];
