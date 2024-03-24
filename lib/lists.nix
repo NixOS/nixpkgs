@@ -1688,16 +1688,21 @@ rec {
     ## `lib.lists.crossLists` usage example
 
     ```nix
-    crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
+    crossLists (x: y: "${toString x}${toString y}") [[1 2] [3 4]]
     => [ "13" "14" "23" "24" ]
     ```
 
+    To migrate to `lib.mapCartesianProduct` we need to pass an attrset as input instead of a list:
+
+    ```nix
+    mapCartesianProduct (x: "${toString x.a}${toString x.b}") { a = [1 2]; b = [3 4]; }
+    => [ "13" "14" "23" "24" ]
+    ```
     :::
   */
   crossLists = warn
-    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead."
+    "lib.crossLists is deprecated, use lib.mapCartesianProduct instead."
     (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
-
 
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.

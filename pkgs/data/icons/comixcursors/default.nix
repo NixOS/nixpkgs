@@ -7,14 +7,13 @@ let
     thickness = [ "" "Slim_" ];  # Thick or slim edges.
     handedness = [ "" "LH_" ];   # Right- or left-handed.
   };
-  product = lib.cartesianProductOfSets dimensions;
   variantName =
     { color, opacity, thickness, handedness }:
     "${handedness}${opacity}${thickness}${color}";
   variants =
     # (The order of this list is already good looking enough to show in the
     # meta.longDescription.)
-    map variantName product;
+    lib.mapCartesianProduct variantName dimensions;
 in
 stdenvNoCC.mkDerivation rec {
   pname = "comixcursors";
