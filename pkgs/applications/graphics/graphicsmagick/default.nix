@@ -1,40 +1,77 @@
-{ lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
-, libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
-, libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences
+{ lib
+, bzip2
+, coreutils
+, fetchurl
+, fixDarwinDylibNames
+, freetype
+, ghostscript
+, graphviz
+, libX11
+, libjpeg
+, libpng
+, libtiff
+, libtool
+, libwebp
+, libxml2
+, nukeReferences
+, quantumdepth ? 8
 , runCommand
-, graphicsmagick  # for passthru.tests
+, stdenv
+, xz
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphicsmagick";
   version = "1.3.39";
 
   src = fetchurl {
-    url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "sha256-4wscpY6HPQoe4gg4RyRCTbLTwzpUA04mHRTo+7j40E8=";
+    url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${finalAttrs.version}.tar.xz";
+    hash = "sha256-SE/M/Ssvr2wrqRUUaezlByvLkbpO1z517T2ORsdZ1Vc=";
   };
 
+  outputs = [ "out" "man" ];
+
   patches = [
-    ./disable-popen.patch
+    # CVE Request: GraphicsMagick and ImageMagick popen() shell vulnerability
+    # via filename
+    # https://web.archive.org/web/20160530051451/http://permalink.gmane.org/gmane.comp.security.oss.general/19669
+    ./001-disable-popen.patch
   ];
+
+  buildInputs = [
+    bzip2
+    freetype
+    ghostscript
+    graphviz
+    libX11
+    libjpeg
+    libpng
+    libtiff
+    libtool
+    libwebp
+    libxml2
+    zlib
+  ];
+
+  nativeBuildInputs = [
+    nukeReferences
+    xz
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   configureFlags = [
-    "--enable-shared"
-    "--with-frozenpaths"
-    "--with-quantum-depth=${toString quantumdepth}"
-    "--with-gslib=yes"
+    # specify delegates explicitly otherwise `gm` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
+    (lib.enableFeature true "shared")
+    (lib.withFeature true "frozenpaths")
+    (lib.withFeatureAs true "quantum-depth" (toString quantumdepth))
+    (lib.withFeatureAs true "gslib" "yes")
   ];
 
-  buildInputs =
-    [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
-      zlib libtool libwebp
-    ];
-
-  nativeBuildInputs = [ xz nukeReferences ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-
   # Remove CFLAGS from the binaries to avoid closure bloat.
-  # In the past we have had -dev packages in the closure of the binaries soley due to the string references.
+  # In the past we have had -dev packages in the closure of the binaries soley
+  # due to the string references.
   postConfigure = ''
     nuke-refs -e $out ./magick/magick_config.h
   '';
@@ -46,7 +83,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       issue-157920 = runCommand "issue-157920-regression-test" {
-        buildInputs = [ graphicsmagick ];
+        buildInputs = [ finalAttrs.finalPackage ];
       } ''
         gm convert ${graphviz}/share/graphviz/doc/pdf/neatoguide.pdf jpg:$out
       '';
@@ -56,8 +93,16 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    longDescription = ''
+      GraphicsMagick is the swiss army knife of image processing, providing a
+      robust and efficient collection of tools and libraries which support
+      reading, writing, and manipulating an image in over 92 major formats
+      including important formats like DPX, GIF, JPEG, JPEG-2000, JXL, PNG, PDF,
+      PNM, TIFF, and WebP.
+    '';
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "gm";
+    platforms = lib.platforms.all;
   };
-}
+})
