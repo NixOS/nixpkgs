@@ -41,7 +41,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/shimunn/fido2luks";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      prusnak
       mmahut
       quantenzitrone
     ];
