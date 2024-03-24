@@ -15,8 +15,7 @@
 , wheel
 , setuptools
 , hypothesis
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , pytest-xdist
 , numpy
 , pybind11
@@ -117,7 +116,7 @@ in buildPythonPackage {
   nativeCheckInputs = [
     hypothesis
     # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     pytest-xdist
   ];
 
