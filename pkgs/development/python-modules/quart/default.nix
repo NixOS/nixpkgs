@@ -26,7 +26,7 @@
 , mock
 , py
 , pytest-asyncio
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -76,12 +76,7 @@ buildPythonPackage rec {
     mock
     py
     pytest-asyncio
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+    pytest7CheckHook
   ];
 
   meta = with lib; {
