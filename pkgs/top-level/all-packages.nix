@@ -31668,7 +31668,6 @@ with pkgs;
         pythonPackages = python3Packages;
   };
 
-  graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
   graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
