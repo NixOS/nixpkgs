@@ -1,6 +1,9 @@
 { lib
+, elasticsearch-curator
 , fetchFromGitHub
+, nix-update-script
 , python3
+, testers
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -76,6 +79,14 @@ python3.pkgs.buildPythonApplication rec {
     "test_api_key_set"
   ];
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = elasticsearch-curator;
+      command = "${lib.getExe elasticsearch-curator} --version";
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
     homepage = "https://github.com/elastic/curator";
@@ -93,6 +104,7 @@ python3.pkgs.buildPythonApplication rec {
 
       * Perform various actions on the items which remain in the actionable list.
     '';
+    mainProgram = "curator";
     maintainers = with maintainers; [ basvandijk ];
   };
 }
