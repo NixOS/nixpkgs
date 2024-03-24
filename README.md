@@ -137,16 +137,25 @@ You can just open the wfs-tools directory with Visual Studio and build the proje
 
 ### Linux
 ```
-sudo apt-get install git g++ cmake ninja-build pkg-config libfuse-dev zip
+sudo apt-get install git g++ cmake ninja-build libfuse-dev zip
 ```
 
 ### Mac OS X
+Currently only LLVM is supported
 Install Xcode command line tools:
 ```
 xcode-select --install
 ```
 [Install Homebrew](https://brew.sh/)  
 ```
-brew install cmake ninja pkg-config
-brew install macfuse
+brew install cmake ninja llvm macfus
+```
+Build using the installled llvm:
+```
+# For x86-64
+export CC=/usr/local/opt/llvm/bin/clang
+export CXX=/usr/local/opt/llvm/bin/clang++
+# For arm
+export CC=/opt/homebrew/opt/llvm/bin/clang
+export CXX=/opt/homebrew/opt/llvm/bin/clang++
 ```

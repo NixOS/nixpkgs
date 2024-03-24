@@ -72,8 +72,6 @@ jobs:
           rm /usr/local/bin/python3-config || true
           brew install llvm
           brew install macfuse
-          echo "LDFLAGS=-L/usr/local/opt/llvm/lib" >> $GITHUB_ENV
-          echo "CXXFLAGS=-isystem /usr/local/opt/llvm/include" >> $GITHUB_ENV
         shell: bash
         if: matrix.platform == 'macos-13'
 
@@ -82,8 +80,6 @@ jobs:
           brew update
           brew install llvm
           brew install macfuse
-          echo "LDFLAGS=-L/opt/homebrew/opt/llvm/lib" >> $GITHUB_ENV
-          echo "CXXFLAGS=-isystem /opt/homebrew/opt/llvm/include" >> $GITHUB_ENV
         shell: bash
         if: matrix.platform == 'macos-14'
 
