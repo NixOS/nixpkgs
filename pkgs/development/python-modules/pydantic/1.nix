@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, cython
+, cython_0
 , email-validator
 , fetchFromGitHub
 , pytest-mock
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    cython
+    cython_0
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [

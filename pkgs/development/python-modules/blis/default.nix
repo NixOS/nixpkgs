@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, cython
+, cython_0
 , hypothesis
 , numpy
 , pytestCheckHook
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    cython
+    cython_0
   ];
 
   propagatedBuildInputs = [

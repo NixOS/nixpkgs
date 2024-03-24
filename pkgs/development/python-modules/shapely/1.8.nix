@@ -6,7 +6,7 @@
 , pythonOlder
 , substituteAll
 
-, cython
+, cython_0
 , geos_3_11
 , numpy
 , oldest-supported-numpy
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_0
     geos_3_11 # for geos-config
     oldest-supported-numpy
     setuptools

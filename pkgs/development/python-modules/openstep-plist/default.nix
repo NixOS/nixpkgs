@@ -3,8 +3,7 @@
 , fetchPypi
 , setuptools-scm
 , pytestCheckHook
-, cython
-, pythonImportsCheckHook
+, cython_0
 }:
 
 buildPythonPackage rec {
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools-scm cython ];
+  nativeBuildInputs = [ setuptools-scm cython_0 ];
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "openstep_plist" ];
 

@@ -6,7 +6,7 @@
 , fetchFromGitHub
 
 # build
-, cython_3
+, cython
 , setuptools
 
 # tests
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
   ] ++ lib.optionals (!isPyPy) [
-    cython_3
+    cython
   ];
 
   __darwinAllowLocalNetworking = true;

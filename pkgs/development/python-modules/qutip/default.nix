@@ -3,7 +3,7 @@
 , buildPythonPackage
 , cvxopt
 , cvxpy
-, cython
+, cython_0
 , fetchFromGitHub
 , ipython
 , matplotlib
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython
+    cython_0
   ];
 
   propagatedBuildInputs = [

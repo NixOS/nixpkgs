@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, cython
+, cython_0
 , certifi
 , CFNetwork
 , cmake
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_0
   ];
 
   buildInputs = [

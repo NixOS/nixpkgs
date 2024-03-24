@@ -5,7 +5,7 @@
 , python
 , libev
 , cffi
-, cython_3
+, cython
 , greenlet
 , importlib-metadata
 , setuptools
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
     wheel
   ] ++ lib.optionals (!isPyPy) [

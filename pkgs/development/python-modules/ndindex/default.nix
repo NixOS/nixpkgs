@@ -3,7 +3,7 @@
 , fetchFromGitHub
 
 # build-system
-, cython_3
+, cython
 
 # optional
 , numpy
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
   ];
 
   postPatch = ''

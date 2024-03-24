@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, cython_3
+, cython
 , expandvars
 , setuptools
 , idna
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     expandvars
     setuptools
   ];
