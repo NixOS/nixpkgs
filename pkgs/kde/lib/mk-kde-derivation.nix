@@ -78,11 +78,15 @@ in
     extraNativeBuildInputs ? [],
     extraPropagatedBuildInputs ? [],
     extraCmakeFlags ? [],
+    excludeDependencies ? [],
     ...
   } @ args: let
+    depNames = dependencies.${pname} or [];
+    filteredDepNames = builtins.filter (dep: !(builtins.elem dep excludeDependencies)) depNames;
+
     # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
     # but cross is currently very broken anyway, so we can figure this out later.
-    deps = map (dep: self.${dep}) (dependencies.${pname} or []);
+    deps = map (dep: self.${dep}) filteredDepNames;
 
     defaultArgs = {
       inherit version src;
@@ -109,6 +113,7 @@ in
       "extraNativeBuildInputs"
       "extraPropagatedBuildInputs"
       "extraCmakeFlags"
+      "excludeDependencies"
       "meta"
     ];
 
