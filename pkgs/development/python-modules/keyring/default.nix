@@ -9,6 +9,8 @@
 , importlib-metadata
 , dbus-python
 , jaraco-classes
+, jaraco-context
+, jaraco-functools
 , jeepney
 , secretstorage
 , pytestCheckHook
@@ -16,23 +18,28 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "24.3.1";
+  version = "25.0.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wzJ7b/r8DovvvbWXys20ko/+XBIS92RfGG5tmVeomNs=";
+    hash = "sha256-/AJO1Tx+oJDjByPmvYL1ijncJdmmeX2GYgPs0O5jBss=";
   };
+
+  build-system = [
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools-scm
     shtab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jaraco-classes
+    jaraco-context
+    jaraco-functools
   ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
