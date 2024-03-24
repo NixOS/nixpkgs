@@ -236,9 +236,9 @@ in rec {
   # hipTensor - Only supports GFX9
 
   miopengemm= throw ''
-    'miopen-opencl' has been deprecated.
+    'miopengemm' has been deprecated.
     It is still available for some time as part of rocmPackages_5.
-  ''; # Added 2024-3-3;
+  ''; # Added 2024-3-3
 
   composable_kernel = callPackage ./composable_kernel {
     inherit rocmUpdateScript rocm-cmake clr;
@@ -264,7 +264,7 @@ in rec {
   miopen-opencl= throw ''
     'miopen-opencl' has been deprecated.
     It is still available for some time as part of rocmPackages_5.
-  ''; # Added 2024-3-3;
+  ''; # Added 2024-3-3
 
   migraphx = callPackage ./migraphx {
     inherit rocmUpdateScript rocm-cmake rocblas composable_kernel miopen clr half rocm-device-libs;
