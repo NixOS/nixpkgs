@@ -1,29 +1,29 @@
 { lib
-, python3
-, fetchPypi
+, python3Packages
+, fetchFromGitHub
 , ffmpeg
 , nix-update-script
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "yutto";
-  version = "2.0.0b35";
+  version = "2.0.0b36-unstable-2024-03-04";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = python3Packages.pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-r4Lc5PMkhwLMC6nKArvpf9M4N+eoV6OmZK2uhY6xZxA=";
+  src = fetchFromGitHub {
+    owner = "yutto-dev";
+    repo = "yutto";
+    rev = "f2d34f9e2a2d45ed8ed6ae4c2bf91af248da27f0";
+    hash = "sha256-/zTQt+/sCjnQPt8YyKvRXpWVpN/yi2LrhpFH4FPbeOc=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     httpx
     aiofiles
     biliass

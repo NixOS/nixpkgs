@@ -68,6 +68,10 @@ let
       cudaPackages.cudatoolkit
       cudaPackages.cuda_cudart
     ];
+    postBuild = ''
+      rm "$out/lib64"
+      ln -s "lib" "$out/lib64"
+    '';
   };
 
   runtimeLibs = lib.optionals enableRocm [
@@ -166,7 +170,7 @@ goBuild ((lib.optionalAttrs enableRocm {
     mv "$out/bin/ollama" "$out/bin/.ollama-unwrapped"
     makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" \
       --suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}' '' + lib.optionalString enableRocm ''\
-      --set-default HIP_PATH ${pkgs.rocmPackages.meta.rocm-hip-libraries}
+      --set-default HIP_PATH ${rocmPath}
   '';
 
   ldflags = [

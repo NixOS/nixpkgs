@@ -15023,6 +15023,12 @@
       fingerprint = "E005 48D5 D6AC 812C AAD2  AFFA 9C42 B05E 5913 60DC";
     }];
   };
+  pbeucher = {
+    email = "pierre@crafteo.io";
+    github = "PierreBeucher";
+    githubId = 5041481;
+    name = "Pierre Beucher";
+  };
   pblkt = {
     email = "pebblekite@gmail.com";
     github = "pblkt";
