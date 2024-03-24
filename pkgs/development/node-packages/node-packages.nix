@@ -87329,6 +87329,29 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+
+  ollama = nodeEnv.buildNodePackage {
+    name = "ollama";
+    packageName = "ollama";
+    version = "0.5.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/ollama/-/ollama-0.5.0.tgz";
+      sha512 = "CRtRzsho210EGdK52GrUMohA2pU+7NbgEaBG3DcYeRmvQthDO7E2LHOkLlUUeaYUlNmEd8icbjC02ug9meSYnw==";
+    };
+    dependencies = [
+      sources."whatwg-fetch-3.6.20"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Ollama Javascript library";
+      homepage = "https://github.com/ollama/ollama-js";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+
   orval = nodeEnv.buildNodePackage {
     name = "orval";
     packageName = "orval";
