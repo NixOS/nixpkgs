@@ -8,14 +8,14 @@
 , unfreeEnableDiscord ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "86Box";
   version = "4.1";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JYOJFXiUTLRs6AEMYNx88PwcVw13ChQzV1ZE5OtX6Ds=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.jchw ];
     platforms = platforms.linux;
   };
-}
+})
