@@ -5,7 +5,7 @@
 , ruamel-yaml
 , attrs
 , pythonOlder
-, pytestCheckHook
+, pytest7CheckHook
 , pytest-xdist
 , numpy
 }:
@@ -36,14 +36,9 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     pytest-xdist
     numpy
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTestPaths = [
