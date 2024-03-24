@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2024.1.1";
+  version = "2024.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-L8bRh2bx36CYrAFXYJF67rCeCRfm5ufhTkMFRJo0yYo=";
+    hash = "sha256-8VFtKPaF0PqCjqFB+plFe1GjUno5j7j86+wxKhzByyw=";
   };
 
   nativeBuildInputs = [
@@ -127,8 +127,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
