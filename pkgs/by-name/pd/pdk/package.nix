@@ -23,6 +23,6 @@ bundlerApp {
     description = "Puppet Development Kit";
     homepage = "https://github.com/puppetlabs/pdk";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ netali ];
+    maintainers = with lib.maintainers; [ netali anthonyroussel ];
   };
 }
