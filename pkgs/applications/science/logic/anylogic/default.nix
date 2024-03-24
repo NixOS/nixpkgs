@@ -25,7 +25,7 @@ in
       sha256 = "0n372fq6q1pr0y3qxwdf5xxx9phmlyrjjgji861qilrqdg4cmzcp";
     };
 
-    nativeBuildInputs = [copyDesktopItems gnutar];
+    nativeBuildInputs = [ copyDesktopItems ];
     buildInputs = [steam-run];
 
     unpackPhase = ":";
