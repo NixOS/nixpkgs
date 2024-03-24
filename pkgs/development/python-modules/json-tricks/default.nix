@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
-, pytestCheckHook
+, pytest7CheckHook
 , numpy
 , pandas
 , pytz
@@ -26,11 +26,7 @@ buildPythonPackage rec {
     numpy
     pandas
     pytz
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [
