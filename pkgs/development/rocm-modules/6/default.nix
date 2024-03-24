@@ -322,12 +322,11 @@ in rec {
     useCPU = false;
   };
 
-  mivisionx-opencl = mivisionx.override {
-    rpp = rpp-opencl;
-    miopen = miopen-opencl;
-    useOpenCL = true;
-    useCPU = false;
-  };
+  mivisionx-opencl = throw ''
+    'mivisionx-opencl' has been deprecated.
+    Other versions of mivisionx are still available.
+    It is also still available for some time as part of rocmPackages_5.
+  ''; # Added 2024-3-24
 
   mivisionx-cpu = mivisionx.override {
     rpp = rpp-cpu;
