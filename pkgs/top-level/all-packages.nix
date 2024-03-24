@@ -4909,6 +4909,8 @@ with pkgs;
 
   crudini = callPackage ../tools/misc/crudini { };
 
+  csv2md = with python3Packages; toPythonApplication csv2md;
+
   csv2odf = callPackage ../applications/office/csv2odf { };
 
   csv2parquet = callPackage ../tools/misc/csv2parquet { };
