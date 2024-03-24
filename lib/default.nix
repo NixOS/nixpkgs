@@ -113,7 +113,7 @@ let
       toInt toIntBase10 readPathsFromFile fileContents;
     inherit (self.stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
-    inherit (self.customisation) overrideDerivation makeOverridable
+    inherit (self.customisation) overrideDerivation makeOverridable makeOverridableGeneric
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing makeScopeWithSplicing';
     inherit (self.derivations) lazyDerivation optionalDrvAttr;
