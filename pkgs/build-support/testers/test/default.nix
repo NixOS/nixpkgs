@@ -12,6 +12,8 @@ let
 
 in
 lib.recurseIntoAttrs {
+  lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
+
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
 
   runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {

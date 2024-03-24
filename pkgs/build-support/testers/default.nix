@@ -1,6 +1,10 @@
 { pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
 # Documentation is in doc/builders/testers.chapter.md
 {
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
+  # or doc/builders/testers.chapter.md
+  inherit (callPackage ./lychee.nix {}) lycheeLinkCheck;
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
   # or doc/builders/testers.chapter.md
   testBuildFailure = drv: drv.overrideAttrs (orig: {
