@@ -94,6 +94,14 @@ in {
             Whether to enable python-based plugins
           '';
         };
+        recommendedPythonPackages = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc ''
+            Whether to enable a set of recommended Python plugins
+            by installing extra Python packages.
+          '';
+        };
         extraPackages = mkOption {
           type = types.functionTo (types.listOf types.package);
           default = ps: [];
@@ -206,6 +214,18 @@ in {
         }
       ];
 
+    # Includes a set of recommended Python plugins in exchange of imperfect disk consumption.
+    services.netdata.python.extraPackages = lib.mkIf cfg.python.recommendedPythonPackages (ps: [
+      ps.requests
+      ps.pandas
+      ps.numpy
+      ps.psycopg2
+      ps.python-ldap
+      ps.netdata-pandas
+      ps.changefinder
+    ]);
+
+    services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 
