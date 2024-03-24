@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = with licenses; [ gpl2 gpl2Plus ];
+    license = with licenses; [ gpl2Only gpl2Plus ];
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.all;
     mainProgram = "flashprog";
