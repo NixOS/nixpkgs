@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Alternative parser for bitbake recipes";
     homepage = "https://github.com/priv-kweihmann/oelint-parser";
-    changelog = "https://github.com/priv-kweihmann/oelint-parser/releases/tag/v${version}";
+    changelog = "https://github.com/priv-kweihmann/oelint-parser/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ otavio ];
   };
