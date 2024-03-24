@@ -6187,7 +6187,7 @@
   };
   eymeric = {
     name = "Eymeric Dechelette";
-    email = "hatchchcien@protonmail.com";
+    email = "hatchchien@protonmail.com";
     github = "hatch01";
     githubId = 42416805;
   };
