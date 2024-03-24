@@ -26,9 +26,10 @@ in
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
-    buildInputs = [steam-run];
+    buildInputs = [ steam-run ];
 
-    unpackPhase = ":";
+    dontUnpack = true;
+
     installPhase = ''
       runHook preInstall
       tail -n +374 $src > anylogic_extracted.tgz
