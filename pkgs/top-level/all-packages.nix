@@ -3980,8 +3980,6 @@ with pkgs;
 
   mobilecoin-wallet = callPackage ../applications/misc/mobilecoin-wallet { };
 
-  mpdevil = callPackage ../applications/audio/mpdevil { };
-
   pacparser = callPackage ../tools/networking/pacparser { };
 
   pairdrop = callPackage ../applications/misc/pairdrop { };
