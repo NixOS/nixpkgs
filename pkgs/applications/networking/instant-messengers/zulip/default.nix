@@ -1,35 +1,69 @@
 { lib
-, fetchurl
-, appimageTools
+, fetchFromGitHub
+, buildNpmPackage
+, electron_28
+, makeDesktopItem
+, copyDesktopItems
 }:
 
-let
+buildNpmPackage rec {
   pname = "zulip";
   version = "5.10.5";
 
-  src = fetchurl {
-    url = "https://github.com/zulip/zulip-desktop/releases/download/v${version}/Zulip-${version}-x86_64.AppImage";
-    hash = "sha256-dWTczjE6QAW26bGTIeFTuXl1JwYr3Ma+8Ab6MjeDr78=";
-    name="${pname}-${version}.AppImage";
+  src = fetchFromGitHub {
+    owner = "zulip";
+    repo = "zulip-desktop";
+    rev = "v${version}";
+    hash = "sha256-ule9cggAXLqEuTKUmklm7LBiTWzBDKhtkyk123/3Lsc=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
+  npmDepsHash = "sha256-kE8WvSUuSu7H4lEgQZtMHmrHM5T5dwICvVCc8Rsu0bA=";
 
-in appimageTools.wrapType2 {
-  inherit pname version src;
+  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}";
+  nativeBuildInputs = [
+    copyDesktopItems
+  ];
 
-  extraInstallCommands = ''
-    mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"
-    install -m 444 -D ${appimageContents}/zulip.desktop $out/share/applications/zulip.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/zulip.png \
-      $out/share/icons/hicolor/512x512/apps/zulip.png
-    substituteInPlace $out/share/applications/zulip.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+  dontNpmBuild = true;
+  buildPhase = ''
+    runHook preBuild
+
+    npm run pack -- \
+      -c.electronDist=${electron_28}/libexec/electron \
+      -c.electronVersion=${electron_28.version}
+
+    runHook postBuild
   '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/share/lib/zulip"
+    cp -r dist/*-unpacked/resources/app.asar* "$out/share/lib/zulip/"
+
+    install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
+
+    makeWrapper '${electron_28}/bin/electron' "$out/bin/zulip" \
+      --add-flags "$out/share/lib/zulip/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --inherit-argv0
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "zulip";
+      exec = "zulip %U";
+      icon = "zulip";
+      desktopName = "Zulip";
+      comment = "Zulip Desktop Client for Linux";
+      categories = [ "Chat" "Network" "InstantMessaging" ];
+      startupWMClass = "Zulip";
+      terminal = false;
+    })
+  ];
 
   meta = with lib; {
     description = "Desktop client for Zulip Chat";
