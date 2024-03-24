@@ -5,6 +5,7 @@
 , steam-run
 , makeDesktopItem
 , copyDesktopItems
+, makeWrapper
 ,
 }:
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n372fq6q1pr0y3qxwdf5xxx9phmlyrjjgji861qilrqdg4cmzcp";
   };
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
   buildInputs = [ steam-run ];
 
   dontUnpack = true;
@@ -36,10 +37,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/anylogic/icon.xpm $out/share/icons/anylogic-ple.xpm
 
     mkdir -p $out/bin
-    cat > $out/bin/anylogic <<EOF
-    #! $SHELL -e
-    exec ${steam-run}/bin/steam-run $out/opt/anylogic/anylogic
-    EOF
+    makeWrapper "${steam-run}/bin/steam-run" "$out/bin/anylogic" --add-flags "$out/opt/anylogic/anylogic"
     chmod +x $out/bin/anylogic
 
     runHook postInstall
