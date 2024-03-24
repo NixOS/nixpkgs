@@ -16,7 +16,7 @@
 , clblast
 
 , blasSupport ? builtins.all (x: !x) [ cudaSupport metalSupport openclSupport rocmSupport vulkanSupport ]
-, openblas
+, blas
 
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
@@ -96,7 +96,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals mpiSupport [ mpi ]
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
-    ++ optionals blasSupport [ openblas ]
+    ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs;
 
   cmakeFlags = [
@@ -131,8 +131,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         # Should likely use `rocmPackages.clr.gpuTargets`.
         "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
       ]
-      ++ optionals metalSupport [ (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1") ]
-      ++ optionals blasSupport [ (cmakeFeature "LLAMA_BLAS_VENDOR" "OpenBLAS") ];
+      ++ optionals metalSupport [ (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1") ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
