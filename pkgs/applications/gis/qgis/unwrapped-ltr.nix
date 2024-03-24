@@ -6,7 +6,7 @@
 , wrapGAppsHook
 , wrapQtAppsHook
 
-, withGrass ? true
+, withGrass ? false
 , withWebKit ? false
 
 , bison
@@ -156,6 +156,7 @@ in mkDerivation rec {
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
+    (lib.cmakeBool "WITH_GRASS" withGrass)
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
