@@ -1,4 +1,8 @@
-{ fetchFromGitHub, python3Packages, lib }:
+{
+  fetchFromGitHub,
+  lib,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "check_systemd";
@@ -7,11 +11,13 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Josef-Friedrich";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "11sc0gycxzq1vfvin501jnwnky2ky6ns64yjiw8vq9vmkbf8nni6";
   };
 
-  propagatedBuildInputs = with python3Packages; [ nagiosplugin ];
+  dependencies = with python3Packages; [
+    nagiosplugin
+  ];
 
   postInstall = ''
     # check_systemd is only a broken stub calling check_systemd.py
@@ -24,15 +30,18 @@ python3Packages.buildPythonApplication rec {
     find test -name "*.py" -execdir sed -i "s@./check_systemd.py@$out/bin/check_systemd@" '{}' ";"
     export PATH=$PATH:$out/bin
   '';
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
-  meta = with lib; {
-    description = "Nagios / Icinga monitoring plugin to check systemd for failed units";
-    mainProgram = "check_systemd";
-    inherit (src.meta) homepage;
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
+  meta = {
     changelog = "https://github.com/Josef-Friedrich/check_systemd/releases";
-    maintainers = with maintainers; [ symphorien ];
-    license = licenses.lgpl2Only;
-    platforms = platforms.linux;
+    description = "Nagios / Icinga monitoring plugin to check systemd for failed units";
+    homepage = "https://github.com/Josef-Friedrich/check_systemd";
+    license = lib.licenses.lgpl2Only;
+    mainProgram = "check_systemd";
+    maintainers = with lib.maintainers; [ symphorien ];
+    platforms = lib.platforms.linux;
   };
 }
