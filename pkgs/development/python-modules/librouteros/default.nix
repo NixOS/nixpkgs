@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-xdist
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , setuptools
 }:
@@ -27,12 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+    pytest7CheckHook
   ];
 
   disabledTests = [
