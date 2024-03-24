@@ -31,6 +31,11 @@ buildPythonPackage rec {
       url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
       hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
     })
+    (fetchpatch {
+      name = "paramiko-pytest8-compat.patch";
+      url = "https://github.com/paramiko/paramiko/commit/d71046151d9904df467ff72709585cde39cdd4ca.patch";
+      hash = "sha256-4CTIZ9BmzRdh+HOwxSzfM9wkUGJOnndctK5swqqsIvU=";
+    })
   ];
 
   propagatedBuildInputs = [
@@ -51,10 +56,6 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
 
   disabledTestPaths = [
     # disable tests that require pytest-relaxed, which is broken
