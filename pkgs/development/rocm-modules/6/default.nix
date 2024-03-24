@@ -236,7 +236,7 @@ in rec {
   # hipTensor - Only supports GFX9
 
   miopengemm= throw ''
-    'miopen-opencl' has been deprecated.
+    'miopengemm' has been deprecated.
     It is still available for some time as part of rocmPackages_5.
   ''; # Added 2024-3-3;
 
