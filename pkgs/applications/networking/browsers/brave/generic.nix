@@ -97,8 +97,7 @@ let
     # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
     ++ optionals enableVideoAcceleration  [ "UseChromeOSDirectVideoDecoder" ];
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
