@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , asn1tools
 , coincurve
 , eth-hash
@@ -16,16 +17,18 @@
 
 buildPythonPackage rec {
   pname = "eth-keys";
-  version = "0.4.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.5.0";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-keys";
     rev = "v${version}";
-    hash = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
+    hash = "sha256-vyyaLCG2uIHXX0t93DmFq8/u0rZL+nsBsH2gfgjziyo=";
   };
+
+  build-system = [ setuptools];
 
   propagatedBuildInputs = [
     eth-typing
