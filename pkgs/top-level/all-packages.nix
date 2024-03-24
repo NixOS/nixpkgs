@@ -32303,7 +32303,7 @@ with pkgs;
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
-  graphicsmagick-imagemagick-compat = callPackage ../applications/graphics/graphicsmagick/imagemagick-compat.nix { };
+  graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
 

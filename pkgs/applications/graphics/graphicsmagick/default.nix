@@ -1,5 +1,6 @@
 { lib
 , bzip2
+, callPackage
 , coreutils
 , fetchurl
 , fixDarwinDylibNames
@@ -81,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    imagemagick-compat = callPackage ./imagemagick-compat.nix {
+      graphicsmagick = finalAttrs.finalPackage;
+    };
     tests = {
       issue-157920 = runCommand "issue-157920-regression-test" {
         buildInputs = [ finalAttrs.finalPackage ];
