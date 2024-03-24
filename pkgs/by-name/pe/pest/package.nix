@@ -2,18 +2,18 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pest";
-  version = "2.34.4";
+  version = "2.34.5";
 
   src = fetchFromGitHub {
     owner = "pestphp";
     repo = "pest";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/Ygm/jb08t+0EG4KHM2utAavka28VzmjVU/uXODMFvI=";
+    hash = "sha256-rRXRtcjQUCx8R5sGRBUwlKtog6jQ1WaOu225npM6Ct8=";
   };
 
   composerLock = ./composer.lock;
 
-  vendorHash = "sha256-RDTmNfXD8Lk50i7dY09JNUgg8hcEM0dtwJnh8UpHgQ4=";
+  vendorHash = "sha256-skNf6bUyGUN/F9Ffpz325napOmPINYk1TyUyYqWmwRM=";
 
   meta = {
     changelog = "https://github.com/pestphp/pest/releases/tag/v${finalAttrs.version}";
