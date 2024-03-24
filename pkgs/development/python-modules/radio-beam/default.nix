@@ -21,6 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-7AFkuuYLzibwwgz6zrFw0fBXCnGLzdm4OgT+Chve5jU=";
   };
 
+  # Fix distutils deprecation in Python 3.12. See:
+  # https://github.com/radio-astro-tools/radio-beam/pull/124
+  patches = [ ./fix-distutil-depr.patch ];
+
   nativeBuildInputs = [
     setuptools-scm
   ];
