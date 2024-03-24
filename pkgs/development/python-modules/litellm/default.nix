@@ -49,11 +49,11 @@ buildPythonPackage rec {
     rm -rf dist
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     click
     importlib-metadata
