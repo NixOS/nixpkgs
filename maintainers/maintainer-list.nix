@@ -4832,6 +4832,12 @@
     githubId = 4708206;
     name = "Daniel Fox Franke";
   };
+  dghubble = {
+    email = "dghubble@gmail.com";
+    github = "dghubble";
+    githubId = 2253428;
+    name = "Dalton Hubble";
+  };
   dgliwka = {
     email = "dawid.gliwka@gmail.com";
     github = "dgliwka";
