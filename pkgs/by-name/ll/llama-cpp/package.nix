@@ -16,6 +16,8 @@
 , clblast
 
 , blasSupport ? builtins.all (x: !x) [ cudaSupport metalSupport openclSupport rocmSupport vulkanSupport ]
+, openblas
+
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 , vulkanSupport ? false
@@ -91,9 +93,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
-    ++ optionals mpiSupport mpi
+    ++ optionals mpiSupport [ mpi ]
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals blasSupport [ openblas ]
     ++ optionals vulkanSupport vulkanBuildInputs;
 
   cmakeFlags = [
