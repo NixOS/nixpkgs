@@ -52,7 +52,7 @@ buildGoModule rec {
     homepage = "https://github.com/GoogleCloudPlatform/docker-credential-gcr";
     changelog = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ suvash ];
+    maintainers = with maintainers; [ suvash anthonyroussel ];
     mainProgram = "docker-credential-gcr";
   };
 }
