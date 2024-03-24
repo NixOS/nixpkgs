@@ -59,20 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Some libraries are loaded dynamically, but QLibrary doesn't seem to search
   # the runpath, so use a wrapper instead.
-  postFixup = let
+  preFixup = let
     libPath = lib.makeLibraryPath ([
       libpcap
     ] ++ lib.optional unfreeEnableDiscord discord-gamesdk);
     libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-  in
-  ''
-    wrapProgram $out/bin/86Box \
-      "''${qtWrapperArgs[@]}" \
-      --prefix ${libPathVar} : "${libPath}"
+  in ''
+    makeWrapperArgs+=(--prefix ${libPathVar} : "${libPath}")
   '';
-
-  # Do not wrap twice.
-  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Emulator of x86-based machines based on PCem.";
