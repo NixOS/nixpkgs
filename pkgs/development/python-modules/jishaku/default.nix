@@ -31,6 +31,8 @@ buildPythonPackage rec {
       url = "https://github.com/Gorialis/jishaku/commit/b96cd55a1c2fd154c548f08019ccd6f7be9c7f90.patch";
       hash = "sha256-laPoupwCC1Zthib8G+c1BXqTwZK0Z6up1DKVkhFicJ0=";
     })
+    # change hardcoded /bin/bash default to /bin/sh
+    ./0001-use-bin-sh-instead-of-bin-bash-for-system-bash.patch
   ];
 
   nativeBuildInputs = [ setuptools ];

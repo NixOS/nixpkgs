@@ -1,0 +1,25 @@
+From 645a7436bc5b905822798cae1048f2df949d9d8a Mon Sep 17 00:00:00 2001
+From: itslychee <itslychee@protonmail.com>
+Date: Sun, 24 Mar 2024 07:21:33 -0500
+Subject: [PATCH] use /bin/sh instead of /bin/bash for system bash
+
+---
+ jishaku/shell.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/jishaku/shell.py b/jishaku/shell.py
+index 46afe8c..6ca68ef 100644
+--- a/jishaku/shell.py
++++ b/jishaku/shell.py
+@@ -26,7 +26,7 @@ T = typing.TypeVar('T')
+ P = ParamSpec('P')
+ 
+ 
+-SHELL = os.getenv("SHELL") or "/bin/bash"
++SHELL = os.getenv("SHELL") or "/bin/sh"
+ WINDOWS = sys.platform == "win32"
+ 
+ 
+-- 
+2.44.0
+
