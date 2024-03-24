@@ -5,29 +5,32 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "check_systemd";
-  version = "2.3.1";
+  pname = "check-systemd";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Josef-Friedrich";
-    repo = pname;
+    repo = "check_systemd";
     rev = "refs/tags/v${version}";
-    sha256 = "11sc0gycxzq1vfvin501jnwnky2ky6ns64yjiw8vq9vmkbf8nni6";
+    hash = "sha256-1e1WtWRTmOxozuOP2ndfsozuiy9LCT/Lsvb+yKH+8eY=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/test_argparse.py \
+      --replace-fail "./check_systemd.py" "check_systemd"
+  '';
+
+  build-system = with python3Packages; [
+    poetry-core
+  ];
 
   dependencies = with python3Packages; [
     nagiosplugin
   ];
 
-  postInstall = ''
-    # check_systemd is only a broken stub calling check_systemd.py
-    mv $out/bin/check_systemd{.py,}
-  '';
-
-  # the test scripts run ./check_systemd.py and check_systemd. Patch to
-  # the installed, patchShebanged executable in $out/bin
+  # needs to be able to run check_systemd from PATH
   preCheck = ''
-    find test -name "*.py" -execdir sed -i "s@./check_systemd.py@$out/bin/check_systemd@" '{}' ";"
     export PATH=$PATH:$out/bin
   '';
 
