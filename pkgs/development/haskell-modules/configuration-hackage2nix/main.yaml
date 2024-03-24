@@ -89,7 +89,6 @@ extra-packages:
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
-  - primitive-addr < 0.1.0.3            # 2024-03-20: for hls on ghc < 9.4.7
   - primitive-unlifted == 0.1.3.1       # 2024-03-16: Needed for hls on ghc 9.2
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
