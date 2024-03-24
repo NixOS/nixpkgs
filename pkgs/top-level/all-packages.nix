@@ -38608,7 +38608,7 @@ with pkgs;
 
   hy = with python3Packages; toPythonApplication hy;
 
-  wmic-bin = callPackage ../servers/monitoring/plugins/wmic-bin.nix { };
+  wmic-bin = callPackage ../servers/monitoring/wmic-bin { };
 
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { };
 
