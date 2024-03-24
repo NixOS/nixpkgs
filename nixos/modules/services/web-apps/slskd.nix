@@ -4,44 +4,52 @@ let
   settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.slskd = with lib; with types; {
-    enable = mkEnableOption "enable slskd";
+    enable = mkEnableOption "slskd";
 
-    rotateLogs = mkEnableOption "enable an unit and timer that will rotate logs in /var/slskd/logs";
+    rotateLogs = mkEnableOption "a unit and a timer that will rotate logs in /var/slskd/logs";
 
     package = mkPackageOption pkgs "slskd" { };
 
     nginx = mkOption {
-      description = lib.mdDoc "options for nginx";
+      description = mdDoc "options for nginx";
       example = {
         enable = true;
         domain = "example.com";
         contextPath = "/slskd";
       };
-      type = submodule ({name, config, ...}: {
+      type = submodule {
         options = {
-          enable = mkEnableOption "enable nginx as a reverse proxy";
+          enable = mkEnableOption "nginx as a reverse proxy";
 
           domainName = mkOption {
             type = str;
-            description = "Domain you want to use";
+            description = "The domain to use";
           };
           contextPath = mkOption {
-            type = types.path;
+            type = path;
             default = "/";
-            description = lib.mdDoc ''
+            description = mdDoc ''
               The context path, i.e., the last part of the slskd
               URL. Typically '/' or '/slskd'. Default '/'
             '';
           };
+          bindAddress = mkOption {
+            type = str;
+            default = "localhost";
+            example = "10.0.0.1";
+            description = mdDoc ''
+              The address at which slskd serves its web interface.
+            '';
+          };
         };
-      });
+      };
     };
 
-    environmentFile = mkOption {
+    passwordFile = mkOption {
       type = path;
+      example = "/var/lib/secrets/slskd_password";
       description = ''
-        Path to a file containing secrets.
-        It must at least contain the variable `SLSKD_SLSK_PASSWORD`
+        Password file for slskd; read at service startup.
       '';
     };
 
@@ -126,9 +134,19 @@ in {
   config = let
     cfg = config.services.slskd;
 
-    confWithoutNullValues = (lib.filterAttrs (key: value: value != null) cfg.settings);
+    filteredSettings = lib.filterAttrsRecursive (_: value: value != null) cfg.settings;
+    settingsFile = settingsFormat.generate "slskd.yml" filteredSettings;
 
-    configurationYaml = settingsFormat.generate "slskd.yml" confWithoutNullValues;
+    # Error redirection to /dev/null prevents unwanted password leak into the
+    # logs through the error message of `jq`, should it happen
+    slskd-prestart = pkgs.writeShellScript "slskd-prestart" ''
+      set -eu
+      ${pkgs.yq}/bin/yq -Y \
+        --arg password "$(<'${cfg.passwordFile}')" \
+        '.soulseek += $ARGS.named' \
+        <'${settingsFile}' 2>/dev/null |
+          install -D -m 600 -o slskd -g slskd /dev/stdin /var/lib/slskd/slskd.yml
+    '';
 
   in lib.mkIf cfg.enable {
 
@@ -141,15 +159,12 @@ in {
     };
 
     # Reverse proxy configuration
-    services.nginx.enable = true;
-    services.nginx.virtualHosts."${cfg.nginx.domainName}" = {
-      forceSSL = true;
-      enableACME = true;
-      locations = {
-        "${cfg.nginx.contextPath}" = {
-          proxyPass = "http://localhost:${toString cfg.settings.web.port}";
-          proxyWebsockets = true;
-        };
+    services.nginx = lib.mkIf cfg.nginx.enable {
+      enable = true;
+      virtualHosts.${cfg.nginx.domainName}.locations.${cfg.nginx.contextPath} = {
+        proxyPass =
+          "http://${toString cfg.nginx.bindAddress}:${toString cfg.settings.web.port}";
+        proxyWebsockets = true;
       };
     };
 
@@ -166,9 +181,9 @@ in {
       serviceConfig = {
         Type = "simple";
         User = "slskd";
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = "slskd";
-        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config ${configurationYaml}";
+        ExecStartPre = "+" + slskd-prestart;
+        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config /var/lib/slskd/slskd.yml";
         Restart = "on-failure";
         ReadOnlyPaths = map (d: builtins.elemAt (builtins.split "[^/]*(/.+)" d) 1) cfg.settings.shares.directories;
         LockPersonality = true;
