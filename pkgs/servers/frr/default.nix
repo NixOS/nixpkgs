@@ -242,5 +242,5 @@ stdenv.mkDerivation rec {
     platforms = (platforms.linux ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd);
   };
 
-  passthru.tests = { inherit (nixosTests) frr; };
+  passthru.tests = { inherit (nixosTests) frr-bfd frr-bgp frr-ospf; };
 }
