@@ -19547,8 +19547,6 @@ with pkgs;
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
 
-  r10k = callPackage ../tools/system/r10k { };
-
   radare2 = callPackage ../development/tools/analysis/radare2 ({
     lua = lua5;
   } // (config.radare or {}));
