@@ -1,5 +1,5 @@
 { lib, stdenv, llvm_meta
-, monorepoSrc, runCommand, fetchpatch
+, monorepoSrc, runCommand
 , cmake, lndir, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else null
 , libcxxrt, libunwind
@@ -19,11 +19,11 @@ let
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
-  cxxabiCMakeFlags = lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
-    "-DLIBCXXABI_USE_COMPILER_RT=ON"
-    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optionals (lib.versionAtLeast version "18" && !(useLLVM && !stdenv.hostPlatform.isWasm)) [
+  cxxabiCMakeFlags = [
     "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
+  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
+    "-DLIBCXXABI_ADDITIONAL_LIBRARIES=unwind"
+    "-DLIBCXXABI_USE_COMPILER_RT=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
@@ -87,18 +87,6 @@ stdenv.mkDerivation rec {
   patches = lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     # https://github.com/llvm/llvm-project/issues/64226
     ./0001-darwin-10.12-mbstate_t-fix.patch
-  ] ++ lib.optionals (cxxabi == null && lib.versionAtLeast version "18") [
-    # Allow building libcxxabi alone when using LLVM unwinder
-    (fetchpatch {
-      url = "https://github.com/llvm/llvm-project/commit/77610dd10454e87bb387040d2b51100a17ac5755.patch";
-      revert = true;
-      hash = "sha256-jFbC3vBY3nKfjknJ7UzaPyoy0iSYdD3+jUmOFeOaVcA=";
-    })
-    (fetchpatch {
-      url = "https://github.com/llvm/llvm-project/commit/48e5b5ea92674ded69b998cf35724d9012c0f57d.patch";
-      revert = true;
-      hash = "sha256-WN63L4T3GxVozPZb6kx21AgNe4rwwSUOeeryIGsvQYY=";
-    })
   ];
 
   postPatch = ''

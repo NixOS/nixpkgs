@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ libllvm libxml2 ];
 
+  patches = [
+    ./gnu-install-dirs.patch
+  ];
+
   cmakeFlags = [
     "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

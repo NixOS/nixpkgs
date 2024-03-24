@@ -90,8 +90,6 @@ stdenv.mkDerivation {
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
-    # Prevent a compilation error on darwin
-    ./darwin-targetconditionals.patch
     # See: https://github.com/NixOS/nixpkgs/pull/186575
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
