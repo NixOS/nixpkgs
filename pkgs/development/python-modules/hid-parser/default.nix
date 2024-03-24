@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, pytestCheckHook
+, pytest7CheckHook
 , hypothesis
 }:
 
@@ -21,12 +21,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     hypothesis
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   pythonImportsCheck = [ "hid_parser" ];
