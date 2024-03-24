@@ -6,6 +6,9 @@ let
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
+    "macos-14.3" = {
+      system_cmds   = "970.0.4";
+    };
     "osx-10.12.6" = {
       xnu           = "3789.70.16";
       libiconv      = "50";
@@ -155,7 +158,7 @@ let
     version = versions.${sdkName}.${pname};
   in fetchApple' pname version sha256;
 
-  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
+  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation (finalAttrs: {
     inherit pname version;
 
     src = if attrs ? srcs then null else (fetchApple' pname version sha256);
@@ -181,7 +184,7 @@ let
       fi
     '';
 
-  } // attrs // {
+  } // (if builtins.isFunction attrs then attrs finalAttrs else attrs) // {
     meta = (with lib; {
       platforms = platforms.darwin;
       license = licenses.apsl20;
@@ -276,7 +279,9 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     libmalloc       = if stdenv.isx86_64 then
       applePackage "libmalloc" "osx-10.12.6" "sha256-brfG4GEF2yZipKdhlPq6DhT2z5hKYSb2MAmffaikdO4=" {}
     else macosPackages_11_0_1.libmalloc;
-    libplatform     = applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {};
+    libplatform     = if stdenv.isx86_64 then
+      applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {}
+    else macosPackages_11_0_1.libplatform;
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" {};
@@ -304,7 +309,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     else macosPackages_11_0_1.network_cmds;
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "sha256-kmEOprkiJGMVcl7yHkGX8ymk/5KjE99gWuF8j2hK5hY=" {};
-    system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "sha256-KBdGlHeXo2PwgRQOOeElJ1RBqCY1Tdhn5KD42CMhdzI=" {};
+    system_cmds     = applePackage "system_cmds"       "macos-14.3"      "sha256-qFp9nkzsq9uQ7zoyfvO+3gvDlc7kaPvn6luvmO/Io30=" {};
     text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "sha256-KSebU7ZyUsPeqn51nzuGNaNxs9pvmlIQQdkWXIVzDxw=" {};
     top             = applePackage "top"               "osx-10.11.6"     "sha256-jbz64ODogtpNyLpXGSZj1jCBdFPVXcVcBkL1vc7g5qQ=" {};
     PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "sha256-bYGtYnBOcE5W03AZzfVTJXPZ6GgryGAMt/LgLPxFkVk=" {};

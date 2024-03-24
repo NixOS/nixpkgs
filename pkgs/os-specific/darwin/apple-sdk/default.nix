@@ -350,5 +350,7 @@ in rec {
 
   frameworks = bareFrameworks // overrides bareFrameworks;
 
+  inherit darwin-stubs;
+
   inherit sdk;
 }

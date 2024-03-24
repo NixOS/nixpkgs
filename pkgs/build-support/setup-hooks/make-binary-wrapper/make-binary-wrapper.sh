@@ -19,6 +19,7 @@ assertExecutable() {
 #                          (if unset or empty, defaults to EXECUTABLE)
 # --inherit-argv0        : the executable inherits argv0 from the wrapper.
 #                          (use instead of --argv0 '$0')
+# --resolve-argv0        : if argv0 doesn't include a / character, resolve it against PATH
 # --set          VAR VAL : add VAR with value VAL to the executable's environment
 # --set-default  VAR VAL : like --set, but only adds VAR if not already set in
 #                          the environment
@@ -87,6 +88,7 @@ makeDocumentedCWrapper() {
 makeCWrapper() {
     local argv0 inherit_argv0 n params cmd main flagsBefore flagsAfter flags executable length
     local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
+    local resolve_path
     executable=$(escapeStringLiteral "$1")
     params=("$@")
     length=${#params[*]}
@@ -169,6 +171,12 @@ makeCWrapper() {
                 # Whichever comes last of --argv0 and --inherit-argv0 wins
                 inherit_argv0=1
             ;;
+            --resolve-argv0)
+                # this gets processed after other argv0 flags
+                uses_stdio=1
+                uses_string=1
+                resolve_argv0=1
+            ;;
             *) # Using an error macro, we will make sure the compiler gives an understandable error message
                 main="$main#error makeCWrapper: Unknown argument ${p}"$'\n'
             ;;
@@ -176,6 +184,7 @@ makeCWrapper() {
     done
     [[ -z "$flagsBefore" && -z "$flagsAfter" ]] || main="$main"${main:+$'\n'}$(addFlags "$flagsBefore" "$flagsAfter")$'\n'$'\n'
     [ -z "$inherit_argv0" ] && main="${main}argv[0] = \"${argv0:-${executable}}\";"$'\n'
+    [ -z "$resolve_argv0" ] || main="${main}argv[0] = resolve_argv0(argv[0]);"$'\n'
     main="${main}return execv(\"${executable}\", argv);"$'\n'
 
     [ -z "$uses_asprintf" ] || printf '%s\n' "#define _GNU_SOURCE         /* See feature_test_macros(7) */"
@@ -183,9 +192,11 @@ makeCWrapper() {
     printf '%s\n' "#include <stdlib.h>"
     [ -z "$uses_assert" ]   || printf '%s\n' "#include <assert.h>"
     [ -z "$uses_stdio" ]    || printf '%s\n' "#include <stdio.h>"
+    [ -z "$uses_string" ]   || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
+    [ -z "$resolve_argv0" ] || printf '\n%s\n' "$(resolveArgv0Fn)"
     printf '\n%s' "int main(int argc, char **argv) {"
     printf '\n%s' "$(indent4 "$main")"
     printf '\n%s\n' "}"
@@ -334,6 +345,41 @@ void set_env_suffix(char *env, char *sep, char *suffix) {
     } else {
         assert_success(setenv(env, suffix, 1));
     }
+}
+"
+}
+
+resolveArgv0Fn() {
+  printf '%s' "\
+char *resolve_argv0(char *argv0) {
+  if (strchr(argv0, '/') != NULL) {
+    return argv0;
+  }
+  char *path = getenv(\"PATH\");
+  if (path == NULL) {
+    return argv0;
+  }
+  char *path_copy = strdup(path);
+  if (path_copy == NULL) {
+    return argv0;
+  }
+  char *dir = strtok(path_copy, \":\");
+  while (dir != NULL) {
+    char *candidate = malloc(strlen(dir) + strlen(argv0) + 2);
+    if (candidate == NULL) {
+      free(path_copy);
+      return argv0;
+    }
+    sprintf(candidate, \"%s/%s\", dir, argv0);
+    if (access(candidate, X_OK) == 0) {
+      free(path_copy);
+      return candidate;
+    }
+    free(candidate);
+    dir = strtok(NULL, \":\");
+  }
+  free(path_copy);
+  return argv0;
 }
 "
 }

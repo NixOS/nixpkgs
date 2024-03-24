@@ -39,8 +39,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "SQLAlchemy";
-  version = "2.0.28";
+  pname = "sqlalchemy";
+  version = "2.0.29";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-Xl3w9v97tyOpL4vUYzlovGrUGIZtIZsAhbE5/FhqFiM=";
+    hash = "sha256-jEkuvwq/KKjcsREWDvvTFT87kgu3TSBR3JaseOs54qc=";
   };
 
   postPatch = ''

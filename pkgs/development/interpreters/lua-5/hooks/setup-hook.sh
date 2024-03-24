@@ -13,11 +13,6 @@ nix_debug() {
 addToLuaSearchPathWithCustomDelimiter() {
   local varName="$1"
   local absPattern="$2"
-  # delete longest match starting from the lua placeholder '?'
-  local topDir="${absPattern%%\?*}"
-
-  # export only if the folder exists else LUA_PATH/LUA_CPATH grow too large
-  if [[ ! -d "$topDir" ]]; then return; fi
 
   # export only if we haven't already got this dir in the search path
   if [[ ${!varName-} == *"$absPattern"* ]]; then return; fi
@@ -27,7 +22,15 @@ addToLuaSearchPathWithCustomDelimiter() {
   # allowing relative modules to be used even when there are system modules.
   if [[ ! -v "${varName}" ]]; then export "${varName}=;;"; fi
 
-  export "${varName}=${!varName:+${!varName};}${absPattern}"
+  # export only if the folder contains lua files
+  shopt -s globstar
+
+  for _file in ${absPattern/\?/\*\*}; do
+    export "${varName}=${!varName:+${!varName};}${absPattern}"
+    shopt -u globstar
+    return;
+  done
+  shopt -u globstar
 }
 
 addToLuaPath() {

@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyMySQL";
+  pname = "pymysql";
   version = "1.0.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyMySQL";
+    inherit version;
     sha256 = "816927a350f38d56072aeca5dfb10221fe1dc653745853d30a216637f5d7ad36";
   };
 

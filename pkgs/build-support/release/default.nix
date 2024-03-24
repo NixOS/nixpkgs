@@ -1,6 +1,24 @@
 { lib, pkgs }:
 
-with pkgs;
+let
+  inherit (lib) optionalString;
+
+  inherit (pkgs)
+    autoconf
+    automake
+    checkinstall
+    clang-analyzer
+    cov-build
+    enableGCOVInstrumentation
+    lcov
+    libtool
+    makeGCOVReport
+    runCommand
+    stdenv
+    vmTools
+    xz
+    ;
+in
 
 rec {
 
@@ -91,7 +109,7 @@ rec {
       dontConfigure = true;
       dontBuild = true;
 
-      patchPhase = lib.optionalString isNixOS ''
+      patchPhase = optionalString isNixOS ''
         touch .update-on-nixos-rebuild
       '';
 
