@@ -15,6 +15,7 @@
 , json-glib
 , qrencode
 , curl
+, aria2
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace meson/post_install.py \
       --replace gtk-update-icon-cache gtk4-update-icon-cache
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ aria2 ]}
+    )
   '';
 
   meta = with lib; {
