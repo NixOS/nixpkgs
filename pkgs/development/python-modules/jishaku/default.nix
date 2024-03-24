@@ -1,5 +1,6 @@
 {
   lib,
+  bash,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -32,6 +33,11 @@ buildPythonPackage rec {
       hash = "sha256-laPoupwCC1Zthib8G+c1BXqTwZK0Z6up1DKVkhFicJ0=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace jishaku/shell.py \
+      --replace-fail '"/bin/bash"' '"${lib.getExe bash}"'
+  '';
 
   nativeBuildInputs = [ setuptools ];
 
