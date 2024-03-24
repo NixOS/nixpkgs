@@ -5,15 +5,15 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "check_esxi_hardware";
-  version = "20200710";
+  pname = "check-esxi-hardware";
+  version = "20221230";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Napsty";
     repo = "check_esxi_hardware";
     rev = "refs/tags/${version}";
-    sha256 = "EC6np/01S+5SA2H9z5psJ9Pq/YoEyGdHL9wHUKKsNas=";
+    hash = "sha256-u0LklUrzj92mzSzD61C/lxA37bx6nWlRzE1+1fcTL14=";
   };
 
   dontBuild = true;
@@ -36,7 +36,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = "https://www.claudiokuenzler.com/nagios-plugins/";
+    homepage = "https://github.com/Napsty/check_esxi_hardware";
+    changelog = "https://github.com/Napsty/check_esxi_hardware/releases/tag/${version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "check_esxi_hardware";
     maintainers = with lib.maintainers; [ peterhoeg ];
