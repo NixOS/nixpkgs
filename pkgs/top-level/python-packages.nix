@@ -1942,6 +1942,8 @@ self: super: with self; {
 
   chameleon = callPackage ../development/python-modules/chameleon { };
 
+  changefinder = callPackage ../development/python-modules/changefinder { };
+
   channels = callPackage ../development/python-modules/channels { };
 
   channels-redis = callPackage ../development/python-modules/channels-redis { };
