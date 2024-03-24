@@ -6,6 +6,7 @@
 , enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch
 , enableVncRenderer ? false
 , unfreeEnableDiscord ? false
+, unfreeEnableRoms ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,14 +49,27 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!enableDynarec) "-DDYNAREC=OFF"
     ++ lib.optional (!unfreeEnableDiscord) "-DDISCORD=OFF";
 
-  postInstall = lib.optional stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     install -Dm644 -t $out/share/applications $src/src/unix/assets/net.86box.86Box.desktop
 
     for size in 48 64 72 96 128 192 256 512; do
       install -Dm644 -t $out/share/icons/hicolor/"$size"x"$size"/apps \
         $src/src/unix/assets/"$size"x"$size"/net.86box.86Box.png
     done;
+  ''
+  + lib.optionalString unfreeEnableRoms ''
+    mkdir -p $out/share/86Box
+    ln -s ${finalAttrs.passthru.roms} $out/share/86Box/roms
   '';
+
+  passthru = {
+    roms = fetchFromGitHub {
+      owner = "86Box";
+      repo = "roms";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-1HtoizO0QIGNjQTW0clzRp40h1ulw55+iTYz12UJSms=";
+    };
+  };
 
   # Some libraries are loaded dynamically, but QLibrary doesn't seem to search
   # the runpath, so use a wrapper instead.
@@ -72,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Emulator of x86-based machines based on PCem.";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
-    license = with licenses; [ gpl2Only ] ++ optional unfreeEnableDiscord unfree;
+    license = with licenses; [ gpl2Only ]
+      ++ optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
     maintainers = [ maintainers.jchw ];
     platforms = platforms.linux;
   };
