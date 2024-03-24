@@ -3,7 +3,7 @@
 , wmic-bin ? null }:
 
 stdenv.mkDerivation rec {
-  pname = "check-wmiplus";
+  pname = "check_wmi_plus";
   version = "1.65";
 
   # We fetch from github.com instead of the proper upstream as nix-build errors
