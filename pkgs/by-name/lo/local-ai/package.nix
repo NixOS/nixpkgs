@@ -368,10 +368,11 @@ let
 
     proxyVendor = true;
 
-    # should be passed as buildFlags, but build system failes with spaces
+    # should be passed as makeFlags, but build system failes with strings
+    # containing spaces
     env.GO_TAGS = builtins.concatStringsSep " " GO_TAGS;
 
-    buildFlags = [
+    makeFlags = [
       "VERSION=v${version}"
       "BUILD_TYPE=${BUILD_TYPE}"
     ]
