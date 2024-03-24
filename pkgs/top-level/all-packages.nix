@@ -7877,8 +7877,6 @@ with pkgs;
     callPackage ../servers/search/elasticsearch/plugins.nix {}
   );
 
-  elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator { };
-
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
