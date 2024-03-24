@@ -156,6 +156,17 @@ mapAliases ({
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
   ccloud-cli = throw "ccloud-cli has been removed, please use confluent-cli instead"; # Added 2023-06-09
   certmgr-selfsigned = certmgr; # Added 2023-11-30
+  check_smartmon = lib.warn "'check_smartmon' has been renamed to 'nagiosPlugins.check_smartmon'" nagiosPlugins.check_smartmon; # Added 2024-03-24
+  check_systemd = lib.warn "'check_systemd' has been renamed to 'nagiosPlugins.check_systemd'" nagiosPlugins.check_systemd; # Added 2024-03-24
+  check_zfs = lib.warn "'check_zfs' has been renamed to 'nagiosPlugins.check_zfs'" nagiosPlugins.check_zfs; # Added 2024-03-24
+  check-esxi-hardware = lib.warn "'check-esxi-hardware' has been renamed to 'nagiosPlugins.check_esxi_hardware'" nagiosPlugins.check_esxi_hardware; # Added 2024-03-24
+  check-mssql-health = lib.warn "'check-mssql-health' has been renamed to 'nagiosPlugins.check_mssql_health'" nagiosPlugins.check_mssql_health; # Added 2024-03-24
+  check-nwc-health = lib.warn "'check-nwc-health' has been renamed to 'nagiosPlugins.check_nwc_health'" nagiosPlugins.check_nwc_health; # Added 2024-03-24
+  check-openvpn = lib.warn "'check-openvpn' has been renamed to 'nagiosPlugins.check_openvpn'" nagiosPlugins.check_openvpn; # Added 2024-03-24
+  check-ups-health = lib.warn "'check-ups-health' has been renamed to 'nagiosPlugins.check_ups_health'" nagiosPlugins.check_ups_health; # Added 2024-03-24
+  check-uptime = lib.warn "'check-uptime' has been renamed to 'nagiosPlugins.check_uptime'" nagiosPlugins.check_uptime; # Added 2024-03-24
+  check-wmiplus = lib.warn "'check-wmiplus' has been renamed to 'nagiosPlugins.check_wmi_plus'" nagiosPlugins.check_wmi_plus; # Added 2024-03-24
+  checkSSLCert = lib.warn "'checkSSLCert' has been renamed to 'nagiosPlugins.check_ssl_cert'" nagiosPlugins.check_ssl_cert; # Added 2024-03-24
   chefdk = throw "chefdk has been removed due to being deprecated upstream by Chef Workstation"; # Added 2023-03-22
   chia = throw "chia has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
   chia-dev-tools = throw "chia-dev-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
