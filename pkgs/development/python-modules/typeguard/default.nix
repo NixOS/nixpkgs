@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "4.1.5";
+  version = "4.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6goRO7wRG8/8kHieuyFWJcljQR9wlqfpBi1ORjDBVf0=";
+    hash = "sha256-KurlEHUPyojQos7KPobef3GqQ7bD5sJnc3zh9e/8SzQ=";
   };
 
   outputs = [
