@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
   version = "1.2.8";
 
+  __structuredAttrs = true;
+
   buildInputs = [
     AppKit
     Foundation
