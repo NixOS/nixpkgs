@@ -16,29 +16,26 @@ buildGoModule rec {
   pname = "goss";
 
   # Don't forget to update dgoss to the same version.
-  version = "0.4.4";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dH052t30unWmrFTZK5niXNvbg1nngzWY7mwuZr4ULbM=";
+    hash = "sha256-4LJD70Y6nxRWdcaPe074iP2MVUMDgoTOwWbC1JecVcI=";
   };
 
-  vendorHash = "sha256-4fEEz/c/xIeWxIzyyjwgSn2/2FWLA2tIedK65jGgYhY=";
+  vendorHash = "sha256-5/vpoJZu/swNwQQXtW6wuEVCtOq6HsbFywuipaiwHfs=";
 
   CGO_ENABLED = 0;
+
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
-
-  checkFlags = [
-    # Prometheus tests are skipped upstream
-    # See https://github.com/goss-org/goss/blob/master/ci/go-test.sh
-    "-skip" "^TestPrometheus"
-  ];
 
   postInstall = let
     runtimeDependencies = [ bash getent ]
