@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  passthru.tests.nix-ld = nixosTests.nix-ld;
+  passthru.tests = nixosTests.nix-ld;
 
   meta = with lib; {
     description = "Run unpatched dynamic binaries on NixOS";
