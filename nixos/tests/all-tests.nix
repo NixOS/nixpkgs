@@ -329,6 +329,7 @@ in {
   frp = handleTest ./frp.nix {};
   frr-bfd = handleTest ./frr/bfd.nix {};
   frr-bgp = handleTest ./frr/bgp.nix {};
+  frr-isis = handleTest ./frr/isis.nix {};
   frr-ospf = handleTest ./frr/ospf.nix {};
   fsck = handleTest ./fsck.nix {};
   fsck-systemd-stage-1 = handleTest ./fsck.nix { systemdStage1 = true; };
