@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, libcap, acl, file, readline, python3 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libcap,
+  acl,
+  file,
+  readline,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "clifm";
@@ -11,7 +20,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-tgCGZCLCWcF7ktXqDHjoUkeVqxg6QVOkZb7pbk3nA+U=";
   };
 
-  buildInputs = [ libcap acl file readline python3];
+  buildInputs = [
+    libcap
+    acl
+    file
+    readline
+    python3
+  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
