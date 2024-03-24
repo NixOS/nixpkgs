@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, smartmontools
+{
+  fetchFromGitHub,
+  lib,
+  python3,
+  smartmontools,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "check_smartmon";
+  pname = "check-smartmon";
   version = "1.0.1";
 
   src = fetchFromGitHub {
-    owner  = "driehuis";
-    repo   = "Nagios_check_smartmon";
-    rev    = version;
+    owner = "driehuis";
+    repo = "Nagios_check_smartmon";
+    rev = "refs/tags/${version}";
     sha256 = "tiIeFiHdDgqoeznk9XdCE7owIMnnsQ0fmtj8foFoUD8=";
   };
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs check_smartmon.py
     substituteInPlace check_smartmon.py \
-      --replace '"/usr/sbin/smartctl"' '"${smartmontools}/bin/smartctl"'
+      --replace-fail '"/usr/sbin/smartctl"' '"${smartmontools}/bin/smartctl"'
   '';
 
   installPhase = ''
@@ -33,11 +34,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nagios-Plugin that uses smartmontools to check disk health status and temperature";
     mainProgram = "check_smartmon";
     homepage = "https://github.com/driehuis/Nagios_check_smartmon";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mariaa144 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mariaa144 ];
   };
 }
