@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , accountsservice
 , alsa-lib
 , budgie-screensaver
@@ -49,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./plugins.patch
+
+    # vapi: Update libxfce4windowing to 4.19.3
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/546
+    (fetchpatch2 {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/a040ccb96094f1d3a1ee81a6733c9434722bdf6c.patch";
+      hash = "sha256-9eMYB5Zyn3BDYvAwORXTHaPGYDP7LnqHAwp+6Wy6XLk=";
+    })
   ];
 
   nativeBuildInputs = [
