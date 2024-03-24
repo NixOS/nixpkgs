@@ -19,8 +19,7 @@
 , parse
 , poetry-core
 , pytest-aiohttp
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , pythonOlder
 , responses
 , requests
@@ -94,7 +93,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpx
     pytest-aiohttp
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     responses
     webob
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);

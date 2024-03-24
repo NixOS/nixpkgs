@@ -17,8 +17,7 @@
 , mujson
 , orjson
 , pytest-asyncio
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , pyyaml
 , rapidjson
 , requests
@@ -61,7 +60,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     # https://github.com/falconry/falcon/blob/master/requirements/tests
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     pyyaml
     requests
     rapidjson

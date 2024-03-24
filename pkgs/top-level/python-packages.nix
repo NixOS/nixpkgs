@@ -11925,6 +11925,8 @@ self: super: with self; {
 
   pytest_7 = callPackage ../development/python-modules/pytest/7.nix { };
 
+  pytest7CheckHook = pytestCheckHook.override { pytest = pytest_7; };
+
   pytest-aio = callPackage ../development/python-modules/pytest-aio { };
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };

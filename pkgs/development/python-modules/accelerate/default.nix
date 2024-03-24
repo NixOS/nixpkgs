@@ -3,8 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , setuptools
 , numpy
 , packaging
@@ -47,7 +46,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     evaluate
     parameterized
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     transformers
   ];
   preCheck = ''

@@ -5,8 +5,7 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , pythonAtLeast
 , pythonOlder
 , pytest-aiohttp
@@ -50,7 +49,7 @@ buildPythonPackage rec {
     aiohttp-wsgi
     pytest-aiohttp
     pytest-asyncio
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
   ];
 
   pytestFlagsArray = [

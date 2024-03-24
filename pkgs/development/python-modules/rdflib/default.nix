@@ -23,8 +23,7 @@
 # tests
 , pip
 , pytest-cov
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , setuptools
 }:
 
@@ -69,7 +68,7 @@ buildPythonPackage rec {
     pip
     pytest-cov
     # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     setuptools
   ]
   ++ passthru.optional-dependencies.networkx
