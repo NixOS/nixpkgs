@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "anylogic-ple";
-  version = "8.8.2";
+  version = "8.8.6";
 
   src = fetchurl {
     url = "https://files.anylogic.com/${pname}-${version}.linux.x86_64.tgz.bin";
-    sha256 = "0n372fq6q1pr0y3qxwdf5xxx9phmlyrjjgji861qilrqdg4cmzcp";
+    hash = "sha256-4bmhD52/69lsfN5htpykKEYv+pxC49/fHVzJfsetIzw=";
   };
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    tail -n +374 $src > anylogic_extracted.tgz
+    tail -n +386 $src > anylogic_extracted.tgz
     tar zxf anylogic_extracted.tgz
     rm anylogic_extracted.tgz
     cd ./anylogic
