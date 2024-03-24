@@ -1,39 +1,66 @@
-{ lib, stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, yaml-cpp, openssl, ruby, util-linux }:
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  coreutils,
+  facter,
+  gnugrep,
+  iproute2,
+  lib,
+  makeWrapper,
+  nettools,
+  pciutils,
+  procps,
+  stdenv,
+  testers,
+  util-linux,
+  virt-what,
+  zfs,
+}:
 
-stdenv.mkDerivation rec {
+bundlerApp {
   pname = "facter";
-  version = "3.14.17";
+  gemdir = ./.;
+  exes = [ "facter" ];
 
-  src = fetchFromGitHub {
-    sha256 = "sha256-RvsUt1DyN8Xr+Xtz84mbKlDwxLewgK6qklYVdQHu6q0=";
-    rev = version;
-    repo = pname;
-    owner = "puppetlabs";
+  nativeBuildInputs = [ makeWrapper ];
+
+  postBuild =
+    let
+      runtimeDependencies =
+        [
+          coreutils
+          gnugrep
+          nettools
+          pciutils
+          procps
+          util-linux
+        ]
+        ++ lib.optionals stdenv.isLinux [
+          iproute2
+          virt-what
+          zfs
+        ];
+    in
+    ''
+      wrapProgram $out/bin/facter --prefix PATH : ${lib.makeBinPath runtimeDependencies}
+    '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "${lib.getExe facter} --version";
+      package = facter;
+      version = (import ./gemset.nix).facter.version;
+    };
+    updateScript = bundlerUpdateScript "facter";
   };
 
-  postPatch = ''
-    sed '1i#include <array>' -i lib/src/facts/glib/load_average_resolver.cc # gcc12
-  '';
-
-  CXXFLAGS = lib.optionalString stdenv.cc.isGNU "-fpermissive -Wno-error=catch-value";
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lblkid";
-
-  cmakeFlags = [
-    "-DFACTER_RUBY=${ruby}/lib/libruby${stdenv.hostPlatform.extensions.sharedLibrary}"
-    "-DRUBY_LIB_INSTALL=${placeholder "out"}/lib/ruby"
-  ];
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost cpp-hocon curl leatherman libwhereami yaml-cpp openssl ruby util-linux ];
-
-  meta = with lib; {
-    homepage = "https://github.com/puppetlabs/facter";
+  meta = {
+    changelog = "https://www.puppet.com/docs/puppet/latest/release_notes_facter.html";
     description = "A system inventory tool";
-    license = licenses.asl20;
-    maintainers = [ maintainers.womfoo ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/puppetlabs/facter";
+    license = lib.licenses.asl20;
     mainProgram = "facter";
+    maintainers = with lib.maintainers; [ womfoo anthonyroussel ];
+    platforms = lib.platforms.unix;
   };
 }
