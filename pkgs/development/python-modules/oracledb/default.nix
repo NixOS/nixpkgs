@@ -20,13 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-4ugXz6bf82xxMXNvNOKq7HXXJv040ZENgxgGGieCKPo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython_3
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
   ];
 
