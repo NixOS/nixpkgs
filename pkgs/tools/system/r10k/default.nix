@@ -1,4 +1,12 @@
-{ lib, bundlerApp, bundlerUpdateScript, makeWrapper, git, gnutar, gzip }:
+{
+  bundlerApp,
+  bundlerUpdateScript,
+  git,
+  gnutar,
+  gzip,
+  lib,
+  makeWrapper,
+}:
 
 bundlerApp {
   pname = "r10k";
@@ -8,17 +16,23 @@ bundlerApp {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/r10k --prefix PATH : ${lib.makeBinPath [ git gnutar gzip ]}
+    wrapProgram $out/bin/r10k --prefix PATH : ${
+      lib.makeBinPath [
+        git
+        gnutar
+        gzip
+      ]
+    }
   '';
 
   passthru.updateScript = bundlerUpdateScript "r10k";
 
-  meta = with lib; {
+  meta = {
     description = "Puppet environment and module deployment";
-    homepage    = "https://github.com/puppetlabs/r10k";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ zimbatm manveru nicknovitski ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/puppetlabs/r10k";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zimbatm manveru nicknovitski anthonyroussel ];
+    platforms = lib.platforms.unix;
     mainProgram = "r10k";
   };
 }
