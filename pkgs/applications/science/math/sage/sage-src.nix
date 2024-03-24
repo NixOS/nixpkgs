@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , fetchpatch
 , fetchurl
@@ -40,6 +41,10 @@ stdenv.mkDerivation rec {
     # we can now set the cache dir to be within the .sage directory. This is
     # not strictly necessary, but keeps us from littering in the user's HOME.
     ./patches/sympow-cache.patch
+  ] ++ lib.optionals (stdenv.cc.isClang) [
+    # https://github.com/NixOS/nixpkgs/pull/264126
+    # Dead links in python sysconfig cause LLVM linker warnings, leading to cython doctest failures.
+    ./patches/silence-linker.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -64,6 +69,13 @@ stdenv.mkDerivation rec {
     # compile libs/gap/element.pyx with -O1
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
     ./patches/gap-element-crash.patch
+
+    # https://github.com/sagemath/sage/pull/37886, landed in 10.4.beta7
+    (fetchpatch {
+      name = "remove-xcode.patch";
+      url = "https://github.com/sagemath/sage/commit/8e72038b4ab24fb63c06b28f6eb43097b9ab24d6.patch";
+      sha256 = "sha256-hufDJFUBa/Trn1xsVNvzb2c1wE9iyhqewj3RMjVtENA=";
+    })
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -73,6 +85,12 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
+    # https://github.com/sagemath/sage/pull/37646, landed in 10.4.beta1
+    (fetchpatch {
+      name = "cpp-17.patch";
+      url = "https://github.com/sagemath/sage/commit/9b0a40d6cd17706db31d5ff8cdd78910409ba1c8.patch";
+      sha256 = "sha256-2pJ9eH+o9O76Tsmklc/frzDOFkvPjvs2JQWCSqA+tMs=";
+    })
     # https://github.com/sagemath/sage/pull/37763, landed in 10.4.beta2
     (fetchpatch {
       name = "scipy-fault-tolerance.patch";
