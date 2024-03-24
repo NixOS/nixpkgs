@@ -49,11 +49,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.arrays;
 
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "--deselect=ndindex/tests/test_ndindex.py::test_ndindex_invalid"
-  ];
-
   meta = with lib; {
     description = "";
     homepage = "https://github.com/Quansight-Labs/ndindex";
