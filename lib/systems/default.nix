@@ -1,7 +1,25 @@
 { lib }:
-  let inherit (lib.attrsets) mapAttrs; in
 
-rec {
+let
+  inherit (lib)
+    any
+    filterAttrs
+    foldl
+    hasInfix
+    isFunction
+    isList
+    isString
+    mapAttrs
+    optional
+    optionalAttrs
+    optionalString
+    removeSuffix
+    replaceStrings
+    toUpper
+    ;
+
+  inherit (lib.strings) toJSON;
+
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
@@ -24,7 +42,7 @@ rec {
     both arguments have been `elaborate`-d.
   */
   equals =
-    let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
+    let removeFunctions = a: filterAttrs (_: v: !isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
@@ -41,7 +59,7 @@ rec {
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
   elaborate = args': let
-    args = if lib.isString args' then { system = args'; }
+    args = if isString args' then { system = args'; }
            else args';
 
     # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
@@ -96,7 +114,7 @@ rec {
         then "lib64"
         else "lib"
       else null;
-      extensions = lib.optionalAttrs final.hasSharedLibraries {
+      extensions = optionalAttrs final.hasSharedLibraries {
         sharedLibrary =
           if      final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
@@ -134,9 +152,9 @@ rec {
          # uname -m
          processor =
            if final.isPower64
-           then "ppc64${lib.optionalString final.isLittleEndian "le"}"
+           then "ppc64${optionalString final.isLittleEndian "le"}"
            else if final.isPower
-           then "ppc${lib.optionalString final.isLittleEndian "le"}"
+           then "ppc${optionalString final.isLittleEndian "le"}"
            else if final.isMips64
            then "mips64"  # endianness is *not* included on mips64
            else final.parsed.cpu.name;
@@ -202,8 +220,8 @@ rec {
         else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
-        else if final.isMips64n32 then "mipsn32${lib.optionalString final.isLittleEndian "el"}"
-        else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
+        else if final.isMips64n32 then "mipsn32${optionalString final.isLittleEndian "el"}"
+        else if final.isMips64 then "mips64${optionalString final.isLittleEndian "el"}"
         else final.uname.processor;
 
       # Name used by UEFI for architectures.
@@ -259,7 +277,7 @@ rec {
           if pkgs.stdenv.hostPlatform.canExecute final
           then "${pkgs.runtimeShell} -c '\"$@\"' --"
           else if final.isWindows
-          then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"
+          then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
           then "${qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
@@ -310,10 +328,10 @@ rec {
                   let
                     f = args.rustc.platform.target-family;
                   in
-                    if builtins.isList f then f else [ f ]
+                    if isList f then f else [ f ]
                 )
-              else lib.optional final.isUnix "unix"
-                   ++ lib.optional final.isWindows "windows";
+              else optional final.isUnix "unix"
+                   ++ optional final.isWindows "windows";
 
             # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
             vendor = let
@@ -337,13 +355,13 @@ rec {
             vendor_ = final.rust.platform.vendor;
           # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
           in args.rust.rustcTarget or args.rustc.config
-            or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+            or "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.
           rustcTargetSpec = rust.rustcTargetSpec or (
             /**/ if rust ? platform
-            then builtins.toFile (final.rust.rustcTarget + ".json") (builtins.toJSON rust.platform)
+            then builtins.toFile (final.rust.rustcTarget + ".json") (toJSON rust.platform)
             else final.rust.rustcTarget);
 
           # The name of the rust target if it is standard, or the
@@ -352,7 +370,7 @@ rec {
           #
           # This is the name used by Cargo for target subdirectories.
           cargoShortTarget =
-            lib.removeSuffix ".json" (baseNameOf "${final.rust.rustcTargetSpec}");
+            removeSuffix ".json" (baseNameOf "${final.rust.rustcTargetSpec}");
 
           # When used as part of an environment variable name, triples are
           # uppercased and have all hyphens replaced by underscores:
@@ -360,17 +378,17 @@ rec {
           # https://github.com/rust-lang/cargo/pull/9169
           # https://github.com/rust-lang/cargo/issues/8285#issuecomment-634202431
           cargoEnvVarTarget =
-            lib.strings.replaceStrings ["-"] ["_"]
-              (lib.strings.toUpper final.rust.cargoShortTarget);
+            replaceStrings ["-"] ["_"]
+              (toUpper final.rust.cargoShortTarget);
 
           # True if the target is no_std
           # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
           isNoStdTarget =
-            builtins.any (t: lib.hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
+            any (t: hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
         };
       };
   in assert final.useAndroidPrebuilt -> final.isAndroid;
-     assert lib.foldl
+     assert foldl
        (pass: { assertion, message }:
          if assertion final
          then pass
@@ -378,4 +396,20 @@ rec {
        true
        (final.parsed.abi.assertions or []);
     final;
+
+in
+
+# Everything in this attrset is the public interface of the file.
+{
+  inherit
+    architectures
+    doubles
+    elaborate
+    equals
+    examples
+    flakeExposed
+    inspect
+    parse
+    platforms
+    ;
 }
