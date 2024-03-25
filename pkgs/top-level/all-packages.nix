@@ -40812,8 +40812,6 @@ with pkgs;
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
-  xivlauncher = callPackage ../games/xivlauncher { };
-
   xortool = python3Packages.callPackage ../tools/security/xortool { };
 
   xorex = callPackage ../tools/security/xorex { };
