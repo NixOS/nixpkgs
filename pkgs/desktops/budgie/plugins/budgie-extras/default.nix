@@ -182,4 +182,11 @@ in
     ];
     meta.description = "Desktop time & date";
   };
+
+  budgie-takeabreak = mkBudgieExtrasPlugin {
+    pluginName = "takeabreak";
+    moduleName = "budgie_takeabreak";
+    isPython = true;
+    meta.description = "Take regular breaks from working";
+  };
 }
