@@ -1,0 +1,78 @@
+diff --git a/bin/console b/bin/console
+index 8fe9d49..3af9662 100755
+--- a/bin/console
++++ b/bin/console
+@@ -1,5 +1,8 @@
+ #!/usr/bin/env php
+ <?php
++if (getenv('ENV_DIR') !== false) {
++    $_SERVER['APP_RUNTIME_OPTIONS']['dotenv_path'] = getenv('ENV_DIR').'/.env';
++}
+ 
+ use App\Kernel;
+ use Symfony\Bundle\FrameworkBundle\Console\Application;
+@@ -28,7 +31,11 @@ if ($input->hasParameterOption('--no-debug', true)) {
+     putenv('APP_DEBUG='.$_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
+ }
+ 
+-(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
++if (getenv('ENV_DIR') !== false) {
++    (new Dotenv())->bootEnv(getenv('ENV_DIR').'/.env');
++} else {
++    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
++}
+ 
+ if ($_SERVER['APP_DEBUG']) {
+     umask(0000);
+diff --git a/public/index.php b/public/index.php
+index 3f8b90e..c57ec21 100644
+--- a/public/index.php
++++ b/public/index.php
+@@ -1,5 +1,9 @@
+ <?php
+ 
++if (getenv('ENV_DIR') !== false) {
++    $_SERVER['APP_RUNTIME_OPTIONS']['dotenv_path'] = getenv('ENV_DIR').'/.env';
++}
++
+ use App\Kernel;
+ use Symfony\Component\Dotenv\Dotenv;
+ use Symfony\Component\ErrorHandler\Debug;
+@@ -7,7 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
+ 
+ require dirname(__DIR__).'/vendor/autoload.php';
+ 
+-(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
++if (getenv('ENV_DIR') !== false) {
++    (new Dotenv())->bootEnv(getenv('ENV_DIR').'/.env');
++} else {
++    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
++}
+ 
+ if ($_SERVER['APP_DEBUG']) {
+     umask(0000);
+diff --git a/src/Kernel.php b/src/Kernel.php
+index 0f43d2f..8863f2c 100644
+--- a/src/Kernel.php
++++ b/src/Kernel.php
+@@ -49,4 +49,20 @@ class Kernel extends BaseKernel
+             (require $path)($routes->withPath($path), $this);
+         }
+     }
++
++    public function getCacheDir(): string
++    {
++        if (getenv('CACHE_DIR') !== false) {
++            return getenv('CACHE_DIR') . '/' . $this->getEnvironment();
++        }
++        return parent::getCacheDir();
++    }
++
++    public function getLogDir(): string
++    {
++        if (getenv('LOG_DIR') !== false) {
++            return getenv('LOG_DIR') . '/' . $this->getEnvironment();
++        }
++        return parent::getLogDir();
++    }
+ }
