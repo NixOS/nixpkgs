@@ -17,16 +17,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-rope";
-    repo = pname;
+    repo = "rope";
     rev = "refs/tags/${version}";
     hash = "sha256-g/fta5gW/xPs3VaVuLtikfLhqCKyy1AKRnOcOXjQ8bA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytoolconfig
   ] ++ pytoolconfig.optional-dependencies.global;
 
