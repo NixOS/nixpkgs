@@ -38,17 +38,19 @@ let
     sourceTypes
     ;
 
-  inherit (backendStdenv) hostPlatform;
+  inherit (backendStdenv) buildPlatform hostPlatform targetPlatform;
 
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
-  # redistArch :: String
-  # The redistArch is the name of the architecture for which the redistributable is built.
-  # It is `"unsupported"` if the redistributable is not supported on the hostPlatform.
-  redistArch = flags.getRedistArch hostPlatform.system;
 
-  sourceMatchesHost = flags.getNixSystem redistArch == hostPlatform.system;
+  # hostPlatformRedistArch :: String
+  # The hostPlatformRedistArch is the name of the architecture for which the redistributable is built.
+  # It is `"unsupported"` if the redistributable is not supported on the hostPlatform.
+  hostPlatformRedistArch = flags.getRedistArch hostPlatform.system;
+
+  # sourceMatchesHost :: Bool
+  sourceMatchesHost = flags.getNixSystem hostPlatformRedistArch == hostPlatform.system;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
@@ -76,7 +78,7 @@ backendStdenv.mkDerivation (
           output:
           attrsets.attrByPath
             [
-              redistArch
+              hostPlatformRedistArch
               "outputs"
               output
             ]
@@ -96,12 +98,12 @@ backendStdenv.mkDerivation (
         # NOTE: In the case the redistributable isn't supported on the target platform,
         # we will have `outputs = [ "out" ] ++ possibleOutputs`. This is of note because platforms which
         # aren't supported would otherwise have evaluation errors when trying to access outputs other than `out`.
-        # The alternative would be to have `outputs = [ "out" ]` when`redistArch = "unsupported"`, but that would
+        # The alternative would be to have `outputs = [ "out" ]` when`hostPlatformRedistArch = "unsupported"`, but that would
         # require adding guards throughout the entirety of the CUDA package set to ensure `cudaSupport` is true --
         # recall that OfBorg will evaluate packages marked as broken and that `cudaPackages` will be evaluated with
         # `cudaSupport = false`!
         additionalOutputs =
-          if redistArch == "unsupported"
+          if hostPlatformRedistArch == "unsupported"
           then possibleOutputs
           else builtins.filter hasOutput possibleOutputs;
         # The out output is special -- it's the default output and we always include it.
@@ -154,18 +156,35 @@ backendStdenv.mkDerivation (
     };
 
     # src :: Optional Derivation
-    src = trivial.pipe redistArch [
-      # If redistArch doesn't exist in redistribRelease, return null.
-      (redistArch: redistribRelease.${redistArch} or null)
-      # If the release is non-null, fetch the source; otherwise, return null.
-      (trivial.mapNullable (
-        { relative_path, sha256, ... }:
-        fetchurl {
-          url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
-          inherit sha256;
-        }
-      ))
-    ];
+    src =
+      # TODO(@connorbaker): Remove debugging lib.warn and inline this.
+      let
+        src =
+          trivial.mapNullable
+            (
+              { relative_path, sha256, ... }:
+              fetchurl {
+                url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+                inherit sha256;
+              }
+            )
+            (redistribRelease.${hostPlatformRedistArch} or null);
+      in
+      lib.warn
+      ''
+        Info:
+        - redistName: ${redistName}
+        - hostPlatformRedistArch: ${hostPlatformRedistArch}
+        - pname: ${finalAttrs.pname}
+        - version: ${finalAttrs.version}
+        - outputs: ${builtins.toJSON finalAttrs.outputs}
+        - brokenConditions: ${builtins.toJSON finalAttrs.brokenConditions}
+        - badPlatformsConditions: ${builtins.toJSON finalAttrs.badPlatformsConditions}
+        - buildPlatform: ${buildPlatform.system}
+        - hostPlatform: ${hostPlatform.system}
+        - targetPlatform: ${targetPlatform.system}
+      ''
+      src;
 
     # Handle the pkg-config files:
     # 1. No FHS
@@ -198,30 +217,37 @@ backendStdenv.mkDerivation (
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-      # This hook will make sure libcuda can be found
-      # in typically /lib/opengl-driver by adding that
-      # directory to the rpath of all ELF binaries.
-      # Check e.g. with `patchelf --print-rpath path/to/my/binary
-      autoAddDriverRunpath
-      markForCudatoolkitRootHook
-      # To create fat outputs from each component and find a version of `lndir` built for the host platform.
-      lndir
-    ]
-    # autoAddCudaCompatRunpath depends on cuda_compat and would cause
-    # infinite recursion if applied to `cuda_compat` itself (beside the fact
-    # that it doesn't make sense in the first place)
-    ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
-      # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
-      # See its documentation in ./setup-hooks/extension.nix.
-      # NOTE(@connorbaker): Because autoAddCudaCompatRunpath is in nativeBuildInputs, it tries to use toolchains
-      # from buildPlatform, but that's not what we want. We want to use our host/target toolchains!
-      # To overcome this, we access the `__spliced` attribute and choose the `hostTarget` attribute.
-      # In the case the `__spliced` attribute doesn't exist, we just use the hook directly (because we're not
-      # cross-compiling).
-      autoAddCudaCompatRunpath.__spliced.hostTarget or autoAddCudaCompatRunpath
-    ];
+    nativeBuildInputs =
+      [
+        # To create fat outputs from each component and find a version of `lndir` built for the host platform.
+        lndir
+      ]
+      ++ [
+        # Patchelf is used to fix the rpath of the binaries.
+        autoPatchelfHook
+        # (autoPatchelfHook.__spliced.buildHost or autoPatchelfHook)
+
+        # This hook will make sure libcuda can be found in typically
+        # /lib/opengl-driver by adding that directory to the rpath of all ELF
+        # binaries. Check e.g. with `patchelf --print-rpath path/to/my/binary
+        autoAddDriverRunpath
+        # (autoAddDriverRunpath.__spliced.buildHost or autoAddDriverRunpath)
+
+        # Mark the CUDA toolkit root directory for the CUDA compatibility libraries
+        markForCudatoolkitRootHook
+        # (markForCudatoolkitRootHook.__spliced.buildHost or markForCudatoolkitRootHook)
+      ]
+      # autoAddCudaCompatRunpath depends on cuda_compat and would cause
+      # infinite recursion if applied to `cuda_compat` itself (beside the fact
+      # that it doesn't make sense in the first place)
+      ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
+        # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
+        # See its documentation in ./setup-hooks/auto-add-cuda-compat-runpath-hook/default.nix.
+        # NOTE(@connorbaker): Because autoAddCudaCompatRunpath is in nativeBuildInputs, it tries to use cuda_compat
+        # from buildPackages, but we need to use the one from targetPackages.
+        # We can either use autoAddCudaCompatRunpath.__spliced.hostTarget or move it to buildInputs.
+        (autoAddCudaCompatRunpath.__spliced.hostTarget or autoAddCudaCompatRunpath)
+      ];
 
     buildInputs =
       [
