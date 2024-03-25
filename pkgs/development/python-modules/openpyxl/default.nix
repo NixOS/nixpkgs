@@ -5,7 +5,7 @@
 , lxml
 , pandas
 , pillow
-, pytestCheckHook
+, pytest7CheckHook
 , pythonAtLeast
 , pythonOlder
 , setuptools
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     lxml
     pandas
     pillow
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pytestFlagsArray = [
