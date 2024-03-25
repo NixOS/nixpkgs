@@ -7,6 +7,7 @@
 , json-glib
 , libgee
 , libhandy
+, libnotify
 , libpeas
 , pantheon
 , python3Packages
@@ -92,5 +93,20 @@ in
       libpeas
     ];
     meta.description = "Time of day in fuzzy way";
+  };
+
+  budgie-hotcorners = mkBudgieExtrasPlugin {
+    pluginName = "hotcorners";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      json-glib
+      libnotify
+      libpeas
+    ];
+    postPatch = ''
+      patchShebangs budgie-hotcorners/applet/meson_post_install.py
+    '';
+    meta.description = "Set hotcorner actions";
   };
 }
