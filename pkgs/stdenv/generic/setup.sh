@@ -1557,7 +1557,7 @@ runPhase() {
     if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then return; fi
     if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then return; fi
 
-    if [[ -n $NIX_LOG_FD ]]; then
+    if [[ -n "${NIX_LOG_FD-}" ]]; then
         echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
     fi
 
