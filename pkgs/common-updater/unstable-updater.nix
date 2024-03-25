@@ -95,6 +95,9 @@ let
       fi
 
       git clone "''${cloneArgs[@]}" "$url" "$tmpdir"
+      getLatestVersion() {
+          git describe --tags --abbrev=0 --match "''${tag_format}" 2> /dev/null || true
+      }
 
       pushd "$tmpdir"
       commit_date="$(git show -s --pretty='format:%cs')"
@@ -104,7 +107,7 @@ let
           if [[ "$shallow_clone" == "1" ]]; then
               depth=100
               while (( depth < 10000 )); do
-                  last_tag="$(git describe --tags --abbrev=0 --match "''${tag_format}" 2> /dev/null || true)"
+                  last_tag="$(getLatestVersion)"
                   if [[ -n "$last_tag" ]]; then
                       break
                   fi
@@ -115,10 +118,10 @@ let
               if [[ -z "$last_tag" ]]; then
                   # To be extra sure, check if full history helps with finding a tag
                   git fetch --tags
-                  last_tag="$(git describe --tags --abbrev=0 --match "''${tag_format}" 2> /dev/null || true)"
+                  last_tag="$(getLatestVersion)"
               fi
           else
-              last_tag="$(git describe --tags --abbrev=0 --match "''${tag_format}" 2> /dev/null || true)"
+              last_tag="$(getLatestVersion)"
           fi
           if [[ -z "$last_tag" ]]; then
               last_tag="0"
