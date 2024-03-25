@@ -393,7 +393,7 @@ rec {
 
   mypy-boto3-kafkaconnect = buildMypyBoto3Package "kafkaconnect" "1.34.50" "sha256-frPPAQeFyO92uMqqzBcSC3MVK4V4hbdO9tx4awAKAUU=";
 
-  mypy-boto3-kendra = buildMypyBoto3Package "kendra" "1.34.0" "sha256-j1fph9WwqBns2BpZjoKTpXC9gUJ4lu+poPBV6LIOusM=";
+  mypy-boto3-kendra = buildMypyBoto3Package "kendra" "1.34.69" "sha256-OKUSsCfv2X9ad5XUSwm0KRwW++qb+AVtvCOurlRM/bo=";
 
   mypy-boto3-kendra-ranking = buildMypyBoto3Package "kendra-ranking" "1.34.0" "sha256-hbemz5ECtfP3oi645lZT7CCx31yg8MNqbAD32Am6l1U=";
 
