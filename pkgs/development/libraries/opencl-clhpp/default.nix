@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencl-clhpp";
-  version = "2.0.15";
+  version = "2023.12.14";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-CLHPP";
     rev = "v${version}";
-    sha256 = "sha256-A12GdevbMaO2QkGAk3VsXzwcDkF+6dEapse2xfdqzPM=";
+    sha256 = "sha256-BMpKkS2ISO0F5HNPoVYL38p84VvEAdqqY46bYdiPT0E=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
