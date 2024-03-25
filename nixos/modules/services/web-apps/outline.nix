@@ -783,6 +783,8 @@ in
         # This working directory is required to find stuff like the set of
         # onboarding files:
         WorkingDirectory = "${cfg.package}/share/outline";
+        # In case this directory is not in /var/lib/outline, it needs to be made writable explicitly
+        ReadWritePaths = [ cfg.storage.localRootDir ];
       };
     };
   };
