@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , glibcLocales
 , importlib-metadata
+, packaging
 , logfury
 , pyfakefs
 , pytestCheckHook
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     logfury
     requests
     tqdm
