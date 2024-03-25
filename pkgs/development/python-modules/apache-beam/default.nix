@@ -1,75 +1,99 @@
 {
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  pythonRelaxDepsHook,
+
+  # build-system
+  cython,
+  distlib,
+  grpcio-tools,
+  jinja2,
+  mypy-protobuf,
+  pyyaml,
+  setuptools,
+  yapf,
+
+  # dependencies
   cloudpickle,
   crcmod,
-  cython,
   dill,
   fastavro,
   fasteners,
-  fetchFromGitHub,
-  fetchpatch,
-  freezegun,
   grpcio,
-  grpcio-tools,
   hdfs,
   httplib2,
-  hypothesis,
-  lib,
-  mock,
-  mypy-protobuf,
+  jsonpickle,
+  jsonschema,
   numpy,
   objsize,
   orjson,
-  pandas,
-  parameterized,
   proto-plus,
   protobuf,
-  psycopg2,
   pyarrow,
   pydot,
-  pyhamcrest,
   pymongo,
-  pytest-xdist,
-  pytestCheckHook,
-  python,
   python-dateutil,
   pytz,
-  pyyaml,
+  redis,
   regex,
   requests,
+  typing-extensions,
+  zstandard,
+
+  # checks
+  python,
+  docstring-parser,
+  freezegun,
+  hypothesis,
+  mock,
+  pandas,
+  parameterized,
+  psycopg2,
+  pyhamcrest,
+  pytestCheckHook,
+  pytest-xdist,
   requests-mock,
   scikit-learn,
-  setuptools,
   sqlalchemy,
   tenacity,
   testcontainers,
-  typing-extensions,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.59.0";
+  version = "2.62.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-JeVYfXAx/GBGXQKAt6pSpnxH83oyeDylEY12EDzMxnw=";
+    hash = "sha256-vLvnRZAQg9nhUOI0SIUn+9Y8O7edK3445PkdhPbhO3Y=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/apache/beam/pull/24143
-      name = "fix-for-dill-0.3.6.patch";
-      url = "https://github.com/apache/beam/commit/7e014435b816015d21cc07f3f6c80809f3d8023d.patch";
-      hash = "sha256-iUmnzrItTFM98w3mpadzrmtI3t0fucpSujAg/6qxCGk=";
-      stripLen = 2;
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "distlib==0.3.7" "distlib" \
+      --replace-fail "yapf==0.29.0" "yapf" \
+      --replace-fail "grpcio-tools==1.62.1" "grpcio-tools" \
+      --replace-fail "mypy-protobuf==3.5.0" "mypy-protobuf" \
+      --replace-fail "numpy>=1.14.3,<2.3.0" "numpy"
+  '';
 
   pythonRelaxDeps = [
+    "grpcio"
+    "mypy-protobuf"
+
+    # As of apache-beam v2.55.1, the requirement is cloudpickle~=2.2.1, but
+    # the current (2024-04-20) nixpkgs's pydot version is 3.0.0.
+    "cloudpickle"
+
+    # As of apache-beam v2.55.1, the requirement is pydot>=1.2.0,<2, but
+    # the current (2024-04-20) nixpkgs's pydot version is 2.0.0.
+    "pydot"
+
     # See https://github.com/NixOS/nixpkgs/issues/156957
     "dill"
     "numpy"
@@ -92,13 +116,21 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/sdks/python";
 
   nativeBuildInputs = [
-    cython
-    grpcio-tools
-    mypy-protobuf
-    setuptools
+    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    cython
+    distlib
+    grpcio-tools
+    jinja2
+    mypy-protobuf
+    pyyaml
+    setuptools
+    yapf
+  ];
+
+  dependencies = [
     cloudpickle
     crcmod
     dill
@@ -107,6 +139,8 @@ buildPythonPackage rec {
     grpcio
     hdfs
     httplib2
+    jsonpickle
+    jsonschema
     numpy
     objsize
     orjson
@@ -117,6 +151,7 @@ buildPythonPackage rec {
     pymongo
     python-dateutil
     pytz
+    redis
     regex
     requests
     typing-extensions
@@ -125,9 +160,16 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  # If this directory doesn't exist, the build script fails
+  # https://github.com/apache/beam/blob/v2.62.0/sdks/python/setup.py#L213-L215
+  preBuild = ''
+    mkdir apache_beam/yaml/docs
+  '';
+
   pythonImportsCheck = [ "apache_beam" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    docstring-parser
     freezegun
     hypothesis
     mock
@@ -136,7 +178,7 @@ buildPythonPackage rec {
     psycopg2
     pyhamcrest
     pytestCheckHook
-    pytest-xdist
+    # pytest-xdist
     pyyaml
     requests-mock
     scikit-learn
@@ -150,6 +192,9 @@ buildPythonPackage rec {
   preCheck = "cd $out/${python.sitePackages}";
 
   disabledTestPaths = [
+    # "apache_beam/yaml/programming_guide_test.py"
+    # "apache_beam/yaml/readme_test.py"
+
     # Fails with
     #     _______ ERROR collecting apache_beam/io/external/xlang_jdbcio_it_test.py _______
     #     apache_beam/io/external/xlang_jdbcio_it_test.py:80: in <module>
@@ -158,23 +203,23 @@ buildPythonPackage rec {
     #         container_init: Callable[[], Union[PostgresContainer, MySqlContainer]],
     #     E   NameError: name 'MySqlContainer' is not defined
     #
-    "apache_beam/io/external/xlang_jdbcio_it_test.py"
+    # "apache_beam/io/external/xlang_jdbcio_it_test.py"
 
     # These tests depend on the availability of specific servers backends.
-    "apache_beam/runners/portability/flink_runner_test.py"
-    "apache_beam/runners/portability/samza_runner_test.py"
-    "apache_beam/runners/portability/spark_runner_test.py"
+    # "apache_beam/runners/portability/flink_runner_test.py"
+    # "apache_beam/runners/portability/samza_runner_test.py"
+    # "apache_beam/runners/portability/spark_runner_test.py"
 
     # Fails starting from dill 0.3.6 because it tries to pickle pytest globals:
     # https://github.com/uqfoundation/dill/issues/482#issuecomment-1139017499.
-    "apache_beam/transforms/window_test.py"
+    # "apache_beam/transforms/window_test.py"
 
     # See https://github.com/apache/beam/issues/25390.
-    "apache_beam/coders/slow_coders_test.py"
-    "apache_beam/dataframe/pandas_doctests_test.py"
-    "apache_beam/typehints/typed_pipeline_test.py"
-    "apache_beam/coders/fast_coders_test.py"
-    "apache_beam/dataframe/schemas_test.py"
+    # "apache_beam/coders/slow_coders_test.py"
+    # "apache_beam/dataframe/pandas_doctests_test.py"
+    # "apache_beam/typehints/typed_pipeline_test.py"
+    # "apache_beam/coders/fast_coders_test.py"
+    # "apache_beam/dataframe/schemas_test.py"
   ];
 
   disabledTests = [
@@ -201,15 +246,19 @@ buildPythonPackage rec {
     "test_pformat_namedtuple_with_unnamed_fields"
     "test_row_coder_fail_early_bad_schema"
     # See https://github.com/apache/beam/issues/26004.
-    "test_batch_encode_decode"
+    # "test_batch_encode_decode" TODO remove completely
   ];
 
-  meta = with lib; {
+  pytestFlagsArray = [
+    "-vvvv"
+    "--maxfail=10"
+  ];
+
+  meta = {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
-    # https://github.com/apache/beam/issues/27221
-    broken = lib.versionAtLeast pandas.version "2";
+    changelog = "https://github.com/apache/beam/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }
