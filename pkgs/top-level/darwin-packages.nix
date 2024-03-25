@@ -133,6 +133,11 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
 
+  fixDylibReferences = pkgs.makeSetupHook {
+    name = "fix-darwin-dylib-references-hook";
+    substitutions = { inherit (pkgs.binutils) targetPrefix; };
+  } ../os-specific/darwin/fix-dylib-references-in-binaries.sh;
+
   print-reexports = callPackage ../os-specific/darwin/print-reexports { };
 
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
