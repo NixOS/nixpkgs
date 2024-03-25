@@ -48,8 +48,10 @@ super: lib.trivial.pipe super [
   (patchExtension "ddterm@amezin.github.com" (old: {
     nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
     buildInputs = [ vte ];
+    postPatch = ''
+      substituteInPlace "bin/com.github.amezin.ddterm" --replace-fail "/usr/bin/gjs" "${gjs}/bin/gjs"
+    '';
     postFixup = ''
-      substituteInPlace "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm" --replace "gjs" "${gjs}/bin/gjs"
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
     '';
   }))
