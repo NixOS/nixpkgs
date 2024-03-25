@@ -37,9 +37,7 @@ in rustPlatform.buildRustPackage {
     hash = "sha256-JCxjmWr2+75KMPOoVybNZhy9zhhrg9BAKA8D+J6MNBc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-FGB8p9ClGokYDrV0b47PnjeSlOv7p+IgThNajve3yms=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
