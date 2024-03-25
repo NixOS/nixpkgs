@@ -802,6 +802,7 @@ with pkgs;
   sea-orm-cli = callPackage ../development/tools/sea-orm-cli { };
 
   vcpkg-tool = callPackage ../by-name/vc/vcpkg-tool/package.nix {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     fmt = fmt_10;
   };
 
@@ -17816,7 +17817,7 @@ with pkgs;
   smiley-sans = callPackage ../data/fonts/smiley-sans { };
 
   inherit (callPackages ../applications/networking/cluster/spark { })
-    spark_3_5 spark_3_4 spark_3_3;
+    spark_3_5 spark_3_4;
   spark3 = spark_3_5;
   spark = spark3;
 
@@ -18183,6 +18184,12 @@ with pkgs;
   apacheKafka_3_3 = callPackage ../servers/apache-kafka { majorVersion = "3.3"; };
   apacheKafka_3_4 = callPackage ../servers/apache-kafka { majorVersion = "3.4"; };
   apacheKafka_3_5 = callPackage ../servers/apache-kafka { majorVersion = "3.5"; };
+
+  apng2gif = callPackage ../tools/graphics/apng2gif { };
+
+  gif2apng = callPackage ../tools/graphics/gif2apng { };
+
+  apngopt = callPackage ../tools/graphics/apngopt { };
 
   kt = callPackage ../tools/misc/kt { };
 
@@ -32467,7 +32474,7 @@ with pkgs;
     stdenv = stdenv;
   });
 
-  kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
+  kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
@@ -37852,6 +37859,12 @@ with pkgs;
 
   wesnoth = callPackage ../games/wesnoth {
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
+    # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
+    lua = lua5_4.override {
+      postConfigure = ''
+        makeFlagsArray+=("CC=$CXX")
+      '';
+    };
   };
 
   wesnoth-dev = wesnoth;
