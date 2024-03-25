@@ -72,4 +72,15 @@ in
     isPython = true;
     meta.description = "Count down applet with options";
   };
+
+  budgie-dropby = mkBudgieExtrasPlugin {
+    pluginName = "dropby";
+    moduleName = "budgie_dropby";
+    isPython = true;
+    pythonPath = with python3Packages; [
+      psutil
+      pyudev
+    ];
+    meta.description = "Popup menu for USB drives";
+  };
 }
