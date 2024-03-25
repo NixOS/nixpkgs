@@ -70,6 +70,7 @@ let
     dynamic-crop = callPackage ./dynamic-crop.nix { };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     memo = callPackage ./memo.nix { };
+    manga-reader = callPackage ./manga-reader.nix { };
     modernx = callPackage ./modernx.nix { };
     modernx-zydezu = callPackage ./modernx-zydezu.nix { };
     mpris = callPackage ./mpris.nix { };
