@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/nix-support
 
-    ldpath=/${stdenv.hostPlatform.libDir}/$(basename $(< ${stdenv.cc}/nix-support/dynamic-linker))
+    ldpath=/${stdenv.hostPlatform.libDir}/$(basename ${stdenv.cc.bintools.dynamicLinker})
     echo "$ldpath" > $out/nix-support/ldpath
     mkdir -p $out/lib/tmpfiles.d/
     cat > $out/lib/tmpfiles.d/nix-ld.conf <<EOF
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  passthru.tests.nix-ld = nixosTests.nix-ld;
+  passthru.tests = nixosTests.nix-ld;
 
   meta = with lib; {
     description = "Run unpatched dynamic binaries on NixOS";

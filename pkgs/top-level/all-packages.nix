@@ -14954,6 +14954,8 @@ with pkgs;
     boost = boost179;
   };
 
+  xorriso = libisoburn;
+
   xurls = callPackage ../tools/text/xurls { };
 
   xxv = callPackage ../tools/misc/xxv { };
@@ -16251,7 +16253,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21 openjfx22;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -16290,6 +16292,11 @@ with pkgs;
   openjdk21_headless = javaPackages.compiler.openjdk21.headless;
   jdk21 = openjdk21;
   jdk21_headless = openjdk21_headless;
+
+  openjdk22 = javaPackages.compiler.openjdk22;
+  openjdk22_headless = javaPackages.compiler.openjdk22.headless;
+  jdk22 = openjdk22;
+  jdk22_headless = openjdk22_headless;
 
   /* default JDK */
   jdk = jdk21;
@@ -28574,7 +28581,6 @@ with pkgs;
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
-  bibata-cursors = callPackage ../data/icons/bibata-cursors { attrs = python3Packages.attrs; };
   bibata-extra-cursors = callPackage ../data/icons/bibata-cursors/extra.nix { };
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
@@ -33419,8 +33425,6 @@ with pkgs;
   nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell { };
-
-  nix-ld = callPackage ../os-specific/linux/nix-ld { };
 
   noaa-apt = callPackage ../applications/radio/noaa-apt { };
 
@@ -41294,6 +41298,8 @@ with pkgs;
   };
 
   treefmt = callPackage ../development/tools/treefmt { };
+
+  nufmt = callPackage ../development/tools/nufmt { };
 
   bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
 
