@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     . $stdenv/setup
 
-    unpackPhase
+    # Run unpackPhase without cd to sourceRoot
+    eval "''${unpackPhase:-unpackPhase}"
 
     mkdir -pv $out
     cp -r -t $out adom/*
