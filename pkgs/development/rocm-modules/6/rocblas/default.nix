@@ -120,31 +120,31 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_C_COMPILER=hipcc"
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-Dpython=python3"
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    "-DBUILD_WITH_TENSILE=${if buildTensile then "ON" else "OFF"}"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeFeature "CMAKE_C_COMPILER" "hipcc")
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
+    (lib.cmakeFeature "python" "python3")
+    (lib.cmakeFeature "AMDGPU_TARGETS" (lib.concatStringsSep ";" gpuTargets))
+    (lib.cmakeBool "BUILD_WITH_TENSILE" buildTensile)
+    (lib.cmakeBool "ROCM_SYMLINK_LIBS" false)
+    # # Manually define CMAKE_INSTALL_<DIR>
+    # # See: https://github.com/NixOS/nixpkgs/pull/197838
+    # "-DCMAKE_INSTALL_BINDIR=bin"
+    # "-DCMAKE_INSTALL_LIBDIR=lib"
+    # "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
+    (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
   ] ++ lib.optionals buildTensile [
-    "-DVIRTUALENV_HOME_DIR=/build/source/tensile"
-    "-DTensile_TEST_LOCAL_PATH=/build/source/tensile"
-    "-DTensile_ROOT=/build/source/tensile/${python3.sitePackages}/Tensile"
-    "-DTensile_LOGIC=${tensileLogic}"
-    "-DTensile_CODE_OBJECT_VERSION=${tensileCOVersion}"
-    "-DTensile_SEPARATE_ARCHITECTURES=${if tensileSepArch then "ON" else "OFF"}"
-    "-DTensile_LAZY_LIBRARY_LOADING=${if tensileLazyLib then "ON" else "OFF"}"
-    "-DTensile_LIBRARY_FORMAT=${tensileLibFormat}"
-  ] ++ lib.optionals buildTests [
-    "-DBUILD_CLIENTS_TESTS=ON"
-  ] ++ lib.optionals buildBenchmarks [
-    "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    (lib.cmakeFeature "VIRTUALENV_HOME_DIR" "/build/source/tensile")
+    (lib.cmakeFeature "Tensile_TEST_LOCAL_PATH" "/build/source/tensile")
+    (lib.cmakeFeature "Tensile_ROOT" "/build/source/tensile/${python3.sitePackages}/Tensile")
+    (lib.cmakeFeature "Tensile_LOGIC" tensileLogic)
+    (lib.cmakeFeature "Tensile_CODE_OBJECT_VERSION" tensileCOVersion)
+    (lib.cmakeBool "Tensile_SEPARATE_ARCHITECTURES" tensileSepArch)
+    (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
+    (lib.cmakeFeature "Tensile_LIBRARY_FORMAT" tensileLibFormat)
+    (lib.cmakeBool "Tensile_PRINT_DEBUG" true)
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    "-DCMAKE_CXX_FLAGS=-I${amd-blis}/include/blis"
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${amd-blis}/include/blis")
   ];
 
   patches = [
@@ -155,7 +155,10 @@ in stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = lib.optionalString (finalAttrs.pname != "rocblas") ''
+  postPatch = ''
+    substituteInPlace cmake/build-options.cmake \
+      --replace-fail 'Tensile_CPU_THREADS ""' 'Tensile_CPU_THREADS "$ENV{NIX_BUILD_CORES}"'
+  '' + lib.optionalString (finalAttrs.pname != "rocblas") ''
     # Return early and install tensile files manually
     substituteInPlace library/src/CMakeLists.txt \
       --replace "set_target_properties( TensileHost PROPERTIES OUTPUT_NAME" "return()''\nset_target_properties( TensileHost PROPERTIES OUTPUT_NAME"
