@@ -26923,6 +26923,8 @@ with pkgs;
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
+  tusd = callPackage ../servers/tusd { };
+
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
