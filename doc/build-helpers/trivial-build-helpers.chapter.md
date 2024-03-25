@@ -488,7 +488,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script"
+  destination = "bin/my-script";
 }
 ```
 
@@ -576,7 +576,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script"
+  destination = "bin/my-script";
 }
 ```
 
