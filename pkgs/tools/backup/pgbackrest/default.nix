@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "pgbackrest";
-  version = "2.50";
+  version = "2.51";
 
   src = fetchFromGitHub {
     owner = "pgbackrest";
     repo = "pgbackrest";
     rev = "release/${version}";
-    sha256 = "sha256-RjkTg80LAUndSVfTrol9hvgNOG6PMC+OkMVjdtjpdbI=";
+    sha256 = "sha256-o6UROI+t35lHSFeRMLh0nIkmLMdcclpkKNzjkw/z56Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];
