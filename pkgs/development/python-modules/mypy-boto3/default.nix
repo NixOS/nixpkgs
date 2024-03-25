@@ -603,7 +603,7 @@ rec {
 
   mypy-boto3-robomaker = buildMypyBoto3Package "robomaker" "1.34.0" "sha256-dAL2P2bxhSc5oLZXhhekrt9y4bWXg7kIr+/FVbkFTww=";
 
-  mypy-boto3-rolesanywhere = buildMypyBoto3Package "rolesanywhere" "1.34.0" "sha256-U/j/u6pqoHpfNP3GbQ8SZb+qIL842ZcwwdBr1QQhlj0=";
+  mypy-boto3-rolesanywhere = buildMypyBoto3Package "rolesanywhere" "1.34.69" "sha256-wuPEIXHDNvPOWIKLRx5ZR/SgQaWEYqA+IHNR3NZDhIs=";
 
   mypy-boto3-route53 = buildMypyBoto3Package "route53" "1.34.31" "sha256-MtmEtt57vhFRG1O+VnFXFUhSWAQ7JrnV3hBZx4TpOh8=";
 
