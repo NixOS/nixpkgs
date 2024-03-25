@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-validators/validators";
     changelog = "https://github.com/python-validators/validators/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }
