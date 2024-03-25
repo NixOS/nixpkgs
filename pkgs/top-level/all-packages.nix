@@ -7161,7 +7161,7 @@ with pkgs;
     llvmPackages = llvmPackages_13;
   };
 
-  conda = callPackage ../tools/package-management/conda { };
+  conda = with python3Packages; toPythonApplication conda;
 
   conduktor = callPackage ../applications/misc/conduktor { };
 
