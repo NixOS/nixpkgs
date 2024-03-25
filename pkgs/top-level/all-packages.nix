@@ -3337,8 +3337,6 @@ with pkgs;
 
   autospotting = callPackage ../applications/misc/autospotting { };
 
-  autosuspend = callPackage ../os-specific/linux/autosuspend { };
-
   avfs = callPackage ../tools/filesystems/avfs { };
 
   aliyun-cli = callPackage ../tools/admin/aliyun-cli { };
@@ -30610,8 +30608,6 @@ with pkgs;
 
   docker = docker_24;
   docker-client = docker.override { clientOnly = true; };
-
-  docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
   docker-machine-hyperkit = callPackage ../applications/networking/cluster/docker-machine/hyperkit.nix { };
