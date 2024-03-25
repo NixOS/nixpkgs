@@ -20,6 +20,7 @@
 , withLocation ? false
 , withSerialPort ? false
 , withTools ? false
+, withXmlPatterns ? false
 , pkgsBuildTarget
 , buildPackages
 , dbusSupport ? !stdenv.isDarwin
@@ -137,6 +138,7 @@ buildPythonPackage rec {
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
     ++ lib.optional withTools qttools
+    ++ lib.optional withXmlPatterns qtxmlpatterns
   );
 
   buildInputs = with libsForQt5; [
@@ -154,6 +156,7 @@ buildPythonPackage rec {
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
     ++ lib.optional withTools qttools
+    ++ lib.optional withXmlPatterns qtxmlpatterns
   ;
 
   propagatedBuildInputs = [
@@ -170,6 +173,7 @@ buildPythonPackage rec {
     locationEnabled = withLocation;
     serialPortEnabled = withSerialPort;
     toolsEnabled = withTools;
+    xmlPatternsEnabled = withXmlPatterns;
   };
 
   dontConfigure = true;
@@ -191,6 +195,7 @@ buildPythonPackage rec {
     ++ lib.optional withLocation "PyQt5.QtPositioning"
     ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
     ++ lib.optional withTools "PyQt5.QtDesigner"
+    ++ lib.optional withXmlPatterns "PyQt5.QtXmlPatterns"
   ;
 
   meta = with lib; {
