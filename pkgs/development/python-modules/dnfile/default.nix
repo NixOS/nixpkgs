@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "dnfile";
   version = "0.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pefile
   ];
 
