@@ -45,7 +45,6 @@ backendStdenv.mkDerivation {
     ++ lib.optionals (cudaAtLeast "12.0") [cuda_cccl];
 
   cmakeFlags = [
-    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
       with flags; lib.concatStringsSep ";" (lib.lists.map dropDot cudaCapabilities)
     ))
