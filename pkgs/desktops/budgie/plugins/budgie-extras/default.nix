@@ -5,6 +5,7 @@
 , gnome-menus
 , gtk3
 , json-glib
+, keybinder3
 , libgee
 , libhandy
 , libnma
@@ -23,6 +24,18 @@ in
 
 {
   inherit mkBudgieExtrasPlugin;
+
+  budgie-extras-daemon = mkBudgieExtrasPlugin {
+    pluginName = "extras-daemon";
+    mesonOptionName = "extrasdaemon";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      keybinder3
+      libpeas
+    ];
+    meta.description = "Manages keyboard shortcuts delivered via .bde files for various plugins";
+  };
 
   budgie-app-launcher = mkBudgieExtrasPlugin {
     pluginName = "app-launcher";
