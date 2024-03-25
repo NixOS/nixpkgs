@@ -223,6 +223,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
+    # Fixed upstream and included in the main branch
+    # https://github.com/systemd/systemd/pull/31871
+    ./0019-virtualbox-detection-on-proprietary-systems.patch
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional (stdenv.hostPlatform.isPower || stdenv.hostPlatform.isRiscV) [

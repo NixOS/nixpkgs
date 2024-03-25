@@ -1,0 +1,22 @@
+From e2d2a5938b9c9ba9bba8edcb85c1da9f0d4b57fc Mon Sep 17 00:00:00 2001
+From: Friedrich Altheide <11352905+FriedrichAltheide@users.noreply.github.com>
+Date: Wed, 20 Mar 2024 17:48:39 +0100
+Subject: [PATCH] basic/virt: Fix virtualbox detection on proprietary system
+ via board_vendor
+
+Identify an virtualbox instance even if product_name, sys_vendor and bios_vendor reflect the
+information of the real hardware, by checking if board_vendor == "Oracle Corporation"
+
+This fixes #13429 again
+The previous fix was removed in #21127
+---
+ src/basic/virt.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/basic/virt.c b/src/basic/virt.c
+index b976d2af14f66..7e2c0781fe128 100644
+--- a/src/basic/virt.c
++++ b/src/basic/virt.c
+@@ -181,1 +181,2 @@ static Virtualization detect_vm_dmi_vendor(void) {
+                 { "VirtualBox",            VIRTUALIZATION_ORACLE    },
++                { "Oracle Corporation",    VIRTUALIZATION_ORACLE    }, /* Detect VirtualBox on some proprietary systems via the board_vendor */
