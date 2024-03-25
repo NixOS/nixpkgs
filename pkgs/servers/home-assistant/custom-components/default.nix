@@ -18,6 +18,8 @@
 
   gpio = callPackage ./gpio {};
 
+  homematicip_local = callPackage ./homematicip_local { };
+
   localtuya = callPackage ./localtuya {};
 
   miele = callPackage ./miele {};
