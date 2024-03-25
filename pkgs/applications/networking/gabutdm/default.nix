@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , meson
 , pkg-config
-, cmake
 , ninja
 , vala
 , wrapGAppsHook4
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     pkg-config
-    cmake
     ninja
     vala
     wrapGAppsHook4
