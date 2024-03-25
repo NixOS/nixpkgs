@@ -1,18 +1,19 @@
 { lib, mkDerivation, fetchFromGitHub, makeWrapper, runCommand
 , python3, vapoursynth
 , qmake, qtbase, qtwebsockets
+, testers, vapoursynth-editor
 }:
 
 let
   unwrapped = mkDerivation rec {
     pname = "vapoursynth-editor";
-    version = "R19-mod-4";
+    version = "19-mod-5.4";
 
     src = fetchFromGitHub {
       owner = "YomikoR";
       repo = pname;
-      rev = lib.toLower version;
-      sha256 = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
+      rev = "r${version}";
+      sha256 = "sha256-rDMdr/dhcKpz2v5VUj6k1FXc51BgRZc398cQQ3GcXZM=";
     };
 
     nativeBuildInputs = [ qmake ];
@@ -31,7 +32,13 @@ let
       done
     '';
 
-    passthru = { inherit withPlugins; };
+    passthru = {
+      inherit withPlugins;
+      tests.version = testers.testVersion {
+        package = vapoursynth-editor;
+        version = "R${version}";
+      };
+    };
 
     meta = with lib; {
       description = "Cross-platform editor for VapourSynth scripts";
@@ -39,6 +46,7 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ tadeokondrak ];
       platforms = platforms.all;
+      mainProgram = "vsedit";
     };
   };
 
