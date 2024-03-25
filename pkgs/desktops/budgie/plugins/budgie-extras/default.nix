@@ -10,6 +10,7 @@
 , libnma
 , libnotify
 , libpeas
+, libwnck
 , networkmanager
 , pantheon
 , python3Packages
@@ -169,5 +170,16 @@ in
     moduleName = "budgie_rotation_lock";
     isPython = true;
     meta.description = "Lock or unlock the screen for rotation";
+  };
+
+  budgie-showtime = mkBudgieExtrasPlugin {
+    pluginName = "showtime";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libwnck
+    ];
+    meta.description = "Desktop time & date";
   };
 }
