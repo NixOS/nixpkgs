@@ -1,13 +1,13 @@
 { fetchzip, lib, stdenvNoCC }:
 
- /*
- This cannot be built from source as it requires entitlements and
- for that it needs to be code signed. Automatic updates will have
- to be disabled via preferences instead of at build time. To do
- that edit $HOME/Library/Preferences/com.googlecode.iterm2.plist
- and add:
- SUEnableAutomaticChecks = 0;
- */
+ /**
+  This cannot be built from source as it requires entitlements and
+  for that it needs to be code signed. Automatic updates will have
+  to be disabled via preferences instead of at build time. To do
+  that edit $HOME/Library/Preferences/com.googlecode.iterm2.plist
+  and add:
+  SUEnableAutomaticChecks = 0;
+*/
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";

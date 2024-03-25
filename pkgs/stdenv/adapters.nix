@@ -1,6 +1,8 @@
-/* This file contains various functions that take a stdenv and return
-   a new stdenv with different behaviour, e.g. using a different C
-   compiler. */
+/**
+  This file contains various functions that take a stdenv and return
+  a new stdenv with different behaviour, e.g. using a different C
+  compiler.
+*/
 
 { lib, pkgs, config }:
 
@@ -160,8 +162,16 @@ rec {
   );
 
 
-  /* Modify a stdenv so that all buildInputs are implicitly propagated to
-     consuming derivations
+  /**
+    Modify a stdenv so that all buildInputs are implicitly propagated to
+    consuming derivations
+
+
+    # Inputs
+
+    `stdenv`
+
+    : 1\. Function argument
   */
   propagateBuildInputs = stdenv:
     stdenv.override (old: {
@@ -172,22 +182,50 @@ rec {
     });
 
 
-  /* Modify a stdenv so that the specified attributes are added to
-     every derivation returned by its mkDerivation function.
+  /**
+    Modify a stdenv so that the specified attributes are added to
+    every derivation returned by its mkDerivation function.
 
-     Example:
-       stdenvNoOptimise =
-         addAttrsToDerivation
-           { env.NIX_CFLAGS_COMPILE = "-O0"; }
-           stdenv;
+
+    # Inputs
+
+    `extraAttrs`
+
+    : 1\. Function argument
+
+    `stdenv`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `addAttrsToDerivation` usage example
+
+    ```nix
+    stdenvNoOptimise =
+      addAttrsToDerivation
+        { env.NIX_CFLAGS_COMPILE = "-O0"; }
+        stdenv;
+    ```
+
+    :::
   */
   addAttrsToDerivation = extraAttrs: stdenv: stdenv.override (old: {
     mkDerivationFromStdenv = extendMkDerivationArgs old (_: extraAttrs);
   });
 
 
-  /* Use the trace output to report all processed derivations with their
-     license name.
+  /**
+    Use the trace output to report all processed derivations with their
+    license name.
+
+
+    # Inputs
+
+    `stdenv`
+
+    : 1\. Function argument
   */
   traceDrvLicenses = stdenv:
     stdenv.override (old: {
@@ -205,9 +243,18 @@ rec {
     });
 
 
-  /* Modify a stdenv so that it produces debug builds; that is,
-     binaries have debug info, and compiler optimisations are
-     disabled. */
+  /**
+    Modify a stdenv so that it produces debug builds; that is,
+    binaries have debug info, and compiler optimisations are
+    disabled.
+
+
+    # Inputs
+
+    `stdenv`
+
+    : 1\. Function argument
+  */
   keepDebugInfo = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
@@ -217,7 +264,16 @@ rec {
     });
 
 
-  /* Modify a stdenv so that it uses the Gold linker. */
+  /**
+    Modify a stdenv so that it uses the Gold linker.
+
+
+    # Inputs
+
+    `stdenv`
+
+    : 1\. Function argument
+  */
   useGoldLinker = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
@@ -225,28 +281,45 @@ rec {
       });
     });
 
-  /* Copy the libstdc++ from the model stdenv to the target stdenv.
-   *
-   * TODO(@connorbaker):
-   * This interface provides behavior which should be revisited prior to the
-   * release of 24.05. For a more detailed explanation and discussion, see
-   * https://github.com/NixOS/nixpkgs/issues/283517. */
+  /**
+    Copy the libstdc++ from the model stdenv to the target stdenv.
+    *
+    * TODO(@connorbaker):
+    * This interface provides behavior which should be revisited prior to the
+    * release of 24.05. For a more detailed explanation and discussion, see
+    * https://github.com/NixOS/nixpkgs/issues/283517.
+
+
+    # Inputs
+
+    `modelStdenv`
+
+    : 1\. Function argument
+
+    `targetStdenv`
+
+    : 2\. Function argument
+  */
   useLibsFrom = modelStdenv: targetStdenv:
     let
       ccForLibs = modelStdenv.cc.cc;
-      /* NOTE(@connorbaker):
-       * This assumes targetStdenv.cc is a cc-wrapper. */
+      /**
+        NOTE(@connorbaker):
+        * This assumes targetStdenv.cc is a cc-wrapper.
+      */
       cc = targetStdenv.cc.override {
-        /* NOTE(originally by rrbutani):
-         * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
-         * clang based `cc` to use `libstdc++` (from gcc).
-         *
-         * Here we (ab)use it to use a `libstdc++` from a different `gcc` than our
-         * `cc`.
-         *
-         * Note that this does not inhibit our `cc`'s lib dir from being added to
-         * cflags/ldflags (see `cc_solib` in `cc-wrapper`) but this is okay: our
-         * `gccForLibs`'s paths should take precedence. */
+        /**
+          NOTE(originally by rrbutani):
+          * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
+          * clang based `cc` to use `libstdc++` (from gcc).
+          *
+          * Here we (ab)use it to use a `libstdc++` from a different `gcc` than our
+          * `cc`.
+          *
+          * Note that this does not inhibit our `cc`'s lib dir from being added to
+          * cflags/ldflags (see `cc_solib` in `cc-wrapper`) but this is okay: our
+          * `gccForLibs`'s paths should take precedence.
+        */
         useCcForLibs = true;
         gccForLibs = ccForLibs;
       };
@@ -273,10 +346,19 @@ rec {
   });
 
 
-  /* Modify a stdenv so that it builds binaries optimized specifically
-     for the machine they are built on.
+  /**
+    Modify a stdenv so that it builds binaries optimized specifically
+    for the machine they are built on.
 
-     WARNING: this breaks purity! */
+    WARNING: this breaks purity!
+
+
+    # Inputs
+
+    `stdenv`
+
+    : 1\. Function argument
+  */
   impureUseNativeOptimizations = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
@@ -290,18 +372,38 @@ rec {
     });
 
 
-  /* Modify a stdenv so that it builds binaries with the specified list of
-     compilerFlags appended and passed to the compiler.
+  /**
+    Modify a stdenv so that it builds binaries with the specified list of
+    compilerFlags appended and passed to the compiler.
 
-     This example would recompile every derivation on the system with
-     -funroll-loops and -O3 passed to each gcc invocation.
+    This example would recompile every derivation on the system with
+    -funroll-loops and -O3 passed to each gcc invocation.
 
-     Example:
-       nixpkgs.overlays = [
-         (self: super: {
-           stdenv = super.withCFlags [ "-funroll-loops" "-O3" ] super.stdenv;
-         })
-       ];
+
+    # Inputs
+
+    `compilerFlags`
+
+    : 1\. Function argument
+
+    `stdenv`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `withCFlags` usage example
+
+    ```nix
+    nixpkgs.overlays = [
+      (self: super: {
+        stdenv = super.withCFlags [ "-funroll-loops" "-O3" ] super.stdenv;
+      })
+    ];
+    ```
+
+    :::
   */
   withCFlags = compilerFlags: stdenv:
     stdenv.override (old: {

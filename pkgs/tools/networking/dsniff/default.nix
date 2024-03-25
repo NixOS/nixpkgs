@@ -6,10 +6,10 @@
 # (see https://bugzilla.redhat.com/show_bug.cgi?id=1862809).
 
 let
-  /*
-  dsniff's build system unconditionnaly wants static libraries and does not
-  support multi output derivations. We do some overriding to give it
-  satisfaction.
+  /**
+    dsniff's build system unconditionnaly wants static libraries and does not
+    support multi output derivations. We do some overriding to give it
+    satisfaction.
   */
   staticdb = symlinkJoin {
     inherit (db) name;

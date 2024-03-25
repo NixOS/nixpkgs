@@ -15,7 +15,8 @@
 , texliveBinaries
 }:
 
-/* Convert an attribute set extracted from tlpdb.nix (with the deps attribute
+/**
+  Convert an attribute set extracted from tlpdb.nix (with the deps attribute
   already processed) to a fake multi-output derivation with possible outputs
   [ "tex" "texdoc" "texsource" "tlpkg" "out" "man" "info" ]
 */

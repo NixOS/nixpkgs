@@ -37,7 +37,9 @@ stdenv.mkDerivation rec {
       --replace '6755' '0755'
   '';
 
-  nativeBuildInputs = [ bison flex perl /* for `prove` (tests) */ ];
+  nativeBuildInputs = [ bison flex perl /**
+  for `prove` (tests)
+*/ ];
 
   buildInputs = [ pam ];
 

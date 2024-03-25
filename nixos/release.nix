@@ -420,8 +420,10 @@ in rec {
 
   tests = allTests;
 
-  /* Build a bunch of typical closures so that Hydra can keep track of
-     the evolution of closure sizes. */
+  /**
+    Build a bunch of typical closures so that Hydra can keep track of
+    the evolution of closure sizes.
+  */
 
   closures = {
 

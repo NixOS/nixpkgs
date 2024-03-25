@@ -53,7 +53,9 @@ in ((buildMozillaMach {
     hash = "sha256-Oxz5drDQ9IJVpgP4/+jiQ5Ds1b0oX8TRD+SOG6JRN0Q=";
   };
 
-  extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
+  extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /**
+  bash
+*/ ''
     PATH=$PATH:${lib.makeBinPath [ git ]}
     patches=$(mktemp -d)
     for dir in branding bugs external features misc; do

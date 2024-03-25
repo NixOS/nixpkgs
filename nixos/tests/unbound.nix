@@ -1,20 +1,20 @@
-/*
- Test that our unbound module indeed works as most users would expect.
- There are a few settings that we must consider when modifying the test. The
- usual use-cases for unbound are
-   * running a recursive DNS resolver on the local machine
-   * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via UDP/53 & TCP/53
-   * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via TCP/853 (DoT)
-   * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/53 & UDP/53
-   * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/853 (DoT)
+/**
+  Test that our unbound module indeed works as most users would expect.
+  There are a few settings that we must consider when modifying the test. The
+  usual use-cases for unbound are
+    * running a recursive DNS resolver on the local machine
+    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via UDP/53 & TCP/53
+    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via TCP/853 (DoT)
+    * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/53 & UDP/53
+    * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/853 (DoT)
 
- In the below test setup we are trying to implement all of those use cases.
+  In the below test setup we are trying to implement all of those use cases.
 
- Another aspect that we cover is access to the local control UNIX socket. It
- can optionally be enabled and users can optionally be in a group to gain
- access. Users that are not in the group (except for root) should not have
- access to that socket. Also, when there is no socket configured, users
- shouldn't be able to access the control socket at all. Not even root.
+  Another aspect that we cover is access to the local control UNIX socket. It
+  can optionally be enabled and users can optionally be in a group to gain
+  access. Users that are not in the group (except for root) should not have
+  access to that socket. Also, when there is no socket configured, users
+  shouldn't be able to access the control socket at all. Not even root.
 */
 import ./make-test-python.nix ({ pkgs, lib, ... }:
   let

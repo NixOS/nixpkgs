@@ -1,4 +1,4 @@
-/*
+/**
   This is the Hydra jobset for the `haskell-updates` branch in Nixpkgs.
   You can see the status of this jobset at
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.

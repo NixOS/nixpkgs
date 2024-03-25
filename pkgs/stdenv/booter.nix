@@ -41,21 +41,41 @@
 # other words, this does a foldr not foldl.
 stageFuns: let
 
-  /* "dfold" a ternary function `op' between successive elements of `list' as if
-     it was a doubly-linked list with `lnul' and `rnul` base cases at either
-     end. In precise terms, `dfold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
-     same as
+  /**
+    "dfold" a ternary function `op' between successive elements of `list' as if
+    it was a doubly-linked list with `lnul' and `rnul` base cases at either
+    end. In precise terms, `dfold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
+    same as
 
-       let
-         f_-1  = lnul f_0;
-         f_0   = op f_-1   x_0  f_1;
-         f_1   = op f_0    x_1  f_2;
-         f_2   = op f_1    x_2  f_3;
-         ...
-         f_n   = op f_n-1  x_n  f_n+1;
-         f_n+1 = rnul f_n;
-       in
-         f_0
+      let
+        f_-1  = lnul f_0;
+        f_0   = op f_-1   x_0  f_1;
+        f_1   = op f_0    x_1  f_2;
+        f_2   = op f_1    x_2  f_3;
+        ...
+        f_n   = op f_n-1  x_n  f_n+1;
+        f_n+1 = rnul f_n;
+      in
+        f_0
+
+
+    # Inputs
+
+    `op`
+
+    : 1\. Function argument
+
+    `lnul`
+
+    : 2\. Function argument
+
+    `rnul`
+
+    : 3\. Function argument
+
+    `list`
+
+    : 4\. Function argument
   */
   dfold = op: lnul: rnul: list:
     let

@@ -5,7 +5,7 @@
   python3,
 }:
 
-/*
+/**
   Creates a patch that replaces every instantiation of GSettings in a C project
   with a code that loads a GSettings schema from a hardcoded path.
 
@@ -30,26 +30,33 @@
 
   - `patches`: A list of patches to apply before generating the patch.
 
-  Example:
-    passthru = {
-      hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
-        inherit (finalAttrs) src;
-        schemaIdToVariableMapping = {
-           ...
-        };
-      };
 
-      updateScript =
-        let
-          updateSource = ...;
-          updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
-        in
-        _experimental-update-script-combinators.sequence [
-          updateSource
-          updatePatch
-        ];
+  # Examples
+  :::{.example}
+
+  ```nix
+  passthru = {
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      inherit (finalAttrs) src;
+      schemaIdToVariableMapping = {
+         ...
       };
-    }
+    };
+
+    updateScript =
+      let
+        updateSource = ...;
+        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updatePatch
+      ];
+    };
+  }
+  ```
+
+  :::
 */
 {
   src,

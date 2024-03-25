@@ -1,4 +1,4 @@
-/*
+/**
   To run:
 
       nix-shell maintainers/scripts/update.nix
@@ -26,8 +26,20 @@ let
 
   inherit (pkgs) lib;
 
-  /* Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
-   */
+  /**
+    Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
+
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
+
+    `list`
+
+    : 2\. Function argument
+  */
   nubOn = f: list:
     if list == [] then
       []
@@ -38,15 +50,35 @@ let
       in
         [x] ++ nubOn f xs;
 
-  /* Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
+  /**
+    Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
 
-    Type: packagesWithPath :: AttrPath → (AttrPath → derivation → bool) → AttrSet → List<AttrSet{attrPath :: str; package :: derivation; }>
-          AttrPath :: [str]
 
-    The packages will be returned as a list of named pairs comprising of:
-      - attrPath: stringified attribute path (based on `rootPath`)
-      - package: corresponding derivation
-   */
+    # Inputs
+
+    `rootPath`
+
+    : 1\. Function argument
+
+    `cond`
+
+    : 2\. Function argument
+
+    `pkgs`
+
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    packagesWithPath :: AttrPath → (AttrPath → derivation → bool) → AttrSet → List<AttrSet{attrPath :: str; package :: derivation; }>
+                 AttrPath :: [str]
+
+           The packages will be returned as a list of named pairs comprising of:
+             - attrPath: stringified attribute path (based on `rootPath`)
+             - package: corresponding derivation
+    ```
+  */
   packagesWithPath = rootPath: cond: pkgs:
     let
       packagesWithPathInner = path: pathContent:
@@ -81,17 +113,34 @@ let
     in
       packagesWithPathInner rootPath pkgs;
 
-  /* Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
-   */
+  /**
+    Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
+  */
   packagesWith = packagesWithPath [];
 
-  /* Recursively find all packages in `pkgs` with updateScript matching given predicate.
-   */
+  /**
+    Recursively find all packages in `pkgs` with updateScript matching given predicate.
+
+
+    # Inputs
+
+    `cond`
+
+    : 1\. Function argument
+  */
   packagesWithUpdateScriptMatchingPredicate = cond:
     packagesWith (path: pkg: builtins.hasAttr "updateScript" pkg && cond path pkg);
 
-  /* Recursively find all packages in `pkgs` with updateScript by given maintainer.
-   */
+  /**
+    Recursively find all packages in `pkgs` with updateScript by given maintainer.
+
+
+    # Inputs
+
+    `maintainer'`
+
+    : 1\. Function argument
+  */
   packagesWithUpdateScriptAndMaintainer = maintainer':
     let
       maintainer =
@@ -110,8 +159,20 @@ let
                          )
                    );
 
-  /* Recursively find all packages under `path` in `pkgs` with updateScript.
-   */
+  /**
+    Recursively find all packages under `path` in `pkgs` with updateScript.
+
+
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    `pkgs`
+
+    : 2\. Function argument
+  */
   packagesWithUpdateScript = path: pkgs:
     let
       prefix = lib.splitString "." path;
@@ -123,8 +184,20 @@ let
         packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
                        pathContent;
 
-  /* Find a package under `path` in `pkgs` and require that it has an updateScript.
-   */
+  /**
+    Find a package under `path` in `pkgs` and require that it has an updateScript.
+
+
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    `pkgs`
+
+    : 2\. Function argument
+  */
   packageByName = path: pkgs:
     let
         package = lib.attrByPath (lib.splitString "." path) null pkgs;
@@ -136,8 +209,9 @@ let
       else
         { attrPath = path; inherit package; };
 
-  /* List of packages matched based on the CLI arguments.
-   */
+  /**
+    List of packages matched based on the CLI arguments.
+  */
   packages =
     if package != null then
       [ (packageByName package pkgs) ]
@@ -186,8 +260,9 @@ let
         --argstr commit true
   '';
 
-  /* Transform a matched package into an object for update.py.
-   */
+  /**
+    Transform a matched package into an object for update.py.
+  */
   packageData = { package, attrPath }: {
     name = package.name;
     pname = lib.getName package;
@@ -197,8 +272,9 @@ let
     attrPath = package.updateScript.attrPath or attrPath;
   };
 
-  /* JSON file with data for update.py.
-   */
+  /**
+    JSON file with data for update.py.
+  */
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
 
   optionalArgs =

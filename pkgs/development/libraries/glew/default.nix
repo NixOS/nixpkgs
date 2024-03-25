@@ -55,7 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "An OpenGL extension loading library for C/C++";
     homepage = "https://glew.sourceforge.net/";
-    license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
+    license = with licenses; [ /**
+  modified bsd
+*/ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     pkgConfigModules = [ "glew" ];
     platforms = with platforms;
       if enableEGL then

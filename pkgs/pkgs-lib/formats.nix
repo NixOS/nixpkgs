@@ -1,38 +1,36 @@
 { lib, pkgs }:
 rec {
 
-  /*
+  /**
+    Every following entry represents a format for program configuration files
+    used for `settings`-style options (see https://github.com/NixOS/rfcs/pull/42).
+    Each entry should look as follows:
 
-  Every following entry represents a format for program configuration files
-  used for `settings`-style options (see https://github.com/NixOS/rfcs/pull/42).
-  Each entry should look as follows:
+      <format> = <parameters>: {
+        #        ^^ Parameters for controlling the format
 
-    <format> = <parameters>: {
-      #        ^^ Parameters for controlling the format
+        # The module system type most suitable for representing such a format
+        # The description needs to be overwritten for recursive types
+        type = ...;
 
-      # The module system type most suitable for representing such a format
-      # The description needs to be overwritten for recursive types
-      type = ...;
+        # Utility functions for convenience, or special interactions with the
+        # format (optional)
+        lib = {
+          exampleFunction = ...
+          # Types specific to the format (optional)
+          types = { ... };
+          ...
+        };
 
-      # Utility functions for convenience, or special interactions with the
-      # format (optional)
-      lib = {
-        exampleFunction = ...
-        # Types specific to the format (optional)
-        types = { ... };
-        ...
-      };
+        # generate :: Name -> Value -> Path
+        # A function for generating a file with a value of such a type
+        generate = ...;
 
-      # generate :: Name -> Value -> Path
-      # A function for generating a file with a value of such a type
-      generate = ...;
+      });
 
-    });
-
-  Please note that `pkgs` may not always be available for use due to the split
-  options doc build introduced in fc614c37c653, so lazy evaluation of only the
-  'type' field is required.
-
+    Please note that `pkgs` may not always be available for use due to the split
+    options doc build introduced in fc614c37c653, so lazy evaluation of only the
+    'type' field is required.
   */
 
 
@@ -274,7 +272,8 @@ rec {
 
   };
 
-  /* For configurations of Elixir project, like config.exs or runtime.exs
+  /**
+    For configurations of Elixir project, like config.exs or runtime.exs
 
     Most Elixir project are configured using the [Config] Elixir DSL
 
@@ -390,39 +389,65 @@ rec {
         {
           inherit mkRaw;
 
-          /* Fetch an environment variable at runtime, with optional fallback
+          /**
+            Fetch an environment variable at runtime, with optional fallback
           */
           mkGetEnv = { envVariable, fallback ? null }:
             mkRaw "System.get_env(${toElixir envVariable}, ${toElixir fallback})";
 
-          /* Make an Elixir atom.
+          /**
+            Make an Elixir atom.
 
             Note: lowercase atoms still need to be prefixed by ':'
+
+
+            # Inputs
+
+            `value`
+
+            : 1\. Function argument
           */
           mkAtom = value: {
             inherit value;
             _elixirType = "atom";
           };
 
-          /* Make an Elixir tuple out of a list.
+          /**
+            Make an Elixir tuple out of a list.
+
+
+            # Inputs
+
+            `value`
+
+            : 1\. Function argument
           */
           mkTuple = value: {
             inherit value;
             _elixirType = "tuple";
           };
 
-          /* Make an Elixir map out of an attribute set.
+          /**
+            Make an Elixir map out of an attribute set.
+
+
+            # Inputs
+
+            `value`
+
+            : 1\. Function argument
           */
           mkMap = value: {
             inherit value;
             _elixirType = "map";
           };
 
-          /* Contains Elixir types. Every type it exports can also be replaced
-             by raw Elixir code (i.e. every type is `either type rawElixir`).
+          /**
+            Contains Elixir types. Every type it exports can also be replaced
+            by raw Elixir code (i.e. every type is `either type rawElixir`).
 
-             It also reexports standard types, wrapping them so that they can
-             also be raw Elixir.
+            It also reexports standard types, wrapping them so that they can
+            also be raw Elixir.
           */
           types = with lib.types; let
             isElixirType = type: x: (x._elixirType or "") == type;

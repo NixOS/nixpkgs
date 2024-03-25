@@ -162,7 +162,8 @@ with prev;
         sha256 = "1vmx039n3nqfx50faqhs3wgiw28ws416rhw6vh6srmh9i826dac7";
       })
     ];
-    /* TODO: separate docs derivation? (pandoc is heavy)
+    /**
+      TODO: separate docs derivation? (pandoc is heavy)
       nativeBuildInputs = [ pandoc ];
       makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */

@@ -48,7 +48,9 @@ buildPythonPackage rec {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
     changelog = "https://github.com/svinota/pyroute2/blob/${version}/CHANGELOG.rst";
-    license = with licenses; [ asl20 /* or */ gpl2Plus ];
+    license = with licenses; [ asl20 /**
+  or
+*/ gpl2Plus ];
     maintainers = with maintainers; [ fab mic92 ];
     platforms = platforms.unix;
   };

@@ -1,5 +1,7 @@
-/* A small release file, with few packages to be built.  The aim is to reduce
-   the load on Hydra when testing the `stdenv-updates' branch. */
+/**
+  A small release file, with few packages to be built.  The aim is to reduce
+  the load on Hydra when testing the `stdenv-updates' branch.
+*/
 
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]

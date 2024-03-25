@@ -17,7 +17,7 @@ let
     else "";
 in
 {
-  /*
+  /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,
     saving a lot of computation when the derivation is non-trivial.
@@ -61,7 +61,6 @@ in
         (lazyDerivation { inherit derivation }).passthru
 
         (lazyDerivation { inherit derivation }).pythonPath
-
   */
   lazyDerivation =
     args@{
@@ -149,25 +148,48 @@ in
     // genAttrs outputs (outputName: checked.${outputName})
     // passthru;
 
-  /* Conditionally set a derivation attribute.
+  /**
+    Conditionally set a derivation attribute.
 
-     Because `mkDerivation` sets `__ignoreNulls = true`, a derivation
-     attribute set to `null` will not impact the derivation output hash.
-     Thus, this function passes through its `value` argument if the `cond`
-     is `true`, but returns `null` if not.
+    Because `mkDerivation` sets `__ignoreNulls = true`, a derivation
+    attribute set to `null` will not impact the derivation output hash.
+    Thus, this function passes through its `value` argument if the `cond`
+    is `true`, but returns `null` if not.
 
-     Type: optionalDrvAttr :: Bool -> a -> a | Null
 
-     Example:
-       (stdenv.mkDerivation {
-         name = "foo";
-         x = optionalDrvAttr true 1;
-         y = optionalDrvAttr false 1;
-       }).drvPath == (stdenv.mkDerivation {
-         name = "foo";
-         x = 1;
-       }).drvPath
-       => true
+    # Inputs
+
+    `cond`
+
+    : Condition
+
+    `value`
+
+    : Attribute value
+
+    # Type
+
+    ```
+    optionalDrvAttr :: Bool -> a -> a | Null
+    ```
+
+    # Examples
+    :::{.example}
+    ## `optionalDrvAttr` usage example
+
+    ```nix
+    (stdenv.mkDerivation {
+      name = "foo";
+      x = optionalDrvAttr true 1;
+      y = optionalDrvAttr false 1;
+    }).drvPath == (stdenv.mkDerivation {
+      name = "foo";
+      x = 1;
+    }).drvPath
+    => true
+    ```
+
+    :::
   */
   optionalDrvAttr =
     # Condition

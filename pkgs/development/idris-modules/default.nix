@@ -1,7 +1,24 @@
 { pkgs, config, idris-no-deps, overrides ? (self: super: {}) }: let
   inherit (pkgs.lib) callPackageWith fix' extends;
 
-  /* Taken from haskell-modules/default.nix, should probably abstract this away */
+  /**
+    Taken from haskell-modules/default.nix, should probably abstract this away
+
+
+    # Inputs
+
+    `scope`
+
+    : 1\. Function argument
+
+    `drv`
+
+    : 2\. Function argument
+
+    `args`
+
+    : 3\. Function argument
+  */
   callPackageWithScope = scope: drv: args: (callPackageWith scope drv args) // {
     overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
   };

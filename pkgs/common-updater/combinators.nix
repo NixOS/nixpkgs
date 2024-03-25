@@ -1,7 +1,7 @@
 { lib
 }:
 
-/*
+/**
   This is a set of tools to manipulate update scripts as recognized by update.nix.
   It is still very experimental with **instability** almost guaranteed so any use
   outside Nixpkgs is discouraged.
@@ -27,20 +27,27 @@
 */
 
 let
-  /*
+  /**
     type ShellArg = String | { __rawShell : String }
   */
 
-  /*
+  /**
     Quotes all arguments to be safely passed to the Bourne shell.
 
     escapeShellArgs' : [ShellArg] -> String
   */
   escapeShellArgs' = lib.concatMapStringsSep " " (arg: if arg ? __rawShell then arg.__rawShell else lib.escapeShellArg arg);
 
-  /*
+  /**
     processArg : { maxArgIndex : Int, args : [ShellArg], paths : [FilePath] } → (String|FilePath) → { maxArgIndex : Int, args : [ShellArg], paths : [FilePath] }
     Helper reducer function for building a command arguments where file paths are replaced with argv[x] reference.
+
+
+    # Inputs
+
+    `arg`
+
+    : 2\. Function argument
   */
   processArg =
     { maxArgIndex, args, paths }:
@@ -53,14 +60,32 @@ let
       args = args ++ [ arg ];
       inherit maxArgIndex paths;
     };
-  /*
+  /**
     extractPaths : Int → [ (String|FilePath) ] → { maxArgIndex : Int, args : [ShellArg], paths : [FilePath] }
     Helper function that extracts file paths from command arguments and replaces them with argv[x] references.
+
+
+    # Inputs
+
+    `maxArgIndex`
+
+    : 1\. Function argument
+
+    `command`
+
+    : 2\. Function argument
   */
   extractPaths = maxArgIndex: command: builtins.foldl' processArg { inherit maxArgIndex; args = [ ]; paths = [ ]; } command;
-  /*
+  /**
     processCommand : { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] } → [ (String|FilePath) ] → { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] }
     Helper reducer function for extracting file paths from individual commands.
+
+
+    # Inputs
+
+    `command`
+
+    : 2\. Function argument
   */
   processCommand =
     { maxArgIndex, commands, paths }:
@@ -73,15 +98,33 @@ let
       paths = paths ++ new.paths;
       maxArgIndex = new.maxArgIndex;
     };
-  /*
+  /**
     extractCommands : Int → [[ (String|FilePath) ]] → { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] }
     Helper function for extracting file paths from a list of commands and replacing them with argv[x] references.
+
+
+    # Inputs
+
+    `maxArgIndex`
+
+    : 1\. Function argument
+
+    `commands`
+
+    : 2\. Function argument
   */
   extractCommands = maxArgIndex: commands: builtins.foldl' processCommand { inherit maxArgIndex; commands = [ ]; paths = [ ]; } commands;
 
-  /*
+  /**
     commandsToShellInvocation : [[ (String|FilePath) ]] → [ (String|FilePath) ]
     Converts a list of commands into a single command by turning them into a shell script and passing them to `sh -c`.
+
+
+    # Inputs
+
+    `commands`
+
+    : 1\. Function argument
   */
   commandsToShellInvocation = commands:
     let
@@ -96,9 +139,16 @@ let
     ] ++ extracted.paths;
 in
 rec {
-  /*
+  /**
     normalize : UpdateScript → UpdateScript
     EXPERIMENTAL! Converts a basic update script to the experimental attribute set form.
+
+
+    # Inputs
+
+    `updateScript`
+
+    : 1\. Function argument
   */
   normalize = updateScript: {
     command = lib.toList (updateScript.command or updateScript);
@@ -107,9 +157,16 @@ rec {
     inherit (updateScript) attrPath;
   };
 
-  /*
+  /**
     sequence : [UpdateScript] → UpdateScript
     EXPERIMENTAL! Combines multiple update scripts to run in sequence.
+
+
+    # Inputs
+
+    `scripts`
+
+    : 1\. Function argument
   */
   sequence =
     scripts:
@@ -137,9 +194,20 @@ rec {
       ];
     };
 
-  /*
+  /**
     copyAttrOutputToFile : String → FilePath → UpdateScript
     EXPERIMENTAL! Simple update script that copies the output of Nix derivation built by `attr` to `path`.
+
+
+    # Inputs
+
+    `attr`
+
+    : 1\. Function argument
+
+    `path`
+
+    : 2\. Function argument
   */
   copyAttrOutputToFile =
     attr:

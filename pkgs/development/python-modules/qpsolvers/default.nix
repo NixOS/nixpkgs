@@ -56,7 +56,11 @@ buildPythonPackage rec {
     quadprog = [ quadprog ];
     scs = [ scs ];
     open_source_solvers = with passthru.optional-dependencies; lib.flatten [
-      clarabel cvxopt daqp ecos /* highs */ osqp /* piqp proxqp qpalm */ quadprog scs
+      clarabel cvxopt daqp ecos /**
+  highs
+*/ osqp /**
+  piqp proxqp qpalm
+*/ quadprog scs
     ];
   };
 

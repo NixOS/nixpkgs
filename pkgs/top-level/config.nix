@@ -24,7 +24,9 @@ let
 
   options = {
 
-    /* Internal stuff */
+    /**
+      Internal stuff
+    */
 
     # Hide built-in module system options from docs.
     _module.args = mkOption {
@@ -37,7 +39,9 @@ let
       internal = true;
     };
 
-    /* Config options */
+    /**
+      Config options
+    */
 
     warnUndeclaredOptions = mkOption {
       description = mdDoc "Whether to warn when `config` contains an unrecognized attribute.";

@@ -3,7 +3,9 @@
 
 , tex ? texliveBasic.withPackages (ps: with ps; [ # satisfy all packages that ./configure mentions
     epstopdf anysize appendix changebar
-    fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
+    fancybox fancyvrb float footmisc listings jknapltx/**
+  for mathrsfs.sty
+*/
     multirow overpic pdfpages pdflscape graphics stmaryrd subfigure titlesec wasysym
     # pkgs below don't seem requested by dblatex, but our manual fails without them
     ec zapfding symbol eepic times rsfs cs tex4ht courier helvetic ly1

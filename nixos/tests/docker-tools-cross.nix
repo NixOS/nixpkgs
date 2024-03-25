@@ -11,7 +11,9 @@ let
     then "x86_64-linux"
     else "aarch64-linux";
 
-  remoteCrossPkgs = import ../.. /*nixpkgs*/ {
+  remoteCrossPkgs = import ../.. /**
+  nixpkgs
+*/ {
     # NOTE: This is the machine that runs the build -  local from the
     #       'perspective' of the build script.
     localSystem = remoteSystem;

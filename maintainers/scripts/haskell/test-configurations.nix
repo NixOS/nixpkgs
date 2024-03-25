@@ -1,50 +1,50 @@
-/* Nix expression to test for regressions in the Haskell configuration overlays.
+/**
+  Nix expression to test for regressions in the Haskell configuration overlays.
 
-   test-configurations.nix determines all attributes touched by given Haskell
-   configuration overlays (i. e. pkgs/development/haskell-modules/configuration-*.nix)
-   and builds all derivations (or at least a reasonable subset) affected by
-   these overrides.
+  test-configurations.nix determines all attributes touched by given Haskell
+  configuration overlays (i. e. pkgs/development/haskell-modules/configuration-*.nix)
+  and builds all derivations (or at least a reasonable subset) affected by
+  these overrides.
 
-   By default, it checks `configuration-{common,nix,ghc-8.10.x}.nix`. You can
-   invoke it like this:
+  By default, it checks `configuration-{common,nix,ghc-8.10.x}.nix`. You can
+  invoke it like this:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix --keep-going
+    nix-build maintainers/scripts/haskell/test-configurations.nix --keep-going
 
-   It is possible to specify other configurations:
+  It is possible to specify other configurations:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
-       --arg files '[ "configuration-ghc-9.0.x.nix" "configuration-ghc-9.2.x.nix" ]' \
-       --keep-going
+    nix-build maintainers/scripts/haskell/test-configurations.nix \
+      --arg files '[ "configuration-ghc-9.0.x.nix" "configuration-ghc-9.2.x.nix" ]' \
+      --keep-going
 
-   You can also just supply a single string:
+  You can also just supply a single string:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
-       --argstr files "configuration-arm.nix" --keep-going
+    nix-build maintainers/scripts/haskell/test-configurations.nix \
+      --argstr files "configuration-arm.nix" --keep-going
 
-   You can even supply full paths which is handy, as it allows for tab-completing
-   the configurations:
+  You can even supply full paths which is handy, as it allows for tab-completing
+  the configurations:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
-       --argstr files pkgs/development/haskell-modules/configuration-arm.nix \
-       --keep-going
+    nix-build maintainers/scripts/haskell/test-configurations.nix \
+      --argstr files pkgs/development/haskell-modules/configuration-arm.nix \
+      --keep-going
 
-   By default, derivation that fail to evaluate are skipped, unless they are
-   “just” marked as broken. You can check for other eval errors like this:
+  By default, derivation that fail to evaluate are skipped, unless they are
+  “just” marked as broken. You can check for other eval errors like this:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
-       --arg skipEvalErrors false --keep-going
+    nix-build maintainers/scripts/haskell/test-configurations.nix \
+      --arg skipEvalErrors false --keep-going
 
-   You can also disable checking broken packages by passing a nixpkgs config:
+  You can also disable checking broken packages by passing a nixpkgs config:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
-       --arg config '{ allowBroken = false; }' --keep-going
+    nix-build maintainers/scripts/haskell/test-configurations.nix \
+      --arg config '{ allowBroken = false; }' --keep-going
 
-   By default the haskell.packages.ghc*Binary sets used for bootstrapping GHC
-   are _not_ tested. You can change this using:
+  By default the haskell.packages.ghc*Binary sets used for bootstrapping GHC
+  are _not_ tested. You can change this using:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
-       --arg skipBinaryGHCs false --keep-going
-
+    nix-build maintainers/scripts/haskell/test-configurations.nix \
+      --arg skipBinaryGHCs false --keep-going
 */
 { files ? [
     "configuration-common.nix"

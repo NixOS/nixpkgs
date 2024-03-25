@@ -1,9 +1,10 @@
-/* This function builds just the `lib/locale/locale-archive' file from
-   Glibc and nothing else.  If `allLocales' is true, all supported
-   locales are included; otherwise, just the locales listed in
-   `locales'.  See localedata/SUPPORTED in the Glibc source tree for
-   the list of all supported locales:
-   https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
+/**
+  This function builds just the `lib/locale/locale-archive' file from
+  Glibc and nothing else.  If `allLocales' is true, all supported
+  locales are included; otherwise, just the locales listed in
+  `locales'.  See localedata/SUPPORTED in the Glibc source tree for
+  the list of all supported locales:
+  https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
 */
 
 { lib, stdenv, buildPackages, callPackage, writeText, glibc

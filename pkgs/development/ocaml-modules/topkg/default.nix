@@ -1,9 +1,10 @@
-/* Topkg is a packager for distributing OCaml software. This derivation
-provides facilities to describe derivations for OCaml libraries
-using topkg.
-The `buildPhase` and `installPhase` attributes can be reused directly
-in many cases. When more fine-grained control on how to run the “topkg”
-build system is required, the attribute `run` can be used.
+/**
+  Topkg is a packager for distributing OCaml software. This derivation
+  provides facilities to describe derivations for OCaml libraries
+  using topkg.
+  The `buildPhase` and `installPhase` attributes can be reused directly
+  in many cases. When more fine-grained control on how to run the “topkg”
+  build system is required, the attribute `run` can be used.
 */
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, result, opaline }:
 
@@ -21,10 +22,11 @@ let
     propagatedBuildInputs = [ result ];
   };
 
-/* This command allows to run the “topkg” build system.
- * It is usually called with `build` or `test` as argument.
- * Packages that use `topkg` may call this command as part of
- *  their `buildPhase` or `checkPhase`.
+/**
+  This command allows to run the “topkg” build system.
+  * It is usually called with `build` or `test` as argument.
+  * Packages that use `topkg` may call this command as part of
+  *  their `buildPhase` or `checkPhase`.
 */
   run = "ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml";
 in

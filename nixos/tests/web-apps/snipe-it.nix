@@ -1,12 +1,12 @@
-/*
-Snipe-IT NixOS test
+/**
+  Snipe-IT NixOS test
 
-It covers the following scenario:
-- Installation
-- Backup and restore
+  It covers the following scenario:
+  - Installation
+  - Backup and restore
 
-Scenarios NOT covered by this test (but perhaps in the future):
-- Sending and receiving emails
+  Scenarios NOT covered by this test (but perhaps in the future):
+  - Sending and receiving emails
 */
 { pkgs, ... }: let
   siteName = "NixOS Snipe-IT Test Instance";

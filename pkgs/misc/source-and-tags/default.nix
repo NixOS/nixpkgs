@@ -83,12 +83,12 @@
         };
   }; };
 }
-/*
-experimental
-idea:
-a) Attach some information to a nexpression telling how to create a tag file which can then be used within your favourite editor
-   Do this in a way not affecting the expression (using passthru or meta which is ignored when calculating the hash)
-   implementations: addCTaggingInfo (C / C++) and addHasktagsTaggingInfo (Haskell)
-b) use sourceWithTagsDerivation function to create a derivation installing the source along with the generated tag files
-   so that you can use them easily witihn your favourite text editor
+/**
+  experimental
+  idea:
+  a) Attach some information to a nexpression telling how to create a tag file which can then be used within your favourite editor
+     Do this in a way not affecting the expression (using passthru or meta which is ignored when calculating the hash)
+     implementations: addCTaggingInfo (C / C++) and addHasktagsTaggingInfo (Haskell)
+  b) use sourceWithTagsDerivation function to create a derivation installing the source along with the generated tag files
+     so that you can use them easily witihn your favourite text editor
 */

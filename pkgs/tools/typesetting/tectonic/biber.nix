@@ -1,4 +1,4 @@
-/*
+/**
   This package, `biber-for-tectonic`, provides a compatible version of `biber`
   as an optional runtime dependency of `tectonic`.
 
@@ -21,7 +21,7 @@
 
 let version = "2.17"; in (
   biber.override {
-    /*
+    /**
       It is necessary to first override the `version` data here, which is
       passed to `buildPerlModule`, and then to `mkDerivation`.
 

@@ -3,7 +3,7 @@
 python3.override {
   packageOverrides = lib.composeExtensions
     (self: super: {
-      /*
+      /**
         This overlay can be used whenever we need to override
         dependencies specific to the mailman ecosystem: in the past
         this was necessary for e.g. psycopg2[1] or sqlalchemy[2].

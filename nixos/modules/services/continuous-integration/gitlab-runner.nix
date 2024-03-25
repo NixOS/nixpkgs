@@ -5,9 +5,21 @@ let
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
 
-  /* The whole logic of this module is to diff the hashes of the desired vs existing runners
-  The hash is recorded in the runner's name because we can't do better yet
-  See https://gitlab.com/gitlab-org/gitlab-runner/-/issues/29350 for more details
+  /**
+    The whole logic of this module is to diff the hashes of the desired vs existing runners
+    The hash is recorded in the runner's name because we can't do better yet
+    See https://gitlab.com/gitlab-org/gitlab-runner/-/issues/29350 for more details
+
+
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `service`
+
+    : 2\. Function argument
   */
   genRunnerName = name: service: let
       hash = substring 0 12 (hashString "md5" (unsafeDiscardStringContext (toJSON service)));

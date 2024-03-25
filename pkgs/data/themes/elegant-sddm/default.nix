@@ -3,15 +3,16 @@
 , stdenvNoCC
 , fetchFromGitHub
 , qtgraphicaleffects
-  /* An example of how you can override the background with a NixOS wallpaper
-  *
-  *  environment.systemPackages = [
-  *    (pkgs.elegant-sddm.override {
-  *      themeConfig.General = {
-           background = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}";
-  *      };
-  *    })
-  *  ];
+  /**
+    An example of how you can override the background with a NixOS wallpaper
+    *
+    *  environment.systemPackages = [
+    *    (pkgs.elegant-sddm.override {
+    *      themeConfig.General = {
+             background = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}";
+    *      };
+    *    })
+    *  ];
   */
 , themeConfig ? null
 }:

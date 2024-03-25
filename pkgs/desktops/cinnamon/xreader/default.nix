@@ -22,7 +22,9 @@
 , ninja
 , gsettings-desktop-schemas
 , djvulibre
-, backends ? [ "pdf" "ps" /* "dvi" "t1lib" */ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
+, backends ? [ "pdf" "ps" /**
+  "dvi" "t1lib"
+*/ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
 }:
 
 stdenv.mkDerivation rec {

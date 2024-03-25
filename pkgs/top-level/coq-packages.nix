@@ -167,14 +167,22 @@ let
   };
 in rec {
 
-  /* The function `mkCoqPackages` takes as input a derivation for Coq and produces
-   * a set of libraries built with that specific Coq. More libraries are known to
-   * this function than what is compatible with that version of Coq. Therefore,
-   * libraries that are not known to be compatible are removed (filtered out) from
-   * the resulting set. For meta-programming purposes (inpecting the derivations
-   * rather than building the libraries) this filtering can be disabled by setting
-   * a `dontFilter` attribute into the Coq derivation.
-   */
+  /**
+    The function `mkCoqPackages` takes as input a derivation for Coq and produces
+    * a set of libraries built with that specific Coq. More libraries are known to
+    * this function than what is compatible with that version of Coq. Therefore,
+    * libraries that are not known to be compatible are removed (filtered out) from
+    * the resulting set. For meta-programming purposes (inpecting the derivations
+    * rather than building the libraries) this filtering can be disabled by setting
+    * a `dontFilter` attribute into the Coq derivation.
+
+
+    # Inputs
+
+    `coq`
+
+    : 1\. Function argument
+  */
   mkCoqPackages = coq:
     let self = lib.makeScope newScope (lib.flip mkCoqPackages' coq); in
     self.filterPackages (! coq.dontFilter or false);

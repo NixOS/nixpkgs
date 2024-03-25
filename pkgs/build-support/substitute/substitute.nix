@@ -1,30 +1,36 @@
 { lib, stdenvNoCC }:
-/*
-This is a wrapper around `substitute` in the stdenv.
+/**
+  This is a wrapper around `substitute` in the stdenv.
 
-Attribute arguments:
-- `name` (optional): The name of the resulting derivation
-- `src`: The path to the file to substitute
-- `substitutions`: The list of substitution arguments to pass
-  See https://nixos.org/manual/nixpkgs/stable/#fun-substitute
-- `replacements`: Deprecated version of `substitutions`
-  that doesn't support spaces in arguments.
+  Attribute arguments:
+  - `name` (optional): The name of the resulting derivation
+  - `src`: The path to the file to substitute
+  - `substitutions`: The list of substitution arguments to pass
+    See https://nixos.org/manual/nixpkgs/stable/#fun-substitute
+  - `replacements`: Deprecated version of `substitutions`
+    that doesn't support spaces in arguments.
 
-Example:
 
-```nix
-{ substitute }:
-substitute {
-  src = ./greeting.txt;
-  substitutions = [
-    "--replace"
-    "world"
-    "paul"
-  ];
-}
-```
+  # Examples
+  :::{.example}
 
-See ../../test/substitute for tests
+  ```nix
+  ```nix
+  { substitute }:
+  substitute {
+    src = ./greeting.txt;
+    substitutions = [
+      "--replace"
+      "world"
+      "paul"
+    ];
+  }
+  ```
+
+  See ../../test/substitute for tests
+  ```
+
+  :::
 */
 args:
 

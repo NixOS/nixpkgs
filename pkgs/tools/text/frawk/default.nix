@@ -39,7 +39,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "frawk";
     homepage = "https://github.com/ezrosent/frawk";
     changelog = "https://github.com/ezrosent/frawk/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -26,8 +26,12 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ help2man perl /* for `whois' */ ];
-  buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
+  nativeBuildInputs = [ help2man perl /**
+  for `whois'
+*/ ];
+  buildInputs = [ ncurses /**
+  for `talk'
+*/ libxcrypt ];
 
   env = lib.optionalAttrs stdenv.isDarwin {
     # This is a temporary workaround for missing headers in the 10.12 SDK to avoid a mass rebuild.

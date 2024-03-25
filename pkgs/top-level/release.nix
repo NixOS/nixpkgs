@@ -1,12 +1,13 @@
-/* This file defines the builds that constitute the Nixpkgs.
-   Everything defined here ends up in the Nixpkgs channel.  Individual
-   jobs can be tested by running:
+/**
+  This file defines the builds that constitute the Nixpkgs.
+  Everything defined here ends up in the Nixpkgs channel.  Individual
+  jobs can be tested by running:
 
-   $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
+  $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
 
-   e.g.
+  e.g.
 
-   $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
+  $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
@@ -124,13 +125,13 @@ let
               jobs.transmission-gtk.x86_64-darwin
 
               # Tests
-              /*
-              jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
+              /**
+                jobs.tests.cc-wrapper.default.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
+                jobs.tests.stdenv-inputs.x86_64-darwin
+                jobs.tests.macOSSierraShared.x86_64-darwin
+                jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
             ];
         } else null;
@@ -160,21 +161,21 @@ let
               jobs.firefox-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
 
-              /*
-              TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
+              /**
+                TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
 
-              jobs.tests.cc-wrapper.default.x86_64-linux
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
+                jobs.tests.cc-wrapper.default.x86_64-linux
+                jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
+                jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
 
-              # broken see issue #40038
+                # broken see issue #40038
 
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
-              jobs.tests.cc-multilib-gcc.x86_64-linux
-              jobs.tests.cc-multilib-clang.x86_64-linux
-              jobs.tests.stdenv-inputs.x86_64-linux
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
+                jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
+                jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
+                jobs.tests.cc-multilib-gcc.x86_64-linux
+                jobs.tests.cc-multilib-clang.x86_64-linux
+                jobs.tests.stdenv-inputs.x86_64-linux
+                jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
               */
             ]
             ++ collect isDerivation jobs.stdenvBootstrapTools
@@ -194,15 +195,15 @@ let
               jobs.inkscape.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
               jobs.darwin.linux-builder.x86_64-darwin
-              /*
-              jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
+              /**
+                jobs.tests.cc-wrapper.default.x86_64-darwin
+                jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin
+                jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
+                jobs.tests.stdenv-inputs.x86_64-darwin
+                jobs.tests.macOSSierraShared.x86_64-darwin
+                jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
             ]
             ++ optionals supportDarwin.aarch64 [
@@ -221,7 +222,9 @@ let
               jobs.inkscape.aarch64-darwin
               jobs.qt5.qtmultimedia.aarch64-darwin
               jobs.darwin.linux-builder.aarch64-darwin
-              /* consider adding tests, as suggested above for x86_64-darwin */
+              /**
+                consider adding tests, as suggested above for x86_64-darwin
+              */
             ];
         };
 

@@ -41,7 +41,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/sylikc/pyexiftool/blob/${src.rev}/CHANGELOG.md";
     description = "Python wrapper for exiftool";
     homepage = "https://github.com/sylikc/pyexiftool";
-    license = with lib.licenses; [ bsd3 /* or */ gpl3Plus ];
+    license = with lib.licenses; [ bsd3 /**
+  or
+*/ gpl3Plus ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

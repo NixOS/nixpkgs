@@ -19,7 +19,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A command line tool to write random bytes to stdout";
     homepage = "https://github.com/Wulfsta/psw";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ wulfsta ];
   };
 }

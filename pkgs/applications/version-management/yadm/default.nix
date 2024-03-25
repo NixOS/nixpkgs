@@ -6,14 +6,14 @@
 , bash
 , openssl
 , gawk
-/*
-TODO: yadm can use git-crypt and transcrypt
-but it does so in a way that resholve 0.6.0
-can't yet do anything smart about. It looks
-like these are for interactive use, so the
-main impact should just be that users still
-need both of these packages in their profile
-to support their use in yadm.
+/**
+  TODO: yadm can use git-crypt and transcrypt
+  but it does so in a way that resholve 0.6.0
+  can't yet do anything smart about. It looks
+  like these are for interactive use, so the
+  main impact should just be that users still
+  need both of these packages in their profile
+  to support their use in yadm.
 */
 # , git-crypt
 # , transcrypt
@@ -102,9 +102,9 @@ resholve.mkDerivation rec {
         "$ENVTPL_PROGRAM" = true;
         "$LSB_RELEASE_PROGRAM" = true;
       };
-      /*
-      TODO: these should be dropped as fast as they can be dealt
-            with properly in binlore and/or resholve.
+      /**
+        TODO: these should be dropped as fast as they can be dealt
+              with properly in binlore and/or resholve.
       */
       execer = [
         "cannot:${j2cli}/bin/j2"

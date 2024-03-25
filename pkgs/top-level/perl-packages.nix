@@ -1,9 +1,11 @@
-/* This file defines the composition for CPAN (Perl) packages.  It has
-   been factored out of all-packages.nix because there are so many of
-   them.  Also, because most Nix expressions for CPAN packages are
-   trivial, most are actually defined here.  I.e. there's no function
-   for each package in a separate file: the call to the function would
-   be almost as much code as the function itself. */
+/**
+  This file defines the composition for CPAN (Perl) packages.  It has
+  been factored out of all-packages.nix because there are so many of
+  them.  Also, because most Nix expressions for CPAN packages are
+  trivial, most are actually defined here.  I.e. there's no function
+  for each package in a separate file: the call to the function would
+  be almost as much code as the function itself.
+*/
 
 { config
 , stdenv, lib, buildPackages, pkgs, darwin
@@ -70,21 +72,46 @@ with self; {
       buildInputs = (args.buildInputs or []) ++ [ ModuleBuild ];
     });
 
-  /* Construct a perl search path (such as $PERL5LIB)
+  /**
+    Construct a perl search path (such as $PERL5LIB)
 
-     Example:
-       pkgs = import <nixpkgs> { }
-       makePerlPath [ pkgs.perlPackages.libnet ]
-       => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
+
+    # Examples
+    :::{.example}
+    ## `makePerlPath` usage example
+
+    ```nix
+    pkgs = import <nixpkgs> { }
+    makePerlPath [ pkgs.perlPackages.libnet ]
+    => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
+    ```
+
+    :::
   */
   makePerlPath = lib.makeSearchPathOutput "lib" perl.libPrefix;
 
-  /* Construct a perl search path recursively including all dependencies (such as $PERL5LIB)
+  /**
+    Construct a perl search path recursively including all dependencies (such as $PERL5LIB)
 
-     Example:
-       pkgs = import <nixpkgs> { }
-       makeFullPerlPath [ pkgs.perlPackages.CGI ]
-       => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
+
+    # Inputs
+
+    `deps`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `makeFullPerlPath` usage example
+
+    ```nix
+    pkgs = import <nixpkgs> { }
+    makeFullPerlPath [ pkgs.perlPackages.CGI ]
+    => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
+    ```
+
+    :::
   */
   makeFullPerlPath = deps: makePerlPath (lib.misc.closePropagation deps);
 
@@ -1645,7 +1672,9 @@ with self; {
       hash = "sha256-BFKmEdNDrfnZX86ra6a2YXbjrX/MzlKAkiwOQx9RSf8=";
     };
     propagatedBuildInputs = [ BFlags IPCRun Opcodes ];
-    doCheck = false; /* test fails */
+    doCheck = false; /**
+  test fails
+*/
     meta = {
       description = "Perl compiler";
       homepage = "https://github.com/rurban/perl-compiler";
@@ -2502,7 +2531,9 @@ with self; {
     };
     buildInputs = [ CatalystActionRenderView CatalystPluginSession CatalystPluginSessionStateCookie CatalystPluginSessionStoreFile CatalystViewTT CodeTidyAllPluginPerlAlignMooseAttributes PodCoverageTrustPod PodTidy TemplateToolkit TestCPANMeta TestDifferences TestEOL TestKwalitee TestLongString TestMemoryCycle TestNoTabs TestPAUSEPermissions TestPod TestPodCoverage TestWWWMechanize TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ CatalystComponentInstancePerContext HTMLFormFuMultiForm RegexpAssemble ];
-    doCheck = false; /* fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.' */
+    doCheck = false; /**
+  fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.'
+*/
     meta = {
       description = "HTML Form Creation, Rendering and Validation Framework";
       homepage = "https://github.com/FormFu/HTML-FormFu";
@@ -5461,7 +5492,9 @@ with self; {
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/pgplet
     '';
-    doCheck = false; /* test fails with 'No random source available!' */
+    doCheck = false; /**
+  test fails with 'No random source available!'
+*/
 
     meta = {
       description = "Pure-Perl OpenPGP implementation";
@@ -8035,7 +8068,9 @@ with self; {
     };
     buildInputs = [ MooseAutobox TestCPANMeta TestPerlCritic TestVersion ];
     propagatedBuildInputs = [ DistZillaPluginMojibakeTests DistZillaPluginTestCPANChanges DistZillaPluginTestCPANMetaJSON DistZillaPluginTestCompile DistZillaPluginTestDistManifest DistZillaPluginTestEOL DistZillaPluginTestKwalitee DistZillaPluginTestMinimumVersion DistZillaPluginTestNoTabs DistZillaPluginTestPerlCritic DistZillaPluginTestPodLinkCheck DistZillaPluginTestPortability DistZillaPluginTestSynopsis DistZillaPluginTestUnusedVars DistZillaPluginTestVersion PodCoverageTrustPod ];
-    doCheck = false; /* fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.' */
+    doCheck = false; /**
+  fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.'
+*/
     meta = {
       description = "Test your dist with every testing plugin conceivable";
       homepage = "https://metacpan.org/release/Dist-Zilla-PluginBundle-TestingMania";
@@ -13128,7 +13163,9 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20231003.0.tar.gz";
       hash = "sha256-6yW731kT0pF5fvG/6ZjxUTC0VdPtAqrN5oVvCyXk/lc=";
     };
-    doCheck = false; /* attempts a network connection to localhost */
+    doCheck = false; /**
+  attempts a network connection to localhost
+*/
     propagatedBuildInputs = [ IOTty ];
     buildInputs = [ Readonly ];
     meta = {
@@ -18156,7 +18193,9 @@ with self; {
     meta = with lib; {
       description = "Perl bindings to the msgpack C library";
       homepage = "https://github.com/jacquesg/p5-MsgPack-Raw";
-      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      license = with licenses; [ gpl1Plus /**
+  or
+*/ artistic1 ];
       maintainers = with maintainers; [ figsoda ];
     };
   };
@@ -18283,7 +18322,9 @@ with self; {
     meta = with lib; {
       description = "Perl bindings for Neovim";
       homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
-      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      license = with licenses; [ gpl1Plus /**
+  or
+*/ artistic1 ];
       maintainers = with maintainers; [ figsoda ];
     };
   };
@@ -18383,7 +18424,9 @@ with self; {
     patches =
       [ ../development/perl-modules/net-amazon-mechanicalturk.patch ];
     propagatedBuildInputs = [ DigestHMAC LWPProtocolHttps XMLParser ];
-    doCheck = false; /* wants network */
+    doCheck = false; /**
+  wants network
+*/
     meta = {
       description = "Amazon Mechanical Turk SDK for Perl";
       license = with lib.licenses; [ asl20 ];
@@ -18708,7 +18751,9 @@ with self; {
     };
     propagatedBuildInputs = [ URI ];
     __darwinAllowLocalNetworking = true;
-    doCheck = false; /* wants network */
+    doCheck = false; /**
+  wants network
+*/
     meta = {
       description = "Low-level HTTP connection (client)";
       homepage = "https://github.com/libwww-perl/Net-HTTP";
@@ -22166,7 +22211,9 @@ with self; {
       hash = "sha256-idw0vKixqp/uC8QK7d5eLBYCL8eYssOryH3gczG5lbk=";
     };
     propagatedBuildInputs = [ locallib ];
-    doCheck = false; /* creates files in HOME */
+    doCheck = false; /**
+  creates files in HOME
+*/
     meta = {
       description = "A simple pure perl RSS parser";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23935,7 +23982,9 @@ with self; {
       hash = "sha256-dbGy2WFVZHhCWHFGzv0N4wlDuFGV6OPspR4PC4ZC1h4=";
     };
     propagatedBuildInputs = [ CatalystAuthenticationStoreDBIxClass CatalystControllerHTMLFormFu CatalystDevel CatalystManual CatalystPluginAuthorizationACL CatalystPluginAuthorizationRoles CatalystPluginSessionStateCookie CatalystPluginSessionStoreFastMmap CatalystPluginStackTrace CatalystViewTT ];
-    doCheck = false; /* fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.' */
+    doCheck = false; /**
+  fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.'
+*/
     meta = {
       description = "Everything you need to follow the Catalyst Tutorial";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -24749,7 +24798,9 @@ with self; {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Test-Cmd-1.09.tar.gz";
       hash = "sha256-zzMg7N3nkeC4lFogwfbyZdkPHj2rGPHiPLZ3x51yloQ=";
     };
-      doCheck = false; /* test fails */
+      doCheck = false; /**
+  test fails
+*/
     meta = {
       description = "Perl module for portable testing of commands and scripts";
       homepage = "https://github.com/neilb/Test-Cmd";
@@ -27246,7 +27297,9 @@ with self; {
       url = "mirror://cpan/authors/id/M/MH/MHX/Tie-Hash-Indexed-0.08.tar.gz";
       hash = "sha256-N7xigV9ahIrHeRK5v0eIqfJyiE6DpS4gk9q0qDpKexA=";
     };
-    doCheck = false; /* test fails on some machines */
+    doCheck = false; /**
+  test fails on some machines
+*/
     meta = {
       description = "Ordered hashes for Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -27697,7 +27750,9 @@ with self; {
     };
     meta = {
       description = "Checks if scalar is valid UTF-8";
-      license = with lib.licenses; [ ucd /* and */ artistic1 gpl1Plus ];
+      license = with lib.licenses; [ ucd /**
+  and
+*/ artistic1 gpl1Plus ];
     };
   };
 

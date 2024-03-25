@@ -1,10 +1,11 @@
-/*  The package defintion for an OpenRA out-of-tree mod.
-    It shares code with `engine.nix` by what is defined in `common.nix`.
-    To build an out-of-tree mod it needs the source code of the engine available,
-    and they each need to be build with a specific version or fork of the engine,
-    so the engine needs to be supplied as an argument as well.
-    The engine is relatively small and quick to build, so this is not much of a problem.
-    Building a mod will result in a wrapper script that starts the mod inside the specified engine.
+/**
+  The package defintion for an OpenRA out-of-tree mod.
+  It shares code with `engine.nix` by what is defined in `common.nix`.
+  To build an out-of-tree mod it needs the source code of the engine available,
+  and they each need to be build with a specific version or fork of the engine,
+  so the engine needs to be supplied as an argument as well.
+  The engine is relatively small and quick to build, so this is not much of a problem.
+  Building a mod will result in a wrapper script that starts the mod inside the specified engine.
 */
 { lib, stdenv
 , packageAttrs

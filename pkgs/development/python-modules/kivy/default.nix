@@ -76,7 +76,7 @@ buildPythonPackage rec {
       --replace "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
   '';
 
-  /*
+  /**
     We cannot run tests as Kivy tries to import itself before being fully
     installed.
   */

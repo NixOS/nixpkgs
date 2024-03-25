@@ -152,7 +152,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://racket-lang.org/";
     changelog = "https://github.com/racket/racket/releases/tag/v${version}";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };

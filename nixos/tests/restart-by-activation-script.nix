@@ -43,7 +43,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript = /* python */ ''
+  testScript = /**
+  python
+*/ ''
     machine.wait_for_unit("multi-user.target")
 
     with subtest("nothing happens when the activation script does nothing"):

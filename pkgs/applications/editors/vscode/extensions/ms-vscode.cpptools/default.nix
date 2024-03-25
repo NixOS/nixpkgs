@@ -5,7 +5,7 @@
 , autoPatchelfHook, makeWrapper, stdenv, lttng-ust, libkrb5, zlib
 }:
 
-/*
+/**
   Note that this version of the extension still has some nix specific issues
   which could not be fixed merely by patching (inside a C# dll).
 

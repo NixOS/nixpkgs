@@ -33,7 +33,7 @@ rec {
     nativeBuildInputs = [ git ];
   };
 
-  /*
+  /**
     Upstream isn't interested in packaging this as a library
     (or accepting all of the patches we need to do so).
     This creates one without disturbing upstream too much.
@@ -49,7 +49,7 @@ rec {
       rev = "3d0427e222f7e42ae7be90c706d7fde555efca2e";
       hash = "sha256-XMoNkBEEmD6AwNSu1uSh3OcWLfy4/ADtRckn/Pj2cP4=";
 
-      /*
+      /**
         It's not critical to drop most of these; the primary target is
         the vendored fork of Python-2.7.13, which is ~ 55M and over 3200
         files, dozens of which get interpreter script patches in fixup.

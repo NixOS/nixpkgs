@@ -19,9 +19,10 @@ assert faacSupport -> enableUnfree;
 
 let inherit (lib) optional optionals hasPrefix enableFeature; in
 
-/* ToDo:
-    - more deps, inspiration: https://packages.ubuntu.com/raring/libav-tools
-    - maybe do some more splitting into outputs
+/**
+  ToDo:
+  - more deps, inspiration: https://packages.ubuntu.com/raring/libav-tools
+  - maybe do some more splitting into outputs
 */
 
 let

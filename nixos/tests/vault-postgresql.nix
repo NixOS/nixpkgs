@@ -1,10 +1,11 @@
-/* This test checks that
-    - multiple config files can be loaded
-    - the storage backend can be in a file outside the nix store
-      as is required for security (required because while confidentiality is
-      always covered, availability isn't)
-    - the postgres integration works
- */
+/**
+  This test checks that
+  - multiple config files can be loaded
+  - the storage backend can be in a file outside the nix store
+    as is required for security (required because while confidentiality is
+    always covered, availability isn't)
+  - the postgres integration works
+*/
 import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "vault-postgresql";

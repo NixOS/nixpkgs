@@ -1,5 +1,5 @@
 import ./make-test-python.nix ({ pkgs, ... }:
-/*
+/**
   SANE NixOS test
   ===============
   SANE is intrisically tied to hardware, so testing it is not straightforward.
@@ -43,10 +43,11 @@ in
     systemd.services.fake-webcam = {
       wantedBy = [ "multi-user.target" ];
       description = "fill /dev/video0 with ${image}";
-      /* HACK: /dev/video0 is a v4l2 only device, it misses one single v4l1
-      ioctl, VIDIOCSPICT. But sane only supports v4l1, so it will log that this
-      ioctl failed, and assume that the pixel format is Y8 (gray). So we tell
-      ffmpeg to produce this pixel format.
+      /**
+        HACK: /dev/video0 is a v4l2 only device, it misses one single v4l1
+        ioctl, VIDIOCSPICT. But sane only supports v4l1, so it will log that this
+        ioctl failed, and assume that the pixel format is Y8 (gray). So we tell
+        ffmpeg to produce this pixel format.
       */
       serviceConfig.ExecStart = [ "${pkgs.ffmpeg}/bin/ffmpeg -framerate 30 -re -stream_loop -1 -i ${image} -f v4l2 -pix_fmt gray /dev/video0" ];
     };

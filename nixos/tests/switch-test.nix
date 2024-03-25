@@ -5,7 +5,9 @@ import ./make-test-python.nix ({ lib, pkgs, ...} : let
   # Simple service that can either be socket-activated or that will
   # listen on port 1234 if not socket-activated.
   # A connection to the socket causes 'hello' to be written to the client.
-  socketTest = pkgs.writeScript "socket-test.py" /* python */ ''
+  socketTest = pkgs.writeScript "socket-test.py" /**
+  python
+*/ ''
     #!${pkgs.python3}/bin/python3
 
     from socketserver import TCPServer, StreamRequestHandler
@@ -610,7 +612,9 @@ in {
     # Returns a comma separated representation of the given list in sorted
     # order, that matches the output format of switch-to-configuration.pl
     sortedUnits = xs: lib.concatStringsSep ", " (builtins.sort builtins.lessThan xs);
-  in /* python */ ''
+  in /**
+  python
+*/ ''
     def switch_to_specialisation(system, name, action="test", fail=False):
         if name == "":
             switcher = f"{system}/bin/switch-to-configuration"

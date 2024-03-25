@@ -1,4 +1,4 @@
-/*
+/**
   Test suite for curl-impersonate
 
   Abstract:

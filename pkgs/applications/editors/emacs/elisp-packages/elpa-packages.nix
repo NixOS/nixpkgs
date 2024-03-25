@@ -1,25 +1,23 @@
-/*
+/**
+  # Updating
 
-# Updating
+  To update the list of packages from ELPA,
 
-To update the list of packages from ELPA,
+  1. Run `./update-elpa`.
+  2. Check for evaluation errors:
+       # "../../../../../" points to the default.nix from root of Nixpkgs tree
+       env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
+  3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
 
-1. Run `./update-elpa`.
-2. Check for evaluation errors:
-     # "../../../../../" points to the default.nix from root of Nixpkgs tree
-     env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages
-3. Run `git commit -m "elpa-packages $(date -Idate)" -- elpa-generated.nix`
+  ## Update from overlay
 
-## Update from overlay
+  Alternatively, run the following command:
 
-Alternatively, run the following command:
+  ./update-from-overlay
 
-./update-from-overlay
-
-It will update both melpa and elpa packages using
-https://github.com/nix-community/emacs-overlay. It's almost instantenous and
-formats commits for you.
-
+  It will update both melpa and elpa packages using
+  https://github.com/nix-community/emacs-overlay. It's almost instantenous and
+  formats commits for you.
 */
 
 { lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:

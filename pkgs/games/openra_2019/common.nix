@@ -1,5 +1,6 @@
-/*  The reusable code, and package attributes, between OpenRA engine packages (engine.nix)
-    and out-of-tree mod packages (mod.nix).
+/**
+  The reusable code, and package attributes, between OpenRA engine packages (engine.nix)
+  and out-of-tree mod packages (mod.nix).
 */
 { lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
 , lua, mono, python3

@@ -28,7 +28,9 @@ buildPythonPackage rec {
     homepage = "https://www.decalage.info/python/olefileio";
     # BSD2 + reference to Pillow
     # http://olefile.readthedocs.io/en/latest/License.html
-    license = with licenses; [ bsd2 /* and */ hpnd ];
+    license = with licenses; [ bsd2 /**
+  and
+*/ hpnd ];
     maintainers = with maintainers; [ fab ];
   };
 }

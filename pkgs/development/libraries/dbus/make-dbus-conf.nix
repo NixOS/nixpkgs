@@ -8,11 +8,12 @@
 , apparmor ? "disabled" # one of enabled, disabled, required
 }:
 
-/* DBus has two configuration parsers -- normal and "trivial", which is used
- * for suid helper. Unfortunately the latter doesn't support <include>
- * directive. That means that we can't just place our configuration to
- * *-local.conf -- it needs to be in the main configuration file.
- */
+/**
+  DBus has two configuration parsers -- normal and "trivial", which is used
+  * for suid helper. Unfortunately the latter doesn't support <include>
+  * directive. That means that we can't just place our configuration to
+  * *-local.conf -- it needs to be in the main configuration file.
+*/
 runCommand "dbus-1"
   {
     inherit serviceDirectories suidHelper apparmor;

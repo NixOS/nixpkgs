@@ -2,14 +2,26 @@
 # helper functions for packaging programs with plugin systems
 {
 
-  /* Takes a list of expected plugin names
-   * and compares it to the found plugins given in the file,
-   * one plugin per line.
-   * If the lists differ, the build fails with a nice message.
-   *
-   * This is helpful to ensure maintainers don’t miss
-   * the addition or removal of a plugin.
-   */
+  /**
+    Takes a list of expected plugin names
+    * and compares it to the found plugins given in the file,
+    * one plugin per line.
+    * If the lists differ, the build fails with a nice message.
+    *
+    * This is helpful to ensure maintainers don’t miss
+    * the addition or removal of a plugin.
+
+
+    # Inputs
+
+    `expectedPlugins`
+
+    : 1\. Function argument
+
+    `foundPluginsFilePath`
+
+    : 2\. Function argument
+  */
   diffPlugins = expectedPlugins: foundPluginsFilePath: ''
      # sort both lists first
      plugins_expected=$(mktemp)

@@ -56,7 +56,9 @@ in {
 
   config = mkIf config.hardware.raid.HPSmartArray.enable {
 
-    boot.initrd.kernelModules = [ "sg" ]; /* hpssacli wants it */
+    boot.initrd.kernelModules = [ "sg" ]; /**
+  hpssacli wants it
+*/
     boot.initrd.availableKernelModules = [ "hpsa" ];
 
     environment.systemPackages = [ hpssacli ];

@@ -5,7 +5,9 @@ let
 in
 {
   name = "nixseparatedebuginfod";
-  /* A binary cache with debug info and source for nix */
+  /**
+    A binary cache with debug info and source for nix
+  */
   nodes.cache = { pkgs, ... }: {
     services.nix-serve = {
       enable = true;
@@ -18,7 +20,9 @@ in
       pkgs.sl
     ];
   };
-  /* the machine where we need the debuginfo */
+  /**
+    the machine where we need the debuginfo
+  */
   nodes.machine = {
     imports = [
       ../modules/installer/cd-dvd/channel.nix

@@ -11,7 +11,9 @@ let
   etc = pkgs.runCommandLocal "etc" {
     # This is needed for the systemd module
     passthru.targets = map (x: x.target) etc';
-  } /* sh */ ''
+  } /**
+  sh
+*/ ''
     set -euo pipefail
 
     makeEtcEntry() {

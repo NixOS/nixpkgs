@@ -21,11 +21,15 @@
 , sysctl
 , buildLlvmTools
 , debugVersion ? false
-, doCheck ? (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+, doCheck ? (!stdenv.isx86_32 /**
+  TODO: why
+*/) && (!stdenv.hostPlatform.isMusl)
   && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? stdenv.isLinux /* PFM only supports Linux */
+, enablePFM ? stdenv.isLinux /**
+  PFM only supports Linux
+*/
   # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
   # broken for the armv7l builder
   && !stdenv.hostPlatform.isAarch

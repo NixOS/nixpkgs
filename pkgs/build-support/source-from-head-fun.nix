@@ -1,13 +1,12 @@
-/*
-   purpose: mantain bleeding edge head sources.
+/**
+  purpose: mantain bleeding edge head sources.
 
-   you run
-   app --update
-   app --publish
-   to create source snapshots
+  you run
+  app --update
+  app --publish
+  to create source snapshots
 
-   The documentation is availible at https://github.com/MarcWeber/nix-repository-manager/raw/master/README
-
+  The documentation is availible at https://github.com/MarcWeber/nix-repository-manager/raw/master/README
 */
 { config }:
   localTarName: publishedSrcSnapshot:

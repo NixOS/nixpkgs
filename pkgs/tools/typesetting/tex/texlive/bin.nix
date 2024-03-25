@@ -140,12 +140,24 @@ core = stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (with texlive.bin.core; [
     # configure: error: tangle was not found but is required when cross-compiling.
     # dev (himktables) is used when building hitex to generate the additional source file hitables.c
-    web/*tangle*/ cweb/*ctangle*/ omegaware/*otangle*/ tie/*tie*/ # see "Building TeX Live" 6.4.2 Cross problems
-    dev/*himktables*/
+    web/**
+  tangle
+*/ cweb/**
+  ctangle
+*/ omegaware/**
+  otangle
+*/ tie/**
+  tie
+*/ # see "Building TeX Live" 6.4.2 Cross problems
+    dev/**
+  himktables
+*/
   ]);
 
   buildInputs = [
-    /*teckit*/ zziplib mpfr gmp
+    /**
+      teckit
+    */ zziplib mpfr gmp
     pixman gd freetype libpng libpaper zlib
     perl
   ];
@@ -183,10 +195,14 @@ core = stdenv.mkDerivation rec {
 
   # TODO: perhaps improve texmf.cnf search locations
   postInstall =
-       /* remove redundant texmf-dist (content provided by TeX Live packages) */
+       /**
+        remove redundant texmf-dist (content provided by TeX Live packages)
+      */
   ''
     rm -fr "$out"/share/texmf-dist
-  '' + /* install himktables in separate output for use in cross compilation */ ''
+  '' + /**
+  install himktables in separate output for use in cross compilation
+*/ ''
      mkdir -p $dev/bin
      cp texk/web2c/.libs/himktables $dev/bin/himktables
   '' + common.moveBins;
@@ -251,8 +267,10 @@ core-big = stdenv.mkDerivation {
   inherit (core) nativeBuildInputs depsBuildBuild;
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 potrace ];
 
-  /* deleting the unused packages speeds up configure by a considerable margin
-     and ensures we do not rebuild existing libraries by mistake */
+  /**
+    deleting the unused packages speeds up configure by a considerable margin
+    and ensures we do not rebuild existing libraries by mistake
+  */
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
       libs/{mpfr,pixman,xpdf,zlib,zziplib} \
@@ -273,9 +291,13 @@ core-big = stdenv.mkDerivation {
       ([ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "hitex" "pdftex"
         "web-progs" "synctex"
       ] ++ lib.optionals (!withLuaJIT) [ "luajittex" "luajithbtex" "mfluajit" ])
-    /* disable all packages, re-enable upmendex, web2c packages */
+    /**
+      disable all packages, re-enable upmendex, web2c packages
+    */
     ++ [ "--disable-all-pkgs" "--enable-upmendex" "--enable-web2c" ]
-    /* kpathsea requires specifying the kpathsea location manually */
+    /**
+      kpathsea requires specifying the kpathsea location manually
+    */
     ++ [ "--with-kpathsea-includes=${core.dev}/include" ];
 
   configureScript = "../configure";
@@ -302,7 +324,9 @@ chktex = stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   # perl used in shebang of script bin/deweb
-  buildInputs = [ core/*kpathsea*/ perl ];
+  buildInputs = [ core/**
+  kpathsea
+*/ perl ];
 
   preConfigure = "cd texk/chktex";
 
@@ -368,7 +392,9 @@ dvipng = stdenv.mkDerivation {
   inherit (common) src;
 
   nativeBuildInputs = [ perl pkg-config makeWrapper ];
-  buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript ];
+  buildInputs = [ core/**
+  kpathsea
+*/ zlib libpng freetype gd ghostscript ];
 
   preConfigure = ''
     cd texk/dvipng
@@ -432,7 +458,9 @@ bibtex8 = stdenv.mkDerivation {
   inherit (common) src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ icu ];
+  buildInputs = [ core/**
+  kpathsea
+*/ icu ];
 
   preConfigure = "cd texk/bibtex-x";
 
@@ -450,7 +478,9 @@ xdvi = stdenv.mkDerivation {
   inherit (common) src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ freetype ghostscript ]
+  buildInputs = [ core/**
+  kpathsea
+*/ freetype ghostscript ]
     ++ (with xorg; [ libX11 libXaw libXi libXpm libXmu libXaw libXext libXfixes ]);
 
   preConfigure = "cd texk/xdvik";

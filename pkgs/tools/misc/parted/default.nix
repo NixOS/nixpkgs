@@ -42,7 +42,9 @@ stdenv.mkDerivation rec {
 
   # Tests were previously failing due to Hydra running builds as uid 0.
   # That should hopefully be fixed now.
-  doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
+  doCheck = !stdenv.hostPlatform.isMusl; /**
+  translation test
+*/
   nativeCheckInputs = [ check dosfstools e2fsprogs perl python3 util-linux ];
 
   meta = {

@@ -1,4 +1,5 @@
-/* TeX Live user docs
+/**
+  TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */

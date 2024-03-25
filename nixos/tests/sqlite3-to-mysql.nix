@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 
-/*
+/**
   This test suite replaces the typical pytestCheckHook function in
   sqlite3-to-mysql due to the need of a running mysql instance.
 */
