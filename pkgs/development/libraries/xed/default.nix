@@ -10,19 +10,19 @@ let
       owner = "intelxed";
       repo = "mbuild";
       rev = "v${version}";
-      sha256 = "sha256-eOAqmoPotdXGcBmrD9prXph4XOL6noJU6GYT/ud/VXk=";
+      sha256 = "sha256-nVHHiaPbf+b+RntjUGjLLGS53e6c+seXIBx7AcTtiWU=";
     };
   };
 
 in stdenv.mkDerivation rec {
   pname = "xed";
-  version = "2022.08.11";
+  version = "2024.02.22";
 
   src = fetchFromGitHub {
     owner = "intelxed";
     repo = "xed";
     rev = "v${version}";
-    sha256 = "sha256-Iil+dfjuWYPbzmSjgwKTKScSE/IsWuHEKQ5HsBJDqWM=";
+    sha256 = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
   };
 
   nativeBuildInputs = [ mbuild ];
@@ -32,6 +32,9 @@ in stdenv.mkDerivation rec {
 
     # this will build, test and install
     ./mfile.py test --prefix $out
+    ./mfile.py examples
+    mkdir -p $out/bin
+    cp ./obj/wkit/examples/obj/xed $out/bin/
   '';
 
   dontInstall = true; # already installed during buildPhase
