@@ -247,4 +247,12 @@ in
     '';
     meta.description = "Place a window in a predefined layout";
   };
+
+  budgie-workspace-stopwatch = mkBudgieExtrasPlugin {
+    pluginName = "workspace-stopwatch";
+    mesonOptionName = "workspacestopwatch";
+    moduleName = "budgie-workspacestopwatch";
+    isPython = true;
+    meta.description = "Keep track on spent time per workspace";
+  };
 }
