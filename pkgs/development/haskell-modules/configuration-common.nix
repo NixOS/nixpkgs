@@ -2986,6 +2986,9 @@ self: super: {
     })
   ] super.niv;
 
+  # 2024-03-25: HSH broken because of the unix-2.8.0.0 breaking change
+  HSH = appendPatches [./patches/HSH-unix-openFd.patch] super.HSH;
+
   inherit
     (let
       unbreakRepa = packageName: drv: lib.pipe drv [
