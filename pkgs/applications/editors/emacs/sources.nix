@@ -4,8 +4,8 @@
 }:
 
 let
-  mkArgs = { pname, version, variant, rev, hash }: {
-    inherit pname version variant;
+  mkArgs = { pname, version, variant, patches ? _: [ ], rev, hash }: {
+    inherit pname version variant patches;
 
     src = {
       "mainline" = (fetchFromSavannah {
