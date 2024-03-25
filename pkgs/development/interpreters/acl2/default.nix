@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
     pushd $out/share/${pname}/books
     makeFlags="ACL2=$out/share/${pname}/saved_acl2"
     buildFlags="all"
-    buildPhase
+    runPhase buildPhase
 
     # Clean up some stuff to save space
     find -name '*@useless-runes.lsp' -execdir rm {} +  # saves ~1GB of space
