@@ -10,6 +10,7 @@
 , libnma
 , libnotify
 , libpeas
+, libsoup
 , libwnck
 , networkmanager
 , pantheon
@@ -212,5 +213,18 @@ in
       patchShebangs budgie-visualspace/data/subst.py
     '';
     meta.description = "Workspace indicator and window list";
+  };
+
+  budgie-weathershow = mkBudgieExtrasPlugin {
+    pluginName = "weathershow";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      json-glib
+      libgee
+      libpeas
+      libsoup
+    ];
+    meta.description = "Show weather & forecast";
   };
 }
