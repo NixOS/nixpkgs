@@ -28,11 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-05hxc34ecSoAp0GBVf9yq2BC928wxZOLZJHAbJ7cdtk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     requests
     unidiff
