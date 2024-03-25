@@ -295,7 +295,7 @@ rec {
 
   mypy-boto3-finspace-data = buildMypyBoto3Package "finspace-data" "1.34.0" "sha256-8mND5BbdKY5srFwdpxSyfCUTIP4fa9hztP4daUJOB8k=";
 
-  mypy-boto3-firehose = buildMypyBoto3Package "firehose" "1.34.46" "sha256-Fgs7wrwKPK79cYduCR/RYQ2FEZvghDuWI1hXKzFLfJo=";
+  mypy-boto3-firehose = buildMypyBoto3Package "firehose" "1.34.69" "sha256-GCMH/XA9ETSuo39OnlvyhfHDKylsTeLO1R1+7tl2S/E=";
 
   mypy-boto3-fis = buildMypyBoto3Package "fis" "1.34.63" "sha256-TJnzgQGDcybpVqg+p7Tuvw/RoY79cQPPChyHWlMxhiY=";
 
