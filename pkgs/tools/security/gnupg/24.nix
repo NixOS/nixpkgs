@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkg-config texinfo ];
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+    libgpg-error # for gpgrt-config
+  ];
   buildInputs = [
     gettext libassuan libgcrypt libgpg-error libiconv libksba npth
   ] ++ lib.optionals (!enableMinimal) [
