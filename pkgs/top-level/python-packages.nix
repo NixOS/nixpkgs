@@ -3755,6 +3755,8 @@ self: super: with self; {
 
   enrich = callPackage ../development/python-modules/enrich { };
 
+  enterpriseattack = callPackage ../development/python-modules/enterpriseattack { };
+
   entrance = callPackage ../development/python-modules/entrance {
     routerFeatures = false;
   };
