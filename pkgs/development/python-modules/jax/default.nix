@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    rev = "refs/tags/jaxlib-v${version}";
+    rev = "refs/tags/jax-v${version}";
     hash = "sha256-poQQo2ZgEhPYzK3aCs+BjaHTNZbezJAECd+HOdY1Yok=";
   };
 
@@ -143,6 +143,9 @@ buildPythonPackage rec {
       jaxlib = jaxlib-bin.override { cudaSupport = true; };
     };
   };
+
+  # updater fails to pick the correct branch
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";
