@@ -24,6 +24,8 @@ let
     PAPERLESS_TIME_ZONE = config.time.timeZone;
   } // optionalAttrs enableRedis {
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
+  } // optionalAttrs (cfg.openMPThreadingWorkaround) {
+    OMP_NUM_THREADS = "1";
   } // (
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
@@ -200,6 +202,20 @@ in
       defaultText = literalExpression "pkgs.paperless-ngx";
       description = lib.mdDoc "The Paperless package to use.";
     };
+
+    openMPThreadingWorkaround = mkEnableOption ''
+      a workaround for document classifier timeouts.
+
+      Paperless uses OpenBLAS via scikit-learn for document classification.
+
+      The default is to use threading for OpenMP but this would cause the
+      document classifier to spin on one core seemingly indefinitely if there
+      are large amounts of classes per classification; causing it to
+      effectively never complete due to running into timeouts.
+
+      This sets `OMP_NUM_THREADS` to `1` in order to mitigate the issue. See
+      https://github.com/NixOS/nixpkgs/issues/240591 for more information.
+    '' // mkOption { default = true; };
   };
 
   config = mkIf cfg.enable {
