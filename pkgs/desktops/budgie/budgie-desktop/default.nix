@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , accountsservice
 , alsa-lib
 , budgie-screensaver
@@ -49,6 +50,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./plugins.patch
+
+    # Fix workspace applet window icon click not performing workspace switch
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/524
+    (fetchpatch2 {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/9b775d613ad0c324db628ed5a32d3fccc90f82d6.patch";
+      hash = "sha256-QtPviPW7pJYZIs28CYwE3N8vcDswqnjD6d0WVPFchL4=";
+    })
+
+    # Work around even more SNI noncompliance
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/539
+    (fetchpatch2 {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/84269e2fcdcac6d737ee5100881e8b306eaae570.patch";
+      hash = "sha256-1Uj+6GZ9/oDQOt+5P8UYiVP3P0BrsJe3HqXVLkWCkAM=";
+    })
+
+    # vapi: Update libxfce4windowing to 4.19.3
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/546
+    (fetchpatch2 {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/a040ccb96094f1d3a1ee81a6733c9434722bdf6c.patch";
+      hash = "sha256-9eMYB5Zyn3BDYvAwORXTHaPGYDP7LnqHAwp+6Wy6XLk=";
+    })
   ];
 
   nativeBuildInputs = [
