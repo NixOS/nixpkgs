@@ -14,9 +14,7 @@ makeSetupHook
   {
     name = "auto-add-cuda-compat-runpath-hook";
     propagatedBuildInputs = [ autoFixElfFiles ];
-
     substitutions.libcudaPath = lib.optionalString flags.isJetsonBuild "${cuda_compat}/compat";
-
     meta = {
       broken = !flags.isJetsonBuild;
       badPlatforms = lib.optionals (cuda_compat == null) lib.platforms.all;
