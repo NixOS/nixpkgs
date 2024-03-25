@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "litebrowser";
-  version = "unstable-2022-10-31";
+  version = "unstable-2024-02-25";
 
   src = fetchFromGitHub {
     owner = "litehtml";
     repo = "litebrowser-linux";
-    rev = "4654f8fb2d5e2deba7ac6223b6639341bd3b7eba";
-    hash = "sha256-SvW1AOxLBLKqa+/2u2Zn+/t33ZzQHmqlcLRl6z0rK9U=";
+    rev = "8130cf50af90e07d201d43b934b5a57f7ed4e68d";
+    hash = "sha256-L/pd4VypDfjLKfh+HLpc4um+POWGzGa4OOttudwJxyk=";
     fetchSubmodules = true; # litehtml submodule
   };
 
@@ -46,6 +46,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = stdenv.cc.isClang;  # https://github.com/litehtml/litebrowser-linux/issues/19
     description = "A simple browser based on the litehtml engine";
     mainProgram = "litebrowser";
     homepage = "https://github.com/litehtml/litebrowser-linux";
