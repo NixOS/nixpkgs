@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchFromGitHub
 , copyDesktopItems
 , makeDesktopItem
 , desktopToDarwinBundle
@@ -45,36 +44,23 @@
 
 assert enablePython -> enableCxx;
 
-let
-
-  freeglut-mupdf = freeglut.overrideAttrs (old: rec {
-    pname = "freeglut-mupdf";
-    version = "3.0.0-r${src.rev}";
-    src = fetchFromGitHub {
-      owner = "ArtifexSoftware";
-      repo = "thirdparty-freeglut";
-      rev = "13ae6aa2c2f9a7b4266fc2e6116c876237f40477";
-      hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
-    };
-  });
-
-in
 stdenv.mkDerivation rec {
-  version = "1.23.6";
+  version = "1.24.0";
   pname = "mupdf";
 
   src = fetchurl {
-    url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-rBHrhZ3UBEiOUVPNyWUbtDQeW6r007Pyfir8gvmq3Ck=";
+    url = "https://mupdf.com/downloads/archive/mupdf-${version}-source.tar.gz";
+    hash = "sha256-UvYwA6b02J8jTp7ftLTIPSFrg6rrMjz9pgR8t1RZmuA=";
   };
 
-  patches = [ ./0001-Use-command-v-in-favor-of-which.patch
-              ./0002-Add-Darwin-deps.patch
-              ./0003-Fix-cpp-build.patch
-            ];
+  patches = [
+    ./0002-Add-Darwin-deps.patch
+    ./0003-Fix-cpp-build.patch
+  ];
 
   postPatch = ''
-    substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
+    substituteInPlace Makerules \
+      --replace-fail "(shell pkg-config" "(shell $PKG_CONFIG"
 
     patchShebangs scripts/mupdfwrap.py
 
@@ -83,7 +69,8 @@ stdenv.mkDerivation rec {
 
     # fix libclang unnamed struct format
     for wrapper in ./scripts/wrap/{cpp,state}.py; do
-      substituteInPlace "$wrapper" --replace 'struct (unnamed' '(unnamed struct'
+      substituteInPlace "$wrapper" \
+        --replace-fail 'struct (unnamed' '(unnamed struct'
     done
   '';
 
@@ -91,10 +78,11 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
     "shared=yes"
     "USE_SYSTEM_LIBS=yes"
-    "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ] ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ]
     ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ];
+
+  env.USE_SONAME = "no";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
@@ -110,7 +98,7 @@ stdenv.mkDerivation rec {
       if stdenv.isDarwin then
         with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
       else
-        [ freeglut-mupdf libGLU ]
+        [ freeglut libGLU ]
     )
     ++ lib.optionals enableOcr [ leptonica tesseract ]
   ;
