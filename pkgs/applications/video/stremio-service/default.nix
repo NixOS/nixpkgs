@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoBuildFeatures = [ "offline-build" "bundled" ];
+  buildFeatures = [ "offline-build" "bundled" ];
   doCheck = false;
   cargoCheckFeatures = [ "offline-build" "bundled" ];
   cargoSha256 = "sha256-aHIkHw2KvveuURq5yvSLXACIinQF89ZtHuV5o2fJmks=";
