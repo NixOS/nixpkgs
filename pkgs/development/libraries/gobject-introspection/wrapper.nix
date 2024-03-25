@@ -41,7 +41,7 @@ then
         dontStrip = true;
         depsTargetTargetPropagated = [ overridenTargetUnwrappedGir ];
         buildCommand = ''
-          eval fixupPhase
+          runPhase fixupPhase
           ${lib.concatMapStrings (output: ''
             mkdir -p ${"$" + "${output}"}
             ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
@@ -96,7 +96,7 @@ else
       dontStrip = true;
       depsTargetTargetPropagated = [ overridenTargetUnwrappedGir ];
       buildCommand = ''
-        eval fixupPhase
+        runPhase fixupPhase
         ${lib.concatMapStrings (output: ''
           mkdir -p ${"$" + "${output}"}
           ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
