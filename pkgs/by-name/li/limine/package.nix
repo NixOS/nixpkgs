@@ -53,6 +53,7 @@ stdenv.mkDerivation {
     # necessarily the platforms for that bootable images can be created.
     platforms = platforms.unix;
     maintainers = [
+      maintainers._48cf
       maintainers.phip1611
     ];
   };
