@@ -39,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
