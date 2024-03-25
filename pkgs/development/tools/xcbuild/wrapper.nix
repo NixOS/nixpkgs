@@ -163,5 +163,5 @@ runCommand "xcodebuild-${xcbuild.version}" {
     ln -s ${xcbuild}/bin/$bin $out/bin/$bin
   done
 
-  fixupPhase
+  runPhase fixupPhase
 ''
