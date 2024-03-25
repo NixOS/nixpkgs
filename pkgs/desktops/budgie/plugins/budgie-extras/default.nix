@@ -163,4 +163,11 @@ in
     ];
     meta.description = "Show recently used items";
   };
+
+  budgie-rotation-lock = mkBudgieExtrasPlugin {
+    pluginName = "rotation-lock";
+    moduleName = "budgie_rotation_lock";
+    isPython = true;
+    meta.description = "Lock or unlock the screen for rotation";
+  };
 }
