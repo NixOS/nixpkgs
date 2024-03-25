@@ -204,8 +204,6 @@ filterAndCreateOverrides {
       # nvcc to use the fixed backend toolchain. Cf. comments in
       # backend-stdenv.nix
 
-      nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ backendStdenv.cc ];
-
       # TODO(@connorbaker): We should specify the spliced version of backendStdenv and cuda_cudart to use here.
       postPatch =
         (prevAttrs.postPatch or "")
