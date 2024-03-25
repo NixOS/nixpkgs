@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, openssl
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, rustPlatform
+
+, cachix
 , darwin
 , libgit2
-, makeWrapper
 , nix
+, openssl
 , pkg-config
-, rustPlatform
-, cachix
-, fetchFromGitHub
 }:
 
 let
