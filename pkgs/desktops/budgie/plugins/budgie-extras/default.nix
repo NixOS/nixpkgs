@@ -142,4 +142,14 @@ in
     ];
     meta.description = "Network Applet for Budgie";
   };
+
+  budgie-quicknote = mkBudgieExtrasPlugin {
+    pluginName = "quicknote";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+    ];
+    meta.description = "Quick & Easy Notes";
+  };
 }
