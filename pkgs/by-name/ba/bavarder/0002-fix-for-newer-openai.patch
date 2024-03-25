@@ -1,0 +1,99 @@
+diff --git a/src/providers/local.py b/src/providers/local.py
+index b810ac2..397b854 100644
+--- a/src/providers/local.py
++++ b/src/providers/local.py
+@@ -1,4 +1,5 @@
+ from .openai import BaseOpenAIProvider
++import openai
+ 
+ from gi.repository import Gtk, Adw
+ 
+diff --git a/src/providers/openai.py b/src/providers/openai.py
+index 860de35..df817a9 100644
+--- a/src/providers/openai.py
++++ b/src/providers/openai.py
+@@ -9,15 +9,14 @@ from gi.repository import Gtk, Adw, GLib
+ class BaseOpenAIProvider(BaseProvider):
+     model = None
+     api_key_title = "API Key"
+-    chat = openai.ChatCompletion
+ 
+     def __init__(self, app, window):
+         super().__init__(app, window)
+ 
+         if self.data.get("api_key"):
+             openai.api_key = self.data["api_key"]
+-        if self.data.get("api_base"):
+-            openai.api_base = self.data["api_base"]
++        if self.data.get("api_base"):
++            openai.base_url = self.data["api_base"]
+ 
+     def ask(self, prompt, chat):
+         _chat = []
+@@ -31,25 +30,33 @@ class BaseOpenAIProvider(BaseProvider):
+ 
+         if self.data.get("api_key"):
+             openai.api_key = self.data["api_key"]
+-        if self.data.get("api_base"):
+-            openai.api_base = self.data["api_base"]
++        if self.data.get("api_base"):
++            openai.base_url = self.data["api_base"]
+ 
+         if self.model:
+             prompt = self.chunk(prompt)
+             try:
+                 print(chat)
+-                response = self.chat.create(
++                response = openai.chat.completions.create(
+                             model=self.model,
+                             messages=chat,
+                         ).choices[0].message.content
+-            except openai.error.AuthenticationError:
+-                return _("Your API key is invalid, please check your preferences.")
+-            except openai.error.InvalidRequestError:
+-                return _("You don't have access to this model, please check your plan and billing details.")
+-            except openai.error.RateLimitError:
+-                return _("You exceeded your current quota, please check your plan and billing details.")
+-            except openai.error.APIError:
+-                return _("I'm having trouble connecting to the API, please check your internet connection.")
++            except openai.APIError:
++                return _("API returned an API Error.")
++            except openai.Timeout:
++                return _("API request timed out.")
++            except openai.APIConnectionError:
++                return _("API request failed to connect.")
++            except openai.InvalidRequestError:
++                return _("API request was invalid.")
++            except openai.AuthenticationError:
++                return _("API request was not authorized. Check your API key.")
++            except openai.PermissionError:
++                return _("API request was not permitted. Check if you have access to the model.")
++            except openai.RateLimitError:
++                return _("API request exceeded rate limit/quota.")
++            except openai.ServiceUnavailableError:
++                return _("Service unavailable. Try again shortly.")
+             except socket.gaierror:
+                 return _("I'm having trouble connecting to the API, please check your internet connection.")
+             else:
+@@ -72,7 +79,7 @@ class BaseOpenAIProvider(BaseProvider):
+ 
+         self.api_url_row = Adw.EntryRow()
+         self.api_url_row.connect("apply", self.on_apply)
+-        self.api_url_row.props.text = openai.api_base or ""
++        self.api_url_row.props.text = openai.base_url or ""
+         self.api_url_row.props.title = "API Url"
+         self.api_url_row.set_show_apply_button(True)
+         self.api_url_row.add_suffix(self.how_to_get_base_url())
+@@ -83,10 +90,10 @@ class BaseOpenAIProvider(BaseProvider):
+     def on_apply(self, widget):
+         api_key = self.api_row.get_text()
+         openai.api_key = api_key
+-        openai.api_base = self.api_url_row.get_text()
++        openai.base_url = self.api_url_row.get_text()
+ 
+         self.data["api_key"] = openai.api_key
+-        self.data["api_base"] = openai.api_base
++        self.data["api_base"] = openai.base_url
+ 
+ 
+     def how_to_get_base_url(self):

@@ -1,0 +1,16 @@
+diff --git a/src/main.py b/src/main.py
+index 79f5401..afc352d 100644
+--- a/src/main.py
++++ b/src/main.py
+@@ -24,10 +24,9 @@ import time
+ gi.require_version('Gtk', '4.0')
+ gi.require_version('Adw', '1')
+ gi.require_version('Xdp', '1.0')
+-gi.require_version('XdpGtk4', '1.0')
+ gi.require_version('GtkSource', '5')
+ 
+-from gi.repository import Gtk, Gio, Adw, Xdp, XdpGtk4, GLib
++from gi.repository import Gtk, Gio, Adw, Xdp, GLib
+ from .views.window import BavarderWindow
+ from .views.about_window import AboutWindow
+ from .views.preferences_window import PreferencesWindow

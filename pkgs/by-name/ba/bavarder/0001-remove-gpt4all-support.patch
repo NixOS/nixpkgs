@@ -1,0 +1,76 @@
+diff --git a/src/main.py b/src/main.py
+index 79f5401..f82cd0f 100644
+--- a/src/main.py
++++ b/src/main.py
+@@ -35,7 +35,6 @@ from .constants import app_id
+ from .providers import PROVIDERS
+ 
+ import json
+-from gpt4all import GPT4All
+ import os
+ 
+ user_config_dir = os.environ.get(
+@@ -306,15 +305,7 @@ class BavarderApplication(Adw.Application):
+     def setup_chat(self):
+         if not self.models:
+             self.list_models()
+-
+-        if not self.models:
+-            return False
+-        else:
+-            if self.model is None:
+-                if self.model_name not in self.models:
+-                    self.download_model(self.model_name)
+-                self.model = GPT4All(self.model_name, model_path=model_path)
+-            return True
++        return bool(self.models)
+ 
+     def download_model(self, model=None):
+         if model:
+diff --git a/src/views/preferences_window.py b/src/views/preferences_window.py
+index e057aff..73e4ea3 100644
+--- a/src/views/preferences_window.py
++++ b/src/views/preferences_window.py
+@@ -5,8 +5,6 @@ from bavarder.providers.provider_item import Provider
+ from bavarder.widgets.model_item import Model
+ from bavarder.widgets.download_row import DownloadRow
+ 
+-from gpt4all import GPT4All
+-
+ @Gtk.Template(resource_path=f"{rootdir}/ui/preferences_window.ui")
+ class PreferencesWindow(Adw.PreferencesWindow):
+     __gtype_name__ = "Preferences"
+@@ -34,7 +32,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
+     def setup(self):
+         self.setup_signals()
+         self.load_providers()
+-        self.load_models()
+ 
+         self.bot_name.set_text(self.app.bot_name)
+         self.user_name.set_text(self.app.user_name)
+@@ -47,25 +44,6 @@ class PreferencesWindow(Adw.PreferencesWindow):
+             p = Provider(self.app, self, provider)
+             self.provider_group.add(p)
+ 
+-    def load_models(self):
+-        self.general_page.remove(self.model_group)
+-        self.model_group = Adw.PreferencesGroup()
+-        self.model_group.set_title(_("Models"))
+-        
+-        for model in self.app.models:
+-            p = Model(self.app, self, model)
+-            self.model_group.add(p)
+-        else:
+-            self.no_models_available = Adw.ExpanderRow()
+-            self.no_models_available.set_title(_("List of available models"))
+-
+-            for model in GPT4All.list_models():
+-                self.no_models_available.add_row(DownloadRow(self.app, self, model))
+-
+-            self.model_group.add(self.no_models_available)
+-
+-        self.general_page.add(self.model_group)
+-
+     @Gtk.Template.Callback()
+     def clear_all_chats_clicked(self, widget, *args):
+         dialog = Adw.MessageDialog(
