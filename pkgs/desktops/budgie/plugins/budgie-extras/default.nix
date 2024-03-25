@@ -109,4 +109,11 @@ in
     '';
     meta.description = "Set hotcorner actions";
   };
+
+  budgie-kangaroo = mkBudgieExtrasPlugin {
+    pluginName = "kangaroo";
+    moduleName = "budgie_kangaroo";
+    isPython = true;
+    meta.description = "Quick directory-browser applet";
+  };
 }
