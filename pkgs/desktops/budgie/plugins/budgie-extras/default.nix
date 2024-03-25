@@ -116,4 +116,15 @@ in
     isPython = true;
     meta.description = "Quick directory-browser applet";
   };
+
+  budgie-keyboard-autoswitch = mkBudgieExtrasPlugin {
+    pluginName = "keyboard-autoswitch";
+    moduleName = "budgie-keyboard-autoswitch";
+    isPython = true;
+    pythonPath = with python3Packages; [
+      psutil
+      dbus-python
+    ];
+    meta.description = "Set a different layout per application";
+  };
 }
