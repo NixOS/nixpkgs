@@ -7,8 +7,10 @@
 , json-glib
 , libgee
 , libhandy
+, libnma
 , libnotify
 , libpeas
+, networkmanager
 , pantheon
 , python3Packages
 }:
@@ -126,5 +128,18 @@ in
       dbus-python
     ];
     meta.description = "Set a different layout per application";
+  };
+
+  budgie-network-manager = mkBudgieExtrasPlugin {
+    pluginName = "network-manager";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libgee
+      libnma
+      libpeas
+      networkmanager
+    ];
+    meta.description = "Network Applet for Budgie";
   };
 }
