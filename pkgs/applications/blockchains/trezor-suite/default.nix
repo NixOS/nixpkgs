@@ -53,6 +53,9 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
+    # trezor-suite fails to detect a connected hardware wallet
+    # ref: https://github.com/NixOS/nixpkgs/issues/281975
+    broken = true;
     description = "Trezor Suite - Desktop App for managing crypto";
     homepage = "https://suite.trezor.io";
     changelog = "https://github.com/trezor/trezor-suite/releases/tag/v${version}";
