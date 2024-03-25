@@ -6,13 +6,10 @@ let
     callPackage ./generic.nix (
       {
         inherit (darwin.apple_sdk.frameworks)
-          Cocoa
-          CoreServices
-          CoreAudio
-          CoreMedia
+          AppKit
+          AudioToolbox
           AVFoundation
-          MediaToolbox
-          VideoDecodeAcceleration
+          CoreImage
           VideoToolbox
           ;
       }
