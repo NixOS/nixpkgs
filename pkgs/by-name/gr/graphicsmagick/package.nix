@@ -33,13 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "man" ];
 
-  patches = [
-    # CVE Request: GraphicsMagick and ImageMagick popen() shell vulnerability
-    # via filename
-    # https://web.archive.org/web/20160530051451/http://permalink.gmane.org/gmane.comp.security.oss.general/19669
-    ./001-disable-popen.patch
-  ];
-
   buildInputs = [
     bzip2
     freetype
