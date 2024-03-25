@@ -227,4 +227,24 @@ in
     ];
     meta.description = "Show weather & forecast";
   };
+
+  # FIXME: The applet loads but it does not work, needs budgie-extras daemon
+  budgie-window-shuffler = mkBudgieExtrasPlugin {
+    pluginName = "window-shuffler";
+    nativeBuildInputs = [
+      appstream
+    ];
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libnotify
+      libwnck
+    ];
+    postPatch = ''
+      patchShebangs budgie-window-shuffler/data/subst.py
+      substituteInPlace budgie-window-shuffler/applet/meson.build --replace "/usr" "$out"
+    '';
+    meta.description = "Place a window in a predefined layout";
+  };
 }
