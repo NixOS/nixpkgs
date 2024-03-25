@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = [ maintainers.baloo ];
     mainProgram = "swtpm";
+    platforms = platforms.all;
   };
 })
