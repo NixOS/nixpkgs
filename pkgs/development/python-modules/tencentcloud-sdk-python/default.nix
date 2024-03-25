@@ -21,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-3tkkLB27R4trvS3LY0tRv0+q37SfT7S6gr9i1OWaNUU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
   ];
 
