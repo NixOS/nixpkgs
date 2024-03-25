@@ -83,4 +83,14 @@ in
     ];
     meta.description = "Popup menu for USB drives";
   };
+
+  budgie-fuzzyclock = mkBudgieExtrasPlugin {
+    pluginName = "fuzzyclock";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+    ];
+    meta.description = "Time of day in fuzzy way";
+  };
 }
