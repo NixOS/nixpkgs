@@ -255,4 +255,15 @@ in
     isPython = true;
     meta.description = "Keep track on spent time per workspace";
   };
+
+  budgie-wswitcher = mkBudgieExtrasPlugin {
+    pluginName = "wswitcher";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libwnck
+    ];
+    meta.description = "Set a different wallpaper per workspace";
+  };
 }
