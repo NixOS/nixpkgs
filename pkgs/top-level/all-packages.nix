@@ -802,6 +802,7 @@ with pkgs;
   sea-orm-cli = callPackage ../development/tools/sea-orm-cli { };
 
   vcpkg-tool = callPackage ../by-name/vc/vcpkg-tool/package.nix {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     fmt = fmt_10;
   };
 
@@ -15674,14 +15675,6 @@ with pkgs;
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
 
-  pin-to-gcc12-if-gcc13 = pkg:
-    if !(lib.isDerivation pkg) || !(pkg?override) then pkg else
-    pkg.override (previousArgs:
-      lib.optionalAttrs (previousArgs.stdenv.cc.cc.isGNU or false &&
-                         lib.versionAtLeast previousArgs.stdenv.cc.cc.version "13.0") {
-                           stdenv = gcc12Stdenv;
-                         });
-
   wrapNonDeterministicGcc = stdenv: ccWrapper:
     if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
       env = old.env // {
@@ -17825,7 +17818,7 @@ with pkgs;
   smiley-sans = callPackage ../data/fonts/smiley-sans { };
 
   inherit (callPackages ../applications/networking/cluster/spark { })
-    spark_3_5 spark_3_4 spark_3_3;
+    spark_3_5 spark_3_4;
   spark3 = spark_3_5;
   spark = spark3;
 
@@ -18192,6 +18185,12 @@ with pkgs;
   apacheKafka_3_3 = callPackage ../servers/apache-kafka { majorVersion = "3.3"; };
   apacheKafka_3_4 = callPackage ../servers/apache-kafka { majorVersion = "3.4"; };
   apacheKafka_3_5 = callPackage ../servers/apache-kafka { majorVersion = "3.5"; };
+
+  apng2gif = callPackage ../tools/graphics/apng2gif { };
+
+  gif2apng = callPackage ../tools/graphics/gif2apng { };
+
+  apngopt = callPackage ../tools/graphics/apngopt { };
 
   kt = callPackage ../tools/misc/kt { };
 
@@ -25858,6 +25857,7 @@ with pkgs;
   dmarc-metrics-exporter = callPackage ../servers/monitoring/prometheus/dmarc-metrics-exporter { };
 
   dmlive = callPackage ../applications/video/dmlive {
+    inherit (darwin) configd;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -32475,7 +32475,7 @@ with pkgs;
     stdenv = stdenv;
   });
 
-  kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
+  kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
@@ -32741,6 +32741,10 @@ with pkgs;
 
   libreoffice = hiPrio libreoffice-still;
 
+  libreoffice-qt = hiPrio libreoffice-qt-still;
+
+  libreoffice-qt-unwrapped = libreoffice-qt.unwrapped;
+
   libreoffice-unwrapped = libreoffice.unwrapped;
 
   libreoffice-args = {
@@ -32762,13 +32766,23 @@ with pkgs;
     boost = boost179;
   };
 
-  libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+  libreoffice-qt-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     unwrapped = libsForQt5.callPackage ../applications/office/libreoffice
       (libreoffice-args // {
         kdeIntegration = true;
         variant = "fresh";
       });
   });
+  libreoffice-qt-fresh-unwrapped = libreoffice-qt-fresh.unwrapped;
+
+  libreoffice-qt-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    unwrapped = libsForQt5.callPackage ../applications/office/libreoffice
+      (libreoffice-args // {
+        kdeIntegration = true;
+        variant = "still";
+      });
+  });
+  libreoffice-qt-still-unwrapped = libreoffice-qt-still.unwrapped;
 
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     unwrapped = callPackage ../applications/office/libreoffice
@@ -36224,8 +36238,6 @@ with pkgs;
 
   ytmdl = callPackage ../tools/misc/ytmdl { };
 
-  yutto = callPackage ../tools/misc/yutto { };
-
   yuview = libsForQt5.yuview;
 
   wallust = callPackage ../applications/misc/wallust { };
@@ -37848,6 +37860,12 @@ with pkgs;
 
   wesnoth = callPackage ../games/wesnoth {
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
+    # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
+    lua = lua5_4.override {
+      postConfigure = ''
+        makeFlagsArray+=("CC=$CXX")
+      '';
+    };
   };
 
   wesnoth-dev = wesnoth;

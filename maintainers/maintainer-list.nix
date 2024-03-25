@@ -5423,6 +5423,7 @@
     name = "Florentin Eckl";
   };
   eclairevoyant = {
+    email = "contactmeongithubinstead@proton.me";
     github = "eclairevoyant";
     githubId = 848000;
     name = "éclairevoyant";
@@ -6186,7 +6187,7 @@
   };
   eymeric = {
     name = "Eymeric Dechelette";
-    email = "hatchchcien@protonmail.com";
+    email = "hatchchien@protonmail.com";
     github = "hatch01";
     githubId = 42416805;
   };
@@ -9032,6 +9033,12 @@
     github = "jethrokuan";
     githubId = 1667473;
     name = "Jethro Kuan";
+  };
+  jetpackjackson = {
+    email = "baileyannew@tutanota.com";
+    github = "JetpackJackson";
+    githubId = 88674707;
+    name = "Bailey Watkins";
   };
   jevy = {
     email = "jevin@quickjack.ca";
@@ -15023,6 +15030,12 @@
       fingerprint = "E005 48D5 D6AC 812C AAD2  AFFA 9C42 B05E 5913 60DC";
     }];
   };
+  pbeucher = {
+    email = "pierre@crafteo.io";
+    github = "PierreBeucher";
+    githubId = 5041481;
+    name = "Pierre Beucher";
+  };
   pblkt = {
     email = "pebblekite@gmail.com";
     github = "pblkt";
@@ -18438,6 +18451,15 @@
     github = "spinus";
     githubId = 950799;
     name = "Tomasz Czyż";
+  };
+  spitulax = {
+    name = "Bintang Adiputra Pratama";
+    email = "bintangadiputrapratama@gmail.com";
+    github = "spitulax";
+    githubId = 96517350;
+    keys = [{
+      fingerprint = "652F FAAD 5CB8 AF1D 3F96  9521 929E D6C4 0414 D3F5";
+    }];
   };
   spoonbaker = {
     github = "Spoonbaker";

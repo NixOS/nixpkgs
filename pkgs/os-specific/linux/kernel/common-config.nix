@@ -55,7 +55,7 @@ let
       DYNAMIC_DEBUG             = yes;
       DEBUG_STACK_USAGE         = no;
       RCU_TORTURE_TEST          = no;
-      SCHEDSTATS                = no;
+      SCHEDSTATS                = yes;
       DETECT_HUNG_TASK          = yes;
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
@@ -392,8 +392,8 @@ let
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FRAMEBUFFER_CONSOLE_DETECT_PRIMARY = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
-      # On 5.14 this conflicts with FB_SIMPLE.
-      DRM_SIMPLEDRM = whenAtLeast "5.14" no;
+      # Use simplefb on older kernels where we don't have simpledrm (enabled below)
+      FB_SIMPLE           = whenOlder "5.15" yes;
       DRM_FBDEV_EMULATION = yes;
     };
 
@@ -409,9 +409,18 @@ let
     video = let
       whenHasDevicePrivate = mkIf (!stdenv.isx86_32 && versionAtLeast version "5.1");
     in {
+      # compile in DRM so simpledrm can load before initrd if necessary
+      AGP = yes;
+      DRM = yes;
+
       DRM_LEGACY = whenOlder "6.8" no;
 
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
+
+      # Enable simpledrm and use it for generic framebuffer
+      # Technically added in 5.14, but adding more complex configuration is not worth it
+      DRM_SIMPLEDRM = whenAtLeast "5.15" yes;
+      SYSFB_SIMPLEFB = whenAtLeast "5.15" yes;
 
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
@@ -450,6 +459,7 @@ let
       DRM_NOUVEAU_SVM = whenHasDevicePrivate yes;
 
       # Enable HDMI-CEC receiver support
+      RC_CORE = yes;
       MEDIA_CEC_RC = whenAtLeast "5.10" yes;
 
       # Enable CEC over DisplayPort
@@ -1176,11 +1186,6 @@ let
       # Add debug interfaces for CMA
       CMA_DEBUGFS = yes;
       CMA_SYSFS = yes;
-
-      # Many ARM SBCs hand off a pre-configured framebuffer.
-      # This always can can be replaced by the actual native driver.
-      # Keeping it a built-in ensures it will be used if possible.
-      FB_SIMPLE = yes;
 
       # https://docs.kernel.org/arch/arm/mem_alignment.html
       # tldr:

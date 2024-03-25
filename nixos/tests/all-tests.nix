@@ -543,6 +543,7 @@ in {
   mod_perl = handleTest ./mod_perl.nix {};
   molly-brown = handleTest ./molly-brown.nix {};
   monado = handleTest ./monado.nix {};
+  monetdb = handleTest ./monetdb.nix {};
   monica = handleTest ./web-apps/monica.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
@@ -695,6 +696,7 @@ in {
   pgmanage = handleTest ./pgmanage.nix {};
   pgvecto-rs = handleTest ./pgvecto-rs.nix {};
   phosh = handleTest ./phosh.nix {};
+  photonvision = handleTest ./photonvision.nix {};
   photoprism = handleTest ./photoprism.nix {};
   php = handleTest ./php {};
   php81 = handleTest ./php { php = pkgs.php81; };

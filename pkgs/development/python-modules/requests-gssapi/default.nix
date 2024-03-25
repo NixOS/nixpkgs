@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "requests-gssapi";
-  version = "1.2.3";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IHhFCJgUAfcVPJM+7QlTOJM6QIGNplolnb8tgNzLFQ4=";
+    hash = "sha256-TVK/jCqiqCkTDvzKhcFJQ/3QqnVFWquYWyuHJhWcIMo=";
   };
 
   build-system = [

@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 }:
 let
@@ -18,7 +18,7 @@ let
     '';
 in
 
-buildGoModule {
+buildGo121Module {
   pname = "scion";
 
   inherit version;
