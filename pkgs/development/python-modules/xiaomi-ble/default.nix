@@ -34,7 +34,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "pycryptodomex"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-data-tools
