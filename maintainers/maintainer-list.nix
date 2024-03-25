@@ -16556,6 +16556,11 @@
     githubId = 61013287;
     name = "Ricardo Steijn";
   };
+  richar = {
+    github = "ri-char";
+    githubId = 17962023;
+    name = "richar";
+  };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";
     github = "richardipsum";
