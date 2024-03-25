@@ -25,7 +25,7 @@ let
     doInstallCheck = false;
   });
 
-  version = "1.0.1";
+  version = "1.0.2";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -34,7 +34,7 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-9LnGe0KWqXj18IV+A1panzXQuTamrH/QcasaqnuqiE0=";
+    hash = "sha256-JCxjmWr2+75KMPOoVybNZhy9zhhrg9BAKA8D+J6MNBc=";
   };
 
   cargoLock = {
