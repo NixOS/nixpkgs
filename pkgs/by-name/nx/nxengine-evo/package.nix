@@ -1,68 +1,94 @@
-{ lib, stdenv
-, fetchpatch
-, fetchurl
-, fetchFromGitHub
-, cmake
-, libpng
-, SDL2
-, SDL2_mixer
+{
+  lib,
+  SDL2,
+  SDL2_mixer,
+  cmake,
+  pkg-config,
+  ninja,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  libpng,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nxengine-evo";
   version = "2.6.4";
+
   src = fetchFromGitHub {
     owner = "nxengine";
     repo = "nxengine-evo";
-    rev = "v${version}";
-    sha256 = "sha256-krK2b1E5JUMxRoEWmb3HZMNSIHfUUGXSpyb4/Zdp+5A=";
-  };
-  assets = fetchurl {
-    url = "https://github.com/nxengine/nxengine-evo/releases/download/v${version}/NXEngine-v${version}-Linux.tar.xz";
-    sha256 = "1b5hkmsrrhnjjf825ri6n62kb3fldwl7v5f1cqvqyv47zv15g5gy";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-krK2b1E5JUMxRoEWmb3HZMNSIHfUUGXSpyb4/Zdp+5A=";
   };
 
   patches = [
+    # Fix building by adding SDL_MIXER to include path
     (fetchpatch {
       url = "https://github.com/nxengine/nxengine-evo/commit/1890127ec4b4b5f8d6cb0fb30a41868e95659840.patch";
-      sha256 = "18j22vzkikcwqd42vlhzd6rjp26dq0zslxw5yyl07flivms0hny2";
+      hash = "sha256-wlsIdN2RugOo94V3qj/AzYgrs2kf0i1Iw5zNOP8WQqI=";
     })
+    # Fix buffer overflow
     (fetchpatch {
       url = "https://github.com/nxengine/nxengine-evo/commit/75b8b8e3b067fd354baa903332f2a3254d1cc017.patch";
-      sha256 = "0sjr7z63gp7nfxifxisvp2w664mxxk3xi4a3d86mm0470dj5m5bx";
+      hash = "sha256-fZVaZAOHgFoNakOR2MfsvRJjuLhbx+5id/bcN8w/WWo=";
+    })
+    # Add missing include
+    (fetchpatch {
+      url = "https://github.com/nxengine/nxengine-evo/commit/0076ebb11bcfec5dc5e2e923a50425f1a33a4133.patch";
+      hash = "sha256-8j3fFFw8DMljV7aAFXE+eA+vkbz1HdFTMAJmk3BRU04=";
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    SDL2
+    cmake
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
-    libpng
     SDL2
     SDL2_mixer
+    libpng
   ];
+
+  strictDeps = true;
 
   # Allow finding game assets.
   postPatch = ''
     sed -i -e "s,/usr/share/,$out/share/," src/ResourceManager.cpp
   '';
 
-  installPhase = ''
+  installPhase = let
+    assetsVersion = "2.6.4";
+    assets = fetchurl {
+      url = "https://github.com/nxengine/nxengine-evo/releases/download/v${assetsVersion}/NXEngine-v${assetsVersion}-Linux.tar.xz";
+      hash = "sha256-/pVXwv6HbI83ZsGVfShv1I01hbEm5iKQk9LCnHWdsKw=";
+    };
+  in ''
+    runHook preInstall
+
     cd ..
     unpackFile ${assets}
     mkdir -p $out/bin/ $out/share/nxengine/
     install bin/* $out/bin/
-    cp -r NXEngine-evo-${version}-Linux/data/ $out/share/nxengine/data
+    cp -r NXEngine-evo-${assetsVersion}-Linux/data/ $out/share/nxengine/data
     chmod -R a=r,a+X $out/share/nxengine/data
+
+    runHook postInstall
   '';
 
   meta = {
+    homepage = "https://github.com/nxengine/nxengine-evo";
     description = "A complete open-source clone/rewrite of the masterpiece jump-and-run platformer Doukutsu Monogatari (also known as Cave Story)";
     license = with lib.licenses; [
-      gpl3                   # Game engine
+      gpl3Plus # Game engine
       unfreeRedistributable  # Game assets, freeware
     ];
-    maintainers = [ ];
-    homepage = "https://github.com/nxengine/nxengine-evo";
+    mainProgram = "nx";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
-}
+})
