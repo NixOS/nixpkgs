@@ -33,80 +33,150 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # cf: Fix cast-function-type err w/disable-checking
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6867a3e8429f37fb748575df52256227ae9e5b53";
-      hash = "sha256-FDvOFDzl2eFN7ZKUqQBQSWGo0ntayc8NCYh/haVi8Ng=";
+    # afs: Make afs_AllocDCache static
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15679/revisions/889d335497aa9f5ee38789fb50fc15694b8e17f8/patch";
+      hash = "sha256-XJAiZ7XL+QFk3l0CUSzudUSGC+oC7v4Kew9TWmEKvNg=";
     })
-    # LINUX: Make 'fs flush*' invalidate dentry
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=898098e01e19970f80f60a0551252b2027246038";
-      hash = "sha256-ehwRrzpqB8iJKuZ/18oJsrHVlKQs6EzCNaPtSG1m0sw=";
+    # LINUX: Minor osi_vfsop.c cleanup
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15680/revisions/342e9cbad84c762934787106a4a8baab7cd7f5aa/patch";
+      hash = "sha256-kw8CQrpK9caq8eXrCEbk2zTSb727d8NmaSQg0Bg/TAM=";
     })
-    # Linux 6.5: Replace generic_file_splice_read
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=fef245769366efe8694ddadd1e1f2ed5ef8608f4";
-      hash = "sha256-TD1xYvlc9aJyravNZLPhceeOwBawvn0Ndxd50rszTJU=";
+    # afs: Remove SRXAFSCB_GetDE
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15681/revisions/27e7adf192a1dd07505e0b3d0c89426910f7daa4/patch";
+      hash = "sha256-3AMq5fAUt/HAIRuh/GAWPov3gwvMzVAqzmvpIKZLbBo=";
     })
-    # LINUX: Make sysctl definitions more concise
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=d15c7ab50c92671052cbe9a93b0440c81156d8aa";
-      hash = "sha256-6K593AJvgC34RfnIqW8+0A/v9cF6tsbVMeKpCv+QrK4=";
+    # afs: remove dead ICL (fstrace) code
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15682/revisions/61d3bef0ded0999366e6487d39ab6aabaaceeb71/patch";
+      hash = "sha256-4LnNwJ7xZAoPqHnyKai4kCEGiG037rlZwkEjmD6xBeM=";
     })
-    # Linux 6.5: Use register_sysctl()
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=63801cfd1fc06ec3259fcfd67229f3a3c70447ed";
-      hash = "sha256-eoQxaZ28OanSoaHRJcfvXQORbe21YLhwPLoJUILjMkU=";
+    # cf: Add function prototypes for linux conftest
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15683/revisions/f7f37de075700bda5f75c405f0f775ea4e118089/patch";
+      hash = "sha256-6tceVLqrhdo5QWjOCvutvZmetopz+tyP5AtJUh7Kkkc=";
     })
-    # hcrypto: rename abort to _afscrypto_abort
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=538f450033a67e251b473ff92238b3124b85fc72";
-      hash = "sha256-ztfJQKvGHGdWQe/0+BGkgRFxOi3n4YY+EFxgbD3DO1E=";
+    # afs: Remove DFlushDCache()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15684/revisions/e0f425a3d8bccb48a69f27dff209e32cf05f4305/patch";
+      hash = "sha256-/S4uZj+cScPFihvJDW49dQ2awrt7Thx7tIpoImIl/kg=";
     })
-    # cf: Avoid nested C functions built by autoconf
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=d50ced2a17e05884ea18bb3dfcde6378b2531dc7";
-      hash = "sha256-dK2/9bGhlXCPCB9t9T/K2dKdRBShVKXtYXWPttsOhAM=";
+    # afs: Remove afs_MemExtendEntry()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15685/revisions/aae8b00d97585b60702151c6f28ff7ec4d65c2d9/patch";
+      hash = "sha256-9CA0lwiNjzeteAPXh/Yyu3gqZBSi2b9XBrl43w2VzSs=";
     })
-    # cf: Use static allocated structs for cf tests
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=00f13c45d637249a0d698458e08c1b8e2da8e219";
-      hash = "sha256-YNszJIxBDIsl3RgBcHEpNtYIrNLC0tnSbIOQvX0oZ+s=";
+    # afs: Remove afs_osi_UnmaskUserLoop()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15686/revisions/5312d069bc57d200ff65bf968c9bdff0f38fe653/patch";
+      hash = "sha256-jBwd0zFidIfNx6csPSNp1RGCq1JKmXNXWbQnG2pIgvM=";
     })
-    # LINUX: Pass an array of structs to register_sysctl
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=5b647bf17a878271e1ce9882e41663770ee73528";
-      hash = "sha256-9o4cr/KORtanTfuKMAMAOvePB+vK579rR85rY+m8VNM=";
+    # afs: Remove dummy_PSetAcl()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15687/revisions/056a7a8005a68cf2fb8be80668b139aa87a0de0b/patch";
+      hash = "sha256-ExvIzyyqPijf5c1T3mpSqFefvbd42FpLIFYUpcc5fyk=";
     })
-    # linux: Replace fop iterate with fop iterate_shared
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6de0a646036283266e1d4aeb583e426005ca5ad4";
-      hash = "sha256-cL3ByjUS3QU8fSbuN7ZEEKyjb+6TbbZL10UKbSgNl6c=";
+    # afs: Remove SRXAFSCB_FetchData/StoreData
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15688/revisions/073adec17a9b7b55d3672b17f7faa4a122ce6e9d/patch";
+      hash = "sha256-dMVeHTdLde22cxtRzSJLI0MUKgZRYzVRjAeuKgMKFtQ=";
     })
-    # Linux 6.6: convert to ctime accessor functions
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6413fdbc913834f2884989e5811841f4ccea2b5f";
-      hash = "sha256-vdK25vfS5Yr0xQufzUk431FXHwMIWlP2UpLjqnobJWI=";
+    # afs: Remove afs_DbgDisconFiles()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15689/revisions/db913849047d0ec77e735f14dbbce63652209cc1/patch";
+      hash = "sha256-v0kWFBEFdfpNQWzs4vA0Pu25ZR/nC36x6mqP3rOujxY=";
     })
-    # Linux 6.6: Pass request_mask to generic_fillattr
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=4f1d8104d17d2b4e95c7abaf5498db6b80aefa8f";
-      hash = "sha256-XJpqbDB/LOuqZj3gPHlcLeGzAQCGvPH8ArgWf+sbBJU=";
+    # afs: Add declaration for RXAFS_ResidencyCmd()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15690/revisions/67e48c84b9971e6b865274408080fbf5ec7ba1ac/patch";
+      hash = "sha256-jzZG7w0tOxkrcphiITHrfodCZ6wyGp1NVARLI/tfN3c=";
     })
-    # Linux: Fix to use time_t instead of time64_t
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=56763a199f92101c35d6b9b733302cb08fe0cdbe";
-      hash = "sha256-A2z+smBLQg6k+cHPpNr2s/SgoYuCOMNLcvm5LFRiqeM=";
+    # roken: Declare ct_memcmp in hcrypto kernel roken.h
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15691/revisions/d1c89acf70a794b78c5daaff206d734e36bbec6d/patch";
+      hash = "sha256-OrkUiybGI2jOsEqQFeGXTQqWvgp1NwttuPvokNkwxHw=";
     })
-    # dir: Introduce struct DirEntryFlex
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=fd527549c2d2b29a955f8c0427ac67c5d49ef38c";
-      hash = "sha256-jblsaJuTt3BsW5MG69ETcao/ZzSuh9aKRZyTIxZ7Ty4=";
+    # Linux 6.8: Add function prototypes for krb5
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15692/revisions/a14a9add73341bc3c355250bc43282e022bff95c/patch";
+      hash = "sha256-PMnW4H/s2uKda3xbka2+2nz422pksttrYvsTf+omzrc=";
     })
-    # Linux 6.7: convert to inode a/mtime accessor funcs
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6edf9d350c6ffd9d5e51fb8106701c1bc2f6a4d9";
-      hash = "sha256-oQVyKzIcqzYDZHSut9Mw1t3kcEC5HGUX6eGlGJ9fZYo=";
+    # afs: Declare init_hckernel_mutex()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15693/revisions/112fb94a608a9a810cc9b43fdf762f15277d9eaa/patch";
+      hash = "sha256-73zpSSF2yfbA7wxZVdKWnOqkMtdi/EkT8IjpXIMNUnc=";
+    })
+    # afs: Add includes to pick up function prototypes
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15694/revisions/87ab04acc921794f49084548cf5fc94f6f37f10e/patch";
+      hash = "sha256-KCBjBLBH530+vr5hmA/r6RK7VYpoiJYgkks1pQplYXU=";
+    })
+    # afs: Move function prototypes into headers
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15695/revisions/0d9f6cf121e49cfe1a2047b98d4c30b82a1898bd/patch";
+      hash = "sha256-WrfPZvNNVN3VuuBGH4sshpJOoPP2hwVitQW8PqQCBRA=";
+    })
+    # afs: Add afs_xioctl prototyes to afs_prototypes.h
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15696/revisions/dffd0e1475f9fb346a146607335c9f9d847d4429/patch";
+      hash = "sha256-HJzTJlKNGjuXALXoaUjuQEr5Us2KLM9Exuj7jGqvHyg=";
+    })
+    # afs: Remove SRXAFSCB* protos from afs_prototypes.h
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15697/revisions/a87845d40aac04ff12dde369753c9472a8e4808d/patch";
+      hash = "sha256-XO8+aL/yTkMdUT4sDRTFO3CspvO6nmF8M4Y/V0Y+dww=";
+    })
+    # rx: Add function prototypes to rx_prototypes.h
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15698/revisions/f5bafb0680a063d710b6e5e8ccf833f1dd371896/patch";
+      hash = "sha256-KYGehW48hw71dAIdd5Z5U5Kvp72Gk4Tu2q+VA50LL7A=";
+    })
+    # afs: fix 'ops' variable may be used uninitialized
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15699/revisions/6b207567af7244a4fc6c314fdc815aa14c4eae09/patch";
+      hash = "sha256-IIjuY9LL2BjnUh8W8n5ohUVY7RNk5qoH58JpimXqrNo=";
+    })
+    # afs: Add static attribute to internal functions
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15700/revisions/e157f8f39bd367151f5a9264c7d4ce8bcbed08fb/patch";
+      hash = "sha256-LKBYqorko5HmaigKWFiIiYHgVnyc03UcQX6p8CjfYrs=";
+    })
+    # rx: Add static attribute to internal functions
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15701/revisions/2056ce8ae0d617d663e6181573c982994a1836db/patch";
+      hash = "sha256-+Oq8CFI3+29WdCabrHV4+AU3U3fuyIUO+wYzy/QJ/24=";
+    })
+    # rxgen: Declare generated PKG_TranslateOpCode()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15702/revisions/b77b304bb58f472e8a9d2f3b6d47fffd38d0c905/patch";
+      hash = "sha256-iErcC/J9L7TrjnbkJw9yHXR4wHCM+KHai0vzs+KEgfo=";
+    })
+    # rxgen: Declare generated PKG_OpCodeStats()
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15703/revisions/e428053b5bc1250fdcc3ed8ac52ee798d96ad284/patch";
+      hash = "sha256-copfhVvIa6zScehQm6gZ5FaIT42wr+YoFdhPCN50xn4=";
+    })
+    # Linux 6.8: use hlist iteration for dentry children
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15704/revisions/7cae97b86fbcc4a53967927d6c2cae9dcbc6ac4d/patch";
+      hash = "sha256-NwF1CvdI9ZjISc1A/nJP4Ea1LJY4lBnsbkRqvQFo5Wc=";
+    })
+    # Linux 6.8: Remove ctl_table sentinels
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15705/revisions/81b910ab4a0ef0d0b6cd3a1a636fcbcd050c0245/patch";
+      hash = "sha256-g8acwb7bGF+LjQN8tVKFLXvATddN+8gSepVoM28AehA=";
+    })
+    # Linux 6.8: Use roken's strlcpy() in kernel module
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15706/revisions/d9f3a2c6639e694c8d6fc4ad00d6a37d6e1f9bf6/patch";
+      hash = "sha256-4P+9VkDhMezPHa47a5L92Rh+6PMGxF54Agdx4uAU63Y=";
+    })
+    # afs: Drop GLOCK for various Rx calls
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15707/revisions/0e983a9a7e010a4e7c8a4c60cf313e566323bbf1/patch";
+      hash = "sha256-uHYuCxC0xAd8BQmNbTFGfVstq8LC2PM2aZ0EcWfRIJM=";
     })
   ];
 
