@@ -2761,7 +2761,6 @@ broken-packages:
   - hsgnutls-yj # failure in job https://hydra.nixos.org/build/233220680 at 2023-09-02
   - hsgsom # failure in job https://hydra.nixos.org/build/233192340 at 2023-09-02
   - HsHaruPDF # failure in job https://hydra.nixos.org/build/233220916 at 2023-09-02
-  - HSH # failure in job https://hydra.nixos.org/build/252713464 at 2024-03-16
   - HsHyperEstraier # failure in job https://hydra.nixos.org/build/233253787 at 2023-09-02
   - hsI2C # failure in job https://hydra.nixos.org/build/233247520 at 2023-09-02
   - hSimpleDB # failure in job https://hydra.nixos.org/build/233236736 at 2023-09-02

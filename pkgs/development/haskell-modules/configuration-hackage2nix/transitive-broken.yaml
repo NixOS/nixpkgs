@@ -873,7 +873,6 @@ dont-distribute-packages:
  - clckwrks-theme-bootstrap
  - clckwrks-theme-clckwrks
  - clckwrks-theme-geo-bootstrap
- - clean-home
  - cleff-plugin
  - cless
  - cleveland
@@ -1098,7 +1097,6 @@ dont-distribute-packages:
  - ddc-tools
  - ddc-war
  - ddci-core
- - debian-binary
  - debug
  - decidable
  - decimal-arithmetic
@@ -2074,7 +2072,6 @@ dont-distribute-packages:
  - hesh
  - hesql
  - heterolist
- - hevm
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2890,7 +2887,6 @@ dont-distribute-packages:
  - mysql-simple-typed
  - mywatch
  - mywork
- - n-m
  - n2o-web
  - nakadi-client
  - named-servant-client
@@ -3447,7 +3443,6 @@ dont-distribute-packages:
  - rest-types
  - rest-wai
  - restful-snap
- - restless-git
  - restricted-workers
  - rethinkdb-model
  - rethinkdb-wereHamster
