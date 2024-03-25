@@ -123,11 +123,11 @@ in
 
   simulide_1_1_0 = generic rec {
     version = "1.1.0";
-    release = "RC1";
-    rev = "1912";
+    release = "SR0";
+    rev = "1913";
     src = fetchbzr {
       url = "https://code.launchpad.net/~arcachofo/simulide/1.1.0";
-      sha256 = "sha256-bgRAqt7h2LtU2Ze6Jiz8APhyPcV15v4ofxIilIeZV9E=";
+      sha256 = "sha256-iGlYSgLXIEIkWldTX7Uov93MxQegSZS6rC6HNVruT3I=";
       inherit rev;
     };
   };
