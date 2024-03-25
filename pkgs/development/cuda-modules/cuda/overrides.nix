@@ -204,8 +204,17 @@ filterAndCreateOverrides {
       # nvcc to use the fixed backend toolchain. Cf. comments in
       # backend-stdenv.nix
 
-      # TODO(@connorbaker): We should specify the spliced version of backendStdenv and cuda_cudart to use here.
       postPatch =
+        let
+          # CC must come from the host environment, not the target environment because it is
+          # used at build time.
+          ccBin = lib.getBin (backendStdenv.__spliced.buildHost.cc or backendStdenv.cc);
+          # CUDA runtime libraries must come from the host/target environment because they
+          # are used at runtime, not build time (outside of linking).
+          cudartStatic = (cuda_cudart.__spliced.hostTarget or cuda_cudart).static;
+          cudartLib = lib.getLib (cuda_cudart.__spliced.hostTarget or cuda_cudart);
+          cudartDev = lib.getDev (cuda_cudart.__spliced.hostTarget or cuda_cudart);
+        in
         (prevAttrs.postPatch or "")
         + ''
           echo "Running the cuda_nvcc postPatch"
@@ -223,19 +232,19 @@ filterAndCreateOverrides {
           cat << EOF >> bin/nvcc.profile
 
           # Fix a compatible backend compiler
-          PATH += ${lib.getBin backendStdenv.cc}/bin:
+          PATH += "${ccBin}/bin":
 
           # Expose the split-out nvvm
-          LIBRARIES =+ -L''${!outputBin}/nvvm/lib
-          INCLUDES =+ -I''${!outputBin}/nvvm/include
+          LIBRARIES =+ -L"''${!outputBin}/nvvm/lib"
+          INCLUDES =+ -I"''${!outputBin}/nvvm/include"
 
           # Expose cudart and the libcuda stubs
-          LIBRARIES =+ -L$static/lib" "-L${cuda_cudart.lib}/lib -L${cuda_cudart.lib}/lib/stubs
-          INCLUDES =+ -I${cuda_cudart.dev}/include
+          LIBRARIES =+ -L"$static/lib" -L"${cudartStatic}/lib" -L"${cudartLib}/lib" -L"${cudartLib}/lib/stubs"
+          INCLUDES =+ -I"${cudartDev}/include"
           EOF
         '';
 
-      propagatedNativeBuildInputs = [ setupCudaHook ];
+      propagatedNativeBuildInputs = (prevAttrs.propagatedNativeBuildInputs or [ ]) ++ [ setupCudaHook ];
 
       postInstall =
         (prevAttrs.postInstall or "")
