@@ -97,6 +97,33 @@ in {
       inherit (pythonOnBuildForHost.pkgs) installer;
     };
 
+  # Patches pyproject.toml to point use setuptools in legacy mode as documented in https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/#fallback-behaviour
+  # Tools such as Flit and older versions of Poetry generates setup.py files for backwards compatibility with older pre PEP-517 tooling.
+  # We rely on this file when passing using `buildPythonPackage { format = "setuptools"; }`.
+  #
+  # This hook exists to opt out of whatever the project has defined as their build system when `buildPythonPackage` is called with `format = "setuptools"`,
+  # avoiding having to add PEP-517 build systems in the transition period where we standardize on building with `pypaBuildHook`.
+  pyprojectSetuptoolsLegacyHook = callPackage ({ makePythonHook, stdenvNoCC, substituteAll, tomlkit }:
+    makePythonHook {
+      name = "pyproject-setuptools-legacy-hook";
+      substitutions = {
+        inherit pythonInterpreter;
+        patchScript = substituteAll {
+          src = ./pyproject-setuptools-legacy-hook-patch.py;
+          # Use only sources from tomlkit to avoid infinite recursion.
+          # It's a pure Python package that we can just import.
+          tomlkit = stdenvNoCC.mkDerivation {
+            pname = "tomlkit-src";
+            inherit (tomlkit) src version;
+            dontConfigure = true;
+            dontBuild = true;
+            dontFixup = true;
+            installPhase = "mkdir $out && cp -r tomlkit $out";
+          };
+        };
+      };
+    } ./pyproject-setuptools-legacy-hook.sh) {};
+
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
     makePythonHook {
       name = "pytest-check-hook";
