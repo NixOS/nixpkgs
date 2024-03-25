@@ -744,6 +744,10 @@
     dependencies = with self; [ lush-nvim ];
   };
 
+  cellular-automaton-nvim = super.cellular-automaton-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter ];
+  };
+
   LanguageClient-neovim =
     let
       version = "0.1.161";
