@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3;
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ temp ]; # TODO
+    maintainers = with maintainers; [ danid3v ];
   };
 }

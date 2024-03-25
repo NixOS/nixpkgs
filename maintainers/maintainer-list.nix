@@ -4258,6 +4258,12 @@
     githubId = 24708079;
     name = "Dan Eads";
   };
+  danid3v = {
+    email = "sch220233@spengergasse.at";
+    github = "DaniD3v";
+    githubId = 124387056;
+    name = "DaniD3v";
+  };
   danielbarter = {
     email = "danielbarter@gmail.com";
     github = "danielbarter";
