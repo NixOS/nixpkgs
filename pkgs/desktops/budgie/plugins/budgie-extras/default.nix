@@ -152,4 +152,15 @@ in
     ];
     meta.description = "Quick & Easy Notes";
   };
+
+  budgie-recentlyused = mkBudgieExtrasPlugin {
+    pluginName = "recentlyused";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libgee
+      libpeas
+    ];
+    meta.description = "Show recently used items";
+  };
 }
