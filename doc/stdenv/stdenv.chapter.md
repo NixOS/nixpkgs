@@ -772,6 +772,10 @@ Hook executed at the start of the configure phase.
 
 Hook executed at the end of the configure phase.
 
+::: {.note}
+If you wish to run `$configureScript` with flags compiled via all the variables described above, but wish to avoid running `{pre,post}Configure` hooks, you can run the shell function `scriptConfigure`.
+:::
+
 ### The build phase {#build-phase}
 
 The build phase is responsible for actually building the package (e.g. compiling it). The default `buildPhase` calls `make` if a file named `Makefile`, `makefile` or `GNUmakefile` exists in the current directory (or the `makefile` is explicitly set); otherwise it does nothing.
@@ -828,6 +832,10 @@ You can set flags for `make` through the `makeFlags` variable.
 
 Before and after running `make`, the hooks `preBuild` and `postBuild` are called, respectively.
 
+::: {.note}
+If you wish to run `make` with flags compiled via all the variables described above, but wish to avoid running `{pre,post}Build` hooks, you can run the shell function `makeBuild`.
+:::
+
 ### The check phase {#ssec-check-phase}
 
 The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the [`doCheck` variable](#var-stdenv-doCheck) is enabled.
@@ -875,6 +883,10 @@ Hook executed at the start of the check phase.
 
 Hook executed at the end of the check phase.
 
+::: {.note}
+If you wish to run `make $checkTarget` with flags compiled via all the variables described above, but wish to avoid running `{pre,post}Check` hooks, you can run the shell function `makeCheck`.
+:::
+
 ### The install phase {#ssec-install-phase}
 
 The install phase is responsible for installing the package in the Nix store under `out`. The default `installPhase` creates the directory `$out` and calls `make install`.
@@ -908,6 +920,10 @@ Hook executed at the start of the install phase.
 ##### `postInstall` {#var-stdenv-postInstall}
 
 Hook executed at the end of the install phase.
+
+::: {.note}
+If you wish to run `make $installTargets` with flags compiled via all the variables described above, but wish to avoid running `{pre,post}Install` hooks, you can run the shell function `makeInstall`.
+:::
 
 ### The fixup phase {#ssec-fixup-phase}
 
@@ -1106,6 +1122,10 @@ Hook executed at the start of the installCheck phase.
 
 Hook executed at the end of the installCheck phase.
 
+::: {.note}
+If you wish to run `make $installCheckTarget` with flags compiled via all the variables described above, but wish to avoid running `{pre,post}InstallCheck` hooks, you can run the shell function `makeInstallCheck`.
+:::
+
 ### The distribution phase {#ssec-distribution-phase}
 
 The distribution phase is intended to produce a source distribution of the package. The default `distPhase` first calls `make dist`, then it copies the resulting source tarballs to `$out/tarballs/`. This phase is only executed if the attribute `doDist` is set.
@@ -1139,6 +1159,10 @@ Hook executed at the start of the distribution phase.
 ##### `postDist` {#var-stdenv-postDist}
 
 Hook executed at the end of the distribution phase.
+
+::: {.note}
+If you wish to run `make $distTarget` with flags compiled via all the variables described above, but wish to avoid running `{pre,post}Dist` hooks, you can run the shell function `makeDist`.
+:::
 
 ## Shell functions and utilities {#ssec-stdenv-functions}
 
