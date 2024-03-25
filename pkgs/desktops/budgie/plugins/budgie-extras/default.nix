@@ -199,4 +199,18 @@ in
     ];
     meta.description = "Manage items in your trash bin right from the Budgie panel";
   };
+
+  budgie-visualspace = mkBudgieExtrasPlugin {
+    pluginName = "visualspace";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+      libwnck
+    ];
+    postPatch = ''
+      patchShebangs budgie-visualspace/data/subst.py
+    '';
+    meta.description = "Workspace indicator and window list";
+  };
 }
