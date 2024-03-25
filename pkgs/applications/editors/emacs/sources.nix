@@ -73,6 +73,13 @@ in
     variant = "mainline";
     rev = "28.2";
     hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
+    patches = fetchpatch: [
+      # CVE-2022-45939
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
+        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
+      })
+    ];
   });
 
   emacs29 = import ./make-emacs.nix (mkArgs {
