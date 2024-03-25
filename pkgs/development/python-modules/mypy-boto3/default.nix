@@ -649,7 +649,7 @@ rec {
 
   mypy-boto3-secretsmanager = buildMypyBoto3Package "secretsmanager" "1.34.63" "sha256-oZM3PXGPdH1Th4tcx/7y6bj944kuR4isaQ/SsWo1Vkw=";
 
-  mypy-boto3-securityhub = buildMypyBoto3Package "securityhub" "1.34.20" "sha256-EcLY5SXSN2kJEuo8s2sYJJfq/X78BM1msyI9TfYD7Xw=";
+  mypy-boto3-securityhub = buildMypyBoto3Package "securityhub" "1.34.69" "sha256-2fJx1VaOhYSjTXAEboBhHhMdTH697zcGHmrJsGknDTI=";
 
   mypy-boto3-securitylake = buildMypyBoto3Package "securitylake" "1.34.53" "sha256-O/RHRoeUYT5DerEXIQ1NL288bcgA6bGdI29sN7WoQac=";
 
