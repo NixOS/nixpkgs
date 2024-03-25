@@ -189,4 +189,14 @@ in
     isPython = true;
     meta.description = "Take regular breaks from working";
   };
+
+  budgie-trash = mkBudgieExtrasPlugin {
+    pluginName = "trash";
+    buildInputs = [
+      budgie.budgie-desktop
+      gtk3
+      libpeas
+    ];
+    meta.description = "Manage items in your trash bin right from the Budgie panel";
+  };
 }
