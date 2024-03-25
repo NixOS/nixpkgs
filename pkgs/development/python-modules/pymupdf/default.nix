@@ -11,7 +11,7 @@
 , setuptools
 , swig
 
-# native dependencies
+# dependencies
 , freetype
 , harfbuzz
 , openjpeg
@@ -19,9 +19,7 @@
 , libjpeg_turbo
 , gumbo
 , memstreamHook
-
-# dependencies
-, mupdf
+, mupdf-headless
 
 # tests
 , fonttools
@@ -30,27 +28,27 @@
 
 let
   # PyMuPDF needs the C++ bindings generated
-  mupdf-cxx = mupdf.override { enableOcr = true; enableCxx = true; enablePython = true; python3 = python; };
+  mupdf-cxx = mupdf-headless.override { enableOcr = true; enableCxx = true; enablePython = true; python3 = python; };
 in buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.23.26";
+  version = "1.24.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     rev = "refs/tags/${version}";
-    hash = "sha256-m2zq04+PDnlzFuqeSt27UhdHXTHxpHdMPIg5RQl/5bQ=";
+    hash = "sha256-lTyYVKKbrIUNrU7N+JOjjMslsXARSTdjdPNsuHI0tiw=";
   };
 
   # swig is not wrapped as python package
   # libclang calls itself just clang in wheel metadata
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"swig",' "" \
-      --replace "libclang" "clang"
+    substituteInPlace setup.py \
+      --replace-fail "ret.append( 'swig')" "pass" \
+      --replace-fail "'libclang'" "'clang'"
   '';
 
   nativeBuildInputs = [
@@ -67,12 +65,9 @@ in buildPythonPackage rec {
     jbig2dec
     libjpeg_turbo
     gumbo
+    mupdf-cxx
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
     memstreamHook
-  ];
-
-  propagatedBuildInputs = [
-    mupdf-cxx
   ];
 
   env = {
