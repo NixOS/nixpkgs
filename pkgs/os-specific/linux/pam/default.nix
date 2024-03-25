@@ -22,6 +22,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/linux-pam/linux-pam/commit/cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13.patch";
       hash = "sha256-tCnH2yPO4dBbJOZA0fP2gm1EavHRMEJyfzB5Vy7YjAA=";
     })
+
+    # Resotre handling of empty passwords:
+    #   https://github.com/linux-pam/linux-pam/issues/758
+    (fetchpatch {
+      name = "revert-unconditional-helper.patch";
+      url = "https://github.com/linux-pam/linux-pam/commit/b3020da7da384d769f27a8713257fbe1001878be.patch";
+      hash = "sha256-vtMA8zI330niM8dvDOg8wdQ90cLTBkIjcqTpAKpfnp8=";
+      revert = true;
+    })
   ];
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
