@@ -268,6 +268,16 @@ rec {
     };
   };
 
+  binaryCrystal_1_10 = genericBinary {
+    version = "1.10.1";
+    sha256s = {
+      x86_64-linux = "sha256-F0LjdV02U9G6B8ApHxClF/o5KvhxMNukSX7Z2CwSNIs=";
+      aarch64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
+      x86_64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
+      aarch64-linux = "sha256-AzFz+nrU/HJmCL1hbCKXf5ej/uypqV1GJPVLQ4J3778=";
+    };
+  };
+
   crystal_1_2 = generic {
     version = "1.2.2";
     sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
@@ -297,5 +307,12 @@ rec {
     llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_9;
+  crystal_1_11 = generic {
+    version = "1.11.2";
+    sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_15;
+  };
+
+  crystal = crystal_1_11;
 }

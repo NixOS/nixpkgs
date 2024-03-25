@@ -1,26 +1,32 @@
 { lib
 , stdenv
 , fetchurl
-, jdk
 , ant
+, jdk
 , makeWrapper
+, strip-nondeterminism
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dataexplorer";
   version = "3.8.5";
 
   src = fetchurl {
-    url = "mirror://savannah/dataexplorer/dataexplorer-${version}-src.tar.gz";
-    sha256 = "sha256-b68xIZNbzHdPyZwLngcnjcoBtI6AeTdrblz/qx/HbGQ=";
+    url = "mirror://savannah/dataexplorer/dataexplorer-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-b68xIZNbzHdPyZwLngcnjcoBtI6AeTdrblz/qx/HbGQ=";
   };
 
-  nativeBuildInputs = [ ant makeWrapper ];
-
-  buildInputs = [ jdk ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    strip-nondeterminism
+  ];
 
   buildPhase = ''
+    runHook preBuild
     ant -f build/build.xml dist
+    runHook postBuild
   '';
 
   doCheck = false;
@@ -30,6 +36,8 @@ stdenv.mkDerivation rec {
   #'';
 
   installPhase = ''
+    runHook preInstall
+
     ant -Dprefix=$out/share/ -f build/build.xml install
 
     # The sources contain a wrapper script in $out/share/DataExplorer/DataExplorer
@@ -49,6 +57,14 @@ stdenv.mkDerivation rec {
       $out/etc/udev/rules.d/50-Junsi-iCharger-USB.rules
     install -Dvm644 build/misc/GNU_LINUX_SKYRC_UDEV_RULE/50-SkyRC-Charger.rules \
       $out/etc/udev/rules.d/50-SkyRC-Charger.rules
+
+    runHook postInstall
+  '';
+
+  # manually call strip-nondeterminism because using stripJavaArchivesHook takes
+  # too long to strip bundled jars
+  postFixup = ''
+    strip-nondeterminism --type jar $out/share/DataExplorer/{DataExplorer.jar,devices/*.jar}
   '';
 
   meta = with lib; {
@@ -63,4 +79,4 @@ stdenv.mkDerivation rec {
       binaryBytecode    # contains thirdparty jar files, e.g. javax.json, org.glassfish.json
     ];
   };
-}
+})
