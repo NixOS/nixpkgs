@@ -251,6 +251,11 @@ in stdenv.mkDerivation rec {
     substituteInPlace \
       src/runtime/src/native/libs/System.Security.Cryptography.Native.Apple/CMakeLists.txt \
       --replace-fail 'xcrun swiftc' 'xcrun swiftc -module-cache-path "$ENV{HOME}/.cache/module-cache"'
+
+    # fix: strip: error: unknown argument '-n'
+    substituteInPlace \
+      src/runtime/eng/native/functions.cmake \
+      --replace-fail ' -no_code_signature_warning' ""
   '';
 
   prepFlags = [
