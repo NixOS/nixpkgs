@@ -65,4 +65,11 @@ in
     ];
     meta.description = "Multi-clock applet to show the time across multiple timezones";
   };
+
+  budgie-countdown = mkBudgieExtrasPlugin {
+    pluginName = "countdown";
+    moduleName = "budgie-countdown";
+    isPython = true;
+    meta.description = "Count down applet with options";
+  };
 }
