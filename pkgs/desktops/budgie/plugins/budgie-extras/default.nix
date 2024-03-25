@@ -1,6 +1,7 @@
 { callPackage
 , appstream
 , budgie
+, gnome
 , gnome-menus
 , gtk3
 , json-glib
@@ -40,5 +41,16 @@ in
       pantheon.granite
     ];
     meta.description = "Application launcher for Budgie";
+  };
+
+  budgie-brightness-controller = mkBudgieExtrasPlugin {
+    pluginName = "brightness-controller";
+    buildInputs = [
+      budgie.budgie-desktop
+      gnome.gnome-settings-daemon
+      gtk3
+      libpeas
+    ];
+    meta.description = "Brightness controller for Budgie";
   };
 }
