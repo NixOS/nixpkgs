@@ -394,13 +394,18 @@ stdenv.mkDerivation (finalAttrs: {
         '';
       }
     ]
-    ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
+    ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
         hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
       }
-    ));
+      {
+        name = "fix_vulkan_av1";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e06ce6d2b45edac4a2df04f304e18d4727417d24";
+        hash = "sha256-73mlX1rdJrguw7OXaSItfHtI7gflDrFj+7SepVvvUIg=";
+      }
+    ]));
 
   configurePlatforms = [];
   setOutputFlags = false; # Only accepts some of them
