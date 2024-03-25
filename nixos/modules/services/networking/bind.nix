@@ -21,6 +21,7 @@ let
       };
       master = mkOption {
         description = lib.mdDoc "Master=false means slave server";
+        default = true;
         type = types.bool;
       };
       file = mkOption {
@@ -30,6 +31,7 @@ let
       masters = mkOption {
         type = types.listOf types.str;
         description = lib.mdDoc "List of servers for inclusion in stub and secondary zones.";
+        default = [ ];
       };
       slaves = mkOption {
         type = types.listOf types.str;
