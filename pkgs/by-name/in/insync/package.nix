@@ -1,22 +1,27 @@
 { lib
 , writeShellScript
-, buildFHSEnvBubblewrap
+, buildFHSEnv
 , stdenvNoCC
 , fetchurl
 , autoPatchelfHook
 , dpkg
 , nss
+, cacert
+, alsa-lib
 , libvorbis
 , libdrm
 , libGL
 , wayland
 , xkeyboard_config
 , libthai
+, libsForQt5
 }:
 
 let
   pname = "insync";
-  version = "3.8.6.50504";
+  # Find a binary from https://www.insynchq.com/downloads/linux#ubuntu.
+  version = "3.8.7.50516";
+  ubuntu-dist = "mantic_amd64";
   meta = with lib; {
     platforms = ["x86_64-linux"];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -35,7 +40,6 @@ let
      Known bug(s):
 
      1) Currently the system try icon does not render correctly.
-     2) libqtvirtualkeyboardplugin does not have necessary Qt library shipped from vendor.
     '';
     mainProgram = "insync";
   };
@@ -45,21 +49,26 @@ let
     inherit version meta;
 
     src = fetchurl {
-      # Find a binary from https://www.insynchq.com/downloads/linux#ubuntu.
-      url = "https://cdn.insynchq.com/builds/linux/insync_${version}-lunar_amd64.deb";
-      sha256 = "sha256-BxTFtQ1rAsOuhKnH5vsl3zkM7WOd+vjA4LKZGxl4jk0=";
+      url = "https://cdn.insynchq.com/builds/linux/insync_${version}-${ubuntu-dist}.deb";
+      sha256 = "sha256-U7BcgghbdR7r9WiZpEOka+BzXwnxrzL6p4imGESuB/k=";
     };
+
+    nativeBuildInputs = [
+      dpkg
+      autoPatchelfHook
+      libsForQt5.qt5.wrapQtAppsHook
+    ];
 
     buildInputs = [
       nss
+      alsa-lib
       libvorbis
       libdrm
       libGL
       wayland
       libthai
+      libsForQt5.qt5.qtvirtualkeyboard
     ];
-
-    nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
     unpackPhase = ''
       dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
@@ -71,15 +80,6 @@ let
       mkdir -p $out
       cp -R usr/* $out/
 
-      # use system glibc
-      rm $out/lib/insync/{libgcc_s.so.1,libstdc++.so.6}
-
-      # remove badly packaged plugins
-      rm $out/lib/insync/PySide2/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so
-
-      # remove the unused vendor wrapper
-      rm $out/bin/insync
-
       runHook postInstall
     '';
 
@@ -87,29 +87,25 @@ let
     dontStrip = true;
   };
 
-in buildFHSEnvBubblewrap {
+in buildFHSEnv {
   name = pname;
   inherit meta;
 
   targetPkgs = pkgs: with pkgs; [
-    insync-pkg
     libudev0-shim
+    insync-pkg
   ];
 
-  runScript = writeShellScript "insync-wrapper.sh" ''
-    # QT_STYLE_OVERRIDE was used to suppress a QT warning, it should have no actual effect for this binary.
-    echo Unsetting QT_STYLE_OVERRIDE=$QT_STYLE_OVERRIDE
-    echo Unsetting QT_QPA_PLATFORMTHEME=$QT_QPA_PLATFORMTHEME
-    unset QT_STYLE_OVERRIDE
-    unset QPA_PLATFORMTHEME
+  extraInstallCommands = ''
+    cp -rsHf "${insync-pkg}"/share $out
+  '';
 
+  runScript = writeShellScript "insync-wrapper.sh" ''
     # xkb configuration needed: https://github.com/NixOS/nixpkgs/issues/236365
     export XKB_CONFIG_ROOT=${xkeyboard_config}/share/X11/xkb/
-    echo XKB_CONFIG_ROOT=$XKB_CONFIG_ROOT
 
-    # For debuging:
+    # For debugging:
     # export QT_DEBUG_PLUGINS=1
-    # find -L /usr/share -name "*insync*"
 
     exec /usr/lib/insync/insync "$@"
     '';
@@ -121,6 +117,6 @@ in buildFHSEnvBubblewrap {
   unshareNet    = false;
   unshareUts    = false;
   unshareCgroup = false;
-  # Since "insync start" command starts a daemon, this daemon should die with it.
-  dieWithParent = false;
+
+  dieWithParent = true;
 }
