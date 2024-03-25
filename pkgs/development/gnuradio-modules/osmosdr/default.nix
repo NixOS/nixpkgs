@@ -33,7 +33,7 @@ let
     "3.10" = "0.2.4";
   }.${gnuradio.versionAttr.major};
   src = fetchgit {
-    url = "git://git.osmocom.org/gr-osmosdr";
+    url = "https://gitea.osmocom.org/sdr/gr-osmosdr";
     rev = "v${version}";
     sha256 = {
       "3.7" = "0bf9bnc1c3c4yqqqgmg3nhygj6rcfmyk6pybi27f7461d2cw1drv";
