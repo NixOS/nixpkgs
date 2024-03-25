@@ -16596,6 +16596,8 @@ with pkgs;
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
+  inherit (callPackage ../build-support/src-inspector.nix {}) mkSrcInspectionReportJSON mkInspectedSrcTypesJSON inspectedSrcTypesJSONExtension;
+
   roslyn = callPackage ../development/compilers/roslyn { };
 
   msbuild = callPackage ../development/tools/build-managers/msbuild { };
