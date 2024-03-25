@@ -122,6 +122,9 @@ let
       # Default SATA link power management to "medium with device initiated PM"
       # for some extra power savings.
       SATA_MOBILE_LPM_POLICY           = whenAtLeast "5.18" (freeform "3");
+
+      # Enable Pulse-Width-Modulation support, commonly used for fan and backlight.
+      PWM                              = yes;
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
