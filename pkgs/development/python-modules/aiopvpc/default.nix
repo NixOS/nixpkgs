@@ -31,11 +31,11 @@ buildPythonPackage rec {
       --replace-fail " --cov --cov-report term --cov-report html" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
   ] ++ lib.optionals (pythonOlder "3.9") [
