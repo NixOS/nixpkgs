@@ -7,6 +7,7 @@
   cudaCapabilities ? (config.cudaCapabilities or []),
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
+  cudaAtLeast,
   cudaVersion,
   # gpus :: List Gpu
   gpus,
@@ -48,7 +49,7 @@ let
     gpu:
     let
       inherit (gpu) minCudaVersion maxCudaVersion;
-      lowerBoundSatisfied = strings.versionAtLeast cudaVersion minCudaVersion;
+      lowerBoundSatisfied = cudaAtLeast minCudaVersion;
       upperBoundSatisfied =
         (maxCudaVersion == null) || !(strings.versionOlder maxCudaVersion cudaVersion);
     in
@@ -286,7 +287,7 @@ assert let
   };
   actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
 in
-asserts.assertMsg ((strings.versionAtLeast cudaVersion "11.2") -> (expected == actualWrapped)) ''
+asserts.assertMsg ((cudaAtLeast "11.2") -> (expected == actualWrapped)) ''
   This test should only fail when using a version of CUDA older than 11.2, the first to support
   8.6.
   Expected: ${builtins.toJSON expected}
