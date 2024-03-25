@@ -61,10 +61,13 @@ let
     "chattr"
     # 01:47
     "checksum"
+    "compression"
     # 01:00
-    #"deadman" # disabled because it gives an error
+    "deadman"
     # 00:04
     "devices"
+    "events"
+    "exec"
     # 00:02
     "fallocate"
     # 01:03
@@ -83,6 +86,7 @@ let
     "zfs_sysfs"
     # 04:54
     "zpool_add"
+    "zpool_create"
     # 03:06
     "zpool_reopen"
   ];
@@ -151,6 +155,7 @@ let
                 pkgs.samba # net
                 #pkgs.fio # disable because of kernel crashes... / hangs
                 # exportfs -> nfs-utils?
+                pkgs.tree
 
                 pkgs.lvm2
               ];
@@ -162,7 +167,7 @@ let
           machine.wait_for_unit("multi-user.target")
           print(machine.succeed("modprobe zfs", "zfs version", "id"))
 
-          machine.succeed(
+          machine.execute(
               "su - alice -- ${zfsForTesting.zfs_tests}/share/zfs/zfs-tests.sh -T ${testname} >> test-results.log",
           )
           # Show the last lines of the test results log.
@@ -175,7 +180,10 @@ let
           # Missing util(s): devname2devid mmap_libaio fio pamtester quotaon umask wait setenforce
           print(machine.execute("grep 'Missing util' test-results.log")[1])
 
+          print(machine.succeed("tree /var/tmp/test_results/"))
+          print(machine.succeed("cat /var/tmp/test_results/current/**"))
           # Test results can be found in /var/tmp/test_results/<DATETIME>
+          machine.succeed("grep 'Percent passed.*100' test-results.log")
         '';
       })
   );
