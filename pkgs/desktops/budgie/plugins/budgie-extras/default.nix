@@ -5,6 +5,7 @@
 , gnome-menus
 , gtk3
 , json-glib
+, keybinder3
 , libgee
 , libhandy
 , libnma

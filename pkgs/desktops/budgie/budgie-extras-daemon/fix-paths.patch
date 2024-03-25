@@ -1,0 +1,13 @@
+diff --git a/budgie-extras-daemon/src/layouts.vala b/budgie-extras-daemon/src/layouts.vala
+index 56bb0cc..5f5057e 100644
+--- a/budgie-extras-daemon/src/layouts.vala
++++ b/budgie-extras-daemon/src/layouts.vala
+@@ -20,7 +20,7 @@ namespace Layouts {
+     const string plank_settings_schema="net.launchpad.plank.dock.settings";
+     const string plank_path="/net/launchpad/plank/docks/xyz/";
+     const string panel_schema="com.solus-project.budgie-panel";
+-    const string plank_global_path="/usr/share/applications/plank.desktop";
++    const string plank_global_path="@plank@/share/applications/plank.desktop";
+     const string appmenu_budgie_schema="org.ubuntubudgie.plugins.budgie-appmenu";
+     const string budgiewm_schema="com.solus-project.budgie-wm";
+     const string nemo_window_schema="org.nemo.window-state";
