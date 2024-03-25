@@ -41,6 +41,15 @@ in
     portalPackage = mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
     xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
+
+    systemd.setPath.enable = mkEnableOption null // {
+      default = true;
+      description = mdDoc ''
+        Set environment path of systemd to include the current system's bin directory.
+        This is needed in Hyprland setups, where opening links in applications do not work.
+        Enabled by default.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -62,6 +71,12 @@ in
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
       configPackages = mkDefault [ cfg.finalPackage ];
+    };
+
+    systemd = mkIf cfg.systemd.setPath.enable {
+      user.extraConfig = ''
+        DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin"
+      '';
     };
   };
 
