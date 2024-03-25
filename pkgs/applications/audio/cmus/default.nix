@@ -1,7 +1,7 @@
 { config, lib, stdenv, fetchFromGitHub, ncurses, pkg-config
 , libiconv, CoreAudio, AudioUnit, VideoToolbox
 
-, alsaSupport ? stdenv.isLinux, alsa-lib ? null
+, with_alsa ? stdenv.isLinux, alsa-lib ? null
 # simple fallback for everyone else
 , aoSupport ? !stdenv.isLinux, libao ? null
 , jackSupport ? false, libjack ? null
@@ -53,7 +53,7 @@ let
 
   opts = [
     # Audio output
-    (mkFlag alsaSupport       "CONFIG_ALSA=y"       alsa-lib)
+    (mkFlag with_alsa       "CONFIG_ALSA=y"       alsa-lib)
     (mkFlag aoSupport         "CONFIG_AO=y"         libao)
     (mkFlag jackSupport       "CONFIG_JACK=y"       libjack)
     (mkFlag samplerateSupport "CONFIG_SAMPLERATE=y" libsamplerate)
