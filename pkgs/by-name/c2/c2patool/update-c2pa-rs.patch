@@ -1,0 +1,204 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 218abde..8180275 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -56,12 +56,6 @@ version = "0.5.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "23b62fc65de8e4e7f52534fb52b0f3ed04746ae267519eef2a83941e8085068b"
+ 
+-[[package]]
+-name = "arrayvec"
+-version = "0.7.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
+-
+ [[package]]
+ name = "asn1-rs"
+ version = "0.5.2"
+@@ -214,8 +208,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "afa748e348ad3be8263be728124b24a24f268266f6f5d58af9d75f6a40b5c587"
+ dependencies = [
+  "arrayref",
+- "arrayvec 0.5.2",
+- "constant_time_eq 0.1.5",
++ "arrayvec",
++ "constant_time_eq",
+ ]
+ 
+ [[package]]
+@@ -225,22 +219,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "9e461a7034e85b211a4acb57ee2e6730b32912b06c08cc242243c39fc21ae6a2"
+ dependencies = [
+  "arrayref",
+- "arrayvec 0.5.2",
+- "constant_time_eq 0.1.5",
+-]
+-
+-[[package]]
+-name = "blake3"
+-version = "1.4.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "199c42ab6972d92c9f8995f086273d25c42fc0f7b2a1fcefba465c1352d25ba5"
+-dependencies = [
+- "arrayref",
+- "arrayvec 0.7.4",
+- "cc",
+- "cfg-if",
+- "constant_time_eq 0.3.0",
+- "digest 0.10.7",
++ "arrayvec",
++ "constant_time_eq",
+ ]
+ 
+ [[package]]
+@@ -314,9 +294,9 @@ checksum = "89b2fd2a0dcf38d7971e2194b6b6eebab45ae01067456a7fd93d5547a61b70be"
+ 
+ [[package]]
+ name = "c2pa"
+-version = "0.28.2"
++version = "0.28.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6ed5e2b5022f2a5570faa9275a7482b3668cb9556260287a16f06924fb583100"
++checksum = "7fd7d3aa160a83cc2670b605748d667d74582492be39780931f8add365cc001f"
+ dependencies = [
+  "asn1-rs",
+  "async-generic",
+@@ -324,7 +304,6 @@ dependencies = [
+  "atree",
+  "base64 0.21.2",
+  "bcder",
+- "blake3",
+  "byteorder",
+  "byteordered",
+  "bytes",
+@@ -346,11 +325,11 @@ dependencies = [
+  "lazy_static",
+  "log",
+  "lopdf",
++ "memchr",
+  "mp4",
+  "multibase",
+  "multihash",
+  "openssl",
+- "openssl-sys",
+  "png_pong",
+  "rand",
+  "range-set",
+@@ -369,7 +348,6 @@ dependencies = [
+  "tempfile",
+  "thiserror",
+  "treeline",
+- "twoway",
+  "ureq",
+  "url",
+  "uuid",
+@@ -527,12 +505,6 @@ version = "0.1.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
+ 
+-[[package]]
+-name = "constant_time_eq"
+-version = "0.3.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f7144d30dcf0fafbce74250a3963025d8d52177934239851c917d29f1df280c2"
+-
+ [[package]]
+ name = "conv"
+ version = "0.3.3"
+@@ -728,7 +700,6 @@ checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
+ dependencies = [
+  "block-buffer 0.10.4",
+  "crypto-common",
+- "subtle",
+ ]
+ 
+ [[package]]
+@@ -1172,9 +1143,9 @@ checksum = "490cc448043f947bae3cbee9c203358d62dbee0db12107a74be5c30ccfd09771"
+ 
+ [[package]]
+ name = "memchr"
+-version = "2.5.0"
++version = "2.7.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
++checksum = "523dc4f511e55ab87b694dc30d0f820d60906ef06413f93d4d7a1385599cc149"
+ 
+ [[package]]
+ name = "memoffset"
+@@ -1392,9 +1363,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
+ 
+ [[package]]
+ name = "openssl"
+-version = "0.10.57"
++version = "0.10.64"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "bac25ee399abb46215765b1cb35bc0212377e58a061560d8b29b024fd0430e7c"
++checksum = "95a0481286a310808298130d22dd1fef0fa571e05a8f44ec801801e84b216b1f"
+ dependencies = [
+  "bitflags 2.3.3",
+  "cfg-if",
+@@ -1418,18 +1389,18 @@ dependencies = [
+ 
+ [[package]]
+ name = "openssl-src"
+-version = "111.28.0+1.1.1w"
++version = "300.2.3+3.2.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3ce95ee1f6f999dfb95b8afd43ebe442758ea2104d1ccb99a94c30db22ae701f"
++checksum = "5cff92b6f71555b61bb9315f7c64da3ca43d87531622120fea0195fc761b4843"
+ dependencies = [
+  "cc",
+ ]
+ 
+ [[package]]
+ name = "openssl-sys"
+-version = "0.9.92"
++version = "0.9.101"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "db7e971c2c2bba161b2d2fdf37080177eff520b3bc044787c7f1f5f9e78d869b"
++checksum = "dda2b0f344e78efc2facf7d195d098df0dd72151b26ab98da807afc26c198dff"
+ dependencies = [
+  "cc",
+  "libc",
+@@ -2188,28 +2159,12 @@ version = "0.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "a7f741b240f1a48843f9b8e0444fb55fb2a4ff67293b50a9179dfd5ea67f8d41"
+ 
+-[[package]]
+-name = "twoway"
+-version = "0.2.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c57ffb460d7c24cd6eda43694110189030a3d1dfe418416d9468fd1c1d290b47"
+-dependencies = [
+- "memchr",
+- "unchecked-index",
+-]
+-
+ [[package]]
+ name = "typenum"
+ version = "1.16.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
+ 
+-[[package]]
+-name = "unchecked-index"
+-version = "0.2.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "eeba86d422ce181a719445e51872fa30f1f7413b62becb52e95ec91aa262d85c"
+-
+ [[package]]
+ name = "unicode-bidi"
+ version = "0.3.13"
+diff --git a/Cargo.toml b/Cargo.toml
+index a293cf1..ef59491 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -19,7 +19,7 @@ repository = "https://github.com/contentauth/c2patool"
+ 
+ [dependencies]
+ anyhow = "1.0"
+-c2pa = { version = "0.28.2", features = ["fetch_remote_manifests", "file_io", "add_thumbnails", "xmp_write", "pdf"]}
++c2pa = { version = "0.28.5", features = ["fetch_remote_manifests", "file_io", "add_thumbnails", "xmp_write", "pdf"]}
+ clap = { version = "3.2", features = ["derive"] }
+ env_logger = "0.9"
+ log = "0.4" 
