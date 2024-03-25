@@ -9,6 +9,7 @@
 , libhandy
 , libpeas
 , pantheon
+, python3Packages
 }:
 
 let
@@ -52,5 +53,16 @@ in
       libpeas
     ];
     meta.description = "Brightness controller for Budgie";
+  };
+
+  budgie-clockworks = mkBudgieExtrasPlugin {
+    pluginName = "clockworks";
+    moduleName = "budgie_clockworks";
+    isPython = true;
+    pythonPath = with python3Packages; [
+      cairosvg
+      svgwrite
+    ];
+    meta.description = "Multi-clock applet to show the time across multiple timezones";
   };
 }
