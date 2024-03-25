@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , rustPlatform
+, testers
 
 , cachix
 , darwin
@@ -10,6 +11,8 @@
 , nix
 , openssl
 , pkg-config
+
+, devenv  # required to run version test
 }:
 
 let
@@ -49,6 +52,13 @@ in rustPlatform.buildRustPackage {
   postInstall = ''
     wrapProgram $out/bin/devenv --set DEVENV_NIX ${devenv_nix} --prefix PATH ":" "$out/bin:${cachix}/bin"
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = devenv;
+      command = "export XDG_DATA_HOME=$PWD; devenv version";
+    };
+  };
 
   meta = {
     changelog = "https://github.com/cachix/devenv/releases/tag/v${version}";
