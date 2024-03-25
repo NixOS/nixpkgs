@@ -210,6 +210,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra fpletz lilyinstarlight ];
     platforms = platforms.unix;
-    mainProgram = "mupdf";
+    mainProgram = if (enableGL || enableX11) then "mupdf" else "mutool";
   };
 }
