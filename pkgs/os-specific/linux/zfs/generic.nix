@@ -5,6 +5,12 @@ let
   , perl
   , configFile ? "all"
 
+  # Test dependencies
+  , ksh
+  , lvm2
+  , gzip
+  , e2fsprogs
+
   # Userspace dependencies
   , zlib, libuuid, python3, attr, openssl
   , libtirpc
@@ -73,6 +79,33 @@ let
         --replace '"/usr/bin/env", "umount"' '"${util-linux}/bin/umount", "-n"' \
         --replace '"/usr/bin/env", "mount"'  '"${util-linux}/bin/mount", "-n"'
     '' + optionalString buildUser ''
+        # TODO(Mindavi): Is overriding with /run/current-system/sw/bin acceptable?
+        substituteInPlace scripts/zfs-tests.sh \
+          --replace '$STF_PATH/ksh' ${ksh}/bin/ksh \
+          --replace 'LOSETUP=' 'LOSETUP=${util-linux}/bin/losetup #' \
+          --replace 'export PATH=$STF_PATH' '#' \
+          --replace 'DMSETUP=' 'DMSETUP=${lvm2}/bin/dmsetup #' \
+          --replace '$STF_PATH/gzip' '${gzip}/bin/gzip' \
+          --replace '$STF_PATH/gunzip' '${gzip}/bin/gunzip' \
+          --replace '/sbin/fsck.ext4' '${e2fsprogs}/bin/fsck.ext4' \
+          --replace '/sbin/mkfs.ext4' '${e2fsprogs}/bin/mkfs.ext4' \
+          --replace '$STF_PATH/awk' '${gawk}/bin/awk' \
+          --replace 'SYSTEM_DIRS="/usr/local/bin /usr/local/sbin"' 'SYSTEM_DIRS="/run/current-system/sw/bin"'
+        substituteInPlace scripts/common.sh.in \
+          --replace 'export ZTS_DIR=' 'export ZTS_DIR=${placeholder "zfs_tests"}/share/zfs #' \
+          --replace 'export SCRIPT_DIR=' 'export SCRIPT_DIR=${placeholder "zfs_tests"}/share/zfs #' \
+          --replace 'export ZDB=' 'export ZDB=${placeholder "out"}/bin/zdb #' \
+          --replace 'export ZFS=' 'export ZFS=${placeholder "out"}/bin/zfs #' \
+          --replace 'export ZPOOL=' 'export ZPOOL=${placeholder "out"}/bin/zpool #' \
+          --replace 'export ZTEST=' 'export ZTEST=${placeholder "out"}/bin/ztest #' \
+          --replace 'export ZFS_SH=' 'export ZFS_SH=${placeholder "zfs_tests"}/share/zfs/zfs.sh #'
+        # Fix ksh paths in test suite.
+        # patchShebangs doesn't work due to the scripts not being executable.
+        # It doesn't seem logical to make them executable either.
+        find -name "*.ksh" -exec sed -i 's,/bin/ksh,${ksh}/bin/ksh,' {} \;
+        # Patching maybe required for more binaries
+        # Maybe FHS environment would be better?
+
       substituteInPlace ./lib/libshare/os/linux/nfs.c --replace "/usr/sbin/exportfs" "${
         # We don't *need* python support, but we set it like this to minimize closure size:
         # If it's disabled by default, no need to enable it, even if we have python enabled
@@ -181,10 +214,12 @@ let
       done
 
       # Remove tests because they add a runtime dependency on gcc
-      rm -rf $out/share/zfs/zfs-tests
+      # TODO(mindavi): Should we optionally remove these? How does that work?
+      mkdir -p ${placeholder "zfs_tests"}/share/zfs/
+      mv ${placeholder "out"}/share/zfs/ ${placeholder "zfs_tests"}/share/
 
       # Add Bash completions.
-      install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+      install -v -m444 -D -t ${placeholder "out"}/share/bash-completion/completions contrib/bash_completion.d/zfs
       (cd $out/share/bash-completion/completions; ln -s zfs zpool)
     '';
 
@@ -196,7 +231,7 @@ let
       done
     '';
 
-    outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
+    outputs = [ "out" ] ++ optionals buildUser [ "dev" "zfs_tests" ];
 
     passthru = {
       inherit enableMail latestCompatibleLinuxPackages kernelModuleAttribute;
