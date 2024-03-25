@@ -191,10 +191,10 @@ in {
 
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {
-      name = "setuptools-setup-hook";
+      name = "setuptools-build-hook";
       propagatedBuildInputs = [ setuptools wheel ];
       substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuppy;
+        inherit pythonInterpreter setuppy;
       };
     } ./setuptools-build-hook.sh) {};
 
