@@ -355,8 +355,10 @@ _accumFlagsArray() {
             local -n nameref="$name"
             case "$name" in
                 *Array)
+                    # shellcheck disable=SC2206
                     flagsArray+=( ${nameref+"${nameref[@]}"} ) ;;
                 *)
+                    # shellcheck disable=SC2206
                     flagsArray+=( ${nameref-} ) ;;
             esac
         done
@@ -1178,6 +1180,7 @@ unpackPhase() {
     if [ -n "$__structuredAttrs" ]; then
         srcsArray=( "${srcs[@]}" )
     else
+        # shellcheck disable=SC2206
         srcsArray=( $srcs )
     fi
 
@@ -1245,8 +1248,10 @@ patchPhase() {
 
     local -a patchesArray
     if [ -n "$__structuredAttrs" ]; then
+        # shellcheck disable=SC2206
         patchesArray=( ${patches:+"${patches[@]}"} )
     else
+        # shellcheck disable=SC2206
         patchesArray=( ${patches:-} )
     fi
 
@@ -1272,7 +1277,7 @@ patchPhase() {
         if [ -n "$__structuredAttrs" ]; then
             flagsArray=( "${patchFlags[@]:--p1}" )
         else
-            # shellcheck disable=SC2086
+            # shellcheck disable=SC2086,SC2206
             flagsArray=( ${patchFlags:--p1} )
         fi
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
@@ -1385,7 +1390,7 @@ buildPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
-            SHELL=$SHELL
+            SHELL="$SHELL"
         )
         _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
@@ -1410,9 +1415,9 @@ checkPhase() {
     if [[ -z "${checkTarget:-}" ]]; then
         #TODO(@oxij): should flagsArray influence make -n?
         if make -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
-            checkTarget=check
+            checkTarget="check"
         elif make -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
-            checkTarget=test
+            checkTarget="test"
         fi
     fi
 
@@ -1423,16 +1428,18 @@ checkPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
-            SHELL=$SHELL
+            SHELL="$SHELL"
         )
 
         _accumFlagsArray makeFlags makeFlagsArray
         if [ -n "$__structuredAttrs" ]; then
             flagsArray+=( "${checkFlags[@]:-VERBOSE=y}" )
         else
+            # shellcheck disable=SC2206
             flagsArray+=( ${checkFlags:-VERBOSE=y} )
         fi
         _accumFlagsArray checkFlagsArray
+        # shellcheck disable=SC2206
         flagsArray+=( ${checkTarget} )
 
         echoCmd 'check flags' "${flagsArray[@]}"
@@ -1464,12 +1471,13 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
-        SHELL=$SHELL
+        SHELL="$SHELL"
     )
     _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
     if [ -n "$__structuredAttrs" ]; then
         flagsArray+=( "${installTargets[@]:-install}" )
     else
+        # shellcheck disable=SC2206
         flagsArray+=( ${installTargets:-install} )
     fi
 
@@ -1551,11 +1559,12 @@ installCheckPhase() {
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
-            SHELL=$SHELL
+            SHELL="$SHELL"
         )
 
         _accumFlagsArray makeFlags makeFlagsArray \
           installCheckFlags installCheckFlagsArray
+        # shellcheck disable=SC2206
         flagsArray+=( ${installCheckTarget:-installcheck} )
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
@@ -1572,6 +1581,7 @@ distPhase() {
 
     local flagsArray=()
     _accumFlagsArray distFlags distFlagsArray
+    # shellcheck disable=SC2206
     flagsArray+=( ${distTarget:-dist} )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
