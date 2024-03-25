@@ -35,14 +35,18 @@
   # Feature flags
 , withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
 , withAom ? withFullDeps # AV1 reference encoder
+, withAppKit ? withHeadlessDeps && stdenv.isDarwin # Apple AppKit framework
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
+, withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
+, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
+, withCoreImage ? withHeadlessDeps && stdenv.isDarwin # Apple CoreImage framework
 , withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
@@ -97,6 +101,7 @@
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW # Vdpau hardware acceleration
+, withVideoToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple VideoToolbox
 , withVidStab ? withFullDeps && withGPL # Video stabilization
 , withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
@@ -287,13 +292,10 @@
 /*
  *  Darwin frameworks
  */
+, AppKit
+, AudioToolbox
 , AVFoundation
-, Cocoa
-, CoreAudio
-, CoreMedia
-, CoreServices
-, MediaToolbox
-, VideoDecodeAcceleration
+, CoreImage
 , VideoToolbox
 /*
  *  Testing
@@ -491,16 +493,20 @@ stdenv.mkDerivation (finalAttrs: {
      */
     (enableFeature withAlsa "alsa")
     (enableFeature withAom "libaom")
+    (enableFeature withAppKit "appkit")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
     (enableFeature withAss "libass")
+    (enableFeature withAudioToolbox "audiotoolbox")
+    (enableFeature withAvFoundation "avfoundation")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCaca "libcaca")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
+    (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
     (enableFeature withDav1d "libdav1d")
@@ -565,6 +571,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (versionAtLeast version "6.0")  [
     (enableFeature withVpl "libvpl")
   ] ++ [
+    (enableFeature withVideoToolbox "videotoolbox")
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
     (enableFeature withVmaf "libvmaf")
     (enableFeature withVoAmrwbenc "libvo-amrwbenc")
@@ -619,14 +626,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = []
   ++ optionals withAlsa [ alsa-lib ]
   ++ optionals withAom [ libaom ]
+  ++ optionals withAppKit [ AppKit ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
+  ++ optionals withAudioToolbox [ AudioToolbox ]
+  ++ optionals withAvFoundation [ AVFoundation ]
   ++ optionals withBluray [ libbluray ]
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
+  ++ optionals withCoreImage [ CoreImage ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
@@ -676,6 +687,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
+  ++ optionals withVideoToolbox [ VideoToolbox ]
   ++ optionals withVidStab [ vid-stab ]
   ++ optionals withVmaf [ libvmaf ]
   ++ optionals withVoAmrwbenc [ vo-amrwbenc ]
@@ -694,17 +706,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withZimg [ zimg ]
   ++ optionals withZlib [ zlib ]
   ++ optionals withZmq [ zeromq4 ]
-  ++ optionals stdenv.isDarwin [
-    # TODO fine-grained flags
-    AVFoundation
-    Cocoa
-    CoreAudio
-    CoreMedia
-    CoreServices
-    MediaToolbox
-    VideoDecodeAcceleration
-    VideoToolbox
-  ];
+  ;
 
   buildFlags = [ "all" ]
     ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
