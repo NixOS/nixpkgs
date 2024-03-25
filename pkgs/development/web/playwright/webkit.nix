@@ -1,50 +1,47 @@
 { stdenv
 , fetchzip
 , fetchFromGitHub
-, wrapGAppsHook
+, makeWrapper
 , autoPatchelfHook
 , patchelfUnstable
+
 , at-spi2-atk
-, libgcc
 , cairo
-, enchant
-, libepoxy
-, libevent
 , flite
 , fontconfig
 , freetype
-, mesa
-, libglvnd
-, libgcrypt
-, gtk3
-, gdk-pixbuf
 , glib
-, libgpg-error
+, glib-networking
 , gst_all_1
-, harfbuzzFull
 , harfbuzz
-, hyphen
+, harfbuzzFull
 , icu70
-, libjpeg8
 , lcms
-, libmanette
-, openjpeg
+, libdrm
+, libepoxy
+, libevent
+, libgcc
+, libgcrypt
+, libgpg-error
+, libjpeg8
 , libopus
-, pango
 , libpng
-, libsecret
 , libsoup_3
-, sqlite
-, systemdLibs
 , libtasn1
+, libvpx
 , libwebp
-, rigsofrods-bin
-, woff2
-, xorg
+, libwpe
+, libwpe-fdo
+, libxkbcommon
 , libxml2
 , libxslt
-, libvpx
+, mesa
+, sqlite
+, systemdLibs
+, wayland-scanner
+, woff2
 , zlib
+
 , suffix
 , revision
 }:
@@ -53,7 +50,7 @@ let
             then "ubuntu-22.04"
             else suffix;
 
-  libvpx_1_12 = libvpx.overrideAttrs (finalAttrs: previousAttrs: {
+  libvpx' = libvpx.overrideAttrs (finalAttrs: previousAttrs: {
     version = "1.12.0";
     src = fetchFromGitHub {
       owner = "webmproject";
@@ -72,63 +69,55 @@ stdenv.mkDerivation {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook patchelfUnstable];
+  nativeBuildInputs = [ autoPatchelfHook patchelfUnstable makeWrapper];
   buildInputs = [
     at-spi2-atk
-    libgcc.lib
     cairo
-    enchant
-    libepoxy
-    libevent
     flite
     fontconfig.lib
     freetype
-    libglvnd
-    mesa
-    libgcrypt
-    gtk3
-    gdk-pixbuf
     glib
-    libgpg-error
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
-    harfbuzzFull
     harfbuzz
-    hyphen
+    harfbuzzFull
     icu70
-    libjpeg8
-
     lcms
-    libmanette
-
-    openjpeg
+    libdrm
+    libepoxy
+    libevent
+    libgcc.lib
+    libgcrypt
+    libgpg-error
+    libjpeg8
     libopus
-    pango
     libpng
-    libsecret
     libsoup_3
-    sqlite
-    systemdLibs
     libtasn1
     libwebp
-    rigsofrods-bin
-    woff2.lib
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
+    libwpe
+    libwpe-fdo
+    libvpx'
     libxml2
-    xorg.libXrender
     libxslt
+    mesa
+    sqlite
+    systemdLibs
+    wayland-scanner
+    woff2.lib
+    libxkbcommon
     zlib
-    libvpx_1_12
   ];
 
-
-  # Firefox uses "relrhack" to manually process relocations from a fixed offset
   patchelfFlags = [ "--no-clobber-old-sections"];
   buildPhase = ''
     cp -R . $out
+
+    # remove unused gtk browser
+    rm -rf $out/minibrowser-gtk
+
+    wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
+      --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/:$GIO_EXTRA_MODULES}" \
   '';
 }
