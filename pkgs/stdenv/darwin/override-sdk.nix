@@ -1,9 +1,9 @@
 # The basic algorithm is to rewrite the propagated inputs of a package and any of its
-# own propagated inputs recurssively to replace references from the default SDK with
+# own propagated inputs recursively to replace references from the default SDK with
 # those from the requested SDK version. This is done across all propagated inputs to
 # avoid making assumptions about how those inputs are being used.
 #
-# For example, packages may propgate target-target dependencies with the expectation that
+# For example, packages may propagate target-target dependencies with the expectation that
 # they will be just build inputs when the package itself is used as a native build input.
 #
 # To support this use case and operate without regard to the original package set,
@@ -72,7 +72,7 @@ let
         original = pkgs.darwin.libobjc;
         replacement = sdk.objc4;
       }
-      # Unfortunately, this is not consistent between Dariwn SDKs in nixpkgs, so
+      # Unfortunately, this is not consistent between Darwin SDKs in nixpkgs, so
       # try both versions to map between them.
       {
         original = pkgs.darwin.apple_sdk.sdk or pkgs.darwin.apple_sdk.MacOSX-SDK;
@@ -124,11 +124,11 @@ let
   # replaced packages.
   #
   # Note: `env` is an attrset containing `outputs` and `dependencies`.
-  # `dependncies` is a regex passed to sed and must be `passAsFile`.
+  # `dependencies` is a regex passed to sed and must be `passAsFile`.
   mkStub =
     name: env:
     pkgsHostTarget.runCommand name env (
-      # Map over the outputs in the package being replace to make sure the proxy is
+      # Map over the outputs in the package being replaced to make sure the proxy is
       # a fully functional replacement. This is like `symlinkJoin` except for
       # outputs and the contents of `nix-support`, which will be customized.
       ''
@@ -179,80 +179,59 @@ let
   replacePropagatedPackages =
     newPackages: pkg:
     let
-      propagatedInputs = lib.attrValues {
-        inherit (pkg)
-          depsBuildBuildPropagated
-          propagatedNativeBuildInputs
-          depsBuildTargetPropagated
-          depsHostHostPropagated
-          propagatedBuildInputs
-          depsTargetTargetPropagated
-          ;
-      };
-
+      propagatedInputs = getPropagatedInputs pkg;
       env = {
         inherit (pkg) outputs;
 
         # Old dependencies are replaced with new ones via a sed script. It is assumed
         # that `|` will not appear in a store path.
-        dependencies = lib.pipe propagatedInputs [
-          lib.flatten
-          (lib.concatMapStrings (
-            dep:
-            let
-              replacement = getReplacement newPackages dep;
-            in
-            lib.optionalString (dep != replacement) "s|${dep}|${replacement}|g;"
-          ))
-        ];
+        dependencies = lib.concatMapStrings (
+          dep:
+          let
+            replacement = getReplacement newPackages dep;
+          in
+          lib.optionalString (dep != replacement) "s|${dep}|${replacement}|g;"
+        ) propagatedInputs;
 
         passAsFile = [ "dependencies" ];
       };
     in
     # Only remap the package’s propagated inputs if there are any and if any of them
     # had packages remapped (with frameworks or proxy packages).
-    if
-      lib.isDerivation pkg && lib.any (inputs: inputs != [ ]) propagatedInputs && env.dependencies != ""
-    then
-      mkStub pkg.name env
-    else
-      pkg;
-
-  propagatedInputs = [
-    "depsBuildBuildPropagated"
-    "propagatedNativeBuildInputs"
-    "depsBuildTargetPropagated"
-    "depsHostHostPropagated"
-    "propagatedBuildInputs"
-    "depsTargetTargetPropagated"
-  ];
+    if propagatedInputs != [ ] && env.dependencies != "" then mkStub pkg.name env else pkg;
 
   # Gets all propagated inputs in a package. This does not recurse.
   getPropagatedInputs =
     pkg:
-    lib.concatMap (input: pkg.${input} or [ ]) [
-      "depsBuildBuildPropagated"
-      "propagatedNativeBuildInputs"
-      "depsBuildTargetPropagated"
-      "depsHostHostPropagated"
-      "propagatedBuildInputs"
-      "depsTargetTargetPropagated"
-    ];
+    lib.optionals (lib.isDerivation pkg) (
+      lib.concatMap (input: pkg.${input} or [ ]) [
+        "depsBuildBuildPropagated"
+        "propagatedNativeBuildInputs"
+        "depsBuildTargetPropagated"
+        "depsHostHostPropagated"
+        "propagatedBuildInputs"
+        "depsTargetTargetPropagated"
+      ]
+    );
 
   # Gets all propagated dependencies in a package.
   getPropagatedDependencies =
     pkgs:
+    let
+      mapToPropagatedInputs =
+        pkgs:
+        lib.pipe pkgs [
+          (lib.filter (pkg: pkg != null))
+          (map (pkg: {
+            key = builtins.unsafeDiscardStringContext pkg;
+            package = pkg;
+            deps = getPropagatedInputs pkg;
+          }))
+        ];
+    in
     lib.genericClosure {
-      startSet = map (pkg: {
-        key = pkg.outPath;
-        deps = getPropagatedInputs pkg;
-      }) pkgs;
-      operator =
-        { key, deps }:
-        map (dep: {
-          key = dep.outPath;
-          deps = getPropagatedInputs dep;
-        }) deps;
+      startSet = mapToPropagatedInputs pkgs;
+      operator = { deps, ... }: mapToPropagatedInputs deps;
     };
 
   # Returns a package mapping based on remapping all propagated packages.
@@ -266,7 +245,7 @@ let
     let
       dependencies = lib.pipe input [
         getPropagatedDependencies
-        (lib.toposort (x: y: lib.any (z: x.key == z) y.deps))
+        (lib.toposort (x: y: lib.any (z: x.package == z) y.deps))
         (lib.getAttr "result")
         lib.reverseList
       ];
@@ -274,14 +253,14 @@ let
     lib.foldl' (
       newPackages: pkg:
       let
-        replacement = replacePropagatedPackages newPackages pkg;
-        outPath = builtins.unsafeDiscardStringContext pkg;
+        replacement = replacePropagatedPackages newPackages pkg.package;
+        outPath = builtins.unsafeDiscardStringContext pkg.key;
       in
-      if pkg == null || newPackages ? ${outPath} then
+      if pkg.key == null || newPackages ? ${outPath} then
         newPackages
       else
         newPackages // { ${outPath} = replacement; }
-    ) baseMapping input;
+    ) baseMapping (builtins.trace (builtins.catAttrs "key" dependencies) dependencies);
 
   overrideSDK =
     stdenv: sdkVersion:
@@ -298,7 +277,7 @@ let
 
       # `newSdkPackages` is constructed based on the assumption that SDK packages only
       # propagate versioned packages from that SDK -- that they neither propagate
-      # unversioned packages SDK packages nor propagate non-SDK packages (such as curl).
+      # unversioned SDK packages nor propagate non-SDK packages (such as curl).
       #
       # Note: `builtins.unsafeDiscardStringContext` is used to allow the path from the
       # original package output to be mapped to the replacement. This is safe because
