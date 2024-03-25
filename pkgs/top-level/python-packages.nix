@@ -5374,6 +5374,8 @@ self: super: with self; {
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
+  hsh = callPackage ../development/python-modules/hsh { };
+
   hsluv = callPackage ../development/python-modules/hsluv { };
 
   hstspreload = callPackage ../development/python-modules/hstspreload { };
@@ -8388,6 +8390,8 @@ self: super: with self; {
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
+
+  naked = callPackage ../development/python-modules/naked { };
 
   namedlist = callPackage ../development/python-modules/namedlist { };
 
