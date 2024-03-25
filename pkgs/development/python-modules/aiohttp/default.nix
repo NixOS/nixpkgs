@@ -48,6 +48,7 @@ buildPythonPackage rec {
       url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
       hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
     })
+    ./3.8.6-CVE-2024-23334.patch
   ];
 
   postPatch = ''
