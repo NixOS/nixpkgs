@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  configureFlags = [
+    "--color" "auto"
+  ];
+
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
