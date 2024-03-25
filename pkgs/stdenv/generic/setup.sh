@@ -576,7 +576,9 @@ findInputs() {
     # Sanity check
     (( hostOffset <= targetOffset )) || exit 1
 
+    # shellcheck disable=SC1087
     local varVar="${pkgAccumVarVars[hostOffset + 1]}"
+    # shellcheck disable=SC1087
     local varRef="$varVar[$((targetOffset - hostOffset))]"
     local var="${!varRef}"
     unset -v varVar varRef
@@ -585,6 +587,7 @@ findInputs() {
     # nix-shell doesn't use impure bash. This should replace the O(n)
     # case with an O(1) hash map lookup, assuming bash is implemented
     # well :D.
+    # shellcheck disable=SC1087
     local varSlice="$var[*]"
     # ${..-} to hack around old bash empty array problem
     case "${!varSlice-}" in
