@@ -21,11 +21,11 @@ let
         inherit pname version hash;
       };
 
-      nativeBuildInputs = [
+      build-system = [
         setuptools
       ];
 
-      propagatedBuildInputs = [
+      dependencies = [
         boto3
       ] ++ lib.optionals (pythonOlder "3.12") [
         typing-extensions
