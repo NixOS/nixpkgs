@@ -30,7 +30,7 @@
 , withFullDeps ? ffmpegVariant == "full"
 
 , fetchgit
-, fetchpatch
+, fetchpatch2
 
   # Feature flags
 , withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
@@ -368,25 +368,25 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
-  patches = map (patch: fetchpatch patch) ([ ]
+  patches = map (patch: fetchpatch2 patch) ([ ]
     ++ optionals (versionOlder version "5") [
       {
         name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
-        hash = "sha256-mSnmAkoNikDpxcN+A/hpB7mUbbtcMvm4tG6gZFuroe8=";
+        hash = "sha256-agJgzIzrBTQBAypuCmGXXFo7vw6Iodw5Ny5O5QCKCn8=";
       }
       {
         # Backport fix for binutils-2.41.
         name = "binutils-2.41.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
-        hash = "sha256-vlBUMJ1bORQHRNpuzc5iXsTWwS/CN5BmGIA8g7H7mJE=";
+        hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
       }
       # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
       # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
       {
         name = "utils-fix_crash_in_ff_seek_frame_binary.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/ab792634197e364ca1bb194f9abe36836e42f12d";
-        hash = "sha256-UxZ4VneZpw+Q/UwkEUDNdb2nOx1QnMrZ40UagspNTxI=";
+        hash = "sha256-vqqVACjbCcGL9Qvmg1QArSKqVmOqr8BEr+OxTBDt6mA=";
         postFetch = ''
           substituteInPlace "$out" \
             --replace libavformat/seek.c libavformat/utils.c \
@@ -394,18 +394,11 @@ stdenv.mkDerivation (finalAttrs: {
         '';
       }
     ]
-    ++ (lib.optional (lib.versionAtLeast version "6" && lib.versionOlder version "6.1")
-      { # this can be removed post 6.1
-        name = "fix_aacps_tablegen";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/814178f92647be2411516bbb82f48532373d2554";
-        hash = "sha256-FQV9/PiarPXCm45ldtCsxGHjlrriL8DKpn1LaKJ8owI=";
-      }
-    )
-    ++ (lib.optional (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
+    ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2")
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
-        hash = "sha256-Ittka0mId1N/BwJ0FQ0ygpTSS6Y11u2SjWDpbGN+KXo=";
+        hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
       }
     ));
 
