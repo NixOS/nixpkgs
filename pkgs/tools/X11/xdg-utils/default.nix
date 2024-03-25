@@ -4,6 +4,7 @@
 # runtime deps
 , resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, xdg-user-dirs
 , perl, perlPackages
+, makeWrapper
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
 
@@ -234,7 +235,9 @@ stdenv.mkDerivation rec {
   ];
 
   # just needed when built from git
-  nativeBuildInputs = [ libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl xmlto ];
+  nativeBuildInputs = [
+    libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl xmlto
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) makeWrapper;
 
   # explicitly provide a runtime shell so patchShebangs is consistent across build platforms
   buildInputs = [ bash ];
@@ -243,7 +246,32 @@ stdenv.mkDerivation rec {
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
   '';
 
-  preFixup = lib.concatStringsSep "\n" (map (resholve.phraseSolution "xdg-utils-resholved") solutions);
+  ## Cross-compiling with resholve is currently broken, so we just manually patch this in that case:
+  # https://github.com/abathur/resholve/issues/115
+  preFixup = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform)
+    (lib.concatStringsSep "\n" (map (resholve.phraseSolution "xdg-utils-resholved") solutions));
+  postFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    for bin in $out/bin/*; do
+      wrapProgram "$bin" \
+        --prefix PATH : ${lib.makeBinPath [
+          coreutils
+          dbus
+          file
+          gawk
+          glib.bin
+          gnugrep
+          gnused
+          jq
+          nettools
+          perl
+          perlPackages.FileMimeInfo
+          procmail
+          procps
+          xdg-user-dirs
+        ]}:${placeholder "out"}/bin \
+        --prefix PERL5LIB : ${with perlPackages; makePerlPath [ FileMimeInfo ]}
+    done
+  '';
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
