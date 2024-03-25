@@ -8,7 +8,7 @@ let
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
     removeSuffix replaceStrings singleton splitString makeBinPath;
 
-  /*
+  /**
     * The attrset `exporterTests` contains one attribute
     * for each exporter test. Each of these attributes
     * is expected to be an attrset containing:

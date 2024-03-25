@@ -80,7 +80,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "jumpy";
     homepage = "https://fishfight.org/";
     changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

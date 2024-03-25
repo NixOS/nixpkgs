@@ -1,92 +1,93 @@
-/* Technical details
+/**
+  Technical details
 
-`make-disk-image` has a bit of magic to minimize the amount of work to do in a virtual machine.
+  `make-disk-image` has a bit of magic to minimize the amount of work to do in a virtual machine.
 
-It relies on the [LKL (Linux Kernel Library) project](https://github.com/lkl/linux) which provides Linux kernel as userspace library.
+  It relies on the [LKL (Linux Kernel Library) project](https://github.com/lkl/linux) which provides Linux kernel as userspace library.
 
-The Nix-store only image only need to run LKL tools to produce an image and will never spawn a virtual machine, whereas full images will always require a virtual machine, but also use LKL.
+  The Nix-store only image only need to run LKL tools to produce an image and will never spawn a virtual machine, whereas full images will always require a virtual machine, but also use LKL.
 
-### Image preparation phase
+  ### Image preparation phase
 
-Image preparation phase will produce the initial image layout in a folder:
+  Image preparation phase will produce the initial image layout in a folder:
 
-- devise a root folder based on `$PWD`
-- prepare the contents by copying and restoring ACLs in this root folder
-- load in the Nix store database all additional paths computed by `pkgs.closureInfo` in a temporary Nix store
-- run `nixos-install` in a temporary folder
-- transfer from the temporary store the additional paths registered to the installed NixOS
-- compute the size of the disk image based on the apparent size of the root folder
-- partition the disk image using the corresponding script according to the partition table type
-- format the partitions if needed
-- use `cptofs` (LKL tool) to copy the root folder inside the disk image
+  - devise a root folder based on `$PWD`
+  - prepare the contents by copying and restoring ACLs in this root folder
+  - load in the Nix store database all additional paths computed by `pkgs.closureInfo` in a temporary Nix store
+  - run `nixos-install` in a temporary folder
+  - transfer from the temporary store the additional paths registered to the installed NixOS
+  - compute the size of the disk image based on the apparent size of the root folder
+  - partition the disk image using the corresponding script according to the partition table type
+  - format the partitions if needed
+  - use `cptofs` (LKL tool) to copy the root folder inside the disk image
 
-At this step, the disk image already contains the Nix store, it now only needs to be converted to the desired format to be used.
+  At this step, the disk image already contains the Nix store, it now only needs to be converted to the desired format to be used.
 
-### Image conversion phase
+  ### Image conversion phase
 
-Using `qemu-img`, the disk image is converted from a raw format to the desired format: qcow2(-compressed), vdi, vpc.
+  Using `qemu-img`, the disk image is converted from a raw format to the desired format: qcow2(-compressed), vdi, vpc.
 
-### Image Partitioning
+  ### Image Partitioning
 
-#### `none`
+  #### `none`
 
-No partition table layout is written. The image is a bare filesystem image.
+  No partition table layout is written. The image is a bare filesystem image.
 
-#### `legacy`
+  #### `legacy`
 
-The image is partitioned using MBR. There is one primary ext4 partition starting at 1 MiB that fills the rest of the disk image.
+  The image is partitioned using MBR. There is one primary ext4 partition starting at 1 MiB that fills the rest of the disk image.
 
-This partition layout is unsuitable for UEFI.
+  This partition layout is unsuitable for UEFI.
 
-#### `legacy+gpt`
+  #### `legacy+gpt`
 
-This partition table type uses GPT and:
+  This partition table type uses GPT and:
 
-- create a "no filesystem" partition from 1MiB to 2MiB ;
-- set `bios_grub` flag on this "no filesystem" partition, which marks it as a [GRUB BIOS partition](https://www.gnu.org/software/parted/manual/html_node/set.html) ;
-- create a primary ext4 partition starting at 2MiB and extending to the full disk image ;
-- perform optimal alignments checks on each partition
+  - create a "no filesystem" partition from 1MiB to 2MiB ;
+  - set `bios_grub` flag on this "no filesystem" partition, which marks it as a [GRUB BIOS partition](https://www.gnu.org/software/parted/manual/html_node/set.html) ;
+  - create a primary ext4 partition starting at 2MiB and extending to the full disk image ;
+  - perform optimal alignments checks on each partition
 
-This partition layout is unsuitable for UEFI boot, because it has no ESP (EFI System Partition) partition. It can work with CSM (Compatibility Support Module) which emulates legacy (BIOS) boot for UEFI.
+  This partition layout is unsuitable for UEFI boot, because it has no ESP (EFI System Partition) partition. It can work with CSM (Compatibility Support Module) which emulates legacy (BIOS) boot for UEFI.
 
-#### `efi`
+  #### `efi`
 
-This partition table type uses GPT and:
+  This partition table type uses GPT and:
 
-- creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
-- creates an primary ext4 partition starting after the boot partition and extending to the full disk image
+  - creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
+  - creates an primary ext4 partition starting after the boot partition and extending to the full disk image
 
-#### `efixbootldr`
+  #### `efixbootldr`
 
-This partition table type uses GPT and:
+  This partition table type uses GPT and:
 
-- creates an FAT32 ESP partition from 8MiB to 100MiB, set it bootable ;
-- creates an FAT32 BOOT partition from 100MiB to specified `bootSize` parameter (256MiB by default), set `bls_boot` flag ;
-- creates an primary ext4 partition starting after the boot partition and extending to the full disk image
+  - creates an FAT32 ESP partition from 8MiB to 100MiB, set it bootable ;
+  - creates an FAT32 BOOT partition from 100MiB to specified `bootSize` parameter (256MiB by default), set `bls_boot` flag ;
+  - creates an primary ext4 partition starting after the boot partition and extending to the full disk image
 
-#### `hybrid`
+  #### `hybrid`
 
-This partition table type uses GPT and:
+  This partition table type uses GPT and:
 
-- creates a "no filesystem" partition from 0 to 1MiB, set `bios_grub` flag on it ;
-- creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
-- creates a primary ext4 partition starting after the boot one and extending to the full disk image
+  - creates a "no filesystem" partition from 0 to 1MiB, set `bios_grub` flag on it ;
+  - creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
+  - creates a primary ext4 partition starting after the boot one and extending to the full disk image
 
-This partition could be booted by a BIOS able to understand GPT layouts and recognizing the MBR at the start.
+  This partition could be booted by a BIOS able to understand GPT layouts and recognizing the MBR at the start.
 
-### How to run determinism analysis on results?
+  ### How to run determinism analysis on results?
 
-Build your derivation with `--check` to rebuild it and verify it is the same.
+  Build your derivation with `--check` to rebuild it and verify it is the same.
 
-If it fails, you will be left with two folders with one having `.check`.
+  If it fails, you will be left with two folders with one having `.check`.
 
-You can use `diffoscope` to see the differences between the folders.
+  You can use `diffoscope` to see the differences between the folders.
 
-However, `diffoscope` is currently not able to diff two QCOW2 filesystems, thus, it is advised to use raw format.
+  However, `diffoscope` is currently not able to diff two QCOW2 filesystems, thus, it is advised to use raw format.
 
-Even if you use raw disks, `diffoscope` cannot diff the partition table and partitions recursively.
+  Even if you use raw disks, `diffoscope` cannot diff the partition table and partitions recursively.
 
-To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$image-p$i.raw skip=$start count=$sectors` for each `(start, sectors)` listed in the `fdisk` output. Now, you will have each partition as a separate file and you can compare them in pairs.
+  To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$image-p$i.raw skip=$start count=$sectors` for each `(start, sectors)` listed in the `fdisk` output. Now, you will have each partition as a separate file and you can compare them in pairs.
 */
 { pkgs
 , lib

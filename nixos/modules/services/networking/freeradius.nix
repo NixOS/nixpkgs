@@ -72,7 +72,9 @@ in
 
     users = {
       users.radius = {
-        /*uid = config.ids.uids.radius;*/
+        /**
+          uid = config.ids.uids.radius;
+        */
         description = "Radius daemon user";
         isSystemUser = true;
       };

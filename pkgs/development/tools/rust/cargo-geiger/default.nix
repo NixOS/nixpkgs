@@ -54,7 +54,9 @@ rustPlatform.buildRustPackage rec {
       dependency selection but it can not help you decide when and why unsafe
       code is appropriate.
     '';
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ evanjs jk matthiasbeyer ];
   };
 }

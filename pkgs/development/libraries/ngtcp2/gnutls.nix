@@ -34,11 +34,13 @@ stdenv.mkDerivation rec {
     description = "an effort to implement RFC9000 QUIC protocol.";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vcunat/* for knot-dns */ ];
+    maintainers = with maintainers; [ vcunat/**
+  for knot-dns
+*/ ];
   };
 }
 
-/*
+/**
   Why split from ./default.nix?
 
   ngtcp2 libs contain helpers to plug into various crypto libs (gnutls, patched openssl, ...).

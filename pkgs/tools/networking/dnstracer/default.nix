@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [ perl /**
+  for pod2man
+*/ ];
 
   setOutputFlags = false;
 

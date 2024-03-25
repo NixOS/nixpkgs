@@ -1,4 +1,5 @@
-/* List of maintainer teams.
+/**
+  List of maintainer teams.
     name = {
       # Required
       members = [ maintainer1 maintainer2 ];
@@ -25,7 +26,7 @@
    * keep the list alphabetically sorted
    * test the validity of the format with:
        nix-build lib/tests/teams.nix
-  */
+*/
 
 { lib }:
 with lib.maintainers; {

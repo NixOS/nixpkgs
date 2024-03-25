@@ -2,14 +2,18 @@
 runCommand "test-neovim-rust-analyzer" {
   nativeBuildInputs = [ cargo neovim rust-analyzer rustc ];
 
-  testRustSrc = /* rust */ ''
+  testRustSrc = /**
+  rust
+*/ ''
     fn main() {
       let mut var = vec![None];
       var.push(Some("hello".to_owned()));
     }
   '';
 
-  nvimConfig = /* lua */ ''
+  nvimConfig = /**
+  lua
+*/ ''
     vim.lsp.buf_attach_client(vim.api.nvim_get_current_buf(), vim.lsp.start_client({
       cmd = { "rust-analyzer" },
       handlers = {

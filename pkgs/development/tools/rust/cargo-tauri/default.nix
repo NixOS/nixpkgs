@@ -40,7 +40,9 @@ rustPlatform.buildRustPackage rec {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     mainProgram = "cargo-tauri";
     homepage = "https://tauri.app/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ dit7ya happysalada ];
   };
 }

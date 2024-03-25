@@ -305,7 +305,9 @@ in stdenv.mkDerivation (finalAttrs: {
     # fetch_Download_item tries to interpret the name as a variable name, let it do so...
     sed -e '1ilibreoffice-translations-${version}.tar.xz=libreoffice-translations-${version}.tar.xz' -i Makefile
     sed -e '1ilibreoffice-help-${version}.tar.xz=libreoffice-help-${version}.tar.xz' -i Makefile
-  '' /* Test fixups. May need to be revisited/pruned, left alone for now. */ + ''
+  '' /**
+  Test fixups. May need to be revisited/pruned, left alone for now.
+*/ + ''
     # unit test sd_tiledrendering seems to be fragile
     # https://nabble.documentfoundation.org/libreoffice-5-0-failure-in-CUT-libreofficekit-tiledrendering-td4150319.html
     echo > ./sd/CppunitTest_sd_tiledrendering.mk
@@ -398,7 +400,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # testReqIfTable fails since libxml2: 2.10.3 -> 2.10.4
     sed -e 's@.*"/html/body/div/table/tr/th".*@//&@' -i sw/qa/extras/htmlexport/htmlexport.cxx
-  '' /* This to avoid using /lib:/usr/lib at linking */ + ''
+  '' /**
+  This to avoid using /lib:/usr/lib at linking
+*/ + ''
     sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
 
     find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;

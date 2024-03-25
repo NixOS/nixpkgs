@@ -1,12 +1,14 @@
-/* This file composes a single bootstrapping stage of the Nix Packages
-   collection. That is, it imports the functions that build the various
-   packages, and calls them with appropriate arguments. The result is a set of
-   all the packages in the Nix Packages collection for some particular platform
-   for some particular stage.
+/**
+  This file composes a single bootstrapping stage of the Nix Packages
+  collection. That is, it imports the functions that build the various
+  packages, and calls them with appropriate arguments. The result is a set of
+  all the packages in the Nix Packages collection for some particular platform
+  for some particular stage.
 
-   Default arguments are only provided for bootstrapping
-   arguments. Normal users should not import this directly but instead
-   import `pkgs/default.nix` or `default.nix`. */
+  Default arguments are only provided for bootstrapping
+  arguments. Normal users should not import this directly but instead
+  import `pkgs/default.nix` or `default.nix`.
+*/
 
 let
   # An overlay to auto-call packages in ../by-name.

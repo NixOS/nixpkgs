@@ -1,4 +1,4 @@
-/*
+/**
   Run with:
 
       cd nixpkgs

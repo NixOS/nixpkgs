@@ -57,7 +57,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ figsoda turbomack matthiasbeyer ];
   };
 }

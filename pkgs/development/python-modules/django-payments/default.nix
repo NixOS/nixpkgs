@@ -51,9 +51,13 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    all = [ braintree /* suds-community */ mercadopago cryptography xmltodict stripe ];
+    all = [ braintree /**
+  suds-community
+*/ mercadopago cryptography xmltodict stripe ];
     braintree = [ braintree ];
-    cybersource = [ /* suds-community */ ];
+    cybersource = [ /**
+  suds-community
+*/ ];
     docs = [ sphinx-rtd-theme ];
     mercadopago = [ mercadopago ];
     sagepay = [ cryptography ];

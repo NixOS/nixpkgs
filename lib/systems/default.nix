@@ -9,7 +9,7 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
-  /*
+  /**
     Elaborated systems contain functions, which means that they don't satisfy
     `==` for a lack of reflexivity.
 
@@ -27,10 +27,11 @@ rec {
     let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
-  /* List of all Nix system doubles the nixpkgs flake will expose the package set
-     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+  /**
+    List of all Nix system doubles the nixpkgs flake will expose the package set
+    for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
-     **Warning**: This attribute is considered experimental and is subject to change.
+    **Warning**: This attribute is considered experimental and is subject to change.
   */
   flakeExposed = import ./flake-systems.nix { };
 
@@ -68,7 +69,9 @@ rec {
         else if final.isMusl                then "musl"
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
-        else if final.isLinux /* default */ then "glibc"
+        else if final.isLinux /**
+  default
+*/ then "glibc"
         else if final.isFreeBSD             then "fblibc"
         else if final.isNetBSD              then "nblibc"
         else if final.isAvr                 then "avrlibc"

@@ -118,17 +118,17 @@
 , withZlib ? withHeadlessDeps
 , withZmq ? withFullDeps # Message passing
 
-/*
- *  Licensing options (yes some are listed twice, filters and such are not listed)
- */
+/**
+  *  Licensing options (yes some are listed twice, filters and such are not listed)
+*/
 , withGPL ? true
 , withVersion3 ? true # When withGPL is set this implies GPLv3 otherwise it is LGPLv3
 , withGPLv3 ? withGPL && withVersion3
 , withUnfree ? false
 
-/*
- *  Build options
- */
+/**
+  *  Build options
+*/
 , withSmallBuild ? false # Optimize for size instead of speed
 , withRuntimeCPUDetection ? true # Detect CPU capabilities at runtime (disable to compile natively)
 , withGrayscale ? withFullDeps # Full grayscale support
@@ -143,17 +143,17 @@
 , withPic ? true
 , withThumb ? false # On some ARM platforms
 
-/*
- *  Program options
- */
+/**
+  *  Program options
+*/
 , buildFfmpeg ? withHeadlessDeps # Build ffmpeg executable
 , buildFfplay ? withFullDeps # Build ffplay executable
 , buildFfprobe ? withHeadlessDeps # Build ffprobe executable
 , buildQtFaststart ? withFullDeps # Build qt-faststart executable
 , withBin ? buildFfmpeg || buildFfplay || buildFfprobe || buildQtFaststart
-/*
- *  Library options
- */
+/**
+  *  Library options
+*/
 , buildAvcodec ? withHeadlessDeps # Build avcodec library
 , buildAvdevice ? withHeadlessDeps # Build avdevice library
 , buildAvfilter ? withHeadlessDeps # Build avfilter library
@@ -173,9 +173,9 @@
   || buildPostproc
   || buildSwresample
   || buildSwscale
-/*
- *  Documentation options
- */
+/**
+  *  Documentation options
+*/
 , withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc
 , withHtmlDoc ? withHeadlessDeps # HTML documentation pages
 , withManPages ? withHeadlessDeps # Man documentation pages
@@ -185,17 +185,17 @@
 # a "doc" output because its files go to "man".
 , withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc)
 
-/*
- *  Developer options
- */
+/**
+  *  Developer options
+*/
 , withDebug ? false
 , withOptimisations ? true
 , withExtraWarnings ? false
 , withStripping ? false
 
-/*
- *  External libraries options
- */
+/**
+  *  External libraries options
+*/
 , alsa-lib
 , bzip2
 , celt
@@ -282,9 +282,9 @@
 , zeromq4
 , zimg
 , zlib
-/*
- *  Darwin frameworks
- */
+/**
+  *  Darwin frameworks
+*/
 , AVFoundation
 , Cocoa
 , CoreAudio
@@ -293,24 +293,25 @@
 , MediaToolbox
 , VideoDecodeAcceleration
 , VideoToolbox
-/*
- *  Testing
- */
+/**
+  *  Testing
+*/
 , testers
 }:
 
-/* Maintainer notes:
- *
- * Version bumps:
- * It should always be safe to bump patch releases (e.g. 2.1.x, x being a patch release)
- * If adding a new branch, note any configure flags that were added, changed, or deprecated/removed
- *   and make the necessary changes.
- *
- * Known issues:
- * Cross-compiling will disable features not present on host OS
- *   (e.g. dxva2 support [DirectX] will not be enabled unless natively compiled on Cygwin)
- *
- */
+/**
+  Maintainer notes:
+  *
+  * Version bumps:
+  * It should always be safe to bump patch releases (e.g. 2.1.x, x being a patch release)
+  * If adding a new branch, note any configure flags that were added, changed, or deprecated/removed
+  *   and make the necessary changes.
+  *
+  * Known issues:
+  * Cross-compiling will disable features not present on host OS
+  *   (e.g. dxva2 support [DirectX] will not be enabled unless natively compiled on Cygwin)
+  *
+*/
 
 let
   inherit (lib) optional optionals optionalString enableFeature versionOlder versionAtLeast;
@@ -319,18 +320,18 @@ in
 
 assert lib.elem ffmpegVariant [ "headless" "small" "full" ];
 
-/*
- *  Licensing dependencies
- */
+/**
+  *  Licensing dependencies
+*/
 assert withGPLv3 -> withGPL && withVersion3;
 
-/*
- *  Build dependencies
- */
+/**
+  *  Build dependencies
+*/
 assert withPixelutils -> buildAvutil;
-/*
- *  Program dependencies
- */
+/**
+  *  Program dependencies
+*/
 assert buildFfmpeg -> buildAvcodec
                      && buildAvfilter
                      && buildAvformat
@@ -340,9 +341,9 @@ assert buildFfplay -> buildAvcodec
                      && buildSwscale
                      && (buildSwresample || buildAvresample);
 assert buildFfprobe -> buildAvcodec && buildAvformat;
-/*
- *  Library dependencies
- */
+/**
+  *  Library dependencies
+*/
 assert buildAvcodec -> buildAvutil; # configure flag since 0.6
 assert buildAvdevice -> buildAvformat
                        && buildAvcodec
@@ -413,15 +414,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--target_os=${if stdenv.hostPlatform.isMinGW then "mingw64" else stdenv.hostPlatform.parsed.kernel.name}"
     "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     "--pkg-config=${buildPackages.pkg-config.targetPrefix}pkg-config"
-    /*
-     *  Licensing flags
-     */
+    /**
+      *  Licensing flags
+    */
     (enableFeature withGPL "gpl")
     (enableFeature withVersion3 "version3")
     (enableFeature withUnfree "nonfree")
-    /*
-     *  Build flags
-     */
+    /**
+      *  Build flags
+    */
     (enableFeature withStatic "static")
     (enableFeature withShared "shared")
     (enableFeature withPic "pic")
@@ -443,18 +444,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     "--datadir=${placeholder "data"}/share/ffmpeg"
 
-    /*
-     *  Program flags
-     */
+    /**
+      *  Program flags
+    */
     (enableFeature buildFfmpeg "ffmpeg")
     (enableFeature buildFfplay "ffplay")
     (enableFeature buildFfprobe "ffprobe")
   ] ++ optionals withBin [
     "--bindir=${placeholder "bin"}/bin"
   ] ++ [
-    /*
-     *  Library flags
-     */
+    /**
+      *  Library flags
+    */
     (enableFeature buildAvcodec "avcodec")
     (enableFeature buildAvdevice "avdevice")
     (enableFeature buildAvfilter "avfilter")
@@ -471,9 +472,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--libdir=${placeholder "lib"}/lib"
     "--incdir=${placeholder "dev"}/include"
   ] ++ [
-    /*
-     *  Documentation flags
-     */
+    /**
+      *  Documentation flags
+    */
     (enableFeature withDocumentation "doc")
     (enableFeature withHtmlDoc "htmlpages")
     (enableFeature withManPages "manpages")
@@ -485,9 +486,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals withDoc [
     "--docdir=${placeholder "doc"}/share/doc/ffmpeg"
   ] ++ [
-    /*
-     *  External libraries
-     */
+    /**
+      *  External libraries
+    */
     (enableFeature withAlsa "alsa")
     (enableFeature withAom "libaom")
   ] ++ optionals (versionAtLeast version "6.1") [
@@ -581,9 +582,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withZimg "libzimg")
     (enableFeature withZlib "zlib")
     (enableFeature withZmq "libzmq")
-    /*
-     * Developer flags
-     */
+    /**
+      * Developer flags
+    */
     (enableFeature withDebug "debug")
     (enableFeature withOptimisations "optimizations")
     (enableFeature withExtraWarnings "extra-warnings")

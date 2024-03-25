@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://sourcefoundry.org/hack/";
 
-    /*
+    /**
       "The font binaries are released under a license that permits unlimited
       print, desktop, and web use for commercial and non-commercial
       applications. It may be embedded and distributed in documents and

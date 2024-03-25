@@ -1,4 +1,6 @@
-/* hunspell dictionaries */
+/**
+  hunspell dictionaries
+*/
 
 { lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, python3, hunspell }:
 
@@ -292,7 +294,9 @@ let
 in
 rec {
 
-  /* ENGLISH */
+  /**
+    ENGLISH
+  */
 
   en_US = en-us;
   en-us = mkDictFromWordlist {
@@ -402,7 +406,9 @@ rec {
     };
   };
 
-  /* SPANISH */
+  /**
+    SPANISH
+  */
 
   es_ANY = es-any;
   es-any = mkDictFromRla {
@@ -551,7 +557,9 @@ rec {
     dictFileName = "es_VE";
   };
 
-  /* FRENCH */
+  /**
+    FRENCH
+  */
 
   fr-any = mkDictFromDicollecte {
     shortName = "fr-any";
@@ -596,7 +604,9 @@ rec {
     '';
   };
 
-  /* ITALIAN */
+  /**
+    ITALIAN
+  */
 
   it_IT = it-it;
   it-it = mkDictFromLinguistico {
@@ -609,7 +619,9 @@ rec {
     };
   };
 
-  /* BASQUE */
+  /**
+    BASQUE
+  */
 
   eu_ES = eu-es;
   eu-es = mkDictFromXuxen {
@@ -642,7 +654,9 @@ rec {
     ];
   };
 
-  /* HUNGARIAN */
+  /**
+    HUNGARIAN
+  */
 
   hu_HU = hu-hu;
   hu-hu = mkDictFromLibreOffice {
@@ -652,7 +666,9 @@ rec {
     license = with lib.licenses; [ mpl20 lgpl3 ];
   };
 
-  /* SWEDISH */
+  /**
+    SWEDISH
+  */
 
   sv_SE = sv-se;
   sv-se = mkDictFromDSSO {
@@ -669,7 +685,9 @@ rec {
     shortDescription = "Swedish (Finland)";
   };
 
-  /* GERMAN */
+  /**
+    GERMAN
+  */
 
   de_DE = de-de;
   de-de = mkDictFromJ3e {
@@ -692,7 +710,9 @@ rec {
     dictFileName = "de_CH";
   };
 
-  /* UKRAINIAN */
+  /**
+    UKRAINIAN
+  */
 
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
@@ -721,7 +741,9 @@ rec {
     };
   };
 
-  /* RUSSIAN */
+  /**
+    RUSSIAN
+  */
 
   ru_RU = ru-ru;
   ru-ru = mkDictFromLibreOffice {
@@ -731,7 +753,9 @@ rec {
     license = with lib.licenses; [ mpl20 lgpl3 ];
   };
 
-  /* CZECH */
+  /**
+    CZECH
+  */
 
   cs_CZ = cs-cz;
   cs-cz = mkDictFromLibreOffice {
@@ -742,7 +766,9 @@ rec {
     license = with lib.licenses; [ gpl2 ];
   };
 
-  /* SLOVAK */
+  /**
+    SLOVAK
+  */
 
   sk_SK = sk-sk;
   sk-sk = mkDictFromLibreOffice {
@@ -753,7 +779,9 @@ rec {
     license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
   };
 
-  /* DANISH */
+  /**
+    DANISH
+  */
 
   da_DK = da-dk;
   da-dk = mkDict rec {
@@ -782,7 +810,9 @@ rec {
     };
   };
 
-  /* DUTCH */
+  /**
+    DUTCH
+  */
 
   nl_NL = nl_nl;
   nl_nl = mkDict rec {
@@ -812,7 +842,9 @@ rec {
     };
   };
 
-  /* HEBREW */
+  /**
+    HEBREW
+  */
 
   he_IL = he-il;
   he-il = mkDictFromLibreOffice {
@@ -823,7 +855,9 @@ rec {
     license = with lib.licenses; [ agpl3Plus ];
   };
 
-  /* THAI */
+  /**
+    THAI
+  */
 
   th_TH = th-th;
   th-th = mkDict {
@@ -846,7 +880,9 @@ rec {
     };
   };
 
-  /* CROATIAN */
+  /**
+    CROATIAN
+  */
 
   hr_HR = hr-hr;
   hr-hr = mkDictFromLibreOffice {
@@ -857,7 +893,9 @@ rec {
     license = with lib.licenses; [ gpl2Only lgpl21Only mpl11 ];
   };
 
-  /* NORWEGIAN */
+  /**
+    NORWEGIAN
+  */
 
   nb_NO = nb-no;
   nb-no = mkDictFromLibreOffice {
@@ -879,7 +917,9 @@ rec {
     license = with lib.licenses; [ gpl2Only ];
   };
 
-  /* TOKI PONA */
+  /**
+    TOKI PONA
+  */
 
   tok = mkDict rec {
     pname = "hunspell-dict-tok";
@@ -903,7 +943,9 @@ rec {
     };
   };
 
-  /* POLISH */
+  /**
+    POLISH
+  */
 
   pl_PL = pl-pl;
   pl-pl = mkDictFromLibreOffice {
@@ -915,7 +957,9 @@ rec {
     license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
   };
 
-  /* PORTUGUESE */
+  /**
+    PORTUGUESE
+  */
 
   pt_BR = pt-br;
   pt-br = mkDictFromLibreOffice {
@@ -935,7 +979,9 @@ rec {
     license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
   };
 
-  /* PERSIAN */
+  /**
+    PERSIAN
+  */
 
   fa_IR = fa-ir;
   fa-ir = mkDict {

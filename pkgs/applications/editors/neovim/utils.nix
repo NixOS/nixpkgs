@@ -14,23 +14,28 @@
 let
   inherit (vimUtils) toVimPlugin;
 
-   /* returns everything needed for the caller to wrap its own neovim:
-   - the generated content of the future init.vim
-   - the arguments to wrap neovim with
-   The caller is responsible for writing the init.vim and adding it to the wrapped
-   arguments (["-u" writeText "init.vim" GENERATEDRC)]).
-   This makes it possible to write the config anywhere: on a per-project basis
-   .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-   Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-   anymore, $MYVIMRC wont be set etc
-   */
+   /**
+    returns everything needed for the caller to wrap its own neovim:
+    - the generated content of the future init.vim
+    - the arguments to wrap neovim with
+    The caller is responsible for writing the init.vim and adding it to the wrapped
+    arguments (["-u" writeText "init.vim" GENERATEDRC)]).
+    This makes it possible to write the config anywhere: on a per-project basis
+    .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
+    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
+    anymore, $MYVIMRC wont be set etc
+  */
   makeNeovimConfig =
     { withPython3 ? true
-    /* the function you would have passed to python3.withPackages */
+    /**
+      the function you would have passed to python3.withPackages
+    */
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
     , withRuby ? true
-    /* the function you would have passed to lua.withPackages */
+    /**
+      the function you would have passed to lua.withPackages
+    */
     , extraLuaPackages ? (_: [ ])
 
     # expects a list of plugin configuration
@@ -126,11 +131,17 @@ let
   # to keep backwards compatibility for people using neovim.override
   legacyWrapper = neovim: {
     extraMakeWrapperArgs ? ""
-    /* the function you would have passed to python.withPackages */
+    /**
+      the function you would have passed to python.withPackages
+    */
     , extraPythonPackages ? (_: [])
-    /* the function you would have passed to python.withPackages */
+    /**
+      the function you would have passed to python.withPackages
+    */
     , withPython3 ? true,  extraPython3Packages ? (_: [])
-    /* the function you would have passed to lua.withPackages */
+    /**
+      the function you would have passed to lua.withPackages
+    */
     , extraLuaPackages ? (_: [])
     , withNodeJs ? false
     , withRuby ? true
@@ -164,13 +175,15 @@ let
       wrapRc = (configure != {});
   });
 
-  /* Generate vim.g.<LANG>_host_prog lua rc to setup host providers
+  /**
+    Generate vim.g.<LANG>_host_prog lua rc to setup host providers
 
-  Mapping a boolean argument to a key that tells us whether to add
-      vim.g.<LANG>_host_prog=$out/bin/nvim-<LANG>
-  Or this:
-      let g:loaded_${prog}_provider=0
-  While the latter tells nvim that this provider is not available */
+    Mapping a boolean argument to a key that tells us whether to add
+        vim.g.<LANG>_host_prog=$out/bin/nvim-<LANG>
+    Or this:
+        let g:loaded_${prog}_provider=0
+    While the latter tells nvim that this provider is not available
+  */
   generateProviderRc = {
       withPython3 ? true
     , withNodeJs ? false

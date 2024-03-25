@@ -113,13 +113,15 @@ let
         )
         + "\n"
         else
-      /*
-      if isList val && stringLength indent < 4 then concatMapStrings
-        (elem: "\n${indent}- " + n2y (indent + "  ") elem)
-        val
-        else
+      /**
+        if isList val && stringLength indent < 4 then concatMapStrings
+          (elem: "\n${indent}- " + n2y (indent + "  ") elem)
+          val
+          else
       */
-      if isList val /* and long indent */ then
+      if isList val /**
+  and long indent
+*/ then
         "[ " + concatMapStringsSep ", " quoteString val + " ]" else
       if isBool val then (if val then "on" else "off") else
       quoteString val;

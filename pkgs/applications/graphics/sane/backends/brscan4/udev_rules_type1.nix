@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     tar xfvz data.tar.gz
   '';
 
-  /*
+  /**
     Fix the following error:
 
     ~~~

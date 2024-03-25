@@ -19,7 +19,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "svdtools";
     homepage = "https://github.com/stm32-rs/svdtools";
     changelog = "https://github.com/stm32-rs/svdtools/blob/v${version}/CHANGELOG-rust.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ newam ];
   };
 }

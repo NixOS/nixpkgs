@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ systemd /* for busctl */ jq bash ]}"
+      --prefix PATH : "${lib.makeBinPath [ systemd /**
+  for busctl
+*/ jq bash ]}"
     )
   '';
 

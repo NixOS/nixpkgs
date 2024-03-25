@@ -1,4 +1,4 @@
-/*
+/**
   Run all tests with:
 
       cd nixpkgs
@@ -8,7 +8,6 @@
 
       cd nixpkgs
       nix-build -A tests.trivial-builders.foo
-
 */
 
 { callPackage, lib, stdenv }:

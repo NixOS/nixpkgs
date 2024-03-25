@@ -31,7 +31,9 @@ rustPlatform.buildRustPackage rec {
     description = "A language server for Standard ML";
     homepage = "https://github.com/azdavis/millet";
     changelog = "https://github.com/azdavis/millet/blob/v${version}/docs/CHANGELOG.md";
-    license = [ licenses.mit /* or */ licenses.asl20 ];
+    license = [ licenses.mit /**
+  or
+*/ licenses.asl20 ];
     maintainers = with maintainers; [ marsam ];
     mainProgram = "millet-ls";
   };

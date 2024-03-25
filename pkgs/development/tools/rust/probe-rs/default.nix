@@ -32,7 +32,9 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ xgroleau newam ];
   };
 }

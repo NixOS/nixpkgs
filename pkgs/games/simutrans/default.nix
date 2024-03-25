@@ -55,11 +55,12 @@ let
       sha256 = "1cv1rzl1a3i5dvk476zq094wawk9hhdh2f0y4xrdny5gn17mb2xi";
     };
 
-    /* This release contains accented filenames that prevent unzipping.
-    "pak192.comic" = {
-      srcPath = "pak192comic%20for%20${ver2_dash}/pak192comic-0.4-${ver2_dash}up";
-      sha256 = throw "";
-    };
+    /**
+      This release contains accented filenames that prevent unzipping.
+      "pak192.comic" = {
+        srcPath = "pak192comic%20for%20${ver2_dash}/pak192comic-0.4-${ver2_dash}up";
+        sha256 = throw "";
+      };
     */
   };
 
@@ -88,8 +89,17 @@ let
       '';
     };
 
-  /* The binaries need all data in one directory; the default is directory
-      of the executable, and another option is the current directory :-/ */
+  /**
+    The binaries need all data in one directory; the default is directory
+    of the executable, and another option is the current directory :-/
+
+
+    # Inputs
+
+    `paks`
+
+    : 1\. Function argument
+  */
   withPaks = paks: buildEnv {
     inherit (binaries) name;
     paths = [binaries] ++ paks;

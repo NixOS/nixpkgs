@@ -110,7 +110,7 @@ in {
     expectFailure package "Found duplicated packages in closure for dependency 'packaging'";
 
 
-  /*
+  /**
     More complex test case with a transitive conflict
 
     Test sets up this dependency tree:

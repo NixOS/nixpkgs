@@ -6,7 +6,9 @@
 , libxml2
 , libllvm
 , version
-, doCheck ? (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+, doCheck ? (!stdenv.isx86_32 /**
+  TODO: why
+*/) && (!stdenv.hostPlatform.isMusl)
 }:
 
 stdenv.mkDerivation rec {

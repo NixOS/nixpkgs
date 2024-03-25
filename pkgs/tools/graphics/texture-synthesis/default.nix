@@ -24,7 +24,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Example-based texture synthesis written in Rust";
     homepage = "https://github.com/embarkstudios/texture-synthesis";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "texture-synthesis";
   };

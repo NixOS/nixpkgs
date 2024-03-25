@@ -42,10 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/muesli4/mpd-touch-screen-gui/tree/master/LICENSES
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ doronbehar ];
-    /* Partial darwin build failure log (from ofborg):
-    geometry.cpp:95:34: error: no member named 'abs' in namespace 'std'
-       >     return { std::abs(v.w), std::abs(v.h) };
-       >                             ~~~~~^
+    /**
+      Partial darwin build failure log (from ofborg):
+      geometry.cpp:95:34: error: no member named 'abs' in namespace 'std'
+         >     return { std::abs(v.w), std::abs(v.h) };
+         >                             ~~~~~^
     */
     platforms = platforms.linux;
   };

@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ (lib.getBin xz) ];
-  /* If no explicit coreutils is given, use the one from stdenv. */
+  /**
+    If no explicit coreutils is given, use the one from stdenv.
+  */
   buildInputs = [ coreutils ];
 
   # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under

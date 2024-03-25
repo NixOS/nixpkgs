@@ -132,7 +132,9 @@ buildPythonPackage rec {
     routes_dispatcher = [ routes ];
     ssl = [ pyopenssl ];
     # not packaged yet
-    xcgi = [ /* flup */ ];
+    xcgi = [ /**
+  flup
+*/ ];
   };
 
   meta = with lib; {

@@ -89,7 +89,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [ bsd3 /* or */ lgpl3Only ];
+    license = with licenses; [ bsd3 /**
+  or
+*/ lgpl3Only ];
     maintainers = with maintainers; [ ];
   };
 }

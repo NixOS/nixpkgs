@@ -1,5 +1,4 @@
-/*
-
+/**
   # New packages
 
   READ THIS FIRST
@@ -21,7 +20,6 @@
    from the top of the Nixpkgs tree.
   3. Use `nox-review wip` to check that everything builds.
   4. Commit the changes and open a pull request.
-
 */
 
 { libsForQt5

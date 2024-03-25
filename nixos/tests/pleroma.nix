@@ -1,4 +1,4 @@
-/*
+/**
   Pleroma E2E VM test.
 
   Abstract:
@@ -60,10 +60,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   test-db-passwd = "SccZOvTGM//BMrpoQj68JJkjDkMGb4pHv2cECWiI+XhVe3uGJTLI0vFV/gDlZ5jJ";
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
-    DEPLOYMENT**.*/
+    DEPLOYMENT**.
+  */
   db-seed = pkgs.writeText "provision.psql" ''
     CREATE USER pleroma WITH ENCRYPTED PASSWORD '${test-db-passwd}';
     CREATE DATABASE pleroma OWNER pleroma;
@@ -111,7 +113,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
     config :pleroma, configurable_from_database: false
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
     DEPLOYMENT**.
@@ -134,21 +137,23 @@ import ./make-test-python.nix ({ pkgs, ... }:
       private_key: "k7o9onKMQrgMjMb6l4fsxSaXO0BTNAer5MVSje3q60k"
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
     DEPLOYMENT**.
     In a real-word deployment, you'd handle this either by:
     - manually upload your pleroma secrets to /var/lib/pleroma/secrets.exs
     - use a deployment tool such as morph or NixOps to deploy your secrets.
-    */
+  */
   provision-secrets = pkgs.writeScriptBin "provision-secrets" ''
     set -eux
     cp "${pleroma-conf-secret}" "/var/lib/pleroma/secrets.exs"
     chown pleroma:pleroma /var/lib/pleroma/secrets.exs
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
     DEPLOYMENT**.

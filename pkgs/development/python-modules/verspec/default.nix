@@ -36,7 +36,9 @@ buildPythonPackage rec {
     description = "Flexible version handling";
     homepage = "https://github.com/jimporter/verspec";
     changelog = "https://github.com/jimporter/averspec/releases/tag/v${version}";
-    license = with licenses; [ bsd2 /* and */ asl20 ];
+    license = with licenses; [ bsd2 /**
+  and
+*/ asl20 ];
     maintainers = with maintainers; [ marsam ];
   };
 }

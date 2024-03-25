@@ -24,7 +24,9 @@ in lib.concatLists [
            #  https://github.com/NixOS/nixpkgs/pull/170215#issuecomment-1202164709
            (lib.lists.elem
              (lib.strings.substring 0 6 (p.cpu or ""))
-             [ "power7" "power8" "power9" "power1"/*0, 11, etc*/ ]))) [
+             [ "power7" "power8" "power9" "power1"/**
+  0, 11, etc
+*/ ]))) [
       "--with-long-double-128"
       "--with-long-double-format=${gcc.long-double-format or "ieee"}"
     ]))

@@ -52,7 +52,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-release";
     homepage = "https://github.com/crate-ci/cargo-release";
     changelog = "https://github.com/crate-ci/cargo-release/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ figsoda gerschtli ];
   };
 }

@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
-  /*
-  ** We have to fix a few occurrences to tools with absolute
-  ** paths in some helper scripts, otherwise the build will fail on
-  ** NixOS or in any chroot build.
+  /**
+    ** We have to fix a few occurrences to tools with absolute
+    ** paths in some helper scripts, otherwise the build will fail on
+    ** NixOS or in any chroot build.
   */
   patchPhase = ''
     substituteInPlace ./makefiles/installsh \
@@ -37,21 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn "/usr/bin/libtool" libtool
   '';
 
-  /*
-  ** Don't use configureFlags, since that just implicitly appends
-  ** everything onto a --prefix flag, which ./configure gets very angry
-  ** about.
-  **
-  ** Also, carefully set a manual workarea argument, so that we
-  ** can later easily find the machine type that we built Chez
-  ** for.
+  /**
+    ** Don't use configureFlags, since that just implicitly appends
+    ** everything onto a --prefix flag, which ./configure gets very angry
+    ** about.
+    **
+    ** Also, carefully set a manual workarea argument, so that we
+    ** can later easily find the machine type that we built Chez
+    ** for.
   */
   configurePhase = ''
     ./configure --as-is --threads --installprefix=$out --installman=$out/share/man
   '';
 
-  /*
-  ** Clean up some of the examples from the build output.
+  /**
+    ** Clean up some of the examples from the build output.
   */
   postInstall = ''
     rm -rf $out/lib/csv${finalAttrs.version}/examples

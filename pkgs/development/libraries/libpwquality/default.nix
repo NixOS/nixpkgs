@@ -50,7 +50,9 @@ stdenv.mkDerivation rec {
       function and PAM module that can be used instead of pam_cracklib. The
       module supports all the options of pam_cracklib.
     '';
-    license = with licenses; [ bsd3 /* or */ gpl2Plus ];
+    license = with licenses; [ bsd3 /**
+  or
+*/ gpl2Plus ];
     maintainers = with maintainers; [ jk ];
     platforms = platforms.unix;
   };

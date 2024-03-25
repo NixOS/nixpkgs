@@ -89,7 +89,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description     = "Multi-Stage Programming extension for OCaml";
     homepage        = "https://okmij.org/ftp/ML/MetaOCaml.html";
-    license         = with licenses; [ /* compiler */ qpl /* library */ lgpl2 ];
+    license         = with licenses; [ /**
+  compiler
+*/ qpl /**
+  library
+*/ lgpl2 ];
     maintainers     = with maintainers; [ thoughtpolice ];
 
     branch          = baseOcamlBranch;

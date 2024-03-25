@@ -6,127 +6,126 @@
 , linkFarm
 }:
 
-/*
+/**
+  USAGE EXAMPLE
+  =============
 
-USAGE EXAMPLE
-=============
+  Install Vim like this eg using nixos option environment.systemPackages which will provide
+  vim-with-plugins in PATH:
 
-Install Vim like this eg using nixos option environment.systemPackages which will provide
-vim-with-plugins in PATH:
+    vim-full.customize {
+      name = "vim-with-plugins"; # optional
 
-  vim-full.customize {
-    name = "vim-with-plugins"; # optional
+      # add custom .vimrc lines like this:
+      vimrcConfig.customRC = ''
+        set hidden
+      '';
 
-    # add custom .vimrc lines like this:
-    vimrcConfig.customRC = ''
-      set hidden
-    '';
-
-    # store your plugins in Vim packages
-    vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
-      # loaded on launch
-      start = [ youcompleteme fugitive ];
-      # manually loadable by calling `:packadd $plugin-name`
-      opt = [ phpCompletion elm-vim ];
-      # To automatically load a plugin when opening a filetype, add vimrc lines like:
-      # autocmd FileType php :packadd phpCompletion
+      # store your plugins in Vim packages
+      vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
+        # loaded on launch
+        start = [ youcompleteme fugitive ];
+        # manually loadable by calling `:packadd $plugin-name`
+        opt = [ phpCompletion elm-vim ];
+        # To automatically load a plugin when opening a filetype, add vimrc lines like:
+        # autocmd FileType php :packadd phpCompletion
+      };
     };
-  };
 
-WHAT IS A VIM PLUGIN?
-=====================
-Typical plugin files:
+  WHAT IS A VIM PLUGIN?
+  =====================
+  Typical plugin files:
 
-  plugin/P1.vim
-  autoload/P1.vim
-  ftplugin/xyz.vim
-  doc/plugin-documentation.txt (traditional documentation)
-  README(.md) (nowadays thanks to github)
-
-
-Vim offers the :h rtp setting which works for most plugins. Thus adding
-this to your .vimrc should make most plugins work:
-
-  set rtp+=~/.nix-profile/share/vim-plugins/youcompleteme
-  " or for p in ["youcompleteme"] | exec 'set rtp+=~/.nix-profile/share/vim-plugins/'.p | endfor
-
-Learn about about plugin Vim plugin mm managers at
-http://vim-wiki.mawercer.de/wiki/topic/vim%20plugin%20managment.html.
-
-The documentation can be accessed by Vim's :help command if it was tagged.
-See vimHelpTags sample code below.
-
-CONTRIBUTING AND CUSTOMIZING
-============================
-The example file pkgs/applications/editors/vim/plugins/default.nix provides
-both:
-* manually mantained plugins
-* plugins created by VAM's nix#ExportPluginsForNix implementation
-
-I highly recommend to lookup vim plugin attribute names at the [vim-pi] project
- which is a database containing all plugins from
-vim.org and quite a lot of found at github and similar sources. vim-pi's documented purpose
-is to associate vim.org script ids to human readable names so that dependencies
-can be describe easily.
-
-How to find a name?
-  * http://vam.mawercer.de/ or VAM's
-  * grep vim-pi
-  * use VAM's completion or :AddonsInfo command
-
-It might happen than a plugin is not known by vim-pi yet. We encourage you to
-contribute to vim-pi so that plugins can be updated automatically.
+    plugin/P1.vim
+    autoload/P1.vim
+    ftplugin/xyz.vim
+    doc/plugin-documentation.txt (traditional documentation)
+    README(.md) (nowadays thanks to github)
 
 
-CREATING DERIVATIONS AUTOMATICALLY BY PLUGIN NAME
-==================================================
-Most convenient is to use a ~/.vim-scripts file putting a plugin name into each line
-as documented by [VAM]'s README.md
-It is the same format you pass to vimrcConfig.vam.pluginDictionaries from the
-usage example above.
+  Vim offers the :h rtp setting which works for most plugins. Thus adding
+  this to your .vimrc should make most plugins work:
 
-Then create a temp vim file and insert:
+    set rtp+=~/.nix-profile/share/vim-plugins/youcompleteme
+    " or for p in ["youcompleteme"] | exec 'set rtp+=~/.nix-profile/share/vim-plugins/'.p | endfor
 
-  let opts = {}
-  let opts.path_to_nixpkgs = '/etc/nixos/nixpkgs'
-  let opts.cache_file = '/tmp/export-vim-plugin-for-nix-cache-file'
-  let opts.plugin_dictionaries = map(readfile("vim-plugins"), 'eval(v:val)')
-  " add more files
-  " let opts.plugin_dictionaries += map(.. other file )
-  call nix#ExportPluginsForNix(opts)
+  Learn about about plugin Vim plugin mm managers at
+  http://vim-wiki.mawercer.de/wiki/topic/vim%20plugin%20managment.html.
 
-Then ":source %" it.
+  The documentation can be accessed by Vim's :help command if it was tagged.
+  See vimHelpTags sample code below.
 
-nix#ExportPluginsForNix is provided by ./vim2nix
+  CONTRIBUTING AND CUSTOMIZING
+  ============================
+  The example file pkgs/applications/editors/vim/plugins/default.nix provides
+  both:
+  * manually mantained plugins
+  * plugins created by VAM's nix#ExportPluginsForNix implementation
 
-A buffer will open containing the plugin derivation lines as well list
-fitting the vimrcConfig.vam.pluginDictionaries option.
+  I highly recommend to lookup vim plugin attribute names at the [vim-pi] project
+   which is a database containing all plugins from
+  vim.org and quite a lot of found at github and similar sources. vim-pi's documented purpose
+  is to associate vim.org script ids to human readable names so that dependencies
+  can be describe easily.
 
-Thus the most simple usage would be:
+  How to find a name?
+    * http://vam.mawercer.de/ or VAM's
+    * grep vim-pi
+    * use VAM's completion or :AddonsInfo command
 
-  vim_with_plugins =
-    let vim = vim-full;
-        inherit (vimUtil.override {inherit vim}) rtpPath addRtp buildVimPlugin vimHelpTags;
-        vimPlugins = [
-          # the derivation list from the buffer created by nix#ExportPluginsForNix
-          # don't set which will default to pkgs.vimPlugins
+  It might happen than a plugin is not known by vim-pi yet. We encourage you to
+  contribute to vim-pi so that plugins can be updated automatically.
+
+
+  CREATING DERIVATIONS AUTOMATICALLY BY PLUGIN NAME
+  ==================================================
+  Most convenient is to use a ~/.vim-scripts file putting a plugin name into each line
+  as documented by [VAM]'s README.md
+  It is the same format you pass to vimrcConfig.vam.pluginDictionaries from the
+  usage example above.
+
+  Then create a temp vim file and insert:
+
+    let opts = {}
+    let opts.path_to_nixpkgs = '/etc/nixos/nixpkgs'
+    let opts.cache_file = '/tmp/export-vim-plugin-for-nix-cache-file'
+    let opts.plugin_dictionaries = map(readfile("vim-plugins"), 'eval(v:val)')
+    " add more files
+    " let opts.plugin_dictionaries += map(.. other file )
+    call nix#ExportPluginsForNix(opts)
+
+  Then ":source %" it.
+
+  nix#ExportPluginsForNix is provided by ./vim2nix
+
+  A buffer will open containing the plugin derivation lines as well list
+  fitting the vimrcConfig.vam.pluginDictionaries option.
+
+  Thus the most simple usage would be:
+
+    vim_with_plugins =
+      let vim = vim-full;
+          inherit (vimUtil.override {inherit vim}) rtpPath addRtp buildVimPlugin vimHelpTags;
+          vimPlugins = [
+            # the derivation list from the buffer created by nix#ExportPluginsForNix
+            # don't set which will default to pkgs.vimPlugins
+          ];
+      in vim.customize {
+        name = "vim-with-plugins";
+
+        vimrcConfig.customRC = '' .. '';
+
+        vimrcConfig.vam.knownPlugins = vimPlugins;
+        vimrcConfig.vam.pluginDictionaries = [
+            # the plugin list form ~/.vim-scripts turned into nix format added to
+            # the buffer created by the nix#ExportPluginsForNix
         ];
-    in vim.customize {
-      name = "vim-with-plugins";
+      }
 
-      vimrcConfig.customRC = '' .. '';
+  vim_with_plugins can be installed like any other application within Nix.
 
-      vimrcConfig.vam.knownPlugins = vimPlugins;
-      vimrcConfig.vam.pluginDictionaries = [
-          # the plugin list form ~/.vim-scripts turned into nix format added to
-          # the buffer created by the nix#ExportPluginsForNix
-      ];
-    }
-
-vim_with_plugins can be installed like any other application within Nix.
-
-[VAM]    https://github.com/MarcWeber/vim-addon-manager
-[vim-pi] https://bitbucket.org/vimcommunity/vim-pi
+  [VAM]    https://github.com/MarcWeber/vim-addon-manager
+  [vim-pi] https://bitbucket.org/vimcommunity/vim-pi
 */
 
 
@@ -168,10 +167,27 @@ let
     let mkEntryFromDrv = drv: { name = "${prefix}/${lib.getName drv}"; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
-  /* Generates a packpath folder as expected by vim
-       Example:
-       packDir (myVimPackage.{ start = [ vimPlugins.vim-fugitive ]; opt = [] })
-       => "/nix/store/xxxxx-pack-dir"
+  /**
+    Generates a packpath folder as expected by vim
+
+
+    # Inputs
+
+    `packages`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `packDir` usage example
+
+    ```nix
+    packDir (myVimPackage.{ start = [ vimPlugins.vim-fugitive ]; opt = [] })
+    => "/nix/store/xxxxx-pack-dir"
+    ```
+
+    :::
   */
   packDir = packages:
   let
@@ -212,18 +228,28 @@ let
     set runtimepath^=${packDir packages}
   '';
 
-  /* Generates a vimrc string
+  /**
+    Generates a vimrc string
 
     packages is an attrset with {name: { start = [ vim derivations ]; opt = [ vim derivations ]; }
-    Example:
-      vimrcContent {
 
-        packages = { home-manager = { start = [vimPlugins.vim-fugitive]; opt = [];};
-        beforePlugins = '';
-        customRC = ''let mapleader = " "'';
 
-      };
-   */
+    # Examples
+    :::{.example}
+    ## `vimrcContent` usage example
+
+    ```nix
+    vimrcContent {
+
+      packages = { home-manager = { start = [vimPlugins.vim-fugitive]; opt = [];};
+      beforePlugins = '';
+      customRC = ''let mapleader = " "'';
+
+    };
+    ```
+
+    :::
+  */
   vimrcContent = {
     packages ? null,
     vam ? null, # deprecated
@@ -237,7 +263,8 @@ let
   }:
 
     let
-      /* vim-plug is an extremely popular vim plugin manager.
+      /**
+        vim-plug is an extremely popular vim plugin manager.
       */
       plugImpl =
       ''

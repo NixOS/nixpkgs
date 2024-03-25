@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libGLU libGL SDL SDL_mixer SDL_image SDL_ttf ];
 
-  /*
+  /**
     This big commented thing may be needed for versions 2.8.0 or beyond
     I keep it here for future updates.
 

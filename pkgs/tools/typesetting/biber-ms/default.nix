@@ -22,12 +22,16 @@ perlPackages.buildPerlModule {
   buildInputs = with perlPackages; [
     # build deps
     ConfigAutoConf ExtUtilsLibBuilder FileWhich TestDifferences
-    /*TestMore=TestSimple=null*/
+    /**
+      TestMore=TestSimple=null
+    */
     # runtime deps
     BusinessISBN BusinessISMN BusinessISSN ClassAccessor DataCompare DataDump
     DataUniqid DateTimeCalendarJulian DateTimeFormatBuilder EncodeEUCJPASCII
     EncodeHanExtra EncodeJIS2K EncodeLocale FileSlurper IOString IPCRun3
-    LWPProtocolHttps LWP/*LWPUserAgent*/ libwwwperl LinguaTranslit ListAllUtils
+    LWPProtocolHttps LWP/**
+  LWPUserAgent
+*/ libwwwperl LinguaTranslit ListAllUtils
     ListMoreUtils ListMoreUtilsXS LogLog4perl MozillaCA ParseRecDescent
     PerlIOutf8_strict RegexpCommon SortKey TextBalanced TextBibTeX TextCSV
     TextCSV_XS TextRoman URI UnicodeLineBreak XMLLibXML XMLLibXMLSimple

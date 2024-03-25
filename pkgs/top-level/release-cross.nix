@@ -1,15 +1,16 @@
-/* This file defines some basic smoke tests for cross compilation.
-   Individual jobs can be tested by running:
+/**
+  This file defines some basic smoke tests for cross compilation.
+  Individual jobs can be tested by running:
 
-   $ nix-build pkgs/top-level/release-cross.nix -A <jobname>.<package> --arg supportedSystems '[builtins.currentSystem]'
+  $ nix-build pkgs/top-level/release-cross.nix -A <jobname>.<package> --arg supportedSystems '[builtins.currentSystem]'
 
-   e.g.
+  e.g.
 
-   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
+  $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
 
-   To build all of the bootstrapFiles bundles on every enabled platform, use:
+  To build all of the bootstrapFiles bundles on every enabled platform, use:
 
-   $ nix-build --expr 'with import ./pkgs/top-level/release-cross.nix {supportedSystems = [builtins.currentSystem];}; builtins.mapAttrs (k: v: v.build) bootstrapTools'
+  $ nix-build --expr 'with import ./pkgs/top-level/release-cross.nix {supportedSystems = [builtins.currentSystem];}; builtins.mapAttrs (k: v: v.build) bootstrapTools'
 */
 
 { # The platforms *from* which we cross compile.
@@ -177,56 +178,80 @@ in
 
   crossIphone32 = mapTestOnCross systems.examples.iphone32 darwinCommon;
 
-  /* Test some cross builds to the Sheevaplug */
+  /**
+    Test some cross builds to the Sheevaplug
+  */
   crossSheevaplugLinux = mapTestOnCross systems.examples.sheevaplug (linuxCommon // {
     ubootSheevaplug = nativePlatforms;
   });
 
-  /* Test some cross builds on 32 bit mingw-w64 */
+  /**
+    Test some cross builds on 32 bit mingw-w64
+  */
   crossMingw32 = mapTestOnCross systems.examples.mingw32 windowsCommon;
 
-  /* Test some cross builds on 64 bit mingw-w64 */
+  /**
+    Test some cross builds on 64 bit mingw-w64
+  */
   crossMingwW64 = mapTestOnCross systems.examples.mingwW64 windowsCommon;
 
-  /* Linux on mipsel */
+  /**
+    Linux on mipsel
+  */
   fuloongminipc = mapTestOnCross systems.examples.fuloongminipc linuxCommon;
   ben-nanonote = mapTestOnCross systems.examples.ben-nanonote linuxCommon;
 
-  /* Javacript */
+  /**
+    Javacript
+  */
   ghcjs = mapTestOnCross systems.examples.ghcjs {
     haskell.packages.ghcjs.hello = nativePlatforms;
     haskell.packages.native-bignum.ghcHEAD.hello = nativePlatforms;
     haskellPackages.hello = nativePlatforms;
   };
 
-  /* Linux on Raspberrypi */
+  /**
+    Linux on Raspberrypi
+  */
   rpi = mapTestOnCross systems.examples.raspberryPi rpiCommon;
   rpi-musl = mapTestOnCross systems.examples.muslpi rpiCommon;
 
-  /* Linux on the Remarkable */
+  /**
+    Linux on the Remarkable
+  */
   remarkable1 = mapTestOnCross systems.examples.remarkable1 linuxCommon;
   remarkable2 = mapTestOnCross systems.examples.remarkable2 linuxCommon;
 
-  /* Linux on armv7l-hf */
+  /**
+    Linux on armv7l-hf
+  */
   armv7l-hf = mapTestOnCross systems.examples.armv7l-hf-multiplatform linuxCommon;
 
   pogoplug4 = mapTestOnCross systems.examples.pogoplug4 linuxCommon;
 
-  /* Linux on aarch64 */
+  /**
+    Linux on aarch64
+  */
   aarch64 = mapTestOnCross systems.examples.aarch64-multiplatform linuxCommon;
   aarch64-musl = mapTestOnCross systems.examples.aarch64-multiplatform-musl linuxCommon;
 
-  /* Linux on RISCV */
+  /**
+    Linux on RISCV
+  */
   riscv64 = mapTestOnCross systems.examples.riscv64 linuxCommon;
   riscv32 = mapTestOnCross systems.examples.riscv32 linuxCommon;
 
-  /* Linux on LoongArch */
+  /**
+    Linux on LoongArch
+  */
   loongarch64-linux = mapTestOnCross systems.examples.loongarch64-linux linuxCommon;
 
   m68k = mapTestOnCross systems.examples.m68k linuxCommon;
   s390x = mapTestOnCross systems.examples.s390x linuxCommon;
 
-  /* (Cross-compiled) Linux on x86 */
+  /**
+    (Cross-compiled) Linux on x86
+  */
   x86_64-musl = mapTestOnCross systems.examples.musl64 linuxCommon;
   x86_64-gnu = mapTestOnCross systems.examples.gnu64 linuxCommon;
   i686-musl = mapTestOnCross systems.examples.musl32 linuxCommon;
@@ -264,7 +289,9 @@ in
   # successfully cross-compile to Redox so far
   x86_64-redox = mapTestOnCross systems.examples.x86_64-unknown-redox embedded;
 
-  /* Cross-built bootstrap tools for every supported platform */
+  /**
+    Cross-built bootstrap tools for every supported platform
+  */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     meta = {

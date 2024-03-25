@@ -1,6 +1,7 @@
 { stdenv, lib, fetchzip, kernel }:
 
-/* The python script shouldn't be needed for users of this kernel module.
+/**
+  The python script shouldn't be needed for users of this kernel module.
   https://github.com/rr-debugger/rr/blob/master/scripts/zen_workaround.py
   The module itself is called "zen_workaround" (a bit generic unfortunately).
 */

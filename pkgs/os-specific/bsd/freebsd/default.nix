@@ -596,7 +596,9 @@ in makeScopeWithSplicing' {
       bsdSetupHook freebsdSetupHook
       makeMinimal
       install
-      mandoc groff rsync /*nbperf*/ rpcgen
+      mandoc groff rsync /**
+  nbperf
+*/ rpcgen
 
       # HACK use NetBSD's for now
       buildPackages.netbsd.mtree

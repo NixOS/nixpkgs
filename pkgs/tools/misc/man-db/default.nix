@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
+  nativeCheckInputs = [ libiconv /**
+  for 'iconv' binary
+*/ ];
 
   patches = [
     ./systemwide-man-db-conf.patch
@@ -81,7 +83,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */;
+  doCheck = !stdenv.hostPlatform.isMusl /**
+  iconv binary
+*/;
 
   passthru.tests = {
     nixos = nixosTests.man;

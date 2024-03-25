@@ -1,4 +1,5 @@
-/* Build configuration used to build glibc, Info files, and locale
+/**
+  Build configuration used to build glibc, Info files, and locale
    information.
 
    Note that this derivation has multiple outputs and does not respect the
@@ -58,54 +59,68 @@ stdenv.mkDerivation ({
 
   patches =
     [
-      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.38/master && git describe
-          glibc-2.38-44-gd37c2b20a4
-          $ git show --minimal --reverse glibc-2.38.. | gzip -9n --rsyncable - > 2.38-master.patch.gz
+      /**
+        No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
+         $ git fetch --all -p && git checkout origin/release/2.38/master && git describe
+         glibc-2.38-44-gd37c2b20a4
+         $ git show --minimal --reverse glibc-2.38.. | gzip -9n --rsyncable - > 2.38-master.patch.gz
 
-         To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.38-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.38-master.patch.gz
-       */
+        To compare the archive contents zdiff can be used.
+         $ zdiff -u 2.38-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.38-master.patch.gz
+      */
       ./2.38-master.patch.gz
 
-      /* Allow NixOS and Nix to handle the locale-archive. */
+      /**
+        Allow NixOS and Nix to handle the locale-archive.
+      */
       ./nix-locale-archive.patch
 
-      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
+      /**
+        Don't use /etc/ld.so.cache, for non-NixOS systems.
+      */
       ./dont-use-system-ld-so-cache.patch
 
-      /* Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.  */
+      /**
+        Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.
+      */
       ./dont-use-system-ld-so-preload.patch
 
-      /* The command "getconf CS_PATH" returns the default search path
-         "/bin:/usr/bin", which is inappropriate on NixOS machines. This
-         patch extends the search path by "/run/current-system/sw/bin". */
+      /**
+        The command "getconf CS_PATH" returns the default search path
+        "/bin:/usr/bin", which is inappropriate on NixOS machines. This
+        patch extends the search path by "/run/current-system/sw/bin".
+      */
       ./fix_path_attribute_in_getconf.patch
 
       ./fix-x64-abi.patch
 
-      /* https://github.com/NixOS/nixpkgs/pull/137601 */
+      /**
+        https://github.com/NixOS/nixpkgs/pull/137601
+      */
       ./nix-nss-open-files.patch
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
 
-      /* Patch derived from archlinux,
-         https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/blob/e54d98e2d1aae4930ecad9404ef12234922d9dfd/reenable_DT_HASH.patch
+      /**
+        Patch derived from archlinux,
+        https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/blob/e54d98e2d1aae4930ecad9404ef12234922d9dfd/reenable_DT_HASH.patch
 
-         See also https://github.com/ValveSoftware/Proton/issues/6051
-         & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
+        See also https://github.com/ValveSoftware/Proton/issues/6051
+        & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
 
-      /* Retrieved from https://salsa.debian.org/glibc-team/glibc/-/commit/662dbc4f9287139a0d9c91df328a5ba6cc6abee1#0f3c6d67cb8cf5bb35c421c20f828fea97b68edf
-         Qualys advisory: https://www.qualys.com/2024/01/30/qsort.txt
-       */
+      /**
+        Retrieved from https://salsa.debian.org/glibc-team/glibc/-/commit/662dbc4f9287139a0d9c91df328a5ba6cc6abee1#0f3c6d67cb8cf5bb35c421c20f828fea97b68edf
+        Qualys advisory: https://www.qualys.com/2024/01/30/qsort.txt
+      */
       ./local-qsort-memory-corruption.patch
     ]
-    /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
-       every HPC piece of software, without this patch CUDA compilation on ARM
-       is effectively broken. See
-       https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
+    /**
+      NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
+      every HPC piece of software, without this patch CUDA compilation on ARM
+      is effectively broken. See
+      https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
     */
     ++ (
       let

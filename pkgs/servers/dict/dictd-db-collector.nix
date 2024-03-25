@@ -1,7 +1,7 @@
 { stdenv, lib, dict, libfaketime }:
 ({ dictlist, allowList ? [ "127.0.0.1" ], denyList ? [ ] }:
 
-/*
+/**
   dictlist is a list of form
   [ { filename = /path/to/files/basename;
   name = "name"; } ]

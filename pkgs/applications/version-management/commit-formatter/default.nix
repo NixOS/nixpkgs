@@ -16,7 +16,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A CLI tool to help you write git commit";
     homepage = "https://github.com/Eliot00/commit-formatter";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ elliot ];
     mainProgram = "git-cf";
   };

@@ -1352,9 +1352,11 @@ mapAliases ({
     targetLlvm = targetPackages.llvmPackages_git.llvm or llvmPackages_git.llvm;
   });
 
-  /* If these are in the scope of all-packages.nix, they cause collisions
-    between mixed versions of qt. See:
-  https://github.com/NixOS/nixpkgs/pull/101369 */
+  /**
+    If these are in the scope of all-packages.nix, they cause collisions
+      between mixed versions of qt. See:
+    https://github.com/NixOS/nixpkgs/pull/101369
+  */
 
   inherit (plasma5Packages)
     akonadi akregator arianna ark bluedevil bomber bovo breeze-grub breeze-gtk

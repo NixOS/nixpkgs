@@ -56,12 +56,12 @@ resholve.mkDerivation rec {
       fix = {
         # stray absolute path; make it resolve from coreutils
         "/usr/bin/od" = true;
-        /*
-        Caution: this one is contextually debatable. shunit2
-        sets this variable after testing whether `echo -e test`
-        yields `test` or `-e test`. Since we're setting the
-        interpreter, we can pre-test this. But if we go fiddle
-        the interpreter later, I guess we _could_ break it.
+        /**
+          Caution: this one is contextually debatable. shunit2
+          sets this variable after testing whether `echo -e test`
+          yields `test` or `-e test`. Since we're setting the
+          interpreter, we can pre-test this. But if we go fiddle
+          the interpreter later, I guess we _could_ break it.
         */
         "$__SHUNIT_CMD_ECHO_ESC" = [ "echo -e" ];
         "$SHUNIT_CMD_TPUT" = [ "tput" ]; # from ncurses

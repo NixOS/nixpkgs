@@ -553,7 +553,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
       withHoogle = self.ghcWithHoogle;
     };
 
-    /*
+    /**
       Run `cabal sdist` on a source.
 
       Unlike `haskell.lib.sdistTarball`, this does not require any dependencies
@@ -584,12 +584,19 @@ in package-set { inherit pkgs lib callPackage; } self // {
         mv out/*.tar.gz $out
       '';
 
-    /*
+    /**
       Like `haskell.lib.buildFromSdist`, but using `cabal sdist` instead of
       building `./Setup`.
 
       Unlike `haskell.lib.buildFromSdist`, this does not require any dependencies
       to be present. This makes `buildFromCabalSdist` faster than `haskell.lib.buildFromSdist`.
+
+
+      # Inputs
+
+      `pkg`
+
+      : 1\. Function argument
     */
     buildFromCabalSdist = pkg:
       haskellLib.overrideSrc
@@ -599,7 +606,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         }
         pkg;
 
-    /*
+    /**
       Modify a Haskell package to add shell completion scripts for the
       given executables produced by it. These completion scripts will be
       picked up automatically if the resulting derivation is installed,
@@ -612,10 +619,21 @@ in package-set { inherit pkgs lib callPackage; } self // {
        commands: names of the executables built by the derivation
             pkg: Haskell package that builds the executables
 
-      Example:
-        generateOptparseApplicativeCompletions [ "exec1" "exec2" ] pkg
+      # Type
 
-       Type: [str] -> drv -> drv
+      ```
+      [str] -> drv -> drv
+      ```
+
+      # Examples
+      :::{.example}
+      ## `generateOptparseApplicativeCompletions` usage example
+
+      ```nix
+      generateOptparseApplicativeCompletions [ "exec1" "exec2" ] pkg
+      ```
+
+      :::
     */
     generateOptparseApplicativeCompletions =
       (self.callPackage (
@@ -629,15 +647,26 @@ in package-set { inherit pkgs lib callPackage; } self // {
         else pkg
       ) { }) // { __attrsFailEvaluation = true; };
 
-    /*
+    /**
       Modify given Haskell package to force GHC to employ the LLVM
       codegen backend when compiling. Useful when working around bugs
       in a native codegen backend GHC defaults to.
 
-      Example:
-        forceLlvmCodegenBackend tls
+      # Type
 
-      Type: drv -> drv
+      ```
+      drv -> drv
+      ```
+
+      # Examples
+      :::{.example}
+      ## `forceLlvmCodegenBackend` usage example
+
+      ```nix
+      forceLlvmCodegenBackend tls
+      ```
+
+      :::
     */
     forceLlvmCodegenBackend = overrideCabal (drv: {
       configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];

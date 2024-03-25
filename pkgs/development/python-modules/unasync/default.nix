@@ -39,7 +39,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Project that can transform your asynchronous code into synchronous code";
     homepage = "https://github.com/python-trio/unasync";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ dotlambda ];
   };
 }

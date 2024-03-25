@@ -4,7 +4,7 @@
 
 let
 
-  /*
+  /**
     Invoke NixOS. Unlike traditional NixOS, this does not include all modules.
     Any such modules have to be explicitly added via the `modules` parameter,
     or imported using `imports` in a module.
@@ -25,8 +25,7 @@ let
 
       An attribute set containing `config.system.build.toplevel` among other
       attributes. See `lib.evalModules` in the Nixpkgs library.
-
-   */
+  */
   evalModules = {
     prefix ? [],
     modules ? [],

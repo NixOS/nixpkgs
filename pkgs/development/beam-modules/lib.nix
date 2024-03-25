@@ -5,7 +5,23 @@ let
 in
 rec {
 
-  /* Similar to callPackageWith/callPackage, but without makeOverridable
+  /**
+    Similar to callPackageWith/callPackage, but without makeOverridable
+
+
+    # Inputs
+
+    `autoArgs`
+
+    : 1\. Function argument
+
+    `fn`
+
+    : 2\. Function argument
+
+    `args`
+
+    : 3\. Function argument
   */
   callPackageWith = autoArgs: fn: args:
     let
@@ -15,19 +31,31 @@ rec {
 
   callPackage = callPackageWith pkgs;
 
-  /* Uses generic-builder to evaluate provided drv containing OTP-version
-  specific data.
+  /**
+    Uses generic-builder to evaluate provided drv containing OTP-version
+    specific data.
 
-  drv: package containing version-specific args;
-  builder: generic builder for all Erlang versions;
-  args: arguments merged into version-specific args, used mostly to customize
-        dependencies;
+    drv: package containing version-specific args;
+    builder: generic builder for all Erlang versions;
+    args: arguments merged into version-specific args, used mostly to customize
+          dependencies;
 
-  Arguments passed to the generic-builder are overridable, used to
-  enable/disable high-level OTP features, like ODBC or WX support;
+    Arguments passed to the generic-builder are overridable, used to
+    enable/disable high-level OTP features, like ODBC or WX support;
 
-  Please note that "mkDerivation" defined here is the one called from R16.nix
-  and similar files.
+    Please note that "mkDerivation" defined here is the one called from R16.nix
+    and similar files.
+
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
+    `args`
+
+    : 2\. Function argument
   */
   callErlang = drv: args:
     let
@@ -37,18 +65,30 @@ rec {
         mkDerivation = pkgs.makeOverridable builder;
       };
 
-  /* Uses generic-builder to evaluate provided drv containing Elixir version
-  specific data.
+  /**
+    Uses generic-builder to evaluate provided drv containing Elixir version
+    specific data.
 
-  drv: package containing version-specific args;
-  builder: generic builder for all Erlang versions;
-  args: arguments merged into version-specific args, used mostly to customize
-        dependencies;
+    drv: package containing version-specific args;
+    builder: generic builder for all Erlang versions;
+    args: arguments merged into version-specific args, used mostly to customize
+          dependencies;
 
-  Arguments passed to the generic-builder are overridable.
+    Arguments passed to the generic-builder are overridable.
 
-  Please note that "mkDerivation" defined here is the one called from 1.4.nix
-  and similar files.
+    Please note that "mkDerivation" defined here is the one called from 1.4.nix
+    and similar files.
+
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
+    `args`
+
+    : 2\. Function argument
   */
   callElixir = drv: args:
     let
@@ -58,18 +98,30 @@ rec {
         mkDerivation = pkgs.makeOverridable builder;
       };
 
-  /* Uses generic-builder to evaluate provided drv containing Elixir version
-  specific data.
+  /**
+    Uses generic-builder to evaluate provided drv containing Elixir version
+    specific data.
 
-  drv: package containing version-specific args;
-  builder: generic builder for all Erlang versions;
-  args: arguments merged into version-specific args, used mostly to customize
-        dependencies;
+    drv: package containing version-specific args;
+    builder: generic builder for all Erlang versions;
+    args: arguments merged into version-specific args, used mostly to customize
+          dependencies;
 
-  Arguments passed to the generic-builder are overridable.
+    Arguments passed to the generic-builder are overridable.
 
-  Please note that "mkDerivation" defined here is the one called from 1.2.nix
-  and similar files.
+    Please note that "mkDerivation" defined here is the one called from 1.2.nix
+    and similar files.
+
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
+    `args`
+
+    : 2\. Function argument
   */
   callLFE = drv: args:
     let

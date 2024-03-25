@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-rmORSZuhds9W2WpNgYf4AJM2jgEUPoJit4G64qLqj5w=";
   };
 
-  /* Fix up the frontend to load the 'default' cryptoverif library
-  ** from under $out/libexec. By default, it expects to find the files
-  ** in $CWD which doesn't work. */
+  /**
+    Fix up the frontend to load the 'default' cryptoverif library
+    ** from under $out/libexec. By default, it expects to find the files
+    ** in $CWD which doesn't work.
+  */
   postPatch = ''
     substituteInPlace ./src/syntax.ml \
       --replace \"default\" \"$out/libexec/default\"

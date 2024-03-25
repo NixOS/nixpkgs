@@ -12,7 +12,7 @@
 }:
 
 let
-  /*
+  /**
     Currently, the test files are only fully available from the `dev` branch of
     `biber`. When https://github.com/plk/biber/pull/467 is eventually released,
     we can obtain the test files from `texlive.pkgs.biber.texsource`. For now,
@@ -44,7 +44,7 @@ let
   '';
 
   networkRequiringTestPkg = name: script: runCommand
-    /*
+    /**
       Introduce dependence on `tectonic` in the test package name. Note that
       adding `tectonic` to `nativeBuildInputs` is not enough to trigger
       rebuilds for a fixed-output derivation. One must update its name or
@@ -53,7 +53,7 @@ let
     */
     "test-${lib.removePrefix "${builtins.storeDir}/" tectonic.outPath}-${name}"
     {
-      /*
+      /**
         Make a fixed-output derivation, return an `emptyFile` with fixed hash.
         These derivations are allowed to access the internet from within a
         sandbox, which allows us to test the automatic download of resource

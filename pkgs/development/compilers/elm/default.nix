@@ -95,9 +95,9 @@ let
   hs92Pkgs = self: pkgs.haskell.packages.ghc92.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
-      /*
-      The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
-      `package/nix/build.sh`
+      /**
+        The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
+        `package/nix/build.sh`
       */
       elm-format = justStaticExecutables (overrideCabal (drv: {
         jailbreak = true;
@@ -134,13 +134,14 @@ let
 in lib.makeScope pkgs.newScope (self: with self; {
   inherit fetchElmDeps nodejs;
 
-  /* Node/NPM based dependencies can be upgraded using script `packages/generate-node-packages.sh`.
+  /**
+    Node/NPM based dependencies can be upgraded using script `packages/generate-node-packages.sh`.
 
-      * Packages which rely on `bin-wrap` will fail by default
-        and can be patched using `patchBinwrap` function defined in `packages/lib.nix`.
+    * Packages which rely on `bin-wrap` will fail by default
+      and can be patched using `patchBinwrap` function defined in `packages/lib.nix`.
 
-      * Packages which depend on npm installation of elm can be patched using
-        `patchNpmElm` function also defined in `packages/lib.nix`.
+    * Packages which depend on npm installation of elm can be patched using
+      `patchNpmElm` function also defined in `packages/lib.nix`.
   */
   elmLib = let
     hsElmPkgs = (hs810Pkgs self) // (hs96Pkgs self);

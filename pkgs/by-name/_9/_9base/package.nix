@@ -70,7 +70,9 @@ stdenv.mkDerivation {
       The overall SLOC is about 66kSLOC, so this userland + all libs is much smaller than, e.g. bash.
       9base can be used to run werc instead of the full blown plan9port.
     '';
-    license = with licenses; [ mit /* and */ lpl-102 ];
+    license = with licenses; [ mit /**
+  and
+*/ lpl-102 ];
     maintainers = with maintainers; [ jk ];
     platforms = platforms.unix;
     # needs additional work to support aarch64-darwin

@@ -62,7 +62,9 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
   nativeBuildInputs = [
-    which pkg-config perl autoreconfHook/*patches applied*/
+    which pkg-config perl autoreconfHook/**
+  patches applied
+*/
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # autogen needs a build autogen when cross-compiling
     buildPackages.buildPackages.autogen buildPackages.texinfo

@@ -1,4 +1,4 @@
-/*
+/**
   <!-- This anchor is here for backwards compatibity -->
   []{#sec-fileset}
 
@@ -157,17 +157,34 @@ let
 
 in {
 
-  /*
+  /**
     Create a file set from a path that may or may not exist:
     - If the path does exist, the path is [coerced to a file set](#sec-fileset-path-coercion).
     - If the path does not exist, a file set containing no files is returned.
 
-    Type:
-      maybeMissing :: Path -> FileSet
 
-    Example:
-      # All files in the current directory, but excluding main.o if it exists
-      difference ./. (maybeMissing ./main.o)
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    maybeMissing :: Path -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `maybeMissing` usage example
+
+    ```nix
+    # All files in the current directory, but excluding main.o if it exists
+    difference ./. (maybeMissing ./main.o)
+    ```
+
+    :::
   */
   maybeMissing =
     path:
@@ -183,7 +200,7 @@ in {
     else
       _singleton path;
 
-  /*
+  /**
     Incrementally evaluate and trace a file set in a pretty way.
     This function is only intended for debugging purposes.
     The exact tracing format is unspecified and may change.
@@ -194,25 +211,45 @@ in {
 
     This variant is useful for tracing file sets in the Nix repl.
 
-    Type:
-      trace :: FileSet -> Any -> Any
 
-    Example:
-      trace (unions [ ./Makefile ./src ./tests/run.sh ]) null
-      =>
-      trace: /home/user/src/myProject
-      trace: - Makefile (regular)
-      trace: - src (all files in directory)
-      trace: - tests
-      trace:   - run.sh (regular)
-      null
-  */
-  trace =
-    /*
-    The file set to trace.
+    # Inputs
+
+    `fileset`
+
+    : The file set to trace.
 
     This argument can also be a path,
     which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    # Type
+
+    ```
+    trace :: FileSet -> Any -> Any
+    ```
+
+    # Examples
+    :::{.example}
+    ## `trace` usage example
+
+    ```nix
+    trace (unions [ ./Makefile ./src ./tests/run.sh ]) null
+    =>
+    trace: /home/user/src/myProject
+    trace: - Makefile (regular)
+    trace: - src (all files in directory)
+    trace: - tests
+    trace:   - run.sh (regular)
+    null
+    ```
+
+    :::
+  */
+  trace =
+    /**
+      The file set to trace.
+
+      This argument can also be a path,
+      which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
     */
     fileset:
     let
@@ -224,7 +261,7 @@ in {
       (_printFileset actualFileset)
       (x: x);
 
-  /*
+  /**
     Incrementally evaluate and trace a file set in a pretty way.
     This function is only intended for debugging purposes.
     The exact tracing format is unspecified and may change.
@@ -234,32 +271,52 @@ in {
 
     This variant is useful for tracing file sets passed as arguments to other functions.
 
-    Type:
-      traceVal :: FileSet -> FileSet
 
-    Example:
-      toSource {
-        root = ./.;
-        fileset = traceVal (unions [
-          ./Makefile
-          ./src
-          ./tests/run.sh
-        ]);
-      }
-      =>
-      trace: /home/user/src/myProject
-      trace: - Makefile (regular)
-      trace: - src (all files in directory)
-      trace: - tests
-      trace:   - run.sh (regular)
-      "/nix/store/...-source"
-  */
-  traceVal =
-    /*
-    The file set to trace and return.
+    # Inputs
+
+    `fileset`
+
+    : The file set to trace and return.
 
     This argument can also be a path,
     which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    # Type
+
+    ```
+    traceVal :: FileSet -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `traceVal` usage example
+
+    ```nix
+    toSource {
+      root = ./.;
+      fileset = traceVal (unions [
+        ./Makefile
+        ./src
+        ./tests/run.sh
+      ]);
+    }
+    =>
+    trace: /home/user/src/myProject
+    trace: - Makefile (regular)
+    trace: - src (all files in directory)
+    trace: - tests
+    trace:   - run.sh (regular)
+    "/nix/store/...-source"
+    ```
+
+    :::
+  */
+  traceVal =
+    /**
+      The file set to trace and return.
+
+      This argument can also be a path,
+      which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
     */
     fileset:
     let
@@ -273,7 +330,7 @@ in {
       # but that would then duplicate work for consumers of the fileset, because then they have to coerce it again
       actualFileset;
 
-  /*
+  /**
     Add the local files contained in `fileset` to the store as a single [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) rooted at `root`.
 
     The result is the store path as a string-like value, making it usable e.g. as the `src` of a derivation, or in string interpolation:
@@ -286,62 +343,72 @@ in {
 
     The name of the store path is always `source`.
 
-    Type:
-      toSource :: {
-        root :: Path,
-        fileset :: FileSet,
-      } -> SourceLike
+    # Type
 
-    Example:
-      # Import the current directory into the store
-      # but only include files under ./src
-      toSource {
-        root = ./.;
-        fileset = ./src;
-      }
-      => "/nix/store/...-source"
+    ```
+    toSource :: {
+      root :: Path,
+      fileset :: FileSet,
+    } -> SourceLike
+    ```
 
-      # Import the current directory into the store
-      # but only include ./Makefile and all files under ./src
-      toSource {
-        root = ./.;
-        fileset = union
-          ./Makefile
-          ./src;
-      }
-      => "/nix/store/...-source"
+    # Examples
+    :::{.example}
+    ## `toSource` usage example
 
-      # Trying to include a file outside the root will fail
-      toSource {
-        root = ./.;
-        fileset = unions [
-          ./Makefile
-          ./src
-          ../LICENSE
-        ];
-      }
-      => <error>
+    ```nix
+    # Import the current directory into the store
+    # but only include files under ./src
+    toSource {
+      root = ./.;
+      fileset = ./src;
+    }
+    => "/nix/store/...-source"
 
-      # The root needs to point to a directory that contains all the files
-      toSource {
-        root = ../.;
-        fileset = unions [
-          ./Makefile
-          ./src
-          ../LICENSE
-        ];
-      }
-      => "/nix/store/...-source"
+    # Import the current directory into the store
+    # but only include ./Makefile and all files under ./src
+    toSource {
+      root = ./.;
+      fileset = union
+        ./Makefile
+        ./src;
+    }
+    => "/nix/store/...-source"
 
-      # The root has to be a local filesystem path
-      toSource {
-        root = "/nix/store/...-source";
-        fileset = ./.;
-      }
-      => <error>
+    # Trying to include a file outside the root will fail
+    toSource {
+      root = ./.;
+      fileset = unions [
+        ./Makefile
+        ./src
+        ../LICENSE
+      ];
+    }
+    => <error>
+
+    # The root needs to point to a directory that contains all the files
+    toSource {
+      root = ../.;
+      fileset = unions [
+        ./Makefile
+        ./src
+        ../LICENSE
+      ];
+    }
+    => "/nix/store/...-source"
+
+    # The root has to be a local filesystem path
+    toSource {
+      root = "/nix/store/...-source";
+      fileset = ./.;
+    }
+    => <error>
+    ```
+
+    :::
   */
   toSource = {
-    /*
+    /**
       (required) The local directory [path](https://nixos.org/manual/nix/stable/language/values.html#type-path) that will correspond to the root of the resulting store path.
       Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
       `root` has to be a directory.
@@ -352,7 +419,7 @@ in {
       :::
     */
     root,
-    /*
+    /**
       (required) The file set whose files to import into the store.
       File sets can be created using other functions in this library.
       This argument can also be a path,
@@ -361,7 +428,6 @@ in {
       :::{.note}
       If a directory does not recursively contain any file, it is omitted from the store path contents.
       :::
-
     */
     fileset,
   }:
@@ -418,7 +484,7 @@ in {
       };
 
 
-  /*
+  /**
     The list of file paths contained in the given file set.
 
     :::{.note}
@@ -432,15 +498,32 @@ in {
 
     The resulting list of files can be turned back into a file set using [`lib.fileset.unions`](#function-library-lib.fileset.unions).
 
-    Type:
-      toList :: FileSet -> [ Path ]
 
-    Example:
-      toList ./.
-      [ ./README.md ./Makefile ./src/main.c ./src/main.h ]
+    # Inputs
 
-      toList (difference ./. ./src)
-      [ ./README.md ./Makefile ]
+    `fileset`
+
+    : The file set whose file paths to return. This argument can also be a path, which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    # Type
+
+    ```
+    toList :: FileSet -> [ Path ]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `toList` usage example
+
+    ```nix
+    toList ./.
+    [ ./README.md ./Makefile ./src/main.c ./src/main.h ]
+
+    toList (difference ./. ./src)
+    [ ./README.md ./Makefile ]
+    ```
+
+    :::
   */
   toList =
     # The file set whose file paths to return.
@@ -449,7 +532,7 @@ in {
     fileset:
     _toList (_coerce "lib.fileset.toList: Argument" fileset);
 
-  /*
+  /**
     The file set containing all files that are in either of two given file sets.
     This is the same as [`unions`](#function-library-lib.fileset.unions),
     but takes just two file sets instead of a list.
@@ -458,17 +541,38 @@ in {
     The given file sets are evaluated as lazily as possible,
     with the first argument being evaluated first if needed.
 
-    Type:
-      union :: FileSet -> FileSet -> FileSet
 
-    Example:
-      # Create a file set containing the file `Makefile`
-      # and all files recursively in the `src` directory
-      union ./Makefile ./src
+    # Inputs
 
-      # Create a file set containing the file `Makefile`
-      # and the LICENSE file from the parent directory
-      union ./Makefile ../LICENSE
+    `fileset1`
+
+    : The first file set. This argument can also be a path, which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    `fileset2`
+
+    : The second file set. This argument can also be a path, which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    # Type
+
+    ```
+    union :: FileSet -> FileSet -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `union` usage example
+
+    ```nix
+    # Create a file set containing the file `Makefile`
+    # and all files recursively in the `src` directory
+    union ./Makefile ./src
+
+    # Create a file set containing the file `Makefile`
+    # and the LICENSE file from the parent directory
+    union ./Makefile ../LICENSE
+    ```
+
+    :::
   */
   union =
     # The first file set.
@@ -491,7 +595,7 @@ in {
         }
       ]);
 
-  /*
+  /**
     The file set containing all files that are in any of the given file sets.
     This is the same as [`union`](#function-library-lib.fileset.unions),
     but takes a list of file sets instead of just two.
@@ -500,27 +604,44 @@ in {
     The given file sets are evaluated as lazily as possible,
     with earlier elements being evaluated first if needed.
 
-    Type:
-      unions :: [ FileSet ] -> FileSet
 
-    Example:
-      # Create a file set containing selected files
-      unions [
-        # Include the single file `Makefile` in the current directory
-        # This errors if the file doesn't exist
-        ./Makefile
+    # Inputs
 
-        # Recursively include all files in the `src/code` directory
-        # If this directory is empty this has no effect
-        ./src/code
+    `filesets`
 
-        # Include the files `run.sh` and `unit.c` from the `tests` directory
-        ./tests/run.sh
-        ./tests/unit.c
+    : A list of file sets. The elements can also be paths, which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
 
-        # Include the `LICENSE` file from the parent directory
-        ../LICENSE
-      ]
+    # Type
+
+    ```
+    unions :: [ FileSet ] -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `unions` usage example
+
+    ```nix
+    # Create a file set containing selected files
+    unions [
+      # Include the single file `Makefile` in the current directory
+      # This errors if the file doesn't exist
+      ./Makefile
+
+      # Recursively include all files in the `src/code` directory
+      # If this directory is empty this has no effect
+      ./src/code
+
+      # Include the files `run.sh` and `unit.c` from the `tests` directory
+      ./tests/run.sh
+      ./tests/unit.c
+
+      # Include the `LICENSE` file from the parent directory
+      ../LICENSE
+    ]
+    ```
+
+    :::
   */
   unions =
     # A list of file sets.
@@ -541,19 +662,40 @@ in {
         _unionMany
       ];
 
-  /*
+  /**
     The file set containing all files that are in both of two given file sets.
     See also [Intersection (set theory)](https://en.wikipedia.org/wiki/Intersection_(set_theory)).
 
     The given file sets are evaluated as lazily as possible,
     with the first argument being evaluated first if needed.
 
-    Type:
-      intersection :: FileSet -> FileSet -> FileSet
 
-    Example:
-      # Limit the selected files to the ones in ./., so only ./src and ./Makefile
-      intersection ./. (unions [ ../LICENSE ./src ./Makefile ])
+    # Inputs
+
+    `fileset1`
+
+    : The first file set. This argument can also be a path, which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    `fileset2`
+
+    : The second file set. This argument can also be a path, which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    # Type
+
+    ```
+    intersection :: FileSet -> FileSet -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `intersection` usage example
+
+    ```nix
+    # Limit the selected files to the ones in ./., so only ./src and ./Makefile
+    intersection ./. (unions [ ../LICENSE ./src ./Makefile ])
+    ```
+
+    :::
   */
   intersection =
     # The first file set.
@@ -580,28 +722,49 @@ in {
       (elemAt filesets 0)
       (elemAt filesets 1);
 
-  /*
+  /**
     The file set containing all files from the first file set that are not in the second file set.
     See also [Difference (set theory)](https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement).
 
     The given file sets are evaluated as lazily as possible,
     with the first argument being evaluated first if needed.
 
-    Type:
-      union :: FileSet -> FileSet -> FileSet
 
-    Example:
-      # Create a file set containing all files from the current directory,
-      # except ones under ./tests
-      difference ./. ./tests
+    # Inputs
 
-      let
-        # A set of Nix-related files
-        nixFiles = unions [ ./default.nix ./nix ./tests/default.nix ];
-      in
-      # Create a file set containing all files under ./tests, except ones in `nixFiles`,
-      # meaning only without ./tests/default.nix
-      difference ./tests nixFiles
+    `positive`
+
+    : The positive file set. The result can only contain files that are also in this file set.  This argument can also be a path, which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    `negative`
+
+    : The negative file set. The result will never contain files that are also in this file set.  This argument can also be a path, which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    # Type
+
+    ```
+    union :: FileSet -> FileSet -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `difference` usage example
+
+    ```nix
+    # Create a file set containing all files from the current directory,
+    # except ones under ./tests
+    difference ./. ./tests
+
+    let
+      # A set of Nix-related files
+      nixFiles = unions [ ./default.nix ./nix ./tests/default.nix ];
+    in
+    # Create a file set containing all files under ./tests, except ones in `nixFiles`,
+    # meaning only without ./tests/default.nix
+    difference ./tests nixFiles
+    ```
+
+    :::
   */
   difference =
     # The positive file set.
@@ -632,35 +795,72 @@ in {
       (elemAt filesets 0)
       (elemAt filesets 1);
 
-  /*
+  /**
     Filter a file set to only contain files matching some predicate.
 
-    Type:
-      fileFilter ::
-        ({
-          name :: String,
-          type :: String,
-          hasExt :: String -> Bool,
-          ...
-        } -> Bool)
-        -> Path
-        -> FileSet
 
-    Example:
-      # Include all regular `default.nix` files in the current directory
-      fileFilter (file: file.name == "default.nix") ./.
+    # Inputs
 
-      # Include all non-Nix files from the current directory
-      fileFilter (file: ! file.hasExt "nix") ./.
+    `predicate`
 
-      # Include all files that start with a "." in the current directory
-      fileFilter (file: hasPrefix "." file.name) ./.
+    : The predicate function to call on all files contained in given file set.
+    A file is included in the resulting file set if this function returns true for it.
 
-      # Include all regular files (not symlinks or others) in the current directory
-      fileFilter (file: file.type == "regular") ./.
+    This function is called with an attribute set containing these attributes:
+
+    - `name` (String): The name of the file
+
+    - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
+      This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+
+    - `hasExt` (String -> Bool): Whether the file has a certain file extension.
+      `hasExt ext` is true only if `hasSuffix ".${ext}" name`.
+
+      This also means that e.g. for a file with name `.gitignore`,
+      `hasExt "gitignore"` is true.
+
+    Other attributes may be added in the future.
+
+    `path`
+
+    : The path whose files to filter
+
+    # Type
+
+    ```
+    fileFilter ::
+      ({
+        name :: String,
+        type :: String,
+        hasExt :: String -> Bool,
+        ...
+      } -> Bool)
+      -> Path
+      -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `fileFilter` usage example
+
+    ```nix
+    # Include all regular `default.nix` files in the current directory
+    fileFilter (file: file.name == "default.nix") ./.
+
+    # Include all non-Nix files from the current directory
+    fileFilter (file: ! file.hasExt "nix") ./.
+
+    # Include all files that start with a "." in the current directory
+    fileFilter (file: hasPrefix "." file.name) ./.
+
+    # Include all regular files (not symlinks or others) in the current directory
+    fileFilter (file: file.type == "regular") ./.
+    ```
+
+    :::
   */
   fileFilter =
-    /*
+    /**
       The predicate function to call on all files contained in given file set.
       A file is included in the resulting file set if this function returns true for it.
 
@@ -699,23 +899,37 @@ in {
     else
       _fileFilter predicate path;
 
-  /*
-  Create a file set with the same files as a `lib.sources`-based value.
-  This does not import any of the files into the store.
+  /**
+    Create a file set with the same files as a `lib.sources`-based value.
+    This does not import any of the files into the store.
 
-  This can be used to gradually migrate from `lib.sources`-based filtering to `lib.fileset`.
+    This can be used to gradually migrate from `lib.sources`-based filtering to `lib.fileset`.
 
-  A file set can be turned back into a source using [`toSource`](#function-library-lib.fileset.toSource).
+    A file set can be turned back into a source using [`toSource`](#function-library-lib.fileset.toSource).
 
-  :::{.note}
-  File sets cannot represent empty directories.
-  Turning the result of this function back into a source using `toSource` will therefore not preserve empty directories.
-  :::
+    :::{.note}
+    File sets cannot represent empty directories.
+    Turning the result of this function back into a source using `toSource` will therefore not preserve empty directories.
+    :::
 
-  Type:
+
+    # Inputs
+
+    `source`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
     fromSource :: SourceLike -> FileSet
+    ```
 
-  Example:
+    # Examples
+    :::{.example}
+    ## `fromSource` usage example
+
+    ```nix
     # There's no cleanSource-like function for file sets yet,
     # but we can just convert cleanSource to a file set and use it that way
     toSource {
@@ -740,6 +954,9 @@ in {
         ./Makefile
         ./src
       ]);
+    ```
+
+    :::
   */
   fromSource = source:
     let
@@ -768,24 +985,42 @@ in {
       # If there's no filter, no need to run the expensive conversion, all subpaths will be included
       _singleton path;
 
-  /*
+  /**
     Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
 
     This function behaves like [`gitTrackedWith { }`](#function-library-lib.fileset.gitTrackedWith) - using the defaults.
 
-    Type:
-      gitTracked :: Path -> FileSet
 
-    Example:
-      # Include all files tracked by the Git repository in the current directory
-      gitTracked ./.
+    # Inputs
 
-      # Include only files tracked by the Git repository in the parent directory
-      # that are also in the current directory
-      intersection ./. (gitTracked ../.)
+    `path`
+
+    : The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+    This directory must contain a `.git` file or subdirectory.
+
+    # Type
+
+    ```
+    gitTracked :: Path -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `gitTracked` usage example
+
+    ```nix
+    # Include all files tracked by the Git repository in the current directory
+    gitTracked ./.
+
+    # Include only files tracked by the Git repository in the parent directory
+    # that are also in the current directory
+    intersection ./. (gitTracked ../.)
+    ```
+
+    :::
   */
   gitTracked =
-    /*
+    /**
       The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
       This directory must contain a `.git` file or subdirectory.
     */
@@ -796,7 +1031,7 @@ in {
       path
       {};
 
-  /*
+  /**
     Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
     The first argument allows configuration with an attribute set,
     while the second argument is the path to the Git working tree.
@@ -820,24 +1055,42 @@ in {
     This may change in the future.
     :::
 
-    Type:
-      gitTrackedWith :: { recurseSubmodules :: Bool ? false } -> Path -> FileSet
 
-    Example:
-      # Include all files tracked by the Git repository in the current directory
-      # and any submodules under it
-      gitTracked { recurseSubmodules = true; } ./.
+    # Inputs
+
+    `path`
+
+    : The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+    This directory must contain a `.git` file or subdirectory.
+
+    # Type
+
+    ```
+    gitTrackedWith :: { recurseSubmodules :: Bool ? false } -> Path -> FileSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `gitTrackedWith` usage example
+
+    ```nix
+    # Include all files tracked by the Git repository in the current directory
+    # and any submodules under it
+    gitTracked { recurseSubmodules = true; } ./.
+    ```
+
+    :::
   */
   gitTrackedWith =
     {
-      /*
+      /**
         (optional, default: `false`) Whether to recurse into [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to also include their tracked files.
 
         If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
       */
       recurseSubmodules ? false,
     }:
-    /*
+    /**
       The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
       This directory must contain a `.git` file or subdirectory.
     */

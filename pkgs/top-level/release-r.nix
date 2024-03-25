@@ -1,4 +1,4 @@
-/*
+/**
   This is the Hydra jobset for the `r-updates` branch in Nixpkgs.
   The jobset can be tested by:
 

@@ -92,7 +92,9 @@ rustPlatform.buildRustPackage {
       tools-preview` or install the `llvm-tools-preview` component using your Nix
       library (e.g. fenix or rust-overlay)
     '';
-    license = with lib.licenses; [ asl20 /* or */ mit ];
+    license = with lib.licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with lib.maintainers; [ wucke13 matthiasbeyer CobaltCause ];
 
     # The profiler runtime is (currently) disabled on non-Linux platforms

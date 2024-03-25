@@ -1,9 +1,11 @@
-/* This file defines the composition for Lua packages.  It has
+/**
+  This file defines the composition for Lua packages.  It has
   been factored out of all-packages.nix because there are many of
   them.  Also, because most Nix expressions for Lua packages are
   trivial, most are actually defined here.  I.e. there's no function
   for each package in a separate file: the call to the function would
-  be almost as must code as the function itself. */
+  be almost as must code as the function itself.
+*/
 
 { pkgs
 , stdenv

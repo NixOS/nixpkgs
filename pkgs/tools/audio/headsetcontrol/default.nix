@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     hidapi
   ];
 
-  /*
-  Tests depend on having the appropriate headsets connected.
+  /**
+    Tests depend on having the appropriate headsets connected.
   */
   doCheck = false;
 

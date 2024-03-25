@@ -559,7 +559,9 @@ in
         # it doesn't function well enough to be included
         # in default configurations.
         # https://github.com/NixOS/nixpkgs/issues/60908
-        /* gnome-boxes */
+        /**
+          gnome-boxes
+        */
       ] config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;

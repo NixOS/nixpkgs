@@ -46,7 +46,9 @@ python3Packages.buildPythonApplication rec {
     description = "Upstream packaging automation tool";
     homepage = "https://pkg.labs.nic.cz/pages/apkg";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vcunat /* close to upstream */ ];
+    maintainers = [ maintainers.vcunat /**
+  close to upstream
+*/ ];
     mainProgram = "apkg";
   };
 }

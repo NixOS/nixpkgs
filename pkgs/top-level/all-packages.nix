@@ -1,10 +1,11 @@
-/* The top-level package collection of nixpkgs.
- * It is sorted by categories corresponding to the folder names in the /pkgs
- * folder. Inside the categories packages are roughly sorted by alphabet, but
- * strict sorting has been long lost due to merges. Please use the full-text
- * search of your editor. ;)
- * Hint: ### starts category names.
- */
+/**
+  The top-level package collection of nixpkgs.
+  * It is sorted by categories corresponding to the folder names in the /pkgs
+  * folder. Inside the categories packages are roughly sorted by alphabet, but
+  * strict sorting has been long lost due to merges. Please use the full-text
+  * search of your editor. ;)
+  * Hint: ### starts category names.
+*/
 { lib, noSysDirs, config, overlays }:
 res: pkgs: super:
 
@@ -3227,7 +3228,9 @@ with pkgs;
   appimage-run = callPackage ../tools/package-management/appimage-run { };
   appimage-run-tests = callPackage ../tools/package-management/appimage-run/test.nix {
     appimage-run = appimage-run.override {
-      appimage-run-tests = null; /* break boostrap cycle for passthru.tests */
+      appimage-run-tests = null; /**
+  break boostrap cycle for passthru.tests
+*/
     };
   };
 
@@ -4059,7 +4062,9 @@ with pkgs;
 
   grb = callPackage ../applications/misc/grb { };
 
-  kerf   = kerf_1; /* kerf2 is WIP */
+  kerf   = kerf_1; /**
+  kerf2 is WIP
+*/
   kerf_1 = callPackage ../development/interpreters/kerf {
     stdenv = clangStdenv;
     inherit (darwin.apple_sdk.frameworks)
@@ -16293,7 +16298,9 @@ with pkgs;
   jdk21 = openjdk21;
   jdk21_headless = openjdk21_headless;
 
-  /* default JDK */
+  /**
+    default JDK
+  */
   jdk = jdk21;
   jdk_headless = jdk21_headless;
 
@@ -39931,7 +39938,7 @@ with pkgs;
   # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-aws: ...` to trigger automatically.
   nixops_unstablePlugins = recurseIntoAttrs nixops_unstable_minimal.availablePlugins;
 
-  /*
+  /**
     Evaluate a NixOS configuration using this evaluation of Nixpkgs.
 
     With this function you can write, for example, a package that
@@ -39948,9 +39955,20 @@ with pkgs;
             Alternatively, you may use the result's config and
             options attributes to query any option.
 
-    Example:
 
-        let
+    # Inputs
+
+    `configuration`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `nixos` usage example
+
+    ```nix
+    let
           myOS = pkgs.nixos ({ lib, pkgs, config, ... }: {
 
             config.services.nginx = {
@@ -39983,6 +40001,9 @@ with pkgs;
 
     Note that you will need to have called Nixpkgs with the system
     parameter set to the right value for your deployment target.
+    ```
+
+    :::
   */
   nixos =
     configuration:
@@ -40007,9 +40028,9 @@ with pkgs;
       in
         c.config.system.build // c;
 
-  /*
+  /**
     A NixOS/home-manager/arion/... module that sets the `pkgs` module argument.
-   */
+  */
   pkgsModule = { lib, options, ... }: {
     config =
       if options?nixpkgs.pkgs then {

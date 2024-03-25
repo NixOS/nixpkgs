@@ -4,16 +4,16 @@ with lib;
 
 let
 
-  /* minimal secure setup:
+  /**
+    minimal secure setup:
 
-   enable = true;
-   forceLocalLoginsSSL = true;
-   forceLocalDataSSL = true;
-   userlistDeny = false;
-   localUsers = true;
-   userlist = ["non-root-user" "other-non-root-user"];
-   rsaCertFile = "/var/vsftpd/vsftpd.pem";
-
+    enable = true;
+    forceLocalLoginsSSL = true;
+    forceLocalDataSSL = true;
+    userlistDeny = false;
+    localUsers = true;
+    userlist = ["non-root-user" "other-non-root-user"];
+    rsaCertFile = "/var/vsftpd/vsftpd.pem";
   */
 
   cfg = config.services.vsftpd;

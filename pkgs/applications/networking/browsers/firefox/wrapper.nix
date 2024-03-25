@@ -4,7 +4,9 @@
 
 ## various stuff that can be plugged in
 , ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
-, gnome/*.gnome-shell*/
+, gnome/**
+  .gnome-shell
+*/
 , browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx-cast-bridge

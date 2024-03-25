@@ -6,7 +6,7 @@
 #
 # Alternative: use `emacs`, install everything to a system or user profile
 # and then add this at the start your `early-init.el`:
-/*
+/**
   ;; optional. use this if you install emacs packages to the system profile
   (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
 
