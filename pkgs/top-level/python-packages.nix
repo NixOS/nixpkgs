@@ -13093,8 +13093,6 @@ self: super: with self; {
 
   robotframework-sshlibrary = callPackage ../development/python-modules/robotframework-sshlibrary { };
 
-  robotframework-tidy = callPackage ../development/python-modules/robotframework-tidy { };
-
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
   robotstatuschecker = callPackage ../development/python-modules/robotstatuschecker { };
