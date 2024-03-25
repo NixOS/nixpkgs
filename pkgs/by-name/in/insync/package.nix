@@ -20,7 +20,7 @@
 let
   pname = "insync";
   # Find a binary from https://www.insynchq.com/downloads/linux#ubuntu.
-  version = "3.8.6.50504";
+  version = "3.8.7.50516";
   ubuntu-dist = "mantic_amd64";
   meta = with lib; {
     platforms = ["x86_64-linux"];
@@ -50,7 +50,7 @@ let
 
     src = fetchurl {
       url = "https://cdn.insynchq.com/builds/linux/insync_${version}-${ubuntu-dist}.deb";
-      sha256 = "sha256-QfSfTJjMTWShQETlUQqXQTYT7mBNhmj0HHoT5bjF0o8=";
+      sha256 = "sha256-U7BcgghbdR7r9WiZpEOka+BzXwnxrzL6p4imGESuB/k=";
     };
 
     nativeBuildInputs = [
@@ -92,7 +92,6 @@ in buildFHSEnv {
   inherit meta;
 
   targetPkgs = pkgs: with pkgs; [
-    cacert
     libudev0-shim
     insync-pkg
   ];
@@ -108,7 +107,7 @@ in buildFHSEnv {
     # For debugging:
     # export QT_DEBUG_PLUGINS=1
 
-    QT_QPA_PLATFORMTHEME=hicolor QT_STYLE_OVERRIDE=hicolor LC_TIME=C exec /usr/lib/insync/insync "$@"
+    exec /usr/lib/insync/insync "$@"
     '';
 
   # As intended by this bubble wrap, share as much namespaces as possible with user.
