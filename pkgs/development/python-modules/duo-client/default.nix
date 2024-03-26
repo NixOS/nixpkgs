@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "duosecurity";
     repo = "duo_client_python";
     rev = "refs/tags/${version}";
-    hash = "sha256-MnSAFxKgExq+e8TOwgsPAoO4GEfsc3sjPNGLxzch5f0=";
+    hash = "sha256-7cifxNSBHbX7QZ52Sy1hm5xzZYcLZOkloT6q9P7TO6A=";
   };
 
   postPatch = ''
