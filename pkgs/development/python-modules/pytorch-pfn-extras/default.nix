@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , lib
 , numpy
 , onnx
@@ -21,6 +22,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-juoLw/qfq4YF7opyR7cTYCVzUa9pXVvQnvGntcQhBr4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "onnx-CVE-2024-27318-fix-compat.patch";
+      url = "https://github.com/pfnet/pytorch-pfn-extras/commit/730085cbbabcbd8209c93587d7dc3a54c51b5189.patch";
+      hash = "sha256-0ILOi6mLI62vW5C8qigYugR1Ikkt/3HngfPaBSgQk1g=";
+    })
+  ];
 
   propagatedBuildInputs = [ numpy packaging torch typing-extensions ];
 
