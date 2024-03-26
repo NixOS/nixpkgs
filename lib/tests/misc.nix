@@ -245,16 +245,6 @@ runTests {
     expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
   };
 
-  testMakeIncludePathWithOneString = {
-    expr = (makeIncludePath [ "/usr" ]);
-    expected = "/usr/include";
-  };
-
-  testMakeIncludePathWithManyString = {
-    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
-    expected = "/usr/include:/usr/local/include";
-  };
-
   testBitAnd = {
     expr = (bitAnd 3 10);
     expected = 2;
@@ -305,6 +295,16 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testMakeIncludePathWithOneString = {
+    expr = (makeIncludePath [ "/usr" ]);
+    expected = "/usr/include";
+  };
+
+  testMakeIncludePathWithManyString = {
+    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expected = "/usr/include:/usr/local/include";
   };
 
   testReplicateString = {
