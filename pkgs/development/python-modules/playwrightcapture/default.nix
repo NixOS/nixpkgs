@@ -39,12 +39,12 @@ buildPythonPackage rec {
     "tzdata"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     dateparser
     playwright
