@@ -27,6 +27,9 @@ buildPythonPackage rec {
     llama-index-core
   ];
 
+  # Tests are only available in the mono repo
+  doCheck = false;
+
   pythonImportsCheck = [
     "llama_index.llms.openai"
   ];
