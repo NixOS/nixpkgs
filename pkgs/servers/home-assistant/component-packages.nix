@@ -392,7 +392,8 @@
       pybalboa
     ];
     "bang_olufsen" = ps: with ps; [
-    ]; # missing inputs: mozart-api
+      mozart-api
+    ];
     "bayesian" = ps: with ps; [
     ];
     "bbox" = ps: with ps; [
@@ -5921,6 +5922,7 @@
     "backup"
     "baf"
     "balboa"
+    "bang_olufsen"
     "bayesian"
     "binary_sensor"
     "blackbird"

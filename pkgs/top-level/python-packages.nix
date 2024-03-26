@@ -7513,6 +7513,8 @@ self: super: with self; {
 
   mox3 = callPackage ../development/python-modules/mox3 { };
 
+  mozart-api = callPackage ../development/python-modules/mozart-api { };
+
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
