@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchzip, cmake, tbb, python3, ispc }:
+{
+  cmake,
+  fetchzip,
+  ispc,
+  lib,
+  python3,
+  stdenv,
+  tbb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openimagedenoise";
@@ -10,12 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-i73w/Vkr5TPLB1ulPbPU4OVGwdNlky1brfarueD7akE=";
   };
 
-  nativeBuildInputs = [ cmake python3 ispc ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    ispc
+  ];
   buildInputs = [ tbb ];
 
   cmakeFlags = [
-    "-DTBB_ROOT=${tbb}"
-    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${tbb.dev}/include")
+    (lib.cmakeFeature "TBB_ROOT" "${tbb}")
   ];
 
   meta = with lib; {
