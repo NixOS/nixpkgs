@@ -19778,6 +19778,11 @@
     githubId = 26902865;
     name = "Tomas Drtina";
   };
+  t-monaghan = {
+    github = "t-monaghan";
+    githubId = 62273348;
+    name = "Thomas Monaghan";
+  };
   tmountain = {
     email = "tinymountain@gmail.com";
     github = "tmountain";
