@@ -448,13 +448,28 @@ let
     let
       outputs = attrs.outputs or [ "out" ];
     in
-    lib.attrsets.optionalAttrs (attrs ? src.meta.homepage) {
+    lib.attrsets.optionalAttrs (attrs ? src.meta.homepage || attrs ? srcs && any (src: src ? meta.homepage) attrs.srcs) {
       # should point to an http-browsable source tree, if available.
       # fetchers like fetchFromGitHub set it automatically.
       # this could be handled a lot easier if we nulled it instead
       # of having it be undefined, but that wouldn't match the
       # other attributes.
-      repository = attrs.src.meta.homepage;
+      repository = let
+        getSrcs = attrs:
+          if attrs ? src
+          then
+            [ attrs.src ]
+          else
+            lib.filter (src: src ? meta.homepage) attrs.srcs;
+        getHomePages = srcs: map (src: src.meta.homepage) srcs;
+        unlist = list:
+          if lib.length list == 1
+          then
+            lib.elemAt list 0
+          else
+            list;
+      in
+        unlist (getHomePages (getSrcs attrs));
     } // {
       # `name` derivation attribute includes cross-compilation cruft,
       # is under assert, and is sanitized.
