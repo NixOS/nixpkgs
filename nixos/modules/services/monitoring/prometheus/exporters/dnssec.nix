@@ -41,7 +41,7 @@ in
       description = lib.mdDoc ''
         Listen address as host IP and port definition.
       '';
-      example = ":${cfg.port}";
+      example = ":9204";
     };
 
     resolvers = mkOption {
@@ -83,7 +83,7 @@ in
       ++ optionals (cfg.listenAddress != null) [
       "-listen-address ${escapeShellArg cfg.listenAddress}"
     ]
-      ++ optionals (cfg.resolvers != null) [
+      ++ optionals (cfg.resolvers != [ ]) [
       "-resolvers ${escapeShellArg (concatStringsSep "," cfg.resolvers)}"
     ]
       ++ optionals (cfg.timeout != null) [
