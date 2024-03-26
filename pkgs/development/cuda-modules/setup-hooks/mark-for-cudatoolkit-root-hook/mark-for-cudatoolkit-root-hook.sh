@@ -3,18 +3,24 @@
 guard=Sourcing
 reason=
 
-export NIX_DEBUG=1
+# export NIX_DEBUG=1
 
 # Only run the hook from nativeBuildInputs.
 # See the table under https://nixos.org/manual/nixpkgs/unstable/#dependency-propagation for information
 # about the different target combinations and their offsets.
-if (( "${hostOffset:?}" != -1 && "${targetOffset:?}" != 0 )); then
+
+# Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
+# native compile.
+if [[ -v ${strictDeps-} ]]; then
     guard=Skipping
-    reason=" because the hook is not in nativeBuildInputs"
+    reason=" because strictDeps is set"
+elif (( "${hostOffset:?}" < 0 )); then
+    guard=Skipping
+    reason=" because the hook is not in buildInputs"
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    echo "$guard hostOffset=$hostOffset targetOffset=$targetOffset mark-for-cudatoolkit-root-hook$reason" >&2
+    echo "$guard hostOffset=$hostOffset targetOffset=${targetOffset:?} mark-for-cudatoolkit-root-hook$reason" >&2
 else
     echo "$guard mark-for-cudatoolkit-root-hook$reason" >&2
 fi
