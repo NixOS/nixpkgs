@@ -31,6 +31,8 @@
     "--with-unsigned-addon-scopes=app,system"
   ];
 
+  updateScript = ./update.sh;
+
   meta = {
     description = "A fork of Firefox, focused on keeping the Open, Private and Sustainable Web alive, built in Japan";
     homepage = "https://floorp.app/";
