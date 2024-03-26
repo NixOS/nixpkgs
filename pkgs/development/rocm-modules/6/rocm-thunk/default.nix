@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-thunk";
-  version = "6.0.2";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
