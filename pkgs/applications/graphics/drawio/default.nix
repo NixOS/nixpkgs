@@ -6,6 +6,7 @@
 , copyDesktopItems
 , prefetch-yarn-deps
 , makeWrapper
+, autoSignDarwinBinariesHook
 , nodejs
 , yarn
 , electron
@@ -13,19 +14,24 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "23.1.5";
+  version = "24.0.4";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ThmTahuU0o/vr6h/T/zCyEB5/APJlVA6t1TNfZgqTJ0=";
+    hash = "sha256-+TCnVXcmAEpa7MiL0dyeoh2aUfIIO8eze9pEaHgKnME=";
   };
+
+  # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
+  postPatch = ''
+    sed -i -e 's/resetAdHocDarwinSignature:.*/resetAdHocDarwinSignature: false,/' build/fuses.js
+  '';
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-hL89WVYy/EQe6Zppmr17Q9T2o/UjBvydDIgGpr7AA5M=";
+    hash = "sha256-QS0bkDDQq3sn79TQ+pTZsmbmXgMccyLmlPLTsko7eGg=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +41,8 @@ stdenv.mkDerivation rec {
     yarn
   ] ++ lib.optionals (!stdenv.isDarwin) [
     copyDesktopItems
+  ] ++ lib.optionals stdenv.isDarwin [
+    autoSignDarwinBinariesHook
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = true;

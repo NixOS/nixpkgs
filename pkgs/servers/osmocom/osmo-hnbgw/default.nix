@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Osmocom Home NodeB Gateway, for attaching femtocells to the 3G CN (OsmoMSC, OsmoSGSN)";
+    mainProgram = "osmo-hnbgw";
     homepage = "https://osmocom.org/projects/osmohnbgw";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ janik ];

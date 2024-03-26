@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Extracts information about the Python environment easily";
+    mainProgram = "helpdev";
     license = lib.licenses.mit;
   };
 

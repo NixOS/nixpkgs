@@ -228,7 +228,7 @@ beamPackages.mixRelease rec {
   meta = with lib; {
     description = "ActivityPub microblogging server";
     homepage = "https://akkoma.social";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mvs ];
     platforms = platforms.unix;
   };

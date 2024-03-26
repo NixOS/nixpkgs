@@ -67,6 +67,10 @@ python.pkgs.buildPythonApplication rec {
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
 
+    # Configure django-statici18n to compile all available languages at
+    # build time.
+    ./language-build.patch
+
     (fetchpatch2 {
       # Allow customization of cache and log directory
       # https://github.com/pretix/pretix/pull/3997
@@ -260,5 +264,7 @@ python.pkgs.buildPythonApplication rec {
       asl20
     ];
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "pretix-manage";
+    platforms = platforms.linux;
   };
 }

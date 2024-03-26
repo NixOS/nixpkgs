@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch2
 }:
 let
   version = "0.10.0";
@@ -42,6 +43,13 @@ buildGoModule {
   '';
 
   doCheck = true;
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/scionproto/scion/commit/cb7fa6d6aab55c9eb90556c2b996b87539f8aa02.patch";
+      hash = "sha256-mMGJMPB6T7KeDXjEXffdrhzyKwaFmhuisK6PjHOJIdU=";
+    })
+  ];
 
   meta = with lib; {
     description = "A future Internet architecture utilizing path-aware networking";

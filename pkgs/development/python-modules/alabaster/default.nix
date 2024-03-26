@@ -1,15 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi
-, pygments }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "alabaster";
-  version = "0.7.13";
-  format = "setuptools";
+  version = "0.7.16";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-onpKCE1eaQ4W4B4DrSsuVSxhplRpQZuQckMZPeGoSuI=";
+    hash = "sha256-dai5nCil2tUN1/jM3UR6Eh3bOJLanlPRylzKMQbVjWU=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ pygments ];
 

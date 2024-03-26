@@ -108,13 +108,13 @@ There's some limitations as to which packages can be defined using this structur
 
 ## Validation
 
-CI performs [certain checks](../test/nixpkgs-check-by-name/README.md#validity-checks) on the `pkgs/by-name` structure.
-This is done using the [`nixpkgs-check-by-name` tool](../test/nixpkgs-check-by-name).
+CI performs [certain checks](https://github.com/NixOS/nixpkgs-check-by-name?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
+This is done using the [`nixpkgs-check-by-name` tool](https://github.com/NixOS/nixpkgs-check-by-name).
 
 You can locally emulate the CI check using
 
 ```
-$ ./pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh master
+$ ./maintainers/scripts/check-by-name.sh master
 ```
 
 See [here](../../.github/workflows/check-by-name.yml) for more info.

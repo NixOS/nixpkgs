@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = "http://ytalk.ourproject.org";
     description = "A terminal based talk client";
+    mainProgram = "ytalk";
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ taeer ];
     license     = lib.licenses.gpl2Plus;

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/petervanderdoes/gitflow";
     description = "Extend git with the Gitflow branching model";
+    mainProgram = "git-flow";
     longDescription = ''
       A set of scripts that provide high-level repository operations
       for managing feature/release/hotfix branches in a Git repository,

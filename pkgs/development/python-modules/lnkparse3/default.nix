@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "lnkparse3";
-  version = "1.3.3";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Matmaus";
     repo = "LnkParse3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ej2Tv1RViHqm2z1EG/cAkImcvtJcwSc3I0DxIL/q8FI=";
+    hash = "sha256-aWMkLFbmikdj4mlAPpo0qrxfE8zgRcSV83aiws03XsQ=";
   };
 
   nativeBuildInputs = [

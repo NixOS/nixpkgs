@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Gemini Project client written in Rust with NCurses";
+    mainProgram = "asuka";
     homepage = "https://git.sr.ht/~julienxx/asuka";
     license = licenses.mit;
     platforms = platforms.unix;

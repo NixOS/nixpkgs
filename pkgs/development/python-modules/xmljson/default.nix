@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Converts XML into dictionary structures and vice-versa";
+    mainProgram = "xml2json";
     homepage = "https://github.com/sanand0/xmljson";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ rakesh4g ];

@@ -16,6 +16,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "General purpose Language Server";
+    mainProgram = "efm-langserver";
     maintainers = with maintainers; [ Philipp-M ];
     homepage = "https://github.com/mattn/efm-langserver";
     license = licenses.mit;

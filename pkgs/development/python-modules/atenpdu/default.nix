@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to control ATEN PE PDUs";
+    mainProgram = "pductl";
     homepage = "https://github.com/mtdcr/pductl";
     changelog = "https://github.com/mtdcr/pductl/releases/tag/${version}";
     license = with licenses; [ mit ];

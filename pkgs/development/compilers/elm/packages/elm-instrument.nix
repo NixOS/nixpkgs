@@ -40,4 +40,5 @@ mkDerivation {
   homepage = "https://elm-lang.org";
   description = "Instrumentation library for Elm";
   license = lib.licenses.bsd3;
+  mainProgram = "elm-instrument";
 }

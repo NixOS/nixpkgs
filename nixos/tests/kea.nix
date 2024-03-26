@@ -44,6 +44,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
             name = "/var/lib/kea/dhcp4.leases";
           };
 
+          control-socket = {
+            socket-type = "unix";
+            socket-name = "/run/kea/dhcp4.sock";
+          };
+
           interfaces-config = {
             dhcp-socket-type = "raw";
             interfaces = [
@@ -88,6 +93,25 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
             } ];
           };
         };
+      };
+
+      services.kea.ctrl-agent = {
+        enable = true;
+        settings = {
+          http-host = "127.0.0.1";
+          http-port = 8000;
+          control-sockets.dhcp4 = {
+            socket-type = "unix";
+            socket-name = "/run/kea/dhcp4.sock";
+          };
+        };
+      };
+
+      services.prometheus.exporters.kea = {
+        enable = true;
+        controlSocketPaths = [
+          "http://127.0.0.1:8000"
+        ];
       };
     };
 
@@ -182,5 +206,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
     client.wait_until_succeeds("ping -c 5 10.0.0.1")
     router.wait_until_succeeds("ping -c 5 10.0.0.3")
     nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
+    router.log(router.execute("curl 127.0.0.1:9547")[1])
+    router.succeed("curl --no-buffer 127.0.0.1:9547 | grep -qE '^kea_dhcp4_addresses_assigned_total.*1.0$'")
   '';
 })

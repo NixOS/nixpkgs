@@ -26,6 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/arsham/figurine";
     description = "Print your name in style";
+    mainProgram = "figurine";
     license = licenses.asl20;
     maintainers = with maintainers; [ ironicbadger ];
   };

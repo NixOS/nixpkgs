@@ -93,6 +93,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Common workflows for MRI (anatomical, functional, diffusion, etc.)";
+    mainProgram = "niworkflows-boldref";
     homepage = "https://github.com/nipreps/niworkflows";
     changelog = "https://github.com/nipreps/niworkflows/blob/${src.rev}/CHANGES.rst";
     license = licenses.asl20;

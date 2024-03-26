@@ -6,4 +6,5 @@ mkKdeDerivation {
   pname = "kbounce";
 
   extraBuildInputs = [qtsvg];
+  meta.mainProgram = "kbounce";
 }

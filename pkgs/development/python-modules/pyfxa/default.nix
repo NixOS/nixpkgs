@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Firefox Accounts client library";
+    mainProgram = "fxa-client";
     homepage = "https://github.com/mozilla/PyFxA";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ];

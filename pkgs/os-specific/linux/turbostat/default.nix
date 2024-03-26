@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Report processor frequency and idle statistics";
+    mainProgram = "turbostat";
     homepage = "https://www.kernel.org/";
     license = licenses.gpl2;
     platforms = [ "i686-linux" "x86_64-linux" ]; # x86-specific

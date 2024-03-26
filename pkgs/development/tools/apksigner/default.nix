@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line tool to sign and verify Android APKs";
+    mainProgram = "apksigner";
     homepage = "https://developer.android.com/studio/command-line/apksigner";
     license = licenses.asl20;
     maintainers = with maintainers; [ linsui ];

@@ -31,6 +31,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform clipboard history applet";
+    mainProgram = "qlipper";
     homepage = "https://github.com/pvanek/qlipper";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;

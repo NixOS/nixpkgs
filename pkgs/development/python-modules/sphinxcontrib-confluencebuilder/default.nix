@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Confluence builder for sphinx";
+    mainProgram = "sphinx-build-confluence";
     homepage = "https://github.com/sphinx-contrib/confluencebuilder";
     license = licenses.bsd1;
     maintainers = with maintainers; [ graysonhead ];

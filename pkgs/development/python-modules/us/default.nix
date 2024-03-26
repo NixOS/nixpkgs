@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A package for easily working with US and state metadata";
+    mainProgram = "states";
     longDescription = ''
       All US states and territories, postal abbreviations, Associated Press style
       abbreviations, FIPS codes, capitals, years of statehood, time zones, phonetic

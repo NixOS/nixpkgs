@@ -114,6 +114,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A nonlinear 2D puzzle platformer taking place in impossible spaces";
+    mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
     license = licenses.asl20;
     maintainers = with maintainers; [ Luflosi ];

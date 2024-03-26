@@ -72,6 +72,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jcelaya/hdrmerge";
     description = "Combines two or more raw images into an HDR";
+    mainProgram = "hdrmerge";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.paperdigits ];

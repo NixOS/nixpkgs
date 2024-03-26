@@ -18,4 +18,5 @@ mkKdeDerivation {
     kitemmodels
     kquickcharts
   ];
+  meta.mainProgram = "arianna";
 }

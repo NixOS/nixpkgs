@@ -46,6 +46,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = common.meta // {
     description = common.meta.description + " - core binary";
+    mainProgram = "semgrep-core";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.attrNames common.core;
   };

@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "DigitalOcean droplet system metrics agent";
+    mainProgram = "do-agent";
     longDescription = ''
       do-agent is a program provided by DigitalOcean that collects system
       metrics from a DigitalOcean Droplet (on which the program runs) and sends

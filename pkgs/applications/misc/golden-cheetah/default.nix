@@ -76,6 +76,7 @@ in mkDerivation rec {
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
+    mainProgram = "GoldenCheetah";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ adamcstephens ];
     license = lib.licenses.gpl2Plus;

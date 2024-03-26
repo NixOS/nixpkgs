@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for the TP-Link Omada SDN Controller API";
+    mainProgram = "omada";
     homepage = "https://github.com/MarkGodwin/tplink-omada-api";
     changelog = "https://github.com/MarkGodwin/tplink-omada-api/releases/tag/release%2Fv${version}";
     license = licenses.mit;

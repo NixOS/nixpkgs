@@ -33,6 +33,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Dump certificates from PE files in different formats";
+    mainProgram = "CertDump";
     homepage = "https://github.com/secana/CertDump";
     longDescription = ''
       Cross-Platform tool to dump the signing certificate from a Portable Executable (PE) file.

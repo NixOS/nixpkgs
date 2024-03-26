@@ -46,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "MATE Desktop menu editor";
+    mainProgram = "mozo";
     homepage = "https://github.com/mate-desktop/mozo";
     license = with licenses; [ lgpl2Plus ];
     platforms = platforms.unix;

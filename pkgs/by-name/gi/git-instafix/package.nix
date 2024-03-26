@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Quickly fix up an old commit using your currently-staged changes";
+    mainProgram = "git-instafix";
     homepage = "https://github.com/quodlibetor/git-instafix";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ mightyiam ];

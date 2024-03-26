@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenStack Block Storage API Client Library";
+    mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

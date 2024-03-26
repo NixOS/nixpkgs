@@ -47,12 +47,12 @@ let
 in
 
 buildPythonPackage rec {
-  pname = "OpenUSD";
+  pname = "openusd";
   version = "23.11";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
-    repo = pname;
+    repo = "OpenUSD";
     rev = "refs/tags/v${version}";
     hash = "sha256-5zQrfB14kXs75WbL3s4eyhxELglhLNxU2L2aVXiyVjg=";
   };

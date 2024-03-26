@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple color chooser written in GTK3";
+    mainProgram = "gcolor3";
     homepage = "https://gitlab.gnome.org/World/gcolor3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];

@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple cargo plugin to get a list of features for a specific crate";
+    mainProgram = "cargo-whatfeatures";
     homepage = "https://github.com/museun/cargo-whatfeatures";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ ivan-babrou matthiasbeyer ];

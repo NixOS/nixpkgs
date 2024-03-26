@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Famous german card game";
+    mainProgram = "xskat";
     platforms = platforms.unix;
     license = licenses.xskat;
     longDescription = "Play the german card game Skat against the AI or over IRC.";

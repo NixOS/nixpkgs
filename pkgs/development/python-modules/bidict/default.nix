@@ -2,16 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, sphinx
 , hypothesis
-, py
 , pytest-xdist
 , pytestCheckHook
-, pytest-benchmark
-, sortedcollections
-, sortedcontainers
 , typing-extensions
 , pythonOlder
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -19,7 +15,7 @@ buildPythonPackage rec {
   version = "0.23.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jab";
@@ -28,31 +24,31 @@ buildPythonPackage rec {
     hash = "sha256-WE0YaRT4a/byvU2pzcByuf1DfMlOpYA9i0PPrKXsS+M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-  ];
-
-  propagatedBuildInputs = [
-    sphinx
+    wheel
   ];
 
   nativeCheckInputs = [
     hypothesis
-    py
     pytest-xdist
     pytestCheckHook
-    pytest-benchmark
-    sortedcollections
-    sortedcontainers
     typing-extensions
+  ];
+
+  pytestFlagsArray = [
+    # Pass -c /dev/null so that pytest does not use the bundled pytest.ini, which adds
+    # options to run additional integration tests that are overkill for our purposes.
+    "-c"
+    "/dev/null"
   ];
 
   pythonImportsCheck = [ "bidict" ];
 
   meta = with lib; {
-    homepage = "https://github.com/jab/bidict";
-    changelog = "https://github.com/jab/bidict/blob/v${version}/CHANGELOG.rst";
-    description = "Efficient, Pythonic bidirectional map data structures and related functionality";
+    homepage = "https://bidict.readthedocs.io";
+    changelog = "https://bidict.readthedocs.io/changelog.html";
+    description = "The bidirectional mapping library for Python.";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

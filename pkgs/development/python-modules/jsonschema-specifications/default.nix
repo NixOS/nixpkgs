@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-specifications";
-  version = "2023.11.2";
+  version = "2023.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jsonschema_specifications";
     inherit version;
-    hash = "sha256-lHL8T+pHTNdL6korGQ2uzLWp5NsuqA7896G1gvyagbg=";
+    hash = "sha256-SKdnh7PnD17VPxFg0rgfWG5MptFUjF3nCF0WgmdHZMw=";
   };
 
   nativeBuildInputs = [

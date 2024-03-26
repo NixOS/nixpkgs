@@ -21,6 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/LLNL/certipy";
     description = "wrapper for pyOpenSSL";
+    mainProgram = "certipy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ isgy ];
   };

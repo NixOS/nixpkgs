@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A fast multiple sequence alignment program";
+    mainProgram = "kalign";
     homepage = "https://github.com/TimoLassmann/kalign";
     changelog = "https://github.com/TimoLassmann/kalign/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;

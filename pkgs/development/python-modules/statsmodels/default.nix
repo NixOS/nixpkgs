@@ -1,53 +1,47 @@
 { lib
 , buildPythonPackage
 , cython
-, fetchpatch
 , fetchPypi
-, matplotlib
 , numpy
 , oldest-supported-numpy
+, packaging
 , pandas
 , patsy
+, pythonAtLeast
 , pythonOlder
 , scipy
+, setuptools
 , setuptools-scm
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.0";
-  format = "pyproject";
+  version = "0.14.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aHXH1onpZtlI8V64FqtWFvSShwaxgM9HD9WQerb2R6Q=";
+    hash = "sha256-ImDv3B74nznGcKC9gVGx0IQ1Z3gbyv7GzaBTTrR6lPY=";
   };
 
-  patches = [
-    # https://github.com/statsmodels/statsmodels/pull/8969
-    (fetchpatch {
-      name = "unpin-setuptools-scm.patch";
-      url = "https://github.com/statsmodels/statsmodels/commit/cfad8d81166e9b1392ba99763b95983afdb6d61b.patch";
-      hash = "sha256-l7cQHodkPm399a+3qIVmXPk/Ca+CqJDyWXWgjb062nM=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     cython
     oldest-supported-numpy
+    scipy
+    setuptools
     setuptools-scm
-    wheel
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    numpy
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
-    scipy
+    packaging
     pandas
     patsy
-    matplotlib
+    scipy
   ];
 
   # Huge test suites with several test failures

@@ -95,6 +95,14 @@ in {
         enable = mkEnableOption (lib.mdDoc "JACK audio emulation");
       };
 
+      raopOpenFirewall = mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Opens UDP/6001-6002, required by RAOP/Airplay for timing and control data.
+        '';
+      };
+
       pulse = {
         enable = mkEnableOption (lib.mdDoc "PulseAudio server emulation");
       };
@@ -370,6 +378,8 @@ in {
 
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.mkIf cfg.jack.enable [ "${cfg.package.jack}/lib" ];
+
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.raopOpenFirewall [ 6001 6002 ];
 
     users = lib.mkIf cfg.systemWide {
       users.pipewire = {

@@ -53,6 +53,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Thread and IRQ affinity setting GUI and cmd line tool";
+    mainProgram = "tuna";
     homepage = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

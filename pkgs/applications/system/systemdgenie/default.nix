@@ -24,6 +24,7 @@ stdenv.mkDerivation rec{
 
   meta = with lib; {
     description = "Systemd management utility";
+    mainProgram = "systemdgenie";
     homepage = "https://kde.org";
     license = licenses.gpl2;
     maintainers = [ maintainers.pasqui23 ];

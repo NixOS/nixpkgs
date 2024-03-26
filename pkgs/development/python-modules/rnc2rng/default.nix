@@ -22,6 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/djc/rnc2rng";
     description = "Compact to regular syntax conversion library for RELAX NG schemata";
+    mainProgram = "rnc2rng";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

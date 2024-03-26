@@ -17,6 +17,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     description = "Tool for making call graphs of C programmes";
+    mainProgram = "egypt";
     longDescription = ''
       Egypt is a simple tool for creating call graphs of C programs. It neither
       analyzes source code nor lays out graphs. Instead, it leaves the source

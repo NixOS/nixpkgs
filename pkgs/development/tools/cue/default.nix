@@ -45,6 +45,7 @@ buildGoModule rec {
 
   meta = with lib;  {
     description = "A data constraint language which aims to simplify tasks involving defining and using data";
+    mainProgram = "cue";
     homepage = "https://cuelang.org/";
     license = lib.licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];

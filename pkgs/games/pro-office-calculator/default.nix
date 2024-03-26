@@ -16,6 +16,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A completely normal office calculator";
+    mainProgram = "procalc";
     homepage = "https://proofficecalculator.com/";
     maintainers = [ maintainers.pmiddend ];
     platforms = platforms.linux;

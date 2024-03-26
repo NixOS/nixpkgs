@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python connector for WiZ light bulbs";
+    mainProgram = "wizlight";
     homepage = "https://github.com/sbidy/pywizlight";
     changelog = "https://github.com/sbidy/pywizlight/releases/tag/v${version}";
     license = with licenses; [ mit ];

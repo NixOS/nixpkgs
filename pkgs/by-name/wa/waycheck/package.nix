@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "update-desktop-database -q" "update-desktop-database $out/share/applications"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
     homepage = "https://gitlab.freedesktop.org/serebit/waycheck";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ julienmalka ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ julienmalka federicoschonborn ];
     mainProgram = "waycheck";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

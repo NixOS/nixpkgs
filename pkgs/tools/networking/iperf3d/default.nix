@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A iperf3 client and server wrapper for dynamic server ports";
+    mainProgram = "iperf3d";
     homepage = "https://github.com/wobcom/iperf3d";
     license = licenses.mit;
     maintainers = with maintainers; [ netali ] ++ teams.wdz.members;

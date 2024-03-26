@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Non-validating SQL parser for Python";
+    mainProgram = "sqlformat";
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';

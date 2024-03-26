@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Client for ONVIF Camera";
+    mainProgram = "onvif-cli";
     homepage = "https://github.com/quatanium/python-onvif";
     license = licenses.mit;
     maintainers = with maintainers; [ fleaz ];

@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for Emulated Input";
+    mainProgram = "ei-debug-events";
     homepage = "https://gitlab.freedesktop.org/libinput/libei";
     license = licenses.mit;
     maintainers = [ maintainers.pedrohlc ];

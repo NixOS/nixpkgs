@@ -11,6 +11,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "A volume keys control daemon for Xfce using pulseaudio";
+    mainProgram = "xfce4-volumed-pulse";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ] ++ teams.xfce.members;
   };

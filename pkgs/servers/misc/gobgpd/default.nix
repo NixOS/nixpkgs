@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "BGP implemented in Go";
+    mainProgram = "gobgpd";
     homepage = "https://osrg.github.io/gobgp/";
     changelog = "https://github.com/osrg/gobgp/releases/tag/v${version}";
     license = licenses.asl20;

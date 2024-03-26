@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Accelerated BLAST compatible local sequence aligner";
+    mainProgram = "diamond";
     longDescription = ''
       DIAMOND is a sequence aligner for protein and translated DNA searches, designed for high performance analysis of big sequence data. The key features are:
       - Pairwise alignment of proteins and translated DNA at 100x-10,000x speed of BLAST.

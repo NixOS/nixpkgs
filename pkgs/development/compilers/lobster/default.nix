@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "The Lobster programming language";
+    mainProgram = "lobster";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of
       very static typing and memory management with a very lightweight,

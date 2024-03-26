@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program to find rational points on hyperelliptic curves";
+    mainProgram = "ratpoints";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

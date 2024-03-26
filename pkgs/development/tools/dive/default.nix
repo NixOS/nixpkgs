@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool for exploring each layer in a docker image";
+    mainProgram = "dive";
     homepage = "https://github.com/wagoodman/dive";
     changelog = "https://github.com/wagoodman/dive/releases/tag/v${version}";
     license = licenses.mit;

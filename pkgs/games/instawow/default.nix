@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/layday/instawow";
     description = "World of Warcraft add-on manager CLI and GUI";
+    mainProgram = "instawow";
     license = licenses.gpl3;
     maintainers = with maintainers; [ seirl ];
   };

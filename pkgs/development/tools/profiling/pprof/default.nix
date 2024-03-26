@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool for visualization and analysis of profiling data";
+    mainProgram = "pprof";
     homepage = "https://github.com/google/pprof";
     license = licenses.asl20;
     longDescription = ''

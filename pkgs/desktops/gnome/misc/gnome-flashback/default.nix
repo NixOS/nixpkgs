@@ -184,6 +184,7 @@ let
 
     meta = with lib; {
       description = "GNOME 2.x-like session for GNOME 3";
+      mainProgram = "gnome-flashback";
       homepage = "https://wiki.gnome.org/Projects/GnomeFlashback";
       license = licenses.gpl2;
       maintainers = teams.gnome.members;

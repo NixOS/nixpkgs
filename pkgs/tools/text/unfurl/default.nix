@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Pull out bits of URLs provided on stdin";
+    mainProgram = "unfurl";
     homepage = "https://github.com/tomnomnom/unfurl";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module designed to provide detailed insights into the zip structure of APK files";
+    mainProgram = "apkInspector";
     homepage = "https://github.com/erev0s/apkInspector";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

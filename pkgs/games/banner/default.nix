@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/pronovic/banner";
     description = "Print large banners to ASCII terminals";
+    mainProgram = "banner";
     license = licenses.gpl2Only;
 
     longDescription = ''

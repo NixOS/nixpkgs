@@ -66,6 +66,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Build applications using Go + HTML + CSS + JS";
+    mainProgram = "wails";
     homepage = "https://wails.io";
     license = licenses.mit;
     maintainers = with maintainers; [ ianmjones ];

@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://fuse-emulator.sourceforge.net/";
     description = "ZX Spectrum emulator";
+    mainProgram = "fuse";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];

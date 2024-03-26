@@ -34,6 +34,7 @@ buildGoModule rec {
     homepage = "https://github.com/wal-g/wal-g";
     license = licenses.asl20;
     description = "An archival restoration tool for PostgreSQL";
+    mainProgram = "wal-g";
     maintainers = with maintainers; [ marsam ];
   };
 }

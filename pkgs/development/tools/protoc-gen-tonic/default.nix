@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A protoc plugin that generates Tonic gRPC server and client code using the Prost code generation engine";
+    mainProgram = "protoc-gen-tonic";
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";
     license = licenses.asl20;

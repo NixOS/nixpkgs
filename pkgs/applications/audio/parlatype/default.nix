@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME audio player for transcription";
+    mainProgram = "parlatype";
     longDescription = ''
       Parlatype is a minimal audio player for manual speech transcription,
       written for the GNOME desktop environment. It plays audio sources to

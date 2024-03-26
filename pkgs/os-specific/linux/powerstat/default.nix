@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Laptop power measuring tool";
+    mainProgram = "powerstat";
     homepage = "https://github.com/ColinIanKing/powerstat";
     license = licenses.gpl2;
     platforms = platforms.linux;

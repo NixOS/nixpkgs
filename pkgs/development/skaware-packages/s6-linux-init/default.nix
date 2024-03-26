@@ -1,8 +1,6 @@
-{ lib, skawarePackages }:
+{ lib, skawarePackages, skalibs, execline, s6 }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6-linux-init";
   version = "1.1.2.0";
   sha256 = "sha256-Ea4I0KZiELXla2uu4Pa5sbafvtsF/aEoWxFaMcpGx38=";

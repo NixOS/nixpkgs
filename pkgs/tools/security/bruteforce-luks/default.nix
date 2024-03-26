@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Cracks passwords of LUKS encrypted volumes";
+    mainProgram = "bruteforce-luks";
     longDescription = ''
       The program tries to decrypt at least one of the key slots by trying
       all the possible passwords. It is especially useful if you know

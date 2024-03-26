@@ -4,6 +4,8 @@
 , rustPlatform
 , darwin
 , pandoc
+, pkg-config
+, openssl
 , installShellFiles
 , copyDesktopItems
 , makeDesktopItem
@@ -16,19 +18,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = "fend";
     rev = "v${version}";
-    hash = "sha256-X96r5wN5eq1PZD/JGqnG/0kg6PYEdnj5h9zc+GXQjQM=";
+    hash = "sha256-l4AZpvLMmNuUWHqm5b0ngBxSHh5CV0SMOyKSF4LaxSI=";
   };
 
-  cargoHash = "sha256-UIZs45OQ1j57VEb6g4P0AwjmEsjMt0am5FUXXDODaWI=";
+  cargoHash = "sha256-mx0KXGbSxn54JUyLVJms/AdPseKA9QH1Ixi7XKydf2w=";
 
-  nativeBuildInputs = [ pandoc installShellFiles copyDesktopItems ];
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
+  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postBuild = ''
     patchShebangs --build ./documentation/build.sh
@@ -82,7 +84,7 @@ rustPlatform.buildRustPackage rec {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
     changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
+    license = licenses.mit;
     maintainers = with maintainers; [ djanatyn liff ];
     mainProgram = "fend";
   };

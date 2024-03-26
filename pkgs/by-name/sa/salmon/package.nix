@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description =
       "Tool for quantifying the expression of transcripts using RNA-seq data";
+    mainProgram = "salmon";
     longDescription = ''
       Salmon is a tool for quantifying the expression of transcripts
       using RNA-seq data. Salmon uses new algorithms (specifically,

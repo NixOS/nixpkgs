@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Fast and portable executable to run your Elm tests";
+    mainProgram = "elm-test-rs";
     homepage = "https://github.com/mpizenberg/elm-test-rs";
     license = licenses.bsd3;
     maintainers = [ maintainers.jpagex ];

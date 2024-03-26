@@ -304,6 +304,7 @@ in buildFHSEnv rec {
     then
       steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
         description = steam.meta.description + " (without game specific libraries)";
+        mainProgram = "steam";
       }
     else {
       description = "Steam dependencies (dummy package, do not use)";

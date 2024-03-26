@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Relational database with version control and CLI a-la Git";
+    mainProgram = "dolt";
     homepage = "https://github.com/dolthub/dolt";
     license = licenses.asl20;
     maintainers = with maintainers; [ danbst ];

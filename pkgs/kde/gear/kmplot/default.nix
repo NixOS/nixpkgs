@@ -6,4 +6,5 @@ mkKdeDerivation {
   pname = "kmplot";
 
   extraBuildInputs = [qtsvg];
+  meta.mainProgram = "kmplot";
 }

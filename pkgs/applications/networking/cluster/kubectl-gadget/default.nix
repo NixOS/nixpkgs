@@ -17,7 +17,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w"
-    "-X main.version=v${version}"
+    "-X github.com/inspektor-gadget/inspektor-gadget/cmd/common.version=v${version}"
+    "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${version}"
     "-extldflags=-static"
   ];
 
@@ -29,8 +30,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A collection of gadgets for troubleshooting Kubernetes applications using eBPF";
+    mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kranurag7 ];
+    maintainers = with maintainers; [ kranurag7 devusb ];
   };
 }

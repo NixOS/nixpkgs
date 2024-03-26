@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A General Environment for the Treatment of Discrete Problems";
+    mainProgram = "getdp";
     longDescription = ''
       GetDP is a free finite element solver using mixed elements to discretize
       de Rham-type complexes in one, two and three dimensions.  The main

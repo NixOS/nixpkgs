@@ -43,6 +43,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     description = "Quick access to Zotero references";
+    mainProgram = "qnotero";
     homepage = "https://www.cogsci.nl/software/qnotero";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;

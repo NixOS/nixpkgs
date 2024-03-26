@@ -70,6 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "State-of-the-art 2D and 3D Face Analysis Project";
+    mainProgram = "insightface-cli";
     homepage = "https://github.com/deepinsight/insightface";
     license = licenses.mit;
     maintainers = with maintainers; [ oddlama ];

@@ -631,6 +631,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "dotenvy"
+version = "0.15.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1aaf95b3e5c8f23aa320147307562d361db0ae0d51242340f558153b4eb2439b"
+
+[[package]]
 name = "either"
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1795,7 +1801,7 @@ dependencies = [
 
 [[package]]
 name = "rye"
-version = "0.29.0"
+version = "0.31.0"
 dependencies = [
  "age",
  "anyhow",
@@ -1808,6 +1814,7 @@ dependencies = [
  "curl",
  "decompress",
  "dialoguer",
+ "dotenvy",
  "flate2",
  "fslock",
  "git-testament",

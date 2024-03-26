@@ -12,9 +12,13 @@
 
   epex_spot = callPackage ./epex_spot {};
 
+  frigate = callPackage ./frigate {};
+
   govee-lan = callPackage ./govee-lan {};
 
   gpio = callPackage ./gpio {};
+
+  homematicip_local = callPackage ./homematicip_local { };
 
   localtuya = callPackage ./localtuya {};
 
