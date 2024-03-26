@@ -146,14 +146,12 @@ default because it's not free software. You can enable it as follows:
 services.xserver.videoDrivers = [ "nvidia" ];
 ```
 
-Or if you have an older card, you may have to use one of the legacy
-drivers:
+If you have an older card, you may have to use one of the legacy drivers:
 
 ```nix
-services.xserver.videoDrivers = [ "nvidiaLegacy470" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy390" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
+hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
+hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
+hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_340;
 ```
 
 You may need to reboot after enabling this driver to prevent a clash
