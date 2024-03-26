@@ -5000,8 +5000,6 @@ with pkgs;
 
   ioport = callPackage ../os-specific/linux/ioport { };
 
-  dgoss = callPackage ../tools/misc/dgoss { };
-
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
@@ -5532,8 +5530,6 @@ with pkgs;
   gorilla-cli = callPackage ../tools/llm/gorilla-cli { };
 
   godu = callPackage ../tools/misc/godu { };
-
-  goss = callPackage ../tools/misc/goss { };
 
   gosu = callPackage ../tools/misc/gosu { };
 
@@ -24870,6 +24866,10 @@ with pkgs;
   tevent = callPackage ../development/libraries/tevent { };
 
   tet = callPackage ../development/tools/misc/tet { };
+
+  texpresso = callPackage ../tools/typesetting/tex/texpresso {
+    texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
+  };
 
   text-engine = callPackage ../development/libraries/text-engine { };
 

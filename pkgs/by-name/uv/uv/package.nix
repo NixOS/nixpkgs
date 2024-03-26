@@ -2,6 +2,7 @@
 , cmake
 , darwin
 , fetchFromGitHub
+, installShellFiles
 , openssl
 , pkg-config
 , rustPlatform
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     pkg-config
   ];
 
@@ -47,6 +49,14 @@ rustPlatform.buildRustPackage rec {
   env = {
     OPENSSL_NO_VENDOR = true;
   };
+
+  postInstall = ''
+    export HOME=$TMPDIR
+    installShellCompletion --cmd uv \
+      --bash <($out/bin/uv --generate-shell-completion bash) \
+      --fish <($out/bin/uv --generate-shell-completion fish) \
+      --zsh <($out/bin/uv --generate-shell-completion zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
