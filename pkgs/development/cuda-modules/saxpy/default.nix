@@ -56,6 +56,5 @@ backendStdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = lib.teams.cuda.members;
     platforms = lib.platforms.unix;
-    badPlatforms = lib.optionals flags.isJetsonBuild platforms;
   };
 }

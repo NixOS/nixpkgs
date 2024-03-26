@@ -54,7 +54,8 @@ final: _: {
         makeSetupHook
           {
             name = "auto-add-opengl-runpath-hook";
-            propagatedBuildInputs = [addDriverRunpath autoFixElfFiles];
+            propagatedBuildInputs = [autoFixElfFiles];
+            substitutions = { inherit (addDriverRunpath) driverLink; };
           }
           ./auto-add-driver-runpath-hook.sh
       )
@@ -71,15 +72,17 @@ final: _: {
   autoAddCudaCompatRunpath =
     final.callPackage
       (
-        {makeSetupHook, autoFixElfFiles, cuda_compat ? null }:
+        {makeSetupHook, addDriverRunpath, autoFixElfFiles, cuda_compat ? null }:
         makeSetupHook
           {
             name = "auto-add-cuda-compat-runpath-hook";
             propagatedBuildInputs = [autoFixElfFiles];
 
             substitutions = {
+              inherit (addDriverRunpath) driverLink;
+
               # Hotfix Ofborg evaluation
-              libcudaPath = if final.flags.isJetsonBuild then "${cuda_compat}/compat" else null;
+              libcudaPath = if final.flags.isJetsonBuild then "${cuda_compat}/compat" else "";
             };
 
             meta.broken = !final.flags.isJetsonBuild;

@@ -88,9 +88,11 @@ in buildPythonPackage {
     rm -rf $out/bin
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
-  '';
+  elfAddRunpaths = [
+    "${lib.getLib cudaPackages.cuda_nvrtc}/lib"
+    "$ORIGIN"
+  ];
+
 
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
   dontStrip = true;

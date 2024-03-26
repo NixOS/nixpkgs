@@ -1,27 +1,36 @@
 # shellcheck shell=bash
 # Patch all dynamically linked, ELF files with the CUDA driver (libcuda.so)
 # coming from the cuda_compat package by adding it to the RUNPATH.
+
+[[ -n ${autoAddCudaCompatRunpath_Once-} ]] && return
+declare -g autoAddCudaCompatRunpath_Once=1
+
 echo "Sourcing auto-add-cuda-compat-runpath-hook"
 
-addCudaCompatRunpath() {
-  local libPath
-  local origRpath
+arrayInsertBefore() {
+    local -n arrayRef="$1" # Namerefs, bash >= 4.3:
+    local pattern="$2"
+    local item="$3"
+    shift 3
 
-  if [[ $# -eq 0 ]]; then
-    echo "addCudaCompatRunpath: no library path provided" >&2
-    exit 1
-  elif [[ $# -gt 1 ]]; then
-    echo "addCudaCompatRunpath: too many arguments" >&2
-    exit 1
-  elif [[ "$1" == "" ]]; then
-    echo "addCudaCompatRunpath: empty library path" >&2
-    exit 1
-  else
-    libPath="$1"
-  fi
+    local i
+    local foundMatch=
 
-  origRpath="$(patchelf --print-rpath "$libPath")"
-  patchelf --set-rpath "@libcudaPath@:$origRpath" "$libPath"
+    local -a newArray
+    for i in "${arrayRef[@]}" ; do
+        if [[ "$i" == "$pattern" ]] ; then
+            newArray+=( "$item" )
+            foundMatch=1
+        fi
+        newArray+=( "$i" )
+    done
+    if [[ -z "$foundMatch" ]] ; then
+        newArray+=( "$item" )
+    fi
+    arrayRef=( "${newArray[@]}" )
 }
 
-postFixupHooks+=("autoFixElfFiles addCudaCompatRunpath")
+
+if [[ -n "@libcudaPath@" ]] ; then
+    arrayInsertBefore elfPrependRunpaths "@driverLink@/lib" "@libcudaPath@"
+fi

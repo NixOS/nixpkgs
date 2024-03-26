@@ -1,8 +1,11 @@
 # shellcheck shell=bash
-# Run addDriverRunpath on all dynamically linked ELF files
-echo "Sourcing auto-add-driver-runpath-hook"
+# Equivalent to running addDriverRunpath on all dynamically linked ELF files
+
+[[ -n ${autoAddDriverRunpath_Once-} ]] && return
+declare -g autoAddDriverRunpath_Once=1
+
+echo "Sourcing auto-add-driver-runpath-hook.sh"
 
 if [ -z "${dontUseAutoAddDriverRunpath-}" ]; then
-  echo "Using autoAddDriverRunpath"
-  postFixupHooks+=("autoFixElfFiles addDriverRunpath")
+  elfPrependRunpaths+=( "@driverLink@/lib" )
 fi
