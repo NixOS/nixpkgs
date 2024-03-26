@@ -21,13 +21,14 @@
 , survey
 , typing-extensions
 , watchdog
+, xattr
 , pytestCheckHook
 , nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.9.1";
+  version = "1.9.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ilaKcYVZr0rkExna8WLcO+zLUp24eRRfL5SW+sMCJG0=";
+    hash = "sha256-Bb0yE2OKdlZd6ZsTEWOD+hMuV41fZanesY49L+v4BBE=";
   };
 
   propagatedBuildInputs = [
@@ -57,6 +58,7 @@ buildPythonPackage rec {
     survey
     typing-extensions
     watchdog
+    xattr
   ];
 
   makeWrapperArgs = [
@@ -86,6 +88,8 @@ buildPythonPackage rec {
     "test_cased_path_candidates"
     # AssertionError
     "test_locking_multiprocess"
+    # OSError: [Errno 95] Operation not supported
+    "test_move_preserves_xattrs"
   ];
 
   pythonImportsCheck = [
