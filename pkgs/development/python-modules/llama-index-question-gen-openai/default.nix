@@ -25,14 +25,14 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  # Tests are only available in the mono repo
-  doCheck = false;
-
   dependencies = [
     llama-index-core
     llama-index-llms-openai
     llama-index-program-openai
   ];
+
+  # Tests are only available in the mono repo
+  doCheck = false;
 
   pythonImportsCheck = [
     "llama_index.question_gen.openai"
