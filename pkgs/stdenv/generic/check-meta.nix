@@ -448,7 +448,7 @@ let
     let
       outputs = attrs.outputs or [ "out" ];
     in
-    lib.attrsets.optionalAttrs (attrs ? src.meta.homepage || attrs ? srcs && any (src: src ? meta.homepage) attrs.srcs) {
+    optionalAttrs (attrs ? src.meta.homepage || attrs ? srcs && isList attrs.srcs && any (src: src ? meta.homepage) attrs.srcs) {
       # should point to an http-browsable source tree, if available.
       # fetchers like fetchFromGitHub set it automatically.
       # this could be handled a lot easier if we nulled it instead
