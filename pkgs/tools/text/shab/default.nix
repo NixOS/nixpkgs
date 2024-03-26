@@ -49,11 +49,22 @@ let
     };
   };
 
-  /*
-     shabScript:       a path or filename to use as a template
-     parameters.name:  the name to use as part of the store path
-     parameters:       variables to expose to the template
-   */
+  /**
+    shabScript:       a path or filename to use as a template
+    parameters.name:  the name to use as part of the store path
+    parameters:       variables to expose to the template
+
+
+    # Inputs
+
+    `shabScript`
+
+    : 1\. Function argument
+
+    `parameters`
+
+    : 2\. Function argument
+  */
   render = shabScript: parameters:
     let extraParams = {
           inherit shabScript;
@@ -62,11 +73,22 @@ let
       ${shab}/bin/shab "$shabScript" >$out
     '';
 
-  /*
-     shabScriptText:   a string to use as a template
-     parameters.name:  the name to use as part of the store path
-     parameters:       variables to expose to the template
-   */
+  /**
+    shabScriptText:   a string to use as a template
+    parameters.name:  the name to use as part of the store path
+    parameters:       variables to expose to the template
+
+
+    # Inputs
+
+    `shabScriptText`
+
+    : 1\. Function argument
+
+    `parameters`
+
+    : 2\. Function argument
+  */
   renderText = shabScriptText: parameters:
     render (writeText "template" shabScriptText) parameters;
 

@@ -46,7 +46,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/LekKit/RVVM";
     description = "The RISC-V Virtual Machine";
-    license = with licenses; [ gpl3 /* or */ mpl20 ];
+    license = with licenses; [ gpl3 /**
+  or
+*/ mpl20 ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ kamillaova ];
     mainProgram = "rvvm";

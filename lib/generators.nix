@@ -1,18 +1,19 @@
-/* Functions that generate widespread file
- * formats from nix data structures.
- *
- * They all follow a similar interface:
- * generator { config-attrs } data
- *
- * `config-attrs` are “holes” in the generators
- * with sensible default implementations that
- * can be overwritten. The default implementations
- * are mostly generators themselves, called with
- * their respective default values; they can be reused.
- *
- * Tests can be found in ./tests/misc.nix
- * Documentation in the manual, #sec-generators
- */
+/**
+  Functions that generate widespread file
+  * formats from nix data structures.
+  *
+  * They all follow a similar interface:
+  * generator { config-attrs } data
+  *
+  * `config-attrs` are “holes” in the generators
+  * with sensible default implementations that
+  * can be overwritten. The default implementations
+  * are mostly generators themselves, called with
+  * their respective default values; they can be reused.
+  *
+  * Tests can be found in ./tests/misc.nix
+  * Documentation in the manual, #sec-generators
+*/
 { lib }:
 
 let
@@ -69,10 +70,18 @@ let
 
   ## -- HELPER FUNCTIONS & DEFAULTS --
 
-  /* Convert a value to a sensible default string representation.
-   * The builtin `toString` function has some strange defaults,
-   * suitable for bash scripts but not much else.
-   */
+  /**
+    Convert a value to a sensible default string representation.
+    * The builtin `toString` function has some strange defaults,
+    * suitable for bash scripts but not much else.
+
+
+    # Inputs
+
+    `v`
+
+    : 2\. Function argument
+  */
   mkValueStringDefault = {}: v:
     let err = t: v: abort
           ("generators.mkValueStringDefault: " +
@@ -100,15 +109,31 @@ let
     else err "this value is" (toString v);
 
 
-  /* Generate a line of key k and value v, separated by
-   * character sep. If sep appears in k, it is escaped.
-   * Helper for synaxes with different separators.
-   *
-   * mkValueString specifies how values should be formatted.
-   *
-   * mkKeyValueDefault {} ":" "f:oo" "bar"
-   * > "f\:oo:bar"
-   */
+  /**
+    Generate a line of key k and value v, separated by
+    * character sep. If sep appears in k, it is escaped.
+    * Helper for synaxes with different separators.
+    *
+    * mkValueString specifies how values should be formatted.
+    *
+    * mkKeyValueDefault {} ":" "f:oo" "bar"
+    * > "f\:oo:bar"
+
+
+    # Inputs
+
+    `sep`
+
+    : 2\. Function argument
+
+    `k`
+
+    : 3\. Function argument
+
+    `v`
+
+    : 4\. Function argument
+  */
   mkKeyValueDefault = {
     mkValueString ? mkValueStringDefault {}
   }: sep: k: v:
@@ -118,10 +143,11 @@ let
   ## -- FILE FORMAT GENERATORS --
 
 
-  /* Generate a key-value-style config file from an attrset.
-   *
-   * mkKeyValue is the same as in toINI.
-   */
+  /**
+    Generate a key-value-style config file from an attrset.
+    *
+    * mkKeyValue is the same as in toINI.
+  */
   toKeyValue = {
     mkKeyValue ? mkKeyValueDefault {} "=",
     listsAsDuplicateKeys ? false,
@@ -134,26 +160,34 @@ let
   in attrs: concatStrings (concatLists (mapAttrsToList mkLines attrs));
 
 
-  /* Generate an INI-style config file from an
-   * attrset of sections to an attrset of key-value pairs.
-   *
-   * generators.toINI {} {
-   *   foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
-   *   baz = { "also, integers" = 42; };
-   * }
-   *
-   *> [baz]
-   *> also, integers=42
-   *>
-   *> [foo]
-   *> ciao=bar
-   *> hi=/nix/store/y93qql1p5ggfnaqjjqhxcw0vqw95rlz0-hello-2.10
-   *
-   * The mk* configuration attributes can generically change
-   * the way sections and key-value strings are generated.
-   *
-   * For more examples see the test cases in ./tests/misc.nix.
-   */
+  /**
+    Generate an INI-style config file from an
+    * attrset of sections to an attrset of key-value pairs.
+    *
+    * generators.toINI {} {
+    *   foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
+    *   baz = { "also, integers" = 42; };
+    * }
+    *
+    *> [baz]
+    *> also, integers=42
+    *>
+    *> [foo]
+    *> ciao=bar
+    *> hi=/nix/store/y93qql1p5ggfnaqjjqhxcw0vqw95rlz0-hello-2.10
+    *
+    * The mk* configuration attributes can generically change
+    * the way sections and key-value strings are generated.
+    *
+    * For more examples see the test cases in ./tests/misc.nix.
+
+
+    # Inputs
+
+    `attrsOfAttrs`
+
+    : 2\. Function argument
+  */
   toINI = {
     # apply transformations (e.g. escapes) to section names
     mkSectionName ? (name: escape [ "[" "]" ] name),
@@ -174,37 +208,38 @@ let
       # map input to ini sections
       mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
 
-  /* Generate an INI-style config file from an attrset
-   * specifying the global section (no header), and an
-   * attrset of sections to an attrset of key-value pairs.
-   *
-   * generators.toINIWithGlobalSection {} {
-   *   globalSection = {
-   *     someGlobalKey = "hi";
-   *   };
-   *   sections = {
-   *     foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
-   *     baz = { "also, integers" = 42; };
-   * }
-   *
-   *> someGlobalKey=hi
-   *>
-   *> [baz]
-   *> also, integers=42
-   *>
-   *> [foo]
-   *> ciao=bar
-   *> hi=/nix/store/y93qql1p5ggfnaqjjqhxcw0vqw95rlz0-hello-2.10
-   *
-   * The mk* configuration attributes can generically change
-   * the way sections and key-value strings are generated.
-   *
-   * For more examples see the test cases in ./tests/misc.nix.
-   *
-   * If you don’t need a global section, you can also use
-   * `generators.toINI` directly, which only takes
-   * the part in `sections`.
-   */
+  /**
+    Generate an INI-style config file from an attrset
+    * specifying the global section (no header), and an
+    * attrset of sections to an attrset of key-value pairs.
+    *
+    * generators.toINIWithGlobalSection {} {
+    *   globalSection = {
+    *     someGlobalKey = "hi";
+    *   };
+    *   sections = {
+    *     foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
+    *     baz = { "also, integers" = 42; };
+    * }
+    *
+    *> someGlobalKey=hi
+    *>
+    *> [baz]
+    *> also, integers=42
+    *>
+    *> [foo]
+    *> ciao=bar
+    *> hi=/nix/store/y93qql1p5ggfnaqjjqhxcw0vqw95rlz0-hello-2.10
+    *
+    * The mk* configuration attributes can generically change
+    * the way sections and key-value strings are generated.
+    *
+    * For more examples see the test cases in ./tests/misc.nix.
+    *
+    * If you don’t need a global section, you can also use
+    * `generators.toINI` directly, which only takes
+    * the part in `sections`.
+  */
   toINIWithGlobalSection = {
     # apply transformations (e.g. escapes) to section names
     mkSectionName ? (name: escape [ "[" "]" ] name),
@@ -219,24 +254,32 @@ let
            + "\n")
     + (toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; } sections);
 
-  /* Generate a git-config file from an attrset.
-   *
-   * It has two major differences from the regular INI format:
-   *
-   * 1. values are indented with tabs
-   * 2. sections can have sub-sections
-   *
-   * generators.toGitINI {
-   *   url."ssh://git@github.com/".insteadOf = "https://github.com";
-   *   user.name = "edolstra";
-   * }
-   *
-   *> [url "ssh://git@github.com/"]
-   *>   insteadOf = "https://github.com"
-   *>
-   *> [user]
-   *>   name = "edolstra"
-   */
+  /**
+    Generate a git-config file from an attrset.
+    *
+    * It has two major differences from the regular INI format:
+    *
+    * 1. values are indented with tabs
+    * 2. sections can have sub-sections
+    *
+    * generators.toGitINI {
+    *   url."ssh://git@github.com/".insteadOf = "https://github.com";
+    *   user.name = "edolstra";
+    * }
+    *
+    *> [url "ssh://git@github.com/"]
+    *>   insteadOf = "https://github.com"
+    *>
+    *> [user]
+    *>   name = "edolstra"
+
+
+    # Inputs
+
+    `attrs`
+
+    : 1\. Function argument
+  */
   toGitINI = attrs:
     let
       mkSectionName = name:
@@ -290,9 +333,13 @@ let
 
   withRecursion =
     {
-      /* If this option is not null, the given value will stop evaluating at a certain depth */
+      /**
+        If this option is not null, the given value will stop evaluating at a certain depth
+      */
       depthLimit
-      /* If this option is true, an error will be thrown, if a certain given depth is exceeded */
+      /**
+        If this option is true, an error will be thrown, if a certain given depth is exceeded
+      */
     , throwOnDepthLimit ? true
     }:
       assert isInt depthLimit;
@@ -323,20 +370,27 @@ let
       in
         mapAny 0;
 
-  /* Pretty print a value, akin to `builtins.trace`.
-   * Should probably be a builtin as well.
-   * The pretty-printed string should be suitable for rendering default values
-   * in the NixOS manual. In particular, it should be as close to a valid Nix expression
-   * as possible.
-   */
+  /**
+    Pretty print a value, akin to `builtins.trace`.
+    * Should probably be a builtin as well.
+    * The pretty-printed string should be suitable for rendering default values
+    * in the NixOS manual. In particular, it should be as close to a valid Nix expression
+    * as possible.
+  */
   toPretty = {
-    /* If this option is true, attrsets like { __pretty = fn; val = …; }
-       will use fn to convert val to a pretty printed representation.
-       (This means fn is type Val -> String.) */
+    /**
+      If this option is true, attrsets like { __pretty = fn; val = …; }
+      will use fn to convert val to a pretty printed representation.
+      (This means fn is type Val -> String.)
+    */
     allowPrettyValues ? false,
-    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    /**
+      If this option is true, the output is indented with newlines for attribute sets and lists
+    */
     multiline ? true,
-    /* Initial indentation level */
+    /**
+      Initial indentation level
+    */
     indent ? ""
   }:
     let
@@ -447,9 +501,17 @@ let
 ${expr "" v}
 </plist>'';
 
-  /* Translate a simple Nix expression to Dhall notation.
-   * Note that integers are translated to Integer and never
-   * the Natural type.
+  /**
+    Translate a simple Nix expression to Dhall notation.
+    * Note that integers are translated to Integer and never
+    * the Natural type.
+
+
+    # Inputs
+
+    `v`
+
+    : 2\. Function argument
   */
   toDhall = { }@args: v:
     let concatItems = concatStringsSep ", ";
@@ -471,46 +533,69 @@ ${expr "" v}
     else
       toJSON v;
 
-  /*
-   Translate a simple Nix expression to Lua representation with occasional
-   Lua-inlines that can be constructed by mkLuaInline function.
+  /**
+    Translate a simple Nix expression to Lua representation with occasional
+    Lua-inlines that can be constructed by mkLuaInline function.
 
-   Configuration:
-     * multiline - by default is true which results in indented block-like view.
-     * indent - initial indent.
-     * asBindings - by default generate single value, but with this use attrset to set global vars.
+    Configuration:
+      * multiline - by default is true which results in indented block-like view.
+      * indent - initial indent.
+      * asBindings - by default generate single value, but with this use attrset to set global vars.
 
-   Attention:
-     Regardless of multiline parameter there is no trailing newline.
+    Attention:
+      Regardless of multiline parameter there is no trailing newline.
 
-   Example:
-     generators.toLua {}
-       {
-         cmd = [ "typescript-language-server" "--stdio" ];
-         settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
-       }
-     ->
+
+    # Inputs
+
+    `v`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    toLua :: AttrSet -> Any -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `toLua` usage example
+
+    ```nix
+    generators.toLua {}
       {
-        ["cmd"] = {
-          "typescript-language-server",
-          "--stdio"
-        },
-        ["settings"] = {
-          ["workspace"] = {
-            ["library"] = (vim.api.nvim_get_runtime_file("", true))
-          }
-        }
+        cmd = [ "typescript-language-server" "--stdio" ];
+        settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
       }
+    ->
+     {
+       ["cmd"] = {
+         "typescript-language-server",
+         "--stdio"
+       },
+       ["settings"] = {
+         ["workspace"] = {
+           ["library"] = (vim.api.nvim_get_runtime_file("", true))
+         }
+       }
+     }
+    ```
 
-   Type:
-     toLua :: AttrSet -> Any -> String
+    :::
   */
   toLua = {
-    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    /**
+      If this option is true, the output is indented with newlines for attribute sets and lists
+    */
     multiline ? true,
-    /* Initial indentation level */
+    /**
+      Initial indentation level
+    */
     indent ? "",
-    /* Interpret as variable bindings */
+    /**
+      Interpret as variable bindings
+    */
     asBindings ? false,
   }@args: v:
     let
@@ -559,11 +644,21 @@ ${expr "" v}
     else
       abort "generators.toLua: type ${typeOf v} is unsupported";
 
-  /*
-   Mark string as Lua expression to be inlined when processed by toLua.
+  /**
+    Mark string as Lua expression to be inlined when processed by toLua.
 
-   Type:
-     mkLuaInline :: String -> AttrSet
+
+    # Inputs
+
+    `expr`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkLuaInline :: String -> AttrSet
+    ```
   */
   mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
 
@@ -588,15 +683,17 @@ in
     withRecursion
     ;
 
-  /* Generates JSON from an arbitrary (non-function) value.
+  /**
+    Generates JSON from an arbitrary (non-function) value.
     * For more information see the documentation of the builtin.
-    */
+  */
   toJSON = {}: toJSON;
 
-  /* YAML has been a strict superset of JSON since 1.2, so we
+  /**
+    YAML has been a strict superset of JSON since 1.2, so we
     * use toJSON. Before it only had a few differences referring
     * to implicit typing rules, so it should work with older
     * parsers as well.
-    */
+  */
   toYAML = {}: toJSON;
 }

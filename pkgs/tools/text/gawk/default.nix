@@ -4,11 +4,12 @@
 , interactive ? false, readline
 , autoreconfHook # no-pma fix
 
-/* Test suite broke on:
-       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
-    || stdenv.isDarwin # XXX: `locale' segfaults
-    || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
-    || stdenv.isFreeBSD
+/**
+  Test suite broke on:
+     stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+  || stdenv.isDarwin # XXX: `locale' segfaults
+  || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+  || stdenv.isFreeBSD
 */
 , doCheck ? (interactive && stdenv.isLinux), glibcLocales ? null
 , locale ? null

@@ -1,6 +1,6 @@
-/*
-   test for example like this
-   $ hydra-eval-jobs pkgs/top-level/release-python.nix
+/**
+  test for example like this
+  $ hydra-eval-jobs pkgs/top-level/release-python.nix
 */
 
 { # The platforms for which we build Nixpkgs.

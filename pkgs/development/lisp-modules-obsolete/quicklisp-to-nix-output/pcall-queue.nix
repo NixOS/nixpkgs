@@ -1,4 +1,6 @@
-/* Generated file. */
+/**
+  Generated file.
+*/
 args @ { fetchurl, ... }:
 rec {
   baseName = "pcall-queue";
@@ -18,11 +20,13 @@ rec {
   asdFilesToKeep = ["pcall-queue.asd"];
   overrides = x: x;
 }
-/* (SYSTEM pcall-queue DESCRIPTION System lacks description SHA256
-    02idx1wnv9770fl2nh179sb8njw801g70b5mf8jqhqm2gwsb731y URL
-    http://beta.quicklisp.org/archive/pcall/2010-10-06/pcall-0.3.tgz MD5
-    019d85dfd1d5d0ee8d4ee475411caf6b NAME pcall-queue FILENAME pcall-queue DEPS
-    ((NAME alexandria FILENAME alexandria)
-     (NAME bordeaux-threads FILENAME bordeaux-threads))
-    DEPENDENCIES (alexandria bordeaux-threads) VERSION pcall-0.3 SIBLINGS
-    (pcall) PARASITES NIL) */
+/**
+  (SYSTEM pcall-queue DESCRIPTION System lacks description SHA256
+  02idx1wnv9770fl2nh179sb8njw801g70b5mf8jqhqm2gwsb731y URL
+  http://beta.quicklisp.org/archive/pcall/2010-10-06/pcall-0.3.tgz MD5
+  019d85dfd1d5d0ee8d4ee475411caf6b NAME pcall-queue FILENAME pcall-queue DEPS
+  ((NAME alexandria FILENAME alexandria)
+   (NAME bordeaux-threads FILENAME bordeaux-threads))
+  DEPENDENCIES (alexandria bordeaux-threads) VERSION pcall-0.3 SIBLINGS
+  (pcall) PARASITES NIL)
+*/

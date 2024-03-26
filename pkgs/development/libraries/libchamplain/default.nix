@@ -16,7 +16,9 @@
 , clutter-gtk
 , libsoup
 , libsoup_3
-, gobject-introspection /*, libmemphis */
+, gobject-introspection /**
+  , libmemphis
+*/
 , withLibsoup3 ? false
 }:
 

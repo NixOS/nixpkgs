@@ -110,7 +110,9 @@ buildPythonPackage rec {
     description = "Modern self-hosted software for accepting Bitcoin";
     homepage = "https://github.com/CypherpunkPay/CypherpunkPay";
     changelog = "https://github.com/CypherpunkPay/CypherpunkPay/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ unlicense ];
+    license = with licenses; [ mit /**
+  or
+*/ unlicense ];
     maintainers = with maintainers; [ prusnak ];
   };
 }

@@ -38,7 +38,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ marsam ];
   };
 }

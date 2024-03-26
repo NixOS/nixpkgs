@@ -2,9 +2,10 @@
 , fftwSinglePrec, netcdf, pcre, gdal, blas, lapack, glibc, ghostscript, dcw-gmt
 , gshhg-gmt }:
 
-/* The onus is on the user to also install:
-    - ffmpeg for webm or mp4 output
-    - graphicsmagick for gif output
+/**
+  The onus is on the user to also install:
+  - ffmpeg for webm or mp4 output
+  - graphicsmagick for gif output
 */
 
 stdenv.mkDerivation rec {

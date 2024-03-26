@@ -1,10 +1,8 @@
-/*
+/**
+  # Updates
 
-# Updates
-
-Run `./fetch.sh` to update package sources from Git.
-Check for any minor version changes.
-
+  Run `./fetch.sh` to update package sources from Git.
+  Check for any minor version changes.
 */
 
 { makeScopeWithSplicing', generateSplicesForMkScope

@@ -1,4 +1,6 @@
-/* Generated file. */
+/**
+  Generated file.
+*/
 args @ { fetchurl, ... }:
 rec {
   baseName = "hunchentoot";
@@ -23,7 +25,8 @@ rec {
   asdFilesToKeep = ["hunchentoot.asd"];
   overrides = x: x;
 }
-/* (SYSTEM hunchentoot DESCRIPTION
+/**
+  (SYSTEM hunchentoot DESCRIPTION
     Hunchentoot is a HTTP server based on USOCKET and
   BORDEAUX-THREADS.  It supports HTTP 1.1, serves static files, has a
   simple framework for user-defined handlers and can be extended
@@ -51,4 +54,5 @@ rec {
      cl-ppcre cl-who cxml-stp drakma flexi-streams md5 rfc2388 split-sequence
      swank trivial-backtrace trivial-features trivial-garbage
      trivial-gray-streams usocket xpath)
-    VERSION v1.3.0 SIBLINGS NIL PARASITES (hunchentoot-dev hunchentoot-test)) */
+    VERSION v1.3.0 SIBLINGS NIL PARASITES (hunchentoot-dev hunchentoot-test))
+*/

@@ -1,4 +1,4 @@
-/*
+/**
   Manages /etc/nix/nix.conf.
 
   See also
@@ -6,7 +6,7 @@
    - ./nix-flakes.nix
    - ./nix-remote-build.nix
    - nixos/modules/services/system/nix-daemon.nix
- */
+*/
 { config, lib, pkgs, ... }:
 
 let

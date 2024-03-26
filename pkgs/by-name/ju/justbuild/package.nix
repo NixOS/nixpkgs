@@ -97,21 +97,21 @@ stdenv.mkDerivation rec {
     sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
   '';
 
-  /* The build phase follows the bootstrap procedure that is explained in
-     https://github.com/just-buildsystem/justbuild/blob/master/INSTALL.md
+  /**
+    The build phase follows the bootstrap procedure that is explained in
+    https://github.com/just-buildsystem/justbuild/blob/master/INSTALL.md
 
-     The bootstrap of the just binary depends on two proto libraries, which are
-     supplied as external distfiles.
+    The bootstrap of the just binary depends on two proto libraries, which are
+    supplied as external distfiles.
 
-     The microsoft-gsl library does not provide a pkg-config file, so one is
-     created here. In case also the GNU Scientific Library would be used (which
-     has also the pkg-config name gsl) this would cause a conflict. However, it
-     is very unlikely that a build tool will ever depend on a GPL math library.
+    The microsoft-gsl library does not provide a pkg-config file, so one is
+    created here. In case also the GNU Scientific Library would be used (which
+    has also the pkg-config name gsl) this would cause a conflict. However, it
+    is very unlikely that a build tool will ever depend on a GPL math library.
 
-     The extra build flags (ADD_CFLAGS and ADD_CXXFLAGS) are only needed in the
-     current version of just, the next release will contain a fix from upstream.
-     https://github.com/just-buildsystem/justbuild/commit/5abcd4140a91236c7bda1c21ce69e76a28da7c8a
-
+    The extra build flags (ADD_CFLAGS and ADD_CXXFLAGS) are only needed in the
+    current version of just, the next release will contain a fix from upstream.
+    https://github.com/just-buildsystem/justbuild/commit/5abcd4140a91236c7bda1c21ce69e76a28da7c8a
   */
 
   buildPhase = ''

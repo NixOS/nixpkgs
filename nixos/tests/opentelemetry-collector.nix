@@ -34,7 +34,9 @@ in {
 
   # Send a log event through the OTLP pipeline and check for its
   # presence in the collector logs.
-  testScript = /* python */ ''
+  testScript = /**
+  python
+*/ ''
     import requests
     import time
 

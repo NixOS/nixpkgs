@@ -1,5 +1,7 @@
-/* Impure default args for `pkgs/top-level/default.nix`. See that file
-   for the meaning of each argument. */
+/**
+  Impure default args for `pkgs/top-level/default.nix`. See that file
+  for the meaning of each argument.
+*/
 
 
 let

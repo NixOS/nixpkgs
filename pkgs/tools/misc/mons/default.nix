@@ -22,7 +22,7 @@ resholve.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  /*
+  /**
     Remove reference to `%LIBDIR%/liblist.sh`. This would be linked to the
     non-resholved of the library in the final derivation.
 
@@ -57,9 +57,9 @@ resholve.mkDerivation rec {
         "$XRANDR" = [ "xrandr" ];
       };
       keep = {
-        /*
-        has a whole slate of *flag variables that it sets to either
-        the true or false builtin and then executes...
+        /**
+          has a whole slate of *flag variables that it sets to either
+          the true or false builtin and then executes...
         */
         "$aFlag" = true;
         "$dFlag" = true;

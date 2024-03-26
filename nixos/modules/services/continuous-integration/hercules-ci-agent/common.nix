@@ -1,9 +1,7 @@
-/*
-
+/**
   This file is for options that NixOS and nix-darwin have in common.
 
   Platform-specific code is in the respective default.nix files.
-
 */
 
 { config, lib, options, pkgs, ... }:
@@ -57,7 +55,7 @@ in
       type = types.submoduleWith { modules = [ settingsModule ]; };
     };
 
-    /*
+    /**
       Internal and/or computed values.
 
       These are written as options instead of let binding to allow sharing with

@@ -41,7 +41,9 @@ buildPythonPackage rec {
     description = "Python driver for Oracle Database";
     homepage = "https://oracle.github.io/python-oracledb";
     changelog = "https://github.com/oracle/python-oracledb/blob/v${version}/doc/src/release_notes.rst";
-    license = with licenses; [ asl20 /* and or */ upl ];
+    license = with licenses; [ asl20 /**
+  and or
+*/ upl ];
     maintainers = with maintainers; [ harvidsen ];
   };
 }

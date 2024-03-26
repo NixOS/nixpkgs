@@ -1,4 +1,6 @@
-/* This file defines the composition for CRAN (R) packages. */
+/**
+  This file defines the composition for CRAN (R) packages.
+*/
 
 { R, pkgs, overrides }:
 

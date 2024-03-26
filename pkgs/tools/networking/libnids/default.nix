@@ -9,14 +9,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap glib libnet ];
 
-  /*
-  Quoting the documentation of glib: g_thread_init has been deprecated since
-  version 2.32 and should not be used in newly-written code.  This function is
-  no longer necessary. The GLib threading system is automatically initialized
-  at the start of your program.
+  /**
+    Quoting the documentation of glib: g_thread_init has been deprecated since
+    version 2.32 and should not be used in newly-written code.  This function is
+    no longer necessary. The GLib threading system is automatically initialized
+    at the start of your program.
 
-  this is necessary for dsniff to compile; otherwise g_thread_init is a missing
-  symbol when linking (?!?)
+    this is necessary for dsniff to compile; otherwise g_thread_init is a missing
+    symbol when linking (?!?)
   */
   env.NIX_CFLAGS_COMPILE = "-Dg_thread_init= ";
 

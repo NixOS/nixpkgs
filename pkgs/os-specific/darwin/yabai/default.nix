@@ -70,7 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postPatch = lib.optionalString stdenv.isx86_64 /* bash */ ''
+  postPatch = lib.optionalString stdenv.isx86_64 /**
+  bash
+*/ ''
     # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
     # Since multilib doesnt work on darwin i dont know of a better way of handling this.
     substituteInPlace makefile \

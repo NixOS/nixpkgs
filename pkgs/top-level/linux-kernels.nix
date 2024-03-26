@@ -290,11 +290,20 @@ in {
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0_hardened = throw "linux 6.0 was removed because it has reached its end of life upstream";
   }));
-  /*  Linux kernel modules are inherently tied to a specific kernel.  So
+  /**
+    Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
     specific kernel, we have a function that builds those packages
     for a specific kernel.  This function can then be called for
-    whatever kernel you're using. */
+    whatever kernel you're using.
+
+
+    # Inputs
+
+    `kernel_`
+
+    : 1\. Function argument
+  */
 
   packagesFor = kernel_: lib.makeExtensible (self: with self;
     let callPackage = newScope self; in {

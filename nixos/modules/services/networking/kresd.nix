@@ -31,7 +31,9 @@ let
     + cfg.extraConfig
   );
 in {
-  meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
+  meta.maintainers = [ maintainers.vcunat /**
+  upstream developer
+*/ ];
 
   imports = [
     (mkChangedOptionModule [ "services" "kresd" "interfaces" ] [ "services" "kresd" "listenPlain" ]

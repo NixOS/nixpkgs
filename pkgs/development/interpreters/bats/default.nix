@@ -96,11 +96,11 @@ resholve.mkDerivation rec {
         "$parallel_binary_name" = "${parallel}/bin/parallel";
       };
       execer = [
-        /*
-        both blatant lies for expedience; these can certainly exec args
-        they may be safe here, because they may always run things that
-        are ultimately in libexec?
-        TODO: handle parallel and flock in binlore/resholve
+        /**
+          both blatant lies for expedience; these can certainly exec args
+          they may be safe here, because they may always run things that
+          are ultimately in libexec?
+          TODO: handle parallel and flock in binlore/resholve
         */
         "cannot:${parallel}/bin/parallel"
         "cannot:${flock}/bin/flock"

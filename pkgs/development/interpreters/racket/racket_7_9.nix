@@ -103,7 +103,9 @@ stdenv.mkDerivation rec {
       GUIs and charts.
     '';
     homepage = "https://racket-lang.org/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
     broken = stdenv.isDarwin; # No support yet for setting FFI lookup path

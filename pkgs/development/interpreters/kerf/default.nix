@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libedit zlib ncurses ]
     ++ lib.optionals stdenv.isDarwin ([
       Accelerate
-    ] ++ lib.optionals stdenv.isx86_64 /* && isDarwin */ [
+    ] ++ lib.optionals stdenv.isx86_64 /**
+  && isDarwin
+*/ [
       CoreGraphics CoreVideo
     ]);
 

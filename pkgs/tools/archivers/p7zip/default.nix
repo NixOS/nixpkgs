@@ -65,7 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses;
       # p7zip code is largely lgpl2Plus
       # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3
-      [ lgpl2Plus /* and */ bsd3 ] ++
+      [ lgpl2Plus /**
+  and
+*/ bsd3 ] ++
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];

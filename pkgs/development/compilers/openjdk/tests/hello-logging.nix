@@ -3,7 +3,9 @@
 , pkgs
 }:
 
-/* 'Hello world' Java application derivation for use in tests */
+/**
+  'Hello world' Java application derivation for use in tests
+*/
 let
   source = pkgs.writeTextDir "src/Hello.java" ''
     import java.util.logging.Logger;

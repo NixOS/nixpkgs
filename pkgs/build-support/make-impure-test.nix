@@ -1,12 +1,17 @@
-/* Create tests that run in the nix sandbox with additional access to selected host paths
+/**
+  Create tests that run in the nix sandbox with additional access to selected host paths
 
   This is for example useful for testing hardware where a tests needs access to
   /sys and optionally more.
 
   The following example shows a test that accesses the GPU:
 
-  Example:
-    makeImpureTest {
+
+  # Examples
+  :::{.example}
+
+  ```nix
+  makeImpureTest {
       name = "opencl";
       testedPackage = "mypackage"; # Or testPath = "mypackage.impureTests.opencl.testDerivation"
 
@@ -27,6 +32,9 @@
 
   Rerun an already cached test:
     $(nix-build -A mypackage.impureTests) --check
+  ```
+
+  :::
 */
 { lib
 , stdenv

@@ -134,8 +134,12 @@ stdenv.mkDerivation (args // {
     homepage = "https://ocaml.org/";
     branch = versionNoPatch;
     license = with licenses; [
-      qpl /* compiler */
-      lgpl2 /* library */
+      qpl /**
+  compiler
+*/
+      lgpl2 /**
+  library
+*/
     ];
     description = "OCaml is an industrial-strength programming language supporting functional, imperative and object-oriented styles";
 

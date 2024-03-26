@@ -1,13 +1,12 @@
-/*
-    Test CUDA packages.
+/**
+  Test CUDA packages.
 
-    This release file will not be tested on hydra.nixos.org
-    because it requires unfree software.
+  This release file will not be tested on hydra.nixos.org
+  because it requires unfree software.
 
-    Test for example like this:
+  Test for example like this:
 
-        $ hydra-eval-jobs pkgs/top-level/release-cuda.nix --option restrict-eval false -I foo=. --arg nixpkgs '{ outPath = ./.; revCount = 0; shortRev = "aabbcc"; }'
-
+      $ hydra-eval-jobs pkgs/top-level/release-cuda.nix --option restrict-eval false -I foo=. --arg nixpkgs '{ outPath = ./.; revCount = 0; shortRev = "aabbcc"; }'
 */
 
 { # The platforms for which we build Nixpkgs.

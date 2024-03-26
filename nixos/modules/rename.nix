@@ -7,12 +7,12 @@ let
 in
 {
   imports = [
-    /*
-    This file defines some renaming/removing options for backwards compatibility
+    /**
+      This file defines some renaming/removing options for backwards compatibility
 
-    It should ONLY be used when the relevant module can't define these imports
-    itself, such as when the module was removed completely.
-    See https://github.com/NixOS/nixpkgs/pull/61570 for explanation
+      It should ONLY be used when the relevant module can't define these imports
+      itself, such as when the module was removed completely.
+      See https://github.com/NixOS/nixpkgs/pull/61570 for explanation
     */
 
     # This alias module can't be where _module.check is defined because it would

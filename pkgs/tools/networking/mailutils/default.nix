@@ -139,8 +139,12 @@ stdenv.mkDerivation rec {
     '';
 
     license = with licenses; [
-      lgpl3Plus /* libraries */
-      gpl3Plus /* tools */
+      lgpl3Plus /**
+  libraries
+*/
+      gpl3Plus /**
+  tools
+*/
     ];
 
     maintainers = with maintainers; [ orivej vrthra ];

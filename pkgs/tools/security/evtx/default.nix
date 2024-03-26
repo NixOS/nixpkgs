@@ -26,7 +26,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "evtx_dump";
     homepage = "https://github.com/omerbenamram/evtx";
     changelog = "https://github.com/omerbenamram/evtx/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

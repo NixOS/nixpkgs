@@ -40,7 +40,9 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/PyO3/maturin";
     changelog = "https://github.com/PyO3/maturin/blob/v${version}/Changelog.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = [ ];
   };
 }

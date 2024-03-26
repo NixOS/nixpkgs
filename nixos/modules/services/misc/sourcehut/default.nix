@@ -984,11 +984,12 @@ in
             serviceConfig.BindReadOnlyPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
           };
           services.nginx.virtualHosts."logs.${domain}" = mkMerge [ {
-            /* FIXME: is a listen needed?
-            listen = with builtins;
-              # FIXME: not compatible with IPv6
-              let address = split ":" cfg.settings."builds.sr.ht::worker".name; in
-              [{ addr = elemAt address 0; port = lib.toInt (elemAt address 2); }];
+            /**
+              FIXME: is a listen needed?
+              listen = with builtins;
+                # FIXME: not compatible with IPv6
+                let address = split ":" cfg.settings."builds.sr.ht::worker".name; in
+                [{ addr = elemAt address 0; port = lib.toInt (elemAt address 2); }];
             */
             locations."/logs/".alias = cfg.settings."builds.sr.ht::worker".buildlogs + "/";
           } cfg.nginx.virtualHost ];

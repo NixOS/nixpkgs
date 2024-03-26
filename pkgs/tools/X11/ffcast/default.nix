@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kxqwDGEguFTFHkQzXctXqxslt0+bYnfUdQ8C/8+eTXo=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper perl /*for pod2man*/ ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper perl /**
+  for pod2man
+*/ ];
 
   configureFlags = [ "--disable-xrectsel" ];
 

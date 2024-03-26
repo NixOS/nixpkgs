@@ -100,12 +100,24 @@ stdenv.mkDerivation rec {
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
     license = with licenses; [
-      /* runtime, compilers, tools and most class libraries licensed */ mit
-      /* runtime includes some code licensed */ bsd3
-      /* mcs/class/I18N/mklist.sh marked GPLv2 and others just GPL */ gpl2Only
-      /* RabbitMQ.Client class libraries dual licensed */ mpl20 asl20
-      /* mcs/class/System.Core/System/TimeZoneInfo.Android.cs */ asl20
-      /* some documentation */ mspl
+      /**
+        runtime, compilers, tools and most class libraries licensed
+      */ mit
+      /**
+        runtime includes some code licensed
+      */ bsd3
+      /**
+        mcs/class/I18N/mklist.sh marked GPLv2 and others just GPL
+      */ gpl2Only
+      /**
+        RabbitMQ.Client class libraries dual licensed
+      */ mpl20 asl20
+      /**
+        mcs/class/System.Core/System/TimeZoneInfo.Android.cs
+      */ asl20
+      /**
+        some documentation
+      */ mspl
       # https://www.mono-project.com/docs/faq/licensing/
       # https://github.com/mono/mono/blob/main/LICENSE
     ];

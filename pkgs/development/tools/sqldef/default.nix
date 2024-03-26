@@ -22,7 +22,11 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Idempotent SQL schema management tool";
-    license = with licenses; [ mit /* for everything except parser */  asl20 /* for parser */ ];
+    license = with licenses; [ mit /**
+  for everything except parser
+*/  asl20 /**
+  for parser
+*/ ];
     homepage = "https://github.com/k0kubun/sqldef";
     changelog = "https://github.com/k0kubun/sqldef/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ kgtkr ];

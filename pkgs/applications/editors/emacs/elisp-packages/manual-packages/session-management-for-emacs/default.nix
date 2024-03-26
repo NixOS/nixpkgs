@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    /* installation: add to your ~/.emacs
+    /**
+      installation: add to your ~/.emacs
       (require 'session)
       (add-hook 'after-init-hook 'session-initialize)
     */

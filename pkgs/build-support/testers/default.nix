@@ -114,9 +114,10 @@
   # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   nixosTest =
     let
-      /* The nixos/lib/testing-python.nix module, preapplied with arguments that
-       * make sense for this evaluation of Nixpkgs.
-       */
+      /**
+        The nixos/lib/testing-python.nix module, preapplied with arguments that
+        * make sense for this evaluation of Nixpkgs.
+      */
       nixosTesting =
         (import ../../../nixos/lib/testing-python.nix {
           inherit (stdenv.hostPlatform) system;

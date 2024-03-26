@@ -104,7 +104,9 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
     homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
-    license = with licenses; [ asl20 /* or */ upl ];
+    license = with licenses; [ asl20 /**
+  or
+*/ upl ];
     maintainers = with maintainers; [ ilian ];
   };
 }

@@ -1,35 +1,33 @@
-/*
+/**
+  # Usage
 
-# Usage
+  `emacs.pkgs.withPackages` takes a single argument: a function from a package
+  set to a list of packages (the packages that will be available in
+  Emacs). For example,
+  ```
+  emacs.pkgs.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
+  ```
+  All the packages in the list should come from the provided package
+  set. It is possible to add any package to the list, but the provided
+  set is guaranteed to have consistent dependencies and be built with
+  the correct version of Emacs.
 
-`emacs.pkgs.withPackages` takes a single argument: a function from a package
-set to a list of packages (the packages that will be available in
-Emacs). For example,
-```
-emacs.pkgs.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
-```
-All the packages in the list should come from the provided package
-set. It is possible to add any package to the list, but the provided
-set is guaranteed to have consistent dependencies and be built with
-the correct version of Emacs.
+  # Overriding
 
-# Overriding
-
-`emacs.pkgs.withPackages` inherits the package set which contains it, so the
-correct way to override the provided package set is to override the
-set which contains `emacs.pkgs.withPackages`. For example, to override
-`emacs.pkgs.emacs.pkgs.withPackages`,
-```
-let customEmacsPackages =
-      emacs.pkgs.overrideScope (self: super: {
-        # use a custom version of emacs
-        emacs = ...;
-        # use the unstable MELPA version of magit
-        magit = self.melpaPackages.magit;
-      });
-in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
-```
-
+  `emacs.pkgs.withPackages` inherits the package set which contains it, so the
+  correct way to override the provided package set is to override the
+  set which contains `emacs.pkgs.withPackages`. For example, to override
+  `emacs.pkgs.emacs.pkgs.withPackages`,
+  ```
+  let customEmacsPackages =
+        emacs.pkgs.overrideScope (self: super: {
+          # use a custom version of emacs
+          emacs = ...;
+          # use the unstable MELPA version of magit
+          magit = self.melpaPackages.magit;
+        });
+  in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
+  ```
 */
 
 { lib, lndir, makeBinaryWrapper, runCommand, gcc }:

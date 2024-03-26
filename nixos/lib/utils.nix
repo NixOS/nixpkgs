@@ -82,27 +82,47 @@ rec {
     else
       shell;
 
-  /* Recurse into a list or an attrset, searching for attrs named like
-     the value of the "attr" parameter, and return an attrset where the
-     names are the corresponding jq path where the attrs were found and
-     the values are the values of the attrs.
+  /**
+    Recurse into a list or an attrset, searching for attrs named like
+    the value of the "attr" parameter, and return an attrset where the
+    names are the corresponding jq path where the attrs were found and
+    the values are the values of the attrs.
 
-     Example:
-       recursiveGetAttrWithJqPrefix {
-         example = [
-           {
-             irrelevant = "not interesting";
-           }
-           {
-             ignored = "ignored attr";
-             relevant = {
-               secret = {
-                 _secret = "/path/to/secret";
-               };
-             };
-           }
-         ];
-       } "_secret" -> { ".example[1].relevant.secret" = "/path/to/secret"; }
+
+    # Inputs
+
+    `item`
+
+    : 1\. Function argument
+
+    `attr`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `recursiveGetAttrWithJqPrefix` usage example
+
+    ```nix
+    recursiveGetAttrWithJqPrefix {
+      example = [
+        {
+          irrelevant = "not interesting";
+        }
+        {
+          ignored = "ignored attr";
+          relevant = {
+            secret = {
+              _secret = "/path/to/secret";
+            };
+          };
+        }
+      ];
+    } "_secret" -> { ".example[1].relevant.secret" = "/path/to/secret"; }
+    ```
+
+    :::
   */
   recursiveGetAttrWithJqPrefix = item: attr:
     let
@@ -122,54 +142,63 @@ rec {
           [];
     in listToAttrs (flatten (recurse "" item));
 
-  /* Takes an attrset and a file path and generates a bash snippet that
-     outputs a JSON file at the file path with all instances of
+  /**
+    Takes an attrset and a file path and generates a bash snippet that
+    outputs a JSON file at the file path with all instances of
 
-     { _secret = "/path/to/secret" }
+    { _secret = "/path/to/secret" }
 
-     in the attrset replaced with the contents of the file
-     "/path/to/secret" in the output JSON.
+    in the attrset replaced with the contents of the file
+    "/path/to/secret" in the output JSON.
 
-     When a configuration option accepts an attrset that is finally
-     converted to JSON, this makes it possible to let the user define
-     arbitrary secret values.
+    When a configuration option accepts an attrset that is finally
+    converted to JSON, this makes it possible to let the user define
+    arbitrary secret values.
 
-     Example:
-       If the file "/path/to/secret" contains the string
-       "topsecretpassword1234",
 
-       genJqSecretsReplacementSnippet {
-         example = [
-           {
-             irrelevant = "not interesting";
-           }
-           {
-             ignored = "ignored attr";
-             relevant = {
-               secret = {
-                 _secret = "/path/to/secret";
-               };
-             };
-           }
-         ];
-       } "/path/to/output.json"
+    # Examples
+    :::{.example}
+    ## `genJqSecretsReplacementSnippet` usage example
 
-       would generate a snippet that, when run, outputs the following
-       JSON file at "/path/to/output.json":
+    ```nix
+    If the file "/path/to/secret" contains the string
+    "topsecretpassword1234",
 
-       {
-         "example": [
-           {
-             "irrelevant": "not interesting"
-           },
-           {
-             "ignored": "ignored attr",
-             "relevant": {
-               "secret": "topsecretpassword1234"
-             }
-           }
-         ]
-       }
+    genJqSecretsReplacementSnippet {
+      example = [
+        {
+          irrelevant = "not interesting";
+        }
+        {
+          ignored = "ignored attr";
+          relevant = {
+            secret = {
+              _secret = "/path/to/secret";
+            };
+          };
+        }
+      ];
+    } "/path/to/output.json"
+
+    would generate a snippet that, when run, outputs the following
+    JSON file at "/path/to/output.json":
+
+    {
+      "example": [
+        {
+          "irrelevant": "not interesting"
+        },
+        {
+          "ignored": "ignored attr",
+          "relevant": {
+            "secret": "topsecretpassword1234"
+          }
+        }
+      ]
+    }
+    ```
+
+    :::
   */
   genJqSecretsReplacementSnippet = genJqSecretsReplacementSnippet' "_secret";
 
@@ -210,15 +239,37 @@ rec {
       (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
     '';
 
-  /* Remove packages of packagesToRemove from packages, based on their names.
-     Relies on package names and has quadratic complexity so use with caution!
+  /**
+    Remove packages of packagesToRemove from packages, based on their names.
+    Relies on package names and has quadratic complexity so use with caution!
 
-     Type:
-       removePackagesByName :: [package] -> [package] -> [package]
 
-     Example:
-       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
-       => [ nautilus ]
+    # Inputs
+
+    `packages`
+
+    : 1\. Function argument
+
+    `packagesToRemove`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    removePackagesByName :: [package] -> [package] -> [package]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `removePackagesByName` usage example
+
+    ```nix
+    removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
+    => [ nautilus ]
+    ```
+
+    :::
   */
   removePackagesByName = packages: packagesToRemove:
     let

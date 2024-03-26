@@ -37,7 +37,9 @@ buildPythonPackage rec {
       --replace "-mthumb" ""
     substituteInPlace src/cpp/skia-builder/skia/src/core/SkOpts.cpp \
       --replace "defined(SK_CPU_ARM64)" "0"
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) /* old compiler? */ ''
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) /**
+  old compiler?
+*/ ''
     patch -p1 <<EOF
     --- a/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
     +++ b/src/cpp/skia-builder/skia/include/private/base/SkTArray.h

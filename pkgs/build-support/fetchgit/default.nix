@@ -31,26 +31,27 @@ lib.makeOverridable (
 , allowedRequisites ? null
 }:
 
-/* NOTE:
-   fetchgit has one problem: git fetch only works for refs.
-   This is because fetching arbitrary (maybe dangling) commits creates garbage collection risks
-   and checking whether a commit belongs to a ref is expensive. This may
-   change in the future when some caching is added to git (?)
-   Usually refs are either tags (refs/tags/*) or branches (refs/heads/*)
-   Cloning branches will make the hash check fail when there is an update.
-   But not all patches we want can be accessed by tags.
+/**
+  NOTE:
+  fetchgit has one problem: git fetch only works for refs.
+  This is because fetching arbitrary (maybe dangling) commits creates garbage collection risks
+  and checking whether a commit belongs to a ref is expensive. This may
+  change in the future when some caching is added to git (?)
+  Usually refs are either tags (refs/tags/*) or branches (refs/heads/*)
+  Cloning branches will make the hash check fail when there is an update.
+  But not all patches we want can be accessed by tags.
 
-   The workaround is getting the last n commits so that it's likely that they
-   still contain the hash we want.
+  The workaround is getting the last n commits so that it's likely that they
+  still contain the hash we want.
 
-   for now : increase depth iteratively (TODO)
+  for now : increase depth iteratively (TODO)
 
-   real fix: ask git folks to add a
-   git fetch $HASH contained in $BRANCH
-   facility because checking that $HASH is contained in $BRANCH is less
-   expensive than fetching --depth $N.
-   Even if git folks implemented this feature soon it may take years until
-   server admins start using the new version?
+  real fix: ask git folks to add a
+  git fetch $HASH contained in $BRANCH
+  facility because checking that $HASH is contained in $BRANCH is less
+  expensive than fetching --depth $N.
+  Even if git folks implemented this feature soon it may take years until
+  server admins start using the new version?
 */
 
 assert deepClone -> leaveDotGit;

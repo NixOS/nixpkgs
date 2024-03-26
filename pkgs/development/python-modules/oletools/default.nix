@@ -57,7 +57,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to analyze MS OLE2 files and MS Office documents";
     homepage = "https://github.com/decalage2/oletools";
-    license = with licenses; [ bsd2 /* and */ mit ];
+    license = with licenses; [ bsd2 /**
+  and
+*/ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -27,19 +27,19 @@ in
 
     programs.bash = {
 
-      /*
-      enable = mkOption {
-        default = true;
-        description = lib.mdDoc ''
-          Whenever to configure Bash as an interactive shell.
-          Note that this tries to make Bash the default
-          {option}`users.defaultUserShell`,
-          which in turn means that you might need to explicitly
-          set this variable if you have another shell configured
-          with NixOS.
-        '';
-        type = types.bool;
-      };
+      /**
+        enable = mkOption {
+          default = true;
+          description = lib.mdDoc ''
+            Whenever to configure Bash as an interactive shell.
+            Note that this tries to make Bash the default
+            {option}`users.defaultUserShell`,
+            which in turn means that you might need to explicitly
+            set this variable if you have another shell configured
+            with NixOS.
+          '';
+          type = types.bool;
+        };
       */
 
       shellAliases = mkOption {
@@ -111,7 +111,9 @@ in
 
   };
 
-  config = /* mkIf cfg.enable */ {
+  config = /**
+  mkIf cfg.enable
+*/ {
 
     programs.bash = {
 

@@ -97,7 +97,9 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
-    '' /* wayland is currently broken, remove when TS3 fixes that */ + ''
+    '' /**
+  wayland is currently broken, remove when TS3 fixes that
+*/ + ''
         --set QT_QPA_PLATFORM xcb \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
@@ -120,37 +122,37 @@ stdenv.mkDerivation rec {
   };
 }
 
-/*
-License issues:
-Date: Mon, 10 Dec 2007 19:55:16 -0500
-From: TeamSpeak Sales <sales@tritoncia.com>
-To: 'Marc Weber' <marco-oweber@gmx.de>
-Subject: RE: teamspeak on nix?
+/**
+  License issues:
+  Date: Mon, 10 Dec 2007 19:55:16 -0500
+  From: TeamSpeak Sales <sales@tritoncia.com>
+  To: 'Marc Weber' <marco-oweber@gmx.de>
+  Subject: RE: teamspeak on nix?
 
-Yes, that would be fine.  As long as you are not renting servers or selling
-TeamSpeak then you are more than welcome to distribute it.
+  Yes, that would be fine.  As long as you are not renting servers or selling
+  TeamSpeak then you are more than welcome to distribute it.
 
-Thank you,
+  Thank you,
 
-TeamSpeak Sales Team
-________________________________
-e-Mail: sales@tritoncia.com
-TeamSpeak: http://www.TeamSpeak.com
-Account Login: https://sales.TritonCIA.com/users
+  TeamSpeak Sales Team
+  ________________________________
+  e-Mail: sales@tritoncia.com
+  TeamSpeak: http://www.TeamSpeak.com
+  Account Login: https://sales.TritonCIA.com/users
 
 
 
------Original Message-----
-From: Marc Weber [mailto:marco-oweber@gmx.de]
-Sent: Monday, December 10, 2007 5:03 PM
-To: sales@tritoncia.com
-Subject: teamspeak on nix?
+  -----Original Message-----
+  From: Marc Weber [mailto:marco-oweber@gmx.de]
+  Sent: Monday, December 10, 2007 5:03 PM
+  To: sales@tritoncia.com
+  Subject: teamspeak on nix?
 
-Hello,
+  Hello,
 
-nix is very young software distribution system (http://nix.cs.uu.nl/)
-I'd like to ask wether you permit us to add teamspeak (server/ client?)
+  nix is very young software distribution system (http://nix.cs.uu.nl/)
+  I'd like to ask wether you permit us to add teamspeak (server/ client?)
 
-Sincerly
-Marc Weber (small nix contributor)
+  Sincerly
+  Marc Weber (small nix contributor)
 */

@@ -592,17 +592,17 @@ in
 
     services.udev.packages = [ pkgs.nut ];
 
-/*
-    users.users.nut =
-      { uid = 84;
-        home = "/var/lib/nut";
-        createHome = true;
-        group = "nut";
-        description = "UPnP A/V Media Server user";
-      };
+/**
+  users.users.nut =
+    { uid = 84;
+      home = "/var/lib/nut";
+      createHome = true;
+      group = "nut";
+      description = "UPnP A/V Media Server user";
+    };
 
-    users.groups."nut" =
-      { gid = 84; };
+  users.groups."nut" =
+    { gid = 84; };
 */
 
   };

@@ -66,9 +66,11 @@ let
     }
   '' +
 
-  /* Syncthing's rest API for the folders and devices is almost identical.
-  Hence we iterate them using lib.pipe and generate shell commands for both at
-  the sime time. */
+  /**
+    Syncthing's rest API for the folders and devices is almost identical.
+    Hence we iterate them using lib.pipe and generate shell commands for both at
+    the sime time.
+  */
   (lib.pipe {
     # The attributes below are the only ones that are different for devices /
     # folders.
@@ -108,9 +110,10 @@ let
         ''))
         (lib.concatStringsSep "\n")
       ]
-      /* If we need to override devices/folders, we iterate all currently configured
-      IDs, via another `curl -X GET`, and we delete all IDs that are not part of
-      the Nix configured list of IDs
+      /**
+        If we need to override devices/folders, we iterate all currently configured
+        IDs, via another `curl -X GET`, and we delete all IDs that are not part of
+        the Nix configured list of IDs
       */
       + lib.optionalString s.override ''
         stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
@@ -126,8 +129,10 @@ let
     builtins.attrValues
     (lib.concatStringsSep "\n")
   ]) +
-  /* Now we update the other settings defined in cleanedConfig which are not
-  "folders" or "devices". */
+  /**
+    Now we update the other settings defined in cleanedConfig which are not
+    "folders" or "devices".
+  */
   (lib.pipe cleanedConfig [
     builtins.attrNames
     (lib.subtractLists ["folders" "devices"])

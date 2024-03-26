@@ -21,7 +21,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rust-script";
     homepage = "https://rust-script.org";
     changelog = "https://github.com/fornwall/rust-script/releases/tag/${version}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

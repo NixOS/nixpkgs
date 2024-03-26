@@ -33,7 +33,8 @@ in
       default = [ ];
       example = [ "widget-team@example.com" "security@example.com" ];
     };
-    /* maybe one day....
+    /**
+      maybe one day....
       domains = lib.mkOption {
       description = "Domains for which all mail should be handled by Schleuder.";
       type = lib.types.listOf lib.types.str;

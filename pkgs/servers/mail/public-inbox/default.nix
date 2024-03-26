@@ -157,7 +157,9 @@ buildPerlPackage rec {
             --prefix PATH : ${lib.makeBinPath [
               git
               xapian
-              /* for InlineC */
+              /**
+                for InlineC
+              */
               gnumake
               stdenv.cc
             ]}

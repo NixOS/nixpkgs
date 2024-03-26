@@ -54,7 +54,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/esp-rs/espflash";
     changelog = "https://github.com/esp-rs/espflash/blob/v${version}/CHANGELOG.md";
     mainProgram = "espflash";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

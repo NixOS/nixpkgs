@@ -33,7 +33,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "JSON decoder for Python that can extract data from the muck";
     homepage = "https://github.com/codecobblers/dirtyjson";
-    license = with licenses; [ afl21 /* and */ mit];
+    license = with licenses; [ afl21 /**
+  and
+*/ mit];
     maintainers = with maintainers; [ fab ];
   };
 }

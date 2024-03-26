@@ -25,15 +25,31 @@
 }:
 
 let
-  /*
+  /**
     Check if null or false
-    Example:
+
+
+    # Inputs
+
+    `p`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `enableCmakeFeature` usage example
+
+    ```nix
     let result = enableFeature null
     => "OFF"
     let result = enableFeature false
     => "OFF"
     let result = enableFeature «derivation»
     => "ON"
+    ```
+
+    :::
   */
   enableCmakeFeature = p: if (p == null || p == false) then "OFF" else "ON";
 

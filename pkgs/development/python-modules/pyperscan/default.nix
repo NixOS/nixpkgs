@@ -45,7 +45,9 @@ buildPythonPackage rec {
     description = "a hyperscan binding for Python, which supports vectorscan";
     homepage = "https://github.com/vlaci/pyperscan";
     platforms = platforms.unix;
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ tnias vlaci ];
   };
 }

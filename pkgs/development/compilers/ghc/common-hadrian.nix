@@ -354,7 +354,9 @@ stdenv.mkDerivation ({
   # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
   + lib.optionalString targetPlatform.isGhcjs ''
     export EM_CACHE="$(mktemp -d emcache.XXXXXXXXXX)"
-    cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
+    cp -Lr ${targetCC /**
+  == emscripten
+*/}/share/emscripten/cache/* "$EM_CACHE/"
     chmod u+rwX -R "$EM_CACHE"
   ''
   # Create bash array hadrianFlagsArray for use in buildPhase. Do it in

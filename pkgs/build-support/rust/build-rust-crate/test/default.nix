@@ -115,20 +115,21 @@ let
         ''
       );
 
-    /* Returns a derivation that asserts that the crate specified by `crateArgs`
-       has the specified files as output.
+    /**
+      Returns a derivation that asserts that the crate specified by `crateArgs`
+      has the specified files as output.
 
-       `name` is used as part of the derivation name that performs the checking.
+      `name` is used as part of the derivation name that performs the checking.
 
-       `crateArgs` is passed to `mkHostCrate` to build the crate with `buildRustCrate`.
+      `crateArgs` is passed to `mkHostCrate` to build the crate with `buildRustCrate`.
 
-       `expectedFiles` contains a list of expected file paths in the output. E.g.
-       `[ "./bin/my_binary" ]`.
+      `expectedFiles` contains a list of expected file paths in the output. E.g.
+      `[ "./bin/my_binary" ]`.
 
-       `output` specifies the name of the output to use. By default, the default
-       output is used but e.g. `output = "lib";` will cause the lib output
-       to be checked instead. You do not need to specify any directories.
-     */
+      `output` specifies the name of the output to use. By default, the default
+      output is used but e.g. `output = "lib";` will cause the lib output
+      to be checked instead. You do not need to specify any directories.
+    */
     assertOutputs = { name, crateArgs, expectedFiles, output? null }:
       assert (builtins.isString name);
       assert (builtins.isAttrs crateArgs);

@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = lib.optionals stdenv.buildPlatform.isLinux [
-    alsa-lib stdenv.cc.libc/*couldn't find libm*/
+    alsa-lib stdenv.cc.libc/**
+  couldn't find libm
+*/
   ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
     OpenAL
   ];

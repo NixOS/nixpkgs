@@ -1537,9 +1537,11 @@ in
 
         runuser = { rootOK = true; unixAuth = false; setEnvironment = false; };
 
-        /* FIXME: should runuser -l start a systemd session? Currently
-           it complains "Cannot create session: Already running in a
-           session". */
+        /**
+          FIXME: should runuser -l start a systemd session? Currently
+          it complains "Cannot create session: Already running in a
+          session".
+        */
         runuser-l = { rootOK = true; unixAuth = false; };
       } // optionalAttrs (config.security.pam.enableFscrypt) {
         # Allow fscrypt to verify login passphrase

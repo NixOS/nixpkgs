@@ -25,15 +25,16 @@ in
         '';
         type = submodule {
           freeformType = (pkgs.formats.keyValue { }).type;
-          /* There are three different sources for user/group id ranges, each of which gets
-             used by different programs:
-             - The login.defs file, used by the useradd, groupadd and newusers commands
-             - The update-users-groups.pl file, used by NixOS in the activation phase to
-               decide on which ids to use for declaratively defined users without a static
-               id
-             - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
-               by systemd for features like ConditionUser=@system and systemd-sysusers
-              */
+          /**
+            There are three different sources for user/group id ranges, each of which gets
+            used by different programs:
+            - The login.defs file, used by the useradd, groupadd and newusers commands
+            - The update-users-groups.pl file, used by NixOS in the activation phase to
+              decide on which ids to use for declaratively defined users without a static
+              id
+            - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
+              by systemd for features like ConditionUser=@system and systemd-sysusers
+          */
           options = {
             DEFAULT_HOME = mkOption {
               description = mdDoc "Indicate if login is allowed if we can't cd to the home directory.";

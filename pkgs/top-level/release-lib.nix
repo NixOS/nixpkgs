@@ -38,9 +38,18 @@ let
   hydraJob' = if scrubJobs then hydraJob else id;
 
 
-  /* !!! Hack: poor man's memoisation function.  Necessary to prevent
-     Nixpkgs from being evaluated again and again for every
-     job/platform pair. */
+  /**
+    !!! Hack: poor man's memoisation function.  Necessary to prevent
+    Nixpkgs from being evaluated again and again for every
+    job/platform pair.
+
+
+    # Inputs
+
+    `crossSystem`
+
+    : 1\. Function argument
+  */
   mkPkgsFor = crossSystem: let
     packageSet' = args: packageSet (args // { inherit crossSystem; } // nixpkgsArgs);
 
@@ -115,9 +124,11 @@ let
     else pkgs.runCommand "evaluated-to-false" {} "false";
 
 
-  /* The working or failing mails for cross builds will be sent only to
-     the following maintainers, as most package maintainers will not be
-     interested in the result of cross building a package. */
+  /**
+    The working or failing mails for cross builds will be sent only to
+    the following maintainers, as most package maintainers will not be
+    interested in the result of cross building a package.
+  */
   crossMaintainers = [ maintainers.viric ];
 
 
@@ -130,24 +141,45 @@ let
   forMatchingSystems = metaPatterns: genAttrs (supportedMatches metaPatterns);
 
 
-  /* Build a package on the given set of platforms.  The function `f'
-     is called for each supported platform with Nixpkgs for that
-     platform as an argument .  We return an attribute set containing
-     a derivation for each supported platform, i.e. ‘{ x86_64-linux =
-     f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
+  /**
+    Build a package on the given set of platforms.  The function `f'
+    is called for each supported platform with Nixpkgs for that
+    platform as an argument .  We return an attribute set containing
+    a derivation for each supported platform, i.e. ‘{ x86_64-linux =
+    f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’.
+  */
   testOn = testOnCross null;
 
 
-  /* Similar to the testOn function, but with an additional
-     'crossSystem' parameter for packageSet', defining the target
-     platform for cross builds. */
+  /**
+    Similar to the testOn function, but with an additional
+    'crossSystem' parameter for packageSet', defining the target
+    platform for cross builds.
+
+
+    # Inputs
+
+    `crossSystem`
+
+    : 1\. Function argument
+
+    `metaPatterns`
+
+    : 2\. Function argument
+
+    `f`
+
+    : 3\. Function argument
+  */
   testOnCross = crossSystem: metaPatterns: f: forMatchingSystems metaPatterns
     (system: hydraJob' (f (pkgsForCross crossSystem system)));
 
 
-  /* Given a nested set where the leaf nodes are lists of platforms,
-     map each leaf node to `testOn [platforms...] (pkgs:
-     pkgs.<attrPath>)'. */
+  /**
+    Given a nested set where the leaf nodes are lists of platforms,
+    map each leaf node to `testOn [platforms...] (pkgs:
+    pkgs.<attrPath>)'.
+  */
   mapTestOn = _mapTestOnHelper id null;
 
 
@@ -155,15 +187,19 @@ let
     (path: metaPatterns: testOnCross crossSystem metaPatterns
       (pkgs: f (getAttrFromPath path pkgs)));
 
-  /* Similar to the testOn function, but with an additional 'crossSystem'
-   * parameter for packageSet', defining the target platform for cross builds,
-   * and triggering the build of the host derivation. */
+  /**
+    Similar to the testOn function, but with an additional 'crossSystem'
+    * parameter for packageSet', defining the target platform for cross builds,
+    * and triggering the build of the host derivation.
+  */
   mapTestOnCross = _mapTestOnHelper
     (addMetaAttrs { maintainers = crossMaintainers; });
 
 
-  /* Recursively map a (nested) set of derivations to an isomorphic
-     set of meta.platforms values. */
+  /**
+    Recursively map a (nested) set of derivations to an isomorphic
+    set of meta.platforms values.
+  */
   packagePlatforms = mapAttrs (name: value:
       if isDerivation value then
         value.meta.hydraPlatforms
@@ -176,7 +212,9 @@ let
     );
 
 in {
-  /* Common platform groups on which to test packages. */
+  /**
+    Common platform groups on which to test packages.
+  */
   inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
 
   inherit

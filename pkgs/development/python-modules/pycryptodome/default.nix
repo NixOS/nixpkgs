@@ -37,7 +37,9 @@ buildPythonPackage rec {
     description = "Self-contained cryptographic library";
     homepage = "https://github.com/Legrandin/pycryptodome";
     changelog = "https://github.com/Legrandin/pycryptodome/blob/v${version}/Changelog.rst";
-    license = with licenses; [ bsd2 /* and */ asl20 ];
+    license = with licenses; [ bsd2 /**
+  and
+*/ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

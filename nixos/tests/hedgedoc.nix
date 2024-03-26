@@ -25,10 +25,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             database = "hedgedocdb";
           };
 
-          /*
-           * Do not use pkgs.writeText for secrets as
-           * they will end up in the world-readable Nix store.
-           */
+          /**
+            * Do not use pkgs.writeText for secrets as
+            * they will end up in the world-readable Nix store.
+          */
           environmentFile = pkgs.writeText "hedgedoc-env" ''
             DB_PASSWORD=snakeoilpassword
           '';

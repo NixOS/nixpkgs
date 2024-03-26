@@ -114,8 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Otherwise a very confusing "Can't load GDAL library" error
   makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
 
-  /* Ensures that the python script run at build time are actually executable;
-   * otherwise, patchShebangs ignores them.  */
+  /**
+    Ensures that the python script run at build time are actually executable;
+    * otherwise, patchShebangs ignores them.
+  */
   postConfigure = ''
     for f in $(find . -name '*.py'); do
       chmod +x $f

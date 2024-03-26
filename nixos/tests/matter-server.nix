@@ -17,7 +17,9 @@ in
     };
   };
 
-  testScript = /* python */ ''
+  testScript = /**
+  python
+*/ ''
     start_all()
 
     machine.wait_for_unit("matter-server.service")

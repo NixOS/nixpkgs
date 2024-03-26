@@ -107,10 +107,10 @@ let
 
 in
 
-  /*
-  * We can patch the runescape launcher, but it downloads a client at runtime and checks it for changes.
-  * For that we need use a buildFHSEnv.
-  * FHS simulates a classic linux shell
+  /**
+    * We can patch the runescape launcher, but it downloads a client at runtime and checks it for changes.
+    * For that we need use a buildFHSEnv.
+    * FHS simulates a classic linux shell
   */
   buildFHSEnv {
     name = "RuneScape";

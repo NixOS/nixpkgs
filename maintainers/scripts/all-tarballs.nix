@@ -1,9 +1,10 @@
-/* Helper expression for copy-tarballs. This returns (nearly) all
-   tarballs used the free packages in Nixpkgs.
+/**
+  Helper expression for copy-tarballs. This returns (nearly) all
+  tarballs used the free packages in Nixpkgs.
 
-   Typical usage:
+  Typical usage:
 
-   $ copy-tarballs.pl --expr 'import <nixpkgs/maintainers/scripts/all-tarballs.nix>'
+  $ copy-tarballs.pl --expr 'import <nixpkgs/maintainers/scripts/all-tarballs.nix>'
 */
 
 import ../../pkgs/top-level/release.nix

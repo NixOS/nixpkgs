@@ -2,7 +2,7 @@
 
 let
   mkComposerRepositoryOverride =
-    /*
+    /**
       We cannot destruct finalAttrs since the attrset below is used to construct it
       and Nix currently does not support lazy attribute names.
       {

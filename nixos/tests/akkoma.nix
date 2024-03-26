@@ -1,4 +1,4 @@
-/*
+/**
   End-to-end test for Akkoma.
 
   Based in part on nixos/tests/pleroma.

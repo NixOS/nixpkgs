@@ -57,7 +57,9 @@ mkDerivation rec {
     "-DWITH_SPEEX=On"
     "-DWITH_ILBC=On"
     "-DHAVE_LIBATOMIC=atomic"
-    /* "-DWITH_DIAMONDCARD=On" seems ancient and broken */
+    /**
+      "-DWITH_DIAMONDCARD=On" seems ancient and broken
+    */
   ];
 
   meta = with lib; {

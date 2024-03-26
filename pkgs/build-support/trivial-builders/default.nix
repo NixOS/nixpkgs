@@ -37,7 +37,7 @@ rec {
   # We shouldn’t force the user to have a cc in scope.
 
   # TODO: Move documentation for runCommandWith to the Nixpkgs manual
-  /*
+  /**
     Generalized version of the `runCommand`-variants
     which does customized behavior via a single
     attribute set passed as the first argument
@@ -46,7 +46,7 @@ rec {
     the used `stdenv` freely and has a more explicit
     approach to changing the arguments passed to
     `stdenv.mkDerivation`.
-   */
+  */
   runCommandWith =
     let
       # prevent infinite recursion for the default stdenv value
@@ -186,70 +186,107 @@ rec {
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeShellApplication
   writeShellApplication =
     {
-      /*
-         The name of the script to write.
+      /**
+        The name of the script to write.
 
-         Type: String
-       */
+        # Type
+
+        ```
+        String
+        ```
+      */
       name,
-      /*
-         The shell script's text, not including a shebang.
+      /**
+        The shell script's text, not including a shebang.
 
-         Type: String
-       */
+        # Type
+
+        ```
+        String
+        ```
+      */
       text,
-      /*
-         Inputs to add to the shell script's `$PATH` at runtime.
+      /**
+        Inputs to add to the shell script's `$PATH` at runtime.
 
-         Type: [String|Derivation]
-       */
+        # Type
+
+        ```
+        [String|Derivation]
+        ```
+      */
       runtimeInputs ? [ ],
-      /*
-         Extra environment variables to set at runtime.
+      /**
+        Extra environment variables to set at runtime.
 
-         Type: AttrSet
-       */
+        # Type
+
+        ```
+        AttrSet
+        ```
+      */
       runtimeEnv ? null,
-      /*
-         `stdenv.mkDerivation`'s `meta` argument.
+      /**
+        `stdenv.mkDerivation`'s `meta` argument.
 
-         Type: AttrSet
-       */
+        # Type
+
+        ```
+        AttrSet
+        ```
+      */
       meta ? { },
-      /*
-         The `checkPhase` to run. Defaults to `shellcheck` on supported
-         platforms and `bash -n`.
+      /**
+        The `checkPhase` to run. Defaults to `shellcheck` on supported
+        platforms and `bash -n`.
 
-         The script path will be given as `$target` in the `checkPhase`.
+        The script path will be given as `$target` in the `checkPhase`.
 
-         Type: String
-       */
+        # Type
+
+        ```
+        String
+        ```
+      */
       checkPhase ? null,
-      /*
-         Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
+      /**
+        Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
 
-         See <https://www.shellcheck.net/wiki/> for a list of checks.
+        See <https://www.shellcheck.net/wiki/> for a list of checks.
 
-         Type: [String]
-       */
+        # Type
+
+        ```
+        [String]
+        ```
+      */
       excludeShellChecks ? [ ],
-      /*
-         Bash options to activate with `set -o` at the start of the script.
+      /**
+        Bash options to activate with `set -o` at the start of the script.
 
-         Defaults to `[ "errexit" "nounset" "pipefail" ]`.
+        Defaults to `[ "errexit" "nounset" "pipefail" ]`.
 
-         Type: [String]
-       */
+        # Type
+
+        ```
+        [String]
+        ```
+      */
       bashOptions ? [ "errexit" "nounset" "pipefail" ],
-      /* Extra arguments to pass to `stdenv.mkDerivation`.
+      /**
+        Extra arguments to pass to `stdenv.mkDerivation`.
 
-         :::{.caution}
-         Certain derivation attributes are used internally,
-         overriding those could cause problems.
-         :::
+        :::{.caution}
+        Certain derivation attributes are used internally,
+        overriding those could cause problems.
+        :::
 
-         Type: AttrSet
-       */
+        # Type
+
+        ```
+        AttrSet
+        ```
+      */
       derivationArgs ? { },
     }:
     writeTextFile {
@@ -323,12 +360,16 @@ rec {
   # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
-  /* concat a list of files to the nix store.
+  /**
+    concat a list of files to the nix store.
     The contents of files are added to the file in the store.
 
-    Example:
 
+    # Examples
+    :::{.example}
+    ## `concatTextFile` usage example
 
+    ```nix
     # Writes my-file to /nix/store/<store path>
     concatTextFile {
       name = "my-file";
@@ -346,9 +387,10 @@ rec {
       executable = true;
       destination = "/bin/my-file";
     }
+    ```
 
-
-   */
+    :::
+  */
   concatTextFile =
     { name # the name of the derivation
     , files
@@ -374,34 +416,67 @@ rec {
   # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
-  /*
+  /**
     Writes a text file to nix store with no optional parameters available.
 
-    Example:
+
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `files`
+
+    : 2\. Function argument
 
 
+    # Examples
+    :::{.example}
+    ## `concatText` usage example
+
+    ```nix
     # Writes contents of files to /nix/store/<store path>
     concatText "my-file" [ file1 file2 ]
+    ```
 
-
+    :::
   */
   concatText = name: files: concatTextFile { inherit name files; };
 
   # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
-  /*
+  /**
     Writes a text file to nix store with and mark it as executable.
 
-    Example:
+
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `files`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `concatScript` usage example
+
+    ```nix
     # Writes contents of files to /nix/store/<store path>
     concatScript "my-file" [ file1 file2 ]
+    ```
 
+    :::
   */
   concatScript = name: files: concatTextFile { inherit name files; executable = true; };
 
 
-  /*
+  /**
     TODO: Deduplicate this documentation.
     More docs in doc/build-helpers/trivial-build-helpers.chapter.md
     See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-symlinkJoin
@@ -413,9 +488,12 @@ rec {
 
     BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
 
-    Example:
 
+    # Examples
+    :::{.example}
+    ## `symlinkJoin` usage example
 
+    ```nix
     # adds symlinks of hello to current build.
     symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }
 
@@ -457,7 +535,10 @@ rec {
     linkFarm is instead used to create a simple derivation with symlinks to
     other derivations.  A derivation created with linkFarm is often used in CI
     as a easy way to build multiple derivations at once.
-   */
+    ```
+
+    :::
+  */
   symlinkJoin =
     args_@{ name
     , paths
@@ -483,7 +564,7 @@ rec {
       '';
 
   # TODO: move linkFarm docs to the Nixpkgs manual
-  /*
+  /**
     Quickly create a set of symlinks to derivations.
 
     This creates a simple derivation with symlinks to all inputs.
@@ -498,8 +579,22 @@ rec {
     { name = "/nix/store/..."; other = "/nix/store/..."; }
 
 
-    Example:
+    # Inputs
 
+    `name`
+
+    : 1\. Function argument
+
+    `entries`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `linkFarm` usage example
+
+    ```nix
     # Symlinks hello and stack paths in store to current $out/hello-test and
     # $out/foobar.
     linkFarm "myexample" [ { name = "hello-test"; path = pkgs.hello; } { name = "foobar"; path = pkgs.stack; } ]
@@ -512,7 +607,10 @@ rec {
 
 
     See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
-   */
+    ```
+
+    :::
+  */
   linkFarm = name: entries:
     let
       entries' =
@@ -540,15 +638,30 @@ rec {
     '';
 
   # TODO: move linkFarmFromDrvs docs to the Nixpkgs manual
-  /*
+  /**
     Easily create a linkFarm from a set of derivations.
 
     This calls linkFarm with a list of entries created from the list of input
     derivations.  It turns each input derivation into an attribute set
     like { name = drv.name ; path = drv }, and passes this to linkFarm.
 
-    Example:
 
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `drvs`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `linkFarmFromDrvs` usage example
+
+    ```nix
     # Symlinks the hello, gcc, and ghc derivations in $out
     linkFarmFromDrvs "myexample" [ pkgs.hello pkgs.gcc pkgs.ghc ]
 
@@ -559,20 +672,29 @@ rec {
     |-- gcc-wrapper-9.2.0 -> /nix/store/fqhjxf9ii4w4gqcsx59fyw2vvj91486a-gcc-wrapper-9.2.0
     |-- ghc-8.6.5 -> /nix/store/gnf3s07bglhbbk4y6m76sbh42siym0s6-ghc-8.6.5
     `-- hello-2.10 -> /nix/store/k0ll91c4npk4lg8lqhx00glg2m735g74-hello-2.10
+    ```
 
+    :::
   */
   linkFarmFromDrvs = name: drvs:
     let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
   # TODO: move onlyBin docs to the Nixpkgs manual
-  /*
+  /**
     Produce a derivation that links to the target derivation's `/bin`,
     and *only* `/bin`.
 
     This is useful when your favourite package doesn't have a separate
     bin output and other contents of the package's output (e.g. setup
     hooks) cause trouble when used in your environment.
+
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
   */
   onlyBin = drv: runCommand "${drv.name}-only-bin" { } ''
     mkdir -p $out
@@ -670,7 +792,7 @@ rec {
     '';
 
   # TODO: move writeStringReferencesToFile docs to the Nixpkgs manual
-  /*
+  /**
     Extract a string's references to derivations and paths (its
     context) and write them to a text file, removing the input string
     itself from the dependency graph. This is useful when you want to
@@ -678,20 +800,27 @@ rec {
     contents (to avoid unnecessary rebuilds, for example).
 
     Note that this only works as intended on Nix >= 2.3.
-   */
+
+
+    # Inputs
+
+    `string`
+
+    : 1\. Function argument
+  */
   writeStringReferencesToFile = string:
-    /*
-       The basic operation this performs is to copy the string context
-       from `string` to a second string and wrap that string in a
-       derivation. However, that alone is not enough, since nothing in the
-       string refers to the output paths of the derivations/paths in its
-       context, meaning they'll be considered build-time dependencies and
-       removed from the wrapper derivation's closure. Putting the
-       necessary output paths in the new string is however not very
-       straightforward - the attrset returned by `getContext` contains
-       only references to derivations' .drv-paths, not their output
-       paths. In order to "convert" them, we try to extract the
-       corresponding paths from the original string using regex.
+    /**
+      The basic operation this performs is to copy the string context
+      from `string` to a second string and wrap that string in a
+      derivation. However, that alone is not enough, since nothing in the
+      string refers to the output paths of the derivations/paths in its
+      context, meaning they'll be considered build-time dependencies and
+      removed from the wrapper derivation's closure. Putting the
+      necessary output paths in the new string is however not very
+      straightforward - the attrset returned by `getContext` contains
+      only references to derivations' .drv-paths, not their output
+      paths. In order to "convert" them, we try to extract the
+      corresponding paths from the original string using regex.
     */
     let
       # Taken from https://github.com/NixOS/nix/blob/130284b8508dad3c70e8160b15f3d62042fc730a/src/libutil/hash.cc#L84
@@ -810,7 +939,7 @@ rec {
 
 
   # TODO: move copyPathToStore docs to the Nixpkgs manual
-  /*
+  /**
     Copy a path to the Nix store.
     Nix automatically copies files to the store before stringifying paths.
     If you need the store path of a file, ${copyPathToStore <path>} can be
@@ -820,16 +949,21 @@ rec {
 
 
   # TODO: move copyPathsToStore docs to the Nixpkgs manual
-  /*
+  /**
     Copy a list of paths to the Nix store.
   */
   copyPathsToStore = builtins.map copyPathToStore;
 
   # TODO: move applyPatches docs to the Nixpkgs manual
-  /* Applies a list of patches to a source directory.
+  /**
+    Applies a list of patches to a source directory.
 
-    Example:
 
+    # Examples
+    :::{.example}
+    ## `applyPatches` usage example
+
+    ```nix
     # Patching nixpkgs:
 
     applyPatches {
@@ -841,8 +975,10 @@ rec {
         })
       ];
     }
+    ```
 
-   */
+    :::
+  */
   applyPatches =
     { src
     , name ? (if builtins.typeOf src == "path"
@@ -872,7 +1008,9 @@ rec {
       // (removeAttrs args [ "src" "name" "patches" "prePatch" "postPatch" ]));
 
   # TODO: move docs to Nixpkgs manual
-  /* An immutable file in the store with a length of 0 bytes. */
+  /**
+    An immutable file in the store with a length of 0 bytes.
+  */
   emptyFile = runCommand "empty-file"
     {
       outputHashAlgo = "sha256";
@@ -882,7 +1020,9 @@ rec {
     } "touch $out";
 
   # TODO: move docs to Nixpkgs manual
-  /* An immutable empty directory in the store. */
+  /**
+    An immutable empty directory in the store.
+  */
   emptyDirectory = runCommand "empty-directory"
     {
       outputHashAlgo = "sha256";

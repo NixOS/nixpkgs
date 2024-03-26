@@ -79,7 +79,7 @@ rec {
         interpreter = "none";
         inputs = [ shunit2 openssl.bin "libexec" "libexec/invokeme" ];
         execer = [
-          /*
+          /**
             This is the same verdict binlore will
             come up with. It's a no-op just to demo
             how to fiddle lore via the Nix API.

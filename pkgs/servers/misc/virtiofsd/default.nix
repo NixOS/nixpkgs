@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ qyliss astro ];
     mainProgram = "virtiofsd";
     platforms = platforms.linux;
-    license = with licenses; [ asl20 /* and */ bsd3 ];
+    license = with licenses; [ asl20 /**
+  and
+*/ bsd3 ];
   };
 }

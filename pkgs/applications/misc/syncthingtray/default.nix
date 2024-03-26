@@ -25,11 +25,13 @@
 , kioPluginSupport ? stdenv.isLinux
 , plasmoidSupport  ? stdenv.isLinux
 , systemdSupport ? stdenv.isLinux
-/* It is possible to set via this option an absolute exec path that will be
-written to the `~/.config/autostart/syncthingtray.desktop` file generated
-during runtime. Alternatively, one can edit the desktop file themselves after
-it is generated See:
-https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
+/**
+  It is possible to set via this option an absolute exec path that will be
+  written to the `~/.config/autostart/syncthingtray.desktop` file generated
+  during runtime. Alternatively, one can edit the desktop file themselves after
+  it is generated See:
+  https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382
+*/
 , autostartExecPath ? "syncthingtray"
 }:
 

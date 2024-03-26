@@ -1,4 +1,6 @@
-/* Generated file. */
+/**
+  Generated file.
+*/
 args @ { fetchurl, ... }:
 rec {
   baseName = "puri";
@@ -20,9 +22,11 @@ rec {
   asdFilesToKeep = ["puri.asd"];
   overrides = x: x;
 }
-/* (SYSTEM puri DESCRIPTION Portable Universal Resource Indentifier Library
-    SHA256 16h7gip6d0564s9yba3jg0rjzndmysv531hcrngvi3j3sandjfzx URL
-    http://beta.quicklisp.org/archive/puri/2020-10-16/puri-20201016-git.tgz MD5
-    890c61df1d7204b2d681bf146c43e711 NAME puri FILENAME puri DEPS
-    ((NAME ptester FILENAME ptester)) DEPENDENCIES (ptester) VERSION
-    20201016-git SIBLINGS NIL PARASITES (puri/test)) */
+/**
+  (SYSTEM puri DESCRIPTION Portable Universal Resource Indentifier Library
+  SHA256 16h7gip6d0564s9yba3jg0rjzndmysv531hcrngvi3j3sandjfzx URL
+  http://beta.quicklisp.org/archive/puri/2020-10-16/puri-20201016-git.tgz MD5
+  890c61df1d7204b2d681bf146c43e711 NAME puri FILENAME puri DEPS
+  ((NAME ptester FILENAME ptester)) DEPENDENCIES (ptester) VERSION
+  20201016-git SIBLINGS NIL PARASITES (puri/test))
+*/

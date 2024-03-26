@@ -109,7 +109,9 @@ in stdenv.mkDerivation {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
     changelog = "https://github.com/facebook/buck2/releases/tag/${version}";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     mainProgram = "buck2";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms = [

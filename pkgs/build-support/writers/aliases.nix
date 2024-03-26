@@ -29,7 +29,9 @@ let
 
 in
 mapAliases ({
-  /* Cleanup before 22.05, Added 2021-12-11 */
+  /**
+    Cleanup before 22.05, Added 2021-12-11
+  */
   writePython2 = "Python 2 is EOL and the use of writers.writePython2 is deprecated.";
   writePython2Bin = "Python 2 is EOL and the use of writers.writePython2Bin is deprecated.";
 })

@@ -43,7 +43,9 @@ let
 in
 rec {
 
-  /* ENGLISH */
+  /**
+    ENGLISH
+  */
 
   en_US = en-us;
   en-us = mkDictFromChromium {
@@ -59,7 +61,9 @@ rec {
     shortDescription = "English (United Kingdom)";
   };
 
-  /* GERMAN */
+  /**
+    GERMAN
+  */
 
   de_DE = de-de;
   de-de = mkDictFromChromium {

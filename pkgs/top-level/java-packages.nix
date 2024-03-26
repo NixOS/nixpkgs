@@ -21,7 +21,9 @@ in {
     };
 
     bootstrapArgs = gnomeArgs // {
-      openjfx = openjfx11; /* need this despite next line :-( */
+      openjfx = openjfx11; /**
+  need this despite next line :-(
+*/
       enableJavaFX = false;
       headless = true;
     };
@@ -45,7 +47,9 @@ in {
     };
 
     mkBootstrap = adoptopenjdk: path: args:
-      /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
+      /**
+        adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping
+      */
       if   !stdenv.hostPlatform.isi686
       then
         # only linux has the gtkSupport option
@@ -112,7 +116,9 @@ in {
       ../development/compilers/openjdk/12.nix
       (bootstrapArgs // {
         inherit openjdk11-bootstrap;
-        /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
+        /**
+          build segfaults with gcc9 or newer, so use gcc8 like Debian does
+        */
         stdenv = gcc8Stdenv;
       });
 
@@ -157,7 +163,9 @@ in {
       { openjfx = openjfx11; };
 
     openjdk12 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/12.nix {
-        /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
+        /**
+          build segfaults with gcc9 or newer, so use gcc8 like Debian does
+        */
         stdenv = gcc8Stdenv;
         openjfx = openjfx11;
     };

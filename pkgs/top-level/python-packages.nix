@@ -11375,7 +11375,7 @@ self: super: with self; {
     withMultimedia = true;
   };
 
-  /*
+  /**
     `pyqt5-webkit` should not be used by python libraries in
     pkgs/development/python-modules/*. Putting this attribute in
     `propagatedBuildInputs` may cause collisions.

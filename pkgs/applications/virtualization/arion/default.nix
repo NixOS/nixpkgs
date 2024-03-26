@@ -8,14 +8,15 @@
 
 let
 
-  /* This derivation builds the arion tool.
+  /**
+    This derivation builds the arion tool.
 
-     It is based on the arion-compose Haskell package, but adapted and extended to
-       - have the correct name
-       - have a smaller closure size
-       - have functions to use Arion from inside Nix: arion.eval and arion.build
-       - make it self-contained by including docker-compose
-   */
+    It is based on the arion-compose Haskell package, but adapted and extended to
+      - have the correct name
+      - have a smaller closure size
+      - have functions to use Arion from inside Nix: arion.eval and arion.build
+      - make it self-contained by including docker-compose
+  */
   arion =
     (justStaticExecutables (
       overrideCabal
@@ -63,22 +64,24 @@ let
   srcUnpacked = runCommand "arion-src" {}
     "mkdir $out; tar -C $out --strip-components=1 -xf ${arion-compose.src}";
 
-  /* Function for evaluating a composition
+  /**
+    Function for evaluating a composition
 
-     Re-uses this Nixpkgs evaluation instead of `arion-pkgs.nix`.
+    Re-uses this Nixpkgs evaluation instead of `arion-pkgs.nix`.
 
-     Returns the module system's `config` and `options` variables.
-   */
+    Returns the module system's `config` and `options` variables.
+  */
   eval = args@{...}:
     import (srcUnpacked + "/src/nix/eval-composition.nix")
       ({ inherit pkgs; } // args);
 
-  /* Function to derivation of the docker compose yaml file
+  /**
+    Function to derivation of the docker compose yaml file
      NOTE: The output will change: https://github.com/hercules-ci/arion/issues/82
 
     This function is particularly useful on CI, although the references
     to image tarballs may not always be desirable.
-   */
+  */
   build = args@{...}:
     let composition = eval args;
     in composition.config.out.dockerComposeYaml;

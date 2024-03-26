@@ -29,7 +29,9 @@ rustPlatform.buildRustPackage rec {
     description = "Zero setup cross compilation and cross testing";
     homepage = "https://github.com/cross-rs/cross";
     changelog = "https://github.com/cross-rs/cross/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ otavio ];
     mainProgram = "cross";
   };

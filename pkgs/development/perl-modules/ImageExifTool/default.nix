@@ -48,7 +48,9 @@ buildPerlPackage rec {
     '';
     homepage = "https://exiftool.org/";
     changelog = "https://exiftool.org/history.html";
-    license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
+    license = with lib.licenses; [ gpl1Plus /**
+  or
+*/ artistic2 ];
     maintainers = with lib.maintainers; [ kiloreux anthonyroussel ];
     mainProgram = "exiftool";
   };

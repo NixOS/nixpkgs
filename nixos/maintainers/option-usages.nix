@@ -92,7 +92,9 @@ let
 
       keepNames =
         map ({fst, snd}:
-          /* assert fst.name == snd.name; */ snd.name
+          /**
+            assert fst.name == snd.name;
+          */ snd.name
         );
 
       # Use  tryEval (strict ...)  to know if there is any failure while

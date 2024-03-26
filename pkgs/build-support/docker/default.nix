@@ -983,7 +983,9 @@ rec {
           '';
         };
 
-        closureRoots = lib.optionals includeStorePaths /* normally true */ (
+        closureRoots = lib.optionals includeStorePaths /**
+  normally true
+*/ (
           [ baseJson customisationLayer ]
         );
         overallClosure = writeText "closure" (lib.concatStringsSep " " closureRoots);

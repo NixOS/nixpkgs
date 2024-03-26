@@ -49,18 +49,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
               olcRootDN = "cn=${ldapRootUser},${dbSuffix}";
               olcRootPW = ldapRootPassword;
               olcAccess = [
-                /*
+                /**
                   custom access rules for userPassword attributes
-                  */
+                */
                 ''
                   {0}to attrs=userPassword
                                     by self write
                                     by anonymous auth
                                     by * none''
 
-                /*
+                /**
                   allow read on anything else
-                  */
+                */
                 ''
                   {1}to *
                                     by * read''

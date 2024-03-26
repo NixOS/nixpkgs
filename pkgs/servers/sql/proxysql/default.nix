@@ -73,7 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   # replace and fix some vendored dependencies
-  preBuild = /* sh */ ''
+  preBuild = /**
+  sh
+*/ ''
     pushd deps
 
     function replace_dep() {

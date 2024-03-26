@@ -307,7 +307,9 @@ in
 
     mailLocation = mkOption {
       type = types.str;
-      default = "maildir:/var/spool/mail/%u"; /* Same as inbox, as postfix */
+      default = "maildir:/var/spool/mail/%u"; /**
+  Same as inbox, as postfix
+*/
       example = "maildir:~/mail:INBOX=/var/spool/mail/%u";
       description = lib.mdDoc ''
         Location that dovecot will use for mail folders. Dovecot mail_location option.

@@ -8,8 +8,19 @@ let
   hasLuaModule = drv: drv ? luaModule;
 
 
-  /*
-  Use this to override the arguments passed to buildLuarocksPackage
+  /**
+    Use this to override the arguments passed to buildLuarocksPackage
+
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
+    `f`
+
+    : 2\. Function argument
   */
   overrideLuarocks = drv: f: (drv.override (args: args // {
     buildLuarocksPackage = drv: (args.buildLuarocksPackage drv).override f;
@@ -30,17 +41,27 @@ rec {
     "lib/lua/${lua.luaversion}/?.so"
   ];
 
-  /* generate paths without a prefix
+  /**
+    generate paths without a prefix
   */
   luaPathRelStr = lib.concatStringsSep ";" luaPathList;
   luaCPathRelStr = lib.concatStringsSep ";" luaCPathList;
 
-  /* generate LUA_(C)PATH value for a specific derivation, i.e., with absolute paths
+  /**
+    generate LUA_(C)PATH value for a specific derivation, i.e., with absolute paths
+
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
   */
   genLuaPathAbsStr = drv: lib.concatMapStringsSep ";" (x: "${drv}/${x}") luaPathList;
   genLuaCPathAbsStr = drv: lib.concatMapStringsSep ";" (x: "${drv}/${x}") luaCPathList;
 
-  /* Generate a LUA_PATH with absolute paths
+  /**
+    Generate a LUA_PATH with absolute paths
   */
   # genLuaPathAbs = drv:
   #   lib.concatStringsSep ";" (map (x: "${drv}/x") luaPathList);
@@ -52,18 +73,42 @@ rec {
   isLua53 = lua.luaversion == "5.3";
   isLuaJIT = lib.getName lua == "luajit";
 
-  /* generates the relative path towards the folder where
-   seems stable even when using  lua_modules_path = ""
+  /**
+    generates the relative path towards the folder where
+    seems stable even when using  lua_modules_path = ""
 
-   Example:
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `getDataFolder` usage example
+
+    ```nix
     getDataFolder luaPackages.stdlib
     => stdlib-41.2.2-1-rocks/stdlib/41.2.2-1/doc
+    ```
+
+    :::
   */
   getDataFolder = drv:
     "${drv.pname}-${drv.version}-rocks/${drv.pname}/${drv.version}";
 
-  /* Convert derivation to a lua module.
+  /**
+    Convert derivation to a lua module.
     so that luaRequireModules can be run later
+
+
+    # Inputs
+
+    `drv`
+
+    : 1\. Function argument
   */
   toLuaModule = drv:
     drv.overrideAttrs(oldAttrs: {
@@ -75,19 +120,30 @@ rec {
     });
 
 
-  /* generate a luarocks config conforming to:
+  /**
+    generate a luarocks config conforming to:
     https://github.com/luarocks/luarocks/wiki/Config-file-format
 
     The config lists folders where to find lua dependencies
 
-    Example:
-      generateLuarocksConfig {
-        externalDeps = [ { name = "CRYPTO"; dep = pkgs.openssl; } ];
-        rocksSubdir = "subdir";
-      };
+    # Type
 
-    Type:
-       generateLuarocksConfig :: AttrSet -> String
+    ```
+    generateLuarocksConfig :: AttrSet -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `generateLuarocksConfig` usage example
+
+    ```nix
+    generateLuarocksConfig {
+      externalDeps = [ { name = "CRYPTO"; dep = pkgs.openssl; } ];
+      rocksSubdir = "subdir";
+    };
+    ```
+
+    :::
   */
   generateLuarocksConfig = {
       externalDeps ? []

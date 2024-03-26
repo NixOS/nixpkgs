@@ -80,7 +80,8 @@ let
   installCrate = import ./install-crate.nix { inherit stdenv; };
 in
 
-  /* The overridable pkgs.buildRustCrate function.
+  /**
+    The overridable pkgs.buildRustCrate function.
     *
     * Any unrecognized parameters will be passed as to
     * the underlying stdenv.mkDerivation.
