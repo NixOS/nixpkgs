@@ -35,7 +35,7 @@
 , icu
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodePackages
 , nodejs_18
 , jq
@@ -215,6 +215,7 @@ let
       nodejs_18
       jq
       moreutils
+      prefetch-yarn-deps
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -252,7 +253,7 @@ let
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
+      fixup-yarn-lock app/assets/javascripts/yarn.lock
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
