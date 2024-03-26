@@ -11,7 +11,7 @@ Python runtime dependencies can be directly consumed as unqualified
 function arguments. Pass them into `propagatedBuildInputs`, for them to
 be available to Home Assistant.
 
-Out-of-tree components need to use python packages from
+Out-of-tree components need to use Python packages from
 `home-assistant.python.pkgs` as to not introduce conflicting package
 versions into the Python environment.
 
@@ -58,7 +58,7 @@ domain in the `manifest.json` as well as the module name are
 
 The `pname` attribute is a composition of both `owner` and `domain`.
 
-Don't set `pname`, set `owner and `domain` instead.
+Don't set `pname`, set `owner` and `domain` instead.
 
 Exposing the `domain` attribute separately allows checking for
 conflicting components at eval time.

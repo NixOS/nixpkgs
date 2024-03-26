@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "templ";
-  version = "0.2.639";
+  version = "0.2.646";
 
   subPackages = [ "cmd/templ" ];
 
@@ -21,7 +21,7 @@ buildGoModule rec {
     owner = "a-h";
     repo = "templ";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W1efknPo45mmKYuiFakJ0AigmfQqlfQ/u+de0zTRwwY=";
+    hash = "sha256-ocuDWdIHL4Ub1ybWBScg4ysTRQdvCxlod0TNuJFDA4o=";
   };
 
   vendorHash = "sha256-Upd5Wq4ajsyOMDiAWS2g2iNO1sm1XJc43AFQLIo5eDM=";

@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "MutatorMath";
+  pname = "mutatormath";
   version = "3.0.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "MutatorMath";
+    inherit version;
     sha256 = "0r1qq45np49x14zz1zwkaayqrn7m8dn2jlipjldg2ihnmpzw29w1";
     extension = "zip";
   };

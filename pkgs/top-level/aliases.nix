@@ -237,6 +237,7 @@ mapAliases ({
   docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
   docker-machine-kvm = throw "'docker-machine-kvm' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
   docker-machine-xhyve = throw "'docker-machine-xhyve' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
+  docker-proxy = throw "`docker-proxy` has been merged to the main repo of Moby since Docker 22.06"; # Added 2024-03-14
   dogecoin = throw "'dogecoin' has been removed, as it was broken and unmaintained"; # Added 2024-03-11
   dogecoind = throw "'dogecoind' has been removed, as it was broken and unmaintained"; # Added 2024-03-11
   dolphin-emu-beta = dolphin-emu; # Added 2023-02-11
@@ -266,6 +267,36 @@ mapAliases ({
 
   # Electron
   electron_9 = throw "electron_9 has been removed in favor of newer versions"; # added 2023-09-11
+  electron_10 = throw "electron_10 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_10-bin = throw "electron_10-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_11 = throw "electron_11 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_11-bin = throw "electron_11-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_12 = throw "electron_12 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_12-bin = throw "electron_12-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_13 = throw "electron_13 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_13-bin = throw "electron_13-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_14 = throw "electron_14 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_14-bin = throw "electron_14-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_15 = throw "electron_15 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_15-bin = throw "electron_15-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_16 = throw "electron_16 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_16-bin = throw "electron_16-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_17 = throw "electron_17 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_17-bin = throw "electron_17-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_18 = throw "electron_18 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_18-bin = throw "electron_18-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_19 = throw "electron_19 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_19-bin = throw "electron_19-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_20 = throw "electron_20 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_20-bin = throw "electron_20-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_21 = throw "electron_21 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_21-bin = throw "electron_21-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_22 = throw "electron_22 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_22-bin = throw "electron_22-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_23 = throw "electron_23 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_23-bin = throw "electron_23-bin has been removed in favor of newer versions"; # added 2024-03-20
+  electron_26 = throw "electron_26 has been removed in favor of newer versions"; # added 2024-03-20
+  electron_26-bin = throw "electron_26-bin has been removed in favor of newer versions"; # added 2024-03-20
 
   elementary-planner = throw "elementary-planner has been renamed to planify"; # Added 2023-06-24
 
@@ -349,6 +380,7 @@ mapAliases ({
   garage_0_7_3 = throw "garage 0.7.x has been removed as it is EOL. Please upgrade to 0.8 series."; # Added 2023-10-10
   garmin-plugin = throw "garmin-plugin has been removed, as it is unmaintained upstream and no longer works with modern browsers."; # Added 2024-01-12
   garmindev = throw "'garmindev' has been removed as the dependent software 'qlandkartegt' has been removed"; # Added 2023-04-17
+  gcc10StdenvCompat = if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11" then gcc10Stdenv else stdenv; # Added 2024-03-21
   gcl_2_6_13_pre = throw "'gcl_2_6_13_pre' has been removed in favor of 'gcl'"; # Added 2024-01-11
   geekbench4 = throw "'geekbench4' has been renamed to 'geekbench_4'"; # Added 2023-03-10
   geekbench5 = throw "'geekbench5' has been renamed to 'geekbench_5'"; # Added 2023-03-10
@@ -1104,6 +1136,7 @@ mapAliases ({
   spark2 = throw "'spark2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_2_4 = throw "'spark_2_4' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_3_1 = throw "'spark_3_1' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
+  spark_3_3 = throw "'spark_3_3' is no longer supported nixpkgs, please use 'spark'"; # Added 2024-03-23
   spark2014 = gnatprove; # Added 2024-02-25
 
   # Added 2020-02-10

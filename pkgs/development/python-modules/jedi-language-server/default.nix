@@ -11,12 +11,11 @@
 , pytestCheckHook
 , python-lsp-jsonrpc
 , pythonOlder
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.41.1-unstable-2023-10-04";
+  version = "0.41.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,17 +23,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = pname;
-    rev = "c4c470cff67e54593a626b22d1b6b05e56fde3a3";
-    hash = "sha256-qFBni97B/GkabbznnZtWTG4dCHFkOx5UQjuevxq+Uvo=";
+    rev = "v${version}";
+    hash = "sha256-+k4WOoEbVe7mlPyPj0ttBM+kmjq8V739yHi36BDYK2U=";
   };
-
-  pythonRelaxDeps = [
-    "pygls"
-  ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

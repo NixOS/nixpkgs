@@ -138,5 +138,6 @@ in {
     self.OneTuple
   ] super.base-compat-batteries;
 
-  primitive-addr = self.primitive-addr_0_1_0_2;
+  # Too strict lower bound on base
+  primitive-addr = doJailbreak super.primitive-addr;
 }

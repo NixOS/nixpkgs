@@ -1,36 +1,86 @@
-{
-  lib, mkDerivation, extra-cmake-modules, fetchurl,
-
-  kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
-
-
-  qtx11extras, qtwebsockets, qtkeychain, libsecret,
-
-  eigen, zlib,
-
-  cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
+{ lib
+, stdenv
+, mkDerivation
+, extra-cmake-modules
+, fetchFromGitHub
+, kconfig
+, kdoctools
+, kguiaddons
+, ki18n
+, kinit
+, kiconthemes
+, kio
+, knewstuff
+, kplotting
+, kwidgetsaddons
+, kxmlgui
+, knotifyconfig
+, qtx11extras
+, qtwebsockets
+, qtkeychain
+, qtdatavis3d
+, wrapQtAppsHook
+, breeze-icons
+, libsecret
+, eigen
+, zlib
+, cfitsio
+, indi-full
+, xplanet
+, libnova
+, libraw
+, gsl
+, wcslib
+, stellarsolver
+, libxisf
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.6.7";
+  version = "3.6.9";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "sha256-uEgzvhlHHpXyvi3Djfwg3GmYeZq+r48m7OJFIDARpe4=";
+  src = fetchFromGitHub {
+    owner = "KDE";
+    repo = "kstars";
+    rev = "stable-${finalAttrs.version}";
+    hash = "sha256-28RRW+ncMiQcBb/lybEKTeV08ZkF3IqLkeTHNW5nhls=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapQtAppsHook
+  ];
   buildInputs = [
-    kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
-
-    qtx11extras qtwebsockets qtkeychain libsecret
-
-    eigen zlib
-
-    cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
+    kconfig
+    kdoctools
+    kguiaddons
+    ki18n
+    kinit
+    kiconthemes
+    kio
+    knewstuff
+    kplotting
+    kwidgetsaddons
+    kxmlgui
+    knotifyconfig
+    qtx11extras
+    qtwebsockets
+    qtkeychain
+    qtdatavis3d
+    breeze-icons
+    libsecret
+    eigen
+    zlib
+    cfitsio
+    indi-full
+    xplanet
+    libnova
+    libraw
+    gsl
+    wcslib
+    stellarsolver
+    libxisf
   ];
 
   cmakeFlags = [
@@ -51,4 +101,4 @@ mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ timput hjones2199 ];
   };
-}
+})

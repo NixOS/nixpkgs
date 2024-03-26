@@ -683,7 +683,7 @@ let
           (let dp9ik = config.security.pam.dp9ik; in { name = "p9"; enable = dp9ik.enable; control = dp9ik.control; modulePath = "${pkgs.pam_dp9ik}/lib/security/pam_p9.so"; args = [
             dp9ik.authserver
           ]; })
-          { name = "fprintd"; enable = cfg.fprintAuth; control = "sufficient"; modulePath = "${pkgs.fprintd}/lib/security/pam_fprintd.so"; }
+          { name = "fprintd"; enable = cfg.fprintAuth; control = "sufficient"; modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so"; }
         ] ++
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run

@@ -18,6 +18,7 @@
 , clojure-lsp
 , alejandra
 , millet
+, craftos-pc
 , shfmt
 , typst-lsp
 , typst-preview
@@ -807,10 +808,11 @@ let
           mktplcRef = {
             name = "catppuccin-vsc-icons";
             publisher = "catppuccin";
-            version = "0.12.0";
-            sha256 = "sha256-i47tY6DSVtV8Yf6AgZ6njqfhaUFGEpgbRcBF70l2Xe0=";
+            version = "1.10.0";
+            sha256 = "sha256-6klrnMHAIr+loz7jf7l5EZPLBhgkJODFHL9fzl1MqFI=";
           };
           meta = {
+            changelog = "https://marketplace.visualstudio.com/items/Catppuccin.catppuccin-vsc-icons/changelog";
             description = "Soothing pastel icon theme for VSCode";
             license = lib.licenses.mit;
             downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc-icons";
@@ -1400,12 +1402,12 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "14.1.1";
-          sha256 = "sha256-eSN48IudpHYzT4u+S4b2I2pyEPyOwBCSL49awT/mzEE=";
+          version = "14.9.0";
+          sha256 = "sha256-Z6KeIUw1SLZ4tUgs7sU9IJO/6diozPxQuTbXr6DayHA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
-          description = "GitLens supercharges the Git capabilities built into Visual Studio Code.";
+          description = "A Visual Studio Code extension that improves its built-in Git capabilities";
           longDescription = ''
             Supercharge the Git capabilities built into Visual Studio Code — Visualize code authorship at a glance via Git
             blame annotations and code lens, seamlessly navigate and explore Git repositories, gain valuable insights via
@@ -1593,8 +1595,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "10.3.0";
-          sha256 = "sha256-Oc46dxOI+55Y6hiJe0zTakdTM1sikcF7ISWkkVlaO1c=";
+          version = "10.4.0";
+          sha256 = "sha256-8+90cZpqyH+wBgPFaX5GaU6E02yBWUoB+T9C2z2Ix8c=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -2262,6 +2264,39 @@ let
         };
       };
 
+      jackmacwindows.craftos-pc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "craftos-pc";
+          publisher = "jackmacwindows";
+          version = "1.2.2";
+          sha256 = "sha256-A+MNroXv0t9Mw/gr0Fyov3cXyF/GGzwRLKrIxQ2tKCE=";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+
+          jq -e '
+            .contributes.configuration.properties."craftos-pc.executablePath.linux".default =
+              "${lib.meta.getExe craftos-pc}" |
+            .contributes.configuration.properties."craftos-pc.executablePath.mac".default =
+              "${lib.meta.getExe craftos-pc}" |
+            .contributes.configuration.properties."craftos-pc.executablePath.windows".default =
+              "${lib.meta.getExe craftos-pc}"
+          ' \
+          < package.json \
+          | sponge package.json
+        '';
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.craftos-pc/changelog";
+          description = "A Visual Studio Code extension for opening a CraftOS-PC window";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.craftos-pc";
+          homepage = "https://www.craftos-pc.cc/docs/extension";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ tomodachi94 ];
+          platforms = craftos-pc.meta.platforms;
+        };
+      };
+
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "latex-workshop";
@@ -2314,11 +2349,12 @@ let
         mktplcRef = {
           name = "gruvbox";
           publisher = "jdinhlife";
-          version = "1.8.0";
-          sha256 = "sha256-P4FbbcRcKWbnC86TSnzQaGn2gHWkDM9I4hj4GiHNPS4=";
+          version = "1.18.0";
+          sha256 = "sha256-4sGGVJYgQiOJzcnsT/YMdJdk0mTi7qcAcRHLnYghPh4=";
         };
         meta = {
-          description = "Gruvbox Theme";
+          changelog = "https://marketplace.visualstudio.com/items/jdinhlife.gruvbox/changelog";
+          description = "A port of Gruvbox theme to VS Code editor";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox";
           homepage = "https://github.com/jdinhify/vscode-theme-gruvbox";
           license = lib.licenses.mit;
@@ -2809,6 +2845,7 @@ let
 
       ms-ceintl = callPackage ./language-packs.nix { }; # non-English language packs
 
+      ms-dotnettools.csdevkit = callPackage ./ms-dotnettools.csdevkit { };
       ms-dotnettools.csharp = callPackage ./ms-dotnettools.csharp { };
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {

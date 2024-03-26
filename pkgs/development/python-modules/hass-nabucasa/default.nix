@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.78.0-unstable-2024-03-09";
+  version = "0.79.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    rev = "f4c189fa388aa7a76ebd0d88e73f7e9421088d8f";
-    hash = "sha256-UU/vsHclA8UeciC3YiPG9M/dXu6MnAxO5ElGAo5c6EA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7VhafefF7imvnhdFo6K+18h5kmXvIatKerJ+Qn5zwdQ=";
   };
 
   nativeBuildInputs = [

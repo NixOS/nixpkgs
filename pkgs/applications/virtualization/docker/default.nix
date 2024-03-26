@@ -12,7 +12,7 @@ rec {
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+      , go-md2man, go, containerd, runc, tini, libtool
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
@@ -137,6 +137,7 @@ rec {
       installPhase = ''
         cd ./go/src/${goPackagePath}
         install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
+        install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
 
         makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
           --prefix PATH : "$out/libexec/docker:$extraPath"
@@ -144,7 +145,6 @@ rec {
         ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
         ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
         ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
-        ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
         ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
         # systemd
@@ -172,7 +172,7 @@ rec {
   buildGoPackage (lib.optionalAttrs (!clientOnly) {
     # allow overrides of docker components
     # TODO: move packages out of the let...in into top-level to allow proper overrides
-    inherit docker-runc docker-containerd docker-proxy docker-tini moby;
+    inherit docker-runc docker-containerd docker-tini moby;
   } // rec {
     pname = "docker";
     inherit version;

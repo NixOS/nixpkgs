@@ -341,6 +341,8 @@ self: super: with self; {
 
   aiopg = callPackage ../development/python-modules/aiopg { };
 
+  aiopinboard = callPackage ../development/python-modules/aiopinboard { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aioprometheus = callPackage ../development/python-modules/aioprometheus { };
@@ -2746,6 +2748,8 @@ self: super: with self; {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbglib = callPackage ../development/python-modules/dbglib { };
+
   dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
 
   dbt-core = callPackage ../development/python-modules/dbt-core { };
@@ -2867,6 +2871,8 @@ self: super: with self; {
   demetriek = callPackage ../development/python-modules/demetriek { };
 
   demjson3 = callPackage ../development/python-modules/demjson3 { };
+
+  demoji = callPackage ../development/python-modules/demoji { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
 
@@ -3748,6 +3754,8 @@ self: super: with self; {
   enochecker-core = callPackage ../development/python-modules/enochecker-core { };
 
   enrich = callPackage ../development/python-modules/enrich { };
+
+  enterpriseattack = callPackage ../development/python-modules/enterpriseattack { };
 
   entrance = callPackage ../development/python-modules/entrance {
     routerFeatures = false;
@@ -5367,6 +5375,8 @@ self: super: with self; {
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
+
+  hsh = callPackage ../development/python-modules/hsh { };
 
   hsluv = callPackage ../development/python-modules/hsluv { };
 
@@ -8383,6 +8393,8 @@ self: super: with self; {
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
 
+  naked = callPackage ../development/python-modules/naked { };
+
   namedlist = callPackage ../development/python-modules/namedlist { };
 
   nameparser = callPackage ../development/python-modules/nameparser { };
@@ -9350,7 +9362,7 @@ self: super: with self; {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
 
-  pcbnew-transition = callPackage ../development/python-modules/pcbnew-transition { };
+  pcbnewtransition = callPackage ../development/python-modules/pcbnewtransition { };
 
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
@@ -10961,6 +10973,8 @@ self: super: with self; {
   pykwb = callPackage ../development/python-modules/pykwb { };
 
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
+
+  pylacus = callPackage ../development/python-modules/pylacus { };
 
   pylama = callPackage ../development/python-modules/pylama { };
 
@@ -12901,6 +12915,8 @@ self: super: with self; {
 
   requests-credssp = callPackage ../development/python-modules/requests-credssp { };
 
+  requests-gssapi = callPackage ../development/python-modules/requests-gssapi { };
+
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
   requests = callPackage ../development/python-modules/requests { };
@@ -13082,6 +13098,8 @@ self: super: with self; {
   robotframework-seleniumlibrary = callPackage ../development/python-modules/robotframework-seleniumlibrary { };
 
   robotframework-sshlibrary = callPackage ../development/python-modules/robotframework-sshlibrary { };
+
+  robotframework-tidy = callPackage ../development/python-modules/robotframework-tidy { };
 
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
@@ -16660,6 +16678,8 @@ self: super: with self; {
   wtforms = callPackage ../development/python-modules/wtforms { };
 
   wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
+
+  wunsen = callPackage ../development/python-modules/wunsen { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 

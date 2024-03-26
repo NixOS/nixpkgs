@@ -65,6 +65,7 @@ self: super: {
   fourmolu = self.fourmolu_0_15_0_0;
   stylish-haskell = self.stylish-haskell_0_14_6_0;
   hlint = self.hlint_3_8;
+  ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_11_0;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = self.ghc-exactprint_1_8_0_0;
@@ -101,6 +102,7 @@ self: super: {
   raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
   stripe-concepts = doJailbreak super.stripe-concepts; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
   stripe-signature = doJailbreak super.stripe-signature; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
+  string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
 
   #
   # Test suite issues
@@ -109,6 +111,7 @@ self: super: {
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
   hourglass = dontCheck super.hourglass; # umaintained, test suite doesn't compile anymore
   bsb-http-chunked = dontCheck super.bsb-http-chunked; # umaintained, test suite doesn't compile anymore
+  pcre-heavy = dontCheck super.pcre-heavy; # GHC warnings cause the tests to fail
 
   #
   # Other build fixes
