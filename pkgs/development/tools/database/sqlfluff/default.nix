@@ -15,11 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-/Zp/iAX6Y6MaXMjpk3dRYgZNhjJtl3cr/FiCyhGK9X4=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     appdirs
     cached-property
     chardet
