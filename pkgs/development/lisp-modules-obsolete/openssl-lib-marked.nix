@@ -1,4 +1,9 @@
-with import ../../../default.nix {};
+let
+  pkgs = import ../../../default.nix {};
+
+  inherit (pkgs) openssl runCommand lib;
+in
+
 runCommand "openssl-lib-marked" {} ''
   mkdir -p "$out/lib"
   for lib in ssl crypto; do
