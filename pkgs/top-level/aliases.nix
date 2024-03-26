@@ -79,6 +79,7 @@ mapAliases ({
   arcanPackages = throw "arcanPackages was removed and its sub-attributes were promoted to top-level"; # Added 2023-11-26
   archiveopteryx = throw "archiveopteryx depended on an unsupported version of OpenSSL and was unmaintained"; # Added 2024-01-03
   ardour_6 = throw "ardour_6 has been removed in favor of newer versions"; # Added 2023-10-13
+  aria = aria2; # Added 2024-03-26
   aseprite-unfree = aseprite; # Added 2023-08-26
   asls = throw "asls has been removed: abandoned by upstream"; # Added 2023-03-16
   asterisk_16 = throw "asterisk_16: Asterisk 16 is end of life and has been removed"; # Added 2023-04-19
