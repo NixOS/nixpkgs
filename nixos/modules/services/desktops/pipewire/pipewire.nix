@@ -64,14 +64,14 @@ in {
   ###### interface
   options = {
     services.pipewire = {
-      enable = mkEnableOption (lib.mdDoc "PipeWire service");
+      enable = mkEnableOption "PipeWire service";
 
       package = mkPackageOption pkgs "pipewire" { };
 
       socketActivation = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Automatically run PipeWire when connections are made to the PipeWire socket.
         '';
       };
@@ -82,35 +82,35 @@ in {
           # this is for backwards compatibility
           default = cfg.alsa.enable || cfg.jack.enable || cfg.pulse.enable;
           defaultText = lib.literalExpression "config.services.pipewire.alsa.enable || config.services.pipewire.jack.enable || config.services.pipewire.pulse.enable";
-          description = lib.mdDoc "Whether to use PipeWire as the primary sound server";
+          description = "Whether to use PipeWire as the primary sound server";
         };
       };
 
       alsa = {
-        enable = mkEnableOption (lib.mdDoc "ALSA support");
-        support32Bit = mkEnableOption (lib.mdDoc "32-bit ALSA support on 64-bit systems");
+        enable = mkEnableOption "ALSA support";
+        support32Bit = mkEnableOption "32-bit ALSA support on 64-bit systems";
       };
 
       jack = {
-        enable = mkEnableOption (lib.mdDoc "JACK audio emulation");
+        enable = mkEnableOption "JACK audio emulation";
       };
 
       raopOpenFirewall = mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Opens UDP/6001-6002, required by RAOP/Airplay for timing and control data.
         '';
       };
 
       pulse = {
-        enable = mkEnableOption (lib.mdDoc "PulseAudio server emulation");
+        enable = mkEnableOption "PulseAudio server emulation";
       };
 
       systemWide = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If true, a system-wide PipeWire service and socket is enabled
           allowing all users in the "pipewire" group to use it simultaneously.
           If false, then user units are used instead, restricting access to
@@ -138,7 +138,7 @@ in {
               };
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             Additional configuration for the PipeWire server.
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/pipewire.conf.d`.
@@ -166,7 +166,7 @@ in {
               };
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             Additional configuration for the PipeWire client library, used by most applications.
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/client.conf.d`.
@@ -186,7 +186,7 @@ in {
               };
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             Additional configuration for the PipeWire client library, used by real-time applications and legacy ALSA clients.
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/client-rt.conf.d`.
@@ -207,7 +207,7 @@ in {
               };
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             Additional configuration for the PipeWire JACK server and client library.
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/jack.conf.d`.
@@ -232,7 +232,7 @@ in {
               }];
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             Additional configuration for the PipeWire PulseAudio server.
 
             Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/pipewire-pulse.conf.d`.
@@ -251,7 +251,7 @@ in {
       configPackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of packages that provide PipeWire configuration, in the form of
           `share/pipewire/*/*.conf` files.
 
@@ -264,7 +264,7 @@ in {
         type = lib.types.listOf lib.types.package;
         default = [];
         example = lib.literalExpression "[ pkgs.lsp-plugins ]";
-        description = lib.mdDoc ''
+        description = ''
           List of packages that provide LV2 plugins in `lib/lv2` that should
           be made available to PipeWire for [filter chains][wiki-filter-chain].
 
