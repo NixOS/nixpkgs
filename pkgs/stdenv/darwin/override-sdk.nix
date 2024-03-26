@@ -367,7 +367,7 @@ let
                   }
                   {
                     key = "libs";
-                    pkgs = mkMapping "libs" item.value newSDK;
+                    replacementList = mkMapping "libs" item.value newSDK;
                   }
                   {
                     key = "overrides";
