@@ -26,15 +26,15 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements-dev.txt \
-      --replace "dlint" "" \
-      --replace "flake8" ""
+      --replace-fail "dlint" "" \
+      --replace-fail "flake8" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     six
   ];
 
