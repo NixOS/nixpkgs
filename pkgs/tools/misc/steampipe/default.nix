@@ -1,4 +1,13 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  nix-update-script,
+  stdenv,
+  steampipe,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "steampipe";
@@ -37,6 +46,15 @@ buildGoModule rec {
       --fish <($out/bin/steampipe --install-dir $INSTALL_DIR completion fish) \
       --zsh <($out/bin/steampipe --install-dir $INSTALL_DIR completion zsh)
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "${lib.getExe steampipe} --version";
+      package = steampipe;
+      version = "v${version}";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://steampipe.io/";
