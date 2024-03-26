@@ -463,6 +463,7 @@ mapAliases ({
   scikitlearn = scikit-learn; # added 2021-07-21
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   sequoia = throw "python3Packages.sequoia was replaced by pysequoia - built from a dedicated repository, with a new API."; # added 2023-06-24
+  setuptools_dso = setuptools-dso; # added 2024-03-03
   setuptools_scm = setuptools-scm; # added 2021-06-03
   setuptoolsTrial = setuptools-trial; # added 2023-11-11
   sharkiqpy = sharkiq; # added 2022-05-21
