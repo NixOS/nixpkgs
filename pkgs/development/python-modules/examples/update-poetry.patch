@@ -1,0 +1,24 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 3f162ee..00d5d1f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -8,7 +8,7 @@ readme = "README.md"
+ 
+ [tool.poetry.dependencies]
+ python = "^3.6"
+-pydantic = ">=0.32.2<2.0.0"
++pydantic = ">=0.32.2,<2.0.0"
+ 
+ [tool.poetry.dev-dependencies]
+ vulture = "^1.0"
+@@ -34,8 +34,8 @@ name = "material"
+ palette = {primary = "orange", accent = "blue"}
+ 
+ [build-system]
+-requires = ["poetry>=0.12"]
+-build-backend = "poetry.masonry.api"
++requires = ["poetry-core>=1.2.0"]
++build-backend = "poetry.core.masonry.api"
+ 
+ [tool.black]
+ line-length = 100
