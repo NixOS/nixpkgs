@@ -24,13 +24,13 @@ let
 
   resource-agentsForOCF = stdenv.mkDerivation rec {
     pname = "resource-agents";
-    version = "4.10.0";
+    version = "4.12.0";
 
     src = fetchFromGitHub {
       owner = "ClusterLabs";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0haryi3yrszdfpqnkfnppxj1yiy6ipah6m80snvayc7v0ss0wnir";
+      sha256 = "sha256-+UIjmHmCOi1aitJ01tC8k/2/Xb361UhMVtj/9wC/TEE=";
     };
 
     patches = [
@@ -53,6 +53,11 @@ let
       python3
     ];
 
+    patches = [
+      # See https://github.com/ClusterLabs/resource-agents/pull/1870
+      ./0001-storage_mon-Fix-printf-format-string-on-i686.patch
+    ];
+
     env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
       # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
       "-Wno-error=maybe-uninitialized"
@@ -63,7 +68,7 @@ let
       description = "Combined repository of OCF agents from the RHCS and Linux-HA projects";
       license = licenses.gpl2Plus;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ ryantm astro ];
+      maintainers = with maintainers; [ ryantm astro tmarkus ];
     };
   };
 
