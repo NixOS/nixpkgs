@@ -3379,8 +3379,6 @@ with pkgs;
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
-  aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
-
   iamy = callPackage ../tools/admin/iamy { };
 
   iam-policy-json-to-terraform = callPackage ../tools/misc/iam-policy-json-to-terraform { };
