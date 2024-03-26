@@ -32,17 +32,17 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
     hash = "sha256-GFQ87Ic0xHXs8ZgmzH7kOFbDSNmtj0hx+YHKnrz/sG0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     cython_3
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohappyeyeballs
     async-interrupt
     chacha20poly1305-reuseable
