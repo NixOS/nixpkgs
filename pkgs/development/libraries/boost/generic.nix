@@ -73,8 +73,7 @@ let
                     else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
     # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
-    "binary-format=${if stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.macho
-                     then "mach-o"
+    "binary-format=${if stdenv.hostPlatform.isMacho then "mach-o"
                      else toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
     "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
@@ -169,7 +168,7 @@ stdenv.mkDerivation {
 
   preConfigure = lib.optionalString useMpi ''
     cat << EOF >> user-config.jam
-    using mpi : ${mpi}/bin/mpiCC ;
+    using mpi : ${lib.getDev mpi}/bin/mpiCC ;
     EOF
   ''
   # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,

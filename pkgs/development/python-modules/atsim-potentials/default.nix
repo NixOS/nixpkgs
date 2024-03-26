@@ -15,6 +15,7 @@
 
 buildPythonPackage rec {
   version = "0.4.1";
+  format = "setuptools";
   pname = "atsim-potentials";
 
   src = fetchFromGitHub {
@@ -56,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/mjdrushton/atsim-potentials";
     description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
+    mainProgram = "potable";
     license = licenses.mit;
     maintainers = [ ];
   };

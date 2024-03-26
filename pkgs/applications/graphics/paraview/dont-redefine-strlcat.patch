@@ -1,0 +1,28 @@
+--- a/VTK/ThirdParty/netcdf/vtknetcdf/include/vtk_netcdf_mangle.h	2023-11-27 21:11:33.562949964 +0100
++++ b/VTK/ThirdParty/netcdf/vtknetcdf/include/vtk_netcdf_mangle.h	2023-11-27 21:11:33.562949964 +0100
+@@ -1246,7 +1246,7 @@
+ #define write_numrecs vtknetcdf_write_numrecs
+ 
+ /* Only define strlcat conditionally, as it's provided by system headers on the BSDs. */
+-#if !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(_BSD_SOURCE)
++#ifndef HAVE_STRLCAT
+ #define strlcat vtknetcdf_strlcat
+ #endif
+ 
+--- a/VTK/ThirdParty/netcdf/vtknetcdf/config.h.in	2023-11-27 21:10:35.113525241 +0100
++++ b/VTK/ThirdParty/netcdf/vtknetcdf/config.h.in	2023-11-27 21:10:55.241982399 +0100
+@@ -1,7 +1,5 @@
+ /* config.h.in.  Generated from configure.ac by autoheader.  */
+ 
+-#include "vtk_netcdf_mangle.h"
+-
+ /* Define if building universal (internal helper macro) */
+ #cmakedefine AC_APPLE_UNIVERSAL_BUILD
+ 
+@@ -621,4 +619,6 @@
+ #endif
+ #endif
+ 
++#include "vtk_netcdf_mangle.h"
++
+ #include "ncconfigure.h"

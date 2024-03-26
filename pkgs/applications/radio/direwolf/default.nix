@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-Vbxc6a6CK+wrBfs15dtjfRa1LJDKKyHMrg8tqsF7EX4=";
   };
 
-  patches = [ ./fix-strlcpy-usage.patch ];
-
   nativeBuildInputs = [ cmake ];
 
   strictDeps = true;

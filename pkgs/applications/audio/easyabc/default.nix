@@ -7,7 +7,7 @@ let
     packageOverrides = self: super: {
       # currently broken with 4.2.1
       # https://github.com/jwdj/EasyABC/issues/75
-      wxPython_4_2 = super.wxPython_4_2.overrideAttrs (args: rec {
+      wxpython = super.wxpython.overrideAttrs (args: rec {
         version = "4.2.0";
         src = fetchPypi {
           inherit version;
@@ -32,7 +32,7 @@ in python.pkgs.buildPythonApplication {
 
   propagatedBuildInputs = with python.pkgs; [
     cx-freeze
-    wxPython_4_2
+    wxpython
     pygame
   ];
 
@@ -73,6 +73,7 @@ in python.pkgs.buildPythonApplication {
 
   meta = {
     description = "ABC music notation editor";
+    mainProgram = "easyabc";
     homepage = "https://easyabc.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

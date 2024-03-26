@@ -131,6 +131,7 @@ in
         xfdesktop
       ] ++ optional cfg.enableScreensaver xfce4-screensaver) excludePackages;
 
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
 
@@ -178,5 +179,7 @@ in
     ]) excludePackages;
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
+
+    xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
   };
 }

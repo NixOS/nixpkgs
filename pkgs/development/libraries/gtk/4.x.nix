@@ -40,6 +40,7 @@
 , libGL
 # experimental and can cause crashes in inspector
 , vulkanSupport ? false
+, shaderc
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -53,6 +54,7 @@
 , Cocoa
 , libexecinfo
 , broadwaySupport ? true
+, testers
 }:
 
 let
@@ -65,9 +67,9 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.10.4";
+  version = "4.12.5";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -78,14 +80,9 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "dyVABILgaF4oJl4ibGKEf05zz8qem0FqxYOCB/U3eiQ=";
+    url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+    sha256 = "KLNW1ZDuaO9ibi75ggst0hRBSEqaBCpaPwxA6d/E9Pg=";
   };
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
-    ./patches/4.0-fix-darwin-build.patch
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -106,7 +103,9 @@ stdenv.mkDerivation rec {
     mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
-  ] ++ setupHooks;
+  ] ++ lib.optionals vulkanSupport [
+    shaderc # for glslc
+  ] ++ finalAttrs.setupHooks;
 
   buildInputs = [
     libxkbcommon
@@ -168,7 +167,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
-    "-Dgtk_doc=${lib.boolToString x11Support}"
+    "-Ddocumentation=${lib.boolToString x11Support}"
     "-Dbuild-tests=false"
     "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
     "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
@@ -201,6 +200,7 @@ stdenv.mkDerivation rec {
 
     files=(
       build-aux/meson/gen-demo-header.py
+      build-aux/meson/gen-visibility-macros.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
       gdk/gen-gdk-gresources-xml.py
@@ -241,7 +241,7 @@ stdenv.mkDerivation rec {
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
   '' + lib.optionalString x11Support ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -253,6 +253,11 @@ stdenv.mkDerivation rec {
       packageName = "gtk";
       versionPolicy = "odd-unstable";
       attrPath = "gtk4";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -272,6 +277,13 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.all;
-    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
+    pkgConfigModules = [
+      "gtk4"
+      "gtk4-broadway"
+      "gtk4-unix-print"
+      "gtk4-wayland"
+      "gtk4-x11"
+    ];
   };
-}
+})

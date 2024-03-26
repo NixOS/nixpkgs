@@ -5,20 +5,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
-  version = "1.4";
+  version = "1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2LujfvsxMHHmYjYOnLJaLdSlzDeej+ehUr4YfVe903U=";
+    sha256 = "sha256-z3OGCjLsOi6K1udChlSih8X6e2qvT8kNhh2PWBGB9zU=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     notmuch2
-    oauth2client
     google-api-python-client
+    google-auth-oauthlib
     tqdm
     setuptools
   ];
@@ -41,6 +41,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://lieer.gaute.vetsj.com/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ archer-65 flokli ];
+    mainProgram = "gmi";
   };
 }

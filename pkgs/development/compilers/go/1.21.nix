@@ -46,11 +46,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.21.3";
+  version = "1.21.8";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-GG8rb4yLcE5paCGwmrIEGlwe4T3LwxVqE63PdZMe5Ig=";
+    hash = "sha256-3IBs91qH4UFLW0w9y53T6cyY9M/M7EK3r2F9WmWKPEM=";
   };
 
   strictDeps = true;
@@ -184,5 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.darwin ++ platforms.linux;
+    mainProgram = "go";
   };
 })

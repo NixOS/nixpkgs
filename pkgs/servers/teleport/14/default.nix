@@ -1,13 +1,13 @@
 { callPackage, ... }@args:
 callPackage ../generic.nix ({
-  version = "14.0.3";
-  hash = "sha256-X+vekYmuTE7n22SH/z2GWO3wnBsIef1GEjR7WOJpjc8=";
-  vendorHash = "sha256-+R6f2HrlN/RLec83YutccDFJW6gq6HXbxoJVtxMgdp8=";
-  yarnHash = "sha256-udM4DNaTGiMkqfkllJjmT+Nk6PNbGUzT34ixQOhmScw=";
+  version = "14.3.0";
+  hash = "sha256-yTbJeHCmPlelq7BrZQRY3XyNQiovV7NQ1tNh2NfYGbk=";
+  vendorHash = "sha256-ySe5YkBMt+1tF/8PWctfAkK/e03cqp5P1aJ2ANz7pLo=";
+  yarnHash = "sha256-m934P+KygGiCzr5fDsNTlmZ1T9JxA6P8zTimocQyVi0=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rdp-rs-0.1.0" = "sha256-n4x4w7GZULxqaR109das12+ZGU0xvY3wGOTWngcwe4M=";
+      "rdp-rs-0.1.0" = "sha256-4NbAsEmyUdmBcHuzx+SLQCGKICC4V4FX4GTK2SzyHC0=";
     };
   };
   extPatches = [

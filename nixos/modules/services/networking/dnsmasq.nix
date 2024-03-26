@@ -53,7 +53,7 @@ in
         '';
       };
 
-      package = mkPackageOptionMD pkgs "dnsmasq" {};
+      package = mkPackageOption pkgs "dnsmasq" {};
 
       resolveLocalQueries = mkOption {
         type = types.bool;
@@ -181,4 +181,6 @@ in
         restartTriggers = [ config.environment.etc.hosts.source ];
     };
   };
+
+  meta.doc = ./dnsmasq.md;
 }

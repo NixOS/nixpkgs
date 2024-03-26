@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.7";
+  format = "setuptools";
   pname = "cram";
 
   nativeCheckInputs = [ which ];
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A simple testing framework for command line applications";
+    mainProgram = "cram";
     homepage = "https://bitheap.org/cram/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jluttine ];

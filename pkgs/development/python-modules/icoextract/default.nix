@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "icoextract";
   version = "0.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

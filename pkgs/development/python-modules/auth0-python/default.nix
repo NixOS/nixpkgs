@@ -3,28 +3,31 @@
 , aioresponses
 , buildPythonPackage
 , callee
+, cryptography
 , fetchFromGitHub
 , mock
 , poetry-core
 , poetry-dynamic-versioning
 , pyjwt
+, pyopenssl
 , pytestCheckHook
 , pythonOlder
 , requests
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.5.0";
-  format = "pyproject";
+  version = "4.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-kWlfckSjBxgzLd1ND4M0btt/+zfSHj5h4V/uDLmnHaA=";
+    hash = "sha256-udtrvAr8wfg1DbNbBEjA/tlrYhIiXtTFqi4bZCuKI0Q=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +36,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    requests
+    aiohttp
+    cryptography
     pyjwt
+    pyopenssl
+    requests
+    urllib3
   ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [

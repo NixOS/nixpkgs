@@ -47,7 +47,8 @@ in {
           TRUNK_LINK_FAILURE_MODE=0;
           NVSWITCH_FAILURE_MODE=0;
           ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-          TOPOLOGY_FILE_PATH=nvidia_x11.fabricmanager + "/share/nvidia-fabricmanager/nvidia/nvswitch";
+          TOPOLOGY_FILE_PATH="${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+          DATABASE_PATH="${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         };
         defaultText = lib.literalExpression ''
         {
@@ -69,7 +70,8 @@ in {
           TRUNK_LINK_FAILURE_MODE=0;
           NVSWITCH_FAILURE_MODE=0;
           ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-          TOPOLOGY_FILE_PATH=nvidia_x11.fabricmanager + "/share/nvidia-fabricmanager/nvidia/nvswitch";
+          TOPOLOGY_FILE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+          DATABASE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         }
         '';
         description = lib.mdDoc ''
@@ -261,7 +263,16 @@ in {
         ];
         boot = {
           blacklistedKernelModules = ["nouveau" "nvidiafb"];
-          kernelModules = [ "nvidia-uvm" ];
+
+          # Don't add `nvidia-uvm` to `kernelModules`, because we want
+          # `nvidia-uvm` be loaded only after `udev` rules for `nvidia` kernel
+          # module are applied.
+          #
+          # Instead, we use `softdep` to lazily load `nvidia-uvm` kernel module
+          # after `nvidia` kernel module is loaded and `udev` rules are applied.
+          extraModprobeConfig = ''
+            softdep nvidia post: nvidia-uvm
+          '';
         };
         systemd.tmpfiles.rules =
           lib.optional config.virtualisation.docker.enableNvidia
@@ -385,6 +396,9 @@ in {
             modules = [nvidia_x11.bin];
             display = !offloadCfg.enable;
             deviceSection =
+              ''
+                Option "SidebandSocketPath" "/run/nvidia-xdriver/"
+              '' +
               lib.optionalString primeEnabled
               ''
                 BusID "${pCfg.nvidiaBusId}"
@@ -522,8 +536,14 @@ in {
 
         hardware.firmware = lib.optional cfg.open nvidia_x11.firmware;
 
-        systemd.tmpfiles.rules =
-          lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+        systemd.tmpfiles.rules = [
+          # Remove the following log message:
+          #    (WW) NVIDIA: Failed to bind sideband socket to
+          #    (WW) NVIDIA:     '/var/run/nvidia-xdriver-b4f69129' Permission denied
+          #
+          # https://bbs.archlinux.org/viewtopic.php?pid=1909115#p1909115
+          "d /run/nvidia-xdriver 0770 root users"
+        ] ++ lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
           "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
         boot = {
@@ -575,24 +595,50 @@ in {
         boot.extraModulePackages = [
           nvidia_x11.bin
         ];
-        systemd.services.nvidia-fabricmanager = {
-          enable = true;
-          description = "Start NVIDIA NVLink Management";
-          wantedBy = [ "multi-user.target" ];
-          unitConfig.After = [ "network-online.target" ];
-          unitConfig.Requires = [ "network-online.target" ];
-          serviceConfig = {
-            Type = "forking";
-            TimeoutStartSec = 240;
-            ExecStart = let
-              nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
-              in
-                nvidia_x11.fabricmanager + "/bin/nv-fabricmanager -c " + nv-fab-conf;
-            LimitCORE="infinity";
-          };
-        };
-        environment.systemPackages =
-          lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager;
-      })
-    ]);
+
+        systemd = {
+          tmpfiles.rules =
+            lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+            "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
+          services = lib.mkMerge [
+            ({
+              nvidia-fabricmanager = {
+                enable = true;
+                description = "Start NVIDIA NVLink Management";
+                wantedBy = [ "multi-user.target" ];
+                unitConfig.After = [ "network-online.target" ];
+                unitConfig.Requires = [ "network-online.target" ];
+                serviceConfig = {
+                  Type = "forking";
+                  TimeoutStartSec = 240;
+                  ExecStart = let
+                    nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
+                    in
+                      "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                  LimitCORE="infinity";
+                };
+              };
+            })
+            (lib.mkIf cfg.nvidiaPersistenced {
+              "nvidia-persistenced" = {
+                description = "NVIDIA Persistence Daemon";
+                wantedBy = ["multi-user.target"];
+                serviceConfig = {
+                  Type = "forking";
+                  Restart = "always";
+                  PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+                  ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                  ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+                };
+              };
+            })
+          ];
+      };
+
+      environment.systemPackages =
+        lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
+        ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+    })
+  ]);
 }

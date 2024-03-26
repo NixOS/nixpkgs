@@ -11,10 +11,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.13.1";
+  version = "0.13.2";
   odd-unstable = false;
 
-  sha256 = "sha256-Tor4mA0uSpVCdK6mla1L0JswgURnGPOfkYBR2N1AbL0=";
+  sha256 = "sha256-FKgNKQ2l4FGvEvmppf+RTxMXU6TfsZVFBVii4zr4ASc=";
 
   buildInputs = [
     glib
@@ -29,6 +29,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "A fast and lightweight picture-viewer for the Xfce desktop environment";
+    mainProgram = "ristretto";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

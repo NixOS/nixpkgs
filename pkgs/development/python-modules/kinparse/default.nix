@@ -9,6 +9,7 @@
 buildPythonPackage {
   pname = "kinparse";
   version = "unstable-2019-12-18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xesscorp";
@@ -31,6 +32,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A Parser for KiCad EESCHEMA netlists";
+    mainProgram = "kinparse";
     homepage = "https://github.com/xesscorp/kinparse";
     license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];

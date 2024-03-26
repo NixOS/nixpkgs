@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pyssim";
   version = "0.6";
+  format = "setuptools";
 
   propagatedBuildInputs = [ numpy scipy pillow ];
 
@@ -37,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for computing Structured Similarity Image Metric (SSIM) in Python";
+    mainProgram = "pyssim";
     homepage = "https://github.com/jterrace/pyssim";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

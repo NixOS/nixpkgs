@@ -18,5 +18,6 @@ buildGoModule {
     homepage = "https://ambientsound.github.io/pms/";
     license = licenses.mit;
     maintainers = with maintainers; [ deejayem ];
+    mainProgram = "pms";
   };
 }

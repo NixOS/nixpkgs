@@ -21,13 +21,13 @@ with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "5.4.2";
+  version = "7.0.7";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
+    sha256 = "sha256-NODeDEgmf/nSKrM+RxAUsUwsbVQT7OSDrTOGVBwOzpw=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "The client of the Tryton application platform";
+    mainProgram = "tryton";
     longDescription = ''
       The client for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using

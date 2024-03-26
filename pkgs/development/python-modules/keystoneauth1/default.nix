@@ -15,6 +15,7 @@
 , requests
 , requests-kerberos
 , requests-mock
+, setuptools
 , six
 , stestr
 , stevedore
@@ -24,11 +25,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.3.0";
+  version = "5.6.0";
+  pyproject= true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AXwrm1mUU8kpQHUO27IPF2hxIbKJARS/nTbfFKBicRc=";
+    hash = "sha256-7LfzR1nr4QPbNyqwlTwLghkp3dSX8zKqaz72yqz/7Yg=";
   };
 
   postPatch = ''
@@ -36,6 +38,10 @@ buildPythonPackage rec {
     # so instead of removing them one by one remove everything
     rm test-requirements.txt
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     betamax

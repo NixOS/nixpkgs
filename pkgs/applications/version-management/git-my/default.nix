@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     maintainers = with maintainers; [ bb010g ];
     platforms = platforms.all;
+    mainProgram = "git-my";
   };
 }
 

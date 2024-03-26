@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "hikvision";
   version = "2.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fbradyirl";

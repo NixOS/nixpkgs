@@ -1,8 +1,13 @@
 { lib
+, asyncclick
 , buildPythonPackage
 , fetchPypi
+, firebase-messaging
 , oauthlib
 , poetry-core
+, pytest-asyncio
+, pytest-mock
+, pytest-socket
 , pytestCheckHook
 , pythonOlder
 , pytz
@@ -13,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.7.4";
+  version = "0.8.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-hto3MwlC6ADjKkcB/4l/uFyw+0CgvLZM0sp3FF62XUA=";
+    hash = "sha256-Rz12Qpawi4/u14ywJGt9Yw7IqjYP4bg6zNr9oN3iQxQ=";
   };
 
   nativeBuildInputs = [
@@ -29,13 +34,23 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    asyncclick
     oauthlib
     pytz
     requests
     requests-oauthlib
   ];
 
+  passthru.optional-dependencies = {
+    listen = [
+      firebase-messaging
+    ];
+  };
+
   nativeCheckInputs = [
+    pytest-asyncio
+    pytest-mock
+    pytest-socket
     pytestCheckHook
     requests-mock
   ];
@@ -46,6 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to communicate with Ring Door Bell";
+    mainProgram = "ring-doorbell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
     changelog = "https://github.com/tchellomello/python-ring-doorbell/releases/tag/${version}";
     license = licenses.lgpl3Plus;

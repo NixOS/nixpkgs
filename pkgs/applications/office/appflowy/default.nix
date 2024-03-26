@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.3.6";
+  version = "0.5.2";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-linux-x86_64.tar.gz";
-    hash = "sha256-MH5NLppwe/W5d0duNwyQtUBryqDzfV3u0LqWI40GqLQ=";
+    hash = "sha256-yXrdV/m6Ss9DyYleA5K7Wz1RUa8fznDJl5Yvco+jaiA=";
     stripRoot = false;
   };
 
@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     # Copy archive contents to the outpout directory
     cp -r ./* $out/opt/
 
+    # Copy icon
+    install -Dm444 data/flutter_assets/assets/images/flowy_logo.svg $out/share/icons/hicolor/scalable/apps/appflowy.svg
+
     runHook postInstall
   '';
 
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
       desktopName = "AppFlowy";
       comment = meta.description;
       exec = "appflowy";
+      icon = "appflowy";
       categories = [ "Office" ];
     })
   ];
@@ -75,5 +79,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${version}";
     maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "appflowy";
   };
 }

@@ -41,6 +41,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.evcc = {
+      wants = [ "network-online.target" ];
       after = [
         "network-online.target"
         "mosquitto.target"

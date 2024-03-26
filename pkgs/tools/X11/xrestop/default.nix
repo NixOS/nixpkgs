@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xrestop";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchurl {
-    url = "https://xorg.freedesktop.org/archive/individual/app/xrestop-${version}.tar.bz2";
-    sha256 = "06ym32famav8qhdms5k7y5i14nfq89hhvfn5g452jjqzkpcsbl49";
+    url = "https://xorg.freedesktop.org/archive/individual/app/xrestop-${version}.tar.xz";
+    hash = "sha256-Li7BEcSyeYtdwtwrPsevT2smGUbpA7jhTbBGgx0gOyk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
+    mainProgram = "xrestop";
   };
 }

@@ -35,6 +35,7 @@
 , libXau
 , libinput
 , libdrm
+, libei
 , gsettings-desktop-schemas
 , glib
 , atk
@@ -66,13 +67,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "44.5";
+  version = "45.5";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "8kfg7WXrYvKwd1RtUoPtbUf0Ar2mpDFkE1AdjK7Slnk=";
+    sha256 = "sha256-UcMyS4qXX5luWsaTqzhWPElubxQubNM1e0lQ0lAzSHQ=";
   };
 
   mesonFlags = [
@@ -123,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     libcanberra
     libdrm
+    libei
     libgudev
     libinput
     libstartup_notification
@@ -170,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-12/doc" "$devdoc"
+    moveToOutput "share/mutter-13/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -179,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-12";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-13";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
@@ -199,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A window manager for GNOME";
+    mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

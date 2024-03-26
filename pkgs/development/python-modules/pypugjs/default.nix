@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "pypugjs";
   version = "5.9.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kakulukia";
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates";
+    mainProgram = "pypugjs";
     homepage = "https://github.com/kakulukia/pypugjs";
     license = licenses.mit;
     maintainers = with maintainers; [ lopsided98 ];

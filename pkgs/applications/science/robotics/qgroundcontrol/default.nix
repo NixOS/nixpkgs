@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.2.8";
+  version = "4.3.0";
 
   propagatedBuildInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EmGtVy/cHiZ2SqOOKmt9vCUQbyT5Sl8XnkRlhn9BdvA=";
+    sha256 = "sha256-a0+cpT413qi88PvaWQPxKABHfK7vbPE7B42n84n/SAk=";
     fetchSubmodules = true;
   };
 

@@ -1,18 +1,17 @@
 { stdenv, fetchFromGitHub, nix-update-source, lib, python3
-, which, runtimeShell, pychecker ? null }:
+, which, runtimeShell, pylint }:
 stdenv.mkDerivation rec {
-  version = "0.8.4";
+  version = "0.9.0";
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gup";
     rev = "version-${version}";
-    sha256 = "0b8q9mrr7b9silwc4mp733j1z18g4lp6ppdi8p2rxzgb2fb4bkvp";
+    sha256 = "12ck047jminfwb4cfzmvfc9dpxg25xian11jgly534rlcbmgmkgq";
   };
   pname = "gup";
-  nativeBuildInputs = [ python3 which pychecker ];
+  nativeBuildInputs = [ python3 which pylint ];
   buildInputs = [ python3 ];
   strictDeps = true;
-  SKIP_PYCHECKER = pychecker == null;
   buildPhase = "make python";
   installPhase = ''
     mkdir $out

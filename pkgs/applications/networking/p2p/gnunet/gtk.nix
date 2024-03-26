@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gnunet=${gnunet}" ];
 
-  patchPhase = "patchShebangs pixmaps/icon-theme-installer";
+  postPatch = "patchShebangs pixmaps/icon-theme-installer";
+
+  postInstall = ''
+    ln -s $out/share/gnunet-gtk/gnunet_logo.png $out/share/gnunet/gnunet-logo-color.png
+  '';
 
   meta = gnunet.meta // {
     description = "GNUnet GTK User Interface";

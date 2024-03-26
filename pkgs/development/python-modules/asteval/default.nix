@@ -20,8 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-XIRDm/loZOOPQ7UO/XAo86TzhtHHRrnWFU7MNI4f1vM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace " --cov=asteval --cov-report xml" ""

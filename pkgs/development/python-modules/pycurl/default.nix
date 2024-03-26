@@ -13,12 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.45.2";
+  version = "7.45.3";
+  format = "setuptools";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VzBZC+AnE2Slvd2eJFycwPtxDEy6y92VJkoxItIyJMo=";
+    hash = "sha256-jCRxr5B5rXmOFkXsCw09QiPbaHN50X3TanBjdEn4HWs=";
   };
 
   preConfigure = ''
@@ -69,9 +70,12 @@ buildPythonPackage rec {
     # https://github.com/pycurl/pycurl/issues/819
     "test_multi_socket_select"
     # https://github.com/pycurl/pycurl/issues/729
+    "test_easy_pause_unpause"
     "test_multi_socket_action"
     # https://github.com/pycurl/pycurl/issues/822
     "test_request_with_verifypeer"
+    # https://github.com/pycurl/pycurl/issues/836
+    "test_proxy_tlsauth"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fatal Python error: Segmentation fault
     "cadata_test"

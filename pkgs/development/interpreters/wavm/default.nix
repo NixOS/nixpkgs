@@ -19,8 +19,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "WebAssembly Virtual Machine";
+    mainProgram = "wavm";
     homepage = "https://wavm.github.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ereslibre ];
+    platforms = platforms.unix;
   };
 })

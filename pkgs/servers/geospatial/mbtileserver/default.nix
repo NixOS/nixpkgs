@@ -15,9 +15,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A simple Go-based server for map tiles stored in mbtiles format";
+    mainProgram = "mbtileserver";
     homepage = "https://github.com/consbio/mbtileserver";
     changelog = "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
     license = licenses.isc;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
   };
 }

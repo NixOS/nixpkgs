@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "libkeepass";
   version = "0.3.1.post1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

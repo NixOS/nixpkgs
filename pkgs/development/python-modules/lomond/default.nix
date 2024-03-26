@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "lomond";
   version = "0.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wildfoundry";
@@ -46,6 +47,9 @@ buildPythonPackage rec {
     # Makes HTTP requests
     "test_proxy"
     "test_live"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/wildfoundry/dataplicity-lomond/issues/91
+    "test_that_on_ping_responds_with_pong"
   ];
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [

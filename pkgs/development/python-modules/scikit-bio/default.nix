@@ -21,6 +21,7 @@
 
 buildPythonPackage rec {
   version = "0.5.9";
+  format = "setuptools";
   pname = "scikit-bio";
   disabled = !isPy3k;
 

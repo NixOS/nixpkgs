@@ -6,20 +6,20 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.0";
+  version = "1.5.5";
   pname = "nanoflann";
 
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vPLL6l4sFRi7nvIfdMbBn/gvQ1+1lQHlZbR/2ok0Iw8=";
+    hash = "sha256-a1XX1tvXfrPCar9EGMXzxLg2bXJaK85t2Bd8CworwFk=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_EXAMPLES=${if buildExamples then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_EXAMPLES" buildExamples)
   ];
 
   doCheck = true;

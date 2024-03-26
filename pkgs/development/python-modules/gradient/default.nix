@@ -7,7 +7,7 @@
 , click-help-colors
 , colorama
 , fetchPypi
-, gradient_statsd
+, gradient-statsd
 , gradient-utils
 , gql
 , halo
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     click-help-colors
     colorama
     gql
-    gradient_statsd
+    gradient-statsd
     gradient-utils
     halo
     marshmallow
@@ -73,6 +73,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The command line interface for Gradient";
+    mainProgram = "gradient";
     homepage = "https://github.com/Paperspace/gradient-cli";
     license = licenses.isc;
     platforms = platforms.unix;

@@ -32,5 +32,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     maintainers = with maintainers; [ muscaln ];
     platforms = platforms.linux;
+    mainProgram = "qdl";
   };
 }

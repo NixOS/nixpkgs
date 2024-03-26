@@ -4,7 +4,25 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pychromecast = super.pychromecast.overridePythonAttrs (_: rec {
+        version = "13.1.0";
+
+        src = fetchPypi {
+          pname = "PyChromecast";
+          inherit version;
+          hash = "sha256-COYai1S9IRnTyasewBNtPYVjqpfgo7V4QViLm+YMJnY=";
+        };
+
+        postPatch = "";
+      });
+    };
+  };
+in
+
+python.pkgs.buildPythonApplication rec {
   pname = "catt";
   version = "0.12.11";
   format = "pyproject";
@@ -22,11 +40,11 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     click
     ifaddr
     pychromecast
@@ -46,5 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/skorokithakis/catt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "catt";
   };
 }

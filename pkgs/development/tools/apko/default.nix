@@ -70,6 +70,7 @@ buildGoModule rec {
     homepage = "https://apko.dev/";
     changelog = "https://github.com/chainguard-dev/apko/blob/main/NEWS.md";
     description = "Build OCI images using APK directly without Dockerfile";
+    mainProgram = "apko";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk developer-guy ];
   };

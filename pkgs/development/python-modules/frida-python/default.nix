@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, fetchPypi, buildPythonPackage, typing-extensions }:
 let
   version = "16.0.19";
+  format = "setuptools";
   devkit = fetchurl {
     url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
     hash = "sha256-yNXNqv8eCbpdQKFShpAh6rUCEuItrOSNNLOjESimPdk=";

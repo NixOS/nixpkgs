@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Wordlist generator";
+    mainProgram = "crunch";
     homepage = "https://sourceforge.net/projects/crunch-wordlist/";
     platforms = platforms.unix;
     license = with licenses; [ gpl2Only ];

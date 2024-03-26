@@ -95,5 +95,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.unix;
+    mainProgram = "torrenttools";
   };
 }

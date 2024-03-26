@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "bitarray";
-  version = "2.8.2";
+  version = "2.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+QsvRLWyM2TV+63iw0ZS4Vsfz+gTxG+CjgCPaKcJFg8=";
+    hash = "sha256-qPKGpRoyMjcV13dV7ZWflL7xOXLpov5xtgnkDm0nlX4=";
   };
 
   checkPhase = ''

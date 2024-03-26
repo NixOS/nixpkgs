@@ -12,8 +12,6 @@
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , runtimeShell
-# Downstream packages for tests
-, bazel-watcher
 # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
 # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
@@ -22,6 +20,8 @@
 , file
 , substituteAll
 , writeTextFile
+, writeShellApplication
+, makeBinaryWrapper
 }:
 
 let
@@ -128,6 +128,28 @@ let
 
   defaultShellPath = lib.makeBinPath defaultShellUtils;
 
+  bashWithDefaultShellUtilsSh = writeShellApplication {
+    name = "bash";
+    runtimeInputs = defaultShellUtils;
+    text = ''
+      if [[ "$PATH" == "/no-such-path" ]]; then
+        export PATH=${defaultShellPath}
+      fi
+      exec ${bash}/bin/bash "$@"
+    '';
+  };
+
+  # Script-based interpreters in shebangs aren't guaranteed to work,
+  # especially on MacOS. So let's produce a binary
+  bashWithDefaultShellUtils = stdenv.mkDerivation {
+    name = "bash";
+    src = bashWithDefaultShellUtilsSh;
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    buildPhase = ''
+      makeWrapper ${bashWithDefaultShellUtilsSh}/bin/bash $out/bin/bash
+    '';
+  };
+
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
@@ -175,6 +197,10 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    # upb definition inside bazel sets its own copts that take precedence
+    # over flags we set externally, so need to patch them at the source
+    ./upb-clang16.patch
+
     # Force usage of the _non_ prebuilt java toolchain.
     # the prebuilt one does not work in nix world.
     ./java_toolchain.patch
@@ -314,12 +340,6 @@ stdenv.mkDerivation rec {
       javaWithNixHacks = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
       protobufWithNixHacks = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
       pythonBinPathWithNixHacks = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
-
-      # downstream packages using buildBazelPackage
-      # fixed-output hashes of the fetch phase need to be spot-checked manually
-      downstream = recurseIntoAttrs ({
-        inherit bazel-watcher;
-      });
     };
 
   src_for_updater = stdenv.mkDerivation rec {
@@ -379,6 +399,8 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+      # for CLang 16 compatibility in external/{absl,upb} dependencies
+      export NIX_CFLAGS_COMPILE+=" -Wno-deprecated-builtins -Wno-gnu-offsetof-extensions"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
@@ -420,8 +442,8 @@ stdenv.mkDerivation rec {
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
-          --replace /bin/bash ${bash}/bin/bash \
-          --replace "/usr/bin/env bash" ${bash}/bin/bash \
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash \
+          --replace "/usr/bin/env bash" ${bashWithDefaultShellUtils}/bin/bash \
           --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
@@ -436,17 +458,17 @@ stdenv.mkDerivation rec {
 
       # bazel test runner include references to /bin/bash
       substituteInPlace tools/build_rules/test_rules.bzl \
-        --replace /bin/bash ${bash}/bin/bash
+        --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
 
       for i in $(find tools/cpp/ -type f)
       do
         substituteInPlace $i \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
       done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -523,7 +545,7 @@ stdenv.mkDerivation rec {
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
 
-  buildInputs = [buildJdk] ++ defaultShellUtils;
+  buildInputs = [buildJdk bashWithDefaultShellUtils] ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.

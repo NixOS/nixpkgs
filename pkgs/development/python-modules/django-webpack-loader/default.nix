@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
-  version = "2.0.1";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Do37L82znb/QG+dgPAYBMqRmT0g4Ec48dfLTwNOat2I=";
+    hash = "sha256-UTMbM9p2aI60078+o7tWQ0sMHfstzYjL+wo5YY9o3Xo=";
   };
 
   propagatedBuildInputs = [

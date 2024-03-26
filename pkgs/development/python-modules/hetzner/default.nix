@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "hetzner";
   version = "0.8.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "hetzner";
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/RedMoonStudios/hetzner";
     description = "High-level Python API for accessing the Hetzner robot";
+    mainProgram = "hetznerctl";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aszlig ];
   };

@@ -6,15 +6,24 @@
 { mkYarnPackage
 , fetchYarnDeps
 , lib
+
+, grpc-gateway
+, protoc-gen-grpc-web
+, protoc-gen-js
 }:
 
 let
   protobufGenerated = generateProtobufCode {
     pname = "zitadel-console";
+    nativeBuildInputs = [
+      grpc-gateway
+      protoc-gen-grpc-web
+      protoc-gen-js
+    ];
     workDir = "console";
     bufArgs = "../proto --include-imports --include-wkt";
     outputPath = "src/app/proto";
-    hash = "sha256-s0dzmcjKd8ot7t+KlRlNVA9oiIDKVMnGOT/HjdaUjGI=";
+    hash = "sha256-h/5K6PvEFyjzS5p7SfuDIk91TkN1iPc+iXor8T/QSeE=";
   };
 in
 mkYarnPackage rec {
@@ -26,7 +35,7 @@ mkYarnPackage rec {
   packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-48IC4LxqbkH+95k7rCmhRWT+qAlJ9CDXWwRjbric9no=";
+    hash = "sha256-cfo2WLSbfU8tYADjF7j9zTLNsboVThF6MUBrb49MrII=";
   };
 
   postPatch = ''

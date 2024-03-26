@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pydanfossair";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JonasPed";

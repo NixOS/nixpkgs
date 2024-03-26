@@ -51,8 +51,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = {
+    homepage = "https://github.com/timbertson/nix-update-source";
     description = "Utility to automate updating of nix derivation sources";
     maintainers = with lib.maintainers; [ timbertson ];
     license = lib.licenses.mit;
+    mainProgram = "nix-update-source";
   };
 }

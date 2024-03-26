@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to detect and remediate misconfigurations and security risks of GitHub assets";
+    mainProgram = "legitify";
     homepage = "https://github.com/Legit-Labs/legitify";
     changelog = "https://github.com/Legit-Labs/legitify/releases/tag/v${version}";
     license = licenses.asl20;

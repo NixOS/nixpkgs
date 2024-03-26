@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
+  separateDebugInfo = true;
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -114,7 +115,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple interprocess messaging system";
-    homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
+    homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
     changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);

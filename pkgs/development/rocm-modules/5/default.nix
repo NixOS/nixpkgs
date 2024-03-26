@@ -1,4 +1,5 @@
-{ callPackage
+{ gcc12Stdenv # FIXME: Try removing this with a new ROCm release https://github.com/NixOS/nixpkgs/issues/271943
+, callPackage
 , recurseIntoAttrs
 , symlinkJoin
 , fetchFromGitHub
@@ -15,7 +16,7 @@
 let
   rocmUpdateScript = callPackage ./update.nix { };
 in rec {
-  ## RadeonOpenCompute ##
+  ## ROCm ##
   llvm = recurseIntoAttrs (callPackage ./llvm/default.nix { inherit rocmUpdateScript rocm-device-libs rocm-runtime rocm-thunk clr; });
 
   rocm-core = callPackage ./rocm-core {
@@ -73,12 +74,12 @@ in rec {
   # Broken, too many errors
   rdc = callPackage ./rdc {
     inherit rocmUpdateScript rocm-smi rocm-runtime;
+    stdenv = gcc12Stdenv;
     # stdenv = llvm.rocmClangStdenv;
   };
 
-  rocm-docs-core = python3Packages.callPackage ./rocm-docs-core { };
+  rocm-docs-core = python3Packages.callPackage ./rocm-docs-core { stdenv = gcc12Stdenv; };
 
-  ## ROCm-Developer-Tools ##
   hip-common = callPackage ./hip-common {
     inherit rocmUpdateScript;
     stdenv = llvm.rocmClangStdenv;
@@ -107,17 +108,20 @@ in rec {
   rocprofiler = callPackage ./rocprofiler {
     inherit rocmUpdateScript clr rocm-core rocm-thunk rocm-device-libs roctracer rocdbgapi rocm-smi hsa-amd-aqlprofile-bin;
     inherit (llvm) clang;
+    stdenv = gcc12Stdenv;
   };
 
   # Needs GCC
   roctracer = callPackage ./roctracer {
     inherit rocmUpdateScript rocm-device-libs rocm-runtime clr;
+    stdenv = gcc12Stdenv;
   };
 
   # Needs GCC
   rocgdb = callPackage ./rocgdb {
     inherit rocmUpdateScript;
     elfutils = elfutils.override { enableDebuginfod = true; };
+    stdenv = gcc12Stdenv;
   };
 
   rocdbgapi = callPackage ./rocdbgapi {
@@ -130,7 +134,6 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
-  ## ROCmSoftwarePlatform ##
   rocprim = callPackage ./rocprim {
     inherit rocmUpdateScript rocm-cmake clr;
     stdenv = llvm.rocmClangStdenv;
@@ -275,7 +278,6 @@ in rec {
     rocmlir = rocmlir-rock;
   };
 
-  ## GPUOpen-ProfessionalCompute-Libraries ##
   rpp = callPackage ./rpp {
     inherit rocmUpdateScript rocm-cmake rocm-docs-core clr half;
     inherit (llvm) openmp;
@@ -306,7 +308,7 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
 
     # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice
-    # See: https://github.com/GPUOpen-ProfessionalCompute-Libraries/MIVisionX/issues/1051
+    # See: https://github.com/ROCm/MIVisionX/issues/1051
     libjpeg_turbo = libjpeg_turbo.overrideAttrs {
       version = "2.0.6.1";
 
@@ -342,8 +344,8 @@ in rec {
   # Emulate common ROCm meta layout
   # These are mainly for users. I strongly suggest NOT using these in nixpkgs derivations
   # Don't put these into `propagatedBuildInputs` unless you want PATH/PYTHONPATH issues!
-  # See: https://rocm.docs.amd.com/en/latest/_images/image.004.png
-  # See: https://rocm.docs.amd.com/en/latest/deploy/linux/os-native/package_manager_integration.html
+  # See: https://rocm.docs.amd.com/en/docs-5.7.1/_images/image.004.png
+  # See: https://rocm.docs.amd.com/en/docs-5.7.1/deploy/linux/os-native/package_manager_integration.html
   meta = rec {
     rocm-developer-tools = symlinkJoin {
       name = "rocm-developer-tools-meta";
@@ -438,7 +440,7 @@ in rec {
         rocm-core
         llvm.clang
         llvm.mlir
-        llvm.openmp # openmp-extras-devel (https://github.com/ROCm-Developer-Tools/aomp)
+        llvm.openmp # openmp-extras-devel (https://github.com/ROCm/aomp)
         rocm-language-runtime
       ];
     };
@@ -502,7 +504,7 @@ in rec {
         rocm-runtime
         rocm-core
         rocm-comgr
-        llvm.openmp # openmp-extras-runtime (https://github.com/ROCm-Developer-Tools/aomp)
+        llvm.openmp # openmp-extras-runtime (https://github.com/ROCm/aomp)
       ];
     };
 

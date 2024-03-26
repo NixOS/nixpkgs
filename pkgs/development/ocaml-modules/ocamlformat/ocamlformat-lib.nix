@@ -1,6 +1,7 @@
-{ lib, callPackage, buildDunePackage, menhir, version ? "0.25.1" }:
+# Version can be selected with the 'version' argument, see generic.nix.
+{ lib, callPackage, buildDunePackage, menhir, ... }@args:
 
-let inherit (callPackage ./generic.nix { inherit version; }) src library_deps;
+let inherit (callPackage ./generic.nix args) src version library_deps;
 
 in assert (lib.versionAtLeast version "0.25.1");
 

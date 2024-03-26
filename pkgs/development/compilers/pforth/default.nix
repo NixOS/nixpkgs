@@ -38,8 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://www.softsynth.com/pforth/";
+    homepage = "https://www.softsynth.com/pforth/";
     description = "Portable Portable ANS-like Forth written in ANSI 'C'";
+    mainProgram = "pforth";
     changelog = "https://github.com/philburk/pforth/blob/v${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ AndersonTorres yrashk ];

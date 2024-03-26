@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.4.1";
+  version = "0.6.3";
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-1XbgsdIcnlXJtNEzDgEfHVJHF9naz3HplCPc2cKFUWw=";
+    hash = "sha256-AdUXKiTMC/0R4RI9I9Y/x0mNwhtUEIBke4Mm9lu9CX8=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
     (gst-plugins-good.override { gtkSupport = true; })
     gst-plugins-bad
   ]);
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
 
   passthru = {
     updateScript = nix-update-script { };

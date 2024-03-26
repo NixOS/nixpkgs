@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.6.0";
-  format = "pyproject";
+  version = "1.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
+    repo = "netutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ocajE7E4xIatEmv58/9gEpWF2plJdiZXjk6ajD2vTzw=";
+    hash = "sha256-B2epTqG0PzcD876Bk222nDSorHHB8Znepp+cgl1++gY=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jsonschema
-    napalm
   ];
 
   passthru.optional-dependencies.optionals = [

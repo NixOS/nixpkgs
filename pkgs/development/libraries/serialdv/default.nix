@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ Minimal interface to encode and decode audio with AMBE3000 based devices in packet mode over a serial link";
+    mainProgram = "dvtest";
     homepage = "https://github.com/f4exb/serialdv";
     platforms = platforms.unix;
     maintainers = with maintainers; [ alkeryn ];

@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Five_or_more";
     description = "Remove colored balls from the board by forming lines";
+    mainProgram = "five-or-more";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;

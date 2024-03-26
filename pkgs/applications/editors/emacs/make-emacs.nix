@@ -61,17 +61,14 @@
 , wrapGAppsHook
 
 # Boolean flags
-, nativeComp ? null
-, withNativeCompilation ?
-  if nativeComp != null
-  then lib.warn "nativeComp option is deprecated and will be removed; use withNativeCompilation instead" nativeComp
-  else stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , noGui ? false
 , srcRepo ? true
 , withAcl ? false
 , withAlsaLib ? false
 , withAthena ? false
 , withCsrc ? true
+, withDbus ? stdenv.isLinux
 , withGTK2 ? false
 , withGTK3 ? withPgtk && !noGui
 , withGconf ? false
@@ -81,6 +78,7 @@
 , withMotif ? false
 , withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
 , withPgtk ? false
+, withSelinux ? stdenv.isLinux
 , withSQLite3 ? lib.versionAtLeast version "29"
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withToolkitScrollBars ? true
@@ -89,6 +87,8 @@
 , withX ? !(stdenv.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
 , withXwidgets ? !stdenv.isDarwin && !noGui && (withGTK3 || withPgtk)
+, withSmallJaDic ? false
+, withCompressInstall ? true
 
 # Options
 , siteStart ? ./site-start.el
@@ -229,8 +229,9 @@ mkDerivation (finalAttrs: {
     alsa-lib
   ] ++ lib.optionals withGpm [
     gpm
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals withDbus [
     dbus
+  ] ++ lib.optionals withSelinux [
     libselinux
   ] ++ lib.optionals (!stdenv.isDarwin && withGTK3) [
     gsettings-desktop-schemas
@@ -331,13 +332,18 @@ mkDerivation (finalAttrs: {
     "--with-xml2=yes"
   ]
   ++ (lib.optional stdenv.isDarwin (lib.withFeature withNS "ns"))
-  ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
-  ++ lib.optional withNativeCompilation "--with-native-compilation"
-  ++ lib.optional withImageMagick "--with-imagemagick"
-  ++ lib.optional withTreeSitter "--with-tree-sitter"
-  ++ lib.optional withXinput2 "--with-xinput2"
-  ++ lib.optional withXwidgets "--with-xwidgets"
-  ;
+  ++ [
+    (lib.withFeature withCompressInstall "compress-install")
+    (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
+    (lib.withFeature withNativeCompilation "native-compilation")
+    (lib.withFeature withImageMagick "imagemagick")
+    (lib.withFeature withSmallJaDic "small-ja-dic")
+    (lib.withFeature withTreeSitter "tree-sitter")
+    (lib.withFeature withXinput2 "xinput2")
+    (lib.withFeature withXwidgets "xwidgets")
+    (lib.withFeature withDbus "dbus")
+    (lib.withFeature withSelinux "selinux")
+  ];
 
   env = lib.optionalAttrs withNativeCompilation {
     NATIVE_FULL_AOT = "1";
@@ -399,9 +405,6 @@ mkDerivation (finalAttrs: {
     inherit withTreeSitter;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
-    # Backwards compatibility aliases. Remove this at some point before 23.11 release cut-off.
-    nativeComp = builtins.trace "emacs.passthru: nativeComp was renamed to withNativeCompilation and will be removed in 23.11" withNativeCompilation;
-    treeSitter = builtins.trace "emacs.passthru: treeSitter was renamed to withTreeSitter and will be removed in 23.11" withTreeSitter;
   };
 
   meta = meta // {

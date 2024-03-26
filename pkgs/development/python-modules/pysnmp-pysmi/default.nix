@@ -9,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "pysnmp-pysmi";
-  version = "1.1.10";
-  format = "pyproject";
+  version = "1.1.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pysnmp";
     repo = "pysmi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZfN0nU9IurBEjSZijC2E4UoLIM54mBFgv7rcI1v/a4Q=";
+    hash = "sha256-qe99nLOyUvE6LJagtQ9whPF4zwIWiM7g5zn40QsmrmA=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SNMP MIB parser";
     homepage = "https://github.com/pysnmp/pysmi";
+    changelog = "https://github.com/pysnmp/pysmi/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };

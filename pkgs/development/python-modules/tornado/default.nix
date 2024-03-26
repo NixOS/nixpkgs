@@ -20,6 +20,7 @@
 buildPythonPackage rec {
   pname = "tornado";
   version = "6.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tornadoweb";

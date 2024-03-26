@@ -1,6 +1,5 @@
 { qtModule
 , qtbase
-, qtquick3d
 , qtdeclarative
 , wayland
 , pkg-config

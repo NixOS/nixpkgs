@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "motion";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner  = "Motion-Project";
     repo   = "motion";
     rev    = "release-${version}";
-    sha256 = "sha256-3TmmLAU/muiI90hrYrctzgVbWS4rXjxzAa0ctVYKSSY=";
+    sha256 = "sha256-f23glk91HWSEW/Glq/DdEikTQeg1eELEg4XG9zTsU78=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
+    mainProgram = "motion";
   };
 }

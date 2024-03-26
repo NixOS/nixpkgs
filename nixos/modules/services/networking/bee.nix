@@ -8,7 +8,7 @@ let
 in {
   meta = {
     # doc = ./bee.xml;
-    maintainers = with maintainers; [ attila-lendvai ];
+    maintainers = with maintainers; [ ];
   };
 
   ### interface
@@ -17,12 +17,8 @@ in {
     services.bee = {
       enable = mkEnableOption (lib.mdDoc "Ethereum Swarm Bee");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bee;
-        defaultText = literalExpression "pkgs.bee";
-        example = literalExpression "pkgs.bee-unstable";
-        description = lib.mdDoc "The package providing the bee binary for the service.";
+      package = mkPackageOption pkgs "bee" {
+        example = "bee-unstable";
       };
 
       settings = mkOption {
@@ -77,13 +73,10 @@ in {
       }
     ];
 
-    warnings = optional (! config.services.bee-clef.enable) "The bee service requires an external signer. Consider setting `config.services.bee-clef.enable` = true";
-
     services.bee.settings = {
       data-dir             = lib.mkDefault "/var/lib/bee";
       password-file        = lib.mkDefault "/var/lib/bee/password";
       clef-signer-enable   = lib.mkDefault true;
-      clef-signer-endpoint = lib.mkDefault "/var/lib/bee-clef/clef.ipc";
       swap-endpoint        = lib.mkDefault "https://rpc.slock.it/goerli";
     };
 
@@ -94,9 +87,6 @@ in {
     ];
 
     systemd.services.bee = {
-      requires = optional config.services.bee-clef.enable
-        "bee-clef.service";
-
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -124,7 +114,6 @@ Bee has SWAP enabled by default and it needs ethereum endpoint to operate.
 It is recommended to use external signer with bee.
 Check documentation for more info:
 - SWAP https://docs.ethswarm.org/docs/installation/manual#swap-bandwidth-incentives
-- External signer https://docs.ethswarm.org/docs/installation/bee-clef
 
 After you finish configuration run 'sudo bee-get-addr'."
         fi
@@ -137,8 +126,6 @@ After you finish configuration run 'sudo bee-get-addr'."
         home = cfg.settings.data-dir;
         isSystemUser = true;
         description = "Daemon user for Ethereum Swarm Bee";
-        extraGroups = optional config.services.bee-clef.enable
-          config.services.bee-clef.group;
       };
     };
 

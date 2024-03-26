@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , poetry-core
 , pytestCheckHook
+, pythonRelaxDepsHook
 , setuptools
 , jsonschema
 , pyyaml
@@ -22,8 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-JelFfd3WS012dveNlIljhLdyPmgE9VEOXoZE3MBA/Gw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "jsonschema"
+    "pyyaml"
+    "termcolor"
+  ];
 
   propagatedBuildInputs = [
     setuptools # needs pkg_resources at runtime
@@ -33,10 +42,21 @@ buildPythonPackage rec {
     termcolor
   ];
 
-  pythonImportsCheck = [ "barectf" ];
+  pythonImportsCheck = [
+    "barectf"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
 
   meta = with lib; {
     description = "Generator of ANSI C tracers which output CTF data streams ";
+    mainProgram = "barectf";
     homepage = "https://github.com/efficios/barectf";
     license = licenses.mit;
     maintainers = with maintainers; [ Madouura ];

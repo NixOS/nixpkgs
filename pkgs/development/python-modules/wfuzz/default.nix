@@ -63,6 +63,11 @@ buildPythonPackage rec {
     "wfuzz"
   ];
 
+  postInstall = ''
+    mkdir -p $out/share/wordlists/wfuzz
+    cp -R -T "wordlist" "$out/share/wordlists/wfuzz"
+  '';
+
   meta = with lib; {
     description = "Web content fuzzer to facilitate web applications assessments";
     longDescription = ''

@@ -33,13 +33,13 @@
 
 let
   pname = "pulsar";
-  version = "1.109.0";
+  version = "1.114.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-pIm3mI1YdfapxXgIciSHtI4LeqMw5RdYTnH+eHUQ4Yo=";
+    x86_64-linux.hash = "sha256-O//dowoMgQfS3hq088IKr5aJd5St9zpT/ypfuswnyv0=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-KIY/qzfl7CU0YwIgQlNHoAMhLfrTbQe7ZZvzdkUVw+M=";
+    aarch64-linux.hash = "sha256-EzCTB1Ib9cTbslEdXPsS5gehHr1qd5v4iZgOqpxhUmA=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       --set-rpath "${newLibpath}" \
       $opt/resources/app/ppm/bin/node
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $opt/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+      $opt/resources/app.asar.unpacked/node_modules/symbol-provider-ctags/vendor/ctags-linux
 
   '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     # Replace the bundled git with the one from nixpkgs
@@ -208,7 +208,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ colamaroro ];
+    maintainers = with maintainers; [ colamaroro bryango ];
     knownVulnerabilities = [
       "CVE-2023-5217"
       "CVE-2022-21718"

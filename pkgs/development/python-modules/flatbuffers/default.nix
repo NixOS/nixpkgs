@@ -6,6 +6,8 @@
 buildPythonPackage rec {
   inherit (flatbuffers) pname version src;
 
+  format = "setuptools";
+
   sourceRoot = "${src.name}/python";
 
   # flatbuffers needs VERSION environment variable for setting the correct

@@ -2,30 +2,35 @@
 , buildPythonPackage
 , fetchFromGitHub
 , dacite
-, pysnmplib
+, pysnmp-lextudio
 , pytest-asyncio
 , pytest-error-for-skips
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "4.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-f55daLPBepNDIfZFAZWdkAvEkNb0cyYQt9LkqyIMrnY=";
+    hash = "sha256-n1CIozKuF0+N8Vg3QA2jy5xNLDBJPdnhVT/xg1R+t90=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     dacite
-    pysnmplib
+    pysnmp-lextudio
   ];
 
   nativeCheckInputs = [

@@ -4,7 +4,6 @@ with lib;
 
 let
 
-  inherit (pkgs) nixos-icons;
   plymouth = pkgs.plymouth.override {
     systemd = config.boot.initrd.systemd.package;
   };
@@ -97,8 +96,8 @@ in
       logo = mkOption {
         type = types.path;
         # Dimensions are 48x48 to match GDM logo
-        default = "${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
-        defaultText = literalExpression ''"''${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png"'';
+        default = "${pkgs.nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
+        defaultText = literalExpression ''"''${pkgs.nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png"'';
         example = literalExpression ''
           pkgs.fetchurl {
             url = "https://nixos.org/logo/nixos-hires.png";
@@ -107,6 +106,7 @@ in
         '';
         description = lib.mdDoc ''
           Logo which is displayed on the splash screen.
+          Currently supports PNG file format only.
         '';
       };
 
@@ -186,6 +186,8 @@ in
           # module might come from a theme
           cp ${themesEnv}/lib/plymouth/*.so $out
           cp ${plymouth}/lib/plymouth/renderers/*.so $out/renderers
+          # useless in the initrd, and adds several megabytes to the closure
+          rm $out/renderers/x11.so
         '';
         "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
           # Check if the actual requested theme is here
@@ -271,6 +273,8 @@ in
       # module might come from a theme
       cp ${themesEnv}/lib/plymouth/*.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
+      # useless in the initrd, and adds several megabytes to the closure
+      rm $out/lib/plymouth/renderers/x11.so
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth

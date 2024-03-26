@@ -166,7 +166,7 @@ in
       }
     ];
 
-    warnings = lib.optional (config.boot.initrd.systemd.enable -> cfg.shell != null) ''
+    warnings = lib.optional (config.boot.initrd.systemd.enable && cfg.shell != null) ''
       Please set 'boot.initrd.systemd.users.root.shell' instead of 'boot.initrd.network.ssh.shell'
     '';
 
@@ -243,8 +243,10 @@ in
 
       services.sshd = {
         description = "SSH Daemon";
-        wantedBy = ["initrd.target"];
-        after = ["network.target" "initrd-nixos-copy-secrets.service"];
+        wantedBy = [ "initrd.target" ];
+        after = [ "network.target" "initrd-nixos-copy-secrets.service" ];
+        before = [ "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
 
         # Keys from Nix store are world-readable, which sshd doesn't
         # like. If this were a real nix store and not the initrd, we

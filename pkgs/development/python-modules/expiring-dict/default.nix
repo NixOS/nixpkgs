@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Python dict with TTL support for auto-expiring caches";
     homepage = "https://github.com/dparker2/py-expiring-dict";
     license = licenses.mit;
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "stups-tokens";
   version = "1.1.19";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

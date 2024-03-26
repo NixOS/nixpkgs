@@ -1,9 +1,10 @@
 <p align="center">
-  <a href="https://nixos.org#gh-light-mode-only">
-    <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo"/>
-  </a>
-  <a href="https://nixos.org#gh-dark-mode-only">
-    <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png" width="500px" alt="NixOS logo"/>
+  <a href="https://nixos.org">
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
+      <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo">
+    </picture>
   </a>
 </p>
 
@@ -51,9 +52,9 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 23.05 release](https://hydra.nixos.org/jobset/nixos/release-23.05)
+* [Continuous package builds for the NixOS 23.11 release](https://hydra.nixos.org/jobset/nixos/release-23.11)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 23.05 release](https://hydra.nixos.org/job/nixos/release-23.05/tested#tabs-constituents)
+* [Tests for the NixOS 23.11 release](https://hydra.nixos.org/job/nixos/release-23.11/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are

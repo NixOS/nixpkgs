@@ -1,30 +1,25 @@
 { lib
-, stdenvNoCC
+, buildLua
 , fetchFromGitHub
 , luaPackages
+, unstableGitUpdater
 }:
 
-stdenvNoCC.mkDerivation {
+buildLua {
   pname = "mpv-webm";
-  version = "unstable-2023-02-23";
+  version = "unstable-2023-11-18";
 
   src = fetchFromGitHub {
     owner = "ekisu";
     repo = "mpv-webm";
-    rev = "a18375932e39e9b2a40d9c7ab52ea367b41e2558";
-    hash = "sha256-aetkQ1gU/6Yys5FJS/N06ED9tCSvL6BAgUGdNmNmpbU=";
+    rev = "6b5863f68275b3dc91c2507284c039ec8a4cbd97";
+    hash = "sha256-rJamBm6FyxWcJO7VXXOUTO9piWCkPfEVdqGKGeJ/h0c=";
   };
+  passthru.updateScript = unstableGitUpdater {};
 
+  dontBuild = false;
   nativeBuildInputs = [ luaPackages.moonscript ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/mpv/scripts
-    install -m 644 build/webm.lua $out/share/mpv/scripts/
-    runHook postInstall
-  '';
-
-  passthru.scriptName = "webm.lua";
+  scriptPath = "build/webm.lua";
 
   meta = with lib; {
     description = "Simple WebM maker for mpv, with no external dependencies";

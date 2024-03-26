@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pgpdump";
   version = "1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

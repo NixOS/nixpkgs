@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpu-x";
-  version = "5.0.0";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "X0rg";
     repo = "CPU-X";
     rev = "v${version}";
-    sha256 = "sha256-mykN+E2ghp2+a06WLYXg9oaQQ2SJDyxIVQSUM00zrCo=";
+    sha256 = "sha256-iaqqBeoack41D07Bbr0Fo1JXfF2ksXbqS5V5Ymt6Qvg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free software that gathers information on CPU, motherboard and more";
+    mainProgram = "cpu-x";
     homepage = "https://thetumultuousunicornofdarkness.github.io/CPU-X";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];

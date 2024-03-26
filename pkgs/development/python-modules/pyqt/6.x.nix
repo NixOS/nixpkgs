@@ -22,15 +22,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt6";
-  version = "6.5.2";
+  pname = "pyqt6";
+  version = "6.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FIfuc1D5/7ZtYKtBdlGSUsKzcXYsvo+DQP2VH2OAEoA=";
+    pname = "PyQt6";
+    inherit version;
+    hash = "sha256-nxWKop0gUULFbw810HeEuN8L4oN40gqXvNqL1k/9A3k=";
   };
 
   patches = [
@@ -132,8 +133,7 @@ buildPythonPackage rec {
   ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
 
-  # fix build with qt 6.6
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
 
   meta = with lib; {
     description = "Python bindings for Qt6";

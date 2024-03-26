@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 
 # runtime
@@ -48,6 +49,12 @@ buildPythonPackage rec {
 
   patches = [
     ./skip-database-tests.patch
+
+    (fetchpatch {
+      # sqlalchemy 2.0.22+ compat; https://github.com/kvesteri/sqlalchemy-utils/pull/725
+      url = "https://github.com/kvesteri/sqlalchemy-utils/commit/712aabaefc5c8ca3680751c705cf5a5984c74af1.patch";
+      hash = "sha256-xBdiUtFWjlUhBzHgGFbaKBt3at6NDo+mv9sd8WwiPOA=";
+    })
   ];
 
   propagatedBuildInputs = [
@@ -76,7 +83,6 @@ buildPythonPackage rec {
     docutils
     flexmock
     psycopg2
-    psycopg2cffi
     pg8000
     pytz
     python-dateutil
@@ -84,6 +90,10 @@ buildPythonPackage rec {
     pyodbc
   ]
   ++ lib.flatten (builtins.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (pythonOlder "3.12") [
+    # requires distutils, which were removed in 3.12
+    psycopg2cffi
+  ]
   ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ];

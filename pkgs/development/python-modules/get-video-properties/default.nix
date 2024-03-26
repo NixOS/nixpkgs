@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "get-video-properties";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mvasilkov";

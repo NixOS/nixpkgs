@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "semver";
-  version = "3.0.1";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-semver";
     repo = "python-semver";
     rev = "refs/tags/${version}";
-    hash = "sha256-vVi0+Pq8VpYMy73JSrvi9ranOzvFaHpcPZRt8gMkkFs=";
+    hash = "sha256-772PSUq1dqtn9aOol+Bo0S0OItBmoiCNP8q/YCBvKU4=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
+    mainProgram = "pysemver";
     homepage = "https://python-semver.readthedocs.io/";
     changelog = "https://github.com/python-semver/python-semver/releases/tag/3.0.0";
     license = licenses.bsd3;

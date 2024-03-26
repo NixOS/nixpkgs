@@ -39,6 +39,7 @@
 , requests
 , requests-mock
 , scikit-learn
+, setuptools
 , sqlalchemy
 , tenacity
 , testcontainers
@@ -48,13 +49,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.50.0";
+  version = "2.54.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qaxYWPVdMlegvH/W66UBoQbcQ5Ac/3DNoQs8xo+KfLc=";
+    hash = "sha256-DcqYBPAS+yUqTJLUem8+2OqRUzb6DoBOeRkMjmvuvws=";
   };
 
   patches = [
@@ -94,6 +96,7 @@ buildPythonPackage rec {
     grpcio-tools
     mypy-protobuf
     pythonRelaxDepsHook
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -147,7 +150,7 @@ buildPythonPackage rec {
 
   # Make sure we're running the tests for the actually installed
   # package, so that cython's .so files are available.
-  preCheck = "cd $out/lib/${python.libPrefix}/site-packages";
+  preCheck = "cd $out/${python.sitePackages}";
 
   disabledTestPaths = [
     # Fails with

@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
     then "./Configure BSD-x86_64"
     else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
-    then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+    then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
     else if stdenv.hostPlatform.isBSD
     then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
     else if stdenv.hostPlatform.isMinGW

@@ -13,7 +13,7 @@
 # This confusingly-named parameter indicates the *subdirectory of
 # `target/` from which to copy the build artifacts.  It is derived
 # from a stdenv platform (or a JSON file).
-, target ? rust.lib.toRustTargetSpecShort stdenv.hostPlatform
+, target ? stdenv.hostPlatform.rust.cargoShortTarget
 }:
 
 {
@@ -65,11 +65,11 @@
         diff = "${lib.getBin buildPackages.diffutils}/bin/diff";
 
         cargoConfig = ''
-          [target."${rust.toRustTarget stdenv.buildPlatform}"]
-          "linker" = "${rust.envVars.ccForBuild}"
+          [target."${stdenv.buildPlatform.rust.rustcTarget}"]
+          "linker" = "${rust.envVars.linkerForBuild}"
           ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-            [target."${rust.toRustTarget stdenv.hostPlatform}"]
-            "linker" = "${rust.envVars.ccForHost}"
+            [target."${stdenv.hostPlatform.rust.rustcTarget}"]
+            "linker" = "${rust.envVars.linkerForHost}"
           ''}
           "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
         '';

@@ -35,14 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     "C_COMPILER=$(CC)"
     "CXX_COMPILER=$(CXX)"
-    "TARGET_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "TARGET_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "LINKER_OPTIONS=-headerpad_max_install_names"
     "POSTINSTALL_PROGRAM=install_name_tool"
   ]) ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "HOSTSYSTEM=${stdenv.hostPlatform.config}"
+    "TARGET_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "TARGET_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
   ]);
 
   nativeBuildInputs = [

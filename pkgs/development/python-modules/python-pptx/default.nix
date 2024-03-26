@@ -7,11 +7,12 @@
 }:
 buildPythonPackage rec {
   pname = "python-pptx";
-  version = "0.6.22";
+  version = "0.6.23";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OPjukt3jHSS0ViVg5hsDV+XZfs91xDUq5mFtWjKXhlQ=";
+    hash = "sha256-WHSX/yjneasY27B09tQFKJPIXe3JXtdd8xk2TzMf7e4=";
   };
 
   # postPatch = ''

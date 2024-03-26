@@ -17,6 +17,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/theopolis/uefi-firmware-parser/";
     description = "Parse BIOS/Intel ME/UEFI firmware related structures: Volumes, FileSystems, Files, etc";
+    mainProgram = "uefi-firmware-parser";
     # MIT + license headers in some files
     license = with licenses; [
       mit

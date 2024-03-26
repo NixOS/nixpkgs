@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "GUI frontend for Delve";
+    mainProgram = "gdlv";
     homepage = "https://github.com/aarzilli/gdlv";
     maintainers = with maintainers; [ mmlb ];
     license = licenses.gpl3;

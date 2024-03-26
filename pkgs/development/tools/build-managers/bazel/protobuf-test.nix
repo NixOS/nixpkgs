@@ -170,7 +170,7 @@ let
         --distdir=${distDir} \
         --verbose_failures \
         --curses=no \
-        --sandbox_debug \
+        --subcommands \
         --strict_java_deps=off \
         --strict_proto_deps=off \
         //... \

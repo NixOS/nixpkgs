@@ -1,7 +1,3 @@
-let
-  execFormatIsELF = platform: platform.parsed.kernel.execFormat.name == "elf";
-in
-
 { stdenv
 , autoreconfHook
 , autoconf269, automake, libtool
@@ -18,7 +14,7 @@ in
 , texinfo
 , zlib
 
-, enableGold ? execFormatIsELF stdenv.targetPlatform
+, enableGold ? stdenv.targetPlatform.isElf
 , enableShared ? !stdenv.hostPlatform.isStatic
   # WARN: Enabling all targets increases output size to a multiple.
 , withAllTargets ? false
@@ -26,7 +22,7 @@ in
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
 # make sure that intent matches result ourselves.
-assert enableGold -> execFormatIsELF stdenv.targetPlatform;
+assert enableGold -> stdenv.targetPlatform.isElf;
 
 
 let
@@ -95,7 +91,7 @@ stdenv.mkDerivation {
      # this patch is from debian:
      # https://sources.debian.org/data/main/b/binutils/2.38-3/debian/patches/mips64-default-n64.diff
      (if stdenv.targetPlatform.isMusl
-      then substitute { src = ./mips64-default-n64.patch; replacements = [ "--replace" "gnuabi64" "muslabi64" ]; }
+      then substitute { src = ./mips64-default-n64.patch; substitutions = [ "--replace" "gnuabi64" "muslabi64" ]; }
       else ./mips64-default-n64.patch)
   # On PowerPC, when generating assembly code, GCC generates a `.machine`
   # custom instruction which instructs the assembler to generate code for this

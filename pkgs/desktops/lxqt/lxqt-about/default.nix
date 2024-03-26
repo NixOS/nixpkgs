@@ -14,23 +14,23 @@
 
 mkDerivation rec {
   pname = "lxqt-about";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "Dm4WFtF0O7MgAvwYBI/1DkY9MhneI+QSM+wRp4JlD+o=";
+    hash = "sha256-FA9xvIi45qpD6iGxiiNKNlcLKzJtb0cWmvDBJRnJFwA=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtx11extras
-    qttools
     qtsvg
     kwindowsystem
     liblxqt
@@ -42,6 +42,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-about";
     description = "Dialogue window providing information about LXQt and the system it's running on";
+    mainProgram = "lxqt-about";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;

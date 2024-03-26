@@ -50,6 +50,7 @@ in {
       description = "Standalone MPD Web GUI written in C";
 
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
       serviceConfig = {

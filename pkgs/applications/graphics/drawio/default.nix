@@ -4,8 +4,9 @@
 , fetchYarnDeps
 , makeDesktopItem
 , copyDesktopItems
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , makeWrapper
+, autoSignDarwinBinariesHook
 , nodejs
 , yarn
 , electron
@@ -13,28 +14,35 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "22.0.3";
+  version = "24.0.4";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Im0T+1jm1IZT3UILsOJ4Rp5P5IiBUKcJJ+cqv3WsqXw=";
+    hash = "sha256-+TCnVXcmAEpa7MiL0dyeoh2aUfIIO8eze9pEaHgKnME=";
   };
+
+  # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
+  postPatch = ''
+    sed -i -e 's/resetAdHocDarwinSignature:.*/resetAdHocDarwinSignature: false,/' build/fuses.js
+  '';
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-Abyu/WoNOPAIfRIThG7vKFECW9NQMgcBAkLgEPwdJDQ=";
+    hash = "sha256-QS0bkDDQq3sn79TQ+pTZsmbmXgMccyLmlPLTsko7eGg=";
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    prefetch-yarn-deps
     makeWrapper
     nodejs
     yarn
   ] ++ lib.optionals (!stdenv.isDarwin) [
     copyDesktopItems
+  ] ++ lib.optionals stdenv.isDarwin [
+    autoSignDarwinBinariesHook
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = true;
@@ -44,7 +52,7 @@ stdenv.mkDerivation rec {
 
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -61,7 +69,7 @@ stdenv.mkDerivation rec {
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   '' + ''
     yarn --offline run electron-builder --dir \
-      --config electron-builder-linux-mac.json \
+      ${if stdenv.isDarwin then "--config electron-builder-linux-mac.json" else ""} \
       -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
       -c.electronVersion=${electron.version}
 
@@ -112,5 +120,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ qyliss darkonion0 ];
     platforms = platforms.darwin ++ platforms.linux;
+    mainProgram = "drawio";
   };
 }

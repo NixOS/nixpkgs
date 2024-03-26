@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "skein";
   version = "0.8.2";
+  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-nXTqsJNX/LwAglPcPZkmdYPfF+vDLN+nNdZaDFTrHzE=";
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://jcristharif.com/skein";
     description = "A tool and library for easily deploying applications on Apache YARN";
+    mainProgram = "skein";
     license = licenses.bsd3;
     maintainers = with maintainers; [ alexbiehl illustris ];
     # https://github.com/NixOS/nixpkgs/issues/48663#issuecomment-1083031627

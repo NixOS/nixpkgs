@@ -899,25 +899,6 @@ in {
                       '';
                     };
                   };
-
-                  managementFrameProtection = mkOption {
-                    default = "required";
-                    type = types.enum ["disabled" "optional" "required"];
-                    apply = x:
-                      getAttr x {
-                        "disabled" = 0;
-                        "optional" = 1;
-                        "required" = 2;
-                      };
-                    description = mdDoc ''
-                      Management frame protection (MFP) authenticates management frames
-                      to prevent deauthentication (or related) attacks.
-
-                      - {var}`"disabled"`: No management frame protection
-                      - {var}`"optional"`: Use MFP if a connection allows it
-                      - {var}`"required"`: Force MFP for all clients
-                    '';
-                  };
                 };
 
                 config = let
@@ -928,7 +909,7 @@ in {
                 in {
                   settings = {
                     ssid = bssCfg.ssid;
-                    utf8_ssid = bssCfg.ssid;
+                    utf8_ssid = bssCfg.utf8Ssid;
 
                     logger_syslog = mkDefault (-1);
                     logger_syslog_level = bssCfg.logLevel;
@@ -943,7 +924,8 @@ in {
 
                     # IEEE 802.11i (authentication) related configuration
                     # Encrypt management frames to protect against deauthentication and similar attacks
-                    ieee80211w = bssCfg.managementFrameProtection;
+                    ieee80211w = mkDefault 1;
+                    sae_require_mfp = mkDefault 1;
 
                     # Only allow WPA by default and disable insecure WEP
                     auth_algs = mkDefault 1;
@@ -1185,14 +1167,6 @@ in {
                   message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
                 }
                 {
-                  assertion = auth.mode == "wpa3-sae" -> bssCfg.managementFrameProtection == 2;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires managementFrameProtection="required"'';
-                }
-                {
-                  assertion = auth.mode == "wpa3-sae-transition" -> bssCfg.managementFrameProtection != 0;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode with WPA2-SHA256, which requires managementFrameProtection="optional" or ="required"'';
-                }
-                {
                   assertion = countWpaPasswordDefinitions <= 1;
                   message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
                 }
@@ -1222,8 +1196,6 @@ in {
         cfg.radios));
 
     environment.systemPackages = [cfg.package];
-
-    services.udev.packages = with pkgs; [crda];
 
     systemd.services.hostapd = {
       description = "IEEE 802.11 Host Access-Point Daemon";

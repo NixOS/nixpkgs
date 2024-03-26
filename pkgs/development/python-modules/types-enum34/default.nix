@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "types-enum34";
   version = "1.1.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

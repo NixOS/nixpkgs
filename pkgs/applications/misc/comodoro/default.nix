@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/soywod/comodoro/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ soywod ];
+    mainProgram = "comodoro";
   };
 }

@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
+    mainProgram = "gcr-viewer-gtk4";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
     license = licenses.lgpl2Plus;
 

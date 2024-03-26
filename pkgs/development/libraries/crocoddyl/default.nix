@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-h7rzLSvmWOZCP8rvmUEhFeMEiPhojfbvkt+fNKpgoXo=";
+    hash = "sha256-MsAXHfxLNlIK/PbtVTjvBN1Jk3dyGEkfpj3/98nExj4=";
   };
 
   strictDeps = true;

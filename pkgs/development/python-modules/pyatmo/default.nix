@@ -16,19 +16,23 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "7.5.0";
-  format = "pyproject";
+  version = "8.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GucatimZTg0Fggrz4bG1x6YSa3wE/uLGB4ufil/km3w=";
+    hash = "sha256-FnDXj+bY/TMdengnxgludXUTiZw9wpeFiNbWTIxrlzw=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "oauthlib~=3.1" "oauthlib" \
+      --replace "requests~=2.24" "requests"
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
@@ -48,12 +52,6 @@ buildPythonPackage rec {
     requests-mock
     time-machine
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "oauthlib~=3.1" "oauthlib" \
-      --replace "requests~=2.24" "requests"
-  '';
 
   pythonImportsCheck = [
     "pyatmo"

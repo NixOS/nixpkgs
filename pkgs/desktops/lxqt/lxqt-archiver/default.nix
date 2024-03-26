@@ -16,19 +16,20 @@
 
 mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    sha256 = "C38c/jCyRur7jQSgU2ByasCQnollHgy3/mUoNv61OCU=";
+    hash = "sha256-8pfUpyjn01D8CL+2PjGkZqyHu+lpHZIXlXn67rZoxMY=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
@@ -37,7 +38,6 @@ mkDerivation rec {
     libfm-qt
     menu-cache
     qtbase
-    qttools
     qtx11extras
   ];
 
@@ -48,6 +48,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-archiver/";
     description = "Archive tool for the LXQt desktop environment";
+    mainProgram = "lxqt-archiver";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;

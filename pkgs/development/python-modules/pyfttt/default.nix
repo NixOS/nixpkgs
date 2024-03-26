@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "pyfttt";
   version = "0.3.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,6 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Package for sending events to the IFTTT Webhooks Channel";
+    mainProgram = "pyfttt";
     homepage = "https://github.com/briandconnelly/pyfttt";
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.bsd2;

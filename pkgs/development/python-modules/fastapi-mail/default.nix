@@ -11,6 +11,7 @@
 , jinja2
 , poetry-core
 , pydantic
+, pydantic-settings
 , pytest-asyncio
 , pytestCheckHook
 , python-multipart
@@ -19,23 +20,23 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.3.1";
-  format = "pyproject";
+  version = "1.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sabuhish";
-    repo = pname;
+    repo = "fastapi-mail";
     rev = "refs/tags/${version}";
-    hash = "sha256-m8d4y75+mSh9A+YVaV/yZhN3ckOe2mV1jdtfeNFtU/w=";
+    hash = "sha256-2iTZqZIxlt1GKhElasTcnys18UbNNDwHoZziHBOIGBo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'version = "1.2.5"' 'version = "${version}"' \
       --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
-      --replace 'pydantic = "^1.8"' 'pydantic = "*"' \
+      --replace 'pydantic = "^2.0"' 'pydantic = "*"' \
   '';
 
   nativeBuildInputs = [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
     httpx
     jinja2
     pydantic
+    pydantic-settings
     python-multipart
   ];
 

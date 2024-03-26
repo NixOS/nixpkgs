@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "pure-maps";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "pure-maps";
     rev = version;
-    hash = "sha256-07Jk5ufYbBAa/UY1B0IoyuOAVt15rGCxCRXu3OeYyWU=";
+    hash = "sha256-TeFolD3jXRdLGfXdy+QcwtOcQQVUB5fn8PwoYfRLaPQ=";
     fetchSubmodules = true;
   };
 
@@ -36,6 +36,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Display vector and raster maps, places, routes, and provide navigation instructions with a flexible selection of data and service providers";
+    mainProgram = "pure-maps";
     homepage = "https://github.com/rinigus/pure-maps";
     changelog = "https://github.com/rinigus/pure-maps/blob/${src.rev}/NEWS.md";
     license = licenses.gpl3Only;

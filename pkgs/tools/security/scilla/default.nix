@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Information gathering tool for DNS, ports and more";
+    mainProgram = "scilla";
     homepage = "https://github.com/edoardottt/scilla";
     changelog = "https://github.com/edoardottt/scilla/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];

@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   version = "0.1.2";
+  format = "setuptools";
   pname = "shouldbe";
   # incompatible, https://github.com/DirectXMan12/should_be/issues/4
   disabled = pythonAtLeast "3.8";

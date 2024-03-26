@@ -1,12 +1,12 @@
 { lib
-, python3
-, buildPythonPackage
-, fetchFromGitHub
 , agate
+, buildPythonPackage
 , cffi
 , click
 , colorama
 , dbt-extractor
+, dbt-semantic-interfaces
+, fetchFromGitHub
 , hologram
 , idna
 , isodate
@@ -18,10 +18,13 @@
 , packaging
 , pathspec
 , protobuf
+, python3
+, pythonOlder
 , pythonRelaxDepsHook
 , pytz
 , pyyaml
 , requests
+, setuptools
 , sqlparse
 , typing-extensions
 , urllib3
@@ -30,20 +33,23 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.6.2";
-  format = "setuptools";
+  version = "1.7.10";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zmZdFOB0jQHamRJ7Zuzr/augP6Y2smAdUvqSXDZDuwo=";
+    hash = "sha256-0cKzQjAnj0JMrHyA/gOgYceM6g1URJFgQtp90m09Nkw=";
   };
 
   sourceRoot = "${src.name}/core";
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -52,6 +58,7 @@ buildPythonPackage rec {
     "mashumaro"
     "networkx"
     "logbook"
+    "urllib3"
   ];
 
   propagatedBuildInputs = [
@@ -60,6 +67,7 @@ buildPythonPackage rec {
     click
     colorama
     dbt-extractor
+    dbt-semantic-interfaces
     hologram
     idna
     isodate

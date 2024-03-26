@@ -2,14 +2,14 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch2
+, fetchpatch
 , gettext
 , meson
 , ninja
 , pkg-config
 , perl
 , python3
-, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+, libiconv, zlib, libffi, pcre2, elfutils, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -24,17 +24,12 @@
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
-# TODO:
-# * Make it build without python
-#     Problem: an example (test?) program needs it.
-#     Possible solution: disable compilation of this example somehow
-#     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
-#       $out/bin/gtester-report' to postInstall if this is solved
 /*
+  * TODO:
   * Use --enable-installed-tests for GNOME-related packages,
       and use them as a separately installed tests run by Hydra
       (they should test an already installed package)
-      https://wiki.gnome.org/GnomeGoals/InstalledTests
+      https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
@@ -56,11 +51,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.76.4";
+  version = "2.78.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "WloZHJaDbhZqd3H36myisAacYDx9o8uhzTjRaUo5Xdo=";
+    sha256 = "sha256-JLjgZy3KEgzDLTlLzLhYROcy4E/nXRi7BXOy28dUj2M=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -69,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
+    (fetchpatch {
+      name = "GLib-against-PCRE2-10.43.patch";
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/cce3ae98a2c1966719daabff5a4ec6cf94a846f6.patch";
+      hash = "sha256-vgKzb5hQmFQGD8zxRrXnuX9Gpg/TeSrzehlOH2vA1xU=";
+    })
+
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 
@@ -109,11 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf
     finalAttrs.setupHook
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
@@ -157,6 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
+  ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    "-Dlibelf=disabled"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
   ] ++ lib.optionals stdenv.isFreeBSD [
@@ -230,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
@@ -286,7 +290,7 @@ stdenv.mkDerivation (finalAttrs: {
       "gobject-2.0"
       "gthread-2.0"
     ];
-    platforms   = platforms.unix;
+    platforms   = platforms.unix ++ platforms.windows;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

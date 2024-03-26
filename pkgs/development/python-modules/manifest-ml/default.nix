@@ -27,17 +27,19 @@
 
 buildPythonPackage rec {
   pname = "manifest-ml";
-  version = "0.1.8";
+  version = "0.1.9";
   format = "setuptools";
 
-  disalbed = pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "HazyResearch";
     repo = "manifest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d34TIZYDB8EDEIZUH5mDzfDHzFT290DwjPLJkNneklc=";
+    hash = "sha256-6m1XZOXzflBYyq9+PinbrW+zqvNGFN/aRDHH1b2Me5E=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   propagatedBuildInputs = [
     numpy

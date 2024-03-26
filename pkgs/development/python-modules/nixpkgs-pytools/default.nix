@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "nixpkgs-pytools";
   version = "1.3.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

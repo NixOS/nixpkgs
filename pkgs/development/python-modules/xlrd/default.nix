@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "xlrd";
   version = "2.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://www.python-excel.org/";
     description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
+    mainProgram = "runxlrd.py";
     license = licenses.bsd0;
   };
 

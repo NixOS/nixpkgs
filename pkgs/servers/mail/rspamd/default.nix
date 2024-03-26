@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch2
 , cmake
 , perl
 , glib
@@ -28,13 +27,13 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.7.2";
+  version = "3.8.4";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-Kr6Y1ePgBeH+WhkfEYqmoBZ9AJ54G+OVgrY73aV0+OU=";
+    hash = "sha256-3skF+aQv8Y3ATujV+WH4DxwyQ2hXR6CDZz77CkaRso0=";
   };
 
   hardeningEnable = [ "pie" ];

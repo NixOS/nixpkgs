@@ -6,22 +6,27 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "1.12.17";
-  format = "setuptools";
+  version = "1.12.20";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thebjorn";
-    repo = pname;
+    repo = "pydeps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DVSZeNuDz/y0jh/HimV+jFgNFevMhUKOu6EhZytMMqQ=";
+    hash = "sha256-d6EeeNem+HfuipKF5ZOI48c11j0ozGrBP4XlqTx+fJ4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     graphviz
@@ -55,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module dependency visualization";
+    mainProgram = "pydeps";
     homepage = "https://github.com/thebjorn/pydeps";
     changelog = "https://github.com/thebjorn/pydeps/releases/tag/v${version}";
     license = licenses.bsd2;

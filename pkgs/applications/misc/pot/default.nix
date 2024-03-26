@@ -19,17 +19,18 @@
 , libsoup
 , openssl
 , xdotool
+, cacert
 }:
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "2.6.6";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-ZpN+SgBq2vA2p4MjrT07j22VB67FdiXIIl9puGiGJA4=";
+    hash = "sha256-c7FHkp/utvrr7qasY+XKaTnPaiZWb8M5EGiFne52osQ=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
       jq
       moreutils
       nodePackages.pnpm
+      cacert
     ];
 
     installPhase = ''
@@ -66,15 +68,14 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-PqdwoGPsu1j4sDTvBAguDhB2v1yaNWybluLiN37SDa4=";
+    outputHash = "sha256-BQ5M+pKEXGJzWmxMchNgxpvLpgFCRIg33GQCvO4TLz4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       # All other crates in the same workspace reuse this hash.
-      "tauri-plugin-autostart-0.0.0" = "sha256-wgVsF3H9BT8lBew7tQ308eIQ6cLZT93hD/4eYCDEq98=";
-      "tauri-plugin-sql-0.0.0" = "sha256-e9iwcHwW8MaRzkaAbewrq6b9+n3ZofMTBnvA23ZF2ro=";
+      "tauri-plugin-autostart-0.0.0" = "sha256-/uxaSBp+N1VjjSiwf6NwNnSH02Vk6gQZ/CzO+AyEI7o=";
     };
   };
 
@@ -127,6 +128,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A cross-platform translation software";
+    mainProgram = "pot";
     homepage = "https://pot.pylogmon.com";
     platforms = platforms.linux;
     license = licenses.gpl3Only;

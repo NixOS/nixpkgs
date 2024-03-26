@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "ete3";
   version = "3.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python framework for the analysis and visualization of trees";
+    mainProgram = "ete3";
     homepage = "http://etetoolkit.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ delehef ];

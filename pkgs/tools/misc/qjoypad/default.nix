@@ -35,5 +35,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
+    mainProgram = "qjoypad";
   };
 }

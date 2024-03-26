@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "buildkit";
-  version = "0.12.3";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
     rev = "v${version}";
-    hash = "sha256-ph44J90g5zOTi/+FVbdnDDJp1gXcxPt7coA1rvhsQSQ=";
+    hash = "sha256-BrLDY3T40ndkjuWCx5kLZvMBp8xI5d3MFg9M3IpafWM=";
   };
 
   vendorHash = null;

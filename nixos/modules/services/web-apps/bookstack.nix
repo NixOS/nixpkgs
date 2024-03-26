@@ -412,20 +412,25 @@ in {
       '';
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir}                            0710 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public                     0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public/uploads             0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage                    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/app                0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/fonts              0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework          0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/cache    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/sessions 0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/views    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/logs               0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/uploads            0700 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-bookstack" = let
+      defaultConfig = {
+        inherit user group;
+        mode = "0700";
+      };
+    in {
+      "${cfg.dataDir}".d = defaultConfig // { mode = "0710"; };
+      "${cfg.dataDir}/public".d = defaultConfig // { mode = "0750"; };
+      "${cfg.dataDir}/public/uploads".d = defaultConfig // { mode = "0750"; };
+      "${cfg.dataDir}/storage".d = defaultConfig;
+      "${cfg.dataDir}/storage/app".d = defaultConfig;
+      "${cfg.dataDir}/storage/fonts".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework/cache".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework/sessions".d = defaultConfig;
+      "${cfg.dataDir}/storage/framework/views".d = defaultConfig;
+      "${cfg.dataDir}/storage/logs".d = defaultConfig;
+      "${cfg.dataDir}/storage/uploads".d = defaultConfig;
+    };
 
     users = {
       users = mkIf (user == "bookstack") {

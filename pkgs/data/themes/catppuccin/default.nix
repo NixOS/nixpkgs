@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "rofi" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "starship" "thunderbird" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -20,8 +20,8 @@ let
       name = "bat";
       owner = "catppuccin";
       repo = "bat";
-      rev = "ba4d16880d63e656acced2b7d4e034e4a93f74b1";
-      hash = "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=";
+      rev = "2bafe4454d8db28491e9087ff3a1382c336e7d27";
+      hash = "sha256-yHt3oIjUnljARaihalcWSNldtaJfVDfmfiecYfbzGs0=";
     };
 
     bottom = fetchFromGitHub {
@@ -40,6 +40,14 @@ let
       hash = "sha256-J3UezOQMDdxpflGax0rGBF/XMiKqdqZXuX4KMVGTxFk=";
     };
 
+    grub = fetchFromGitHub {
+      name = "grub";
+      owner = "catppuccin";
+      repo = "grub";
+      rev = "v1.0.0";
+      hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
+    };
+
     hyprland = fetchFromGitHub {
       name = "hyprland";
       owner = "catppuccin";
@@ -52,8 +60,8 @@ let
       name = "k9s";
       owner = "catppuccin";
       repo = "k9s";
-      rev = "516f44dd1a6680357cb30d96f7e656b653aa5059";
-      hash = "sha256-PtBJRBNbLkj7D2ko7ebpEjbfK9Ywjs7zbE+Y8FQVEfA=";
+      rev = "590a762110ad4b6ceff274265f2fe174c576ce96";
+      hash = "sha256-EBDciL3F6xVFXvND+5duT+OiVDWKkFMWbOOSruQ0lus=";
     };
 
     kvantum = fetchFromGitHub {
@@ -68,16 +76,24 @@ let
       name = "lazygit";
       owner = "catppuccin";
       repo = "lazygit";
-      rev = "0543c28e8af1a935f8c512ad9451facbcc17d8a8";
-      hash = "sha256-OVihY5E+elPKag2H4RyWiSv+MdIqHtfGNM3/1u2ik6U=";
+      rev = "v2.0.0";
+      hash = "sha256-gM0HplHhcpvtpmIVdlX/p59h0v+ihKEidS1imqPYlBg=";
     };
 
     plymouth = fetchFromGitHub {
       name = "plymouth";
       owner = "catppuccin";
       repo = "plymouth";
-      rev = "d4105cf336599653783c34c4a2d6ca8c93f9281c";
-      hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
+      rev = "67759fbe15eb9490d096ef8014d9f92fc5748fe7";
+      hash = "sha256-IzoyVOi44Uay7DTfzR9RdRLSjORsdBM4pPrgeXk5YMI=";
+    };
+
+    qt5ct = fetchFromGitHub {
+      name = "qt5ct";
+      owner = "catppuccin";
+      repo = "qt5ct";
+      rev = "89ee948e72386b816c7dad72099855fb0d46d41e";
+      hash = "sha256-t/uyK0X7qt6qxrScmkTU2TvcVJH97hSQuF0yyvSO/qQ=";
     };
 
     refind = fetchFromGitHub {
@@ -96,6 +112,22 @@ let
       hash = "sha256-DNorfyl3C4RBclF2KDgwvQQwixpTwSRu7fIvihPN8JY=";
     };
 
+    starship = fetchFromGitHub {
+      name = "starship";
+      owner = "catppuccin";
+      repo = "starship";
+      rev = "5629d2356f62a9f2f8efad3ff37476c19969bd4f";
+      hash = "sha256-nsRuxQFKbQkyEI4TXgvAjcroVdG+heKX5Pauq/4Ota0=";
+    };
+
+    thunderbird = fetchFromGitHub {
+      name = "thunderbird";
+      owner = "catppuccin";
+      repo = "thunderbird";
+      rev = "d61882ad9fd35909a75da6bb95fca38db552135c";
+      hash = "sha256-wn8//8lHScbbB1nEiDY8DphnLUMKZBFMc1GPaTRjTOY=";
+    };
+
     waybar = fetchFromGitHub {
       name = "waybar";
       owner = "catppuccin";
@@ -111,7 +143,7 @@ lib.checkListOfEnum "${pname}: themes" validThemes themeList
 
 stdenvNoCC.mkDerivation {
   inherit pname;
-  version = "unstable-2023-10-09";
+  version = "unstable-2024-03-12";
 
   srcs = selectedSources;
 
@@ -130,7 +162,7 @@ stdenvNoCC.mkDerivation {
 
   '' + lib.optionalString (lib.elem "bat" themeList) ''
     mkdir -p $out/bat
-    cp "${sources.bat}/Catppuccin-${variant}.tmTheme" "$out/bat/"
+    cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
 
   '' + lib.optionalString (lib.elem "btop" themeList) ''
     mkdir -p $out/btop
@@ -140,13 +172,18 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bottom
     cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
 
+  '' + lib.optionalString (lib.elem "grub" themeList) ''
+    mkdir -p $out/grub
+    cp -r ${sources.grub}/src/catppuccin-${variant}-grub-theme/* "$out/grub/"
+
   '' + lib.optionalString (lib.elem "hyprland" themeList) ''
     mkdir -p $out/hyprland
     cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
 
   '' + lib.optionalString (lib.elem "k9s" themeList) ''
     mkdir -p $out/k9s
-    cp "${sources.k9s}/dist/${variant}.yml" "$out/k9s/"
+    cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s/"
+    cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s/"
 
   '' + lib.optionalString (lib.elem "kvantum" themeList) ''
     mkdir -p $out/share/Kvantum
@@ -154,13 +191,17 @@ stdenvNoCC.mkDerivation {
 
   '' + lib.optionalString (lib.elem "lazygit" themeList) ''
     mkdir -p $out/lazygit/{themes,themes-mergable}
-    cp "${sources.lazygit}/themes/${variant}/${variant}-${accent}.yml" "$out/lazygit/themes/"
-    cp "${sources.lazygit}/themes-mergable/${variant}/${variant}-${accent}.yml" "$out/lazygit/themes-mergable/"
+    cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes/"
+    cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable/"
 
   '' + lib.optionalString (lib.elem "plymouth" themeList) ''
     mkdir -p $out/share/plymouth/themes/catppuccin-${variant}
     cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
     sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+
+  '' + lib.optionalString (lib.elem "qt5ct" themeList) ''
+    mkdir -p $out/qt5ct
+    cp ${sources.qt5ct}/themes/Catppuccin-"$capitalizedVariant".conf $out/qt5ct/
 
   '' + lib.optionalString (lib.elem "rofi" themeList) ''
     mkdir -p $out/rofi
@@ -170,6 +211,14 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/refind/assets
     cp ${sources.refind}/${variant}.conf $out/refind/
     cp -r ${sources.refind}/assets/${variant} $out/refind/assets/
+
+  '' + lib.optionalString (lib.elem "starship" themeList) ''
+    mkdir -p $out/starship
+    cp ${sources.starship}/palettes/${variant}.toml $out/starship/
+
+  '' + lib.optionalString (lib.elem "thunderbird" themeList) ''
+    mkdir -p $out/thunderbird
+    cp ${sources.thunderbird}/themes/${variant}/${variant}-${accent}.xpi $out/thunderbird/
 
   '' + lib.optionalString (lib.elem "waybar" themeList) ''
     mkdir -p $out/waybar

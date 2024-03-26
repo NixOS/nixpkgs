@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sgrep.sourceforge.net/";
     description = "Sgrep (sorted grep) searches sorted input files for lines that match a search key";
+    mainProgram = "sgrep";
     longDescription = ''
       Sgrep (sorted grep) searches sorted input files for lines that match a search
       key and outputs the matching lines. When searching large files sgrep is much

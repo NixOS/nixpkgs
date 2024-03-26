@@ -14,7 +14,6 @@
 , brotli
 , gnomeSupport ? true
 , sqlite
-, glib-networking
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
@@ -85,9 +84,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";

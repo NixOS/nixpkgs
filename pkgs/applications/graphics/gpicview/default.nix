@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.unix;
+    mainProgram = "gpicview";
   };
 }

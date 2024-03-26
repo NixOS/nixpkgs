@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "zetup";
   version = "0.2.64";
+  format = "setuptools";
 
   # https://github.com/zimmermanncode/zetup/issues/4
   disabled = pythonAtLeast "3.10";

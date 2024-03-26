@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.lxde.org/en/LXTask";
     description = "Lightweight and desktop independent task manager";
+    mainProgram = "lxtask";
     longDescription = ''
       LXTask is a lightweight task manager derived from xfce4 task manager
       with all xfce4 dependencies removed, some bugs fixed, and some

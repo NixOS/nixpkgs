@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "12.3.1";
+  version = "14.1.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     rev = version;
-    hash = "sha256-NP5ph598YSPbpzJJUR2r+EkqFmuItxgvOSDgDaN+Swg=";
+    hash = "sha256-trm5bR3/2w+oQppHQBB+b6l0N0sLjTk5+rRGDfnGb+8=";
   };
 
   # These get set at all-packages, keep onto them for child drvs

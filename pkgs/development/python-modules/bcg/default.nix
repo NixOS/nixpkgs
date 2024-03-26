@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "bcg";
   version = "1.17.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-gateway";
     description = "HARDWARIO Gateway (Python Application «bcg»)";
+    mainProgram = "bcg";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

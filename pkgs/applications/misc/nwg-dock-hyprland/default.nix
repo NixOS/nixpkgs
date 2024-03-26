@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "GTK3-based dock for Hyprland";
+    mainProgram = "nwg-dock-hyprland";
     homepage = "https://github.com/nwg-piotr/nwg-dock-hyprland";
     license = licenses.mit;
     platforms = platforms.linux;

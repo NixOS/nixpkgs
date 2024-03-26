@@ -11,6 +11,7 @@
 , pyudev
 , setproctitle
 , wrapGAppsHook
+, notify2
 }:
 
 let
@@ -39,6 +40,7 @@ buildPythonPackage (common // {
     pygobject3
     pyudev
     setproctitle
+    notify2
   ];
 
   postInstall = ''
@@ -50,5 +52,6 @@ buildPythonPackage (common // {
 
   meta = common.meta // {
     description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
+    mainProgram = "openrazer-daemon";
   };
 })

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "4.8.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bG0hui5GjHWHny/8Rq5sZGz3s5rYnYlpc+K8I/LwDto=";
+    hash = "sha256-hlGNL7aMzxBxtATWJBqJTFEQqMv10oC3sRCdtRLHOww=";
   };
 
   hardeningDisable = [ "format" ];
@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];
     license = licenses.gpl2Plus;
+    mainProgram = "qalculate-gtk";
     platforms = platforms.all;
   };
 })

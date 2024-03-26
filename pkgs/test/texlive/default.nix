@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
+{ lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText, texliveInfraOnly, texliveConTeXt, texliveSmall, texliveMedium, texliveFull }:
 
 rec {
 
@@ -6,7 +6,7 @@ rec {
     { name
     , format
     , text
-    , texLive ? texlive.combined.scheme-small
+    , texLive ? texliveSmall
     , options ? "-interaction=errorstopmode"
     , preTest ? ""
     , postTest ? ""
@@ -43,7 +43,7 @@ rec {
     lualatex = mkTeXTest {
       name = "opentype-fonts-lualatex";
       format = "lualatex";
-      texLive = texlive.combine { inherit (texlive) scheme-small libertinus-fonts; };
+      texLive = texliveSmall.withPackages (ps: [ ps.libertinus-fonts ]);
       text = ''
         \documentclass{article}
         \usepackage{fontspec}
@@ -61,7 +61,7 @@ rec {
 
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
-      (texlive.combine { inherit (texlive) scheme-infraonly chktex; })
+      (texlive.withPackages (ps: [ ps.chktex ]))
     ];
     input = builtins.toFile "chktex-sample.tex" ''
       \documentclass{article}
@@ -70,14 +70,30 @@ rec {
       \end{document}
     '';
   } ''
-    chktex -v -nall -w1 "$input" 2>&1 | tee "$out"
+    # chktex is supposed to return 2 when it (successfully) finds warnings, but no errors,
+    # see http://git.savannah.nongnu.org/cgit/chktex.git/commit/?id=ec0fb9b58f02a62ff0bfec98b997208e9d7a5998
+    (set +e; chktex -v -nall -w1 "$input" 2>&1; [ $? = 2 ] || exit 1; set -e)  | tee "$out"
+    # also check that the output does indeed contain "One warning printed"
     grep "One warning printed" "$out"
   '';
+
+  context = mkTeXTest {
+    name = "texlive-test-context";
+    format = "context";
+    texLive = texliveConTeXt;
+    text = ''
+      \starttext
+      \startsection[title={ConTeXt test document}]
+        This is an {\em incredibly} simple ConTeXt document.
+      \stopsection
+      \stoptext
+    '';
+  };
 
   dvipng = lib.recurseIntoAttrs {
     # https://github.com/NixOS/nixpkgs/issues/75605
     basic = runCommand "texlive-test-dvipng-basic" {
-      nativeBuildInputs = [ file texlive.combined.scheme-medium ];
+      nativeBuildInputs = [ file texliveMedium ];
       input = fetchurl {
         name = "test_dvipng.tex";
         url = "http://git.savannah.nongnu.org/cgit/dvipng.git/plain/test_dvipng.tex?id=b872753590a18605260078f56cbd6f28d39dc035";
@@ -99,7 +115,7 @@ rec {
 
     # test dvipng's limited capability to render postscript specials via GS
     ghostscript = runCommand "texlive-test-ghostscript" {
-      nativeBuildInputs = [ file (texlive.combine { inherit (texlive) scheme-small dvipng; }) ];
+      nativeBuildInputs = [ file (texliveSmall.withPackages (ps: [ ps.dvipng ])) ];
       input = builtins.toFile "postscript-sample.tex" ''
         \documentclass{minimal}
         \begin{document}
@@ -140,7 +156,7 @@ rec {
 
   # https://github.com/NixOS/nixpkgs/issues/75070
   dvisvgm = runCommand "texlive-test-dvisvgm" {
-    nativeBuildInputs = [ file texlive.combined.scheme-medium ];
+    nativeBuildInputs = [ file texliveMedium ];
     input = builtins.toFile "dvisvgm-sample.tex" ''
       \documentclass{article}
       \begin{document}
@@ -166,10 +182,7 @@ rec {
 
   texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
-      (texlive.combine {
-        inherit (texlive) scheme-infraonly luatex texdoc;
-        pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
-      })
+      (texlive.withPackages (ps: with ps; [ luatex ps.texdoc ps.texdoc.texdoc ]))
     ];
   } ''
     texdoc --version
@@ -214,7 +227,7 @@ rec {
   };
 
   # check that all languages are available, including synonyms
-  allLanguages = let hyphenBase = lib.head texlive.hyphen-base.pkgs; texLive = texlive.combined.scheme-full; in
+  allLanguages = let hyphenBase = texlive.pkgs.hyphen-base; texLive = texliveFull; in
     lib.recurseIntoAttrs {
       # language.def
       etex = mkTeXTest {
@@ -289,9 +302,9 @@ rec {
 
   # test that language files are generated as expected
   hyphen-base = runCommand "texlive-test-hyphen-base" {
-    hyphenBase = lib.head texlive.hyphen-base.pkgs;
-    schemeFull = texlive.combined.scheme-full;
-    schemeInfraOnly = texlive.combined.scheme-infraonly;
+    hyphenBase = texlive.pkgs.hyphen-base;
+    schemeFull = texliveFull;
+    schemeInfraOnly = texliveInfraOnly;
   } ''
     mkdir -p "$out"/{scheme-infraonly,scheme-full}
 
@@ -322,8 +335,8 @@ rec {
 
   # test that fmtutil.cnf is fully regenerated on scheme-full
   fmtutilCnf = runCommand "texlive-test-fmtutil.cnf" {
-    kpathsea = lib.head texlive.kpathsea.pkgs;
-    schemeFull = texlive.combined.scheme-full;
+    kpathsea = texlive.pkgs.kpathsea.tex;
+    schemeFull = texliveFull;
   } ''
     mkdir -p "$out"
 
@@ -335,7 +348,7 @@ rec {
   # verify that the restricted mode gets enabled when
   # needed (detected by checking if it disallows --gscmd)
   repstopdf = runCommand "texlive-test-repstopdf" {
-    nativeBuildInputs = [ (texlive.combine { inherit (texlive) scheme-infraonly epstopdf; }) ];
+    nativeBuildInputs = [ (texlive.withPackages (ps: [ ps.epstopdf ])) ];
   } ''
     ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden >/dev/null
     (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden >/dev/null
@@ -345,7 +358,7 @@ rec {
   # verify that the restricted mode gets enabled when
   # needed (detected by checking if it disallows --gscmd)
   rpdfcrop = runCommand "texlive-test-rpdfcrop" {
-    nativeBuildInputs = [ (texlive.combine { inherit (texlive) scheme-infraonly pdfcrop; }) ];
+    nativeBuildInputs = [ (texlive.withPackages (ps: [ ps.pdfcrop ])) ];
   } ''
     ! (pdfcrop --gscmd echo $(command -v pdfcrop) 2>&1 || true) | grep 'restricted mode' >/dev/null
     (rpdfcrop --gscmd echo $(command -v pdfcrop) 2>&1 || true) | grep 'restricted mode' >/dev/null
@@ -417,6 +430,12 @@ rec {
         # crossrefware: require bibtexperllibs under TEXMFROOT
         "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "checkcites" "ltx2crossrefxml"
 
+        # epstopdf: requires kpsewhich
+        "epstopdf" "repstopdf"
+
+        # requires kpsewhich
+        "memoize-extract.pl" "memoize-extract.py"
+
         # require other texlive binaries in PATH
         "allcm" "allec" "chkweb" "fontinst" "ht*" "installfont-tl" "kanji-config-updmap-sys" "kanji-config-updmap-user"
         "kpse*" "latexfileversion" "mkocp" "mkofm" "mtxrunjit" "pdftex-quiet" "pslatex" "rumakeindex" "texconfig"
@@ -424,7 +443,7 @@ rec {
 
         # misc luatex binaries searching for luatex in PATH
         "citeproc-lua" "context" "contextjit" "ctanbib" "digestif" "epspdf" "l3build" "luafindfont" "luaotfload-tool"
-        "luatools" "make4ht" "pmxchords" "tex4ebook" "texdoc" "texlogsieve" "xindex"
+        "luatools" "make4ht" "pmxchords" "tex4ebook" "texblend" "texdoc" "texfindpkg" "texlogsieve" "xindex"
 
         # requires full TEXMFROOT (e.g. for config)
         "mktexfmt" "mktexmf" "mktexpk" "mktextfm" "psnup" "psresize" "pstops" "tlmgr" "updmap" "webquiz"
@@ -454,14 +473,13 @@ rec {
       '';
 
       # link all binaries in single derivation
-      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
-      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binPackages = lib.catAttrs "out" (lib.attrValues texlive.pkgs);
       binaries = buildEnv { name = "texlive-binaries"; paths = binPackages; };
     in
     runCommand "texlive-test-binaries"
       {
         inherit binaries contextTestTex latexTestTex texTestTex;
-        texliveScheme = texlive.combined.scheme-full;
+        texliveScheme = texliveFull;
       }
       ''
         loadables="$(command -v bash)"
@@ -504,6 +522,13 @@ rec {
           args=
           ignoreExitCode=
           binCount=$((binCount + 1))
+
+          # ignore non-executable files (such as context.lua)
+          if [[ ! -x "$bin" ]] ; then
+            ignoredCount=$((ignoredCount + 1))
+            continue
+          fi
+
           case "$base" in
             ${lib.concatStringsSep "|" ignored})
               ignoredCount=$((ignoredCount + 1))
@@ -565,8 +590,7 @@ rec {
 
   # check that all scripts have a Nix shebang
   shebangs = let
-      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
-      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binPackages = lib.catAttrs "out" (lib.attrValues texlive.pkgs);
     in
     runCommand "texlive-test-shebangs" { }
       (''
@@ -577,6 +601,7 @@ rec {
         (pkg: ''
           for bin in '${pkg.outPath}'/bin/* ; do
             grep -I -q . "$bin" || continue  # ignore binary files
+            [[ -x "$bin" ]] || continue # ignore non-executable files (such as context.lua)
             scriptCount=$((scriptCount + 1))
             read -r cmdline < "$bin"
             read -r interp <<< "$cmdline"
@@ -615,7 +640,7 @@ rec {
         correctLicenses = scheme: builtins.foldl'
                 (acc: pkg: concatLicenses acc (lib.toList (pkg.meta.license or [])))
                 []
-                scheme.passthru.packages;
+                scheme.passthru.requiredTeXPackages;
         correctLicensesAttrNames = scheme:
           lib.sort lt
             (map licenseToAttrName (correctLicenses scheme));
@@ -625,7 +650,7 @@ rec {
           (savedLicensesAttrNames scheme) != (correctLicensesAttrNames scheme);
         incorrectSchemes = lib.filterAttrs
           (n: hasLicenseMismatch)
-          texlive.combined;
+          (texlive.combined // texlive.schemes);
         prettyPrint = name: scheme:
           ''
             license info for ${name} is incorrect! Note that order is enforced.
@@ -648,10 +673,13 @@ rec {
   # this is effectively an eval-time assertion, converted into a derivation for
   # ease of testing
   fixedHashes = with lib; let
-    combine = findFirst (p: (head p.pkgs).pname == "combine") { pkgs = []; } (head texlive.collection-latexextra.pkgs).tlDeps;
-    all = concatLists (map (p: p.pkgs or []) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ]))) ++ combine.pkgs;
-    fods = filter (p: isDerivation p && p.tlType != "bin") all;
-    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname + optionalString (p.tlType != "run") ("." + p.tlType)} does not have a fixed output hash\n") fods;
+    fods = lib.concatMap
+      (p: lib.optional (p ? tex && isDerivation p.tex) p.tex
+        ++ lib.optional (p ? texdoc) p.texdoc
+        ++ lib.optional (p ? texsource) p.texsource
+        ++ lib.optional (p ? tlpkg) p.tlpkg)
+      (attrValues texlive.pkgs);
+    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n") fods;
   in runCommand "texlive-test-fixed-hashes" {
     inherit errorText;
     passAsFile = [ "errorText" ];

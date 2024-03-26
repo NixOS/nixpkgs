@@ -37,7 +37,6 @@ target-version = ['py39']
 include = '\.pyi?$'
 
 [tool.mypy]
-python_version = "3.10"
 warn_redundant_casts = true
 disallow_untyped_calls = true
 disallow_untyped_defs = true

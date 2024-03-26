@@ -86,9 +86,14 @@ touch /etc/initrd-release
 # Function for waiting for device(s) to appear.
 waitDevice() {
     local device="$1"
-    # Split device string using ':' as a delimiter as bcachefs
-    # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
-    local IFS=':'
+    # Split device string using ':' as a delimiter, bcachefs uses
+    # this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
+    local IFS
+
+    # bcachefs is the only known use for this at the moment
+    # Preferably, the 'UUID=' syntax should be enforced, but
+    # this is kept for compatibility reasons
+    if [ "$fsType" = bcachefs ]; then IFS=':'; fi
 
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
@@ -253,9 +258,6 @@ done
 @setHostId@
 
 # Load the required kernel modules.
-mkdir -p /lib
-ln -s @modulesClosure@/lib/modules /lib/modules
-ln -s @modulesClosure@/lib/firmware /lib/firmware
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
@@ -497,6 +499,8 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
         echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
     fi
 fi
+
+@postResumeCommands@
 
 # If we have a path to an iso file, find the iso and link it to /dev/root
 if [ -n "$isoPath" ]; then

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "shiv";
-  version = "1.0.4";
+  version = "1.0.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j2n3gXolRalMyOB6jsWXN1z4biwb0OWD7nU9bzH4UGA=";
+    hash = "sha256-3eryU4+4HFfMIrmst1Vlm6GounzvtCfFiAYFhAH/RdU=";
   };
 
   propagatedBuildInputs = [ click pip setuptools wheel ];

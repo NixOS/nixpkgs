@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "3.4";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    hash = "sha256-Z2DT+RO35EcJFOnrjmJ8v2tsINQnsPkbFhZW9OZqob4=";
+    hash = "sha256-CfCWfKRzeGGk8/B0BLauO4Xb88/Si1ezvcGKeURgC9o=";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform gettext catalogs (.po files) editor";
+    mainProgram = "poedit";
     homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;

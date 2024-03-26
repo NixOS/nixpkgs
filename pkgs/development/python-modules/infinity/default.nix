@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "infinity";
   version = "1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

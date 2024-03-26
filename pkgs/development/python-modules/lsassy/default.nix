@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.8";
+  version = "3.1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Hackndo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-refOq/QWRv1naCskVm6h1QmCH9/YkDJ90HU3Hzc2w4A=";
+    hash = "sha256-VGLSVv/+UpgeSTHoOTjEfQSAYfXA3bAI+yKjcKBI1Z4=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to extract data from Local Security Authority Subsystem Service (LSASS)";
+    mainProgram = "lsassy";
     homepage = "https://github.com/Hackndo/lsassy";
     changelog = "https://github.com/Hackndo/lsassy/releases/tag/v${version}";
     license = with licenses; [ mit ];

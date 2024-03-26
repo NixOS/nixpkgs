@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake, boost, zlib}:
+{lib, stdenv, fetchurl, fetchpatch, cmake, boost, zlib}:
 
 stdenv.mkDerivation rec {
   pname = "clucene-core";
@@ -40,8 +40,21 @@ stdenv.mkDerivation rec {
 
     # required for darwin and linux-musl
     ./pthread-include.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./fix-darwin.patch
 
-  ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
+    # see https://bugs.gentoo.org/869170
+    (fetchpatch {
+       url = "https://869170.bugs.gentoo.org/attachment.cgi?id=858825";
+       hash = "sha256-TbAfBKdXh+1HepZc8J6OhK1XGwhwBCMvO8QBDsad998=";
+    })
+  ];
+
+  # see https://github.com/macports/macports-ports/commit/236d43f2450c6be52dc42fd3a2bbabbaa5136201
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/shared/CMakeLists.txt --replace 'fstati64;_fstati64;fstat64;fstat;_fstat' 'fstat;_fstat'
+    substituteInPlace src/shared/CMakeLists.txt --replace 'stati64;_stati64;stat64;stat;_stat' 'stat;_stat'
+  '';
 
   # fails with "Unable to find executable:
   # /build/clucene-core-2.3.3.4/build/bin/cl_test"

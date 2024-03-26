@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   ] ++ optionals stdenv.isDarwin [
     "NATIVE=osx"
     "CLANG=1"
-    "OSX_MIN=${stdenv.targetPlatform.darwinMinVersion}"
+    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   postInstall = optionalString tiles
@@ -72,6 +72,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A free, post apocalyptic, zombie infested rogue-like";
+    mainProgram = "cataclysm-tiles";
     longDescription = ''
       Cataclysm: Dark Days Ahead is a roguelike set in a post-apocalyptic world.
       Surviving is difficult: you have been thrown, ill-equipped, into a

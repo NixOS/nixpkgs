@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pijuice";
   version = "1.7";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -58,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and resources for PiJuice HAT for Raspberry Pi";
+    mainProgram = "pijuice_cli";
     homepage = "https://github.com/PiSupply/PiJuice";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexagonal-sun ];

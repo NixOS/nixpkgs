@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
-  version = "3.4.20";
+  version = "3.5.6";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    hash = "sha256-9jKKef7KPnSYgKb3zf1LaulFBJuDpY6pWOJHSpG6Hzs=";
+    hash = "sha256-8/zAMnzuC3677i7wFKQroFtAMtfhg0280xZd3nAMmcI=";
   };
 
   patches = [
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
     license = with licenses; [ mit /* or */ ruby ];
+    mainProgram = "gem";
     maintainers = with maintainers; [ zimbatm ];
   };
 }

@@ -92,7 +92,12 @@ in {
     (mkIf cfg.enableRedirector {
       security.wrappers."keybase-redirector".source = "${pkgs.kbfs}/bin/redirector";
 
-      systemd.tmpfiles.rules = [ "d /keybase 0755 root root 0" ];
+      systemd.tmpfiles.settings."10-kbfs"."/keybase".d = {
+        user = "root";
+        group = "root";
+        mode = "0755";
+        age = "0";
+      };
 
       # Upstream: https://github.com/keybase/client/blob/master/packaging/linux/systemd/keybase-redirector.service
       systemd.user.services.keybase-redirector = {

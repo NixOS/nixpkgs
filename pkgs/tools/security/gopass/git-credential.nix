@@ -2,21 +2,30 @@
 , makeWrapper
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , gopass
 }:
 
 buildGoModule rec {
   pname = "git-credential-gopass";
-  version = "1.15.8";
+  version = "1.15.12";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "git-credential-gopass";
     rev = "v${version}";
-    hash = "sha256-gp/5ZBAxngQKRmr924f7ZQ4GX3uYHz2ULw1Gn+d7vug=";
+    hash = "sha256-5j5+so4LT3x+epEZf9OVn/kLNHBk2ENQxxRrzbziEA4=";
   };
 
-  vendorHash = "sha256-IXY8w5TLXA3SIT2Jyjqt+pPtZ35zQnG0wY08OB1spDw=";
+  patches = [
+    # go mod tidy. Remove with next release
+    (fetchpatch {
+      url = "https://github.com/gopasspw/git-credential-gopass/commit/88d11d2b1b49f00b7fba9a917cf90f7ea14c9d1b.patch";
+      hash = "sha256-mXxI9GXan0zYL8msL83VLqxOp4oAOwMyCOFaUOLAg5E=";
+    })
+  ];
+
+  vendorHash = "sha256-y1PH0+tt/kcHw2I4LWD2XfLud3JtsYqrRd/yVRPdaTA=";
 
   subPackages = [ "." ];
 

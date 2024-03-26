@@ -28,6 +28,7 @@ in
     start_all()
 
     server.wait_for_unit("uptermd.service")
+    server.systemctl("start network-online.target")
     server.wait_for_unit("network-online.target")
 
     # wait for upterm port to be reachable

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjson";
-  version = "1.7.16";
+  version = "1.7.17";
 
   src = fetchFromGitHub {
     owner = "DaveGamble";
     repo = "cJSON";
     rev = "v${version}";
-    sha256 = "sha256-sdhnDpaAO9Fau4uMzNXrbOJ2k0b8+MdhKh6rpFMUwaQ=";
+    sha256 = "sha256-jU9UbXvdXiNXFh7c9p/LppMsuqryFK40NTTyQGbNU84=";
   };
 
   nativeBuildInputs = [ cmake ];

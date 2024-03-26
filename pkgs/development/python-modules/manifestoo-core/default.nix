@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "manifestoo-core";
-  version = "1.0";
+  version = "1.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "manifestoo_core";
-    hash = "sha256-cnEbws2NDxVkLEgLsYw2VQQWP69nC1SVixl9a6vHPmo=";
+    hash = "sha256-a3v2WfJ42bh2LlAsH9ekpLFsAlOiTTLGNknTW2mTxCI=";
   };
 
   nativeBuildInputs = [
@@ -26,8 +26,6 @@ buildPythonPackage rec {
   propagatedBuildInputs =
     lib.optionals (pythonOlder "3.7") [ importlib-resources ]
     ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   passthru.updateScript = nix-update-script { };
 

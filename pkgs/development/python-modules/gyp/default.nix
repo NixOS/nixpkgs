@@ -9,6 +9,7 @@
 buildPythonPackage {
   pname = "gyp";
   version = "unstable-2022-04-01";
+  format = "setuptools";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/external/gyp";
@@ -35,6 +36,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A tool to generate native build files";
+    mainProgram = "gyp";
     homepage = "https://gyp.gsrc.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];

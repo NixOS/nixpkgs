@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
+, setuptools
 , numpy
 , onnx
 , packaging
@@ -8,18 +9,24 @@
 , torch
 , torchvision
 , typing-extensions
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.7.2";
+  version = "0.7.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
-    repo = pname;
+    repo = "pytorch-pfn-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-juoLw/qfq4YF7opyR7cTYCVzUa9pXVvQnvGntcQhBr4=";
+    hash = "sha256-vSon/0GxQfaRtSPsQbYAvE3s/F0HEN59VpzE3w1PnVE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ numpy packaging torch typing-extensions ];
 
@@ -41,6 +48,7 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_torchvision.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/utils.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_lax.py"
 
     # RuntimeError: No Op registered for Gradient with domain_version of 9
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_grad.py"
@@ -53,13 +61,15 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/nn_tests/modules_tests/test_lazy.py"
     "tests/pytorch_pfn_extras_tests/profiler_tests/test_record.py"
     "tests/pytorch_pfn_extras_tests/runtime_tests/test_to.py"
-    "tests/pytorch_pfn_extras_tests/test_handler.py"
-    "tests/pytorch_pfn_extras_tests/test_logic.py"
+    "tests/pytorch_pfn_extras_tests/handler_tests/test_handler.py"
     "tests/pytorch_pfn_extras_tests/test_reporter.py"
     "tests/pytorch_pfn_extras_tests/training_tests/test_trainer.py"
     "tests/pytorch_pfn_extras_tests/utils_tests/test_checkpoint.py"
     "tests/pytorch_pfn_extras_tests/utils_tests/test_comparer.py"
     "tests/pytorch_pfn_extras_tests/utils_tests/test_new_comparer.py"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # Remove this when https://github.com/NixOS/nixpkgs/pull/259068 is merged
+    "tests/pytorch_pfn_extras_tests/dynamo_tests/test_compile.py"
   ];
 
   meta = with lib; {

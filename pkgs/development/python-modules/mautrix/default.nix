@@ -16,20 +16,21 @@
 , pytest-asyncio
 , aiosqlite
 , asyncpg
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.20.2";
+  version = "0.20.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-c6NSDFQGKtT8Otw+ivNUZ2+Qm/LEDGpZNs3FrYq+N1A=";
+    hash = "sha256-A9d/r4Caeo4tO82/MMXgU5xKvXRDnK0iQUm8AFhDPLM=";
   };
 
   propagatedBuildInputs = [
@@ -51,12 +52,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  checkInputs = [
     pytest-asyncio
     aiosqlite
     asyncpg
+    ruamel-yaml
   ] ++ passthru.optional-dependencies.encryption;
 
   pythonImportsCheck = [

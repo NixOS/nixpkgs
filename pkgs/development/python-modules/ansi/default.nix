@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "ansi";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tehmaze";
     repo = pname;
-    rev = "${pname}-${version}";
-    hash = "sha256-2gu2Dba3LOjMhbCCZrBqzlOor5KqDYThhe8OP8J3O2M=";
+    rev = "refs/tags/ansi-${version}";
+    hash = "sha256-PmgB1glksu4roQeZ1o7uilMJNm9xaYqw680N2z+tUUM=";
   };
 
   nativeBuildInputs = [

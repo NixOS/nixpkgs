@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
     appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
     html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
     service-identity simplejson sphinx-rtd-theme testtools treq twisted zfec
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls
     ++ twisted.optional-dependencies.conch;
 
@@ -89,6 +89,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
+    mainProgram = "tahoe";
     longDescription = ''
       Tahoe-LAFS is a secure, decentralized, fault-tolerant filesystem.
       This filesystem is encrypted and spread over multiple peers in

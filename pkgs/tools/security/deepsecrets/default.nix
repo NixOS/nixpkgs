@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "deepsecrets";
   version = "1.0.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avito-tech";
@@ -17,9 +17,9 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'pyyaml = "^5.4.1"' 'pyyaml = "*"' \
-      --replace 'regex = "^2023.3.23"' 'regex = "*"' \
-      --replace 'mmh3 = "^3.0.0"' 'mmh3 = "*"'
+      --replace-warn 'pyyaml = "^5.4.1"' 'pyyaml = "*"' \
+      --replace-warn 'regex = "^2023.3.23"' 'regex = "*"' \
+      --replace-warn 'mmh3 = "^3.0.0"' 'mmh3 = "*"'
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     dotwiz
     mmh3
     ordered-set
-    pydantic
+    pydantic_1
     pygments
     pyyaml
     regex
@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Secrets scanner that understands code";
+    mainProgram = "deepsecrets";
     homepage = "https://github.com/avito-tech/deepsecrets";
     changelog = "https://github.com/avito-tech/deepsecrets/releases/tag/v${version}";
     license = licenses.mit;

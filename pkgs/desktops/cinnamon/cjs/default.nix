@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "5.8.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-DKCe8dKdYfdeWQ9Iqr0AmDU7YDN9QrQGdTkrBV/ywV0=";
+    hash = "sha256-oSqEAZWEVb8NxFTScl8s5Mb04tCGDyVVslYW00s4YYk=";
   };
 
   outputs = [ "out" "dev" ];

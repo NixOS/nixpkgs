@@ -255,12 +255,12 @@ rec {
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://github.com/eclipse-cdt/cdt/releases
-    version = "11.3.0";
+    version = "11.4.0";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
-      hash = "sha256-jmHiIohn8Ol0QhTCOVRStIAKmMzOPcQ5i5QNz6hKQ4M=";
+      hash = "sha256-39AoB5cKRQMFpRaOlrTEsyEKZYVqdTp1tMtlaDjjZ84=";
     };
 
     meta = with lib; {
@@ -671,12 +671,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.feature_${version}.jar";
-      sha1 = "c8fb6c4aab32db13db0bd81c1a148032667fff31";
+      hash = "sha256-iKe7oOPjy6th0HmKt6NXexOHN60EDpQe1r+n6K+uoyw=";
     };
 
     srcPlugin = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse_${version}.jar";
-      sha1 = "0c80c2e228a07f18efab1c56ea026448eda70c06";
+      hash = "sha256-lhwFwdMDwCIUrQjdWfe5ZSutCIsKtZSBT6FWthUipdk=";
     };
 
     meta = with lib; {
@@ -695,12 +695,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.eclipse.resolvevisualizer.feature_${version}.jar";
-      sha1 = "fb1941eaa2c0de54259de01b0da6d5a6b4a2cab1";
+      hash = "sha256-PSH5NtE7hN2hHoHUhVK1CLkHN7YSDdTTqBP7711X4rU=";
     };
 
     srcPlugin = fetchurl {
       url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse.resolvevisualizer_${version}.jar";
-      sha1 = "225e0c8ccb010d622c159560638578c2fc51a67e";
+      hash = "sha256-qjTvn1j7viSfzLkWnYjyS9Pj2ExqsiFGLzot3+oB0Tw=";
     };
 
     meta = with lib; {

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "3.4.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "media-downloader";
     rev = finalAttrs.version;
-    hash = "sha256-FTfkVD2uBfCBbP7fjjfG21bOGDVd2j6bhPLHGPm3xh4=";
+    hash = "sha256-/W0SkKe9rcwf8HBIEcdJCPdZEnx9eh+twBu9wa6Sq30=";
   };
 
   nativeBuildInputs = [
@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ zendo ];
     platforms = lib.platforms.linux;
+    mainProgram = "media-downloader";
   };
 })

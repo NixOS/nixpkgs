@@ -36,7 +36,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
   };
 
   # fancy setup: run in uWSGI and use nginx as proxy
-  nodes.fancy = { ... }: {
+  nodes.fancy = { config, ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
     services.searx = {
@@ -65,7 +65,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
           include ${pkgs.nginx}/conf/uwsgi_params;
           uwsgi_pass unix:/run/searx/uwsgi.sock;
         '';
-      locations."/searx/static/".alias = "${pkgs.searx}/share/static/";
+      locations."/searx/static/".alias = "${config.services.searx.package}/share/static/";
     };
 
     # allow nginx access to the searx socket
@@ -108,7 +108,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
               "${pkgs.curl}/bin/curl --fail http://localhost/searx >&2"
           )
           fancy.succeed(
-              "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/oscar/js/bootstrap.min.js >&2"
+              "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/simple/js/leaflet.js >&2"
           )
     '';
 })

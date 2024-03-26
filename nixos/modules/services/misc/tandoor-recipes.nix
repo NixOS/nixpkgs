@@ -12,19 +12,19 @@ let
     DEBUG_TOOLBAR = "0";
     MEDIA_ROOT = "/var/lib/tandoor-recipes";
   } // optionalAttrs (config.time.timeZone != null) {
-    TIMEZONE = config.time.timeZone;
+    TZ = config.time.timeZone;
   } // (
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
 
-  manage =
-    let
-      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
-    in
-    pkgs.writeShellScript "manage" ''
-      ${setupEnv}
-      exec ${pkg}/bin/tandoor-recipes "$@"
-    '';
+  manage = pkgs.writeShellScript "manage" ''
+    set -o allexport # Export the following env vars
+    ${lib.toShellVars env}
+    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
+    exec ${pkgs.util-linux}/bin/nsenter \
+      -t $MainPID -m -S $UID -G $GID \
+      ${pkg}/bin/tandoor-recipes "$@"
+  '';
 in
 {
   meta.maintainers = with maintainers; [ ambroisie ];
@@ -71,12 +71,7 @@ in
       };
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.tandoor-recipes;
-      defaultText = literalExpression "pkgs.tandoor-recipes";
-      description = lib.mdDoc "The Tandoor Recipes package to use.";
-    };
+    package = mkPackageOption pkgs "tandoor-recipes" { };
   };
 
   config = mkIf cfg.enable {
@@ -90,6 +85,7 @@ in
         Restart = "on-failure";
 
         User = "tandoor_recipes";
+        Group = "tandoor_recipes";
         DynamicUser = true;
         StateDirectory = "tandoor-recipes";
         WorkingDirectory = "/var/lib/tandoor-recipes";

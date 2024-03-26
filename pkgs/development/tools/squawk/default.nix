@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "0.24.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XQU/1uAas1bT7FSgBzJSPRe4ET9ysjpFGhV+qi23AAY=";
+    hash = "sha256-RnY41G0ombqJewv+kxvg8AwQeRaVb+frZjmU/Cd28Jo=";
   };
 
-  cargoHash = "sha256-Qg2VcsAqXpYamO35t/lvlXUPTdjAqZ4z3Nm0hYdhjEM=";
+  cargoHash = "sha256-YR2ZSwrCkX8eyHTj1Dtk9f01/y9fDtknouige68kS8I=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,6 +38,11 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   LIBPG_QUERY_PATH = libpg_query;
+
+  checkFlags = [
+    # depends on the PostgreSQL version
+    "--skip=parse::tests::test_parse_sql_query_json"
+  ];
 
   meta = with lib; {
     description = "Linter for PostgreSQL, focused on migrations";

@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.50";
+  version = "1.14.52";
 
   outputs = [ "out" "dev" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libgsf";
     rev = "LIBGSF_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-6RP2DJWcDQ8dkKtcPxAkRsS7jSvvLoDNZHXiDJwR8Eg=";
+    hash = "sha256-uSi2/pZiST07YutU8SHNoY2LifEQhohQeyaH9spyG2s=";
   };
 
   postPatch = ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNOME's Structured File Library";
     homepage = "https://www.gnome.org/projects/libgsf";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
 

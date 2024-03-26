@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyschedule";
   version = "0.2.34";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

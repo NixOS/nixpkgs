@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-logging";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jaraco.logging";
     inherit version;
-    hash = "sha256-X8ssPxI1HU1QN1trYPOJnFg3sjLxotj/y6/17NK3M+c=";
+    hash = "sha256-9KfPusuGqDTCiGwBo7UrxM3icowdlxfEnU3OHWJI8Hs=";
   };
 
   pythonNamespaces = [

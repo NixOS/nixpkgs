@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "act";
-  version = "0.2.52";
+  version = "0.2.60";
 
   src = fetchFromGitHub {
     owner = "nektos";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-mw0Ul6m8mgx2I3ExoDs5luN4PQXAI0NADTSYt+DFCs8=";
+    hash = "sha256-FFSnxxqKAFYPuX4NJahiBS65Goj6se2U5WdPiKpNXDo=";
   };
 
-  vendorHash = "sha256-WoeJ4yB3bTx6I+Ga5X7ZhPfjw3NERp1v/ot5pPsYYLw=";
+  vendorHash = "sha256-FLomnHVhpvbM+O3OGwjXfrtTVbegnzry8Sl+4a3uw08=";
 
   doCheck = false;
 
@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Run your GitHub Actions locally";
+    mainProgram = "act";
     homepage = "https://github.com/nektos/act";
     changelog = "https://github.com/nektos/act/releases/tag/v${version}";
     license = licenses.mit;

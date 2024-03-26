@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) generators literalExpression mkEnableOption mkIf mkOption recursiveUpdate types;
+  inherit (lib) generators literalExpression mkEnableOption mkPackageOption
+                mkIf mkOption recursiveUpdate types;
   cfg = config.services.zeronet;
   dataDir = "/var/lib/zeronet";
   configFile = pkgs.writeText "zeronet.conf" (generators.toINI {} (recursiveUpdate defaultSettings cfg.settings));
@@ -19,12 +20,7 @@ in with lib; {
   options.services.zeronet = {
     enable = mkEnableOption (lib.mdDoc "zeronet");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.zeronet;
-      defaultText = literalExpression "pkgs.zeronet";
-      description = lib.mdDoc "ZeroNet package to use";
-    };
+    package = mkPackageOption pkgs "zeronet" { };
 
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);

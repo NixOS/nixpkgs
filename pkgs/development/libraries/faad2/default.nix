@@ -1,8 +1,7 @@
 {lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
-, drmSupport ? false # Digital Radio Mondiale
+, cmake
 
 # for passthru.tests
 , gst_all_1
@@ -13,19 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "faad2";
-  version = "2.10.1";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
     rev = version;
-    sha256 = "sha256-k7y12OwCn3YkNZY9Ov5Y9EQtlrZh6oFUzM27JDR960w=";
+    hash = "sha256-E6oe7yjYy1SJo8xQkyUk1sSucKDMPxwUFVSAyrf4Pd8=";
   };
 
-  configureFlags = []
-    ++ lib.optional drmSupport "--with-drm";
+  outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ cmake ];
 
   passthru.tests = {
     inherit mpd vlc;

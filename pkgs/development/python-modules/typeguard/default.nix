@@ -1,11 +1,12 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , pythonOlder
-, lib
 , setuptools
 , setuptools-scm
 , pytestCheckHook
 , typing-extensions
+, importlib-metadata
 , sphinxHook
 , sphinx-autodoc-typehints
 , sphinx-rtd-theme
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   version = "4.1.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,6 +41,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   env.LC_ALL = "en_US.utf-8";
@@ -48,19 +51,28 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "typeguard"
+  ];
+
   disabledTestPaths = [
     # mypy tests aren't passing with latest mypy
     "tests/mypy"
   ];
 
   disabledTests = [
-    # not compatible with python3.10
-    "test_typed_dict"
+    # AssertionError: 'type of argument "x" must be ' != 'None'
+    "TestPrecondition::test_precondition_ok_and_typeguard_fails"
+    # AttributeError: 'C' object has no attribute 'x'
+    "TestInvariant::test_invariant_ok_and_typeguard_fails"
+    # AttributeError: 'D' object has no attribute 'x'
+    "TestInheritance::test_invariant_ok_and_typeguard_fails"
   ];
 
   meta = with lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
+    changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

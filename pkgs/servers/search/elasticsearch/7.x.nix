@@ -18,10 +18,10 @@ let
   plat = elemAt info 1;
   hashes =
     {
-      x86_64-linux   = "sha512-eiAT5Dx/w56GoxpzPMdMWH7yu6DAE/lc6HT5i0iKT48Ob7JUoe7dXAsOIQrtmgGV9zWPqWU8iQ4jRBP/kxkIBw==";
-      x86_64-darwin  = "sha512-5vSefA9Z4mCz49Q+Vzdck1KXbE9REYAF46kSf0G1n5XlHqFYzTGOmUEObZhGTqH4RDLJBdEqhLj2iyzjWQX5RA==";
-      aarch64-linux  = "sha512-8nkPSbecOBJGu/h0MZGUUq+Tqk/YqmvJwfkDHn7V2cZJ9bq4Z8KKfRYC4ihdP0pfePgJrAV0SwKtZ9aGELtnfQ==";
-      aarch64-darwin = "sha512-dbZrYGULuC3FF/SllPpAgW077Lkr87NJ8+gyTMayl8i8rOvAjnZhiR/U7eA6CZ/qVsFQkpGATdAzRXF8NlZBcg==";
+      x86_64-linux   = "sha512-OiWGRxaCdRxXuxE/W04v87ytzOeUEcHRjF5nyRkdqSbZSnLXUyKOYQ4fKmk4til0VBOaKZYId20XyPiu/XTXNw==";
+      x86_64-darwin  = "sha512-V/vKYL96+M1lp7ZJlvuneRBePWZmucUANfUrFPMuq+fnUP4nN69RStLWcgwgt65EspFMBwKVyQbak4swV8rWxw==";
+      aarch64-linux  = "sha512-fNgVRaIIGx01reNHOnGKhMOG1aYU7gC8HLpIESSbM3+9xO1q9IHIaL/ObI/w2RYj/lD22d7PAdX5N6Hd1pVSAA==";
+      aarch64-darwin = "sha512-DgexeyoxZ1YTPw9HjSUAM6eC8XtzIw7MY1WUVsIa8zl5j3RpCp25s3oI12BWefjYYCTjdtFDMsnoFSqZBabLig==";
     };
 in
 stdenv.mkDerivation rec {

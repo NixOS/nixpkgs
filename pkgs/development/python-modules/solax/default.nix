@@ -1,9 +1,9 @@
 { lib
 , aiohttp
+, async-timeout
 , buildPythonPackage
 , fetchPypi
 , pytest-asyncio
-, pytest-cov
 , pytest-httpserver
 , pytestCheckHook
 , pythonOlder
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "0.3.2";
-  format = "setuptools";
+  version = "3.0.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7UDTG8rw9XJd5LPqcAe2XyE7DQa96dBj9YOcgW+/aFc=";
+    hash = "sha256-PQ7qJCNfXGNF2RK6pHwf0U1DXgv2j2uQ64Nv/qh8f8s=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
     voluptuous
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov
     pytest-httpserver
     pytestCheckHook
   ];
@@ -43,9 +43,16 @@ buildPythonPackage rec {
     "solax"
   ];
 
+  disabledTests = [
+    # Tests require network access
+    "test_discovery"
+    "test_smoke"
+  ];
+
   meta = with lib; {
     description = "Python wrapper for the Solax Inverter API";
     homepage = "https://github.com/squishykid/solax";
+    changelog = "https://github.com/squishykid/solax/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

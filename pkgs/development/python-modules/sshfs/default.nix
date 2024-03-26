@@ -15,15 +15,14 @@
 buildPythonPackage rec {
   pname = "sshfs";
   version = "2023.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
-    repo = pname;
+    repo = "sshfs";
     rev = "refs/tags/${version}";
     hash = "sha256-6MueDHR+jZFDZg4zufEVhBtSwcgDd7KnW9gJp2hDu0A=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

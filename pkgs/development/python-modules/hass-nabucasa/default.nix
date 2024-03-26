@@ -4,12 +4,17 @@
 , atomicwrites-homeassistant
 , attrs
 , buildPythonPackage
+, ciso8601
+, cryptography
 , fetchFromGitHub
 , pycognito
+, pyjwt
 , pytest-aiohttp
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
+, setuptools
 , snitun
 , syrupy
 , xmltodict
@@ -17,31 +22,36 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.71.0";
-  format = "setuptools";
+  version = "0.79.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
-    repo = pname;
+    repo = "hass-nabucasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-2v8LEVYY7PEzcIMaXcy9h+8O2KrU0zTKyZb2IrO35JQ=";
+    hash = "sha256-7VhafefF7imvnhdFo6K+18h5kmXvIatKerJ+Qn5zwdQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "acme==" "acme>=" \
-      --replace "pycognito==" "pycognito>=" \
-      --replace "snitun==" "snitun>=" \
-  '';
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "acme"
+  ];
 
   propagatedBuildInputs = [
     acme
     aiohttp
     atomicwrites-homeassistant
     attrs
+    ciso8601
+    cryptography
     pycognito
+    pyjwt
     snitun
   ];
 

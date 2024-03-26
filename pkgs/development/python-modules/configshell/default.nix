@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "configshell";
   version = "1.1.30";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";

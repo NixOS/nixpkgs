@@ -1,9 +1,9 @@
-{ config, pkgs, lib, options, ... }:
+{ config, pkgs, lib, options, utils, ... }:
 
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
-                mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-                optional types mkOptionDefault flip attrNames;
+    mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
+    optional types mkOptionDefault flip attrNames;
 
   cfg = config.services.prometheus.exporters;
 
@@ -20,7 +20,7 @@ let
   #  systemd service must be provided by specifying either
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
-  exporterOpts = genAttrs [
+  exporterOpts = (genAttrs [
     "apcupsd"
     "artifactory"
     "bind"
@@ -34,14 +34,16 @@ let
     "domain"
     "dovecot"
     "fastly"
+    "flow"
+    "fritz"
     "fritzbox"
     "graphite"
     "idrac"
     "imap-mailstat"
     "influxdb"
     "ipmi"
-    "json"
     "jitsi"
+    "json"
     "junos-czerwonk"
     "kea"
     "keylight"
@@ -51,6 +53,7 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mongodb"
     "mysqld"
     "nextcloud"
     "nginx"
@@ -58,25 +61,26 @@ let
     "node"
     "nut"
     "openldap"
-    "openvpn"
     "pgbouncer"
     "php-fpm"
     "pihole"
+    "ping"
     "postfix"
     "postgres"
     "process"
     "pve"
     "py-air-control"
     "redis"
+    "restic"
     "rspamd"
     "rtl_433"
     "sabnzbd"
     "scaphandre"
     "script"
     "shelly"
-    "snmp"
     "smartctl"
     "smokeping"
+    "snmp"
     "sql"
     "statsd"
     "surfboard"
@@ -88,10 +92,39 @@ let
     "v2ray"
     "varnish"
     "wireguard"
-    "flow"
     "zfs"
-  ] (name:
-    import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+  ]
+    (name:
+      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options utils; }
+    )) // (mapAttrs
+    (name: params:
+      import (./. + "/exporters/${params.name}.nix") { inherit config lib pkgs options utils; type = params.type ; })
+    {
+      exportarr-bazarr = {
+        name = "exportarr";
+        type = "bazarr";
+      };
+      exportarr-lidarr = {
+        name = "exportarr";
+        type = "lidarr";
+      };
+      exportarr-prowlarr = {
+        name = "exportarr";
+        type = "prowlarr";
+      };
+      exportarr-radarr = {
+        name = "exportarr";
+        type = "radarr";
+      };
+      exportarr-readarr = {
+        name = "exportarr";
+        type = "readarr";
+      };
+      exportarr-sonarr = {
+        name = "exportarr";
+        type = "sonarr";
+      };
+    }
   );
 
   mkExporterOpts = ({ name, port }: {

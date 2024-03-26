@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/NNBnh/bfetch";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
+    mainProgram = "bfetch";
   };
 }

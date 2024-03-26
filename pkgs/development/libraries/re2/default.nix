@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2023-09-01";
+  version = "2024-03-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    hash = "sha256-dCEkwjIs8ITVUZ4N0+qeGoShGNqKkdvJ88teyGKN6pg=";
+    hash = "sha256-VuI9OsfGTdVywdyVfBrSzXSjbSfevne+YQ2oOz4R3DM=";
   };
 
   outputs = [ "out" "dev" ];

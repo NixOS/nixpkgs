@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "nose-randomly";
   version = "1.2.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

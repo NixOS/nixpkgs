@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , pkg-config, cmake, xxd
 , openssl, libwebsockets, json_c, libuv, zlib
+, nixosTests
 }:
 
 with builtins;
@@ -20,11 +21,16 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+  passthru.tests = {
+    inherit (nixosTests) ttyd;
+  };
+
   meta = {
     description = "Share your terminal over the web";
     homepage    = "https://github.com/tsl0922/ttyd";
     license     = lib.licenses.mit;
     maintainers = [ lib.maintainers.thoughtpolice ];
     platforms   = lib.platforms.all;
+    mainProgram = "ttyd";
   };
 }

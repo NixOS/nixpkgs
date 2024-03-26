@@ -1,38 +1,45 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, asn1crypto
+, pythonOlder
+, setuptools
+, unicrypto
 , asyauth
 , asysocks
-, minikerberos
+, asn1crypto
+, winacl
 , prompt-toolkit
 , tqdm
-, winacl
-, winsspi
-, pythonOlder
+, wcwidth
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.5.7";
-  format = "setuptools";
+  version = "0.5.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6gTUPtGQKJSd7HpMRRlw87Iu3I1L2ea2F+QQs1U1jIM=";
+    hash = "sha256-Zb/g5QLJTSb0XTZvVnzbYkYvJ/ZVvQri8CKP48n5ibg=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    asn1crypto
+    unicrypto
     asyauth
     asysocks
-    minikerberos
+    asn1crypto
+    winacl
     prompt-toolkit
     tqdm
-    winacl
-    winsspi
+    wcwidth
+    tabulate
   ];
 
   # Project doesn't have tests

@@ -13,12 +13,13 @@
 , withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
+, withSystemdJournal ? (!stdenv.isDarwin), systemd
 , withDebug ? false
 }:
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
-  version = "1.43.0";
+  version = "1.44.3";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-hrwuJLO9/K5QT3j8d5RYHcpBHChpKvwajaCoUfikw88="
-      else "sha256-+bX6pVpW6N1ms04k63sJg0E9XMOai5K9IjEQPeVCzs8=";
+      then "sha256-ahWaq6geEoc6NZ2oU/Dqnb0bjRXd+q1zaRGOSIYVYok="
+      else "sha256-2Kvh2WuoJjJxsFKueMjCAbazqZdzoOTxakbPVsj9PBo=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ lib.optionals withConnPrometheus [ snappy ]
     ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
+    ++ lib.optionals withSystemdJournal [ systemd ]
     ++ lib.optionals withSsl [ openssl ];
 
   patches = [
@@ -93,6 +95,10 @@ stdenv.mkDerivation rec {
        $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
+    ${lib.optionalString withSystemdJournal ''
+      mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
+         $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+    ''}
     ${lib.optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
@@ -109,6 +115,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-ebpf"
     "--with-jemalloc=${jemalloc}"
+  ] ++ lib.optionals (withSystemdJournal) [
+    "--enable-plugin-systemd-journal"
   ] ++ lib.optionals (!withDBengine) [
     "--disable-dbengine"
   ] ++ lib.optionals (!withCloud) [

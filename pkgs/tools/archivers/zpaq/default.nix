@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "http://mattmahoney.net/dc/zpaq.html";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "zpaq";
   };
 }

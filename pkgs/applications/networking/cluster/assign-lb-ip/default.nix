@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Assigns loadBalancerIP address to a Kubernetes service for testing purposes";
+    mainProgram = "assign-lb-ip";
     homepage    = "https://github.com/Nordix/assign-lb-ip";
     license     = licenses.asl20;
     maintainers = [ maintainers.starcraft66 ];

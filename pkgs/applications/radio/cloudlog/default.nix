@@ -8,16 +8,16 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cloudlog";
-  version = "2.4.11";
+  version = "2.6.7";
 
   src = fetchFromGitHub {
     owner = "magicbug";
     repo = "Cloudlog";
     rev = version;
-    hash = "sha256-w1QCEow0K8uzbHlyASCggw2U+1RXjPbmxd5XRSdp6yE=";
+    hash = "sha256-blWMfe/eqeccGE5dWVJWV7L1akWnhO3t5n8HbjlJIcA=";
   };
 
-  postPath = ''
+  postPatch = ''
     substituteInPlace index.php \
       --replace "define('ENVIRONMENT', 'development');" "define('ENVIRONMENT', 'production');"
   '';

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , unasync
 , poetry-core
 , python
@@ -33,9 +34,15 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     unasync
     poetry-core
   ];
+
+  # it has not been maintained at all for a half year and some dependencies are outdated
+  # https://github.com/redis/redis-om-python/pull/554
+  # https://github.com/redis/redis-om-python/pull/577
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     click
@@ -49,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} make_sync.py
+    ${python.pythonOnBuildForHost.interpreter} make_sync.py
   '';
 
   nativeCheckInputs = [
@@ -77,6 +84,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object mapping, and more, for Redis and Python";
+    mainProgram = "migrate";
     homepage = "https://github.com/redis/redis-om-python";
     changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.rev}";
     license = licenses.mit;

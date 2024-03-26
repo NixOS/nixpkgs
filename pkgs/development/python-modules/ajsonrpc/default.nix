@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ajsonrpc";
   version = "1.2.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -17,6 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Async JSON-RPC 2.0 protocol + asyncio server";
+    mainProgram = "async-json-rpc-server";
     homepage = "https://github.com/pavlov99/ajsonrpc";
     license = licenses.mit;
     maintainers = with maintainers; [ oxzi ];

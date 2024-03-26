@@ -19,7 +19,10 @@
 , gtkSupport ? stdenv.isLinux
 , cairo
 , glib
+, gtk2
 , gtk3
+  # runtime dependencies for JavaFX
+, ffmpeg
 }:
 let
   dist = dists.${stdenv.hostPlatform.system}
@@ -43,6 +46,10 @@ let
     cairo
     glib
     gtk3
+  ] ++ lib.optionals (gtkSupport && lib.versionOlder dist.jdkVersion "17") [
+    gtk2
+  ] ++ lib.optionals (stdenv.isLinux && enableJavaFX) [
+    ffmpeg.lib
   ];
 
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
@@ -57,7 +64,7 @@ let
   isJdk8 = lib.versions.major dist.jdkVersion == "8";
 
   jdk = stdenv.mkDerivation rec {
-    pname = "zulu${dist.zuluVersion}-${javaPackage}";
+    pname = "zulu-${javaPackage}";
     version = dist.jdkVersion;
 
     src = fetchurl {
@@ -83,8 +90,14 @@ let
       xorg.libXi
       xorg.libXrender
       xorg.libXtst
+      xorg.libXxf86vm
       zlib
-    ];
+    ] ++ lib.optionals (stdenv.isLinux && enableJavaFX) runtimeDependencies;
+
+    autoPatchelfIgnoreMissingDeps = if (stdenv.isLinux && enableJavaFX) then [
+      "libavcodec*.so.*"
+      "libavformat*.so.*"
+    ] else null;
 
     installPhase = ''
       mkdir -p $out

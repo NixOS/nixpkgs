@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kestrel";
-  version = "0.11.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "finfet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-l9YYzwyi7POXbCxRmmhULO2YJauNJBfRGuXYU3uZQN4=";
+    hash = "sha256-n0XIFBCwpc6QTj3PjGp+fYtU4U+RAfA4PRcettFlxVA=";
   };
 
-  cargoHash = "sha256-XqyFGxTNQyY1ryTbL9/9s1WVP4bVk/zbG9xNdddLX10=";
+  cargoHash = "sha256-GZK4IaAolU1up2bYd/2tBahcCP70hO5/shDODUD+aRE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "File encryption done right";
+    mainProgram = "kestrel";
     longDescription = "
       Kestrel is a data-at-rest file encryption program
       that lets you encrypt files to anyone with a public key.

@@ -9,7 +9,6 @@
 , mesonEmulatorHook
 , ninja
 , perl
-, rsync
 , python3
 , fetchpatch
 , gettext
@@ -72,7 +71,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     perl
-    rsync
 
     # man pages
     libxslt
@@ -101,7 +99,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     dbus
-    (python3.pythonForBuild.withPackages (pp: with pp; [
+    (python3.pythonOnBuildForHost.withPackages (pp: with pp; [
       dbus-python
       (python-dbusmock.overridePythonAttrs (attrs: {
         # Avoid dependency cycle.
@@ -131,7 +129,7 @@ stdenv.mkDerivation rec {
   # at install time but Meson does not support this
   # so we need to convince it to install all files to a temporary
   # location using DESTDIR and then move it to proper one in postInstall.
-  DESTDIR = "${placeholder "out"}/dest";
+  env.DESTDIR = "dest";
 
   inherit doCheck;
 
@@ -165,23 +163,19 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
-    # We use rsync to merge the directories.
-    rsync --archive "${DESTDIR}/etc" "$out"
-    rm --recursive "${DESTDIR}/etc"
-    rsync --archive "${DESTDIR}${system}"/* "$out"
-    rm --recursive "${DESTDIR}${system}"/*
-    rmdir --parents --ignore-fail-on-non-empty "${DESTDIR}${system}"
+    # We need to be careful with the ordering to merge without conflicts.
     for o in $(getAllOutputNames); do
-        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "${DESTDIR}/''${!o}"
+        mv "$DESTDIR/''${!o}" "''${!o}"
     done
-    # Ensure the DESTDIR is removed.
-    destdirContainer="$(dirname "${DESTDIR}")"
-    pushd "$destdirContainer"; rmdir --parents "''${DESTDIR##$destdirContainer/}${builtins.storeDir}"; popd
+    mv "$DESTDIR/etc" "$out"
+    mv "$DESTDIR${system}/share"/* "$out/share"
+    # Ensure we did not forget to install anything.
+    rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}" "$DESTDIR${system}/share"
+    ! test -e "$DESTDIR"
   '';
 
   meta = with lib; {
-    homepage = "http://www.freedesktop.org/wiki/Software/polkit";
+    homepage = "https://gitlab.freedesktop.org/polkit/polkit/";
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

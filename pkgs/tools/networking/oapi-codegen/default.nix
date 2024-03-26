@@ -25,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/deepmap/oapi-codegen/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ j4m3s ];
+    mainProgram = "oapi-codegen";
   };
 }

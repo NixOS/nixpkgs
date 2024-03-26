@@ -1,22 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, sgmllib3k
 , python
+, pythonOlder
+, setuptools
+, sgmllib3k
 }:
 
 buildPythonPackage rec {
   pname = "feedparser";
-  version = "6.0.10";
-  format = "setuptools";
+  version = "6.0.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J9pIX0Y3znFjzeqxOoAxK5O30MG3db70pHYpoxELylE=";
+    hash = "sha256-ydBAe2TG8qBl0OuyksKzXAEFDMDcM3V0Yaqr3ExBhNU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     sgmllib3k
@@ -36,8 +41,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/kurtmckee/feedparser";
     description = "Universal feed parser";
+    homepage = "https://github.com/kurtmckee/feedparser";
+    changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
     license = licenses.bsd2;
     maintainers = with maintainers; [ domenkozar ];
   };

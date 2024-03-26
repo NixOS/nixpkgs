@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-vlc";
-  version = "3.0.18122";
+  version = "3.0.20123";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EDm94oeFO0t7Yboi2DdhgyQ094UG2nYt+wYCkb8yiX0=";
+    hash = "sha256-JE+7njkqAyaEH8qSbW0SoqNsVGmCGR9JPxSPoZ5msdQ=";
   };
 
   patches = [

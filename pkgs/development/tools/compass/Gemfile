@@ -1,3 +1,2 @@
-source "https://rubygems.org" do
-  gem 'compass'
-end
+source 'https://rubygems.org'
+gem 'compass'

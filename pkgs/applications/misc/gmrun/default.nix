@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [];
     platforms = platforms.all;
+    mainProgram = "gmrun";
   };
 }

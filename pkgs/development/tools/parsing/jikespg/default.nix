@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://jikes.sourceforge.net/";
     description = "The Jikes Parser Generator";
+    mainProgram = "jikespg";
     platforms = platforms.all;
     license = licenses.ipl10;
     maintainers = with maintainers; [ pSub ];

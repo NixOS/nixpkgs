@@ -1,46 +1,83 @@
 { lib
 , fetchFromGitHub
-, buildNpmPackage
 , makeWrapper
-, electron_25
+, electron
 , python3
 , stdenv
+, stdenvNoCC
 , copyDesktopItems
+, moreutils
+, cacert
+, jq
+, nodePackages
 , makeDesktopItem
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "2.1.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "th-ch";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-aYEEUv+dybzcH0aNJlZ19XF++8cswFunrU0H+ZaKm4Y=";
+    repo = "youtube-music";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-N6TzDTKvMyasksE0qcEGKeNjGAD08OzxpmpoQ11/ZW4=";
   };
 
-  electron = electron_25;
+  pnpmDeps = stdenvNoCC.mkDerivation {
+    pname = "${finalAttrs.pname}-pnpm-deps";
+    inherit (finalAttrs) src version ELECTRON_SKIP_BINARY_DOWNLOAD;
 
-in
-buildNpmPackage {
-  inherit pname version src;
+    nativeBuildInputs = [ jq moreutils nodePackages.pnpm cacert ];
 
-  nativeBuildInputs = [ makeWrapper python3 ]
+    installPhase = ''
+      export HOME=$(mktemp -d)
+
+      pnpm config set store-dir $out
+      pnpm install --frozen-lockfile --ignore-script
+
+      rm -rf $out/v3/tmp
+      for f in $(find $out -name "*.json"); do
+        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
+        jq --sort-keys . $f | sponge $f
+      done
+    '';
+
+    dontBuild = true;
+    dontFixup = true;
+    outputHashMode = "recursive";
+    outputHash = {
+      x86_64-linux = "sha256-V6CSawxBWFbXmAPbck0xCXqRlANpqFAoqSAB4Duf8qM=";
+      aarch64-linux = "sha256-cqBn35soV14CmobKt0napRELio4HKKA8Iw3QSWTxzP8=";
+      x86_64-darwin = "sha256-DY9T1N8Hxr57/XisYT+u2+hQvYMIiyQ3UHeTuA6BhSY=";
+      aarch64-darwin = "sha256-3Zk0SyhVKaz5QdO69/xzWFZj9ueJS6GLWhfW7odWvHc=";
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  };
+
+  nativeBuildInputs = [ makeWrapper python3 nodePackages.pnpm nodePackages.nodejs ]
     ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
 
-  npmDepsHash = "sha256-XGV0mTywYYxpMitojzIILB/Eu/8dfk/aCvUxIkx4SDQ=";
-  makeCacheWritable = true;
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  };
+  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+    export STORE_PATH=$(mktemp -d)
+
+    cp -Tr "$pnpmDeps" "$STORE_PATH"
+    chmod -R +w "$STORE_PATH"
+
+    pnpm config set store-dir "$STORE_PATH"
+    pnpm install --offline --frozen-lockfile --ignore-script
+    patchShebangs node_modules/{*,.*}
+  '';
 
   postBuild = lib.optionalString stdenv.isDarwin ''
     cp -R ${electron}/Applications/Electron.app Electron.app
     chmod -R u+w Electron.app
   '' + ''
-    npm exec electron-builder -- \
+    pnpm build
+    ./node_modules/.bin/electron-builder \
       --dir \
       -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
       -c.electronVersion=${electron.version}
@@ -83,7 +120,7 @@ buildNpmPackage {
       icon = "youtube-music";
       desktopName = "Youtube Music";
       startupWMClass = "Youtube Music";
-      categories = ["AudioVideo"];
+      categories = [ "AudioVideo" ];
     })
   ];
 
@@ -93,6 +130,6 @@ buildNpmPackage {
     license = licenses.mit;
     maintainers = [ maintainers.aacebedo ];
     mainProgram = "youtube-music";
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
-}
+})

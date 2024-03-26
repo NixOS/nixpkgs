@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "sphinx-jinja";
   version = "2.0.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

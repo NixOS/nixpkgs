@@ -17,8 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-z7Qp74cai8GfsxB4n9dSCWQepp0/4PimFiRJQBaVSoo=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     gettext
   ];
@@ -56,6 +54,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Check websites for broken links";
+    mainProgram = "linkchecker";
     homepage = "https://linkcheck.github.io/linkchecker/";
     changelog = "https://github.com/linkchecker/linkchecker/releases/tag/v${version}";
     license = licenses.gpl2Plus;

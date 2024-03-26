@@ -2,26 +2,25 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, openssl
+, libiconv
 , pkg-config
 , installShellFiles
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tuxmux";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "edeneast";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QySDC/aEU9Fo0UbRUNvgBQLfESYzENGfS8Tl/ycn1YY=";
+    hash = "sha256-BZ1Vo1NIpzUBGyvd/UbxLaFbrLzoaP8kn/8GoAYBmlo=";
   };
 
-  cargoHash = "sha256-MlLTaN+KMeF0A1hh0oujLYWqjwrbmoNzoRoXjeCUf7I=";
+  cargoHash = "sha256-HIYQPHLMhQtpCIkl5EzjJGHXzBtw7mY85l5bqapw3rg=";
 
-  buildInputs = [ openssl ] ++ (lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]);
+  buildInputs = [ libiconv ];
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
   postInstall = ''
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tmux session manager";
     homepage = "https://github.com/edeneast/tuxmux";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ edeneast ];
     mainProgram = "tm";
   };

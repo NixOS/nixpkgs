@@ -30,8 +30,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-S4+cS4m69nqDN2h0vwyO35fFFBEa0Rcxx0XDBfSNLp0=";
 
+  postInstall = ''
+    install -Dm444 linux/com.system76.keyboardconfigurator.desktop -t $out/share/applications
+    cp -r data/icons $out/share
+  '';
+
   meta = with lib; {
     description = "Keyboard configuration application for System76 keyboards and laptops";
+    mainProgram = "system76-keyboard-configurator";
     homepage = "https://github.com/pop-os/keyboard-configurator";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ mirrexagon ];

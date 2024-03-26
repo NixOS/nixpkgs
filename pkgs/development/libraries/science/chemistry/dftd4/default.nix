@@ -27,10 +27,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ blas lapack mctc-lib mstore multicharge ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}/" ""
+  outputs = [ "out" "dev" ];
+
+  # Fix the Pkg-Config files for doubled store paths
+  postPatch = ''
+    substituteInPlace config/template.pc \
+      --replace "\''${prefix}/" ""
   '';
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
 
   doCheck = true;
   preCheck = ''
@@ -39,6 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
+    mainProgram = "dftd4";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
     homepage = "https://github.com/grimme-lab/dftd4";
     platforms = platforms.linux;

@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.fourmilab.ch/webtools/qprint/";
     license = lib.licenses.publicDomain;
     description = "Encode and decode Quoted-Printable files";
+    mainProgram = "qprint";
     maintainers = [ lib.maintainers.tv ];
     platforms = lib.platforms.all;
   };

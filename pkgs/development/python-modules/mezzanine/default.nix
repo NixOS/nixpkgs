@@ -6,7 +6,7 @@
 , django
 , django-contrib-comments
 , fetchPypi
-, filebrowser_safe
+, filebrowser-safe
 , future
 , grappelli-safe
 , isPyPy
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     chardet
     django
     django-contrib-comments
-    filebrowser_safe
+    filebrowser-safe
     future
     grappelli-safe
     pillow
@@ -66,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Content management platform built using the Django framework";
+    mainProgram = "mezzanine-project";
     longDescription = ''
       Mezzanine is a powerful, consistent, and flexible content
       management platform. Built using the Django framework, Mezzanine
@@ -88,4 +89,3 @@ buildPythonPackage rec {
     platforms = platforms.unix;
   };
 }
-

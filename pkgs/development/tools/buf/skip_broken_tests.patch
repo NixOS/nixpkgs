@@ -1,0 +1,28 @@
+diff --git a/private/buf/cmd/buf/workspace_unix_test.go b/private/buf/cmd/buf/workspace_unix_test.go
+index 22c84385..22548555 100644
+--- a/private/buf/cmd/buf/workspace_unix_test.go
++++ b/private/buf/cmd/buf/workspace_unix_test.go
+@@ -93,6 +93,8 @@ func TestWorkspaceAbsoluteFail(t *testing.T) {
+ // Workflow run: https://github.com/bufbuild/buf/actions/runs/6510804063/job/17685247791.
+ // Potential fix: https://stackoverflow.com/questions/22575662/filename-too-long-in-git-for-windows.
+ func TestWorkspaceGit(t *testing.T) {
++	// Fails because the source checkout is not part of a git repository while building with nix
++	t.Skip()
+ 	// Directory paths specified as a git reference within a workspace.
+ 	t.Parallel()
+ 	testRunStdout(
+diff --git a/private/bufpkg/buftesting/buftesting.go b/private/bufpkg/buftesting/buftesting.go
+index d9e1fdc6..6e08c439 100644
+--- a/private/bufpkg/buftesting/buftesting.go
++++ b/private/bufpkg/buftesting/buftesting.go
+@@ -104,6 +104,10 @@ func RunActualProtoc(
+ 
+ // GetGoogleapisDirPath gets the path to a clone of googleapis.
+ func GetGoogleapisDirPath(t *testing.T, buftestingDirPath string) string {
++	// Requires network access, which is not available during
++	// the nixpkgs sandboxed build
++	t.Skip()
++
+ 	googleapisDirPath := filepath.Join(buftestingDirPath, testGoogleapisDirPath)
+ 	require.NoError(
+ 		t,

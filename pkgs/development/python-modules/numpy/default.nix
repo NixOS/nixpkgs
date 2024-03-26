@@ -2,17 +2,29 @@
 , stdenv
 , fetchPypi
 , python
-, buildPythonPackage
-, gfortran
-, hypothesis
-, pytestCheckHook
-, typing-extensions
-, blas
-, lapack
-, writeTextFile
-, cython
 , pythonAtLeast
 , pythonOlder
+, buildPythonPackage
+, writeTextFile
+
+# build-system
+, cython_3
+, gfortran
+, meson-python
+, mesonEmulatorHook
+, pkg-config
+, xcbuild
+
+# native dependencies
+, blas
+, lapack
+
+# tests
+, hypothesis
+, pytest-xdist
+, pytestCheckHook
+, setuptools
+, typing-extensions
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -41,14 +53,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.25.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  version = "1.26.4";
+  pyproject = true;
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-/WCOGcjXxVAh3/1Dv+VJL6uMwQXMiYb4E/jDwEizh2A=";
+    hash = "sha256-KgKrqe0S5KxOs+qUIcQgMBoMZGDZgw10qd+H76SRIBA=";
   };
 
   patches = [
@@ -70,21 +82,44 @@ in buildPythonPackage rec {
     #   error: option --single-version-externally-managed not recognized
     #   TypeError: dist must be a Distribution instance
     rm numpy/core/tests/test_cython.py
+
+    patchShebangs numpy/_build_utils/*.py
+
+    # remove needless reference to full Python path stored in built wheel
+    substituteInPlace numpy/meson.build \
+      --replace 'py.full_path()' "'python'"
   '';
 
-  nativeBuildInputs = [ gfortran cython ];
-  buildInputs = [ blas lapack ];
+  nativeBuildInputs = [
+    cython_3
+    gfortran
+    meson-python
+    pkg-config
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    xcbuild.xcrun
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
   hardeningDisable = lib.optionals stdenv.cc.isClang [ "strictoverflow" ];
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/xianyi/OpenBLAS/issues/2993
+  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
+  '';
+
+  # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
+  postConfigure = ''
+    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
   '';
 
   preBuild = ''
@@ -94,8 +129,10 @@ in buildPythonPackage rec {
   enableParallelBuilding = true;
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     hypothesis
+    setuptools
     typing-extensions
   ];
 
@@ -127,6 +164,9 @@ in buildPythonPackage rec {
     "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_big_arrays" # OOM on a 16G machine
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # can fail on virtualized machines confused over their cpu identity
+    "test_dispatcher"
   ];
 
   passthru = {
@@ -138,10 +178,12 @@ in buildPythonPackage rec {
 
   # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_large_file_support";
+  env.NOSE_EXCLUDE = "test_large_file_support";
 
   meta = {
+    changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
     description = "Scientific tools for Python";
+    mainProgram = "f2py";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];

@@ -19,8 +19,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Serve NAR file contents via HTTP";
+    mainProgram = "nar-serve";
     homepage = "https://github.com/numtide/nar-serve";
     license = licenses.mit;
-    maintainers = with maintainers; [ rizary ];
+    maintainers = with maintainers; [ rizary zimbatm ];
   };
 }

@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.k900 ];
     platforms = platforms.linux;
     homepage = "https://github.com/jcaesar/lls";
+    mainProgram = "lls";
   };
 }

@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "coreapi";
   version = "2.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "python-client";

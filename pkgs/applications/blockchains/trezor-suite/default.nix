@@ -8,7 +8,7 @@
 
 let
   pname = "trezor-suite";
-  version = "23.10.1";
+  version = "24.3.2";
   name = "${pname}-${version}";
 
   suffix = {
@@ -19,8 +19,8 @@ let
   src = fetchurl {
     url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
     hash = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/latest/download/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-      aarch64-linux = "sha512-MR9BYg6R+Oof3zh02KSh48V2m6J7JpsrYpi6gj5kTvKuCU5Ci5AwPEAvnTjHAR6xlappvoNQmeA5nCEoTWaL7A==";
-      x86_64-linux  = "sha512-BqdfhYLG4z+9B7KbJGWGPml7U2fl/RQ1nZK0vdeA/cKhG0SjH0K8er9bemg60RPBXj0AeuK80v/6vMbDtyEnRQ==";
+      aarch64-linux = "sha512-oj/UrUFTH0QZD2eTHdR/Lu6Tz6AIhbIBgPJD3jH1YJKgOZIzX21H0KSddMgu+iKPw2WmoKf0UP+qqf+yFs/mVQ==";
+      x86_64-linux  = "sha512-RakNuSDKR0neO0IZwTVaARX9tWNDfJwOBFL3teUsNlcrur862I1c6NaaA/RxriujolDRI+wgG0twaUGEXXar5g==";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -53,11 +53,15 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
+    # trezor-suite fails to detect a connected hardware wallet
+    # ref: https://github.com/NixOS/nixpkgs/issues/281975
+    broken = true;
     description = "Trezor Suite - Desktop App for managing crypto";
     homepage = "https://suite.trezor.io";
     changelog = "https://github.com/trezor/trezor-suite/releases/tag/v${version}";
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
+    mainProgram = "trezor-suite";
   };
 }

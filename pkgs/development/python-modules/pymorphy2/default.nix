@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pymorphy2";
   version = "0.9.1";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Morphological analyzer/inflection engine for Russian and Ukrainian";
+    mainProgram = "pymorphy";
     homepage = "https://github.com/kmike/pymorphy2";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

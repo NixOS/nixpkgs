@@ -1,62 +1,53 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , rustPlatform
 , cargo
 , pkg-config
-, dtc
 , glibc
 , openssl
-, libiconv
 , libkrunfw
 , rustc
-, Hypervisor
 , sevVariant ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "libkrun";
-  version = "1.5.1";
+  version = "1.7.2";
 
-  src = if stdenv.isLinux then fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-N9AkG+zkjQHNaaCVrEpMfWUN9bQNHjMA2xi5NUulF5A=";
-  } else fetchurl {
-    url = "https://github.com/containers/libkrun/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-8hPbnZtDbiVdwBrtxt4nZ/QA2OFtui2VsQlaoOmWybo=";
+    repo = "libkrun";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cP+Pxl/9QIsoGysXTBZJ86q57cIMA7TJenMWtcOI+Y4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-nbtp7FP+ObVGfDOEzTt4Z7TZwcNlREczTKIAXGSflZU=";
+    inherit pname version src;
+    hash = "sha256-qVyHC015QJEt6LZ8br3H0nucYKhYGBMtyB2IBaixTqk=";
   };
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
     rustc
-  ] ++ lib.optional sevVariant pkg-config;
+  ] ++ lib.optionals sevVariant [
+    pkg-config
+  ];
 
   buildInputs = [
     (libkrunfw.override { inherit sevVariant; })
-  ] ++ lib.optionals stdenv.isLinux [
     glibc
     glibc.static
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Hypervisor
-    dtc
-  ] ++ lib.optional sevVariant openssl;
+  ] ++ lib.optionals sevVariant [
+    openssl
+  ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optional sevVariant "SEV=1";
-
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/libkrun.dylib $out/lib/libkrun.${version}.dylib
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ] ++ lib.optionals sevVariant [
+    "SEV=1"
+  ];
 
   meta = with lib; {
     description = "A dynamic library providing Virtualization-based process isolation capabilities";
@@ -64,6 +55,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
     platforms = libkrunfw.meta.platforms;
-    sourceProvenance = with sourceTypes; lib.optionals stdenv.isDarwin [ binaryNativeCode ];
   };
 }

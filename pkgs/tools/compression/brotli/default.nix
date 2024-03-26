@@ -73,5 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libbrotlienc"
     ];
     platforms = platforms.all;
+    mainProgram = "brotli";
   };
 })

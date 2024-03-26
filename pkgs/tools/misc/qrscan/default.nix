@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv }:
+{ clang_15, lib, rustPlatform, fetchFromGitHub, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qrscan";
@@ -12,7 +12,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    rustPlatform.bindgenHook
+    (rustPlatform.bindgenHook.overrideAttrs {
+      libclang = clang_15.cc.lib;
+    })
   ];
 
   cargoHash = "sha256-P40IwFRtEQp6BGRgmt1x3UXtAKtWaMjR3kqhYq+p7wQ=";
@@ -28,6 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Scan a QR code in the terminal using the system camera or a given image";
+    mainProgram = "qrscan";
     homepage = "https://github.com/sayanarijit/qrscan";
     license = licenses.mit;
     broken = stdenv.isDarwin;

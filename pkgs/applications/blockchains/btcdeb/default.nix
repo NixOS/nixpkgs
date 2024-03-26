@@ -3,21 +3,26 @@
 , autoreconfHook
 , pkg-config
 , openssl
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "btcdeb";
-  version = "unstable-2022-04-03";
+  version = "0.3.20-unstable-2024-02-06";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "btcdeb";
-    rev = "3ba1ec7f4d37f7d2ff0544403465004c6e12036e";
-    hash = "sha256-l/PGXXX288mnoSFZ32t2Xd13dC6JCU5wDHoDxb+fcp0=";
+    rev = "b9288fc3371eb1d9be0cae2549be25de66659be8";
+    hash = "sha256-IieLNMA3m6g2Kn7g3iewmUL9c+meMR4hrrwVYqNZoh8=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl ];
+
+  enableParallelBuilding = true;
+
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
     description = "Bitcoin Script Debugger";

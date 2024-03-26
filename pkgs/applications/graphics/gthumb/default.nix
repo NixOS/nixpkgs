@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.12.3";
+  version = "3.12.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-k9s11xQCxIoILVDPQIW7a4DkvVyLmxYaH3tRhBsQBxE=";
+    sha256 = "sha256-YIdwxsjnMHOh1AS2W9G3YeGsXcJecBMP8HJIj6kvXDM=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gthumb";
     description = "Image browser and viewer for GNOME";
+    mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mimame ];

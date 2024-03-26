@@ -5,6 +5,7 @@
 , buildPythonApplication
 , python3
 , pythonRelaxDepsHook
+, installShellFiles
 , androguard
 , babel
 , clint
@@ -26,14 +27,14 @@
 
 buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "2.2.1";
+  version = "unstable-2023-10-23";
   format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-+Y1YTgELsX834WIrhx/NX34yLMHdkKM+YUNvnHPiC/s=";
+    rev = "f4b10cf83935432d19948dac669964384bef0728";
+    hash = "sha256-GmR6Td5pScwEKK9W6m26xQV4XxBdZ7frN2UvwUGY4Dw=";
   };
 
   pythonRelaxDeps = [
@@ -47,16 +48,19 @@ buildPythonApplication rec {
   '';
 
   preConfigure = ''
-    ${python3.pythonForBuild.interpreter} setup.py compile_catalog
+    ${python3.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
     patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
+    installShellCompletion --cmd fdroid \
+      --bash completion/bash-completion
   '';
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    installShellFiles
   ];
 
   buildInputs = [
@@ -103,10 +107,11 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/f-droid/fdroidserver";
-    changelog = "https://github.com/f-droid/fdroidserver/blob/${version}/CHANGELOG.md";
+    homepage = "https://gitlab.com/fdroid/fdroidserver";
+    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ linsui jugendhacker ];
+    mainProgram = "fdroid";
   };
 }

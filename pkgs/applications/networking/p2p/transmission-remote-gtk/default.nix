@@ -7,6 +7,7 @@
 , geoip
 , gettext
 , glib
+, glib-networking
 , gtk3
 , json-glib
 , libappindicator
@@ -50,12 +51,15 @@ stdenv.mkDerivation rec {
     libmrss
     libproxy
     libsoup_3
-  ] ++ libsoup_3.propagatedUserEnvPackages;
+    # For TLS support.
+    glib-networking
+  ];
 
   doCheck = false; # Requires network access
 
   meta = with lib; {
     description = "GTK remote control for the Transmission BitTorrent client";
+    mainProgram = "transmission-remote-gtk";
     homepage = "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
     changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${version}";
     license = licenses.gpl2;

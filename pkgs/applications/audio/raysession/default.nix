@@ -1,12 +1,12 @@
-{ lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, which, bash, qt5 }:
+{ lib, fetchurl, buildPythonApplication, libjack2, pyliblo, pyqt5, which, bash, qt5 }:
 
 buildPythonApplication rec {
   pname = "raysession";
-  version = "0.13.1";
+  version = "0.14.3";
 
   src = fetchurl {
     url = "https://github.com/Houston4444/RaySession/releases/download/v${version}/RaySession-${version}-source.tar.gz";
-    sha256 = "sha256-iiFRtX43u9BHe7a4ojza7kav+dMW9e05dPi7Gf9d1GM=";
+    sha256 = "sha256-3+g1zdjGkxNEpyuKuxzhr2p9gkEFjYAso4fPedbjmlY=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ buildPythonApplication rec {
     qt5.wrapQtAppsHook
   ];
   buildInputs = [ libjack2 bash ];
-  propagatedBuildInputs = [ pydbus pyliblo pyqt5 ];
+  propagatedBuildInputs = [ pyliblo pyqt5 ];
 
   dontWrapQtApps = true; # The program is a python script.
 

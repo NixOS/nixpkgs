@@ -24,6 +24,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A paint app from the C Suite";
+    mainProgram = "corepaint";
     homepage = "https://gitlab.com/cubocore/coreapps/corepaint";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

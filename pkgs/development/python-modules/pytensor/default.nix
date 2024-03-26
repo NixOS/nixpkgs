@@ -18,15 +18,13 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-# Tensorflow is currently (2023/10/04) broken.
-# Thus, we don't provide this optional test dependency.
-# , tensorflow-probability
+, tensorflow-probability
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.17.3";
+  version = "2.18.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,7 +33,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-FufPCFzSjG8BrHes7t3XsdovX9gqUBG0gMDGKvkRkSA=";
+    hash = "sha256-SMh4wVZwmc87ztFn2OOI234VP3JzmxVMBkn7lYwVu6M=";
   };
 
   postPatch = ''
@@ -66,9 +64,7 @@ buildPythonPackage rec {
     numba-scipy
     pytest-mock
     pytestCheckHook
-    # Tensorflow is currently (2023/10/04) broken.
-    # Thus, we don't provide this optional test dependency.
-    # tensorflow-probability
+    tensorflow-probability
   ];
 
   preBuild = ''
@@ -86,8 +82,6 @@ buildPythonPackage rec {
     "test_logsumexp_benchmark"
     "test_scan_multiple_output"
     "test_vector_taps_benchmark"
-    # Temporarily disabled because of broken tensorflow-probability
-    "test_tfp_ops"
   ];
 
   disabledTestPaths = [
@@ -99,6 +93,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
+    mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
     changelog = "https://github.com/pymc-devs/pytensor/releases";
     license = licenses.bsd3;

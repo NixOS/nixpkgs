@@ -18,6 +18,7 @@
 buildPythonPackage {
   pname = "dogtail";
   version = "0.9.11";
+  format = "setuptools";
 
   outputs = [ "out" "dev" ];
 

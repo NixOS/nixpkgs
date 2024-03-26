@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyfido";
   version = "2.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client to get fido account data";
+    mainProgram = "pyfido";
     homepage = "https://github.com/titilambert/pyfido";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

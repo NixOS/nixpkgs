@@ -24,6 +24,8 @@ let
       { name = "cli"; description = "command-line serialization functions"; }
       { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
       { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
+      { name = "meta"; description = "functions for derivation metadata"; }
+      { name = "derivations"; description = "miscellaneous derivation-specific functions"; }
     ];
   };
 
@@ -120,16 +122,17 @@ in pkgs.stdenv.mkDerivation {
       ${pkgs.documentation-highlighter}/mono-blue.css \
       ${pkgs.documentation-highlighter}/loader.js
 
-    cp -t out ./overrides.css ./style.css
+    cp -t out ./style.css ./anchor.min.js ./anchor-use.js
 
     nixos-render-docs manual html \
       --manpage-urls ./manpage-urls.json \
       --revision ${pkgs.lib.trivial.revisionWithDefault (pkgs.rev or "master")} \
       --stylesheet style.css \
-      --stylesheet overrides.css \
       --stylesheet highlightjs/mono-blue.css \
       --script ./highlightjs/highlight.pack.js \
       --script ./highlightjs/loader.js \
+      --script ./anchor.min.js \
+      --script ./anchor-use.js \
       --toc-depth 1 \
       --section-toc-depth 1 \
       manual.md \
@@ -148,4 +151,26 @@ in pkgs.stdenv.mkDerivation {
     echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
+
+  passthru.tests.manpage-urls = with pkgs; testers.invalidateFetcherByDrvHash
+    ({ name ? "manual_check-manpage-urls"
+     , script
+     , urlsFile
+     }: runCommand name {
+      nativeBuildInputs = [
+        cacert
+        (python3.withPackages (p: with p; [
+          aiohttp
+          rich
+          structlog
+        ]))
+      ];
+      outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";  # Empty output
+    } ''
+      python3 ${script} ${urlsFile}
+      touch $out
+    '') {
+      script = ./tests/manpage-urls.py;
+      urlsFile = ./manpage-urls.json;
+    };
 }

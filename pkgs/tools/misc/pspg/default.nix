@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pspg";
-  version = "5.8.0";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VkWGVKLN8arc6BOivmjSk8MtMbp2WYqZE9lM8oTQe+U=";
+    sha256 = "sha256-1mL/UlN7wD0GBYwg0C2eYCB3MtFO2ILd4+A7br+/ovs=";
   };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.jlesquembre ];
+    mainProgram = "pspg";
   };
 }

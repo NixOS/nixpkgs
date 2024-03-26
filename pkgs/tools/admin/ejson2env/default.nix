@@ -22,9 +22,10 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A tool to simplify storing secrets that should be accessible in the shell environment in your git repo.";
+    description = "Decrypt EJSON secrets and export them as environment variables";
     homepage = "https://github.com/Shopify/ejson2env";
     maintainers = with maintainers; [ viraptor ];
     license = licenses.mit;
+    mainProgram = "ejson2env";
   };
 }

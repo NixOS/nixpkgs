@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wlcs";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YYrhcN1BSJISn/7lxu7Db5YaOK+okdHVJuMwqSDzAIU=";
+    hash = "sha256-BQPRymkbGu4YvTYXTaTMuyP5fHpqMWI4xPwjDRHZNEQ=";
   };
 
   strictDeps = true;

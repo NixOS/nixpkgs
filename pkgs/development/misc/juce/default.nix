@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";
-  version = "7.0.7";
+  version = "7.0.10";
 
   src = fetchFromGitHub {
     owner = "juce-framework";
     repo = "juce";
     rev = finalAttrs.version;
-    hash = "sha256-r+Wf/skPDexm3rsrVBoWrygKvV9HGlCQd7r0iHr9avM=";
+    hash = "sha256-CAHhHPTUvIyDOh2CdvNmw26HfoWWtbqRRiR+3Ky4GYA=";
   };
 
   patches = [
@@ -53,13 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd # libGL.so
     webkitgtk # webkit2gtk-4.0
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-    darwin.apple_sdk_11_0.frameworks.MetalKit
-    darwin.apple_sdk_11_0.frameworks.WebKit
+    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.MetalKit
+    darwin.apple_sdk.frameworks.WebKit
   ];
 
   meta = with lib; {
     description = "Cross-platform C++ application framework";
+    mainProgram = "juceaide";
     longDescription = "JUCE is an open-source cross-platform C++ application framework for desktop and mobile applications, including VST, VST3, AU, AUv3, RTAS and AAX audio plug-ins";
     homepage = "https://github.com/juce-framework/JUCE";
     license = with licenses; [ isc gpl3Plus ];

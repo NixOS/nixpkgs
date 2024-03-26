@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "async-timeout";
   version = "4.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

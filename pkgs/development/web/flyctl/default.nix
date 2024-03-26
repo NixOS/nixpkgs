@@ -1,27 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles }:
+{ lib, buildGo122Module, fetchFromGitHub, testers, flyctl, installShellFiles }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "flyctl";
-  version = "0.1.104";
+  version = "0.2.17";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-iTizgA3MtcG6YN7aHaZF4UXT6jBKodsMxXG61UgDNaQ=";
+    hash = "sha256-XE1kZdR9ZbWMqp0neouZBvNtIJbOdzp/aMe+uA85zL8=";
   };
 
-  vendorHash = "sha256-5Nu9XpYjlZHGazWTK7LmfnEGgewKa017PLHtV9HycD0=";
+  vendorHash = "sha256-ZX7hcxQJdSLwY37DnV3vKcBW+K9F5RMPUeMtWzm48Dc=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/superfly/flyctl/internal/buildinfo.commit=${src.rev}"
     "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
-    "-X github.com/superfly/flyctl/internal/buildinfo.environment=production"
-    "-X github.com/superfly/flyctl/internal/buildinfo.version=${version}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.buildVersion=${version}"
   ];
+  tags = ["production"];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -58,7 +57,7 @@ buildGoModule rec {
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse adtya jsierles techknowlogick viraptor ];
+    maintainers = with maintainers; [ adtya jsierles techknowlogick ];
     mainProgram = "flyctl";
   };
 }

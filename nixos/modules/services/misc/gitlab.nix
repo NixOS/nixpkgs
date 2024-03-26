@@ -258,41 +258,17 @@ in {
         '';
       };
 
-      packages.gitlab = mkOption {
-        type = types.package;
-        default = pkgs.gitlab;
-        defaultText = literalExpression "pkgs.gitlab";
-        description = lib.mdDoc "Reference to the gitlab package";
-        example = literalExpression "pkgs.gitlab-ee";
+      packages.gitlab = mkPackageOption pkgs "gitlab" {
+        example = "gitlab-ee";
       };
 
-      packages.gitlab-shell = mkOption {
-        type = types.package;
-        default = pkgs.gitlab-shell;
-        defaultText = literalExpression "pkgs.gitlab-shell";
-        description = lib.mdDoc "Reference to the gitlab-shell package";
-      };
+      packages.gitlab-shell = mkPackageOption pkgs "gitlab-shell" { };
 
-      packages.gitlab-workhorse = mkOption {
-        type = types.package;
-        default = pkgs.gitlab-workhorse;
-        defaultText = literalExpression "pkgs.gitlab-workhorse";
-        description = lib.mdDoc "Reference to the gitlab-workhorse package";
-      };
+      packages.gitlab-workhorse = mkPackageOption pkgs "gitlab-workhorse" { };
 
-      packages.gitaly = mkOption {
-        type = types.package;
-        default = pkgs.gitaly;
-        defaultText = literalExpression "pkgs.gitaly";
-        description = lib.mdDoc "Reference to the gitaly package";
-      };
+      packages.gitaly = mkPackageOption pkgs "gitaly" { };
 
-      packages.pages = mkOption {
-        type = types.package;
-        default = pkgs.gitlab-pages;
-        defaultText = literalExpression "pkgs.gitlab-pages";
-        description = lib.mdDoc "Reference to the gitlab-pages package";
-      };
+      packages.pages = mkPackageOption pkgs "gitlab-pages" { };
 
       statePath = mkOption {
         type = types.str;
@@ -1410,10 +1386,8 @@ in {
 
     systemd.services.gitlab-db-config = {
       after = [ "gitlab-config.service" "gitlab-postgresql.service" "postgresql.service" ];
-      bindsTo = [
-        "gitlab-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service"
-        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+      wants = optional (cfg.databaseHost == "") "postgresql.service" ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+      bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       serviceConfig = {
@@ -1446,10 +1420,10 @@ in {
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      ];
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv // (optionalAttrs cfg.sidekiq.memoryKiller.enable {
@@ -1465,6 +1439,8 @@ in {
         nodejs
         gnupg
 
+        "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
+
         # Needed for GitLab project imports
         gnutar
         gzip
@@ -1478,7 +1454,12 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
+        ExecStart = utils.escapeSystemdExecArgs [
+          "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster"
+          "-e" "production"
+          "-r" "."
+          "*" # all queue groups
+        ];
       };
     };
 
@@ -1576,7 +1557,7 @@ in {
         gnutar
         gzip
         openssh
-        gitlab-workhorse
+        cfg.packages.gitlab-workhorse
       ];
       serviceConfig = {
         Type = "simple";
@@ -1636,10 +1617,10 @@ in {
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      ];
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;

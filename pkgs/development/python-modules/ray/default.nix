@@ -52,13 +52,13 @@
 
 let
   pname = "ray";
-  version = "2.6.1";
+  version = "2.9.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
 
   src =
     let

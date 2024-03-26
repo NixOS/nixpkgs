@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "librist";
-  version = "0.2.8";
+  version = "0.2.10";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
     rev = "v${version}";
-    hash = "sha256-E12TS+N47UQapkF6oO0Lx66Z3lHAyP0R4tVnx/uKBwQ=";
+    hash = "sha256-8N4wQXxjNZuNGx/c7WVAV5QS48Bff5G3t11UkihT+K0=";
   };
 
   patches = [

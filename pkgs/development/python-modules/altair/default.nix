@@ -17,13 +17,13 @@
 , anywidget
 , ipython
 , pytestCheckHook
-, vega_datasets
+, vega-datasets
 , sphinx
 }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.1.2";
+  version = "5.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "altair-viz";
     repo = "altair";
     rev = "refs/tags/v${version}";
-    hash = "sha256-30M+rt5IfD4hvK5CwaW8HfQacDBPjowff/f9o7iido0=";
+    hash = "sha256-uTG+V0SQgAQtMjvrVvKVKgIBT9qO+26EPRxQCEXj/gc=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     anywidget
     ipython
     sphinx
-    vega_datasets
+    vega-datasets
     pytestCheckHook
   ];
 

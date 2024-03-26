@@ -7,21 +7,21 @@
 , postgresqlTestHook
 , postgresql
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , server-mode ? true
 }:
 
 let
   pname = "pgadmin";
-  version = "7.7";
-  yarnHash = "sha256-8EbbyZHodrYz4a2IYuIWYGutqvrjauSv34o9KFvR/6c=";
+  version = "8.4";
+  yarnHash = "sha256-Wizgb3WgNPYOLytEj7hBVMV/U3RqW9vhNnhQU4k+j+8=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-+KD05hzghNFpuw2xW3NUVyKwspCUO9fyJgMPzYk1Xt8=";
+    hash = "sha256-kj/a1JjSDFnLY/UQNBqYdhs3J5wi0mlDyJ1jD/L12FM=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -54,29 +54,23 @@ pythonPackages.buildPythonApplication rec {
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
     substituteInPlace Makefile \
-      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+      --replace-fail 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
 
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
-      --replace "code_snippets" ""
-    patchShebangs .
-
+      --replace-fail "code_snippets" ""
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    #TODO: Can be removed once boto3>=1.28.0 and cryptography>=41 has been merged to master
-    substituteInPlace requirements.txt \
-      --replace "boto3>=1.28.*" "boto3>=1.26.*"
-    substituteInPlace requirements.txt \
-      --replace "botocore>=1.31.*" "botocore>=1.29.*"
-    substituteInPlace requirements.txt \
-      --replace "cryptography>=41.0.*" "cryptography>=40.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
+    # remove packageManager from package.json so we can work without corepack
+    substituteInPlace web/package.json \
+      --replace-fail "\"packageManager\": \"yarn@3.6.4\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
-      --replace "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
+      --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
     substituteInPlace web/config.py \
-      --replace "SERVER_MODE = True" "SERVER_MODE = False"
+      --replace-fail "SERVER_MODE = True" "SERVER_MODE = False"
     ''}
   '';
 
@@ -110,7 +104,7 @@ pythonPackages.buildPythonApplication rec {
     rm yarn.lock
     cp ${./yarn.lock} yarn.lock
     chmod +w yarn.lock
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     yarn webpacker
@@ -134,7 +128,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn fixup_yarn_lock nodejs ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn prefetch-yarn-deps nodejs ];
   buildInputs = [
     zlib
     pythonPackages.wheel
@@ -165,7 +159,6 @@ pythonPackages.buildPythonApplication rec {
     cryptography
     sshtunnel
     ldap3
-    flask-babelex
     flask-babel
     gssapi
     flask-socketio
@@ -190,6 +183,9 @@ pythonPackages.buildPythonApplication rec {
     google-auth-oauthlib
     google-api-python-client
     keyring
+    typer
+    rich
+    jsonformatter
   ];
 
   passthru.tests = {
@@ -217,8 +213,8 @@ pythonPackages.buildPythonApplication rec {
     # in /var/lib/pgadmin and /var/log/pgadmin
     # see https://github.com/pgadmin-org/pgadmin4/blob/fd1c26408bbf154fa455a49ee5c12895933833a3/web/regression/runtests.py#L217-L226
     cp -v regression/test_config.json.in regression/test_config.json
-    substituteInPlace regression/test_config.json --replace "localhost" "$PGHOST"
-    substituteInPlace regression/runtests.py --replace "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+    substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
+    substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
 
     ## Browser test ##
 

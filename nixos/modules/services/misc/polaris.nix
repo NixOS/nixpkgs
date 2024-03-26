@@ -13,7 +13,7 @@ in
     services.polaris = {
       enable = mkEnableOption (lib.mdDoc "Polaris Music Server");
 
-      package = mkPackageOptionMD pkgs "polaris" { };
+      package = mkPackageOption pkgs "polaris" { };
 
       user = mkOption {
         type = types.str;

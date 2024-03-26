@@ -25,5 +25,6 @@ in stdenv.mkDerivation {
     license     = licenses.mit;
     maintainers = with maintainers; [ mpscholten nicknovitski ];
     platforms   = platforms.all;
+    mainProgram = "maphosts";
   };
 }

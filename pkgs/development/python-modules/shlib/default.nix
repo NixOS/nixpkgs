@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "shlib";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KenKundert";

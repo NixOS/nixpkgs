@@ -3,13 +3,15 @@
 , fetchPypi
 , pyparsing
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aenum";
   version = "3.1.15";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-jL12zRjE+HD/ObJChNPqAo++hzGljfOqWB5DTFdblVk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pyparsing
@@ -36,6 +42,9 @@ buildPythonPackage rec {
     "test_arduino_headers"
     "test_c_header_scanner"
     "test_extend_flag_backwards_stdlib"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: <enum 'Color'> has no attribute 'value'. Did you mean: 'blue'?
+    "test_extend_enum_shadow_property_stdlib"
   ];
 
   meta = with lib; {

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pdb2pqr";
-  version = "3.6.1";
+  version = "3.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wFak5tKOsPYRflBW8viWEjM6Cku5JkWB6mWVyINYh1g=";
+    hash = "sha256-He301TJ1bzWub0DZ6Ro/Xc+JMtJBbyygVpWjPY6RMbA=";
   };
 
   nativeBuildInputs = [

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "hipCUB";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-ygBEA3NuCQ13QrSzGqyWXkx8Dy9WhR3u4syzapRTkFU=";
@@ -81,10 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Thin wrapper library on top of rocPRIM or CUB";
-    homepage = "https://github.com/ROCmSoftwarePlatform/hipCUB";
+    homepage = "https://github.com/ROCm/hipCUB";
     license = with licenses; [ bsd3 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

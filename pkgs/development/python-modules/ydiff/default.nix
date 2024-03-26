@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "ydiff";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
+    mainProgram = "ydiff";
     longDescription = ''
       Term based tool to view colored, incremental diff in a version
       controlled workspace (supports Git, Mercurial, Perforce and Svn

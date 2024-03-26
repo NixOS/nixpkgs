@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "humanfriendly";
   version = "10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Human friendly output for text interfaces using Python";
+    mainProgram = "humanfriendly";
     homepage = "https://humanfriendly.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ montag451 ];

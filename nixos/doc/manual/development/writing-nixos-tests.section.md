@@ -261,7 +261,7 @@ added using the parameter `extraPythonPackages`. For example, you could add
 
   testScript = ''
     import numpy as np
-    assert str(np.zeros(4) == "array([0., 0., 0., 0.])")
+    assert str(np.zeros(4)) == "[0. 0. 0. 0.]"
   '';
 }
 ```

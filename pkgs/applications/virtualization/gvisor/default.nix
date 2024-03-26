@@ -1,4 +1,5 @@
 { lib
+, nixosTests
 , buildGoModule
 , fetchFromGitHub
 , iproute2
@@ -7,9 +8,9 @@
 , procps
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "gvisor";
-  version = "20221102.1";
+  version = "20240311.0-unstable-2024-03-25";
 
   # gvisor provides a synthetic go branch (https://github.com/google/gvisor/tree/go)
   # that can be used to build gvisor without bazel.
@@ -18,11 +19,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "gvisor";
-    rev = "bf8eeee3a9eb966bc72c773da060a3c8bb73b8ff";
-    sha256 = "sha256-rADQsJ+AnBVlfQURGJl1xR6Ad5NyRWSrBSpOFMRld+o=";
+    rev = "b1e227737fd6e3bb3b11a403a1a5013bc89b3b60";
+    hash = "sha256-EfXzXkoEgtEerNMacRhbITCRig+t23WlIRya0BlJZcE=";
   };
 
-  vendorHash = "sha256-iGLWxx/Kn1QaJTNOZcc+mwoF3ecEDOkaqmA0DH4pdgU=";
+  vendorHash = "sha256-jbMXeNXzvjfJcIfHjvf8I3ePjm6KFTXJ94ia4T2hUs4=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,6 +39,8 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
     mv $out/bin/shim $out/bin/containerd-shim-runsc-v1
   '';
+
+  passthru.tests = { inherit (nixosTests) gvisor; };
 
   meta = with lib; {
     description = "Application Kernel for Containers";

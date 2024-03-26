@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "py3dns";
   version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

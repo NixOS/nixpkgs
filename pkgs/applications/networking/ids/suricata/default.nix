@@ -33,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "7.0.1";
+  version = "7.0.4";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-YEfHX555qbDMbWx2MgJKQSaBK8IS9SrPXTyBPMfJ+ws=";
+    hash = "sha256-ZABgEgAkvnDb6B9uxu/HLkYlD8s2IZ3/Z+ZBciD/Ibc=";
   };
 
   nativeBuildInputs = [

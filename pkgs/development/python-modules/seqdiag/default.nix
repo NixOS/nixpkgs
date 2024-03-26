@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
+    mainProgram = "seqdiag";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;

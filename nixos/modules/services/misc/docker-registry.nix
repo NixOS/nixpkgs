@@ -47,12 +47,8 @@ in {
   options.services.dockerRegistry = {
     enable = mkEnableOption (lib.mdDoc "Docker Registry");
 
-    package = mkOption {
-      type = types.package;
-      description = mdDoc "Which Docker registry package to use.";
-      default = pkgs.docker-distribution;
-      defaultText = literalExpression "pkgs.docker-distribution";
-      example = literalExpression "pkgs.gitlab-container-registry";
+    package = mkPackageOption pkgs "docker-distribution" {
+      example = "gitlab-container-registry";
     };
 
     listenAddress = mkOption {
@@ -65,6 +61,12 @@ in {
       description = lib.mdDoc "Docker registry port to bind to.";
       default = 5000;
       type = types.port;
+    };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc "Opens the port used by the firewall.";
     };
 
     storagePath = mkOption {
@@ -158,5 +160,9 @@ in {
         isSystemUser = true;
       };
     users.groups.docker-registry = {};
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+    };
   };
 }

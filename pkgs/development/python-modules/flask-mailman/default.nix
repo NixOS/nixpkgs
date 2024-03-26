@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "flask-mailman";
-  version = "0.3.0";
+  version = "1.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "waynerv";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cfLtif+48M6fqOkBbi4PJRFpf9FRXCPesktFQky34eU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wfbMz9k9cy9m95mc0Y0lqmpJczrfjhmumO31gRQy704=";
   };
 
   nativeBuildInputs = [

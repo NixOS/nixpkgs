@@ -27,12 +27,12 @@ let
 in
 {
   meta.doc = ./gotosocial.md;
-  meta.maintainers = with lib.maintainers; [ misuzu ];
+  meta.maintainers = with lib.maintainers; [ misuzu blakesmith ];
 
   options.services.gotosocial = {
     enable = lib.mkEnableOption (lib.mdDoc "ActivityPub social network server");
 
-    package = lib.mkPackageOptionMD pkgs "gotosocial" { };
+    package = lib.mkPackageOption pkgs "gotosocial" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
@@ -128,9 +128,7 @@ in
       ensureUsers = [
         {
           name = "gotosocial";
-          ensurePermissions = {
-            "DATABASE gotosocial" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };

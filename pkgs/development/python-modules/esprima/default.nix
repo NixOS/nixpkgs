@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python parser for standard-compliant ECMAScript";
+    mainProgram = "esprima";
     homepage = "https://github.com/Kronuz/esprima-python";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];

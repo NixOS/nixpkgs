@@ -8,6 +8,7 @@
 , pathspec
 , ninja
 , pyproject-metadata
+, setuptools-scm
 
 # dependencies
 , numpy
@@ -19,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.1.0";
+  version = "2.3.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gUNUX9/8EfvNpNcFpra81Iid6bw1JLeN+GajbdDeCks=";
+    hash = "sha256-c24l7GfCIMsg+rcBfE/mOC7t7iIwdtV/QEc0KxvGjOM=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     pathspec
     ninja
     pyproject-metadata
+    setuptools-scm
   ];
 
   dontUseCmakeConfigure = true;

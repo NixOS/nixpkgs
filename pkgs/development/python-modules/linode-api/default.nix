@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , requests
 , pytestCheckHook
 , mock
@@ -9,7 +10,9 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.7.2";
+  version = "5.13.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   # Sources from Pypi exclude test fixtures
@@ -17,10 +20,16 @@ buildPythonPackage rec {
     owner = "linode";
     repo = "python-linode-api";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-RU/GyNYV05iYVNanMqKMmoksXWrxTQ2H2XvaIwSSslA=";
+    hash = "sha256-WB4CurdokRKh1eD6FZR2SeMpa3Z0BzLb0ldI7SYPEVI=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    requests
+  ];
 
   nativeCheckInputs = [
     mock

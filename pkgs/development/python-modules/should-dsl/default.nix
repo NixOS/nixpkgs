@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "should-dsl";
   version = "2.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

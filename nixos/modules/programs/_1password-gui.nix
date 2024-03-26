@@ -27,7 +27,7 @@ in
         '';
       };
 
-      package = mkPackageOptionMD pkgs "1Password GUI" {
+      package = mkPackageOption pkgs "1Password GUI" {
         default = [ "_1password-gui" ];
       };
     };
@@ -49,14 +49,6 @@ in
           owner = "root";
           group = "onepassword";
           setuid = false;
-          setgid = true;
-        };
-
-        "1Password-KeyringHelper" = {
-          source = "${package}/share/1password/1Password-KeyringHelper";
-          owner = "root";
-          group = "onepassword";
-          setuid = true;
           setgid = true;
         };
       };

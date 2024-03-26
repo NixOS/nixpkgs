@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Hundemeier/sacn";
     changelog = "https://github.com/Hundemeier/sacn/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

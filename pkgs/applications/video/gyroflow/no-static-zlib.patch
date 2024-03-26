@@ -1,0 +1,6 @@
+diff --git a/build.rs b/build.rs
+index 8ba86bf..f6f00a0 100644
+--- a/build.rs
++++ b/build.rs
+@@ -203 +202,0 @@ fn main() {
+-            println!("cargo:rustc-link-lib=static:+whole-archive=z");

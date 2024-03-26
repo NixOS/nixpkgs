@@ -2,8 +2,7 @@
 
 buildDunePackage rec {
   pname = "cryptokit";
-  version = "1.18";
-  duneVersion = "3";
+  version = "1.19";
 
   minimalOCamlVersion = "4.08";
 
@@ -11,7 +10,7 @@ buildDunePackage rec {
     owner = "xavierleroy";
     repo = "cryptokit";
     rev = "release${lib.replaceStrings ["."] [""] version}";
-    hash = "sha256-8ae8hroCSkp4O5vM/qVOhAnnJJ+uygMYm3ix5ytwtHU=";
+    hash = "sha256-8RRAPFgL2pqKotc1I3fIB9q2cNi46SP8pt+0rZM+QUc=";
   };
 
   # dont do autotools configuration, but do trigger findlib's preConfigure hook

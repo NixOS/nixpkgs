@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bluej.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2ClasspathPlus;
-    mainProgram = pname;
+    mainProgram = "bluej";
     maintainers = with maintainers; [ chvp ];
     platforms = platforms.linux;
   };

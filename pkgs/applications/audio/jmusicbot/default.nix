@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "JMusicBot";
-  version = "0.3.9";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "https://github.com/jagrosh/MusicBot/releases/download/${version}/JMusicBot-${version}.jar";
-    sha256 = "sha256-2A1yo2e1MawGLMTM6jWwpQJJuKOmljxFriORv90Jqg8=";
+    sha256 = "sha256-JSVrzyCqAp3V5OZ+KJczhWGolPkdaHsPmiqfmhapQMs=";
   };
 
   dontUnpack = true;
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
     inherit (jre_headless.meta) platforms;
+    mainProgram = "JMusicBot";
   };
 }

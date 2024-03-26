@@ -4,6 +4,7 @@
 buildPythonPackage rec {
   pname = "salmon-mail";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     broken = stdenv.isDarwin;
     homepage = "https://salmon-mail.readthedocs.org/";
     description = "Pythonic mail application server";
+    mainProgram = "salmon";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jluttine ];
   };

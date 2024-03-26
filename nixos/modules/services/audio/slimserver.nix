@@ -19,12 +19,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.slimserver;
-        defaultText = literalExpression "pkgs.slimserver";
-        description = lib.mdDoc "Slimserver package to use.";
-      };
+      package = mkPackageOption pkgs "slimserver" { };
 
       dataDir = mkOption {
         type = types.path;
@@ -54,7 +49,7 @@ in {
       serviceConfig = {
         User = "slimserver";
         # Issue 40589: Disable broken image/video support (audio still works!)
-        ExecStart = "${cfg.package}/slimserver.pl --logdir ${cfg.dataDir}/logs --prefsdir ${cfg.dataDir}/prefs --cachedir ${cfg.dataDir}/cache --noimage --novideo";
+        ExecStart = "${lib.getExe cfg.package} --logdir ${cfg.dataDir}/logs --prefsdir ${cfg.dataDir}/prefs --cachedir ${cfg.dataDir}/cache --noimage --novideo";
       };
     };
 

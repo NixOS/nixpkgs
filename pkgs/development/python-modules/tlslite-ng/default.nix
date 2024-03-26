@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "tlslite-ng";
   version = "0.7.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

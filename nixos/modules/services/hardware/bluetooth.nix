@@ -4,7 +4,7 @@ let
   package = cfg.package;
 
   inherit (lib)
-    mkDefault mkEnableOption mkIf mkOption
+    mkDefault mkEnableOption mkIf mkOption mkPackageOption
     mkRenamedOptionModule mkRemovedOptionModule
     concatStringsSep escapeShellArgs literalExpression
     optional optionals optionalAttrs recursiveUpdate types;
@@ -46,14 +46,7 @@ in
         description = lib.mdDoc "Whether to power up the default Bluetooth controller on boot.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bluez;
-        defaultText = literalExpression "pkgs.bluez";
-        description = lib.mdDoc ''
-          Which BlueZ package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "bluez" { };
 
       disabledPlugins = mkOption {
         type = types.listOf types.str;

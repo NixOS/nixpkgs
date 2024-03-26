@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "wsgiprox";
   version = "1.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "webrecorder";

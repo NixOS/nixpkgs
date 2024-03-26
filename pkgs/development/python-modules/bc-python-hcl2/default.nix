@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "bc-python-hcl2";
-  version = "0.3.51";
+  version = "0.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fb/suuiC6tmY3ZMAc3I3oU5A39jJc+XH3ntMkgQKAQ8=";
+    hash = "sha256-rI/1n7m9Q36im4mn18UH/QoelXhFuumurGnyiSuNaB4=";
   };
 
   # Nose is required during build process, so can not use `nativeCheckInputs`.
@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parser for HCL2 written in Python using Lark";
+    mainProgram = "hcl2tojson";
     longDescription = ''
       This parser only supports HCL2 and isn't backwards compatible with HCL v1.
       It can be used to parse any HCL2 config file such as Terraform.

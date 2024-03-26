@@ -2,23 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
-, setuptools
+, flit-core
 }:
 
 buildPythonPackage rec {
   pname = "cryptography-vectors";
   # The test vectors must have the same version as the cryptography package
   inherit (cryptography) version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "cryptography_vectors";
     inherit version;
-    hash = "sha256-gN4EUsSzT1b1UY6B69dba5BfVyiq7VIdQuQfTryKQ/s=";
+    hash = "sha256-UFzV47DLMtoVJvBwQrf8OKS2w1ZxDLc9K192sDejjtE=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   # No tests included

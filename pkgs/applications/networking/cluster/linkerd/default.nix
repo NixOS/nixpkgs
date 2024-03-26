@@ -2,7 +2,7 @@
 
 (callPackage ./generic.nix { }) {
   channel = "stable";
-  version = "2.14.1";
-  sha256 = "1fxwy8c1zcjwnv055czn9ixalpvq710k0m82633n73a0ixnlmjbv";
-  vendorHash = "sha256-hOuvIndyGGvNWYmzE0rho/Y30/ilCzeBtL5GEvl9QqU=";
+  version = "2.14.9";
+  sha256 = "135x5q0a8knckbjkag2xqcr76zy49i57zf2hlsa70iknynq33ys7";
+  vendorHash = "sha256-bGl8IZppwLDS6cRO4HmflwIOhH3rOhE/9slJATe+onI=";
 }

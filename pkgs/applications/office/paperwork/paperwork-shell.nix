@@ -32,8 +32,6 @@ buildPythonPackage rec {
     chmod a+w -R ..
     patchShebangs ../tools
   '';
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     openpaperwork-core
     paperwork-backend

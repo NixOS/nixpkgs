@@ -3,7 +3,6 @@
 , bx-py-utils
 , colorlog
 , fetchFromGitHub
-, fetchPypi
 , importlib-resources
 , jaraco-classes
 , jaraco-collections
@@ -40,14 +39,16 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/jaraco/jaraco.abode/issues/19
     echo "graft jaraco" > MANIFEST.in
+
+    # https://github.com/jaraco/jaraco.abode/commit/9e3e789efc96cddcaa15f920686bbeb79a7469e0
+    substituteInPlace jaraco/abode/helpers/timeline.py \
+      --replace "call_aside" "invoke"
   '';
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     requests
@@ -92,6 +93,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/jaraco/jaraco.abode/blob/${version}/CHANGES.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
+    mainProgram = "abode";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee dotlambda ];
   };

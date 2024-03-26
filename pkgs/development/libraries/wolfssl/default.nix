@@ -5,6 +5,7 @@
 , autoreconfHook
 , util-linux
 , openssl
+, cacert
 # The primary --enable-XXX variant. 'all' enables most features, but causes build-errors for some software,
 # requiring to build a special variant for that software. Example: 'haproxy'
 , variant ? "all"
@@ -13,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.6.3";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "refs/tags/v${finalAttrs.version}-stable";
-    hash = "sha256-UN4zs+Rxh/bsLD1BQA+f1YN/UOJ6OB2HduhoetEp10Y=";
+    hash = "sha256-4j1GqeZJn5UWx56DjGjge05jlzBbIGn4IXxcaIBxON4=";
   };
 
   postPatch = ''
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-bigcache"
 
     # Use WolfSSL's Single Precision Math with timing-resistant cryptography.
-    "--enable-sp=yes${lib.optionalString (!stdenv.isx86_32) ",asm"}"
+    "--enable-sp=yes${lib.optionalString (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch) ",asm"}"
     "--enable-sp-math-all"
     "--enable-harden"
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     openssl
+    cacert
   ];
 
   postInstall = ''
@@ -95,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
+    mainProgram = "wolfssl-config";
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
     platforms = platforms.all;

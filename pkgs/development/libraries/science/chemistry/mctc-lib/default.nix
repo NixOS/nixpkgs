@@ -22,15 +22,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ json-fortran ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}/" ""
+  outputs = [ "out" "dev" ];
+
+  # Fix the Pkg-Config files for doubled store paths
+  postPatch = ''
+    substituteInPlace config/template.pc \
+      --replace "\''${prefix}/" ""
   '';
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
 
   doCheck = true;
 
   meta = with lib; {
     description = "Modular computation tool chain library";
+    mainProgram = "mctc-convert";
     homepage = "https://github.com/grimme-lab/mctc-lib";
     license = licenses.asl20;
     platforms = platforms.linux;

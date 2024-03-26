@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "ipfs-cluster";
-  version = "1.0.7";
+  version = "1.0.8";
 
-  vendorHash = "sha256-/Kjm/hM+lKsZ6fzStDyOitp7Vtt7Vb8ak7E/W0lbW20=";
+  vendorHash = "sha256-uwDXUy9mh/DvLuwj8Htm55wla5/JjvZH5ztJbqnox+U=";
 
   src = fetchFromGitHub {
     owner = "ipfs-cluster";
     repo = "ipfs-cluster";
     rev = "v${version}";
-    hash = "sha256-eBbbD77nnjcumhrsixAlI09B1ZAxK5IOHoBeJGgj+TY=";
+    hash = "sha256-qZUoYJjw3Qac7Kmg5PfNWTDM8Ra3rqrbjScLbK6FRx4=";
   };
 
   meta = with lib; {

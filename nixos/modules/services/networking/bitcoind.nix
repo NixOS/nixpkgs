@@ -3,8 +3,7 @@
 with lib;
 
 let
-
-  eachBitcoind = config.services.bitcoind;
+  eachBitcoind = filterAttrs (bitcoindName: cfg: cfg.enable) config.services.bitcoind;
 
   rpcUserOpts = { name, ... }: {
     options = {
@@ -37,12 +36,7 @@ let
 
       enable = mkEnableOption (lib.mdDoc "Bitcoin daemon");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bitcoind;
-        defaultText = literalExpression "pkgs.bitcoind";
-        description = lib.mdDoc "The package providing bitcoin binaries.";
-      };
+      package = mkPackageOption pkgs "bitcoind" { };
 
       configFile = mkOption {
         type = types.nullOr types.path;
@@ -204,6 +198,7 @@ in
         '';
       in {
         description = "Bitcoin daemon";
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {

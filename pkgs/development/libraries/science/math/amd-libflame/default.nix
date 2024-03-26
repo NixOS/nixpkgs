@@ -9,18 +9,18 @@
 
 , withOpenMP ? true
 , blas64 ? false
-, withAMDOpt ? false
+, withAMDOpt ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "amd-libflame";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "libflame";
     rev = version;
-    hash = "sha256-SZk11oOAnvn1vb7ucX6U9b0YtAJNxl3tQu4ExHpwwoo=";
+    hash = "sha256-eiH2eq+nKUjlB1bZTZNRW1+efCHZ68UOSFy0NpcY1FI=";
   };
 
   postPatch = ''
@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ amd-blis aocl-utils ];
 
   cmakeFlags = [
-    "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib"
+    "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib/libaoclutils${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DLIBAOCLUTILS_INCLUDE_PATH=${lib.getDev aocl-utils}/include"
     "-DENABLE_BUILTIN_LAPACK2FLAME=ON"
     "-DENABLE_CBLAS_INTERFACES=ON"
     "-DENABLE_EXT_LAPACK_INTERFACE=ON"
   ]
-  ++ lib.optional (!withOpenMP) "ENABLE_MULTITHREADING=OFF"
-  ++ lib.optional blas64 "ENABLE_ILP64=ON"
-  ++ lib.optional withAMDOpt "ENABLE_AMD_OPT=ON";
+  ++ lib.optional (!withOpenMP) "-DENABLE_MULTITHREADING=OFF"
+  ++ lib.optional blas64 "-DENABLE_ILP64=ON"
+  ++ lib.optional withAMDOpt "-DENABLE_AMD_OPT=ON";
 
   postInstall = ''
     ln -s $out/lib/libflame.so $out/lib/liblapack.so.3

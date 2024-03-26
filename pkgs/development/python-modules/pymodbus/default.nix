@@ -19,17 +19,22 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.5.4";
+  version = "3.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
-    repo = pname;
+    repo = "pymodbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IgGDYNIRS39t8vHkJSGnDGCTKxpeIYZyedLzyS5pOI0=";
+    hash = "sha256-CnMCHFwzNyzTgVyFDSlE7ggI6eXXYbtGuERIomUa3uA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov-report html " ""
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -72,10 +77,15 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests often hang
     "test_connected"
+  ] ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+    "test_split_serial_packet"
+    "test_serial_poll"
+    "test_simulator"
   ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
+    mainProgram = "pymodbus.simulator";
     longDescription = ''
       Pymodbus is a full Modbus protocol implementation using twisted,
       torndo or asyncio for its asynchronous communications core. It can

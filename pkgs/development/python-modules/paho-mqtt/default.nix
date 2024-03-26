@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "paho-mqtt";
   version = "1.6.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eclipse";

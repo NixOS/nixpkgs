@@ -22,10 +22,11 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "OCR tool to convert pictures to LaTeX.";
+    description = "OCR tool to convert pictures to LaTeX";
     homepage = "https://mathpix.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.hiro98 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "mathpix-snipping-tool";
   };
 }

@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.newbreedsoftware.com/icbm3d/";
     description = "3D vector-based clone of the atari game Missile Command";
+    mainProgram = "icbm3d";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

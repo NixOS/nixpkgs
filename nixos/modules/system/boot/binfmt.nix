@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption mkDefault types optionalString stringAfter;
+  inherit (lib) mkOption mkDefault types optionalString;
 
   cfg = config.boot.binfmt;
 
@@ -331,6 +331,7 @@ in {
           "proc-sys-fs-binfmt_misc.mount"
           "systemd-binfmt.service"
         ];
+        services.systemd-binfmt.after = [ "systemd-tmpfiles-setup.service" ];
         services.systemd-binfmt.restartTriggers = [ (builtins.toJSON config.boot.binfmt.registrations) ];
       })
     ];

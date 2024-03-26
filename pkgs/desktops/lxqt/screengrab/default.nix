@@ -17,25 +17,25 @@
 
 mkDerivation rec {
   pname = "screengrab";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "ySC5bCOnen2bjhmLY4GnwiFaUrvGx93LJrLQo0pBUc4=";
+    hash = "sha256-mmN3BQum7X0GWTUYauEN2mAo3GWdmtkIl2i84g5cp78=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     perl # needed by LXQtTranslateDesktop.cmake
+    qttools
     autoPatchelfHook # fix libuploader.so and libextedit.so not found
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtx11extras
     qtsvg
     kwindowsystem
@@ -49,6 +49,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/screengrab";
     description = "Crossplatform tool for fast making screenshots";
+    mainProgram = "screengrab";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;

@@ -12,6 +12,7 @@
 , psutil
 , pydantic
 , pytestCheckHook
+, pytest_7
 , pytest-cases
 , pytest-cov
 , pytest-xdist
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.16.0";
+  version = "0.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
-    rev = "v${version}";
-    hash = "sha256-d4CbzPy3H5HQ4YmSRCRMEYaTpwB7F0Bznd26aKWiHTA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RrdRUqQ3QyMUpTi1FEsSXK6WS37r77SdPBH1oVVvSw0=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +66,7 @@ buildPythonPackage rec {
     google-cloud-storage
     psutil
     pydantic
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     pytest-cases
     pytest-cov
     pytest-xdist

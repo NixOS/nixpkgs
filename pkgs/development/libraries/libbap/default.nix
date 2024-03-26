@@ -1,24 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, ctypes-foreign, autoreconfHook,
   which }:
 
 stdenv.mkDerivation {
   pname = "libbap";
-  version = "master-2020-11-25";
+  version = "master-2022-07-13";
 
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-bindings";
-    rev = "3193cb31e1b1f2455406ea0c819dad9dfa2ba10d";
-    sha256 = "0m4spva3z6fgbwlg4zq53l5p227dic893q2qq65pvzxyf7k7nmil";
+    rev = "4d324dd794f8e022e8eddecbb2ae2e7b28173947";
+    hash = "sha256-la47HR+i99ueDEWR91YIXGdKflpE1E0qmmJjeowmGSI=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile.in \
-      --replace "-linkpkg" "-thread -linkpkg"
-  '';
-
   nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
-  buildInputs = [ bap ctypes ];
+  buildInputs = [ bap ctypes ctypes-foreign ];
 
   preInstall = ''
     mkdir -p $out/lib

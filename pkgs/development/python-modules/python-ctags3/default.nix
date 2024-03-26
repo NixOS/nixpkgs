@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "python-ctags3";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";

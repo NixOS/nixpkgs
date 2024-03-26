@@ -1,19 +1,25 @@
 { lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
+, lv2, jdk
 , vamp-plugin-sdk, ladspaH, meson, ninja, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "rubberband";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "https://breakfastquay.com/files/releases/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-uVp22lzbOWZ3DGARXs2Dj4QGESD4hMO/3JBPdZMeyao=";
+    hash = "sha256-2e+J4rjvn4WxOsPC+uww4grPLJ86nIxFzmN/K8leV2w=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ] ++ lib.optionals stdenv.isDarwin
+  nativeBuildInputs = [ pkg-config meson ninja jdk ];
+  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
   makeFlags = [ "AR:=$(AR)" ];
+
+  # TODO: package boost-test, so we can run the test suite. (Currently it fails
+  # to find libboost_unit_test_framework.a.)
+  mesonFlags = [ "-Dtests=disabled" ];
+  doCheck = false;
 
   meta = with lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";

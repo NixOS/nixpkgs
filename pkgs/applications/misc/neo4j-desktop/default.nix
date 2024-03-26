@@ -29,5 +29,6 @@ in appimageTools.wrapType2 {
     license = licenses.unfree;
     maintainers = [ maintainers.bobvanderlinden ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "neo4j-desktop";
   };
 }

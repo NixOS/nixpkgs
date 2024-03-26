@@ -24,6 +24,7 @@
 buildPythonPackage rec {
   pname = "qiskit-ignis";
   version = "0.7.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

@@ -19,6 +19,7 @@ buildGoModule {
   # use make instead of default checks because e2e does not work with `buildGoDir`
   checkPhase = ''
     runHook preCheck
+    HOME="$(mktemp -d)"
     # We do not set trimpath for tests, in case they reference test assets
     export GOFLAGS=''${GOFLAGS//-trimpath/}
 
@@ -62,6 +63,7 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/tellerops/teller/";
     description = "Cloud native secrets management for developers";
+    mainProgram = "teller";
     license = licenses.asl20;
     maintainers = with maintainers; [ wahtique ];
   };

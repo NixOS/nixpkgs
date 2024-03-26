@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snappymail";
-  version = "2.29.1";
+  version = "2.35.4";
 
   src = fetchurl {
     url = "https://github.com/the-djmaze/snappymail/releases/download/v${version}/snappymail-${version}.tar.gz";
-    sha256 = "sha256-ZE17VCrpHlZ4GMc7+DaUyuehKtYWMr7NJFV1hGQ+UsA=";
+    sha256 = "sha256-l75s2ntZM/eqoFqw8bMkmxwPBvOFwf2Y8TpSsyzu3cU=";
   };
 
   sourceRoot = "snappymail";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://snappymail.eu";
     changelog = "https://github.com/the-djmaze/snappymail/blob/v${version}/CHANGELOG.md";
     downloadPage = "https://github.com/the-djmaze/snappymail/releases";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];
   };

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pysrt";
   version = "1.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "byroot";
@@ -27,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/byroot/pysrt";
     license = licenses.gpl3;
     description = "Python library used to edit or create SubRip files";
+    mainProgram = "srt";
   };
 }

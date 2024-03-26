@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "picosvg";
   version = "0.22.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool to simplify SVGs";
+    mainProgram = "picosvg";
     homepage = "https://github.com/googlefonts/picosvg";
     license = licenses.asl20;
     maintainers = with maintainers; [ _999eagle ];

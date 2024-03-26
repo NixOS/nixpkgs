@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, nasm, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, nasm
+, pkg-config
 , xxHash
 , withTools ? false # "dav1d" binary
-, withExamples ? false, SDL2 # "dav1dplay" binary
-, useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
+, withExamples ? false
+, SDL2 # "dav1dplay" binary
+, useVulkan ? false
+, libplacebo
+, vulkan-loader
+, vulkan-headers
 
-# for passthru.tests
+  # for passthru.tests
 , ffmpeg
 , gdal
 , handbrake
@@ -17,13 +26,13 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "1.2.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "videolan";
     repo = pname;
     rev = version;
-    hash = "sha256-RrEim3HXXjx2RUU7K3wPH3QbhNTRN9ZX/oAcyE9aV8I=";
+    hash = "sha256-NDv4ZlmrbRoecd0qj/sy+camn4uRTrvte4/84L6oUUg=";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,7 +43,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withExamples SDL2
     ++ lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
 
-  mesonFlags= [
+  mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"
     "-Denable_examples=${lib.boolToString withExamples}"
   ];
@@ -62,7 +71,7 @@ stdenv.mkDerivation rec {
     changelog = "https://code.videolan.org/videolan/dav1d/-/tags/${version}";
     # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
     license = licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ primeos ];
   };
 }

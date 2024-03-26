@@ -4,7 +4,7 @@
 , setuptools-scm
 , bottle
 , importlib-resources
-, proxy_tools
+, proxy-tools
 , pygobject3
 , pyqtwebengine
 , pytest
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "4.3.3";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "r0x0r";
     repo = "pywebview";
     rev = "refs/tags/${version}";
-    hash = "sha256-8BkbO7C8cYDIQWWCKaXFjfD45L5KVG1tDZJl+uW5g9g=";
+    hash = "sha256-Mep4r5OujsefXFQA09OospqnzgQ3xn8HHdZFKNo3oM4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     bottle
     pyqtwebengine
-    proxy_tools
+    proxy-tools
     six
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
@@ -49,8 +49,6 @@ buildPythonPackage rec {
     qtpy
     xvfb-run
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   checkPhase = ''
     # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED

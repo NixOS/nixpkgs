@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, flet-client-flutter
 
 # build-system
 , poetry-core
@@ -12,14 +12,10 @@
 
 buildPythonPackage rec {
   pname = "flet-core";
-  version = "0.10.1";
-  format = "pyproject";
+  inherit (flet-client-flutter) version src;
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "flet_core";
-    inherit version;
-    hash = "sha256-YLtHnKBlXkUJJkQzxnDkfl6+gSGm05GXYPGEU3XO/jI=";
-  };
+  sourceRoot = "${src.name}/sdk/python/packages/flet-core";
 
   nativeBuildInputs = [
     poetry-core
@@ -33,9 +29,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     description = "The library is the foundation of Flet framework and is not intended to be used directly";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.heyimnova ];
+    maintainers = with lib.maintainers; [ heyimnova lucasew ];
   };
 }

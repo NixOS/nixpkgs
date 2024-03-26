@@ -9,10 +9,12 @@
 , oniguruma
 , zstd
 , rust-jemalloc-sys
+, rust-jemalloc-sys-unprefixed
 , Security
 , libiconv
 , coreutils
 , CoreServices
+, SystemConfiguration
 , tzdata
 , cmake
 , perl
@@ -27,14 +29,14 @@
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
 , nixosTests
 , nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.33.0";
+  version = "0.36.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -43,16 +45,15 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZhRvQQ0MxEd0Ry6sfEWUzYpEN80GhBOzpbEG5ZhCA2E=";
+    hash = "sha256-iY0Bi1FG3kEiZtPTXonoVGYiquZkTPF51PWEZEoxQSw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "aws-config-0.54.1" = "sha256-AVumLhybVbMnEah9/JqiQOQ4R0e2OsbB8WAJ422R6uk=";
-      "greptime-proto-0.1.0" = "sha256-kSOy/0s8ZJ1RfqOb469oaVlreABtHxesNaMzFH6H+aE=";
-      "greptimedb-client-0.1.0" = "sha256-mGgbxp/h55snowS2BV+QRwrhnE5vywfRF9Gc+8MoAdY=";
-      "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
+      "greptime-proto-0.1.0" = "sha256-Q8xr6qN6SAGGK0W96WuNRdQ5/8iNlruqzhXD6xq3Ua8=";
+      "greptimedb-client-0.1.0" = "sha256-l4r/2DGllXiFgOwpa83ZRiK9o0L4bokVltCGD1cp3NM=";
+      "heim-0.1.0-rc.1" = "sha256-TFgLR5zb/oqceVOH4mIOvFFY/HMOLSo8VI5Eh9KP60E=";
       "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
       "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
       "tokio-util-0.7.8" = "sha256-HCvtfohOoa1ZjD4s7QLDbIV4fe/MVBKtgM1QQX7gGKQ=";
@@ -60,8 +61,10 @@ rustPlatform.buildRustPackage {
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+  buildInputs =
+    [ oniguruma openssl protobuf rdkafka zstd ]
+    ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";

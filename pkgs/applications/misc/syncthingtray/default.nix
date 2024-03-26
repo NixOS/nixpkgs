@@ -1,9 +1,9 @@
-{ mkDerivation
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
 , qtbase
+, qtsvg
+, qtwayland
 , qtwebengine
 , qtdeclarative
 , extra-cmake-modules
@@ -19,6 +19,7 @@
 , iconv
 , cppunit
 , syncthing
+, xdg-utils
 , webviewSupport ? true
 , jsSupport ? true
 , kioPluginSupport ? stdenv.isLinux
@@ -33,23 +34,25 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.4.7";
+  version = "1.5.0";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ddOyAyvFifsdNMbwcMZTyhA+5pvz6/Eu/VoBmdsHi54=";
+    hash = "sha256-O8FLjse2gY8KNWGXpUeZ83cNk0ZuRAZJJ3Am33/ABVw=";
   };
 
   buildInputs = [
     qtbase
+    qtsvg
     cpp-utilities
     qtutilities
     boost
     qtforkawesome
   ] ++ lib.optionals stdenv.isDarwin [ iconv ]
+    ++ lib.optionals stdenv.isLinux [ qtwayland ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]
@@ -73,15 +76,22 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.isDarwin;
   preCheck = ''
     export QT_QPA_PLATFORM=offscreen
-    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qtbase}/${qtbase.qtPluginPrefix}"
   '';
-  # don't test --help  on Darwin because output is .app
-  doInstallCheck = !stdenv.isDarwin;
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    # put the app bundle into the proper place /Applications instead of /bin
+    mkdir -p $out/Applications
+    mv $out/bin/syncthingtray.app $out/Applications
+    # Make binary available in PATH like on other platforms
+    ln -s $out/Applications/syncthingtray.app/Contents/MacOS/syncthingtray $out/bin/syncthingtray
+  '';
   installCheckPhase = ''
     $out/bin/syncthingtray --help | grep ${finalAttrs.version}
   '';
 
   cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
+    "-DKF_PACKAGE_PREFIX=KF${lib.versions.major qtbase.version}"
     "-DBUILD_TESTING=ON"
     # See https://github.com/Martchus/syncthingtray/issues/208
     "-DEXCLUDE_TESTS_FROM_ALL=OFF"
@@ -94,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
     ++ lib.optionals (!webviewSupport) ["-DWEBVIEW_PROVIDER:STRING=none"]
   ;
+
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/syncthingtray";

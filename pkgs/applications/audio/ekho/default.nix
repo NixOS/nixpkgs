@@ -1,16 +1,46 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libsndfile, libpulseaudio
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoconf
+, automake
+, libtool
+, libsndfile
+, libpulseaudio
+, espeak-ng
+, sonic
+, utf8cpp
+, AudioUnit
 }:
 
-let
-  version = "5.8.2";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ekho";
-  inherit version;
+  version = "9.0";
+
+  src = fetchFromGitHub {
+    owner = "hgneng";
+    repo = "ekho";
+    rev = "v${version}";
+    hash = "sha256-VYN9tR3BJXd3UA0V5vqQJNItJe1e1knZ+S7tLeaeYYk=";
+  };
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  CXXFLAGS = [
+    "-O0"
+    "-I${lib.getDev utf8cpp}/include/utf8cpp"
+  ];
+
+  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
+
+  buildInputs = [ libsndfile libpulseaudio espeak-ng sonic utf8cpp ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit ];
 
   meta = with lib; {
     description = "Chinese text-to-speech software";
-    homepage    = "http://www.eguidedog.net/ekho.php";
+    homepage = "http://www.eguidedog.net/ekho.php";
     longDescription = ''
       Ekho (余音) is a free, open source and multilingual text-to-speech (TTS)
       software. It supports Cantonese (Chinese dialect spoken in Hong Kong and
@@ -18,22 +48,8 @@ in stdenv.mkDerivation rec {
       (a dialect in Taiwan), Tibetan, Ngangien (an ancient Chinese before
       Yuan Dynasty) and Korean (in trial).
     '';
-    license        = licenses.gpl2Plus;
-    platforms      = platforms.linux;
-    hydraPlatforms = [];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ aaronjheng ];
   };
-
-  src = fetchurl {
-    url = "mirror://sourceforge/e-guidedog/Ekho/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0ym6lpcpsvwvsiwlzkl1509a2hljwcw7synngrmqjq1n49ww00nj";
-  };
-
-  preConfigure = with lib; ''
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${optionalString stdenv.is64bit "-D_x86_64"}"
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DEKHO_DATA_PATH=\"$out/share/ekho-data\""
-  '';
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ libsndfile libpulseaudio ];
 }

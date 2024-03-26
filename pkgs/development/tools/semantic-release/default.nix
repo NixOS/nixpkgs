@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "semantic-release";
-  version = "21.0.5";
+  version = "23.0.6";
 
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
     rev = "v${version}";
-    hash = "sha256-QFBYIoOd1htSNj3xKl0HvmD1T068Jv+L/EqCbMrn0lw=";
+    hash = "sha256-saWKx7OnKRT1zonaSRaLXUoL7XI6YaeKogdTuxDN6eo=";
   };
 
-  npmDepsHash = "sha256-0GhDXGyVoMwz+vVFdplv7ObTiTRTvQDd9r9e6616iTI=";
+  npmDepsHash = "sha256-OvH568kJP0tdK6y2TmMRAyVZ4LgY9+Y4AF39jXk4dq4=";
 
   dontNpmBuild = true;
 
@@ -34,6 +34,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Fully automated version management and package publishing";
+    mainProgram = "semantic-release";
     homepage = "https://semantic-release.gitbook.io/semantic-release/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sestrella ];

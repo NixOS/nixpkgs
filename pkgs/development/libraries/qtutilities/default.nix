@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtutilities";
-  version = "6.13.1";
+  version = "6.13.5";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "qtutilities";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ic1Xnle1fGZ5elf0yH0BF+3spAmIo9kP62WhXLmBVNc=";
+    hash = "sha256-ZPfyJAQHtE5ae/X9f8s/69UNiB4CnyACPLvYp8RgpKg=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 

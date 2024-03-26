@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "djangorestframework";
   version = "3.14.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -38,6 +39,11 @@ buildPythonPackage rec {
     django-guardian
     pyyaml
     uritemplate
+  ];
+
+  pytestFlagsArray = [
+    # ytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   pythonImportsCheck = [ "rest_framework" ];

@@ -1,33 +1,53 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, flask
-, flask-sessionstore
-, flask-sqlalchemy
+
+# build-system
+, setuptools
+
+# dependencies
 , captcha
+, flask
+, markupsafe
+
+# tests
+, flask-sqlalchemy
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "flask-session-captcha";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tethik";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-V0f3mXCfqwH2l3OtJKOHGdrlKAFxs2ynqXvNve7Amkc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0g8nnnmTfcb9VqrtJ6kkfCFm+AYVrPZNWUPNQSjVTgQ=";
   };
 
-  propagatedBuildInputs = [ flask flask-sessionstore captcha ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  pythonImportsCheck = [ "flask_session_captcha" ];
+  propagatedBuildInputs = [
+    captcha
+    flask
+    markupsafe
+  ];
 
-  nativeCheckInputs = [ flask-sqlalchemy pytestCheckHook ];
+  pythonImportsCheck = [
+    "flask_session_captcha"
+  ];
 
   # RuntimeError: Working outside of application context.
   doCheck = false;
+
+  nativeCheckInputs = [
+    flask-sqlalchemy
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "A captcha implemention for flask";

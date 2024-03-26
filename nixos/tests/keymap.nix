@@ -213,7 +213,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
 
     extraConfig.console.useXkbConfig = true;
     extraConfig.services.xserver.xkb.layout = "us-greek";
-    extraConfig.services.xserver.extraLayouts.us-greek =
+    extraConfig.services.xserver.xkb.extraLayouts.us-greek =
       { description = "US layout with alt-gr greek";
         languages   = [ "eng" ];
         symbolsFile = pkgs.writeText "us-greek" ''

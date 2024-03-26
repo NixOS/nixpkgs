@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , glibcLocales
 , importlib-metadata
 , logfury
@@ -10,26 +10,34 @@
 , pytest-lazy-fixture
 , pytest-mock
 , pythonOlder
+, pythonRelaxDepsHook
+, pdm-backend
 , requests
-, setuptools-scm
 , tqdm
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.24.1";
-  format = "setuptools";
+  version = "1.32.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Tp9RjtybqCSxB1gFZXrjwNJ4mmwl+OWTzVyHd250Jas=";
+  src = fetchFromGitHub {
+    owner = "Backblaze";
+    repo = "b2-sdk-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xBLMvH51zbrSuBOtMxLeQJt7Wv31OcxBbD72EuLHzuU=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    pdm-backend
+    pythonRelaxDepsHook
+  ];
+
+  pythonRemoveDeps = [
+    "setuptools"
   ];
 
   propagatedBuildInputs = [
@@ -51,11 +59,6 @@ buildPythonPackage rec {
     glibcLocales
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'setuptools_scm<6.0' 'setuptools_scm'
-  '';
-
   disabledTestPaths = [
     # requires aws s3 auth
     "test/integration/test_download.py"
@@ -67,6 +70,7 @@ buildPythonPackage rec {
     "test_raw_api"
     "test_files_headers"
     "test_large_file"
+    "test_file_info_b2_attributes"
   ];
 
   pythonImportsCheck = [

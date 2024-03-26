@@ -70,6 +70,12 @@ in rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r resources/logo $out/share/icons
+    install -Dm444 resources/linux/ajour.desktop -t $out/share/applications
+  '';
+
   fixupPhase = ''
     patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $out/bin/ajour)" $out/bin/ajour
     wrapProgram $out/bin/ajour --prefix PATH ":" ${lib.makeBinPath [ zenity kdialog ]}
@@ -77,6 +83,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "World of Warcraft addon manager written in Rust";
+    mainProgram = "ajour";
     longDescription = ''
       Ajour is a World of Warcraft addon manager written in Rust with a
       strong focus on performance and simplicity. The project is

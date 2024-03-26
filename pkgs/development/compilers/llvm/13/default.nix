@@ -1,5 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
-, gccForLibs, preLibcCrossHeaders
+, preLibcCrossHeaders
 , libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -16,39 +16,51 @@
     then null
     else pkgs.bintools
 , darwin
+# LLVM release information; specify one of these but not both:
+, gitRelease ? null
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   rev = /* commit SHA */;
+  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+, officialRelease ? { version = "13.0.1"; sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k"; }
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   candidate = /* optional; if specified, should be: "rcN" */
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+# By default, we'll try to fetch a release from `github:llvm/llvm-project`
+# corresponding to the `gitRelease` or `officialRelease` specified.
+#
+# You can provide your own LLVM source by specifying this arg but then it's up
+# to you to make sure that the LLVM repo given matches the release configuration
+# specified.
+, monorepoSrc ? null
+
 }:
 
+assert let
+  int = a: if a then 1 else 0;
+  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
+in
+  lib.assertMsg
+    (xor
+      (gitRelease != null)
+      (officialRelease != null))
+    ("must specify `gitRelease` or `officialRelease`" +
+      (lib.optionalString (gitRelease != null) " — not both"));
 let
-  release_version = "13.0.1";
-  candidate = ""; # empty or "rcN"
-  dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = ""; # When using a Git commit
-  rev-version = ""; # When using a Git commit
-  version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
-  targetConfig = stdenv.targetPlatform.config;
+  monorepoSrc' = monorepoSrc;
+in let
+  # Import releaseInfo separately to avoid infinite recursion
+  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
+  inherit (releaseInfo) release_version version;
+  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
-  src = fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k";
-  };
-
-  llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = lib.teams.llvm.members;
-
-    # See llvm/cmake/config-ix.cmake.
-    platforms   =
-      lib.platforms.aarch64 ++
-      lib.platforms.arm ++
-      lib.platforms.mips ++
-      lib.platforms.power ++
-      lib.platforms.riscv ++
-      lib.platforms.s390x ++
-      lib.platforms.wasi ++
-      lib.platforms.x86;
-  };
+  src = monorepoSrc;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version src buildLlvmTools; });
@@ -125,7 +137,6 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -191,7 +202,6 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -201,6 +211,7 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
         echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+        echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
         echo "-lunwind" >> $out/nix-support/cc-ldflags
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
@@ -284,28 +295,8 @@ let
 
     libcxx = callPackage ./libcxx {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else (
-                 # libcxx >= 13 does not build on gcc9
-                 if stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "10"
-                 then pkgs.gcc10Stdenv
-                 else stdenv
-               );
-    };
-
-    libcxxabi = let
-      stdenv_ = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-      cxx-headers = callPackage ./libcxx {
-        inherit llvm_meta;
-        stdenv = stdenv_;
-        headersOnly = true;
-      };
-    in callPackage ./libcxxabi {
-      stdenv = stdenv_;
-      inherit llvm_meta cxx-headers;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      monorepoSrc = src;
     };
 
     libunwind = callPackage ./libunwind {

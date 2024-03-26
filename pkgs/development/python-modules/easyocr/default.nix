@@ -4,7 +4,7 @@
 , hdf5
 , numpy
 , onnx
-, opencv3
+, opencv4
 , pillow
 , pyaml
 , pyclipper
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     hdf5
     numpy
-    opencv3
+    opencv4
     pillow
     pyaml
     pyclipper
@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
+    mainProgram = "easyocr";
     homepage = "https://github.com/JaidedAI/EasyOCR";
     changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
     license = licenses.asl20;

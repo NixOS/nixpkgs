@@ -1,21 +1,40 @@
-{ stdenv, lib, fetchFromGitHub, cmake, nasm
-, gtk2, glib, ffmpeg_4, alsa-lib, libmad, libogg, libvorbis
-, glew, libpulseaudio, udev
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, nasm
+, alsa-lib
+, ffmpeg_6
+, glew
+, glib
+, gtk2
+, libmad
+, libogg
+, libpulseaudio
+, libvorbis
+, udev
+, xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stepmania";
-  version = "5.1.0-b2";
+  version = "5.1.0-b2-unstable-2022-11-14";
 
   src = fetchFromGitHub {
     owner = "stepmania";
     repo  = "stepmania";
-    rev   = "v${version}";
-    sha256 = "0a7y9l7xm510vgnpmj1is7p9m6d6yd0fcaxrjcickz295k5w3rdn";
+    rev   = "d55acb1ba26f1c5b5e3048d6d6c0bd116625216f";
+    hash = "sha256-49H2Q61R4l/G0fWsjCjiAUXeWwG3lcsDpV5XvR3l3QE=";
   };
 
   patches = [
-    ./0001-fix-build-with-ffmpeg-4.patch
+    # https://github.com/stepmania/stepmania/pull/2247
+    (fetchpatch {
+      name = "fix-building-with-ffmpeg6.patch";
+      url = "https://github.com/stepmania/stepmania/commit/3fef5ef60b7674d6431f4e1e4ba8c69b0c21c023.patch";
+      hash = "sha256-m+5sP+mIpcSjioRBdzChqja5zwNcwdSNAfvSJ2Lww+g=";
+    })
   ];
 
   postPatch = ''
@@ -25,8 +44,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake nasm ];
 
   buildInputs = [
-    gtk2 glib ffmpeg_4 alsa-lib libmad libogg libvorbis
-    glew libpulseaudio udev
+    alsa-lib
+    ffmpeg_6
+    glew
+    glib
+    gtk2
+    libmad
+    libogg
+    libpulseaudio
+    libvorbis
+    udev
+    xorg.libXtst
   ];
 
   cmakeFlags = [
@@ -38,6 +66,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     ln -s $out/stepmania-5.1/stepmania $out/bin/stepmania
+
+    mkdir -p $out/share/
+    cp -r $src/icons $out/share/
+
+    install -Dm444 $src/stepmania.desktop -t $out/share/applications
   '';
 
   meta = with lib; {
@@ -45,8 +78,9 @@ stdenv.mkDerivation rec {
     description = "Free dance and rhythm game for Windows, Mac, and Linux";
     platforms = platforms.linux;
     license = licenses.mit; # expat version
-    maintainers = [ ];
+    maintainers = with maintainers; [ h7x4 ];
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;
+    mainProgram = "stepmania";
   };
 }

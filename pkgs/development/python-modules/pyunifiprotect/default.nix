@@ -2,9 +2,13 @@
 , aiofiles
 , aiohttp
 , aioshutil
+, async-timeout
 , buildPythonPackage
 , dateparser
 , fetchFromGitHub
+, ffmpeg
+, hatch-vcs
+, hatchling
 , ipython
 , orjson
 , packaging
@@ -22,37 +26,34 @@
 , python-dotenv
 , pythonOlder
 , pytz
-, setuptools
-, setuptools-scm
 , termcolor
 , typer
-, ffmpeg
 }:
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.21.0";
-  format = "pyproject";
+  version = "5.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "briis";
-    repo = pname;
+    repo = "pyunifiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BFcICpWq0aBjEww9EuO6UH8oGX8fufernFqh/gihIrM=";
+    hash = "sha256-bZjfpatw4lcOgMCqung/DMfRijxwtuIht6QusIYaCQ0=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pyunifiprotect --cov-append" ""
+      --replace "--strict-markers -ra -Wd --ignore=.* --no-cov-on-fail --cov=pyunifiprotect --cov-append --maxfail=10 -n=auto" ""
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -67,7 +68,10 @@ buildPythonPackage rec {
     pyjwt
     pytz
     typer
-  ] ++ typer.optional-dependencies.all;
+  ] ++ typer.optional-dependencies.all
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ];
 
   passthru.optional-dependencies = {
     shell = [
@@ -98,6 +102,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for interacting with the Unifi Protect API";
+    mainProgram = "unifi-protect";
     homepage = "https://github.com/briis/pyunifiprotect";
     changelog = "https://github.com/AngellusMortis/pyunifiprotect/releases/tag/v${version}";
     license = with licenses; [ mit ];

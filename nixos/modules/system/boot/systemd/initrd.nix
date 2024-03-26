@@ -57,6 +57,7 @@ let
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
     "systemd-halt.service"
+    "systemd-hibernate-resume.service"
     "systemd-journald-audit.socket"
     "systemd-journald-dev-log.socket"
     "systemd-journald.service"
@@ -70,6 +71,7 @@ let
     "systemd-tmpfiles-setup.service"
     "timers.target"
     "umount.target"
+    "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
 
   upstreamWants = [
@@ -88,18 +90,12 @@ let
     inherit (cfg) packages package;
   };
 
-  fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
-
-  needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
-
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-  modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
-  firmware = config.hardware.firmware;
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = modulesTree;
-    firmware = firmware;
+    kernel = config.system.modulesTree;
+    firmware = config.hardware.firmware;
     allowMissing = false;
   };
 
@@ -128,10 +124,6 @@ in {
         stage 2 counterparts such as {option}`systemd.services`,
         except that `restartTriggers` and `reloadTriggers` are not
         supported.
-
-        Note: This is experimental. Some of the `boot.initrd` options
-        are not supported when this is enabled, and the options under
-        `boot.initrd.systemd` are subject to change.
       '';
     };
 
@@ -216,6 +208,19 @@ in {
       '';
       type = types.listOf types.singleLineStr;
       default = [];
+    };
+
+    root = lib.mkOption {
+      type = lib.types.enum [ "fstab" "gpt-auto" ];
+      default = "fstab";
+      example = "gpt-auto";
+      description = ''
+        Controls how systemd will interpret the root FS in initrd. See
+        {manpage}`kernel-command-line(7)`. NixOS currently does not
+        allow specifying the root file system itself this
+        way. Instead, the `fstab` value is used in order to interpret
+        the root file system specified with the `fileSystems` option.
+      '';
     };
 
     emergencyAccess = mkOption {
@@ -348,14 +353,49 @@ in {
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
+    assertions = [
+      {
+        assertion = cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
+        message = "The ‘fileSystems’ option does not specify your root file system.";
+      }
+    ] ++ map (name: {
+      assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
+      message = ''
+        systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
+          convert it to analogous systemd units in 'boot.initrd.systemd'.
+
+            Definitions:
+        ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}") (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations}
+      '';
+    }) [
+      [ "preFailCommands" ]
+      [ "preDeviceCommands" ]
+      [ "preLVMCommands" ]
+      [ "postDeviceCommands" ]
+      [ "postResumeCommands" ]
+      [ "postMountCommands" ]
+      [ "extraUdevRulesCommands" ]
+      [ "extraUtilsCommands" ]
+      [ "extraUtilsCommandsTest" ]
+      [ "network" "postCommands" ]
+    ];
+
     system.build = { inherit initialRamdisk; };
 
     boot.initrd.availableKernelModules = [
       # systemd needs this for some features
-      "autofs4"
+      "autofs"
       # systemd-cryptenroll
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
-    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";
+    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb"
+    ++ lib.optional cfg.package.withEfi "efivarfs";
+
+    boot.kernelParams = [
+      "root=${config.boot.initrd.systemd.root}"
+    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+      # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
+      # For NixOS activation to succeed, we need to have root writable in initrd.
+      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package];
@@ -380,8 +420,7 @@ in {
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
 
-        "/lib/modules".source = "${modulesClosure}/lib/modules";
-        "/lib/firmware".source = "${modulesClosure}/lib/firmware";
+        "/lib".source = "${modulesClosure}/lib";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
@@ -409,15 +448,17 @@ in {
 
       storePaths = [
         # systemd tooling
+        "${cfg.package}/lib/systemd/systemd-executor"
         "${cfg.package}/lib/systemd/systemd-fsck"
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
-        (lib.mkIf needMakefs "${cfg.package}/lib/systemd/systemd-makefs")
+        "${cfg.package}/lib/systemd/systemd-makefs"
         "${cfg.package}/lib/systemd/systemd-modules-load"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
+        "${cfg.package}/lib/systemd/systemd-bsod"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -478,7 +519,7 @@ in {
               case $o in
                   init=*)
                       IFS== read -r -a initParam <<< "$o"
-                      closure="$(dirname "''${initParam[1]}")"
+                      closure="''${initParam[1]}"
                       ;;
               esac
           done
@@ -488,6 +529,13 @@ in {
             echo 'No init= parameter on the kernel command line' >&2
             exit 1
           fi
+
+          # Resolve symlinks in the init parameter. We need this for some boot loaders
+          # (e.g. boot.loader.generationsDir).
+          closure="$(chroot /sysroot ${pkgs.coreutils}/bin/realpath "$closure")"
+
+          # Assume the directory containing the init script is the closure.
+          closure="$(dirname "$closure")"
 
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
@@ -537,7 +585,5 @@ in {
         serviceConfig.Type = "oneshot";
       };
     };
-
-    boot.kernelParams = lib.mkIf (config.boot.resumeDevice != "") [ "resume=${config.boot.resumeDevice}" ];
   };
 }

@@ -66,6 +66,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.succeed("su - ${user.name} -c 'DISPLAY=:0 thunar >&2 &'")
         machine.wait_for_window("Thunar")
         machine.wait_for_text('(Pictures|Public|Templates|Videos)')
+
+      with subtest("Check if any coredumps are found"):
+        machine.succeed("(coredumpctl --json=short 2>&1 || true) | grep 'No coredumps found'")
         machine.sleep(10)
         machine.screenshot("screen")
     '';

@@ -2,7 +2,7 @@
   guile_1_8, xmodmap, which, freetype,
   libjpeg,
   sqlite,
-  tex ? null,
+  texliveSmall ? null,
   aspell ? null,
   git ? null,
   python3 ? null,
@@ -23,7 +23,8 @@ let
   pname = "texmacs";
   version = "2.1.2";
   common = callPackage ./common.nix {
-    inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
+    inherit extraFonts chineseFonts japaneseFonts koreanFonts;
+    tex = texliveSmall;
   };
 in
 stdenv.mkDerivation {
@@ -44,7 +45,6 @@ stdenv.mkDerivation {
     pkg-config
     wrapQtAppsHook
     xdg-utils
-  ] ++ lib.optionals (!stdenv.isDarwin) [
     cmake
   ];
 
@@ -62,7 +62,18 @@ stdenv.mkDerivation {
     qtmacextras
   ];
 
+  cmakeFlags = lib.optionals stdenv.isDarwin [
+    (lib.cmakeFeature "TEXMACS_GUI" "Qt")
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "./TeXmacs.app/Contents/Resources")
+  ];
+
   env.NIX_LDFLAGS = "-lz";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv TeXmacs.app $out/Applications/
+    makeWrapper $out/Applications/TeXmacs.app/Contents/MacOS/TeXmacs $out/bin/texmacs
+  '';
 
   qtWrapperArgs = [
     "--suffix" "PATH" ":" (lib.makeBinPath [
@@ -70,13 +81,13 @@ stdenv.mkDerivation {
       which
       ghostscriptX
       aspell
-      tex
+      texliveSmall
       git
       python3
     ])
   ];
 
-  postFixup = ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     wrapQtApp $out/bin/texmacs
   '';
 

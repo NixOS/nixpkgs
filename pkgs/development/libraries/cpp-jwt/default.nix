@@ -19,11 +19,13 @@ stdenv.mkDerivation rec {
     "-DCPP_JWT_BUILD_EXAMPLES=OFF"
   ];
 
-  nativeBuildInputs = [ cmake gtest ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ openssl nlohmann_json ];
+  buildInputs = [ gtest openssl nlohmann_json ];
 
   doCheck = true;
+
+  strictDeps = true;
 
   meta = {
     description = "JSON Web Token library for C++";

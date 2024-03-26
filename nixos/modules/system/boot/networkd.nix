@@ -122,6 +122,16 @@ let
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
       ];
+
+      # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
+      ipVlanVtapChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "Flags"
+        ])
+        (assertValueOneOf "Mode" ["L2" "L3" "L3S" ])
+        (assertValueOneOf "Flags" ["private" "vepa" "bridge" ])
+      ];
     in {
 
       sectionNetdev = checkUnitConfig "Netdev" [
@@ -146,6 +156,7 @@ let
           "ip6gretap"
           "ipip"
           "ipvlan"
+          "ipvtap"
           "macvlan"
           "macvtap"
           "sit"
@@ -190,6 +201,10 @@ let
         (assertValueOneOf "LooseBinding" boolValues)
         (assertValueOneOf "ReorderHeader" boolValues)
       ];
+
+      sectionIPVLAN = checkUnitConfig "IPVLAN" ipVlanVtapChecks;
+
+      sectionIPVTAP = checkUnitConfig "IPVTAP" ipVlanVtapChecks;
 
       sectionMACVLAN = checkUnitConfig "MACVLAN" [
         (assertOnlyFields [
@@ -582,6 +597,8 @@ let
           "DHCP"
           "DHCPServer"
           "LinkLocalAddressing"
+          "IPv6LinkLocalAddressGenerationMode"
+          "IPv6StableSecretAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -615,6 +632,7 @@ let
           "VRF"
           "VLAN"
           "IPVLAN"
+          "IPVTAP"
           "MACVLAN"
           "MACVTAP"
           "VXLAN"
@@ -629,9 +647,10 @@ let
           "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
-        (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
+        (assertValueOneOf "DHCP" (boolValues ++ ["ipv4" "ipv6"]))
         (assertValueOneOf "DHCPServer" boolValues)
-        (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "fallback" "ipv4-fallback"])
+        (assertValueOneOf "LinkLocalAddressing" (boolValues ++ ["ipv4" "ipv6" "fallback" "ipv4-fallback"]))
+        (assertValueOneOf "IPv6LinkLocalAddressGenerationMode" ["eui64" "none" "stable-privacy" "random"])
         (assertValueOneOf "IPv4LLRoute" boolValues)
         (assertValueOneOf "DefaultRouteOnDevice" boolValues)
         (assertValueOneOf "LLMNR" (boolValues ++ ["resolve"]))
@@ -710,8 +729,8 @@ let
         (assertInt "FirewallMark")
         (assertRange "FirewallMark" 1 4294967295)
         (assertInt "Priority")
-        (assertPort "SourcePort")
-        (assertPort "DestinationPort")
+        (assertPortOrPortRange "SourcePort")
+        (assertPortOrPortRange "DestinationPort")
         (assertValueOneOf "InvertRule" boolValues)
         (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
         (assertInt "SuppressPrefixLength")
@@ -778,6 +797,7 @@ let
           "UseHostname"
           "Hostname"
           "UseDomains"
+          "UseGateway"
           "UseRoutes"
           "UseTimezone"
           "ClientIdentifier"
@@ -810,6 +830,7 @@ let
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
@@ -1277,6 +1298,7 @@ let
           "FirewallMark"
           "Wash"
           "SplitGSO"
+          "AckFilter"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
@@ -1309,6 +1331,7 @@ let
         (assertRange "FirewallMark" 1 4294967295)
         (assertValueOneOf "Wash" boolValues)
         (assertValueOneOf "SplitGSO" boolValues)
+        (assertValueOneOf "AckFilter" (boolValues ++ ["aggressive"]))
       ];
 
       sectionControlledDelay = checkUnitConfig "ControlledDelay" [
@@ -1594,7 +1617,7 @@ let
         description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
           `[WireGuardPeer]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
+          {manpage}`systemd.netdev(5)` for details.
         '';
       };
     };
@@ -1620,6 +1643,26 @@ let
         Each attribute in this set specifies an option in the
         `[VLAN]` section of the unit.  See
         {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "L2"; Flags = "private"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipvtapConfig = mkOption {
+      default = {};
+      example = { Mode = "L3"; Flags = "vepa"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVTAP;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVTAP]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -2948,15 +2991,9 @@ let
 
       systemd.services.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        # These before and conflicts lines can be removed when this PR makes it into a release:
-        # https://github.com/systemd/systemd/pull/27791
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
       systemd.sockets.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
 
       systemd.services.systemd-network-generator.wantedBy = [ "sysinit.target" ];

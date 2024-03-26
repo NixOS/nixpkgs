@@ -3,44 +3,47 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
-, importlib-metadata
+, hatch-vcs
 , packaging
-, pip
 , platformdirs
 , pytestCheckHook
 , pythonOlder
+, tomli
 , userpath
+, git
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.2.1";
-  format = "pyproject";
+  version = "1.4.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "pipxproject";
-    repo = pname;
+    owner = "pypa";
+    repo = "pipx";
     rev = "refs/tags/${version}";
-    hash = "sha256-eNZJXznKgamGR9yrswrrLEqUTxFhLGxWTkYbi13bebY=";
+    hash = "sha256-NxXOeVXwBhGqi4DUABV8UV+cDER0ROBFdgiyYTzdvuo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argcomplete
     packaging
     platformdirs
     userpath
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    git
   ];
 
   preCheck = ''
@@ -73,11 +76,13 @@ buildPythonPackage rec {
     "determination"
     "json"
     "test_list_short"
+    "test_skip_maintenance"
   ];
 
   meta = with lib; {
     description = "Install and run Python applications in isolated environments";
-    homepage = "https://github.com/pipxproject/pipx";
+    mainProgram = "pipx";
+    homepage = "https://github.com/pypa/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ yshym ];

@@ -99,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
+  setupHook = ./setup-hook.sh;
+
   enableParallelBuilding = true;
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";

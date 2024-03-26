@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "python-nvd3";
   version = "0.15.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "areski";
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/areski/python-nvd3";
     description = "Python Wrapper for NVD3 - It's time for beautiful charts";
+    mainProgram = "nvd3";
     license = licenses.mit;
     maintainers = [ maintainers.ivan-tkatchev ];
   };

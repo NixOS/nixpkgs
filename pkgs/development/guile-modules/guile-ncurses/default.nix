@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     "--with-gnu-filesystem-hierarchy"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   postFixup = ''
     for f in $out/${guile.siteDir}/ncurses/**.scm; do \
       substituteInPlace $f \
@@ -42,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile-ncurses/";
     description = "Scheme interface to the NCurses libraries";
+    mainProgram = "guile-ncurses-shell";
     longDescription = ''
       GNU Guile-Ncurses is a library for the Guile Scheme interpreter that
       provides functions for creating text user interfaces.  The text user

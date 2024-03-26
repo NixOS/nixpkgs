@@ -12,23 +12,34 @@
 , paramiko
 , pytestCheckHook
 , responses
+, setuptools
+, wrapt
+, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "6.4.0";
-  format = "setuptools";
+  version = "7.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fciNaVw603FAcgrSrND+LEycJffmnFQij2ZpatYZ/e4=";
+    hash = "sha256-yGy4xNoHCE+LclBBTMVtTKP6GYZ5w09NJ0OmsUPnir4=";
   };
 
-  passthru.optional-dependencies = {
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    wrapt
+  ];
+
+  optional-dependencies = {
     s3 = [
       boto3
     ];
@@ -49,6 +60,9 @@ buildPythonPackage rec {
     ssh = [
       paramiko
     ];
+    zst = [
+      zstandard
+    ];
   };
 
   pythonImportsCheck = [
@@ -59,7 +73,7 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "smart_open"

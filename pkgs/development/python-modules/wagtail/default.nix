@@ -24,20 +24,22 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "5.1.1";
+  version = "6.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IR/wzXBZ+Win/EOFUDsg2AHB5otW9YMeCmpPxgCllD8=";
+    hash = "sha256-Q89luoQwtB5TMWfudbJ2YKeobrBt2L156NZPtK8Feos=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8" \
-      --replace "Pillow>=4.0.0,<10.0.0" "Pillow>=9.1.0,<11.0.0"
+      --replace "draftjs_exporter>=2.1.5,<3.0" "draftjs_exporter>=2.1.5,<6.0" \
+      --replace "django-taggit>=2.0,<5.0" "django-taggit>=2.0,<6.0" \
+      --replace "Willow[heif]>=1.6.2,<1.7" "Willow[heif]>=1.6.2,<2"
   '';
 
   propagatedBuildInputs = [
@@ -64,10 +66,13 @@ buildPythonPackage rec {
   # on wagtail (wagtail-factories)
   doCheck = false;
 
-  passthru.tests.wagtail = callPackage ./tests.nix {};
+  passthru.tests.wagtail = callPackage ./tests.nix { };
+
+  pythonImportsCheck = [ "wagtail" ];
 
   meta = with lib; {
     description = "A Django content management system focused on flexibility and user experience";
+    mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
     changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";
     license = licenses.bsd3;

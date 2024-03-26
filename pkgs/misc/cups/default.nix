@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       # service would stop the socket and break subsequent socket activations.
       # See https://github.com/apple/cups/issues/6005
       sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12") ''
     substituteInPlace backend/usb-darwin.c \
       --replace "kIOMainPortDefault" "kIOMasterPortDefault"
   '';

@@ -33,7 +33,7 @@ in {
 
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-modules-load.service" "network-online.target" ];
-      wants = [ "network-pre.target" ];
+      wants = [ "network-pre.target" "network-online.target" ];
 
       serviceConfig = {
         Type = "oneshot";

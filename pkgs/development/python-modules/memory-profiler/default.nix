@@ -6,6 +6,7 @@
 python.pkgs.buildPythonPackage rec {
   pname = "memory-profiler";
   version = "0.61.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "memory_profiler";
@@ -20,6 +21,7 @@ python.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     description = "A module for monitoring memory usage of a process";
+    mainProgram = "mprof";
     longDescription = ''
       This is a python module for monitoring memory consumption of a process as
       well as line-by-line analysis of memory consumption for python programs.

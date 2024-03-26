@@ -31,16 +31,16 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "1.1.0";
-  format = "pyproject";
+  version = "1.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kJqy7aK67JFtmsrwMtze/wTM9qch9YYj2eUzGJRJreQ=";
+    hash = "sha256-w1ptKi/MH3kGZxLMUNq/Gs6btGx+n2fG4nfQUXCXmiY=";
   };
 
   nativeBuildInputs = [

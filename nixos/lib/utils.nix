@@ -64,8 +64,8 @@ rec {
     let
       s = if builtins.isPath arg then "${arg}"
         else if builtins.isString arg then arg
-        else if builtins.isInt arg || builtins.isFloat arg then toString arg
-        else throw "escapeSystemdExecArg only allows strings, paths and numbers";
+        else if builtins.isInt arg || builtins.isFloat arg || lib.isDerivation arg then toString arg
+        else throw "escapeSystemdExecArg only allows strings, paths, numbers and derivations";
     in
       replaceStrings [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON s);
 
@@ -109,6 +109,7 @@ rec {
       recurse = prefix: item:
         if item ? ${attr} then
           nameValuePair prefix item.${attr}
+        else if isDerivation item then []
         else if isAttrs item then
           map (name:
             let

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "rqlite";
-  version = "7.6.1";
+  version = "8.23.0";
 
   src = fetchFromGitHub {
     owner = "rqlite";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WvEnMAz3dKG8xMlQzm7E0TmAgvsrRED50bb4Ved1+4U=";
+    sha256 = "sha256-n4ALjayvcOR+VcpKPRh6WswAEEdlYyxhYyfPRje98Rs=";
   };
 
-  vendorHash = "sha256-qirt5g7dcjAnceejrBnfhDpA4LSEj7eOuznSlfUBUgo=";
+  vendorHash = "sha256-UYO5asCX+KpESAT1ws7O91QaOJ8zPbd06JzHexBiWj0=";
 
   subPackages = [ "cmd/rqlite" "cmd/rqlited" "cmd/rqbench" ];
 

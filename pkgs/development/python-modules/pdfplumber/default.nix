@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.10.2";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jsvine";
     repo = "pdfplumber";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nuHHEVOYm2/PkXIs9Ze5y5xyJMLkxqp3q3u4gV8Ks80=";
+    hash = "sha256-sjiCxE2WcvBASANCeookNn1n9M+mY0/8QGOCen+pzqM=";
   };
 
   postPatch = ''
@@ -71,6 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
+    mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
     changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
     license = licenses.mit;

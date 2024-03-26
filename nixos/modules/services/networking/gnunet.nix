@@ -112,12 +112,8 @@ in
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gnunet;
-        defaultText = literalExpression "pkgs.gnunet";
-        description = lib.mdDoc "Overridable attribute of the gnunet package to use.";
-        example = literalExpression "pkgs.gnunet_git";
+      package = mkPackageOption pkgs "gnunet" {
+        example = "gnunet_git";
       };
 
       extraOptions = mkOption {

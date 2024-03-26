@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "skytemple-icons";
   version = "1.3.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

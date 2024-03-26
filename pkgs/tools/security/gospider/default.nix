@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fast web spider written in Go";
+    mainProgram = "gospider";
     longDescription = ''
       GoSpider is a fast web crawler that parses sitemap.xml and robots.txt file.
       It can generate and verify link from JavaScript files, extract URLs from

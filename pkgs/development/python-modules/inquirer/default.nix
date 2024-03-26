@@ -8,7 +8,7 @@
 
 # propagated
 , blessed
-, python-editor
+, editor
 , readchar
 
 # tests
@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "3.1.3";
+  version = "3.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "magmax";
     repo = "python-inquirer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7GfHsCQgnDUdiM1z9YNdDuwMNy6rLjR1UTnZMgpQ5k4=";
+    hash = "sha256-LsZ2SYgBOKZegk7b9DwForwMA49XvIe+Z6WvI1/YscY=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     blessed
-    python-editor
+    editor
     readchar
   ];
 

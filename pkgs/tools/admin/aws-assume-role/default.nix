@@ -23,7 +23,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "Easily assume AWS roles in your terminal.";
+    description = "Easily assume AWS roles in your terminal";
     homepage = "https://github.com/remind101/assume-role";
     license = licenses.bsd2;
     mainProgram = "assume-role";

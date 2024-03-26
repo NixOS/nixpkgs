@@ -20,9 +20,11 @@ let
     else
       pkgs.writeText "vdirsyncer-${name}.conf" (toIniJson (
         {
-          general = cfg'.config.general // (lib.optionalAttrs (cfg'.config.statusPath == null) {
-            status_path = "/var/lib/vdirsyncer/${name}";
-          });
+          general = cfg'.config.general // {
+            status_path = if cfg'.config.statusPath == null
+                          then "/var/lib/vdirsyncer/${name}"
+                          else cfg'.config.statusPath;
+          };
         } // (
           mapAttrs' (name: nameValuePair "pair ${name}") cfg'.config.pairs
         ) // (
@@ -71,7 +73,7 @@ in
     services.vdirsyncer = {
       enable = mkEnableOption (mdDoc "vdirsyncer");
 
-      package = mkPackageOptionMD pkgs "vdirsyncer" {};
+      package = mkPackageOption pkgs "vdirsyncer" {};
 
       jobs = mkOption {
         description = mdDoc "vdirsyncer job configurations";

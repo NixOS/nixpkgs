@@ -119,6 +119,10 @@ in stdenv.mkDerivation rec {
   makeFlags = [
     "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
+    # Setting this flag was required as workaround for a clang bug, but seems not relevant anymore.
+    # https://github.com/ostreedev/ostree/commit/fd8795f3874d623db7a82bec56904648fe2c1eb7
+    # See also Makefile-libostree.am
+    "INTROSPECTION_SCANNER_ENV="
   ];
 
   preConfigure = ''

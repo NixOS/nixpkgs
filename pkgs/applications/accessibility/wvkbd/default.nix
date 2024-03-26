@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.14.1";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-a1VOSLpvSKiEkR73V/Q3Es9irueDihMKcQvO9alPCqo=";
+    sha256 = "sha256-1ySKsWgSCqsWV0RnR+wZt7+hWVWUqXrQLd1H6FqYzc8=";
   };
 
   postPatch = ''
@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.elohmeier ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "wvkbd-mobintl";
   };
 }

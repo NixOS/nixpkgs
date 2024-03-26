@@ -1,6 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, python3, autoreconfHook
-, libuuid, sqlite, glib, libevent, libsearpc, openssl, fuse, libarchive, which
-, vala, cmake, oniguruma, nixosTests }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, python3
+, autoreconfHook
+, libuuid
+, sqlite
+, glib
+, libevent
+, libsearpc
+, openssl
+, fuse
+, libarchive
+, libjwt
+, curl
+, which
+, vala
+, cmake
+, oniguruma
+, nixosTests
+}:
 
 let
   # seafile-server relies on a specific version of libevhtp.
@@ -8,15 +27,16 @@ let
   libevhtp = import ./libevhtp.nix {
     inherit stdenv lib fetchFromGitHub cmake libevent;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "seafile-server";
-  version = "9.0.10";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
-    rev = "079a8b65a543bfbc48e7671c3dbbffe19fd02944"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-F1n4E6ajpri3CVM7B28UKoTV1oOLr5nTy6Lw0E5tCrc=";
+    rev = "db09baec1b88fc131bf4453a808ab63a3fc714c9"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-a5vtJcbnaYzq6/3xmhbWk23BZ+Wil/Tb/q22ML4bDqs=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -31,6 +51,8 @@ in stdenv.mkDerivation rec {
     python3
     fuse
     libarchive
+    libjwt
+    curl
     which
     vala
     libevhtp

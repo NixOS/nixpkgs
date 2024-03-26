@@ -130,7 +130,7 @@ in
     '';
   };
 
-  config = lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
+  config = lib.mkMerge [ (lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
@@ -231,7 +231,8 @@ in
         # even if you've upgraded your system to a new NixOS release.
         #
         # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-        # so changing it will NOT upgrade your system.
+        # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+        # to actually do that.
         #
         # This value being lower than the current NixOS release does NOT mean your system is
         # out of date, out of support, or vulnerable.
@@ -257,10 +258,13 @@ in
 
     documentation.man.man-db.skipPackages = [ nixos-version ];
 
+  })
+
+  # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
+  ({
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
-
-  };
+  })];
 
 }

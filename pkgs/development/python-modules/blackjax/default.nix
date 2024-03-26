@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, pytest-xdist
 , pytestCheckHook
 , setuptools-scm
 , fastprogress
@@ -14,21 +15,19 @@
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.0.0";
+  version = "1.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
-    repo = pname;
+    repo = "blackjax";
     rev = "refs/tags/${version}";
-    hash = "sha256-hqOKSHyZ/BmOu6MJLeecD3H1BbLbZqywmlBzn3xjQRk=";
+    hash = "sha256-6+ElY1F8oRCtWT4a/LIG6hYMthlq5mDx2baKAc6zIns=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     fastprogress
@@ -39,7 +38,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
   disabledTestPaths = [ "tests/test_benchmarks.py" ];
   disabledTests = [
     # too slow

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cglm";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "recp";
     repo = "cglm";
     rev = "v${version}";
-    sha256 = "sha256-qOPOJ+h1bq5yKkP3ZNeZnRwiOMSgS7bxTk7s/5tREQw=";
+    sha256 = "sha256-jaG+XGbSx5SaNhGFWLh+1WTB+ya3c5tBZYs9xKIRafI=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "markdownify";
   version = "0.11.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTML to Markdown converter";
+    mainProgram = "markdownify";
     homepage = "https://github.com/matthewwithanm/python-markdownify";
     license = licenses.mit;
     maintainers = [ maintainers.McSinyx ];

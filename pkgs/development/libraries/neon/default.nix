@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An HTTP and WebDAV client library";
+    mainProgram = "neon-config";
     homepage = "https://notroj.github.io/neon/";
     changelog = "https://github.com/notroj/${pname}/blob/${version}/NEWS";
     platforms = platforms.unix;

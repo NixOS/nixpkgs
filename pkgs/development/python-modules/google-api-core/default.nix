@@ -13,19 +13,24 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.11.1";
-  format = "setuptools";
+  version = "2.17.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JdKeBaAFjtXxnGHAp4sbU63qTZNktGTQFPvalB9tHJo=";
+    hash = "sha256-nfGKH4fuDfC8TuoncOvEIoOS2MxAZmVbMg4s/MsV25U=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     googleapis-common-protos

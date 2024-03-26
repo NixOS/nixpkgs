@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An implementation of the XDG Sound Theme and Name Specifications";
+    mainProgram = "canberra-gtk-play";
     longDescription = ''
       libcanberra is an implementation of the XDG Sound Theme and Name
       Specifications, for generating event sounds on free desktops

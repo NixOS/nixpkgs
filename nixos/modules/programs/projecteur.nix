@@ -6,7 +6,7 @@ in
 {
   options.programs.projecteur = {
     enable = lib.mkEnableOption (lib.mdDoc "projecteur");
-    package = lib.mkPackageOptionMD pkgs "projecteur" { };
+    package = lib.mkPackageOption pkgs "projecteur" { };
   };
 
   config = lib.mkIf cfg.enable {

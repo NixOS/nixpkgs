@@ -12,19 +12,17 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.36.9";
-  format = "pyproject";
+  version = "0.42.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "griffe";
     rev = "refs/tags/${version}";
-    hash = "sha256-5j6boIy2LnB3Y0ZzheTdflON8KaQkeQS5vkaPIsETGk=";
+    hash = "sha256-KaD3j96FJJx43m/nfHa4kAft4FcDOdq+2dsiaMY7PPY=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     pdm-backend
@@ -52,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Signatures for entire Python programs";
+    mainProgram = "griffe";
     homepage = "https://github.com/mkdocstrings/griffe";
     changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
     license = licenses.isc;

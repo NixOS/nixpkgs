@@ -2,6 +2,7 @@
 , stdenv
 , aiohttp
 , buildPythonPackage
+, setuptools
 , eventlet
 , fetchFromGitHub
 , iana-etc
@@ -17,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.7.1";
-  format = "setuptools";
+  version = "4.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -26,8 +27,12 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jHXpPnrQlIpmQ2sY4y6AUx/6W8Pf+683s4NmmlwZO58=";
+    hash = "sha256-FpPGIK5HVtTzDOpORo+WPhS1860P3dm1nJkvakpzsjE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     simple-websocket

@@ -11,6 +11,7 @@
 
 buildPythonPackage rec {
   version = "1.0.0";
+  format = "setuptools";
   pname = "jupyter";
 
   src = fetchPypi {

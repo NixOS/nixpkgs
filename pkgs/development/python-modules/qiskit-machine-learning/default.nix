@@ -1,9 +1,11 @@
 { lib
 , pythonOlder
-, pythonAtLeast
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+
+# build-system
+, setuptools
+
   # Python Inputs
 , fastdtw
 , numpy
@@ -21,7 +23,8 @@
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
-  version = "0.6.1";
+  version = "0.7.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -29,8 +32,12 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-oSLQvZGEq/nBj7ktDEq3BMk7xyYiLGpBDmKxuXtMTfs=";
+    hash = "sha256-EBjWWoNRuIZFWQkrjf9IyZZ648rP5d7MZkjeIYifgGk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     fastdtw

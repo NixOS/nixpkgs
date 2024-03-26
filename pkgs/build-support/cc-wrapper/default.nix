@@ -53,19 +53,42 @@
 , gccForLibs ? if useCcForLibs then cc else null
 , fortify-headers ? null
 , includeFortifyHeaders ? null
+
+# https://github.com/NixOS/nixpkgs/issues/295322
+# should -march flag be used
+, disableMarch ? false
 }:
 
-with lib;
-
 assert nativeTools -> !propagateDoc && nativePrefix != "";
-assert !nativeTools ->
-  cc != null && coreutils != null && gnugrep != null;
+assert !nativeTools -> cc != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
 let
-  stdenv = stdenvNoCC;
+  inherit (lib)
+    attrByPath
+    concatMapStrings
+    concatStringsSep
+    escapeShellArg
+    getBin
+    getDev
+    getLib
+    getName
+    getVersion
+    mapAttrsToList
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    removePrefix
+    replaceStrings
+    toList
+    versionAtLeast
+    ;
+
   inherit (stdenv) hostPlatform targetPlatform;
+
+  stdenv = stdenvNoCC;
 
   includeFortifyHeaders' = if includeFortifyHeaders != null
     then includeFortifyHeaders
@@ -73,13 +96,11 @@ let
 
   # Prefix for binaries. Customarily ends with a dash separator.
   #
-  # TODO(@Ericson2314) Make unconditional, or optional but always true by
-  # default.
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
-                                           (targetPlatform.config + "-");
+  # TODO(@Ericson2314) Make unconditional, or optional but always true by default.
+  targetPrefix = optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-");
 
-  ccVersion = lib.getVersion cc;
-  ccName = lib.removePrefix targetPrefix (lib.getName cc);
+  ccVersion = getVersion cc;
+  ccName = removePrefix targetPrefix (getName cc);
 
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
@@ -98,7 +119,7 @@ let
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
+    optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
   useGccForLibs = useCcForLibs
     && libcxx == null
@@ -109,6 +130,9 @@ let
     && gccForLibs != null;
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+
+  # Analogously to cc_solib and gccForLibs_solib
+  libcxx_solib = "${getLib libcxx}/lib";
 
   # The following two functions, `isGccArchSupported` and
   # `isGccTuneSupported`, only handle those situations where a flag
@@ -218,6 +242,17 @@ let
        then guess
        else null;
 
+  defaultHardeningFlags = bintools.defaultHardeningFlags or [];
+
+  # if cc.hardeningUnsupportedFlagsByTargetPlatform exists, this is
+  # called with the targetPlatform as an argument and
+  # cc.hardeningUnsupportedFlags is completely ignored - the function
+  # is responsible for including the constant hardeningUnsupportedFlags
+  # list however it sees fit.
+  ccHardeningUnsupportedFlags = if cc ? hardeningUnsupportedFlagsByTargetPlatform
+    then cc.hardeningUnsupportedFlagsByTargetPlatform targetPlatform
+    else (cc.hardeningUnsupportedFlags or []);
+
   darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
@@ -271,6 +306,8 @@ stdenv.mkDerivation {
     inherit expand-response-params;
 
     inherit nixSupport;
+
+    inherit defaultHardeningFlags;
   };
 
   dontBuild = true;
@@ -361,7 +398,7 @@ stdenv.mkDerivation {
 
       # this symlink points to the unwrapped gnat's output "out". It is used by
       # our custom gprconfig compiler description to find GNAT's ada runtime. See
-      # ../../development/tools/build-managers/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+      # ../../development/ada-modules/gprbuild/{boot.nix, nixpkgs-gnat.xml}
       ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
     ''
 
@@ -391,9 +428,9 @@ stdenv.mkDerivation {
 
   setupHooks = [
     ../setup-hooks/role.bash
-  ] ++ lib.optional (cc.langC or true) ./setup-hook.sh
-    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh
-    ++ lib.optional (targetPlatform.isWindows) (stdenv.mkDerivation {
+  ] ++ optional (cc.langC or true) ./setup-hook.sh
+    ++ optional (cc.langFortran or false) ./fortran-hook.sh
+    ++ optional (targetPlatform.isWindows) (stdenv.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
       installPhase = ''
@@ -460,7 +497,7 @@ stdenv.mkDerivation {
     # when building e.g. firefox), lld is able to find libgcc_s.so
     + concatMapStrings (libgcc: ''
       echo "-L${libgcc}/lib" >> $out/nix-support/cc-ldflags
-    '') (lib.toList (gccForLibs.libgcc or [])))
+    '') (toList (gccForLibs.libgcc or [])))
 
     ##
     ## General libc support
@@ -518,17 +555,20 @@ stdenv.mkDerivation {
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
-      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
+      for dir in ${gccForLibs}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
-      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*/${targetPlatform.config}; do
+      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
     + optionalString (libcxx.isLLVM or false) ''
-      echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
-      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-isystem ${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
+    ''
+    # can remove once LLVM9 and LLVM11 are dropped from nixpkgs
+    + optionalString (libcxx.isLLVM or false && lib.versionOlder (lib.getVersion libcxx) "12" && libcxx ? cxxabi.libName) ''
+      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-l${libcxx.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
     ''
 
@@ -560,7 +600,7 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
-      echo " -L${lib.getLib libcxx}/lib" >> $out/nix-support/cc-ldflags
+      echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
     ##
@@ -577,7 +617,7 @@ stdenv.mkDerivation {
     ## Hardening support
     ##
     + ''
-      export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
+      export hardening_unsupported_flags="${concatStringsSep " " ccHardeningUnsupportedFlags}"
     ''
 
     # Machine flags. These are necessary to support
@@ -588,9 +628,12 @@ stdenv.mkDerivation {
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
+    #
+    # For clang, this is handled in add-clang-cc-cflags-before.sh
+
     # TODO: aarch64-darwin has mcpu incompatible with gcc
-    + optionalString ((targetPlatform ? gcc.arch) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64)) &&
-                      isGccArchSupported targetPlatform.gcc.arch) ''
+    + optionalString ((targetPlatform ? gcc.arch) && !isClang && !(stdenv.isDarwin && stdenv.isAarch64) &&
+                      isGccArchSupported targetPlatform.gcc.arch && !disableMarch) ''
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
@@ -684,6 +727,10 @@ stdenv.mkDerivation {
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
     ##
     + optionalString isClang ''
+      # Escape twice: once for this script, once for the one it gets substituted into.
+      export march=${escapeShellArg
+        (optionalString (targetPlatform ? gcc.arch && !disableMarch)
+          (escapeShellArg "-march=${targetPlatform.gcc.arch}"))}
       export defaultTarget=${targetPlatform.config}
       substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''
@@ -692,8 +739,8 @@ stdenv.mkDerivation {
     ## Extra custom steps
     ##
     + extraBuildCommands
-    + lib.strings.concatStringsSep "; "
-      (lib.attrsets.mapAttrsToList
+    + concatStringsSep "; "
+      (mapAttrsToList
         (name: value: "echo ${toString value} >> $out/nix-support/${name}")
         nixSupport);
 
@@ -712,14 +759,13 @@ stdenv.mkDerivation {
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
+    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
   };
 
   meta =
-    let cc_ = lib.optionalAttrs (cc != null) cc; in
-    (lib.optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
-    { description =
-        lib.attrByPath ["meta" "description"] "System C compiler" cc_
-        + " (wrapper script)";
+    let cc_ = optionalAttrs (cc != null) cc; in
+    (optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
+    { description = attrByPath ["meta" "description"] "System C compiler" cc_ + " (wrapper script)";
       priority = 10;
       mainProgram = if name != "" then name else ccName;
   };

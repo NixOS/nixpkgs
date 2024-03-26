@@ -5,7 +5,7 @@
 , mpfr
 , libmpc
 , ppl
-, cython
+, cython_3
 , cysignals
 , gmpy2
 , sphinx
@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "pplpy";
   version = "0.8.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cython
+    cython_3
     cysignals
     gmpy2
   ];

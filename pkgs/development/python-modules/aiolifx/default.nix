@@ -7,19 +7,24 @@
 , ifaddr
 , inquirerpy
 , bitstring
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "0.9.0";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oK8Ih62EFwu3X5PNVFLH+Uce6ZBs7IMXet5/DHxfd5M=";
+    hash = "sha256-r42M7aqKKLdGgRaCym44M1nvu0vTGK7ricBp/AsbFRk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     async-timeout
@@ -38,6 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for local communication with LIFX devices over a LAN";
+    mainProgram = "aiolifx";
     homepage = "https://github.com/frawau/aiolifx";
     changelog = "https://github.com/frawau/aiolifx/releases/tag/${version}";
     license = licenses.mit;

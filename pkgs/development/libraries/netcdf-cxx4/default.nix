@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GZ6n7dW3l8Kqrk2Xp2mxRTUWWQj0XEd2LDTG9EtrfhY=";
   };
 
+  patches = [
+    # This fix is included upstream, remove with next upgrade
+    ./cmake-h5free.patch
+  ];
+
   preConfigure = ''
     cmakeFlags+="-Dabs_top_srcdir=$(readlink -f ./)"
   '';
@@ -25,8 +30,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ API to manipulate netcdf files";
+    mainProgram = "ncxx4-config";
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

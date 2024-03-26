@@ -8,16 +8,15 @@
 , pretend
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , simplejson
-, typing-extensions
+, twisted
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "23.2.0";
-  format = "pyproject";
+  version = "24.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,19 +24,13 @@ buildPythonPackage rec {
     owner = "hynek";
     repo = "structlog";
     rev = "refs/tags/${version}";
-    hash = "sha256-KSHKgkv+kObKCdWZDg5o6QYe0AMND9VLdEuseY/GyDY=";
+    hash = "sha256-0Yc28UEeozK2+IqILFTqHoTiM5L2SA4t6jld4qTBSzQ=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -46,6 +39,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     simplejson
+    twisted
   ];
 
   pythonImportsCheck = [
@@ -57,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hynek/structlog";
     changelog = "https://github.com/hynek/structlog/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

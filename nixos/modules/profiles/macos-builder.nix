@@ -103,6 +103,19 @@ in
     # server that QEMU provides (normally 10.0.2.3)
     networking.nameservers = [ "8.8.8.8" ];
 
+    # The linux builder is a lightweight VM for remote building; not evaluation.
+    nix.channel.enable = false;
+    # remote builder uses `nix-daemon` (ssh-ng:) or `nix-store --serve` (ssh:)
+    # --force: do not complain when missing
+    # TODO: install a store-only nix
+    #       https://github.com/NixOS/rfcs/blob/master/rfcs/0134-nix-store-layer.md#detailed-design
+    environment.extraSetup = ''
+      rm --force $out/bin/{nix-instantiate,nix-build,nix-shell,nix-prefetch*,nix}
+    '';
+    # Deployment is by image.
+    # TODO system.switch.enable = false;?
+    system.disableInstallerTools = true;
+
     nix.settings = {
       auto-optimise-store = true;
 
@@ -132,6 +145,8 @@ in
         # This installCredentials script is written so that it's as easy as
         # possible for a user to audit before confirming the `sudo`
         installCredentials = hostPkgs.writeShellScript "install-credentials" ''
+          set -euo pipefail
+
           KEYS="''${1}"
           INSTALL=${hostPkgs.coreutils}/bin/install
           "''${INSTALL}" -g nixbld -m 600 "''${KEYS}/${user}_${keyType}" ${privateKey}
@@ -141,6 +156,9 @@ in
         hostPkgs = config.virtualisation.host.pkgs;
 
         script = hostPkgs.writeShellScriptBin "create-builder" (
+          ''
+            set -euo pipefail
+          '' +
           # When running as non-interactively as part of a DarwinConfiguration the working directory
           # must be set to a writeable directory.
         (if cfg.workingDirectory != "." then ''

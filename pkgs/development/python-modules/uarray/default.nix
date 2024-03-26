@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "uarray";
   version = "0.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
   preCheck = ''
     cd $TMP
   '';
-  pytestFlagsArray = ["--pyargs" "uarray"];
+  pytestFlagsArray = ["--pyargs" "uarray" "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
   pythonImportsCheck = [ "uarray" ];
 
   meta = with lib; {

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pywal";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate and change colorschemes on the fly. A 'wal' rewrite in Python 3";
+    mainProgram = "wal";
     homepage = "https://github.com/dylanaraps/pywal";
     license = licenses.mit;
     maintainers = with maintainers; [ Fresheyeball ];

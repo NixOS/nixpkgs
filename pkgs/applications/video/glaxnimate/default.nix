@@ -37,19 +37,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "glaxnimate";
-  version = "0.5.1";
+  version = "0.5.4";
 
   src = fetchFromGitLab {
     owner = "mattbas";
     repo = "${pname}";
     rev = version;
-    sha256 = "G4ykcOvXXnVIQZUYpRIrALtDSsGqxMvDtcmobjjtlKw=";
+    sha256 = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
@@ -65,6 +66,10 @@ stdenv.mkDerivation rec {
     python3WithLibs
   ];
 
+  # Translation needs to be separately compiled
+  # https://gitlab.com/mattbas/glaxnimate/-/issues/648
+  buildFlags = [ "translations" ];
+
   qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
 
   passthru.tests.version = lib.optionalAttrs stdenv.isLinux (testers.testVersion {
@@ -77,5 +82,6 @@ stdenv.mkDerivation rec {
     description = "Simple vector animation program.";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tobiasBora ];
+    mainProgram = "glaxnimate";
   };
 }

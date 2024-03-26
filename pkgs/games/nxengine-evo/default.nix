@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       gpl3                   # Game engine
       unfreeRedistributable  # Game assets, freeware
     ];
-    maintainers = [ lib.maintainers.scubed2 ];
+    maintainers = [ ];
     homepage = "https://github.com/nxengine/nxengine-evo";
     platforms = lib.platforms.linux;
   };

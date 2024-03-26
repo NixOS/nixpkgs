@@ -6,21 +6,22 @@
 }:
 
 let
-  version = "16.4.1";
+  version = "16.9.2";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
   commonOpts = {
     inherit version;
 
+    # nixpkgs-update: no auto update
     src = fetchFromGitLab {
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-t3d72l/Na0qv+jezT/YhAUbG9DSSe9pyixQjTALTxvk=";
+      hash = "sha256-YlSZq7+YtV9mhZDoNZ7QStbZLQ/Vtt8H2ZW84ONvCq8=";
     };
 
-    vendorHash = "sha256-Nlq1l1f389DC854rFznEu2Viv0T7Y1cD1Ht0o2N304o=";
+    vendorHash = "sha256-aqwdeBjR8IGa1DsAXY1h7vq7OkuTgoDim5m40YKlcmo=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 

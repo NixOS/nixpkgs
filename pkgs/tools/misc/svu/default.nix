@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "svu";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FmSBh2XxwxmIbX2TILnk+YUYbMQQbOb89uvnpl4b+7Y=";
+    sha256 = "sha256-MztFramrNqxYmdTRf857HOC7H66dLvezG6LL9njxWUs=";
   };
 
   vendorHash = "sha256-+e1oL08KvBSNaRepGR2SBBrEDJaGxl5V9rOBysGEfQs=";
@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/caarlos0/svu";
     maintainers = with maintainers; [ caarlos0 ];
     license = licenses.mit;
+    mainProgram = "svu";
   };
 }

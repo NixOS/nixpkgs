@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool ];
   buildInputs = [ pidgin gmime libxml2 nss ];
-  configureFlags = [ "--without-dbus" ];
+  configureFlags = [
+    "--without-dbus"
+    "--enable-quality-check=no"
+  ];
+
   enableParallelBuilding = true;
 
   postInstall = "ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";

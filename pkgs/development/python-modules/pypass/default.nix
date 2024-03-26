@@ -23,6 +23,7 @@
 buildPythonPackage rec {
   pname = "pypass";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -76,6 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Password manager pass in Python";
+    mainProgram = "pypass";
     homepage = "https://github.com/aviau/python-pass";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

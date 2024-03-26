@@ -38,8 +38,6 @@ buildPythonPackage rec {
     scipy
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
@@ -61,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
     description = "A lightweight tool for reporting Python package versions and hardware resources";
+    mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];

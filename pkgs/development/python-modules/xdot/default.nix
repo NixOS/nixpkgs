@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "xdot";
   version = "1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
@@ -55,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An interactive viewer for graphs written in Graphviz's dot";
+    mainProgram = "xdot";
     homepage = "https://github.com/jrfonseca/xdot.py";
     license = licenses.lgpl3Plus;
   };

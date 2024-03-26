@@ -7,6 +7,7 @@
 , zbar
 , secp256k1
 , enableQt ? true
+, qtwayland
 }:
 
 let
@@ -65,11 +66,12 @@ python3.pkgs.buildPythonApplication {
     matplotlib
     pbkdf2
     protobuf
-    py_scrypt
+    py-scrypt
     pysocks
     qrcode
     requests
     tlslite-ng
+    certifi
     # plugins
     btchip-python
     ckcc-protocol
@@ -110,6 +112,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  buildInputs = lib.optional stdenv.isLinux qtwayland;
 
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 
@@ -124,6 +127,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Lightweight Litecoin Client";
+    mainProgram = "electrum-ltc";
     longDescription = ''
       Electrum-LTC is a simple, but powerful Litecoin wallet. A unique secret
       phrase (or “seed”) leaves intruders stranded and your peace of mind
@@ -133,6 +137,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://electrum-ltc.org/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
   };
 }

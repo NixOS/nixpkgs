@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, defusedxml
 , dissect-cstruct
 , dissect-util
 , fetchFromGitHub
@@ -13,8 +14,8 @@
 
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
-  version = "3.9";
-  format = "pyproject";
+  version = "3.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -22,10 +23,8 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.hypervisor";
     rev = "refs/tags/${version}";
-    hash = "sha256-AcDlyLKrRyt1mhh7nb9Oln/cjVKw8s1g78J8sgE2p2g=";
+    hash = "sha256-uQt+oyETjZHPa1QZfswpUX92ZCdzkR5x9deo15J+Fxo=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -33,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    defusedxml
     dissect-cstruct
     dissect-util
   ];

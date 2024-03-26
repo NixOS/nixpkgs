@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "2023.10.0";
+  version = "2023.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "pyiqvia";
     rev = "refs/tags/${version}";
-    hash = "sha256-8eTa2h+1QOL0T13+lg2OzvaQv6CYYKkviQb4J5KPsvM=";
+    hash = "sha256-qq6UQUz60WkmWqdmExlSQT3wapaHJr8DeH1eVrTOnpQ=";
   };
 
   nativeBuildInputs = [

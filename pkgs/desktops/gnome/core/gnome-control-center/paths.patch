@@ -1,17 +1,17 @@
 diff --git a/panels/color/cc-color-panel.c b/panels/color/cc-color-panel.c
-index 603178efc..c363a6a5c 100644
+index f6c84e3d2..cd897f8f5 100644
 --- a/panels/color/cc-color-panel.c
 +++ b/panels/color/cc-color-panel.c
-@@ -591,7 +591,7 @@ gcm_prefs_calibrate_cb (CcColorPanel *prefs)
+@@ -614,7 +614,7 @@ gcm_prefs_calibrate_cb (CcColorPanel *self)
  
    /* run with modal set */
    argv = g_ptr_array_new_with_free_func (g_free);
 -  g_ptr_array_add (argv, g_strdup ("gcm-calibrate"));
 +  g_ptr_array_add (argv, g_build_filename ("@gcm@", "bin", "gcm-calibrate", NULL));
    g_ptr_array_add (argv, g_strdup ("--device"));
-   g_ptr_array_add (argv, g_strdup (cd_device_get_id (prefs->current_device)));
+   g_ptr_array_add (argv, g_strdup (cd_device_get_id (self->current_device)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1029,7 +1029,7 @@ gcm_prefs_profile_view (CcColorPanel *prefs, CdProfile *profile)
+@@ -989,7 +989,7 @@ gcm_prefs_profile_view (CcColorPanel *self, CdProfile *profile)
  
    /* open up gcm-viewer as a info pane */
    argv = g_ptr_array_new_with_free_func (g_free);
@@ -20,9 +20,9 @@ index 603178efc..c363a6a5c 100644
    g_ptr_array_add (argv, g_strdup ("--profile"));
    g_ptr_array_add (argv, g_strdup (cd_profile_get_id (profile)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1275,15 +1275,12 @@ gcm_prefs_device_clicked (CcColorPanel *prefs, CdDevice *device)
+@@ -1221,15 +1221,12 @@ gcm_prefs_device_clicked (CcColorPanel *self, CdDevice *device)
  static void
- gcm_prefs_profile_clicked (CcColorPanel *prefs, CdProfile *profile, CdDevice *device)
+ gcm_prefs_profile_clicked (CcColorPanel *self, CdProfile *profile, CdDevice *device)
  {
 -  g_autofree gchar *s = NULL;
 -
@@ -34,11 +34,11 @@ index 603178efc..c363a6a5c 100644
 -  if (cd_profile_get_filename (profile) != NULL &&
 -      (s = g_find_program_in_path ("gcm-viewer")) != NULL)
 +  if (cd_profile_get_filename (profile) != NULL)
-     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, TRUE);
+     gtk_widget_set_sensitive (self->toolbutton_profile_view, TRUE);
    else
-     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, FALSE);
+     gtk_widget_set_sensitive (self->toolbutton_profile_view, FALSE);
 diff --git a/panels/datetime/tz.h b/panels/datetime/tz.h
-index a2376f8a4..98769e08f 100644
+index feef16580..4b88ef7b1 100644
 --- a/panels/datetime/tz.h
 +++ b/panels/datetime/tz.h
 @@ -27,11 +27,7 @@
@@ -54,44 +54,24 @@ index a2376f8a4..98769e08f 100644
  
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
-diff --git a/panels/keyboard/cc-input-list-box.c b/panels/keyboard/cc-input-list-box.c
-index 6c2cb5614..8f57159cc 100644
---- a/panels/keyboard/cc-input-list-box.c
-+++ b/panels/keyboard/cc-input-list-box.c
-@@ -223,10 +223,10 @@ row_layout_cb (CcInputListBox *self,
-   layout_variant = cc_input_source_get_layout_variant (source);
- 
-   if (layout_variant && layout_variant[0])
--    commandline = g_strdup_printf ("gkbd-keyboard-display -l \"%s\t%s\"",
-+    commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l \"%s\t%s\"",
- 				   layout, layout_variant);
-   else
--    commandline = g_strdup_printf ("gkbd-keyboard-display -l %s",
-+    commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l %s",
- 				   layout);
- 
-   g_spawn_command_line_async (commandline, NULL);
 diff --git a/panels/network/connection-editor/net-connection-editor.c b/panels/network/connection-editor/net-connection-editor.c
-index 505b8ee25..62e94009f 100644
+index ec5a905a5..689fdbebe 100644
 --- a/panels/network/connection-editor/net-connection-editor.c
 +++ b/panels/network/connection-editor/net-connection-editor.c
-@@ -267,9 +267,9 @@ net_connection_editor_do_fallback (NetConnectionEditor *self, const gchar *type)
-         g_autoptr(GError) error = NULL;
+@@ -377,7 +377,7 @@ net_connection_editor_do_fallback (NetConnectionEditor *self, const gchar *type)
+         GPid child_pid;
+ 
+         builder = g_strv_builder_new ();
+-        g_strv_builder_add (builder, "nm-connection-editor");
++        g_strv_builder_add (builder, "@networkmanagerapplet@/bin/nm-connection-editor");
  
          if (self->is_new_connection) {
--                cmdline = g_strdup_printf ("nm-connection-editor --type='%s' --create", type);
-+                cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --type='%s' --create", type);
-         } else {
--                cmdline = g_strdup_printf ("nm-connection-editor --edit='%s'",
-+                cmdline = g_strdup_printf ("@networkmanagerapplet@/bin/nm-connection-editor --edit='%s'",
-                                            nm_connection_get_uuid (self->connection));
-         }
- 
+                 g_autofree gchar *type_str = NULL;
 diff --git a/panels/network/net-device-bluetooth.c b/panels/network/net-device-bluetooth.c
-index 74dfb0e9a..5f53d1a20 100644
+index 303f4a8af..e5afc4dff 100644
 --- a/panels/network/net-device-bluetooth.c
 +++ b/panels/network/net-device-bluetooth.c
-@@ -90,7 +90,7 @@ nm_device_bluetooth_refresh_ui (NetDeviceBluetooth *self)
+@@ -80,7 +80,7 @@ nm_device_bluetooth_refresh_ui (NetDeviceBluetooth *self)
          update_off_switch_from_device_state (self->device_off_switch, state, self);
  
          /* set up the Options button */
@@ -100,7 +80,7 @@ index 74dfb0e9a..5f53d1a20 100644
          gtk_widget_set_visible (GTK_WIDGET (self->options_button), state != NM_DEVICE_STATE_UNMANAGED && path != NULL);
  }
  
-@@ -141,7 +141,7 @@ options_button_clicked_cb (NetDeviceBluetooth *self)
+@@ -131,7 +131,7 @@ options_button_clicked_cb (NetDeviceBluetooth *self)
  
          connection = net_device_get_find_connection (self->client, self->device);
          uuid = nm_connection_get_uuid (connection);
@@ -109,7 +89,7 @@ index 74dfb0e9a..5f53d1a20 100644
          g_debug ("Launching '%s'\n", cmdline);
          if (!g_spawn_command_line_async (cmdline, &error))
                  g_warning ("Failed to launch nm-connection-editor: %s", error->message);
-@@ -185,7 +185,7 @@ net_device_bluetooth_init (NetDeviceBluetooth *self)
+@@ -173,7 +173,7 @@ net_device_bluetooth_init (NetDeviceBluetooth *self)
  
          gtk_widget_init_template (GTK_WIDGET (self));
  
@@ -119,10 +99,10 @@ index 74dfb0e9a..5f53d1a20 100644
  }
  
 diff --git a/panels/network/net-device-mobile.c b/panels/network/net-device-mobile.c
-index 34eb86241..50d0a2bed 100644
+index 166670224..36f720d36 100644
 --- a/panels/network/net-device-mobile.c
 +++ b/panels/network/net-device-mobile.c
-@@ -508,7 +508,7 @@ options_button_clicked_cb (NetDeviceMobile *self)
+@@ -521,7 +521,7 @@ options_button_clicked_cb (NetDeviceMobile *self)
  
          connection = net_device_get_find_connection (self->client, self->device);
          uuid = nm_connection_get_uuid (connection);
@@ -131,7 +111,7 @@ index 34eb86241..50d0a2bed 100644
          g_debug ("Launching '%s'\n", cmdline);
          if (!g_spawn_command_line_async (cmdline, &error))
                  g_warning ("Failed to launch nm-connection-editor: %s", error->message);
-@@ -797,7 +797,7 @@ net_device_mobile_init (NetDeviceMobile *self)
+@@ -810,7 +810,7 @@ net_device_mobile_init (NetDeviceMobile *self)
  
          self->cancellable = g_cancellable_new ();
  
@@ -154,12 +134,12 @@ index a31a606e3..ed5133d29 100644
  
    /* Use SNMP to get printer's informations */
 diff --git a/panels/user-accounts/run-passwd.c b/panels/user-accounts/run-passwd.c
-index 86f53d4fc..0b052856f 100644
+index edbc99830..1e1d90141 100644
 --- a/panels/user-accounts/run-passwd.c
 +++ b/panels/user-accounts/run-passwd.c
-@@ -150,7 +150,7 @@ spawn_passwd (PasswdHandler *passwd_handler, GError **error)
+@@ -152,7 +152,7 @@ spawn_passwd (PasswdHandler *passwd_handler, GError **error)
          gchar  **envp;
-         gint    my_stdin, my_stdout, my_stderr;
+         gint    my_stdin, my_stdout;
  
 -        argv[0] = "/usr/bin/passwd";    /* Is it safe to rely on a hard-coded path? */
 +        argv[0] = "/run/wrappers/bin/passwd";    /* Is it safe to rely on a hard-coded path? */
@@ -167,10 +147,10 @@ index 86f53d4fc..0b052856f 100644
  
          envp = g_get_environ ();
 diff --git a/panels/user-accounts/user-utils.c b/panels/user-accounts/user-utils.c
-index 83d4cd091..e8784c722 100644
+index 5b7bc1f02..13ffe6ca8 100644
 --- a/panels/user-accounts/user-utils.c
 +++ b/panels/user-accounts/user-utils.c
-@@ -486,7 +486,7 @@ is_valid_username_async (const gchar *username,
+@@ -215,7 +215,7 @@ is_valid_username_async (const gchar *username,
           * future, so it would be nice to have some official way for this
           * instead of relying on the current "--login" implementation.
           */

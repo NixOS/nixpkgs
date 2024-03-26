@@ -2,24 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, six
 }:
 
 buildPythonPackage rec {
   pname = "bumps";
-  version = "0.9.1";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J8NeV9FCUC5dLkosBzVrovxiJJbeuj8Xc50NGEI9Bms=";
+    hash = "sha256-PhoxjnkeLGL8vgEp7UubXKlS8p44TUkJ3c4SqRjKFJA=";
   };
-
-  propagatedBuildInputs = [
-    six
-  ];
 
   # Module has no tests
   doCheck = false;
@@ -30,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Data fitting with bayesian uncertainty analysis";
+    mainProgram = "bumps";
     homepage = "https://bumps.readthedocs.io/";
     changelog = "https://github.com/bumps/bumps/releases/tag/v${version}";
     license = licenses.publicDomain;

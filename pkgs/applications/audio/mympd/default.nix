@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "12.0.4";
+  version = "14.1.0";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pOs3VfgpDUD8KiBmJ37qpGLguxOXm5cr+jlTEeRZ4Bk=";
+    sha256 = "sha256-yNB5WQi3M4cYogtxx/vLi2xJog2keyFrJIMlx663DLo=";
   };
 
   nativeBuildInputs = [
@@ -63,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.doronbehar ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+    mainProgram = "mympd";
   };
 })

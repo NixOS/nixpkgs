@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "xkbcommon";
   version = "0.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
-    ${python.pythonForBuild.interpreter} xkbcommon/ffi_build.py
+    ${python.pythonOnBuildForHost.interpreter} xkbcommon/ffi_build.py
   '';
 
   pythonImportsCheck = [ "xkbcommon" ];

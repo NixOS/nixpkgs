@@ -7,6 +7,7 @@ let
   mkValueStringTinyproxy = with lib; v:
         if true  ==         v then "yes"
         else if false ==    v then "no"
+        else if types.path.check v then ''"${v}"''
         else generators.mkValueStringDefault {} v;
   mkKeyValueTinyproxy = {
     mkValueString ? mkValueStringDefault {}
@@ -28,7 +29,7 @@ in
   options = {
     services.tinyproxy = {
       enable = mkEnableOption (lib.mdDoc "Tinyproxy daemon");
-      package = mkPackageOptionMD pkgs "tinyproxy" {};
+      package = mkPackageOption pkgs "tinyproxy" {};
       settings = mkOption {
         description = lib.mdDoc "Configuration for [tinyproxy](https://tinyproxy.github.io/).";
         default = { };
@@ -85,7 +86,7 @@ in
         User = "tinyproxy";
         Group = "tinyproxy";
         Type = "simple";
-        ExecStart = "${getExe pkgs.tinyproxy} -d -c ${configFile}";
+        ExecStart = "${getExe cfg.package} -d -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";

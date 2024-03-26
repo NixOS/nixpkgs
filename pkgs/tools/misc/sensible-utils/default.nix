@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The package provides utilities used by programs to sensibly select and spawn an appropriate browser, editor, or pager.";
+    description = "A collection of utilities used by programs to sensibly select and spawn an appropriate browser, editor, or pager";
     longDescription = ''
        The specific utilities included are:
        - sensible-browser

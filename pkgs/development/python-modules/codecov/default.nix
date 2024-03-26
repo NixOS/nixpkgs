@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "codecov";
   version = "2.1.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "codecov";
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python report uploader for Codecov";
+    mainProgram = "codecov";
     homepage = "https://codecov.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

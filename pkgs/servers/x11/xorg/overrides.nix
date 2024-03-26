@@ -5,7 +5,7 @@
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
   xorg, windows
 }:
@@ -408,14 +408,15 @@ self: super:
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    patches = attrs.patches or [] ++ [
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/commit/833c86ce15cee2a84a37ae71015f236fd32615d9.patch";
-        hash = "sha256-6koQV+Vse7/OWwuWYrWmBUebHBT+5F32Kkn9V9j+m+Q=";
-      })
-    ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+    buildInputs = attrs.buildInputs ++ [ zlib ]
+      ++ lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+
+    mesonFlags = [
+      (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
+      (lib.mesonEnable "zlib" true)
+    ];
 
     meta = attrs.meta // {
       # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
@@ -568,17 +569,6 @@ self: super:
 
   xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
-  });
-
-  xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
-    patches = [
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/commit/e0511968d04b42abf11bc0ffb387f143582bc144.patch";
-        sha256 = "sha256-79nqKuJRgMYXDEMB8IWxdmbxtI/m+Oca1wSLYeGMuEk=";
-      })
-    ];
   });
 
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {

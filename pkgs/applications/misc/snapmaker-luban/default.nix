@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.9.1";
+  version = "4.10.2";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-qLeF1trBrp53xkiAhybPTHUKuXYHQYfZ3tsmPPJlvUM=";
+    sha256 = "sha256-unxI0L8pcF6iWWa57GpYv/aYsApKAKfRaes3uXE7izM=";
   };
 
   nativeBuildInputs = [

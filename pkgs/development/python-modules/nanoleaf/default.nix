@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "nanoleaf";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

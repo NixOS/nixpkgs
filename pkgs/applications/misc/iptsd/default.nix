@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "1.4.0";
+  version = "2";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qBABt0qEePGrZH4khnikvStrSi/OVmP3yVMJZbEd36M=";
+    hash = "sha256-zTXTyDgSa1akViDZlYLtJk1yCREGCSJKxzF+HZAWx0c=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
     license = licenses.gpl2Plus;
+    mainProgram = "iptsd";
     maintainers = with maintainers; [ tomberek dotlambda ];
     platforms = platforms.linux;
   };

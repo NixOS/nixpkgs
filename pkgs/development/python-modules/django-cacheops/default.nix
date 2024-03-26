@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "7.0.1";
+  version = "7.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ed3qh90DlWiXikCD2JyJ37hm6lWnpI+2haaPwZiotlA=";
+    hash = "sha256-d6N8c9f6z8cpk2XtZqEr56SH3XRd2GwdM8ouv9OzKHg=";
   };
 
   nativeBuildInputs = [

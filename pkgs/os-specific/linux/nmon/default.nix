@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
   dontUnpack = true;
   buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
-    with stdenv.targetPlatform;
+    with stdenv.hostPlatform;
     if isx86 then "X86"
     else if isAarch then "ARM"
     else if isPower then "POWER"
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "AIX & Linux Performance Monitoring tool";
+    mainProgram = "nmon";
     homepage = "https://nmon.sourceforge.net";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

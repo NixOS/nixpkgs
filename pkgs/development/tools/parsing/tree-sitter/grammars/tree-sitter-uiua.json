@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/shnarazk/tree-sitter-uiua",
+  "rev": "aa1e0202dbf2ba654d79f880b86f6c1073d81b20",
+  "date": "2023-11-20T13:01:37+09:00",
+  "path": "/nix/store/lawqd38bskf5gxsls3w9jjgdaj08q1ym-tree-sitter-uiua",
+  "sha256": "0sn1vrpdkkaw2j6sp403bhijz3561n0qjh2wcpgp6qbqaxj4gxap",
+  "hash": "sha256-V/VHZFd4YXPfZVxAiYENpowvI1wDkKuNFFzN2W7ewWo=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

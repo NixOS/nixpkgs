@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.26.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
     rev = version;
-    sha256 = "sha256-q3Lu3UaEKfS7F59G6rPx+5cKcsaXk+xcdtJRIXPwVIs=";
+    sha256 = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
     fetchSubmodules = true;
   };
 
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
+    mainProgram = "giada";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kashw2 ];

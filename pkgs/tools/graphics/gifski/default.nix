@@ -7,19 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.13.0";
+  version = "1.14.4";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    hash = "sha256-Ij+bgL935uLCZeh8GQnTFlPIuUloNCn8LUdvMd+6okM=";
+    hash = "sha256-Yhcz3pbEsSlpxQ1couFgQuaS8Eru7PLiGFNHcKmiFak=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ffmpeg-sys-next-6.0.1" = "sha256-/KxW57lt9/qKqNUUZqJucsP0cKvZ1m/FdGCsZxBlxYc=";
+      "ffmpeg-sys-next-6.1.0" = "sha256-RB9sDQoP68Dzqk8tIuYlOX3dZcS64hKI5KpTGq/7xbM=";
     };
   };
 
@@ -43,6 +43,11 @@ rustPlatform.buildRustPackage rec {
   # outline a solution.
   #
   checkType = "debug";
+
+  # Cargo.lock is outdated
+  postPatch = ''
+    cargo metadata --offline
+  '';
 
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";

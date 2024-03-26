@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "qimage2ndarray";
   version = "1.10.0";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

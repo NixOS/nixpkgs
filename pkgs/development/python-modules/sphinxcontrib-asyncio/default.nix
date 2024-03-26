@@ -24,10 +24,12 @@ buildPythonPackage rec {
     "sphinxcontrib.asyncio"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx extension to add asyncio-specific markups";
     homepage = "https://github.com/aio-libs/sphinxcontrib-asyncio";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

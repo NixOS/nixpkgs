@@ -1,4 +1,6 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, cmake, pkg-config, miniupnpc, bzip2
+{ lib, mkDerivation, fetchFromGitHub
+, fetchpatch
+, qmake, cmake, pkg-config, miniupnpc, bzip2
 , speex, libmicrohttpd, libxml2, libxslt, sqlcipher, rapidjson, libXScrnSaver
 , qtbase, qtx11extras, qtmultimedia, libgnome-keyring3
 }:
@@ -20,6 +22,13 @@ mkDerivation rec {
     # but we already have them checked out
     ./no-submodules.patch
     ./cpp-filesystem.patch
+
+    # Fix gcc-13 build failure
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/RetroShare/RetroShare/commit/e1934fd9b03cd52c556eb06d94fb5d68b649592e.patch";
+      hash = "sha256-oqxQAsD4fmkWAH2kSVmmed/q0LzTW/iqUU1SgYNdFyk=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config qmake cmake ];

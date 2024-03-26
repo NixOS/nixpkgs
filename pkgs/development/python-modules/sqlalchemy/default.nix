@@ -17,7 +17,7 @@
 , aiosqlite
 , asyncmy
 , asyncpg
-, cx_oracle
+, cx-oracle
 , mariadb
 , mypy
 , mysql-connector
@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "2.0.21";
+  version = "2.0.28";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -49,8 +49,12 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-ldBn+pdZfqnBKdYkOcG47ScH/hBgeJBeIvn1hCIBw/A=";
+    hash = "sha256-Xl3w9v97tyOpL4vUYzlovGrUGIZtIZsAhbE5/FhqFiM=";
   };
+
+  postPatch = ''
+    sed -i '/tag_build = dev/d' setup.cfg
+  '';
 
   nativeBuildInputs =[
     setuptools
@@ -89,7 +93,7 @@ buildPythonPackage rec {
       mariadb
     ];
     oracle = [
-      cx_oracle
+      cx-oracle
     ];
     oracle_oracledb = [
       oracledb

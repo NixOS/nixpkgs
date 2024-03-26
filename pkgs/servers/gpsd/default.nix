@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     substituteInPlace SConscript --replace "env['CCVERSION']" "env['CC']"
 
     sconsFlags+=" udevdir=$out/lib/udev"
-    sconsFlags+=" python_libdir=$out/lib/${python3Packages.python.libPrefix}/site-packages"
+    sconsFlags+=" python_libdir=$out/${python3Packages.python.sitePackages}"
   '';
 
   # - leapfetch=no disables going online at build time to fetch leap-seconds

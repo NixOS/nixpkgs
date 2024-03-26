@@ -65,7 +65,7 @@
 }:
 let
   pname = "argilla";
-  version = "1.18.0";
+  version = "1.26.0";
   optional-dependencies = {
     server = [
       fastapi
@@ -126,7 +126,7 @@ buildPythonPackage {
     owner = "argilla-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2VWzmNMdd4WXSBrMSmclpjSZ9jDKNG7GbndUh8zLmgQ=";
+    hash = "sha256-+8oN3afbpBQU2tRb2Oq12IlmoCg4O1LUHtt4hl2FOEI=";
   };
 
   pythonRelaxDeps = [
@@ -179,6 +179,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Argilla: the open-source data curation platform for LLMs";
+    mainProgram = "argilla";
     homepage = "https://github.com/argilla-io/argilla";
     changelog = "https://github.com/argilla-io/argilla/releases/tag/v${version}";
     license = licenses.asl20;

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "carapace";
-  version = "0.28.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "rsteube";
     repo = "${pname}-bin";
     rev = "v${version}";
-    hash = "sha256-0ubZt4KsjsoIcglo/lh9JDAZjuACBNdVLJazH0Csxl0=";
+    hash = "sha256-lc+oU9adFbtQyb4wKLgbf5i6UwxsKUJo3giquDTO6qg=";
   };
 
-  vendorHash = "sha256-35Gmye5NPOtUaW8zNkjK0cQ3FRB1fK7UyqT5c17rls4=";
+  vendorHash = "sha256-XAdTLfMnOAcOiRYZGrom2Q+qp+epfg6Y9Jv0V0T12/8=";
 
   ldflags = [
     "-s"
@@ -24,7 +24,7 @@ buildGoModule rec {
   tags = [ "release" ];
 
   preBuild = ''
-    go generate ./...
+    GOOS= GOARCH= go generate ./...
   '';
 
   passthru.tests.version = testers.testVersion { package = carapace; };

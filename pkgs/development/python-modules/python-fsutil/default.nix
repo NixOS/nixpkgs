@@ -4,21 +4,26 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "0.14.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
-    repo = pname;
+    repo = "python-fsutil";
     rev = "refs/tags/${version}";
-    hash = "sha256-bHnCa7laDYi424czCGCPZuomqEOAeihjDTTW35ZTiac=";
+    hash = "sha256-Cs78zpf3W5UZJkkUBEP6l6fi2J4OtJXGvqqQ8PWKx+8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

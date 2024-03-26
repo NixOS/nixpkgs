@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pychart";
   version = "1.39";
+  format = "setuptools";
 
   disabled = ! isPy27;
 

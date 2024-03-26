@@ -28,37 +28,10 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  # needs http-client >= 0.7.11 which isn't part of Stackage LTS 18
-  - http-client-restricted < 0.0.5
-  # Downgrade hasql-dynamic-statements until hasql 1.6 is in Stackage
-  - hasql-dynamic-statements < 0.3.1.2
-  - rope-utf16-splay < 0.4.0.0
-  # hnix < 0.17 (unreleased) needs hnix-store-* 0.5.*
-  - hnix-store-core == 0.5.0.0            # 2022-06-17: Until hnix 0.17
-  - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
-
-  # 2023-04-22: For dhall < 1.42 compatibility
-  - dhall-nixpkgs == 1.0.9
-  - dhall-nix == 1.1.25
-
-  # 2023-07-06: ghcide-2.0.0.1 explicitly needs implicit-hie < 0.1.3, because some sort of
-  # breaking change was introduced in implicit-hie-0.1.3.0.
-  # https://github.com/haskell/haskell-language-server/blob/feb596592de95f09cf4ee885f3e74178161919f1/ghcide/ghcide.cabal#L107-L111
-  - implicit-hie < 0.1.3
-  - hie-bios < 0.13
-
-  # pandoc-crossref 0.3.17 needs pandoc >= 3.1.8
-  - pandoc-crossref < 0.3.17.0
-
-  # 2023-09-17: reflex-dom 0.6.3.0 is broken https://github.com/reflex-frp/reflex-dom/issues/462
-  - reflex-dom < 0.6.2.0
-
-  # Only an older version of dependent-sum-template is compatible with ghc 9.4
-  # https://github.com/obsidiansystems/dependent-sum-template/issues/5
-  - dependent-sum-template < 0.1.2
-
-  # hls-floskell-plugin 2.4 does not yet support floskell 0.11
-  - floskell < 0.11
+  # 2024-02-22: Needed for haskell-language-server-2.6.0.0
+  - lsp < 2.4.0.0
+  # 2024-02-22: Needed for hls-fourmolu-plugin-2.6.0.0 and others
+  - lsp-test < 0.17.0.0
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
@@ -66,7 +39,6 @@ extra-packages:
   - Cabal == 3.6.*                      # used for packages needing newer Cabal on ghc 8.10 and 9.0
   - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.2 and 9.0
   - Cabal-syntax == 3.10.*              # newest version required for cabal-install and other packages
-  - cachix < 1.4                        # 2023-04-02: cachix 1.4{,.1} have known on multi-user Nix systems
   - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
@@ -76,14 +48,11 @@ extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
-  - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
-  - brick-skylighting < 1.0             # 2022-08-13: needed by matterhorn-50200.17.0 to match brick
+  - brick == 0.70.*                     # 2022-08-13: needed by taskell
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
-  - dhall == 1.29.0                     # required for ats-pkg
-  - dhall == 1.38.1                     # required for spago
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
   - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
@@ -91,15 +60,10 @@ extra-packages:
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
-  - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
-  - ghc-lib == 9.4.*                    # 2023-03-17: preserve for GHC 9.4
-  - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
-  - ghc-lib-parser == 9.4.*             # 2023-03-17: preserve for GHC 9.4
-  - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
-  - ghc-lib-parser-ex == 9.4.*          # 2023-03-17: preserve for GHC 9.4
+  - ghc-syntax-highlighter == 0.0.10.*  # 2023-11-20:
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
@@ -108,9 +72,11 @@ extra-packages:
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
+  - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0, needed for HLS
   - hspec-meta < 2.8                    # 2022-12-07: Needed for elmPackages.elm / hspec-discover
   - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
   - http2 < 3.3                         # 2023-08-24: Needed for twain <https://github.com/alexmingoia/twain/issues/5>
@@ -118,14 +84,16 @@ extra-packages:
   - language-docker == 11.0.0           # required by hadolint 2.12.0, 2022-11-16
   - language-javascript == 0.7.0.0      # required by purescript
   - lens-aeson < 1.2                    # 2022-12-17: For aeson < 2.0 compat
-  - lsp == 1.4.0.0                      # 2022-09-18: need for dhall-lsp-server 1.1.2
-  - lsp-types == 1.4.0.1                # 2022-09-18: need for dhall-lsp-server 1.1.2
+  - lsp == 2.1.0.0                      # 2024-02-28: need for dhall-lsp-server unstable
+  - lsp-types == 2.0.2.0                # 2024-02-28: need for dhall-lsp-server unstable
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
   - fourmolu == 0.11.*                  # 2023-10-22: for hls on ghc 9.0
+  - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
-  - pantry == 0.5.2.1                   # needed for stack-2.7.3
+  - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
+  - primitive-unlifted == 0.1.3.1       # 2024-03-16: Needed for hls on ghc 9.2
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
   - sbv == 7.13                         # required for pkgs.petrinizer
@@ -137,13 +105,12 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
-  - commonmark-extensions < 0.2.3.3     # 2022-12-17: required by emanote 1.0.0.0 (to avoid a bug in 0.2.3.3)
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.6.*                   # 2023-02-18: preserve for ghc-lib == 9.4.*
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
-  - unix-compat < 0.7                   # 2023-07-04: Need System.PosixCompat.User for git-annex
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
+  - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
 
 package-maintainers:
   abbradar:
@@ -154,6 +121,8 @@ package-maintainers:
     - hnix-store-remote
   arturcygan:
     - hevm
+  athas:
+    - futhark
   berberman:
     - nvfetcher
     - arch-web
@@ -169,6 +138,7 @@ package-maintainers:
   centromere:
     - nfc
   dalpd:
+    - dhall-lsp-server
     - espial
     - ghc-vis
     - patat
@@ -176,6 +146,7 @@ package-maintainers:
   danielrolls:
     - byte-count-reader
     - shellify
+    - specup
   domenkozar:
     - cachix
     - cachix-api
@@ -208,6 +179,9 @@ package-maintainers:
     - vulkan-utils
   erictapen:
     - hakyll
+  evenbrenden:
+    - unleash-client-haskell
+    - unleash-client-haskell-core
   Gabriella439:
     - annah
     - bench
@@ -279,8 +253,6 @@ package-maintainers:
   maralorn:
     - cabal-fmt
     - clay
-    - ema
-    - emanote
     - eventlog2html
     - generic-optics
     - ghc-debug-brick
@@ -295,13 +267,11 @@ package-maintainers:
     - hlint
     - hmatrix
     - hspec-discover
-    - iCalendar
     - matrix-client
     - optics
     - pandoc
     - pandoc-cli
     - pandoc-crossref
-    - paths
     - postgresql-simple
     - purebred-email
     - reflex-dom
@@ -323,11 +293,12 @@ package-maintainers:
   ncfavier:
     - lambdabot
   nomeata:
+    - cabal-plan-bounds
     - candid
     - leb128-cereal
-    - tasty-expected-failure
     - lhs2tex
     - rec-def
+    - tasty-expected-failure
   peti:
     - cabal2spec
     - funcmp
@@ -378,9 +349,22 @@ package-maintainers:
     - taffybar
     - arbtt
     - lentil
+  sheepforce:
+    - mpi-hs
+    - mpi-hs-store
+    - mpi-hs-cereal
+    - mpi-hs-binary
   shlok:
     - streamly-archive
     - streamly-lmdb
+  slotThe:
+    - X11
+    - X11-xft
+    - html-parse-util
+    - optparse-applicative-cmdline-util
+    - xmonad
+    - xmonad-contrib
+    - xmonad-extras
   sorki:
     - cayenne-lpp
     - blockfrost-client
@@ -398,6 +382,9 @@ package-maintainers:
     - ttn-client
     - update-nix-fetchgit
     - zre
+  srid:
+    - ema
+    - emanote
   sternenseemann:
     # also maintain upstream package
     - cabal2nix
@@ -504,6 +491,7 @@ package-maintainers:
     - latex
     - lazyio
     - linear-programming
+    - llvm-ffi
     - markov-chain
     - midi
     - midi-alsa
@@ -617,7 +605,6 @@ unsupported-platforms:
   haskell-snake:                                [ platforms.darwin ]
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
-  hidapi:                                       [ platforms.darwin ]
   hinotify-bytestring:                          [ platforms.darwin ]
   honk:                                         [ platforms.darwin ]
   HSoM:                                         [ platforms.darwin ]
@@ -650,6 +637,7 @@ unsupported-platforms:
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
   oculus:                                       [ platforms.darwin ]
+  ostree-pin:                                   [ platforms.darwin ] # depends on gi-ostree
   pam:                                          [ platforms.darwin ]
   parport:                                      [ platforms.darwin ]
   persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
@@ -662,6 +650,7 @@ unsupported-platforms:
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
   reflex-dom:                                   [ platforms.darwin ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
+  rsi-break:                                    [ platforms.darwin ] # depends on monomer
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
   SDL-mixer:                                    [ platforms.darwin ] # depends on mesa
@@ -757,7 +746,9 @@ supported-platforms:
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
   systemd-api:                                  [ platforms.linux ]
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
+  tcod-haskell:                                 [ platforms.linux ] # limited by pkgs.libtcod
   udev:                                         [ platforms.linux ]
+  vty-windows:                                  [ platforms.windows ] # depends on Win32
   Win32-console:                                [ platforms.windows ]
   Win32-dhcp-server:                            [ platforms.windows ]
   Win32-errors:                                 [ platforms.windows ]

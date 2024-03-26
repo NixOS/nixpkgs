@@ -4,8 +4,7 @@
 , budgie-desktop-view
 , glib
 , gsettings-desktop-schemas
-, magpie
-, mate
+, gnome
 , nixos-artwork
 , nixos-background-light ? nixos-artwork.wallpapers.nineish
 , nixos-background-dark ? nixos-artwork.wallpapers.nineish-dark-gray
@@ -54,7 +53,6 @@ let
     [org.buddiesofbudgie.budgie-desktop-view:Budgie]
     show=true
     show-active-mounts=true
-    terminal="${mate.mate-terminal}/bin/mate-terminal"
 
     ${extraGSettingsOverrides}
   '';
@@ -63,7 +61,7 @@ let
       budgie-desktop
       budgie-desktop-view
       gsettings-desktop-schemas
-      magpie
+      gnome.mutter
   ] ++ extraGSettingsOverridePackages;
 
 in

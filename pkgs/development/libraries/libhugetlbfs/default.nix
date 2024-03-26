@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     "EXEDIR=$(bin)/bin"
     "DOCDIR=$(doc)/share/doc/libhugetlbfs"
     "MANDIR=$(man)/share/man"
+  ] ++ lib.optionals (stdenv.buildPlatform.system != stdenv.hostPlatform.system) [
+    # The ARCH logic defaults to querying `uname`, which will return build platform arch
+    "ARCH=${stdenv.hostPlatform.uname.processor}"
   ];
 
   # Default target builds tests as well, and the tests want a static
@@ -44,10 +47,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    badPlatforms = [
+    badPlatforms = flatten [
       systems.inspect.platformPatterns.isStatic
       systems.inspect.patterns.isMusl
-      systems.inspect.patterns.isAarch64
     ];
   };
 }

@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , freezegun
 , poetry-core
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
-  version = "2023.10.0";
+  version = "2024.01.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-psynooRbX34EFYY7FTqy3KdFsv939z/qYfIfyNTVkiM=";
+    hash = "sha256-B5k8uXDHq0U6fJVW8oy2sWUj5OIVGUfe9EtCjnIr3OE=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     pyjwt
     pytz
     titlecase

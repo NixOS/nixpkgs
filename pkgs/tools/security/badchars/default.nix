@@ -21,6 +21,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "HEX badchar generator for different programming languages";
+    mainProgram = "badchars";
     longDescription = ''
       A HEX bad char generator to instruct encoders such as shikata-ga-nai to
       transform those to other chars.

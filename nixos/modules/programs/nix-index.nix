@@ -5,12 +5,7 @@ in {
   options.programs.nix-index = with lib; {
     enable = mkEnableOption (lib.mdDoc "nix-index, a file database for nixpkgs");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.nix-index;
-      defaultText = literalExpression "pkgs.nix-index";
-      description = lib.mdDoc "Package providing the `nix-index` tool.";
-    };
+    package = mkPackageOption pkgs "nix-index" { };
 
     enableBashIntegration = mkEnableOption (lib.mdDoc "Bash integration") // {
       default = true;

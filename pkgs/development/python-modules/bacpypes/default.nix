@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , wheel
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -11,7 +12,8 @@ buildPythonPackage rec {
   version = "0.18.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  # uses the removed asyncore module
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "JoelBender";

@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Session";
+  pname = "flask-session";
   version = "0.5.0";
   format = "pyproject";
 

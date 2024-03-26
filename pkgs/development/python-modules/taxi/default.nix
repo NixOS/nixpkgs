@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "taxi";
   version = "6.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sephii";
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/sephii/taxi/";
     description = "Timesheeting made easy";
+    mainProgram = "taxi";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ jocelynthode ];
   };

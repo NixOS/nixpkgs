@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "puredata";
-  version = "0.54-0";
+  version = "0.54-1";
 
   src = fetchurl {
     url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
-    hash = "sha256-6MFKfYV5CWxuOsm1V4LaYChIRIlx0Qcwah5SbtBFZIU=";
+    hash = "sha256-hcPUvTYgtAHntdWEeHoFIIKylMTE7us1g9dwnZP9BMI=";
   };
 
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];

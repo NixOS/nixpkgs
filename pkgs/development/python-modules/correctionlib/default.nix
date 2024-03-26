@@ -7,6 +7,7 @@
 , setuptools
 , setuptools-scm
 , wheel
+, packaging
 , pybind11
 , pydantic
 , rich
@@ -18,21 +19,19 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.3.3";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4WXY7XfZVYaJD63y7fPB6tCsc+wGAsgnFlgtFbX5IK0=";
+    hash = "sha256-H8QCdU6piBdqJEJOGVbsz+6eyMhFVuwTpIHKUoKaf4A=";
   };
 
   nativeBuildInputs = [
     cmake
-    numpy
     scikit-build
     setuptools
     setuptools-scm
-    wheel
     pybind11
   ];
 
@@ -41,13 +40,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    numpy
+    packaging
     pydantic
     rich
   ];
 
   dontUseCmakeConfigure = true;
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeCheckInputs = [
     awkward
@@ -61,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";
+    mainProgram = "correction";
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];

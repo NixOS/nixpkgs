@@ -6,16 +6,17 @@
 
 buildGoModule rec {
   pname = "xe-guest-utilities";
-  version = "7.30.0";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "xenserver";
     repo = "xe-guest-utilities";
     rev = "v${version}";
-    hash = "sha256-gMb8QIUg8t0SiTtUzqeh4XM5hHgCXuf5KlV3OeoU0LI=";
+    hash = "sha256-LpZx+Km2qRywYK/eFLP3aCDku6K6HC4+MzEODH+8Gvs=";
   };
 
-  vendorHash = "sha256-zhpDvo8iujE426/gxJY+Pqfv99vLNKHqyMQbbXIKodY=";
+  deleteVendor = true;
+  vendorHash = "sha256-X/BI+ZhoqCGCmJfccyEBVgZc70aRTp3rL5j+rBWG5fE=";
 
   postPatch = ''
     substituteInPlace mk/xen-vcpu-hotplug.rules \

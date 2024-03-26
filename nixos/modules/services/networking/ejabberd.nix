@@ -29,12 +29,7 @@ in {
         description = lib.mdDoc "Whether to enable ejabberd server";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ejabberd;
-        defaultText = literalExpression "pkgs.ejabberd";
-        description = lib.mdDoc "ejabberd server package to use";
-      };
+      package = mkPackageOption pkgs "ejabberd" { };
 
       user = mkOption {
         type = types.str;
@@ -124,6 +119,12 @@ in {
       preStart = ''
         if [ -z "$(ls -A '${cfg.spoolDir}')" ]; then
           touch "${cfg.spoolDir}/.firstRun"
+        fi
+
+        if ! test -e ${cfg.spoolDir}/.erlang.cookie; then
+          touch ${cfg.spoolDir}/.erlang.cookie
+          chmod 600 ${cfg.spoolDir}/.erlang.cookie
+          dd if=/dev/random bs=16 count=1 | base64 > ${cfg.spoolDir}/.erlang.cookie
         fi
       '';
 

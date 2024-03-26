@@ -1,24 +1,31 @@
 { lib
+, cryptography
 , buildPythonPackage
 , fetchPypi
 , pyjwt
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.24.0";
-  format = "setuptools";
+  version = "1.27.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fS7NrUGl9zuyuBPzBhpM9HySRiEQWo7RN1hvy52Pgn4=";
+    hash = "sha256-MQlQPAOLprMHFSsOjTT5gRPy56eJhuKNC69bUwOv2lI=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    cryptography
     pyjwt
     requests
   ]

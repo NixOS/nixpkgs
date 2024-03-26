@@ -74,9 +74,12 @@ let
     }) (''
       source ${nmt}/bash-lib/assertions.sh
       vimrc="${writeText "init.vim" neovim-drv.initRc}"
+      luarc="${writeText "init.lua" neovim-drv.luaRcContent}"
+      luarcGeneric="$out/patched.lua"
       vimrcGeneric="$out/patched.vim"
       mkdir $out
       ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
+      ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$luarc" > "$luarcGeneric"
     '' + buildCommand);
 
 in
@@ -89,6 +92,9 @@ rec {
   nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
 
   singlelinesconfig = runTest (wrapNeovim2 "-single-lines" nvimConfSingleLines) ''
+      assertFileContains \
+        "$luarcGeneric" \
+        "vim.cmd.source \"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-init.vim"
       assertFileContent \
         "$vimrcGeneric" \
         "${./init-single-lines.vim}"
@@ -212,7 +218,7 @@ rec {
 
   # having no RC generated should autodisable init.vim wrapping
   nvim_autowrap = runTest nvim_via_override ''
-      ! grep "-u" ${nvimShouldntWrap}/bin/nvim
+      ! grep ${nvimShouldntWrap}/bin/nvim
   '';
 
 

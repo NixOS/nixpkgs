@@ -93,5 +93,6 @@ with localPython.pkgs; buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
     maintainers = with maintainers; [ eqyiel kirillrdy ];
     license = licenses.asl20;
+    mainProgram = "eb";
   };
 }

@@ -18,6 +18,7 @@
 , pytest-click
 , pytest-subtests
 , pytest-timeout
+, pytest-xdist
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.3.4";
+  version = "5.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kCPfaoli2nnrMMDITV9IY9l5OkZjVMyTHX9yQjmW3ig=";
+    hash = "sha256-hwzHHXN8AgDDlykNcwNEzJkdE6BXU0NT0STJOAJnqrk=";
   };
 
   propagatedBuildInputs = [
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     pytest-click
     pytest-subtests
     pytest-timeout
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -72,11 +74,20 @@ buildPythonPackage rec {
     # test_multi tries to create directories under /var
     "t/unit/bin/test_multi.py"
     "t/unit/apps/test_multi.py"
+    # requires moto<5
+    "t/unit/backends/test_s3.py"
   ];
 
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+    # seems to only fail on higher core counts
+    # AssertionError: assert 3 == 0
+    "test_setup_security_disabled_serializers"
+    # fails with pytest-xdist
+    "test_itercapture_limit"
+    "test_stamping_headers_in_options"
+    "test_stamping_with_replace"
   ] ++ lib.optionals stdenv.isDarwin [
     # too many open files on hydra
     "test_cleanup"
@@ -94,6 +105,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distributed task queue";
+    mainProgram = "celery";
     homepage = "https://github.com/celery/celery/";
     changelog = "https://github.com/celery/celery/releases/tag/v${version}";
     license = licenses.bsd3;

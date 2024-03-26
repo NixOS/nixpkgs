@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     description = "A powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "yed";
   };
 }

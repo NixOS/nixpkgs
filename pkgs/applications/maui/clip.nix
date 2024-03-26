@@ -41,6 +41,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Video player and video collection manager";
+    mainProgram = "clip";
     homepage = "https://invent.kde.org/maui/clip";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

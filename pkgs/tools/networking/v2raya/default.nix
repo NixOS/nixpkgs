@@ -11,13 +11,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.2.4";
+  version = "2.2.5.1";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
-    hash = "sha256-X2fCp9uVdt7fIW1C/tdRK1Tmr8mq6VBk6UBnt99E+1c=";
+    hash = "sha256-aicKjirUHNeCCxfW9aaPI+X5DTQ0RdZnCxIQRU+GdCM=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
   guiSrc = "${src}/gui";
@@ -30,7 +30,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${guiSrc}/yarn.lock";
-      sha256 = "sha256-pB0B5Iy6dLfU5CL2E9OBQGJKLJqYQRwPxx9aaCDg1Qk=";
+      sha256 = "sha256-AZIYkW2u1l9IaDpR9xiKNpc0sGAarLKwHf5kGnzdpKw=";
     };
 
     buildPhase = ''
@@ -62,7 +62,7 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
-  vendorHash = "sha256-lK6oTI9o8oLXPPMFO/Q97tIsdRd9smUk1v7GwwCFitg=";
+  vendorHash = "sha256-/4l13TbE1WEX1xYfyzEwygFsNtT6weoYDll4ejvCyIg=";
 
   ldflags = [
     "-s"
@@ -94,6 +94,6 @@ buildGoModule {
     mainProgram = "v2rayA";
     license = licenses.agpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elliot ];
+    maintainers = with maintainers; [ ChaosAttractor ];
   };
 }

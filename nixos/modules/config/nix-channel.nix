@@ -12,7 +12,6 @@ let
     mkDefault
     mkIf
     mkOption
-    stringAfter
     types
     ;
 
@@ -98,8 +97,7 @@ in
     nix.settings.nix-path = mkIf (! cfg.channel.enable) (mkDefault "");
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
-      "f /root/.nix-channels -"
-      ''w "/root/.nix-channels" - - - - "${config.system.defaultChannel} nixos\n"''
+      ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
     ];
   };
 }

@@ -1,19 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , aiohttp
 }:
 
 buildPythonPackage rec {
   pname = "emulated-roku";
-  version = "0.2.1";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mindigmarton";
     repo = "emulated_roku";
     rev = version;
-    sha256 = "02cbg5wrph19p6x44jlw6cn3jli0kwbgfh6klb3c4k5jfrkhgghw";
+    hash = "sha256-7DbJl1e1ESWPCNuQX7m/ggXNDyPYZ5eNGwSz+jnxZj0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

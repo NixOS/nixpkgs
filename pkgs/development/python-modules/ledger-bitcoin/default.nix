@@ -4,18 +4,20 @@
 , setuptools
 , ledgercomm
 , packaging
+, bip32
+, coincurve
 , typing-extensions
  }:
 
 buildPythonPackage rec {
   pname = "ledger-bitcoin";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "ledger_bitcoin";
-    hash = "sha256-MEZuwIthIOwBkRdR7dEsEznO+GVBeOf7/5xmwNW1SvI=";
+    hash = "sha256-rZzerzOkVWK71brmdRAluGmi+B1usCZ90GKgH1klpNU=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +27,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ledgercomm
     packaging
+    bip32
+    coincurve
     typing-extensions
   ];
 

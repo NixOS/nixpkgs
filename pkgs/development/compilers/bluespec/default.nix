@@ -19,7 +19,7 @@
 , gmp-static
 , verilog
 , asciidoctor
-, tex
+, texliveFull
 , which
 }:
 
@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
     ghcWithPackages
     perl
     pkg-config
-    tex
+    texliveFull
   ];
 
   makeFlags = [

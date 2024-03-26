@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-pomodoro";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-Yn0lDCFpc8o25iiPib1n1NEBeodNAdTzRWcnLbXUA5g=";
+    hash = "sha256-Ml3znMz1Q9593rMgfAST8k9QglxMG9ocFD7W8kaFWCw=";
   };
 
   patches = [
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
+    mainProgram = "gnome-pomodoro";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.

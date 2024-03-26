@@ -23,5 +23,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lesuisse ];
+    mainProgram = "buildkit-nix";
   };
 }

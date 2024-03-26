@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "django-cors-headers";
   version = "3.13.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adamchainz";

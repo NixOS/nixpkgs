@@ -7,7 +7,7 @@
 , hatchling
 , jupyter-server
 , jupyterlab
-, jupyterlab_server
+, jupyterlab-server
 , notebook-shim
 , tornado
 , pytest-jupyter
@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "7.0.3";
+  version = "7.1.2";
   disabled = pythonOlder "3.8";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B/PFBi/Q5uaYZEN6A0erxIXZkaroepLEfWWWmfVxtyk=";
+    hash = "sha256-78LIAEOQng+qF/zp6bN8BZwDrw7Jmk1NuEyyHZ0uk2o=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jupyter-server
     jupyterlab
-    jupyterlab_server
+    jupyterlab-server
     notebook-shim
     tornado
   ];

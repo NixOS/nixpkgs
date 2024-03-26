@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to emulate the Sneakers movie effect";
+    mainProgram = "py-sneakers";
     homepage = "https://github.com/aenima-x/py-sneakers";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

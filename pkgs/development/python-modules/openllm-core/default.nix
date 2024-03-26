@@ -2,12 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , accelerate
 , attrs
-, bentoml
 , bitsandbytes
+, bentoml
 , cattrs
+, click-option-group
 , datasets
+, deepmerge
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
@@ -15,14 +18,13 @@
 , mypy-extensions
 , orjson
 , peft
-, ray
 , transformers
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "openllm-core";
-  version = "0.3.9";
+  version = "0.4.44";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,31 +33,50 @@ buildPythonPackage rec {
     owner = "bentoml";
     repo = "OpenLLM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M/ckvaHTdKFg7xfUgFxu7pRBrS6TGw0m2U3L88b2DKU=";
+    hash = "sha256-kRR715Vnt9ZAmxuWvtH0z093crH0JFrEKPtbjO3QMRc=";
   };
 
-  sourceRoot = "source/openllm-core";
+  sourceRoot = "${src.name}/openllm-core";
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace-fail "hatchling==1.18.0" "hatchling" \
+      --replace-fail "hatch-fancy-pypi-readme==23.1.0" "hatch-fancy-pypi-readme"
+  '';
+
+  pythonRelaxDeps = [
+    "cattrs"
+  ];
+
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
-    bentoml
     cattrs
+    # not listed in pyproject.toml, but required at runtime
+    click-option-group
+    deepmerge
     inflection
     mypy-extensions
     orjson
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     vllm = [
-      ray
       # vllm
+    ];
+    bentoml = [
+      bentoml
     ];
     fine-tune = [
       accelerate
@@ -65,9 +86,12 @@ buildPythonPackage rec {
       transformers
       # trl
     ] ++ transformers.optional-dependencies.torch
-      ++ transformers.optional-dependencies.tokenizers
-      ++ transformers.optional-dependencies.accelerate;
-    full = with passthru.optional-dependencies; ( vllm ++ fine-tune );
+      ++ transformers.optional-dependencies.tokenizers;
+    full = with optional-dependencies; (
+      vllm
+      # use absolute path to disambiguate with derivbation argument
+      ++ optional-dependencies.bentoml
+      ++ fine-tune );
   };
 
   # there is no tests

@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "replxx";
-  version = "unstable-2023-02-26";
+  version = "unstable-2023-10-31";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "replxx";
-    rev = "1da4681a8814366ec51e7630b76558e53be0997d";
-    hash = "sha256-Zs7ItuK31n0VSxwOsPUdZZLr68PypitZqcydACrx90Q=";
+    rev = "13f7b60f4f79c2f14f352a76d94860bad0fc7ce9";
+    hash = "sha256-xPuQ5YBDSqhZCwssbaN/FcTZlc3ampYl7nfl2bbsgBA=";
   };
 
   dontConfigure = true;

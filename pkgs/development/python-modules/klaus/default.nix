@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "klaus";
   version = "2.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The first Git web viewer that Just Works";
+    mainProgram = "klaus";
     homepage    = "https://github.com/jonashaag/klaus";
     license     = licenses.isc;
     maintainers = with maintainers; [ pSub ];

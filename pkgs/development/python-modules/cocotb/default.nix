@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "cocotb";
   version = "1.8.1";
+  format = "setuptools";
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {
@@ -64,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/cocotb/cocotb/releases/tag/v${version}";
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
+    mainProgram = "cocotb-config";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh jleightcap ];

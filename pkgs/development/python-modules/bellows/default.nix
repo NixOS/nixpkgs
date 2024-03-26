@@ -9,14 +9,15 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , voluptuous
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.36.8";
-  format = "setuptools";
+  version = "0.38.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,8 +25,18 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "bellows";
     rev = "refs/tags/${version}";
-    hash = "sha256-+p3As+fi6mw9i5q2klFTM9QQ2JoQarwrphc6tB6C94M=";
+    hash = "sha256-oxPzjDb+FdHeHsgeGKH3SVvKb0vCB9dIhT7lGzhDcBw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     click
@@ -48,6 +59,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to implement EZSP for EmberZNet devices";
+    mainProgram = "bellows";
     homepage = "https://github.com/zigpy/bellows";
     changelog = "https://github.com/zigpy/bellows/releases/tag/${version}";
     license = licenses.gpl3Plus;

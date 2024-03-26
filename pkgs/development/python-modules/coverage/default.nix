@@ -3,18 +3,25 @@
 , fetchPypi
 , mock
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.3.1";
+  version = "7.4.3";
+  pyproject = true;
+
   # uses f strings
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bLf+FYHetnt4LBUxNlQeIJAaoxLO7a8UZ9yzUlV4eVI=";
+    hash = "sha256-J29gd6XGFEekjRM+0T51nAnmKv8NyEJ0po3BhmAQTVI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # No tests in archive
   doCheck = false;

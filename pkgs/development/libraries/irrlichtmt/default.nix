@@ -7,34 +7,25 @@
 , libjpeg
 , libGL
 , libX11
-, withTouchSupport ? false
 , libXi
 , libXext
 , Cocoa
 , Kernel
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "irrlichtmt";
-  version = "1.9.0mt10";
+  version = "1.9.0mt13";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "irrlicht";
-    rev = version;
-    sha256 = "sha256-PA+gz77XkwxQ3TtubaT0ov9dsT7s3ZlrQxrOkD5ku3g=";
+    rev = finalAttrs.version;
+    hash = "sha256-BlQd7zbpvQnxqLv3IaHWrXzJ1pJFbQQ3DNWDAj14/YY=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
-
-  # https://github.com/minetest/minetest/pull/10729
-  postPatch = lib.optionalString (!withTouchSupport) ''
-    sed -i '1i #define NO_IRR_LINUX_X11_XINPUT2_' include/IrrCompileConfig.h
-
-    # HACK: Fix mistake in build script
-    sed -i '/''${X11_Xi_LIB}/d' source/Irrlicht/CMakeLists.txt
-  '';
 
   buildInputs = [
     zlib
@@ -42,7 +33,6 @@ stdenv.mkDerivation rec {
     libjpeg
     libGL
     libX11
-  ] ++ lib.optionals withTouchSupport [
     libXi
     libXext
   ] ++ lib.optionals stdenv.isDarwin [
@@ -58,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ DeeUnderscore ];
     description = "Minetest project's fork of Irrlicht, a realtime 3D engine written in C++";
   };
-}
+})

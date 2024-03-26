@@ -13,6 +13,13 @@ merging is handled.
 `types.bool`
 
 :   A boolean, its values can be `true` or `false`.
+    All definitions must have the same value, after priorities. An error is thrown in case of a conflict.
+
+`types.boolByOr`
+
+:   A boolean, its values can be `true` or `false`.
+    The result is `true` if _any_ of multiple definitions is `true`.
+    In other words, definitions are merged with the logical _OR_ operator.
 
 `types.path`
 
@@ -319,7 +326,7 @@ Composed types are types that take a type as parameter. `listOf
 `types.uniq` *`t`*
 
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
-    definitions are declared only once.
+    definitions are provided only once.
 
 `types.unique` `{ message = m }` *`t`*
 

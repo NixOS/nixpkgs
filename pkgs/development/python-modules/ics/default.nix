@@ -1,16 +1,20 @@
 { lib
+, arrow
+, attrs
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, tatsu
-, arrow
-, pytestCheckHook
 , pytest-flakes
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tatsu
 }:
 
 buildPythonPackage rec {
   pname = "ics";
   version = "0.7.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -20,7 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-hdtnET7YfSb85+TGwpwzoxOfxPT7VSj9eKSiV6AXUS8=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    attrs
     arrow
     tatsu
   ];
@@ -44,7 +53,9 @@ buildPythonPackage rec {
     "test_many_lines"
   ];
 
-  pythonImportsCheck = [ "ics" ];
+  pythonImportsCheck = [
+    "ics"
+  ];
 
   meta = with lib; {
     description = "Pythonic and easy iCalendar library (RFC 5545)";
@@ -52,7 +63,7 @@ buildPythonPackage rec {
       Ics.py is a pythonic and easy iCalendar library. Its goals are to read and
       write ics data in a developer friendly way.
     '';
-    homepage = "http://icspy.readthedocs.org/en/stable/";
+    homepage = "http://icspy.readthedocs.org/";
     changelog = "https://github.com/ics-py/ics-py/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

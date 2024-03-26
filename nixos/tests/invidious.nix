@@ -5,49 +5,72 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ sbruder ];
   };
 
-  nodes.machine = { config, lib, pkgs, ... }: {
-    services.invidious = {
-      enable = true;
-    };
-
-    specialisation = {
-      nginx.configuration = {
-        services.invidious = {
-          nginx.enable = true;
-          domain = "invidious.example.com";
-        };
-        services.nginx.virtualHosts."invidious.example.com" = {
-          forceSSL = false;
-          enableACME = false;
-        };
-        networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
+  nodes = {
+    postgres-tcp = { config, pkgs, ... }: {
+      services.postgresql = {
+        enable = true;
+        initialScript = pkgs.writeText "init-postgres-with-password" ''
+          CREATE USER invidious WITH PASSWORD 'correct horse battery staple';
+          CREATE DATABASE invidious WITH OWNER invidious;
+        '';
+        enableTCPIP = true;
+        authentication = ''
+          host invidious invidious samenet scram-sha-256
+        '';
       };
-      postgres-tcp.configuration = {
-        services.invidious = {
-          database = {
-            createLocally = false;
-            host = "127.0.0.1";
-            passwordFile = toString (pkgs.writeText "database-password" "correct horse battery staple");
+      networking.firewall.allowedTCPPorts = [ config.services.postgresql.port ];
+    };
+    machine = { config, lib, pkgs, ... }: {
+      services.invidious = {
+        enable = true;
+      };
+
+      specialisation = {
+        nginx.configuration = {
+          services.invidious = {
+            nginx.enable = true;
+            domain = "invidious.example.com";
+          };
+          services.nginx.virtualHosts."invidious.example.com" = {
+            forceSSL = false;
+            enableACME = false;
+          };
+          networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
+        };
+        nginx-scale.configuration = {
+          services.invidious = {
+            nginx.enable = true;
+            domain = "invidious.example.com";
+            serviceScale = 3;
+          };
+          services.nginx.virtualHosts."invidious.example.com" = {
+            forceSSL = false;
+            enableACME = false;
+          };
+          networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
+        };
+        nginx-scale-ytproxy.configuration = {
+          services.invidious = {
+            nginx.enable = true;
+            http3-ytproxy.enable = true;
+            domain = "invidious.example.com";
+            serviceScale = 3;
+          };
+          services.nginx.virtualHosts."invidious.example.com" = {
+            forceSSL = false;
+            enableACME = false;
+          };
+          networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
+        };
+        postgres-tcp.configuration = {
+          services.invidious = {
+            database = {
+              createLocally = false;
+              host = "postgres-tcp";
+              passwordFile = toString (pkgs.writeText "database-password" "correct horse battery staple");
+            };
           };
         };
-        # Normally not needed because when connecting to postgres over TCP/IP
-        # the database is most likely on another host.
-        systemd.services.invidious = {
-          after = [ "postgresql.service" ];
-          requires = [ "postgresql.service" ];
-        };
-        services.postgresql =
-          let
-            inherit (config.services.invidious.settings.db) dbname user;
-          in
-          {
-            enable = true;
-            initialScript = pkgs.writeText "init-postgres-with-password" ''
-              CREATE USER kemal WITH PASSWORD 'correct horse battery staple';
-              CREATE DATABASE invidious;
-              GRANT ALL PRIVILEGES ON DATABASE invidious TO kemal;
-            '';
-          };
       };
     };
   };
@@ -64,6 +87,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     url = "http://localhost:${toString nodes.machine.config.services.invidious.port}"
     port = ${toString nodes.machine.config.services.invidious.port}
 
+    # start postgres vm now
+    postgres_tcp.start()
+
     machine.wait_for_open_port(port)
     curl_assert_status_code(f"{url}/search", 200)
 
@@ -71,9 +97,26 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_open_port(80)
     curl_assert_status_code("http://invidious.example.com/search", 200)
 
-    # Remove the state so the `initialScript` gets run
-    machine.succeed("systemctl stop postgresql")
-    machine.succeed("rm -r /var/lib/postgresql")
+    activate_specialisation("nginx-scale")
+    machine.wait_for_open_port(80)
+    # this depends on nginx round-robin behaviour for the upstream servers
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    machine.succeed("journalctl -eu invidious.service | grep -o '200 GET /search'")
+    machine.succeed("journalctl -eu invidious-1.service | grep -o '200 GET /search'")
+    machine.succeed("journalctl -eu invidious-2.service | grep -o '200 GET /search'")
+
+    activate_specialisation("nginx-scale-ytproxy")
+    machine.wait_for_unit("http3-ytproxy.service")
+    machine.wait_for_open_port(80)
+    machine.wait_until_succeeds("ls /run/http3-ytproxy/socket/http-proxy.sock")
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    # this should error out as no internet connectivity is available in the test
+    curl_assert_status_code("http://invidious.example.com/vi/dQw4w9WgXcQ/mqdefault.jpg", 502)
+    machine.succeed("journalctl -eu http3-ytproxy.service | grep -o 'dQw4w9WgXcQ'")
+
+    postgres_tcp.wait_for_unit("postgresql.service")
     activate_specialisation("postgres-tcp")
     machine.wait_for_open_port(port)
     curl_assert_status_code(f"{url}/search", 200)

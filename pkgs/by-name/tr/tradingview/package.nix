@@ -20,13 +20,14 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.6.1";
-  revision = "44";
+  version = "2.7.2";
+  revision = "49";
+
   src = fetchurl {
-    url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${revision}.snap";
-    hash = "sha512-Hd00TWjPskd0QDzpOSwQCuMw20nW4n1xxRkT1rA95pzbXtw7XFxrJdMWkzWDbucuokU2qR2b5tovAHAgw9E0tQ==";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
+    hash = "sha256-GU5vWjZz8FBMtYawfP8cVmKp8X7bhJnLa0ft7Ku8czw=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
     cp squashfs-root/meta/gui/icon.png $out/share/icons/tradingview.png
 
     mkdir $out/bin
-    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview --prefix LD_LIBRARY_PATH : ${ lib.makeLibraryPath buildInputs }
+    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview --prefix LD_LIBRARY_PATH : ${ lib.makeLibraryPath finalAttrs.buildInputs }
 
     runHook postInstall
   '';
@@ -90,4 +91,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "tradingview";
   };
-}
+})

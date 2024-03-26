@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small C tool for Linux filesystem encryption";
+    mainProgram = "fscryptctl";
     longDescription = ''
       fscryptctl is a low-level tool written in C that handles raw keys and
       manages policies for Linux filesystem encryption, specifically the

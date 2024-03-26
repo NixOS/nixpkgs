@@ -18,24 +18,24 @@
 
 mkDerivation rec {
   pname = "lximage-qt";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "afCW3VeXAq2HYc4fjSrd+7j6cGoHmGlO8jCiNq6/F3E=";
+    hash = "sha256-Igfd8lhKDjdseQeARiirj+tEoJdcaeHuyd4mfQHOVg0=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtx11extras
     qtsvg
     qtimageformats # add-on module to support more image file formats
@@ -51,6 +51,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/lximage-qt";
     description = "The image viewer and screenshot tool for lxqt";
+    mainProgram = "lximage-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

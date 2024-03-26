@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nixcloud.io/tour";
     license = licenses.gpl2;
     maintainers = with maintainers; [ qknight yuu ];
+    mainProgram = "nix-tour";
   };
 }

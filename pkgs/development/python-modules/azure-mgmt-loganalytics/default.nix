@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-loganalytics";
   version = "12.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

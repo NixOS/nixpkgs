@@ -16,6 +16,7 @@
 , hidapi
 , imgui
 , libpng
+, libusb1
 , libzip
 , libXrender
 , pugixml
@@ -30,15 +31,28 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+let
+  # cemu doesn't build with imgui 1.90.2 or newer:
+  # error: 'struct ImGuiIO' has no member named 'ImeWindowHandle'
+  imgui' = imgui.overrideAttrs rec {
+    version = "1.90.1";
+    src = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      rev = "v${version}";
+      sha256 = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+    };
+  };
+
+in stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-47";
+  version = "2.0-72";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-0N/bJJHWMHF+ZlVxNHV8t/1jFr3ER3GNF8CPAHVSsak=";
+    hash = "sha256-4sy2pI+pOJ69JntfktrcXd00yL3fkQI14K02j0l4cuI=";
   };
 
   patches = [
@@ -66,8 +80,9 @@ stdenv.mkDerivation rec {
     glm
     gtk3
     hidapi
-    imgui
+    imgui'
     libpng
+    libusb1
     libzip
     libXrender
     pugixml
@@ -93,7 +108,7 @@ stdenv.mkDerivation rec {
     tag = last (splitString "-" version);
   in ''
     rm -rf dependencies/imgui
-    ln -s ${imgui}/include/imgui dependencies/imgui
+    ln -s ${imgui'}/include/imgui dependencies/imgui
     substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
     substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
   '';

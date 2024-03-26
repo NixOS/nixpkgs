@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.10.0";
+  version = "2.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "c0fec0de";
     repo = "anytree";
     rev = "refs/tags/${version}";
-    hash = "sha256-9rxrHZBlQarfpYQvo6bJPGF+cdSROlwq+8TjXI18HDs=";
+    hash = "sha256-8mV9Lf6NLPUDVurXCxG+tqe7+3TrIn2H+7tHa6BpTzk=";
   };
 
   patches = lib.optionals withGraphviz [
@@ -42,6 +42,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   # Tests print “Fontconfig error: Cannot load default config file”

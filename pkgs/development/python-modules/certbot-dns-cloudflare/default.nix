@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   pname = "certbot-dns-cloudflare";
+  format = "setuptools";
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";

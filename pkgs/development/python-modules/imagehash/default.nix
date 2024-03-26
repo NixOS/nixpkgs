@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "imagehash";
   version = "4.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JohannesBuchner";
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python Perceptual Image Hashing Module";
+    mainProgram = "find_similar_images.py";
     homepage = "https://github.com/JohannesBuchner/imagehash";
     license = licenses.bsd2;
     maintainers = with maintainers; [ e1mo ];

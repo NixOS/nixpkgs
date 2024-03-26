@@ -1,82 +1,101 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.vdr;
-  libDir = "/var/lib/vdr";
-in {
 
-  ###### interface
-
+  inherit (lib)
+    mkEnableOption mkPackageOption mkOption types mkIf optional mdDoc;
+in
+{
   options = {
 
     services.vdr = {
-      enable = mkEnableOption (lib.mdDoc "VDR. Please put config into ${libDir}");
+      enable = mkEnableOption (mdDoc "Start VDR");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.vdr;
-        defaultText = literalExpression "pkgs.vdr";
-        example = literalExpression "pkgs.wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
-        description = lib.mdDoc "Package to use.";
+      package = mkPackageOption pkgs "vdr" {
+        example = "wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
       };
 
       videoDir = mkOption {
         type = types.path;
         default = "/srv/vdr/video";
-        description = lib.mdDoc "Recording directory";
+        description = mdDoc "Recording directory";
       };
 
       extraArguments = mkOption {
         type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc "Additional command line arguments to pass to VDR.";
+        default = [ ];
+        description = mdDoc "Additional command line arguments to pass to VDR.";
       };
 
-      enableLirc = mkEnableOption (lib.mdDoc "LIRC");
+      enableLirc = mkEnableOption (mdDoc "LIRC");
+
+      user = mkOption {
+        type = types.str;
+        default = "vdr";
+        description = mdDoc ''
+          User under which the VDR service runs.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "vdr";
+        description = mdDoc ''
+          Group under which the VDRvdr service runs.
+        '';
+      };
     };
+
   };
 
-  ###### implementation
+  config = mkIf cfg.enable {
 
-  config = mkIf cfg.enable (mkMerge [{
     systemd.tmpfiles.rules = [
-      "d ${cfg.videoDir} 0755 vdr vdr -"
-      "Z ${cfg.videoDir} - vdr vdr -"
+      "d ${cfg.videoDir} 0755 ${cfg.user} ${cfg.group} -"
+      "Z ${cfg.videoDir} - ${cfg.user} ${cfg.group} -"
     ];
 
     systemd.services.vdr = {
       description = "VDR";
       wantedBy = [ "multi-user.target" ];
+      wants = optional cfg.enableLirc "lircd.service";
+      after = [ "network.target" ]
+        ++ optional cfg.enableLirc "lircd.service";
       serviceConfig = {
-        ExecStart = ''
-          ${cfg.package}/bin/vdr \
-            --video="${cfg.videoDir}" \
-            --config="${libDir}" \
-            ${escapeShellArgs cfg.extraArguments}
-        '';
-        User = "vdr";
+        ExecStart =
+          let
+            args = [
+              "--video=${cfg.videoDir}"
+            ]
+            ++ optional cfg.enableLirc "--lirc=${config.passthru.lirc.socket}"
+            ++ cfg.extraArguments;
+          in
+          "${cfg.package}/bin/vdr ${lib.escapeShellArgs args}";
+        User = cfg.user;
+        Group = cfg.group;
         CacheDirectory = "vdr";
         StateDirectory = "vdr";
+        RuntimeDirectory = "vdr";
         Restart = "on-failure";
       };
     };
 
-    users.users.vdr = {
-      group = "vdr";
-      home = libDir;
-      isSystemUser = true;
+    environment.systemPackages = [ cfg.package ];
+
+    users.users = mkIf (cfg.user == "vdr") {
+      vdr = {
+        inherit (cfg) group;
+        home = "/run/vdr";
+        isSystemUser = true;
+        extraGroups = [
+          "video"
+          "audio"
+        ]
+        ++ optional cfg.enableLirc "lirc";
+      };
     };
 
-    users.groups.vdr = {};
-  }
+    users.groups = mkIf (cfg.group == "vdr") { vdr = { }; };
 
-  (mkIf cfg.enableLirc {
-    services.lirc.enable = true;
-    users.users.vdr.extraGroups = [ "lirc" ];
-    services.vdr.extraArguments = [
-      "--lirc=${config.passthru.lirc.socket}"
-    ];
-  })]);
+  };
 }

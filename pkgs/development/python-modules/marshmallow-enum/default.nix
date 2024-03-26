@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "marshmallow-enum";
   version = "1.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "justanr";
@@ -28,6 +29,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [

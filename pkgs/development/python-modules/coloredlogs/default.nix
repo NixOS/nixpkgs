@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "coloredlogs";
   version = "15.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xolox";
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Colored stream handler for Python's logging module";
+    mainProgram = "coloredlogs";
     homepage = "https://github.com/xolox/python-coloredlogs";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

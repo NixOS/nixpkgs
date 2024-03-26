@@ -7,20 +7,21 @@
 , wheel
 
 # dependencies
+, beartype
 , einops
 , torch
 }:
 
 buildPythonPackage rec {
   pname = "rotary-embedding-torch";
-  version = "0.3.5";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "rotary-embedding-torch";
-    rev = version;
-    hash = "sha256-dST3eJnOcG2s9tiD/Fb9BvLS6nIpE8RXly92PK/gCC8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CCz/va5oydgU1JRDHKooRezbDbeGZHtD8Zy6fWJ2uRg=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    beartype
     einops
     torch
   ];
@@ -42,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of Rotary Embeddings, from the Roformer paper, in Pytorch";
     homepage = "https://github.com/lucidrains/rotary-embedding-torch";
+    changelog = "https://github.com/lucidrains/rotary-embedding-torch/releases/tag/${version}";
     license = licenses.mit;
     maintainers = teams.tts.members;
   };

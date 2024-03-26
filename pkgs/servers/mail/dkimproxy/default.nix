@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perlPackages.perl ];
-  propagatedBuildInputs = with perlPackages; [ Error MailDKIM MIMETools NetServer ];
+  propagatedBuildInputs = with perlPackages; [ CryptX Error MailDKIM MIMETools NetServer ];
 
   meta = with lib; {
     description = "SMTP-proxy that signs and/or verifies emails";

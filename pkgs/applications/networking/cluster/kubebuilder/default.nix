@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "kubebuilder";
-  version = "3.12.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    hash = "sha256-drg7hFUEFoicZxzorO365b3eFN9NRdhWYn9bIk+sSY8=";
+    hash = "sha256-em+I2YICcqljaaNQ+zOAnOZ552elmV6Ywbfla8buwaY=";
   };
 
-  vendorHash = "sha256-qH7+DDGYRCrXI3B2dN/4pZMBqSXKkZUvIrtVEg0Ep+c=";
+  vendorHash = "sha256-iBwhpVs9u5AQAvmzb69SaewdYHmmaV19Bstd0Tux9CA=";
 
   subPackages = ["cmd"];
 
@@ -60,6 +60,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "SDK for building Kubernetes APIs using CRDs";
+    mainProgram = "kubebuilder";
     homepage = "https://github.com/kubernetes-sigs/kubebuilder";
     changelog = "https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v${version}";
     license = licenses.asl20;

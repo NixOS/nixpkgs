@@ -8,17 +8,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "FireflyAlgorithm";
-  version = "0.3.4";
-  format = "pyproject";
+  pname = "fireflyalgorithm";
+  version = "0.4.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
-    repo = pname;
+    repo = "FireflyAlgorithm";
     rev = "refs/tags/${version}";
-    hash = "sha256-rJOcPQU/oz/qP787OpZsfbjSsT2dWvhJLTs4N5TriWc=";
+    hash = "sha256-xsTgSHBtN4gGw+9YvprcLubnCXSNRdn4abcz391cMEE=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An implementation of the stochastic nature-inspired algorithm for optimization";
+    mainProgram = "firefly-algorithm";
     homepage = "https://github.com/firefly-cpp/FireflyAlgorithm";
     changelog = "https://github.com/firefly-cpp/FireflyAlgorithm/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

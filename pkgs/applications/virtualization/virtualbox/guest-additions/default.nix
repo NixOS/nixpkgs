@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "bbabd89b8fff38a257bab039a278f0c4dc4426eff6e4238c1db01edb7284186a";
+    sha256 = "0efbcb9bf4722cb19292ae00eba29587432e918d3b1f70905deb70f7cf78e8ce";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -118,8 +118,8 @@ in stdenv.mkDerivation rec {
     #ln -s $out/lib/VBoxOGL.so $out/lib/dri/vboxvideo_dri.so
 
     # Install desktop file
-    mkdir -p $out/share/autostart
-    cp -v other/vboxclient.desktop $out/share/autostart
+    mkdir -p $out/etc/xdg/autostart
+    cp -v other/vboxclient.desktop $out/etc/xdg/autostart
 
     # Install Xorg drivers
     mkdir -p $out/lib/xorg/modules/{drivers,input}
@@ -146,7 +146,7 @@ in stdenv.mkDerivation rec {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = "GPL";
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ lib.maintainers.sander lib.maintainers.friedrichaltheide ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };

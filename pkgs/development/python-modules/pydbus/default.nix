@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pygobject3
 }:
 
 buildPythonPackage rec {
   pname = "pydbus";
   version = "0.6.0";
-  pyproejct = true;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LEW21";
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     substituteInPlace pydbus/_inspect3.py \
       --replace "getargspec" "getfullargspec"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pygobject3

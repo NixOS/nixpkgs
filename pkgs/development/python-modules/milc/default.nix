@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "milc";
   version = "1.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "clueboard";
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An Opinionated Batteries-Included Python 3 CLI Framework";
+    mainProgram = "milc-color";
     homepage = "https://milc.clueboard.co";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];

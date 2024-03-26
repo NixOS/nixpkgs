@@ -22,6 +22,7 @@
     # lvm
     separateBoot
     separateBootFat
+    separateBootZfs
     simple
     simpleLabels
     simpleProvided
@@ -32,6 +33,11 @@
     stratisRoot
     swraid
     zfsroot
+    clevisLuks
+    clevisLuksFallback
+    clevisZfs
+    clevisZfsFallback
+    gptAutoRoot
     ;
 
 }

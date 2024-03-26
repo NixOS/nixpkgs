@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sqids";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U9nVpRc9PIM1ZO+bcL3RGIfAdlUMf+uFw/SpPTAjdnA=";
+    hash = "sha256-/8P7/vY0kb7ouUCpgGU4g0Xb77BtSeQVt6nkdcogD50=";
   };
 
   nativeBuildInputs = [

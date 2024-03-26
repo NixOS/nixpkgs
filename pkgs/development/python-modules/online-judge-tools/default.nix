@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "online-judge-tools";
   version = "11.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools for various online judges. Download sample cases, generate additional test cases, test your code, and submit it.";
+    mainProgram = "oj";
     homepage = "https://github.com/online-judge-tools/oj";
     license = licenses.mit;
     maintainers = with maintainers; [ sei40kr ];

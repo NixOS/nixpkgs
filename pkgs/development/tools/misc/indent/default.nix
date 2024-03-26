@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ texinfo ];
   buildInputs = [ libintl ];
-  pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-implicit-function-declaration"
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/indent/";
     description = "A source code reformatter";
+    mainProgram = "indent";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.mmahut ];
     platforms = lib.platforms.unix;

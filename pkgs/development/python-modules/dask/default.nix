@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.10.0";
+  version = "2024.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-u7KuZT0uH833zqLNBfqRLU7EcMrUmXgszevYA3Z7G1Y=";
+    hash = "sha256-L8bRh2bx36CYrAFXYJF67rCeCRfm5ufhTkMFRJo0yYo=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +98,9 @@ buildPythonPackage rec {
     # from panda[test]
     hypothesis
     pytest-asyncio
-  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+  ]
+  ++ passthru.optional-dependencies.dataframe
+  ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
     pyarrow
   ];
 
@@ -114,7 +116,7 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
     substituteInPlace pyproject.toml \
-      --replace ', "versioneer[toml]==0.28"' "" \
+      --replace ', "versioneer[toml]==0.29"' "" \
       --replace " --durations=10" "" \
       --replace " --cov-config=pyproject.toml" "" \
       --replace "\"-v" "\" "
@@ -125,6 +127,8 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -133,6 +137,10 @@ buildPythonPackage rec {
     "test_auto_blocksize_csv"
     # AttributeError: 'str' object has no attribute 'decode'
     "test_read_dir_nometa"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # concurrent.futures.process.BrokenProcessPool: A process in the process pool terminated abpruptly...
+    "test_foldby_tree_reduction"
+    "test_to_bag"
   ] ++ [
     # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
     "test_concat_categorical"
@@ -163,6 +171,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";
+    mainProgram = "dask";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;

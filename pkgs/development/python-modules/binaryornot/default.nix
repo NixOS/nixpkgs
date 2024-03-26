@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "binaryornot";
   version = "0.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

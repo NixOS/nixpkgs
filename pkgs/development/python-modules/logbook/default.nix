@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "logbook";
-  version = "1.6.0";
+  version = "1.7.0.post0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "getlogbook";
     repo = "logbook";
     rev = "refs/tags/${version}";
-    hash = "sha256-2K6fM6MFrh3l0smhSz8RFd79AIOXQZJQbNLTJM4WZUo=";
+    hash = "sha256-bqfFSd7CPYII/3AJCMApqmAYrAWjecOb3JA17FPFMIc=";
   };
 
   nativeBuildInputs = [

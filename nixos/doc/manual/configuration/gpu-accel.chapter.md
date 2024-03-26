@@ -65,12 +65,10 @@ hardware.opengl.extraPackages = [
 [Intel Gen8 and later
 GPUs](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen8)
 are supported by the Intel NEO OpenCL runtime that is provided by the
-intel-compute-runtime package. For Gen7 GPUs, the deprecated Beignet
-runtime can be used, which is provided by the beignet package. The
-proprietary Intel OpenCL runtime, in the intel-ocl package, is an
-alternative for Gen7 GPUs.
+intel-compute-runtime package. The proprietary Intel OpenCL runtime, in
+the intel-ocl package, is an alternative for Gen7 GPUs.
 
-The intel-compute-runtime, beignet, or intel-ocl package can be added to
+The intel-compute-runtime or intel-ocl package can be added to
 [](#opt-hardware.opengl.extraPackages)
 to enable OpenCL support. For example, for Gen8 and later GPUs, the following
 configuration can be used:

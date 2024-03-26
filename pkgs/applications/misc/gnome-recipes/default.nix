@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Recipe management application for GNOME";
+    mainProgram = "gnome-recipes";
     homepage = "https://wiki.gnome.org/Apps/Recipes";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;

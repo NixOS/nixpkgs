@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , aiosqlite
+, aioresponses
 , buildPythonPackage
 , crccheck
 , cryptography
@@ -14,13 +15,12 @@
 , pythonOlder
 , setuptools
 , voluptuous
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.57.2";
-  format = "pyproject";
+  version = "0.63.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-v4H8syWbXqmfvOznRECgSjYi246+socPJTffb79MXK4=";
+    hash = "sha256-0wenUUkhgodsBID+ZT9JRoJeGDTqAChAIpj+9/Q3FMM=";
   };
 
   postPatch = ''
@@ -39,7 +39,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -53,6 +52,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     freezegun
     pytest-asyncio
     pytest-timeout

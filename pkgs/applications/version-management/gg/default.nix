@@ -10,8 +10,8 @@
 }:
 
 let
-  version = "1.3.0";
-  commit = "5bfe79b3632f15c442e8dc51ec206ab76354487f";
+  version = "1.3.1";
+  commit = "b6be8bac78605c21a9670db0e44faf5e1eafe0d4";
 in buildGoModule {
   pname = "gg-scm";
   inherit version;
@@ -20,7 +20,7 @@ in buildGoModule {
     owner = "gg-scm";
     repo = "gg";
     rev = "v${version}";
-    hash = "sha256-5iiu3blNJHDehg3wnvZUmfjFST+zNr89+FAoQu4CSH8=";
+    hash = "sha256-qw0KWhCkJVYRhDBNtiNactWGGMHjBwdQ1Po4lQQbaj4=";
   };
   postPatch = ''
     substituteInPlace cmd/gg/editor_unix.go \
@@ -33,7 +33,7 @@ in buildGoModule {
     "-X" "main.buildCommit=${commit}"
   ];
 
-  vendorHash = "sha256-IU3Ac9rXsyPqRJrPJMW1eNVzQy7qoVBs9XYaLX9c5AU=";
+  vendorHash = "sha256-56Sah030xbWsoOu8r3c3nN2UGHvQORheavebP+Z1Wc8=";
 
   nativeBuildInputs = [ pandoc installShellFiles makeWrapper ];
   nativeCheckInputs = [ bash coreutils git ];

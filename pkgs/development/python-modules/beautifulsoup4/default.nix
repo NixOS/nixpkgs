@@ -21,8 +21,8 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.12.2";
-  format = "pyproject";
+  version = "4.12.3";
+  pyproject = true;
 
   outputs = ["out" "doc"];
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SSu8adyjXRLarHHE2xv/8Mh2wA70ov+sziJtRjjrcto=";
+    hash = "sha256-dOPRko7cBw0hdIGFxG4/szSQ8i9So63e6a7g9Pd4EFE=";
   };
 
   nativeBuildInputs = [

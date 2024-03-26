@@ -8,7 +8,6 @@
 , bc
 , ncurses
 , perl
-, glibcLocales
 , testers
 , fzf
 }:
@@ -19,22 +18,22 @@ let
   # warnings on non-nixos machines
   ourPerl = if !stdenv.isLinux then perl else (
     writeShellScriptBin "perl" ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+      export PERL_BADLANG=0
       exec ${perl}/bin/perl "$@"
     '');
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.43.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-5voAO3vHygSo7rl9ELdb9BwMNFVZdjEe7x8foyi+a6s=";
+    hash = "sha256-rIRn8g4j/drWEHnvZnJW2sSLq5mrw8Q2pn3LN2sEXDY=";
   };
 
-  vendorHash = "sha256-cv8KUXPRXufvbaZlvf/DeFfQCzu7MAlikRVPHWlakx0=";
+  vendorHash = "sha256-BOPACUQKcllmA2eWQs+sOfofAQLle2Byb/rZgOhmkVY=";
 
   CGO_ENABLED = 0;
 
@@ -60,6 +59,7 @@ buildGoModule rec {
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.bash \
+      --replace "command -v perl" "command -v ${ourPerl}/bin/perl" \
       --replace " perl -n " " ${ourPerl}/bin/perl -n "
     # fzf-tmux depends on bc
    substituteInPlace bin/fzf-tmux \

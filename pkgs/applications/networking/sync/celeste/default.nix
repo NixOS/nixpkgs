@@ -7,13 +7,12 @@
 , pkg-config
 , wrapGAppsHook4
 , cairo
+, dbus
 , gdk-pixbuf
 , glib
 , graphene
-, gtk3
 , gtk4
 , libadwaita
-, libappindicator-gtk3
 , librclone
 , pango
 , rclone
@@ -21,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-fqPAQCbuPnFyn3wioWDETmcXu53808nvnlEzcdUevI4=";
+    hash = "sha256-fJK3UTa5NS+dSsjnqZtRN3HmHQ1bYU2jepkJ5tchYD4=";
   };
 
-  cargoHash = "sha256-mVl7CsCX7HMlGC2EIKEfHnPNjmrexjsrpDK/Uq/GwpY=";
+  cargoHash = "sha256-/0w52bh9CsBoMTJsnWuEAQNgQzf92mbzh53H4iQYswc=";
 
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys
@@ -64,10 +63,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     cairo
+    dbus
     gdk-pixbuf
     glib
     graphene
-    gtk3
     gtk4
     libadwaita
     librclone
@@ -76,7 +75,6 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator-gtk3 ]}"
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
   '';
@@ -88,6 +86,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     changelog = "https://github.com/hwittenborn/celeste/blob/${src.rev}/CHANGELOG.md";
     description = "GUI file synchronization client that can sync with any cloud provider";
+    mainProgram = "celeste";
     homepage = "https://github.com/hwittenborn/celeste";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];

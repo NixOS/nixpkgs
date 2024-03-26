@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Enables SSO and Federation web applications written with any programming language or framework";
     platforms   = platforms.unix;
     license     = licenses.asl20;
-    maintainers = [ maintainers.jammerful ];
+    maintainers = [ ];
   };
 }

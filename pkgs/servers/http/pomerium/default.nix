@@ -14,15 +14,15 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.23.0";
+  version = "0.25.1";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-3q/dizGTuwg0GsyBklx9jPIfarDhAxIzXz7x8zFK0Ic=";
+    hash = "sha256-xVPyiwKtSBchXC0FhNegeJlUej877zwNvrlAhSy6dJE=";
   };
 
-  vendorHash = "sha256-fJg1fcnLQII5sybuamZBE5CHSOEg+zlee4Pvzt8yyA0=";
+  vendorHash = "sha256-GdeZkKkENacc11FmEAFUfX9efInfhpv2Lz0/3CtixFQ=";
 
   ui = mkYarnPackage {
     inherit version;
@@ -121,8 +121,9 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
+    mainProgram = "pomerium";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [ lukegb devusb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

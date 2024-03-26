@@ -17,6 +17,7 @@ in
 buildPythonPackage rec {
   pname = "kaitaistruct";
   version = "0.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

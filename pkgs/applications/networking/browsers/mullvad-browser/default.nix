@@ -6,12 +6,9 @@
 , makeWrapper
 , writeText
 , wrapGAppsHook
+, autoPatchelfHook
 , callPackage
 
-# Common run-time dependencies
-, zlib
-
-# libxul run-time dependencies
 , atk
 , cairo
 , dbus
@@ -30,19 +27,31 @@
 , mesa
 , pango
 , pciutils
+, zlib
 
 , libnotifySupport ? stdenv.isLinux
 , libnotify
 
+, waylandSupport ? stdenv.isLinux
+, libxkbcommon
+, libdrm
+, libGL
+
+, mediaSupport ? true
+, ffmpeg
+
 , audioSupport ? mediaSupport
-, pulseaudioSupport ? mediaSupport
+
+, pipewireSupport ? audioSupport
+, pipewire
+
+, pulseaudioSupport ? audioSupport
 , libpulseaudio
 , apulse
 , alsa-lib
 
-# Media support (implies audio support)
-, mediaSupport ? true
-, ffmpeg
+, libvaSupport ? mediaSupport
+, libva
 
 # Extra preferences
 , extraPrefs ? ""
@@ -74,11 +83,14 @@ let
       stdenv.cc.libc
       zlib
     ] ++ lib.optionals libnotifySupport [ libnotify ]
+      ++ lib.optionals waylandSupport [ libxkbcommon libdrm libGL ]
+      ++ lib.optionals pipewireSupport [ pipewire ]
       ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+      ++ lib.optionals libvaSupport [ libva ]
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.0.1";
+  version = "13.0.13";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -90,7 +102,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-VYkRHWyTAAt5P7jnNuf4s2bOv36LuqcTMMKOLRGE9FQ=";
+      hash = "sha256-CAJJs14U9zsl5PiyZIwXYZG4dZz+Cqn7sD9u3S+/WvA=";
     };
   };
 
@@ -113,13 +125,19 @@ stdenv.mkDerivation rec {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook autoPatchelfHook ];
+  buildInputs = [
+    gtk3
+    alsa-lib
+    dbus-glib
+    libXtst
+  ];
 
   preferLocalBuild = true;
   allowSubstitutes = false;
 
   desktopItems = [(makeDesktopItem {
-    name = "mullvadbrowser";
+    name = "mullvad-browser";
     exec = "mullvad-browser %U";
     icon = "mullvad-browser";
     desktopName = "Mullvad Browser";
@@ -238,6 +256,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
+    mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
     maintainers = with maintainers; [ felschr panicgh ];

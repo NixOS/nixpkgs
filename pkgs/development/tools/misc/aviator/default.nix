@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Merge YAML/JSON files in a in a convenient fashion";
+    mainProgram = "aviator";
     homepage = "https://github.com/herrjulz/aviator";
     license = licenses.mit;
     maintainers = with maintainers; [ risson ];
