@@ -40,7 +40,6 @@ prefixExpression='
     };
   in
   with lib;
-  with internal;
   with lib.network;
 '
 
@@ -82,8 +81,13 @@ expectEqual() {
 }
 
 
-# TEMP
+# Test basic cases for ingesting a CIDR string.
 expectEqual '(ipv4.fromCidr "192.168.0.1/24").cidr' '"192.168.0.1/24"'
 expectEqual '(ipv4.fromCidr "192.168.0.1/24").address' '"192.168.0.1"'
 expectEqual '(ipv4.fromCidr "192.168.0.1/24").prefixLength' '"24"'
 expectEqual '(ipv4.fromCidr "192.168.0.1/24").subnetMask' '"255.255.255.0"'
+
+# Test basic cases for encoding IPv4 address.
+expectEqual 'internal.ipv4._encode 0' '"0.0.0.0"'
+expectEqual 'internal.ipv4._encode 4294967295' '"255.255.255.255"'
+expectEqual 'internal.ipv4._encode 3232235521' '"192.168.0.1"'
