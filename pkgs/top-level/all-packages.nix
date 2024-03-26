@@ -2834,8 +2834,6 @@ with pkgs;
 
   xcpc = callPackage ../applications/emulators/xcpc { };
 
-  xemu = callPackage ../applications/emulators/xemu { };
-
   yapesdl = callPackage ../applications/emulators/yapesdl { };
 
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
@@ -25886,7 +25884,7 @@ with pkgs;
 
   etcd = etcd_3_5;
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
-  etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
+  etcd_3_5 = callPackage ../servers/etcd/3.5 { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
 
@@ -31668,10 +31666,8 @@ with pkgs;
         pythonPackages = python3Packages;
   };
 
-  graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
-
-  graphicsmagick-imagemagick-compat = callPackage ../applications/graphics/graphicsmagick/compat.nix { };
+  graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
 
@@ -34741,8 +34737,6 @@ with pkgs;
   maestro = callPackage ../development/mobile/maestro { };
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
-
-  insync = callPackage ../applications/networking/insync { };
 
   lemurs = callPackage ../applications/display-managers/lemurs { };
 

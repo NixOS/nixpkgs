@@ -1,10 +1,18 @@
 {
+  hash,
   lts ? false,
+  patches,
+  updateScriptArgs ? "",
+  vendorHash,
+  version,
+}:
 
+{
+  callPackage,
   lib,
   buildGoModule,
-  fetchpatch,
   fetchFromGitHub,
+  writeScript,
   writeShellScript,
   acl,
   cowsql,
@@ -19,31 +27,28 @@
 }:
 
 let
-  releaseFile = if lts then ./lts.nix else ./latest.nix;
-  inherit (import releaseFile { inherit fetchpatch; })
-    version
-    hash
-    patches
-    vendorHash
-    ;
-  name = "incus${lib.optionalString lts "-lts"}";
+  pname = "incus${lib.optionalString lts "-lts"}";
 in
 
-buildGoModule {
-  pname = "${name}-unwrapped";
-
-  inherit patches vendorHash version;
+buildGoModule rec {
+  inherit
+    patches
+    pname
+    vendorHash
+    version
+    ;
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     inherit hash;
   };
 
+  # replace with env var > 0.6 https://github.com/lxc/incus/pull/610
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
-      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+      --replace-fail "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
   excludedPackages = [
@@ -107,12 +112,23 @@ buildGoModule {
   '';
 
   passthru = {
-    tests.incus = nixosTests.incus;
+    client = callPackage ./client.nix {
+      inherit
+        lts
+        meta
+        patches
+        src
+        vendorHash
+        version
+        ;
+    };
 
-    updateScript = writeShellScript "update-incus" ''
-      nix-update ${name}.unwrapped -vr 'v(.*)' --override-filename pkgs/by-name/in/incus/${
-        if lts then "lts" else "latest"
-      }.nix
+    tests = nixosTests.incus;
+
+    ui = callPackage ./ui.nix { };
+
+    updateScript = writeScript "ovs-update.nu" ''
+      ${./update.nu} ${updateScriptArgs}
     '';
   };
 
@@ -123,5 +139,6 @@ buildGoModule {
     license = lib.licenses.asl20;
     maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
+    mainProgram = "incus";
   };
 }

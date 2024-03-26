@@ -2,12 +2,16 @@
 
 let
   version = "3.5.12";
+  etcdSrcHash = "sha256-Z2WXNzFJYfRQCldUspQjUR5NyUzCCINycuEXWaTn4vU=";
+  etcdServerVendorHash = "sha256-S5cEIV4hKRjn9JFEKWBiSEPytHtVacsSnG6T8dofgyk=";
+  etcdUtlVendorHash = "sha256-Vgp44Kg6zUDYVJU6SiYd8ZEcAWqKPPTsqYafcfk89Cc=";
+  etcdCtlVendorHash = "sha256-PZLsekZzwlGzccCirNk9uUj70Ue5LMDs6LMWBI9yivs=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    hash = "sha256-Z2WXNzFJYfRQCldUspQjUR5NyUzCCINycuEXWaTn4vU=";
+    hash = etcdSrcHash;
   };
 
   CGO_ENABLED = 0;
@@ -16,7 +20,7 @@ let
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline endocrimes ];
+    maintainers = with maintainers; [ endocrimes offline superherointj ];
     platforms = platforms.darwin ++ platforms.linux;
   };
 
@@ -25,7 +29,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-S5cEIV4hKRjn9JFEKWBiSEPytHtVacsSnG6T8dofgyk=";
+    vendorHash = etcdServerVendorHash;
 
     modRoot = "./server";
 
@@ -45,7 +49,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-Vgp44Kg6zUDYVJU6SiYd8ZEcAWqKPPTsqYafcfk89Cc=";
+    vendorHash = etcdUtlVendorHash;
 
     modRoot = "./etcdutl";
   };
@@ -55,7 +59,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-PZLsekZzwlGzccCirNk9uUj70Ue5LMDs6LMWBI9yivs=";
+    vendorHash = etcdCtlVendorHash;
 
     modRoot = "./etcdctl";
   };
@@ -71,6 +75,7 @@ symlinkJoin {
       inherit (nixosTests) etcd etcd-cluster;
       k3s = k3s.passthru.tests.etcd;
     };
+    updateScript = ./update.sh;
   };
 
   paths = [

@@ -2959,6 +2959,12 @@
     githubId = 8891115;
     name = "Brian Choy";
   };
+   ByteSudoer = {
+    email = "bytesudoer@gmail.com";
+    github = "bytesudoer";
+    githubId = 88513682;
+    name = "ByteSudoer";
+  };
   bzizou = {
     email = "Bruno@bzizou.net";
     github = "bzizou";
@@ -12556,6 +12562,15 @@
     githubId = 15093162;
     name = "Melanie B. Sigl";
   };
+  melvyn2 = {
+    email = "melvyn2@dnsense.pub";
+    github = "melvyn2";
+    githubId = 9157412;
+    name = "melvyn";
+    keys = [{
+      fingerprint = "232B 9F00 2153 CA86 849C  9224 25A2 B728 0CE3 AFF6";
+    }];
+  };
   mephistophiles = {
     email = "mussitantesmortem@gmail.com";
     name = "Maxim Zhukov";
@@ -16540,6 +16555,11 @@
     github = "RicArch97";
     githubId = 61013287;
     name = "Ricardo Steijn";
+  };
+  richar = {
+    github = "ri-char";
+    githubId = 17962023;
+    name = "richar";
   };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";
