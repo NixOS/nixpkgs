@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pipdeptree";
   version = "2.16.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-g0O0ndHd2ehBUmHwb0HoWgCGSsqbjmlPFOd6KrkUv2Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pip
   ];
 
