@@ -310,7 +310,7 @@ let
         newPackages
       else
         newPackages // { ${outPath} = replacement; }
-    ) baseMapping (builtins.trace (builtins.catAttrs "key" dependencies) dependencies);
+    ) baseMapping dependencies;
 
   overrideSDK =
     stdenv: sdkVersion:
