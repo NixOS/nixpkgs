@@ -36,6 +36,11 @@ buildPythonPackage rec {
     hash = "sha256-NKrxv5a5gkgpNG7yViTKYBYnU249taWl6fkPJa7/Rzo=";
   };
 
+  postPatch = ''
+    substituteInPlace ./kubernetes/base/config/kube_config_test.py \
+      --replace-fail assertEquals assertEqual
+  '';
+
   propagatedBuildInputs = [
     adal
     certifi
