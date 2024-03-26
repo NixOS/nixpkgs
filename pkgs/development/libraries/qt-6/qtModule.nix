@@ -6,6 +6,7 @@
 , moveBuildTree
 , srcs
 , patches ? [ ]
+, debug ? false
 }:
 
 args:
@@ -26,9 +27,16 @@ stdenv.mkDerivation (args // {
     (lib.warnIf (args ? qtInputs) "qt6.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
     (args.propagatedBuildInputs or []);
 
+  env.NIX_CFLAGS_COMPILE = let
+    prev = if args ? env && args.env ? NIX_CFLAGS_COMPILE then "${args.env.NIX_CFLAGS_COMPILE} " else "";
+  in "${prev}${if debug then "" else "-DQT_NO_DEBUG"}";
+
   moveToDev = false;
 
   outputs = args.outputs or [ "out" "dev" ];
+
+  cmakeBuildType = if debug then "Debug" else "Release";
+  dontStrip = debug;
 
   dontWrapQtApps = args.dontWrapQtApps or true;
 }) // {

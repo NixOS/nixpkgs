@@ -17,7 +17,6 @@
 , config
 
   # options
-, developerBuild ? false
 , debug ? false
 }:
 
@@ -29,25 +28,25 @@ let
 
   addPackages = self:
     let
-      callPackage = self.newScope ({
+      callPackage = self.newScope {
         inherit (self) qtModule;
-        inherit srcs python3;
+        inherit srcs python3 debug;
         stdenv =
           if stdenv.isDarwin
           then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
           else stdenv;
-      });
+      };
     in
     {
 
       inherit callPackage srcs;
 
-      qtModule = callPackage ./qtModule.nix { };
+      qtModule = callPackage ./qtModule.nix {};
 
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = !stdenv.hostPlatform.isMinGW;
         inherit (srcs.qtbase) src version;
-        inherit developerBuild;
+        inherit debug;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation AppKit Contacts CoreBluetooth EventKit GSS MetalKit;
         patches = [

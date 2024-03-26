@@ -93,20 +93,16 @@
 , libGLSupported ? stdenv.hostPlatform.isLinux
 , libGL
 , debug ? false
-, developerBuild ? false
 , qttranslations ? null
 }:
 
 let
-  debugSymbols = debug || developerBuild;
   isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "qtbase";
 
   inherit src version;
-
-  debug = debugSymbols;
 
   propagatedBuildInputs = [
     libxml2
@@ -195,7 +191,6 @@ stdenv.mkDerivation rec {
     CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional developerBuild gdb
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
@@ -250,7 +245,7 @@ stdenv.mkDerivation rec {
     "-framework GSS"
   ]);
 
-  env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
+  env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"${if debug then "" else " -DQT_NO_DEBUG"}";
 
   outputs = [ "out" "dev" ];
 
@@ -266,7 +261,8 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
   '';
 
-  dontStrip = debugSymbols;
+  cmakeBuildType = if debug then "Debug" else "Release";
+  dontStrip = debug;
 
   dontWrapQtApps = true;
 
