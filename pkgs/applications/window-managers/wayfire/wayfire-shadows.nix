@@ -6,10 +6,6 @@
 , ninja
 , pkg-config
 , wayfire
-, wayland
-, wf-config
-, cairo
-, pango
 , libxkbcommon
 , libGL
 }:
@@ -33,10 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayfire
-    wayland
-    wf-config
-    cairo
-    pango
     libxkbcommon
     libGL
   ];

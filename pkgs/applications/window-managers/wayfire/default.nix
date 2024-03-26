@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wf-config
     libGL
     libdrm
     libexecinfo
@@ -55,14 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland-protocols
     xorg.xcbutilwm
-    wayland
-    cairo
-    pango
     nlohmann_json
   ];
 
   propagatedBuildInputs = [
+    wf-config
     wlroots
+    wayland
+    cairo
+    pango
   ];
 
   nativeCheckInputs = [
