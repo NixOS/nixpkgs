@@ -11,6 +11,8 @@ let
     reverseList
     toInt
     ;
+
+  inherit (builtins) toString;
 in
 rec {
   common = {
@@ -57,11 +59,43 @@ rec {
       in
       _encode ((foldl (x: y: 2 * x + 1) 0 (range 1 prefixLength')) * (common.pow 2 (32 - prefixLength')));
 
+    /**
+      Encodes an integer into a valid IPv4 address.
+
+      # Example
+
+      ```nix
+      _encode 0
+      => "0.0.0.0"
+      _encode 3232235521
+      => "192.168.0.1"
+      ```
+
+      # Type
+
+      ```
+      _encode :: Int -> String
+      ```
+
+      # Arguments
+
+      - [num] A decoded integer representation of an IPv4 address.
+
+      # Throws
+
+      - If the argument is less than zero.
+      - If the argument is greater than or equal to 2^32.
+    */
     _encode =
       num:
-      concatStringsSep "." (
-        map (x: toString (mod (num / x) 256)) (reverseList (genList (x: common.pow 2 (x * 8)) 4))
-      );
+      if num < 0 then
+        throw "lib.network.ipv4._encode: ${toString num} cannot be encoded into an IPv4 address."
+      else if num > 4294967295 then
+        throw "lib.network.ipv4._encode: ${toString num} is too large to encode into an IPv4 address."
+      else
+        concatStringsSep "." (
+          map (x: toString (mod (num / x) 256)) (reverseList (genList (x: common.pow 2 (x * 8)) 4))
+        );
 
     _verifyPrefixLength =
       splitCidr:
