@@ -2463,6 +2463,8 @@ self: super: with self; {
 
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
 
+  craft-application-1 = callPackage ../development/python-modules/craft-application-1 { };
+
   craft-archives = callPackage ../development/python-modules/craft-archives { };
 
   craft-cli = callPackage ../development/python-modules/craft-cli { };
