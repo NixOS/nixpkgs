@@ -21,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-FjRIo0sJGJikX4T4Esew3pBxEp7E3kK7Ds2uXDJqMzQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     llama-index-core
     llama-index-readers-file
     s3fs
