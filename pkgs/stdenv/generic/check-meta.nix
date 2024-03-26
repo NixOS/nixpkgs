@@ -296,7 +296,10 @@ let
       str
     ];
     downloadPage = str;
-    repository = str;
+    repository = union [
+      (listOf str)
+      str
+    ];
     changelog = union [
       (listOf str)
       str
