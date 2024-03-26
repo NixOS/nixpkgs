@@ -21,7 +21,7 @@ in
     services.pipewire.wireplumber = {
       enable = mkOption {
         type = bool;
-        default = config.services.pipewire.enable;
+        default = pwCfg.enable;
         defaultText = literalExpression "config.services.pipewire.enable";
         description = "Whether to enable WirePlumber, a modular session / policy manager for PipeWire";
       };
@@ -98,7 +98,7 @@ in
 
       configPackages = cfg.configPackages
           ++ optional (!pwUsedForAudio) pwNotForAudioConfigPkg
-          ++ optional config.services.pipewire.systemWide systemwideConfigPkg;
+          ++ optional pwCfg.systemWide systemwideConfigPkg;
 
       configs = pkgs.buildEnv {
         name = "wireplumber-configs";
@@ -147,19 +147,19 @@ in
 
       systemd.packages = [ cfg.package ];
 
-      systemd.services.wireplumber.enable = config.services.pipewire.systemWide;
-      systemd.user.services.wireplumber.enable = !config.services.pipewire.systemWide;
+      systemd.services.wireplumber.enable = pwCfg.systemWide;
+      systemd.user.services.wireplumber.enable = !pwCfg.systemWide;
 
       systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
       systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
 
-      systemd.services.wireplumber.environment = mkIf config.services.pipewire.systemWide {
+      systemd.services.wireplumber.environment = mkIf pwCfg.systemWide {
         # Force WirePlumber to use system dbus.
         DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
 
       systemd.user.services.wireplumber.environment.LV2_PATH =
-        mkIf (!config.services.pipewire.systemWide) "${lv2Plugins}/lib/lv2";
+        mkIf (!pwCfg.systemWide) "${lv2Plugins}/lib/lv2";
     };
 }
