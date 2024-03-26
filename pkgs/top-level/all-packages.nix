@@ -35991,8 +35991,6 @@ with pkgs;
     lua = lua5_3;
   };
 
-  apvlv = callPackage ../applications/misc/apvlv { };
-
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
