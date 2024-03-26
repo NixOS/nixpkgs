@@ -146,7 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [binutils-unwrapped harec qbe]}
   '';
 
-  setupHook = ./setup-hook.sh;
+  setupHook = substituteAll {
+    src = ./setup-hook.sh;
+    hare_default_flags = "-q -R -a${stdenv.targetPlatform.uname.processor}";
+  };
 
   passthru = {
     updateScript = gitUpdater { };

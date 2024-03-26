@@ -25,8 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-    "HAREFLAGS=-qa${stdenv.hostPlatform.uname.processor}"
   ];
 
   enableParallelBuilding = true;

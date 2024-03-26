@@ -26,22 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
+  env.PREFIX = builtins.placeholder "out";
+
   enableParallelChecking = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   dontConfigure = true;
-
-  preBuild = ''
-    HARECACHE="$(mktemp -d --tmpdir harecache.XXXXXXXX)"
-    export HARECACHE
-    export PREFIX=${builtins.placeholder "out"}
-  '';
 
   buildPhase = ''
     runHook preBuild
 
-    ./bootstrap.sh
+    hare build -o ./bin/haredo $HAREFLAGS src
+    scdoc <./doc/haredo.1.scd >./doc/haredo.1
 
     runHook postBuild
   '';
@@ -57,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./bootstrap.sh install
+    install -Dm0755 ./bin/haredo $out/bin/haredo
+    install -Dm0644 ./doc/haredo.1 $out/share/man/man1/haredo.1
 
     runHook postInstall
   '';
