@@ -42,11 +42,6 @@ rustPlatform.buildRustPackage {
 
   ATTIC_DISTRIBUTOR = "attic";
 
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.
   doCheck = false;
@@ -69,4 +64,3 @@ rustPlatform.buildRustPackage {
     mainProgram = "attic";
   };
 }
-
