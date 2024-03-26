@@ -8,6 +8,7 @@
 , fetchurl
 , libpng
 , stdenv
+, installAssets ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,12 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     cd ..
-    mkdir -p $out/bin/ $out/share/nxengine/
+    mkdir -p $out/bin/
     install bin/* $out/bin/
-  '' + ''
+  '' + (lib.optionalString installAssets ''
+    mkdir $out/share/nxengine/
     cp -r ${finalAttrs.finalPackage.assets}/share/nxengine/data $out/share/nxengine/data
     chmod -R a=r,a+X $out/share/nxengine/data
-  '' + ''
+  '') + ''
     runHook postInstall
   '';
 
