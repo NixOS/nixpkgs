@@ -13215,6 +13215,12 @@
     githubId = 830082;
     name = "Nathan Moos";
   };
+  moraxyc = {
+    email = "nix@qaq.li";
+    github = "moraxyc";
+    githubId = 69713071;
+    name = "Moraxyc Xu";
+  };
   moredread = {
     email = "code@apb.name";
     github = "Moredread";
