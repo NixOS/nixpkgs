@@ -15,13 +15,13 @@
   SDL2
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emulationstation-de";
-  version = "2.2.1";
+  version = "3.0.1";
 
   src = fetchzip {
-    url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v2.2.1/emulationstation-de-v2.2.1.tar.gz";
-    hash = "sha256:1kp9p3fndnx4mapgfvy742zwisyf0y5k57xkqkis0kxyibx0z8i6";
+    url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v${finalAttrs.version}/emulationstation-de-v${finalAttrs.version}.tar.gz";
+    hash = "sha256:8hkHD0vdGo6iYr76S4It97YJyvY27vCkT9DBL+cKUTE=";
   };
 
   patches = [ ./001-add-nixpkgs-retroarch-cores.patch ];
@@ -44,8 +44,13 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    install -D ../emulationstation $out/bin/emulationstation
-    cp -r ../resources/ $out/bin/resources/
+    runHook preInstall
+
+    install -Dm755 ../es-de $out/bin/es-de
+    mkdir -p $out/share/es-de/
+    cp -r ../resources/ $out/share/es-de/resources/
+
+    runHook postInstall
   '';
 
   meta = {
@@ -54,6 +59,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ ivarmedi ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    mainProgram = "emulationstation";
+    mainProgram = "es-de";
   };
-}
+})
