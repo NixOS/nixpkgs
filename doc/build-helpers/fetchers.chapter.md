@@ -283,7 +283,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value:_ `""`.
 
-`recursiveHash` (Boolean; _optional_)
+`recursiveHash` (Boolean; _optional_) []{#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash}
 : If set to `true`, will signal to Nix that the hash given to `fetchurl` was calculated using the `"recursive"` mode.
   See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHashMode) for more information about the existing modes.
 
@@ -296,7 +296,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
   _Default value_: `false`.
 
-`downloadToTemp` (Boolean; _optional_)
+`downloadToTemp` (Boolean; _optional_) []{#sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp}
 : If `true`, saves the downloaded file to a temporary location instead of the expected Nix store location.
   This is useful when used in conjunction with `postFetch` attribute, otherwise `fetchurl` will not produce any meaningful output.
 
@@ -519,15 +519,81 @@ See [](#chap-pkgs-fetchers-caveats) for more details on how to work with the `ha
 
 ## `fetchzip` {#sec-pkgs-fetchers-fetchzip}
 
-Downloads content from a given URL (which is assumed to be an archive), and decompresses the archive for you, making files and directories directly accessible.
-`fetchzip` can only be used with archives.
-Despite its name, `fetchzip` is not limited to `.zip` files and can also be used with any tarball.
+Returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads an archive from a given URL and decompresses it.
 
-It has two required arguments, a URL and a hash.
-The hash is typically `hash`, although many more hash algorithms are supported.
-Nixpkgs contributors are currently recommended to use `hash`.
-This hash will be used by Nix to identify your source.
-A typical usage of `fetchzip` is provided below.
+Despite its name, `fetchzip` is not limited to `.zip` files but can also be used with [various compressed tarball formats](#tar-files) by default.
+This can extended by specifying additional attributes, see [](#ex-fetchers-fetchzip-rar-archive) to understand how to do that.
+
+### Inputs {#sec-pkgs-fetchers-fetchzip-inputs}
+
+`fetchzip` requires an attribute set, and most attributes are passed to the underlying call to [`fetchurl`](#sec-pkgs-fetchers-fetchurl).
+
+The attributes below are treated differently by `fetchzip` when compared to what `fetchurl` expects:
+
+`name` (String; _optional_)
+: Works as defined in `fetchurl`, but has a different default value than `fetchurl`.
+
+  _Default value:_ `"source"`.
+
+`nativeBuildInputs` (List of Attribute Set; _optional_)
+: Works as defined in `fetchurl`, but it is also augmented by `fetchzip` to include packages to deal with additional archives (such as `.zip`).
+
+  _Default value:_ `[]`.
+
+`postFetch` (String; _optional_)
+: Works as defined in `fetchurl`, but it is also augmented with the code needed to make `fetchzip` work.
+
+  :::{.caution}
+  It is only safe to modify files in `$out` in `postFetch`.
+  Consult the implementation of `fetchzip` for anything more involved.
+  :::
+
+  _Default value:_ `""`.
+
+`stripRoot` (Boolean; _optional_)
+: If `true`, the decompressed contents are moved one level up the directory tree.
+
+  This is useful for archives that decompress into a single directory which commonly includes some values that change with time, such as version numbers.
+  When this is the case (and `stripRoot` is `true`), `fetchzip` will remove this directory and make the decompressed contents available in the top-level directory.
+
+  [](#ex-fetchers-fetchzip-simple-striproot) shows what this attribute does.
+
+  This attribute is **not** passed through to `fetchurl`.
+
+  _Default value:_ `true`.
+
+`extension` (String or Null; _optional_)
+: If set, the archive downloaded by `fetchzip` will be renamed to a filename with the extension specified in this attribute.
+
+  This is useful when making `fetchzip` support additional types of archives, because the implementation may use the extension of an archive to determine whether they can decompress it.
+  If the URL you're using to download the contents doesn't end with the extension associated with the archive, use this attribute to fix the filename of the archive.
+
+  This attribute is **not** passed through to `fetchurl`.
+
+  _Default value:_ `null`.
+
+`recursiveHash` (Boolean; _optional_)
+: Works [as defined in `fetchurl`](#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash), but its default value is different than for `fetchurl`.
+
+  _Default value:_ `true`.
+
+`downloadToTemp` (Boolean; _optional_)
+: Works [as defined in `fetchurl`](#sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp), but its default value is different than for `fetchurl`.
+
+  _Default value:_ `true`.
+
+`extraPostFetch` **DEPRECATED**
+: This attribute is deprecated.
+  Please use `postFetch` instead.
+
+  This attribute is **not** passed through to `fetchurl`.
+
+### Examples {#sec-pkgs-fetchers-fetchzip-examples}
+
+::::{.example #ex-fetchers-fetchzip-simple-striproot}
+# Using `fetchzip` to output contents directly
+
+The following recipe shows how to use `fetchzip` to decompress a `.tar.gz` archive:
 
 ```nix
 { fetchzip }:
@@ -536,6 +602,80 @@ fetchzip {
   hash = "sha256-3ABYlME9R8klcpJ7MQpyFEFwHmxDDEzIYBqu/CpDYmg=";
 }
 ```
+
+This archive has all its contents in a directory named `patchelf-0.18.0`.
+This means that after decompressing, you'd have to enter this directory to see the contents of the archive.
+However, `fetchzip` makes this easier through the attribute `stripRoot` (enabled by default).
+
+After building the recipe, the derivation output will show all the files in the archive at the top level:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/1b7h3fvmgrcddvs0m299hnqxlgli1yjw-source
+
+$ ls /nix/store/1b7h3fvmgrcddvs0m299hnqxlgli1yjw-source
+aclocal.m4  completions  configure.ac  m4           Makefile.in  patchelf.spec     README.md  tests
+build-aux   configure    COPYING       Makefile.am  patchelf.1   patchelf.spec.in  src        version
+```
+
+If `stripRoot` is set to `false`, the derivation output will be the decompressed archive as-is:
+
+```nix
+{ fetchzip }:
+fetchzip {
+  url = "https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.gz";
+  hash = "sha256-uv3FuKE4DqpHT3yfE0qcnq0gYjDNQNKZEZt2+PUAneg=";
+  stripRoot = false;
+}
+```
+
+:::{.caution}
+The hash changed!
+Whenever changing attributes of a Nixpkgs fetcher, [remember to invalidate the hash](#chap-pkgs-fetchers-caveats), otherwise you won't get the results you're expecting!
+:::
+
+After building the recipe:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/2hy5bxw7xgbgxkn0i4x6hjr8w3dbx16c-source
+
+$ ls /nix/store/2hy5bxw7xgbgxkn0i4x6hjr8w3dbx16c-source
+patchelf-0.18.0
+```
+::::
+
+::::{.example #ex-fetchers-fetchzip-rar-archive}
+# Using `fetchzip` to decompress a `.rar` file
+
+The `unrar` package provides a [setup hook](#ssec-setup-hooks) to decompress `.rar` archives during the [unpack phase](#ssec-unpack-phase), which can be used with `fetchzip` to decompress those archives:
+
+```nix
+{ fetchzip, unrar }:
+fetchzip {
+  url = "https://archive.org/download/SpaceCadet_Plus95/Space_Cadet.rar";
+  hash = "sha256-fC+zsR8BY6vXpUkVd6i1jF0IZZxVKVvNi6VWCKT+pA4=";
+  stripRoot = false;
+  nativeBuildInputs = [ unrar ];
+}
+```
+
+Since this particular `.rar` file doesn't put its contents in a directory inside the archive, `stripRoot` must be set to `false`.
+
+After building the recipe, the derivation output will show the decompressed files:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/zpn7knxfva6rfjja2gbb4p3l9w1f0d36-source
+
+$ ls /nix/store/zpn7knxfva6rfjja2gbb4p3l9w1f0d36-source
+FONT.DAT      PINBALL.DAT  PINBALL.EXE	PINBALL2.MID  TABLE.BMP    WMCONFIG.EXE
+MSCREATE.DIR  PINBALL.DOC  PINBALL.MID	Sounds	     WAVEMIX.INF
+```
+::::
 
 ## `fetchpatch` {#fetchpatch}
 
