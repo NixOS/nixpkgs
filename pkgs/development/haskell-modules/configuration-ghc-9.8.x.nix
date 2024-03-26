@@ -110,6 +110,7 @@ self: super: {
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
   hourglass = dontCheck super.hourglass; # umaintained, test suite doesn't compile anymore
   bsb-http-chunked = dontCheck super.bsb-http-chunked; # umaintained, test suite doesn't compile anymore
+  pcre-heavy = dontCheck super.pcre-heavy; # GHC warnings cause the tests to fail
 
   #
   # Other build fixes
