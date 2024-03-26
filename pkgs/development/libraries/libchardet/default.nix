@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl }:
 
 stdenv.mkDerivation rec {
   pname = "libchardet";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JhEiWM3q8X+eEBHxv8k9yYOaTGoJOzI+/iFYC0gZJJs=";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   enableParallelBuilding = true;
 
