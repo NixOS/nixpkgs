@@ -297,6 +297,20 @@ runTests {
     expected = "a\nb\nc\n";
   };
 
+  testMakeIncludePathWithPkgs = {
+    expr = (makeIncludePath [
+      { dev = "/nix/store/bash"; }
+      # lib.getOutput "dev" return out if "dev" is not found
+      { out = "/nix/store/openssl"; }
+    ]);
+    expected = "/nix/store/bash/include:/nix/store/openssl/include";
+  };
+
+  testMakeIncludePathWithEmptyList = {
+    expr = (makeIncludePath [ ]);
+    expected = "";
+  };
+
   testMakeIncludePathWithOneString = {
     expr = (makeIncludePath [ "/usr" ]);
     expected = "/usr/include";
