@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, unstableGitUpdater }:
+{ lib, stdenv, fetchFromGitHub, postgresql, unstableGitUpdater, extensionCheck }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgjwt";
   version = "unstable-2023-03-02";
 
@@ -19,6 +19,15 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+  passthru.tests.extension = extensionCheck {
+    postgresqlPackage = postgresql.withPackages (_: [ finalAttrs.finalPackage ]);
+    sql = ''
+      CREATE EXTENSION pgjwt CASCADE;
+
+      SELECT sign('{"sub":"1234567890","name":"John Doe","admin":true}', 'secret');
+    '';
+  };
+
   meta = with lib; {
     description = "PostgreSQL implementation of JSON Web Tokens";
     longDescription = ''
@@ -28,4 +37,4 @@ stdenv.mkDerivation {
     platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [spinus];
   };
-}
+})
