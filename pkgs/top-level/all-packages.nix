@@ -2834,8 +2834,6 @@ with pkgs;
 
   xcpc = callPackage ../applications/emulators/xcpc { };
 
-  xemu = callPackage ../applications/emulators/xemu { };
-
   yapesdl = callPackage ../applications/emulators/yapesdl { };
 
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
@@ -14954,6 +14952,8 @@ with pkgs;
     boost = boost179;
   };
 
+  xorriso = libisoburn;
+
   xurls = callPackage ../tools/text/xurls { };
 
   xxv = callPackage ../tools/misc/xxv { };
@@ -16251,7 +16251,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21 openjfx22;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -16290,6 +16290,11 @@ with pkgs;
   openjdk21_headless = javaPackages.compiler.openjdk21.headless;
   jdk21 = openjdk21;
   jdk21_headless = openjdk21_headless;
+
+  openjdk22 = javaPackages.compiler.openjdk22;
+  openjdk22_headless = javaPackages.compiler.openjdk22.headless;
+  jdk22 = openjdk22;
+  jdk22_headless = openjdk22_headless;
 
   /* default JDK */
   jdk = jdk21;
@@ -25879,7 +25884,7 @@ with pkgs;
 
   etcd = etcd_3_5;
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
-  etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
+  etcd_3_5 = callPackage ../servers/etcd/3.5 { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
 
@@ -28574,7 +28579,6 @@ with pkgs;
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
-  bibata-cursors = callPackage ../data/icons/bibata-cursors { attrs = python3Packages.attrs; };
   bibata-extra-cursors = callPackage ../data/icons/bibata-cursors/extra.nix { };
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
@@ -31662,10 +31666,8 @@ with pkgs;
         pythonPackages = python3Packages;
   };
 
-  graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
-
-  graphicsmagick-imagemagick-compat = callPackage ../applications/graphics/graphicsmagick/compat.nix { };
+  graphicsmagick-imagemagick-compat = graphicsmagick.imagemagick-compat;
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
 
@@ -33420,8 +33422,6 @@ with pkgs;
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell { };
 
-  nix-ld = callPackage ../os-specific/linux/nix-ld { };
-
   noaa-apt = callPackage ../applications/radio/noaa-apt { };
 
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
@@ -34737,8 +34737,6 @@ with pkgs;
   maestro = callPackage ../development/mobile/maestro { };
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
-
-  insync = callPackage ../applications/networking/insync { };
 
   lemurs = callPackage ../applications/display-managers/lemurs { };
 
@@ -41294,6 +41292,8 @@ with pkgs;
   };
 
   treefmt = callPackage ../development/tools/treefmt { };
+
+  nufmt = callPackage ../development/tools/nufmt { };
 
   bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
 

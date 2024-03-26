@@ -1,14 +1,35 @@
-{ lib, mkXfceDerivation, gobject-introspection, glib, gtk3, libwnck, wayland }:
+{ lib
+, mkXfceDerivation
+, gobject-introspection
+, wayland-scanner
+, glib
+, gtk3
+, libwnck
+, libX11
+, wayland
+, wlr-protocols
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4windowing";
-  version = "4.19.2";
+  version = "4.19.3";
 
-  sha256 = "sha256-mXxxyfwZB/AJFVVGFAAXLqC5p7pZAeqmhljQym55hyM=";
+  sha256 = "sha256-nsobRyGeagUq1WHzYBq6vd9g5A65KEQC4cX+m7w0pqg=";
 
-  nativeBuildInputs = [ gobject-introspection ];
-  buildInputs = [ glib gtk3 libwnck wayland ];
+  nativeBuildInputs = [
+    gobject-introspection
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libwnck
+    libX11
+    wayland
+    wlr-protocols
+  ];
 
   meta = {
     description = "Windowing concept abstraction library for X11 and Wayland";

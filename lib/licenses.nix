@@ -392,6 +392,12 @@ in mkLicense lset) ({
     fullName = "Common Public Attribution License 1.0";
   };
 
+  commons-clause = {
+    fullName = "Commons Clause License";
+    url = "https://commonsclause.com/";
+    free = false;
+  };
+
   cpl10 = {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
