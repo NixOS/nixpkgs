@@ -41,7 +41,7 @@ in
 
     postFixup = lib.optionalString useSteamRun (let
       steam-run = (steam.override {
-        extraPkgs = pkgs: [ pkgs.libunwind ];
+        extraPkgs = pkgs: [ pkgs.libunwind pkgs.gamemode ];
         extraProfile = ''
           unset TZ
         '';
