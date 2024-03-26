@@ -121,7 +121,7 @@ in
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
+, webrtcSupport ? !privacySupport
 
 # digital rights managemewnt
 
