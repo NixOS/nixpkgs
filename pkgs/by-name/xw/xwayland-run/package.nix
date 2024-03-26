@@ -1,6 +1,4 @@
-{ cage
-, fetchFromGitLab
-, gnome
+{ fetchFromGitLab
 , lib
 , meson
 , ninja
@@ -8,25 +6,28 @@
 , weston
 , xorg
 , xwayland
-, withMutter ? false
-, withCage ? false
+, withCage ? false , cage
+, withKwin ? false , kdePackages
+, withMutter ? false, gnome
+, withDbus ? withMutter , dbus # Since 0.0.3, mutter compositors run with their own DBUS sessions
 }:
 let
   compositors = [ weston ]
-    ++ lib.optional withMutter gnome.mutter
     ++ lib.optional withCage cage
+    ++ lib.optional withKwin kdePackages.kwin
+    ++ lib.optional withMutter gnome.mutter ++ lib.optional withDbus dbus
   ;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "xwayland-run";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "ofourdan";
     repo = "xwayland-run";
     rev = version;
-    hash = "sha256-+HdRLIizEdtKWD8HadQQf750e2t1AWa14U/Xwu3xPK4=";
+    hash = "sha256-yYULbbcFDT1zRFn1UWS0dyuchGYnOZypDmxqc14RYF4=";
   };
 
   pyproject = false;
@@ -37,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
   ];
-
 
   postInstall = ''
     wrapProgram $out/bin/wlheadless-run \

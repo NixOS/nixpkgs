@@ -42,6 +42,9 @@ in
     postFixup = lib.optionalString useSteamRun (let
       steam-run = (steam.override {
         extraPkgs = pkgs: [ pkgs.libunwind ];
+        extraProfile = ''
+          unset TZ
+        '';
       }).run;
     in ''
       substituteInPlace $out/bin/XIVLauncher.Core \
