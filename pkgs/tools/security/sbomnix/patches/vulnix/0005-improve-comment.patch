@@ -1,0 +1,18 @@
+diff --git a/src/vulnix/nix.py b/src/vulnix/nix.py
+index 7fb23c9..a3c4e96 100644
+--- a/src/vulnix/nix.py
++++ b/src/vulnix/nix.py
+@@ -109,8 +109,8 @@ class Store(object):
+         if self.closure:
+             for output in self._find_outputs(path):
+                 for candidate in map(
+-                    # Nix 2.4 also returns `p.get('deriver')`
+-                    # like `nix-store -qd` but that path may not exist
++                    # Nix 2.4 also returns a `deriver` field
++                    # but like `nix-store -qd` that path may not exist
+                     lambda p: self._find_deriver(p.get('path')),
+                     json.loads(
+                         self._call_nix(['path-info', '-r', '--json', output])
+-- 
+2.44.0
+
