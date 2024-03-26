@@ -3755,6 +3755,8 @@ self: super: with self; {
 
   enrich = callPackage ../development/python-modules/enrich { };
 
+  enterpriseattack = callPackage ../development/python-modules/enterpriseattack { };
+
   entrance = callPackage ../development/python-modules/entrance {
     routerFeatures = false;
   };
@@ -5373,6 +5375,8 @@ self: super: with self; {
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
+
+  hsh = callPackage ../development/python-modules/hsh { };
 
   hsluv = callPackage ../development/python-modules/hsluv { };
 
@@ -8388,6 +8392,8 @@ self: super: with self; {
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
+
+  naked = callPackage ../development/python-modules/naked { };
 
   namedlist = callPackage ../development/python-modules/namedlist { };
 
@@ -13092,6 +13098,8 @@ self: super: with self; {
   robotframework-seleniumlibrary = callPackage ../development/python-modules/robotframework-seleniumlibrary { };
 
   robotframework-sshlibrary = callPackage ../development/python-modules/robotframework-sshlibrary { };
+
+  robotframework-tidy = callPackage ../development/python-modules/robotframework-tidy { };
 
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 

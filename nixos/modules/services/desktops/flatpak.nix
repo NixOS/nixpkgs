@@ -32,6 +32,8 @@ in {
 
     security.polkit.enable = true;
 
+    fonts.fontDir.enable = true;
+
     services.dbus.packages = [ pkgs.flatpak ];
 
     systemd.packages = [ pkgs.flatpak ];

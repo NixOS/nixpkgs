@@ -1,20 +1,21 @@
-import ../make-test-python.nix ({ pkgs, lib, extra ? {}, ... } :
+import ../make-test-python.nix ({ pkgs, lib, extra ? {}, name ? "incus-container", ... } :
 
 let
   releases = import ../../release.nix {
-    configuration = {
-      # Building documentation makes the test unnecessarily take a longer time:
-      documentation.enable = lib.mkForce false;
+    configuration = lib.recursiveUpdate {
+        # Building documentation makes the test unnecessarily take a longer time:
+        documentation.enable = lib.mkForce false;
 
-      boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
-    } // extra;
+        boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
+    }
+    extra;
   };
 
   container-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
   container-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  name = "incus-container";
+  inherit name;
 
   meta = {
     maintainers = lib.teams.lxc.members;

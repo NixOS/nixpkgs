@@ -116,11 +116,11 @@ in stdenv.mkDerivation {
      # we don't take any chances and only apply it if people actually want to use KVM support.
   ++ optional enableKvm (fetchpatch
     (let
-      patchVersion = "20240226";
+      patchVersion = "20240325";
     in {
       name = "virtualbox-${version}-kvm-dev-${patchVersion}.patch";
-      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/virtualbox-${version}-kvm-dev-${patchVersion}.patch";
-      hash = "sha256-3YT1ZN/TwoNWNb2eqOcPF8GTrVGfOPaPb8vpGoPNISY=";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/kvm-backend-${version}-dev-${patchVersion}.patch";
+      hash = "sha256-D1ua8X5Iyw/I89PtskiGdnGr4NhdFtI93ThltiOcu8w=";
     }))
   ++ [
     ./qt-dependency-paths.patch
@@ -281,7 +281,7 @@ in stdenv.mkDerivation {
     ];
     license = licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
-    maintainers = with maintainers; [ sander friedrichaltheide ];
+    maintainers = with maintainers; [ sander friedrichaltheide blitz ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
   };
