@@ -25,11 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-hDJcekn0ExYUCs8kBZkJzsWqXsB/cI6RbW3EhRCCioM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pydantic
     sqlalchemy
   ];
