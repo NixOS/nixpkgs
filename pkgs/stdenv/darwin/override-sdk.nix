@@ -240,7 +240,7 @@ let
           let
             replacement = getReplacement newPackages dep;
           in
-          lib.optionalString (dep != replacement) "s|${lib.escapeRegex dep}|${lib.escapeRegex replacement}|g;"
+          lib.optionalString (dep != replacement) "s|${lib.escapeRegex dep.outPath}|${lib.escapeRegex replacement.outPath}|g;"
         ) propagatedInputs;
 
         passAsFile = [ "dependencies" ];
