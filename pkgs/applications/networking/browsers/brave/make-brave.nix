@@ -210,8 +210,8 @@ stdenv.mkDerivation {
       contribute to your favorite creators automatically.
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
     platforms = [ platform ];
     mainProgram = "brave";
   };
