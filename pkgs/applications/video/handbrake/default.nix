@@ -95,7 +95,8 @@ let
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
-    rev = version;
+    # uses version commit for logic in version.txt
+    rev = "86156a66c0d5ccc306487c1ff961a7b2328961b3";
     hash = "sha256-4Q//UU/CPgWvhtpROfNPLzBvZlB02hbFe9Z9FA7mX04=";
   };
 
@@ -155,13 +156,15 @@ let
   });
 
   versionFile = writeText "version.txt" ''
-    BRANCH=${versions.majorMinor version}.x
-    DATE=1970-01-01 00:00:01 +0000
+    URL=${src.meta.homepage}.git
     HASH=${src.rev}
-    REV=${src.rev}
-    SHORTHASH=${src.rev}
+    SHORTHASH=${lib.substring 0 9 src.rev}
     TAG=${version}
-    URL=${src.meta.homepage}
+    TAG_HASH=${src.rev}
+    REV=0
+    BRANCH=
+    REMOTE=${src.meta.homepage}.git
+    DATE=1970-01-01 00:00:01 +0000
   '';
 
   inherit (lib) optional optionals optionalString versions;
