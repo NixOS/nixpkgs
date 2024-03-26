@@ -15,25 +15,26 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Oz1T9koeXnmHc5oru1apUtmhhvKi/gAtg/Hb7HKkkP0=";
   };
 
   vendorHash = "sha256-U0BeGCRLjL56ZmVKcKqrrPTCXpShJzJq5/wnXDKax6g=";
   proxyVendor = true;
 
-  patchPhase = ''
-    runHook prePatch
+  postPatch = ''
     # Patch test that relies on looking up homedir in user struct to prefer ~
     substituteInPlace pkg/steampipeconfig/shared_test.go \
-      --replace 'filehelpers "github.com/turbot/go-kit/files"' "" \
-      --replace 'filepaths.SteampipeDir, _ = filehelpers.Tildefy("~/.steampipe")' 'filepaths.SteampipeDir = "~/.steampipe"';
-    runHook postPatch
+      --replace-fail 'filehelpers "github.com/turbot/go-kit/files"' "" \
+      --replace-fail 'filepaths.SteampipeDir, _ = filehelpers.Tildefy("~/.steampipe")' 'filepaths.SteampipeDir = "~/.steampipe"';
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   doCheck = true;
 
@@ -65,12 +66,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    homepage = "https://steampipe.io/";
-    description = "select * from cloud;";
-    license = licenses.agpl3Only;
-    mainProgram = "steampipe";
-    maintainers = with maintainers; [ hardselius anthonyroussel ];
+  meta = {
     changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
+    description = "select * from cloud;";
+    homepage = "https://steampipe.io/";
+    license = lib.licenses.agpl3Only;
+    mainProgram = "steampipe";
+    maintainers = with lib.maintainers; [ hardselius anthonyroussel ];
   };
 }
