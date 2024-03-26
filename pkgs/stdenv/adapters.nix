@@ -19,9 +19,43 @@ let
   in
     k stdenvSelf mkDerivationSuper;
 
+  /**
+    Compose an overrideAttrs callback onto a mkDerivation callback (base layer),
+    returning a new mkDerivation callback.
+
+    Type:
+        (Attrs | final@Attrs -> Attrs) ->
+        (Attrs | prev@Attrs -> Attrs | final@Attrs -> prev@Attrs -> Attrs) ->
+        (final@Attrs -> Attrs)
+   */
+  composeOverrider =
+    # layer composition arguments
+    base: override:
+    # layer composition return value, fixpoint argument function
+    finalAttrs:
+    let
+      baseFn =
+        if # analogous to the conditional in `mkDerivation` in `make-derivation.nix`
+          builtins.isFunction base
+        then base
+        else finalAttrs: base;
+      prevAttrs =
+        baseFn finalAttrs;
+
+      # analogous to `x` in `makeDerivationExtensible` in `make-derivation.nix`
+      x = override prevAttrs;
+
+    in
+    if builtins.isFunction x
+    then
+      # Can't reuse `x`, because `finalAttrs` comes first.
+      # Looks inefficient, but `f0 prevAttrs` was a cheap thunk.
+      prevAttrs // override finalAttrs prevAttrs
+    else prevAttrs // x;
+
   # Wrap the original `mkDerivation` providing extra args to it.
   extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs f);
+    mkDerivationSuper (composeOverrider args f));
 
   # Wrap the original `mkDerivation` transforming the result.
   overrideMkDerivationResult = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
