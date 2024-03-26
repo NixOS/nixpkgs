@@ -5,23 +5,24 @@
 , pkg-config
 , makeWrapper
 , go
-, gcc
-, gtk3
-, webkitgtk
 , nodejs
 , zlib
+  # Linux specific dependencies
+, gtk3
+, webkitgtk
 }:
 
 buildGoModule rec {
   pname = "wails";
   version = "2.8.0";
 
-  src = fetchFromGitHub {
-    owner = "wailsapp";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MHwIRanmgpjTKM+ILSQheCd9+XUwVTCVrREqntxpv7Q=";
-  } + "/v2";
+  src = fetchFromGitHub
+    {
+      owner = "wailsapp";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-MHwIRanmgpjTKM+ILSQheCd9+XUwVTCVrREqntxpv7Q=";
+    } + "/v2";
 
   vendorHash = "sha256-0cGmJEi7OfMZS7ObPBLHOVqKfvnlpHBiGRjSdV6wxE4=";
 
@@ -44,10 +45,11 @@ buildGoModule rec {
   propagatedBuildInputs = [
     pkg-config
     go
-    gcc
+    stdenv.cc
+    nodejs
+  ] ++ lib.optionals stdenv.isLinux [
     gtk3
     webkitgtk
-    nodejs
   ];
 
   ldflags = [
@@ -58,8 +60,8 @@ buildGoModule rec {
   # As Wails calls a compiler, certain apps and libraries need to be made available.
   postFixup = ''
     wrapProgram $out/bin/wails \
-      --prefix PATH : ${lib.makeBinPath [ pkg-config go gcc nodejs ]} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 webkitgtk ]} \
+      --prefix PATH : ${lib.makeBinPath [ pkg-config go stdenv.cc nodejs ]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([ ] ++ lib.optionals stdenv.isLinux [ gtk3 webkitgtk ])}" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH" \
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
@@ -70,6 +72,6 @@ buildGoModule rec {
     homepage = "https://wails.io";
     license = licenses.mit;
     maintainers = with maintainers; [ ianmjones ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
