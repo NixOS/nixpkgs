@@ -68,7 +68,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
-    description = "select * from cloud;";
+    description = "Dynamically query your cloud, code, logs & more with SQL";
     homepage = "https://steampipe.io/";
     license = lib.licenses.agpl3Only;
     mainProgram = "steampipe";
