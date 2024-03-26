@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "riscv-config";
-  version = "3.17.0";
+  version = "3.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "riscv-software-src";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-dMs900w5sXggqxU+2W8qKrKjGpyrXhA2QEbXQeaKZTs=";
+    hash = "sha256-M36xS9rBnCPHWmHvAA6qC9J21K/zIjgsqEyhApJDKrE=";
   };
 
   propagatedBuildInputs = [
