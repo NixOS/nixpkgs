@@ -299,9 +299,9 @@ runTests {
 
   testMakeIncludePathWithPkgs = {
     expr = (makeIncludePath [
-      { dev = "/nix/store/bash"; }
+      { dev = { outPath = "/nix/store/bash"; }; }
       # lib.getOutput "dev" return out if "dev" is not found
-      { out = "/nix/store/openssl"; }
+      { out = { outPath = "/nix/store/openssl"; }; }
     ]);
     expected = "/nix/store/bash/include:/nix/store/openssl/include";
   };
