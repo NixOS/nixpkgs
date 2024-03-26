@@ -1,9 +1,12 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "ed25519";
   version = "1.5";
   format = "setuptools";
+
+  # last commit in 2019, various compat issues with 3.12
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
