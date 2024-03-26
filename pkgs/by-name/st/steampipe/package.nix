@@ -3,6 +3,7 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  makeWrapper,
   nix-update-script,
   steampipe,
   testers,
@@ -29,7 +30,10 @@ buildGoModule rec {
       --replace-fail 'filepaths.SteampipeDir, _ = filehelpers.Tildefy("~/.steampipe")' 'filepaths.SteampipeDir = "~/.steampipe"';
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   ldflags = [
     "-s"
@@ -50,6 +54,10 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
+    wrapProgram $out/bin/steampipe \
+      --set-default STEAMPIPE_UPDATE_CHECK false \
+      --set-default STEAMPIPE_TELEMETRY none
+
     INSTALL_DIR=$(mktemp -d)
     installShellCompletion --cmd steampipe \
       --bash <($out/bin/steampipe --install-dir $INSTALL_DIR completion bash) \
