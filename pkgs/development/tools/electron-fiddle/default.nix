@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , fetchurl
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , git
 , lib
 , makeDesktopItem
@@ -51,11 +51,11 @@ let
     pname = "${pname}-unwrapped";
     inherit version src;
 
-    nativeBuildInputs = [ fixup_yarn_lock git nodejs util-linux yarn zip ];
+    nativeBuildInputs = [ prefetch-yarn-deps git nodejs util-linux yarn zip ];
 
     configurePhase = ''
       export HOME=$TMPDIR
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
       yarn config --offline set yarn-offline-mirror ${offlineCache}
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules
