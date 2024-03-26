@@ -3,7 +3,6 @@
 , buildPythonPackage
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , gtest
 , nbval
 , numpy
@@ -20,11 +19,9 @@
 , protobuf
 }:
 
-let
-  gtestStatic = gtest.override { static = true; };
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "onnx";
-  version = "1.15.0";
+  version = "1.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -33,17 +30,8 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jzga1IiUO5LN5imSUmnbsjYtapRatTihx38EOUjm9Os=";
+    hash = "sha256-mgYrY3IXUMgG/2/SjwMWAX0FneY+E8SpLDMnB9EUbF4=";
   };
-
-  patches = [
-    ./1.15.0-CVE-2024-27318.patch
-    (fetchpatch {
-      name = "CVE-2024-27319.patch";
-      url = "https://github.com/onnx/onnx/commit/08a399ba75a805b7813ab8936b91d0e274b08287.patch";
-      hash = "sha256-9X92N9i/hpQjDGe4I/C+FwUcTUTtP2Nf7+pcTA2sXoA=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,6 +52,10 @@ in buildPythonPackage rec {
     typing-extensions
   ];
 
+  checkInputs = [
+    gtest
+  ];
+
   nativeCheckInputs = [
     nbval
     parameterized
@@ -77,19 +69,12 @@ in buildPythonPackage rec {
 
     substituteInPlace setup.py \
       --replace 'setup_requires.append("pytest-runner")' ""
-
-    # prevent from fetching & building own gtest
-    substituteInPlace CMakeLists.txt \
-      --replace 'include(googletest)' ""
-    substituteInPlace cmake/unittest.cmake \
-      --replace 'googletest)' ')'
   '';
 
   preConfigure = ''
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
     # to lib64 and cmake incorrectly looks for the protobuf library in lib64
     export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
-    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a -Dgoogletest_INCLUDE_DIRS=${lib.getDev gtestStatic}/include"
     export ONNX_BUILD_TESTS=1
   '';
 
