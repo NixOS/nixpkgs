@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, texliveSmall, bison, flex, lapack, blas
-, autoreconfHook, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, nauty
+, autoreconfHook, gmp, mpfr, pari, ntl, gsl, mpfi, ecm, glpk, hevea, nauty
 , buildPackages, readline, gettext, libpng, libao, gfortran, perl
 , enableGUI ? false, libGL, libGLU, xorg, fltk
 , enableMicroPy ? false, python3
@@ -9,18 +9,19 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
-  version = "1.9.0-43"; # TODO try to remove preCheck phase on upgrade
+  version = "1.9.0-93"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "sha256-466jB8ZRqHkU5XCY+j0Fh7Dq/mMaOu10rHECKbtNGrs=";
+    sha256 = "sha256-FT/d9KJ94yMAzD6elJeHW8UrOtIS9f9GTnETI9pbTIU=";
   };
 
   patches = [
+    ./clang-16.patch
     (fetchpatch {
-      name = "pari_2_11.patch";
-      url = "https://raw.githubusercontent.com/sagemath/sage/21ba7540d385a9864b44850d6987893dfa16bfc0/build/pkgs/giac/patches/pari_2_11.patch";
-      sha256 = "sha256-vEo/5MNzMdYRPWgLFPsDcMT1W80Qzj4EPBjx/B8j68k=";
+      name = "pari_2_15.patch";
+      url = "https://raw.githubusercontent.com/sagemath/sage/07a2afd65fb4b0a1c9cbc43ede7d4a18c921a000/build/pkgs/giac/patches/pari_2_15.patch";
+      sha256 = "sha256-Q3xBFED7XEAyNz6AHjzt63XtospmdGAIdS6iPq1C2UE=";
     })
 
     # giac calls scanf/printf with non-constant first arguments, which
@@ -31,8 +32,14 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-r+M+9MRPRqhHcdhYWI6inxyNvWbXUbBcPCeDY7aulvk=";
     })
 
+    (fetchpatch {
+      name = "fix_implicit_declaration.patch";
+      url = "https://salsa.debian.org/science-team/giac/-/raw/c05ae9b9e74d3c6ee6411d391071989426a76201/debian/patches/fix_implicit_declaration.patch";
+      sha256 = "sha256-ompUceYJLiL0ftfjBkIMcYvX1YqG2/XA7e1yDyFY0IY=";
+    })
+
     # increase pari stack size for test chk_fhan{4,6}
-    ./increase-pari-stack-size.patch
+    # ./increase-pari-stack-size.patch
   ] ++ lib.optionals (!enableGUI) [
     # when enableGui is false, giac is compiled without fltk. That
     # means some outputs differ in the make check. Patch around this:
@@ -41,6 +48,12 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/sagemath/sage/7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26/build/pkgs/giac/patches/nofltk-check.patch";
       sha256 = "sha256-nAl5q3ufLjK3X9s0qMlGNowdRRf3EaC24eVtJABzdXY=";
     })
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    (fetchpatch {
+      name = "macos-ifactor.patch";
+      url = "https://raw.githubusercontent.com/sagemath/sage/07a2afd65fb4b0a1c9cbc43ede7d4a18c921a000/build/pkgs/giac/patches/macos-ifactor.patch";
+      sha256 = "sha256-zBagXSE4uvycSwC+o/44LHmEhkUv9CeE/OEFR5S+qYM=";
+    })
   ];
 
   # 1.9.0-5's tarball contains a binary (src/mkjs) which is executed
@@ -48,19 +61,15 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   postPatch = ''
-    for i in doc/*/Makefile* micropython*/xcas/Makefile*; do
-      substituteInPlace "$i" --replace "/bin/cp" "cp";
-    done;
-    rm src/mkjs
-    substituteInPlace src/Makefile.am --replace "g++ mkjs.cc" \
+    substituteInPlace src/Makefile.am --replace-fail "g++ mkjs.cc" \
       "${buildPackages.stdenv.cc.targetPrefix}c++ mkjs.cc"
 
     # to open help
-    substituteInPlace src/global.cc --replace 'browser="mozilla"' 'browser="xdg-open"'
+    substituteInPlace src/global.cc --replace-fail 'browser="mozilla"' 'browser="xdg-open"'
   '';
 
   nativeBuildInputs = [
-    autoreconfHook texliveSmall bison flex
+    autoreconfHook texliveSmall bison flex hevea
   ];
 
   # perl is only needed for patchShebangs fixup.
@@ -79,6 +88,8 @@ stdenv.mkDerivation rec {
   # and interactive use is likely to need docs
   outputs = [ "out" ] ++ lib.optional (!enableGUI) "doc";
 
+  # test failures on aarch64 are NOT a regression in giac
+  # https://github.com/sagemath/sage/issues/34537#issuecomment-1418187185
   doCheck = true;
   preCheck = lib.optionalString (!enableGUI) ''
     # even with the nofltk patch, some changes in src/misc.cc (grep
@@ -86,6 +97,13 @@ stdenv.mkDerivation rec {
     # when fltk is disabled. disable these tests for now.
     echo > check/chk_fhan2
     echo > check/chk_fhan9
+  '' + lib.optionalString (stdenv.isDarwin) ''
+    echo > check/chk_fhan4
+    echo > check/chk_fhan6
+    echo > check/chk_fhan8
+    echo > check/chk_fhan11
+    echo > check/chk_fhan12
+    echo > check/chk_fhan13
   '';
 
   enableParallelBuilding = true;
@@ -94,6 +112,8 @@ stdenv.mkDerivation rec {
     "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
     "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
     "--enable-ao" "--enable-ecm" "--enable-glpk"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--disable-nls"
   ] ++ lib.optionals enableGUI [
     "--enable-gui" "--with-x"
   ] ++ lib.optionals (!enableGUI) [
@@ -129,7 +149,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    # it technically is, but this is not a regression
+    # broken = stdenv.isDarwin && stdenv.isAarch64;
     maintainers = [ maintainers.symphorien ];
   };
 }

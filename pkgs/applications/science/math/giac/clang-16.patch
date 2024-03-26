@@ -1,0 +1,1669 @@
+diff --git a/intl/plural.c b/intl/plural.c
+index 78a223d..2a6dc9f 100644
+--- a/intl/plural.c
++++ b/intl/plural.c
+@@ -406,7 +406,7 @@ union yyalloc
+ #   define YYCOPY(To, From, Count)		\
+       do					\
+ 	{					\
+-	  register YYSIZE_T yyi;		\
++	  YYSIZE_T yyi;		\
+ 	  for (yyi = 0; yyi < (Count); yyi++)	\
+ 	    (To)[yyi] = (From)[yyi];		\
+ 	}					\
+@@ -572,7 +572,7 @@ yystrlen (yystr)
+      const char *yystr;
+ #   endif
+ {
+-  register const char *yys = yystr;
++  const char *yys = yystr;
+ 
+   while (*yys++ != '\0')
+     continue;
+@@ -597,8 +597,8 @@ yystpcpy (yydest, yysrc)
+      const char *yysrc;
+ #   endif
+ {
+-  register char *yyd = yydest;
+-  register const char *yys = yysrc;
++  char *yyd = yydest;
++  const char *yys = yysrc;
+ 
+   while ((*yyd++ = *yys++) != '\0')
+     continue;
+@@ -680,8 +680,8 @@ yyparse (YYPARSE_PARAM_ARG)
+   YY_DECL_VARIABLES
+ #endif  /* !YYPURE */
+ 
+-  register int yystate;
+-  register int yyn;
++  int yystate;
++  int yyn;
+   int yyresult;
+   /* Number of tokens to shift before error messages enabled.  */
+   int yyerrstatus;
+@@ -699,12 +699,12 @@ yyparse (YYPARSE_PARAM_ARG)
+   /* The state stack. */
+   short	yyssa[YYINITDEPTH];
+   short *yyss = yyssa;
+-  register short *yyssp;
++  short *yyssp;
+ 
+   /* The semantic value stack.  */
+   YYSTYPE yyvsa[YYINITDEPTH];
+   YYSTYPE *yyvs = yyvsa;
+-  register YYSTYPE *yyvsp;
++  YYSTYPE *yyvsp;
+ 
+ #if YYLSP_NEEDED
+   /* The location stack.  */
+diff --git a/micropython-1.12/fx/gccollect.c b/micropython-1.12/fx/gccollect.c
+index 074e910..b42208d 100644
+--- a/micropython-1.12/fx/gccollect.c
++++ b/micropython-1.12/fx/gccollect.c
+@@ -43,12 +43,12 @@
+ typedef mp_uint_t regs_t[6];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long rbx asm ("rbx");
+-    register long rbp asm ("rbp");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long rbx asm ("rbx");
++    long rbp asm ("rbp");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -76,10 +76,10 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[4];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long ebx asm ("ebx");
+-    register long esi asm ("esi");
+-    register long edi asm ("edi");
+-    register long ebp asm ("ebp");
++    long ebx asm ("ebx");
++    long esi asm ("esi");
++    long edi asm ("edi");
++    long ebp asm ("ebp");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -103,16 +103,16 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[10];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long r4 asm ("r4");
+-    register long r5 asm ("r5");
+-    register long r6 asm ("r6");
+-    register long r7 asm ("r7");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
++    long r4 asm ("r4");
++    long r5 asm ("r5");
++    long r6 asm ("r6");
++    long r7 asm ("r7");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
+     arr[0] = r4;
+     arr[1] = r5;
+     arr[2] = r6;
+@@ -131,14 +131,14 @@ typedef mp_uint_t regs_t[8];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+   // printf("get_reg sh3\n");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+     arr[0] = r8;
+     arr[1] = r9;
+     arr[2] = r10;
+diff --git a/micropython-1.12/hp39/gccollect.c b/micropython-1.12/hp39/gccollect.c
+index 4ce1568..fcda88f 100644
+--- a/micropython-1.12/hp39/gccollect.c
++++ b/micropython-1.12/hp39/gccollect.c
+@@ -43,12 +43,12 @@
+ typedef mp_uint_t regs_t[6];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long rbx asm ("rbx");
+-    register long rbp asm ("rbp");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long rbx asm ("rbx");
++    long rbp asm ("rbp");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -76,10 +76,10 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[4];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long ebx asm ("ebx");
+-    register long esi asm ("esi");
+-    register long edi asm ("edi");
+-    register long ebp asm ("ebp");
++    long ebx asm ("ebx");
++    long esi asm ("esi");
++    long edi asm ("edi");
++    long ebp asm ("ebp");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -103,16 +103,16 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[10];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long r4 asm ("r4");
+-    register long r5 asm ("r5");
+-    register long r6 asm ("r6");
+-    register long r7 asm ("r7");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
++    long r4 asm ("r4");
++    long r5 asm ("r5");
++    long r6 asm ("r6");
++    long r7 asm ("r7");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
+     arr[0] = r4;
+     arr[1] = r5;
+     arr[2] = r6;
+diff --git a/micropython-1.12/nspire/gccollect.c b/micropython-1.12/nspire/gccollect.c
+index 4ce1568..fcda88f 100644
+--- a/micropython-1.12/nspire/gccollect.c
++++ b/micropython-1.12/nspire/gccollect.c
+@@ -43,12 +43,12 @@
+ typedef mp_uint_t regs_t[6];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long rbx asm ("rbx");
+-    register long rbp asm ("rbp");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long rbx asm ("rbx");
++    long rbp asm ("rbp");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -76,10 +76,10 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[4];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long ebx asm ("ebx");
+-    register long esi asm ("esi");
+-    register long edi asm ("edi");
+-    register long ebp asm ("ebp");
++    long ebx asm ("ebx");
++    long esi asm ("esi");
++    long edi asm ("edi");
++    long ebp asm ("ebp");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -103,16 +103,16 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[10];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long r4 asm ("r4");
+-    register long r5 asm ("r5");
+-    register long r6 asm ("r6");
+-    register long r7 asm ("r7");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
++    long r4 asm ("r4");
++    long r5 asm ("r5");
++    long r6 asm ("r6");
++    long r7 asm ("r7");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
+     arr[0] = r4;
+     arr[1] = r5;
+     arr[2] = r6;
+diff --git a/micropython-1.12/numworks/gccollect.c b/micropython-1.12/numworks/gccollect.c
+index 4ce1568..fcda88f 100644
+--- a/micropython-1.12/numworks/gccollect.c
++++ b/micropython-1.12/numworks/gccollect.c
+@@ -43,12 +43,12 @@
+ typedef mp_uint_t regs_t[6];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long rbx asm ("rbx");
+-    register long rbp asm ("rbp");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long rbx asm ("rbx");
++    long rbp asm ("rbp");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -76,10 +76,10 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[4];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long ebx asm ("ebx");
+-    register long esi asm ("esi");
+-    register long edi asm ("edi");
+-    register long ebp asm ("ebp");
++    long ebx asm ("ebx");
++    long esi asm ("esi");
++    long edi asm ("edi");
++    long ebp asm ("ebp");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -103,16 +103,16 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[10];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long r4 asm ("r4");
+-    register long r5 asm ("r5");
+-    register long r6 asm ("r6");
+-    register long r7 asm ("r7");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
++    long r4 asm ("r4");
++    long r5 asm ("r5");
++    long r6 asm ("r6");
++    long r7 asm ("r7");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
+     arr[0] = r4;
+     arr[1] = r5;
+     arr[2] = r6;
+diff --git a/micropython-1.12/ports/unix/gccollect.c b/micropython-1.12/ports/unix/gccollect.c
+index ddc2d92..6c11eba 100644
+--- a/micropython-1.12/ports/unix/gccollect.c
++++ b/micropython-1.12/ports/unix/gccollect.c
+@@ -43,12 +43,12 @@
+ typedef mp_uint_t regs_t[6];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long rbx asm ("rbx");
+-    register long rbp asm ("rbp");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long rbx asm ("rbx");
++    long rbp asm ("rbp");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -76,10 +76,10 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[4];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long ebx asm ("ebx");
+-    register long esi asm ("esi");
+-    register long edi asm ("edi");
+-    register long ebp asm ("ebp");
++    long ebx asm ("ebx");
++    long esi asm ("esi");
++    long edi asm ("edi");
++    long ebp asm ("ebp");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -103,16 +103,16 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[10];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long r4 asm ("r4");
+-    register long r5 asm ("r5");
+-    register long r6 asm ("r6");
+-    register long r7 asm ("r7");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
++    long r4 asm ("r4");
++    long r5 asm ("r5");
++    long r6 asm ("r6");
++    long r7 asm ("r7");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
+     arr[0] = r4;
+     arr[1] = r5;
+     arr[2] = r6;
+diff --git a/micropython-1.12/unix/gccollect.c b/micropython-1.12/unix/gccollect.c
+index 02f6fc9..c0457c8 100644
+--- a/micropython-1.12/unix/gccollect.c
++++ b/micropython-1.12/unix/gccollect.c
+@@ -43,12 +43,12 @@
+ typedef mp_uint_t regs_t[6];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long rbx asm ("rbx");
+-    register long rbp asm ("rbp");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long rbx asm ("rbx");
++    long rbp asm ("rbp");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -76,10 +76,10 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[4];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long ebx asm ("ebx");
+-    register long esi asm ("esi");
+-    register long edi asm ("edi");
+-    register long ebp asm ("ebp");
++    long ebx asm ("ebx");
++    long esi asm ("esi");
++    long edi asm ("edi");
++    long ebp asm ("ebp");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -103,16 +103,16 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[10];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long r4 asm ("r4");
+-    register long r5 asm ("r5");
+-    register long r6 asm ("r6");
+-    register long r7 asm ("r7");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
++    long r4 asm ("r4");
++    long r5 asm ("r5");
++    long r6 asm ("r6");
++    long r7 asm ("r7");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
+     arr[0] = r4;
+     arr[1] = r5;
+     arr[2] = r6;
+diff --git a/micropython-1.12/xcas/gccollect.c b/micropython-1.12/xcas/gccollect.c
+index 4ce1568..fcda88f 100644
+--- a/micropython-1.12/xcas/gccollect.c
++++ b/micropython-1.12/xcas/gccollect.c
+@@ -43,12 +43,12 @@
+ typedef mp_uint_t regs_t[6];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long rbx asm ("rbx");
+-    register long rbp asm ("rbp");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
+-    register long r14 asm ("r14");
+-    register long r15 asm ("r15");
++    long rbx asm ("rbx");
++    long rbp asm ("rbp");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
++    long r14 asm ("r14");
++    long r15 asm ("r15");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -76,10 +76,10 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[4];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long ebx asm ("ebx");
+-    register long esi asm ("esi");
+-    register long edi asm ("edi");
+-    register long ebp asm ("ebp");
++    long ebx asm ("ebx");
++    long esi asm ("esi");
++    long edi asm ("edi");
++    long ebp asm ("ebp");
+ #ifdef __clang__
+     // TODO:
+     // This is dirty workaround for Clang. It tries to get around
+@@ -103,16 +103,16 @@ STATIC void gc_helper_get_regs(regs_t arr) {
+ typedef mp_uint_t regs_t[10];
+ 
+ STATIC void gc_helper_get_regs(regs_t arr) {
+-    register long r4 asm ("r4");
+-    register long r5 asm ("r5");
+-    register long r6 asm ("r6");
+-    register long r7 asm ("r7");
+-    register long r8 asm ("r8");
+-    register long r9 asm ("r9");
+-    register long r10 asm ("r10");
+-    register long r11 asm ("r11");
+-    register long r12 asm ("r12");
+-    register long r13 asm ("r13");
++    long r4 asm ("r4");
++    long r5 asm ("r5");
++    long r6 asm ("r6");
++    long r7 asm ("r7");
++    long r8 asm ("r8");
++    long r9 asm ("r9");
++    long r10 asm ("r10");
++    long r11 asm ("r11");
++    long r12 asm ("r12");
++    long r13 asm ("r13");
+     arr[0] = r4;
+     arr[1] = r5;
+     arr[2] = r6;
+diff --git a/pariinl.h b/pariinl.h
+index e057e96..43e8bd4 100644
+--- a/pariinl.h
++++ b/pariinl.h
+@@ -46,7 +46,7 @@ ENDEXTERN
+ 
+ 
+ /* Use local variables whenever possible. */
+-#define LOCAL_HIREMAINDER  register ulong hiremainder
++#define LOCAL_HIREMAINDER ulong hiremainder
+ #define SAVE_OVERFLOW \
+      { ulong _temp_overf = overflow; \
+        extern ulong overflow; \
+@@ -365,7 +365,7 @@ cgetr(long x)
+ INLINE GEN
+ mpcopy(GEN x)
+ {
+-  register long lx = lg(x);
++  long lx = lg(x);
+   const GEN y = new_chunk(lx);
+ 
+   while (--lx >= 0) y[lx]=x[lx];
+@@ -375,7 +375,7 @@ mpcopy(GEN x)
+ INLINE GEN
+ icopy(GEN x)
+ {
+-  register long lx = lgefint(x);
++  long lx = lgefint(x);
+   const GEN y = cgeti(lx);
+ 
+   while (--lx > 0) y[lx]=x[lx];
+@@ -386,7 +386,7 @@ icopy(GEN x)
+ INLINE GEN
+ icopy_av(GEN x, GEN y)
+ {
+-  register long lx = lgefint(x);
++  long lx = lgefint(x);
+ 
+   y -= lx; while (--lx >= 0) y[lx]=x[lx];
+   return y;
+@@ -894,7 +894,7 @@ mulssmod(ulong a, ulong b, ulong c)
+ {
+   LOCAL_HIREMAINDER;
+   {
+-    register ulong x = mulll(a,b);
++    ulong x = mulll(a,b);
+ 
+     /* alter the doubleword by a multiple of c: */
+     if (hiremainder>=c) hiremainder %= c;
+diff --git a/src/Editeur.cc b/src/Editeur.cc
+index d69dce2..9739364 100644
+--- a/src/Editeur.cc
++++ b/src/Editeur.cc
+@@ -3,7 +3,6 @@
+ #include "Input.h"
+ #include "Tableur.h"
+ #include "Python.h"
+-Fl_Tabs * xcas_main_tab=0;
+ #ifdef HAVE_LIBMICROPYTHON
+ extern "C" int mp_token(const char * line);
+ #endif
+@@ -47,6 +46,7 @@ extern "C" int mp_token(const char * line);
+ #ifdef HAVE_UNISTD_H
+ #include <unistd.h>
+ #endif
++Fl_Tabs * xcas_main_tab=0;
+ 
+ using namespace std;
+ using namespace giac;
+diff --git a/src/all_global_var b/src/all_global_var
+index 7d75d73..55f4782 100644
+--- a/src/all_global_var
++++ b/src/all_global_var
+@@ -16,7 +16,7 @@ Relatif a l'evaluation du tableur
+ // File Eqw.cc
+   vector<string> completion_tab;
+ // File alg_ext.cc
+-  rootmap symbolic_rootof_list(ptr_fun(islesscomplex));
++  rootmap symbolic_rootof_list(islesscomplex);
+ // File derive.cc
+ // File desolve.cc
+   identificateur laplace_var(" s");
+diff --git a/src/cocoa.cc b/src/cocoa.cc
+index c5c391a..3d11c78 100755
+--- a/src/cocoa.cc
++++ b/src/cocoa.cc
+@@ -6248,7 +6248,7 @@ namespace giac {
+   }
+ 
+   inline void special_mod(modint2 & x,modint2 c,modint d,modint env,modint2 env2){
+-    register modint2 y=x-c*d;
++    modint2 y=x-c*d;
+     //x=y%env;
+     //if (y<0) x = y+env2; else x=y;// if y is negative make it positive by adding env^2
+     // x = y - (y>>63)*env2;
+@@ -6256,7 +6256,7 @@ namespace giac {
+   }
+ 
+   inline void special_mod(double & x,double c,modint d,modint env,double env2){
+-    register modint2 y=modint2(x-c*d);
++    modint2 y=modint2(x-c*d);
+     if (y<0) x = double(y+env2); else x=double(y);// if y is negative make it positive by adding env^2
+   }
+ 
+diff --git a/src/gausspol.cc b/src/gausspol.cc
+index 8fbd581..4cf3623 100644
+--- a/src/gausspol.cc
++++ b/src/gausspol.cc
+@@ -855,7 +855,7 @@ namespace giac {
+ 		 std::vector< monomial<gen> >::const_iterator & itb_end,
+ 		 std::vector< monomial<gen> > & new_coord,
+ 		 bool (* is_strictly_greater)( const index_m &, const index_m &),
+-		 const std::pointer_to_binary_function < const monomial<gen> &, const monomial<gen> &, bool> m_is_strictly_greater
++		 const strictly_greater_t m_is_strictly_greater
+ 	     ) {
+     if (ita==ita_end || itb==itb_end){
+       new_coord.clear();
+diff --git a/src/gausspol.h b/src/gausspol.h
+index 41a4ca8..45f17a7 100644
+--- a/src/gausspol.h
++++ b/src/gausspol.h
+@@ -93,7 +93,7 @@ namespace giac {
+ 		 std::vector< monomial<gen> >::const_iterator & itb_end,
+ 		 std::vector< monomial<gen> > & new_coord,
+ 		 bool (* is_strictly_greater)( const index_t &, const index_t &),
+-		 const std::pointer_to_binary_function < const monomial<gen> &, const monomial<gen> &, bool> m_is_greater
++		 const strictly_greater_t m_is_greater
+ 		 ) ;
+   void mulpoly(const polynome & th,const gen & fact,polynome & res);
+   polynome operator * (const polynome & th, const gen & fact) ;
+@@ -290,7 +290,7 @@ namespace giac {
+     if (it==itend)
+       return -1;
+     int t=it->g.type,tt;
+-    register int tmp;
++    int tmp;
+     for (++it;it!=itend;++it){
+       tt=it->g.type;
+       if (tt!=t)
+diff --git a/src/gen.cc b/src/gen.cc
+index c4ee3a3..96ed406 100755
+--- a/src/gen.cc
++++ b/src/gen.cc
+@@ -1125,7 +1125,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+       g.__MAPptr = new ref_gen_map;
+ #else
+-    g.__MAPptr = new ref_gen_map(ptr_fun(islesscomplexthanf));
++    g.__MAPptr = new ref_gen_map(islesscomplexthanf);
+ #endif
+ #endif
+     g.type=_MAP;
+@@ -4710,7 +4710,7 @@ namespace giac {
+       interrupted = true; ctrl_c=false;
+       return gensizeerr(gettext("Stopped by user interruption.")); 
+     }
+-    register ref_mpz_t * e;
++    ref_mpz_t * e;
+     switch ( t ) {
+     case _ZINT__ZINT:
+       e =new ref_mpz_t;
+@@ -4920,14 +4920,14 @@ namespace giac {
+   }
+ 
+   gen operator_plus (const gen & a,const gen & b,GIAC_CONTEXT){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return((longlong) a.val+b.val);
+     return operator_plus(a,b,t,contextptr);
+   }
+ 
+   gen operator + (const gen & a,const gen & b){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return ((longlong) a.val+b.val);
+     return operator_plus(a,b,t,context0);
+@@ -5508,7 +5508,7 @@ namespace giac {
+       interrupted = true; ctrl_c=false;
+       return gensizeerr(gettext("Stopped by user interruption.")); 
+     }      
+-    register ref_mpz_t * e;
++    ref_mpz_t * e;
+     switch ( t) {
+     case _ZINT__ZINT:
+       e = new ref_mpz_t;
+@@ -5654,14 +5654,14 @@ namespace giac {
+   }
+ 
+   gen operator_minus (const gen & a,const gen & b,GIAC_CONTEXT){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return((longlong) a.val-b.val);
+     return operator_minus(a,b,t,contextptr);
+   }
+ 
+   gen operator - (const gen & a,const gen & b){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return((longlong) a.val-b.val);
+     return operator_minus(a,b,t,context0);
+@@ -5990,7 +5990,7 @@ namespace giac {
+ 
+   // a*b -> tmp, modifies tmp in place
+   void type_operator_times(const gen & a,const gen &b,gen & tmp){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+ #if !defined(EMCC) && !defined(EMCC2)
+     if (tmp.type==_DOUBLE_ && t==_DOUBLE___DOUBLE_){
+ #ifdef DOUBLEVAL
+@@ -6003,7 +6003,7 @@ namespace giac {
+     }
+ #endif
+     if (!t && tmp.type==_INT_ ){
+-      register longlong ab=longlong(a.val)*b.val;
++      longlong ab=longlong(a.val)*b.val;
+       tmp.val=(int)ab;
+ #if 1
+       if (ab>>31)
+@@ -6054,7 +6054,7 @@ namespace giac {
+   }
+ 
+   void type_operator_plus_times(const gen & a,const gen & b,gen & c){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+ #if !defined(EMCC) && !defined(EMCC2)
+     if (c.type==_DOUBLE_ && t==_DOUBLE___DOUBLE_){
+ #ifdef DOUBLEVAL
+@@ -6134,7 +6134,7 @@ namespace giac {
+   }
+ 
+   void type_operator_minus_times(const gen & a,const gen & b,gen & c){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+ #if !defined(EMCC) && !defined(EMCC2)
+     if (c.type==_DOUBLE_ && t==_DOUBLE___DOUBLE_){
+ #ifdef DOUBLEVAL
+@@ -6257,7 +6257,7 @@ namespace giac {
+       interrupted = true; ctrl_c=false;
+       return gensizeerr(gettext("Stopped by user interruption.")); 
+     }
+-    register ref_mpz_t * e;
++    ref_mpz_t * e;
+     switch (t) {
+     case _ZINT__ZINT:
+       e=new ref_mpz_t(GIAC_MPZ_INIT_SIZE); // ((mpz_size(*b._ZINTptr)+mpz_size(*b._ZINTptr))*mp_bits_per_limb);
+@@ -6648,14 +6648,14 @@ namespace giac {
+   }
+ 
+   gen operator_times(const gen & a,const gen & b,GIAC_CONTEXT){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return gen((longlong) a.val*b.val);
+     return operator_times(a,b,t,contextptr);
+   }
+ 
+   gen operator * (const gen & a,const gen & b){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return gen((longlong) a.val*b.val);
+     return operator_times(a,b,t,context0);
+@@ -11230,7 +11230,7 @@ namespace giac {
+ 
+   gen irem(const gen & a,const gen & b,gen & q){
+     ref_mpz_t * rem;
+-    register int r;
++    int r;
+     switch ( (a.type<< _DECALAGE) | b.type ) {
+     case _INT___INT_: 
+       if (!b.val)
+@@ -12383,7 +12383,7 @@ namespace giac {
+ 	return 0;
+       vecteur v;
+       v.reserve(itend-it+1);
+-      register const gen * f;
++      const gen * f;
+       for (;it!=itend;){
+ 	for (--itend;itend!=it;--itend)
+ 	  v.push_back(*itend);
+diff --git a/src/gen.h b/src/gen.h
+index 92f10f4..fd21fb8 100644
+--- a/src/gen.h
++++ b/src/gen.h
+@@ -443,7 +443,7 @@ namespace giac {
+   };
+   typedef std::map<gen,gen,comparegen> gen_map;
+ #else
+-  typedef std::map<gen,gen,const std::pointer_to_binary_function < const gen &, const gen &, bool> > gen_map;
++  typedef std::map<gen,gen,const strictly_greater_t> gen_map;
+ #endif
+   struct ref_gen_map;
+ 
+@@ -765,7 +765,7 @@ namespace giac {
+     
+ #else // SMARTPTR64
+     gen & operator = (const gen & a){
+-      register unsigned t=(type << _DECALAGE) | a.type;
++      unsigned t=(type << _DECALAGE) | a.type;
+       if (!t){
+ 	subtype=a.subtype;
+ 	val=a.val;
+@@ -902,7 +902,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+     ref_gen_map(): ref_count(1),m() {}
+ #else
+-    ref_gen_map(const std::pointer_to_binary_function < const gen &, const gen &, bool> & p): ref_count(1),m(p) {}
++	ref_gen_map(const strictly_greater_t & p): ref_count(1),m(p) {}
+ #endif
+     ref_gen_map(const gen_map & M):ref_count(1),m(M) {}
+   };
+diff --git a/src/icas.cc b/src/icas.cc
+index a5e3711..44ec905 100644
+--- a/src/icas.cc
++++ b/src/icas.cc
+@@ -2166,11 +2166,13 @@ int main(int ARGC, char *ARGV[]){
+ 	printf("%s\n","Running ./xcas");
+ 	continue;
+       }
++#ifdef HAVE_LIBFLTK
+       if (s=="xcas"){
+ 	giac::gen ge; std::string filename;
+ 	xcas::fltk_view(0,ge,"session.xws",filename,5,contextptr);
+ 	continue;
+       }
++#endif
+       if (s=="giac"){
+ 	python_compat(python_compat(contextptr)&3,contextptr);
+ 	printf("%s\n","Switching to giac interpreter");
+@@ -2251,7 +2253,9 @@ int main(int ARGC, char *ARGV[]){
+ #else
+       start=clock();
+ #endif
++#ifdef HAVE_LIBFLTK
+       xcas::icas_eval(gq,ge,reading_file,filename,contextptr);
++#endif
+ #ifdef __APPLE_
+       startc=clock()-startc;
+ #endif
+@@ -2265,9 +2269,11 @@ int main(int ARGC, char *ARGV[]){
+       // 2-d plot?
+       int graph_output=graph_output_type(ge);
+       if (reading_file>=2 || graph_output || (giac::ckmatrix(ge,true) &&ge.subtype==giac::_SPREAD__VECT) ){
++#ifdef HAVE_LIBFLTK
+ 	if (xcas::fltk_view(gq,ge,"",filename,reading_file,contextptr))
+ 	  cout << "Done";
+ 	else
++#endif
+ 	  cout << "Plot cancelled or unable to plot";
+       }
+       else {
+diff --git a/src/ifactor.cc b/src/ifactor.cc
+index 2db1a7c..1fbfcd5 100644
+--- a/src/ifactor.cc
++++ b/src/ifactor.cc
+@@ -303,10 +303,10 @@ namespace giac {
+   }
+ 
+   unsigned count_ones(unsigned * tab,int C32){
+-    register unsigned r=0;
+-    register unsigned * tabend=tab+C32;
++    unsigned r=0;
++    unsigned * tabend=tab+C32;
+     for (;tab!=tabend;++tab){
+-      register unsigned u=*tab;
++      unsigned u=*tab;
+       while (u){
+ 	r += u & 1;
+ 	u >>= 1;
+@@ -587,9 +587,9 @@ namespace giac {
+   static inline void core_sieve(slicetype * slice,small_basis_t * bit,small_basis_t * bitend)  {
+     for (;bit!=bitend;++bit){
+       // first root is at bit->root1
+-      register unsigned p=bit->p;
+-      register unsigned char nbits=bit->logp;
+-      register unsigned pos=bit->root1,pos2=bit->root2;
++      unsigned p=bit->p;
++      unsigned char nbits=bit->logp;
++      unsigned pos=bit->root1,pos2=bit->root2;
+       if (pos==pos2){
+ 	for (;pos<32768; pos += p){
+ 	  slice[pos] -= nbits;
+@@ -620,11 +620,11 @@ namespace giac {
+ 
+   // return position of last prime sieved (useful when large prime hashtable is enabled
+   static inline basis_t * core_sieve(slicetype * slice,int ss,basis_t * bit,basis_t * bitend)  {
+-    register unsigned char nbits=sizeinbase2(bit->p);
++    unsigned char nbits=sizeinbase2(bit->p);
+     // int next=1 << nbits;
+     for (;bit!=bitend;++bit){
+       // first root is at bit->root1
+-      register ushort_t p=bit->p;
++      ushort_t p=bit->p;
+ #ifdef WITH_LOGP
+       nbits=bit->logp;
+ #else
+@@ -637,7 +637,7 @@ namespace giac {
+ 	next *=2;
+       }
+ #endif
+-      register unsigned pos=bit->root1,pos2=bit->root2;
++      unsigned pos=bit->root1,pos2=bit->root2;
+       if (pos==pos2){
+ 	for (;int(pos)<SLICEEND; pos += p){
+ 	  slice[pos] -= nbits;
+@@ -660,8 +660,8 @@ namespace giac {
+ #ifndef LP_TAB_SIZE
+     for (;bit!=bitend;++bit){
+       // same as above but we are sieving with primes >2^15, no need to check for nbits increase
+-      register ushort_t p=bit->p;
+-      register unsigned pos=bit->root1;
++      ushort_t p=bit->p;
++      unsigned pos=bit->root1;
+       for (;pos<ss; pos += p){
+ 	slice[pos] -= LP_BIT_LIMIT+1;
+       }
+@@ -899,9 +899,9 @@ namespace giac {
+ 	// we have modified pos_root_mod1 and pos_root_mod2 -> posss
+ 	int posss=ss-pos; // always positive
+ 	for (;basisptr!=basisend;++basisptr){
+-	  register int bi=basisptr->p;
++	  int bi=basisptr->p;
+ 	  // check if we have a root 
+-	  register int check=bi-(posss%bi); 
++	  int check=bi-(posss%bi); 
+ 	  if (check!=bi && check!=int(basisptr->root1) && check!=int(basisptr->root2))
+ 	    continue;
+ 	  if (check==bi && basisptr->root1 && basisptr->root2)
+@@ -1203,7 +1203,7 @@ namespace giac {
+   inline 
+   int modmult(int a,int b,unsigned p){
+ #ifdef _I386_
+-    register int res;
++    int res;
+     asm volatile("imull %%edx\n\t" /* a*b-> edx:eax */ 
+ 		 "idivl %%ecx\n\t" /* edx:eax div p -> quotient=eax, remainder=edx */
+ 		 :"=d"(res)
+@@ -1559,7 +1559,7 @@ namespace giac {
+       for (;small_basisptr<small_basisend;++basisptr,++small_basisptr){
+ 	small_basisptr->root1=basisptr->root1;
+ 	small_basisptr->root2=basisptr->root2;
+-	register unsigned short p =basisptr->p;
++	unsigned short p =basisptr->p;
+ 	small_basisptr->p = p;
+ 	small_basisptr->logp=logp;
+ 	if (p>next){
+@@ -1589,8 +1589,8 @@ namespace giac {
+       for (;bvpos<bvposend;++basisptr,++bvpos){
+ 	// PREFETCH(basisptr+4);
+ 	// PREFETCH(bvpos+4);
+-	register unsigned p=basisptr->p;
+-	register int r=basisptr->root1-(*bvpos);
++	unsigned p=basisptr->p;
++	int r=basisptr->root1-(*bvpos);
+ 	if (r<0)
+ 	  r+=p;
+ 	basisptr->root1=r;
+@@ -1604,8 +1604,8 @@ namespace giac {
+       for (;bvpos<bvposend;++basisptr,++bvpos){
+ 	// PREFETCH(basisptr+4);
+ 	// PREFETCH(bvpos+4);
+-	register unsigned p=basisptr->p;
+-	register int r=basisptr->root1+(*bvpos);
++	unsigned p=basisptr->p;
++	int r=basisptr->root1+(*bvpos);
+ 	if (r>p)
+ 	  r-=p;
+ 	basisptr->root1=r;
+@@ -1645,9 +1645,9 @@ namespace giac {
+     if (decal0>=basis.back().p){
+       if (be<0){
+ 	for (;bvpos<bvposend;++basisptr,++bvpos){
+-	  register unsigned p=basisptr->p;
+-	  register unsigned decal = (decal0+(*bvpos))% p;
+-	  register unsigned r=basisptr->root1+decal;
++	  unsigned p=basisptr->p;
++	  unsigned decal = (decal0+(*bvpos))% p;
++	  unsigned r=basisptr->root1+decal;
+ 	  if (r>p)
+ 	    r -= p;
+ 	  basisptr->root1 = r;
+@@ -1659,9 +1659,9 @@ namespace giac {
+       }
+       else {
+ 	for (;bvpos<bvposend;++basisptr,++bvpos){
+-	  register unsigned p=basisptr->p;
+-	  register unsigned decal = (decal0-(*bvpos))% p;
+-	  register unsigned r=basisptr->root1+decal;
++	  unsigned p=basisptr->p;
++	  unsigned decal = (decal0-(*bvpos))% p;
++	  unsigned r=basisptr->root1+decal;
+ 	  if (r>p)
+ 	    r -= p;
+ 	  basisptr->root1 = r;
+@@ -1675,9 +1675,9 @@ namespace giac {
+     else 
+       { // should not be reached since Mtarget is about basis.back()
+ 	for (;bvpos<bvposend;++basisptr,++bvpos){
+-	  register unsigned p=basisptr->p;
+-	  register unsigned decal = (decal0+p-be*(*bvpos))% p;
+-	  register unsigned r=basisptr->root1+decal;
++	  unsigned p=basisptr->p;
++	  unsigned decal = (decal0+p-be*(*bvpos))% p;
++	  unsigned r=basisptr->root1+decal;
+ 	  if (r>p)
+ 	    r -= p;
+ 	  basisptr->root1 = r;
+@@ -1705,8 +1705,8 @@ namespace giac {
+       for (;bvpos<bvposend;++basisptr,++bvpos){
+ 	// PREFETCH(basisptr+4);
+ 	// PREFETCH(bvpos+4);
+-	register unsigned p=basisptr->p;
+-	register int r=basisptr->root1-(*bvpos);
++	unsigned p=basisptr->p;
++	int r=basisptr->root1-(*bvpos);
+ 	if (r<0)
+ 	  r+=p;
+ 	basisptr->root1=r;
+@@ -1720,8 +1720,8 @@ namespace giac {
+       for (;bvpos<bvposend;++basisptr,++bvpos){
+ 	// PREFETCH(basisptr+4);
+ 	// PREFETCH(bvpos+4);
+-	register unsigned p=basisptr->p;
+-	register int r=basisptr->root1+(*bvpos);
++	unsigned p=basisptr->p;
++	int r=basisptr->root1+(*bvpos);
+ 	if (r>int(p))
+ 	  r-=p;
+ 	basisptr->root1=r;
+@@ -1803,7 +1803,7 @@ namespace giac {
+ 	  continue;
+ 	}
+ #ifdef _I386_
+-	register int q=M;
++	int q=M;
+ 	addmultmod(q,bmodp+sqrtm,inva,p);
+ 	basisptr->root1=q;
+ 	q=M;
+@@ -1832,7 +1832,7 @@ namespace giac {
+ 	  int bjj=bvalues[j].val;
+ 	  vector<ushort_t>::const_iterator invait=Inva.begin();
+ 	  for (basisptr=&basis.front();basisptr<basisend;++invait,++bainv2ptr,++basisptr){
+-	    register int r=(bjj*longlong(2*(*invait))) % basisptr->p;
++	    int r=(bjj*longlong(2*(*invait))) % basisptr->p;
+ 	    if (r<0)
+ 	      r += basisptr->p;
+ 	    *bainv2ptr=r;
+@@ -1845,7 +1845,7 @@ namespace giac {
+ 	  mpz_t & bz=*bvalues[j]._ZINTptr;
+ 	  vector<ushort_t>::const_iterator invait=Inva.begin();
+ 	  for (basisptr=&basis.front();basisptr<basisend;++invait,++bainv2ptr,++basisptr){
+-	    register int p=basisptr->p;
++	    int p=basisptr->p;
+ 	    *bainv2ptr=((modulo(bz,p))*longlong(2*(*invait))) % p;
+ 	  }
+ 	}
+@@ -2537,8 +2537,8 @@ namespace giac {
+ 	      unsigned endpos=nslices*slicesize;
+ 	      lp_tab_t * ptr=&lp_map[0]+k*nslices;
+ 	      for (;bit!=bitend;++bit){
+-		register ushort_t p=bit->p;
+-		register unsigned pos=bit->root1;
++		ushort_t p=bit->p;
++		unsigned pos=bit->root1;
+ 		for (;pos<endpos; pos += p){
+ 		  (ptr+(pos >> LP_TAB_SIZE))->push_back(lp_entry_t((pos & LP_MASK),p));
+ 		}
+@@ -2562,8 +2562,8 @@ namespace giac {
+ 	      basis_t * basisptr=&basis[0]+lp_basis_pos;
+ 	      if (be>0){
+ 		for (;bvpos<bvposend;++basisptr,++bvpos){
+-		  register unsigned p=basisptr->p;
+-		  register int r=basisptr->root1-(*bvpos);
++		  unsigned p=basisptr->p;
++		  int r=basisptr->root1-(*bvpos);
+ 		  if (r<0)
+ 		    r+=p;
+ 		  basisptr->root1=r;
+@@ -2575,8 +2575,8 @@ namespace giac {
+ 	      }
+ 	      else {
+ 		for (;bvpos<bvposend;++basisptr,++bvpos){
+-		  register unsigned p=basisptr->p;
+-		  register int r=basisptr->root1+(*bvpos);
++		  unsigned p=basisptr->p;
++		  int r=basisptr->root1+(*bvpos);
+ 		  if (r>int(p))
+ 		    r-=p;
+ 		  basisptr->root1=r;
+@@ -2599,8 +2599,8 @@ namespace giac {
+ 	  basis_t * bit=&basis[0]+lp_basis_pos, * bitend=&basis[0]+bs;
+ 	  unsigned endpos=nslices*slicesize;
+ 	  for (;bit!=bitend;++bit){
+-	    register ushort_t p=bit->p;
+-	    register unsigned pos=bit->root1;
++	    ushort_t p=bit->p;
++	    unsigned pos=bit->root1;
+ 	    for (;pos<endpos; pos += p){
+ 	      lp_map[pos >> LP_TAB_SIZE].push_back(lp_entry_t((pos & LP_MASK),p));
+ 	    }
+diff --git a/src/lex_yy.c b/src/lex_yy.c
+index 717517d..bc831ad 100644
+--- a/src/lex_yy.c
++++ b/src/lex_yy.c
+@@ -2693,9 +2693,9 @@ extern int itex2MML_yylex (void);
+  */
+ YY_DECL
+ {
+-	register yy_state_type yy_current_state;
+-	register char *yy_cp, *yy_bp;
+-	register int yy_act;
++	yy_state_type yy_current_state;
++	char *yy_cp, *yy_bp;
++	int yy_act;
+     
+ #line 43 "itex2MML.l"
+ 
+@@ -2753,7 +2753,7 @@ YY_DECL
+ yy_match:
+ 		do
+ 			{
+-			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
++			YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
+ 			if ( yy_accept[yy_current_state] )
+ 				{
+ 				(yy_last_accepting_state) = yy_current_state;
+@@ -5751,9 +5751,9 @@ case YY_STATE_EOF(RAISEBOX2):
+  */
+ static int yy_get_next_buffer (void)
+ {
+-    	register char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
+-	register char *source = (yytext_ptr);
+-	register int number_to_move, i;
++    char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
++	char *source = (yytext_ptr);
++	int number_to_move, i;
+ 	int ret_val;
+ 
+ 	if ( (yy_c_buf_p) > &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars) + 1] )
+@@ -5885,14 +5885,14 @@ static int yy_get_next_buffer (void)
+ 
+     static yy_state_type yy_get_previous_state (void)
+ {
+-	register yy_state_type yy_current_state;
+-	register char *yy_cp;
++	yy_state_type yy_current_state;
++	char *yy_cp;
+     
+ 	yy_current_state = (yy_start);
+ 
+ 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
+ 		{
+-		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
++		YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+ 		if ( yy_accept[yy_current_state] )
+ 			{
+ 			(yy_last_accepting_state) = yy_current_state;
+@@ -5917,10 +5917,10 @@ static int yy_get_next_buffer (void)
+  */
+     static yy_state_type yy_try_NUL_trans  (yy_state_type yy_current_state )
+ {
+-	register int yy_is_jam;
+-    	register char *yy_cp = (yy_c_buf_p);
++	int yy_is_jam;
++    char *yy_cp = (yy_c_buf_p);
+ 
+-	register YY_CHAR yy_c = 1;
++	YY_CHAR yy_c = 1;
+ 	if ( yy_accept[yy_current_state] )
+ 		{
+ 		(yy_last_accepting_state) = yy_current_state;
+@@ -5938,9 +5938,9 @@ static int yy_get_next_buffer (void)
+ 	return yy_is_jam ? 0 : yy_current_state;
+ }
+ 
+-    static void yyunput (int c, register char * yy_bp )
++    static void yyunput (int c, char * yy_bp )
+ {
+-	register char *yy_cp;
++	char *yy_cp;
+     
+     yy_cp = (yy_c_buf_p);
+ 
+@@ -5950,10 +5950,10 @@ static int yy_get_next_buffer (void)
+ 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
+ 		{ /* need to shift things up to make room */
+ 		/* +2 for EOB chars. */
+-		register int number_to_move = (yy_n_chars) + 2;
+-		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
++		int number_to_move = (yy_n_chars) + 2;
++		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
+ 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
+-		register char *source =
++		char *source =
+ 				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
+ 
+ 		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
+@@ -6566,7 +6566,7 @@ int itex2MML_yylex_destroy  (void)
+ #ifndef yytext_ptr
+ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
+ {
+-	register int i;
++	int i;
+ 	for ( i = 0; i < n; ++i )
+ 		s1[i] = s2[i];
+ }
+@@ -6575,7 +6575,7 @@ static void yy_flex_strncpy (char* s1, yyconst char * s2, int n )
+ #ifdef YY_NEED_STRLEN
+ static int yy_flex_strlen (yyconst char * s )
+ {
+-	register int n;
++	int n;
+ 	for ( n = 0; s[n]; ++n )
+ 		;
+ 
+diff --git a/src/maple.cc b/src/maple.cc
+index a957347..16278b3 100755
+--- a/src/maple.cc
++++ b/src/maple.cc
+@@ -3603,7 +3603,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+     gen_map m;
+ #else
+-    gen_map m(ptr_fun(islessthanf));
++    gen_map m(islessthanf);
+ #endif
+     int s=int(args.size());
+     vector<int> indexbegin,indexsize;
+diff --git a/src/misc.cc b/src/misc.cc
+index d5d8b24..b8a2c6d 100755
+--- a/src/misc.cc
++++ b/src/misc.cc
+@@ -6056,10 +6056,10 @@ static define_unary_function_eval (__spline,&_spline,_spline_s);
+   define_unary_function_ptr5( at_spline ,alias_at_spline,&__spline,0,true);
+ 
+   gen giac_bitand(const gen & a,const gen & b){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return( a.val & b.val);
+-    register ref_mpz_t * e;
++    ref_mpz_t * e;
+     switch ( t ) {
+     case _ZINT__ZINT:
+       e = new ref_mpz_t;
+@@ -6079,10 +6079,10 @@ static define_unary_function_eval (__spline,&_spline,_spline_s);
+     return symbolic(at_bitand,gen(makevecteur(a,b),_SEQ__VECT));
+   }
+   gen giac_bitor(const gen & a,const gen & b){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return( a.val | b.val);
+-    register ref_mpz_t * e;
++    ref_mpz_t * e;
+     switch ( t ) {
+     case _ZINT__ZINT:
+       e = new ref_mpz_t;
+@@ -6102,10 +6102,10 @@ static define_unary_function_eval (__spline,&_spline,_spline_s);
+     return symbolic(at_bitor,gen(makevecteur(a,b),_SEQ__VECT));
+   }
+   gen giac_bitxor(const gen & a,const gen & b){
+-    register unsigned t=(a.type<< _DECALAGE) | b.type;
++    unsigned t=(a.type<< _DECALAGE) | b.type;
+     if (!t)
+       return( a.val ^ b.val);
+-    register ref_mpz_t * e;
++    ref_mpz_t * e;
+     switch ( t ) {
+     case _ZINT__ZINT:
+       e = new ref_mpz_t;
+diff --git a/src/monomial.h b/src/monomial.h
+index 6e606d0..cdee1a3 100644
+--- a/src/monomial.h
++++ b/src/monomial.h
+@@ -290,6 +290,9 @@ namespace giac {
+       return s;
+     }
+   };
++
++  using strictly_greater_t = std::function<bool(const monomial<gen> &, const monomial<gen> &)>;
++  using m_strictly_greater_t = std::function<bool(const index_m &,const index_m &)>;
+   
+   // ordering monomials using index ordering
+   template <class T>
+@@ -338,9 +341,9 @@ namespace giac {
+ 
+   template<class T> class sort_helper {
+   public:
+-    std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> strictly_greater ;
+-    sort_helper(const std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> is_strictly_greater):strictly_greater(is_strictly_greater) {};
+-    sort_helper():strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) {};
++	strictly_greater_t strictly_greater ;
++	sort_helper(const strictly_greater_t is_strictly_greater):strictly_greater(is_strictly_greater) {};
++	sort_helper():strictly_greater(m_lex_is_strictly_greater<T>) {};
+     bool operator () (const monomial<T> & a, const monomial<T> & b){ return strictly_greater(a,b);}
+   };
+ 
+@@ -503,8 +506,6 @@ namespace giac {
+     return res ;
+   }
+ 
+-  typedef bool (* m_strictly_greater_t)(const index_m &,const index_m &);
+-
+   template <class T>
+   void Add ( typename std::vector< monomial<T> >::const_iterator & a,
+ 	     typename std::vector< monomial<T> >::const_iterator & a_end,
+@@ -677,7 +678,7 @@ namespace giac {
+ 	     typename std::vector< monomial<T> >::const_iterator & itb_end,
+ 	     std::vector< monomial<T> > & new_coord,
+ 	     bool (* is_strictly_greater)( const index_m &, const index_m &),
+-	     const std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> m_is_strictly_greater
++		 const strictly_greater_t m_is_strictly_greater
+ 	     ) {
+     if (ita==ita_end || itb==itb_end){
+       new_coord.clear();
+@@ -726,8 +727,8 @@ namespace giac {
+ #endif
+ #ifndef NSPIRE
+     /* other algorithm using a map to avoid reserving too much space */
+-    typedef std::map< index_t,T,const std::pointer_to_binary_function < const index_m &, const index_m &, bool> > application;
+-    application produit(std::ptr_fun(is_strictly_greater));
++    typedef std::map< index_t,T,const m_strictly_greater_t> application;
++    application produit(is_strictly_greater);
+     // typedef std::map<index_t,T> application;
+     // application produit;
+     index_t somme(ita->index.size());
+@@ -848,7 +849,7 @@ namespace giac {
+     typename std::vector< monomial<T> >::const_iterator a=v.begin(), a_end=v.end();
+     typename std::vector< monomial<T> >::const_iterator b=w.begin(), b_end=w.end();
+     std::vector< monomial<T> > res;
+-    Mul(a,a_end,b,b_end,res,i_lex_is_strictly_greater,std::ptr_fun< const monomial<T> &, const monomial<T> &, bool >((m_lex_is_strictly_greater<T>)));
++    Mul(a,a_end,b,b_end,res,i_lex_is_strictly_greater,m_lex_is_strictly_greater<T>);
+     return res ;
+   }
+ 
+@@ -856,7 +857,7 @@ namespace giac {
+   std::vector< monomial<T> > & operator *= (std::vector< monomial<T> > & v,const std::vector< monomial<T> > & w){
+     typename std::vector< monomial<T> >::const_iterator a=v.begin(), a_end=v.end();
+     typename std::vector< monomial<T> >::const_iterator b=w.begin(), b_end=w.end();
+-    Mul(a,a_end,b,b_end,v,i_lex_is_strictly_greater,std::ptr_fun< const monomial<T> &, const monomial<T> &, bool >((m_lex_is_strictly_greater<T>)));
++    Mul(a,a_end,b,b_end,v,i_lex_is_strictly_greater,m_lex_is_strictly_greater<T>);
+     return v;
+   }
+ 
+diff --git a/src/plot.cc b/src/plot.cc
+index 58541d7..4ea5731 100755
+--- a/src/plot.cc
++++ b/src/plot.cc
+@@ -11842,7 +11842,7 @@ static vecteur densityscale(double xmin,double xmax,double ymin,double ymax,doub
+ #if 1 // def NSPIRE
+     gen_map m;
+ #else
+-    gen_map m(ptr_fun(islesscomplexthanf));
++    gen_map m(islesscomplexthanf);
+ #endif
+     int taille;
+     is >> taille;
+diff --git a/src/poly.h b/src/poly.h
+index 7d64e2c..5b0cc50 100644
+--- a/src/poly.h
++++ b/src/poly.h
+@@ -40,23 +40,23 @@ namespace giac {
+     // T zero;
+     // functional object sorting function for monomial ordering
+     bool (* is_strictly_greater)( const index_m &, const index_m &);
+-    std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> m_is_strictly_greater ;
++	strictly_greater_t m_is_strictly_greater ;
+     // constructors
+     tensor(const tensor<T> & t) : dim(t.dim), coord(t.coord), is_strictly_greater(t.is_strictly_greater), m_is_strictly_greater(t.m_is_strictly_greater) { }
+     tensor(const tensor<T> & t, const std::vector< monomial<T> > & v) : dim(t.dim), coord(v), is_strictly_greater(t.is_strictly_greater), m_is_strictly_greater(t.m_is_strictly_greater) { }
+     // warning: this constructor prohibits construction of tensor from a value
+     // of type T if this value is an int, except by using tensor<T>(T(int))
+-    tensor() : dim(0), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { }
+-    explicit tensor(int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { }
++    tensor() : dim(0), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) { }
++    explicit tensor(int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) { }
+     explicit tensor(int d,const tensor<T> & t) : dim(d),is_strictly_greater(t.is_strictly_greater), m_is_strictly_greater(t.m_is_strictly_greater)  { }
+-    tensor(const monomial<T> & v) : dim(int(v.index.size())), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { 
++    tensor(const monomial<T> & v) : dim(int(v.index.size())), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) { 
+       coord.push_back(v);
+     }
+-    tensor(const T & v, int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) {
++    tensor(const T & v, int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) {
+       if (!is_zero(v))
+ 	coord.push_back(monomial<T>(v,0,d));
+     }
+-    tensor(int d,const std::vector< monomial<T> > & c) : dim(d), coord(c), is_strictly_greater(i_lex_is_strictly_greater),m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { }
++    tensor(int d,const std::vector< monomial<T> > & c) : dim(d), coord(c), is_strictly_greater(i_lex_is_strictly_greater),m_is_strictly_greater(m_lex_is_strictly_greater<T>) { }
+     ~tensor() { coord.clear(); }
+     // member functions
+     // ordering monomials in the tensor
+@@ -519,10 +519,10 @@ namespace giac {
+   template <class T>
+   void lexsort(std::vector < monomial<T> > & v){
+ #if 1 // def NSPIRE
+-    sort_helper<T> M(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>));
++	sort_helper<T> M(m_lex_is_strictly_greater<T>);
+     sort(v.begin(),v.end(),M);
+ #else
+-    sort(v.begin(),v.end(),std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>));
++    sort(v.begin(),v.end(),m_lex_is_strictly_greater<T>);
+ #endif
+   }
+ 
+diff --git a/src/solve.cc b/src/solve.cc
+index c06f152..271723f 100755
+--- a/src/solve.cc
++++ b/src/solve.cc
+@@ -8622,39 +8622,39 @@ namespace giac {
+     switch (order.val){
+     case _PLEX_ORDER: 
+       p.is_strictly_greater=i_lex_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_lex_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_lex_is_strictly_greater<gen>;
+       break;
+     case _REVLEX_ORDER: 
+       p.is_strictly_greater=i_total_revlex_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_total_revlex_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_total_revlex_is_strictly_greater<gen>;
+       break;
+     case _TDEG_ORDER:
+       p.is_strictly_greater=i_total_lex_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_total_lex_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_total_lex_is_strictly_greater<gen>;
+       break;
+     case _3VAR_ORDER:
+       p.is_strictly_greater=i_3var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_3var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_3var_is_strictly_greater<gen>;
+       break;      
+     case _7VAR_ORDER:
+       p.is_strictly_greater=i_7var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_7var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_7var_is_strictly_greater<gen>;
+       break;      
+     case _11VAR_ORDER:
+       p.is_strictly_greater=i_11var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_11var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_11var_is_strictly_greater<gen>;
+       break;      
+     case _16VAR_ORDER:
+       p.is_strictly_greater=i_16var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_16var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_16var_is_strictly_greater<gen>;
+       break;      
+     case _32VAR_ORDER:
+       p.is_strictly_greater=i_32var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_32var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_32var_is_strictly_greater<gen>;
+       break;      
+     case _64VAR_ORDER:
+       p.is_strictly_greater=i_64var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_64var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_64var_is_strictly_greater<gen>;
+       break;      
+     }
+     p.tsort();
+diff --git a/src/sparse.cc b/src/sparse.cc
+index d1ad9ee..3d4c2e6 100644
+--- a/src/sparse.cc
++++ b/src/sparse.cc
+@@ -1058,7 +1058,7 @@ namespace giac {
+     double res=0;
+     std::vector<giac_double>::const_iterator it=v.begin(),itend=v.end();
+     for (;it!=itend;++it){
+-      register double tmp=*it;
++      double tmp=*it;
+       res+=tmp*tmp;
+     }
+     return std::sqrt(res);
+diff --git a/src/threaded.cc b/src/threaded.cc
+index 54cd668..6b54a45 100755
+--- a/src/threaded.cc
++++ b/src/threaded.cc
+@@ -773,16 +773,16 @@ mpz_class smod(const mpz_class & a,int reduce){
+ 	ucur=it->u;
+ 	uend=(ucur/var)*var;
+ 	if (ucur==uend){
+-	  register int g=smod(it->g,modulo);
++	  int g=smod(it->g,modulo);
+ 	  if (g!=0)
+ 	    px.push_back(T_unsigned<int,hashgcd_U>(g,uend));
+ 	  ++it;
+ 	  continue;
+ 	}
+-	register int nterms = (ucur-uend)/var2;
++	int nterms = (ucur-uend)/var2;
+ 	if (nterms<itend-it && (it+nterms)->u==uend){
+ 	  it += nterms;
+-	  register int g=smod(it->g,modulo);
++	  int g=smod(it->g,modulo);
+ 	  if (g!=0)
+ 	    px.push_back(T_unsigned<int,hashgcd_U>(g,uend));
+ 	  ++it;
+@@ -791,7 +791,7 @@ mpz_class smod(const mpz_class & a,int reduce){
+ 	for (++it;it!=itend;++it){
+ 	  if (it->u<=uend){
+ 	    if (it->u==uend){
+-	      register int g=smod(it->g,modulo);
++	      int g=smod(it->g,modulo);
+ 	      if (g!=0)
+ 		px.push_back(T_unsigned<int,hashgcd_U>(g,uend));
+ 	      ++it;
+@@ -1624,7 +1624,7 @@ mpz_class smod(const mpz_class & a,int reduce){
+ 	res = (res*longlong(alpha)+*it)%modulo;
+       }
+     }
+-    register int tmp=res+res;
++    int tmp=res+res;
+     if (tmp>modulo)
+       return res-modulo;
+     if (tmp<=-modulo)
+@@ -5107,7 +5107,7 @@ mpz_class smod(const mpz_class & a,int reduce){
+ 	  ++it;
+ 	  continue;
+ 	}
+-	register int nterms = (ucur-uend)/var2;
++	int nterms = (ucur-uend)/var2;
+ 	if (nterms<itend-it && (it+nterms)->u==uend){
+ 	  it += nterms;
+ 	  const vector<int> & g=smod(it->g,modulo);
+diff --git a/src/threaded.h b/src/threaded.h
+index e06a51f..1422d41 100755
+--- a/src/threaded.h
++++ b/src/threaded.h
+@@ -1300,7 +1300,7 @@ namespace giac {
+     unsigned childindex=2,holeindex=0;
+     while (childindex<size){
+       // find largest child until end of tab
+-      register T * ptr=tab+childindex;
++      T * ptr=tab+childindex;
+       if (*ptr<*(ptr-1)){
+ 	--childindex;
+ 	--ptr;
+@@ -2724,7 +2724,7 @@ namespace giac {
+       // find maincoeff of b
+       std::vector< T_unsigned<T,U> > lcoeffb;
+       for (cit=b.begin(),citend=b.end();cit!=citend;++cit){
+-	register U u=cit->u;
++	U u=cit->u;
+ 	if (rstop>u)
+ 	  break;
+ 	lcoeffb.push_back(T_unsigned<T,U>(cit->g,u-rstop));
+@@ -2793,7 +2793,7 @@ namespace giac {
+ 	  if (!is_zero(reduce)){
+ 	    for (it2=quo.begin(),it2end=quo.end();it2!=it2end;++it2){
+ 	      u=u1+it2->u;
+-	      register int deg = int(u >> mainvar); // deg=deg1+it2->u/mainvar;
++	      int deg = int(u >> mainvar); // deg=deg1+it2->u/mainvar;
+ 	      if (deg<rdeg){
+ 		type_operator_plus_times_reduce(g1,it2->g,rem[u],reduce); 
+ 	      }
+@@ -2802,7 +2802,7 @@ namespace giac {
+ 	  else {
+ 	    for (it2=quo.begin(),it2end=quo.end();it2!=it2end;++it2){
+ 	      u=u1+it2->u;
+-	      register int deg=int(u >> mainvar);
++	      int deg=int(u >> mainvar);
+ 	      if (deg<rdeg){
+ 		type_operator_plus_times(g1,it2->g,rem[u]);	      
+ 	      }
+@@ -3238,7 +3238,7 @@ namespace giac {
+     // find maincoeff of b
+     std::vector< T_unsigned<T,U> > lcoeffb;
+     for (cit=b.begin(),citend=b.end();cit!=citend;++cit){
+-      register U u=cit->u;
++      U u=cit->u;
+       if (rstop>u)
+ 	break;
+       lcoeffb.push_back(T_unsigned<T,U>(cit->g,u-rstop));
+@@ -3333,7 +3333,7 @@ namespace giac {
+ 	if (!is_zero(reduce)){
+ 	  for (it2=quo.begin(),it2end=quo.end();it2!=it2end;++it2){
+ 	    u=u1+it2->u;
+-	    register int deg = int(u >> mainvar); // deg=deg1+it2->u/mainvar;
++	    int deg = int(u >> mainvar); // deg=deg1+it2->u/mainvar;
+ 	    if (deg<rdeg){
+ 	      hashptr = &produit[deg];
+ 	      prod_it=hashptr->find(u);
+@@ -3352,7 +3352,7 @@ namespace giac {
+ 	else {
+ 	  for (it2=quo.begin(),it2end=quo.end();it2!=it2end;++it2){
+ 	    u=u1+it2->u;
+-	    register int deg=int(u >> mainvar);
++	    int deg=int(u >> mainvar);
+ 	    if (deg<rdeg){
+ 	      hashptr = &produit[deg];
+ 	      prod_it=hashptr->find(u);
+diff --git a/src/usual.cc b/src/usual.cc
+index f9c8138..f7270db 100755
+--- a/src/usual.cc
++++ b/src/usual.cc
+@@ -5950,7 +5950,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+     gen_map m;
+ #else
+-    gen_map m(ptr_fun(islesscomplexthanf));
++    gen_map m(islesscomplexthanf);
+ #endif
+     for (;it!=itend;++it){
+       if (is_equal(*it) || it->is_symb_of_sommet(at_deuxpoints)){
+diff --git a/src/vecteur.cc b/src/vecteur.cc
+index 1fda0e2..c917d8d 100644
+--- a/src/vecteur.cc
++++ b/src/vecteur.cc
+@@ -18258,7 +18258,7 @@ namespace giac {
+ 	*vprimek += wj0*(*H0jk);
+       }
+       for (;H0jk!=H0jkend;++wk,++vprimek,++H0jk){
+-	register giac_double tmp0=(*H0jk);
++	giac_double tmp0=(*H0jk);
+ 	*vprimek += wj0*tmp0;
+ 	res += tmp0*(*wk);
+       }
+diff --git a/src/vector.h b/src/vector.h
+index 80cf0ff..b11b26e 100644
+--- a/src/vector.h
++++ b/src/vector.h
+@@ -10,7 +10,7 @@
+ 
+ namespace std {
+ 
+-  // inline void swapptr(void * & a,void * & b){ register void * c=a; a=b; b=c; }
++  // inline void swapptr(void * & a,void * & b){ void * c=a; a=b; b=c; }
+   inline unsigned _abs(int i){ return i>=0?(i==immvector_max?0:i):-i;}
+   inline int nextpow2(int n){
+     if (n>=16){

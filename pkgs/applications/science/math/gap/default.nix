@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , makeWrapper
 , readline
@@ -66,12 +67,20 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.12.2";
+  version = "4.13.0";
 
   src = fetchurl {
     url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
-    sha256 = "sha256-ZyMIdF63iiIklO6N1nhu3VvDMUVvzGRWrAZL2yjVh6g=";
+    sha256 = "sha256-zHbsvjPWcZRQpZPmE/uH6eQkf6qHb2Mt0Pl8OY+SJl0=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gap-system/gap/commit/203cc919b529fb05b8bec1bfa9f331667d5953fa.diff";
+      excludes = [ ".gitignore" ];
+      hash = "sha256-Xtjh6qR5hwvNKq1AVKFtH1Hili85h1mWO0bypZjNzjA=";
+    })
+  ];
 
   # remove all non-essential packages (which take up a lot of space)
   preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''

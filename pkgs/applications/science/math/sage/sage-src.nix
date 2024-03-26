@@ -68,6 +68,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/a0c56816b051e97da44ac0a4e4d4f6915cf7fa0f.diff";
       sha256 = "sha256-WGMmPeBoj2LUC+2qxWuaJL89QUuGt6axGvxWkpM9LYg=";
     })
+    (fetchpatch {
+      name = "clang-16.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/sagemath/sage/pull/37646.diff";
+      sha256 = "sha256-5OE4cizys0foMQ9Xg/tL6QYO9EEqTG0HaSPz/h53sK0=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

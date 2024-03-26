@@ -39,7 +39,6 @@
 , ecm
 , lcalc
 , rubiks
-, flintqs
 , blas
 , lapack
 , flint3
@@ -93,7 +92,6 @@ let
     ecm
     lcalc
     rubiks
-    flintqs
     jdk # only needed for `jmol` which may be replaced in the future
     less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
   ]
@@ -186,7 +184,7 @@ writeTextFile rec {
     export SAGE_EXTCODE='${sagelib.src}/src/sage/ext_data'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular giac]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular giac gap]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 } // { # equivalent of `passthru`, which `writeTextFile` doesn't support
   lib = sagelib;
