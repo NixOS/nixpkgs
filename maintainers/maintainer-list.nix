@@ -8666,6 +8666,12 @@
     github = "j4m3s-s";
     githubId = 9413812;
   };
+  jab = {
+    name = "Joshua Bronson";
+    email = "jabronson@gmail.com";
+    github = "jab";
+    githubId = 64992;
+  };
   jacbart = {
     name = "Jack Bartlett";
     email = "jacbart@gmail.com";

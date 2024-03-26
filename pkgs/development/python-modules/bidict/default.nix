@@ -50,6 +50,6 @@ buildPythonPackage rec {
     changelog = "https://bidict.readthedocs.io/changelog.html";
     description = "The bidirectional mapping library for Python.";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    maintainers = with maintainers; [ jab jakewaksbaum ];
   };
 }
