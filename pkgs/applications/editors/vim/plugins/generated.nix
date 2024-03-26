@@ -16985,6 +16985,18 @@ final: prev:
     meta.homepage = "https://github.com/samodostal/image.nvim/";
   };
 
+  texpresso-vim = buildVimPlugin {
+    pname = "texpresso.vim";
+    version = "2024-03-08";
+    src = fetchFromGitHub {
+      owner = "let-def";
+      repo = "texpresso.vim";
+      rev = "04816dcdddc27e6c50fc2a4faff0ef1675a7ee8e";
+      sha256 = "08lzl0g1b287agscd345yg9cmxsj2vlbg83s1mgsa13qn81y6jga";
+    };
+    meta.homepage = "https://github.com/let-def/texpresso.vim/";
+  };
+
   tinykeymap = buildVimPlugin {
     pname = "tinykeymap";
     version = "2024-02-17";
