@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitLab
+, nix-update-script
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xr-hardware";
@@ -19,6 +20,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installTargets = "install_package";
   installFlagsArray = "DESTDIR=${placeholder "out"}";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Hardware description for XR devices";
