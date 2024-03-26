@@ -152,7 +152,7 @@ buildGoModule rec {
     license = licenses.agpl3;
     homepage = "https://grafana.com";
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     mainProgram = "grafana-server";
   };
 }
