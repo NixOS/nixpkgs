@@ -131,7 +131,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         # Should likely use `rocmPackages.clr.gpuTargets`.
         "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
       ]
-      ++ optionals metalSupport [ (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1") ];
+      ++ optionals metalSupport [
+        (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+        (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+      ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
