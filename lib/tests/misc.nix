@@ -16,6 +16,8 @@ Alternatively, to run all `lib` tests:
 
 let
   lib = import ../default.nix;
+  # Use to test makeIncludePath
+  pkgs = import ../.. {};
 
   inherit (lib)
     allUnique
@@ -299,11 +301,10 @@ runTests {
 
   testMakeIncludePathWithPkgs = {
     expr = (makeIncludePath [
-      { dev = "/nix/store/bash"; }
-      # lib.getOutput "dev" return out if "dev" is not found
-      { out = "/nix/store/openssl"; }
+      pkgs.openssl
+      pkgs.zlib
     ]);
-    expected = "/nix/store/bash/include:/nix/store/openssl/include";
+    expected = "${pkgs.openssl.dev.outPath}/include:${pkgs.zlib.dev.outPath}/include";
   };
 
   testMakeIncludePathWithEmptyList = {
