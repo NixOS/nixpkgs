@@ -1,27 +1,23 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-# propagated
-, httpx
-, pydantic
-, typing-extensions
 , anyio
+, buildPythonPackage
+, dirty-equals
 , distro
-, sniffio
-, cached-property
-, tqdm
-# optional
+, fetchFromGitHub
+, hatchling
+, httpx
 , numpy
 , pandas
 , pandas-stubs
-# tests
-, pytestCheckHook
+, pydantic
 , pytest-asyncio
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
 , respx
-, dirty-equals
+, sniffio
+, tqdm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -29,7 +25,7 @@ buildPythonPackage rec {
   version = "1.14.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7.1";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openai";
@@ -38,20 +34,18 @@ buildPythonPackage rec {
     hash = "sha256-d2alP0jcpExYezSrxhT/2Dr7hylJBqNfvrXh3+MFa34=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    httpx
-    pydantic
-    typing-extensions
+  dependencies = [
     anyio
     distro
+    httpx
+    pydantic
     sniffio
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
+    typing-extensions
   ];
 
   passthru.optional-dependencies = {
@@ -62,20 +56,16 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "openai"
-  ];
-
   nativeCheckInputs = [
-    pytestCheckHook
+    dirty-equals
     pytest-asyncio
     pytest-mock
+    pytestCheckHook
     respx
-    dirty-equals
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+  pythonImportsCheck = [
+    "openai"
   ];
 
   disabledTests = [
@@ -94,10 +84,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client library for the OpenAI API";
-    mainProgram = "openai";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
+    mainProgram = "openai";
   };
 }
