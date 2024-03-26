@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "https://github.com/let-def/texpresso";
+    inherit (src.meta) homepage;
     description = "Live rendering and error reporting for LaTeX.";
     maintainers = with lib.maintainers; [ nickhu ];
     license = lib.licenses.mit;
