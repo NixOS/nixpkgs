@@ -212,7 +212,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
-    platforms = [platform];
+    platforms = [ platform ];
     mainProgram = "brave";
   };
 }
