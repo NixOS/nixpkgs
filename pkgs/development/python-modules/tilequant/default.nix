@@ -7,7 +7,7 @@
 , pythonRelaxDepsHook
 , pillow
 , sortedcollections
-, setuptools_dso
+, setuptools-dso
 }:
 
 buildPythonPackage rec {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     ordered-set
     pillow
     sortedcollections
-    setuptools_dso
+    setuptools-dso
   ];
 
   doCheck = false; # there are no tests
