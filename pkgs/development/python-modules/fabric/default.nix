@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pythonic remote execution";
+    mainProgram = "fab";
     homepage = "https://www.fabfile.org/";
     license = licenses.bsd2;
     maintainers = [ ];

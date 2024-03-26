@@ -66,6 +66,7 @@ buildGoModule rec {
     homepage = "https://github.com/chainguard-dev/melange";
     changelog = "https://github.com/chainguard-dev/melange/blob/${src.rev}/NEWS.md";
     description = "Build APKs from source code";
+    mainProgram = "melange";
     license = licenses.asl20;
     maintainers = with maintainers; [ developer-guy ];
   };

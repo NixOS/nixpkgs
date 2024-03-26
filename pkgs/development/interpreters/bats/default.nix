@@ -210,6 +210,7 @@ resholve.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bats-core/bats-core";
     description = "Bash Automated Testing System";
+    mainProgram = "bats";
     maintainers = with maintainers; [ abathur ];
     license = licenses.mit;
     platforms = platforms.unix;

@@ -303,7 +303,7 @@ in
         type = types.listOf types.str;
         default = [ "modesetting" "fbdev" ];
         example = [
-          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nvidia"
           "amdgpu-pro"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
@@ -749,7 +749,7 @@ in
     boot.kernel.sysctl."fs.inotify.max_user_instances" = mkDefault 524288;
     boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
 
-    programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gnome3;
+    programs.gnupg.agent.pinentryPackage = lib.mkOverride 1100 pkgs.pinentry-gnome3;
 
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 

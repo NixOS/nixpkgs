@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://cfssl.org/";
     description = "Cloudflare's automated certificate management using a CFSSL CA";
+    mainProgram = "certmgr";
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ johanot srhb ];

@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand to provide various options useful for testing and continuous integration";
+    mainProgram = "cargo-hack";
     homepage = "https://github.com/taiki-e/cargo-hack";
     changelog = "https://github.com/taiki-e/cargo-hack/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Tool to control USB HID relays";
+    mainProgram = "usbrelay";
     homepage = "https://github.com/darrylb123/usbrelay";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wentasah ];

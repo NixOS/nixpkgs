@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "1.12.19";
+  version = "1.12.20";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "thebjorn";
     repo = "pydeps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3z/7pkeP6R8GsWvSaCChcf0DZPrC3KdwLeGdNm4m6Jc=";
+    hash = "sha256-d6EeeNem+HfuipKF5ZOI48c11j0ozGrBP4XlqTx+fJ4=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module dependency visualization";
+    mainProgram = "pydeps";
     homepage = "https://github.com/thebjorn/pydeps";
     changelog = "https://github.com/thebjorn/pydeps/releases/tag/v${version}";
     license = licenses.bsd2;

@@ -85,6 +85,7 @@ mavenJdk.buildMavenPackage rec {
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";
+    mainProgram = "cryptomator";
     homepage = "https://cryptomator.org";
     sourceProvenance = with sourceTypes; [
       fromSource

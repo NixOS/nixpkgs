@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-blas-libs=-lblas"
-    "--disable-optimization"
+    "--without-archnative"
   ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ library for exact, high-performance linear algebra";
+    mainProgram = "linbox-config";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

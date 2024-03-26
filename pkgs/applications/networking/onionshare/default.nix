@@ -29,12 +29,12 @@
 }:
 
 let
-  version = "2.6.1";
+  version = "2.6.2";
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-LR3Ao4Q8kEDwrFV+gYdMSEeYF4hDtEa1rJgvRRrJMwc=";
+    hash = "sha256-J8Hdriy8eWpHuMCI87a9a/zCR6xafM3A/Tkyom0Ktko=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";

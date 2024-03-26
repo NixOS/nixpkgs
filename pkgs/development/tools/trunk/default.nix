@@ -54,6 +54,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
+    mainProgram = "trunk";
     maintainers = with maintainers; [ freezeboy ];
     license = with licenses; [ asl20 ];
   };

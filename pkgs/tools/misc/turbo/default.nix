@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage rec{
 
   meta = with lib; {
     description = "High-performance build system for JavaScript and TypeScript codebases";
+    mainProgram = "turbo";
     homepage = "https://turbo.build/";
     maintainers = with maintainers; [ dlip ];
     license = licenses.mpl20;

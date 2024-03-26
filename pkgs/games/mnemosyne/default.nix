@@ -53,6 +53,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://mnemosyne-proj.org/";
     description = "Spaced-repetition software";
+    mainProgram = "mnemosyne";
     longDescription = ''
       The Mnemosyne Project has two aspects:
 

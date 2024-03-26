@@ -204,6 +204,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
 
+    phpinsights = callPackage ../development/php-packages/phpinsights { };
+
     phpmd = callPackage ../development/php-packages/phpmd { };
 
     phpspy = callPackage ../development/php-packages/phpspy { };
@@ -258,6 +260,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     imagick = callPackage ../development/php-packages/imagick { };
 
     inotify = callPackage ../development/php-packages/inotify { };
+
+    ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
 
     mailparse = callPackage ../development/php-packages/mailparse { };
 

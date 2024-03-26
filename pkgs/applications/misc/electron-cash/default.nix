@@ -82,6 +82,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A Bitcoin Cash SPV Wallet";
+    mainProgram = "electron-cash";
     longDescription = ''
       An easy-to-use Bitcoin Cash client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)

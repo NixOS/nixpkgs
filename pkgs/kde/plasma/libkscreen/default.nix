@@ -9,4 +9,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [qttools qtwayland jq];
   extraBuildInputs = [qtwayland];
+  meta.mainProgram = "kscreen-doctor";
 }

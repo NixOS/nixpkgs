@@ -9,4 +9,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [pkg-config];
   extraBuildInputs = [qtdeclarative systemd];
+  meta.mainProgram = "kjournaldbrowser";
 }

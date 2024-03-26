@@ -13,6 +13,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Required tool for Zabbix agent integrated PostgreSQL monitoring";
+    mainProgram = "postgresql";
     homepage = "https://www.zabbix.com/integrations/postgresql";
     license = licenses.asl20;
     maintainers = with maintainers; [ gador ];

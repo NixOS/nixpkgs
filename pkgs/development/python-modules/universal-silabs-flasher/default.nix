@@ -72,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/v${version}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
+    mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ hexa ];

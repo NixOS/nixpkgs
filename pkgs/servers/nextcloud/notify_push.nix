@@ -42,6 +42,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
+    mainProgram = "notify_push";
     homepage = "https://github.com/nextcloud/notify_push";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

@@ -19,6 +19,7 @@ buildPythonPackage rec {
     description = ''
       Raspberry Pi LCD library for the widely used Hitachi HD44780 controller
     '';
+    mainProgram = "rplcd-tests";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

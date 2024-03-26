@@ -156,11 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Softish fork of Mutter 43.x";
     homepage = "https://github.com/BuddiesOfBudgie/magpie";
-    license = licenses.gpl2Plus;
-    maintainers = teams.budgie.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.budgie.members;
+    platforms = lib.platforms.linux;
   };
 })

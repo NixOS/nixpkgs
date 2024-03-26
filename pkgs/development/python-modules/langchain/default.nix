@@ -185,6 +185,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Building applications with LLMs through composability";
+    mainProgram = "langchain-server";
     homepage = "https://github.com/langchain-ai/langchain";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = licenses.mit;

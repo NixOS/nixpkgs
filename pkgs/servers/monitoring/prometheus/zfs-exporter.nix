@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "ZFS Exporter for the Prometheus monitoring system";
+    mainProgram = "zfs_exporter";
     homepage = "https://github.com/pdf/zfs_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

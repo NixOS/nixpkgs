@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Modular computation tool chain library";
+    mainProgram = "mctc-convert";
     homepage = "https://github.com/grimme-lab/mctc-lib";
     license = licenses.asl20;
     platforms = platforms.linux;

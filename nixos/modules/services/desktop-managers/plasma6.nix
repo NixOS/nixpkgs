@@ -170,6 +170,7 @@ in {
         breeze.qt5
         plasma-integration.qt5
         pkgs.plasma5Packages.kwayland-integration
+        pkgs.plasma5Packages.kio
         kio-extras-kf5
       ]
       # Optional hardware support features
@@ -215,7 +216,7 @@ in {
       serif = ["Noto Serif"];
     };
 
-    programs.gnupg.agent.pinentryPackage = pkgs.pinentry-qt;
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
@@ -252,6 +253,7 @@ in {
     services.xserver.displayManager.sddm = {
       package = kdePackages.sddm;
       theme = mkDefault "breeze";
+      wayland.compositor = "kwin";
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami

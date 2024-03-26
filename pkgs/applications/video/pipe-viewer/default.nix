@@ -38,13 +38,13 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.4.9";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-7l8exCC9robe1hKnQAaIVfnn8L+FuwTOkxaxlwJmpe0=";
+    hash = "sha256-tNIAGvv3dCPd7MA27yd2AHMSgs+1D2uiJJTQgTsEVNU=";
   };
 
   nativeBuildInputs = [ makeWrapper ]

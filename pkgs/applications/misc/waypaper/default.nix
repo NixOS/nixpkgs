@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
+    mainProgram = "waypaper";
     longDescription = ''
       GUI wallpaper setter for Wayland-based window managers that works as a frontend for popular backends like swaybg and swww.
 

@@ -21,12 +21,13 @@ let
 
   meta = with lib; {
     description = "Virtual Tabletop for playing roleplaying games with remote players or face to face";
+    mainProgram = "maptool";
     homepage = "https://www.rptools.net/toolbox/maptool/";
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ rhendric ];
     platforms = [ "x86_64-linux" ];
   };

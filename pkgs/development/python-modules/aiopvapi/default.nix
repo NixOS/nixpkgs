@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "sander76";
     repo = "aio-powerview-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NfSGu4M0NWfCDc37zRwUjYtZz5jOtw3pYgF6fIsB/Yo=";
+    hash = "sha256-nJjYGPxpnbq/8XFmLKbMU71buFdaNUj7PQES5FnlN3o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
   ];
 

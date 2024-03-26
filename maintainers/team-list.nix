@@ -99,6 +99,7 @@ with lib.maintainers; {
   budgie = {
     members = [
       bobby285271
+      federicoschonborn
     ];
     scope = "Maintain Budgie desktop environment";
     shortName = "Budgie";
@@ -879,6 +880,7 @@ with lib.maintainers; {
     members = [
       Madouura
       Flakebi
+      mschwaig
     ];
     githubTeams = [
       "rocm-maintainers"

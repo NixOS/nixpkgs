@@ -17,6 +17,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Formatter for text proto files";
+    mainProgram = "txtpbfmt";
     homepage = "https://github.com/protocolbuffers/txtpbfmt";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];

@@ -103,6 +103,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helps when interfacing with Ansible";
+    mainProgram = "ansible-runner";
     homepage = "https://github.com/ansible/ansible-runner";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

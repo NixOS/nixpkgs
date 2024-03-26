@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
     description = "Python CBOR (de)serializer with extensive tag support";
+    mainProgram = "cbor2";
     homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

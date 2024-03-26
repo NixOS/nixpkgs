@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 let
   cfg = config.services.prometheus.exporters.mysqld;
   inherit (lib) types mkOption mdDoc mkIf mkForce cli concatStringsSep optionalString escapeShellArgs;

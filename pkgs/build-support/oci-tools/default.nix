@@ -1,4 +1,4 @@
-{ lib, writeText, runCommand, writeReferencesToFile }:
+{ lib, writeText, runCommand, writeClosure }:
 
 {
   buildContainer =
@@ -72,7 +72,7 @@
       set -o pipefail
       mkdir -p $out/rootfs/{dev,proc,sys}
       cp ${config} $out/config.json
-      xargs tar c < ${writeReferencesToFile args} | tar -xC $out/rootfs/
+      xargs tar c < ${writeClosure args} | tar -xC $out/rootfs/
     '';
 }
 

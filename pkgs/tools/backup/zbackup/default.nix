@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A versatile deduplicating backup tool";
+    mainProgram = "zbackup";
     homepage = "http://zbackup.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;

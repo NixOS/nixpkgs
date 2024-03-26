@@ -20,6 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "API Test Automation Made Simple";
+    mainProgram = "karate";
     longDescription = ''
       Karate is the only open-source tool to combine API
       test-automation, mocks, performance-testing and even UI

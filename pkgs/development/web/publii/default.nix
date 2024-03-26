@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Static Site CMS with GUI to build privacy-focused SEO-friendly website.";
+    mainProgram = "Publii";
     longDescription = ''
       Creating a website doesn't have to be complicated or expensive. With Publii, the most
       intuitive static site CMS, you can create a beautiful, safe, and privacy-friendly website

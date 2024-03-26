@@ -157,6 +157,10 @@ let
       repo = "tree-sitter-sql";
       branch = "gh-pages";
     };
+    "tree-sitter-talon" = {
+      orga = "wenkokke";
+      repo = "tree-sitter-talon";
+    };
     "tree-sitter-typst" = {
       orga = "uben0";
       repo = "tree-sitter-typst";
@@ -412,6 +416,10 @@ let
     "tree-sitter-gleam" = {
       orga = "gleam-lang";
       repo = "tree-sitter-gleam";
+    };
+    "tree-sitter-koka" = {
+      orga = "mtoohey31";
+      repo = "tree-sitter-koka";
     };
   };
 

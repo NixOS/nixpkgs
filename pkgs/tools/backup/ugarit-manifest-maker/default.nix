@@ -24,6 +24,7 @@ in with pkgs; eggDerivation rec {
   meta = with lib; {
     homepage = "https://www.kitten-technologies.co.uk/project/ugarit-manifest-maker/";
     description = "A tool for generating import manifests for Ugarit";
+    mainProgram = "ugarit-manifest-maker";
     license = licenses.bsd3;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;

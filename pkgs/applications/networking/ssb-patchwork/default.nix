@@ -46,7 +46,7 @@ in
         sea-slang for gossip - a scuttlebutt is basically a watercooler on a ship.
       '';
       homepage = "https://www.scuttlebutt.nz/";
-      license = licenses.agpl3;
+      license = licenses.agpl3Only;
       maintainers = with maintainers; [ asymmetric picnoir cyplo ];
       mainProgram = "ssb-patchwork";
       platforms = [ "x86_64-linux" ];

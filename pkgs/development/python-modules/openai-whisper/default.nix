@@ -78,6 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
+    mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa MayNiklas ];

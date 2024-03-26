@@ -54,6 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generic modularized configuration file manager";
+    mainProgram = "update-dotdee";
     homepage = "https://github.com/xolox/python-update-dotdee";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

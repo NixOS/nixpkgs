@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "trimental";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dDGTy5WOCyeWYfemVtv+YswNyHSqDL4C7MbHsKgRwLk=";
+    hash = "sha256-kZQREYnauR8xusyX6enBPUKHSe39aBLlrZjKEjJlfx0=";
   };
 
-  cargoHash = "sha256-GDy7/FooHD77X5dZmlLX+isRKr2WjadKPKyVD55M9ZE=";
+  cargoHash = "sha256-2mQFr2nLJ/iBLpdOUmerY6F2C8Kt+/vMEjS6THpmJic=";
 
   nativeBuildInputs = [
     installShellFiles

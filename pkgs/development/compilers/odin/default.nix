@@ -71,6 +71,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A fast, concise, readable, pragmatic and open sourced programming language";
+    mainProgram = "odin";
     homepage = "https://odin-lang.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ luc65r astavie znaniye ];

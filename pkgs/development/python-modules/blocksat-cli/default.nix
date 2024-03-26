@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Blockstream Satellite CLI";
+    mainProgram = "blocksat-cli";
     homepage = "https://github.com/Blockstream/satellite";
     changelog = "https://github.com/Blockstream/satellite/releases/tag/v${version}";
     license = licenses.gpl3Only;

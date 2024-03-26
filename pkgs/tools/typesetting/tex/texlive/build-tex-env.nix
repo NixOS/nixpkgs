@@ -172,7 +172,6 @@ let
 
   # emulate split output derivation
   splitOutputs = {
-    out = out // { outputSpecified = true; };
     texmfdist = texmfdist // { outputSpecified = true; };
     texmfroot = texmfroot // { outputSpecified = true; };
   } // (lib.genAttrs pkgList.nonEnvOutputs (outName: (buildEnv {
@@ -186,9 +185,9 @@ let
     inherit meta passthru;
   }).overrideAttrs { outputs = [ outName ]; } // { outputSpecified = true; }));
 
-  passthru = lib.optionalAttrs (! __combine) (splitOutputs // {
-    all = builtins.attrValues splitOutputs;
-  }) // {
+  passthru = {
+    # these are not part of pkgList.nonEnvOutputs and must be exported in passthru
+    inherit (splitOutputs) texmfdist texmfroot;
     # This is set primarily to help find-tarballs.nix to do its job
     requiredTeXPackages = builtins.filter lib.isDerivation (pkgList.bin ++ pkgList.nonbin
       ++ lib.optionals (! __fromCombineWrapper)
@@ -378,7 +377,7 @@ let
     if [[ -e "$out/bin/mtxrun" ]]; then
       mv "$out"/bin/mtxrun.lua{,.orig}
       substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua "$out"/bin/mtxrun.lua \
-        --replace 'randomseed(math.initialseed)' "randomseed($SOURCE_DATE_EPOCH)"
+        --replace-fail 'randomseed(math.initialseed)' "randomseed($SOURCE_DATE_EPOCH)"
     fi
   '' +
   # texlive postactions (see TeXLive::TLUtils::_do_postaction_script)
@@ -409,7 +408,7 @@ let
     # note that calling faketime and fmtutil is fragile (faketime uses LD_PRELOAD, fmtutil calls /bin/sh, causing potential glibc issues on non-NixOS)
     # so we patch fmtutil to use faketime, rather than calling faketime fmtutil
     substitute "$TEXMFDIST"/scripts/texlive/fmtutil.pl fmtutil \
-      --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
+      --replace-fail 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
     FORCE_SOURCE_DATE=1 TZ= perl fmtutil --sys --all | grep '^fmtutil' # too verbose
 
     # Disable unavailable map files

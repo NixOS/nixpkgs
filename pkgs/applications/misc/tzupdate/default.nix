@@ -16,6 +16,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Update timezone information based on geoip";
+    mainProgram = "tzupdate";
     homepage = "https://github.com/cdown/tzupdate";
     maintainers = [ maintainers.michaelpj ];
     license = licenses.unlicense;

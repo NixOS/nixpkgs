@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.3.0";
+  version = "2024.3.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2430,6 +2430,7 @@
     "joaoapps_join" = ps: with ps; [
     ]; # missing inputs: python-join-api
     "juicenet" = ps: with ps; [
+      python-juicenet
     ];
     "justnimbus" = ps: with ps; [
       justnimbus
@@ -4025,12 +4026,13 @@
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+      aioraven
       fnv-hash-fast
       psutil-home-assistant
       pyserial
       pyudev
       sqlalchemy
-    ]; # missing inputs: aioraven
+    ];
     "rainmachine" = ps: with ps; [
       regenmaschine
     ];
@@ -6395,6 +6397,7 @@
     "radiotherm"
     "rainbird"
     "rainforest_eagle"
+    "rainforest_raven"
     "rainmachine"
     "random"
     "rapt_ble"

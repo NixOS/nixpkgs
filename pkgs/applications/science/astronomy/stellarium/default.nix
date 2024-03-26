@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta =  {
     description = "Free open-source planetarium";
+    mainProgram = "stellarium";
     homepage = "https://stellarium.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Anti-vandalism tool for use on MediaWiki-based projects";
+    mainProgram = "huggle";
     homepage = "https://github.com/huggle/huggle3-qt-lx";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.fee1-dead ];

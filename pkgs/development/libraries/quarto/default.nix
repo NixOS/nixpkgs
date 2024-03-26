@@ -73,6 +73,7 @@ stdenv.mkDerivation (final: {
 
   meta = with lib; {
     description = "Open-source scientific and technical publishing system built on Pandoc";
+    mainProgram = "quarto";
     longDescription = ''
         Quarto is an open-source scientific and technical publishing system built on Pandoc.
         Quarto documents are authored using markdown, an easy to write plain text format.

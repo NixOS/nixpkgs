@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
 # Python deps
 , blockfrost-python
 , cachetools
@@ -41,6 +42,10 @@ in buildPythonPackage rec {
     hash = "sha256-LP/W8IC2del476fGFq10VMWwMrbAoCCcZOngA8unBM0=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = [
     blockfrost-python
     cachetools
@@ -57,6 +62,8 @@ in buildPythonPackage rec {
     typeguard
     websocket-client
   ];
+
+  pythonRelaxDeps = [ "typeguard" ];
 
   pythonImportsCheck = [ "pycardano" ];
 

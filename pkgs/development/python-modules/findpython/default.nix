@@ -15,7 +15,7 @@
 
 let
   pname = "findpython";
-  version = "0.4.1";
+  version = "0.5.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,7 +25,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-19AUVYaBs3YdV6WyNCpxOovzAvbB/J2Z+Budi9FoGwQ=";
+    hash = "sha256-UGSjA5PFLvyMajV5DDdbiwAF1vdPFykDW0tCZHNH4T0=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "A utility to find python versions on your system";
+    mainProgram = "findpython";
     homepage = "https://github.com/frostming/findpython";
     changelog = "https://github.com/frostming/findpython/releases/tag/${version}";
     license = licenses.mit;

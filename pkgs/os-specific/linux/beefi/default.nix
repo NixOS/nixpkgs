@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A small script to create bootable EFISTUB kernel images";
+    mainProgram = "beefi";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tu-maurice ];

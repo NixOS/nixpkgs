@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/v${finalAttrs.version}.html";
     license = licenses.libtiff;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
   };
 })

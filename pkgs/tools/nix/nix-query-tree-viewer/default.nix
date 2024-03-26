@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "GTK viewer for the output of `nix store --query --tree`";
+    mainProgram = "nix-query-tree-viewer";
     homepage    = "https://github.com/cdepillabout/nix-query-tree-viewer";
     license     = with licenses; [ mit ];
     maintainers = with maintainers; [ cdepillabout ];

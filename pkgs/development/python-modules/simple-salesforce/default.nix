@@ -11,12 +11,13 @@
 , requests
 , responses
 , setuptools
+, typing-extensions
 , zeep
 }:
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
-  version = "1.12.5";
+  version = "1.12.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "simple-salesforce";
     repo = "simple-salesforce";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mj7lbBGEybsEzWo4TYmPrN3mBXItdo/JomVIYmzIDAY=";
+    hash = "sha256-nrfIyXftS2X2HuuLFRZpWLz/IbRasqUzv+r/HvhxfAw=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     pendulum
     pyjwt
     requests
+    typing-extensions
     zeep
   ];
 

@@ -54,6 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library wrapping the Deconz REST API";
+    mainProgram = "pydeconz";
     homepage = "https://github.com/Kane610/deconz";
     changelog = "https://github.com/Kane610/deconz/releases/tag/v${version}";
     license = with licenses; [ mit ];

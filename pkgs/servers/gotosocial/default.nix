@@ -43,8 +43,18 @@ buildGoModule rec {
   # tests are working only on x86_64-linux
   doCheck = stdenv.isLinux && stdenv.isx86_64;
 
-  # flaky test
-  checkFlags = [ "-skip=^TestPage/minID,_maxID_and_limit_set$" ];
+  checkFlags =
+    let
+      # flaky / broken tests
+      skippedTests = [
+        # See: https://github.com/superseriousbusiness/gotosocial/issues/2651
+        "TestPage/minID,_maxID_and_limit_set"
+        # See: https://github.com/superseriousbusiness/gotosocial/pull/2760. Stop skipping
+        # this test when fixed for go 1.21.8 and above
+        "TestValidationTestSuite/TestValidateEmail"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.gotosocial = nixosTests.gotosocial;
 

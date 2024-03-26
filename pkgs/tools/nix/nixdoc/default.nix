@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Generate documentation for Nix functions";
+    mainProgram = "nixdoc";
     homepage    = "https://github.com/nix-community/nixdoc";
     license     = [ licenses.gpl3 ];
     maintainers = with maintainers; [

@@ -131,6 +131,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Swiss-army knife for multimedia streaming";
+    mainProgram = "liquidsoap";
     homepage = "https://www.liquidsoap.info/";
     maintainers = with maintainers; [ dandellion ehmry ];
     license = licenses.gpl2Plus;

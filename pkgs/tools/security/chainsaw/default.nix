@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Rapidly Search and Hunt through Windows Forensic Artefacts";
+    mainProgram = "chainsaw";
     homepage = "https://github.com/WithSecureLabs/chainsaw";
     changelog = "https://github.com/WithSecureLabs/chainsaw/releases/tag/v${version}";
     license = licenses.gpl3Only;

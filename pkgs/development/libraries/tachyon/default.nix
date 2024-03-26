@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "A Parallel / Multiprocessor Ray Tracing System";
+    mainProgram = "tachyon";
     license = lib.licenses.bsd3;
     maintainers = [lib.maintainers.raskin];
     platforms = with lib.platforms; linux ++ cygwin ++ darwin;

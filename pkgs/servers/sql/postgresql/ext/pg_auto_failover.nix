@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "PostgreSQL extension and service for automated failover and high-availability";
+    mainProgram = "pg_autoctl";
     homepage = "https://github.com/citusdata/pg_auto_failover";
     changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${version}/CHANGELOG.md";
     maintainers = [ maintainers.marsam ];

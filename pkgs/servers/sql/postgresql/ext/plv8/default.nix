@@ -4,6 +4,7 @@
 , v8
 , perl
 , postgresql
+, jitSupport
 # For test
 , runCommand
 , coreutils
@@ -138,6 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ marsam ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.postgresql;
-    broken = postgresql.jitSupport;
+    broken = jitSupport;
   };
 })

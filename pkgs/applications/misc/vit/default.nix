@@ -33,6 +33,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
+    mainProgram = "vit";
     maintainers = with maintainers; [ dtzWill arcnmx ];
     platforms = platforms.all;
     license = licenses.mit;

@@ -38,6 +38,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "A build tool that compiles and packages Android app's resources";
+    mainProgram = "aapt2";
     homepage = "https://developer.android.com/tools/aapt2";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ linsui ];

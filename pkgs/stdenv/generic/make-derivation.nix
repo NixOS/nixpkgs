@@ -556,8 +556,8 @@ let
 
   meta = checkMeta.commonMeta {
     inherit validity attrs pos;
-    references = attrs.nativeBuildInputs ++ attrs.buildInputs
-              ++ attrs.propagatedNativeBuildInputs ++ attrs.propagatedBuildInputs;
+    references = attrs.nativeBuildInputs or [] ++ attrs.buildInputs or []
+              ++ attrs.propagatedNativeBuildInputs or [] ++ attrs.propagatedBuildInputs or [];
   };
   validity = checkMeta.assertValidity { inherit meta attrs; };
 

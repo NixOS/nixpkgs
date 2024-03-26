@@ -21,6 +21,7 @@ buildGoModule {
 
   meta = {
     description = "Generate type-safe code from SQL";
+    mainProgram = "sqlc";
     homepage = "https://sqlc.dev/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.adisbladis ];

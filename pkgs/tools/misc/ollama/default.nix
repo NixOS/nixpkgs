@@ -51,6 +51,11 @@ let
   rocmPath = buildEnv {
     name = "rocm-path";
     paths = [
+      rocmPackages.clr
+      rocmPackages.hipblas
+      rocmPackages.rocblas
+      rocmPackages.rocsolver
+      rocmPackages.rocsparse
       rocmPackages.rocm-device-libs
       rocmClang
     ];
@@ -63,6 +68,10 @@ let
       cudaPackages.cudatoolkit
       cudaPackages.cuda_cudart
     ];
+    postBuild = ''
+      rm "$out/lib64"
+      ln -s "lib" "$out/lib64"
+    '';
   };
 
   runtimeLibs = lib.optionals enableRocm [
@@ -132,8 +141,11 @@ goBuild ((lib.optionalAttrs enableRocm {
 
     # ollama's patches of llama.cpp's example server
     # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
-    (preparePatch "01-cache.diff" "sha256-MTTln2G0G8dntihUzEjPM1ruTsApb4ZToBczJb8EG68=")
-    (preparePatch "02-cudaleaks.diff" "sha256-Cu7E9iEcvddPL9mPPI5Z96qmwWigi3f0WgSpPRjGc88=")
+    (preparePatch "01-cache.diff" "sha256-VDwu/iK6taBCyscpndQiOJ3eGqonnLVwmS2rJNMBVGU=")
+    (preparePatch "02-cudaleaks.diff" "sha256-nxsWgrePUMsZBWWQAjqVHWMJPzr1owH1zSJvUU7Q5pA=")
+    (preparePatch "03-load_exception.diff" "sha256-1DfNahFYYxqlx4E4pwMKQpL+XR0bibYnDFGt6dCL4TM=")
+    (preparePatch "04-locale.diff" "sha256-r5nHiP6yN/rQObRu2FZIPBKpKP9yByyZ6sSI2SKj6Do=")
+    (preparePatch "05-fix-clip-free.diff" "sha256-EFZ+QTtZCvstVxYgVdFKHsQqdkL98T0eXOEBOqCrlL4=")
   ];
   postPatch = ''
     # use a patch from the nix store in the `go generate` script
@@ -157,7 +169,8 @@ goBuild ((lib.optionalAttrs enableRocm {
     # expose runtime libraries necessary to use the gpu
     mv "$out/bin/ollama" "$out/bin/.ollama-unwrapped"
     makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" \
-      --suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'
+      --suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}' '' + lib.optionalString enableRocm ''\
+      --set-default HIP_PATH ${rocmPath}
   '';
 
   ldflags = [

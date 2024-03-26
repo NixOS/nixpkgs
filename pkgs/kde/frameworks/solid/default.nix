@@ -13,4 +13,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [qttools bison flex];
   extraBuildInputs = [libimobiledevice];
+  meta.mainProgram = "solid-hardware6";
 }

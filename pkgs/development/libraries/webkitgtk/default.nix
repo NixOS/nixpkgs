@@ -235,6 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Web content rendering engine, GTK port";
+    mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     pkgConfigModules = [

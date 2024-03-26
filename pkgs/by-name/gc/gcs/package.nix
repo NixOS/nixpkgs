@@ -59,11 +59,6 @@ buildGoModule rec {
   flags = [ "-a -trimpath" ];
   ldflags = [ "-s" "-w" "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}" ];
 
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
-  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   installPhase = ''
     runHook preInstall
     install -Dm755 $GOPATH/bin/gcs -t $out/bin

@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.7.5";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "flax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NDah0ayQbiO1/sTU1DDf/crPq5oLTnSuosV7cFHlTM8=";
+    hash = "sha256-3UzMSJoKw+V1WLBJ+Zf7aF7CDNBsvWnRUfNgb3K4v1A=";
   };
 
   nativeBuildInputs = [

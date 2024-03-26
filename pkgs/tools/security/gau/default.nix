@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to fetch known URLs";
+    mainProgram = "gau";
     longDescription = ''
       getallurls (gau) fetches known URLs from various sources for any
       given domain.

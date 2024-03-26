@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ahodesuka/ahoviewer";
     description = "A GTK2 image viewer, manga reader, and booru browser";
+    mainProgram = "ahoviewer";
     maintainers = with maintainers; [ xzfc ];
     license = licenses.mit;
     # Unintentionally not working on Darwin:

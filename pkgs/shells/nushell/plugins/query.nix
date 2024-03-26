@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "A Nushell plugin to query JSON, XML, and various web data";
+    mainProgram = "nu_plugin_query";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_query";
     license = licenses.mpl20;
     maintainers = with maintainers; [ happysalada aidalgol ];

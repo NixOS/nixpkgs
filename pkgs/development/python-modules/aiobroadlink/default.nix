@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module to control various Broadlink devices";
+    mainProgram = "aiobroadlink";
     homepage = "https://github.com/frawau/aiobroadlink";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

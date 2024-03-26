@@ -61,6 +61,7 @@ in stdenv.mkDerivation rec {
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
       -i sys/unix/hints/linux
     sed \
+      -e 's,^#WANT_WIN_CURSES=1$,WANT_WIN_CURSES=1,' \
       -e 's,^CC=.*$,CC=${stdenv.cc.targetPrefix}cc,' \
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
@@ -99,7 +100,8 @@ in stdenv.mkDerivation rec {
     popd
   '';
 
-  enableParallelBuilding = true;
+  # https://github.com/NixOS/nixpkgs/issues/294751
+  enableParallelBuilding = false;
 
   preFixup = lib.optionalString qtMode ''
     wrapQtApp "$out/games/nethack"

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , fetchYarnDeps
 , yarn
 , prefetch-yarn-deps
@@ -45,6 +46,11 @@ in stdenv.mkDerivation rec {
     ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
+    (fetchpatch {
+      name = "adtraction-fallback.patch";
+      url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/3575.patch";
+      hash = "sha256-XhYYLQf/oSX3uK+0KzfnAb49iaGwhl9W64Tg2Fqi8Gg=";
+    })
   ];
 
   postPatch = ''

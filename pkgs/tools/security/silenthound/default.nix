@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "silenthound";
-  version = "unstable-2022-09-02";
+  version = "0-unstable-2022-12-14";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "layer8secure";
     repo = "SilentHound";
-    rev = "44d361f6c95b79bd848603c8050af86db3d072b0";
-    hash = "sha256-6JcU6FIE+9fsMawI1RSNQyx9ubjxmchEKmeg6/kmI4s=";
+    rev = "f04746aaca29e377c8badcbd6d8f6584deb9e919";
+    hash = "sha256-alTgo8/aqwERt/JC4W3KodAdyfNZyG3XqCp3z4OpS68=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -36,8 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to enumerate an Active Directory Domain";
     homepage = "https://github.com/layer8secure/SilentHound";
-    # Unknown license, https://github.com/layer8secure/SilentHound/issues/1
-    license = licenses.unfree;
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "silenthound";
   };

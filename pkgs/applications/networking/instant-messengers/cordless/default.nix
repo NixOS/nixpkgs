@@ -18,6 +18,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/Bios-Marcel/cordless";
     description = "Discord terminal client";
+    mainProgram = "cordless";
     license = licenses.bsd3;
     maintainers = with maintainers; [ colemickens ];
   };

@@ -7,7 +7,6 @@
 , llvm
 , spirv-headers
 , spirv-tools
-, disable-warnings-if-gcc13
 }:
 
 let
@@ -42,7 +41,7 @@ let
       hash = "sha256-NoIoa20+2sH41rEnr8lsMhtfesrtdPINiXtUnxYVm8s=";
     } else throw "Incompatible LLVM version.";
 in
-disable-warnings-if-gcc13 (stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
   inherit (branch) version;
 
@@ -114,8 +113,9 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
   meta = with lib; {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    mainProgram = "llvm-spirv";
     license     = licenses.ncsa;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ gloaming ];
   };
-})
+}

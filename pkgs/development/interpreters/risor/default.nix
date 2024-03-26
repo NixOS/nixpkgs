@@ -7,17 +7,17 @@
 
 buildGoModule rec {
   pname = "risor";
-  version = "1.3.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "risor-io";
     repo = "risor";
     rev = "v${version}";
-    hash = "sha256-E4Huto3jvPziWEZqHwVBchZYDX/Tuq/TCBvoviin5UY=";
+    hash = "sha256-bGlJe61B5jMb1u81NvNMJDW+dNem6bNFT7DJYno5jCk=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-0NYvZhVkDX6WlKN4QFXyrNnEy0sjUQ1Us+iNEPIgNX0=";
+  vendorHash = "sha256-eW6eSZp5Msg/u50i1+S2KSzDws0Rq8JBY1Yxzq7/hVo=";
 
   subPackages = [
     "cmd/risor"
@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fast and flexible scripting for Go developers and DevOps";
+    mainProgram = "risor";
     homepage = "https://github.com/risor-io/risor";
     changelog = "https://github.com/risor-io/risor/releases/tag/${src.rev}";
     license = licenses.asl20;

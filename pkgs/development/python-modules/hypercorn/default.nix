@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pgjones/hypercorn";
     description = "The ASGI web server inspired by Gunicorn";
+    mainProgram = "hypercorn";
     license = licenses.mit;
     maintainers = with maintainers; [ dgliwka ];
   };

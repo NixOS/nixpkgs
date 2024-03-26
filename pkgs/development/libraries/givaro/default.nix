@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = [
-    "--disable-optimization"
+    "--without-archnative"
   ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A C++ library for arithmetic and algebraic computations";
+    mainProgram = "givaro-config";
     license = lib.licenses.cecill-b;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

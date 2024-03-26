@@ -4,8 +4,8 @@
 }:
 
 let
-  mkArgs = { pname, version, variant, rev, hash }: {
-    inherit pname version variant;
+  mkArgs = { pname, version, variant, patches ? _: [ ], rev, hash }: {
+    inherit pname version variant patches;
 
     src = {
       "mainline" = (fetchFromSavannah {
@@ -73,6 +73,27 @@ in
     variant = "mainline";
     rev = "28.2";
     hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
+    patches = fetchpatch: [
+      # CVE-2022-45939
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
+        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
+      })
+
+      # https://lists.gnu.org/archive/html/emacs-devel/2024-03/msg00611.html
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/10_all_org-macro-eval.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-OdGt4e9JGjWJPkfJhbYsmQQc6jart4BH5aIKPIbWKFs=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/11_all_untrusted-content.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-wa2bsnCt5yFx0+RAFZGBPI+OoKkbrfkkMer/KBEc/wA=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
+      })
+    ];
   });
 
   emacs29 = import ./make-emacs.nix (mkArgs {

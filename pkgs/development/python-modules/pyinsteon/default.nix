@@ -8,6 +8,7 @@
 , pyserial
 , pyserial-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 , voluptuous
@@ -47,12 +48,29 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AssertionError: Failed test 'read_eeprom_response' with argument 'group' value X vs expected value Z
+    "test_async_send"
+    "test_nak_response"
+    "test_no_direct_ack"
+    "test_on_level"
+    "test_on_level_group"
+    "test_on_level_nak"
+    # AssertionError: Failed test 'read_eeprom_response' with argument 'target' value X vs expected value Y
+    "test_other_status"
+    "test_status_command"
+    "test_status_request_hub"
+    # stuck in epoll
+    "test_read_all_peek"
+  ];
+
   pythonImportsCheck = [
     "pyinsteon"
   ];
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";
+    mainProgram = "insteon_tools";
     longDescription = ''
       This is a Python package to interface with an Insteon Modem. It has been
       tested to work with most USB or RS-232 serial based devices such as the

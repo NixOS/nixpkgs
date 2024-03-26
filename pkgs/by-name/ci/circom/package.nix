@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "zkSnark circuit compiler";
+    mainProgram = "circom";
     homepage = "https://github.com/iden3/circom";
     changelog = "https://github.com/iden3/circom/blob/${src.rev}/RELEASES.md";
     license = licenses.gpl3Only;

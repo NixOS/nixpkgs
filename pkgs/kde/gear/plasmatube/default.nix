@@ -17,4 +17,5 @@ mkKdeDerivation {
   extraPropagatedBuildInputs = [purpose];
 
   qtWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [ yt-dlp ])];
+  meta.mainProgram = "plasmatube";
 }

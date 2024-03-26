@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Manage multiple versions of your MkDocs-powered documentation";
+    mainProgram = "mike";
     homepage = "https://github.com/jimporter/mike";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];

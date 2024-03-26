@@ -10,7 +10,6 @@
 , iml
 , libpng
 , readline
-, arb
 , blas
 , boost
 , brial
@@ -18,7 +17,7 @@
 , eclib
 , ecm
 , fflas-ffpack
-, flint
+, flint3
 , gap
 , giac
 , givaro
@@ -45,6 +44,7 @@
 , singular
 , sqlite
 , symmetrica
+, conway-polynomials
 , cvxopt
 , cypari2
 , cysignals
@@ -92,6 +92,7 @@ buildPythonPackage rec {
   version = src.version;
   pname = "sagelib";
   src = sage-src;
+  pyproject = true;
 
   nativeBuildInputs = [
     iml
@@ -112,7 +113,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # native dependencies (TODO: determine which ones need to be propagated)
-    arb
     blas
     boost
     brial
@@ -120,7 +120,7 @@ buildPythonPackage rec {
     eclib
     ecm
     fflas-ffpack
-    flint
+    flint3
     gap
     giac
     givaro
@@ -149,6 +149,7 @@ buildPythonPackage rec {
     symmetrica
 
     # from src/sage/setup.cfg and requirements.txt
+    conway-polynomials
     cvxopt
     cypari2
     cysignals
@@ -202,11 +203,7 @@ buildPythonPackage rec {
     mkdir -p "$SAGE_SHARE/sage/ext/notebook-ipython"
     mkdir -p "var/lib/sage/installed"
 
-    # version lower bounds are useful, but upper bounds are a hassle because
-    # Sage tests already catch any relevant API breakage.
-    # according to the discussion at https://trac.sagemath.org/ticket/33520,
-    # upper bounds will be less noisy starting from Sage 9.6.
-    sed -i 's/, <[^, ]*//' build/pkgs/*/install-requires.txt
+    sed -i "/sage-conf/d" src/{setup.cfg,pyproject.toml,requirements.txt}
 
     cd build/pkgs/sagelib/src
   '';

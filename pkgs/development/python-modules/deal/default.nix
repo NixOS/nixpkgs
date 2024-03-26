@@ -62,6 +62,10 @@ buildPythonPackage rec {
     flake8
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTests = [
     # needs internet access
     "test_smoke_has"

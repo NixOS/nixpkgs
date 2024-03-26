@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Terminal JSON viewer";
+    mainProgram = "fx";
     homepage = "https://github.com/antonmedv/fx";
     changelog = "https://github.com/antonmedv/fx/releases/tag/${src.rev}";
     license = licenses.mit;

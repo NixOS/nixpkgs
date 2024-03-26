@@ -6,6 +6,7 @@
 , jre
 , ant
 , makeWrapper
+, stripJavaArchivesHook
 , doCheck ? true
 }:
 let
@@ -30,10 +31,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = with deps; ''
-    # Fix the output jar timestamps for reproducibility
-    substituteInPlace build.xml \
-        --replace-fail '<jar ' '<jar modificationtime="0" '
-
     # Manually create version properties file for reproducibility
     mkdir -p build/classes
     cat > build/classes/splitter-version.properties << EOF
@@ -58,7 +55,7 @@ stdenv.mkDerivation rec {
     '') testInputs}
   '';
 
-  nativeBuildInputs = [ jdk ant makeWrapper ];
+  nativeBuildInputs = [ jdk ant makeWrapper stripJavaArchivesHook ];
 
   buildPhase = ''
     runHook preBuild
