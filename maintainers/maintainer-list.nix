@@ -11735,6 +11735,12 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
+  lyonsyonii = {
+    email = "liam@garriga.dev";
+    github = "LyonSyonII";
+    githubId = 69039201;
+    name = "Liam Garriga";
+  };
   m00wl = {
     name = "Moritz Lumme";
     email = "moritz.lumme@gmail.com";
