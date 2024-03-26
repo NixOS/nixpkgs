@@ -5,7 +5,7 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) mergeAttrs warn;
+  inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
@@ -917,6 +917,22 @@ rec {
     Return the result of function f applied to the cartesian product of attribute set value combinations.
     Equivalent to using cartesianProduct followed by map.
 
+    # Inputs
+
+    `f`
+
+    : A function, given an attribute set, it returns a new value.
+
+    `attrsOfLists`
+
+    : Attribute set with attributes that are lists of values
+
+    # Type
+
+    ```
+    cartesianProduct :: (AttrSet -> a) -> AttrSet -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.attrsets.mapCartesianProduct` usage example
@@ -929,7 +945,7 @@ rec {
     :::
 
   */
-  mapCartesianProduct = f: xs: map f (cartesianProduct xs);
+  mapCartesianProduct = f: attrsOfLists: map f (cartesianProduct attrsOfLists);
 
   /**
     Utility function that creates a `{name, value}` pair as expected by `builtins.listToAttrs`.
@@ -2019,6 +2035,6 @@ rec {
     "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 
   # DEPRECATED
-  cartesianProductOfSets = warn
+  cartesianProductOfSets = warnIf (isInOldestRelease 2405)
     "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct." cartesianProduct;
 }
