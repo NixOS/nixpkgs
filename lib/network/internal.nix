@@ -1,45 +1,55 @@
 { lib }:
+let
+  inherit (lib)
+    concatStringsSep
+    elemAt
+    fold
+    foldl
+    genList
+    mod
+    range
+    reverseList
+    toInt
+    ;
+
+  pow =
+    base: exponent:
+    if exponent < 0 then
+      throw "lib.network.pow: Exponent cannot be negative."
+    else if exponent == 0 then
+      1
+    else
+      fold (x: y: y * base) base (range 2 exponent);
+in
 {
   ipv4 = rec {
     _prefixToSubnetMask =
-      prefix:
+      prefixLength:
       let
-        prefix' = lib.toInt prefix;
-        numOctets = 4;
-        octetBits = 8;
-        octetMin = 0;
-        octetMax = 255;
-        # How many initial parts of the mask are full (=255)
-        fullParts = prefix' / octetBits;
+        prefixLength' = toInt prefixLength;
       in
-      lib.concatMapStringsSep "." builtins.toString (
-        lib.genList (
-          idx:
-          # Fill up initial full parts
-          if idx < fullParts then
-            octetMax
-          # If we're above the first non-full part, fill with 0
-          else if fullParts < idx then
-            octetMin
-          # First non-full part generation
-          else
-            _genPartialMask (lib.mod prefix' octetBits)
-        ) numOctets
-      );
+      _encode ((foldl (x: y: 2 * x + 1) 0 (range 1 prefixLength')) * (pow 2 (32 - prefixLength')));
 
-    _genPartialMask = n: if n == 0 then 0 else _genPartialMask (n - 1) / 2 + 128;
+    _encode =
+      num:
+      concatStringsSep "." (
+        map (x: toString (mod (num / x) 256)) (reverseList (genList (x: pow 2 (x * 8)) 4))
+      );
 
     _verifyPrefixLength =
       splitCidr:
       if (builtins.length splitCidr) == 1 then
         "32"
       else if (builtins.length splitCidr) == 2 then
-        if lib.elemAt splitCidr 1 == "" then throw "no empty prefix" else lib.elemAt splitCidr 1
+        if elemAt splitCidr 1 == "" then
+          throw "lib.network: Got a CIDR with no prefix length."
+        else
+          elemAt splitCidr 1
       else
-        throw "bad stuff happened";
+        throw "lib.network: Could not verify prefix length.";
 
     _makeIPv4 = address: prefixLength: {
-      cidr = lib.concatStringsSep "/" [
+      cidr = concatStringsSep "/" [
         address
         prefixLength
       ];
