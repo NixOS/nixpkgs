@@ -14,20 +14,20 @@ in
         type = lib.types.bool;
         default = config.services.pipewire.enable;
         defaultText = lib.literalExpression "config.services.pipewire.enable";
-        description = lib.mdDoc "Whether to enable WirePlumber, a modular session / policy manager for PipeWire";
+        description = "Whether to enable WirePlumber, a modular session / policy manager for PipeWire";
       };
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.wireplumber;
         defaultText = lib.literalExpression "pkgs.wireplumber";
-        description = lib.mdDoc "The WirePlumber derivation to use.";
+        description = "The WirePlumber derivation to use.";
       };
 
       configPackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of packages that provide WirePlumber configuration, in the form of
           `share/wireplumber/*/*.lua` files.
 
@@ -40,7 +40,7 @@ in
         type = lib.types.listOf lib.types.package;
         default = [];
         example = lib.literalExpression "[ pkgs.lsp-plugins ]";
-        description = lib.mdDoc ''
+        description = ''
           List of packages that provide LV2 plugins in `lib/lv2` that should
           be made available to WirePlumber for [filter chains][wiki-filter-chain].
 
