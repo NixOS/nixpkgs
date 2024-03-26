@@ -302,7 +302,7 @@ def update_plugins():
             compatibility_spec = repo.get_file('.discourse-compatibility', repo.latest_commit_sha)
             versions = [(DiscourseVersion(discourse_version), plugin_rev.strip(' '))
                         for [discourse_version, plugin_rev]
-                        in [line.split(':')
+                        in [line.lstrip("< ").split(':')
                             for line
                             in compatibility_spec.splitlines() if line != '']]
             discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
