@@ -86,11 +86,12 @@ class DiscourseRepo:
 
         return self._latest_commit_sha
 
-    def get_yarn_lock_hash(self, rev: str):
-        yarnLockText = self.get_file('app/assets/javascripts/yarn.lock', rev)
+    def get_yarn_lock_hash(self, rev: str, path: str):
+        yarnLockText = self.get_file(path, rev)
         with tempfile.NamedTemporaryFile(mode='w') as lockFile:
             lockFile.write(yarnLockText)
-            return subprocess.check_output(['prefetch-yarn-deps', lockFile.name]).decode('utf-8').strip()
+            hash = subprocess.check_output(['prefetch-yarn-deps', lockFile.name]).decode().strip()
+            return subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", hash]).decode().strip()
 
     def get_file(self, filepath, rev):
         """Return file contents at a given rev.
@@ -224,6 +225,8 @@ def update(rev):
         with open(rubyenv_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, version.tag))
 
+    # work around https://github.com/nix-community/bundix/issues/8
+    os.environ["BUNDLE_FORCE_RUBY_PLATFORM"] = "true"
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
@@ -231,11 +234,17 @@ def update(rev):
     _call_nix_update('discourse', version.version)
 
     old_yarn_hash = _nix_eval('discourse.assets.yarnOfflineCache.outputHash')
-    new_yarn_hash = repo.get_yarn_lock_hash(version.tag)
-    click.echo(f"Updating yarn lock hash, {old_yarn_hash} -> {new_yarn_hash}")
+    new_yarn_hash = repo.get_yarn_lock_hash(version.tag, "app/assets/javascripts/yarn-ember5.lock")
+    click.echo(f"Updating yarn lock hash: {old_yarn_hash} -> {new_yarn_hash}")
+
+    old_yarn_dev_hash = _nix_eval('discourse.assets.yarnDevOfflineCache.outputHash')
+    new_yarn_dev_hash = repo.get_yarn_lock_hash(version.tag, "yarn.lock")
+    click.echo(f"Updating yarn dev lock hash: {old_yarn_dev_hash} -> {new_yarn_dev_hash}")
+
     with open(Path(__file__).parent / "default.nix", 'r+') as f:
         content = f.read()
         content = content.replace(old_yarn_hash, new_yarn_hash)
+        content = content.replace(old_yarn_dev_hash, new_yarn_dev_hash)
         f.seek(0)
         f.write(content)
         f.truncate()
