@@ -6782,11 +6782,19 @@ self: super: with self; {
 
   llama-index-question-gen-openai = callPackage ../development/python-modules/llama-index-question-gen-openai { };
 
+  llama-index-readers-database = callPackage ../development/python-modules/llama-index-readers-database { };
+
   llama-index-readers-file = callPackage ../development/python-modules/llama-index-readers-file { };
 
   llama-index-readers-json = callPackage ../development/python-modules/llama-index-readers-json { };
 
   llama-index-readers-llama-parse = callPackage ../development/python-modules/llama-index-readers-llama-parse { };
+
+  llama-index-readers-s3 = callPackage ../development/python-modules/llama-index-readers-s3 { };
+
+  llama-index-readers-twitter = callPackage ../development/python-modules/llama-index-readers-twitter { };
+
+  llama-index-readers-txtai = callPackage ../development/python-modules/llama-index-readers-txtai { };
 
   llama-index-readers-weather = callPackage ../development/python-modules/llama-index-readers-weather { };
 

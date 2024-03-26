@@ -902,6 +902,7 @@ in {
   systemd-sysusers-immutable = runTest ./systemd-sysusers-immutable.nix;
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-timesyncd-nscd-dnssec = handleTest ./systemd-timesyncd-nscd-dnssec.nix {};
+  systemd-user-linger = handleTest ./systemd-user-linger.nix {};
   systemd-user-tmpfiles-rules = handleTest ./systemd-user-tmpfiles-rules.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
   systemd-userdbd = handleTest ./systemd-userdbd.nix {};
