@@ -70,7 +70,7 @@ buildGoModule rec {
     description = "select * from cloud;";
     license = licenses.agpl3Only;
     mainProgram = "steampipe";
-    maintainers = with maintainers; [ hardselius ];
+    maintainers = with maintainers; [ hardselius anthonyroussel ];
     changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
   };
 }
