@@ -6,20 +6,21 @@
 , pytestCheckHook
 , python
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
-  pname = "python-lz4";
+  pname = "lz4";
   version = "4.3.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   # get full repository in order to run tests
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "python-lz4";
+    repo = "python-lz4";
     rev = "refs/tags/v${version}";
     hash = "sha256-ZvGUkb9DoheYY2/sejUhxgh2lS5eoBrFCXR4E0IcFcs=";
   };
@@ -28,9 +29,10 @@ buildPythonPackage rec {
     sed -i '/pytest-cov/d' setup.py
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pkgconfig
     setuptools-scm
+    setuptools
   ];
 
   pythonImportsCheck = [
@@ -46,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   # for lz4.steam
-  PYLZ4_EXPERIMENTAL = true;
+  env.PYLZ4_EXPERIMENTAL = true;
 
   # prevent local lz4 directory from getting imported as it lacks native extensions
   preCheck = ''
