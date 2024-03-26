@@ -1,31 +1,40 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (builtins) attrNames concatMap length;
+  inherit (lib) maintainers;
+  inherit (lib.attrsets) attrByPath filterAttrs;
+  inherit (lib.lists) flatten optional;
+  inherit (lib.modules) mkIf;
+  inherit (lib.options) literalExpression mkOption;
+  inherit (lib.strings) hasPrefix;
+  inherit (lib.types) bool listOf package;
+
   pwCfg = config.services.pipewire;
   cfg = pwCfg.wireplumber;
   pwUsedForAudio = pwCfg.audio.enable;
 in
 {
-  meta.maintainers = [ lib.maintainers.k900 ];
+  meta.maintainers = [ maintainers.k900 ];
 
   options = {
     services.pipewire.wireplumber = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = bool;
         default = config.services.pipewire.enable;
-        defaultText = lib.literalExpression "config.services.pipewire.enable";
+        defaultText = literalExpression "config.services.pipewire.enable";
         description = "Whether to enable WirePlumber, a modular session / policy manager for PipeWire";
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
+      package = mkOption {
+        type = package;
         default = pkgs.wireplumber;
-        defaultText = lib.literalExpression "pkgs.wireplumber";
+        defaultText = literalExpression "pkgs.wireplumber";
         description = "The WirePlumber derivation to use.";
       };
 
-      configPackages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
+      configPackages = mkOption {
+        type = listOf package;
         default = [ ];
         description = ''
           List of packages that provide WirePlumber configuration, in the form of
@@ -36,10 +45,10 @@ in
         '';
       };
 
-      extraLv2Packages = lib.mkOption {
-        type = lib.types.listOf lib.types.package;
+      extraLv2Packages = mkOption {
+        type = listOf package;
         default = [];
-        example = lib.literalExpression "[ pkgs.lsp-plugins ]";
+        example = literalExpression "[ pkgs.lsp-plugins ]";
         description = ''
           List of packages that provide LV2 plugins in `lib/lv2` that should
           be made available to WirePlumber for [filter chains][wiki-filter-chain].
@@ -78,8 +87,8 @@ in
       '';
 
       configPackages = cfg.configPackages
-          ++ lib.optional (!pwUsedForAudio) pwNotForAudioConfigPkg
-          ++ lib.optional config.services.pipewire.systemWide systemwideConfigPkg;
+          ++ optional (!pwUsedForAudio) pwNotForAudioConfigPkg
+          ++ optional config.services.pipewire.systemWide systemwideConfigPkg;
 
       configs = pkgs.buildEnv {
         name = "wireplumber-configs";
@@ -87,11 +96,11 @@ in
         pathsToLink = [ "/share/wireplumber" ];
       };
 
-      requiredLv2Packages = lib.flatten
+      requiredLv2Packages = flatten
         (
-          lib.concatMap
+          concatMap
             (p:
-              lib.attrByPath ["passthru" "requiredLv2Packages"] [] p
+              attrByPath ["passthru" "requiredLv2Packages"] [] p
             )
             configPackages
         );
@@ -102,19 +111,19 @@ in
         pathsToLink = [ "/lib/lv2" ];
       };
     in
-    lib.mkIf cfg.enable {
+    mkIf cfg.enable {
       assertions = [
         {
           assertion = !config.hardware.bluetooth.hsphfpd.enable;
           message = "Using WirePlumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
         }
         {
-          assertion = builtins.length
-            (builtins.attrNames
+          assertion = length
+            (attrNames
               (
-                lib.filterAttrs
+                filterAttrs
                   (name: value:
-                    lib.hasPrefix "wireplumber/" name || name == "wireplumber"
+                    hasPrefix "wireplumber/" name || name == "wireplumber"
                   )
                   config.environment.etc
               )) == 1;
@@ -134,13 +143,13 @@ in
       systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
       systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
 
-      systemd.services.wireplumber.environment = lib.mkIf config.services.pipewire.systemWide {
+      systemd.services.wireplumber.environment = mkIf config.services.pipewire.systemWide {
         # Force WirePlumber to use system dbus.
         DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
         LV2_PATH = "${lv2Plugins}/lib/lv2";
       };
 
       systemd.user.services.wireplumber.environment.LV2_PATH =
-        lib.mkIf (!config.services.pipewire.systemWide) "${lv2Plugins}/lib/lv2";
+        mkIf (!config.services.pipewire.systemWide) "${lv2Plugins}/lib/lv2";
     };
 }
