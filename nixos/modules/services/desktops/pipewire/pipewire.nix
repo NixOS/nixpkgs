@@ -258,6 +258,28 @@ in {
       configPackages = mkOption {
         type = listOf package;
         default = [];
+        example = literalExpression ''[
+          (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-loopback.conf" '''
+            context.modules = [
+            {   name = libpipewire-module-loopback
+                args = {
+                  node.description = "Scarlett Focusrite Line 1"
+                  capture.props = {
+                      audio.position = [ FL ]
+                      stream.dont-remix = true
+                      node.target = "alsa_input.usb-Focusrite_Scarlett_Solo_USB_Y7ZD17C24495BC-00.analog-stereo"
+                      node.passive = true
+                  }
+                  playback.props = {
+                      node.name = "SF_mono_in_1"
+                      media.class = "Audio/Source"
+                      audio.position = [ MONO ]
+                  }
+                }
+            }
+            ]
+          ''')
+        ]'';
         description = ''
           List of packages that provide PipeWire configuration, in the form of
           `share/pipewire/*/*.conf` files.
