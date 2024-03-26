@@ -4,7 +4,6 @@
   installShellFiles,
   lib,
   nix-update-script,
-  stdenv,
   steampipe,
   testers,
 }:
@@ -36,8 +35,18 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  # panic: could not create backups directory: mkdir /var/empty/.steampipe: operation not permitted
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        # panic: could not create backups directory: mkdir /var/empty/.steampipe: operation not permitted
+        "TestTrimBackups"
+        # Skip tests that require network access
+        "TestIsPortBindable"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     INSTALL_DIR=$(mktemp -d)
