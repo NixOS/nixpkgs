@@ -6788,6 +6788,8 @@ self: super: with self; {
 
   llama-index-readers-llama-parse = callPackage ../development/python-modules/llama-index-readers-llama-parse { };
 
+  llama-index-readers-s3 = callPackage ../development/python-modules/llama-index-readers-s3 { };
+
   llama-index-readers-weather = callPackage ../development/python-modules/llama-index-readers-weather { };
 
   llama-index-vector-stores-chroma = callPackage ../development/python-modules/llama-index-vector-stores-chroma { };
