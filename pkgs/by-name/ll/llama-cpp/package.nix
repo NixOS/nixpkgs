@@ -107,7 +107,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_SHARED_LIBS" true)
     (cmakeBool "LLAMA_BLAS" blasSupport)
     (cmakeBool "LLAMA_CLBLAST" openclSupport)
-    (cmakeBool "LLAMA_CUBLAS" cudaSupport)
+    (cmakeBool "LLAMA_CUDA" cudaSupport)
     (cmakeBool "LLAMA_HIPBLAS" rocmSupport)
     (cmakeBool "LLAMA_METAL" metalSupport)
     (cmakeBool "LLAMA_MPI" mpiSupport)
