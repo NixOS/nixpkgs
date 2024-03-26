@@ -5,11 +5,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nxengine-assets";
-  version = "2.6.4";
+  version = "2.6.5-1";
 
   src = fetchzip {
-    url = "https://github.com/nxengine/nxengine-evo/releases/download/v${finalAttrs.version}/NXEngine-v${finalAttrs.version}-Linux.tar.xz";
-    hash = "sha256-vBbbX6yBZ5CwdkxzO9Z/DjY1IMnKGKYNx6jzAgYUjcM=";
+    url = "https://github.com/nxengine/nxengine-evo/releases/download/v${finalAttrs.version}/NXEngine-Evo-v${finalAttrs.version}-Win64.zip";
+    hash = "sha256-+PjjhJYL1yk67QJ7ixfpCRg1coQnSPpXDUIwsqp9aIM=";
   };
 
   dontConfigure = true;
