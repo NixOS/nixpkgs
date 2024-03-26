@@ -1,5 +1,8 @@
 {
   cmake,
+  config,
+  cudaPackages,
+  cudaSupport ? config.cudaSupport,
   fetchzip,
   ispc,
   lib,
@@ -18,14 +21,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZIrs4oEb+PzdMh2x2BUFXKyu/HBlFb3CJX24ciEHy3Q=";
   };
 
+  patches = lib.optional cudaSupport ./cuda.patch;
+
   nativeBuildInputs = [
     cmake
     python3
     ispc
-  ];
-  buildInputs = [ tbb ];
+  ] ++ lib.optional cudaSupport cudaPackages.cuda_nvcc;
+
+  buildInputs =
+    [ tbb ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+      cudaPackages.cuda_cccl
+    ];
 
   cmakeFlags = [
+    (lib.cmakeBool "OIDN_DEVICE_CUDA" cudaSupport)
     (lib.cmakeFeature "TBB_INCLUDE_DIR" "${tbb.dev}/include")
     (lib.cmakeFeature "TBB_ROOT" "${tbb}")
   ];
