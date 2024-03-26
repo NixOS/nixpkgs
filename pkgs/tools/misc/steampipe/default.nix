@@ -42,6 +42,7 @@ buildGoModule rec {
     homepage = "https://steampipe.io/";
     description = "select * from cloud;";
     license = licenses.agpl3Only;
+    mainProgram = "steampipe";
     maintainers = with maintainers; [ hardselius ];
     changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
   };
