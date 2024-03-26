@@ -104,11 +104,53 @@ let
       }
     ];
 
+  mkBintools =
+    Libsystem: bintools:
+    if bintools ? override then
+      bintools.override { libc = Libsystem; }
+    else
+      let
+        # `override` isn’t available, so bintools has to be rewrapped with the new libc.
+        # Most of the required arguments can be recovered except for `postLinkSignHook`
+        # and `signingUtils`, which have to be scrapped from the original’s `postFixup`.
+        # This isn’t ideal, but it works.
+        postFixup = lib.splitString "\n" bintools.postFixup;
+
+        postLinkSignHook = lib.pipe postFixup [
+          (lib.findFirst (lib.hasPrefix "echo 'source") null)
+          (builtins.match "^echo 'source (.*-post-link-sign-hook)' >> \\$out/nix-support/post-link-hook$")
+          lib.head
+        ];
+
+        signingUtils = lib.pipe postFixup [
+          (lib.findFirst (lib.hasPrefix "export signingUtils") null)
+          (builtins.match "^export signingUtils=(.*)$")
+          lib.head
+        ];
+
+        newBintools = pkgsBuildTarget.wrapBintoolsWith {
+          inherit (bintools) name;
+
+          buildPackages = { };
+          libc = Libsystem;
+
+          inherit lib;
+
+          coreutils = bintools.coreutils_bin;
+          gnugrep = bintools.gnugrep_bin;
+
+          inherit (bintools) bintools;
+
+          inherit postLinkSignHook signingUtils;
+        };
+      in
+      lib.getOutput bintools.outputName newBintools;
+
   mkCC =
     Libsystem: cc:
     if cc ? override then
       cc.override {
-        bintools = cc.bintools.override { libc = Libsystem; };
+        bintools = mkBintools Libsystem cc.bintools;
         libc = Libsystem;
       }
     else
@@ -165,7 +207,15 @@ let
   getReplacement =
     newPackages: pkg:
     let
-      pkgOrCC = if pkg.libc or null != null then mkCC (getReplacement newPackages pkg.libc) pkg else pkg;
+      pkgOrCC =
+        if pkg.libc or null != null then
+          # Heuristic to determine whether package is a compiler or bintools.
+          if pkg.wrapperName == "CC_WRAPPER" then
+            mkCC (getReplacement newPackages pkg.libc) pkg
+          else
+            mkBintools (getReplacement newPackages pkg.libc) pkg
+        else
+          pkg;
     in
     if lib.isDerivation pkg then
       newPackages.${builtins.unsafeDiscardStringContext pkg} or pkgOrCC
@@ -190,7 +240,7 @@ let
           let
             replacement = getReplacement newPackages dep;
           in
-          lib.optionalString (dep != replacement) "s|${dep}|${replacement}|g;"
+          lib.optionalString (dep != replacement) "s|${lib.escapeRegex dep}|${lib.escapeRegex replacement}|g;"
         ) propagatedInputs;
 
         passAsFile = [ "dependencies" ];
