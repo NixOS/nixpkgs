@@ -34,6 +34,8 @@
 , kpurpose
 , kdeclarative
 , wrapGAppsHook
+, glaxnimate
+, enableGlaxnimate ? true
 }:
 
 let
@@ -80,13 +82,14 @@ mkDerivation {
     kpurpose
     kdeclarative
     wrapGAppsHook
-  ];
+  ] ++ lib.optional enableGlaxnimate glaxnimate;
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
-  patches = [ ./dependency-paths.patch ];
+  patches = [ ./dependency-paths.patch ] ++ lib.optional enableGlaxnimate ./dependency-paths-glaxnimate.patch;
 
-  inherit mediainfo;
+  # Needed to replace @glaxnimate@ by its path
+  inherit mediainfo glaxnimate;
   ffmpeg = ffmpeg-full;
   mlt = mlt-full;
 
