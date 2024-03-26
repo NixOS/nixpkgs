@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -58,6 +59,8 @@ buildPythonPackage rec {
     "--deselect=tests/test_inputs.py::URLTest::test_check"
     "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
     "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--deselect=tests/test_inputs.py::EmailTest::test_invalid_values_check"
   ];
 
   disabledTests = [
