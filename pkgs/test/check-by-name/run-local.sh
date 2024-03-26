@@ -14,7 +14,6 @@ cleanup() {
 
     [[ -e "$tmp/base" ]] && git worktree remove --force "$tmp/base"
     [[ -e "$tmp/merged" ]] && git worktree remove --force "$tmp/merged"
-    [[ -e "$tmp/tool-nixpkgs" ]] && git worktree remove --force "$tmp/tool-nixpkgs"
 
     rm -rf "$tmp"
 
@@ -63,20 +62,12 @@ trace -n "Merging base branch into the HEAD commit in $tmp/merged.. "
 git -C "$tmp/merged" merge -q --no-edit "$baseSha"
 trace -e "\e[34m$(git -C "$tmp/merged" rev-parse HEAD)\e[0m"
 
-trace -n "Reading pinned nixpkgs-check-by-name revision from pinned-tool.json.. "
-toolSha=$(jq -r .rev "$tmp/merged/pkgs/test/nixpkgs-check-by-name/scripts/pinned-tool.json")
-trace -e "\e[34m$toolSha\e[0m"
+trace -n "Reading pinned nixpkgs-check-by-name version from pinned-version.txt.. "
+toolVersion=$(<"$tmp/merged/pkgs/test/check-by-name/pinned-version.txt")
+trace -e "\e[34m$toolVersion\e[0m"
 
-trace -n "Creating Git worktree for the nixpkgs-check-by-name revision in $tmp/tool-nixpkgs.. "
-git worktree add -q "$tmp/tool-nixpkgs" "$toolSha"
-trace "Done"
-
-trace "Building/fetching nixpkgs-check-by-name.."
-nix-build -o "$tmp/tool" "$tmp/tool-nixpkgs" \
-    -A tests.nixpkgs-check-by-name \
-    --arg config '{}' \
-    --arg overlays '[]' \
-    -j 0
+trace -n "Building tool.. "
+nix-build https://github.com/NixOS/nixpkgs-check-by-name/tarball/"$toolVersion" -o "$tmp/tool" -A build
 
 trace "Running nixpkgs-check-by-name.."
 "$tmp/tool/bin/nixpkgs-check-by-name" --base "$tmp/base" "$tmp/merged"
