@@ -258,7 +258,10 @@ let
       bzip2
       dbus-glib
       glib
+      gst_all_1.gst-libav # Required for H.264 and H.265 video previews
+      gst_all_1.gst-plugins-bad # Required for AV1 video previews
       gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good # Required for video previews
       gst_all_1.gstreamer
       gtk3
       hicolor-icon-theme
