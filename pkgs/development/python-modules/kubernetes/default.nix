@@ -67,6 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
+    changelog = "https://github.com/kubernetes-client/python/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lsix ];
   };
