@@ -15,21 +15,22 @@
 , cpio
 , glib
 , gnome
-, gtk3
+, gtk4
+, libadwaita
 , libhandy
 , json-glib
 , libarchive
-, libportal-gtk3
+, libportal-gtk4
 , nautilus
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file-roller";
-  version = "43.1";
+  version = "44";
 
   src = fetchurl {
     url = "mirror://gnome/sources/file-roller/${lib.versions.major finalAttrs.version}/file-roller-${finalAttrs.version}.tar.xz";
-    sha256 = "hJlAI5lyk76zRdl5Pbj18Lu0H6oVXG/7SDKPIDlXrQg=";
+    hash = "sha256-WxwOai5951OSvUJFUMHlZD3Rz2wzP7HtanZBmilQeqQ=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cpio
     glib
-    gtk3
+    gtk4
+    libadwaita
     libhandy
     json-glib
     libarchive
-    libportal-gtk3
+    libportal-gtk4
     nautilus
   ];
 
