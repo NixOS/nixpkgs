@@ -99,6 +99,7 @@ self: super: {
   terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
   raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
+  stripe-concepts = doJailbreak super.stripe-concepts; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
 
   #
   # Test suite issues
