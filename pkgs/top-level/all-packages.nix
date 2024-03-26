@@ -30627,8 +30627,6 @@ with pkgs;
 
   dk = callPackage ../applications/window-managers/dk { };
 
-  docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
-
   docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
 
   dockstarter = callPackage ../tools/virtualization/dockstarter { };
