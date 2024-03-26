@@ -51,13 +51,7 @@ let
     "meta"
   ];
 
-  stdenv' =
-    if stdenv.isDarwin then
-      darwin.apple_sdk_11_0.stdenv
-    else
-      stdenv;
-
-  cLibs = lib.optionals stdenv'.isLinux (
+  cLibs = lib.optionals stdenv.isLinux (
     [ glibc zlib.static ]
     ++ lib.optionals (!useMusl) [ glibc.static ]
     ++ lib.optionals useMusl [ musl ]
@@ -67,14 +61,14 @@ let
   # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
   musl-gcc = (runCommandCC "musl-gcc" { } ''
     mkdir -p $out/bin
-    ln -s ${lib.getDev musl}/bin/musl-gcc $out/bin/${stdenv'.hostPlatform.system}-musl-gcc
+    ln -s ${lib.getDev musl}/bin/musl-gcc $out/bin/${stdenv.hostPlatform.system}-musl-gcc
   '');
-  binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv'.cc ]);
+  binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv.cc ]);
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
 
-  graalvm-ce = stdenv'.mkDerivation ({
+  graalvm-ce = stdenv.mkDerivation ({
     pname = "graalvm-ce";
 
     unpackPhase = ''
