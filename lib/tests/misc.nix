@@ -64,6 +64,7 @@ let
     lists
     listToAttrs
     makeExtensible
+    makeIncludePath
     makeOverridable
     mapAttrs
     matchAttrs
@@ -242,6 +243,16 @@ runTests {
                composed = obj.extend composition;
            in composed.foo;
     expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
+  };
+
+  testMakeIncludePathWithOneString = {
+    expr = (makeIncludePath [ "/usr" ]);
+    expected = "/usr/include";
+  };
+
+  testMakeIncludePathWithManyString = {
+    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expected = "/usr/include:/usr/local/include";
   };
 
   testBitAnd = {
