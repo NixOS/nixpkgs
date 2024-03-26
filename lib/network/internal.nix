@@ -11,29 +11,56 @@ let
     reverseList
     toInt
     ;
-
-  pow =
-    base: exponent:
-    if exponent < 0 then
-      throw "lib.network.pow: Exponent cannot be negative."
-    else if exponent == 0 then
-      1
-    else
-      fold (x: y: y * base) base (range 2 exponent);
 in
-{
+rec {
+  common = {
+    /**
+      Given a base and exponent, calculates base raised to the exponent.
+
+      # Example
+
+      ```nix
+      pow 2 3
+      => 8
+      ```
+
+      # Type
+
+      ```
+      pow :: Int -> Int -> Int
+      ```
+
+      # Arguments
+
+      - [base] The base.
+      - [exponent] The exponent.
+
+      # Throws
+
+      - If the exponent is less than 0.
+    */
+    pow =
+      base: exponent:
+      if exponent < 0 then
+        throw "lib.network.pow: Exponent cannot be negative."
+      else if exponent == 0 then
+        1
+      else
+        fold (x: y: y * base) base (range 2 exponent);
+  };
+
   ipv4 = rec {
     _prefixToSubnetMask =
       prefixLength:
       let
         prefixLength' = toInt prefixLength;
       in
-      _encode ((foldl (x: y: 2 * x + 1) 0 (range 1 prefixLength')) * (pow 2 (32 - prefixLength')));
+      _encode ((foldl (x: y: 2 * x + 1) 0 (range 1 prefixLength')) * (common.pow 2 (32 - prefixLength')));
 
     _encode =
       num:
       concatStringsSep "." (
-        map (x: toString (mod (num / x) 256)) (reverseList (genList (x: pow 2 (x * 8)) 4))
+        map (x: toString (mod (num / x) 256)) (reverseList (genList (x: common.pow 2 (x * 8)) 4))
       );
 
     _verifyPrefixLength =

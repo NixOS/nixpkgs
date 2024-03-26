@@ -81,6 +81,24 @@ expectEqual() {
 }
 
 
+# Check that a nix expression fails to evaluate (strictly, read-write-mode).
+# And check the received stderr against a regex
+# The expression has `lib.network` in scope.
+# Usage: expectFailure NIX REGEX
+expectFailure() {
+    local expr=$1
+    local expectedErrorRegex=$2
+    if result=$(nix-instantiate --eval --strict --read-write-mode --show-trace 2>"$tmp/stderr" \
+        --expr "$prefixExpression $expr"); then
+        die "$expr evaluated successfully to $result, but it was expected to fail"
+    fi
+    stderr=$(<"$tmp/stderr")
+    if [[ ! "$stderr" =~ $expectedErrorRegex ]]; then
+        die "$expr should have errored with this regex pattern:\n\n$expectedErrorRegex\n\nbut this was the actual error:\n\n$stderr"
+    fi
+}
+
+
 # Test basic cases for ingesting a CIDR string.
 expectEqual '(ipv4.fromCidr "192.168.0.1/24").cidr' '"192.168.0.1/24"'
 expectEqual '(ipv4.fromCidr "192.168.0.1/24").address' '"192.168.0.1"'
@@ -91,3 +109,8 @@ expectEqual '(ipv4.fromCidr "192.168.0.1/24").subnetMask' '"255.255.255.0"'
 expectEqual 'internal.ipv4._encode 0' '"0.0.0.0"'
 expectEqual 'internal.ipv4._encode 4294967295' '"255.255.255.255"'
 expectEqual 'internal.ipv4._encode 3232235521' '"192.168.0.1"'
+
+# Test pow function
+expectEqual 'internal.common.pow 2 0' '1'
+expectEqual 'internal.common.pow 2 3' '8'
+expectFailure 'internal.common.pow 2 (-1)' 'lib.network.pow: Exponent cannot be negative.'
