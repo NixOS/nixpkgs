@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gsocket";
-  version = "1.4.41";
+  version = "1.4.42dev2";
 
   src = fetchFromGitHub {
     owner = "hackerschoice";
     repo = "gsocket";
     rev = "v${version}";
-    hash = "sha256-N/dGvEjCkCQvTTWApN0iQi2W3c5ZsaHXnZpjRxSfByY=";
+    hash = "sha256-HfClsnNL53V/JMokwIDYAgeCs3jnPaa/YUOkhmWaVrs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
