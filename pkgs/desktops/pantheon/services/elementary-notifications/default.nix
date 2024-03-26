@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
     libhandy
   ];
 
+  postPatch = ''
+    # https://github.com/elementary/notifications/issues/222
+    substituteInPlace src/FdoActionGroup.vala \
+      --replace-fail "out VariantType" "out unowned VariantType"
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
