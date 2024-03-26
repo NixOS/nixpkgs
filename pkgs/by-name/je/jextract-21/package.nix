@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , emptyDirectory
 , writeText
-, makeWrapper
+, makeBinaryWrapper
 , gradle
 , jdk21
 , llvmPackages
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     gradle
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   env = {
@@ -79,18 +79,16 @@ stdenv.mkDerivation {
 
     mkdir -p $out/opt/
     cp -r ./build/jextract $out/opt/jextract
+    makeBinaryWrapper "$out/opt/jextract/bin/jextract" "$out/bin/jextract"
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    makeWrapper "$out/opt/jextract/bin/jextract" "$out/bin/jextract"
   '';
 
   meta = with lib; {
     description = "A tool which mechanically generates Java bindings from a native library headers";
     mainProgram = "jextract";
     homepage = "https://github.com/openjdk/jextract";
+    platforms = jdk21.meta.platforms;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sharzy ];
   };
