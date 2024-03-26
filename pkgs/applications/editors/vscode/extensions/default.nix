@@ -4202,6 +4202,21 @@ let
         };
       };
 
+      teabyii.ayu = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ayu";
+          publisher = "teabyii";
+          version = "1.0.5";
+          sha256 = "sha256-+IFqgWliKr+qjBLmQlzF44XNbN7Br5a119v9WAnZOu4=";
+        };
+        meta = {
+          description = "A simple theme with bright colors and comes in three versions — dark, light and mirage for all day long comfortable work.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=teabyii.ayu";
+          homepage = "https://github.com/ayu-theme/vscode-ayu";
+          license = lib.licenses.mit;
+        };
+      };
+
       techtheawesome.rust-yew = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "rust-yew";
