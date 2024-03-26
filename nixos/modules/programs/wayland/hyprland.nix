@@ -44,6 +44,7 @@ in
 
     systemd.setPath.enable = mkEnableOption null // {
       default = true;
+      example = false;
       description = ''
         Set environment path of systemd to include the current system's bin directory.
         This is needed in Hyprland setups, where opening links in applications do not work.
@@ -75,7 +76,7 @@ in
 
     systemd = mkIf cfg.systemd.setPath.enable {
       user.extraConfig = ''
-        DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin"
+        DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin:/etc/profiles/per-user/$USER/bin:/run/wrappers/bin"
       '';
     };
   };
