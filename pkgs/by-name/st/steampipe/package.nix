@@ -1,4 +1,13 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  nix-update-script,
+  stdenv,
+  steampipe,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "steampipe";
@@ -11,7 +20,7 @@ buildGoModule rec {
     hash = "sha256-Oz1T9koeXnmHc5oru1apUtmhhvKi/gAtg/Hb7HKkkP0=";
   };
 
-  vendorHash = "sha256-jC77z/1EerJSMK75np9R5kX+cLzTh55cFFlliAXASEw=";
+  vendorHash = "sha256-U0BeGCRLjL56ZmVKcKqrrPTCXpShJzJq5/wnXDKax6g=";
   proxyVendor = true;
 
   patchPhase = ''
@@ -38,10 +47,20 @@ buildGoModule rec {
       --zsh <($out/bin/steampipe --install-dir $INSTALL_DIR completion zsh)
   '';
 
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "${lib.getExe steampipe} --version";
+      package = steampipe;
+      version = "v${version}";
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     homepage = "https://steampipe.io/";
     description = "select * from cloud;";
     license = licenses.agpl3Only;
+    mainProgram = "steampipe";
     maintainers = with maintainers; [ hardselius ];
     changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
   };

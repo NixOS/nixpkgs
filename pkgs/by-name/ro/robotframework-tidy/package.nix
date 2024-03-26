@@ -1,18 +1,10 @@
 {
   lib,
-  buildPythonPackage,
+  python3,
   fetchFromGitHub,
-  setuptools,
-  robotframework,
-  click,
-  colorama,
-  pathspec,
-  tomli,
-  rich-click,
-  jinja2,
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "robotframework-tidy";
   version = "4.11.0";
   pyproject = true;
@@ -20,13 +12,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MarketSquare";
     repo = "robotframework-tidy";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-pWW7Ex184WgnPfqHg5qQjfE+9UPvCmE5pwkY8jrp9bI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = [
+  dependencies = with python3.pkgs; [
     robotframework
     click
     colorama
@@ -34,13 +26,17 @@ buildPythonPackage rec {
     tomli
     rich-click
     jinja2
+    tomli-w
   ];
 
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+
   meta = with lib; {
-    changelog = "https://github.com/MarketSquare/robotframework-tidy/blob/main/docs/releasenotes/${version}.rst";
     description = "Code autoformatter for Robot Framework";
     homepage = "https://robotidy.readthedocs.io";
+    changelog = "https://github.com/MarketSquare/robotframework-tidy/blob/main/docs/releasenotes/${version}.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ otavio ];
+    mainProgram = "robotidy";
   };
 }
