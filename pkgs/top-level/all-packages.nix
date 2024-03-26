@@ -27790,7 +27790,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
   };
 
-  nushellFull = nushell.override { additionalFeatures = p: p ++ ["dataframe" "extra"]; };
+  nushellFull = nushell.override { additionalFeatures = p: p ++ ["dataframe"]; };
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
