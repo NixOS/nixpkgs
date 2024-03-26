@@ -38,7 +38,7 @@ in
         default = [ ];
         description = ''
           List of packages that provide WirePlumber configuration, in the form of
-          `share/wireplumber/*/*.lua` files.
+          `share/wireplumber/*/*.conf` files.
 
           LV2 dependencies will be picked up from config packages automatically
           via `passthru.requiredLv2Packages`.
