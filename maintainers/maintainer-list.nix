@@ -11531,6 +11531,15 @@
     githubId = 3717454;
     name = "Lucas Bergman";
   };
+  lucas-deangelis = {
+    email = "deangelis.lucas@outlook.com";
+    github = "lucas-deangelis";
+    githubId = 55180995;
+    name = "Lucas De Angelis";
+    keys = [{
+      fingerprint = "3C8B D3AD 93BB 1F36 B8FF  30BD 8627 E5ED F74B 5BF4";
+    }];
+  };
   lucasew = {
     email = "lucas59356@gmail.com";
     github = "lucasew";
