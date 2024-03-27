@@ -10,6 +10,7 @@
 , cython
 , gfortran
 , meson-python
+, nukeReferences
 , pkg-config
 , pythran
 , wheel
@@ -94,6 +95,7 @@ in buildPythonPackage {
     cython
     gfortran
     meson-python
+    nukeReferences
     pythran
     pkg-config
     wheel
@@ -165,6 +167,12 @@ in buildPythonPackage {
   #         ldr     x0, [x0, ___stack_chk_guard];momd
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
+  # remove references to dev dependencies
+  postInstall = ''
+    nuke-refs $out/${python.sitePackages}/scipy/__config__.py
+    rm $out/${python.sitePackages}/scipy/__pycache__/__config__.*.opt-1.pyc
+  '';
 
   preCheck = ''
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
