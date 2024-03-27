@@ -212,7 +212,7 @@ filterAndCreateOverrides {
           EOF
         '';
 
-      propagatedNativeBuildInputs = (prevAttrs.propagatedNativeBuildInputs or [ ]) ++ [ cc ];
+      # propagatedNativeBuildInputs = (prevAttrs.propagatedNativeBuildInputs or [ ]) ++ [ cc ];
 
       # NOTE(@connorbaker):
       # Though it might seem odd or counter-intuitive to add the setup hook to `propagatedBuildInputs` instead of
@@ -220,7 +220,7 @@ filterAndCreateOverrides {
       # `propagatedNativeBuildInputs`, it stops being propagated to downstream packages during their build because
       # setup hooks in `propagatedNativeBuildInputs` are not designed to affect the runtime or build environment of
       # dependencies; they are only meant to affect the build environment of the package that directly includes them.
-      propagatedBuildInputs = (prevAttrs.propagatedBuildInputs or [ ]) ++ [ setupCudaHook ];
+      # propagatedBuildInputs = (prevAttrs.propagatedBuildInputs or [ ]) ++ [ setupCudaHook ];
 
       postInstall =
         (prevAttrs.postInstall or "")
