@@ -91,6 +91,8 @@ self: super: {
 
     pg_relusage = super.callPackage ./pg_relusage.nix { };
 
+    pg_roaringbitmap = super.callPackage ./pg_roaringbitmap.nix { };
+
     pg_safeupdate = super.callPackage ./pg_safeupdate.nix { };
 
     pg_squeeze = super.callPackage ./pg_squeeze.nix { };

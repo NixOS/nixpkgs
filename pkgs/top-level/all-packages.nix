@@ -7866,8 +7866,6 @@ with pkgs;
     callPackage ../servers/search/elasticsearch/plugins.nix {}
   );
 
-  elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator { };
-
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
@@ -25376,8 +25374,6 @@ with pkgs;
 
   fastjar = callPackage ../development/tools/java/fastjar { };
 
-  jextract = callPackage ../development/tools/java/jextract { };
-
   httpunit = callPackage ../development/libraries/java/httpunit { };
 
   javaCup = callPackage ../development/libraries/java/cup {
@@ -30628,8 +30624,6 @@ with pkgs;
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
   dk = callPackage ../applications/window-managers/dk { };
-
-  docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
   docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
 
@@ -37402,8 +37396,6 @@ with pkgs;
 
   portmod = callPackage ../games/portmod { };
 
-  tetrio-desktop = callPackage ../games/tetrio-desktop { };
-
   tr-patcher = callPackage ../games/tr-patcher { };
 
   tes3cmd = callPackage ../games/tes3cmd { };
@@ -38484,8 +38476,6 @@ with pkgs;
   coin-utils = callPackage ../development/libraries/science/math/coin-utils { };
 
   ecos = callPackage ../development/libraries/science/math/ecos { };
-
-  flintqs = callPackage ../development/libraries/science/math/flintqs { };
 
   getdp = callPackage ../applications/science/math/getdp { };
 
@@ -41047,9 +41037,7 @@ with pkgs;
 
   openrisk = callPackage ../tools/security/openrisk { };
 
-  openvino = callPackage ../development/libraries/openvino {
-    python = python3;
-  };
+  openvino = callPackage ../development/libraries/openvino { };
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
     # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
