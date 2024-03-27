@@ -174,27 +174,44 @@ let
       # a fully functional replacement. This is like `symlinkJoin` except for
       # outputs and the contents of `nix-support`, which will be customized.
       ''
+        function replacePropagatedInputs() {
+          sourcePath=$1
+          targetPath=$2
+          targetName=$(basename "$targetPath")
+
+          mkdir "$targetPath"
+
+          for file in "$sourcePath"/*; do
+            fileName=$(basename "$file")
+            targetFile="$targetPath/$fileName"
+
+            if [ -d "$file" ]; then
+              replacePropagatedInputs "$file" "$targetPath/$fileName"
+              # Check to see if any of the files in the folder were replaced.
+              # Otherwise, replace the folder with a symlink if none were changed.
+              if [ "$(find -maxdepth 1 "$targetPath/$fileName" -not -type l)" = "" ]; then
+                rm "$targetPath/$fileName"/*
+                ln -s "$file" "$targetPath/$fileName"
+              fi
+            else
+              sed -f "$dependenciesPath" < "$file" > "$targetFile"
+              if cmp -s "$file" "$targetFile"; then
+                rm "$targetFile"
+                ln -s "$file" "$targetFile"
+              fi
+            fi
+          done
+        }
+
         for outputName in $outputs; do
           mkdir -p "''${!outputName}"
 
-          for targetPath in "''${!outputName}"/*; do
-            targetName=$(basename "$targetPath")
-
+          for sourcePath in "''${!outputName}"/*; do
+            sourceName=$(basename "$targetPath")
             # `nix-support` is special-cased because any propagated inputs need their
             # SDK frameworks replaced with those from the requested SDK.
-            if [ "$targetName" == "nix-support" ]; then
-              mkdir "''${!outputName}/nix-support"
-
-              for file in "$targetPath"/*; do
-                fileName=$(basename "$file")
-                targetFile="''${!outputName}/nix-support/$fileName"
-
-                sed -f "$dependenciesPath" < "$file" > "$targetFile"
-                if cmp -s "$file" "$targetFile"; then
-                  rm "$targetFile"
-                  ln -s "$file" "$targetFile"
-                fi
-              done
+            if [ "$sourceName" == "nix-support" ]; then
+              replacePropagatedInputs "$sourcePath" "''${!outputName}/nix-support"
             else
               ln -s "$targetPath" "''${!outputName}/$targetName"
             fi
