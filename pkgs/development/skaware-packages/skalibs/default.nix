@@ -4,9 +4,7 @@
 , pkgs
 }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "skalibs";
   version = "2.14.1.1";
   sha256 = "trebgW9LoLaAFnaw7UF5tZyMeAnu/+JttnLkBGNr78M=";

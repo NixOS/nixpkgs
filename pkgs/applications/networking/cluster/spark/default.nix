@@ -4,7 +4,6 @@
 , makeWrapper
 , jdk8
 , python3
-, python310
 , coreutils
 , hadoop
 , RSupport ? true
@@ -72,11 +71,5 @@ in
     pname = "spark";
     version = "3.4.2";
     hash = "sha256-qr0tRuzzEcarJznrQYkaQzGqI7tugp/XJpoZxL7tJwk=";
-  };
-  spark_3_3 = spark rec {
-    pname = "spark";
-    version = "3.3.3";
-    hash = "sha256-YtHxRYTwrwSle3UpFjRSwKcnLFj2m9/zLBENH/HVzuM=";
-    pysparkPython = python310;
   };
 }

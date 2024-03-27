@@ -160,6 +160,10 @@ stdenv'.mkDerivation rec {
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+
+    substituteInPlace packaging/linux/sunshine.service.in \
+      --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine
   '';
 
   preBuild = ''

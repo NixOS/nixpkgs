@@ -55,7 +55,7 @@ let
       DYNAMIC_DEBUG             = yes;
       DEBUG_STACK_USAGE         = no;
       RCU_TORTURE_TEST          = no;
-      SCHEDSTATS                = no;
+      SCHEDSTATS                = yes;
       DETECT_HUNG_TASK          = yes;
       CRASH_DUMP                = option no;
       # Easier debugging of NFS issues.
@@ -173,7 +173,7 @@ let
       DAMON_VADDR = whenAtLeast "5.15" yes;
       DAMON_PADDR = whenAtLeast "5.16" yes;
       DAMON_SYSFS = whenAtLeast "5.18" yes;
-      DAMON_DBGFS = whenAtLeast "5.15" yes;
+      DAMON_DBGFS = whenBetween "5.15" "6.9" yes;
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
       # Support recovering from memory failures on systems with ECC and MCA recovery.
@@ -392,8 +392,8 @@ let
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FRAMEBUFFER_CONSOLE_DETECT_PRIMARY = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
-      # On 5.14 this conflicts with FB_SIMPLE.
-      DRM_SIMPLEDRM = whenAtLeast "5.14" no;
+      # Use simplefb on older kernels where we don't have simpledrm (enabled below)
+      FB_SIMPLE           = whenOlder "5.15" yes;
       DRM_FBDEV_EMULATION = yes;
     };
 
@@ -409,9 +409,18 @@ let
     video = let
       whenHasDevicePrivate = mkIf (!stdenv.isx86_32 && versionAtLeast version "5.1");
     in {
+      # compile in DRM so simpledrm can load before initrd if necessary
+      AGP = yes;
+      DRM = yes;
+
       DRM_LEGACY = whenOlder "6.8" no;
 
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
+
+      # Enable simpledrm and use it for generic framebuffer
+      # Technically added in 5.14, but adding more complex configuration is not worth it
+      DRM_SIMPLEDRM = whenAtLeast "5.15" yes;
+      SYSFB_SIMPLEFB = whenAtLeast "5.15" yes;
 
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
@@ -450,6 +459,7 @@ let
       DRM_NOUVEAU_SVM = whenHasDevicePrivate yes;
 
       # Enable HDMI-CEC receiver support
+      RC_CORE = yes;
       MEDIA_CEC_RC = whenAtLeast "5.10" yes;
 
       # Enable CEC over DisplayPort
@@ -567,7 +577,7 @@ let
       EXT4_FS_SECURITY  = yes;
       EXT4_ENCRYPTION   = whenOlder "5.1" yes;
 
-      NTFS_FS            = whenAtLeast "5.15" no;
+      NTFS_FS            = whenBetween "5.15" "6.9" no;
       NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
@@ -718,7 +728,8 @@ let
       X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
 
       # Mitigate straight line speculation at the cost of some file size
-      SLS = whenAtLeast "5.17" yes;
+      SLS = whenBetween "5.17" "6.9" yes;
+      MITIGATION_SLS = whenAtLeast "6.9" yes;
     };
 
     microcode = {
@@ -1176,11 +1187,6 @@ let
       # Add debug interfaces for CMA
       CMA_DEBUGFS = yes;
       CMA_SYSFS = yes;
-
-      # Many ARM SBCs hand off a pre-configured framebuffer.
-      # This always can can be replaced by the actual native driver.
-      # Keeping it a built-in ensures it will be used if possible.
-      FB_SIMPLE = yes;
 
       # https://docs.kernel.org/arch/arm/mem_alignment.html
       # tldr:

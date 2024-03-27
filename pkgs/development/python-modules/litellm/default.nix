@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.33.7";
+  version = "1.34.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,18 +42,18 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o2MqZ9d2YDe0eQtao9OO9Ysl3cKTGiHqaYknOvcyCT4=";
+    hash = "sha256-FRAT7wQZEO60Hf3sJv+jLIHif8ium0j2Mr1mU/XKlCM=";
   };
 
   postPatch = ''
     rm -rf dist
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     click
     importlib-metadata

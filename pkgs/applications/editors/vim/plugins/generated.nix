@@ -16685,6 +16685,18 @@ final: prev:
     meta.homepage = "https://github.com/KabbAmine/zeavim.vim/";
   };
 
+  zellij-nvim = buildVimPlugin {
+    pname = "zellij.nvim";
+    version = "2023-12-03";
+    src = fetchFromGitHub {
+      owner = "Lilja";
+      repo = "zellij.nvim";
+      rev = "483c855ab7a3aba60e522971991481807ea3a47b";
+      sha256 = "17lapf7lznlw557k00dpvx04j5pkgdqk95aw5js3aamydnhi976g";
+    };
+    meta.homepage = "https://github.com/Lilja/zellij.nvim/";
+  };
+
   zen-mode-nvim = buildVimPlugin {
     pname = "zen-mode.nvim";
     version = "2024-01-21";
@@ -17019,6 +17031,18 @@ final: prev:
       sha256 = "sha256-7ljjJ7UwN2U1xPCtsYbrKdnz6SGQGbM/HrxPTxNKlwo=";
     };
     meta.homepage = "https://github.com/lukas-reineke/virt-column.nvim/";
+  };
+
+  jupytext-nvim = buildVimPlugin {
+    pname = "jupytest-nvim";
+    version = "2024-01-24";
+    src = fetchFromGitHub {
+      owner = "GCBallesteros";
+      repo = "jupytext.nvim";
+      rev = "68fddf28119dbaddfaea6b71f3d6aa1e081afb93";
+      sha256 = "sha256-x5emW+qfUTUDR72B9QdDgVdrb8wGH9D7AdtRrQm80sI=";
+    };
+    meta.homepage = "https://github.com/GCBallesteros/jupytext.nvim/";
   };
 
 

@@ -237,6 +237,7 @@ mapAliases ({
   docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
   docker-machine-kvm = throw "'docker-machine-kvm' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
   docker-machine-xhyve = throw "'docker-machine-xhyve' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
+  docker-proxy = throw "`docker-proxy` has been merged to the main repo of Moby since Docker 22.06"; # Added 2024-03-14
   dogecoin = throw "'dogecoin' has been removed, as it was broken and unmaintained"; # Added 2024-03-11
   dogecoind = throw "'dogecoind' has been removed, as it was broken and unmaintained"; # Added 2024-03-11
   dolphin-emu-beta = dolphin-emu; # Added 2023-02-11
@@ -346,6 +347,7 @@ mapAliases ({
   fitnesstrax = throw "fitnesstrax was removed from nixpkgs because it disappeared upstream and no longer compiles"; # added 2023-07-04
   flashrom-stable = flashprog;   # Added 2024-03-01
   flatbuffers_2_0 = flatbuffers; # Added 2022-05-12
+  flintqs = throw "FlintQS has been removed due to lack of maintenance and security issues; use SageMath or FLINT instead"; # Added 2024-03-21
   flutter2 = throw "flutter2 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2023-07-03
   flutter37 = throw "flutter37 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2023-07-03
   foldingathome = fahclient; # Added 2020-09-03
@@ -1135,6 +1137,7 @@ mapAliases ({
   spark2 = throw "'spark2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_2_4 = throw "'spark_2_4' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_3_1 = throw "'spark_3_1' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
+  spark_3_3 = throw "'spark_3_3' is no longer supported nixpkgs, please use 'spark'"; # Added 2024-03-23
   spark2014 = gnatprove; # Added 2024-02-25
 
   # Added 2020-02-10

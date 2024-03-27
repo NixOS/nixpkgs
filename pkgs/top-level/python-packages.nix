@@ -2750,6 +2750,8 @@ self: super: with self; {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbglib = callPackage ../development/python-modules/dbglib { };
+
   dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
 
   dbt-core = callPackage ../development/python-modules/dbt-core { };
@@ -3754,6 +3756,8 @@ self: super: with self; {
   enochecker-core = callPackage ../development/python-modules/enochecker-core { };
 
   enrich = callPackage ../development/python-modules/enrich { };
+
+  enterpriseattack = callPackage ../development/python-modules/enterpriseattack { };
 
   entrance = callPackage ../development/python-modules/entrance {
     routerFeatures = false;
@@ -5374,6 +5378,8 @@ self: super: with self; {
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
+  hsh = callPackage ../development/python-modules/hsh { };
+
   hsluv = callPackage ../development/python-modules/hsluv { };
 
   hstspreload = callPackage ../development/python-modules/hstspreload { };
@@ -6778,11 +6784,19 @@ self: super: with self; {
 
   llama-index-question-gen-openai = callPackage ../development/python-modules/llama-index-question-gen-openai { };
 
+  llama-index-readers-database = callPackage ../development/python-modules/llama-index-readers-database { };
+
   llama-index-readers-file = callPackage ../development/python-modules/llama-index-readers-file { };
 
   llama-index-readers-json = callPackage ../development/python-modules/llama-index-readers-json { };
 
   llama-index-readers-llama-parse = callPackage ../development/python-modules/llama-index-readers-llama-parse { };
+
+  llama-index-readers-s3 = callPackage ../development/python-modules/llama-index-readers-s3 { };
+
+  llama-index-readers-twitter = callPackage ../development/python-modules/llama-index-readers-twitter { };
+
+  llama-index-readers-txtai = callPackage ../development/python-modules/llama-index-readers-txtai { };
 
   llama-index-readers-weather = callPackage ../development/python-modules/llama-index-readers-weather { };
 
@@ -8389,6 +8403,8 @@ self: super: with self; {
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
 
+  naked = callPackage ../development/python-modules/naked { };
+
   namedlist = callPackage ../development/python-modules/namedlist { };
 
   nameparser = callPackage ../development/python-modules/nameparser { };
@@ -9062,7 +9078,7 @@ self: super: with self; {
 
   openvino = callPackage ../development/python-modules/openvino {
     openvino-native = pkgs.openvino.override {
-      inherit python;
+      python3Packages = self;
     };
   };
 
@@ -9356,7 +9372,7 @@ self: super: with self; {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
 
-  pcbnew-transition = callPackage ../development/python-modules/pcbnew-transition { };
+  pcbnewtransition = callPackage ../development/python-modules/pcbnewtransition { };
 
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
@@ -12909,6 +12925,8 @@ self: super: with self; {
 
   requests-credssp = callPackage ../development/python-modules/requests-credssp { };
 
+  requests-gssapi = callPackage ../development/python-modules/requests-gssapi { };
+
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
   requests = callPackage ../development/python-modules/requests { };
@@ -13501,7 +13519,7 @@ self: super: with self; {
 
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
 
-  setuptools_dso = callPackage ../development/python-modules/setuptools_dso { };
+  setuptools-dso = callPackage ../development/python-modules/setuptools-dso { };
 
   setuptools-generate = callPackage ../development/python-modules/setuptools-generate { };
 

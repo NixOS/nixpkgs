@@ -36,12 +36,10 @@ buildPythonPackage rec {
 
   dependencies = [
     jupyterhub
+    pyjwt
   ];
 
   passthru.optional-dependencies = {
-    azuread = [
-      pyjwt
-    ];
     googlegroups = [
       google-api-python-client
       google-auth-oauthlib

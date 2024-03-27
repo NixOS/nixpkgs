@@ -123,6 +123,15 @@ core = stdenv.mkDerivation rec {
 
   inherit (common) binToOutput src prePatch;
 
+  patches = [
+    (fetchpatch {
+      name = "ttfdump-CVE-2024-25262.patch";
+      url = "https://tug.org/svn/texlive/trunk/Build/source/texk/ttfdump/libttf/hdmx.c?r1=57915&r2=69520&view=patch";
+      stripLen = 2;
+      hash = "sha256-WH2kioqFAs3jaFmu4DdEUdrTf6eiymtiWTZi3vWwU7k=";
+    })
+  ];
+
   outputs = [ "out" "dev" "man" "info" ]
     ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
@@ -308,11 +317,11 @@ chktex = stdenv.mkDerivation {
 # for details see https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live
 context = stdenv.mkDerivation rec {
   pname = "luametatex";
-  version = "2.11.02";
+  version = "2.10.08";
 
   src = fetchurl {
-    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?revision=70616&view=co";
-    hash = "sha256-o7esoBBTTYEstkd7l34BWxew3fIRdVcFiGxrT1/KP1o=";
+    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?revision=67034&view=co";
+    hash = "sha256-3JeOUQ63jJOZWTxFCoyWjfcrspmdmC/yqgS1JaLfTWk=";
   };
 
   enableParallelBuilding = true;

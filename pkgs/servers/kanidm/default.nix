@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
     owner = pname;
     repo = pname;
     # Latest revision of 1.1.0-rc.16 stable branch
-    rev = "4c88d6b27c9b82ad5b2482bda140025d7068293f";
-    hash = "sha256-tatZ56uIusNvAAGwJ731rfmHvheOtPXjPUxLuAPFxXs=";
+    rev = "e51d0dee44ecabbf7be9e855753453bb2f61cced";
+    hash = "sha256-YgrlmSrjOzn/oFWmYy/71xwcq53lJbmiLIFzn2sIFAk=";
   };
 
   cargoLock = {
