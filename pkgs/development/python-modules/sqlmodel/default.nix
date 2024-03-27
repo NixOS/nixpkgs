@@ -6,7 +6,7 @@
 , poetry-core
 , pydantic
 , pytest-asyncio
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , sqlalchemy
 }:
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     dirty-equals
     fastapi
     pytest-asyncio
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [
