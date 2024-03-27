@@ -16189,6 +16189,12 @@
     githubId = 39039420;
     name = "Quinn Dougherty";
   };
+  qusic = {
+    email = "qusicx@gmail.com";
+    github = "Qusic";
+    githubId = 2141853;
+    name = "Bang Lee";
+  };
   qyliss = {
     email = "hi@alyssa.is";
     github = "alyssais";
