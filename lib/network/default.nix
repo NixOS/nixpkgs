@@ -4,7 +4,7 @@ let
 in
 {
   ipv4 = {
-    fromCidr =
+    fromCidrString =
       cidr:
       let
         splitCidr = lib.splitString "/" cidr;

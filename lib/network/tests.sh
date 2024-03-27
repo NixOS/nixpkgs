@@ -100,10 +100,10 @@ expectFailure() {
 
 
 # Test basic cases for ingesting a CIDR string.
-expectEqual '(ipv4.fromCidr "192.168.0.1/24").cidr' '"192.168.0.1/24"'
-expectEqual '(ipv4.fromCidr "192.168.0.1/24").address' '"192.168.0.1"'
-expectEqual '(ipv4.fromCidr "192.168.0.1/24").prefixLength' '"24"'
-expectEqual '(ipv4.fromCidr "192.168.0.1/24").subnetMask' '"255.255.255.0"'
+expectEqual '(ipv4.fromCidrString "192.168.0.1/24").cidr' '"192.168.0.1/24"'
+expectEqual '(ipv4.fromCidrString "192.168.0.1/24").address' '"192.168.0.1"'
+expectEqual '(ipv4.fromCidrString "192.168.0.1/24").prefixLength' '"24"'
+expectEqual '(ipv4.fromCidrString "192.168.0.1/24").subnetMask' '"255.255.255.0"'
 
 # Test pow function
 expectEqual 'internal.common.pow 2 0' '1'
