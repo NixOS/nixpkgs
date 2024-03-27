@@ -38,7 +38,7 @@ let
     sourceTypes
     ;
 
-  inherit (backendStdenv) buildPlatform hostPlatform targetPlatform;
+  inherit (backendStdenv) hostPlatform;
 
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
@@ -157,39 +157,21 @@ backendStdenv.mkDerivation (
 
     # src :: Optional Derivation
     src =
-      # TODO(@connorbaker): Remove debugging lib.warn and inline this.
-      let
-        src =
-          trivial.mapNullable
-            (
-              { relative_path, sha256, ... }:
-              fetchurl {
-                url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
-                inherit sha256;
-              }
-            )
-            (redistribRelease.${hostPlatformRedistArch} or null);
-      in
-      lib.warn
-      ''
-        Info:
-        - redistName: ${redistName}
-        - hostPlatformRedistArch: ${hostPlatformRedistArch}
-        - pname: ${finalAttrs.pname}
-        - version: ${finalAttrs.version}
-        - outputs: ${builtins.toJSON finalAttrs.outputs}
-        - brokenConditions: ${builtins.toJSON finalAttrs.brokenConditions}
-        - badPlatformsConditions: ${builtins.toJSON finalAttrs.badPlatformsConditions}
-        - buildPlatform: ${buildPlatform.system}
-        - hostPlatform: ${hostPlatform.system}
-        - targetPlatform: ${targetPlatform.system}
-      ''
-      src;
+      trivial.mapNullable
+        (
+          { relative_path, sha256, ... }:
+          fetchurl {
+            url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+            inherit sha256;
+          }
+        )
+        (redistribRelease.${hostPlatformRedistArch} or null);
 
     # Handle the pkg-config files:
     # 1. No FHS
     # 2. Location expected by the pkg-config wrapper
     # 3. Generate unversioned names too
+    # TODO(@connorbaker): Not all packages have a lib or dev output, so we should check for their existence.
     postPatch = ''
       for path in pkg-config pkgconfig ; do
         [[ -d "$path" ]] || continue
@@ -236,17 +218,6 @@ backendStdenv.mkDerivation (
         # Mark the CUDA toolkit root directory for the CUDA compatibility libraries
         markForCudatoolkitRootHook
         # (markForCudatoolkitRootHook.__spliced.buildHost or markForCudatoolkitRootHook)
-      ]
-      # autoAddCudaCompatRunpath depends on cuda_compat and would cause
-      # infinite recursion if applied to `cuda_compat` itself (beside the fact
-      # that it doesn't make sense in the first place)
-      ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
-        # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
-        # See its documentation in ./setup-hooks/auto-add-cuda-compat-runpath-hook/default.nix.
-        # NOTE(@connorbaker): Because autoAddCudaCompatRunpath is in nativeBuildInputs, it tries to use cuda_compat
-        # from buildPackages, but we need to use the one from targetPackages.
-        # We can either use autoAddCudaCompatRunpath.__spliced.hostTarget or move it to buildInputs.
-        (autoAddCudaCompatRunpath.__spliced.hostTarget or autoAddCudaCompatRunpath)
       ];
 
     buildInputs =
@@ -256,6 +227,17 @@ backendStdenv.mkDerivation (
         # nvcc forces us to use an older gcc
         # NB: We don't actually know if this is the right thing to do
         stdenv.cc.cc.lib
+      ]
+      # autoAddCudaCompatRunpath depends on cuda_compat and would cause
+      # infinite recursion if applied to `cuda_compat` itself (beside the fact
+      # that it doesn't make sense in the first place)
+      ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
+        # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
+        # See its documentation in ./setup-hooks/auto-add-cuda-compat-runpath-hook/default.nix.
+        # NOTE(@connorbaker): If autoAddCudaCompatRunpath is in nativeBuildInputs, it tries to use cuda_compat
+        # from buildPackages, but we need to use the one from pkgs (pkgsHostTarget).
+        # We can either use autoAddCudaCompatRunpath.__spliced.hostTarget or move it to buildInputs.
+        autoAddCudaCompatRunpath
       ];
 
     # Picked up by autoPatchelf
