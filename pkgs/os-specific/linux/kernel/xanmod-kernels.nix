@@ -29,6 +29,10 @@ let
     };
 
     structuredExtraConfig = with lib.kernel; {
+      # CPUFreq governor Performance
+      CPU_FREQ_DEFAULT_GOV_PERFORMANCE = lib.mkOverride 60 yes;
+      CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = lib.mkOverride 60 no;
+
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
