@@ -19029,6 +19029,15 @@
     githubId = 12595971;
     name = "Guillaume Girol";
   };
+  syntax626 = {
+    email = "sntx.htqjd@simplelogin.com";
+    github = "Syntax626";
+    githubId = 48636286;
+    name = "sntx";
+    keys = [{
+      fingerprint = "0809 A274 05DE 37A1 6884 FD78 071E 9A01 90AA B7E9";
+    }];
+  };
   synthetica = {
     email = "nix@hilhorst.be";
     github = "Synthetica9";
