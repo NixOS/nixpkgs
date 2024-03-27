@@ -152,16 +152,16 @@ let
 
   self = buildEnv rec {
     pname = "local-ai";
-    version = "2.10.1";
+    version = "2.11.0";
 
     src = fetchFromGitHub {
       owner = "go-skynet";
       repo = "LocalAI";
       rev = "v${version}";
-      hash = "sha256-135s1Gw8mfOIx4kXlw2pYrD3ewwajUtnz3sPY/CtoLw=";
+      hash = "sha256-Sqo4NOggUNb1ZemT9TRknBmz8dThe/X43R+4JFfQJ4M=";
     };
 
-    vendorHash = "sha256-UCeG0TKS+VBW8D87VmxTHS2tCAf0ADEYTJayaSiua6s=";
+    vendorHash = "sha256-3bOr8DnAjTzOpVDB5wmlPxECNteWw3tI0yc1f2Wt4y0=";
 
     # Workaround for
     # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
