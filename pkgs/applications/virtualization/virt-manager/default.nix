@@ -76,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    pytest7CheckHook
     cpio
     cdrtools
     xorriso
