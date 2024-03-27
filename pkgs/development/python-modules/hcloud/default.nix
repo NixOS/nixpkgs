@@ -7,12 +7,13 @@
 , python-dateutil
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "hcloud";
   version = "1.34.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-8hwr0K+6nLgAVMhXb/08CS7HrlLYQ/SV0K8MWH/PQk0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     future
     requests
     python-dateutil
