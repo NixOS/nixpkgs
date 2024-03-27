@@ -49,11 +49,11 @@
 , unzip
 , usbutils
 , which
-, runCommand
 , xkeyboard_config
 , zlib
 , makeDesktopItem
 , tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
+, runCommandLocal
 }:
 
 let
@@ -184,14 +184,14 @@ let
       ncurses5
 
       # Flutter can only search for certs Fedora-way.
-      (runCommand "fedoracert" {}
+      (runCommandLocal "fedoracert" {}
         ''
         mkdir -p $out/etc/pki/tls/
         ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
         '')
     ];
   };
-in runCommand
+in runCommandLocal
   drvName
   {
     startScript = ''
@@ -201,7 +201,14 @@ in runCommand
     preferLocalBuild = true;
     allowSubstitutes = false;
     passthru = {
+      inherit version;
       unwrapped = androidStudio;
+      updateScript = runCommandLocal "update-android-studio-${channel}" {
+        src = ./update.sh;
+        nativeBuildInputs = [ makeWrapper ];
+      } ''
+        makeWrapper $src $out --add-flags "${channel}"
+      '';
     };
     meta = with lib; {
       description = "The Official IDE for Android (${channel} channel)";
