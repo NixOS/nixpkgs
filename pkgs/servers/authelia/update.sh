@@ -25,10 +25,6 @@ replace() {
     sed -i "s@$1@$2@g" "$3"
 }
 
-grab_version() {
-    instantiateClean "authelia.version"
-}
-
 # provide a github token so you don't get rate limited
 # if you use gh cli you can use:
 #     `export GITHUB_TOKEN="$(cat ~/.config/gh/config.yml | yq '.hosts."github.com".oauth_token' -r)"`
@@ -59,29 +55,12 @@ NEW_SRC_HASH="$(fetchNewHash authelia.src)"
 echo "New src hash $NEW_SRC_HASH"
 replace "$TMP_HASH" "$NEW_SRC_HASH" "$DRV_DIR/sources.nix"
 
-# after updating src the next focus is the web dependencies
-# build package-lock.json since authelia uses pnpm
-WEB_DIR=$(mktemp -d)
-clean_up() {
-  rm -rf "$WEB_DIR"
-}
-trap clean_up EXIT
-
-OLD_PWD=$PWD
-cd $WEB_DIR
-OUT=$(nix-build -E "with import $NIXPKGS_ROOT {}; authelia.src" --no-out-link)
-cp -r $OUT/web/package.json .
-npm install --package-lock-only --legacy-peer-deps --ignore-scripts
-mv package-lock.json "$DRV_DIR/"
-cd $OLD_PWD
-
-OLD_NPM_DEPS_HASH="$(instantiateClean authelia.web.npmDepsHash)"
-echo "Old npm deps hash $OLD_NPM_DEPS_HASH"
-replace "$OLD_NPM_DEPS_HASH" "$TMP_HASH" "$DRV_DIR/sources.nix"
-NEW_NPM_DEPS_HASH="$(fetchNewHash authelia.web)"
-echo "New npm deps hash $NEW_NPM_DEPS_HASH"
-replace "$TMP_HASH" "$NEW_NPM_DEPS_HASH" "$DRV_DIR/sources.nix"
-clean_up
+OLD_PNPM_DEPS_HASH="$(instantiateClean authelia.web.pnpmDeps.outputHash)"
+echo "Old pnpm deps hash $OLD_PNPM_DEPS_HASH"
+replace "$OLD_PNPM_DEPS_HASH" "$TMP_HASH" "$DRV_DIR/sources.nix"
+NEW_PNPM_DEPS_HASH="$(fetchNewHash authelia.web)"
+echo "New pnpm deps hash $NEW_PNPM_DEPS_HASH"
+replace "$TMP_HASH" "$NEW_PNPM_DEPS_HASH" "$DRV_DIR/sources.nix"
 
 OLD_GO_VENDOR_HASH="$(instantiateClean authelia.vendorHash)"
 echo "Old go vendor hash $OLD_GO_VENDOR_HASH"
