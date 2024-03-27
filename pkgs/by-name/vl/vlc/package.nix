@@ -83,6 +83,8 @@
 , zlib
 
 , chromecastSupport ? true
+, enableSystemd ? true
+, enableVdpau ? true
 , jackSupport ? false
 , onlyLibVLC ? false
 , skins2Support ? !onlyLibVLC
@@ -173,7 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
     libupnp
     libv4l
     libva
-    libvdpau
     libvorbis
     libxml2
     lua5
@@ -183,11 +184,12 @@ stdenv.mkDerivation (finalAttrs: {
     schroedinger
     speex
     srt
-    systemd
     taglib
     xcbutilkeysyms
     zlib
   ]
+  ++ optionals enableSystemd [ systemd ]
+  ++ optionals enableVdpau [ libvdpau ]
   ++ optionals (!stdenv.hostPlatform.isAarch && !onlyLibVLC) [ live555 ]
   ++ optionals jackSupport [ libjack2 ]
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
@@ -285,7 +287,9 @@ stdenv.mkDerivation (finalAttrs: {
   # should be the same as pkgsBuildBuild.qt5.qttranslations.
   postFixup = ''
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
-    ${if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc}/lib/vlc/vlc-cache-gen $out/vlc/plugins
+    ${if stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      then "$out"
+      else pkgsBuildBuild.libvlc}/lib/vlc/vlc-cache-gen $out/vlc/plugins
   '' + optionalString withQt5 ''
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
