@@ -622,7 +622,10 @@ rec {
 
     attrTag = tags: attrTagWith { inherit tags; };
 
-    attrTagWith = args@{ tags }:
+    attrTagWith = args@{ tags, unpack ? false, unpackTagAttr ? "tag", unpackValueAttr ? "value" }:
+      # FIXME: proper exceptions
+      assert unpack -> !tags?${unpackTagAttr};
+      assert unpack -> !tags?${unpackValueAttr};
       let
         tags =
           mapAttrs
@@ -678,12 +681,17 @@ rec {
           in
             if tags?${choice}
             then
-              { ${choice} =
-                  (lib.modules.evalOptionValue
-                    (loc ++ [choice])
-                    tags.${choice}
-                    checkedValueDefs
-                  ).value;
+              let v =
+                    (lib.modules.evalOptionValue
+                      (loc ++ [choice])
+                      tags.${choice}
+                      checkedValueDefs
+                    ).value;
+              in
+              { ${choice} = v; }
+              // lib.optionalAttrs unpack {
+                ${unpackTagAttr} = choice;
+                ${unpackValueAttr} = v;
               }
             else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
         nestedTypes = tags;
