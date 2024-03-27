@@ -46,7 +46,9 @@ python3Packages.buildPythonApplication rec {
     backoff
     more-itertools
     pexpect
-    pytestCheckHook
+
+    # backblaze-b2 requires pytest 7 to complete tests.
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   preCheck = ''
@@ -60,10 +62,6 @@ python3Packages.buildPythonApplication rec {
 
     # fixed by https://github.com/Backblaze/B2_Command_Line_Tool/pull/915
     "TestRmConsoleTool"
-
-    "TestConsoleTool"
-    "TestNonUTF8TerminalSupport"
-    "TestVersionConsoleTool"
   ];
 
   disabledTestPaths = [
