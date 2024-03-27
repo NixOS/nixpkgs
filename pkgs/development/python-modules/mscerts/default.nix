@@ -2,12 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mscerts";
   version = "2024.3.27";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-Hucf3tToYm3P6ebKNlUs5V+X1B95u9P2UC1yOItZOhc=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   # extras_require contains signify -> circular dependency
 
