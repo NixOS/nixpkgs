@@ -88,8 +88,13 @@ filterAndCreateOverrides {
         ++ lib.lists.optionals (cudaAtLeast "12.0") [ libnvjitlink.lib ];
     };
 
+  # TODO(@connorbaker): cuda_cudart.dev depends on crt/host_config.h, which is from
+  # cuda_nvcc.dev. It would be nice to be able to encode that.
   cuda_cudart =
-    { buildPackages, lib }:
+    { addDriverRunpath, lib }:
+    let
+      inherit (addDriverRunpath.__spliced.buildHost or addDriverRunpath) driverLink;
+    in
     prevAttrs: {
       # Remove once cuda-find-redist-features has a special case for libcuda
       outputs =
@@ -105,7 +110,7 @@ filterAndCreateOverrides {
           while IFS= read -r -d $'\0' path ; do
             sed -i \
               -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
-              -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${buildPackages.addDriverRunpath.driverLink}/lib|" \
+              -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${driverLink}/lib|" \
               "$path"
           done < <(find -iname 'cuda-*.pc' -print0)
         ''
@@ -165,6 +170,11 @@ filterAndCreateOverrides {
       lib,
       setupCudaHook,
     }:
+    let
+      # CC must come from the host environment, not the target environment because it is
+      # used at build time.
+      inherit (backendStdenv.__spliced.buildHost or backendStdenv) cc;
+    in
     prevAttrs: {
       # Patch the nvcc.profile.
       # Syntax:
@@ -180,16 +190,6 @@ filterAndCreateOverrides {
       # backend-stdenv.nix
 
       postPatch =
-        let
-          # CC must come from the host environment, not the target environment because it is
-          # used at build time.
-          ccBin = lib.getBin (backendStdenv.__spliced.buildHost.cc or backendStdenv.cc);
-          # CUDA runtime libraries must come from the host/target environment because they
-          # are used at runtime, not build time (outside of linking).
-          cudartStatic = (cuda_cudart.__spliced.hostTarget or cuda_cudart).static;
-          cudartLib = lib.getLib (cuda_cudart.__spliced.hostTarget or cuda_cudart);
-          cudartDev = lib.getDev (cuda_cudart.__spliced.hostTarget or cuda_cudart);
-        in
         (prevAttrs.postPatch or "")
         + ''
           echo "Running the cuda_nvcc postPatch"
@@ -204,19 +204,23 @@ filterAndCreateOverrides {
           cat << EOF >> bin/nvcc.profile
 
           # Fix a compatible backend compiler
-          PATH += "${ccBin}/bin":
+          PATH += "${cc}/bin":
 
           # Expose the split-out nvvm
-          LIBRARIES =+ -L"''${!outputBin}/nvvm/lib"
-          INCLUDES =+ -I"''${!outputBin}/nvvm/include"
-
-          # Expose cudart and the libcuda stubs
-          LIBRARIES =+ -L"$static/lib" -L"${cudartStatic}/lib" -L"${cudartLib}/lib" -L"${cudartLib}/lib/stubs"
-          INCLUDES =+ -I"${cudartDev}/include"
+          LIBRARIES =+ "-L''${!outputBin}/nvvm/lib"
+          INCLUDES =+ "-I''${!outputBin}/nvvm/include"
           EOF
         '';
 
-      propagatedNativeBuildInputs = (prevAttrs.propagatedNativeBuildInputs or [ ]) ++ [ setupCudaHook ];
+      propagatedNativeBuildInputs = (prevAttrs.propagatedNativeBuildInputs or [ ]) ++ [ cc ];
+
+      # NOTE(@connorbaker):
+      # Though it might seem odd or counter-intuitive to add the setup hook to `propagatedBuildInputs` instead of
+      # `propagatedNativeBuildInputs`, it is necessary! If you move the setup hook from `propagatedBuildInputs` to
+      # `propagatedNativeBuildInputs`, it stops being propagated to downstream packages during their build because
+      # setup hooks in `propagatedNativeBuildInputs` are not designed to affect the runtime or build environment of
+      # dependencies; they are only meant to affect the build environment of the package that directly includes them.
+      propagatedBuildInputs = (prevAttrs.propagatedBuildInputs or [ ]) ++ [ setupCudaHook ];
 
       postInstall =
         (prevAttrs.postInstall or "")
@@ -261,23 +265,14 @@ filterAndCreateOverrides {
       qt5 ? null,
       qt6 ? null,
     }:
-    prevAttrs: {
-      nativeBuildInputs =
-        prevAttrs.nativeBuildInputs
-        ++ (
-          if (lib.strings.versionOlder prevAttrs.version "2022.2.0") then
-            [ qt5.wrapQtAppsHook ]
-          else
-            [ qt6.wrapQtAppsHook ]
-        );
-      buildInputs =
-        prevAttrs.buildInputs
-        ++ (
-          if (lib.strings.versionOlder prevAttrs.version "2022.2.0") then
-            [ qt5.qtwebview ]
-          else
-            [ qt6.qtwebview ]
-        );
+    prevAttrs:
+    let
+      qt = if lib.strings.versionOlder prevAttrs.version "2022.2.0" then qt5 else qt6;
+      inherit (qt) wrapQtAppsHook qtwebview;
+    in
+    {
+      nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ wrapQtAppsHook ];
+      buildInputs = prevAttrs.buildInputs ++ [ qtwebview ];
     };
 
   nsight_systems =
