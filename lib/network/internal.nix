@@ -165,6 +165,32 @@ rec {
         else
           afterSlash;
 
+    /**
+      Given an IP address and prefix length, creates an attribute set of network parameters.
+
+      # Example
+
+      ```nix
+      _makeIPv4 "192.168.0.1/24"
+      => {
+        address = "192.168.0.1";
+        cidr = "192.168.0.1/24";
+        prefixLength = "24";
+        subnetMask = "255.255.255.0";
+      }
+      ```
+
+      # Type
+
+      ```
+      _makeIPv4 :: String -> IPv4Address
+      ```
+
+      # Arguments
+
+      - [address] An IPv4 address.
+      - [prefixLength] A prefix length.
+    */
     _makeIPv4 = address: prefixLength: {
       cidr = concatStringsSep "/" [
         address
