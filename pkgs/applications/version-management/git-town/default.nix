@@ -32,8 +32,6 @@ buildGoModule rec {
     let
       skippedTests = [
         "TestGodog"
-        "TestRunner_CreateChildFeatureBranch"
-        "TestShellRunner_RunStringWith_Dir"
         "TestMockingShell_MockCommand"
         "TestShellRunner_RunStringWith_Input"
       ];
@@ -63,7 +61,7 @@ buildGoModule rec {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ allonsy blaggacao ];
+    maintainers = with maintainers; [ allonsy blaggacao gabyx ];
     mainProgram = "git-town";
   };
 }
