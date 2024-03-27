@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.24";
+  version = "0.0.25";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,15 +26,15 @@ buildPythonPackage rec {
     owner = "karpetrosyan";
     repo = "hishel";
     rev = "refs/tags/${version}";
-    hash = "sha256-wup1rQ5MHjsBaTdfueP9y7QhutoO0xYeexZPDQpUEJk=";
+    hash = "sha256-vDzXrAGJUqG9+wOUWXeKLYraUrILJFAQXf60iCAHRPo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 

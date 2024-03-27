@@ -7356,6 +7356,7 @@ self: super: with self; {
   mizani = callPackage ../development/python-modules/mizani { };
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
+  mkdocs-autolinks-plugin = callPackage ../development/python-modules/mkdocs-autolinks-plugin { };
   mkdocs-autorefs = callPackage ../development/python-modules/mkdocs-autorefs { };
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
@@ -14556,6 +14557,8 @@ self: super: with self; {
 
   tencentcloud-sdk-python = callPackage ../development/python-modules/tencentcloud-sdk-python { };
 
+  tendo = callPackage ../development/python-modules/tendo { };
+
   tensorboard-data-server = callPackage ../development/python-modules/tensorboard-data-server { };
 
   tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
@@ -16030,6 +16033,8 @@ self: super: with self; {
   typing-extensions = callPackage ../development/python-modules/typing-extensions { };
 
   typing-inspect = callPackage ../development/python-modules/typing-inspect { };
+
+  typing-validation = callPackage ../development/python-modules/typing-validation { };
 
   typish = callPackage ../development/python-modules/typish { };
 

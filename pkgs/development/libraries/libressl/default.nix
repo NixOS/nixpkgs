@@ -113,5 +113,13 @@ in {
   libressl_3_8 = generic {
     version = "3.8.3";
     hash = "sha256-pl9A4+9uPJRRyDGObyxFTDZ+Z/CcDN4YSXMaTW7McnI=";
+
+    patches = [
+      (fetchpatch {
+        name = "libtls-pkg-config-static.patch";
+        url = "https://github.com/libressl/portable/commit/f7a0f40d52b994d0bca0eacd88b39f71e447c5d9.patch";
+        hash = "sha256-2ly6lsIdoV/riVqDViFXDP7nkZ/RUatEdiaSudQKtz0=";
+      })
+    ];
   };
 }

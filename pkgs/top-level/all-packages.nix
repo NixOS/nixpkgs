@@ -22282,7 +22282,6 @@ with pkgs;
 
   libdwarf = callPackage ../development/libraries/libdwarf { };
   dwarfdump = libdwarf.bin;
-  libdwarf_20210528 = callPackage ../development/libraries/libdwarf/20210528.nix { };
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
