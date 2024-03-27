@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     description = "De novo assembler for single molecule sequencing reads using repeat graphs";
     homepage = "https://github.com/fenderglass/Flye";
     license = licenses.bsd3;
-    platforms = platforms.unix ++ platforms.darwin;
+    platforms = platforms.unix;
     mainProgram = "flye";
     maintainers = with maintainers; [ assistant ];
   };
