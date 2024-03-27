@@ -1,4 +1,10 @@
 {
+  "sec-override-nixos-test": [
+    "index.html#sec-override-nixos-test"
+  ],
+  "test-opt-rawTestDerivationArg": [
+    "index.html#test-opt-rawTestDerivationArg"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
