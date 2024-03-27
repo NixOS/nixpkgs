@@ -7,25 +7,22 @@
 , coreutils
 , git
 , pkg-config
-, qtbase
-, qtsvg
-, qttools
+, qt6
 , snapper
 , util-linux
-, wrapQtAppsHook
 , enableSnapper ? true
 , nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-assistant";
-  version = "1.9";
+  version = "2.0";
 
   src = fetchFromGitLab {
     owner = "btrfs-assistant";
     repo = "btrfs-assistant";
     rev = finalAttrs.version;
-    hash = "sha256-a854WI8f9/G/BRU5rn1FKC6WRZyXNYsUL4p258C8ppw=";
+    hash = "sha256-nE8Vsc0leXWhbrjMgJDef6jl9MqdojRniGcvUmrQNUQ=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     btrfs-progs
-    qtbase
-    qtsvg
-    qttools
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtwayland
   ];
 
-  propagatedBuildInputs = [ wrapQtAppsHook ];
+  propagatedBuildInputs = [ qt6.wrapQtAppsHook ];
 
   prePatch = ''
     substituteInPlace src/util/System.cpp \
