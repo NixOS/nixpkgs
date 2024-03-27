@@ -30,17 +30,19 @@ The plugins will be available in the namespace `wordpressPackages.plugins`.
 Using it together with the Wordpress module could look like this:
 
 ```nix
-services.wordpress = {
-  sites."blog.${config.networking.domain}" = {
-    plugins = with pkgs.wordpressPackages.plugins; [
-      anti-spam-bee
-      code-syntax-block
-      cookie-notice
-      lightbox-with-photoswipe
-      wp-gdpr-compliance
-    ];
+{
+  services.wordpress = {
+    sites."blog.${config.networking.domain}" = {
+      plugins = with pkgs.wordpressPackages.plugins; [
+        anti-spam-bee
+        code-syntax-block
+        cookie-notice
+        lightbox-with-photoswipe
+        wp-gdpr-compliance
+      ];
+    };
   };
-};
+}
 ```
 
 The same scheme applies to `themes` and `languages`.

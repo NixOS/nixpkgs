@@ -16,14 +16,14 @@ A good example of all these things is zlib:
 { pkg-config, testers, ... }:
 
 stdenv.mkDerivation (finalAttrs: {
-  ...
+  /* ... */
 
   nativeBuildInputs = [ pkg-config validatePkgConfig ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    ...
+    /* ... */
     pkgConfigModules = [ "zlib" ];
   };
 })

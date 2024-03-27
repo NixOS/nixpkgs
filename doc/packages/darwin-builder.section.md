@@ -154,6 +154,7 @@ To do this, you just need to set the `virtualisation.darwin-builder.*` parameter
 in the example below and rebuild.
 
 ```nix
+  {
     darwin-builder = nixpkgs.lib.nixosSystem {
       system = linuxSystem;
       modules = [
@@ -166,6 +167,8 @@ in the example below and rebuild.
           virtualisation.darwin-builder.workingDirectory = "/var/lib/darwin-builder";
         }
       ];
+    };
+  }
 ```
 
 You may make any other changes to your VM in this attribute set. For example,

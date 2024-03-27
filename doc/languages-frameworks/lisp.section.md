@@ -56,9 +56,11 @@ in mkShell {
 Such a Lisp can be now used e.g. to compile your sources:
 
 ```nix
-buildPhase = ''
-  ${sbcl'}/bin/sbcl --load my-build-file.lisp
-''
+{
+  buildPhase = ''
+    ${sbcl'}/bin/sbcl --load my-build-file.lisp
+  '';
+}
 ```
 
 ## Importing packages from Quicklisp {#lisp-importing-packages-from-quicklisp}

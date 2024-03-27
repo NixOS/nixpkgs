@@ -66,9 +66,9 @@ in {
     # Settings to setup what certificates are used for which endpoint.
     virtualHosts = {
       "${fqdn}".enableACME = true;
-      "meta.${fqdn}".useACMEHost = fqdn:
-      "man.${fqdn}".useACMEHost = fqdn:
-      "git.${fqdn}".useACMEHost = fqdn:
+      "meta.${fqdn}".useACMEHost = fqdn;
+      "man.${fqdn}".useACMEHost = fqdn;
+      "git.${fqdn}".useACMEHost = fqdn;
     };
   };
 }

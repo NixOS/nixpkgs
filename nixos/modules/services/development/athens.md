@@ -42,7 +42,7 @@ To use the local proxy in Go builds, you can set the proxy as environment variab
 ```nix
 {
   environment.variables = {
-    GOPROXY = "http://localhost:3000"
+    GOPROXY = "http://localhost:3000";
   };
 }
 ```

@@ -134,7 +134,7 @@ Here is an example `default.nix`, using some of the previously discussed argumen
 { lib, buildDotnetModule, dotnetCorePackages, ffmpeg }:
 
 let
-  referencedProject = import ../../bar { ... };
+  referencedProject = import ../../bar { /* ... */ };
 in buildDotnetModule rec {
   pname = "someDotnetApplication";
   version = "0.1";

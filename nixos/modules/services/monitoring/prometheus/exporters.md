@@ -10,6 +10,7 @@ One of the most common exporters is the
 it provides hardware and OS metrics from the host it's
 running on. The exporter could be configured as follows:
 ```nix
+{
   services.prometheus.exporters.node = {
     enable = true;
     port = 9100;
@@ -23,6 +24,7 @@ running on. The exporter could be configured as follows:
     openFirewall = true;
     firewallFilter = "-i br0 -p tcp -m tcp --dport 9100";
   };
+}
 ```
 It should now serve all metrics from the collectors that are explicitly
 enabled and the ones that are
@@ -36,6 +38,7 @@ the [available options](https://nixos.org/nixos/options.html#prometheus.exporter
 
 Prometheus can now be configured to consume the metrics produced by the exporter:
 ```nix
+{
     services.prometheus = {
       # ...
 
@@ -49,7 +52,8 @@ Prometheus can now be configured to consume the metrics produced by the exporter
       ];
 
       # ...
-    }
+    };
+}
 ```
 
 ## Adding a new exporter {#module-services-prometheus-exporters-new-exporter}

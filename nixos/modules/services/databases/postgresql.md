@@ -16,8 +16,10 @@ PostgreSQL is an advanced, free relational database.
 
 To enable PostgreSQL, add the following to your {file}`configuration.nix`:
 ```nix
-services.postgresql.enable = true;
-services.postgresql.package = pkgs.postgresql_15;
+{
+  services.postgresql.enable = true;
+  services.postgresql.package = pkgs.postgresql_15;
+}
 ```
 Note that you are required to specify the desired version of PostgreSQL (e.g. `pkgs.postgresql_15`). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for [](#opt-services.postgresql.package) such as the most recent release of PostgreSQL.
 
@@ -36,7 +38,9 @@ alice=>
 
 By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlSchema`. You can override this using [](#opt-services.postgresql.dataDir), e.g.
 ```nix
-services.postgresql.dataDir = "/data/postgresql";
+{
+  services.postgresql.dataDir = "/data/postgresql";
+}
 ```
 
 ## Initializing {#module-services-postgres-initializing}
@@ -95,16 +99,19 @@ databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
 are already created.
 
 ```nix
+  {
     systemd.services.postgresql.postStart = lib.mkAfter ''
       $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
       $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
+  }
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
 
 ```nix
+  {
     systemd.services."migrate-service1-db1" = {
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
@@ -119,6 +126,7 @@ are already created.
         # ....
       '';
     };
+  }
 ```
 
 #### as service user {#module-services-postgres-initializing-extra-permissions-service-user}
@@ -130,6 +138,7 @@ are already created.
 ##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
 
 ```nix
+  {
     environment.PSQL = "psql --port=${toString services.postgresql.port}";
     path = [ postgresql ];
     systemd.services."service1".preStart = ''
@@ -137,11 +146,13 @@ are already created.
       $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
+  }
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-user-oneshot}
 
 ```nix
+  {
     systemd.services."migrate-service1-db1" = {
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
@@ -156,6 +167,7 @@ are already created.
         # ....
       '';
     };
+  }
 ```
 
 ## Upgrading {#module-services-postgres-upgrading}
@@ -257,11 +269,13 @@ postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 
 To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 ```nix
-services.postgresql.package = pkgs.postgresql_12;
-services.postgresql.extraPlugins = ps: with ps; [
-  pg_repack
-  postgis
-];
+{
+  services.postgresql.package = pkgs.postgresql_12;
+  services.postgresql.extraPlugins = ps: with ps; [
+    pg_repack
+    postgis
+  ];
+}
 ```
 
 You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like:
