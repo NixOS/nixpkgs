@@ -1,72 +1,97 @@
 # shellcheck shell=bash
 
-guard=Sourcing
-reason=
+# Guard helper function
+# Returns 0 (success) if the hook should be run, 1 (failure) otherwise.
+# This allows us to use short-circuit evaluation to avoid running the hook when it shouldn't be.
+setupCudaHookGuard() {
+    local -i hostOffset=${hostOffset:?}
+    local -i targetOffset=${targetOffset:?}
+    local fnName="setup-cuda-hook::setupCudaHookGuard hostOffset=$hostOffset targetOffset=$targetOffset"
+    local guard=Skipping
+    local reason=
 
-# export NIX_DEBUG=1
+    # This hook is meant only to add a stub file to the nix-support directory of the package including it in its
+    # nativeBuildInputs, so that the setup hook propagated by cuda_nvcc, setup-cuda-hook, can detect it and add the
+    # package to the CUDA toolkit root. Therefore, since it only modifies the package being built and will not be
+    # propagated, it should only ever be included in nativeBuildInputs.
+    if (( hostOffset == -1 && targetOffset == 0)); then
+        guard=Sourcing
+        reason="because the hook is in nativeBuildInputs relative to the package being built"
+    elif [[ -n "${cudaSetupHookOnce-}" ]]; then
+        guard=Skipping
+        reason="because the hook has been propagated more than once"
+    fi
 
-# Only run the hook from buildInputs: outside executables like cuda_nvcc, most
-# CUDA dependencies are needed at runtime, not build-time.
-# See the table under https://nixos.org/manual/nixpkgs/unstable/#dependency-propagation for information
-# about the different target combinations and their offsets.
-# Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
-# native compile.
-if [[ -v ${strictDeps-} ]]; then
-    guard=Skipping
-    reason=" because strictDeps is set"
-elif (( "${hostOffset:?}" < 0 )); then
-    guard=Skipping
-    reason=" because the hook is not in buildInputs"
-elif [[ -n ${cudaSetupHookOnce-} ]]; then
-    guard=Skipping
-    reason=" because the hook has been propagated more than once"
-fi
+    echo "$fnName: $guard $reason" >&2
 
-if (( "${NIX_DEBUG:-0}" >= 1 )); then
-    echo "$guard hostOffset=$hostOffset targetOffset=${targetOffset:?} setup-cuda-hook$reason" >&2
-else
-    echo "$guard setup-cuda-hook$reason" >&2
-fi
+    # Recall that test commands return 0 for success and 1 for failure.
+    [[ "$guard" == Sourcing ]]
+    return $?
+}
 
-[[ "$guard" = Sourcing ]] || return 0
+# Guard against calling the hook at the wrong time.
+setupCudaHookGuard || return 0
 
 declare -g cudaSetupHookOnce=1
 declare -Ag cudaHostPathsSeen=()
 declare -Ag cudaOutputToPath=()
 
-extendCudaHostPathsSeen() {
-    local fnName=setup-cuda-hook::extendCudaHostPathsSeen
-    (( "${NIX_DEBUG:-0}" >= 1 )) && echo "$fnName: $1" >&2
+# Make a copy of the current offsets, so that we can use them in information messages; this is necessary because the
+# offsets are not consistently available in the environment during various phases of the build.
+declare -g snapshotHostOffset="${hostOffset:?}"
+declare -g snapshotTargetOffset="${targetOffset:?}"
 
+setupCudaHookGetFnName() {
+    local fnName="setup-cuda-hook::${1:?}"
+    local hostOffset="${hostOffset:-$snapshotHostOffset}"
+    local targetOffset="${targetOffset:-$snapshotTargetOffset}"
+    echo "$fnName hostOffset=$hostOffset targetOffset=$targetOffset"
+}
+
+extendCudaHostPathsSeen() {
+    # Name function never needs to have return value checked.
+    # shellcheck disable=SC2155
+    local fnName="$(setupCudaHookGetFnName extendCudaHostPathsSeen)"
     local markerPath="$1/nix-support/include-in-cudatoolkit-root"
+    (( ${NIX_DEBUG:-0} >= 1 )) && echo "$fnName: checking for existence of $markerPath" >&2
+
     if [[ ! -f "$markerPath" ]]; then
-        (( "${NIX_DEBUG:-0}" >= 1 )) && echo "$fnName: skipping since $markerPath exists" >&2
-        return
+        (( ${NIX_DEBUG:-0} >= 1 )) && echo "$fnName: skipping since $markerPath does not exist" >&2
+        return 0
     fi
 
-    if [[ -v cudaHostPathsSeen[$1] ]]; then
-        (( "${NIX_DEBUG:-0}" >= 1 )) && echo "$fnName: skipping since $1 has already been seen" >&2
-        return
+    if [[ -v cudaHostPathsSeen["$1"] ]]; then
+        (( ${NIX_DEBUG:-0} >= 1 )) && echo "$fnName: skipping since $1 has already been seen" >&2
+        return 0
     fi
 
     # Add the path to the list of CUDA host paths.
     cudaHostPathsSeen["$1"]=1
+    (( ${NIX_DEBUG:-0} >= 1 )) && echo "$fnName: added $1 to cudaHostPathsSeen" >&2
+
+    # Only attempt to read the file referenced by markerPath if strictDeps is not set; otherwise it is blank and we
+    # don't need to read it.
+    [[ -n "${strictDeps-}" ]] && return 0
 
     # E.g. cuda_cudart-lib
     local cudaOutputName
-    read -r cudaOutputName < "$markerPath"
+    # Fail gracefully if the file is empty. This may happen if the package was built with strictDeps set,
+    # but the current build does not have strictDeps set.
+    read -r cudaOutputName < "$markerPath" || return 0
 
-    [[ -z "$cudaOutputName" ]] && return
+    [[ -z "$cudaOutputName" ]] && return 0
 
     local oldPath="${cudaOutputToPath[$cudaOutputName]-}"
     [[ -n "$oldPath" ]] && echo "$fnName: warning: overwriting $cudaOutputName from $oldPath to $1" >&2
     cudaOutputToPath["$cudaOutputName"]="$1"
 }
-addEnvHooks "$targetOffset" extendCudaHostPathsSeen
+addEnvHooks "${targetOffset:?}" extendCudaHostPathsSeen
 
 setupCUDAToolkit_ROOT() {
-    local fnName=setup-cuda-hook::setupCUDAToolkit_ROOT
-    (( "${NIX_DEBUG:-0}" >= 1 )) && echo "$fnName: cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
+    # Name function never needs to have return value checked.
+    # shellcheck disable=SC2155
+    local fnName="$(setupCudaHookGetFnName setupCUDAToolkit_ROOT)"
+    (( ${NIX_DEBUG:-0} >= 1 )) && echo "$fnName: cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
 
     for path in "${!cudaHostPathsSeen[@]}"; do
         addToSearchPathWithCustomDelimiter ";" CUDAToolkit_ROOT "$path"
@@ -81,10 +106,12 @@ setupCUDAToolkit_ROOT() {
 preConfigureHooks+=(setupCUDAToolkit_ROOT)
 
 setupCUDAToolkitCompilers() {
-    local fnName=setup-cuda-hook::setupCUDAToolkitCompilers
+    # Name function never needs to have return value checked.
+    # shellcheck disable=SC2155
+    local fnName="$(setupCudaHookGetFnName setupCUDAToolkitCompilers)"
     echo "$fnName: Running" >&2
 
-    [[ -n "${dontSetupCUDAToolkitCompilers-}" ]] && return
+    [[ -n "${dontSetupCUDAToolkitCompilers-}" ]] && return 0
 
     # Point NVCC at a compatible compiler
 
@@ -119,10 +146,12 @@ setupCUDAToolkitCompilers() {
 preConfigureHooks+=(setupCUDAToolkitCompilers)
 
 propagateCudaLibraries() {
-    local fnName=setup-cuda-hook::propagateCudaLibraries
-    (( "${NIX_DEBUG:-0}" >= 1 )) && echo "$fnName: cudaPropagateToOutput=$cudaPropagateToOutput cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
+    # Name function never needs to have return value checked.
+    # shellcheck disable=SC2155
+    local fnName="$(setupCudaHookGetFnName propagateCudaLibraries)"
+    (( ${NIX_DEBUG:-0} >= 1 )) && echo "$fnName: cudaPropagateToOutput=$cudaPropagateToOutput cudaHostPathsSeen=${!cudaHostPathsSeen[*]}" >&2
 
-    [[ -z "${cudaPropagateToOutput-}" ]] && return
+    [[ -z "${cudaPropagateToOutput-}" ]] && return 0
 
     mkdir -p "${!cudaPropagateToOutput}/nix-support"
     # One'd expect this should be propagated-bulid-build-deps, but that doesn't seem to work
