@@ -29,11 +29,11 @@ python3Packages.buildPythonApplication rec {
 
   preConfigure = ''
     substituteInPlace flye/polishing/alignment.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace flye/tests/test_toy.py \
-      --replace "find_executable(\"flye" "find_executable(\"$out/bin/flye" \
-      --replace "[\"flye" "[\"$out/bin/flye"
+      --replace-fail "find_executable(\"flye" "find_executable(\"$out/bin/flye" \
+      --replace-fail "[\"flye" "[\"$out/bin/flye"
   '';
 
   meta = with lib; {
