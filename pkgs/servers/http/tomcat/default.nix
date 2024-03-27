@@ -44,7 +44,7 @@ in {
   };
 
   tomcat10 = common {
-    version = "10.1.19";
-    hash = "sha256-w+pp2SvPw+15Ko2AeUrNuFbxwF2KBF4XpxoliKDHULc=";
+    version = "10.1.20";
+    hash = "sha256-hCfFUJ8U5IKUCgFfP2DeIDQtPXLI3qmYKk1xEstxpu4=";
   };
 }
