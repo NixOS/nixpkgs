@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch2
+, nixosTests
 }:
 let
   version = "0.10.0";
@@ -60,6 +61,10 @@ buildGoModule {
       hash = "sha256-mMGJMPB6T7KeDXjEXffdrhzyKwaFmhuisK6PjHOJIdU=";
     })
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) scion-freestanding-deployment;
+  };
 
   meta = with lib; {
     description = "A future Internet architecture utilizing path-aware networking";
