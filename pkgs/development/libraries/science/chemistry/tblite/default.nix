@@ -2,8 +2,10 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, cmake
 , gfortran
+, meson
+, ninja
+, pkg-config
 , blas
 , lapack
 , mctc-lib
@@ -35,13 +37,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # Fix the Pkg-Config files for doubled store paths
-  postPatch = ''
-    substituteInPlace config/template.pc \
-      --replace "\''${prefix}/" ""
-  '';
-
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     blas
@@ -55,10 +56,6 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "dev" ];
-
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
 
   doCheck = true;
   preCheck = ''
