@@ -27,16 +27,17 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
+  pythonRelaxDeps = [
+    "packaging"
+    "structlog"
+  ];
+
   propagatedBuildInputs = [
     colorama
     packaging
     pydantic
     redis
     structlog
-  ];
-
-  pythonRelaxDeps = [
-    "structlog"
   ];
 
   pythonImportsCheck = [
