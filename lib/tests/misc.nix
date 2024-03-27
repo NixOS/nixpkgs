@@ -299,11 +299,16 @@ runTests {
 
   testMakeIncludePathWithPkgs = {
     expr = (makeIncludePath [
-      { dev = { outPath = "/nix/store/bash"; }; }
-      # lib.getOutput "dev" return out if "dev" is not found
-      { out = { outPath = "/nix/store/openssl"; }; }
+      # makeIncludePath preferably selects the "dev" output
+      { dev.outPath = "/dev"; out.outPath = "/out"; outPath = "/default"; }
+      # "out" is used if "dev" is not found
+      { out.outPath = "/out"; outPath = "/default"; }
+      # And it returns the derivation directly if there's no "out" either
+      { outPath = "/default"; }
+      # Same if the output is specified explicitly, even if there's a "dev"
+      { dev.outPath = "/dev"; outPath = "/default"; outputSpecified = true; }
     ]);
-    expected = "/nix/store/bash/include:/nix/store/openssl/include";
+    expected = "/dev/include:/out/include:/default/include:/default/include";
   };
 
   testMakeIncludePathWithEmptyList = {
