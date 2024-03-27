@@ -185,7 +185,12 @@ let
       runHook postConfigure
     '');
 
-    buildPhase = args.buildPhase or (''
+    buildPhase = args.buildPhase or (
+      lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+        "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+      lib.warnIf (builtins.elem "-buildid=" ldflags)
+        "`-buildid=` is set by default as ldflag by buildGoModule"
+    ''
       runHook preBuild
 
       exclude='\(/_\|examples\|Godeps\|testdata'
@@ -304,7 +309,4 @@ let
   });
 in
 lib.warnIf (args' ? vendorSha256) "`vendorSha256` is deprecated. Use `vendorHash` instead"
-lib.warnIf (buildFlags != "" || buildFlagsArray != "")
-  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
-lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
   package
