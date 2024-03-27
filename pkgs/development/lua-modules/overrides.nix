@@ -330,6 +330,7 @@ with prev;
       mariadb.client
       libmysqlclient
     ];
+    meta.broken = true;
   });
 
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
