@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "18mi6ccq640jq21hmir35v2967h07bjv226072d9qz5qkzkmrhss",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.5/calendar-v4.6.5.tar.gz",
-    "version": "4.6.5",
+    "sha256": "18hlk6j3dzpcd61sgn8r8zmcc9d1bklq030kwyn4mzr20dcf75w5",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.7/calendar-v4.6.7.tar.gz",
+    "version": "4.6.7",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "0g6pbzm7bxllpkf9jqkrb3ys8xvbmayxc3rqwspalzckayjbz98m",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.2/contacts-v5.5.2.tar.gz",
-    "version": "5.5.2",
+    "sha256": "0xyrkr5p7xa8cn33kgx1hyblpbsdzaakpfm5bk6w9sm71a42688w",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.3/contacts-v5.5.3.tar.gz",
+    "version": "5.5.3",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -160,9 +160,9 @@
     ]
   },
   "memories": {
-    "sha256": "1j3296d3arkr9344zzv6ynhg842ym36a1bp1r3y6m8wp552m5gay",
-    "url": "https://github.com/pulsejet/memories/releases/download/v6.2.2/memories.tar.gz",
-    "version": "6.2.2",
+    "sha256": "0638120x6byp35gslcr2yg4rswihjjdssnjw87fxx7q41sd02vsz",
+    "url": "https://github.com/pulsejet/memories/releases/download/v7.0.2/memories.tar.gz",
+    "version": "7.0.2",
     "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
     "homepage": "https://memories.gallery",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1inq39kdfynip4j9hfrgybiscgii7r0wkjb5pssvmqknbpqf7x4g",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.9/notify_push-v0.6.9.tar.gz",
-    "version": "0.6.9",
+    "sha256": "0zsjr3zr8c686pkgsmhjg1ssnzvc9flkyy1x571wk7lx7lfrvrd1",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.10/notify_push-v0.6.10.tar.gz",
+    "version": "0.6.10",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -290,9 +290,9 @@
     ]
   },
   "twofactor_nextcloud_notification": {
-    "sha256": "0gaqgzbryim580dxarak7p4g3wd8wp3w6lw9jhl84jh46wrsbrj8",
-    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.8.0/twofactor_nextcloud_notification-v3.8.0.tar.gz",
-    "version": "3.8.0",
+    "sha256": "0qpg6i6iw6ldnryf0p56kd7fgs5vyckw9m6yjcf8r4j3mwfka273",
+    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.9.0/twofactor_nextcloud_notification-v3.9.0.tar.gz",
+    "version": "3.9.0",
     "description": "Allows using any of your logged in devices as second factor",
     "homepage": "https://github.com/nextcloud/twofactor_nextcloud_notification",
     "licenses": [
@@ -300,9 +300,9 @@
     ]
   },
   "twofactor_webauthn": {
-    "sha256": "1p4ng7nprlcgw7sdfd7wqx5az86a856f1v470lahg2nfbx3fg296",
-    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v1.3.2/twofactor_webauthn-v1.3.2.tar.gz",
-    "version": "1.3.2",
+    "sha256": "0llxakzcdcy9hscyzw3na5zp1p57h03w5fmm0gs9g62k1b88k6kw",
+    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v1.4.0/twofactor_webauthn-v1.4.0.tar.gz",
+    "version": "1.4.0",
     "description": "A two-factor provider for WebAuthn devices",
     "homepage": "https://github.com/nextcloud/twofactor_webauthn#readme",
     "licenses": [
@@ -320,9 +320,9 @@
     ]
   },
   "user_oidc": {
-    "sha256": "06w6r1cmrahh9kr6rxc3nmy9q4m8fmf6afwgkvah3xixqnq04iwb",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v5.0.1/user_oidc-v5.0.1.tar.gz",
-    "version": "5.0.1",
+    "sha256": "0nl716c8jx6hhpkxjdpbldlnqhh6jsm6xx1zmcmvkzkdr9pjkggj",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v5.0.2/user_oidc-v5.0.2.tar.gz",
+    "version": "5.0.2",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
@@ -330,9 +330,9 @@
     ]
   },
   "user_saml": {
-    "sha256": "0rsrbbdvf8kb9l6afz86af33ri0ng9yj7d4xw28j50mfcx3kifg3",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.6/user_saml-v5.2.6.tar.gz",
-    "version": "5.2.6",
+    "sha256": "0cvlspkrcm3anxpz4lca464d66672slqq2laa7gn7sd1b9yl9nx8",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.7/user_saml-v5.2.7.tar.gz",
+    "version": "5.2.7",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
