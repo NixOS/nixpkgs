@@ -32448,7 +32448,7 @@ with pkgs;
 
   kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
 
-  kile = libsForQt5.callPackage ../applications/editors/kile { };
+  kile = qt6Packages.callPackage ../applications/editors/kile { };
 
   kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
 
