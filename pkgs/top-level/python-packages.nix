@@ -9076,7 +9076,7 @@ self: super: with self; {
 
   openvino = callPackage ../development/python-modules/openvino {
     openvino-native = pkgs.openvino.override {
-      inherit python;
+      python3Packages = self;
     };
   };
 

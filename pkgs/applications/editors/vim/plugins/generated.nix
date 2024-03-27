@@ -17033,5 +17033,17 @@ final: prev:
     meta.homepage = "https://github.com/lukas-reineke/virt-column.nvim/";
   };
 
+  jupytext-nvim = buildVimPlugin {
+    pname = "jupytest-nvim";
+    version = "2024-01-24";
+    src = fetchFromGitHub {
+      owner = "GCBallesteros";
+      repo = "jupytext.nvim";
+      rev = "68fddf28119dbaddfaea6b71f3d6aa1e081afb93";
+      sha256 = "sha256-x5emW+qfUTUDR72B9QdDgVdrb8wGH9D7AdtRrQm80sI=";
+    };
+    meta.homepage = "https://github.com/GCBallesteros/jupytext.nvim/";
+  };
+
 
 }
