@@ -13,7 +13,7 @@
       }
     ];
     # powerpc
-    linux-ppc64le = [];
+    linux-ppc64le = [ ];
     # server-grade arm
     linux-sbsa = [
       {
