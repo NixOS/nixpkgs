@@ -56,6 +56,7 @@ stdenv.mkDerivation {
   # symlink completion backends where ycmd expects them
   installPhase = ''
     rm -rf ycmd/tests
+    find third_party -type d -name "test" -exec rm -rf {} +
 
     chmod +x ycmd/__main__.py
     sed -i "1i #!${python.interpreter}\
