@@ -24,11 +24,9 @@ stdenv.mkDerivation rec {
     glib
     libical
   ];
-  postPatch = ''
-    sed -ie "s|^OLSON_DIR.*|OLSON_DIR = ${version}|" ./Makefile
-    sed -ie "s|^PRODUCT_ID.*|PRODUCT_ID = -//NixOS//NONSGML Citadel calendar//EN|" ./Makefile
-    sed -ie "s|^TZID_PREFIX.*|TZID_PREFIX = /NixOS/Olson_%D_1/|" ./Makefile
-  '';
+  OLSON_DIR = version;
+  PRODUCT_ID = "-//NixOS//NONSGML Citadel calendar//EN";
+  TZID_PREFIX = "/NixOS/Olson_%D_1/";
 
   installPhase = ''
     mkdir -p $out/share/vtimezone $out/bin
