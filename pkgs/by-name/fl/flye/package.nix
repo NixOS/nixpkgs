@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
 
   preConfigure = ''
     substituteInPlace flye/polishing/alignment.py \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
 
     substituteInPlace flye/tests/test_toy.py \
       --replace-fail "find_executable(\"flye" "find_executable(\"$out/bin/flye" \
