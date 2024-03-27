@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.7.1.4";
+  version = "0.7.13";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jNhiwyz6iVSLlvMNjI689TwQYuEvTJ+QaPvvDQ4UOwc=";
+    hash = "sha256-S4lJTLxNjGmgBJt89i3whBglMU2EQ0VelLG6iP6bY8g=";
   };
 
   backend = buildDotnetModule {
@@ -25,18 +25,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     patches = [
       # The webroot is hardcoded as ./wwwroot
-      (substituteAll {
-        src = ./change-webroot.diff;
-        web_root = "${finalAttrs.frontend}/lib/node_modules/kavita-webui/dist";
-      })
+      ./change-webroot.diff
     ];
+    postPatch = ''
+      substituteInPlace API/Services/DirectoryService.cs --subst-var out
+
+      substituteInPlace API/Startup.cs API/Services/LocalizationService.cs API/Controllers/FallbackController.cs \
+        --subst-var-by webroot "${finalAttrs.frontend}/lib/node_modules/kavita-webui/dist/browser"
+    '';
 
     executables = [ "API" ];
 
     projectFile = "API/API.csproj";
     nugetDeps = ./nuget-deps.nix;
-    dotnet-sdk = dotnetCorePackages.sdk_6_0;
-    dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+    dotnet-sdk = dotnetCorePackages.sdk_8_0;
+    dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   };
 
   frontend =  buildNpmPackage {
@@ -48,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-w0CuTPyCQyAxULvqd6+GiZaPlO8fh4xLmbEnGA47pL8=";
+    npmDepsHash = "sha256-jseoczC2Ay3D1wDUZbWXTYQJGSWdgobJ3+Z1bp+PQG4=";
   };
 
   dontBuild = true;
