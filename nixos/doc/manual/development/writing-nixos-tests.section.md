@@ -281,6 +281,29 @@ The NixOS test framework supports multiple overriding methods.
 `overrideTestDerivation` *function*
 :   Applies `overrideAttrs` of the [test](#test-opt-test) derivation.
 
+`extendNixOS { modules = ` *module* `; specialArgs = ` *specialArgs* `; }`
+:   Evaluates the test with additional NixOS modules and/or arguments.
+
+    :::{.example #ex-nixos-test-extendNixOS}
+
+    # Using extendNixOS in `passthru.tests` to make `(openssh.tests.overrideAttrs f).tests.nixos` coherent
+
+    ```nix
+    mkDerivation (finalAttrs: {
+      # …
+      passthru = {
+        tests = {
+          nixos = nixosTests.openssh.extendNixOS {
+            module = {
+              services.openssh.package = finalAttrs.finalPackage;
+            };
+          };
+        };
+      };
+    })
+    ```
+    :::
+
 `extend { modules = ` *modules* `; specialArgs = ` *specialArgs* `; }`
 :   Adds new modules and/or module arguments to the test, which are evaluated together with the existing modules and [built-in options](#sec-test-options-reference).
     You may use this to affect any part of the test; not just the final derivation that runs the test.
