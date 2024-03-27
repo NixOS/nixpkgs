@@ -124,3 +124,6 @@ expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/"' 'lib.network.ip
 expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/33"' 'lib.network.ipv4: Got a CIDR with out of bounds prefix length, 33.'
 expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/-1"' 'lib.network.ipv4: Got a CIDR with out of bounds prefix length, -1.'
 expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/24/bad"' 'lib.network.ipv4: Could not verify prefix length.'
+
+# Test prefix length to subnet mask conversion.
+expectEqual 'internal.ipv4._prefixToSubnetMask "24"' '"255.255.255.0"'

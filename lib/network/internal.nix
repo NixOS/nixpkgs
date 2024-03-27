@@ -52,6 +52,25 @@ rec {
   };
 
   ipv4 = rec {
+    /**
+      Given a prefix length, returns the equivalent subnet mask.
+
+      # Example
+
+      ```nix
+      _prefixToSubnetMask "24"
+      => "255.255.255.0"
+      ```
+
+      # Type
+
+      ```
+      _prefixToSubnetMask :: String -> String
+
+      # Arguments
+
+      - [prefixLength] A prefix length
+    */
     _prefixToSubnetMask =
       prefixLength:
       let
