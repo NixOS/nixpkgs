@@ -3,6 +3,7 @@
 , dooit
 , python3
 , testers
+, nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,9 +40,13 @@ python3.pkgs.buildPythonApplication rec {
   # No tests available
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = dooit;
-    command = "HOME=$(mktemp -d) dooit --version";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = dooit;
+      command = "HOME=$(mktemp -d) dooit --version";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
