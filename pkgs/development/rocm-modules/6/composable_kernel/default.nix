@@ -9,6 +9,7 @@
 , clang-tools-extra
 , git
 , gtest
+, zstd
 , buildTests ? false
 , buildExamples ? false
 , gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     clr
     clang-tools-extra
+    zstd
   ];
 
   buildInputs = [ openmp ];
@@ -66,7 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   ;
 
-  postInstall = lib.optionalString buildTests ''
+  postInstall = ''
+    zstd --rm $out/lib/libdevice_operations.a
+  '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv $out/bin/test_* $test/bin
   '' + lib.optionalString buildExamples ''
