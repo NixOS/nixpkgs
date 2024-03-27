@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation {
@@ -25,6 +26,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Soothing pastel theme for SDDM based on corners theme.";
