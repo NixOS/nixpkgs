@@ -56,7 +56,11 @@ buildPythonPackage rec {
     setuptools
   ];
   pythonRemoveDeps = [ "shap" ];
-  pythonRelaxDeps = [ "pytz" "pyarrow" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "pytz"
+    "pyarrow"
+  ];
 
   propagatedBuildInputs = [
     alembic
