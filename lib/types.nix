@@ -666,7 +666,7 @@ rec {
                 };
             })
             tags;
-        substSubModules = m: attrTagWith { tags = mapAttrs (n: opt: opt // { type = (opt.type or types.unspecified).substSubModules m; }) tags; };
+        substSubModules = m: attrTagWith { tags = mapAttrs (n: opt: opt // { type = (opt.type or throw "Tag ${lib.escapeNixIdentifier n} must declare a `type`.").substSubModules m; }) tags; };
         check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
         merge = loc: defs:
           let
