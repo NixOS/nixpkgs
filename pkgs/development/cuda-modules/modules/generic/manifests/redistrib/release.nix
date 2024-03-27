@@ -1,11 +1,11 @@
-{lib, ...}:
+{ lib, ... }:
 let
   inherit (lib) options types;
-  Package = import ./package.nix {inherit lib;};
+  Package = import ./package.nix { inherit lib; };
 in
 options.mkOption {
   description = "A release is an attribute set which includes a mapping from platform to package";
-  example = (import ./manifest.nix {inherit lib;}).cuda_cccl;
+  example = (import ./manifest.nix { inherit lib; }).cuda_cccl;
   type = types.submodule {
     # Allow any attribute name as these will be the platform names
     freeformType = types.attrsOf Package.type;

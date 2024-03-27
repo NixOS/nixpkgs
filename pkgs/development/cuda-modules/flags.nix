@@ -3,7 +3,7 @@
 #   - See the documentation in ./gpus.nix.
 {
   config,
-  cudaCapabilities ? (config.cudaCapabilities or []),
+  cudaCapabilities ? (config.cudaCapabilities or [ ]),
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
   cudaVersion,
@@ -77,9 +77,9 @@ let
   # cudaArchNameToVersions :: AttrSet String (List String)
   # Maps the name of a GPU architecture to different versions of that architecture.
   # For example, "Ampere" maps to [ "8.0" "8.6" "8.7" ].
-  cudaArchNameToVersions =
-    lists.groupBy' (versions: gpu: versions ++ [gpu.computeCapability]) [] (gpu: gpu.archName)
-      supportedGpus;
+  cudaArchNameToVersions = lists.groupBy' (versions: gpu: versions ++ [ gpu.computeCapability ]) [ ] (
+    gpu: gpu.archName
+  ) supportedGpus;
 
   # cudaComputeCapabilityToName :: AttrSet String String
   # Maps the version of a GPU architecture to the name of that architecture.
@@ -108,7 +108,7 @@ let
   jetsonTargets = lists.intersectLists jetsonComputeCapabilities cudaCapabilities;
 
   # dropDot :: String -> String
-  dropDot = ver: builtins.replaceStrings ["."] [""] ver;
+  dropDot = ver: builtins.replaceStrings [ "." ] [ "" ] ver;
 
   # archMapper :: String -> List String -> List String
   # Maps a feature across a list of architecture versions to produce a list of architectures.
@@ -135,25 +135,29 @@ let
   # `all-packages.nix`, which is evaluated on all systems. As such, we need to handle unsupported
   # systems gracefully.
   # getRedistArch :: String -> String
-  getRedistArch = nixSystem: attrsets.attrByPath [ nixSystem ] "unsupported" {
-    aarch64-linux = if jetsonTargets != [] then "linux-aarch64" else "linux-sbsa";
-    x86_64-linux = "linux-x86_64";
-    ppc64le-linux = "linux-ppc64le";
-    x86_64-windows = "windows-x86_64";
-  };
+  getRedistArch =
+    nixSystem:
+    attrsets.attrByPath [ nixSystem ] "unsupported" {
+      aarch64-linux = if jetsonTargets != [ ] then "linux-aarch64" else "linux-sbsa";
+      x86_64-linux = "linux-x86_64";
+      ppc64le-linux = "linux-ppc64le";
+      x86_64-windows = "windows-x86_64";
+    };
 
   # Maps NVIDIA redist arch to Nix system.
   # NOTE: This function *will* be called by unsupported systems because `cudaPackages` is part of
   # `all-packages.nix`, which is evaluated on all systems. As such, we need to handle unsupported
   # systems gracefully.
   # getNixSystem :: String -> String
-  getNixSystem = redistArch: attrsets.attrByPath [ redistArch ] "unsupported-${redistArch}" {
-    linux-sbsa = "aarch64-linux";
-    linux-aarch64 = "aarch64-linux";
-    linux-x86_64 = "x86_64-linux";
-    linux-ppc64le = "ppc64le-linux";
-    windows-x86_64 = "x86_64-windows";
-  };
+  getNixSystem =
+    redistArch:
+    attrsets.attrByPath [ redistArch ] "unsupported-${redistArch}" {
+      linux-sbsa = "aarch64-linux";
+      linux-aarch64 = "aarch64-linux";
+      linux-x86_64 = "x86_64-linux";
+      linux-ppc64le = "ppc64le-linux";
+      windows-x86_64 = "x86_64-windows";
+    };
 
   formatCapabilities =
     {
@@ -194,7 +198,7 @@ let
       gencode =
         let
           base = gencodeMapper "sm" cudaCapabilities;
-          forward = gencodeMapper "compute" [(lists.last cudaCapabilities)];
+          forward = gencodeMapper "compute" [ (lists.last cudaCapabilities) ];
         in
         base ++ lib.optionals enableForwardCompat forward;
 
@@ -209,150 +213,151 @@ let
       # isJetsonBuild :: Boolean
       isJetsonBuild =
         let
-          requestedJetsonDevices =
-            lists.filter (cap: cudaComputeCapabilityToIsJetson.${cap} or false)
-              cudaCapabilities;
-          requestedNonJetsonDevices =
-            lists.filter (cap: !(builtins.elem cap requestedJetsonDevices))
-              cudaCapabilities;
-          jetsonBuildSufficientCondition = requestedJetsonDevices != [];
-          jetsonBuildNecessaryCondition = requestedNonJetsonDevices == [] && hostPlatform.isAarch64;
+          requestedJetsonDevices = lists.filter (
+            cap: cudaComputeCapabilityToIsJetson.${cap} or false
+          ) cudaCapabilities;
+          requestedNonJetsonDevices = lists.filter (
+            cap: !(builtins.elem cap requestedJetsonDevices)
+          ) cudaCapabilities;
+          jetsonBuildSufficientCondition = requestedJetsonDevices != [ ];
+          jetsonBuildNecessaryCondition = requestedNonJetsonDevices == [ ] && hostPlatform.isAarch64;
         in
-        trivial.throwIf (jetsonBuildSufficientCondition && !jetsonBuildNecessaryCondition)
-          ''
-            Jetson devices cannot be targeted with non-Jetson devices. Additionally, they require hostPlatform to be aarch64.
-            You requested ${builtins.toJSON cudaCapabilities} for host platform ${hostPlatform.system}.
-            Requested Jetson devices: ${builtins.toJSON requestedJetsonDevices}.
-            Requested non-Jetson devices: ${builtins.toJSON requestedNonJetsonDevices}.
-            Exactly one of the following must be true:
-            - All CUDA capabilities belong to Jetson devices and hostPlatform is aarch64.
-            - No CUDA capabilities belong to Jetson devices.
-            See ${./gpus.nix} for a list of architectures supported by this version of Nixpkgs.
-          ''
-          jetsonBuildSufficientCondition
+        trivial.throwIf (jetsonBuildSufficientCondition && !jetsonBuildNecessaryCondition) ''
+          Jetson devices cannot be targeted with non-Jetson devices. Additionally, they require hostPlatform to be aarch64.
+          You requested ${builtins.toJSON cudaCapabilities} for host platform ${hostPlatform.system}.
+          Requested Jetson devices: ${builtins.toJSON requestedJetsonDevices}.
+          Requested non-Jetson devices: ${builtins.toJSON requestedNonJetsonDevices}.
+          Exactly one of the following must be true:
+          - All CUDA capabilities belong to Jetson devices and hostPlatform is aarch64.
+          - No CUDA capabilities belong to Jetson devices.
+          See ${./gpus.nix} for a list of architectures supported by this version of Nixpkgs.
+        '' jetsonBuildSufficientCondition
         && jetsonBuildNecessaryCondition;
     };
 in
 # When changing names or formats: pause, validate, and update the assert
-assert let
-  expected = {
-    cudaCapabilities = [
-      "7.5"
-      "8.6"
-    ];
-    enableForwardCompat = true;
+assert
+  let
+    expected = {
+      cudaCapabilities = [
+        "7.5"
+        "8.6"
+      ];
+      enableForwardCompat = true;
 
-    archNames = [
-      "Turing"
-      "Ampere"
-    ];
-    realArches = [
-      "sm_75"
-      "sm_86"
-    ];
-    virtualArches = [
-      "compute_75"
-      "compute_86"
-    ];
-    arches = [
-      "sm_75"
-      "sm_86"
-      "compute_86"
-    ];
+      archNames = [
+        "Turing"
+        "Ampere"
+      ];
+      realArches = [
+        "sm_75"
+        "sm_86"
+      ];
+      virtualArches = [
+        "compute_75"
+        "compute_86"
+      ];
+      arches = [
+        "sm_75"
+        "sm_86"
+        "compute_86"
+      ];
 
-    gencode = [
-      "-gencode=arch=compute_75,code=sm_75"
-      "-gencode=arch=compute_86,code=sm_86"
-      "-gencode=arch=compute_86,code=compute_86"
-    ];
-    gencodeString = "-gencode=arch=compute_75,code=sm_75 -gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_86,code=compute_86";
+      gencode = [
+        "-gencode=arch=compute_75,code=sm_75"
+        "-gencode=arch=compute_86,code=sm_86"
+        "-gencode=arch=compute_86,code=compute_86"
+      ];
+      gencodeString = "-gencode=arch=compute_75,code=sm_75 -gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_86,code=compute_86";
 
-    isJetsonBuild = false;
-  };
-  actual = formatCapabilities {
-    cudaCapabilities = [
-      "7.5"
-      "8.6"
-    ];
-  };
-  actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
-in
-asserts.assertMsg ((strings.versionAtLeast cudaVersion "11.2") -> (expected == actualWrapped)) ''
-  This test should only fail when using a version of CUDA older than 11.2, the first to support
-  8.6.
-  Expected: ${builtins.toJSON expected}
-  Actual: ${builtins.toJSON actualWrapped}
-'';
-# Check mixed Jetson and non-Jetson devices
-assert let
-  expected = false;
-  actual = formatCapabilities {
-    cudaCapabilities = [
-      "7.2"
-      "7.5"
-    ];
-  };
-  actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
-in
-asserts.assertMsg (expected == actualWrapped) ''
-  Jetson devices capabilities cannot be mixed with non-jetson devices.
-  Capability 7.5 is non-Jetson and should not be allowed with Jetson 7.2.
-  Expected: ${builtins.toJSON expected}
-  Actual: ${builtins.toJSON actualWrapped}
-'';
-# Check Jetson-only
-assert let
-  expected = {
-    cudaCapabilities = [
-      "6.2"
-      "7.2"
-    ];
-    enableForwardCompat = true;
-
-    archNames = [
-      "Pascal"
-      "Volta"
-    ];
-    realArches = [
-      "sm_62"
-      "sm_72"
-    ];
-    virtualArches = [
-      "compute_62"
-      "compute_72"
-    ];
-    arches = [
-      "sm_62"
-      "sm_72"
-      "compute_72"
-    ];
-
-    gencode = [
-      "-gencode=arch=compute_62,code=sm_62"
-      "-gencode=arch=compute_72,code=sm_72"
-      "-gencode=arch=compute_72,code=compute_72"
-    ];
-    gencodeString = "-gencode=arch=compute_62,code=sm_62 -gencode=arch=compute_72,code=sm_72 -gencode=arch=compute_72,code=compute_72";
-
-    isJetsonBuild = true;
-  };
-  actual = formatCapabilities {
-    cudaCapabilities = [
-      "6.2"
-      "7.2"
-    ];
-  };
-  actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
-in
-asserts.assertMsg
-  # We can't do this test unless we're targeting aarch64
-  (hostPlatform.isAarch64 -> (expected == actualWrapped))
-  ''
-    Jetson devices can only be built with other Jetson devices.
-    Both 6.2 and 7.2 are Jetson devices.
+      isJetsonBuild = false;
+    };
+    actual = formatCapabilities {
+      cudaCapabilities = [
+        "7.5"
+        "8.6"
+      ];
+    };
+    actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
+  in
+  asserts.assertMsg ((strings.versionAtLeast cudaVersion "11.2") -> (expected == actualWrapped)) ''
+    This test should only fail when using a version of CUDA older than 11.2, the first to support
+    8.6.
     Expected: ${builtins.toJSON expected}
     Actual: ${builtins.toJSON actualWrapped}
   '';
+# Check mixed Jetson and non-Jetson devices
+assert
+  let
+    expected = false;
+    actual = formatCapabilities {
+      cudaCapabilities = [
+        "7.2"
+        "7.5"
+      ];
+    };
+    actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
+  in
+  asserts.assertMsg (expected == actualWrapped) ''
+    Jetson devices capabilities cannot be mixed with non-jetson devices.
+    Capability 7.5 is non-Jetson and should not be allowed with Jetson 7.2.
+    Expected: ${builtins.toJSON expected}
+    Actual: ${builtins.toJSON actualWrapped}
+  '';
+# Check Jetson-only
+assert
+  let
+    expected = {
+      cudaCapabilities = [
+        "6.2"
+        "7.2"
+      ];
+      enableForwardCompat = true;
+
+      archNames = [
+        "Pascal"
+        "Volta"
+      ];
+      realArches = [
+        "sm_62"
+        "sm_72"
+      ];
+      virtualArches = [
+        "compute_62"
+        "compute_72"
+      ];
+      arches = [
+        "sm_62"
+        "sm_72"
+        "compute_72"
+      ];
+
+      gencode = [
+        "-gencode=arch=compute_62,code=sm_62"
+        "-gencode=arch=compute_72,code=sm_72"
+        "-gencode=arch=compute_72,code=compute_72"
+      ];
+      gencodeString = "-gencode=arch=compute_62,code=sm_62 -gencode=arch=compute_72,code=sm_72 -gencode=arch=compute_72,code=compute_72";
+
+      isJetsonBuild = true;
+    };
+    actual = formatCapabilities {
+      cudaCapabilities = [
+        "6.2"
+        "7.2"
+      ];
+    };
+    actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
+  in
+  asserts.assertMsg
+    # We can't do this test unless we're targeting aarch64
+    (hostPlatform.isAarch64 -> (expected == actualWrapped))
+    ''
+      Jetson devices can only be built with other Jetson devices.
+      Both 6.2 and 7.2 are Jetson devices.
+      Expected: ${builtins.toJSON expected}
+      Actual: ${builtins.toJSON actualWrapped}
+    '';
 {
   # formatCapabilities :: { cudaCapabilities: List Capability, enableForwardCompat: Boolean } ->  { ... }
   inherit formatCapabilities;
@@ -376,6 +381,6 @@ asserts.assertMsg
     ;
 }
 // formatCapabilities {
-  cudaCapabilities = if cudaCapabilities == [] then defaultCapabilities else cudaCapabilities;
+  cudaCapabilities = if cudaCapabilities == [ ] then defaultCapabilities else cudaCapabilities;
   enableForwardCompat = cudaForwardCompat;
 }
