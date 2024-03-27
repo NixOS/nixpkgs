@@ -69,12 +69,12 @@ let
       chickenEggs = super.chickenEggs.overrideScope' (eggself: eggsuper: {
         srfi-180 = eggsuper.srfi-180.overrideAttrs {
           # path to a local copy of srfi-180
-          src = "...";
+          src = <...>;
         };
       });
   });
 in
 # Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
 # the local copy of `srfi-180`.
-"..."
+<...>
 ```

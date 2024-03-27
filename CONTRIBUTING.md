@@ -557,7 +557,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   foo {
-    arg = "...";
+    arg = <...>;
   }
   ```
 
@@ -566,14 +566,14 @@ Names of files and directories should be in lowercase, with dashes between words
   ```nix
   foo
   {
-    arg = "...";
+    arg = <...>;
   }
   ```
 
   Also fine is
 
   ```nix
-  foo { arg = "..."; }
+  foo { arg = <...>; }
   ```
 
   if it's a short call.
@@ -683,19 +683,19 @@ Names of files and directories should be in lowercase, with dashes between words
 - Functions should list their expected arguments as precisely as possible. That is, write
 
   ```nix
-  { stdenv, fetchurl, perl }: "..."
+  { stdenv, fetchurl, perl }: <...>
   ```
 
   instead of
 
   ```nix
-  args: with args; "..."
+  args: with args; <...>
   ```
 
   or
 
   ```nix
-  { stdenv, fetchurl, perl, ... }: "..."
+  { stdenv, fetchurl, perl, ... }: <...>
   ```
 
   For functions that are truly generic in the number of arguments (such as wrappers around `mkDerivation`) that have some required arguments, you should write them using an `@`-pattern:
