@@ -274,6 +274,24 @@ added using the parameter `extraPythonPackages`. For example, you could add
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
 
+## Overriding a test {#sec-override-nixos-test}
+
+The NixOS test framework supports multiple overriding methods.
+
+`overrideTestDerivation` *function*
+:   Applies `overrideAttrs` of the [test](#test-opt-test) derivation.
+
+`extend { modules = ` *modules* `; specialArgs = ` *specialArgs* `; }`
+:   Adds new modules and/or module arguments to the test, which are evaluated together with the existing modules and [built-in options](#sec-test-options-reference).
+    You may use this to affect any part of the test; not just the final derivation that runs the test.
+    Returns a new test derivation with the changes applied; see
+
+    `modules`
+    :   A list of modules to add to the test. These are added to the existing modules and then [evaluated](https://nixos.org/manual/nixpkgs/stable/index.html#module-system-lib-evalModules) together.
+
+    `specialArgs`
+    :   A list of arguments to pass to the test. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define.
+
 ## Test Options Reference {#sec-test-options-reference}
 
 The following options can be used when writing tests.
