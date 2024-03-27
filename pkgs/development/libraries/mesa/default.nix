@@ -276,7 +276,7 @@ self = stdenv.mkDerivation {
   ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals (vulkanLayers != []) [
-    "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}"
+    (lib.mesonOption "vulkan-layers" (builtins.concatStringsSep "," vulkanLayers))
   ];
 
   strictDeps = true;
