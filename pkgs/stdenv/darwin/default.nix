@@ -245,7 +245,7 @@ in
           version = "boot";
         };
 
-        binutils = (import ../../build-support/bintools-wrapper) {
+        binutils = super.wrapBintoolsWith {
           name = "bootstrap-stage0-binutils-wrapper";
 
           nativeTools = false;
