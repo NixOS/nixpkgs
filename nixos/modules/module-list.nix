@@ -159,6 +159,7 @@
   ./programs/ccache.nix
   ./programs/cdemu.nix
   ./programs/cfs-zen-tweaks.nix
+  ./programs/chrome-remote-desktop.nix
   ./programs/chromium.nix
   ./programs/clash-verge.nix
   ./programs/cnping.nix
