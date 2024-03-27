@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "metakernel";
   version = "0.30.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-Siff2FO4SfASgkLFUgTuWXpajYZClPJghLry+8gU1aQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipykernel
     jedi
     jupyter-core
