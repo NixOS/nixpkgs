@@ -318,7 +318,7 @@ let
   '' +
     # now filter hyphenation patterns and formats
   (let
-    hyphens = lib.filter (p: p.hasHyphens or false && p.tlOutputName or p.outputName == "tex") pkgList.nonbin;
+    hyphens = lib.filter (p: p ? hyphenPatterns && p.tlOutputName or p.outputName == "tex") pkgList.nonbin;
     hyphenPNames = map (p: p.pname) hyphens;
     formats = lib.filter (p: p ? formats && p.tlOutputName or p.outputName == "tex") pkgList.nonbin;
     formatPNames = map (p: p.pname) formats;
