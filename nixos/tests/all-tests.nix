@@ -791,6 +791,7 @@ in {
   sanoid = handleTest ./sanoid.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
+  scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};
   scrutiny = handleTest ./scrutiny.nix {};
   sddm = handleTest ./sddm.nix {};
   seafile = handleTest ./seafile.nix {};
@@ -963,6 +964,7 @@ in {
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   user-expiry = runTest ./user-expiry.nix;
   user-home-mode = handleTest ./user-home-mode.nix {};
+  ustreamer = handleTest ./ustreamer.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };

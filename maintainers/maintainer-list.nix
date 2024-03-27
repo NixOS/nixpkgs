@@ -4745,6 +4745,12 @@
     githubId = 4956158;
     name = "Robin Stumm";
   };
+  DerRockWolf = {
+    email = "git@rockwolf.eu";
+    github = "DerRockWolf";
+    githubId = 50499906;
+    name = "DerRockWolf";
+  };
   DerTim1 = {
     email = "tim.digel@active-group.de";
     github = "DerTim1";
@@ -7788,6 +7794,12 @@
     matrix = "@chris:netsoj.nl";
     name = "Chris Josten";
   };
+  hennk = {
+    email = "henning.kiel@gmail.com";
+    github = "hennk";
+    githubId = 328259;
+    name = "Henning Kiel";
+  };
   henrikolsson = {
     email = "henrik@fixme.se";
     github = "henrikolsson";
@@ -10328,6 +10340,12 @@
     github = "kini";
     githubId = 691290;
     name = "Keshav Kini";
+  };
+  kintrix = {
+    email = "kintrix007@proton.me";
+    github = "kintrix007";
+    githubId = 60898798;
+    name = "kintrix";
   };
   kinzoku = {
     email = "kinzokudev4869@gmail.com";
