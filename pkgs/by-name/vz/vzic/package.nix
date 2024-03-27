@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/libical/vzicr";
+    homepage = "https://github.com/libical/vzic";
     description = "A program to convert the IANA timezone database files into VTIMEZONE files compatible with the iCalendar specification";
     mainProgram = "vzic";
     platforms = platforms.unix;
