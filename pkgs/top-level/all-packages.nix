@@ -20115,7 +20115,7 @@ with pkgs;
 
   yams = callPackage ../applications/audio/yams { };
 
-  ycmd = callPackage ../development/tools/misc/ycmd {
+  ycmd = callPackage ../by-name/yc/ycmd/package.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
   };
