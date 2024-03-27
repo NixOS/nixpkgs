@@ -47,12 +47,14 @@
 , withCelt ? withFullDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCoreImage ? withHeadlessDeps && stdenv.isDarwin # Apple CoreImage framework
-, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
+, withCuda ? withFullDeps && withNvcodec
 , withCudaLLVM ? withFullDeps
+, withCuvid ? withHeadlessDeps && withNvcodec
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
 , withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
 , withFdkAac ? withFullDeps && (!withGPL || withUnfree) # Fraunhofer FDK AAC de/encoder
+, withNvcodec ? withHeadlessDeps && (with stdenv; !isDarwin && !isAarch32 && !hostPlatform.isRiscV && hostPlatform == buildPlatform) # dynamically linked Nvidia code
 , withFlite ? withFullDeps # Voice Synthesis
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
@@ -70,14 +72,14 @@
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
-, withNvenc ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
+, withNvdec ? withHeadlessDeps && withNvcodec
+, withNvenc ? withHeadlessDeps && withNvcodec
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
 , withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
-, withOpengl ? false # OpenGL rendering
+, withOpengl ? withFullDeps && !stdenv.isDarwin # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
 , withOpenmpt ? withFullDeps # Tracked music files decoder
@@ -85,7 +87,7 @@
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
-, withRtmp ? false # RTMP[E] support
+, withRtmp ? withFullDeps # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
 , withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
@@ -95,7 +97,7 @@
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
-, withTensorflow ? false # Tensorflow dnn backend support
+, withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withHeadlessDeps && stdenv.isLinux  # Video 4 Linux support
 , withV4l2M2m ? withV4l2
@@ -356,6 +358,11 @@ assert buildAvformat -> buildAvcodec && buildAvutil; # configure flag since 0.6
 assert buildPostproc -> buildAvutil;
 assert buildSwscale -> buildAvutil;
 
+/*
+ *  External Library dependencies
+ */
+assert (withCuda || withCuvid || withNvdec  || withNvenc) -> withNvcodec;
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpeg" + (optionalString (ffmpegVariant != "small") "-${ffmpegVariant}");
   inherit version;
@@ -509,10 +516,12 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
+    (enableFeature withCuvid "cuvid")
     (enableFeature withDav1d "libdav1d")
     (enableFeature withDc1394 "libdc1394")
     (enableFeature withDrm "libdrm")
     (enableFeature withFdkAac "libfdk-aac")
+    (enableFeature withNvcodec "ffnvcodec")
     (enableFeature withFlite "libflite")
     (enableFeature withFontconfig "fontconfig")
     (enableFeature withFontconfig "libfontconfig")
@@ -533,7 +542,6 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMp3lame "libmp3lame")
     (enableFeature withMysofa "libmysofa")
-    (enableFeature withNvdec "cuvid")
     (enableFeature withNvdec "nvdec")
     (enableFeature withNvenc "nvenc")
     (enableFeature withOpenal "openal")
@@ -642,6 +650,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
   ++ optionals withFdkAac [ fdk_aac ]
+  ++ optionals withNvcodec [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withFlite [ flite ]
   ++ optionals withFontconfig [ fontconfig ]
   ++ optionals withFreetype [ freetype ]
@@ -659,7 +668,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
-  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
@@ -774,7 +782,16 @@ stdenv.mkDerivation (finalAttrs: {
       ++ optional withGPLv3 gpl3Plus
       ++ optional withUnfree unfreeRedistributable
       ++ optional (withGPL && withUnfree) unfree;
-    pkgConfigModules = [ "libavutil" ];
+    pkgConfigModules = [ ]
+      ++ optional buildAvcodec "libavcodec"
+      ++ optional buildAvdevice "libavdevice"
+      ++ optional buildAvfilter "libavfilter"
+      ++ optional buildAvformat "libavformat"
+      ++ optional buildAvresample "libavresample"
+      ++ optional buildAvutil "libavutil"
+      ++ optional buildPostproc "libpostproc"
+      ++ optional buildSwresample "libswresample"
+      ++ optional buildSwscale "libswscale";
     platforms = platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
