@@ -23,7 +23,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} -m dbf.test
+    runHook postCheck
   '';
 
   pythonImportsCheck = [
