@@ -78,6 +78,8 @@ mkDerivation rec {
     substituteInPlace src/external/ssynth.cmake \
       --replace-fail '$'{SSYNTH_LINK} ${structuresynth.src} \
       --replace-warn "MD5 ''${SSYNTH_MD5}" ""
+    substituteInPlace src/common_gui/CMakeLists.txt \
+      --replace-warn "MESHLAB_LIB_INSTALL_DIR" "CMAKE_INSTALL_LIBDIR"
   '';
 
   cmakeFlags = [
