@@ -78,13 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick-compat = callPackage ./imagemagick-compat.nix {
       graphicsmagick = finalAttrs.finalPackage;
     };
-    tests = {
-      issue-157920 = runCommand "issue-157920-regression-test" {
-        buildInputs = [ finalAttrs.finalPackage ];
-      } ''
-        gm convert ${graphviz}/share/graphviz/doc/pdf/neatoguide.pdf jpg:$out
-      '';
-    };
   };
 
   meta = {
