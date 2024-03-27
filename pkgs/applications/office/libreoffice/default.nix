@@ -53,6 +53,7 @@
 , CoinMP
 , libwps
 , libabw
+, libargon2
 , libmysqlclient
 , autoconf
 , automake
@@ -215,27 +216,16 @@ in stdenv.mkDerivation (finalAttrs: {
     tar -xf ${srcs.translations}
   '';
 
-  patches = [
+  patches = lib.optionals (variant == "still") [
     # Remove build config to reduce the amount of `-dev` outputs in the
     # runtime closure. This behavior was introduced by upstream in commit
     # cbfac11330882c7d0a817b6c37a08b2ace2b66f4
     ./0001-Strip-away-BUILDCONFIG.patch
-
+  ] ++ [
     # Backport fix for tests broken by expired test certificates.
     (fetchpatch {
       url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=ececb678b8362e3be8e02768ddd5e4197d87dc2a";
       hash = "sha256-TUfKlwNxUTOJ95VLqwVD+ez1xhu7bW6xZlgIaCyIiNg=";
-    })
-
-    # Backport libxml 2.12 build fixes
-    # FIXME: remove in next release
-    (fetchpatch {
-      url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=c8f7408db73d2f2ccacb25a2b4fef8dfebdfc6cb";
-      hash = "sha256-uEgRx1eyS3Wx2ZDWEsUmpIbuKezVrIbO++qSL2QI8Lk=";
-    })
-    (fetchpatch {
-      url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=cbb17a548b5cc6a99b6ed7735479bb4f2bc40f26";
-      hash = "sha256-ofhif37uvQI+gidaUpyr6XlyBc3gTJUDBRb3ootrzz0=";
     })
   ];
 
@@ -431,6 +421,8 @@ in stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   configureFlags = [
+    "--without-buildconfig-recorded"
+
     (lib.withFeature withHelp "help")
     "--with-boost=${getDev boost}"
     "--with-boost-libdir=${getLib boost}/lib"
@@ -451,6 +443,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--with-system-liblangtag"
     "--without-system-libcmis"
     "--with-system-libwps"
+    "--with-system-mdds"
     "--with-system-openldap"
     "--with-system-coinmp"
     "--with-system-postgresql"
@@ -476,6 +469,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--with-system-beanshell"
     "--without-system-hsqldb"
     "--without-system-altlinuxhyph"
+    "--without-system-frozen"
     "--without-system-lpsolve"
     "--without-system-libetonyek"
     "--without-system-libfreehand"
@@ -487,11 +481,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "--without-system-libqxp"
     "--without-system-dragonbox"
     "--without-system-libfixmath"
-  # the "still" variant doesn't support Nixpkgs' mdds 2.1, only mdds 2.0
-  ] ++ optionals (variant == "still") [
-    "--without-system-mdds"
-  ] ++ optionals (variant == "fresh") [
-    "--with-system-mdds"
+
+    # is packaged but headers can't be found because there is no pkg-config file
+    "--without-system-zxcvbn"
   ] ++ [
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
@@ -504,9 +496,6 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (variant == "fresh") [
     "--without-system-dragonbox"
     "--without-system-libfixmath"
-    # Technically needed only when kdeIntegration is enabled in the "fresh"
-    # variant. Won't hurt to put it here for every "fresh" variant.
-    "--without-system-frozen"
   ];
 
   checkTarget = concatStringsSep " " [
@@ -572,6 +561,7 @@ in stdenv.mkDerivation (finalAttrs: {
     libXinerama
     libXtst
     libabw
+    libargon2
     libatomic_ops
     libcdr
     libe-book
@@ -683,6 +673,7 @@ in stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
+    changelog = "https://wiki.documentfoundation.org/ReleaseNotes/${lib.versions.majorMinor version}";
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
     # at least one jar in dependencies
