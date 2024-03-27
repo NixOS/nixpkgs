@@ -291,6 +291,7 @@
   ./programs/wshowkeys.nix
   ./programs/xfconf.nix
   ./programs/xfs_quota.nix
+  ./programs/xivlauncher.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
   ./programs/xwayland.nix
