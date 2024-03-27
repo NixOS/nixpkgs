@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     git
-    pythonPackages.pytestCheckHook
+    pythonPackages.pytest7CheckHook
   ];
 
   # 1. git fails to run as it cannot detect the email address, so we set it
