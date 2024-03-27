@@ -640,7 +640,11 @@ rec {
   filterAttrs =
     pred:
     set:
-    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
+    zipAttrsWith
+      (name: values: head values)
+      (mapAttrsToList
+        (k: v: if pred k v then { ${k} = v; } else { })
+        set);
 
 
   /**
