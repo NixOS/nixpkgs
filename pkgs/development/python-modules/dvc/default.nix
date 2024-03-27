@@ -76,17 +76,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace dvc/analytics.py \
-      --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
+      --replace-fail 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     colorama
     configobj
@@ -166,10 +166,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
-    mainProgram = "dvc";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
+    mainProgram = "dvc";
   };
 }
