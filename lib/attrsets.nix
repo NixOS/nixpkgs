@@ -7,7 +7,7 @@ let
   inherit (builtins) head length;
   inherit (lib.trivial) mergeAttrs warn;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) foldr foldl' concatMap elemAt all last partition groupBy take foldl zipAttrsWith;
 in
 
 rec {
@@ -358,11 +358,7 @@ rec {
     :::
   */
   concatMapAttrs = f: v:
-    foldl' mergeAttrs { }
-      (attrValues
-        (mapAttrs f v)
-      );
-
+    zipAttrsWith (name: values: last values) (mapAttrsToList f v);
 
   /**
     Update or set specific paths of an attribute set.
