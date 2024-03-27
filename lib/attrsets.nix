@@ -930,7 +930,7 @@ rec {
     # Type
 
     ```
-    cartesianProduct :: (AttrSet -> a) -> AttrSet -> [a]
+    mapCartesianProduct :: (AttrSet -> a) -> AttrSet -> [a]
     ```
 
     # Examples
