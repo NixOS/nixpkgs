@@ -5,30 +5,39 @@
 , pkgconf
 , freetype
 , expat
+, libX11
+, libXcursor
+, libXi
+, libXrandr
+, pop-launcher
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "onagre";
-  version = "1.0.0-alpha.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oknozor";
-    repo = pname;
+    repo = "onagre";
     rev = version;
-    hash = "sha256-hP+slfCWgsTgR2ZUjAmqx9f7+DBu3MpSLvaiZhqNK1Q=";
+    hash = "sha256-FqmOcmq0yNxTXZRNPA5MpsTAm4cxXpvU99yPPhihayI=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pop-launcher-1.2.1" = "sha256-LeKaJIvooD2aUlY113P0mzxOcj63sGkrA0SIccNqCLY=";
-    };
   };
 
   cargoSha256 = "sha256-IOhAGrAiT2mnScNP7k7XK9CETUr6BjGdQVdEUvTYQT4=";
 
-  nativeBuildInputs = [ cmake pkgconf ];
+  nativeBuildInputs = [ cmake pkgconf makeWrapper ];
   buildInputs = [ freetype expat ];
+
+  postInstall = ''
+    wrapProgram $out/bin/onagre \
+      --prefix LD_LIBRARY_PATH ":" ${lib.makeLibraryPath [ libX11 libXcursor libXi libXrandr ]} \
+      --prefix PATH : ${pop-launcher}/bin
+  '';
 
   meta = with lib; {
     description = "A general purpose application launcher for X and wayland inspired by rofi/wofi and alfred";
