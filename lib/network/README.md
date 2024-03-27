@@ -11,11 +11,20 @@ It should have the following properties.
 - Safe: Throw early and helpful errors when mistakes are detected.
 - Lazy: Only compute values when necessary.
 
-## Design descisions
-
 ## Tests
 
-Tests are declared in the `tests` directory.
+Tests are declared in `tests.sh`.
+
+## Internal Representation
+
+`IPv4Address`
+
+An attribute set with these values:
+
+- `cidr`: A CIDR.
+- `address`: An IP address.
+- `prefixLength`: A prefix length.
+- `subnetMask`: A subnet mask.
 
 ## Other implementations and references
 
