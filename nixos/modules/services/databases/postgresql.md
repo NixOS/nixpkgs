@@ -111,7 +111,7 @@ are already created.
       before = "service1.service";
       after = "postgresql.service";
       serviceConfig.User = "postgres";
-      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
       path = [ postgresql ];
       script = ''
         $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
@@ -130,7 +130,7 @@ are already created.
 ##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
 
 ```nix
-    environment.PSQL = "psql --port=${toString services.postgresql.port}";
+    environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
     path = [ postgresql ];
     systemd.services."service1".preStart = ''
       $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
@@ -148,7 +148,7 @@ are already created.
       before = "service1.service";
       after = "postgresql.service";
       serviceConfig.User = "service1";
-      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
       path = [ postgresql ];
       script = ''
         $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'

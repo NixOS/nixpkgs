@@ -100,11 +100,11 @@ in
 
         port = mkOption {
           type = types.port;
-          default = if !usePostgresql then 3306 else pg.port;
+          default = if usePostgresql then pg.settings.port else 3306;
           defaultText = literalExpression ''
             if config.${opt.database.type} != "postgresql"
             then 3306
-            else config.${options.services.postgresql.port}
+            else 5432
           '';
           description = lib.mdDoc "Database host port.";
         };

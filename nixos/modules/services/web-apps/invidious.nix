@@ -346,8 +346,8 @@ in
 
       port = lib.mkOption {
         type = types.port;
-        default = options.services.postgresql.port.default;
-        defaultText = lib.literalExpression "options.services.postgresql.port.default";
+        default = config.services.postgresql.settings.port;
+        defaultText = lib.literalExpression "config.services.postgresql.settings.port";
         description = lib.mdDoc ''
           The port of the database Invidious should use.
 
