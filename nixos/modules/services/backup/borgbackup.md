@@ -24,19 +24,18 @@ A very basic configuration for backing up to a locally accessible directory is:
 ```nix
 {
     opt.services.borgbackup.jobs = {
-      { rootBackup = {
-          paths = "/";
-          exclude = [ "/nix" "/path/to/local/repo" ];
-          repo = "/path/to/local/repo";
-          doInit = true;
-          encryption = {
-            mode = "repokey";
-            passphrase = "secret";
-          };
-          compression = "auto,lzma";
-          startAt = "weekly";
+      rootBackup = {
+        paths = "/";
+        exclude = [ "/nix" "/path/to/local/repo" ];
+        repo = "/path/to/local/repo";
+        doInit = true;
+        encryption = {
+          mode = "repokey";
+          passphrase = "secret";
         };
-      }
+        compression = "auto,lzma";
+        startAt = "weekly";
+      };
     };
 }
 ```
@@ -96,7 +95,7 @@ accessible by root
       startAt = "hourly";
     };
   };
-};
+}
 ```
 
 The following few commands (run as root) let you test your backup.

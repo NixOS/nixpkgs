@@ -3,21 +3,25 @@
 To enable the Xfce Desktop Environment, set
 
 ```nix
-services.xserver.desktopManager.xfce.enable = true;
-services.xserver.displayManager.defaultSession = "xfce";
+{
+  services.xserver.desktopManager.xfce.enable = true;
+  services.xserver.displayManager.defaultSession = "xfce";
+}
 ```
 
 Optionally, *picom* can be enabled for nice graphical effects, some
 example settings:
 
 ```nix
-services.picom = {
-  enable = true;
-  fade = true;
-  inactiveOpacity = 0.9;
-  shadow = true;
-  fadeDelta = 4;
-};
+{
+  services.picom = {
+    enable = true;
+    fade = true;
+    inactiveOpacity = 0.9;
+    shadow = true;
+    fadeDelta = 4;
+  };
+}
 ```
 
 Some Xfce programs are not installed automatically. To install them

@@ -30,7 +30,7 @@ For example, consider the following fetcher:
 fetchurl {
   url = "http://www.example.org/hello-1.0.tar.gz";
   hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
-};
+}
 ```
 
 A common mistake is to update a fetcher’s URL, or a version parameter, without updating the hash.
@@ -39,7 +39,7 @@ A common mistake is to update a fetcher’s URL, or a version parameter, without
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
   hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
-};
+}
 ```
 
 **This will reuse the old contents**.
@@ -49,7 +49,7 @@ Remember to invalidate the hash argument, in this case by setting the `hash` att
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
   hash = "";
-};
+}
 ```
 
 Use the resulting error message to determine the correct hash.
@@ -123,7 +123,7 @@ Here is an example of `fetchDebianPatch` in action:
 buildPythonPackage rec {
   pname = "pysimplesoap";
   version = "1.16.2";
-  src = ...;
+  src = "...";
 
   patches = [
     (fetchDebianPatch {
@@ -134,7 +134,7 @@ buildPythonPackage rec {
     })
   ];
 
-  ...
+  # ...
 }
 ```
 
