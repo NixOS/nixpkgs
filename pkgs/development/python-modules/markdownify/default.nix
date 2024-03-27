@@ -1,23 +1,41 @@
 { lib
+, beautifulsoup4
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, beautifulsoup4
+, pythonOlder
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "markdownify";
   version = "0.12.1";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-H7CMYYsw4O56MaObmY9EoY+yirJU9V9K8GttNaIXnic=";
   };
 
-  propagatedBuildInputs = [ beautifulsoup4 six ];
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    beautifulsoup4
+    six
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "markdownify"
+  ];
 
   meta = with lib; {
     description = "HTML to Markdown converter";
