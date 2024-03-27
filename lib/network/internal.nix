@@ -133,13 +133,18 @@ rec {
       in
       if (builtins.length splitCidr) == 1 then
         "32"
-      else if (builtins.length splitCidr) == 2 then
-        if elemAt splitCidr 1 == "" then
-          throw "lib.network: Got a CIDR with no prefix length."
-        else
-          elemAt splitCidr 1
+      else if (builtins.length splitCidr) > 2 then
+        throw "lib.network.ipv4: Could not verify prefix length."
       else
-        throw "lib.network: Could not verify prefix length.";
+        let
+          afterSlash = elemAt splitCidr 1;
+        in
+        if afterSlash == "" then
+          throw "lib.network.ipv4: Got a CIDR with no prefix length."
+        else if toInt afterSlash > 32 || toInt afterSlash < 0 then
+          throw "lib.network.ipv4: Got a CIDR with out of bounds prefix length, ${afterSlash}."
+        else
+          afterSlash;
 
     _makeIPv4 = address: prefixLength: {
       cidr = concatStringsSep "/" [
