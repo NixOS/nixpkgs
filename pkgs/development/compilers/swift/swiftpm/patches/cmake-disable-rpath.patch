@@ -2,14 +2,15 @@ Disable rpath for the bootstrap build with CMake.
 
 --- a/Sources/PackageDescription/CMakeLists.txt
 +++ b/Sources/PackageDescription/CMakeLists.txt
-@@ -31,14 +31,11 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL Darwin)
-   set(SWIFT_INTERFACE_PATH ${CMAKE_BINARY_DIR}/pm/ManifestAPI/PackageDescription.swiftinterface)
-   target_compile_options(PackageDescription PUBLIC
-     $<$<COMPILE_LANGUAGE:Swift>:-emit-module-interface-path$<SEMICOLON>${SWIFT_INTERFACE_PATH}>)
+@@ -26,15 +26,9 @@ add_library(PackageDescription
+ target_compile_options(PackageDescription PUBLIC
+   $<$<COMPILE_LANGUAGE:Swift>:-package-description-version$<SEMICOLON>999.0>)
+ 
+-if(CMAKE_HOST_SYSTEM_NAME STREQUAL Darwin)
 -  target_link_options(PackageDescription PRIVATE
 -    "SHELL:-Xlinker -install_name -Xlinker @rpath/libPackageDescription.dylib")
- endif()
- 
+-endif()
+-
  set_target_properties(PackageDescription PROPERTIES
      Swift_MODULE_NAME PackageDescription
      Swift_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/pm/ManifestAPI
@@ -19,7 +20,7 @@ Disable rpath for the bootstrap build with CMake.
      ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/pm/ManifestAPI
 --- a/Sources/PackagePlugin/CMakeLists.txt
 +++ b/Sources/PackagePlugin/CMakeLists.txt
-@@ -29,14 +29,11 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL Darwin)
+@@ -30,14 +30,11 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL Darwin)
    set(SWIFT_INTERFACE_PATH ${CMAKE_BINARY_DIR}/pm/PluginAPI/PackagePlugin.swiftinterface)
    target_compile_options(PackagePlugin PUBLIC
      $<$<COMPILE_LANGUAGE:Swift>:-emit-module-interface-path$<SEMICOLON>${SWIFT_INTERFACE_PATH}>)

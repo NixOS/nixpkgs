@@ -23,7 +23,7 @@
 
 let
 
-  inherit (swift) swiftOs swiftModuleSubdir swiftStaticModuleSubdir;
+  inherit (swift) swiftOs swiftLibSubdir swiftModuleSubdir swiftStaticModuleSubdir;
   sharedLibraryExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
   sources = callPackage ../sources.nix { };
@@ -33,13 +33,12 @@ let
   # Common attributes for the bootstrap swiftpm and the final swiftpm.
   commonAttrs = {
     inherit (sources) version;
-    src = sources.swift-package-manager;
+    src = sources.swiftpm;
     nativeBuildInputs = [ makeWrapper ];
     # Required at run-time for the host platform to build package manifests.
     propagatedBuildInputs = [ Foundation ];
     patches = [
       ./patches/cmake-disable-rpath.patch
-      ./patches/cmake-fix-quoting.patch
       ./patches/disable-index-store.patch
       ./patches/disable-sandbox.patch
       ./patches/disable-xctest.patch
@@ -60,21 +59,6 @@ let
         --replace \
           'librariesPath = applicationPath.parentDirectory' \
           "librariesPath = AbsolutePath(\"$out\")"
-
-      # Fix case-sensitivity issues.
-      # Upstream PR: https://github.com/apple/swift-package-manager/pull/6500
-      substituteInPlace Sources/CMakeLists.txt \
-        --replace \
-          'packageCollectionsSigning' \
-          'PackageCollectionsSigning'
-      substituteInPlace Sources/PackageCollectionsSigning/CMakeLists.txt \
-        --replace \
-          'SubjectPublickeyInfo' \
-          'SubjectPublicKeyInfo'
-      substituteInPlace Sources/PackageCollections/CMakeLists.txt \
-        --replace \
-          'FilepackageCollectionsSourcesStorage' \
-          'FilePackageCollectionsSourcesStorage'
     '';
   };
 
@@ -161,6 +145,25 @@ let
   #
   # In the end, we don't expose these derivations, and they only exist during
   # the bootstrap phase. The final swiftpm derivation does not depend on them.
+
+  swift-asn1 = mkBootstrapDerivation {
+    name = "swift-asn1";
+    src = generated.sources.swift-asn1;
+
+    postInstall = cmakeGlue.SwiftASN1;
+  };
+
+  swift-certificates = mkBootstrapDerivation {
+    name = "swift-certificates";
+    src = generated.sources.swift-certificates;
+
+    buildInputs = [
+      swift-asn1
+      swift-crypto
+    ];
+
+    postInstall = cmakeGlue.SwiftCertificates;
+  };
 
   swift-system = mkBootstrapDerivation {
     name = "swift-system";
@@ -321,6 +324,10 @@ let
     name = "swift-crypto";
     src = generated.sources.swift-crypto;
 
+    patches = [
+      ./patches/swift-crypto-cmake-install-extras.patch
+    ];
+
     postPatch = ''
       # Fix use of hardcoded tool paths on Darwin.
       substituteInPlace CMakeLists.txt \
@@ -345,7 +352,9 @@ let
     buildInputs = [
       llbuild
       sqlite
+      swift-asn1
       swift-argument-parser
+      swift-certificates
       swift-collections
       swift-crypto
       swift-driver

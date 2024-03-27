@@ -28,11 +28,12 @@ stdenv.mkDerivation (swift._wrapperParams // {
     ln -s -t $out/bin/ $swift/bin/swift*
 
     # Replace specific binaries with wrappers.
-    for executable in swift swiftc swift-frontend; do
-      export prog=$swift/bin/$executable
-      rm $out/bin/$executable
-      substituteAll '${./wrapper.sh}' $out/bin/$executable
-      chmod a+x $out/bin/$executable
+    for progName in swift swiftc swift-frontend; do
+      prog=$swift/bin/$progName
+      export prog progName
+      rm $out/bin/$progName
+      substituteAll '${./wrapper.sh}' $out/bin/$progName
+      chmod a+x $out/bin/$progName
     done
 
     ${lib.optionalString useSwiftDriver ''

@@ -2,10 +2,10 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "swift-argument-parser" = "1jph9w7lk9nr20fsv2c8p4hisx3dda817fh7pybd0r0j1jwa9nmw";
-    "swift-llbuild" = "106vnssh6pgy5s9dnq1hi1c9v2wkfydqgncg5dy7c9n23iisjy3s";
+    "swift-argument-parser" = "1wza0znrzkvk5ybikfj4nwgwnc9j45s2dnnxmg8ndrab0zyg710v";
+    "swift-llbuild" = "111bsckdybwm6j0pssfx741s9yv3abqxy7scnvjfl29wqv196qc4";
     "swift-system" = "0402hkx2q2dv27gccnn8ma79ngvwiwzkhcv4zlcdldmy6cgi0px7";
-    "swift-tools-support-core" = "1qvblyiazv58qwyxgyk2dh5ymbab3y70vm2q81qs6rmv43hs8ciz";
+    "swift-tools-support-core" = "0pg8yg87x1zzn4kz426c4vb28khx3vb8j0672bf40k6i6p7msya3";
     "Yams" = "11abhcfkmqm3cmh7vp7rqzvxd1zj02j2866a2pp6v9m89456xb76";
   };
 }

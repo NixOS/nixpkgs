@@ -4,7 +4,7 @@ interop succeed. The required flags can be read from cc-wrapper support files.
 
 --- a/SwiftCompilerSources/CMakeLists.txt
 +++ b/SwiftCompilerSources/CMakeLists.txt
-@@ -105,18 +105,11 @@ function(add_swift_compiler_modules_library name)
+@@ -110,18 +110,11 @@ function(add_swift_compiler_modules_library name)
        get_filename_component(swift_exec_bin_dir ${ALS_SWIFT_EXEC} DIRECTORY)
        set(sdk_option ${sdk_option} "-resource-dir" "${swift_exec_bin_dir}/../bootstrapping0/lib/swift")
      endif()
@@ -51,7 +51,7 @@ interop succeed. The required flags can be read from cc-wrapper support files.
  
 --- a/stdlib/public/Cxx/std/CMakeLists.txt
 +++ b/stdlib/public/Cxx/std/CMakeLists.txt
-@@ -145,6 +145,9 @@ add_swift_target_library(swiftstd STATIC NO_LINK_NAME IS_STDLIB
+@@ -14,6 +14,9 @@ add_swift_target_library(swiftCxxStdlib STATIC NO_LINK_NAME IS_STDLIB IS_SWIFT_O
      SWIFT_COMPILE_FLAGS_LINUX
      ${SWIFT_SDK_LINUX_CXX_OVERLAY_SWIFT_COMPILE_FLAGS}
  
@@ -59,5 +59,5 @@ interop succeed. The required flags can be read from cc-wrapper support files.
 +    ${SWIFT_SDK_OSX_CXX_OVERLAY_SWIFT_COMPILE_FLAGS}
 +
      LINK_FLAGS "${SWIFT_RUNTIME_SWIFT_LINK_FLAGS}"
-     TARGET_SDKS ALL_APPLE_PLATFORMS LINUX
+     TARGET_SDKS ALL_APPLE_PLATFORMS LINUX WINDOWS
      INSTALL_IN_COMPONENT compiler
