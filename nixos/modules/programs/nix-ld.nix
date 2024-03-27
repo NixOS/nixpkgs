@@ -3,7 +3,7 @@ let
   cfg = config.programs.nix-ld;
 
   nix-ld-libraries = pkgs.buildEnv {
-    name = "lb-library-path";
+    name = "ld-library-path";
     pathsToLink = [ "/lib" ];
     paths = map lib.getLib cfg.libraries;
     # TODO make glibc here configurable?
