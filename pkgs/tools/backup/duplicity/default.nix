@@ -13,6 +13,7 @@
 , gettext
 , getconf
 , testers
+, nix-update-script
 }:
 
 let self = python3.pkgs.buildPythonApplication rec {
@@ -120,6 +121,10 @@ let self = python3.pkgs.buildPythonApplication rec {
   doCheck = true;
 
   passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "rel\.(.*)" ];
+    };
+
     tests.version = testers.testVersion {
       package = self;
     };
