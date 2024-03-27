@@ -18,12 +18,14 @@ let
   fetchurlBoot = import ../build-support/fetchurl/boot.nix {
     inherit (stdenv) system;
   };
+
+  aliases = self: super: lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib self super pkgs);
 in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "darwin";
   extra = spliced: spliced.apple_sdk.frameworks;
-  f = (self: let
+  f = lib.extends aliases (self: let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
