@@ -13125,7 +13125,7 @@ with pkgs;
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
-  sipvicious = python3Packages.callPackage ../tools/security/sipvicious { };
+  sipvicious = callPackage ../tools/security/sipvicious { };
 
   siril = callPackage ../applications/science/astronomy/siril { };
 
