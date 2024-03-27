@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-E11wpTrE+HIT+jgn1zMC8L7RGas83DAJd1R0WWHp7Jc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     unasync
     poetry-core
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   # https://github.com/redis/redis-om-python/pull/577
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     hiredis
     more-itertools
