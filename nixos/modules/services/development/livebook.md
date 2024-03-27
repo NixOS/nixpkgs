@@ -9,7 +9,7 @@ Enabling the `livebook` service creates a user
 [`systemd`](https://www.freedesktop.org/wiki/Software/systemd/) unit
 which runs the server.
 
-```
+```nix
 { ... }:
 
 {
@@ -51,6 +51,6 @@ some features require additional packages.  For example, the machine
 learning Kinos require `gcc` and `gnumake`.  To add these, use
 `extraPackages`:
 
-```
+```nix
 services.livebook.extraPackages = with pkgs; [ gcc gnumake ];
 ```

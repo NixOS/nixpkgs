@@ -15,7 +15,7 @@ PostgreSQL is an advanced, free relational database.
 ## Configuring {#module-services-postgres-configuring}
 
 To enable PostgreSQL, add the following to your {file}`configuration.nix`:
-```
+```nix
 services.postgresql.enable = true;
 services.postgresql.package = pkgs.postgresql_15;
 ```
@@ -35,7 +35,7 @@ alice=>
 -->
 
 By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlSchema`. You can override this using [](#opt-services.postgresql.dataDir), e.g.
-```
+```nix
 services.postgresql.dataDir = "/data/postgresql";
 ```
 
@@ -174,7 +174,7 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
 "13"
 ```
 For an upgrade, a script like this can be used to simplify the process:
-```
+```nix
 { config, pkgs, ... }:
 {
   environment.systemPackages = [
@@ -256,7 +256,7 @@ postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 ```
 
 To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
-```
+```nix
 services.postgresql.package = pkgs.postgresql_12;
 services.postgresql.extraPlugins = ps: with ps; [
   pg_repack
@@ -265,7 +265,7 @@ services.postgresql.extraPlugins = ps: with ps; [
 ```
 
 You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like:
-```
+```nix
 self: super: {
   postgresql_custom = self.postgresql_12.withPackages (ps: [
     ps.pg_repack
@@ -275,7 +275,7 @@ self: super: {
 ```
 
 Here's a recipe on how to override a particular plugin through an overlay:
-```
+```nix
 self: super: {
   postgresql_15 = super.postgresql_15// {
     pkgs = super.postgresql_15.pkgs // {

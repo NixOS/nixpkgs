@@ -1197,7 +1197,7 @@ a good indication that the package is not in a valid state.
 Pytest is the most common test runner for python repositories. A trivial
 test run would be:
 
-```
+```nix
   nativeCheckInputs = [ pytest ];
   checkPhase = ''
     runHook preCheck
@@ -1213,7 +1213,7 @@ sandbox, and will generally need many tests to be disabled.
 
 To filter tests using pytest, one can do the following:
 
-```
+```nix
   nativeCheckInputs = [ pytest ];
   # avoid tests which need additional data or touch network
   checkPhase = ''
@@ -1248,7 +1248,7 @@ when a package may need many items disabled to run the test suite.
 
 Using the example above, the analogous `pytestCheckHook` usage would be:
 
-```
+```nix
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -1273,7 +1273,7 @@ Using the example above, the analogous `pytestCheckHook` usage would be:
 This is especially useful when tests need to be conditionally disabled,
 for example:
 
-```
+```nix
   disabledTests = [
     # touches network
     "download"
@@ -1298,7 +1298,7 @@ all packages have test suites that can be run easily, and some have none at all.
 To help ensure the package still works, [`pythonImportsCheck`](#using-pythonimportscheck) can attempt to import
 the listed modules.
 
-```
+```nix
   pythonImportsCheck = [
     "requests"
     "urllib"
@@ -1307,7 +1307,7 @@ the listed modules.
 
 roughly translates to:
 
-```
+```nix
   postCheck = ''
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
     python -c "import requests; import urllib"
@@ -1342,7 +1342,7 @@ pkg3>=1.0,<=2.0
 
 we can do:
 
-```
+```nix
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
@@ -1365,7 +1365,7 @@ pkg3
 Another option is to pass `true`, that will relax/remove all dependencies, for
 example:
 
-```
+```nix
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = true;
 ```
@@ -1392,7 +1392,7 @@ work with any of the [existing hooks](#setup-hooks).
 
 `unittestCheckHook` is a hook which will substitute the setuptools `test` command for a [`checkPhase`](#ssec-check-phase) which runs `python -m unittest discover`:
 
-```
+```nix
   nativeCheckInputs = [
     unittestCheckHook
   ];
@@ -1409,7 +1409,7 @@ using the popular Sphinx documentation generator.
 It is setup to automatically find common documentation source paths and
 render them using the default `html` style.
 
-```
+```nix
   outputs = [
     "out"
     "doc"
@@ -1424,7 +1424,7 @@ The hook will automatically build and install the artifact into the
 `doc` output, if it exists. It also provides an automatic diversion
 for the artifacts of the `man` builder into the `man` target.
 
-```
+```nix
   outputs = [
     "out"
     "doc"
@@ -1441,7 +1441,7 @@ for the artifacts of the `man` builder into the `man` target.
 Overwrite `sphinxRoot` when the hook is unable to find your
 documentation source root.
 
-```
+```nix
   # Configure sphinxRoot for uncommon paths
   sphinxRoot = "weird/docs/path";
 ```
@@ -1920,7 +1920,7 @@ The Python interpreters are by default not built with optimizations enabled, bec
 the builds are in that case not reproducible. To enable optimizations, override the
 interpreter of interest, e.g using
 
-```
+```nix
 let
   pkgs = import ./. {};
   mypython = pkgs.python3.override {

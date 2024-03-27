@@ -45,7 +45,7 @@ $ sbcl
 
 Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 
-```
+```nix
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
 in mkShell {
@@ -55,7 +55,7 @@ in mkShell {
 
 Such a Lisp can be now used e.g. to compile your sources:
 
-```
+```nix
 buildPhase = ''
   ${sbcl'}/bin/sbcl --load my-build-file.lisp
 ''
@@ -173,7 +173,7 @@ into the package scope with `withOverrides`.
 A package defined outside Nixpkgs using `buildASDFSystem` can be woven into the
 Nixpkgs-provided scope like this:
 
-```
+```nix
 let
   alexandria = sbcl.buildASDFSystem rec {
     pname = "alexandria";
@@ -199,7 +199,7 @@ new package with different parameters.
 
 Example of overriding `alexandria`:
 
-```
+```nix
 sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
   version = "1.4";
   src = fetchFromGitLab {
@@ -225,7 +225,7 @@ vice versa.
 
 To package slashy systems, use `overrideLispAttrs`, like so:
 
-```
+```nix
 ecl.pkgs.alexandria.overrideLispAttrs (oldAttrs: {
   systems = oldAttrs.systems ++ [ "alexandria/tests" ];
   lispLibs = oldAttrs.lispLibs ++ [ ecl.pkgs.rt ];
@@ -290,7 +290,7 @@ derivation.
 
 This example wraps CLISP:
 
-```
+```nix
 wrapLisp {
   pkg = clisp;
   faslExt = "fas";

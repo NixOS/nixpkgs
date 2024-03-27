@@ -24,7 +24,7 @@ After that you can commit and submit the changes.
 The apps will be available in the namespace `nextcloud25Packages.apps`.
 Using it together with the Nextcloud module could look like this:
 
-```
+```nix
 services.nextcloud = {
   enable = true;
   package = pkgs.nextcloud25;

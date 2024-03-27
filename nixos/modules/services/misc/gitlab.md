@@ -10,7 +10,7 @@ configure a webserver to proxy HTTP requests to the socket.
 
 For instance, the following configuration could be used to use nginx as
 frontend proxy:
-```
+```nix
 services.nginx = {
   enable = true;
   recommendedGzipSettings = true;
@@ -35,7 +35,7 @@ The default state dir is `/var/gitlab/state`. This is where
 all data like the repositories and uploads will be stored.
 
 A basic configuration with some custom settings could look like this:
-```
+```nix
 services.gitlab = {
   enable = true;
   databasePasswordFile = "/var/keys/gitlab/db_password";

@@ -22,7 +22,7 @@ friendly input method user interface.
 
 The following snippet can be used to configure IBus:
 
-```
+```nix
 i18n.inputMethod = {
   enabled = "ibus";
   ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
@@ -48,7 +48,7 @@ Available extra IBus engines are:
     methods, it must appear in the list of engines along with
     `table`. For example:
 
-    ```
+    ```nix
     ibus.engines = with pkgs.ibus-engines; [ table table-others ];
     ```
 
@@ -74,7 +74,7 @@ built-in Input Method Engine, Pinyin, QuWei and Table-based input methods.
 
 The following snippet can be used to configure Fcitx:
 
-```
+```nix
 i18n.inputMethod = {
   enabled = "fcitx5";
   fcitx5.addons = with pkgs; [ fcitx5-mozc fcitx5-hangul fcitx5-m17n ];
@@ -110,7 +110,7 @@ phonetic Korean characters (hangul) and pictographic Korean characters
 
 The following snippet can be used to configure Nabi:
 
-```
+```nix
 i18n.inputMethod = {
   enabled = "nabi";
 };
@@ -123,7 +123,7 @@ framework. Applications can use it through so-called bridges.
 
 The following snippet can be used to configure uim:
 
-```
+```nix
 i18n.inputMethod = {
   enabled = "uim";
 };
@@ -141,7 +141,7 @@ etc...
 
 The following snippet can be used to configure Hime:
 
-```
+```nix
 i18n.inputMethod = {
   enabled = "hime";
 };
@@ -153,7 +153,7 @@ Kime is Korean IME. it's built with Rust language and let you get simple, safe, 
 
 The following snippet can be used to configure Kime:
 
-```
+```nix
 i18n.inputMethod = {
   enabled = "kime";
 };

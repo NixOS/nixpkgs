@@ -9,7 +9,7 @@ One of the most common exporters is the
 [node exporter](https://github.com/prometheus/node_exporter),
 it provides hardware and OS metrics from the host it's
 running on. The exporter could be configured as follows:
-```
+```nix
   services.prometheus.exporters.node = {
     enable = true;
     port = 9100;
@@ -35,7 +35,7 @@ configuration see `man configuration.nix` or search through
 the [available options](https://nixos.org/nixos/options.html#prometheus.exporters).
 
 Prometheus can now be configured to consume the metrics produced by the exporter:
-```
+```nix
     services.prometheus = {
       # ...
 
@@ -75,7 +75,7 @@ example:
     `nixos/modules/services/monitoring/prometheus/exporters/`
     directory, which will be called postfix.nix and contains all exporter
     specific options and configuration:
-    ```
+    ```nix
     # nixpkgs/nixos/modules/services/prometheus/exporters/postfix.nix
     { config, lib, pkgs, options }:
 
@@ -148,7 +148,7 @@ example:
 Should an exporter option change at some point, it is possible to add
 information about the change to the exporter definition similar to
 `nixpkgs/nixos/modules/rename.nix`:
-```
+```nix
 { config, lib, pkgs, options }:
 
 with lib;

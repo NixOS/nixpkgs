@@ -126,7 +126,7 @@ should be set to. See the description of
 ## Example configuration {#module-services-keycloak-example-config}
 
 A basic configuration with some custom settings could look like this:
-```
+```nix
 services.keycloak = {
   enable = true;
   settings = {
