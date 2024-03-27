@@ -263,6 +263,7 @@ in
         {
           INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
           INCUS_OVMF_PATH = ovmf;
+          INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
           PATH = lib.mkForce serverBinPath;
         }
         (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
