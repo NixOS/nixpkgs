@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, libsForQt5
 , unstableGitUpdater
 }:
 
@@ -17,6 +18,20 @@ stdenvNoCC.mkDerivation {
 
   dontConfigure = true;
   dontBuild = true;
+  dontWrapQtApps = true;
+
+  propagatedBuildInputs = with libsForQt5.qt5; [
+    qtgraphicaleffects
+    qtquickcontrols2
+    qtsvg
+  ];
+
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo ${libsForQt5.qt5.qtgraphicaleffects}  >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qt5.qtquickcontrols2}  >> $out/nix-support/propagated-user-env-packages
+    echo ${libsForQt5.qt5.qtsvg}  >> $out/nix-support/propagated-user-env-packages
+  '';
 
   installPhase = ''
     runHook preInstall
