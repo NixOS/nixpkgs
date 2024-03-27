@@ -1,4 +1,5 @@
-{ system, bootstrapFiles, derivationArgTransform, extraAttrs }:
+# no lib.id so we use (args: args) as a substitute
+{ system, bootstrapFiles, derivationArgTransform ? (args: args), extraAttrs }:
 
 derivation (derivationArgTransform ({
   name = "bootstrap-tools";
