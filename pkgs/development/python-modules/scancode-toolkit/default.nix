@@ -72,11 +72,11 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     beautifulsoup4
     bitarray
