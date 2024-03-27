@@ -27,6 +27,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "packaging"
     "python-gnupg"
   ];
 
