@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     })
     (fetchpatch {
       url = "https://github.com/espeak-ng/espeak-ng/commit/b7ebfedadced920daa8abf44bf8e6ff8797fa705.patch";
-      hash = "0djnij1v7nidhflqa9rlgzka88swk69zyywqbkmk6hczhd1y0yk2";
+      sha256 = "0djnij1v7nidhflqa9rlgzka88swk69zyywqbkmk6hczhd1y0yk2";
     })
   ] ++ lib.optionals mbrolaSupport [
     # Hardcode correct mbrola paths.
