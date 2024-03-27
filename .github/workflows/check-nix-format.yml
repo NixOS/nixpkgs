@@ -1,0 +1,50 @@
+# This file was copied mostly from check-maintainers-sorted.yaml.
+# NOTE: Formatting with the RFC-style nixfmt command is not yet stable. See
+# https://github.com/NixOS/rfcs/pull/166.
+# Because of this, this action is not yet enabled for all files -- only for
+# those who have opted in.
+name: Check that Nix files are formatted
+
+on:
+  pull_request_target:
+permissions:
+  contents: read
+
+jobs:
+  nixos:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
+    steps:
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
+        with:
+          # explicitly enable sandbox
+          extra_nix_config: sandbox = true
+      - name: Install nixfmt
+        run: nix-env -f default.nix -iAP nixfmt-rfc-style
+      - name: Check that Nix files are formatted according to the RFC style
+        # Each environment variable beginning with NIX_FMT_PATHS_ is a list of
+        # paths to check with nixfmt.
+        env:
+          # Format paths related to the Nixpkgs CUDA ecosystem.
+          NIX_FMT_PATHS_CUDA: |
+            pkgs/development/cuda-modules
+            pkgs/test/cuda
+            pkgs/top-level/cuda-packages.nix
+        # Iterate over all environment variables beginning with NIX_FMT_PATHS_.
+        run: |
+          for env_var in "${!NIX_FMT_PATHS_@}"; do
+            readarray -t paths <<< "${!env_var}"
+            if [[ "${paths[*]}" == "" ]]; then
+              echo "Error: $env_var is empty."
+              exit 1
+            fi
+            echo "Checking paths: ${paths[@]}"
+            if ! nixfmt --check "${paths[@]}"; then
+              echo "Error: nixfmt failed."
+              exit 1
+            fi
+          done
