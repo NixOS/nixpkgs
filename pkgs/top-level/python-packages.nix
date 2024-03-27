@@ -13914,6 +13914,10 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  snakemake = toPythonModule (pkgs.snakemake.override {
+    python3 = python;
+  });
+
   snakemake-executor-plugin-cluster-generic = callPackage ../development/python-modules/snakemake-executor-plugin-cluster-generic { };
 
   snakemake-interface-common = callPackage ../development/python-modules/snakemake-interface-common { };
