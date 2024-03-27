@@ -32,12 +32,12 @@ buildPythonPackage rec {
     "packaging"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     packaging
     pyparsing
