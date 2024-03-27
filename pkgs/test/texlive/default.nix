@@ -81,6 +81,14 @@ rec {
     name = "texlive-test-context";
     format = "context";
     texLive = texliveConTeXt;
+    # check that the PDF has been created: we have hit cases of context
+    # failing with exit status 0 due to a misconfigured texlive
+    postTest = ''
+      if [[ ! -f "$name".pdf ]] ; then
+        echo "ConTeXt test failed: file '$name.pdf' not found"
+        exit 1
+      fi
+    '';
     text = ''
       \starttext
       \startsection[title={ConTeXt test document}]
