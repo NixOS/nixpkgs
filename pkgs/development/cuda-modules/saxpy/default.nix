@@ -16,7 +16,6 @@ let
     flags
     libcublas
     ;
-  inherit (lib) getDev getLib getOutput;
 in
 backendStdenv.mkDerivation {
   pname = "saxpy";
@@ -37,10 +36,9 @@ backendStdenv.mkDerivation {
   buildInputs =
     lib.optionals (cudaOlder "11.4") [cudatoolkit]
     ++ lib.optionals (cudaAtLeast "11.4") [
-      (getDev libcublas)
-      (getLib libcublas)
-      (getOutput "static" libcublas)
       cuda_cudart
+      libcublas.dev
+      libcublas.lib
     ]
     ++ lib.optionals (cudaAtLeast "12.0") [cuda_cccl];
 
