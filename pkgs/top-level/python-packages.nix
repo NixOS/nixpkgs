@@ -16032,6 +16032,8 @@ self: super: with self; {
 
   typing-inspect = callPackage ../development/python-modules/typing-inspect { };
 
+  typing-validation = callPackage ../development/python-modules/typing-validation { };
+
   typish = callPackage ../development/python-modules/typish { };
 
   typogrify = callPackage ../development/python-modules/typogrify { };
