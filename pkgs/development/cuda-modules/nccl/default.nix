@@ -35,6 +35,7 @@ backendStdenv.mkDerivation (
     };
 
     strictDeps = true;
+    __structuredAttrs = true;
 
     outputs = [
       "out"
@@ -66,22 +67,20 @@ backendStdenv.mkDerivation (
 
     preConfigure = ''
       patchShebangs ./src/device/generate.py
-      makeFlagsArray+=(
-        "NVCC_GENCODE=${lib.concatStringsSep " " cudaFlags.gencode}"
-      )
     '';
 
+    # NOTE(@connorbaker): When referencing packages, make sure to use the spliced version corresponding to
+    # buildPackages instead of pkgs (the default).
     makeFlags =
-      ["PREFIX=$(out)"]
+      [
+        "PREFIX=$(out)"
+        "NVCC_GENCODE=${lib.concatStringsSep " " cudaFlags.gencode}"
+      ]
       ++ lib.optionals (lib.versionOlder cudaVersion "11.4") [
-        "CUDA_HOME=${cudatoolkit}"
-        "CUDA_LIB=${lib.getLib cudatoolkit}/lib"
-        "CUDA_INC=${lib.getDev cudatoolkit}/include"
+        "CUDA_HOME=${cudatoolkit.__spliced.buildHost or cudatoolkit}"
       ]
       ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [
-        "CUDA_HOME=${cuda_nvcc}"
-        "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
-        "CUDA_INC=${lib.getDev cuda_cudart}/include"
+        "CUDA_HOME=${cuda_nvcc.__spliced.buildHost or cuda_nvcc}"
       ];
 
     enableParallelBuilding = true;
