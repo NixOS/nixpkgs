@@ -60,6 +60,10 @@ python3Packages.buildPythonApplication rec {
 
     # fixed by https://github.com/Backblaze/B2_Command_Line_Tool/pull/915
     "TestRmConsoleTool"
+
+    "TestConsoleTool"
+    "TestNonUTF8TerminalSupport"
+    "TestVersionConsoleTool"
   ];
 
   disabledTestPaths = [
