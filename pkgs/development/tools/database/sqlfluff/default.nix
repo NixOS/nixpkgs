@@ -5,21 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
     rev = "refs/tags/${version}";
-    hash = "sha256-GJpSBDxgI0UpIIVeF9dl9XzKJ2TuwWf/IOCzoTGJNRQ=";
+    hash = "sha256-/Zp/iAX6Y6MaXMjpk3dRYgZNhjJtl3cr/FiCyhGK9X4=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     appdirs
     cached-property
     chardet
