@@ -33,6 +33,7 @@ buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "more-itertools"
+    "packaging"
   ];
 
   propagatedBuildInputs = [
