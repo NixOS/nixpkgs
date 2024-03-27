@@ -1,0 +1,13 @@
+diff --git a/SConstruct b/SConstruct
+index 7062a072de7..833fa2bdd3c 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -313,7 +313,7 @@ add_option('experimental-optimization',
+     action="append",
+     choices=experimental_optimization_choices,
+     const=experimental_optimization_choices[0],
+-    default=['+sandybridge'],
++    default=[],
+     help='Enable experimental optimizations',
+     nargs='?',
+     type='choice'

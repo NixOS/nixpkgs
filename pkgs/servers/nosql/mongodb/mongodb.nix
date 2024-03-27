@@ -29,6 +29,7 @@ with lib;
 
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
+, avxSupport ? true
 }:
 
 let
