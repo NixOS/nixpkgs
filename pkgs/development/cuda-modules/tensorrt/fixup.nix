@@ -108,6 +108,6 @@ finalAttrs: prevAttrs: {
       prevAttrs.meta.badPlatforms or [ ]
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
-    maintainers = prevAttrs.meta.maintainers ++ [maintainers.aidalgol];
+    maintainers = prevAttrs.meta.maintainers ++ [ maintainers.aidalgol ];
   };
 }
