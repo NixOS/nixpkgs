@@ -40,9 +40,9 @@
 , pkgsCross # wasm32 rlbox
 , python3
 , runCommand
-, rustc
 , rust-cbindgen
-, rustPlatform
+, rustPackages_1_73
+, rustPackages_1_76
 , unzip
 , which
 , wrapGAppsHook
@@ -149,6 +149,9 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 
 let
   inherit (lib) enableFeature;
+
+  inherit (if lib.versionAtLeast version "125" then rustPackages_1_76 else rustPackages_1_73)
+    cargo rustc rustPlatform;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
