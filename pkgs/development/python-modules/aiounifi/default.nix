@@ -29,17 +29,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools==" "setuptools>=" \
-      --replace "wheel==" "wheel>="
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel==" "wheel>="
 
     sed -i '/--cov=/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     orjson
     segno
@@ -63,10 +63,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for communicating with Unifi Controller API";
-    mainProgram = "aiounifi";
     homepage = "https://github.com/Kane610/aiounifi";
     changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "aiounifi";
   };
 }
