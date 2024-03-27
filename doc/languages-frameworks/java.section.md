@@ -96,7 +96,7 @@ let
   something = (pkgs.something.override { jre = my_jre; });
   other = (pkgs.other.override { jre = my_jre; });
 in
-  "..."
+  <...>
 ```
 
 You can also specify what JDK your JRE should be based on, for example

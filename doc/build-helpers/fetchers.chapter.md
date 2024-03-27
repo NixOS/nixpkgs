@@ -123,7 +123,7 @@ Here is an example of `fetchDebianPatch` in action:
 buildPythonPackage rec {
   pname = "pysimplesoap";
   version = "1.16.2";
-  src = "...";
+  src = <...>;
 
   patches = [
     (fetchDebianPatch {

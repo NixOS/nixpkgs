@@ -1890,7 +1890,7 @@ this snippet:
 {
   myPythonPackages = python3Packages.override {
     overrides = self: super: {
-      twisted = "...";
+      twisted = <...>;
     };
   };
 }

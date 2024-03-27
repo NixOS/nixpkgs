@@ -194,7 +194,7 @@ mkDerivation {
   version = "1.5.0";
   pname = "iowa-stdlib";
 
-  src = "...";
+  src = <...>;
 
   libraryFile = "";
   libraryName = "IAL-1.3";
