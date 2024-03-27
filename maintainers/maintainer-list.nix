@@ -18569,6 +18569,12 @@
       fingerprint = "652F FAAD 5CB8 AF1D 3F96  9521 929E D6C4 0414 D3F5";
     }];
   };
+  spk = {
+    email = "laurent@spkdev.net";
+    github = "spk";
+    githubId = 98590;
+    name = "Laurent Arnoud";
+  };
   spoonbaker = {
     github = "Spoonbaker";
     githubId = 47164123;
