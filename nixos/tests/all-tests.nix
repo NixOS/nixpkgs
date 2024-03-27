@@ -791,6 +791,7 @@ in {
   sanoid = handleTest ./sanoid.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
+  scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};
   scrutiny = handleTest ./scrutiny.nix {};
   sddm = handleTest ./sddm.nix {};
   seafile = handleTest ./seafile.nix {};
