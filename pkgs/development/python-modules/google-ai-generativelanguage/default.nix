@@ -11,21 +11,26 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-ai-generativelanguage";
-  version = "0.5.4";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XBhXXrzbIiKoFPew/UdUD673AUPb96rm9LudyVcY3H8=";
+    hash = "sha256-vA/JVTaj3+NuA91LJo+Utn1hxogihr/OaBV4ujOFm7o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     google-api-core
     grpcio
     grpcio-status

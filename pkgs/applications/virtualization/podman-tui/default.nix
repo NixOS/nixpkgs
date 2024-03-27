@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.18.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    hash = "sha256-T2hiCRoZqdbcB36Tpy597j7Hc1yeR2MijQbuheENfuA=";
+    hash = "sha256-sJaiZJeT0oUAnSg9Kv8uMp1XoumumC3LB77lelmwSgw=";
   };
 
   vendorHash = null;
@@ -24,11 +24,11 @@ buildGoModule rec {
     let
       skippedTests = [
         "TestDialogs"
+        "TestVoldialogs"
       ];
     in
     ''
-      export USER=$(whoami)
-      export HOME=/home/$USER
+      export HOME="$(mktemp -d)"
 
       # Disable flaky tests
       buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
@@ -36,7 +36,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = podman-tui;
-    command = "podman-tui version";
+    command = "HOME=$(mktemp -d) podman-tui version";
     version = "v${version}";
   };
 

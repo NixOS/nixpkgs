@@ -257,7 +257,7 @@ foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
 
 # Add bcache module, if needed.
 my @bcacheDevices = glob("/dev/bcache*");
-@bcacheDevices = grep(!qr#dev/bcachefs.*#, @bcacheDevices);
+@bcacheDevices = grep(!m#dev/bcachefs.*#, @bcacheDevices);
 if (scalar @bcacheDevices > 0) {
     push @initrdAvailableKernelModules, "bcache";
 }

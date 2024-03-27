@@ -6782,11 +6782,19 @@ self: super: with self; {
 
   llama-index-question-gen-openai = callPackage ../development/python-modules/llama-index-question-gen-openai { };
 
+  llama-index-readers-database = callPackage ../development/python-modules/llama-index-readers-database { };
+
   llama-index-readers-file = callPackage ../development/python-modules/llama-index-readers-file { };
 
   llama-index-readers-json = callPackage ../development/python-modules/llama-index-readers-json { };
 
   llama-index-readers-llama-parse = callPackage ../development/python-modules/llama-index-readers-llama-parse { };
+
+  llama-index-readers-s3 = callPackage ../development/python-modules/llama-index-readers-s3 { };
+
+  llama-index-readers-twitter = callPackage ../development/python-modules/llama-index-readers-twitter { };
+
+  llama-index-readers-txtai = callPackage ../development/python-modules/llama-index-readers-txtai { };
 
   llama-index-readers-weather = callPackage ../development/python-modules/llama-index-readers-weather { };
 
@@ -9068,7 +9076,7 @@ self: super: with self; {
 
   openvino = callPackage ../development/python-modules/openvino {
     openvino-native = pkgs.openvino.override {
-      inherit python;
+      python3Packages = self;
     };
   };
 
@@ -13099,8 +13107,6 @@ self: super: with self; {
 
   robotframework-sshlibrary = callPackage ../development/python-modules/robotframework-sshlibrary { };
 
-  robotframework-tidy = callPackage ../development/python-modules/robotframework-tidy { };
-
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
   robotstatuschecker = callPackage ../development/python-modules/robotstatuschecker { };
@@ -13511,7 +13517,7 @@ self: super: with self; {
 
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
 
-  setuptools_dso = callPackage ../development/python-modules/setuptools_dso { };
+  setuptools-dso = callPackage ../development/python-modules/setuptools-dso { };
 
   setuptools-generate = callPackage ../development/python-modules/setuptools-generate { };
 

@@ -4838,6 +4838,12 @@
     githubId = 4708206;
     name = "Daniel Fox Franke";
   };
+  dghubble = {
+    email = "dghubble@gmail.com";
+    github = "dghubble";
+    githubId = 2253428;
+    name = "Dalton Hubble";
+  };
   dgliwka = {
     email = "dawid.gliwka@gmail.com";
     github = "dgliwka";
@@ -16188,6 +16194,15 @@
     githubId = 104558;
     name = "Benjamin Saunders";
   };
+  ramblurr = {
+    name = "Casey Link";
+    email = "nix@caseylink.com";
+    github = "Ramblurr";
+    githubId = 14830;
+    keys = [{
+      fingerprint = "978C 4D08 058B A26E B97C  B518 2078 2DBC ACFA ACDA";
+    }];
+  };
   ramkromberg = {
     email = "ramkromberg@mail.com";
     github = "RamKromberg";
@@ -19076,6 +19091,12 @@
     github = "tailhook";
     githubId = 321799;
     name = "Paul Colomiets";
+  };
+  takac = {
+    email = "cammann.tom@gmail.com";
+    github = "takac";
+    githubId = 1015381;
+    name = "Tom Cammann";
   };
   takagiy = {
     email = "takagiy.4dev@gmail.com";

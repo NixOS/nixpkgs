@@ -3380,8 +3380,6 @@ with pkgs;
 
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
-  aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
-
   iamy = callPackage ../tools/admin/iamy { };
 
   iam-policy-json-to-terraform = callPackage ../tools/misc/iam-policy-json-to-terraform { };
@@ -5003,8 +5001,6 @@ with pkgs;
 
   ioport = callPackage ../os-specific/linux/ioport { };
 
-  dgoss = callPackage ../tools/misc/dgoss { };
-
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
@@ -5535,8 +5531,6 @@ with pkgs;
   gorilla-cli = callPackage ../tools/llm/gorilla-cli { };
 
   godu = callPackage ../tools/misc/godu { };
-
-  goss = callPackage ../tools/misc/goss { };
 
   gosu = callPackage ../tools/misc/gosu { };
 
@@ -6333,8 +6327,6 @@ with pkgs;
   starboard = callPackage ../applications/networking/cluster/starboard { };
 
   statserial = callPackage ../tools/misc/statserial { };
-
-  steampipe = callPackage ../tools/misc/steampipe { };
 
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
@@ -7874,8 +7866,6 @@ with pkgs;
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix {}
   );
-
-  elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator { };
 
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
@@ -24876,6 +24866,10 @@ with pkgs;
 
   tet = callPackage ../development/tools/misc/tet { };
 
+  texpresso = callPackage ../tools/typesetting/tex/texpresso {
+    texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
+  };
+
   text-engine = callPackage ../development/libraries/text-engine { };
 
   the-foundation = callPackage ../development/libraries/the-foundation { };
@@ -25380,8 +25374,6 @@ with pkgs;
   commonsMath = callPackage ../development/libraries/java/commons/math { };
 
   fastjar = callPackage ../development/tools/java/fastjar { };
-
-  jextract = callPackage ../development/tools/java/jextract { };
 
   httpunit = callPackage ../development/libraries/java/httpunit { };
 
@@ -30633,8 +30625,6 @@ with pkgs;
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
   dk = callPackage ../applications/window-managers/dk { };
-
-  docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
   docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
 
@@ -37407,8 +37397,6 @@ with pkgs;
 
   portmod = callPackage ../games/portmod { };
 
-  tetrio-desktop = callPackage ../games/tetrio-desktop { };
-
   tr-patcher = callPackage ../games/tr-patcher { };
 
   tes3cmd = callPackage ../games/tes3cmd { };
@@ -38489,8 +38477,6 @@ with pkgs;
   coin-utils = callPackage ../development/libraries/science/math/coin-utils { };
 
   ecos = callPackage ../development/libraries/science/math/ecos { };
-
-  flintqs = callPackage ../development/libraries/science/math/flintqs { };
 
   getdp = callPackage ../applications/science/math/getdp { };
 
@@ -40807,8 +40793,6 @@ with pkgs;
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
-  xivlauncher = callPackage ../games/xivlauncher { };
-
   xortool = python3Packages.callPackage ../tools/security/xortool { };
 
   xorex = callPackage ../tools/security/xorex { };
@@ -41054,9 +41038,7 @@ with pkgs;
 
   openrisk = callPackage ../tools/security/openrisk { };
 
-  openvino = callPackage ../development/libraries/openvino {
-    python = python3;
-  };
+  openvino = callPackage ../development/libraries/openvino { };
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
     # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
