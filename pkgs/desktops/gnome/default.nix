@@ -27,6 +27,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
+  papers = callPackage ./core/papers { };
+
   evolution-data-server = callPackage ./core/evolution-data-server { };
 
   gdm = callPackage ./core/gdm { };
