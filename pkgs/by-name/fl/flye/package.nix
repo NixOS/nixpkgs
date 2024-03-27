@@ -20,7 +20,9 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+
   propagatedBuildInputs = [ coreutils ];
+
   buildInputs = [
     zlib
     curl
