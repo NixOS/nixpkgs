@@ -37,7 +37,7 @@ buildPythonPackage rec {
       --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
   '';
 
-  build-systems = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
