@@ -97,8 +97,40 @@ rec {
           map (x: toString (mod (num / x) 256)) (reverseList (genList (x: common.pow 2 (x * 8)) 4))
         );
 
+    /**
+      Extracts a prefix length from a CIDR and verifies it is valid.
+
+      If an IP address is given without a CIDR, then a prefix length of 32 is returned.
+
+      # Example
+
+      ```nix
+      _verifyPrefixLength "192.168.0.1/24"
+      => 24
+      _verifyPrefixLength "192.168.0.1"
+      => 32
+      ```
+
+      # Type
+
+      ```
+      _verifyPrefixLength :: String => String
+      ```
+
+      # Arguments
+
+      - [cidr] An IPv4 CIDR.
+
+      # Throws
+
+      - If a CIDR was given with a slash but no prefix length following.
+      - If there were multiple slashes in the CIDR.
+    */
     _verifyPrefixLength =
-      splitCidr:
+      cidr:
+      let
+        splitCidr = lib.splitString "/" cidr;
+      in
       if (builtins.length splitCidr) == 1 then
         "32"
       else if (builtins.length splitCidr) == 2 then

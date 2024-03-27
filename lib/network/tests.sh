@@ -116,3 +116,9 @@ expectEqual 'internal.ipv4._encode 4294967295' '"255.255.255.255"'
 expectEqual 'internal.ipv4._encode 3232235521' '"192.168.0.1"'
 expectFailure 'internal.ipv4._encode 4294967296' 'lib.network.ipv4._encode: [[:digit:]]+ is too large to encode into an IPv4 address.'
 expectFailure 'internal.ipv4._encode (-1)' 'lib.network.ipv4._encode: -[[:digit:]]+ cannot be encoded into an IPv4 address.'
+
+# Test basic cases for verifying a prefix length.
+expectEqual 'internal.ipv4._verifyPrefixLength "192.168.0.1/24"' '"24"'
+expectEqual 'internal.ipv4._verifyPrefixLength "192.168.0.1"' '"32"'
+expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/"' 'lib.network: Got a CIDR with no prefix length.'
+expectFailure 'internal.ipv4._verifyPrefixLength "192.168.0.1/24/bad"' 'lib.network: Could not verify prefix length.'

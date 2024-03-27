@@ -9,7 +9,7 @@ in
       let
         splitCidr = lib.splitString "/" cidr;
         address = lib.elemAt splitCidr 0;
-        prefixLength = internal.ipv4._verifyPrefixLength splitCidr;
+        prefixLength = internal.ipv4._verifyPrefixLength cidr;
       in
       internal.ipv4._makeIPv4 address prefixLength;
   };
