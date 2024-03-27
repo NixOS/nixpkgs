@@ -2621,6 +2621,11 @@ with pkgs;
 
   _86Box = callPackage ../applications/emulators/86box { };
 
+  _86Box-with-roms = _86Box.override {
+    unfreeEnableRoms = true;
+    unfreeEnableDiscord = true;
+  };
+
   attract-mode = callPackage ../applications/emulators/attract-mode { };
 
   basiliskii = callPackage ../applications/emulators/basiliskii { };
