@@ -212,6 +212,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
+  ./programs/lomiri.nix
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
