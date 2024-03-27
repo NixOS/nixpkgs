@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, ncurses }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpustat";
@@ -6,12 +10,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
-    rev = "V${version}";
+    repo ="cpustat";
+    rev = "refs/tags/V${version}";
     hash = "sha256-cdHoo2esm772q782kb7mwRwlPXGDNNLHJRbd2si5g7k=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+  ];
 
   installFlags = [
     "BINDIR=${placeholder "out"}/bin"
@@ -21,10 +27,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CPU usage monitoring tool";
-    mainProgram = "cpustat";
     homepage = "https://github.com/ColinIanKing/cpustat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "cpustat";
   };
 }
