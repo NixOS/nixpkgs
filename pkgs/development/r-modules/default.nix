@@ -1433,7 +1433,7 @@ let
     });
 
     Rhdf5lib = old.Rhdf5lib.overrideAttrs (attrs: {
-      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5.dev pkgs.libaec ];
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5_1_10.dev pkgs.libaec ];
       patches = [ ./patches/Rhdf5lib.patch ];
       passthru.hdf5 = pkgs.hdf5;
     });
