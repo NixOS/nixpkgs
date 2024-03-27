@@ -6,6 +6,7 @@
 , llama-index-llms-openai
 , poetry-core
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -21,8 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-Vz6Zot0WrTyvOCyKso0awQ6yVxvJSB2EptiYBq1qpdQ=";
   };
 
+  pythonRelaxDeps = [
+    "llama-index-agent-openai"
+  ];
+
   build-system = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
