@@ -22,7 +22,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ aenum ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} -m dbf.test
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "dbf" ];
