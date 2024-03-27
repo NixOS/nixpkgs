@@ -29,12 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-vDzXrAGJUqG9+wOUWXeKLYraUrILJFAQXf60iCAHRPo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 
