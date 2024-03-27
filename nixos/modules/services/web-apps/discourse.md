@@ -6,7 +6,7 @@ modern and open source discussion platform.
 ## Basic usage {#module-services-discourse-basic-usage}
 
 A minimal configuration using Let's Encrypt for TLS certificates looks like this:
-```
+```nix
 services.discourse = {
   enable = true;
   hostname = "discourse.example.com";
@@ -34,7 +34,7 @@ the [](#opt-services.discourse.sslCertificate)
 and [](#opt-services.discourse.sslCertificateKey)
 options:
 
-```
+```nix
 services.discourse = {
   enable = true;
   hostname = "discourse.example.com";
@@ -80,7 +80,7 @@ A basic setup which assumes you want to use your configured
 [hostname](#opt-services.discourse.hostname) as
 email domain can be done like this:
 
-```
+```nix
 services.discourse = {
   enable = true;
   hostname = "discourse.example.com";
@@ -162,7 +162,7 @@ The following example sets the title and description of the
 Discourse instance and enables
 GitHub login in the site settings,
 and changes a few request limits in the backend settings:
-```
+```nix
 services.discourse = {
   enable = true;
   hostname = "discourse.example.com";
@@ -253,7 +253,7 @@ and [discourse-solved](https://github.com/discourse/discourse-solved)
 plugins, and disable `discourse-spoiler-alert`
 by default:
 
-```
+```nix
 services.discourse = {
   enable = true;
   hostname = "discourse.example.com";

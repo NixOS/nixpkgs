@@ -8,7 +8,7 @@ All of the core apps, optional apps, games, and core developer tools from GNOME 
 
 To enable the GNOME desktop use:
 
-```
+```nix
 services.xserver.desktopManager.gnome.enable = true;
 services.xserver.displayManager.gdm.enable = true;
 ```
@@ -23,7 +23,7 @@ The default applications used in NixOS are very minimal, inspired by the default
 
 If you’d like to only use the GNOME desktop and not the apps, you can disable them with:
 
-```
+```nix
 services.gnome.core-utilities.enable = false;
 ```
 
@@ -37,7 +37,7 @@ Note that this mechanism can only exclude core utilities, games and core develop
 
 It is also possible to disable many of the [core services](https://github.com/NixOS/nixpkgs/blob/b8ec4fd2a4edc4e30d02ba7b1a2cc1358f3db1d5/nixos/modules/services/x11/desktop-managers/gnome.nix#L329-L348). For example, if you do not need indexing files, you can disable Tracker with:
 
-```
+```nix
 services.gnome.tracker-miners.enable = false;
 services.gnome.tracker.enable = false;
 ```
@@ -48,7 +48,7 @@ Note, however, that doing so is not supported and might break some applications.
 
 You can install all of the GNOME games with:
 
-```
+```nix
 services.gnome.games.enable = true;
 ```
 
@@ -56,7 +56,7 @@ services.gnome.games.enable = true;
 
 You can install GNOME core developer tools with:
 
-```
+```nix
 services.gnome.core-developer-tools.enable = true;
 ```
 
@@ -64,7 +64,7 @@ services.gnome.core-developer-tools.enable = true;
 
 GNOME Flashback provides a desktop environment based on the classic GNOME 2 architecture. You can enable the default GNOME Flashback session, which uses the Metacity window manager, with:
 
-```
+```nix
 services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
 ```
 
@@ -72,7 +72,7 @@ It is also possible to create custom sessions that replace Metacity with a diffe
 
 The following example uses `xmonad` window manager:
 
-```
+```nix
 services.xserver.desktopManager.gnome.flashback.customSessions = [
   {
     wmName = "xmonad";
@@ -104,7 +104,7 @@ Some packages that include Shell extensions, like `gnome.gpaste`, don’t have t
 
 You can install them like any other package:
 
-```
+```nix
 environment.systemPackages = [
   gnomeExtensions.dash-to-dock
   gnomeExtensions.gsconnect
@@ -136,7 +136,7 @@ You can use `dconf-editor` tool to explore which GSettings you can set.
 
 ### Example {#sec-gnome-gsettings-overrides-example}
 
-```
+```nix
 services.xserver.desktopManager.gnome = {
   extraGSettingsOverrides = ''
     # Change default background

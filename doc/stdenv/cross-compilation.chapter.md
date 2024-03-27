@@ -159,7 +159,7 @@ Add `mesonEmulatorHook` to `nativeBuildInputs` conditionally on if the target bi
 
 e.g.
 
-```
+```nix
 nativeBuildInputs = [
   meson
 ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

@@ -12,7 +12,7 @@ Additionally, the [`validatePkgConfig` setup hook](https://nixos.org/manual/nixp
 
 A good example of all these things is zlib:
 
-```
+```nix
 { pkg-config, testers, ... }:
 
 stdenv.mkDerivation (finalAttrs: {

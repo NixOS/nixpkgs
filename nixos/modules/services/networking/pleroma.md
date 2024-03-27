@@ -17,7 +17,7 @@ The `config.exs` file can be further customized following the instructions on th
 ## Initializing the database {#module-services-pleroma-initialize-db}
 
 First, the Postgresql service must be enabled in the NixOS configuration
-```
+```nix
 services.postgresql = {
   enable = true;
   package = pkgs.postgresql_13;
@@ -38,7 +38,7 @@ $ sudo -u postgres psql -f setup.psql
 In this section we will enable the Pleroma service only locally, so its configurations can be improved incrementally.
 
 This is an example of configuration, where [](#opt-services.pleroma.configs) option contains the content of the file `config.exs`, generated [in the first section](#module-services-pleroma-generate-config), but with the secrets (database password, endpoint secret key, salts, etc.) removed. Removing secrets is important, because otherwise they will be stored publicly in the Nix store.
-```
+```nix
 services.pleroma = {
   enable = true;
   secretConfigFile = "/var/lib/pleroma/secrets.exs";
@@ -121,7 +121,7 @@ $ pleroma_ctl user new <nickname> <email>  --admin --moderator --password <passw
 
 In this configuration, Pleroma is listening only on the local port 4000. Nginx can be configured as a Reverse Proxy, for forwarding requests from public ports to the Pleroma service. This is an example of configuration, using
 [Let's Encrypt](https://letsencrypt.org/) for the TLS certificates
-```
+```nix
 security.acme = {
   email = "root@example.net";
   acceptTerms = true;

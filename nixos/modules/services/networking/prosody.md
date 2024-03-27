@@ -25,7 +25,7 @@ A good configuration to start with, including a
 [Multi User Chat (MUC)](https://xmpp.org/extensions/xep-0045.html)
 endpoint as well as a [HTTP File Upload](https://xmpp.org/extensions/xep-0363.html)
 endpoint will look like this:
-```
+```nix
 services.prosody = {
   enable = true;
   admins = [ "root@example.org" ];
@@ -57,7 +57,7 @@ certificate by leveraging the ACME
 
 Provided the setup detailed in the previous section, you'll need the following acme configuration to generate
 a TLS certificate for the three endponits:
-```
+```nix
 security.acme = {
   email = "root@example.org";
   acceptTerms = true;

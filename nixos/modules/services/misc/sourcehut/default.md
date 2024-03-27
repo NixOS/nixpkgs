@@ -12,7 +12,7 @@ This NixOS module also provides basic configuration integrating Sourcehut into l
 and `services.postgresql` services.
 
 A very basic configuration may look like this:
-```
+```nix
 { pkgs, ... }:
 let
   fqdn =

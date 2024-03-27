@@ -147,7 +147,7 @@ them, we need to make them writable.
 A special function `swiftpmMakeMutable` is available to replace the symlink
 with a writable copy:
 
-```
+```nix
 configurePhase = generated.configure ++ ''
   # Replace the dependency symlink with a writable copy.
   swiftpmMakeMutable swift-crypto

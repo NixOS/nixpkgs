@@ -458,7 +458,7 @@ function does not require a hash (unless git dependencies are used)
 and fetches every dependency as a separate fixed-output derivation.
 `importCargoLock` can be used as follows:
 
-```
+```nix
 cargoDeps = rustPlatform.importCargoLock {
   lockFile = ./Cargo.lock;
 };
@@ -468,7 +468,7 @@ If the `Cargo.lock` file includes git dependencies, then their output
 hashes need to be specified since they are not available through the
 lock file. For example:
 
-```
+```nix
 cargoDeps = rustPlatform.importCargoLock {
   lockFile = ./Cargo.lock;
   outputHashes = {
