@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "fenderglass";
-    repo = pname;
+    repo = "flye";
     rev = version;
     hash = "sha256-IALqtIPmvDYoH4w/tk2WB/P/pAcKXxgnsu9PFp+wIes=";
   };
