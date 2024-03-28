@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "perseus-cli";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-IYjLx9/4oWSXa4jhOtGw1GOHmrR7LQ6bWyN5zbOuEFs=";
+    sha256 = "sha256-Qq+DQOJP11A5WMG+l3F1Uh+VjK7A9fKej2UOmFIIYXs=";
   };
 
-  cargoSha256 = "sha256-i7MPmO9MoANZLzmR5gsD+v0gyDtFbzhsmE9xOsb88L0=";
+  cargoSha256 = "sha256-W1colldWSJ9/M3C8lWxgHCVGgksS9grzFZsMLd4ZFAo=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
@@ -26,8 +26,11 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${lib.makeBinPath [ wasm-pack ]}"
   '';
 
+  # Disable tests for https://github.com/framesurge/perseus/issues/305
+  doCheck = false;
+
   meta = with lib; {
-    homepage = "https://arctic-hen7.github.io/perseus";
+    homepage = "https://framesurge.sh/perseus/en-US";
     description = "A high-level web development framework for Rust with full support for server-side rendering and static generation";
     maintainers = with maintainers; [ max-niederman ];
     license = with licenses; [ mit ];
