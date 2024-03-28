@@ -1,6 +1,5 @@
-diff -ur postgresql-9.5.3-orig/src/port/path.c postgresql-9.5.3/src/port/path.c
---- postgresql-9.5.3-orig/src/port/path.c	2016-05-09 22:50:23.000000000 +0200
-+++ postgresql-9.5.3/src/port/path.c	2016-08-29 22:44:10.507377613 +0200
+--- a/src/port/path.c
++++ b/src/port/path.c
 @@ -714,7 +714,11 @@
  void
  get_lib_path(const char *my_exec_path, char *ret_path)
