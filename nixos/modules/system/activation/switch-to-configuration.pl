@@ -571,7 +571,7 @@ while (my ($unit, $state) = each(%{$active_cur})) {
     my $new_base_unit_file = $new_unit_file;
 
     # Detect template instances.
-    if (!-e $cur_unit_file && !-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
+    if (!-e $cur_unit_file && !-e $new_unit_file && $unit =~ /^(.*)@.*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
       $cur_base_unit_file = "/etc/systemd/system/$base_unit";
       $new_base_unit_file = "$toplevel/etc/systemd/system/$base_unit";
@@ -754,7 +754,7 @@ if ($action eq "dry-activate") {
         my $new_base_unit_file = $new_unit_file;
 
         # Detect template instances.
-        if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
+        if (!-e $new_unit_file && $unit =~ /^(.*)@.*\.(.*)$/msx) {
           $base_unit = "$1\@.$2";
           $new_base_unit_file = "$toplevel/etc/systemd/system/$base_unit";
         }
@@ -827,7 +827,7 @@ foreach (split(/\n/msx, read_file($restart_by_activation_file, err_mode => "quie
     my $new_base_unit_file = $new_unit_file;
 
     # Detect template instances.
-    if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
+    if (!-e $new_unit_file && $unit =~ /^(.*)@.*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
       $new_base_unit_file = "$toplevel/etc/systemd/system/$base_unit";
     }

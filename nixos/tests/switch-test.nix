@@ -325,6 +325,10 @@ in {
             wantedBy = [ "multi-user.target" ];
             overrideStrategy = "asDropin";
           };
+          systemd.services."instantiated@three.with.dot" = {
+            wantedBy = [ "multi-user.target" ];
+            overrideStrategy = "asDropin";
+          };
         };
 
         unitWithTemplateModified.configuration = {
@@ -930,11 +934,11 @@ in {
         # Ensure templated units are restarted when the base unit changes
         switch_to_specialisation("${machine}", "unitWithTemplate")
         out = switch_to_specialisation("${machine}", "unitWithTemplateModified")
-        assert_contains(out, "stopping the following units: instantiated@one.service, instantiated@two.service\n")
+        assert_contains(out, "stopping the following units: instantiated@one.service, instantiated@three.with.dot.service, instantiated@two.service\n")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
-        assert_contains(out, "\nstarting the following units: instantiated@one.service, instantiated@two.service\n")
+        assert_contains(out, "\nstarting the following units: instantiated@one.service, instantiated@three.with.dot.service, instantiated@two.service\n")
         assert_lacks(out, "the following new units were started:")
 
     with subtest("failing units"):
