@@ -5,6 +5,8 @@
 , nixosTests
 , gettext
 , python3
+, giflib
+, darwin
 , ghostscript
 , imagemagickBig
 , jbig2enc
@@ -64,6 +66,9 @@ let
 
     buildInputs = [
       pango
+      giflib
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreText
     ];
 
     CYPRESS_INSTALL_BINARY = "0";
