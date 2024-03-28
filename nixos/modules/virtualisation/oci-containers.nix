@@ -110,7 +110,10 @@ let
 
         log-driver = mkOption {
           type = types.str;
-          default = "journald";
+          default = if cfg.backend == "podman" then "passthrough" else "journald";
+          defaultText = literalExpression ''
+            if cfg.backend == "podman" then "passthrough" else "journald";
+          '';
           description = lib.mdDoc ''
             Logging driver for the container.  The default of
             `"journald"` means that the container's logs will be
@@ -294,7 +297,7 @@ let
       "--hostname=${escapeShellArg container.hostname}"
       ++ lib.optionals (cfg.backend == "podman") [
         "--cidfile=/run/podman-${escapedName}.ctr-id"
-        "--cgroups=no-conmon"
+        "--cgroups=split"
         "--sdnotify=conmon"
         "-d"
         "--replace"
@@ -342,6 +345,9 @@ let
       Environment="PODMAN_SYSTEMD_UNIT=podman-${name}.service";
       Type="notify";
       NotifyAccess="all";
+      Delegate="yes";
+      StandardOutput="journal";
+      StandardError="journal";
     };
   };
 
