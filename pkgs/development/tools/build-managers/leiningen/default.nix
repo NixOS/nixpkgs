@@ -3,17 +3,16 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.10.0";
+  version = "2.11.2";
 
   src = fetchurl {
     url = "https://codeberg.org/leiningen/leiningen/raw/tag/${version}/bin/lein-pkg";
-    hash = "sha256-sXV86UHky/Fcv2Sbe09BM2XmEtqJLSKEHsFyg5G7Zq8=";
+    hash = "sha256-KKGmJmjF9Ce0E6hnfjdq/6qZXwI7H80G4tTJisHfXz4=";
   };
 
-  # Check https://codeberg.org/leiningen/leiningen/releases to get the URL for the new version
   jarsrc = fetchurl {
-    url = "https://codeberg.org/attachments/43cebda5-a7c2-405b-b641-5143a00051b5";
-    hash = "sha256-0nKZutNAdawoZNC9BVn4NcbixHbAsKKDvL21dP2tuzQ=";
+    url = "https://codeberg.org/leiningen/leiningen/releases/download/${version}/leiningen-${version}-standalone.jar";
+    hash = "sha256-fTGuI652npJ0OLDNVdFak+faurCf1PwVh3l5Fh4Qh3Q=";
   };
 
   JARNAME = "${pname}-${version}-standalone.jar";
