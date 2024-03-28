@@ -10,7 +10,6 @@
   markForCudatoolkitRootHook,
   flags,
   stdenv,
-  hostPlatform,
   # Builder-specific arguments
   # Short package name (e.g., "cuda_cccl")
   # pname : String
@@ -32,7 +31,6 @@ let
   inherit (lib)
     attrsets
     lists
-    meta
     strings
     trivial
     licenses
@@ -40,15 +38,19 @@ let
     sourceTypes
     ;
 
+  inherit (backendStdenv) hostPlatform;
+
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
-  # redistArch :: String
-  # The redistArch is the name of the architecture for which the redistributable is built.
-  # It is `"unsupported"` if the redistributable is not supported on the target platform.
-  redistArch = flags.getRedistArch hostPlatform.system;
 
-  sourceMatchesHost = flags.getNixSystem redistArch == stdenv.hostPlatform.system;
+  # hostPlatformRedistArch :: String
+  # The hostPlatformRedistArch is the name of the architecture for which the redistributable is built.
+  # It is `"unsupported"` if the redistributable is not supported on the hostPlatform.
+  hostPlatformRedistArch = flags.getRedistArch hostPlatform.system;
+
+  # sourceMatchesHost :: Bool
+  sourceMatchesHost = flags.getNixSystem hostPlatformRedistArch == hostPlatform.system;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
@@ -76,7 +78,7 @@ backendStdenv.mkDerivation (
           output:
           attrsets.attrByPath
             [
-              redistArch
+              hostPlatformRedistArch
               "outputs"
               output
             ]
@@ -96,12 +98,12 @@ backendStdenv.mkDerivation (
         # NOTE: In the case the redistributable isn't supported on the target platform,
         # we will have `outputs = [ "out" ] ++ possibleOutputs`. This is of note because platforms which
         # aren't supported would otherwise have evaluation errors when trying to access outputs other than `out`.
-        # The alternative would be to have `outputs = [ "out" ]` when`redistArch = "unsupported"`, but that would
+        # The alternative would be to have `outputs = [ "out" ]` when`hostPlatformRedistArch = "unsupported"`, but that would
         # require adding guards throughout the entirety of the CUDA package set to ensure `cudaSupport` is true --
         # recall that OfBorg will evaluate packages marked as broken and that `cudaPackages` will be evaluated with
         # `cudaSupport = false`!
         additionalOutputs =
-          if redistArch == "unsupported"
+          if hostPlatformRedistArch == "unsupported"
           then possibleOutputs
           else builtins.filter hasOutput possibleOutputs;
         # The out output is special -- it's the default output and we always include it.
@@ -133,7 +135,18 @@ backendStdenv.mkDerivation (
     # brokenConditions :: AttrSet Bool
     # Sets `meta.broken = true` if any of the conditions are true.
     # Example: Broken on a specific version of CUDA or when a dependency has a specific version.
-    brokenConditions = { };
+    brokenConditions = {
+      # Unclear how this is handled by Nix internals.
+      "Duplicate entries in outputs" = finalAttrs.outputs != lists.unique finalAttrs.outputs;
+      # Typically this results in the static output being empty, as all libraries are moved
+      # back to the lib output.
+      "lib output follows static output" =
+        let
+          libIndex = lists.findFirstIndex (x: x == "lib") null finalAttrs.outputs;
+          staticIndex = lists.findFirstIndex (x: x == "static") null finalAttrs.outputs;
+        in
+        libIndex != null && staticIndex != null && libIndex > staticIndex;
+    };
 
     # badPlatformsConditions :: AttrSet Bool
     # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
@@ -143,23 +156,22 @@ backendStdenv.mkDerivation (
     };
 
     # src :: Optional Derivation
-    src = trivial.pipe redistArch [
-      # If redistArch doesn't exist in redistribRelease, return null.
-      (redistArch: redistribRelease.${redistArch} or null)
-      # If the release is non-null, fetch the source; otherwise, return null.
-      (trivial.mapNullable (
-        { relative_path, sha256, ... }:
-        fetchurl {
-          url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
-          inherit sha256;
-        }
-      ))
-    ];
+    src =
+      trivial.mapNullable
+        (
+          { relative_path, sha256, ... }:
+          fetchurl {
+            url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+            inherit sha256;
+          }
+        )
+        (redistribRelease.${hostPlatformRedistArch} or null);
 
     # Handle the pkg-config files:
     # 1. No FHS
     # 2. Location expected by the pkg-config wrapper
     # 3. Generate unversioned names too
+    # TODO(@connorbaker): Not all packages have a lib or dev output, so we should check for their existence.
     postPatch = ''
       for path in pkg-config pkgconfig ; do
         [[ -d "$path" ]] || continue
@@ -187,23 +199,26 @@ backendStdenv.mkDerivation (
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
 
-    nativeBuildInputs = [
-      autoPatchelfHook
-      # This hook will make sure libcuda can be found
-      # in typically /lib/opengl-driver by adding that
-      # directory to the rpath of all ELF binaries.
-      # Check e.g. with `patchelf --print-rpath path/to/my/binary
-      autoAddDriverRunpath
-      markForCudatoolkitRootHook
-    ]
-    # autoAddCudaCompatRunpath depends on cuda_compat and would cause
-    # infinite recursion if applied to `cuda_compat` itself (beside the fact
-    # that it doesn't make sense in the first place)
-    ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
-      # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
-      # See its documentation in ./setup-hooks/extension.nix.
-      autoAddCudaCompatRunpath
-    ];
+    nativeBuildInputs =
+      [
+        # To create fat outputs from each component and find a version of `lndir` built for the host platform.
+        lndir
+      ]
+      ++ [
+        # Patchelf is used to fix the rpath of the binaries.
+        autoPatchelfHook
+        # (autoPatchelfHook.__spliced.buildHost or autoPatchelfHook)
+
+        # This hook will make sure libcuda can be found in typically
+        # /lib/opengl-driver by adding that directory to the rpath of all ELF
+        # binaries. Check e.g. with `patchelf --print-rpath path/to/my/binary
+        autoAddDriverRunpath
+        # (autoAddDriverRunpath.__spliced.buildHost or autoAddDriverRunpath)
+
+        # Mark the CUDA toolkit root directory for the CUDA compatibility libraries
+        markForCudatoolkitRootHook
+        # (markForCudatoolkitRootHook.__spliced.buildHost or markForCudatoolkitRootHook)
+      ];
 
     buildInputs =
       [
@@ -212,6 +227,17 @@ backendStdenv.mkDerivation (
         # nvcc forces us to use an older gcc
         # NB: We don't actually know if this is the right thing to do
         stdenv.cc.cc.lib
+      ]
+      # autoAddCudaCompatRunpath depends on cuda_compat and would cause
+      # infinite recursion if applied to `cuda_compat` itself (beside the fact
+      # that it doesn't make sense in the first place)
+      ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
+        # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
+        # See its documentation in ./setup-hooks/auto-add-cuda-compat-runpath-hook/default.nix.
+        # NOTE(@connorbaker): If autoAddCudaCompatRunpath is in nativeBuildInputs, it tries to use cuda_compat
+        # from buildPackages, but we need to use the one from pkgs (pkgsHostTarget).
+        # We can either use autoAddCudaCompatRunpath.__spliced.hostTarget or move it to buildInputs.
+        autoAddCudaCompatRunpath
       ];
 
     # Picked up by autoPatchelf
@@ -296,11 +322,14 @@ backendStdenv.mkDerivation (
 
     # For each output, create a symlink to it in the out output.
     # NOTE: We must recreate the out output here, because the setup hook will have deleted it if it was empty.
+    # NOTE: Rely on nativeBuildInputs adding lndir to the path because meta.getExe has no concept of spliced
+    # attributes and will select the hostPlatform variant instead of the buildPlatform variant.
+    # TODO(@connorbaker): This should be removed when https://github.com/NixOS/nixpkgs/issues/271792 is resolved.
     postPatchelf = ''
       mkdir -p "$out"
       for output in $(getAllOutputNames); do
         if [[ "$output" != "out" ]]; then
-          ${meta.getExe lndir} "''${!output}" "$out"
+          lndir "''${!output}" "$out"
         fi
       done
     '';

@@ -3,10 +3,8 @@
   nvccCompatibilities,
   cudaVersion,
   pkgs,
-  overrideCC,
   stdenv,
-  wrapCCWith,
-  stdenvAdapters,
+  stdenvAdapters
 }:
 
 let

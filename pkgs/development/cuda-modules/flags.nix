@@ -2,12 +2,13 @@
 # Gpu :: AttrSet
 #   - See the documentation in ./gpus.nix.
 {
+  backendStdenv,
   config,
   cudaCapabilities ? (config.cudaCapabilities or []),
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
+  cudaAtLeast,
   cudaVersion,
-  hostPlatform,
   # gpus :: List Gpu
   gpus,
 }:
@@ -18,6 +19,12 @@ let
     lists
     strings
     trivial
+    ;
+
+  inherit (backendStdenv)
+    buildPlatform
+    hostPlatform
+    targetPlatform
     ;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit
@@ -42,7 +49,7 @@ let
     gpu:
     let
       inherit (gpu) minCudaVersion maxCudaVersion;
-      lowerBoundSatisfied = strings.versionAtLeast cudaVersion minCudaVersion;
+      lowerBoundSatisfied = cudaAtLeast minCudaVersion;
       upperBoundSatisfied =
         (maxCudaVersion == null) || !(strings.versionOlder maxCudaVersion cudaVersion);
     in
@@ -216,21 +223,24 @@ let
             lists.filter (cap: !(builtins.elem cap requestedJetsonDevices))
               cudaCapabilities;
           jetsonBuildSufficientCondition = requestedJetsonDevices != [];
-          jetsonBuildNecessaryCondition = requestedNonJetsonDevices == [] && hostPlatform.isAarch64;
+          jetsonBuildNecessaryCondition = requestedNonJetsonDevices == [];
         in
         trivial.throwIf (jetsonBuildSufficientCondition && !jetsonBuildNecessaryCondition)
           ''
-            Jetson devices cannot be targeted with non-Jetson devices. Additionally, they require hostPlatform to be aarch64.
-            You requested ${builtins.toJSON cudaCapabilities} for host platform ${hostPlatform.system}.
+            Jetson devices cannot be targeted with non-Jetson devices. Additionally, host platform
+            and target platform must be aarch64.
+            You requested ${builtins.toJSON cudaCapabilities} for:
+            - Build platform ${buildPlatform.system}
+            - Host platform ${hostPlatform.system}
+            - Target platform ${targetPlatform.system}
             Requested Jetson devices: ${builtins.toJSON requestedJetsonDevices}.
             Requested non-Jetson devices: ${builtins.toJSON requestedNonJetsonDevices}.
-            Exactly one of the following must be true:
-            - All CUDA capabilities belong to Jetson devices and hostPlatform is aarch64.
-            - No CUDA capabilities belong to Jetson devices.
             See ${./gpus.nix} for a list of architectures supported by this version of Nixpkgs.
           ''
           jetsonBuildSufficientCondition
-        && jetsonBuildNecessaryCondition;
+        && jetsonBuildNecessaryCondition
+        && hostPlatform.isAarch64
+        && targetPlatform.isAarch64;
     };
 in
 # When changing names or formats: pause, validate, and update the assert
@@ -277,7 +287,7 @@ assert let
   };
   actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
 in
-asserts.assertMsg ((strings.versionAtLeast cudaVersion "11.2") -> (expected == actualWrapped)) ''
+asserts.assertMsg ((cudaAtLeast "11.2") -> (expected == actualWrapped)) ''
   This test should only fail when using a version of CUDA older than 11.2, the first to support
   8.6.
   Expected: ${builtins.toJSON expected}
@@ -300,59 +310,6 @@ asserts.assertMsg (expected == actualWrapped) ''
   Expected: ${builtins.toJSON expected}
   Actual: ${builtins.toJSON actualWrapped}
 '';
-# Check Jetson-only
-assert let
-  expected = {
-    cudaCapabilities = [
-      "6.2"
-      "7.2"
-    ];
-    enableForwardCompat = true;
-
-    archNames = [
-      "Pascal"
-      "Volta"
-    ];
-    realArches = [
-      "sm_62"
-      "sm_72"
-    ];
-    virtualArches = [
-      "compute_62"
-      "compute_72"
-    ];
-    arches = [
-      "sm_62"
-      "sm_72"
-      "compute_72"
-    ];
-
-    gencode = [
-      "-gencode=arch=compute_62,code=sm_62"
-      "-gencode=arch=compute_72,code=sm_72"
-      "-gencode=arch=compute_72,code=compute_72"
-    ];
-    gencodeString = "-gencode=arch=compute_62,code=sm_62 -gencode=arch=compute_72,code=sm_72 -gencode=arch=compute_72,code=compute_72";
-
-    isJetsonBuild = true;
-  };
-  actual = formatCapabilities {
-    cudaCapabilities = [
-      "6.2"
-      "7.2"
-    ];
-  };
-  actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
-in
-asserts.assertMsg
-  # We can't do this test unless we're targeting aarch64
-  (hostPlatform.isAarch64 -> (expected == actualWrapped))
-  ''
-    Jetson devices can only be built with other Jetson devices.
-    Both 6.2 and 7.2 are Jetson devices.
-    Expected: ${builtins.toJSON expected}
-    Actual: ${builtins.toJSON actualWrapped}
-  '';
 {
   # formatCapabilities :: { cudaCapabilities: List Capability, enableForwardCompat: Boolean } ->  { ... }
   inherit formatCapabilities;

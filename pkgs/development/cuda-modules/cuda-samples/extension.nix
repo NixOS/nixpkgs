@@ -1,6 +1,6 @@
 {
+  backendStdenv,
   cudaVersion,
-  hostPlatform,
   lib,
 }:
 let
@@ -26,7 +26,7 @@ let
   # Samples are built around the CUDA Toolkit, which is not available for
   # aarch64. Check for both CUDA version and platform.
   cudaVersionIsSupported = cudaVersionToHash ? ${cudaVersion};
-  platformIsSupported = hostPlatform.isx86_64;
+  platformIsSupported = backendStdenv.hostPlatform.isx86_64;
   isSupported = cudaVersionIsSupported && platformIsSupported;
 
   # Build our extension
