@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ viraptor aidalgol ];
     platforms = with platforms; all;
+    mainProgram = "nu_plugin_formats";
   };
 }
