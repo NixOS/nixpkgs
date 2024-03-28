@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "aiosql"
     "aiosqlite"
     "pillow"
     "httpx"
