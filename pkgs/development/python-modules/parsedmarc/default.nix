@@ -27,9 +27,9 @@
 , opensearch-py
 , publicsuffixlist
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , tqdm
-, urllib3
 , xmltodict
 }:
 
@@ -51,14 +51,14 @@ buildPythonPackage rec {
     hash = "sha256-tK/cxOw50awcDAGRDTQ+Nxb9aJl2+zLZHuJq88xNmXM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "elasticsearch<7.14.0" "elasticsearch" \
-      --replace "elasticsearch-dsl==7.4.0" "elasticsearch-dsl"
-  '';
-
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "elasticsearch"
+    "elasticsearch-dsl"
   ];
 
   propagatedBuildInputs = [
@@ -85,7 +85,6 @@ buildPythonPackage rec {
     publicsuffixlist
     requests
     tqdm
-    urllib3
     xmltodict
     opensearch-py
   ];
