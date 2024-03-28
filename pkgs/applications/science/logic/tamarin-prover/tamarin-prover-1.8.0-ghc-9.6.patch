@@ -1,0 +1,237 @@
+commit 084bd5474d9ac687656c2a3a6b2e1d507febaa98
+Author: Artur Cygan <arczicygan@gmail.com>
+Date:   Mon Feb 26 10:04:48 2024 +0100
+
+    Update to GHC 9.6 (#618)
+    
+    Cherry-picked from b3e18f61e45d701d42d794bc91ccbb4c0e3834ec.
+    
+    Removing Control.Monad.List
+
+diff --git a/lib/sapic/src/Sapic/Exceptions.hs b/lib/sapic/src/Sapic/Exceptions.hs
+index 146b721e..b9962478 100644
+--- a/lib/sapic/src/Sapic/Exceptions.hs
++++ b/lib/sapic/src/Sapic/Exceptions.hs
+@@ -23,7 +23,6 @@ import Theory.Sapic
+ import Data.Label
+ import qualified Data.Maybe
+ import Theory.Text.Pretty
+-import Sapic.Annotation  --toAnProcess
+ import Theory.Sapic.Print (prettySapic)
+ import qualified Theory.Text.Pretty as Pretty
+ 
+@@ -67,14 +66,14 @@ data ExportException = UnsupportedBuiltinMS
+                        | UnsupportedTypes [String]
+ 
+ instance Show ExportException where
+-    
++
+     show (UnsupportedTypes incorrectFunctionUsages) = do
+         let functionsString = List.intercalate ", " incorrectFunctionUsages
+         (case length functionsString of
+           1 -> "The function " ++ functionsString ++ ", which is declared with a user-defined type, appears in a rewrite rule. "
+           _ -> "The functions " ++ functionsString ++ ", which are declared with a user-defined type, appear in a rewrite rule. ")
+         ++ "However, the translation of rules only works with bitstrings at the moment."
+-    show unsuppBuiltin = 
++    show unsuppBuiltin =
+         "The builtins bilinear-pairing and multiset are not supported for export. However, your model uses " ++
+         (case unsuppBuiltin of
+             UnsupportedBuiltinBP -> "bilinear-pairing."
+@@ -93,7 +92,7 @@ instance Show (SapicException an) where
+     show (InvalidPosition p) = "Invalid position:" ++ prettyPosition p
+     show (NotImplementedError s) = "This feature is not implemented yet. Sorry! " ++ s
+     show (ImplementationError s) = "You've encountered an error in the implementation: " ++ s
+-    show a@(ProcessNotWellformed e p) = "Process not well-formed: " ++ Pretty.render (text (show e) $-$ nest 2 (maybe emptyDoc prettySapic p))
++    show (ProcessNotWellformed e p) = "Process not well-formed: " ++ Pretty.render (text (show e) $-$ nest 2 (maybe emptyDoc prettySapic p))
+     show ReliableTransmissionButNoProcess = "The builtin support for reliable channels currently only affects the process calculus, but you have not specified a top-level process. Please remove \"builtins: reliable-channel\" to proceed."
+     show (CannotExpandPredicate facttag rstr) = "Undefined predicate "
+                               ++ showFactTagArity facttag
+@@ -135,7 +134,7 @@ instance Show WFerror where
+                               ++ prettySapicFunType t2
+                               ++ "."
+     show (FunctionNotDefined sym ) = "Function not defined " ++ show sym
+-        
++
+ 
+ instance Exception WFerror
+ instance (Typeable an) => Exception (SapicException an)
+diff --git a/lib/term/src/Term/Narrowing/Narrow.hs b/lib/term/src/Term/Narrowing/Narrow.hs
+index 56f145d9..88f89aa1 100644
+--- a/lib/term/src/Term/Narrowing/Narrow.hs
++++ b/lib/term/src/Term/Narrowing/Narrow.hs
+@@ -12,6 +12,7 @@ module Term.Narrowing.Narrow (
+ import           Term.Unification
+ import           Term.Positions
+ 
++import           Control.Monad
+ import           Control.Monad.Reader
+ 
+ import           Extension.Prelude
+diff --git a/lib/term/src/Term/Unification.hs b/lib/term/src/Term/Unification.hs
+index b5c107cd..fcf52128 100644
+--- a/lib/term/src/Term/Unification.hs
++++ b/lib/term/src/Term/Unification.hs
+@@ -61,7 +61,7 @@ module Term.Unification (
+   , pairDestMaudeSig
+   , symEncDestMaudeSig
+   , asymEncDestMaudeSig
+-  , signatureDestMaudeSig  
++  , signatureDestMaudeSig
+   , locationReportMaudeSig
+   , revealSignatureMaudeSig
+   , hashMaudeSig
+@@ -80,7 +80,7 @@ module Term.Unification (
+   , module Term.Rewriting.Definitions
+ ) where
+ 
+--- import           Control.Applicative
++import           Control.Monad
+ import           Control.Monad.RWS
+ import           Control.Monad.Except
+ import           Control.Monad.State
+diff --git a/lib/theory/src/Theory/Constraint/System/Guarded.hs b/lib/theory/src/Theory/Constraint/System/Guarded.hs
+index 99f985a8..3f0cd8d8 100644
+--- a/lib/theory/src/Theory/Constraint/System/Guarded.hs
++++ b/lib/theory/src/Theory/Constraint/System/Guarded.hs
+@@ -88,6 +88,7 @@ module Theory.Constraint.System.Guarded (
+ 
+ import           Control.Arrow
+ import           Control.DeepSeq
++import           Control.Monad
+ import           Control.Monad.Except
+ import           Control.Monad.Fresh              (MonadFresh, scopeFreshness)
+ import qualified Control.Monad.Trans.PreciseFresh as Precise (Fresh, evalFresh, evalFreshT)
+diff --git a/lib/utils/src/Control/Monad/Trans/Disj.hs b/lib/utils/src/Control/Monad/Trans/Disj.hs
+index 96dae742..b3b63825 100644
+--- a/lib/utils/src/Control/Monad/Trans/Disj.hs
++++ b/lib/utils/src/Control/Monad/Trans/Disj.hs
+@@ -18,10 +18,10 @@ module Control.Monad.Trans.Disj (
+   , runDisjT
+   ) where
+ 
+--- import Control.Applicative
+-import Control.Monad.List
+-import Control.Monad.Reader
++import Control.Monad
+ import Control.Monad.Disj.Class
++import Control.Monad.Reader
++import ListT
+ 
+ 
+ ------------------------------------------------------------------------------
+@@ -33,12 +33,12 @@ newtype DisjT m a = DisjT { unDisjT :: ListT m a }
+   deriving (Functor, Applicative, MonadTrans )
+ 
+ -- | Construct a 'DisjT' action.
+-disjT :: m [a] -> DisjT m a
+-disjT = DisjT . ListT
++disjT :: (Monad m, Foldable m) => m a -> DisjT m a
++disjT = DisjT . fromFoldable
+ 
+ -- | Run a 'DisjT' action.
+-runDisjT :: DisjT m a -> m [a]
+-runDisjT = runListT . unDisjT
++runDisjT :: Monad m => DisjT m a -> m [a]
++runDisjT = toList . unDisjT
+ 
+ 
+ 
+@@ -47,8 +47,6 @@ runDisjT = runListT . unDisjT
+ ------------
+ 
+ instance Monad m => Monad (DisjT m) where
+-    {-# INLINE return #-}
+-    return  = DisjT . return
+     {-# INLINE (>>=) #-}
+     m >>= f = DisjT $ (unDisjT . f) =<< unDisjT m
+ 
+diff --git a/lib/utils/tamarin-prover-utils.cabal b/lib/utils/tamarin-prover-utils.cabal
+index 75ed2b46..bb54d1e5 100644
+--- a/lib/utils/tamarin-prover-utils.cabal
++++ b/lib/utils/tamarin-prover-utils.cabal
+@@ -47,6 +47,7 @@ library
+       , deepseq
+       , dlist
+       , fclabels
++      , list-t
+       , mtl
+       , pretty
+       , safe
+diff --git a/src/Main/Mode/Batch.hs b/src/Main/Mode/Batch.hs
+index e7710682..d370da85 100644
+--- a/src/Main/Mode/Batch.hs
++++ b/src/Main/Mode/Batch.hs
+@@ -32,7 +32,8 @@ import           Main.TheoryLoader
+ import           Main.Utils
+ 
+ import           Theory.Module
+-import           Control.Monad.Except (MonadIO(liftIO), runExceptT)
++import           Control.Monad.Except (runExceptT)
++import           Control.Monad.IO.Class (MonadIO(liftIO))
+ import           System.Exit (die)
+ import Theory.Tools.Wellformedness (prettyWfErrorReport)
+ import           Text.Printf                     (printf)
+diff --git a/src/Main/TheoryLoader.hs b/src/Main/TheoryLoader.hs
+index 7fffb85b..71fba2b9 100644
+--- a/src/Main/TheoryLoader.hs
++++ b/src/Main/TheoryLoader.hs
+@@ -42,8 +42,6 @@ module Main.TheoryLoader (
+ 
+   ) where
+ 
+--- import           Debug.Trace
+-
+ import           Prelude                             hiding (id, (.))
+ 
+ import           Data.Char                           (toLower)
+@@ -58,8 +56,10 @@ import           Data.Bifunctor (Bifunctor(bimap))
+ import           Data.Bitraversable (Bitraversable(bitraverse))
+ 
+ import           Control.Category
+-import           Control.Exception (evaluate)
+ import           Control.DeepSeq (force)
++import           Control.Exception (evaluate)
++import           Control.Monad
++import           Control.Monad.IO.Class (MonadIO(liftIO))
+ 
+ import           System.Console.CmdArgs.Explicit
+ import           System.Timeout (timeout)
+@@ -387,10 +387,10 @@ closeTheory version thyOpts sign srcThy = do
+   deducThy   <- bitraverse (return . addMessageDeductionRuleVariants)
+                            (return . addMessageDeductionRuleVariantsDiff) transThy
+ 
+-  derivCheckSignature <- Control.Monad.Except.liftIO $ toSignatureWithMaude (get oMaudePath thyOpts) $ maudePublicSig (toSignaturePure sign)
++  derivCheckSignature <- liftIO $ toSignatureWithMaude (get oMaudePath thyOpts) $ maudePublicSig (toSignaturePure sign)
+   variableReport <- case compare derivChecks 0 of
+     EQ -> pure $ Just []
+-    _ -> Control.Monad.Except.liftIO $ timeout (1000000 * derivChecks) $ evaluate . force $ (either (\t -> checkVariableDeducability  t derivCheckSignature autoSources defaultProver)
++    _ -> liftIO $ timeout (1000000 * derivChecks) $ evaluate . force $ (either (\t -> checkVariableDeducability  t derivCheckSignature autoSources defaultProver)
+       (\t-> diffCheckVariableDeducability t derivCheckSignature autoSources defaultProver defaultDiffProver) deducThy)
+ 
+   let report = wellformednessReport  ++ (fromMaybe [(underlineTopic "Derivation Checks", Pretty.text "Derivation checks timed out. Use --derivcheck-timeout=INT to configure timeout, 0 to deactivate.")] variableReport)
+diff --git a/stack.yaml b/stack.yaml
+index 7267ba17..b53f6ff8 100644
+--- a/stack.yaml
++++ b/stack.yaml
+@@ -7,7 +7,7 @@ packages:
+ - lib/sapic/
+ - lib/export/
+ - lib/accountability/
+-resolver: lts-20.26
++resolver: lts-22.11
+ ghc-options:
+   "$everything": -Wall
+ nix:
+diff --git a/tamarin-prover.cabal b/tamarin-prover.cabal
+index 89a7e3a8..986274ea 100644
+--- a/tamarin-prover.cabal
++++ b/tamarin-prover.cabal
+@@ -106,7 +106,7 @@ executable tamarin-prover
+     default-language: Haskell2010
+ 
+     if flag(threaded)
+-        ghc-options:   -threaded -eventlog
++        ghc-options:   -threaded
+ 
+     -- -XFlexibleInstances
+ 

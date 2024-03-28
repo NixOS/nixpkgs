@@ -68,7 +68,6 @@ dont-distribute-packages:
  - Chart-fltkhs
  - ClustalParser
  - Coadjute
- - Color
  - Combinatorrent
  - ComonadSheet
  - Condor
@@ -136,7 +135,6 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - GeBoP
  - GenI
- - GenSmsPdu
  - Genbank
  - Gene-CluEDO
  - GenussFold
@@ -213,7 +211,6 @@ dont-distribute-packages:
  - Haschoo
  - Hashell
  - HaskRel
- - HaskellNet-SSL
  - Hate
  - Hawk
  - Hayoo
@@ -593,8 +590,6 @@ dont-distribute-packages:
  - aws-kinesis-client
  - aws-kinesis-reshard
  - aws-lambda
- - aws-lambda-haskell-runtime
- - aws-lambda-haskell-runtime-wai
  - aws-mfa-credentials
  - aws-sdk
  - aws-sdk-xml-unordered
@@ -721,8 +716,6 @@ dont-distribute-packages:
  - borel
  - both
  - bound-gen
- - bower-json
- - bower-json_1_0_0_1
  - breakout
  - bricks
  - bricks-internal-test
@@ -829,7 +822,6 @@ dont-distribute-packages:
  - chassis
  - chatty
  - cheapskate-highlight
- - cheapskate-lucid
  - cheapskate-terminal
  - check-pvp
  - chevalier-common
@@ -881,7 +873,6 @@ dont-distribute-packages:
  - clckwrks-theme-bootstrap
  - clckwrks-theme-clckwrks
  - clckwrks-theme-geo-bootstrap
- - clean-home
  - cleff-plugin
  - cless
  - cleveland
@@ -1021,7 +1012,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_6
+ - crackNum_3_10
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1106,7 +1097,6 @@ dont-distribute-packages:
  - ddc-tools
  - ddc-war
  - ddci-core
- - debian-binary
  - debug
  - decidable
  - decimal-arithmetic
@@ -1156,7 +1146,6 @@ dont-distribute-packages:
  - differential
  - digestive-foundation-lucid
  - digestive-functors-hsp
- - digraph
  - dimensional-tf
  - dimensions
  - dingo-core
@@ -1290,6 +1279,7 @@ dont-distribute-packages:
  - errors-ext
  - ersatz-toysat
  - esotericbot
+ - esqueleto-postgis
  - esqueleto-streaming
  - essence-of-live-coding-PortMidi
  - essence-of-live-coding-gloss
@@ -1577,7 +1567,6 @@ dont-distribute-packages:
  - gloss-accelerate
  - gloss-devil
  - gloss-raster-accelerate
- - gloss-raster-massiv
  - gloss-sodium
  - glpk-hs
  - gltf-loader
@@ -1992,6 +1981,7 @@ dont-distribute-packages:
  - haskoin-bitcoind
  - haskoin-crypto
  - haskoin-node
+ - haskoin-node_1_1_0
  - haskoin-protocol
  - haskoin-script
  - haskoon
@@ -2086,7 +2076,6 @@ dont-distribute-packages:
  - hesh
  - hesql
  - heterolist
- - hevm
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2199,7 +2188,6 @@ dont-distribute-packages:
  - hs-sdl-term-emulator
  - hs2ats
  - hs2dot
- - hsautogui
  - hsbackup
  - hsbencher-codespeed
  - hsbencher-fusion
@@ -2321,7 +2309,6 @@ dont-distribute-packages:
  - ideas-statistics
  - identicon-style-squares
  - idna
- - idris
  - ifscs
  - ige-mac-integration
  - igrf
@@ -2359,7 +2346,6 @@ dont-distribute-packages:
  - inferno-vc
  - infinity
  - inline-java
- - inliterate
  - inspector-wrecker
  - instant-aeson
  - instant-bytes
@@ -2676,6 +2662,7 @@ dont-distribute-packages:
  - lol-typing
  - loli
  - longshot
+ - looksee-trip
  - loop-effin
  - lorentz
  - lostcities
@@ -2703,7 +2690,6 @@ dont-distribute-packages:
  - magicbane
  - mahoro
  - maid
- - mail-pool
  - mailgun
  - majordomo
  - majority
@@ -2738,10 +2724,7 @@ dont-distribute-packages:
  - marvin
  - marxup
  - masakazu-bot
- - massiv
- - massiv-io
  - massiv-persist
- - massiv-test
  - matchers
  - math-programming-glpk
  - math-programming-tests
@@ -2778,7 +2761,6 @@ dont-distribute-packages:
  - minilight
  - minilight-lua
  - minimung
- - minio-hs
  - minioperational
  - minirotate
  - mismi-kernel
@@ -2911,7 +2893,6 @@ dont-distribute-packages:
  - mysql-simple-typed
  - mywatch
  - mywork
- - n-m
  - n2o-web
  - nakadi-client
  - named-servant-client
@@ -3050,8 +3031,6 @@ dont-distribute-packages:
  - outsort
  - overeasy
  - overload
- - pa-field-parser
- - pa-json
  - package-o-tron
  - padKONTROL
  - pairing
@@ -3279,7 +3258,6 @@ dont-distribute-packages:
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
  - proton
- - psc-ide
  - psql
  - publicsuffixlist
  - puffytools
@@ -3289,10 +3267,7 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purenix
- - purescript
  - purescript-iso
- - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -3474,7 +3449,6 @@ dont-distribute-packages:
  - rest-types
  - rest-wai
  - restful-snap
- - restless-git
  - restricted-workers
  - rethinkdb-model
  - rethinkdb-wereHamster
@@ -3584,7 +3558,6 @@ dont-distribute-packages:
  - scalpel-search
  - scan-metadata
  - scan-vector-machine
- - scheduler
  - scheduling
  - schematic
  - scholdoc
@@ -3675,7 +3648,6 @@ dont-distribute-packages:
  - servant-streaming-docs
  - servant-streaming-server
  - servant-swagger-tags
- - servant-to-elm
  - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
@@ -3748,7 +3720,6 @@ dont-distribute-packages:
  - smtlib2-pipe
  - smtlib2-quickcheck
  - smtlib2-timing
- - smtp-mail
  - smtp2mta
  - snap-auth-cli
  - snap-elm
@@ -3929,6 +3900,7 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
+ - syslog
  - systemd-api
  - systemstats
  - t3-client
@@ -4162,6 +4134,8 @@ dont-distribute-packages:
  - util-exception
  - util-primitive-control
  - util-universe
+ - utxorpc-client
+ - utxorpc-server
  - uu-cco-examples
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
@@ -4412,7 +4386,6 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
- - zephyr
  - zephyr-copilot
  - zerobin
  - zeromq3-conduit

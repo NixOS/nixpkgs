@@ -118,7 +118,6 @@ self: super: {
   relude = dontCheck (doJailbreak super.relude);
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
-    hls-cabal-plugin
     ghc-trace-events
     gi-cairo-connector          # mtl <2.3
     ghc-prof                    # base <4.18
