@@ -116,6 +116,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
 
   configureFlags = prevConfigFlags
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-wine-tools=${lib.getOutput "tools" pkgsBuildHost.wine64Packages.minimal}"
+    ++ lib.optional stdenv.hostPlatform.isStatic "--without-freetype" # no idea why, but it was failing with "checking for -lfreetype... <...>-musl-1.2.3-bin/bin/ldd: conftest: Not a valid dynamic program"
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
     ++ lib.optionals ((stdenv.hostPlatform.isDarwin && !supportFlags.xineramaSupport) || !supportFlags.x11Support) [ "--without-x" ];
