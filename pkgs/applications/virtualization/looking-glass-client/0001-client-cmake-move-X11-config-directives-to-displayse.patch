@@ -1,0 +1,57 @@
+From: Geoffrey McRae <geoff@hostfission.com>
+Date: Wed, 13 Mar 2024 11:17:25 +1100
+Subject: [PATCH] [client] cmake: move X11 config directives to
+ `displayservers`
+
+---
+ client/CMakeLists.txt                | 7 -------
+ client/displayservers/CMakeLists.txt | 7 +++++++
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git client/CMakeLists.txt client/CMakeLists.txt
+index 3755adcf..eeeb3eb0 100644
+--- client/CMakeLists.txt
++++ client/CMakeLists.txt
+@@ -42,19 +42,12 @@ add_feature_info(ENABLE_ASAN ENABLE_ASAN "AddressSanitizer support.")
+ option(ENABLE_UBSAN "Build with UndefinedBehaviorSanitizer" OFF)
+ add_feature_info(ENABLE_UBSAN ENABLE_UBSAN "UndefinedBehaviorSanitizer support.")
+
+-option(ENABLE_X11 "Build with X11 support" ON)
+-add_feature_info(ENABLE_X11 ENABLE_X11 "X11 support.")
+-
+ option(ENABLE_PIPEWIRE "Build with PipeWire audio output support" ON)
+ add_feature_info(ENABLE_PIPEWIRE ENABLE_PIPEWIRE "PipeWire audio support.")
+
+ option(ENABLE_PULSEAUDIO "Build with PulseAudio audio output support" ON)
+ add_feature_info(ENABLE_PULSEAUDIO ENABLE_PULSEAUDIO "PulseAudio audio support.")
+
+-if (NOT ENABLE_X11 AND NOT ENABLE_WAYLAND)
+-  message(FATAL_ERROR "Either ENABLE_X11 or ENABLE_WAYLAND must be on")
+-endif()
+-
+ add_compile_options(
+   "-Wall"
+   "-Wextra"
+diff --git client/displayservers/CMakeLists.txt client/displayservers/CMakeLists.txt
+index 5b5f827a..e7c4b25a 100644
+--- client/displayservers/CMakeLists.txt
++++ client/displayservers/CMakeLists.txt
+@@ -18,9 +18,16 @@ function(add_displayserver name)
+   add_subdirectory(${name})
+ endfunction()
+
++option(ENABLE_X11 "Build with X11 support" ON)
++add_feature_info(ENABLE_X11 ENABLE_X11 "X11 support.")
++
+ option(ENABLE_WAYLAND "Build with Wayland support" ON)
+ add_feature_info(ENABLE_WAYLAND ENABLE_WAYLAND "Wayland support.")
+
++if (NOT ENABLE_X11 AND NOT ENABLE_WAYLAND)
++  message(FATAL_ERROR "Either ENABLE_X11 or ENABLE_WAYLAND must be on")
++endif()
++
+ # Add/remove displayservers here!
+ if (ENABLE_WAYLAND)
+   add_displayserver(Wayland)
+--
+2.43.1
