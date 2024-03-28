@@ -13,7 +13,7 @@
 , rustPlatform
 , rust-bindgen
 , nixosTests
-}:
+}@args':
 
 lib.makeOverridable ({ # The kernel source tarball.
   src
@@ -68,6 +68,10 @@ lib.makeOverridable ({ # The kernel source tarball.
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
+
+, stdenv ? args'.stdenv
+, buildPackages ? args'.buildPackages
+
 , ...
 }@args:
 
