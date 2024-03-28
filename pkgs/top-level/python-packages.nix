@@ -127,6 +127,8 @@ self: super: with self; {
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
+  aifs = callPackage ../development/python-modules/aifs { };
+
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
@@ -5840,6 +5842,7 @@ self: super: with self; {
 
   iso-639 = callPackage ../development/python-modules/iso-639 { };
 
+
   iso4217 = callPackage ../development/python-modules/iso4217 { };
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
@@ -6068,6 +6071,8 @@ self: super: with self; {
   jsonpath-rw = callPackage ../development/python-modules/jsonpath-rw { };
 
   jsonpath-ng = callPackage ../development/python-modules/jsonpath-ng { };
+
+  jsonpath-python = callPackage ../development/python-modules/jsonpath-python { };
 
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
 
@@ -9885,6 +9890,8 @@ self: super: with self; {
   python-ipware = callPackage ../development/python-modules/python-ipware { };
 
   python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
+
+  python-iso639 = callPackage ../development/python-modules/python-iso639 { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
 
@@ -16175,6 +16182,8 @@ self: super: with self; {
   unrpa = callPackage ../development/python-modules/unrpa { };
 
   unstructured = callPackage ../development/python-modules/unstructured { };
+
+  unstructured-client = callPackage ../development/python-modules/unstructured-client { };
 
   unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
 

@@ -24,11 +24,16 @@
 , posthog
 , openai
 , setuptools
+, fastapi
+, nltk
+, send2trash
+, uvicorn
+, aifs
 }:
 
 buildPythonPackage rec {
   pname = "open-interpreter";
-  version = "0.2.0";
+  version = "0.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,16 +42,17 @@ buildPythonPackage rec {
     owner = "KillianLucas";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XeJ6cADtyXtqoTXwYJu+i9d3NYbJCLpYOeZYmdImtwI=";
+    hash = "sha256-Y8qFmj2CTNVmr6mACk4Q11VWOQysogyB4GmBuDlmWdk=";
   };
 
   # Remove unused dependency
   postPatch = ''
-    substituteInPlace pyproject.toml --replace 'git-python = "^1.0.3"' ""
+    substituteInPlace pyproject.toml --replace-fail 'git-python = "^1.0.3"' ""
   '';
 
   pythonRelaxDeps = [
     "tiktoken"
+    "pydantic"
   ];
 
   nativeBuildInputs = [
@@ -55,14 +61,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
     astor
+    # git-python is unused
     inquirer
     litellm
     pyyaml
     rich
     six
-    tiktoken
     tokentrim
     wget
     psutil
@@ -72,7 +77,16 @@ buildPythonPackage rec {
     matplotlib
     toml
     posthog
+    tiktoken
+
     openai
+    fastapi
+    nltk
+    send2trash
+    uvicorn
+    aifs
+
+    appdirs
 
     # Not explicitly in pyproject.toml but required due to use of `pkgs_resources`
     setuptools
