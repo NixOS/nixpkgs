@@ -36,6 +36,8 @@ lib.makeScope newScope (self: with self; {
 
   github-copilot-cli-fish = callPackage ./github-copilot-cli-fish.nix { };
 
+  git-abbr = callPackage ./git-abbr.nix { };
+
   grc = callPackage ./grc.nix { };
 
   humantime-fish = callPackage ./humantime-fish.nix { };
@@ -64,3 +66,4 @@ lib.makeScope newScope (self: with self; {
 } // lib.optionalAttrs config.allowAliases {
   autopair-fish = self.autopair; # Added 2023-03-10
 })
+
