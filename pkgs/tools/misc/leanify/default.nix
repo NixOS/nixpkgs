@@ -6,19 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "leanify";
-  version = "unstable-2023-10-19";
+  version = "unstable-2023-12-17";
 
   src = fetchFromGitHub {
     owner = "JayXon";
     repo = "Leanify";
-    rev = "5511415b02a7669f5fe9b454e5705e8328ab0359";
-    hash = "sha256-eOp/SOynh0HUz62Ki5ADRk7FjQY0Gh55ydVnO0MCXAA=";
+    rev = "9daa4303cdc03f6b90b72c369e6377c6beb75c39";
+    hash = "sha256-fLazKCQnOT3bN3Kz25Q80RLk54EU5U6HCf6kPLcXn9c=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace "-flto" "" \
-      --replace "lib/LZMA/Alloc.o" "lib/LZMA/CpuArch.o lib/LZMA/Alloc.o"
+      --replace-fail "-flto" "" \
+      --replace-fail "lib/LZMA/Alloc.o" "lib/LZMA/CpuArch.o lib/LZMA/Alloc.o" \
+      --replace-quiet "-Werror" ""
   '';
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
