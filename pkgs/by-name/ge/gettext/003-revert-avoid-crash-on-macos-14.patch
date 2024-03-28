@@ -1,0 +1,54 @@
+From 2f702ed832b2aa0feaa1948104eb0388943177e6 Mon Sep 17 00:00:00 2001
+From: Weijia Wang <contact@weijia.wang>
+Date: Sun, 7 Jan 2024 01:27:16 +0100
+Subject: [PATCH] Revert "Avoid crash on macOS 14."
+
+This reverts commit 1bcf74a9fa6dcf33645f54a854dc49387e76a40b.
+---
+ gettext-runtime/configure      | 2 +-
+ gettext-runtime/intl/configure | 2 +-
+ gettext-tools/configure        | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gettext-runtime/configure b/gettext-runtime/configure
+index 2a376c6..88c9312 100755
+--- a/gettext-runtime/configure
++++ b/gettext-runtime/configure
+@@ -22421,7 +22421,7 @@ printf "%s\n" "#define HAVE_CFLOCALECOPYPREFERREDLANGUAGES 1" >>confdefs.h
+   INTL_MACOSX_LIBS=
+   if test $gt_cv_func_CFPreferencesCopyAppValue = yes \
+      || test $gt_cv_func_CFLocaleCopyPreferredLanguages = yes; then
+-                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation -Wl,-framework -Wl,CoreServices"
++                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
+   fi
+ 
+ 
+diff --git a/gettext-runtime/intl/configure b/gettext-runtime/intl/configure
+index 8bea363..78f70d7 100755
+--- a/gettext-runtime/intl/configure
++++ b/gettext-runtime/intl/configure
+@@ -17428,7 +17428,7 @@ printf "%s\n" "#define HAVE_CFLOCALECOPYPREFERREDLANGUAGES 1" >>confdefs.h
+   INTL_MACOSX_LIBS=
+   if test $gt_cv_func_CFPreferencesCopyAppValue = yes \
+      || test $gt_cv_func_CFLocaleCopyPreferredLanguages = yes; then
+-                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation -Wl,-framework -Wl,CoreServices"
++                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
+   fi
+ 
+ 
+diff --git a/gettext-tools/configure b/gettext-tools/configure
+index 5ce6cf1..08f1062 100755
+--- a/gettext-tools/configure
++++ b/gettext-tools/configure
+@@ -25810,7 +25810,7 @@ printf "%s\n" "#define HAVE_CFLOCALECOPYPREFERREDLANGUAGES 1" >>confdefs.h
+   INTL_MACOSX_LIBS=
+   if test $gt_cv_func_CFPreferencesCopyAppValue = yes \
+      || test $gt_cv_func_CFLocaleCopyPreferredLanguages = yes; then
+-                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation -Wl,-framework -Wl,CoreServices"
++                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
+   fi
+ 
+ 
+-- 
+2.39.3 (Apple Git-145)
+

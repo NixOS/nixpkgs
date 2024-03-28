@@ -1,10 +1,12 @@
 { lib
 , bash
+, darwin
 , fetchurl
 , libiconv
 , stdenv
 , xz
 
+, enableCoreServices ? stdenv.isDarwin
 # HACK, see #10874 (and 14664)
 , enableLibiconv ? (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin)
 }:
@@ -29,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: ({
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./002-msginit-do-not-use-pot-creation-date.patch
+  ]
+  ++ lib.optionals enableCoreServices [
+    # prevent infinite recursion for the darwin stdenv
+    ./003-revert-avoid-crash-on-macos-14.patch
   ];
 
   outputs = [ "out" "man" "doc" "info" ];
@@ -68,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: ({
   ]
   ++ lib.optionals enableLibiconv [
     libiconv
+  ]
+  ++ lib.optionals enableCoreServices [
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   strictDeps = true;
