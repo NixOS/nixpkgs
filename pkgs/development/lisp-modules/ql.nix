@@ -269,6 +269,12 @@ let
     capstone = super.capstone.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.capstone ];
     });
+    cl-autowrap = super.cl-autowrap.overrideLispAttrs (o: {
+      asds = [ "cl-autowrap" "cl-plus-c" ];
+      systems = [ "cl-autowrap" "cl-autowrap/libffi" "cl-plus-c" ];
+      nativeLibs = [ pkgs.libffi ];
+    });
+    cl-plus-c = self.cl-autowrap;
   });
 
   qlpkgs =
