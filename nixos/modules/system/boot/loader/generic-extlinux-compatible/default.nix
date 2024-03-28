@@ -10,9 +10,9 @@ let
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
   # The builder used to write during system activation
-  builder = import ./extlinux-conf-builder.nix { inherit pkgs; };
+  builder = import ./extlinux-conf-builder.nix { inherit pkgs cfg; };
   # The builder exposed in populateCmd, which runs on the build architecture
-  populateBuilder = import ./extlinux-conf-builder.nix { pkgs = pkgs.buildPackages; };
+  populateBuilder = import ./extlinux-conf-builder.nix { pkgs = pkgs.buildPackages; inherit cfg; };
 in
 {
   options = {
@@ -65,6 +65,24 @@ in
         '';
       };
 
+      copyKernels = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to copy the necessary boot files into /boot, so
+          /nix/store is not needed by the boot loader. This is done
+          automatically if /boot is on a different partition than /.
+        '';
+      };
+
+      storePath = mkOption {
+        default = "/nix/store";
+        type = types.str;
+        description = ''
+          Path to the Nix store when looking for kernels at boot.
+          Only makes sense when copyKernels is false.
+        '';
+      };
     };
   };
 
