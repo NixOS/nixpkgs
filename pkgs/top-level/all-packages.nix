@@ -14638,6 +14638,8 @@ with pkgs;
 
   uptime-kuma = callPackage ../servers/monitoring/uptime-kuma { };
 
+  uptrace = callPackage ../servers/monitoring/uptrace { };
+
   vul = callPackage ../applications/misc/vul { };
 
   xar = callPackage ../tools/compression/xar { };
