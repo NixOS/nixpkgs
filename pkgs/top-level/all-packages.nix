@@ -29543,6 +29543,8 @@ with pkgs;
 
   siji = callPackage ../data/fonts/siji { };
 
+  smc-chilanka = callPackage ../data/fonts/smc-chilanka { };
+
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
 
   source-code-pro = callPackage ../data/fonts/source-code-pro { };
