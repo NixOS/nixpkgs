@@ -130,7 +130,7 @@ stdenv.mkDerivation {
     "-Wno-error=deprecated-declarations"
     "-Wno-error=gnu-folding-constant"
     "-Wno-error=unused-but-set-variable"
-  ]);
+  ] ++ lib.optional stdenv.hostPlatform.isMusl "-Wno-cpp");
 
   configurePlatforms = [];
 
