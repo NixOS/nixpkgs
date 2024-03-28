@@ -27,8 +27,8 @@ let
   expandOutputs =
     mapping:
     map (output: {
-      key = builtins.unsafeDiscardStringContext (lib.getOutput output mapping.original);
-      replacement = lib.getOutput output mapping.replacement;
+      name = builtins.unsafeDiscardStringContext (lib.getOutput output mapping.original);
+      value = lib.getOutput output mapping.replacement;
     }) mapping.original.outputs;
 
   # Produces a list of mappings from an SDK path specified by `attr` in the given
@@ -239,6 +239,20 @@ let
     else
       pkg;
 
+  # Gets all propagated inputs in a package. This does not recurse.
+  getPropagatedInputs =
+    pkg:
+    lib.optionals (lib.isDerivation pkg) (
+      lib.concatMap (input: pkg.${input} or [ ]) [
+        "depsBuildBuildPropagated"
+        "propagatedNativeBuildInputs"
+        "depsBuildTargetPropagated"
+        "depsHostHostPropagated"
+        "propagatedBuildInputs"
+        "depsTargetTargetPropagated"
+      ]
+    );
+
   # Replaces all packages propagated by `pkgs` using the `newPackages` mapping.
   # It is assumed that all possible overrides have already been incorporated into
   # the mapping. If any propagated packages are replaced, a stub package will be
@@ -257,7 +271,9 @@ let
           let
             replacement = getReplacement newPackages dep;
           in
-          lib.optionalString (dep != replacement) "s|${lib.escapeRegex dep.outPath}|${lib.escapeRegex replacement.outPath}|g;"
+          lib.optionalString (
+            dep != replacement
+          ) "s|${lib.escapeRegex dep.outPath}|${lib.escapeRegex replacement.outPath}|g;"
         ) propagatedInputs;
 
         passAsFile = [ "dependencies" ];
@@ -267,58 +283,35 @@ let
     # had packages remapped (with frameworks or proxy packages).
     if propagatedInputs != [ ] && env.dependencies != "" then mkStub pkg.name env else pkg;
 
-  # Gets all propagated inputs in a package. This does not recurse.
-  getPropagatedInputs =
-    pkg:
-    lib.optionals (lib.isDerivation pkg) (
-      lib.concatMap (input: pkg.${input} or [ ]) [
-        "depsBuildBuildPropagated"
-        "propagatedNativeBuildInputs"
-        "depsBuildTargetPropagated"
-        "depsHostHostPropagated"
-        "propagatedBuildInputs"
-        "depsTargetTargetPropagated"
-      ]
-    );
-
-  # Gets all propagated dependencies in a package.
-  getPropagatedDependencies =
+  # Gets all propagated dependencies in a package in reverse order sorted topologically.
+  # This takes advantage of the fact that items produced by `operator` are pushed to
+  # the end of the working set, ensuring that dependencies always appear after their
+  # parent in the list with leaf nodes at the end.
+  topologicallyOrderedPropagatedDependencies =
     pkgs:
     let
-      mapToPropagatedInputs =
-        pkgs:
-        lib.pipe pkgs [
-          (lib.filter (pkg: pkg != null))
-          (map (pkg: {
-            key = builtins.unsafeDiscardStringContext pkg;
-            package = pkg;
-            deps = getPropagatedInputs pkg;
-          }))
-        ];
+      mapPackageDeps = lib.flip lib.pipe [
+        (lib.filter (pkg: pkg != null))
+        (map (pkg: {
+          key = builtins.unsafeDiscardStringContext pkg;
+          package = pkg;
+          deps = getPropagatedInputs pkg;
+        }))
+      ];
     in
     lib.genericClosure {
-      startSet = mapToPropagatedInputs pkgs;
-      operator = { deps, ... }: mapToPropagatedInputs deps;
+      startSet = mapPackageDeps pkgs;
+      operator = { deps, ... }: mapPackageDeps deps;
     };
 
   # Returns a package mapping based on remapping all propagated packages.
-  #
-  # Implementation note: recursion is avoided because it is costly. Instead, a flat
-  # list of dependencies is obtained then sorted topologically, so that dependencies
-  # can be updated in order (and only once). This produces a new mapping that must
-  # be used to perform the actual updates to the propagated packages.
   getPackageMapping =
     baseMapping: input:
     let
-      dependencies = lib.pipe input [
-        getPropagatedDependencies
-        (lib.toposort (x: y: lib.any (z: x.package == z) y.deps))
-        (lib.getAttr "result")
-        lib.reverseList
-      ];
+      dependencies = topologicallyOrderedPropagatedDependencies input;
     in
-    lib.foldl' (
-      newPackages: pkg:
+    lib.foldr (
+      pkg: newPackages:
       let
         replacement = replacePropagatedPackages newPackages pkg.package;
         outPath = builtins.unsafeDiscardStringContext pkg.key;
@@ -350,60 +343,26 @@ let
       # original package output to be mapped to the replacement. This is safe because
       # the value is not persisted anywhere and necessary because store paths are not
       # allowed as attrset names otherwise.
-      baseSdkMapping =
-        let
-          sdkPackages = lib.genericClosure {
-            startSet = lib.pipe args [
-              (lib.flip removeAttrs [
-                "lib"
-                "extendMkDerivationArgs"
-              ])
-              (lib.filterAttrs (_: lib.hasAttr "darwin"))
-              (lib.mapAttrs (
-                name: value: {
-                  key = name;
-                  inherit value;
-                }
-              ))
-              lib.attrValues
-            ];
-            operator =
-              item:
-              let
-                newSDK = resolveSDK item.value;
-              in
-              if item ? replacement then
-                [ ]
-              else if item ? replacementList then
-                item.replacementList
-              else
-                [
-                  {
-                    key = "frameworks";
-                    replacementList = mkMapping "frameworks" item.value newSDK;
-                  }
-                  {
-                    key = "libs";
-                    replacementList = mkMapping "libs" item.value newSDK;
-                  }
-                  {
-                    key = "overrides";
-                    replacementList = mkOverrides item.value newSDK newVersion;
-                  }
-                ];
-          };
-        in
-        lib.pipe sdkPackages [
-          (lib.filter (attrs: attrs ? replacement))
-          (map (
-            { key, replacement }:
-            {
-              name = key;
-              value = replacement;
-            }
-          ))
-          lib.listToAttrs
-        ];
+      baseSdkMapping = lib.pipe args [
+        (lib.flip removeAttrs [
+          "lib"
+          "extendMkDerivationArgs"
+        ])
+        (lib.filterAttrs (_: lib.hasAttr "darwin"))
+        lib.attrValues
+        (lib.concatMap (
+          pkgs:
+          let
+            newSDK = resolveSDK pkgs;
+
+            frameworks = mkMapping "frameworks" pkgs newSDK;
+            libs = mkMapping "libs" pkgs newSDK;
+            overrides = mkOverrides pkgs newSDK newVersion;
+          in
+          frameworks ++ libs ++ overrides
+        ))
+        lib.listToAttrs
+      ];
 
       # Remaps all inputs given to the requested SDK version. The result is an attrset
       # that can be passed to `extendMkDerivationArgs`.
