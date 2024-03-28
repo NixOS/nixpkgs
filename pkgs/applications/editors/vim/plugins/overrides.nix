@@ -688,6 +688,10 @@
     dependencies = with self; [ nvim-treesitter ];
   };
 
+  headlines-nvim = super.headlines-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   hex-nvim = super.hex-nvim.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
