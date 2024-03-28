@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, cmake, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libjpeg
+, perl
+, zlib
+
+# for passthru.tests
+, cups-filters
+, pdfmixtool
+, pdfslicer
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
@@ -23,6 +36,15 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit (python3.pkgs) pikepdf;
+    inherit
+      cups-filters
+      pdfmixtool
+      pdfslicer
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://qpdf.sourceforge.io/";
