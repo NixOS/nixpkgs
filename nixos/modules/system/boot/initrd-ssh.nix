@@ -53,16 +53,11 @@ in
         "/etc/secrets/initrd/ssh_host_ed25519_key"
       ];
       description = lib.mdDoc ''
-        Specify SSH host keys to import into the initrd.
+        Specify SSH host keys to import into the initrd. See
+        {manpage}`ssh-keygen(1)` on how to generate them.
 
-        To generate keys, use
-        {manpage}`ssh-keygen(1)`
-        as root:
-
-        ```
-        ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
-        ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
-        ```
+        If left blank, new keys will be automatically generated
+        on every boot.
 
         ::: {.warning}
         Unless your bootloader supports initrd secrets, these keys
@@ -75,15 +70,6 @@ in
         using your regular host keys exposes the private keys on
         your unencrypted boot partition.
         :::
-      '';
-    };
-
-    ignoreEmptyHostKeys = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Allow leaving {option}`config.boot.initrd.network.ssh` empty,
-        to deploy ssh host keys out of band.
       '';
     };
 
@@ -135,6 +121,11 @@ in
         HostKey ${initrdKeyPath path}
       '')}
 
+      ${optionalString (cfg.hostKeys == []) ''
+        HostKey /etc/ssh/ssh_host_rsa_key
+        HostKey /etc/ssh/ssh_host_ed25519_key
+      ''}
+
       KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
       Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
       MACs ${concatStringsSep "," sshdCfg.settings.Macs}
@@ -155,15 +146,6 @@ in
         assertion = cfg.authorizedKeys != [];
         message = "You should specify at least one authorized key for initrd SSH";
       }
-
-      {
-        assertion = (cfg.hostKeys != []) || cfg.ignoreEmptyHostKeys;
-        message = ''
-          You must now pre-generate the host keys for initrd SSH.
-          See the boot.initrd.network.ssh.hostKeys documentation
-          for instructions.
-        '';
-      }
     ];
 
     warnings = lib.optional (config.boot.initrd.systemd.enable && cfg.shell != null) ''
@@ -172,6 +154,7 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${package}/bin/sshd
+      copy_bin_and_libs ${package}/bin/ssh-keygen
       cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
     '';
 
@@ -207,6 +190,11 @@ in
         echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
       '') cfg.authorizedKeys)}
 
+      ${optionalString (cfg.hostKeys == []) ''
+        /bin/ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""
+        /bin/ssh-keygen -t ed25519 -b 4096 -f /etc/ssh/ssh_host_ed25519_key -N ""
+      ''}
+
       ${flip concatMapStrings cfg.hostKeys (path: ''
         # keys from Nix store are world-readable, which sshd doesn't like
         chmod 0600 "${initrdKeyPath path}"
@@ -239,7 +227,10 @@ in
       contents."/etc/ssh/authorized_keys.d/root".text =
         concatStringsSep "\n" config.boot.initrd.network.ssh.authorizedKeys;
       contents."/etc/ssh/sshd_config".text = sshdConfig;
-      storePaths = ["${package}/bin/sshd"];
+      storePaths = [
+        "${package}/bin/sshd"
+        "${package}/bin/ssh-keygen"
+      ];
 
       services.sshd = {
         description = "SSH Daemon";
@@ -248,12 +239,19 @@ in
         before = [ "shutdown.target" ];
         conflicts = [ "shutdown.target" ];
 
-        # Keys from Nix store are world-readable, which sshd doesn't
-        # like. If this were a real nix store and not the initrd, we
-        # neither would nor could do this
-        preStart = flip concatMapStrings cfg.hostKeys (path: ''
-          /bin/chmod 0600 "${initrdKeyPath path}"
-        '');
+        preStart = ''
+          # Keys from Nix store are world-readable, which sshd doesn't
+          # like. If this were a real nix store and not the initrd, we
+          # neither would nor could do this
+          ${flip concatMapStrings cfg.hostKeys (path: ''
+            chmod 0600 "${initrdKeyPath path}"
+          '')}
+
+          ${optionalString (cfg.hostKeys == []) ''
+            ${package}/bin/ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""
+            ${package}/bin/ssh-keygen -t ed25519 -b 4096 -f /etc/ssh/ssh_host_ed25519_key -N ""
+          ''}
+        '';
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
           ExecStart = "${package}/bin/sshd -D -f /etc/ssh/sshd_config";
