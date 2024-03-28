@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
     homepage = "https://github.com/marimo-team/marimo";
+    changelog = "https://github.com/marimo-team/marimo/releases/tag/${version}";
     license = licenses.asl20;
     mainProgram = "marimo";
     maintainers = with maintainers; [ akshayka dmadisetti ];
