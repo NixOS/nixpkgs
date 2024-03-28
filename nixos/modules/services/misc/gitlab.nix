@@ -1578,7 +1578,9 @@ in {
           rm "${cfg.statePath}/config/gitlab-workhorse.json"
         '';
         ExecStart =
-          "${cfg.packages.gitlab-workhorse}/bin/workhorse "
+          "${cfg.packages.gitlab-workhorse}/bin/${
+              optionalString (lib.versionAtLeast (lib.getVersion cfg.packages.gitlab-workhorse) "16.10") "gitlab-"
+            }workhorse "
           + "-listenUmask 0 "
           + "-listenNetwork unix "
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "

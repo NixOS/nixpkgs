@@ -49,7 +49,7 @@ let
                 cp Cargo.lock $out
               '';
             };
-            hash = "sha256-csasA2RH1vwRdF/9/BpFmh0AKsP3xtGmrhCx6mbVf6k=";
+            hash = "sha256-7q2xWAsFkXHxkYNzIjPwJRy72xMXF278cpVzqGLt/9Y=";
           };
 
           dontBuild = false;
@@ -112,6 +112,8 @@ let
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
 
+    SKIP_YARN_INSTALL = 1;
+
     configurePhase = ''
       runHook preConfigure
 
@@ -142,11 +144,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
       runHook postBuild
     '';
