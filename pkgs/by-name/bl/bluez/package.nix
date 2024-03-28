@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.72";
+  version = "5.73";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SZ1/o0WplsG7ZQ9cZ0nh2SkRH6bs4L4OmGh/7mEkU24=";
+    hash = "sha256-JX6Qdc4Fxw1Ixd79JU54xBhBb3WEtF+d3ciE/4jj/FM=";
   };
 
   patches =
@@ -132,18 +132,12 @@ stdenv.mkDerivation (finalAttrs: {
     popd
     wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
 
-    # for bluez4 compatibility for NixOS
-    mkdir $out/sbin
-    ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
-    ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
-
-    # Add extra configuration
-    mkdir $out/etc/bluetooth
-    ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
-
+    # Link extra configuration from /etc/bluetooth
     # https://github.com/NixOS/nixpkgs/issues/204418
-    ln -s /etc/bluetooth/input.conf $out/etc/bluetooth/input.conf
-    ln -s /etc/bluetooth/network.conf $out/etc/bluetooth/network.conf
+    for file in $(find $out/etc/bluetooth -maxdepth 1 -type f); do
+      name=$(basename $file)
+      ln -sf /etc/bluetooth/$name $out/etc/bluetooth/$name
+    done
 
     # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
     for files in $(find tools/ -type f -perm -755); do
