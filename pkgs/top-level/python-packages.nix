@@ -6780,6 +6780,8 @@ self: super: with self; {
 
   llama-index-legacy = callPackage ../development/python-modules/llama-index-legacy { };
 
+  llama-index-llms-ollama = callPackage ../development/python-modules/llama-index-llms-ollama { };
+
   llama-index-llms-openai = callPackage ../development/python-modules/llama-index-llms-openai { };
 
   llama-index-multi-modal-llms-openai = callPackage ../development/python-modules/llama-index-multi-modal-llms-openai { };
