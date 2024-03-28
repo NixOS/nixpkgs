@@ -46,6 +46,9 @@ in
           kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
           features = lib.recursiveUpdate super.kernel.features features;
         });
+        # Allows kernel patches to refer to the kernel version without introducing
+        # an infinite recursion.
+        kernelVersion = super.kernel.version;
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
