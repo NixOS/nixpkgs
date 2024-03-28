@@ -18,9 +18,13 @@ import ./make-test-python.nix ({ pkgs, ...} :
       user = "alice";
       program = "${pkgs.xterm}/bin/xterm";
     };
+  };
 
-    # Need to switch to a different GPU driver than the default one (-vga std) so that Cage can launch:
-    virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
+    environment.variables = {
+      "WLR_NO_HARDWARE_CURSORS" = "1";
+    };
   };
 
   enableOCR = true;

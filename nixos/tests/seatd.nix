@@ -40,8 +40,14 @@ in
     '';
 
     hardware.opengl.enable = true;
-    virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
     services.seatd.enable = true;
+  };
+
+  interactive.nodes.machine = {
+    virtualisation.opengl = true;
+    environment.variables = {
+      "WLR_NO_HARDWARE_CURSORS" = "1";
+    };
   };
 
   testScript = ''
