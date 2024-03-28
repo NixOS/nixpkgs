@@ -272,6 +272,21 @@ in
         '';
       };
 
+      realmFiles = mkOption {
+        type = attrsOf str;
+        example = literalExpression ''
+          some-realm = builtins.readFile ./some/realm.json;
+          another-realm = builtins.readFile ./another/realm.json;
+        '';
+        default = {};
+        description = lib.mdDoc ''
+          Set of realm files that the server is going to try to import
+          during startup. If a realm already exists in the server, the import
+          operation is skipped. Importing the master realm is not supported.
+          All files are expected to be in `json` format.
+        '';
+      };
+
       settings = mkOption {
         type = lib.types.submodule {
           freeformType = attrsOf (nullOr (oneOf [ str int bool (attrsOf path) ]));
@@ -611,6 +626,9 @@ in
               replace-secret ${hashString "sha256" file} $CREDENTIALS_DIRECTORY/${baseNameOf file} /run/keycloak/conf/keycloak.conf
             '';
             secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+            installRealmFile = name: value: ''
+              install -D -m 0600 ${pkgs.writeText "keycloak-realm-${name}" value} /run/keycloak/data/import/${name}.json
+            '';
           in
           {
             after = databaseServices;
@@ -660,10 +678,12 @@ in
             '' + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
               mkdir -p /run/keycloak/ssl
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
-            '' + ''
+            '' + optionalString (cfg.realmFiles != {}) ''
+              ${concatStringsSep "\n" (mapAttrsToList installRealmFile cfg.realmFiles)}
+            '' +''
               export KEYCLOAK_ADMIN=admin
               export KEYCLOAK_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
-              kc.sh start --optimized
+              kc.sh start --optimized ${lib.optionalString (cfg.realmFiles != {}) "--import-realm"}
             '';
           };
 
