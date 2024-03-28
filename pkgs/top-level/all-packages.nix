@@ -32682,6 +32682,8 @@ with pkgs;
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
+  kubernetes-split-yaml = callPackage ../development/tools/kubernetes-split-yaml { };
+
   wrapHelm = callPackage ../applications/networking/cluster/helm/wrapper.nix { };
 
   kubernetes-helm-wrapped = wrapHelm kubernetes-helm { };

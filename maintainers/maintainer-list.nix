@@ -5526,6 +5526,13 @@
     githubId = 22300113;
     name = "Eduardo Espadeiro";
   };
+  edlimerkaj = {
+      name = "Edli Merkaj";
+      email = "edli.merkaj@identinet.io";
+      github = "edlimerkaj";
+      githubId = 71988351;
+  };
+
   eduarrrd = {
     email = "e.bachmakov@gmail.com";
     github = "eduarrrd";
