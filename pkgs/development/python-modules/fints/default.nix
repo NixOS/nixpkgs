@@ -2,8 +2,11 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, pythonRelaxDepsHook
+, setuptools
 , bleach
 , mt-940
+, enum-tools
 , requests
 , sepaxml
 , pytestCheckHook
@@ -11,20 +14,37 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.0.0";
+  version = "4.1.0";
   pname = "fints";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
     rev = "v${version}";
-    hash = "sha256-SREprcrIdeKVpL22IViexwiKmFfbT2UbKEmxtVm6iu0=";
+    hash = "sha256-1k6ZeYlv0vxNkqQse9vi/NT6ag3DJONKCWB594LvER0=";
   };
 
-  propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "enum-tools"
+  ];
+
+  dependencies = [
+    bleach
+    enum-tools
+    mt-940
+    requests
+    sepaxml
+  ];
+
+  pythonImportsCheck = [ "fints" ];
 
   nativeCheckInputs = [ pytestCheckHook pytest-mock ];
 
