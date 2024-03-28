@@ -1,0 +1,11 @@
+--- a/configure
++++ b/configure
+@@ -14325,6 +14325,6 @@
+ /* end confdefs.h.  */
+ 
+   #define SLJIT_CONFIG_AUTO 1
+-  #include "src/sljit/sljitConfigInternal.h"
++  #include "src/sljit/sljitConfigCPU.h"
+   #if (defined SLJIT_CONFIG_UNSUPPORTED && SLJIT_CONFIG_UNSUPPORTED)
+   #error unsupported
+Mark set
