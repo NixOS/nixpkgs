@@ -144,11 +144,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
       runHook postBuild
     '';
