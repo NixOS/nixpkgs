@@ -18,10 +18,10 @@ let
 
   cfg = config.boot.initrd.systemd;
 
-  # Copied from fedora
   upstreamUnits = [
     "basic.target"
     "ctrl-alt-del.target"
+    "debug-shell.service"
     "emergency.service"
     "emergency.target"
     "final.target"
@@ -395,7 +395,8 @@ in {
     ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}";
 
     boot.initrd.systemd = {
-      initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package];
+      # bashInteractive is easier to use and also required by debug-shell.service
+      initrdBin = [pkgs.bashInteractive pkgs.coreutils cfg.package.kmod cfg.package];
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
@@ -468,6 +469,9 @@ in {
         "${cfg.package.util-linux}/bin/mount"
         "${cfg.package.util-linux}/bin/umount"
         "${cfg.package.util-linux}/bin/sulogin"
+
+        # required for script services
+        "${pkgs.runtimeShell}"
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
