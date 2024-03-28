@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.create_ap;
-  configFile = pkgs.writeText "create_ap.conf" (generators.toKeyValue { } cfg.settings);
+  configFile = cfg.configPath;
 in {
   options = {
     services.create_ap = {
@@ -23,6 +23,15 @@ in {
           SSID = "My Wifi Hotspot";
           PASSPHRASE = "12345678";
         };
+      };
+      configPath = mkOption {
+        type = types.str;
+        default = pkgs.writeText "create_ap.conf" (generators.toKeyValue { } cfg.settings);
+        description = lib.mdDoc ''
+          Configuration file path for `create_ap`, overrides settings.
+          See [upstream example configuration](https://raw.githubusercontent.com/lakinduakash/linux-wifi-hotspot/master/src/scripts/create_ap.conf)
+          for supported values.
+        '';
       };
     };
   };
