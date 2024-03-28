@@ -30,7 +30,11 @@ The `dart` commands run can be overridden through `pubGetScript` and `dartCompil
 Dart supports multiple [outputs types](https://dart.dev/tools/dart-compile#types-of-output), you can choose between them using `dartOutputType` (defaults to `exe`). If you want to override the binaries path or the source path they come from, you can use `dartEntryPoints`. Outputs that require a runtime will automatically be wrapped with the relevant runtime (`dartaotruntime` for `aot-snapshot`, `dart run` for `jit-snapshot` and `kernel`, `node` for `js`), this can be overridden through `dartRuntimeCommand`.
 
 ```nix
-{ lib, buildDartApplication, fetchFromGitHub }:
+{
+  lib,
+  buildDartApplication,
+  fetchFromGitHub,
+}:
 
 buildDartApplication rec {
   pname = "dart-sass";
@@ -99,7 +103,7 @@ The function `buildFlutterApplication` builds Flutter applications.
 See the [Dart documentation](#ssec-dart-applications) for more details on required files and arguments.
 
 ```nix
-{  flutter, fetchFromGitHub }:
+{ flutter, fetchFromGitHub }:
 
 flutter.buildFlutterApplication {
   pname = "firmware-updater";

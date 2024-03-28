@@ -48,9 +48,7 @@ In the rare case you need to use icons from dependencies (e.g. when an app force
 
 ```nix
 {
-  buildInputs = [
-    pantheon.elementary-icon-theme
-  ];
+  buildInputs = [ pantheon.elementary-icon-theme ];
   preFixup = ''
     gappsWrapperArgs+=(
       # The icon theme is hardcoded.
@@ -96,7 +94,12 @@ Given the requirements above, the package expression would become messy quickly:
         --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
         --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
         --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
-        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ pango json-glib ]}"
+        --prefix GI_TYPELIB_PATH : "${
+          lib.makeSearchPath "lib/girepository-1.0" [
+            pango
+            json-glib
+          ]
+        }"
     done
   '';
 }

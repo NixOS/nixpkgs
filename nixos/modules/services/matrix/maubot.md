@@ -10,9 +10,7 @@ framework for Matrix.
 2. If you want to use PostgreSQL instead of SQLite, do this:
 
    ```nix
-   {
-     services.maubot.settings.database = "postgresql://maubot@localhost/maubot";
-   }
+   { services.maubot.settings.database = "postgresql://maubot@localhost/maubot"; }
    ```
 
    If the PostgreSQL connection requires a password, you will have to

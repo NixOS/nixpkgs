@@ -9,9 +9,7 @@ However, we can tell Nix explicitly what the previous build state was, by repres
 To change a normal derivation to a checkpoint based build, these steps must be taken:
   - apply `prepareCheckpointBuild` on the desired derivation, e.g.
 ```nix
-{
-  checkpointArtifacts = (pkgs.checkpointBuildTools.prepareCheckpointBuild pkgs.virtualbox);
-}
+{ checkpointArtifacts = (pkgs.checkpointBuildTools.prepareCheckpointBuild pkgs.virtualbox); }
 ```
   - change something you want in the sources of the package, e.g. use a source override:
 ```nix
@@ -26,12 +24,11 @@ To change a normal derivation to a checkpoint based build, these steps must be t
 
 ## Example {#sec-checkpoint-build-example}
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 let
-  inherit (pkgs.checkpointBuildTools)
-    prepareCheckpointBuild
-    mkCheckpointBuild
-    ;
+  inherit (pkgs.checkpointBuildTools) prepareCheckpointBuild mkCheckpointBuild;
   helloCheckpoint = prepareCheckpointBuild pkgs.hello;
   changedHello = pkgs.hello.overrideAttrs (_: {
     doCheck = false;
@@ -39,5 +36,6 @@ let
       sed -i 's/Hello, world!/Hello, Nix!/g' src/hello.c
     '';
   });
-in mkCheckpointBuild changedHello helloCheckpoint
+in
+mkCheckpointBuild changedHello helloCheckpoint
 ```

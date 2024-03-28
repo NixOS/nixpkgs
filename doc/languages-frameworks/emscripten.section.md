@@ -38,13 +38,12 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
 
 
 ```nix
-(pkgs.zlib.override {
-  stdenv = pkgs.emscriptenStdenv;
-}).overrideAttrs
-(old: rec {
+(pkgs.zlib.override { stdenv = pkgs.emscriptenStdenv; }).overrideAttrs (old: rec {
   buildInputs = old.buildInputs ++ [ pkg-config ];
   # we need to reset this setting!
-  env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
+  env = (old.env or { }) // {
+    NIX_CFLAGS_COMPILE = "";
+  };
   configurePhase = ''
     # FIXME: Some tests require writing at $HOME
     HOME=$TMPDIR
@@ -103,8 +102,21 @@ This `xmlmirror` example features an Emscripten package that is defined complete
 pkgs.buildEmscriptenPackage rec {
   name = "xmlmirror";
 
-  buildInputs = [ pkg-config autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
-  nativeBuildInputs = [ pkg-config zlib ];
+  buildInputs = [
+    pkg-config
+    autoconf
+    automake
+    libtool
+    gnumake
+    libxml2
+    nodejs
+    openjdk
+    json_c
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    zlib
+  ];
 
   src = pkgs.fetchgit {
     url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -129,7 +141,10 @@ pkgs.buildEmscriptenPackage rec {
     make -f Makefile.emEnv
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     mkdir -p $out/share

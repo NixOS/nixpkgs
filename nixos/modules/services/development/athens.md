@@ -20,9 +20,9 @@ A complete list of options for the Athens module may be found
 A very basic configuration for Athens that acts as a caching and forwarding HTTP proxy is:
 ```nix
 {
-    services.athens = {
-      enable = true;
-    };
+  services.athens = {
+    enable = true;
+  };
 }
 ```
 
@@ -30,10 +30,10 @@ If you want to prevent Athens from writing to disk, you can instead configure it
 
 ```nix
 {
-    services.athens = {
-      enable = true;
-      storageType = "memory";
-    };
+  services.athens = {
+    enable = true;
+    storageType = "memory";
+  };
 }
 ```
 

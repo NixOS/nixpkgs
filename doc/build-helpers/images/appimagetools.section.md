@@ -37,9 +37,7 @@ let
     hash = "sha256-he1uGC1M/nFcKpMM9JKY4oeexJcnzV0ZRxhTjtJz6xw=";
   };
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
-}
+appimageTools.wrapType2 { inherit pname version src; }
 ```
 
 :::
@@ -66,7 +64,8 @@ let
     url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
     sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 }
@@ -103,10 +102,9 @@ let
     sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in appimageTools.wrapType2 {
+  appimageContents = appimageTools.extract { inherit pname version src; };
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
@@ -150,7 +148,8 @@ let
       substituteInPlace $out/irccloud.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];

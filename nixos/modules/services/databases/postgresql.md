@@ -38,9 +38,7 @@ alice=>
 
 By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlSchema`. You can override this using [](#opt-services.postgresql.dataDir), e.g.
 ```nix
-{
-  services.postgresql.dataDir = "/data/postgresql";
-}
+{ services.postgresql.dataDir = "/data/postgresql"; }
 ```
 
 ## Initializing {#module-services-postgres-initializing}
@@ -99,34 +97,34 @@ databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
 are already created.
 
 ```nix
-  {
-    systemd.services.postgresql.postStart = lib.mkAfter ''
-      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-      # ....
-    '';
-  }
+{
+  systemd.services.postgresql.postStart = lib.mkAfter ''
+    $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+    $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+    # ....
+  '';
+}
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
 
 ```nix
-  {
-    systemd.services."migrate-service1-db1" = {
-      serviceConfig.Type = "oneshot";
-      requiredBy = "service1.service";
-      before = "service1.service";
-      after = "postgresql.service";
-      serviceConfig.User = "postgres";
-      environment.PSQL = "psql --port=${toString services.postgresql.port}";
-      path = [ postgresql ];
-      script = ''
-        $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-        # ....
-      '';
-    };
-  }
+{
+  systemd.services."migrate-service1-db1" = {
+    serviceConfig.Type = "oneshot";
+    requiredBy = "service1.service";
+    before = "service1.service";
+    after = "postgresql.service";
+    serviceConfig.User = "postgres";
+    environment.PSQL = "psql --port=${toString services.postgresql.port}";
+    path = [ postgresql ];
+    script = ''
+      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+  };
+}
 ```
 
 #### as service user {#module-services-postgres-initializing-extra-permissions-service-user}
@@ -138,36 +136,36 @@ are already created.
 ##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
 
 ```nix
-  {
-    environment.PSQL = "psql --port=${toString services.postgresql.port}";
-    path = [ postgresql ];
-    systemd.services."service1".preStart = ''
-      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-      # ....
-    '';
-  }
+{
+  environment.PSQL = "psql --port=${toString services.postgresql.port}";
+  path = [ postgresql ];
+  systemd.services."service1".preStart = ''
+    $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+    $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+    # ....
+  '';
+}
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-user-oneshot}
 
 ```nix
-  {
-    systemd.services."migrate-service1-db1" = {
-      serviceConfig.Type = "oneshot";
-      requiredBy = "service1.service";
-      before = "service1.service";
-      after = "postgresql.service";
-      serviceConfig.User = "service1";
-      environment.PSQL = "psql --port=${toString services.postgresql.port}";
-      path = [ postgresql ];
-      script = ''
-        $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-        # ....
-      '';
-    };
-  }
+{
+  systemd.services."migrate-service1-db1" = {
+    serviceConfig.Type = "oneshot";
+    requiredBy = "service1.service";
+    before = "service1.service";
+    after = "postgresql.service";
+    serviceConfig.User = "service1";
+    environment.PSQL = "psql --port=${toString services.postgresql.port}";
+    path = [ postgresql ];
+    script = ''
+      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+  };
+}
 ```
 
 ## Upgrading {#module-services-postgres-upgrading}
@@ -190,33 +188,36 @@ For an upgrade, a script like this can be used to simplify the process:
 { config, pkgs, ... }:
 {
   environment.systemPackages = [
-    (let
-      # XXX specify the postgresql package you'd like to upgrade to.
-      # Do not forget to list the extensions you need.
-      newPostgres = pkgs.postgresql_13.withPackages (pp: [
-        # pp.plv8
-      ]);
-    in pkgs.writeScriptBin "upgrade-pg-cluster" ''
-      set -eux
-      # XXX it's perhaps advisable to stop all services that depend on postgresql
-      systemctl stop postgresql
+    (
+      let
+        # XXX specify the postgresql package you'd like to upgrade to.
+        # Do not forget to list the extensions you need.
+        newPostgres = pkgs.postgresql_13.withPackages (pp: [
+          # pp.plv8
+        ]);
+      in
+      pkgs.writeScriptBin "upgrade-pg-cluster" ''
+        set -eux
+        # XXX it's perhaps advisable to stop all services that depend on postgresql
+        systemctl stop postgresql
 
-      export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
+        export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
 
-      export NEWBIN="${newPostgres}/bin"
+        export NEWBIN="${newPostgres}/bin"
 
-      export OLDDATA="${config.services.postgresql.dataDir}"
-      export OLDBIN="${config.services.postgresql.package}/bin"
+        export OLDDATA="${config.services.postgresql.dataDir}"
+        export OLDBIN="${config.services.postgresql.package}/bin"
 
-      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-      cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+        cd "$NEWDATA"
+        sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
 
-      sudo -u postgres $NEWBIN/pg_upgrade \
-        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir $OLDBIN --new-bindir $NEWBIN \
-        "$@"
-    '')
+        sudo -u postgres $NEWBIN/pg_upgrade \
+          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+          --old-bindir $OLDBIN --new-bindir $NEWBIN \
+          "$@"
+      ''
+    )
   ];
 }
 ```
@@ -271,10 +272,11 @@ To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 ```nix
 {
   services.postgresql.package = pkgs.postgresql_12;
-  services.postgresql.extraPlugins = ps: with ps; [
-    pg_repack
-    postgis
-  ];
+  services.postgresql.extraPlugins =
+    ps: with ps; [
+      pg_repack
+      postgis
+    ];
 }
 ```
 
@@ -291,7 +293,7 @@ self: super: {
 Here's a recipe on how to override a particular plugin through an overlay:
 ```nix
 self: super: {
-  postgresql_15 = super.postgresql_15// {
+  postgresql_15 = super.postgresql_15 // {
     pkgs = super.postgresql_15.pkgs // {
       pg_repack = super.postgresql_15.pkgs.pg_repack.overrideAttrs (_: {
         name = "pg_repack-v20181024";
@@ -312,9 +314,7 @@ is disabled by default because of the ~300MiB closure-size increase from the LLV
 can be optionally enabled in PostgreSQL with the following config option:
 
 ```nix
-{
-  services.postgresql.enableJIT = true;
-}
+{ services.postgresql.enableJIT = true; }
 ```
 
 This makes sure that the [`jit`](https://www.postgresql.org/docs/current/runtime-config-query.html#GUC-JIT)-setting
@@ -333,7 +333,9 @@ overlay) since all modifications are propagated to `withJIT`. I.e.
 with import <nixpkgs> {
   overlays = [
     (self: super: {
-      postgresql = super.postgresql.overrideAttrs (_: { pname = "foobar"; });
+      postgresql = super.postgresql.overrideAttrs (_: {
+        pname = "foobar";
+      });
     })
   ];
 };

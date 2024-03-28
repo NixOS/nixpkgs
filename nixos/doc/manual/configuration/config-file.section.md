@@ -5,7 +5,8 @@ The NixOS configuration file generally looks like this:
 ```nix
 { config, pkgs, ... }:
 
-{ /* option definitions */
+{
+  # option definitions
 }
 ```
 
@@ -19,7 +20,8 @@ name of an option and `value` is its value. For example,
 ```nix
 { config, pkgs, ... }:
 
-{ services.httpd.enable = true;
+{
+  services.httpd.enable = true;
   services.httpd.adminAddr = "alice@example.org";
   services.httpd.virtualHosts.localhost.documentRoot = "/webroot";
 }
@@ -38,7 +40,8 @@ example above can also be written as:
 ```nix
 { config, pkgs, ... }:
 
-{ services = {
+{
+  services = {
     httpd = {
       enable = true;
       adminAddr = "alice@example.org";
@@ -80,9 +83,7 @@ Strings
 :   Strings are enclosed in double quotes, e.g.
 
     ```nix
-    {
-      networking.hostName = "dexter";
-    }
+    { networking.hostName = "dexter"; }
     ```
 
     Special characters can be escaped by prefixing them with a backslash
@@ -92,11 +93,10 @@ Strings
 
     ```nix
     {
-      networking.extraHosts =
-        ''
-          127.0.0.2 other-localhost
-          10.0.0.1 server
-        '';
+      networking.extraHosts = ''
+        127.0.0.2 other-localhost
+        10.0.0.1 server
+      '';
     }
     ```
 
@@ -123,9 +123,7 @@ Integers
 :   For example,
 
     ```nix
-    {
-      boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
-    }
+    { boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60; }
     ```
 
     (Note that here the attribute name `net.ipv4.tcp_keepalive_time` is
@@ -141,11 +139,15 @@ Sets
 
     ```nix
     {
-      fileSystems."/boot" =
-        { device = "/dev/sda1";
-          fsType = "ext4";
-          options = [ "rw" "data=ordered" "relatime" ];
-        };
+      fileSystems."/boot" = {
+        device = "/dev/sda1";
+        fsType = "ext4";
+        options = [
+          "rw"
+          "data=ordered"
+          "relatime"
+        ];
+      };
     }
     ```
 
@@ -156,16 +158,18 @@ Lists
 
     ```nix
     {
-      boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+      boot.kernelModules = [
+        "fuse"
+        "kvm-intel"
+        "coretemp"
+      ];
     }
     ```
 
     List elements can be any other type, e.g. sets:
 
     ```nix
-    {
-      swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
-    }
+    { swapDevices = [ { device = "/dev/disk/by-label/swap"; } ]; }
     ```
 
 Packages
@@ -176,10 +180,10 @@ Packages
 
     ```nix
     {
-      environment.systemPackages =
-        [ pkgs.thunderbird
-          pkgs.emacs
-        ];
+      environment.systemPackages = [
+        pkgs.thunderbird
+        pkgs.emacs
+      ];
 
       services.postgresql.package = pkgs.postgresql_14;
     }

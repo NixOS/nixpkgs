@@ -528,9 +528,7 @@ Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the inter
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
 ```nix
-{
-  patches = [ ./0001-changes.patch ];
-}
+{ patches = [ ./0001-changes.patch ]; }
 ```
 
 If you do need to do create this sort of patch file, one way to do so is with git:
@@ -629,13 +627,14 @@ Here in the nixpkgs manual we describe mostly _package tests_; for _module tests
 For very simple tests, they can be written inline:
 
 ```nix
-{ /* ... , */ yq-go }:
+# ... ,
+{ yq-go }:
 
 buildGoModule rec {
   # …
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-test" { } ''
       echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
       [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
     '';
@@ -651,7 +650,12 @@ This is an example using the `phoronix-test-suite` package with the current best
 Add the tests in `passthru.tests` to the package definition like this:
 
 ```nix
-{ stdenv, lib, fetchurl, callPackage }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  callPackage,
+}:
 
 stdenv.mkDerivation {
   # …
@@ -660,7 +664,9 @@ stdenv.mkDerivation {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = { /* … */ };
+  meta = {
+    # …
+  };
 }
 ```
 
@@ -673,20 +679,19 @@ let
   inherit (phoronix-test-suite) pname version;
 in
 
-runCommand "${pname}-tests" { meta.timeout = 60; }
-  ''
-    # automatic initial setup to prevent interactive questions
-    ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
-    # get version of installed program and compare with package version
-    if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
-      echo "Error: program version does not match package version"
-      exit 1
-    fi
-    # run dummy command
-    ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
-    # needed for Nix to register the command as successful
-    touch $out
-  ''
+runCommand "${pname}-tests" { meta.timeout = 60; } ''
+  # automatic initial setup to prevent interactive questions
+  ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
+  # get version of installed program and compare with package version
+  if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
+    echo "Error: program version does not match package version"
+    exit 1
+  fi
+  # run dummy command
+  ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
+  # needed for Nix to register the command as successful
+  touch $out
+''
 ```
 
 ### Running package tests
@@ -715,7 +720,11 @@ Like [package tests][larger-package-tests] as shown above, [NixOS module tests](
 For example, assuming we're packaging `nginx`, we can link its module test via `passthru.tests`:
 
 ```nix
-{ stdenv, lib, nixosTests }:
+{
+  stdenv,
+  lib,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   # ...

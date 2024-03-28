@@ -19,9 +19,10 @@ versions into the Python environment.
 **Example Boilerplate:**
 
 ```nix
-{ lib
-, buildHomeAssistantcomponent
-, fetchFromGitHub
+{
+  lib,
+  buildHomeAssistantcomponent,
+  fetchFromGitHub,
 }:
 
 buildHomeAssistantComponent {

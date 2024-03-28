@@ -5,7 +5,11 @@ Nim programs are built using `buildNimPackage` and a lockfile containing Nim dep
 
 The following example shows a Nim program that depends only on Nim libraries:
 ```nix
-{ lib, buildNimPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+}:
 
 buildNimPackage { } (finalAttrs: {
   pname = "ttop";
@@ -20,9 +24,7 @@ buildNimPackage { } (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  nimFlags = [
-    "-d:NimblePkgVersion=${finalAttrs.version}"
-  ];
+  nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
 })
 ```
 
@@ -57,7 +59,9 @@ The `buildNimPackage` function generates flags and additional build dependencies
 ```nix
 pkgs.nitter.overrideNimAttrs {
   # using a different source which has different dependencies from the standard package
-  src = pkgs.fetchFromGithub { /* … */ };
+  src = pkgs.fetchFromGithub {
+    # …
+  };
   # new lock file generated from the source
   lockFile = ./custom-lock.json;
 }
@@ -70,22 +74,25 @@ The default overrides are maintained as the top-level `nimOverrides` attrset at 
 
 For example, to propagate a dependency on SDL2 for lockfiles that select the Nim `sdl2` library, an overlay is added to the set in the `nim-overrides.nix` file:
 ```nix
-{ lib
-/* … */
-, SDL2
-/* … */
+{
+  lib,
+  # …
+  SDL2,
+# …
 }:
 
 {
-  /* … */
+  # …
   sdl2 =
-    lockAttrs:
-    finalAttrs:
-    { buildInputs ? [ ], ... }:
+    lockAttrs: finalAttrs:
+    {
+      buildInputs ? [ ],
+      ...
+    }:
     {
       buildInputs = buildInputs ++ [ SDL2 ];
     };
-  /* … */
+  # …
 }
 ```
 
@@ -100,22 +107,28 @@ The `nimOverrides` attrset makes it possible to modify overrides in a few differ
 
 Override a package internal to its definition:
 ```nix
-{ lib, buildNimPackage, nimOverrides, libressl }:
+{
+  lib,
+  buildNimPackage,
+  nimOverrides,
+  libressl,
+}:
 
 let
   buildNimPackage' = buildNimPackage.override {
     nimOverrides = nimOverrides.override { openssl = libressl; };
   };
-in buildNimPackage' (finalAttrs: {
+in
+buildNimPackage' (finalAttrs: {
   pname = "foo";
   # …
 })
-
 ```
 
 Override a package externally:
 ```nix
-{ pkgs }: {
+{ pkgs }:
+{
   foo = pkgs.foo.override {
     buildNimPackage = pkgs.buildNimPackage.override {
       nimOverrides = pkgs.nimOverrides.override { openssl = libressl; };

@@ -5,9 +5,7 @@
 The absolute minimal configuration for the netbird daemon looks like this:
 
 ```nix
-{
-  services.netbird.enable = true;
-}
+{ services.netbird.enable = true; }
 ```
 
 This will set up a netbird service listening on the port `51820` associated to the
@@ -16,9 +14,7 @@ This will set up a netbird service listening on the port `51820` associated to t
 It is strictly equivalent to setting:
 
 ```nix
-{
-  services.netbird.tunnels.wt0.stateDir = "netbird";
-}
+{ services.netbird.tunnels.wt0.stateDir = "netbird"; }
 ```
 
 The `enable` option is mainly kept for backward compatibility, as defining netbird

@@ -39,9 +39,7 @@ Should grub be used as bootloader, and `/boot` is located on an
 encrypted partition, it is necessary to add the following grub option:
 
 ```nix
-{
-  boot.loader.grub.enableCryptodisk = true;
-}
+{ boot.loader.grub.enableCryptodisk = true; }
 ```
 
 ## FIDO2 {#sec-luks-file-systems-fido2}
@@ -83,9 +81,7 @@ you might want to enable it only when your device is PIN protected, such
 as [Trezor](https://trezor.io/).
 
 ```nix
-{
-  boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess = true;
-}
+{ boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess = true; }
 ```
 
 ### systemd Stage 1 {#sec-luks-file-systems-fido2-systemd}

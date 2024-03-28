@@ -38,7 +38,10 @@ A very basic configuration may look like this:
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 }
 ```
 
@@ -131,13 +134,19 @@ settings `listen.owner` &amp; `listen.group` in the
 
 An exemplary configuration may look like this:
 ```nix
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   services.nginx.enable = false;
   services.nextcloud = {
     enable = true;
     hostName = "localhost";
 
-    /* further, required options */
+    # further, required options
   };
   services.phpfpm.pools.nextcloud.settings = {
     "listen.owner" = config.services.httpd.user;
@@ -206,7 +215,7 @@ in NixOS for a safe upgrade-path before removing those. In that case we should k
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/servers/nextcloud/default.nix>`):
 ```nix
-/* ... */
+# ...
 {
   nextcloud17 = generic {
     version = "17.0.x";

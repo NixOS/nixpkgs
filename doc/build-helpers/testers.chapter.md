@@ -15,9 +15,7 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 ```nix
 {
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta.pkgConfigModules = [ "libfoo" ];
 }
@@ -59,9 +57,7 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-{
-  passthru.tests.version = testers.testVersion { package = hello; };
-}
+{ passthru.tests.version = testers.testVersion { package = hello; }; }
 ```
 
 :::
@@ -113,18 +109,22 @@ While `testBuildFailure` is designed to keep changes to the original builder's e
 # Check that a build fails, and verify the changes made during build
 
 ```nix
-runCommand "example" {
-  failed = testers.testBuildFailure (runCommand "fail" {} ''
-    echo ok-ish >$out
-    echo failing though
-    exit 3
-  '');
-} ''
-  grep -F 'ok-ish' $failed/result
-  grep -F 'failing though' $failed/testBuildFailure.log
-  [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
-  touch $out
-''
+runCommand "example"
+  {
+    failed = testers.testBuildFailure (
+      runCommand "fail" { } ''
+        echo ok-ish >$out
+        echo failing though
+        exit 3
+      ''
+    );
+  }
+  ''
+    grep -F 'ok-ish' $failed/result
+    grep -F 'failing though' $failed/testBuildFailure.log
+    [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+    touch $out
+  ''
 ```
 
 :::
@@ -143,15 +143,18 @@ testers.testEqualContents {
   expected = writeText "expected" ''
     foo baz baz
   '';
-  actual = runCommand "actual" {
-    # not really necessary for a package that's in stdenv
-    nativeBuildInputs = [ gnused ];
-    base = writeText "base" ''
-      foo bar baz
-    '';
-  } ''
-    sed -e 's/bar/baz/g' $base >$out
-  '';
+  actual =
+    runCommand "actual"
+      {
+        # not really necessary for a package that's in stdenv
+        nativeBuildInputs = [ gnused ];
+        base = writeText "base" ''
+          foo bar baz
+        '';
+      }
+      ''
+        sed -e 's/bar/baz/g' $base >$out
+      '';
 }
 ```
 
@@ -171,10 +174,11 @@ Otherwise, the build log explains the difference via `nix-diff`.
 # Check that two packages produce the same derivation
 
 ```nix
-testers.testEqualDerivation
-  "The hello package must stay the same when enabling checks."
-  hello
-  (hello.overrideAttrs(o: { doCheck = true; }))
+testers.testEqualDerivation "The hello package must stay the same when enabling checks." hello (
+  hello.overrideAttrs (o: {
+    doCheck = true;
+  })
+)
 ```
 
 :::
@@ -224,15 +228,20 @@ If your test is part of the Nixpkgs repository, or if you need a more general en
 # Run a NixOS test using `runNixOSTest`
 
 ```nix
-pkgs.testers.runNixOSTest ({ lib, ... }: {
-  name = "hello";
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.hello ];
-  };
-  testScript = ''
-    machine.succeed("hello")
-  '';
-})
+pkgs.testers.runNixOSTest (
+  { lib, ... }:
+  {
+    name = "hello";
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.hello ];
+      };
+    testScript = ''
+      machine.succeed("hello")
+    '';
+  }
+)
 ```
 
 :::
@@ -255,10 +264,17 @@ A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-te
 {
   name = "my-test";
   nodes = {
-    machine1 = { lib, pkgs, nodes, ... }: {
-      environment.systemPackages = [ pkgs.hello ];
-      services.foo.enable = true;
-    };
+    machine1 =
+      {
+        lib,
+        pkgs,
+        nodes,
+        ...
+      }:
+      {
+        environment.systemPackages = [ pkgs.hello ];
+        services.foo.enable = true;
+      };
     # machine2 = ...;
   };
   testScript = ''

@@ -4,14 +4,19 @@ Sometimes NixOS modules need to be used in configuration but exist
 outside of Nixpkgs. These modules can be imported:
 
 ```nix
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports =
-    [ # Use a locally-available module definition in
-      # ./example-module/default.nix
-        ./example-module
-    ];
+  imports = [
+    # Use a locally-available module definition in
+    # ./example-module/default.nix
+    ./example-module
+  ];
 
   services.exampleModule.enable = true;
 }
@@ -36,7 +41,12 @@ Like any NixOS module, this module can import additional modules:
 
 ```nix
 # NIXOS_EXTRA_MODULE_PATH=/absolute/path/to/extra-module
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # No `imports` needed

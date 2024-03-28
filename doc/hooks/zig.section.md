@@ -7,17 +7,16 @@ In Nixpkgs, `zig.hook` overrides the default build, check and install phases.
 ## Example code snippet {#zig-hook-example-code-snippet}
 
 ```nix
-{ lib
-, stdenv
-, zig_0_11
+{
+  lib,
+  stdenv,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation {
   # . . .
 
-  nativeBuildInputs = [
-    zig_0_11.hook
-  ];
+  nativeBuildInputs = [ zig_0_11.hook ];
 
   zigBuildFlags = [ "-Dman-pages=true" ];
 

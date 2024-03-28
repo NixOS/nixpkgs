@@ -48,9 +48,8 @@ Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 ```nix
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
-in mkShell {
-  packages = [ sbcl' ];
-}
+in
+mkShell { packages = [ sbcl' ]; }
 ```
 
 Such a Lisp can be now used e.g. to compile your sources:
@@ -188,10 +187,9 @@ let
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
-  sbcl' = sbcl.withOverrides (self: super: {
-    inherit alexandria;
-  });
-in sbcl'.pkgs.alexandria
+  sbcl' = sbcl.withOverrides (self: super: { inherit alexandria; });
+in
+sbcl'.pkgs.alexandria
 ```
 
 ## Overriding package attributes {#lisp-overriding-package-attributes}
@@ -296,6 +294,9 @@ This example wraps CLISP:
 wrapLisp {
   pkg = clisp;
   faslExt = "fas";
-  flags = ["-E" "UTF8"];
+  flags = [
+    "-E"
+    "UTF8"
+  ];
 }
 ```

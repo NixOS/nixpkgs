@@ -47,7 +47,8 @@ An example of this is building a kernel for use in a VM or micro VM. You can use
 # Using `pkgs.linuxManualConfig` with a specific source, version, and config file
 
 ```nix
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   version = "6.1.55";
   src = pkgs.fetchurl {
     url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${version}.tar.xz";
@@ -64,7 +65,8 @@ An example of this is building a kernel for use in a VM or micro VM. You can use
 If necessary, the version string can be slightly modified to explicitly mark it as a custom version. If you do so, ensure the `modDirVersion` attribute matches the source's version, otherwise the build will fail.
 
 ```nix
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   version = "6.1.55-custom";
   modDirVersion = "6.1.55";
   src = pkgs.fetchurl {
@@ -73,7 +75,12 @@ If necessary, the version string can be slightly modified to explicitly mark it 
   };
   configfile = ./path_to_config_file;
   linux = pkgs.linuxManualConfig {
-    inherit version modDirVersion src configfile;
+    inherit
+      version
+      modDirVersion
+      src
+      configfile
+      ;
     allowImportFromDerivation = true;
   };
 }

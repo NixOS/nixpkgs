@@ -97,7 +97,8 @@ The `goDeps` attribute can be imported from a separate `nix` file that defines w
 
 ```nix
 # deps.nix
-[ # goDeps is a list of Go dependencies.
+[
+  # goDeps is a list of Go dependencies.
   {
     # goPackagePath specifies Go package import path.
     goPackagePath = "gopkg.in/yaml.v2";
@@ -181,9 +182,7 @@ A string list of [Go build tags (also called build constraints)](https://pkg.go.
 Tags can also be set conditionally:
 
 ```nix
-{
-  tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
-}
+{ tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ]; }
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
@@ -261,9 +260,7 @@ For example, only a selection of tests could be run with:
 ```nix
 {
   # -run and -skip accept regular expressions
-  checkFlags = [
-    "-run=^Test(Simple|Fast)$"
-  ];
+  checkFlags = [ "-run=^Test(Simple|Fast)$" ];
 }
 ```
 
