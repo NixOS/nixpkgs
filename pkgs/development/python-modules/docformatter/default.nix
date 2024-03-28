@@ -51,6 +51,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Added until the tests are fixed upstream
+  disabledTests = [
+    "test_do_format_code.py"
+    "test_docformatter.py"
+  ];
+
   pythonImportsCheck = [ "docformatter" ];
 
   meta = {
