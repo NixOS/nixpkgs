@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeDesktopItem
 , python3
-, wrapQtAppsHook
+, libsForQt5
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     copyDesktopItems
     pythonRelaxDepsHook
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     pillow
     protobuf
-    pyogg
     pyqt5
     pyqt5-sip
     pyxdg
@@ -46,6 +45,9 @@ python3.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     "PyQt5-Qt5"
     "PyQt5-stubs"
+    # Doesn't seem to be used in the sources and causes
+    # build issues
+    "PyOgg"
   ];
 
   pythonRelaxDeps = true;
