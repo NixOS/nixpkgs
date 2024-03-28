@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for controlling Fjäråskupan kitchen fans";
     homepage = "https://github.com/elupus/fjaraskupan";
+    changelog = "https://github.com/elupus/fjaraskupan/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
