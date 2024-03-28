@@ -6,7 +6,6 @@
 , numpy
 , pytestCheckHook
 , imread
-, freeimage
 , lib
 , stdenv
 }:
@@ -24,7 +23,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    freeimage
     imread
     numpy
     pillow
@@ -33,11 +31,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace mahotas/io/freeimage.py \
-      --replace "ctypes.util.find_library('freeimage')" 'True' \
-      --replace 'ctypes.CDLL(libname)' 'np.ctypeslib.load_library("libfreeimage", "${freeimage}/lib")'
-  '';
 
   # mahotas/_morph.cpp:864:10: error: no member named 'random_shuffle' in namespace 'std'
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -59,7 +52,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "mahotas"
-    "mahotas.freeimage"
   ];
 
   disabled = stdenv.isi686; # Failing tests
