@@ -23,7 +23,7 @@
 
     buildInputs = with pkgs; [
       systemd
-      gcc.cc.libgcc
+      libgcc
     ];
 
     meta = with lib; {
