@@ -1,6 +1,7 @@
 { lib
 , aiofiles
 , aiohttp
+, async-timeout
 , async-generator
 , buildPythonPackage
 , fetchFromGitHub
@@ -12,31 +13,30 @@
 , pythonOlder
 , setuptools
 , voluptuous
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
   version = "1.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pyinsteon";
+    repo = "pyinsteon";
     rev = "refs/tags/${version}";
     hash = "sha256-9d6QbekUv63sjKdK+ZogYOkGfFXVW+JB6ITHnehLwtM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
+    async-timeout
     pypubsub
     pyserial
     pyserial-asyncio
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     "test_other_status"
     "test_status_command"
     "test_status_request_hub"
-    # stuck in epoll
+    # Test stuck in epoll
     "test_read_all_peek"
   ];
 
@@ -70,7 +70,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";
-    mainProgram = "insteon_tools";
     longDescription = ''
       This is a Python package to interface with an Insteon Modem. It has been
       tested to work with most USB or RS-232 serial based devices such as the
@@ -80,5 +79,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "insteon_tools";
   };
 }
