@@ -10,6 +10,7 @@
 , responses
 , setuptools
 , setuptools-scm
+, poetry-core
 }:
 
 buildPythonPackage rec {
@@ -20,15 +21,16 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
+    rev = "c2561b6771fa88c5f9add1cf1b9807c4b4da3171";
     owner = "stravalib";
     repo = "stravalib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-U+QlSrijvT77/m+yjhFxbcVTQe51J+PR4Kc8N+qG+wI=";
+    hash = "sha256-KctJ1ARgp4RyQsaL4ytug5+YqnimB2KCVF54gBAaJoA=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -53,6 +55,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/stravalib/stravalib/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ sikmir ];
-    broken = lib.versionAtLeast pydantic.version "2";
   };
 }
