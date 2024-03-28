@@ -3,8 +3,17 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, boost
 }:
 
+let
+  tomlSpecRepo = fetchFromGitHub {
+    owner = "toml-lang";
+    repo = "toml";
+    rev = "v0.5.0";
+    hash = "sha256-qKNoUlZn8jlPSugy4NckLUNYDiT1uMKcNLxbgaXVYco=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml11";
   version = "3.8.1";
@@ -28,9 +37,24 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    mkdir -p build/tests
+    ln -s ${tomlSpecRepo} build/tests/toml
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
+
+  checkInputs = [
+    boost
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "toml11_BUILD_TEST" finalAttrs.doCheck)
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/ToruNiina/toml11";
@@ -57,4 +81,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
   };
 })
-# TODO [ AndersonTorres ]: tests
