@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -85,7 +85,7 @@ in let
     then tools.bintools
     else bootBintools;
 
-  in {
+  in rec {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -95,7 +95,17 @@ in let
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm;
 
-    libclang = callPackage ./clang {
+    libclang = callPackage ../common/clang {
+      patches = [
+        ./clang/purity.patch
+        # https://reviews.llvm.org/D51899
+        ./clang/gnu-install-dirs.patch
+        ../common/clang/add-nostdlibinc-flag.patch
+        (substituteAll {
+          src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
+          libllvmLibdir = "${libllvm.lib}/lib";
+        })
+      ];
       inherit llvm_meta;
     };
 

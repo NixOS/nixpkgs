@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
 , preLibcCrossHeaders
-, substitute, fetchFromGitHub, fetchpatch
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -56,7 +56,7 @@ let
     then tools.bintools
     else bootBintools;
 
-  in {
+  in rec {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -66,7 +66,17 @@ let
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm;
 
-    libclang = callPackage ./clang {
+    libclang = callPackage ../common/clang {
+      src = fetch "clang" "0px4gl27az6cdz6adds89qzdwb1cqpjsfvrldbz9qvpmphrj34bf";
+      patches = [
+        ./clang/purity.patch
+        # https://reviews.llvm.org/D51899
+        ./clang/gnu-install-dirs.patch
+        (substituteAll {
+          src = ../common/clang/clang-11-15-LLVMgold-path.patch;
+          libllvmLibdir = "${libllvm.lib}/lib";
+        })
+      ];
       inherit clang-tools-extra_src llvm_meta;
     };
 
