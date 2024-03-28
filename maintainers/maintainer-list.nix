@@ -13473,6 +13473,12 @@
     githubId = 133448;
     name = "Mikołaj Siedlarek";
   };
+  msladecek = {
+    email = "martin.sladecek+nixpkgs@gmail.com";
+    name = "Martin Sladecek";
+    github = "msladecek";
+    githubId = 7304317;
+  };
   mslingsby = {
     email = "morten.slingsby@eviny.no";
     github = "MortenSlingsby";
