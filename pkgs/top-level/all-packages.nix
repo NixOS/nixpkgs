@@ -38397,6 +38397,8 @@ with pkgs;
 
   raxml-mpi = raxml.override { useMpi = true; };
 
+  rtg-tools = callPackage ../applications/science/biology/rtg-tools { };
+
   sambamba = callPackage ../applications/science/biology/sambamba { };
 
   samblaster = callPackage ../applications/science/biology/samblaster { };
