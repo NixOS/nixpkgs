@@ -255,7 +255,7 @@ in
               ln -fs ${ipc-config} config/IPC.config
             ''}
 
-            ${lib.optionalString (cfg.ipcSettings != {}) ''
+            ${lib.optionalString (cfg.bots != {}) ''
               ln -fs ${createBotsScript}/* config/
             ''}
 
