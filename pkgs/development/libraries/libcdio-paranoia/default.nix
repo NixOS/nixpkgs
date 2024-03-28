@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcdio-paranoia";
-  version = "0.94+2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "libcdio-paranoia";
     rev = "release-10.2+${version}";
-    sha256 = "1wjgmmaca4baw7k5c3vdap9hnjc49ciagi5kvpvync3aqfmdvkha";
+    hash = "sha256-kNGhhslp5noAVeho0kBVfyvb4kQpDY56nyL3a4aFgjE=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
