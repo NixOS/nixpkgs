@@ -18,7 +18,7 @@
 
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, help2man, makeWrapper
 , glib, libbsd
-, libX11, xorgserver, kmod, xf86videonouveau
+, libX11, xorgserver, kmod, xf86videonouveau, xf86inputmouse
 , nvidia_x11, virtualgl, libglvnd
 , automake111x, autoconf
 # The below should only be non-null in a x86_64 system. On a i686
@@ -42,7 +42,7 @@ let
 
   bbdPath = lib.makeBinPath [ kmod xorgserver ];
 
-  xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
+  xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules") ([ xorgserver xf86inputmouse] ++ lib.optional (!useNvidia) xf86videonouveau));
 
   modprobePatch = fetchpatch {
     url = "https://github.com/Bumblebee-Project/Bumblebee/commit/1ada79fe5916961fc4e4917f8c63bb184908d986.patch";
