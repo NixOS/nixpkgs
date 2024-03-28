@@ -6,7 +6,7 @@ let
   cfg = config.services.traefik;
   jsonValue = with types;
     let
-      valueType = nullOr (oneOf [
+      valueType = nullOr (oneOfRecursive [
         bool
         int
         float

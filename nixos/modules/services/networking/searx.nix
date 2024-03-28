@@ -27,7 +27,7 @@ let
     done
   '';
 
-  settingType = with types; (oneOf
+  settingType = with types; (oneOfRecursive
     [ bool int float str
       (listOf settingType)
       (attrsOf settingType)

@@ -147,7 +147,7 @@ in
                 };
                 settings = mkOption {
                   type = types.submodule {
-                    freeformType = let t = types.attrsOf (types.either types.str (t // { description = "instances of this type recursively"; })); in t;
+                    freeformType = let t = types.attrsOf (types.eitherRecursive types.str (t // { description = "instances of this type recursively"; })); in t;
                     options = {
                       stream_compress = mkOption {
                         description = lib.mdDoc ''

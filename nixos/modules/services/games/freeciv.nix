@@ -6,7 +6,7 @@ let
   rootDir = "/run/freeciv";
   argsFormat = {
     type = with lib.types; let
-      valueType = nullOr (oneOf [
+      valueType = nullOr (oneOfRecursive [
         bool int float str
         (listOf valueType)
       ]) // {

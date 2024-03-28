@@ -41,7 +41,7 @@ let
 
   elixirValue = let
     elixirValue' = with types;
-      nullOr (oneOf [ bool int float str (attrsOf elixirValue') (listOf elixirValue') ]) // {
+      nullOr (oneOfRecursive [ bool int float str (attrsOf elixirValue') (listOf elixirValue') ]) // {
         description = "Elixir value";
       };
   in elixirValue';

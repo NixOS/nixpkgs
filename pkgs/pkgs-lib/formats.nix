@@ -46,7 +46,7 @@ rec {
   json = {}: {
 
     type = with lib.types; let
-      valueType = nullOr (oneOf [
+      valueType = nullOr (oneOfRecursive [
         bool
         int
         float
@@ -80,7 +80,7 @@ rec {
     '') {};
 
     type = with lib.types; let
-      valueType = nullOr (oneOf [
+      valueType = nullOr (oneOfRecursive [
         bool
         int
         float
@@ -251,7 +251,7 @@ rec {
 
   toml = {}: json {} // {
     type = with lib.types; let
-      valueType = oneOf [
+      valueType = oneOfRecursive [
         bool
         int
         float
@@ -366,7 +366,7 @@ rec {
     {
       type = with lib.types; let
         valueType = nullOr
-          (oneOf [
+          (oneOfRecursive [
             bool
             int
             float
@@ -475,7 +475,7 @@ rec {
   # Useful for many Django-based services
   pythonVars = {}: {
     type = with lib.types; let
-      valueType = nullOr(oneOf [
+      valueType = nullOr(oneOfRecursive [
         bool
         float
         int
