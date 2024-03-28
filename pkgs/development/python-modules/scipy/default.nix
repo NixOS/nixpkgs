@@ -34,8 +34,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.12.0";
-  srcHash = "sha256-PuiyYTgSegDTV9Kae5N68FOXT1jyJrNv9p2aFP70Z20=";
+  version = "1.13.0";
+  srcHash = "sha256-HaYk92hOREHMOXppK+Bs9DrBu9KUVUsZ0KV+isTofUo=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -76,18 +76,15 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
-    (fetchpatch {
-      name = "openblas-0.3.26-compat.patch";
-      url = "https://github.com/scipy/scipy/commit/8c96a1f742335bca283aae418763aaba62c03378.patch";
-      hash = "sha256-SGoYDxwSAkr6D5/XEqHLerF4e4nmmI+PX+z+3taWAps=";
-    })
   ];
 
-  # Upstream complicated numpy version pinning is causing issues in the
-  # configurePhase, so we pass on it.
+  # Upstream says in a comment in their pyproject.toml that building against
+  # both numpy 2 and numpy 1 should work, but they seem to worry about numpy
+  # incompatibilities that we here with Nixpkgs' Python ecosystem, shouldn't
+  # experience.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'numpy==' 'numpy>=' \
+      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
   '';
 
   nativeBuildInputs = [
