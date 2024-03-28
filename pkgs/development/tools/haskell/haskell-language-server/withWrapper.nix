@@ -18,6 +18,10 @@
 #
 # Maintainers: if a new formatter is added, add it here and down in knownFormatters
 , supportedFormatters ? [ "ormolu" "fourmolu" "floskell" "stylish-haskell" ]
+
+# remove support for plugins, example:
+# [{cabalFlag = "stan"; packages = ["hls-stan-plugin"];}]
+, removePlugins ? []
 }:
 
 # make sure the user only sets GHC versions that actually exist
@@ -91,17 +95,22 @@ let
 
   # Given the list of `supportedFormatters`, remove every formatter that we know of (knownFormatters)
   # by disabling the cabal flag and also removing the formatter libraries.
-  removeUnnecessaryFormatters =
+  unnecessaryFormatterPlugins =
     let
       # only formatters that were not requested
       unwanted = lib.pipe knownFormatters [
         (lib.filterAttrs (fmt: _: ! (lib.elem fmt supportedFormatters)))
         lib.attrsToList
+        (map (x: x.value))
       ];
+     in unwanted;
+
+  removeUnwantedPlugins = unwanted:
+    let
       # all flags to disable
-      flags = map (fmt: fmt.value.cabalFlag) unwanted;
+      flags = map (fmt: fmt.cabalFlag) unwanted;
       # all dependencies to remove from hls
-      deps = lib.concatMap (fmt: fmt.value.packages) unwanted;
+      deps = lib.concatMap (fmt: fmt.packages) unwanted;
 
       # remove nulls from a list
       stripNulls = lib.filter (x: x != null);
@@ -128,7 +137,7 @@ let
         '';
       }))
       ((if dynamic then enableCabalFlag else disableCabalFlag) "dynamic")
-      removeUnnecessaryFormatters
+      (removeUnwantedPlugins (unnecessaryFormatterPlugins ++ removePlugins))
     ]
     ++ lib.optionals (!dynamic) [
       justStaticExecutables
