@@ -4657,6 +4657,8 @@ with pkgs;
 
   clickgen = with python3Packages; toPythonApplication clickgen;
 
+  clickup = callPackage ../applications/office/clickup { };
+
   clog-cli = callPackage ../development/tools/clog-cli { };
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { inherit systemd; };
