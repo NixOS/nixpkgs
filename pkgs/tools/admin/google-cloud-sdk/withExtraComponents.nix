@@ -16,7 +16,8 @@ let
     (drvs: lib.unique (drvs ++ (builtins.concatMap (drv: drv.dependencies) drvs)));
 
   # Components to install by default
-  defaultComponents = with components; [ alpha beta ];
+  # auth plugin often required as per https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+  defaultComponents = with components; [ alpha beta gke-gcloud-auth-plugin ];
 
   comps = [ google-cloud-sdk ] ++ filterPreInstalled (findDepsRecursive (defaultComponents ++ comps_));
 in
