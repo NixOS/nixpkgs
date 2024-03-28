@@ -1177,6 +1177,7 @@ dockerTools.buildImage {
     hello
     dockerTools.binSh
   ];
+}
 ```
 
 After building the image and loading it in Docker, we can create a container based on it and enter a shell inside the container.
