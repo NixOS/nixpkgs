@@ -1,0 +1,65 @@
+diff --git a/src/services/json_yaml.py b/src/services/json_yaml.py
+index 619f69f..45fa8b8 100644
+--- a/src/services/json_yaml.py
++++ b/src/services/json_yaml.py
+@@ -3,9 +3,9 @@
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ 
+ from gi.repository import Gio, GObject
+-from ruamel import yaml
++from ruamel.yaml import YAML
+ import json
+-
++from io import StringIO
+ 
+ class JsonYamlService():
+ 
+@@ -25,15 +25,15 @@ class JsonYamlService():
+         task.return_value(outcome)
+ 
+     def _convert_json_to_yaml(self, json_str:str, indents:int) -> str:
+-        return yaml.dump(
+-            json.loads(json_str),
+-            indent=indents,
+-            default_flow_style=False
+-        )
++        output_buffer = StringIO()
++        yaml = YAML(typ='unsafe', pure=True)
++        yaml.dump(json.loads(json_str), output_buffer)
++        return output_buffer.getvalue()
+ 
+     def _convert_yaml_to_json(self, yaml_str:str, indents:int) -> str:
++        yaml = YAML(typ='rt')
+         return json.dumps(
+-            yaml.load(yaml_str, Loader=yaml.Loader),
++            yaml.load(yaml_str),
+             indent=indents,
+             ensure_ascii=False
+         )
+diff --git a/src/utils.py b/src/utils.py
+index e2aecb1..b7a6821 100644
+--- a/src/utils.py
++++ b/src/utils.py
+@@ -3,7 +3,7 @@
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ 
+ from gi.repository import Gdk, GLib
+-from ruamel import yaml
++from ruamel.yaml import YAML, YAMLError
+ from enum import Enum
+ from lxml import etree
+ from crontab import CronSlices
+@@ -52,10 +52,11 @@ class Utils:
+ 
+     @staticmethod
+     def is_yaml(test_input) -> bool:
++        yaml = YAML(typ='rt')
+         try:
+-            yaml.load(test_input, Loader=yaml.Loader)
++            yaml.load(test_input)
+             return True
+-        except yaml.YAMLError:
++        except YAMLError:
+             return False
+ 
+     @staticmethod

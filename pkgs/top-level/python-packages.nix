@@ -2640,6 +2640,8 @@ self: super: with self; {
 
   dalle-mini = callPackage ../development/python-modules/dalle-mini { };
 
+  daltonlens = callPackage ../development/python-modules/daltonlens { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   daqp = callPackage ../development/python-modules/daqp { };
@@ -8791,6 +8793,8 @@ self: super: with self; {
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
+  python-lorem = callPackage ../development/python-modules/python-lorem { };
+
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
@@ -14708,6 +14712,8 @@ self: super: with self; {
 
   textparser = callPackage ../development/python-modules/textparser { };
 
+  textstat = callPackage ../development/python-modules/textstat { };
+
   textual = callPackage ../development/python-modules/textual { };
 
   textual-dev = callPackage ../development/python-modules/textual-dev { };
@@ -16261,6 +16267,8 @@ self: super: with self; {
   utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
+
+  uuid6 = callPackage ../development/python-modules/uuid6 { };
 
   uvcclient = callPackage ../development/python-modules/uvcclient { };
 
