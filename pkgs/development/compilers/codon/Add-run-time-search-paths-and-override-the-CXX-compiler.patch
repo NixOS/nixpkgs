@@ -1,0 +1,29 @@
+From 4c4da2729a09d3a156f96ccbb742418c6847f493 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <paveloom@riseup.net>
+Date: Sat, 26 Aug 2023 22:09:37 +0300
+Subject: [PATCH] Add run-time search paths and override the C++ compiler.
+
+---
+ codon/cir/llvm/llvisitor.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/codon/cir/llvm/llvisitor.cpp b/codon/cir/llvm/llvisitor.cpp
+index ecbdfb1..970027b 100644
+--- a/codon/cir/llvm/llvisitor.cpp
++++ b/codon/cir/llvm/llvisitor.cpp
+@@ -493,7 +493,12 @@ void LLVMVisitor::writeToExecutable(const std::string &filename,
+     rpaths.push_back(std::string(path));
+   }
+
+-  std::vector<std::string> command = {"g++"};
++  std::vector<std::string> nix_rpaths = {@NIX_RPATHS@};
++  for (const auto &nix_rpath : nix_rpaths) {
++    rpaths.push_back(nix_rpath);
++  }
++
++  std::vector<std::string> command = {"@CXX@"};
+   // Avoid "argument unused during compilation" warning
+   command.push_back("-Wno-unused-command-line-argument");
+   // MUST go before -llib to compile on Linux
+--
+2.41.0
