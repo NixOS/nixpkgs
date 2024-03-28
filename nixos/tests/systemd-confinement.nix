@@ -4,7 +4,7 @@ import ./make-test-python.nix {
   nodes.machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
       #!${pkgs.runtimeShell}
-      export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}
+      export PATH=${lib.makeBinPath [ pkgs.coreutils pkgs.findutils ]}
       ${lib.escapeShellArg pkgs.runtimeShell} 2>&1
       echo "exit-status:$?"
     '';
@@ -48,8 +48,14 @@ import ./make-test-python.nix {
       { config.confinement.mode = "chroot-only";
         testScript = ''
           with subtest("chroot-only confinement"):
-              paths = machine.succeed('chroot-exec ls -1 / | paste -sd,').strip()
-              assert_eq(paths, "bin,nix,run")
+              # chroot-exec starts a socket-activated service,
+              # but, upon starting, a systemd system service
+              # calls setup_namespace() which calls base_filesystem_create()
+              # which creates some usual top level directories.
+              # In chroot-only mode, without additional BindPaths= or the like,
+              # they must be empty and thus removable by rmdir.
+              paths = machine.succeed('chroot-exec rmdir /dev /etc /proc /root /sys /usr /var "&&" ls -Am /').strip()
+              assert_eq(paths, "bin, nix, run")
               uid = machine.succeed('chroot-exec id -u').strip()
               assert_eq(uid, "0")
               machine.succeed("chroot-exec chown 65534 /bin")
@@ -57,7 +63,7 @@ import ./make-test-python.nix {
       }
       { testScript = ''
           with subtest("full confinement with APIVFS"):
-              machine.fail("chroot-exec ls -l /etc")
+              machine.succeed('chroot-exec rmdir /etc')
               machine.fail("chroot-exec chown 65534 /bin")
               assert_eq(machine.succeed('chroot-exec id -u').strip(), "0")
               machine.succeed("chroot-exec chown 0 /bin")
@@ -80,6 +86,146 @@ import ./make-test-python.nix {
               machine.fail("chroot-exec touch /bin/test")
         '';
       }
+      { config.confinement.mode = "full-apivfs";
+        config.serviceConfig.DynamicUser = true;
+        testScript = ''
+          with subtest("check if DynamicUser is working in full-apivfs mode"):
+              machine.succeed("chroot-exec ls -l /dev")
+              paths = machine.succeed('chroot-exec find / -path /dev/"\\*" -prune -o -path /nix/"\\*" -prune -o -path /proc/"\\*" -prune -o -path /sys/"\\*" -prune -o -print || test $? = 1')
+              assert_eq(
+                '\n'.join(sorted(paths.split('\n'))),
+          """
+          /
+          /bin
+          /bin/sh
+          /dev
+          /etc
+          /nix
+          /proc
+          /root
+          /run
+          /run/host
+          /run/host/.os-release-stage
+          /run/host/.os-release-stage/os-release
+          /run/host/os-release
+          /run/systemd
+          /run/systemd/incoming
+          /sys
+          /tmp
+          /usr
+          /var
+          /var/tmp
+          find: '/root': Permission denied
+          find: '/run/systemd/incoming': Permission denied"""
+              )
+              uid = machine.succeed('chroot-exec id -u').strip()
+              assert uid != "0", "UID of a DynamicUser shouldn't be 0"
+              machine.fail("chroot-exec touch /bin/test")
+              # DynamicUser=true implies ProtectSystem=strict
+              machine.fail("chroot-exec touch /etc/test")
+        '';
+      }
+      { config.confinement.mode = "full-apivfs";
+        config.serviceConfig.DynamicUser = true;
+        config.serviceConfig.PrivateTmp = false;
+        testScript = ''
+          with subtest("check if DynamicUser and PrivateTmp=false are working in full-apivfs mode"):
+              machine.succeed("chroot-exec ls -l /dev")
+              paths = machine.succeed('chroot-exec find / -path /dev/"\\*" -prune -o -path /nix/"\\*" -prune -o -path /proc/"\\*" -prune -o -path /sys/"\\*" -prune -o -print || test $? = 1')
+              assert_eq(
+                '\n'.join(sorted(paths.split('\n'))),
+          """
+          /
+          /bin
+          /bin/sh
+          /dev
+          /etc
+          /nix
+          /proc
+          /root
+          /run
+          /run/host
+          /run/host/.os-release-stage
+          /run/host/.os-release-stage/os-release
+          /run/host/os-release
+          /run/systemd
+          /run/systemd/incoming
+          /sys
+          /usr
+          /var
+          find: '/root': Permission denied
+          find: '/run/systemd/incoming': Permission denied"""
+              )
+              uid = machine.succeed('chroot-exec id -u').strip()
+              assert uid != "0", "UID of a DynamicUser shouldn't be 0"
+              machine.fail("chroot-exec touch /bin/test")
+              # DynamicUser=true implies ProtectSystem=strict
+              machine.fail("chroot-exec touch /etc/test")
+        '';
+      }
+      { config.confinement.mode = "chroot-only";
+        config.serviceConfig.DynamicUser = true;
+        testScript = ''
+          with subtest("check if DynamicUser is working in chroot-only mode"):
+              paths = machine.succeed('chroot-exec find / -path /nix/"\\*" -prune -o -print || test $? = 1')
+              assert_eq(
+                '\n'.join(sorted(paths.split('\n'))),
+          """
+          /
+          /bin
+          /bin/sh
+          /dev
+          /etc
+          /nix
+          /proc
+          /root
+          /run
+          /run/systemd
+          /run/systemd/incoming
+          /sys
+          /usr
+          /var
+          find: '/root': Permission denied
+          find: '/run/systemd/incoming': Permission denied"""
+              )
+              uid = machine.succeed('chroot-exec id -u').strip()
+              assert uid != "0", "UID of a DynamicUser shouldn't be 0"
+              machine.fail("chroot-exec touch /bin/test")
+        '';
+      }
+      { config.confinement.mode = "chroot-only";
+        config.serviceConfig.DynamicUser = true;
+        config.serviceConfig.PrivateTmp = true;
+        testScript = ''
+          with subtest("check if DynamicUser and PrivateTmp=true are working in chroot-only mode"):
+              paths = machine.succeed('chroot-exec find / -path /nix/"\\*" -prune -o -print || test $? = 1')
+              assert_eq(
+                '\n'.join(sorted(paths.split('\n'))),
+          """
+          /
+          /bin
+          /bin/sh
+          /dev
+          /etc
+          /nix
+          /proc
+          /root
+          /run
+          /run/systemd
+          /run/systemd/incoming
+          /sys
+          /tmp
+          /usr
+          /var
+          /var/tmp
+          find: '/root': Permission denied
+          find: '/run/systemd/incoming': Permission denied"""
+              )
+              uid = machine.succeed('chroot-exec id -u').strip()
+              assert uid != "0", "UID of a DynamicUser shouldn't be 0"
+              machine.fail("chroot-exec touch /bin/test")
+        '';
+      }
       (let
         symlink = pkgs.runCommand "symlink" {
           target = pkgs.writeText "symlink-target" "got me\n";
@@ -88,7 +234,7 @@ import ./make-test-python.nix {
         config.confinement.packages = lib.singleton symlink;
         testScript = ''
           with subtest("check if symlinks are properly bind-mounted"):
-              machine.fail("chroot-exec test -e /etc")
+              machine.succeed("chroot-exec rmdir /etc")
               text = machine.succeed('chroot-exec cat ${symlink}').strip()
               assert_eq(text, "got me")
         '';
@@ -176,9 +322,13 @@ import ./make-test-python.nix {
   };
 
   testScript = { nodes, ... }: ''
-    def assert_eq(a, b):
-        assert a == b, f"{a} != {b}"
+    import difflib
+    def assert_eq(got, expected):
+        if got != expected:
+          diff = difflib.unified_diff(got.splitlines(keepends=True), expected.splitlines(keepends=True))
+          print("".join(diff))
+        assert got == expected, f"{got} != {expected}"
 
     machine.wait_for_unit("multi-user.target")
-  '' + nodes.machine.config.__testSteps;
+  '' + nodes.machine.__testSteps;
 }
