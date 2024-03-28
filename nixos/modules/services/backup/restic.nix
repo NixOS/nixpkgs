@@ -256,6 +256,24 @@ in
             having to manually specify most options.
           '';
         };
+
+        niceness = mkOption {
+          description = lib.mdDoc "Niceness for instances of restic. Also applies to remote ones connecting via ssh when positive. Only used for `restic backup`, `restic forget` and `restic check` commands.";
+          type = types.ints.between (-20) 19;
+          default = 10;
+        };
+
+        ioSchedulingClass = mkOption {
+          description = lib.mdDoc "IO scheduling class for restic (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle. Only used for `restic backup`, `restic forget` and `restic check` commands.";
+          type = types.enum [ "idle" "best-effort" "realtime" ];
+          default = "best-effort";
+        };
+
+        ioPriority = mkOption {
+          description = lib.mdDoc "IO scheduling priority for restic (see ionice(1) for a quick description). If null, the value is derived from (niceness + 20) / 5. Only used for `restic backup`, `restic forget` and `restic check` commands.";
+          type = types.nullOr (types.ints.between 0 7);
+          default = null;
+        };
       };
     }));
     default = { };
@@ -296,9 +314,21 @@ in
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
+            niceness =
+              let
+                ioniceClass = {
+                  "idle" = 3;
+                  "best-effort" = 2;
+                  "realtime" = 1;
+                }.${backup.ioSchedulingClass};
+              in
+                ''${pkgs.util-linux}/bin/ionice -t ''
+                + '' -c ${toString ioniceClass} ''
+                + '' ${optionalString (backup.ioPriority != null) "-n ${toString backup.ioPriority}"} ''
+                + '' ${optionalString (backup.niceness >= 1) "${pkgs.coreutils}/bin/nice -n ${toString backup.niceness}"} '';
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
-              (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
+              (niceness + " " + resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
+              (niceness + " " + resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -330,7 +360,7 @@ in
             after = [ "network-online.target" ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
+              ExecStart = (optionals doBackup [ "${niceness} ${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
                 ++ pruneCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
