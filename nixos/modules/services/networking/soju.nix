@@ -5,7 +5,10 @@ with lib;
 let
   cfg = config.services.soju;
   stateDir = "/var/lib/soju";
-  listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") cfg.listen;
+  runtimeDir = "/run/soju";
+  listen = cfg.listen ++
+    (optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin");
+  listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") listen;
   tlsCfg = optionalString (cfg.tlsCertificate != null)
     "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
   logCfg = optionalString cfg.enableMessageLogging
@@ -21,6 +24,10 @@ let
     accept-proxy-ip ${concatStringsSep " " cfg.acceptProxyIP}
 
     ${cfg.extraConfig}
+  '';
+
+  sojuctl = pkgs.writeShellScriptBin "sojuctl" ''
+    exec ${pkgs.soju}/bin/sojuctl --config ${configFile} "$@"
   '';
 in
 {
@@ -66,6 +73,14 @@ in
       description = lib.mdDoc "Whether to enable message logging.";
     };
 
+    adminSocket.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        Listen for admin connections from sojuctl at /run/soju/admin.
+      '';
+    };
+
     httpOrigins = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -107,6 +122,8 @@ in
       }
     ];
 
+    environment.systemPackages = [ sojuctl ];
+
     systemd.services.soju = {
       description = "soju IRC bouncer";
       wantedBy = [ "multi-user.target" ];
@@ -117,6 +134,7 @@ in
         Restart = "always";
         ExecStart = "${pkgs.soju}/bin/soju -config ${configFile}";
         StateDirectory = "soju";
+        RuntimeDirectory = "soju";
       };
     };
   };
