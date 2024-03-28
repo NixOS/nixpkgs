@@ -1,8 +1,13 @@
 { lib, systemdUtils }:
 
-with lib;
-
 let
+  inherit (lib)
+    concatMapStrings
+    concatStringsSep
+    flip
+    optionalString
+    ;
+
   attrsToSection = systemdUtils.lib.attrsToSection;
   commonMatchText = def:
     optionalString (def.matchConfig != { }) ''
