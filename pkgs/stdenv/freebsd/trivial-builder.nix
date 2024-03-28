@@ -1,8 +1,9 @@
-{ system, name, ver, url, sha256, configureArgs ? [], executable ? false } :
+derivationArgTransform:
+{ system, name, ver, url, sha256, configureArgs ? [], executable ? false }:
 
 let fetchURL = import <nix/fetchurl.nix>;
 
-in derivation {
+in derivation (derivationArgTransform {
   inherit system configureArgs;
   name = "trivial-bootstrap-${name}-${ver}";
   dname = "${name}-${ver}";
@@ -10,4 +11,4 @@ in derivation {
     inherit url sha256 executable;
   };
   builder = ./trivial-builder.sh;
-}
+})

@@ -13,6 +13,7 @@
 , config
 , overlays
 , crossOverlays ? [ ]
+, derivationArgTransform ? lib.id
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? if localSystem.isAarch64 then
     import ./bootstrap-files/aarch64-apple-darwin.nix
@@ -48,7 +49,7 @@ let
     unset SDKROOT
   '';
 
-  bootstrapTools = derivation ({
+  bootstrapTools = derivation (derivationArgTransform ({
     inherit system;
 
     name = "bootstrap-tools";
@@ -62,7 +63,7 @@ let
     __contentAddressed = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-  }) // { passthru.isFromBootstrapFiles = true; };
+  })) // { passthru.isFromBootstrapFiles = true; };
 
   stageFun = prevStage:
     { name, overrides ? (self: super: { }), extraNativeBuildInputs ? [ ], extraPreHook ? "" }:
@@ -129,6 +130,7 @@ let
         targetPlatform = localSystem;
 
         inherit config extraNativeBuildInputs;
+        inherit (prevStage.stdenv) derivationArgTransform;
 
         extraBuildInputs = [ prevStage.darwin.CF ];
 
@@ -196,6 +198,15 @@ in
       libllvm = null;
       libcxx = null;
       compiler-rt = null;
+    };
+
+    # This fake stdenv exists solely to inject derivationArgTransform
+    # into succeeding stages. It does not get passed to cc-wrapper as
+    # buildPackages since this stage lacks a non-null `llvmPackages.clang-unwrapped`.
+    # If that ceases to be the case the conditional in stageFun must be modified.
+    # Similar to the linux stdenv bootstrap, but with clang instead of gcc.
+    stdenv = {
+      inherit derivationArgTransform;
     };
   })
 
@@ -1217,7 +1228,7 @@ in
 
       shell = cc.shell;
 
-      inherit (prevStage.stdenv) fetchurlBoot;
+      inherit (prevStage.stdenv) fetchurlBoot derivationArgTransform;
 
       extraAttrs = {
         inherit bootstrapTools;

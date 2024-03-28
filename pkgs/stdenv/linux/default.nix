@@ -54,7 +54,7 @@
 #
 #     $ nix-tree --derivation $(nix-instantiate -A stdenv)
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem, crossSystem, config, overlays, crossOverlays ? [], derivationArgTransform ? lib.id
 
 , bootstrapFiles ?
   let table = {
@@ -140,7 +140,7 @@ let
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
   bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
-    inherit system bootstrapFiles;
+    inherit system bootstrapFiles derivationArgTransform;
     extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
       __contentAddressed = true;
       outputHashAlgo = "sha256";
@@ -178,6 +178,8 @@ let
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
         };
+
+        derivationArgTransform = prevStage.stdenv.derivationArgTransform;
 
         cc = if prevStage.gcc-unwrapped == null
              then null
@@ -222,6 +224,13 @@ in
     binutils = null;
     coreutils = null;
     gnugrep = null;
+    # This fake stdenv exists solely to inject derivationArgTransform
+    # into succeeding stages. It does not get passed to cc-wrapper as
+    # buildPackages since this stage lacks a non-null gcc-unwrapped. If that
+    # ceases to be the case the conditional in stageFun must be modified.
+    stdenv = {
+      inherit derivationArgTransform;
+    };
   })
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
@@ -622,7 +631,7 @@ in
 
       shell = cc.shell;
 
-      inherit (prevStage.stdenv) fetchurlBoot;
+      inherit (prevStage.stdenv) fetchurlBoot derivationArgTransform;
 
       extraAttrs = {
         inherit bootstrapTools;

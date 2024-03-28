@@ -1,10 +1,10 @@
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem, crossSystem, config, overlays, crossOverlays ? [], derivationArgTransform ? lib.id
 }:
 
 let
   bootStages = import ../. {
-    inherit lib localSystem overlays;
+    inherit lib localSystem overlays derivationArgTransform;
 
     crossSystem = localSystem;
     crossOverlays = [];

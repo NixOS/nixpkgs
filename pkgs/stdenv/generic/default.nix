@@ -53,6 +53,14 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 , # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
   # This is convient to have as a parameter so the stdenv "adapters" work better
   mkDerivationFromStdenv ? stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation
+
+, # Function that intercepts and processes the argument attrsets of
+  # ALL `builtins.derivation`s before passing them to
+  # `builtins.derivation` itself. Use carefully to avoid creating
+  # infinite recursions. Since this is part of the bootstrap process
+  # of stdenv itself, it should contain no references to the current
+  # stdenv.
+  derivationArgTransform ? lib.id
 }:
 
 let
@@ -79,7 +87,7 @@ let
 
   # The stdenv that we are producing.
   in
-    derivation (
+    derivation (derivationArgTransform (
     lib.optionalAttrs (allowedRequisites != null) {
       allowedRequisites = allowedRequisites
         ++ defaultNativeBuildInputs ++ defaultBuildInputs;
@@ -129,7 +137,7 @@ let
     // lib.optionalAttrs buildPlatform.isDarwin {
       __sandboxProfile = stdenvSandboxProfile;
       __impureHostDeps = __stdenvImpureHostDeps;
-    })
+    }))
 
     // {
 
@@ -157,6 +165,8 @@ let
       inherit (hostPlatform) system;
 
       mkDerivation = mkDerivationFromStdenv stdenv;
+
+      inherit derivationArgTransform;
 
       inherit fetchurlBoot;
 

@@ -1,11 +1,11 @@
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem, crossSystem, config, overlays, crossOverlays ? [], derivationArgTransform ? lib.id
 }:
 
 assert crossSystem == localSystem;
 let inherit (localSystem) system;
     fetchURL = import <nix/fetchurl.nix>;
-    trivialBuilder = (import ./trivial-builder.nix);
+    trivialBuilder = (import ./trivial-builder.nix) derivationArgTransform;
     make = trivialBuilder rec {
       inherit (localSystem) system;
       name = "make";
@@ -170,7 +170,7 @@ in
   ({}: {
     __raw = true;
 
-    bootstrapTools = derivation ({
+    bootstrapTools = derivation (derivationArgTransform ({
       inherit system;
       inherit make bash coreutils findutils
         diffutils grep patch gawk cpio sed
@@ -186,7 +186,7 @@ in
       __contentAddressed = true;
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
-    });
+    }));
   })
 
   ({ bootstrapTools, ... }: rec {
@@ -201,6 +201,7 @@ in
     };
 
     stdenv = import ../generic {
+      inherit derivationArgTransform;
       name = "stdenv-freebsd-boot-1";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
@@ -226,7 +227,7 @@ in
       initialPath = [ prevStage.bootstrapTools ];
       inherit (prevStage.stdenv)
         buildPlatform hostPlatform targetPlatform
-        shell;
+        shell derivationArgTransform;
       fetchurlBoot = prevStage.fetchurl;
       cc = null;
     };
@@ -240,7 +241,7 @@ in
 
       inherit (prevStage.stdenv)
         buildPlatform hostPlatform targetPlatform
-        initialPath shell fetchurlBoot;
+        initialPath shell fetchurlBoot derivationArgTransform;
 
       cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         inherit lib;
