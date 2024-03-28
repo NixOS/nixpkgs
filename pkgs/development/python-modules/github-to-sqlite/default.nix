@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
+, beautifulsoup4
 , pytestCheckHook
 , pyyaml
 , requests
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    beautifulsoup4
     sqlite-utils
     pyyaml
     requests
