@@ -30,6 +30,9 @@
 , darwin
 , libsForQt5
 , gitUpdater
+  # for tests
+, runCommandLocal
+, shellcheck-minimal
 }:
 
 let
@@ -178,10 +181,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
-  passthru.updateScript = gitUpdater {
-    url = "https://gitlab.kitware.com/cmake/cmake.git";
-    rev-prefix = "v";
-    ignoredVersions = "-"; # -rc1 and friends
+  passthru = {
+    tests =
+      let
+        shellcheckBashSourceFile =
+          { name,
+            sourceFile,
+            bashOptions ? [ "errexit" "nounset" "pipefail" ],
+            excludeShellChecks ? [ ],
+            sourcePaths ? [ ],
+          }:
+          runCommandLocal name {
+            __structuredAttrs = true;
+            inherit
+              sourceFile
+              bashOptions
+              excludeShellChecks;
+            nativeBuildInputs = [ shellcheck-minimal ];
+          } ''
+            set -eu -o pipefail
+            cat <<EOF > "$out"
+            ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+            . "$sourceFile"
+            EOF
+            shellcheck \
+              --shell=bash --external-sources \
+              --exclude=${lib.escapeShellArg (lib.concatStringsSep "," excludeShellChecks)} \
+              --source-path=${lib.escapeShellArg (lib.concatStringsSep ":" sourcePaths)} \
+              "$out"
+          '';
+      in
+      {
+        shellcheck-setuphook = shellcheckBashSourceFile {
+          name = "test-cmake-shellcheck-setup-hook";
+          sourceFile = ./setup-hook.sh;
+        };
+        shellcheck-check-pc-files-hook = shellcheckBashSourceFile {
+          name = "test-cmake-shellcheck-check-pc-files-hook";
+          sourceFile = ./check-pc-files-hook.sh;
+        };
+      };
+    updateScript = gitUpdater {
+      url = "https://gitlab.kitware.com/cmake/cmake.git";
+      rev-prefix = "v";
+      ignoredVersions = "-"; # -rc1 and friends
+    };
   };
 
   meta = {
