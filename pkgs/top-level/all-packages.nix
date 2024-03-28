@@ -13304,6 +13304,8 @@ with pkgs;
     openjdk = openjdk21.override { enableJavaFX = true; };
   };
 
+  sparrow-wifi = callPackage ../applications/networking/sparrow-wifi { };
+
   sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix { };
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
