@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "sievelib";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7cubQWqYWjzFt9f01+wBPjcuv5DmTJ2eAOIDEpmvOP0=";
+    hash = "sha256-MxPX8fP4Mkq2qOISnknXbuCN8NQ+L1UOaBuPEuP0TNE=";
   };
 
   nativeBuildInputs = [
