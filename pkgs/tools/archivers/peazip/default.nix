@@ -16,15 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "peazip";
-  version = "9.6.0";
+  version = "9.7.1";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = pname;
     rev = version;
-    hash = "sha256-75EkVRx6bX1ZZzeNSR7IvKNjTA5NvzFzUJdORiAVHBo=";
+    hash = "sha256-HxRpoT+O9nWL4FzB6CjJ0DqnZALaaYtXGb82GkgF2JA=";
   };
-  sourceRoot = "${src.name}/peazip-sources";
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -41,14 +40,24 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     export HOME=$(mktemp -d)
-    cd dev
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_pea.lpi && [ -f pea ]
-    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_peach.lpi && [ -f peazip ]
-    cd ..
+
+    lazbuild --add-package packages/metadarkstyle-main/metadarkstyle.lpk
+
+    cd peazip-sources/dev
+
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_pea.lpi
+    [ -f pea ]
+
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_peach.lpi
+    [ -f peazip ]
+
+    cd ../..
   '';
 
   installPhase = ''
     runHook preInstall
+
+    cd peazip-sources
 
     # Executables
     ## Main programs
@@ -77,6 +86,8 @@ stdenv.mkDerivation rec {
     install -D res/share/icons/peazip_{7z,rar,zip}.png -t "$out/share/icons/hicolor/256x256/mimetypes"
     install -D res/share/batch/freedesktop_integration/peazip_{add,extract}.png -t "$out/share/icons/hicolor/256x256/actions"
     install -D res/share/batch/freedesktop_integration/*.desktop -t "$out/share/applications"
+
+    cd ..
 
     runHook postInstall
   '';
