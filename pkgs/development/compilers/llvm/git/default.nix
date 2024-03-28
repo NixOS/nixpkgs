@@ -90,7 +90,7 @@ in let
 
   in {
 
-    libllvm = callPackage ./llvm {
+    libllvm = callPackage ../common/llvm {
       inherit llvm_meta;
     };
 
