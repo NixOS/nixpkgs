@@ -68,9 +68,8 @@ runCommand
     ];
   }
   ''
-    unpackPhase
-    cd "''${sourceRoot:-.}"
-    patchPhase
+    # Unpack and patch
+    phases="''${prePhases[*]-} unpackPhase patchPhase" genericBuild
     set -x
     cp ${builtins.toFile "glib-schema-to-var.json" (builtins.toJSON schemaIdToVariableMapping)} ./glib-schema-to-var.json
     git init

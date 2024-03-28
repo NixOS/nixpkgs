@@ -73,9 +73,8 @@ stdenv.mkDerivation rec {
     wrapQtApp = wrapWith "wrapQtApp";
     wrapProgram = wrapWith "wrapProgram";
   in ''
-    unpackPhase
-    cd "$sourceRoot"
-    patchPhase
+    # Unpack and patch
+    phases="''${prePhases[*]-} unpackPhase patchPhase" genericBuild
 
     ${stdenv.shell} bootStrap.bash \
       --with-core \
@@ -100,7 +99,7 @@ stdenv.mkDerivation rec {
       mv ''${!outputLib}/lib64 ''${!outputLib}/lib
       ln -s lib ''${!outputLib}/lib64
     fi
-    fixupPhase
+    runPhase fixupPhase
   '';
 
   meta = with lib; {

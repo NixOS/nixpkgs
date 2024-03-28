@@ -399,9 +399,11 @@ in stdenv.mkDerivation {
       cd $SWIFT_BUILD_ROOT/$1
 
       cmakeDir=$SWIFT_SOURCE_ROOT/''${2-$1}
-      cmakeConfigurePhase
 
-      ninjaBuildPhase
+      phases="configurePhase ''${preBuildPhases[*]-} buildPhase" \
+        configurePhase=cmakeConfigurePhase \
+        buildPhase=ninjaBuildPhase \
+        genericBuild
     }
 
     cmakeFlags="-GNinja"
@@ -583,7 +585,7 @@ in stdenv.mkDerivation {
   checkPhase = ''
     cd $SWIFT_BUILD_ROOT/swift
     checkTarget=check-swift-all
-    ninjaCheckPhase
+    checkPhase=ninjaCheckPhase runPhase checkPhase
     unset checkTarget
   '';
 
@@ -600,20 +602,20 @@ in stdenv.mkDerivation {
     # for private use by Swift only.
     cd $SWIFT_BUILD_ROOT/llvm
     installTargets=install-clang
-    ninjaInstallPhase
+    installPhase=ninjaInstallPhase runPhase installPhase
     unset installTargets
 
     # LLDB is also a private install.
     cd $SWIFT_BUILD_ROOT/lldb
-    ninjaInstallPhase
+    installPhase=ninjaInstallPhase runPhase installPhase
 
     cd $SWIFT_BUILD_ROOT/swift
-    ninjaInstallPhase
+    installPhase=ninjaInstallPhase runPhase installPhase
 
     ${lib.optionalString stdenv.isDarwin ''
     cd $SWIFT_BUILD_ROOT/swift-concurrency-backdeploy
     installTargets=install-back-deployment
-    ninjaInstallPhase
+    installPhase=ninjaInstallPhase runPhase installPhase
     unset installTargets
     ''}
 

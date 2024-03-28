@@ -78,7 +78,9 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    ninjaCheckPhase
+    installCheckPhase=ninjaCheckPhase \
+      preCheck="" postCheck="" \
+      runPhase installCheckPhase
 
     runHook postInstallCheck
   '';

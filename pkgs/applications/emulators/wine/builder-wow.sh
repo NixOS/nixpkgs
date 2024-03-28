@@ -1,21 +1,30 @@
 ## build described at https://wiki.winehq.org/Building_Wine#Shared_WoW64
+# shellcheck shell=bash disable=SC2034,SC2154
 
-source $stdenv/setup
-preFlags="${configureFlags}"
 
-unpackPhase
-cd $TMP/$sourceRoot
-patchPhase
+# Hint ShellCheck we do this
+# TODO: Remove once we explicitly specify in ShellCheck directives
+# the path to `setup.sh`. See below.
+set -eu -o pipefail
 
-configureScript=$TMP/$sourceRoot/configure
-mkdir -p $TMP/wine-wow $TMP/wine64
+# Use directive `shellcheck source=../../../stdenv/generic/setup.sh`
+# instead of disabling source following, once setup.sh passes ShellCheck
+# See #298831
+# shellcheck disable=SC1091
+source "$stdenv/setup"
+preFlags="${configureFlags[*]-}"
 
-cd $TMP/wine64
-sourceRoot=`pwd`
+phases="unpackPhase patchPhase" \
+  sourceRoot="$TMP/$sourceRoot" \
+  genericBuild
+
+configureScript="$TMP/$sourceRoot/configure"
+mkdir -p "$TMP/wine-wow" "$TMP/wine64"
+
+cd "$TMP/wine64"
+sourceRoot="$(pwd)"
 configureFlags="${preFlags} --enable-win64"
-configurePhase
-buildPhase
-# checkPhase
+phases="configurePhase buildPhase" genericBuild
 
 # Remove 64 bit gstreamer from PKG_CONFIG_PATH
 IFS=":" read -ra LIST_ARRAY <<< "$PKG_CONFIG_PATH"
@@ -37,15 +46,13 @@ for ELEMENT in "${LIST_ARRAY[@]}"; do
 done
 PKG_CONFIG_PATH=$(IFS=":"; echo "${NEW_LIST_ARRAY[*]}")
 
-cd $TMP/wine-wow
-sourceRoot=`pwd`
+cd "$TMP/wine-wow"
+sourceRoot="$(pwd)"
 configureFlags="${preFlags} --with-wine64=../wine64"
-configurePhase
-buildPhase
-# checkPhase
+phases="configurePhase buildPhase" genericBuild
 
-eval "$preInstall"
-cd $TMP/wine-wow && make install -j$NIX_BUILD_CORES
-cd $TMP/wine64 && make install -j$NIX_BUILD_CORES
-eval "$postInstall"
-fixupPhase
+runHook preInstall
+cd "$TMP/wine-wow" && make install "-j$NIX_BUILD_CORES"
+cd "$TMP/wine64" && make install "-j$NIX_BUILD_CORES"
+runHook postInstall
+runPhase fixupPhase
