@@ -14,14 +14,14 @@
 let buildToxAV = !stdenv.isAarch32;
 in stdenv.mkDerivation rec {
   pname = "libtoxcore";
-  version = "0.2.18";
+  version = "0.2.19";
 
   src =
     # We need the prepared sources tarball.
     fetchurl {
       url =
         "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
-      sha256 = "sha256-8pQFN5mIY1k+KLxqa19W8JZ19s2KKDJre8MbSDbAiUI=";
+      sha256 = "sha256-i0GPZHDbCFz1mpkVaFYTVWVW3yv0JxSPGBS3sRhihZQ=";
     };
 
   cmakeFlags = [
