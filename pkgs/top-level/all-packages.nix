@@ -24168,8 +24168,6 @@ with pkgs;
 
   asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
 
-  baserow = callPackage ../servers/baserow { };
-
   bftpd = callPackage ../servers/ftp/bftpd { };
 
   bind = callPackage ../servers/dns/bind { };

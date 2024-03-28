@@ -1,0 +1,26 @@
+From d30489f46fec68ee2ddd369963fe22ed37999d81 Mon Sep 17 00:00:00 2001
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Mon, 8 May 2023 07:44:16 +0200
+Subject: [PATCH] backend: package HTML templates
+
+---
+ setup.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/setup.py b/setup.py
+index 0309d164..bee79602 100644
+--- a/setup.py
++++ b/setup.py
+@@ -30,6 +30,9 @@ setup(
+     "technical expertise. Build a table and define custom fields "
+     "like text, number, file and many more.",
+     platforms=["linux"],
++    package_data={
++        'baserow.core': ['templates/*.html', 'templates/*.eta', 'templates/**/*.eta', 'templates/**/*.html']
++    },
+     package_dir={"": "src"},
+     packages=find_packages("src"),
+     include_package_data=True,
+-- 
+2.40.1
+
