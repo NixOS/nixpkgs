@@ -25,6 +25,9 @@ assert if type == "sdk" then packages != null else true;
 , writeShellScript
 , mkNugetDeps
 , callPackage
+, darwin
+, makeSetupHook
+, xmlstarlet
 }:
 
 let
@@ -44,6 +47,16 @@ let
 
   mkCommon = callPackage ./common.nix {};
 
+  _icu = if stdenv.isDarwin then darwin.ICU else icu;
+
+  addIcuDyldPathHook = makeSetupHook {
+    name = "add-icu-dyld-path-hook";
+    substitutions.icu = _icu;
+  } ./add-icu-dyld-path-hook.sh;
+
+  sigtool = callPackage ./sigtool.nix {};
+  signAppHost = callPackage ./sign-apphost.nix {};
+
 in
 mkCommon type rec {
   inherit pname version;
@@ -51,15 +64,22 @@ mkCommon type rec {
   # Some of these dependencies are `dlopen()`ed.
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook
+  ++ lib.optionals (type == "sdk" && stdenv.isDarwin) [
+    xmlstarlet
+    sigtool
+  ];
 
   buildInputs = [
     stdenv.cc.cc
     zlib
-    icu
+    _icu
     libkrb5
     curl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
+
+  propagatedNativeBuildInputs =
+    lib.optional stdenv.isDarwin addIcuDyldPathHook;
 
   src = fetchurl (
     srcs."${stdenv.hostPlatform.system}" or (throw
@@ -67,6 +87,16 @@ mkCommon type rec {
   );
 
   sourceRoot = ".";
+
+  postPatch = if type == "sdk" && stdenv.isDarwin then ''
+    xmlstarlet ed \
+      --inplace \
+      -s //_:Project -t elem -n Import \
+      -i \$prev -t attr -n Project -v "${signAppHost}" \
+      sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
+
+    codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
+  '' else null;
 
   dontPatchELF = true;
   noDumpEnvVars = true;
@@ -83,6 +113,11 @@ mkCommon type rec {
 
     ln -s $out/dotnet $out/bin/dotnet
 
+  '' + lib.optionalString stdenv.isDarwin ''
+    wrapProgram $out/bin/dotnet \
+      --prefix DYLD_LIBRARY_PATH : ${_icu}/lib
+
+  '' + ''
     runHook postInstall
   '';
 
@@ -106,7 +141,7 @@ mkCommon type rec {
   '';
 
   passthru = {
-    inherit icu;
+    icu = _icu;
   } // lib.optionalAttrs (type == "sdk") {
     packages = mkNugetDeps {
       name = "${pname}-${version}-deps";
