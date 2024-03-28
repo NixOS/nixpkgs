@@ -13,6 +13,7 @@ firefox.section.md
 fish.section.md
 fuse.section.md
 ibus.section.md
+jupyter.section.md
 kakoune.section.md
 linux.section.md
 locales.section.md
