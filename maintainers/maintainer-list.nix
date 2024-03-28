@@ -58,6 +58,10 @@
          nix-build lib/tests/maintainers.nix
 
     See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
+
+    When creating a commit:
+      * When adding a new maintainer, be aware of the current commit conventions:
+        https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#commit-conventions.
 */
 {
   _0b11stan = {
