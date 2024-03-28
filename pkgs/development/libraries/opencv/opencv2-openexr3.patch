@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 90e16c2a57f8..dd184d78a03c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -201,7 +201,7 @@ OCV_OPTION(BUILD_TIFF               "Build libtiff from source"          WIN32 O
+ OCV_OPTION(BUILD_JASPER             "Build libjasper from source"        WIN32 OR ANDROID OR APPLE )
+ OCV_OPTION(BUILD_JPEG               "Build libjpeg from source"          WIN32 OR ANDROID OR APPLE )
+ OCV_OPTION(BUILD_PNG                "Build libpng from source"           WIN32 OR ANDROID OR APPLE )
+-OCV_OPTION(BUILD_OPENEXR            "Build openexr from source"          WIN32 OR ANDROID OR APPLE )
++OCV_OPTION(BUILD_OPENEXR            "Build openexr from source"          OFF )
+ OCV_OPTION(BUILD_TBB                "Download and build TBB from source" ANDROID )
+ 
+ # OpenCV installation options
+diff --git a/cmake/OpenCVFindOpenEXR.cmake b/cmake/OpenCVFindOpenEXR.cmake
+index c0a46806e150..037ea7aa1b30 100644
+--- a/cmake/OpenCVFindOpenEXR.cmake
++++ b/cmake/OpenCVFindOpenEXR.cmake
+@@ -9,6 +9,22 @@
+ # OPENEXR_LIBRARIES = libraries that are needed to use OpenEXR.
+ #
+ 
++if(NOT OPENCV_SKIP_OPENEXR_FIND_PACKAGE)
++  find_package(OpenEXR 3 QUIET)
++  #ocv_cmake_dump_vars(EXR)
++  if(OpenEXR_FOUND)
++    if(TARGET OpenEXR::OpenEXR)  # OpenEXR 3+
++      set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
++      set(OPENEXR_INCLUDE_PATHS "")
++      set(OPENEXR_VERSION "${OpenEXR_VERSION}")
++      set(OPENEXR_FOUND 1)
++      return()
++    else()
++      message(STATUS "Unsupported find_package(OpenEXR) - missing OpenEXR::OpenEXR target (version ${OpenEXR_VERSION})")
++    endif()
++  endif()
++endif()
++
+ SET(OPENEXR_LIBRARIES "")
+ SET(OPENEXR_LIBSEARCH_SUFFIXES "")
+ file(TO_CMAKE_PATH "$ENV{ProgramFiles}" ProgramFiles_ENV_PATH)
+diff --git a/modules/highgui/src/grfmt_exr.hpp b/modules/highgui/src/grfmt_exr.hpp
+index b9467c6d26f6..5a725011fabe 100644
+--- a/modules/highgui/src/grfmt_exr.hpp
++++ b/modules/highgui/src/grfmt_exr.hpp
+@@ -53,6 +53,7 @@
+ #include <ImfInputFile.h>
+ #include <ImfChannelList.h>
+ #include <ImathBox.h>
++#include <ImfRgbaFile.h>
+ #include "grfmt_base.hpp"
+ 
+ namespace cv
