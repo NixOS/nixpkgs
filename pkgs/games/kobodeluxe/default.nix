@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, SDL, SDL_image, libGLU, libGL} :
+{ lib, stdenv, fetchpatch, fetchurl, SDL, SDL_image, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "kobodeluxe";
@@ -9,14 +9,33 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ SDL SDL_image libGLU libGL ];
+  nativeBuildInputs = [ makeWrapper ];
 
   prePatch = ''
     sed -e 's/char \*tok/const char \*tok/' -i graphics/window.cpp
   '';
 
-  patches = [ ./glibc29.patch ];
+  # We wrap the program to give it the highscore directory, otherwise the scores can't be saved
+  # because the nix store directory where the game lives is read only
+  postInstall = ''
+    wrapProgram $out/bin/${meta.mainProgram} \
+      --run "mkdir -p ~/.config/${pname}" \
+      --add-flags "-scores ~/.config/${pname}"
+  '';
+
+  patches = [
+    (fetchpatch { # Fixes a build failure: error const enemy kind pipe2 redeclared as different kind of symbol
+      url = "https://sources.debian.org/data/main/k/${pname}/${version}-10/debian/patches/04_enemies-pipe-decl.patch";
+      sha256 = "sha256-myMhB7+7y6EeD+xIfeHTbJPLrulyQmzpTxuNX1azpSY=";
+    })
+    (fetchpatch { # Fixes the game being stuck in the pause state
+      url = "https://sources.debian.org/data/main/k/${pname}/${version}-10/debian/patches/ignore-appinputfocus.patch";
+      sha256 = "sha256-RTLeF2hvQJ4F9+dJvTL25VXD1RFrJsmcDsZSIYOhYYo=";
+    })
+  ];
 
   meta = {
+    mainProgram = "kobodl";
     homepage = "http://olofson.net/kobodl/";
     description = "Enhanced version of Akira Higuchi's game XKobo  for Un*x systems with X11";
     mainProgram = "kobodl";
