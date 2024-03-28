@@ -1,52 +1,56 @@
-{ lib
-, appimageTools
-, fetchurl
-}:
-
-appimageTools.wrapAppImage rec {
+{ lib, appimageTools, fetchurl, makeWrapper, enableWayland ? false }:
+let
   pname = "bazecor";
   version = "1.3.9";
+  src = fetchurl {
+    url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
+    hash = "sha256-qve5xxhhyVej8dPDkZ7QQdeDUmqGO4pHJTykbS4RhAk=";
+  };
 
-  src = appimageTools.extract {
-    inherit pname version;
-    src = fetchurl {
-      url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
-      hash = "sha256-qve5xxhhyVej8dPDkZ7QQdeDUmqGO4pHJTykbS4RhAk=";
-    };
+  appimageContents = appimageTools.extractType2 {
+    inherit pname version src;
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370
     postExtract = ''
       substituteInPlace \
-        $out/usr/lib/bazecor/resources/app/.webpack/main/index.js \
-        --replace \
+        $out/usr/lib/${pname}/resources/app/.webpack/main/index.js \
+        --replace-fail \
           'checkUdev=()=>{try{if(c.default.existsSync(f))return c.default.readFileSync(f,"utf-8").trim()===l.trim()}catch(e){console.error(e)}return!1}' \
           'checkUdev=()=>{return 1}'
     '';
   };
+in appimageTools.wrapType2 {
+  inherit pname version src;
 
   # also make sure to update the udev rules in ./10-dygma.rules; most recently
   # taken from
   # https://github.com/Dygmalab/Bazecor/blob/v1.3.9/src/main/utils/udev.ts#L6
 
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
-    p.glib
-  ];
+  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.glib ];
 
   # Also expose the udev rules here, so it can be used as:
   #   services.udev.packages = [ pkgs.bazecor ];
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    mv $out/bin/bazecor-* $out/bin/bazecor
-
-    install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/Bazecor.desktop \
-      --replace 'Exec=Bazecor' 'Exec=bazecor'
-
-    install -m 444 -D ${src}/bazecor.png -t $out/share/pixmaps
+    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
+    install -m 444 -D ${appimageContents}/Bazecor.desktop -t $out/share/applications
+    install -m 444 -D ${appimageContents}/bazecor.png -t $out/share/pixmaps
 
     mkdir -p $out/lib/udev/rules.d
-    ln -s --target-directory=$out/lib/udev/rules.d ${./10-dygma.rules}
+    ln -s ${./10-dygma.rules} $out/lib/udev/rules.d
+
+    # Bazecor with wayland crashes on startup. Disable wayland flags by default
+    # https://github.com/Dygmalab/Bazecor/issues/683
+    ${if enableWayland then ''
+      source "${makeWrapper}/nix-support/setup-hook"
+      wrapProgram "$out/bin/${pname}" \
+         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+    '' else
+      ""}
+
+    substituteInPlace $out/share/applications/Bazecor.desktop \
+      --replace-fail 'Exec=Bazecor' 'Exec=${pname}'
   '';
 
   meta = {
