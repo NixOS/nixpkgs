@@ -11657,6 +11657,10 @@ with pkgs;
 
   osslsigncode = callPackage ../development/tools/osslsigncode { };
 
+  ossia-score = qt6.callPackage ../applications/audio/ossia-score {
+    # inherit (llvmPackages_14) libclang llvm;
+  };
+
   ostree = callPackage ../tools/misc/ostree { };
 
   ostree-rs-ext = callPackage ../tools/misc/ostree-rs-ext { };
