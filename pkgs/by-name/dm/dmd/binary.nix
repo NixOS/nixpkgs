@@ -17,17 +17,16 @@ stdenv.mkDerivation {
   src = fetchurl rec {
     name = "dmd.${version}.${OS}.tar.xz";
     url = "http://downloads.dlang.org/releases/2.x/${version}/${name}";
-    sha256 = hashes.${OS} or (throw "missing bootstrap sha256 for OS ${OS}");
+    hash = hashes.${OS} or (throw "missing bootstrap hash for OS ${OS}");
   };
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = lib.optionals hostPlatform.isLinux [
-    autoPatchelfHook
-  ] ++ lib.optionals hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    lib.optional hostPlatform.isLinux autoPatchelfHook
+  ++ lib.optional hostPlatform.isDarwin fixDarwinDylibNames;
+
   propagatedBuildInputs = [
     curl
     tzdata
@@ -70,7 +69,7 @@ stdenv.mkDerivation {
     description = "Digital Mars D Compiler Package";
     # As of 2.075 all sources and binaries use the boost license
     license = licenses.boost;
-    maintainers = [ maintainers.lionello ];
+    maintainers = with maintainers; [ lionello ];
     homepage = "https://dlang.org/";
     platforms = [ "x86_64-darwin" "i686-linux" "x86_64-linux" ];
   };
