@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl
-, fetchpatch
 , autoreconfHook
 , perl
 , ps
@@ -9,15 +8,15 @@
 
 stdenv.mkDerivation rec {
   pname = "bash-completion";
-  version = "2.11";
+  version = "2.12.0";
 
   # Using fetchurl because fetchGithub or fetchzip will have trouble on
   # e.g. APFS filesystems (macOS) because of non UTF-8 characters in some of the
   # test fixtures that are part of the repository.
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
   src = fetchurl {
-    url = "https://github.com/scop/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1b0iz7da1sgifx1a5wdyx1kxbzys53v0kyk8nhxfipllmm5qka3k";
+    url = "https://github.com/scop/bash-completion/releases/download/${version}/bash-completion-${version}.tar.xz";
+    hash = "sha256-PrBbF4PDOe9Z7Vdq+w9nj6TvSabeimljl98xSPg0Wvk=";
   };
 
   strictDeps = true;
