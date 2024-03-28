@@ -32,6 +32,10 @@ buildPythonPackage rec {
     pywebpush
   ];
 
+  pythonRelaxDeps = [
+    "pywebpush"
+  ];
+
   # nothing to test
   doCheck = false;
 
