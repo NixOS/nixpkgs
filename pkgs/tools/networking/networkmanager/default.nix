@@ -50,6 +50,7 @@
 , mobile-broadband-provider-info
 , runtimeShell
 , buildPackages
+, nixosTests
 }:
 
 let
@@ -202,6 +203,9 @@ stdenv.mkDerivation rec {
       packageName = "NetworkManager";
       attrPath = "networkmanager";
       versionPolicy = "odd-unstable";
+    };
+    tests = {
+      inherit (nixosTests.networking) networkmanager;
     };
   };
 
