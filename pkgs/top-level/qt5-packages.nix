@@ -261,6 +261,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
+  qtspell = callPackage ../development/libraries/qtspell { };
+
   qwt = callPackage ../development/libraries/qwt/default.nix { };
 
   qwt6_1 = callPackage ../development/libraries/qwt/6_1.nix { };
