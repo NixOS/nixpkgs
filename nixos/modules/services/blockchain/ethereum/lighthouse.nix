@@ -47,6 +47,12 @@ in {
               '';
             };
 
+            disableUpnp = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc "Enables UPNP.";
+            };
+
             disableDepositContractSync = mkOption {
               type = types.bool;
               default = false;
@@ -211,26 +217,24 @@ in {
   };
 
   config = mkIf (cfg.beacon.enable || cfg.validator.enable) {
-
-    environment.systemPackages = [ pkgs.lighthouse ] ;
+    environment.systemPackages = [pkgs.lighthouse];
 
     networking.firewall = mkIf cfg.beacon.enable {
-      allowedTCPPorts = mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
-      allowedUDPPorts = mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
+      allowedTCPPorts = mkIf cfg.beacon.openFirewall [cfg.beacon.port];
+      allowedUDPPorts = mkIf cfg.beacon.openFirewall [cfg.beacon.port];
     };
-
 
     systemd.services.lighthouse-beacon = mkIf cfg.beacon.enable {
       description = "Lighthouse beacon node (connect to P2P nodes and verify blocks)";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
 
       script = ''
         # make sure the chain data directory is created on first run
         mkdir -p ${cfg.beacon.dataDir}/${cfg.network}
 
         ${pkgs.lighthouse}/bin/lighthouse beacon_node \
-          --disable-upnp \
+          ${lib.optionalString cfg.beacon.disableUpnp "--disable-upnp"} \
           ${lib.optionalString cfg.beacon.disableDepositContractSync "--disable-deposit-contract-sync"} \
           --port ${toString cfg.beacon.port} \
           --listen-address ${cfg.beacon.address} \
