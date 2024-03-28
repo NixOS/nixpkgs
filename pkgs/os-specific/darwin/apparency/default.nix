@@ -6,11 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "apparency";
-  version = "1.5.1";
+  version = "1.8.1";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20230815073821/https://www.mothersruin.com/software/downloads/Apparency.dmg";
-    hash = "sha256-JpaBdlt8kTNFzK/yZVZ+ZFJ3DnPQbogJC7QBmtSVkoQ=";
+   # Use externally archived download URL because
+   # upstream does not provide stable URLs for versioned releases
+    url = "https://web.archive.org/web/20240304101835/https://www.mothersruin.com/software/downloads/Apparency.dmg";
+    hash = "sha256-hxbAtIy7RdhDrsFIvm9CEr04uUTbWi4KmrzJIcU1YVA=";
   };
 
   nativeBuildInputs = [ undmg ];
