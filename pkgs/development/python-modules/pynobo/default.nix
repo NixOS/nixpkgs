@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pynobo";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "echoromeo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-LJS4NJM+f+j53YzH8LradBDzHAsOprd4F7nH1cfC3B0=";
+    hash = "sha256-Hfyf7XGleDWTKKWNlItcBFuiS3UEwsYed7v5FPRdC0w=";
   };
 
   # Project has no tests
