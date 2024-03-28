@@ -19,7 +19,7 @@ import os
 import re
 import subprocess
 from concurrent.futures import ThreadPoolExecutor as Pool
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 import requests
 from packaging.specifiers import SpecifierSet
@@ -210,12 +210,22 @@ def _determine_latest_version(current_version, target, versions):
     return (max(sorted(versions))).raw_version
 
 
+def _filter_yanked_versions(releases: Dict[str, List]) -> List[str]:
+    versions = []
+    for version, files in releases.items():
+        valid_files = [file for file in files if not file["yanked"]]
+        if not valid_files:
+            continue
+        versions.append(version)
+    return versions
+
+
 def _get_latest_version_pypi(attr_path, package, extension, current_version, target):
     """Get latest version and hash from PyPI."""
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
 
-    versions = json["releases"].keys()
+    versions = _filter_yanked_versions(json["releases"])
     version = _determine_latest_version(current_version, target, versions)
 
     try:
