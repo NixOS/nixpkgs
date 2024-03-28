@@ -16360,6 +16360,12 @@
     githubId = 145816;
     name = "David McKay";
   };
+  rayne = {
+    email = "rayne+nix@digitalrayne.net";
+    github = "digitalrayne";
+    githubId = 1829286;
+    name = "Rayne";
+  };
   rayslash = {
     email = "stevemathewjoy@tutanota.com";
     github = "rayslash";
