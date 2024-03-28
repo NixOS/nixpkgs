@@ -145,7 +145,7 @@ in
     services.xserver.desktopManager.session = [{
       name = "xfce";
       desktopNames = [ "XFCE" ];
-      bgSupport = true;
+      bgSupport = !cfg.noDesktop;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
         waitPID=$!
