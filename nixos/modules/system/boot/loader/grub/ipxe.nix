@@ -10,8 +10,8 @@ let
   grubEntry = name:
     ''
       menuentry "iPXE - ${name}" {
-        linux16 @bootRoot@/ipxe.lkrn
-        initrd16 @bootRoot@/${name}.ipxe
+        linux16 @extraRoot@/ipxe.lkrn
+        initrd16 @extraRoot@/${name}.ipxe
       }
 
     '';
