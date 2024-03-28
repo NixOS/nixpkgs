@@ -9,7 +9,6 @@
 , gtk3
 , libnotify
 , libxml2
-, gnome-online-accounts
 , colord
 , polkit
 , libxkbfile
@@ -59,7 +58,6 @@ stdenv.mkDerivation rec {
     colord
     libgudev
     libwacom
-    gnome-online-accounts
     tzdata
     networkmanager
     libnma
@@ -85,6 +83,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # https://github.com/linuxmint/cinnamon-control-center/issues/326
+    "-Donlineaccounts=false"
   ];
 
   nativeBuildInputs = [

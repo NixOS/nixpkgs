@@ -24,6 +24,7 @@
 , libXext
 , libXi
 , libXv
+, libdrm
 , enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
@@ -45,7 +46,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.22.9";
+  version = "1.24.0";
 
   outputs = [ "out" "dev" ];
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-+sPg3S2Ok3A4izS/jCG4nV9jvDz8Es1/3I/GwcugMzQ=";
+    hash = "sha256-8zd0EpxDfiIHA0+JJ69M9+2MDwBqRgK1zeKCPsbAzAc=";
   };
 
   strictDeps = true;
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
     libpng
     libjpeg
+    libdrm
     tremor
     pango
   ] ++ lib.optionals (!stdenv.isDarwin) [

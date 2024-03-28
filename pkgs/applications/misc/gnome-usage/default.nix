@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-usage";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "5nfE/iwBSXqE/x4RV+kTHp+ZmfGnjTUjSvHXfYJ18pQ=";
+    sha256 = "GGrajgAYjIn4yrVPNZmO2XpG6rb9shiRAoNhvzhqybI=";
   };
 
   nativeBuildInputs = [

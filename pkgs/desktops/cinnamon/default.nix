@@ -35,6 +35,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
   folder-color-switcher = callPackage ./folder-color-switcher { };
+  gnome-online-accounts-gtk = callPackage ./gnome-online-accounts-gtk { };
   nemo = callPackage ./nemo { };
   nemo-emblems = callPackage ./nemo-extensions/nemo-emblems { };
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
