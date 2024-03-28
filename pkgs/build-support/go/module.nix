@@ -16,7 +16,12 @@
   #
   # if vendorHash is null, then we won't fetch any dependencies and
   # rely on the vendor folder within the source.
-, vendorHash ? args'.vendorSha256 or (throw "buildGoModule: vendorHash is missing")
+, vendorHash ? throw (
+    if args'?vendorSha256 then
+      "buildGoModule: Expect vendorHash instead of vendorSha256"
+    else
+      "buildGoModule: vendorHash is missing"
+  )
   # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
   # Whether to fetch (go mod download) and proxy the vendor directory.
@@ -51,7 +56,6 @@
 }@args':
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
-assert (args' ? vendorHash && args' ? vendorSha256) -> throw "both `vendorHash` and `vendorSha256` set. only one can be set.";
 
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
@@ -147,7 +151,9 @@ let
 
     outputHashMode = "recursive";
     outputHash = vendorHash;
-    outputHashAlgo = if args' ? vendorSha256 || vendorHash == "" then "sha256" else null;
+    # Handle empty vendorHash; avoid
+    # error: empty hash requires explicit hash algorithm
+    outputHashAlgo = if vendorHash == "" then "sha256" else null;
   }).overrideAttrs overrideModAttrs;
 
   package = stdenv.mkDerivation (args // {
@@ -298,8 +304,7 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go goModules vendorHash; }
-                        // lib.optionalAttrs (args' ? vendorSha256 ) { inherit (args') vendorSha256; };
+    passthru = passthru // { inherit go goModules vendorHash; };
 
     meta = {
       # Add default meta information
@@ -307,7 +312,6 @@ let
     } // meta;
   });
 in
-lib.warnIf (args' ? vendorSha256) "`vendorSha256` is deprecated. Use `vendorHash` instead"
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
 lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
