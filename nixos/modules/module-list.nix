@@ -1451,6 +1451,7 @@
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/unclutter.nix
   ./services/x11/urserver.nix
+  ./services/x11/dunst.nix
   ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
   ./services/x11/window-managers/bspwm.nix
