@@ -237,13 +237,14 @@ in nameDrvAfterAttrName ({
     expectFailure = true;
   };
 
-  fortify3StdenvUnsuppDoesntUnsuppFortify = brokenIf stdenv.hostPlatform.isMusl (checkTestBin (f2exampleWithStdEnv (stdenvUnsupport ["fortify3"]) {
+  # musl implementation undetectable by this means even if present
+  fortify3StdenvUnsuppDoesntUnsuppFortify1 = brokenIf stdenv.hostPlatform.isMusl (checkTestBin (f1exampleWithStdEnv (stdenvUnsupport ["fortify3"]) {
     hardeningEnable = [ "fortify" ];
   }) {
     ignoreFortify = false;
   });
 
-  fortify3StdenvUnsuppDoesntUnsuppFortifyExecTest = fortifyExecTest (f2exampleWithStdEnv (stdenvUnsupport ["fortify3"]) {
+  fortify3StdenvUnsuppDoesntUnsuppFortify1ExecTest = fortifyExecTest (f1exampleWithStdEnv (stdenvUnsupport ["fortify3"]) {
     hardeningEnable = [ "fortify" ];
   });
 
@@ -285,7 +286,8 @@ in nameDrvAfterAttrName ({
     expectFailure = true;
   };
 
-  fortify3EnabledEnvEnablesFortify = brokenIf stdenv.hostPlatform.isMusl (checkTestBin (f2exampleWithStdEnv stdenv {
+  # musl implementation undetectable by this means even if present
+  fortify3EnabledEnvEnablesFortify1 = brokenIf stdenv.hostPlatform.isMusl (checkTestBin (f1exampleWithStdEnv stdenv {
     hardeningDisable = [ "fortify" "fortify3" ];
     preBuild = ''
       export NIX_HARDENING_ENABLE="fortify3"
@@ -294,7 +296,7 @@ in nameDrvAfterAttrName ({
     ignoreFortify = false;
   });
 
-  fortify3EnabledEnvEnablesFortifyExecTest = fortifyExecTest (f2exampleWithStdEnv stdenv {
+  fortify3EnabledEnvEnablesFortify1ExecTest = fortifyExecTest (f1exampleWithStdEnv stdenv {
     hardeningDisable = [ "fortify" "fortify3" ];
     preBuild = ''
       export NIX_HARDENING_ENABLE="fortify3"
@@ -312,7 +314,6 @@ in nameDrvAfterAttrName ({
   };
 
   # NIX_HARDENING_ENABLE can't enable an unsupported feature
-
   stackProtectorUnsupportedEnabledEnv = checkTestBin (f2exampleWithStdEnv (stdenvUnsupport ["stackprotector"]) {
     preBuild = ''
       export NIX_HARDENING_ENABLE="stackprotector"
@@ -322,6 +323,9 @@ in nameDrvAfterAttrName ({
     expectFailure = true;
   };
 
+  # current implementation prevents the command-line from disabling
+  # fortify if cc-wrapper is enabling it.
+
   # undetectable by this means on static even if present
   fortify1ExplicitEnabledCmdlineDisabled = brokenIf stdenv.hostPlatform.isStatic (checkTestBin (f1exampleWithStdEnv stdenv {
     hardeningEnable = [ "fortify" ];
@@ -330,8 +334,11 @@ in nameDrvAfterAttrName ({
     '';
   }) {
     ignoreFortify = false;
-    expectFailure = true;
+    expectFailure = false;
   });
+
+  # current implementation doesn't force-disable fortify if
+  # command-line enables it even if we use hardeningDisable.
 
   # musl implementation undetectable by this means even if present
   fortify1ExplicitDisabledCmdlineEnabled = brokenIf (
