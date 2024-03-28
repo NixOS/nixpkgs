@@ -1,0 +1,13 @@
+Remove the definition of OPAQUE in config.h so we can set it
+through the compiler's command line.
+--- a/config.h
++++ b/config.h
+@@ -13,8 +13,4 @@
+ // Cursor image during selection
+ #define CURSOR XC_crosshair
+ 
+-// If your compositor is causing the overlay to behave strangely,
+-// set this option to true. (NOTE: this feature is still experimental)
+-#define OPAQUE false
+-
+ /* ------------------------- */
