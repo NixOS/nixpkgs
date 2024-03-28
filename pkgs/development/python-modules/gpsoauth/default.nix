@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
+, poetry-core
 , pycryptodomex
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
@@ -20,12 +21,17 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    pythonRelaxDepsHook
+    poetry-core
   ];
 
   propagatedBuildInputs = [
     pycryptodomex
     requests
+  ];
+
+  pythonRelaxDeps = [
+    "urllib3"
   ];
 
   # upstream tests are not very comprehensive
