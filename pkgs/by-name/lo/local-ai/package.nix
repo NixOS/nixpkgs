@@ -92,8 +92,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "d01b3c4c32357567f3531d4e6ceffc5d23e87583";
-      hash = "sha256-7eaQV+XTCXdrJlo7y21q5j/8ecVwuTMJScRTATcF6oM=";
+      rev = "b06c16ef9f81d84da520232c125d4d8a1d273736";
+      hash = "sha256-t1AIx/Ir5RhasjblH4BSpGOXVvO84SJPSqa7rXWj6b4=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -203,8 +203,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "a56f435fd475afd7edf02bfbf9f8c77f527198c2";
-      hash = "sha256-g8ZhVB5sxpfrFzg/0seSrv0vFG0YOP56253n6/KWHfE=";
+      rev = "1558ec5a16cb2b2a0bf54815df1d41f83dc3815b";
+      hash = "sha256-UAqWU3kvkHM+fV+T6gFVsAKuOG6N4FoFgTKGUptwjmE=";
     };
     nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = typedBuiltInputs;
@@ -315,18 +315,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.10.1";
+  version = "2.11.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-135s1Gw8mfOIx4kXlw2pYrD3ewwajUtnz3sPY/CtoLw=";
+    hash = "sha256-Sqo4NOggUNb1ZemT9TRknBmz8dThe/X43R+4JFfQJ4M=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-UCeG0TKS+VBW8D87VmxTHS2tCAf0ADEYTJayaSiua6s=";
+    vendorHash = "sha256-3bOr8DnAjTzOpVDB5wmlPxECNteWw3tI0yc1f2Wt4y0=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
