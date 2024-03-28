@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = let
+    inherit (lib.strings) mesonEnable mesonOption;
+
     # The "sd-bus-provider" meson option does not include a "none" option,
     # but it is silently ignored iff "-Dtray=disabled".  We use "basu"
     # (which is not in nixpkgs) instead of "none" to alert us if this
@@ -67,11 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     # assert trayEnabled -> systemdSupport && dbusSupport;
 
     sd-bus-provider =  if systemdSupport then "libsystemd" else "basu";
-    in
-    [ "-Dsd-bus-provider=${sd-bus-provider}" ]
-    ++ lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled"
-    ++ lib.optional (!finalAttrs.trayEnabled)    "-Dtray=disabled"
-  ;
+    in [
+      (mesonOption "sd-bus-provider" sd-bus-provider)
+      (mesonEnable "xwayland" finalAttrs.enableXWayland)
+      (mesonEnable "tray" finalAttrs.trayEnabled)
+    ];
 
   passthru.tests.basic = nixosTests.sway;
 
