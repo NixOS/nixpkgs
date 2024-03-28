@@ -7,22 +7,29 @@
 , stdenv
 , darwin
 , python3
+, perl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bws";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "sdk";
     rev = "bws-v${version}";
-    hash = "sha256-o+tmO9E881futhA/fN6+EX2yEBKnKUmKk/KilIt5vYY=";
+    hash = "sha256-oCAyUTVAUfXBEb2K7vkYBOzcwqCsm2wxEKsYLZcfm6w=";
   };
 
-  cargoHash = "sha256-nmsAfXNn1nqmqHzGD7jl2JNrif/nJycCJZWZYjv7G4c=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "uniffi-0.25.2" = "sha256-YckrtociJV3VKGs5DJ0a1r1Cvq06S/mtr9iL1kLmAi8=";
+    };
+  };
 
   nativeBuildInputs = [
+    perl
     pkg-config
   ];
 
