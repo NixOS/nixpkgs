@@ -27,6 +27,7 @@ let
     ;
   inherit (lib.attrsets)
     attrByPath
+    concatMapAttrs
     optionalAttrs
     ;
   inherit (lib.strings)
@@ -465,6 +466,66 @@ rec {
       ${showOption opt.loc}, with values defined in:
       ${concatMapStringsSep "\n" (defFile: "  - ${defFile}") opt.files}
     '';
+
+  /* Filters an option tree, such that the returned tree only contains the options for which the callback returns `true`.
+
+  Arguments passed to the callback are:
+
+  * The option path, as a list of strings representing the attribute names.
+  * The option declaration at that path.
+
+  Non-attrset values pass through unchanged.
+  It is not possible to prune entire branches of the option tree in one go, as the callback is only invoked for each option (leaf).
+
+
+    Type
+
+    ```
+    filterOptions :: (List String -> Option -> Bool) -> Options -> Options
+    ```
+
+
+    Example
+
+    :::{.example}
+    ## `filterOptions` usage example
+
+
+    ```nix
+    filterOptions
+      (path: option: option.description == "a" || elem "c" path)
+      {
+        a = mkOption { description = "a"; };
+        b = mkOption { description = "b"; };
+        c = mkOption { description = "foo"; };
+      }
+    => {
+        a = mkOption { description = "a"; };
+        c = mkOption { description = "foo"; };
+      }
+    ```
+
+    :::  */
+  filterOptions = predicate: options: let
+    recurse = path: options:
+      concatMapAttrs
+      (
+        name: value: let
+          newPath = path ++ [name];
+        in
+          if isAttrs value then
+            if isOption value then
+              if predicate newPath value then {${name} = value;}
+              else {}
+            else # attrs, not option
+              let branch = recurse newPath value;
+              in if branch == {} then {} else {${name} = branch;}
+          else # not attrs
+            {${name} = value;}
+      )
+      options;
+  in
+    recurse [] options;
 
   unknownModule = "<unknown-file>";
 
