@@ -79,9 +79,11 @@ in
     };
 
     systemd.tmpfiles.settings."10-regreet" = let
+      user = config.services.greetd.settings.default_session.user;
+
       defaultConfig = {
-        user = "greeter";
-        group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
+        inherit user;
+        group = config.users.users.${user}.group;
         mode = "0755";
       };
     in {
