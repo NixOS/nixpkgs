@@ -119,12 +119,24 @@ in
         description = ''
           Additional scripts for WirePlumber to be used by configuration files.
 
-          Every item in this attrset becomes a separate lua file `/etc/wireplumber/scripts`.
+          Every item in this attrset becomes a separate lua file with the path
+          relative to the `scripts` directory specified in the name of the item.
+          The scripts get passed to the WirePlumber service via the `XDG_DATA_DIRS`
+          variable. Scripts specified here are preferred over those shipped with
+          WirePlumber if they occupy the same relative path.
+
+          For a script to be loaded, it needs to be specified as part of a component,
+          and that component needs to be required by an active profile (e.g. `main`).
+          Components can be defined in config files either via `extraConfig` or `configPackages`.
 
           See also:
-          - [Location of files][docs-file-locations]
+          - [Location of scripts][docs-file-locations-scripts]
+          - [Components & Profiles][docs-components-profiles]
+          - [Migration - Loading custom scripts][docs-migration-loading-custom-scripts]
 
-          [docs-file-locations]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/locations.html
+          [docs-file-locations-scripts]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/locations.html#location-of-scripts
+          [docs-components-profiles]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/components_and_profiles.html
+          [docs-migration-loading-custom-scripts]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/migration.html#loading-custom-scripts
         '';
       };
 
