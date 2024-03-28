@@ -46,6 +46,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
     license = licenses.asl20;
-    homepage = "https://alviano.net/software/maxino/";
+    homepage = "https://github.com/alviano/aspino";
   };
 }

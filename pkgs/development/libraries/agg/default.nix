@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = lib.licenses.gpl2Plus;
-    homepage = "http://www.antigrain.com/";
+    homepage = "https://agg.sourceforge.net/antigrain.com/index.html";
     platforms = lib.platforms.unix;
   };
 }

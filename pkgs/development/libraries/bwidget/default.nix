@@ -18,7 +18,7 @@ tcl.mkTclDerivation rec {
   '';
 
   meta = {
-    homepage = "https://sourceforge.net/projects/tcllib";
+    homepage = "https://sourceforge.net/projects/tcllib/";
     description = "High-level widget set for Tcl/Tk";
     maintainers = with lib.maintainers; [ agbrooks ];
     license = lib.licenses.tcltk;
