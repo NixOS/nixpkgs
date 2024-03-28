@@ -33,12 +33,12 @@ buildPythonPackage rec {
     "red-black-tree-mod"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     compressed-rtf
     ebcdic
