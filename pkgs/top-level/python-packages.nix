@@ -692,6 +692,8 @@ self: super: with self; {
 
   argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
 
+  argparse-manpage = callPackage ../development/python-modules/argparse-manpage { };
+
   args = callPackage ../development/python-modules/args { };
 
   aria2p = callPackage ../development/python-modules/aria2p { };
@@ -1937,6 +1939,8 @@ self: super: with self; {
   };
 
   chainmap = callPackage ../development/python-modules/chainmap { };
+
+  chainstream = callPackage ../development/python-modules/chainstream { };
 
   chalice = callPackage ../development/python-modules/chalice { };
 
