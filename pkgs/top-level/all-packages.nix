@@ -816,7 +816,7 @@ with pkgs;
 
   enum4linux = callPackage ../tools/security/enum4linux { };
 
-  enum4linux-ng = python3Packages.callPackage ../tools/security/enum4linux-ng { };
+  enum4linux-ng = callPackage ../tools/security/enum4linux-ng { };
 
   enumerepo = callPackage ../tools/security/enumerepo {};
 
