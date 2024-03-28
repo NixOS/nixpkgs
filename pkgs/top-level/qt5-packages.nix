@@ -275,6 +275,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   telepathy = callPackage ../development/libraries/telepathy/qt { };
 
+  trse = callPackage ../applications/editors/trse {};
+
   qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
   # Not a library, but we do want it to be built for every qt version there
