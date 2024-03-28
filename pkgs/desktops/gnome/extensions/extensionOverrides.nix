@@ -9,6 +9,7 @@
 , hddtemp
 , libgda
 , libgtop
+, libhandy
 , liquidctl
 , lm_sensors
 , netcat-gnu
@@ -47,9 +48,11 @@ super: lib.trivial.pipe super [
 
   (patchExtension "ddterm@amezin.github.com" (old: {
     nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
-    buildInputs = [ vte ];
+    buildInputs = [ vte libhandy ];
+    postPatch = ''
+      substituteInPlace "bin/com.github.amezin.ddterm" --replace-fail "/usr/bin/gjs" "${gjs}/bin/gjs"
+    '';
     postFixup = ''
-      substituteInPlace "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm" --replace "gjs" "${gjs}/bin/gjs"
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
     '';
   }))
