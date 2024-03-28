@@ -17,7 +17,7 @@ This significantly reduces the time needed to evaluate code in Nixpkgs, and allo
 
 For these reasons, the Nix built-in fetchers are not allowed in Nixpkgs code.
 
-The following table summarizes the differences:
+The following table summarises the differences:
 
 | Fetchers | Download | Output | Cache | Re-download when |
 |-|-|-|-|-|
