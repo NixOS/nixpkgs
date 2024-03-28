@@ -9,6 +9,7 @@
   draco,
   embree,
   fetchFromGitHub,
+  fetchpatch,
   flex,
   git,
   graphviz-nox,
@@ -48,13 +49,13 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "23.11";
+  version = "24.03";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5zQrfB14kXs75WbL3s4eyhxELglhLNxU2L2aVXiyVjg=";
+    hash = "sha256-EYf8GhXhsAx0Wxz9ibDZEV4E5scL3GPiu3Nje7N5C/I=";
   };
 
   stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
@@ -62,6 +63,14 @@ buildPythonPackage rec {
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   format = "other";
+
+  patches = [
+    (fetchpatch {
+      name = "port-to-embree-4.patch";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/pull/2266/commits/4b6c23d459c602fdac5e0ebc9b7722cbd5475e86.patch";
+      hash = "sha256-yjqdGAVqfEsOX1W/tG6c+GgQLYya5U9xgUe/sNIuDbw=";
+    })
+  ];
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -147,9 +156,6 @@ buildPythonPackage rec {
     ''
     + lib.optionalString withDocs ''
       mv $out/docs $doc
-    ''
-    + ''
-      rm $out/share -r # only examples
     '';
 
   meta = {
