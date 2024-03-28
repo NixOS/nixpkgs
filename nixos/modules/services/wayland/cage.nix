@@ -36,8 +36,18 @@ in {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
     defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
+    example = literalExpression ''
+      pkgs.writeShellScript "cage-program" '''
+        cd /home/''${user}
+        exec ''${pkgs.xterm}/bin/xterm
+      ''';
+    '';
     description = lib.mdDoc ''
       Program to run in cage.
+
+      By default, the program's working directory will be `/`. Since `/` is
+      owned by root, consider setting a more permissive directory to mitigate
+      permission issues.
     '';
   };
 
