@@ -37,6 +37,11 @@ buildPythonPackage rec {
     "deprecat"
   ];
 
+  disabledTestPaths = [
+    # https://github.com/mjhajharia/deprecat/issues/13
+    "tests/test_sphinx.py"
+  ];
+
   meta = with lib; {
     description = "Decorator to deprecate old python classes, functions or methods";
     homepage = "https://github.com/mjhajharia/deprecat";
