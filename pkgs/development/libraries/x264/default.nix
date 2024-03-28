@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isi686) "--enable-pic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
+  makeFlags = ["BASHCOMPLETIONSDIR=$(out)/share/bash-completion/completions" "install-bashcompletion" "install-lib-shared"];
+
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isx86 nasm;
 
   meta = with lib; {
