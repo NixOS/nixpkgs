@@ -7,7 +7,7 @@
 
 let
   majorVersion = "4";
-  minorVersion = "0";
+  minorVersion = "2";
   versionSuffix = "ga9";
 in stdenv.mkDerivation rec {
   pname = "x3270";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${version}-src.tgz";
-    sha256 = "0km24rgll0s4ji6iz8lvy5ra76ds162s95y33w5px6697cwqkp9j";
+    sha256 = "01i81lh8xbpz2nbj4hv2yfdh6mpv46jq6nb7b2c3w2pmhcvhq32z";
   };
 
   buildFlags = [ "unix" ];
@@ -34,6 +34,8 @@ in stdenv.mkDerivation rec {
     ncurses
     expat
   ];
+
+  installTargets = [ "install" "install.man" ];
 
   meta = with lib; {
     description = "IBM 3270 terminal emulator for the X Window System";
