@@ -1,0 +1,37 @@
+diff --git a/src/client/sound/qal.h b/src/client/sound/qal.h
+index deb2f01b..170a90d7 100644
+--- a/src/client/sound/qal.h
++++ b/src/client/sound/qal.h
+@@ -20,15 +20,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
+
+ #define AL_NO_PROTOTYPES
+
+-#ifdef __APPLE__
+-#include <OpenAL/al.h>
+-#include <OpenAL/alext.h>
+-#include <OpenAL/efx.h>
+-#else
+ #include <AL/al.h>
+ #include <AL/alext.h>
+ #include <AL/efx.h>
+-#endif
+
+ #ifndef QALAPI
+ #define QALAPI extern
+
+diff --git a/src/client/sound/qal.c b/src/client/sound/qal.c
+index ebe610ce..14930940 100644
+--- a/src/client/sound/qal.c
++++ b/src/client/sound/qal.c
+@@ -22,11 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
+ #include "common/common.h"
+ #include "common/files.h"
+
+-#ifdef __APPLE__
+-#include <OpenAL/alc.h>
+-#else
+ #include <AL/alc.h>
+-#endif
+
+ #define QALAPI
+ #include "qal.h"
