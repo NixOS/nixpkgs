@@ -1994,6 +1994,8 @@ with pkgs;
 
   ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
 
+  odmpy = python3Packages.callPackage ../tools/misc/odmpy { };
+
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
