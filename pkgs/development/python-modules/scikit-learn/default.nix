@@ -35,6 +35,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
+    numpy.blas
     pillow
     glibcLocales
   ] ++ lib.optionals stdenv.cc.isClang [
@@ -51,10 +52,6 @@ buildPythonPackage rec {
     scipy
     setuptools
     wheel
-  ];
-
-  propagatedBuildInputs = [
-    numpy.blas
   ];
 
   dependencies = [
