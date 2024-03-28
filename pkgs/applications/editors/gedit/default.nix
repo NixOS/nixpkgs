@@ -4,6 +4,7 @@
 , mesonEmulatorHook
 , fetchurl
 , python3
+, python3Packages
 , pkg-config
 , gtk3
 , gtk-mac-integration
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
+    python3Packages.wrapPython
     vala
     wrapGAppsHook
     gtk-doc
@@ -84,6 +86,16 @@ stdenv.mkDerivation rec {
 
   # Reliably fails to generate gedit-file-browser-enum-types.h in time
   enableParallelBuilding = false;
+
+  pythonPath = with python3Packages; [
+    # https://github.com/NixOS/nixpkgs/issues/298716
+    pycairo
+  ];
+
+  postFixup = ''
+    buildPythonPath "$pythonPath"
+    patchPythonScript $out/lib/gedit/plugins/snippets/document.py
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -204,6 +204,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
 
+    phpinsights = callPackage ../development/php-packages/phpinsights { };
+
     phpmd = callPackage ../development/php-packages/phpmd { };
 
     phpspy = callPackage ../development/php-packages/phpspy { };

@@ -32,6 +32,8 @@ self: super: {
 
     pg_ivm = super.callPackage ./pg_ivm.nix { };
 
+    pg_libversion = super.callPackage ./pg_libversion.nix { };
+
     pg_rational = super.callPackage ./pg_rational.nix { };
 
     pg_repack = super.callPackage ./pg_repack.nix { };
@@ -88,6 +90,8 @@ self: super: {
     pg_partman = super.callPackage ./pg_partman.nix { };
 
     pg_relusage = super.callPackage ./pg_relusage.nix { };
+
+    pg_roaringbitmap = super.callPackage ./pg_roaringbitmap.nix { };
 
     pg_safeupdate = super.callPackage ./pg_safeupdate.nix { };
 

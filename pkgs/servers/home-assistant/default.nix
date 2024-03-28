@@ -39,16 +39,6 @@ let
         };
       });
 
-      aioautomower = super.aioautomower.overridePythonAttrs (oldAttrs: rec {
-        version = "2024.2.10";
-        src = fetchFromGitHub {
-          owner = "Thomas55555";
-          repo = "aioautomower";
-          rev = "refs/tags/${version}";
-          hash = "sha256-NRcLyuU5FFIKJALUrx5iVSihzgO6ljqaqlhbs+y2E4Q=";
-        };
-      });
-
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -151,11 +141,26 @@ let
           inherit version;
           hash = "sha256-XHVdtkiG0ff/OY8g+W5iur7OAyhhk1UGA+XUfB2L8/o=";
         };
+        build-system = oldAttrs.build-system ++ (with self; [
+          pythonRelaxDepsHook
+        ]);
+        pythonRemoveDeps = [ "asyncio" ];
       });
 
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
         # tests are deadlocking too often
         # https://github.com/NixOS/nixpkgs/issues/262000
+        doCheck = false;
+      });
+
+      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.1";
+        src = fetchFromGitHub {
+          owner = "ndokter";
+          repo = "dsmr_parser";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-PULrKRHrCuDFZcR+5ha0PjkN438QFgf2CrpYhKIqYTs=";
+        };
         doCheck = false;
       });
 
@@ -536,7 +541,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.3.1";
+  hassVersion = "2024.3.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -554,13 +559,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-cvzoia2zzqXSDnPQdevfs73H4qITPBpEpzpFKM9jRKs=";
+    hash = "sha256-EutnNqENt1MTmbMe9vtSM+bM5PzvjsfMhpkwXdxWoeI=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-WK2PTTFDnQMwiXAtxjNOo9u5KVXWnqUXqd286hq0VEc=";
+    hash = "sha256-9i8snvozDKgvcEQfk9KTYfqHxQbDBluvArXYVVnNvnA=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -573,6 +578,7 @@ in python.pkgs.buildPythonApplication rec {
     "bcrypt"
     "ciso8601"
     "cryptography"
+    "hass-nabucasa"
     "httpx"
     "orjson"
     "pyopenssl"

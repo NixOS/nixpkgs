@@ -87,6 +87,7 @@ final: prev:
         pname = "luarocks-nix";
         src = /home/my_luarocks/repository;
       });
+    };
   };
 
   luaPackages = lua.pkgs;
@@ -154,7 +155,9 @@ You can develop your package as you usually would, just don't forget to wrap it
 within a `toLuaModule` call, for instance
 
 ```nix
-mynewlib = toLuaModule ( stdenv.mkDerivation { ... });
+{
+  mynewlib = toLuaModule ( stdenv.mkDerivation { /* ... */ });
+}
 ```
 
 There is also the `buildLuaPackage` function that can be used when lua modules
@@ -182,24 +185,26 @@ Each interpreter has the following attributes:
 The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-luarocks-package.nix`
 The following is an example:
 ```nix
-luaposix = buildLuarocksPackage {
-  pname = "luaposix";
-  version = "34.0.4-1";
+{
+  luaposix = buildLuarocksPackage {
+    pname = "luaposix";
+    version = "34.0.4-1";
 
-  src = fetchurl {
-    url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luaposix-34.0.4-1.src.rock";
-    hash = "sha256-4mLJG8n4m6y4Fqd0meUDfsOb9RHSR0qa/KD5KCwrNXs=";
-  };
-  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
-  propagatedBuildInputs = [ bit32 lua std_normalize ];
+    src = fetchurl {
+      url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luaposix-34.0.4-1.src.rock";
+      hash = "sha256-4mLJG8n4m6y4Fqd0meUDfsOb9RHSR0qa/KD5KCwrNXs=";
+    };
+    disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+    propagatedBuildInputs = [ bit32 lua std_normalize ];
 
-  meta = {
-    homepage = "https://github.com/luaposix/luaposix/";
-    description = "Lua bindings for POSIX";
-    maintainers = with lib.maintainers; [ vyp lblasc ];
-    license.fullName = "MIT/X11";
+    meta = {
+      homepage = "https://github.com/luaposix/luaposix/";
+      description = "Lua bindings for POSIX";
+      maintainers = with lib.maintainers; [ vyp lblasc ];
+      license.fullName = "MIT/X11";
+    };
   };
-};
+}
 ```
 
 The `buildLuarocksPackage` delegates most tasks to luarocks:

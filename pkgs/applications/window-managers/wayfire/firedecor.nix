@@ -5,17 +5,13 @@
 , ninja
 , pkg-config
 , boost
-, cairo
 , glib
 , libGL
 , libinput
 , librsvg
 , libxkbcommon
-, pango
 , udev
 , wayfire
-, wayland
-, wf-config
 , xcbutilwm
 , mate
 }:
@@ -39,17 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    cairo
     glib
     libGL
     libinput
     librsvg
     libxkbcommon
-    pango
     udev
     wayfire
-    wayland
-    wf-config
     xcbutilwm
   ];
 

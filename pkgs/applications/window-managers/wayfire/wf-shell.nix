@@ -6,7 +6,6 @@
 , pkg-config
 , wayland-scanner
 , wayfire
-, wf-config
 , alsa-lib
 , gtkmm3
 , gtk-layer-shell
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayfire
-    wf-config
     alsa-lib
     gtkmm3
     gtk-layer-shell

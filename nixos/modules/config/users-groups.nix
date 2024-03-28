@@ -496,6 +496,7 @@ let
     in
       filter types.shellPackage.check shells;
 
+  lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
 in {
   imports = [
     (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
@@ -695,24 +696,31 @@ in {
       '';
     } else ""; # keep around for backwards compatibility
 
-    system.activationScripts.update-lingering = let
-      lingerDir = "/var/lib/systemd/linger";
-      lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
-      lingeringUsersFile = builtins.toFile "lingering-users"
-        (concatStrings (map (s: "${s}\n")
-          (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
-    in stringAfter [ "users" ] ''
-      if [ -e ${lingerDir} ] ; then
+    systemd.services.linger-users = lib.mkIf ((builtins.length lingeringUsers) > 0) {
+      wantedBy = ["multi-user.target"];
+      after = ["systemd-logind.service"];
+      requires = ["systemd-logind.service"];
+
+      script = let
+        lingerDir = "/var/lib/systemd/linger";
+        lingeringUsersFile = builtins.toFile "lingering-users"
+          (concatStrings (map (s: "${s}\n")
+            (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
+      in ''
+        mkdir -vp ${lingerDir}
         cd ${lingerDir}
-        for user in ${lingerDir}/*; do
-          if ! id "$user" >/dev/null 2>&1; then
+        for user in $(ls); do
+          if ! id "$user" >/dev/null; then
+            echo "Removing linger for missing user $user"
             rm --force -- "$user"
           fi
         done
-        ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
-        ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
-      fi
-    '';
+        ls | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
+        ls | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
+      '';
+
+      serviceConfig.Type = "oneshot";
+    };
 
     # Warn about user accounts with deprecated password hashing schemes
     # This does not work when the users and groups are created by

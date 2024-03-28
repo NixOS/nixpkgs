@@ -2,10 +2,16 @@
 , buildPythonPackage
 , fetchFromGitHub
 
+, pytestCheckHook
+
 , pythonOlder
 
 , setuptools
 , cython_3
+
+, symspellpy
+, numpy
+, editdistpy
 }:
 
 buildPythonPackage rec {
@@ -27,8 +33,26 @@ buildPythonPackage rec {
     cython_3
   ];
 
-  # for tests need symspellpy package, symspellpy is not in nixpkgs...
+  # error: infinite recursion encountered
   doCheck = false;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    symspellpy
+    numpy
+  ];
+
+  preCheck = ''
+    rm -r editdistpy
+  '';
+
+  passthru.tests = {
+    check = editdistpy.overridePythonAttrs (
+      _: {
+        doCheck = true;
+      }
+    );
+  };
 
   pythonImportsCheck = [
     "editdistpy"

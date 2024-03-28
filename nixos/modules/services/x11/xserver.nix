@@ -303,7 +303,7 @@ in
         type = types.listOf types.str;
         default = [ "modesetting" "fbdev" ];
         example = [
-          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nvidia"
           "amdgpu-pro"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things

@@ -21,11 +21,11 @@ let
         inherit pname version hash;
       };
 
-      nativeBuildInputs = [
+      build-system = [
         setuptools
       ];
 
-      propagatedBuildInputs = [
+      dependencies = [
         boto3
       ] ++ lib.optionals (pythonOlder "3.12") [
         typing-extensions
@@ -159,7 +159,7 @@ rec {
 
   mypy-boto3-cloudwatch = buildMypyBoto3Package "cloudwatch" "1.34.40" "sha256-M/C3Rzie5dcv6TGVl7ilI5WiT1uYFrCGL+7Fga+xSLw=";
 
-  mypy-boto3-codeartifact = buildMypyBoto3Package "codeartifact" "1.34.0" "sha256-iUgoanqMSyxRopVctyFLiu+otFSgRvdgQPw4mKX3QIk=";
+  mypy-boto3-codeartifact = buildMypyBoto3Package "codeartifact" "1.34.68" "sha256-Ey0cmx0OxN1/VXIyvn0EOBP9qYIuc/XyFVZniHLaNEY=";
 
   mypy-boto3-codebuild = buildMypyBoto3Package "codebuild" "1.34.67" "sha256-Kvd8zAHfepA4dulpiQCaT2pfKCH567d6CYd5QlweXIY=";
 
@@ -295,7 +295,7 @@ rec {
 
   mypy-boto3-finspace-data = buildMypyBoto3Package "finspace-data" "1.34.0" "sha256-8mND5BbdKY5srFwdpxSyfCUTIP4fa9hztP4daUJOB8k=";
 
-  mypy-boto3-firehose = buildMypyBoto3Package "firehose" "1.34.46" "sha256-Fgs7wrwKPK79cYduCR/RYQ2FEZvghDuWI1hXKzFLfJo=";
+  mypy-boto3-firehose = buildMypyBoto3Package "firehose" "1.34.69" "sha256-GCMH/XA9ETSuo39OnlvyhfHDKylsTeLO1R1+7tl2S/E=";
 
   mypy-boto3-fis = buildMypyBoto3Package "fis" "1.34.63" "sha256-TJnzgQGDcybpVqg+p7Tuvw/RoY79cQPPChyHWlMxhiY=";
 
@@ -393,7 +393,7 @@ rec {
 
   mypy-boto3-kafkaconnect = buildMypyBoto3Package "kafkaconnect" "1.34.50" "sha256-frPPAQeFyO92uMqqzBcSC3MVK4V4hbdO9tx4awAKAUU=";
 
-  mypy-boto3-kendra = buildMypyBoto3Package "kendra" "1.34.0" "sha256-j1fph9WwqBns2BpZjoKTpXC9gUJ4lu+poPBV6LIOusM=";
+  mypy-boto3-kendra = buildMypyBoto3Package "kendra" "1.34.69" "sha256-OKUSsCfv2X9ad5XUSwm0KRwW++qb+AVtvCOurlRM/bo=";
 
   mypy-boto3-kendra-ranking = buildMypyBoto3Package "kendra-ranking" "1.34.0" "sha256-hbemz5ECtfP3oi645lZT7CCx31yg8MNqbAD32Am6l1U=";
 
@@ -565,7 +565,7 @@ rec {
 
   mypy-boto3-polly = buildMypyBoto3Package "polly" "1.34.43" "sha256-rx5sW32N6H47fpy5yGvwlKKVKS/uIKOtLfsjoGoNPJg=";
 
-  mypy-boto3-pricing = buildMypyBoto3Package "pricing" "1.34.39" "sha256-SdIK9pWjyY6rcK9Kak5r66hP6tc/OVp+gQ9wo7HKVms=";
+  mypy-boto3-pricing = buildMypyBoto3Package "pricing" "1.34.69" "sha256-0+bak3+4FQK0vAjI1r7uKvhwspZxt/zLCJRVMvH41qs=";
 
   mypy-boto3-privatenetworks = buildMypyBoto3Package "privatenetworks" "1.34.0" "sha256-WFX0KaJRo0LCPKEAq8LES0P3WJkt6ywLXqTlOFZyZ1w=";
 
@@ -603,7 +603,7 @@ rec {
 
   mypy-boto3-robomaker = buildMypyBoto3Package "robomaker" "1.34.0" "sha256-dAL2P2bxhSc5oLZXhhekrt9y4bWXg7kIr+/FVbkFTww=";
 
-  mypy-boto3-rolesanywhere = buildMypyBoto3Package "rolesanywhere" "1.34.0" "sha256-U/j/u6pqoHpfNP3GbQ8SZb+qIL842ZcwwdBr1QQhlj0=";
+  mypy-boto3-rolesanywhere = buildMypyBoto3Package "rolesanywhere" "1.34.69" "sha256-wuPEIXHDNvPOWIKLRx5ZR/SgQaWEYqA+IHNR3NZDhIs=";
 
   mypy-boto3-route53 = buildMypyBoto3Package "route53" "1.34.31" "sha256-MtmEtt57vhFRG1O+VnFXFUhSWAQ7JrnV3hBZx4TpOh8=";
 
@@ -649,7 +649,7 @@ rec {
 
   mypy-boto3-secretsmanager = buildMypyBoto3Package "secretsmanager" "1.34.63" "sha256-oZM3PXGPdH1Th4tcx/7y6bj944kuR4isaQ/SsWo1Vkw=";
 
-  mypy-boto3-securityhub = buildMypyBoto3Package "securityhub" "1.34.20" "sha256-EcLY5SXSN2kJEuo8s2sYJJfq/X78BM1msyI9TfYD7Xw=";
+  mypy-boto3-securityhub = buildMypyBoto3Package "securityhub" "1.34.69" "sha256-2fJx1VaOhYSjTXAEboBhHhMdTH697zcGHmrJsGknDTI=";
 
   mypy-boto3-securitylake = buildMypyBoto3Package "securitylake" "1.34.53" "sha256-O/RHRoeUYT5DerEXIQ1NL288bcgA6bGdI29sN7WoQac=";
 

@@ -1,11 +1,17 @@
-{ lib, stdenv, skawarePackages, targetPackages }:
+{ lib, stdenv, skawarePackages, targetPackages, skalibs, execline, s6 }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6-rc";
   version = "0.5.4.2";
   sha256 = "AL36WW+nFhUS6XLskoKiq9j9DjHwkXe616K8PY8oOYI=";
+
+  manpages = skawarePackages.buildManPages {
+    pname = "s6-rc-man-pages";
+    version = "0.5.4.2.1";
+    sha256 = "Ywke3FG/xhhUd934auDB+iFRDCvy8IJs6IkirP6O/As=";
+    description = "mdoc(7) versions of the documentation for the s6-rc service manager";
+    maintainers = [ lib.maintainers.qyliss ];
+  };
 
   description = "A service manager for s6-based systems";
   platforms = lib.platforms.unix;

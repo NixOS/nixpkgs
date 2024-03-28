@@ -92,6 +92,7 @@ buildDunePackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
+}
 ```
 
 Here is a second example, this time using a source archive generated with `dune-release`. It is a good idea to use this archive when it is available as it will usually contain substituted variables such as a `%%VERSION%%` field. This library does not depend on any other OCaml library and no tests are run after building it.

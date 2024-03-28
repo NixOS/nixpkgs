@@ -4,6 +4,7 @@
 
 , autoPatchelfHook
 , dpkg
+, makeBinaryWrapper
 , makeWrapper
 , undmg
 , wrapGAppsHook
@@ -51,13 +52,13 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg makeBinaryWrapper ];
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out/Applications $out/bin
       cp -r spotube.app $out/Applications
-      ln -s $out/Applications/spotube.app/Contents/MacOS/spotube $out/bin/spotube
+      makeBinaryWrapper $out/Applications/spotube.app/Contents/MacOS/spotube $out/bin/spotube
       runHook postInstall
     '';
   };

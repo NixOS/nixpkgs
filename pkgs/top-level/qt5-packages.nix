@@ -251,7 +251,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
+    qt6Kvantum = pkgs.qt6Packages.qtstyleplugin-kvantum;
+  };
 
   quazip = callPackage ../development/libraries/quazip { };
 

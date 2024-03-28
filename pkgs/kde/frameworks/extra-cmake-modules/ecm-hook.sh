@@ -6,7 +6,7 @@ ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
 }
-addEnvHooks "$targetOffset" ecmEnvHook
+addEnvHooks "$hostOffset" ecmEnvHook
 
 ecmPostHook() {
     # Because we need to use absolute paths here, we must set *all* the paths.
@@ -125,4 +125,4 @@ ecmHostPathHook() {
         propagatedUserEnvPkgs+=" $1"
     fi
 }
-addEnvHooks "$targetOffset" ecmHostPathHook
+addEnvHooks "$hostOffset" ecmHostPathHook
