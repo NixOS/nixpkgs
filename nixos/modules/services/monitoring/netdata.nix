@@ -13,6 +13,9 @@ let
     ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
     ln -s /run/wrappers/bin/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
+    ln -s /run/wrappers/bin/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
+    ln -s /run/wrappers/bin/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
+    ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
   '';
 
   plugins = [
@@ -89,6 +92,14 @@ in {
           default = true;
           description = lib.mdDoc ''
             Whether to enable python-based plugins
+          '';
+        };
+        recommendedPythonPackages = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc ''
+            Whether to enable a set of recommended Python plugins
+            by installing extra Python packages.
           '';
         };
         extraPackages = mkOption {
@@ -203,12 +214,26 @@ in {
         }
       ];
 
+    # Includes a set of recommended Python plugins in exchange of imperfect disk consumption.
+    services.netdata.python.extraPackages = lib.mkIf cfg.python.recommendedPythonPackages (ps: [
+      ps.requests
+      ps.pandas
+      ps.numpy
+      ps.psycopg2
+      ps.python-ldap
+      ps.netdata-pandas
+      ps.changefinder
+    ]);
+
+    services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 
     systemd.services.netdata = {
       description = "Real time performance monitoring";
-      after = [ "network.target" ];
+      after = [ "network.target" "suid-sgid-wrappers.service" ];
+      # No wrapper means no "useful" netdata.
+      requires = [ "suid-sgid-wrappers.service" ];
       wantedBy = [ "multi-user.target" ];
       path = (with pkgs; [
           curl
@@ -217,6 +242,10 @@ in {
           which
           procps
           bash
+          nvme-cli # for go.d
+          iw # for charts.d
+          apcupsd # for charts.d
+          # TODO: firehol # for FireQoS -- this requires more NixOS module support.
           util-linux # provides logger command; required for syslog health alarms
       ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
@@ -312,6 +341,14 @@ in {
         permissions = "u+rx,g+x,o-rwx";
       };
 
+      "debugfs.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/debugfs.plugin.org";
+        capabilities = "cap_dac_read_search+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+
       "cgroup-network" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/cgroup-network.org";
         capabilities = "cap_setuid+ep";
@@ -336,6 +373,14 @@ in {
         permissions = "u+rx,g+x,o-rwx";
       };
 
+      "logs-management.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/logs-management.plugin.org";
+        capabilities = "cap_dac_read_search,cap_syslog+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+
       "slabinfo.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
         capabilities = "cap_dac_override+ep";
@@ -348,6 +393,14 @@ in {
       "freeipmi.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
         capabilities = "cap_dac_override,cap_fowner+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+    } // optionalAttrs (cfg.package.withNetworkViewer) {
+      "network-viewer.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/network-viewer.plugin.org";
+        capabilities = "cap_sys_admin,cap_dac_read_search,cap_sys_ptrace+ep";
         owner = cfg.user;
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
