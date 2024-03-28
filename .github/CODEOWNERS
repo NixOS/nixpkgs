@@ -159,7 +159,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @RaitoBezarius
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -203,10 +202,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
-
-# Linux kernel
-/pkgs/os-specific/linux/kernel    @raitobezarius
-/pkgs/top-level/linux-kernels.nix @raitobezarius
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix @joachifm
