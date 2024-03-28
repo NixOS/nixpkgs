@@ -11413,6 +11413,8 @@ self: super: with self; {
       setuptools sip;
   };
 
+  pyqtdarktheme = callPackage ../development/python-modules/pyqtdarktheme { };
+
   pyqtdatavisualization = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtdatavisualization {
     inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
       setuptools sip;
