@@ -150,7 +150,10 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
-  hiprand = rocrand; # rocrand includes hiprand
+  hiprand = callPackage ./hiprand {
+    inherit rocmUpdateScript rocm-cmake clr rocrand;
+    stdenv = llvm.rocmClangStdenv;
+  };
 
   rocfft = callPackage ./rocfft {
     inherit rocmUpdateScript rocm-cmake rocrand rocfft clr;
