@@ -9,6 +9,7 @@
 , openssl
 , zlib
 , cmake
+, gitUpdater
 , python3
 , perl
 , snappy
@@ -28,11 +29,13 @@ let
     if targetArchitecture == null
     then defaultTargetArchitecture
     else targetArchitecture;
+
+  version = "3.10.5.2";
 in
 
-gcc10Stdenv.mkDerivation rec {
+gcc10Stdenv.mkDerivation {
   pname = "arangodb";
-  version = "3.10.5.2";
+  inherit version;
 
   src = fetchFromGitHub {
     repo = "arangodb";
@@ -74,6 +77,10 @@ gcc10Stdenv.mkDerivation rec {
     "-DASM_OPTIMIZATIONS=ON"
     "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://www.arangodb.com";
