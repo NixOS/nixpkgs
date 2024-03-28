@@ -6100,6 +6100,8 @@ with pkgs;
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
+  online-judge-verify-helper = python3.pkgs.callPackage ../tools/misc/online-judge-verify-helper { };
+
   onnxruntime = callPackage ../development/libraries/onnxruntime {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
