@@ -95,5 +95,6 @@ buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
     platforms = [ "x86_64-linux" ] ++ optionals (!cudaSupport) [ "x86_64-darwin" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
