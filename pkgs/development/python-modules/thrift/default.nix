@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "thrift";
-  version = "0.16.0";
+  version = "0.20.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K1tkiPze0h+dMSqiPJ/2oBldD2ribdvVrZ4+Jd/BRAg=";
+    hash = "sha256-TdZi6t9riuvopBcpUnvWmt9s6qKoaBy+9k0Sc7Po/ro=";
   };
 
   propagatedBuildInputs = [ six ];
