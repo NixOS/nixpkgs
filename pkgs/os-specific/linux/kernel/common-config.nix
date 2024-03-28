@@ -132,7 +132,7 @@ let
       DAMON_VADDR = whenAtLeast "5.15" yes;
       DAMON_PADDR = whenAtLeast "5.16" yes;
       DAMON_SYSFS = whenAtLeast "5.18" yes;
-      DAMON_DBGFS = whenAtLeast "5.15" yes;
+      DAMON_DBGFS = whenBetween "5.15" "6.9" yes;
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
     };
@@ -452,7 +452,7 @@ let
       EXT4_FS_SECURITY  = yes;
       EXT4_ENCRYPTION   = whenOlder "5.1" yes;
 
-      NTFS_FS            = whenAtLeast "5.15" no;
+      NTFS_FS            = whenBetween "5.15" "6.9" no;
       NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
