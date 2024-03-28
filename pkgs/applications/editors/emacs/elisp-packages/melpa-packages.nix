@@ -730,6 +730,16 @@ let
             '';
           })
           else super.osx-dictionary;
+
+        # Lsp-mode may be built with plists instead of hash-tables for
+        # deserialisation. For this to work, however, the appropriate
+        # environment variable needs to be set at byte-compile-time.
+        lsp-mode = pkgs.callPackage ({ withPlists ? false }:
+          super.lsp-mode.overrideAttrs(old: {
+            buildPhase = (if withPlists then ''
+              export LSP_USE_PLISTS=true
+            '' else "") + (old.buildPhase or "");
+          })) { };
       };
 
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
