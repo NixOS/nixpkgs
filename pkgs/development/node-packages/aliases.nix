@@ -6,8 +6,6 @@ pkgs: lib: self: super:
 ### Use `./remove-attr.py [attrname]` in this directory to remove your alias
 ### from the `nodePackages` set without regenerating the entire file.
 
-with self;
-
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
@@ -100,7 +98,7 @@ mapAliases {
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   karma = pkgs.karma-runner; # added 2023-07-29
-  leetcode-cli = vsc-leetcode-cli; # added 2023-08-31
+  leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   manta = pkgs.node-manta; # Added 2023-05-06
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
@@ -112,7 +110,7 @@ mapAliases {
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
-  parcel-bundler = parcel; # added 2023-09-04
+  parcel-bundler = self.parcel; # added 2023-09-04
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
