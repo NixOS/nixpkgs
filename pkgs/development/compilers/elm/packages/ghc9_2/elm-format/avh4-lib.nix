@@ -12,7 +12,6 @@ mkDerivation {
     fetchSubmodules = true;
   };
   postUnpack = "sourceRoot+=/avh4-lib; echo source root reset to $sourceRoot";
-  configureFlags = [ "--ghc-option=-Wno-error=unused-packages" ];
   libraryHaskellDepends = [
     array base bytestring directory filepath mtl pooled-io process
     relude text
@@ -22,7 +21,6 @@ mkDerivation {
     relude tasty tasty-hspec tasty-hunit text
   ];
   testToolDepends = [ tasty-discover ];
-  doHaddock = false;
   description = "Common code for haskell projects";
   license = lib.licenses.bsd3;
 }

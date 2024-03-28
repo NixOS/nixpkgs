@@ -17,12 +17,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256:nlpxlPzWk3wwDgczuMI9T6DFY1YtQpQ1R4BhdPbzZBs=";
   };
 
-  cargoPatches = [ ./elm-json.patch ];
+  cargoPatches = [ ./use-system-ssl.patch ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    curl openssl
+    curl
+    openssl
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   cargoSha256 = "sha256:8SOpL8nfhYen9vza0LYpB/5fgVmBwG7vGMmFOaJskIc=";

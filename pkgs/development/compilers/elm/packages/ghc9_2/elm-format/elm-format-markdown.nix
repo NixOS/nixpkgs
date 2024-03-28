@@ -10,7 +10,6 @@ mkDerivation {
   };
   postUnpack = "sourceRoot+=/elm-format-markdown; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [ base containers mtl text ];
-  doHaddock = false;
   description = "Markdown parsing for Elm documentation comments";
   license = lib.licenses.bsd3;
 }
