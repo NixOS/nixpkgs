@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://cadsondemak.github.io/${pname}/";
+    homepage = "https://cadsondemak.github.io/Sarabun/";
     description = "A slightly-condensed looped Thai and sans serif Latin typeface for communications";
     longDescription = ''
       The most popular typeface from the 13 fonts from SIPA Thailand’s National
