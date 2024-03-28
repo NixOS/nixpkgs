@@ -3676,6 +3676,10 @@ with pkgs;
 
   crcpp = callPackage ../development/libraries/crcpp { };
 
+  cloneit = callPackage ../tools/misc/cloneit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   cudd = callPackage ../development/libraries/cudd { };
 
   cue = callPackage ../development/tools/cue { };
