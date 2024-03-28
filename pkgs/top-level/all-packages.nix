@@ -19116,6 +19116,8 @@ with pkgs;
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
+  ida-free = callPackage ../development/tools/analysis/ida-free { };
+
   ikos = callPackage ../development/tools/analysis/ikos {
     inherit (llvmPackages_14) stdenv clang llvm;
     tbb = tbb_2021_8;
