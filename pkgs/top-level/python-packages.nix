@@ -12049,6 +12049,8 @@ self: super: with self; {
 
   python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
 
+  python3-msrplib = callPackage ../development/python-modules/python3-msrplib { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-arango = callPackage ../development/python-modules/python-arango { };
