@@ -1,0 +1,26 @@
+--- a/gegl/gegl-config.c	2023-03-26 14:19:28.000000000 +0100
++++ b/gegl/gegl-config.c	2023-05-07 13:18:51.971220727 +0100
+@@ -322,13 +322,7 @@
+     mem_available = (uint64_t) sysconf (_SC_AVPHYS_PAGES) * sysconf (_SC_PAGESIZE);
+ #endif
+ 
+-    default_tile_cache_size = mem_total;
+-    if (default_tile_cache_size > mem_available)
+-    {
+-      default_tile_cache_size = mem_available;
+-    }
+-    if (default_tile_cache_size < mem_min)
+-      default_tile_cache_size = mem_min;
++    default_tile_cache_size = 1024 * 1024 * 1024;
+ 
+   g_object_class_install_property (gobject_class, PROP_TILE_CACHE_SIZE,
+                                    g_param_spec_uint64 ("tile-cache-size",
+@@ -380,7 +374,7 @@
+                                                      "Number of threads",
+                                                      "Number of concurrent evaluation threads",
+                                                      0, GEGL_MAX_THREADS,
+-                                                     _gegl_threads,
++                                                     1,
+                                                      G_PARAM_READWRITE |
+                                                      G_PARAM_STATIC_STRINGS |
+                                                      G_PARAM_CONSTRUCT));
