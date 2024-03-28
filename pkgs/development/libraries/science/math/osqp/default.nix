@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  patches = [
+    # Fix header path including prefix twice.
+    # https://github.com/osqp/osqp/pull/481
+    ./fix-cmake-header-path.diff
+  ];
+
   meta = with lib; {
     description = "A quadratic programming solver using operator splitting";
     homepage = "https://osqp.org";
