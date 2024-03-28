@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     mainProgram = "glas";
-    maintainers = with lib.maintainers; [ payas ];
+    maintainers = with lib.maintainers; [ bhankas ];
   };
 }
