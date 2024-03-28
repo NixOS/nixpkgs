@@ -1,0 +1,25 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 94da456..b959d0c 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1486,7 +1486,7 @@ checksum = "f91339c0467de62360649f8d3e185ca8de4224ff281f66000de5eb2a77a79041"
+ 
+ [[package]]
+ name = "scaphandre"
+-version = "0.5.0"
++version = "1.0.0"
+ dependencies = [
+  "chrono",
+  "clap",
+diff --git a/Cargo.toml b/Cargo.toml
+index 2074d40..76161b1 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "scaphandre"
+-version = "0.5.0"
++version = "1.0.0"
+ authors = ["Benoit Petit <bpetit@hubblo.org>"]
+ edition = "2021"
+ license = "Apache-2.0"
