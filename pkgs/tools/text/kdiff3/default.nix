@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    ln -s "$out/Applications/KDE/kdiff3.app/Contents/MacOS" "$out/bin"
+  '';
+
   buildInputs = [ boost kconfig kcrash kinit kparts kiconthemes ];
 
   cmakeFlags = [ "-Wno-dev" ];
@@ -33,6 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://invent.kde.org/sdk/kdiff3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 })
