@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, nix-update-script
+, nixosTests
 }:
 buildGoModule rec {
   pname = "juicity";
@@ -36,6 +38,11 @@ buildGoModule rec {
     substituteInPlace $out/lib/systemd/system/juicity-client.service \
       --replace /usr/bin/juicity-client $out/bin/juicity-client
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) juicity; };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/juicity/juicity";

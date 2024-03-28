@@ -444,6 +444,7 @@ in {
   jirafeau = handleTest ./jirafeau.nix {};
   jitsi-meet = handleTest ./jitsi-meet.nix {};
   jool = import ./jool.nix { inherit pkgs runTest; };
+  juicity = handleTest ./juicity.nix {};
   k3s = handleTest ./k3s {};
   kafka = handleTest ./kafka.nix {};
   kanidm = handleTest ./kanidm.nix {};
