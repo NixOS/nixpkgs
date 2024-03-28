@@ -13,8 +13,10 @@
   libsamplerate,
   cdrdao,
   cdrtools,
+  cdparanoia,
   dvdplusrwtools,
   libburn,
+  libdvdcss,
   normalize,
   sox,
   transcode,
@@ -50,5 +52,10 @@ mkKdeDerivation {
       flac
     ]}"
   ];
+
+  postFixup = ''
+    patchelf $out/lib/libk3blib.so --add-rpath "${lib.makeLibraryPath [ cdparanoia libdvdcss ]}"
+  '';
+
   meta.mainProgram = "k3b";
 }
