@@ -1,0 +1,31 @@
+{
+  "version": "4.3.0",
+  "aarch64-darwin": {
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.0/html-report-4.3.0-darwin.arm64.zip",
+    "hash": "sha256-WAIzDTYdFMmUhC5BJ10kiEWlmQJ9flXevrKzG+WB2DU="
+  },
+  "aarch64-linux": {
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.0/html-report-4.3.0-linux.arm64.zip",
+    "hash": "sha256-NuhFQqs0mSBNlBDG/ypz6Y/ufkNGAmT7jD3vxFg+/Jk="
+  },
+  "i386-windows": {
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.0/html-report-4.3.0-windows.x86.zip",
+    "hash": "sha256-EFahV2LoWzwteUg4VqvqcaPW0DmXKojUTWI3anOYjiQ="
+  },
+  "i686-linux": {
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.0/html-report-4.3.0-linux.x86.zip",
+    "hash": "sha256-KKCPs1eQOqVtXrSVRiSDyNjHYpmwKgrwElF5YhzFmHA="
+  },
+  "x86_64-darwin": {
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.0/html-report-4.3.0-darwin.x86_64.zip",
+    "hash": "sha256-R7eoVnr6362fUij/nu4ep5mBYce6gDg5K4ytQ9pXfLs="
+  },
+  "x86_64-linux": {
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.0/html-report-4.3.0-linux.x86_64.zip",
+    "hash": "sha256-JqnpcLqGQ7KczitWSS8UceKrpeIB4NUpiZhCrwOE1BU="
+  },
+  "x86_64-windows": {
+    "url": "https://github.com/getgauge/html-report/releases/download/v4.3.0/html-report-4.3.0-windows.x86_64.zip",
+    "hash": "sha256-4s+uTQCeWvRCpyTIaElk/0HcVCbIzZVLU66YjObMvJw="
+  }
+}
