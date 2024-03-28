@@ -1,14 +1,15 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# propgatedBuildInputs
 , adal
+, buildPythonPackage
 , certifi
+, fetchFromGitHub
 , google-auth
+, mock
+, pytestCheckHook
 , python-dateutil
+, pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , requests
 , requests-oauthlib
@@ -16,16 +17,12 @@
 , six
 , urllib3
 , websocket-client
-
-# tests
-, pytestCheckHook
-, mock
 }:
 
 buildPythonPackage rec {
   pname = "kubernetes";
   version = "28.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -37,23 +34,36 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace ./kubernetes/base/config/kube_config_test.py \
-      --replace-fail assertEquals assertEqual
+    substituteInPlace kubernetes/base/config/kube_config_test.py \
+      --replace-fail "assertEquals" "assertEqual"
   '';
 
-  propagatedBuildInputs = [
-    adal
+  pythonRelaxDeps = [
+    "urllib3"
+  ];
+
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     certifi
     google-auth
     python-dateutil
     pyyaml
     requests
     requests-oauthlib
-    setuptools
     six
     urllib3
     websocket-client
   ];
+
+  passthru.optional-dependencies = {
+    adal = [
+      adal
+    ];
+  };
 
   pythonImportsCheck = [
     "kubernetes"
@@ -62,7 +72,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # AssertionError: <class 'urllib3.poolmanager.ProxyManager'> != <class 'urllib3.poolmanager.Poolmanager'>
@@ -72,6 +82,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
+    changelog = "https://github.com/kubernetes-client/python/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lsix ];
   };
