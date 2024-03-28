@@ -11,13 +11,7 @@ let
 
   stage2 = writeShellApplication {
     name = "mplab_ide-wrapper";
-    runtimeInputs = [
-      execline
-      fuse-overlayfs
-      rsync
-
-      microchip-xc16
-    ];
+    runtimeInputs = [ execline fuse-overlayfs rsync ];
     text = ''
       # Make the rt directory, isolated from the host filesystem.
       rt="$XDG_RUNTIME_DIR/mplab-x"
@@ -25,11 +19,16 @@ let
       mount -t tmpfs mplab-x-wrapper "$rt"
 
       # Make and populate the overlay subdirectory.
-      mkdir -p "$rt/overlay/opt"
+      mkdir -p "$rt/overlay/opt/microchip"
       rsync -rlp ${fhsEnv.fhsenv}/             "$rt/overlay/"
       rsync -rlp ${mplab-x-unwrapped}/etc/     "$rt/overlay/etc/"
-      ln -s ${mplab-x-unwrapped}/opt/microchip "$rt/overlay/opt/microchip"
       ln -s "$HOME"                            "$rt/overlay/root"
+      for f in ${mplab-x-unwrapped}/opt/microchip/*; do
+        ln -s "$f" "$rt/overlay/opt/microchip/"
+      done
+
+      mkdir "$rt/overlay/opt/microchip/xc16"
+      ln -s ${microchip-xc16} "$rt/overlay/opt/microchip/xc16/v${microchip-xc16.version}"
 
       # Make and mount (with FUSE) the newroot subdirectory.
       mkdir "$rt/newroot"
