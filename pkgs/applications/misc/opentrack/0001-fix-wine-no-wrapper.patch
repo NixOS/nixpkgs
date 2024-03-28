@@ -1,0 +1,24 @@
+From d501d7e0b237ed0c305525788b423d842ffa356d Mon Sep 17 00:00:00 2001
+From: Francesco Zanini <francesco@zanini.me>
+Date: Mon, 13 Nov 2023 08:59:42 +0100
+Subject: [PATCH] Fix build for wine without wrapper
+
+`connected_game` is only declared in a specific configuration.
+---
+ proto-wine/ftnoir_protocol_wine.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/proto-wine/ftnoir_protocol_wine.cpp b/proto-wine/ftnoir_protocol_wine.cpp
+index 75526c54a..c44cfc43b 100644
+--- a/proto-wine/ftnoir_protocol_wine.cpp
++++ b/proto-wine/ftnoir_protocol_wine.cpp
+@@ -137,7 +137,9 @@ module_status wine::initialize()
+         qDebug() << "proto/wine: shm success";
+ 
+         // display "waiting for game message" (overwritten once a game is detected)
++#ifndef OTR_WINE_NO_WRAPPER
+         connected_game = "waiting for game...";
++#endif
+     }
+     else {
+         qDebug() << "proto/wine: shm no success";
