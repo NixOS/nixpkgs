@@ -34,14 +34,10 @@ buildGoModule rec {
       --zsh <($out/bin/cue completion zsh)
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/cue eval - <<<'a: "all good"' > /dev/null
-  '';
-
   passthru = {
     write-cue-validator = callPackage ./write-cue-validator.nix { };
     tests = {
+      test-001-all-good = callPackage ./tests/001-all-good.nix { };
       version = testers.testVersion {
         package = cue;
         command = "cue version";
