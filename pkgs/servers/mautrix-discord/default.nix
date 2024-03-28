@@ -4,6 +4,7 @@
 , olm
 , nix-update-script
 , testers
+, nixosTests
 , mautrix-discord
 }:
 
@@ -29,8 +30,11 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = mautrix-discord;
+    tests = {
+      mautrix-discord = nixosTests.mautrix-discord;
+      version = testers.testVersion {
+        package = mautrix-discord;
+      };
     };
   };
 
@@ -39,7 +43,7 @@ buildGoModule rec {
     homepage = "https://github.com/mautrix/discord";
     changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ MoritzBoehme ];
+    maintainers = with maintainers; [ MoritzBoehme robin ];
     mainProgram = "mautrix-discord";
   };
 }
