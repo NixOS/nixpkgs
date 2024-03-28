@@ -24,6 +24,7 @@
 , pyvex
 , rich
 , rpyc
+, setuptools
 , sortedcontainers
 , sqlalchemy
 , sympy
@@ -44,7 +45,11 @@ buildPythonPackage rec {
     hash = "sha256-qav9SUvQtcEad9lvgyrMhOcFhPAhzU/9s7ekTfohqRc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ailment
     archinfo
     cachetools
