@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: ({
   pname = "gettext";
-  version = "0.22";
+  version = "0.22.1";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/gettext-${finalAttrs.version}.tar.gz";
-    hash = "sha256-SfCJvhG0kBcLvwntL1Hl9Rd/Vb5MxmUEpYYYIOD7Bqs=";
+    hash = "sha256-5QmVOYjotLPmRW+q2prpDudLCbRC6wbLfL4Ilhf7rYU=";
   };
 
   patches = [
