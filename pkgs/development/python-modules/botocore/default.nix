@@ -28,16 +28,22 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jmespath
     python-dateutil
     urllib3
   ];
+
+  passthru.optional-dependencies = {
+    crt = [
+      awscrt
+    ];
+  };
 
   nativeCheckInputs = [
     jsonschema
@@ -55,12 +61,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "botocore"
   ];
-
-  passthru.optional-dependencies = {
-    crt = [
-      awscrt
-    ];
-  };
 
   meta = with lib; {
     description = "A low-level interface to a growing number of Amazon Web Services";
