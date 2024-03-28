@@ -8,8 +8,8 @@
 , python3
 , python3Packages
 , libffi
-# TODO: Gold plugin on LLVM16 has a severe memory corruption bug: https://github.com/llvm/llvm-project/issues/61350.
-, enableGoldPlugin ? false
+# TODO: Can this memory corruption bug still occur? https://github.com/llvm/llvm-project/issues/61350.
+, enableGoldPlugin ? true
 , libbfd
 , libpfm
 , libxml2
@@ -66,7 +66,6 @@ let
   else python3;
 
 in
-  assert (lib.assertMsg (!enableGoldPlugin) "Gold plugin cannot be enabled on LLVM16 due to a upstream issue: https://github.com/llvm/llvm-project/issues/61350");
   stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
