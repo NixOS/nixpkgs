@@ -297,7 +297,10 @@ in let
       monorepoSrc = src;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
+      patches = [
+        ./libunwind/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
