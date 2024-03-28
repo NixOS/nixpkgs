@@ -3,8 +3,17 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, boost
 }:
 
+let
+  tomlSpecRepo = fetchFromGitHub {
+    owner = "toml-lang";
+    repo = "toml";
+    rev = "v0.5.0";
+    hash = "sha256-qKNoUlZn8jlPSugy4NckLUNYDiT1uMKcNLxbgaXVYco=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml11";
   version = "3.8.1";
@@ -26,11 +35,31 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
       hash = "sha256-G+B4GibUvpSwosKxUa8UtQ6h3wNXAHnZySPkQoXGSTI=";
     })
+
+    # toml11 emits some warnings on some systems when compiled with the flags that the tests set, so instead of patching
+    # out the causes of the warnings, let's go the easy route and stop setting -Werror
+    ./disable-werror-in-tests.patch
   ];
+
+  postPatch = ''
+    mkdir -p build/tests
+    ln -s ${tomlSpecRepo} build/tests/toml
+  '';
 
   nativeBuildInputs = [
     cmake
   ];
+
+  checkInputs = [
+    boost
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "toml11_BUILD_TEST" finalAttrs.doCheck)
+    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/ToruNiina/toml11";
@@ -57,4 +86,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
   };
 })
-# TODO [ AndersonTorres ]: tests
