@@ -2,6 +2,7 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    certifi
     python-engineio
     python-socketio
     websockets
