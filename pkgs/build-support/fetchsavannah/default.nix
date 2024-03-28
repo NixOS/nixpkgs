@@ -1,8 +1,9 @@
-{ fetchzip, lib }:
+{ lib, repoRevToNameMaybe, fetchzip }:
 
 lib.makeOverridable (
 # cgit example, snapshot support is optional in cgit
-{ repo, rev, name ? "source"
+{ repo, rev
+, name ? repoRevToNameMaybe repo rev "savannah"
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;
