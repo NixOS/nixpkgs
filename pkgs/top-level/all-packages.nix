@@ -30382,7 +30382,7 @@ with pkgs;
 
   cmctl = callPackage ../applications/networking/cluster/cmctl { };
 
-  cmus = callPackage ../applications/audio/cmus {
+  cmus = callPackage ../by-name/cm/cmus/package.nix {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio VideoToolbox;
     libjack = libjack2;
   };
