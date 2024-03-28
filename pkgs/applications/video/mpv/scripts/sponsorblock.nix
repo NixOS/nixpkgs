@@ -32,7 +32,7 @@ buildLua {
       --replace 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
   '';
 
-  postInstall = "cp -a sponsorblock_shared $out/share/mpv/scripts/";
+  extraScripts = [ "sponsorblock_shared" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
