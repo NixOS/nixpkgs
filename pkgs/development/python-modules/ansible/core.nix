@@ -25,6 +25,8 @@
 , scp
 , windowsSupport ? false, pywinrm
 , xmltodict
+# Additional packages to add to propagatedBuildInputs
+, extraPackages ? [ ]
 }:
 
 buildPythonPackage rec {
@@ -79,7 +81,7 @@ buildPythonPackage rec {
     pywinrm
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-resources
-  ];
+  ] ++ extraPackages;
 
   pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
     "importlib-resources"

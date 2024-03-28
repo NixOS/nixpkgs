@@ -2,6 +2,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchPypi
+, jmespath
 , jsonschema
 , jxmlease
 , ncclient
@@ -55,6 +56,10 @@ buildPythonPackage {
     ttp
     xmltodict
     # ansible.windows
+
+    # Default ansible collections dependencies
+    # community.general
+    jmespath
 
     # lots of collections with dedicated requirements.txt and pyproject.toml files,
     # add the dependencies for the collections you need conditionally and install
