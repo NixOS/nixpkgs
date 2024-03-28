@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, sasl, boost, Security, CoreFoundation, cctools }:
+{ stdenv, callPackage, lib, sasl, boost, Security, CoreFoundation, cctools, avxSupport ? true }:
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
@@ -18,11 +18,13 @@ let
     };
 in
 buildMongoDB {
+  inherit avxSupport;
   version = variants.version;
   sha256 = variants.sha256;
   patches = [
     ./forget-build-dependencies-4-4.patch
     ./asio-no-experimental-string-view-4-4.patch
     ./fix-gcc-Wno-exceptions-5.0.patch
-  ] ++ variants.patches;
+  ] ++ variants.patches
+    ++ lib.optionals (!avxSupport) [ ./build-without-avx.patch ];
 }
