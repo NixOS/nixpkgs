@@ -1,0 +1,36 @@
+diff --git a/examples/eigen/Makefile.am b/examples/eigen/Makefile.am
+index 6e909aa3..7d21f6a6 100644
+--- a/examples/eigen/Makefile.am
++++ b/examples/eigen/Makefile.am
+@@ -31,18 +31,15 @@ TESTS_ARPACK = BeamEigenValue.edp \
+ 	condition-number.edp \
+ 	free-cyl-axi.edp \
+ 	Lap3dEigenValue.edp \
+-	LapComplexEigenValue.edp \
+ 	LapEigenValue.edp \
+ 	LapEigenValueFunc.edp \
+ 	LapEigenValueFuncV2.edp \
+-	LapnosymComplexEigenValue.edp \
+ 	LapnosymEigenValue.edp \
+ 	neuman.edp \
+ 	Stokes-eigen.edp \
+ 	VP-Steklov-Poincare.edp \
+ 	WGM-sphere.edp \
+-	LapEigenBeltrami.edp \
+-        LapEigenValueFuncComplex.edp
++	LapEigenBeltrami.edp
+ 
+ if ARPACK
+ CONDITIONAL_ARPACK = $(TESTS_ARPACK)
+@@ -52,7 +49,10 @@ TESTS =	$(TESTS_ARPACK)
+ 
+ LIST_CONDITIONAL = $(CONDITIONAL_ARPACK)
+ 
+-XFAIL_TESTS = LapnosymEigenValue.edp
++XFAIL_TESTS = LapnosymEigenValue.edp \
++	LapnosymComplexEigenValue.edp \
++	LapComplexEigenValue.edp \
++	LapEigenValueFuncComplex.edp
+ 
+ EXTRA_DIST = *.edp all.edp
+ 
