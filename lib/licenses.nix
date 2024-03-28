@@ -891,6 +891,11 @@ in mkLicense lset) ({
     url = "https://license.coscl.org.cn/MulanPSL2";
   };
 
+  naist-2003 = {
+    spxId = "NAIST-2003";
+    fullName = "Nara Institute of Science and Technology License (2003)";
+  };
+
   nasa13 = {
     spdxId = "NASA-1.3";
     fullName = "NASA Open Source Agreement 1.3";
@@ -1166,6 +1171,11 @@ in mkLicense lset) ({
     redistributable = true;
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
+  };
+
+  unicode-30 = {
+    spxId = "Unicode-3.0";
+    fullName = "Unicode License v3";
   };
 
   unicode-dfs-2015 = {
