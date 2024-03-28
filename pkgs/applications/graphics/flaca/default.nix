@@ -1,21 +1,29 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, fetchurl, runCommand }:
 
 rustPlatform.buildRustPackage rec {
   pname = "flaca";
-  version = "2.3.0";
+  version = "2.4.6";
 
-  src = fetchFromGitHub {
-    owner = "Blobfolio";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gK9nKvhrqGQ3yDAfnqDF2K1g6JK3CYz0kSpTLqfGTzc=";
-  };
+  src =
+    let
+      source = fetchFromGitHub {
+        owner = "Blobfolio";
+        repo = pname;
+        rev = "v${version}";
+        hash = "sha256-uybEo098+Y92b2P9CniKFmaV8hQZFuOSthgQRGZ/ncc=";
+      };
+      lockFile = fetchurl {
+        url = "https://github.com/Blobfolio/flaca/releases/download/v${version}/Cargo.lock";
+        hash = "sha256-xAjpw71HgS6fILg5zNuc43s0fIqYcoUMMbCH65xrlww=";
+      };
+    in
+    runCommand "source" { } ''
+      cp -R ${source} $out
+      chmod +w $out
+      cp ${lockFile} $out/Cargo.lock
+    '';
 
-  # upstream does not provide a Cargo.lock
-  cargoLock.lockFile = ./Cargo.lock;
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-z6hw5xUcEakAzoT2ZUD/+PDCTCWkZqfPCiIZQQ7Ul54=";
 
   meta = with lib; {
     description = "A CLI tool to losslessly compress JPEG and PNG images";
