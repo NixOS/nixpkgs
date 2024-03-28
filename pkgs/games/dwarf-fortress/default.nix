@@ -32,9 +32,16 @@
 # changes on later launches, but consider extending the wrapper with your
 # desired options instead.
 
-with lib;
-
 let
+  inherit (lib)
+    attrNames
+    getAttr
+    importJSON
+    listToAttrs
+    recurseIntoAttrs
+    replaceStrings
+    ;
+
   callPackage = newScope self;
 
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
@@ -43,14 +50,14 @@ let
   latestVersion = "0.47.05";
 
   # Converts a version to a package name.
-  versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
+  versionToName = version: "dwarf-fortress_${replaceStrings ["."] ["_"] version}";
 
   dwarf-therapist-original = libsForQt5.callPackage ./dwarf-therapist {
     texlive = texliveBasic.withPackages (ps: with ps; [ float caption wrapfig adjmulticol sidecap preprint enumitem ]);
   };
 
   # A map of names to each Dwarf Fortress package we know about.
-  df-games = lib.listToAttrs (map
+  df-games = listToAttrs (map
     (dfVersion: {
       name = versionToName dfVersion;
       value =
@@ -83,10 +90,10 @@ let
           jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
         };
     })
-    (lib.attrNames self.df-hashes));
+    (attrNames self.df-hashes));
 
   self = rec {
-    df-hashes = lib.importJSON ./game.json;
+    df-hashes = importJSON ./game.json;
 
     # Aliases for the latest Dwarf Fortress and the selected Therapist install
     dwarf-fortress = getAttr (versionToName latestVersion) df-games;

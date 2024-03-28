@@ -3,9 +3,16 @@
 , sslSupport ? true
 }:
 
-with lib;
-
 assert sslSupport -> openssl != null;
+
+let
+  inherit (lib)
+    licenses
+    maintainers
+    optional
+    platforms
+    ;
+in
 
 stdenv.mkDerivation rec {
   pname = "tinyfugue";
