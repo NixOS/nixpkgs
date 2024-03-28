@@ -9,10 +9,7 @@
 , bubblewrap
 }:
 
-{ name ? null
-, pname ? null
-, version ? null
-, runScript ? "bash"
+{ runScript ? "bash"
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
@@ -29,20 +26,19 @@
 , ...
 } @ args:
 
-assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
+assert (!args ? pname || !args ? version) -> (args ? name); # You must provide name if pname or version (preferred) is missing.
 
 with builtins;
 let
-  pname = if args ? name && args.name != null then args.name else args.pname;
-  versionStr = lib.optionalString (version != null) ("-" + version);
-  name = pname + versionStr;
+  name = args.name or "${args.pname}-${args.version}";
+  executableName = args.pname or args.name;
+  nameAttrs = lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" ]) args;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
+  fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
-    "pname" "version"
   ]);
 
   etcBindEntries = let
@@ -260,8 +256,7 @@ let
   '';
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
-in runCommandLocal name {
-  inherit pname version;
+in runCommandLocal name (nameAttrs // {
   inherit meta;
 
   passthru = passthru // {
@@ -275,9 +270,9 @@ in runCommandLocal name {
     '';
     inherit args fhsenv;
   };
-} ''
+}) ''
   mkdir -p $out/bin
-  ln -s ${bin} $out/bin/${pname}
+  ln -s ${bin} $out/bin/${executableName}
 
   ${extraInstallCommands}
 ''

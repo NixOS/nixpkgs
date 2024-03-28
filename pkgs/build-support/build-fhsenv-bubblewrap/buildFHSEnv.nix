@@ -8,14 +8,14 @@
 , pkgsi686Linux
 }:
 
-{ name ? null
-, profile ? ""
+{ profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
 , multiArch ? false # Whether to include 32bit packages
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
+, ... # for name, or pname+version
 } @ args:
 
 # HOWTO:
@@ -35,6 +35,10 @@
 
 let
   inherit (stdenv) is64bit;
+
+  name = if (args ? pname && args ? version)
+    then "${args.pname}-${args.version}"
+    else args.name;
 
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
