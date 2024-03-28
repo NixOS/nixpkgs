@@ -481,7 +481,6 @@ let
     Rsamtools = with pkgs; [ zlib.dev curl.dev bzip2 xz ];
     rtracklayer = [ pkgs.zlib.dev ];
     affyio = [ pkgs.zlib.dev ];
-    VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
     vcfppR = [ pkgs.curl.dev pkgs.bzip2 pkgs.zlib.dev pkgs.xz];
     hdf5r = [ pkgs.hdf5.dev ];
@@ -626,6 +625,7 @@ let
     jackalope = with pkgs; [ zlib.dev xz.dev ];
     largeList = [ pkgs.zlib.dev ];
     mappoly = [ pkgs.zlib.dev ];
+    VariantAnnotation = with pkgs; [ zlib.dev curl.dev bzip2.dev xz.dev ];
     matchingMarkets = [ pkgs.zlib.dev ];
     methylKit = [ pkgs.zlib.dev ];
     ndjson = [ pkgs.zlib.dev ];
