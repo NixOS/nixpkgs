@@ -1,0 +1,246 @@
+commit a0e3f27d520228b9be3155cce8be252839274133
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Sun Nov 12 17:10:46 2023 +0100
+
+    update toolchain to `nightly-2023-09-28`
+    
+    Backport of commit 4ad3b68b7c02bf2865e20a88dd4a935709585432
+
+diff --git a/common/src/lib.rs b/common/src/lib.rs
+index 215ab90..e578396 100644
+--- a/common/src/lib.rs
++++ b/common/src/lib.rs
+@@ -12,9 +12,9 @@
+     type_alias_impl_trait,
+     extend_one,
+     arbitrary_self_types,
+-    int_roundings
++    int_roundings,
++    hash_extract_if
+ )]
+-#![feature(hash_drain_filter)]
+ 
+ // Rustfmt can't expand macros to see module declarations inside them but it is
+ // hardcoded to parse `cfg_if`. https://github.com/rust-lang/rustfmt/issues/3253
+diff --git a/common/systems/src/lib.rs b/common/systems/src/lib.rs
+index 0d77b99..e9c30bc 100644
+--- a/common/systems/src/lib.rs
++++ b/common/systems/src/lib.rs
+@@ -1,4 +1,4 @@
+-#![feature(drain_filter, let_chains)]
++#![feature(extract_if, let_chains)]
+ #![allow(clippy::option_map_unit_fn)]
+ 
+ mod aura;
+diff --git a/common/systems/src/mount.rs b/common/systems/src/mount.rs
+index c7d4073..7cf4fec 100644
+--- a/common/systems/src/mount.rs
++++ b/common/systems/src/mount.rs
+@@ -61,7 +61,7 @@ impl<'a> System<'a> for Sys {
+                         .map(|c| (
+                             // Only take inputs and actions from the rider if the mount is not intelligent (TODO: expand the definition of 'intelligent').
+                             if !matches!(body, Some(Body::Humanoid(_))) {
+-                                let actions = c.actions.drain_filter(|action| match action {
++                                let actions = c.actions.extract_if(|action| match action {
+                                     ControlAction::StartInput { input: i, .. }
+                                     | ControlAction::CancelInput(i) => matches!(i, InputKind::Jump | InputKind::Fly | InputKind::Roll),
+                                     _ => false
+@@ -151,7 +151,7 @@ impl<'a> System<'a> for Sys {
+             let inputs = controllers.get_mut(entity).map(|c| {
+                 let actions: Vec<_> = c
+                     .actions
+-                    .drain_filter(|action| match action {
++                    .extract_if(|action| match action {
+                         ControlAction::StartInput { input: i, .. }
+                         | ControlAction::CancelInput(i) => {
+                             matches!(i, InputKind::Jump | InputKind::Fly | InputKind::Roll)
+diff --git a/network/protocol/src/lib.rs b/network/protocol/src/lib.rs
+index 5d6efdd..438f9c0 100644
+--- a/network/protocol/src/lib.rs
++++ b/network/protocol/src/lib.rs
+@@ -1,4 +1,3 @@
+-#![feature(drain_filter)]
+ //! Network Protocol
+ //!
+ //! a I/O-Free protocol for the veloren network crate.
+diff --git a/network/protocol/src/quic.rs b/network/protocol/src/quic.rs
+index d61d911..085affe 100644
+--- a/network/protocol/src/quic.rs
++++ b/network/protocol/src/quic.rs
+@@ -388,7 +388,7 @@ where
+             // try to order pending
+             let mut pending_violated = false;
+             let mut reliable = vec![];
+-            self.pending_reliable_buffers.drain_filter(|(_, buffer)| {
++            self.pending_reliable_buffers.retain(|(_, buffer)| {
+                 // try to get Sid without touching buffer
+                 let mut testbuffer = buffer.clone();
+                 match ITFrame::read_frame(&mut testbuffer) {
+@@ -398,13 +398,13 @@ where
+                         length: _,
+                     })) => {
+                         reliable.push((sid, buffer.clone()));
+-                        true
++                        false
+                     },
+                     Ok(Some(_)) | Err(_) => {
+                         pending_violated = true;
+-                        true
++                        false
+                     },
+-                    Ok(None) => false,
++                    Ok(None) => true,
+                 }
+             });
+ 
+diff --git a/server/src/lib.rs b/server/src/lib.rs
+index 8d8ad62..2ffd13b 100644
+--- a/server/src/lib.rs
++++ b/server/src/lib.rs
+@@ -3,13 +3,11 @@
+ #![deny(clippy::clone_on_ref_ptr)]
+ #![feature(
+     box_patterns,
+-    drain_filter,
+     let_chains,
+     never_type,
+     option_zip,
+     unwrap_infallible
+ )]
+-#![feature(hash_drain_filter)]
+ 
+ pub mod automod;
+ mod character_creator;
+diff --git a/server/src/persistence/character_updater.rs b/server/src/persistence/character_updater.rs
+index 29289e1..8ee2787 100644
+--- a/server/src/persistence/character_updater.rs
++++ b/server/src/persistence/character_updater.rs
+@@ -267,8 +267,8 @@ impl CharacterUpdater {
+     }
+ 
+     pub fn process_batch_completion(&mut self, completed_batch_id: u64) {
+-        self.pending_database_actions.drain_filter(|_, event| {
+-            matches!(event, DatabaseAction::Submitted {
++        self.pending_database_actions.retain(|_, event| {
++            !matches!(event, DatabaseAction::Submitted {
+                     batch_id,
+             } if completed_batch_id == *batch_id)
+         });
+diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
+index ac2775b..eb0eb17 100644
+--- a/voxygen/src/lib.rs
++++ b/voxygen/src/lib.rs
+@@ -4,14 +4,15 @@
+ #![deny(clippy::clone_on_ref_ptr)]
+ #![feature(
+     array_methods,
+-    array_zip,
+-    drain_filter,
+     trait_alias,
++    extract_if,
+     option_get_or_insert_default,
+     map_try_insert,
+     slice_as_chunks,
+     let_chains,
+-    generic_const_exprs
++    generic_const_exprs,
++    maybe_uninit_uninit_array,
++    maybe_uninit_array_assume_init
+ )]
+ #![recursion_limit = "2048"]
+ 
+diff --git a/voxygen/src/render/pipelines/trail.rs b/voxygen/src/render/pipelines/trail.rs
+index 5ab28a5..dc9107d 100644
+--- a/voxygen/src/render/pipelines/trail.rs
++++ b/voxygen/src/render/pipelines/trail.rs
+@@ -39,7 +39,7 @@ impl Add<Vertex> for Vertex {
+ 
+     fn add(self, other: Self) -> Self::Output {
+         Self {
+-            pos: self.pos.zip(other.pos).map(|(a, b)| a + b),
++            pos: [self.pos[0] + other.pos[0], self.pos[1] + other.pos[1], self.pos[2] + other.pos[2]],
+         }
+     }
+ }
+diff --git a/voxygen/src/render/renderer/locals.rs b/voxygen/src/render/renderer/locals.rs
+index 12276a4..0fc7ce7 100644
+--- a/voxygen/src/render/renderer/locals.rs
++++ b/voxygen/src/render/renderer/locals.rs
+@@ -22,6 +22,11 @@ pub struct Locals {
+     pub postprocess_bind: postprocess::BindGroup,
+ }
+ 
++fn arr_zip_map<const N: usize, A, B, C>(a: [A; N], b: [B; N], f: impl Fn(A, B) -> C) -> [C; N] {
++    let mut b = b.into_iter();
++    a.map(|a| f(a, b.next().unwrap()))
++}
++
+ impl Locals {
+     pub(super) fn new(
+         device: &wgpu::Device,
+@@ -58,10 +63,9 @@ impl Locals {
+         );
+ 
+         let bloom_binds = bloom.map(|bloom| {
+-            bloom
+-                .src_views
+-                .zip(bloom.locals) // zip arrays
+-                .map(|(view, locals)| layouts.bloom.bind(device, view, sampler, locals))
++            arr_zip_map(bloom.src_views, bloom.locals, |view, locals| {
++                layouts.bloom.bind(device, view, sampler, locals)
++            })
+         });
+ 
+         Self {
+@@ -107,10 +111,9 @@ impl Locals {
+             &self.postprocess,
+         );
+         self.bloom_binds = bloom.map(|bloom| {
+-            bloom
+-                .src_views
+-                .zip(bloom.locals) // zip arrays
+-                .map(|(view, locals)| layouts.bloom.bind(device, view, sampler, locals))
++            arr_zip_map(bloom.src_views, bloom.locals, |view, locals| {
++                layouts.bloom.bind(device, view, sampler, locals)
++            })
+         });
+     }
+ }
+diff --git a/voxygen/src/scene/math.rs b/voxygen/src/scene/math.rs
+index 41c2ae6..6caf30b 100644
+--- a/voxygen/src/scene/math.rs
++++ b/voxygen/src/scene/math.rs
+@@ -250,7 +250,7 @@ pub fn clip_object_by_plane<T: Float + MulAdd<T, T, Output = T> + core::fmt::Deb
+     tolerance: T,
+ ) {
+     let mut intersection_points = Vec::new();
+-    polys.drain_filter(|points| {
++    polys.retain_mut(|points| {
+         let len = intersection_points.len();
+         let outside_first = clip_points_by_plane(points, plane, &mut intersection_points);
+         // Only remember intersections that are not coplanar with this side; i.e. those
+@@ -273,7 +273,7 @@ pub fn clip_object_by_plane<T: Float + MulAdd<T, T, Output = T> + core::fmt::Deb
+             intersection_points.swap(len, len + 1);
+         }
+         // Remove polygon if it was clipped away
+-        points.is_empty()
++        !points.is_empty()
+     });
+     // Add a polygon of all intersection points with the plane to close out the
+     // object.
+diff --git a/voxygen/src/scene/mod.rs b/voxygen/src/scene/mod.rs
+index c80712d..26f668b 100644
+--- a/voxygen/src/scene/mod.rs
++++ b/voxygen/src/scene/mod.rs
+@@ -763,9 +763,9 @@ impl Scene {
+         renderer.update_consts(&mut self.data.lights, lights);
+ 
+         // Update event lights
+-        self.event_lights.drain_filter(|el| {
++        self.event_lights.retain_mut(|el| {
+             el.timeout -= dt;
+-            el.timeout <= 0.0
++            el.timeout > 0.0
+         });
+ 
+         // Update shadow constants

@@ -1,0 +1,23 @@
+--- a/../cargo-vendor-dir/vek-0.15.8/build.rs
++++ b/../cargo-vendor-dir/vek-0.15.8/build.rs
+@@ -4,19 +4,6 @@ fn main() {
+ fn main() {
+     assert!(version().unwrap().major >= 1);
+ 
+-    match version_meta().unwrap().channel {
+-        Channel::Stable => {
+-            println!("cargo:rustc-cfg=stable");
+-        }
+-        Channel::Beta => {
+-            println!("cargo:rustc-cfg=beta");
+-        }
+-        Channel::Nightly => {
+-            println!("cargo:rustc-cfg=nightly");
+-        }
+-        Channel::Dev => {
+-            println!("cargo:rustc-cfg=dev");
+-        }
+-    }
++    println!("cargo:rustc-cfg=nightly");
+ }
+ 
