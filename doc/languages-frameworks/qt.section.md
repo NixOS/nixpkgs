@@ -25,12 +25,14 @@ stdenv.mkDerivation {
 
 The same goes for Qt 5 where libraries and tools are under `libsForQt5`.
 
-Any Qt package should include `wrapQtAppsHook` in `nativeBuildInputs`, or explicitly set `dontWrapQtApps` to bypass generating the wrappers.
+Any Qt package should include `wrapQtAppsHook` (or `wrapQtClisHook`) in `nativeBuildInputs`, or explicitly set `dontWrapQtApps` to bypass generating the wrappers.
 
 ::: {.note}
-Qt 6 graphical applications should also include `qtwayland` in `buildInputs` on Linux (but not on platforms e.g. Darwin, where `qtwayland` is not available), to ensure the Wayland platform plugin is available.
 
-This may become default in the future, see [NixOS/nixpkgs#269674](https://github.com/NixOS/nixpkgs/pull/269674).
+`wrapQtAppsHook` will propagate `qtwayland` to ensure the Wayland platform plugin is available，it's useful for Graphical Linux applications. It should be noted that on platforms that do not support qtwaylnd (e.g. Darwin), only `qtbase` will be propagated.
+
+`wrapQtClisHook` will not propagate any qt components, it's suitable for pure command-line applications to reduce the closure size.
+
 :::
 
 ## Packages supporting multiple Qt versions {#qt-versions}

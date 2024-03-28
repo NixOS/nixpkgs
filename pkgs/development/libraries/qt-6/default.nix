@@ -182,9 +182,18 @@ let
       };
 
       wrapQtAppsHook = callPackage
-        ({ makeBinaryWrapper }: makeSetupHook
+        ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook
           {
             name = "wrap-qt6-apps-hook";
+            propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
+              ++ lib.optional (lib.meta.availableOn stdenv.targetPlatform qtwayland) qtwayland.dev;
+          } ./hooks/wrap-qt-apps-hook.sh)
+        { };
+
+      wrapQtClisHook = callPackage
+        ({ makeBinaryWrapper }: makeSetupHook
+          {
+            name = "wrap-qt6-clis-hook";
             propagatedBuildInputs = [ makeBinaryWrapper ];
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
