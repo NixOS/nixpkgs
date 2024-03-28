@@ -4,10 +4,17 @@ let
   settingsFormat = pkgs.formats.yaml { };
   configurationYaml = settingsFormat.generate "dendrite.yaml" cfg.settings;
   workingDir = "/var/lib/dendrite";
+  mediaStore = "${workingDir}/media_store";
 in
 {
   options.services.dendrite = {
     enable = lib.mkEnableOption (lib.mdDoc "matrix.org dendrite");
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.dendrite;
+      defaultText = lib.literalExpression "pkgs.dendrite";
+      description = lib.mdDoc "Which Dendrite package to use.";
+    };
     httpPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
       default = 8008;
@@ -180,7 +187,7 @@ in
           };
           base_path = lib.mkOption {
             type = lib.types.str;
-            default = "${workingDir}/media_store";
+            default = "${mediaStore}";
             description = lib.mdDoc ''
               Storage path for uploaded media.
             '';
@@ -292,6 +299,8 @@ in
         DynamicUser = true;
         StateDirectory = "dendrite";
         WorkingDirectory = workingDir;
+        ReadWritePaths = lib.mkIf (cfg.settings.media_api.base_path != mediaStore)
+          [ cfg.settings.media_api.base_path ];
         RuntimeDirectory = "dendrite";
         RuntimeDirectoryMode = "0700";
         LimitNOFILE = 65535;
