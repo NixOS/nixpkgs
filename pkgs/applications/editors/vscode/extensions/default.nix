@@ -2951,6 +2951,23 @@ let
         };
       };
 
+      ms-toolsai.datawrangler = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "datawrangler";
+          publisher = "ms-toolsai";
+          version = "0.29.6";
+          sha256 = "sha256-9MR2+hb9YdjIGDfUkdLW41HOxhjeS/San49C8QRZ/YY=";
+        };
+
+        meta = {
+          description = "Data viewing, cleaning and preparation for tabular datasets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-toolsai.datawrangler";
+          homepage = "https://github.com/microsoft/vscode-data-wrangler";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.katanallama ];
+        };
+      };
+
       ms-toolsai.jupyter = callPackage ./ms-toolsai.jupyter { };
 
       ms-toolsai.jupyter-keymap = buildVscodeMarketplaceExtension {
