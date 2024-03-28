@@ -1,22 +1,24 @@
+# shellcheck shell=bash disable=SC2034,SC2154
+
 addCMakeParams() {
-    addToSearchPath CMAKE_PREFIX_PATH $1
+    addToSearchPath CMAKE_PREFIX_PATH "$1"
 }
 
 fixCmakeFiles() {
     # Replace occurences of /usr and /opt by /var/empty.
     echo "fixing cmake files..."
-    find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
-        while read fn; do
-            sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
-            mv "$fn.tmp" "$fn"
-        done
+    while read -r fn; do
+        sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
+        mv "$fn.tmp" "$fn"
+    done < <(find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print)
+    unset fn
 }
 
 cmakeConfigurePhase() {
     runHook preConfigure
 
     # default to CMake defaults if unset
-    : ${cmakeBuildDir:=build}
+    : "${cmakeBuildDir:=build}"
 
     export CTEST_OUTPUT_ON_FAILURE=1
     if [ -n "${enableParallelChecking-1}" ]; then
@@ -29,10 +31,10 @@ cmakeConfigurePhase() {
 
     if [ -z "${dontUseCmakeBuildDir-}" ]; then
         mkdir -p "$cmakeBuildDir"
-        cd "$cmakeBuildDir"
-        : ${cmakeDir:=..}
+        cd "$cmakeBuildDir" || return 1
+        : "${cmakeDir:=..}"
     else
-        : ${cmakeDir:=.}
+        : "${cmakeDir:=.}"
     fi
 
     declare -ga cmakeFlagsArray
@@ -84,7 +86,8 @@ cmakeConfigurePhase() {
     if [[ -z "$shareDocName" ]]; then
         local cmakeLists="${cmakeDir}/CMakeLists.txt"
         if [[ -f "$cmakeLists" ]]; then
-            local shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' < "$cmakeLists" | head -n1)"
+            local shareDocName
+            shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' < "$cmakeLists" | head -n1)"
         fi
         # The argument sometimes contains garbage or variable interpolation.
         # When that is the case, let’s fall back to the derivation name.
@@ -92,7 +95,8 @@ cmakeConfigurePhase() {
             if [[ -n "${pname-}" ]]; then
                 shareDocName="$pname"
             else
-                shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
+                # shellcheck disable=SC2001 # Use sed as it requires regular expression.
+                shareDocName="$(sed 's/-[^a-zA-Z].*//' <<< "$name")"
             fi
         fi
     fi
@@ -151,7 +155,7 @@ cmakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "${dontUseCmakeConfigure-}" -a -z "${configurePhase-}" ]; then
+if [[ -z "${dontUseCmakeConfigure-}" ]] && [[ -z "${configurePhase-}" ]]; then
     setOutputFlags=
     configurePhase=cmakeConfigurePhase
 fi
@@ -162,16 +166,16 @@ makeCmakeFindLibs(){
     isystem_seen=
     iframework_seen=
     for flag in ${NIX_CFLAGS_COMPILE-} ${NIX_LDFLAGS-}; do
-        if test -n "$isystem_seen" && test -d "$flag"; then
+        if [[ -n "$isystem_seen" ]] && [[ -d "$flag" ]]; then
             isystem_seen=
             export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH-}${CMAKE_INCLUDE_PATH:+:}${flag}"
-        elif test -n "$iframework_seen" && test -d "$flag"; then
+        elif [[ -n "$iframework_seen" ]] && [[ -d "$flag" ]]; then
             iframework_seen=
             export CMAKE_FRAMEWORK_PATH="${CMAKE_FRAMEWORK_PATH-}${CMAKE_FRAMEWORK_PATH:+:}${flag}"
         else
             isystem_seen=
             iframework_seen=
-            case $flag in
+            case "$flag" in
             -I*)
                 export CMAKE_INCLUDE_PATH="${CMAKE_INCLUDE_PATH-}${CMAKE_INCLUDE_PATH:+:}${flag:2}"
                 ;;
