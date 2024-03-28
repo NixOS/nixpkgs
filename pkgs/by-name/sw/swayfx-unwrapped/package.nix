@@ -32,12 +32,15 @@
     sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sway, but with eye candy!";
     homepage = "https://github.com/WillPower3309/swayfx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eclairevoyant ricarch97 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      ricarch97
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "sway";
 
     longDescription = ''
