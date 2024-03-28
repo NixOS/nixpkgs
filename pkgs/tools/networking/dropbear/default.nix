@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc, zlib, libxcrypt
+{ lib, stdenv, fetchurl, zlib, libxcrypt
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableSCP ? false
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ./pass-path.patch
   ];
 
-  buildInputs = [ zlib libxcrypt ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
+  buildInputs = [ zlib libxcrypt ];
 
   meta = with lib; {
     description = "A small footprint implementation of the SSH 2 protocol";
