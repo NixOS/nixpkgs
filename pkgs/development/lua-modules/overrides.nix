@@ -89,7 +89,7 @@ with prev;
     ];
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace "'lua_cliargs = 3.0-1'," "'lua_cliargs >= 3.0-1',"
+        --replace "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0',"
     '';
     postInstall = ''
       installShellCompletion --cmd busted \
@@ -141,16 +141,6 @@ with prev;
     ];
     postInstall = ''
       installManPage fennel.1
-    '';
-  });
-
-  # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
-  # we have to invoke busted manually
-  fzy = prev.fzy.overrideAttrs(oa: {
-    doCheck = true;
-    nativeCheckInputs = [ prev.busted ];
-    checkPhase = ''
-      busted test/test.lua
     '';
   });
 
@@ -380,6 +370,14 @@ with prev;
     ];
   });
 
+  luasnip = prev.luasnip.overrideAttrs (_: {
+    # Until https://github.com/L3MON4D3/LuaSnip/issues/1139 is solved
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace "'jsregexp >= 0.0.5, <= 0.0.6'" "'jsregexp >= 0.0.5'"
+    '';
+  });
+
   luaossl = prev.luaossl.overrideAttrs (_: {
     externalDeps = [
       { name = "CRYPTO"; dep = openssl; }
@@ -419,6 +417,13 @@ with prev;
   #   # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
   #   meta.broken = true;
   # });
+
+  lua-resty-openidc =  prev.lua-resty-openidc.overrideAttrs (_: {
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace '"lua-resty-session >= 2.8, <= 3.10",' '"lua-resty-session >= 2.8",'
+    '';
+  });
 
   lua-yajl =  prev.lua-yajl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
@@ -627,6 +632,7 @@ with prev;
 
     doCheck = true;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
+    propagatedBuildInputs = [ luv ];
 
     # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
     checkPhase = ''
@@ -668,17 +674,19 @@ with prev;
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ magic-enum sol2 ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace \
-        "TOML_PLUS_PLUS_SRC" \
-        "${tomlplusplus.src}"
+      substituteInPlace CMakeLists.txt \
+        --replace "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}" \
+        --replace "MAGIC_ENUM_SRC" "${magic-enum.src}"
     '';
+      #
+      # cat CMakeLists.txt
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-gvUqkLOa0WvAK4GcTkufr0lC2BOs2FQ2bgFpB0qa47k=";
+      hash = "sha256-Hx4Lq2ZtoY1YDisikXvhhv9lsXskmhUCyRvvTy/rkV4=";
     };
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
@@ -690,6 +698,10 @@ with prev;
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace '"luasystem = 0.2.1",' '"luasystem",'
+    '';
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
       chmod -x $out/bin/vusted_entry.vim
