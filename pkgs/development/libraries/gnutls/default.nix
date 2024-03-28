@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
+{ config, lib, stdenv, fetchurl, fetchpatch, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autoconf, automake, libidn2, libiconv
 , texinfo
 , unbound, dns-root-data, gettext, util-linux
@@ -49,6 +49,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-ssl-cert-file.patch
+    (fetchpatch {
+      name = "CVE-2024-28834.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/1c4701ffc342259fc5965d5a0de90d87f780e3e5.patch";
+      hash = "sha256-QMqeEdpNy5MCuZwTPRVKnWMvGkZvIlumigvH3JgcjE4=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-28835.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/e369e67a62f44561d417cb233acc566cc696d82d.patch";
+      hash = "sha256-K8wqypFKfoB7hiFWJPSVVEC7Aei7NGRijorK/tkou9o=";
+    })
   ];
 
   # Skip some tests:
