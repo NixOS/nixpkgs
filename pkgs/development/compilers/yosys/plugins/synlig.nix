@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   plugin = "synlig";
 
   # The module has automatic regular releases, with date + short git hash
-  GIT_VERSION = "2023-11-28-b8ed72d";
+  GIT_VERSION = "2024-03-13-d844d8d";
 
   # Derive our package version from GIT_VERSION, remove hash, just keep date.
   version = builtins.concatStringsSep "-" (
@@ -26,18 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "chipsalliance";
     repo  = "synlig";
     rev   = "${finalAttrs.GIT_VERSION}";
-    hash  = "sha256-jdA3PBodecqriGWU/BzWtQ5gyu62pZHv+1NvFrwsTTk=";
+    hash  = "sha256-PODeQL8n34Ekq4NQJ5/w9pTkfkBc77osZc7JzEOUk6I=";
     fetchSubmodules = false;  # we use all dependencies from nix
   };
-
-  patches = [
-    (fetchpatch {
-      # Fixes https://github.com/chipsalliance/synlig/issues/2299
-      name = "make-compile-for-yosys-0.37.patch";
-      url = "https://github.com/chipsalliance/synlig/commit/3dd46d4769c20b6dd1163310f8e56560b351a211.patch";
-      hash = "sha256-OP/2HA/Ukt6o5aKgoBk19P6T/33btU/x6VnoIVXct1g=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
