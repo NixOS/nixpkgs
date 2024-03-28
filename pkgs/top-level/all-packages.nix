@@ -7156,6 +7156,8 @@ with pkgs;
 
   conda = callPackage ../tools/package-management/conda { };
 
+  conda-package-handling = with python3Packages; toPythonApplication conda-package-handling;
+
   conduktor = callPackage ../applications/misc/conduktor { };
 
   console-bridge = callPackage ../development/libraries/console-bridge { };
