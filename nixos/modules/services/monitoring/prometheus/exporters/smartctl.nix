@@ -57,7 +57,7 @@ in {
       PrivateDevices = lib.mkForce false;
       ProtectProc = "invisible";
       ProcSubset = "pid";
-      SupplementaryGroups = [ "disk" ];
+      SupplementaryGroups = [ "disk" "rawio" ];
       SystemCallFilter = [ "@system-service" "~@privileged" ];
     };
   };
