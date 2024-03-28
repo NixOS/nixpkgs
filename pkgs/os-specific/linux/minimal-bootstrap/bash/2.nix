@@ -10,6 +10,7 @@
 , bash_2_05
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bash";
   version = "2.05b";
 
@@ -67,7 +68,7 @@ let
   ];
 in
 kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+  inherit pname version meta;
 
   nativeBuildInputs = [
     tinycc.compiler
@@ -114,14 +115,6 @@ kaem.runCommand "${pname}-${version}" {
       ${result}/bin/bash --version
       mkdir ''${out}
     '';
-
-  meta = with lib; {
-    description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
-    homepage = "https://www.gnu.org/software/bash";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
 } ''
   # Unpack
   ungz --file ${src} --output bash.tar

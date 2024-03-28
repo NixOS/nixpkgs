@@ -3,18 +3,22 @@
 , hostPlatform
 , fetchurl
 , bash
-, tinycc
-, gnumakeBoot
+, gcc
+, musl
+, binutils
+, gnumake
 , gnupatch
 , gnused
 , gnugrep
 , gawk
+, diffutils
+, findutils
 , gnutar
 , gzip
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnumake-musl";
+  pname = "gnumake-static";
   version = "4.4.1";
 
   src = fetchurl {
@@ -35,12 +39,16 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version meta;
 
   nativeBuildInputs = [
-    tinycc.compiler
-    gnumakeBoot
+    gcc
+    musl
+    binutils
+    gnumake
     gnupatch
     gnused
     gnugrep
     gawk
+    diffutils
+    findutils
     gnutar
     gzip
   ];
@@ -52,23 +60,23 @@ bash.runCommand "${pname}-${version}" {
     '';
 } ''
   # Unpack
-  tar xzf ${src}
+  tar xf ${src}
   cd make-${version}
 
   # Patch
   ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
   # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export LD=tcc
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
-    --host=${hostPlatform.config}
+    --host=${hostPlatform.config} \
+    CC=musl-gcc \
+    CFLAGS=-static
 
   # Build
-  make AR="tcc -ar"
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''

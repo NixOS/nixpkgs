@@ -10,17 +10,19 @@
 , gnused
 , gnugrep
 , gawk
+, diffutils
+, findutils
+, gnutar
 , gzip
-, gnutarBoot
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnutar";
-  version = "1.35";
+  pname = "gawk-static";
+  version = "5.2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-${version}.tar.gz";
-    hash = "sha256-FNVeMgY+qVJuBX+/Nfyr1TN452l4fv95GcN1WwLStX4=";
+    url = "mirror://gnu/gawk/gawk-${version}.tar.gz";
+    hash = "sha256-lFrvfM/xAfILIqEIArwAXplKsrjqPnJMwaGXxi9B9lA=";
   };
 in
 bash.runCommand "${pname}-${version}" {
@@ -34,30 +36,34 @@ bash.runCommand "${pname}-${version}" {
     gnused
     gnugrep
     gawk
+    diffutils
+    findutils
+    gnutar
     gzip
-    gnutarBoot
   ];
 
   passthru.tests.get-version = result:
     bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/tar --version
+      ${result}/bin/awk --version
       mkdir $out
     '';
 } ''
   # Unpack
-  tar xzf ${src}
-  cd tar-${version}
+  tar xf ${src}
+  cd gawk-${version}
 
   # Configure
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
-    CC=musl-gcc
+    CC=musl-gcc \
+    CFLAGS=-static
 
   # Build
   make -j $NIX_BUILD_CORES
 
   # Install
   make -j $NIX_BUILD_CORES install
+  rm $out/bin/gawkbug
 ''

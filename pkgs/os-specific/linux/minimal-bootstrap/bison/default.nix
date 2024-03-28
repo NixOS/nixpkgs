@@ -10,21 +10,23 @@
 , gnused
 , gnugrep
 , gawk
-, gzip
-, gnutarBoot
+, diffutils
+, findutils
+, gnutar
+, xz
+, gnum4
 }:
 let
-  inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnutar";
-  version = "1.35";
+  pname = "bison";
+  version = "3.8.2";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-${version}.tar.gz";
-    hash = "sha256-FNVeMgY+qVJuBX+/Nfyr1TN452l4fv95GcN1WwLStX4=";
+    url = "mirror://gnu/bison/bison-${version}.tar.xz";
+    hash = "sha256-m7oCFMz38QecXVkhAEUie89hlRmEDr+oDNOEnP9aW/I=";
   };
 in
 bash.runCommand "${pname}-${version}" {
-  inherit pname version meta;
+  inherit pname version;
 
   nativeBuildInputs = [
     gcc
@@ -34,19 +36,30 @@ bash.runCommand "${pname}-${version}" {
     gnused
     gnugrep
     gawk
-    gzip
-    gnutarBoot
+    diffutils
+    findutils
+    gnutar
+    xz
+    gnum4
   ];
 
   passthru.tests.get-version = result:
     bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/tar --version
+      ${result}/bin/bison --version
       mkdir $out
     '';
+
+  meta = with lib; {
+    description = "Yacc-compatible parser generator";
+    homepage = "https://www.gnu.org/software/bison/";
+    license = licenses.gpl3Plus;
+    maintainers = teams.minimal-bootstrap.members;
+    platforms = platforms.unix;
+  };
 } ''
   # Unpack
-  tar xzf ${src}
-  cd tar-${version}
+  tar xf ${src}
+  cd bison-${version}
 
   # Configure
   bash ./configure \

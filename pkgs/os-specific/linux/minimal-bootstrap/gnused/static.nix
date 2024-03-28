@@ -10,17 +10,19 @@
 , gnused
 , gnugrep
 , gawk
-, gzip
-, gnutarBoot
+, diffutils
+, findutils
+, gnutar
+, xz
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnutar";
-  version = "1.35";
+  pname = "gnused-static";
+  version = "4.9";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-${version}.tar.gz";
-    hash = "sha256-FNVeMgY+qVJuBX+/Nfyr1TN452l4fv95GcN1WwLStX4=";
+    url = "mirror://gnu/sed/sed-${version}.tar.xz";
+    hash = "sha256-biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
   };
 in
 bash.runCommand "${pname}-${version}" {
@@ -34,26 +36,29 @@ bash.runCommand "${pname}-${version}" {
     gnused
     gnugrep
     gawk
-    gzip
-    gnutarBoot
+    diffutils
+    findutils
+    gnutar
+    xz
   ];
 
   passthru.tests.get-version = result:
     bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/tar --version
+      ${result}/bin/sed --version
       mkdir $out
     '';
 } ''
   # Unpack
-  tar xzf ${src}
-  cd tar-${version}
+  tar xf ${src}
+  cd sed-${version}
 
   # Configure
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
-    CC=musl-gcc
+    CC=musl-gcc \
+    CFLAGS=-static
 
   # Build
   make -j $NIX_BUILD_CORES

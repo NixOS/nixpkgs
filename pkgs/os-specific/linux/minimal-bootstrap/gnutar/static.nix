@@ -10,12 +10,14 @@
 , gnused
 , gnugrep
 , gawk
-, gzip
+, diffutils
+, findutils
 , gnutarBoot
+, gzip
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnutar";
+  pname = "gnutar-static";
   version = "1.35";
 
   src = fetchurl {
@@ -34,8 +36,10 @@ bash.runCommand "${pname}-${version}" {
     gnused
     gnugrep
     gawk
-    gzip
+    diffutils
+    findutils
     gnutarBoot
+    gzip
   ];
 
   passthru.tests.get-version = result:
@@ -53,7 +57,8 @@ bash.runCommand "${pname}-${version}" {
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
-    CC=musl-gcc
+    CC=musl-gcc \
+    CFLAGS=-static
 
   # Build
   make -j $NIX_BUILD_CORES

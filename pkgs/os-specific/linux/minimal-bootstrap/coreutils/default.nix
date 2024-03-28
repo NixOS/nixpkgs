@@ -6,6 +6,7 @@
 , gnupatch
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bootstrap-coreutils";
   version = "5.0";
 
@@ -71,21 +72,13 @@ let
   ];
 in
 kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+  inherit pname version meta;
 
   nativeBuildInputs = [
     tinycc.compiler
     gnumake
     gnupatch
   ];
-
-  meta = with lib; {
-    description = "The GNU Core Utilities";
-    homepage = "https://www.gnu.org/software/coreutils";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
 } ''
   # Unpack
   ungz --file ${src} --output coreutils.tar
