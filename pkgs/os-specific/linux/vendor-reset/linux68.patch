@@ -1,0 +1,41 @@
+From cc6bf3085ad43f9bbad6ef4e12a2437376d7d5c1 Mon Sep 17 00:00:00 2001
+From: Sakari <20642596+sakarie9@users.noreply.github.com>
+Date: Thu, 14 Mar 2024 10:59:15 +0800
+Subject: [PATCH] Fix build on kernel 6.8+
+
+---
+ src/amd/amdgpu/atom.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/amd/amdgpu/atom.c b/src/amd/amdgpu/atom.c
+index 9a04857..333961f 100644
+--- a/src/amd/amdgpu/atom.c
++++ b/src/amd/amdgpu/atom.c
+@@ -28,6 +28,7 @@
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/delay.h>
++#include <linux/version.h>
+ #include <asm/unaligned.h>
+ 
+ //#include <drm/drm_util.h>
+@@ -39,6 +40,10 @@
+ #include "atom-names.h"
+ #include "atom-bits.h"
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 3, 0)
++#define strscpy strlcpy
++#endif
++
+ #define ATOM_COND_ABOVE 0
+ #define ATOM_COND_ABOVEOREQUAL 1
+ #define ATOM_COND_ALWAYS 2
+@@ -1424,7 +1429,7 @@ struct atom_context *amdgpu_atom_parse(struct card_info *card, void *bios)
+ 	if (*str != '\0')
+ 	{
+ 		pr_info("ATOM BIOS: %s\n", str);
+-		strlcpy(ctx->vbios_version, str, sizeof(ctx->vbios_version));
++		strscpy(ctx->vbios_version, str, sizeof(ctx->vbios_version));
+ 	}
+ 
+ 	return ctx;
