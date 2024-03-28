@@ -167,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
+    "-Dwayland_backend=${lib.boolToString waylandSupport}"
     "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
     "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
