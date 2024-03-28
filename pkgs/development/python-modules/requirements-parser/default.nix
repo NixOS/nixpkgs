@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "madpah";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-e2dfVBMh1uGRMDw7OdPefO4/eRxc3BGwvy/D7u5ipkk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fUx6NBD6qxAyArGgCiB2J1Ak7pudx/LI0+rCHjLnc1M=";
   };
 
   nativeBuildInputs = [
