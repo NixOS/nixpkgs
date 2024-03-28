@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
   ];
 
+  patches = [ ./change_float_to_nearest_integer.patch ];
+
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
@@ -74,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zendo ];
-    broken = true; # https://github.com/liferooter/textpieces/issues/130
+    broken = false; # https://github.com/liferooter/textpieces/issues/130
   };
 })

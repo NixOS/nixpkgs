@@ -1,0 +1,29 @@
+diff --git a/resources/ui/Editor.blp b/resources/ui/Editor.blp
+index b98edc7..5c3f993 100644
+--- a/resources/ui/Editor.blp
++++ b/resources/ui/Editor.blp
+@@ -42,7 +42,7 @@ template TextPiecesEditor : Adw.Bin {
+           hexpand: false;
+           width-request: 300;
+           margin-top: 5;
+-          margin-bottom: 2.5;
++          margin-bottom: 3;
+           margin-start: 5;
+           margin-end: 10;
+           spacing: 3;
+diff --git a/resources/ui/SearchBar.blp b/resources/ui/SearchBar.blp
+index d810558..b7d9232 100644
+--- a/resources/ui/SearchBar.blp
++++ b/resources/ui/SearchBar.blp
+@@ -15,7 +15,7 @@ template TextPiecesSearchBar : Adw.Bin {
+       ]
+ 
+       margin-top: 5;
+-      margin-bottom: 2.5;
++      margin-bottom: 3;
+       margin-start: 5;
+       margin-end: 10;
+       row-spacing: 6;
+-- 
+2.44.0
+
