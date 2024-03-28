@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
-, gcc, python3Packages, perl, perlPackages, makeWrapper, fetchpatch
+, gcc, python3Packages, perl, perlPackages, opencl-headers, ocl-icd, makeWrapper, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openwall/john/commit/c9825e688d1fb9fdd8942ceb0a6b4457b0f9f9b4.patch";
       excludes = [ "doc/*" ];
       sha256 = "sha256-hgoiz7IgR4f66fMP7bV1F8knJttY8g2Hxyk3QfkTu+g=";
+    })
+    (fetchpatch {
+      name = "handle-systems-that-already-defined-cl_device_topology_amd.patch";
+      url = "https://github.com/openwall/john/commit/e467645a13e8b64f96be1151c591274c2f525e40.patch";
+      sha256 = "sha256-jkUJPt1m56ivM8rmoosvIQLJuhTo1ulQj3Yo2SKIVNw=";
     })
   ];
 
@@ -50,7 +55,11 @@ stdenv.mkDerivation rec {
     "--with-systemwide"
   ];
 
-  buildInputs = [ openssl nss nspr libkrb5 gmp zlib libpcap re2 ];
+  # opencl_DES_bs_f_plug.o:/build/source/src/opencl_DES_bs.h:65: multiple definition of `opencl_DES_bs_index768';
+  # opencl_DES_bs_b_plug.o:/build/source/src/opencl_DES_bs.h:65: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
+  buildInputs = [ openssl nss nspr libkrb5 gmp zlib libpcap re2 opencl-headers ocl-icd ];
   nativeBuildInputs = [ gcc python3Packages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with python3Packages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
                           (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
