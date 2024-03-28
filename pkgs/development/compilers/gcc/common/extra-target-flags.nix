@@ -9,8 +9,11 @@ in
   # It would be good to consolidate the generation of makeFlags
   # ({C,CXX,LD}FLAGS_FOR_{BUILD,TARGET}, etc...) at some point.
   EXTRA_FLAGS_FOR_TARGET = let
+      commonFlags = "-O2";
+      nanoFlags = "-g -Os -fdata-sections -ffunction-sections -fno-exceptions";
       mkFlags = dep: langD: lib.optionals (targetPlatform != hostPlatform && dep != null && !langD) ([
-        "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
+        "${if targetPlatform.isNone && targetPlatform.libc == "newlib-nano" then nanoFlags else commonFlags}"
+        "-idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
       ] ++ lib.optionals (! withoutTargetLibc) [
         "-B${lib.getLib dep}${dep.libdir or "/lib"}"
       ]);
