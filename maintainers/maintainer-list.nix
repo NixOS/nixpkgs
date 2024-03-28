@@ -1336,6 +1336,12 @@
     matrix = "@a-n-n-a-l-e-e:matrix.org";
     name = "annalee";
   };
+  annoyingrains = {
+    email = "contact@annoyingrains.xyz";
+    github = "AnnoyingRain5";
+    githubId = 35289650;
+    name = "AnnoyingRains";
+  };
   anoa = {
     matrix = "@andrewm:amorgan.xyz";
     email = "andrew@amorgan.xyz";
