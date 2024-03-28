@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, autoreconfHook
+, fetchurl
 , gettext
 , perl
 , pkg-config
@@ -11,23 +10,20 @@
 , groff
 , tcl
 , darwin
+, nixosTests
 }:
 
 perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   pname = "rrdtool";
   version = "1.8.0";
+  outputs = [ "out" "dev" "doc" ];
 
-  src = fetchFromGitHub {
-    owner = "oetiker";
-    repo = "rrdtool-1.x";
-    rev = "v${version}";
-    hash = "sha256-a+AxU1+YpkGoFs1Iu/CHAEZ4XIkWs7Vsnr6RcfXzsBE=";
+  src = fetchurl {
+    url = "https://github.com/oetiker/rrdtool-1.x/releases/download/v${version}/rrdtool-${version}.tar.gz";
+    hash = "sha256-vTdhQTfXqNxSM1lkjrKoFjGjT9kagu1VgZFqUsCEM/Q=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gettext perl libxml2 pango cairo groff ]
     ++ lib.optionals stdenv.isDarwin [ tcl darwin.apple_sdk.frameworks.ApplicationServices ];
@@ -38,11 +34,14 @@ perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
     mv $out/lib/perl/5* $out/${perl.libPrefix}
   '';
 
-  meta = with lib; {
+  passthru.tests = { inherit (nixosTests) collectd; };
+
+  meta = {
     homepage = "https://oss.oetiker.ch/rrdtool/";
     description = "High performance logging in Round Robin Databases";
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ ehmry pSub ];
+    mainProgram = "rrdtool";
   };
 })
