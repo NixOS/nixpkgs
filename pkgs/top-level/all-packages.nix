@@ -39387,6 +39387,7 @@ with pkgs;
   vite = libsForQt5.callPackage ../applications/science/misc/vite { };
 
   xearth = callPackage ../applications/science/astronomy/xearth { };
+
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
   ### SCIENCE / PHYSICS
