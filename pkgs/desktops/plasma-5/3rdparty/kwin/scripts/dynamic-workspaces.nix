@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "dynamic_workspaces";
-  version = "1.0.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "d86leader";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mnwh489i6l8z9s5a1zl7zybkw76pp9fdmmis41mym7r4wz4iznm";
+    sha256 = "sha256-qYoWUj41tx/cwP6yCAORuwIan9Z5NDRU6DK1leWHcIw=";
   };
 
   buildInputs = [
