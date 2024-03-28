@@ -1,11 +1,9 @@
 { lib
 , stdenv
-, archinfo
 , bitstring
 , buildPythonPackage
 , cffi
 , fetchPypi
-, future
 , pycparser
 , pythonOlder
 , setuptools
@@ -13,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.93";
+  version = "9.2.96";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-44F1EE8TRsmYRnMNQakxIaFdAuZKpHIDsq+M1cK/pQk=";
+    hash = "sha256-60aOAm7eUlYHTCqIILz4l0oF1jvttDZUs4jSrF5+IJI=";
   };
 
   build-system = [
@@ -28,10 +26,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    archinfo
     bitstring
     cffi
-    future
     pycparser
   ];
 
