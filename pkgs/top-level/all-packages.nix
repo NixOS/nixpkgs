@@ -41455,4 +41455,6 @@ with pkgs;
   insulator2 = callPackage ../applications/misc/insulator2 {};
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
+
+  discovery-overlay = callPackage ../by-name/di/discover-overlay/package.nix { };
 }
