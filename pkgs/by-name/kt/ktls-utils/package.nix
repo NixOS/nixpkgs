@@ -9,6 +9,7 @@
 , libnl
 , systemd
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
   makeFlags = lib.optional withSystemd [ "unitdir=$(out)/lib/systemd/system" ];
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "TLS handshake utilities for in-kernel TLS consumers";
