@@ -21,14 +21,14 @@
     ;
 
   wlroots = wlroots_0_16;
-}).overrideAttrs (oldAttrs: rec {
+}).overrideAttrs (finalAttrs: prevAttrs: {
   pname = "swayfx-unwrapped";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
   };
 
