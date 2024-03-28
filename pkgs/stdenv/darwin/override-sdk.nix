@@ -219,6 +219,20 @@ let
         done
       '');
 
+  # Gets all propagated inputs in a package. This does not recurse.
+  getPropagatedInputs =
+    pkg:
+    lib.optionals (lib.isDerivation pkg) (
+      lib.concatMap (input: pkg.${input} or [ ]) [
+        "depsBuildBuildPropagated"
+        "propagatedNativeBuildInputs"
+        "depsBuildTargetPropagated"
+        "depsHostHostPropagated"
+        "propagatedBuildInputs"
+        "depsTargetTargetPropagated"
+      ]
+    );
+
   # Looks up the replacement for `pkg` in the `newPackages` mapping. If `pkg` is a
   # compiler (meaning it has a `libc` attribute), the compiler will be overriden.
   getReplacement =
@@ -238,20 +252,6 @@ let
       newPackages.${builtins.unsafeDiscardStringContext pkg} or pkgOrCC
     else
       pkg;
-
-  # Gets all propagated inputs in a package. This does not recurse.
-  getPropagatedInputs =
-    pkg:
-    lib.optionals (lib.isDerivation pkg) (
-      lib.concatMap (input: pkg.${input} or [ ]) [
-        "depsBuildBuildPropagated"
-        "propagatedNativeBuildInputs"
-        "depsBuildTargetPropagated"
-        "depsHostHostPropagated"
-        "propagatedBuildInputs"
-        "depsTargetTargetPropagated"
-      ]
-    );
 
   # Replaces all packages propagated by `pkgs` using the `newPackages` mapping.
   # It is assumed that all possible overrides have already been incorporated into
