@@ -6,7 +6,7 @@ let
   inherit (lib.attrsets) attrByPath filterAttrs mapAttrsToList attrsToList concatMapAttrs;
   inherit (lib.lists) flatten optional;
   inherit (lib.modules) mkIf;
-  inherit (lib.options) literalExpression mkOption mdDoc;
+  inherit (lib.options) literalExpression mkOption;
   inherit (lib.strings) hasPrefix concatMapStringsSep concatStringsSep;
   inherit (lib.types) bool listOf attrsOf package lines;
 
@@ -120,7 +120,7 @@ in
             };
           };
         }'';
-        description = mdDoc ''
+        description = ''
           Additional configuration for the WirePlumber daemon when run in
           single-instance mode (the default in nixpkgs and currently the only
           supported way to run WirePlumber configured via `extraConfig`).
@@ -141,7 +141,7 @@ in
       extraScripts = mkOption {
         type = attrsOf lines;
         default = { };
-        description = mdDoc ''
+        description = ''
           Additional scripts for WirePlumber to be used by configuration files.
 
           Every item in this attrset becomes a separate lua file `/etc/wireplumber/scripts`.
