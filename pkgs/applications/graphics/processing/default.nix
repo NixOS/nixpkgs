@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, wrapGAppsHook, libGL }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, stripJavaArchivesHook, wrapGAppsHook, libGL }:
 let
   buildNumber = "1293";
   vaqua = fetchurl {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
   };
 
-  nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ ant unzip makeWrapper stripJavaArchivesHook wrapGAppsHook ];
   buildInputs = [ jdk jogl ant rsync ffmpeg batik ];
 
   dontWrapGApps = true;
