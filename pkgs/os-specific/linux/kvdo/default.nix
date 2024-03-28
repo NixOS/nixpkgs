@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   inherit (vdo);
   pname = "kvdo";
-  version = "8.2.1.6"; # bump this version with vdo
+  version = "8.2.3.3"; # bump this version with vdo
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = "kvdo";
     rev = version;
-    hash = "sha256-S5r2Rgx5pWk4IsdIwmfZkuGL/oEQ3prquyVqxjR3cO0=";
+    hash = "sha256-y7uVgWFV6uWRoRqfiu0arG9731mgWijXjcp9KSaZ5X0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
