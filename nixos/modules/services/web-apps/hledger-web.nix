@@ -26,26 +26,33 @@ in {
       '';
     };
 
-    capabilities = {
+    allow = {
       view = mkOption {
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          Enable the view capability.
+          Allow viewing.
         '';
       };
       add = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Enable the add capability.
+          Allow adding transactions.
         '';
       };
-      manage = mkOption {
+      edit = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Enable the manage capability.
+          Allow editing hledger files.
+        '';
+      };
+      sandstorm = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Allow permissions from the `X-Sandstorm-Permissions` header.
         '';
       };
     };
@@ -89,6 +96,12 @@ in {
 
   };
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "hledger-web" "capabilities" "view" ] [ "services" "hledger-web" "allow" "view" ])
+    (mkRenamedOptionModule [ "services" "hledger-web" "capabilities" "add" ] [ "services" "hledger-web" "allow" "add" ])
+    (mkRenamedOptionModule [ "services" "hledger-web" "capabilities" "manage" ] [ "services" "hledger-web" "allow" "edit" ])
+  ];
+
   config = mkIf cfg.enable {
 
     users.users.hledger = {
@@ -102,16 +115,17 @@ in {
     users.groups.hledger = {};
 
     systemd.services.hledger-web = let
-      capabilityString = with cfg.capabilities; concatStringsSep "," (
+      allowString = with cfg.allow; concatStringsSep "," (
         (optional view "view")
         ++ (optional add "add")
-        ++ (optional manage "manage")
+        ++ (optional edit "edit")
+        ++ (optional sandstorm "sandstorm")
       );
       serverArgs = with cfg; escapeShellArgs ([
         "--serve"
         "--host=${host}"
         "--port=${toString port}"
-        "--capabilities=${capabilityString}"
+        "--allow=${allowString}"
         (optionalString (cfg.baseUrl != null) "--base-url=${cfg.baseUrl}")
         (optionalString (cfg.serveApi) "--serve-api")
       ] ++ (map (f: "--file=${stateDir}/${f}") cfg.journalFiles)
