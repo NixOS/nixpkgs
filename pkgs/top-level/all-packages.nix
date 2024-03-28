@@ -12542,6 +12542,8 @@ with pkgs;
 
   reredirect = callPackage ../tools/misc/reredirect { };
 
+  resorter = callPackage ../tools/misc/resorter { };
+
   retext = qt6Packages.callPackage ../applications/editors/retext { };
 
   rewrk = callPackage ../tools/networking/rewrk { };
