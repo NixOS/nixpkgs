@@ -8547,6 +8547,12 @@
     githubId = 137306;
     name = "Michele Catalano";
   };
+  isaacshaha = {
+    email = "isaac.shaha64@gmail.com";
+    github = "IsaacShaha";
+    githubId = 24405680;
+    name = "Isaac Shaha";
+  };
   isaozler = {
     email = "isaozler@gmail.com";
     github = "isaozler";
