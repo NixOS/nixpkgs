@@ -8,7 +8,7 @@ group="nixos-test-vm"
 vm_size="Standard_D2s_v3";  os_size=42;
 
 # ensure group
-az group create --location "westus2" --name "${group}"
+az group create --location "${location}" --name "${group}"
 group_id="$(az group show --name "${group}" -o tsv --query "[id]")"
 
 # (optional) identity
@@ -30,7 +30,6 @@ az vm create \
   --os-disk-size-gb "${os_size}" \
   --image "${image}" \
   --admin-username "${USER}" \
-  --location "westus2" \
+  --location "${location}" \
   --storage-sku "Premium_LRS" \
-  --ssh-key-values "$(ssh-add -L)"
-
+  --ssh-key-values "$(ssh-add -L | grep ssh-rsa)"
