@@ -289,14 +289,14 @@ in let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt

@@ -91,9 +91,9 @@ stdenv.mkDerivation {
     # extra `/`.
     ./normalize-var.patch
     # See: https://github.com/NixOS/nixpkgs/pull/186575
-    ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
+    ./darwin-plistbuddy-workaround.patch
     # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
-    # ../../common/compiler-rt/armv7l-15.patch
+    # ./armv7l-15.patch
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
