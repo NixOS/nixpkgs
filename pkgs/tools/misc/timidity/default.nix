@@ -7,7 +7,7 @@
 , libobjc
 , libjack2
 , ncurses
-, alsa-lib
+, alsa-lib-with-plugins
 , buildPackages
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libjack2
     ncurses
   ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
+    alsa-lib-with-plugins
   ] ++ lib.optionals stdenv.isDarwin [
     CoreAudio
     libobjc
