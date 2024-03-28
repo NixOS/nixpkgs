@@ -1,35 +1,58 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, patches ? []
 , buildLlvmTools
-, fetch
-, libunwind
+, monorepoSrc ? null
+, src ? null
+, libunwind ? null
+, runCommand
 , cmake
+, ninja
 , libxml2
 , libllvm
 , version
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "lld";
-  inherit version;
+  src' =
+    if monorepoSrc != null then
+      runCommand "lld-src-${version}" {} ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/${pname} "$out"
+        mkdir -p "$out/libunwind"
+        cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
+        mkdir -p "$out/llvm"
+      '' else src;
 
-  src = fetch pname "0qg3fgc7wj34hdkqn21y03zcmsdd01szhhm1hfki63iifrm3y2v9";
-
-  patches = [
-    ./gnu-install-dirs.patch
-  ];
-
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versions.major release_version == "12") ''
     substituteInPlace MachO/CMakeLists.txt --replace \
       '(''${LLVM_MAIN_SRC_DIR}/' '('
     mkdir -p libunwind/include
     tar -xf "${libunwind.src}" --wildcards -C libunwind/include --strip-components=2 "libunwind-*/include/"
+  '' + lib.optionalString (lib.versions.major release_version == "13" && stdenv.isDarwin) ''
+    substituteInPlace MachO/CMakeLists.txt --replace \
+      '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';
+in
+stdenv.mkDerivation (rec {
+  inherit pname version patches;
 
-  nativeBuildInputs = [ cmake ];
+  src = src';
+
+  sourceRoot =
+    if lib.versionOlder release_version "13" then null
+    else "${src.name}/${pname}";
+
+  nativeBuildInputs = [ cmake ] ++ lib.optional (lib.versionAtLeast release_version "15") ninja;
   buildInputs = [ libllvm libxml2 ];
 
-  cmakeFlags = [
+  cmakeFlags = lib.optionals (lib.versionOlder release_version "14") [
     "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+  ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
+    "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];
@@ -51,4 +74,4 @@ stdenv.mkDerivation rec {
       of several different linkers.
     '';
   };
-}
+} // (if (postPatch == "" && lib.versions.major release_version != "13") then {} else { inherit postPatch; }))
