@@ -3,6 +3,7 @@
 , buildPythonPackage
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , gtest
 , nbval
 , numpy
@@ -31,6 +32,11 @@ in buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
   };
+
+  patches = [
+    ./1.14.1-CVE-2024-27318.patch
+    ./1.14.1-CVE-2024-27319.patch
+  ];
 
   nativeBuildInputs = [
     cmake
