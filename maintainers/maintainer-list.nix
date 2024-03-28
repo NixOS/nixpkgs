@@ -21057,6 +21057,12 @@
     githubId = 13031455;
     name = "Jakob Schmutz";
   };
+  WhenFreedom = {
+    email = "github.83qmz@simplelogin.co";
+    github = "WhenFreedom";
+    githubId = 97380298;
+    name = "WhenFreedom";
+  };
   WhiteBlackGoose = {
     email = "wbg@angouri.org";
     github = "WhiteBlackGoose";
