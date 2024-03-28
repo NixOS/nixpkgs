@@ -18275,7 +18275,11 @@ with pkgs;
 
   b4 = callPackage ../development/tools/b4 { };
 
-  babeltrace = callPackage ../development/tools/misc/babeltrace { };
+  babeltracePackages = callPackage ../development/tools/misc/babeltrace { };
+
+  babeltrace = babeltracePackages.v1;
+
+  babeltrace2 = babeltracePackages.v2;
 
   bam = callPackage ../development/tools/build-managers/bam { };
 
