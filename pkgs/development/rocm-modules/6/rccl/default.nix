@@ -49,8 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_CXX_COMPILER=hipcc"
     "-DBUILD_BFD=OFF" # Can't get it to detect bfd.h
-    # Don't exhaust memory, upstream setting is 2
-    "-DHIP_CLANG_NUM_PARALLEL_JOBS=1"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -67,7 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Really strange behavior, `#!/usr/bin/env perl` should work...
     substituteInPlace CMakeLists.txt \
-      --replace "\''$ \''${hipify-perl_executable}" "${perl}/bin/perl ${hipify}/bin/hipify-perl"
+      --replace "\''$ \''${hipify-perl_executable}" "${perl}/bin/perl ${hipify}/bin/hipify-perl" \
+      --replace-warn "-parallel-jobs=12" "-parallel-jobs=1" \
+      --replace-warn "-parallel-jobs=16" "-parallel-jobs=1"
   '';
 
   postInstall = lib.optionalString buildTests ''
