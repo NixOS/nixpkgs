@@ -16,6 +16,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           extraArgs = [ "--private=~/firejail-home" ];
         };
       };
+      wrappedPackages = [ pkgs.zsh ];
     };
 
     systemd.services.setupFirejailTest = {
@@ -86,6 +87,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     machine.fail(
         "sudo -u alice firejail --private-tmp --output=/tmp/foo 'bash -c $(id>/tmp/vuln2;echo id)' && cat /tmp/vuln2"
     )
+
+    # Test path acl with wrapped program
+    machine.succeed("sudo -u alice zsh -c 'cat ~/public' | grep -q publ1c")
+    machine.fail("sudo -u alice zsh -c 'cat ~/.password-store/secret' | grep -q s3cret")
+    machine.fail("sudo -u alice zsh -c 'cat ~/my-secrets/secret' | grep -q s3cret")
   '';
 })
 
