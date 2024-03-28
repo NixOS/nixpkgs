@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-44F1EE8TRsmYRnMNQakxIaFdAuZKpHIDsq+M1cK/pQk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     archinfo
     bitstring
     cffi
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
-      --replace '/usr/bin/ar' 'ar'
+      --replace-fail '/usr/bin/ar' 'ar'
   '';
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
