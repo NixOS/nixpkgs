@@ -4,9 +4,8 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) optionalString concatStringsSep optional boolToString types mkOption mkImageMediaOverride optionals stringLength optionalAttrs mkEnableOption literalExpression;
   /**
    * Given a list of `options`, concats the result of mapping each options
    * to a menuentry for use in grub.
@@ -156,7 +155,7 @@ let
   isolinuxCfg = concatStringsSep "\n"
     ([ baseIsolinuxCfg ] ++ optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
-  refindBinary = if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
+  refindBinary = if config.isoImage.includeRefind && (targetArch == "x64" || targetArch == "aa64") then "refind_${targetArch}.efi" else null;
 
   # Setup instructions for rEFInd.
   refind =
@@ -231,19 +230,10 @@ let
     ''}
   '';
 
-  # The EFI boot image.
-  # Notes about grub:
-  #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
-  #    will get white-on-black console-like text on sub-menus. *sigh*
-  efiDir = pkgs.runCommand "efi-directory" {
+  grubImage = pkgs.runCommand "grub.img" {
     nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
     strictDeps = true;
   } ''
-    mkdir -p $out/EFI/boot/
-
-    # Add a marker so GRUB can find the filesystem.
-    touch $out/EFI/nixos-installer-image
-
     # ALWAYS required modules.
     MODULES=(
       # Basic modules for filesystems and partition schemes
@@ -263,6 +253,9 @@ let
 
       # Allows rebooting into firmware setup interface
       "efifwsetup"
+
+      # Provides `exit`, for passing on to the next thing in the EFI boot order
+      "minicmd"
 
       # EFI Graphics Output Protocol
       "efi_gop"
@@ -309,15 +302,35 @@ let
       fi
     done
 
+    mkdir -p $out
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
+      ${optionalString (config.boot.secureboot.sbat != null) "--sbat=${config.boot.secureboot.sbat}"} \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
-      -o $out/EFI/boot/boot${targetArch}.efi \
+      -o $out/grub.efi \
       -p /EFI/boot \
       -O ${grubPkgs.grub2_efi.grubTarget} \
       ''${MODULES[@]}
+  '';
+
+  # The EFI boot image.
+  # Notes about grub:
+  #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
+  #    will get white-on-black console-like text on sub-menus. *sigh*
+  efiDir = pkgs.runCommand "efi-directory" {
+    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+    strictDeps = true;
+  } ''
+    mkdir -p $out/EFI/boot/
+
+    # Add a marker so GRUB can find the filesystem.
+    touch $out/EFI/nixos-installer-image
+
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
+
+    cp ${config.isoImage.efiBootImage} $out/EFI/boot/boot${targetArch}.efi
+    cp ${config.boot.secureboot.signFile "${grubImage}/grub.efi"} $out/EFI/boot/grub${targetArch}.efi
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
@@ -425,6 +438,9 @@ let
       echo ""
       echo "If you see this message, your EFI system doesn't support this feature."
       echo ""
+    }
+    menuentry 'Next EFI boot entry' {
+      exit
     }
     menuentry 'Shutdown' --class shutdown {
       halt
@@ -560,6 +576,8 @@ in
         Nix store in the generated ISO image.
       '';
     };
+
+    isoImage.includeRefind = mkEnableOption "rEFInd as a boot option" // { default = true; };
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
@@ -706,6 +724,17 @@ in
       '';
     };
 
+    isoImage.efiBootImage = mkOption {
+      type = types.pathInStore;
+      internal = true;
+      default = "${grubImage}/grub.efi";
+      description = lib.mdDoc ''
+        The EFI image to boot.
+        The default is the GRUB image bundled with the config, but this may be overridden.
+        This is used to enable Secure Boot via shim.
+      '';
+    };
+
   };
 
   # store them in lib so we can mkImageMediaOverride the
@@ -717,11 +746,9 @@ in
         options = [ "mode=0755" ];
       };
 
-    # Note that /dev/root is a symlink to the actual root device
-    # specified on the kernel command line, created in the stage 1
-    # init script.
     "/iso" = mkImageMediaOverride
-      { device = "/dev/root";
+      { label = config.isoImage.volumeID;
+        fsType = "auto";
         neededForBoot = true;
         noCheck = true;
       };
@@ -793,7 +820,8 @@ in
     # UUID of the USB stick.  It would be nicer to write
     # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
     # recognise that.
-    boot.kernelParams =
+
+    boot.kernelParams = lib.mkIf (!config.boot.initrd.systemd.enable)
       [ "root=LABEL=${config.isoImage.volumeID}"
         "boot.shell_on_fail"
       ];
@@ -802,7 +830,7 @@ in
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = [ "loop" "overlay" "sr_mod" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -862,6 +890,8 @@ in
       ];
 
     boot.loader.timeout = 10;
+
+    system.build.efiDir = efiDir;
 
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({

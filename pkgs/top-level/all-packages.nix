@@ -28253,6 +28253,12 @@ with pkgs;
     withVmspawn = false;
     withQrencode = false;
   };
+  ukify = systemdMinimal.override {
+    withBootloader = true;
+    withEfi = true;
+    withUkify = true;
+  };
+
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
     buildLibsOnly = true;
