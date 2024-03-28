@@ -33636,6 +33636,8 @@ with pkgs;
 
   memento = libsForQt5.callPackage ../applications/video/memento { };
 
+  microchip-xc16 = callPackage ../development/compilers/microchip/xc16 { };
+
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
   mm-common = callPackage ../development/libraries/mm-common { };
