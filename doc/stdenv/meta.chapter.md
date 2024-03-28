@@ -84,9 +84,7 @@ The *priority* of the package, used by `nix-env` to resolve file name conflicts 
 The list of Nix platform types on which the package is supported. Hydra builds packages according to the platform specified. If no platform is specified, the package does not have prebuilt binaries. An example is:
 
 ```nix
-{
-  meta.platforms = lib.platforms.linux;
-}
+{ meta.platforms = lib.platforms.linux; }
 ```
 
 Attribute Set `lib.platforms` defines [various common lists](https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix) of platforms types.
@@ -142,7 +140,8 @@ For more on how to write and run package tests, see [](#sec-package-tests).
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 
 ```nix
-{ /* ... , */ nixosTests }:
+# ... ,
+{ nixosTests }:
 {
   # ...
   passthru.tests = {
@@ -174,16 +173,26 @@ stdenv.mkDerivation (finalAttrs: {
 
 ```nix
 # my-package/example.nix
-{ runCommand, lib, my-package, ... }:
-runCommand "my-package-test" {
-  nativeBuildInputs = [ my-package ];
-  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
-} ''
-  my-package --help
-  my-package <example.in >example.actual
-  diff -U3 --color=auto example.expected example.actual
-  mkdir $out
-''
+{
+  runCommand,
+  lib,
+  my-package,
+  ...
+}:
+runCommand "my-package-test"
+  {
+    nativeBuildInputs = [ my-package ];
+    src = lib.sources.sourcesByRegex ./. [
+      ".*.in"
+      ".*.expected"
+    ];
+  }
+  ''
+    my-package --help
+    my-package <example.in >example.actual
+    diff -U3 --color=auto example.expected example.actual
+    mkdir $out
+  ''
 ```
 
 
@@ -202,7 +211,7 @@ The list of Nix platform types for which the [Hydra](https://github.com/nixos/hy
 ```nix
 {
   meta.platforms = lib.platforms.linux;
-  meta.hydraPlatforms = [];
+  meta.hydraPlatforms = [ ];
 }
 ```
 
@@ -217,16 +226,19 @@ This means that `broken` can be used to express constraints, for example:
 - Does not cross compile
 
   ```nix
-  {
-    meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
-  }
+  { meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform); }
   ```
 
 - Broken if all of a certain set of its dependencies are broken
 
   ```nix
   {
-    meta.broken = lib.all (map (p: p.meta.broken) [ glibc musl ]);
+    meta.broken = lib.all (
+      map (p: p.meta.broken) [
+        glibc
+        musl
+      ]
+    );
   }
   ```
 

@@ -19,14 +19,14 @@ You can use them like this:
 {
   environment.systemPackages = with pkgs; [
     sl
-    (pass.withExtensions (subpkgs: with subpkgs; [
-      pass-audit
-      pass-otp
-      pass-genphrase
-    ]))
-    (python3.withPackages (subpkgs: with subpkgs; [
-        requests
-    ]))
+    (pass.withExtensions (
+      subpkgs: with subpkgs; [
+        pass-audit
+        pass-otp
+        pass-genphrase
+      ]
+    ))
+    (python3.withPackages (subpkgs: with subpkgs; [ requests ]))
     cowsay
   ];
 }
@@ -40,9 +40,7 @@ dependency on GTK 2. If you want to build it against GTK 3, you can
 specify that as follows:
 
 ```nix
-{
-  environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
-}
+{ environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ]; }
 ```
 
 The function `override` performs the call to the Nix function that
@@ -86,11 +84,7 @@ two instances of the package. If you want to have everything depend on
 your customised instance, you can apply a *global* override as follows:
 
 ```nix
-{
-  nixpkgs.config.packageOverrides = pkgs:
-    { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
-    };
-}
+{ nixpkgs.config.packageOverrides = pkgs: { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; }; }; }
 ```
 
 The effect of this definition is essentially equivalent to modifying the

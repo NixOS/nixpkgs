@@ -115,9 +115,10 @@ A wrapper around `fetchpatch`, which takes:
 Here is an example of `fetchDebianPatch` in action:
 
 ```nix
-{ lib
-, fetchDebianPatch
-, buildPythonPackage
+{
+  lib,
+  fetchDebianPatch,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
@@ -274,7 +275,9 @@ It produces packages that cannot be built automatically.
 { fetchtorrent }:
 
 fetchtorrent {
-  config = { peer-limit-global = 100; };
+  config = {
+    peer-limit-global = 100;
+  };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
   sha256 = "";
 }

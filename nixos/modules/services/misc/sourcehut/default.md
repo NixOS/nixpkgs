@@ -18,13 +18,19 @@ let
   fqdn =
     let
       join = hostName: domain: hostName + optionalString (domain != null) ".${domain}";
-    in join config.networking.hostName config.networking.domain;
-in {
+    in
+    join config.networking.hostName config.networking.domain;
+in
+{
 
   networking = {
     hostName = "srht";
     domain = "tld";
-    firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.allowedTCPPorts = [
+      22
+      80
+      443
+    ];
   };
 
   services.sourcehut = {
@@ -37,15 +43,15 @@ in {
     postgresql.enable = true;
     redis.enable = true;
     settings = {
-        "sr.ht" = {
-          environment = "production";
-          global-domain = fqdn;
-          origin = "https://${fqdn}";
-          # Produce keys with srht-keygen from sourcehut.coresrht.
-          network-key = "/run/keys/path/to/network-key";
-          service-key = "/run/keys/path/to/service-key";
-        };
-        webhooks.private-key= "/run/keys/path/to/webhook-key";
+      "sr.ht" = {
+        environment = "production";
+        global-domain = fqdn;
+        origin = "https://${fqdn}";
+        # Produce keys with srht-keygen from sourcehut.coresrht.
+        network-key = "/run/keys/path/to/network-key";
+        service-key = "/run/keys/path/to/service-key";
+      };
+      webhooks.private-key = "/run/keys/path/to/webhook-key";
     };
   };
 

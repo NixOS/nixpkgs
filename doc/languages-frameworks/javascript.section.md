@@ -117,12 +117,19 @@ After you have identified the correct system, you need to override your package 
 For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
-  {
-    dat = prev.dat.override (oldAttrs: {
-      buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-      meta = oldAttrs.meta // { broken = since "12"; };
-    });
-  }
+{
+  dat = prev.dat.override (oldAttrs: {
+    buildInputs = [
+      final.node-gyp-build
+      pkgs.libtool
+      pkgs.autoconf
+      pkgs.automake
+    ];
+    meta = oldAttrs.meta // {
+      broken = since "12";
+    };
+  });
+}
 ```
 
 ### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
@@ -185,7 +192,11 @@ It works by utilizing npm's cache functionality -- creating a reproducible cache
 Here's an example:
 
 ```nix
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 
 buildNpmPackage rec {
   pname = "flood";
@@ -279,9 +290,7 @@ buildNpmPackage {
   pname = "hello";
   version = "0.1.0";
 
-  npmDeps = importNpmLock {
-    npmRoot = ./.;
-  };
+  npmDeps = importNpmLock { npmRoot = ./.; };
 
   npmConfigHook = importNpmLock.npmConfigHook;
 }
@@ -345,9 +354,7 @@ It's important to use the `--offline` flag. For example if you script is `"build
 The `distPhase` is packing the package's dependencies in a tarball using `yarn pack`. You can disable it using:
 
 ```nix
-{
-  doDist = false;
-}
+{ doDist = false; }
 ```
 
 The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:
@@ -392,7 +399,11 @@ To fix this we will specify different versions of build inputs to use, as well a
 mkYarnPackage rec {
   pkgConfig = {
     node-sass = {
-      buildInputs = with final;[ python libsass pkg-config ];
+      buildInputs = with final; [
+        python
+        libsass
+        pkg-config
+      ];
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi

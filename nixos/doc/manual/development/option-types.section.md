@@ -377,16 +377,14 @@ if you want to allow users to leave it undefined.
 {
   options.mod = mkOption {
     description = "submodule example";
-    type = with types; submodule {
-      options = {
-        foo = mkOption {
-          type = int;
-        };
-        bar = mkOption {
-          type = str;
+    type =
+      with types;
+      submodule {
+        options = {
+          foo = mkOption { type = int; };
+          bar = mkOption { type = str; };
         };
       };
-    };
   };
 }
 ```
@@ -398,12 +396,8 @@ if you want to allow users to leave it undefined.
 let
   modOptions = {
     options = {
-      foo = mkOption {
-        type = int;
-      };
-      bar = mkOption {
-        type = int;
-      };
+      foo = mkOption { type = int; };
+      bar = mkOption { type = int; };
     };
   };
 in
@@ -428,16 +422,14 @@ multiple definitions of the submodule option set
 {
   options.mod = mkOption {
     description = "submodule example";
-    type = with types; listOf (submodule {
-      options = {
-        foo = mkOption {
-          type = int;
+    type =
+      with types;
+      listOf (submodule {
+        options = {
+          foo = mkOption { type = int; };
+          bar = mkOption { type = str; };
         };
-        bar = mkOption {
-          type = str;
-        };
-      };
-    });
+      });
   };
 }
 ```
@@ -448,8 +440,14 @@ multiple definitions of the submodule option set
 ```nix
 {
   config.mod = [
-    { foo = 1; bar = "one"; }
-    { foo = 2; bar = "two"; }
+    {
+      foo = 1;
+      bar = "one";
+    }
+    {
+      foo = 2;
+      bar = "two";
+    }
   ];
 }
 ```
@@ -466,16 +464,14 @@ multiple named definitions of the submodule option set
 {
   options.mod = mkOption {
     description = "submodule example";
-    type = with types; attrsOf (submodule {
-      options = {
-        foo = mkOption {
-          type = int;
+    type =
+      with types;
+      attrsOf (submodule {
+        options = {
+          foo = mkOption { type = int; };
+          bar = mkOption { type = str; };
         };
-        bar = mkOption {
-          type = str;
-        };
-      };
-    });
+      });
   };
 }
 ```
@@ -485,8 +481,14 @@ multiple named definitions of the submodule option set
 ### Definition of attribute sets of submodules
 ```nix
 {
-  config.mod.one = { foo = 1; bar = "one"; };
-  config.mod.two = { foo = 2; bar = "two"; };
+  config.mod.one = {
+    foo = 1;
+    bar = "one";
+  };
+  config.mod.two = {
+    foo = 2;
+    bar = "two";
+  };
 }
 ```
 :::

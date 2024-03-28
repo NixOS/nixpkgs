@@ -548,7 +548,7 @@ so:
 
 ```nix
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
   inherit (pkgs) haskell;
   inherit (haskell.lib.compose) overrideCabal;
 
@@ -572,7 +572,7 @@ let
     previousIntermediates = turtle-full-build-with-incremental-output.intermediates;
   }) turtle;
 in
-  turtle-incremental-build
+turtle-incremental-build
 ```
 
 ## Development environments {#haskell-development-environments}
@@ -651,7 +651,9 @@ that:
 
 ```nix
 # Retrieve nixpkgs impurely from NIX_PATH for now, you can pin it instead, of course.
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 # use the nixpkgs default haskell package set
 pkgs.haskellPackages.callPackage ./my-project.nix { }
@@ -715,7 +717,9 @@ Say our example above depends on `distribution-nixpkgs` and we have a project
 file set up for both, we can add the following `shell.nix` expression:
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 pkgs.haskellPackages.shellFor {
   packages = hpkgs: [
@@ -764,7 +768,12 @@ linked to work reliably. You can override the list of supported GHC versions
 with e.g.
 
 ```nix
-pkgs.haskell-language-server.override { supportedGhcVersions = [ "90" "94" ]; }
+pkgs.haskell-language-server.override {
+  supportedGhcVersions = [
+    "90"
+    "94"
+  ];
+}
 ```
 Where all strings `version` are allowed such that
 `haskell.packages.ghc${version}` is an existing package set.
@@ -804,9 +813,7 @@ need to build `nix-tree` with a more recent version of `brick` than the default
 one provided by `haskellPackages`:
 
 ```nix
-haskellPackages.nix-tree.override {
-  brick = haskellPackages.brick_0_67;
-}
+haskellPackages.nix-tree.override { brick = haskellPackages.brick_0_67; }
 ```
 
 <!-- TODO(@sternenseemann): This belongs in the next section
@@ -824,9 +831,7 @@ if `haskell-ci` needs a recent version of `Cabal`, but also uses other packages
 that depend on that library, you may want to use:
 
 ```nix
-haskellPackages.haskell-ci.overrideScope (self: super: {
-  Cabal = self.Cabal_3_6_2_0;
-})
+haskellPackages.haskell-ci.overrideScope (self: super: { Cabal = self.Cabal_3_6_2_0; })
 ```
 
 -->
@@ -1228,60 +1233,69 @@ in
   # recommended to only use such an overlay if you are enabling profiling on a
   # platform that doesn't by default, because compiling GHC from scratch is
   # quite expensive.
-  (final: prev:
-  let
-    inherit (final) lib;
-  in
+  (
+    final: prev:
+    let
+      inherit (final) lib;
+    in
 
-  {
-    haskell = prev.haskell // {
-      compiler = prev.haskell.compiler // {
-        ${ghcName} = prev.haskell.compiler.${ghcName}.override {
-          # Unfortunately, the GHC setting is named differently for historical reasons
-          enableProfiledLibs = enableProfiling;
-        };
-      };
-    };
-  })
-
-  (final: prev:
-  let
-    inherit (final) lib;
-    haskellLib = final.haskell.lib.compose;
-  in
-
-  {
-    haskell = prev.haskell // {
-      packages = prev.haskell.packages // {
-        ${ghcName} = prev.haskell.packages.${ghcName}.override {
-          overrides = hfinal: hprev: {
-            mkDerivation = args: hprev.mkDerivation (args // {
-              # Since we are forcing our ideas upon mkDerivation, this change will
-              # affect every package in the package set.
-              enableLibraryProfiling = enableProfiling;
-
-              # To actually use profiling on an executable, executable profiling
-              # needs to be enabled for the executable you want to profile. You
-              # can either do this globally or…
-              enableExecutableProfiling = enableProfiling;
-            });
-
-            # …only for the package that contains an executable you want to profile.
-            # That saves on unnecessary rebuilds for packages that you only depend
-            # on for their library, but also contain executables (e.g. pandoc).
-            my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
-
-            # If you are disabling profiling to save on build time, but want to
-            # retain the ability to substitute from the binary cache. Drop the
-            # override for mkDerivation above and instead have an override like
-            # this for the specific packages you are building locally and want
-            # to make cheaper to build.
-            my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+    {
+      haskell = prev.haskell // {
+        compiler = prev.haskell.compiler // {
+          ${ghcName} = prev.haskell.compiler.${ghcName}.override {
+            # Unfortunately, the GHC setting is named differently for historical reasons
+            enableProfiledLibs = enableProfiling;
           };
         };
       };
-    };
-  })
+    }
+  )
+
+  (
+    final: prev:
+    let
+      inherit (final) lib;
+      haskellLib = final.haskell.lib.compose;
+    in
+
+    {
+      haskell = prev.haskell // {
+        packages = prev.haskell.packages // {
+          ${ghcName} = prev.haskell.packages.${ghcName}.override {
+            overrides = hfinal: hprev: {
+              mkDerivation =
+                args:
+                hprev.mkDerivation (
+                  args
+                  // {
+                    # Since we are forcing our ideas upon mkDerivation, this change will
+                    # affect every package in the package set.
+                    enableLibraryProfiling = enableProfiling;
+
+                    # To actually use profiling on an executable, executable profiling
+                    # needs to be enabled for the executable you want to profile. You
+                    # can either do this globally or…
+                    enableExecutableProfiling = enableProfiling;
+                  }
+                );
+
+              # …only for the package that contains an executable you want to profile.
+              # That saves on unnecessary rebuilds for packages that you only depend
+              # on for their library, but also contain executables (e.g. pandoc).
+              my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
+
+              # If you are disabling profiling to save on build time, but want to
+              # retain the ability to substitute from the binary cache. Drop the
+              # override for mkDerivation above and instead have an override like
+              # this for the specific packages you are building locally and want
+              # to make cheaper to build.
+              my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+            };
+          };
+        };
+      };
+    }
+  )
 ]
 ```
 

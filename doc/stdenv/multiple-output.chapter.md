@@ -31,7 +31,12 @@ In nixpkgs there is a framework supporting multiple-output derivations. It tries
 
 ```nix
 {
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+  ];
 }
 ```
 

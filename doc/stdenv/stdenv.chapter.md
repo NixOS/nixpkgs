@@ -37,7 +37,11 @@ stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
   # ...
-  buildInputs = [libbar perl ncurses];
+  buildInputs = [
+    libbar
+    perl
+    ncurses
+  ];
 }
 ```
 
@@ -225,7 +229,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = [ libseccomp ];
 
   postInstall = ''
@@ -235,12 +242,22 @@ stdenv.mkDerivation rec {
       --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
-      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          dosfstools
+          mtools
+          parted
+          syslinux
+        ]
+      }
   '';
 
   doCheck = true;
-  nativeCheckInputs = [ util-linux qemu ];
-  checkPhase = '' [elided] '';
+  nativeCheckInputs = [
+    util-linux
+    qemu
+  ];
+  checkPhase = ''[elided] '';
 }
 ```
 
@@ -280,7 +297,7 @@ This can lead to conflicting dependencies that cannot easily be resolved.
 # A propagated dependency
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 let
   bar = stdenv.mkDerivation {
     name = "bar";
@@ -469,9 +486,7 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
 - []{#var-passthru-updateScript-command} an executable file, either on the file system:
 
   ```nix
-  {
-    passthru.updateScript = ./update.sh;
-  }
+  { passthru.updateScript = ./update.sh; }
   ```
 
   or inside the expression itself:
@@ -494,7 +509,11 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
 
   ```nix
   {
-    passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+    passthru.updateScript = [
+      ../../update.sh
+      pname
+      "--requested-release=unstable"
+    ];
   }
   ```
 
@@ -506,9 +525,14 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
   ```nix
   {
     passthru.updateScript = {
-      command = [ ../../update.sh pname ];
+      command = [
+        ../../update.sh
+        pname
+      ];
       attrPath = pname;
-      supportedFeatures = [ /* ... */ ];
+      supportedFeatures = [
+        # ...
+      ];
     };
   }
   ```
@@ -517,9 +541,7 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
 A common pattern is to use the [`nix-update-script`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
 
 ```nix
-{
-  passthru.updateScript = nix-update-script { };
-}
+{ passthru.updateScript = nix-update-script { }; }
 ```
 
 For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released. The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set. While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
@@ -589,8 +611,7 @@ If you pass a function to `mkDerivation`, it will receive as its argument the fi
 mkDerivation (finalAttrs: {
   pname = "hello";
   withFeature = true;
-  configureFlags =
-    lib.optionals finalAttrs.withFeature ["--with-feature"];
+  configureFlags = lib.optionals finalAttrs.withFeature [ "--with-feature" ];
 })
 ```
 
@@ -607,28 +628,28 @@ various bindings:
 
 ```nix
 # `pkg` is the _original_ definition (for illustration purposes)
-let pkg =
-  mkDerivation (finalAttrs: {
+let
+  pkg = mkDerivation (finalAttrs: {
     # ...
 
     # An example attribute
-    packages = [];
+    packages = [ ];
 
     # `passthru.tests` is a commonly defined attribute.
     passthru.tests.simple = f finalAttrs.finalPackage;
 
     # An example of an attribute containing a function
-    passthru.appendPackages = packages':
-      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
-        packages = super.packages ++ packages';
-      });
+    passthru.appendPackages =
+      packages':
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: { packages = super.packages ++ packages'; });
 
     # For illustration purposes; referenced as
     # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
     passthru.finalAttrs = finalAttrs;
     passthru.original = pkg;
   });
-in pkg
+in
+pkg
 ```
 
 Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
@@ -858,9 +879,7 @@ The file name of the Makefile.
 A list of strings passed as additional flags to `make`. These flags are also used by the default install and check phase. For setting make flags specific to the build phase, use `buildFlags` (see below).
 
 ```nix
-{
-  makeFlags = [ "PREFIX=$(out)" ];
-}
+{ makeFlags = [ "PREFIX=$(out)" ]; }
 ```
 
 ::: {.note}
@@ -908,9 +927,7 @@ The check phase checks whether the package was built correctly by running its te
 Controls whether the check phase is executed. By default it is skipped, but if `doCheck` is set to true, the check phase is usually executed. Thus you should set
 
 ```nix
-{
-  doCheck = true;
-}
+{ doCheck = true; }
 ```
 
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -963,9 +980,7 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 The make targets that perform the installation. Defaults to `install`. Example:
 
 ```nix
-{
-  installTargets = "install-bin install-doc";
-}
+{ installTargets = "install-bin install-doc"; }
 ```
 
 ##### `installFlags` / `installFlagsArray` {#var-stdenv-installFlags}
@@ -1098,7 +1113,7 @@ To make GDB find debug information for the `socat` package and its dependencies,
 ```nix
 let
   pkgs = import ./. {
-    config = {};
+    config = { };
     overlays = [
       (final: prev: {
         ncurses = prev.ncurses.overrideAttrs { separateDebugInfo = true; };
@@ -1117,19 +1132,19 @@ let
     ];
   };
 in
-  pkgs.mkShell {
+pkgs.mkShell {
 
-    NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+  NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
 
-    packages = [
-      pkgs.gdb
-      pkgs.socat
-    ];
+  packages = [
+    pkgs.gdb
+    pkgs.socat
+  ];
 
-    shellHook = ''
-      ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
-    '';
-  }
+  shellHook = ''
+    ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+  '';
+}
 ```
 
 This setup works as follows:
@@ -1154,9 +1169,7 @@ It is often better to add tests that are not part of the source distribution to 
 Controls whether the installCheck phase is executed. By default it is skipped, but if `doInstallCheck` is set to true, the installCheck phase is usually executed. Thus you should set
 
 ```nix
-{
-  doInstallCheck = true;
-}
+{ doInstallCheck = true; }
 ```
 
 in the derivation to enable install checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doInstallCheck` is set, as the newly-built program won’t run on the platform used to build it.

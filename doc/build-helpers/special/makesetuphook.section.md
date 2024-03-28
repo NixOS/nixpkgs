@@ -15,16 +15,22 @@ pkgs.makeSetupHook {
 ### setup hook that depends on the hello package and runs hello and @shell@ is substituted with path to bash {#sec-pkgs.makeSetupHook-usage-example}
 
 ```nix
-pkgs.makeSetupHook {
+pkgs.makeSetupHook
+  {
     name = "run-hello-hook";
     propagatedBuildInputs = [ pkgs.hello ];
-    substitutions = { shell = "${pkgs.bash}/bin/bash"; };
+    substitutions = {
+      shell = "${pkgs.bash}/bin/bash";
+    };
     passthru.tests.greeting = callPackage ./test { };
     meta.platforms = lib.platforms.linux;
-} (writeScript "run-hello-hook.sh" ''
-    #!@shell@
-    hello
-'')
+  }
+  (
+    writeScript "run-hello-hook.sh" ''
+      #!@shell@
+      hello
+    ''
+  )
 ```
 
 ## Attributes {#sec-pkgs.makeSetupHook-attributes}

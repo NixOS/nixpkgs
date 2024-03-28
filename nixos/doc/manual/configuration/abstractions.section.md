@@ -4,39 +4,39 @@ If you find yourself repeating yourself over and over, it’s time to abstract. 
 
 ```nix
 {
-  services.httpd.virtualHosts =
-    { "blog.example.org" = {
-        documentRoot = "/webroot/blog.example.org";
-        adminAddr = "alice@example.org";
-        forceSSL = true;
-        enableACME = true;
-        enablePHP = true;
-      };
-      "wiki.example.org" = {
-        documentRoot = "/webroot/wiki.example.org";
-        adminAddr = "alice@example.org";
-        forceSSL = true;
-        enableACME = true;
-        enablePHP = true;
-      };
+  services.httpd.virtualHosts = {
+    "blog.example.org" = {
+      documentRoot = "/webroot/blog.example.org";
+      adminAddr = "alice@example.org";
+      forceSSL = true;
+      enableACME = true;
+      enablePHP = true;
     };
+    "wiki.example.org" = {
+      documentRoot = "/webroot/wiki.example.org";
+      adminAddr = "alice@example.org";
+      forceSSL = true;
+      enableACME = true;
+      enablePHP = true;
+    };
+  };
 }
 ```
 
 It defines two virtual hosts with nearly identical configuration; the only difference is the document root directories. To prevent this duplication, we can use a `let`:
 ```nix
 let
-  commonConfig =
-    { adminAddr = "alice@example.org";
-      forceSSL = true;
-      enableACME = true;
-    };
+  commonConfig = {
+    adminAddr = "alice@example.org";
+    forceSSL = true;
+    enableACME = true;
+  };
 in
 {
-  services.httpd.virtualHosts =
-    { "blog.example.org" = (commonConfig // { documentRoot = "/webroot/blog.example.org"; });
-      "wiki.example.org" = (commonConfig // { documentRoot = "/webroot/wiki.example.com"; });
-    };
+  services.httpd.virtualHosts = {
+    "blog.example.org" = (commonConfig // { documentRoot = "/webroot/blog.example.org"; });
+    "wiki.example.org" = (commonConfig // { documentRoot = "/webroot/wiki.example.com"; });
+  };
 }
 ```
 
@@ -47,9 +47,24 @@ You can write a `let` wherever an expression is allowed. Thus, you also could ha
 ```nix
 {
   services.httpd.virtualHosts =
-    let commonConfig = { /* ... */ }; in
-    { "blog.example.org" = (commonConfig // { /* ... */ });
-      "wiki.example.org" = (commonConfig // { /* ... */ });
+    let
+      commonConfig = {
+        # ...
+      };
+    in
+    {
+      "blog.example.org" = (
+        commonConfig
+        // {
+          # ...
+        }
+      );
+      "wiki.example.org" = (
+        commonConfig
+        // {
+          # ...
+        }
+      );
     };
 }
 ```
@@ -62,18 +77,19 @@ but not `{ let commonConfig = ...; in ...; }` since attributes (as opposed to at
 {
   services.httpd.virtualHosts =
     let
-      makeVirtualHost = webroot:
-        { documentRoot = webroot;
-          adminAddr = "alice@example.org";
-          forceSSL = true;
-          enableACME = true;
-        };
-    in
-      { "example.org" = (makeVirtualHost "/webroot/example.org");
-        "example.com" = (makeVirtualHost "/webroot/example.com");
-        "example.gov" = (makeVirtualHost "/webroot/example.gov");
-        "example.nl" = (makeVirtualHost "/webroot/example.nl");
+      makeVirtualHost = webroot: {
+        documentRoot = webroot;
+        adminAddr = "alice@example.org";
+        forceSSL = true;
+        enableACME = true;
       };
+    in
+    {
+      "example.org" = (makeVirtualHost "/webroot/example.org");
+      "example.com" = (makeVirtualHost "/webroot/example.com");
+      "example.gov" = (makeVirtualHost "/webroot/example.gov");
+      "example.nl" = (makeVirtualHost "/webroot/example.nl");
+    };
 }
 ```
 

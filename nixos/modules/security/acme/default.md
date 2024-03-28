@@ -210,14 +210,20 @@ Nix config. Instead, generate them one time with a systemd service:
 ```nix
 {
   systemd.services.dns-rfc2136-conf = {
-    requiredBy = ["acme-example.com.service" "bind.service"];
-    before = ["acme-example.com.service" "bind.service"];
+    requiredBy = [
+      "acme-example.com.service"
+      "bind.service"
+    ];
+    before = [
+      "acme-example.com.service"
+      "bind.service"
+    ];
     unitConfig = {
       ConditionPathExists = "!/var/lib/secrets/dnskeys.conf";
     };
     serviceConfig = {
       Type = "oneshot";
-      UMask = 0077;
+      UMask = 77;
     };
     path = [ pkgs.bind ];
     script = ''
@@ -312,28 +318,32 @@ can be applied to any service.
 
   # Now you must augment OpenSMTPD's systemd service to load
   # the certificate files.
-  systemd.services.opensmtpd.requires = ["acme-finished-mail.example.com.target"];
-  systemd.services.opensmtpd.serviceConfig.LoadCredential = let
-    certDir = config.security.acme.certs."mail.example.com".directory;
-  in [
-    "cert.pem:${certDir}/cert.pem"
-    "key.pem:${certDir}/key.pem"
-  ];
+  systemd.services.opensmtpd.requires = [ "acme-finished-mail.example.com.target" ];
+  systemd.services.opensmtpd.serviceConfig.LoadCredential =
+    let
+      certDir = config.security.acme.certs."mail.example.com".directory;
+    in
+    [
+      "cert.pem:${certDir}/cert.pem"
+      "key.pem:${certDir}/key.pem"
+    ];
 
   # Finally, configure OpenSMTPD to use these certs.
-  services.opensmtpd = let
-    credsDir = "/run/credentials/opensmtpd.service";
-  in {
-    enable = true;
-    setSendmail = false;
-    serverConfiguration = ''
-      pki mail.example.com cert "${credsDir}/cert.pem"
-      pki mail.example.com key "${credsDir}/key.pem"
-      listen on localhost tls pki mail.example.com
-      action act1 relay host smtp://127.0.0.1:10027
-      match for local action act1
-    '';
-  };
+  services.opensmtpd =
+    let
+      credsDir = "/run/credentials/opensmtpd.service";
+    in
+    {
+      enable = true;
+      setSendmail = false;
+      serverConfiguration = ''
+        pki mail.example.com cert "${credsDir}/cert.pem"
+        pki mail.example.com key "${credsDir}/key.pem"
+        listen on localhost tls pki mail.example.com
+        action act1 relay host smtp://127.0.0.1:10027
+        match for local action act1
+      '';
+    };
 }
 ```
 

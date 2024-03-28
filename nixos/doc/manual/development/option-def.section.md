@@ -21,10 +21,16 @@ option, you may need to use `mkIf`. Consider, for instance:
 
 ```nix
 {
-  config = if config.services.httpd.enable then {
-    environment.systemPackages = [ /* ... */ ];
-    # ...
-  } else {};
+  config =
+    if config.services.httpd.enable then
+      {
+        environment.systemPackages = [
+          # ...
+        ];
+        # ...
+      }
+    else
+      { };
 }
 ```
 
@@ -35,11 +41,11 @@ clearly circular and contradictory:
 
 ```nix
 {
-  config = if config.services.httpd.enable then {
-    services.httpd.enable = false;
-  } else {
-    services.httpd.enable = true;
-  };
+  config =
+    if config.services.httpd.enable then
+      { services.httpd.enable = false; }
+    else
+      { services.httpd.enable = true; };
 }
 ```
 
@@ -48,7 +54,9 @@ The solution is to write:
 ```nix
 {
   config = mkIf config.services.httpd.enable {
-    environment.systemPackages = [ /* ... */ ];
+    environment.systemPackages = [
+      # ...
+    ];
     # ...
   };
 }
@@ -60,7 +68,13 @@ be "pushed down" into the individual definitions, as if you had written:
 ```nix
 {
   config = {
-    environment.systemPackages = if config.services.httpd.enable then [ /* ... */ ] else [];
+    environment.systemPackages =
+      if config.services.httpd.enable then
+        [
+          # ...
+        ]
+      else
+        [ ];
     # ...
   };
 }
@@ -75,9 +89,7 @@ priority 100 and option defaults have priority 1500.
 You can specify an explicit priority by using `mkOverride`, e.g.
 
 ```nix
-{
-  services.openssh.enable = mkOverride 10 false;
-}
+{ services.openssh.enable = mkOverride 10 false; }
 ```
 
 This definition causes all other definitions with priorities above 10 to
@@ -92,9 +104,7 @@ The functions `mkBefore` and `mkAfter` are equal to `mkOrder 500` and `mkOrder 1
 As an example,
 
 ```nix
-{
-  hardware.firmware = mkBefore [ myFirmware ];
-}
+{ hardware.firmware = mkBefore [ myFirmware ]; }
 ```
 
 This definition ensures that `myFirmware` comes before other unordered
@@ -112,14 +122,19 @@ they were declared in separate modules. This can be done using
 
 ```nix
 {
-  config = mkMerge
-    [ # Unconditional stuff.
-      { environment.systemPackages = [ /* ... */ ];
-      }
-      # Conditional stuff.
-      (mkIf config.services.bla.enable {
-        environment.systemPackages = [ /* ... */ ];
-      })
-    ];
+  config = mkMerge [
+    # Unconditional stuff.
+    {
+      environment.systemPackages = [
+        # ...
+      ];
+    }
+    # Conditional stuff.
+    (mkIf config.services.bla.enable {
+      environment.systemPackages = [
+        # ...
+      ];
+    })
+  ];
 }
 ```

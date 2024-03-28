@@ -53,8 +53,15 @@ It also takes other standard `mkDerivation` attributes, they are added as such, 
 Here is a simple package example. It is a pure Coq library, thus it depends on Coq. It builds on the Mathematical Components library, thus it also takes some `mathcomp` derivations as `extraBuildInputs`.
 
 ```nix
-{ lib, mkCoqDerivation, version ? null
-, coq, mathcomp, mathcomp-finmap, mathcomp-bigenough }:
+{
+  lib,
+  mkCoqDerivation,
+  version ? null,
+  coq,
+  mathcomp,
+  mathcomp-finmap,
+  mathcomp-bigenough,
+}:
 
 let
   inherit (lib) licenses maintainers switch;
@@ -62,31 +69,70 @@ let
 in
 
 mkCoqDerivation {
-  /* namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2` */
-  namePrefix = [ "coq" "mathcomp" ];
+  # namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2`
+  namePrefix = [
+    "coq"
+    "mathcomp"
+  ];
   pname = "multinomials";
   owner = "math-comp";
   inherit version;
-  defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.7" "8.12")  "1.11.0" ];             out = "1.5.2"; }
-      { cases = [ (range "8.7" "8.11")  (range "1.8" "1.10") ]; out = "1.5.0"; }
-      { cases = [ (range "8.7" "8.10")  (range "1.8" "1.10") ]; out = "1.4"; }
-      { cases = [ "8.6"                 (range "1.6" "1.7") ];  out = "1.1"; }
-    ] null;
+  defaultVersion =
+    with versions;
+    switch
+      [
+        coq.version
+        mathcomp.version
+      ]
+      [
+        {
+          cases = [
+            (range "8.7" "8.12")
+            "1.11.0"
+          ];
+          out = "1.5.2";
+        }
+        {
+          cases = [
+            (range "8.7" "8.11")
+            (range "1.8" "1.10")
+          ];
+          out = "1.5.0";
+        }
+        {
+          cases = [
+            (range "8.7" "8.10")
+            (range "1.8" "1.10")
+          ];
+          out = "1.4";
+        }
+        {
+          cases = [
+            "8.6"
+            (range "1.6" "1.7")
+          ];
+          out = "1.1";
+        }
+      ]
+      null;
   release = {
     "1.5.2".sha256 = "15aspf3jfykp1xgsxf8knqkxv8aav2p39c2fyirw7pwsfbsv2c4s";
     "1.5.1".sha256 = "13nlfm2wqripaq671gakz5mn4r0xwm0646araxv0nh455p9ndjs3";
     "1.5.0".sha256 = "064rvc0x5g7y1a0nip6ic91vzmq52alf6in2bc2dmss6dmzv90hw";
-    "1.5.0".rev    = "1.5";
-    "1.4".sha256   = "0vnkirs8iqsv8s59yx1fvg1nkwnzydl42z3scya1xp1b48qkgn0p";
-    "1.3".sha256   = "0l3vi5n094nx3qmy66hsv867fnqm196r8v605kpk24gl0aa57wh4";
-    "1.2".sha256   = "1mh1w339dslgv4f810xr1b8v2w7rpx6fgk9pz96q0fyq49fw2xcq";
-    "1.1".sha256   = "1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s";
-    "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
+    "1.5.0".rev = "1.5";
+    "1.4".sha256 = "0vnkirs8iqsv8s59yx1fvg1nkwnzydl42z3scya1xp1b48qkgn0p";
+    "1.3".sha256 = "0l3vi5n094nx3qmy66hsv867fnqm196r8v605kpk24gl0aa57wh4";
+    "1.2".sha256 = "1mh1w339dslgv4f810xr1b8v2w7rpx6fgk9pz96q0fyq49fw2xcq";
+    "1.1".sha256 = "1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s";
+    "1.0".sha256 = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
-  propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
+  propagatedBuildInputs = [
+    mathcomp.ssreflect
+    mathcomp.algebra
+    mathcomp-finmap
+    mathcomp-bigenough
+  ];
 
   meta = {
     description = "A Coq/SSReflect Library for Monoidal Rings and Multinomials";
@@ -106,17 +152,13 @@ There are three distinct ways of changing a Coq package by overriding one of its
 For example, assuming you have a special `mathcomp` dependency you want to use, here is how you could override the `mathcomp` dependency:
 
 ```nix
-multinomials.override {
-  mathcomp = my-special-mathcomp;
-}
+multinomials.override { mathcomp = my-special-mathcomp; }
 ```
 
 In Nixpkgs, all Coq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
 
 ```nix
-coqPackages.multinomials.override {
-  version = "1.5.1";
-}
+coqPackages.multinomials.override { version = "1.5.1"; }
 ```
 
 Refer to [](#coq-packages-attribute-sets-coqpackages) for all the different formats that you can potentially pass to `version`, as well as the restrictions.
@@ -128,12 +170,10 @@ The `overrideCoqDerivation` function lets you easily change arguments to `mkCoqD
 For example, here is how you could locally add a new release of the `multinomials` library, and set the `defaultVersion` to use this release:
 
 ```nix
-coqPackages.lib.overrideCoqDerivation
-  {
-    defaultVersion = "2.0";
-    release."2.0".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkk";
-  }
-  coqPackages.multinomials
+coqPackages.lib.overrideCoqDerivation {
+  defaultVersion = "2.0";
+  release."2.0".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkk";
+} coqPackages.multinomials
 ```
 
 ### `.overrideAttrs` {#coq-overrideAttrs}
@@ -144,8 +184,10 @@ For instance, here is how you could add some code to be performed in the derivat
 
 ```nix
 coqPackages.multinomials.overrideAttrs (oldAttrs: {
-  postInstall = oldAttrs.postInstall or "" + ''
-    echo "you can do anything you want here"
-  '';
+  postInstall =
+    oldAttrs.postInstall or ""
+    + ''
+      echo "you can do anything you want here"
+    '';
 })
 ```

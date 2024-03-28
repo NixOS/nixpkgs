@@ -39,12 +39,12 @@ $ nix-shell -p 'octave.withPackages (ps: with ps; [ symbolic ])'
 This will also work in a `shell.nix` file.
 
 ```nix
-{ pkgs ? import <nixpkgs> { }}:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [
-    (octave.withPackages (opkgs: with opkgs; [ symbolic ]))
-  ];
+  nativeBuildInputs = with pkgs; [ (octave.withPackages (opkgs: with opkgs; [ symbolic ])) ];
 }
 ```
 
