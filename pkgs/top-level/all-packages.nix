@@ -30889,6 +30889,8 @@ with pkgs;
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
+  everforest-gtk = callPackage ../data/themes/everforest-gtk { };
+
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   eww = callPackage ../applications/window-managers/eww { };
