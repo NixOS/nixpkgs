@@ -72,18 +72,15 @@ let
     cp -r --no-preserve=all $inputs/* .
 
     substituteInPlace ./manual.md \
-      --replace '@NIXOS_VERSION@' "${version}"
+      --subst-var-by NIXOS_VERSION "${version}"
     substituteInPlace ./configuration/configuration.md \
-      --replace \
-          '@MODULE_CHAPTERS@' \
-          ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
+      --subst-var-by MODULE_CHAPTERS \
+        ${lib.escapeShellArg (lib.concatMapStringsSep "\n" (p: "${p.value}") config.meta.doc)}
     substituteInPlace ./nixos-options.md \
-      --replace \
-        '@NIXOS_OPTIONS_JSON@' \
+      --subst-var-by NIXOS_OPTIONS_JSON \
         ${optionsDoc.optionsJSON}/${common.outputPath}/options.json
     substituteInPlace ./development/writing-nixos-tests.section.md \
-      --replace \
-        '@NIXOS_TEST_OPTIONS_JSON@' \
+      --subst-var-by NIXOS_TEST_OPTIONS_JSON \
         ${testOptionsDoc.optionsJSON}/${common.outputPath}/options.json
     sed -e '/@PYTHON_MACHINE_METHODS@/ {' -e 'r ${testDriverMachineDocstrings}/machine-methods.md' -e 'd' -e '}' \
       -i ./development/writing-nixos-tests.section.md
