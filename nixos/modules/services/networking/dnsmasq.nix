@@ -129,10 +129,11 @@ in
 
     warnings = lib.optional (cfg.extraConfig != "") "Text based config is deprecated, dnsmasq now supports `services.dnsmasq.settings` for an attribute-set based config";
 
-    services.dnsmasq.settings = {
+    services.dnsmasq.settings = mkIf (cfg.settings ? "dhcp-range") {
       dhcp-leasefile = mkDefault "${stateDir}/dnsmasq.leases";
-      conf-file = mkDefault (optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
-      resolv-file = mkDefault (optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
+    } // mkIf (cfg.resolveLocalQueries && config.networking.resolvconf.enable) {
+      conf-file = mkDefault "/etc/dnsmasq-conf.conf";
+      resolv-file = mkDefault "/etc/dnsmasq-resolv.conf";
     };
 
     networking.nameservers =
@@ -161,11 +162,13 @@ in
         after = [ "network.target" "systemd-resolved.service" ];
         wantedBy = [ "multi-user.target" ];
         path = [ dnsmasq ];
-        preStart = ''
+        preStart = lib.optionalString (cfg.settings ? "dhcp-range") ''
           mkdir -m 755 -p ${stateDir}
           touch ${stateDir}/dnsmasq.leases
           chown -R dnsmasq ${stateDir}
+        '' + lib.optionalString (cfg.resolveLocalQueries && config.networking.resolvconf.enable) ''
           touch /etc/dnsmasq-{conf,resolv}.conf
+        '' + ''
           dnsmasq --test
         '';
         serviceConfig = {
