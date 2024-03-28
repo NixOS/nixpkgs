@@ -6330,6 +6330,11 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  feathecutie = {
+    name = "feathecutie";
+    github = "feathecutie";
+    githubId = 53912746;
+  };
   federicoschonborn = {
     name = "Federico Damián Schonborn";
     email = "federicoschonborn@disroot.org";
