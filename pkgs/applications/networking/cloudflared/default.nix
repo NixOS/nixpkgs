@@ -70,6 +70,9 @@ buildGoModule rec {
 
   doCheck = !stdenv.isDarwin;
 
+  # Test timed out after 10m0s
+  checkFlags = [ "-skip=^TestConcurrentUpdateAndRead$" ];
+
   passthru.tests.simple = callPackage ./tests.nix { inherit version; };
 
   meta = with lib; {

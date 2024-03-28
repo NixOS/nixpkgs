@@ -30,6 +30,9 @@ buildGoModule rec {
     runHook postBuild
   '';
 
+  # No test target in Makefile.
+  doCheck = false;
+
   installPhase = ''
     runHook preInstall
     make PREFIX=$out install

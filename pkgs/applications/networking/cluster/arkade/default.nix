@@ -41,6 +41,11 @@ buildGoModule rec {
     "-X github.com/alexellis/arkade/pkg.Version=${version}"
   ];
 
+  checkFlags = [
+    # Test needs network access
+    "-skip=^Test_DownloadKubens$"
+  ];
+
   postInstall = ''
     installShellCompletion --cmd arkade \
       --bash <($out/bin/arkade completion bash) \

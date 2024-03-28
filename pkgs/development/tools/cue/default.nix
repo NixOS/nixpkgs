@@ -33,6 +33,9 @@ buildGoModule rec {
       --zsh <($out/bin/cue completion zsh)
   '';
 
+  # Tests asserts on development version, which we override in ldflags.
+  checkFlags = [ "-skip=^TestScript/version$" ];
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/cue eval - <<<'a: "all good"' > /dev/null

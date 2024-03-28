@@ -32,6 +32,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  checkFlags = [
+    # Expected nil, but got: &errors.errorString{s:"no private IP address found, and explicit IP not provided"}
+    "-skip=^TestFinalAdvertiseAddr$"
+  ];
+
   postInstall = ''
     $out/bin/amtool --completion-script-bash > amtool.bash
     installShellCompletion amtool.bash

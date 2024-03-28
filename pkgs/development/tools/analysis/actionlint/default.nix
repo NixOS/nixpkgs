@@ -34,6 +34,11 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/rhysd/actionlint.version=${version}" ];
 
+  checkFlags = [
+    # Test checks version output and assumes version is empty.
+    "-skip=^TestLinterFormatErrorMessageInSARIF$"
+  ];
+
   meta = with lib; {
     homepage = "https://rhysd.github.io/actionlint/";
     description = "Static checker for GitHub Actions workflow files";

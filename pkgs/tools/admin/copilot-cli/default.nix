@@ -25,6 +25,18 @@ buildGoModule rec {
 
   subPackages = [ "./cmd/copilot" ];
 
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests executes docker.
+        "TestDockerCommand_CheckDockerEngineRunning"
+        "TestDockerCommand_GetPlatform"
+        # Tests require network access.
+        "TestWorkloadDeployer_UploadArtifacts"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}" ];
+
   postInstall = ''
     installShellCompletion --cmd copilot \
       --bash <($out/bin/copilot completion bash) \

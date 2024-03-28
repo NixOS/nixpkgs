@@ -15,6 +15,17 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  # Test requires network access.
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests require network access.
+        "TestPublicIP"
+        "TestLocalIP"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
   passthru = {
     tests = {
       local-relay = callPackage ./test-local-relay.nix { };

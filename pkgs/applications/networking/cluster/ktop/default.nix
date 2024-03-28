@@ -3,7 +3,6 @@
 buildGoModule rec {
   pname = "ktop";
   version = "0.3.5";
-  excludedPackages = [".ci"];
 
   src = fetchFromGitHub {
     owner = "vladimirvivien";
@@ -15,9 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-IiAMmHOq69WMT2B1q9ZV2fGDnLr7AbRm1P7ACSde2FE=";
   ldflags = [ "-s" "-w" "-X github.com/vladimirvivien/ktop/buildinfo.Version=v${version}" ];
 
-  postInstall = ''
-    rm $out/bin/hack
-  '';
+  subPackages = [ "." ];
 
   doCheck = false;
 

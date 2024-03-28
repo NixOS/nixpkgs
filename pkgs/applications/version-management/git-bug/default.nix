@@ -17,7 +17,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  excludedPackages = [ "doc" "misc" ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-X github.com/MichaelMure/git-bug/commands.GitCommit=v${version}"

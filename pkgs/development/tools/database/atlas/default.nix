@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, atlas }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, git
+, atlas
+}:
 
 buildGoModule rec {
   pname = "atlas";
@@ -21,6 +28,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X ariga.io/atlas/cmd/atlas/internal/cmdapi.version=v${version}" ];
 
   subPackages = [ "." ];
+
+  nativeCheckInputs = [ git ];
 
   postInstall = ''
     installShellCompletion --cmd atlas \

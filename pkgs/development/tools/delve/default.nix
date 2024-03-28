@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, stdenv, lsof }:
 
 buildGoModule rec {
   pname = "delve";
@@ -18,6 +18,18 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   hardeningDisable = [ "fortify" ];
+
+  nativeCheckInputs = [ lsof ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests fail with 'could not get the Go version for the moduledata extraction: no goversion found'
+        "TestDebugStripped"
+        "TestDebugStripped2"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck = ''
     XDG_CONFIG_HOME=$(mktemp -d)

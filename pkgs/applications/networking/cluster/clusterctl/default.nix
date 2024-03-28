@@ -23,6 +23,22 @@ buildGoModule rec {
     "-X ${t}.gitVersion=v${version}"
   ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  excludedPackages = [
+    # Packages use envtest in their TestMain and panic when executed.
+    # Excluding these packages here so, as TestMain functions cannot
+    # be skipped on a per-package basis using '-skip' flag.
+    "util/patch"
+    "internal/controllers/clusterclass"
+    "controllers/remote"
+    "internal/util/ssa"
+    "internal/controllers/topology/cluster/structuredmerge"
+    "internal/controllers/topology/cluster"
+  ];
+
   postInstall = ''
     # errors attempting to write config to read-only $HOME
     export HOME=$TMPDIR

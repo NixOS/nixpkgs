@@ -34,6 +34,10 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/clair \
       --prefix PATH : "${lib.makeBinPath [ rpm xz ]}"

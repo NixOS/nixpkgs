@@ -188,25 +188,47 @@ let
     buildPhase = args.buildPhase or (''
       runHook preBuild
 
-      exclude='\(/_\|examples\|Godeps\|testdata'
-      if [[ -n "$excludedPackages" ]]; then
-        IFS=' ' read -r -a excludedArr <<<$excludedPackages
-        printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
-        excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
-        exclude+='\|'"$excludedAlternates"
-      fi
-      exclude+='\)'
+      filterExcluded() {
+        local pkgs=("$@")
+        local filteredPkgs=()
+        read -ra excludedPackages <<< "$excludedPackages"
+        for pkg in "''${pkgs[@]}"; do
+          for exclude in "''${excludedPackages[@]}"; do
+            # Regexp match for backwards compatibility
+            # TODO: Use exact match after fixing packages
+            if [[ "$pkg" =~ $exclude ]]; then
+              continue 2
+            fi
+          done
+          filteredPkgs+=("$pkg")
+        done
+        echo "''${filteredPkgs[@]}"
+      }
 
-      buildGoDir() {
-        local cmd="$1" dir="$2"
-
+      collectFlags() {
         . $TMPDIR/buildFlagsArray
-
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
-        flags+=(''${tags:+-tags=''${tags// /,}})
-        flags+=(''${ldflags:+-ldflags="$ldflags"})
-        flags+=("-p" "$NIX_BUILD_CORES")
+        flags+=("''${tags:+-tags=''${tags// /,}}")
+        flags+=("''${ldflags:+-ldflags="$ldflags"}")
+        flags+=("-p=$NIX_BUILD_CORES")
+        for flag in "''${flags[@]}"; do
+          echo "$flag" >&2
+          echo "$flag"
+        done
+      }
+
+      buildGoDirs() {
+        local cmd="$1"
+        shift
+        local pkgs=("$@")
+
+        read -ra pkgs < <(filterExcluded "''${pkgs[@]}")
+
+        read -ra flags < <(collectFlags)
+        for flag in "''${flags[@]}"; do
+          echo "$flag" >&2
+        done
 
         if [ "$cmd" = "test" ]; then
           flags+=(-vet=off)
@@ -214,7 +236,7 @@ let
         fi
 
         local OUT
-        if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
+        if ! OUT="$(go $cmd "''${flags[@]}" "''${pkgs[@]}" 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -226,13 +248,23 @@ let
         return 0
       }
 
-      getGoDirs() {
-        local type;
-        type="$1"
-        if [ -n "$subPackages" ]; then
-          echo "$subPackages" | sed "s,\(^\| \),\1./,g"
+      getPackagesToBuild() {
+        read -ra flags < <(collectFlags)
+        if [[ -n "$subPackages" ]]; then
+          local subPkgs
+          read -ra subPkgs < <(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
+          go list \
+              -f '{{ .Dir }}' \
+              "''${flags[@]}" \
+              "''${subPkgs[@]}" | \
+              xargs echo
         else
-          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
+          # Make Go recurse all packages of the module.
+          go list \
+            -f '{{ .Dir }}' \
+            "''${flags[@]}" \
+            ./... | \
+            xargs echo
         fi
       }
 
@@ -248,10 +280,8 @@ let
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
-      for pkg in $(getGoDirs ""); do
-        echo "Building subPackage $pkg"
-        buildGoDir install "$pkg"
-      done
+      read -ra buildPkgs < <(getPackagesToBuild)
+      buildGoDirs install "''${buildPkgs[@]}"
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
@@ -273,9 +303,31 @@ let
       # We do not set trimpath for tests, in case they reference test assets
       export GOFLAGS=''${GOFLAGS//-trimpath/}
 
-      for pkg in $(getGoDirs test); do
-        buildGoDir test "$pkg"
-      done
+      getPackagesToTest() {
+        read -ra flags < <(collectFlags)
+        if [[ -n "$subPackages" ]]; then
+          # Find all packages belonging to this Go module that are dependencies
+          # of the targeted subPackages.
+          local subPkgs
+          read -ra subPkgs < <(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
+          go list \
+              -f '{{ if ne .Module nil }}{{ if .Module.Main }}{{ .Dir }}{{ end }}{{ end }}' \
+              -deps \
+              "''${flags[@]}" \
+              "''${subPkgs[@]}" | \
+              xargs echo
+        else
+          # Make Go recurse all packages of the module.
+          go list \
+            -f '{{ .Dir }}' \
+            "''${flags[@]}"  \
+            ./... | \
+            xargs echo
+        fi
+      }
+
+      read -ra testPkgs < <(getPackagesToTest)
+      buildGoDirs test "''${testPkgs[@]}"
 
       runHook postCheck
     '';
@@ -295,7 +347,7 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go goModules vendorHash; }
-                        // lib.optionalAttrs (args' ? vendorSha256 ) { inherit (args') vendorSha256; };
+      // lib.optionalAttrs (args' ? vendorSha256) { inherit (args') vendorSha256; };
 
     meta = {
       # Add default meta information
@@ -304,7 +356,9 @@ let
   });
 in
 lib.warnIf (args' ? vendorSha256) "`vendorSha256` is deprecated. Use `vendorHash` instead"
-lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+  lib.warnIf
+  (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
-lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
+  lib.warnIf
+  (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
   package
