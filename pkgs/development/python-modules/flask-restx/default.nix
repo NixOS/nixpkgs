@@ -17,24 +17,29 @@
 , pytest-mock
 , pytest-benchmark
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "flask-restx";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
-    repo = pname;
+    repo = "flask-restx";
     rev = "refs/tags/${version}";
     hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aniso8601
     flask
     importlib-resources
