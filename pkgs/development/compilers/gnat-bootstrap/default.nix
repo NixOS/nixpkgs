@@ -10,6 +10,16 @@ stdenv.mkDerivation(finalAttrs:
   let versionMap =
     let url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${finalAttrs.version}/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
     in {
+    "4" = {
+      gccVersion = "4.1";
+      alireRevision = "";
+    } // {
+      x86_64-linux = {
+        upstreamTriplet = "x86_64-pc-linux-gnu";
+        url = "https://github.com/mmlb/nixpkgs-gnat-bootstrap/releases/download/v1.0.0/gnatboot-4.1-amd64.tar.bz2";
+        hash = "sha256-hqyUHBcMbbRHQZ6YoEsBLuYP6zjwaj7syzskRqR4YME=";
+      };
+    }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
     "11" = {
       gccVersion = "11.2.0";
       alireRevision = "4";
@@ -81,13 +91,16 @@ in {
   # PATH environment variable for the executable if its first argument does not
   # contain a slash, so we can just change the string to "sed" and zero the
   # other bytes.
-  + ''
-     sed -i "s,/usr/bin/sed,sed\x00\x00\x00\x00\x00\x00\x00\x00\x00," libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/fixincl
+  + lib.optionalString (majorVersion > "4") ''
+    sed -i "s,/usr/bin/sed,sed\x00\x00\x00\x00\x00\x00\x00\x00\x00," libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/fixincl
   '';
 
   installPhase = ''
     mkdir -p $out
     cp -ar * $out/
+  '' + lib.optionalString (majorVersion == "4") ''
+    mv $out/bin/gnatgcc_2wrap $out/bin/gnatgcc
+    ln -s $out/bin/gnatgcc $out/bin/gcc
   ''
 
   # So far with the Darwin gnat-bootstrap binary packages, there have been two
