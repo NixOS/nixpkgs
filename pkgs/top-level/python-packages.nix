@@ -12747,6 +12747,8 @@ self: super: with self; {
 
   random2 = callPackage ../development/python-modules/random2 { };
 
+  randomgen = callPackage ../development/python-modules/randomgen { };
+
   range-typed-integers = callPackage ../development/python-modules/range-typed-integers { };
 
   rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
