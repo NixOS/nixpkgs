@@ -50,6 +50,17 @@ in
     environment = {
       systemPackages = [ pkgs.gamemode ];
       etc."gamemode.ini".source = configFile;
+
+      # Integrate with NVIDIA Optimus offloading.
+      # https://github.com/FeralInteractive/gamemode#note-for-hybrid-gpu-users
+      sessionVariables = {
+        "GAMEMODERUNEXEC" = let
+          inherit (config.hardware.nvidia.prime) offload;
+        in
+          lib.mkIf
+          (builtins.elem "nvidia" config.services.xserver.videoDrivers && offload.enable && offload.enableOffloadCmd)
+          (lib.mkDefault "nvidia-offload");
+      };
     };
 
     security = {
