@@ -1,0 +1,13 @@
+diff --git a/tests/diff2_logic_test.py b/tests/diff2_logic_test.py
+index 4ccd559..e097158 100644
+--- a/tests/diff2_logic_test.py
++++ b/tests/diff2_logic_test.py
+@@ -5,7 +5,7 @@ import os
+ import filecmp
+
+ from csvdiff3 import merge3
+-from output import Diff2OutputDriver
++from csvdiff3.output import Diff2OutputDriver
+
+ class Debug:
+     # Set this true to disable all tests; a single test can then be
