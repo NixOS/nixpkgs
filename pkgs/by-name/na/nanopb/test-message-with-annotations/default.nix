@@ -1,9 +1,11 @@
-{ stdenv, protobuf, nanopb }:
+{ stdenv, nanopb }:
 
 stdenv.mkDerivation {
   name = "nanopb-test-message-with-annotations";
   meta.timeout = 60;
   src = ./.;
+
+  buildInputs = [ nanopb ];
 
   # protoc requires any .proto file to be compiled to reside within it's
   # proto_path. By default the current directory is automatically added to the
@@ -13,7 +15,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     mkdir $out
 
-    ${protobuf}/bin/protoc --proto_path=. --proto_path=${nanopb}/share/nanopb/generator/proto --plugin=protoc-gen-nanopb=${nanopb}/bin/protoc-gen-nanopb --nanopb_out=$out withannotations.proto
+    protoc --proto_path=. --proto_path=${nanopb}/share/nanopb/generator/proto --plugin=protoc-gen-nanopb=${nanopb}/bin/protoc-gen-nanopb --nanopb_out=$out withannotations.proto
   '';
 
   doCheck = true;

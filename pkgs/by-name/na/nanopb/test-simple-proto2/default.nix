@@ -1,9 +1,11 @@
-{ stdenv, protobuf, nanopb }:
+{ stdenv, nanopb }:
 
 stdenv.mkDerivation {
   name = "nanopb-test-simple-proto2";
   meta.timeout = 60;
   src = ./.;
+
+  buildInputs = [ nanopb ];
 
   # protoc requires any .proto file to be compiled to reside within it's
   # proto_path. By default the current directory is automatically added to the
@@ -13,7 +15,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     mkdir $out
 
-    ${protobuf}/bin/protoc --plugin=protoc-gen-nanopb=${nanopb}/bin/protoc-gen-nanopb --nanopb_out=$out simple.proto
+    protoc --plugin=protoc-gen-nanopb=${nanopb}/bin/protoc-gen-nanopb --nanopb_out=$out simple.proto
   '';
 
   doCheck = true;

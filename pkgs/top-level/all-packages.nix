@@ -20674,8 +20674,6 @@ with pkgs;
 
   cre2 = callPackage ../development/libraries/cre2 { };
 
-  criterion = callPackage ../development/libraries/criterion { };
-
   croaring = callPackage ../development/libraries/croaring { };
 
   crocoddyl = callPackage ../development/libraries/crocoddyl { };
@@ -24165,8 +24163,7 @@ with pkgs;
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
-  nanopb = callPackage ../development/libraries/nanopb { };
-  nanopbMalloc = callPackage ../development/libraries/nanopb { mallocBuild = true; };
+  nanopbMalloc = callPackage ../by-name/na/nanopb/package.nix { enable_malloc = true; };
 
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;

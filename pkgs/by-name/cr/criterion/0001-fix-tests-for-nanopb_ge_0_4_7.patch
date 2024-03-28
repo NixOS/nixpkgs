@@ -1,0 +1,13 @@
+diff --git a/src/protocol/gen-pb.py b/src/protocol/gen-pb.py
+index 3dc68c0..9dfe0d0 100755
+--- a/src/protocol/gen-pb.py
++++ b/src/protocol/gen-pb.py
+@@ -17,7 +17,7 @@ makedirs(build_dir, exist_ok=True)
+ 
+ cmdline = [protoc_path, '--plugin=protoc-gen-nanopb=' + gen_path,
+       '-I' + source_dir,
+-      '--nanopb_out=' + '-f ' + options_file + ':' + build_dir,
++      '--nanopb_out=' + '-f' + options_file + ':' + build_dir,
+       proto_file]
+ 
+ sys.stderr.write(" ".join(cmdline) + "\n")

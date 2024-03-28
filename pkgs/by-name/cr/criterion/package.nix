@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, boxfort, meson, libcsptr, pkg-config, gettext
-, cmake, ninja, protobuf, libffi, libgit2, dyncall, nanomsg, nanopbMalloc
-, python3Packages }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, boxfort
+, meson
+, libcsptr
+, pkg-config
+, gettext
+, cmake
+, ninja
+, protobuf
+, libffi
+, libgit2
+, dyncall
+, nanomsg
+, nanopb
+, python3Packages
+}:
 
 stdenv.mkDerivation rec {
   pname = "criterion";
@@ -16,13 +31,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja cmake pkg-config protobuf ];
 
+  patches = [
+    ./0001-fix-tests-for-nanopb_ge_0_4_7.patch
+  ];
+
   buildInputs = [
     boxfort.dev
     dyncall
     gettext
     libcsptr
     nanomsg
-    nanopbMalloc
+
+    (nanopb.override {
+      enable_malloc = true;
+      no_packed_structs = true;
+    })
+
     libgit2
     libffi
   ];
@@ -44,6 +68,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       thesola10
       Yumasi
+      liarokapisv
     ];
     platforms = platforms.unix;
   };
