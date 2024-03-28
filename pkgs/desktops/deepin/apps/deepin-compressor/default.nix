@@ -20,22 +20,18 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.24";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-XNhG28VZifQrl3TZfx/OHnsAOo0eKrhGKDk+OjOYD8k=";
+    hash = "sha256-DUpYb1xNmWpBcKo9kajeVm/+z4yj2OBE+qOyEkCHbUI=";
   };
-
-  patches = [
-    ./0001-fix-build-on-new-dtk.diff
-  ];
 
   postPatch = ''
     substituteInPlace src/source/common/pluginmanager.cpp \
-      --replace-fail "/usr/lib/" "$out/lib/"
+      --replace-fail "/usr/lib" "$out/lib"
     substituteInPlace src/desktop/deepin-compressor.desktop \
       --replace-fail "/usr" "$out"
   '';
