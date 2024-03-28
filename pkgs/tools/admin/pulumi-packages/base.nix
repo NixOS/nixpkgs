@@ -24,6 +24,20 @@ let
         "-s"
         "-w"
       ] ++ extraLdflags;
+
+      # scripts/upstream.sh and Makefile have unwanted dependencies. Just apply
+      # patches manually if needed.
+      postPatch = ''
+        pushd ..
+        if [ -d upstream -a -d patches ]; then
+          chmod -R +w upstream
+          for patch in patches/*.patch; do
+            echo "Applying $patch"
+            patch -p1 -d upstream <"$patch"
+          done
+        fi
+        popd
+      '';
     } // args);
 
   mkPythonPackage =
