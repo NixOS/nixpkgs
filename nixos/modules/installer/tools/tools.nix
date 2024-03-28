@@ -151,7 +151,7 @@ in
         # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
         # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-        # Set your time zone.
+        # Set your time zone, run `tzselect` to interactively select a value for this option.
         # time.timeZone = "Europe/Amsterdam";
 
         # Configure network proxy if necessary

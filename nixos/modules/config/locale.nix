@@ -23,11 +23,13 @@ in
         type = timezone;
         example = "America/New_York";
         description = lib.mdDoc ''
-          The time zone used when displaying times and dates. See <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
-          for a comprehensive list of possible values for this setting.
+          The time zone used when displaying times and dates.
+          Run {command}`tzselect` to interactively select a timezone for a value of this option.
+          Alternatively see <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
+          for a comprehensive list of possible values for this option.
 
           If null, the timezone will default to UTC and can be set imperatively
-          using timedatectl.
+          using {command}`timedatectl`.
         '';
       };
 
