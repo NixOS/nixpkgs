@@ -5,6 +5,13 @@
 , memcached
 , mock
 , pytestCheckHook
+
+# for passthru.tests
+, cachy
+, cherrypy
+, freeipa
+, pymemcache
+, ws4py
 }:
 
 buildPythonPackage rec {
@@ -40,6 +47,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "memcache" ];
+
+  passthru.tests = {
+    inherit cachy cherrypy freeipa pymemcache ws4py;
+  };
 
   meta = with lib; {
     description = "Pure python memcached client";
