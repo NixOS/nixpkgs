@@ -1,0 +1,13 @@
+diff --git a/elf/dl-version.c b/elf/dl-version.c
+index 5b8693de04..c2bb39bc57 100644
+--- a/elf/dl-version.c
++++ b/elf/dl-version.c
+@@ -362,7 +362,7 @@ _dl_check_map_versions (struct link_map *map, int verbose, int trace_mode)
+   /* When there is a DT_VERNEED entry with libc.so on DT_NEEDED, issue
+      an error if there is a DT_RELR entry without GLIBC_ABI_DT_RELR
+      dependency.  */
+-  if (dyn != NULL
++  if (0 && dyn != NULL
+       && map->l_info[DT_NEEDED] != NULL
+       && map->l_info[DT_RELR] != NULL
+       && __glibc_unlikely (!map->l_dt_relr_ref))
