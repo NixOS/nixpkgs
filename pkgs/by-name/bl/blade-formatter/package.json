@@ -1,0 +1,120 @@
+{
+  "name": "blade-formatter",
+  "engines": {
+    "node": ">= 14.0.0"
+  },
+  "keywords": [
+    "php",
+    "formatter",
+    "laravel"
+  ],
+  "version": "1.38.2",
+  "description": "An opinionated blade template formatter for Laravel",
+  "main": "./dist/bundle.cjs",
+  "types": "./dist/types/main.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/bundle.js",
+      "require": "./dist/bundle.cjs",
+      "default": "./dist/bundle.js"
+    },
+    "./*": "./*"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production node esbuild.js && cross-env NODE_ENV=production ESM_BUILD=true node esbuild.js",
+    "prepublish": "tsc src/main.ts --declaration --emitDeclarationOnly --outDir ./dist/types || true",
+    "watch": "node esbuild.js",
+    "test": "yarn run build && node --experimental-vm-modules node_modules/.bin/jest",
+    "lint": "eslint src -c .eslintrc.json --ext ts",
+    "fix": "prettier {src,__tests__}/**/*.ts --write",
+    "check_formatted": "prettier **/*.ts -c",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "prepare": "husky install",
+    "bin": "cross-env ./bin/blade-formatter.cjs"
+  },
+  "bin": {
+    "blade-formatter": "bin/blade-formatter.cjs"
+  },
+  "author": "Shuhei Hayashibara",
+  "license": "MIT",
+  "dependencies": {
+    "@prettier/plugin-php": "^0.19.7",
+    "@shufo/tailwindcss-class-sorter": "3.0.1",
+    "aigle": "^1.14.1",
+    "ajv": "^8.9.0",
+    "chalk": "^4.1.0",
+    "concat-stream": "^2.0.0",
+    "detect-indent": "^6.0.0",
+    "find-config": "^1.0.0",
+    "glob": "^8.0.1",
+    "html-attribute-sorter": "^0.4.3",
+    "ignore": "^5.1.8",
+    "js-beautify": "^1.14.8",
+    "lodash": "^4.17.19",
+    "php-parser": "3.1.5",
+    "prettier": "^2.2.0",
+    "tailwindcss": "^3.1.8",
+    "vscode-oniguruma": "1.7.0",
+    "vscode-textmate": "^7.0.1",
+    "xregexp": "^5.0.1",
+    "yargs": "^17.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.16.5",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-typescript": "^7.16.5",
+    "@types/concat-stream": "^2.0.0",
+    "@types/find-config": "^1.0.1",
+    "@types/fs-extra": "^11.0.0",
+    "@types/glob": "^8.0.0",
+    "@types/jest": "^29.0.0",
+    "@types/js-beautify": "^1.13.3",
+    "@types/lodash": "^4.14.178",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.0.0",
+    "@types/xregexp": "^4.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "app-root-path": "^3.0.0",
+    "babel-jest": "^29.0.0",
+    "codecov": "^3.8.3",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.19.0",
+    "esbuild-node-externals": "^1.4.1",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^26.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "fs-extra": "^11.0.0",
+    "husky": "^8.0.0",
+    "jest": "^29.0.0",
+    "lint-staged": ">=10",
+    "source-map-loader": "^4.0.0",
+    "ts-jest": "^29.0.0",
+    "ts-loader": "^9.2.6",
+    "ts-migrate": "^0.1.27",
+    "ts-node": "^10.4.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shufo/blade-formatter.git"
+  },
+  "files": [
+    "dist",
+    "src",
+    "bin",
+    "wasm",
+    "syntaxes",
+    "CHANGELOG.md"
+  ],
+  "lint-staged": {
+    "*.ts": "yarn run fix"
+  }
+}
