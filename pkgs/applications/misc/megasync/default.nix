@@ -28,13 +28,13 @@
 }:
 mkDerivation rec {
   pname = "megasync";
-  version = "4.9.0.0";
+  version = "4.10.0.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "sha256-s0E8kJ4PJmhaxVcWPCyCk/KbcX4V3IESdZhSosPlZuM=";
+    sha256 = "sha256-ye23yiVPTNKf5egpv58e10nWNwuK2wwb3ZkpgpDD1cI=";
     fetchSubmodules = true;
   };
 
@@ -72,7 +72,6 @@ mkDerivation rec {
     ./noinstall-distro-version.patch
     # megasync target is not part of the install rule thanks to a commented block
     ./install-megasync.patch
-    ./ffmpeg_44.patch
   ];
 
   postPatch = ''
