@@ -20,6 +20,10 @@ buildPythonPackage rec {
     sha256 = "09yfr8hlwvpgvq8kp1y7qbnnl0q28hi0348bv199ssiqx779r99r";
   };
 
+  patches = [
+    ./flask-3.0-compat.patch
+  ];
+
   propagatedBuildInputs = [
     flask
     babel

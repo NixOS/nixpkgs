@@ -1,0 +1,114 @@
+diff --git a/flask_babelex/__init__.py b/flask_babelex/__init__.py
+index 74f8a63..21a533b 100644
+--- a/flask_babelex/__init__.py
++++ b/flask_babelex/__init__.py
+@@ -17,7 +17,8 @@ if os.environ.get('LC_CTYPE', '').lower() == 'utf-8':
+     os.environ['LC_CTYPE'] = 'en_US.utf-8'
+
+ from datetime import datetime
+-from flask import _request_ctx_stack
++from flask import current_app
++from flask.globals import request_ctx
+ from babel import dates, numbers, support, Locale
+ from babel.support import NullTranslations
+ from werkzeug.datastructures import ImmutableDict
+@@ -205,13 +206,13 @@ def get_locale():
+     a request. If flask-babel was not attached to the Flask application,
+     will return 'en' locale.
+     """
+-    ctx = _request_ctx_stack.top
+-    if ctx is None:
++    ctx = request_ctx
++    if not ctx:
+         return None
+
+     locale = getattr(ctx, 'babel_locale', None)
+     if locale is None:
+-        babel = ctx.app.extensions.get('babel')
++        babel = current_app.extensions.get('babel')
+
+         if babel is None:
+             locale = _DEFAULT_LOCALE
+@@ -236,11 +237,11 @@ def get_timezone():
+     a request. If flask-babel was not attached to application, will
+     return UTC timezone object.
+     """
+-    ctx = _request_ctx_stack.top
++    ctx = request_ctx
+     tzinfo = getattr(ctx, 'babel_tzinfo', None)
+
+     if tzinfo is None:
+-        babel = ctx.app.extensions.get('babel')
++        babel = current_app.extensions.get('babel')
+
+         if babel is None:
+             tzinfo = UTC
+@@ -275,7 +276,7 @@ def refresh():
+     Without that refresh, the :func:`~flask.flash` function would probably
+     return English text and a now German page.
+     """
+-    ctx = _request_ctx_stack.top
++    ctx = request_ctx
+     for key in 'babel_locale', 'babel_tzinfo':
+         if hasattr(ctx, key):
+             delattr(ctx, key)
+@@ -285,7 +286,7 @@ def _get_format(key, format):
+     """A small helper for the datetime formatting functions.  Looks up
+     format defaults for different kinds.
+     """
+-    babel = _request_ctx_stack.top.app.extensions.get('babel')
++    babel = current_app.extensions.get('babel')
+
+     if babel is not None:
+         formats = babel.date_formats
+@@ -481,8 +482,8 @@ class Domain(object):
+
+     def as_default(self):
+         """Set this domain as default for the current request"""
+-        ctx = _request_ctx_stack.top
+-        if ctx is None:
++        ctx = request_ctx
++        if not ctx:
+             raise RuntimeError("No request context")
+
+         ctx.babel_domain = self
+@@ -495,7 +496,7 @@ class Domain(object):
+         """Returns translations directory path. Override if you want
+         to implement custom behavior.
+         """
+-        return self.dirname or os.path.join(ctx.app.root_path, 'translations')
++        return self.dirname or os.path.join(current_app.root_path, 'translations')
+
+     def get_translations(self):
+         """Returns the correct gettext translations that should be used for
+@@ -503,8 +504,8 @@ class Domain(object):
+         object if used outside of the request or if a translation cannot be
+         found.
+         """
+-        ctx = _request_ctx_stack.top
+-        if ctx is None:
++        ctx = request_ctx
++        if not ctx:
+             return NullTranslations()
+
+         locale = get_locale()
+@@ -603,8 +604,8 @@ def get_domain():
+     This will return the default domain (e.g. "messages" in <approot>/translations")
+     if none is set for this request.
+     """
+-    ctx = _request_ctx_stack.top
+-    if ctx is None:
++    ctx = request_ctx
++    if not ctx:
+         return domain
+
+     try:
+@@ -612,7 +613,7 @@ def get_domain():
+     except AttributeError:
+         pass
+
+-    babel = ctx.app.extensions.get('babel')
++    babel = current_app.extensions.get('babel')
+     if babel is not None:
+         d = babel._default_domain
+     else:
