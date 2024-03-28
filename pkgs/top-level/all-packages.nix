@@ -37299,6 +37299,8 @@ with pkgs;
 
   lugaru = callPackage ../games/lugaru { };
 
+  lix = callPackage ../games/lix { };
+
   macopix = callPackage ../games/macopix {
     gtk = gtk2;
   };
