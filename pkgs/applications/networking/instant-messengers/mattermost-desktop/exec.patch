@@ -1,0 +1,12 @@
+diff --git a/src/assets/linux/create_desktop_file.sh b/src/assets/linux/create_desktop_file.sh
+index dd9cf292..636c5ed3 100755
+--- a/create_desktop_file.sh
++++ b/create_desktop_file.sh
+@@ -9,7 +9,7 @@ cat <<EOS > Mattermost.desktop
+ [Desktop Entry]
+ Name=Mattermost
+ Comment=Mattermost Desktop application for Linux
+-Exec="${FULL_PATH}/mattermost-desktop"
++Exec=${FULL_PATH}/mattermost-desktop %U
+ Terminal=false
+ Type=Application

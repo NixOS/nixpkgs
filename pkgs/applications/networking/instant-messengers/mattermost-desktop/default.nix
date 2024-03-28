@@ -31,6 +31,8 @@ stdenv.mkDerivation {
 
   src = fetchurl (srcs."${system}" or (throw "Unsupported system ${system}"));
 
+  patches = [ ./mime-type.patch ./exec.patch ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
