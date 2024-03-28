@@ -5513,7 +5513,8 @@
       pyweatherflowudp
     ];
     "weatherflow_cloud" = ps: with ps; [
-    ]; # missing inputs: weatherflow4py
+      weatherflow4py
+    ];
     "weatherkit" = ps: with ps; [
       apple-weatherkit
     ];
@@ -6628,6 +6629,7 @@
     "waze_travel_time"
     "weather"
     "weatherflow"
+    "weatherflow_cloud"
     "weatherkit"
     "webhook"
     "webostv"
