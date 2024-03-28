@@ -9467,6 +9467,8 @@ self: super: with self; {
 
   pescea = callPackage ../development/python-modules/pescea { };
 
+  pettingzoo = callPackage ../development/python-modules/pettingzoo { };
+
   pex = callPackage ../development/python-modules/pex { };
 
   pexif = callPackage ../development/python-modules/pexif { };
@@ -11915,6 +11917,8 @@ self: super: with self; {
 
   pytest-logdog = callPackage ../development/python-modules/pytest-logdog { };
 
+  pytest-markdown-docs = callPackage ../development/python-modules/pytest-markdown-docs { };
+
   pytest-md-report = callPackage ../development/python-modules/pytest-md-report { };
 
   pytest-metadata = callPackage ../development/python-modules/pytest-metadata { };
@@ -13065,6 +13069,8 @@ self: super: with self; {
   rkm-codes = callPackage ../development/python-modules/rkm-codes { };
 
   rlax = callPackage ../development/python-modules/rlax { };
+
+  rlcard = callPackage ../development/python-modules/rlcard { };
 
   rlp = callPackage ../development/python-modules/rlp { };
 
