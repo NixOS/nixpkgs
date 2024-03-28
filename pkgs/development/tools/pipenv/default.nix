@@ -5,9 +5,23 @@
 , installShellFiles
 }:
 
-with python3.pkgs;
-
 let
+  inherit (lib)
+    licenses
+    maintainers
+    optionals
+    platforms
+    ;
+
+  # This file is a bit special due to runtimeDeps below.
+  inherit (python3.pkgs)
+    buildPythonApplication
+    mock
+    pytestCheckHook
+    pytest-xdist
+    pytz
+    requests
+    ;
 
   runtimeDeps = ps: with ps; [
     certifi
@@ -16,7 +30,7 @@ let
     virtualenv
     virtualenv-clone
   ]
-  ++ lib.optionals stdenv.hostPlatform.isAndroid [
+  ++ optionals stdenv.hostPlatform.isAndroid [
     pyjnius
   ];
 
@@ -36,7 +50,7 @@ in buildPythonApplication rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     installShellFiles
     setuptools
     wheel
@@ -81,7 +95,7 @@ in buildPythonApplication rec {
       --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Development Workflow for Humans";
     license = licenses.mit;
     platforms = platforms.all;
