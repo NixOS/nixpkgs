@@ -33716,6 +33716,8 @@ with pkgs;
 
   micro = callPackage ../applications/editors/micro { };
 
+  microPlugins = callPackage  ../applications/editors/micro/plugins { };
+
   mle = callPackage ../applications/editors/mle { };
 
   namaka = callPackage ../development/tools/misc/namaka { };
