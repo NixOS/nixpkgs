@@ -10,8 +10,10 @@
 , lerc
 , libdeflate
 , libjpeg
+, libwebp
 , xz
 , zlib
+, zstd
 
   # for passthru.tests
 , libgeotiff
@@ -71,8 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     libdeflate
     libjpeg
+    # libwebp depends on us; this will cause infinite
+    # recursion otherwise
+    (libwebp.override { tiffSupport = false; })
     xz
     zlib
+    zstd
   ];
 
   enableParallelBuilding = true;
