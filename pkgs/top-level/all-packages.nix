@@ -367,6 +367,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  blivet-gui = callPackage ../tools/misc/blivet-gui { };
+
   blst = callPackage ../development/libraries/blst { };
 
   bloom = qt6Packages.callPackage ../development/tools/bloom { };
