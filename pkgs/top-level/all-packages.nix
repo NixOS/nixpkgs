@@ -20843,7 +20843,7 @@ with pkgs;
 
   elfio = callPackage ../development/libraries/elfio { };
 
-  emanote = haskell.lib.compose.justStaticExecutables haskellPackages.emanote;
+  emanote = callPackage ../applications/misc/emanote { };
 
   enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
   enchant = enchant2;
