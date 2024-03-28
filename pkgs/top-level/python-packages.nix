@@ -3871,6 +3871,8 @@ self: super: with self; {
 
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
+  eval-type-backport = callPackage ../development/python-modules/eval-type-backport { };
+
   evaluate = callPackage ../development/python-modules/evaluate { };
 
   evdev = callPackage ../development/python-modules/evdev { };
