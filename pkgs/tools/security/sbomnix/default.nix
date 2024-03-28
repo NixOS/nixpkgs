@@ -41,7 +41,12 @@ python.pkgs.buildPythonApplication rec {
     owner = "tiiuae";
     repo = "sbomnix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dECeNsJgsN/LTXas5HchoJJHpY73xWuTK+9A0budGOU=";
+    hash = "sha256-kPjCK9NEs3D0qFsSSVX6MYGKbwqeij0svTfzz5JC4qM=";
+
+    postFetch = ''
+      rm -fr "$out"/doc
+      find "$out" -name '*.md' ! -name "README.md" -exec rm -f '{}' \;
+    '';
   };
 
   postInstall = ''
