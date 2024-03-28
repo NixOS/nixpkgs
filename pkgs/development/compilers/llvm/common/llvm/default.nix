@@ -232,7 +232,7 @@ stdenv.mkDerivation (rec {
     # modifies the atime when run. See #284056.
     rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
+    patch -p1 -i ${./TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
