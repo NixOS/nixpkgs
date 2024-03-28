@@ -559,7 +559,6 @@ with lib.maintainers; {
       ericson2314
       lovek323
       qyliss
-      raitobezarius
       RossComputerGuy
       rrbutani
       sternenseemann
