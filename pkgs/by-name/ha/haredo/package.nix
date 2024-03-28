@@ -1,13 +1,13 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromSourcehut
-, hare
+, stdenv
 , scdoc
 , nix-update-script
 , makeWrapper
 , bash
+, buildHarePackage
 }:
-stdenv.mkDerivation (finalAttrs: {
+buildHarePackage (finalAttrs: {
   pname = "haredo";
   version = "1.0.5";
 
@@ -21,27 +21,21 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    hare
     makeWrapper
     scdoc
   ];
 
   enableParallelChecking = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   dontConfigure = true;
-
-  preBuild = ''
-    HARECACHE="$(mktemp -d --tmpdir harecache.XXXXXXXX)"
-    export HARECACHE
-    export PREFIX=${builtins.placeholder "out"}
-  '';
 
   buildPhase = ''
     runHook preBuild
 
-    ./bootstrap.sh
+    hare build -o ./bin/haredo $HAREFLAGS src
+    scdoc <./doc/haredo.1.scd >./doc/haredo.1
 
     runHook postBuild
   '';
@@ -57,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./bootstrap.sh install
+    install -Dm0755 ./bin/haredo $out/bin/haredo
+    install -Dm0644 ./doc/haredo.1 $out/share/man/man1/haredo.1
 
     runHook postInstall
   '';
@@ -77,6 +72,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ onemoresuza ];
     mainProgram = "haredo";
-    inherit (hare.meta) platforms badPlatforms;
   };
 })
