@@ -559,6 +559,7 @@ let
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
+    cartogramR = [ pkgs.fftw.dev ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [ gmp libxml2.dev glpk ];
