@@ -23,11 +23,17 @@ buildPythonPackage rec {
     hash = "sha256-ai9JQ3gphY/IievBNdHiblIpc0IPS9wp7CVvBIRzG/4=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    # https://github.com/seamustuohy/RTFDE/issues/31
+    substituteInPlace setup.py \
+      --replace-fail "==" ">="
+  '';
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lark
     oletools
   ];
