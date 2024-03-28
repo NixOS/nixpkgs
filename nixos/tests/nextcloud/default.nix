@@ -20,6 +20,10 @@ foldl
       inherit system pkgs;
       nextcloudVersion = ver;
     };
+    "with-objectstore${toString ver}" = import ./with-objectstore.nix {
+      inherit system pkgs;
+      nextcloudVersion = ver;
+    };
   })
 { }
   [ 26 27 28 ]
