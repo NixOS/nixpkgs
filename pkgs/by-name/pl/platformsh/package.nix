@@ -36,7 +36,7 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://github.com/platformsh/legacy-cli";
     license = lib.licenses.mit;
     mainProgram = "platform";
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [ shyim spk ];
     platforms = lib.platforms.all;
   };
 })
