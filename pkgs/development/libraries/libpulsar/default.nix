@@ -1,6 +1,5 @@
 { lib
 , clang-tools
-, llvmPackages
 , boost179
 , protobuf
 , python3Support ? false
@@ -37,8 +36,6 @@ let
   */
   enableCmakeFeature = p: if (p == null || p == false) then "OFF" else "ON";
 
-  # Not really sure why I need to do this.. If I call clang-tools without the override it defaults to a different version and fails
-  clangTools = clang-tools.override { inherit stdenv llvmPackages; };
   # If boost has python enabled, then boost-python package will be installed which is used by libpulsars python wrapper
   boost = if python3Support then boost179.override { inherit stdenv; enablePython = python3Support; python = python3; } else boost179;
   defaultOptionals = [ boost protobuf ]
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "apache-pulsar-${version}-src/pulsar-client-cpp";
 
   # clang-tools needed for clang-format
-  nativeBuildInputs = [ cmake pkg-config clangTools ]
+  nativeBuildInputs = [ cmake pkg-config clang-tools ]
     ++ defaultOptionals
     ++ lib.optional gtestSupport gtest.dev;
 
@@ -75,7 +72,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=${enableCmakeFeature gtestSupport}"
     "-DBUILD_PYTHON_WRAPPER=${enableCmakeFeature python3Support}"
     "-DUSE_LOG4CXX=${enableCmakeFeature log4cxxSupport}"
-    "-DClangTools_PATH=${clangTools}/bin"
+    "-Dclang-tools_PATH=${clang-tools}/bin"
   ];
 
   enableParallelBuilding = true;

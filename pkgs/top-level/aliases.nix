@@ -216,6 +216,14 @@ mapAliases ({
   clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
   clang_11 = throw "clang_11 has been removed from nixpkgs"; # Added 2023-01-24
 
+  clang-tools_9 = llvmPackages_9.clang-tools;   # Added 2024-03-22
+  clang-tools_12 = llvmPackages_12.clang-tools; # Added 2024-03-22
+  clang-tools_13 = llvmPackages_13.clang-tools; # Added 2024-03-22
+  clang-tools_14 = llvmPackages_14.clang-tools; # Added 2024-03-22
+  clang-tools_15 = llvmPackages_15.clang-tools; # Added 2024-03-22
+  clang-tools_16 = llvmPackages_16.clang-tools; # Added 2024-03-22
+  clang-tools_17 = llvmPackages_17.clang-tools; # Added 2024-03-22
+
   ### D ###
 
   dagger = throw "'dagger' has been removed from nixpkgs, as the trademark policy of the upstream project is incompatible"; # Added 2023-10-16
