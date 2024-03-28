@@ -10862,6 +10862,8 @@ with pkgs;
 
   mprime = callPackage ../tools/misc/mprime { };
 
+  mprime-primenet = callPackage ../tools/misc/mprime-primenet { };
+
   mpw = callPackage ../tools/security/mpw { };
 
   mqtt_cpp = callPackage ../development/libraries/mqtt_cpp { };
