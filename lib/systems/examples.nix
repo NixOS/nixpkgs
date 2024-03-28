@@ -235,6 +235,11 @@ rec {
     libc = "newlib";
   };
 
+  microblaze-embedded = {
+    config = "microblazeel-none-elf";
+    libc = "newlib";
+  };
+
   #
   # Redox
   #
