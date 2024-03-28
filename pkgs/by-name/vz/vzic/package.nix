@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libical/vzic";
     description = "A program to convert the IANA timezone database files into VTIMEZONE files compatible with the iCalendar specification";
     mainProgram = "vzic";
+    license = with licenses; [ gpl2Plus ];
+    #maintainers = with maintainers; [ moraxyc ];
     platforms = platforms.unix;
   };
 }
