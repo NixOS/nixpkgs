@@ -24,10 +24,11 @@ stdenv.mkDerivation (finalAttrs: ({
   };
 
   patches = [
-    ./absolute-paths.diff
+    # Parameterize some tools to their absolute paths in gettext.sh.in
+    ./001-absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
-    ./0001-msginit-Do-not-use-POT-Creation-Date.patch
+    ./002-msginit-do-not-use-pot-creation-date.patch
   ];
 
   outputs = [ "out" "man" "doc" "info" ];
