@@ -1,0 +1,34 @@
+diff --git a/sources/mainapp/mainapp.pro b/sources/mainapp/mainapp.pro
+index 8269dc6..0600674 100644
+--- a/sources/mainapp/mainapp.pro
++++ b/sources/mainapp/mainapp.pro
+@@ -83,14 +83,7 @@ contains(DEFINES, APPBUNDLE) {
+ 
+ ### install ###
+ 
+-isEmpty(PREFIX) {
+-	INSTALLDIR = /opt/ubpm
+-} else {
+-equals(PREFIX, "/app") | equals(PREFIX, "/root/parts/ubpm/install")  {
+ 	INSTALLDIR = $$PREFIX/bin
+-} else {
+-	INSTALLDIR = $$PREFIX
+-}}
+ 	target.path = $$INSTALLDIR
+ 
+ 	guides.path  = $$INSTALLDIR/Guides
+@@ -116,12 +109,8 @@ equals(PREFIX, "/root/parts/ubpm/install") {
+ 	cmd.extra     += install -D ../../release/appbundle/lin/ubpm.desktop $$INSTALLDIR/../usr/share/applications/ubpm.desktop $$escape_expand(\n\t)
+ 	cmd.extra     += install -D ../../release/appbundle/lin/page.codeberg.lazyt.ubpm.appdata.xml $$INSTALLDIR/../usr/share/metainfo/page.codeberg.lazyt.ubpm.appdata.xml $$escape_expand(\n\t)
+ } else {
+-	cmd.extra     += cp res/ico/ubpm.png /usr/share/icons/hicolor/256x256/apps $$escape_expand(\n\t)
+-	cmd.extra     += cp ../../release/appbundle/lin/ubpm.desktop /usr/share/applications $$escape_expand(\n\t)
+-	cmd.extra     += sed -i \"s|Exec=ubpm|Exec=$$INSTALLDIR/ubpm|g\" /usr/share/applications/ubpm.desktop $$escape_expand(\n\t)
+-	cmd.extra     += sed -i \"s|Icon=ubpm|Icon=/usr/share/icons/hicolor/256x256/apps/ubpm.png|g\" /usr/share/applications/ubpm.desktop $$escape_expand(\n\t)
+-	cmd.uninstall += rm /usr/share/icons/hicolor/256x256/apps/ubpm.png $$escape_expand(\n\t)
+-	cmd.uninstall += rm /usr/share/applications/ubpm.desktop
++	cmd.extra     += install -D res/ico/ubpm.png $$INSTALLDIR/../share/icons/hicolor/256x256/apps/ubpm.png $$escape_expand(\n\t)
++	cmd.extra     += install -D ../../release/appbundle/lin/ubpm.desktop $$INSTALLDIR/../share/applications/ubpm.desktop $$escape_expand(\n\t)
+ }}
+ 	INSTALLS += target guides languages plugins themes cmd
+ }
