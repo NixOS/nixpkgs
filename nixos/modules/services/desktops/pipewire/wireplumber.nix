@@ -101,6 +101,11 @@ in
           - [Locations of files][docs-file-locations]
           - and the [configuration section][docs-config-section] of the docs in general
 
+          Note that WirePlumber (and PipeWire) use dotted attribute names like
+          `device.product.id`. These are not nested, but flat objects for WirePlumber/PipeWire,
+          so to write these in nix expressions, remember to quote them like `"device.product.id"`.
+          Have a look at the example for this.
+
           [docs-the-conf-file]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/conf_file.html
           [docs-modifying-config]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/modifying_configuration.html
           [docs-file-locations]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/locations.html
