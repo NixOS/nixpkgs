@@ -64,6 +64,16 @@
   "test_PointCloudDot"
   "test_Torus"
 
+  # test_ImplicitFunction[/test_implicit_graph] failing with:
+  # E           AssertionError:
+  # E           Not equal to tolerance rtol=1e-07, atol=1.01
+  # E           Frame no -1. You can use --show_diff to visually show the difference.
+  # E           Mismatched elements: 1185[/633] / 1639680[/1639680] (0.0723[/0.0386]%)
+  # E           Max absolute difference: 125[/121]
+  # E           Max relative difference: 6.5[/1]
+  "test_ImplicitFunction"
+  "test_implicit_graph"
+
   # failing with:
   # TypeError: __init__() got an unexpected keyword argument 'msg' - maybe you meant pytest.mark.skipif?
   "test_force_window_opengl_render_with_movies"

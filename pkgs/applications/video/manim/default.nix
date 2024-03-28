@@ -64,8 +64,10 @@ in python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "cloup"
+    "isosurfaces"
     "pillow"
     "skia-pathops"
+    "watchdog"
   ];
 
   patches = [
