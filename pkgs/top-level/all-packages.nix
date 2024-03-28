@@ -21141,8 +21141,6 @@ with pkgs;
   inherit (callPackages ../development/libraries/getdns { })
     getdns stubby;
 
-  gettext = callPackage ../development/libraries/gettext { };
-
   gf2x = callPackage ../development/libraries/gf2x { };
 
   gfxstream = callPackage ../development/libraries/gfxstream { };
