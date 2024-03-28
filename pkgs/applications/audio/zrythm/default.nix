@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchFromSourcehut
-, fetchpatch
+, fetchFromGitLab
+, fetchurl
 , SDL2
 , alsa-lib
 , appstream
@@ -33,6 +33,7 @@
 , libaudec
 , libbacktrace
 , libcyaml
+, libdrm
 , libepoxy
 , libgtop
 , libjack2
@@ -61,12 +62,14 @@
 , serd
 , sord
 , sox
+, soxr
 , sratom
 , texi2html
 , vamp-plugin-sdk
 , wrapGAppsHook
 , xdg-utils
 , xxHash
+, yyjson
 , zix
 , zstd
 }:
@@ -75,27 +78,28 @@ let
   # As of zrythm-1.0.0-beta.4.5.62, Zrythm needs clap
   # https://github.com/falktx/carla/tree/main/source/includes/clap, which is
   # only available on Carla unstable as of 2023-02-24.
-  carla-unstable = carla.overrideAttrs (oldAttrs: rec {
+  carla-unstable = carla.overrideAttrs (oldAttrs: {
     pname = "carla";
-    version = "unstable-2023-05-12";
+    version = "unstable-2023-12-13";
 
     src = fetchFromGitHub {
       owner = "falkTX";
-      repo = pname;
-      rev = "0175570f1d41285f39efe0ee32234458e0ed941c";
-      hash = "sha256-yfVzZV8G4AUDM8+yS9finzobpOb1PUEPgBWFhEY4nFQ=";
+      repo = "carla";
+      rev = "1e3b910d014f7f7d44e8b3b76eb47efad2121e4f";
+      hash = "sha256-2ErjlweNxOSEO1q7FB40EHHLZn3z2GauW9DK9soQjvI=";
     };
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zrythm";
-  version = "1.0.0-beta.4.9.1";
+  version = "1.0.0-beta.6.4.1";
 
-  src = fetchFromSourcehut {
-    owner = "~alextee";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-U3IUqNbHu20uyWfkTsLOOlUZjcUL4QdHilB3srSsebw=";
+  src = fetchFromGitLab {
+    domain = "gitlab.zrythm.org";
+    owner = "zrythm";
+    repo = "zrythm";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OjUZzU5mqsM+8HkUvSD7E3WPiO+X9uzDwQA4rheJXTg=";
   };
 
   nativeBuildInputs = [
@@ -134,12 +138,30 @@ stdenv.mkDerivation rec {
     flex
     glib
     graphviz
-    gtk4
+    (gtk4.overrideAttrs (finalAttrs: previousAttrs: {
+      patches = [];
+      version = "4.13.3";
+      src = fetchurl {
+        url = "mirror://gnome/sources/gtk/4.13/gtk-4.13.3.tar.xz";
+        sha256 = "sha256-TwSkPnwoc2BHPzT8J7Yp9kh1eV87x+wngd9EnF5y8xI=";
+      };
+      buildInputs = previousAttrs.buildInputs ++ [ libdrm ];
+    }))
     gtksourceview5
     guile
     json-glib
     kissfft
-    libadwaita
+    (libadwaita.overrideAttrs (finalAttrs: previousAttrs: {
+      patches = [];
+      version = "1.5.0";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libadwaita";
+        rev = finalAttrs.version;
+        hash = "sha256-ctHAN0SY6k68jaBpmIpMm8DngC9DPiL1vAmGhECpNic=";
+      };
+    }))
     libbacktrace
     libcyaml
     libepoxy
@@ -157,27 +179,28 @@ stdenv.mkDerivation rec {
     pcre
     pcre2
     reproc
-    rtaudio
+    (rtaudio.overrideAttrs (finalAttrs: previousAttrs: {
+      version = "6.0.1";
+      src = fetchFromGitHub {
+        owner = "thestk";
+        repo = "rtaudio";
+        rev = finalAttrs.version;
+        sha256 = "sha256-Acsxbnl+V+Y4mKC1gD11n0m03E96HMK+oEY/YV7rlIY=";
+      };
+    }))
     rtmidi
     rubberband
     serd
     sord
     sox
+    soxr
     sratom
     vamp-plugin-sdk
     xdg-utils
     xxHash
+    yyjson
     zix
     zstd
-  ];
-
-  patches = [
-    # Fix gcc-13 build failure
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://gitlab.zrythm.org/zrythm/zrythm/-/commit/cbc2b3715b939718479631841f2d9703fb28e6da.diff";
-      hash = "sha256-2ZTSaCtSO3yynJVFe5B1AEjWhjRa5YyA26ergAfdL5Y=";
-    })
   ];
 
   # Zrythm uses meson to build, but requires cmake for dependency detection.
@@ -220,7 +243,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas/"
+      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}/glib-2.0/schemas/"
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${breeze-icons}/share"
     )
   '';
@@ -232,4 +255,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.agpl3Plus;
   };
-}
+})
