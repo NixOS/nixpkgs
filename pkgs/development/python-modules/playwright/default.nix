@@ -77,6 +77,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pyee"
+    "greenlet"
   ];
 
   propagatedBuildInputs = [
