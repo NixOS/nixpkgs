@@ -41,6 +41,11 @@ buildPythonPackage rec {
       url = "https://github.com/GZGavinZhao/Tensile/commit/855cb15839849addb0816a6dde45772034a3e41f.patch";
       hash = "sha256-d+fVf/vz+sxGqJ96vuxe0jRMgbC5K6j5FQ5SJ1e3Sl8=";
     })
+    (fetchpatch {
+      name = "Don-t-copy-file-twice-in-copyStaticFiles.patch";
+      url = "https://github.com/GZGavinZhao/Tensile/commit/9e14d5a00a096bddac605910a0e4dfb4c35bb0d5.patch";
+      hash = "sha256-gOzjJyD1K056OFQ+hK5nbUeBhxLTIgQLoT+0K12SypI=";
+    })
   ];
 
   doCheck = false; # Too many errors, not sure how to set this up properly
