@@ -40,6 +40,24 @@ with lib;
         '';
       };
 
+      defaultCharacterSet = mkOption {
+        type = types.str;
+        default = lib.last (builtins.split "\\." (
+          builtins.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] config.i18n.defaultLocale
+        ));
+        defaultText = literalExpression ''
+          lib.last (builtins.split "\\." (
+            builtins.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] config.i18n.defaultLocale
+          ))
+        '';
+        example = "UTF-8";
+        description = lib.mdDoc ''
+          The default character set. This only needs to be set if
+          {option}`i18n.defaultLocale` does not contain a character set,
+          for example `eo`.
+        '';
+      };
+
       extraLocaleSettings = mkOption {
         type = types.attrsOf types.str;
         default = {};
