@@ -218,6 +218,13 @@ let
       };
     } else throw "Musl libc only supports 64-bit Linux systems.";
 
+    # All packages built with the glibc built with LD_FALLBACK_PATH patch.
+    pkgsGlibcLdFallback = nixpkgsFun {
+      config = {
+        glibc.withLdFallbackPatch = true;
+      };
+    };
+
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
