@@ -17046,7 +17046,7 @@ final: prev:
   };
 
   jupytext-nvim = buildVimPlugin {
-    pname = "jupytest-nvim";
+    pname = "jupytext-nvim";
     version = "2024-01-24";
     src = fetchFromGitHub {
       owner = "GCBallesteros";
@@ -17055,6 +17055,18 @@ final: prev:
       sha256 = "sha256-x5emW+qfUTUDR72B9QdDgVdrb8wGH9D7AdtRrQm80sI=";
     };
     meta.homepage = "https://github.com/GCBallesteros/jupytext.nvim/";
+  };
+
+  improved-search-nvim = buildVimPlugin {
+    pname = "improved-search-nvim";
+    version = "2023-12-21";
+    src = fetchFromGitHub {
+      owner = "backdround";
+      repo = "improved-search.nvim";
+      rev = "9480bfb0e05f990a1658464c1d349dd2acfb9c34";
+      sha256 = "sha256-k35uJZfarjRskS9MgCjSQ3gfl57d+r8vWvw0Uq16Z30=";
+    };
+    meta.homepage = "https://github.com/backdround/improved-search.nvim/";
   };
 
 
