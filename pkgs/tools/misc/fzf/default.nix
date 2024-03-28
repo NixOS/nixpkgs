@@ -24,16 +24,16 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.47.0";
+  version = "0.48.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-rIRn8g4j/drWEHnvZnJW2sSLq5mrw8Q2pn3LN2sEXDY=";
+    hash = "sha256-xtewDTjytEpQXtjT1WV4KDkQ28s/+U8TUKOQVVNvh5I=";
   };
 
-  vendorHash = "sha256-BOPACUQKcllmA2eWQs+sOfofAQLle2Byb/rZgOhmkVY=";
+  vendorHash = "sha256-lfnBopkzoTD3Xxj0BCN+ZZz2JxZtj8xLOXMUD8kc8/A=";
 
   CGO_ENABLED = 0;
 
@@ -74,15 +74,6 @@ buildGoModule rec {
     install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
-
-    # Install shell integrations
-    install -D shell/* -t $out/share/fzf/
-    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    mkdir -p $out/share/fish/vendor_conf.d
-    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-      status is-interactive; or exit 0
-      fzf_key_bindings
-    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
