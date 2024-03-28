@@ -17046,7 +17046,7 @@ final: prev:
   };
 
   jupytext-nvim = buildVimPlugin {
-    pname = "jupytest-nvim";
+    pname = "jupytext-nvim";
     version = "2024-01-24";
     src = fetchFromGitHub {
       owner = "GCBallesteros";
