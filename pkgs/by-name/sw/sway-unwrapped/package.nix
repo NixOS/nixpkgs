@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.basic = nixosTests.sway;
 
-  meta = with lib; {
+  meta = {
     description = "An i3-compatible tiling Wayland compositor";
     longDescription = ''
       Sway is a tiling Wayland compositor and a drop-in replacement for the i3
@@ -90,9 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage    = "https://swaywm.org";
     changelog   = "https://github.com/swaywm/sway/releases/tag/${finalAttrs.version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ primeos synthetica ];
     mainProgram = "sway";
   };
 })
