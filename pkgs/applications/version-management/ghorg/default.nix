@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "ghorg";
@@ -17,6 +17,14 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd ghorg \
+      --bash <($out/bin/ghorg completion bash) \
+      --fish <($out/bin/ghorg completion fish) \
+      --zsh <($out/bin/ghorg completion zsh)
+  '';
 
   meta = with lib; {
     description = "Quickly clone an entire org/users repositories into one directory";
