@@ -1,4 +1,5 @@
 { lib
+, nixos
 , stdenv
 , fetchFromGitHub
 , buildPackages
@@ -14,7 +15,10 @@
 , libxml2
 , gd
 }:
-
+let
+  inherit (nixos {}) config;
+  group = config.programs.gphoto2.group;
+in
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
   version = "2.5.31";
@@ -60,10 +64,10 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/lib/udev/{rules.d,hwdb.d}
       ${executablePrefix}/lib/libgphoto2/print-camera-list \
-          udev-rules version 201 group camera \
+          udev-rules version 201 group ${group} \
           >$out/lib/udev/rules.d/40-libgphoto2.rules
       ${executablePrefix}/lib/libgphoto2/print-camera-list \
-          hwdb version 201 group camera \
+          hwdb version 201 group ${group} \
           >$out/lib/udev/hwdb.d/20-gphoto.hwdb
     '';
 
