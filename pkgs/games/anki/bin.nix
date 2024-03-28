@@ -54,6 +54,11 @@ let
     inherit pname version;
     name = null; # Appimage sets it to "appimage-env"
 
+    profile = ''
+      # anki vendors QT and mixing QT versions usually causes crashes
+      unset QT_PLUGIN_PATH
+    '';
+
     # Dependencies of anki
     targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
 
