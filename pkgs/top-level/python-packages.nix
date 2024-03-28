@@ -9693,6 +9693,8 @@ self: super: with self; {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  private-gpt = callPackage ../development/python-modules/private-gpt { };
+
   prodict = callPackage ../development/python-modules/prodict { };
 
   prometheus-pandas = callPackage ../development/python-modules/prometheus-pandas { };
