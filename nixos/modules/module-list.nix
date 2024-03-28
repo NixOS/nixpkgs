@@ -1303,6 +1303,7 @@
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
+  ./services/web-apps/cookbook.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
