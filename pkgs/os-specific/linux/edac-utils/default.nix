@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, perl
 , sysfsutils, dmidecode, kmod }:
 
 stdenv.mkDerivation {
   pname = "edac-utils";
-  version = "unstable-2015-01-07";
+  version = "unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "grondo";
     repo = "edac-utils";
-    rev = "f9aa96205f610de39a79ff43c7478b7ef02e3138";
-    sha256 = "1dmfqb15ffldl5zirbmwiqzpxbcc2ny9rpfvxcfvpmh5b69knvdg";
+    rev = "8fdc1d40e30f65737fef6c3ddcd1d2cd769f6277";
+    hash = "sha256-jZGRrZ1sa4x0/TBJ5GsNVuWakmPNOU+oiOoXdhARunk=";
   };
 
-  nativeBuildInputs = [ perl makeWrapper ];
-  buildInputs = [ sysfsutils ];
+  patches = [ ./edac-ctl.patch ];
+  postPatch = ''
+    substituteInPlace src/util/edac-ctl.in \
+      --subst-var-by dmidecode ${dmidecode}/bin/dmidecode \
+      --subst-var-by modprobe ${kmod}/bin/modprobe
+  '';
+
+  nativeBuildInputs = [ perl ];
+  buildInputs = [ perl sysfsutils ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -24,9 +31,9 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc"
   ];
 
-  postInstall = ''
-    wrapProgram "$out/sbin/edac-ctl" \
-      --set PATH ${lib.makeBinPath [ dmidecode kmod ]}
+  # SysV init script is not relevant.
+  postFixup = ''
+    rm -r $out/etc/init.d
   '';
 
   meta = with lib; {
