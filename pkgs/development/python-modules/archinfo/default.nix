@@ -16,16 +16,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "archinfo";
     rev = "refs/tags/v${version}";
     hash = "sha256-drZuQRQ2XukCimH/SG6CRCL4avyMEcKxuj+Rinp7lJQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
+  dependencies = lib.optionals (pythonOlder "3.11") [
     backports-strenum
   ];
 
