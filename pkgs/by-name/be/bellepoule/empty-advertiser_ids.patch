@@ -1,0 +1,16 @@
+diff --git a/sources/common/network/advertiser_ids.hpp b/sources/common/network/advertiser_ids.hpp
+new file mode 100644
+index 00000000..436f7411
+--- /dev/null
++++ b/sources/common/network/advertiser_ids.hpp
+@@ -0,0 +1,10 @@
++// advertiser_ids.hpp
++#if !defined(TWITTER_CONSUMER_KEY)
++
++#define TWITTER_CONSUMER_KEY ""
++#define TWITTER_CONSUMER_SECRET ""
++
++#define FACEBOOK_CONSUMER_KEY ""
++#define FACEBOOK_CONSUMER_SECRET ""
++
++#endif
