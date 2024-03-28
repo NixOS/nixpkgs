@@ -3258,6 +3258,8 @@ self: super: with self; {
 
   django-redis = callPackage ../development/python-modules/django-redis { };
 
+  django-recaptcha = callPackage ../development/python-modules/django-recaptcha { };
+
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
