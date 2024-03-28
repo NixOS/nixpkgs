@@ -144,7 +144,7 @@ in let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
       inherit llvm_meta;
     };
 
