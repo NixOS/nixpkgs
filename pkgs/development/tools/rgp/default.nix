@@ -9,25 +9,27 @@
 , glib
 , libGLU
 , libglvnd
+, libICE
+, libkrb5
+, libSM
 , libX11
 , libxcb
 , libXi
+, libxkbcommon
 , ncurses
-, qtbase
-, qtdeclarative
 , zlib
 }:
 
 let
-  buildNum = "2023-05-22-1083";
+  buildNum = "2023-12-04-1282";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "1.15.1";
+  version = "2.0";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-WSSiNiiIVw1wwt9vxgyirBDe+SPzH87LU1GlSdUhZB8=";
+    hash = "sha256-gGkINq0tmOCkZJMxtoURHikqEGXGuRAP6Y6PEOLqmI0=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -39,16 +41,16 @@ stdenv.mkDerivation {
     glib
     libGLU
     libglvnd
+    libICE
+    libkrb5
+    libSM
     libX11
     libxcb
     libXi
+    libxkbcommon
     ncurses
-    qtbase
-    qtdeclarative
     zlib
   ];
-
-  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out/opt/rgp $out/bin
@@ -59,10 +61,16 @@ stdenv.mkDerivation {
 
     for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler RadeonMemoryVisualizer RadeonRaytracingAnalyzer rga rtda; do
       # makeWrapper is needed so that executables are started from the opt
-      # directory, where qt.conf and other tools are
+      # directory, where qt.conf and other tools are.
+      # Unset Qt theme, it does not work if the nixos Qt version is different from the packaged one.
+      # The packaged Qt version only supports X11, so enforce that.
       makeWrapper \
         $out/opt/rgp/$prog \
-        $out/bin/$prog
+        $out/bin/$prog \
+        --unset QT_QPA_PLATFORMTHEME \
+        --unset QT_STYLE_OVERRIDE \
+        --set QT_QPA_PLATFORM xcb \
+        --prefix LD_LIBRARY_PATH : $out/opt/rgp/lib
     done
   '';
 
