@@ -45,7 +45,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "20.2";
+  version = "22";
   format = "pyproject";
 
   outputs = [ "out" "man" ];
@@ -54,29 +54,20 @@ buildPythonApplication rec {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-+mvepzoswDVIHzj+rEnlr0ouphGv5unpaNX3U8x517Y=";
+    hash = "sha256-Zom1GlyhqgpTKfjcBOUEJMlubSn+TQsk97js1/UfDHY=";
   };
-
-  patches = [
-    # sandbox: Deal correctly with unmerged-usr.
-    # Remove on next release after v20.2.
-    (fetchpatch {
-      url = "https://github.com/systemd/mkosi/commit/5a708efdb432dee9c6e5a9a4754752359cac8944.patch";
-      hash = "sha256-dXkY8Hha6y9CoZC1WdtZuI/YJsOQ1fOt4o4RsPkGWYQ=";
-    })
-  ];
 
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
   postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace mkosi/run.py \
-      --replace 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
+    substituteInPlace mkosi/user.py \
+      --replace-fail 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
     substituteInPlace mkosi/__init__.py \
-      --replace '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
+      --replace-fail '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
   '' + lib.optionalString withQemu ''
     substituteInPlace mkosi/qemu.py \
-      --replace '/usr/share/ovmf/x64/OVMF_VARS.fd' "${OVMF.variables}" \
-      --replace '/usr/share/ovmf/x64/OVMF_CODE.fd' "${OVMF.firmware}"
+      --replace-fail '/usr/share/ovmf/x64/OVMF_VARS.fd' "${OVMF.variables}" \
+      --replace-fail '/usr/share/ovmf/x64/OVMF_CODE.fd' "${OVMF.firmware}"
   '';
 
   nativeBuildInputs = [
