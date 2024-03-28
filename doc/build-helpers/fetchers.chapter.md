@@ -3,12 +3,8 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 To do this, we use functions that we call _fetchers_ to obtain remote sources via various protocols and services.
 
-Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball) to accomplish this, but they behave in ways that complicate the task of evaluating code in Nixpkgs.
-Nixpkgs provides its own fetchers, which work differently and reduce the time needed to evaluate code in Nixpkgs, as well as allow [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
-
-Since the Nixpkgs fetchers work better with Nixpkgs, the Nix built-in fetchers are not allowed in Nixpkgs code.
-
-The differences are explained in this list:
+Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball) to accomplish this.
+Nixpkgs provides its own fetchers, which work differenty:
 
 - A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path).
   A Nixpkgs fetcher will create a ([fixed-output](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation)) [derivation](https://nixos.org/manual/nix/stable/glossary#gloss-derivation), and files are downloaded at build time.
@@ -16,6 +12,10 @@ The differences are explained in this list:
   Nixpkgs fetchers only re-download if the specified hash changes or the store object is not available.
 - Built-in fetchers do not use [substituters](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters).
   Derivations produced by Nixpkgs fetchers will use any configured binary cache transparently.
+
+This significantly reduces the time needed to evaluate code in Nixpkgs, as well as allow [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
+
+For these reasons, the Nix built-in fetchers are not allowed in Nixpkgs code.
 
 The following table summarizes the differences:
 
