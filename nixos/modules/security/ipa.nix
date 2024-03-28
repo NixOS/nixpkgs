@@ -135,7 +135,7 @@ in {
         realm = ${cfg.realm}
         domain = ${cfg.domain}
         server = ${cfg.server}
-        host = ${config.networking.hostName}
+        host = ${config.networking.fqdn}
         xmlrpc_uri = https://${cfg.server}/ipa/xml
         enable_ra = True
       '';
@@ -218,7 +218,7 @@ in {
 
       ipa_domain = ${cfg.domain}
       ipa_server = _srv_, ${cfg.server}
-      ipa_hostname = ${config.networking.hostName}.${cfg.domain}
+      ipa_hostname = ${config.networking.fqdn}
 
       cache_credentials = ${pyBool cfg.cacheCredentials}
       krb5_store_password_if_offline = ${pyBool cfg.offlinePasswords}
