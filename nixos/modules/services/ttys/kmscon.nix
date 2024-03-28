@@ -41,6 +41,14 @@ in {
           }; in nullOr (nonEmptyListOf fontType);
       };
 
+      useXkbConfig = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          If set, configure the kmscon keymap from the xserver keyboard settings.
+        '';
+      };
+
       extraConfig = mkOption {
         description = lib.mdDoc "Extra contents of the kmscon.conf file.";
         type = types.lines;
@@ -101,11 +109,20 @@ in {
     systemd.services.systemd-vconsole-setup.enable = false;
     systemd.services.reload-systemd-vconsole-setup.enable = false;
 
-    services.kmscon.extraConfig =
+    services.kmscon.extraConfig = lib.optionalString cfg.useXkbConfig (
+      with config.services.xserver; ''
+        xkb-model=${xkbModel}
+        xkb-layout=${layout}
+        xkb-options=${xkbOptions}
+      '' + lib.optionalString (xkbVariant != "") ''
+        xkb-variant=${xkbVariant}
+      ''
+    ) + (
       let
         render = optionals cfg.hwRender [ "drm" "hwaccel" ];
         fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
-      in lib.concatStringsSep "\n" (render ++ fonts);
+      in lib.concatStringsSep "\n" (render ++ fonts)
+    );
 
     hardware.opengl.enable = mkIf cfg.hwRender true;
 
