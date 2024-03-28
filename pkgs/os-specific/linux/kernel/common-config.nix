@@ -173,7 +173,7 @@ let
       DAMON_VADDR = whenAtLeast "5.15" yes;
       DAMON_PADDR = whenAtLeast "5.16" yes;
       DAMON_SYSFS = whenAtLeast "5.18" yes;
-      DAMON_DBGFS = whenAtLeast "5.15" yes;
+      DAMON_DBGFS = whenBetween "5.15" "6.9" yes;
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
       # Support recovering from memory failures on systems with ECC and MCA recovery.
@@ -577,7 +577,7 @@ let
       EXT4_FS_SECURITY  = yes;
       EXT4_ENCRYPTION   = whenOlder "5.1" yes;
 
-      NTFS_FS            = whenAtLeast "5.15" no;
+      NTFS_FS            = whenBetween "5.15" "6.9" no;
       NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
@@ -728,7 +728,8 @@ let
       X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
 
       # Mitigate straight line speculation at the cost of some file size
-      SLS = whenAtLeast "5.17" yes;
+      SLS = whenBetween "5.17" "6.9" yes;
+      MITIGATION_SLS = whenAtLeast "6.9" yes;
     };
 
     microcode = {
