@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  postInstall = ''
+    ln -s $out/lib/libmcfgthread.{dll.a,a}
+  '';
+
   meta = {
     description = "A threading support library for Windows 7 and above";
     homepage = "https://github.com/lhmouse/mcfgthread/wiki";

@@ -48,9 +48,16 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ cctools ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
-  postInstall = ''
-    moveToOutput "lib/*.a" $static
-  '';
+  postInstall = if stdenv.targetPlatform.isWindows then
+    # There are only static libraries on windows so link the outputs
+    ''
+      ln -s $lib $static
+    ''
+  else
+    ''
+      moveToOutput "lib/*.a" $static
+    ''
+  ;
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
