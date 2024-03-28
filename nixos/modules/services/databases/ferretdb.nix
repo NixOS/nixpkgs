@@ -22,8 +22,38 @@ in
       };
 
       settings = lib.mkOption {
-        type =
-          lib.types.submodule { freeformType = with lib.types; attrsOf str; };
+        type = lib.types.submodule {
+          freeformType = with lib.types; attrsOf str;
+          options = {
+            FERRETDB_HANDLER  = lib.mkOption {
+              type = lib.types.enum [ "sqlite" "pg" ];
+              default = "sqlite";
+              description = "Backend handler";
+            };
+
+            FERRETDB_SQLITE_URL = lib.mkOption {
+              type = lib.types.str;
+              default = "file:/var/lib/ferretdb/";
+              description = "SQLite URI (directory) for 'sqlite' handler";
+            };
+
+            FERRETDB_POSTGRESQL_URL = lib.mkOption {
+              type = lib.types.str;
+              default = "postgres://ferretdb@localhost/ferretdb?host=/run/postgresql";
+              description = "PostgreSQL URL for 'pg' handler";
+            };
+
+            FERRETDB_TELEMETRY = lib.mkOption {
+              type = lib.types.enum [ "enable" "disable" ];
+              default = "disable";
+              description = ''
+                Enable or disable basic telemetry.
+
+                See <https://docs.ferretdb.io/telemetry/> for more information.
+              '';
+            };
+          };
+        };
         example = {
           FERRETDB_LOG_LEVEL = "warn";
           FERRETDB_MODE = "normal";
@@ -39,12 +69,6 @@ in
 
   config = mkIf cfg.enable
     {
-
-      services.ferretdb.settings = {
-        FERRETDB_HANDLER = lib.mkDefault "sqlite";
-        FERRETDB_SQLITE_URL = lib.mkDefault "file:/var/lib/ferretdb/";
-      };
-
       systemd.services.ferretdb = {
         description = "FerretDB";
         after = [ "network.target" ];
