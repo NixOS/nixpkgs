@@ -1,13 +1,13 @@
-{ mkDerivation, fetchpatch, ansi-terminal, ansi-wl-pprint, base, binary
+{ mkDerivation, ansi-terminal, ansi-wl-pprint, base, binary
 , bytestring, Cabal, cmark, containers, directory, elm-format
-, fetchgit, filepath, free, HUnit, indents, json, mtl
+, fetchgit, filepath, free, HUnit, indents, json, lib, mtl
 , optparse-applicative, parsec, process, QuickCheck, quickcheck-io
-, split, lib, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
-, text
+, split, tasty, tasty-golden, tasty-hunit, tasty-quickcheck, text
+, fetchpatch
 }:
 mkDerivation {
   pname = "elm-instrument";
-  version = "0.0.7";
+  version = "unstable-2020-03-16";
   src = fetchgit {
     url = "https://github.com/zwilias/elm-instrument";
     sha256 = "167d7l2547zxdj7i60r6vazznd9ichwc0bqckh3vrh46glkz06jv";

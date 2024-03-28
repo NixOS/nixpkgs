@@ -24,7 +24,9 @@ mkDerivation {
     text
   ];
   testToolDepends = [ tasty-discover ];
-  doHaddock = false;
   description = "Common code used by elm-format and elm-refactor";
   license = lib.licenses.bsd3;
+
+  # Added manually
+  doHaddock = false;
 }

@@ -24,16 +24,17 @@ mkDerivation rec {
     quickcheck-io relude tasty tasty-hspec tasty-hunit tasty-quickcheck
     text
   ];
-  doHaddock = false;
   homepage = "https://elm-lang.org";
   description = "A source code formatter for Elm";
   license = lib.licenses.bsd3;
   mainProgram = "elm-format";
+
+  # Added manually (and "rec" above)
+  doHaddock = false;
   postPatch = ''
     mkdir -p ./generated
     cat <<EOHS > ./generated/Build_elm_format.hs
     module Build_elm_format where
-
     gitDescribe :: String
     gitDescribe = "${version}"
     EOHS
