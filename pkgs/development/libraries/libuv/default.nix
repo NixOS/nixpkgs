@@ -78,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
       # I observe this test failing with some regularity on ARMv7:
       # https://github.com/libuv/libuv/issues/1871
       "shutdown_close_pipe"
+    ] ++ lib.optionals stdenv.isFreeBSD [
+      # https://github.com/libuv/libuv/issues/4255
+      # Failure occurs outside of nix
+      "fs_event_watch_dir"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString (finalAttrs.finalPackage.doCheck) ''

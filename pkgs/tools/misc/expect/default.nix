@@ -9,11 +9,12 @@ tcl.mkTclDerivation rec {
     hash = "sha256-Safag7C92fRtBKBN7sGcd2e7mjI+QMR4H4nK92C5LDQ=";
   };
 
-  patches = [
+  patches = lib.optionals (!stdenv.isFreeBSD) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/c05e6aa361a4049eabd8b21eb64a34899ef83fc7/package/expect/0001-enable-cross-compilation.patch";
       hash = "sha256-yyzE0Jjac5qaj7Svn4VpMiAqSNLYrw7VZbtFqgMVncs=";
     })
+  ] ++ [
     (substituteAll {
       src = ./fix-cross-compilation.patch;
       tcl = "${buildPackages.tcl}/bin/tclsh";
@@ -29,11 +30,16 @@ tcl.mkTclDerivation rec {
     })
     # Include `sys/ioctl.h` and `util.h` on Darwin, which are required for `ioctl` and `openpty`.
     ./fix-darwin-clang16.patch
+  ] ++ lib.optionals (stdenv.isFreeBSD) [
+    ./link-unversioned.patch
   ];
 
   postPatch = ''
     sed -i "s,/bin/stty,$(type -p stty),g" configure.in
   '';
+
+  # software doesn't support clang16 yet...
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
 

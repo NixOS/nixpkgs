@@ -13,6 +13,7 @@
 
 # runtime dependencies
 , bzip2
+, deterministic-uname
 , expat
 , libffi
 , libxcrypt
@@ -121,6 +122,9 @@ let
     versionOlder
   ;
 
+  # mixes libcc and libxcrypt headers and libs and causes segfautlts on importing crypt
+  libxcrypt = if stdenv.hostPlatform.isFreeBSD then null else inputs.libxcrypt;
+
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
@@ -158,6 +162,8 @@ let
     pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
+  ] ++ optionals stdenv.hostPlatform.isFreeBSD [
+    deterministic-uname
   ];
 
   buildInputs = lib.filter (p: p != null) ([
@@ -217,6 +223,7 @@ let
   # are not documented, and must be derived from the configure script (see links
   # below).
   sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
+    # TODO: Purify the python build! it pulls in the running kernel version!
     machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
@@ -261,6 +268,7 @@ let
 
     multiarch =
       if isDarwin then "darwin"
+      else if isFreeBSD then ""
       else if isWindows then ""
       else "${multiarchCpu}-${machdep}-${pythonAbiName}";
 
@@ -469,6 +477,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
   optionalString enableNoSemanticInterposition ''
     export CFLAGS_NODIST="-fno-semantic-interposition"
+  '' + optionalString (stdenv.buildPlatform.isFreeBSD && stdenv.hostPlatform.isFreeBSD) ''
+    sed -E -i -e 's/uname -p/uname -m/g' -e 's/uname -r/echo/g' config.guess
+    sed -E -i -e 's/uname -p/uname -m/g' -e 's/uname -r/echo/g' configure
   '';
 
   setupHook = python-setup-hook sitePackages;
@@ -476,8 +487,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
-      (placeholder "out") libxcrypt
-    ] ++ optionals tzdataSupport [
+      (placeholder "out") ] ++ ((optionals (libxcrypt != null)) [libxcrypt])
+    ++ optionals tzdataSupport [
       tzdata
     ]);
   in lib.optionalString enableFramework ''
@@ -660,7 +671,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     maintainers = with maintainers; [ fridh ];
     mainProgram = executable;
   };

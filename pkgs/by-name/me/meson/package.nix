@@ -1,9 +1,12 @@
 { lib
 , stdenv
+, buildPackages
 , fetchFromGitHub
 , installShellFiles
 , coreutils
 , darwin
+, libblocksruntime
+, llvmPackages
 , libxcrypt
 , openldap
 , ninja
@@ -65,11 +68,16 @@ python3.pkgs.buildPythonApplication rec {
 
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
+
+    # This edge case is explicitly part of meson but is wrong for nix
+    ./007-freebsd-pkgconfig-path.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
     libxcrypt
   ];
+
+  propagatedNativeBuildInputs = lib.optionals stdenv.isFreeBSD [ buildPackages.freebsd.ldd ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -89,6 +97,9 @@ python3.pkgs.buildPythonApplication rec {
     OpenAL
     OpenGL
     openldap
+  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
+    libblocksruntime
+    llvmPackages.openmp
   ];
 
   checkPhase = lib.concatStringsSep "\n" ([
@@ -102,7 +113,7 @@ python3.pkgs.buildPythonApplication rec {
     ''
   ]
   # Remove problematic tests
-  ++ (builtins.map (f: ''rm -vr "${f}";'') [
+  ++ (builtins.map (f: ''rm -vr "${f}";'') ([
     # requires git, creating cyclic dependency
     ''test cases/common/66 vcstag''
     # requires glib, creating cyclic dependency
@@ -112,7 +123,13 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
     ''test cases/osx/7 bitcode''
-  ])
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    # pch doesn't work quite right on FreeBSD, I think
+    ''test cases/common/13 pch''
+    # tests hardcode lib instead of libdata, which FreeBSD uses
+    ''test cases/common/44 pkgconfig-gen''
+    ''test cases/common/230 external project''
+  ]))
   ++ [
     ''HOME="$TMPDIR" python ./run_project_tests.py''
     "runHook postCheck"

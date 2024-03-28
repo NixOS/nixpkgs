@@ -10,7 +10,7 @@
 
 makeSetupHook {
   name = "make-binary-wrapper-hook";
-  propagatedBuildInputs = [ dieHook ];
+  propagatedBuildInputs = [ dieHook cc ];
 
   substitutions = {
     cc = "${cc}/bin/${cc.targetPrefix}cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
