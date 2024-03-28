@@ -30387,6 +30387,8 @@ with pkgs;
 
   clight = callPackage ../applications/misc/clight { };
 
+  clight-gui = libsForQt5.callPackage ../applications/misc/clight/clight-gui.nix { };
+
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
