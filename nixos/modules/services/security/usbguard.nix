@@ -157,6 +157,14 @@ in
         '';
       };
 
+      notifierEnable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enable also usbguard-notifier with usbguard daemon.
+        '';
+      };
+
       dbus.enable = mkEnableOption (lib.mdDoc "USBGuard dbus daemon");
     };
   };
@@ -166,7 +174,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = if cfg.notifierEnable then [ cfg.package pkgs.usbguard-notifier ] else [ cfg.package ];
 
     systemd.services = {
       usbguard = {
@@ -227,6 +235,21 @@ in
         };
 
         aliases = [ "dbus-org.usbguard.service" ];
+      };
+
+      usbguard-notifier = mkIf cfg.notifierEnable {
+        description = "USBGuard Notifier Service";
+
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "usbguard.service" ];
+
+        serviceConfig = {
+          Type = "simple";
+          BusName = "org.usbguard1";
+          ExecStart = "${pkgs.usbguard-notifier}/bin/usbguard-notifier";
+          Restart = "on-failure";
+        };
+
       };
     };
 
