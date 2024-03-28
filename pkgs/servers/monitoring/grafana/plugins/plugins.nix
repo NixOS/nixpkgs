@@ -14,4 +14,5 @@
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
+  netsage-sankey-panel = callPackage ./netsage-sankey-panel { };
 }
