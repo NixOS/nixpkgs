@@ -1,9 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, cmake, ninja, python
-, withGodef ? true, godef
-, withGotools? true, gotools
-, withTypescript ? true, typescript
-, abseil-cpp, boost, llvmPackages
-, fixDarwinDylibNames, Cocoa
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, python
+, withGodef ? true
+, godef
+, withGotools ? true
+, gotools
+, withTypescript ? true
+, typescript
+, abseil-cpp
+, boost
+, llvmPackages
+, fixDarwinDylibNames
+, Cocoa
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +34,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ninja ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = with python.pkgs; with llvmPackages; [ abseil-cpp boost libllvm.all libclang.all ]
-    ++  [ jedi jedi-language-server pybind11 ]
+    ++ [ jedi jedi-language-server pybind11 ]
     ++ lib.optional stdenv.isDarwin Cocoa;
 
   buildPhase = ''
@@ -45,6 +56,7 @@ stdenv.mkDerivation {
   # symlink completion backends where ycmd expects them
   installPhase = ''
     rm -rf ycmd/tests
+    find third_party -type d -name "test" -exec rm -rf {} +
 
     chmod +x ycmd/__main__.py
     sed -i "1i #!${python.interpreter}\
