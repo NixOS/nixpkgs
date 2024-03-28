@@ -27,11 +27,10 @@ in {
           memcached = true;
         };
         database.createLocally = true;
-        config = {
-          dbtype = "mysql";
-          # Don't inherit adminuser since "root" is supposed to be the default
-          adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
-        };
+        settings.dbtype = "mysql";
+        # Don't inherit adminuser since "root" is supposed to be the default
+        # Don't try this at home!
+        config.adminpassFile = "${pkgs.writeText "adminpass" adminpass}";
       };
 
       services.memcached.enable = true;

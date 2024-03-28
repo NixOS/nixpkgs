@@ -44,11 +44,10 @@ in {
         datadir = "/var/lib/nextcloud-data";
         hostName = "nextcloud";
         database.createLocally = true;
-        config = {
-          # Don't inherit adminuser since "root" is supposed to be the default
-          adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
-          dbtableprefix = "nixos_";
-        };
+        settings.dbtableprefix = "nixos_";
+        # Don't inherit adminuser since "root" is supposed to be the default
+        # Don't try this at home!
+        config.adminpassFile = "${pkgs.writeText "adminpass" adminpass}";
         package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         autoUpdateApps = {
           enable = true;
