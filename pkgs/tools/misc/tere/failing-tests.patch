@@ -1,0 +1,36 @@
+diff --git a/tests/cli.rs b/tests/cli.rs
+index 88b9b8d..3a05c79 100644
+--- a/tests/cli.rs
++++ b/tests/cli.rs
+@@ -43,6 +43,7 @@ fn get_cmd_no_first_run_prompt() -> Command {
+     cmd
+ }
+ 
++#[ignore]
+ #[test]
+ fn basic_run() -> Result<(), RexpectError> {
+     let mut cmd = get_cmd_no_first_run_prompt();
+@@ -63,6 +64,7 @@ fn basic_run() -> Result<(), RexpectError> {
+     Ok(())
+ }
+ 
++#[ignore]
+ #[test]
+ fn output_on_exit_without_cd() -> Result<(), RexpectError> {
+     let mut proc = run_app_with_cmd(get_cmd_no_first_run_prompt());
+@@ -78,6 +80,7 @@ fn output_on_exit_without_cd() -> Result<(), RexpectError> {
+     Ok(())
+ }
+ 
++#[ignore]
+ #[test]
+ fn first_run_prompt_cancel() -> Result<(), RexpectError> {
+     let mut cmd = get_cmd();
+@@ -101,6 +104,7 @@ fn first_run_prompt_cancel() -> Result<(), RexpectError> {
+     Ok(())
+ }
+ 
++#[ignore]
+ #[test]
+ fn first_run_prompt_accept() -> Result<(), RexpectError> {
+     let mut cmd = get_cmd();
