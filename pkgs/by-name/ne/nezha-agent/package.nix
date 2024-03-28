@@ -24,14 +24,8 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    export GOFLAGS=''${GOFLAGS//-trimpath/}
+  preCheck = ''
     rm ./pkg/monitor/myip_test.go
-    for pkg in $(getGoDirs test); do
-      buildGoDir test "$pkg"
-    done
-    runHook postCheck
   '';
 
   passthru.tests = {
@@ -45,6 +39,6 @@ buildGoModule rec {
     description = "Agent of Nezha Monitoring";
     homepage = "https://github.com/nezhahq/agent";
     license = licenses.asl20;
-    maintainers = with maintainers; [moraxyc];
+    maintainers = with maintainers; [ moraxyc ];
   };
 }
