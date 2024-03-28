@@ -2,20 +2,22 @@
 
 # Upstream changes files in-place, to update:
 # 1. Check latest version at http://www.un4seen.com/
-# 2. Update `version`s and `sha256` sums.
+# 2. Update `version`s and `hash` sums.
 # See also http://www.un4seen.com/forum/?topic=18614.0
 
 let
   allBass = {
     bass = {
       h = "bass.h";
-      version = "2.4.15";
+      version = "2.4.17";
       so = {
-        i686_linux = "libbass.so";
-        x86_64-linux = "x64/libbass.so";
+        i686_linux = "libs/x86/libbass.so";
+        x86_64-linux = "libs/x86_64/libbass.so";
+        armv7l-linux = "libs/armhf/libbass.so";
+        aarch64-linux = "libs/aarch64/libbass.so";
       };
       urlpath = "bass24-linux.zip";
-      sha256 = "1lmysxfhy727zskavml3ibg5w876ir88923bm17c21s59w5lh7l8";
+      hash = "sha256-bud59LhdqCHUpTg88+gmZZKiuhCP9Zl2dU/A+Ka05P0=";
     };
 
     bass_fx = {
@@ -36,7 +38,7 @@ let
 
     src = fetchurl {
       url = "https://www.un4seen.com/files/${bass.urlpath}";
-      inherit (bass) sha256;
+      inherit (bass) hash;
     };
     unpackCmd = ''
       mkdir out
