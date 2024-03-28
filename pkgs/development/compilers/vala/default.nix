@@ -16,8 +16,6 @@ let
       {
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
-        "0.54" = ./disable-graphviz-0.46.1.patch;
-
         "0.56" = ./disable-graphviz-0.56.8.patch;
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
@@ -93,11 +91,6 @@ in rec {
   vala_0_48 = generic {
     version = "0.48.25";
     sha256 = "UMs8Xszdx/1DaL+pZBSlVgReedKxWmiRjHJ7jIOxiiQ=";
-  };
-
-  vala_0_54 = generic {
-    version = "0.54.9";
-    sha256 = "hXLA6Nd9eMFZfVFgCPBUDH50leA10ou0wlzJk+U85LQ=";
   };
 
   vala_0_56 = generic {
