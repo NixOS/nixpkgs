@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "awswrangler";
   version = "3.7.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,11 +37,11 @@ buildPythonPackage rec {
     hash = "sha256-1eb2oTiRNxA2XTpkScA5WJutN5P6FX96jC4Ra9VdonI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     gremlinpython
     jsonpath-ng
