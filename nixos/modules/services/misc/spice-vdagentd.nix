@@ -7,7 +7,7 @@ in
 {
   options = {
     services.spice-vdagentd = {
-      enable = mkEnableOption (lib.mdDoc "Spice guest vdagent daemon");
+      enable = mkEnableOption (lib.mdDoc "Spice guest vdagent system daemon");
     };
   };
 
@@ -16,7 +16,7 @@ in
     environment.systemPackages = [ pkgs.spice-vdagent ];
 
     systemd.services.spice-vdagentd = {
-      description = "spice-vdagent daemon";
+      description = "spice-vdagent system daemon";
       wantedBy = [ "graphical.target" ];
       preStart = ''
         mkdir -p "/run/spice-vdagentd/"
