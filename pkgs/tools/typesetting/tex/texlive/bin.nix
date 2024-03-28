@@ -145,6 +145,12 @@ core = stdenv.mkDerivation rec {
     # Fix implicit `int` on `main`, which results in an error when building with clang 16.
     # This is fixed upstream and can be dropped with the 2023 release.
     ./fix-implicit-int.patch
+    (fetchpatch {
+      name = "ttfdump-CVE-2024-25262.patch";
+      url = "https://tug.org/svn/texlive/trunk/Build/source/texk/ttfdump/libttf/hdmx.c?r1=57915&r2=69520&view=patch";
+      stripLen = 2;
+      hash = "sha256-WH2kioqFAs3jaFmu4DdEUdrTf6eiymtiWTZi3vWwU7k=";
+    })
   ];
 
   hardeningDisable = [ "format" ];
