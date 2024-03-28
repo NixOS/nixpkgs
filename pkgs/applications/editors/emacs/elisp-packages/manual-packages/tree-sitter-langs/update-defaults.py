@@ -55,7 +55,7 @@ def build_attr(nixpkgs, attr: str) -> str:
 
 if __name__ == "__main__":
     cwd = dirname(abspath(__file__))
-    nixpkgs = abspath(join(cwd, "../../../../../.."))
+    nixpkgs = abspath(join(cwd, "../../../../../../.."))
 
     src_dir = build_attr(nixpkgs, "emacs.pkgs.tree-sitter-langs.src")
 
