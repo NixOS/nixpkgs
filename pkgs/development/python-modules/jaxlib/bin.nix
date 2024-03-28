@@ -25,7 +25,7 @@
 let
   inherit (cudaPackagesGoogle) autoAddDriverRunpath cudaVersion;
 
-  version = "0.4.24";
+  version = "0.4.25";
 
   inherit (python) pythonVersion;
 
@@ -55,65 +55,65 @@ let
       "3.9-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp39";
-        hash = "sha256-6P5ArMoLZiUkHUoQ/mJccbNj5/7el/op+Qo6cGQ33xE=";
+        hash = "sha256-D9ETq0FN6Fb5DwcmTmzNDLldOS81ecDeq0/wlD73X3M=";
       };
       "3.9-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp39";
-        hash = "sha256-23JQZRwMLtt7sK/JlCBqqRyfTVIAVJFN2sL+nAkQgvU=";
+        hash = "sha256-Mogfk9XeGVoP0Z4JGiqolBj6J/Yw0wx5tGE6Uc/00cY=";
       };
       "3.9-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp39";
-        hash = "sha256-OgMedn9GHGs5THZf3pkP3Aw/jJ0vL5qK1b+Lzf634Ik=";
+        hash = "sha256-ZmC2h0Eoa9S4ScFJ2GqMNuRI9+OeHUg+edq3nqMAvxs=";
       };
 
       "3.10-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp310";
-        hash = "sha256-/VwUIIa7mTs/wLz0ArsEfNrz2pGriVVT5GX9XRFRxfY=";
+        hash = "sha256-3Np0x8jrMozeiv7rzyHskkATj6xU+WMaYLZ5ohH34QA=";
       };
       "3.10-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp310";
-        hash = "sha256-LgICOyDGts840SQQJh+yOMobMASb62llvJjpGvhzrSw=";
+        hash = "sha256-O1y9Ok9zFjZGnNrwbEQTIIgRykWO4xJkfo8/rKMvZEU=";
       };
       "3.10-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp310";
-        hash = "sha256-vhyULw+zBpz1UEi2tqgBMQEzY9a6YBgEIg6A4PPh3bQ=";
+        hash = "sha256-vhsm6W6A1C9U93ImoBZxfLlp19II0Ny2GZfxncey2OI=";
       };
 
       "3.11-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp311";
-        hash = "sha256-VJO/VVwBFkOEtq4y/sLVgAV8Cung01JULiuT6W96E/8=";
+        hash = "sha256-oN0Jy7Ylg5QYcrahmIlOh6G2TY5N1rU5Rtu0HWQrj18=";
       };
       "3.11-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp311";
-        hash = "sha256-VtuwXxurpSp1KI8ty1bizs5cdy8GEBN2MgS227sOCmE=";
+        hash = "sha256-DffiGTshbhld/HqKoUUn61JhTsO6TFmhma8vFxla4cE=";
       };
       "3.11-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp311";
-        hash = "sha256-4Dj5dEGKb9hpg3HlVogNO1Gc9UibJhy1eym2mjivxAQ=";
+        hash = "sha256-N9p4DLVFyiEL+gQCtQgUUq2DC7Bv6elw/RatFNL9xqY=";
       };
 
       "3.12-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp312";
-        hash = "sha256-TlrGVtb3NTLmhnILWPLJR+jISCZ5SUV4wxNFpSfkCBo=";
+        hash = "sha256-3Ptxp/VZwTc0WEdpyjA3O8S3PQ/hBXkEYjcOSfNdy+Q=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-FIwK5CGykQjteuWzLZnbtAggIxLQeGV96bXlZGEytN0=";
+        hash = "sha256-DpdUK72J9DFtL+tZkRnYpDRAyhUbehZe/w/BJ89FEuc=";
       };
       "3.12-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp312";
-        hash = "sha256-9/jw/wr6oUD9pOadVAaMRL086iVMUXwVgnUMcG1UNvE=";
+        hash = "sha256-Ql1vP6V+odFnSuhLWj01iLoJN/PEf9TxZuuExCQIh7g=";
       };
     };
 
@@ -129,35 +129,35 @@ let
   gpuSrcs = {
     "cuda12.2-3.9" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp39-cp39-manylinux2014_x86_64.whl";
-      hash = "sha256-xdJKLPtx+CIza2CrWKM3M0cZJzyNFVTTTsvlgh38bfM=";
+      hash = "sha256-R0H84kNed66VzbtRhe4lrtzer3fXjk4WXxRSTW/EQ9k=";
     };
     "cuda12.2-3.10" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-QCjrOczD2mp+CDwVXBc0/4rJnAizeV62AK0Dpx9X6TE=";
+      hash = "sha256-x4K3kxTXxwRsWDRmOQLnA/Mzirl8hvaY1UujTviVQ9g=";
     };
     "cuda12.2-3.11" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp311-cp311-manylinux2014_x86_64.whl";
-      hash = "sha256-Ipy3vk1yUplpNzECAFt63aOIhgEWgXG7hkoeTIk9bQQ=";
+      hash = "sha256-Weso/rKLRwn3YNQsUf7yEZ1+94FO3dkmaGATgTS2xVI=";
     };
     "cuda12.2-3.12" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp312-cp312-manylinux2014_x86_64.whl";
-      hash = "sha256-LSnZHaUga/8Z65iKXWBnZDk4yUpNykFTu3vukCchO6Q=";
+      hash = "sha256-9GalNKmggR2dvOaWpXB3W+nIzOrBSV/S2GeKD3Qllww=";
     };
     "cuda11.8-3.9" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp39-cp39-manylinux2014_x86_64.whl";
-      hash = "sha256-UmyugL0VjlXkiD7fuDPWgW8XUpr/QaP5ggp6swoZTzU=";
+      hash = "sha256-BWujb84WS9kUdZCSsKUCQtUeLh0oBGJrvnXSKUlogac=";
     };
     "cuda11.8-3.10" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-luKULEiV1t/sO6eckDxddJTiOFa0dtJeDlrvp+WYmHk=";
+      hash = "sha256-CFJEmlLX4iweOi2IKN0QF6C8lB02reZwbabIIofskJI=";
     };
     "cuda11.8-3.11" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp311-cp311-manylinux2014_x86_64.whl";
-      hash = "sha256-4+uJ8Ij6mFGEmjFEgi3fLnSLZs+v18BRoOt7mZuqydw=";
+      hash = "sha256-9ZJ+bMt5EMx8s0UCPGnwlPV8hcX4cW3ARBChvaam79I=";
     };
     "cuda11.8-3.12" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp312-cp312-manylinux2014_x86_64.whl";
-      hash = "sha256-bUDFb94Ar/65SzzR9RLIs/SL/HdjaPT1Su5whmjkS00=";
+      hash = "sha256-tw3GTanY4PE7B7NKBT2K6QT3LZa/wXw0OvMFa4q1rZM=";
     };
   };
 
