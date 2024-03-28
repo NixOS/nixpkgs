@@ -49,14 +49,14 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.6.0";
+  version = "8.7.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-PM1V2Rr5UWU534BiX4GMc03G8uz5utozx2dl6ZEh2xU=";
+    hash = "sha256-b+oqrGpGEPvQQAr7C83b5yWKZMY/H2jlhV68DGWXEM0=";
   };
 
   postPatch = ''
