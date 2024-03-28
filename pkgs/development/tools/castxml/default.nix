@@ -8,12 +8,14 @@
 , withManual ? true
 , withHTML ? true
 , llvmPackages
+, clang
 , python3
 }:
 
 let
   inherit (llvmPackages) libclang llvm;
   inherit (python3.pkgs) sphinx;
+  clangVersion = lib.getVersion clang;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
+    "-DCLANG_RESOURCE_DIR=${clang.cc.lib}/lib/clang/${clangVersion}"
     "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
     "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
