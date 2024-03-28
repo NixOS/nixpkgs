@@ -2,6 +2,7 @@
 , stdenvNoCC
 , fetchurl
 , makeWrapper
+, wrapGAppsHook
 , jre
 }:
 
@@ -17,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontUnpack = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ jre makeWrapper wrapGAppsHook ];
 
   installPhase = ''
     runHook preInstall
