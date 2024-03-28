@@ -30,7 +30,7 @@ For example, consider the following fetcher:
 fetchurl {
   url = "http://www.example.org/hello-1.0.tar.gz";
   hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
-};
+}
 ```
 
 A common mistake is to update a fetcher’s URL, or a version parameter, without updating the hash.
@@ -39,7 +39,7 @@ A common mistake is to update a fetcher’s URL, or a version parameter, without
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
   hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
-};
+}
 ```
 
 **This will reuse the old contents**.
@@ -49,7 +49,7 @@ Remember to invalidate the hash argument, in this case by setting the `hash` att
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
   hash = "";
-};
+}
 ```
 
 Use the resulting error message to determine the correct hash.
@@ -123,7 +123,7 @@ Here is an example of `fetchDebianPatch` in action:
 buildPythonPackage rec {
   pname = "pysimplesoap";
   version = "1.16.2";
-  src = ...;
+  src = <...>;
 
   patches = [
     (fetchDebianPatch {
@@ -134,7 +134,7 @@ buildPythonPackage rec {
     })
   ];
 
-  ...
+  # ...
 }
 ```
 
@@ -243,7 +243,7 @@ This is a useful last-resort workaround for license restrictions that prohibit r
 If the requested file is present in the Nix store, the resulting derivation will not be built, because its expected output is already available.
 Otherwise, the builder will run, but fail with a message explaining to the user how to provide the file. The following code, for example:
 
-```
+```nix
 requireFile {
   name = "jdk-${version}_linux-x64_bin.tar.gz";
   url = "https://www.oracle.com/java/technologies/javase-jdk11-downloads.html";
@@ -270,7 +270,7 @@ It produces packages that cannot be built automatically.
 
 `fetchtorrent` expects two arguments. `url` which can either be a Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file. It can also take a `config` argument which will craft a `settings.json` configuration file and give it to `transmission`, the underlying program that is performing the fetch. The available config options for `transmission` can be found [here](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md#options)
 
-```
+```nix
 { fetchtorrent }:
 
 fetchtorrent {

@@ -10867,6 +10867,12 @@
     githubId = 695526;
     name = "Benjamin Kober";
   };
+  lampros = {
+    email = "hauahx@gmail.com";
+    github = "LamprosPitsillos";
+    githubId = 61395246;
+    name = "Lampros Pitsillos";
+  };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
     github = "larsr";
@@ -17025,6 +17031,12 @@
     github = "rski";
     githubId = 2960312;
   };
+  rsniezek = {
+    email = "radoslaw.sniezek@protonmail.com";
+    github = "rsniezek";
+    githubId = 19433256;
+    name = "Radoslaw Sniezek";
+  };
   rsynnest = {
     email = "contact@rsynnest.com";
     github = "rsynnest";
@@ -18568,6 +18580,12 @@
     keys = [{
       fingerprint = "652F FAAD 5CB8 AF1D 3F96  9521 929E D6C4 0414 D3F5";
     }];
+  };
+  spk = {
+    email = "laurent@spkdev.net";
+    github = "spk";
+    githubId = 98590;
+    name = "Laurent Arnoud";
   };
   spoonbaker = {
     github = "Spoonbaker";

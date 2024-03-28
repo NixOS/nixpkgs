@@ -76,12 +76,14 @@ If you need to refer to the resulting files somewhere else in a Nix expression, 
 For example, if the file destination is a directory:
 
 ```nix
-my-file = writeTextFile {
-  name = "my-file";
-  text = ''
-    Contents of File
-  '';
-  destination = "/share/my-file";
+{
+  my-file = writeTextFile {
+    name = "my-file";
+    text = ''
+      Contents of File
+    '';
+    destination = "/share/my-file";
+  };
 }
 ```
 
@@ -90,7 +92,7 @@ Remember to append "/share/my-file" to the resulting store path when using it el
 ```nix
 writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
-'';
+''
 ```
 ::::
 
@@ -287,7 +289,7 @@ writeTextFile {
   };
   allowSubstitutes = true;
   preferLocalBuild = false;
-};
+}
 ```
 :::
 
@@ -351,7 +353,7 @@ Write the string `Contents of File` to `/nix/store/<store path>`:
 writeText "my-file"
   ''
   Contents of File
-  '';
+  ''
 ```
 :::
 
@@ -391,7 +393,7 @@ Write the string `Contents of File` to `/nix/store/<store path>/share/my-file`:
 writeTextDir "share/my-file"
   ''
   Contents of File
-  '';
+  ''
 ```
 :::
 
@@ -433,7 +435,7 @@ Write the string `Contents of File` to `/nix/store/<store path>` and make the fi
 writeScript "my-file"
   ''
   Contents of File
-  '';
+  ''
 ```
 :::
 
@@ -475,7 +477,7 @@ The store path will include the the name, and it will be a directory.
 writeScriptBin "my-script"
   ''
   echo "hi"
-  '';
+  ''
 ```
 :::
 
@@ -519,7 +521,7 @@ This function is almost exactly like [](#trivial-builder-writeScript), except th
 writeShellScript "my-script"
   ''
   echo "hi"
-  '';
+  ''
 ```
 :::
 
@@ -562,7 +564,7 @@ This function is a combination of [](#trivial-builder-writeShellScript) and [](#
 writeShellScriptBin "my-script"
   ''
   echo "hi"
-  '';
+  ''
 ```
 :::
 
@@ -674,7 +676,7 @@ writeClosure [ (writeScriptBin "hi" ''${hello}/bin/hello'') ]
 
 produces an output path `/nix/store/<hash>-runtime-deps` containing
 
-```nix
+```
 /nix/store/<hash>-hello-2.10
 /nix/store/<hash>-hi
 /nix/store/<hash>-libidn2-2.3.0
@@ -700,7 +702,7 @@ writeDirectReferencesToFile (writeScriptBin "hi" ''${hello}/bin/hello'')
 
 produces an output path `/nix/store/<hash>-runtime-references` containing
 
-```nix
+```
 /nix/store/<hash>-hello-2.10
 ```
 

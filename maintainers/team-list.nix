@@ -560,6 +560,7 @@ with lib.maintainers; {
       lovek323
       qyliss
       raitobezarius
+      RossComputerGuy
       rrbutani
       sternenseemann
     ];
