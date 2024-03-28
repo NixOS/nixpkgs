@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # TODO: opengl support (bogus configure detection)
-  propagatedBuildInputs = [
+  buildInputs = [
     libdeflate
     libjpeg
     xz
@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.libtiff;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
+    maintainers = teams.geospatial.members;
   };
 })
