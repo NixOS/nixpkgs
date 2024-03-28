@@ -261,8 +261,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_21 = common {
-    version = "2.21.0";
-    hash = "sha256-9b9qJ+7rGjLKbIswMf0/2pgUWH/xOlYLk7P4WYNcGDs=";
+    version = "2.21.1";
+    hash = "sha256-iRtvOcJbohyhav+deEajI/Ln/LU/6WqSfLyXDQaNEro=";
   };
 
   # The minimum Nix version supported by Nixpkgs
