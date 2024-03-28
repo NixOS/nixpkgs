@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ejgxWVIkusGi7zwg3nyAHHdjEPrFaS1TN7nN+PpSgOE=";
+    hash = "sha256-rW4xLUFTpGpUeMnTBdrI/2OjgZX1ihK0EfcVK6snmpk=";
   };
 
   patches = [
