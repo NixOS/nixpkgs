@@ -94,11 +94,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
-   - You can use `nix-prefetch-url url` to get the SHA-256 hash of source distributions. There are similar commands as `nix-prefetch-git` and `nix-prefetch-hg` available in `nix-prefetch-scripts` package.
-
-   - A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix).
-
-   The exact syntax and semantics of the Nix expression language, including the built-in function, are [described in the Nix manual](https://nixos.org/manual/nix/stable/language/).
+   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).
 
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
@@ -408,8 +404,12 @@ Import From Derivation can be worked around in some cases by committing generate
 
 Always fetch source files using [Nixpkgs fetchers](https://nixos.org/manual/nixpkgs/unstable/#chap-pkgs-fetchers).
 Use reproducible sources with a high degree of availability.
-Currently only [`fetchurl`](https://nixos.org/manual/nixpkgs/unstable/#fetchurl) has mirroring support.
 Prefer protocols that support proxies.
+
+Currently only [`fetchurl`](https://nixos.org/manual/nixpkgs/unstable/#fetchurl) has mirroring support.
+A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix).
+
+The preferred source hash type is `sha256`.
 
 Examples going from bad to best practices:
 
