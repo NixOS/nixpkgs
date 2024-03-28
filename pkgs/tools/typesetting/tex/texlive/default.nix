@@ -94,7 +94,7 @@ let
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
 
   buildTeXLivePackage = import ./build-texlive-package.nix {
-    inherit lib fetchurl runCommand bash jdk perl python3 ruby snobol4 tk;
+    inherit lib fetchurl runCommand writeShellScript bash jdk perl python3 ruby snobol4 tk;
     texliveBinaries = bin;
   };
 
