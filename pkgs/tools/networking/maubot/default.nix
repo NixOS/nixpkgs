@@ -59,6 +59,7 @@ let
     ];
 
     propagatedBuildInputs = with python.pkgs; [
+      setuptools
       # requirements.txt
       mautrix
       aiohttp
