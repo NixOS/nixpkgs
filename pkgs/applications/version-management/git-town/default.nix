@@ -2,21 +2,24 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "11.1.0";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-QQ+sIZzkzecs+pZBzsmCL048JZpMPvdYi0PRtMN4AhY=";
+    hash = "sha256-EK8Mx+fXprWsndkqYywlyQoWBVi4HgZAryUOhucQl5g=";
   };
 
-  vendorHash = null;
-
+  buildInputs = [ git ];
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildInputs = [ git ];
+  vendorHash = null;
+  excludedPackages = [
+    "./tools"
+  ];
 
+  GOWORK = "off";
   ldflags =
     let
       modulePath = "github.com/git-town/git-town/v${lib.versions.major version}"; in
@@ -32,8 +35,6 @@ buildGoModule rec {
     let
       skippedTests = [
         "TestGodog"
-        "TestRunner_CreateChildFeatureBranch"
-        "TestShellRunner_RunStringWith_Dir"
         "TestMockingShell_MockCommand"
         "TestShellRunner_RunStringWith_Input"
       ];
@@ -63,7 +64,7 @@ buildGoModule rec {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ allonsy blaggacao ];
+    maintainers = with maintainers; [ allonsy blaggacao gabyx ];
     mainProgram = "git-town";
   };
 }
