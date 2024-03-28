@@ -674,7 +674,11 @@ in
           (lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null")
           cfg.ports}
         ${concatMapStringsSep "\n"
-          (la: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString la.port}"} -f ${sshconf} > /dev/null")
+          (la:
+            concatMapStringsSep "\n"
+              (port: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString port}"} -f ${sshconf} > /dev/null")
+              (if la.port != null then [ la.port ] else cfg.ports)
+          )
           cfg.listenAddresses}
         touch $out
       '')
