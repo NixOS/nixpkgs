@@ -166,7 +166,8 @@ in
           # Add everything if we want full console setup...
           "/etc/kbd" = lib.mkIf cfg.earlySetup { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share"; };
           # ...but only the keymaps if we don't
-          "/etc/kbd/keymaps" = { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
+          "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
+          "/etc/kbd/consolefonts" = lib.mkIf (!cfg.earlySetup && cfg.font != null) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/consolefonts"; };
         };
         boot.initrd.systemd.additionalUpstreamUnits = [
           "systemd-vconsole-setup.service"
