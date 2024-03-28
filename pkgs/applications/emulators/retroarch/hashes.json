@@ -165,10 +165,10 @@
         "src": {
             "owner": "libretro",
             "repo": "bsnes-libretro",
-            "rev": "494d53b11d875a51f2de9e8fe25db038ae4c63fa",
-            "hash": "sha256-hLFT4m0900+2PAmVS41Z5uf3Ir2hg2pCbs2der8CG+k="
+            "rev": "51b378454e34f7535f8b627de5b81d33b0fa4cb0",
+            "hash": "sha256-oriFvt0RCt9Bd5DjjLSxMuswfazd31isvt5OxwwNuks="
         },
-        "version": "unstable-2024-03-15"
+        "version": "unstable-2024-03-22"
     },
     "bsnes-hd": {
         "fetcher": "fetchFromGitHub",
@@ -307,11 +307,11 @@
         "src": {
             "owner": "flyinghead",
             "repo": "flycast",
-            "rev": "40cdef6c1c9bd73bf3a55d412e30c25bbcf2b59c",
-            "hash": "sha256-+3PqeLT6i2HesVaA5b13bavNqH0mqeFIkHfhusdzWYU=",
+            "rev": "c9fafa0ed176d1ffabae5c1a7a363d0ee276a972",
+            "hash": "sha256-ruqgen9X3CEY+PRZFVGNPhEDUUvH486paWphQfGCHew=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-03-19"
+        "version": "unstable-2024-03-26"
     },
     "fmsx": {
         "fetcher": "fetchFromGitHub",
@@ -348,10 +348,10 @@
         "src": {
             "owner": "libretro",
             "repo": "gambatte-libretro",
-            "rev": "b2dadf0c4ebcc70f04245d8bc1eefc2b8d56cbe3",
-            "hash": "sha256-GvZO2TJM8L65/aWp3KRsA7VpAmS6Gz3e64LDcOt97qc="
+            "rev": "cbda5ea9fd81d1be0220dfc690d05240655602e4",
+            "hash": "sha256-uLUIFDiPJ5ZSJPezZ24bDfd10AKDCHz4ATm2BBBGs9I="
         },
-        "version": "unstable-2024-03-15"
+        "version": "unstable-2024-03-22"
     },
     "genesis-plus-gx": {
         "fetcher": "fetchFromGitHub",

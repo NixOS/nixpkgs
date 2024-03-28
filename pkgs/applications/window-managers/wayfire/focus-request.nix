@@ -5,7 +5,9 @@
 , ninja
 , pkg-config
 , wayfire
-, eudev
+, wf-config
+, wayland
+, pango
 , libinput
 , libxkbcommon
 , librsvg
@@ -14,20 +16,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "windecor";
-  version = "0.8.0";
+  pname = "focus-request";
+  version = "0.8.0.2";
 
   src = fetchFromGitLab {
     owner = "wayfireplugins";
-    repo = "windecor";
+    repo = "focus-request";
     rev = "v${finalAttrs.version}";
     hash = "sha256-v0kGT+KrtfFJ/hp1Dr8izKVj6UHhuW6udHFjWt1y9TY=";
   };
-
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace "wayfire.get_variable( pkgconfig: 'metadatadir' )" "join_paths(get_option('prefix'), 'share/wayfire/metadata')"
-  '';
 
   nativeBuildInputs = [
     meson
@@ -37,7 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayfire
-    eudev
+    wf-config
+    wayland
+    pango
     libinput
     libxkbcommon
     librsvg
@@ -45,11 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilwm
   ];
 
-  mesonFlags = [ "--sysconfdir=/etc" ];
+  env = {
+    PKG_CONFIG_WAYFIRE_METADATADIR = "${placeholder "out"}/share/wayfire/metadata";
+  };
 
   meta = {
-    homepage = "https://gitlab.com/wayfireplugins/windecor";
-    description = "A window decoration plugin for wayfire";
+    homepage = "https://gitlab.com/wayfireplugins/focus-request";
+    description = "The wayfire plugin provides a mechanism to grant focus to views that make a focus self-request";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;
