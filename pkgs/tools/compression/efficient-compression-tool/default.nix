@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "efficient-compression-tool";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "fhanau";
     repo = "Efficient-Compression-Tool";
     rev = "v${version}";
-    sha256 = "sha256-TSV5QXf6GuHAwQrde3Zo9MA1rtpAhtRg0UTzMkBnHB8=";
+    sha256 = "sha256-ArjgEmA6vmJWgVmLvZ7wPdA0tdVrS9g8hz8hlNWsujU=";
     fetchSubmodules = true;
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./use-nixpkgs-libpng.patch ];
 
-  buildInputs = [ boost libpng  ];
+  buildInputs = [ boost libpng ];
 
   cmakeDir = "../src";
 
