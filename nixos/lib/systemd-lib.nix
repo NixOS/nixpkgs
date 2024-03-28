@@ -1,8 +1,47 @@
 { config, lib, pkgs }:
 
-with lib;
-
 let
+  inherit (lib)
+    all
+    attrByPath
+    attrNames
+    concatLists
+    concatMap
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    const
+    elem
+    filter
+    filterAttrs
+    flip
+    head
+    isInt
+    isList
+    length
+    makeBinPath
+    makeSearchPathOutput
+    mapAttrs
+    mapAttrsToList
+    mkAfter
+    mkIf
+    optional
+    optionalAttrs
+    optionalString
+    range
+    replaceStrings
+    reverseList
+    splitString
+    stringLength
+    stringToCharacters
+    tail
+    toIntBase10
+    trace
+    types
+    ;
+
+  inherit (lib.strings) toJSON;
+
   cfg = config.systemd;
   lndir = "${pkgs.buildPackages.xorg.lndir}/bin/lndir";
   systemd = cfg.package;
@@ -10,7 +49,7 @@ in rec {
 
   shellEscape = s: (replaceStrings [ "\\" ] [ "\\\\" ] s);
 
-  mkPathSafeName = lib.replaceStrings ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
+  mkPathSafeName = replaceStrings ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
 
   # a type for options that take a unit name
   unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
@@ -133,7 +172,7 @@ in rec {
     )) attrs;
     errors = concatMap (c: c group defs) checks;
   in if errors == [] then true
-     else builtins.trace (concatStringsSep "\n" errors) false;
+     else trace (concatStringsSep "\n" errors) false;
 
   toOption = x:
     if x == true then "true"
@@ -220,7 +259,7 @@ in rec {
       # upstream unit.
       for i in ${toString (mapAttrsToList
           (n: v: v.unit)
-          (lib.filterAttrs (n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists") units))}; do
+          (filterAttrs (n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists") units))}; do
         fn=$(basename $i/*)
         if [ -e $out/$fn ]; then
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
@@ -243,7 +282,7 @@ in rec {
       # treated as drop-in file.
       for i in ${toString (mapAttrsToList
           (n: v: v.unit)
-          (lib.filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units))}; do
+          (filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units))}; do
         fn=$(basename $i/*)
         mkdir -p $out/$fn.d
         ln -s $i/$fn $out/$fn.d/overrides.conf
@@ -384,7 +423,7 @@ in rec {
   commonUnitText = def: lines: ''
       [Unit]
       ${attrsToSection def.unitConfig}
-    '' + lines + lib.optionalString (def.wantedBy != [ ]) ''
+    '' + lines + optionalString (def.wantedBy != [ ]) ''
 
       [Install]
       WantedBy=${concatStringsSep " " def.wantedBy}
@@ -406,7 +445,7 @@ in rec {
       '' + (let env = cfg.globalEnvironment // def.environment;
         in concatMapStrings (n:
           let s = optionalString (env.${n} != null)
-            "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
+            "Environment=${toJSON "${n}=${env.${n}}"}\n";
           # systemd max line length is now 1MiB
           # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
           in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env))
@@ -475,13 +514,13 @@ in rec {
   # in that attrset are determined by the supplied format.
   definitions = directoryName: format: definitionAttrs:
     let
-      listOfDefinitions = lib.mapAttrsToList
+      listOfDefinitions = mapAttrsToList
         (name: format.generate "${name}.conf")
         definitionAttrs;
     in
     pkgs.runCommand directoryName { } ''
       mkdir -p $out
-      ${(lib.concatStringsSep "\n"
+      ${(concatStringsSep "\n"
         (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
       )}
     '';
