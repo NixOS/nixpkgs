@@ -9,6 +9,7 @@
 , gnupg
 , gnused
 , nix
+, nix-prefetch
 }:
 
 let
@@ -45,7 +46,13 @@ export PATH=${lib.makeBinPath [
   gnupg
   gnused
   nix
+  nix-prefetch
 ]}
+
+# Download files to a temp directory
+tmpdir=$(mktemp -d --tmpdir electrum-update-XXXX)
+pushd "$tmpdir"
+trap 'rm -r -- "$tmpdir"' EXIT
 
 version=$(curl -L --list-only -- '${downloadPageUrl}' \
     | grep -Po '<a href="\K([[:digit:]]+\.?)+' \
@@ -68,6 +75,21 @@ gpg --batch --import ${gpgImportPaths}
 gpg --batch --verify "$sigFile" "$srcFile"
 
 sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$srcFile")
+hash=$(nix hash to-sri sha256:$sha256)
 
-update-source-version electrum "$version" "$sha256"
+popd
+update-source-version electrum "$version" "$hash"
+
+# Check if githash needs updating
+githash=$(nix-prefetch fetchFromGitHub --owner "spesmilo" --repo "electrum" --rev "$version")
+# Find location of default.nix
+defaultdotnix=$(nix-instantiate --eval --strict -A "electrum.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+if [[ -e "$defaultdotnix" ]]; then
+  oldgithash="$(sed -n 's/.*githash *= *"\(.*\)";/\1/p' $defaultdotnix)"
+  # If changed replace with new hash
+  if [ "$oldgithash" != "$githash" ]; then
+    sed -i "s/githash = \".*\";/githash = \"$githash\";/" $defaultdotnix
+  fi
+fi
+
 ''
