@@ -3679,9 +3679,7 @@ with pkgs;
   cudd = callPackage ../development/libraries/cudd { };
 
   cue = cuelang;
-  cuelang = callPackage ../development/tools/cuelang { };
-
-  writeCueValidator = callPackage ../development/tools/cuelang/validator.nix { };
+  writeCueValidator = cuelang.write-cue-validator;
 
   cuelsp = callPackage ../development/tools/cuelsp { };
 
