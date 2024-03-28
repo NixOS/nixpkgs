@@ -3,7 +3,8 @@
 {
   # an array of fonts, e.g. `[ pkgs.dejavu_fonts.minimal ]`
 
-  fontDirectories
+  fontconfig ? fontconfig
+,  fontDirectories
   , impureFontDirectories ? [
     # nix user profile
     "~/.nix-profile/lib/X11/fonts" "~/.nix-profile/share/fonts"
