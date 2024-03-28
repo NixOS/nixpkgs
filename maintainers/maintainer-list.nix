@@ -6300,6 +6300,12 @@
     githubId = 345808;
     name = "Jakub Okoński";
   };
+  fazo96 = {
+    email = "enrico.fasoli1996@gmail.com";
+    github = "fazo96";
+    githubId = 2546805;
+    name = "Enrico Fasoli";
+  };
   fbeffa = {
     email = "beffa@fbengineering.ch";
     github = "fedeinthemix";

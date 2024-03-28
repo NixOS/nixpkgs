@@ -6868,6 +6868,12 @@ with pkgs;
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
+  comfyui-cuda = callPackage ../by-name/co/comfyui/package.nix { gpuBackend = "cuda"; };
+
+  comfyui-rocm = callPackage ../by-name/co/comfyui/package.nix { gpuBackend = "rocm"; };
+
+  comfyui-custom-nodes = recurseIntoAttrs (callPackage ../by-name/co/comfyui/custom-nodes.nix { });
+
   cpuminer = callPackage ../tools/misc/cpuminer { };
 
   crabz = callPackage ../tools/compression/crabz { };
