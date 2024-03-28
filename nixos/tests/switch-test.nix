@@ -590,6 +590,10 @@ in {
 
     other = {
       users.mutableUsers = true;
+      specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
+        echo this will fail
+        false
+      '';
     };
   };
 
@@ -654,6 +658,11 @@ in {
     machine.succeed(
         "${stderrRunner} ${otherSystem}/bin/switch-to-configuration test"
     )
+
+    with subtest("pre-switch checks"):
+        machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
+        out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
+        assert_contains(out, "this will fail")
 
 
     with subtest("actions"):
