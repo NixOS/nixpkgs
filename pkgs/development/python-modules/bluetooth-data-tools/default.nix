@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cryptography
-, cython_3
+, cython
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   env.REQUIRE_CYTHON = 1;
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];

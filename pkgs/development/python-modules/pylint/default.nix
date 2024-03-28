@@ -17,7 +17,7 @@
 , py
 , pytest-timeout
 , pytest-xdist
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     py
     pytest-timeout
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
     requests
     typing-extensions
   ];

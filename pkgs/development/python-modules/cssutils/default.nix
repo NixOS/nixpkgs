@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
-, pythonAtLeast
 , pythonOlder
-, fetchpatch
 , fetchPypi
 , setuptools
 , setuptools-scm
@@ -10,7 +8,7 @@
 , jaraco-test
 , lxml
 , mock
-, pytestCheckHook
+, pytest7CheckHook
 , importlib-resources
 }:
 
@@ -37,14 +35,9 @@ buildPythonPackage rec {
     jaraco-test
     lxml
     mock
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [

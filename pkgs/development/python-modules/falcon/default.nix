@@ -6,7 +6,7 @@
 , fetchFromGitHub
 
 # build
-, cython_3
+, cython
 , setuptools
 
 # tests
@@ -17,8 +17,7 @@
 , mujson
 , orjson
 , pytest-asyncio
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , pyyaml
 , rapidjson
 , requests
@@ -44,7 +43,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
   ] ++ lib.optionals (!isPyPy) [
-    cython_3
+    cython
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -61,7 +60,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     # https://github.com/falconry/falcon/blob/master/requirements/tests
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     pyyaml
     requests
     rapidjson

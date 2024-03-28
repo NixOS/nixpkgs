@@ -1,16 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , marshmallow
-, pytestCheckHook
-, isPy27
-, enum34
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-enum";
   version = "1.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "justanr";
@@ -23,22 +22,16 @@ buildPythonPackage rec {
     sed -i '/addopts/d' tox.ini
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     marshmallow
-  ] ++ lib.optionals isPy27 [ enum34 ];
+  ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
-  disabledTests = [
-    "test_custom_error_in_deserialize_by_name"
-    "test_custom_error_in_deserialize_by_value"
+    pytest7CheckHook
   ];
 
   meta = with lib; {

@@ -4,15 +4,17 @@
 , fetchPypi
 , numba
 , numpy
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "sparse";
   version = "0.15.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -21,7 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-lzrcuIqNuOPYBHlTMx4m0/ZKVlf5tGprhZxHZjw+75k=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    sed -i "/addopts =/d" pytest.ini
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     numba
     numpy
     scipy
@@ -29,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dask
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

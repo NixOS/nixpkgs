@@ -94,6 +94,7 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail psycopg2-binary psycopg2 \
       --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
       --replace-fail "bleach==5.0.*" bleach \
+      --replace-fail "django-filter==23.5" django-filter \
       --replace-fail "dnspython==2.5.*" dnspython \
       --replace-fail "importlib_metadata==7.*" importlib_metadata \
       --replace-fail "protobuf==4.25.*" protobuf \
@@ -107,7 +108,6 @@ python.pkgs.buildPythonApplication rec {
   build-system = with python.pkgs; [
     gettext
     nodejs
-    pythonRelaxDepsHook
     setuptools
     tomli
   ];

@@ -5,7 +5,7 @@
 
 # build time
 , astropy-extension-helpers
-, cython_3
+, cython
 , jinja2
 , oldest-supported-numpy
 , setuptools-scm
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    cython_3
+    cython
     jinja2
     oldest-supported-numpy
     setuptools-scm

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , substituteAll
 , fetchPypi
-, cython_3
+, cython
 , fontconfig
 , freetype-py
 , hsluv
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython_3
+    cython
     oldest-supported-numpy
     setuptools
     setuptools-scm

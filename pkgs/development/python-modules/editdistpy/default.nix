@@ -7,7 +7,7 @@
 , pythonOlder
 
 , setuptools
-, cython_3
+, cython
 
 , symspellpy
 , numpy
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    cython_3
+    cython
   ];
 
   # error: infinite recursion encountered

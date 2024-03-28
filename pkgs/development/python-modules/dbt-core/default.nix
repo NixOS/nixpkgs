@@ -58,6 +58,7 @@ buildPythonPackage rec {
     "mashumaro"
     "networkx"
     "logbook"
+    "pathspec"
     "urllib3"
   ];
 

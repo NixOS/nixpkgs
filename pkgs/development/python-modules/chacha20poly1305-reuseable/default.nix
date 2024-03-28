@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , poetry-core
 , setuptools
 
@@ -34,7 +34,7 @@ buildPythonPackage {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];

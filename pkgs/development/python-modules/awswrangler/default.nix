@@ -19,6 +19,7 @@
 , pyparsing
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , redshift-connector
 , requests-aws4auth
 }:
@@ -39,6 +40,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   propagatedBuildInputs = [

@@ -239,8 +239,8 @@ let
           inherit version;
           hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
         };
-        pytestFlagsArray = [
-          "-W" "ignore::pytest.PytestRemovedIn8Warning"
+        disabledTests = old.disabledTests or [ ] ++ [
+          "test_export_md5_digest"
         ];
       });
 

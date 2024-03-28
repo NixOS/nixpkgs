@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , mako
 , parse
 , parse-type
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
-  version = "6.1.1";
+  version = "7.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,16 +22,8 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+76jIgfDQPdIoesTr1+QUu8wmOnrdf4KT+TJr9F2Hqk=";
+    hash = "sha256-PC4VSsUU5qEFp/C/7OTgHINo8wmOo0w2d1Hpe0EnFzE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-setuptools.patch";
-      url = "https://github.com/pytest-dev/pytest-bdd/commit/5d8eda3a30b47d3bd27849884a851adafca765cb.patch";
-      hash = "sha256-G2WHaRKlQ9HINufh8wl7+ly7HfDGobMLzzlbwDwd+o8=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core

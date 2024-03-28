@@ -86,6 +86,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-csp"
+    "django-filter"
     "python-dateutil"
   ];
 

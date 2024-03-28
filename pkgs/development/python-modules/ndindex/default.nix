@@ -3,7 +3,7 @@
 , fetchFromGitHub
 
 # build-system
-, cython_3
+, cython
 
 # optional
 , numpy
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
   ];
 
   postPatch = ''
@@ -48,11 +48,6 @@ buildPythonPackage rec {
     pytest-cov # uses cov markers
     pytestCheckHook
   ] ++ passthru.optional-dependencies.arrays;
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "--deselect=ndindex/tests/test_ndindex.py::test_ndindex_invalid"
-  ];
 
   meta = with lib; {
     description = "";

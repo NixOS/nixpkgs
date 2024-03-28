@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
+, setuptools-scm
 , param
 , pyct
 , pytest-mpl
@@ -10,14 +12,19 @@
 buildPythonPackage rec {
   pname = "colorcet";
   version = "3.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-KSGzzYGiKIqvLWPbwM48JtzYgujDicxQXWiGv3qppOs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     param
     pyct
   ];

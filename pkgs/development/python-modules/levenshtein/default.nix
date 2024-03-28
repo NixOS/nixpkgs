@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cmake
-, cython_3
+, cython
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython_3
+    cython
     scikit-build
   ];
 

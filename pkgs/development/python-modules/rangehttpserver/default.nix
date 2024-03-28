@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, pytestCheckHook
+, pytest7CheckHook
 , requests
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     requests
   ];
 

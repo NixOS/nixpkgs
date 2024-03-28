@@ -28,6 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-HUFJ2FP9WGcG9pkukS2LHIgPYFRAXAneiVK6VfYQ+zU=";
   };
 
+  postPatch = ''
+    sed -i "/addopts =/d" pyproject.toml
+  '';
+
   nativeBuildInputs = [
     cython
   ];

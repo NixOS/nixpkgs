@@ -5,7 +5,7 @@
 , fetchpatch
 , pydicom
 , pyfakefs
-, pytestCheckHook
+, pytest7CheckHook
 , sqlalchemy
 , pythonOlder
 }:
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pyfakefs
-    pytestCheckHook
+    pytest7CheckHook
     sqlalchemy
   ];
 
