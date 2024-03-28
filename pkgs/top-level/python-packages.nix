@@ -8412,6 +8412,8 @@ self: super: with self; {
 
   names = callPackage ../development/python-modules/names { };
 
+  namex = callPackage ../development/python-modules/namex { };
+
   name-that-hash = callPackage ../development/python-modules/name-that-hash { };
 
   nameko = callPackage ../development/python-modules/nameko { };
@@ -9098,6 +9100,8 @@ self: super: with self; {
   optax = callPackage ../development/python-modules/optax { };
 
   optimum = callPackage ../development/python-modules/optimum { };
+
+  optree = callPackage ../development/python-modules/optree { };
 
   optuna = callPackage ../development/python-modules/optuna { };
 
@@ -14749,6 +14753,8 @@ self: super: with self; {
   textwrap3 = callPackage ../development/python-modules/textwrap3 { };
 
   textx = callPackage ../development/python-modules/textx { };
+
+  tf-keras = callPackage ../development/python-modules/tf-keras { };
 
   tf2onnx = callPackage ../development/python-modules/tf2onnx { };
 
