@@ -24,21 +24,80 @@ The following table summarizes the differences:
 | `builtins.fetch*` | evaluation time | store path | `/nix/store`, `~/.cache/nix` | `tarball-ttl` expires, cache miss in `~/.cache/nix`, output store object not in local store |
 | `pkgs.fetch*` | build time | derivation | `/nix/store`, substituters | output store object not available |
 
+:::{.note}
+`pkgs.fetchFrom*` helpers retrieve _snapshots_ of version-controlled sources, as opposed to the entire version history, which is more efficient.
+:::
+
 ## Caveats {#chap-pkgs-fetchers-caveats}
 
-Because Nixpkgs fetchers are [fixed-output derivations](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation), they need you to specify a hash (this is what turns them into a fixed-output derivation).
-This is usually done through a `hash` attribute, which **can be different from the hash of the contents that are downloaded**.
-On top of that, Nix checks if there is already an object in the Nix store with the same hash, and reuses that object if it exists.
+Because Nixpkgs fetchers are fixed-output derivations, an [output hash](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) has to be specified.
+This hash refers to the derivation output, not the remote source itself!
+
 This has the following implications that you should be aware of:
 
-- In most cases, it's better to use Nix (or Nix-aware) tooling to give you the hash, because you may not be able to just hash the contents and use that result.
-  See [the tip](#fetchers-hash-tip) below for an easy way to do this.
-  If you can't use the method suggested by the tip, you should understand the hash [algorithm](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHashAlgo) and [mode](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHashMode) used by the fetcher you're using so you can calculate the hash by yourself beforehand.
-- If you update the URL of the content to be fetched (or a version parameter, or some other parameter), you **must not** leave the hash unchanged, because it will reuse the old contents that were already fetched (this will lead to unexpected behaviour when building the derivation).
-  If the contents with the given hash already exist, Nix won't fetch any content again (even if the URL changed!) and will reuse the existing contents.
-  The Nix manual [explains](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) why Nix ignores URL changes in this case.
+- Use Nix (or Nix-aware) tooling to produce the output hash.
 
-For example, consider the following recipe that only uses a fetcher:
+- When changing any fetcher parameters, always update the output hash.
+  Use one of the methods from [](#sec-pkgs-fetchers-updating-source-hashes).
+  Otherwise, existing store objects that match the output hash will be re-used rather than fetching new content.
+
+A similar problem arises while testing changes to a fetcher's implementation.
+If the output of the derivation already exists in the Nix store, test failures can go undetected.
+The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
+
+## Updating source hashes {#sec-pkgs-fetchers-updating-source-hashes}
+
+There are several ways to obtain a remote source's hash.
+
+1. Prefetch the source with [`nix-prefetch-<type> <URL>`](https://search.nixos.org/packages?buckets={%22package_attr_set%22%3A[%22No%20package%20set%22]%2C%22package_license_set%22%3A[]%2C%22package_maintainers_set%22%3A[]%2C%22package_platforms%22%3A[]}&query=nix-prefetch), where `<type>` is one of
+
+   - `url`
+   - `git`
+   - `hg`
+   - `cvs`
+   - `bzr`
+   - `svn`
+
+  The hash is printed to stdout.
+
+2. Prefetch by package source (with `nix-prefetch-url '<nixpkgs>' -A <package>.src`, where `<package>` is package attribute name).
+   The hash is printed to stdout.
+
+   This works well when you've upgraded the existing package version and want to find out new hash, but is useless if the package can't be accessed by attribute or the package has multiple sources (`.srcs`, architecture-dependent sources, etc).
+
+3. Upstream hash: use it when upstream provides `sha256` or `sha512`.
+   Don't use it when upstream provides `md5`, compute `sha256` instead.
+
+   A little nuance is that `nix-prefetch-*` tools produce hashes encoded with the custom Nix `base32` variant, but upstream usually provides hexadecimal (`base16`) encoding.
+   Fetchers understand both formats.
+   Nixpkgs does not standardise on any one format.
+
+   You can convert between hash formats with [`nix-hash`](https://nixos.org/manual/nix/stable/command-ref/nix-hash).
+
+4. Extract the hash from a local source archive with `sha256sum`.
+   Use `nix-prefetch-url file:///path/to/archive` if you want the custom Nix `base32` hash.
+
+5. Trust on first use: set the hash to one of
+
+   - `""`
+   - `lib.fakeHash`
+   - `lib.fakeSha256`
+   - `lib.fakeSha512`
+
+   in the package recipe, attempt to build, and extract the correct hash from error messages.
+
+   :::{.warning}
+   You must use one of these four fake hashes and not some arbitrarily-chosen hash.
+   See [][#sec-pkgs-fetchers-secure-hashes] for details.
+   :::
+
+   This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable.
+
+:::{.example #ex-fetchers-update-fod-hash}
+
+# Update source hash with "trust on first use"
+
+Consider the following recipe that produces a plain file:
 
 ```nix
 { fetchurl }:
@@ -48,7 +107,7 @@ fetchurl {
 }
 ```
 
-A common mistake is to update a fetcher’s URL, or a version parameter, without updating the hash.
+A common mistake is to update a fetcher parameter, such as `url`, without updating the hash:
 
 ```nix
 { fetchurl }:
@@ -58,9 +117,7 @@ fetchurl {
 }
 ```
 
-**This will reuse the old contents**.
-Remember to invalidate the hash argument.
-You can do this by setting the `hash` attribute to an empty string.
+**This will produce the same output as before!**.
 
 ```nix
 { fetchurl }:
@@ -70,28 +127,32 @@ fetchurl {
 }
 ```
 
-When building the recipe, you'll get an error message that you can use to determine the correct hash:
+When building the package, use the error message to determine the correct hash:
 
 ```shell
 $ nix-build
-(some output removed for clarity)
+...
 error: hash mismatch in fixed-output derivation '/nix/store/7yynn53jpc93l76z9zdjj4xdxgynawcw-version.drv':
          specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
             got:    sha256-BZqI7r0MNP29yGH5+yW2tjU9OOpOCEvwWKrWCv5CQ0I=
 error: build of '/nix/store/bqdjcw5ij5ymfbm41dq230chk9hdhqff-version.drv' failed
 ```
-
-[]{#fetchers-hash-tip}
-:::{.tip}
-For most cases, it is recommended to use the method illustrated above to figure out the appropriate hash to use in a fetcher:
-set the `hash` attribute to an empty string, try to build the derivation, and then copy the hash given by the error message.
-
-Remember to set the `hash` attribute to an empty string whenever you update fetcher parameters and expect the content to change!
 :::
 
-A similar problem arises while testing changes to a fetcher's implementation.
-If the output of the derivation already exists in the Nix store, test failures can go undetected.
-The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
+## Obtaining hashes securely {#sec-pkgs-fetchers-secure-hashes}
+
+Let's say Man-in-the-Middle (MITM) sits close to your network.
+Then instead of fetching source you can fetch malware, and instead of the actual source hash, you get the hash of malware.
+Here are security considerations for this scenario:
+
+- `http://` URLs are not secure to prefetch hashes.
+
+- Upstream hashes should be obtained via a secure protocol.
+
+- `https://` URLs are secure when using `nix-prefetch-*` or for upstream hashes.
+
+- `https://` URLs are secure relying on "trust on first use" *only if* you use one of the listed fake hashes.
+  If you use any other hash, `fetchurl` will pass `--insecure` to `curl` and may then degrade to HTTP in case of TLS certificate expiration.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
