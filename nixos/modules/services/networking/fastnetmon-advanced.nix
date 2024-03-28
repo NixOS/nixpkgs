@@ -146,6 +146,7 @@ in {
       };
     };
 
+    services.dbus.implementation = "broker"; # workaround for https://github.com/NixOS/nixpkgs/issues/297756
     security.polkit.enable = true;
     security.polkit.extraConfig = ''
       polkit.addRule(function(action, subject) {
