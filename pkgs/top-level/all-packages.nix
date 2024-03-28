@@ -5681,6 +5681,8 @@ with pkgs;
 
   irpf = callPackage ../applications/finance/irpf { };
 
+  jhide = sbclPackages.jhide;
+
   jellycli = callPackage ../applications/audio/jellycli { };
 
   jellyfin = callPackage ../servers/jellyfin {
