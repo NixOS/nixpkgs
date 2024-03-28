@@ -2,12 +2,12 @@ diff --git a/mapl b/mapl
 index c9d3727..de24c77 100755
 --- a/mapl
 +++ b/mapl
-@@ -20,26 +20,8 @@ SHORTVERSION=182U64
- LONGVERSION="18.2 64-bit Unicode"
+@@ -20,26 +20,8 @@ SHORTVERSION=190U64
+ LONGVERSION="19.0 64-bit Unicode"
  REL="`echo "${LONGVERSION}" | sed 's/ .*$//'`"
  
 -# Find the Dyalog installation directory
--if [ "$(uname)" = Linux ]; then
+-if [ "$(uname)" = Linux ] ; then
 -	# this script location, canonical.
 -	THIS="$(readlink -f $0)"
 -else

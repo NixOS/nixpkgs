@@ -16,15 +16,18 @@
 , glib
 , ncurses5
 
-, dotnet-sdk_6
+, dotnet-sdk_8
 , dotnetSupport ? false
 
 , alsa-lib
-, gtk2
+, gtk3
 , libXdamage
 , libXtst
 , libXScrnSaver
 , nss
+, libdrm
+, mesa
+, libxkbcommon
 , htmlRendererSupport ? false
 
 , R
@@ -61,7 +64,7 @@ let
   ]
   ++ lib.optionals dotnetSupport [
     # needs to be set to run .NET Bridge
-    "--set DOTNET_ROOT ${dotnet-sdk_6}"
+    "--set DOTNET_ROOT ${dotnet-sdk_8}"
     # .NET Bridge files are runtime dependencies, but cannot be patchelf'd
     "--prefix LD_LIBRARY_PATH : ${dyalogHome}"
   ]
@@ -91,14 +94,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "18.2.45405";
+  version = "19.0.48928";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
     fetchurl {
       url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/linux_64_${finalAttrs.version}_unicode.x86_64.deb";
-      sha256 = "sha256-pA/WGTA6YvwG4MgqbiPBLKSKPtLGQM7BzK6Bmyz5pmM=";
+      sha256 = "sha256-+L9XI7Knt91sG/0E3GFSeqjD9Zs+1n72MDfvsXnr77M=";
     };
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc";
@@ -108,11 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [ ./dyalogscript.patch ./mapl.patch ];
-
-  postPatch = lib.optionalString dotnetSupport ''
-    # Patch to use .NET 6.0 instead of .NET Core 3.1 (can be removed when Dyalog 19.0 releases)
-    substituteInPlace Dyalog.Net.Bridge.*.json --replace "3.1" "6.0"
-  '';
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -127,11 +125,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals htmlRendererSupport [
     alsa-lib
-    gtk2
+    gtk3
     libXdamage
     libXtst
     libXScrnSaver
     nss
+    libdrm
+    mesa
+    libxkbcommon
   ]
   ++ lib.optionals sqaplSupport [
     unixODBC
@@ -142,11 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p ${dyalogHome}
-    cp -r aplfmt aplkeys apltrans fonts Library PublicCACerts SALT StartupSession ${dyalogHome}
-    cp aplkeys.sh default.dse dyalog dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl startup.dyalog ${dyalogHome}
+    cp -r aplfmt aplkeys apltrans fonts Library PublicCACerts SALT StartupSession Experimental ${dyalogHome}
+    cp aplkeys.sh default.dse dyalog dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${ncurses5}/lib/libncurses.so.5 ${dyalogHome}
 
     mkdir ${dyalogHome}/lib
-    cp lib/{conga34_64.so,dyalog64.so,libconga34ssl64.so} ${dyalogHome}/lib
+    cp lib/{conga35_64.so,dyalog64.so,libconga35ssl64.so} ${dyalogHome}/lib
 
     # Only keep the most useful workspaces
     mkdir ${dyalogHome}/ws
@@ -156,15 +157,15 @@ stdenv.mkDerivation (finalAttrs: {
     cp libnethost.so Dyalog.Net.Bridge.* ${dyalogHome}
   ''
   + lib.optionalString htmlRendererSupport ''
-    cp -r locales swiftshader ${dyalogHome}
-    cp libcef.so libEGL.so libGLESv2.so chrome-sandbox natives_blob.bin snapshot_blob.bin icudtl.dat v8_context_snapshot.bin *.pak ${dyalogHome}
+    cp -r locales ${dyalogHome}
+    cp libcef.so libEGL.so libGLESv2.so chrome-sandbox snapshot_blob.bin icudtl.dat v8_context_snapshot.bin *.pak ${dyalogHome}
     cp lib/htmlrenderer.so ${dyalogHome}/lib
   ''
   + lib.optionalString rSupport ''
     cp ws/rconnect.dws ${dyalogHome}/ws
   ''
   + lib.optionalString sqaplSupport ''
-    cp lib/cxdya64u64u.so ${dyalogHome}/lib
+    cp lib/cxdya65u64u.so ${dyalogHome}/lib
     cp ws/sqapl.dws ${dyalogHome}/ws
     cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
   ''
