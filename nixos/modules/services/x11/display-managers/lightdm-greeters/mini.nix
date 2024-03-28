@@ -60,7 +60,7 @@ in
 
           Note that this greeter starts only the default X session.
           You can configure the default X session using
-          [](#opt-services.xserver.displayManager.defaultSession).
+          [](#opt-services.displayManager.defaultSession).
         '';
       };
 

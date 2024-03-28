@@ -11,12 +11,12 @@ import ./make-test-python.nix ({ pkgs, ...} :
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm.enable = true;
+    services.displayManager.sddm.enable = true;
     # FIXME: this should be testing Wayland
-    services.xserver.displayManager.defaultSession = "plasmax11";
-    services.xserver.desktopManager.plasma6.enable = true;
+    services.displayManager.defaultSession = "plasmax11";
+    services.desktopManager.plasma6.enable = true;
     environment.plasma6.excludePackages = [ pkgs.kdePackages.elisa ];
-    services.xserver.displayManager.autoLogin = {
+    services.displayManager.autoLogin = {
       enable = true;
       user = "alice";
     };

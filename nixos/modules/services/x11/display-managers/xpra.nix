@@ -226,7 +226,7 @@ in
       VideoRam 192000
     '';
 
-    services.xserver.displayManager.job.execCmd = ''
+    services.displayManager.execCmd = ''
       ${optionalString (cfg.pulseaudio)
         "export PULSE_COOKIE=/run/pulse/.config/pulse/cookie"}
       exec ${pkgs.xpra}/bin/xpra ${if cfg.desktop == null then "start" else "start-desktop --start=${cfg.desktop}"} \

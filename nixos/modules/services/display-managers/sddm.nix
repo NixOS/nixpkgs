@@ -2,8 +2,8 @@
 
 let
   xcfg = config.services.xserver;
-  dmcfg = xcfg.displayManager;
-  cfg = dmcfg.sddm;
+  dmcfg = config.services.displayManager;
+  cfg = config.services.displayManager.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
   sddm = cfg.package.override (old: {
@@ -21,12 +21,12 @@ let
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec systemd-cat -t xserver-wrapper ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
+    exec systemd-cat -t xserver-wrapper ${xcfg.displayManager.xserverBin} ${toString xcfg.displayManager.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeShellScript "Xsetup" ''
     ${cfg.setupScript}
-    ${dmcfg.setupCommands}
+    ${xcfg.displayManager.setupCommands}
   '';
 
   Xstop = pkgs.writeShellScript "Xstop" ''
@@ -40,7 +40,7 @@ let
       Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
 
       # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
-      DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
+      DefaultSession = optionalString (config.services.displayManager.defaultSession != null) "${config.services.displayManager.defaultSession}.desktop";
 
       DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     } // optionalAttrs (cfg.wayland.compositor == "kwin") {
@@ -128,23 +128,36 @@ let
 in
 {
   imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "minimumUid" ] [ "services" "displayManager" "sddm" "autoLogin" "minimumUid" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "relogin" ] [ "services" "displayManager" "sddm" "autoLogin" "relogin" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoNumlock" ] [ "services" "displayManager" "sddm" "autoNumlock" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "enable" ]      [ "services" "displayManager" "sddm" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "enableHidpi" ] [ "services" "displayManager" "sddm" "enableHidpi" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "extraPackages" ] [ "services" "displayManager" "sddm" "extraPackages" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "package" ]     [ "services" "displayManager" "sddm" "package" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "settings" ]    [ "services" "displayManager" "sddm" "settings" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "setupScript" ] [ "services" "displayManager" "sddm" "setupScript" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "stopScript" ]  [ "services" "displayManager" "sddm" "stopScript" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "theme" ]       [ "services" "displayManager" "sddm" "theme" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "wayland" "enable" ] [ "services" "displayManager" "sddm" "wayland" "enable" ])
+
     (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "themes" ]
-      "Set the option `services.xserver.displayManager.sddm.package' instead.")
+      [ "services" "displayManager" "sddm" "themes" ]
+      "Set the option `services.displayManager.sddm.package' instead.")
     (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "enable" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "enable" ])
+      [ "services" "displayManager" "sddm" "autoLogin" "enable" ]
+      [ "services" "displayManager" "autoLogin" "enable" ])
     (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "user" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "user" ])
+      [ "services" "displayManager" "sddm" "autoLogin" "user" ]
+      [ "services" "displayManager" "autoLogin" "user" ])
     (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "extraConfig" ]
-      "Set the option `services.xserver.displayManager.sddm.settings' instead.")
+      [ "services" "displayManager" "sddm" "extraConfig" ]
+      "Set the option `services.displayManager.sddm.settings' instead.")
   ];
 
   options = {
 
-    services.xserver.displayManager.sddm = {
+    services.displayManager.sddm = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -268,18 +281,23 @@ in
 
     assertions = [
       {
-        assertion = xcfg.enable;
+        assertion = xcfg.enable || cfg.wayland.enable;
         message = ''
-          SDDM requires services.xserver.enable to be true
+          SDDM requires either services.xserver.enable or services.displayManager.sddm.wayland.enable to be true
         '';
       }
       {
-        assertion = dmcfg.autoLogin.enable -> autoLoginSessionName != null;
+        assertion = config.services.displayManager.autoLogin.enable -> autoLoginSessionName != null;
         message = ''
-          SDDM auto-login requires that services.xserver.displayManager.defaultSession is set.
+          SDDM auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
     ];
+
+    services.displayManager = {
+      enable = true;
+      execCmd = "exec /run/current-system/sw/bin/sddm";
+    };
 
     security.pam.services = {
       sddm.text = ''
@@ -338,7 +356,6 @@ in
     services = {
       dbus.packages = [ sddm ];
       xserver = {
-        displayManager.job.execCmd = "exec /run/current-system/sw/bin/sddm";
         # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
         tty = null;
         display = null;

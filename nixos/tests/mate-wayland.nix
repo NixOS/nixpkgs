@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     ];
 
     services.xserver.enable = true;
-    services.xserver.displayManager = {
+    services.displayManager = {
       sddm.enable = true; # https://github.com/canonical/lightdm/issues/63
       sddm.wayland.enable = true;
       defaultSession = "MATE";

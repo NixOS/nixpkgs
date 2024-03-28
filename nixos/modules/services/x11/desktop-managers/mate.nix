@@ -49,7 +49,7 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable || cfg.enableWaylandSession) {
-      services.xserver.displayManager.sessionPackages = [
+      services.displayManager.sessionPackages = [
         pkgs.mate.mate-session-manager
       ];
 
@@ -103,7 +103,7 @@ in
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${pkgs.mate.mate-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
       environment.systemPackages = [ pkgs.mate.mate-wayland-session ];
-      services.xserver.displayManager.sessionPackages = [ pkgs.mate.mate-wayland-session ];
+      services.displayManager.sessionPackages = [ pkgs.mate.mate-wayland-session ];
     })
   ];
 }

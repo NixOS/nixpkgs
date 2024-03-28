@@ -96,7 +96,7 @@ in
         pkgs.pantheon.pantheon-agent-geoclue2
       ] config.environment.pantheon.excludePackages;
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
+      services.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
       # Ensure lightdm is used when Pantheon is enabled
       # Without it screen locking will be nonfunctional because of the use of lightlocker
@@ -109,7 +109,7 @@ in
 
       # Without this, elementary LightDM greeter will pre-select non-existent `default` session
       # https://github.com/elementary/greeter/issues/368
-      services.xserver.displayManager.defaultSession = mkDefault "pantheon";
+      services.displayManager.defaultSession = mkDefault "pantheon";
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then

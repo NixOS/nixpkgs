@@ -509,7 +509,9 @@
   ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
+  ./services/display-managers/default.nix
   ./services/display-managers/greetd.nix
+  ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
@@ -705,6 +707,7 @@
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
+  ./services/misc/graphical-desktop.nix
   ./services/misc/greenclip.nix
   ./services/misc/guix
   ./services/misc/headphones.nix
@@ -1431,7 +1434,6 @@
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/lightdm.nix
-  ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
   ./services/x11/display-managers/startx.nix
   ./services/x11/display-managers/sx.nix
