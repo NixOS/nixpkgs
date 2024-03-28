@@ -47,11 +47,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/core";
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
-
   pythonRelaxDeps = [
     "agate"
     "click"
@@ -61,7 +56,12 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     agate
     cffi
     click
