@@ -23099,8 +23099,6 @@ with pkgs;
 
   libstroke = callPackage ../development/libraries/libstroke { };
 
-  libstrophe = callPackage ../development/libraries/libstrophe { };
-
   libspatialaudio = callPackage ../development/libraries/libspatialaudio { };
 
   libspatialindex = callPackage ../development/libraries/libspatialindex { };
