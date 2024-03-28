@@ -20,7 +20,9 @@
 , protobuf
 , psutil
 , pycparser
+, pyformlang
 , pythonOlder
+, pythonRelaxDepsHook
 , pyvex
 , rich
 , rpyc
@@ -29,11 +31,12 @@
 , sqlalchemy
 , sympy
 , unicorn
+, unique-log-filter
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.84";
+  version = "9.2.96";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -42,10 +45,15 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qav9SUvQtcEad9lvgyrMhOcFhPAhzU/9s7ekTfohqRc=";
+    hash = "sha256-eyXjmU/K8zv5nxrt+oKkyxS00tHOYrkbTc2X9esTSSA=";
   };
 
+  pythonRelaxDeps = [
+    "capstone"
+  ];
+
   build-system = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -68,6 +76,7 @@ buildPythonPackage rec {
     protobuf
     psutil
     pycparser
+    pyformlang
     pyvex
     rich
     rpyc
@@ -75,6 +84,7 @@ buildPythonPackage rec {
     sqlalchemy
     sympy
     unicorn
+    unique-log-filter
   ];
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [
