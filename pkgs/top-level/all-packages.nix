@@ -17888,6 +17888,7 @@ with pkgs;
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
+  tcl-8_7 = callPackage ../development/interpreters/tcl/8.7.nix { };
 
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
@@ -24936,6 +24937,7 @@ with pkgs;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
+  tk-8_7 = callPackage ../development/libraries/tk/8.7.nix { tcl = tcl-8_7; };
 
   tkimg = callPackage ../development/libraries/tkimg { };
 
