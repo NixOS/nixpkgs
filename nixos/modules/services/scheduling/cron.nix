@@ -40,7 +40,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the Vixie cron daemon.";
+        description = lib.mdDoc ''
+          Whether to enable the Vixie cron daemon.
+
+          In general, you’ll probably have a better experience if you use systemd
+          timers instead of cron jobs. See {option}`systemd.timers` and
+          {option}`systemd.user.services.<name>.startAt`.
+        '';
       };
 
       mailto = mkOption {
