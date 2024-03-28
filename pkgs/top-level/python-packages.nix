@@ -8856,6 +8856,8 @@ self: super: with self; {
     tesseract = pkgs.tesseract5;
   };
 
+  ocrodjvu = callPackage ../development/python-modules/ocrodjvu { };
+
   od = callPackage ../development/python-modules/od { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
