@@ -20,6 +20,7 @@
 , curl
 , coreutils
 , cacert
+, freetype
 , useChineseVersion ? false
 }:
 let
@@ -114,6 +115,14 @@ stdenv.mkDerivation rec {
       substituteInPlace $i \
         --replace /usr/bin $out/bin
     done
+
+    rm -f $out/opt/kingsoft/wps-office/office6/libfreetype.so.6
+    ln -sf ${freetype.overrideAttrs (e: rec {
+      patches = e.patches ++ [
+        ./0000-WPS-compatiblity.patch
+        ./0001-Enable-long-PCF-family-names.patch
+       ];
+    })}/lib/libfreetype.so.6 $out/opt/kingsoft/wps-office/office6
     runHook postInstall
   '';
 

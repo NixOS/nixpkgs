@@ -1,0 +1,42 @@
+From 4ad8eb493b63d9e81378b073cbc6f1440aa21fbb Mon Sep 17 00:00:00 2001
+From: Fushan Wen <qydwhotmail@gmail.com>
+Date: Sun, 17 Sep 2023 13:15:29 +0800
+Subject: [PATCH] src/base/ftsynth.c: keep compatiblity in
+ FT_GlyphSlot_Embolden
+
+The delta is highly a matter of taste, but the style should be consistent. In some old applications x_scale and y_scale do not always match x_ppem and y_ppem, so fixed delta values will break bold fonts in those existing applications.
+---
+ src/base/ftsynth.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/src/base/ftsynth.c b/src/base/ftsynth.c
+index f32edd338..c397a374f 100644
+--- a/src/base/ftsynth.c
++++ b/src/base/ftsynth.c
+@@ -98,7 +98,22 @@
+   FT_EXPORT_DEF( void )
+   FT_GlyphSlot_Embolden( FT_GlyphSlot  slot )
+   {
+-    FT_GlyphSlot_AdjustWeight( slot, 0x0AAA, 0x0AAA );
++    FT_UShort        units_per_EM;
++    FT_Size_Metrics* metrics;
++    FT_Fixed         xdelta, ydelta;
++
++    if ( !slot )
++      return;
++
++    units_per_EM = slot->face->units_per_EM;
++    metrics      = &( slot->face->size->metrics );
++
++    xdelta = FT_MulFix( units_per_EM, metrics->x_scale / 24 ) * 1024 /
++             (FT_Pos)metrics->x_ppem;
++    ydelta = FT_MulFix( units_per_EM, metrics->y_scale / 24 ) * 1024 /
++             (FT_Pos)metrics->y_ppem;
++
++    FT_GlyphSlot_AdjustWeight( slot, xdelta, ydelta );
+   }
+ 
+ 
+-- 
+GitLab
+
