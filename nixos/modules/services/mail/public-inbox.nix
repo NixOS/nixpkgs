@@ -9,9 +9,6 @@ let
   gitIni = pkgs.formats.gitIni { listsAsDuplicateKeys = true; };
   iniAtom = elemAt gitIni.type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped/*either*/.functor.wrapped 0;
 
-  useSpamAssassin = cfg.settings.publicinboxmda.spamcheck == "spamc" ||
-                    cfg.settings.publicinboxwatch.spamcheck == "spamc";
-
   publicInboxDaemonOptions = proto: defaultPort: {
     args = mkOption {
       type = with types; listOf str;
@@ -252,12 +249,6 @@ in
     nntp = {
       enable = mkEnableOption (lib.mdDoc "the public-inbox NNTP server");
     } // publicInboxDaemonOptions "nntp" 563;
-    spamAssassinRules = mkOption {
-      type = with types; nullOr path;
-      default = "${cfg.package.sa_config}/user/.spamassassin/user_prefs";
-      defaultText = literalExpression "\${cfg.package.sa_config}/user/.spamassassin/user_prefs";
-      description = lib.mdDoc "SpamAssassin configuration specific to public-inbox.";
-    };
     settings = mkOption {
       description = lib.mdDoc ''
         Settings for the [public-inbox config file](https://public-inbox.org/public-inbox-config.html).
@@ -311,7 +302,7 @@ in
           default = "none";
           description = lib.mdDoc ''
             If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
-            using SpamAssassin.
+            using SpamAssassin. This is currently not working in NixOS.
           '';
         };
         options.publicinboxwatch.spamcheck = mkOption {
@@ -319,7 +310,7 @@ in
           default = "none";
           description = lib.mdDoc ''
             If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
-            using SpamAssassin.
+            using SpamAssassin. This is currently not working in NixOS.
           '';
         };
         options.publicinboxwatch.watchspam = mkOption {
@@ -351,25 +342,6 @@ in
     openFirewall = mkEnableOption (lib.mdDoc "opening the firewall when using a port option");
   };
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = config.services.spamassassin.enable || !useSpamAssassin;
-        message = ''
-          public-inbox is configured to use SpamAssassin, but
-          services.spamassassin.enable is false.  If you don't need
-          spam checking, set `services.public-inbox.settings.publicinboxmda.spamcheck' and
-          `services.public-inbox.settings.publicinboxwatch.spamcheck' to null.
-        '';
-      }
-      { assertion = cfg.path != [] || !useSpamAssassin;
-        message = ''
-          public-inbox is configured to use SpamAssassin, but there is
-          no spamc executable in services.public-inbox.path.  If you
-          don't need spam checking, set
-          `services.public-inbox.settings.publicinboxmda.spamcheck' and
-          `services.public-inbox.settings.publicinboxwatch.spamcheck' to null.
-        '';
-      }
-    ];
     services.public-inbox.settings =
       filterAttrsRecursive (n: v: v != null) {
         publicinbox = mapAttrs (n: filterAttrs (n: v: n != "description")) cfg.inboxes;
@@ -510,8 +482,7 @@ in
         { public-inbox-watch = mkMerge [(serviceConfig "watch") {
           inherit (cfg) path;
           wants = [ "public-inbox-init.service" ];
-          requires = [ "public-inbox-init.service" ] ++
-            optional (cfg.settings.publicinboxwatch.spamcheck == "spamc") "spamassassin.service";
+          requires = [ "public-inbox-init.service" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package}/bin/public-inbox-watch";
@@ -529,11 +500,6 @@ in
           script = ''
             set -ux
             install -D -p ${PI_CONFIG} ${stateDir}/.public-inbox/config
-            '' + optionalString useSpamAssassin ''
-              install -m 0700 -o spamd -d ${stateDir}/.spamassassin
-              ${optionalString (cfg.spamAssassinRules != null) ''
-                ln -sf ${cfg.spamAssassinRules} ${stateDir}/.spamassassin/user_prefs
-              ''}
             '' + concatStrings (mapAttrsToList (name: inbox: ''
               if [ ! -e ${stateDir}/inboxes/${escapeShellArg name} ]; then
                 # public-inbox-init creates an inbox and adds it to a config file.
