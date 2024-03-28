@@ -69,22 +69,6 @@ in
               "log.level" = "D";
             };
           };
-          "celluloid-default-volume" = {
-            "stream.rules" = [
-              {
-                matches = [
-                  {
-                    "application.name" = "io.github.celluloid_player.Celluloid";
-                  }
-                ];
-                actions = {
-                  update-props = {
-                    "state.default-volume" = 0.5;
-                  };
-                };
-              }
-            ];
-          };
           "wh-1000xm3-ldac-hq" = {
             "monitor.bluez.rules" = [
               {
@@ -104,20 +88,6 @@ in
                 };
               }
             ];
-          };
-          "communication-duck-lower-priority" = {
-            # Instead of corking (pausing; the default for this endpoint) audio
-            # from lower priority virtual items, only duck (lower the volume of)
-            # them when a client connects to the communication virtual item.
-            #
-            # Virtual items are suitable for mobile OSes, car infotainment systems,
-            # and the like. Desktop Linux Applications are not set up to work with
-            # these for now.
-            virtual-item-roles = {
-              Communication = {
-                "action.default" = "duck";
-              };
-            };
           };
         }'';
         description = ''
