@@ -180,6 +180,9 @@ let
         "$MV" = true;
         "$XPROP" = true;
       };
+      execer = [
+        "cannot:${perl}/bin/perl"
+      ];
       prologue = "${writeText "xdg-screensaver-prologue" ''
         export PERL5LIB=${with perlPackages; makePerlPath [ NetDBus XMLTwig XMLParser X11Protocol ]}
         export PATH=$PATH:${coreutils}/bin
