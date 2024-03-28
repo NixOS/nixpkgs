@@ -4,6 +4,8 @@
 , pythonOlder
 , fetchFromGitHub
 , cmake
+, ninja
+, setuptools
 , boost
 , eigen
 , python
@@ -37,23 +39,29 @@
     else python.stdenv;
 in buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.11.1";
-  format = "setuptools";
+  version = "2.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
-    repo = pname;
+    repo = "pybind11";
     rev = "v${version}";
-    hash = "sha256-sO/Fa+QrAKyq2EYyYMcjPrYI+bdJIrDoj6L3JHoDo3E=";
+    hash = "sha256-DVkI5NxM5uME9m3PFYVpJOOa2j+yjL6AJn76fCTv2nE=";
   };
 
   postPatch = ''
-    sed -i "/^timeout/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout=300" ""
   '';
 
-  nativeBuildInputs = [ cmake ];
+  build-system = [
+    cmake
+    ninja
+    setuptools
+  ];
+
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
-  propagatedBuildInputs = [ setupHook ];
+  propagatedNativeBuildInputs = [ setupHook ];
 
   stdenv = stdenv';
 
