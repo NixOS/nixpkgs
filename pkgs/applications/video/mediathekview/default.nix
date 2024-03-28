@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, zip }:
+{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, copyDesktopItems, makeDesktopItem, zip, xorg }:
 
 stdenv.mkDerivation rec {
   version = "14.0.0";
@@ -8,34 +8,60 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vr0yqKVRodtXalHEIsm5gdEp9wPU9U5nnYhMk7IiPF4=";
   };
 
-
-  nativeBuildInputs = [ makeWrapper zip ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper zip ];
 
   installPhase =
   let
-    libraryPath = lib.strings.makeLibraryPath [ libglvnd libnotify ];
+    libraryPath = lib.makeLibraryPath ([ libglvnd libnotify ]
+      ++ lib.optional stdenv.isLinux xorg.libXxf86vm);
+    # add JVM args from
+    # https://github.com/mediathekview/MediathekView/blob/9105485f50ec10d863727b4817c8c4ffcbb02643/pom.xml#L136-L139
+    jvmArgList = [
+      "-XX:+UseShenandoahGC"
+      "-XX:ShenandoahGCHeuristics=compact"
+      "-XX:MaxRAMPercentage=50.0"
+      "-XX:+UseStringDeduplication"
+      "--add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED"
+      "-Dfile.encoding=UTF-8"
+      "-DexternalUpdateCheck" # disable checking for updates
+    ];
+    jvmArgs = lib.strings.concatStringsSep " " jvmArgList;
   in
   ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
+    mkdir -p $out/{bin,lib} $out/share/pixmaps
 
     install -m644 MediathekView.jar $out/lib
+    install -m644 MediathekView.svg $out/share/pixmaps
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "-jar $out/lib/MediathekView.jar" \
+      --add-flags "${jvmArgs} -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView \
       --add-flags "-jar $out/lib/MediathekView.jar" \
+      --add-flags "${jvmArgs} -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
-      --add-flags "-Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
+      --add-flags "${jvmArgs} -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     runHook postInstall
   '';
+
+  desktopItems = makeDesktopItem {
+    name = "MediathekView";
+    exec = "mediathek";
+    icon = "MediathekView";
+    desktopName = "mediathek";
+    genericName = "MediathekView";
+    comment = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
+    type = "Application";
+    categories = [ "Video" "AudioVideo" ];
+    startupNotify = true;
+  };
 
   meta = with lib; {
     description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
