@@ -14,6 +14,7 @@ fish.section.md
 fuse.section.md
 ibus.section.md
 kakoune.section.md
+krita.section.md
 linux.section.md
 locales.section.md
 etc-files.section.md
