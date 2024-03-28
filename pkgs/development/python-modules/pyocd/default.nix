@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, capstone
+, capstone_4
 , cmsis-pack-manager
 , colorama
 , importlib-metadata
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    capstone
+    capstone_4
     cmsis-pack-manager
     colorama
     importlib-metadata

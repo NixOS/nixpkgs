@@ -7,16 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "capstone";
-  version = "5.0.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "capstone-engine";
     repo = "capstone";
     rev = version;
-    sha256 = "sha256-kKmL5sae9ruWGu1gas1mel9qM52qQOD+zLj8cRE3isg=";
+    sha256 = "sha256-XMwQ7UaPC8YYu4yxsE4bbR3leYPfBHu5iixSLz05r3g=";
   };
-
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   nativeBuildInputs = [
     cmake
