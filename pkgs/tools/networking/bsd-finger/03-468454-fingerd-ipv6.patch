@@ -1,0 +1,33 @@
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=468454
+
+Description: Implement IPv6 capacity for the server Fingerd.
+Author: Mats Erik Andersson <debian@gisladisker.se>
+Forwarded: no
+Last-Update: 2010-02-09
+
+--- a/fingerd/fingerd.c
++++ b/fingerd/fingerd.c
+@@ -112,7 +112,7 @@
+ 	int k, nusers;
+ 	char *s, *t;
+ 	const char *fingerpath = NULL;
+-	struct sockaddr_in sn;
++	struct sockaddr_storage sn;
+ 	socklen_t sval = sizeof(sn);
+ 
+ 
+@@ -182,11 +182,13 @@
+ 	}
+ 
+ 	if (welcome) {
+-		char buf[256];
++		char buf[256] = "";
+ 		struct hostent *hp;
+ 		struct utsname utsname;
+ 
+ 		uname(&utsname);
++		/* gethostbyname() only retrieves the local hostname.
++		 * This does not disturb IPv6 in any manner. */
+ 		gethostname(buf, sizeof(buf));
+ 		if ((hp = gethostbyname(buf))) {
+ 			/* paranoia: dns spoofing? */

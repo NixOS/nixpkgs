@@ -1,0 +1,120 @@
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=468454
+
+Description: Implement IPv6 capability for the client Finger.
+Author: Mats Erik Andersson <debian@gisladisker.se>
+Forwarded: no
+Last-Updated: 2010-02-09
+
+--- a/finger/finger.c
++++ b/finger/finger.c
+@@ -93,7 +93,7 @@
+ int main(int argc, char *argv[]) {
+ 	int ch;
+ 	int err = 0;
+-	struct sockaddr_in sin;
++	struct sockaddr_storage sin;
+ 	socklen_t slen = sizeof(sin);
+ 
+ 	while ((ch = getopt(argc, argv, "lmps")) != EOF) {
+@@ -137,6 +137,8 @@
+ 	 * Also check stdin for nofinger processing, because of older
+ 	 * fingerds that make stdout a pipe for CRLF handling.
+ 	 */
++	slen = sizeof(slen); /* For safety: sockaddr_in and sockaddr_in6 */
++
+ 	if (getsockname(STDIN_FILENO, (struct sockaddr *)&sin, &slen)==0) {
+ 		enable_nofinger = 1;
+ 	}	
+--- a/finger/net.c
++++ b/finger/net.c
+@@ -53,13 +53,12 @@
+ 
+ int netfinger(const char *name) {
+ 	register FILE *fp;
+-	struct in_addr defaddr;
+ 	register int c, sawret, ateol;
+-	struct hostent *hp, def;
++	struct addrinfo hints, *result, *resptr;
+ 	struct servent *sp;
+-	struct sockaddr_in sn;
+-	int s;
+-	char *alist[1], *host;
++	struct sockaddr_storage sn;
++	int s, status;
++	char *host;
+ 
+ 	host = strrchr(name, '@');
+ 	if (!host) return 1;
+@@ -72,38 +71,46 @@
+ 		eprintf("finger: tcp/finger: unknown service\n");
+ 		return 1;
+ 	}
+-	sn.sin_port = sp->s_port;
++	memset(&hints, 0, sizeof(hints));
++	hints.ai_flags  = AI_CANONNAME | AI_ADDRCONFIG;
++	hints.ai_family = AF_UNSPEC;
++	hints.ai_socktype = SOCK_STREAM;
++	hints.ai_protocol = IPPROTO_TCP;
++
++	status = getaddrinfo(host, "finger", &hints, &result);
++	if (status != 0) {
++		eprintf("finger: unknown host: %s\n", host);
++		eprintf("getaddrinfo: %s\n", gai_strerror(status));
++		return 1;
++	}
++
++	for ( resptr = result; resptr; resptr = resptr->ai_next) {
++
++		if ((s = socket(resptr->ai_family, resptr->ai_socktype,
++				resptr->ai_protocol)) < 0)
++			continue;
++
+ 
+-	hp = gethostbyname(host);
+-	if (!hp) {
+-		if (!inet_aton(host, &defaddr)) {
+-			eprintf("finger: unknown host: %s\n", host);
+-			return 1;
++		/* print hostname before connecting, in case it takes a while */
++		/* This should probably be removed. */
++		/* xprintf("[%s]\n", result->ai_canonname); */
++
++		if (connect(s, resptr->ai_addr, resptr->ai_addrlen) < 0) {
++			close(s);
++			continue;
+ 		}
+-		def.h_name = host;
+-		def.h_addr_list = alist;
+-		def.h_addr = (char *)&defaddr;
+-		def.h_length = sizeof(struct in_addr);
+-		def.h_addrtype = AF_INET;
+-		def.h_aliases = 0;
+-		hp = &def;
+-	}
+-	sn.sin_family = hp->h_addrtype;
+-	if (hp->h_length > (int)sizeof(sn.sin_addr)) {
+-	    hp->h_length = sizeof(sn.sin_addr);
+-	}
+-	memcpy(&sn.sin_addr, hp->h_addr, hp->h_length);
+ 
+-	if ((s = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) {
+-		eprintf("finger: socket: %s\n", strerror(errno));
+-		return 1;
++		/* Connection is now established.
++		/* Assemble the gained information. */
++		memcpy(&sn, resptr->ai_addr, resptr->ai_addrlen);
++		break;
+ 	}
+ 
+-	/* print hostname before connecting, in case it takes a while */
+-	xprintf("[%s]\n", hp->h_name);
+-	if (connect(s, (struct sockaddr *)&sn, sizeof(sn)) < 0) {
++	freeaddrinfo(result);
++
++	if ( resptr == NULL ) {
++		/* Last error is still providing the correct clue. */
+ 		eprintf("finger: connect: %s\n", strerror(errno));
+-		close(s);
+ 		return 1;
+ 	}
+ 

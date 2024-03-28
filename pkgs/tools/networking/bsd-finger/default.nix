@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, buildClient ? true
-}:
+{ lib, stdenv, fetchurl, buildClient ? true }:
 
 stdenv.mkDerivation rec {
   srcName = "bsd-finger";
@@ -10,8 +6,9 @@ stdenv.mkDerivation rec {
   version = "0.17";
 
   src = fetchurl {
-    url = "mirror://ibiblioPubLinux/system/network/finger/${srcName}-${version}.tar.gz";
-    hash = "sha256-hIhdZo0RfvUOAccDSkXYND10fOxiEuQOjQgVG8GOE/o=";
+    url =
+      "http://ftp.de.debian.org/debian/pool/main/b/bsd-finger/bsd-finger_${version}.orig.tar.bz2";
+    hash = "sha256-KLNNYF0j6mh9eeD8SMA1q+gPiNnBVH56pGeW0QgcA2M=";
   };
 
   # outputs = [ "out" "man" ];
@@ -19,11 +16,18 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   patches = [
-    ./ubuntu-0.17-9.patch
+    ./01-legacy.patch
+    ./02-518559-nsswitch-sources.patch
+    ./03-468454-fingerd-ipv6.patch
+    ./04-468454-finger-ipv6.patch
+    ./05-547014-netgroup.patch
+    ./06-572211-decrease-timeout.patch
+    ./use-cmake-as-buildsystem.patch
+    ./use-cmake-as-buildsystem-debian-extras.patch
+    ./fix-fingerd-man-typo.patch
   ];
 
-  preBuild = let
-    srcdir = if buildClient then "finger" else "fingerd";
+  preBuild = let srcdir = if buildClient then "finger" else "fingerd";
   in ''
     cd ${srcdir}
   '';
@@ -36,10 +40,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      if buildClient
-      then "User information lookup program"
-      else "Remote user information server";
+    description = if buildClient then
+      "User information lookup program"
+    else
+      "Remote user information server";
     platforms = platforms.linux;
     license = licenses.bsdOriginal;
     mainProgram = "finger";

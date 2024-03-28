@@ -1,0 +1,75 @@
+Description: Decrease timeout length during connect().
+ In cases where a name server is answering with A as well as AAAA records,
+ but the system to be queried has lost a corresponding address, the TCP
+ handshake timeout will cause a long delay before allowing the query of
+ the next address family, or the next address in general.
+ .
+ The use of a trivial signal handler for SIGALRM allows the reduction
+ of this timeout, thus producing better responsiveness for the interactive
+ user of the Finger service.
+Author: Mats Erik Andersson <debian@gisladisker.se>
+Forwarded: no
+Last-Updated: 2010-03-02
+
+--- a/finger/net.c
++++ b/finger/net.c
+@@ -49,14 +49,25 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <ctype.h>
++#include <signal.h>
+ #include "finger.h"
+ 
++#if ! defined(FINGER_TIMEOUT) || FINGER_TIMEOUT < 1
++# define FINGER_TIMEOUT 5
++#endif
++
++static void trivial_alarm(int sig) {
++	/* Just to trigger EINTR, and to later use it. */
++	return;
++}
++
+ int netfinger(const char *name) {
+ 	register FILE *fp;
+ 	register int c, sawret, ateol;
+ 	struct addrinfo hints, *result, *resptr;
+ 	struct servent *sp;
+ 	struct sockaddr_storage sn;
++	struct sigaction sigact, oldsigact;
+ 	int s, status;
+ 	char *host;
+ 
+@@ -77,6 +88,10 @@
+ 	hints.ai_socktype = SOCK_STREAM;
+ 	hints.ai_protocol = IPPROTO_TCP;
+ 
++	sigact.sa_handler = trivial_alarm;
++	sigemptyset(&sigact.sa_mask);
++	sigact.sa_flags = 0;
++
+ 	status = getaddrinfo(host, "finger", &hints, &result);
+ 	if (status != 0) {
+ 		eprintf("finger: unknown host: %s\n", host);
+@@ -95,13 +110,21 @@
+ 		/* This should probably be removed. */
+ 		/* xprintf("[%s]\n", result->ai_canonname); */
+ 
++		sigaction(SIGALRM, &sigact, &oldsigact);
++		alarm(FINGER_TIMEOUT);
++
+ 		if (connect(s, resptr->ai_addr, resptr->ai_addrlen) < 0) {
++			if ( errno == EINTR )
++				errno = ETIMEDOUT;
+ 			close(s);
+ 			continue;
+ 		}
+ 
++		alarm(0);
++		sigaction(SIGALRM, &oldsigact, NULL);
++
+ 		/* Connection is now established.
+-		/* Assemble the gained information. */
++		 * Assemble the gained information. */
+ 		memcpy(&sn, resptr->ai_addr, resptr->ai_addrlen);
+ 		break;
+ 	}

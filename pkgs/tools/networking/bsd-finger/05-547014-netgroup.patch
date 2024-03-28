@@ -1,0 +1,27 @@
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=547014
+
+From: "Matthew A. Dunford" <mdunford@lbl.gov>
+
+finger segfaults when it comes across a netgroup entry in /etc/passwd.
+A netgroup entry doesn't include many of the fields in a normal passwd
+entry, so pw->pw_gecos is set to NULL, which causes finger to core
+dump.
+
+Here is part of a /etc/passwd file with a netgroup entry:
+
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
++@operator
+
+This patch sidesteps what finger considers a malformed passwd entry:
+
+--- a/finger/util.c
++++ b/finger/util.c
+@@ -180,6 +180,8 @@
+ 	int i, j, ct, rv=0;
+ 	char *rname;
+ 
++	if (pw->pw_gecos == NULL) return 0;
++
+ 	strncpy(tbuf, pw->pw_gecos, TBUFLEN);
+ 	tbuf[TBUFLEN-1] = 0;  /* guarantee null termination */
+ 	p = tbuf;
