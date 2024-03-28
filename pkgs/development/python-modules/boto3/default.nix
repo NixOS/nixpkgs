@@ -25,20 +25,26 @@ buildPythonPackage rec {
     hash = "sha256-2L4pHjrDoy7dPZm0nx+NXZV/K3ZVx7FrNGYZTMrwAs4=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
-
   pythonRelaxDeps = [
     "s3transfer"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     botocore
     jmespath
     s3transfer
   ];
+
+  passthru.optional-dependencies = {
+    crt = [
+      botocore
+    ] ++ botocore.optional-dependencies.crt;
+  };
 
   nativeCheckInputs = [
     pytest-xdist
@@ -53,12 +59,6 @@ buildPythonPackage rec {
     # Integration tests require networking
     "tests/integration"
   ];
-
-  passthru.optional-dependencies = {
-    crt = [
-      botocore.optional-dependencies.crt
-    ];
-  };
 
   meta = with lib; {
     description = "AWS SDK for Python";
