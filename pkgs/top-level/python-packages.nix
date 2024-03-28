@@ -6814,6 +6814,8 @@ self: super: with self; {
 
   llama-index-vector-stores-postgres = callPackage ../development/python-modules/llama-index-vector-stores-postgres { };
 
+  llama-index-vector-stores-qdrant = callPackage ../development/python-modules/llama-index-vector-stores-qdrant { };
+
   llama-parse = callPackage ../development/python-modules/llama-parse { };
 
   llamaindex-py-client = callPackage ../development/python-modules/llamaindex-py-client { };
