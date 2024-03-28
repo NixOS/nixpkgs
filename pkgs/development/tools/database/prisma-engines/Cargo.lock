@@ -1082,8 +1082,8 @@ dependencies = [
  "indoc 2.0.3",
  "itertools",
  "pretty_assertions",
- "prisma-models",
  "psl",
+ "query-structure",
  "schema",
  "serde",
  "serde_json",
@@ -2486,11 +2486,11 @@ dependencies = [
  "itertools",
  "mongodb",
  "mongodb-client",
- "prisma-models",
  "prisma-value",
  "psl",
  "query-connector",
  "query-engine-metrics",
+ "query-structure",
  "rand 0.7.3",
  "regex",
  "serde",
@@ -3347,22 +3347,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "prisma-models"
-version = "0.0.0"
-dependencies = [
- "bigdecimal",
- "chrono",
- "cuid",
- "getrandom 0.2.10",
- "itertools",
- "nanoid",
- "prisma-value",
- "psl",
- "thiserror",
- "uuid",
-]
-
-[[package]]
 name = "prisma-schema-build"
 version = "0.1.0"
 dependencies = [
@@ -3571,6 +3555,7 @@ dependencies = [
  "connection-string",
  "either",
  "futures",
+ "getrandom 0.2.10",
  "hex",
  "indoc 0.3.6",
  "lru-cache",
@@ -3652,8 +3637,8 @@ dependencies = [
  "futures",
  "indexmap 1.9.3",
  "itertools",
- "prisma-models",
  "prisma-value",
+ "query-structure",
  "serde",
  "serde_json",
  "thiserror",
@@ -3679,10 +3664,11 @@ dependencies = [
  "once_cell",
  "opentelemetry",
  "petgraph 0.4.13",
- "prisma-models",
+ "pin-project",
  "psl",
  "query-connector",
  "query-engine-metrics",
+ "query-structure",
  "schema",
  "serde",
  "serde_json",
@@ -3694,6 +3680,7 @@ dependencies = [
  "tracing-subscriber",
  "user-facing-errors",
  "uuid",
+ "wasm-bindgen-futures",
 ]
 
 [[package]]
@@ -3762,12 +3749,12 @@ dependencies = [
  "napi-build",
  "napi-derive",
  "opentelemetry",
- "prisma-models",
  "psl",
  "quaint",
  "query-connector",
  "query-core",
  "query-engine-metrics",
+ "query-structure",
  "request-handlers",
  "serde",
  "serde_json",
@@ -3819,11 +3806,16 @@ dependencies = [
  "futures",
  "js-sys",
  "log",
- "prisma-models",
  "psl",
+ "quaint",
+ "query-connector",
+ "query-core",
+ "query-structure",
+ "request-handlers",
  "serde",
  "serde-wasm-bindgen",
  "serde_json",
+ "sql-query-connector",
  "thiserror",
  "tokio",
  "tracing",
@@ -3835,6 +3827,22 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "wasm-logger",
+]
+
+[[package]]
+name = "query-structure"
+version = "0.0.0"
+dependencies = [
+ "bigdecimal",
+ "chrono",
+ "cuid",
+ "getrandom 0.2.10",
+ "itertools",
+ "nanoid",
+ "prisma-value",
+ "psl",
+ "thiserror",
+ "uuid",
 ]
 
 [[package]]
@@ -3862,13 +3870,13 @@ dependencies = [
  "nom",
  "once_cell",
  "parse-hyperlinks",
- "prisma-models",
  "psl",
  "qe-setup",
  "quaint",
  "query-core",
  "query-engine",
  "query-engine-metrics",
+ "query-structure",
  "regex",
  "request-handlers",
  "serde",
@@ -4150,10 +4158,10 @@ dependencies = [
  "itertools",
  "mongodb-query-connector",
  "once_cell",
- "prisma-models",
  "psl",
  "quaint",
  "query-core",
+ "query-structure",
  "schema",
  "serde",
  "serde_json",
@@ -4421,8 +4429,8 @@ version = "0.1.0"
 dependencies = [
  "codspeed-criterion-compat",
  "once_cell",
- "prisma-models",
  "psl",
+ "query-structure",
  "rustc-hash",
 ]
 
@@ -4931,14 +4939,15 @@ dependencies = [
  "chrono",
  "cuid",
  "futures",
+ "hex",
  "itertools",
  "once_cell",
  "opentelemetry",
- "prisma-models",
  "prisma-value",
  "psl",
  "quaint",
  "query-connector",
+ "query-structure",
  "rand 0.7.3",
  "serde",
  "serde_json",
@@ -6010,9 +6019,9 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 
 [[package]]
 name = "wasm-bindgen"
-version = "0.2.87"
+version = "0.2.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7706a72ab36d8cb1f80ffbf0e071533974a60d0a308d01a5d0375bf60499a342"
+checksum = "7daec296f25a1bae309c0cd5c29c4b260e510e6d813c286b19eaadf409d40fce"
 dependencies = [
  "cfg-if",
  "wasm-bindgen-macro",
@@ -6020,9 +6029,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-backend"
-version = "0.2.87"
+version = "0.2.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ef2b6d3c510e9625e5fe6f509ab07d66a760f0885d858736483c32ed7809abd"
+checksum = "e397f4664c0e4e428e8313a469aaa58310d302159845980fd23b0f22a847f217"
 dependencies = [
  "bumpalo",
  "log",
@@ -6047,9 +6056,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro"
-version = "0.2.87"
+version = "0.2.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dee495e55982a3bd48105a7b947fd2a9b4a8ae3010041b9e0faab3f9cd028f1d"
+checksum = "5961017b3b08ad5f3fe39f1e79877f8ee7c23c5e5fd5eb80de95abc41f1f16b2"
 dependencies = [
  "quote",
  "wasm-bindgen-macro-support",
@@ -6057,9 +6066,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro-support"
-version = "0.2.87"
+version = "0.2.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "54681b18a46765f095758388f2d0cf16eb8d4169b639ab575a8f5693af210c7b"
+checksum = "c5353b8dab669f5e10f5bd76df26a9360c748f054f862ff5f3f8aae0c7fb3907"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -6070,9 +6079,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-shared"
-version = "0.2.87"
+version = "0.2.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca6ad05a4870b2bf5fe995117d3728437bd27d7cd5f06f13c17443ef369775a1"
+checksum = "0d046c5d029ba91a1ed14da14dca44b68bf2f124cfbaf741c54151fdb3e0750b"
 
 [[package]]
 name = "wasm-logger"
