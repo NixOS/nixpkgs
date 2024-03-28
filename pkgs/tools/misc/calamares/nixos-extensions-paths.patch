@@ -1,21 +1,20 @@
 diff --git a/src/calamares/main.cpp b/src/calamares/main.cpp
-index de709156f..a0b6c5faf 100644
+index e0491e5f9..faf272016 100644
 --- a/src/calamares/main.cpp
 +++ b/src/calamares/main.cpp
-@@ -131,6 +132,8 @@ main( int argc, char* argv[] )
-     // TODO: umount anything in /tmp/calamares-... as an emergency save function
+@@ -132,6 +132,7 @@ main( int argc, char* argv[] )
  #endif
  
-+    CalamaresUtils::setNixosDirs();
-+
-     bool is_debug = handle_args( a );
- 
- #ifdef WITH_KF5DBus
+     std::unique_ptr< KDSingleApplication > possiblyUnique;
++    Calamares::setNixosDirs();
+     const bool is_debug = handle_args( a );
+     if ( !is_debug )
+     {
 diff --git a/src/libcalamares/utils/Dirs.cpp b/src/libcalamares/utils/Dirs.cpp
-index f333d6e64..6118fb412 100644
+index c42768a08..bac98645a 100644
 --- a/src/libcalamares/utils/Dirs.cpp
 +++ b/src/libcalamares/utils/Dirs.cpp
-@@ -115,6 +116,14 @@ setXdgDirs()
+@@ -114,6 +114,14 @@ setXdgDirs()
      s_haveExtraDirs = !( s_extraConfigDirs.isEmpty() && s_extraDataDirs.isEmpty() );
  }
  
@@ -31,7 +30,7 @@ index f333d6e64..6118fb412 100644
  extraConfigDirs()
  {
 diff --git a/src/libcalamares/utils/Dirs.h b/src/libcalamares/utils/Dirs.h
-index 445cbe1f1..da869d446 100644
+index d0edd7a4f..26bd16b4e 100644
 --- a/src/libcalamares/utils/Dirs.h
 +++ b/src/libcalamares/utils/Dirs.h
 @@ -50,6 +50,9 @@ DLLEXPORT bool isAppDataDirOverridden();
