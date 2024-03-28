@@ -5550,6 +5550,12 @@
     githubId = 1148549;
     name = "Eelco Dolstra";
   };
+  eggflaw = {
+    email = "eggflaw@gmail.com";
+    github = "eggflaw";
+    githubId = 108559753;
+    name = "Eggflaw";
+  };
   ehegnes = {
     email = "eric.hegnes@gmail.com";
     github = "ehegnes";
