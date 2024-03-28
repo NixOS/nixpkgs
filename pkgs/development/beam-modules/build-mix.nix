@@ -61,7 +61,7 @@ let
       runHook preConfigure
 
       ${./mix-configure-hook.sh}
-      ${lib.optionalString (!isNull appConfigPath)
+      ${lib.optionalString (appConfigPath != null)
       # Due to https://hexdocs.pm/elixir/main/Config.html the config directory
       # of a library seems to be not considered, as config is always
       # application specific. So we can safely delete it.
