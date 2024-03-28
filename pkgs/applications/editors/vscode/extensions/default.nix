@@ -3364,11 +3364,14 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.31.0";
-          sha256 = "0rn4dyqr46wbgi4k27ni6a6i3pa83gyaprhds5rlndjaw90iakb4";
+          version = "4.34.0";
+          sha256 = "sha256-xxOEUvMjqJbl8lONB/So2NoIAVPOxysTq2YQY3iHGqo=";
         };
         meta = {
+          description = "Material Design file/folder icon theme for VSCode";
+          homepage = "https://github.com/PKief/vscode-material-icon-theme/blob/main/README.md";
           license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
@@ -3376,11 +3379,14 @@ let
         mktplcRef = {
           name = "material-product-icons";
           publisher = "PKief";
-          version = "1.5.0";
-          sha256 = "sha256-gKU21OS2ZFyzCQVQ1fa3qlahLBAcJaHDEcz7xof3P4A=";
+          version = "1.7.0";
+          sha256 = "sha256-F6sukBQ61pHoKTxx88aa8QMLDOm9ozPF9nonIH34C7Q=";
         };
         meta = {
+          description = "Material Design product icon theme for VSCode";
+          homepage = "https://github.com/PKief/vscode-material-product-icons/blob/main/README.md";
           license = lib.licenses.mit;
+          maintainers = [ ];
         };
       };
 
