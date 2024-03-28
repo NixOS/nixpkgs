@@ -48,7 +48,6 @@ buildPythonPackage rec {
     "test_unit/test_dis27.py"
   ];
 
-
   disabledTests = [
     # AssertionError: events did not match expectation
     "test_big_linenos"
