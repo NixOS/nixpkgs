@@ -71,7 +71,8 @@ in
           if version == "8.11.0+0.11.1" then version
           else builtins.replaceStrings [ "+" ] [ "." ] version
         }.tbz";
-    sha256 = release."${version}".sha256;
+    # abort/syntax error will fail package set eval, but throw is "fine"
+    sha256 = release."${version}".sha256 or (throw "Unknown version '${version}'");
   };
 
   patches =
