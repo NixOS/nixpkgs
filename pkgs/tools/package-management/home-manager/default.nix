@@ -16,14 +16,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "unstable-2023-12-31";
+  version = "unstable-2024-03-19";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "2e8634c252890cb38c60ab996af04926537cbc27";
-    hash = "sha256-oYMwbObpWheGeeNWY1LjO/+omrbAWDNdyzNDxTr2jo8=";
+    rev = "f33900124c23c4eca5831b9b5eb32ea5894375ce";
+    hash = "sha256-s9Hi4RHhc6yut4EcYD50sZWRDKsugBJHSbON8KFwoTw=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/nix-community/home-manager/";
+    branch = "release-23.11";
   };
 
   meta = {
