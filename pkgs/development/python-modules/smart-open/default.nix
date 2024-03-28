@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.0.1";
+  version = "7.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yGy4xNoHCE+LclBBTMVtTKP6GYZ5w09NJ0OmsUPnir4=";
+    hash = "sha256-2G0sAAUc+fpEY/ggPSRbJjclSJwTFetKmMEBJcz8YFY=";
   };
 
   build-system = [
