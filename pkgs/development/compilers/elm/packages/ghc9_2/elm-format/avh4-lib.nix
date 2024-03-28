@@ -23,8 +23,4 @@ mkDerivation {
   testToolDepends = [ tasty-discover ];
   description = "Common code for haskell projects";
   license = lib.licenses.bsd3;
-
-  # Added manually
-  configureFlags = [ "--ghc-option=-Wno-error=unused-packages" ];
-  doHaddock = false;
 }

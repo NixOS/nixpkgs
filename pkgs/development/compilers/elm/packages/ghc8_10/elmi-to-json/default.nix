@@ -4,11 +4,11 @@
 }:
 mkDerivation {
   pname = "elmi-to-json";
-  version = "unstable-2021-07-19";
+  version = "1.3.0";
   src = fetchgit {
     url = "https://github.com/stoeffel/elmi-to-json";
-    hash = "sha256-9fScXRSyTkqzeXwh/Jjza6mnENCThlU6KI366CLFcgY=";
-    rev = "bd18efb59d247439b362272b480e67a16a4e424e";
+    sha256 = "0vy678k15rzpsn0aly90fb01pxsbqkgf86pa86w0gd94lka8acwl";
+    rev = "6a42376ef4b6877e130971faf964578cc096e29b";
     fetchSubmodules = true;
   };
   isLibrary = true;

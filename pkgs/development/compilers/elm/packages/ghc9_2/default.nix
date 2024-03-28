@@ -11,6 +11,15 @@ self: pkgs.haskell.packages.ghc92.override {
         elm-format = justStaticExecutables (overrideCabal
           (drv: {
             jailbreak = true;
+            doHaddock = false;
+            postPatch = ''
+              mkdir -p ./generated
+              cat <<EOHS > ./generated/Build_elm_format.hs
+              module Build_elm_format where
+              gitDescribe :: String
+              gitDescribe = "${drv.version}"
+              EOHS
+            '';
 
             description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
             homepage = "https://github.com/avh4/elm-format";
@@ -19,15 +28,20 @@ self: pkgs.haskell.packages.ghc92.override {
           })
           (self.callPackage ./elm-format/elm-format.nix { }));
       };
+
+      fixHaddock = overrideCabal (_: {
+        configureFlags = [ "--ghc-option=-Wno-error=unused-packages" ];
+        doHaddock = false;
+      });
     in
     elmPkgs // {
       inherit elmPkgs;
 
       # Needed for elm-format
-      avh4-lib = doJailbreak (self.callPackage ./elm-format/avh4-lib.nix { });
-      elm-format-lib = doJailbreak (self.callPackage ./elm-format/elm-format-lib.nix { });
-      elm-format-test-lib = self.callPackage ./elm-format/elm-format-test-lib.nix { };
-      elm-format-markdown = self.callPackage ./elm-format/elm-format-markdown.nix { };
+      avh4-lib = fixHaddock (doJailbreak (self.callPackage ./elm-format/avh4-lib.nix { }));
+      elm-format-lib =  fixHaddock (doJailbreak (self.callPackage ./elm-format/elm-format-lib.nix { }));
+      elm-format-test-lib = fixHaddock (self.callPackage ./elm-format/elm-format-test-lib.nix { });
+      elm-format-markdown = fixHaddock (self.callPackage ./elm-format/elm-format-markdown.nix { });
 
       # elm-format requires text >= 2.0
       text = self.text_2_0_2;
