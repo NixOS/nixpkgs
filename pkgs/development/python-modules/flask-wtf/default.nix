@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Simple integration of Flask and WTForms.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mic92 anthonyroussel ];
-    homepage = "https://github.com/lepture/flask-wtf/";
+    homepage = "https://github.com/wtforms/flask-wtf/";
     changelog = "https://github.com/wtforms/flask-wtf/releases/tag/v${version}";
   };
 }
