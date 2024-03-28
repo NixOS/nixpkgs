@@ -109,6 +109,7 @@ in lib.makeExtensible (self: {
   };
 
   alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };
+  audible = callPackage ./plugins/audible.nix { beets = self.beets-minimal; };
   copyartifacts = callPackage ./plugins/copyartifacts.nix { beets = self.beets-minimal; };
   extrafiles = callPackage ./plugins/extrafiles.nix { beets = self.beets-minimal; };
 })
