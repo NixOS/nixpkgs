@@ -4,6 +4,7 @@
 , installShellFiles
 , testers
 , cue
+, callPackage
 }:
 
 buildGoModule rec {
@@ -33,21 +34,22 @@ buildGoModule rec {
       --zsh <($out/bin/cue completion zsh)
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/cue eval - <<<'a: "all good"' > /dev/null
-  '';
-
-  passthru.tests.version = testers.testVersion {
-    package = cue;
-    command = "cue version";
+  passthru = {
+    write-cue-validator = callPackage ./write-cue-validator.nix { };
+    tests = {
+      test-001-all-good = callPackage ./tests/001-all-good.nix { };
+      version = testers.testVersion {
+        package = cue;
+        command = "cue version";
+      };
+    };
   };
 
-  meta = with lib;  {
-    description = "A data constraint language which aims to simplify tasks involving defining and using data";
+  meta = {
     homepage = "https://cuelang.org/";
+    description = "A data constraint language which aims to simplify tasks involving defining and using data";
     license = lib.licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "cue";
+    maintainers = with lib.maintainers; [ aaronjheng ];
   };
 }
