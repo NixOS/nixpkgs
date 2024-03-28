@@ -52,7 +52,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.upower.enable = elem "battery" cfg.order;
+    services.upower.enable = mkIf (elem "battery" cfg.order) true;
 
     systemd.user.services.dwm-status = {
       description = "Highly performant and configurable DWM status service";
