@@ -8,7 +8,6 @@
 , makeSetupHook
 , makeWrapper
 , dotnet-sdk
-, dotnet-test-sdk
 , disabledTests
 , nuget-source
 , dotnet-runtime
@@ -22,10 +21,18 @@ let
   libraryPath = lib.makeLibraryPath runtimeDeps;
 in
 {
+  # Why we are not using propagatedBuildInputs for dotnet-sdk? That is because
+  # - these hooks are an implementation detail of buildDotnetModule,
+  # - buildDotnetModule already puts dotnet-sdk in the nativeBuildInputs.
+  # And, most importantly, these inputs would actually be propagated as
+  # buildInputs instead of nativeBuildInputs. That is how splicing works in
+  # Nixpkgs. In particular, hooks are not spliced when buildDotnetModule adds
+  # them to the nativeBuildInputs of the derivation, so mkDerivation uses them
+  # as is and, as expected, propagates non-native build inputs.
+
   dotnetConfigureHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-configure-hook";
-      propagatedBuildInputs = [ dotnet-sdk nuget-source ];
       substitutions = {
         nugetSource = nuget-source;
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
@@ -43,7 +50,6 @@ in
   dotnetBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-build-hook";
-      propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
@@ -52,7 +58,6 @@ in
   dotnetCheckHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-check-hook";
-      propagatedBuildInputs = [ dotnet-test-sdk ];
       substitutions = {
         inherit buildType runtimeId libraryPath;
         disabledTests = lib.optionalString (disabledTests != [])
@@ -67,7 +72,6 @@ in
   dotnetInstallHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-install-hook";
-      propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
@@ -76,7 +80,6 @@ in
   dotnetFixupHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-fixup-hook";
-      propagatedBuildInputs = [ dotnet-runtime ];
       substitutions = {
         dotnetRuntime = dotnet-runtime;
         runtimeDeps = libraryPath;

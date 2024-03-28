@@ -7,21 +7,77 @@ export PATH="@binPath@"
 # used for glob ordering of package names
 export LC_ALL=C
 
-if [ $# -eq 0 ]; then
-  >&2 echo "Usage: $0 <packages directory> [path to a file with a list of excluded packages] > deps.nix"
+usage="Usage: $0 [-h|--help] [--nuget-config <nuget-config>] [--] <packages-directory> [<excluded-packages>] > deps.nix
+    <packages-directory>           Path to a nuget packages directory
+    <excluded-packages>            Optional path to a file with a list of excluded packages
+    --nuget-config <nuget-config>  Optional path to the nuget.config file
+    --help, -h                     Show this help message"
+
+print_usage_error() {
+  echo "$usage" >&2
+  if [ $# -gt 0 ]; then
+    echo >&2
+    echo "Error: $@" >&2
+  fi
+}
+
+while [ $# -gt 0 ]; do
+  arg=$1
+  case "$arg" in
+  --nuget-config)
+    shift
+    if [ $# -eq 0 ]; then
+      print_usage_error "flag $arg requires path to nuget config"
+      exit 1
+    fi
+    nuget_config=$1
+    shift
+    ;;
+  -h | --help)
+    echo "$usage" >&2
+    exit 0
+    ;;
+  --)
+    shift
+    break
+    ;;
+  -*)
+    print_usage_error "unknown flag $arg"
+    exit 1
+    ;;
+  *)
+    break
+    ;;
+  esac
+done
+
+case $# in
+1 | 2) ;;
+0)
+  print_usage_error "expected packages directory argument"
   exit 1
-fi
+  ;;
+*)
+  print_usage_error "unexpected trailing arguments: $@"
+  exit 1
+  ;;
+esac
 
 pkgs=$1
+# NB for compatibility we treat empty path as if it is not set.
+if [ -n "${2-}" ]; then
+  excluded_list=$(realpath -- "$2")
+fi
+
 tmp=$(realpath "$(mktemp -td nuget-to-nix.XXXXXX)")
 trap 'rm -r "$tmp"' EXIT
-
-excluded_list=$(realpath "${2:-/dev/null}")
 
 export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
+mapfile -t sources < <(dotnet nuget list source --format short \
+  ${nuget_config+"--configfile=$nuget_config"} |
+  awk '/^E / { print $2 }')
 
 declare -a remote_sources
 declare -A base_addresses
@@ -47,8 +103,10 @@ for package in *; do
   for version in *; do
     id=$(xq -r .package.metadata.id "$version"/*.nuspec)
 
-    if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
-      continue
+    if [ -n "${excluded_list-}" ]; then
+      if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
+        continue
+      fi
     fi
 
     used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"

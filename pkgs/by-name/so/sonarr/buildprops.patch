@@ -1,0 +1,20 @@
+This patch fixes build reproducibility issue caused by copyright date and adds
+variables for version substitution.
+
+--- a/src/Directory.Build.props
++++ b/src/Directory.Build.props
+@@ -71,11 +71,11 @@
+   <PropertyGroup Condition="'$(SonarrProject)'=='true'">
+     <Product>Sonarr</Product>
+     <Company>sonarr.tv</Company>
+-    <Copyright>Copyright 2014-$([System.DateTime]::Now.ToString('yyyy')) sonarr.tv (GNU General Public v3)</Copyright>
++    <Copyright>Copyright 2014-@copyrightYear@ sonarr.tv (GNU General Public v3)</Copyright>
+     
+     <!-- Should be replaced by CI -->
+-    <AssemblyVersion>10.0.0.*</AssemblyVersion>
+-    <AssemblyConfiguration>$(Configuration)-dev</AssemblyConfiguration>
++    <AssemblyVersion>@assemblyVersion@</AssemblyVersion>
++    <AssemblyConfiguration>@assemblyConfiguration@</AssemblyConfiguration>
+     <NeutralLanguage>en</NeutralLanguage>
+ 
+     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
