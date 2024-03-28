@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "google-guest-configs";
-  version = "20211116.00";
+  version = "20231214.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-configs";
     rev = version;
-    sha256 = "sha256-0SRu6p/DsHNNI20mkXJitt/Ee5S2ooiy5hNmD+ndecM=";
+    hash = "sha256-V0eoAPpzx2Dso0zw5Rx5VPK/H4pNEkGnvlDF7yc3qRg=";
   };
 
   binDeps = lib.makeBinPath [ coreutils util-linux gnugrep gnused ethtool ipcalc iproute2 ];
@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
     substitute ${./fix-paths.patch} fix-paths.patch \
       --subst-var out \
       --subst-var-by nvme "${nvme-cli}/bin/nvme" \
-      --subst-var-by sh "${stdenv.shell}" \
-      --subst-var-by umount "${util-linux}/bin/umount" \
-      --subst-var-by logger "${util-linux}/bin/logger"
+      --subst-var-by sh "${stdenv.shell}"
     patch -p1 < ./fix-paths.patch
   '';
 
