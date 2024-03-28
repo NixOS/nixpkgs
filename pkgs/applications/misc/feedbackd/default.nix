@@ -18,6 +18,7 @@
 , json-glib
 , libgudev
 , dbus
+, gitUpdater
 }:
 
 let
@@ -96,6 +97,10 @@ stdenv.mkDerivation rec {
         done
     fi
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "A daemon to provide haptic (and later more) feedback on events";
