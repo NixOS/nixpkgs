@@ -19,6 +19,7 @@
 , fontconfig
 , glew
 , libGL
+, udev
 , SDL2
 , SDL2_mixer
 }:
@@ -49,6 +50,7 @@ buildDotnetModule rec {
     pulseaudio
     vulkan-loader
     ffmpeg
+    udev
 
     # Avalonia UI
     libICE
