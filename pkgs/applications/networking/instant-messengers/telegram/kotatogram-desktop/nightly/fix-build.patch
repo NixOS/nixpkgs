@@ -1,0 +1,71 @@
+From e17e1b4eb752b01d7f3b167937881f481018e18d Mon Sep 17 00:00:00 2001
+From: Ilya Fedin <fedin-ilja2010@ya.ru>
+Date: Fri, 5 Jan 2024 02:57:46 +0400
+Subject: [PATCH] Fix build
+
+---
+ Telegram/CMakeLists.txt                                |  2 +-
+ Telegram/SourceFiles/platform/linux/launcher_linux.cpp | 10 +++++-----
+ Telegram/SourceFiles/platform/linux/tray_linux.cpp     |  1 -
+ lib/xdg/io.github.kotatogram.service                   |  3 +++
+ 4 files changed, 9 insertions(+), 7 deletions(-)
+ create mode 100644 lib/xdg/io.github.kotatogram.service
+
+diff --git a/Telegram/CMakeLists.txt b/Telegram/CMakeLists.txt
+index 300b67b7ce..3c1c4c51f8 100644
+--- a/Telegram/CMakeLists.txt
++++ b/Telegram/CMakeLists.txt
+@@ -1890,7 +1890,7 @@ endif()
+ 
+ if (LINUX AND DESKTOP_APP_USE_PACKAGED)
+     include(GNUInstallDirs)
+-    configure_file("../lib/xdg/io.github.kotatogram.desktop" "${CMAKE_CURRENT_BINARY_DIR}/io.github.kotatogram.desktop" @ONLY)
++    configure_file("../lib/xdg/io.github.kotatogram.service" "${CMAKE_CURRENT_BINARY_DIR}/io.github.kotatogram.service" @ONLY)
+     configure_file("../lib/xdg/io.github.kotatogram.metainfo.xml" "${CMAKE_CURRENT_BINARY_DIR}/io.github.kotatogram.metainfo.xml" @ONLY)
+     #generate_appdata_changelog(Telegram "${CMAKE_SOURCE_DIR}/changelog.txt" "${CMAKE_CURRENT_BINARY_DIR}/io.github.kotatogram.metainfo.xml")
+     install(TARGETS Telegram RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" BUNDLE DESTINATION "${CMAKE_INSTALL_BINDIR}")
+diff --git a/Telegram/SourceFiles/platform/linux/launcher_linux.cpp b/Telegram/SourceFiles/platform/linux/launcher_linux.cpp
+index ade9a4207e..bf4566cd2c 100644
+--- a/Telegram/SourceFiles/platform/linux/launcher_linux.cpp
++++ b/Telegram/SourceFiles/platform/linux/launcher_linux.cpp
+@@ -106,14 +106,14 @@ bool Launcher::launchUpdater(UpdaterLaunch action) {
+ 	}
+ 
+ 	if (!::Kotato::JsonSettings::GetBool("api_use_env")) {
+-		argumentsList.push("-no-env-api");
++		argumentsList.push_back("-no-env-api");
+ 	}
+ 
+ 	if (::Kotato::JsonSettings::GetBool("api_start_params")) {
+-		argumentsList.push("-api-id");
+-		argumentsList.push(QFile::encodeName(QString::number(::Kotato::JsonSettings::GetInt("api_id"))));
+-		argumentsList.push("-api-hash");
+-		argumentsList.push(QFile::encodeName(::Kotato::JsonSettings::GetString("api_hash")));
++		argumentsList.push_back("-api-id");
++		argumentsList.push_back(std::to_string(::Kotato::JsonSettings::GetInt("api_id")));
++		argumentsList.push_back("-api-hash");
++		argumentsList.push_back(::Kotato::JsonSettings::GetString("api_hash").toStdString());
+ 	}
+ 
+ 	Logs::closeMain();
+diff --git a/Telegram/SourceFiles/platform/linux/tray_linux.cpp b/Telegram/SourceFiles/platform/linux/tray_linux.cpp
+index 8f22ad1b5b..50c611dd33 100644
+--- a/Telegram/SourceFiles/platform/linux/tray_linux.cpp
++++ b/Telegram/SourceFiles/platform/linux/tray_linux.cpp
+@@ -197,7 +197,6 @@ QIcon IconGraphic::trayIcon(
+ 	}
+ 
+ 	QIcon result;
+-	QIcon systemIcon;
+ 	const auto customAppIcon = ::Kotato::JsonSettings::GetInt("custom_app_icon");
+ 	const auto disableTrayCounter = ::Kotato::JsonSettings::GetInt("disable_tray_counter");
+ 
+diff --git a/lib/xdg/io.github.kotatogram.service b/lib/xdg/io.github.kotatogram.service
+new file mode 100644
+index 0000000000..6e0a75e44e
+--- /dev/null
++++ b/lib/xdg/io.github.kotatogram.service
+@@ -0,0 +1,3 @@
++[D-BUS Service]
++Name=io.github.kotatogram
++Exec=@CMAKE_INSTALL_FULL_BINDIR@/kotatogram-desktop
