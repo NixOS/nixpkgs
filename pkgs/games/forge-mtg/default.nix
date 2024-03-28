@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "1.6.57";
+  version = "1.6.58";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-pxnnqLfyblbIgIRZZrx8Y8K43zUv9mu7PzZ7zltpEUQ=";
+    hash = "sha256-6SjCCXvSxkEE+LgLJ97rkXLUtSYBCagNObfbxAwOiBU=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -27,7 +27,7 @@ maven.buildMavenPackage {
 
   # Tests need a running Xorg.
   mvnParameters = "-DskipTests";
-  mvnHash = "sha256-QK9g0tG75lIhEtf4jW03N32YbD9Fe5iI0JTuqmCTtnE=";
+  mvnHash = "sha256-XBjOG0jSiKGMKwbUYmYhM0AuForccZhqpNG6w+5T4S8=";
 
   nativeBuildInputs = [ makeWrapper ];
 
