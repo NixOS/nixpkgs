@@ -4,8 +4,19 @@
 , pygobject3
 , pythonOlder
 , setuptools
+, useGtk3 ? false
+, useLibsoup2 ? false
 }:
 
+let
+  config = lib.optionals useGtk3 [
+    "Gtk3"
+    "Gdk3"
+    "GtkSource4"
+  ] ++ lib.optionals useLibsoup2 [
+    "Soup2"
+  ];
+in
 buildPythonPackage rec {
   pname = "pygobject-stubs";
   version = "2.10.0";
@@ -26,6 +37,11 @@ buildPythonPackage rec {
 
   # This package does not include any tests.
   doCheck = false;
+
+  env = lib.optionalAttrs (config != []) {
+    # Choose which version of libraries to use since only one version can be exported under the name.
+    PYGOBJECT_STUB_CONFIG = lib.concatStringsSep "," config;
+  };
 
   meta = with lib; {
     description = "PEP 561 Typing Stubs for PyGObject";
