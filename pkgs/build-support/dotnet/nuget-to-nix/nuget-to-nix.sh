@@ -33,9 +33,13 @@ for index in "${sources[@]}"; do
 
     remote_sources+=($index)
 
-    base_addresses[$index]=$(
+    base_address=$(
     curl --compressed --netrc -fsL "$index" | \
       jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')
+    if [[ ! "$base_address" == */ ]]; then
+      base_address="$base_address/"
+    fi
+    base_addresses[$index]="$base_address"
 done
 
 echo "{ fetchNuGet }: ["
