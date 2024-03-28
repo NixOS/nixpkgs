@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nezha-agent,
+  testers,
 }:
 buildGoModule rec {
   pname = "nezha-agent";
@@ -31,6 +33,13 @@ buildGoModule rec {
     done
     runHook postCheck
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = nezha-agent;
+      command = "${nezha-agent}/bin/agent -v";
+    };
+  };
 
   meta = with lib; {
     description = "Agent of Nezha Monitoring";
