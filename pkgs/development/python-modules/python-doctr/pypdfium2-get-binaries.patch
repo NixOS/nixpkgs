@@ -1,0 +1,106 @@
+diff --git a/setupsrc/pypdfium2_setup/packaging_base.py b/setupsrc/pypdfium2_setup/packaging_base.py
+index 8fa4a70..1df4ec6 100644
+--- a/setupsrc/pypdfium2_setup/packaging_base.py
++++ b/setupsrc/pypdfium2_setup/packaging_base.py
+@@ -115,6 +115,8 @@ LibnameForSystem = {
+ BinaryPlatforms = list(ReleaseNames.keys())
+ BinarySystems   = list(LibnameForSystem.keys())
+ 
++NixHardcodedVersion = 6124
++
+ 
+ class PdfiumVer:
+     
+@@ -124,40 +126,20 @@ class PdfiumVer:
+     @staticmethod
+     @functools.lru_cache(maxsize=1)
+     def get_latest():
+-        git_ls = run_cmd(["git", "ls-remote", f"{ReleaseRepo}.git"], cwd=None, capture=True)
+-        tag = git_ls.split("\t")[-1]
+-        return int( tag.split("/")[-1] )
++        return NixHardcodedVersion
+     
+     @classmethod
+     def to_full(cls, v_short):
+-        
+-        # FIXME The ls-remote call is fairly expensive. While cached in memory for a process lifetime, it can cause a significant slowdown for consecutive process runs.
+-        # There may be multiple ways to improve this, like adding some disk cache to ensure it would only be called once for a whole session, or maybe adding a second strategy that would parse the pdfium-binaries VERSION file, and use the chromium refs only for sourcebuild.
+-        
+-        v_short = int(v_short)
+-        rc = cls._refs_cache
+-        
+-        if rc["lines"] is None:
+-            print(f"Fetching chromium refs ...", file=sys.stderr)
+-            ChromiumURL = "https://chromium.googlesource.com/chromium/src"
+-            rc["lines"] = run_cmd(["git", "ls-remote", "--sort", "-version:refname", "--tags", ChromiumURL, '*.*.*.0'], cwd=None, capture=True).split("\n")
+-        
+-        if rc["cursor"] is None or rc["cursor"] > v_short:
+-            for i, line in enumerate(rc["lines"]):
+-                ref = line.split("\t")[-1].rsplit("/", maxsplit=1)[-1]
+-                full_ver = cls.scheme(*[int(v) for v in ref.split(".")])
+-                rc["dict"][full_ver.build] = full_ver
+-                if full_ver.build == v_short:
+-                    rc["cursor"] = full_ver.build
+-                    rc["lines"] = rc["lines"][i+1:]
+-                    break
+-        
+-        full_ver = rc["dict"][v_short]
+-        print(f"Resolved {v_short} -> {full_ver}", file=sys.stderr)
+-        
++        # can be found using 
++        # git ls-remote --sort -version:refname --tags https://chromium.googlesource.com/chromium/src '*.*.*.0' | awk -F '/' '{print $NF}' | grep $NixHardcodedVersion
++        # where the minor shoud match the NixHardcodedVersion
++        # after which a dict is returned
++        PdfiumVerTuple = namedtuple("PdfiumVerTuple", ["build", "major", "minor", "patch"])
++
++        # Simulate a return value for full_ver
++        full_ver = PdfiumVerTuple(build=121, major=0, minor=NixHardcodedVersion, patch=0)
+         return full_ver
+ 
+-
+ def read_json(fp):
+     with open(fp, "r") as buf:
+         return json.load(buf)
+diff --git a/setupsrc/pypdfium2_setup/update_pdfium.py b/setupsrc/pypdfium2_setup/update_pdfium.py
+index f4d1b3f..2fdb3de 100755
+--- a/setupsrc/pypdfium2_setup/update_pdfium.py
++++ b/setupsrc/pypdfium2_setup/update_pdfium.py
+@@ -36,17 +36,8 @@ def _get_package(pl_name, version, robust, use_v8):
+     fn = prefix + f"{ReleaseNames[pl_name]}.tgz"
+     fu = f"{ReleaseURL}{version}/{fn}"
+     fp = pl_dir / fn
+-    print(f"'{fu}' -> '{fp}'")
+-    
+-    try:
+-        url_request.urlretrieve(fu, fp)
+-    except Exception:
+-        if robust:
+-            traceback.print_exc()
+-            return None, None
+-        else:
+-            raise
+     
++    print("OVERRIDE - using nix supplied package instead of downloading")
+     return pl_name, fp
+ 
+ 
+@@ -69,7 +60,8 @@ def extract(archives, version, flags):
+     
+     for pl_name, arc_path in archives.items():
+         
+-        with tarfile.open(arc_path) as tar:
++        arc_path_override = os.path.basename(arc_path)
++        with tarfile.open(arc_path_override) as tar:
+             pl_dir = DataDir/pl_name
+             system = plat_to_system(pl_name)
+             libname = LibnameForSystem[system]
+@@ -77,9 +69,6 @@ def extract(archives, version, flags):
+             tar_extract_file(tar, f"{tar_libdir}/{libname}", pl_dir/libname)
+             write_pdfium_info(pl_dir, version, origin="pdfium-binaries", flags=flags)
+         
+-        arc_path.unlink()
+-
+-
+ BinaryPlatforms = list(ReleaseNames.keys())
+ 
+ def main(platforms, version=None, robust=False, max_workers=None, use_v8=False):
