@@ -856,6 +856,22 @@ let
         };
       };
 
+      cameron.vscode-pytest = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-pytest";
+          publisher = "Cameron";
+          version = "0.1.1";
+          sha256 = "sha256-YU37a0Q+IXusXgwf9doxXLlYiyzkizbPjjdCZFxeDaA=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension that adds IntelliSense support for pytest fixtures";
+          changelog = "https://github.com/cameronmaske/pytest-vscode/blob/master/CHANGELOG.md";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Cameron.vscode-pytest";
+          license = lib.licenses.unlicense;
+          maintainers = [ lib.maintainers.rhoriguchi ];
+        };
+      };
+
       christian-kohler.npm-intellisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "npm-intellisense";
@@ -4725,6 +4741,22 @@ let
           homepage = "https://github.com/yzhang-gh/vscode-markdown";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.raroh73 ];
+        };
+      };
+
+      zainchen.json = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "json";
+          publisher = "ZainChen";
+          version = "2.0.2";
+          sha256 = "sha256-nC3Q8KuCtn/jg1j/NaAxWGvnKe/ykrPm2PUjfsJz8aI=";
+        };
+        meta = {
+          description = "This extension adds json support for Visual Studio Code";
+          changelog = "https://marketplace.visualstudio.com/items/ZainChen.json/changelog";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ZainChen.json";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.rhoriguchi ];
         };
       };
 
