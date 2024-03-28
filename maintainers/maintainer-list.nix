@@ -2453,6 +2453,12 @@
     github = "benwis";
     githubId = 6953353;
   };
+  berber = {
+    name = "Berthold Blatt Lorke";
+    email = "berber@zmberber.com";
+    github = "zmberber";
+    githubId = 29400525;
+  };
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
