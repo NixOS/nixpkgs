@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libiscsi";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libiscsi";
     rev = version;
-    sha256 = "0ajrkkg5awmi8m4b3mha7h07ylg18k252qprvk1sgq0qbyd66zy7";
+    sha256 = "sha256-idiK9JowKhGAk5F5qJ57X14Q2Y0TbIKRI02onzLPkas=";
   };
 
   postPatch = ''
