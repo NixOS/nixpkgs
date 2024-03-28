@@ -8,13 +8,14 @@ let
 
 in stdenvNoCC.mkDerivation rec {
   pname = "mplab-x-unwrapped";
-  version = "6.20";
+  version = "6.15";
 
   src = fetchurl {
     url =
       "https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/SoftwareTools/MPLABX-v${version}-linux-installer.tar";
-    hash = "sha256-zs77CsuKFUCGYwUiv4ZZLm8HZLskxm3zP8HoGMUHdWA=";
-
+    # hash = "sha256-zs77CsuKFUCGYwUiv4ZZLm8HZLskxm3zP8HoGMUHdWA=";
+    # hash = "sha256-6628a28ee082e1c39f27931d30367e2f2500cea2090cb4cdf779caa19b694c61";
+    hash = "md5-0qbJdKBZezdzTtoOeVKumA==";
     # The Microchip server requires this Referer to allow the download.
     curlOptsList = [
       "--referer"
@@ -49,7 +50,7 @@ in stdenvNoCC.mkDerivation rec {
       --setenv HOME /tmp/home \
       -- /bin/fakeroot /installer --mode unattended
 
-    rm -r chroot/opt/microchip/mplabx/v6.20/sys
+    # rm -r chroot/opt/microchip/mplabx/v${version}/sys
 
     runHook postBuild
   '';
@@ -74,7 +75,7 @@ in stdenvNoCC.mkDerivation rec {
     description =
       "An expandable, highly configurable software program that incorporates powerful tools to help you discover, configure, develop, debug and qualify embedded designs for most of Microchip's microcontrollers and digital signal controllers.";
     license = licenses.unfree;
-    maintainers = with maintainers; [ remexre ];
+    maintainers = with maintainers; [ remexre nyadiia ];
     platforms = [ "x86_64-linux" ];
   };
 }

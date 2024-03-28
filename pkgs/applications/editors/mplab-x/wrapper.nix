@@ -56,8 +56,8 @@ let
       # Chroot into the new rootfs and launch the IDE.
       export LD_LIBRARY_PATH="/lib''${LD_LIBRARY_PATH:+:}''${LD_LIBRARY_PATH:-}"
       chroot "$rt/newroot" execline-cd "$(pwd)" \
-        ${mplab-x-unwrapped}/opt/microchip/mplabx/v6.20/mplab_platform/bin/mplab_ide \
-        --jdkhome ${jdk8}
+        ${mplab-x-unwrapped}/opt/microchip/mplabx/v${mplab-x-unwrapped.version}/mplab_platform/bin/mplab_ide \
+        # --jdkhome ${jdk8}
     '';
 
     inherit (mplab-x-unwrapped) meta;
