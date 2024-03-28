@@ -127,6 +127,8 @@ let
 
     inherit patches;
 
+    __darwinAllowLocalNetworking = true; # for tests
+
     doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
 
     # Some dependencies required for tools/doc/node_modules (and therefore

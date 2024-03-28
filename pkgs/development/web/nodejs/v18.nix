@@ -16,6 +16,8 @@ let
     buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
     python = python3;
   };
+
+  gypPatches = callPackage ./gyp-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
@@ -27,5 +29,5 @@ buildNodejs {
     ./revert-arm64-pointer-auth.patch
     ./node-npm-build-npm-package-logic.patch
     ./trap-handler-backport.patch
-  ];
+  ] ++ gypPatches;
 }
