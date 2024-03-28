@@ -154,6 +154,8 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
   elm-test-rs = callPackage ./packages/elm-test-rs.nix { };
 
+  elm-i18next-gen = callPackage ./packages/elm-i18next-gen.nix { };
+
   elm-test = callPackage ./packages/elm-test.nix { };
 } // (hs96Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (hs810Pkgs self).elmPkgs // (with elmLib; with (hs96Pkgs self).elmPkgs; {
   elm-verify-examples = let
