@@ -2,11 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "simp_le-client";
-  version = "0.17.0";
+  version = "0.20.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m1jynar4calaffp2zdxr5yy9vnhw2qf2hsfxwzfwf8fqb5h7bjb";
+    hash = "sha256-p6+OF8MuAzcdTV4/CvZpjGaOrg7xcNuEddk7yC2sXIE=";
   };
 
   postPatch = ''
@@ -17,12 +18,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
     $out/bin/simp_le --test
+    runHook postCheck
   '';
 
-  propagatedBuildInputs = with python3Packages; [ acme setuptools-scm josepy idna ];
-
-  nativeCheckInputs = with python3Packages; [ mock ];
+  # both setuptools-scm with pkg_resources and mock are runtime dependencies
+  propagatedBuildInputs = with python3Packages; [ acme cryptography setuptools-scm josepy idna mock pyopenssl pytz six ];
 
   meta = with lib; {
     homepage = "https://github.com/zenhack/simp_le";
