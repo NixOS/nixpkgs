@@ -25,6 +25,7 @@
 , "polls": "agpl3Plus"
 , "previewgenerator": "agpl3Plus"
 , "qownnotesapi": "agpl3Plus"
+, "recognize": "agpl3Only"
 , "registration": "agpl3Plus"
 , "spreed": "agpl3Plus"
 , "tasks": "agpl3Plus"
