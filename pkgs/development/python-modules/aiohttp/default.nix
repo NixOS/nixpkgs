@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , substituteAll
 , llhttp
+, python
 # build_requires
 , cython
 , setuptools
@@ -76,6 +77,11 @@ buildPythonPackage rec {
     aiodns
     brotli
   ];
+
+  postInstall = ''
+    # remove source code file with reference to dev dependencies
+    rm $out/${python.sitePackages}/aiohttp/_cparser.pxd{,.orig}
+  '';
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
