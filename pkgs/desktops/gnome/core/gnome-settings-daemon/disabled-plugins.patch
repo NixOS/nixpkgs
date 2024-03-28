@@ -1,0 +1,11 @@
+--- a/plugins/meson.build
++++ b/plugins/meson.build
+@@ -18,6 +18,6 @@
+     ['wwan', 'Wwan', 'GNOME WWan support'],
+ ]
+
+-disabled_plugins = []
++disabled_plugins = [@disabled@]
+
+ if not enable_smartcard
+     disabled_plugins += ['smartcard']
