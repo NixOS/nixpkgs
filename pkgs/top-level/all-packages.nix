@@ -19196,6 +19196,10 @@ with pkgs;
 
   ko = callPackage ../development/tools/ko { };
 
+  komac = callPackage ../by-name/ko/komac/package.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
+  };
+
   konstraint = callPackage ../development/tools/konstraint { };
 
   krankerl = callPackage ../development/tools/krankerl { };
