@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
 , tcl, which, ps, getconf
+, callPackage
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
 , tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.redis = nixosTests.redis;
+  passthru.modules = callPackage ./modules {};
 
   meta = with lib; {
     homepage = "https://redis.io";
