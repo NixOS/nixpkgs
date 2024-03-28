@@ -17232,6 +17232,9 @@ with pkgs;
 
     noLibc = (self.libc == null);
 
+    shell = runtimeShell;
+    buildPackages = pkgs;
+
     inherit bintools libc;
     inherit (darwin) postLinkSignHook signingUtils;
   } // extraArgs; in self);
