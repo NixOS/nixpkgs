@@ -175,7 +175,7 @@ in
       oci-containers.containers = lib.mkMerge [
         (mkIf cfg.webDriverSupport {
           changedetection-io-webdriver = {
-            image = "selenium/standalone-chrome";
+            image = "seleniarm/standalone-chrome";
             environment = {
               VNC_NO_PASSWORD = "1";
               SCREEN_WIDTH = "1920";
