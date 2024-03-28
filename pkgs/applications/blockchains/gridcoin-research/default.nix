@@ -1,23 +1,23 @@
-{ fetchFromGitHub
-, stdenv
-, makeDesktopItem
-, lib
-, openssl
-, boost
-, curl
-, libevent
-, libzip
-, qrencode
-, qtbase
-, qttools
-, wrapQtAppsHook
-, autoreconfHook
-, pkg-config
-, libtool
-, miniupnpc
-, hexdump
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  cmake,
+  pkg-config,
+  boost,
+  curl,
+  libzip,
+  miniupnpc,
+  openssl,
+  qrencode,
+  qtbase,
+  qttools,
+  secp256k1,
+  withGui ? true,
+  withUpnp ? false,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gridcoin-research";
   version = "5.4.7.0";
@@ -30,33 +30,42 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    autoPatchelfHook
+    cmake
     pkg-config
-    wrapQtAppsHook
-    autoreconfHook
-    libtool
-    hexdump
-  ];
+  ] ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [
-    qttools
-    qtbase
-    qrencode
-    libevent
-    libzip
-    openssl
-    boost
-    miniupnpc
-    curl
-  ];
+  buildInputs =
+    [
+      boost
+      curl
+      libzip
+      openssl
+      secp256k1
+    ]
+    ++ lib.optionals withGui [
+      qrencode
+      qtbase
+      qttools
+    ]
+    ++ lib.optionals withUpnp [ miniupnpc ];
 
-  configureFlags = [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-    "--with-qrencode"
-    "--with-boost-libdir=${boost.out}/lib"
-  ];
+  cmakeFlags =
+    [ "-DENABLE_TESTS=OFF" ]
+    ++ lib.optionals (!withGui) [
+      "-DENABLE_GUI=OFF"
+      "-DENABLE_QRENCODE=OFF"
+    ]
+    ++ lib.optionals withGui [
+      "-DENABLE_GUI=ON"
+      "-DENABLE_QRENCODE=ON"
+    ]
+    ++ lib.optionals withUpnp [
+      "-DENABLE_UPNP=ON"
+      "-DDEFAULT_UPNP=ON"
+    ];
 
-  enableParallelBuilding = true;
+  patches = [ ./0001-fix-install-systemd.patch ];
 
   meta = with lib; {
     description = "A POS-based cryptocurrency that rewards users for participating on the BOINC network";
