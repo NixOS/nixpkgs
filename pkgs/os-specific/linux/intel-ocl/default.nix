@@ -1,69 +1,37 @@
-{ lib, stdenv, fetchzip, rpmextract, ncurses5, numactl, zlib }:
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, ocl-icd, hwloc, zlib, mkl, intel-oneapi-compiler }:
 
 stdenv.mkDerivation rec {
   pname = "intel-ocl";
-  version = "5.0-63503";
+  version = "2023.1.0";
 
-  src = fetchzip {
-    # https://github.com/NixOS/nixpkgs/issues/166886
-    urls = [
-      "https://registrationcenter-download.intel.com/akdlm/irc_nas/11396/SRB5.0_linux64.zip"
-      "http://registrationcenter-download.intel.com/akdlm/irc_nas/11396/SRB5.0_linux64.zip"
-      "https://web.archive.org/web/20190526190814/http://registrationcenter-download.intel.com/akdlm/irc_nas/11396/SRB5.0_linux64.zip"
-    ];
-    sha256 = "0qbp63l74s0i80ysh9ya8x7r79xkddbbz4378nms9i7a0kprg9p2";
-    stripRoot = false;
+  # Refer https://aur.archlinux.org/packages/intel-cpu-runtime
+  src = fetchurl {
+    url = "https://apt.repos.intel.com/oneapi/pool/main/intel-oneapi-runtime-opencl-2023.1.0-46305_amd64.deb";
+    hash = "sha256-/nR9WIgjwlXxKZcAKfNuP082Jz25a8zlf5SQwDEBnYg=";
   };
 
-  buildInputs = [ rpmextract ];
-
-  sourceRoot = ".";
-
-  libPath = lib.makeLibraryPath [
-    stdenv.cc.cc.lib
-    ncurses5
-    numactl
-    zlib
+  buildInputs = [
+    dpkg
+    autoPatchelfHook
   ];
 
-  postUnpack = ''
-    # Extract the RPMs contained within the source ZIP.
-    rpmextract source/intel-opencl-r${version}.x86_64.rpm
-    rpmextract source/intel-opencl-cpu-r${version}.x86_64.rpm
-  '';
+  nativeBuildInputs = [
+    stdenv.cc.cc.lib
+    ocl-icd
+    hwloc
+    zlib
+    mkl
+    intel-oneapi-compiler
+  ];
 
-  patchPhase = ''
-    runHook prePatch
-
-    # Remove libOpenCL.so, since we use ocl-icd's libOpenCL.so instead and this would cause a clash.
-    rm opt/intel/opencl/libOpenCL.so*
-
-    # Patch shared libraries.
-    for lib in opt/intel/opencl/*.so; do
-      patchelf --set-rpath "${libPath}:$out/lib/intel-ocl" $lib || true
-    done
-
-    runHook postPatch
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    # Create ICD file, which just contains the path of the corresponding shared library.
-    echo "$out/lib/intel-ocl/libintelocl.so" > intel.icd
-
-    runHook postBuild
-  '';
-
+  # replace opt/intel/oneapi/lib/etc/intel64.icd by a new icd file
+  # ocl-icd will provide lib/libOpenCL.so*
   installPhase = ''
-    runHook preInstall
-
-    install -D -m 0755 opt/intel/opencl/*.so* -t $out/lib/intel-ocl
-    install -D -m 0644 opt/intel/opencl/*.{o,rtl,bin} -t $out/lib/intel-ocl
-    install -D -m 0644 opt/intel/opencl/{LICENSE,NOTICES} -t $out/share/doc/intel-ocl
-    install -D -m 0644 intel.icd -t $out/etc/OpenCL/vendors
-
-    runHook postInstall
+    install -d $out/lib
+    cp -r opt/intel/oneapi/lib/intel64 -t $out/lib
+    install -Dm644 opt/intel/oneapi/lib/clbltfnshared.rtl -t $out/lib
+    install -d $out/etc/OpenCL/vendors
+    echo "$out/lib/intel64/libintelocl.so" > $out/etc/OpenCL/vendors/intel64.icd
   '';
 
   dontStrip = true;
