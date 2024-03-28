@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl-sdr";
-  version = "0.8.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "librtlsdr";
     repo = "librtlsdr";
     rev = "v${version}";
-    hash = "sha256-s03h+3EfC5c7yRYBM6aCRWtmstwRJWuBywuyVt+k/bk=";
+    hash = "sha256-FaFUFpuvwA9LliuiM43X8NMQx5lbwkoLuLxx97G/LOo=";
   };
 
   postPatch = ''
