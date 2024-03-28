@@ -13,6 +13,7 @@
   AddressBook                      = { inherit Carbon Cocoa CoreFoundation Foundation; };
   AppKit                           = { inherit ApplicationServices CloudKit CoreData CoreFoundation CoreGraphics CoreImage CoreLocation Foundation IOKit Metal OpenGL QuartzCore; };
   AppTrackingTransparency          = { inherit Foundation; };
+  AppleArchive                     = { inherit Compression System; };
   AppleScriptKit                   = {};
   AppleScriptObjC                  = { inherit Foundation; };
   ApplicationServices              = { inherit ColorSync CoreFoundation CoreGraphics CoreServices CoreText ImageIO; };
@@ -34,6 +35,7 @@
   Collaboration                    = { inherit AppKit CoreServices Foundation; };
   ColorSync                        = { inherit CoreFoundation; };
   Combine                          = {};
+  Compression                      = { inherit Foundation; };
   Contacts                         = { inherit CoreFoundation CoreGraphics Foundation IOKit; };
   ContactsUI                       = { inherit AppKit; };
   CoreAudio                        = { inherit CoreAudioTypes CoreFoundation; };
@@ -59,6 +61,7 @@
   CoreText                         = { inherit CoreFoundation CoreGraphics; };
   CoreVideo                        = { inherit ApplicationServices CoreFoundation CoreGraphics IOSurface Metal OpenGL; };
   CoreWLAN                         = { inherit Foundation IOKit; };
+  CreateML                         = { inherit AVFoundation Combine CoreAudio CoreFoundation CoreGraphics CoreImage CoreML CoreMedia CoreVideo Foundation IOKit ImageIO Metal MetalPerformanceShaders NaturalLanguage VideoToolbox Vision simd; };
   CryptoKit                        = { inherit CoreFoundation CoreGraphics Foundation IOKit LocalAuthentication Security; };
   CryptoTokenKit                   = { inherit CoreFoundation CoreGraphics Foundation IOKit Security; };
   DVDPlayback                      = { inherit ApplicationServices CoreFoundation Security; };
@@ -192,5 +195,6 @@
   WebKit                           = { inherit AppKit CloudKit CoreData CoreFoundation CoreGraphics CoreImage CoreLocation Foundation IOKit JavaScriptCore Metal OpenGL QuartzCore; };
   WidgetKit                        = { inherit Combine CoreFoundation CoreGraphics CoreVideo Foundation IOKit Intents Metal SwiftUI; };
   iTunesLibrary                    = { inherit Foundation; };
+  simd                             = {};
   vmnet                            = {};
 }
