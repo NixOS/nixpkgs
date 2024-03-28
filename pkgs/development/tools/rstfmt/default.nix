@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rstfmt";
-  version = "0.0.13";
+  version = "0.0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dzhu";
     repo = "rstfmt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SJRA14CfoT8XMt3hMB7cLdmuLwsJnBSwhKkD1pJvQCI=";
+    hash = "sha256-zvmKgNzfxyWYHoaD+q84I48r1Mpp4kU4oIGAwMSRRlA=";
   };
 
   build-system = with python3.pkgs; [
