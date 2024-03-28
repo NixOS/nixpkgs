@@ -213,8 +213,7 @@ in
           preStart = ''
             ${pkg}/opt/healthchecks/manage.py collectstatic --no-input
             ${pkg}/opt/healthchecks/manage.py remove_stale_contenttypes --no-input
-            ${pkg}/opt/healthchecks/manage.py compress
-          '';
+          '' + lib.optionalString (cfg.settings.DEBUG != "True") "${pkg}/opt/healthchecks/manage.py compress";
 
           serviceConfig = commonConfig // {
             Restart = "always";
