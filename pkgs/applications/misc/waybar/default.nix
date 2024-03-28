@@ -63,6 +63,7 @@
 , upowerSupport ? true
 , wireplumberSupport ? true
 , withMediaPlayer ? mprisSupport && false
+, nix-update-script
 }:
 
 let
@@ -188,6 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/waybar-mediaplayer.py \
       --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/alexays/waybar";
