@@ -1,0 +1,44 @@
+diff --git a/samples/hellovr_opengl/hellovr_opengl_main.cpp b/samples/hellovr_opengl/hellovr_opengl_main.cpp
+index 3e276ba..088593d 100644
+--- a/hellovr_opengl/hellovr_opengl_main.cpp
++++ b/hellovr_opengl/hellovr_opengl_main.cpp
+@@ -534,7 +534,7 @@ bool CMainApplication::BInit()
+ 		return false;
+ 	}
+ 
+-	vr::VRInput()->SetActionManifestPath( Path_MakeAbsolute( "../hellovr_actions.json", Path_StripFilename( Path_GetExecutablePath() ) ).c_str() );
++	vr::VRInput()->SetActionManifestPath( Path_MakeAbsolute( "../share/openvr/hellovr_actions.json", Path_StripFilename( Path_GetExecutablePath() ) ).c_str() );
+ 
+ 	vr::VRInput()->GetActionHandle( "/actions/demo/in/HideCubes", &m_actionHideCubes );
+ 	vr::VRInput()->GetActionHandle( "/actions/demo/in/HideThisController", &m_actionHideThisController);
+@@ -1101,7 +1101,7 @@ bool CMainApplication::CreateAllShaders()
+ bool CMainApplication::SetupTexturemaps()
+ {
+ 	std::string sExecutableDirectory = Path_StripFilename( Path_GetExecutablePath() );
+-	std::string strFullPath = Path_MakeAbsolute( "../cube_texture.png", sExecutableDirectory );
++	std::string strFullPath = Path_MakeAbsolute( "../share/openvr/cube_texture.png", sExecutableDirectory );
+ 	
+ 	std::vector<unsigned char> imageRGBA;
+ 	unsigned nImageWidth, nImageHeight;
+diff --git a/samples/hellovr_vulkan/hellovr_vulkan_main.cpp b/samples/hellovr_vulkan/hellovr_vulkan_main.cpp
+index 07aa245..8e10d73 100644
+--- a/hellovr_vulkan/hellovr_vulkan_main.cpp
++++ b/hellovr_vulkan/hellovr_vulkan_main.cpp
+@@ -1802,7 +1802,7 @@ bool CMainApplication::CreateAllShaders()
+ 		for ( int32_t nStage = 0; nStage <= 1; nStage++ )
+ 		{
+ 			char shaderFileName[ 1024 ];
+-			sprintf( shaderFileName, "../shaders/%s_%s.spv", pShaderNames[ nShader ], pStageNames[ nStage ] );
++			sprintf( shaderFileName, "../share/openvr/shaders/%s_%s.spv", pShaderNames[ nShader ], pStageNames[ nStage ] );
+ 			std::string shaderPath =  Path_MakeAbsolute( shaderFileName, sExecutableDirectory );
+ 
+ 			FILE *fp = fopen( shaderPath.c_str(), "rb" );
+@@ -2135,7 +2135,7 @@ void CMainApplication::CreateAllDescriptorSets()
+ bool CMainApplication::SetupTexturemaps()
+ {
+ 	std::string sExecutableDirectory = Path_StripFilename( Path_GetExecutablePath() );
+-	std::string strFullPath = Path_MakeAbsolute( "../cube_texture.png", sExecutableDirectory );
++	std::string strFullPath = Path_MakeAbsolute( "../share/openvr/cube_texture.png", sExecutableDirectory );
+ 	
+ 	std::vector< unsigned char > imageRGBA;
+ 	unsigned nImageWidth, nImageHeight;
