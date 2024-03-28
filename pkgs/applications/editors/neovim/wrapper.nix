@@ -8,6 +8,7 @@
 , vimUtils
 , perl
 , lndir
+, vimPlugins
 }:
 
 neovim-unwrapped:
@@ -38,6 +39,7 @@ let
     , luaRcContent ? ""
     # entry to load in packpath
     , packpathDirs
+    , treesitterParsers ? [ ]
     , ...
   }:
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
@@ -153,6 +155,17 @@ let
         fi
         rm "${placeholder "out"}/bin/nvim-wrapper"
       '')
+      + ''
+        mkdir -p $out/lib/nvim/parser
+      '' + (lib.concatMapStrings
+       (language: ''
+         ln -fs \
+           ${vimPlugins.nvim-treesitter-parsers.${language}}/parser/${language}.so \
+           $out/lib/nvim/parser/${language}.so
+       '')
+       (treesitterParsers
+       # https://github.com/NixOS/nixpkgs/pull/227159
+       ++ [ "c" "lua" "vim" "vimdoc" "query" ]))
       + ''
         rm $out/bin/nvim
         touch $out/rplugin.vim
