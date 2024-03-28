@@ -35864,6 +35864,8 @@ with pkgs;
 
   wllvm = callPackage  ../development/tools/wllvm { };
 
+  wljoywake = callPackage ../tools/games/wljoywake { };
+
   wmname = callPackage ../applications/misc/wmname { };
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
