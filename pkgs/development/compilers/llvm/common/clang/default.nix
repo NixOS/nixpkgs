@@ -52,9 +52,9 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
-      ../../common/clang/add-nostdlibinc-flag.patch
+      ./add-nostdlibinc-flag.patch
       (substituteAll {
-        src = ../../common/clang/clang-at-least-16-LLVMgold-path.patch;
+        src = ./clang-at-least-16-LLVMgold-path.patch;
        libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
