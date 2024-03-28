@@ -1,8 +1,33 @@
 { config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, specialArgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    cleanSourceFilter
+    concatMapStringsSep
+    evalModules
+    filter
+    functionArgs
+    hasSuffix
+    isAttrs
+    isDerivation
+    isFunction
+    isPath
+    literalExpression
+    mapAttrs
+    mdDoc
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionalAttrs
+    optionals
+    partition
+    removePrefix
+    types
+    warn
+    ;
 
   cfg = config.documentation;
   allOpts = options;
@@ -13,7 +38,7 @@ let
       instance = f (mapAttrs (n: _: abort "evaluating ${n} for `meta` failed") (functionArgs f));
     in
       cfg.nixos.options.splitBuild
-        && builtins.isPath m
+        && isPath m
         && isFunction f
         && instance ? options
         && instance.meta.buildDocsInSandbox or true;
@@ -51,12 +76,11 @@ let
           (name: value:
             let
               wholeName = "${namePrefix}.${name}";
-              guard = lib.warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
+              guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
             in if isAttrs value then
               scrubDerivations wholeName value
               // optionalAttrs (isDerivation value) {
                 outPath = guard "\${${wholeName}}";
-                drvPath = guard drvPath;
               }
             else value
           )
@@ -176,7 +200,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Whether to install documentation of packages from
           {option}`environment.systemPackages` into the generated system path.
 
@@ -188,7 +212,7 @@ in
       man.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Whether to install manual pages.
           This also includes `man` outputs.
         '';
@@ -209,7 +233,7 @@ in
       info.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Whether to install info pages and the {command}`info` command.
           This also includes "info" outputs.
         '';
@@ -218,7 +242,7 @@ in
       doc.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Whether to install documentation distributed in packages' `/share/doc`.
           Usually plain text and/or HTML.
           This also includes "doc" outputs.
@@ -242,7 +266,7 @@ in
       nixos.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Whether to install NixOS's own documentation.
 
           - This includes man pages like
@@ -256,7 +280,7 @@ in
       nixos.extraModules = mkOption {
         type = types.listOf types.raw;
         default = [];
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Modules for which to show options even when not imported.
         '';
       };
@@ -264,7 +288,7 @@ in
       nixos.options.splitBuild = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Whether to split the option docs build into a cacheable and an uncacheable part.
           Splitting the build can substantially decrease the amount of time needed to build
           the manual, but some user modules may be incompatible with this splitting.
@@ -274,7 +298,7 @@ in
       nixos.options.warningsAreErrors = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Treat warning emitted during the option documentation build (eg for missing option
           descriptions) as errors.
         '';
@@ -283,7 +307,7 @@ in
       nixos.includeAllModules = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Whether the generated NixOS's documentation should include documentation for all
           the options from all the NixOS modules included in the current
           `configuration.nix`. Disabling this will make the manual
@@ -294,7 +318,7 @@ in
       nixos.extraModuleSources = mkOption {
         type = types.listOf (types.either types.path types.str);
         default = [ ];
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
         '';
