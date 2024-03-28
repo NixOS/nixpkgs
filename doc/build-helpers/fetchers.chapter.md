@@ -14,7 +14,6 @@ Nixpkgs provides its own fetchers, which work differently:
   Derivations produced by Nixpkgs fetchers will use any configured binary cache transparently.
 
 This significantly reduces the time needed to evaluate code in Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
-
 For these reasons, the Nix built-in fetchers are not allowed in Nixpkgs code.
 
 The following table summarises the differences:
