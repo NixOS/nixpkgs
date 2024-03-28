@@ -20105,6 +20105,8 @@ with pkgs;
 
   xc3sprog = callPackage ../development/embedded/xc3sprog { };
 
+  bootcommander = callPackage ../development/embedded/bootcommander {};
+
   xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
 
   xcode-install = callPackage ../development/tools/xcode-install { };
@@ -22972,6 +22974,8 @@ with pkgs;
   libosmo-sccp = callPackage ../servers/osmocom/libosmo-sccp { };
 
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
+
+  libopenblt = callPackage ../development/libraries/libopenblt {};
 
   libotr = callPackage ../development/libraries/libotr { };
 
