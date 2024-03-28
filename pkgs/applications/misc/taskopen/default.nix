@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, which, perl, perlPackages }:
-
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  darwin,
+  nim,
+  git,
+}:
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "taskopen";
-  version = "1.1.5";
+
+  version = "v2.0.1";
 
   src = fetchFromGitHub {
-    owner = "ValiValpas";
+    owner = "jschlatow";
     repo = "taskopen";
-    rev = "v${version}";
-    sha256 = "sha256-/xf7Ph2KKiZ5lgLKk95nCgw/z9wIBmuWf3QGaNebgHg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Gy0QS+FCpg5NGSctVspw+tNiBnBufw28PLqKxnaEV7I=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/";
 
   postPatch = ''
     # We don't need a DESTDIR and an empty string results in an absolute path
@@ -17,26 +27,23 @@ stdenv.mkDerivation rec {
     sed 's|$(DESTDIR)/||' -i Makefile
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which ]
-    ++ (with perlPackages; [ JSON perl ]);
+  nativeBuildInputs = [makeWrapper];
+  buildInputs = [nim git];
 
-  installPhase = ''
-    make PREFIX=$out
-    make PREFIX=$out install
+  buildPhase = ''
+    export HOME=$(pwd)
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/taskopen \
-         --set PERL5LIB "$PERL5LIB"
+  installPhase = ''
+    make PREFIX=$out install
   '';
 
   meta = with lib; {
     description = "Script for taking notes and open urls with taskwarrior";
     mainProgram = "taskopen";
-    homepage = "https://github.com/ValiValpas/taskopen";
-    platforms = platforms.linux;
+    homepage = "https://github.com/jschlatow/taskopen";
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.winpat ];
+    maintainers = [maintainers.winpat];
   };
-}
+})
