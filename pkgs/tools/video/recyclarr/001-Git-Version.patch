@@ -1,0 +1,12 @@
+diff --git a/src/Directory.Build.props b/src/Directory.Build.props
+index 8d10c9f..6eb0f42 100644
+--- a/src/Directory.Build.props
++++ b/src/Directory.Build.props
+@@ -7,7 +7,7 @@
+     <DebugType>embedded</DebugType>
+     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+     <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
+-    <!--<DisableGitVersionTask>true</DisableGitVersionTask>-->
++    <DisableGitVersionTask>true</DisableGitVersionTask>
+     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+   </PropertyGroup>

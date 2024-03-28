@@ -1,74 +1,56 @@
 { lib
 , stdenv
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, fixDarwinDylibNames
-, darwin
-, recyclarr
+, writeText
 , git
-, icu
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, recyclarr
 , testers
-, zlib
 }:
 let
-  os =
-    if stdenv.isDarwin
-    then "osx"
-    else "linux";
-
-  arch = {
-    x86_64-linux = "x64";
-    aarch64-linux = "arm64";
-    x86_64-darwin = "x64";
-    aarch64-darwin = "arm64";
-  }."${stdenv.hostPlatform.system}"
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  hash = {
-    x64-linux_hash = "sha256-Skf3wY52B6KnWS8YurAL0b5Sdkvp4YYn3IvHrAKyvK8=";
-    arm64-linux_hash = "sha256-66OCz13eLyAfEC3kYUniqq+QhsHoZNBJieXmmsLG5eM=";
-    x64-osx_hash = "sha256-6cNpfcjwgfxZRlBnZQrZLMPaXDHEXSbS3Z/qcx1Z3HA=";
-    arm64-osx_hash = "sha256-OkM+LgqXOHzyzEWH6D3czH86Sncym9FpfTFaacp2aN0=";
-  }."${arch}-${os}_hash";
-
-  libPath = {
-    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU zlib]}";
-    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu zlib]}";
-  }."${os}";
-
+  nuget-config = writeText "nuget.config" ''
+    <configuration>
+      <packageSources>
+        <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+      </packageSources>
+    </configuration>
+  '';
 in
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "recyclarr";
   version = "6.0.2";
 
-  src = fetchurl {
-    url = "https://github.com/recyclarr/recyclarr/releases/download/v${version}/recyclarr-${os}-${arch}.tar.xz";
-    inherit hash;
+  src = fetchFromGitHub {
+    owner = "recyclarr";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-kDptVN2cRGZI6pKE62IKgQqOKpkw4o18Eb+ySQJqG8k=";
   };
 
-  sourceRoot = ".";
+  projectFile = "src/Recyclarr.sln";
+  nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
-  buildInputs = [ icu zlib ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 recyclarr -t $out/bin
-
-    runHook postInstall
+  prePatch = ''
+    substituteInPlace src/Recyclarr.Cli/Program.cs \
+      --replace 'GitVersionInformation.InformationalVersion' '"${version}-nixpkgs"'
   '';
+  patches = [
+    ./001-Git-Version.patch
+  ];
 
-  postInstall = ''
-    wrapProgram $out/bin/recyclarr \
-      --prefix PATH : ${lib.makeBinPath [git]} \
-      --prefix ${libPath}
-  '';
+  dotnetRestoreFlags = [ "--configfile=${nuget-config}" ];
 
-  dontStrip = true; # stripping messes up dotnet single-file deployment
+  doCheck = false;
+
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-test-sdk = dotnetCorePackages.sdk_7_0;
+
+  executables = [ "recyclarr" ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [git]}"
+  ];
 
   passthru = {
     updateScript = ./update.sh;
@@ -82,8 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://recyclarr.dev/";
     changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ josephst ];
-    mainProgram = "recyclarr";
+    maintainers = with maintainers; [ josephst aldoborrero ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
