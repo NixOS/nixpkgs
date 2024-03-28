@@ -14315,6 +14315,8 @@ with pkgs;
 
   vit = callPackage ../applications/misc/vit { };
 
+  vitables = python3Packages.callPackage ../tools/misc/vitables { };
+
   viu = callPackage ../tools/graphics/viu { };
 
   vix = callPackage ../tools/misc/vix { };
