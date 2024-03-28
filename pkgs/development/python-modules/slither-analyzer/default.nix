@@ -7,7 +7,7 @@
 , packaging
 , prettytable
 , pythonOlder
-, setuptools
+, setuptools-scm
 , solc
 , web3
 , withSolc ? false
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -68,8 +68,14 @@ buildPythonPackage rec {
     "slither.vyper_parsing"
   ];
 
-  # No Python tests
-  doCheck = false;
+  # test if the binary works
+  checkPhase = ''
+    runHook preCheck
+
+    HOME="$TEMP" $out/bin/slither --version
+
+    runHook postCheck
+  '';
 
   passthru.tests = {
     version = testers.testVersion {
