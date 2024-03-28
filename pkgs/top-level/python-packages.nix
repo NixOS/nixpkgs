@@ -6271,6 +6271,8 @@ self: super: with self; {
 
   keyboard = callPackage ../development/python-modules/keyboard { };
 
+  keyframed = callPackage ../development/python-modules/keyframed { };
+
   keyring = callPackage ../development/python-modules/keyring { };
 
   keyring-pass = callPackage ../development/python-modules/keyring-pass { };
@@ -14213,6 +14215,8 @@ self: super: with self; {
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
   sslib = callPackage ../development/python-modules/sslib { };
+
+  stability-sdk = callPackage ../development/python-modules/stability-sdk { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
