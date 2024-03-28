@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-kGCFwpMaLWxLUp8k5H5AnL21KrwohbUYLswLcLqmc3M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     iso4217
     pyserial
     pyserial-asyncio
