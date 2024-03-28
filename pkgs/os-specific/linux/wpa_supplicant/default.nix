@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
+{ lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
 , nixosTests, wpa_supplicant_gui
 , dbusSupport ? !stdenv.hostPlatform.isStatic, dbus
 , withReadline ? true, readline
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix a bug when using two config files
     ./Use-unique-IDs-for-networks-and-credentials.patch
+    # Drop security level to 0 with OpenSSL 3.0 when using TLS 1.0/1.1
+    (fetchpatch {
+            url = "https://w1.fi/cgit/hostap/patch/?id=bc99366f9b960150aa2e369048bbc2218c1d414e";
+            sha256 = "sha256-ESL7OZhVZz+YhDqZSQzRyh8ZX9RmZi2EO8o7aLRODHY=";
+          })
   ] ++ lib.optionals readOnlyModeSSIDs [
     # Allow read-only networks
     ./0001-Implement-read-only-mode-for-ssids.patch
