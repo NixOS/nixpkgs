@@ -7,14 +7,20 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "danhper";
-    repo = pname;
+    repo = "python-i18n";
     rev = "v${version}";
     sha256 = "6FahoHZqaOWYGaT9RqLARCm2kLfUIlYuauB6+0eX7jA=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook pyyaml ];
+  # Replace use of deprecated assertRaisesRegexp
+  postPatch = ''
+    substituteInPlace i18n/tests/loader_tests.py \
+      --replace-fail assertRaisesRegexp assertRaisesRegex
+  '';
 
+  nativeCheckInputs = [ pytestCheckHook pyyaml ];
   pytestFlagsArray = [ "i18n/tests/run_tests.py" ];
+  pythonImportsCheck = [ "i18n" ];
 
   meta = with lib; {
     description = "Easy to use i18n library";
