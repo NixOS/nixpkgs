@@ -220,12 +220,13 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         else
           lib.getLib qt.qtwayland;
       qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
+      qt6Packages = final.pkgs.qt6Packages;
     in
     {
       # An ad hoc replacement for
       # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
       env.rmPatterns = toString [
-        "nsight-systems/*/*/libQt*"
+        "nsight-systems/*/*/libQt6*"
         "nsight-systems/*/*/libstdc*"
         "nsight-systems/*/*/libboost*"
         "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
@@ -233,7 +234,6 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         "nsight-systems/*/*/Mesa"
         "nsight-systems/*/*/python/bin/python"
         "nsight-systems/*/*/libexec"
-        "nsight-systems/*/*/Plugins"
       ];
       postPatch =
         prevAttrs.postPatch or ""
@@ -241,6 +241,8 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
           for path in $rmPatterns ; do
             rm -r "$path"
           done
+        '' + ''
+          patchShebangs nsight-systems
         '';
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ qt.wrapQtAppsHook ];
       buildInputs = prevAttrs.buildInputs ++ [
@@ -264,7 +266,35 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         (qt.qtdeclarative or qt.full)
         (qt.qtsvg or qt.full)
         qtWaylandPlugins
+        qt6Packages.qtpositioning
+        qt6Packages.qtscxml
+        qt6Packages.qttools
+        qt6Packages.qtwebengine
       ];
+
+      postInstall =
+        # 1. Move dependencies of nsys, nsys-ui binaries to bin output
+        # 2. Fix paths in wrapper scripts
+        let inherit (prev.nsight_systems) version;
+          versionString = with lib.versions; "${majorMinor version}.${patch version}";
+        in
+        ''
+          moveToOutput 'nsight-systems/${versionString}/host-linux-*' "''${!outputBin}"
+          moveToOutput 'nsight-systems/${versionString}/target-linux-*' "''${!outputBin}"
+
+          substituteInPlace $bin/bin/nsys $bin/bin/nsys-ui \
+            --replace-fail 'nsight-systems-#VERSION_RSPLIT#' nsight-systems/${versionString}
+
+          for qtlib in $bin/nsight-systems/${versionString}/host-linux-x64/Plugins/*/libq*.so; do
+            qtdir=$(basename $(dirname $qtlib))
+            filename=$(basename $qtlib)
+            for qtpkgdir in ${lib.concatMapStringsSep " " (x: qt6Packages.${x}) ["qtbase" "qtimageformats" "qtsvg" "qtwayland"]}; do
+              if [ -e $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename ]; then
+                ln -snf $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename $qtlib
+              fi
+            done
+          done
+        '';
 
       # Older releases require boost 1.70 deprecated in Nixpkgs
       meta.broken = prevAttrs.meta.broken or false || lib.versionOlder final.cudaVersion "11.8";
