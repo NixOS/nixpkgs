@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     "networkx"
     "openai"
     "packageurl-python"
+    "packaging"
     "pycep-parser"
     "termcolor"
   ];

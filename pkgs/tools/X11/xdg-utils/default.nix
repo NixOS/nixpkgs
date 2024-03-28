@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, fetchpatch, writeText
+{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, writeText
 # docs deps
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
-, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, xdg-user-dirs
+, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
 , perl, perlPackages
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
@@ -212,6 +212,25 @@ let
         "$handler" = true;
       };
     }
+
+    {
+      scripts = [ "bin/xdg-terminal" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = commonDeps ++ [ bash glib.bin which ];
+      fake.external = commonFakes ++ [
+        "gconftool-2"    # GNOME
+        "exo-open"       # XFCE
+        "lxterminal"     # LXQT
+        "qterminal"      # LXQT
+        "terminology"    # Englightenment
+      ];
+      keep = {
+        "$command" = true;
+        "$kreadconfig" = true;
+        "$terminal_exec" = true;
+      };
+      prologue = commonPrologue;
+    }
   ];
 in
 
@@ -231,6 +250,8 @@ stdenv.mkDerivation rec {
     # Allow forcing the use of XDG portals using NIXOS_XDG_OPEN_USE_PORTAL environment variable.
     # Upstream PR: https://github.com/freedesktop/xdg-utils/pull/12
     ./allow-forcing-portal-use.patch
+    #  Enable build of xdg-terminal
+    ./enable-xdg-terminal.patch
   ];
 
   # just needed when built from git

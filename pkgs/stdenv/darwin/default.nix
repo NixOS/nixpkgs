@@ -158,8 +158,16 @@ let
         __stdenvImpureHostDeps = commonImpureHostDeps;
         __extraImpureHostDeps = commonImpureHostDeps;
 
+        # Using the bootstrap tools curl for fetchers allows the stdenv bootstrap to avoid
+        # having a dependency on curl, allowing curl to be updated without triggering a
+        # new stdenv bootstrap on Darwin.
         overrides = self: super: (overrides self super) // {
           fetchurl = thisStdenv.fetchurlBoot;
+          fetchpatch = super.fetchpatch.override { inherit (self) fetchurl; };
+          fetchgit = super.fetchgit.override {
+            git = super.git.override { curl = bootstrapTools; };
+          };
+          fetchzip = super.fetchzip.override { inherit (self) fetchurl; };
         };
       };
 
@@ -415,8 +423,6 @@ in
         buildInputs = old.buildInputs ++ [ self.darwin.CF ];
       });
 
-      curl = super.curlMinimal;
-
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
 
@@ -489,8 +495,9 @@ in
     '';
   })
 
-  # Build sysctl and Python for use by LLVM’s check phase. These must be built in their
-  # own stage, or an infinite recursion results on x86_64-darwin when using the source-based SDK.
+  # Build cctools, Python, and sysctl for use by LLVM’s check phase. They must be built in
+  # their stage to prevent infinite recursions and to make sure the stdenv used to build
+  # LLVM has the newly built cctools instead of the one from the bootstrap tools.
   (prevStage:
     # previous stage1 stdenv:
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
@@ -1027,39 +1034,10 @@ in
         # LLVM dependencies - don’t rebuild them.
         libffi libiconv libxml2 ncurses zlib;
 
-      # These overrides are required to break an infinite recursion. curl depends on Darwin
-      # frameworks, but those frameworks require these dependencies to build, which
-      # depend on curl indirectly.
-      cpio = super.cpio.override {
-        inherit (prevStage) fetchurl;
-      };
-
-      libyaml = super.libyaml.override {
-        inherit (prevStage) fetchFromGitHub;
-      };
-
-      pbzx = super.pbzx.override {
-        inherit (prevStage) fetchFromGitHub;
-      };
-
-      python3Minimal = super.python3Minimal.override {
-        inherit (prevStage) fetchurl;
-      };
-
-      xar = super.xar.override {
-        inherit (prevStage) fetchurl;
-      };
-
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
           # CF dependencies - don’t rebuild them.
           libobjc objc4;
-
-        # rewrite-tbd is also needed to build Darwin frameworks, so it’s built using the
-        # previous stage’s fetchFromGitHub to avoid an infinite recursion (same as above).
-        rewrite-tbd = superDarwin.rewrite-tbd.override {
-          inherit (prevStage) fetchFromGitHub;
-        };
 
         signingUtils = superDarwin.signingUtils.override {
           inherit (selfDarwin) sigtool;
@@ -1075,6 +1053,28 @@ in
           bintools = selfDarwin.binutils-unwrapped;
           libc = selfDarwin.Libsystem;
         };
+
+        # cctools needs to build the LLVM man pages, which requires sphinx. Sphinx
+        # has hatch-vcs as a transitive dependency, which pulls in git (and curl).
+        # Disabling the tests for hatch-vcs allows the stdenv bootstrap to avoid having
+        # any dependency on curl other than the one provided in the bootstrap tools.
+        cctools-llvm = superDarwin.cctools-llvm.override (old: {
+          llvmPackages =
+            let
+              tools = old.llvmPackages.tools.extend (_: superTools: {
+                llvm-manpages = superTools.llvm-manpages.override {
+                  python3Packages = prevStage.python3Packages.overrideScope (_: superPython: {
+                    hatch-vcs = (superPython.hatch-vcs.override {
+                      git = null;
+                      pytestCheckHook = null;
+                    });
+                  });
+                };
+              });
+              inherit (old.llvmPackages) libraries release_version;
+            in
+            { inherit tools libraries release_version; } // tools // libraries;
+        });
       });
 
       llvmPackages = super.llvmPackages // (

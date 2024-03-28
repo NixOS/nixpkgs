@@ -2,7 +2,6 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
-, withLibcrypt? false
 , pkgsBuildBuild
 , libgcc
 }:
@@ -16,7 +15,7 @@ let
 in
 
 (callPackage ./common.nix { inherit stdenv; } {
-  inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
+  inherit withLinuxHeaders withGd profilingLibraries;
   pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 

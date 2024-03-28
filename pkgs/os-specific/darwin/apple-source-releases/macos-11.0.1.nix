@@ -40,7 +40,6 @@ objc4 = applePackage' "objc4" "818.2" "macos-11.0.1" "0m8mk1qd18wqjfn2jsq2lx6fxv
 ppp = applePackage' "ppp" "877.40.2" "macos-11.0.1" "06xznc77j45zzi12m4cmr3jj853qlc8dbmynbg1z6m9qf5phdbgk" {};
 removefile = applePackage' "removefile" "49.40.3" "macos-11.0.1" "0870ihxpmvj8ggaycwlismbgbw9768lz7w6mc9vxf8l6nlc43z4f" {};
 shell_cmds = applePackage' "shell_cmds" "216.40.4" "macos-11.0.1" "0wbysc9lwf1xgl686r3yn95rndcmqlp17zc1ig9gsl5fxyy5bghh" {};
-system_cmds = applePackage' "system_cmds" "880.40.5" "macos-11.0.1" "064yqf84ny0cjpqmzmnhz05faay6axb2r4i6knnyc8n21yiip5dc" {};
 text_cmds = applePackage' "text_cmds" "106" "macos-11.0.1" "17fn35m6i866zjrf8da6cq6crydp6vp4zq0aaab243rv1fx303yy" {};
 top = applePackage' "top" "129" "macos-11.0.1" "0d9pqmv3mwkfcv7c05hfvnvnn4rbsl92plr5hsazp854pshzqw2k" {};
 xnu = applePackage' "xnu" "7195.50.7.100.1" "macos-11.0.1" "11zjmpw11rcc6a0xlbwramra1rsr65s4ypnxwpajgbr2c657lipl" {};

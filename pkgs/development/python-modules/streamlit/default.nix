@@ -18,6 +18,7 @@
 , pympler
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , requests
 , rich
@@ -44,6 +45,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   propagatedBuildInputs = [

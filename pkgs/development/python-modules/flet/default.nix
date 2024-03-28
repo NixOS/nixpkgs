@@ -36,9 +36,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "websockets"
     "cookiecutter"
+    "packaging"
     "watchdog"
+    "websockets"
   ];
 
   propagatedBuildInputs = [

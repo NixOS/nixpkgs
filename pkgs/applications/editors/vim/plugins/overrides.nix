@@ -670,6 +670,9 @@
 
   hardhat-nvim = super.hardhat-nvim.overrideAttrs {
     dependencies = with self; [ overseer-nvim plenary-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "hardhat";
   };
 
   harpoon = super.harpoon.overrideAttrs {

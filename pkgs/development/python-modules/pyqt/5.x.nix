@@ -26,14 +26,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt5";
+  pname = "pyqt5";
   version = "5.15.9";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyQt5";
+    inherit version;
     hash = "sha256-3EHoQBqQ3D4raStBG9VJKrVZrieidCTu1L05FVZOxMA=";
   };
 

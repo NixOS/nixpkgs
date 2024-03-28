@@ -1,7 +1,7 @@
-{ config
-, lib
+{ lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , zlib
 , lzo
 , libtasn1
@@ -57,11 +57,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.3";
+  version = "3.8.4";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-90/FlUsn1Oxt+7Ed6ph4iLWxJCiaNwOvytoO5SD0Fz4=";
+    hash = "sha256-K+pOFUeU8/ABgPoqXFH+iwBax6Mc1YvUTN+n8268Ops=";
   };
 
   outputs = [ "bin" "dev" "out" ]
@@ -73,6 +73,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-ssl-cert-file.patch
+    # Revert https://gitlab.com/gnutls/gnutls/-/merge_requests/1800
+    # dlopen isn't as easy in NixPkgs, as noticed in tests broken by this.
+    # Without getting the libs into RPATH they won't be found.
+    (fetchpatch2 {
+      name = "revert-dlopen-compression.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/8584908d6b679cd4e7676de437117a793e18347c.diff";
+      revert = true;
+      hash = "sha256-r/+Gmwqy0Yc1LHL/PdPLXlErUBC5JxquLzCBAN3LuRM=";
+    })
   ];
 
   # Skip some tests:
@@ -87,6 +96,12 @@ stdenv.mkDerivation rec {
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
   '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
     sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # Adapted from https://gitlab.com/gnutls/gnutls/-/commit/d214cd4570fb1559a20e941bb7ceac7df52e96d3
+    # Can be removed with 3.8.5+.
+    sed -i lib/nettle/backport/rsa-sign-tr.c -e \
+      '/^#include <nettle\/rsa\.h>/i\
+    #define nettle_rsa_compute_root_tr _gnutls_nettle_backport_rsa_compute_root_tr'
   '';
 
   preConfigure = "patchShebangs .";
@@ -112,7 +127,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
-  nativeBuildInputs = [ perl pkg-config texinfo ]
+  nativeBuildInputs = [ perl pkg-config texinfo ] ++ [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
