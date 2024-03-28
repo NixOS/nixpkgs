@@ -8,14 +8,14 @@
 
 buildPythonPackage rec{
   pname = "panflute";
-  version = "2.3.0";
+  version = "2.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zv2d/EjM2XMqU9tXYQcB0igG2jl6ipflzI3AcLVYZco=";
+    hash = "sha256-XxvQKjTvOYLuAl7FtY+zpu7fwx2ZS4rjnY3JkVotjx8=";
   };
 
   propagatedBuildInputs = [
