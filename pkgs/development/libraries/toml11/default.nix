@@ -1,19 +1,32 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml11";
-  version = "3.7.1";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "ToruNiina";
     repo = "toml11";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HnhXBvIjo1JXhp+hUQvjs83t5IBVbNN6o3ZGhB4WESQ=";
+    hash = "sha256-XgpsCv38J9k8Tsq71UdZpuhaVHK3/60IQycs9CeLssA=";
   };
+
+  patches = [
+    # remove the requirement of setting CXX_STANDARD -- see https://github.com/ToruNiina/toml11/issues/241
+    # (couldn't apply the commit that closed that issue because it came right after a cmake refactor,
+    # so revert the commit that introduced the problematic behavior instead)
+    (fetchpatch {
+      name = "remove-cxx-standard-requirement.patch";
+      url = "https://github.com/ToruNiina/toml11/commit/4c4e82866ecd042856b7123a83f80c0ad80a5e13.patch";
+      revert = true;
+      hash = "sha256-G+B4GibUvpSwosKxUa8UtQ6h3wNXAHnZySPkQoXGSTI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
