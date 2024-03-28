@@ -3404,6 +3404,8 @@ self: super: with self; {
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };
 
+  docarray = callPackage ../development/python-modules/docarray { };
+
   docloud = callPackage ../development/python-modules/docloud { };
 
   docstr-coverage = callPackage ../development/python-modules/docstr-coverage { };
