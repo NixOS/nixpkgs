@@ -2021,6 +2021,8 @@ with pkgs;
 
   quich = callPackage ../tools/misc/quich { } ;
 
+  quillcpp = callPackage ../by-name/qu/quillcpp/package.nix { };
+
   rabtap = callPackage ../tools/networking/rabtap { } ;
 
   redfang = callPackage ../tools/networking/redfang { };
