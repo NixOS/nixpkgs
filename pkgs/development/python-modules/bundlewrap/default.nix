@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Easy, Concise and Decentralized Config management with Python";
     mainProgram = "bw";
     license = [ licenses.gpl3 ] ;
-    maintainers = with maintainers; [ wamserma ];
+    maintainers = with maintainers; [ wamserma hexchen ];
   };
 }
