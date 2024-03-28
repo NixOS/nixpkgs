@@ -4,8 +4,9 @@ with lib;
 
 let
   cfg = config.services.syncoid;
+  inherit (config.networking) nftables;
 
-  # Extract local dasaset names (so no datasets containing "@")
+  # Extract local dataset names (so no datasets containing "@")
   localDatasetName = d: optionals (d != null) (
     let m = builtins.match "([^/@]+[^@]*)" d; in
     optionals (m != null) m
@@ -13,72 +14,8 @@ let
 
   # Escape as required by: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
   escapeUnitName = name:
-    lib.concatMapStrings (s: if lib.isList s then "-" else s)
+    concatMapStrings (s: if isList s then "-" else s)
       (builtins.split "[^a-zA-Z0-9_.\\-]+" name);
-
-  # Function to build "zfs allow" commands for the filesystems we've delegated
-  # permissions to. It also checks if the target dataset exists before
-  # delegating permissions, if it doesn't exist we delegate it to the parent
-  # dataset (if it exists). This should solve the case of provisoning new
-  # datasets.
-  buildAllowCommand = permissions: dataset: (
-    "-+${pkgs.writeShellScript "zfs-allow-${dataset}" ''
-      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-
-      # Run a ZFS list on the dataset to check if it exists
-      if ${lib.escapeShellArgs [
-        "/run/booted-system/sw/bin/zfs"
-        "list"
-        dataset
-      ]} 2> /dev/null; then
-        ${lib.escapeShellArgs [
-          "/run/booted-system/sw/bin/zfs"
-          "allow"
-          cfg.user
-          (concatStringsSep "," permissions)
-          dataset
-        ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
-        else
-          ${lib.escapeShellArgs [
-            "/run/booted-system/sw/bin/zfs"
-            "allow"
-            cfg.user
-            (concatStringsSep "," permissions)
-            # Remove the last part of the path
-            (builtins.dirOf dataset)
-          ]}
-      ''}
-      fi
-    ''}"
-  );
-
-  # Function to build "zfs unallow" commands for the filesystems we've
-  # delegated permissions to. Here we unallow both the target but also
-  # on the parent dataset because at this stage we have no way of
-  # knowing if the allow command did execute on the parent dataset or
-  # not in the pre-hook. We can't run the same if in the post hook
-  # since the dataset should have been created at this point.
-  buildUnallowCommand = permissions: dataset: (
-    "-+${pkgs.writeShellScript "zfs-unallow-${dataset}" ''
-      # Here we explicitly use the booted system to guarantee the stable API needed by ZFS
-      ${lib.escapeShellArgs [
-        "/run/booted-system/sw/bin/zfs"
-        "unallow"
-        cfg.user
-        (concatStringsSep "," permissions)
-        dataset
-      ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") (lib.escapeShellArgs [
-        "/run/booted-system/sw/bin/zfs"
-        "unallow"
-        cfg.user
-        (concatStringsSep "," permissions)
-        # Remove the last part of the path
-        (builtins.dirOf dataset)
-      ])}
-    ''}"
-  );
 in
 {
 
@@ -87,7 +24,17 @@ in
   options.services.syncoid = {
     enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
-    package = lib.mkPackageOption pkgs "sanoid" {};
+    package = lib.mkPackageOptionMD pkgs "sanoid" {};
+
+    nftables.enable = mkEnableOption (lib.mdDoc ''
+      maintaining an nftables set of the active syncoid UIDs.
+
+      This can be used like so (assuming `output-net`
+      is being called by the output chain):
+      ```
+      networking.nftables.ruleset = "table inet filter { chain output-net { skuid @nixos-syncoid-uids meta l4proto tcp accept } }";
+      ```
+    '');
 
     interval = mkOption {
       type = types.str;
@@ -101,33 +48,18 @@ in
       '';
     };
 
-    user = mkOption {
-      type = types.str;
-      default = "syncoid";
-      example = "backup";
-      description = lib.mdDoc ''
-        The user for the service. ZFS privilege delegation will be
-        automatically configured for any local pools used by syncoid if this
-        option is set to a user other than root. The user will be given the
-        "hold" and "send" privileges on any pool that has datasets being sent
-        and the "create", "mount", "receive", and "rollback" privileges on
-        any pool that has datasets being received.
-      '';
-    };
-
-    group = mkOption {
-      type = types.str;
-      default = "syncoid";
-      example = "backup";
-      description = lib.mdDoc "The group for the service.";
-    };
-
     sshKey = mkOption {
       type = with types; nullOr (coercedTo path toString str);
       default = null;
       description = lib.mdDoc ''
-        SSH private key file to use to login to the remote system. Can be
-        overridden in individual commands.
+        SSH private key file to use to login to the remote system.
+        It can be overridden in individual commands.
+        It is loaded using `LoadCredentialEncrypted=`
+        when its path is prefixed by a credential name and colon,
+        otherwise `LoadCredential=` is used.
+        For more SSH tuning, you may use syncoid's `--sshoption`
+        in {option}`services.syncoid.commonArgs`
+        and/or in the `extraArgs` of a specific command.
       '';
     };
 
@@ -136,21 +68,22 @@ in
       # Permissions snapshot and destroy are in case --no-sync-snap is not used
       default = [ "bookmark" "hold" "send" "snapshot" "destroy" "mount" ];
       description = lib.mdDoc ''
-        Permissions granted for the {option}`services.syncoid.user` user
-        for local source datasets. See
-        <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
+        Permissions granted for the syncoid user for local source datasets.
+        See <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
         for available permissions.
       '';
     };
 
     localTargetAllow = mkOption {
       type = types.listOf types.str;
-      default = [ "change-key" "compression" "create" "mount" "mountpoint" "receive" "rollback" ];
+      # Permission destroy is required to reset broken receive states (zfs receive -A),
+      # which syncoid does when it fails to resume a receive state,
+      # when the snapshot it refers to has been destroyed on the source.
+      default = [ "change-key" "compression" "create" "destroy" "mount" "mountpoint" "receive" "rollback" ];
       example = [ "create" "mount" "receive" "rollback" ];
       description = lib.mdDoc ''
-        Permissions granted for the {option}`services.syncoid.user` user
-        for local target datasets. See
-        <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
+        Permissions granted for the syncoid user for local target datasets.
+        See <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
         for available permissions.
         Make sure to include the `change-key` permission if you send raw encrypted datasets,
         the `compression` permission if you send raw compressed datasets, and so on.
@@ -254,13 +187,10 @@ in
             '';
           };
 
-          useCommonArgs = mkOption {
-            type = types.bool;
-            default = true;
-            description = lib.mdDoc ''
-              Whether to add the configured common arguments to this command.
-            '';
-          };
+          useCommonArgs = mkEnableOption
+            (lib.mdDoc ''
+              configured common arguments to this command
+            '') // { default = true; };
 
           service = mkOption {
             type = types.attrs;
@@ -297,42 +227,103 @@ in
   # Implementation
 
   config = mkIf cfg.enable {
-    users = {
-      users = mkIf (cfg.user == "syncoid") {
-        syncoid = {
-          group = cfg.group;
-          isSystemUser = true;
-          # For syncoid to be able to create /var/lib/syncoid/.ssh/
-          # and to use custom ssh_config or known_hosts.
-          home = "/var/lib/syncoid";
-          createHome = false;
-        };
-      };
-      groups = mkIf (cfg.group == "syncoid") {
-        syncoid = { };
-      };
-    };
+    assertions = [
+      {
+        assertion = cfg.nftables.enable -> config.networking.nftables.enable;
+        message = "config.networking.nftables.enable must be set when config.services.syncoid.nftables.enable is set";
+      }
+    ];
 
     systemd.services = mapAttrs'
       (name: c:
+        let
+          sshKeyCred = builtins.split ":" c.sshKey;
+        in
         nameValuePair "syncoid-${escapeUnitName name}" (mkMerge [
           {
             description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
             after = [ "zfs.target" ];
             startAt = cfg.interval;
-            # syncoid may need zpool to get feature@extensible_dataset
-            path = [ "/run/booted-system/sw/bin/" ];
+            # Here we explicitly use the booted system to guarantee the stable API needed by ZFS.
+            # Moreover syncoid may need zpool to get feature@extensible_dataset.
+            path = [ "/run/booted-system/sw" ];
+            # Prevents missing snapshots during DST changes
+            environment.TZ = "UTC";
+            # A custom LD_LIBRARY_PATH is needed to access in `getent passwd`
+            # the systemd's entry about the DynamicUser=,
+            # so that ssh won't fail with: "No user exists for uid $UID".
+            environment.LD_LIBRARY_PATH = config.system.nssModules.path;
             serviceConfig = {
               ExecStartPre =
-                (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source)) ++
-                (map (buildAllowCommand c.localTargetAllow) (localDatasetName c.target));
+                # Recursively remove any residual permissions
+                # given on local+descendant datasets (source, target or target's parent)
+                # to any currently unknown (hence unused) systemd dynamic users (UID/GID range 61184…65519),
+                # which happens when a crash has occurred
+                # during any previous run of a syncoid-*.service (not only this one).
+                map
+                  (dataset:
+                    "+" + pkgs.writeShellScript "zfs-unallow-unused-dynamic-users" ''
+                      set -eu
+                      zfs allow "$1" |
+                      sed -ne 's/^\t\(user\|group\) (unknown: \([0-9]\+\)).*/\1 \2/p' |
+                      {
+                        declare -a uids
+                        while read -r role id; do
+                          if [ "$id" -ge 61184 ] && [ "$id" -le 65519 ]; then
+                            case "$role" in
+                              (user) uids+=("$id");;
+                            esac
+                          fi
+                        done
+                        zfs unallow -r -u "$(printf %s, "''${uids[@]}")" "$1"
+                      }
+                    '' + " " + escapeShellArg dataset
+                  )
+                  (localDatasetName c.source ++ localDatasetName c.target ++ map builtins.dirOf (localDatasetName c.target)) ++
+                # For a local source, allow the localSourceAllow ZFS permissions.
+                map
+                  (dataset:
+                    "+/run/booted-system/sw/bin/zfs allow $USER " +
+                      escapeShellArgs [ (concatStringsSep "," c.localSourceAllow) dataset ]
+                  )
+                  (localDatasetName c.source) ++
+                # For a local target, check if the dataset exists before delegating permissions,
+                # and if it doesn't exist, delegate it to the parent dataset.
+                # This should solve the case of provisioning new datasets.
+                map
+                  (dataset:
+                    "+" + pkgs.writeShellScript "zfs-allow-target" ''
+                      dataset="$1"
+                      # Run a ZFS list on the dataset to check if it exists
+                      zfs list "$dataset" >/dev/null 2>/dev/null ||
+                        dataset="$(dirname "$dataset")"
+                      zfs allow "$USER" ${escapeShellArg (concatStringsSep "," c.localTargetAllow)} "$dataset"
+                    '' + " " + escapeShellArg dataset
+                  )
+                  (localDatasetName c.target) ++
+                # Adding a user to an nftables set will not persist across a reboot,
+                # hence there is no need to cleanup residual dynamic users remaining in it after a crash.
+                optional cfg.nftables.enable
+                  "+${pkgs.nftables}/bin/nft add element inet filter nixos-syncoid-uids { $USER }";
               ExecStopPost =
-                (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
-                (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
+                let
+                  zfsUnallow = dataset: "+/run/booted-system/sw/bin/zfs unallow $USER " + escapeShellArg dataset;
+                in
+                map zfsUnallow (localDatasetName c.source) ++
+                  # For a local target, unallow both the dataset and its parent,
+                  # because at this stage we have no way of knowing if the allow command
+                  # did execute on the parent dataset or not in the ExecStartPre=.
+                  # We can't run the same if-then-else in the post hook
+                  # since the dataset should have been created at this point.
+                  concatMap
+                    (dataset: [ (zfsUnallow dataset) (zfsUnallow (builtins.dirOf dataset)) ])
+                    (localDatasetName c.target) ++
+                  optional cfg.nftables.enable
+                    "+${pkgs.nftables}/bin/nft delete element inet filter nixos-syncoid-uids { $USER }";
               ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
-                ++ optional c.recursive "-r"
-                ++ optionals (c.sshKey != null) [ "--sshkey" c.sshKey ]
+                ++ optional c.recursive "--recursive"
+                ++ optionals (c.sshKey != null) [ "--sshkey" "\${CREDENTIALS_DIRECTORY}/${if length sshKeyCred > 1 then head sshKeyCred else "sshKey"}" ]
                 ++ c.extraArgs
                 ++ [
                 "--sendoptions"
@@ -343,10 +334,7 @@ in
                 c.source
                 c.target
               ]);
-              User = cfg.user;
-              Group = cfg.group;
-              StateDirectory = [ "syncoid" ];
-              StateDirectoryMode = "700";
+              DynamicUser = true;
               # Prevent SSH control sockets of different syncoid services from interfering
               PrivateTmp = true;
               # Permissive access to /proc because syncoid
@@ -402,18 +390,29 @@ in
                 "~@privileged"
                 "~@resources"
                 "~@setuid"
-                "~@timer"
               ];
               SystemCallArchitectures = "native";
               # This is for BindPaths= and BindReadOnlyPaths=
               # to allow traversal of directories they create in RootDirectory=.
               UMask = "0066";
-            };
+            } //
+            (
+              if length sshKeyCred > 1
+              then { LoadCredentialEncrypted = [ c.sshKey ]; }
+              else { LoadCredential = [ "sshKey:${c.sshKey}" ]; }
+            );
           }
           cfg.service
           c.service
         ]))
       cfg.commands;
+
+    networking.nftables.ruleset = optionalString cfg.nftables.enable (mkBefore ''
+      table inet filter {
+        # A set containing the dynamic UIDs of the syncoid services currently active
+        set nixos-syncoid-uids { type uid; }
+      }
+    '');
   };
 
   meta.maintainers = with maintainers; [ julm lopsided98 ];
