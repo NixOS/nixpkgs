@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "rstfmt";
   version = "0.0.13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dzhu";
@@ -15,7 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-SJRA14CfoT8XMt3hMB7cLdmuLwsJnBSwhKkD1pJvQCI=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     black
     docutils
     sphinx
@@ -31,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "A formatter for reStructuredText";
     homepage = "https://github.com/dzhu/rstfmt";
+    changelog = "https://github.com/dzhu/rstfmt/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
