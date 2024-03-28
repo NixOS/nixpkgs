@@ -10867,6 +10867,12 @@
     githubId = 695526;
     name = "Benjamin Kober";
   };
+  lampros = {
+    email = "hauahx@gmail.com";
+    github = "LamprosPitsillos";
+    githubId = 61395246;
+    name = "Lampros Pitsillos";
+  };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
     github = "larsr";
