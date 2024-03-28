@@ -8743,6 +8743,8 @@ self: super: with self; {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
+  nudatus = callPackage ../development/python-modules/nudatus { };
+
   nuitka = callPackage ../development/python-modules/nuitka { };
 
   nuheat = callPackage ../development/python-modules/nuheat { };
@@ -9494,6 +9496,8 @@ self: super: with self; {
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
   pgvector = callPackage ../development/python-modules/pgvector { };
+
+  pgzero = callPackage ../development/python-modules/pgzero { };
 
   phe = callPackage ../development/python-modules/phe { };
 
