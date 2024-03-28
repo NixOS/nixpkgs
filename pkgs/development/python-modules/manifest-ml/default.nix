@@ -11,6 +11,7 @@
 , pydantic
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , redis
 , requests
 , sentence-transformers
@@ -41,7 +42,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
+
   build-system = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -95,12 +101,17 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # these tests have db access
+    # Tests require DB access
     "test_init"
     "test_key_get_and_set"
     "test_get"
-    # this test has network access
+    # Tests require network access
+    "test_abatch_run"
+    "test_batch_run"
     "test_retry_handling"
+    "test_run_chat"
+    "test_run"
+    "test_score_run"
     # Test is time-senstive
     "test_timing"
   ];
