@@ -6,14 +6,19 @@
 , makeWrapper
 , CoreFoundation
 , AppKit
+, binaryen
+, cargo
 , libfido2
 , nodejs
 , openssl
 , pkg-config
+, rustc
 , Security
 , stdenv
 , xdg-utils
 , yarn
+, wasm-bindgen-cli
+, wasm-pack
 , prefetch-yarn-deps
 , nixosTests
 
@@ -69,11 +74,26 @@ let
     pname = "teleport-webassets";
     inherit src version;
 
-    nativeBuildInputs = [
-      nodejs
-      yarn
-      prefetch-yarn-deps
+    cargoDeps = rustPlatform.importCargoLock cargoLock;
+
+    RUSTFLAGS = builtins.concatStringsSep " " [
+      "-C linker=lld"
+
+      # This seems to avoid a stack overflow when compiling p384.
+      # See: https://github.com/RustCrypto/elliptic-curves/issues/906
+      "-C debuginfo=0"
     ];
+
+    nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps ] ++
+      lib.optional (lib.versionAtLeast version "15") [
+        binaryen
+        cargo
+        rustc
+        rustc.llvmPackages.lld
+        rustPlatform.cargoSetupHook
+        wasm-bindgen-cli
+        wasm-pack
+      ];
 
     configurePhase = ''
       export HOME=$(mktemp -d)
@@ -88,7 +108,15 @@ let
         --ignore-engines --ignore-scripts
       patchShebangs .
 
-      yarn build-ui-oss
+      ${if lib.versionAtLeast version "15"
+      then ''
+        PATH=$PATH:$PWD/node_modules/.bin
+        pushd web/packages/teleport
+        wasm-pack build ./src/ironrdp --target web --mode no-install
+        vite build
+        popd
+      ''
+      else "yarn build-ui-oss"}
     '';
 
     installPhase = ''
@@ -154,7 +182,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
-    license = licenses.asl20;
+    license = if lib.versionAtLeast version "15" then licenses.agpl3Plus else licenses.asl20;
     maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy techknowlogick ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
