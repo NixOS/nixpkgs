@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libusb1, pico-sdk }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libusb1, pico-sdk-minimal }:
 
 stdenv.mkDerivation rec {
   pname = "picotool";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OcQJeiva6X2rUyh1rJ+w4O2dWxaR7MwMfbHlnWuBVb8=";
   };
 
-  buildInputs = [ libusb1 pico-sdk ];
+  buildInputs = [ libusb1 pico-sdk-minimal ];
   nativeBuildInputs = [ cmake pkg-config ];
-  cmakeFlags = [ "-DPICO_SDK_PATH=${pico-sdk}/lib/pico-sdk" ];
+  cmakeFlags = [ "-DPICO_SDK_PATH=${pico-sdk-minimal}/lib/pico-sdk" ];
 
   postInstall = ''
     install -Dm444 ../udev/99-picotool.rules -t $out/etc/udev/rules.d

@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake
+, minimal ? false, }:
 
 stdenv.mkDerivation rec {
   pname = "pico-sdk";
@@ -8,7 +9,11 @@ stdenv.mkDerivation rec {
     owner = "raspberrypi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JNcxd86XNNiPkvipVFR3X255boMmq+YcuJXUP4JwInU=";
+    fetchSubmodules = !minimal;
+    sha256 = if minimal then
+      "sha256-JNcxd86XNNiPkvipVFR3X255boMmq+YcuJXUP4JwInU="
+    else
+      "sha256-GY5jjJzaENL3ftuU5KpEZAmEZgyFRtLwGVg3W1e/4Ho=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,5 +36,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ muscaln ];
     platforms = platforms.unix;
+    # Only minimal on hydra: non-minimal is too big.
+    hydraPlatforms = optionals minimal platforms.unix;
   };
 }
