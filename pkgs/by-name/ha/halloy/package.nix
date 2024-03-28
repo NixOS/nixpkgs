@@ -15,19 +15,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.3";
+  version = "2024.5";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-9yEkM65c8R71oQ0C54xZqwRh609+HSaq4Hb8izNM52A=";
+    hash = "sha256-F/yQYLYrq3MZFV6igQe4sQi84ChIKCCPdS5151nD6hs=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "iced-0.12.0" = "sha256-LtmAJDUMp42S4E+CjOM6Q7doAKOZkmJCN/49gsq3v/A=";
+      "iced-0.13.0-dev" = "sha256-8L0AoHPwRUeCiJK/N0NTs1Nl4BX0wbM7SLgundhvra0=";
       "winit-0.29.10" = "sha256-YoXJEvEhMvk3pK5EbXceVFeJEJLL6KTjiw0kBJxgHIE=";
     };
   };
@@ -83,7 +83,8 @@ rustPlatform.buildRustPackage rec {
     '');
 
   postInstall = ''
-    install -Dm644 assets/linux/org.squidowl.halloy.png $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+    install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
+      $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
   '';
 
   meta = with lib; {
