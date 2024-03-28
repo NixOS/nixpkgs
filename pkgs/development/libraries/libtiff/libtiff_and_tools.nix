@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitLab
-, nix-update-script
+, fetchzip
 
 , autoreconfHook
 , pkg-config
@@ -11,27 +10,18 @@
 , libjpeg
 , xz
 , zlib
-
-  # for passthru.tests
-, libgeotiff
-, python3Packages
-, imagemagick
-, graphicsmagick
-, gdal
-, openimageio
-, freeimage
-, testers
 }:
+
+# This is a fork created by the hylafaxplus developer to
+# restore tools dropped by original libtiff in version 4.6.0.
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
-  version = "4.6.0";
+  version = "4.6.0t";
 
-  src = fetchFromGitLab {
-    owner = "libtiff";
-    repo = "libtiff";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-qCg5qjsPPynCHIg0JsPJldwVdcYkI68zYmyNAKUCoyw=";
+  src = fetchzip {
+    url = "http://www.libtiff.org/downloads/tiff-${finalAttrs.version}.tar.xz";
+    hash = "sha256-9ov4w2jw4LtKr82/4jWMAGhc5GEdviJ7bT+y0+U/Ac4=";
   };
 
   patches = [
@@ -71,21 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru = {
-    tests = {
-      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
-      inherit (python3Packages) pillow imread;
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-      };
-    };
-    updateScript = nix-update-script { };
-  };
-
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
-    homepage = "https://libtiff.gitlab.io/libtiff";
-    changelog = "https://libtiff.gitlab.io/libtiff/releases/v${finalAttrs.version}.html";
+    homepage = "http://www.libtiff.org";
+    changelog = "http://www.libtiff.org/releases/v${finalAttrs.version}.html";
+    maintainers = with maintainers; [ yarny ];
     license = licenses.libtiff;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
