@@ -8,8 +8,8 @@
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.22.0";
-  format = "pyproject";
+  version = "0.24.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -17,10 +17,10 @@ buildPythonPackage rec {
     owner = "python-validators";
     repo = "validators";
     rev = "refs/tags/${version}";
-    hash = "sha256-Qu6Tu9uIluT1KBJYkFjDFt9AWN2Kez3uCYDQknXqYrU=";
+    hash = "sha256-zwjWv7zUkn+GCLRuW7BxQDRq6ri4Qi+J1c4hr7xC4vA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-validators/validators";
     changelog = "https://github.com/python-validators/validators/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }
