@@ -1,27 +1,24 @@
-{ lib
-, pkgs
+{ buildPythonPackage
 , fetchPypi
-, buildPythonPackage
+, lib
+, pkgs
+, stdenv
 }:
 
 buildPythonPackage rec {
-    pname = "pyxattr";
-    version = "0.8.1";
-    format = "setuptools";
+  pname = "pyxattr";
+  version = "0.8.1";
+  format = "setuptools";
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-SMV47PjqC9Q1GxdSRw4wGpCjdhx8IfAPlT3PbW+m7lo=";
-    };
+  # IOError: [Errno 95] Operation not supported (expected)
+  doCheck = false;
 
-    # IOError: [Errno 95] Operation not supported (expected)
-    doCheck = false;
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
-    buildInputs = with pkgs; [ attr ];
+  buildInputs = [ ] ++ lib.optionals stdenv.isLinux (with pkgs; [ attr ]);
 
-    meta = with lib; {
-      description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems";
-      license = licenses.lgpl21Plus;
-      inherit (pkgs.attr.meta) platforms;
-    };
+  meta = with lib; {
+    description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems";
+    license = licenses.lgpl21Plus;
+  };
 }

@@ -53,6 +53,8 @@ self: super: with self; {
 
   acquire = callPackage ../development/python-modules/acquire { };
 
+  acstore = callPackage ../development/python-modules/acstore { };
+
   actdiag = callPackage ../development/python-modules/actdiag { };
 
   acunetix = callPackage ../development/python-modules/acunetix { };
@@ -758,6 +760,8 @@ self: super: with self; {
   arsenic = callPackage ../development/python-modules/arsenic { };
 
   art = callPackage ../development/python-modules/art { };
+
+  artifacts = callPackage ../development/python-modules/artifacts { };
 
   arviz = callPackage ../development/python-modules/arviz { };
 
@@ -2914,6 +2918,12 @@ self: super: with self; {
 
   devtools = callPackage ../development/python-modules/devtools { };
 
+  dfdatetime = callPackage ../development/python-modules/dfdatetime { };
+
+  dfvfs = callPackage ../development/python-modules/dfvfs { };
+
+  dfwinreg = callPackage ../development/python-modules/dfwinreg { };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
@@ -3521,6 +3531,8 @@ self: super: with self; {
   dsnap = callPackage ../development/python-modules/dsnap { };
 
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
+
+  dtfabric = callPackage ../development/python-modules/dtfabric { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
 
@@ -4336,6 +4348,8 @@ self: super: with self; {
   flit-core = callPackage ../development/python-modules/flit-core { };
 
   flit-scm = callPackage ../development/python-modules/flit-scm { };
+
+  flor = callPackage ../development/python-modules/flor { };
 
   floret = callPackage ../development/python-modules/floret { };
 
@@ -6501,6 +6515,8 @@ self: super: with self; {
     inherit (pkgs) libasyncns;
   };
 
+  libbde-python = callPackage ../development/python-modules/libbde-python { };
+
   libclang = callPackage ../development/python-modules/libclang { };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
@@ -6511,6 +6527,8 @@ self: super: with self; {
     (p: p.override { inherit python; })
     (p: p.py)
   ];
+  
+  libcreg-python = callPackage ../development/python-modules/libcreg-python { };
 
   libcst = callPackage ../development/python-modules/libcst { };
 
@@ -6523,6 +6541,14 @@ self: super: with self; {
 
   libevdev = callPackage ../development/python-modules/libevdev { };
 
+  libesedb-python = callPackage ../development/python-modules/libesedb-python { };
+
+  libevt-python = callPackage ../development/python-modules/libevt-python { };
+
+  libevtx-python = callPackage ../development/python-modules/libevtx-python { };
+
+  libewf-python = callPackage ../development/python-modules/libewf-python { };
+
   libfdt = toPythonModule (pkgs.dtc.override {
     inherit python;
     pythonSupport = true;
@@ -6530,6 +6556,29 @@ self: super: with self; {
 
   libfive = toPythonModule (pkgs.libfive.override {
     inherit python;
+  });
+  
+  libfsapfs-python = callPackage ../development/python-modules/libfsapfs-python { };
+
+  libfsext-python = callPackage ../development/python-modules/libfsext-python { };
+
+  libfsfat-python = callPackage ../development/python-modules/libfsfat-python { };
+
+  libfshfs-python = callPackage ../development/python-modules/libfshfs-python { };
+
+  libfsntfs-python = callPackage ../development/python-modules/libfsntfs-python { };
+
+  libfsxfs-python = callPackage ../development/python-modules/libfsxfs-python { };
+
+  libfvde-python = callPackage ../development/python-modules/libfvde-python { };
+
+  libfwnt-python = callPackage ../development/python-modules/libfwnt-python { };
+
+  libfwsi-python = callPackage ../development/python-modules/libfwsi-python { };
+
+  libgpiod = toPythonModule (pkgs.libgpiod.override {
+    enablePython = true;
+    python3 = python;
   });
 
   libgpiod = callPackage ../development/python-modules/libgpiod {
@@ -6552,9 +6601,15 @@ self: super: with self; {
 
   liblarch = callPackage ../development/python-modules/liblarch { };
 
+  liblnk-python = callPackage ../development/python-modules/liblnk-python { };
+
+  libluksde-python = callPackage ../development/python-modules/libluksde-python { };
+
   liblzfse = callPackage ../development/python-modules/liblzfse {
     inherit (pkgs) lzfse;
   };
+
+  libmodi-python = callPackage ../development/python-modules/libmodi-python { };
 
   libmodulemd = lib.pipe pkgs.libmodulemd [
     toPythonModule
@@ -6618,6 +6673,19 @@ self: super: with self; {
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
+  libmsiecf-python = callPackage ../development/python-modules/libmsiecf-python { };
+
+  libolecf-python = callPackage ../development/python-modules/libolecf-python { };
+
+  libphdi-python = callPackage ../development/python-modules/libphdi-python { };
+
+  libqcow-python = callPackage ../development/python-modules/libqcow-python { };
+
+  libregf-python = callPackage ../development/python-modules/libregf-python { };
+
+  libscca-python = callPackage ../development/python-modules/libscca-python { };
+
+  libsigscan-python = callPackage ../development/python-modules/libsigscan-python { };
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
@@ -6640,6 +6708,10 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  libsmdev-python = callPackage ../development/python-modules/libsmdev-python { };
+
+  libsmraw-python = callPackage ../development/python-modules/libsmraw-python { };
+
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };
@@ -6660,9 +6732,19 @@ self: super: with self; {
     inherit (pkgs) libversion;
   };
 
+  libvhdi-python = callPackage ../development/python-modules/libvhdi-python { };
+
   libvirt = callPackage ../development/python-modules/libvirt {
     inherit (pkgs) libvirt;
   };
+
+  libvmdk-python = callPackage ../development/python-modules/libvmdk-python { };
+
+  libvsgpt-python = callPackage ../development/python-modules/libvsgpt-python { };
+
+  libvshadow-python = callPackage ../development/python-modules/libvshadow-python { };
+
+  libvslvm-python = callPackage ../development/python-modules/libvslvm-python { };
 
   libxml2 = (toPythonModule (pkgs.libxml2.override {
     pythonSupport = true;
@@ -8976,7 +9058,9 @@ self: super: with self; {
       openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
   };
 
-  opencensus = callPackage ../development/python-modules/opencensus { };
+  plaso = callPackage ../development/python-modules/plaso { };
+
+  plantuml = callPackage ../development/python-modules/plantuml { };
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
 
@@ -9309,8 +9393,12 @@ self: super: with self; {
 
   pasimple = callPackage ../development/python-modules/pasimple { };
 
-  passlib = callPackage ../development/python-modules/passlib { };
+  pytsk3 = callPackage ../development/python-modules/pytsk3 { };
 
+  py-air-control = callPackage ../development/python-modules/py-air-control { };
+
+  passlib = callPackage ../development/python-modules/passlib { };
+  
   paste = callPackage ../development/python-modules/paste { };
 
   pastedeploy = callPackage ../development/python-modules/pastedeploy { };
