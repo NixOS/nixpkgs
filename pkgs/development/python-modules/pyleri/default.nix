@@ -3,12 +3,13 @@
 , fetchFromGitHub
 , pythonOlder
 , unittestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyleri";
   version = "1.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-4t+6wtYzJbmL0TB/OXr89uZ2s8DeGlUdWwHd4YPsCW0=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     unittestCheckHook
