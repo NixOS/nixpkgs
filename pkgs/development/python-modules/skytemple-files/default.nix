@@ -37,7 +37,9 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-OkokbVD8j+Sgypj25demzSZdiAEf8TJrnl0QRIM2HsI=";
+    hash = "sha256-Len1Cz5NLAg7siabrKxRVxeybwASVi6RhR+P9U9HNlU=";
+    # Most patches are in submodules
+    fetchSubmodules = true;
   };
 
   postPatch = ''
