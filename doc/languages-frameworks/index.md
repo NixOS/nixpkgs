@@ -16,6 +16,7 @@ dart.section.md
 dhall.section.md
 dotnet.section.md
 emscripten.section.md
+factor.section.md
 gnome.section.md
 go.section.md
 haskell.section.md
