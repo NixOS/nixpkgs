@@ -54,7 +54,6 @@
   remod-cli = "remod";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
-  typescript-language-server = "typescript-language-server";
   uglify-js = "uglifyjs";
   undollar = "$";
   vscode-css-languageserver-bin = "css-languageserver";
