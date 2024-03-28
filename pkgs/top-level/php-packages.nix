@@ -16,7 +16,7 @@
 , gettext
 , gmp
 , html-tidy
-, icu64
+, icu73
 , libffi
 , libiconv
 , libkrb5
@@ -437,7 +437,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "intl";
-          buildInputs = [ icu64 ];
+          buildInputs = [ icu73 ];
         }
         {
           name = "ldap";
