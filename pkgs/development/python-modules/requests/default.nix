@@ -14,6 +14,21 @@
 , pytestCheckHook
 , pythonOlder
 , urllib3
+
+# for passthru.tests
+, cachecontrol
+, httmock
+, msrest
+, openapi-core
+, pysaml2
+, requests-file
+, requests-hawk
+, requests-mock
+, requests-oauthlib
+, requests-toolbelt
+, requestsexceptions
+, responses
+, treq
 }:
 
 buildPythonPackage rec {
@@ -83,6 +98,23 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "requests"
   ];
+
+  passthru.tests = {
+    inherit
+      cachecontrol
+      httmock
+      msrest
+      openapi-core
+      pysaml2
+      requests-file
+      requests-hawk
+      requests-mock
+      requests-oauthlib
+      requests-toolbelt
+      requestsexceptions
+      responses
+      treq;
+  };
 
   meta = with lib; {
     description = "HTTP library for Python";
