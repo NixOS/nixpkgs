@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.samba.org/?p=socket_wrapper.git;a=summary;";
     license = licenses.bsd3;
     platforms = platforms.all;
+    changelog = "https://git.samba.org/?p=socket_wrapper.git;a=blob;f=CHANGELOG;hb=HEAD";
   };
 }

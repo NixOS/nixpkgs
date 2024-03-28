@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+    changelog = "https://git.samba.org/?p=nss_wrapper.git;a=blob;f=CHANGELOG;hb=HEAD";
   };
 }

@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
-    description = "A wrapper for the user, group and hosts NSS API";
-    homepage = "https://git.samba.org/?p=uid_wrapper.git;a=summary;";
+    description = "A wrapper for DNS name resolving or DNS faking";
+    homepage = "https://git.samba.org/?p=resolv_wrapper.git;a=summary;";
     license = licenses.bsd3;
     platforms = platforms.linux;
+    changelog = "https://git.samba.org/?p=resolv_wrapper.git;a=blob;f=CHANGELOG;hb=HEAD";
   };
 }
