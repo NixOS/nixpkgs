@@ -1,0 +1,47 @@
+diff --git a/lm4flash/Makefile b/lm4flash/Makefile
+index 20bd741..6822d6b 100644
+--- a/lm4flash/Makefile
++++ b/lm4flash/Makefile
+@@ -1,13 +1,14 @@
+ EXE := lm4flash
+ 
+ CC ?= gcc
++PKG_CONFIG ?= pkg-config
+ CFLAGS += -Wall
+ 
+ ifeq ($(shell uname),FreeBSD)
+ LDFLAGS += -lusb
+ else
+-CFLAGS += $(shell pkg-config --cflags libusb-1.0)
+-LDFLAGS += $(shell pkg-config --libs libusb-1.0)
++CFLAGS += $(shell $(PKG_CONFIG) --cflags libusb-1.0)
++LDFLAGS += $(shell $(PKG_CONFIG) --libs libusb-1.0)
+ endif
+ 
+ all: $(EXE)
+diff --git a/lmicdiusb/Makefile b/lmicdiusb/Makefile
+index c5d5689..11cdb89 100644
+--- a/lmicdiusb/Makefile
++++ b/lmicdiusb/Makefile
+@@ -36,6 +36,8 @@
+ #// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
+ #//
+ #//*****************************************************************************
++PKG_CONFIG ?= pkg-config
++
+ ifeq ($(shell uname),Darwin)
+ 	LDFLAGS += -framework AppKit -framework Carbon -framework IOKit
+ endif
+@@ -46,9 +48,9 @@ ifeq ($(shell uname),FreeBSD)
+ 	LIBUSB_LIBS := -lusb
+ endif
+ 
+-	LIBUSB_CFLAGS ?= $(shell pkg-config --cflags libusb-1.0)
+-	LIBUSB_LIBDIR ?= $(shell pkg-config --variable=libdir libusb-1.0)
+-	LIBUSB_LIBS ?= $(shell pkg-config --libs-only-l libusb-1.0)
++	LIBUSB_CFLAGS ?= $(shell $(PKG_CONFIG) --cflags libusb-1.0)
++	LIBUSB_LIBDIR ?= $(shell $(PKG_CONFIG) --variable=libdir libusb-1.0)
++	LIBUSB_LIBS ?= $(shell $(PKG_CONFIG) --libs-only-l libusb-1.0)
+ 
+ VPATH += $(LIBUSB_LIBDIR)
+ 

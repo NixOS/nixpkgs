@@ -1,0 +1,31 @@
+diff --git a/lmicdiusb/Makefile b/lmicdiusb/Makefile
+index 8810d45..c5d5689 100644
+--- a/lmicdiusb/Makefile
++++ b/lmicdiusb/Makefile
+@@ -37,9 +37,6 @@
+ #//
+ #//*****************************************************************************
+ ifeq ($(shell uname),Darwin)
+-	LIBUSB_CFLAGS := -I/usr/local/include/libusb-1.0
+-	LIBUSB_LIBDIR := /usr/local/lib
+-	LIBUSB_LIBS := -lusb-1.0
+ 	LDFLAGS += -framework AppKit -framework Carbon -framework IOKit
+ endif
+ 
+@@ -49,11 +46,9 @@ ifeq ($(shell uname),FreeBSD)
+ 	LIBUSB_LIBS := -lusb
+ endif
+ 
+-ifeq ($(shell uname),Linux)
+ 	LIBUSB_CFLAGS ?= $(shell pkg-config --cflags libusb-1.0)
+ 	LIBUSB_LIBDIR ?= $(shell pkg-config --variable=libdir libusb-1.0)
+ 	LIBUSB_LIBS ?= $(shell pkg-config --libs-only-l libusb-1.0)
+-endif
+ 
+ VPATH += $(LIBUSB_LIBDIR)
+ 
+@@ -78,4 +73,3 @@ endif
+ 
+ clean:
+ 	rm -rf lmicdi lmicdi.o socket.o gdb.o
+-
