@@ -1,0 +1,71 @@
+diff --git a/src/vulnix/main.py b/src/vulnix/main.py
+index 6d85c99..a0da641 100755
+--- a/src/vulnix/main.py
++++ b/src/vulnix/main.py
+@@ -96,9 +96,9 @@ def run(nvd, store):
+ @click.option('-r/-R', '--requisites/--no-requisites', default=True,
+               help='Yes: determine transitive closure. No: examine just the '
+               'passed derivations (default: yes).')
+-@click.option('--runtime', is_flag=True,
+-              help='Examine only runtime dependencies (default: no). '
+-              'Implies --no-requisites.')
++@click.option('--closure', is_flag=True,
++              help='Examine the closure of an output path '
++              '(runtime dependencies). Implies --no-requisites.')
+ @click.option('-m', '--mirror',
+               help='Mirror to fetch NVD archives from. Default: {}.'.format(
+                   DEFAULT_MIRROR),
+@@ -118,14 +118,14 @@ def run(nvd, store):
+ @click.option('-F', '--notfixed', is_flag=True,
+               help='(obsolete; kept for compatibility reasons)')
+ def main(verbose, gc_roots, system, from_file, profile, path, mirror,
+-         cache_dir, requisites, runtime, whitelist, write_whitelist,
++         cache_dir, requisites, closure, whitelist, write_whitelist,
+          version, json, show_whitelisted, show_description,
+          default_whitelist, notfixed):
+     if version:
+         print('vulnix ' + pkg_resources.get_distribution('vulnix').version)
+         sys.exit(0)
+ 
+-    if (runtime):
++    if (closure):
+         requisites = False
+ 
+     if not (gc_roots or system or profile or path or from_file):
+@@ -145,7 +145,7 @@ def main(verbose, gc_roots, system, from_file, profile, path, mirror,
+             for wl in wh_sources:
+                 whitelist.merge(Whitelist.load(wl))
+         with Timer('Load derivations'):
+-            store = Store(requisites, runtime)
++            store = Store(requisites, closure)
+             if from_file:
+                 if from_file.name.endswith('.json'):
+                     _log.debug("loading packages.json")
+diff --git a/src/vulnix/nix.py b/src/vulnix/nix.py
+index 7a5b1d5..7fb23c9 100644
+--- a/src/vulnix/nix.py
++++ b/src/vulnix/nix.py
+@@ -9,9 +9,9 @@ _log = logging.getLogger(__name__)
+ 
+ class Store(object):
+ 
+-    def __init__(self, requisites=True, runtime=False):
++    def __init__(self, requisites=True, closure=False):
+         self.requisites = requisites
+-        self.runtime = runtime
++        self.closure = closure
+         self.derivations = set()
+         self.experimental_flag_needed = None
+ 
+@@ -106,7 +106,7 @@ class Store(object):
+                                'derivations referenced from it'.format(path))
+         _log.debug('Loading derivations referenced by "%s"', path)
+ 
+-        if self.runtime:
++        if self.closure:
+             for output in self._find_outputs(path):
+                 for candidate in map(
+                     # Nix 2.4 also returns `p.get('deriver')`
+-- 
+2.44.0
+

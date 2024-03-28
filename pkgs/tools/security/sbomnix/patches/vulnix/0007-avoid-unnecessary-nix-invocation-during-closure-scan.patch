@@ -1,0 +1,42 @@
+diff --git a/src/vulnix/nix.py b/src/vulnix/nix.py
+index 84883a2..4cf3f23 100644
+--- a/src/vulnix/nix.py
++++ b/src/vulnix/nix.py
+@@ -59,11 +59,12 @@ class Store(object):
+                          'nix-command'] + args)
+         return call(['nix'] + args)
+ 
+-    def _find_deriver(self, path):
++    def _find_deriver(self, path, qpi_deriver=None):
+         if path.endswith('.drv'):
+             return path
+         # Deriver from QueryPathInfo
+-        qpi_deriver = call(['nix-store', '-qd', path]).strip()
++        if qpi_deriver is None:
++            qpi_deriver = call(['nix-store', '-qd', path]).strip()
+         _log.debug('qpi_deriver: %s', qpi_deriver)
+         if qpi_deriver and qpi_deriver != 'unknown-deriver' and p.exists(
+                 qpi_deriver):
+@@ -109,13 +110,15 @@ class Store(object):
+         if self.closure:
+             for output in self._find_outputs(path):
+                 for candidate in map(
+-                    # We cannot use the `deriver` field because
+-                    # like `nix-store -qd` that path may not exist.
++                    # We cannot use the `deriver` field directly because
++                    # like from `nix-store -qd` that path may not exist.
+                     # However, we know that if it is not present
+                     # the path has no deriver because it is a
+                     # derivation input source so we can skip it.
+-                    lambda p: self._find_deriver(p.get('path'))
+-                        if p.get('deriver') is not None else None,
++                    lambda p: self._find_deriver(
++                                  p.get('path'),
++                                  qpi_deriver=p.get('deriver')
++                              ) if p.get('deriver') is not None else None,
+                     json.loads(
+                         self._call_nix(['path-info', '-r', '--json', output])
+                     )
+-- 
+2.44.0
+

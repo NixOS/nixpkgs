@@ -1,0 +1,16 @@
+diff --git a/src/vulnix/main.py b/src/vulnix/main.py
+index a0da641..d2a8483 100755
+--- a/src/vulnix/main.py
++++ b/src/vulnix/main.py
+@@ -96,7 +96,7 @@ def run(nvd, store):
+ @click.option('-r/-R', '--requisites/--no-requisites', default=True,
+               help='Yes: determine transitive closure. No: examine just the '
+               'passed derivations (default: yes).')
+-@click.option('--closure', is_flag=True,
++@click.option('-C', '--closure', is_flag=True,
+               help='Examine the closure of an output path '
+               '(runtime dependencies). Implies --no-requisites.')
+ @click.option('-m', '--mirror',
+-- 
+2.44.0
+

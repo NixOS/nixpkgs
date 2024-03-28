@@ -1,0 +1,25 @@
+diff --git a/src/vulnix/main.py b/src/vulnix/main.py
+index e6c9ab7..0fbf393 100755
+--- a/src/vulnix/main.py
++++ b/src/vulnix/main.py
+@@ -50,7 +50,7 @@ def init_logging(verbose):
+         logging.basicConfig(level=logging.WARNING)
+ 
+ 
+-def populate_store(store, gc_roots, profiles, paths, requisites=True):
++def populate_store(store, gc_roots, profiles, paths):
+     """Load derivations from nix store depending on cmdline invocation."""
+     if gc_roots:
+         store.add_gc_roots()
+@@ -147,7 +147,7 @@ def main(verbose, gc_roots, system, from_file, profile, path, mirror,
+                     for drv in from_file.readlines():
+                         paths.append(drv.strip())
+             else:
+-                populate_store(store, gc_roots, profile,  paths, requisites)
++                populate_store(store, gc_roots, profile,  paths)
+         with NVD(mirror, cache_dir) as nvd:
+             with Timer('Update NVD data'):
+                 nvd.update()
+-- 
+2.44.0
+
