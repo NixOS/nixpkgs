@@ -32,7 +32,7 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 stackprotector pie pic strictoverflow format trivialautovarinit zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 stackprotector pie pic spectrev2 strictoverflow format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -91,6 +91,14 @@ for flag in "${!hardeningEnableMap[@]}"; do
     pic)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
       hardeningCFlagsBefore+=('-fPIC')
+      ;;
+    spectrev2)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling spectrev2 >&2; fi
+      if (( @isClang@ )); then
+        hardeningCFlagsBefore+=('-mretpoline')
+      else
+        hardeningCFlagsBefore+=('-mindirect-branch=thunk' '-mfunction-return=thunk')
+      fi
       ;;
     strictoverflow)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
