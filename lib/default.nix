@@ -130,7 +130,7 @@ let
       unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
-      sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
+      sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride mkPostMerge
       mkOptionDefault mkDefault mkImageMediaOverride mkForce mkVMOverride
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule

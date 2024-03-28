@@ -820,30 +820,34 @@ let
   mergeDefinitions = loc: type: defs: rec {
     defsFinal' =
       let
+        # Extract the final map functions and unwrap their contents
+        defs' = extractPostMergeDefs defs;
+
         # Process mkMerge and mkIf properties.
-        defs' = concatMap (m:
+        defs'' = concatMap (m:
           map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
-        ) defs;
+        ) defs'.values;
 
         # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+        defs''' = filterOverrides' defs'';
 
         # Sort mkOrder properties.
-        defs''' =
+        defs'''' =
           # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''.values
-          then sortProperties defs''.values
-          else defs''.values;
+          if any (def: def.value._type or "" == "order") defs'''.values
+          then sortProperties defs'''.values
+          else defs'''.values;
       in {
-        values = defs''';
-        inherit (defs'') highestPrio;
+        postMergeFns = defs'.functions;
+        values = defs'''';
+        inherit (defs''') highestPrio;
       };
     defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
+        if all (def: type.check def.value) defsFinal then applyAll defsFinal'.postMergeFns (type.merge loc defsFinal)
         else let allInvalid = filter (def: ! type.check def.value) defsFinal;
         in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
       else
@@ -880,6 +884,8 @@ let
       map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
       map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+    else if cfg._type or "" == "postmerge" then
+      map (mapAttrs (n: v: mkPostMerge cfg.f v)) (pushDownProperties cfg.content)
     else # FIXME: handle mkOrder?
       [ cfg ];
 
@@ -906,6 +912,19 @@ let
         throw "‘mkIf’ called with a non-Boolean condition"
     else
       [ def ];
+
+  # Apply a list of functions starting from the left.
+  applyAll = functions: x:
+    foldl' (acc: f: f acc) x functions;
+
+  /* Given a list of config values, extract the map functions for later use
+     and unwrap the contents so they can be processed the same as the others.
+  */
+  extractPostMergeDefs = defs:
+    {
+      functions = map (def: def.value.f) (filter (def: def.value._type or "" == "postmerge") defs);
+      values = map (def: if def.value._type or ""  == "postmerge" then def // { value = def.value.content; } else def) defs;
+    };
 
   /* Given a list of config values, process the mkOverride properties,
      that is, return the values that have the highest (that is,
@@ -1014,6 +1033,11 @@ let
   mkOverride = priority: content:
     { _type = "override";
       inherit priority content;
+    };
+
+  mkPostMerge = f: content:
+    { _type = "postmerge";
+      inherit f content;
     };
 
   mkOptionDefault = mkOverride 1500; # priority of option defaults
