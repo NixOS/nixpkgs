@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchsvn,
-  version, rev, sha256 }:
+{ stdenv, lib, fetchgit
+, rev, hash, version ? "git+${builtins.substring 0 7 rev}"
+}:
 
 stdenv.mkDerivation rec {
   pname = "crossfire-maps";
-  version = rev;
+  inherit version;
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/maps/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "http://git.code.sf.net/p/crossfire/crossfire-maps";
+    inherit rev hash;
   };
 
   installPhase = ''

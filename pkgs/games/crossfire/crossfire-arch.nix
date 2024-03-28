@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchsvn,
-  version, rev, sha256 }:
+{ stdenv, lib, fetchgit
+, rev, hash, version ? "git+${builtins.substring 0 7 rev}"
+}:
 
 stdenv.mkDerivation rec {
   pname = "crossfire-arch";
-  version = rev;
+  inherit version;
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/arch/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "http://git.code.sf.net/p/crossfire/crossfire-arch";
+    inherit rev hash;
   };
 
   installPhase = ''
