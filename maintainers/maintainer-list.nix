@@ -2156,6 +2156,12 @@
     githubId = 18467667;
     name = "Alexander Bantyev";
   };
+  bananad3v = {
+    email = "banana@banana.is-cool.dev";
+    github = "bananad3v";
+    githubId = 68944906;
+    name = "Nikita";
+  };
   bandresen = {
     email = "bandresen@gmail.com";
     github = "bennyandresen";
