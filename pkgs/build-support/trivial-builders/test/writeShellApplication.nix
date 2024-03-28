@@ -78,11 +78,26 @@ linkFarm "writeShellApplication-tests" {
       '';
     };
 
-  test-check-phase =
+  test-post-install =
     checkShellApplication {
-      name = "test-check-phase";
+      name = "test-post-install";
+      text = ''
+        hello
+      '';
+      postInstall = ''
+        echo "world" >> "$target"
+      '';
+      expected = ''
+        hello
+        world
+      '';
+    };
+
+  test-install-check-phase =
+    checkShellApplication {
+      name = "test-install-check-phase";
       text = "";
-      checkPhase = ''
+      installCheckPhase = ''
         echo "echo -n hello" > $target
       '';
       expected = "hello";

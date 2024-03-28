@@ -120,7 +120,7 @@ rec {
     writeTextFile {
       inherit name text;
       executable = true;
-      checkPhase = ''
+      installCheckPhase = ''
          ${(phraseContextForPWD (
              phraseInvocation name (
                partialSolution // {
@@ -138,7 +138,7 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
-      checkPhase = ''
+      installCheckPhase = ''
         ${phraseContextForOut (
             phraseInvocation name (
               partialSolution // {
