@@ -1,4 +1,5 @@
 { lib
+, archinfo
 , buildPythonPackage
 , cffi
 , fetchFromGitHub
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    archinfo
     cffi
     minidump
     pefile
