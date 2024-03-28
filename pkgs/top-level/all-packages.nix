@@ -2109,6 +2109,8 @@ with pkgs;
 
   trimage = callPackage ../applications/graphics/trimage { inherit (qt5) wrapQtAppsHook; };
 
+  ttaenc = callPackage ../applications/audio/ttaenc { };
+
   ttchat = callPackage ../tools/misc/ttchat { };
 
   ufolint = with python3Packages; toPythonApplication ufolint;
