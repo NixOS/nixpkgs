@@ -1,0 +1,66 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5e4af80..a54eecb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,9 @@
+ # Copyright (C) 2020-2024 Intel Corporation
+ # SPDX-License-Identifier: MIT
+ 
++add_compile_definitions(SPDLOG_FMT_EXTERNAL)
++add_compile_definitions(FMT_HEADER_ONLY)
++
+ cmake_minimum_required(VERSION 3.2.0 FATAL_ERROR)
+ set(CMAKE_CXX_STANDARD 14)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -58,7 +60,7 @@ elseif(Git_FOUND)
+ endif()
+ 
+ include(FetchContent)
+-set(SPDLOG_ROOT "${FETCHCONTENT_BASE_DIR}/spdlog-src")
++set(SPDLOG_ROOT "@spdlog@")
+ 
+ # Update other relevant variables to include the patch
+ set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+diff --git a/source/utils/CMakeLists.txt b/source/utils/CMakeLists.txt
+index cb6cfb1..599338a 100644
+--- a/source/utils/CMakeLists.txt
++++ b/source/utils/CMakeLists.txt
+@@ -1,16 +1,6 @@
+ # Copyright (C) 2024 Intel Corporation
+ # SPDX-License-Identifier: MIT
+ 
+-include(FetchContent)
+-set(SPDLOG_REPO https://github.com/gabime/spdlog)
+-set(SPDLOG_TAG v1.13.0)
+-FetchContent_Declare(
+-    spdlog
+-    GIT_REPOSITORY ${SPDLOG_REPO}
+-    GIT_TAG ${SPDLOG_TAG}
+-)
+-FetchContent_makeAvailable(spdlog)
+-
+ add_library(utils
+   STATIC
+   "logging.h"
+@@ -19,5 +9,5 @@ add_library(utils
+ 
+ target_include_directories(utils
+   PUBLIC
+-  ${FETCHCONTENT_BASE_DIR}/spdlog-src/include
++  @spdlog@/include
+ )
+diff --git a/source/utils/logging.h b/source/utils/logging.h
+index 4aad451..c8c4cc3 100644
+--- a/source/utils/logging.h
++++ b/source/utils/logging.h
+@@ -16,8 +16,8 @@
+ #include <string>
+ #include <vector>
+ 
+-#include "spdlog/sinks/basic_file_sink.h"
+-#include "spdlog/spdlog.h"
++#include <spdlog/sinks/basic_file_sink.h>
++#include <spdlog/spdlog.h>
+ 
+ namespace loader {
+ 
