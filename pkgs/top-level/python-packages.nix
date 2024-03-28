@@ -6778,6 +6778,8 @@ self: super: with self; {
 
   llama-index-embeddings-openai = callPackage ../development/python-modules/llama-index-embeddings-openai { };
 
+  llama-index-graph-stores-nebula = callPackage ../development/python-modules/llama-index-graph-stores-nebula { };
+
   llama-index-graph-stores-neo4j = callPackage ../development/python-modules/llama-index-graph-stores-neo4j { };
 
   llama-index-graph-stores-neptune = callPackage ../development/python-modules/llama-index-graph-stores-neptune { };
