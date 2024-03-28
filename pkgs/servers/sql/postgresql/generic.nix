@@ -5,6 +5,7 @@ let
       { stdenv, lib, fetchurl, makeWrapper, fetchpatch
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
+      , stdenvNoCC, postgresqlTestHook
       , linux-pam
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
@@ -242,6 +243,21 @@ let
               inherit rustc cargo;
             };
           };
+          extensionCheck = { sql, postgresqlPackage, ... }@extraArgs: stdenvNoCC.mkDerivation ({
+            inherit sql;
+            name = "postgresql-extension-check";
+            dontUnpack = true;
+            doCheck = true;
+            nativeCheckInputs = [ postgresqlTestHook postgresqlPackage ];
+            failureHook = "postgresqlStop";
+            passAsFile = [ "sql" ];
+            checkPhase = ''
+              runHook preCheck
+              psql -a -v ON_ERROR_STOP=1 -f $sqlPath
+              runHook postCheck
+            '';
+            installPhase = "touch $out";
+          } // extraArgs);
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
