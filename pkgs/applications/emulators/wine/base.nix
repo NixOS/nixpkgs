@@ -57,6 +57,8 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
 
   pname = prevName + lib.optionalString (wineRelease != "stable" && wineRelease != "unstable") "-${wineRelease}";
 
+  outputs = [ "out" "tools" ];
+
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;
 
@@ -142,7 +144,10 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
 
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
-  in lib.optionalString supportFlags.embedInstallers ''
+  in ''
+    mkdir -p "$tools"
+    cp -avT tools "$tools/tools" # not a typo; grep `/configure` for `$wine_cv_toolsdir`
+  '' + lib.optionalString supportFlags.embedInstallers ''
     mkdir -p $out/share/wine/gecko $out/share/wine/mono/
     ${lib.strings.concatStringsSep "\n"
           ((map (links "share/wine/gecko") geckos)
