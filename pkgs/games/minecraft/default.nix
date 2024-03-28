@@ -151,6 +151,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
+    broken = builtins.trace "Warning: minecraft-launcher will fail on NixOS for versions >1.19, try prismlauncher or atlauncher instead" true;
   };
 
   passthru = {
