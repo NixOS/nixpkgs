@@ -11256,6 +11256,12 @@
     githubId = 36448130;
     name = "Michael Brantley";
   };
+  linbreux = {
+    email = "linbreux@gmail.com";
+    github = "linbreux";
+    githubId = 29354411;
+    name = "Linbreux";
+  };
   linc01n = {
     email = "git@lincoln.hk";
     github = "linc01n";
