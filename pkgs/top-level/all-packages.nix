@@ -32605,7 +32605,9 @@ with pkgs;
 
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 
-  kubectl-klock = callPackage ../applications/networking/cluster/kubectl-klock { };
+  kubectl-klock = callPackage ../applications/networking/cluster/kubectl-klock {
+    buildGoModule = buildGo122Module;
+  };
 
   kubectl-ktop = callPackage ../applications/networking/cluster/kubectl-ktop { };
 
