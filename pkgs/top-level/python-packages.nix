@@ -6770,6 +6770,8 @@ self: super: with self; {
 
   llama-index-embeddings-google = callPackage ../development/python-modules/llama-index-embeddings-google { };
 
+  llama-index-embeddings-huggingface = callPackage ../development/python-modules/llama-index-embeddings-huggingface { };
+
   llama-index-embeddings-ollama = callPackage ../development/python-modules/llama-index-embeddings-ollama { };
 
   llama-index-embeddings-openai = callPackage ../development/python-modules/llama-index-embeddings-openai { };
