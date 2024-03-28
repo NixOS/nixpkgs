@@ -1,38 +1,37 @@
 { lib, stdenv, fetchurl, pkg-config, bison, numactl, libxml2
 , perl, gfortran, slurm, openssh, hwloc, zlib, makeWrapper
-# InfiniBand dependencies
-, opensm, rdma-core
+# InfiniBand/Ethernet dependencies
+, ucx
 # OmniPath dependencies
-, libpsm2, libfabric
+, libfabric
 # Compile with slurm as a process manager
 , useSlurm ? false
 # Network type for MVAPICH2
-, network ? "ethernet"
+, network ? "ucx"
 } :
 
-assert builtins.elem network [ "ethernet" "infiniband" "omnipath" ];
+assert builtins.elem network [ "ucx" "ofi" ];
 
 stdenv.mkDerivation rec {
   pname = "mvapich";
-  version = "2.3.7";
+  version = "3.0";
 
   src = fetchurl {
-    url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-${version}.tar.gz";
-    sha256 = "sha256-w5pEkvS+UN9hAHhXSLoolOI85FCpQSgYHVFtpXV3Ua4=";
+    url = "https://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich-${version}.tar.gz";
+    sha256 = "sha256-7gdsTmctGNa/jdIlDkqR+paqwdsseI5FcrVRPYaTbvs=";
   };
 
   outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ pkg-config bison makeWrapper gfortran ];
-  propagatedBuildInputs = [ numactl rdma-core zlib opensm ];
+  propagatedBuildInputs = [ numactl zlib ];
   buildInputs = with lib; [
-    numactl
     libxml2
     perl
     openssh
     hwloc
-  ] ++ optionals (network == "infiniband") [ rdma-core opensm ]
-    ++ optionals (network == "omnipath") [ libpsm2 libfabric ]
+  ] ++ optional (network == "ucx") ucx
+    ++ optional (network == "ofi") libfabric
     ++ optional useSlurm slurm;
 
   configureFlags = with lib; [
@@ -44,19 +43,12 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     "FFLAGS=-fallow-argument-mismatch" # fix build with gfortran 10
   ] ++ optional useSlurm "--with-pm=slurm"
-    ++ optional (network == "ethernet") "--with-device=ch3:sock"
-    ++ optionals (network == "infiniband") [ "--with-device=ch3:mrail" "--with-rdma=gen2" "--disable-ibv-dlopen" ]
-    ++ optionals (network == "omnipath") ["--with-device=ch3:psm" "--with-psm2=${libpsm2}"];
+    ++ optional (network == "ucx") "--with-device=ch4:ucx"
+    ++ optional (network == "ofi") "--with-device=ch4:ofi";
 
   doCheck = true;
 
   preFixup = ''
-    # /tmp/nix-build... ends up in the RPATH, fix it manually
-    for entry in $out/bin/mpichversion $out/bin/mpivars; do
-      echo "fix rpath: $entry"
-      patchelf --allowed-rpath-prefixes ${builtins.storeDir} --shrink-rpath $entry
-    done
-
     # Ensure the default compilers are the ones mvapich was built with
     substituteInPlace $out/bin/mpicc --replace 'CC="gcc"' 'CC=${stdenv.cc}/bin/cc'
     substituteInPlace $out/bin/mpicxx --replace 'CXX="g++"' 'CXX=${stdenv.cc}/bin/c++'
@@ -66,7 +58,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "MPI-3.1 implementation optimized for Infiband transport";
+    description = "MPI-3.1 implementation optimized for Infiband and OmniPath transport";
     homepage = "https://mvapich.cse.ohio-state.edu";
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];
