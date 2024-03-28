@@ -649,7 +649,8 @@ in
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
                     || dmConf.startx.enable
-                    || config.services.greetd.enable);
+                    || config.services.greetd.enable
+                    || config.services.displayManager.ly.enable);
       in mkIf (default) (mkDefault true);
 
     # so that the service won't be enabled when only startx is used
@@ -658,7 +659,8 @@ in
           noDmUsed = !(dmConf.gdm.enable
                     || dmConf.sddm.enable
                     || dmConf.xpra.enable
-                    || dmConf.lightdm.enable);
+                    || dmConf.lightdm.enable
+                    || config.services.displayManager.ly.enable);
       in mkIf (noDmUsed) (mkDefault false);
 
     hardware.opengl.enable = mkDefault true;
