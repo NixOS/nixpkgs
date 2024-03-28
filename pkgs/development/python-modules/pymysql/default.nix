@@ -1,22 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , cryptography
+, setuptools
+, build
 }:
 
 buildPythonPackage rec {
   pname = "PyMySQL";
-  version = "1.0.2";
+  version = "1.1.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "816927a350f38d56072aeca5dfb10221fe1dc653745853d30a216637f5d7ad36";
+  src = fetchFromGitHub {
+    inherit pname;
+    owner = "PyMySQL";
+    repo = "PyMySQL";
+    rev = "v${version}";
+    sha256 = "sha256-j9RF4vPIFg6RvV5xREL71RAlXM7YWP0LULghlZC/1yA=";
   };
 
   propagatedBuildInputs = [ cryptography ];
 
-  # Wants to connect to MySQL
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools
+    build
+  ];
 
   meta = with lib; {
     description = "Pure Python MySQL Client";
