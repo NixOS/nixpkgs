@@ -1,7 +1,15 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p cabal2nix elm2nix -i bash ../../..
 
-cabal2nix https://github.com/ekmett/ansi-wl-pprint --revision d16e2f6896d76b87b72af7220c2e93ba15c53280 > packages/ghc9_6/ansi-wl-pprint/default.nix
+# Update all cabal packages.
+cabal2nix 'https://github.com/zwilias/elm-instrument' --revision '0.0.7' > packages/ghc8_10/elm-instrument/default.nix
+for subpath in 'avh4-lib' 'elm-format-lib' 'elm-format-markdown' 'elm-format-test-lib'; do
+  cabal2nix 'https://github.com/avh4/elm-format' --revision '0.8.7' \
+    --subpath $subpath > packages/ghc9_2/elm-format/${subpath}.nix
+done
+cabal2nix 'https://github.com/avh4/elm-format' --revision '0.8.7' > packages/ghc9_2/elm-format/elm-format.nix
+cabal2nix 'https://github.com/stoeffel/elmi-to-json' --revision '1.3.0' > packages/ghc8_10/elmi-to-json/default.nix
+cabal2nix 'https://github.com/ekmett/ansi-wl-pprint' --revision 'v0.6.8.1' > packages/ghc9_6/ansi-wl-pprint/default.nix
 
 # We're building binaries from commit that npm installer is using since
 # November 1st release called 0.19.1-6 in npm registry.
