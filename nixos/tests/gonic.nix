@@ -2,11 +2,17 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "gonic";
 
   nodes.machine = { ... }: {
+    systemd.tmpfiles.rules = [
+      "d /tmp/music"
+      "d /tmp/podcast"
+      "d /tmp/playlists"
+    ];
     services.gonic = {
       enable = true;
       settings = {
-        music-path = [ "/tmp" ];
-        podcast-path = "/tmp";
+        music-path = [ "/tmp/music" ];
+        podcast-path = "/tmp/podcast";
+        playlists-path = "/tmp/playlists";
       };
     };
   };
