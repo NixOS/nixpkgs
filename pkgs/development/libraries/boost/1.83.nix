@@ -11,4 +11,13 @@ callPackage ./generic.nix (args // rec {
     # SHA256 from http://www.boost.org/users/history/version_1_83_0.html
     sha256 = "6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "avoid-phoenix-odr.patch";
+      url = "https://github.com/boostorg/phoenix/commit/665047aac26ad4d96b266d87504b3a88ad21b37e.diff";
+      hash = "sha256-JUK5iMnInNJw/5ybHTO2gsOOYgcGKAkhA4LyL3RDRn0=";
+      stripLen = 1;
+    })
+  ];
 })
