@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.3.6";
-  rcversion = "3";
+  version = "3.3.10";
+  rcversion = "1";
   arch = "amd64";
 
   src = fetchurl {
     url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${finalAttrs.rcversion}/GitHubDesktop-linux-${finalAttrs.arch}-${finalAttrs.version}-linux${finalAttrs.rcversion}.deb";
-    hash = "sha256-900JhfHN78CuAXptPX2ToTvT9E+g+xRXqmlm34J9l6k=";
+    hash = "sha256-zzq6p/DAQmgSw4KAUYqtrQKkIPksLzkUQjGzwO26WgQ=";
   };
 
   nativeBuildInputs = [
