@@ -5,9 +5,11 @@ pythonImportsCheckPhase () {
     echo "Executing pythonImportsCheckPhase"
 
     if [ -n "$pythonImportsCheck" ]; then
+        runHook prePythonImportsCheck
         echo "Check whether the following modules can be imported: $pythonImportsCheck"
         export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
         ( cd $out && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"pythonImportsCheck\"].split()))'" )
+        runHook postPythonImportsCheck
     fi
 }
 
