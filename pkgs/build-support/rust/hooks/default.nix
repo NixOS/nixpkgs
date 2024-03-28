@@ -31,7 +31,7 @@
       name = "cargo-check-hook.sh";
       propagatedBuildInputs = [ cargo ];
       substitutions = {
-        inherit (rust.envVars) rustHostPlatformSpec;
+        inherit (rust.envVars) rustHostPlatformSpec setEnv;
       };
     } ./cargo-check-hook.sh) {};
 
