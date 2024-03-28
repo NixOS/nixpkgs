@@ -11,15 +11,15 @@ let
     pybind11
   ]);
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "evdi";
-  version = "1.14.1-unstable-2024-01-30";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
-    repo = "evdi";
-    rev = "d21a6ea3c69ba180457966a04b6545d321cf46ca";
-    hash = "sha256-Txa9yX9h3GfmHRRNvhrfrsUoQhqRWbBt4gJYAZTNe0w=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-HnZ3EmSG1MUc2maaX2HZdyfI1e/J5WEQAXPfPL1C39A=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
