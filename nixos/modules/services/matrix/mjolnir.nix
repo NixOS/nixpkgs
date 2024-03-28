@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.services.mjolnir;
 
+  mjolnir = cfg.package;
+
   yamlConfig = {
     inherit (cfg) dataPath managementRoom protectedRooms;
 
@@ -30,7 +32,7 @@ let
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
-    "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
+    "${mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
     moduleConfigFile
   ];
 
@@ -66,6 +68,13 @@ in
 {
   options.services.mjolnir = {
     enable = mkEnableOption (lib.mdDoc "Mjolnir, a moderation tool for Matrix");
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.mjolnir;
+      defaultText = literalExpression "pkgs.mjolnir";
+      description = lib.mdDoc "Mjolnir package to use.";
+    };
 
     homeserverUrl = mkOption {
       type = types.str;
@@ -200,7 +209,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml'';
+        ExecStart = ''${mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml'';
         ExecStartPre = [ generateConfig ];
         WorkingDirectory = cfg.dataPath;
         StateDirectory = "mjolnir";
