@@ -2,6 +2,7 @@
 , llvmPackages
 , lib
 , fetchFromGitHub
+, flatbuffers
 , cmake
 , libffi
 , libpng
@@ -18,13 +19,13 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation rec {
   pname = "halide";
-  version = "16.0.0";
+  version = "17.0.1";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     rev = "v${version}";
-    sha256 = "sha256-lJQrXkJgBmGb/QMSxwuPkkHOSgEDowLWzIolp1km2Y8=";
+    sha256 = "sha256-43jPItXJl/dEvEdlHJJxm1gIsfVoXixIVcGGwK3usQQ=";
   };
 
   postPatch = ''
@@ -61,9 +62,12 @@ stdenv.mkDerivation rec {
     # v16 release (See https://github.com/halide/Halide/commit/09c5d1d19ec8e6280ccbc01a8a12decfb27226ba)
     # These tests also fail to compile on Darwin because of some missing command line options...
     "-DWITH_TEST_FUZZ=OFF"
+    # Disable FetchContent for flatbuffers and use the version from nixpkgs instead
+    "-DFLATBUFFERS_USE_FETCHCONTENT=OFF"
   ];
 
   doCheck = true;
+  strictDeps = true;
 
   # Note: disable mullapudi2016_fibonacci because it requires too much
   # parallelism for remote builders
@@ -89,7 +93,10 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    flatbuffers
+  ];
 
   meta = with lib; {
     description = "C++ based language for image processing and computational photography";
