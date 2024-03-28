@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     moveToOutput bin/pcre2-config "$dev"
+    patchShebangs $dev/bin/pcre2-config
   '';
 
   meta = with lib; {
