@@ -25,11 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-n9Erm21slKm+zDblhSHA5Cwxkyrcyx0w09ua3bUc5XI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-api
     opentelemetry-sdk
     std-uritemplate
