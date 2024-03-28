@@ -1,20 +1,16 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib
+, stdenvNoCC
+, fira-mono
+}:
 
-stdenvNoCC.mkDerivation rec {
-  pname = "fira";
-  version = "4.202";
-
-  src = fetchFromGitHub {
-    owner = "mozilla";
-    repo = "Fira";
-    rev = version;
-    hash = "sha256-HLReqgL0PXF5vOpwLN0GiRwnzkjGkEVEyOEV2Z4R0oQ=";
-  };
+stdenvNoCC.mkDerivation {
+  pname = "fira-sans";
+  inherit (fira-mono) version src;
 
   installPhase = ''
     runHook preInstall
 
-    install --mode=-x -Dt $out/share/fonts/opentype otf/*.otf
+    install --mode=-x -Dt $out/share/fonts/opentype otf/FiraSans*.otf
 
     runHook postInstall
   '';
