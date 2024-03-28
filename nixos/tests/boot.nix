@@ -124,6 +124,15 @@ in {
       usb = "${iso}/iso/${iso.isoName}";
     };
 
+    directNetboot = makeTest {
+      name = "directboot-netboot";
+      nodes.machine = {
+        imports = [ ../modules/installer/netboot/netboot-minimal.nix ];
+        virtualisation.memorySize = 4096;
+      };
+      testScript = "machine.fail('stat /dev/vda')";
+    };
+
     uefiNetboot = makeNetbootTest "uefi" {
       uefi = true;
     };
