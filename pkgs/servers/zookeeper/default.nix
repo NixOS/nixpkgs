@@ -50,5 +50,8 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ nathan-gs pradeepchhetri ztzg ];
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2024-23944"
+    ];
   };
 }
