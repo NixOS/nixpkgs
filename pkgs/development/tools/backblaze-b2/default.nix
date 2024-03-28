@@ -46,7 +46,9 @@ python3Packages.buildPythonApplication rec {
     backoff
     more-itertools
     pexpect
-    pytestCheckHook
+
+    # backblaze-b2 requires pytest 7 to complete tests.
+    (pytestCheckHook.override { pytest = pytest_7; })
   ];
 
   preCheck = ''

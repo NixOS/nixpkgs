@@ -63,7 +63,7 @@ in
   };
 
   options.services.pretix = {
-    enable = mkEnableOption "pretix";
+    enable = mkEnableOption "Pretix, a ticket shop application for conferences, festivals, concerts, etc.";
 
     package = mkPackageOption pkgs "pretix" { };
 
@@ -479,7 +479,7 @@ in
           CapabilityBoundingSet = [ "" ];
           DevicePolicy = "closed";
           LockPersonality = true;
-          MemoryDenyWriteExecute = true;
+          MemoryDenyWriteExecute = false; # required by pdftk
           NoNewPrivileges = true;
           PrivateDevices = true;
           PrivateTmp = true;
@@ -535,6 +535,7 @@ in
           fi
         '';
         serviceConfig = {
+          TimeoutStartSec = "5min";
           ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
           RuntimeDirectory = "pretix";
         };

@@ -26,13 +26,13 @@ let
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-tQ35GZuw7Ag1YfmOUarVY45yk4yugNLJetEV4m2w3GE=";
+    hash = "sha256-r6BMlcjvRbVnBHsfRhJyMiyZzH2Z+FLOYz6ik4I8p+A=";
   };
 
   sourceRoot = "${src.name}/caddy";
@@ -40,7 +40,7 @@ in buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-sv3IcNj1rjolgF0HZZnJ3dLV9+QeRw3ItRguz6Un9CY=";
+  vendorHash = "sha256-gxBD2KPkWtAM0MsaQ9Ed4QDjJCg1uJQpXvnCOnAsZTw=";
 
   buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
   nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];

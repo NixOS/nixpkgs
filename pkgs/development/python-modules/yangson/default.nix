@@ -1,27 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools-scm
+, fetchFromGitHub
+, poetry-core
 , elementpath
+, pyyaml
+, setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yangson";
-  version = "1.4.19";
-  format = "setuptools";
+  version = "1.5.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rYUxv3TEdyr2D3UEmmHcJJtlG6gXJnp1c2pez4H13SU=";
+  src = fetchFromGitHub {
+    owner = "CZ-NIC";
+    repo = "yangson";
+    rev = "refs/tags/${version}";
+    hash = "sha256-c/UWyfJdVz6wSluL1Ej9cSV3EpDUTkP0GTeHPYfAduE=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
+    poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     elementpath
+    pyyaml
+    setuptools
   ];
 
   nativeCheckInputs = [

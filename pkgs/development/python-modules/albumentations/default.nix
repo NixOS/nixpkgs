@@ -12,18 +12,20 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, torch
+, torchvision
 }:
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.0";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZJ+KFIlveIs1bsxwCDxPuRvtq0/04rOa0heoJOGJ3tA=";
+    hash = "sha256-lznWLJocXdfwnhAZ33V5ZdlFCAsNa0u/rjfkjmHBQOg=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +52,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deepdiff
     pytestCheckHook
+    torch
+    torchvision
   ];
 
   disabledTests = [

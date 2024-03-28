@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "extract-msg";
-  version = "0.48.2";
+  version = "0.48.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qCOi4CRBGF5MuGcHVUk+zb76pchZXbE1cBUIlzl9++w=";
+    hash = "sha256-xX25RVtkUFn+j9rALOHQOTRzqJXiEMn7i9pxCJ8so4U=";
   };
 
   pythonRelaxDeps = [
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     "red-black-tree-mod"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     compressed-rtf
     ebcdic

@@ -509,6 +509,12 @@ in
                                 for details).
                               '';
                             }
+                            {
+                              assertion = !lib.strings.hasInfix "_" name;
+                              message = ''
+                                Names containing underscores are not allowed in nixos-containers. Please rename the container '${name}'
+                              '';
+                            }
                           ];
                         };
                       };

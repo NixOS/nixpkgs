@@ -302,6 +302,7 @@ mapAliases ({
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
   pathpy = path; # added 2022-04-12
+  pcbnew-transition = pcbnewtransition; # added 2024-03-21
   pdfposter = throw "pdfposter was promoted to a top-level attribute"; # Added 2023-06-29
   pdfminer = pdfminer-six; # added 2022-05-25
   pep257 = pydocstyle; # added 2022-04-12
@@ -462,6 +463,7 @@ mapAliases ({
   scikitlearn = scikit-learn; # added 2021-07-21
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   sequoia = throw "python3Packages.sequoia was replaced by pysequoia - built from a dedicated repository, with a new API."; # added 2023-06-24
+  setuptools_dso = setuptools-dso; # added 2024-03-03
   setuptools_scm = setuptools-scm; # added 2021-06-03
   setuptoolsTrial = setuptools-trial; # added 2023-11-11
   sharkiqpy = sharkiq; # added 2022-05-21
@@ -501,6 +503,7 @@ mapAliases ({
   thumborPexif = throw "thumborPexif has been removed, because it was unused."; # added 2024-01-07
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
+  py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20

@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waypipe";
-  version = "0.8.6";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    hash = "sha256-1VLPnP4BmF9Zha0uVsPjA/WbF/oLfZmdDX57SzqrV5A=";
+    hash = "sha256-zk5IzZiFff9EeJn24/QmE1ybcBkxpaz6Owp77CfCwV0=";
   };
 
   strictDeps = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${version}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ mic92 ];
     mainProgram = "waypipe";
   };
 }

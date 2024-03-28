@@ -1238,11 +1238,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcursor = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes, libXrender, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXcursor";
-    version = "1.2.1";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXcursor-1.2.1.tar.xz";
-      sha256 = "011195an3w4xld3x0dr534kar1xjf52q96hmf0hgvfhh2rrl7ha6";
+      url = "mirror://xorg/individual/lib/libXcursor-1.2.2.tar.xz";
+      sha256 = "1vl87819mnhlbnccchysv9nmax4abil5x3cr61x52vn55jyp3l2k";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2158,11 +2158,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xauth = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXext, libXmu, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xauth";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xauth-1.1.2.tar.xz";
-      sha256 = "0072ivzn4z59ysanz838nh8s4mcmdsx6q9xkvlfysv2k37ynmfkq";
+      url = "mirror://xorg/individual/app/xauth-1.1.3.tar.xz";
+      sha256 = "0cwxzq7lv932rcfad3baanr541qcjjdhyrhxy0bzjcp3pac581z7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

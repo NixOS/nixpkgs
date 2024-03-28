@@ -417,31 +417,37 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 - Bad: Uses `git://` which won't be proxied.
 
   ```nix
-  src = fetchgit {
-    url = "git://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "git://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
 - Better: This is ok, but an archive fetch will still be faster.
 
   ```nix
-  src = fetchgit {
-    url = "https://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "https://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
 - Best: Fetches a snapshot archive and you get the rev you want.
 
   ```nix
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nix";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
@@ -506,13 +512,15 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 Patches available online should be retrieved using `fetchpatch`.
 
 ```nix
-patches = [
-  (fetchpatch {
-    name = "fix-check-for-using-shared-freetype-lib.patch";
-    url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
-  })
-];
+{
+  patches = [
+    (fetchpatch {
+      name = "fix-check-for-using-shared-freetype-lib.patch";
+      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+      hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
+    })
+  ];
+}
 ```
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
@@ -520,7 +528,9 @@ Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the inter
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
 ```nix
-patches = [ ./0001-changes.patch ];
+{
+  patches = [ ./0001-changes.patch ];
+}
 ```
 
 If you do need to do create this sort of patch file, one way to do so is with git:
@@ -564,8 +574,10 @@ We use jbidwatcher as an example for a discontinued project here.
 
     For example in this case:
 
-    ```
-    jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    ```nix
+    {
+      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    }
     ```
 
     The throw message should explain in short why the package was removed for users that still have it installed.
@@ -617,10 +629,10 @@ Here in the nixpkgs manual we describe mostly _package tests_; for _module tests
 For very simple tests, they can be written inline:
 
 ```nix
-{ …, yq-go }:
+{ /* ... , */ yq-go }:
 
 buildGoModule rec {
-  …
+  # …
 
   passthru.tests = {
     simple = runCommand "${pname}-test" {} ''
@@ -642,13 +654,13 @@ Add the tests in `passthru.tests` to the package definition like this:
 { stdenv, lib, fetchurl, callPackage }:
 
 stdenv.mkDerivation {
-  …
+  # …
 
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = { … };
+  meta = { /* … */ };
 }
 ```
 
@@ -706,13 +718,13 @@ For example, assuming we're packaging `nginx`, we can link its module test via `
 { stdenv, lib, nixosTests }:
 
 stdenv.mkDerivation {
-  ...
+  # ...
 
   passthru.tests = {
     nginx = nixosTests.nginx;
   };
 
-  ...
+  # ...
 }
 ```
 

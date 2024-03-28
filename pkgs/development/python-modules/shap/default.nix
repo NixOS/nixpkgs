@@ -22,16 +22,16 @@
 , scipy
 , sentencepiece
 , setuptools
+, setuptools-scm
 , slicer
 , tqdm
 , transformers
 , xgboost
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.43.0";
+  version = "0.45.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,13 +40,13 @@ buildPythonPackage rec {
     owner = "slundberg";
     repo = "shap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ylkpXhaLXsQiu6YMC3pUtlicptQmtjITzW+ydinB4ls=";
+    hash = "sha256-x8845saPoLsWu3Z8Thkhqo3HeLmfAZANj3KE0ftVqZc=";
   };
 
   nativeBuildInputs = [
     oldest-supported-numpy
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport [ cudaPackages.autoAddOpenGLRunpathHook ]
+    ++ lib.optionals cudaSupport [ cudaPackages.autoAddDriverRunpath ]
     ++ lib.optionals rLibrary [ R ];
 
   buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit

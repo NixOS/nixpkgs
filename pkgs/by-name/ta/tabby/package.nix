@@ -97,8 +97,6 @@ let
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];
 
-  LLAMA_CPP_LIB = "${llamaccpPackage.outPath}/lib";
-
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -139,7 +137,7 @@ rustPlatform.buildRustPackage {
   ] ++ optionals enableCuda [
     # TODO: Replace with autoAddDriverRunpath
     # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    cudaPackages.autoAddDriverRunpath
   ];
 
   buildInputs = [ openssl ]
@@ -148,11 +146,7 @@ rustPlatform.buildRustPackage {
   ++ optionals enableRocm rocmBuildInputs
   ;
 
-  env = lib.mergeAttrsList [
-    { inherit LLAMA_CPP_LIB; }
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205
-    (lib.optionalAttrs stdenv.cc.isClang { NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}"; })
-  ];
+  env.LLAMA_CPP_LIB = "${lib.getLib llamaccpPackage}/lib";
   patches = [ ./0001-nix-build-use-nix-native-llama-cpp-package.patch ];
 
   # Fails with:

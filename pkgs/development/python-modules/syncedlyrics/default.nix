@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "syncedlyrics";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,10 +20,10 @@ buildPythonPackage rec {
     owner = "rtcq";
     repo = "syncedlyrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ro9HzI8N7Ry4xh91mO1Vyy3CScEi3FifweOO01/Ti0w=";
+    hash = "sha256-Q0Hu403Hxr4iDuZfGQjgTSuNMVgsqd9zLRl9Vc1YzyQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     pythonRelaxDepsHook
   ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "rapidfuzz"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     rapidfuzz
     beautifulsoup4

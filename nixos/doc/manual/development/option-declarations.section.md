@@ -6,14 +6,16 @@ hasn't been declared in any module. An option declaration generally
 looks like this:
 
 ```nix
-options = {
-  name = mkOption {
-    type = type specification;
-    default = default value;
-    example = example value;
-    description = lib.mdDoc "Description for use in the NixOS manual.";
+{
+  options = {
+    name = mkOption {
+      type = type specification;
+      default = default value;
+      example = example value;
+      description = lib.mdDoc "Description for use in the NixOS manual.";
+    };
   };
-};
+}
 ```
 
 The attribute names within the `name` attribute path must be camel
@@ -221,28 +223,34 @@ enforces that there can only be a single display manager enabled.
 ::: {#ex-option-declaration-eot-service .example}
 ### Extensible type placeholder in the service module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  description = "Display manager to use";
-  type = with types; nullOr (enum [ ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    description = "Display manager to use";
+    type = with types; nullOr (enum [ ]);
+  };
+}
 ```
 :::
 
 ::: {#ex-option-declaration-eot-backend-gdm .example}
 ### Extending `services.xserver.displayManager.enable` in the `gdm` module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "gdm" ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    type = with types; nullOr (enum [ "gdm" ]);
+  };
+}
 ```
 :::
 
 ::: {#ex-option-declaration-eot-backend-sddm .example}
 ### Extending `services.xserver.displayManager.enable` in the `sddm` module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "sddm" ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    type = with types; nullOr (enum [ "sddm" ]);
+  };
+}
 ```
 :::
 

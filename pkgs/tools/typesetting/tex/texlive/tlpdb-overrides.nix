@@ -291,11 +291,6 @@ in lib.recursiveUpdate orig rec {
   '';
 
   #### other script fixes
-  # wrong $0 expectations
-  bibcop.postFixup = ''
-    substituteInPlace "$out"/bin/bibcop --replace "basename(\$0) eq 'bibcop.pl'" "basename(\$0) eq 'bibcop'"
-  '';
-
   # misc tab and python3 fixes
   ebong.postFixup = ''
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
@@ -305,12 +300,12 @@ in lib.recursiveUpdate orig rec {
   # add runtime dependencies to PATH
   epspdf.postFixup = ''
     sed -i '2ios.setenv("PATH","${lib.makeBinPath epspdf.extraBuildInputs}" .. (os.getenv("PATH") and ":" .. os.getenv("PATH") or ""))' "$out"/bin/epspdf
-    substituteInPlace "$out"/bin/epspdftk --replace '[info script]' "\"$scriptsFolder/epspdftk.tcl\""
+    substituteInPlace "$out"/bin/epspdftk --replace-fail '[info script]' "\"$scriptsFolder/epspdftk.tcl\""
   '';
 
   # find files in script directory, not in binary directory
   latexindent.postFixup = ''
-    substituteInPlace "$out"/bin/latexindent --replace 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
+    substituteInPlace "$out"/bin/latexindent --replace-fail 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
   '';
 
   # flag lua dependency
@@ -330,14 +325,14 @@ in lib.recursiveUpdate orig rec {
 
   # patch interpreter
   texosquery.postFixup = ''
-    substituteInPlace "$out"/bin/* --replace java "$interpJava"
+    substituteInPlace "$out"/bin/* --replace-fail java "$interpJava"
   '';
 
   # hardcode revision numbers (since texlive.infra, tlshell are not in either system or user texlive.tlpdb)
   tlshell.postFixup = ''
     substituteInPlace "$out"/bin/tlshell \
-      --replace '[dict get $::pkgs texlive.infra localrev]' '${toString orig."texlive.infra".revision}' \
-      --replace '[dict get $::pkgs tlshell localrev]' '${toString orig.tlshell.revision}'
+      --replace-fail '[dict get $::pkgs texlive.infra localrev]' '${toString orig."texlive.infra".revision}' \
+      --replace-fail '[dict get $::pkgs tlshell localrev]' '${toString orig.tlshell.revision}'
   '';
 
   #### dependency changes
@@ -389,9 +384,9 @@ in lib.recursiveUpdate orig rec {
       TEXMFCNF="${tl.kpathsea.tex}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
       substituteInPlace "$TMPDIR"/_texdoc \
-        --replace 'compdef __texdoc texdoc' '#compdef texdoc' \
-        --replace '$(kpsewhich -var-value TEXMFROOT)/tlpkg/texlive.tlpdb' '$(kpsewhich Data.tlpdb.lua)' \
-        --replace '/^name[^.]*$/ {print $2}' '/^  \["[^"]*"\] = {$/ { print substr($1,3,length($1)-4) }'
+        --replace-fail 'compdef __texdoc texdoc' '#compdef texdoc' \
+        --replace-fail '$(kpsewhich -var-value TEXMFROOT)/tlpkg/texlive.tlpdb' '$(kpsewhich Data.tlpdb.lua)' \
+        --replace-fail '/^name[^.]*$/ {print $2}' '/^  \["[^"]*"\] = {$/ { print substr($1,3,length($1)-4) }'
       echo '__texdoc' >> "$TMPDIR"/_texdoc
       installShellCompletion --zsh "$TMPDIR"/_texdoc
     '';
@@ -410,7 +405,7 @@ in lib.recursiveUpdate orig rec {
     # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
     postFixup = ''
       substituteInPlace "$out"/bin/tlmgr \
-        --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
+        --replace-fail 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
       sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
       sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused tl.kpathsea ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
     '';

@@ -178,7 +178,7 @@ file {file}`configuration.nix` to make it contain:
 ::: {.example #module-services-emacs-configuration-nix}
 ### Custom Emacs in `configuration.nix`
 
-```
+```nix
 {
  environment.systemPackages = [
    # [...]
@@ -203,7 +203,7 @@ adding it to your {file}`~/.config/nixpkgs/config.nix` (see
 ::: {.example #module-services-emacs-config-nix}
 ### Custom Emacs in `~/.config/nixpkgs/config.nix`
 
-```
+```nix
 {
   packageOverrides = super: let self = super.pkgs; in {
     myemacs = import ./emacs.nix { pkgs = self; };
@@ -228,7 +228,7 @@ only use {command}`emacsclient`), you can change your file
 ::: {.example #ex-emacsGtk3Nix}
 ### Custom Emacs build
 
-```
+```nix
 { pkgs ? import <nixpkgs> {} }:
 let
   myEmacs = (pkgs.emacs.override {
@@ -242,7 +242,7 @@ let
       rm $out/share/applications/emacs.desktop
     '';
   });
-in [...]
+in [ /* ... */ ]
 ```
 :::
 
@@ -262,8 +262,10 @@ with the user's login session.
 
 To install and enable the {command}`systemd` user service for Emacs
 daemon, add the following to your {file}`configuration.nix`:
-```
-services.emacs.enable = true;
+```nix
+{
+  services.emacs.enable = true;
+}
 ```
 
 The {var}`services.emacs.package` option allows a custom
@@ -323,9 +325,11 @@ In general, {command}`systemd` user services are globally enabled
 by symlinks in {file}`/etc/systemd/user`. In the case where
 Emacs daemon is not wanted for all users, it is possible to install the
 service but not globally enable it:
-```
-services.emacs.enable = false;
-services.emacs.install = true;
+```nix
+{
+  services.emacs.enable = false;
+  services.emacs.install = true;
+}
 ```
 
 To enable the {command}`systemd` user service for just the

@@ -25,6 +25,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   dontUseSetuptoolsCheck = true;
 
   disabledTests = [

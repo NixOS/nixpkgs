@@ -1,12 +1,12 @@
-{ fetchurl, lib, stdenv, gettext, npth, libgpg-error, buildPackages }:
+{ fetchurl, lib, stdenv, gettext, npth, libgpg-error, buildPackages, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
-  version = "2.5.6";
+  version = "2.5.7";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-6f0nIY1TlJBOTjl4j5sXQnEcPmtBaJoxqjOAvVqk9CY=";
+    sha256 = "sha256-AQMIH/wng4ouUEeRU8oQXoc9PWXYqVkygunJTH5q+3Y=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
     sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' $dev/include/assuan.h
   '';
 
+  passthru.updateScript = gitUpdater {
+    url = "https://dev.gnupg.org/source/libassuan.git";
+    rev-prefix = "libassuan-";
+    ignoredVersions = ".*-base";
+  };
+
   meta = with lib; {
     description = "IPC library used by GnuPG and related software";
     mainProgram = "libassuan-config";
@@ -36,7 +42,8 @@ stdenv.mkDerivation rec {
       GnuPG components.  Both, server and client side functions are
       provided.
     '';
-    homepage = "http://gnupg.org";
+    homepage = "https://gnupg.org/software/libassuan/";
+    changelog = "https://dev.gnupg.org/source/libassuan/browse/master/NEWS;libassuan-${version}";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = [ ];

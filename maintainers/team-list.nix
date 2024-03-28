@@ -560,6 +560,7 @@ with lib.maintainers; {
       lovek323
       qyliss
       raitobezarius
+      RossComputerGuy
       rrbutani
       sternenseemann
     ];
@@ -880,6 +881,7 @@ with lib.maintainers; {
     members = [
       Madouura
       Flakebi
+      mschwaig
     ];
     githubTeams = [
       "rocm-maintainers"

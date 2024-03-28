@@ -5,8 +5,8 @@ mkdir -p package/rime
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-array";
-  rev = "d10f2f8b2aec7c7e736ace01e8a399e5ae5e7c3a";
-  sha256 = "sha256-4t6+gh2V57SueDp9Tn6vTuxQCZNGzjLdJEhzIEqRjdI=";
+  rev = "b37aad383ff6e71e457aa6d1d47d2040af8649b9";
+  sha256 = "0krvxnjr35r49wwi6bcjdnld6zbk791l7vm294wmdy36qfp2924y";
 }} package/rime/array
 ln -sv ${fetchFromGitHub {
   owner = "rime";
@@ -23,14 +23,14 @@ ln -sv ${fetchFromGitHub {
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-cantonese";
-  rev = "b6f800c74eb639816d56d0d5601aaa96c8963178";
-  sha256 = "1a4ksacbz8l30y3y5c017d0hzwik8knplglb3yswy7l4hsvaanyh";
+  rev = "e3c6b17e638ac8a9aeab4d5852e5909b049c5ab3";
+  sha256 = "171a64l17yb6isgiih2z0cp2vgzvdcn0vby3rk8556b0ir4j545q";
 }} package/rime/cantonese
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-combo-pinyin";
-  rev = "a84065a86b272c76215215bd6f03c506b6e7097c";
-  sha256 = "1f0b4kakw0x26gmx7xi4f94nbjlb8lvi9bks4f92jswa045vnd87";
+  rev = "17b66079a23a00d3214639fee2b8ae97d3e620dc";
+  sha256 = "1izx29hawfryapfzadysjbb2zfw0yq6vwsw56khkf6gsaz1faamn";
 }} package/rime/combo-pinyin
 ln -sv ${fetchFromGitHub {
   owner = "rime";
@@ -41,14 +41,14 @@ ln -sv ${fetchFromGitHub {
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-emoji";
-  rev = "4c8c51f4a3bc7298c99376eda9bbd86070fc4fa1";
-  sha256 = "0175jqh210fncafqckr9zzaw55qpswmqjrykwms1apmc68l43122";
+  rev = "a18b09997e7c457066e4c92adf249a4b3e235f9c";
+  sha256 = "0gaa9r3yx1s135jlqxp85iyygcwqgz2k4n1bpvjr2n8xkn9297b6";
 }} package/rime/emoji
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-essay";
-  rev = "9db2e77305e75798baf3ec8dcf1f82785b5e1be9";
-  sha256 = "03ypkkaadd5qmyg26n24a66cll90xvcimgbmiyv4d33jradiqg22";
+  rev = "e0519d0579722a0871efb68189272cba61a7350b";
+  sha256 = "1g7188vgklxindvm6p65b5jlm6z47fdmhmp0hqrrd6smg9pz4qpw";
 }} package/rime/essay
 ln -sv ${fetchFromGitHub {
   owner = "rime";
@@ -59,32 +59,32 @@ ln -sv ${fetchFromGitHub {
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-jyutping";
-  rev = "1e24baa6998815c716c581effe8ec65ee87c4e8c";
-  sha256 = "0s2rckpwlrm3n7w1csnqyi5p9mkpp3z87s7mrm2vc9sv06rpv7zl";
+  rev = "50100769f645bf92afef5170e3bf42be5147b41b";
+  sha256 = "1dmw2ssbqxbs93iab0whjzncsvv66vyw3hwb30kly2v18bwkagq0";
 }} package/rime/jyutping
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-luna-pinyin";
-  rev = "623adb022b094d540218b287c2e601509eee3347";
-  sha256 = "06pcwp09l5wkqv7792gbsl31xnlb3gr9q6bgbp94vvq6m2ycahqz";
+  rev = "79aeae200a7370720be98232844c0715f277e1c0";
+  sha256 = "06vff5hq85dkbmqch9d3w2rww2n8sk41c7say0pdlkfphyjs76ps";
 }} package/rime/luna-pinyin
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-middle-chinese";
-  rev = "9fad7a7c0c26167d5e6e85db8df48a15c7f7d4f0";
-  sha256 = "0a0bqrlzg0k692xblqnh1rh1fwwqqb205xwxlihgji85n8ibcgph";
+  rev = "582e144e525525ac2b6c2498097d7c7919e84174";
+  sha256 = "0ixj2f3syc0hv9n5r0cavcq0jrdf1www2frjl11855gwydp4lsx5";
 }} package/rime/middle-chinese
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-pinyin-simp";
-  rev = "b0e84cda02c613ebdedc127a26131b3800f45a8e";
-  sha256 = "05v804qr3a9xvjzp9yid7231fi2l2yrl47ybbvql61z9k36ab094";
+  rev = "52b9c75f085479799553f2499c4f4c611d618cdf";
+  sha256 = "1zi9yqgijb4r3q5ah89hdwbli5xhlmg19xj8sq1grnpfbw2hbdbj";
 }} package/rime/pinyin-simp
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-prelude";
-  rev = "3de303ffaa731dba07b0462ce59f4767e1219ad2";
-  sha256 = "0g7a0bla58rh1v3md59k6adk185pilb4z8i2i0pqdl4nwqp40n2p";
+  rev = "dd84abecc33f0b05469f1d744e32d2b60b3529e3";
+  sha256 = "14wn86xqvb6r73pgksi51wgfc70pj95iqrl85m2i0fwl43zg2y5g";
 }} package/rime/prelude
 ln -sv ${fetchFromGitHub {
   owner = "rime";
@@ -113,20 +113,20 @@ ln -sv ${fetchFromGitHub {
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-stroke";
-  rev = "ea8576d1accd6fda339e96b415caadb56e2a07d1";
-  sha256 = "07h6nq9867hjrd2v3h1pnr940sdrw4mqrzj43siz1rzjxz3s904r";
+  rev = "e6c7608925009636577ff7469eecc870f1de18f3";
+  sha256 = "1rzclksf09s9js6z9mjm4ibgybr6kg2c4xq4j6sg9b3pnjbjwv8g";
 }} package/rime/stroke
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-terra-pinyin";
-  rev = "ce7b9249612f575d2f43d51fcacd31d1b4e0ef1b";
-  sha256 = "0vm303f4lrdmdmif5klrp6w29vn9z2vzw33cw0y83pcnz39wiads";
+  rev = "9427853de91d645d9aca9ceace8fe9e9d8bc5b50";
+  sha256 = "0f1wiqasy41hp3kw3qc5zk6z0rgfrswdw91kc66v1w1a3skb6wpp";
 }} package/rime/terra-pinyin
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-wubi";
-  rev = "f1876f08f1d4a9696395be0070c0e8e4353c44cb";
-  sha256 = "1d9y9rqssacria9d0hla96czsqv2wkfm6z926m1x269ryv96zxvk";
+  rev = "152a0d3f3efe40cae216d1e3b338242446848d07";
+  sha256 = "1p2ikcw40q84fx0ixarm1jfp8ax276pabansybchrj34cqs53sr1";
 }} package/rime/wubi
 ln -sv ${fetchFromGitHub {
   owner = "rime";

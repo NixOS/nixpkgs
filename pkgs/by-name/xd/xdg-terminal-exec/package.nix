@@ -2,16 +2,17 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  dash,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xdg-terminal-exec";
-  version = "unstable-2023-12-08";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "xdg-terminal-exec";
-    rev = "04f37d4337b6ce157d4a7338dd600a32deb43a28";
-    hash = "sha256-QIPdF+/dMUEVcz5j9o+wQ4dnw2yWwz7slnLdMNETkGs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uLUHvSjxIjmy0ejqLfliB6gHFRwyTWNH1RL5kTXebUM=";
   };
 
   dontBuild = true;
@@ -19,6 +20,12 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
     install -Dm555 xdg-terminal-exec -t $out/bin
     runHook postInstall
+  '';
+
+  dontPatchShebangs = true;
+  postFixup = ''
+    substituteInPlace $out/bin/xdg-terminal-exec \
+      --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
   '';
 
   meta = {
@@ -29,4 +36,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [quantenzitrone];
     platforms = lib.platforms.unix;
   };
-}
+})

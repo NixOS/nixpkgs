@@ -79,6 +79,8 @@ let
 
     libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
 
+    jellycon = callPackage ../applications/video/kodi/addons/jellycon { };
+
     jellyfin = callPackage ../applications/video/kodi/addons/jellyfin { };
 
     joystick = callPackage ../applications/video/kodi/addons/joystick { };

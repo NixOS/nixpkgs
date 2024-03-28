@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "uc-micro-py";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "tsutsu3";
     repo = "uc.micro-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PUeWYG/VyxCfhB7onAcDFow1yYqArjmfMT99+058P7U=";
+    hash = "sha256-Z7XHWeV5I/y19EKg4lzcl9pwRexWnSQ7d8CpQu5xdnI=";
   };
 
   nativeBuildInputs = [

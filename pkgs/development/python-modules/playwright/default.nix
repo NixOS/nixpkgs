@@ -20,7 +20,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.40.0";
+  version = "1.42.0";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+gq/aFq/rQpl04LbaZXGxL35iIX1Wi/motYg5jwv91I=";
+    hash = "sha256-GfaZ6wMbJShyTTcV9uulmsL8OI/OA+YDMvS2s3ePnjs=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       --replace "wheel==0.41.2" "wheel"
 
     substituteInPlace pyproject.toml \
-      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.41.2", "auditwheel==5.4.0"]' \
+      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.42.0", "auditwheel==5.4.0"]' \
                 'requires = ["setuptools", "setuptools-scm", "wheel"]'
 
     # Skip trying to download and extract the driver.

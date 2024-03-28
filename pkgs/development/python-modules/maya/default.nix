@@ -1,30 +1,28 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-
-# build-system
-, setuptools
-
-# dependencies
 , dateparser
-, humanize
-, tzlocal
-, pendulum
-, snaptime
-, pytz
-
-# tests
+, fetchFromGitHub
 , freezegun
+, humanize
+, pendulum
+, pytest-mock
 , pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+, snaptime
+, tzlocal
 }:
 
 buildPythonPackage rec {
   pname = "maya";
   version = "0.6.1";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "kennethreitz";
+    owner = "timofurrer";
     repo = "maya";
     rev = "refs/tags/v${version}";
     hash = "sha256-4fUyUqVQk/AcQL3xMnU1cQlF5yiD/N9NPAsUPuDTTNY=";
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   postPatch = ''
     # function was made private in humanize
     substituteInPlace maya/core.py \
-      --replace "humanize.time.abs_timedelta" "humanize.time._abs_timedelta"
+      --replace-fail "humanize.time.abs_timedelta" "humanize.time._abs_timedelta"
   '';
 
   nativeBuildInputs = [
@@ -51,12 +49,24 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    pytest-mock
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "maya"
+  ];
+
+  disabledTests = [
+    # https://github.com/timofurrer/maya/issues/202
+    "test_parse_iso8601"
   ];
 
   meta = with lib; {
     description = "Datetimes for Humans";
-    homepage = "https://github.com/kennethreitz/maya";
+    homepage = "https://github.com/timofurrer/maya";
+    changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

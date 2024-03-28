@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubeshark";
-  version = "52.1.75";
+  version = "52.1.77";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     rev = "v${version}";
-    hash = "sha256-3DKoYjAOYucK28D68GeM1S1kTxec9eMYFY6zQ8dZKNo=";
+    hash = "sha256-BpixzQ88JfA1cS5bLMHmLhE5Si5UbC9zRf9GAELrJwM=";
   };
 
   vendorHash = "sha256-SmvO9DYOXxnmN2dmHPPOguVwEbWSH/xNLBB+idpzopo=";

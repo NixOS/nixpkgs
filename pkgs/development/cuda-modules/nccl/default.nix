@@ -12,7 +12,7 @@
 }:
 let
   inherit (cudaPackages)
-    autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
     backendStdenv
     cuda_cccl
     cuda_cudart
@@ -25,13 +25,13 @@ in
 backendStdenv.mkDerivation (
   finalAttrs: {
     pname = "nccl";
-    version = "2.20.3-1";
+    version = "2.20.5-1";
 
     src = fetchFromGitHub {
       owner = "NVIDIA";
       repo = finalAttrs.pname;
       rev = "v${finalAttrs.version}";
-      hash = "sha256-7gI1q6uN3saz/twwLjWl7XmMucYjvClDPDdbVpVM0vU=";
+      hash = "sha256-ModIjD6RaRD/57a/PA1oTgYhZsAQPrrvhl5sNVXnO6c=";
     };
 
     strictDeps = true;
@@ -44,7 +44,7 @@ backendStdenv.mkDerivation (
     nativeBuildInputs =
       [
         which
-        autoAddOpenGLRunpathHook
+        autoAddDriverRunpath
         python3
       ]
       ++ lib.optionals (lib.versionOlder cudaVersion "11.4") [cudatoolkit]

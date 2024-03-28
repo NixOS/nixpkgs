@@ -50,19 +50,18 @@ rec {
   # because older compilers may not be able to parse the headers from the default stdenv’s libc++.
   overrideLibcxx = stdenv:
     assert stdenv.cc.libcxx != null;
+    assert pkgs.stdenv.cc.libcxx != null;
+    # only unified libcxx / libcxxabi stdenv's are supported
+    assert lib.versionAtLeast pkgs.stdenv.cc.libcxx.version "12";
+    assert lib.versionAtLeast stdenv.cc.libcxx.version "12";
     let
       llvmLibcxxVersion = lib.getVersion llvmLibcxx;
-      stdenvLibcxxVersion = lib.getVersion stdenvLibcxx;
 
       stdenvLibcxx = pkgs.stdenv.cc.libcxx;
-      stdenvCxxabi = pkgs.stdenv.cc.libcxx.cxxabi;
-
       llvmLibcxx = stdenv.cc.libcxx;
-      llvmCxxabi = stdenv.cc.libcxx.cxxabi;
 
       libcxx = pkgs.runCommand "${stdenvLibcxx.name}-${llvmLibcxxVersion}" {
         outputs = [ "out" "dev" ];
-        inherit cxxabi;
         isLLVM = true;
       } ''
         mkdir -p "$dev/nix-support"
@@ -70,21 +69,10 @@ rec {
         echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
         ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
       '';
-
-      cxxabi = pkgs.runCommand "${stdenvCxxabi.name}-${llvmLibcxxVersion}" {
-        outputs = [ "out" "dev" ];
-        inherit (stdenvCxxabi) libName;
-      } ''
-        mkdir -p "$dev/nix-support"
-        ln -s '${stdenvCxxabi}' "$out"
-        echo '${stdenvCxxabi}' > "$dev/nix-support/propagated-build-inputs"
-        ln -s '${lib.getDev llvmCxxabi}/include' "$dev/include"
-      '';
     in
     overrideCC stdenv (stdenv.cc.override {
       inherit libcxx;
       extraPackages = [
-        cxxabi
         pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
       ];
     });
@@ -144,10 +132,10 @@ rec {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
     extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs (finalAttrs: {
-      NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
+    (mkDerivationSuper args).overrideAttrs (prevAttrs: {
+      NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (finalAttrs.nativeBuildInputs or [])
+      nativeBuildInputs = (prevAttrs.nativeBuildInputs or [])
         ++ lib.optionals stdenv.hasCC [
           (pkgs.buildPackages.makeSetupHook {
             name = "darwin-portable-libSystem-hook";
@@ -237,14 +225,18 @@ rec {
       });
     });
 
+  /* Copy the libstdc++ from the model stdenv to the target stdenv.
+   *
+   * TODO(@connorbaker):
+   * This interface provides behavior which should be revisited prior to the
+   * release of 24.05. For a more detailed explanation and discussion, see
+   * https://github.com/NixOS/nixpkgs/issues/283517. */
   useLibsFrom = modelStdenv: targetStdenv:
     let
       ccForLibs = modelStdenv.cc.cc;
-      cc = pkgs.wrapCCWith {
-        /* NOTE: cc.cc is the unwrapped compiler. Should we respect the old
-         * wrapper instead? */
-        cc = targetStdenv.cc.cc;
-
+      /* NOTE(@connorbaker):
+       * This assumes targetStdenv.cc is a cc-wrapper. */
+      cc = targetStdenv.cc.override {
         /* NOTE(originally by rrbutani):
          * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
          * clang based `cc` to use `libstdc++` (from gcc).

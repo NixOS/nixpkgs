@@ -61,14 +61,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie:GNOME'")
           machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie.budgie-desktop-with-plugins.pname}'")
 
-      with subtest("Open Budgie Control Center"):
+      with subtest("Open run dialog"):
           machine.send_key("alt-f2")
-          machine.wait_until_succeeds("pgrep -f budgie-run-dialog")
           machine.wait_for_window("budgie-run-dialog")
-          machine.sleep(3)
-          machine.send_chars("Budgie Control Center", delay=0.5)
-          machine.screenshot("quick_search")
-          machine.send_chars("\n")
+          machine.sleep(2)
+          machine.screenshot("run_dialog")
+          machine.send_key("esc")
+
+      with subtest("Open Budgie Control Center"):
+          machine.succeed("${su "budgie-control-center >&2 &"}")
           machine.wait_for_window("Budgie Control Center")
 
       with subtest("Lock the screen"):
@@ -81,9 +82,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.wait_until_succeeds("${su "budgie-screensaver-command -q"} | grep 'The screensaver is inactive'")
           machine.sleep(2)
 
-      with subtest("Open MATE terminal"):
-          machine.succeed("${su "mate-terminal >&2 &"}")
-          machine.wait_for_window("Terminal")
+      with subtest("Open GNOME terminal"):
+          machine.succeed("${su "gnome-terminal"}")
+          machine.wait_for_window("${user.name}@machine: ~")
 
       with subtest("Check if Budgie has ever coredumped"):
           machine.fail("coredumpctl --json=short | grep budgie")

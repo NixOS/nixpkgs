@@ -41,6 +41,11 @@ buildPythonPackage rec {
     numpy
   ];
 
+  pytestFlagsArray = [
+    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   disabledTestPaths = [
     "tests/test_spec.py"
   ];

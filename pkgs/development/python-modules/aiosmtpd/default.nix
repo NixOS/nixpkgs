@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
-  version = "1.4.4.post2";
+  version = "1.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-iWKOxXtOBmszDBgeSHNY4a74D00p/9Pf7h/n+ohpTqs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8nQ4BVSLYgZHRGkbujy/olV/+GABlkDhe5wef3hyQpQ=";
   };
 
   propagatedBuildInputs = [

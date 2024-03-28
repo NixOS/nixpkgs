@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options, type }:
+{ config, lib, pkgs, options, type, ... }:
 
 let
   cfg = config.services.prometheus.exporters."exportarr-${type}";

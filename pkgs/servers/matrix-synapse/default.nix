@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchPypi
 , python3
 , openssl
 , libiconv
@@ -12,25 +13,39 @@
 }:
 
 let
-  plugins = python3.pkgs.callPackage ./plugins { };
+  python = python3.override {
+    packageOverrides = self: super: {
+      netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.0";
+
+        src = fetchPypi {
+          pname = "netaddr";
+          inherit version;
+          hash = "sha256-6wRrVTVOelv4AcBJAq6SO9aZGQJC2JsJnolvmycktNM=";
+        };
+      });
+    };
+  };
+
+  plugins = python.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
-python3.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.102.0";
+  version = "1.103.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-RJsuvNqqUiiVw6uKkG81rqo1ZoszUHK4UIJh8MReFqo=";
+    hash = "sha256-NwHX4pOM2PUf2MldaPTOzP9gOcTmILxM1Sx2HPkLBcw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-PoPJnSZ9QpcpVbqDMlqwgAqu0K8oornpihErLHXb6Gc=";
+    hash = "sha256-AyV0JPPJkJ4jdaw0FUXPqGF3Qkce1+RK70FkXAw+bLA=";
   };
 
   postPatch = ''
@@ -48,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     sed -i 's/Pillow = ".*"/Pillow = ">=5.4.0"/' pyproject.toml
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     poetry-core
     rustPlatform.cargoSetupHook
     setuptools-rust
@@ -62,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
     libiconv
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     attrs
     bcrypt
     bleach
@@ -95,7 +110,7 @@ python3.pkgs.buildPythonApplication rec {
   ]
   ++ twisted.optional-dependencies.tls;
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  passthru.optional-dependencies = with python.pkgs; {
     postgres = if isPyPy then [
       psycopg2cffi
     ] else [
@@ -133,7 +148,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     openssl
-  ] ++ (with python3.pkgs; [
+  ] ++ (with python.pkgs; [
     mock
     parameterized
   ])
@@ -154,15 +169,14 @@ python3.pkgs.buildPythonApplication rec {
       NIX_BUILD_CORES=4
     fi
 
-    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+    PYTHONPATH=".:$PYTHONPATH" ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
 
     runHook postCheck
   '';
 
   passthru = {
     tests = { inherit (nixosTests) matrix-synapse matrix-synapse-workers; };
-    inherit plugins tools;
-    python = python3;
+    inherit plugins tools python;
   };
 
   meta = with lib; {

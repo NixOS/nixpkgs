@@ -44,8 +44,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "hatch-vcs==0.3.0" "hatch-vcs" \
-      --replace "hatchling==1.18.0" "hatchling"
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace-fail "hatchling==1.18.0" "hatchling" \
+      --replace-fail "hatch-fancy-pypi-readme==23.1.0" "hatch-fancy-pypi-readme"
   '';
 
   pythonRelaxDeps = [

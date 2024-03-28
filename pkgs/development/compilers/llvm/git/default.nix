@@ -17,15 +17,20 @@
     else pkgs.bintools
 , darwin
 # LLVM release information; specify one of these but not both:
-, gitRelease ? null
+, gitRelease ? {
+    version = "19.0.0-git";
+    rev = "65058a8d732c3c41664a4dad1a1ae2a504d5c98e";
+    rev-version = "19.0.0-unstable-2024-03-16";
+    sha256 = "sha256-xV33kx/8OZ2KLtaz25RmudDrlIX7nScauTykf87jyTE=";
+}
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
   #   rev = /* commit SHA */;
-  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   rev-version = /* human readable version; i.e. "15.0.0-unstable-2022-07-26" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? { version = "18.1.0-rc4"; sha256 = "sha256-fVpwewbjoPMPslIEZ+WAtaQ+YKc0XWGl8EbP/TbQb8o="; }
+, officialRelease ? null
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -134,7 +139,6 @@ in let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -199,7 +203,6 @@ in let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -309,45 +312,7 @@ in let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxxabi = let
-      # CMake will "require" a compiler capable of compiling C++ programs
-      # cxx-header's build does not actually use one so it doesn't really matter
-      # what stdenv we use here, as long as CMake is happy.
-      cxx-headers = callPackage ./libcxx {
-        inherit llvm_meta;
-        # Note that if we use the regular stdenv here we'll get cycle errors
-        # when attempting to use this compiler in the stdenv.
-        #
-        # The final stdenv pulls `cxx-headers` from the package set where
-        # hostPlatform *is* the target platform which means that `stdenv` at
-        # that point attempts to use this toolchain.
-        #
-        # So, we use `stdenv_` (the stdenv containing `clang` from this package
-        # set, defined below) to sidestep this issue.
-        #
-        # Because we only use `cxx-headers` in `libcxxabi` (which depends on the
-        # clang stdenv _anyways_), this is okay.
-        stdenv = stdenv_;
-        headersOnly = true;
-      };
-
-      # `libcxxabi` *doesn't* need a compiler with a working C++ stdlib but it
-      # *does* need a relatively modern C++ compiler (see:
-      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/index.html#platform-and-compiler-support).
-      #
-      # So, we use the clang from this LLVM package set, like libc++
-      # "boostrapping builds" do:
-      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/BuildingLibcxx.html#bootstrapping-build
-      #
-      # We cannot use `clangNoLibcxx` because that contains `compiler-rt` which,
-      # on macOS, depends on `libcxxabi`, thus forming a cycle.
-      stdenv_ = overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc;
-    in callPackage ./libcxxabi {
-      stdenv = stdenv_;
-      inherit llvm_meta cxx-headers;
-    };
-
-    # Like `libcxxabi` above, `libcxx` requires a fairly modern C++ compiler,
+    # `libcxx` requires a fairly modern C++ compiler,
     # so: we use the clang from this LLVM package set instead of the regular
     # stdenv's compiler.
     libcxx = callPackage ./libcxx {

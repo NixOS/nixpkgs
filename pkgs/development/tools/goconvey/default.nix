@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "goconvey";
-  version = "1.8.1";
+  version = "1.8.1-unstable-2024-03-06";
 
   excludedPackages = "web/server/watch/integration_testing";
 
   src = fetchFromGitHub {
     owner = "smartystreets";
     repo = "goconvey";
-    rev = "v${version}";
-    hash = "sha256-6SrlPsOqRxNNwEYx2t1v+rEHnQ58GvJtjo87SZo/Omk=";
+    rev = "a50310f1e3e53e63e2d23eb904f853aa388a5988";
+    hash = "sha256-w5eX/n6Wu2gYgCIhgtjqH3lNckWIDaN4r80cJW3JqFo=";
   };
 
-  vendorHash = "sha256-020bxa0LErrvRKe3HirCWZDaBQFfKsWgl4mxfLtl1lg=";
+  vendorHash = "sha256-P4J/CZY95ks08DC+gSqG+eanL3zoiaoz1d9/ZvBoc9Q=";
 
   ldflags = [ "-s" "-w" ];
 

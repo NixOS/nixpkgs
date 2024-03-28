@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, flet-client-flutter
 , pythonRelaxDepsHook
 
 # build-system
 , poetry-core
 
 # propagates
+, fastapi
 , flet-core
 , flet-runtime
 , httpx
@@ -14,6 +15,7 @@
 , packaging
 , qrcode
 , cookiecutter
+, uvicorn
 , watchdog
 , websocket-client
 , websockets
@@ -22,13 +24,11 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.20.2";
+  inherit (flet-client-flutter) version src;
+
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3LhQI/hjenTxG/1DZP/zn2zs00rT5BviDAQYb2vucBM=";
-  };
+  sourceRoot = "${src.name}/sdk/python/packages/flet";
 
   nativeBuildInputs = [
     poetry-core
@@ -37,11 +37,15 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "websockets"
+    "cookiecutter"
+    "watchdog"
   ];
 
   propagatedBuildInputs = [
+    fastapi
     flet-core
     flet-runtime
+    uvicorn
     websocket-client
     watchdog
     oauthlib
@@ -50,6 +54,8 @@ buildPythonPackage rec {
     packaging
     qrcode
     cookiecutter
+    fastapi
+    uvicorn
   ];
 
   doCheck = false;
@@ -63,7 +69,7 @@ buildPythonPackage rec {
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.heyimnova ];
+    maintainers = with lib.maintainers; [ heyimnova lucasew ];
     mainProgram = "flet";
   };
 }

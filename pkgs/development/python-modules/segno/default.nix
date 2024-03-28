@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build-system
-, setuptools
+, flit-core
 
 # dependencies
 , importlib-metadata
@@ -17,18 +17,18 @@
 
 buildPythonPackage rec {
   pname = "segno";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "heuer";
     repo = "segno";
     rev = "refs/tags/${version}";
-    hash = "sha256-lgitNnVHvvPLKtDqJvc/zsVlFu9Gw0D3S4lt/20TlhE=";
+    hash = "sha256-5CDrQhbgUydz1ORp4ktZwhcgbJxQq1snKIAA0v4mZ00=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [

@@ -37,22 +37,13 @@ in
             enable = mkEnableOption (mdDoc "Wyoming faster-whisper server");
 
             model = mkOption {
-              # Intersection between available and referenced models here:
-              # https://github.com/rhasspy/models/releases/tag/v1.0
-              # https://github.com/rhasspy/rhasspy3/blob/wyoming-v1/programs/asr/faster-whisper/server/wyoming_faster_whisper/download.py#L17-L27
-              type = enum [
-                "tiny"
-                "tiny-int8"
-                "base"
-                "base-int8"
-                "small"
-                "small-int8"
-                "medium-int8"
-              ];
+              type = str;
               default = "tiny-int8";
-              example = "medium-int8";
+              example = "Systran/faster-distil-whisper-small.en";
               description = mdDoc ''
                 Name of the voice model to use.
+
+                Check the [2.0.0 release notes](https://github.com/rhasspy/wyoming-faster-whisper/releases/tag/v2.0.0) for possible values.
               '';
             };
 

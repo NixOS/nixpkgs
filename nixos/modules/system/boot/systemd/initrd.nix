@@ -91,13 +91,11 @@ let
   };
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-  modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
-  firmware = config.hardware.firmware;
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = modulesTree;
-    firmware = firmware;
+    kernel = config.system.modulesTree;
+    firmware = config.hardware.firmware;
     allowMissing = false;
   };
 
@@ -394,7 +392,10 @@ in {
 
     boot.kernelParams = [
       "root=${config.boot.initrd.systemd.root}"
-    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}";
+    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+      # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
+      # For NixOS activation to succeed, we need to have root writable in initrd.
+      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package];

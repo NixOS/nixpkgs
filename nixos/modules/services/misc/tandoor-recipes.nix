@@ -20,7 +20,10 @@ let
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
-    exec ${pkg}/bin/tandoor-recipes "$@"
+    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
+    exec ${pkgs.util-linux}/bin/nsenter \
+      -t $MainPID -m -S $UID -G $GID \
+      ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
 {
@@ -82,6 +85,7 @@ in
         Restart = "on-failure";
 
         User = "tandoor_recipes";
+        Group = "tandoor_recipes";
         DynamicUser = true;
         StateDirectory = "tandoor-recipes";
         WorkingDirectory = "/var/lib/tandoor-recipes";

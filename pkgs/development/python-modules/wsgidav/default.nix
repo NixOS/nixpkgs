@@ -16,23 +16,23 @@
 
 buildPythonPackage rec {
   pname = "wsgidav";
-  version = "4.3.0";
-  format = "pyproject";
+  version = "4.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mar10";
-    repo = pname;
+    repo = "wsgidav";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DEUoKoFELIOg5KX6hL1VgR18dtsery4ZzKksrxl0D7Q=";
+    hash = "sha256-jgn4bculVIXfMx3Or3pKF478UOzCL8nhEeNvOeGyjPI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     jinja2
     json5
@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generic and extendable WebDAV server based on WSGI";
-    mainProgram = "wsgidav";
     homepage = "https://wsgidav.readthedocs.io/";
     changelog = "https://github.com/mar10/wsgidav/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "wsgidav";
   };
 }

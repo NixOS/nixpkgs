@@ -2,17 +2,16 @@
 
 buildGoModule rec {
   pname = "gomacro";
-  rev = "b4c3ab9b218fd12f22759354f4f3e37635828d1f";
-  version = "20210131-${lib.strings.substring 0 7 rev}";
+  version = "2.7-unstable-2024-01-07";
 
   src = fetchFromGitHub {
     owner = "cosmos72";
     repo = "gomacro";
-    inherit rev;
-    hash = "sha256-zxiEt/RR7g5Q0wMLuRaybnT5dFfPCyvt0PvDjL9BJDI=";
+    rev = "bf232d031933810d4a5382e17ce6c4b042a24304";
+    hash = "sha256-16u3eByFmnY12M2CEhSJKLIT0KP9nbvTv+BnqWwNTcg=";
   };
 
-  vendorHash = "sha256-fQYuav0pT+/fGq0fmOWlsiVxA9tGV4JV8X7G3E6BZMU=";
+  vendorHash = "sha256-ok71QlBHGasGVt+CGwGqhgmx5JLkQcdlU/KX+W1A5Ws=";
 
   subPackages = [ "." ];
 

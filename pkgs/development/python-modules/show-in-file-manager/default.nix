@@ -2,27 +2,31 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, importlib-metadata
+, argparse-manpage
+, setuptools
 , packaging
 , pyxdg
 }:
 
 buildPythonPackage rec {
   pname = "show-in-file-manager";
-  version = "1.1.4";
-  format = "setuptools";
+  version = "1.1.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FdFuSodbniF7A40C8CnDgAxKatZF4/c8nhB+omurOts=";
+    hash = "sha256-7ROhgKHUj9iP3UxYv7yzhgJoZBo4gFGSyBTUE4cZLYQ=";
   };
+
+  nativeBuildInputs = [
+    argparse-manpage
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     packaging
   ]
-  ++ lib.optional (stdenv.isLinux) pyxdg
-  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ++ lib.optional (stdenv.isLinux) pyxdg;
 
   meta = with lib; {
     homepage = "https://github.com/damonlynch/showinfilemanager";

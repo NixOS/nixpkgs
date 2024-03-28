@@ -82,6 +82,9 @@ buildPythonPackage rec {
     # Tests make network requests
     "test_streaming_response"
     "test_copy_build_request"
+
+    # Test fails with pytest>=8
+    "test_basic_attribute_access_works"
   ];
 
   disabledTestPaths = [

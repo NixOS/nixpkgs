@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , cmake
 , pkg-config
@@ -17,25 +16,16 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "punes";
-  version = "0.110";
+  version = "0.111";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "v${version}";
-    sha256 = "sha256-+hL168r40aYUjyLbWFXWk9G2srrrG1TH1gLYMliHftU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TIXjYkInWV3yVnvXrdHcmeWYeps5TcvkG2Xjg4roIds=";
   };
-
-  patches = [
-    # Fixes compilation on aarch64
-    # Remove when version > 0.110
-    (fetchpatch {
-      url = "https://github.com/punesemu/puNES/commit/90dd5bc90412bbd199c2716f67a24aa88b24d80f.patch";
-      hash = "sha256-/KNpTds4qjwyaTUebWWPlVXfuxVh6M4zOInxUfYztJg=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -73,8 +63,9 @@ stdenv.mkDerivation rec {
     description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
     mainProgram = "punes";
     homepage = "https://github.com/punesemu/puNES";
+    changelog = "https://github.com/punesemu/puNES/blob/v${finalAttrs.version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = with platforms; linux ++ freebsd ++ openbsd ++ windows;
   };
-}
+})

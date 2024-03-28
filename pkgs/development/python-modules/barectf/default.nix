@@ -50,6 +50,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+  ];
+
   meta = with lib; {
     description = "Generator of ANSI C tracers which output CTF data streams ";
     mainProgram = "barectf";

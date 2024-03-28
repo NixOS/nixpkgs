@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cookiecutter";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   # not sure why this is broken
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5h6QNHSOP0G4vSwR8A0DB4S0hxHE1cQjY8UJiaZTMew=";
+    hash = "sha256-2yH4Fp6k9P3CQI1IykSFk0neJkf75JSp1sPt/AVCwhw=";
   };
 
   nativeBuildInputs = [

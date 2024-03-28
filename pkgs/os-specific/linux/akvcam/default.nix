@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    broken = kernel.kernelAtLeast "5.18";
   };
 }

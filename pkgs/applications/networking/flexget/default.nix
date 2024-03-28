@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.24";
+  version = "3.11.25";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GivnZ7WWoS4fc7/uUfZFTdT0W+pW7W6Vhb56CmkEb0k=";
+    hash = "sha256-bvCogSBB990LIkk273EMTlqNN303JKr5WCI8g7hLU9Q=";
   };
 
   postPatch = ''
@@ -22,12 +22,12 @@ python3.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
     apscheduler
     beautifulsoup4
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     loguru
     more-itertools
     packaging
-    pendulum_3
+    pendulum
     psutil
     pynzb
     pyrsistent

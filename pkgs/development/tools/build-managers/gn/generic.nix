@@ -1,6 +1,5 @@
 { stdenv, lib, fetchgit, darwin, writeText
 , ninja, python3
-, disable-warnings-if-gcc13
 , ...
 }:
 
@@ -18,7 +17,7 @@ let
     #endif  // OUT_LAST_COMMIT_POSITION_H_
   '';
 
-in disable-warnings-if-gcc13 (stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "gn-unstable";
   inherit version;
 
@@ -38,6 +37,8 @@ in disable-warnings-if-gcc13 (stdenv.mkDerivation {
     Foundation
     AppKit
   ]);
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   buildPhase = ''
     python build/gen.py --no-last-commit-position
@@ -59,4 +60,4 @@ in disable-warnings-if-gcc13 (stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [ stesie matthewbauer primeos ];
   };
-})
+}

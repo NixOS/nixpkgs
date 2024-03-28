@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "gto";
-  version = "1.6.2";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,14 +32,14 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "gto";
     rev = "refs/tags/${version}";
-    hash = "sha256-1+Owhp2otGC/FIdsSz+4vn0sZR696+zOMGNDvjM6KH8=";
+    hash = "sha256-fUi+/PW05EvgTnoEv1Im1BjZ07VzpZhyW0EjhLUqJGI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "setuptools_scm_git_archive==1.4.1"' ""
+      --replace-fail ', "setuptools_scm_git_archive==1.4.1"' ""
     substituteInPlace setup.cfg \
-      --replace " --cov=gto --cov-report=term-missing --cov-report=xml" ""
+      --replace-fail " --cov=gto --cov-report=term-missing --cov-report=xml" ""
   '';
 
   nativeBuildInputs = [
@@ -88,10 +88,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for Git Tag Operations";
-    mainProgram = "gto";
     homepage = "https://github.com/iterative/gto";
     changelog = "https://github.com/iterative/gto/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "gto";
   };
 }

@@ -64,7 +64,7 @@
 
 let pandas = buildPythonPackage rec {
   pname = "pandas";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -73,7 +73,7 @@ let pandas = buildPythonPackage rec {
     owner = "pandas-dev";
     repo = "pandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PMrqniyyFYRnAeFBruPrTrGKzX2dRxMRct8AHeghstA=";
+    hash = "sha256-eyVUIYG0KCAEJbh/qZiEjGpdXq7A+2Lab+5bp+7t4cw=";
   };
 
   postPatch = ''
