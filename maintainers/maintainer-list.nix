@@ -10107,6 +10107,11 @@
     githubId = 15855440;
     name = "Keanu Ashwell";
   };
+  katanallama = {
+    github = "katanallama";
+    githubId = 70604257;
+    name = "katanallama";
+  };
   katexochen = {
     github = "katexochen";
     githubId = 49727155;
