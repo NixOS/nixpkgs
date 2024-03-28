@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchFromGitLab
 , cargo
 , desktop-file-utils
 , meson
@@ -19,22 +20,33 @@
 , wireplumber
 }:
 
+let
+  wireplumber_0_4 = wireplumber.overrideAttrs (attrs: rec {
+    version = "0.4.17";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      owner = "pipewire";
+      repo = "wireplumber";
+      rev = version;
+      hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
+    };
+  });
+in
 stdenv.mkDerivation rec {
   pname = "pwvucontrol";
-  version = "0.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     rev = version;
-    hash = "sha256-jBvMLewBZi4LyX//YUyJQjqPvxnKqlpuLZAm9zpDMrA=";
+    hash = "sha256-t4JUpKtuO1JgrdsNbl0M/SwPmoqu7WxsaD74vlJeVhY=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "libspa-0.6.0" = "sha256-CVLQ9JXRMo78/kay1TpRgRuk5v/Z5puPVMzLA30JRk8=";
-      "wireplumber-0.1.0" = "sha256-wkku9vqIMdV+HTkWCPXKH2KM1Xzf0xApC5zrVmgxhsA=";
+      "wireplumber-0.1.0" = "sha256-+LZ8xKok2AOegW8WvfrfZGXuQB4xHrLNshcTOHab+xQ=";
     };
   };
 
@@ -58,7 +70,7 @@ stdenv.mkDerivation rec {
     libadwaita
     pango
     pipewire
-    wireplumber
+    wireplumber_0_4
   ];
 
   meta = with lib; {
