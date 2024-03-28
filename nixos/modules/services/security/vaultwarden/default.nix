@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.vaultwarden;
   user = config.users.users.vaultwarden.name;
@@ -11,60 +9,60 @@ let
   nameToEnvVar = name:
     let
       parts = builtins.split "([A-Z0-9]+)" name;
-      partsToEnvVar = parts: foldl' (key: x: let last = stringLength key - 1; in
-        if isList x then key + optionalString (key != "" && substring last 1 key != "_") "_" + head x
-        else if key != "" && elem (substring 0 1 x) lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
-          substring 0 last key + optionalString (substring (last - 1) 1 key != "_") "_" + substring last 1 key + toUpper x
-        else key + toUpper x) "" parts;
+      partsToEnvVar = parts: lib.foldl' (key: x: let last = lib.stringLength key - 1; in
+        if lib.isList x then key + lib.optionalString (key != "" && lib.substring last 1 key != "_") "_" + lib.head x
+        else if key != "" && lib.elem (lib.substring 0 1 x) lib.lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
+          lib.substring 0 last key + lib.optionalString (lib.substring (last - 1) 1 key != "_") "_" + lib.substring last 1 key + lib.toUpper x
+        else key + lib.toUpper x) "" parts;
     in if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
 
   # Due to the different naming schemes allowed for config keys,
   # we can only check for values consistently after converting them to their corresponding environment variable name.
   configEnv =
     let
-      configEnv = concatMapAttrs (name: value: optionalAttrs (value != null) {
-        ${nameToEnvVar name} = if isBool value then boolToString value else toString value;
+      configEnv = lib.concatMapAttrs (name: value: lib.optionalAttrs (value != null) {
+        ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
       }) cfg.config;
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
-  configFile = pkgs.writeText "vaultwarden.env" (concatStrings (mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
+  configFile = pkgs.writeText "vaultwarden.env" (lib.concatStrings (lib.mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
 
   vaultwarden = cfg.package.override { inherit (cfg) dbBackend; };
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "bitwarden_rs" ] [ "services" "vaultwarden" ])
+    (lib.mkRenamedOptionModule [ "services" "bitwarden_rs" ] [ "services" "vaultwarden" ])
   ];
 
-  options.services.vaultwarden = with types; {
-    enable = mkEnableOption (lib.mdDoc "vaultwarden");
+  options.services.vaultwarden = {
+    enable = lib.mkEnableOption "vaultwarden";
 
-    dbBackend = mkOption {
-      type = enum [ "sqlite" "mysql" "postgresql" ];
+    dbBackend = lib.mkOption {
+      type = lib.types.enum [ "sqlite" "mysql" "postgresql" ];
       default = "sqlite";
-      description = lib.mdDoc ''
+      description = ''
         Which database backend vaultwarden will be using.
       '';
     };
 
-    backupDir = mkOption {
-      type = nullOr str;
+    backupDir = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The directory under which vaultwarden will backup its persistent data.
       '';
       example = "/var/backup/vaultwarden";
     };
 
-    config = mkOption {
-      type = attrsOf (nullOr (oneOf [ bool int str ]));
+    config = lib.mkOption {
+      type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
       default = {
         ROCKET_ADDRESS = "::1"; # default to localhost
         ROCKET_PORT = 8222;
       };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           DOMAIN = "https://bitwarden.example.com";
           SIGNUPS_ALLOWED = false;
@@ -101,7 +99,7 @@ in {
           SMTP_FROM_NAME = "example.com Bitwarden server";
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         The configuration of vaultwarden is done through environment variables,
         therefore it is recommended to use upper snake case (e.g. {env}`DISABLE_2FA_REMEMBER`).
 
@@ -125,11 +123,11 @@ in {
       '';
     };
 
-    environmentFile = mkOption {
-      type = with types; nullOr path;
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       example = "/var/lib/vaultwarden.env";
-      description = lib.mdDoc ''
+      description = ''
         Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
@@ -157,17 +155,17 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "vaultwarden" { };
+    package = lib.mkPackageOption pkgs "vaultwarden" { };
 
-    webVaultPackage = mkOption {
-      type = package;
+    webVaultPackage = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.vaultwarden.webvault;
-      defaultText = literalExpression "pkgs.vaultwarden.webvault";
-      description = lib.mdDoc "Web vault package to use.";
+      defaultText = lib.literalExpression "pkgs.vaultwarden.webvault";
+      description = "Web vault package to use.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [ {
       assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
       message = "Backups for database backends other than sqlite will need customization";
@@ -185,7 +183,7 @@ in {
       serviceConfig = {
         User = user;
         Group = group;
-        EnvironmentFile = [ configFile ] ++ optional (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = [ configFile ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${vaultwarden}/bin/vaultwarden";
         LimitNOFILE = "1048576";
         PrivateTmp = "true";
@@ -200,7 +198,7 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.services.backup-vaultwarden = mkIf (cfg.backupDir != null) {
+    systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
       description = "Backup vaultwarden";
       environment = {
         DATA_FOLDER = "/var/lib/bitwarden_rs";
@@ -212,24 +210,24 @@ in {
       serviceConfig = {
         SyslogIdentifier = "backup-vaultwarden";
         Type = "oneshot";
-        User = mkDefault user;
-        Group = mkDefault group;
+        User = lib.mkDefault user;
+        Group = lib.mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
       };
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
+    systemd.timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
       description = "Backup vaultwarden on time";
       timerConfig = {
-        OnCalendar = mkDefault "23:00";
+        OnCalendar = lib.mkDefault "23:00";
         Persistent = "true";
         Unit = "backup-vaultwarden.service";
       };
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.tmpfiles.settings = mkIf (cfg.backupDir != null) {
+    systemd.tmpfiles.settings = lib.mkIf (cfg.backupDir != null) {
       "10-vaultwarden".${cfg.backupDir}.d = {
         inherit user group;
         mode = "0770";
