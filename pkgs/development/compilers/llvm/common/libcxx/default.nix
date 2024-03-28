@@ -1,8 +1,21 @@
-{ lib, stdenv, llvm_meta
-, monorepoSrc, runCommand, fetchpatch
-, cmake, lndir, ninja, python3, fixDarwinDylibNames, version
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, monorepoSrc ? null
+, src ? null
+, patches ? []
+, runCommand
+, substitute
+, cmake
+, lndir
+, ninja
+, python3
+, fixDarwinDylibNames
+, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else null
-, libcxxrt, libunwind
+, libcxxrt
+, libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -13,16 +26,39 @@
 assert cxxabi == null || !stdenv.hostPlatform.isDarwin;
 let
   basename = "libcxx";
+  pname = basename;
   cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
   useLLVM = stdenv.hostPlatform.useLLVM or false;
 
-  cxxabiCMakeFlags = lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
+  src' = if monorepoSrc != null then
+    runCommand "${pname}-src-${version}" {} (''
+      mkdir -p "$out/llvm"
+    '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/cmake "$out"
+    '') + ''
+      cp -r ${monorepoSrc}/libcxx "$out"
+      cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+      cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+    '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/third-party "$out"
+    '') + ''
+      cp -r ${monorepoSrc}/runtimes "$out"
+    '' + (lib.optionalString (cxxabi == null) ''
+      cp -r ${monorepoSrc}/libcxxabi "$out"
+    '')) else src;
+
+  cxxabiCMakeFlags = lib.optionals (lib.versionAtLeast release_version "18") [
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
+  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) (if lib.versionAtLeast release_version "18" then [
+    "-DLIBCXXABI_ADDITIONAL_LIBRARIES=unwind"
+    "-DLIBCXXABI_USE_COMPILER_RT=ON"
+  ] else [
     "-DLIBCXXABI_USE_COMPILER_RT=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
+  ]) ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
   ] ++ lib.optionals (!enableShared) [
@@ -35,13 +71,11 @@ let
     "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${lib.getDev cxxabi}/include"
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
     "-DLIBCXX_HAS_MUSL_LIBC=1"
+  ] ++ lib.optionals (lib.versionAtLeast release_version "18" && !useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
+    "-DLIBCXX_ADDITIONAL_LIBRARIES=gcc_s"
   ] ++ lib.optionals useLLVM [
     "-DLIBCXX_USE_COMPILER_RT=ON"
-    # There's precedent for this in llvm-project/libcxx/cmake/caches.
-    # In a monorepo build you might do the following in the libcxxabi build:
-    #   -DLLVM_ENABLE_PROJECTS=libcxxabi;libunwinder
-    #   -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=On
-    # libcxx appears to require unwind and doesn't pull it in via other means.
+  ] ++ lib.optionals (useLLVM && lib.versionAtLeast release_version "16") [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXX_ENABLE_THREADS=OFF"
@@ -68,23 +102,10 @@ let
 
 in
 
-stdenv.mkDerivation rec {
-  pname = basename;
-  inherit version cmakeFlags;
+stdenv.mkDerivation (rec {
+  inherit pname version cmakeFlags patches;
 
-  src = runCommand "${pname}-src-${version}" {} (''
-    mkdir -p "$out/llvm"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/libcxx "$out"
-    cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-    cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-    cp -r ${monorepoSrc}/third-party "$out"
-    cp -r ${monorepoSrc}/runtimes "$out"
-  '' + lib.optionalString (cxxabi == null) ''
-    cp -r ${monorepoSrc}/libcxxabi "$out"
-  '');
-
-  sourceRoot = "${src.name}/runtimes";
+  src = src';
 
   outputs = [ "out" "dev" ];
 
@@ -103,8 +124,8 @@ stdenv.mkDerivation rec {
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't
   # support linker scripts so the external cxxabi needs to be symlinked in
   postInstall = lib.optionalString (cxxabi != null) ''
-    lndir ${lib.getDev cxxabi}/include ''${!outputDev}/include/c++/v1
-    lndir ${lib.getLib cxxabi}/lib ''${!outputLib}/lib
+    lndir ${lib.getDev cxxabi}/include $out/include/c++/v1
+    lndir ${lib.getLib cxxabi}/lib $out/lib
   '';
 
   passthru = {
@@ -122,4 +143,15 @@ stdenv.mkDerivation rec {
     # UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
   };
-}
+} // (if (lib.versionOlder release_version "16" || lib.versionAtLeast release_version "17") then {
+  postPatch = (lib.optionalString (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "15") ''
+    # fix CMake error when static and LIBCXXABI_USE_LLVM_UNWINDER=ON. aren't
+    # building unwind so don't need to depend on it
+    substituteInPlace libcxx/src/CMakeLists.txt \
+      --replace-fail "add_dependencies(cxx_static unwind)" "# add_dependencies(cxx_static unwind)"
+  '') + ''
+    cd runtimes
+  '';
+} else {
+  sourceRoot = "${src'.name}/runtimes";
+}))
