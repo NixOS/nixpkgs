@@ -24,6 +24,7 @@
 , mailsuite
 , msgraph-core
 , nixosTests
+, opensearch-py
 , publicsuffixlist
 , pythonOlder
 , requests
@@ -86,6 +87,7 @@ buildPythonPackage rec {
     tqdm
     urllib3
     xmltodict
+    opensearch-py
   ];
 
   # no tests on PyPI, no tags on GitHub
