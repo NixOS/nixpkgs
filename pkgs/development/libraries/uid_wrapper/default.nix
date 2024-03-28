@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.samba.org/?p=uid_wrapper.git;a=summary;";
     license = licenses.bsd3;
     platforms = platforms.all;
-    changelog = "https://git.samba.org/?p=uid_wrapper.git;a=blob;f=CHANGELOG;hb=HEAD";
+    changelog = "https://git.samba.org/?p=uid_wrapper.git;a=blob;f=CHANGELOG;hb=refs/tags/uid_wrapper-${version}";
   };
 }
