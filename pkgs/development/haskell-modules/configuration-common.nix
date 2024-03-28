@@ -3047,4 +3047,9 @@ self: super: {
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
 
+  # c2hs preprocessing errors on non-x86_64 platforms
+  cpython = if (pkgs.stdenv.hostPlatform.system != "x86_64-linux")
+    then markBroken super.cpython
+    else super.cpython;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
