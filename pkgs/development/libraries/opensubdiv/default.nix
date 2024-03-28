@@ -22,16 +22,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
   ] ++ lib.optional cudaSupport [
     cudaPackages.cuda_nvcc
   ];
   buildInputs =
-    [ libGLU libGL python3
+    lib.optionals (!stdenv.hostPlatform.isWindows) [
+      libGLU libGL
       # FIXME: these are not actually needed, but the configure script wants them.
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor
       xorg.libXinerama xorg.libXi
     ]
-    ++ lib.optionals (openclSupport && !stdenv.isDarwin) [ ocl-icd ]
+    ++ lib.optionals (openclSupport && stdenv.isLinux) [ ocl-icd ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       OpenCL
       Cocoa
@@ -58,10 +60,11 @@ stdenv.mkDerivation rec {
     [ "-DNO_TUTORIALS=1"
       "-DNO_REGRESSION=1"
       "-DNO_EXAMPLES=1"
+      "-DNO_DX=1"
       (lib.cmakeBool "NO_METAL" (!stdenv.isDarwin))
       (lib.cmakeBool "NO_OPENCL" (!openclSupport))
       (lib.cmakeBool "NO_CUDA" (!cudaSupport))
-    ] ++ lib.optionals (!stdenv.isDarwin) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.isDarwin) [
       "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
       "-DGLEW_LIBRARY=${glew.dev}/lib"
     ] ++ lib.optionals cudaSupport [
@@ -73,7 +76,9 @@ stdenv.mkDerivation rec {
     NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
   '';
 
-  postInstall = ''
+  postInstall = if stdenv.hostPlatform.isWindows then ''
+    ln -s $out $static
+  '' else ''
     moveToOutput "lib/*.a" $static
   '';
 
@@ -81,7 +86,7 @@ stdenv.mkDerivation rec {
     description = "An Open-Source subdivision surface library";
     homepage = "http://graphics.pixar.com/opensubdiv";
     broken = openclSupport && cudaSupport;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ lib.maintainers.eelco ];
     license = lib.licenses.asl20;
   };
