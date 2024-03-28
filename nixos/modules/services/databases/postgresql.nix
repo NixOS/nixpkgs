@@ -57,6 +57,15 @@ in
         example = "postgresql_15";
       };
 
+      upgradeFrom = mkOption {
+        type = types.nullOr types.package;
+        default = null;
+        example = literalExample "pkgs.postgresql_11";
+        description = ''
+          PostgreSQL package that you're upgrading from (this will automatically call pg_upgrade)
+        '';
+      };
+
       port = mkOption {
         type = types.port;
         default = 5432;
@@ -509,6 +518,15 @@ in
 
               # Initialise the database.
               initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+
+              ${optionalString (cfg.upgradeFrom != null) ''
+                if [ -e "/var/lib/postgresql/${cfg.upgradeFrom.psqlSchema}" ]; then
+                  mkdir -p /tmp/pg_upgrade
+                  pushd /tmp/pg_upgrade
+                  pg_upgrade -b "${cfg.upgradeFrom}/bin" -d "/var/lib/postgresql/${cfg.upgradeFrom.psqlSchema}/" -D "${cfg.dataDir}"
+                  popd
+                fi
+              ''}
 
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
