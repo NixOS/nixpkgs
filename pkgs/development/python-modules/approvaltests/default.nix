@@ -5,6 +5,7 @@
 , buildPythonPackage
 , empty-files
 , fetchFromGitHub
+, fetchpatch2
 , mock
 , mrjob
 , numpy
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "11.1.2";
+  version = "11.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,14 +30,21 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VM4TP98bS9NmhxZz+YHMJrHKr5g6E6aYidxjKQyXp7k=";
+    hash = "sha256-VqE2Oj3b+ZfKT+fhJ9DxBClfa8Wz8w/puAnAotN3eG4=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/approvals/ApprovalTests.Python/commit/dac7c8a8aa62f31dca7a687d4dbf08158351d5e1.patch";
+      hash = "sha256-TMyfXNtzpGci6tdFRhxiKJRjCWRD5LkaffPY8EVj53E=";
+    })
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     allpairspy
     approval-utilities
     beautifulsoup4
@@ -56,7 +64,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Tests expects paths below ApprovalTests.Python directory
+    # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"
   ];
