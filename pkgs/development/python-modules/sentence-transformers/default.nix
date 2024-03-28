@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "2.5.1";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "UKPLab";
     repo = "sentence-transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HIOizBf8YnPAj95cG1HopO9B/bhAmT0u3q5CM6POEjQ=";
+    hash = "sha256-09AAuv/yXTbBvjA4gu5ueZrQkVja0BTIGNLZ2tLSyh8=";
   };
 
   build-system = [
