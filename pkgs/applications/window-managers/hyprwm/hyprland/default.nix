@@ -78,6 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "@DIRTY@" ""
   '';
 
+  depsBuildBuild = [
+    # to find wayland-scanner when cross-compiling
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     jq
     makeWrapper
