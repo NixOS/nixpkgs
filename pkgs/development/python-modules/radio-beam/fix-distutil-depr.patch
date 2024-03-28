@@ -1,0 +1,13 @@
+diff --git a/radio_beam/conftest.py b/radio_beam/conftest.py
+index dfc8086..0e745f4 100644
+--- a/radio_beam/conftest.py
++++ b/radio_beam/conftest.py
+@@ -4,7 +4,7 @@
+ from __future__ import print_function, absolute_import, division
+ 
+ import os
+-from distutils.version import LooseVersion
++from setuptools._distutils.version import LooseVersion
+ 
+ # Import casatools and casatasks here if available as they can otherwise
+ # cause a segfault if imported later on during tests.
