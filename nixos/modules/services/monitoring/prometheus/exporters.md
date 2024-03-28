@@ -72,6 +72,7 @@ example:
       - `extraFlags`
       - `openFirewall`
       - `firewallFilter`
+      - `firewallRules`
       - `user`
       - `group`
   - As there is already a package available, the module can now be added. This
