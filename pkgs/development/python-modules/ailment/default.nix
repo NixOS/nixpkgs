@@ -15,16 +15,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "ailment";
     rev = "refs/tags/v${version}";
     hash = "sha256-xc9/J360ftynKT5HYNcjR/0WX04DUDmszaAHb8h3Iao=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyvex
   ];
 
